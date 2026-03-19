@@ -20,6 +20,7 @@ from bixarena_app.page.bixarena_quest_section import (
     QUEST_UI_CONFIG,
     _build_builders_credits_html,
     _build_carousel_html,
+    _build_quest_header_html,
     _build_progress_html,
     build_quest_section,
 )
@@ -274,7 +275,7 @@ def build_stats_section():
 
 def load_quest_content_on_page_load(
     request: gr.Request,
-) -> tuple[dict, dict, dict, dict]:
+) -> tuple[dict, dict, dict, dict, dict]:
     """Load all dynamic quest content on page load (progress, contributors, carousel).
 
     Fetches quest data (with posts gated by caller auth) and contributors,
@@ -287,7 +288,7 @@ def load_quest_content_on_page_load(
         request: Gradio request object
 
     Returns:
-        Tuple of (quest_container_update, progress_html_update,
+        Tuple of (quest_container_update, quest_header_html_update, progress_html_update,
                   contributors_html_update, carousel_html_update)
     """
     try:
@@ -299,7 +300,13 @@ def load_quest_content_on_page_load(
 
         # If quest doesn't exist, keep section hidden
         if quest_data is None:
-            return (gr.update(visible=False), gr.update(), gr.update(), gr.update())
+            return (
+                gr.update(visible=False),
+                gr.update(),
+                gr.update(),
+                gr.update(),
+                gr.update(),
+            )
 
         # Fetch contributors separately (public endpoint)
         contributors_data = fetch_quest_contributors(quest_id)
@@ -351,8 +358,12 @@ def load_quest_content_on_page_load(
             active_post_index=quest_data.get("active_post_index"),
         )
 
+        # Build header HTML with title and description
+        header_html = _build_quest_header_html(quest_data)
+
         return (
             gr.update(visible=True),
+            gr.update(value=header_html),
             gr.update(value=progress_html),
             gr.update(value=contributors_html),
             gr.update(value=carousel_html),
@@ -366,6 +377,7 @@ def load_quest_content_on_page_load(
             gr.update(),
             gr.update(),
             gr.update(),
+            gr.update(),
         )
 
 
@@ -373,6 +385,7 @@ def build_quest_section_wrapper():
     """Create the Community Quest section for the home page."""
     if not COMMUNITY_QUEST_ENABLED:
         with gr.Column(visible=False) as quest_container:
+            quest_header_html_container = gr.HTML("")
             progress_html_container = gr.HTML("")
             contributors_html_container = gr.HTML("")
             carousel_html_container = gr.HTML("")
@@ -381,6 +394,7 @@ def build_quest_section_wrapper():
             carousel_init_trigger = gr.Button(visible=False)
         return (
             quest_container,
+            quest_header_html_container,
             progress_html_container,
             contributors_html_container,
             carousel_html_container,
@@ -550,6 +564,7 @@ def build_home_page():
         # Community Quest Section (new)
         (
             quest_html,
+            quest_header_container,
             quest_progress_container,
             quest_contributors_container,
             quest_carousel_container,
@@ -570,6 +585,7 @@ def build_home_page():
         cta_helper_msg,
         stats_container,
         quest_html,
+        quest_header_container,
         quest_progress_container,
         quest_contributors_container,
         quest_carousel_container,

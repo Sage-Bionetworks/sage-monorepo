@@ -1,6 +1,6 @@
 <div class="column-selector">
   <p-popover #columnPopover styleClass="toggle-columns">
-    <ul id="columns">
+    <ul id="columns" class="unselectable-text">
       @for (column of columns; track column) {
         @if (column.type !== 'primary') {
           <li>

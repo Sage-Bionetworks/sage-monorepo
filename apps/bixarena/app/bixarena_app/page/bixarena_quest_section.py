@@ -61,12 +61,21 @@ QUEST_UI_CONFIG = {
 
 
 def build_quest_not_found_section() -> tuple[
-    gr.Column, gr.HTML, gr.HTML, gr.HTML, gr.Button, gr.Button, gr.Button, str, int
+    gr.Column,
+    gr.HTML,
+    gr.HTML,
+    gr.HTML,
+    gr.HTML,
+    gr.Button,
+    gr.Button,
+    gr.Button,
+    str,
+    int,
 ]:
     """Build a quest not found error section.
 
     Returns:
-        Tuple of (quest_container, empty_html, empty_contributors_html,
+        Tuple of (quest_container, quest_header_html, empty_html, empty_contributors_html,
                   empty_carousel_html, hidden buttons, carousel_id, rotation_interval)
     """
     with gr.Column(
@@ -115,6 +124,7 @@ def build_quest_not_found_section() -> tuple[
 
         # Hidden components (required for return signature compatibility)
         # These are inside the container but hidden with visible=False and CSS
+        empty_quest_header_html = gr.HTML("", visible=False)
         empty_html = gr.HTML("", visible=False)
         empty_contributors_html = gr.HTML("", visible=False)
         empty_carousel_html = gr.HTML("", visible=False)
@@ -128,6 +138,7 @@ def build_quest_not_found_section() -> tuple[
 
     return (
         quest_container,
+        empty_quest_header_html,
         empty_html,
         empty_contributors_html,
         empty_carousel_html,
@@ -212,7 +223,7 @@ def _build_user_progress_card_html(
                     border-radius: 5px; overflow: hidden;
                     border: 1px solid var(--border-color-primary);">
             <div style="height: 100%; width: {progress_pct:.0f}%;
-                        background: var(--color-accent, #f97316);
+                        background: {tier_color};
                         border-radius: 5px;"></div>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
@@ -227,6 +238,58 @@ def _build_user_progress_card_html(
         </div>
     </div>
     """
+
+
+def _build_contributor_row_html(
+    username: str, tier: str, battles_per_week: float
+) -> str:
+    """Build a single contributor row with emoji, username, progress bar, and stats.
+
+    Args:
+        username: The contributor's display name
+        tier: Current tier ('champion', 'knight', or 'apprentice')
+        battles_per_week: Average battles per week
+
+    Returns:
+        HTML string for one contributor row
+    """
+    tier_info = TIER_CONFIG.get(tier, TIER_CONFIG["apprentice"])
+    emoji = tier_info["emoji"]
+    bar_color = tier_info["color"]
+
+    if tier == "champion":
+        progress_pct = 100.0
+    elif tier == "knight":
+        progress_pct = min((battles_per_week - 5.0) / 5.0 * 100, 100)
+    else:  # apprentice
+        progress_pct = min(battles_per_week / 5.0 * 100, 100)
+
+    safe_username = escape(username)
+
+    return f"""
+        <div style="display: grid;
+                    grid-template-columns: 140px 0.75rem 1fr 0.25rem 55px;
+                    align-items: center;">
+            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+                        font-size: 0.875rem; color: var(--body-text-color);"
+                 title="{safe_username}">
+                <span style="margin-right: 0.25rem;">{emoji}</span>{safe_username}
+            </div>
+            <div></div>
+            <div style="width: 100%; height: 10px;
+                        background-color: var(--background-fill-secondary);
+                        border-radius: 4px; overflow: hidden;
+                        border: 1px solid var(--border-color-primary);">
+                <div style="height: 100%; width: {progress_pct:.0f}%;
+                            background: {bar_color};
+                            border-radius: 4px;"></div>
+            </div>
+            <div></div>
+            <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
+                        text-align: right; white-space: nowrap;">
+                {battles_per_week:.1f}/wk
+            </div>
+        </div>"""
 
 
 def _build_tier_legend_html() -> str:
@@ -411,23 +474,19 @@ def _build_builders_credits_html(
         total_count = contributors_data["total_contributors"]
         contributors_by_tier = contributors_data["contributors_by_tier"]
 
-        builders_parts = []
+        builders_rows = []
         for rank in ["champion", "knight", "apprentice"]:
             rank_contributors = contributors_by_tier.get(rank, [])
             for contributor in rank_contributors:
-                username = contributor["username"]
-                emoji = TIER_CONFIG[rank]["emoji"]
-                builders_parts.append(
-                    f'<span style="color: var(--body-text-color); '
-                    f'font-size: 0.875rem;">'
-                    f'<span style="margin-right: 0.25rem;">{emoji}</span>{username}'
-                    f"</span>"
+                builders_rows.append(
+                    _build_contributor_row_html(
+                        username=contributor["username"],
+                        tier=rank,
+                        battles_per_week=contributor.get("battles_per_week", 0.0),
+                    )
                 )
 
-        # Join with separators
-        builders_html = '<span style="color: var(--body-text-color-subdued); font-size: 0.75rem;">•</span>'.join(
-            builders_parts
-        )
+        builders_html = "\n".join(builders_rows)
 
     # Build progress card (personalized for contributors, default for others)
     if current_user_data is not None:
@@ -458,10 +517,10 @@ def _build_builders_credits_html(
             </h4>
 
             <div style="flex: 1; overflow-y: auto; min-height: 0;
-                        padding-right: 0.25rem;">
-                <div style="display: flex; flex-wrap: wrap;
-                            align-items: center; gap: 0.5rem;
-                            line-height: 1.5;">
+                        max-height: 375px; padding-right: 0.25rem;
+                        scrollbar-color: var(--border-color-primary) transparent;">
+                <div style="display: flex; flex-direction: column;
+                            gap: 0.5rem;">
                     {builders_html}
                 </div>
             </div>
@@ -936,6 +995,7 @@ def _build_carousel_html(
             scrollbar-color: var(--border-color-primary) transparent;
         }}
 
+
         .update-description {{
             color: var(--body-text-color-subdued);
             font-size: 0.875rem;
@@ -1012,12 +1072,46 @@ def _build_carousel_html(
     return carousel_html
 
 
+def _build_quest_header_html(quest_data: dict) -> str:
+    """Build the quest header HTML with title and description."""
+    return f"""
+    <div style="padding: 2.5rem 1.5rem;">
+        <!-- Section Header -->
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <!-- Community Quest Badge -->
+            <div style="margin-bottom: 1rem;">
+                <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #22c55e; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                    Community Quest
+                </span>
+            </div>
+
+            <h1 style="font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.75rem; font-weight: 600;">
+                {escape(quest_data.get("title", ""))}
+            </h1>
+
+            <p style="color: var(--body-text-color-subdued); font-size: var(--text-xl); max-width: 48rem; margin: 0 auto;">
+                {escape(quest_data.get("description", ""))}
+            </p>
+        </div>
+    </div>
+    """
+
+
 def build_quest_section(
     quest_data: dict | None = None,
     progress_data: dict | None = None,
     contributors_data: dict | None = None,
 ) -> tuple[
-    gr.Column, gr.HTML, gr.HTML, gr.HTML, gr.Button, gr.Button, gr.Button, str, int
+    gr.Column,
+    gr.HTML,
+    gr.HTML,
+    gr.HTML,
+    gr.HTML,
+    gr.Button,
+    gr.Button,
+    gr.Button,
+    str,
+    int,
 ]:
     """Build the Community Quest section for home page.
 
@@ -1060,27 +1154,10 @@ def build_quest_section(
     # Build the complete quest section using Gradio layout components
     with gr.Column(elem_id="quest-section-wrapper", visible=False) as quest_container:
         # Header section (outside bordered box, matching Arena Rules style)
-        gr.HTML(f"""
-        <div style="padding: 2.5rem 1.5rem;">
-            <!-- Section Header -->
-            <div style="text-align: center; margin-bottom: 3rem;">
-                <!-- Community Quest Badge -->
-                <div style="margin-bottom: 1rem;">
-                    <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #22c55e; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
-                        Community Quest
-                    </span>
-                </div>
-
-                <h1 style="font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.75rem; font-weight: 600;">
-                    {escape(quest_data.get("title", ""))}
-                </h1>
-
-                <p style="color: var(--body-text-color-subdued); font-size: var(--text-xl); max-width: 48rem; margin: 0 auto;">
-                    {escape(quest_data.get("description", ""))}
-                </p>
-            </div>
-        </div>
-        """)
+        quest_header_html_container = gr.HTML(
+            _build_quest_header_html(quest_data),
+            elem_id="quest-header-container",
+        )
 
         # Content box (bordered container with carousel and progress)
         with gr.Column(elem_id="quest-content-box"):
@@ -1195,6 +1272,7 @@ def build_quest_section(
 
     return (
         quest_container,
+        quest_header_html_container,
         progress_html_container,
         contributors_html_container,
         carousel_html_container,

@@ -18,7 +18,7 @@
             <span></span>
           </button>
           <div class="header-nav-inner">
-            <ul>
+            <ul class="unselectable-text">
               @for (link of links; track link.label) {
                 <li [class.mobile-dropdown-item]="link.children && isMobile">
                   @if (link.children && !isMobile) {

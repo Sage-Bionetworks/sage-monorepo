@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use 'agora/styles/src/lib/variables';
-@use 'agora/styles/src/lib/mixins';
+@use 'agora/styles/src/variables' as vars;
+@use 'agora/styles/src/mixins' as mixins;
 
 .gct-filter-list {
   white-space: nowrap;
@@ -25,7 +25,7 @@
     font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
-    transition: variables.$transition-duration;
+    transition: vars.$transition-duration;
 
     &:hover {
       color: var(--color-action-primary);

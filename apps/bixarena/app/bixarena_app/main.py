@@ -415,6 +415,7 @@ def build_app():
                 cta_helper_msg,
                 stats_container,
                 quest_container,
+                quest_header_container,
                 quest_progress_container,
                 quest_contributors_container,
                 quest_carousel_container,
@@ -646,6 +647,7 @@ def build_app():
             inputs=None,
             outputs=[
                 quest_container,
+                quest_header_container,
                 quest_progress_container,
                 quest_contributors_container,
                 quest_carousel_container,

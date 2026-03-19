@@ -63,7 +63,7 @@
           }
         ],
         "stylePreprocessorOptions": {
-          "includePaths": ["libs", "libs/model-ad"]
+          "includePaths": ["libs"]
         },
         "styles": ["apps/model-ad/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
         "scripts": [],

@@ -1,3 +1,5 @@
+@use './mixins' as mixins;
+
 :root {
   --font-family-primary: 'DM Sans Variable', sans-serif;
 }
@@ -40,16 +42,16 @@ body {
     width: 100%;
     max-width: 960px;
 
-    @include respond-to('ex-small') {
+    @include mixins.respond-to('ex-small') {
       width: 80%;
     }
 
-    @include respond-to('small') {
+    @include mixins.respond-to('small') {
       min-width: 480px;
       width: 60%;
     }
 
-    @include respond-to('medium') {
+    @include mixins.respond-to('medium') {
       min-width: 480px;
       width: 100%;
     }

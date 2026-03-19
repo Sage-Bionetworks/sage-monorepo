@@ -1,5 +1,5 @@
-@use 'explorers/styles/src/lib/variables' as vars;
-@use 'explorers/styles/src/lib/mixins';
+@use 'explorers/styles/src/variables' as vars;
+@use 'explorers/styles/src/mixins' as mixins;
 
 .primary-identifier-controls {
   display: flex;

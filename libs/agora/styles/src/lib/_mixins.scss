@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use 'sass:meta';
-@import 'variables';
+@use 'sass:string';
+@use './variables' as vars;
 
 @mixin reset-button() {
   border: none;
@@ -39,7 +40,7 @@
 * S. https://sass-guidelin.es/#architecture
 */
 @mixin respond-to($breakpoint) {
-  $raw-query: map.get($breakpoints, $breakpoint);
+  $raw-query: map.get(vars.$breakpoints, $breakpoint);
 
   @if $raw-query {
     $query: if(
@@ -87,12 +88,12 @@
 
 @mixin two-tone-icon {
   color: var(--color-gray-600);
-  transition: $transition-duration;
+  transition: vars.$transition-duration;
 
   circle,
   rect,
   path {
-    transition: $transition-duration;
+    transition: vars.$transition-duration;
   }
 
   &:hover {

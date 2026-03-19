@@ -1,5 +1,5 @@
-@use 'styles/src/lib/variables';
-@use 'styles/src/lib/mixins';
+@use 'model-ad/styles/src/variables' as vars;
+@use 'model-ad/styles/src/mixins' as mixins;
 
 $home-mobile-md-max-width: 850px;
 $home-mobile-sm-max-width: 535px;
