@@ -18,12 +18,12 @@
             <span></span>
           </button>
           <div class="header-nav-inner">
-            <ul>
+            <ul class="unselectable-text">
               @for (link of links; track link.label) {
                 <li [class.mobile-dropdown-item]="link.children && isMobile">
                   @if (link.children && !isMobile) {
                     <a
-                      class="dropdown-trigger unselectable-text"
+                      class="dropdown-trigger"
                       [class.active]="isDropdownActive(link)"
                       (click)="menu.toggle($event)"
                     >
@@ -42,7 +42,6 @@
                       @for (child of link.children; track child.label) {
                         <li>
                           <a
-                            class="unselectable-text"
                             [routerLink]="child.routerLink"
                             routerLinkActive="active"
                             (click)="toggleNav()"
@@ -54,7 +53,6 @@
                     </ul>
                   } @else if (link.routerLink) {
                     <a
-                      class="unselectable-text"
                       [routerLink]="link.routerLink"
                       routerLinkActive="active"
                       [routerLinkActiveOptions]="link.activeOptions || { exact: false }"
@@ -63,12 +61,7 @@
                       <span>{{ link.label }}</span>
                     </a>
                   } @else if (link.url) {
-                    <a
-                      class="unselectable-text"
-                      [attr.href]="link.url"
-                      [attr.target]="link.target"
-                      (click)="toggleNav()"
-                    >
+                    <a [attr.href]="link.url" [attr.target]="link.target" (click)="toggleNav()">
                       <span>{{ link.label }}</span>
                     </a>
                   } @else {
