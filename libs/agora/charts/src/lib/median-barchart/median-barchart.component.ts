@@ -38,6 +38,7 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
   private MIN_CHART_WIDTH = 500;
   private CHART_HEIGHT = 350;
   private chartMargin = { top: 20, right: 20, bottom: 65, left: 65 };
+  private AXIS_OFFSET = 5; // x-axis offset to prevent clipping
   private chartXScale!: d3.ScaleBand<string>;
   private chartXAxisDrawn!: d3.Selection<SVGGElement, unknown, null, undefined>;
   private chartXAxisLabel!: d3.Selection<SVGTextElement, unknown, null, undefined>;
@@ -68,7 +69,7 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
   @ViewChild('chart') chartRef: ElementRef<SVGElement> = {} as ElementRef;
   @ViewChild('tooltip') tooltipRef: ElementRef<HTMLElement> = {} as ElementRef;
 
-  @HostListener('window:resize', ['$event.target'])
+  @HostListener('window:resize')
   onResize() {
     if (this.shouldResize && this.chartInitialized) {
       const self = this;
@@ -232,7 +233,7 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
         .append('text')
         .attr('class', 'x-axis-label')
         .attr('x', innerWidth / 2)
-        .attr('y', innerHeight + this.chartMargin.bottom)
+        .attr('y', innerHeight + this.chartMargin.bottom - this.AXIS_OFFSET)
         .attr('text-anchor', 'middle')
         .text(this.xAxisLabel);
 
