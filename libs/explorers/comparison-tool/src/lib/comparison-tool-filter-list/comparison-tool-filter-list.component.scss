@@ -1,5 +1,5 @@
-@use 'explorers/styles/src/lib/variables';
-@use 'explorers/styles/src/lib/mixins';
+@use 'explorers/styles/src/variables' as vars;
+@use 'explorers/styles/src/mixins' as mixins;
 
 .filter-list {
   white-space: nowrap;
@@ -24,7 +24,7 @@
     font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
-    transition: variables.$transition-duration;
+    transition: vars.$transition-duration;
 
     &:hover {
       color: var(--color-action-primary);

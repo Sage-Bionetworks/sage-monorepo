@@ -1,4 +1,6 @@
-@each $key, $value in $spacings {
+@use '../variables' as vars;
+
+@each $key, $value in vars.$spacings {
   .m-#{$key} {
     margin: var(--spacing-#{$key}) !important;
   }

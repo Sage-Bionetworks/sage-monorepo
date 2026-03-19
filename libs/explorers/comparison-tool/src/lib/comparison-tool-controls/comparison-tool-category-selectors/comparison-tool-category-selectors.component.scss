@@ -1,4 +1,4 @@
-@use 'explorers/styles/src/lib/variables' as variables;
+@use 'explorers/styles/src/variables' as vars;
 
 %selector-text {
   font-size: 14px;
@@ -66,7 +66,7 @@ explorers-comparison-tool-category-selectors {
 
         li {
           padding: 5px 15px;
-          transition: variables.$transition-duration;
+          transition: vars.$transition-duration;
 
           span {
             white-space: nowrap;

@@ -1,15 +1,17 @@
 /* stylelint-disable no-descending-specificity */
+@use '../variables' as vars;
+@use '../mixins' as mixins;
 
 .container-sm {
-  @include container('sm');
+  @include mixins.container('sm');
 }
 
 .container-md {
-  @include container;
+  @include mixins.container;
 }
 
 .container-lg {
-  @include container('lg');
+  @include mixins.container('lg');
 }
 
 .section {
@@ -33,7 +35,7 @@
   }
 }
 
-@each $key, $color in $main-colors {
+@each $key, $color in vars.$main-colors {
   .section-#{$key} {
     background-color: var(--color-#{$key});
   }

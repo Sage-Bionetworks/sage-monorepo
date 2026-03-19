@@ -1,5 +1,5 @@
-@use 'explorers/styles/src/lib/variables';
-@use 'explorers/styles/src/lib/mixins';
+@use 'explorers/styles/src/variables' as vars;
+@use 'explorers/styles/src/mixins' as mixins;
 
 footer {
   display: flex;
@@ -10,7 +10,7 @@ footer {
   padding: 10px;
   min-height: var(--footer-height);
 
-  @media (min-width: variables.$md-breakpoint) {
+  @media (min-width: vars.$md-breakpoint) {
     justify-content: space-between;
   }
 
@@ -24,7 +24,7 @@ footer {
       padding: 0;
       margin: 10px 0;
 
-      @media (min-width: variables.$md-breakpoint) {
+      @media (min-width: vars.$md-breakpoint) {
         margin: 0;
       }
 
@@ -67,7 +67,7 @@ footer {
     gap: 50px;
     margin: 10px 0;
 
-    @media (min-width: variables.$md-breakpoint) {
+    @media (min-width: vars.$md-breakpoint) {
       margin: 0;
     }
 

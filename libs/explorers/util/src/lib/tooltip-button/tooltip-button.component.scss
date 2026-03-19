@@ -1,4 +1,4 @@
-@use 'explorers/styles/src/lib/mixins';
+@use 'explorers/styles/src/mixins' as mixins;
 
 button {
   @include mixins.reset-button;

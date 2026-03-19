@@ -1,4 +1,4 @@
-@use 'explorers/styles/src/lib/variables';
+@use 'explorers/styles/src/variables' as vars;
 
 .filter-list-item {
   display: flex;
@@ -31,7 +31,7 @@
     color: #5081a7;
 
     svg path {
-      transition: variables.$transition-duration;
+      transition: vars.$transition-duration;
       stroke-width: 5;
     }
   }

@@ -1,7 +1,7 @@
 /* stylelint-disable no-descending-specificity */
 
-@use 'explorers/styles/src/lib/variables';
-@use 'explorers/styles/src/lib/mixins';
+@use 'explorers/styles/src/variables' as vars;
+@use 'explorers/styles/src/mixins' as mixins;
 
 :host {
   --panel-subnav-offset: -19px;

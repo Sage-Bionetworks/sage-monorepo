@@ -1,3 +1,6 @@
+@use '../variables' as vars;
+@use '../mixins' as mixins;
+
 h1,
 .h1,
 h2,
@@ -15,7 +18,7 @@ h6,
   margin-bottom: var(--spacing-lg);
 }
 
-@each $size, $properties in $headings {
+@each $size, $properties in vars.$headings {
   #{$size},
   .#{$size} {
     @each $property, $value in $properties {
@@ -49,7 +52,7 @@ b {
   font-weight: 700;
 }
 
-@each $key, $color in $main-colors {
+@each $key, $color in vars.$main-colors {
   .text-#{$key} {
     color: var(--color-#{$key}) !important;
   }
@@ -67,7 +70,7 @@ b {
   text-align: right;
 }
 
-@each $size, $properties in $font-sizes {
+@each $size, $properties in vars.$font-sizes {
   .text-#{$size} {
     @each $property, $value in $properties {
       #{$property}: var(--#{$property}-#{$size}) !important;
@@ -76,5 +79,5 @@ b {
 }
 
 .link {
-  @include link;
+  @include mixins.link;
 }

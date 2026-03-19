@@ -1,4 +1,4 @@
-@use 'explorers/styles/src/lib/mixins';
+@use 'explorers/styles/src/mixins' as mixins;
 
 .page-not-found {
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
