@@ -68,7 +68,7 @@ class AiServiceStack(cdk.Stack):
             "BIXARENA_AI_JWT_EXPECTED_AUDIENCE": "urn:bixarena:ai",
             # Validation configuration
             "BIXARENA_AI_PROMPT_VALIDATION_CONFIDENCE_THRESHOLD": "0.5",
-            "BIXARENA_AI_BATTLE_VALIDATION_CONFIDENCE_THRESHOLD": "0.5",
+            "BIXARENA_AI_BATTLE_VALIDATION_CONFIDENCE_THRESHOLD": "0.2",
             "BIXARENA_AI_PROMPT_MAX_LENGTH": "10000",
             # OpenRouter / LLM configuration
             "BIXARENA_AI_OPENROUTER_BASE_URL": "https://openrouter.ai/api/v1",
