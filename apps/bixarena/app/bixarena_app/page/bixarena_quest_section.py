@@ -75,7 +75,7 @@ def build_quest_not_found_section() -> tuple[
     """Build a quest not found error section.
 
     Returns:
-        Tuple of (quest_container, header_html, empty_html, empty_contributors_html,
+        Tuple of (quest_container, quest_header_html, empty_html, empty_contributors_html,
                   empty_carousel_html, hidden buttons, carousel_id, rotation_interval)
     """
     with gr.Column(
@@ -124,7 +124,7 @@ def build_quest_not_found_section() -> tuple[
 
         # Hidden components (required for return signature compatibility)
         # These are inside the container but hidden with visible=False and CSS
-        empty_header_html = gr.HTML("", visible=False)
+        empty_quest_header_html = gr.HTML("", visible=False)
         empty_html = gr.HTML("", visible=False)
         empty_contributors_html = gr.HTML("", visible=False)
         empty_carousel_html = gr.HTML("", visible=False)
@@ -138,7 +138,7 @@ def build_quest_not_found_section() -> tuple[
 
     return (
         quest_container,
-        empty_header_html,
+        empty_quest_header_html,
         empty_html,
         empty_contributors_html,
         empty_carousel_html,
@@ -1072,7 +1072,7 @@ def _build_carousel_html(
     return carousel_html
 
 
-def _build_header_html(quest_data: dict) -> str:
+def _build_quest_header_html(quest_data: dict) -> str:
     """Build the quest header HTML with title and description."""
     return f"""
     <div style="padding: 2.5rem 1.5rem;">
@@ -1154,8 +1154,8 @@ def build_quest_section(
     # Build the complete quest section using Gradio layout components
     with gr.Column(elem_id="quest-section-wrapper", visible=False) as quest_container:
         # Header section (outside bordered box, matching Arena Rules style)
-        header_html_container = gr.HTML(
-            _build_header_html(quest_data),
+        quest_header_html_container = gr.HTML(
+            _build_quest_header_html(quest_data),
             elem_id="quest-header-container",
         )
 
@@ -1272,7 +1272,7 @@ def build_quest_section(
 
     return (
         quest_container,
-        header_html_container,
+        quest_header_html_container,
         progress_html_container,
         contributors_html_container,
         carousel_html_container,

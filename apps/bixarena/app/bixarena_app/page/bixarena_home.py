@@ -20,7 +20,7 @@ from bixarena_app.page.bixarena_quest_section import (
     QUEST_UI_CONFIG,
     _build_builders_credits_html,
     _build_carousel_html,
-    _build_header_html,
+    _build_quest_header_html,
     _build_progress_html,
     build_quest_section,
 )
@@ -288,7 +288,7 @@ def load_quest_content_on_page_load(
         request: Gradio request object
 
     Returns:
-        Tuple of (quest_container_update, header_html_update, progress_html_update,
+        Tuple of (quest_container_update, quest_header_html_update, progress_html_update,
                   contributors_html_update, carousel_html_update)
     """
     try:
@@ -359,7 +359,7 @@ def load_quest_content_on_page_load(
         )
 
         # Build header HTML with title and description
-        header_html = _build_header_html(quest_data)
+        header_html = _build_quest_header_html(quest_data)
 
         return (
             gr.update(visible=True),
@@ -385,7 +385,7 @@ def build_quest_section_wrapper():
     """Create the Community Quest section for the home page."""
     if not COMMUNITY_QUEST_ENABLED:
         with gr.Column(visible=False) as quest_container:
-            header_html_container = gr.HTML("")
+            quest_header_html_container = gr.HTML("")
             progress_html_container = gr.HTML("")
             contributors_html_container = gr.HTML("")
             carousel_html_container = gr.HTML("")
@@ -394,7 +394,7 @@ def build_quest_section_wrapper():
             carousel_init_trigger = gr.Button(visible=False)
         return (
             quest_container,
-            header_html_container,
+            quest_header_html_container,
             progress_html_container,
             contributors_html_container,
             carousel_html_container,
