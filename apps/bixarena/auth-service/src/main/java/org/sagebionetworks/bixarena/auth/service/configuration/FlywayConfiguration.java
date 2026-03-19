@@ -9,8 +9,11 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Slf4j
 public class FlywayConfiguration {
-  // Clean the DB only in dev mode, never in production.
-  // With schema separation, this is now safe as it only affects the auth schema.
+  // Disabled: clean+migrate on every restart destroys auth.user rows, which invalidates
+  // active sessions (the session in Valkey still references a user UUID that no longer
+  // exists in the DB). To manually clean and re-apply migrations when needed, run:
+  //   ./gradlew :bixarena-auth-service:flywayClean :bixarena-auth-service:flywayMigrate
+  //
   // @Profile("dev")
   // @Bean
   // public FlywayMigrationStrategy cleanMigrationStrategy() {
