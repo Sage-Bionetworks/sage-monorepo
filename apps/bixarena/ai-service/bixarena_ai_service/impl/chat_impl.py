@@ -200,16 +200,16 @@ async def _do_stream(
         )
         return
 
-    # Truncation detection via completion_tokens
+    # Fallback: some providers return finish_reason="stop" or None even when
+    # the token limit is hit. Compare completion_tokens against the max we requested.
     if finish_reason in (None, "stop") and usage_data:
         completion_tokens = getattr(usage_data, "completion_tokens", 0) or 0
-        max_tokens = getattr(usage_data, "max_tokens", None)
-        if max_tokens and completion_tokens >= max_tokens:
+        if completion_tokens > settings.chat_max_response_tokens:
             logger.warning(
                 "%s: max tokens reached (%d/%d)",
                 model_name,
                 completion_tokens,
-                max_tokens,
+                settings.chat_max_response_tokens,
             )
             finish_reason = "length"
 
