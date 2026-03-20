@@ -8,12 +8,8 @@ import { AppComponent } from './app/app.component';
 
 prefetchConfig<AppConfig>().then((config) => {
   initSentry({
-    dsn: 'https://3cfc84951936511803f5c86d82eb9cad@o4510881207418880.ingest.us.sentry.io/4510897622679552',
-    hostEnvironmentMap: {
-      'agora-dev.adknowledgeportal.org': 'dev',
-      'agora-stage.adknowledgeportal.org': 'stage',
-      'agora.adknowledgeportal.org': 'prod',
-    },
+    dsn: config?.sentryDSN,
+    environment: config?.sentryEnvironment,
     release: config?.sentryRelease,
   });
 

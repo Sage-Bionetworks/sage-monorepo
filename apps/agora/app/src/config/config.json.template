@@ -1,9 +1,11 @@
 {
-  "apiDocsUrl": "${API_DOCS_URL}",
-  "appVersion": "${APP_VERSION}",
-  "commitSha": "${COMMIT_SHA}",
-  "csrApiUrl": "${CSR_API_URL}",
-  "ssrApiUrl": "${SSR_API_URL}",
-  "googleTagManagerId": "${GOOGLE_TAG_MANAGER_ID}",
-  "sentryRelease": "${SENTRY_RELEASE}"
+  "apiDocsUrl": "${API_DOCS_URL:-http://localhost:8000/api-docs}",
+  "appVersion": "${APP_VERSION:-local}",
+  "commitSha": "${COMMIT_SHA:-}",
+  "csrApiUrl": "${CSR_API_URL:-http://localhost:8000/api/v1}",
+  "ssrApiUrl": "${SSR_API_URL:-http://agora-api:3333/v1}",
+  "googleTagManagerId": "${GOOGLE_TAG_MANAGER_ID:-}",
+  "sentryDSN": "${SENTRY_DSN:-}",
+  "sentryEnvironment": "${SENTRY_ENVIRONMENT:-localhost}",
+  "sentryRelease": "${SENTRY_RELEASE:-}"
 }
