@@ -17,6 +17,7 @@ from __future__ import annotations
 import logging
 from collections.abc import AsyncGenerator
 from pathlib import Path
+from urllib.parse import urlparse
 
 from fastapi import HTTPException
 from fastapi.sse import EventSourceResponse
@@ -32,6 +33,12 @@ from bixarena_ai_service.models.model_chat_request import ModelChatRequest
 from bixarena_ai_service.models.model_chat_usage import ModelChatUsage
 
 logger = logging.getLogger(__name__)
+
+# Allowed hosts for api_base to prevent SSRF
+_ALLOWED_API_BASE_HOSTS = {
+    "openrouter.ai",
+    "api.openai.com",
+}
 
 # Load system prompt once at module level
 _SYSTEM_PROMPT_PATH = (
@@ -253,6 +260,14 @@ class ChatApiImpl(BaseChatApi):
                 )
 
         settings = get_settings()
+
+        # Validate api_base against allowlist to prevent SSRF
+        parsed = urlparse(model_chat_request.api_base)
+        if parsed.scheme != "https" or parsed.hostname not in _ALLOWED_API_BASE_HOSTS:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unsupported api_base host: {parsed.hostname}",
+            )
 
         # https://openrouter.ai/docs/app-attribution
         default_headers = {}
