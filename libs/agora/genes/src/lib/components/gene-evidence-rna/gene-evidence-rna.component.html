@@ -25,6 +25,7 @@
             <explorers-download-dom-image
               [target]="rnaOEChart"
               [filename]="_gene.ensembl_gene_id + '_rna_overall_expression'"
+              [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
             ></explorers-download-dom-image>
           </h3>
           <p>
@@ -81,6 +82,7 @@
             <explorers-download-dom-image
               [target]="rnaDEChart"
               [filename]="_gene.ensembl_gene_id + '_rna_differential_expression'"
+              [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
             ></explorers-download-dom-image>
           </h3>
           <p class="mb-0">
@@ -122,6 +124,7 @@
             <explorers-download-dom-image
               [target]="rnaCCChart"
               [filename]="_gene.ensembl_gene_id + '_rna_consistency_of_change_in_expression'"
+              [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
             ></explorers-download-dom-image>
           </h3>
           <p class="mb-0">
@@ -158,6 +161,7 @@
             <explorers-download-dom-image
               [target]="rnaCorrChart"
               [filename]="_gene.ensembl_gene_id + '_rna_correlation_with_hallmarks_of_AD'"
+              [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
             ></explorers-download-dom-image>
           </h3>
           <div class="mb-md">
