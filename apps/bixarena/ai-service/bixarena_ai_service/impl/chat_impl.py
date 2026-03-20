@@ -284,7 +284,7 @@ class ChatApiImpl(BaseChatApi):
                 messages=messages,
                 settings=settings,
             ):
-                data = chunk.model_dump_json(exclude_none=True)
+                data = chunk.model_dump_json(by_alias=True, exclude_none=True)
                 yield f"data:{data}\n\n"
 
         return EventSourceResponse(content=event_generator())
