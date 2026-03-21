@@ -242,7 +242,7 @@ public class ChatCompletionStreamService {
         AiChunk chunk = objectMapper.readValue(data, AiChunk.class);
 
         // Forward chunk to client
-        writer.write("data:" + data + "\n\n");
+        writer.write("data: " + data + "\n\n");
         writer.flush();
 
         // Accumulate content
@@ -315,7 +315,7 @@ public class ChatCompletionStreamService {
     }
     AiChunk errorChunk = new AiChunk(null, "error", null, message, null);
     PrintWriter writer = response.getWriter();
-    writer.write("data:" + objectMapper.writeValueAsString(errorChunk) + "\n\n");
+    writer.write("data: " + objectMapper.writeValueAsString(errorChunk) + "\n\n");
     writer.flush();
   }
 }
