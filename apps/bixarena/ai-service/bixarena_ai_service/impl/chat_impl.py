@@ -225,9 +225,12 @@ async def _do_stream(
     if usage_data:
         usage = ModelChatUsage(
             model=model_name,
-            prompt_tokens=getattr(usage_data, "prompt_tokens", 0) or 0,
-            completion_tokens=getattr(usage_data, "completion_tokens", 0) or 0,
-            total_tokens=getattr(usage_data, "total_tokens", 0) or 0,
+            temperature=settings.chat_default_temperature,
+            top_p=settings.chat_default_top_p,
+            max_tokens=settings.chat_max_response_tokens,
+            prompt_tokens=usage_data.prompt_tokens,
+            completion_tokens=usage_data.completion_tokens,
+            total_tokens=usage_data.total_tokens,
         )
 
     # Final chunk
