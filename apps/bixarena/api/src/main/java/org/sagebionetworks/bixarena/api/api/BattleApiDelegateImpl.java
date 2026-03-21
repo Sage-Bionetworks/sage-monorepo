@@ -204,9 +204,11 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
     UUID roundId,
     UUID modelId
   ) {
-    log.info("Stream requested: battle={}, round={}, model={}", battleId, roundId, modelId);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UUID callerId = UUID.fromString(authentication.getName());
+    log.info("User {} stream requested: battle={}, round={}, model={}", callerId, battleId, roundId, modelId);
     HttpServletResponse servletResponse = request.getNativeResponse(HttpServletResponse.class);
-    chatCompletionStreamService.streamCompletion(battleId, roundId, modelId, servletResponse);
+    chatCompletionStreamService.streamCompletion(battleId, roundId, modelId, callerId, servletResponse);
     // Response already written directly to HttpServletResponse
     return null;
   }

@@ -89,11 +89,19 @@ public class ChatCompletionStreamService {
    * then persists the accumulated response as a message on the battle round.
    */
   public void streamCompletion(
-      UUID battleId, UUID roundId, UUID modelId, HttpServletResponse response) {
+      UUID battleId, UUID roundId, UUID modelId, UUID callerId, HttpServletResponse response) {
     BattleEntity battle = battleRepository
       .findById(battleId)
       .orElseThrow(() -> new BattleNotFoundException(
         String.format("The battle with ID %s does not exist.", battleId)));
+
+    // Ownership check: users can only stream their own battles
+    if (!battle.getUserId().equals(callerId)) {
+      log.warn("User {} attempted to stream battle {} owned by {}", callerId, battleId, battle.getUserId());
+      throw new org.springframework.security.access.AccessDeniedException(
+        "You can only stream your own battles"
+      );
+    }
 
     BattleRoundEntity round = battleRoundRepository
       .findById(roundId)
