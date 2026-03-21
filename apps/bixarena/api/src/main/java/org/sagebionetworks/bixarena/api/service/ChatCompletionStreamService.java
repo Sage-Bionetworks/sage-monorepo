@@ -90,15 +90,28 @@ public class ChatCompletionStreamService {
    * then persists the accumulated response as a message on the battle round.
    */
   public void streamCompletion(
-      UUID battleId, UUID roundId, UUID modelId, UUID callerId, HttpServletResponse response) {
+    UUID battleId,
+    UUID roundId,
+    UUID modelId,
+    UUID callerId,
+    HttpServletResponse response
+  ) {
     BattleEntity battle = battleRepository
       .findById(battleId)
-      .orElseThrow(() -> new BattleNotFoundException(
-        String.format("The battle with ID %s does not exist.", battleId)));
+      .orElseThrow(() ->
+        new BattleNotFoundException(
+          String.format("The battle with ID %s does not exist.", battleId)
+        )
+      );
 
     // Ownership check: users can only stream their own battles
     if (!battle.getUserId().equals(callerId)) {
-      log.warn("User {} attempted to stream battle {} owned by {}", callerId, battleId, battle.getUserId());
+      log.warn(
+        "User {} attempted to stream battle {} owned by {}",
+        callerId,
+        battleId,
+        battle.getUserId()
+      );
       throw new org.springframework.security.access.AccessDeniedException(
         "You can only stream your own battles"
       );
@@ -106,12 +119,16 @@ public class ChatCompletionStreamService {
 
     BattleRoundEntity round = battleRoundRepository
       .findById(roundId)
-      .orElseThrow(() -> new BattleRoundNotFoundException(
-        String.format("The battle round with ID %s does not exist.", roundId)));
+      .orElseThrow(() ->
+        new BattleRoundNotFoundException(
+          String.format("The battle round with ID %s does not exist.", roundId)
+        )
+      );
 
     if (!round.getBattleId().equals(battleId)) {
       throw new BattleRoundNotFoundException(
-        String.format("The battle with ID %s does not contain round %s.", battleId, roundId));
+        String.format("The battle with ID %s does not contain round %s.", battleId, roundId)
+      );
     }
 
     // Verify model belongs to this battle
@@ -119,22 +136,23 @@ public class ChatCompletionStreamService {
     boolean isModel2 = modelId.equals(battle.getModel2Id());
     if (!isModel1 && !isModel2) {
       throw new ModelNotFoundException(
-        String.format("Model %s does not belong to battle %s.", modelId, battleId));
+        String.format("Model %s does not belong to battle %s.", modelId, battleId)
+      );
     }
 
     ModelEntity model = modelRepository
       .findById(modelId)
-      .orElseThrow(() -> new ModelNotFoundException(
-        String.format("Model with id %s not found", modelId)));
+      .orElseThrow(() ->
+        new ModelNotFoundException(String.format("Model with id %s not found", modelId))
+      );
 
     // Build conversation messages from DB
-    List<Map<String, String>> messages = buildConversationMessages(battleId, round);
+    List<Map<String, String>> messages = buildConversationMessages(battleId, round, isModel1);
 
     try {
       forwardStream(response, battle, round, model, isModel1, messages);
     } catch (Exception e) {
-      log.error("Stream failed for round {} model {}: {}",
-        roundId, modelId, e.getMessage(), e);
+      log.error("Stream failed for round {} model {}: {}", roundId, modelId, e.getMessage(), e);
       try {
         sendErrorEvent(response, "An unexpected error occurred.");
       } catch (Exception writeErr) {
@@ -144,29 +162,36 @@ public class ChatCompletionStreamService {
   }
 
   private List<Map<String, String>> buildConversationMessages(
-      UUID battleId, BattleRoundEntity currentRound) {
+    UUID battleId,
+    BattleRoundEntity currentRound,
+    boolean isModel1
+  ) {
     List<Map<String, String>> messages = new ArrayList<>();
 
-    // Get all rounds up to and including current, ordered by round number
-    List<BattleRoundEntity> rounds = battleRoundRepository
-      .findByBattleIdOrderByRoundNumberAsc(battleId);
+    List<BattleRoundEntity> rounds = battleRoundRepository.findByBattleIdOrderByRoundNumberAsc(
+      battleId
+    );
 
     for (BattleRoundEntity round : rounds) {
       if (round.getRoundNumber() > currentRound.getRoundNumber()) {
         break;
       }
 
-      // Add the user prompt
       if (round.getPromptMessageId() != null) {
-        messageRepository.findById(round.getPromptMessageId()).ifPresent(msg ->
-          messages.add(Map.of("role", "user", "content", msg.getContent()))
-        );
+        messageRepository
+          .findById(round.getPromptMessageId())
+          .ifPresent(msg -> messages.add(Map.of("role", "user", "content", msg.getContent())));
       }
 
-      // For prior rounds, add the assistant response (don't add for current round)
+      // Include this model's own prior response for multi-turn context
       if (round.getRoundNumber() < currentRound.getRoundNumber()) {
-        // TODO: Which model's response to include for multi-turn? For now, skip prior responses.
-        // This matches current frontend behavior where each round is independent.
+        UUID msgId = isModel1 ? round.getModel1MessageId() : round.getModel2MessageId();
+        if (msgId != null) {
+          messageRepository
+            .findById(msgId)
+            .ifPresent(msg -> messages.add(Map.of("role", "assistant", "content", msg.getContent()))
+            );
+        }
       }
     }
 
@@ -174,12 +199,12 @@ public class ChatCompletionStreamService {
   }
 
   private void forwardStream(
-      HttpServletResponse response,
-      BattleEntity battle,
-      BattleRoundEntity round,
-      ModelEntity model,
-      boolean isModel1,
-      List<Map<String, String>> messages
+    HttpServletResponse response,
+    BattleEntity battle,
+    BattleRoundEntity round,
+    ModelEntity model,
+    boolean isModel1,
+    List<Map<String, String>> messages
   ) throws Exception {
     String serviceToken = serviceTokenProvider.obtainServiceToken();
 
@@ -193,8 +218,12 @@ public class ChatCompletionStreamService {
     String jsonBody = objectMapper.writeValueAsString(aiRequest);
     String url = appProperties.aiService().baseUrl() + "/chat/completions";
 
-    log.info("Streaming chat completion: battle={}, round={}, model={}",
-      battle.getId(), round.getId(), model.getId());
+    log.info(
+      "Streaming chat completion: battle={}, round={}, model={}",
+      battle.getId(),
+      round.getId(),
+      model.getId()
+    );
 
     HttpRequest request = HttpRequest.newBuilder(URI.create(url))
       .header("Authorization", "Bearer " + serviceToken)
@@ -203,10 +232,9 @@ public class ChatCompletionStreamService {
       .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
       .build();
 
-    HttpResponse<java.io.InputStream> httpResponse = serviceTokenProvider.getHttpClient().send(
-      request,
-      HttpResponse.BodyHandlers.ofInputStream()
-    );
+    HttpResponse<java.io.InputStream> httpResponse = serviceTokenProvider
+      .getHttpClient()
+      .send(request, HttpResponse.BodyHandlers.ofInputStream());
 
     // Set SSE headers
     response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
@@ -225,8 +253,11 @@ public class ChatCompletionStreamService {
     StringBuilder accumulatedText = new StringBuilder();
     String errorMessage = null;
 
-    try (BufferedReader reader = new BufferedReader(
-        new InputStreamReader(httpResponse.body(), StandardCharsets.UTF_8))) {
+    try (
+      BufferedReader reader = new BufferedReader(
+        new InputStreamReader(httpResponse.body(), StandardCharsets.UTF_8)
+      )
+    ) {
       PrintWriter writer = response.getWriter();
       String line;
       while ((line = reader.readLine()) != null) {
@@ -262,12 +293,12 @@ public class ChatCompletionStreamService {
   }
 
   protected void persistResult(
-      BattleEntity battle,
-      BattleRoundEntity round,
-      ModelEntity model,
-      boolean isModel1,
-      String content,
-      String errorMessage
+    BattleEntity battle,
+    BattleRoundEntity round,
+    ModelEntity model,
+    boolean isModel1,
+    String content,
+    String errorMessage
   ) {
     if (errorMessage != null) {
       ModelErrorEntity error = ModelErrorEntity.builder()
@@ -277,8 +308,12 @@ public class ChatCompletionStreamService {
         .roundId(round.getId())
         .build();
       modelErrorRepository.save(error);
-      log.warn("Persisted model error for model {} round {}: {}",
-        model.getId(), round.getId(), errorMessage);
+      log.warn(
+        "Persisted model error for model {} round {}: {}",
+        model.getId(),
+        round.getId(),
+        errorMessage
+      );
       return;
     }
 
@@ -303,8 +338,12 @@ public class ChatCompletionStreamService {
         battleRoundRepository.setModel2MessageId(round.getId(), messageId);
       }
 
-      log.info("Persisted {} message {} for round {}",
-        isModel1 ? "model1" : "model2", messageId, round.getId());
+      log.info(
+        "Persisted {} message {} for round {}",
+        isModel1 ? "model1" : "model2",
+        messageId,
+        round.getId()
+      );
     });
   }
 
