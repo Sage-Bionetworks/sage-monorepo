@@ -199,7 +199,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
 
   @Override
   @PreAuthorize("hasRole('USER')")
-  public ResponseEntity<ModelChatCompletionChunkDto> streamBattleRoundCompletion(
+  public ResponseEntity<ModelChatCompletionChunkDto> createBattleRoundCompletion(
     UUID battleId,
     UUID roundId,
     UUID modelId

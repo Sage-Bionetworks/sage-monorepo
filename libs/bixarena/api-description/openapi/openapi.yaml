@@ -372,7 +372,7 @@ paths:
         - Battle
       summary: Stream a chat completion for a battle round
       description: Sends the round's prompt and conversation history to the specified model via ai-service and returns the response as a streaming HTTP response (text/event-stream). The completed response is persisted as a message after the stream ends.
-      operationId: streamBattleRoundCompletion
+      operationId: createBattleRoundCompletion
       responses:
         '200':
           description: Streaming HTTP response with chat completion chunks

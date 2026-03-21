@@ -46,6 +46,13 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
+    def test_create_battle_round_completion(self) -> None:
+        """Test case for create_battle_round_completion
+
+        Stream a chat completion for a battle round
+        """
+        pass
+
     def test_create_battle_validation(self) -> None:
         """Test case for create_battle_validation
 
@@ -92,13 +99,6 @@ class TestBattleApi(unittest.TestCase):
         """Test case for set_effective_validation
 
         Set effective validation
-        """
-        pass
-
-    def test_stream_battle_round_completion(self) -> None:
-        """Test case for stream_battle_round_completion
-
-        Stream a chat completion for a battle round
         """
         pass
 

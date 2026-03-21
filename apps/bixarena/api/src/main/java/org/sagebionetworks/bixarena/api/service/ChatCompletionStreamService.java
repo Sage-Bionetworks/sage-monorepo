@@ -131,7 +131,7 @@ public class ChatCompletionStreamService {
     List<Map<String, String>> messages = buildConversationMessages(battleId, round);
 
     try {
-      doStream(response, battle, round, model, isModel1, messages);
+      forwardStream(response, battle, round, model, isModel1, messages);
     } catch (Exception e) {
       log.error("Stream failed for round {} model {}: {}",
         roundId, modelId, e.getMessage(), e);
@@ -173,7 +173,7 @@ public class ChatCompletionStreamService {
     return messages;
   }
 
-  private void doStream(
+  private void forwardStream(
       HttpServletResponse response,
       BattleEntity battle,
       BattleRoundEntity round,
