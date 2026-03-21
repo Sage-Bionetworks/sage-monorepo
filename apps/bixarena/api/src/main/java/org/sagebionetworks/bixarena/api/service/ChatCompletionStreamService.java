@@ -34,7 +34,7 @@ import org.sagebionetworks.bixarena.api.model.repository.ModelErrorRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * Streams a chat completion for a battle round by proxying ai-service SSE
@@ -54,6 +54,7 @@ public class ChatCompletionStreamService {
   private final ServiceTokenProvider serviceTokenProvider;
   private final AppProperties appProperties;
   private final ObjectMapper objectMapper;
+  private final TransactionTemplate transactionTemplate;
 
   /** SSE chunk from ai-service. */
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -260,7 +261,6 @@ public class ChatCompletionStreamService {
     persistResult(battle, round, model, isModel1, accumulatedText.toString(), errorMessage);
   }
 
-  @Transactional
   protected void persistResult(
       BattleEntity battle,
       BattleRoundEntity round,
@@ -287,22 +287,25 @@ public class ChatCompletionStreamService {
       return;
     }
 
-    MessageCreateDto messageDto = new MessageCreateDto();
-    messageDto.setRole(MessageRoleDto.ASSISTANT);
-    messageDto.setContent(content);
-    UUID messageId = messageService.createMessage(messageDto);
+    // Use TransactionTemplate to ensure message creation + round update are atomic.
+    // (Self-invoked @Transactional is silently ignored due to Spring proxy bypass.)
+    transactionTemplate.executeWithoutResult(status -> {
+      MessageCreateDto messageDto = new MessageCreateDto();
+      messageDto.setRole(MessageRoleDto.ASSISTANT);
+      messageDto.setContent(content);
+      UUID messageId = messageService.createMessage(messageDto);
 
-    BattleRoundEntity freshRound = battleRoundRepository.findById(round.getId()).orElseThrow();
-    if (isModel1) {
-      freshRound.setModel1MessageId(messageId);
-    } else {
-      freshRound.setModel2MessageId(messageId);
-    }
-    battleRoundRepository.save(freshRound);
-    battleRoundRepository.flush();
+      // Use targeted column update to avoid race condition when two models
+      // stream concurrently — each thread only writes its own column.
+      if (isModel1) {
+        battleRoundRepository.setModel1MessageId(round.getId(), messageId);
+      } else {
+        battleRoundRepository.setModel2MessageId(round.getId(), messageId);
+      }
 
-    log.info("Persisted {} message {} for round {}",
-      isModel1 ? "model1" : "model2", messageId, round.getId());
+      log.info("Persisted {} message {} for round {}",
+        isModel1 ? "model1" : "model2", messageId, round.getId());
+    });
   }
 
   private void sendErrorEvent(HttpServletResponse response, String message) throws Exception {
