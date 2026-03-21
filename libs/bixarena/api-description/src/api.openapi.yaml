@@ -51,6 +51,8 @@ paths:
     $ref: paths/battles/{battleId}/rounds.yaml
   /battles/{battleId}/rounds/{roundId}:
     $ref: paths/battles/{battleId}/rounds/{roundId}.yaml
+  /battles/{battleId}/rounds/{roundId}/stream:
+    $ref: paths/battles/{battleId}/rounds/{roundId}/stream.yaml
   /example-prompts:
     $ref: paths/example-prompts.yaml
   /leaderboards:

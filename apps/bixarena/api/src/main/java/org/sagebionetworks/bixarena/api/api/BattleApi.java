@@ -19,6 +19,7 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.ModelChatCompletionChunkDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestDto;
 import java.util.UUID;
@@ -677,6 +678,82 @@ public interface BattleApi {
         @Parameter(name = "SetEffectiveValidationRequestDto", description = "", required = true) @Valid @RequestBody SetEffectiveValidationRequestDto setEffectiveValidationRequestDto
     ) {
         return getDelegate().setEffectiveValidation(battleId, setEffectiveValidationRequestDto);
+    }
+
+
+    /**
+     * POST /battles/{battleId}/rounds/{roundId}/stream : Stream a chat completion for a battle round
+     * Sends the round&#39;s prompt and conversation history to the specified model via ai-service and returns the response as a streaming HTTP response (text/event-stream). The completed response is persisted as a message after the stream ends.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @param roundId The unique identifier of the battle round (required)
+     * @param modelId The model to stream (required)
+     * @return Streaming HTTP response with chat completion chunks (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "streamBattleRoundCompletion",
+        summary = "Stream a chat completion for a battle round",
+        description = "Sends the round's prompt and conversation history to the specified model via ai-service and returns the response as a streaming HTTP response (text/event-stream). The completed response is persisted as a message after the stream ends.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Streaming HTTP response with chat completion chunks", content = {
+                @Content(mediaType = "text/event-stream", schema = @Schema(implementation = ModelChatCompletionChunkDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ModelChatCompletionChunkDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ModelChatCompletionChunkDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "text/event-stream", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "text/event-stream", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "text/event-stream", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "text/event-stream", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "text/event-stream", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "text/event-stream", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/battles/{battleId}/rounds/{roundId}/stream",
+        produces = { "text/event-stream", "application/problem+json", "application/json" }
+    )
+    
+    default ResponseEntity<ModelChatCompletionChunkDto> streamBattleRoundCompletion(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
+        @Parameter(name = "roundId", description = "The unique identifier of the battle round", required = true, in = ParameterIn.PATH) @PathVariable("roundId") UUID roundId,
+        @NotNull @Parameter(name = "modelId", description = "The model to stream", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "modelId", required = true) UUID modelId
+    ) {
+        return getDelegate().streamBattleRoundCompletion(battleId, roundId, modelId);
     }
 
 

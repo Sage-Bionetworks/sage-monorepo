@@ -16,6 +16,7 @@ from fastapi import FastAPI
 from bixarena_ai_service.apis.battle_validation_api import (
     router as BattleValidationApiRouter,
 )
+from bixarena_ai_service.apis.chat_api import router as ChatApiRouter
 from bixarena_ai_service.apis.health_check_api import router as HealthCheckApiRouter
 from bixarena_ai_service.apis.prompt_validation_api import (
     router as PromptValidationApiRouter,
@@ -28,5 +29,6 @@ app = FastAPI(
 )
 
 app.include_router(BattleValidationApiRouter)
+app.include_router(ChatApiRouter)
 app.include_router(HealthCheckApiRouter)
 app.include_router(PromptValidationApiRouter)
