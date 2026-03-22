@@ -245,8 +245,9 @@ public class ChatCompletionStreamService {
 
     if (httpResponse.statusCode() != 200) {
       String body = new String(httpResponse.body().readAllBytes(), StandardCharsets.UTF_8);
-      log.error("AI service returned {}: {}", httpResponse.statusCode(), body);
-      sendErrorEvent(response, "AI service error (code: " + httpResponse.statusCode() + ")");
+      log.error("AI service returned {} for round {} model {}: {}",
+        httpResponse.statusCode(), round.getId(), model.getId(), body);
+      sendErrorEvent(response, body);
       return;
     }
 
