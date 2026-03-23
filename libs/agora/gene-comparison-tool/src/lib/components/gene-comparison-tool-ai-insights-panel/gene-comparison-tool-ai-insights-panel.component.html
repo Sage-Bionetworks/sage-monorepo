@@ -1,0 +1,143 @@
+<div class="gct-ai-insights-panel" [class.open]="isOpen">
+  <div class="gct-ai-insights-panel-inner">
+    <div class="gct-ai-insights-panel-header">
+      <div class="gct-ai-insights-panel-heading">AI Insights</div>
+      <div class="gct-ai-insights-panel-header-actions">
+        @if (messages.length > 0) {
+          <button
+            class="gct-ai-insights-panel-clear"
+            (click)="clearConversation()"
+            pTooltip="Clear conversation"
+            tooltipPosition="bottom"
+            tooltipStyleClass="tooltip"
+          >
+            <span class="pi pi-trash"></span>
+          </button>
+        }
+        <button class="gct-ai-insights-panel-close" (click)="close()">
+          <svg
+            width="21"
+            height="21"
+            viewBox="0 0 21 21"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19.9999 1L1.3999 19.6M1.3999 1L19.9999 19.6"
+              stroke="#C4C4C4"
+              stroke-width="2"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="gct-ai-insights-panel-model">
+      <label for="ai-model-select">Model</label>
+      <p-select
+        id="ai-model-select"
+        [options]="modelOptions"
+        [(ngModel)]="selectedModel"
+        optionLabel="label"
+        optionValue="id"
+        [disabled]="isStreaming"
+      ></p-select>
+    </div>
+
+    <div class="gct-ai-insights-panel-messages" #messagesContainer>
+      @if (messages.length === 0 && !isStreaming && !errorMessage) {
+        <div class="gct-ai-insights-panel-empty">
+          <span class="pi pi-sparkles gct-ai-insights-panel-empty-icon"></span>
+          <p>
+            Analyze your pinned genes with AI to discover patterns, comparisons, and research
+            insights.
+          </p>
+          <p-button
+            label="Analyze Pinned Genes"
+            icon="pi pi-sparkles"
+            (click)="analyze()"
+            [disabled]="pinnedGenes.length === 0"
+            [rounded]="true"
+          ></p-button>
+          @if (pinnedGenes.length === 0) {
+            <p class="gct-ai-insights-panel-hint">Pin some genes first to enable analysis.</p>
+          }
+        </div>
+      }
+
+      @for (message of messages; track $index) {
+        @if (message.role === 'user') {
+          <div class="gct-ai-insights-message gct-ai-insights-message-user">
+            <div class="gct-ai-insights-message-content">{{ message.content }}</div>
+          </div>
+        }
+        @if (message.role === 'assistant') {
+          <div class="gct-ai-insights-message gct-ai-insights-message-assistant">
+            <div class="gct-ai-insights-message-content">
+              <markdown [data]="message.content"></markdown>
+            </div>
+          </div>
+        }
+      }
+
+      @if (isStreaming && streamingContent) {
+        <div
+          class="gct-ai-insights-message gct-ai-insights-message-assistant gct-ai-insights-message-streaming"
+        >
+          <div class="gct-ai-insights-message-content">
+            <markdown [data]="streamingContent"></markdown>
+            <span class="gct-ai-insights-cursor"></span>
+          </div>
+        </div>
+      }
+
+      @if (isStreaming && !streamingContent) {
+        <div class="gct-ai-insights-loading">
+          <span class="pi pi-spinner pi-spin"></span>
+          <span>Analyzing genes...</span>
+        </div>
+      }
+
+      @if (errorMessage) {
+        <div class="gct-ai-insights-error">
+          <span class="pi pi-exclamation-triangle"></span>
+          <span>{{ errorMessage }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="gct-ai-insights-panel-input">
+      @if (isStreaming) {
+        <p-button
+          label="Stop"
+          icon="pi pi-stop"
+          severity="danger"
+          (click)="stopStreaming()"
+          [rounded]="true"
+          size="small"
+        ></p-button>
+      }
+      @if (!isStreaming && messages.length > 0) {
+        <div class="gct-ai-insights-panel-input-row">
+          <input
+            type="text"
+            class="gct-ai-insights-panel-textarea"
+            [(ngModel)]="userInput"
+            placeholder="Ask a follow-up question..."
+            (keydown.enter)="sendFollowUp()"
+          />
+          <p-button
+            icon="pi pi-send"
+            (click)="sendFollowUp()"
+            [disabled]="!userInput.trim()"
+            [rounded]="true"
+            size="small"
+            pTooltip="Send"
+            tooltipPosition="top"
+            tooltipStyleClass="tooltip"
+          ></p-button>
+        </div>
+      }
+    </div>
+  </div>
+</div>

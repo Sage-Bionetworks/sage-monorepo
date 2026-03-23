@@ -300,6 +300,18 @@
                   <div class="clear-all-button">
                     <button (click)="onClearAllClick()">Clear All</button>
                   </div>
+                  <div class="ai-insights-button">
+                    <p-button
+                      label="AI Insights"
+                      icon="pi pi-sparkles"
+                      (click)="aiInsightsPanel.toggle()"
+                      [rounded]="true"
+                      size="small"
+                      pTooltip="Get AI-powered analysis of pinned genes"
+                      tooltipPosition="top"
+                      tooltipStyleClass="tooltip"
+                    ></p-button>
+                  </div>
                 </div>
               </div>
             }
@@ -636,6 +648,12 @@
     </div>
   </div>
 
+  <agora-gene-comparison-tool-ai-insights-panel
+    #aiInsightsPanel
+    [pinnedGenes]="pinnedItems"
+    [category]="category"
+    [subCategory]="subCategory"
+  ></agora-gene-comparison-tool-ai-insights-panel>
   <agora-gene-comparison-tool-details-panel
     #detailsPanel
     (onShowLegend)="comparisonToolService.toggleLegend()"

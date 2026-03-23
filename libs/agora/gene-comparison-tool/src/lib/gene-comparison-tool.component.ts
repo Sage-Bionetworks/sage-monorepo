@@ -45,6 +45,7 @@ import { combineLatest, Subscription } from 'rxjs';
 import * as helpers from './gene-comparison-tool.helpers';
 import * as variables from './gene-comparison-tool.variables';
 
+import { GeneComparisonToolAiInsightsPanelComponent } from './components/gene-comparison-tool-ai-insights-panel/gene-comparison-tool-ai-insights-panel.component';
 import { GeneComparisonToolDetailsPanelComponent } from './components/gene-comparison-tool-details-panel/gene-comparison-tool-details-panel.component';
 import { GeneComparisonToolFilterPanelComponent } from './components/gene-comparison-tool-filter-panel/gene-comparison-tool-filter-panel.component';
 import { GeneComparisonToolPinnedGenesModalComponent } from './components/gene-comparison-tool-pinned-genes-modal/gene-comparison-tool-pinned-genes-modal.component';
@@ -78,6 +79,7 @@ import { GeneComparisonToolFilterListComponent } from './components/gene-compari
     SvgIconComponent,
     HelpLinksComponent,
     Paginator,
+    GeneComparisonToolAiInsightsPanelComponent,
     GeneComparisonToolFilterListComponent,
     GeneComparisonToolScorePanelComponent,
     GeneComparisonToolDetailsPanelComponent,
@@ -182,6 +184,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild('pinnedTable', { static: true }) pinnedTable!: Table;
   @ViewChild('genesTable', { static: true }) genesTable!: Table;
 
+  @ViewChild('aiInsightsPanel') aiInsightsPanel!: GeneComparisonToolAiInsightsPanelComponent;
   @ViewChild('filterPanel') filterPanel!: GeneComparisonToolFilterPanelComponent;
   @ViewChild('detailsPanel') detailsPanel!: GeneComparisonToolDetailsPanelComponent;
   @ViewChild('scorePanel') scorePanel!: GeneComparisonToolScorePanelComponent;
