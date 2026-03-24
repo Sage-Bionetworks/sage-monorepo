@@ -211,7 +211,7 @@ async def _do_stream(
     # the token limit is hit. Compare completion_tokens against the max we requested.
     if finish_reason in (None, "stop") and usage_data:
         completion_tokens = getattr(usage_data, "completion_tokens", 0) or 0
-        if completion_tokens > settings.chat_max_response_tokens:
+        if completion_tokens >= settings.chat_max_response_tokens:
             logger.warning(
                 "%s: max tokens reached (%d/%d)",
                 model_name,
