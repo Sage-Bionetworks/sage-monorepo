@@ -31,7 +31,6 @@ dependencies = [
     "fastapi>=0.119.0",
     "gradio==5.23.1",
     "numpy",
-    "openai>=1.0",
     "requests",
     "websockets>=12.0",
 ]

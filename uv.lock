@@ -288,7 +288,6 @@ dependencies = [
     { name = "fastapi" },
     { name = "gradio" },
     { name = "numpy" },
-    { name = "openai" },
     { name = "requests" },
     { name = "websockets" },
 ]
@@ -299,7 +298,6 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.119.0" },
     { name = "gradio", specifier = "==5.23.1" },
     { name = "numpy" },
-    { name = "openai", specifier = ">=1.0" },
     { name = "requests" },
     { name = "websockets", specifier = ">=12.0" },
 ]
