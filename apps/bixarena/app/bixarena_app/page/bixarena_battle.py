@@ -30,7 +30,7 @@ from bixarena_app.config.constants import (
 from bixarena_app.config.system_message import create_system_message_html
 from bixarena_app.config.utils import _ga4_event_js
 from bixarena_app.model.battle_state import BattleSession, State
-from bixarena_app.model.error_handler import get_battle_round_limit_message
+from bixarena_app.config.system_message import get_battle_round_limit_message
 from bixarena_app.model.model_response import bot_response_multi
 from bixarena_app.page.battle_page_css import (
     CHATBOT_BATTLE_CSS,

@@ -6,20 +6,11 @@ Maps exceptions to user-friendly messages without leaking sensitive information.
 
 import logging
 
-from bixarena_app.config.constants import BATTLE_ROUND_LIMIT
-
 logger = logging.getLogger(__name__)
 
 
 class StreamError(Exception):
     """Raised when the backend SSE stream returns an error or empty response."""
-
-
-def get_battle_round_limit_message() -> str:
-    return (
-        f"You've reached the round limit ({BATTLE_ROUND_LIMIT}) for this battle.<br>"
-        "Please submit your evaluation of the model."
-    )
 
 
 def get_user_error_message(error: Exception) -> str:
