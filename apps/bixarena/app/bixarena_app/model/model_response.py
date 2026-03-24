@@ -5,9 +5,9 @@ import gradio as gr
 
 from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import PROMPT_USE_LIMIT
-from bixarena_app.config.conversation import (
+from bixarena_app.config.conversation import Conversation
+from bixarena_app.config.system_message import (
     CONTINUATION_PROMPT,
-    Conversation,
     create_system_message_html,
 )
 from bixarena_app.model.api_provider import get_api_provider_stream_iter

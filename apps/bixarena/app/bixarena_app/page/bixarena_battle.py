@@ -27,7 +27,7 @@ from bixarena_app.config.constants import (
     PROMPT_LEN_LIMIT,
     PROMPT_USE_LIMIT,
 )
-from bixarena_app.config.conversation import create_system_message_html
+from bixarena_app.config.system_message import create_system_message_html
 from bixarena_app.config.utils import _ga4_event_js
 from bixarena_app.model import model_response
 from bixarena_app.model.error_handler import get_battle_round_limit_message
@@ -156,18 +156,12 @@ def create_battle(
                 model1_name = battle.model1.name
                 model2_name = battle.model2.name
 
-                # Update api_endpoint_info with the selected models
+                # Store model IDs for streaming via backend
                 model_response.api_endpoint_info[model1_name] = {
                     "model_id": battle.model1.id,
-                    "api_type": "openai",
-                    "api_base": battle.model1.api_base,
-                    "model_name": battle.model1.api_model_name,
                 }
                 model_response.api_endpoint_info[model2_name] = {
                     "model_id": battle.model2.id,
-                    "api_type": "openai",
-                    "api_base": battle.model2.api_base,
-                    "model_name": battle.model2.api_model_name,
                 }
 
                 logger.info(
