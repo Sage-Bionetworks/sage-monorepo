@@ -744,6 +744,8 @@ def build_side_by_side_ui_anony():
         vote_outputs,
         js=_ga4_event_js("vote_clicked", {"vote_choice": "tie"}),
     )
+    streaming_events: list = []
+
     new_battle_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
         [battle_session],
@@ -823,144 +825,81 @@ def build_side_by_side_ui_anony():
     }
     """
 
-    # "New Battle Same Prompt" button: reset + auto-resubmit stored prompt
-    new_battle_same_prompt_btn.click(
-        new_battle_same_prompt,
-        [battle_session],
-        states
-        + [battle_session]
-        + chatbots
-        + model_selectors
-        + [textbox]
-        + [left_vote_btn, tie_btn, right_vote_btn]
-        + [battle_interface, voting_row, next_battle_row]
-        + [page_header, textbox_row]
-        + [disclaimer]
-        + [example_prompts_group]
-        + [new_battle_same_prompt_btn]
-        + [new_battle_btn],
-        js=_ga4_event_js("new_battle_clicked", {"trigger": "new_battle_same_prompt"}),
-    ).then(
-        add_text,
-        states + [battle_session] + model_selectors + [textbox],
+    # Shared inputs/outputs for all submit chains
+    add_text_inputs = states + [battle_session] + model_selectors + [textbox]
+    add_text_outputs = (
         states
         + [battle_session]
         + chatbots
         + [textbox]
         + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-        + [page_header, textbox_row, disclaimer],
-    ).then(
-        lambda: None,
-        [],
-        [],
-        js=disable_enter_js,
-    ).then(
-        bot_response_multi,
-        states + [battle_session],
+        + [page_header, textbox_row, disclaimer]
+    )
+    bot_response_outputs = (
         states
         + [battle_session]
         + chatbots
         + [voting_row, next_battle_row, page_header, textbox_row]
-        + [new_battle_same_prompt_btn, new_battle_btn],
-    ).then(
-        lambda: None,
-        [],
-        [],
-        js=enable_enter_js,
+        + [new_battle_same_prompt_btn, new_battle_btn]
     )
 
-    textbox.submit(
-        add_text,
-        states + [battle_session] + model_selectors + [textbox],
-        states
-        + [battle_session]
-        + chatbots
-        + [textbox]
-        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-        + [page_header, textbox_row, disclaimer],
-    ).then(
-        lambda: None,  # Disable enter key
-        [],
-        [],
-        js=disable_enter_js,
-    ).then(
-        bot_response_multi,
-        states + [battle_session],
-        states
-        + [battle_session]
-        + chatbots
-        + [voting_row, next_battle_row, page_header, textbox_row]
-        + [new_battle_same_prompt_btn, new_battle_btn],
-    ).then(
-        lambda: None,  # Enable enter key
-        [],
-        [],
-        js=enable_enter_js,
-    )
+    def _wire_streaming(pre_event):
+        """Wire bot_response_multi after a pre-event and track for cancellation."""
+        evt = pre_event.then(
+            bot_response_multi, states + [battle_session], bot_response_outputs
+        )
+        streaming_events.append(evt)
+        evt.then(lambda: None, [], [], js=enable_enter_js)
 
-    # Arrow submit button — same chain as textbox.submit
-    arrow_submit_btn.click(
-        add_text,
-        states + [battle_session] + model_selectors + [textbox],
-        states
-        + [battle_session]
-        + chatbots
-        + [textbox]
-        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-        + [page_header, textbox_row, disclaimer],
-    ).then(
-        lambda: None,
-        [],
-        [],
-        js=disable_enter_js,
-    ).then(
-        bot_response_multi,
-        states + [battle_session],
-        states
-        + [battle_session]
-        + chatbots
-        + [voting_row, next_battle_row, page_header, textbox_row]
-        + [new_battle_same_prompt_btn, new_battle_btn],
-    ).then(
-        lambda: None,
-        [],
-        [],
-        js=enable_enter_js,
-    )
-
-    # Re-wire prompt buttons to use plain text prompts and trigger auto-submission
-    for i, card in enumerate(prompt_cards):
-        card.click(
-            lambda idx=i: example_prompt_ui.prompt_messages[idx],
-            inputs=[],
-            outputs=[textbox],
-        ).then(
-            add_text,
-            states + [battle_session] + model_selectors + [textbox],
+    # "New Battle Same Prompt" → add_text → stream
+    _wire_streaming(
+        new_battle_same_prompt_btn.click(
+            new_battle_same_prompt,
+            [battle_session],
             states
             + [battle_session]
             + chatbots
+            + model_selectors
             + [textbox]
-            + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-            + [page_header, textbox_row, disclaimer],
-        ).then(
-            lambda: None,
-            [],
-            [],
-            js=disable_enter_js,
-        ).then(
-            bot_response_multi,
-            states + [battle_session],
-            states
-            + [battle_session]
-            + chatbots
-            + [voting_row, next_battle_row, page_header, textbox_row]
-            + [new_battle_same_prompt_btn, new_battle_btn],
-        ).then(
-            lambda: None,
-            [],
-            [],
-            js=enable_enter_js,
+            + [left_vote_btn, tie_btn, right_vote_btn]
+            + [battle_interface, voting_row, next_battle_row]
+            + [page_header, textbox_row]
+            + [disclaimer]
+            + [example_prompts_group]
+            + [new_battle_same_prompt_btn]
+            + [new_battle_btn],
+            js=_ga4_event_js(
+                "new_battle_clicked", {"trigger": "new_battle_same_prompt"}
+            ),
+        )
+        .then(add_text, add_text_inputs, add_text_outputs)
+        .then(lambda: None, [], [], js=disable_enter_js)
+    )
+
+    # textbox.submit → stream
+    _wire_streaming(
+        textbox.submit(add_text, add_text_inputs, add_text_outputs).then(
+            lambda: None, [], [], js=disable_enter_js
+        )
+    )
+
+    # arrow_submit_btn → stream
+    _wire_streaming(
+        arrow_submit_btn.click(add_text, add_text_inputs, add_text_outputs).then(
+            lambda: None, [], [], js=disable_enter_js
+        )
+    )
+
+    # prompt card clicks → stream
+    for i, card in enumerate(prompt_cards):
+        _wire_streaming(
+            card.click(
+                lambda idx=i: example_prompt_ui.prompt_messages[idx],
+                inputs=[],
+                outputs=[textbox],
+            )
+            .then(add_text, add_text_inputs, add_text_outputs)
+            .then(lambda: None, [], [], js=disable_enter_js)
         )
 
     # Components needed to reset the battle from outside (e.g. nav button)
@@ -984,6 +923,7 @@ def build_side_by_side_ui_anony():
         disclaimer,
         battle_session,
         reset_outputs,
+        streaming_events,
     )
 
 
@@ -1008,6 +948,7 @@ def build_battle_page():
             _,  # disclaimer (not needed)
             battle_session,
             reset_outputs,
+            streaming_events,
         ) = build_side_by_side_ui_anony()
 
         # Refresh example prompts when page loads to ensure each user sees different prompts
@@ -1030,4 +971,11 @@ def build_battle_page():
         # Setup disclaimer show/hide based on textbox focus
         battle_page.load(lambda: None, None, None, js=DISCLAIMER_TOGGLE_JS)
 
-    return battle_page, example_prompt_ui, prompt_outputs, battle_session, reset_outputs
+    return (
+        battle_page,
+        example_prompt_ui,
+        prompt_outputs,
+        battle_session,
+        reset_outputs,
+        streaming_events,
+    )
