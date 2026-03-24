@@ -247,7 +247,7 @@ public class ChatCompletionStreamService {
       String body = new String(httpResponse.body().readAllBytes(), StandardCharsets.UTF_8);
       log.error("AI service returned {} for round {} model {}: {}",
         httpResponse.statusCode(), round.getId(), model.getId(), body);
-      sendErrorEvent(response, body);
+      sendErrorEvent(response, "An error occurred while generating the response.");
       return;
     }
 
