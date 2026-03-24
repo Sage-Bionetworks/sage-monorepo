@@ -1,5 +1,7 @@
 """Stream LLM responses from the backend SSE endpoint."""
 
+import codecs
+import codecs
 import json
 import logging
 
@@ -46,9 +48,10 @@ def get_api_provider_stream_iter(
             text = ""
             finish_reason = None
             buf = ""
+            decoder = codecs.getincrementaldecoder("utf-8")()
 
             for chunk_bytes in response.stream(amt=4096):
-                buf += chunk_bytes.decode("utf-8")
+                buf += decoder.decode(chunk_bytes)
                 # SSE lines are separated by \n; process complete lines
                 while "\n" in buf:
                     line, buf = buf.split("\n", 1)
