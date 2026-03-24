@@ -29,13 +29,9 @@ from bixarena_app.config.constants import (
 )
 from bixarena_app.config.system_message import create_system_message_html
 from bixarena_app.config.utils import _ga4_event_js
-from bixarena_app.model import model_response
+from bixarena_app.model.battle_state import BattleSession, State
 from bixarena_app.model.error_handler import get_battle_round_limit_message
-from bixarena_app.model.model_response import (
-    BattleSession,
-    State,
-    bot_response_multi,
-)
+from bixarena_app.model.model_response import bot_response_multi
 from bixarena_app.page.battle_page_css import (
     CHATBOT_BATTLE_CSS,
     DISCLAIMER_CSS,
@@ -133,17 +129,13 @@ anony_names = ["", ""]
 def create_battle(
     title: str | None = None,
     cookies: dict[str, str] | None = None,
-) -> tuple[UUID | None, str | None, str | None]:
+):
     """Create a new battle record in the database.
 
     The backend randomly selects two models and returns the battle with full model information.
 
-    Args:
-        title: Optional battle title (first prompt snippet)
-        cookies: Session cookies for authentication
-
     Returns:
-        Tuple of (battle_id, model1_name, model2_name) if successful, (None, None, None) otherwise
+        The Battle object if successful, None otherwise.
     """
 
     try:
@@ -153,25 +145,15 @@ def create_battle(
             battle_api = BattleApi(api_client)
             battle = battle_api.create_battle(battle_request)
             if battle and battle.id and battle.model1 and battle.model2:
-                model1_name = battle.model1.name
-                model2_name = battle.model2.name
-
-                # Store model IDs for streaming via backend
-                model_response.api_endpoint_info[model1_name] = {
-                    "model_id": battle.model1.id,
-                }
-                model_response.api_endpoint_info[model2_name] = {
-                    "model_id": battle.model2.id,
-                }
-
                 logger.info(
-                    f"✅ Battle created: {battle.id} - '{title}' - {model1_name} vs {model2_name}"
+                    f"✅ Battle created: {battle.id} - '{title}' - "
+                    f"{battle.model1.name} vs {battle.model2.name}"
                 )
-                return battle.id, model1_name, model2_name
+                return battle
             logger.warning("❌ Failed to create battle.")
     except Exception as e:
         logger.warning(f"❌ Failed to create battle: {e}")
-    return None, None, None
+    return None
 
 
 def end_battle(battle_id: UUID, cookies: dict[str, str] | None = None) -> None:
@@ -528,8 +510,7 @@ def add_text(
 
     # State: Edge case - battle round limit reached
     if states[0] is not None:
-        conv = states[0].conv
-        if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
+        if battle_session.round_count >= BATTLE_ROUND_LIMIT:
             logger.info(
                 f"🛑 Battle round limit reached: battle_id={battle_session.battle_id}"
             )
@@ -537,8 +518,8 @@ def add_text(
             round_limit_content = create_system_message_html(round_limit_msg)
             for i in range(num_sides):
                 if states[i]:
-                    states[i].conv.append_message("user", text)
-                    states[i].conv.append_message("assistant", round_limit_content)
+                    states[i].append_message("user", text)
+                    states[i].append_message("assistant", round_limit_content)
                     states[i].skip_next = True
 
     text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off
@@ -548,17 +529,17 @@ def add_text(
     if battle_session.battle_id is None:
         # Use first 50 characters of prompt as battle title
         battle_title = text[:50] + "..." if len(text) > 50 else text
-        battle_id, model1, model2 = create_battle(battle_title, cookies)
-        if battle_id and model1 and model2:
-            battle_session.battle_id = battle_id
+        battle = create_battle(battle_title, cookies)
+        if battle:
+            battle_session.battle_id = battle.id
             # Track prompt for "New Battle Same Prompt" reuse
             if text != battle_session.last_prompt:
                 battle_session.prompt_use_remaining = PROMPT_USE_LIMIT
             battle_session.last_prompt = text
             # Initialize states with the models selected by the backend
             states = [
-                State(model1),
-                State(model2),
+                State(battle.model1.name, battle.model1.id),
+                State(battle.model2.name, battle.model2.id),
             ]
         else:
             # State: Edge case - failed to create battle
@@ -592,14 +573,16 @@ def add_text(
         round_id = None
         if battle_id:
             round_id = create_battle_round(battle_id, text, cookies)
+            if round_id:
+                battle_session.round_count += 1
 
         for i in range(num_sides):
             # In continuation mode, skip models that aren't truncated
             states[i].skip_next = any_truncated and not states[i].is_truncated
 
             if not states[i].skip_next:
-                states[i].conv.append_message(states[i].conv.roles[0], text)
-                states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
+                states[i].append_message("user", text)
+                states[i].append_message("assistant", None)  # type: ignore
                 states[i].is_truncated = False
 
         battle_session.round_id = round_id

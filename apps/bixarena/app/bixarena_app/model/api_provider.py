@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_api_provider_stream_iter(
-    model_api_dict: dict,
+    model_id,
     battle_session,
     cookies: dict[str, str] | None = None,
     max_new_tokens: int = MAX_RESPONSE_TOKENS,
@@ -26,7 +26,6 @@ def get_api_provider_stream_iter(
 
     Raises StreamError on backend errors or empty responses.
     """
-    model_id = model_api_dict["model_id"]
 
     logger.info(
         "Streaming: battle=%s, round=%s, model=%s",
