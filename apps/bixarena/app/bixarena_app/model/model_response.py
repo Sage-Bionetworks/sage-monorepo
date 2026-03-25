@@ -1,4 +1,7 @@
 import logging
+import queue
+import threading
+import time
 
 import gradio as gr
 
@@ -12,6 +15,8 @@ from bixarena_app.model.battle_state import BattleSession, State
 from bixarena_app.model.error_handler import get_user_error_message
 
 logger = logging.getLogger(__name__)
+
+CURSOR = '<span class="streaming-cursor">▌</span>'
 
 
 def bot_response(
@@ -30,15 +35,29 @@ def bot_response(
         cookies=cookies,
     )
 
-    state.update_last_message("▌")
+    state.update_last_message(CURSOR)
     yield (state, state.to_gradio_chatbot())
 
     try:
+        prev_len = 0
         for data in stream_iter:
             output = data["text"].strip()
             state.has_error = False
-            state.update_last_message(output + "▌")
-            yield (state, state.to_gradio_chatbot())
+            new_text = output[prev_len:]
+            prev_len = len(output)
+
+            # Drip-feed large chunks word-by-word for smooth display.
+            # Some providers (e.g., Gemini) send hundreds of chars at once.
+            words = new_text.split(" ")
+            displayed = output[: len(output) - len(new_text)]
+            for j, word in enumerate(words):
+                if j > 0:
+                    displayed += " "
+                displayed += word
+                state.update_last_message(displayed.strip() + CURSOR)
+                yield (state, state.to_gradio_chatbot())
+                if len(words) > 3:
+                    time.sleep(0.02)
 
         output = data["text"].strip()
         state.update_last_message(output)
@@ -88,27 +107,46 @@ def bot_response_multi(
         return
 
     states = [state0, state1]
-    gen = []
     cookies = get_session_cookie(request) if request else None
-    for i in range(num_sides):
-        gen.append(
-            bot_response(
+    chatbots = [None] * num_sides
+
+    # Stream both models in parallel using threads + queue.
+    # Each thread runs bot_response() independently and puts updates into the
+    # shared queue. The main generator drains the queue and yields to Gradio.
+    # This prevents one slow model from blocking the other's display.
+    _SENTINEL = object()
+    q = queue.Queue()
+
+    def _stream_model(i):
+        try:
+            for state, chatbot in bot_response(
                 states[i],
                 battle_session=battle_session,
                 cookies=cookies,
-            )
-        )
+            ):
+                q.put((i, state, chatbot))
+        finally:
+            q.put((i, _SENTINEL, None))
 
-    chatbots = [None] * num_sides
-    while True:
-        stop = True
-        for i in range(num_sides):
-            try:
-                ret = next(gen[i])
-                states[i], chatbots[i] = ret[0], ret[1]
-                stop = False
-            except StopIteration:
-                pass
+    for i in range(num_sides):
+        t = threading.Thread(target=_stream_model, args=(i,), daemon=True)
+        t.start()
+
+    done = 0
+    while done < num_sides:
+        try:
+            i, state_or_sentinel, chatbot = q.get(timeout=120)
+        except queue.Empty:
+            logger.error("Streaming timed out waiting for model updates")
+            break
+
+        if state_or_sentinel is _SENTINEL:
+            done += 1
+            continue
+
+        states[i] = state_or_sentinel
+        chatbots[i] = chatbot
+
         # State 2: Models streaming responses
         yield (
             states  # state0, state1: streaming
@@ -121,8 +159,6 @@ def bot_response_multi(
             + [gr.update()]  # new_battle_same_prompt_btn: unchanged
             + [gr.update()]  # new_battle_btn: unchanged
         )
-        if stop:
-            break
 
     # State 3B: Error occurred
     if any(state.has_error for state in states):

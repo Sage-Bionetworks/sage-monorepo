@@ -9,6 +9,16 @@ CHATBOT_BATTLE_CSS = """
     min-height: unset !important;
 }
 
+/* Blinking cursor animation for streaming responses */
+.streaming-cursor {
+    display: inline;
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
 /* System message styling */
 .message.bot.panel-full-width.thought:has(.system-message) {
     border: none;
