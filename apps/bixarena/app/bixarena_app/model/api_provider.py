@@ -1,14 +1,12 @@
 """Stream LLM responses from the backend SSE endpoint."""
 
 import codecs
-import codecs
 import json
 import logging
 
 from bixarena_api_client import BattleApi
 
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
-from bixarena_app.config.constants import MAX_RESPONSE_TOKENS
 from bixarena_app.model.error_handler import StreamError
 
 logger = logging.getLogger(__name__)
@@ -18,7 +16,6 @@ def get_api_provider_stream_iter(
     model_id,
     battle_session,
     cookies: dict[str, str] | None = None,
-    max_new_tokens: int = MAX_RESPONSE_TOKENS,
 ):
     """Stream LLM response from the backend via SSE.
 
@@ -75,19 +72,6 @@ def get_api_provider_stream_iter(
 
                     elif status == "complete":
                         finish_reason = data.get("finishReason", "stop")
-                        usage = data.get("usage")
-
-                        # Fallback truncation detection
-                        if finish_reason == "stop" and usage:
-                            completion_tokens = usage.get("completionTokens", 0)
-                            if completion_tokens >= max_new_tokens:
-                                logger.warning(
-                                    "Truncation detected: %d/%d tokens",
-                                    completion_tokens,
-                                    max_new_tokens,
-                                )
-                                finish_reason = "length"
-
                         yield {"text": text, "finish_reason": finish_reason}
 
             # Empty response detection

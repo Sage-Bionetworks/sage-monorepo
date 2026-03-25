@@ -9,11 +9,6 @@ PROMPT_LEN_LIMIT = int(os.getenv("PROMPT_LEN_LIMIT", 5000))
 BATTLE_ROUND_LIMIT = int(os.getenv("BATTLE_ROUND_LIMIT", 20))
 PROMPT_USE_LIMIT = int(os.getenv("PROMPT_USE_LIMIT", 5))
 
-# Generation parameters
-DEFAULT_TEMPERATURE = 0.7
-DEFAULT_TOP_P = 1.0
-MAX_RESPONSE_TOKENS = int(os.getenv("MAX_RESPONSE_TOKENS", 4096))
-
 # Analytics
 GTM_CONTAINER_ID = os.getenv("GTM_CONTAINER_ID", "")
 
