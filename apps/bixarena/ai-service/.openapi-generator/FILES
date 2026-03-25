@@ -1,6 +1,8 @@
 bixarena_ai_service/apis/__init__.py
 bixarena_ai_service/apis/battle_validation_api.py
 bixarena_ai_service/apis/battle_validation_api_base.py
+bixarena_ai_service/apis/chat_api.py
+bixarena_ai_service/apis/chat_api_base.py
 bixarena_ai_service/apis/health_check_api.py
 bixarena_ai_service/apis/health_check_api_base.py
 bixarena_ai_service/apis/prompt_validation_api.py
@@ -13,10 +15,17 @@ bixarena_ai_service/models/battle_validation.py
 bixarena_ai_service/models/battle_validation_request.py
 bixarena_ai_service/models/extra_models.py
 bixarena_ai_service/models/health_check.py
+bixarena_ai_service/models/message_create.py
+bixarena_ai_service/models/message_role.py
+bixarena_ai_service/models/model_chat_completion_chunk.py
+bixarena_ai_service/models/model_chat_request.py
+bixarena_ai_service/models/model_chat_usage.py
 bixarena_ai_service/models/prompt_validation.py
 bixarena_ai_service/models/prompt_validation_request.py
+bixarena_ai_service/models/rate_limit_error.py
 bixarena_ai_service/security_api.py
 tests/conftest.py
 tests/test_battle_validation_api.py
+tests/test_chat_api.py
 tests/test_health_check_api.py
 tests/test_prompt_validation_api.py

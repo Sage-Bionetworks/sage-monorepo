@@ -1,0 +1,40 @@
+parameters:
+  - $ref: ../../../../../components/parameters/path/battleId.yaml
+  - $ref: ../../../../../components/parameters/path/roundId.yaml
+  - name: modelId
+    description: The model to stream
+    in: query
+    required: true
+    schema:
+      $ref: ../../../../../components/schemas/ModelId.yaml
+
+post:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Battle
+  summary: Stream a chat completion for a battle round
+  description: >-
+    Sends the round's prompt and conversation history to the specified model
+    via ai-service and returns the response as a streaming HTTP response
+    (text/event-stream). The completed response is persisted as a message
+    after the stream ends.
+  operationId: createBattleRoundCompletion
+  responses:
+    '200':
+      description: Streaming HTTP response with chat completion chunks
+      content:
+        text/event-stream:
+          schema:
+            $ref: ../../../../../components/schemas/ModelChatCompletionChunk.yaml
+    '400':
+      $ref: ../../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../../../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../../../../components/responses/InternalServerError.yaml

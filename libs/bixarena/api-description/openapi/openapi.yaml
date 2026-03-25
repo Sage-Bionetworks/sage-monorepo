@@ -13,6 +13,8 @@ servers:
   - url: https://bixarena.ai/api/v1
   - url: https://bixarena.ai/api/v1
 tags:
+  - name: Chat
+    x-displayName: Chat
   - name: Admin
     description: Administrative endpoints requiring elevated roles.
     x-displayName: Admin
@@ -41,6 +43,37 @@ tags:
     description: Authentication and token minting operations.
     x-displayName: Auth
 paths:
+  /chat/completions:
+    post:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Chat
+      summary: Create a chat completion
+      description: Sends messages to an LLM model via OpenRouter and returns a streaming HTTP response (text/event-stream)
+      operationId: createChatCompletion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelChatRequest'
+      responses:
+        '200':
+          description: Streaming HTTP response with chat completion chunks
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/ModelChatCompletionChunk'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
   /admin/quests/{questId}:
     parameters:
       - $ref: '#/components/parameters/questId'
@@ -309,6 +342,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BattleRound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /battles/{battleId}/rounds/{roundId}/stream:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+      - $ref: '#/components/parameters/roundId'
+      - name: modelId
+        description: The model to stream
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/ModelId'
+    post:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Battle
+      summary: Stream a chat completion for a battle round
+      description: Sends the round's prompt and conversation history to the specified model via ai-service and returns the response as a streaming HTTP response (text/event-stream). The completed response is persisted as a message after the stream ends.
+      operationId: createBattleRoundCompletion
+      responses:
+        '200':
+          description: Streaming HTTP response with chat completion chunks
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/ModelChatCompletionChunk'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1298,110 +1369,169 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  securitySchemes:
-    jwtBearer:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: |
-        Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
-  parameters:
-    questId:
-      name: questId
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Unique identifier for a quest
-      example: build-bioarena-together
-    battleSearchQuery:
-      name: battleSearchQuery
-      description: The search query used to find and filter battles.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/BattleSearchQuery'
-    battleId:
-      name: battleId
-      description: The unique identifier of the battle
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/BattleId'
-    roundId:
-      name: roundId
-      description: The unique identifier of the battle round
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/BattleRoundId'
-    examplePromptSearchQuery:
-      name: examplePromptSearchQuery
-      description: The search query used to find and filter example prompts.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/ExamplePromptSearchQuery'
-    leaderboardId:
-      name: leaderboardId
-      description: The unique identifier of a leaderboard
-      in: path
-      required: true
-      schema:
-        type: string
-        example: open-source
-    leaderboardSearchQuery:
-      name: leaderboardSearchQuery
-      description: The search query used to find and filter leaderboard entries.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/LeaderboardSearchQuery'
-    modelId:
-      name: modelId
-      description: The unique identifier of a model
-      in: path
-      required: true
-      schema:
-        type: string
-        example: model_456
-    leaderboardModelHistoryQuery:
-      name: leaderboardModelHistoryQuery
-      description: The query used to filter and paginate historical model performance data.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/LeaderboardModelHistoryQuery'
-    leaderboardSnapshotQuery:
-      name: leaderboardSnapshotQuery
-      description: The query used to filter and paginate leaderboard snapshots.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/LeaderboardSnapshotQuery'
-    modelSearchQuery:
-      name: modelSearchQuery
-      description: The search query used to find and filter models.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/ModelSearchQuery'
-    postIndex:
-      name: postIndex
-      in: path
-      required: true
-      schema:
-        type: integer
-        minimum: 0
-      description: Display ordering index of a quest post (0-based)
-      example: 0
   schemas:
+    ModelId:
+      description: UUID of an AI model.
+      type: string
+      format: uuid
+      example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+    MessageRole:
+      type: string
+      description: The role of a message.
+      maxLength: 20
+      enum:
+        - system
+        - user
+        - assistant
+      example: user
+    MessageContent:
+      type: string
+      description: The content of a message.
+      maxLength: 10000
+      example: What is the capital of France?
+    MessageCreate:
+      type: object
+      description: Payload used to create a message.
+      properties:
+        role:
+          $ref: '#/components/schemas/MessageRole'
+        content:
+          $ref: '#/components/schemas/MessageContent'
+      required:
+        - role
+        - content
+    ModelChatRequest:
+      type: object
+      description: Request payload for creating a chat completion
+      properties:
+        modelId:
+          $ref: '#/components/schemas/ModelId'
+        apiModelName:
+          type: string
+          description: The model name used for API calls.
+          example: anthropic/claude-sonnet-4.5
+        apiBase:
+          type: string
+          description: Base URL for the model API.
+          example: https://openrouter.ai/api/v1
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageCreate'
+          description: The conversation messages to send to the model
+      required:
+        - modelId
+        - apiModelName
+        - apiBase
+        - messages
+    ModelErrorMessage:
+      type: string
+      description: Error message describing what went wrong.
+      minLength: 1
+      maxLength: 1000
+      example: Rate limit exceeded
+    ModelChatUsage:
+      type: object
+      description: Token usage and generation parameters for the chat completion
+      properties:
+        model:
+          type: string
+          description: The model identifier that was used
+        temperature:
+          type: number
+          format: float
+          description: The sampling temperature that was used
+        topP:
+          type: number
+          format: float
+          description: The nucleus sampling parameter that was used
+        maxTokens:
+          type: integer
+          description: The maximum token limit that was set
+        promptTokens:
+          type: integer
+          description: Number of tokens in the prompt
+        completionTokens:
+          type: integer
+          description: Number of tokens in the completion
+        totalTokens:
+          type: integer
+          description: Total number of tokens used
+      required:
+        - promptTokens
+        - completionTokens
+        - totalTokens
+    ModelChatCompletionChunk:
+      type: object
+      description: A streaming event chunk from the model chat completion
+      properties:
+        content:
+          $ref: '#/components/schemas/MessageContent'
+        status:
+          type: string
+          enum:
+            - streaming
+            - complete
+            - error
+          description: Current state of the streaming response
+        finishReason:
+          type: string
+          nullable: true
+          enum:
+            - stop
+            - length
+            - content_filter
+            - error
+          description: Reason the model stopped generating
+        errorMessage:
+          $ref: '#/components/schemas/ModelErrorMessage'
+        usage:
+          $ref: '#/components/schemas/ModelChatUsage'
+      required:
+        - status
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
+    RateLimitError:
+      allOf:
+        - $ref: '#/components/schemas/BasicError'
+        - type: object
+          properties:
+            limit:
+              type: integer
+              description: Maximum requests allowed per window
+              example: 100
+            window:
+              type: string
+              description: Time window for rate limiting
+              example: 1 minute
+            retryAfterSeconds:
+              type: integer
+              description: Seconds to wait before retrying
+              example: 18
+          required:
+            - limit
+            - window
+            - retryAfterSeconds
     QuestPost:
       type: object
       description: A single quest post. Content fields (description, images) are null/empty when the caller does not meet unlock gates.
@@ -1524,49 +1654,6 @@ components:
         - activePostIndex
         - totalBlocks
         - posts
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem
-      required:
-        - title
-        - status
-    RateLimitError:
-      allOf:
-        - $ref: '#/components/schemas/BasicError'
-        - type: object
-          properties:
-            limit:
-              type: integer
-              description: Maximum requests allowed per window
-              example: 100
-            window:
-              type: string
-              description: Time window for rate limiting
-              example: 1 minute
-            retryAfterSeconds:
-              type: integer
-              description: Seconds to wait before retrying
-              example: 18
-          required:
-            - limit
-            - window
-            - retryAfterSeconds
     BattleSort:
       description: What to sort battles by.
       type: string
@@ -1629,11 +1716,6 @@ components:
       type: string
       format: uuid
       example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-    ModelId:
-      description: UUID of an AI model.
-      type: string
-      format: uuid
-      example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
     CreatedAt:
       description: Timestamp when the entity was created.
       type: string
@@ -1855,31 +1937,6 @@ components:
         endedAt:
           $ref: '#/components/schemas/EndedAt'
           nullable: true
-    MessageRole:
-      type: string
-      description: The role of a message.
-      maxLength: 20
-      enum:
-        - system
-        - user
-        - assistant
-      example: user
-    MessageContent:
-      type: string
-      description: The content of a message.
-      maxLength: 10000
-      example: What is the capital of France?
-    MessageCreate:
-      type: object
-      description: Payload used to create a message.
-      properties:
-        role:
-          $ref: '#/components/schemas/MessageRole'
-        content:
-          $ref: '#/components/schemas/MessageContent'
-      required:
-        - role
-        - content
     BattleRoundCreateRequest:
       type: object
       description: Payload to create a new battle round with the user prompt.
@@ -2481,12 +2538,6 @@ components:
       nullable: true
       description: HTTP status code from the error response.
       example: 429
-    ModelErrorMessage:
-      type: string
-      description: Error message describing what went wrong.
-      minLength: 1
-      maxLength: 1000
-      example: Rate limit exceeded
     ModelErrorCreateRequest:
       type: object
       description: Request to report a model error.
@@ -2916,20 +2967,14 @@ components:
       required:
         - sub
   responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
     Unauthorized:
       description: Unauthorized
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    Forbidden:
-      description: The user does not have the permission to perform this action
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
       content:
         application/problem+json:
           schema:
@@ -2967,8 +3012,14 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    BadRequest:
-      description: Invalid request
+    Forbidden:
+      description: The user does not have the permission to perform this action
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
       content:
         application/problem+json:
           schema:
@@ -2979,7 +3030,113 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+  securitySchemes:
+    jwtBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
+  parameters:
+    questId:
+      name: questId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Unique identifier for a quest
+      example: build-bioarena-together
+    battleSearchQuery:
+      name: battleSearchQuery
+      description: The search query used to find and filter battles.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/BattleSearchQuery'
+    battleId:
+      name: battleId
+      description: The unique identifier of the battle
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/BattleId'
+    roundId:
+      name: roundId
+      description: The unique identifier of the battle round
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/BattleRoundId'
+    examplePromptSearchQuery:
+      name: examplePromptSearchQuery
+      description: The search query used to find and filter example prompts.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ExamplePromptSearchQuery'
+    leaderboardId:
+      name: leaderboardId
+      description: The unique identifier of a leaderboard
+      in: path
+      required: true
+      schema:
+        type: string
+        example: open-source
+    leaderboardSearchQuery:
+      name: leaderboardSearchQuery
+      description: The search query used to find and filter leaderboard entries.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/LeaderboardSearchQuery'
+    modelId:
+      name: modelId
+      description: The unique identifier of a model
+      in: path
+      required: true
+      schema:
+        type: string
+        example: model_456
+    leaderboardModelHistoryQuery:
+      name: leaderboardModelHistoryQuery
+      description: The query used to filter and paginate historical model performance data.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/LeaderboardModelHistoryQuery'
+    leaderboardSnapshotQuery:
+      name: leaderboardSnapshotQuery
+      description: The query used to filter and paginate leaderboard snapshots.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/LeaderboardSnapshotQuery'
+    modelSearchQuery:
+      name: modelSearchQuery
+      description: The search query used to find and filter models.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ModelSearchQuery'
+    postIndex:
+      name: postIndex
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+      description: Display ordering index of a quest post (0-based)
+      example: 0
 x-tagGroups:
+  - name: BixArena AI Service
+    tags:
+      - Chat
   - name: BixArena API Service
     tags:
       - Admin

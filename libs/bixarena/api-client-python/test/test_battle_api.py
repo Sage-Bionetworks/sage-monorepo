@@ -46,6 +46,13 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
+    def test_create_battle_round_completion(self) -> None:
+        """Test case for create_battle_round_completion
+
+        Stream a chat completion for a battle round
+        """
+        pass
+
     def test_create_battle_validation(self) -> None:
         """Test case for create_battle_validation
 

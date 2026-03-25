@@ -29,6 +29,9 @@ tags:
   - name: Battle Validation
     description: Operations for validating biomedical battles
     x-sage-internal: true
+  - name: Chat
+    description: Operations for streaming chat completions from LLM models
+    x-sage-internal: true
 
 paths:
   /health-check:
@@ -37,3 +40,5 @@ paths:
     $ref: paths/validate-prompt.yaml
   /validate-battle:
     $ref: paths/validate-battle.yaml
+  /chat/completions:
+    $ref: paths/chat/completions.yaml

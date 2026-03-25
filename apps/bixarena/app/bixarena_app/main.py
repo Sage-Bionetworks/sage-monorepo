@@ -435,6 +435,7 @@ def build_app():
                 prompt_outputs,
                 battle_session,
                 battle_reset_outputs,
+                streaming_events,
             ) = build_battle_page()
 
         with gr.Column(
@@ -512,6 +513,7 @@ def build_app():
             inputs=[battle_session],
             outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
             js=_GA4_PAGE_VIEW_JS.format(path="battle", title="Battle"),
+            cancels=streaming_events,
         )
         # Leaderboard button - show page and refresh data
         leaderboard_btn.click(

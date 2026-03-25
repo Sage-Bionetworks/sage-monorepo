@@ -27,15 +27,11 @@ from bixarena_app.config.constants import (
     PROMPT_LEN_LIMIT,
     PROMPT_USE_LIMIT,
 )
-from bixarena_app.config.conversation import create_system_message_html
+from bixarena_app.config.system_message import create_system_message_html
 from bixarena_app.config.utils import _ga4_event_js
-from bixarena_app.model import model_response
-from bixarena_app.model.error_handler import get_battle_round_limit_message
-from bixarena_app.model.model_response import (
-    BattleSession,
-    State,
-    bot_response_multi,
-)
+from bixarena_app.model.battle_state import BattleSession, State
+from bixarena_app.config.system_message import get_battle_round_limit_message
+from bixarena_app.model.model_response import bot_response_multi
 from bixarena_app.page.battle_page_css import (
     CHATBOT_BATTLE_CSS,
     DISCLAIMER_CSS,
@@ -133,17 +129,13 @@ anony_names = ["", ""]
 def create_battle(
     title: str | None = None,
     cookies: dict[str, str] | None = None,
-) -> tuple[UUID | None, str | None, str | None]:
+):
     """Create a new battle record in the database.
 
     The backend randomly selects two models and returns the battle with full model information.
 
-    Args:
-        title: Optional battle title (first prompt snippet)
-        cookies: Session cookies for authentication
-
     Returns:
-        Tuple of (battle_id, model1_name, model2_name) if successful, (None, None, None) otherwise
+        The Battle object if successful, None otherwise.
     """
 
     try:
@@ -153,31 +145,15 @@ def create_battle(
             battle_api = BattleApi(api_client)
             battle = battle_api.create_battle(battle_request)
             if battle and battle.id and battle.model1 and battle.model2:
-                model1_name = battle.model1.name
-                model2_name = battle.model2.name
-
-                # Update api_endpoint_info with the selected models
-                model_response.api_endpoint_info[model1_name] = {
-                    "model_id": battle.model1.id,
-                    "api_type": "openai",
-                    "api_base": battle.model1.api_base,
-                    "model_name": battle.model1.api_model_name,
-                }
-                model_response.api_endpoint_info[model2_name] = {
-                    "model_id": battle.model2.id,
-                    "api_type": "openai",
-                    "api_base": battle.model2.api_base,
-                    "model_name": battle.model2.api_model_name,
-                }
-
                 logger.info(
-                    f"✅ Battle created: {battle.id} - '{title}' - {model1_name} vs {model2_name}"
+                    f"✅ Battle created: {battle.id} - '{title}' - "
+                    f"{battle.model1.name} vs {battle.model2.name}"
                 )
-                return battle.id, model1_name, model2_name
+                return battle
             logger.warning("❌ Failed to create battle.")
     except Exception as e:
         logger.warning(f"❌ Failed to create battle: {e}")
-    return None, None, None
+    return None
 
 
 def end_battle(battle_id: UUID, cookies: dict[str, str] | None = None) -> None:
@@ -534,8 +510,7 @@ def add_text(
 
     # State: Edge case - battle round limit reached
     if states[0] is not None:
-        conv = states[0].conv
-        if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
+        if battle_session.round_count >= BATTLE_ROUND_LIMIT:
             logger.info(
                 f"🛑 Battle round limit reached: battle_id={battle_session.battle_id}"
             )
@@ -543,8 +518,8 @@ def add_text(
             round_limit_content = create_system_message_html(round_limit_msg)
             for i in range(num_sides):
                 if states[i]:
-                    states[i].conv.append_message("user", text)
-                    states[i].conv.append_message("assistant", round_limit_content)
+                    states[i].append_message("user", text)
+                    states[i].append_message("assistant", round_limit_content)
                     states[i].skip_next = True
 
     text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off
@@ -554,17 +529,17 @@ def add_text(
     if battle_session.battle_id is None:
         # Use first 50 characters of prompt as battle title
         battle_title = text[:50] + "..." if len(text) > 50 else text
-        battle_id, model1, model2 = create_battle(battle_title, cookies)
-        if battle_id and model1 and model2:
-            battle_session.battle_id = battle_id
+        battle = create_battle(battle_title, cookies)
+        if battle:
+            battle_session.battle_id = battle.id
             # Track prompt for "New Battle Same Prompt" reuse
             if text != battle_session.last_prompt:
                 battle_session.prompt_use_remaining = PROMPT_USE_LIMIT
             battle_session.last_prompt = text
             # Initialize states with the models selected by the backend
             states = [
-                State(model1),
-                State(model2),
+                State(battle.model1.name, battle.model1.id),
+                State(battle.model2.name, battle.model2.id),
             ]
         else:
             # State: Edge case - failed to create battle
@@ -598,14 +573,16 @@ def add_text(
         round_id = None
         if battle_id:
             round_id = create_battle_round(battle_id, text, cookies)
+            if round_id:
+                battle_session.round_count += 1
 
         for i in range(num_sides):
             # In continuation mode, skip models that aren't truncated
             states[i].skip_next = any_truncated and not states[i].is_truncated
 
             if not states[i].skip_next:
-                states[i].conv.append_message(states[i].conv.roles[0], text)
-                states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
+                states[i].append_message("user", text)
+                states[i].append_message("assistant", None)  # type: ignore
                 states[i].is_truncated = False
 
         battle_session.round_id = round_id
@@ -767,6 +744,8 @@ def build_side_by_side_ui_anony():
         vote_outputs,
         js=_ga4_event_js("vote_clicked", {"vote_choice": "tie"}),
     )
+    streaming_events: list = []
+
     new_battle_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
         [battle_session],
@@ -846,144 +825,81 @@ def build_side_by_side_ui_anony():
     }
     """
 
-    # "New Battle Same Prompt" button: reset + auto-resubmit stored prompt
-    new_battle_same_prompt_btn.click(
-        new_battle_same_prompt,
-        [battle_session],
-        states
-        + [battle_session]
-        + chatbots
-        + model_selectors
-        + [textbox]
-        + [left_vote_btn, tie_btn, right_vote_btn]
-        + [battle_interface, voting_row, next_battle_row]
-        + [page_header, textbox_row]
-        + [disclaimer]
-        + [example_prompts_group]
-        + [new_battle_same_prompt_btn]
-        + [new_battle_btn],
-        js=_ga4_event_js("new_battle_clicked", {"trigger": "new_battle_same_prompt"}),
-    ).then(
-        add_text,
-        states + [battle_session] + model_selectors + [textbox],
+    # Shared inputs/outputs for all submit chains
+    add_text_inputs = states + [battle_session] + model_selectors + [textbox]
+    add_text_outputs = (
         states
         + [battle_session]
         + chatbots
         + [textbox]
         + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-        + [page_header, textbox_row, disclaimer],
-    ).then(
-        lambda: None,
-        [],
-        [],
-        js=disable_enter_js,
-    ).then(
-        bot_response_multi,
-        states + [battle_session],
+        + [page_header, textbox_row, disclaimer]
+    )
+    bot_response_outputs = (
         states
         + [battle_session]
         + chatbots
         + [voting_row, next_battle_row, page_header, textbox_row]
-        + [new_battle_same_prompt_btn, new_battle_btn],
-    ).then(
-        lambda: None,
-        [],
-        [],
-        js=enable_enter_js,
+        + [new_battle_same_prompt_btn, new_battle_btn]
     )
 
-    textbox.submit(
-        add_text,
-        states + [battle_session] + model_selectors + [textbox],
-        states
-        + [battle_session]
-        + chatbots
-        + [textbox]
-        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-        + [page_header, textbox_row, disclaimer],
-    ).then(
-        lambda: None,  # Disable enter key
-        [],
-        [],
-        js=disable_enter_js,
-    ).then(
-        bot_response_multi,
-        states + [battle_session],
-        states
-        + [battle_session]
-        + chatbots
-        + [voting_row, next_battle_row, page_header, textbox_row]
-        + [new_battle_same_prompt_btn, new_battle_btn],
-    ).then(
-        lambda: None,  # Enable enter key
-        [],
-        [],
-        js=enable_enter_js,
-    )
+    def _wire_streaming(pre_event):
+        """Wire bot_response_multi after a pre-event and track for cancellation."""
+        evt = pre_event.then(
+            bot_response_multi, states + [battle_session], bot_response_outputs
+        )
+        streaming_events.append(evt)
+        evt.then(lambda: None, [], [], js=enable_enter_js)
 
-    # Arrow submit button — same chain as textbox.submit
-    arrow_submit_btn.click(
-        add_text,
-        states + [battle_session] + model_selectors + [textbox],
-        states
-        + [battle_session]
-        + chatbots
-        + [textbox]
-        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-        + [page_header, textbox_row, disclaimer],
-    ).then(
-        lambda: None,
-        [],
-        [],
-        js=disable_enter_js,
-    ).then(
-        bot_response_multi,
-        states + [battle_session],
-        states
-        + [battle_session]
-        + chatbots
-        + [voting_row, next_battle_row, page_header, textbox_row]
-        + [new_battle_same_prompt_btn, new_battle_btn],
-    ).then(
-        lambda: None,
-        [],
-        [],
-        js=enable_enter_js,
-    )
-
-    # Re-wire prompt buttons to use plain text prompts and trigger auto-submission
-    for i, card in enumerate(prompt_cards):
-        card.click(
-            lambda idx=i: example_prompt_ui.prompt_messages[idx],
-            inputs=[],
-            outputs=[textbox],
-        ).then(
-            add_text,
-            states + [battle_session] + model_selectors + [textbox],
+    # "New Battle Same Prompt" → add_text → stream
+    _wire_streaming(
+        new_battle_same_prompt_btn.click(
+            new_battle_same_prompt,
+            [battle_session],
             states
             + [battle_session]
             + chatbots
+            + model_selectors
             + [textbox]
-            + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-            + [page_header, textbox_row, disclaimer],
-        ).then(
-            lambda: None,
-            [],
-            [],
-            js=disable_enter_js,
-        ).then(
-            bot_response_multi,
-            states + [battle_session],
-            states
-            + [battle_session]
-            + chatbots
-            + [voting_row, next_battle_row, page_header, textbox_row]
-            + [new_battle_same_prompt_btn, new_battle_btn],
-        ).then(
-            lambda: None,
-            [],
-            [],
-            js=enable_enter_js,
+            + [left_vote_btn, tie_btn, right_vote_btn]
+            + [battle_interface, voting_row, next_battle_row]
+            + [page_header, textbox_row]
+            + [disclaimer]
+            + [example_prompts_group]
+            + [new_battle_same_prompt_btn]
+            + [new_battle_btn],
+            js=_ga4_event_js(
+                "new_battle_clicked", {"trigger": "new_battle_same_prompt"}
+            ),
+        )
+        .then(add_text, add_text_inputs, add_text_outputs)
+        .then(lambda: None, [], [], js=disable_enter_js)
+    )
+
+    # textbox.submit → stream
+    _wire_streaming(
+        textbox.submit(add_text, add_text_inputs, add_text_outputs).then(
+            lambda: None, [], [], js=disable_enter_js
+        )
+    )
+
+    # arrow_submit_btn → stream
+    _wire_streaming(
+        arrow_submit_btn.click(add_text, add_text_inputs, add_text_outputs).then(
+            lambda: None, [], [], js=disable_enter_js
+        )
+    )
+
+    # prompt card clicks → stream
+    for i, card in enumerate(prompt_cards):
+        _wire_streaming(
+            card.click(
+                lambda idx=i: example_prompt_ui.prompt_messages[idx],
+                inputs=[],
+                outputs=[textbox],
+            )
+            .then(add_text, add_text_inputs, add_text_outputs)
+            .then(lambda: None, [], [], js=disable_enter_js)
         )
 
     # Components needed to reset the battle from outside (e.g. nav button)
@@ -1007,6 +923,7 @@ def build_side_by_side_ui_anony():
         disclaimer,
         battle_session,
         reset_outputs,
+        streaming_events,
     )
 
 
@@ -1031,6 +948,7 @@ def build_battle_page():
             _,  # disclaimer (not needed)
             battle_session,
             reset_outputs,
+            streaming_events,
         ) = build_side_by_side_ui_anony()
 
         # Refresh example prompts when page loads to ensure each user sees different prompts
@@ -1053,4 +971,11 @@ def build_battle_page():
         # Setup disclaimer show/hide based on textbox focus
         battle_page.load(lambda: None, None, None, js=DISCLAIMER_TOGGLE_JS)
 
-    return battle_page, example_prompt_ui, prompt_outputs, battle_session, reset_outputs
+    return (
+        battle_page,
+        example_prompt_ui,
+        prompt_outputs,
+        battle_session,
+        reset_outputs,
+        streaming_events,
+    )

@@ -74,6 +74,11 @@ from bixarena_api_client.models.license import License
 from bixarena_api_client.models.message_create import MessageCreate
 from bixarena_api_client.models.message_role import MessageRole
 from bixarena_api_client.models.model import Model
+from bixarena_api_client.models.model_chat_completion_chunk import (
+    ModelChatCompletionChunk,
+)
+from bixarena_api_client.models.model_chat_request import ModelChatRequest
+from bixarena_api_client.models.model_chat_usage import ModelChatUsage
 from bixarena_api_client.models.model_error import ModelError
 from bixarena_api_client.models.model_error_create_request import (
     ModelErrorCreateRequest,
