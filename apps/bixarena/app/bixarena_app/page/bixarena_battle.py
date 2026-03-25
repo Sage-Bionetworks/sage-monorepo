@@ -658,6 +658,12 @@ def build_side_by_side_ui_anony():
                             show_copy_button=True,
                             type="messages",
                             group_consecutive_messages=False,
+                            latex_delimiters=[
+                                {"left": "$$", "right": "$$", "display": True},
+                                {"left": "\\[", "right": "\\]", "display": True},
+                                {"left": "$", "right": "$", "display": False},
+                                {"left": "\\(", "right": "\\)", "display": False},
+                            ],
                         )
                         chatbots.append(chatbot)
 
