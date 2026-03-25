@@ -16,6 +16,8 @@ from bixarena_app.model.error_handler import get_user_error_message
 
 logger = logging.getLogger(__name__)
 
+CURSOR = '<span class="streaming-cursor">▌</span>'
+
 
 def bot_response(
     state: State,
@@ -33,7 +35,7 @@ def bot_response(
         cookies=cookies,
     )
 
-    state.update_last_message("▌")
+    state.update_last_message(CURSOR)
     yield (state, state.to_gradio_chatbot())
 
     try:
@@ -52,7 +54,7 @@ def bot_response(
                 if j > 0:
                     displayed += " "
                 displayed += word
-                state.update_last_message(displayed.strip() + "▌")
+                state.update_last_message(displayed.strip() + CURSOR)
                 yield (state, state.to_gradio_chatbot())
                 if len(words) > 3:
                     time.sleep(0.02)
