@@ -99,12 +99,12 @@ def fetch_all_models(conn) -> list[dict[str, Any]]:
         conn: Database connection
 
     Returns:
-        List of model dictionaries with all model fields
+        List of model dictionaries with leaderboard-relevant fields
     """
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT *
+            SELECT id, name, slug, organization, external_link, license, active
             FROM api.model
             ORDER BY name
             """

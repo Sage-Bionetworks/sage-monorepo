@@ -2,7 +2,7 @@
 Leaderboard snapshot generation orchestration.
 
 Encapsulates the full snapshot workflow:
-  1. Fetch active models and battle evaluations from DB
+  1. Fetch all models and battle evaluations from DB
   2. Compute Bradley-Terry rankings with bootstrap confidence intervals
   3. Filter models below the minimum evaluation threshold
   4. Insert the snapshot and entries into the DB
