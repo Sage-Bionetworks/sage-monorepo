@@ -12,7 +12,7 @@ Encapsulates the full snapshot workflow:
 from datetime import UTC, datetime
 
 from bixarena_leaderboard.db_helper import (
-    fetch_active_models,
+    fetch_all_models,
     fetch_battle_evaluations,
     fetch_leaderboard_ids,
     fetch_leaderboards,
@@ -76,7 +76,7 @@ def generate_snapshot(
                 f"Available: {', '.join(available_slugs)}"
             )
 
-        all_models = fetch_active_models(conn)
+        all_models = fetch_all_models(conn)
         all_evaluations = fetch_battle_evaluations(conn)
 
         if not all_evaluations:

@@ -88,12 +88,35 @@ def fetch_active_models(conn) -> list[dict[str, Any]]:
         return cur.fetchall()
 
 
+def fetch_all_models(conn) -> list[dict[str, Any]]:
+    """
+    Fetch all models from the database, including inactive ones.
+
+    Used by leaderboard generation so that retired models retain their
+    earned rankings.
+
+    Args:
+        conn: Database connection
+
+    Returns:
+        List of model dictionaries with all model fields
+    """
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT *
+            FROM api.model
+            ORDER BY name
+            """
+        )
+        return cur.fetchall()
+
+
 def fetch_battle_evaluations(conn) -> list[dict[str, Any]]:
     """
     Fetch battle evaluations with model names for ranking.
 
-    Only includes evaluations where both models are active and the battle
-    is validated as biomedical.
+    Only includes evaluations where the battle is validated as biomedical.
 
     Args:
         conn: Database connection
@@ -112,8 +135,7 @@ def fetch_battle_evaluations(conn) -> list[dict[str, Any]]:
             JOIN api.battle_validation bv ON bv.id = b.effective_validation_id
             JOIN api.model m1 ON b.model1_id = m1.id
             JOIN api.model m2 ON b.model2_id = m2.id
-            WHERE m1.active = true AND m2.active = true
-              AND bv.is_biomedical = true
+            WHERE bv.is_biomedical = true
             """
         )
         return cur.fetchall()
