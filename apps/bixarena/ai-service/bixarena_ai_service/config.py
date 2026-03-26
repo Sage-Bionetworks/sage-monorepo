@@ -82,9 +82,15 @@ def get_openai_client() -> AsyncOpenAI:
     Reuses the same HTTP connection pool across requests.
     """
     settings = get_settings()
+    headers = {}
+    if settings.app_url:
+        headers["HTTP-Referer"] = settings.app_url
+    if settings.app_title:
+        headers["X-OpenRouter-Title"] = settings.app_title
     return AsyncOpenAI(
         api_key=settings.openrouter_api_key,
         base_url=settings.openrouter_base_url,
         timeout=settings.openrouter_timeout,
         max_retries=settings.openrouter_max_retries,
+        default_headers=headers if headers else None,
     )
