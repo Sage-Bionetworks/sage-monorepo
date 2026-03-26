@@ -315,13 +315,16 @@ DISCLAIMER_CSS = """
     max-width: 850px;
     margin: 0 auto;
     visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-#disclaimer.show {
+#disclaimer.collapsed {
+    display: none;
+}
+
+#disclaimer.show,
+#disclaimer.locked {
     visibility: visible;
-    opacity: 1;
+    display: block;
 }
 
 #disclaimer-content {

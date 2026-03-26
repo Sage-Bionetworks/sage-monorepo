@@ -11,7 +11,11 @@ from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.constants import GTM_CONTAINER_ID
 from bixarena_app.config.utils import setup_logging
 from bixarena_app.opengraph import OpenGraphFixMiddleware, build_opengraph_meta_tags
-from bixarena_app.page.bixarena_battle import build_battle_page, clear_history
+from bixarena_app.page.bixarena_battle import (
+    _DISCLAIMER_RESET_JS,
+    build_battle_page,
+    clear_history,
+)
 
 # Configure logging first
 setup_logging()
@@ -508,11 +512,24 @@ def build_app():
             reset = clear_history(bs, request, example_prompt_ui)
             return nav + reset
 
+        # GA4 + disclaimer reset JS for battle navigation buttons
+        _BATTLE_NAV_JS = f"""
+() => {{
+    if (window.bixTrack) {{
+        window.bixTrack('virtual_page_view', {{
+            page_path: '/battle',
+            page_title: 'Battle'
+        }});
+    }}
+{_DISCLAIMER_RESET_JS}
+}}
+"""
+
         battle_btn.click(
             navigate_to_battle,
             inputs=[battle_session],
             outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
-            js=_GA4_PAGE_VIEW_JS.format(path="battle", title="Battle"),
+            js=_BATTLE_NAV_JS,
             cancels=streaming_events,
         )
         # Leaderboard button - show page and refresh data

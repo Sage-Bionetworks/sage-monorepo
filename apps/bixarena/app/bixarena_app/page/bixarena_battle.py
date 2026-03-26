@@ -101,17 +101,20 @@ SUBMIT_BUTTON_INJECT_JS = """
 DISCLAIMER_TOGGLE_JS = """
 () => {
     const textarea = document.querySelector('#input_box textarea');
-    const disclaimer = document.getElementById('disclaimer');
-    if (!textarea || !disclaimer || disclaimer._disclaimerSetup) return;
-    disclaimer._disclaimerSetup = true;
+    if (!textarea || textarea._disclaimerSetup) return;
+    textarea._disclaimerSetup = true;
 
     const update = () => {
+        if (window._disclaimerPaused) return;
+        const d = document.getElementById('disclaimer');
+        if (!d || d.classList.contains('locked')) return;
         const hasFocus = document.activeElement === textarea;
         const hasContent = textarea.value.length > 0;
         if (hasFocus || hasContent) {
-            disclaimer.classList.add('show');
+            d.classList.remove('collapsed');
+            d.classList.add('show');
         } else {
-            disclaimer.classList.remove('show');
+            d.classList.remove('show');
         }
     };
 
@@ -121,6 +124,23 @@ DISCLAIMER_TOGGLE_JS = """
     update();
 }
 """
+
+# JavaScript to lock disclaimer visible after prompt submit
+DISCLAIMER_LOCK_JS = """
+() => {
+    const d = document.getElementById('disclaimer');
+    if (d) { d.classList.remove('collapsed'); d.classList.add('locked'); }
+}
+"""
+
+# Inline JS snippet to reset disclaimer state (used inside other JS functions).
+# Removes all visibility classes and pauses the focus toggle briefly so
+# Gradio re-render events (e.g. textbox clearing) don't re-show the disclaimer.
+_DISCLAIMER_RESET_JS = """\
+    var d = document.getElementById('disclaimer');
+    if (d) { d.classList.remove('locked'); d.classList.remove('show'); d.classList.remove('collapsed'); }
+    window._disclaimerPaused = true;
+    setTimeout(function() { window._disclaimerPaused = false; }, 500);"""
 
 num_sides = 2
 anony_names = ["", ""]
@@ -323,7 +343,7 @@ def vote_last_response(
         + (gr.Row(visible=True),)  # next_battle_row: show
         + (gr.HTML(visible=False),)  # page_header: hide
         + (gr.Row(visible=False),)  # textbox_row: hide
-        + (gr.HTML(visible=False),)  # disclaimer: hide
+        + (gr.HTML(visible=True),)  # disclaimer: keep in DOM, JS controls visibility
         + (
             new_battle_same_prompt_upd,
         )  # new_battle_same_prompt_btn: show/hide based on reuse count
@@ -482,7 +502,7 @@ def new_battle_same_prompt(battle_session: BattleSession, request: gr.Request = 
         + [gr.Row(visible=False)]  # next_battle_row: hide
         + [gr.HTML(visible=False)]  # page_header: hide (going straight to battle)
         + [gr.Row(visible=True)]  # textbox_row: show temporarily
-        + [gr.HTML(visible=False)]  # disclaimer: hide
+        + [gr.HTML(visible=True)]  # disclaimer: keep in DOM, JS controls visibility
         + [gr.Column(visible=False)]  # example_prompts_group: hide
         + [new_battle_same_prompt_upd]  # new_battle_same_prompt_btn: update counter
         + [gr.Button(variant="secondary" if can_reuse else "primary")]  # new_battle_btn
@@ -732,23 +752,33 @@ def build_side_by_side_ui_anony():
         + [new_battle_same_prompt_btn]
         + [new_battle_btn]
     )
+
+    def _vote_js(choice):
+        return f"""
+() => {{
+    if (window.bixTrack) window.bixTrack('vote_clicked', {{vote_choice: '{choice}'}});
+    var d = document.getElementById('disclaimer');
+    if (d) {{ d.classList.remove('locked'); d.classList.remove('show'); d.classList.add('collapsed'); }}
+}}
+"""
+
     left_vote_btn.click(
         left_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
-        js=_ga4_event_js("vote_clicked", {"vote_choice": "model_1"}),
+        js=_vote_js("model_1"),
     )
     right_vote_btn.click(
         right_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
-        js=_ga4_event_js("vote_clicked", {"vote_choice": "model_2"}),
+        js=_vote_js("model_2"),
     )
     tie_btn.click(
         tie_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
-        js=_ga4_event_js("vote_clicked", {"vote_choice": "tie"}),
+        js=_vote_js("tie"),
     )
     streaming_events: list = []
 
@@ -766,7 +796,12 @@ def build_side_by_side_ui_anony():
         + [disclaimer]
         + [example_prompts_group, prev_btn, next_btn]
         + prompt_cards,
-        js=_ga4_event_js("new_battle_clicked", {"trigger": "new_battle"}),
+        js=f"""
+() => {{
+    if (window.bixTrack) window.bixTrack('new_battle_clicked', {{trigger: 'new_battle'}});
+{_DISCLAIMER_RESET_JS}
+}}
+""",
     )
 
     # Direct JavaScript functions for enter key control
@@ -879,21 +914,22 @@ def build_side_by_side_ui_anony():
             ),
         )
         .then(add_text, add_text_inputs, add_text_outputs)
+        .then(lambda: None, [], [], js=DISCLAIMER_LOCK_JS)
         .then(lambda: None, [], [], js=disable_enter_js)
     )
 
     # textbox.submit → stream
     _wire_streaming(
-        textbox.submit(add_text, add_text_inputs, add_text_outputs).then(
-            lambda: None, [], [], js=disable_enter_js
-        )
+        textbox.submit(add_text, add_text_inputs, add_text_outputs)
+        .then(lambda: None, [], [], js=DISCLAIMER_LOCK_JS)
+        .then(lambda: None, [], [], js=disable_enter_js)
     )
 
     # arrow_submit_btn → stream
     _wire_streaming(
-        arrow_submit_btn.click(add_text, add_text_inputs, add_text_outputs).then(
-            lambda: None, [], [], js=disable_enter_js
-        )
+        arrow_submit_btn.click(add_text, add_text_inputs, add_text_outputs)
+        .then(lambda: None, [], [], js=DISCLAIMER_LOCK_JS)
+        .then(lambda: None, [], [], js=disable_enter_js)
     )
 
     # prompt card clicks → stream
@@ -905,6 +941,7 @@ def build_side_by_side_ui_anony():
                 outputs=[textbox],
             )
             .then(add_text, add_text_inputs, add_text_outputs)
+            .then(lambda: None, [], [], js=DISCLAIMER_LOCK_JS)
             .then(lambda: None, [], [], js=disable_enter_js)
         )
 
