@@ -111,7 +111,6 @@ DISCLAIMER_TOGGLE_JS = """
         const hasFocus = document.activeElement === textarea;
         const hasContent = textarea.value.length > 0;
         if (hasFocus || hasContent) {
-            d.classList.remove('collapsed');
             d.classList.add('show');
         } else {
             d.classList.remove('show');
@@ -129,7 +128,7 @@ DISCLAIMER_TOGGLE_JS = """
 DISCLAIMER_LOCK_JS = """
 () => {
     const d = document.getElementById('disclaimer');
-    if (d) { d.classList.remove('collapsed'); d.classList.add('locked'); }
+    if (d) d.classList.add('locked');
 }
 """
 
@@ -138,7 +137,7 @@ DISCLAIMER_LOCK_JS = """
 # Gradio re-render events (e.g. textbox clearing) don't re-show the disclaimer.
 _DISCLAIMER_RESET_JS = """\
     var d = document.getElementById('disclaimer');
-    if (d) { d.classList.remove('locked'); d.classList.remove('show'); d.classList.remove('collapsed'); }
+    if (d) { d.classList.remove('locked'); d.classList.remove('show'); }
     window._disclaimerPaused = true;
     setTimeout(function() { window._disclaimerPaused = false; }, 500);"""
 
@@ -343,7 +342,7 @@ def vote_last_response(
         + (gr.Row(visible=True),)  # next_battle_row: show
         + (gr.HTML(visible=False),)  # page_header: hide
         + (gr.Row(visible=False),)  # textbox_row: hide
-        + (gr.HTML(visible=True),)  # disclaimer: keep in DOM, JS controls visibility
+        + (gr.HTML(visible=False),)  # disclaimer: hide
         + (
             new_battle_same_prompt_upd,
         )  # new_battle_same_prompt_btn: show/hide based on reuse count
@@ -753,32 +752,23 @@ def build_side_by_side_ui_anony():
         + [new_battle_btn]
     )
 
-    def _vote_js(choice):
-        return f"""
-() => {{
-    if (window.bixTrack) window.bixTrack('vote_clicked', {{vote_choice: '{choice}'}});
-    var d = document.getElementById('disclaimer');
-    if (d) {{ d.classList.remove('locked'); d.classList.remove('show'); d.classList.add('collapsed'); }}
-}}
-"""
-
     left_vote_btn.click(
         left_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
-        js=_vote_js("model_1"),
+        js=_ga4_event_js("vote_clicked", {"vote_choice": "model_1"}),
     )
     right_vote_btn.click(
         right_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
-        js=_vote_js("model_2"),
+        js=_ga4_event_js("vote_clicked", {"vote_choice": "model_2"}),
     )
     tie_btn.click(
         tie_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
-        js=_vote_js("tie"),
+        js=_ga4_event_js("vote_clicked", {"vote_choice": "tie"}),
     )
     streaming_events: list = []
 

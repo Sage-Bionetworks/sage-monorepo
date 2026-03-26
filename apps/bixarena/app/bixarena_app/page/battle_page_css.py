@@ -317,14 +317,9 @@ DISCLAIMER_CSS = """
     visibility: hidden;
 }
 
-#disclaimer.collapsed {
-    display: none;
-}
-
 #disclaimer.show,
 #disclaimer.locked {
     visibility: visible;
-    display: block;
 }
 
 #disclaimer-content {
