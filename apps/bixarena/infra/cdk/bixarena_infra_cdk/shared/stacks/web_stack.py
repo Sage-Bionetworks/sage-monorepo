@@ -3,7 +3,6 @@
 import aws_cdk as cdk
 from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_ecs as ecs
-from aws_cdk import aws_secretsmanager as sm
 from aws_cdk.aws_elasticloadbalancingv2 import IApplicationTargetGroup
 from constructs import Construct
 
@@ -30,7 +29,6 @@ class WebStack(cdk.Stack):
         developer_name: str | None = None,
         fqdn: str | None = None,
         use_https: bool = False,
-        openrouter_api_key: str = "",
         gtm_container_id: str = "",
         **kwargs,
     ) -> None:
@@ -50,7 +48,6 @@ class WebStack(cdk.Stack):
             developer_name: Developer name for dev environment (optional)
             fqdn: Fully qualified domain name (optional, uses ALB DNS if not provided)
             use_https: Whether to use HTTPS protocol (default: False for HTTP)
-            openrouter_api_key: OpenRouter API key for LLM access
             gtm_container_id: Google Tag Manager container ID for analytics
             **kwargs: Additional arguments passed to parent Stack
         """
@@ -94,28 +91,10 @@ class WebStack(cdk.Stack):
             "ENABLE_CRISP": "false",
             "GTM_CONTAINER_ID": gtm_container_id,
             "BATTLE_ROUND_LIMIT": "5",
-            "MAX_RESPONSE_TOKENS": "4096",
             "PROMPT_LEN_LIMIT": "5000",
             "PROMPT_USE_LIMIT": "5",
             "APP_COMMUNITY_QUEST_ENABLED": "true",
         }
-
-        # Create AWS Secrets Manager secret for OpenRouter API key
-        # This ensures the API key is encrypted at rest and in transit
-        container_secrets = {}
-        if openrouter_api_key:
-            openrouter_secret = sm.Secret(
-                self,
-                "OpenRouterApiKeySecret",
-                secret_name=f"{stack_prefix}-openrouter-api-key",
-                description="OpenRouter API key for BixArena Gradio app",
-                secret_string_value=cdk.SecretValue.unsafe_plain_text(
-                    openrouter_api_key
-                ),
-            )
-            container_secrets["OPENROUTER_API_KEY"] = ecs.Secret.from_secrets_manager(
-                openrouter_secret
-            )
 
         # Create Fargate service for the Gradio app
         service_construct = BixArenaFargateService(
@@ -129,7 +108,6 @@ class WebStack(cdk.Stack):
             cpu=512,  # 0.5 vCPU - Gradio needs more than nginx
             memory_limit_mib=1024,  # 1 GB - Gradio/Python apps need memory
             environment=container_env,
-            secrets=container_secrets,  # Secure secret injection
             desired_count=1,
             target_group=target_group,
             # Note: Health check path is configured on the ALB target group
