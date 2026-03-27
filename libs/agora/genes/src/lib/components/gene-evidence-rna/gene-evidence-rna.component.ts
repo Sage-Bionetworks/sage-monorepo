@@ -50,6 +50,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   distributionService = inject(DistributionService);
 
   readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
+  readonly BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX = 20;
 
   _gene: Gene | undefined;
   get gene(): Gene | undefined {
