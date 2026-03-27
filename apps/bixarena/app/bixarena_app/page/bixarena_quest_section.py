@@ -11,20 +11,20 @@ TIER_CONFIG = {
     "champion": {
         "emoji": "🏆",
         "color": "#fbbf24",  # Gold
-        "threshold": "10+",
-        "description": "10+ battles/week on average",
+        "threshold": 10.0,
+        "description": "10+/wk",
     },
     "knight": {
         "emoji": "⚔️",
         "color": "#c0c0c0",  # Silver
-        "threshold": "5+",
-        "description": "5+",
+        "threshold": 5.0,
+        "description": "5–10/wk",
     },
     "apprentice": {
         "emoji": "🌟",
         "color": "#cd7f32",  # Bronze
-        "threshold": "<5",
-        "description": "<5",
+        "threshold": 0.0,
+        "description": "<5/wk",
     },
 }
 
@@ -189,12 +189,12 @@ def _build_user_progress_card_html(
 
     # For apprentice -> knight or knight -> champion
     if tier == "apprentice":
-        prev_threshold = 0.0
-        next_threshold = 5.0
+        prev_threshold = TIER_CONFIG["apprentice"]["threshold"]
+        next_threshold = TIER_CONFIG["knight"]["threshold"]
         next_tier = "knight"
     else:  # knight
-        prev_threshold = 5.0
-        next_threshold = 10.0
+        prev_threshold = TIER_CONFIG["knight"]["threshold"]
+        next_threshold = TIER_CONFIG["champion"]["threshold"]
         next_tier = "champion"
 
     next_emoji = TIER_CONFIG[next_tier]["emoji"]
@@ -240,82 +240,180 @@ def _build_user_progress_card_html(
     """
 
 
-def _build_contributor_row_html(
-    username: str, tier: str, battles_per_week: float
+def _build_builders_html(
+    top_contributors: list[dict],
+    contributors_by_tier: dict,
+    total_contributors: int,
 ) -> str:
-    """Build a single contributor row with emoji, username, progress bar, and stats.
+    """Build the 'Builders' section: top-3 ranked rows followed by the remaining
+    contributors as tier chips behind an expand toggle.
 
     Args:
-        username: The contributor's display name
-        tier: Current tier ('champion', 'knight', or 'apprentice')
-        battles_per_week: Average battles per week
+        top_contributors: Up to 3 dicts (username, tier, battles_per_week), sorted desc
+        contributors_by_tier: Full dict with 'champion', 'knight', 'apprentice' lists
+        total_contributors: Total contributor count
 
     Returns:
-        HTML string for one contributor row
+        HTML string for the builders section
     """
-    tier_info = TIER_CONFIG.get(tier, TIER_CONFIG["apprentice"])
-    emoji = tier_info["emoji"]
-    bar_color = tier_info["color"]
+    # ── Top-3 rows ────────────────────────────────────────────────────────────
+    rank_styles = [
+        {
+            "label": "1st",
+            "color": "#fbbf24",
+            "bg": "color-mix(in srgb, #fbbf24 12%, transparent)",
+        },
+        {
+            "label": "2nd",
+            "color": "#c0c0c0",
+            "bg": "color-mix(in srgb, #c0c0c0 12%, transparent)",
+        },
+        {
+            "label": "3rd",
+            "color": "#cd7f32",
+            "bg": "color-mix(in srgb, #cd7f32 12%, transparent)",
+        },
+    ]
+    max_rate = (
+        max((c.get("battles_per_week", 0.0) for c in top_contributors), default=1.0)
+        or 1.0
+    )
+    top_usernames = {c["username"] for c in top_contributors}
 
-    if tier == "champion":
-        progress_pct = 100.0
-    elif tier == "knight":
-        progress_pct = min((battles_per_week - 5.0) / 5.0 * 100, 100)
-    else:  # apprentice
-        progress_pct = min(battles_per_week / 5.0 * 100, 100)
+    top_rows = ""
+    for i, contributor in enumerate(top_contributors):
+        rs = rank_styles[i]
+        safe_username = escape(contributor["username"])
+        tier_info = TIER_CONFIG.get(
+            contributor.get("tier", "apprentice"), TIER_CONFIG["apprentice"]
+        )
+        bpw = contributor.get("battles_per_week", 0.0)
+        bar_pct = bpw / max_rate * 100
+        top_rows += f"""
+            <div style="display: grid; grid-template-columns: 2rem 1fr 52px;
+                        align-items: center; gap: 0.5rem;">
+                <div style="width: 2rem; height: 2rem; border-radius: 6px;
+                            background: {rs["bg"]}; border: 1px solid {rs["color"]}40;
+                            display: flex; align-items: center; justify-content: center;
+                            font-size: 0.625rem; font-weight: 700; color: {rs["color"]};
+                            letter-spacing: 0.02em; flex-shrink: 0;">
+                    {rs["label"]}
+                </div>
+                <div style="min-width: 0;">
+                    <div style="font-size: 0.8125rem; font-weight: 600;
+                                color: var(--body-text-color); overflow: hidden;
+                                text-overflow: ellipsis; white-space: nowrap;
+                                margin-bottom: 0.25rem;"
+                         title="{safe_username}">
+                        {tier_info["emoji"]} {safe_username}
+                    </div>
+                    <div style="width: 100%; height: 6px;
+                                background-color: var(--background-fill-secondary);
+                                border-radius: 3px; overflow: hidden;
+                                border: 1px solid var(--border-color-primary);">
+                        <div style="height: 100%; width: {bar_pct:.0f}%;
+                                    background: {rs["color"]}; border-radius: 3px;"></div>
+                    </div>
+                </div>
+                <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
+                            text-align: right; white-space: nowrap; flex-shrink: 0;">
+                    {bpw:.1f}/wk
+                </div>
+            </div>"""
 
-    safe_username = escape(username)
+    # ── Remaining contributors as tier chips (hidden behind expand toggle) ───────
+    rest_chips = ""
+    for rank in ["champion", "knight", "apprentice"]:
+        rest = [
+            m
+            for m in contributors_by_tier.get(rank, [])
+            if m["username"] not in top_usernames
+        ]
+        if not rest:
+            continue
+        cfg = TIER_CONFIG[rank]
+        rest_chips += "".join(
+            f'<span style="display: inline-flex; align-items: center; gap: 0.2rem; '
+            f"padding: 0.2rem 0.5rem; border-radius: 999px; font-size: 0.75rem; "
+            f"font-weight: 500; color: {cfg['color']}; "
+            f"background: color-mix(in srgb, {cfg['color']} 10%, transparent); "
+            f"border: 1px solid color-mix(in srgb, {cfg['color']} 25%, transparent); "
+            f'white-space: nowrap; max-width: 9rem; overflow: hidden; text-overflow: ellipsis;" '
+            f'title="{escape(m["username"])}">'
+            f"{cfg['emoji']} {escape(m['username'])}</span>"
+            for m in rest
+        )
+
+    rest_section = ""
+    if rest_chips:
+        rest_section = f"""
+            <div style="margin-top: 0.75rem;">
+                <button onclick="
+                    var chips = document.getElementById('bx-rest-chips');
+                    var expanded = chips.style.display !== 'none';
+                    chips.style.display = expanded ? 'none' : 'flex';
+                    this.textContent = expanded ? 'Show all contributors' : 'Show less';
+                " style="background: none; border: none; padding: 0; cursor: pointer;
+                         font-size: 0.8125rem; font-weight: 500; outline: none;
+                         color: var(--color-accent, #14b8a6);">
+                    Show all contributors
+                </button>
+                <div id="bx-rest-chips"
+                     style="display: none; max-height: 120px; overflow-y: auto;
+                            scrollbar-color: var(--border-color-primary) transparent;
+                            scrollbar-width: thin; margin-top: 0.625rem;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.3rem;">
+                        {rest_chips}
+                    </div>
+                </div>
+            </div>"""
 
     return f"""
-        <div style="display: grid;
-                    grid-template-columns: 140px 0.75rem 1fr 0.25rem 55px;
-                    align-items: center;">
-            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-                        font-size: 0.875rem; color: var(--body-text-color);"
-                 title="{safe_username}">
-                <span style="margin-right: 0.25rem;">{emoji}</span>{safe_username}
+        <div>
+            <h4 style="color: var(--body-text-color); font-weight: 600;
+                       margin: 0 0 0.75rem 0; font-size: 1rem;">
+                Builders ({total_contributors})
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.625rem;">
+                {top_rows}
             </div>
-            <div></div>
-            <div style="width: 100%; height: 10px;
-                        background-color: var(--background-fill-secondary);
-                        border-radius: 4px; overflow: hidden;
-                        border: 1px solid var(--border-color-primary);">
-                <div style="height: 100%; width: {progress_pct:.0f}%;
-                            background: {bar_color};
-                            border-radius: 4px;"></div>
-            </div>
-            <div></div>
-            <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
-                        text-align: right; white-space: nowrap;">
-                {battles_per_week:.1f}/wk
-            </div>
+            {rest_section}
         </div>"""
 
 
-def _build_tier_legend_html() -> str:
-    """Build the tier legend HTML with descriptions and accuracy note.
+def _build_tier_annotation_html() -> str:
+    """Build a dedicated section explaining how tiers and the battles/wk metric work.
 
     Returns:
-        HTML string for the tier legend section
+        HTML string for the tier annotation section
     """
+    tier_items = "".join(
+        f'<span style="white-space: nowrap; color: var(--body-text-color-subdued); font-size: 0.875rem;">'
+        f"{TIER_CONFIG[rank]['emoji']} {rank.capitalize()} ({TIER_CONFIG[rank]['description']})"
+        f"</span>"
+        + (
+            '<span style="color: var(--border-color-primary); padding: 0 0.4rem;">&middot;</span>'
+            if rank != "apprentice"
+            else ""
+        )
+        for rank in ["champion", "knight", "apprentice"]
+    )
+
     return f"""
-            <!-- Contributor Tiers Legend -->
-            <div style="margin-top: 1.5rem;">
-                <h4 style="color: var(--body-text-color); font-weight: 600;
-                           margin: 0 0 0.75rem 0; font-size: 1rem;">
-                    Contributor Tiers
-                </h4>
-                <div style="display: flex; flex-direction: column; gap: 0.375rem;
-                            color: var(--body-text-color-subdued); font-size: 0.875rem;">
-                    <div>{TIER_CONFIG["champion"]["emoji"]} Champion ({TIER_CONFIG["champion"]["description"]})</div>
-                    <div>{TIER_CONFIG["knight"]["emoji"]} Knight ({TIER_CONFIG["knight"]["description"]})</div>
-                    <div>{TIER_CONFIG["apprentice"]["emoji"]} Apprentice ({TIER_CONFIG["apprentice"]["description"]})</div>
-                </div>
-                <div style="margin-top: 0.75rem; color: var(--body-text-color-subdued); font-size: 0.8125rem; font-style: italic; line-height: 1.5;">
-                    Note: Tiers are calculated based on your average battle completion rate. As more days of the quest pass, tier assignments become increasingly accurate.
-                </div>
+        <div>
+            <h4 style="color: var(--body-text-color); font-weight: 600;
+                       margin: 0 0 0.5rem 0; font-size: 1rem;">
+                Contributor Tiers
+            </h4>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.1rem;">
+                {tier_items}
             </div>
-"""
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; font-style: italic;
+                      color: var(--body-text-color-subdued); line-height: 1.5;">
+                Note: Tiers are calculated based on your average battle completion rate.
+                As more days of the quest pass, tier assignments become increasingly accurate.
+            </p>
+        </div>"""
 
 
 def _build_progress_html(
@@ -433,8 +531,12 @@ def _build_builders_credits_html(
                         color: var(--body-text-color-subdued); font-size: 0.875rem;">
                 No builders yet. Be the first to contribute!
             </div>
+        </div>
 
-{_build_tier_legend_html()}        </div>
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        {_build_tier_annotation_html()}
 
         <!-- Divider -->
         <div style="height: 1px; background: var(--border-color-primary);"></div>
@@ -470,23 +572,21 @@ def _build_builders_credits_html(
     </div>
     """
     else:
-        # Build real contributors list grouped by rank
         total_count = contributors_data["total_contributors"]
         contributors_by_tier = contributors_data["contributors_by_tier"]
 
-        builders_rows = []
+        # Collect top 3 contributors across all tiers (already sorted desc by battles_per_week)
+        top_contributors = []
         for rank in ["champion", "knight", "apprentice"]:
-            rank_contributors = contributors_by_tier.get(rank, [])
-            for contributor in rank_contributors:
-                builders_rows.append(
-                    _build_contributor_row_html(
-                        username=contributor["username"],
-                        tier=rank,
-                        battles_per_week=contributor.get("battles_per_week", 0.0),
-                    )
-                )
+            for c in contributors_by_tier.get(rank, []):
+                top_contributors.append({**c, "tier": rank})
+            if len(top_contributors) >= 3:
+                break
+        top_contributors = top_contributors[:3]
 
-        builders_html = "\n".join(builders_rows)
+        builders_html = _build_builders_html(
+            top_contributors, contributors_by_tier, total_count
+        )
 
     # Build progress card (personalized for contributors, default for others)
     if current_user_data is not None:
@@ -508,29 +608,20 @@ def _build_builders_credits_html(
 
         {progress_card_html}
 
-        <!-- Builders Section -->
-        <div style="flex: 1; display: flex; flex-direction: column;
-                    min-height: 0;">
-            <h4 style="color: var(--body-text-color); font-weight: 600;
-                       margin: 0 0 0.75rem 0; font-size: 1rem;">
-                Builders ({total_count})
-            </h4>
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
 
-            <div style="flex: 1; overflow-y: auto; min-height: 0;
-                        max-height: 375px; padding-right: 0.25rem;
-                        scrollbar-color: var(--border-color-primary) transparent;">
-                <div style="display: flex; flex-direction: column;
-                            gap: 0.5rem;">
-                    {builders_html}
-                </div>
-            </div>
-
-{_build_tier_legend_html()}        </div>
+        {builders_html}
 
         <!-- Divider -->
         <div style="height: 1px; background: var(--border-color-primary);"></div>
 
-        <!-- Credits Section (no title) -->
+        {_build_tier_annotation_html()}
+
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        <!-- Credits Section -->
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
             <div style="font-size: 0.875rem;
                         color: var(--body-text-color-subdued);">
