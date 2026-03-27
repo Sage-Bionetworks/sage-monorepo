@@ -5,6 +5,9 @@ server:
   port: 8112
 
 spring:
+  threads:
+    virtual:
+      enabled: true
   application:
     name: bixarena-api
   cache:

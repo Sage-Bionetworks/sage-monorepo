@@ -4,6 +4,7 @@ bixarena_api_client/api/__init__.py
 bixarena_api_client/api/admin_api.py
 bixarena_api_client/api/auth_api.py
 bixarena_api_client/api/battle_api.py
+bixarena_api_client/api/chat_api.py
 bixarena_api_client/api/example_prompt_api.py
 bixarena_api_client/api/leaderboard_api.py
 bixarena_api_client/api/model_api.py
@@ -56,6 +57,9 @@ bixarena_api_client/models/license.py
 bixarena_api_client/models/message_create.py
 bixarena_api_client/models/message_role.py
 bixarena_api_client/models/model.py
+bixarena_api_client/models/model_chat_completion_chunk.py
+bixarena_api_client/models/model_chat_request.py
+bixarena_api_client/models/model_chat_usage.py
 bixarena_api_client/models/model_error.py
 bixarena_api_client/models/model_error_create_request.py
 bixarena_api_client/models/model_page.py
@@ -100,6 +104,7 @@ docs/BattleUpdateRequest.md
 docs/BattleValidationCreateRequest.md
 docs/BattleValidationResponse.md
 docs/Callback200Response.md
+docs/ChatApi.md
 docs/ExamplePrompt.md
 docs/ExamplePromptApi.md
 docs/ExamplePromptPage.md
@@ -126,6 +131,9 @@ docs/MessageCreate.md
 docs/MessageRole.md
 docs/Model.md
 docs/ModelApi.md
+docs/ModelChatCompletionChunk.md
+docs/ModelChatRequest.md
+docs/ModelChatUsage.md
 docs/ModelError.md
 docs/ModelErrorCreateRequest.md
 docs/ModelPage.md
@@ -172,6 +180,7 @@ test/test_battle_update_request.py
 test/test_battle_validation_create_request.py
 test/test_battle_validation_response.py
 test/test_callback200_response.py
+test/test_chat_api.py
 test/test_example_prompt.py
 test/test_example_prompt_api.py
 test/test_example_prompt_page.py
@@ -198,6 +207,9 @@ test/test_message_create.py
 test/test_message_role.py
 test/test_model.py
 test/test_model_api.py
+test/test_model_chat_completion_chunk.py
+test/test_model_chat_request.py
+test/test_model_chat_usage.py
 test/test_model_error.py
 test/test_model_error_create_request.py
 test/test_model_page.py

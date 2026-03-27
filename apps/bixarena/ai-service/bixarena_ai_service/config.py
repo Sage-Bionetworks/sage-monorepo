@@ -38,6 +38,17 @@ class Settings(BaseSettings):
     openrouter_timeout: float = 30.0
     openrouter_max_retries: int = 2
 
+    # Chat completion configuration
+    chat_default_temperature: float = 0.7
+    chat_default_top_p: float = 1.0
+    chat_max_response_tokens: int = 4096
+    chat_timeout: float = 60.0
+    chat_max_retries: int = 2
+
+    # OpenRouter app attribution configuration
+    app_url: str = "https://bioarena.io"
+    app_title: str = "BioArena"
+
     # Validation method IDs — used as part of the cache key.
     # Bump when changing the classification prompt or model.
     prompt_validation_method: str = "openrouter-haiku-v1"
@@ -71,9 +82,15 @@ def get_openai_client() -> AsyncOpenAI:
     Reuses the same HTTP connection pool across requests.
     """
     settings = get_settings()
+    headers = {}
+    if settings.app_url:
+        headers["HTTP-Referer"] = settings.app_url
+    if settings.app_title:
+        headers["X-OpenRouter-Title"] = settings.app_title
     return AsyncOpenAI(
         api_key=settings.openrouter_api_key,
         base_url=settings.openrouter_base_url,
         timeout=settings.openrouter_timeout,
         max_retries=settings.openrouter_max_retries,
+        default_headers=headers if headers else None,
     )

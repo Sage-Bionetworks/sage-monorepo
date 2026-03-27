@@ -9,6 +9,16 @@ CHATBOT_BATTLE_CSS = """
     min-height: unset !important;
 }
 
+/* Blinking cursor animation for streaming responses */
+.streaming-cursor {
+    display: inline;
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
 /* System message styling */
 .message.bot.panel-full-width.thought:has(.system-message) {
     border: none;
@@ -305,13 +315,11 @@ DISCLAIMER_CSS = """
     max-width: 850px;
     margin: 0 auto;
     visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-#disclaimer.show {
+#disclaimer.show,
+#disclaimer.locked {
     visibility: visible;
-    opacity: 1;
 }
 
 #disclaimer-content {

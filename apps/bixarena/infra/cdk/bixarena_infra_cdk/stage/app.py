@@ -363,7 +363,6 @@ def main() -> None:
         alb_dns_name=alb_stack.alb_construct.alb.load_balancer_dns_name,
         fqdn=fqdn if fqdn else None,
         use_https=use_https,
-        openrouter_api_key=os.getenv("OPENROUTER_API_KEY", ""),
         gtm_container_id=gtm_container_id,
         description=f"Web client for BixArena {environment} environment",
     )
