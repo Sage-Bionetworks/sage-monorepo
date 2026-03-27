@@ -38,7 +38,7 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
   private MIN_CHART_WIDTH = 500;
   private CHART_HEIGHT = 350;
   private chartMargin = { top: 20, right: 20, bottom: 65, left: 65 };
-  private AXIS_OFFSET = 5; // x-axis offset to prevent clipping
+  private X_AXIS_LABEL_VERTICAL_PADDING = 5; // vertical padding to lift the x-axis label from the svg bottom edge and prevent clipping of descenders like 'g', 'y', 'p', etc.
   private chartXScale!: d3.ScaleBand<string>;
   private chartXAxisDrawn!: d3.Selection<SVGGElement, unknown, null, undefined>;
   private chartXAxisLabel!: d3.Selection<SVGTextElement, unknown, null, undefined>;
@@ -233,7 +233,7 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
         .append('text')
         .attr('class', 'x-axis-label')
         .attr('x', innerWidth / 2)
-        .attr('y', innerHeight + this.chartMargin.bottom - this.AXIS_OFFSET)
+        .attr('y', innerHeight + this.chartMargin.bottom - this.X_AXIS_LABEL_VERTICAL_PADDING)
         .attr('text-anchor', 'middle')
         .text(this.xAxisLabel);
 
