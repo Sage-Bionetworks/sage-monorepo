@@ -1,6 +1,15 @@
 @use 'bixarena/themes/src/lib/variables';
 @use '@fontsource-variable/dm-sans';
 
+// Layer order: reset < primeng < app (unscoped rules beat all layers)
+@layer reset, primeng, app;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   background: var(--p-surface-0);
@@ -12,14 +21,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-// Nav Login button — compact ghost style
-bixarena-nav .p-button {
-  padding: 0 0.875rem;
-  font-size: 0.875rem;
-  font-family: inherit;
-  font-variation-settings: 'wght' 500;
-  letter-spacing: -0.01em;
-  border-radius: 6px;
-  height: 32px;
-  line-height: 32px;
+// PrimeNG components read --p-font-family; body font-family alone doesn't propagate into them
+:root {
+  --p-font-family: 'DM Sans Variable', 'DM Sans', system-ui, sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--bixarena-max-width);
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+@layer app {
+  // Nav Login button — compact, modern
+  bixarena-nav .p-button {
+    padding: 0 0.875rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    font-variation-settings: 'wght' 500;
+    letter-spacing: -0.01em;
+    border-radius: 6px;
+    height: 32px;
+    line-height: 32px;
+  }
 }

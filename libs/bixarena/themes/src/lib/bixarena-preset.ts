@@ -2,6 +2,9 @@ import { definePreset } from '@primeuix/themes';
 import Lara from '@primeuix/themes/lara';
 
 export const BixArenaPreset = definePreset(Lara, {
+  primitive: {
+    fontFamily: "'DM Sans Variable', 'DM Sans', system-ui, sans-serif",
+  },
   semantic: {
     // Orange primary matches the live Gradio app (Gradio default theme primary)
     primary: {
