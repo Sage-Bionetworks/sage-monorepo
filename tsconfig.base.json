@@ -119,7 +119,10 @@
       "@sagebionetworks/synapse/api-client": ["libs/synapse/api-client-angular/src/index.ts"],
       "@sagebionetworks/web-shared/angular/analytics/gtm": [
         "libs/web-shared/angular/analytics/gtm/src/index.ts"
-      ]
+      ],
+      "@sagebionetworks/bixarena/battle": ["libs/bixarena/battle/src/index.ts"],
+      "@sagebionetworks/bixarena/home": ["libs/bixarena/home/src/index.ts"],
+      "@sagebionetworks/bixarena/leaderboard": ["libs/bixarena/leaderboard/angular/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
