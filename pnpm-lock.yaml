@@ -459,6 +459,9 @@ importers:
       jsdom:
         specifier: 22.1.0
         version: 22.1.0(canvas@3.1.0)
+      jsonc-eslint-parser:
+        specifier: ^2.1.0
+        version: 2.4.0
       lint-staged:
         specifier: 15.2.10
         version: 15.2.10
@@ -540,6 +543,12 @@ importers:
       yaml:
         specifier: 2.8.1
         version: 2.8.1
+
+  libs/bixarena/models:
+    dependencies:
+      tslib:
+        specifier: ^2.3.0
+        version: 2.4.1
 
   libs/sage-monorepo/nx-plugin:
     dependencies:

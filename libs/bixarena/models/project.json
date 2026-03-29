@@ -1,0 +1,22 @@
+{
+  "name": "bixarena-models",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/bixarena/models/src",
+  "projectType": "library",
+  "tags": ["type:util", "scope:bixarena", "language:typescript"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/bixarena/models",
+        "main": "libs/bixarena/models/src/index.ts",
+        "tsConfig": "libs/bixarena/models/tsconfig.lib.json",
+        "assets": ["libs/bixarena/models/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
