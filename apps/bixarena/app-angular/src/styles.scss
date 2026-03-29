@@ -1,1 +1,25 @@
 @use 'bixarena/themes/src/lib/variables';
+@use '@fontsource-variable/dm-sans';
+
+body {
+  margin: 0;
+  background: var(--p-surface-0);
+  color: var(--p-text-color);
+  font-family: 'DM Sans Variable', 'DM Sans', system-ui, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Nav Login button — compact ghost style
+bixarena-nav .p-button {
+  padding: 0 0.875rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  font-variation-settings: 'wght' 500;
+  letter-spacing: -0.01em;
+  border-radius: 6px;
+  height: 32px;
+  line-height: 32px;
+}

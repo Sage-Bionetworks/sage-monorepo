@@ -11,6 +11,7 @@ import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from 
 import { BASE_PATH } from '@sagebionetworks/bixarena/api-client';
 import { configFactory, ConfigService } from '@sagebionetworks/bixarena/config';
 import { BixArenaPreset } from '@sagebionetworks/bixarena/themes';
+import { ThemeService } from '@sagebionetworks/bixarena/services';
 import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
 
@@ -19,6 +20,10 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       const initializerFn = configFactory(inject(ConfigService));
       return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      inject(ThemeService).init();
+      return;
     }),
     provideAnimationsAsync(),
     providePrimeNG({
