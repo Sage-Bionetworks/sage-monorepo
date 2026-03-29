@@ -1,5 +1,13 @@
-<nav>
-  <a routerLink="/">BioArena</a>
-  <a routerLink="/battle">Battle</a>
-  <a routerLink="/leaderboard">Leaderboard</a>
-</nav>
+<header class="nav">
+  <a routerLink="/" class="brand">
+    <img src="/assets/bioarena-logo.svg" alt="BioArena" height="48" />
+    <span>BioArena</span>
+  </a>
+  <nav class="links">
+    <a routerLink="/battle" routerLinkActive="active">Battle</a>
+    <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
+  </nav>
+  <div class="actions">
+    <p-button label="Login" />
+  </div>
+</header>
