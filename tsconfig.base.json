@@ -41,6 +41,7 @@
       "@sagebionetworks/agora/ui": ["libs/agora/ui/src/index.ts"],
       "@sagebionetworks/agora/util": ["libs/agora/util/src/index.ts"],
       "@sagebionetworks/agora/wiki": ["libs/agora/wiki/src/index.ts"],
+      "@sagebionetworks/bixarena/api-client": ["libs/bixarena/api-client-angular/src/index.ts"],
       "@sagebionetworks/bixarena/config": ["libs/bixarena/config/src/index.ts"],
       "@sagebionetworks/bixarena/themes": ["libs/bixarena/themes/src/index.ts"],
       "@sagebionetworks/explorers/charts": ["libs/explorers/charts/src/index.ts"],
