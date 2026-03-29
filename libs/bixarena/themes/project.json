@@ -1,0 +1,8 @@
+{
+  "name": "bixarena-themes",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/bixarena/themes/src",
+  "projectType": "library",
+  "tags": ["type:util", "scope:bixarena", "language:typescript"],
+  "targets": {}
+}

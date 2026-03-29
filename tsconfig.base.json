@@ -41,6 +41,8 @@
       "@sagebionetworks/agora/ui": ["libs/agora/ui/src/index.ts"],
       "@sagebionetworks/agora/util": ["libs/agora/util/src/index.ts"],
       "@sagebionetworks/agora/wiki": ["libs/agora/wiki/src/index.ts"],
+      "@sagebionetworks/bixarena/config": ["libs/bixarena/config/src/index.ts"],
+      "@sagebionetworks/bixarena/themes": ["libs/bixarena/themes/src/index.ts"],
       "@sagebionetworks/explorers/charts": ["libs/explorers/charts/src/index.ts"],
       "@sagebionetworks/explorers/charts-angular": ["libs/explorers/charts-angular/src/index.ts"],
       "@sagebionetworks/explorers/comparison-tool": ["libs/explorers/comparison-tool/src/index.ts"],
@@ -116,8 +118,7 @@
       "@sagebionetworks/synapse/api-client": ["libs/synapse/api-client-angular/src/index.ts"],
       "@sagebionetworks/web-shared/angular/analytics/gtm": [
         "libs/web-shared/angular/analytics/gtm/src/index.ts"
-      ],
-      "@sagebionetworks/bixarena/config": ["libs/bixarena/config/src/index.ts"]
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

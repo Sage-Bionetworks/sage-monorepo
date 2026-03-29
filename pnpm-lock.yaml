@@ -228,9 +228,6 @@ importers:
       '@angular-eslint/template-parser':
         specifier: 20.3.0
         version: 20.3.0(eslint@8.57.0)(typescript@5.9.2)
-      '@angular/build':
-        specifier: 20.3.2
-        version: 20.3.2(b02600e994e145bc734c459e873df684)
       '@angular/cli':
         specifier: 20.3.2
         version: 20.3.2(@types/node@22.5.1)(chokidar@4.0.3)
@@ -13831,6 +13828,7 @@ snapshots:
       - terser
       - tsx
       - yaml
+    optional: true
 
   '@angular/build@20.3.2(e1439330a721694dae103f3210648cd7)':
     dependencies:
@@ -19577,6 +19575,7 @@ snapshots:
   '@vitejs/plugin-basic-ssl@2.1.0(vite@7.1.5(@types/node@22.5.1)(jiti@2.4.2)(less@4.4.1)(sass-embedded@1.91.0)(sass@1.90.0)(terser@5.43.1)(tsx@4.20.4)(yaml@2.8.1))':
     dependencies:
       vite: 7.1.5(@types/node@22.5.1)(jiti@2.4.2)(less@4.4.1)(sass-embedded@1.91.0)(sass@1.90.0)(terser@5.43.1)(tsx@4.20.4)(yaml@2.8.1)
+    optional: true
 
   '@vitest/expect@3.2.4':
     dependencies:
@@ -28497,6 +28496,7 @@ snapshots:
       terser: 5.43.1
       tsx: 4.20.4
       yaml: 2.8.1
+    optional: true
 
   vite@7.1.7(@types/node@22.5.1)(jiti@2.4.2)(less@4.4.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.43.1)(tsx@4.20.4)(yaml@2.8.1):
     dependencies:
