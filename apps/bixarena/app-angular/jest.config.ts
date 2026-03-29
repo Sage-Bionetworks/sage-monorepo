@@ -12,6 +12,7 @@ export default {
       },
     ],
   },
+  testPathIgnorePatterns: ['<rootDir>/e2e'],
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',

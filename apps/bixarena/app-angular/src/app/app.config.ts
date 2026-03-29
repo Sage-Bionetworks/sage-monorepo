@@ -8,6 +8,7 @@ import {
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
+import { BASE_PATH } from '@sagebionetworks/bixarena/api-client';
 import { configFactory, ConfigService } from '@sagebionetworks/bixarena/config';
 import { BixArenaPreset } from '@sagebionetworks/bixarena/themes';
 import { providePrimeNG } from 'primeng/config';
@@ -33,5 +34,13 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes, withComponentInputBinding(), withInMemoryScrolling()),
+    {
+      provide: BASE_PATH,
+      useFactory: (configService: ConfigService) =>
+        configService.config.isPlatformServer
+          ? configService.config.api.ssrBaseUrl
+          : configService.config.api.csrBaseUrl,
+      deps: [ConfigService],
+    },
   ],
 };

@@ -1,1 +1,7 @@
-<p>BixarenaHome works!</p>
+<p>BioArena home</p>
+@if (stats()) {
+  <p>
+    Battles: {{ stats()!.completedBattles }} | Models: {{ stats()!.modelsEvaluated }} | Users:
+    {{ stats()!.totalUsers }}
+  </p>
+}
