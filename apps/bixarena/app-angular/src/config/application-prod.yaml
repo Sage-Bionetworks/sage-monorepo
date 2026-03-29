@@ -1,0 +1,8 @@
+app:
+  version: '${APP_VERSION}'
+
+api:
+  csrBaseUrl: '${CSR_API_URL}'
+  ssrBaseUrl: '${SSR_API_URL}'
+
+environment: prod

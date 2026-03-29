@@ -228,6 +228,9 @@ importers:
       '@angular-eslint/template-parser':
         specifier: 20.3.0
         version: 20.3.0(eslint@8.57.0)(typescript@5.9.2)
+      '@angular/build':
+        specifier: 20.3.2
+        version: 20.3.2(b02600e994e145bc734c459e873df684)
       '@angular/cli':
         specifier: 20.3.2
         version: 20.3.2(@types/node@22.5.1)(chokidar@4.0.3)
@@ -13828,7 +13831,6 @@ snapshots:
       - terser
       - tsx
       - yaml
-    optional: true
 
   '@angular/build@20.3.2(e1439330a721694dae103f3210648cd7)':
     dependencies:
@@ -14115,7 +14117,7 @@ snapshots:
       '@babel/core': 7.28.3
       '@babel/helper-compilation-targets': 7.27.2
       '@babel/helper-plugin-utils': 7.27.1
-      debug: 4.4.1
+      debug: 4.4.3
       lodash.debounce: 4.0.8
       resolve: 1.22.10
     transitivePeerDependencies:
@@ -15257,7 +15259,7 @@ snapshots:
       '@antfu/install-pkg': 1.1.0
       '@antfu/utils': 8.1.1
       '@iconify/types': 2.0.0
-      debug: 4.4.1
+      debug: 4.4.3
       globals: 15.15.0
       kolorist: 1.8.0
       local-pkg: 1.1.2
@@ -18815,7 +18817,7 @@ snapshots:
 
   '@tokenizer/inflate@0.2.7':
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       fflate: 0.8.2
       token-types: 6.1.1
     transitivePeerDependencies:
@@ -19575,7 +19577,6 @@ snapshots:
   '@vitejs/plugin-basic-ssl@2.1.0(vite@7.1.5(@types/node@22.5.1)(jiti@2.4.2)(less@4.4.1)(sass-embedded@1.91.0)(sass@1.90.0)(terser@5.43.1)(tsx@4.20.4)(yaml@2.8.1))':
     dependencies:
       vite: 7.1.5(@types/node@22.5.1)(jiti@2.4.2)(less@4.4.1)(sass-embedded@1.91.0)(sass@1.90.0)(terser@5.43.1)(tsx@4.20.4)(yaml@2.8.1)
-    optional: true
 
   '@vitest/expect@3.2.4':
     dependencies:
@@ -20226,7 +20227,7 @@ snapshots:
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
-      debug: 4.4.1
+      debug: 4.4.3
       http-errors: 2.0.0
       iconv-lite: 0.6.3
       on-finished: 2.4.1
@@ -21422,7 +21423,6 @@ snapshots:
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
-    optional: true
 
   decimal.js@10.6.0: {}
 
@@ -22257,7 +22257,7 @@ snapshots:
       content-type: 1.0.5
       cookie: 0.7.2
       cookie-signature: 1.2.2
-      debug: 4.4.1
+      debug: 4.4.3
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
@@ -22409,7 +22409,7 @@ snapshots:
 
   finalhandler@2.1.0:
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       encodeurl: 2.0.0
       escape-html: 1.0.3
       on-finished: 2.4.1
@@ -26771,7 +26771,7 @@ snapshots:
 
   router@2.2.0:
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       depd: 2.0.0
       is-promise: 4.0.0
       parseurl: 1.3.3
@@ -28188,7 +28188,7 @@ snapshots:
   tuf-js@3.1.0:
     dependencies:
       '@tufjs/models': 3.0.1
-      debug: 4.4.1
+      debug: 4.4.3
       make-fetch-happen: 14.0.3
     transitivePeerDependencies:
       - supports-color
@@ -28442,7 +28442,7 @@ snapshots:
   vite-node@3.2.4(@types/node@22.5.1)(jiti@2.4.2)(less@4.4.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.43.1)(tsx@4.20.4)(yaml@2.8.1):
     dependencies:
       cac: 6.7.14
-      debug: 4.4.1
+      debug: 4.4.3
       es-module-lexer: 1.7.0
       pathe: 2.0.3
       vite: 7.1.7(@types/node@22.5.1)(jiti@2.4.2)(less@4.4.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.43.1)(tsx@4.20.4)(yaml@2.8.1)
@@ -28497,7 +28497,6 @@ snapshots:
       terser: 5.43.1
       tsx: 4.20.4
       yaml: 2.8.1
-    optional: true
 
   vite@7.1.7(@types/node@22.5.1)(jiti@2.4.2)(less@4.4.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.43.1)(tsx@4.20.4)(yaml@2.8.1):
     dependencies:
