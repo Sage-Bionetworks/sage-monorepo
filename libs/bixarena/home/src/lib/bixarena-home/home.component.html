@@ -1,7 +1,7 @@
 <p>BioArena home</p>
-@if (stats()) {
+@if (stats$ | async; as stats) {
   <p>
-    Battles: {{ stats()!.completedBattles }} | Models: {{ stats()!.modelsEvaluated }} | Users:
-    {{ stats()!.totalUsers }}
+    Battles: {{ stats.completedBattles }} | Models: {{ stats.modelsEvaluated }} | Users:
+    {{ stats.totalUsers }}
   </p>
 }
