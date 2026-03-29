@@ -1,5 +1,5 @@
 app:
-  version: local
+  version: edge
 
 api:
   csrBaseUrl: http://localhost:8000/api/v1

@@ -1,0 +1,9 @@
+# Development-specific configuration
+# Applied when ENVIRONMENT=dev or NODE_ENV=development
+
+app:
+  version: dev
+
+api:
+  csrBaseUrl: http://localhost:8000/api/v1
+  ssrBaseUrl: http://bixarena-api:8000/api/v1

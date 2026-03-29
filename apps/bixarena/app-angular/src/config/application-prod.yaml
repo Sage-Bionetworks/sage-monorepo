@@ -1,8 +1,8 @@
 app:
-  version: '${APP_VERSION}'
+  version: edge
 
 api:
-  csrBaseUrl: '${CSR_API_URL}'
-  ssrBaseUrl: '${SSR_API_URL}'
+  csrBaseUrl: http://localhost:8000/api/v1
+  ssrBaseUrl: http://bixarena-api:8000/api/v1
 
 environment: prod
