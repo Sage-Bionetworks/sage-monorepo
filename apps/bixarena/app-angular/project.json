@@ -5,7 +5,7 @@
   "prefix": "app",
   "sourceRoot": "apps/bixarena/app-angular/src",
   "tags": ["scope:bixarena", "language:typescript"],
-  "implicitDependencies": [],
+  "implicitDependencies": ["shared-typescript-assets"],
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",
