@@ -42,7 +42,7 @@
               },
               {
                 "sourceTag": "scope:explorers",
-                "onlyDependOnLibsWithTags": ["scope:explorers", "scope:shared"]
+                "onlyDependOnLibsWithTags": ["scope:explorers", "scope:shared", "scope:global"]
               },
               {
                 "sourceTag": "scope:shared",
