@@ -3,6 +3,7 @@ import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import * as yaml from 'js-yaml';
+import { CONFIG_BASE_PATH } from './config-base-path';
 
 /**
  * Service for loading and parsing YAML configuration files
@@ -14,6 +15,7 @@ import * as yaml from 'js-yaml';
 export class YamlParserService {
   private readonly http = inject(HttpClient);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly configBasePath = inject(CONFIG_BASE_PATH, { optional: true });
 
   /**
    * Check if running on server (Node.js) or browser
@@ -78,17 +80,13 @@ export class YamlParserService {
         currentDir = process.cwd();
       }
 
-      // Try multiple possible paths (development and production)
       const possiblePaths = [
-        // Production: dist/apps/openchallenges/app/browser/config
+        // Production: relative to server bundle
         join(currentDir, '../../browser/config'),
-        // Development with Vite/ng serve: Check relative to project root
-        resolve(process.cwd(), 'apps/openchallenges/app/src/config'),
-        // Alternative production paths
-        join(currentDir, '../browser/config'), // when cwd is the server/ dir
-        join(currentDir, 'browser/config'), // when cwd is the parent dir of server/
-        // Fallback for Jest tests
-        resolve(process.cwd(), 'apps/openchallenges/app/src/config'),
+        join(currentDir, '../browser/config'),
+        join(currentDir, 'browser/config'),
+        // Development: provided via CONFIG_BASE_PATH
+        ...(this.configBasePath ? [resolve(process.cwd(), this.configBasePath)] : []),
       ];
 
       // Find the first path that exists
