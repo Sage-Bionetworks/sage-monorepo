@@ -18,7 +18,7 @@ import {
 import { provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client';
-import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
+import { configFactory, ConfigService, RuntimeAppConfig } from '@sagebionetworks/model-ad/config';
 import { provideMarkdown } from 'ngx-markdown';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
@@ -32,8 +32,13 @@ export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'model-ad-app' },
     provideAppInitializer(() => {
-      const initializerFn = configFactory(inject(ConfigService));
-      return initializerFn();
+      const configService = inject(ConfigService);
+      return configFactory(configService)().then(() => {
+        const release = configService.config.sentryRelease;
+        if (release) {
+          Sentry.addEventProcessor((event) => ({ ...event, release }));
+        }
+      });
     }),
     provideExplorersConfig({
       visualizationOverviewPanes: VISUALIZATION_OVERVIEW_PANES,
@@ -42,7 +47,7 @@ export const appConfig: ApplicationConfig = {
       provide: API_CLIENT_BASE_PATH,
       useFactory: (configService: ConfigService) =>
         configService.config.isPlatformServer
-          ? configService.config.ssrApiUrl
+          ? (configService.config as RuntimeAppConfig).ssrApiUrl
           : configService.config.csrApiUrl,
       deps: [ConfigService],
     },

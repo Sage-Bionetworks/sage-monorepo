@@ -7,7 +7,7 @@ export function transformServerToClientConfig(serverConfig: AppConfig): ClientCo
     appVersion: serverConfig.appVersion,
     commitSha: serverConfig.commitSha,
     apiDocsUrl: serverConfig.apiDocsUrl,
-    apiBaseUrl: serverConfig.csrApiUrl,
+    csrApiUrl: serverConfig.csrApiUrl,
     googleTagManagerId: serverConfig.googleTagManagerId,
     sentryRelease: serverConfig.sentryRelease,
   };
