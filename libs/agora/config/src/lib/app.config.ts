@@ -1,16 +1,11 @@
 import { InjectionToken } from '@angular/core';
 
-export interface AppConfig {
-  appVersion: string;
-  commitSha: string;
-  apiDocsUrl: string;
-  csrApiUrl: string;
-  ssrApiUrl: string;
-  googleTagManagerId: string;
-  isPlatformServer: boolean;
-  sentryRelease: string;
-}
+export {
+  AppConfig,
+  RuntimeAppConfig,
+  RuntimeClientConfig,
+  ServerConfig,
+} from '@sagebionetworks/explorers/config';
 
-export const EMPTY_APP_CONFIG = {} as AppConfig;
-
+// TODO: remove when app.config.server.ts is updated to use CONFIG_BASE_PATH
 export const APP_PORT = new InjectionToken<string>('APP_PORT');
