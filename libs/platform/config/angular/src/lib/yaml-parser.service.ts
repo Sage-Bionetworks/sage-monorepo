@@ -3,6 +3,7 @@ import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import * as yaml from 'js-yaml';
+import { CONFIG_BASE_PATH } from './config-base-path';
 
 /**
  * Service for loading and parsing YAML configuration files
@@ -14,6 +15,7 @@ import * as yaml from 'js-yaml';
 export class YamlParserService {
   private readonly http = inject(HttpClient);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly configBasePath = inject(CONFIG_BASE_PATH, { optional: true });
 
   /**
    * Check if running on server (Node.js) or browser
@@ -66,30 +68,24 @@ export class YamlParserService {
       // For Jest/CommonJS tests, we use process.cwd() as fallback
       let currentDir: string;
       try {
-        // Try ESM approach (works with Vite)
-        // Use Function constructor to avoid TypeScript error in CommonJS mode
         const getImportMetaUrl = new Function('return import.meta.url');
         const importMetaUrl = getImportMetaUrl() as string;
         const { fileURLToPath } = await dynamicImport('node:url');
         const { dirname } = await dynamicImport('node:path');
         currentDir = dirname(fileURLToPath(importMetaUrl));
       } catch {
-        // Fallback for CommonJS/Jest: use process.cwd()
         currentDir = process.cwd();
       }
 
-      // Try multiple possible paths (development and production)
       const possiblePaths = [
-        // Production: dist/apps/openchallenges/app/browser/config
+        // Production: relative to server bundle
         join(currentDir, '../../browser/config'),
-        // Development with Vite/ng serve: Check relative to project root
-        resolve(process.cwd(), 'apps/openchallenges/app/src/config'),
-        // Alternative production paths
-        join(currentDir, '../browser/config'), // when cwd is the server/ dir
-        join(currentDir, 'browser/config'), // when cwd is the parent dir of server/
-        // Fallback for Jest tests
-        resolve(process.cwd(), 'apps/openchallenges/app/src/config'),
       ];
+
+      // Development: use injected CONFIG_BASE_PATH if available
+      if (this.configBasePath) {
+        possiblePaths.push(resolve(process.cwd(), this.configBasePath));
+      }
 
       // Find the first path that exists
       for (const path of possiblePaths) {
@@ -99,7 +95,6 @@ export class YamlParserService {
           console.log(`[YamlParser] Found config directory: ${configPath}`);
           break;
         } catch {
-          // Path doesn't exist, try next
           continue;
         }
       }
