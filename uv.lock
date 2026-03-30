@@ -322,7 +322,7 @@ requires-dist = [
 [[package]]
 name = "bixarena-leaderboard"
 version = "1.0.0"
-source = { editable = "libs/bixarena/leaderboard/python" }
+source = { editable = "libs/bixarena/leaderboard-python" }
 dependencies = [
     { name = "numpy" },
     { name = "psycopg", extra = ["binary"] },
@@ -353,7 +353,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "bixarena-leaderboard", editable = "libs/bixarena/leaderboard/python" },
+    { name = "bixarena-leaderboard", editable = "libs/bixarena/leaderboard-python" },
     { name = "locust", specifier = ">=2.35.0" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.0.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
@@ -370,7 +370,7 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "bixarena-leaderboard", editable = "libs/bixarena/leaderboard/python" }]
+requires-dist = [{ name = "bixarena-leaderboard", editable = "libs/bixarena/leaderboard-python" }]
 
 [[package]]
 name = "bleach"

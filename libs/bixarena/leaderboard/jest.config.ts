@@ -1,8 +1,8 @@
 export default {
-  displayName: 'bixarena-leaderboard-angular',
-  preset: '../../../../jest.preset.js',
+  displayName: 'bixarena-leaderboard',
+  preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/bixarena/leaderboard/angular',
+  coverageDirectory: '../../../coverage/libs/bixarena/leaderboard',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
