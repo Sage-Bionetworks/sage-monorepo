@@ -48,7 +48,7 @@
       "@sagebionetworks/bixarena/leaderboard": ["libs/bixarena/leaderboard/angular/src/index.ts"],
       "@sagebionetworks/bixarena/models": ["libs/bixarena/models/src/index.ts"],
       "@sagebionetworks/bixarena/services": ["libs/bixarena/services/src/index.ts"],
-      "@sagebionetworks/bixarena/themes": ["libs/bixarena/themes/src/index.ts"],
+      "@sagebionetworks/bixarena/styles": ["libs/bixarena/styles/src/index.ts"],
       "@sagebionetworks/bixarena/ui": ["libs/bixarena/ui/src/index.ts"],
       "@sagebionetworks/explorers/charts": ["libs/explorers/charts/src/index.ts"],
       "@sagebionetworks/explorers/charts-angular": ["libs/explorers/charts-angular/src/index.ts"],
