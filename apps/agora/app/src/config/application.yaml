@@ -1,0 +1,8 @@
+appVersion: local
+commitSha: ''
+csrApiUrl: http://localhost:8000/api/v1
+ssrApiUrl: http://agora-api:3333/v1
+apiDocsUrl: http://localhost:8000/api-docs
+googleTagManagerId: ''
+sentryRelease: ''
+environment: dev
