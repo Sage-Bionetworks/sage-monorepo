@@ -16,6 +16,8 @@
     },
     "create-config-json": {
       "executor": "nx:run-commands",
+      "inputs": ["{projectRoot}/src/config/config.json.template"],
+      "outputs": ["{projectRoot}/src/config/config.json"],
       "options": {
         "command": "node ../../../tools/create-config-json.js",
         "cwd": "{projectRoot}"
@@ -24,6 +26,7 @@
     "build": {
       "executor": "@nx/angular:application",
       "outputs": ["{options.outputPath}"],
+      "dependsOn": ["create-config-json"],
       "options": {
         "outputPath": "dist/apps/model-ad/app",
         "index": "apps/model-ad/app/src/index.html",
