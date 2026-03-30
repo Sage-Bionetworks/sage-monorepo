@@ -1,5 +1,6 @@
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import {
+  APP_ID,
   ApplicationConfig,
   inject,
   provideAppInitializer,
@@ -38,7 +39,12 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(appRoutes, withComponentInputBinding(), withInMemoryScrolling()),
+    { provide: APP_ID, useValue: 'bixarena-app' },
+    provideRouter(
+      appRoutes,
+      withComponentInputBinding(),
+      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
+    ),
     {
       provide: BASE_PATH,
       useFactory: (configService: ConfigService) =>
