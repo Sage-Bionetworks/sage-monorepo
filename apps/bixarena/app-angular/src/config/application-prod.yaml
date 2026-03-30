@@ -1,8 +1,0 @@
-app:
-  version: edge
-
-api:
-  csrBaseUrl: http://localhost:8111/api/v1
-  ssrBaseUrl: http://bixarena-api-gateway:8113/api/v1
-
-environment: prod
