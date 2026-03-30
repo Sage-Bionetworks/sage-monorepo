@@ -2,7 +2,7 @@
   "name": "bixarena-ui",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/bixarena/ui/src",
-  "prefix": "lib",
+  "prefix": "bixarena",
   "projectType": "library",
   "tags": ["type:ui", "scope:bixarena", "language:typescript"],
   "targets": {
@@ -16,6 +16,12 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
     }
   }
 }
