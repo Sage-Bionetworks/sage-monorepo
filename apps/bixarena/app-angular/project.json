@@ -7,6 +7,13 @@
   "tags": ["scope:bixarena", "language:typescript"],
   "implicitDependencies": [],
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "build": {
       "executor": "@nx/angular:application",
       "outputs": ["{options.outputPath}"],
@@ -112,6 +119,20 @@
         "buildTarget": "bixarena-app-angular:build",
         "staticFilePath": "dist/apps/bixarena/app-angular/browser",
         "spa": true
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/bixarena/serve-detach.sh bixarena-app-angular"
+      },
+      "dependsOn": []
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/bixarena-app-angular:local --quiet",
+        "color": true
       }
     },
     "e2e": {
