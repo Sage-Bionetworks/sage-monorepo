@@ -1,4 +1,9 @@
-export * from './lib/app.config';
-export * from './lib/config.factory';
-export * from './lib/config.service';
+export {
+  AppConfig,
+  RuntimeAppConfig,
+  RuntimeClientConfig,
+  ServerConfig,
+  ConfigService,
+  configFactory,
+} from '@sagebionetworks/explorers/config';
 export * from './lib/constants';
