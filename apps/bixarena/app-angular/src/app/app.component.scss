@@ -1,13 +1,9 @@
 :host {
-  display: contents;
-}
-
-.shell {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
 }
 
-.shell-main {
-  flex: 1 1 auto;
+main {
+  flex: 1;
 }
