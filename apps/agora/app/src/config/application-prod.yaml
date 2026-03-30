@@ -1,2 +1,0 @@
-# Production overrides (applied when ENVIRONMENT=prod)
-# All values come from environment variables
