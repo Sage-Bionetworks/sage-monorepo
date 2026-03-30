@@ -6,15 +6,16 @@
  * - If VAR is set, uses its value
  * - If VAR is unset or empty, uses the default value
  *
- * Usage: node tools/create-config-json.js
- * (Run from project root, e.g., apps/agora/app)
+ * Usage: node tools/create-config-json.js [templatePath] [outputPath]
+ * - When called without arguments, runs from the project root (e.g., apps/agora/app)
+ * - When called with arguments, uses the provided paths directly
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const templatePath = path.join(process.cwd(), 'src/config/config.json.template');
-const outputPath = path.join(process.cwd(), 'src/config/config.json');
+const templatePath = process.argv[2] || path.join(process.cwd(), 'src/config/config.json.template');
+const outputPath = process.argv[3] || path.join(process.cwd(), 'src/config/config.json');
 
 if (!fs.existsSync(templatePath)) {
   console.error(`Template not found: ${templatePath}`);
