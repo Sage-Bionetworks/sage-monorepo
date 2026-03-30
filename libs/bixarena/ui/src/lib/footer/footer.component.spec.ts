@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { FooterComponent } from './footer.component';
 
 describe('FooterComponent', () => {
@@ -9,7 +9,12 @@ describe('FooterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FooterComponent],
-      providers: [provideHttpClient()],
+      providers: [
+        {
+          provide: ConfigService,
+          useValue: { config: { app: { version: 'test' } } },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FooterComponent);
