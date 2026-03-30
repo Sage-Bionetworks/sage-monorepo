@@ -46,7 +46,7 @@
       "@sagebionetworks/bixarena/config": ["libs/bixarena/config/src/index.ts"],
       "@sagebionetworks/bixarena/home": ["libs/bixarena/home/src/index.ts"],
       "@sagebionetworks/bixarena/leaderboard": ["libs/bixarena/leaderboard/src/index.ts"],
-      "@sagebionetworks/bixarena/models": ["libs/bixarena/models/src/index.ts"],
+
       "@sagebionetworks/bixarena/services": ["libs/bixarena/services/src/index.ts"],
       "@sagebionetworks/bixarena/styles": ["libs/bixarena/styles/src/index.ts"],
       "@sagebionetworks/bixarena/ui": ["libs/bixarena/ui/src/index.ts"],
