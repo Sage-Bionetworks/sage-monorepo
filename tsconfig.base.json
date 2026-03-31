@@ -26,13 +26,13 @@
       "@sagebionetworks/agora/genes": ["libs/agora/genes/src/index.ts"],
       "@sagebionetworks/agora/home": ["libs/agora/home/src/index.ts"],
       "@sagebionetworks/agora/models": ["libs/agora/models/index.ts"],
-      "@sagebionetworks/agora/nomination-form": ["libs/agora/nomination-form/src/index.ts"],
       "@sagebionetworks/agora/nominated-drugs-comparison-tool": [
         "libs/agora/nominated-drugs-comparison-tool/src/index.ts"
       ],
       "@sagebionetworks/agora/nominated-targets-comparison-tool": [
         "libs/agora/nominated-targets-comparison-tool/src/index.ts"
       ],
+      "@sagebionetworks/agora/nomination-form": ["libs/agora/nomination-form/src/index.ts"],
       "@sagebionetworks/agora/services": ["libs/agora/services/src/index.ts"],
       "@sagebionetworks/agora/storybook": ["libs/agora/storybook/src/index.ts"],
       "@sagebionetworks/agora/teams": ["libs/agora/teams/src/index.ts"],
@@ -41,6 +41,14 @@
       "@sagebionetworks/agora/ui": ["libs/agora/ui/src/index.ts"],
       "@sagebionetworks/agora/util": ["libs/agora/util/src/index.ts"],
       "@sagebionetworks/agora/wiki": ["libs/agora/wiki/src/index.ts"],
+      "@sagebionetworks/bixarena/api-client": ["libs/bixarena/api-client-angular/src/index.ts"],
+      "@sagebionetworks/bixarena/battle": ["libs/bixarena/battle/src/index.ts"],
+      "@sagebionetworks/bixarena/config": ["libs/bixarena/config/src/index.ts"],
+      "@sagebionetworks/bixarena/home": ["libs/bixarena/home/src/index.ts"],
+      "@sagebionetworks/bixarena/leaderboard": ["libs/bixarena/leaderboard/src/index.ts"],
+      "@sagebionetworks/bixarena/services": ["libs/bixarena/services/src/index.ts"],
+      "@sagebionetworks/bixarena/styles": ["libs/bixarena/styles/src/index.ts"],
+      "@sagebionetworks/bixarena/ui": ["libs/bixarena/ui/src/index.ts"],
       "@sagebionetworks/explorers/charts": ["libs/explorers/charts/src/index.ts"],
       "@sagebionetworks/explorers/charts-angular": ["libs/explorers/charts-angular/src/index.ts"],
       "@sagebionetworks/explorers/comparison-tool": ["libs/explorers/comparison-tool/src/index.ts"],

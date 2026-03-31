@@ -82,7 +82,7 @@ members = [
   "apps/openchallenges/infra/cdk",
   "apps/openchallenges/tools",
   "libs/bixarena/api-client-python",
-  "libs/bixarena/leaderboard/python",
+  "libs/bixarena/leaderboard-python",
   "libs/openchallenges/api-client-python",
   "libs/openchallenges/client-python",
   "libs/platform/infra/cdk/common"

@@ -1,8 +1,8 @@
 {
-  "name": "bixarena-leaderboard",
+  "name": "bixarena-leaderboard-python",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/bixarena/leaderboard/python/bixarena_leaderboard",
+  "sourceRoot": "libs/bixarena/leaderboard-python/bixarena_leaderboard",
   "targets": {
     "lock": {
       "executor": "@nxlv/python:lock",
