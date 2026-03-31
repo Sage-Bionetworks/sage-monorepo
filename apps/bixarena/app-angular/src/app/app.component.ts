@@ -1,6 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ThemeService } from '@sagebionetworks/bixarena/services';
 import { NavComponent, FooterComponent } from '@sagebionetworks/bixarena/ui';
 
 @Component({
@@ -9,8 +8,4 @@ import { NavComponent, FooterComponent } from '@sagebionetworks/bixarena/ui';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  constructor() {
-    inject(ThemeService).init();
-  }
-}
+export class AppComponent {}
