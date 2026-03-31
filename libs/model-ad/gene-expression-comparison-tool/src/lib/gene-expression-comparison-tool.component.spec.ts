@@ -9,13 +9,46 @@ import {
   provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
-import { ComparisonToolConfigService } from '@sagebionetworks/model-ad/api-client';
+import {
+  ComparisonToolConfigService,
+  GeneExpression,
+  GeneExpressionService,
+  GeneExpressionsPage,
+  SexCohort,
+} from '@sagebionetworks/model-ad/api-client';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { GeneExpressionComparisonToolComponent } from './gene-expression-comparison-tool.component';
 import { GeneExpressionComparisonToolService } from './services/gene-expression-comparison-tool.service';
+
+const baseMockRow: GeneExpression = {
+  composite_id: 'test-id',
+  ensembl_gene_id: 'ENSG00000001',
+  gene_symbol: 'ABCA7',
+  biodomains: [],
+  name: { link_text: 'Abca7*V1599M.5xFAD', link_url: 'models/Abca7*V1599M.5xFAD' },
+  matched_control: '5xFAD',
+  model_group: 'Abca7*V1599M',
+  model_type: 'Familial AD',
+  tissue: 'Hippocampus',
+  sex_cohort: SexCohort.FemalesMales,
+};
+
+function mockPage(rows: GeneExpression[]): GeneExpressionsPage {
+  return {
+    geneExpressions: rows,
+    page: {
+      number: 0,
+      size: 10,
+      totalElements: rows.length,
+      totalPages: 1,
+      hasNext: false,
+      hasPrevious: false,
+    },
+  };
+}
 
 async function setup() {
   const { fixture } = await render(GeneExpressionComparisonToolComponent, {
@@ -44,12 +77,69 @@ async function setup() {
   });
 
   const component = fixture.componentInstance;
-  return { component };
+  const comparisonToolService = fixture.debugElement.injector.get(
+    GeneExpressionComparisonToolService,
+  );
+  const geneExpressionService = fixture.debugElement.injector.get(GeneExpressionService);
+  return { component, comparisonToolService, geneExpressionService };
 }
 
 describe('GeneExpressionComparisonToolComponent', () => {
   it('should create', async () => {
     const { component } = await setup();
     expect(component).toBeTruthy();
+  });
+
+  it('should override link_url with model_group when non-null', async () => {
+    const { component, comparisonToolService, geneExpressionService } = await setup();
+    jest
+      .spyOn(geneExpressionService, 'getGeneExpressions')
+      .mockReturnValue(of(mockPage([baseMockRow])) as any);
+    const spy = jest.spyOn(comparisonToolService, 'setUnpinnedData');
+
+    component.getUnpinnedData({
+      pinnedItems: [],
+      multiSortMeta: [],
+      pageNumber: 0,
+      pageSize: 10,
+      searchTerm: '',
+      categories: [],
+      filters: [],
+    });
+
+    expect(spy).toHaveBeenCalledWith([
+      expect.objectContaining({
+        name: expect.objectContaining({ link_url: 'models/Abca7*V1599M' }),
+      }),
+    ]);
+  });
+
+  it('should keep original link_url when model_group is null', async () => {
+    const { component, comparisonToolService, geneExpressionService } = await setup();
+    const row = {
+      ...baseMockRow,
+      model_group: null,
+      name: { link_text: '5xFAD (UCI)', link_url: 'models/5xFAD (UCI)' },
+    };
+    jest
+      .spyOn(geneExpressionService, 'getGeneExpressions')
+      .mockReturnValue(of(mockPage([row])) as any);
+    const spy = jest.spyOn(comparisonToolService, 'setUnpinnedData');
+
+    component.getUnpinnedData({
+      pinnedItems: [],
+      multiSortMeta: [],
+      pageNumber: 0,
+      pageSize: 10,
+      searchTerm: '',
+      categories: [],
+      filters: [],
+    });
+
+    expect(spy).toHaveBeenCalledWith([
+      expect.objectContaining({
+        name: expect.objectContaining({ link_url: 'models/5xFAD (UCI)' }),
+      }),
+    ]);
   });
 });
