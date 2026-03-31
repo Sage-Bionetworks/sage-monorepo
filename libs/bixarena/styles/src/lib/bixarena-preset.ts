@@ -1,12 +1,14 @@
 import { definePreset } from '@primeuix/themes';
 import Lara from '@primeuix/themes/lara';
 
+// Tailwind orange primary + zinc surfaces. Dark surface scale is inverted
+// (0=darkest, 950=lightest) with surface-0 adjusted to #111113 to avoid
+// Chrome Retina GPU compositing artifacts on near-black backgrounds.
 export const BixArenaPreset = definePreset(Lara, {
   primitive: {
     fontFamily: "'DM Sans Variable', 'DM Sans', system-ui, sans-serif",
   },
   semantic: {
-    // Orange primary matches the live Gradio app (Gradio default theme primary)
     primary: {
       50: '#fff7ed',
       100: '#ffedd5',
@@ -36,13 +38,10 @@ export const BixArenaPreset = definePreset(Lara, {
           900: '#18181b',
           950: '#09090b',
         },
-        bixarena: {
-          accent: '#14b8a6',
-        },
       },
       dark: {
         surface: {
-          0: '#09090b',
+          0: '#111113',
           50: '#18181b',
           100: '#27272a',
           200: '#3f3f46',
@@ -60,9 +59,6 @@ export const BixArenaPreset = definePreset(Lara, {
           hoverColor: '{surface.950}',
           mutedColor: '{surface.400}',
           hoverMutedColor: '{surface.300}',
-        },
-        bixarena: {
-          accent: '#14b8a6',
         },
       },
     },
