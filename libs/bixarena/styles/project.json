@@ -1,0 +1,8 @@
+{
+  "name": "bixarena-styles",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/bixarena/styles/src",
+  "projectType": "library",
+  "tags": ["type:util", "scope:bixarena", "language:typescript"],
+  "targets": {}
+}

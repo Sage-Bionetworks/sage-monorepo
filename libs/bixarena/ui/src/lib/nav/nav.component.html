@@ -1,0 +1,52 @@
+<header class="nav">
+  <a routerLink="/" class="brand">
+    <img src="/assets/bioarena-logo.svg" alt="BioArena" height="32" />
+    <span>BioArena</span>
+  </a>
+  <nav class="links">
+    <a routerLink="/battle" routerLinkActive="active">Battle</a>
+    <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
+  </nav>
+  <div class="actions">
+    <span class="divider"></span>
+    <p-button label="Login" />
+    <button
+      class="theme-toggle"
+      (click)="themeService.toggle()"
+      [attr.aria-label]="themeService.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+    >
+      @if (themeService.isDark()) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+        </svg>
+      } @else {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path
+            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+          />
+        </svg>
+      }
+    </button>
+  </div>
+</header>

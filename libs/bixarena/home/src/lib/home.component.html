@@ -1,0 +1,9 @@
+<div class="container">
+  <p>BioArena home</p>
+  @if (stats$ | async; as stats) {
+    <p>
+      Battles: {{ stats.completedBattles }} | Models: {{ stats.modelsEvaluated }} | Users:
+      {{ stats.totalUsers }}
+    </p>
+  }
+</div>

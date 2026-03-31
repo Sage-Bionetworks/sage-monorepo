@@ -1,0 +1,146 @@
+{
+  "name": "bixarena-app-angular",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/bixarena/app-angular/src",
+  "tags": ["scope:bixarena", "language:typescript"],
+  "implicitDependencies": ["shared-typescript-assets"],
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "@nx/angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/bixarena/app-angular",
+        "index": "apps/bixarena/app-angular/src/index.html",
+        "browser": "apps/bixarena/app-angular/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/bixarena/app-angular/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs"]
+        },
+        "assets": [
+          "apps/bixarena/app-angular/src/assets",
+          {
+            "input": "apps/bixarena/app-angular/src/config",
+            "glob": "**/*.yaml",
+            "output": "config"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/bixarena/app-angular/public"
+          }
+        ],
+        "styles": [
+          "apps/bixarena/app-angular/src/styles.scss",
+          "node_modules/primeicons/primeicons.css"
+        ],
+        "server": "apps/bixarena/app-angular/src/main.server.ts",
+        "prerender": false,
+        "ssr": {
+          "entry": "apps/bixarena/app-angular/server.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "host": "0.0.0.0",
+        "port": 8100
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "bixarena-app-angular:build:production"
+        },
+        "development": {
+          "buildTarget": "bixarena-app-angular:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
+    },
+    "extract-i18n": {
+      "executor": "@nx/angular:extract-i18n",
+      "options": {
+        "buildTarget": "bixarena-app-angular:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/bixarena/app-angular/jest.config.ts",
+        "tsConfig": "apps/bixarena/app-angular/tsconfig.spec.json"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "bixarena-app-angular:build",
+        "staticFilePath": "dist/apps/bixarena/app-angular/browser",
+        "spa": true
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/bixarena/serve-detach.sh bixarena-app-angular"
+      },
+      "dependsOn": []
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/bixarena-app-angular:local --quiet",
+        "color": true
+      }
+    },
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "outputs": ["{workspaceRoot}/dist/.playwright/{projectRoot}"],
+      "options": {
+        "config": "{projectRoot}/playwright.config.ts"
+      }
+    }
+  }
+}

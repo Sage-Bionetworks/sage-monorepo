@@ -68,15 +68,12 @@ export class YamlParserService {
       // For Jest/CommonJS tests, we use process.cwd() as fallback
       let currentDir: string;
       try {
-        // Try ESM approach (works with Vite)
-        // Use Function constructor to avoid TypeScript error in CommonJS mode
         const getImportMetaUrl = new Function('return import.meta.url');
         const importMetaUrl = getImportMetaUrl() as string;
         const { fileURLToPath } = await dynamicImport('node:url');
         const { dirname } = await dynamicImport('node:path');
         currentDir = dirname(fileURLToPath(importMetaUrl));
       } catch {
-        // Fallback for CommonJS/Jest: use process.cwd()
         currentDir = process.cwd();
       }
 
@@ -89,6 +86,11 @@ export class YamlParserService {
         ...(this.configBasePath ? [resolve(process.cwd(), this.configBasePath)] : []),
       ];
 
+      // Development: use injected CONFIG_BASE_PATH if available
+      if (this.configBasePath) {
+        possiblePaths.push(resolve(process.cwd(), this.configBasePath));
+      }
+
       // Find the first path that exists
       for (const path of possiblePaths) {
         try {
@@ -97,7 +99,6 @@ export class YamlParserService {
           console.log(`[YamlParser] Found config directory: ${configPath}`);
           break;
         } catch {
-          // Path doesn't exist, try next
           continue;
         }
       }

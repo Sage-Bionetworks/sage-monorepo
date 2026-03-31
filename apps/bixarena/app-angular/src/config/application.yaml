@@ -1,0 +1,8 @@
+app:
+  version: local
+
+api:
+  csrBaseUrl: http://localhost:8111/api/v1
+  ssrBaseUrl: http://bixarena-apex:8111/api/v1
+
+environment: dev
