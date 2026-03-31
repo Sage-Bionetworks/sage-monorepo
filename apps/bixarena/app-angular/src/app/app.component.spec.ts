@@ -16,7 +16,7 @@ describe('AppComponent', () => {
         },
         {
           provide: ThemeService,
-          useValue: { init: () => undefined },
+          useValue: { init: () => undefined, toggle: () => undefined, isDark: () => false },
         },
       ],
     }).compileComponents();

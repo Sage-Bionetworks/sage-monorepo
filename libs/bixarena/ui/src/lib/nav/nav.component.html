@@ -10,7 +10,11 @@
   <div class="actions">
     <span class="divider"></span>
     <p-button label="Login" />
-    <button class="theme-toggle" (click)="themeService.toggle()">
+    <button
+      class="theme-toggle"
+      (click)="themeService.toggle()"
+      [attr.aria-label]="themeService.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+    >
       @if (themeService.isDark()) {
         <svg
           xmlns="http://www.w3.org/2000/svg"
