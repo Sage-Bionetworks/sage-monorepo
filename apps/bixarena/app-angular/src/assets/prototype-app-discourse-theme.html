@@ -1107,6 +1107,7 @@
       }
       .page.on {
         display: block;
+        padding-bottom: 4rem;
       }
       .page .container {
         max-width: var(--max-w);
@@ -2061,6 +2062,453 @@
         font-variant-numeric: tabular-nums;
       }
 
+      /* ═══ LEADERBOARD PAGE ═══ */
+      .lb-page {
+        padding: 2.5rem 0 4rem;
+      }
+      .lb-hero {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+      .lb-hero h1 {
+        font-family: var(--serif);
+        font-size: 42px;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+      .lb-hero h1 em {
+        font-style: italic;
+        color: var(--p400);
+      }
+      .lb-hero-sub {
+        color: var(--fg3);
+        font-size: 15px;
+        max-width: 520px;
+        margin: 0 auto 1.5rem;
+        line-height: 1.5;
+      }
+      /* Stats strip */
+      .lb-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+      .lb-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 13px;
+        color: var(--fg3);
+      }
+      .lb-stat-val {
+        font-weight: 620;
+        color: var(--fg);
+        font-variant-numeric: tabular-nums;
+      }
+      .lb-stat-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--teal);
+        animation: lb-pulse 2s ease-in-out infinite;
+      }
+      @keyframes lb-pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      /* Category tabs */
+      .lb-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 0.25rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+      .lb-tab {
+        padding: 0.5rem 1rem;
+        border-radius: var(--r-xs);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--fg3);
+        cursor: pointer;
+        transition: all 0.15s;
+        border: 1px solid transparent;
+        background: none;
+        font-family: var(--sans);
+      }
+      .lb-tab:hover {
+        color: var(--fg2);
+        background: var(--bg-up);
+      }
+      .lb-tab.on {
+        color: var(--fg);
+        background: var(--bg-card-s);
+        border-color: var(--brd);
+        box-shadow: var(--shadow);
+      }
+
+      /* Table wrapper — groups search bar + table + pager */
+      .lb-table-wrap {
+        background: var(--bg-card-s);
+        border: 1px solid var(--brd);
+        border-radius: var(--r);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      .lb-table-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--brd);
+      }
+      .lb-search {
+        flex: 1;
+        min-width: 180px;
+        position: relative;
+      }
+      .lb-search svg {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--fg4);
+        pointer-events: none;
+      }
+      .lb-search input {
+        width: 100%;
+        padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+        border: 1px solid var(--brd);
+        border-radius: 6px;
+        background: var(--bg-up);
+        color: var(--fg);
+        font-size: 13px;
+        font-family: var(--sans);
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .lb-search input::placeholder {
+        color: var(--fg4);
+      }
+      .lb-search input:focus {
+        border-color: var(--p400);
+        background: var(--bg-card-s);
+      }
+      .lb-pills {
+        display: flex;
+        gap: 0.25rem;
+      }
+      .lb-pill {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--fg3);
+        background: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: var(--sans);
+      }
+      .lb-pill:hover {
+        background: var(--bg-up);
+        color: var(--fg2);
+      }
+      .lb-pill.on {
+        background: var(--bg-up);
+        border-color: var(--brd);
+        color: var(--fg);
+      }
+
+      /* Charts row */
+      .lb-charts-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+      @media (max-width: 960px) {
+        .lb-charts-row {
+          grid-template-columns: 1fr;
+        }
+      }
+      .lb-chart-card {
+        background: var(--bg-card-s);
+        border: 1px solid var(--brd);
+        border-radius: var(--r);
+        padding: 1.25rem;
+        box-shadow: var(--shadow);
+      }
+      .lb-chart-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+      }
+      .lb-chart-head h3 {
+        font-size: 14px;
+        font-weight: 580;
+        color: var(--fg);
+      }
+      .lb-chart-head span {
+        font-size: 11px;
+        color: var(--fg4);
+      }
+      .lb-chart {
+        height: 220px;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+      }
+      .lb-chart svg {
+        width: 100%;
+        height: 100%;
+      }
+      .lb-chart-legend {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .lb-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 12px;
+        color: var(--fg3);
+        cursor: default;
+      }
+      .lb-legend-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      /* Top-3 row highlighting in table */
+      .lb-table2 tbody tr.top3 td:first-child {
+        color: var(--p400);
+        font-weight: 700;
+      }
+      .lb-table2 tbody tr.top3 .lb-t-name a {
+        font-weight: 620;
+      }
+
+      /* Enhanced table */
+      .lb-table2 {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      .lb-table2 th {
+        text-align: left;
+        padding: 0.75rem 1rem;
+        font-size: 11px;
+        font-weight: 560;
+        color: var(--fg4);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        border-bottom: 1px solid var(--brd);
+        background: rgba(253, 252, 251, 0.02);
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+        transition: color 0.15s;
+      }
+      .lb-table2 th:hover {
+        color: var(--fg2);
+      }
+      .lb-table2 th.sorted {
+        color: var(--p400);
+      }
+      .lb-table2 th .sort-arrow {
+        display: inline-block;
+        margin-left: 4px;
+        font-size: 10px;
+        opacity: 0;
+        transition: opacity 0.15s;
+      }
+      .lb-table2 th:hover .sort-arrow,
+      .lb-table2 th.sorted .sort-arrow {
+        opacity: 1;
+      }
+      .lb-table2 td {
+        padding: 0.75rem 1rem;
+        font-size: 13px;
+        color: var(--fg2);
+        border-bottom: 1px solid var(--brd);
+        vertical-align: middle;
+      }
+      .lb-table2 tr:last-child td {
+        border-bottom: none;
+      }
+      .lb-table2 tbody tr {
+        transition: background 0.1s;
+      }
+      .lb-table2 tbody tr:hover td {
+        background: rgba(253, 252, 251, 0.02);
+      }
+
+      /* Table cell styles */
+      .lb-t-rank {
+        font-weight: 620;
+        color: var(--fg3);
+        font-variant-numeric: tabular-nums;
+        width: 48px;
+      }
+      .lb-t-model {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+      }
+      .lb-t-logo {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .lb-t-name {
+        font-weight: 560;
+        color: var(--fg);
+      }
+      .lb-t-org {
+        font-size: 11px;
+        color: var(--fg4);
+      }
+      .lb-t-score {
+        font-weight: 580;
+        font-variant-numeric: tabular-nums;
+        color: var(--fg);
+      }
+      .lb-t-diff {
+        font-size: 12px;
+        font-weight: 560;
+        font-variant-numeric: tabular-nums;
+      }
+      .lb-t-diff.up {
+        color: var(--teal);
+      }
+      .lb-t-diff.down {
+        color: #ef4444;
+      }
+      .lb-t-diff.same {
+        color: var(--fg4);
+      }
+      .lb-t-votes {
+        font-variant-numeric: tabular-nums;
+        color: var(--fg3);
+      }
+      .lb-t-license {
+        font-size: 12px;
+        color: var(--fg3);
+      }
+
+      /* Trending badge */
+      .lb-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 10px;
+        font-weight: 600;
+        padding: 0.15rem 0.5rem;
+        border-radius: 10px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+      .lb-badge.hot {
+        color: var(--p400);
+        background: rgba(249, 115, 22, 0.08);
+      }
+      .lb-badge.rising {
+        color: var(--teal);
+        background: rgba(52, 212, 180, 0.08);
+      }
+      .lb-badge.falling {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.08);
+      }
+
+      /* Pagination */
+      .lb-pager {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        border-top: 1px solid var(--brd);
+      }
+      .lb-pager-info {
+        font-size: 12px;
+        color: var(--fg4);
+      }
+      .lb-pager-btns {
+        display: flex;
+        gap: 0.25rem;
+      }
+      .lb-pager-btn {
+        min-width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--fg3);
+        background: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        font-family: var(--sans);
+        transition: all 0.15s;
+      }
+      .lb-pager-btn:hover {
+        background: var(--bg-up);
+        color: var(--fg2);
+      }
+      .lb-pager-btn.on {
+        background: var(--bg-up);
+        border-color: var(--brd);
+        color: var(--fg);
+        font-weight: 600;
+      }
+      .lb-pager-btn:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      .lb-pager-btn:disabled:hover {
+        background: none;
+      }
+
+      /* Methodology section */
+      .lb-method {
+        text-align: center;
+        padding: 2rem 0 0;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .lb-method h3 {
+        font-size: 14px;
+        font-weight: 580;
+        color: var(--teal);
+        margin-bottom: 0.5rem;
+      }
+      .lb-method p {
+        font-size: 13px;
+        color: var(--fg4);
+        line-height: 1.6;
+      }
+
       /* GLOBAL FOOTER */
       .gfoot {
         border-top: 1px solid var(--brd);
@@ -2658,137 +3106,115 @@
 
       <!-- ═══ LEADERBOARD PAGE ═══ -->
       <div class="page" id="pg-lb">
-        <div class="container">
-          <div class="lb">
-            <h1>Leaderboard</h1>
-            <p>
-              Models ranked by community votes using the Bradley-Terry model. Updated after every
-              battle.
+        <div class="lb-page container">
+          <!-- Hero -->
+          <div class="lb-hero">
+            <h1>Leader<em>board</em></h1>
+            <p class="lb-hero-sub">
+              Community-driven evaluation of AI models on biomedical topics. Rankings are computed
+              using the Bradley-Terry model after every battle.
             </p>
-            <table class="lb-table">
+            <div class="lb-stats">
+              <div class="lb-stat"><span class="lb-stat-val">10</span> models evaluated</div>
+              <div class="lb-stat"><span class="lb-stat-val">4,462</span> total votes</div>
+              <div class="lb-stat"><span class="lb-stat-dot"></span> Updated Mar 31, 2026</div>
+            </div>
+            <p
+              style="
+                font-size: 12px;
+                color: var(--fg4);
+                max-width: 560px;
+                margin: 0.75rem auto 0;
+                line-height: 1.5;
+              "
+            >
+              Ranked by Bradley-Terry rating from pairwise battles. Confidence intervals are
+              bootstrapped &mdash; overlapping CIs may produce tied ranks.
+            </p>
+          </div>
+
+          <!-- Category tabs -->
+          <div class="lb-tabs" id="lbTabs">
+            <button class="lb-tab on" data-cat="overall">Overall</button>
+            <button class="lb-tab" data-cat="cardiology">Cardiology</button>
+            <button class="lb-tab" data-cat="oncology">Oncology</button>
+            <button class="lb-tab" data-cat="genetics">Genetics</button>
+            <button class="lb-tab" data-cat="neuroscience">Neuroscience</button>
+            <button class="lb-tab" data-cat="immunology">Immunology</button>
+          </div>
+
+          <!-- Table with integrated search -->
+          <div class="lb-table-wrap">
+            <div class="lb-table-bar">
+              <div class="lb-search">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+                <input
+                  type="text"
+                  id="lbSearch"
+                  placeholder="Search models or organizations..."
+                  oninput="lbPage=1;renderLb()"
+                />
+              </div>
+              <div class="lb-pills">
+                <button class="lb-pill on" data-filter="all" onclick="lbPage=1;toggleLbPill(this)">
+                  All
+                </button>
+                <button class="lb-pill" data-filter="oss" onclick="lbPage=1;toggleLbPill(this)">
+                  Open Source
+                </button>
+                <button class="lb-pill" data-filter="comm" onclick="lbPage=1;toggleLbPill(this)">
+                  Commercial
+                </button>
+              </div>
+            </div>
+            <table class="lb-table2" id="lbTable">
               <thead>
                 <tr>
-                  <th>Rank</th>
-                  <th>Model</th>
-                  <th>BT Score</th>
-                  <th></th>
-                  <th>Votes</th>
+                  <th class="sorted" data-col="rank">
+                    Rank <span class="sort-arrow">&uarr;</span>
+                  </th>
+                  <th data-col="model">Model <span class="sort-arrow">&uarr;</span></th>
+                  <th data-col="score">Score <span class="sort-arrow">&darr;</span></th>
+                  <th>95% CI</th>
+                  <th data-col="votes">Votes <span class="sort-arrow">&darr;</span></th>
+                  <th>Diff</th>
                   <th>License</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td class="lb-rank gold">1</td>
-                  <td>
-                    <span class="lb-model">Claude Sonnet 4</span><br /><span class="lb-org"
-                      >Anthropic</span
-                    >
-                  </td>
-                  <td class="lb-score">1,247</td>
-                  <td class="lb-bar">
-                    <div class="lb-bar-inner">
-                      <div class="lb-bar-fill" style="width: 100%"></div>
-                    </div>
-                  </td>
-                  <td class="lb-votes">892</td>
-                  <td style="color: var(--fg3)">Commercial</td>
-                </tr>
-                <tr>
-                  <td class="lb-rank gold">2</td>
-                  <td>
-                    <span class="lb-model">GPT-4o</span><br /><span class="lb-org">OpenAI</span>
-                  </td>
-                  <td class="lb-score">1,198</td>
-                  <td class="lb-bar">
-                    <div class="lb-bar-inner">
-                      <div class="lb-bar-fill" style="width: 88%"></div>
-                    </div>
-                  </td>
-                  <td class="lb-votes">845</td>
-                  <td style="color: var(--fg3)">Commercial</td>
-                </tr>
-                <tr>
-                  <td class="lb-rank gold">3</td>
-                  <td>
-                    <span class="lb-model">Gemini 2.5 Pro</span><br /><span class="lb-org"
-                      >Google</span
-                    >
-                  </td>
-                  <td class="lb-score">1,156</td>
-                  <td class="lb-bar">
-                    <div class="lb-bar-inner">
-                      <div class="lb-bar-fill" style="width: 78%"></div>
-                    </div>
-                  </td>
-                  <td class="lb-votes">701</td>
-                  <td style="color: var(--fg3)">Commercial</td>
-                </tr>
-                <tr>
-                  <td class="lb-rank">4</td>
-                  <td>
-                    <span class="lb-model">Llama 4 Scout</span><br /><span class="lb-org"
-                      >Meta</span
-                    >
-                  </td>
-                  <td class="lb-score">1,089</td>
-                  <td class="lb-bar">
-                    <div class="lb-bar-inner">
-                      <div class="lb-bar-fill" style="width: 62%"></div>
-                    </div>
-                  </td>
-                  <td class="lb-votes">634</td>
-                  <td style="color: var(--teal)">Open Source</td>
-                </tr>
-                <tr>
-                  <td class="lb-rank">5</td>
-                  <td>
-                    <span class="lb-model">Mistral Large</span><br /><span class="lb-org"
-                      >Mistral AI</span
-                    >
-                  </td>
-                  <td class="lb-score">1,045</td>
-                  <td class="lb-bar">
-                    <div class="lb-bar-inner">
-                      <div class="lb-bar-fill" style="width: 52%"></div>
-                    </div>
-                  </td>
-                  <td class="lb-votes">578</td>
-                  <td style="color: var(--teal)">Open Source</td>
-                </tr>
-                <tr>
-                  <td class="lb-rank">6</td>
-                  <td>
-                    <span class="lb-model">DeepSeek-V3</span><br /><span class="lb-org"
-                      >DeepSeek</span
-                    >
-                  </td>
-                  <td class="lb-score">1,012</td>
-                  <td class="lb-bar">
-                    <div class="lb-bar-inner">
-                      <div class="lb-bar-fill" style="width: 44%"></div>
-                    </div>
-                  </td>
-                  <td class="lb-votes">423</td>
-                  <td style="color: var(--teal)">Open Source</td>
-                </tr>
-                <tr>
-                  <td class="lb-rank">7</td>
-                  <td>
-                    <span class="lb-model">Qwen3-235B</span><br /><span class="lb-org"
-                      >Alibaba</span
-                    >
-                  </td>
-                  <td class="lb-score">987</td>
-                  <td class="lb-bar">
-                    <div class="lb-bar-inner">
-                      <div class="lb-bar-fill" style="width: 38%"></div>
-                    </div>
-                  </td>
-                  <td class="lb-votes">389</td>
-                  <td style="color: var(--teal)">Open Source</td>
-                </tr>
-              </tbody>
+              <tbody id="lbTbody"></tbody>
             </table>
+            <div class="lb-pager" id="lbPager"></div>
+          </div>
+
+          <!-- Charts row -->
+          <div class="lb-charts-row">
+            <div class="lb-chart-card">
+              <div class="lb-chart-head">
+                <h3>BT Score</h3>
+                <span id="lbBarCount"></span>
+              </div>
+              <div class="lb-chart" id="lbBarChart"></div>
+            </div>
+            <div class="lb-chart-card">
+              <div class="lb-chart-head">
+                <h3>Ranking Trajectory</h3>
+                <span>Last 7 days</span>
+              </div>
+              <div class="lb-chart" id="lbChart"></div>
+              <div class="lb-chart-legend" id="lbLegend"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -3880,6 +4306,540 @@
         showPage('home');
       }
 
+      // ═══ LEADERBOARD DATA & LOGIC ═══
+      const LB_MODELS = [
+        {
+          id: 'claude-sonnet-4',
+          name: 'Claude Sonnet 4',
+          org: 'Anthropic',
+          logo: 'A',
+          logoColor: '#d97706',
+          score: 1247,
+          ci: [1198, 1296],
+          votes: 892,
+          license: 'Commercial',
+          diff: 0,
+          ctx: '200K',
+          pIn: '$3.00',
+          pOut: '$15.00',
+          caps: ['text', 'vision', 'tools'],
+          history: [1180, 1195, 1210, 1230, 1235, 1240, 1247],
+          url: 'https://openrouter.ai/anthropic/claude-sonnet-4',
+        },
+        {
+          id: 'gpt-4o',
+          name: 'GPT-4o',
+          org: 'OpenAI',
+          logo: 'O',
+          logoColor: '#10a37f',
+          score: 1198,
+          ci: [1145, 1251],
+          votes: 845,
+          license: 'Commercial',
+          diff: 1,
+          ctx: '128K',
+          pIn: '$2.50',
+          pOut: '$10.00',
+          caps: ['text', 'vision', 'audio', 'tools'],
+          history: [1150, 1160, 1170, 1180, 1185, 1192, 1198],
+          url: 'https://openrouter.ai/openai/gpt-4o',
+        },
+        {
+          id: 'gemini-2.5-pro',
+          name: 'Gemini 2.5 Pro',
+          org: 'Google',
+          logo: 'G',
+          logoColor: '#4285f4',
+          score: 1156,
+          ci: [1102, 1210],
+          votes: 701,
+          license: 'Commercial',
+          diff: -1,
+          ctx: '1M',
+          pIn: '$1.25',
+          pOut: '$10.00',
+          caps: ['text', 'vision', 'audio', 'tools'],
+          history: [1120, 1125, 1135, 1140, 1148, 1155, 1156],
+          url: 'https://openrouter.ai/google/gemini-2.5-pro',
+        },
+        {
+          id: 'llama-4-scout',
+          name: 'Llama 4 Scout',
+          org: 'Meta',
+          logo: 'L',
+          logoColor: '#ef4444',
+          score: 1089,
+          ci: [1030, 1148],
+          votes: 634,
+          license: 'Open Source',
+          diff: 2,
+          ctx: '512K',
+          pIn: '$0.15',
+          pOut: '$0.60',
+          caps: ['text', 'vision', 'tools'],
+          history: [1020, 1035, 1048, 1060, 1072, 1080, 1089],
+          url: 'https://openrouter.ai/meta-llama/llama-4-scout',
+        },
+        {
+          id: 'mistral-large',
+          name: 'Mistral Large',
+          org: 'Mistral AI',
+          logo: 'M',
+          logoColor: '#ff7000',
+          score: 1045,
+          ci: [985, 1105],
+          votes: 578,
+          license: 'Open Source',
+          diff: -1,
+          ctx: '128K',
+          pIn: '$2.00',
+          pOut: '$6.00',
+          caps: ['text', 'tools'],
+          history: [1050, 1055, 1048, 1042, 1040, 1043, 1045],
+          url: 'https://openrouter.ai/mistralai/mistral-large',
+        },
+        {
+          id: 'deepseek-v3',
+          name: 'DeepSeek-V3',
+          org: 'DeepSeek',
+          logo: 'D',
+          logoColor: '#2563eb',
+          score: 1012,
+          ci: [948, 1076],
+          votes: 423,
+          license: 'Open Source',
+          diff: 0,
+          ctx: '128K',
+          pIn: '$0.27',
+          pOut: '$1.10',
+          caps: ['text', 'tools'],
+          history: [960, 975, 988, 995, 1002, 1008, 1012],
+          url: 'https://openrouter.ai/deepseek/deepseek-chat',
+        },
+        {
+          id: 'qwen3-235b',
+          name: 'Qwen3-235B',
+          org: 'Alibaba',
+          logo: 'Q',
+          logoColor: '#7c3aed',
+          score: 987,
+          ci: [920, 1054],
+          votes: 389,
+          license: 'Open Source',
+          diff: 3,
+          ctx: '128K',
+          pIn: '$0.30',
+          pOut: '$1.20',
+          caps: ['text', 'tools'],
+          history: [920, 935, 948, 960, 970, 980, 987],
+          url: 'https://openrouter.ai/qwen/qwen3-235b-a22b',
+        },
+        {
+          id: 'grok-3',
+          name: 'Grok 3',
+          org: 'xAI',
+          logo: 'X',
+          logoColor: '#1d9bf0',
+          score: 965,
+          ci: [898, 1032],
+          votes: 312,
+          license: 'Commercial',
+          diff: -2,
+          ctx: '128K',
+          pIn: '$3.00',
+          pOut: '$15.00',
+          caps: ['text', 'vision', 'tools'],
+          history: [990, 985, 980, 975, 970, 968, 965],
+          url: 'https://openrouter.ai/x-ai/grok-3',
+        },
+        {
+          id: 'command-r-plus',
+          name: 'Command R+',
+          org: 'Cohere',
+          logo: 'C',
+          logoColor: '#39d5ca',
+          score: 934,
+          ci: [862, 1006],
+          votes: 278,
+          license: 'Commercial',
+          diff: 1,
+          ctx: '128K',
+          pIn: '$2.50',
+          pOut: '$10.00',
+          caps: ['text', 'tools'],
+          history: [900, 908, 915, 920, 925, 930, 934],
+          url: 'https://openrouter.ai/cohere/command-r-plus',
+        },
+        {
+          id: 'phi-4',
+          name: 'Phi-4',
+          org: 'Microsoft',
+          logo: 'P',
+          logoColor: '#0078d4',
+          score: 901,
+          ci: [830, 972],
+          votes: 210,
+          license: 'Open Source',
+          diff: 0,
+          ctx: '16K',
+          pIn: '$0.07',
+          pOut: '$0.14',
+          caps: ['text'],
+          history: [870, 878, 885, 890, 895, 898, 901],
+          url: 'https://openrouter.ai/microsoft/phi-4',
+        },
+      ];
+
+      // Per-category rankings (shuffled with different scores)
+      const LB_CATS = {
+        overall: LB_MODELS,
+        cardiology: [...LB_MODELS]
+          .sort((a, b) => {
+            const o = { A: 1, O: 2, G: 3, L: 4, M: 5, D: 6, Q: 7, X: 8, C: 9, P: 10 };
+            return (o[a.logo] || 99) - (o[b.logo] || 99);
+          })
+          .map((m, i) => ({
+            ...m,
+            score: Math.round(m.score * (1 + Math.sin(i * 1.7) * 0.08)),
+            diff: [0, 1, -1, 2, 0, -1, 3, -2, 1, 0][i],
+          })),
+        oncology: [...LB_MODELS]
+          .sort((a, b) => {
+            const o = { O: 1, A: 2, L: 3, G: 4, D: 5, Q: 6, M: 7, X: 8, P: 9, C: 10 };
+            return (o[a.logo] || 99) - (o[b.logo] || 99);
+          })
+          .map((m, i) => ({
+            ...m,
+            score: Math.round(m.score * (1 + Math.cos(i * 2.1) * 0.07)),
+            diff: [2, -1, 0, 1, 0, -1, 0, -2, 1, 3][i],
+          })),
+        genetics: [...LB_MODELS]
+          .sort((a, b) => {
+            const o = { G: 1, A: 2, O: 3, Q: 4, D: 5, L: 6, M: 7, C: 8, X: 9, P: 10 };
+            return (o[a.logo] || 99) - (o[b.logo] || 99);
+          })
+          .map((m, i) => ({
+            ...m,
+            score: Math.round(m.score * (1 + Math.sin(i * 0.9) * 0.06)),
+            diff: [1, -1, 2, 0, 1, -2, 0, 1, -1, 0][i],
+          })),
+        neuroscience: [...LB_MODELS]
+          .sort((a, b) => {
+            const o = { A: 1, G: 2, O: 3, D: 4, Q: 5, L: 6, X: 7, M: 8, C: 9, P: 10 };
+            return (o[a.logo] || 99) - (o[b.logo] || 99);
+          })
+          .map((m, i) => ({
+            ...m,
+            score: Math.round(m.score * (1 + Math.cos(i * 1.3) * 0.09)),
+            diff: [0, 1, 0, -1, 2, 0, -1, 1, -2, 0][i],
+          })),
+        immunology: [...LB_MODELS]
+          .sort((a, b) => {
+            const o = { O: 1, G: 2, A: 3, L: 4, M: 5, D: 6, Q: 7, P: 8, X: 9, C: 10 };
+            return (o[a.logo] || 99) - (o[b.logo] || 99);
+          })
+          .map((m, i) => ({
+            ...m,
+            score: Math.round(m.score * (1 + Math.sin(i * 2.5) * 0.07)),
+            diff: [1, 0, -1, 0, 2, -1, 1, 0, -2, 3][i],
+          })),
+      };
+
+      let lbCat = 'overall';
+      let lbFilter = 'all';
+      let lbSort = 'rank';
+      let lbSortDir = 'asc';
+      let lbInited = false;
+      let lbPage = 1;
+      const LB_PAGE_SIZE = 25;
+
+      function getLbData() {
+        let data = (LB_CATS[lbCat] || LB_MODELS).map((m, i) => ({ ...m, rank: i + 1 }));
+        // Filter
+        const q = ($('lbSearch')?.value || '').toLowerCase();
+        if (q)
+          data = data.filter(
+            (m) => m.name.toLowerCase().includes(q) || m.org.toLowerCase().includes(q),
+          );
+        if (lbFilter === 'oss') data = data.filter((m) => m.license === 'Open Source');
+        if (lbFilter === 'comm') data = data.filter((m) => m.license === 'Commercial');
+        // Sort
+        if (lbSort === 'score')
+          data.sort((a, b) => (lbSortDir === 'asc' ? a.score - b.score : b.score - a.score));
+        else if (lbSort === 'votes')
+          data.sort((a, b) => (lbSortDir === 'asc' ? a.votes - b.votes : b.votes - a.votes));
+        else if (lbSort === 'model')
+          data.sort((a, b) =>
+            lbSortDir === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
+          );
+        else data.sort((a, b) => (lbSortDir === 'asc' ? a.rank - b.rank : b.rank - a.rank));
+        return data;
+      }
+
+      function diffTdHtml(d) {
+        if (d > 0) return `<span class="lb-t-diff up">&uarr;${d}</span>`;
+        if (d < 0) return `<span class="lb-t-diff down">&darr;${Math.abs(d)}</span>`;
+        return `<span class="lb-t-diff same">&mdash;</span>`;
+      }
+
+      // Trending badge based on rank diff
+      function trendBadge(m) {
+        if (m.diff >= 3) return `<span class="lb-badge rising">Most Improved</span>`;
+        if (m.diff <= -2) return `<span class="lb-badge falling">Trending Down</span>`;
+        if (m.rank === 1) return `<span class="lb-badge hot">#1</span>`;
+        return '';
+      }
+
+      function renderLbBarChart(models) {
+        const el = $('lbBarChart');
+        const countEl = $('lbBarCount');
+        if (!el || models.length === 0) return;
+        if (countEl) countEl.textContent = models.length + ' models';
+
+        const W = 500,
+          H = 220,
+          PAD = 45,
+          RPAD = 10,
+          TPAD = 16,
+          BPAD = 30;
+        const n = models.length;
+        const barW = Math.min(36, ((W - PAD - RPAD) / n) * 0.7);
+        const gap = (W - PAD - RPAD) / n;
+        const maxScore = Math.max(...models.map((m) => m.score));
+        const minScore = Math.min(...models.map((m) => m.score)) * 0.85;
+        const range = maxScore - minScore || 1;
+
+        function barX(i) {
+          return PAD + gap * i + gap / 2;
+        }
+        function barH(v) {
+          return ((v - minScore) / range) * (H - TPAD - BPAD);
+        }
+        function barY(v) {
+          return H - BPAD - barH(v);
+        }
+
+        // Grid lines
+        const gridCount = 4;
+        let grid = '';
+        for (let i = 0; i <= gridCount; i++) {
+          const val = minScore + (range * i) / gridCount;
+          const yy = barY(val);
+          grid += `<line x1="${PAD}" y1="${yy}" x2="${W - RPAD}" y2="${yy}" stroke="var(--brd)" stroke-width="0.5"/>`;
+          grid += `<text x="${PAD - 6}" y="${yy + 3}" fill="var(--fg4)" font-size="8" text-anchor="end" font-family="var(--sans)">${Math.round(val)}</text>`;
+        }
+
+        // Bars + labels
+        const bars = models
+          .map((m, i) => {
+            const cx = barX(i);
+            const h = barH(m.score);
+            const y = barY(m.score);
+            const isTop3 = m.rank <= 3;
+            return `
+            <rect x="${cx - barW / 2}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${m.logoColor}" opacity="${isTop3 ? 0.9 : 0.5}"/>
+            <text x="${cx}" y="${y - 4}" fill="${m.logoColor}" font-size="9" font-weight="${isTop3 ? 600 : 400}" text-anchor="middle" font-family="var(--sans)">${m.score.toLocaleString()}</text>
+            <circle cx="${cx}" cy="${H - BPAD + 14}" r="10" fill="${m.logoColor}" opacity="${isTop3 ? 0.9 : 0.5}"/>
+            <text x="${cx}" y="${H - BPAD + 18}" fill="#fff" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--sans)">${m.logo}</text>
+          `;
+          })
+          .join('');
+
+        el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMax meet">${grid}${bars}</svg>`;
+      }
+
+      function renderLbChart(models) {
+        const chart = $('lbChart');
+        const legend = $('lbLegend');
+        if (!chart || models.length === 0) return;
+
+        // Compute rank history from score history
+        // For each day (index), sort all models by that day's score → rank
+        const numDays = models[0]?.history?.length || 7;
+        models.forEach((m) => {
+          m.rankHistory = [];
+        });
+        for (let d = 0; d < numDays; d++) {
+          const dayScores = models.map((m) => ({ id: m.id, score: (m.history || [])[d] || 0 }));
+          dayScores.sort((a, b) => b.score - a.score);
+          dayScores.forEach((ds, rank) => {
+            const m = models.find((x) => x.id === ds.id);
+            if (m) m.rankHistory.push(rank + 1);
+          });
+        }
+
+        const W = 600,
+          H = 220,
+          PAD = 30,
+          RPAD = 50,
+          TPAD = 15,
+          BPAD = 25;
+        const n = models.length;
+
+        // Daily labels
+        const days = [];
+        for (let i = numDays - 1; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          days.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        }
+
+        function xPos(i) {
+          return PAD + (i / (numDays - 1)) * (W - PAD - RPAD);
+        }
+        // Y: rank 1 at top, rank N at bottom
+        function yPos(rank) {
+          return TPAD + ((rank - 1) / (n - 1)) * (H - TPAD - BPAD);
+        }
+
+        // Horizontal grid lines for each rank
+        let grid = '';
+        for (let r = 1; r <= n; r++) {
+          const yy = yPos(r);
+          grid += `<line x1="${PAD}" y1="${yy}" x2="${W - RPAD}" y2="${yy}" stroke="var(--brd)" stroke-width="0.5" ${r > 1 && r < n ? 'stroke-dasharray="2,4"' : ''}/>`;
+          grid += `<text x="${PAD - 6}" y="${yy + 3}" fill="var(--fg4)" font-size="9" text-anchor="end" font-family="var(--sans)">#${r}</text>`;
+        }
+
+        // X-axis labels
+        let xLabels = '';
+        days.forEach((l, i) => {
+          xLabels += `<text x="${xPos(i)}" y="${H - 4}" fill="var(--fg4)" font-size="9" text-anchor="middle" font-family="var(--sans)">${l}</text>`;
+        });
+
+        // Lines — top 3 bold, rest subtle
+        const lines = models
+          .map((m) => {
+            const rh = m.rankHistory || [];
+            if (rh.length < 2) return '';
+            const isTop3 = m.rank <= 3;
+            const sw = isTop3 ? 2.5 : 1.2;
+            const opacity = isTop3 ? 1 : 0.4;
+            const pts = rh.map((r, i) => `${xPos(i)},${yPos(r)}`);
+            const lastPt = pts[pts.length - 1].split(',');
+            return `
+            <polyline points="${pts.join(' ')}" fill="none" stroke="${m.logoColor}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity}"/>
+            <circle cx="${lastPt[0]}" cy="${lastPt[1]}" r="${isTop3 ? 4 : 2.5}" fill="${m.logoColor}" opacity="${opacity}"/>
+            <text x="${parseFloat(lastPt[0]) + 8}" y="${parseFloat(lastPt[1]) + 4}" fill="${m.logoColor}" font-size="${isTop3 ? 10 : 8}" font-weight="${isTop3 ? 600 : 400}" font-family="var(--sans)" opacity="${opacity}">#${rh[rh.length - 1]}</text>
+          `;
+          })
+          .join('');
+
+        chart.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${xLabels}${lines}</svg>`;
+
+        // Legend
+        legend.innerHTML = models
+          .map(
+            (m) => `
+          <div class="lb-legend-item" style="opacity:${m.rank <= 3 ? 1 : 0.6}">
+            <div class="lb-legend-dot" style="background:${m.logoColor}"></div>
+            ${m.name}
+          </div>
+        `,
+          )
+          .join('');
+      }
+
+      function renderLb() {
+        const data = getLbData();
+
+        // All models in one table with pagination
+        const totalPages = Math.max(1, Math.ceil(data.length / LB_PAGE_SIZE));
+        if (lbPage > totalPages) lbPage = totalPages;
+        const start = (lbPage - 1) * LB_PAGE_SIZE;
+        const pageData = data.slice(start, start + LB_PAGE_SIZE);
+
+        const tbody = $('lbTbody');
+        tbody.innerHTML = pageData
+          .map(
+            (m) => `
+          <tr class="${m.rank <= 3 ? 'top3' : ''}">
+            <td class="lb-t-rank">${m.rank}</td>
+            <td>
+              <div class="lb-t-model">
+                <div class="lb-t-logo" style="background:${m.logoColor};color:#fff">${m.logo}</div>
+                <div>
+                  <div class="lb-t-name"><a href="${m.url}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none" onmouseover="this.style.color='var(--p400)'" onmouseout="this.style.color='inherit'">${m.name}</a> ${trendBadge(m)}</div>
+                  <div class="lb-t-org">${m.org}</div>
+                </div>
+              </div>
+            </td>
+            <td class="lb-t-score">${m.score.toLocaleString()}</td>
+            <td style="font-size:12px;color:var(--fg4)">[${m.ci[0].toLocaleString()}, ${m.ci[1].toLocaleString()}]</td>
+            <td class="lb-t-votes">${m.votes.toLocaleString()}</td>
+            <td>${diffTdHtml(m.diff)}</td>
+            <td class="lb-t-license">${m.license}</td>
+          </tr>
+        `,
+          )
+          .join('');
+
+        // Pager
+        const pager = $('lbPager');
+        const showing =
+          data.length > 0
+            ? `${start + 1}–${Math.min(start + LB_PAGE_SIZE, data.length)} of ${data.length}`
+            : '0';
+        let btns = `<button class="lb-pager-btn" onclick="lbPage=1;renderLb()" ${lbPage === 1 ? 'disabled' : ''}>&#171;</button>`;
+        btns += `<button class="lb-pager-btn" onclick="lbPage--;renderLb()" ${lbPage === 1 ? 'disabled' : ''}>&#8249;</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+          btns += `<button class="lb-pager-btn ${i === lbPage ? 'on' : ''}" onclick="lbPage=${i};renderLb()">${i}</button>`;
+        }
+        btns += `<button class="lb-pager-btn" onclick="lbPage++;renderLb()" ${lbPage === totalPages ? 'disabled' : ''}>&#8250;</button>`;
+        btns += `<button class="lb-pager-btn" onclick="lbPage=${totalPages};renderLb()" ${lbPage === totalPages ? 'disabled' : ''}>&#187;</button>`;
+        pager.innerHTML = `<span class="lb-pager-info">Showing ${showing} models</span><div class="lb-pager-btns">${btns}</div>`;
+
+        // Score trajectories chart — all models
+        renderLbBarChart(data);
+        renderLbChart(data);
+      }
+
+      function toggleLbPill(el) {
+        document.querySelectorAll('.lb-pill').forEach((p) => p.classList.remove('on'));
+        el.classList.add('on');
+        lbFilter = el.dataset.filter;
+        renderLb();
+      }
+
+      // Tab clicks
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.lb-tab').forEach((tab) => {
+          tab.addEventListener('click', function () {
+            document.querySelectorAll('.lb-tab').forEach((t) => t.classList.remove('on'));
+            this.classList.add('on');
+            lbCat = this.dataset.cat;
+            renderLb();
+          });
+        });
+        // Sortable column headers
+        document.querySelectorAll('.lb-table2 th[data-col]').forEach((th) => {
+          th.addEventListener('click', function () {
+            const col = this.dataset.col;
+            if (lbSort === col) {
+              lbSortDir = lbSortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+              lbSort = col;
+              lbSortDir = col === 'score' || col === 'votes' ? 'desc' : 'asc';
+            }
+            document.querySelectorAll('.lb-table2 th').forEach((h) => {
+              h.classList.remove('sorted');
+              const arrow = h.querySelector('.sort-arrow');
+              if (arrow) arrow.textContent = '';
+            });
+            this.classList.add('sorted');
+            const arrow = this.querySelector('.sort-arrow');
+            if (arrow) arrow.textContent = lbSortDir === 'asc' ? '\u2191' : '\u2193';
+            renderLb();
+          });
+        });
+      });
+
+      function initLb() {
+        if (!lbInited) {
+          lbInited = true;
+          renderLb();
+        }
+      }
+
       // Theme toggle
       function toggleTheme() {
         const html = document.documentElement;
@@ -3924,6 +4884,11 @@
           setTimeout(homeTypeLoop, 500);
         } else {
           clearInterval(htI);
+        }
+        // Leaderboard init
+        if (p === 'lb') {
+          initLb();
+          renderLb(); // re-render in case theme or data changed
         }
         window.scrollTo(0, 0);
       }
