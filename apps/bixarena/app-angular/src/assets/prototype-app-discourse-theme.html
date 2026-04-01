@@ -3242,7 +3242,7 @@
                 <h3>Building the BioArena</h3>
                 <p>
                   Every time you evaluate a model, you earn a block that will be placed in the
-                  BioArena. 1 Battle = 1 Block.
+                  BioArena.<br /><strong style="color: var(--fg)">1 Battle = 1 Block.</strong>
                 </p>
                 <div class="quest-progress">
                   <div class="quest-bar"><div class="quest-fill" style="width: 62%"></div></div>
@@ -4753,7 +4753,7 @@
         scene.fog = new THREE.Fog(0x0f0e0d, 60, 120);
 
         const camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 500);
-        camera.position.set(-25, 32, 55);
+        camera.position.set(-22, 40, 48);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(W, H);
@@ -4767,7 +4767,7 @@
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.06;
-        controls.target.set(0, 6, 0);
+        controls.target.set(0, 3, 0);
         controls.minDistance = 18;
         controls.maxDistance = 90;
         controls.maxPolarAngle = Math.PI / 2 - 0.05;
