@@ -2062,6 +2062,222 @@
         font-variant-numeric: tabular-nums;
       }
 
+      /* ═══ 3D ARENA PAGE ═══ */
+      .arena-page {
+        padding: 3rem 0 0;
+        text-align: center;
+      }
+      .arena-hero h1 {
+        font-family: var(--serif);
+        font-size: 42px;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+      .arena-hero h1 em {
+        font-style: italic;
+        color: var(--p400);
+      }
+      .arena-hero-sub {
+        color: var(--fg3);
+        font-size: 15px;
+        max-width: 500px;
+        margin: 0 auto 2rem;
+        line-height: 1.5;
+      }
+      .arena-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .arena-stat-val {
+        font-family: var(--serif);
+        font-size: 28px;
+        color: var(--fg);
+      }
+      .arena-stat-label {
+        font-size: 12px;
+        color: var(--fg4);
+      }
+      .arena-progress {
+        max-width: 420px;
+        margin: 0 auto 2.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .arena-progress-bar {
+        flex: 1;
+        height: 8px;
+        background: var(--bg-up);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .arena-progress-fill {
+        height: 100%;
+        border-radius: 4px;
+        background: var(--p500);
+      }
+      /* Standalone replay scrubber */
+      .arena-scrubber {
+        max-width: 500px;
+        margin: 0.5rem auto 1.5rem;
+      }
+      .arena-scrubber-label {
+        font-size: 11px;
+        color: var(--fg4);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .arena-scrubber-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.375rem;
+      }
+      .arena-slider-standalone {
+        flex: 1;
+        height: 4px;
+        appearance: none;
+        background: var(--bg-up);
+        border-radius: 2px;
+        outline: none;
+        cursor: pointer;
+      }
+      .arena-slider-standalone::-webkit-slider-thumb {
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--p500);
+        border: 2px solid var(--bg-card-s);
+        box-shadow: 0 0 6px rgba(249, 115, 22, 0.4);
+        cursor: grab;
+      }
+      .arena-slider-standalone::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--p500);
+        border: 2px solid var(--bg-card-s);
+        cursor: grab;
+      }
+      .arena-scrubber-val {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--p400);
+        min-width: 36px;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .arena-progress-pct {
+        font-size: 13px;
+        font-weight: 560;
+        color: var(--p400);
+      }
+      /* Three.js canvas */
+      .arena-canvas-wrap {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        height: 500px;
+        margin: 0 auto 2rem;
+        border-radius: var(--r);
+        overflow: hidden;
+        background: #0d0b0a;
+      }
+      .arena-canvas-wrap canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .arena-tooltip {
+        position: absolute;
+        pointer-events: none;
+        background: var(--bg-card-s);
+        border: 1px solid var(--brd);
+        border-radius: 6px;
+        padding: 0.375rem 0.75rem;
+        font-size: 12px;
+        color: var(--fg);
+        white-space: nowrap;
+        box-shadow: var(--shadow);
+        opacity: 0;
+        transition: opacity 0.12s;
+        z-index: 10;
+      }
+      .arena-tooltip.on {
+        opacity: 1;
+      }
+      .arena-tooltip-user {
+        font-weight: 600;
+      }
+      .arena-tooltip-date {
+        color: var(--fg4);
+        font-size: 11px;
+      }
+      .arena-hint {
+        font-size: 11px;
+        color: var(--fg4);
+        margin-top: 0.5rem;
+      }
+      /* Activity + builders */
+      .arena-activity {
+        max-width: 500px;
+        margin: 0 auto 2rem;
+        text-align: left;
+      }
+      .arena-activity h3 {
+        font-size: 14px;
+        font-weight: 580;
+        color: var(--fg);
+        margin-bottom: 0.75rem;
+        text-align: center;
+      }
+      .arena-activity-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--brd);
+        font-size: 13px;
+      }
+      .arena-activity-item:last-child {
+        border-bottom: none;
+      }
+      .arena-activity-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+      .arena-activity-user {
+        font-weight: 560;
+        color: var(--fg);
+      }
+      .arena-activity-time {
+        margin-left: auto;
+        color: var(--fg4);
+        font-size: 11px;
+      }
+      .arena-builders {
+        margin-top: 2.5rem;
+      }
+      .arena-builders h3 {
+        font-family: var(--serif);
+        font-size: 22px;
+        font-weight: 400;
+        margin-bottom: 0.75rem;
+      }
+      .arena-tiers {
+        display: flex;
+        justify-content: center;
+        gap: 0.375rem;
+        margin-bottom: 0.75rem;
+        font-size: 12px;
+        color: var(--fg3);
+      }
+
       /* ═══ LEADERBOARD PAGE ═══ */
       .lb-page {
         padding: 2.5rem 0 4rem;
@@ -2636,6 +2852,14 @@
         border-color: var(--p500);
       }
     </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        }
+      }
+    </script>
   </head>
   <body>
     <nav class="nav">
@@ -2995,112 +3219,89 @@
 
       <!-- ═══ ARENA PAGE ═══ -->
       <div class="page" id="pg-arena">
-        <div class="container" style="text-align: center; padding-top: 4rem; padding-bottom: 4rem">
-          <h1
-            style="
-              font-family: var(--serif);
-              font-size: 48px;
-              font-weight: 400;
-              margin-bottom: 0.75rem;
-            "
-          >
-            The <em style="font-style: italic; color: var(--p400)">Arena</em>
-          </h1>
-          <p
-            style="
-              color: var(--fg3);
-              font-size: 16px;
-              max-width: 480px;
-              margin: 0 auto 2.5rem;
-              line-height: 1.6;
-            "
-          >
-            Every valid battle places a block. Together, the community is building a Minecraft-style
-            Rome Arena — one battle at a time.
-          </p>
-          <div
-            style="
-              background: var(--bg-card-s);
-              border: 1px solid var(--brd);
-              border-radius: var(--r);
-              height: 400px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: var(--fg4);
-              font-size: 14px;
-              margin-bottom: 2rem;
-            "
-          >
-            3D Arena viewer coming soon
+        <div class="arena-page container">
+          <!-- Hero -->
+          <div class="arena-hero">
+            <h1>The <em>Arena</em></h1>
+            <p class="arena-hero-sub">
+              Every valid battle places a block. Together, the community is building an arena
+              &mdash; one battle at a time. Hover over any block to see who placed it.
+            </p>
           </div>
-          <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 2.5rem">
-            <div style="text-align: center">
-              <div style="font-family: var(--serif); font-size: 2rem; color: var(--fg)">186</div>
-              <div style="font-size: 12px; color: var(--fg4)">Blocks placed</div>
+
+          <!-- Stats -->
+          <div class="arena-stats">
+            <div>
+              <div class="arena-stat-val" id="arenaBlocks">186</div>
+              <div class="arena-stat-label">Blocks placed</div>
             </div>
-            <div style="text-align: center">
-              <div style="font-family: var(--serif); font-size: 2rem; color: var(--fg)">300</div>
-              <div style="font-size: 12px; color: var(--fg4)">Goal</div>
+            <div>
+              <div class="arena-stat-val">300</div>
+              <div class="arena-stat-label">Goal</div>
             </div>
-            <div style="text-align: center">
-              <div style="font-family: var(--serif); font-size: 2rem; color: var(--fg)">28</div>
-              <div style="font-size: 12px; color: var(--fg4)">Builders</div>
+            <div>
+              <div class="arena-stat-val" id="arenaBuilders">28</div>
+              <div class="arena-stat-label">Builders</div>
             </div>
           </div>
-          <div style="max-width: 500px; margin: 0 auto 2rem">
-            <div style="display: flex; align-items: center; gap: 0.75rem">
-              <div
-                style="
-                  flex: 1;
-                  height: 8px;
-                  background: var(--bg-up);
-                  border-radius: 4px;
-                  overflow: hidden;
-                "
-              >
-                <div
-                  style="height: 100%; width: 62%; background: var(--p500); border-radius: 4px"
-                ></div>
-              </div>
-              <span style="font-size: 13px; color: var(--p400); font-weight: 560">62%</span>
+
+          <!-- Progress -->
+          <div class="arena-progress">
+            <div class="arena-progress-bar">
+              <div class="arena-progress-fill" id="arenaFill" style="width: 50%"></div>
+            </div>
+            <span class="arena-progress-pct" id="arenaPct">50%</span>
+          </div>
+
+          <!-- 3D Viewport (Three.js) -->
+          <div class="arena-canvas-wrap" id="arenaWrap">
+            <div class="arena-tooltip" id="arenaTip">
+              <div class="arena-tooltip-user" id="arenaTipUser"></div>
+              <div class="arena-tooltip-date" id="arenaTipDate"></div>
             </div>
           </div>
-          <h2
-            style="
-              font-family: var(--serif);
-              font-size: 24px;
-              font-weight: 400;
-              margin-bottom: 1.25rem;
-            "
-          >
-            Builders
-          </h2>
-          <div
-            style="
-              display: flex;
-              justify-content: center;
-              gap: 0.375rem;
-              margin-bottom: 1rem;
-              font-size: 12px;
-              color: var(--fg3);
-            "
-          >
-            <span>🏆 12 Champions</span><span style="color: var(--fg4)">&middot;</span>
-            <span>⚔️ 28 Knights</span><span style="color: var(--fg4)">&middot;</span>
-            <span>🌟 156 Apprentices</span>
+          <p class="arena-hint">Drag to rotate &middot; Scroll to zoom</p>
+          <div class="arena-scrubber">
+            <span class="arena-scrubber-label">Replay construction</span>
+            <div class="arena-scrubber-row">
+              <input
+                type="range"
+                id="arenaScrub"
+                min="0"
+                max="100"
+                value="50"
+                class="arena-slider-standalone"
+              />
+              <span class="arena-scrubber-val" id="arenaScrubVal">50%</span>
+            </div>
           </div>
-          <p style="font-size: 13px; color: var(--fg4); margin-bottom: 2rem">
-            Complete 5 battles per week to rank up. Champions: 10+/wk · Knights: 5–10/wk ·
-            Apprentices: &lt;5/wk
-          </p>
-          <button
-            class="bt bt-p"
-            style="height: 40px; padding: 0 24px; font-size: 14px; border-radius: var(--r-sm)"
-            onclick="if(!isLoggedIn){pendingPrompt='';$('loginModal').classList.add('on')}else{showPage('battle')}"
-          >
-            Start battling &rarr;
-          </button>
+
+          <!-- Recent activity -->
+          <div class="arena-activity">
+            <h3>Recent Blocks</h3>
+            <div id="arenaActivity"></div>
+          </div>
+
+          <!-- Builders -->
+          <div class="arena-builders">
+            <h3>Builders</h3>
+            <div class="arena-tiers">
+              <span>🏆 12 Champions</span><span style="color: var(--fg4)">&middot;</span>
+              <span>⚔️ 28 Knights</span><span style="color: var(--fg4)">&middot;</span>
+              <span>🌟 156 Apprentices</span>
+            </div>
+            <p style="font-size: 13px; color: var(--fg4); margin-bottom: 1.5rem">
+              Complete 5 battles per week to rank up. Champions: 10+/wk &middot; Knights:
+              5&ndash;10/wk &middot; Apprentices: &lt;5/wk
+            </p>
+            <button
+              class="bt bt-p"
+              style="height: 40px; padding: 0 24px; font-size: 14px; border-radius: var(--r-sm)"
+              onclick="if(!isLoggedIn){pendingPrompt='';$('loginModal').classList.add('on')}else{showPage('battle')}"
+            >
+              Place a block &rarr;
+            </button>
+          </div>
         </div>
       </div>
 
@@ -4306,6 +4507,533 @@
         showPage('home');
       }
 
+      // ═══ 3D ARENA (Three.js — production Colosseum) ═══
+      let arenaInited = false;
+
+      async function initArena() {
+        if (arenaInited) return;
+        arenaInited = true;
+
+        const THREE = await import('three');
+        const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+
+        const wrap = $('arenaWrap');
+        let W = wrap.clientWidth,
+          H = wrap.clientHeight;
+
+        // ─── SCENE ─────────────────────────────────────────────────────
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0f0e0d);
+        scene.fog = new THREE.Fog(0x0f0e0d, 60, 120);
+
+        const camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 500);
+        camera.position.set(-18, 48, 42);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(W, H);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.1;
+        wrap.insertBefore(renderer.domElement, wrap.firstChild);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.target.set(0, 6, 0);
+        controls.minDistance = 18;
+        controls.maxDistance = 90;
+        controls.maxPolarAngle = Math.PI / 2 - 0.05;
+
+        // ─── LIGHTING — golden hour ────────────────────────────────────
+        scene.add(new THREE.AmbientLight(0xffe8d0, 0.5));
+        scene.add(new THREE.HemisphereLight(0xffecd2, 0x3d2b1f, 0.4));
+
+        const sun = new THREE.DirectionalLight(0xffd090, 1.8);
+        sun.position.set(-20, 40, 30);
+        sun.castShadow = true;
+        sun.shadow.mapSize.set(2048, 2048);
+        sun.shadow.camera.left = -30;
+        sun.shadow.camera.right = 30;
+        sun.shadow.camera.top = 30;
+        sun.shadow.camera.bottom = -30;
+        sun.shadow.camera.far = 100;
+        sun.shadow.bias = -0.001;
+        scene.add(sun);
+
+        const fill = new THREE.DirectionalLight(0x8eb4d0, 0.4);
+        fill.position.set(20, 15, -25);
+        scene.add(fill);
+
+        const rim = new THREE.DirectionalLight(0xffa060, 0.3);
+        rim.position.set(0, 5, -40);
+        scene.add(rim);
+
+        // ─── MATERIALS — warm travertine stone ─────────────────────────
+        function stoneMat(base, rough) {
+          return new THREE.MeshStandardMaterial({
+            color: base,
+            roughness: rough || 0.82,
+            metalness: 0.02,
+          });
+        }
+        const matBase = stoneMat(0xc4ad8a); // warm sandy base
+        const matMid = stoneMat(0xb09878); // mid tone
+        const matUpper = stoneMat(0x9a8568); // darker upper
+        const matAttic = stoneMat(0x8a7558); // darkest attic
+        const matCornice = stoneMat(0xd4bc96, 0.7); // lighter cornice bands
+        const matFloor = stoneMat(0xc9b88c, 0.95); // sand floor
+        const matSeat = stoneMat(0x8a7d6b, 0.9); // seat stone
+        const matDark = stoneMat(0x2a2420, 0.95); // dark corridor depth
+
+        const tierMats = [matBase, matMid, matUpper, matAttic];
+
+        // ─── CONSTANTS ─────────────────────────────────────────────────
+        const R_OUTER = 22; // outer wall radius
+        const R_INNER = 12; // arena floor radius
+        const NUM_BAYS = 40; // number of arch bays around
+        const LEVELS = 3; // arcade levels
+        const LEVEL_H = 5.5; // height per arcade level
+        const ATTIC_H = 3; // attic height
+        const TOTAL_H = LEVELS * LEVEL_H + ATTIC_H;
+        const WALL_THICK = 2.8; // wall depth (radial)
+        const PIER_W = 0.7; // pillar width (tangential)
+        const SEAT_TIERS = 8; // number of seating rows
+        const SEAT_H = 0.45; // seat step height
+        const SEAT_D = 0.8; // seat depth (radial)
+
+        // ─── HELPER: place around ring ─────────────────────────────────
+        function ring(r, count, cb) {
+          for (let i = 0; i < count; i++) {
+            const a = (i / count) * Math.PI * 2;
+            const x = Math.cos(a) * r;
+            const z = Math.sin(a) * r;
+            cb(x, z, a, i);
+          }
+        }
+
+        // ─── BUILD ORDER: all meshes in construction sequence ────────
+        // Phase 1: floor (5%) → Phase 2: seat platforms (15%) → Phase 3: walls L1 (30%) →
+        // Phase 4: walls L2 (45%) → Phase 5: walls L3+attic (60%) → Phase 6: seats fill (60-100%)
+        const allParts = []; // { mesh, phase }
+        const seatMeshes = []; // for raycasting (only visible seats)
+        const USERS = [
+          'Alice',
+          'Bob',
+          'Charlie',
+          'Diana',
+          'Eve',
+          'Frank',
+          'Grace',
+          'Hank',
+          'Iris',
+          'Jack',
+          'Kate',
+          'Leo',
+          'Mia',
+          'Noah',
+          'Olivia',
+          'Pete',
+          'Quinn',
+          'Rosa',
+          'Sam',
+          'Tina',
+          'Uma',
+          'Vic',
+          'Wendy',
+          'Xander',
+          'Yara',
+          'Zoe',
+          'Amir',
+          'Bea',
+        ];
+        const SEAT_COLORS = [
+          0xf97316, 0x6cb4fc, 0x34d4b4, 0xb49cfa, 0xfb923c, 0xef4444, 0x10a37f, 0xd97706, 0x7c3aed,
+          0x1d9bf0, 0x39d5ca, 0x4285f4,
+        ];
+        const BATTLES = 1423,
+          GOAL = 2850;
+        const targetPct = Math.round((BATTLES / GOAL) * 100);
+
+        function addPart(mesh, phase) {
+          mesh.visible = false;
+          scene.add(mesh);
+          allParts.push({ mesh, phase });
+        }
+
+        // Phase 1: Arena floor
+        const floorGeo = new THREE.CylinderGeometry(R_INNER, R_INNER, 0.3, 64);
+        const floor = new THREE.Mesh(floorGeo, matFloor);
+        floor.position.y = -0.15;
+        floor.receiveShadow = true;
+        addPart(floor, 1);
+
+        // Phase 2: Seat platforms (stepped concrete)
+        for (let t = 0; t < SEAT_TIERS; t++) {
+          const r = R_INNER + 0.5 + t * SEAT_D;
+          const h = (t + 1) * SEAT_H;
+          const rGeo = new THREE.CylinderGeometry(
+            r + SEAT_D * 0.4,
+            r + SEAT_D * 0.4,
+            SEAT_H,
+            80,
+            1,
+            true,
+          );
+          const step = new THREE.Mesh(rGeo, matSeat);
+          step.position.y = h - SEAT_H / 2;
+          step.receiveShadow = true;
+          addPart(step, 2);
+          const topGeo = new THREE.RingGeometry(r - SEAT_D * 0.1, r + SEAT_D * 0.4, 80);
+          topGeo.rotateX(-Math.PI / 2);
+          const top = new THREE.Mesh(topGeo, matSeat);
+          top.position.y = h;
+          top.receiveShadow = true;
+          addPart(top, 2);
+        }
+
+        // Phase 6: Individual seat blocks (added later, after walls)
+        const seatGeo = new THREE.BoxGeometry(0.6, 0.5, 0.55);
+        const totalSeats = [];
+        for (let t = 0; t < SEAT_TIERS; t++) {
+          const r = R_INNER + 0.7 + t * SEAT_D;
+          const y = (t + 1) * SEAT_H + 0.18;
+          const circ = 2 * Math.PI * r;
+          const count = Math.floor(circ / 0.75);
+          for (let i = 0; i < count; i++) {
+            const a = (i / count) * Math.PI * 2;
+            totalSeats.push({ x: Math.cos(a) * r, y, z: Math.sin(a) * r, a, tier: t });
+          }
+        }
+        totalSeats.sort((a, b) => {
+          const ha = Math.sin(a.x * 12.9898 + a.z * 78.233 + a.y * 43.11) * 43758.5453;
+          const hb = Math.sin(b.x * 12.9898 + b.z * 78.233 + b.y * 43.11) * 43758.5453;
+          return ha - Math.floor(ha) - (hb - Math.floor(hb));
+        });
+        const seatColorMats = SEAT_COLORS.map(
+          (c) =>
+            new THREE.MeshStandardMaterial({
+              color: c,
+              roughness: 0.4,
+              metalness: 0.05,
+              emissive: c,
+              emissiveIntensity: 0.15,
+            }),
+        );
+        const allSeatMeshes = totalSeats.map((s, i) => {
+          const mat = seatColorMats[i % SEAT_COLORS.length];
+          const m = new THREE.Mesh(seatGeo, mat);
+          m.position.set(s.x, s.y, s.z);
+          m.rotation.y = s.a;
+          m.castShadow = true;
+          m.userData = { idx: i, user: USERS[i % USERS.length], section: 'Seat' };
+          addPart(m, 6);
+          return m;
+        });
+
+        // Progress: map 0-100% to phases
+        // 0-5%: floor, 5-15%: platforms, 15-30%: L1, 30-45%: L2, 45-60%: L3+attic, 60-100%: seats
+        function setProgress(pct) {
+          pct = Math.max(0, Math.min(100, pct));
+          // Determine which phases are active
+          const activePhase =
+            pct < 5
+              ? 0
+              : pct < 10
+                ? 1
+                : pct < 15
+                  ? 2
+                  : pct < 30
+                    ? 3
+                    : pct < 45
+                      ? 4
+                      : pct < 60
+                        ? 5
+                        : 6;
+
+          // Phases 1-5: show/hide structural elements
+          allParts.forEach((p) => {
+            if (p.phase <= 5) {
+              p.mesh.visible = p.phase <= activePhase;
+            }
+          });
+
+          // Phase 6: seats — proportional fill within the 60-100% range
+          seatMeshes.length = 0;
+          if (pct >= 60) {
+            const seatPct = (pct - 60) / 40; // 0 to 1 within seat range
+            const showCount = Math.round(seatPct * allSeatMeshes.length);
+            allSeatMeshes.forEach((m, i) => {
+              m.visible = i < showCount;
+              if (i < showCount) seatMeshes.push(m);
+            });
+          } else {
+            allSeatMeshes.forEach((m) => {
+              m.visible = false;
+            });
+          }
+
+          const battles = Math.round((pct / 100) * GOAL);
+          $('arenaBlocks').textContent = battles.toLocaleString();
+          $('arenaFill').style.width = pct + '%';
+          $('arenaPct').textContent = pct + '%';
+          $('arenaScrub').value = pct;
+        }
+
+        // ─── OUTER WALL — phases 3,4,5 ─────────────────────────────────
+        function addWallMesh(mesh, phase) {
+          mesh.castShadow = true;
+          addPart(mesh, phase);
+        }
+
+        for (let level = 0; level < LEVELS; level++) {
+          const baseY = level * LEVEL_H;
+          const mat = tierMats[level];
+          const phase = 3 + level; // L1=3, L2=4, L3=5
+
+          ring(R_OUTER, NUM_BAYS, (x, z, a, i) => {
+            const nextA = ((i + 1) / NUM_BAYS) * Math.PI * 2;
+            const midA = (a + nextA) / 2;
+
+            const pier = new THREE.Mesh(new THREE.BoxGeometry(PIER_W, LEVEL_H, WALL_THICK), mat);
+            pier.position.set(x, baseY + LEVEL_H / 2, z);
+            pier.rotation.y = -a + Math.PI / 2;
+            pier.receiveShadow = true;
+            addWallMesh(pier, phase);
+
+            const col = new THREE.Mesh(
+              new THREE.CylinderGeometry(0.22, 0.25, LEVEL_H - 0.4, 8),
+              matCornice,
+            );
+            col.position.set(
+              Math.cos(a) * (R_OUTER + WALL_THICK / 2 + 0.1),
+              baseY + LEVEL_H / 2,
+              Math.sin(a) * (R_OUTER + WALL_THICK / 2 + 0.1),
+            );
+            addWallMesh(col, phase);
+
+            const back = new THREE.Mesh(new THREE.BoxGeometry(1.8, LEVEL_H * 0.7, 0.15), matDark);
+            back.position.set(
+              Math.cos(midA) * (R_OUTER - WALL_THICK * 0.3),
+              baseY + LEVEL_H * 0.35,
+              Math.sin(midA) * (R_OUTER - WALL_THICK * 0.3),
+            );
+            back.rotation.y = -midA + Math.PI / 2;
+            addPart(back, phase);
+
+            const lintel = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.35, WALL_THICK), mat);
+            lintel.position.set(
+              Math.cos(midA) * R_OUTER,
+              baseY + LEVEL_H * 0.82,
+              Math.sin(midA) * R_OUTER,
+            );
+            lintel.rotation.y = -midA + Math.PI / 2;
+            addWallMesh(lintel, phase);
+          });
+
+          const cornice = new THREE.Mesh(
+            new THREE.TorusGeometry(R_OUTER + 0.2, 0.2, 4, 80),
+            matCornice,
+          );
+          cornice.rotation.x = Math.PI / 2;
+          cornice.position.y = baseY + LEVEL_H;
+          addWallMesh(cornice, phase);
+        }
+
+        // Attic (phase 5)
+        const atticBaseY = LEVELS * LEVEL_H;
+        ring(R_OUTER, NUM_BAYS, (x, z, a, i) => {
+          const nextA = ((i + 1) / NUM_BAYS) * Math.PI * 2;
+          const midA = (a + nextA) / 2;
+
+          const panel = new THREE.Mesh(new THREE.BoxGeometry(1.6, ATTIC_H, WALL_THICK), matAttic);
+          panel.position.set(
+            Math.cos(midA) * R_OUTER,
+            atticBaseY + ATTIC_H / 2,
+            Math.sin(midA) * R_OUTER,
+          );
+          panel.rotation.y = -midA + Math.PI / 2;
+          addWallMesh(panel, 5);
+
+          const pier = new THREE.Mesh(new THREE.BoxGeometry(PIER_W, ATTIC_H, WALL_THICK), matAttic);
+          pier.position.set(x, atticBaseY + ATTIC_H / 2, z);
+          pier.rotation.y = -a + Math.PI / 2;
+          addWallMesh(pier, 5);
+
+          const p = new THREE.Mesh(new THREE.BoxGeometry(0.3, ATTIC_H - 0.4, 0.3), matCornice);
+          p.position.set(
+            Math.cos(a) * (R_OUTER + WALL_THICK / 2 + 0.1),
+            atticBaseY + ATTIC_H / 2,
+            Math.sin(a) * (R_OUTER + WALL_THICK / 2 + 0.1),
+          );
+          p.rotation.y = -a;
+          addPart(p, 5);
+
+          if (i % 2 === 0) {
+            const w = new THREE.Mesh(new THREE.BoxGeometry(0.6, 1.2, WALL_THICK + 0.2), matDark);
+            w.position.set(
+              Math.cos(midA) * R_OUTER,
+              atticBaseY + ATTIC_H * 0.5,
+              Math.sin(midA) * R_OUTER,
+            );
+            w.rotation.y = -midA + Math.PI / 2;
+            addPart(w, 5);
+          }
+        });
+
+        const topCornice = new THREE.Mesh(
+          new THREE.TorusGeometry(R_OUTER + 0.3, 0.25, 4, 80),
+          matCornice,
+        );
+        topCornice.rotation.x = Math.PI / 2;
+        topCornice.position.y = atticBaseY + ATTIC_H;
+        addWallMesh(topCornice, 5);
+
+        // ── Velarium masts (poles on top) — phase 5 ─────────────────────
+        const mastGeo = new THREE.CylinderGeometry(0.06, 0.08, 2.5, 6);
+        const mastMat = stoneMat(0x6b5f4f, 0.7);
+        for (let i = 0; i < NUM_BAYS; i += 2) {
+          const a = (i / NUM_BAYS) * Math.PI * 2;
+          const mast = new THREE.Mesh(mastGeo, mastMat);
+          mast.position.set(
+            Math.cos(a) * (R_OUTER + 0.5),
+            atticBaseY + ATTIC_H + 1.25,
+            Math.sin(a) * (R_OUTER + 0.5),
+          );
+          mast.rotation.x = Math.sin(a) * 0.15;
+          mast.rotation.z = -Math.cos(a) * 0.15;
+          addPart(mast, 5);
+        }
+
+        // ── Center ring (battle zone marker) ───────────────────────────
+        const ringGeo = new THREE.TorusGeometry(4, 0.1, 8, 72);
+        const ringMat = new THREE.MeshStandardMaterial({
+          color: 0xf97316,
+          emissive: 0xf97316,
+          emissiveIntensity: 0.8,
+        });
+        const centerRing = new THREE.Mesh(ringGeo, ringMat);
+        centerRing.rotation.x = Math.PI / 2;
+        centerRing.position.y = 0.05;
+        addPart(centerRing, 1);
+
+        const glow = new THREE.PointLight(0xf97316, 0.8, 12);
+        glow.position.set(0, 2, 0);
+        scene.add(glow);
+
+        // ─── GROUND PLANE ──────────────────────────────────────────────
+        const groundGeo = new THREE.PlaneGeometry(120, 120);
+        groundGeo.rotateX(-Math.PI / 2);
+        const ground = new THREE.Mesh(
+          groundGeo,
+          new THREE.MeshStandardMaterial({ color: 0x1a1614, roughness: 1 }),
+        );
+        ground.position.y = -0.3;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // ─── TOOLTIP (raycaster on seat blocks) ────────────────────────
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        const tip = $('arenaTip');
+        const tipUser = $('arenaTipUser');
+        const tipDate = $('arenaTipDate');
+
+        renderer.domElement.addEventListener('mousemove', (e) => {
+          const rect = renderer.domElement.getBoundingClientRect();
+          mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+          mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+          raycaster.setFromCamera(mouse, camera);
+          const hits = raycaster.intersectObjects(seatMeshes);
+          if (hits.length) {
+            const ud = hits[0].object.userData;
+            tipUser.textContent = ud.user;
+            tipDate.textContent = 'Block #' + (ud.idx + 1);
+            tip.style.left = e.clientX - rect.left + 14 + 'px';
+            tip.style.top = e.clientY - rect.top - 10 + 'px';
+            tip.classList.add('on');
+            renderer.domElement.style.cursor = 'pointer';
+          } else {
+            tip.classList.remove('on');
+            renderer.domElement.style.cursor = 'grab';
+          }
+        });
+        renderer.domElement.addEventListener('mouseleave', () => tip.classList.remove('on'));
+
+        // ─── SCRUBBER ───────────────────────────────────────────────────
+        $('arenaScrub').addEventListener('input', (e) => {
+          setProgress(parseInt(e.target.value));
+        });
+
+        // ─── RECENT ACTIVITY ───────────────────────────────────────────
+        const actEl = $('arenaActivity');
+        function updateActivity(count) {
+          const recent = [];
+          for (let i = 0; i < 6; i++) {
+            const idx = count - 1 - i;
+            if (idx >= 0) recent.push({ user: USERS[idx % USERS.length], daysAgo: i });
+          }
+          actEl.innerHTML = recent
+            .map(
+              (b) => `
+            <div class="arena-activity-item">
+              <div class="arena-activity-dot" style="background:var(--p500)"></div>
+              <span class="arena-activity-user">${b.user}</span>
+              <span class="arena-activity-time">${b.daysAgo === 0 ? 'Today' : b.daysAgo + 'd ago'}</span>
+            </div>
+          `,
+            )
+            .join('');
+        }
+
+        // ─── BUILD ANIMATION on landing ────────────────────────────────
+        // Rapidly builds from 0% to current progress over ~2.5s
+        let buildAnimId = null;
+        function playBuildAnimation() {
+          let animPct = 0;
+          const step = targetPct / 60; // ~60 frames @ 60fps = ~1s
+          function tick() {
+            animPct += step;
+            if (animPct >= targetPct) {
+              animPct = targetPct;
+              setProgress(animPct);
+              updateActivity(currentShown);
+              buildAnimId = null;
+              return;
+            }
+            setProgress(Math.round(animPct));
+            buildAnimId = requestAnimationFrame(tick);
+          }
+          buildAnimId = requestAnimationFrame(tick);
+        }
+
+        // Start from 0 and animate up
+        setProgress(0);
+        $('arenaBuilders').textContent = '28';
+        setTimeout(playBuildAnimation, 600);
+
+        // ─── ANIMATE ───────────────────────────────────────────────────
+        let t = 0;
+        function animate() {
+          requestAnimationFrame(animate);
+          t += 0.016;
+          controls.update();
+          centerRing.material.emissiveIntensity = 0.6 + Math.sin(t * 2) * 0.3;
+          glow.intensity = 0.6 + Math.sin(t * 2) * 0.3;
+          renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+          W = wrap.clientWidth;
+          H = wrap.clientHeight;
+          camera.aspect = W / H;
+          camera.updateProjectionMatrix();
+          renderer.setSize(W, H);
+        });
+      }
+
       // ═══ LEADERBOARD DATA & LOGIC ═══
       const LB_MODELS = [
         {
@@ -4884,6 +5612,10 @@
           setTimeout(homeTypeLoop, 500);
         } else {
           clearInterval(htI);
+        }
+        // Arena init
+        if (p === 'arena') {
+          initArena();
         }
         // Leaderboard init
         if (p === 'lb') {
