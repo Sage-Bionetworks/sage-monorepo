@@ -2222,60 +2222,209 @@
         margin-top: 0.5rem;
       }
       /* Activity + builders */
-      .arena-activity {
-        max-width: 500px;
-        margin: 0 auto 2rem;
-        text-align: left;
+      /* Recent blocks — flip card feed */
+      .arena-feed {
+        max-width: 700px;
+        margin: 1.5rem auto 1rem;
       }
-      .arena-activity h3 {
-        font-size: 14px;
-        font-weight: 580;
-        color: var(--fg);
-        margin-bottom: 0.75rem;
+      .arena-feed-label {
+        font-size: 11px;
+        color: var(--fg4);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.5rem;
         text-align: center;
       }
-      .arena-activity-item {
+      .arena-feed-card {
+        background: var(--bg-card-s);
+        border: 1px solid var(--brd);
+        border-radius: var(--r-sm);
+        padding: 0.75rem 1rem;
+        height: 48px;
+        overflow: hidden;
+        position: relative;
+      }
+      .arena-feed-item {
         display: flex;
         align-items: center;
         gap: 0.625rem;
-        padding: 0.5rem 0;
+        animation: arena-flip 0.4s ease;
+      }
+      @keyframes arena-flip {
+        0% {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .arena-feed-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .arena-feed-text {
+        display: flex;
+        align-items: baseline;
+        gap: 0.375rem;
+      }
+      .arena-feed-user {
+        font-size: 13px;
+        font-weight: 580;
+        color: var(--fg);
+      }
+      .arena-feed-time {
+        font-size: 12px;
+        color: var(--fg4);
+      }
+      .arena-builders-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        max-width: 700px;
+        margin: 2rem auto 0;
+        text-align: left;
+      }
+      @media (max-width: 640px) {
+        .arena-builders-row {
+          grid-template-columns: 1fr;
+        }
+      }
+      .arena-tier-card,
+      .arena-contributors-card {
+        background: var(--bg-card-s);
+        border: 1px solid var(--brd);
+        border-radius: var(--r);
+        padding: 1.25rem;
+      }
+      .arena-tier-card h4,
+      .arena-contributors-card h4 {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--fg);
+        margin-bottom: 0.75rem;
+      }
+      .arena-tier-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.375rem 0;
         border-bottom: 1px solid var(--brd);
         font-size: 13px;
       }
-      .arena-activity-item:last-child {
+      .arena-tier-item:last-of-type {
         border-bottom: none;
       }
-      .arena-activity-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 2px;
-        flex-shrink: 0;
+      .arena-tier-emoji {
+        font-size: 14px;
       }
-      .arena-activity-user {
+      .arena-tier-name {
         font-weight: 560;
         color: var(--fg);
       }
-      .arena-activity-time {
-        margin-left: auto;
+      .arena-tier-desc {
         color: var(--fg4);
         font-size: 11px;
       }
-      .arena-builders {
-        margin-top: 2.5rem;
+      .arena-tier-count {
+        margin-left: auto;
+        font-weight: 620;
+        font-variant-numeric: tabular-nums;
       }
-      .arena-builders h3 {
-        font-family: var(--serif);
-        font-size: 22px;
-        font-weight: 400;
-        margin-bottom: 0.75rem;
+
+      /* Top 3 contributor rows */
+      .arena-top3-row {
+        display: grid;
+        grid-template-columns: 24px 28px 1fr 48px;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.375rem 0;
+        border-bottom: 1px solid var(--brd);
       }
-      .arena-tiers {
+      .arena-top3-row:last-child {
+        border-bottom: none;
+      }
+      .arena-rank-badge {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
         display: flex;
+        align-items: center;
         justify-content: center;
+        font-size: 9px;
+        font-weight: 700;
+      }
+      .arena-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: #fff;
+      }
+      .arena-top3-name {
+        font-size: 13px;
+        font-weight: 560;
+        color: var(--fg);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .arena-top3-name .tier-badge {
+        font-size: 11px;
+        margin-left: 0.25rem;
+      }
+      .arena-top3-bar {
+        height: 4px;
+        background: var(--bg-up);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-top: 0.25rem;
+      }
+      .arena-top3-bar-fill {
+        height: 100%;
+        border-radius: 2px;
+      }
+      .arena-top3-rate {
+        font-size: 11px;
+        color: var(--fg4);
+        text-align: right;
+      }
+      .arena-rest-chips {
+        display: none;
+        flex-wrap: wrap;
         gap: 0.375rem;
-        margin-bottom: 0.75rem;
-        font-size: 12px;
-        color: var(--fg3);
+        justify-content: center;
+        padding-top: 0.75rem;
+        max-height: 160px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--fg4) transparent;
+      }
+      .arena-rest-chips.on {
+        display: flex;
+      }
+      .arena-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 500;
+        white-space: nowrap;
       }
 
       /* ═══ LEADERBOARD PAGE ═══ */
@@ -2869,7 +3018,7 @@
       </a>
       <div class="nl">
         <a id="nav-battle" onclick="showPage('battle')">Battle</a
-        ><a id="nav-arena" onclick="showPage('arena')">3D Arena</a
+        ><a id="nav-arena" onclick="showPage('arena')">3D BioArena</a
         ><a id="nav-lb" onclick="showPage('lb')">Leaderboard</a>
       </div>
       <div class="nsep"></div>
@@ -3072,7 +3221,7 @@
                     "
                     onclick="showPage('arena')"
                   >
-                    Explore the Arena &rarr;
+                    Explore the 3D BioArena &rarr;
                   </button>
                 </div>
               </div>
@@ -3222,21 +3371,21 @@
         <div class="arena-page container">
           <!-- Hero -->
           <div class="arena-hero">
-            <h1>The <em>Arena</em></h1>
+            <h1>The Bio<em>Arena</em></h1>
             <p class="arena-hero-sub">
               Every valid battle places a block. Together, the community is building an arena
               &mdash; one battle at a time. Hover over any block to see who placed it.
             </p>
           </div>
 
-          <!-- Stats -->
+          <!-- Stats + CTA -->
           <div class="arena-stats">
             <div>
               <div class="arena-stat-val" id="arenaBlocks">186</div>
               <div class="arena-stat-label">Blocks placed</div>
             </div>
             <div>
-              <div class="arena-stat-val">300</div>
+              <div class="arena-stat-val">2,850</div>
               <div class="arena-stat-label">Goal</div>
             </div>
             <div>
@@ -3245,15 +3394,28 @@
             </div>
           </div>
 
-          <!-- Progress -->
+          <!-- Progress + CTA inline -->
           <div class="arena-progress">
             <div class="arena-progress-bar">
               <div class="arena-progress-fill" id="arenaFill" style="width: 50%"></div>
             </div>
             <span class="arena-progress-pct" id="arenaPct">50%</span>
           </div>
+          <button
+            class="bt bt-p"
+            style="
+              height: 40px;
+              padding: 0 24px;
+              font-size: 14px;
+              border-radius: var(--r-sm);
+              margin-bottom: 1.5rem;
+            "
+            onclick="if(!isLoggedIn){pendingPrompt='';$('loginModal').classList.add('on')}else{showPage('battle')}"
+          >
+            Place a block &rarr;
+          </button>
 
-          <!-- 3D Viewport (Three.js) -->
+          <!-- 3D Viewport -->
           <div class="arena-canvas-wrap" id="arenaWrap">
             <div class="arena-tooltip" id="arenaTip">
               <div class="arena-tooltip-user" id="arenaTipUser"></div>
@@ -3276,31 +3438,67 @@
             </div>
           </div>
 
-          <!-- Recent activity -->
-          <div class="arena-activity">
-            <h3>Recent Blocks</h3>
-            <div id="arenaActivity"></div>
+          <!-- Recent blocks — flip card feed -->
+          <div class="arena-feed">
+            <div class="arena-feed-label">Recent Blocks</div>
+            <div class="arena-feed-card" id="arenaFeed">
+              <div class="arena-feed-item" id="arenaFeedItem">
+                <div class="arena-feed-avatar" id="arenaFeedAvatar">D</div>
+                <div class="arena-feed-text">
+                  <span class="arena-feed-user" id="arenaFeedUser">DrNeuro42</span>
+                  <span class="arena-feed-time" id="arenaFeedTime">placed a block just now</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Builders -->
-          <div class="arena-builders">
-            <h3>Builders</h3>
-            <div class="arena-tiers">
-              <span>🏆 12 Champions</span><span style="color: var(--fg4)">&middot;</span>
-              <span>⚔️ 28 Knights</span><span style="color: var(--fg4)">&middot;</span>
-              <span>🌟 156 Apprentices</span>
+          <!-- Builders — two column: tiers | top contributors -->
+          <div class="arena-builders-row">
+            <div class="arena-tier-card">
+              <h4>Tier Breakdown</h4>
+              <div class="arena-tier-item">
+                <span class="arena-tier-emoji">🏆</span
+                ><span class="arena-tier-name">Champions</span
+                ><span class="arena-tier-desc">10+/wk</span
+                ><span class="arena-tier-count" style="color: #fbbf24">12</span>
+              </div>
+              <div class="arena-tier-item">
+                <span class="arena-tier-emoji">⚔️</span><span class="arena-tier-name">Knights</span
+                ><span class="arena-tier-desc">5–10/wk</span
+                ><span class="arena-tier-count" style="color: #c0c0c0">28</span>
+              </div>
+              <div class="arena-tier-item">
+                <span class="arena-tier-emoji">🌟</span
+                ><span class="arena-tier-name">Apprentices</span
+                ><span class="arena-tier-desc">&lt;5/wk</span
+                ><span class="arena-tier-count" style="color: #cd7f32">156</span>
+              </div>
+              <p style="font-size: 11px; color: var(--fg4); margin-top: 0.75rem; line-height: 1.5">
+                Complete 5 battles per week to rank up.
+              </p>
             </div>
-            <p style="font-size: 13px; color: var(--fg4); margin-bottom: 1.5rem">
-              Complete 5 battles per week to rank up. Champions: 10+/wk &middot; Knights:
-              5&ndash;10/wk &middot; Apprentices: &lt;5/wk
-            </p>
-            <button
-              class="bt bt-p"
-              style="height: 40px; padding: 0 24px; font-size: 14px; border-radius: var(--r-sm)"
-              onclick="if(!isLoggedIn){pendingPrompt='';$('loginModal').classList.add('on')}else{showPage('battle')}"
-            >
-              Place a block &rarr;
-            </button>
+            <div class="arena-contributors-card">
+              <h4>Top Builders</h4>
+              <div id="arenaTop3"></div>
+              <div style="text-align: center; margin-top: 0.75rem">
+                <button
+                  onclick="this.nextElementSibling.classList.toggle('on');this.textContent=this.textContent.includes('Show')?'Hide':'Show all 196'"
+                  style="
+                    background: none;
+                    border: 1px solid var(--brd);
+                    border-radius: 20px;
+                    padding: 0.25rem 0.75rem;
+                    font-size: 11px;
+                    color: var(--fg4);
+                    cursor: pointer;
+                    font-family: var(--sans);
+                  "
+                >
+                  Show all 196
+                </button>
+                <div class="arena-rest-chips" id="arenaRestChips"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -4656,10 +4854,18 @@
           GOAL = 2850;
         const targetPct = Math.round((BATTLES / GOAL) * 100);
 
+        let partIdx = 0;
         function addPart(mesh, phase) {
           mesh.visible = false;
+          mesh.userData = {
+            idx: partIdx,
+            user: USERS[partIdx % USERS.length],
+            section:
+              phase <= 1 ? 'Arena Floor' : phase === 2 ? 'Seating' : phase <= 5 ? 'Wall' : 'Seat',
+          };
           scene.add(mesh);
           allParts.push({ mesh, phase });
+          partIdx++;
         }
 
         // Phase 1: Arena floor
@@ -4731,55 +4937,6 @@
           addPart(m, 6);
           return m;
         });
-
-        // Progress: map 0-100% to phases
-        // 0-5%: floor, 5-15%: platforms, 15-30%: L1, 30-45%: L2, 45-60%: L3+attic, 60-100%: seats
-        function setProgress(pct) {
-          pct = Math.max(0, Math.min(100, pct));
-          // Determine which phases are active
-          const activePhase =
-            pct < 5
-              ? 0
-              : pct < 10
-                ? 1
-                : pct < 15
-                  ? 2
-                  : pct < 30
-                    ? 3
-                    : pct < 45
-                      ? 4
-                      : pct < 60
-                        ? 5
-                        : 6;
-
-          // Phases 1-5: show/hide structural elements
-          allParts.forEach((p) => {
-            if (p.phase <= 5) {
-              p.mesh.visible = p.phase <= activePhase;
-            }
-          });
-
-          // Phase 6: seats — proportional fill within the 60-100% range
-          seatMeshes.length = 0;
-          if (pct >= 60) {
-            const seatPct = (pct - 60) / 40; // 0 to 1 within seat range
-            const showCount = Math.round(seatPct * allSeatMeshes.length);
-            allSeatMeshes.forEach((m, i) => {
-              m.visible = i < showCount;
-              if (i < showCount) seatMeshes.push(m);
-            });
-          } else {
-            allSeatMeshes.forEach((m) => {
-              m.visible = false;
-            });
-          }
-
-          const battles = Math.round((pct / 100) * GOAL);
-          $('arenaBlocks').textContent = battles.toLocaleString();
-          $('arenaFill').style.width = pct + '%';
-          $('arenaPct').textContent = pct + '%';
-          $('arenaScrub').value = pct;
-        }
 
         // ─── OUTER WALL — phases 3,4,5 ─────────────────────────────────
         function addWallMesh(mesh, phase) {
@@ -4918,6 +5075,27 @@
         centerRing.position.y = 0.05;
         addPart(centerRing, 1);
 
+        // ─── SORT & PROGRESS — must be AFTER all addPart() calls ─────
+        allParts.sort((a, b) => a.phase - b.phase);
+        const TOTAL_PARTS = allParts.length;
+
+        function setProgress(pct) {
+          pct = Math.max(0, Math.min(100, pct));
+          const count = Math.round((pct / 100) * TOTAL_PARTS);
+          seatMeshes.length = 0;
+          for (let i = 0; i < TOTAL_PARTS; i++) {
+            const visible = i < count;
+            allParts[i].mesh.visible = visible;
+            if (visible) seatMeshes.push(allParts[i].mesh);
+          }
+          const battles = Math.round((pct / 100) * GOAL);
+          $('arenaBlocks').textContent = battles.toLocaleString();
+          $('arenaFill').style.width = Math.min(pct, targetPct) + '%';
+          $('arenaPct').textContent = Math.min(pct, targetPct) + '%';
+          $('arenaScrub').value = pct;
+          $('arenaScrubVal').textContent = pct + '%';
+        }
+
         const glow = new THREE.PointLight(0xf97316, 0.8, 12);
         glow.position.set(0, 2, 0);
         scene.add(glow);
@@ -4966,64 +5144,172 @@
           setProgress(parseInt(e.target.value));
         });
 
-        // ─── RECENT ACTIVITY ───────────────────────────────────────────
-        const actEl = $('arenaActivity');
-        function updateActivity(count) {
-          const recent = [];
-          for (let i = 0; i < 6; i++) {
-            const idx = count - 1 - i;
-            if (idx >= 0) recent.push({ user: USERS[idx % USERS.length], daysAgo: i });
-          }
-          actEl.innerHTML = recent
-            .map(
-              (b) => `
-            <div class="arena-activity-item">
-              <div class="arena-activity-dot" style="background:var(--p500)"></div>
-              <span class="arena-activity-user">${b.user}</span>
-              <span class="arena-activity-time">${b.daysAgo === 0 ? 'Today' : b.daysAgo + 'd ago'}</span>
+        // ─── BUILDERS: top 3 + chips + recent activity ──────────────────
+        const AVATAR_COLORS = [
+          '#f97316',
+          '#6cb4fc',
+          '#34d4b4',
+          '#b49cfa',
+          '#d97706',
+          '#ef4444',
+          '#10a37f',
+          '#7c3aed',
+        ];
+        const RANK_STYLES = [
+          { label: '1st', color: '#fbbf24', bg: 'rgba(251,191,36,0.12)' },
+          { label: '2nd', color: '#c0c0c0', bg: 'rgba(192,192,192,0.12)' },
+          { label: '3rd', color: '#cd7f32', bg: 'rgba(205,127,50,0.12)' },
+        ];
+        const MOCK_CONTRIBUTORS = [
+          { name: 'DrNeuro42', tier: 'champion', bpw: 14.2 },
+          { name: 'GenomeFan', tier: 'champion', bpw: 12.8 },
+          { name: 'CellWizard', tier: 'champion', bpw: 11.5 },
+          { name: 'BioExplorer', tier: 'knight', bpw: 8.3 },
+          { name: 'LabRat99', tier: 'knight', bpw: 7.1 },
+          { name: 'MoleculeX', tier: 'knight', bpw: 6.4 },
+          { name: 'SynapseAI', tier: 'knight', bpw: 5.8 },
+          { name: 'ProteinPro', tier: 'apprentice', bpw: 3.2 },
+          { name: 'HelixHero', tier: 'apprentice', bpw: 2.1 },
+          { name: 'DataMedic', tier: 'apprentice', bpw: 1.4 },
+        ];
+        const TIER_EMOJI = { champion: '🏆', knight: '⚔️', apprentice: '🌟' };
+        const TIER_COLOR = { champion: '#fbbf24', knight: '#c0c0c0', apprentice: '#cd7f32' };
+
+        // Top 3
+        const top3El = $('arenaTop3');
+        const maxBpw = MOCK_CONTRIBUTORS[0].bpw;
+        top3El.innerHTML = MOCK_CONTRIBUTORS.slice(0, 3)
+          .map((c, i) => {
+            const rs = RANK_STYLES[i];
+            const initials = c.name
+              .split(' ')
+              .map((w) => w[0])
+              .join('');
+            return `<div class="arena-top3-row">
+            <div class="arena-rank-badge" style="background:${rs.bg};color:${rs.color};border:1px solid ${rs.color}30">${rs.label}</div>
+            <div class="arena-avatar" style="background:${AVATAR_COLORS[i]}">${initials}</div>
+            <div>
+              <div class="arena-top3-name">${TIER_EMOJI[c.tier]} ${c.name}</div>
+              <div class="arena-top3-bar"><div class="arena-top3-bar-fill" style="width:${((c.bpw / maxBpw) * 100).toFixed(0)}%;background:${rs.color}"></div></div>
             </div>
-          `,
-            )
-            .join('');
+            <div class="arena-top3-rate">${c.bpw.toFixed(1)}/wk</div>
+          </div>`;
+          })
+          .join('');
+
+        // Rest as chips
+        const restEl = $('arenaRestChips');
+        restEl.innerHTML = MOCK_CONTRIBUTORS.slice(3)
+          .map((c, i) => {
+            const tc = TIER_COLOR[c.tier];
+            const av = c.name.slice(0, 2).toUpperCase();
+            const ac = AVATAR_COLORS[(i + 3) % AVATAR_COLORS.length];
+            return `<span class="arena-chip" style="color:${tc};background:${tc}15;border:1px solid ${tc}30"><span style="width:18px;height:18px;border-radius:50%;background:${ac};color:#fff;font-size:8px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">${av}</span>${c.name}</span>`;
+          })
+          .join('');
+
+        // Recent blocks — flip card feed
+        const feedItems = [];
+        function updateActivity(count) {
+          feedItems.length = 0;
+          for (let i = 0; i < 20; i++) {
+            const idx = count - 1 - i;
+            if (idx >= 0) {
+              const user = USERS[idx % USERS.length];
+              const time = i === 0 ? 'just now' : i === 1 ? '1d ago' : i + 'd ago';
+              const color = AVATAR_COLORS[idx % AVATAR_COLORS.length];
+              const initials = user.slice(0, 2).toUpperCase();
+              feedItems.push({ user, time, color, initials });
+            }
+          }
+          if (feedItems.length > 0) showFeedItem(0);
         }
+        let feedIdx = 0;
+        function showFeedItem(i) {
+          feedIdx = i % feedItems.length;
+          const f = feedItems[feedIdx];
+          $('arenaFeedAvatar').textContent = f.initials;
+          $('arenaFeedAvatar').style.background = f.color;
+          $('arenaFeedUser').textContent = f.user;
+          $('arenaFeedTime').textContent = 'placed a block ' + f.time;
+          // Re-trigger flip animation
+          const item = $('arenaFeedItem');
+          item.style.animation = 'none';
+          item.offsetHeight; // force reflow
+          item.style.animation = '';
+        }
+        setInterval(() => {
+          if (feedItems.length > 0) showFeedItem(feedIdx + 1);
+        }, 3000);
 
         // ─── BUILD ANIMATION on landing ────────────────────────────────
-        // Rapidly builds from 0% to current progress over ~2.5s
-        let buildAnimId = null;
         function playBuildAnimation() {
           let animPct = 0;
-          const step = targetPct / 60; // ~60 frames @ 60fps = ~1s
+          const step = targetPct / 90; // ~90 frames = ~1.5s at 60fps
           function tick() {
-            animPct += step;
-            if (animPct >= targetPct) {
-              animPct = targetPct;
-              setProgress(animPct);
-              updateActivity(currentShown);
-              buildAnimId = null;
-              return;
-            }
+            animPct = Math.min(animPct + step, targetPct);
             setProgress(Math.round(animPct));
-            buildAnimId = requestAnimationFrame(tick);
+            if (animPct < targetPct) requestAnimationFrame(tick);
+            else updateActivity(Math.round((targetPct / 100) * TOTAL_PARTS));
           }
-          buildAnimId = requestAnimationFrame(tick);
+          requestAnimationFrame(tick);
         }
 
         // Start from 0 and animate up
         setProgress(0);
         $('arenaBuilders').textContent = '28';
-        setTimeout(playBuildAnimation, 600);
+        setTimeout(playBuildAnimation, 500);
 
-        // ─── ANIMATE ───────────────────────────────────────────────────
+        // ─── ANIMATE (on-demand: only during interaction) ────────────────
         let t = 0;
+        let arenaAnimId = null;
+        let arenaIdleTimer = null;
+
         function animate() {
-          requestAnimationFrame(animate);
+          arenaAnimId = requestAnimationFrame(animate);
           t += 0.016;
           controls.update();
           centerRing.material.emissiveIntensity = 0.6 + Math.sin(t * 2) * 0.3;
           glow.intensity = 0.6 + Math.sin(t * 2) * 0.3;
           renderer.render(scene, camera);
         }
+
+        function arenaWake() {
+          if (!arenaAnimId) animate();
+          clearTimeout(arenaIdleTimer);
+          arenaIdleTimer = setTimeout(arenaSlp, 2000);
+        }
+
+        function arenaSlp() {
+          if (arenaAnimId) {
+            cancelAnimationFrame(arenaAnimId);
+            arenaAnimId = null;
+          }
+        }
+
+        // Wake on any interaction with canvas or scrubber
+        renderer.domElement.addEventListener('pointerdown', arenaWake);
+        renderer.domElement.addEventListener('pointermove', arenaWake);
+        renderer.domElement.addEventListener('wheel', arenaWake, { passive: true });
+        $('arenaScrub').addEventListener('input', arenaWake);
+
+        // Also render one final frame after controls stop (for damping to settle)
+        controls.addEventListener('change', () => {
+          if (!arenaAnimId) {
+            renderer.render(scene, camera);
+          }
+        });
+
+        // Page navigation: stop loop when leaving, render one frame when returning
+        window._arenaStart = function () {
+          renderer.render(scene, camera); // single frame so it's not black
+        };
+        window._arenaStop = arenaSlp;
+
+        // Start loop for build animation, will auto-sleep 2s after it ends
         animate();
+        // The build animation calls setProgress which doesn't wake the loop,
+        // so the loop runs during build then auto-sleeps after 2s idle.
 
         window.addEventListener('resize', () => {
           W = wrap.clientWidth;
@@ -5613,9 +5899,12 @@
         } else {
           clearInterval(htI);
         }
-        // Arena init
+        // Arena — start/stop render loop
         if (p === 'arena') {
           initArena();
+          if (window._arenaStart) window._arenaStart();
+        } else {
+          if (window._arenaStop) window._arenaStop();
         }
         // Leaderboard init
         if (p === 'lb') {
