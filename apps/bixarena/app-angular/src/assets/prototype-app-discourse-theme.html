@@ -1137,10 +1137,11 @@
         color: var(--p400);
       }
       .home-hero p {
-        font-size: 16px;
-        color: var(--fg2);
-        margin: 0 auto 0;
-        line-height: 1.6;
+        font-size: 15px;
+        color: var(--fg3);
+        margin: 0 auto 1.75rem;
+        line-height: 1.55;
+        max-width: 620px;
       }
       .home-cta {
         display: flex;
@@ -1165,24 +1166,27 @@
       .stats {
         display: flex;
         justify-content: center;
-        gap: 3.5rem;
-        padding: 2.5rem 0;
-        border-top: 1px solid var(--brd);
-        border-bottom: 1px solid var(--brd);
-        margin-bottom: 3.5rem;
+        gap: 2rem;
+        padding: 0 0 1rem;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
       }
       .stat {
         text-align: center;
       }
+      .stat + .stat {
+        border-left: 1px solid var(--brd);
+        padding-left: 2rem;
+      }
       .stat-val {
         font-family: var(--serif);
-        font-size: 2.25rem;
+        font-size: 1.75rem;
         font-weight: 400;
-        color: var(--fg);
+        color: var(--fg2);
         line-height: 1.1;
       }
       .stat-lbl {
-        font-size: 12px;
+        font-size: 11px;
         color: var(--fg3);
         margin-top: 0.25rem;
         font-weight: 440;
@@ -1277,7 +1281,7 @@
 
       /* TRENDING QUESTIONS */
       .trending {
-        padding: 0 0 3rem;
+        padding: 0 0 3.5rem;
       }
       .trending h2 {
         font-family: var(--serif);
@@ -1484,7 +1488,7 @@
       .builder-av {
         width: 24px;
         height: 24px;
-        border-radius: 4px;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -3065,10 +3069,11 @@
       <div class="page on" id="pg-home">
         <div class="container">
           <div class="home-hero">
-            <h1>Find the best AI for<br />your <em>biomedical</em> research</h1>
+            <h1>Your vote shapes the future of<br /><em>biomedical</em> AI</h1>
             <p>
-              Two anonymous AI models answer your question. You pick the winner. Your votes shape
-              the global leaderboard.
+              Discover how different AIs answer biomedical questions. Find out which ones you
+              trust.<br />No expertise needed &mdash; just vote for the response you find most
+              useful.
             </p>
           </div>
           <div class="home-comp">
@@ -3116,23 +3121,82 @@
           <div class="stats fade-in" id="statsBar">
             <div class="stat">
               <div class="stat-val" data-target="2847">0</div>
-              <div class="stat-lbl">Battles completed</div>
+              <div class="stat-lbl">Total Battles</div>
             </div>
             <div class="stat">
               <div class="stat-val" data-target="24">0</div>
-              <div class="stat-lbl">Models evaluated</div>
+              <div class="stat-lbl">Models Evaluated</div>
             </div>
             <div class="stat">
               <div class="stat-val" data-target="312">0</div>
-              <div class="stat-lbl">Active users</div>
+              <div class="stat-lbl">Total Users</div>
             </div>
-            <div class="stat">
-              <div class="stat-val" data-target="8429">0</div>
-              <div class="stat-lbl">Votes cast</div>
+            <div class="stat" id="userStatBattles" style="display: none">
+              <div class="stat-val" style="color: var(--p400)">12</div>
+              <div class="stat-lbl" style="color: var(--p400)">Battles Completed</div>
+            </div>
+            <div class="stat" id="userStatRank" style="display: none">
+              <div class="stat-val" style="color: var(--p400)">#47</div>
+              <div class="stat-lbl" style="color: var(--p400)">Your Rank</div>
+            </div>
+            <p
+              style="
+                font-size: 11px;
+                color: var(--fg4);
+                text-align: center;
+                margin-top: 0;
+                margin-bottom: 0;
+                width: 100%;
+              "
+            >
+              Only battles on biomedical topics count toward stats and rankings.
+            </p>
+          </div>
+          <div class="trending fade-in">
+            <h2>Trending this week</h2>
+            <p class="quest-sub">The most popular biomedical questions from the community.</p>
+            <div class="trend-grid">
+              <div class="trend-card" onclick="homeQuickBattle(this)">
+                <div class="trend-q">
+                  Does hypoglycaemia increase the risk of cardiovascular events?
+                </div>
+                <div class="trend-meta">
+                  <span class="trend-tag">Cardiology</span><span class="trend-stat">42 battles</span
+                  ><span class="trend-cta">Battle this &rarr;</span>
+                </div>
+              </div>
+              <div class="trend-card" onclick="homeQuickBattle(this)">
+                <div class="trend-q">
+                  Can mRNA vaccine technology be adapted for cancer treatment?
+                </div>
+                <div class="trend-meta">
+                  <span class="trend-tag">Oncology</span><span class="trend-stat">38 battles</span
+                  ><span class="trend-cta">Battle this &rarr;</span>
+                </div>
+              </div>
+              <div class="trend-card" onclick="homeQuickBattle(this)">
+                <div class="trend-q">
+                  How does neuroplasticity enable functional recovery after ischemic stroke?
+                </div>
+                <div class="trend-meta">
+                  <span class="trend-tag">Neuroscience</span
+                  ><span class="trend-stat">31 battles</span
+                  ><span class="trend-cta">Battle this &rarr;</span>
+                </div>
+              </div>
+            </div>
+            <div class="trending-footer">
+              <button
+                class="bt bt-p"
+                style="height: 36px; padding: 0 20px; font-size: 13px; border-radius: var(--r-sm)"
+                onclick="if(!isLoggedIn){pendingPrompt='';$('loginModal').classList.add('on')}else{showPage('battle')}"
+              >
+                Ask your own question &rarr;
+              </button>
             </div>
           </div>
           <div class="quest-section fade-in">
-            <h2>Community Quest</h2>
+            <h2>Community Progress</h2>
             <p class="quest-sub">
               Battle together, build together. Every valid battle adds a block to the arena.
             </p>
@@ -3172,25 +3236,25 @@
                     style="left: 35%; bottom: 40px; background: var(--p400); opacity: 0.3"
                   ></div>
                 </div>
-                <span class="quest-vlabel">Rome Arena</span>
+                <span class="quest-vlabel">BioArena</span>
               </div>
               <div class="quest-info">
-                <h3>Building the Rome Arena</h3>
+                <h3>Building the BioArena</h3>
                 <p>
-                  The community is constructing a Minecraft-style arena, one battle at a time.
-                  Complete 5 battles to contribute your blocks.
+                  Every time you evaluate a model, you earn a block that will be placed in the
+                  BioArena. 1 Battle = 1 Block.
                 </p>
                 <div class="quest-progress">
                   <div class="quest-bar"><div class="quest-fill" style="width: 62%"></div></div>
-                  <span class="quest-pct">186 / 300 blocks</span>
+                  <span class="quest-pct">1,423 / 2,850 blocks</span>
                 </div>
                 <div class="quest-builders">
                   <div class="builder-stack">
-                    <div class="builder-av" style="background: #d97706">RC</div>
-                    <div class="builder-av" style="background: #10a37f">JK</div>
-                    <div class="builder-av" style="background: #4285f4">ML</div>
-                    <div class="builder-av" style="background: #7c3aed">AS</div>
-                    <div class="builder-av" style="background: #ef4444">TW</div>
+                    <div class="builder-av" style="background: #d97706">DN</div>
+                    <div class="builder-av" style="background: #10a37f">GF</div>
+                    <div class="builder-av" style="background: #4285f4">CW</div>
+                    <div class="builder-av" style="background: #7c3aed">BE</div>
+                    <div class="builder-av" style="background: #ef4444">LR</div>
                     <span class="builder-more">+23 builders</span>
                   </div>
                   <span class="quest-tiers">🏆 12 · ⚔️ 28 · 🌟 156</span>
@@ -3206,7 +3270,7 @@
                     "
                     onclick="if(!isLoggedIn){pendingPrompt='';$('loginModal').classList.add('on')}else{showPage('battle')}"
                   >
-                    Contribute &rarr;
+                    Start Evaluating &rarr;
                   </button>
                   <button
                     class="bt bt-sec"
@@ -3227,54 +3291,12 @@
               </div>
             </div>
           </div>
-          <div class="trending fade-in">
-            <h2>Trending this week</h2>
-            <p class="quest-sub">The most popular biomedical questions from the community.</p>
-            <div class="trend-grid">
-              <div class="trend-card" onclick="homeQuickBattle(this)">
-                <div class="trend-q">
-                  Does hypoglycaemia increase the risk of cardiovascular events?
-                </div>
-                <div class="trend-meta">
-                  <span class="trend-tag">Cardiology</span><span class="trend-stat">42 battles</span
-                  ><span class="trend-cta">Battle this &rarr;</span>
-                </div>
-              </div>
-              <div class="trend-card" onclick="homeQuickBattle(this)">
-                <div class="trend-q">
-                  Can mRNA vaccine technology be adapted for cancer treatment?
-                </div>
-                <div class="trend-meta">
-                  <span class="trend-tag">Oncology</span><span class="trend-stat">38 battles</span
-                  ><span class="trend-cta">Battle this &rarr;</span>
-                </div>
-              </div>
-              <div class="trend-card" onclick="homeQuickBattle(this)">
-                <div class="trend-q">
-                  What is the blood-brain barrier and why do most drugs fail to cross it?
-                </div>
-                <div class="trend-meta">
-                  <span class="trend-tag">Neuroscience</span
-                  ><span class="trend-stat">31 battles</span
-                  ><span class="trend-cta">Battle this &rarr;</span>
-                </div>
-              </div>
-            </div>
-            <div class="trending-footer">
-              <button
-                class="bt bt-p"
-                style="height: 36px; padding: 0 20px; font-size: 13px; border-radius: var(--r-sm)"
-                onclick="if(!isLoggedIn){pendingPrompt='';$('loginModal').classList.add('on')}else{showPage('battle')}"
-              >
-                Ask your own question &rarr;
-              </button>
-            </div>
-          </div>
           <div class="lb-preview fade-in">
             <div class="lb-preview-head">
               <h2>Leaderboard</h2>
               <div class="lb-preview-meta">
-                <span>Think you know which AI is best? Prove it.</span
+                <span
+                  >Rankings shift with every battle. See where your vote makes a difference.</span
                 ><span class="sep">&middot;</span
                 ><a class="lb-preview-link" onclick="showPage('lb')">Full leaderboard &rarr;</a>
               </div>
@@ -3371,7 +3393,7 @@
         <div class="arena-page container">
           <!-- Hero -->
           <div class="arena-hero">
-            <h1>The Bio<em>Arena</em></h1>
+            <h1>Bio<em>Arena</em></h1>
             <p class="arena-hero-sub">
               Every valid battle places a block. Together, the community is building an arena
               &mdash; one battle at a time. Hover over any block to see who placed it.
@@ -3508,7 +3530,7 @@
         <div class="lb-page container">
           <!-- Hero -->
           <div class="lb-hero">
-            <h1>Leader<em>board</em></h1>
+            <h1>Leaderboard</h1>
             <p class="lb-hero-sub">
               Community-driven evaluation of AI models on biomedical topics. Rankings are computed
               using the Bradley-Terry model after every battle.
@@ -4620,6 +4642,9 @@
           mockLogout();
         };
         loginBtn.replaceWith(avatar);
+        // Show personal stats in stats bar
+        $('userStatBattles').style.display = '';
+        $('userStatRank').style.display = '';
         // If there was a pending prompt, go to battle
         if (pendingPrompt !== null) {
           const p = pendingPrompt;
@@ -4701,6 +4726,9 @@
           }
         };
         avatar.replaceWith(btn);
+        // Hide personal stats
+        $('userStatBattles').style.display = 'none';
+        $('userStatRank').style.display = 'none';
         // Go back to home
         showPage('home');
       }
@@ -4725,7 +4753,7 @@
         scene.fog = new THREE.Fog(0x0f0e0d, 60, 120);
 
         const camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 500);
-        camera.position.set(-18, 48, 42);
+        camera.position.set(-25, 32, 55);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(W, H);
