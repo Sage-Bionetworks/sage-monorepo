@@ -1,0 +1,1540 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BioArena — Battle</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+      :root {
+        --s0: #0c0c0e;
+        --s50: #141416;
+        --s100: #1c1c20;
+        --s150: #222226;
+        --s200: #2c2c31;
+        --s300: #3a3a40;
+        --s400: #62626b;
+        --s500: #8b8b95;
+        --s600: #b0b0b8;
+        --s700: #d0d0d6;
+        --s800: #e8e8ec;
+        --s900: #f4f4f6;
+        --s950: #ffffff;
+        --p400: #fb923c;
+        --p500: #f97316;
+        --p600: #ea580c;
+        --p700: #c2410c;
+        --teal: #34d4b4;
+        --teal-dim: rgba(52, 212, 180, 0.08);
+        --blue: #6cb4fc;
+        --violet: #b49cfa;
+        --font: 'DM Sans', system-ui, sans-serif;
+        --nav-h: 56px;
+        --max-w: 1280px;
+        --r: 18px;
+        --r-sm: 12px;
+        --r-xs: 8px;
+        /* Surfaces */
+        --glass-bg: var(--s50);
+        --glass-border: rgba(255, 255, 255, 0.06);
+        --glass-border-hover: rgba(255, 255, 255, 0.1);
+        --glow: rgba(249, 115, 22, 0.04);
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        font-size: 15px;
+      }
+      body {
+        font-family: var(--font);
+        background: var(--s0);
+        color: var(--s950);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        min-height: 100dvh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Subtle noise grain — warmth without gradients */
+      body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.25;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      }
+
+      /* Everything sits above bg */
+      .nav,
+      .shell,
+      .ctrl {
+        position: relative;
+        z-index: 2;
+      }
+
+      /* ═══ NAV ═══ */
+      .nav {
+        display: flex;
+        align-items: center;
+        padding: 0 2rem;
+        height: var(--nav-h);
+        border-bottom: 1px solid var(--glass-border);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(12, 12, 14, 0.7);
+        backdrop-filter: blur(20px) saturate(1.3);
+        -webkit-backdrop-filter: blur(20px) saturate(1.3);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: var(--s950);
+        font-size: 0.9375rem;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+      }
+      .brand svg {
+        width: 26px;
+        height: 26px;
+      }
+      .nl {
+        display: flex;
+        gap: 2px;
+        margin-left: auto;
+      }
+      .nl a {
+        padding: 6px 12px;
+        text-decoration: none;
+        color: var(--s500);
+        font-size: 0.8125rem;
+        font-weight: 440;
+        letter-spacing: -0.01em;
+        border-radius: var(--r-xs);
+        transition: all 0.15s;
+      }
+      .nl a:hover {
+        color: var(--s900);
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .nl a.on {
+        color: var(--s950);
+        font-weight: 560;
+      }
+      .nsep {
+        width: 1px;
+        height: 18px;
+        background: var(--s200);
+        margin: 0 0.75rem;
+        opacity: 0.6;
+      }
+      .na {
+        display: flex;
+        gap: 6px;
+      }
+      .bt {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 30px;
+        padding: 0 14px;
+        font-family: inherit;
+        font-size: 0.75rem;
+        font-weight: 540;
+        letter-spacing: -0.01em;
+        border-radius: var(--r-xs);
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .bt-p {
+        background: var(--p500);
+        color: #fff;
+      }
+      .bt-p:hover {
+        background: var(--p600);
+      }
+      .bt-g {
+        background: transparent;
+        color: var(--s500);
+        width: 30px;
+        padding: 0;
+      }
+      .bt-g:hover {
+        color: var(--s950);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      /* ═══ SHELL ═══ */
+      .shell {
+        width: 100%;
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        flex-direction: column;
+        height: calc(100dvh - var(--nav-h));
+      }
+
+      /* ═══ LANDING ═══ */
+      .land {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        padding-bottom: 6rem;
+      }
+      .land.gone {
+        display: none;
+      }
+
+      .hero h1 {
+        text-align: center;
+        font-size: 2.75rem;
+        font-weight: 760;
+        letter-spacing: -0.05em;
+        line-height: 1.08;
+        margin-bottom: 0.75rem;
+        background: linear-gradient(160deg, var(--s950) 30%, var(--s500) 80%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .hero h1 em {
+        font-style: normal;
+        background: linear-gradient(135deg, var(--p400) 0%, var(--p500) 50%, #e06030 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .hero p {
+        text-align: center;
+        font-size: 1rem;
+        color: var(--s500);
+        max-width: 420px;
+        margin: 0 auto;
+        line-height: 1.5;
+        font-weight: 380;
+      }
+
+      .exs {
+        width: 100%;
+        max-width: 680px;
+      }
+      .exs-lbl {
+        text-align: center;
+        font-size: 0.6rem;
+        color: var(--s400);
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-weight: 520;
+        margin-bottom: 0.75rem;
+      }
+      .exr {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .exc {
+        flex: 1;
+        background: var(--s50);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--r-sm);
+        padding: 0.75rem 1rem;
+        color: var(--s600);
+        font-family: inherit;
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s;
+        min-height: 64px;
+      }
+      .exc:hover {
+        background: var(--s100);
+        border-color: var(--glass-border-hover);
+        color: var(--s900);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      /* ═══ COMPOSER ═══ */
+      .comp {
+        width: 100%;
+        max-width: 680px;
+        position: relative;
+      }
+      .comp-box {
+        position: relative;
+        background: var(--s50);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--r);
+        transition: all 0.25s;
+        overflow: hidden;
+      }
+      .comp-box:focus-within {
+        border-color: rgba(249, 115, 22, 0.25);
+        box-shadow:
+          0 0 0 4px rgba(249, 115, 22, 0.06),
+          0 8px 40px rgba(0, 0, 0, 0.15);
+      }
+      .ci {
+        width: 100%;
+        min-height: 52px;
+        max-height: 140px;
+        padding: 0.9375rem 3.5rem 0.9375rem 1.125rem;
+        background: transparent;
+        border: none;
+        color: var(--s950);
+        font-family: inherit;
+        font-size: 0.9375rem;
+        line-height: 1.5;
+        resize: none;
+        outline: none;
+      }
+      .ci::placeholder {
+        color: var(--s400);
+      }
+      .cs {
+        position: absolute;
+        right: 0.625rem;
+        bottom: 0.625rem;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--s200);
+        color: var(--s500);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .cs.hot {
+        background: var(--p500);
+        color: #fff;
+      }
+      .cs:hover.hot {
+        background: var(--p600);
+        transform: scale(1.08);
+      }
+      .cs svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* File attachment */
+      .comp-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0 0.75rem 0.5rem;
+      }
+      .comp-attach {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        background: transparent;
+        border: 1px solid var(--glass-border);
+        border-radius: 50%;
+        color: var(--s500);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .comp-attach:hover {
+        color: var(--s900);
+        border-color: var(--glass-border-hover);
+        background: rgba(255, 255, 255, 0.03);
+      }
+      .comp-attach svg {
+        width: 14px;
+        height: 14px;
+      }
+      .file-chips {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+      .file-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px 2px 6px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--glass-border);
+        border-radius: 100px;
+        font-size: 0.6875rem;
+        color: var(--s600);
+        font-weight: 460;
+      }
+      .file-chip svg {
+        width: 11px;
+        height: 11px;
+        color: var(--s400);
+      }
+      .file-chip-x {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: transparent;
+        border: none;
+        color: var(--s400);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        transition: all 0.12s;
+      }
+      .file-chip-x:hover {
+        color: var(--s950);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      /* ═══ BATTLE ═══ */
+      .battle {
+        flex: 1;
+        display: none;
+        flex-direction: column;
+        min-height: 0;
+        gap: 0.5rem;
+      }
+      .battle.on {
+        display: flex;
+      }
+
+      /* Progress rail */
+      .rail {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.625rem 0;
+        flex-shrink: 0;
+      }
+      .rd {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--s200);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .rd.done {
+        background: var(--p500);
+        box-shadow: 0 0 6px rgba(249, 115, 22, 0.3);
+      }
+      .rd.now {
+        background: var(--p400);
+        box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.12);
+        animation: dp 2s ease-in-out infinite;
+      }
+      .rd.fut {
+        background: var(--s150);
+      }
+      @keyframes dp {
+        0%,
+        100% {
+          box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.12);
+        }
+        50% {
+          box-shadow: 0 0 0 8px rgba(249, 115, 22, 0.04);
+        }
+      }
+      .rl {
+        font-size: 0.6875rem;
+        color: var(--s400);
+        font-weight: 460;
+        letter-spacing: -0.01em;
+        margin-left: 0.375rem;
+      }
+
+      /* Panels */
+      .panels {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        flex: 1;
+        min-height: 0;
+      }
+      .panel {
+        border: 1px solid var(--glass-border);
+        border-radius: var(--r);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--s50);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .panel:hover {
+        border-color: var(--glass-border-hover);
+      }
+      .panel.glow {
+        border-color: rgba(249, 115, 22, 0.25);
+      }
+      .panel.tie-glow {
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+
+      .ph {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.625rem 1rem;
+        border-bottom: 1px solid var(--glass-border);
+        flex-shrink: 0;
+      }
+      .mt {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.75rem;
+        font-weight: 560;
+        color: var(--s500);
+        letter-spacing: -0.01em;
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--s300);
+        transition: all 0.25s;
+      }
+      .dot.live {
+        background: var(--teal);
+        box-shadow: 0 0 8px rgba(52, 212, 180, 0.3);
+        animation: bd 1.2s ease-in-out infinite;
+      }
+      .dot.fin {
+        background: var(--teal);
+        box-shadow: 0 0 6px rgba(52, 212, 180, 0.2);
+      }
+      @keyframes bd {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      .pb {
+        flex: 1;
+        padding: 1rem 1.125rem;
+        overflow-y: auto;
+        font-size: 0.875rem;
+        line-height: 1.75;
+        scroll-behavior: smooth;
+        color: var(--s800);
+      }
+      .pb::-webkit-scrollbar {
+        width: 3px;
+      }
+      .pb::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .pb::-webkit-scrollbar-thumb {
+        background: var(--s200);
+        border-radius: 2px;
+      }
+      .pb strong {
+        color: var(--s950);
+        font-weight: 620;
+      }
+
+      .rv {
+        padding: 0;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        text-align: center;
+        font-size: 0.8125rem;
+        font-weight: 620;
+        letter-spacing: -0.01em;
+        border-top: 1px solid var(--glass-border);
+        transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .rv.show {
+        max-height: 44px;
+        padding: 0.5rem 1rem;
+        opacity: 1;
+      }
+      .rv.won {
+        background: var(--p500);
+        color: #fff;
+        border-color: rgba(249, 115, 22, 0.4);
+      }
+      .rv.tied {
+        background: var(--s200);
+        color: var(--s900);
+      }
+
+      /* User bubble */
+      .um {
+        background: var(--s150);
+        border-radius: 20px 20px 6px 20px;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1rem;
+        max-width: 78%;
+        float: right;
+        clear: both;
+        font-size: 0.8125rem;
+        color: var(--s700);
+      }
+
+      /* Thinking */
+      .thk {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.875rem;
+        padding: 0;
+        transition: all 0.4s;
+      }
+      .thk-ico {
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
+        color: var(--s500);
+        animation: tp 1.5s ease-in-out infinite;
+      }
+      @keyframes tp {
+        0%,
+        100% {
+          opacity: 0.4;
+          transform: rotate(0deg);
+        }
+        50% {
+          opacity: 1;
+          transform: rotate(180deg);
+        }
+      }
+      .thk-lbl {
+        font-size: 0.8125rem;
+        font-weight: 480;
+        color: var(--s500);
+      }
+      .thk-prev {
+        font-size: 0.8125rem;
+        color: var(--s400);
+        margin-left: 0.125rem;
+      }
+      .thk.done {
+        max-height: 0;
+        opacity: 0;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      /* Streaming cursor */
+      .cur {
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        background: var(--p400);
+        margin-left: 2px;
+        vertical-align: text-bottom;
+        animation: cc 0.65s step-end infinite;
+        border-radius: 1px;
+      }
+      @keyframes cc {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* Skeleton */
+      .sk {
+        margin-top: 0.5rem;
+      }
+      .skl {
+        height: 11px;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, var(--s100) 25%, var(--s150) 50%, var(--s100) 75%);
+        background-size: 200% 100%;
+        animation: sh 1.5s ease-in-out infinite;
+      }
+      .skl:nth-child(1) {
+        width: 90%;
+      }
+      .skl:nth-child(2) {
+        width: 72%;
+      }
+      .skl:nth-child(3) {
+        width: 82%;
+      }
+      @keyframes sh {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      /* ═══ ACTION BAR ═══ */
+      .abar {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 0.25rem 0;
+        gap: 0.5rem;
+      }
+
+      .votes {
+        display: flex;
+        gap: 0.5rem;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        pointer-events: none;
+      }
+      .votes.on {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+      .vb {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 1.25rem;
+        border: 1px solid var(--glass-border);
+        border-radius: 100px;
+        background: var(--s50);
+        color: var(--s700);
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 520;
+        cursor: pointer;
+        transition: all 0.2s;
+        letter-spacing: -0.01em;
+      }
+      .vb:hover {
+        background: var(--s100);
+        border-color: var(--glass-border-hover);
+        color: var(--s950);
+        transform: translateY(-1px);
+      }
+      .vb.l:hover {
+        border-color: rgba(108, 180, 252, 0.25);
+        color: var(--blue);
+      }
+      .vb.r:hover {
+        border-color: rgba(180, 156, 250, 0.25);
+        color: var(--violet);
+      }
+      .vb.pk {
+        background: var(--p500);
+        border-color: var(--p500);
+        color: #fff;
+      }
+
+      /* Validation */
+      .vr {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        width: 100%;
+      }
+      .vr.on {
+        display: flex;
+      }
+      .vspin {
+        width: 18px;
+        height: 18px;
+        animation: sp 1s linear infinite;
+        flex-shrink: 0;
+      }
+      @keyframes sp {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .vtxt {
+        font-size: 0.8125rem;
+        color: var(--s500);
+      }
+      .vtxt b {
+        color: var(--teal);
+        font-weight: 600;
+      }
+      .vtrk {
+        width: 100px;
+        height: 2px;
+        background: var(--s150);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .vfl {
+        height: 100%;
+        background: var(--teal);
+        border-radius: 2px;
+        width: 0%;
+        transition: width 0.3s;
+        box-shadow: 0 0 8px rgba(52, 212, 180, 0.3);
+      }
+
+      /* Nudge */
+      .nu {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 0.625rem;
+        width: 100%;
+      }
+      .nu.on {
+        display: flex;
+      }
+      .nb {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 1.375rem;
+        border-radius: 100px;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 560;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        letter-spacing: -0.01em;
+      }
+      .nb.go {
+        background: var(--p500);
+        color: #fff;
+      }
+      .nb.go:hover {
+        background: var(--p600);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 24px rgba(249, 115, 22, 0.2);
+      }
+      .nb.ag {
+        background: var(--glass-bg);
+        color: var(--s600);
+        border: 1px solid var(--glass-border);
+      }
+      .nb.ag:hover {
+        color: var(--s950);
+        border-color: var(--glass-border-hover);
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .skb {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.6875rem;
+        color: var(--p400);
+        font-weight: 580;
+        padding: 3px 10px;
+        background: rgba(249, 115, 22, 0.06);
+        border: 1px solid rgba(249, 115, 22, 0.1);
+        border-radius: 100px;
+        animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: scale(0.7);
+        }
+      }
+
+      /* ═══ BOTTOM COMPOSER ═══ */
+      .btm {
+        flex-shrink: 0;
+        padding: 0.375rem 0 0.5rem;
+        display: none;
+      }
+      .btm.on {
+        display: block;
+      }
+      .btm .comp {
+        max-width: 100%;
+      }
+
+      /* Footer */
+      .ft {
+        flex-shrink: 0;
+        border-top: 1px solid var(--glass-border);
+        padding: 0.5rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        font-size: 0.6875rem;
+        color: var(--s300);
+      }
+      .ft a {
+        color: var(--s400);
+        text-decoration: none;
+        transition: color 0.12s;
+      }
+      .ft a:hover {
+        color: var(--s950);
+      }
+
+      @media (max-width: 768px) {
+        .panels {
+          grid-template-columns: 1fr;
+        }
+        .exr {
+          flex-direction: column;
+        }
+        .hero h1 {
+          font-size: 2rem;
+        }
+        .votes {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .nav,
+        .shell {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+      }
+
+      /* ═══ PROTO ═══ */
+      .ctrl {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        display: flex;
+        gap: 3px;
+        z-index: 999;
+        background: var(--glass-bg);
+        padding: 6px;
+        border-radius: var(--r-sm);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+      }
+      .c {
+        padding: 4px 8px;
+        border: 1px solid var(--glass-border);
+        border-radius: var(--r-xs);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--s700);
+        font-family: inherit;
+        font-size: 0.625rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .c:hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--s950);
+      }
+      .c.on {
+        background: var(--p500);
+        color: #fff;
+        border-color: var(--p500);
+        box-shadow: 0 0 12px rgba(249, 115, 22, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <a href="#" class="brand">
+        <svg viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="7" fill="#f97316" />
+          <path
+            d="M8 22V10h4.5c2.8 0 4.5 1.4 4.5 3.5 0 1.3-.7 2.3-1.8 2.8 1.4.4 2.3 1.6 2.3 3.1 0 2.3-1.8 3.6-4.8 3.6H8z"
+            fill="#fff"
+            fill-opacity=".92"
+          />
+        </svg>
+        BioArena
+      </a>
+      <div class="nl"><a href="#" class="on">Battle</a><a href="#">Leaderboard</a></div>
+      <div class="nsep"></div>
+      <div class="na">
+        <button class="bt bt-p">Login</button>
+        <button class="bt bt-g">
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <div class="shell">
+      <section class="land" id="land">
+        <div class="hero">
+          <h1>Which AI do <em>you</em> trust?</h1>
+          <p>Ask any biomedical question. Two anonymous models answer. You pick the winner.</p>
+        </div>
+        <div class="exs">
+          <div class="exs-lbl">Try an example</div>
+          <div class="exr">
+            <button class="exc" onclick="pickEx(this)">
+              Does hypoglycaemia increase the risk of cardiovascular events?
+            </button>
+            <button class="exc" onclick="pickEx(this)">
+              Why do broken bones heal but cartilage almost never does?
+            </button>
+            <button class="exc" onclick="pickEx(this)">
+              What is the role of BRCA1 in breast cancer?
+            </button>
+          </div>
+        </div>
+        <div class="comp">
+          <div class="comp-box">
+            <textarea
+              class="ci"
+              id="inp"
+              placeholder="Ask anything biomedical..."
+              rows="1"
+              oninput="oi()"
+              onkeydown="ok(event)"
+            ></textarea>
+            <button class="cs" id="sb" onclick="go()">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+            <div class="comp-toolbar">
+              <div class="file-chips" id="fileChips"></div>
+              <button class="comp-attach" onclick="attachFile()" title="Attach file">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
+                  />
+                </svg>
+              </button>
+              <input
+                type="file"
+                id="fileInput"
+                hidden
+                multiple
+                accept=".pdf,.csv,.txt,.png,.jpg,.jpeg,.docx"
+                onchange="onFileSelect(event)"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="battle" id="battle">
+        <div class="rail">
+          <span class="rd now" id="d0"></span><span class="rd fut" id="d1"></span
+          ><span class="rd fut" id="d2"></span><span class="rd fut" id="d3"></span
+          ><span class="rd fut" id="d4"></span>
+          <span class="rl" id="rl">Battle 1 of 5</span>
+        </div>
+        <div class="panels">
+          <div class="panel" id="pA">
+            <div class="ph">
+              <span class="mt"><span class="dot" id="dA"></span>Model A</span>
+            </div>
+            <div class="pb" id="bA"></div>
+            <div class="rv" id="rA"></div>
+          </div>
+          <div class="panel" id="pB">
+            <div class="ph">
+              <span class="mt"><span class="dot" id="dB"></span>Model B</span>
+            </div>
+            <div class="pb" id="bB"></div>
+            <div class="rv" id="rB"></div>
+          </div>
+        </div>
+        <div class="abar">
+          <div class="votes" id="votes">
+            <button class="vb l" onclick="vote('l')">&#x1F448; A is better</button>
+            <button class="vb" onclick="vote('tie')">Tie</button>
+            <button class="vb r" onclick="vote('r')">B is better &#x1F449;</button>
+          </div>
+          <div class="vr" id="valRow">
+            <svg class="vspin" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="var(--s200)" stroke-width="2.5" />
+              <path
+                d="M22 12a10 10 0 0 0-10-10"
+                stroke="var(--teal)"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span class="vtxt">Validating <b>biomedical relevance</b></span>
+            <div class="vtrk"><div class="vfl" id="vf"></div></div>
+          </div>
+          <div class="nu" id="nudge">
+            <span class="skb" id="strk"></span>
+            <button class="nb go" id="goBtn" onclick="nextRound()">Next battle &rarr;</button>
+            <button class="nb ag" onclick="samePrompt()">Same prompt</button>
+          </div>
+        </div>
+        <div class="btm" id="btm">
+          <div class="comp">
+            <div class="comp-box">
+              <textarea
+                class="ci"
+                id="inp2"
+                placeholder="Ask a follow-up..."
+                rows="1"
+                oninput="oi2()"
+                onkeydown="ok2(event)"
+              ></textarea>
+              <button class="cs" id="sb2">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="ft">
+          <a href="#">Terms</a>&middot;<a href="#">Contact</a>&middot;<a href="#">Report Issue</a>
+        </div>
+      </section>
+    </div>
+
+    <div class="ctrl">
+      <button class="c on" onclick="S('landing')">1 Land</button>
+      <button class="c" onclick="S('stream')">2 Think+Stream</button>
+      <button class="c" onclick="S('vote')">3 Vote</button>
+      <button class="c" onclick="S('val')">4 Validate</button>
+      <button class="c" onclick="S('reveal')">5 Reveal</button>
+      <button class="c" onclick="S('next')">6 Next</button>
+    </div>
+
+    <script>
+      const R = {
+        a: [
+          `Hypoglycaemia, particularly in diabetes management, has been associated with an increased risk of cardiovascular events through several mechanisms:`,
+          `\n\n**Sympathoadrenal Activation** — During hypoglycaemic episodes, the body releases catecholamines (epinephrine and norepinephrine), increasing heart rate, cardiac workload, and myocardial oxygen demand. This can trigger arrhythmias.`,
+          `\n\n**Endothelial Dysfunction** — Recurrent hypoglycaemia impairs endothelial function, promoting vasoconstriction and reducing the protective role of nitric oxide.`,
+          `\n\n**Inflammatory & Prothrombotic Effects** — Episodes activate inflammatory pathways (elevated CRP, IL-6) and increase platelet aggregation, creating a prothrombotic state.`,
+          `\n\n**Clinical Evidence** — The ACCORD, ADVANCE, and VADT trials demonstrated that intensive glucose-lowering was associated with higher cardiovascular mortality in long-standing Type 2 diabetes.`,
+          `\n\nIn summary — hypoglycaemia does increase cardiovascular risk through both acute hemodynamic stress and chronic vascular damage.`,
+        ],
+        b: [
+          `Yes, hypoglycaemia is increasingly recognised as an independent cardiovascular risk factor:`,
+          `\n\n## Acute Mechanisms\n\nLow blood glucose triggers a counter-regulatory hormone surge. Adrenaline and cortisol release leads to tachycardia, raised blood pressure, and increased cardiac output — provoking myocardial ischaemia.`,
+          `\n\n## QT Prolongation\n\nHypoglycaemia prolongs the cardiac QT interval, predisposing to ventricular arrhythmias including torsades de pointes.`,
+          `\n\n## Chronic Vascular Effects\n\nRepeated episodes contribute to:\n- Increased arterial stiffness\n- Elevated von Willebrand factor\n- Impaired fibrinolysis`,
+          `\n\n## Key Trials\n\nThe **ACCORD trial** (2008) was stopped early — the intensive arm showed 22% higher mortality linked to severe hypoglycaemia.`,
+          `\n\nThe relationship between glycaemic control and cardiovascular outcomes remains critical in personalising treatment.`,
+        ],
+      };
+      const TH = [
+        'Analyzing cardiovascular risk factors...',
+        'Reviewing ACCORD trial data...',
+        'Evaluating endothelial pathways...',
+        'Cross-referencing mechanisms...',
+        'Synthesizing meta-analyses...',
+      ];
+      const EX = [
+        'Does hypoglycaemia increase the risk of cardiovascular events?',
+        'Why do broken bones heal but cartilage almost never does?',
+        'What is the role of BRCA1 in breast cancer?',
+        'How does the gut microbiome influence neurological disorders?',
+        'What mechanisms drive antibiotic resistance in MRSA?',
+        'Can mRNA vaccine technology treat cancer?',
+        'What is the blood-brain barrier?',
+      ];
+      const MD = [
+        ['GPT-4o', 'Claude Sonnet 4'],
+        ['Gemini 2.5 Pro', 'Llama 4 Scout'],
+        ['Claude Opus 4', 'Mistral Large'],
+        ['GPT-4.5', 'Gemini 2.5 Flash'],
+        ['DeepSeek-V3', 'Qwen3-235B'],
+      ];
+
+      let rnd = 0,
+        maxR = 5,
+        cur = 'landing',
+        tI,
+        sA,
+        sB,
+        lastVote = null;
+      let ti = 0,
+        ci = 0;
+
+      function typeLoop() {
+        const el = $('inp');
+        if (cur !== 'landing') return;
+        const p = EX[ti % EX.length];
+        el.value = '';
+        ci = 0;
+        tI = setInterval(() => {
+          if (ci < p.length) {
+            el.value = p.substring(0, ++ci);
+            ar(el);
+          } else {
+            clearInterval(tI);
+            setTimeout(() => {
+              el.value = '';
+              ar(el);
+              ti++;
+              if (cur === 'landing') setTimeout(typeLoop, 600);
+            }, 2000);
+          }
+        }, 38);
+      }
+      function stopT() {
+        clearInterval(tI);
+      }
+      setTimeout(typeLoop, 1200);
+      $('inp').addEventListener('focus', () => {
+        stopT();
+        if (cur === 'landing') $('inp').value = '';
+      });
+
+      function $(id) {
+        return document.getElementById(id);
+      }
+      function ar(e) {
+        e.style.height = 'auto';
+        e.style.height = Math.min(e.scrollHeight, 140) + 'px';
+      }
+      function oi() {
+        $('sb').classList.toggle('hot', !!$('inp').value.trim());
+        ar($('inp'));
+      }
+      function ok(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          if ($('inp').value.trim()) go();
+        }
+      }
+      function oi2() {
+        $('sb2').classList.toggle('hot', !!$('inp2').value.trim());
+        ar($('inp2'));
+      }
+      function ok2(e) {
+        if (e.key === 'Enter' && !e.shiftKey) e.preventDefault();
+      }
+      function pickEx(el) {
+        stopT();
+        $('inp').value = el.textContent;
+        oi();
+        $('inp').focus();
+      }
+      function go() {
+        S('stream');
+      }
+
+      function S(s) {
+        cur = s;
+        document.querySelectorAll('.c').forEach((b) => b.classList.remove('on'));
+        ({ landing: 0, stream: 1, vote: 2, val: 3, reveal: 4, next: 5 })[s] !== undefined &&
+          document
+            .querySelectorAll('.c')
+            [
+              { landing: 0, stream: 1, vote: 2, val: 3, reveal: 4, next: 5 }[s]
+            ]?.classList.add('on');
+        clearInterval(sA);
+        clearInterval(sB);
+        $('votes').classList.remove('on');
+        $('valRow').classList.remove('on');
+        $('nudge').classList.remove('on');
+        $('rA').classList.remove('show', 'won', 'tied');
+        $('rB').classList.remove('show', 'won', 'tied');
+        $('pA').classList.remove('glow', 'tie-glow');
+        $('pB').classList.remove('glow', 'tie-glow');
+        document.querySelectorAll('.vb').forEach((b) => b.classList.remove('pk'));
+
+        switch (s) {
+          case 'landing':
+            $('land').classList.remove('gone');
+            $('battle').classList.remove('on');
+            $('bA').innerHTML = '';
+            $('bB').innerHTML = '';
+            $('btm').classList.remove('on');
+            $('dA').className = 'dot';
+            $('dB').className = 'dot';
+            $('inp').value = '';
+            $('sb').classList.remove('hot');
+            rnd = 0;
+            upR();
+            setTimeout(typeLoop, 800);
+            break;
+
+          case 'stream':
+            stopT();
+            $('land').classList.add('gone');
+            $('battle').classList.add('on');
+            $('btm').classList.add('on');
+            const q = $('inp').value || EX[0];
+            $('dA').className = 'dot live';
+            $('dB').className = 'dot live';
+            upR();
+            showThink('bA', q, () => strm('a', $('bA'), $('dA'), q), 1600);
+            showThink('bB', q, () => strm('b', $('bB'), $('dB'), q), 2400);
+            break;
+
+          case 'vote':
+            $('land').classList.add('gone');
+            $('battle').classList.add('on');
+            $('btm').classList.add('on');
+            fill();
+            $('dA').className = 'dot fin';
+            $('dB').className = 'dot fin';
+            $('votes').classList.add('on');
+            upR();
+            break;
+
+          case 'val':
+            $('land').classList.add('gone');
+            $('battle').classList.add('on');
+            $('btm').classList.remove('on');
+            fill();
+            $('dA').className = 'dot fin';
+            $('dB').className = 'dot fin';
+            $('valRow').classList.add('on');
+            runV();
+            upR();
+            break;
+
+          case 'reveal':
+            $('land').classList.add('gone');
+            $('battle').classList.add('on');
+            $('btm').classList.remove('on');
+            fill();
+            $('dA').className = 'dot fin';
+            $('dB').className = 'dot fin';
+            const m = MD[rnd % MD.length];
+            $('rA').classList.add('show');
+            $('rB').classList.add('show');
+            if (lastVote === 'l') {
+              $('rA').textContent = m[0] + ' \u2014 Winner';
+              $('rA').classList.add('won');
+              $('pA').classList.add('glow');
+              $('rB').textContent = m[1];
+            } else if (lastVote === 'r') {
+              $('rB').textContent = m[1] + ' \u2014 Winner';
+              $('rB').classList.add('won');
+              $('pB').classList.add('glow');
+              $('rA').textContent = m[0];
+            } else {
+              $('rA').textContent = m[0] + ' \u2014 Tie';
+              $('rA').classList.add('tied');
+              $('rB').textContent = m[1] + ' \u2014 Tie';
+              $('rB').classList.add('tied');
+              $('pA').classList.add('tie-glow');
+              $('pB').classList.add('tie-glow');
+            }
+            $('nudge').classList.add('on');
+            rnd++;
+            $('strk').textContent =
+              rnd >= maxR ? '\u2728 Quest complete!' : '\uD83D\uDD25 ' + rnd + '/' + maxR;
+            $('goBtn').textContent = rnd >= maxR ? 'New quest \u2192' : 'Next battle \u2192';
+            upR();
+            break;
+
+          case 'next':
+            S('reveal');
+            $('btm').classList.add('on');
+            break;
+        }
+      }
+
+      function showThink(id, q, cb, dur) {
+        const el = $(id);
+        el.innerHTML = `<div class="um">${esc(q)}</div><div style="clear:both"></div>`;
+        const t = document.createElement('div');
+        t.className = 'thk';
+        t.innerHTML = `<svg class="thk-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m14.5-6.5L16 7M8 16l-1.5 1.5M18 18l-1.5-1.5M7 7 5.5 5.5"/><circle cx="12" cy="12" r="3"/></svg><span class="thk-lbl">Generating response...</span><span class="thk-prev"></span>`;
+        el.appendChild(t);
+        const pv = t.querySelector('.thk-prev');
+        let si = 0;
+        const iv = setInterval(() => {
+          pv.textContent = TH[si++ % TH.length];
+        }, 600);
+        setTimeout(() => {
+          clearInterval(iv);
+          t.classList.add('done');
+          setTimeout(cb, 150);
+        }, dur);
+      }
+
+      function strm(m, el, dot, q) {
+        const ch = R[m];
+        let ci2 = 0,
+          chi = 0;
+        const r = document.createElement('div');
+        r.className = 'resp';
+        el.appendChild(r);
+        const iv = setInterval(() => {
+          if (ci2 >= ch.length) {
+            clearInterval(iv);
+            dot.className = 'dot fin';
+            const c = r.querySelector('.cur');
+            if (c) c.remove();
+            chk();
+            return;
+          }
+          const ck = ch[ci2];
+          if (chi < ck.length) {
+            const c = r.querySelector('.cur');
+            if (c) c.remove();
+            const n = Math.floor(Math.random() * 3) + 1;
+            r.innerHTML =
+              fmt(r.textContent + ck.substring(chi, chi + n)) + '<span class="cur"></span>';
+            chi += n;
+            el.scrollTop = el.scrollHeight;
+          } else {
+            ci2++;
+            chi = 0;
+          }
+        }, 20);
+        if (m === 'a') sA = iv;
+        else sB = iv;
+      }
+
+      function chk() {
+        if ($('dA').classList.contains('fin') && $('dB').classList.contains('fin'))
+          setTimeout(() => $('votes').classList.add('on'), 350);
+      }
+
+      function fill() {
+        const q = $('inp').value || EX[0];
+        $('bA').innerHTML =
+          `<div class="um">${esc(q)}</div><div style="clear:both"></div><div class="resp">${fmt(R.a.join(''))}</div>`;
+        $('bB').innerHTML =
+          `<div class="um">${esc(q)}</div><div style="clear:both"></div><div class="resp">${fmt(R.b.join(''))}</div>`;
+      }
+
+      function vote(c) {
+        lastVote = c;
+        document.querySelectorAll('.vb').forEach((b) => b.classList.remove('pk'));
+        event.target.closest('.vb').classList.add('pk');
+        setTimeout(() => {
+          $('votes').classList.remove('on');
+          S('val');
+        }, 500);
+      }
+
+      function runV() {
+        const f = $('vf');
+        let p = 0;
+        const iv = setInterval(() => {
+          p += Math.random() * 18 + 6;
+          if (p >= 100) {
+            p = 100;
+            f.style.width = '100%';
+            clearInterval(iv);
+            setTimeout(() => {
+              $('valRow').classList.remove('on');
+              S('reveal');
+            }, 400);
+          } else f.style.width = p + '%';
+        }, 250);
+      }
+
+      function nextRound() {
+        if (rnd >= maxR) {
+          rnd = 0;
+          S('landing');
+          return;
+        }
+        $('inp').value = '';
+        S('stream');
+      }
+      function samePrompt() {
+        S('stream');
+      }
+
+      function upR() {
+        for (let i = 0; i < maxR; i++) {
+          const d = $('d' + i);
+          if (!d) continue;
+          d.className = i < rnd ? 'rd done' : i === rnd ? 'rd now' : 'rd fut';
+        }
+        $('rl').textContent =
+          rnd >= maxR ? 'Quest complete!' : 'Battle ' + Math.min(rnd + 1, maxR) + ' of ' + maxR;
+      }
+
+      function attachFile() {
+        $('fileInput').click();
+      }
+      function onFileSelect(e) {
+        const chips = $('fileChips');
+        Array.from(e.target.files).forEach((f) => {
+          const chip = document.createElement('span');
+          chip.className = 'file-chip';
+          const ext = f.name.split('.').pop().toUpperCase();
+          const icon = ext === 'PDF' ? 'doc' : ext.match(/PNG|JPG|JPEG/) ? 'img' : 'file';
+          chip.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>${f.name}<button class="file-chip-x" onclick="this.parentElement.remove()">&times;</button>`;
+          chips.appendChild(chip);
+        });
+        e.target.value = '';
+      }
+
+      function esc(t) {
+        const d = document.createElement('div');
+        d.textContent = t;
+        return d.innerHTML;
+      }
+      function fmt(t) {
+        return t
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(
+            /## (.*?)(\n|$)/g,
+            '<h4 style="font-size:.875rem;font-weight:650;margin:.875rem 0 .25rem;letter-spacing:-.01em;color:var(--s900)">$1</h4>',
+          )
+          .replace(
+            /\n- (.*?)(?=\n|$)/g,
+            '<br><span style="color:var(--s400);margin-right:.375rem">&bull;</span>$1',
+          )
+          .replace(/\n\n/g, '</p><p style="margin-bottom:.625rem">')
+          .replace(/\n/g, '<br>');
+      }
+    </script>
+  </body>
+</html>
