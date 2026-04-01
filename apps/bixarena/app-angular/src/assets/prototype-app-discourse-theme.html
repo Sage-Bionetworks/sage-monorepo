@@ -1,0 +1,2788 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BioArena — Prototype</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+      :root {
+        --p400: #fb923c;
+        --p500: #f97316;
+        --p600: #ea580c;
+        --teal: #34d4b4;
+        --blue: #6cb4fc;
+        --violet: #b49cfa;
+        --sans: 'DM Sans', system-ui, sans-serif;
+        --serif: 'Playfair Display', 'Georgia', serif;
+        --nav-h: 56px;
+        --max-w: 1280px;
+        --r: 16px;
+        --r-sm: 12px;
+        --r-xs: 8px;
+        --blur: 42px;
+      }
+      /* Light theme (Discourse exact tokens) */
+      html:not(.dark) {
+        --bg: #fdfcfb;
+        --bg-up: #f4f0eb;
+        --bg-card: rgba(225, 229, 230, 0.5);
+        --bg-card-s: #fffefb;
+        --bg-card-h: rgba(189, 196, 198, 0.25);
+        --fg: #24252d;
+        --fg-body: #3a3a40;
+        --fg2: #7c746f;
+        --fg3: #838b8e;
+        --fg4: #b3aca5;
+        --brd: rgba(134, 128, 123, 0.15);
+        --brd-h: rgba(134, 128, 123, 0.25);
+        --brd-s: rgba(134, 128, 123, 0.12);
+        --shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        --nav-bg: rgba(253, 252, 251, 0.8);
+        --grain-opacity: 0.08;
+      }
+      /* Dark theme (Discourse inverted) */
+      html.dark {
+        --bg: #1b1818;
+        --bg-up: #221f1d;
+        --bg-card: rgba(45, 41, 38, 0.55);
+        --bg-card-s: #2a2624;
+        --bg-card-h: rgba(60, 55, 50, 0.55);
+        --fg: #fdfcfb;
+        --fg-body: #d8d2cc;
+        --fg2: #b3aca5;
+        --fg3: #918a83;
+        --fg4: #6b6560;
+        --brd: rgba(189, 196, 198, 0.1);
+        --brd-h: rgba(189, 196, 198, 0.16);
+        --brd-s: rgba(134, 128, 123, 0.25);
+        --shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+        --nav-bg: rgba(27, 24, 24, 0.8);
+        --grain-opacity: 0.15;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        font-size: 15px;
+      }
+      body {
+        font-family: var(--sans);
+        background: var(--bg);
+        color: var(--fg);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        min-height: 100dvh;
+        overflow-x: hidden;
+      }
+      body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        opacity: var(--grain-opacity);
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+      }
+      .nav,
+      .shell,
+      .ctrl {
+        position: relative;
+        z-index: 2;
+      }
+
+      /* NAV */
+      .nav {
+        display: flex;
+        align-items: center;
+        padding: 0 2rem;
+        height: var(--nav-h);
+        border-bottom: 1px solid var(--brd);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: var(--nav-bg);
+        backdrop-filter: blur(20px) saturate(1.15);
+        -webkit-backdrop-filter: blur(20px) saturate(1.15);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: var(--fg);
+        font-size: 14px;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+      }
+      .brand svg {
+        width: 28px;
+        height: 28px;
+      }
+      .nl {
+        display: flex;
+        gap: 2px;
+        margin-left: auto;
+      }
+      .nl a {
+        padding: 6px 12px;
+        text-decoration: none;
+        color: var(--fg3);
+        font-size: 14px;
+        font-weight: 440;
+        letter-spacing: -0.01em;
+        border-radius: var(--r-xs);
+        transition: all 0.15s;
+        cursor: pointer;
+      }
+      .nl a:hover {
+        color: var(--fg);
+        background: rgba(253, 252, 251, 0.04);
+      }
+      .nl a.on {
+        color: var(--fg);
+        font-weight: 560;
+      }
+      .nsep {
+        width: 1px;
+        height: 18px;
+        background: var(--brd-s);
+        margin: 0 0.75rem;
+      }
+      .na {
+        display: flex;
+        gap: 6px;
+      }
+      .bt {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 30px;
+        padding: 0 14px;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 540;
+        letter-spacing: -0.01em;
+        border-radius: var(--r-xs);
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .bt-p {
+        background: var(--p500);
+        color: #fff;
+      }
+      .bt-p:hover {
+        background: var(--p600);
+      }
+      .bt-g {
+        background: transparent;
+        color: var(--fg3);
+        width: 30px;
+        padding: 0;
+      }
+      .bt-g:hover {
+        color: var(--fg);
+        background: rgba(253, 252, 251, 0.04);
+      }
+
+      /* SHELL */
+      .shell {
+        width: 100%;
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        flex-direction: column;
+        height: calc(100dvh - var(--nav-h));
+      }
+
+      /* LANDING */
+      .land {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        padding-bottom: 4rem;
+      }
+      .land.gone {
+        display: none;
+      }
+      .hero {
+        text-align: center;
+      }
+      .hero h1 {
+        font-family: var(--serif);
+        font-size: 48px;
+        font-weight: 400;
+        letter-spacing: -0.96px;
+        line-height: 1.08;
+        margin-bottom: 0.75rem;
+        color: var(--fg);
+      }
+      .hero h1 em {
+        font-style: italic;
+        color: var(--p400);
+      }
+      .hero p {
+        font-size: 16px;
+        color: var(--fg2);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.55;
+      }
+
+      /* COMPOSER */
+      .comp {
+        width: 100%;
+        max-width: 640px;
+      }
+      .comp-card {
+        background: var(--bg-card);
+        border: 1px solid var(--brd);
+        border-radius: var(--r);
+        overflow: hidden;
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        box-shadow: var(--shadow);
+        transition: all 0.25s;
+      }
+      .comp-card:focus-within {
+        border-color: var(--brd-h);
+        box-shadow:
+          0 4px 32px rgba(0, 0, 0, 0.2),
+          0 0 0 3px rgba(249, 115, 22, 0.04);
+      }
+      .ci {
+        width: 100%;
+        min-height: 56px;
+        max-height: 140px;
+        padding: 1rem 1.125rem 0.5rem;
+        background: transparent;
+        border: none;
+        color: var(--fg);
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 1.5;
+        resize: none;
+        outline: none;
+      }
+      .ci::placeholder {
+        color: var(--fg4);
+      }
+      .comp-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 12px 10px;
+      }
+      .comp-tools {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .cbtn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        background: var(--fg3);
+        border: none;
+        border-radius: 6px;
+        color: var(--fg);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .cbtn:hover {
+        background: var(--fg4);
+      }
+      .cbtn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .cpill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0 8px;
+        height: 28px;
+        background: transparent;
+        border: none;
+        border-radius: 200px;
+        color: var(--fg3);
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .cpill:hover {
+        color: var(--fg);
+        background: rgba(253, 252, 251, 0.04);
+      }
+      .cpill svg {
+        width: 16px;
+        height: 16px;
+      }
+      .csend {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        background: var(--fg3);
+        color: var(--fg);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        opacity: 0.5;
+      }
+      .csend.hot {
+        background: var(--fg);
+        color: var(--bg);
+        opacity: 1;
+      }
+      .csend:hover.hot {
+        transform: scale(1.06);
+      }
+      .csend svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* File chips */
+      .fchips {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+        padding: 0 12px 6px;
+      }
+      .fchip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px 2px 6px;
+        background: rgba(253, 252, 251, 0.04);
+        border: 1px solid var(--brd);
+        border-radius: 100px;
+        font-size: 11px;
+        color: var(--fg2);
+      }
+      .fchip svg {
+        width: 11px;
+        height: 11px;
+        color: var(--fg3);
+      }
+      .fchip-x {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: transparent;
+        border: none;
+        color: var(--fg4);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        transition: all 0.12s;
+      }
+      .fchip-x:hover {
+        color: var(--fg);
+        background: rgba(253, 252, 251, 0.06);
+      }
+
+      /* ═══ DNA HELIX PROMPTS ═══ */
+      .dna-section {
+        width: 100%;
+        max-width: 640px;
+        position: relative;
+      }
+      .dna-label {
+        text-align: center;
+        font-size: 11px;
+        color: var(--fg4);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+      }
+
+      .dna-wrap {
+        position: relative;
+        height: 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Helix strands */
+      .helix {
+        position: relative;
+        width: 400px;
+        height: 100px;
+      }
+      .strand {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      .strand path {
+        fill: none;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        opacity: 0.2;
+      }
+      .strand-front path {
+        stroke: var(--teal);
+      }
+      .strand-back path {
+        stroke: var(--p400);
+      }
+
+      /* Nodes on the helix */
+      .helix-node {
+        position: absolute;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: 2;
+      }
+      .helix-node::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: var(--bg-card);
+        border: 1.5px solid var(--brd);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: all 0.3s;
+      }
+      .helix-node::after {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        border-radius: 50%;
+        background: transparent;
+        transition: all 0.3s;
+      }
+      .helix-node:hover::before {
+        border-color: var(--brd-h);
+        background: var(--bg-card-h);
+      }
+      .helix-node:hover::after {
+        background: rgba(52, 212, 180, 0.06);
+      }
+      .helix-node:hover {
+        transform: scale(1.15);
+      }
+      .helix-node.active::before {
+        border-color: var(--teal);
+        background: rgba(52, 212, 180, 0.1);
+      }
+      .helix-node.active::after {
+        background: rgba(52, 212, 180, 0.08);
+      }
+      .helix-node.active {
+        transform: scale(1.2);
+      }
+
+      .node-icon {
+        position: relative;
+        z-index: 1;
+        width: 16px;
+        height: 16px;
+        color: var(--fg3);
+        transition: color 0.3s;
+      }
+      .helix-node:hover .node-icon {
+        color: var(--fg);
+      }
+      .helix-node.active .node-icon {
+        color: var(--teal);
+      }
+
+      .node-label {
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 9px;
+        color: var(--fg4);
+        font-weight: 500;
+        white-space: nowrap;
+        letter-spacing: 0.02em;
+        transition: color 0.3s;
+        pointer-events: none;
+      }
+      .helix-node:hover .node-label {
+        color: var(--fg3);
+      }
+      .helix-node.active .node-label {
+        color: var(--teal);
+      }
+
+      /* Connecting rungs between nodes */
+      .helix-rung {
+        position: absolute;
+        height: 1px;
+        background: var(--brd);
+        transform-origin: left center;
+        z-index: 1;
+        transition: background 0.3s;
+      }
+
+      /* Pulse animation on active node */
+      @keyframes node-pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(52, 212, 180, 0.15);
+        }
+        50% {
+          box-shadow: 0 0 0 10px rgba(52, 212, 180, 0);
+        }
+      }
+      .helix-node.active {
+        animation: node-pulse 2s ease-in-out infinite;
+      }
+
+      /* Prompt reveal below helix */
+      .dna-reveal {
+        text-align: center;
+        margin-top: 1rem;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .dna-reveal.show {
+        max-height: 80px;
+        opacity: 1;
+      }
+      .dna-prompt {
+        display: inline-block;
+        max-width: 500px;
+        padding: 0.5rem 1rem;
+        background: var(--bg-card);
+        border: 1px solid var(--brd);
+        border-radius: 100px;
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        font-size: 13px;
+        color: var(--fg-body);
+        line-height: 1.5;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: var(--shadow);
+      }
+      .dna-prompt:hover {
+        color: var(--fg);
+        border-color: var(--brd-h);
+      }
+      .dna-hint {
+        font-size: 10px;
+        color: var(--fg4);
+        margin-top: 0.25rem;
+      }
+
+      /* BATTLE */
+      .battle {
+        flex: 1;
+        display: none;
+        flex-direction: column;
+        min-height: 0;
+        gap: 0.5rem;
+      }
+      .battle.on {
+        display: flex;
+      }
+
+      /* Progress rail */
+      .rail {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.625rem 0;
+        flex-shrink: 0;
+      }
+      .rd {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--brd-s);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .rd.done {
+        background: var(--p500);
+        box-shadow: 0 0 6px rgba(249, 115, 22, 0.3);
+      }
+      .rd.now {
+        background: var(--p400);
+        box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.12);
+        animation: dp 2s ease-in-out infinite;
+      }
+      .rd.fut {
+        background: rgba(134, 128, 123, 0.12);
+      }
+      @keyframes dp {
+        0%,
+        100% {
+          box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.12);
+        }
+        50% {
+          box-shadow: 0 0 0 8px rgba(249, 115, 22, 0.04);
+        }
+      }
+      .rl {
+        font-size: 11px;
+        color: var(--fg3);
+        font-weight: 460;
+        letter-spacing: -0.01em;
+        margin-left: 0.375rem;
+      }
+
+      /* Panels */
+      .panels {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        flex: 1;
+        min-height: 0;
+      }
+      .panel {
+        border: 1px solid var(--brd);
+        border-radius: var(--r);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--bg-card-s);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .panel:hover {
+        border-color: var(--brd-h);
+      }
+      .panel.glow {
+        border-color: rgba(249, 115, 22, 0.25);
+      }
+      .panel.tie-glow {
+        border-color: rgba(253, 252, 251, 0.12);
+      }
+
+      .ph {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.625rem 1rem;
+        border-bottom: 1px solid var(--brd);
+        flex-shrink: 0;
+      }
+      .mt {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 12px;
+        font-weight: 560;
+        color: var(--fg3);
+        letter-spacing: -0.01em;
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--fg4);
+        transition: all 0.25s;
+      }
+      .dot.live {
+        background: var(--teal);
+        box-shadow: 0 0 8px rgba(52, 212, 180, 0.3);
+        animation: bd 1.2s ease-in-out infinite;
+      }
+      .dot.fin {
+        background: var(--teal);
+        box-shadow: 0 0 6px rgba(52, 212, 180, 0.2);
+      }
+      @keyframes bd {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      .pb {
+        flex: 1;
+        padding: 1rem 1.125rem;
+        overflow-y: auto;
+        font-size: 14px;
+        line-height: 1.7;
+        scroll-behavior: smooth;
+        color: var(--fg-body);
+      }
+      .pb h4 {
+        font-size: 14px;
+        font-weight: 580;
+        margin: 0.875rem 0 0.125rem;
+        letter-spacing: -0.01em;
+        color: var(--fg);
+      }
+      .pb p {
+        margin-bottom: 0.5rem;
+      }
+      .pb p:last-child {
+        margin-bottom: 0;
+      }
+      .pb::-webkit-scrollbar {
+        width: 3px;
+      }
+      .pb::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .pb::-webkit-scrollbar-thumb {
+        background: var(--brd-s);
+        border-radius: 2px;
+      }
+      .pb strong {
+        color: var(--fg);
+        font-weight: 620;
+      }
+
+      .rv {
+        padding: 0;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 620;
+        letter-spacing: -0.01em;
+        border-top: 1px solid var(--brd);
+        transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        background: rgba(253, 252, 251, 0.02);
+      }
+      .rv.show {
+        max-height: 44px;
+        padding: 0.5rem 1rem;
+        opacity: 1;
+      }
+      .rv.won {
+        background: var(--p500);
+        color: #fff;
+        border-color: rgba(249, 115, 22, 0.4);
+      }
+      .rv.tied {
+        background: var(--brd-s);
+        color: var(--fg);
+      }
+
+      /* User bubble */
+      .um {
+        background: var(--bg-card);
+        border: 1px solid var(--brd);
+        border-radius: 18px 18px 4px 18px;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1rem;
+        max-width: 78%;
+        float: right;
+        clear: both;
+        font-size: 13px;
+        color: var(--fg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+
+      /* Thinking */
+      .thk {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.875rem;
+        transition: all 0.4s;
+      }
+      .thk-ico {
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
+        color: var(--fg3);
+        animation: tp 1.5s ease-in-out infinite;
+      }
+      @keyframes tp {
+        0%,
+        100% {
+          opacity: 0.4;
+          transform: rotate(0deg);
+        }
+        50% {
+          opacity: 1;
+          transform: rotate(180deg);
+        }
+      }
+      .thk-lbl {
+        font-size: 13px;
+        font-weight: 480;
+        color: var(--fg3);
+      }
+      .thk-prev {
+        font-size: 13px;
+        color: var(--fg4);
+        margin-left: 0.125rem;
+      }
+      .thk.done {
+        max-height: 0;
+        opacity: 0;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      /* Streaming cursor */
+      .cur {
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        background: var(--p400);
+        margin-left: 2px;
+        vertical-align: text-bottom;
+        animation: cc 0.65s step-end infinite;
+        border-radius: 1px;
+      }
+      @keyframes cc {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* Skeleton */
+      .skl {
+        height: 11px;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(
+          90deg,
+          var(--bg-up) 25%,
+          var(--bg-card-s) 50%,
+          var(--bg-up) 75%
+        );
+        background-size: 200% 100%;
+        animation: sh 1.5s ease-in-out infinite;
+      }
+      .skl:nth-child(1) {
+        width: 90%;
+      }
+      .skl:nth-child(2) {
+        width: 72%;
+      }
+      .skl:nth-child(3) {
+        width: 82%;
+      }
+      @keyframes sh {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      /* ACTION BAR */
+      .abar {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 0.25rem 0;
+        gap: 0.5rem;
+      }
+
+      .votes {
+        display: flex;
+        gap: 0.5rem;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        pointer-events: none;
+      }
+      .votes.on {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+      .vb {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 1.25rem;
+        border: 1px solid var(--brd);
+        border-radius: 100px;
+        background: var(--bg-card);
+        color: var(--fg2);
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 520;
+        cursor: pointer;
+        transition: all 0.2s;
+        letter-spacing: -0.01em;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+      .vb:hover {
+        background: var(--bg-card-h);
+        border-color: var(--brd-h);
+        color: var(--fg);
+        transform: translateY(-1px);
+      }
+      .vb.l:hover {
+        border-color: rgba(108, 180, 252, 0.2);
+        color: var(--blue);
+      }
+      .vb.r:hover {
+        border-color: rgba(180, 156, 250, 0.2);
+        color: var(--violet);
+      }
+      .vb.pk {
+        background: var(--p500);
+        border-color: var(--p500);
+        color: #fff;
+      }
+
+      /* Validation */
+      .vr {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        width: 100%;
+      }
+      .vr.on {
+        display: flex;
+      }
+      .vspin {
+        width: 18px;
+        height: 18px;
+        animation: sp 1s linear infinite;
+        flex-shrink: 0;
+      }
+      @keyframes sp {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .vtxt {
+        font-size: 13px;
+        color: var(--fg3);
+      }
+      .vtxt b {
+        color: var(--teal);
+        font-weight: 600;
+      }
+      .vtrk {
+        width: 100px;
+        height: 2px;
+        background: var(--bg-up);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .vfl {
+        height: 100%;
+        background: var(--teal);
+        border-radius: 2px;
+        width: 0%;
+        transition: width 0.3s;
+        box-shadow: 0 0 8px rgba(52, 212, 180, 0.3);
+      }
+
+      /* Nudge */
+      .nu {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 0.625rem;
+        width: 100%;
+      }
+      .nu.on {
+        display: flex;
+      }
+      .nb {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 1.375rem;
+        border-radius: 100px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 560;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        letter-spacing: -0.01em;
+      }
+      .nb.go {
+        background: var(--p500);
+        color: #fff;
+      }
+      .nb.go:hover {
+        background: var(--p600);
+        transform: translateY(-1px);
+      }
+      .nb.sec {
+        background: var(--bg-card);
+        color: var(--fg2);
+        border: 1px solid var(--brd);
+      }
+      .nb.sec:hover {
+        color: var(--fg);
+        border-color: var(--brd-h);
+        transform: translateY(-1px);
+      }
+      .skb {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 11px;
+        color: var(--p400);
+        font-weight: 580;
+        padding: 3px 10px;
+        background: rgba(249, 115, 22, 0.06);
+        border: 1px solid rgba(249, 115, 22, 0.1);
+        border-radius: 100px;
+        animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: scale(0.7);
+        }
+      }
+
+      /* Bottom composer */
+      .btm {
+        flex-shrink: 0;
+        padding: 0.375rem 0 0.5rem;
+        display: none;
+      }
+      .btm.on {
+        display: block;
+      }
+      .btm .comp {
+        max-width: 100%;
+      }
+
+      /* Footer */
+      .ft {
+        flex-shrink: 0;
+        border-top: 1px solid var(--brd);
+        padding: 0.5rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        font-size: 11px;
+        color: var(--fg4);
+      }
+      .ft a {
+        color: var(--fg3);
+        text-decoration: none;
+        transition: color 0.12s;
+      }
+      .ft a:hover {
+        color: var(--fg);
+      }
+
+      /* ═══ PAGES ═══ */
+      .page {
+        display: none;
+      }
+      .page.on {
+        display: block;
+      }
+      .page .container {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* HOME */
+      .home-hero {
+        padding: 4.5rem 0 3rem;
+        text-align: center;
+      }
+      .home-hero h1 {
+        font-family: var(--serif);
+        font-size: 48px;
+        font-weight: 400;
+        letter-spacing: -0.96px;
+        line-height: 1.08;
+        margin-bottom: 1rem;
+        color: var(--fg);
+      }
+      .home-hero h1 em {
+        font-style: italic;
+        color: var(--p400);
+      }
+      .home-hero p {
+        font-size: 16px;
+        color: var(--fg2);
+        max-width: 560px;
+        margin: 0 auto 2.5rem;
+        line-height: 1.6;
+      }
+      .home-cta {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+      }
+      .home-cta .bt {
+        height: 40px;
+        padding: 0 24px;
+        font-size: 14px;
+        border-radius: var(--r-sm);
+      }
+      .home-cta .bt-sec {
+        background: var(--bg-card-s);
+        color: var(--fg2);
+        border: 1px solid var(--brd);
+      }
+      .home-cta .bt-sec:hover {
+        background: var(--bg-card-h);
+        border-color: var(--brd-h);
+      }
+      .stats {
+        display: flex;
+        justify-content: center;
+        gap: 3.5rem;
+        padding: 2.5rem 0;
+        border-top: 1px solid var(--brd);
+        border-bottom: 1px solid var(--brd);
+        margin-bottom: 3.5rem;
+      }
+      .stat {
+        text-align: center;
+      }
+      .stat-val {
+        font-family: var(--serif);
+        font-size: 2.25rem;
+        font-weight: 400;
+        color: var(--fg);
+        line-height: 1.1;
+      }
+      .stat-lbl {
+        font-size: 12px;
+        color: var(--fg3);
+        margin-top: 0.25rem;
+        font-weight: 440;
+      }
+      .features {
+        padding: 0 0 3.5rem;
+      }
+      .features h2 {
+        font-family: var(--serif);
+        font-size: 24px;
+        font-weight: 400;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--fg);
+      }
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .feat-card {
+        background: var(--bg-card);
+        border: 1px solid var(--brd);
+        border-radius: var(--r);
+        padding: 1.75rem;
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        box-shadow: var(--shadow);
+        transition: all 0.2s;
+      }
+      .feat-card:hover {
+        border-color: var(--brd-h);
+        transform: translateY(-2px);
+      }
+      .feat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--r-xs);
+        background: rgba(253, 252, 251, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        color: var(--fg2);
+      }
+      .feat-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+      .feat-card h3 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--fg);
+        letter-spacing: -0.01em;
+      }
+      .feat-card p {
+        font-size: 14px;
+        color: var(--fg3);
+        line-height: 1.6;
+      }
+
+      /* HOME COMPOSER */
+      .home-comp {
+        max-width: 640px;
+        margin: 0 auto 2rem;
+        text-align: center;
+      }
+      .home-comp-label {
+        font-size: 12px;
+        color: var(--fg3);
+        margin-bottom: 0.75rem;
+        font-weight: 440;
+      }
+
+      /* LOGIN MODAL */
+      .login-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .login-overlay.on {
+        display: flex;
+      }
+      .login-card {
+        background: var(--bg-card-s);
+        border: 1px solid var(--brd);
+        border-radius: var(--r);
+        padding: 2.5rem;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
+        animation: modal-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      @keyframes modal-in {
+        from {
+          opacity: 0;
+          transform: translateY(16px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .login-card h2 {
+        font-family: var(--serif);
+        font-size: 24px;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+        color: var(--fg);
+      }
+      .login-card p {
+        font-size: 14px;
+        color: var(--fg3);
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+      }
+      .login-card .bt {
+        width: 100%;
+        height: 44px;
+        font-size: 14px;
+        border-radius: var(--r-sm);
+        margin-bottom: 0.75rem;
+      }
+      .login-card .bt-ghost {
+        background: transparent;
+        color: var(--fg3);
+        border: 1px solid var(--brd);
+        width: 100%;
+        height: 36px;
+        font-size: 13px;
+        border-radius: var(--r-sm);
+      }
+      .login-card .bt-ghost:hover {
+        color: var(--fg);
+        border-color: var(--brd-h);
+      }
+
+      /* PAGE TRANSITION */
+      .page-transition {
+        animation: page-slide 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      @keyframes page-slide {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* LEADERBOARD */
+      .lb {
+        padding: 2.5rem 0;
+      }
+      .lb h1 {
+        font-family: var(--serif);
+        font-size: 2rem;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+        color: var(--fg);
+      }
+      .lb > p {
+        color: var(--fg3);
+        font-size: 14px;
+        margin-bottom: 2rem;
+      }
+      .lb-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: var(--bg-card);
+        border: 1px solid var(--brd);
+        border-radius: var(--r);
+        overflow: hidden;
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        box-shadow: var(--shadow);
+      }
+      .lb-table th {
+        text-align: left;
+        padding: 0.875rem 1rem;
+        font-size: 11px;
+        font-weight: 560;
+        color: var(--fg3);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        border-bottom: 1px solid var(--brd);
+        background: rgba(253, 252, 251, 0.02);
+      }
+      .lb-table td {
+        padding: 0.875rem 1rem;
+        font-size: 14px;
+        color: var(--fg2);
+        border-bottom: 1px solid var(--brd);
+      }
+      .lb-table tr:last-child td {
+        border-bottom: none;
+      }
+      .lb-table tr:hover td {
+        background: rgba(253, 252, 251, 0.02);
+      }
+      .lb-rank {
+        font-weight: 620;
+        color: var(--fg3);
+        width: 48px;
+      }
+      .lb-rank.gold {
+        color: var(--p400);
+      }
+      .lb-model {
+        font-weight: 560;
+        color: var(--fg);
+      }
+      .lb-org {
+        color: var(--fg3);
+        font-size: 12px;
+      }
+      .lb-score {
+        font-variant-numeric: tabular-nums;
+        font-weight: 560;
+      }
+      .lb-bar {
+        width: 120px;
+      }
+      .lb-bar-inner {
+        height: 6px;
+        background: var(--bg-up);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .lb-bar-fill {
+        height: 100%;
+        border-radius: 3px;
+        background: var(--p500);
+      }
+      .lb-votes {
+        color: var(--fg3);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* GLOBAL FOOTER */
+      .gfoot {
+        border-top: 1px solid var(--brd);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--fg4);
+        position: relative;
+        z-index: 2;
+      }
+      .gfoot a {
+        color: var(--fg3);
+        text-decoration: none;
+        transition: color 0.12s;
+      }
+      .gfoot a:hover {
+        color: var(--fg);
+      }
+      .gfoot-l {
+        display: flex;
+        align-items: center;
+        flex: 1;
+      }
+      .gfoot-c {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        flex: 1;
+      }
+      .gfoot-dot {
+        color: var(--fg4);
+        font-size: 10px;
+      }
+      .gfoot-r {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1rem;
+        flex: 1;
+      }
+
+      @media (max-width: 768px) {
+        .panels {
+          grid-template-columns: 1fr;
+        }
+        .sugs {
+          justify-content: center;
+        }
+        .hero h1 {
+          font-size: 32px;
+        }
+        .votes {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .nav,
+        .shell {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+      }
+
+      .ctrl {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        display: flex;
+        gap: 3px;
+        z-index: 9999;
+        background: var(--bg-card);
+        padding: 6px;
+        border-radius: var(--r-sm);
+        border: 1px solid var(--brd);
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+      }
+      .c {
+        padding: 4px 10px;
+        border: 1px solid var(--brd);
+        border-radius: var(--r-xs);
+        background: rgba(253, 252, 251, 0.03);
+        color: var(--fg2);
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .c:hover {
+        background: rgba(253, 252, 251, 0.06);
+        color: var(--fg);
+      }
+      .c.on {
+        background: var(--p500);
+        color: #fff;
+        border-color: var(--p500);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <a href="#" class="brand" onclick="showPage('home');return false">
+        <img src="bioarena-logo.svg" alt="BioArena" height="32" />
+        <span>BioArena</span>
+      </a>
+      <div class="nl">
+        <a id="nav-home" class="on" onclick="showPage('home')">Home</a
+        ><a id="nav-battle" onclick="showPage('battle')">Battle</a
+        ><a id="nav-lb" onclick="showPage('lb')">Leaderboard</a>
+      </div>
+      <div class="nsep"></div>
+      <div class="na">
+        <button
+          class="bt bt-p"
+          onclick="if(!isLoggedIn){pendingPrompt=null;$('loginModal').classList.add('on')}"
+        >
+          Login
+        </button>
+        <button class="bt bt-g" onclick="toggleTheme()" id="themeBtn">
+          <svg
+            id="moonIcon"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg
+            id="sunIcon"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            style="display: none"
+          >
+            <circle cx="12" cy="12" r="4" />
+            <path
+              d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <div class="main" style="position: relative; z-index: 2">
+      <!-- ═══ HOME PAGE ═══ -->
+      <div class="page on" id="pg-home">
+        <div class="container">
+          <div class="home-hero">
+            <h1>Find the best AI for<br />your <em>biomedical</em> research</h1>
+            <p>
+              BioArena crowdsources the benchmarking of AI models to unlock the next breakthrough in
+              biomedicine, inviting researchers, clinicians, and biomedical enthusiasts worldwide.
+            </p>
+            <div class="home-cta">
+              <button
+                class="bt bt-p"
+                onclick="if(!isLoggedIn){pendingPrompt='';$('loginModal').classList.add('on')}else{showPage('battle')}"
+              >
+                Start a Battle
+              </button>
+              <button class="bt bt-sec" onclick="showPage('lb')">View Leaderboard</button>
+            </div>
+          </div>
+          <div class="home-comp">
+            <p class="home-comp-label">or ask a question to start</p>
+            <div class="comp">
+              <div class="comp-card">
+                <textarea
+                  class="ci"
+                  id="homeInp"
+                  placeholder="Ask anything biomedical..."
+                  rows="1"
+                  oninput="homeOi()"
+                  onkeydown="homeOk(event)"
+                ></textarea>
+                <div class="comp-bar">
+                  <div class="comp-tools">
+                    <button class="cbtn" title="Attach file">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M12 5v14M5 12h14" />
+                      </svg>
+                    </button>
+                  </div>
+                  <button class="csend" id="homeSb" onclick="homeGo()">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-val">286</div>
+              <div class="stat-lbl">Battles completed</div>
+            </div>
+            <div class="stat">
+              <div class="stat-val">12</div>
+              <div class="stat-lbl">Models evaluated</div>
+            </div>
+            <div class="stat">
+              <div class="stat-val">47</div>
+              <div class="stat-lbl">Active users</div>
+            </div>
+            <div class="stat">
+              <div class="stat-val">1,204</div>
+              <div class="stat-lbl">Votes cast</div>
+            </div>
+          </div>
+          <div class="features">
+            <h2>How it works</h2>
+            <div class="feat-grid">
+              <div class="feat-card">
+                <div class="feat-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
+                    />
+                  </svg>
+                </div>
+                <h3>Ask anything biomedical</h3>
+                <p>
+                  Submit any question about biology, medicine, or health. Two anonymous AI models
+                  will each provide their best answer.
+                </p>
+              </div>
+              <div class="feat-card">
+                <div class="feat-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M16 3h5v5M8 3H3v5M3 16v5h5M21 16v5h-5" />
+                    <path d="M21 3 14 10M3 21l7-7M3 3l7 7M21 21l-7-7" />
+                  </svg>
+                </div>
+                <h3>Compare side by side</h3>
+                <p>
+                  Read both responses without knowing which model wrote them. No brand bias — just
+                  the quality of the answer.
+                </p>
+              </div>
+              <div class="feat-card">
+                <div class="feat-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9" />
+                    <path d="M15 13 9 7l4-4 6 6Z" />
+                    <path d="m16 16 6-6" />
+                    <path d="m8 8-2-2" />
+                  </svg>
+                </div>
+                <h3>Vote and shape rankings</h3>
+                <p>
+                  Your vote directly influences the global leaderboard. Every battle helps the
+                  community find the most trustworthy AI.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ LEADERBOARD PAGE ═══ -->
+      <div class="page" id="pg-lb">
+        <div class="container">
+          <div class="lb">
+            <h1>Leaderboard</h1>
+            <p>
+              Models ranked by community votes using the Bradley-Terry model. Updated after every
+              battle.
+            </p>
+            <table class="lb-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Model</th>
+                  <th>BT Score</th>
+                  <th></th>
+                  <th>Votes</th>
+                  <th>License</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="lb-rank gold">1</td>
+                  <td>
+                    <span class="lb-model">Claude Sonnet 4</span><br /><span class="lb-org"
+                      >Anthropic</span
+                    >
+                  </td>
+                  <td class="lb-score">1,247</td>
+                  <td class="lb-bar">
+                    <div class="lb-bar-inner">
+                      <div class="lb-bar-fill" style="width: 100%"></div>
+                    </div>
+                  </td>
+                  <td class="lb-votes">892</td>
+                  <td style="color: var(--fg3)">Commercial</td>
+                </tr>
+                <tr>
+                  <td class="lb-rank gold">2</td>
+                  <td>
+                    <span class="lb-model">GPT-4o</span><br /><span class="lb-org">OpenAI</span>
+                  </td>
+                  <td class="lb-score">1,198</td>
+                  <td class="lb-bar">
+                    <div class="lb-bar-inner">
+                      <div class="lb-bar-fill" style="width: 88%"></div>
+                    </div>
+                  </td>
+                  <td class="lb-votes">845</td>
+                  <td style="color: var(--fg3)">Commercial</td>
+                </tr>
+                <tr>
+                  <td class="lb-rank gold">3</td>
+                  <td>
+                    <span class="lb-model">Gemini 2.5 Pro</span><br /><span class="lb-org"
+                      >Google</span
+                    >
+                  </td>
+                  <td class="lb-score">1,156</td>
+                  <td class="lb-bar">
+                    <div class="lb-bar-inner">
+                      <div class="lb-bar-fill" style="width: 78%"></div>
+                    </div>
+                  </td>
+                  <td class="lb-votes">701</td>
+                  <td style="color: var(--fg3)">Commercial</td>
+                </tr>
+                <tr>
+                  <td class="lb-rank">4</td>
+                  <td>
+                    <span class="lb-model">Llama 4 Scout</span><br /><span class="lb-org"
+                      >Meta</span
+                    >
+                  </td>
+                  <td class="lb-score">1,089</td>
+                  <td class="lb-bar">
+                    <div class="lb-bar-inner">
+                      <div class="lb-bar-fill" style="width: 62%"></div>
+                    </div>
+                  </td>
+                  <td class="lb-votes">634</td>
+                  <td style="color: var(--teal)">Open Source</td>
+                </tr>
+                <tr>
+                  <td class="lb-rank">5</td>
+                  <td>
+                    <span class="lb-model">Mistral Large</span><br /><span class="lb-org"
+                      >Mistral AI</span
+                    >
+                  </td>
+                  <td class="lb-score">1,045</td>
+                  <td class="lb-bar">
+                    <div class="lb-bar-inner">
+                      <div class="lb-bar-fill" style="width: 52%"></div>
+                    </div>
+                  </td>
+                  <td class="lb-votes">578</td>
+                  <td style="color: var(--teal)">Open Source</td>
+                </tr>
+                <tr>
+                  <td class="lb-rank">6</td>
+                  <td>
+                    <span class="lb-model">DeepSeek-V3</span><br /><span class="lb-org"
+                      >DeepSeek</span
+                    >
+                  </td>
+                  <td class="lb-score">1,012</td>
+                  <td class="lb-bar">
+                    <div class="lb-bar-inner">
+                      <div class="lb-bar-fill" style="width: 44%"></div>
+                    </div>
+                  </td>
+                  <td class="lb-votes">423</td>
+                  <td style="color: var(--teal)">Open Source</td>
+                </tr>
+                <tr>
+                  <td class="lb-rank">7</td>
+                  <td>
+                    <span class="lb-model">Qwen3-235B</span><br /><span class="lb-org"
+                      >Alibaba</span
+                    >
+                  </td>
+                  <td class="lb-score">987</td>
+                  <td class="lb-bar">
+                    <div class="lb-bar-inner">
+                      <div class="lb-bar-fill" style="width: 38%"></div>
+                    </div>
+                  </td>
+                  <td class="lb-votes">389</td>
+                  <td style="color: var(--teal)">Open Source</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ BATTLE PAGE ═══ -->
+      <div class="page" id="pg-battle">
+        <div class="shell">
+          <!-- LANDING -->
+          <section class="land" id="land">
+            <div class="hero">
+              <h1>Bio<em>Arena</em></h1>
+              <p>
+                Discover how different AIs answer biomedical questions.<br />No expertise needed —
+                just vote for the response you trust.
+              </p>
+            </div>
+            <div class="dna-section">
+              <div class="dna-label">Unwind a prompt</div>
+              <div class="dna-wrap">
+                <div class="helix" id="helix">
+                  <!-- SVG strands -->
+                  <svg class="strand strand-back" viewBox="0 0 400 100" preserveAspectRatio="none">
+                    <path
+                      d="M0,50 C50,10 100,90 150,50 C200,10 250,90 300,50 C350,10 400,90 450,50"
+                    />
+                  </svg>
+                  <svg class="strand strand-front" viewBox="0 0 400 100" preserveAspectRatio="none">
+                    <path
+                      d="M0,50 C50,90 100,10 150,50 C200,90 250,10 300,50 C350,90 400,10 450,50"
+                    />
+                  </svg>
+
+                  <!-- Nodes at helix intersections -->
+                  <div
+                    class="helix-node"
+                    id="hn0"
+                    style="left: 55px; top: 32px"
+                    onclick="helixClick(0)"
+                  >
+                    <svg
+                      class="node-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                      />
+                    </svg>
+                    <span class="node-label">Cardiology</span>
+                  </div>
+                  <div
+                    class="helix-node"
+                    id="hn1"
+                    style="left: 130px; top: 58px"
+                    onclick="helixClick(1)"
+                  >
+                    <svg
+                      class="node-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="m16 12-4-4-4 4M12 16V8" />
+                    </svg>
+                    <span class="node-label">Oncology</span>
+                  </div>
+                  <div
+                    class="helix-node"
+                    id="hn2"
+                    style="left: 205px; top: 28px"
+                    onclick="helixClick(2)"
+                  >
+                    <svg
+                      class="node-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M2 15c6.667-6 13.333 0 20-6" />
+                      <path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993" />
+                      <path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993" />
+                    </svg>
+                    <span class="node-label">Genetics</span>
+                  </div>
+                  <div
+                    class="helix-node"
+                    id="hn3"
+                    style="left: 280px; top: 58px"
+                    onclick="helixClick(3)"
+                  >
+                    <svg
+                      class="node-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    <span class="node-label">Neuro</span>
+                  </div>
+                  <div
+                    class="helix-node"
+                    id="hn4"
+                    style="left: 355px; top: 32px"
+                    onclick="helixClick(4)"
+                  >
+                    <svg
+                      class="node-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="m10 20-1.25-2.5L6 18l1-3-2.5-1.5L6 12 4.5 10.5 7 9l-1-3 2.75.5L10 4l2 2 2-2 1.25 2.5L18 6l-1 3 2.5 1.5L18 12l1.5 1.5L17 15l1 3-2.75-.5L14 20l-2-2Z"
+                      />
+                    </svg>
+                    <span class="node-label">Immuno</span>
+                  </div>
+
+                  <!-- Rungs connecting the strands -->
+                  <div
+                    class="helix-rung"
+                    style="left: 74px; top: 50px; width: 36px; transform: rotate(70deg)"
+                  ></div>
+                  <div
+                    class="helix-rung"
+                    style="left: 149px; top: 50px; width: 36px; transform: rotate(-70deg)"
+                  ></div>
+                  <div
+                    class="helix-rung"
+                    style="left: 224px; top: 50px; width: 36px; transform: rotate(70deg)"
+                  ></div>
+                  <div
+                    class="helix-rung"
+                    style="left: 299px; top: 50px; width: 36px; transform: rotate(-70deg)"
+                  ></div>
+                </div>
+              </div>
+              <div class="dna-reveal" id="dnaReveal">
+                <div class="dna-prompt" id="dnaPrompt" onclick="useDnaPrompt()"></div>
+                <div class="dna-hint">click to use this prompt</div>
+              </div>
+            </div>
+            <div class="comp">
+              <div class="comp-card">
+                <textarea
+                  class="ci"
+                  id="inp"
+                  placeholder="Ask anything biomedical..."
+                  rows="1"
+                  oninput="oi()"
+                  onkeydown="ok(event)"
+                ></textarea>
+                <div id="fc" class="fchips"></div>
+                <div class="comp-bar">
+                  <div class="comp-tools">
+                    <button class="cbtn" onclick="$('fi').click()" title="Attach file">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M12 5v14M5 12h14" />
+                      </svg>
+                    </button>
+                    <input type="file" id="fi" hidden multiple onchange="onF(event)" />
+                  </div>
+                  <button class="csend" id="sb" onclick="go()">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- BATTLE -->
+          <section class="battle" id="battle">
+            <div class="rail">
+              <span class="rd now" id="d0"></span><span class="rd fut" id="d1"></span
+              ><span class="rd fut" id="d2"></span><span class="rd fut" id="d3"></span
+              ><span class="rd fut" id="d4"></span><span class="rl" id="rl">Battle 1 of 5</span>
+            </div>
+            <div class="panels">
+              <div class="panel" id="pA">
+                <div class="ph">
+                  <span class="mt"><span class="dot" id="dA"></span>Model A</span>
+                </div>
+                <div class="pb" id="bA"></div>
+                <div class="rv" id="rA"></div>
+              </div>
+              <div class="panel" id="pB">
+                <div class="ph">
+                  <span class="mt"><span class="dot" id="dB"></span>Model B</span>
+                </div>
+                <div class="pb" id="bB"></div>
+                <div class="rv" id="rB"></div>
+              </div>
+            </div>
+            <div class="abar">
+              <div class="votes" id="votes">
+                <button class="vb l" onclick="vote('l')">Left is Better &#x1F448;</button
+                ><button class="vb" onclick="vote('tie')">&#x1F91D; Tie</button
+                ><button class="vb r" onclick="vote('r')">&#x1F449; Right is Better</button>
+              </div>
+              <div class="vr" id="valRow">
+                <svg class="vspin" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="var(--brd-s)" stroke-width="2.5" />
+                  <path
+                    d="M22 12a10 10 0 0 0-10-10"
+                    stroke="var(--teal)"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  /></svg
+                ><span class="vtxt">Validating <b>biomedical relevance</b></span>
+                <div class="vtrk"><div class="vfl" id="vf"></div></div>
+              </div>
+              <div class="nu" id="nudge">
+                <span class="skb" id="strk"></span
+                ><button class="nb go" id="spBtn" onclick="sP()">Same Prompt &rarr;</button
+                ><button class="nb sec" id="goBtn" onclick="nR()">New Battle</button>
+              </div>
+            </div>
+            <div class="btm" id="btm">
+              <div class="comp">
+                <div class="comp-card">
+                  <textarea
+                    class="ci"
+                    id="inp2"
+                    placeholder="Ask a follow-up..."
+                    rows="1"
+                    oninput="oi2()"
+                    onkeydown="ok2(event)"
+                  ></textarea>
+                  <div class="comp-bar">
+                    <div class="comp-tools"></div>
+                    <button class="csend" id="sb2">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ft">
+              <a href="#">Terms</a>&middot;<a href="#">Contact</a>&middot;<a href="#"
+                >Report Issue</a
+              >
+            </div>
+          </section>
+        </div>
+        <!-- /shell -->
+      </div>
+      <!-- /pg-battle -->
+    </div>
+    <!-- /main -->
+
+    <!-- LOGIN MODAL -->
+    <div class="login-overlay" id="loginModal" onclick="if(event.target===this)closeLogin()">
+      <div class="login-card">
+        <h2>Sign in to battle</h2>
+        <p>
+          You need a Synapse account to participate in battles. Your votes help rank AI models for
+          biomedical research.
+        </p>
+        <button class="bt bt-p" onclick="mockLogin()">Sign in with Synapse</button>
+        <button class="bt bt-ghost" onclick="closeLogin()">Cancel</button>
+      </div>
+    </div>
+
+    <footer class="gfoot">
+      <div class="gfoot-l">
+        <span>Powered by</span>
+        <a
+          href="https://sagebionetworks.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="display: inline-flex; align-items: center; gap: 6px; margin-left: 8px"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 86 94"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M42.99 1.95L71.36 18.43l5.8 3.4-2.31 3.94-5.79-3.4L45.29 8.57V44h-4.57V8.6L16.93 22.59l-5.83 3.21-2.21-4 5.77-3.18L42.99 1.95z"
+              fill="#FD9701"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M2.11 40.43L1.92 33.87l4.57-.14.2 6.64v27.55l30.57-17.7 2.29 3.96L8.87 71.94l24.05 13.87 5.78 3.19-2.21 4-5.82-3.21L2.11 73.32V40.43z"
+              fill="#219CEA"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M84.08 33.8v39.53l-28.53 16.24-5.57 3.38-2.37-3.91 5.63-3.42 24.07-13.7-30.66-17.7 2.29-3.96 30.57 17.7V33.8h4.57z"
+              fill="#59C959"
+            />
+          </svg>
+          <span style="color: var(--fg2); font-weight: 500">Sage Bionetworks</span>
+        </a>
+      </div>
+      <div class="gfoot-c">
+        <a href="https://sagebionetworks.org/trust-center" target="_blank" rel="noopener noreferrer"
+          >Terms of Service</a
+        >
+        <span class="gfoot-dot">&bull;</span>
+        <a href="https://sagebionetworks.org/contact" target="_blank" rel="noopener noreferrer"
+          >Contact Us</a
+        >
+        <span class="gfoot-dot">&bull;</span>
+        <a href="https://forms.gle/WsvSdEfv5MfFpeedA" target="_blank" rel="noopener noreferrer"
+          >Report Issue</a
+        >
+      </div>
+      <div class="gfoot-r"><span style="color: var(--fg4)">local</span></div>
+    </footer>
+
+    <div class="ctrl" style="position: fixed; bottom: 1rem; right: 1rem; z-index: 9999">
+      <button class="c on" onclick="event.stopPropagation();S('landing')">1 Land</button>
+      <button class="c" onclick="event.stopPropagation();S('stream')">2 Think+Stream</button>
+      <button class="c" onclick="event.stopPropagation();S('vote')">3 Vote</button>
+      <button class="c" onclick="event.stopPropagation();S('val')">4 Validate</button>
+      <button class="c" onclick="event.stopPropagation();S('reveal')">5 Reveal</button>
+      <button class="c" onclick="event.stopPropagation();S('next')">6 Next</button>
+    </div>
+
+    <script>
+      const R = {
+        a: [
+          `Hypoglycaemia, particularly in diabetes management, has been associated with an increased risk of cardiovascular events through several mechanisms:`,
+          `\n\n**Sympathoadrenal Activation** — During hypoglycaemic episodes, the body releases catecholamines (epinephrine and norepinephrine), increasing heart rate, cardiac workload, and myocardial oxygen demand. This can trigger arrhythmias.`,
+          `\n\n**Endothelial Dysfunction** — Recurrent hypoglycaemia impairs endothelial function, promoting vasoconstriction and reducing the protective role of nitric oxide.`,
+          `\n\n**Inflammatory & Prothrombotic Effects** — Episodes activate inflammatory pathways (elevated CRP, IL-6) and increase platelet aggregation, creating a prothrombotic state.`,
+          `\n\n**Clinical Evidence** — The ACCORD, ADVANCE, and VADT trials demonstrated that intensive glucose-lowering was associated with higher cardiovascular mortality in long-standing Type 2 diabetes.`,
+          `\n\nIn summary — hypoglycaemia does increase cardiovascular risk through both acute hemodynamic stress and chronic vascular damage.`,
+        ],
+        b: [
+          `Yes, hypoglycaemia is increasingly recognised as an independent cardiovascular risk factor:`,
+          `\n\n## Acute Mechanisms\n\nLow blood glucose triggers a counter-regulatory hormone surge. Adrenaline and cortisol release leads to tachycardia, raised blood pressure, and increased cardiac output — provoking myocardial ischaemia.`,
+          `\n\n## QT Prolongation\n\nHypoglycaemia prolongs the cardiac QT interval, predisposing to ventricular arrhythmias including torsades de pointes.`,
+          `\n\n## Chronic Vascular Effects\n\nRepeated episodes contribute to:\n- Increased arterial stiffness\n- Elevated von Willebrand factor\n- Impaired fibrinolysis`,
+          `\n\n## Key Trials\n\nThe **ACCORD trial** (2008) was stopped early — the intensive arm showed 22% higher mortality linked to severe hypoglycaemia.`,
+          `\n\nThe relationship between glycaemic control and cardiovascular outcomes remains critical in personalising treatment.`,
+        ],
+      };
+      const TH = [
+        'Analyzing cardiovascular risk factors...',
+        'Reviewing ACCORD trial data...',
+        'Evaluating endothelial pathways...',
+        'Cross-referencing mechanisms...',
+        'Synthesizing meta-analyses...',
+      ];
+      const EX = [
+        'Does hypoglycaemia increase the risk of cardiovascular events?',
+        'Why do broken bones heal but cartilage almost never does?',
+        'What is the role of BRCA1 in breast cancer?',
+        'How does the gut microbiome influence neurological disorders?',
+        'What mechanisms drive antibiotic resistance in MRSA?',
+        'Can mRNA vaccine technology treat cancer?',
+        'What is the blood-brain barrier?',
+      ];
+      const MD = [
+        ['GPT-4o', 'Claude Sonnet 4'],
+        ['Gemini 2.5 Pro', 'Llama 4 Scout'],
+        ['Claude Opus 4', 'Mistral Large'],
+        ['GPT-4.5', 'Gemini 2.5 Flash'],
+        ['DeepSeek-V3', 'Qwen3-235B'],
+      ];
+      let rnd = 0,
+        maxR = 5,
+        cur = 'landing',
+        tI,
+        sA,
+        sB,
+        lastVote = null,
+        ti = 0,
+        ci = 0;
+
+      function typeLoop() {
+        const el = $('inp');
+        if (cur !== 'landing') return;
+        const p = EX[ti % EX.length];
+        el.value = '';
+        oi();
+        ci = 0;
+        tI = setInterval(() => {
+          if (ci < p.length) {
+            el.value = p.substring(0, ++ci);
+            ar(el);
+            oi();
+          } else {
+            clearInterval(tI);
+            setTimeout(() => {
+              el.value = '';
+              ar(el);
+              oi();
+              ti++;
+              if (cur === 'landing') setTimeout(typeLoop, 600);
+            }, 2000);
+          }
+        }, 38);
+      }
+      function stopT() {
+        clearInterval(tI);
+      }
+      // Hide battle shell + controls on initial load (Home is default)
+      document.querySelector('.shell').style.display = 'none';
+      document.querySelector('.ctrl').style.display = 'none';
+      $('inp').addEventListener('focus', () => {
+        stopT();
+        // Keep the typed text — user can edit or press Enter to submit
+        oi(); // update send button state
+      });
+      function $(id) {
+        return document.getElementById(id);
+      }
+      function ar(e) {
+        e.style.height = 'auto';
+        e.style.height = Math.min(e.scrollHeight, 140) + 'px';
+      }
+      function oi() {
+        $('sb').classList.toggle('hot', !!$('inp').value.trim());
+        ar($('inp'));
+      }
+      function ok(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          if ($('inp').value.trim()) go();
+        }
+      }
+      function oi2() {
+        $('sb2').classList.toggle('hot', !!$('inp2').value.trim());
+        ar($('inp2'));
+      }
+      function ok2(e) {
+        if (e.key === 'Enter' && !e.shiftKey) e.preventDefault();
+      }
+      function go() {
+        S('stream');
+      }
+      // DNA Helix prompts
+      const HELIX_PROMPTS = [
+        [
+          'Does hypoglycaemia increase the risk of cardiovascular events?',
+          'How does atrial fibrillation lead to stroke?',
+          'What causes heart failure in young athletes?',
+        ],
+        [
+          'What is the role of BRCA1 in breast cancer?',
+          'How does immunotherapy differ from chemotherapy?',
+          'Can mRNA vaccines be adapted for cancer treatment?',
+        ],
+        [
+          'How do prion diseases propagate without DNA?',
+          'What mechanisms drive antibiotic resistance in MRSA?',
+          'Why do broken bones heal but cartilage almost never does?',
+        ],
+        [
+          'How does the gut microbiome influence neurological disorders?',
+          'What is the blood-brain barrier and why do most drugs fail to cross it?',
+          'How does neuroplasticity work after a stroke?',
+        ],
+        [
+          'What is CRISPR-Cas9 and how does it edit genes?',
+          'How do epigenetic changes influence disease susceptibility?',
+          'What are the ethical concerns around germline gene editing?',
+        ],
+      ];
+
+      function helixClick(idx) {
+        // Deactivate all nodes
+        document.querySelectorAll('.helix-node').forEach((n) => n.classList.remove('active'));
+        // Activate clicked node
+        $('hn' + idx).classList.add('active');
+        // Pick random prompt from category
+        const prompts = HELIX_PROMPTS[idx];
+        const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+        $('dnaPrompt').textContent = prompt;
+        $('dnaReveal').classList.add('show');
+      }
+
+      function useDnaPrompt() {
+        stopT();
+        $('inp').value = $('dnaPrompt').textContent;
+        oi();
+        closeDna();
+        go(); // auto submit
+      }
+
+      function closeDna() {
+        document.querySelectorAll('.helix-node').forEach((n) => n.classList.remove('active'));
+        $('dnaReveal').classList.remove('show');
+      }
+
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.dna-section') && !e.target.closest('.comp')) closeDna();
+      });
+      function onF(e) {
+        const ch = $('fc');
+        Array.from(e.target.files).forEach((f) => {
+          const c = document.createElement('span');
+          c.className = 'fchip';
+          c.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>${f.name}<button class="fchip-x" onclick="this.parentElement.remove()">&times;</button>`;
+          ch.appendChild(c);
+        });
+        e.target.value = '';
+      }
+
+      function S(s) {
+        cur = s;
+        document.querySelectorAll('.c').forEach((b) => b.classList.remove('on'));
+        const m = { landing: 0, stream: 1, vote: 2, val: 3, reveal: 4, next: 5 };
+        document.querySelectorAll('.c')[m[s]]?.classList.add('on');
+        clearInterval(sA);
+        clearInterval(sB);
+        $('votes').classList.remove('on');
+        $('valRow').classList.remove('on');
+        $('nudge').classList.remove('on');
+        $('rA').classList.remove('show', 'won', 'tied');
+        $('rB').classList.remove('show', 'won', 'tied');
+        $('pA').classList.remove('glow', 'tie-glow');
+        $('pB').classList.remove('glow', 'tie-glow');
+        document.querySelectorAll('.vb').forEach((b) => b.classList.remove('pk'));
+        switch (s) {
+          case 'landing':
+            $('land').classList.remove('gone');
+            $('battle').classList.remove('on');
+            $('bA').innerHTML = '';
+            $('bB').innerHTML = '';
+            $('btm').classList.remove('on');
+            $('dA').className = 'dot';
+            $('dB').className = 'dot';
+            $('inp').value = '';
+            $('sb').classList.remove('hot');
+            document.querySelectorAll('.helix-node').forEach((n) => n.classList.remove('active'));
+            $('dnaReveal').classList.remove('show');
+            rnd = 0;
+            upR();
+            setTimeout(typeLoop, 800);
+            break;
+          case 'stream':
+            stopT();
+            $('land').classList.add('gone');
+            $('battle').classList.add('on');
+            $('btm').classList.add('on');
+            const q = $('inp').value || EX[0];
+            $('dA').className = 'dot live';
+            $('dB').className = 'dot live';
+            $('votes').classList.remove('on');
+            upR();
+            showTh('bA', q, () => strm('a', $('bA'), $('dA'), q), 1600);
+            showTh('bB', q, () => strm('b', $('bB'), $('dB'), q), 2400);
+            break;
+          case 'vote':
+            $('land').classList.add('gone');
+            $('battle').classList.add('on');
+            $('btm').classList.add('on');
+            fill();
+            $('dA').className = 'dot fin';
+            $('dB').className = 'dot fin';
+            $('votes').classList.add('on');
+            upR();
+            break;
+          case 'val':
+            $('land').classList.add('gone');
+            $('battle').classList.add('on');
+            $('btm').classList.remove('on');
+            fill();
+            $('dA').className = 'dot fin';
+            $('dB').className = 'dot fin';
+            $('valRow').classList.add('on');
+            runV();
+            upR();
+            break;
+          case 'reveal':
+            $('land').classList.add('gone');
+            $('battle').classList.add('on');
+            $('btm').classList.remove('on');
+            fill();
+            $('dA').className = 'dot fin';
+            $('dB').className = 'dot fin';
+            const mp = MD[rnd % MD.length];
+            $('rA').classList.add('show');
+            $('rB').classList.add('show');
+            if (lastVote === 'l') {
+              $('rA').textContent = mp[0] + ' \u2014 Winner';
+              $('rA').classList.add('won');
+              $('pA').classList.add('glow');
+              $('rB').textContent = mp[1];
+            } else if (lastVote === 'r') {
+              $('rB').textContent = mp[1] + ' \u2014 Winner';
+              $('rB').classList.add('won');
+              $('pB').classList.add('glow');
+              $('rA').textContent = mp[0];
+            } else {
+              $('rA').textContent = mp[0] + ' \u2014 Tie';
+              $('rA').classList.add('tied');
+              $('rB').textContent = mp[1] + ' \u2014 Tie';
+              $('rB').classList.add('tied');
+              $('pA').classList.add('tie-glow');
+              $('pB').classList.add('tie-glow');
+            }
+            $('nudge').classList.add('on');
+            rnd++;
+            $('strk').textContent =
+              rnd >= maxR ? '\u2728 Quest complete!' : '\uD83D\uDD25 ' + rnd + '/' + maxR;
+            $('goBtn').textContent = rnd >= maxR ? 'New Quest \u2192' : 'Next Battle \u2192';
+            $('spBtn').style.display = rnd >= maxR ? 'none' : '';
+            upR();
+            break;
+          case 'next':
+            S('reveal');
+            break;
+        }
+      }
+
+      function showTh(id, q, cb, dur) {
+        const el = $(id);
+        el.innerHTML = `<div class="um">${esc(q)}</div><div style="clear:both"></div>`;
+        const t = document.createElement('div');
+        t.className = 'thk';
+        t.innerHTML = `<svg class="thk-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m14.5-6.5L16 7M8 16l-1.5 1.5M18 18l-1.5-1.5M7 7 5.5 5.5"/><circle cx="12" cy="12" r="3"/></svg><span class="thk-lbl">Generating response...</span><span class="thk-prev"></span>`;
+        el.appendChild(t);
+        const pv = t.querySelector('.thk-prev');
+        let si = 0;
+        const iv = setInterval(() => {
+          pv.textContent = TH[si++ % TH.length];
+        }, 600);
+        setTimeout(() => {
+          clearInterval(iv);
+          t.classList.add('done');
+          setTimeout(cb, 150);
+        }, dur);
+      }
+
+      function strm(m, el, dot, q) {
+        const ch = R[m];
+        let ci2 = 0,
+          chi = 0;
+        const r = document.createElement('div');
+        r.className = 'resp';
+        el.appendChild(r);
+        const iv = setInterval(() => {
+          if (ci2 >= ch.length) {
+            clearInterval(iv);
+            dot.className = 'dot fin';
+            const c = r.querySelector('.cur');
+            if (c) c.remove();
+            chk();
+            return;
+          }
+          const ck = ch[ci2];
+          if (chi < ck.length) {
+            const c = r.querySelector('.cur');
+            if (c) c.remove();
+            const n = Math.floor(Math.random() * 3) + 1;
+            r.innerHTML =
+              fmt(r.textContent + ck.substring(chi, chi + n)) + '<span class="cur"></span>';
+            chi += n;
+            el.scrollTop = el.scrollHeight;
+          } else {
+            ci2++;
+            chi = 0;
+          }
+        }, 20);
+        if (m === 'a') sA = iv;
+        else sB = iv;
+      }
+      function chk() {
+        if ($('dA').classList.contains('fin') && $('dB').classList.contains('fin'))
+          setTimeout(() => $('votes').classList.add('on'), 350);
+      }
+      function fill() {
+        const q = $('inp').value || EX[0];
+        $('bA').innerHTML =
+          `<div class="um">${esc(q)}</div><div style="clear:both"></div><div class="resp">${fmt(R.a.join(''))}</div>`;
+        $('bB').innerHTML =
+          `<div class="um">${esc(q)}</div><div style="clear:both"></div><div class="resp">${fmt(R.b.join(''))}</div>`;
+      }
+      function vote(c) {
+        lastVote = c;
+        document.querySelectorAll('.vb').forEach((b) => b.classList.remove('pk'));
+        event.target.closest('.vb').classList.add('pk');
+        setTimeout(() => {
+          $('votes').classList.remove('on');
+          S('val');
+        }, 500);
+      }
+      function runV() {
+        const f = $('vf');
+        let p = 0;
+        const iv = setInterval(() => {
+          p += Math.random() * 18 + 6;
+          if (p >= 100) {
+            p = 100;
+            f.style.width = '100%';
+            clearInterval(iv);
+            setTimeout(() => {
+              $('valRow').classList.remove('on');
+              S('reveal');
+            }, 400);
+          } else f.style.width = p + '%';
+        }, 250);
+      }
+      function nR() {
+        if (rnd >= maxR) {
+          rnd = 0;
+          S('landing');
+          return;
+        }
+        $('inp').value = '';
+        S('stream');
+      }
+      function sP() {
+        S('stream');
+      }
+      function upR() {
+        for (let i = 0; i < maxR; i++) {
+          const d = $('d' + i);
+          if (!d) continue;
+          d.className = i < rnd ? 'rd done' : i === rnd ? 'rd now' : 'rd fut';
+        }
+        $('rl').textContent =
+          rnd >= maxR ? 'Quest complete!' : 'Battle ' + Math.min(rnd + 1, maxR) + ' of ' + maxR;
+      }
+      // Auth state (mock)
+      let isLoggedIn = false;
+      let pendingPrompt = null;
+
+      function homeOi() {
+        $('homeSb').classList.toggle('hot', !!$('homeInp').value.trim());
+      }
+      function homeOk(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          if ($('homeInp').value.trim()) homeGo();
+        }
+      }
+
+      function homeGo() {
+        const prompt = $('homeInp').value.trim();
+        if (!prompt) return;
+        if (!isLoggedIn) {
+          pendingPrompt = prompt;
+          $('loginModal').classList.add('on');
+          return;
+        }
+        goToBattle(prompt);
+      }
+
+      function goToBattle(prompt) {
+        // Set prompt in battle composer
+        $('inp').value = prompt;
+        oi();
+        // Navigate to battle with transition
+        showPage('battle');
+        $('pg-battle').classList.add('page-transition');
+        setTimeout(() => $('pg-battle').classList.remove('page-transition'), 400);
+        // Auto-start the battle
+        setTimeout(() => S('stream'), 300);
+      }
+
+      function closeLogin() {
+        $('loginModal').classList.remove('on');
+        pendingPrompt = null;
+      }
+
+      function mockLogin() {
+        isLoggedIn = true;
+        $('loginModal').classList.remove('on');
+        // Replace login button with avatar
+        const loginBtn = document.querySelector('.bt-p');
+        const avatar = document.createElement('div');
+        avatar.style.cssText =
+          'width:30px;height:30px;border-radius:50%;background:var(--p500);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.02em';
+        avatar.textContent = 'BU';
+        avatar.title = 'BioArena User — Click to logout';
+        avatar.onclick = function () {
+          mockLogout();
+        };
+        loginBtn.replaceWith(avatar);
+        // If there was a pending prompt, go to battle
+        if (pendingPrompt !== null) {
+          const p = pendingPrompt;
+          pendingPrompt = null;
+          if (p) goToBattle(p);
+          else showPage('battle');
+        }
+      }
+
+      function mockLogout() {
+        isLoggedIn = false;
+        // Replace avatar back with login button
+        const avatar = document.querySelector('.na div[style]');
+        if (!avatar) return;
+        const btn = document.createElement('button');
+        btn.className = 'bt bt-p';
+        btn.textContent = 'Login';
+        btn.onclick = function () {
+          if (!isLoggedIn) {
+            pendingPrompt = null;
+            $('loginModal').classList.add('on');
+          }
+        };
+        avatar.replaceWith(btn);
+        // Go back to home
+        showPage('home');
+      }
+
+      // Theme toggle
+      function toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.classList.contains('dark');
+        if (isDark) {
+          html.classList.remove('dark');
+          $('moonIcon').style.display = 'none';
+          $('sunIcon').style.display = '';
+        } else {
+          html.classList.add('dark');
+          $('moonIcon').style.display = '';
+          $('sunIcon').style.display = 'none';
+        }
+      }
+
+      // Page navigation
+      function showPage(p) {
+        document.querySelectorAll('.page').forEach((el) => el.classList.remove('on'));
+        $('pg-' + p).classList.add('on');
+        document.querySelectorAll('.nl a').forEach((a) => a.classList.remove('on'));
+        $('nav-' + p)?.classList.add('on');
+        // Show/hide battle shell + controls based on page
+        const shell = document.querySelector('.shell');
+        const ctrl = document.querySelector('.ctrl');
+        if (p === 'battle') {
+          shell.style.display = 'flex';
+          ctrl.style.display = 'flex';
+          if (cur === 'landing') setTimeout(typeLoop, 500);
+        } else {
+          shell.style.display = 'none';
+          ctrl.style.display = 'none';
+          stopT();
+        }
+        window.scrollTo(0, 0);
+      }
+
+      function esc(t) {
+        const d = document.createElement('div');
+        d.textContent = t;
+        return d.innerHTML;
+      }
+      function fmt(t) {
+        return t
+          .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--fg);font-weight:580">$1</strong>')
+          .replace(/## (.*?)(\n|$)/g, '<h4>$1</h4>')
+          .replace(
+            /\n- (.*?)(?=\n|$)/g,
+            '<br><span style="color:var(--fg4);margin-right:.375rem">&bull;</span>$1',
+          )
+          .replace(/\n\n/g, '</p><p>')
+          .replace(/\n/g, '<br>');
+      }
+    </script>
+  </body>
+</html>
