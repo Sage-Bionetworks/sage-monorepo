@@ -1819,14 +1819,60 @@
         box-shadow: 0 16px 64px rgba(0, 0, 0, 0.35);
         animation: modal-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         overflow: hidden;
+        position: relative;
+      }
+      .onboard-close {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: none;
+        background: var(--bg-up);
+        color: var(--fg3);
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        transition: all 0.15s;
+      }
+      .onboard-close:hover {
+        background: var(--brd-h);
+        color: var(--fg);
+      }
+      .onboard-agreement {
+        text-align: left;
+        font-size: 12px;
+        color: var(--fg2);
+        line-height: 1.6;
+      }
+      .onboard-agreement p {
+        margin-bottom: 0.25rem;
+      }
+      .onboard-rule {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+        font-size: 13px;
+        color: var(--fg2);
+        line-height: 1.5;
+      }
+      .onboard-rule svg {
+        flex-shrink: 0;
+        margin-top: 2px;
       }
       .onboard-slides {
         position: relative;
       }
       .onboard-slide {
         display: none;
-        padding: 2.5rem 2.5rem 0;
+        padding: 2rem 2.5rem 0;
         text-align: center;
+        height: 320px;
       }
       .onboard-slide.active {
         display: block;
@@ -1857,23 +1903,23 @@
       }
       .onboard-slide h3 {
         font-family: var(--serif);
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 400;
         color: var(--fg);
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.375rem;
       }
       .onboard-slide p {
-        font-size: 14px;
+        font-size: 13px;
         color: var(--fg3);
-        line-height: 1.6;
+        line-height: 1.55;
         max-width: 380px;
         margin: 0 auto;
       }
       .onboard-icon {
-        width: 48px;
-        height: 48px;
-        margin: 0 auto 1rem;
-        color: var(--fg3);
+        width: 36px;
+        height: 36px;
+        margin: 0.5rem auto 0;
+        color: var(--fg4);
       }
       .onboard-dots {
         display: flex;
@@ -3942,37 +3988,18 @@
       </div>
     </div>
 
-    <!-- ONBOARDING MODAL -->
-    <div class="onboard-overlay" id="onboardModal" onclick="if(event.target===this)return">
+    <!-- ONBOARDING MODAL (4 steps + agreement) -->
+    <div class="onboard-overlay" id="onboardModal" onclick="if(event.target===this)closeOnboard()">
       <div class="onboard-card">
+        <button class="onboard-close" onclick="closeOnboard()" title="Close">&times;</button>
         <div class="onboard-slides">
+          <!-- Step 1: Compare Side by Side -->
           <div class="onboard-slide active" data-step="0">
             <div class="onboard-num">1</div>
-            <h3>Ask anything biomedical</h3>
+            <h3>Compare Side by Side</h3>
             <p>
-              Submit any question about biology, medicine, or health. Two anonymous AI models will
-              each provide their best answer.
-            </p>
-            <svg
-              class="onboard-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
-              />
-            </svg>
-          </div>
-          <div class="onboard-slide" data-step="1">
-            <div class="onboard-num">2</div>
-            <h3>Compare side by side</h3>
-            <p>
-              Read both responses without knowing which model wrote them. No brand bias — just the
-              quality of the answer.
+              Two anonymous AI models answer your question. Review both responses without knowing
+              which model wrote them. No brand bias — just quality.
             </p>
             <svg
               class="onboard-icon"
@@ -3987,12 +4014,35 @@
               <path d="M21 3 14 10M3 21l7-7M3 3l7 7M21 21l-7-7" />
             </svg>
           </div>
+          <!-- Step 2: Select the Better -->
+          <div class="onboard-slide" data-step="1">
+            <div class="onboard-num">2</div>
+            <h3>Select the Better</h3>
+            <p>
+              Pick the response that demonstrates clearer reasoning, or call it a tie. Your choice
+              directly shapes model rankings.
+            </p>
+            <svg
+              class="onboard-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"
+              />
+            </svg>
+          </div>
+          <!-- Step 3: Reveal & Impact -->
           <div class="onboard-slide" data-step="2">
             <div class="onboard-num">3</div>
-            <h3>Vote and shape rankings</h3>
+            <h3>Reveal &amp; Impact</h3>
             <p>
-              Your vote directly influences the global leaderboard. Every battle helps find the most
-              trustworthy AI for biomedicine.
+              Once you've voted, the models are revealed. Only biomedical battles count toward the
+              leaderboard. Ready for another round? Jump right in.
             </p>
             <svg
               class="onboard-icon"
@@ -4007,17 +4057,58 @@
               <path d="M15 13 9 7l4-4 6 6Z" />
             </svg>
           </div>
+          <!-- Step 4: Agreement -->
+          <div class="onboard-slide" data-step="3">
+            <div
+              class="onboard-num"
+              style="
+                background: rgba(249, 115, 22, 0.1);
+                color: var(--p400);
+                border-color: rgba(249, 115, 22, 0.2);
+              "
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                />
+              </svg>
+            </div>
+            <h3>Before You Start</h3>
+            <div class="onboard-agreement">
+              <p>
+                We process your prompts to ensure they are relevant to biomedical research. Your
+                prompts are also sent to third-party LLM proxies and AI model providers who may
+                store and use them for training and service improvement.
+                <strong
+                  >Do not include private, sensitive, confidential, or personally identifiable
+                  information in your prompts.</strong
+                >
+                AI responses may contain errors. Verify all AI responses independently. By
+                continuing, you agree to our
+                <a
+                  href="https://sagebionetworks.org/trust-center"
+                  target="_blank"
+                  style="color: var(--p400)"
+                  >Terms of Service</a
+                >.
+              </p>
+            </div>
+          </div>
         </div>
         <div class="onboard-dots">
           <span class="onboard-dot active" onclick="onboardGo(0)"></span>
           <span class="onboard-dot" onclick="onboardGo(1)"></span>
           <span class="onboard-dot" onclick="onboardGo(2)"></span>
-        </div>
-        <div class="onboard-disclaimer" id="onboardDisclaimer">
-          <strong>Before you start:</strong> Your conversations are used to rank AI models for
-          biomedical research. Model responses may be inaccurate — do not rely on them for medical
-          decisions. <strong>Do not share personal health information.</strong> By continuing, you
-          agree to our <a href="#" style="color: var(--p400)">Terms of Service</a>.
+          <span class="onboard-dot" onclick="onboardGo(3)"></span>
         </div>
         <div class="onboard-footer">
           <label class="onboard-check"
@@ -4666,9 +4757,6 @@
         onboardStep = 0;
         onboardGo(0);
         $('onboardModal').classList.add('on');
-        $('onboardDisclaimer').classList.remove('show');
-        $('onboardBack').style.display = 'none';
-        $('onboardNext').textContent = 'Next';
         window._onboardCallback = callback;
       }
 
@@ -4679,12 +4767,10 @@
         document.querySelectorAll('.onboard-slide')[step]?.classList.add('active');
         document.querySelectorAll('.onboard-dot')[step]?.classList.add('active');
         $('onboardBack').style.display = step > 0 ? '' : 'none';
-        if (step === 2) {
-          $('onboardNext').textContent = 'Start battle';
-          $('onboardDisclaimer').classList.add('show');
+        if (step === 3) {
+          $('onboardNext').textContent = 'I agree — Start battle';
         } else {
           $('onboardNext').textContent = 'Next';
-          $('onboardDisclaimer').classList.remove('show');
         }
       }
 
@@ -4693,7 +4779,7 @@
       }
 
       function onboardNext() {
-        if (onboardStep < 2) {
+        if (onboardStep < 3) {
           onboardGo(onboardStep + 1);
           return;
         }
@@ -4707,6 +4793,11 @@
           window._onboardCallback();
           window._onboardCallback = null;
         }
+      }
+
+      function closeOnboard() {
+        $('onboardModal').classList.remove('on');
+        window._onboardCallback = null;
       }
 
       function mockLogout() {
