@@ -108,7 +108,7 @@
         apigw apigw_ai@-->|"HTTP /ai/**"| ai
 
         %% AI Service to OpenRouter (LLM chat completions + validation)
-        ai ai_openrouter@-->|"LLM Chat Completions<br>Battle Validation"| openrouter
+        ai ai_openrouter@-->|"LLM Inference,<br>Battle Validation"| openrouter
 
         %% Services to Data Layer
         services services_data@--> data
@@ -147,8 +147,8 @@
         style postgres fill:transparent,stroke:none
         style valkey fill:transparent,stroke:none
 
-        %% Style OpenRouter as external service
-        style openrouter fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+        %% Style OpenRouter as external service (brand color #94A3B8)
+        style openrouter fill:#e2e8f0,stroke:#94A3B8,stroke-width:2px
 
 
       </div>
