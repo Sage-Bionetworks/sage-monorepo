@@ -21,5 +21,8 @@
       "Read(./.aws/credentials)",
       "Read(./.aws/config)"
     ]
+  },
+  "enabledPlugins": {
+    "skill-creator@claude-plugins-official": true
   }
 }
