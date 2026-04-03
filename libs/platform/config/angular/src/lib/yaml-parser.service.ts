@@ -86,11 +86,6 @@ export class YamlParserService {
         ...(this.configBasePath ? [resolve(process.cwd(), this.configBasePath)] : []),
       ];
 
-      // Development: use injected CONFIG_BASE_PATH if available
-      if (this.configBasePath) {
-        possiblePaths.push(resolve(process.cwd(), this.configBasePath));
-      }
-
       // Find the first path that exists
       for (const path of possiblePaths) {
         try {
