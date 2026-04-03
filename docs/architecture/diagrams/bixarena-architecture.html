@@ -93,22 +93,22 @@
         end
 
         %% External Services
-        openrouter@{shape: icon, icon: 'mdi:robot', label: 'OpenRouter<br>(LLM Proxy)'}
+        openrouter@{shape: icon, icon: 'simple-icons:openrouter', label: 'OpenRouter<br>(LLM Proxy)'}
 
         %% Connections - User to ALB
         user user_alb@-->|HTTPS| alb
 
         %% ALB to Frontend and Gateway
         alb alb_app@-->|"/**"| app
-        alb alb_apigw@-->|"proxy /api/\*\*, /ai/\*\*, /auth/\*\*"| apigw
+        alb alb_apigw@-->|"/api/\*\*, /ai/\*\*, /auth/\*\*"| apigw
 
         %% API Gateway to Services
         apigw apigw_auth@-->|"HTTP /auth/**"| auth
         apigw apigw_api@-->|"HTTP /api/**"| api
         apigw apigw_ai@-->|"HTTP /ai/**"| ai
 
-        %% Gradio to OpenRouter
-        app app_openrouter@-->|"LLM Requests"| openrouter
+        %% AI Service to OpenRouter (LLM chat completions + validation)
+        ai ai_openrouter@-->|"LLM Inference,<br>Battle Validation"| openrouter
 
         %% Services to Data Layer
         services services_data@--> data
@@ -120,7 +120,7 @@
         apigw_auth@{ animate: true }
         apigw_api@{ animate: true }
         apigw_ai@{ animate: true }
-        app_openrouter@{ animate: true }
+        ai_openrouter@{ animate: true }
         services_data@{ animate: true }
 
         %% Styling for subgraphs
@@ -147,8 +147,8 @@
         style postgres fill:transparent,stroke:none
         style valkey fill:transparent,stroke:none
 
-        %% Style OpenRouter as external service
-        style openrouter fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+        %% Style OpenRouter as external service (brand color #94A3B8)
+        style openrouter fill:#e2e8f0,stroke:#94A3B8,stroke-width:2px
 
 
       </div>
@@ -168,6 +168,13 @@
           name: 'mdi',
           loader: () =>
             fetch('https://unpkg.com/@iconify-json/mdi@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'simple-icons',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/simple-icons@1/icons.json').then((r) =>
+              r.json(),
+            ),
         },
         {
           name: 'catppuccin',

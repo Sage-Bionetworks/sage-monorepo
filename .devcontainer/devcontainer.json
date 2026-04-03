@@ -211,6 +211,7 @@
   "otherPortsAttributes": {
     "onAutoForward": "silent"
   },
+  "postCreateCommand": "mkdir -p \"${containerWorkspaceFolder}/.claude-user\" && ln -sfn \"${containerWorkspaceFolder}/.claude-user\" \"$HOME/.claude\"",
   "shutdownAction": "stopContainer",
   "runArgs": ["--name", "sage-monorepo-devcontainer"],
   "customizations": {

@@ -191,7 +191,11 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: GeneExpressionsPage) => {
-          const data = response.geneExpressions;
+          const data = response.geneExpressions.map((row) =>
+            row.model_group
+              ? { ...row, name: { ...row.name, link_url: `models/${row.model_group}` } }
+              : row,
+          );
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
@@ -221,7 +225,11 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: GeneExpressionsPage) => {
-          const data = response.geneExpressions;
+          const data = response.geneExpressions.map((row) =>
+            row.model_group
+              ? { ...row, name: { ...row.name, link_url: `models/${row.model_group}` } }
+              : row,
+          );
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
