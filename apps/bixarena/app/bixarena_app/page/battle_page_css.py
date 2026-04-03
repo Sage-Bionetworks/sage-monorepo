@@ -19,6 +19,26 @@ CHATBOT_BATTLE_CSS = """
     50% { opacity: 0; }
 }
 
+/* Waiting indicator before first token (TTFT) */
+.waiting-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--body-text-color-subdued);
+    font-size: var(--text-md);
+    font-weight: 600;
+}
+.waiting-indicator .dots::after {
+    content: '';
+    animation: dots 1.5s steps(4, end) infinite;
+}
+@keyframes dots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+}
+
 /* System message styling */
 .message.bot.panel-full-width.thought:has(.system-message) {
     border: none;
