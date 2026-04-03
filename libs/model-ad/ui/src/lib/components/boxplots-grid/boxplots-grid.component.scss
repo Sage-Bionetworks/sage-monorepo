@@ -1,6 +1,7 @@
 .boxplots-grid {
   display: grid;
-  gap: 30px 50px;
+  gap: 15px;
+  padding: 15px;
   grid-template-columns: repeat(auto-fit, minmax(495px, 1fr));
   justify-content: center;
 }
