@@ -13,6 +13,10 @@ class StreamError(Exception):
     """Raised when the backend SSE stream returns an error or empty response."""
 
 
+class ModelTimeoutError(Exception):
+    """Raised when a model does not respond within the allowed time."""
+
+
 def get_user_error_message(error: Exception) -> str:
     """Map any error from the streaming pipeline to a user-friendly message.
 
@@ -20,6 +24,11 @@ def get_user_error_message(error: Exception) -> str:
     the generated API client (status_code-based).
     """
     logger.error("Error: %s", error, exc_info=True)
+
+    if isinstance(error, ModelTimeoutError):
+        return (
+            "The model response timed out.<br>Please start a new battle and try again."
+        )
 
     if isinstance(error, StreamError):
         return (
