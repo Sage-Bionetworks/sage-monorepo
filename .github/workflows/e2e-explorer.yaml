@@ -92,8 +92,7 @@ jobs:
         run: git switch -c new-branch
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        # Pin to v4.2.1 until https://github.com/nrwl/nx-set-shas/issues/186 is fixed
-        uses: nrwl/nx-set-shas@2fa6769581e1ccf9ca8ce27e305d21b195bdaa7f # v4.2.1
+        uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
 
       - name: Set up the dev container
         id: setup-dev-container
