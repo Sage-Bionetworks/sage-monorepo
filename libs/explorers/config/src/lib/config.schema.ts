@@ -14,8 +14,8 @@ export const AppConfigSchema = BaseConfigSchema.extend({
 export type AppConfig = z.infer<typeof AppConfigSchema>;
 export type ServerConfig = AppConfig;
 
-export interface RuntimeAppConfig extends AppConfig {
-  isPlatformServer: boolean;
+export interface RuntimeServerConfig extends AppConfig {
+  isPlatformServer: true;
 }
 
 export function validateConfig(config: unknown): AppConfig {

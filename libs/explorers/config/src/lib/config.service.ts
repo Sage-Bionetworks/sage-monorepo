@@ -1,7 +1,7 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { ConfigLoaderService } from '@sagebionetworks/platform/config/angular';
-import { RuntimeAppConfig, validateConfig, AppConfig } from './config.schema';
+import { RuntimeServerConfig, validateConfig, AppConfig } from './config.schema';
 import { RuntimeClientConfig } from './client-config.schema';
 import { transformServerToClientConfig } from './config-transformer';
 
@@ -9,12 +9,12 @@ import { transformServerToClientConfig } from './config-transformer';
   providedIn: 'root',
 })
 export class ConfigService extends ConfigLoaderService<
-  RuntimeClientConfig | RuntimeAppConfig,
+  RuntimeClientConfig | RuntimeServerConfig,
   AppConfig
 > {
   protected override readonly platformId = inject(PLATFORM_ID);
 
-  config!: RuntimeClientConfig | RuntimeAppConfig;
+  config!: RuntimeClientConfig | RuntimeServerConfig;
 
   protected override validateConfig(config: unknown): AppConfig {
     return validateConfig(config);
@@ -28,14 +28,14 @@ export class ConfigService extends ConfigLoaderService<
     };
   }
 
-  override async loadConfig(basePath?: string): Promise<RuntimeClientConfig | RuntimeAppConfig> {
+  override async loadConfig(basePath?: string): Promise<RuntimeClientConfig | RuntimeServerConfig> {
     const loaded = await super.loadConfig(basePath);
 
     if (isPlatformServer(this.platformId)) {
       this.config = {
         ...(loaded as AppConfig),
         isPlatformServer: true,
-      } as RuntimeAppConfig;
+      } as RuntimeServerConfig;
     } else {
       this.config = loaded as RuntimeClientConfig;
     }

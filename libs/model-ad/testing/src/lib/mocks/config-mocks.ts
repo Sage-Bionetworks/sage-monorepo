@@ -1,6 +1,6 @@
-import { RuntimeAppConfig } from '@sagebionetworks/model-ad/config';
+import { RuntimeServerConfig } from '@sagebionetworks/model-ad/config';
 
-export const configMock: RuntimeAppConfig = {
+export const configMock: RuntimeServerConfig = {
   appVersion: 'local',
   commitSha: '',
   csrApiUrl: 'http://localhost:4200/v1',
@@ -9,5 +9,5 @@ export const configMock: RuntimeAppConfig = {
   googleTagManagerId: '',
   sentryRelease: '',
   environment: 'dev',
-  isPlatformServer: false,
+  isPlatformServer: true,
 };

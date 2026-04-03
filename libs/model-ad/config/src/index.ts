@@ -1,6 +1,6 @@
 export {
   AppConfig,
-  RuntimeAppConfig,
+  RuntimeServerConfig,
   RuntimeClientConfig,
   ServerConfig,
   ConfigService,

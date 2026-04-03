@@ -18,7 +18,7 @@ import {
 import { provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client';
-import { configFactory, ConfigService, RuntimeAppConfig } from '@sagebionetworks/model-ad/config';
+import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
 import { provideMarkdown } from 'ngx-markdown';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
@@ -45,10 +45,10 @@ export const appConfig: ApplicationConfig = {
     }),
     {
       provide: API_CLIENT_BASE_PATH,
-      useFactory: (configService: ConfigService) =>
-        configService.config.isPlatformServer
-          ? (configService.config as RuntimeAppConfig).ssrApiUrl
-          : configService.config.csrApiUrl,
+      useFactory: (configService: ConfigService) => {
+        const config = configService.config;
+        return config.isPlatformServer ? config.ssrApiUrl : config.csrApiUrl;
+      },
       deps: [ConfigService],
     },
     provideAnimationsAsync(),

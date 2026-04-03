@@ -13,5 +13,5 @@ export const ClientConfigSchema = BaseConfigSchema.extend({
 export type ClientConfig = z.infer<typeof ClientConfigSchema>;
 
 export interface RuntimeClientConfig extends ClientConfig {
-  isPlatformServer: boolean;
+  isPlatformServer: false;
 }

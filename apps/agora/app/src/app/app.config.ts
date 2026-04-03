@@ -16,7 +16,7 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client';
-import { configFactory, ConfigService, RuntimeAppConfig } from '@sagebionetworks/agora/config';
+import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
 import { provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client';
@@ -51,10 +51,10 @@ export const appConfig: ApplicationConfig = {
     }),
     {
       provide: API_CLIENT_BASE_PATH,
-      useFactory: (configService: ConfigService) =>
-        configService.config.isPlatformServer
-          ? (configService.config as RuntimeAppConfig).ssrApiUrl
-          : configService.config.csrApiUrl,
+      useFactory: (configService: ConfigService) => {
+        const config = configService.config;
+        return config.isPlatformServer ? config.ssrApiUrl : config.csrApiUrl;
+      },
       deps: [ConfigService],
     },
     provideAnimationsAsync(),
