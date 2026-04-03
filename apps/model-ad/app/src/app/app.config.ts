@@ -32,18 +32,23 @@ export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'model-ad-app' },
     provideAppInitializer(() => {
-      const initializerFn = configFactory(inject(ConfigService));
-      return initializerFn();
+      const configService = inject(ConfigService);
+      return configFactory(configService)().then(() => {
+        const release = configService.config.sentryRelease;
+        if (release) {
+          Sentry.addEventProcessor((event) => ({ ...event, release }));
+        }
+      });
     }),
     provideExplorersConfig({
       visualizationOverviewPanes: VISUALIZATION_OVERVIEW_PANES,
     }),
     {
       provide: API_CLIENT_BASE_PATH,
-      useFactory: (configService: ConfigService) =>
-        configService.config.isPlatformServer
-          ? configService.config.ssrApiUrl
-          : configService.config.csrApiUrl,
+      useFactory: (configService: ConfigService) => {
+        const config = configService.config;
+        return config.isPlatformServer ? config.ssrApiUrl : config.csrApiUrl;
+      },
       deps: [ConfigService],
     },
     provideAnimationsAsync(),

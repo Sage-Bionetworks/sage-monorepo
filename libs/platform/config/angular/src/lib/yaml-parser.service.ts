@@ -80,12 +80,11 @@ export class YamlParserService {
       const possiblePaths = [
         // Production: relative to server bundle
         join(currentDir, '../../browser/config'),
+        join(currentDir, '../browser/config'),
+        join(currentDir, 'browser/config'),
+        // Development: provided via CONFIG_BASE_PATH
+        ...(this.configBasePath ? [resolve(process.cwd(), this.configBasePath)] : []),
       ];
-
-      // Development: use injected CONFIG_BASE_PATH if available
-      if (this.configBasePath) {
-        possiblePaths.push(resolve(process.cwd(), this.configBasePath));
-      }
 
       // Find the first path that exists
       for (const path of possiblePaths) {
