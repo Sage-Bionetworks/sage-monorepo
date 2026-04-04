@@ -12,6 +12,9 @@ site/
 .act.secrets
 .openchallenges.toml
 
+# Generated app config files (from templates via envsubst)
+**/config/config.json
+
 # Generated Dockerfiles from centralized container image system
 **/Dockerfile.generated
 

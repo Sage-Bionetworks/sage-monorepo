@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 
-cd "${APP_DIR}/browser/config"
-envsubst < config.json.template > config.json
+node /docker-entrypoint.d/create-config-json.js \
+  "${APP_DIR}/browser/config/config.json.template" \
+  "${APP_DIR}/browser/config/config.json"
