@@ -12,11 +12,27 @@ from bixarena_app.config.system_message import (
 )
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.battle_state import BattleSession, State
-from bixarena_app.model.error_handler import get_user_error_message
+from bixarena_app.model.error_handler import (
+    ModelTimeoutError,
+    get_user_error_message,
+)
 
 logger = logging.getLogger(__name__)
 
 CURSOR = '<span class="streaming-cursor">▌</span>'
+POLL_INTERVAL = 5  # seconds between queue polls
+PER_MODEL_TIMEOUT = 300  # seconds of inactivity before timeout
+SLOW_MODEL_THRESHOLD = 30  # seconds before showing "taking longer" hint
+
+WAITING_INDICATOR = (
+    "<span class=\"waiting-indicator\">Generating<span class='dots'></span></span>"
+)
+WAITING_SLOW_INDICATOR = (
+    '<span class="waiting-indicator">'
+    "This model is taking a bit longer. Hang tight"
+    "<span class='dots'></span>"
+    "</span>"
+)
 
 
 def bot_response(
@@ -35,7 +51,7 @@ def bot_response(
         cookies=cookies,
     )
 
-    state.update_last_message(CURSOR)
+    state.update_last_message(WAITING_INDICATOR)
     yield (state, state.to_gradio_chatbot())
 
     try:
@@ -116,6 +132,11 @@ def bot_response_multi(
     # This prevents one slow model from blocking the other's display.
     _SENTINEL = object()
     q = queue.Queue()
+    start_time = time.monotonic()
+    last_active = [start_time] * num_sides
+    finished = [False] * num_sides
+    has_content = [False] * num_sides
+    shown_slow_hint = [False] * num_sides
 
     def _stream_model(i):
         try:
@@ -124,8 +145,10 @@ def bot_response_multi(
                 battle_session=battle_session,
                 cookies=cookies,
             ):
+                last_active[i] = time.monotonic()
                 q.put((i, state, chatbot))
         finally:
+            last_active[i] = time.monotonic()
             q.put((i, _SENTINEL, None))
 
     for i in range(num_sides):
@@ -135,17 +158,66 @@ def bot_response_multi(
     done = 0
     while done < num_sides:
         try:
-            i, state_or_sentinel, chatbot = q.get(timeout=120)
+            i, state_or_sentinel, chatbot = q.get(timeout=POLL_INTERVAL)
         except queue.Empty:
-            logger.error("Streaming timed out waiting for model updates")
-            break
+            now = time.monotonic()
+            slow_updated = False
+            for idx in range(num_sides):
+                if finished[idx]:
+                    continue
+                # Show slow hint if model hasn't sent content yet
+                elapsed = now - start_time
+                if (
+                    not has_content[idx]
+                    and not shown_slow_hint[idx]
+                    and elapsed > SLOW_MODEL_THRESHOLD
+                ):
+                    states[idx].update_last_message(WAITING_SLOW_INDICATOR)
+                    chatbots[idx] = states[idx].to_gradio_chatbot()
+                    shown_slow_hint[idx] = True
+                    slow_updated = True
+                if now - last_active[idx] > PER_MODEL_TIMEOUT:
+                    logger.error(
+                        "Model %s timed out after %ds of inactivity",
+                        states[idx].model_name,
+                        PER_MODEL_TIMEOUT,
+                    )
+                    states[idx].update_last_message(
+                        create_system_message_html(
+                            get_user_error_message(ModelTimeoutError())
+                        )
+                    )
+                    states[idx].has_error = True
+                    chatbots[idx] = states[idx].to_gradio_chatbot()
+                    finished[idx] = True
+                    done += 1
+            if slow_updated:
+                yield (
+                    states
+                    + [battle_session]
+                    + chatbots
+                    + [gr.Row(visible=False)]
+                    + [gr.Row(visible=False)]
+                    + [gr.HTML(visible=False)]
+                    + [gr.Row(visible=True)]
+                    + [gr.update()]
+                    + [gr.update()]
+                )
+            continue
 
         if state_or_sentinel is _SENTINEL:
-            done += 1
+            if not finished[i]:
+                finished[i] = True
+                done += 1
+            continue
+
+        if finished[i]:
             continue
 
         states[i] = state_or_sentinel
         chatbots[i] = chatbot
+        if not has_content[i] and CURSOR in states[i].messages[-1].content:
+            has_content[i] = True
 
         # State 2: Models streaming responses
         yield (

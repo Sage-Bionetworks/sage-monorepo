@@ -17,7 +17,7 @@ jobs:
           persist-credentials: true
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v4
+        uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
