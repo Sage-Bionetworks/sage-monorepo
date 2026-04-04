@@ -85,7 +85,7 @@ info:
 
 app:
   welcome-message: 'Welcome to BixArena Auth Service'
-  ui-base-url: http://127.0.0.1:8100
+  ui-base-url: http://127.0.0.1:8111
   session-cookie:
     name: JSESSIONID
     path: /

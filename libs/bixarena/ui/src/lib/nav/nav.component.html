@@ -9,7 +9,11 @@
   </nav>
   <div class="actions">
     <span class="divider"></span>
-    <p-button label="Login" />
+    @if (authService.isAuthenticated()) {
+      <p-button label="Logout" severity="secondary" (onClick)="authService.logout()" />
+    } @else {
+      <p-button label="Login" (onClick)="authService.login()" />
+    }
     <button
       class="theme-toggle"
       (click)="themeService.toggle()"
