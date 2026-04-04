@@ -1,5 +1,9 @@
 app:
   version: local
+  termsOfServiceUrl: https://sagebionetworks.org/trust-center
+  contactUrl: https://sagebionetworks.org/contact
+  feedbackUrl: https://forms.gle/WsvSdEfv5MfFpeedA
+  sageBionetworksUrl: https://sagebionetworks.org
 
 api:
   csrBaseUrl: http://localhost:8111/api/v1
@@ -8,11 +12,5 @@ api:
 auth:
   csrBaseUrl: http://localhost:8113
   ssrBaseUrl: http://bixarena-api-gateway:8113
-
-footer:
-  termsOfServiceUrl: https://sagebionetworks.org/trust-center
-  contactUrl: https://sagebionetworks.org/contact
-  feedbackUrl: https://forms.gle/WsvSdEfv5MfFpeedA
-  sageBionetworksUrl: https://sagebionetworks.org
 
 environment: dev

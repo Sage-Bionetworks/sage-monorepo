@@ -4,6 +4,10 @@ import { BaseConfigSchema } from '@sagebionetworks/platform/config/angular';
 export const AppConfigSchema = BaseConfigSchema.extend({
   app: z.object({
     version: z.string().min(1, 'App version is required'),
+    termsOfServiceUrl: z.url(),
+    contactUrl: z.url(),
+    feedbackUrl: z.url(),
+    sageBionetworksUrl: z.url(),
   }),
 
   api: z.object({
@@ -14,13 +18,6 @@ export const AppConfigSchema = BaseConfigSchema.extend({
   auth: z.object({
     csrBaseUrl: z.url({ message: 'Auth CSR base URL must be a valid URL' }),
     ssrBaseUrl: z.url({ message: 'Auth SSR base URL must be a valid URL' }),
-  }),
-
-  footer: z.object({
-    termsOfServiceUrl: z.url(),
-    contactUrl: z.url(),
-    feedbackUrl: z.url(),
-    sageBionetworksUrl: z.url(),
   }),
 });
 
