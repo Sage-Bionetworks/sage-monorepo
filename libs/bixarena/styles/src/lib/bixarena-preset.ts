@@ -1,12 +1,20 @@
 import { definePreset } from '@primeuix/themes';
 import Lara from '@primeuix/themes/lara';
 
-// Tailwind orange primary + zinc surfaces. Dark surface scale is inverted
-// (0=darkest, 950=lightest) with surface-0 adjusted to #111113 to avoid
-// Chrome Retina GPU compositing artifacts on near-black backgrounds.
 export const BixArenaPreset = definePreset(Lara, {
   primitive: {
     fontFamily: "'DM Sans Variable', 'DM Sans', system-ui, sans-serif",
+    borderRadius: {
+      none: '0',
+      xs: '2px',
+      sm: '4px',
+      md: '8px',
+      lg: '12px',
+      xl: '16px',
+    },
+    teal: { 400: '#34d4b4' },
+    blue: { 400: '#6cb4fc' },
+    violet: { 400: '#b49cfa' },
   },
   semantic: {
     primary: {
@@ -25,34 +33,34 @@ export const BixArenaPreset = definePreset(Lara, {
     colorScheme: {
       light: {
         surface: {
-          0: '#ffffff',
-          50: '#fafafa',
-          100: '#f4f4f5',
-          200: '#e4e4e7',
-          300: '#d4d4d8',
-          400: '#a1a1aa',
-          500: '#71717a',
-          600: '#52525b',
-          700: '#3f3f46',
-          800: '#27272a',
-          900: '#18181b',
-          950: '#09090b',
+          0: '#fdfcfb',
+          50: '#f9f7f4',
+          100: '#f4f0eb',
+          200: '#e8e2db',
+          300: '#d6cfc7',
+          400: '#b3aca5',
+          500: '#918a83',
+          600: '#7c746f',
+          700: '#3a3a40',
+          800: '#24252d',
+          900: '#1b1818',
+          950: '#110f0e',
         },
       },
       dark: {
         surface: {
-          0: '#111113',
-          50: '#18181b',
-          100: '#27272a',
-          200: '#3f3f46',
-          300: '#52525b',
-          400: '#71717a',
-          500: '#a1a1aa',
-          600: '#d4d4d8',
-          700: '#e4e4e7',
-          800: '#f4f4f5',
-          900: '#fafafa',
-          950: '#ffffff',
+          0: '#1b1818',
+          50: '#221f1d',
+          100: '#2a2624',
+          200: '#3d3835',
+          300: '#524c48',
+          400: '#6b6560',
+          500: '#918a83',
+          600: '#b3aca5',
+          700: '#d8d2cc',
+          800: '#f4f0eb',
+          900: '#f9f7f4',
+          950: '#fdfcfb',
         },
         text: {
           color: '{surface.950}',
