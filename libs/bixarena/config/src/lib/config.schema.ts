@@ -10,6 +10,18 @@ export const AppConfigSchema = BaseConfigSchema.extend({
     csrBaseUrl: z.url({ message: 'CSR API base URL must be a valid URL' }),
     ssrBaseUrl: z.url({ message: 'SSR API base URL must be a valid URL' }),
   }),
+
+  auth: z.object({
+    csrBaseUrl: z.url({ message: 'Auth CSR base URL must be a valid URL' }),
+    ssrBaseUrl: z.url({ message: 'Auth SSR base URL must be a valid URL' }),
+  }),
+
+  footer: z.object({
+    termsOfServiceUrl: z.url(),
+    contactUrl: z.url(),
+    feedbackUrl: z.url(),
+    sageBionetworksUrl: z.url(),
+  }),
 });
 
 export type AppConfig = z.infer<typeof AppConfigSchema>;
