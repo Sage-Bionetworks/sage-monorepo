@@ -1,1 +1,1 @@
-export * from './lib/bixarena-preset';
+export * from './lib/base-preset';
