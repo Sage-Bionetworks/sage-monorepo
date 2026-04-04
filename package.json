@@ -27,6 +27,7 @@
     "@angular/router": "20.3.1",
     "@angular/ssr": "20.3.2",
     "@fontsource-variable/dm-sans": "5.2.5",
+    "@fontsource-variable/playfair-display": "5.2.8",
     "@fortawesome/angular-fontawesome": "1.0.0",
     "@fortawesome/free-solid-svg-icons": "6.7.1",
     "@octokit/rest": "22.0.0",
