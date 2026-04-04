@@ -6,8 +6,8 @@ api:
   ssrBaseUrl: http://bixarena-apex:8111/api/v1
 
 auth:
-  csrBaseUrl: http://localhost:8111
-  ssrBaseUrl: http://bixarena-apex:8111
+  csrBaseUrl: http://localhost:8113
+  ssrBaseUrl: http://bixarena-api-gateway:8113
 
 footer:
   termsOfServiceUrl: https://sagebionetworks.org/trust-center
