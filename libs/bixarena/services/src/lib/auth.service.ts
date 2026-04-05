@@ -25,9 +25,7 @@ export class AuthService {
   async init(): Promise<void> {
     if (!this.isBrowser) return;
     try {
-      const res = await fetch(`${this.authUrl}/userinfo`, {
-        credentials: 'include',
-      });
+      const res = await fetch('/userinfo');
       if (res.ok) {
         this.user.set(await res.json());
       }
@@ -44,10 +42,7 @@ export class AuthService {
   async logout(): Promise<void> {
     if (!this.isBrowser) return;
     try {
-      await fetch(`${this.authUrl}/auth/logout`, {
-        method: 'POST',
-        credentials: 'include',
-      });
+      await fetch('/auth/logout', { method: 'POST' });
     } finally {
       this.user.set(null);
       window.location.href = '/';

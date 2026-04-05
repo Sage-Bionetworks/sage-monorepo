@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AuthService, ThemeService } from '@sagebionetworks/bixarena/services';
@@ -12,4 +12,9 @@ import { AuthService, ThemeService } from '@sagebionetworks/bixarena/services';
 export class NavComponent {
   readonly authService = inject(AuthService);
   readonly themeService = inject(ThemeService);
+
+  readonly initials = computed(() => {
+    const name = this.authService.user()?.preferred_username ?? '';
+    return name.slice(0, 2).toUpperCase();
+  });
 }

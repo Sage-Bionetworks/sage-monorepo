@@ -11,7 +11,13 @@
   <div class="actions">
     <span class="divider"></span>
     @if (authService.isAuthenticated()) {
-      <p-button label="Logout" severity="secondary" (onClick)="authService.logout()" />
+      <button
+        class="avatar"
+        (click)="authService.logout()"
+        [title]="'Logout ' + authService.user()?.preferred_username"
+      >
+        {{ initials() }}
+      </button>
     } @else {
       <p-button label="Login" (onClick)="authService.login()" />
     }
