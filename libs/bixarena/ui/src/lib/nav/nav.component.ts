@@ -14,7 +14,12 @@ export class NavComponent {
   readonly themeService = inject(ThemeService);
 
   readonly initials = computed(() => {
-    const name = this.authService.user()?.preferred_username ?? '';
+    const name =
+      this.authService.user()?.preferred_username ?? this.authService.cachedUsername() ?? '';
     return name.slice(0, 2).toUpperCase();
   });
+
+  readonly showAvatar = computed(
+    () => this.authService.isAuthenticated() || this.authService.cachedUsername() !== null,
+  );
 }

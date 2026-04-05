@@ -10,6 +10,8 @@ export interface UserInfo {
   roles: string[];
 }
 
+const CACHE_KEY = 'ba-user';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -17,6 +19,7 @@ export class AuthService {
 
   readonly user = signal<UserInfo | null>(null);
   readonly isAuthenticated = computed(() => this.user() !== null);
+  readonly cachedUsername = signal<string | null>(this.loadCache());
 
   private get authUrl(): string {
     return this.configService.config.auth.csrBaseUrl;
@@ -27,10 +30,14 @@ export class AuthService {
     try {
       const res = await fetch('/userinfo');
       if (res.ok) {
-        this.user.set(await res.json());
+        const user: UserInfo = await res.json();
+        this.user.set(user);
+        this.saveCache(user.preferred_username);
+      } else {
+        this.clearCache();
       }
     } catch {
-      // Not authenticated or auth service unavailable
+      this.clearCache();
     }
   }
 
@@ -45,7 +52,34 @@ export class AuthService {
       await fetch('/auth/logout', { method: 'POST' });
     } finally {
       this.user.set(null);
+      this.clearCache();
       window.location.href = '/';
+    }
+  }
+
+  private loadCache(): string | null {
+    if (!this.isBrowser) return null;
+    try {
+      return localStorage.getItem(CACHE_KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  private saveCache(username: string): void {
+    try {
+      localStorage.setItem(CACHE_KEY, username);
+    } catch {
+      // localStorage unavailable
+    }
+  }
+
+  private clearCache(): void {
+    this.cachedUsername.set(null);
+    try {
+      localStorage.removeItem(CACHE_KEY);
+    } catch {
+      // localStorage unavailable
     }
   }
 }
