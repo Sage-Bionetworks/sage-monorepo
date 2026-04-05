@@ -8,5 +8,10 @@ import { ConfigService } from '@sagebionetworks/bixarena/config';
   styleUrl: './footer.component.scss',
 })
 export class FooterComponent {
-  protected readonly version = inject(ConfigService).config.app.version;
+  private readonly config = inject(ConfigService).config;
+  protected readonly version = this.config.app.version;
+  protected readonly termsOfServiceUrl = this.config.app.termsOfServiceUrl;
+  protected readonly contactUrl = this.config.app.contactUrl;
+  protected readonly feedbackUrl = this.config.app.feedbackUrl;
+  protected readonly sageBionetworksUrl = this.config.app.sageBionetworksUrl;
 }
