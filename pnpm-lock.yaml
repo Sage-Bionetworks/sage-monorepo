@@ -54,7 +54,7 @@ importers:
         specifier: 5.2.5
         version: 5.2.5
       '@fontsource-variable/playfair-display':
-        specifier: ^5.2.8
+        specifier: 5.2.8
         version: 5.2.8
       '@fortawesome/angular-fontawesome':
         specifier: 1.0.0
