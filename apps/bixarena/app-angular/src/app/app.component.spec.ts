@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
-import { ThemeService } from '@sagebionetworks/bixarena/services';
+import { AuthService, ThemeService } from '@sagebionetworks/bixarena/services';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -12,11 +12,33 @@ describe('AppComponent', () => {
         provideRouter([]),
         {
           provide: ConfigService,
-          useValue: { config: { app: { version: 'test' } } },
+          useValue: {
+            config: {
+              app: {
+                version: 'test',
+                termsOfServiceUrl: '',
+                contactUrl: '',
+                feedbackUrl: '',
+                sageBionetworksUrl: '',
+              },
+              auth: { csrBaseUrl: '' },
+            },
+          },
         },
         {
           provide: ThemeService,
           useValue: { init: () => undefined, toggle: () => undefined, isDark: () => false },
+        },
+        {
+          provide: AuthService,
+          useValue: {
+            user: () => null,
+            isAuthenticated: () => false,
+            cachedUsername: () => null,
+            login: () => undefined,
+            logout: () => undefined,
+            init: () => Promise.resolve(),
+          },
         },
       ],
     }).compileComponents();
