@@ -11,5 +11,5 @@ import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm'
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  readonly useGtm = inject(ConfigService).config.analytics.googleTagManager.enabled;
+  readonly useGoogleTagManager = inject(ConfigService).config.analytics.googleTagManager.enabled;
 }
