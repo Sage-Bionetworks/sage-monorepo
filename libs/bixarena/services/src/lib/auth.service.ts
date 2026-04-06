@@ -22,7 +22,7 @@ export class AuthService {
   readonly cachedUsername = signal<string | null>(this.loadCache());
 
   private get authUrl(): string {
-    return this.configService.config.auth.csrBaseUrl;
+    return this.configService.config.auth.baseUrls.csr;
   }
 
   async init(): Promise<void> {

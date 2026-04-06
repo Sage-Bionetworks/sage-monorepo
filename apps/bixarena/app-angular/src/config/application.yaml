@@ -1,16 +1,30 @@
+# Base configuration for BioArena App
+# Default values can be overridden by:
+# 1. Profile-specific files (e.g., application-dev.yaml)
+# 2. Environment variables (e.g., APP_VERSION, API_BASE_URLS_CSR, ANALYTICS_GOOGLE_TAG_MANAGER_ID)
+
 app:
   version: local
-  termsOfServiceUrl: https://sagebionetworks.org/trust-center
-  contactUrl: https://sagebionetworks.org/contact
-  feedbackUrl: https://forms.gle/WsvSdEfv5MfFpeedA
-  sageBionetworksUrl: https://sagebionetworks.org
 
 api:
-  csrBaseUrl: http://127.0.0.1:8111/api/v1
-  ssrBaseUrl: http://bixarena-apex:8111/api/v1
+  baseUrls:
+    csr: http://127.0.0.1:8111/api/v1
+    ssr: http://bixarena-apex:8111/api/v1
 
 auth:
-  csrBaseUrl: http://127.0.0.1:8113
-  ssrBaseUrl: http://bixarena-api-gateway:8113
+  baseUrls:
+    csr: http://127.0.0.1:8113
+    ssr: http://bixarena-api-gateway:8113
+
+analytics:
+  googleTagManager:
+    enabled: true
+    id: ''
+
+links:
+  termsOfService: https://sagebionetworks.org/trust-center
+  contact: https://sagebionetworks.org/contact
+  feedback: https://forms.gle/WsvSdEfv5MfFpeedA
+  sageBionetworks: https://sagebionetworks.org
 
 environment: dev

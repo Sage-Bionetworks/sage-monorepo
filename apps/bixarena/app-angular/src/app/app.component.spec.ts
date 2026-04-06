@@ -14,14 +14,17 @@ describe('AppComponent', () => {
           provide: ConfigService,
           useValue: {
             config: {
-              app: {
-                version: 'test',
-                termsOfServiceUrl: '',
-                contactUrl: '',
-                feedbackUrl: '',
-                sageBionetworksUrl: '',
+              app: { version: 'test' },
+              links: {
+                termsOfService: '',
+                contact: '',
+                feedback: '',
+                sageBionetworks: '',
               },
-              auth: { csrBaseUrl: '' },
+              auth: { baseUrls: { csr: '' } },
+              analytics: {
+                googleTagManager: { enabled: false, id: '' },
+              },
             },
           },
         },

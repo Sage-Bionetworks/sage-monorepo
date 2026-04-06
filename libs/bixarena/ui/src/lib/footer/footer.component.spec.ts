@@ -14,12 +14,12 @@ describe('FooterComponent', () => {
           provide: ConfigService,
           useValue: {
             config: {
-              app: {
-                version: 'test',
-                termsOfServiceUrl: 'https://example.com/tos',
-                contactUrl: 'https://example.com/contact',
-                feedbackUrl: 'https://example.com/feedback',
-                sageBionetworksUrl: 'https://sagebionetworks.org',
+              app: { version: 'test' },
+              links: {
+                termsOfService: 'https://example.com/tos',
+                contact: 'https://example.com/contact',
+                feedback: 'https://example.com/feedback',
+                sageBionetworks: 'https://sagebionetworks.org',
               },
             },
           },
