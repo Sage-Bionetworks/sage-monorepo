@@ -1,9 +1,16 @@
 .boxplots-grid {
   display: grid;
-  gap: 15px;
-  padding: 15px;
   grid-template-columns: repeat(auto-fit, minmax(495px, 1fr));
   justify-content: center;
+
+  // negative margin needed to offset the padding of .boxplot-wrapper
+  // otherwise the boxplot headers will be misaligned with the boxplot
+  // when downloading the boxplots
+  margin: 0 -15px;
+
+  .boxplot-wrapper {
+    padding: 0 15px;
+  }
 }
 
 .boxplots-grid-legend {
