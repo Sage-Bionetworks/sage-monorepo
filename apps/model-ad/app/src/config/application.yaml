@@ -1,3 +1,8 @@
+# Base configuration for Model-AD App
+# Default values can be overridden by:
+# 1. Profile-specific files (e.g., application-dev.yaml)
+# 2. Environment variables (e.g., APP_VERSION, CSR_API_URL, GOOGLE_TAG_MANAGER_ID)
+
 appVersion: local
 commitSha: ''
 csrApiUrl: http://localhost:8000/api/v1
