@@ -6,6 +6,7 @@ export const ClientConfigSchema = BaseConfigSchema.extend({
   commitSha: z.string().default(''),
   apiDocsUrl: z.url(),
   csrApiUrl: z.url(),
+  googleTagManagerEnabled: z.boolean(),
   googleTagManagerId: z.string().default(''),
   sentryRelease: z.string().default(''),
 });

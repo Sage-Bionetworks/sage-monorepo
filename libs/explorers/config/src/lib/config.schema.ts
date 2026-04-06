@@ -7,6 +7,7 @@ export const AppConfigSchema = BaseConfigSchema.extend({
   apiDocsUrl: z.url(),
   csrApiUrl: z.url(),
   ssrApiUrl: z.url(),
+  googleTagManagerEnabled: z.boolean(),
   googleTagManagerId: z.string().default(''),
   sentryRelease: z.string().default(''),
 });

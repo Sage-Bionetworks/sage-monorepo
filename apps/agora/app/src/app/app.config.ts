@@ -21,6 +21,7 @@ import { provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client';
 import * as Sentry from '@sentry/angular';
+import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { provideMarkdown } from 'ngx-markdown';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
@@ -69,6 +70,15 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptors([httpErrorInterceptor])),
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    provideGtmConfig(
+      (configService: ConfigService) => ({
+        enabled: configService.config.googleTagManagerEnabled,
+        gtmId: configService.config.googleTagManagerId,
+        isPlatformServer: configService.config.isPlatformServer,
+      }),
+      [ConfigService],
+    ),
+    provideGtmId(),
     provideMarkdown(),
     provideRouter(
       routes,

@@ -13,12 +13,7 @@ import {
   FooterComponent,
   HeaderComponent,
 } from '@sagebionetworks/explorers/ui';
-import {
-  CONFIG_SERVICE_TOKEN,
-  createGoogleTagManagerIdProvider,
-  GoogleTagManagerComponent,
-  isGoogleTagManagerIdSet,
-} from '@sagebionetworks/shared/google-tag-manager';
+import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
@@ -26,7 +21,7 @@ import { ToastModule } from 'primeng/toast';
     RouterModule,
     ErrorOverlayComponent,
     FooterComponent,
-    GoogleTagManagerComponent,
+    GtmComponent,
     HeaderComponent,
     SearchInputComponent,
     ToastModule,
@@ -36,14 +31,9 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './app.component.scss',
   providers: [
     {
-      provide: CONFIG_SERVICE_TOKEN,
-      useFactory: () => inject(ConfigService),
-    },
-    {
       provide: LOADING_ICON_COLORS,
       useValue: AGORA_LOADING_ICON_COLORS,
     },
-    createGoogleTagManagerIdProvider(),
   ],
 })
 export class AppComponent {
@@ -52,9 +42,7 @@ export class AppComponent {
   private readonly metaTagService = inject(MetaTagService);
   private readonly versionService = inject(VersionService);
 
-  readonly useGoogleTagManager = isGoogleTagManagerIdSet(
-    this.configService.config.googleTagManagerId,
-  );
+  readonly useGoogleTagManager = this.configService.config.googleTagManagerEnabled;
 
   dataVersion = toSignal(
     this.versionService
