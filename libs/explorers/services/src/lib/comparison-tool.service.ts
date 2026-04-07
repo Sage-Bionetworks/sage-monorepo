@@ -472,7 +472,7 @@ export class ComparisonToolService<T> {
   }
 
   /**
-   * Checks the global cookie to determine if the user has chosen to hide
+   * Checks localStorage to determine if the user has chosen to hide
    * the visualization overview panel across all comparison tools.
    */
   isVisualizationOverviewHiddenByUser(): boolean {

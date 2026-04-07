@@ -206,34 +206,34 @@ describe('VisualizationOverviewPanelComponent', () => {
   describe('Checkbox "Don\'t show this again"', () => {
     it('should render checkbox with label', async () => {
       await setup();
-      expect(screen.getByLabelText(/not to show this again/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/don't show this again/i)).toBeInTheDocument();
     });
 
-    it('should initialize checkbox as unchecked when cookie is empty', async () => {
+    it('should initialize checkbox as unchecked when localStorage is empty', async () => {
       await setup({ isHidden: false });
-      const checkbox = screen.getByLabelText(/not to show this again/i) as HTMLInputElement;
+      const checkbox = screen.getByLabelText(/don't show this again/i) as HTMLInputElement;
       expect(checkbox.checked).toBe(false);
     });
 
-    it('should initialize checkbox as checked when cookie is "1"', async () => {
+    it('should initialize checkbox as checked when localStorage is "1"', async () => {
       const { fixture } = await setup({ isHidden: true, isVisible: true });
       fixture.detectChanges();
-      const checkbox = screen.getByLabelText(/not to show this again/i) as HTMLInputElement;
+      const checkbox = screen.getByLabelText(/don't show this again/i) as HTMLInputElement;
       expect(checkbox.checked).toBe(true);
     });
 
-    it('should save cookie immediately when checkbox is clicked', async () => {
+    it('should save preference immediately when checkbox is clicked', async () => {
       const { user, mockStorageService } = await setup({ isHidden: false });
-      const checkbox = screen.getByLabelText(/not to show this again/i);
+      const checkbox = screen.getByLabelText(/don't show this again/i);
 
       await user.click(checkbox);
 
       expect(mockStorageService.setVisualizationOverviewHidden).toHaveBeenCalledWith(true);
     });
 
-    it('should delete cookie when unchecking checkbox', async () => {
+    it('should clear preference when unchecking checkbox', async () => {
       const { user, mockStorageService } = await setup({ isHidden: true, isVisible: true });
-      const checkbox = screen.getByLabelText(/not to show this again/i);
+      const checkbox = screen.getByLabelText(/don't show this again/i);
 
       await user.click(checkbox);
 
@@ -269,8 +269,8 @@ describe('VisualizationOverviewPanelComponent', () => {
     });
   });
 
-  describe('Cookie Initialization', () => {
-    it('should hide dialog when cookie value is "1"', async () => {
+  describe('localStorage Initialization', () => {
+    it('should hide dialog when stored value is "1"', async () => {
       const { component, comparisonToolService } = await setup({
         isHidden: true,
       });
@@ -279,7 +279,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       expect(comparisonToolService.isVisualizationOverviewVisible()).toBe(false);
     });
 
-    it('should show dialog when cookie value is empty', async () => {
+    it('should show dialog when stored value is empty', async () => {
       const { component, comparisonToolService, mockStorageService } = await setup({
         isHidden: false,
       });
@@ -289,7 +289,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       expect(comparisonToolService.isVisualizationOverviewVisible()).toBe(true);
     });
 
-    it('should show dialog when cookie value is "0"', async () => {
+    it('should show dialog when stored value is "0"', async () => {
       const { component, comparisonToolService } = await setup({
         isHidden: false,
       });
