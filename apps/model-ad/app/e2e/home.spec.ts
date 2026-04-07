@@ -15,15 +15,15 @@ test.describe('home', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Model Overview' })).toBeVisible();
   });
 
-  test('gene expression card links to gene expression CT', async ({ page }) => {
+  test('differential expression card links to gene expression CT', async ({ page }) => {
     await page.goto('');
 
-    const geneExpressionCard = page
+    const differentialExpressionCard = page
       .getByRole('button')
-      .filter({ has: page.getByRole('heading', { level: 2, name: 'Gene Expression' }) });
-    await expect(geneExpressionCard).toBeVisible();
+      .filter({ has: page.getByRole('heading', { level: 2, name: 'Differential Expression' }) });
+    await expect(differentialExpressionCard).toBeVisible();
 
-    await geneExpressionCard.click();
+    await differentialExpressionCard.click();
 
     await page.waitForURL('/comparison/expression');
     await expect(page.getByRole('heading', { level: 1, name: 'Gene Expression' })).toBeVisible();

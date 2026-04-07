@@ -80,7 +80,7 @@ test.describe('search', () => {
     const { searchListItems } = await searchAndGetSearchListItems(
       model,
       page,
-      'Find model by name or ID...',
+      'Find mouse model by name or ID...',
     );
     await expect(searchListItems.first()).toHaveText(model);
   });
