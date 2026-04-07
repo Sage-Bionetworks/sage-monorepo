@@ -400,4 +400,94 @@ class UserServiceTest {
     // Verify save was never called
     verify(userRepository, never()).save(any(UserEntity.class));
   }
+
+  @Test
+  @DisplayName("Should persist avatarUrl when creating new user")
+  void handleUserLogin_NewUser_PersistsAvatarUrl() {
+    // Arrange
+    String avatarUrl = "https://repo-prod.prod.sagebase.org/repo/v1/userProfile/3350396/image/preview?redirect=true";
+
+    when(
+      externalAccountRepository.findByProviderAndExternalId(Provider.synapse, EXTERNAL_ID)
+    ).thenReturn(Optional.empty());
+    when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.empty());
+
+    UserEntity savedUser = UserEntity.builder()
+      .id(UUID.randomUUID())
+      .username(USERNAME)
+      .email(EMAIL)
+      .avatarUrl(avatarUrl)
+      .build();
+
+    when(userRepository.save(any(UserEntity.class))).thenReturn(savedUser);
+    when(externalAccountRepository.save(any(ExternalAccountEntity.class))).thenReturn(
+      ExternalAccountEntity.builder().build()
+    );
+
+    // Act
+    userService.handleUserLogin(
+      Provider.synapse,
+      EXTERNAL_ID,
+      USERNAME,
+      EMAIL,
+      true,
+      FIRST_NAME,
+      LAST_NAME,
+      avatarUrl
+    );
+
+    // Assert
+    ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
+    verify(userRepository).save(userCaptor.capture());
+    assertThat(userCaptor.getValue().getAvatarUrl()).isEqualTo(avatarUrl);
+  }
+
+  @Test
+  @DisplayName("Should update avatarUrl when it changes on existing user login")
+  void handleUserLogin_ExistingUser_UpdatesAvatarUrlWhenChanged() {
+    // Arrange
+    String oldAvatarUrl = "https://repo-prod.prod.sagebase.org/repo/v1/userProfile/111/image/preview?redirect=true";
+    String newAvatarUrl = "https://repo-prod.prod.sagebase.org/repo/v1/userProfile/222/image/preview?redirect=true";
+
+    UUID userId = UUID.randomUUID();
+    UserEntity existingUser = UserEntity.builder()
+      .id(userId)
+      .username(USERNAME)
+      .email(EMAIL)
+      .firstName(FIRST_NAME)
+      .lastName(LAST_NAME)
+      .avatarUrl(oldAvatarUrl)
+      .build();
+
+    ExternalAccountEntity existingExtAccount = ExternalAccountEntity.builder()
+      .id(UUID.randomUUID())
+      .user(existingUser)
+      .provider(Provider.synapse)
+      .externalId(EXTERNAL_ID)
+      .externalUsername(USERNAME)
+      .externalEmail(EMAIL)
+      .build();
+
+    when(
+      externalAccountRepository.findByProviderAndExternalId(Provider.synapse, EXTERNAL_ID)
+    ).thenReturn(Optional.of(existingExtAccount));
+    when(userRepository.save(any(UserEntity.class))).thenReturn(existingUser);
+
+    // Act
+    userService.handleUserLogin(
+      Provider.synapse,
+      EXTERNAL_ID,
+      USERNAME,
+      EMAIL,
+      true,
+      FIRST_NAME,
+      LAST_NAME,
+      newAvatarUrl
+    );
+
+    // Assert
+    ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
+    verify(userRepository).save(userCaptor.capture());
+    assertThat(userCaptor.getValue().getAvatarUrl()).isEqualTo(newAvatarUrl);
+  }
 }

@@ -191,7 +191,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       .preferredUsername(preferredUsername != null ? preferredUsername : subject)
       .emailVerified(emailVerified != null ? emailVerified : false)
       .roles(roleEnums)
-      .avatarUrl(avatarUrl)
+      .avatarUrl(avatarUrl != null ? java.net.URI.create(avatarUrl) : null)
       .build();
 
     return ResponseEntity.ok()
