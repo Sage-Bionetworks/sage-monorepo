@@ -19,7 +19,14 @@ export class AppStorageService {
     }
 
     try {
-      return localStorage.getItem(this.HIDE_VISUALIZATION_OVERVIEW_KEY) === '1';
+      const value = localStorage.getItem(this.HIDE_VISUALIZATION_OVERVIEW_KEY);
+      if (value === 'true') {
+        return true;
+      }
+      if (value !== null) {
+        localStorage.removeItem(this.HIDE_VISUALIZATION_OVERVIEW_KEY);
+      }
+      return false;
     } catch {
       return false;
     }
@@ -31,11 +38,7 @@ export class AppStorageService {
     }
 
     try {
-      if (hidden) {
-        localStorage.setItem(this.HIDE_VISUALIZATION_OVERVIEW_KEY, '1');
-      } else {
-        localStorage.removeItem(this.HIDE_VISUALIZATION_OVERVIEW_KEY);
-      }
+      localStorage.setItem(this.HIDE_VISUALIZATION_OVERVIEW_KEY, String(hidden));
     } catch {
       // Silently fail if localStorage is unavailable
     }

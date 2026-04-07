@@ -215,7 +215,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       expect(checkbox.checked).toBe(false);
     });
 
-    it('should initialize checkbox as checked when localStorage is "1"', async () => {
+    it('should initialize checkbox as checked when localStorage is "true"', async () => {
       const { fixture } = await setup({ isHidden: true, isVisible: true });
       fixture.detectChanges();
       const checkbox = screen.getByLabelText(/don't show this again/i) as HTMLInputElement;
@@ -270,7 +270,7 @@ describe('VisualizationOverviewPanelComponent', () => {
   });
 
   describe('localStorage Initialization', () => {
-    it('should hide dialog when stored value is "1"', async () => {
+    it('should hide dialog when stored value is "true"', async () => {
       const { component, comparisonToolService } = await setup({
         isHidden: true,
       });

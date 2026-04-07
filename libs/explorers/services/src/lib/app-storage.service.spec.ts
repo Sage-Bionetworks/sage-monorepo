@@ -38,7 +38,7 @@ describe('AppStorageService', () => {
   describe('isVisualizationOverviewHidden', () => {
     it('returns false on server', () => {
       const { service } = setup({ isServer: true });
-      localStorage.setItem('hide_visualization_overview', '1');
+      localStorage.setItem('hide_visualization_overview', 'true');
       expect(service.isVisualizationOverviewHidden()).toBe(false);
       expect(getItemSpy).not.toHaveBeenCalled();
     });
@@ -48,30 +48,38 @@ describe('AppStorageService', () => {
       expect(service.isVisualizationOverviewHidden()).toBe(false);
     });
 
-    it('returns true when value is "1"', () => {
-      localStorage.setItem('hide_visualization_overview', '1');
+    it('returns true when value is "true"', () => {
+      localStorage.setItem('hide_visualization_overview', 'true');
       const { service } = setup();
       expect(service.isVisualizationOverviewHidden()).toBe(true);
     });
 
-    it('returns false for any other value', () => {
-      localStorage.setItem('hide_visualization_overview', '0');
+    it('returns false and cleans up legacy "1" value', () => {
+      localStorage.setItem('hide_visualization_overview', '1');
       const { service } = setup();
       expect(service.isVisualizationOverviewHidden()).toBe(false);
+      expect(removeItemSpy).toHaveBeenCalledWith('hide_visualization_overview');
+    });
+
+    it('returns false and cleans up any other invalid value', () => {
+      localStorage.setItem('hide_visualization_overview', 'abc');
+      const { service } = setup();
+      expect(service.isVisualizationOverviewHidden()).toBe(false);
+      expect(removeItemSpy).toHaveBeenCalledWith('hide_visualization_overview');
     });
   });
 
   describe('setVisualizationOverviewHidden', () => {
-    it('stores "1" when hiding', () => {
+    it('stores "true" when hiding', () => {
       const { service } = setup();
       service.setVisualizationOverviewHidden(true);
-      expect(setItemSpy).toHaveBeenCalledWith('hide_visualization_overview', '1');
+      expect(setItemSpy).toHaveBeenCalledWith('hide_visualization_overview', 'true');
     });
 
-    it('removes key when showing', () => {
+    it('stores "false" when showing', () => {
       const { service } = setup();
       service.setVisualizationOverviewHidden(false);
-      expect(removeItemSpy).toHaveBeenCalledWith('hide_visualization_overview');
+      expect(setItemSpy).toHaveBeenCalledWith('hide_visualization_overview', 'false');
     });
 
     it('does nothing on server', () => {
