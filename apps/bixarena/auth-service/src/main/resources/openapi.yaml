@@ -395,6 +395,8 @@ components:
         avatar_url:
           description: Profile image URL from the authentication provider
           example: https://example.com/avatar/user123.png
+          format: uri
+          maxLength: 300
           type: string
       required:
         - sub

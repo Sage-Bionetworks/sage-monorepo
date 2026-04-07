@@ -29,6 +29,8 @@ properties:
     example: ['user']
   avatar_url:
     type: string
+    format: uri
+    maxLength: 300
     description: Profile image URL from the authentication provider
     example: 'https://example.com/avatar/user123.png'
 required:

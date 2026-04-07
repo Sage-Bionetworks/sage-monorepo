@@ -25,6 +25,7 @@ from pydantic import (
     field_validator,
 )
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -45,7 +46,7 @@ class UserInfo(BaseModel):
     roles: Optional[List[StrictStr]] = Field(
         default=None, description="User roles assigned within BixArena"
     )
-    avatar_url: Optional[StrictStr] = Field(
+    avatar_url: Optional[Annotated[str, Field(strict=True, max_length=300)]] = Field(
         default=None, description="Profile image URL from the authentication provider"
     )
     __properties: ClassVar[List[str]] = [

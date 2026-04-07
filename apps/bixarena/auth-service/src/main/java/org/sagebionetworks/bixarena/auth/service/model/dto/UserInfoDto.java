@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,7 +75,7 @@ public class UserInfoDto {
   @Valid
   private List<RolesEnum> roles = new ArrayList<>();
 
-  private @Nullable String avatarUrl;
+  private @Nullable URI avatarUrl;
 
   public UserInfoDto() {
     super();
@@ -195,7 +196,7 @@ public class UserInfoDto {
     this.roles = roles;
   }
 
-  public UserInfoDto avatarUrl(@Nullable String avatarUrl) {
+  public UserInfoDto avatarUrl(@Nullable URI avatarUrl) {
     this.avatarUrl = avatarUrl;
     return this;
   }
@@ -204,14 +205,14 @@ public class UserInfoDto {
    * Profile image URL from the authentication provider
    * @return avatarUrl
    */
-  
+  @Valid @Size(max = 300) 
   @Schema(name = "avatar_url", example = "https://example.com/avatar/user123.png", description = "Profile image URL from the authentication provider", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("avatar_url")
-  public @Nullable String getAvatarUrl() {
+  public @Nullable URI getAvatarUrl() {
     return avatarUrl;
   }
 
-  public void setAvatarUrl(@Nullable String avatarUrl) {
+  public void setAvatarUrl(@Nullable URI avatarUrl) {
     this.avatarUrl = avatarUrl;
   }
 
@@ -309,7 +310,7 @@ public class UserInfoDto {
       return this;
     }
     
-    public UserInfoDto.Builder avatarUrl(String avatarUrl) {
+    public UserInfoDto.Builder avatarUrl(URI avatarUrl) {
       this.instance.avatarUrl(avatarUrl);
       return this;
     }
