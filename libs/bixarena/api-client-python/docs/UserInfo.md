@@ -4,13 +4,14 @@ OIDC-compliant user information response
 
 ## Properties
 
-| Name                   | Type          | Description                                 | Notes      |
-| ---------------------- | ------------- | ------------------------------------------- | ---------- |
-| **sub**                | **str**       | Subject identifier - the Synapse user ID    |
-| **preferred_username** | **str**       | Preferred username for display              | [optional] |
-| **email**              | **str**       | User&#39;s email address                    | [optional] |
-| **email_verified**     | **bool**      | Whether the email address has been verified | [optional] |
-| **roles**              | **List[str]** | User roles assigned within BixArena         | [optional] |
+| Name                   | Type          | Description                                        | Notes      |
+| ---------------------- | ------------- | -------------------------------------------------- | ---------- |
+| **sub**                | **str**       | Subject identifier - the user UUID                 |
+| **preferred_username** | **str**       | Preferred username for display                     | [optional] |
+| **email**              | **str**       | User&#39;s email address                           | [optional] |
+| **email_verified**     | **bool**      | Whether the email address has been verified        | [optional] |
+| **roles**              | **List[str]** | User roles assigned within BixArena                | [optional] |
+| **avatar_url**         | **str**       | Profile image URL from the authentication provider | [optional] |
 
 ## Example
 

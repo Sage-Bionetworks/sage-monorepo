@@ -35,15 +35,16 @@ class TestUserInfo(unittest.TestCase):
         model = UserInfo()
         if include_optional:
             return UserInfo(
-                sub = '3350396',
+                sub = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
                 preferred_username = 'john.doe',
                 email = 'john.doe@example.com',
                 email_verified = True,
-                roles = ["user"]
+                roles = ["user"],
+                avatar_url = 'https://example.com/avatar/user123.png'
             )
         else:
             return UserInfo(
-                sub = '3350396',
+                sub = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
         )
         """
 
