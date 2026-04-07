@@ -103,8 +103,8 @@ app:
     jwks-url: https://repo-prod.prod.sagebase.org/auth/v1/openid/jwks
     client-id: changeme
     client-secret: changeme
-    # Use localhost (not 127.0.0.1) so the browser sends the same cookie across app and api if app uses localhost
-    redirect-uri: http://127.0.0.1:8113/auth/callback
+    # All auth flows routed through apex (127.0.0.1:8111) for same-origin cookies
+    redirect-uri: http://127.0.0.1:8111/auth/callback
     # URN-based issuer for consistency across services
     internal-issuer: urn:bixarena:auth
     # Default audience (will be overridden by audience parameter in /oauth2/token)
