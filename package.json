@@ -61,7 +61,6 @@
     "marked": "15.0.11",
     "mongoose": "8.9.5",
     "ngx-avatars": "1.5.0",
-    "ngx-cookie-service": "18.0.0",
     "ngx-countup": "13.1.0",
     "ngx-echarts": "20.0.1",
     "ngx-markdown": "19.1.1",

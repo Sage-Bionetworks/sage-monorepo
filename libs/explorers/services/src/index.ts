@@ -1,4 +1,4 @@
-export * from './lib/app-cookie.service';
+export * from './lib/app-storage.service';
 export * from './lib/breakpoint-config.service';
 export * from './lib/comparison-tool-filter.service';
 export * from './lib/comparison-tool-filter.service.providers';

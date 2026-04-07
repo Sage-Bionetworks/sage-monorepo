@@ -15,6 +15,7 @@ export class ComparisonToolFooterComponent {
 
   shouldPaginate = computed(() => this.comparisonToolService.isInitialized());
   pageSize = this.comparisonToolService.pageSize;
+  pageSizeOptions = this.comparisonToolService.pageSizeOptions;
   totalResultsCount = this.comparisonToolService.totalResultsCount;
   first = this.comparisonToolService.first;
 

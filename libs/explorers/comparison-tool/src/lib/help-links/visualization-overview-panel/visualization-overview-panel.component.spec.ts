@@ -1,7 +1,7 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
 import {
-  AppCookieService,
+  AppStorageService,
   ComparisonToolService,
   provideComparisonToolService,
   provideExplorersConfig,
@@ -16,9 +16,11 @@ import { MessageService } from 'primeng/api';
 import { VisualizationOverviewPanelComponent } from './visualization-overview-panel.component';
 
 describe('VisualizationOverviewPanelComponent', () => {
-  const createMockCookieService = (isHidden = false) => ({
+  const createMockStorageService = (isHidden = false) => ({
     isVisualizationOverviewHidden: jest.fn().mockReturnValue(isHidden),
     setVisualizationOverviewHidden: jest.fn(),
+    getPageSize: jest.fn().mockReturnValue(10),
+    setPageSize: jest.fn(),
   });
 
   async function setup(options?: {
@@ -27,14 +29,14 @@ describe('VisualizationOverviewPanelComponent', () => {
     visualizationOverviewPanes?: VisualizationOverviewPane[];
   }) {
     const user = userEvent.setup();
-    const mockCookieService = createMockCookieService(options?.isHidden);
+    const mockStorageService = createMockStorageService(options?.isHidden);
     const panes = options?.visualizationOverviewPanes ?? mockVisualizationOverviewPanes;
 
     const { fixture } = await render(VisualizationOverviewPanelComponent, {
       providers: [
         provideNoopAnimations(),
         MessageService,
-        { provide: AppCookieService, useValue: mockCookieService },
+        { provide: AppStorageService, useValue: mockStorageService },
         provideExplorersConfig({ visualizationOverviewPanes: panes }),
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
@@ -62,7 +64,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       fixture,
       user,
       comparisonToolService,
-      mockCookieService,
+      mockStorageService,
       setVisualizationOverviewVisibilitySpy,
     };
   }
@@ -221,21 +223,21 @@ describe('VisualizationOverviewPanelComponent', () => {
     });
 
     it('should save cookie immediately when checkbox is clicked', async () => {
-      const { user, mockCookieService } = await setup({ isHidden: false });
+      const { user, mockStorageService } = await setup({ isHidden: false });
       const checkbox = screen.getByLabelText(/not to show this again/i);
 
       await user.click(checkbox);
 
-      expect(mockCookieService.setVisualizationOverviewHidden).toHaveBeenCalledWith(true);
+      expect(mockStorageService.setVisualizationOverviewHidden).toHaveBeenCalledWith(true);
     });
 
     it('should delete cookie when unchecking checkbox', async () => {
-      const { user, mockCookieService } = await setup({ isHidden: true, isVisible: true });
+      const { user, mockStorageService } = await setup({ isHidden: true, isVisible: true });
       const checkbox = screen.getByLabelText(/not to show this again/i);
 
       await user.click(checkbox);
 
-      expect(mockCookieService.setVisualizationOverviewHidden).toHaveBeenCalledWith(false);
+      expect(mockStorageService.setVisualizationOverviewHidden).toHaveBeenCalledWith(false);
     });
   });
 
@@ -278,11 +280,11 @@ describe('VisualizationOverviewPanelComponent', () => {
     });
 
     it('should show dialog when cookie value is empty', async () => {
-      const { component, comparisonToolService, mockCookieService } = await setup({
+      const { component, comparisonToolService, mockStorageService } = await setup({
         isHidden: false,
       });
 
-      expect(mockCookieService.isVisualizationOverviewHidden).toHaveBeenCalled();
+      expect(mockStorageService.isVisualizationOverviewHidden).toHaveBeenCalled();
       expect(component.willHide).toBe(false);
       expect(comparisonToolService.isVisualizationOverviewVisible()).toBe(true);
     });
