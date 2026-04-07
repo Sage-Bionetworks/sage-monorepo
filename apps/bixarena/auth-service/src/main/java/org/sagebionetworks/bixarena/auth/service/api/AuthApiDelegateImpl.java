@@ -117,8 +117,10 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     String clientSecret = parts[1];
 
     // Validate against configured service credentials
-    if (!appProperties.auth().serviceClientId().equals(clientId)
-        || !appProperties.auth().serviceClientSecret().equals(clientSecret)) {
+    if (
+      !appProperties.auth().serviceClientId().equals(clientId) ||
+      !appProperties.auth().serviceClientSecret().equals(clientSecret)
+    ) {
       log.warn("Service token request with invalid credentials, clientId={}", clientId);
       return ResponseEntity.status(401).build();
     }
@@ -163,6 +165,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     Boolean emailVerified = (Boolean) session.getAttribute("AUTH_EMAIL_VERIFIED");
     @SuppressWarnings("unchecked")
     List<String> roles = (List<String>) session.getAttribute("AUTH_ROLES");
+    String avatarUrl = (String) session.getAttribute("AUTH_AVATAR_URL");
 
     if (subject == null) {
       return ResponseEntity.status(401).build();
@@ -188,6 +191,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       .preferredUsername(preferredUsername != null ? preferredUsername : subject)
       .emailVerified(emailVerified != null ? emailVerified : false)
       .roles(roleEnums)
+      .avatarUrl(avatarUrl)
       .build();
 
     return ResponseEntity.ok()
@@ -227,6 +231,8 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       url(appProperties.auth().redirectUri().toString()) +
       "&scope=" +
       url("openid profile email") +
+      "&claims=" +
+      url("{\"id_token\":{\"userid\":null}}") +
       "&state=" +
       url(state) +
       "&nonce=" +
@@ -308,6 +314,10 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       String preferredUsername = (String) idClaims.getOrDefault("preferred_username", sub);
       String userName = (String) idClaims.getOrDefault("user_name", null);
 
+      // Build avatar URL from numeric userid claim (provider-specific)
+      Object useridClaim = idClaims.get("userid");
+      String avatarUrl = buildAvatarUrl(Provider.synapse, useridClaim);
+
       // Use user_name claim if available (this is the actual Synapse username)
       // Otherwise fall back to preferred_username
       String synapseUsername = userName != null ? userName : preferredUsername;
@@ -333,7 +343,8 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
         email,
         emailVerified,
         givenName,
-        familyName
+        familyName,
+        avatarUrl
       );
 
       // Establish authenticated session principal
@@ -350,6 +361,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
         ? List.of("admin", "user")
         : List.of(persistedUser.getRole().name());
       session.setAttribute("AUTH_ROLES", roles);
+      session.setAttribute("AUTH_AVATAR_URL", persistedUser.getAvatarUrl());
       session.removeAttribute("OIDC_STATE");
       session.removeAttribute("OIDC_NONCE");
       // If browser navigation (prefers HTML) redirect to root instead of showing JSON
@@ -409,6 +421,16 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       log.debug("OIDC token exchange exception {}", e.getMessage());
       return null;
     }
+  }
+
+  private String buildAvatarUrl(Provider provider, Object useridClaim) {
+    if (useridClaim == null) return null;
+    String userId = useridClaim.toString();
+    return switch (provider) {
+      case synapse -> "https://repo-prod.prod.sagebase.org/repo/v1/userProfile/" +
+      userId +
+      "/image/preview?redirect=true";
+    };
   }
 
   private Map<String, Object> decodeJwt(String jwt) throws Exception {
