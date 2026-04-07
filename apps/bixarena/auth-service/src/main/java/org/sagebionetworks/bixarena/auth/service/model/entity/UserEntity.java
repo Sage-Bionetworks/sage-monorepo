@@ -60,6 +60,9 @@ public class UserEntity {
   @Column(name = "last_login_at")
   private OffsetDateTime lastLoginAt;
 
+  @Column(name = "avatar_url", length = 300)
+  private String avatarUrl;
+
   public enum Role {
     admin,
     user,
