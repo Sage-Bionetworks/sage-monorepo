@@ -3,8 +3,8 @@ description: OIDC-compliant user information response
 properties:
   sub:
     type: string
-    description: Subject identifier - the Synapse user ID
-    example: '3350396'
+    description: Subject identifier - the user UUID
+    example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
   preferred_username:
     type: string
     description: Preferred username for display
@@ -27,5 +27,9 @@ properties:
         - user
         - admin
     example: ['user']
+  avatar_url:
+    type: string
+    description: Profile image URL from the authentication provider
+    example: 'https://example.com/avatar/user123.png'
 required:
   - sub
