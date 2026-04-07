@@ -8,12 +8,20 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelCurationCurationTask } from './org-sagebionetworks-repo-model-curation-curation-task';
+import { OrgSagebionetworksRepoModelCurationTaskBundle } from './org-sagebionetworks-repo-model-curation-task-bundle';
 
 /**
  * A single page of CurationTasks.
  */
 export interface OrgSagebionetworksRepoModelCurationListCurationTaskResponse {
+  /**
+   * Deprecated. Use \'bundlePage\' instead. A list of task definitions only.
+   */
   page?: Array<OrgSagebionetworksRepoModelCurationCurationTask>;
+  /**
+   * A list of task bundles containing both the definition and the current status.
+   */
+  bundlePage?: Array<OrgSagebionetworksRepoModelCurationTaskBundle>;
   /**
    * Forward this token to get the next page of results.
    */

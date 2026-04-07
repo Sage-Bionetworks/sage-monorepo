@@ -140,6 +140,8 @@ export type OrgSagebionetworksRepoModelMigrationMigrationType =
   | 'CURATION_TASK'
   | 'USER_STATUS'
   | 'RECORDSET_VALIDATION_STATS'
+  | 'TEXT_ANALYZER'
+  | 'COLUMN_ANALYZER_OVERRIDE'
   | 'CHANGE';
 
 export const OrgSagebionetworksRepoModelMigrationMigrationType = {
@@ -301,5 +303,8 @@ export const OrgSagebionetworksRepoModelMigrationMigrationType = {
   UserStatus: 'USER_STATUS' as OrgSagebionetworksRepoModelMigrationMigrationType,
   RecordsetValidationStats:
     'RECORDSET_VALIDATION_STATS' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  TextAnalyzer: 'TEXT_ANALYZER' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  ColumnAnalyzerOverride:
+    'COLUMN_ANALYZER_OVERRIDE' as OrgSagebionetworksRepoModelMigrationMigrationType,
   Change: 'CHANGE' as OrgSagebionetworksRepoModelMigrationMigrationType,
 };

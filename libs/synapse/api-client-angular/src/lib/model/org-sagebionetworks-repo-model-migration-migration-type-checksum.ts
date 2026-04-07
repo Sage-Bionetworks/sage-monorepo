@@ -161,6 +161,8 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     | 'CURATION_TASK'
     | 'USER_STATUS'
     | 'RECORDSET_VALIDATION_STATS'
+    | 'TEXT_ANALYZER'
+    | 'COLUMN_ANALYZER_OVERRIDE'
     | 'CHANGE';
   export const MigrationTypeEnum = {
     Realm: 'REALM' as MigrationTypeEnum,
@@ -295,6 +297,8 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     CurationTask: 'CURATION_TASK' as MigrationTypeEnum,
     UserStatus: 'USER_STATUS' as MigrationTypeEnum,
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as MigrationTypeEnum,
+    TextAnalyzer: 'TEXT_ANALYZER' as MigrationTypeEnum,
+    ColumnAnalyzerOverride: 'COLUMN_ANALYZER_OVERRIDE' as MigrationTypeEnum,
     Change: 'CHANGE' as MigrationTypeEnum,
   };
   export type TypeEnum =
@@ -429,6 +433,8 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     | 'CURATION_TASK'
     | 'USER_STATUS'
     | 'RECORDSET_VALIDATION_STATS'
+    | 'TEXT_ANALYZER'
+    | 'COLUMN_ANALYZER_OVERRIDE'
     | 'CHANGE';
   export const TypeEnum = {
     Realm: 'REALM' as TypeEnum,
@@ -562,6 +568,8 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     CurationTask: 'CURATION_TASK' as TypeEnum,
     UserStatus: 'USER_STATUS' as TypeEnum,
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as TypeEnum,
+    TextAnalyzer: 'TEXT_ANALYZER' as TypeEnum,
+    ColumnAnalyzerOverride: 'COLUMN_ANALYZER_OVERRIDE' as TypeEnum,
     Change: 'CHANGE' as TypeEnum,
   };
 }
