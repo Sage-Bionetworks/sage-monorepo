@@ -8,6 +8,7 @@ export interface UserInfo {
   email: string;
   email_verified: boolean;
   roles: string[];
+  avatar_url?: string;
 }
 
 const CACHE_KEY = 'ba-user';

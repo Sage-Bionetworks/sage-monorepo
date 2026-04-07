@@ -16,7 +16,11 @@
         (click)="authService.logout()"
         [title]="'Logout ' + (authService.user()?.preferred_username ?? '')"
       >
-        {{ initials() }}
+        @if (avatarUrl()) {
+          <img class="avatar-img" [src]="avatarUrl()" [alt]="initials()" />
+        } @else {
+          {{ initials() }}
+        }
       </button>
     } @else {
       <p-button label="Login" (onClick)="authService.login()" />

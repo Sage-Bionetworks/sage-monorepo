@@ -19,6 +19,8 @@ export class NavComponent {
     return name.slice(0, 2).toUpperCase();
   });
 
+  readonly avatarUrl = computed(() => this.authService.user()?.avatar_url ?? null);
+
   readonly showAvatar = computed(
     () => this.authService.isAuthenticated() || this.authService.cachedUsername() !== null,
   );
