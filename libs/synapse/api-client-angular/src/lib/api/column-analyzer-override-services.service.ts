@@ -23,13 +23,11 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { OrgSagebionetworksRepoModelCurationCurationTask } from '../model/org-sagebionetworks-repo-model-curation-curation-task';
+import { OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride } from '../model/org-sagebionetworks-repo-model-search-table-column-analyzer-override';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelCurationListCurationTaskRequest } from '../model/org-sagebionetworks-repo-model-curation-list-curation-task-request';
+import { OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest } from '../model/org-sagebionetworks-repo-model-search-table-list-column-analyzer-overrides-request';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelCurationListCurationTaskResponse } from '../model/org-sagebionetworks-repo-model-curation-list-curation-task-response';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelCurationTaskStatus } from '../model/org-sagebionetworks-repo-model-curation-task-status';
+import { OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse } from '../model/org-sagebionetworks-repo-model-search-table-list-column-analyzer-overrides-response';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -38,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class CurationTaskServicesService {
+export class ColumnAnalyzerOverrideServicesService {
   protected basePath = 'https://repo-prod.prod.sagebase.org';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -111,37 +109,37 @@ export class CurationTaskServicesService {
   }
 
   /**
-   * @param taskId the CurationTask to delete
+   * @param columnAnalyzerOverrideId
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public deleteRepoV1CurationTaskTaskId(
-    taskId: number,
+  public deleteRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
   ): Observable<any>;
-  public deleteRepoV1CurationTaskTaskId(
-    taskId: number,
+  public deleteRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpResponse<any>>;
-  public deleteRepoV1CurationTaskTaskId(
-    taskId: number,
+  public deleteRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpEvent<any>>;
-  public deleteRepoV1CurationTaskTaskId(
-    taskId: number,
+  public deleteRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
   ): Observable<any> {
-    if (taskId === null || taskId === undefined) {
+    if (columnAnalyzerOverrideId === null || columnAnalyzerOverrideId === undefined) {
       throw new Error(
-        'Required parameter taskId was null or undefined when calling deleteRepoV1CurationTaskTaskId.',
+        'Required parameter columnAnalyzerOverrideId was null or undefined when calling deleteRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId.',
       );
     }
 
@@ -185,7 +183,7 @@ export class CurationTaskServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}`;
+    let localVarPath = `/repo/v1/search/column/analyzer/override/${this.configuration.encodeParam({ name: 'columnAnalyzerOverrideId', value: columnAnalyzerOverrideId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
     return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
       responseType: <any>responseType_,
@@ -198,12 +196,12 @@ export class CurationTaskServicesService {
   }
 
   /**
-   * @param taskId the CurationTask to retrieve
+   * @param columnAnalyzerOverrideId
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getRepoV1CurationTaskTaskId(
-    taskId: number,
+  public getRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -211,9 +209,9 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelCurationCurationTask>;
-  public getRepoV1CurationTaskTaskId(
-    taskId: number,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>;
+  public getRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -221,9 +219,9 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelCurationCurationTask>>;
-  public getRepoV1CurationTaskTaskId(
-    taskId: number,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public getRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -231,9 +229,9 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelCurationCurationTask>>;
-  public getRepoV1CurationTaskTaskId(
-    taskId: number,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public getRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -242,9 +240,9 @@ export class CurationTaskServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (taskId === null || taskId === undefined) {
+    if (columnAnalyzerOverrideId === null || columnAnalyzerOverrideId === undefined) {
       throw new Error(
-        'Required parameter taskId was null or undefined when calling getRepoV1CurationTaskTaskId.',
+        'Required parameter columnAnalyzerOverrideId was null or undefined when calling getRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId.',
       );
     }
 
@@ -288,8 +286,8 @@ export class CurationTaskServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelCurationCurationTask>(
+    let localVarPath = `/repo/v1/search/column/analyzer/override/${this.configuration.encodeParam({ name: 'columnAnalyzerOverrideId', value: columnAnalyzerOverrideId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -305,12 +303,12 @@ export class CurationTaskServicesService {
   }
 
   /**
-   * @param taskId the ID of the CurationTask
+   * @param orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getRepoV1CurationTaskTaskIdStatus(
-    taskId: number,
+  public postRepoV1SearchColumnAnalyzerOverride(
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -318,9 +316,9 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelCurationTaskStatus>;
-  public getRepoV1CurationTaskTaskIdStatus(
-    taskId: number,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>;
+  public postRepoV1SearchColumnAnalyzerOverride(
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -328,9 +326,9 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelCurationTaskStatus>>;
-  public getRepoV1CurationTaskTaskIdStatus(
-    taskId: number,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public postRepoV1SearchColumnAnalyzerOverride(
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -338,116 +336,9 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelCurationTaskStatus>>;
-  public getRepoV1CurationTaskTaskIdStatus(
-    taskId: number,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (taskId === null || taskId === undefined) {
-      throw new Error(
-        'Required parameter taskId was null or undefined when calling getRepoV1CurationTaskTaskIdStatus.',
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (bearerAuth) required
-    localVarCredential = this.configuration.lookupCredential('bearerAuth');
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}/status`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelCurationTaskStatus>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
-   * @param orgSagebionetworksRepoModelCurationCurationTask
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public postRepoV1CurationTask(
-    orgSagebionetworksRepoModelCurationCurationTask: OrgSagebionetworksRepoModelCurationCurationTask,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<OrgSagebionetworksRepoModelCurationCurationTask>;
-  public postRepoV1CurationTask(
-    orgSagebionetworksRepoModelCurationCurationTask: OrgSagebionetworksRepoModelCurationCurationTask,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelCurationCurationTask>>;
-  public postRepoV1CurationTask(
-    orgSagebionetworksRepoModelCurationCurationTask: OrgSagebionetworksRepoModelCurationCurationTask,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelCurationCurationTask>>;
-  public postRepoV1CurationTask(
-    orgSagebionetworksRepoModelCurationCurationTask: OrgSagebionetworksRepoModelCurationCurationTask,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public postRepoV1SearchColumnAnalyzerOverride(
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -457,11 +348,11 @@ export class CurationTaskServicesService {
     },
   ): Observable<any> {
     if (
-      orgSagebionetworksRepoModelCurationCurationTask === null ||
-      orgSagebionetworksRepoModelCurationCurationTask === undefined
+      orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride === null ||
+      orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelCurationCurationTask was null or undefined when calling postRepoV1CurationTask.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride was null or undefined when calling postRepoV1SearchColumnAnalyzerOverride.',
       );
     }
 
@@ -513,13 +404,13 @@ export class CurationTaskServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/curation/task`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelCurationCurationTask>(
+    let localVarPath = `/repo/v1/search/column/analyzer/override`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelCurationCurationTask,
+        body: orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -531,12 +422,12 @@ export class CurationTaskServicesService {
   }
 
   /**
-   * @param orgSagebionetworksRepoModelCurationListCurationTaskRequest
+   * @param orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1CurationTaskList(
-    orgSagebionetworksRepoModelCurationListCurationTaskRequest: OrgSagebionetworksRepoModelCurationListCurationTaskRequest,
+  public postRepoV1SearchColumnAnalyzerOverrideList(
+    orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest: OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -544,9 +435,9 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelCurationListCurationTaskResponse>;
-  public postRepoV1CurationTaskList(
-    orgSagebionetworksRepoModelCurationListCurationTaskRequest: OrgSagebionetworksRepoModelCurationListCurationTaskRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse>;
+  public postRepoV1SearchColumnAnalyzerOverrideList(
+    orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest: OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -554,9 +445,11 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelCurationListCurationTaskResponse>>;
-  public postRepoV1CurationTaskList(
-    orgSagebionetworksRepoModelCurationListCurationTaskRequest: OrgSagebionetworksRepoModelCurationListCurationTaskRequest,
+  ): Observable<
+    HttpResponse<OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse>
+  >;
+  public postRepoV1SearchColumnAnalyzerOverrideList(
+    orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest: OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -564,9 +457,11 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelCurationListCurationTaskResponse>>;
-  public postRepoV1CurationTaskList(
-    orgSagebionetworksRepoModelCurationListCurationTaskRequest: OrgSagebionetworksRepoModelCurationListCurationTaskRequest,
+  ): Observable<
+    HttpEvent<OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse>
+  >;
+  public postRepoV1SearchColumnAnalyzerOverrideList(
+    orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest: OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -576,11 +471,11 @@ export class CurationTaskServicesService {
     },
   ): Observable<any> {
     if (
-      orgSagebionetworksRepoModelCurationListCurationTaskRequest === null ||
-      orgSagebionetworksRepoModelCurationListCurationTaskRequest === undefined
+      orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest === null ||
+      orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelCurationListCurationTaskRequest was null or undefined when calling postRepoV1CurationTaskList.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest was null or undefined when calling postRepoV1SearchColumnAnalyzerOverrideList.',
       );
     }
 
@@ -632,13 +527,13 @@ export class CurationTaskServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/curation/task/list`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelCurationListCurationTaskResponse>(
+    let localVarPath = `/repo/v1/search/column/analyzer/override/list`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelCurationListCurationTaskRequest,
+        body: orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -650,14 +545,14 @@ export class CurationTaskServicesService {
   }
 
   /**
-   * @param taskId
-   * @param orgSagebionetworksRepoModelCurationCurationTask
+   * @param columnAnalyzerOverrideId
+   * @param orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public putRepoV1CurationTaskTaskId(
-    taskId: number,
-    orgSagebionetworksRepoModelCurationCurationTask: OrgSagebionetworksRepoModelCurationCurationTask,
+  public putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -665,10 +560,10 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelCurationCurationTask>;
-  public putRepoV1CurationTaskTaskId(
-    taskId: number,
-    orgSagebionetworksRepoModelCurationCurationTask: OrgSagebionetworksRepoModelCurationCurationTask,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>;
+  public putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -676,10 +571,10 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelCurationCurationTask>>;
-  public putRepoV1CurationTaskTaskId(
-    taskId: number,
-    orgSagebionetworksRepoModelCurationCurationTask: OrgSagebionetworksRepoModelCurationCurationTask,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -687,10 +582,10 @@ export class CurationTaskServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelCurationCurationTask>>;
-  public putRepoV1CurationTaskTaskId(
-    taskId: number,
-    orgSagebionetworksRepoModelCurationCurationTask: OrgSagebionetworksRepoModelCurationCurationTask,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -699,17 +594,17 @@ export class CurationTaskServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (taskId === null || taskId === undefined) {
+    if (columnAnalyzerOverrideId === null || columnAnalyzerOverrideId === undefined) {
       throw new Error(
-        'Required parameter taskId was null or undefined when calling putRepoV1CurationTaskTaskId.',
+        'Required parameter columnAnalyzerOverrideId was null or undefined when calling putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId.',
       );
     }
     if (
-      orgSagebionetworksRepoModelCurationCurationTask === null ||
-      orgSagebionetworksRepoModelCurationCurationTask === undefined
+      orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride === null ||
+      orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelCurationCurationTask was null or undefined when calling putRepoV1CurationTaskTaskId.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride was null or undefined when calling putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId.',
       );
     }
 
@@ -761,142 +656,13 @@ export class CurationTaskServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelCurationCurationTask>(
+    let localVarPath = `/repo/v1/search/column/analyzer/override/${this.configuration.encodeParam({ name: 'columnAnalyzerOverrideId', value: columnAnalyzerOverrideId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>(
       'put',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelCurationCurationTask,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
-   * @param taskId the ID of the CurationTask
-   * @param orgSagebionetworksRepoModelCurationTaskStatus
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public putRepoV1CurationTaskTaskIdStatus(
-    taskId: number,
-    orgSagebionetworksRepoModelCurationTaskStatus: OrgSagebionetworksRepoModelCurationTaskStatus,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<OrgSagebionetworksRepoModelCurationTaskStatus>;
-  public putRepoV1CurationTaskTaskIdStatus(
-    taskId: number,
-    orgSagebionetworksRepoModelCurationTaskStatus: OrgSagebionetworksRepoModelCurationTaskStatus,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelCurationTaskStatus>>;
-  public putRepoV1CurationTaskTaskIdStatus(
-    taskId: number,
-    orgSagebionetworksRepoModelCurationTaskStatus: OrgSagebionetworksRepoModelCurationTaskStatus,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelCurationTaskStatus>>;
-  public putRepoV1CurationTaskTaskIdStatus(
-    taskId: number,
-    orgSagebionetworksRepoModelCurationTaskStatus: OrgSagebionetworksRepoModelCurationTaskStatus,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (taskId === null || taskId === undefined) {
-      throw new Error(
-        'Required parameter taskId was null or undefined when calling putRepoV1CurationTaskTaskIdStatus.',
-      );
-    }
-    if (
-      orgSagebionetworksRepoModelCurationTaskStatus === null ||
-      orgSagebionetworksRepoModelCurationTaskStatus === undefined
-    ) {
-      throw new Error(
-        'Required parameter orgSagebionetworksRepoModelCurationTaskStatus was null or undefined when calling putRepoV1CurationTaskTaskIdStatus.',
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (bearerAuth) required
-    localVarCredential = this.configuration.lookupCredential('bearerAuth');
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = ['application/json'];
-    const httpContentTypeSelected: string | undefined =
-      this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}/status`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelCurationTaskStatus>(
-      'put',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelCurationTaskStatus,
+        body: orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

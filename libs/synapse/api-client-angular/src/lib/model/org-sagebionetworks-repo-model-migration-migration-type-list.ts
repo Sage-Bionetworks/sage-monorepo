@@ -147,6 +147,8 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     | 'CURATION_TASK'
     | 'USER_STATUS'
     | 'RECORDSET_VALIDATION_STATS'
+    | 'TEXT_ANALYZER'
+    | 'COLUMN_ANALYZER_OVERRIDE'
     | 'CHANGE';
   export const ListEnum = {
     Realm: 'REALM' as ListEnum,
@@ -280,6 +282,8 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     CurationTask: 'CURATION_TASK' as ListEnum,
     UserStatus: 'USER_STATUS' as ListEnum,
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as ListEnum,
+    TextAnalyzer: 'TEXT_ANALYZER' as ListEnum,
+    ColumnAnalyzerOverride: 'COLUMN_ANALYZER_OVERRIDE' as ListEnum,
     Change: 'CHANGE' as ListEnum,
   };
 }
