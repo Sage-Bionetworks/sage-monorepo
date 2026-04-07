@@ -34,7 +34,7 @@ class UserInfo(BaseModel):
     OIDC-compliant user information response
     """  # noqa: E501
 
-    sub: StrictStr = Field(description="Subject identifier - the Synapse user ID")
+    sub: StrictStr = Field(description="Subject identifier - the user UUID")
     preferred_username: Optional[StrictStr] = Field(
         default=None, description="Preferred username for display"
     )
@@ -45,12 +45,16 @@ class UserInfo(BaseModel):
     roles: Optional[List[StrictStr]] = Field(
         default=None, description="User roles assigned within BixArena"
     )
+    avatar_url: Optional[StrictStr] = Field(
+        default=None, description="Profile image URL from the authentication provider"
+    )
     __properties: ClassVar[List[str]] = [
         "sub",
         "preferred_username",
         "email",
         "email_verified",
         "roles",
+        "avatar_url",
     ]
 
     @field_validator("roles")
@@ -119,6 +123,7 @@ class UserInfo(BaseModel):
                 "email": obj.get("email"),
                 "email_verified": obj.get("email_verified"),
                 "roles": obj.get("roles"),
+                "avatar_url": obj.get("avatar_url"),
             }
         )
         return _obj

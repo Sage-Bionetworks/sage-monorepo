@@ -78,7 +78,8 @@ class UserServiceTest {
       EMAIL,
       true,
       FIRST_NAME,
-      LAST_NAME
+      LAST_NAME,
+      null
     );
 
     // Assert
@@ -156,7 +157,8 @@ class UserServiceTest {
       EMAIL,
       true,
       FIRST_NAME,
-      LAST_NAME
+      LAST_NAME,
+      null
     );
 
     // Assert
@@ -227,7 +229,8 @@ class UserServiceTest {
       EMAIL,
       true,
       FIRST_NAME,
-      LAST_NAME
+      LAST_NAME,
+      null
     );
 
     // Assert
@@ -272,7 +275,8 @@ class UserServiceTest {
       EMAIL,
       true,
       FIRST_NAME,
-      LAST_NAME
+      LAST_NAME,
+      null
     );
 
     // Assert
@@ -337,7 +341,8 @@ class UserServiceTest {
       EMAIL,
       true,
       FIRST_NAME,
-      LAST_NAME
+      LAST_NAME,
+      null
     );
 
     // Assert

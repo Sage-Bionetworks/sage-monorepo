@@ -37,6 +37,7 @@ public class UserService {
    * @param emailVerified Whether the email has been verified by the provider
    * @param firstName The user's first name (given name)
    * @param lastName The user's last name (family name)
+   * @param avatarUrl Profile image URL from the authentication provider
    * @return The UserEntity representing the logged-in user
    */
   @Transactional
@@ -47,7 +48,8 @@ public class UserService {
     String email,
     Boolean emailVerified,
     String firstName,
-    String lastName
+    String lastName,
+    String avatarUrl
   ) {
     // Try to find existing external account first
     Optional<ExternalAccountEntity> existingExtAccount =
@@ -82,6 +84,10 @@ public class UserService {
       }
       if (lastName != null && !lastName.equals(user.getLastName())) {
         user.setLastName(lastName);
+        updated = true;
+      }
+      if (avatarUrl != null && !avatarUrl.equals(user.getAvatarUrl())) {
+        user.setAvatarUrl(avatarUrl);
         updated = true;
       }
 
@@ -121,8 +127,9 @@ public class UserService {
           externalId
         );
 
-        // Update last login timestamp
+        // Update last login timestamp and avatar
         user.setLastLoginAt(OffsetDateTime.now());
+        if (avatarUrl != null) user.setAvatarUrl(avatarUrl);
         user = userRepository.save(user);
 
         // Check if this user already has an external account for this provider
@@ -168,6 +175,7 @@ public class UserService {
           .emailVerified(emailVerified != null ? emailVerified : false)
           .firstName(firstName)
           .lastName(lastName)
+          .avatarUrl(avatarUrl)
           .lastLoginAt(OffsetDateTime.now())
           .build();
         user = userRepository.save(user);

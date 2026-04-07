@@ -13,7 +13,7 @@
  */
 export interface UserInfo {
   /**
-   * Subject identifier - the Synapse user ID
+   * Subject identifier - the user UUID
    */
   sub: string;
   /**
@@ -32,6 +32,10 @@ export interface UserInfo {
    * User roles assigned within BixArena
    */
   roles?: Array<UserInfo.RolesEnum>;
+  /**
+   * Profile image URL from the authentication provider
+   */
+  avatar_url?: string;
 }
 export namespace UserInfo {
   export type RolesEnum = 'user' | 'admin';
