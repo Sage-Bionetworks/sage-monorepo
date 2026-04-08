@@ -758,8 +758,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.setLastPinnedCategories();
 
     this.pinGene(gene);
-
-    if (this.isProteinCategory) this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
   pinGene(gene: GCTGene, refresh = true) {
@@ -844,8 +842,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         });
       }
     }
-
-    if (this.isProteinCategory) this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
   showUnableToAddItemErrorToast() {
@@ -896,7 +892,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     if (showToast) {
       this.showMaxPinnedRowsErrorToast(proteinsAdded);
     }
-    this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
   onUnPinGeneClick(gene: GCTGene, refresh = true) {
@@ -916,12 +911,12 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       this.pinnedItemsPerGene.set(gene.ensembl_gene_id, newCount);
     }
 
+    this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
+
     if (refresh) {
       this.clearPinnedItemsCache();
       this.refreshPinnedGenes();
     }
-
-    if (this.isProteinCategory) this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
   onClearAllClick() {
