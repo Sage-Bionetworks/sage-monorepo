@@ -20,8 +20,9 @@ export class ComparisonToolHelperService {
    * @returns Object containing pageNumber (zero-based) and pageSize
    */
   getPaginationParams(event: TableLazyLoadEvent, defaultRowsPerPage = 10): PaginationParams {
-    const pageNumber = Math.floor((event.first ?? 0) / (event.rows ?? defaultRowsPerPage));
-    const pageSize = event.rows ?? defaultRowsPerPage;
+    const rows = event.rows || defaultRowsPerPage;
+    const pageNumber = Math.floor((event.first ?? 0) / rows);
+    const pageSize = rows;
     return { pageNumber, pageSize };
   }
 

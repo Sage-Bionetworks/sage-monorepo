@@ -9,6 +9,7 @@
     font-size: 16px;
     display: flex;
     align-items: center;
+    position: relative;
     border-top: none !important;
 
     &:first-child {
@@ -21,32 +22,53 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      overflow: hidden;
+      padding-right: 15px;
     }
 
     .column-header-text {
       padding-left: 10px;
-      flex-grow: 1;
+      padding-right: 8px;
+      flex: 1 1 auto;
       text-align: left;
+
+      span {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
 
     .column-header-sort {
-      flex-shrink: 0;
-      margin-left: 8px;
-      margin-right: 22px;
+      flex: 0 100 auto;
+      min-width: 0;
+      overflow: hidden;
     }
 
     &.primary {
       .column-header-text {
         text-align: right;
       }
-
-      .column-header-sort {
-        margin-left: 16px;
-      }
     }
 
     span:hover {
       color: var(--color-action-primary);
+    }
+
+    .column-resize-handle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 8px;
+      height: 100%;
+      cursor: col-resize;
+      z-index: 1;
+
+      &:hover {
+        background-color: var(--color-action-primary);
+        opacity: 0.3;
+        height: 9999px;
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 <div class="comparison-tool-table" #table>
   <div class="table-header-and-pinned" #tableHeaderAndPinned>
-    <explorers-comparison-tool-columns [columnWidth]="columnWidth" />
+    <explorers-comparison-tool-columns />
 
     @if (pinnedResultsCount() > 0) {
       <div class="table-divider table-divider-1">
@@ -23,11 +23,7 @@
         </div>
       </div>
     }
-    <explorers-base-table
-      [data]="pinnedData()"
-      [shouldShowNoDataMessage]="false"
-      [columnWidth]="columnWidth"
-    />
+    <explorers-base-table [data]="pinnedData()" [shouldShowNoDataMessage]="false" />
   </div>
 
   @if (searchTerm() || hasSelectedFilters()) {
@@ -61,9 +57,5 @@
     </div>
   }
 
-  <explorers-base-table
-    [data]="unpinnedData()"
-    [shouldShowNoDataMessage]="true"
-    [columnWidth]="columnWidth"
-  />
+  <explorers-base-table [data]="unpinnedData()" [shouldShowNoDataMessage]="true" />
 </div>

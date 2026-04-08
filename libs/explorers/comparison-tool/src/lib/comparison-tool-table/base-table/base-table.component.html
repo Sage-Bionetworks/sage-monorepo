@@ -6,10 +6,10 @@
     [totalRecords]="totalRecords()"
     [first]="first()"
     [lazy]="true"
+    [lazyLoadOnInit]="false"
     [loading]="data().length > 0 && comparisonToolService.isLoadingTableData()"
     (onLazyLoad)="onLazyLoad($event)"
     sortMode="multiple"
-    [multiSortMeta]="comparisonToolService.multiSortMeta()"
     [defaultSortOrder]="-1"
     breakpoint="0"
     stripedRows
@@ -27,7 +27,7 @@
           @let columnType = column.type;
           @let cellData = rowData[column.data_key];
           @let rowId = rowData[this.viewConfig().rowIdDataKey];
-          <td [style]="{ width: columnWidth() }" [class]="columnType">
+          <td [class]="columnType" [style.width]="'var(--ct-col-' + $index + '-width)'">
             @if (columnType === 'primary') {
               <explorers-primary-identifier-controls
                 [label]="cellData"

@@ -105,15 +105,23 @@
     box-sizing: border-box;
     max-width: 100%;
     min-width: 0;
-    overflow: hidden;
   }
 
   th {
     white-space: normal;
+    overflow: visible;
   }
 
   td {
     white-space: nowrap;
+    overflow: hidden;
+  }
+
+  /* Header component needs its own stacking context above body tables
+     so the resize handle can visually extend over body rows. */
+  explorers-comparison-tool-columns {
+    position: relative;
+    z-index: 1;
   }
 
   .p-datatable-thead,
@@ -125,13 +133,12 @@
     td,
     th {
       display: flex;
+      flex: 0 0 auto;
       align-items: center;
       justify-content: flex-start;
       border-bottom: none !important;
 
       &.primary {
-        width: var(--comparison-tool-primary-column-width) !important;
-        flex: 0 0 var(--comparison-tool-primary-column-width);
         padding: 0 !important;
         justify-content: end;
 
@@ -146,5 +153,19 @@
         justify-content: center;
       }
     }
+  }
+}
+
+/* stylelint-disable-next-line selector-class-pattern */
+body.ct-resizing {
+  cursor: col-resize !important;
+  user-select: none;
+
+  /* Prevent mouse events on table elements during column resize.
+     When shrinking a column, adjacent headers slide under the cursor,
+     firing mouseenter on PrimeNG directives (pTooltip, pSortableColumn)
+     which triggers Angular change detection and spurious API calls. */
+  .comparison-tool-table * {
+    pointer-events: none !important;
   }
 }

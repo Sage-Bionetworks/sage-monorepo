@@ -20,6 +20,7 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
+import { MIN_COLUMN_WIDTH } from './comparison-tool-table.constants';
 
 @Component({
   selector: 'explorers-comparison-tool-table',
@@ -58,7 +59,6 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   pinnedData = this.comparisonToolService.pinnedData;
   unpinnedData = this.comparisonToolService.unpinnedData;
 
-  columnWidth = 'auto';
   primaryColumnWidth = 300;
 
   constructor() {
@@ -71,13 +71,10 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
       // Recalculate column widths whenever selected columns change
       effect((onCleanup) => {
-        // Access selectedColumns to track changes
         this.selectedColumns();
-        // Recalculate widths on next tick to ensure DOM is updated
         const timeoutId = setTimeout(() => {
           this.onWindowResize();
         }, 0);
-        // Clean up timeout if effect re-runs before timeout fires
         onCleanup(() => clearTimeout(timeoutId));
       });
     }
@@ -92,11 +89,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   @HostListener('window:resize')
   onWindowResize() {
     if (this.platformService.isBrowser) {
-      const tableElementWidth = this.tableElement()?.nativeElement?.offsetWidth || 0;
-      this.columnWidth = this.calculateNonprimaryColumnWidth(
-        this.selectedColumns().length - 1,
-        tableElementWidth,
-      );
+      this.resetColumnWidths();
     }
   }
 
@@ -122,7 +115,6 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   }
 
   pinAll() {
-    // TODO: handle pagination (i.e. unpinnedData only contains the first page of data, rather than all unpinned data)
     const rowIdDataKey = this.viewConfig().rowIdDataKey;
     this.comparisonToolService.pinList(this.unpinnedData().map((item) => item[rowIdDataKey]));
   }
@@ -134,5 +126,34 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   calculateNonprimaryColumnWidth(nCols: number, tableWidth: number) {
     const count = Math.max(nCols, 5);
     return Math.ceil((tableWidth - this.primaryColumnWidth) / count) + 'px';
+  }
+
+  /**
+   * Sets CSS custom properties on the container element for each column width.
+   * All cells in all three tables reference these variables, so one setProperty
+   * call updates every cell in that column across all tables — no Angular
+   * change detection involved.
+   */
+  private resetColumnWidths() {
+    const container = this.tableElement()?.nativeElement as HTMLElement;
+    if (!container) return;
+
+    const tableElementWidth = container.offsetWidth || 0;
+    const cols = this.selectedColumns();
+    const nonPrimaryCount = cols.filter((c) => c.type !== 'primary').length;
+    const defaultWidth = this.calculateNonprimaryColumnWidth(nonPrimaryCount, tableElementWidth);
+    const primaryWidth = this.primaryColumnWidth + 'px';
+
+    for (let i = 0; i < cols.length; i++) {
+      let width: string;
+      if (cols[i].type === 'primary') {
+        width = primaryWidth;
+      } else if (cols[i].type === 'heat_map') {
+        width = MIN_COLUMN_WIDTH + 'px';
+      } else {
+        width = defaultWidth;
+      }
+      container.style.setProperty(`--ct-col-${i}-width`, width);
+    }
   }
 }

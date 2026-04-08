@@ -34,7 +34,6 @@ export class BaseTableComponent {
 
   data = input.required<Record<string, any>[]>();
   shouldShowNoDataMessage = input<boolean>(true);
-  columnWidth = input<string>('auto');
 
   onLazyLoad(event: TableLazyLoadEvent) {
     this.comparisonToolService.handleLazyLoad(event);

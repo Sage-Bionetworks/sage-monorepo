@@ -17,7 +17,7 @@
           [id]="column.name"
           [class]="column.type"
           [pSortableColumn]="column.data_key"
-          [style]="{ width: columnWidth() }"
+          [style.width]="'var(--ct-col-' + $index + '-width)'"
         >
           <div class="column-header">
             <div class="column-header-text">
@@ -33,6 +33,13 @@
               />
             </div>
           </div>
+          @if (column.type !== 'primary') {
+            <div
+              class="column-resize-handle"
+              (mousedown)="onResizeStart($event, column.data_key)"
+              (click)="$event.stopPropagation()"
+            ></div>
+          }
         </th>
       }
     </tr>
