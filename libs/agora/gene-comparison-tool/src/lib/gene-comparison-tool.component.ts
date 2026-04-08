@@ -768,7 +768,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         // check if the pinned genes list has a gene with the ensembl id,
         // in which case the protein can be added
         if (!this.pinnedItemsPerGene.has(gene.ensembl_gene_id)) {
-          this.showUnableToAddItemErrorToast();
+          this.showProteinGeneAtLimitToast();
           return;
         }
       }
@@ -836,16 +836,13 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     }
   }
 
-  showUnableToAddItemErrorToast() {
+  showProteinGeneAtLimitToast() {
     this.messageService.clear();
     this.messageService.add({
       severity: 'warn',
       sticky: true,
       summary: '',
-      detail:
-        'The row was not pinned because you reached the maximum of ' +
-        this.maxPinnedGenes +
-        ' pinned genes.',
+      detail: `The row was not pinned because you reached the maximum of ${this.maxPinnedGenes} pinned genes. Only proteins belonging to an already-pinned gene can be added.`,
     });
     setTimeout(() => {
       this.messageService.clear();
