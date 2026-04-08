@@ -15,7 +15,7 @@ async function setup(model: Model = modelMock) {
 
 describe('ModelDetailsOmicsComponent', () => {
   const diseaseCorrelationPath = `comparison/correlation?name=${modelMock.name}`;
-  const geneExpressionPath = `comparison/expression?name=${modelMock.name}`;
+  const transcriptomicsPath = `comparison/expression?name=${modelMock.name}`;
 
   it('should display section header', async () => {
     await setup();
@@ -23,9 +23,9 @@ describe('ModelDetailsOmicsComponent', () => {
     expect(sectionTitle).toBeInTheDocument();
   });
 
-  it('should display gene expression resource card when available', async () => {
-    await setup({ ...modelMock, gene_expression: geneExpressionPath, disease_correlation: null });
-    expect(screen.getByText('Gene Expression')).toBeInTheDocument();
+  it('should display transcriptomics resource card when available', async () => {
+    await setup({ ...modelMock, gene_expression: transcriptomicsPath, disease_correlation: null });
+    expect(screen.getByText('Transcriptomics')).toBeInTheDocument();
     expect(screen.queryByText('Disease Correlation')).not.toBeInTheDocument();
   });
 
@@ -35,17 +35,17 @@ describe('ModelDetailsOmicsComponent', () => {
       gene_expression: null,
       disease_correlation: diseaseCorrelationPath,
     });
-    expect(screen.queryByText('Gene Expression')).not.toBeInTheDocument();
+    expect(screen.queryByText('Transcriptomics')).not.toBeInTheDocument();
     expect(screen.getByText('Disease Correlation')).toBeInTheDocument();
   });
 
-  it('should display both gene comparison and disease correlation when both cards available', async () => {
+  it('should display both transcriptomics and disease correlation when both cards available', async () => {
     await setup({
       ...modelMock,
-      gene_expression: geneExpressionPath,
+      gene_expression: transcriptomicsPath,
       disease_correlation: diseaseCorrelationPath,
     });
-    expect(screen.getByText('Gene Expression')).toBeInTheDocument();
+    expect(screen.getByText('Transcriptomics')).toBeInTheDocument();
     expect(screen.getByText('Disease Correlation')).toBeInTheDocument();
   });
 });

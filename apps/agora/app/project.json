@@ -26,7 +26,11 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/agora/app/src/assets",
-          "apps/agora/app/src/config",
+          {
+            "input": "apps/agora/app/src/config",
+            "glob": "**/*.yaml",
+            "output": "config"
+          },
           "apps/agora/app/src/humans.txt",
           "apps/agora/app/src/robots.txt",
           {

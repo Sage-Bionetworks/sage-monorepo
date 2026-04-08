@@ -26,7 +26,11 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/model-ad/app/src/assets",
-          "apps/model-ad/app/src/config",
+          {
+            "input": "apps/model-ad/app/src/config",
+            "glob": "**/*.yaml",
+            "output": "config"
+          },
           "apps/model-ad/app/src/humans.txt",
           "apps/model-ad/app/src/robots.txt",
           {

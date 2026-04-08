@@ -1,3 +1,9 @@
+<div
+  class="boxplots-grid-legend"
+  sageLegend
+  [pointStyles]="pointStyles()"
+  [chartStyle]="'grayGrid'"
+></div>
 <div class="boxplots-grid">
   @for (boxplotData of boxplotDataList(); track boxplotData; let i = $index) {
     <div class="boxplot-wrapper">
@@ -10,9 +16,3 @@
     </div>
   }
 </div>
-<div
-  class="boxplots-grid-legend"
-  sageLegend
-  [pointStyles]="pointStyles()"
-  [chartStyle]="'grayGrid'"
-></div>

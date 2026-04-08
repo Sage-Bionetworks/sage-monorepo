@@ -12,7 +12,7 @@ export const headerLinks: NavigationLink[] = [
     routerLink: [ROUTE_PATHS.MODEL_OVERVIEW],
   },
   {
-    label: 'Gene Expression',
+    label: 'Differential Expression',
     routerLink: [ROUTE_PATHS.GENE_EXPRESSION],
   },
   {

@@ -4,7 +4,7 @@
   "projectType": "library",
   "sourceRoot": "libs/agora/config/src",
   "prefix": "agora",
-  "tags": ["type:feature", "scope:agora", "language:typescript"],
+  "tags": ["type:config", "scope:agora", "language:typescript"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

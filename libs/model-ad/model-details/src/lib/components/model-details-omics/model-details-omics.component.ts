@@ -16,8 +16,9 @@ export class ModelDetailsOmicsComponent {
     if (this.model().gene_expression) {
       cards.push({
         imagePath: 'model-ad-assets/images/gene-expression.svg',
-        description: 'View Gene Expression results for this model in the comparison tool.',
-        title: 'Gene Expression',
+        description:
+          'View RNA differential expression results for this model in the comparison tool.',
+        title: 'Transcriptomics',
         link: `/${this.model().gene_expression}`,
       });
     }

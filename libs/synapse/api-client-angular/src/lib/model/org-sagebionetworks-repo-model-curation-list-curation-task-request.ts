@@ -9,15 +9,36 @@
  */
 
 /**
- * Request for a single page of CurationTasks for a project.
+ * Request for a single page of CurationTasks with optional filtering.
  */
 export interface OrgSagebionetworksRepoModelCurationListCurationTaskRequest {
   /**
-   * The project ID. Required.
+   * Optional. The synId of the project. If omitted, results are aggregated across projects.
    */
-  projectId: string;
+  projectId?: string;
+  /**
+   * Optional. Filter tasks assigned to specific users or teams.
+   */
+  assigneeIds?: Array<string>;
+  /**
+   * Optional. When true, filter to tasks assigned to the caller or any team the caller belongs to. Cannot be combined with assigneeIds.
+   */
+  assignedToMe?: boolean;
+  /**
+   * Optional. Filter tasks by their current state.
+   */
+  stateFilter?: Array<OrgSagebionetworksRepoModelCurationListCurationTaskRequest.StateFilterEnum>;
   /**
    * Forward the returned \'nextPageToken\' to get the next page of results.
    */
   nextPageToken?: string;
+}
+export namespace OrgSagebionetworksRepoModelCurationListCurationTaskRequest {
+  export type StateFilterEnum = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
+  export const StateFilterEnum = {
+    NotStarted: 'NOT_STARTED' as StateFilterEnum,
+    InProgress: 'IN_PROGRESS' as StateFilterEnum,
+    Completed: 'COMPLETED' as StateFilterEnum,
+    Canceled: 'CANCELED' as StateFilterEnum,
+  };
 }
