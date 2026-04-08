@@ -119,6 +119,14 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   subCategory = '';
   subCategoryLabel = '';
 
+  get isRnaCategory() {
+    return this.category === 'RNA - Differential Expression';
+  }
+
+  get isProteinCategory() {
+    return this.category === 'Protein - Differential Expression';
+  }
+
   /* Columns --------------------------------------------------------------- */
   columns: string[] = [];
   columnWidth = 'auto';
@@ -316,7 +324,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   getUid(item: GCTGene) {
     // rna is just the ensembl gene id
     // protein is a combination of ensembl gene id and uniprotid
-    if (this.category === 'RNA - Differential Expression') return item.ensembl_gene_id;
+    if (this.isRnaCategory) return item.ensembl_gene_id;
     else return item.ensembl_gene_id + item.uniprotid;
   }
 
@@ -338,7 +346,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       return this.pinnedItemsCache.map((g: GCTGene) => g.uid);
     } else {
       // categories don't match, so grab it from the cache and format it
-      if (this.category === 'RNA - Differential Expression') {
+      if (this.isRnaCategory) {
         // if the current category is RNA, we only need the previous ensgs
         // instead of getting the uid, we need to get the ensg
         return this.pinnedItemsCache.map((g: GCTGene) => g.ensembl_gene_id);
@@ -364,7 +372,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       item.uid = this.getUid(item);
       item.search_array = [item.ensembl_gene_id.toLowerCase(), item.hgnc_symbol.toLowerCase()];
 
-      if (this.category === 'Protein - Differential Expression') {
+      if (this.isProteinCategory) {
         item.search_array.push(item.uniprotid?.toLowerCase() || '');
 
         // if there is a match on uid or ensembl_gene_id, add it to pinnedGenes
@@ -434,10 +442,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     if (itemsToPin.length) {
       itemsToPin.sort((a, b) => (a.ensembl_gene_id > b.ensembl_gene_id ? 1 : -1));
 
-      if (
-        'Protein - Differential Expression' === this.category &&
-        this.uniquePinnedGenesCount > this.maxPinnedGenes
-      ) {
+      if (this.isProteinCategory && this.uniquePinnedGenesCount > this.maxPinnedGenes) {
         this.pendingPinnedItems = itemsToPin;
         this.pinnedGenesModal.show();
       } else {
@@ -459,7 +464,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   updateSubCategories() {
     // update subcategory label text
-    if ('Protein - Differential Expression' === this.category) {
+    if (this.isProteinCategory) {
       this.subCategoryLabel = 'Profiling Method';
     } else {
       this.subCategoryLabel = 'Models';
@@ -579,7 +584,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   filter() {
     let filters: { [key: string]: any };
 
-    if (this.category === 'RNA - Differential Expression') {
+    if (this.isRnaCategory) {
       filters = {
         ensembl_gene_id: {
           value: this.getPinnedEnsemblGeneIds(),
@@ -754,14 +759,13 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     this.pinGene(gene);
 
-    if (this.category === 'Protein - Differential Expression')
-      this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
+    if (this.isProteinCategory) this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
   pinGene(gene: GCTGene, refresh = true) {
     const index = this.pinnedItems.findIndex((g: GCTGene) => g.uid === gene.uid);
     const atGeneLimit = this.uniquePinnedGenesCount >= this.maxPinnedGenes;
-    if (this.category === 'RNA - Differential Expression') {
+    if (this.isRnaCategory) {
       if (index > -1 || atGeneLimit) return;
     } else {
       // the same unique id exists, so don't allow it to be added
@@ -836,7 +840,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     if (remaining < 1) {
       return;
     } else {
-      if (this.category === 'RNA - Differential Expression') {
+      if (this.isRnaCategory) {
         if (remaining < genes?.length) {
           this.showMaxPinnedRowsErrorToast(remaining);
         }
@@ -850,8 +854,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       }
     }
 
-    if (this.category === 'Protein - Differential Expression')
-      this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
+    if (this.isProteinCategory) this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
   showUnableToAddItemErrorToast() {
@@ -927,8 +930,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       this.refreshPinnedGenes();
     }
 
-    if (this.category === 'Protein - Differential Expression')
-      this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
+    if (this.isProteinCategory) this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
   onClearAllClick() {
@@ -957,8 +959,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   }
 
   isPinDisabled(gene?: GCTGene) {
-    if (this.category === 'RNA - Differential Expression')
-      return this.uniquePinnedGenesCount >= this.maxPinnedGenes;
+    if (this.isRnaCategory) return this.uniquePinnedGenesCount >= this.maxPinnedGenes;
     else {
       if (this.uniquePinnedGenesCount < this.maxPinnedGenes) return false;
       // At the unique gene limit: only allow proteins whose gene is already pinned
@@ -967,8 +968,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   }
 
   isPinAllDisabled() {
-    if (this.category === 'RNA - Differential Expression')
-      return this.uniquePinnedGenesCount >= this.maxPinnedGenes;
+    if (this.isRnaCategory) return this.uniquePinnedGenesCount >= this.maxPinnedGenes;
     else {
       if (this.uniquePinnedGenesCount < this.maxPinnedGenes) return false;
       // At the gene limit: still enabled if any filtered protein belongs to an already-pinned gene
@@ -980,7 +980,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   onPinAllClick() {
     this.setLastPinnedCategories();
-    if (this.category === 'RNA - Differential Expression') this.pinFilteredGenes();
+    if (this.isRnaCategory) this.pinFilteredGenes();
     else this.pinFilteredProteins();
   }
 
@@ -1241,7 +1241,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       'target_risk_score',
       'multi_omic_risk_score',
       'genetic_risk_score',
-      'Protein - Differential Expression' === this.category ? 'uniprotid' : 'model',
+      this.isProteinCategory ? 'uniprotid' : 'model',
       'tissue',
       'log2_fc',
       'ci_upr',
@@ -1260,7 +1260,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         this.returnEmptyStringIfNull(g.genetics_score),
       ];
 
-      if ('Protein - Differential Expression' === this.category) {
+      if (this.isProteinCategory) {
         baseRow.push(g.uniprotid || '');
       } else {
         baseRow.push(this.subCategory);
