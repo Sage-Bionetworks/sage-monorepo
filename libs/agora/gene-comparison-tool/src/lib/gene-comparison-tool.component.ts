@@ -831,9 +831,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
           this.pinItem(g, false);
         });
       } else {
-        genes.slice(0, genes.length).forEach((g: GCTGene) => {
-          this.pinItem(g, false);
-        });
+        this.pinProteinsBatched(genes);
       }
     }
   }
@@ -852,6 +850,30 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     setTimeout(() => {
       this.messageService.clear();
     }, 5000);
+  }
+
+  pinProteinsBatched(proteins: GCTGene[]) {
+    // Pins proteins in batch, skipping those whose gene is not already pinned when at
+    // the gene limit, so the toast is shown once at the end with the correct count.
+    let proteinsAdded = 0;
+    let showToast = false;
+
+    for (const protein of proteins) {
+      const atLimit = this.uniquePinnedGenesCount >= this.maxPinnedGenes;
+      const geneAlreadyPinned = this.pinnedItemsPerGene.has(protein.ensembl_gene_id);
+
+      if (atLimit && !geneAlreadyPinned) {
+        showToast = true;
+        continue;
+      }
+
+      this.pinItem(protein, false);
+      proteinsAdded++;
+    }
+
+    if (showToast) {
+      this.showMaxPinnedRowsErrorToast(proteinsAdded);
+    }
   }
 
   onUnpinItemClick(gene: GCTGene, refresh = true) {
@@ -936,30 +958,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   }
 
   pinFilteredProteins() {
-    // Cannot use pinItems here: it shows a toast per item when the gene limit is hit.
-    // For "pin all" proteins, we batch the adds and track how many rows were actually
-    // pinned so the toast is only shown once at the end with the correct count.
-    const proteins = this.genesTable.filteredValue as GCTGene[];
-    let proteinsAdded = 0;
-    let showToast = false;
-
-    for (const protein of proteins) {
-      const atLimit = this.uniquePinnedGenesCount >= this.maxPinnedGenes;
-      const geneAlreadyPinned = this.pinnedItemsPerGene.has(protein.ensembl_gene_id);
-
-      if (atLimit && !geneAlreadyPinned) {
-        showToast = true;
-        continue;
-      }
-
-      this.pinItem(protein, false);
-      proteinsAdded++;
-    }
-
-    if (showToast) {
-      this.showMaxPinnedRowsErrorToast(proteinsAdded);
-    }
-
+    this.pinProteinsBatched(this.genesTable.filteredValue as GCTGene[]);
     this.refreshPinnedItems();
   }
 
