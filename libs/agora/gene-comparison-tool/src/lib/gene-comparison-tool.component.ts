@@ -800,26 +800,17 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   }
 
   showMaxPinnedRowsErrorToast(rows: number) {
+    const geneLimit = `the maximum of ${this.maxPinnedGenes} pinned genes`;
+    const proteinNote = this.isProteinCategory
+      ? ' Some rows were skipped because they belong to a gene not already in your pinned list.'
+      : '';
     let message = '';
     if (rows === 0) {
-      message =
-        'No rows were pinned because you reached the maximum of ' +
-        this.maxPinnedGenes +
-        ' pinned genes.';
+      message = `No rows were pinned because you reached ${geneLimit}.${proteinNote}`;
     } else if (rows === 1) {
-      message =
-        'Only ' +
-        rows +
-        ' row were pinned, because you reached the maximum of ' +
-        this.maxPinnedGenes +
-        ' pinned genes.';
+      message = `Only ${rows} row was pinned, because you reached ${geneLimit}.${proteinNote}`;
     } else {
-      message =
-        'Only ' +
-        rows +
-        ' rows were pinned, because you reached the maximum of ' +
-        this.maxPinnedGenes +
-        ' pinned genes.';
+      message = `Only ${rows} rows were pinned, because you reached ${geneLimit}.${proteinNote}`;
     }
 
     this.messageService.clear();
