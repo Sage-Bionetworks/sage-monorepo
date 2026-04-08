@@ -15,6 +15,7 @@
         class="avatar"
         (click)="authService.logout()"
         [title]="'Logout ' + (authService.user()?.preferred_username ?? '')"
+        aria-label="Logout"
       >
         @if (avatarUrl()) {
           <img class="avatar-img" [src]="avatarUrl()" [alt]="initials()" />
