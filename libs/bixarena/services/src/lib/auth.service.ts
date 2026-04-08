@@ -1,6 +1,5 @@
 import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ConfigService } from '@sagebionetworks/bixarena/config';
 
 export interface UserInfo {
   sub: string;
@@ -16,15 +15,9 @@ const CACHE_KEY = 'ba-user';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-  private readonly configService = inject(ConfigService);
-
   readonly user = signal<UserInfo | null>(null);
   readonly isAuthenticated = computed(() => this.user() !== null);
   readonly cachedUsername = signal<string | null>(this.loadCache());
-
-  private get authUrl(): string {
-    return this.configService.config.auth.baseUrls.csr;
-  }
 
   async init(): Promise<void> {
     if (!this.isBrowser) return;
@@ -44,7 +37,7 @@ export class AuthService {
 
   login(): void {
     if (!this.isBrowser) return;
-    window.location.href = `${this.authUrl}/auth/login`;
+    window.location.href = '/auth/login';
   }
 
   async logout(): Promise<void> {

@@ -21,7 +21,6 @@ describe('AppComponent', () => {
                 feedback: '',
                 sageBionetworks: '',
               },
-              auth: { baseUrls: { csr: '' } },
               analytics: {
                 googleTagManager: { enabled: false, id: '' },
               },

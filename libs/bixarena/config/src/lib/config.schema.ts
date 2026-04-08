@@ -20,13 +20,6 @@ export const AppConfigSchema = BaseConfigSchema.extend({
     }),
   }),
 
-  auth: z.object({
-    baseUrls: z.object({
-      csr: z.url({ message: 'Auth CSR base URL must be a valid URL' }),
-      ssr: z.url({ message: 'Auth SSR base URL must be a valid URL' }),
-    }),
-  }),
-
   analytics: z.object({
     googleTagManager: z.object({
       enabled: z.boolean(),
