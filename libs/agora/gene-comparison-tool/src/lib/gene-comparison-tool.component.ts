@@ -449,7 +449,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         this.clearPinnedItems();
         this.pendingPinnedItems = [];
         this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
-        this.pinGenes(itemsToPin);
+        this.pinItems(itemsToPin);
       }
     } else {
       this.clearPinnedItems();
@@ -747,20 +747,20 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
-  refreshPinnedGenes() {
+  refreshPinnedItems() {
     this.setPinnedItemsCache(this.pinnedItems);
     this.filter();
     this.updateUrl();
   }
 
-  onPinGeneClick(gene: GCTGene) {
-    // user-initiated gene pin means we set the last pinned categories
+  onPinItemClick(gene: GCTGene) {
+    // user-initiated pin means we set the last pinned categories
     this.setLastPinnedCategories();
 
-    this.pinGene(gene);
+    this.pinItem(gene);
   }
 
-  pinGene(gene: GCTGene, refresh = true) {
+  pinItem(gene: GCTGene, refresh = true) {
     const index = this.pinnedItems.findIndex((g: GCTGene) => g.uid === gene.uid);
     const atGeneLimit = this.uniquePinnedGenesCount >= this.maxPinnedGenes;
     if (this.isRnaCategory) {
@@ -789,7 +789,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     if (refresh) {
       this.clearPinnedItemsCache();
-      this.refreshPinnedGenes();
+      this.refreshPinnedItems();
     }
   }
 
@@ -823,7 +823,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     }, 5000);
   }
 
-  pinGenes(genes: GCTGene[]) {
+  pinItems(genes: GCTGene[]) {
     const remaining = this.maxPinnedGenes - this.uniquePinnedGenesCount;
 
     if (remaining < 1) {
@@ -834,11 +834,11 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
           this.showMaxPinnedRowsErrorToast(remaining);
         }
         genes.slice(0, remaining).forEach((g: GCTGene) => {
-          this.pinGene(g, false);
+          this.pinItem(g, false);
         });
       } else {
         genes.slice(0, genes.length).forEach((g: GCTGene) => {
-          this.pinGene(g, false);
+          this.pinItem(g, false);
         });
       }
     }
@@ -878,13 +878,13 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         showToast = true;
         if (this.ensgExistsInProteins(proteins[i].ensembl_gene_id)) {
           // if the gene exists, we can still add the protein
-          this.pinGene(proteins[i], false);
+          this.pinItem(proteins[i], false);
           proteinsAdded++;
           remaining = this.maxPinnedGenes - this.uniquePinnedGenesCount;
         }
       } else {
         // add protein to pinned collection
-        this.pinGene(proteins[i], false);
+        this.pinItem(proteins[i], false);
         proteinsAdded++;
         remaining = this.maxPinnedGenes - this.uniquePinnedGenesCount;
       }
@@ -894,7 +894,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     }
   }
 
-  onUnPinGeneClick(gene: GCTGene, refresh = true) {
+  onUnpinItemClick(gene: GCTGene, refresh = true) {
     this.setLastPinnedCategories();
 
     const index = this.pinnedItems.findIndex((g: GCTGene) => g.uid === gene.uid);
@@ -915,7 +915,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     if (refresh) {
       this.clearPinnedItemsCache();
-      this.refreshPinnedGenes();
+      this.refreshPinnedItems();
     }
   }
 
@@ -933,7 +933,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   clearPinnedGenes() {
     this.clearPinnedItems();
     this.clearPinnedItemsCache();
-    this.refreshPinnedGenes();
+    this.refreshPinnedItems();
   }
 
   getPinnedEnsemblGeneIds() {
@@ -971,19 +971,19 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   }
 
   pinFilteredGenes() {
-    this.pinGenes(this.genesTable.filteredValue as GCTGene[]);
-    this.refreshPinnedGenes();
+    this.pinItems(this.genesTable.filteredValue as GCTGene[]);
+    this.refreshPinnedItems();
   }
 
   pinFilteredProteins() {
     this.pinProteins(this.genesTable.filteredValue as GCTGene[]);
-    this.refreshPinnedGenes();
+    this.refreshPinnedItems();
   }
 
   onPinnedGenesModalChange(response: boolean) {
     if (response) {
       this.clearPinnedItems();
-      this.pinGenes(this.pendingPinnedItems);
+      this.pinItems(this.pendingPinnedItems);
     } else {
       this.category = this.categories[0].value;
       this.onCategoryChange();
