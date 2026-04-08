@@ -66,7 +66,6 @@ import { GeneComparisonToolFilterListComponent } from './components/gene-compari
   imports: [
     ButtonModule,
     CommonModule,
-    ButtonModule,
     FormsModule,
     RouterModule,
     TableModule,
@@ -427,8 +426,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       this.setPinnedItemsCache(itemsToPin);
     }
 
-    this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
-
     this.updateVisibleColumns();
 
     if (!this.sortField || !this.columns.includes(this.sortField)) {
@@ -444,14 +441,17 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     if (itemsToPin.length) {
       itemsToPin.sort((a, b) => (a.ensembl_gene_id > b.ensembl_gene_id ? 1 : -1));
+      const uniqueGenesToPinCount = itemsToPin.reduce((set: Set<string>, item: GCTGene) => {
+        set.add(item.ensembl_gene_id);
+        return set;
+      }, new Set<string>()).size;
 
-      if (this.isProteinCategory && this.uniquePinnedGenesCount > this.maxPinnedGenes) {
+      if (this.isProteinCategory && uniqueGenesToPinCount > this.maxPinnedGenes) {
         this.pendingPinnedItems = itemsToPin;
         this.pinnedGenesModal.show();
       } else {
         this.resetPinnedItemsState();
         this.pendingPinnedItems = [];
-        this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
         this.pinItems(itemsToPin);
       }
     } else {
@@ -741,7 +741,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   clearPinnedItemsCache() {
     this.pinnedItemsCache = [];
-    this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
   refreshPinnedItems() {
