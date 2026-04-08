@@ -860,40 +860,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     }, 5000);
   }
 
-  ensgExistsInProteins(ensemblGeneId: string) {
-    return this.pinnedItemsPerGene.has(ensemblGeneId);
-  }
-
-  pinProteins(proteins: GCTGene[]) {
-    let remaining = this.maxPinnedGenes - this.uniquePinnedGenesCount;
-
-    let proteinsAdded = 0;
-
-    let showToast = false;
-    for (let i = 0; i < proteins.length; i++) {
-      // if remaining count is zero, show alert toast
-      if (remaining <= 0) {
-        // check border condition: when there are no remaining ensg slots, it is still possible there
-        // are proteins that could be added
-        showToast = true;
-        if (this.ensgExistsInProteins(proteins[i].ensembl_gene_id)) {
-          // if the gene exists, we can still add the protein
-          this.pinItem(proteins[i], false);
-          proteinsAdded++;
-          remaining = this.maxPinnedGenes - this.uniquePinnedGenesCount;
-        }
-      } else {
-        // add protein to pinned collection
-        this.pinItem(proteins[i], false);
-        proteinsAdded++;
-        remaining = this.maxPinnedGenes - this.uniquePinnedGenesCount;
-      }
-    }
-    if (showToast) {
-      this.showMaxPinnedRowsErrorToast(proteinsAdded);
-    }
-  }
-
   onUnpinItemClick(gene: GCTGene, refresh = true) {
     this.setLastPinnedCategories();
 
@@ -976,7 +942,30 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   }
 
   pinFilteredProteins() {
-    this.pinProteins(this.genesTable.filteredValue as GCTGene[]);
+    // Cannot use pinItems here: it shows a toast per item when the gene limit is hit.
+    // For "pin all" proteins, we batch the adds and track how many rows were actually
+    // pinned so the toast is only shown once at the end with the correct count.
+    const proteins = this.genesTable.filteredValue as GCTGene[];
+    let proteinsAdded = 0;
+    let showToast = false;
+
+    for (const protein of proteins) {
+      const atLimit = this.uniquePinnedGenesCount >= this.maxPinnedGenes;
+      const geneAlreadyPinned = this.pinnedItemsPerGene.has(protein.ensembl_gene_id);
+
+      if (atLimit && !geneAlreadyPinned) {
+        showToast = true;
+        continue;
+      }
+
+      this.pinItem(protein, false);
+      proteinsAdded++;
+    }
+
+    if (showToast) {
+      this.showMaxPinnedRowsErrorToast(proteinsAdded);
+    }
+
     this.refreshPinnedItems();
   }
 
