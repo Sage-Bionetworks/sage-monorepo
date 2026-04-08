@@ -912,7 +912,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   onClearAllClick() {
     this.setLastPinnedCategories();
-    this.clearPinnedGenes();
+    this.clearAllPinnedItems();
   }
 
   clearPinnedItems() {
@@ -921,7 +921,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.uniquePinnedGenesCount = 0;
   }
 
-  clearPinnedGenes() {
+  clearAllPinnedItems() {
     this.clearPinnedItems();
     this.clearPinnedItemsCache();
     this.refreshPinnedItems();
