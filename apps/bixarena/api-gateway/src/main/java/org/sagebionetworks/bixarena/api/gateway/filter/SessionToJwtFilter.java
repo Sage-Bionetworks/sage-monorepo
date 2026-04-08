@@ -108,8 +108,8 @@ public class SessionToJwtFilter implements WebFilter {
               log.debug("Auth service response completed for: {} {}", method, path);
               if ("/auth/logout".equals(path)) {
                 sessionCache.invalidate(sessionId);
-                jwtCache.invalidateAll();
-                log.debug("Session cache evicted on logout");
+                jwtCache.asMap().keySet().removeIf(key -> key.sessionId().equals(sessionId));
+                log.debug("Session and JWT cache evicted on logout for sessionId: {}", maskSessionId(sessionId));
               }
             });
         })
