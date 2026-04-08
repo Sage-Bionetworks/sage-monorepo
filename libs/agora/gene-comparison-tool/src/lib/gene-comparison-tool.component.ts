@@ -174,6 +174,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   lastPinnedCategory = '';
   lastPinnedSubCategory = '';
 
+  // These three fields must always be kept in sync. Mutate only via
+  // addPinnedItem(), removePinnedItem(), or clearPinnedItems().
   pinnedItems: GCTGene[] = [];
   // key: ensembl_gene_id, value: number of pinned items (genes or proteins) with that gene id.
   // Used for O(1) lookups to support the 1:many gene-to-protein relationship,
@@ -181,6 +183,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   // map.size is cached as uniquePinnedGenesCount to avoid repeated lookups.
   pinnedItemsPerGene = new Map<string, number>();
   uniquePinnedGenesCount = 0;
+
   pinnedItemsCache: GCTGene[] = [];
   pendingPinnedItems: GCTGene[] = [];
   maxPinnedGenes = 50;
@@ -774,17 +777,21 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       }
     }
 
+    this.addPinnedItem(gene);
+
+    if (refresh) {
+      this.clearPinnedItemsCache();
+      this.refreshPinnedItems();
+    }
+  }
+
+  private addPinnedItem(gene: GCTGene) {
     this.pinnedItems.push(gene);
     this.pinnedItemsPerGene.set(
       gene.ensembl_gene_id,
       (this.pinnedItemsPerGene.get(gene.ensembl_gene_id) ?? 0) + 1,
     );
     this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
-
-    if (refresh) {
-      this.clearPinnedItemsCache();
-      this.refreshPinnedItems();
-    }
   }
 
   getCountOfUniqueGenes() {
@@ -873,13 +880,11 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     }
   }
 
-  onUnpinItemClick(gene: GCTGene, refresh = true) {
-    this.setLastPinnedCategories();
-
+  private removePinnedItem(gene: GCTGene): boolean {
     const index = this.pinnedItems.findIndex((g: GCTGene) => g.uid === gene.uid);
 
     if (index === -1) {
-      return;
+      return false;
     }
 
     this.pinnedItems.splice(index, 1);
@@ -891,6 +896,13 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     }
 
     this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
+    return true;
+  }
+
+  onUnpinItemClick(gene: GCTGene, refresh = true) {
+    this.setLastPinnedCategories();
+
+    if (!this.removePinnedItem(gene)) return;
 
     if (refresh) {
       this.clearPinnedItemsCache();
