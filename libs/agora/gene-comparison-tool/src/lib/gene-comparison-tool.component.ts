@@ -732,12 +732,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.lastPinnedSubCategory = this.subCategory;
   }
 
-  getPinnedGenesCacheKey(category: string, subCategory?: string) {
-    return (category + (subCategory ? '-' + subCategory : ''))
-      .replace(/[^a-z0-9]/gi, '')
-      .toLowerCase();
-  }
-
   setPinnedItemsCache(genes: GCTGene[]) {
     this.pinnedItemsCache = genes;
   }
