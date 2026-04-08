@@ -51,15 +51,15 @@ describe('GeneComparisonToolComponent', () => {
 
   describe('pinning state', () => {
     beforeEach(() => {
-      component.clearPinnedItems();
+      component.resetPinnedItemsState();
     });
 
-    describe('clearPinnedItems', () => {
+    describe('resetPinnedItemsState', () => {
       it('resets pinnedItems, pinnedItemsPerGene, and uniquePinnedGenesCount', () => {
         component.category = 'RNA - Differential Expression';
         component.pinItem(makeGene('ENSG001'), false);
 
-        component.clearPinnedItems();
+        component.resetPinnedItemsState();
 
         expect(component.pinnedItems).toEqual([]);
         expect(component.pinnedItemsPerGene.size).toBe(0);

@@ -175,7 +175,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   lastPinnedSubCategory = '';
 
   // These three fields must always be kept in sync. Mutate only via
-  // addPinnedItem(), removePinnedItem(), or clearPinnedItems().
+  // addPinnedItem(), removePinnedItem(), or resetPinnedItemsState().
   pinnedItems: GCTGene[] = [];
   // key: ensembl_gene_id, value: number of pinned items (genes or proteins) with that gene id.
   // Used for O(1) lookups to support the 1:many gene-to-protein relationship,
@@ -290,7 +290,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.isLoading = true;
     // this.genesTable.showLoader = true;
     this.genes = [];
-    this.clearPinnedItems();
+    this.resetPinnedItemsState();
     this.paginatorFirst = 0;
 
     this.logger.log(
@@ -449,13 +449,13 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         this.pendingPinnedItems = itemsToPin;
         this.pinnedGenesModal.show();
       } else {
-        this.clearPinnedItems();
+        this.resetPinnedItemsState();
         this.pendingPinnedItems = [];
         this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
         this.pinItems(itemsToPin);
       }
     } else {
-      this.clearPinnedItems();
+      this.resetPinnedItemsState();
     }
 
     this.genes = items;
@@ -915,14 +915,14 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.clearAllPinnedItems();
   }
 
-  clearPinnedItems() {
+  resetPinnedItemsState() {
     this.pinnedItems = [];
     this.pinnedItemsPerGene.clear();
     this.uniquePinnedGenesCount = 0;
   }
 
   clearAllPinnedItems() {
-    this.clearPinnedItems();
+    this.resetPinnedItemsState();
     this.clearPinnedItemsCache();
     this.refreshPinnedItems();
   }
@@ -973,7 +973,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   onPinnedGenesModalChange(response: boolean) {
     if (response) {
-      this.clearPinnedItems();
+      this.resetPinnedItemsState();
       this.pinItems(this.pendingPinnedItems);
     } else {
       this.category = this.categories[0].value;
