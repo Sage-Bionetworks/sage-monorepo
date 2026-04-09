@@ -741,14 +741,14 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.pinItem(gene);
   }
 
-  pinItem(gene: GCTGene, refresh = true) {
+  pinItem(gene: GCTGene, refresh = true): boolean {
     const index = this.pinnedItems.findIndex((g: GCTGene) => g.uid === gene.uid);
     const atGeneLimit = this.uniquePinnedGenesCount >= this.maxPinnedGenes;
     if (this.isRnaCategory) {
-      if (index > -1 || atGeneLimit) return;
+      if (index > -1 || atGeneLimit) return false;
     } else {
       // the same unique id exists, so don't allow it to be added
-      if (index > -1) return;
+      if (index > -1) return false;
 
       if (atGeneLimit) {
         // border condition: if we are at the max allowable pinned genes
@@ -756,7 +756,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         // in which case the protein can be added
         if (!this.pinnedItemsPerGene.has(gene.ensembl_gene_id)) {
           this.showProteinGeneAtLimitToast();
-          return;
+          return false;
         }
       }
     }
@@ -767,6 +767,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       this.clearPinnedItemsCache();
       this.refreshPinnedItems();
     }
+
+    return true;
   }
 
   private addPinnedItem(gene: GCTGene) {
@@ -855,8 +857,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         continue;
       }
 
-      this.pinItem(protein, false);
-      proteinsAdded++;
+      if (this.pinItem(protein, false)) proteinsAdded++;
     }
 
     if (showToast) {
