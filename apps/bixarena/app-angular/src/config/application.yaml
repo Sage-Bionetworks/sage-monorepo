@@ -13,8 +13,7 @@ api:
 
 auth:
   baseUrls:
-    csr: http://127.0.0.1:8113
-    ssr: http://bixarena-api-gateway:8113
+    csr: http://127.0.0.1:8111
 
 analytics:
   googleTagManager:
