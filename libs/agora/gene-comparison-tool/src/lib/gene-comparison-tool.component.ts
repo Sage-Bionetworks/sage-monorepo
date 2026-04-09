@@ -815,17 +815,24 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     if (remaining < 1) {
       return;
+    }
+
+    if (this.isRnaCategory) {
+      this.pinGenesBatched(genes);
     } else {
-      if (this.isRnaCategory) {
-        if (remaining < genes?.length) {
-          this.showMaxPinnedRowsErrorToast(remaining);
-        }
-        genes.slice(0, remaining).forEach((g: GCTGene) => {
-          this.pinItem(g, false);
-        });
-      } else {
-        this.pinProteinsBatched(genes);
-      }
+      this.pinProteinsBatched(genes);
+    }
+  }
+
+  pinGenesBatched(genes: GCTGene[]) {
+    // Pins genes in batch, counting actual additions to show accurate toast.
+    let genesAdded = 0;
+    for (const gene of genes) {
+      if (this.uniquePinnedGenesCount >= this.maxPinnedGenes) break;
+      if (this.pinItem(gene, false)) genesAdded++;
+    }
+    if (genesAdded < genes.length) {
+      this.showMaxPinnedRowsErrorToast(genesAdded);
     }
   }
 
@@ -942,17 +949,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   onPinAllClick() {
     this.setLastPinnedCategories();
-    if (this.isRnaCategory) this.pinFilteredGenes();
-    else this.pinFilteredProteins();
-  }
-
-  pinFilteredGenes() {
     this.pinItems(this.genesTable.filteredValue as GCTGene[]);
-    this.refreshPinnedItems();
-  }
-
-  pinFilteredProteins() {
-    this.pinProteinsBatched(this.genesTable.filteredValue as GCTGene[]);
     this.refreshPinnedItems();
   }
 
