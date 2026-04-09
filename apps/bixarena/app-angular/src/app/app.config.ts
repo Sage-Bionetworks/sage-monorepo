@@ -20,14 +20,14 @@ import { appRoutes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(() => {
-      const initializerFn = configFactory(inject(ConfigService));
-      return initializerFn();
+      const configService = inject(ConfigService);
+      const themeService = inject(ThemeService);
+      const authService = inject(AuthService);
+      return configFactory(configService)().then(() => {
+        themeService.init();
+        return authService.init();
+      });
     }),
-    provideAppInitializer(() => {
-      inject(ThemeService).init();
-      return;
-    }),
-    provideAppInitializer(() => inject(AuthService).init()),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
