@@ -423,5 +423,103 @@ describe('GeneComparisonToolComponent', () => {
         addSpy.mockRestore();
       });
     });
+
+    describe('cache behavior on initial load', () => {
+      it('caches all pinned items when under the limit', () => {
+        component.category = 'RNA - Differential Expression';
+        component.maxPinnedGenes = 50;
+        component.initialLoad = true;
+
+        const itemsToPin = [makeGene('ENSG001'), makeGene('ENSG002'), makeGene('ENSG003')];
+
+        // Simulate what initData does
+        component.resetPinnedItemsState();
+        component.pinItems(itemsToPin);
+        if (component.initialLoad) {
+          component.initialLoad = false;
+          component.setPinnedItemsCache(component.pinnedItems);
+        }
+
+        expect(component.pinnedItemsCache.length).toBe(3);
+        expect(component.pinnedItems.length).toBe(3);
+      });
+
+      it('only caches items up to the limit when exceeding maxPinnedGenes', () => {
+        component.category = 'RNA - Differential Expression';
+        component.maxPinnedGenes = 2;
+        component.initialLoad = true;
+
+        const itemsToPin = [
+          makeGene('ENSG001'),
+          makeGene('ENSG002'),
+          makeGene('ENSG003'),
+          makeGene('ENSG004'),
+          makeGene('ENSG005'),
+        ];
+
+        // Simulate what initData does
+        component.resetPinnedItemsState();
+        component.pinItems(itemsToPin);
+        if (component.initialLoad) {
+          component.initialLoad = false;
+          component.setPinnedItemsCache(component.pinnedItems);
+        }
+
+        // Only 2 items should be cached (matching the limit), not all 5
+        expect(component.pinnedItemsCache.length).toBe(2);
+        expect(component.pinnedItems.length).toBe(2);
+        expect(component.pinnedItemsCache).toEqual(component.pinnedItems);
+      });
+
+      it('caches only pinned proteins when exceeding gene limit', () => {
+        component.category = 'Protein - Differential Expression';
+        component.maxPinnedGenes = 2; // 2 genes max
+        component.initialLoad = true;
+
+        const itemsToPin = [
+          makeGene('ENSG001', 'P00001'),
+          makeGene('ENSG002', 'P00002'),
+          makeGene('ENSG003', 'P00003'), // This should not be pinned
+          makeGene('ENSG003', 'P00004'), // This should not be pinned
+        ];
+
+        // Simulate what initData does
+        component.resetPinnedItemsState();
+        component.pinItems(itemsToPin);
+        if (component.initialLoad) {
+          component.initialLoad = false;
+          component.setPinnedItemsCache(component.pinnedItems);
+        }
+
+        // Only 2 proteins should be cached (genes 1 and 2), not all 4
+        expect(component.pinnedItemsCache.length).toBe(2);
+        expect(component.pinnedItems.length).toBe(2);
+        expect(component.uniquePinnedGenesCount).toBe(2);
+        expect(component.pinnedItemsCache[0].ensembl_gene_id).toBe('ENSG001');
+        expect(component.pinnedItemsCache[1].ensembl_gene_id).toBe('ENSG002');
+      });
+
+      it('does not update cache when not on initial load', () => {
+        component.category = 'RNA - Differential Expression';
+        component.maxPinnedGenes = 50;
+        component.initialLoad = false; // Not initial load
+        component.pinnedItemsCache = [makeGene('ENSG999')]; // Pre-existing cache
+
+        const itemsToPin = [makeGene('ENSG001'), makeGene('ENSG002')];
+
+        // Simulate what initData does
+        component.resetPinnedItemsState();
+        component.pinItems(itemsToPin);
+        if (component.initialLoad) {
+          component.initialLoad = false;
+          component.setPinnedItemsCache(component.pinnedItems);
+        }
+
+        // Cache should not be updated since initialLoad was false
+        expect(component.pinnedItemsCache.length).toBe(1);
+        expect(component.pinnedItemsCache[0].ensembl_gene_id).toBe('ENSG999');
+        expect(component.pinnedItems.length).toBe(2);
+      });
+    });
   });
 });

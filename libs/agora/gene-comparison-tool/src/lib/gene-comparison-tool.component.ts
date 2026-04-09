@@ -416,12 +416,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       });
     });
 
-    // on initial load, we want to cache any items
-    if (this.initialLoad) {
-      this.initialLoad = false;
-      this.setPinnedItemsCache(itemsToPin);
-    }
-
     this.updateVisibleColumns();
 
     if (!this.sortField || !this.columns.includes(this.sortField)) {
@@ -441,6 +435,12 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       this.pinItems(itemsToPin);
     } else {
       this.resetPinnedItemsState();
+    }
+
+    // On initial load, cache the items that were actually pinned (not all itemsToPin)
+    if (this.initialLoad) {
+      this.initialLoad = false;
+      this.setPinnedItemsCache(this.pinnedItems);
     }
 
     this.genes = items;
