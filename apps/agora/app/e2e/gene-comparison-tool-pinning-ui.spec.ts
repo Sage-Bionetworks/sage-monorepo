@@ -1,11 +1,19 @@
 import { expect, test } from '@playwright/test';
 import { baseURL } from '../playwright.config';
-import { GCT_CATEGORIES, GCT_RNA_SUBCATEGORIES, URL_GCT } from './helpers/constants';
+import {
+  GCT_CATEGORIES,
+  GCT_PROTEIN_SUBCATEGORIES,
+  GCT_RNA_SUBCATEGORIES,
+  URL_GCT,
+  URL_GCT_PROTEIN_TMT,
+} from './helpers/constants';
 import { expectGctPageLoaded } from './helpers/gct';
 import {
   expectDisplayedGenesCountText,
   expectPinnedGenesCountText,
+  expectPinnedProteinsCountText,
   expectTooManyPinnedGenesToast,
+  expectTooManyPinnedProteinsToast,
   formatPinnedGenesQueryParam,
   getGenesTableCount,
   getPinnedItemsFromUrl,
@@ -77,5 +85,30 @@ test.describe('GCT: Pinning Genes via UI', () => {
 
     const newTotalGenes = await getGenesTableCount(page);
     expect(newTotalGenes).toEqual(totalGenes - 1);
+  });
+
+  test('only 50 genes are pinned when pinning all rows matching a search in protein mode', async ({
+    page,
+  }) => {
+    await page.goto(URL_GCT_PROTEIN_TMT);
+    await expectGctPageLoaded(page, GCT_CATEGORIES.PROTEIN, GCT_PROTEIN_SUBCATEGORIES.TMT);
+
+    await test.step(`search for a`, async () => {
+      const search = page.getByPlaceholder('Search', { exact: true });
+      await search.fill('a');
+    });
+
+    await test.step('pin all search results', async () => {
+      const pinAllBtn = page.getByRole('button', { name: 'Pin All' });
+      await pinAllBtn.click();
+      await expect(pinAllBtn).toBeDisabled();
+    });
+
+    await test.step('confirm only 50 genes were pinned and toast is displayed', async () => {
+      const expectedPinnedProteinCount = 72;
+      await expectTooManyPinnedProteinsToast(page, expectedPinnedProteinCount);
+      await expectPinnedGenesCountText(page, 50);
+      await expectPinnedProteinsCountText(page, expectedPinnedProteinCount);
+    });
   });
 });
