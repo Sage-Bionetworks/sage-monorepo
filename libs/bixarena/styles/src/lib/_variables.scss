@@ -1,4 +1,17 @@
+// rem: font sizes, padding, margins, max-widths
+// px: borders, box-shadows, border-radius
 :root {
   --nav-height: 3.5rem;
-  --max-width: 1280px;
+  --max-width: 80rem;
+  --font-serif: 'Playfair Display Variable', 'Playfair Display', 'Georgia', serif;
+}
+
+html:not(.dark) {
+  --nav-bg: rgb(253 252 251 / 80%);
+  --grain-opacity: 0.08;
+}
+
+html.dark {
+  --nav-bg: rgb(27 24 24 / 80%);
+  --grain-opacity: 0.15;
 }

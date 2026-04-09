@@ -1,3 +1,42 @@
 <footer>
-  <span>{{ version }}</span>
+  <div class="left">
+    <span>Powered by</span>
+    <a [href]="sageBionetworksUrl" target="_blank" rel="noopener noreferrer">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 86 94"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M42.99 1.95L71.36 18.43l5.8 3.4-2.31 3.94-5.79-3.4L45.29 8.57V44h-4.57V8.6L16.93 22.59l-5.83 3.21-2.21-4 5.77-3.18L42.99 1.95z"
+          fill="#FD9701"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M2.11 40.43L1.92 33.87l4.57-.14.2 6.64v27.55l30.57-17.7 2.29 3.96L8.87 71.94l24.05 13.87 5.78 3.19-2.21 4-5.82-3.21L2.11 73.32V40.43z"
+          fill="#219CEA"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M84.08 33.8v39.53l-28.53 16.24-5.57 3.38-2.37-3.91 5.63-3.42 24.07-13.7-30.66-17.7 2.29-3.96 30.57 17.7V33.8h4.57z"
+          fill="#59C959"
+        />
+      </svg>
+      <span>Sage Bionetworks</span>
+    </a>
+  </div>
+  <div class="center">
+    <a [href]="termsOfServiceUrl" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+    <span class="dot">&bull;</span>
+    <a [href]="contactUrl" target="_blank" rel="noopener noreferrer">Contact Us</a>
+    <span class="dot">&bull;</span>
+    <a [href]="feedbackUrl" target="_blank" rel="noopener noreferrer">Report Issue</a>
+  </div>
+  <div class="right">{{ version }}</div>
 </footer>

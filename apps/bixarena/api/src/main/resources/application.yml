@@ -107,6 +107,8 @@ app:
       - http://127.0.0.1:8100
       - http://localhost:7860
       - http://127.0.0.1:7860
+      - http://localhost:8111
+      - http://127.0.0.1:8111
     allowed-methods:
       - GET
       - POST

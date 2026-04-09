@@ -6,16 +6,38 @@ export const AppConfigSchema = BaseConfigSchema.extend({
     version: z.string().min(1, 'App version is required'),
   }),
 
+  links: z.object({
+    termsOfService: z.url(),
+    contact: z.url(),
+    feedback: z.url(),
+    sageBionetworks: z.url(),
+  }),
+
   api: z.object({
-    csrBaseUrl: z.url({ message: 'CSR API base URL must be a valid URL' }),
-    ssrBaseUrl: z.url({ message: 'SSR API base URL must be a valid URL' }),
+    baseUrls: z.object({
+      csr: z.url({ message: 'API CSR base URL must be a valid URL' }),
+      ssr: z.url({ message: 'API SSR base URL must be a valid URL' }),
+    }),
+  }),
+
+  auth: z.object({
+    baseUrls: z.object({
+      csr: z.url({ message: 'Auth CSR base URL must be a valid URL' }),
+    }),
+  }),
+
+  analytics: z.object({
+    googleTagManager: z.object({
+      enabled: z.boolean(),
+      id: z.string(),
+    }),
   }),
 });
 
 export type AppConfig = z.infer<typeof AppConfigSchema>;
 
-export interface RuntimeAppConfig extends AppConfig {
-  isPlatformServer: boolean;
+export interface RuntimeServerConfig extends AppConfig {
+  isPlatformServer: true;
 }
 
 export function validateConfig(config: unknown): AppConfig {

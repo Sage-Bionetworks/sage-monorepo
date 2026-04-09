@@ -12,19 +12,21 @@ import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from 
 import { BASE_PATH } from '@sagebionetworks/bixarena/api-client';
 import { configFactory, ConfigService } from '@sagebionetworks/bixarena/config';
 import { BixArenaPreset } from '@sagebionetworks/bixarena/styles';
-import { ThemeService } from '@sagebionetworks/bixarena/services';
+import { AuthService, ThemeService } from '@sagebionetworks/bixarena/services';
+import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(() => {
-      const initializerFn = configFactory(inject(ConfigService));
-      return initializerFn();
-    }),
-    provideAppInitializer(() => {
-      inject(ThemeService).init();
-      return;
+      const configService = inject(ConfigService);
+      const themeService = inject(ThemeService);
+      const authService = inject(AuthService);
+      return configFactory(configService)().then(() => {
+        themeService.init();
+        return authService.init();
+      });
     }),
     provideAnimationsAsync(),
     providePrimeNG({
@@ -49,9 +51,18 @@ export const appConfig: ApplicationConfig = {
       provide: BASE_PATH,
       useFactory: (configService: ConfigService) =>
         configService.config.isPlatformServer
-          ? configService.config.api.ssrBaseUrl
-          : configService.config.api.csrBaseUrl,
+          ? configService.config.api.baseUrls.ssr
+          : configService.config.api.baseUrls.csr,
       deps: [ConfigService],
     },
+    provideGtmConfig(
+      (configService: ConfigService) => ({
+        enabled: configService.config.analytics.googleTagManager.enabled,
+        gtmId: configService.config.analytics.googleTagManager.id,
+        isPlatformServer: configService.config.isPlatformServer,
+      }),
+      [ConfigService],
+    ),
+    provideGtmId(),
   ],
 };

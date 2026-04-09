@@ -1,17 +1,17 @@
 {
-  "name": "bixarena-config",
+  "name": "bixarena-arena",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/bixarena/config/src",
+  "sourceRoot": "libs/bixarena/arena/src",
   "prefix": "bixarena",
   "projectType": "library",
-  "tags": ["type:config", "scope:bixarena", "language:typescript"],
+  "tags": ["type:feature", "scope:bixarena", "language:typescript"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/bixarena/config/jest.config.ts",
-        "tsConfig": "libs/bixarena/config/tsconfig.spec.json"
+        "jestConfig": "libs/bixarena/arena/jest.config.ts",
+        "tsConfig": "libs/bixarena/arena/tsconfig.spec.json"
       }
     },
     "lint": {

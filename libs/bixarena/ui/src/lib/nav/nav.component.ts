@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { ThemeService } from '@sagebionetworks/bixarena/services';
+import { AuthService, ThemeService } from '@sagebionetworks/bixarena/services';
 
 @Component({
   selector: 'bixarena-nav',
@@ -10,5 +10,18 @@ import { ThemeService } from '@sagebionetworks/bixarena/services';
   styleUrl: './nav.component.scss',
 })
 export class NavComponent {
+  readonly authService = inject(AuthService);
   readonly themeService = inject(ThemeService);
+
+  readonly displayUser = computed(() => {
+    const user = this.authService.user();
+    const cached = this.authService.cachedUser();
+    return user ? { username: user.preferred_username ?? '', avatarUrl: user.avatar_url } : cached;
+  });
+
+  readonly showAvatar = computed(() => this.displayUser() !== null);
+  readonly initials = computed(() =>
+    (this.displayUser()?.username ?? '').slice(0, 2).toUpperCase(),
+  );
+  readonly avatarUrl = computed(() => this.displayUser()?.avatarUrl ?? null);
 }

@@ -12,7 +12,17 @@ describe('FooterComponent', () => {
       providers: [
         {
           provide: ConfigService,
-          useValue: { config: { app: { version: 'test' } } },
+          useValue: {
+            config: {
+              app: { version: 'test' },
+              links: {
+                termsOfService: 'https://example.com/tos',
+                contact: 'https://example.com/contact',
+                feedback: 'https://example.com/feedback',
+                sageBionetworks: 'https://sagebionetworks.org',
+              },
+            },
+          },
         },
       ],
     }).compileComponents();
