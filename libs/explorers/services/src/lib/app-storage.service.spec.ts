@@ -1,6 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { LocalStorageService } from '@sagebionetworks/web-shared/angular/storage';
-import { HIDE_VISUALIZATION_OVERVIEW_KEY, PAGE_SIZE_KEY } from './app-storage.constants';
+import {
+  HIDE_VISUALIZATION_OVERVIEW_KEY,
+  PAGE_SIZE_KEY,
+  VALID_PAGE_SIZES,
+  DEFAULT_PAGE_SIZE,
+} from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 
 describe('AppStorageService', () => {
@@ -73,10 +78,10 @@ describe('AppStorageService', () => {
   describe('getPageSize', () => {
     it('returns default when nothing stored', () => {
       const service = setup();
-      expect(service.getPageSize()).toBe(10);
+      expect(service.getPageSize()).toBe(DEFAULT_PAGE_SIZE);
     });
 
-    it.each([10, 25, 50])('returns stored value %i when valid', (size) => {
+    it.each(VALID_PAGE_SIZES)('returns stored value %i when valid', (size) => {
       const service = setup();
       storageServiceMock.getItem.mockReturnValue(String(size));
       expect(service.getPageSize()).toBe(size);
@@ -84,35 +89,43 @@ describe('AppStorageService', () => {
 
     it('returns default and cleans up for invalid stored value', () => {
       const service = setup();
-      storageServiceMock.getItem.mockReturnValue('42');
-      expect(service.getPageSize()).toBe(10);
+      const invalidPageSize = '42';
+      storageServiceMock.getItem.mockReturnValue(invalidPageSize);
+      expect(service.getPageSize()).toBe(DEFAULT_PAGE_SIZE);
       expect(storageServiceMock.removeItem).toHaveBeenCalledWith(PAGE_SIZE_KEY);
     });
 
-    it('returns default for non-numeric stored value', () => {
+    it('returns default and cleans up for non-numeric stored value', () => {
       const service = setup();
-      storageServiceMock.getItem.mockReturnValue('abc');
-      expect(service.getPageSize()).toBe(10);
+      const nonNumericValue = 'abc';
+      storageServiceMock.getItem.mockReturnValue(nonNumericValue);
+      expect(service.getPageSize()).toBe(DEFAULT_PAGE_SIZE);
+      expect(storageServiceMock.removeItem).toHaveBeenCalledWith(PAGE_SIZE_KEY);
     });
   });
 
   describe('setPageSize', () => {
     it('writes non-default size to storage', () => {
       const service = setup();
-      service.setPageSize(25);
-      expect(storageServiceMock.setItem).toHaveBeenCalledWith(PAGE_SIZE_KEY, '25');
+      const nonDefaultPageSize = VALID_PAGE_SIZES[1];
+      service.setPageSize(nonDefaultPageSize);
+      expect(storageServiceMock.setItem).toHaveBeenCalledWith(
+        PAGE_SIZE_KEY,
+        String(nonDefaultPageSize),
+      );
     });
 
     it('removes key when setting default page size', () => {
       const service = setup();
-      service.setPageSize(10);
+      service.setPageSize(DEFAULT_PAGE_SIZE);
       expect(storageServiceMock.removeItem).toHaveBeenCalledWith(PAGE_SIZE_KEY);
       expect(storageServiceMock.setItem).not.toHaveBeenCalled();
     });
 
     it('does not write invalid page size', () => {
       const service = setup();
-      service.setPageSize(42);
+      const invalidPageSize = 42;
+      service.setPageSize(invalidPageSize);
       expect(storageServiceMock.setItem).not.toHaveBeenCalled();
       expect(storageServiceMock.removeItem).not.toHaveBeenCalled();
     });

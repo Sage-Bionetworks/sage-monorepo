@@ -28,6 +28,8 @@ import { OrgSagebionetworksRepoModelCurationCurationTask } from '../model/org-sa
 import { OrgSagebionetworksRepoModelCurationListCurationTaskRequest } from '../model/org-sagebionetworks-repo-model-curation-list-curation-task-request';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelCurationListCurationTaskResponse } from '../model/org-sagebionetworks-repo-model-curation-list-curation-task-response';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelCurationTaskStatus } from '../model/org-sagebionetworks-repo-model-curation-task-status';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -288,6 +290,113 @@ export class CurationTaskServicesService {
 
     let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}`;
     return this.httpClient.request<OrgSagebionetworksRepoModelCurationCurationTask>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param taskId the ID of the CurationTask
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRepoV1CurationTaskTaskIdStatus(
+    taskId: number,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelCurationTaskStatus>;
+  public getRepoV1CurationTaskTaskIdStatus(
+    taskId: number,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelCurationTaskStatus>>;
+  public getRepoV1CurationTaskTaskIdStatus(
+    taskId: number,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelCurationTaskStatus>>;
+  public getRepoV1CurationTaskTaskIdStatus(
+    taskId: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (taskId === null || taskId === undefined) {
+      throw new Error(
+        'Required parameter taskId was null or undefined when calling getRepoV1CurationTaskTaskIdStatus.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}/status`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelCurationTaskStatus>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -659,6 +768,135 @@ export class CurationTaskServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelCurationCurationTask,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param taskId the ID of the CurationTask
+   * @param orgSagebionetworksRepoModelCurationTaskStatus
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public putRepoV1CurationTaskTaskIdStatus(
+    taskId: number,
+    orgSagebionetworksRepoModelCurationTaskStatus: OrgSagebionetworksRepoModelCurationTaskStatus,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelCurationTaskStatus>;
+  public putRepoV1CurationTaskTaskIdStatus(
+    taskId: number,
+    orgSagebionetworksRepoModelCurationTaskStatus: OrgSagebionetworksRepoModelCurationTaskStatus,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelCurationTaskStatus>>;
+  public putRepoV1CurationTaskTaskIdStatus(
+    taskId: number,
+    orgSagebionetworksRepoModelCurationTaskStatus: OrgSagebionetworksRepoModelCurationTaskStatus,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelCurationTaskStatus>>;
+  public putRepoV1CurationTaskTaskIdStatus(
+    taskId: number,
+    orgSagebionetworksRepoModelCurationTaskStatus: OrgSagebionetworksRepoModelCurationTaskStatus,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (taskId === null || taskId === undefined) {
+      throw new Error(
+        'Required parameter taskId was null or undefined when calling putRepoV1CurationTaskTaskIdStatus.',
+      );
+    }
+    if (
+      orgSagebionetworksRepoModelCurationTaskStatus === null ||
+      orgSagebionetworksRepoModelCurationTaskStatus === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelCurationTaskStatus was null or undefined when calling putRepoV1CurationTaskTaskIdStatus.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}/status`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelCurationTaskStatus>(
+      'put',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelCurationTaskStatus,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

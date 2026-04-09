@@ -1,0 +1,5 @@
+# Development overrides (applied when environment=dev)
+
+analytics:
+  googleTagManager:
+    enabled: false

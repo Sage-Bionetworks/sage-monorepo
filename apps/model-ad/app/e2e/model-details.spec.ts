@@ -156,10 +156,10 @@ test.describe('model details', () => {
 });
 
 test.describe('model details - omics', () => {
-  test('gene expression card links to gene expression CT in new tab', async ({ page }) => {
+  test('transcriptomics card links to gene expression CT in new tab', async ({ page }) => {
     await page.goto('/models/APOE4');
     const card = page.getByRole('link', {
-      name: /view gene expression results.*comparison tool/i,
+      name: /view rna differential expression results.*comparison tool/i,
     });
 
     const popupPromise = page.waitForEvent('popup');

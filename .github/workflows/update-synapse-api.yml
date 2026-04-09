@@ -96,7 +96,20 @@ jobs:
             nx run-many --target=generate --projects="synapse-*"
           '
 
+      - name: Check for changes (unprivileged)
+        id: check-changes
+        run: |
+          # Run git status as ubuntu since workspace files are owned by ubuntu.
+          CHANGES=$(sudo -u ubuntu bash -lc "git -C \"$GITHUB_WORKSPACE\" status --porcelain")
+          if [ -z "$CHANGES" ]; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "::notice::No changes detected in the Synapse API generated artifacts. The specification has not changed since the last update. Skipping pull request creation."
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create or update Pull Request
+        if: steps.check-changes.outputs.has_changes == 'true'
         # NOTE: This step still runs as root. We start the container as root for early runner
         # internals (checkout, file command state). Only build / generation phases are dropped to
         # the unprivileged 'ubuntu' user via 'sudo -u ubuntu'; we do not wrap third‑party actions.

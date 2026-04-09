@@ -162,6 +162,8 @@ export namespace OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeRespon
     | 'CURATION_TASK'
     | 'USER_STATUS'
     | 'RECORDSET_VALIDATION_STATS'
+    | 'TEXT_ANALYZER'
+    | 'COLUMN_ANALYZER_OVERRIDE'
     | 'CHANGE';
   export const MigrationTypeEnum = {
     Realm: 'REALM' as MigrationTypeEnum,
@@ -296,6 +298,8 @@ export namespace OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeRespon
     CurationTask: 'CURATION_TASK' as MigrationTypeEnum,
     UserStatus: 'USER_STATUS' as MigrationTypeEnum,
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as MigrationTypeEnum,
+    TextAnalyzer: 'TEXT_ANALYZER' as MigrationTypeEnum,
+    ColumnAnalyzerOverride: 'COLUMN_ANALYZER_OVERRIDE' as MigrationTypeEnum,
     Change: 'CHANGE' as MigrationTypeEnum,
   };
 }

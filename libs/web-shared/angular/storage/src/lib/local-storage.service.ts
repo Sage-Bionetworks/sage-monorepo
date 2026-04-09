@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 
-import { LOGGER } from './logger';
+import { LOGGER } from '@sagebionetworks/web-shared/angular/logger';
 
 @Injectable({ providedIn: 'root' })
 export class LocalStorageService {

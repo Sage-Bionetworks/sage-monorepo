@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
 
 import { LocalStorageService } from './local-storage.service';
-import { Logger, LOGGER } from './logger';
+import { Logger, LOGGER } from '@sagebionetworks/web-shared/angular/logger';
 
 function setup(platformId: string): { service: LocalStorageService; logger: Logger } {
   const logger: Logger = { error: jest.fn() };

@@ -104,7 +104,14 @@ public class SessionToJwtFilter implements WebFilter {
           log.debug("Session validated for auth service endpoint, passing through to: {} {}", method, path);
           return chain.filter(exchange)
             .contextWrite(ReactiveSecurityContextHolder.withAuthentication(userAuth))
-            .doOnSuccess(v -> log.debug("Auth service response completed for: {} {}", method, path));
+            .doOnSuccess(v -> {
+              log.debug("Auth service response completed for: {} {}", method, path);
+              if ("/auth/logout".equals(path)) {
+                sessionCache.invalidate(sessionId);
+                jwtCache.asMap().keySet().removeIf(key -> key.sessionId().equals(sessionId));
+                log.debug("Session and JWT cache evicted on logout for sessionId: {}", maskSessionId(sessionId));
+              }
+            });
         })
         .onErrorResume(e -> handleAuthError(exchange, e, method, path));
     }

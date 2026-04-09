@@ -16,6 +16,8 @@ export * from './certified-user-services.service';
 import { CertifiedUserServicesService } from './certified-user-services.service';
 export * from './challenge-services.service';
 import { ChallengeServicesService } from './challenge-services.service';
+export * from './column-analyzer-override-services.service';
+import { ColumnAnalyzerOverrideServicesService } from './column-analyzer-override-services.service';
 export * from './curation-task-services.service';
 import { CurationTaskServicesService } from './curation-task-services.service';
 export * from './doi-services.service';
@@ -70,6 +72,8 @@ export * from './realm-services.service';
 import { RealmServicesService } from './realm-services.service';
 export * from './recycle-bin-services.service';
 import { RecycleBinServicesService } from './recycle-bin-services.service';
+export * from './search-query-services.service';
+import { SearchQueryServicesService } from './search-query-services.service';
 export * from './search-services.service';
 import { SearchServicesService } from './search-services.service';
 export * from './statistics-services.service';
@@ -82,6 +86,8 @@ export * from './table-services.service';
 import { TableServicesService } from './table-services.service';
 export * from './team-services.service';
 import { TeamServicesService } from './team-services.service';
+export * from './text-analyzer-services.service';
+import { TextAnalyzerServicesService } from './text-analyzer-services.service';
 export * from './user-group-services.service';
 import { UserGroupServicesService } from './user-group-services.service';
 export * from './user-profile-services.service';
@@ -104,6 +110,7 @@ export const APIS = [
   AuthenticationServices2FAService,
   CertifiedUserServicesService,
   ChallengeServicesService,
+  ColumnAnalyzerOverrideServicesService,
   CurationTaskServicesService,
   DOIServicesService,
   DataAccessServicesService,
@@ -131,12 +138,14 @@ export const APIS = [
   ProjectStorageServicesService,
   RealmServicesService,
   RecycleBinServicesService,
+  SearchQueryServicesService,
   SearchServicesService,
   StatisticsServicesService,
   StorageReportServicesService,
   SubscriptionServicesService,
   TableServicesService,
   TeamServicesService,
+  TextAnalyzerServicesService,
   UserGroupServicesService,
   UserProfileServicesService,
   VerificationServicesService,

@@ -68,6 +68,41 @@
   flex-shrink: 0;
 }
 
+.avatar {
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 50%;
+  background: var(--p-primary-500);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.12s;
+  overflow: hidden;
+  padding: 0;
+
+  &:has(img) {
+    background: transparent;
+  }
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
 .theme-toggle {
   display: inline-flex;
   align-items: center;

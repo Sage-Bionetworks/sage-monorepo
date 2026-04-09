@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,6 +75,8 @@ public class UserInfoDto {
   @Valid
   private List<RolesEnum> roles = new ArrayList<>();
 
+  private @Nullable URI avatarUrl;
+
   public UserInfoDto() {
     super();
   }
@@ -91,11 +94,11 @@ public class UserInfoDto {
   }
 
   /**
-   * Subject identifier - the Synapse user ID
+   * Subject identifier - the user UUID
    * @return sub
    */
   @NotNull 
-  @Schema(name = "sub", example = "3350396", description = "Subject identifier - the Synapse user ID", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "sub", example = "a1b2c3d4-e5f6-7890-abcd-ef1234567890", description = "Subject identifier - the user UUID", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sub")
   public String getSub() {
     return sub;
@@ -193,6 +196,26 @@ public class UserInfoDto {
     this.roles = roles;
   }
 
+  public UserInfoDto avatarUrl(@Nullable URI avatarUrl) {
+    this.avatarUrl = avatarUrl;
+    return this;
+  }
+
+  /**
+   * Profile image URL from the authentication provider
+   * @return avatarUrl
+   */
+  @Valid @Size(max = 300) 
+  @Schema(name = "avatar_url", example = "https://example.com/avatar/user123.png", description = "Profile image URL from the authentication provider", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("avatar_url")
+  public @Nullable URI getAvatarUrl() {
+    return avatarUrl;
+  }
+
+  public void setAvatarUrl(@Nullable URI avatarUrl) {
+    this.avatarUrl = avatarUrl;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -206,12 +229,13 @@ public class UserInfoDto {
         Objects.equals(this.preferredUsername, userInfo.preferredUsername) &&
         Objects.equals(this.email, userInfo.email) &&
         Objects.equals(this.emailVerified, userInfo.emailVerified) &&
-        Objects.equals(this.roles, userInfo.roles);
+        Objects.equals(this.roles, userInfo.roles) &&
+        Objects.equals(this.avatarUrl, userInfo.avatarUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sub, preferredUsername, email, emailVerified, roles);
+    return Objects.hash(sub, preferredUsername, email, emailVerified, roles, avatarUrl);
   }
 
   @Override
@@ -223,6 +247,7 @@ public class UserInfoDto {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    emailVerified: ").append(toIndentedString(emailVerified)).append("\n");
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
+    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -256,6 +281,7 @@ public class UserInfoDto {
       this.instance.setEmail(value.email);
       this.instance.setEmailVerified(value.emailVerified);
       this.instance.setRoles(value.roles);
+      this.instance.setAvatarUrl(value.avatarUrl);
       return this;
     }
 
@@ -281,6 +307,11 @@ public class UserInfoDto {
     
     public UserInfoDto.Builder roles(List<RolesEnum> roles) {
       this.instance.roles(roles);
+      return this;
+    }
+    
+    public UserInfoDto.Builder avatarUrl(URI avatarUrl) {
+      this.instance.avatarUrl(avatarUrl);
       return this;
     }
     

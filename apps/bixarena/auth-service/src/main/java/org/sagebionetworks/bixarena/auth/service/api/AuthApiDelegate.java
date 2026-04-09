@@ -132,7 +132,7 @@ public interface AuthApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sub\" : \"3350396\", \"email_verified\" : true, \"roles\" : [ \"user\" ], \"preferred_username\" : \"john.doe\", \"email\" : \"john.doe@example.com\" }";
+                    String exampleString = "{ \"sub\" : \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\", \"email_verified\" : true, \"avatar_url\" : \"https://example.com/avatar/user123.png\", \"roles\" : [ \"user\" ], \"preferred_username\" : \"john.doe\", \"email\" : \"john.doe@example.com\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

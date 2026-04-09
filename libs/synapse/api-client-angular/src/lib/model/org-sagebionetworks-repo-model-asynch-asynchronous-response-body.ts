@@ -32,6 +32,7 @@ import { OrgSagebionetworksRepoModelGridDownloadFromGridResult } from './org-sag
 import { OrgSagebionetworksRepoModelFileFileHandleRestoreResult } from './org-sagebionetworks-repo-model-file-file-handle-restore-result';
 import { OrgSagebionetworksRepoModelTableSumFileSizes } from './org-sagebionetworks-repo-model-table-sum-file-sizes';
 import { OrgSagebionetworksRepoModelDownloadActionRequiredCount } from './org-sagebionetworks-repo-model-download-action-required-count';
+import { OrgSagebionetworksRepoModelSearchSearchHit } from './org-sagebionetworks-repo-model-search-search-hit';
 import { OrgSagebionetworksRepoModelFileFileHandleRestoreResponse } from './org-sagebionetworks-repo-model-file-file-handle-restore-response';
 import { OrgSagebionetworksRepoModelTableQueryResultBundle } from './org-sagebionetworks-repo-model-table-query-result-bundle';
 import { OrgSagebionetworksRepoModelReportDownloadStorageReportResponse } from './org-sagebionetworks-repo-model-report-download-storage-report-response';
@@ -40,6 +41,7 @@ import { OrgSagebionetworksRepoModelAgentAgentChatResponse } from './org-sagebio
 import { OrgSagebionetworksRepoModelTableColumnModel } from './org-sagebionetworks-repo-model-table-column-model';
 import { OrgSagebionetworksRepoModelDownloadDownloadListManifestResponse } from './org-sagebionetworks-repo-model-download-download-list-manifest-response';
 import { OrgSagebionetworksRepoModelFileDownloadList } from './org-sagebionetworks-repo-model-file-download-list';
+import { OrgSagebionetworksRepoModelSearchSearchQueryResults } from './org-sagebionetworks-repo-model-search-search-query-results';
 import { OrgSagebionetworksRepoModelDoiV2Doi } from './org-sagebionetworks-repo-model-doi-v2-doi';
 import { OrgSagebionetworksRepoModelDownloadDownloadListQueryResponse } from './org-sagebionetworks-repo-model-download-download-list-query-response';
 import { OrgSagebionetworksRepoModelFileFileDownloadSummary } from './org-sagebionetworks-repo-model-file-file-download-summary';
@@ -89,6 +91,7 @@ export type OrgSagebionetworksRepoModelAsynchAsynchronousResponseBody =
   | OrgSagebionetworksRepoModelReportDownloadStorageReportResponse
   | OrgSagebionetworksRepoModelSchemaCreateSchemaResponse
   | OrgSagebionetworksRepoModelSchemaGetValidationSchemaResponse
+  | OrgSagebionetworksRepoModelSearchSearchQueryResults
   | OrgSagebionetworksRepoModelTableDownloadFromTableResult
   | OrgSagebionetworksRepoModelTableDownloadPFBResult
   | OrgSagebionetworksRepoModelTableEntityUpdateResults
