@@ -47,7 +47,6 @@ import * as variables from './gene-comparison-tool.variables';
 
 import { GeneComparisonToolDetailsPanelComponent } from './components/gene-comparison-tool-details-panel/gene-comparison-tool-details-panel.component';
 import { GeneComparisonToolFilterPanelComponent } from './components/gene-comparison-tool-filter-panel/gene-comparison-tool-filter-panel.component';
-import { GeneComparisonToolPinnedGenesModalComponent } from './components/gene-comparison-tool-pinned-genes-modal/gene-comparison-tool-pinned-genes-modal.component';
 import { GeneComparisonToolScorePanelComponent } from './components/gene-comparison-tool-score-panel/gene-comparison-tool-score-panel.component';
 
 import { FormsModule } from '@angular/forms';
@@ -81,7 +80,6 @@ import { GeneComparisonToolFilterListComponent } from './components/gene-compari
     GeneComparisonToolScorePanelComponent,
     GeneComparisonToolDetailsPanelComponent,
     GeneComparisonToolFilterPanelComponent,
-    GeneComparisonToolPinnedGenesModalComponent,
     LoadingIconComponent,
   ],
   providers: [...provideComparisonToolService()],
@@ -184,7 +182,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   uniquePinnedGenesCount = 0;
 
   pinnedItemsCache: GCTGene[] = [];
-  pendingPinnedItems: GCTGene[] = [];
   maxPinnedGenes = 50;
 
   /* ----------------------------------------------------------------------- */
@@ -200,7 +197,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild('filterPanel') filterPanel!: GeneComparisonToolFilterPanelComponent;
   @ViewChild('detailsPanel') detailsPanel!: GeneComparisonToolDetailsPanelComponent;
   @ViewChild('scorePanel') scorePanel!: GeneComparisonToolScorePanelComponent;
-  @ViewChild('pinnedGenesModal') pinnedGenesModal!: GeneComparisonToolPinnedGenesModalComponent;
 
   constructor() {
     this.category = 'RNA - Differential Expression';
@@ -441,19 +437,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     if (itemsToPin.length) {
       itemsToPin.sort((a, b) => (a.ensembl_gene_id > b.ensembl_gene_id ? 1 : -1));
-      const uniqueGenesToPinCount = itemsToPin.reduce((set: Set<string>, item: GCTGene) => {
-        set.add(item.ensembl_gene_id);
-        return set;
-      }, new Set<string>()).size;
-
-      if (this.isProteinCategory && uniqueGenesToPinCount > this.maxPinnedGenes) {
-        this.pendingPinnedItems = itemsToPin;
-        this.pinnedGenesModal.show();
-      } else {
-        this.resetPinnedItemsState();
-        this.pendingPinnedItems = [];
-        this.pinItems(itemsToPin);
-      }
+      this.resetPinnedItemsState();
+      this.pinItems(itemsToPin);
     } else {
       this.resetPinnedItemsState();
     }
@@ -968,17 +953,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   pinFilteredProteins() {
     this.pinProteinsBatched(this.genesTable.filteredValue as GCTGene[]);
     this.refreshPinnedItems();
-  }
-
-  onPinnedGenesModalChange(response: boolean) {
-    if (response) {
-      this.resetPinnedItemsState();
-      this.pinItems(this.pendingPinnedItems);
-    } else {
-      this.category = this.categories[0].value;
-      this.onCategoryChange();
-    }
-    this.pendingPinnedItems = [];
   }
 
   /* ----------------------------------------------------------------------- */

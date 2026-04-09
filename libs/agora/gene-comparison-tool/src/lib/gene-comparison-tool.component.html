@@ -644,11 +644,4 @@
     (onNavigateToConsistencyOfChange)="navigateToConsistencyOfChange($event)"
   ></agora-gene-comparison-tool-details-panel>
   <agora-gene-comparison-tool-score-panel #scorePanel></agora-gene-comparison-tool-score-panel>
-  <agora-gene-comparison-tool-pinned-genes-modal
-    #pinnedGenesModal
-    (changeEvent)="onPinnedGenesModalChange($event)"
-    [pinnedGenes]="pinnedItems"
-    [pendingPinnedGenes]="pendingPinnedItems"
-    [maxPinnedGenes]="maxPinnedGenes"
-  ></agora-gene-comparison-tool-pinned-genes-modal>
 </div>
