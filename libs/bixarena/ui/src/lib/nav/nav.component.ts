@@ -13,15 +13,15 @@ export class NavComponent {
   readonly authService = inject(AuthService);
   readonly themeService = inject(ThemeService);
 
-  readonly initials = computed(() => {
-    const name =
-      this.authService.user()?.preferred_username ?? this.authService.cachedUsername() ?? '';
-    return name.slice(0, 2).toUpperCase();
+  readonly displayUser = computed(() => {
+    const user = this.authService.user();
+    const cached = this.authService.cachedUser();
+    return user ? { username: user.preferred_username ?? '', avatarUrl: user.avatar_url } : cached;
   });
 
-  readonly avatarUrl = computed(() => this.authService.user()?.avatar_url ?? null);
-
-  readonly showAvatar = computed(
-    () => this.authService.isAuthenticated() || this.authService.cachedUsername() !== null,
+  readonly showAvatar = computed(() => this.displayUser() !== null);
+  readonly initials = computed(() =>
+    (this.displayUser()?.username ?? '').slice(0, 2).toUpperCase(),
   );
+  readonly avatarUrl = computed(() => this.displayUser()?.avatarUrl ?? null);
 }

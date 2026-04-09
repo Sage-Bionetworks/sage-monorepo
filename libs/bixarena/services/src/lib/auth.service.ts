@@ -1,14 +1,11 @@
 import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
+import { UserInfo } from '@sagebionetworks/bixarena/api-client';
 
-export interface UserInfo {
-  sub: string;
-  preferred_username: string;
-  email: string;
-  email_verified: boolean;
-  roles: string[];
-  avatar_url?: string;
+export interface CachedUser {
+  username: string;
+  avatarUrl?: string;
 }
 
 const CACHE_KEY = 'ba-user';
@@ -20,7 +17,7 @@ export class AuthService {
 
   readonly user = signal<UserInfo | null>(null);
   readonly isAuthenticated = computed(() => this.user() !== null);
-  readonly cachedUsername = signal<string | null>(this.loadCache());
+  readonly cachedUser = signal<CachedUser | null>(this.loadCache());
 
   private get authUrl(): string {
     return this.configService.config.auth.baseUrls.csr;
@@ -33,7 +30,7 @@ export class AuthService {
       if (res.ok) {
         const user: UserInfo = await res.json();
         this.user.set(user);
-        this.saveCache(user.preferred_username);
+        this.saveCache({ username: user.preferred_username ?? '', avatarUrl: user.avatar_url });
       } else {
         this.clearCache();
       }
@@ -58,25 +55,27 @@ export class AuthService {
     }
   }
 
-  private loadCache(): string | null {
+  private loadCache(): CachedUser | null {
     if (!this.isBrowser) return null;
     try {
-      return localStorage.getItem(CACHE_KEY);
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw) as CachedUser;
     } catch {
       return null;
     }
   }
 
-  private saveCache(username: string): void {
+  private saveCache(cached: CachedUser): void {
     try {
-      localStorage.setItem(CACHE_KEY, username);
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
     } catch {
       // localStorage unavailable
     }
   }
 
   private clearCache(): void {
-    this.cachedUsername.set(null);
+    this.cachedUser.set(null);
     try {
       localStorage.removeItem(CACHE_KEY);
     } catch {

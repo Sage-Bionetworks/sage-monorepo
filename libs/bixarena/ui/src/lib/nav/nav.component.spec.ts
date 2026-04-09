@@ -26,7 +26,7 @@ describe('NavComponent', () => {
           useValue: {
             user: () => null,
             isAuthenticated: () => false,
-            cachedUsername: () => null,
+            cachedUser: () => null,
             login: () => undefined,
             logout: () => undefined,
             init: () => Promise.resolve(),
