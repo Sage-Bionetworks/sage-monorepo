@@ -44,15 +44,19 @@ export class AuthService {
     window.location.href = `${this.authUrl}/auth/login`;
   }
 
+  // Only clears local state after server confirms session invalidation.
+  // On failure, user stays logged in and can retry.
   async logout(): Promise<void> {
     if (!this.isBrowser) return;
     try {
-      await fetch('/auth/logout', { method: 'POST' });
-    } finally {
-      this.user.set(null);
-      this.clearCache();
-      window.location.href = '/';
+      const res = await fetch('/auth/logout', { method: 'POST' });
+      if (!res.ok) return;
+    } catch {
+      return;
     }
+    this.user.set(null);
+    this.clearCache();
+    window.location.href = '/';
   }
 
   private loadCache(): CachedUser | null {
