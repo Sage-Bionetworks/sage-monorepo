@@ -17,7 +17,8 @@ import {
 } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client';
 import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
-import { provideExplorersConfig } from '@sagebionetworks/explorers/services';
+import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
+import { LOGGER } from '@sagebionetworks/web-shared/angular/storage';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client';
 import * as Sentry from '@sentry/angular';
@@ -73,6 +74,7 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     { provide: UrlSerializer, useClass: CustomUrlSerializer },
+    { provide: LOGGER, useExisting: LoggerService },
     MessageService,
     {
       provide: ErrorHandler,

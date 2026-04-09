@@ -176,6 +176,11 @@ export class ComparisonToolService<T> {
 
     if (this.isInitialized()) {
       // Re-entering an already-initialized service (navigating back to this CT)
+      // Sync the cached page size in case it was changed from another CT
+      const cachedPageSize = this.appStorageService.getPageSize();
+      if (cachedPageSize !== this.pageSize()) {
+        this.updateQuery({ pageSize: cachedPageSize, pageNumber: this.FIRST_PAGE_NUMBER });
+      }
       // Restore this CT's cached state and sync to the URL, ignoring URL params from other CTs
       this.scheduleUrlSyncFromCurrentState();
       return;

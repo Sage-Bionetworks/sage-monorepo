@@ -124,6 +124,9 @@
       "@sagebionetworks/synapse/api-client": ["libs/synapse/api-client-angular/src/index.ts"],
       "@sagebionetworks/web-shared/angular/analytics/gtm": [
         "libs/web-shared/angular/analytics/gtm/src/index.ts"
+      ],
+      "@sagebionetworks/web-shared/angular/storage": [
+        "libs/web-shared/angular/storage/src/index.ts"
       ]
     }
   },

@@ -1,83 +1,58 @@
 import { Injectable, inject } from '@angular/core';
-import { PlatformService } from './platform.service';
+import { LocalStorageService } from '@sagebionetworks/web-shared/angular/storage';
+
+import { HIDE_VISUALIZATION_OVERVIEW_KEY, PAGE_SIZE_KEY } from './app-storage.constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppStorageService {
-  private readonly platformService = inject(PlatformService);
+  private readonly localStorageService = inject(LocalStorageService);
 
-  private readonly HIDE_VISUALIZATION_OVERVIEW_KEY = 'hide_visualization_overview';
-  private readonly PAGE_SIZE_KEY = 'comparison_tool_page_size';
   private readonly VALID_PAGE_SIZES: number[] = [10, 25, 50];
   readonly pageSizeOptions: number[] = this.VALID_PAGE_SIZES;
   private readonly DEFAULT_PAGE_SIZE = this.VALID_PAGE_SIZES[0];
 
   isVisualizationOverviewHidden(): boolean {
-    if (this.platformService.isServer) {
-      return false;
+    const value = this.localStorageService.getItem(HIDE_VISUALIZATION_OVERVIEW_KEY);
+    if (value === 'true') {
+      return true;
     }
-
-    try {
-      const value = localStorage.getItem(this.HIDE_VISUALIZATION_OVERVIEW_KEY);
-      if (value === 'true') {
-        return true;
-      }
-      if (value !== null) {
-        localStorage.removeItem(this.HIDE_VISUALIZATION_OVERVIEW_KEY);
-      }
-      return false;
-    } catch {
-      return false;
+    if (value !== null) {
+      this.localStorageService.removeItem(HIDE_VISUALIZATION_OVERVIEW_KEY);
     }
+    return false;
   }
 
   setVisualizationOverviewHidden(hidden: boolean): void {
-    if (this.platformService.isServer) {
-      return;
-    }
-
-    try {
-      localStorage.setItem(this.HIDE_VISUALIZATION_OVERVIEW_KEY, String(hidden));
-    } catch {
-      // Silently fail if localStorage is unavailable
+    if (hidden) {
+      this.localStorageService.setItem(HIDE_VISUALIZATION_OVERVIEW_KEY, 'true');
+    } else {
+      this.localStorageService.removeItem(HIDE_VISUALIZATION_OVERVIEW_KEY);
     }
   }
 
   getPageSize(): number {
-    if (this.platformService.isServer) {
+    const stored = this.localStorageService.getItem(PAGE_SIZE_KEY);
+    if (stored === null) {
       return this.DEFAULT_PAGE_SIZE;
     }
-
-    try {
-      const stored = localStorage.getItem(this.PAGE_SIZE_KEY);
-      if (stored === null) {
-        return this.DEFAULT_PAGE_SIZE;
-      }
-      const parsed = Number(stored);
-      if (this.VALID_PAGE_SIZES.includes(parsed)) {
-        return parsed;
-      }
-      localStorage.removeItem(this.PAGE_SIZE_KEY);
-      return this.DEFAULT_PAGE_SIZE;
-    } catch {
-      return this.DEFAULT_PAGE_SIZE;
+    const parsed = Number(stored);
+    if (this.VALID_PAGE_SIZES.includes(parsed)) {
+      return parsed;
     }
+    this.localStorageService.removeItem(PAGE_SIZE_KEY);
+    return this.DEFAULT_PAGE_SIZE;
   }
 
   setPageSize(size: number): void {
-    if (this.platformService.isServer) {
-      return;
-    }
-
     if (!this.VALID_PAGE_SIZES.includes(size)) {
       return;
     }
-
-    try {
-      localStorage.setItem(this.PAGE_SIZE_KEY, String(size));
-    } catch {
-      // Silently fail if localStorage is unavailable
+    if (size === this.DEFAULT_PAGE_SIZE) {
+      this.localStorageService.removeItem(PAGE_SIZE_KEY);
+    } else {
+      this.localStorageService.setItem(PAGE_SIZE_KEY, String(size));
     }
   }
 }
