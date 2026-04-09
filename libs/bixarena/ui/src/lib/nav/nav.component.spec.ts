@@ -16,7 +16,9 @@ describe('NavComponent', () => {
         {
           provide: ConfigService,
           useValue: {
-            config: {},
+            config: {
+              auth: { baseUrls: { csr: 'http://localhost:8113' } },
+            },
           },
         },
         {

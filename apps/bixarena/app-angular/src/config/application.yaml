@@ -11,9 +11,14 @@ api:
     csr: http://127.0.0.1:8111/api/v1
     ssr: http://bixarena-apex:8111/api/v1
 
+auth:
+  baseUrls:
+    csr: http://127.0.0.1:8113
+    ssr: http://bixarena-api-gateway:8113
+
 analytics:
   googleTagManager:
-    enabled: true
+    enabled: false
     id: ''
 
 links:
