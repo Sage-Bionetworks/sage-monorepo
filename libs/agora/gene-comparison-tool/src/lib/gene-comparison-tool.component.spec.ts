@@ -424,6 +424,50 @@ describe('GeneComparisonToolComponent', () => {
       });
     });
 
+    describe('pinItems — Protein - Differential Expression', () => {
+      beforeEach(() => {
+        component.category = 'Protein - Differential Expression';
+      });
+
+      it('pins all proteins when under the gene limit', () => {
+        component.pinItems([makeGene('ENSG001', 'P00001'), makeGene('ENSG002', 'P00002')]);
+
+        expect(component.pinnedItems.length).toBe(2);
+        expect(component.uniquePinnedGenesCount).toBe(2);
+      });
+
+      it('at gene limit, pins only proteins whose genes are already pinned', () => {
+        component.maxPinnedGenes = 2;
+        component.pinItem(makeGene('ENSG001', 'P00001'), false);
+        component.pinItem(makeGene('ENSG002', 'P00002'), false);
+
+        component.pinItems([
+          makeGene('ENSG001', 'P00003'), // Should be pinned (ENSG001 already pinned)
+          makeGene('ENSG002', 'P00004'), // Should be pinned (ENSG002 already pinned)
+          makeGene('ENSG003', 'P00005'), // Should be skipped (ENSG003 not pinned)
+        ]);
+
+        expect(component.pinnedItems.length).toBe(4);
+        expect(component.uniquePinnedGenesCount).toBe(2);
+        expect(component.pinnedItems.map((p) => p.uniprotid)).toEqual([
+          'P00001',
+          'P00002',
+          'P00003',
+          'P00004',
+        ]);
+      });
+
+      it('at gene limit, skips all proteins when no genes are already pinned', () => {
+        component.maxPinnedGenes = 1;
+        component.pinItem(makeGene('ENSG001', 'P00001'), false);
+
+        component.pinItems([makeGene('ENSG002', 'P00002'), makeGene('ENSG003', 'P00003')]);
+
+        expect(component.pinnedItems.length).toBe(1);
+        expect(component.uniquePinnedGenesCount).toBe(1);
+      });
+    });
+
     describe('cache behavior on initial load', () => {
       it('caches all pinned items when under the limit', () => {
         component.category = 'RNA - Differential Expression';
