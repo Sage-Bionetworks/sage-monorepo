@@ -44,9 +44,10 @@ export const expectTooManyPinnedGenesToast = async (page: Page) => {
 };
 
 export const expectTooManyPinnedProteinsToast = async (page: Page, nPinnedItems: number) => {
+  const pinnedText = nPinnedItems === 1 ? '1 row was' : `${nPinnedItems} rows were`;
   const alert = page.getByRole('alert');
   await expect(alert).toHaveText(
-    `Only ${nPinnedItems} rows were pinned, because you reached the maximum of 50 pinned genes. Some rows were skipped because they belong to a gene not already in your pinned list.`,
+    `Only ${pinnedText} pinned, because you reached the maximum of 50 pinned genes. Some rows were skipped because they belong to a gene not already in your pinned list.`,
   );
 };
 

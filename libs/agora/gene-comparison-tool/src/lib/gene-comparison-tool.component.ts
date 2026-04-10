@@ -811,13 +811,11 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   }
 
   pinItems(genes: GCTGene[]) {
-    const remaining = this.maxPinnedGenes - this.uniquePinnedGenesCount;
-
-    if (remaining < 1) {
-      return;
-    }
-
     if (this.isRnaCategory) {
+      const remaining = this.maxPinnedGenes - this.uniquePinnedGenesCount;
+      if (remaining < 1) {
+        return;
+      }
       this.pinGenesBatched(genes);
     } else {
       this.pinProteinsBatched(genes);
