@@ -1,10 +1,19 @@
 import { signal } from '@angular/core';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { ComparisonToolService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolService,
+  DEFAULT_PAGE_SIZE,
+  provideExplorersConfig,
+} from '@sagebionetworks/explorers/services';
 import { render } from '@testing-library/angular';
 import { ComparisonToolFooterComponent } from './comparison-tool-footer.component';
 
-function getMockService(totalResults = 0, pageSize = 10, pageNumber = 0, isInitialized = true) {
+function getMockService(
+  totalResults = 0,
+  pageSize = DEFAULT_PAGE_SIZE,
+  pageNumber = 0,
+  isInitialized = true,
+) {
   return {
     totalResultsCount: signal(totalResults),
     pageSize: signal(pageSize),
@@ -31,7 +40,12 @@ function getMockService(totalResults = 0, pageSize = 10, pageNumber = 0, isIniti
   };
 }
 
-async function setup(totalResults = 0, pageSize = 10, pageNumber = 0, isInitialized = true) {
+async function setup(
+  totalResults = 0,
+  pageSize = DEFAULT_PAGE_SIZE,
+  pageNumber = 0,
+  isInitialized = true,
+) {
   const mockService = getMockService(totalResults, pageSize, pageNumber, isInitialized);
   const { fixture } = await render(ComparisonToolFooterComponent, {
     providers: [

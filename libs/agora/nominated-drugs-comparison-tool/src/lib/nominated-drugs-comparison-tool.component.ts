@@ -66,7 +66,6 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
       window.open(url, '_blank');
     },
     legendEnabled: false,
-    rowsPerPage: 10,
     rowIdDataKey: 'common_name',
     allowPinnedImageDownload: false,
     defaultSort: [

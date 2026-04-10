@@ -8,6 +8,7 @@ import {
   PaginationParams,
 } from '@sagebionetworks/explorers/models';
 import { TableLazyLoadEvent } from 'primeng/table';
+import { DEFAULT_PAGE_SIZE } from './app-storage.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -16,10 +17,13 @@ export class ComparisonToolHelperService {
   /**
    * Calculates pagination parameters from a PrimeNG TableLazyLoadEvent
    * @param event The lazy load event from PrimeNG table
-   * @param defaultRowsPerPage Default number of rows per page (defaults to 10)
+   * @param defaultRowsPerPage Default number of rows per page
    * @returns Object containing pageNumber (zero-based) and pageSize
    */
-  getPaginationParams(event: TableLazyLoadEvent, defaultRowsPerPage = 10): PaginationParams {
+  getPaginationParams(
+    event: TableLazyLoadEvent,
+    defaultRowsPerPage = DEFAULT_PAGE_SIZE,
+  ): PaginationParams {
     const pageNumber = Math.floor((event.first ?? 0) / (event.rows ?? defaultRowsPerPage));
     const pageSize = event.rows ?? defaultRowsPerPage;
     return { pageNumber, pageSize };

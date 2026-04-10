@@ -60,7 +60,6 @@ export class ComparisonToolService<T> {
       sizeChartUpperLabel: '',
       sizeChartText: '',
     },
-    rowsPerPage: this.appStorageService.getPageSize(),
     rowIdDataKey: '_id',
     allowPinnedImageDownload: true,
     linkExportField: 'link_url',
