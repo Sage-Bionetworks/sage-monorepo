@@ -1,16 +1,17 @@
 ---
-applyTo: '**/*.java'
+paths:
+  - '**/*.java'
 ---
 
-# Copilot Instructions: Unit Testing for Java (Spring Boot)
+# Java Unit Testing Guidelines (Spring Boot 3)
 
-This file provides focused guidance for GitHub Copilot to generate strong, idiomatic unit tests in Java-based Spring Boot 3 projects.
+This rule provides focused guidance for generating strong, idiomatic unit tests in Java-based Spring Boot 3 projects.
 
 ## Testing Style and Principles
 
 - Write pure unit tests: avoid Spring context loading.
 - Use mocking for all external dependencies (e.g., repositories, APIs).
-- Do not use `@SpringBootTest` unless writing an integration test (see `java-integration-testing.md`).
+- Do not use `@SpringBootTest` unless writing an integration test (see integration testing guidelines).
 
 ## Test File Naming Conventions
 
@@ -188,31 +189,6 @@ When running tests in the multi-module workspace, use targeted commands with pro
 - **Don't check compilation separately - test task will catch compile errors**
 - **Use plain console output to avoid terminal formatting issues**
 
-## Copilot Prompt Examples
-
-Use inline comments or prompts like:
-
-```java
-// Generate a unit test for MyService that verifies getData() returns expected value when repository provides it
-
-```
-
-```java
-// Unit test: should throw IllegalArgumentException when input is empty
-
-```
-
-```java
-// Mock repository to return optional empty and verify service throws NotFoundException
-
-```
-
-**When generating tests, ensure:**
-
-- Method names use CamelCase: `shouldDoSomethingWhenConditionExists()`
-- @DisplayName uses lowercase "should": `@DisplayName("should do something when condition exists")`
-- Consistent naming patterns throughout the test class
-
 ## Clean Code Rules
 
 - Keep tests short and isolated
@@ -221,3 +197,14 @@ Use inline comments or prompts like:
 - Prefer one assertion per test (unless logically grouped)
 - **CONSISTENCY:** Always use the same naming convention within a test class
 - **NO MIXED PATTERNS:** Don't mix CamelCase and underscore naming in the same project
+
+## When Writing Tests
+
+When generating or modifying tests, ensure:
+
+- Method names use CamelCase: `shouldDoSomethingWhenConditionExists()`
+- @DisplayName uses lowercase "should": `@DisplayName("should do something when condition exists")`
+- Consistent naming patterns throughout the test class
+- Tests are short and isolated
+- Use mocking for all external dependencies
+- Follow Arrange-Act-Assert (AAA) structure
