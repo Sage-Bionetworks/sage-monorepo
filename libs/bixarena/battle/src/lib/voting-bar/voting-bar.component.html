@@ -1,0 +1,48 @@
+<div class="voting-bar">
+  @if (phase() === 'voting') {
+    <div class="vote-buttons">
+      <p-button
+        label="Left is Better"
+        icon="pi pi-arrow-left"
+        [disabled]="!canVote()"
+        (onClick)="voteModel1()"
+        aria-label="Vote Model A as better"
+        severity="secondary"
+        [outlined]="true"
+      />
+      <p-button
+        label="Tie"
+        icon="pi pi-thumbs-up"
+        [disabled]="!canVote()"
+        (onClick)="voteTie()"
+        aria-label="Vote tie"
+        severity="secondary"
+        [outlined]="true"
+      />
+      <p-button
+        label="Right is Better"
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        [disabled]="!canVote()"
+        (onClick)="voteModel2()"
+        aria-label="Vote Model B as better"
+        severity="secondary"
+        [outlined]="true"
+      />
+    </div>
+  }
+
+  @if (phase() === 'reveal' || phase() === 'error') {
+    <div class="nudge-buttons">
+      @if (canReuse()) {
+        <p-button
+          [label]="'Same Prompt (' + promptUsesRemaining() + ' remaining)'"
+          (onClick)="samePrompt.emit()"
+          severity="secondary"
+          [outlined]="true"
+        />
+      }
+      <p-button label="New Battle" (onClick)="newBattle.emit()" />
+    </div>
+  }
+</div>

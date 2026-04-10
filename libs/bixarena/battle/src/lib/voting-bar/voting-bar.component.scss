@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.voting-bar {
+  padding: 1rem 0;
+}
+
+.vote-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.nudge-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}

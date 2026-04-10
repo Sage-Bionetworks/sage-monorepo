@@ -1,0 +1,32 @@
+import { Component, input, output } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
+import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
+
+@Component({
+  selector: 'bixarena-voting-bar',
+  imports: [ButtonModule],
+  templateUrl: './voting-bar.component.html',
+  styleUrl: './voting-bar.component.scss',
+})
+export class VotingBarComponent {
+  readonly canVote = input(false);
+  readonly canReuse = input(false);
+  readonly promptUsesRemaining = input(0);
+  readonly phase = input.required<string>();
+
+  readonly vote = output<BattleEvaluationOutcome>();
+  readonly newBattle = output<void>();
+  readonly samePrompt = output<void>();
+
+  voteModel1(): void {
+    this.vote.emit(BattleEvaluationOutcome.Model1);
+  }
+
+  voteTie(): void {
+    this.vote.emit(BattleEvaluationOutcome.Tie);
+  }
+
+  voteModel2(): void {
+    this.vote.emit(BattleEvaluationOutcome.Model2);
+  }
+}
