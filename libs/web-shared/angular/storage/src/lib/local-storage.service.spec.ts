@@ -5,7 +5,7 @@ import { LocalStorageService } from './local-storage.service';
 import { Logger, LOGGER } from '@sagebionetworks/web-shared/angular/logger';
 
 function setup(platformId: string): { service: LocalStorageService; logger: Logger } {
-  const logger: Logger = { error: jest.fn() };
+  const logger: Logger = { log: jest.fn(), warn: jest.fn(), error: jest.fn() };
   TestBed.configureTestingModule({
     providers: [
       { provide: PLATFORM_ID, useValue: platformId },

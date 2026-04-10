@@ -1,5 +1,15 @@
 {
   "extends": "../../../../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
   "compilerOptions": {
     "outDir": "../../../../dist/out-tsc",
     "declaration": true,
@@ -9,7 +19,5 @@
   },
   "angularCompilerOptions": {
     "strictTemplates": true
-  },
-  "exclude": ["src/test-setup.ts", "**/*.spec.ts", "jest.config.ts", "**/*.test.ts"],
-  "include": ["**/*.ts"]
+  }
 }
