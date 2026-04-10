@@ -15,6 +15,11 @@ auth:
   baseUrls:
     csr: http://127.0.0.1:8111
 
+battle:
+  promptLengthLimit: 5000
+  roundLimit: 20
+  promptUseLimit: 5
+
 analytics:
   googleTagManager:
     enabled: true

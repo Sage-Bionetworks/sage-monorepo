@@ -26,6 +26,12 @@ export const AppConfigSchema = BaseConfigSchema.extend({
     }),
   }),
 
+  battle: z.object({
+    promptLengthLimit: z.number().int().positive(),
+    roundLimit: z.number().int().positive(),
+    promptUseLimit: z.number().int().positive(),
+  }),
+
   analytics: z.object({
     googleTagManager: z.object({
       enabled: z.boolean(),

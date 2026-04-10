@@ -22,6 +22,7 @@ describe('AppComponent', () => {
                 sageBionetworks: '',
               },
               auth: { baseUrls: { csr: '' } },
+              battle: { promptLengthLimit: 5000, roundLimit: 20, promptUseLimit: 5 },
               analytics: {
                 googleTagManager: { enabled: false, id: '' },
               },
