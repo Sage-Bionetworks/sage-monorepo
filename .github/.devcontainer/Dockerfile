@@ -176,6 +176,9 @@ RUN corepack install --global pnpm@"${pnpmVersion}"
 RUN pipx ensurepath \
   && pipx install uv=="${uvVersion}"
 
+# Install Claude Code.
+RUN curl -fsSL https://claude.ai/install.sh | bash
+
 # Prepare the user's environment.
 RUN usermod --shell /bin/bash $user \
   && printf "%s\n" \
