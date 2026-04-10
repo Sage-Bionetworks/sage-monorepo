@@ -11,13 +11,17 @@
     }
   ],
   "compilerOptions": {
-    "outDir": "../../../../dist/out-tsc",
-    "declaration": true,
-    "declarationMap": true,
-    "inlineSources": true,
-    "types": []
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "target": "es2024"
   },
   "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
     "strictTemplates": true
   }
 }

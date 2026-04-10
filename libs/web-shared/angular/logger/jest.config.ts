@@ -2,7 +2,7 @@
 export default {
   displayName: 'web-shared-angular-logger',
   preset: '../../../../jest.preset.js',
-  setupFilesAfterSetup: ['<rootDir>/src/test-setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
   coverageDirectory: '../../../../coverage/libs/web-shared/angular/logger',
   transform: {
