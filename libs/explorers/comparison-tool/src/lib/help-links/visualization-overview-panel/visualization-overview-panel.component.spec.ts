@@ -3,6 +3,7 @@ import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
 import {
   AppStorageService,
   ComparisonToolService,
+  DEFAULT_PAGE_SIZE,
   provideComparisonToolService,
   provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
@@ -19,7 +20,7 @@ describe('VisualizationOverviewPanelComponent', () => {
   const createMockStorageService = (isHidden = false) => ({
     isVisualizationOverviewHidden: jest.fn().mockReturnValue(isHidden),
     setVisualizationOverviewHidden: jest.fn(),
-    getPageSize: jest.fn().mockReturnValue(10),
+    getPageSize: jest.fn().mockReturnValue(DEFAULT_PAGE_SIZE),
     setPageSize: jest.fn(),
   });
 

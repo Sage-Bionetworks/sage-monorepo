@@ -58,7 +58,7 @@ describe('LocalStorageService', () => {
         });
 
         expect(service.getItem('key')).toBeNull();
-        expect(logger.error).toHaveBeenCalled();
+        expect(logger.warn).toHaveBeenCalled();
       });
     });
 

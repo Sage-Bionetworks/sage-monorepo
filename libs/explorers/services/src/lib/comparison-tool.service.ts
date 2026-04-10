@@ -17,6 +17,7 @@ import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
 import { combineLatest } from 'rxjs';
+import { VALID_PAGE_SIZES } from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
 import { ComparisonToolHelperService } from './comparison-tool-helper.service';
@@ -122,7 +123,7 @@ export class ComparisonToolService<T> {
   readonly pinnedItems = computed(() => this.querySignal().pinnedItems);
   readonly pageNumber = computed(() => this.querySignal().pageNumber);
   readonly pageSize = computed(() => this.querySignal().pageSize);
-  readonly pageSizeOptions = this.appStorageService.pageSizeOptions;
+  readonly pageSizeOptions = VALID_PAGE_SIZES;
   readonly multiSortMeta = computed(() => this.querySignal().multiSortMeta);
   readonly searchTerm = computed(() => this.querySignal().searchTerm);
   readonly filters = computed(() => this.querySignal().filters);

@@ -14,8 +14,6 @@ import {
 export class AppStorageService {
   private readonly localStorageService = inject(LocalStorageService);
 
-  readonly pageSizeOptions: number[] = VALID_PAGE_SIZES;
-
   isVisualizationOverviewHidden(): boolean {
     const value = this.localStorageService.getItem(HIDE_VISUALIZATION_OVERVIEW_KEY);
     if (value === 'true') {

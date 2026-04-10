@@ -15,7 +15,7 @@ export class LocalStorageService {
     try {
       return localStorage.getItem(key);
     } catch (e) {
-      this.logger.error('Failed to get item from localStorage', e);
+      this.logger.warn('Failed to get item from localStorage', { error: e });
       return null;
     }
   }

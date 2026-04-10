@@ -14,7 +14,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "web-shared",
+            "prefix": "webShared",
             "style": "camelCase"
           }
         ],
