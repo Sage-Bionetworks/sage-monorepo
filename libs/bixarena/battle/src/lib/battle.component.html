@@ -1,3 +1,52 @@
 <div class="page-content">
-  <p>Battle is coming soon</p>
+  @if (state.phase() === 'landing') {
+    <div class="landing">
+      <h1 class="title">BioArena</h1>
+      <p class="subtitle">
+        Discover how different AIs answer biomedical questions. Submit a prompt, compare two
+        anonymous models side-by-side, then vote for the best response.
+      </p>
+    </div>
+  }
+
+  @if (state.phase() !== 'landing') {
+    <div class="battle-view">
+      <div class="panels">
+        <bixarena-model-panel
+          [label]="state.model1DisplayName()"
+          [streamState]="state.model1Stream()"
+          [revealedName]="state.phase() === 'reveal' ? (state.model1()?.name ?? null) : null"
+          [isWinner]="state.selectedOutcome() === 'model1'"
+        />
+        <bixarena-model-panel
+          [label]="state.model2DisplayName()"
+          [streamState]="state.model2Stream()"
+          [revealedName]="state.phase() === 'reveal' ? (state.model2()?.name ?? null) : null"
+          [isWinner]="state.selectedOutcome() === 'model2'"
+        />
+      </div>
+
+      <bixarena-voting-bar
+        [phase]="state.phase()"
+        [canVote]="state.canVote()"
+        [canReuse]="state.canReuse()"
+        [promptUsesRemaining]="state.promptUsesRemaining()"
+        (vote)="onVote($event)"
+        (newBattle)="onNewBattle()"
+        (samePrompt)="onSamePrompt()"
+      />
+    </div>
+  }
+
+  <bixarena-prompt-composer
+    [placeholder]="
+      state.phase() === 'landing' ? 'Ask anything biomedical...' : 'Ask a follow-up...'
+    "
+    [disabled]="state.phase() === 'streaming' || state.phase() === 'creating'"
+    (promptSubmit)="onPromptSubmit($event)"
+  />
+
+  <p class="disclaimer">
+    AI responses may be inaccurate. Do not share personal health information.
+  </p>
 </div>

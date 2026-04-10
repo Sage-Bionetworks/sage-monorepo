@@ -1,4 +1,4 @@
-import { Component, computed, effect, ElementRef, input, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, input, viewChild } from '@angular/core';
 import { ModelStreamState } from '../battle.types';
 import { STREAM_CURSOR } from '../battle.constants';
 
