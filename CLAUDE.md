@@ -22,6 +22,26 @@ nx affected --target=test       # run tests only for affected projects
 nx run-many --target=build      # build all projects
 ```
 
+### Serving an App (Dev Server)
+
+Most apps require the full stack (databases, APIs, etc.) running before the Angular dev server is useful. The typical workflow:
+
+```bash
+# 1. Check if the stack is already running
+docker ps
+
+# 2. If not running, start the full stack in detached Docker containers
+nx serve-detach <project-name>   # e.g. nx serve-detach model-ad
+
+# 3. Remove the app container so the dev server can take its place
+docker rm -f <project-name>-app  # e.g. docker rm -f model-ad-app
+
+# 4. Start the Angular dev server for that app
+nx serve <project-name>-app      # e.g. nx serve model-ad-app
+```
+
+Skip step 2 if Docker containers for the stack are already running.
+
 ### Gradle (Java/Spring Boot)
 
 ```bash
@@ -62,6 +82,12 @@ uv run ruff check         # lint
 ### OpenAPI-First Workflow
 
 API contracts are defined first in OpenAPI specs. Server stubs and client SDKs (Angular, Java, Python) are generated from these specs. Implement business logic in the generated skeletons — do not hand-edit generated files.
+
+After modifying an API spec, regenerate all dependent clients for that scope:
+
+```bash
+nx run-many -t=generate -p=<scope>-*   # e.g. -p=model-ad-*
+```
 
 ### Dependency Constraints
 
