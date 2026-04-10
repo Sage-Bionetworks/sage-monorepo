@@ -1,4 +1,5 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
 import { ConfigLoaderService } from '@sagebionetworks/platform/config/angular';
 import { RuntimeServerConfig, validateConfig, AppConfig } from './config.schema';
 
@@ -18,7 +19,7 @@ export class ConfigService extends ConfigLoaderService<RuntimeServerConfig, AppC
     const loaded = await super.loadConfig(basePath);
     this.config = {
       ...(loaded as AppConfig),
-      isPlatformServer: true,
+      isPlatformServer: isPlatformServer(this.platformId),
     } as RuntimeServerConfig;
     return this.config;
   }
