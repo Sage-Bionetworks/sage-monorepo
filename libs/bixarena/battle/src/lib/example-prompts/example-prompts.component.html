@@ -1,0 +1,63 @@
+<div class="dna-section">
+  <div class="dna-label">Unwind a prompt</div>
+  <div class="dna-wrap">
+    <div class="helix">
+      <svg class="strand strand-back" viewBox="0 0 400 100" preserveAspectRatio="none">
+        <path d="M0,50 C50,10 100,90 150,50 C200,10 250,90 300,50 C350,10 400,90 450,50" />
+      </svg>
+      <svg class="strand strand-front" viewBox="0 0 400 100" preserveAspectRatio="none">
+        <path d="M0,50 C50,90 100,10 150,50 C200,90 250,10 300,50 C350,90 400,10 450,50" />
+      </svg>
+
+      @for (node of nodes; track node.label) {
+        <button
+          class="helix-node"
+          [class.active]="selectedCategory() === node.label"
+          [style.left.px]="node.left"
+          [style.top.px]="node.top"
+          (click)="onNodeClick(node)"
+          role="button"
+          tabindex="0"
+          [attr.aria-label]="'Load ' + node.label + ' prompt'"
+        >
+          <svg
+            class="node-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path [attr.d]="node.icon" />
+          </svg>
+          <span class="node-label">{{ node.label }}</span>
+        </button>
+      }
+
+      <div
+        class="helix-rung"
+        style="left: 74px; top: 50px; width: 36px; transform: rotate(70deg)"
+      ></div>
+      <div
+        class="helix-rung"
+        style="left: 149px; top: 50px; width: 36px; transform: rotate(-70deg)"
+      ></div>
+      <div
+        class="helix-rung"
+        style="left: 224px; top: 50px; width: 36px; transform: rotate(70deg)"
+      ></div>
+      <div
+        class="helix-rung"
+        style="left: 299px; top: 50px; width: 36px; transform: rotate(-70deg)"
+      ></div>
+    </div>
+  </div>
+
+  @if (selectedPrompt()) {
+    <div class="dna-reveal">
+      <button class="dna-prompt" (click)="usePrompt()">{{ selectedPrompt() }}</button>
+      <div class="dna-hint">click to use this prompt</div>
+    </div>
+  }
+</div>
