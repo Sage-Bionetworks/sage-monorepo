@@ -31,7 +31,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 nx test explorers-<lib-name>               # run unit tests for a lib
 nx lint explorers-<lib-name>               # lint a lib
-nx run explorers-storybook:storybook       # serve explorers Storybook (port 4402)
+nx start explorers-storybook       # serve explorers Storybook (port 4402)
 nx run explorers-charts-angular:storybook  # serve charts Storybook (port 4400)
 ```
 
