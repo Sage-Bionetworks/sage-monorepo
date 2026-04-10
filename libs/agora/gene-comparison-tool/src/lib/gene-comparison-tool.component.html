@@ -277,7 +277,7 @@
                 <div class="table-divider-inner">
                   <div id="pinned-genes-header">
                     @if (category === 'RNA - Differential Expression') {
-                      <span> Pinned Genes ({{ pinnedItems.length }}/50) </span>
+                      <span> Pinned Genes ({{ uniquePinnedGenesCount }}/50) </span>
                     }
                     @if (category === 'Protein - Differential Expression') {
                       <div>
@@ -337,7 +337,7 @@
                       </div>
                       <div>
                         <button
-                          (click)="onUnPinGeneClick(gene)"
+                          (click)="onUnpinItemClick(gene)"
                           pTooltip="Unpin this row"
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
@@ -437,13 +437,14 @@
                   }
                   @if (genesTable.filteredValue?.length) {
                     <div>
+                      @let pinAllDisabled = isPinAllDisabled();
                       <button
                         class="pin-all-button"
-                        [disabled]="getPinDisabledStatus()"
-                        [class.disabled]="getPinDisabledStatus()"
+                        [disabled]="pinAllDisabled"
+                        [class.disabled]="pinAllDisabled"
                         (click)="onPinAllClick()"
                         [pTooltip]="
-                          getPinDisabledStatus()
+                          pinAllDisabled
                             ? 'You have already pinned the maximum number of genes (' +
                               maxPinnedGenes +
                               '). You must unpin some genes before you can pin more.'
@@ -487,6 +488,7 @@
               </ng-template>
 
               <ng-template pTemplate="body" let-gene>
+                @let pinDisabled = isPinDisabled(gene);
                 <tr>
                   <td>
                     <div class="gene-controls">
@@ -512,11 +514,11 @@
                       </div>
                       <div>
                         <button
-                          (click)="onPinGeneClick(gene)"
-                          [disabled]="getPinDisabledStatus()"
-                          [class.disabled]="getPinDisabledStatus()"
+                          (click)="onPinItemClick(gene)"
+                          [disabled]="pinDisabled"
+                          [class.disabled]="pinDisabled"
                           [pTooltip]="
-                            getPinDisabledStatus()
+                            pinDisabled
                               ? 'You have already pinned the maximum number of genes (' +
                                 maxPinnedGenes +
                                 '). You must unpin some genes before you can pin more.'
@@ -642,11 +644,4 @@
     (onNavigateToConsistencyOfChange)="navigateToConsistencyOfChange($event)"
   ></agora-gene-comparison-tool-details-panel>
   <agora-gene-comparison-tool-score-panel #scorePanel></agora-gene-comparison-tool-score-panel>
-  <agora-gene-comparison-tool-pinned-genes-modal
-    #pinnedGenesModal
-    (changeEvent)="onPinnedGenesModalChange($event)"
-    [pinnedGenes]="pinnedItems"
-    [pendingPinnedGenes]="pendingPinnedItems"
-    [maxPinnedGenes]="maxPinnedGenes"
-  ></agora-gene-comparison-tool-pinned-genes-modal>
 </div>
