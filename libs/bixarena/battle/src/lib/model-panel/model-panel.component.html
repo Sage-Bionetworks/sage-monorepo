@@ -1,0 +1,27 @@
+<div class="panel" [class.winner]="isWinner()">
+  <div class="header">
+    <span class="dot" [class]="statusClass()"></span>
+    <span class="label">{{ revealedName() ?? label() }}</span>
+    @if (statusLabel()) {
+      <span class="status">{{ statusLabel() }}</span>
+    }
+  </div>
+  <div class="body" #body aria-live="polite" (scroll)="onScroll($event)">
+    @if (streamState().status === 'waiting') {
+      <div class="skeleton">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line"></div>
+      </div>
+    } @else if (streamState().status === 'error') {
+      <div class="error-message">{{ streamState().errorMessage }}</div>
+    } @else {
+      <div class="content">{{ displayText() }}</div>
+    }
+  </div>
+  @if (revealedName()) {
+    <div class="footer">
+      <span class="model-name">{{ revealedName() }}</span>
+    </div>
+  }
+</div>

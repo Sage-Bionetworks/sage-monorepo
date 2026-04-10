@@ -1,0 +1,140 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.panel {
+  background: var(--p-surface-50);
+  border: 1px solid var(--p-surface-200);
+  border-radius: var(--p-rounded-xl);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  transition: border-color 0.4s;
+
+  &.winner {
+    border-color: var(--p-primary-color);
+    box-shadow: 0 0 12px rgb(249 115 22 / 15%);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--p-surface-200);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--p-surface-300);
+  flex-shrink: 0;
+
+  &.live {
+    background: #22c55e;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  &.done {
+    background: #22c55e;
+  }
+
+  &.error {
+    background: #ef4444;
+  }
+}
+
+.label {
+  color: var(--p-text-color);
+}
+
+.status {
+  margin-left: auto;
+  font-weight: 400;
+  color: var(--p-text-muted-color);
+  font-size: 0.75rem;
+}
+
+.body {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  min-height: 200px;
+  max-height: 400px;
+}
+
+.content {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+  font-size: 0.9375rem;
+  color: var(--p-text-color);
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    content: '\26A0';
+  }
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 4px;
+  background: var(--p-surface-200);
+  animation: shimmer 1.5s ease-in-out infinite;
+
+  &.short {
+    width: 60%;
+  }
+}
+
+.footer {
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--p-surface-200);
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+}
+
+.model-name {
+  font-weight: 600;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
