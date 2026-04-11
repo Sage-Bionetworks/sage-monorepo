@@ -34,30 +34,11 @@
           <span class="node-label">{{ node.label }}</span>
         </button>
       }
-
-      <div
-        class="helix-rung"
-        style="left: 74px; top: 50px; width: 36px; transform: rotate(70deg)"
-      ></div>
-      <div
-        class="helix-rung"
-        style="left: 149px; top: 50px; width: 36px; transform: rotate(-70deg)"
-      ></div>
-      <div
-        class="helix-rung"
-        style="left: 224px; top: 50px; width: 36px; transform: rotate(70deg)"
-      ></div>
-      <div
-        class="helix-rung"
-        style="left: 299px; top: 50px; width: 36px; transform: rotate(-70deg)"
-      ></div>
     </div>
   </div>
 
-  @if (selectedPrompt()) {
-    <div class="dna-reveal">
-      <button class="dna-prompt" (click)="usePrompt()">{{ selectedPrompt() }}</button>
-      <div class="dna-hint">click to use this prompt</div>
-    </div>
-  }
+  <div class="dna-reveal" [class.show]="selectedPrompt()">
+    <button class="dna-prompt" (click)="usePrompt()">{{ selectedPrompt() }}</button>
+    <div class="dna-hint">click to use this prompt</div>
+  </div>
 </div>

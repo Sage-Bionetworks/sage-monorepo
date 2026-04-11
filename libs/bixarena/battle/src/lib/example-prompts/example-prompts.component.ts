@@ -1,4 +1,4 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, OnDestroy, output, signal } from '@angular/core';
 
 interface HelixNode {
   label: string;
@@ -94,11 +94,27 @@ const MOCK_PROMPTS: CategoryPrompt[] = [
   templateUrl: './example-prompts.component.html',
   styleUrl: './example-prompts.component.scss',
 })
-export class ExamplePromptsComponent {
+export class ExamplePromptsComponent implements OnDestroy {
   readonly promptSelect = output<string>();
   readonly nodes = HELIX_NODES;
   readonly selectedPrompt = signal<string | null>(null);
   readonly selectedCategory = signal<string | null>(null);
+
+  private readonly onDocClick = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest('.helix-node') && !target.closest('.dna-prompt')) {
+      this.selectedPrompt.set(null);
+      this.selectedCategory.set(null);
+    }
+  };
+
+  constructor() {
+    document.addEventListener('click', this.onDocClick);
+  }
+
+  ngOnDestroy(): void {
+    document.removeEventListener('click', this.onDocClick);
+  }
 
   onNodeClick(node: HelixNode): void {
     const category = MOCK_PROMPTS.find((c) => c.category === node.label);
