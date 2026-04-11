@@ -91,6 +91,48 @@
   }
 }
 
+.thk {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.875rem;
+  transition: all 0.4s;
+
+  &.done {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+}
+
+.thk-ico {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--p-surface-500);
+  animation: tp 1.5s ease-in-out infinite;
+}
+
+.thk-lbl {
+  font-size: var(--text-sm);
+  font-weight: 480;
+  color: var(--p-surface-500);
+}
+
+@keyframes tp {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: rotate(0deg);
+  }
+
+  50% {
+    opacity: 1;
+    transform: rotate(180deg);
+  }
+}
+
 .content {
   white-space: pre-wrap;
   word-break: break-word;
