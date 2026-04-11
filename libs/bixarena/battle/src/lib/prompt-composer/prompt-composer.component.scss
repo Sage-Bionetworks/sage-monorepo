@@ -1,35 +1,35 @@
 :host {
   display: block;
   width: 100%;
-  max-width: 640px;
+  max-width: 40rem;
   margin: 0 auto;
 }
 
 .comp-card {
-  background: var(--p-surface-50);
+  background: var(--p-surface-100);
   border: 1px solid var(--p-surface-200);
-  border-radius: var(--p-rounded-xl);
+  border-radius: 16px;
   overflow: hidden;
   transition: all 0.25s;
 
   &:focus-within {
     border-color: var(--p-surface-300);
     box-shadow:
-      0 4px 32px rgb(0 0 0 / 10%),
+      0 4px 32px rgb(0 0 0 / 20%),
       0 0 0 3px rgb(249 115 22 / 4%);
   }
 }
 
 .input {
   width: 100%;
-  min-height: 56px;
-  max-height: 140px;
-  padding: 1rem;
+  min-height: 3.5rem;
+  max-height: 8.75rem;
+  padding: 1rem 1.125rem 0.5rem;
   border: none;
   outline: none;
   resize: none;
   font: inherit;
-  font-size: 0.9375rem;
+  font-size: var(--text-md);
   line-height: 1.5;
   background: transparent;
   color: var(--p-text-color);
@@ -48,12 +48,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  padding: 6px 12px 10px;
 }
 
 .char-count {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: var(--p-text-muted-color);
+  opacity: 0;
+  transition: opacity 0.2s;
+
+  .comp-card:focus-within & {
+    opacity: 1;
+  }
 }
 
 .send {
@@ -62,10 +68,11 @@
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  display: grid;
-  place-items: center;
-  background: transparent;
-  color: var(--p-text-muted-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--p-surface-500);
+  color: var(--p-text-color);
   transition: all 0.2s;
   opacity: 0.5;
 

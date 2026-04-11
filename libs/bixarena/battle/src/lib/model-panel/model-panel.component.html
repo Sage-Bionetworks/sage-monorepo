@@ -1,10 +1,9 @@
 <div class="panel" [class.winner]="isWinner()">
   <div class="header">
-    <span class="dot" [class]="statusClass()"></span>
-    <span class="label">{{ revealedName() ?? label() }}</span>
-    @if (statusLabel()) {
-      <span class="status">{{ statusLabel() }}</span>
-    }
+    <span class="mt">
+      <span class="dot" [class]="statusClass()"></span>
+      {{ revealedName() ?? label() }}
+    </span>
   </div>
   <div class="body" #body aria-live="polite" (scroll)="onScroll($event)">
     @if (streamState().status === 'waiting') {
@@ -20,8 +19,6 @@
     }
   </div>
   @if (revealedName()) {
-    <div class="footer">
-      <span class="model-name">{{ revealedName() }}</span>
-    </div>
+    <div class="footer">{{ revealedName() }}</div>
   }
 </div>

@@ -19,6 +19,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+// Routed components inserted by router-outlet need to participate in flex layout.
+// Angular host elements default to display: inline, breaking the flex chain.
+main > * {
+  display: contents;
+}
+
 body::after {
   content: '';
   position: fixed;

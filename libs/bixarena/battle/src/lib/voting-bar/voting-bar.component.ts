@@ -1,10 +1,8 @@
 import { Component, input, output } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
 import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
 
 @Component({
   selector: 'bixarena-voting-bar',
-  imports: [ButtonModule],
   templateUrl: './voting-bar.component.html',
   styleUrl: './voting-bar.component.scss',
 })

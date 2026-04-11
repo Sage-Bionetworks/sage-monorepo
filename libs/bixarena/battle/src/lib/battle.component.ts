@@ -1,8 +1,9 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, computed, inject, OnDestroy } from '@angular/core';
 import {
   BattleService as BattleApiService,
   BattleEvaluationOutcome,
 } from '@sagebionetworks/bixarena/api-client';
+import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { BattleStateService } from './services/battle.service';
 import { BattleStreamService } from './services/battle-stream.service';
 import { PromptComposerComponent } from './prompt-composer/prompt-composer.component';
@@ -24,6 +25,17 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
 })
 export class BattleComponent implements OnDestroy {
   readonly state = inject(BattleStateService);
+  readonly promptUseLimit = inject(ConfigService).config.battle.promptUseLimit;
+  readonly promptUseDots = Array.from({ length: this.promptUseLimit }, (_, i) => i + 1);
+  readonly currentBattleNumber = computed(() => {
+    const remaining = this.state.promptUsesRemaining();
+    const phase = this.state.phase();
+    // After voting, remaining decrements but the next battle hasn't started yet
+    if (phase === 'reveal' || phase === 'error') {
+      return this.promptUseLimit - remaining;
+    }
+    return this.promptUseLimit - remaining + 1;
+  });
 
   onPromptSubmit(prompt: string): void {
     this.state.submitPrompt(prompt);

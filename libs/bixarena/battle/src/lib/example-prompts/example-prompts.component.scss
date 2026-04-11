@@ -11,7 +11,7 @@
 
 .dna-label {
   text-align: center;
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   color: var(--p-text-muted-color);
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -74,7 +74,7 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: var(--p-surface-50);
+    background: var(--p-surface-100);
     border: 1.5px solid var(--p-surface-200);
     transition: all 0.3s;
   }
@@ -93,6 +93,7 @@
 
     &::before {
       border-color: var(--p-surface-300);
+      background: var(--p-surface-200);
     }
 
     &::after {
@@ -169,20 +170,22 @@
 
 .dna-prompt {
   display: inline-block;
-  max-width: 500px;
+  max-width: 31.25rem;
   padding: 0.5rem 1rem;
-  background: var(--p-surface-50);
+  background: var(--p-surface-100);
   border: 1px solid var(--p-surface-200);
   border-radius: 100px;
   font: inherit;
-  font-size: 0.8125rem;
-  color: var(--p-text-color);
+  font-size: var(--text-sm);
+  color: var(--p-text-muted-color);
   line-height: 1.5;
   cursor: pointer;
   transition: all 0.2s;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
 
   &:hover {
     border-color: var(--p-surface-300);
+    color: var(--p-text-color);
   }
 }
 

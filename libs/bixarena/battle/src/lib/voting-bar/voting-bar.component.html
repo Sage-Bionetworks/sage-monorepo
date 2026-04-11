@@ -1,48 +1,36 @@
-<div class="voting-bar">
+<div class="abar">
   @if (phase() === 'voting') {
-    <div class="vote-buttons">
-      <p-button
-        label="Left is Better"
-        icon="pi pi-arrow-left"
+    <div class="votes">
+      <button
+        class="vb left"
         [disabled]="!canVote()"
-        (onClick)="voteModel1()"
+        (click)="voteModel1()"
         aria-label="Vote Model A as better"
-        severity="secondary"
-        [outlined]="true"
-      />
-      <p-button
-        label="Tie"
-        icon="pi pi-thumbs-up"
+      >
+        Left is Better 👈
+      </button>
+      <button class="vb" [disabled]="!canVote()" (click)="voteTie()" aria-label="Vote tie">
+        🤝 Tie
+      </button>
+      <button
+        class="vb right"
         [disabled]="!canVote()"
-        (onClick)="voteTie()"
-        aria-label="Vote tie"
-        severity="secondary"
-        [outlined]="true"
-      />
-      <p-button
-        label="Right is Better"
-        icon="pi pi-arrow-right"
-        iconPos="right"
-        [disabled]="!canVote()"
-        (onClick)="voteModel2()"
+        (click)="voteModel2()"
         aria-label="Vote Model B as better"
-        severity="secondary"
-        [outlined]="true"
-      />
+      >
+        👉 Right is Better
+      </button>
     </div>
   }
 
   @if (phase() === 'reveal' || phase() === 'error') {
-    <div class="nudge-buttons">
+    <div class="nudge">
       @if (canReuse()) {
-        <p-button
-          [label]="'Same Prompt (' + promptUsesRemaining() + ' remaining)'"
-          (onClick)="samePrompt.emit()"
-          severity="secondary"
-          [outlined]="true"
-        />
+        <button class="nb go" (click)="samePrompt.emit()">
+          Same Prompt ({{ promptUsesRemaining() }} remaining) &rarr;
+        </button>
       }
-      <p-button label="New Battle" (onClick)="newBattle.emit()" />
+      <button class="nb sec" (click)="newBattle.emit()">New Battle</button>
     </div>
   }
 </div>
