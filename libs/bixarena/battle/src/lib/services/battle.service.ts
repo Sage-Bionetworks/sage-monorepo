@@ -210,7 +210,7 @@ export class BattleStateService {
     if (this.bothComplete()) {
       const s1 = this.model1Stream().status;
       const s2 = this.model2Stream().status;
-      if (s1 === 'error' && s2 === 'error') {
+      if (s1 === 'error' || s2 === 'error') {
         this.phase.set('error');
       } else {
         this.phase.set('voting');
