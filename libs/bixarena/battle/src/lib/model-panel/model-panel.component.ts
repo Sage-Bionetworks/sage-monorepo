@@ -9,9 +9,28 @@ import { STREAM_CURSOR } from '../battle.constants';
 })
 export class ModelPanelComponent {
   readonly label = input.required<string>();
+  readonly modelId = input.required<'model1' | 'model2'>();
   readonly streamState = input.required<ModelStreamState>();
   readonly revealedName = input<string | null>(null);
-  readonly isWinner = input(false);
+  readonly selectedOutcome = input<string | null>(null);
+  readonly hoveredModel = input<string | null>(null);
+
+  readonly isSelected = computed(() => {
+    const o = this.selectedOutcome();
+    if (!o) return false;
+    return o === this.modelId() || o === 'tie';
+  });
+
+  readonly isUnselected = computed(() => {
+    const o = this.selectedOutcome();
+    if (!o) return false;
+    return o !== this.modelId() && o !== 'tie';
+  });
+
+  readonly isHovered = computed(() => {
+    const h = this.hoveredModel();
+    return h === this.modelId() || h === 'tie';
+  });
 
   readonly bodyEl = viewChild<ElementRef<HTMLDivElement>>('body');
   private userScrolled = false;

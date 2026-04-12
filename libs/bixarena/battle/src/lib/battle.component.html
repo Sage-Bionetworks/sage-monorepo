@@ -36,15 +36,19 @@
       <div class="panels">
         <bixarena-model-panel
           [label]="state.model1DisplayName()"
+          modelId="model1"
           [streamState]="state.model1Stream()"
           [revealedName]="state.phase() === 'reveal' ? (state.model1()?.name ?? null) : null"
-          [isWinner]="state.selectedOutcome() === 'model1'"
+          [selectedOutcome]="state.selectedOutcome()"
+          [hoveredModel]="hoverSide()"
         />
         <bixarena-model-panel
           [label]="state.model2DisplayName()"
+          modelId="model2"
           [streamState]="state.model2Stream()"
           [revealedName]="state.phase() === 'reveal' ? (state.model2()?.name ?? null) : null"
-          [isWinner]="state.selectedOutcome() === 'model2'"
+          [selectedOutcome]="state.selectedOutcome()"
+          [hoveredModel]="hoverSide()"
         />
       </div>
       <bixarena-voting-bar
@@ -53,6 +57,7 @@
         [canReuse]="state.canReuse()"
         [promptUsesRemaining]="state.promptUsesRemaining()"
         (vote)="onVote($event)"
+        (hoverSide)="hoverSide.set($event)"
         (newBattle)="onNewBattle()"
         (samePrompt)="onSamePrompt()"
       />

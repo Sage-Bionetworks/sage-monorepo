@@ -43,19 +43,19 @@
     transform: translateY(-1px);
   }
 
-  &.left:hover {
-    border-color: rgb(108 180 252 / 20%);
-    color: var(--p-blue-400);
-  }
-
-  &.right:hover {
-    border-color: rgb(180 156 250 / 20%);
-    color: var(--p-violet-400);
-  }
-
   &:disabled {
     opacity: 0.5;
     pointer-events: none;
+  }
+}
+
+.vb-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+
+  &.flip {
+    transform: scaleX(-1);
   }
 }
 

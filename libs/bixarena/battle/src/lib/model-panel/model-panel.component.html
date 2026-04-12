@@ -1,4 +1,9 @@
-<div class="panel" [class.winner]="isWinner()">
+<div
+  class="panel"
+  [class.selected]="isSelected()"
+  [class.unselected]="isUnselected()"
+  [class.hovered]="isHovered()"
+>
   <div class="header">
     <span class="mt">
       <span class="dot" [class]="statusClass()"></span>

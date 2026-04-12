@@ -14,6 +14,7 @@ describe('ModelPanelComponent', () => {
     fixture = TestBed.createComponent(ModelPanelComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('label', 'Model A');
+    fixture.componentRef.setInput('modelId', 'model1');
     fixture.componentRef.setInput('streamState', INITIAL_STREAM_STATE);
     fixture.detectChanges();
   });

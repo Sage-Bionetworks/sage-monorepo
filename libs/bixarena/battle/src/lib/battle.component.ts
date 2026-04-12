@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy } from '@angular/core';
+import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import {
   BattleService as BattleApiService,
   BattleEvaluationOutcome,
@@ -25,6 +25,7 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
 })
 export class BattleComponent implements OnDestroy {
   readonly state = inject(BattleStateService);
+  readonly hoverSide = signal<'model1' | 'model2' | 'tie' | null>(null);
   readonly promptUseLimit = inject(ConfigService).config.battle.promptUseLimit;
   readonly promptUseDots = Array.from({ length: this.promptUseLimit }, (_, i) => i + 1);
   readonly currentBattleNumber = computed(() => {

@@ -2,7 +2,6 @@
   display: block;
   min-width: 0;
   min-height: 0;
-  overflow: hidden;
 }
 
 .panel {
@@ -16,16 +15,18 @@
   max-height: 100%;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-  &:hover {
-    border-color: var(--p-surface-300);
+  &.selected {
+    border-color: var(--p-primary-color);
   }
 
-  &.winner {
-    border-color: rgb(249 115 22 / 25%);
+  &.unselected {
+    opacity: 0.6;
   }
 
-  &.tie {
-    border-color: rgb(253 252 251 / 12%);
+  &.hovered {
+    border-color: var(--p-surface-400);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 25%);
+    transform: translateY(-2px);
   }
 }
 

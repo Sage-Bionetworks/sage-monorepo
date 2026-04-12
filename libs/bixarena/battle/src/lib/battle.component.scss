@@ -107,7 +107,6 @@
   gap: 0.75rem;
   flex: 1;
   min-height: 0;
-  overflow: hidden;
 
   @media (width <= 768px) {
     grid-template-columns: 1fr;
