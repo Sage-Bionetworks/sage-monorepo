@@ -1,4 +1,5 @@
-import { Component, OnDestroy, output, signal } from '@angular/core';
+import { Component, inject, OnDestroy, output, PLATFORM_ID, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 interface HelixNode {
   label: string;
@@ -108,12 +109,18 @@ export class ExamplePromptsComponent implements OnDestroy {
     }
   };
 
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   constructor() {
-    document.addEventListener('click', this.onDocClick);
+    if (this.isBrowser) {
+      document.addEventListener('click', this.onDocClick);
+    }
   }
 
   ngOnDestroy(): void {
-    document.removeEventListener('click', this.onDocClick);
+    if (this.isBrowser) {
+      document.removeEventListener('click', this.onDocClick);
+    }
   }
 
   onNodeClick(node: HelixNode): void {
