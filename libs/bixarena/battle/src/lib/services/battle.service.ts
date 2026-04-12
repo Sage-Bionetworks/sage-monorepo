@@ -70,8 +70,20 @@ export class BattleStateService {
 
     this.phase.set('creating');
     this.selectedOutcome.set(null);
-    this.model1Stream.set({ ...INITIAL_STREAM_STATE, status: 'waiting' });
-    this.model2Stream.set({ ...INITIAL_STREAM_STATE, status: 'waiting' });
+
+    const userMsg = { role: 'user' as const, content: prompt };
+    const prev1 = this.model1Stream().messages;
+    const prev2 = this.model2Stream().messages;
+    this.model1Stream.set({
+      ...INITIAL_STREAM_STATE,
+      messages: [...prev1, userMsg],
+      status: 'waiting',
+    });
+    this.model2Stream.set({
+      ...INITIAL_STREAM_STATE,
+      messages: [...prev2, userMsg],
+      status: 'waiting',
+    });
 
     try {
       const battle = await this.battleApi.createBattle({ title: prompt.slice(0, 50) }).toPromise();
@@ -176,9 +188,14 @@ export class BattleStateService {
             isSlowHint: false,
           });
         } else if (chunk.status === 'complete') {
+          const current = streamSignal();
           streamSignal.set({
-            ...streamSignal(),
-            text: accumulatedText,
+            ...current,
+            messages: [
+              ...current.messages,
+              { role: 'assistant' as const, content: accumulatedText },
+            ],
+            text: '',
             status: 'complete',
             finishReason: chunk.finishReason ?? null,
             isSlowHint: false,

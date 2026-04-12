@@ -102,6 +102,7 @@
   gap: 0.5rem;
   margin-bottom: 0.875rem;
   transition: all 0.4s;
+  clear: both;
 
   &.done {
     max-height: 0;
@@ -138,9 +139,28 @@
   }
 }
 
+.user-msg {
+  background: var(--p-surface-200);
+  border: 1px solid var(--p-surface-300);
+  border-radius: 18px 18px 4px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  max-width: 78%;
+  float: right;
+  clear: both;
+  font-size: var(--text-sm);
+  color: var(--p-text-color);
+}
+
 .content {
+  clear: both;
   white-space: pre-wrap;
   word-break: break-word;
+  margin-bottom: 1rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .error-message {

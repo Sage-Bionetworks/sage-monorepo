@@ -106,6 +106,7 @@ describe('BattleStateService', () => {
     beforeEach(async () => {
       await service.submitPrompt('test');
       service.model1Stream.set({
+        messages: [],
         text: 'done',
         status: 'complete',
         finishReason: 'stop',
@@ -113,6 +114,7 @@ describe('BattleStateService', () => {
         isSlowHint: false,
       });
       service.model2Stream.set({
+        messages: [],
         text: 'done',
         status: 'complete',
         finishReason: 'stop',
@@ -140,6 +142,7 @@ describe('BattleStateService', () => {
   describe('computed signals', () => {
     it('bothComplete should be true when both streams are done', () => {
       service.model1Stream.set({
+        messages: [],
         text: '',
         status: 'complete',
         finishReason: 'stop',
@@ -147,6 +150,7 @@ describe('BattleStateService', () => {
         isSlowHint: false,
       });
       service.model2Stream.set({
+        messages: [],
         text: '',
         status: 'error',
         finishReason: null,
@@ -158,6 +162,7 @@ describe('BattleStateService', () => {
 
     it('bothComplete should be false when one stream is still going', () => {
       service.model1Stream.set({
+        messages: [],
         text: '',
         status: 'complete',
         finishReason: 'stop',
@@ -165,6 +170,7 @@ describe('BattleStateService', () => {
         isSlowHint: false,
       });
       service.model2Stream.set({
+        messages: [],
         text: '',
         status: 'streaming',
         finishReason: null,
