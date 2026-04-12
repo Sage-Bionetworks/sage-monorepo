@@ -28,14 +28,15 @@ export class BattleComponent implements OnDestroy {
   readonly hoverSide = signal<'model1' | 'model2' | 'tie' | null>(null);
   readonly promptUseLimit = inject(ConfigService).config.battle.promptUseLimit;
   readonly promptUseDots = Array.from({ length: this.promptUseLimit }, (_, i) => i + 1);
-  readonly currentBattleNumber = computed(() => {
-    const remaining = this.state.promptUsesRemaining();
-    const phase = this.state.phase();
-    // After voting, remaining decrements but the next battle hasn't started yet
-    if (phase === 'reveal' || phase === 'error') {
-      return this.promptUseLimit - remaining;
-    }
-    return this.promptUseLimit - remaining + 1;
+
+  readonly completedBattles = computed(
+    () => this.promptUseLimit - this.state.promptUsesRemaining(),
+  );
+
+  readonly currentBattle = computed(() => {
+    const completed = this.completedBattles();
+    // On reveal, remaining already decremented — show the just-completed battle
+    return this.state.phase() === 'reveal' ? completed : completed + 1;
   });
 
   onPromptSubmit(prompt: string): void {
@@ -47,12 +48,12 @@ export class BattleComponent implements OnDestroy {
   }
 
   onNewBattle(): void {
-    this.state.newBattle();
+    this.state.reset();
   }
 
   onSamePrompt(): void {
     const prompt = this.state.lastPrompt();
-    if (prompt) {
+    if (prompt && this.state.promptUsesRemaining() > 0) {
       this.state.newBattle(prompt);
     }
   }

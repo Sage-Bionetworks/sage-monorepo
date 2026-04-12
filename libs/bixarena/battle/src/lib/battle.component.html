@@ -26,12 +26,12 @@
         @for (i of promptUseDots; track i) {
           <span
             class="rd"
-            [class.done]="i < currentBattleNumber()"
-            [class.now]="i === currentBattleNumber()"
-            [class.fut]="i > currentBattleNumber()"
+            [class.done]="i <= completedBattles()"
+            [class.now]="i === currentBattle()"
+            [class.fut]="i > currentBattle()"
           ></span>
         }
-        <span class="rl">Battle {{ currentBattleNumber() }} of {{ promptUseLimit }}</span>
+        <span class="rl">Battle {{ currentBattle() }} of {{ promptUseLimit }}</span>
       </div>
       <div class="panels">
         <bixarena-model-panel
