@@ -34,6 +34,7 @@ export class ModelPanelComponent {
 
   readonly bodyEl = viewChild<ElementRef<HTMLDivElement>>('body');
   private userScrolled = false;
+  private programmaticScroll = false;
 
   readonly displayText = computed(() => {
     const state = this.streamState();
@@ -63,7 +64,7 @@ export class ModelPanelComponent {
 
   constructor() {
     effect(() => {
-      this.displayText();
+      this.streamState();
       if (!this.userScrolled) {
         requestAnimationFrame(() => this.scrollToBottom());
       }
@@ -71,6 +72,7 @@ export class ModelPanelComponent {
   }
 
   onScroll(event: Event): void {
+    if (this.programmaticScroll) return;
     const el = event.target as HTMLDivElement;
     const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
     this.userScrolled = !atBottom;
@@ -79,7 +81,10 @@ export class ModelPanelComponent {
   private scrollToBottom(): void {
     const el = this.bodyEl()?.nativeElement;
     if (el) {
+      this.programmaticScroll = true;
       el.scrollTop = el.scrollHeight;
+      // Reset after smooth scroll completes
+      requestAnimationFrame(() => (this.programmaticScroll = false));
     }
   }
 }
