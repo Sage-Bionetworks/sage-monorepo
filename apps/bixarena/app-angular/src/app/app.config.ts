@@ -15,6 +15,7 @@ import { BixArenaPreset } from '@sagebionetworks/bixarena/styles';
 import { AuthService, ThemeService } from '@sagebionetworks/bixarena/services';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { providePrimeNG } from 'primeng/config';
+import { provideMarkdown } from 'ngx-markdown';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -64,5 +65,6 @@ export const appConfig: ApplicationConfig = {
       [ConfigService],
     ),
     provideGtmId(),
+    provideMarkdown(),
   ],
 };

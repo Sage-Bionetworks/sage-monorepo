@@ -15,7 +15,9 @@
       @if (msg.role === 'user') {
         <div class="user-msg">{{ msg.content }}</div>
       } @else {
-        <div class="content">{{ msg.content }}</div>
+        <div class="content">
+          <markdown [data]="msg.content" />
+        </div>
       }
     }
     <div
@@ -45,7 +47,9 @@
     @if (streamState().status === 'error') {
       <div class="error-message">{{ streamState().errorMessage }}</div>
     } @else if (streamState().text) {
-      <div class="content">{{ displayText() }}</div>
+      <div class="content">
+        <markdown [data]="displayText()" />
+      </div>
     }
   </div>
   @if (revealedName()) {

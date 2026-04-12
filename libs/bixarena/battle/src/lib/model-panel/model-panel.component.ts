@@ -1,9 +1,11 @@
 import { Component, computed, effect, ElementRef, input, viewChild } from '@angular/core';
+import { MarkdownComponent } from 'ngx-markdown';
 import { ModelStreamState } from '../battle.types';
 import { STREAM_CURSOR } from '../battle.constants';
 
 @Component({
   selector: 'bixarena-model-panel',
+  imports: [MarkdownComponent],
   templateUrl: './model-panel.component.html',
   styleUrl: './model-panel.component.scss',
 })
