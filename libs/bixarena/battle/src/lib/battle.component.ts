@@ -33,9 +33,10 @@ export class BattleComponent implements OnDestroy {
     () => this.promptUseLimit - this.state.promptUsesRemaining(),
   );
 
+  // On reveal, promptUsesRemaining already decremented so completedMatches is accurate.
+  // During active phases, add 1 to show the in-progress match number.
   readonly currentMatch = computed(() => {
     const completed = this.completedMatches();
-    // On reveal, remaining already decremented — show the just-completed match
     return this.state.phase() === 'reveal' ? completed : completed + 1;
   });
 

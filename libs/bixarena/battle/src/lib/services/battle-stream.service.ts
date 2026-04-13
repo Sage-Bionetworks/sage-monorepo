@@ -43,6 +43,7 @@ export class BattleStreamService {
 
               buffer += decoder.decode(value, { stream: true });
 
+              // SSE frames are double-newline delimited; last element is a partial frame kept in buffer
               const events = buffer.split('\n\n');
               buffer = events.pop() ?? '';
 
@@ -66,11 +67,13 @@ export class BattleStreamService {
           subscriber.complete();
         })
         .catch((err) => {
+          // AbortError is expected when the Observable is unsubscribed
           if (err.name !== 'AbortError') {
             subscriber.error(err);
           }
         });
 
+      // Teardown: abort fetch when the Observable is unsubscribed
       return () => controller.abort();
     });
   }

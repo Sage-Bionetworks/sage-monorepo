@@ -11,6 +11,30 @@ import { BattlePhase, INITIAL_STREAM_STATE, ModelStreamState } from '../battle.t
 import { SLOW_MODEL_THRESHOLD_MS, MODEL_TIMEOUT_MS } from '../battle.constants';
 import { BattleStreamService } from './battle-stream.service';
 
+/**
+ * BattleStateService — orchestrates the battle lifecycle.
+ *
+ * Phase state machine:
+ *   landing  --[submitPrompt]--> creating
+ *   creating --[API success]---> streaming
+ *   creating --[API error]-----> error
+ *   streaming -[both complete]-> voting   (no model errored)
+ *   streaming -[both complete]-> error    (any model errored)
+ *   voting   --[submitVote]----> reveal
+ *   reveal   --[newBattle]-----> creating ("same question new matchup")
+ *   reveal   --[reset]---------> landing  ("new battle")
+ *   error    --[newBattle]-----> creating
+ *   error    --[reset]---------> landing
+ *
+ * Dot rail (same-question matchup tracking):
+ *   promptUsesRemaining decrements on each vote. Budget resets only
+ *   when the user types a genuinely new prompt. Errors don't decrement.
+ *
+ * Timeouts (two-tier):
+ *   SLOW_MODEL_THRESHOLD_MS - soft UI hint ("Taking longer than expected")
+ *   MODEL_TIMEOUT_MS        - hard cutoff (forces error status)
+ *   Both clear on first received chunk.
+ */
 @Injectable()
 export class BattleStateService {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -34,12 +58,14 @@ export class BattleStateService {
   readonly promptUsesRemaining = signal(0);
   readonly selectedOutcome = signal<BattleEvaluationOutcome | null>(null);
 
+  // Gates transition to voting/error phase
   readonly bothComplete = computed(() => {
     const s1 = this.model1Stream().status;
     const s2 = this.model2Stream().status;
     return (s1 === 'complete' || s1 === 'error') && (s2 === 'complete' || s2 === 'error');
   });
 
+  // Voting allowed when at least one model succeeded (both-error goes to error phase instead)
   readonly canVote = computed(
     () =>
       this.phase() === 'voting' &&
@@ -66,6 +92,7 @@ export class BattleStateService {
   async submitPrompt(prompt: string): Promise<void> {
     if (!this.isBrowser) return;
 
+    // First use of a prompt gets full reuse budget; same prompt does not reset it
     const isNewPrompt = prompt !== this.lastPrompt();
     if (isNewPrompt) {
       this.promptUsesRemaining.set(this.config.battle.promptUseLimit);
@@ -75,6 +102,7 @@ export class BattleStateService {
     this.phase.set('creating');
     this.selectedOutcome.set(null);
 
+    // Carry forward chat history so follow-up rounds show prior messages
     const userMsg = { role: 'user' as const, content: prompt };
     const prev1 = this.model1Stream().messages;
     const prev2 = this.model2Stream().messages;
@@ -147,12 +175,13 @@ export class BattleStateService {
     this.phase.set('reveal');
     this.isVoting = false;
 
-    // Best-effort: record battle end time (may race with async validation)
+    // Best-effort: record battle end time (backend validation may update the battle concurrently)
     firstValueFrom(this.battleApi.updateBattle(battleId, { endedAt: new Date().toISOString() }))
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       .catch(() => {});
   }
 
+  // "Same question new matchup": reset streams but keep lastPrompt so reuse budget continues
   async newBattle(prompt?: string): Promise<void> {
     this.cleanupStreams();
     this.model1Stream.set({ ...INITIAL_STREAM_STATE });
@@ -205,6 +234,7 @@ export class BattleStateService {
 
     return this.streamService.streamCompletion(battleId, roundId, modelId).subscribe({
       next: (chunk) => {
+        // First chunk arrived — cancel slow/timeout timers
         this.clearTimeouts(streamSignal === this.model1Stream ? 'model1' : 'model2');
 
         if (chunk.status === 'streaming' && chunk.content) {
@@ -216,6 +246,7 @@ export class BattleStateService {
             isSlowHint: false,
           });
         } else if (chunk.status === 'complete') {
+          // Move accumulated text into messages array and clear streaming text
           const current = streamSignal();
           streamSignal.set({
             ...current,

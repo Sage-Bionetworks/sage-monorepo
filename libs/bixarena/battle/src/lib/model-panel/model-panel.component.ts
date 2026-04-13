@@ -79,8 +79,9 @@ export class ModelPanelComponent {
 
   constructor() {
     if (this.isBrowser) {
+      // Auto-scroll to bottom on every stream state change, unless user has scrolled up
       effect(() => {
-        this.streamState(); // Register dependency to trigger on every chunk
+        this.streamState(); // Read to register signal dependency
         if (!this.userScrolled) {
           requestAnimationFrame(() => this.scrollToBottom());
         }
@@ -88,6 +89,7 @@ export class ModelPanelComponent {
     }
   }
 
+  // Detect manual scroll: if user scrolls away from bottom, stop auto-scrolling
   onScroll(event: Event): void {
     if (this.programmaticScroll) return;
     const el = event.target as HTMLDivElement;
@@ -98,9 +100,9 @@ export class ModelPanelComponent {
   private scrollToBottom(): void {
     const el = this.bodyEl()?.nativeElement;
     if (el) {
+      // Flag prevents onScroll from treating our scrollTo as a user-initiated scroll
       this.programmaticScroll = true;
       el.scrollTop = el.scrollHeight;
-      // Reset after smooth scroll completes
       requestAnimationFrame(() => (this.programmaticScroll = false));
     }
   }
