@@ -17,7 +17,8 @@ import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
 import { combineLatest } from 'rxjs';
-import { AppCookieService } from './app-cookie.service';
+import { VALID_PAGE_SIZES } from './app-storage.constants';
+import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
 import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
@@ -31,7 +32,7 @@ export class ComparisonToolService<T> {
   private readonly destroyRef = inject(DestroyRef);
   private readonly helperService = inject(ComparisonToolHelperService);
   private readonly coordinatorService = inject(ComparisonToolCoordinatorService);
-  private readonly appCookieService = inject(AppCookieService);
+  private readonly appStorageService = inject(AppStorageService);
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
@@ -60,7 +61,6 @@ export class ComparisonToolService<T> {
       sizeChartUpperLabel: '',
       sizeChartText: '',
     },
-    rowsPerPage: 10,
     rowIdDataKey: '_id',
     allowPinnedImageDownload: true,
     linkExportField: 'link_url',
@@ -71,7 +71,7 @@ export class ComparisonToolService<T> {
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly isVisualizationOverviewVisibleSignal = signal(
-    !this.appCookieService.isVisualizationOverviewHidden(),
+    !this.appStorageService.isVisualizationOverviewHidden(),
   );
   private readonly maxPinnedItemsSignal = signal<number>(50);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
@@ -83,7 +83,7 @@ export class ComparisonToolService<T> {
     categories: [],
     pinnedItems: [],
     pageNumber: this.FIRST_PAGE_NUMBER,
-    pageSize: 10,
+    pageSize: this.appStorageService.getPageSize(),
     multiSortMeta: this.DEFAULT_MULTI_SORT_META,
     searchTerm: null,
     filters: [],
@@ -123,6 +123,7 @@ export class ComparisonToolService<T> {
   readonly pinnedItems = computed(() => this.querySignal().pinnedItems);
   readonly pageNumber = computed(() => this.querySignal().pageNumber);
   readonly pageSize = computed(() => this.querySignal().pageSize);
+  readonly pageSizeOptions = VALID_PAGE_SIZES;
   readonly multiSortMeta = computed(() => this.querySignal().multiSortMeta);
   readonly searchTerm = computed(() => this.querySignal().searchTerm);
   readonly filters = computed(() => this.querySignal().filters);
@@ -175,6 +176,11 @@ export class ComparisonToolService<T> {
 
     if (this.isInitialized()) {
       // Re-entering an already-initialized service (navigating back to this CT)
+      // Sync the cached page size in case it was changed from another CT
+      const cachedPageSize = this.appStorageService.getPageSize();
+      if (cachedPageSize !== this.pageSize()) {
+        this.updateQuery({ pageSize: cachedPageSize, pageNumber: this.FIRST_PAGE_NUMBER });
+      }
       // Restore this CT's cached state and sync to the URL, ignoring URL params from other CTs
       this.scheduleUrlSyncFromCurrentState();
       return;
@@ -471,15 +477,15 @@ export class ComparisonToolService<T> {
   }
 
   /**
-   * Checks the global cookie to determine if the user has chosen to hide
+   * Checks localStorage to determine if the user has chosen to hide
    * the visualization overview panel across all comparison tools.
    */
   isVisualizationOverviewHiddenByUser(): boolean {
-    return this.appCookieService.isVisualizationOverviewHidden();
+    return this.appStorageService.isVisualizationOverviewHidden();
   }
 
   setVisualizationOverviewHiddenByUser(hidden: boolean): void {
-    this.appCookieService.setVisualizationOverviewHidden(hidden);
+    this.appStorageService.setVisualizationOverviewHidden(hidden);
   }
 
   isPinned(id: string): boolean {
@@ -595,10 +601,14 @@ export class ComparisonToolService<T> {
       ...current,
       ...query,
     }));
+
+    if (query.pageSize !== undefined) {
+      this.appStorageService.setPageSize(query.pageSize);
+    }
   }
 
   handleLazyLoad(event: TableLazyLoadEvent) {
-    const defaultRowsPerPage = this.viewConfigSignal().rowsPerPage;
+    const defaultRowsPerPage = this.pageSize();
     const { pageNumber, pageSize } = this.helperService.getPaginationParams(
       event,
       defaultRowsPerPage,

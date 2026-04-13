@@ -3,6 +3,7 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
+  DEFAULT_PAGE_SIZE,
   PlatformService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
@@ -41,7 +42,7 @@ function mockPage(rows: GeneExpression[]): GeneExpressionsPage {
     geneExpressions: rows,
     page: {
       number: 0,
-      size: 10,
+      size: DEFAULT_PAGE_SIZE,
       totalElements: rows.length,
       totalPages: 1,
       hasNext: false,
@@ -101,7 +102,7 @@ describe('GeneExpressionComparisonToolComponent', () => {
       pinnedItems: [],
       multiSortMeta: [],
       pageNumber: 0,
-      pageSize: 10,
+      pageSize: DEFAULT_PAGE_SIZE,
       searchTerm: '',
       categories: [],
       filters: [],
@@ -130,7 +131,7 @@ describe('GeneExpressionComparisonToolComponent', () => {
       pinnedItems: [],
       multiSortMeta: [],
       pageNumber: 0,
-      pageSize: 10,
+      pageSize: DEFAULT_PAGE_SIZE,
       searchTerm: '',
       categories: [],
       filters: [],

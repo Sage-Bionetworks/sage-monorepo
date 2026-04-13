@@ -66,7 +66,6 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
       window.open(url, '_blank');
     },
     legendEnabled: false,
-    rowsPerPage: 10,
     rowIdDataKey: 'hgnc_symbol',
     allowPinnedImageDownload: false,
     defaultSort: [

@@ -1,8 +1,9 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
 import {
-  AppCookieService,
+  AppStorageService,
   ComparisonToolService,
+  DEFAULT_PAGE_SIZE,
   provideComparisonToolService,
   provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
@@ -16,9 +17,11 @@ import { MessageService } from 'primeng/api';
 import { VisualizationOverviewPanelComponent } from './visualization-overview-panel.component';
 
 describe('VisualizationOverviewPanelComponent', () => {
-  const createMockCookieService = (isHidden = false) => ({
+  const createMockStorageService = (isHidden = false) => ({
     isVisualizationOverviewHidden: jest.fn().mockReturnValue(isHidden),
     setVisualizationOverviewHidden: jest.fn(),
+    getPageSize: jest.fn().mockReturnValue(DEFAULT_PAGE_SIZE),
+    setPageSize: jest.fn(),
   });
 
   async function setup(options?: {
@@ -27,14 +30,14 @@ describe('VisualizationOverviewPanelComponent', () => {
     visualizationOverviewPanes?: VisualizationOverviewPane[];
   }) {
     const user = userEvent.setup();
-    const mockCookieService = createMockCookieService(options?.isHidden);
+    const mockStorageService = createMockStorageService(options?.isHidden);
     const panes = options?.visualizationOverviewPanes ?? mockVisualizationOverviewPanes;
 
     const { fixture } = await render(VisualizationOverviewPanelComponent, {
       providers: [
         provideNoopAnimations(),
         MessageService,
-        { provide: AppCookieService, useValue: mockCookieService },
+        { provide: AppStorageService, useValue: mockStorageService },
         provideExplorersConfig({ visualizationOverviewPanes: panes }),
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
@@ -62,7 +65,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       fixture,
       user,
       comparisonToolService,
-      mockCookieService,
+      mockStorageService,
       setVisualizationOverviewVisibilitySpy,
     };
   }
@@ -204,38 +207,38 @@ describe('VisualizationOverviewPanelComponent', () => {
   describe('Checkbox "Don\'t show this again"', () => {
     it('should render checkbox with label', async () => {
       await setup();
-      expect(screen.getByLabelText(/not to show this again/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/don't show this again/i)).toBeInTheDocument();
     });
 
-    it('should initialize checkbox as unchecked when cookie is empty', async () => {
+    it('should initialize checkbox as unchecked when localStorage is empty', async () => {
       await setup({ isHidden: false });
-      const checkbox = screen.getByLabelText(/not to show this again/i) as HTMLInputElement;
+      const checkbox = screen.getByLabelText(/don't show this again/i) as HTMLInputElement;
       expect(checkbox.checked).toBe(false);
     });
 
-    it('should initialize checkbox as checked when cookie is "1"', async () => {
+    it('should initialize checkbox as checked when localStorage is "true"', async () => {
       const { fixture } = await setup({ isHidden: true, isVisible: true });
       fixture.detectChanges();
-      const checkbox = screen.getByLabelText(/not to show this again/i) as HTMLInputElement;
+      const checkbox = screen.getByLabelText(/don't show this again/i) as HTMLInputElement;
       expect(checkbox.checked).toBe(true);
     });
 
-    it('should save cookie immediately when checkbox is clicked', async () => {
-      const { user, mockCookieService } = await setup({ isHidden: false });
-      const checkbox = screen.getByLabelText(/not to show this again/i);
+    it('should save preference immediately when checkbox is clicked', async () => {
+      const { user, mockStorageService } = await setup({ isHidden: false });
+      const checkbox = screen.getByLabelText(/don't show this again/i);
 
       await user.click(checkbox);
 
-      expect(mockCookieService.setVisualizationOverviewHidden).toHaveBeenCalledWith(true);
+      expect(mockStorageService.setVisualizationOverviewHidden).toHaveBeenCalledWith(true);
     });
 
-    it('should delete cookie when unchecking checkbox', async () => {
-      const { user, mockCookieService } = await setup({ isHidden: true, isVisible: true });
-      const checkbox = screen.getByLabelText(/not to show this again/i);
+    it('should clear preference when unchecking checkbox', async () => {
+      const { user, mockStorageService } = await setup({ isHidden: true, isVisible: true });
+      const checkbox = screen.getByLabelText(/don't show this again/i);
 
       await user.click(checkbox);
 
-      expect(mockCookieService.setVisualizationOverviewHidden).toHaveBeenCalledWith(false);
+      expect(mockStorageService.setVisualizationOverviewHidden).toHaveBeenCalledWith(false);
     });
   });
 
@@ -267,8 +270,8 @@ describe('VisualizationOverviewPanelComponent', () => {
     });
   });
 
-  describe('Cookie Initialization', () => {
-    it('should hide dialog when cookie value is "1"', async () => {
+  describe('localStorage Initialization', () => {
+    it('should hide dialog when stored value is "true"', async () => {
       const { component, comparisonToolService } = await setup({
         isHidden: true,
       });
@@ -277,17 +280,17 @@ describe('VisualizationOverviewPanelComponent', () => {
       expect(comparisonToolService.isVisualizationOverviewVisible()).toBe(false);
     });
 
-    it('should show dialog when cookie value is empty', async () => {
-      const { component, comparisonToolService, mockCookieService } = await setup({
+    it('should show dialog when stored value is empty', async () => {
+      const { component, comparisonToolService, mockStorageService } = await setup({
         isHidden: false,
       });
 
-      expect(mockCookieService.isVisualizationOverviewHidden).toHaveBeenCalled();
+      expect(mockStorageService.isVisualizationOverviewHidden).toHaveBeenCalled();
       expect(component.willHide).toBe(false);
       expect(comparisonToolService.isVisualizationOverviewVisible()).toBe(true);
     });
 
-    it('should show dialog when cookie value is "0"', async () => {
+    it('should show dialog when stored value is "0"', async () => {
       const { component, comparisonToolService } = await setup({
         isHidden: false,
       });

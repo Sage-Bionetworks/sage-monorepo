@@ -5,7 +5,7 @@
       [rows]="pageSize()"
       [totalRecords]="totalResultsCount()"
       [first]="first()"
-      [rowsPerPageOptions]="[10, 25, 50]"
+      [rowsPerPageOptions]="pageSizeOptions"
       [showCurrentPageReport]="true"
       currentPageReportTemplate="{first}-{last} of {totalRecords}"
       (onPageChange)="onPageChange($event)"
