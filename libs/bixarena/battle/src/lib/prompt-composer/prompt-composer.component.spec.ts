@@ -52,12 +52,12 @@ describe('PromptComposerComponent', () => {
 
   it('isHot should be true when text is non-empty and not disabled', () => {
     component.text.set('hello');
-    expect(component.isHot).toBe(true);
+    expect(component.isHot()).toBe(true);
   });
 
   it('isHot should be false when disabled', () => {
     fixture.componentRef.setInput('disabled', true);
     component.text.set('hello');
-    expect(component.isHot).toBe(false);
+    expect(component.isHot()).toBe(false);
   });
 });
