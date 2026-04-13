@@ -49,8 +49,12 @@ export class BattleStreamService {
               for (const event of events) {
                 for (const line of event.split('\n')) {
                   if (line.startsWith('data: ')) {
-                    const chunk = JSON.parse(line.slice(6)) as ModelChatCompletionChunk;
-                    subscriber.next(chunk);
+                    try {
+                      const chunk = JSON.parse(line.slice(6)) as ModelChatCompletionChunk;
+                      subscriber.next(chunk);
+                    } catch {
+                      // Skip malformed SSE chunk
+                    }
                   }
                 }
               }

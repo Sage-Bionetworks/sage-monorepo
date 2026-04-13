@@ -1,5 +1,16 @@
-import { Component, computed, effect, ElementRef, input, viewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  PLATFORM_ID,
+  viewChild,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { MarkdownComponent } from 'ngx-markdown';
+import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
 import { ModelStreamState } from '../battle.types';
 import { STREAM_CURSOR } from '../battle.constants';
 
@@ -10,12 +21,14 @@ import { STREAM_CURSOR } from '../battle.constants';
   styleUrl: './model-panel.component.scss',
 })
 export class ModelPanelComponent {
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   readonly label = input.required<string>();
   readonly modelId = input.required<'model1' | 'model2'>();
   readonly streamState = input.required<ModelStreamState>();
   readonly revealedName = input<string | null>(null);
-  readonly selectedOutcome = input<string | null>(null);
-  readonly hoveredModel = input<string | null>(null);
+  readonly selectedOutcome = input<BattleEvaluationOutcome | null>(null);
+  readonly hoveredModel = input<'model1' | 'model2' | 'tie' | null>(null);
 
   readonly isSelected = computed(() => {
     const o = this.selectedOutcome();
@@ -65,12 +78,14 @@ export class ModelPanelComponent {
   });
 
   constructor() {
-    effect(() => {
-      this.streamState();
-      if (!this.userScrolled) {
-        requestAnimationFrame(() => this.scrollToBottom());
-      }
-    });
+    if (this.isBrowser) {
+      effect(() => {
+        this.streamState(); // Register dependency to trigger on every chunk
+        if (!this.userScrolled) {
+          requestAnimationFrame(() => this.scrollToBottom());
+        }
+      });
+    }
   }
 
   onScroll(event: Event): void {

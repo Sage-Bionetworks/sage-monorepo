@@ -1,6 +1,6 @@
-import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
+import { computed, DestroyRef, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import {
   BattleService as BattleApiService,
   BattleEvaluationOutcome,
@@ -17,6 +17,10 @@ export class BattleStateService {
   private readonly battleApi = inject(BattleApiService);
   private readonly streamService = inject(BattleStreamService);
   private readonly config = inject(ConfigService).config;
+
+  constructor() {
+    inject(DestroyRef).onDestroy(() => this.cleanupStreams());
+  }
 
   readonly phase = signal<BattlePhase>('landing');
   readonly battleId = signal<string | null>(null);
@@ -86,7 +90,9 @@ export class BattleStateService {
     });
 
     try {
-      const battle = await this.battleApi.createBattle({ title: prompt.slice(0, 50) }).toPromise();
+      const battle = await firstValueFrom(
+        this.battleApi.createBattle({ title: prompt.slice(0, 50) }),
+      );
 
       if (!battle) throw new Error('Failed to create battle');
 
@@ -94,11 +100,11 @@ export class BattleStateService {
       this.model1.set(battle.model1);
       this.model2.set(battle.model2);
 
-      const round = await this.battleApi
-        .createBattleRound(battle.id, {
+      const round = await firstValueFrom(
+        this.battleApi.createBattleRound(battle.id, {
           promptMessage: { role: 'user', content: prompt },
-        })
-        .toPromise();
+        }),
+      );
 
       if (!round) throw new Error('Failed to create round');
 
@@ -107,6 +113,17 @@ export class BattleStateService {
 
       this.startStreaming(battle.id, round.id, battle.model1.id, battle.model2.id);
     } catch {
+      // Reset streams so panels don't show stale "Connecting..." status
+      this.model1Stream.set({
+        ...INITIAL_STREAM_STATE,
+        status: 'error',
+        errorMessage: 'Failed to start battle',
+      });
+      this.model2Stream.set({
+        ...INITIAL_STREAM_STATE,
+        status: 'error',
+        errorMessage: 'Failed to start battle',
+      });
       this.phase.set('error');
     }
   }
@@ -119,7 +136,7 @@ export class BattleStateService {
 
     this.isVoting = true;
     try {
-      await this.battleApi.createBattleEvaluation(battleId, { outcome }).toPromise();
+      await firstValueFrom(this.battleApi.createBattleEvaluation(battleId, { outcome }));
     } catch {
       this.isVoting = false;
       return; // Evaluation failed — stay in voting phase
@@ -131,9 +148,7 @@ export class BattleStateService {
     this.isVoting = false;
 
     // Best-effort: record battle end time (may race with async validation)
-    this.battleApi
-      .updateBattle(battleId, { endedAt: new Date().toISOString() })
-      .toPromise()
+    firstValueFrom(this.battleApi.updateBattle(battleId, { endedAt: new Date().toISOString() }))
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       .catch(() => {});
   }

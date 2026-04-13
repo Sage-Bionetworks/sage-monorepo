@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
+import { BattlePhase } from '../battle.types';
 
 @Component({
   selector: 'bixarena-voting-bar',
@@ -10,7 +11,7 @@ export class VotingBarComponent {
   readonly canVote = input(false);
   readonly canReuse = input(false);
   readonly promptUsesRemaining = input(0);
-  readonly phase = input.required<string>();
+  readonly phase = input.required<BattlePhase>();
 
   readonly vote = output<BattleEvaluationOutcome>();
   readonly hoverSide = output<'model1' | 'model2' | 'tie' | null>();

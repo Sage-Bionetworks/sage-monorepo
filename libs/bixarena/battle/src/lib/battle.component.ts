@@ -42,11 +42,11 @@ export class BattleComponent implements OnDestroy {
   readonly allMatchesComplete = computed(() => this.completedMatches() >= this.promptUseLimit);
 
   onPromptSubmit(prompt: string): void {
-    this.state.submitPrompt(prompt);
+    void this.state.submitPrompt(prompt);
   }
 
   onVote(outcome: BattleEvaluationOutcome): void {
-    this.state.submitVote(outcome);
+    void this.state.submitVote(outcome);
   }
 
   onNewBattle(): void {

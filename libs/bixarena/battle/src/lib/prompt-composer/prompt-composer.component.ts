@@ -1,4 +1,4 @@
-import { Component, ElementRef, input, output, signal, viewChild } from '@angular/core';
+import { Component, computed, ElementRef, input, output, signal, viewChild } from '@angular/core';
 
 @Component({
   selector: 'bixarena-prompt-composer',
@@ -15,9 +15,7 @@ export class PromptComposerComponent {
   readonly text = signal('');
   readonly textareaEl = viewChild<ElementRef<HTMLTextAreaElement>>('textarea');
 
-  get isHot(): boolean {
-    return this.text().trim().length > 0 && !this.disabled();
-  }
+  readonly isHot = computed(() => this.text().trim().length > 0 && !this.disabled());
 
   onInput(event: Event): void {
     const el = event.target as HTMLTextAreaElement;
