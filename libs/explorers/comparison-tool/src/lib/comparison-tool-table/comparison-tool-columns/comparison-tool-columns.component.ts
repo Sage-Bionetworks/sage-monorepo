@@ -12,6 +12,7 @@ import { SortEvent } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { MIN_COLUMN_WIDTH } from '../comparison-tool-table.constants';
+import { measureHeaderContentWidth } from '../comparison-tool-table.utils';
 
 @Component({
   selector: 'explorers-comparison-tool-columns',
@@ -121,17 +122,11 @@ export class ComparisonToolColumnsComponent {
     container.style.setProperty(cssVar, '0px');
     void container.offsetWidth; // force synchronous reflow
 
-    // Measure header width via .column-header.scrollWidth + .column-header-sort.scrollWidth.
-    // Both have overflow:hidden, so scrollWidth reports the full content width even
-    // when collapsed. The sort div collapses to 0 (min-width:0) so we measure it separately.
+    // Measure header width by summing the text, sort area, and padding.
     const th = container.querySelector(`th:nth-child(${columnIndex + 1})`) as HTMLElement | null;
     let maxWidth = MIN_COLUMN_WIDTH;
     if (th) {
-      const header = th.querySelector('.column-header') as HTMLElement | null;
-      const sortDiv = th.querySelector('.column-header-sort') as HTMLElement | null;
-      const headerWidth = header ? header.scrollWidth : 0;
-      const sortWidth = sortDiv ? sortDiv.scrollWidth : 0;
-      maxWidth = Math.max(maxWidth, headerWidth + sortWidth);
+      maxWidth = Math.max(maxWidth, measureHeaderContentWidth(th));
     }
 
     // Measure body <td> cells

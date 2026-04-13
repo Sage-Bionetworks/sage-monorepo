@@ -21,6 +21,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
 import { MIN_COLUMN_WIDTH } from './comparison-tool-table.constants';
+import { measureHeaderContentWidth } from './comparison-tool-table.utils';
 
 @Component({
   selector: 'explorers-comparison-tool-table',
@@ -162,32 +163,22 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   }
 
   /**
-   * Temporarily collapses all columns to 0 and reads each .column-header's
-   * scrollWidth plus .column-header-sort's scrollWidth. Both have overflow:hidden,
-   * so scrollWidth reports their full content width even when collapsed to 0px.
+   * Temporarily collapses all columns to 0 and measures each header's
+   * natural content width by summing the text, sort area, and padding.
    */
   private measureHeaderWidths(container: HTMLElement, colCount: number): number[] {
     const widths: number[] = [];
 
-    // Shrink all columns to 0 so headers overflow
+    // Shrink all columns to 0 so content overflows
     for (let i = 0; i < colCount; i++) {
       container.style.setProperty(`--ct-col-${i}-width`, '0px');
     }
 
     void container.offsetWidth; // single reflow for all columns
 
-    // Read widths from .column-header.scrollWidth + .column-header-sort.scrollWidth
     for (let i = 0; i < colCount; i++) {
       const th = container.querySelector(`th:nth-child(${i + 1})`) as HTMLElement | null;
-      if (th) {
-        const header = th.querySelector('.column-header') as HTMLElement | null;
-        const sortDiv = th.querySelector('.column-header-sort') as HTMLElement | null;
-        const headerWidth = header ? header.scrollWidth : 0;
-        const sortWidth = sortDiv ? sortDiv.scrollWidth : 0;
-        widths.push(Math.max(headerWidth + sortWidth, MIN_COLUMN_WIDTH));
-      } else {
-        widths.push(MIN_COLUMN_WIDTH);
-      }
+      widths.push(th ? measureHeaderContentWidth(th) : MIN_COLUMN_WIDTH);
     }
 
     return widths;
