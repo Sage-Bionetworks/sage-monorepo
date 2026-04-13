@@ -177,7 +177,7 @@ RUN pipx ensurepath \
   && pipx install uv=="${uvVersion}"
 
 # Install Claude Code.
-RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN curl -fsSL https://claude.ai/install.sh | bash -s stable
 
 # Prepare the user's environment.
 RUN usermod --shell /bin/bash $user \
