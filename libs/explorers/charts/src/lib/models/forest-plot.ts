@@ -25,6 +25,5 @@ export interface ForestPlotProps {
   showCILabels?: boolean; // show ciLeft/ciRight values as text next to line
   // Optional formatter for CI label text; defaults to toPrecision(2)
   ciLabelFormatter?: (value: number) => string;
-  showGridLines?: boolean; // show all vertical grid lines (default: only zero line)
   noDataStyle?: 'textOnly' | 'grayBackground';
 }

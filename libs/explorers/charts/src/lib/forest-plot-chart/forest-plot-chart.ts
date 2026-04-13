@@ -6,13 +6,19 @@ import { initChart, setNoDataOption } from '../utils';
 // --- Styling constants ---
 const LINE_COLOR = '#8b8ad1';
 const LINE_WIDTH = 1.5;
-const CAP_HEIGHT = 8;
 const POINT_SIZE = 18;
-const CI_TEXT_FONT_SIZE = 12;
-const CI_TEXT_COLOR = '#63676c';
+const CI_TEXT_FONT_SIZE = 14;
+const CI_TEXT_COLOR = '#4a5056';
 const ZERO_LINE_COLOR = '#BCC0CA';
 const ZERO_LINE_WIDTH = 2;
+const AXIS_LINE_COLOR = '#989898';
+const AXIS_TICK_LABEL_COLOR = '#000';
 
+const X_AXIS_LABEL_TEXT_STYLE = { color: AXIS_TICK_LABEL_COLOR, fontSize: 14 };
+const Y_AXIS_LABEL_TEXT_STYLE = { color: AXIS_TICK_LABEL_COLOR, fontSize: 14 };
+const TITLE_TEXT_STYLE = { color: '#2a2f35', fontSize: 14, fontWeight: 'bold' as const };
+
+// --- Layout constants ---
 const GRID = { top: 20, right: 80, bottom: 40, containLabel: true };
 
 const TOOLTIP: EChartsOption['tooltip'] = {
@@ -22,13 +28,9 @@ const TOOLTIP: EChartsOption['tooltip'] = {
   borderColor: 'transparent',
 };
 
-const X_AXIS_LABEL_TEXT_STYLE = { color: '#63676c', fontSize: 12 };
-const Y_AXIS_LABEL_TEXT_STYLE = { color: '#63676c', fontSize: 12 };
-const TITLE_TEXT_STYLE = { color: '#2a2f35', fontSize: 14, fontWeight: 'bold' as const };
-
 // Height: ~44px per row + 80px margins
-export function computeInitialHeight(n: number): string {
-  return `${Math.max(n * 44 + 80, 200)}px`;
+export function computeInitialHeight(rowCount: number): string {
+  return `${Math.max(rowCount * 44 + 80, 200)}px`;
 }
 
 // Symmetric bounds from max(|ciLeft|, |ciRight|) ×1.1
@@ -36,13 +38,15 @@ export function computeXBounds(props: ForestPlotProps): [number, number] {
   if (props.xAxisMin !== undefined && props.xAxisMax !== undefined) {
     return [props.xAxisMin, props.xAxisMax];
   }
-  const maxAbs = Math.max(...props.items.flatMap((i) => [Math.abs(i.ciLeft), Math.abs(i.ciRight)]));
+  const maxAbs = Math.max(
+    ...props.items.flatMap((item) => [Math.abs(item.ciLeft), Math.abs(item.ciRight)]),
+  );
   const bound = maxAbs * 1.1;
   return [-bound, bound];
 }
 
 function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
-  const fmt = props.ciLabelFormatter ?? ((v: number) => v.toPrecision(2));
+  const formatCILabel = props.ciLabelFormatter ?? ((value: number) => value.toPrecision(2));
 
   return {
     type: 'custom',
@@ -58,7 +62,6 @@ function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
       const [x1, y] = api.coord([ciLeft, yCategory]);
       const [x2] = api.coord([ciRight, yCategory]);
       const color = (api.visual('color') as string) || props.defaultLineColor || LINE_COLOR;
-      const halfCap = CAP_HEIGHT / 2;
 
       return {
         type: 'group',
@@ -69,25 +72,13 @@ function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
             shape: { x1, y1: y, x2, y2: y },
             style: { stroke: color, lineWidth: LINE_WIDTH },
           },
-          // left end cap
-          {
-            type: 'line',
-            shape: { x1, y1: y - halfCap, x2: x1, y2: y + halfCap },
-            style: { stroke: color, lineWidth: LINE_WIDTH },
-          },
-          // right end cap
-          {
-            type: 'line',
-            shape: { x1: x2, y1: y - halfCap, x2, y2: y + halfCap },
-            style: { stroke: color, lineWidth: LINE_WIDTH },
-          },
           // optional CI text labels
           ...(props.showCILabels
             ? [
                 {
                   type: 'text' as const,
                   style: {
-                    text: fmt(ciLeft),
+                    text: formatCILabel(ciLeft),
                     x: x1 - 4,
                     y,
                     textAlign: 'right' as const,
@@ -99,7 +90,7 @@ function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
                 {
                   type: 'text' as const,
                   style: {
-                    text: fmt(ciRight),
+                    text: formatCILabel(ciRight),
                     x: x2 + 4,
                     y,
                     textAlign: 'left' as const,
@@ -113,8 +104,39 @@ function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
         ],
       };
     },
+    silent: true,
     tooltip: { show: false },
     z: 1,
+  };
+}
+
+// ECharts custom series requires at least one data point to trigger renderItem. We pass
+// [0, referenceCategory] so api.coord([0, referenceCategory]) gives the pixel x-position
+// for x=0. Any valid y-axis category works — only the x=0 position matters.
+function zeroLineSeries(yAxisCategories: string[]): CustomSeriesOption {
+  const referenceCategory = yAxisCategories[0];
+  return {
+    type: 'custom',
+    clip: false,
+    itemStyle: { color: 'transparent' },
+    renderItem: (params, api) => {
+      const [zeroX] = api.coord([0, referenceCategory]);
+      const gridBounds = params.coordSys as unknown as {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+      };
+      return {
+        type: 'line',
+        shape: { x1: zeroX, y1: gridBounds.y, x2: zeroX, y2: gridBounds.y + gridBounds.height },
+        style: { stroke: ZERO_LINE_COLOR, lineWidth: ZERO_LINE_WIDTH, fill: 'none' },
+      };
+    },
+    data: [{ value: [0, referenceCategory] }],
+    silent: true,
+    z: 0,
+    tooltip: { show: false },
   };
 }
 
@@ -124,23 +146,16 @@ function dotSeries(props: ForestPlotProps): ScatterSeriesOption {
     symbolSize: props.pointSize ?? POINT_SIZE,
     data: props.items.map((item) => ({
       value: [item.value, item.yAxisCategory],
-      itemStyle: { color: item.color ?? props.defaultPointColor ?? LINE_COLOR },
+      itemStyle: { color: item.color ?? props.defaultPointColor ?? LINE_COLOR, opacity: 1 },
     })),
     tooltip: {
-      formatter: (params) => {
-        const p = params as CallbackDataParams;
-        const item = props.items[p.dataIndex];
+      formatter: (rawParams) => {
+        const params = rawParams as CallbackDataParams;
+        const item = props.items[params.dataIndex];
         return props.pointTooltipFormatter
-          ? props.pointTooltipFormatter(item, p)
+          ? props.pointTooltipFormatter(item, params)
           : `Value: ${item.value}`;
       },
-    },
-    markLine: {
-      symbol: 'none',
-      silent: true,
-      data: [{ xAxis: 0 }],
-      lineStyle: { color: ZERO_LINE_COLOR, width: ZERO_LINE_WIDTH, type: 'solid' },
-      label: { show: false },
     },
     z: 2,
   };
@@ -167,29 +182,35 @@ export class ForestPlotChart {
     }
 
     const yAxisCategories = props.yAxisCategories ?? [
-      ...new Set(props.items.map((i) => i.yAxisCategory)),
+      ...new Set(props.items.map((item) => item.yAxisCategory)),
     ];
     const [xMin, xMax] = computeXBounds(props);
     const yAxisLabelTooltipFormatter = props.yAxisLabelTooltipFormatter;
 
     const option: EChartsOption = {
-      grid: { ...GRID, top: props.title ? 60 : 20 },
+      grid: { ...GRID, top: props.title ? 60 : 20, bottom: props.xAxisTitle ? 70 : 40 },
       xAxis: {
         type: 'value',
         min: xMin,
         max: xMax,
         name: props.xAxisTitle,
         nameLocation: 'middle',
-        nameGap: 30,
-        splitLine: props.showGridLines
-          ? { show: true, lineStyle: { color: '#e0e0e0' } }
-          : { show: false },
-        axisLabel: X_AXIS_LABEL_TEXT_STYLE,
+        nameGap: 50,
+        nameTextStyle: { fontWeight: 'bold', color: '#2a2f35', fontSize: 18 },
+        axisLine: { show: true, lineStyle: { width: ZERO_LINE_WIDTH, color: AXIS_LINE_COLOR } },
+        splitLine: { show: false },
+        axisLabel: {
+          ...X_AXIS_LABEL_TEXT_STYLE,
+          formatter: (tickValue: number) => tickValue.toFixed(2),
+        },
       },
       yAxis: {
         type: 'category',
         data: yAxisCategories,
         inverse: true,
+        axisTick: { show: false },
+        // Hide the y-axis line; the custom zero line handles the x=0 marker
+        axisLine: { show: false },
         triggerEvent: Boolean(yAxisLabelTooltipFormatter),
         tooltip: {
           show: Boolean(yAxisLabelTooltipFormatter),
@@ -200,7 +221,7 @@ export class ForestPlotChart {
         },
         axisLabel: Y_AXIS_LABEL_TEXT_STYLE,
       } as EChartsOption['yAxis'],
-      series: [ciLineSeries(props), dotSeries(props)],
+      series: [zeroLineSeries(yAxisCategories), ciLineSeries(props), dotSeries(props)],
       tooltip: TOOLTIP,
       title: props.title
         ? [{ text: props.title, left: 'center', textStyle: TITLE_TEXT_STYLE }]
