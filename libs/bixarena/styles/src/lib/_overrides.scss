@@ -10,4 +10,15 @@
     height: 2rem;
     line-height: 2rem;
   }
+
+  bixarena-voting-bar .nudge .p-button {
+    padding: 0.5rem 1.25rem;
+    font-size: var(--text-sm);
+    font-family: inherit;
+    font-variation-settings: 'wght' 520;
+    letter-spacing: -0.01em;
+    border-radius: 100px;
+    height: auto;
+    line-height: inherit;
+  }
 }

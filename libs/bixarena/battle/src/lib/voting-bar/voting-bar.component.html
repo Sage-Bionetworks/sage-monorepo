@@ -78,9 +78,9 @@
   @if (phase() === 'reveal' || phase() === 'error') {
     <div class="nudge">
       @if (canReuse()) {
-        <button class="nb go" (click)="samePrompt.emit()">Same Question New Matchup</button>
+        <p-button label="Same Question New Matchup" (onClick)="samePrompt.emit()" />
       }
-      <button class="nb sec" (click)="newBattle.emit()">New Battle</button>
+      <p-button label="New Battle" severity="secondary" (onClick)="newBattle.emit()" />
     </div>
   }
 </div>

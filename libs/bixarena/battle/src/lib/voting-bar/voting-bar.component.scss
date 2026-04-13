@@ -65,39 +65,3 @@
   flex-wrap: wrap;
   justify-content: center;
 }
-
-.nb {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.5rem 1.25rem;
-  border: 1px solid var(--p-surface-200);
-  border-radius: 100px;
-  font: inherit;
-  font-size: var(--text-sm);
-  font-weight: 520;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: -0.01em;
-
-  &.sec {
-    background: var(--p-surface-100);
-    color: var(--p-surface-600);
-
-    &:hover {
-      background: var(--p-surface-200);
-      color: var(--p-text-color);
-    }
-  }
-
-  &.go {
-    background: var(--p-primary-color);
-    border-color: var(--p-primary-color);
-    color: #fff;
-
-    &:hover {
-      background: var(--p-primary-500);
-      border-color: var(--p-primary-500);
-    }
-  }
-}
