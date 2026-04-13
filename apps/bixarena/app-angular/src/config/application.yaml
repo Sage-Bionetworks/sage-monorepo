@@ -18,7 +18,7 @@ auth:
 battle:
   promptLengthLimit: 5000
   roundLimit: 20
-  promptUseLimit: 5
+  promptUseLimit: 2 # TODO: revert to 5 before merging
 
 analytics:
   googleTagManager:

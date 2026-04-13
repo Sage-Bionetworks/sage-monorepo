@@ -26,12 +26,16 @@
         @for (i of promptUseDots; track i) {
           <span
             class="rd"
-            [class.done]="i <= completedBattles()"
-            [class.now]="i === currentBattle()"
-            [class.fut]="i > currentBattle()"
+            [class.done]="i <= completedMatches()"
+            [class.now]="i === currentMatch() && !allMatchesComplete()"
+            [class.fut]="i > currentMatch()"
           ></span>
         }
-        <span class="rl">Battle {{ currentBattle() }} of {{ promptUseLimit }}</span>
+        @if (allMatchesComplete()) {
+          <span class="rl complete">Mission Complete! You've stress-tested this question</span>
+        } @else {
+          <span class="rl">Match {{ currentMatch() }} / {{ promptUseLimit }}</span>
+        }
       </div>
       <div class="panels">
         <bixarena-model-panel
@@ -64,7 +68,7 @@
       <div class="btm">
         <bixarena-prompt-composer
           placeholder="Ask a follow-up..."
-          [disabled]="state.phase() === 'streaming' || state.phase() === 'creating'"
+          [disabled]="state.phase() !== 'voting'"
           (promptSubmit)="onPromptSubmit($event)"
         />
       </div>

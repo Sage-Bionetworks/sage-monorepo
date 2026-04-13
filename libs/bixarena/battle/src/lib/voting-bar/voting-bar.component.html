@@ -78,9 +78,7 @@
   @if (phase() === 'reveal' || phase() === 'error') {
     <div class="nudge">
       @if (canReuse()) {
-        <button class="nb go" (click)="samePrompt.emit()">
-          Same Prompt ({{ promptUsesRemaining() }} remaining) &rarr;
-        </button>
+        <button class="nb go" (click)="samePrompt.emit()">Same Question New Matchup</button>
       }
       <button class="nb sec" (click)="newBattle.emit()">New Battle</button>
     </div>

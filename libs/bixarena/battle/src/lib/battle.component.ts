@@ -29,15 +29,17 @@ export class BattleComponent implements OnDestroy {
   readonly promptUseLimit = inject(ConfigService).config.battle.promptUseLimit;
   readonly promptUseDots = Array.from({ length: this.promptUseLimit }, (_, i) => i + 1);
 
-  readonly completedBattles = computed(
+  readonly completedMatches = computed(
     () => this.promptUseLimit - this.state.promptUsesRemaining(),
   );
 
-  readonly currentBattle = computed(() => {
-    const completed = this.completedBattles();
-    // On reveal, remaining already decremented — show the just-completed battle
+  readonly currentMatch = computed(() => {
+    const completed = this.completedMatches();
+    // On reveal, remaining already decremented — show the just-completed match
     return this.state.phase() === 'reveal' ? completed : completed + 1;
   });
+
+  readonly allMatchesComplete = computed(() => this.completedMatches() >= this.promptUseLimit);
 
   onPromptSubmit(prompt: string): void {
     this.state.submitPrompt(prompt);

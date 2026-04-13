@@ -111,25 +111,38 @@ export class BattleStateService {
     }
   }
 
+  private isVoting = false;
+
   async submitVote(outcome: BattleEvaluationOutcome): Promise<void> {
     const battleId = this.battleId();
-    if (!battleId) return;
+    if (!battleId || this.isVoting) return;
 
+    this.isVoting = true;
     try {
       await this.battleApi.createBattleEvaluation(battleId, { outcome }).toPromise();
-      await this.battleApi
-        .updateBattle(battleId, { endedAt: new Date().toISOString() })
-        .toPromise();
-      this.selectedOutcome.set(outcome);
-      this.promptUsesRemaining.update((n) => Math.max(0, n - 1));
-      this.phase.set('reveal');
     } catch {
-      // Vote failed — stay in voting phase, user can retry
+      this.isVoting = false;
+      return; // Evaluation failed — stay in voting phase
     }
+
+    this.selectedOutcome.set(outcome);
+    this.promptUsesRemaining.update((n) => Math.max(0, n - 1));
+    this.phase.set('reveal');
+    this.isVoting = false;
+
+    // Best-effort: record battle end time (may race with async validation)
+    this.battleApi
+      .updateBattle(battleId, { endedAt: new Date().toISOString() })
+      .toPromise()
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      .catch(() => {});
   }
 
   async newBattle(prompt?: string): Promise<void> {
     this.cleanupStreams();
+    this.model1Stream.set({ ...INITIAL_STREAM_STATE });
+    this.model2Stream.set({ ...INITIAL_STREAM_STATE });
+    this.selectedOutcome.set(null);
     const text = prompt ?? this.lastPrompt();
     if (text) {
       await this.submitPrompt(text);
