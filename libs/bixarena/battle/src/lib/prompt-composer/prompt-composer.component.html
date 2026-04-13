@@ -13,8 +13,8 @@
     <span class="char-count">{{ text().length }} / {{ maxLength() }}</span>
     <button
       class="send"
-      [class.hot]="isHot"
-      [disabled]="!isHot"
+      [class.hot]="isHot()"
+      [disabled]="!isHot()"
       (click)="submit()"
       aria-label="Send prompt"
     >
