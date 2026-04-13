@@ -43,6 +43,14 @@ export const expectTooManyPinnedGenesToast = async (page: Page) => {
   );
 };
 
+export const expectTooManyPinnedProteinsToast = async (page: Page, nPinnedItems: number) => {
+  const pinnedText = nPinnedItems === 1 ? '1 row was' : `${nPinnedItems} rows were`;
+  const alert = page.getByRole('alert');
+  await expect(alert).toHaveText(
+    `Only ${pinnedText} pinned, because you reached the maximum of 50 pinned genes. Some rows were skipped because they belong to a gene not already in your pinned list.`,
+  );
+};
+
 export const getPinnedItemsFromUrl = (url: string) => {
   const queryString = url.split('?');
   if (queryString.length !== 2) return null;

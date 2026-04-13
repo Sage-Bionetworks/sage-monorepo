@@ -64,7 +64,6 @@ export interface ComparisonToolViewConfig {
   viewDetailsClick: (rowData: unknown) => void;
   legendEnabled: boolean;
   legendPanelConfig: LegendPanelConfig;
-  rowsPerPage: number;
   rowIdDataKey: string;
   allowPinnedImageDownload: boolean;
   defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];

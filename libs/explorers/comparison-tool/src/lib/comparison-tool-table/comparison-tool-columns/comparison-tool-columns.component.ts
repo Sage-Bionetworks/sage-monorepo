@@ -121,11 +121,22 @@ export class ComparisonToolColumnsComponent {
     container.style.setProperty(cssVar, '0px');
     void container.offsetWidth; // force synchronous reflow
 
-    const cells = container.querySelectorAll(
-      `th:nth-child(${columnIndex + 1}), td:nth-child(${columnIndex + 1})`,
-    );
+    // Measure header width via .column-header.scrollWidth + .column-header-sort.scrollWidth.
+    // Both have overflow:hidden, so scrollWidth reports the full content width even
+    // when collapsed. The sort div collapses to 0 (min-width:0) so we measure it separately.
+    const th = container.querySelector(`th:nth-child(${columnIndex + 1})`) as HTMLElement | null;
     let maxWidth = MIN_COLUMN_WIDTH;
-    cells.forEach((cell) => {
+    if (th) {
+      const header = th.querySelector('.column-header') as HTMLElement | null;
+      const sortDiv = th.querySelector('.column-header-sort') as HTMLElement | null;
+      const headerWidth = header ? header.scrollWidth : 0;
+      const sortWidth = sortDiv ? sortDiv.scrollWidth : 0;
+      maxWidth = Math.max(maxWidth, headerWidth + sortWidth);
+    }
+
+    // Measure body <td> cells
+    const tdCells = container.querySelectorAll(`td:nth-child(${columnIndex + 1})`);
+    tdCells.forEach((cell) => {
       maxWidth = Math.max(maxWidth, cell.scrollWidth);
     });
 

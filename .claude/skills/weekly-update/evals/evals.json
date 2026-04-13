@@ -1,0 +1,50 @@
+{
+  "skill_name": "weekly-update",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Generate a weekly update for the sage-monorepo for April 3-10, 2026.",
+      "expected_output": "A complete weekly update markdown document with Highlights, Project Updates, Technical Improvements, Contributors, and Coming Next sections. PRs should be fetched from Sage-Bionetworks/sage-monorepo using the correct date range. Contributor counts should be accurate. Each bullet should have @username attribution.",
+      "files": [],
+      "assertions": [
+        "The output includes all five required sections: Highlights, Project Updates, Technical Improvements, Contributors, and Coming Next",
+        "The output specifies the date range April 3-10, 2026 in the header",
+        "The Contributors section includes @hallieswan, @sagely1, and @rrchai — all three primary contributors for that week",
+        "The Contributors section lists accurate PR counts: @hallieswan with 3 PRs, @sagely1 with 4 PRs, and @rrchai with 4 PRs (±1 to allow for the automated bot PR)",
+        "Every bullet point in Project Updates and Technical Improvements includes a @username attribution using the PR's primary author (not commit co-authors)",
+        "The update covers at least 8 of the 12 merged PRs (BixArena theme/auth, BixArena avatar, BixArena voting fix, Model-AD UAT copy/icons, Model-AD boxplot legend, Model-AD boxplot download fix, Explorers tooltip, Synapse workflow fix)",
+        "The Coming Next section references specific open work (e.g., open PR numbers, ticket IDs like MG-xxx or AG-xxx, or named features), not just generic filler",
+        "The output uses the correct emoji headers (🌟, 📊, 🛠️, 👥, 🔮)"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Hey, can you put together this week's monorepo update for our standup? Just need a summary of what the team shipped.",
+      "expected_output": "A complete weekly update covering the past 7 days (or asking for clarification on date range), with all required sections. Should handle informal phrasing gracefully and still produce a well-structured update.",
+      "files": [],
+      "assertions": [
+        "The output includes all five required sections: Highlights, Project Updates, Technical Improvements, Contributors, and Coming Next",
+        "The output uses a date range covering approximately the past 7 days, or asks the user to confirm the date range",
+        "The Contributors section includes all three primary contributors: @hallieswan, @sagely1, and @rrchai",
+        "Every bullet point includes a @username attribution using the PR's primary author — not commit co-authors",
+        "The update covers multiple projects (at minimum BixArena and Model-AD, ideally also Explorers and infrastructure PRs)",
+        "The output uses the correct emoji headers (🌟, 📊, 🛠️, 👥, 🔮)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I need the weekly digest for sage-monorepo covering March 28 - April 3, 2026. Our stakeholders want to know what shipped and what's coming next. Make sure to include all contributors.",
+      "expected_output": "A complete weekly update for March 28 - April 3, 2026. Should correctly fetch PRs for that specific date range, properly categorize changes between Project Updates and Technical Improvements, list all contributors accurately, and have a substantive Coming Next section based on open PRs/issues.",
+      "files": [],
+      "assertions": [
+        "The output includes all five required sections: Highlights, Project Updates, Technical Improvements, Contributors, and Coming Next",
+        "The output specifies the date range March 28 - April 3, 2026 (or equivalent) in the header",
+        "The Contributors section includes @rrchai (4 PRs: scaffold, architecture doc, data fix, voting fix) and @sagely1 (2 PRs: GitHub Actions hardening, devcontainer update)",
+        "Every bullet point in Project Updates and Technical Improvements includes a @username attribution",
+        "Infrastructure PRs (#3963 GitHub Actions hardening, #3964 devcontainer update by @sagely1) appear in the Technical Improvements section, not Project Updates",
+        "The Coming Next section is substantive and references specific upcoming work such as BixArena auth/config (SMR-715/PR #3961) or Model-AD UAT items",
+        "The output uses the correct emoji headers (🌟, 📊, 🛠️, 👥, 🔮)"
+      ]
+    }
+  ]
+}

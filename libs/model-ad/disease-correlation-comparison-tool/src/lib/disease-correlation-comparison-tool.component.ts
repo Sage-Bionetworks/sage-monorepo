@@ -87,7 +87,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       window.open(url, '_blank');
     },
     legendPanelConfig: this.legendPanelConfig,
-    rowsPerPage: 10,
     rowIdDataKey: 'composite_id',
     defaultSort: [
       { field: 'name', order: 1 },

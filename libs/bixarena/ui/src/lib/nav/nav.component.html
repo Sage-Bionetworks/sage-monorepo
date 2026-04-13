@@ -5,11 +5,27 @@
   </a>
   <nav class="links">
     <a routerLink="/battle" routerLinkActive="active">Battle</a>
+    <a routerLink="/arena" routerLinkActive="active">3D Arena</a>
     <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
   </nav>
   <div class="actions">
     <span class="divider"></span>
-    <p-button label="Login" />
+    @if (showAvatar()) {
+      <button
+        class="avatar"
+        (click)="authService.logout()"
+        [title]="'Logout ' + (displayUser()?.username ?? '')"
+        aria-label="Logout"
+      >
+        @if (avatarUrl()) {
+          <img class="avatar-img" [src]="avatarUrl()" [alt]="initials()" />
+        } @else {
+          {{ initials() }}
+        }
+      </button>
+    } @else {
+      <p-button label="Login" (onClick)="authService.login()" />
+    }
     <button
       class="theme-toggle"
       (click)="themeService.toggle()"

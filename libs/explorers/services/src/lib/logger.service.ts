@@ -1,8 +1,9 @@
 import { Injectable, isDevMode } from '@angular/core';
+import { Logger } from '@sagebionetworks/web-shared/angular/logger';
 import * as Sentry from '@sentry/angular';
 
 @Injectable({ providedIn: 'root' })
-export class LoggerService {
+export class LoggerService implements Logger {
   log(message: string, data?: Record<string, unknown>) {
     if (isDevMode()) {
       if (data) {

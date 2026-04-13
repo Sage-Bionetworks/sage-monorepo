@@ -144,16 +144,52 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     const defaultWidth = this.calculateNonprimaryColumnWidth(nonPrimaryCount, tableElementWidth);
     const primaryWidth = this.primaryColumnWidth + 'px';
 
+    // Measure natural header widths so columns are never narrower than their header text.
+    const headerWidths = this.measureHeaderWidths(container, cols.length);
+
     for (let i = 0; i < cols.length; i++) {
-      let width: string;
+      let width: number;
       if (cols[i].type === 'primary') {
-        width = primaryWidth;
+        width = this.primaryColumnWidth;
       } else if (cols[i].type === 'heat_map') {
-        width = MIN_COLUMN_WIDTH + 'px';
+        width = MIN_COLUMN_WIDTH;
       } else {
-        width = defaultWidth;
+        width = parseInt(defaultWidth, 10) || MIN_COLUMN_WIDTH;
       }
-      container.style.setProperty(`--ct-col-${i}-width`, width);
+      width = Math.max(width, headerWidths[i] || MIN_COLUMN_WIDTH);
+      container.style.setProperty(`--ct-col-${i}-width`, width + 'px');
     }
+  }
+
+  /**
+   * Temporarily collapses all columns to 0 and reads each .column-header's
+   * scrollWidth plus .column-header-sort's scrollWidth. Both have overflow:hidden,
+   * so scrollWidth reports their full content width even when collapsed to 0px.
+   */
+  private measureHeaderWidths(container: HTMLElement, colCount: number): number[] {
+    const widths: number[] = [];
+
+    // Shrink all columns to 0 so headers overflow
+    for (let i = 0; i < colCount; i++) {
+      container.style.setProperty(`--ct-col-${i}-width`, '0px');
+    }
+
+    void container.offsetWidth; // single reflow for all columns
+
+    // Read widths from .column-header.scrollWidth + .column-header-sort.scrollWidth
+    for (let i = 0; i < colCount; i++) {
+      const th = container.querySelector(`th:nth-child(${i + 1})`) as HTMLElement | null;
+      if (th) {
+        const header = th.querySelector('.column-header') as HTMLElement | null;
+        const sortDiv = th.querySelector('.column-header-sort') as HTMLElement | null;
+        const headerWidth = header ? header.scrollWidth : 0;
+        const sortWidth = sortDiv ? sortDiv.scrollWidth : 0;
+        widths.push(Math.max(headerWidth + sortWidth, MIN_COLUMN_WIDTH));
+      } else {
+        widths.push(MIN_COLUMN_WIDTH);
+      }
+    }
+
+    return widths;
   }
 }

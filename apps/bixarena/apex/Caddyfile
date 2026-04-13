@@ -9,6 +9,11 @@
 		reverse_proxy {env.API_GATEWAY_HOST}:{env.API_GATEWAY_PORT}
 	}
 
+	@auth path /auth/* /userinfo /.well-known/jwks.json /oauth2/token
+	handle @auth {
+		reverse_proxy {env.API_GATEWAY_HOST}:{env.API_GATEWAY_PORT}
+	}
+
 	handle {
 		reverse_proxy {env.APP_HOST}:{env.APP_PORT}
 	}

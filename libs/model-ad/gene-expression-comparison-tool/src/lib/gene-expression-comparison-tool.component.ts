@@ -92,7 +92,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       window.open(url, '_blank');
     },
     legendPanelConfig: this.legendPanelConfig,
-    rowsPerPage: 10,
     rowIdDataKey: 'composite_id',
     defaultSort: [
       { field: 'gene_symbol', order: 1 },

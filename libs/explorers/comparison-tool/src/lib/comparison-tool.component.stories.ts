@@ -27,7 +27,7 @@ import DocumentationTemplate from './comparison-tool.component.template.mdx';
 
 type StoryArgs = Omit<
   Partial<ComparisonToolViewConfig>,
-  'viewDetailsClick' | 'heatmapCircleClickTransformFn' | 'rowsPerPage'
+  'viewDetailsClick' | 'heatmapCircleClickTransformFn'
 > & {
   // Data properties
   configs: readonly ComparisonToolConfig[];

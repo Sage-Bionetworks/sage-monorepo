@@ -4,7 +4,7 @@
   "sourceRoot": "libs/bixarena/config/src",
   "prefix": "bixarena",
   "projectType": "library",
-  "tags": ["type:util", "scope:bixarena", "language:typescript"],
+  "tags": ["type:config", "scope:bixarena", "language:typescript"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
