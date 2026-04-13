@@ -31,7 +31,7 @@ Most apps require the full stack (databases, APIs, etc.) running before the Angu
 docker ps
 
 # 2. If not running, start the full stack in detached Docker containers
-nx serve-detach <project-name>   # e.g. nx serve-detach model-ad
+nx serve-detach <project-name>-apex   # e.g. nx serve-detach model-ad-apex
 
 # 3. Remove the app container so the dev server can take its place
 docker rm -f <project-name>-app  # e.g. docker rm -f model-ad-app
@@ -77,7 +77,7 @@ uv run ruff check         # lint
 | **agora**          | Alzheimer's disease evidence explorer | Angular, Node.js, MongoDB        |
 | **openchallenges** | Scientific challenge platform         | Angular, Spring Boot, PostgreSQL |
 | **model-ad**       | AD model data platform                | Angular, Spring Boot             |
-| **bixarena**       | Battle arena game platform            | Angular, Spring Boot, Python     |
+| **bixarena**       | Battle arena platform                 | Angular, Spring Boot, Python     |
 
 ### OpenAPI-First Workflow
 
@@ -95,7 +95,7 @@ Module boundaries are enforced via ESLint (`@nx/enforce-module-boundaries`). Sco
 
 - `scope:agora` → can use `agora`, `explorers`, `shared`
 - `scope:model-ad` → can use `model-ad`, `explorers`, `shared`
-- `scope:explorers` → can use `explorers`, `shared`
+- `scope:explorers` → can use `explorers`, `global`, `shared`
 - `scope:shared` → can only use `shared`
 
 ### Gradle Convention Plugins
@@ -121,8 +121,8 @@ import { Component } from '../../../libs/agora/ui';
 
 Each project has a `project.json` defining targets (build, test, lint, serve, integration-test) and tags:
 
-- `type:feature|ui|util|service`
-- `scope:agora|openchallenges|model-ad|bixarena|explorers|shared`
+- `type:feature|service|app|util|db|config|styles|ui`
+- `scope:backend|agora|openchallenges|model-ad|bixarena|explorers|shared`
 - `language:typescript|java|python`
 
 Always refer to `package.json` for exact dependency versions when looking up API docs.
