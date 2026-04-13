@@ -1,8 +1,9 @@
 ---
-applyTo: '**/*.py'
+paths:
+  - '**/*.py'
 ---
 
-# Python Instructions for Sage Monorepo
+# Python Guidelines for Sage Monorepo
 
 ## General Guidelines
 
@@ -19,9 +20,8 @@ applyTo: '**/*.py'
 
 ## Code Quality
 
-- Run linting tools (e.g., flake8, pylint) before committing code.
-- Write self-documenting code with meaningful variable and function names.
-- Avoid unnecessary comments; use docstrings for functions and modules.
+- Run `uv run ruff check` before committing code.
+- Use docstrings for public functions and modules.
 - Remove debug logging before production deployment, or set logging level appropriately.
 
 ## Testing
@@ -29,10 +29,6 @@ applyTo: '**/*.py'
 - Write unit tests for all functions, especially those with complex logic.
 - Use mocking for external API calls in tests.
 - Validate edge cases and error handling in tests.
-
-## File and Folder Structure
-
-- For file and folder structure, refer to `copilot-instructions.md` in this repository.
 
 ## Environment Variables
 

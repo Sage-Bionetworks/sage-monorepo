@@ -1,10 +1,11 @@
 ---
-applyTo: '**/build.gradle.kts'
+paths:
+  - '**/build.gradle.kts'
 ---
 
-# Copilot Instructions: Gradle Build Scripts
+# Gradle Build Scripts
 
-This file provides coding standards and guidelines for GitHub Copilot when editing Gradle build scripts in the Sage monorepo.
+This rule provides coding standards and guidelines for editing Gradle build scripts in the Sage monorepo.
 
 ## Code Style
 
