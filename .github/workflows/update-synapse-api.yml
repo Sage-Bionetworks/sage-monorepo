@@ -99,9 +99,17 @@ jobs:
       - name: Check for changes (unprivileged)
         id: check-changes
         run: |
-          # Run git status as ubuntu since workspace files are owned by ubuntu.
-          CHANGES=$(sudo -u ubuntu bash -lc "git -C \"$GITHUB_WORKSPACE\" status --porcelain")
-          if [ -z "$CHANGES" ]; then
+          # Stage all changes and run lint-staged (same as the pre-commit hook) with
+          # --allow-empty so it succeeds even when formatting produces no net diff.
+          # Anything still staged afterward is a true content change; an empty index
+          # means only cosmetic formatting differed and there is nothing to commit.
+          sudo -u ubuntu bash -lc '
+            set -euo pipefail
+            . ./dev-env.sh
+            git add -A
+            pnpm dlx lint-staged --relative --allow-empty
+          '
+          if sudo -u ubuntu bash -lc "git -C \"$GITHUB_WORKSPACE\" diff --cached --quiet"; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "::notice::No changes detected in the Synapse API generated artifacts. The specification has not changed since the last update. Skipping pull request creation."
           else
