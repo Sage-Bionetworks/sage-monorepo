@@ -74,7 +74,7 @@ nx build agora-api-description
 
 ## Charts Library
 
-`agora-charts` contains standalone D3-based components. Each chart manages its own SVG lifecycle (`createChart`/`destroyChart` methods) and accepts data via `@Input()`. Charts use `HelperService` from `agora-services` for color schemes. Test setup files mock `ResizeObserver` and `SVGElement.getBBox` to support D3 in jsdom.
+`agora-charts` contains standalone D3-based components. Each chart manages its own SVG lifecycle (`createChart`/`destroyChart` methods) and accepts data via `@Input()`. Charts use `HelperService` from `agora-services` for color schemes. Test setup files mock `ResizeObserver` and `SVGElement.getBBox` to support D3 in jsdom. Do not use dc.js; it is a legacy dependency being phased out.
 
 ## Testing Conventions
 
