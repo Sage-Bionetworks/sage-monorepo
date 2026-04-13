@@ -14,7 +14,7 @@ export class VotingBarComponent {
   readonly phase = input.required<BattlePhase>();
 
   readonly vote = output<BattleEvaluationOutcome>();
-  readonly hoverSide = output<'model1' | 'model2' | 'tie' | null>();
+  readonly hoverSide = output<BattleEvaluationOutcome | null>();
   readonly newBattle = output<void>();
   readonly samePrompt = output<void>();
 

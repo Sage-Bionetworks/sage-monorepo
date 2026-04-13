@@ -5,9 +5,9 @@
   [class.hovered]="isHovered()"
 >
   <div class="header">
-    <span class="mt">
-      <span class="dot" [class]="statusClass()"></span>
-      {{ revealedName() ?? label() }}
+    <span class="header-label">
+      <span class="dot" [class]="streamState().status"></span>
+      {{ modelName() ?? anonymousName() }}
     </span>
   </div>
   <div class="body" #body aria-live="polite" (scroll)="onScroll($event)">
@@ -52,7 +52,7 @@
       </div>
     }
   </div>
-  @if (revealedName()) {
-    <div class="footer">{{ revealedName() }}</div>
+  @if (modelName()) {
+    <div class="footer">{{ modelName() }}</div>
   }
 </div>

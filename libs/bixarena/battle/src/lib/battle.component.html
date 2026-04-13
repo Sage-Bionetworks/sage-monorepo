@@ -39,18 +39,18 @@
       </div>
       <div class="panels">
         <bixarena-model-panel
-          [label]="state.model1DisplayName()"
+          [anonymousName]="state.model1DisplayName()"
           modelId="model1"
           [streamState]="state.model1Stream()"
-          [revealedName]="state.phase() === 'reveal' ? (state.model1()?.name ?? null) : null"
+          [modelName]="state.phase() === 'reveal' ? (state.model1()?.name ?? null) : null"
           [selectedOutcome]="state.selectedOutcome()"
           [hoveredModel]="hoverSide()"
         />
         <bixarena-model-panel
-          [label]="state.model2DisplayName()"
+          [anonymousName]="state.model2DisplayName()"
           modelId="model2"
           [streamState]="state.model2Stream()"
-          [revealedName]="state.phase() === 'reveal' ? (state.model2()?.name ?? null) : null"
+          [modelName]="state.phase() === 'reveal' ? (state.model2()?.name ?? null) : null"
           [selectedOutcome]="state.selectedOutcome()"
           [hoveredModel]="hoverSide()"
         />

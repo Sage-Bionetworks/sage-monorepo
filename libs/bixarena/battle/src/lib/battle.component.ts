@@ -25,7 +25,7 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
 })
 export class BattleComponent implements OnDestroy {
   readonly state = inject(BattleStateService);
-  readonly hoverSide = signal<'model1' | 'model2' | 'tie' | null>(null);
+  readonly hoverSide = signal<BattleEvaluationOutcome | null>(null);
   readonly promptUseLimit = inject(ConfigService).config.battle.promptUseLimit;
   readonly promptUseDots = Array.from({ length: this.promptUseLimit }, (_, i) => i + 1);
 

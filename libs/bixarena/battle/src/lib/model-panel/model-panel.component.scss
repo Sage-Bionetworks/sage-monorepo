@@ -39,7 +39,7 @@
   flex-shrink: 0;
 }
 
-.mt {
+.header-label {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -56,13 +56,13 @@
   background: var(--p-surface-400);
   transition: all 0.25s;
 
-  &.live {
+  &.streaming {
     background: var(--p-teal-400);
     box-shadow: 0 0 8px rgb(52 212 180 / 30%);
     animation: bd 1.2s ease-in-out infinite;
   }
 
-  &.done {
+  &.complete {
     background: var(--p-teal-400);
     box-shadow: 0 0 6px rgb(52 212 180 / 20%);
   }

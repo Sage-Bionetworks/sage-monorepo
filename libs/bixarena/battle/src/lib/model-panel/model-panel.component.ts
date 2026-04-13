@@ -23,12 +23,12 @@ import { STREAM_CURSOR } from '../battle.constants';
 export class ModelPanelComponent {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  readonly label = input.required<string>();
+  readonly anonymousName = input.required<string>();
   readonly modelId = input.required<'model1' | 'model2'>();
   readonly streamState = input.required<ModelStreamState>();
-  readonly revealedName = input<string | null>(null);
+  readonly modelName = input<string | null>(null);
   readonly selectedOutcome = input<BattleEvaluationOutcome | null>(null);
-  readonly hoveredModel = input<'model1' | 'model2' | 'tie' | null>(null);
+  readonly hoveredModel = input<BattleEvaluationOutcome | null>(null);
 
   readonly isSelected = computed(() => {
     const o = this.selectedOutcome();
@@ -48,8 +48,8 @@ export class ModelPanelComponent {
   });
 
   readonly bodyEl = viewChild<ElementRef<HTMLDivElement>>('body');
-  private userScrolled = false;
-  private programmaticScroll = false;
+  private isUserScrolled = false;
+  private isAutoScroll = false;
 
   readonly displayText = computed(() => {
     const state = this.streamState();
@@ -59,30 +59,12 @@ export class ModelPanelComponent {
     return state.text;
   });
 
-  readonly statusClass = computed(() => {
-    const status = this.streamState().status;
-    if (status === 'streaming') return 'live';
-    if (status === 'complete') return 'done';
-    if (status === 'error') return 'error';
-    return '';
-  });
-
-  readonly statusLabel = computed(() => {
-    const state = this.streamState();
-    if (state.status === 'waiting') return 'Connecting...';
-    if (state.status === 'streaming' && state.isSlowHint) return 'Taking longer than expected...';
-    if (state.status === 'streaming') return 'Generating...';
-    if (state.status === 'complete') return 'Complete';
-    if (state.status === 'error') return 'Error';
-    return '';
-  });
-
   constructor() {
     if (this.isBrowser) {
       // Auto-scroll to bottom on every stream state change, unless user has scrolled up
       effect(() => {
         this.streamState(); // Read to register signal dependency
-        if (!this.userScrolled) {
+        if (!this.isUserScrolled) {
           requestAnimationFrame(() => this.scrollToBottom());
         }
       });
@@ -91,19 +73,19 @@ export class ModelPanelComponent {
 
   // Detect manual scroll: if user scrolls away from bottom, stop auto-scrolling
   onScroll(event: Event): void {
-    if (this.programmaticScroll) return;
+    if (this.isAutoScroll) return;
     const el = event.target as HTMLDivElement;
     const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
-    this.userScrolled = !atBottom;
+    this.isUserScrolled = !atBottom;
   }
 
   private scrollToBottom(): void {
     const el = this.bodyEl()?.nativeElement;
     if (el) {
       // Flag prevents onScroll from treating our scrollTo as a user-initiated scroll
-      this.programmaticScroll = true;
+      this.isAutoScroll = true;
       el.scrollTop = el.scrollHeight;
-      requestAnimationFrame(() => (this.programmaticScroll = false));
+      requestAnimationFrame(() => (this.isAutoScroll = false));
     }
   }
 }
