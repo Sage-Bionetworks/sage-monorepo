@@ -58,6 +58,9 @@ export class BattleStateService {
   readonly promptUsesRemaining = signal(0);
   readonly selectedOutcome = signal<BattleEvaluationOutcome | null>(null);
 
+  readonly promptUseLimit = this.config.battle.promptUseLimit;
+  readonly promptUseDots = Array.from({ length: this.promptUseLimit }, (_, i) => i + 1);
+
   // Gates transition to voting/error phase
   readonly bothComplete = computed(() => {
     const s1 = this.model1Stream().status;
@@ -74,12 +77,19 @@ export class BattleStateService {
 
   readonly canReuse = computed(() => this.lastPrompt() !== null && this.promptUsesRemaining() > 0);
 
-  readonly model1DisplayName = computed(() =>
-    this.phase() === 'reveal' ? (this.model1()?.name ?? 'Model A') : 'Model A',
+  readonly completedMatches = computed(
+    () => this.config.battle.promptUseLimit - this.promptUsesRemaining(),
   );
 
-  readonly model2DisplayName = computed(() =>
-    this.phase() === 'reveal' ? (this.model2()?.name ?? 'Model B') : 'Model B',
+  // On reveal, promptUsesRemaining already decremented so completedMatches is accurate.
+  // During active phases, add 1 to show the in-progress match number.
+  readonly currentMatch = computed(() => {
+    const completed = this.completedMatches();
+    return this.phase() === 'reveal' ? completed : completed + 1;
+  });
+
+  readonly allMatchesComplete = computed(
+    () => this.completedMatches() >= this.config.battle.promptUseLimit,
   );
 
   private model1Sub?: Subscription;

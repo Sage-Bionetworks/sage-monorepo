@@ -23,23 +23,22 @@
   @if (state.phase() !== 'landing') {
     <section class="battle-view">
       <div class="rail">
-        @for (i of promptUseDots; track i) {
+        @for (i of state.promptUseDots; track i) {
           <span
             class="rd"
-            [class.done]="i <= completedMatches()"
-            [class.now]="i === currentMatch() && !allMatchesComplete()"
-            [class.fut]="i > currentMatch()"
+            [class.done]="i <= state.completedMatches()"
+            [class.now]="i === state.currentMatch() && !state.allMatchesComplete()"
+            [class.fut]="i > state.currentMatch()"
           ></span>
         }
-        @if (allMatchesComplete()) {
-          <span class="rl complete">Mission Complete! You've stress-tested this question</span>
+        @if (state.allMatchesComplete()) {
+          <span class="rl complete">You've stress-tested this question! Try a new one.</span>
         } @else {
-          <span class="rl">Match {{ currentMatch() }} / {{ promptUseLimit }}</span>
+          <span class="rl">Match {{ state.currentMatch() }} / {{ state.promptUseLimit }}</span>
         }
       </div>
       <div class="panels">
         <bixarena-model-panel
-          [anonymousName]="state.model1DisplayName()"
           modelId="model1"
           [streamState]="state.model1Stream()"
           [modelName]="state.phase() === 'reveal' ? (state.model1()?.name ?? null) : null"
@@ -47,7 +46,6 @@
           [hoveredModel]="hoverSide()"
         />
         <bixarena-model-panel
-          [anonymousName]="state.model2DisplayName()"
           modelId="model2"
           [streamState]="state.model2Stream()"
           [modelName]="state.phase() === 'reveal' ? (state.model2()?.name ?? null) : null"
@@ -63,7 +61,7 @@
         (vote)="onVote($event)"
         (hoverSide)="hoverSide.set($event)"
         (newBattle)="onNewBattle()"
-        (samePrompt)="onSamePrompt()"
+        (samePrompt)="onSamePromptSubmit()"
       />
       <div class="btm">
         <bixarena-prompt-composer

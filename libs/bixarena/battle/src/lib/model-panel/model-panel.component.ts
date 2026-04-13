@@ -23,8 +23,8 @@ import { STREAM_CURSOR } from '../battle.constants';
 export class ModelPanelComponent {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  readonly anonymousName = input.required<string>();
   readonly modelId = input.required<'model1' | 'model2'>();
+  readonly anonymousName = computed(() => (this.modelId() === 'model1' ? 'Model A' : 'Model B'));
   readonly streamState = input.required<ModelStreamState>();
   readonly modelName = input<string | null>(null);
   readonly selectedOutcome = input<BattleEvaluationOutcome | null>(null);
