@@ -3,16 +3,16 @@ import { ForestPlotProps } from '../models';
 import { computeInitialHeight, computeXBounds } from './forest-plot-chart';
 
 describe('computeInitialHeight', () => {
-  it('calculates height from item count when above the 450px floor', () => {
-    // 10 × 44 + 80 = 520; 9 × 44 + 80 = 476 — both exceed the 450px floor
-    expect(computeInitialHeight(10)).toBe('520px');
-    expect(computeInitialHeight(9)).toBe('476px');
+  it('calculates height from item count when above the 490px floor', () => {
+    // 10 × 44 + 60 = 500; 11 × 44 + 60 = 544 — both exceed the 490px floor
+    expect(computeInitialHeight(10)).toBe('500px');
+    expect(computeInitialHeight(11)).toBe('544px');
   });
 
-  it('enforces minimum height of 450px when computed height is below floor', () => {
-    // 8 × 44 + 80 = 432 < 450; 0 × 44 + 80 = 80 < 450
-    expect(computeInitialHeight(0)).toBe('450px');
-    expect(computeInitialHeight(8)).toBe('450px');
+  it('enforces minimum height of 490px when computed height is below floor', () => {
+    // 9 × 44 + 60 = 456 < 490; 0 × 44 + 60 = 60 < 490
+    expect(computeInitialHeight(0)).toBe('490px');
+    expect(computeInitialHeight(9)).toBe('490px');
   });
 });
 
@@ -29,9 +29,10 @@ describe('computeXBounds', () => {
   it('ignores explicit bounds when only one is provided', () => {
     const propsMinOnly: ForestPlotProps = { items: forestPlotItems, xAxisMin: -0.5 };
     const propsMaxOnly: ForestPlotProps = { items: forestPlotItems, xAxisMax: 0.5 };
+    const autoCalculated = computeXBounds({ items: forestPlotItems });
     // Neither case meets the "both defined" condition — auto-calculated instead
-    expect(computeXBounds(propsMinOnly)).not.toEqual([-0.5, expect.anything()]);
-    expect(computeXBounds(propsMaxOnly)).not.toEqual([expect.anything(), 0.5]);
+    expect(computeXBounds(propsMinOnly)).toEqual(autoCalculated);
+    expect(computeXBounds(propsMaxOnly)).toEqual(autoCalculated);
   });
 
   it('auto-calculates symmetric bounds from CI data (x1.1)', () => {
@@ -53,5 +54,12 @@ describe('computeXBounds', () => {
     const [xMin, xMax] = computeXBounds(props);
     expect(xMin).toBeCloseTo(-0.22, 3);
     expect(xMax).toBeCloseTo(0.22, 3);
+  });
+
+  it('returns [-1, 1] when all CI bounds are zero', () => {
+    const props: ForestPlotProps = {
+      items: [{ yAxisCategory: 'ACC', value: 0, ciLeft: 0, ciRight: 0 }],
+    };
+    expect(computeXBounds(props)).toEqual([-1, 1]);
   });
 });

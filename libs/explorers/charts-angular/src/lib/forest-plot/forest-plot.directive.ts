@@ -13,7 +13,6 @@ import {
   ForestPlotItem,
   ForestPlotProps,
 } from '@sagebionetworks/explorers/charts';
-import { CallbackDataParams } from 'echarts/types/dist/shared';
 
 @Directive({
   selector: '[sageForestPlot]',
@@ -23,21 +22,19 @@ export class ForestPlotDirective implements OnDestroy {
   private readonly el = inject(ElementRef);
 
   items = input.required<ForestPlotItem[]>();
-  title = input<string | undefined>(undefined);
-  xAxisTitle = input<string | undefined>(undefined);
-  xAxisMin = input<number | undefined>(undefined);
-  xAxisMax = input<number | undefined>(undefined);
-  yAxisCategories = input<string[] | undefined>(undefined);
-  yAxisLabelTooltipFormatter = input<((category: string) => string) | undefined>(undefined);
-  pointTooltipFormatter = input<
-    ((item: ForestPlotItem, params: CallbackDataParams) => string) | undefined
-  >(undefined);
-  ciLabelFormatter = input<((value: number) => string) | undefined>(undefined);
-  defaultLineColor = input<string | undefined>(undefined);
-  defaultPointColor = input<string | undefined>(undefined);
-  pointSize = input<number | undefined>(undefined);
-  showCILabels = input<boolean | undefined>(undefined);
-  noDataStyle = input<'textOnly' | 'grayBackground' | undefined>(undefined);
+  title = input<string>();
+  xAxisTitle = input<string>();
+  xAxisMin = input<number>();
+  xAxisMax = input<number>();
+  yAxisCategories = input<string[]>();
+  yAxisLabelTooltipFormatter = input<(category: string) => string>();
+  pointTooltipFormatter = input<(item: ForestPlotItem) => string>();
+  ciLabelFormatter = input<(value: number) => string>();
+  defaultLineColor = input<string>();
+  defaultPointColor = input<string>();
+  pointSize = input<number>();
+  showCILabels = input<boolean>();
+  noDataStyle = input<'textOnly' | 'grayBackground'>();
 
   private forestPlot: ForestPlotChart | undefined;
 

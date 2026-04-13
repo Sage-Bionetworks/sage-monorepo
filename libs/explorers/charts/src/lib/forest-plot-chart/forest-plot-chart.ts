@@ -13,14 +13,12 @@ const ZERO_LINE_COLOR = '#BCC0CA';
 const ZERO_LINE_WIDTH = 2;
 const AXIS_LINE_COLOR = '#989898';
 const AXIS_TICK_LABEL_COLOR = '#000';
-
 const X_AXIS_LABEL_TEXT_STYLE = { color: AXIS_TICK_LABEL_COLOR, fontSize: 14 };
-const Y_AXIS_LABEL_TEXT_STYLE = { color: AXIS_TICK_LABEL_COLOR, fontSize: 14 };
-const TITLE_TEXT_STYLE = { color: '#2a2f35', fontSize: 14, fontWeight: 'bold' as const };
+const Y_AXIS_LABEL_TEXT_STYLE = { color: AXIS_TICK_LABEL_COLOR, fontSize: 16 };
+const TITLE_TEXT_STYLE = { color: '#24334f', fontSize: 14, fontWeight: 'bold' as const };
 
 // --- Layout constants ---
-const GRID = { top: 20, right: 80, bottom: 40, containLabel: true };
-
+const GRID = { right: 80, containLabel: true };
 const TOOLTIP: EChartsOption['tooltip'] = {
   confine: true,
   backgroundColor: '#63676C',
@@ -28,9 +26,9 @@ const TOOLTIP: EChartsOption['tooltip'] = {
   borderColor: 'transparent',
 };
 
-// Height: ~44px per row + 80px margins; 450px floor matches the original row-chart
+// Height: ~44px per row + 60px margins; 490px floor
 export function computeInitialHeight(rowCount: number): string {
-  return `${Math.max(rowCount * 44 + 80, 450)}px`;
+  return `${Math.max(rowCount * 44 + 60, 490)}px`;
 }
 
 // Symmetric bounds from max(|ciLeft|, |ciRight|) ×1.1
@@ -38,10 +36,11 @@ export function computeXBounds(props: ForestPlotProps): [number, number] {
   if (props.xAxisMin !== undefined && props.xAxisMax !== undefined) {
     return [props.xAxisMin, props.xAxisMax];
   }
-  const maxAbs = Math.max(
-    ...props.items.flatMap((item) => [Math.abs(item.ciLeft), Math.abs(item.ciRight)]),
+  const maxAbs = props.items.reduce(
+    (acc, item) => Math.max(acc, Math.abs(item.ciLeft), Math.abs(item.ciRight)),
+    0,
   );
-  const bound = maxAbs * 1.1;
+  const bound = maxAbs === 0 ? 1 : maxAbs * 1.1;
   return [-bound, bound];
 }
 
@@ -153,7 +152,7 @@ function dotSeries(props: ForestPlotProps): ScatterSeriesOption {
         const params = rawParams as CallbackDataParams;
         const item = props.items[params.dataIndex];
         return props.pointTooltipFormatter
-          ? props.pointTooltipFormatter(item, params)
+          ? props.pointTooltipFormatter(item)
           : `Value: ${item.value}`;
       },
     },
@@ -165,6 +164,9 @@ export class ForestPlotChart {
   chart: ECharts | undefined;
 
   constructor(chartDom: HTMLDivElement | HTMLCanvasElement, props: ForestPlotProps) {
+    // Height is set once at construction time. If item count changes after construction
+    // (via setOptions), the DOM height will not update. This is intentional for the
+    // current use case where item count is fixed.
     this.chart = initChart(chartDom, computeInitialHeight(props.items.length));
     this.setOptions(props);
   }
@@ -188,7 +190,7 @@ export class ForestPlotChart {
     const yAxisLabelTooltipFormatter = props.yAxisLabelTooltipFormatter;
 
     const option: EChartsOption = {
-      grid: { ...GRID, top: props.title ? 60 : 20, bottom: props.xAxisTitle ? 70 : 40 },
+      grid: { ...GRID, top: props.title ? 60 : 20, bottom: props.xAxisTitle ? 50 : 40 },
       xAxis: {
         type: 'value',
         min: xMin,
@@ -196,7 +198,7 @@ export class ForestPlotChart {
         name: props.xAxisTitle,
         nameLocation: 'middle',
         nameGap: 50,
-        nameTextStyle: { fontWeight: 'bold', color: '#2a2f35', fontSize: 18 },
+        nameTextStyle: { ...TITLE_TEXT_STYLE, fontSize: 18 },
         axisLine: { show: true, lineStyle: { width: ZERO_LINE_WIDTH, color: AXIS_LINE_COLOR } },
         splitLine: { show: false },
         axisLabel: {
@@ -219,7 +221,7 @@ export class ForestPlotChart {
             extraCssText: 'border: unset; opacity: 0.9; background-color: #63676c',
           }),
         },
-        axisLabel: Y_AXIS_LABEL_TEXT_STYLE,
+        axisLabel: { ...Y_AXIS_LABEL_TEXT_STYLE, margin: 30 },
       } as EChartsOption['yAxis'],
       series: [zeroLineSeries(yAxisCategories), ciLineSeries(props), dotSeries(props)],
       tooltip: TOOLTIP,
