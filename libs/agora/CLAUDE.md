@@ -32,7 +32,7 @@ For serving the Agora app, see the "Serving an App" section in the root `CLAUDE.
 | `agora-teams`                             | `teams/`                             | Team/researcher listing and detail pages                                                |
 | `agora-nomination-form`                   | `nomination-form/`                   | Gene nomination submission form                                                         |
 | `agora-gene-comparison-tool`              | `gene-comparison-tool/`              | Side-by-side gene comparison                                                            |
-| `agora-nominated-targets-comparison-tool` | `nominated-targets-comparison-tool/` | Nominated drug targets comparison                                                       |
+| `agora-nominated-targets-comparison-tool` | `nominated-targets-comparison-tool/` | Nominated gene comparison                                                               |
 | `agora-nominated-drugs-comparison-tool`   | `nominated-drugs-comparison-tool/`   | Nominated drugs comparison                                                              |
 | `agora-testing`                           | `testing/`                           | Mock data and service stubs for unit tests                                              |
 | `agora-styles`                            | `styles/`                            | Shared SCSS variables and styles                                                        |
@@ -74,7 +74,7 @@ nx build agora-api-description
 
 ## Charts Library
 
-`agora-charts` contains standalone D3-based components. Each chart manages its own SVG lifecycle (`createChart`/`destroyChart` methods) and accepts data via `@Input()`. Charts use `HelperService` from `agora-services` for color schemes. Test setup files mock `ResizeObserver` and `SVGElement.getBBox` to support D3 in jsdom.
+`agora-charts` contains standalone D3-based components. Each chart manages its own SVG lifecycle (`createChart`/`destroyChart` methods) and accepts data via `@Input()`. Charts use `HelperService` from `agora-services` for color schemes. Test setup files mock `ResizeObserver` and `SVGElement.getBBox` to support D3 in jsdom. Do not use dc.js; it is a legacy dependency being phased out.
 
 ## Testing Conventions
 
@@ -82,4 +82,4 @@ Tests use **Angular TestBed + ComponentFixture** (not `@testing-library/angular`
 
 ## Code Style
 
-This codebase predates the signals migration in the explorers/model-ad libraries. Existing code uses RxJS Observables and `*ngIf`/`*ngFor` — these are legacy patterns. New code should follow the modern Angular patterns in `.claude/rules/angular.md` (signals, `@if`/`@for`, `inject()`). Do not proactively migrate existing legacy code unless it is directly relevant to the current task.
+This codebase predates the signals migration in the explorers/model-ad libraries. Existing code uses `@Input()`/`@Output()` decorators and RxJS `.subscribe()` — these are legacy patterns. New code should follow the modern Angular patterns in `.claude/rules/angular.md` (`input()`/`output()` signals, `inject()`). Do not proactively migrate existing legacy code unless it is directly relevant to the current task.

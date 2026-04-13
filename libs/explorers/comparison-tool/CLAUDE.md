@@ -29,6 +29,8 @@ Coverage is output to `coverage/libs/explorers/comparison-tool`.
 - `ComparisonToolFilterPanelComponent` — slide-in side panel for advanced filtering
 - `ComparisonToolFilterListComponent` — active filter chips/badges
 - `HeatmapDetailsPanelComponent` — modal showing detailed heatmap cell info
+- `ComparisonToolFooterComponent` — paginator and help links
+  - `HelpLinksComponent` — legend panel and visualization overview panel (also a public export)
 
 ### State Management
 
