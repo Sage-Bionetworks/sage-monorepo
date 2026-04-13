@@ -10,10 +10,12 @@ import {
   BoxPlotComponent,
   CandlestickChartComponent,
   MedianBarChartComponent,
-  RowChartComponent,
 } from '@sagebionetworks/agora/charts';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
-import { BoxPlotChartItem, RowChartItem } from '@sagebionetworks/agora/models';
+import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { ForestPlotItem } from '@sagebionetworks/explorers/charts';
+import { ForestPlotDirective } from '@sagebionetworks/explorers/charts-angular';
 import {
   HelperService as ExplorersHelperService,
   LoggerService,
@@ -32,7 +34,7 @@ import { GeneNetworkComponent } from '../gene-network/gene-network.component';
     GeneNetworkComponent,
     GeneModelSelectorComponent,
     CandlestickChartComponent,
-    RowChartComponent,
+    ForestPlotDirective,
     MedianBarChartComponent,
     ModalLinkComponent,
     DownloadDomImageComponent,
@@ -45,6 +47,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
+  private readonly helperService = inject(HelperService);
 
   explorersHelperService = inject(ExplorersHelperService);
   distributionService = inject(DistributionService);
@@ -71,7 +74,13 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   differentialExpressionYAxisMin: number | undefined;
   differentialExpressionYAxisMax: number | undefined;
 
-  consistencyOfChangeChartData: RowChartItem[] = [];
+  consistencyOfChangeChartData: ForestPlotItem[] = [];
+
+  readonly yAxisLabelTooltipFormatter = (category: string) =>
+    this.helperService.getGCTColumnTooltipText(category);
+
+  readonly pointTooltipFormatter = (item: ForestPlotItem) =>
+    `Log Fold Change: ${this.explorersHelperService.getSignificantFigures(item.value, 3)}`;
 
   @ViewChild(BoxPlotComponent) boxPlotComponent: BoxPlotComponent | null = null;
   hasScrolled = false;
@@ -229,19 +238,12 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   }
 
   initConsistencyOfChange() {
-    this.consistencyOfChangeChartData = this.differentialExpression.map((item) => {
-      return {
-        key: [item.tissue, item.ensembl_gene_id, item.model],
-        value: {
-          adj_p_val: item.adj_p_val,
-          fc: item.fc,
-          logfc: item.logfc,
-        },
-        tissue: item.tissue,
-        ci_l: item.ci_l,
-        ci_r: item.ci_r,
-      };
-    });
+    this.consistencyOfChangeChartData = this.differentialExpression.map((item) => ({
+      yAxisCategory: item.tissue,
+      value: item.logfc,
+      ciLeft: item.ci_l,
+      ciRight: item.ci_r,
+    }));
   }
 
   onStatisticalModelChange(event: any) {

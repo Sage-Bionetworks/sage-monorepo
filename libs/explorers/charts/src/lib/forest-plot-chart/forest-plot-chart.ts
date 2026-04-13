@@ -28,9 +28,9 @@ const TOOLTIP: EChartsOption['tooltip'] = {
   borderColor: 'transparent',
 };
 
-// Height: ~44px per row + 80px margins
+// Height: ~44px per row + 80px margins; 450px floor matches the original row-chart
 export function computeInitialHeight(rowCount: number): string {
-  return `${Math.max(rowCount * 44 + 80, 200)}px`;
+  return `${Math.max(rowCount * 44 + 80, 450)}px`;
 }
 
 // Symmetric bounds from max(|ciLeft|, |ciRight|) ×1.1

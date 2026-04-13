@@ -3,16 +3,16 @@ import { ForestPlotProps } from '../models';
 import { computeInitialHeight, computeXBounds } from './forest-plot-chart';
 
 describe('computeInitialHeight', () => {
-  it('calculates height from item count', () => {
-    // 8 × 44 + 80 = 432; 3 × 44 + 80 = 212 — both exceed the 200px floor
-    expect(computeInitialHeight(8)).toBe('432px');
-    expect(computeInitialHeight(3)).toBe('212px');
+  it('calculates height from item count when above the 450px floor', () => {
+    // 10 × 44 + 80 = 520; 9 × 44 + 80 = 476 — both exceed the 450px floor
+    expect(computeInitialHeight(10)).toBe('520px');
+    expect(computeInitialHeight(9)).toBe('476px');
   });
 
-  it('enforces minimum height of 200px when computed height is below floor', () => {
-    // 2 × 44 + 80 = 168 < 200; 0 × 44 + 80 = 80 < 200
-    expect(computeInitialHeight(0)).toBe('200px');
-    expect(computeInitialHeight(2)).toBe('200px');
+  it('enforces minimum height of 450px when computed height is below floor', () => {
+    // 8 × 44 + 80 = 432 < 450; 0 × 44 + 80 = 80 < 450
+    expect(computeInitialHeight(0)).toBe('450px');
+    expect(computeInitialHeight(8)).toBe('450px');
   });
 });
 
