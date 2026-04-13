@@ -8,7 +8,7 @@ import { Component, computed, ElementRef, input, output, signal, viewChild } fro
 export class PromptComposerComponent {
   readonly placeholder = input('Ask anything biomedical...');
   readonly disabled = input(false);
-  readonly maxLength = input(5000);
+  readonly maxLength = input.required<number>();
 
   readonly promptSubmit = output<string>();
 

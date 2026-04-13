@@ -59,6 +59,7 @@ export class BattleStateService {
   readonly selectedOutcome = signal<BattleEvaluationOutcome | null>(null);
 
   readonly promptUseLimit = this.config.battle.promptUseLimit;
+  readonly promptLengthLimit = this.config.battle.promptLengthLimit;
   readonly promptUseDots = Array.from({ length: this.promptUseLimit }, (_, i) => i + 1);
 
   // Gates transition to voting/error phase

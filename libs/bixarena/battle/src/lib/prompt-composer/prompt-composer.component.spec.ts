@@ -12,6 +12,7 @@ describe('PromptComposerComponent', () => {
 
     fixture = TestBed.createComponent(PromptComposerComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('maxLength', 5000);
     fixture.detectChanges();
   });
 

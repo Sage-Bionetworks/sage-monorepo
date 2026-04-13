@@ -11,6 +11,7 @@
       <bixarena-example-prompts (promptSelect)="onPromptSubmit($event)" />
       <bixarena-prompt-composer
         placeholder="Ask anything biomedical..."
+        [maxLength]="state.promptLengthLimit"
         [disabled]="state.phase() === 'creating'"
         (promptSubmit)="onPromptSubmit($event)"
       />
@@ -66,6 +67,7 @@
       <div class="btm">
         <bixarena-prompt-composer
           placeholder="Ask a follow-up..."
+          [maxLength]="state.promptLengthLimit"
           [disabled]="state.phase() !== 'voting'"
           (promptSubmit)="onPromptSubmit($event)"
         />

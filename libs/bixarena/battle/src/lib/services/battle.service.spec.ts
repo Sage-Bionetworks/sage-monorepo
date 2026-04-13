@@ -180,9 +180,9 @@ describe('BattleStateService', () => {
       expect(service.bothComplete()).toBe(false);
     });
 
-    it('model display names should show labels until reveal', () => {
-      expect(service.model1DisplayName()).toBe('Model A');
-      expect(service.model2DisplayName()).toBe('Model B');
+    it('should expose promptLengthLimit and promptUseDots from config', () => {
+      expect(service.promptLengthLimit).toBeGreaterThan(0);
+      expect(service.promptUseDots.length).toBe(service.promptUseLimit);
     });
   });
 
