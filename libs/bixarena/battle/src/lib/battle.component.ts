@@ -1,8 +1,5 @@
 import { Component, inject, OnDestroy, signal } from '@angular/core';
-import {
-  BattleService as BattleApiService,
-  BattleEvaluationOutcome,
-} from '@sagebionetworks/bixarena/api-client';
+import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
 import { BattleStateService } from './services/battle.service';
 import { BattleStreamService } from './services/battle-stream.service';
 import { PromptComposerComponent } from './prompt-composer/prompt-composer.component';
@@ -18,7 +15,7 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
     VotingBarComponent,
     ExamplePromptsComponent,
   ],
-  providers: [BattleStateService, BattleStreamService, BattleApiService],
+  providers: [BattleStateService, BattleStreamService],
   templateUrl: './battle.component.html',
   styleUrl: './battle.component.scss',
 })
