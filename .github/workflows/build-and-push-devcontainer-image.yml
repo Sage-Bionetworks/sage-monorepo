@@ -221,10 +221,11 @@ jobs:
           # exceeds Rekor's entry size limit. The attestation is still signed via
           # OIDC + Fulcio and attached to the image in GHCR, but will not appear
           # in the public Rekor log. Note: cosign sign above still uses tlog.
+          # --tlog-upload=false is valid in v2.x; deprecated/broken in v3 — see sigstore/cosign#4503
           cosign attest --yes \
             --type spdxjson \
             --predicate sbom.spdx.json \
-            --tlog-upload=false \  # valid in v2.x; deprecated/broken in v3 — see sigstore/cosign#4503
+            --tlog-upload=false \
             ${IMAGE}@${IMAGE_DIGEST}
 
       - name: Verify the attestation
