@@ -39,7 +39,7 @@ public class ModelOverviewMapper {
       matchedControls,
       linkMapper.toRequiredDto(document.getStudyData()),
       linkMapper.toRequiredDto(document.getJaxStrain()),
-      linkMapper.toRequiredDto(document.getCenter()),
+      document.getCenter(),
       modifiedGenes,
       availableData
     );

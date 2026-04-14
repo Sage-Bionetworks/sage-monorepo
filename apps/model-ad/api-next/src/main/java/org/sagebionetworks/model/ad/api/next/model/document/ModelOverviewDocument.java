@@ -44,7 +44,7 @@ public class ModelOverviewDocument {
   @Field("jax_strain")
   private Link jaxStrain;
 
-  private Link center;
+  private String center;
 
   @Field("modified_genes")
   private List<String> modifiedGenes;

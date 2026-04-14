@@ -682,9 +682,7 @@ components:
         disease_correlation:
           link_url: link_url
           link_text: link_text
-        center:
-          link_url: link_url
-          link_text: link_text
+        center: center
         model_type: model_type
         matched_controls:
           - matched_controls
@@ -734,7 +732,8 @@ components:
         jax_strain:
           $ref: '#/components/schemas/Link'
         center:
-          $ref: '#/components/schemas/Link'
+          nullable: true
+          type: string
         modified_genes:
           description: List of modified genes in the model
           items:
@@ -816,9 +815,7 @@ components:
             disease_correlation:
               link_url: link_url
               link_text: link_text
-            center:
-              link_url: link_url
-              link_text: link_text
+            center: center
             model_type: model_type
             matched_controls:
               - matched_controls
@@ -849,9 +846,7 @@ components:
             disease_correlation:
               link_url: link_url
               link_text: link_text
-            center:
-              link_url: link_url
-              link_text: link_text
+            center: center
             model_type: model_type
             matched_controls:
               - matched_controls

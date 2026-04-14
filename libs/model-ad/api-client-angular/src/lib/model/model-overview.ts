@@ -35,7 +35,7 @@ export interface ModelOverview {
   pathology?: Link;
   study_data: Link;
   jax_strain: Link;
-  center: Link;
+  center: string | null;
   /**
    * List of modified genes in the model
    */

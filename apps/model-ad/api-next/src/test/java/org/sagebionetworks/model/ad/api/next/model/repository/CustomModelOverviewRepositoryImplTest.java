@@ -58,7 +58,7 @@ class CustomModelOverviewRepositoryImplTest {
 
     // Verify all 4 data filter fields are included in the query
     assertTrue(queryString.contains("available_data"), "Query should include availableData field");
-    assertTrue(queryString.contains("center.link_text"), "Query should include center field");
+    assertTrue(queryString.contains("\"center\""), "Query should include center field");
     assertTrue(queryString.contains("model_type"), "Query should include modelType field");
     assertTrue(queryString.contains("modified_genes"), "Query should include modifiedGenes field");
   }

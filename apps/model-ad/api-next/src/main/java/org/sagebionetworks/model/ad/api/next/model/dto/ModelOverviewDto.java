@@ -50,7 +50,7 @@ public class ModelOverviewDto {
 
   private LinkDto jaxStrain;
 
-  private LinkDto center;
+  private String center = null;
 
   @Valid
   private List<String> modifiedGenes = new ArrayList<>();
@@ -104,7 +104,7 @@ public class ModelOverviewDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelOverviewDto(String id, String name, String modelType, List<String> matchedControls, LinkDto studyData, LinkDto jaxStrain, LinkDto center, List<String> modifiedGenes, List<AvailableDataEnum> availableData) {
+  public ModelOverviewDto(String id, String name, String modelType, List<String> matchedControls, LinkDto studyData, LinkDto jaxStrain, String center, List<String> modifiedGenes, List<AvailableDataEnum> availableData) {
     this.id = id;
     this.name = name;
     this.modelType = modelType;
@@ -324,7 +324,7 @@ public class ModelOverviewDto {
     this.jaxStrain = jaxStrain;
   }
 
-  public ModelOverviewDto center(LinkDto center) {
+  public ModelOverviewDto center(String center) {
     this.center = center;
     return this;
   }
@@ -333,14 +333,14 @@ public class ModelOverviewDto {
    * Get center
    * @return center
    */
-  @NotNull @Valid 
+  @NotNull 
   @Schema(name = "center", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("center")
-  public LinkDto getCenter() {
+  public String getCenter() {
     return center;
   }
 
-  public void setCenter(LinkDto center) {
+  public void setCenter(String center) {
     this.center = center;
   }
 
@@ -540,7 +540,7 @@ public class ModelOverviewDto {
       return this;
     }
     
-    public ModelOverviewDto.Builder center(LinkDto center) {
+    public ModelOverviewDto.Builder center(String center) {
       this.instance.center(center);
       return this;
     }

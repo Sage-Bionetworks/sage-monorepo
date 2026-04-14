@@ -271,7 +271,7 @@ class ModelOverviewApiDelegateImplTest {
     document.setPathology(optionalLink);
     document.setStudyData(requiredLink);
     document.setJaxStrain(requiredLink);
-    document.setCenter(requiredLink);
+    document.setCenter("IU/Jax/Pitt");
     document.setModifiedGenes(List.of("Gene 1"));
     document.setAvailableData(List.of("Transcriptomics", "Pathology"));
     return document;

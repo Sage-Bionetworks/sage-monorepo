@@ -537,7 +537,7 @@ components:
           $ref: '#/components/schemas/Link'
           nullable: true
         center:
-          $ref: '#/components/schemas/Link'
+          type: string
           nullable: true
         modified_genes:
           type: array
