@@ -1,13 +1,12 @@
 import { CustomSeriesOption, ECharts, EChartsOption, ScatterSeriesOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
-import { DARK_TOOLTIP } from '../constants';
+import { DARK_TOOLTIP, DEFAULT_POINT_SIZE } from '../constants';
 import { ForestPlotProps } from '../models';
 import { initChart, setNoDataOption } from '../utils';
 
 // --- Styling constants ---
 const LINE_COLOR = '#8b8ad1';
 const LINE_WIDTH = 1.5;
-const POINT_SIZE = 18;
 const CI_TEXT_FONT_SIZE = 14;
 const CI_TEXT_COLOR = '#4a5056';
 const ZERO_LINE_COLOR = '#BCC0CA';
@@ -137,7 +136,7 @@ function zeroLineSeries(yAxisCategories: string[]): CustomSeriesOption {
 function dotSeries(props: ForestPlotProps): ScatterSeriesOption {
   return {
     type: 'scatter',
-    symbolSize: props.pointSize ?? POINT_SIZE,
+    symbolSize: props.pointSize ?? DEFAULT_POINT_SIZE,
     data: props.items.map((item) => ({
       value: [item.value, item.yAxisCategory],
       itemStyle: { color: item.color ?? props.defaultPointColor ?? LINE_COLOR, opacity: 1 },
