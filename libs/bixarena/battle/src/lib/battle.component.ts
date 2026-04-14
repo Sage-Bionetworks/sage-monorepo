@@ -30,6 +30,10 @@ export class BattleComponent implements OnDestroy {
     void this.state.submitPrompt(prompt);
   }
 
+  onFollowUpSubmit(prompt: string): void {
+    void this.state.submitFollowUp(prompt);
+  }
+
   onVote(outcome: BattleEvaluationOutcome): void {
     void this.state.submitVote(outcome);
   }
@@ -39,10 +43,7 @@ export class BattleComponent implements OnDestroy {
   }
 
   onSamePromptSubmit(): void {
-    const prompt = this.state.lastPrompt();
-    if (prompt && this.state.promptUsesRemaining() > 0) {
-      this.state.newBattle(prompt);
-    }
+    void this.state.newMatchup();
   }
 
   ngOnDestroy(): void {

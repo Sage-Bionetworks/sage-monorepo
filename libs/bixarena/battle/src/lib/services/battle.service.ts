@@ -40,14 +40,18 @@ export class BattleStateService {
   readonly model1Stream = signal<ModelStreamState>({ ...INITIAL_STREAM_STATE });
   readonly model2Stream = signal<ModelStreamState>({ ...INITIAL_STREAM_STATE });
 
-  // Prompt reuse tracking
+  // Prompt reuse tracking — initialPrompt is the first question (used for "Same Question New Matchup"),
+  // lastPrompt is the most recent submission (may be a follow-up).
+  readonly initialPrompt = signal<string | null>(null);
   readonly lastPrompt = signal<string | null>(null);
   readonly promptUsesRemaining = signal(0);
   readonly promptUseLimit = this.config.battle.promptUseLimit;
   readonly promptLengthLimit = this.config.battle.promptLengthLimit;
   private readonly roundLimit = this.config.battle.roundLimit;
   readonly promptUseDots = Array.from({ length: this.promptUseLimit }, (_, i) => i + 1);
-  readonly canReuse = computed(() => this.lastPrompt() !== null && this.promptUsesRemaining() > 0);
+  readonly canReuse = computed(
+    () => this.initialPrompt() !== null && this.promptUsesRemaining() > 0,
+  );
   readonly completedMatches = computed(
     () => this.config.battle.promptUseLimit - this.promptUsesRemaining(),
   );
@@ -83,32 +87,14 @@ export class BattleStateService {
 
   async submitPrompt(prompt: string): Promise<void> {
     if (!this.isBrowser) return;
-
-    // Reset reuse budget for a new prompt; preserve remaining uses for the same prompt
-    const isNewPrompt = prompt !== this.lastPrompt();
-    if (isNewPrompt) {
-      this.promptUsesRemaining.set(this.config.battle.promptUseLimit);
-    }
+    this.initialPrompt.set(prompt);
     this.lastPrompt.set(prompt);
+    this.promptUsesRemaining.set(this.config.battle.promptUseLimit);
     this.selectedOutcome.set(null);
 
-    // If a battle already exists, add a new round (follow-up question, same LLMs)
-    const existingBattle = this.battleId();
-    const model1 = this.model1();
-    const model2 = this.model2();
-    if (existingBattle && model1 && model2) {
-      this.prepareStreams(prompt);
-      try {
-        await this.createRoundAndStream(existingBattle, model1.id, model2.id, prompt);
-      } catch (err) {
-        console.error('Failed to create follow-up round', err);
-        this.setStreamError('Something went wrong', true);
-      }
-      return;
-    }
+    const userMsg = { role: 'user' as const, content: prompt };
+    this.resetStreams([userMsg], [userMsg]);
 
-    // No existing battle — create a new one (new match, new LLM pair)
-    this.prepareStreams(prompt);
     let battle;
     try {
       battle = await firstValueFrom(this.battleApi.createBattle({ title: prompt.slice(0, 50) }));
@@ -129,7 +115,63 @@ export class BattleStateService {
     }
   }
 
-  // Retry after error — creates a new round in the same battle with the same models
+  async submitFollowUp(prompt: string): Promise<void> {
+    const battleId = this.battleId();
+    const model1 = this.model1();
+    const model2 = this.model2();
+    if (!battleId || !model1 || !model2) return;
+
+    this.lastPrompt.set(prompt);
+    this.selectedOutcome.set(null);
+
+    const userMsg = { role: 'user' as const, content: prompt };
+    this.resetStreams(
+      [...this.model1Stream().messages, userMsg],
+      [...this.model2Stream().messages, userMsg],
+    );
+    try {
+      await this.createRoundAndStream(battleId, model1.id, model2.id, prompt);
+    } catch (err) {
+      console.error('Failed to create follow-up round', err);
+      this.setStreamError('Something went wrong', true);
+    }
+  }
+
+  async newMatchup(): Promise<void> {
+    const prompt = this.initialPrompt();
+    if (!prompt || this.promptUsesRemaining() <= 0) return;
+
+    this.battleId.set(null);
+    this.roundId.set(null);
+    this.model1.set(null);
+    this.model2.set(null);
+    this.completedRounds = 0;
+    this.lastPrompt.set(prompt);
+    this.selectedOutcome.set(null);
+
+    const userMsg = { role: 'user' as const, content: prompt };
+    this.resetStreams([userMsg], [userMsg]);
+
+    let battle;
+    try {
+      battle = await firstValueFrom(this.battleApi.createBattle({ title: prompt.slice(0, 50) }));
+      if (!battle) throw new Error('Failed to create battle');
+    } catch (err) {
+      console.error('Failed to create matchup', err);
+      this.setStreamError('Something went wrong. Try a new battle', false);
+      return;
+    }
+    this.battleId.set(battle.id);
+    this.model1.set(battle.model1);
+    this.model2.set(battle.model2);
+    try {
+      await this.createRoundAndStream(battle.id, battle.model1.id, battle.model2.id, prompt);
+    } catch (err) {
+      console.error('Failed to start streaming', err);
+      this.setStreamError('Something went wrong', true);
+    }
+  }
+
   async retry(): Promise<void> {
     const prompt = this.lastPrompt();
     const battleId = this.battleId();
@@ -137,7 +179,7 @@ export class BattleStateService {
     const model2 = this.model2();
     if (!prompt || !battleId || !model1 || !model2) return;
 
-    this.prepareStreams(prompt);
+    this.resetStreams(this.model1Stream().messages, this.model2Stream().messages);
     try {
       await this.createRoundAndStream(battleId, model1.id, model2.id, prompt);
     } catch (err) {
@@ -154,40 +196,21 @@ export class BattleStateService {
     try {
       await firstValueFrom(this.battleApi.createBattleEvaluation(battleId, { outcome }));
     } catch {
-      // On failure, stay in voting phase so the user can retry
       this.isVoting = false;
       return;
     }
 
-    // Record outcome, decrement budget, advance to reveal
     this.selectedOutcome.set(outcome);
     this.promptUsesRemaining.update((n) => Math.max(0, n - 1));
     this.phase.set('reveal');
     this.isVoting = false;
 
-    // Best-effort: record battle end time (non-critical, ignore failures)
     firstValueFrom(this.battleApi.updateBattle(battleId, { endedAt: new Date().toISOString() }))
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       .catch(() => {});
   }
 
-  async newBattle(prompt?: string): Promise<void> {
-    // Cancel active streams and reset stream state, preserving the prompt reuse budget
-    this.cleanupStreams();
-    this.completedRounds = 0;
-    this.model1Stream.set({ ...INITIAL_STREAM_STATE });
-    this.model2Stream.set({ ...INITIAL_STREAM_STATE });
-    this.selectedOutcome.set(null);
-
-    // Re-submit with the provided prompt or fall back to the last prompt
-    const text = prompt ?? this.lastPrompt();
-    if (text) {
-      await this.submitPrompt(text);
-    }
-  }
-
   reset(): void {
-    // Full teardown — cancel streams and return to landing state
     this.cleanupStreams();
     this.completedRounds = 0;
     this.phase.set('landing');
@@ -197,18 +220,20 @@ export class BattleStateService {
     this.model2.set(null);
     this.model1Stream.set({ ...INITIAL_STREAM_STATE });
     this.model2Stream.set({ ...INITIAL_STREAM_STATE });
+    this.initialPrompt.set(null);
     this.lastPrompt.set(null);
     this.promptUsesRemaining.set(0);
     this.selectedOutcome.set(null);
   }
 
-  // Shared setup — reset streams with user message and transition to creating
-  private prepareStreams(prompt: string): void {
+  private resetStreams(
+    m1Messages: { role: 'user' | 'assistant'; content: string }[],
+    m2Messages: { role: 'user' | 'assistant'; content: string }[],
+  ): void {
     this.cleanupStreams();
     this.phase.set('creating');
-    const userMsg = { role: 'user' as const, content: prompt };
-    this.model1Stream.set({ ...INITIAL_STREAM_STATE, messages: [userMsg], status: 'waiting' });
-    this.model2Stream.set({ ...INITIAL_STREAM_STATE, messages: [userMsg], status: 'waiting' });
+    this.model1Stream.set({ ...INITIAL_STREAM_STATE, messages: m1Messages, status: 'waiting' });
+    this.model2Stream.set({ ...INITIAL_STREAM_STATE, messages: m2Messages, status: 'waiting' });
   }
 
   // Shared round creation + streaming kickoff

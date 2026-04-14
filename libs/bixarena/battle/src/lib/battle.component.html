@@ -70,7 +70,7 @@
           placeholder="Ask a follow-up..."
           [maxLength]="state.promptLengthLimit"
           [disabled]="state.phase() !== 'voting'"
-          (promptSubmit)="onPromptSubmit($event)"
+          (promptSubmit)="onFollowUpSubmit($event)"
         />
       </div>
       <p class="disclaimer">
