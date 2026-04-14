@@ -1,0 +1,7 @@
+name: transcriptomicsSearchQuery
+description: The search query used to find and filter transcriptomics data.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/TranscriptomicsSearchQuery.yaml

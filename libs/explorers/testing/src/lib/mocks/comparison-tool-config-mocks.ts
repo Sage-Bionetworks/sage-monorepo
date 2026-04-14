@@ -68,7 +68,7 @@ export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
     options: [
       { label: 'Biomarkers', selected: true },
       { label: 'Disease Correlation', selected: true },
-      { label: 'Gene Expression', selected: true },
+      { label: 'Transcriptomics', selected: true },
       { label: 'Pathology', selected: true },
     ],
   },

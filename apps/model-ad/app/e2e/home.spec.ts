@@ -15,7 +15,7 @@ test.describe('home', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Model Overview' })).toBeVisible();
   });
 
-  test('differential expression card links to gene expression CT', async ({ page }) => {
+  test('differential expression card links to differential expression CT', async ({ page }) => {
     await page.goto('');
 
     const differentialExpressionCard = page
@@ -26,7 +26,9 @@ test.describe('home', () => {
     await differentialExpressionCard.click();
 
     await page.waitForURL('/comparison/expression');
-    await expect(page.getByRole('heading', { level: 1, name: 'Gene Expression' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Differential Expression' }),
+    ).toBeVisible();
   });
 
   test('disease correlation card links to disease correlation CT', async ({ page }) => {

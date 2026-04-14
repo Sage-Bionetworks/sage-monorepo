@@ -1,8 +1,8 @@
 package org.sagebionetworks.model.ad.api.next.configuration;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -43,12 +43,12 @@ public class IntegerEnumConverterConfiguration {
   @Bean
   Converter<
     String,
-    GeneExpressionSearchQueryDto.SortOrdersEnum
-  > geneExpressionSortOrdersConverter() {
-    return new Converter<String, GeneExpressionSearchQueryDto.SortOrdersEnum>() {
+    TranscriptomicsSearchQueryDto.SortOrdersEnum
+  > transcriptomicsSortOrdersConverter() {
+    return new Converter<String, TranscriptomicsSearchQueryDto.SortOrdersEnum>() {
       @Override
-      public GeneExpressionSearchQueryDto.SortOrdersEnum convert(String source) {
-        return GeneExpressionSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
+      public TranscriptomicsSearchQueryDto.SortOrdersEnum convert(String source) {
+        return TranscriptomicsSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
       }
     };
   }

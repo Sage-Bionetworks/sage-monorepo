@@ -1,0 +1,21 @@
+get:
+  tags:
+    - Transcriptomics
+  summary: Get transcriptomics comparison data
+  description: Returns a paginated list of transcriptomics objects for use in comparison tools.
+  operationId: getTranscriptomics
+  parameters:
+    - $ref: ../query/transcriptomicsSearchQuery.yaml
+  responses:
+    '200':
+      description: A paginated response containing transcriptomics objects
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/TranscriptomicsPage.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

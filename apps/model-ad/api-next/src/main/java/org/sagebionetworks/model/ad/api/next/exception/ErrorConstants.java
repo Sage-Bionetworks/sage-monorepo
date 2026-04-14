@@ -15,7 +15,7 @@ public enum ErrorConstants {
     "Query parameter category must repeat twice (e.g. ?category=CONSENSUS NETWORK MODULES" +
     "&category=subcategory) and each value must be a string";
 
-  public static final String GENE_EXPRESSION_CATEGORY = "RNA - Differential Expression";
+  public static final String TRANSCRIPTOMICS_CATEGORY = "RNA - Differential Expression";
   public static final String DISEASE_CORRELATION_CATEGORY = "CONSENSUS NETWORK MODULES";
 
   private final String type;

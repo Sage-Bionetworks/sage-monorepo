@@ -29,12 +29,12 @@ tags:
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
     x-displayName: Disease Correlation
-  - name: Gene Expression
-    description: Operations about Gene Expression results.
-    x-displayName: Gene Expression
-  - name: Gene Expression Individual
-    description: Operations about Individual Gene Expression results.
-    x-displayName: Gene Expression Individual
+  - name: Transcriptomics
+    description: Operations about Transcriptomics results.
+    x-displayName: Transcriptomics
+  - name: Transcriptomics Individual
+    description: Operations about Individual Transcriptomics results.
+    x-displayName: Transcriptomics Individual
 paths:
   /data-version:
     get:
@@ -129,37 +129,37 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /comparison-tools/gene-expression:
+  /comparison-tools/transcriptomics:
     get:
       tags:
-        - Gene Expression
-      summary: Get gene expression comparison data
-      description: Returns a paginated list of gene expression objects for use in comparison tools.
-      operationId: getGeneExpressions
+        - Transcriptomics
+      summary: Get transcriptomics comparison data
+      description: Returns a paginated list of transcriptomics objects for use in comparison tools.
+      operationId: getTranscriptomics
       parameters:
-        - $ref: '#/components/parameters/geneExpressionSearchQuery'
+        - $ref: '#/components/parameters/transcriptomicsSearchQuery'
       responses:
         '200':
-          description: A paginated response containing gene expression objects
+          description: A paginated response containing transcriptomics objects
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GeneExpressionsPage'
+                $ref: '#/components/schemas/TranscriptomicsPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /gene-expression-individual:
+  /transcriptomics-individual:
     get:
       tags:
-        - Gene Expression Individual
-      summary: Get gene expression individual data
-      description: Retrieve gene expression individual data based on specified filter criteria.
-      operationId: getGeneExpressionIndividual
+        - Transcriptomics Individual
+      summary: Get transcriptomics individual data
+      description: Retrieve transcriptomics individual data based on specified filter criteria.
+      operationId: getTranscriptomicsIndividual
       parameters:
-        - $ref: '#/components/parameters/geneExpressionIndividualFilterQuery'
+        - $ref: '#/components/parameters/transcriptomicsIndividualFilterQuery'
       responses:
         '200':
           content:
@@ -167,8 +167,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GeneExpressionIndividual'
-          description: Successfully retrieved individual gene expression data
+                  $ref: '#/components/schemas/TranscriptomicsIndividual'
+          description: Successfully retrieved individual transcriptomics data
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -269,9 +269,9 @@ components:
       description: The type of comparison tool page
       enum:
         - Model Overview
-        - Gene Expression
+        - Differential Expression
         - Disease Correlation
-      example: Gene Expression
+      example: Differential Expression
     ComparisonToolConfigColumn:
       type: object
       properties:
@@ -518,7 +518,7 @@ components:
           items:
             type: string
           description: List of matched control models
-        gene_expression:
+        transcriptomics:
           $ref: '#/components/schemas/Link'
           nullable: true
         disease_correlation:
@@ -549,7 +549,7 @@ components:
           items:
             type: string
             enum:
-              - Gene Expression
+              - Transcriptomics
               - Pathology
               - Biomarkers
               - Disease Correlation
@@ -839,9 +839,9 @@ components:
       required:
         - diseaseCorrelations
         - page
-    GeneExpressionSearchQuery:
+    TranscriptomicsSearchQuery:
       type: object
-      description: Gene expression search query with pagination and filtering options.
+      description: Transcriptomics search query with pagination and filtering options.
       properties:
         pageNumber:
           description: The page number.
@@ -975,13 +975,13 @@ components:
       required:
         - log2_fc
         - adj_p_val
-    GeneExpression:
+    Transcriptomics:
       type: object
-      description: Gene Expression
+      description: Transcriptomics
       properties:
         composite_id:
           type: string
-          description: Unique identifier for the gene expression object
+          description: Unique identifier for the transcriptomics object
           example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
         ensembl_gene_id:
           type: string
@@ -1033,19 +1033,19 @@ components:
         - model_type
         - tissue
         - sex_cohort
-    GeneExpressionsPage:
+    TranscriptomicsPage:
       type: object
-      description: A paginated response containing gene expression objects and pagination metadata.
+      description: A paginated response containing transcriptomics objects and pagination metadata.
       properties:
-        geneExpressions:
+        transcriptomics:
           type: array
-          description: The list of gene expression objects for the current page
+          description: The list of transcriptomics objects for the current page
           items:
-            $ref: '#/components/schemas/GeneExpression'
+            $ref: '#/components/schemas/Transcriptomics'
         page:
           $ref: '#/components/schemas/PageMetadata'
       required:
-        - geneExpressions
+        - transcriptomics
         - page
     ModelIdentifierType:
       type: string
@@ -1056,9 +1056,9 @@ components:
         Specifies whether a model identifier refers to a name or modelGroup.
         - name: The identifier is a model name.
         - modelGroup: The identifier is a model group.
-    GeneExpressionIndividualFilterQuery:
+    TranscriptomicsIndividualFilterQuery:
       type: object
-      description: Gene expression individual filter query options
+      description: Transcriptomics individual filter query options
       properties:
         tissue:
           description: Tissue type to filter by
@@ -1100,9 +1100,9 @@ components:
         - sex
         - individual_id
         - value
-    GeneExpressionIndividual:
+    TranscriptomicsIndividual:
       type: object
-      description: Gene Expression Individual
+      description: Transcriptomics Individual
       properties:
         ensembl_gene_id:
           type: string
@@ -1128,7 +1128,7 @@ components:
           example: C57BL/6J
         units:
           type: string
-          description: Units of measurement for gene expression
+          description: Units of measurement for transcriptomics data
           example: Log2 Counts per Million
         age:
           type: string
@@ -1148,7 +1148,7 @@ components:
             - Trem2
         data:
           type: array
-          description: List of individual gene expression data points
+          description: List of individual transcriptomics data points
           items:
             $ref: '#/components/schemas/IndividualData'
       required:
@@ -1260,9 +1260,9 @@ components:
           description: List of aliases for the model
           items:
             type: string
-        gene_expression:
+        transcriptomics:
           type: string
-          description: Link to gene expression comparison tool data
+          description: Link to transcriptomics comparison tool data
           nullable: true
         disease_correlation:
           type: string
@@ -1298,7 +1298,7 @@ components:
         - alzforum_id
         - genotype
         - aliases
-        - gene_expression
+        - transcriptomics
         - disease_correlation
         - spatial_transcriptomics
         - genetic_info
@@ -1357,20 +1357,20 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
-    geneExpressionSearchQuery:
-      name: geneExpressionSearchQuery
-      description: The search query used to find and filter gene expressions.
+    transcriptomicsSearchQuery:
+      name: transcriptomicsSearchQuery
+      description: The search query used to find and filter transcriptomics data.
       in: query
       style: deepObject
       explode: true
       schema:
-        $ref: '#/components/schemas/GeneExpressionSearchQuery'
-    geneExpressionIndividualFilterQuery:
-      name: geneExpressionIndividualFilterQuery
-      description: The filter query used to retrieve a specific set of gene expression individual data.
+        $ref: '#/components/schemas/TranscriptomicsSearchQuery'
+    transcriptomicsIndividualFilterQuery:
+      name: transcriptomicsIndividualFilterQuery
+      description: The filter query used to retrieve a specific set of transcriptomics individual data.
       in: query
       required: true
       style: deepObject
       explode: true
       schema:
-        $ref: '#/components/schemas/GeneExpressionIndividualFilterQuery'
+        $ref: '#/components/schemas/TranscriptomicsIndividualFilterQuery'

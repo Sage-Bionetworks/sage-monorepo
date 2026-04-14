@@ -13,7 +13,7 @@ export const headerLinks: NavigationLink[] = [
   },
   {
     label: 'Differential Expression',
-    routerLink: [ROUTE_PATHS.GENE_EXPRESSION],
+    routerLink: [ROUTE_PATHS.DIFFERENTIAL_EXPRESSION],
   },
   {
     label: 'Disease Correlation',

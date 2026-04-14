@@ -29,7 +29,7 @@ export interface ModelOverview {
    * List of matched control models
    */
   matched_controls: Array<string>;
-  gene_expression?: Link;
+  transcriptomics?: Link;
   disease_correlation?: Link;
   biomarkers?: Link;
   pathology?: Link;
@@ -44,12 +44,12 @@ export interface ModelOverview {
 }
 export namespace ModelOverview {
   export type AvailableDataEnum =
-    | 'Gene Expression'
+    | 'Transcriptomics'
     | 'Pathology'
     | 'Biomarkers'
     | 'Disease Correlation';
   export const AvailableDataEnum = {
-    GeneExpression: 'Gene Expression' as AvailableDataEnum,
+    Transcriptomics: 'Transcriptomics' as AvailableDataEnum,
     Pathology: 'Pathology' as AvailableDataEnum,
     Biomarkers: 'Biomarkers' as AvailableDataEnum,
     DiseaseCorrelation: 'Disease Correlation' as AvailableDataEnum,

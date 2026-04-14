@@ -33,8 +33,8 @@ public class CacheConfiguration {
       List.of(
         CacheNames.DISEASE_CORRELATION,
         CacheNames.MODEL_OVERVIEW,
-        CacheNames.GENE_EXPRESSION,
-        CacheNames.GENE_EXPRESSION_INDIVIDUAL,
+        CacheNames.TRANSCRIPTOMICS,
+        CacheNames.TRANSCRIPTOMICS_INDIVIDUAL,
         CacheNames.MODEL,
         CacheNames.DATA_VERSION,
         CacheNames.COMPARISON_TOOL_CONFIG

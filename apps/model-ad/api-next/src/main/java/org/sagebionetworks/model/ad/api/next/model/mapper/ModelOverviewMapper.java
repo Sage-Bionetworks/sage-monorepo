@@ -44,7 +44,7 @@ public class ModelOverviewMapper {
       availableData
     );
 
-    dto.setGeneExpression(linkMapper.toNullableDto(document.getGeneExpression()));
+    dto.setTranscriptomics(linkMapper.toNullableDto(document.getTranscriptomics()));
     dto.setDiseaseCorrelation(linkMapper.toNullableDto(document.getDiseaseCorrelation()));
     dto.setBiomarkers(linkMapper.toNullableDto(document.getBiomarkers()));
     dto.setPathology(linkMapper.toNullableDto(document.getPathology()));

@@ -139,11 +139,11 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(dto.getModelType()).isEqualTo("Late Onset AD");
     assertThat(dto.getMatchedControls()).containsExactly("Control 1");
     assertThat(dto.getAvailableData()).containsExactly(
-      ModelOverviewDto.AvailableDataEnum.GENE_EXPRESSION,
+      ModelOverviewDto.AvailableDataEnum.TRANSCRIPTOMICS,
       ModelOverviewDto.AvailableDataEnum.PATHOLOGY
     );
     assertThat(dto.getStudyData().getLinkUrl()).isEqualTo("https://example.org/study");
-    assertThat(dto.getGeneExpression()).isNotNull();
+    assertThat(dto.getTranscriptomics()).isNotNull();
 
     HttpHeaders headers = response.getHeaders();
     assertThat(headers.getCacheControl()).isEqualTo("no-cache, no-store, must-revalidate");
@@ -256,7 +256,7 @@ class ModelOverviewApiDelegateImplTest {
       .build();
 
     Link optionalLink = Link.builder()
-      .linkText("Gene Expression")
+      .linkText("Transcriptomics")
       .linkUrl("https://example.org/gene")
       .build();
 
@@ -265,7 +265,7 @@ class ModelOverviewApiDelegateImplTest {
     document.setName(name);
     document.setModelType("Late Onset AD");
     document.setMatchedControls(List.of("Control 1"));
-    document.setGeneExpression(optionalLink);
+    document.setTranscriptomics(optionalLink);
     document.setDiseaseCorrelation(optionalLink);
     document.setBiomarkers(optionalLink);
     document.setPathology(optionalLink);
@@ -273,7 +273,7 @@ class ModelOverviewApiDelegateImplTest {
     document.setJaxStrain(requiredLink);
     document.setCenter(requiredLink);
     document.setModifiedGenes(List.of("Gene 1"));
-    document.setAvailableData(List.of("Gene Expression", "Pathology"));
+    document.setAvailableData(List.of("Transcriptomics", "Pathology"));
     return document;
   }
 }

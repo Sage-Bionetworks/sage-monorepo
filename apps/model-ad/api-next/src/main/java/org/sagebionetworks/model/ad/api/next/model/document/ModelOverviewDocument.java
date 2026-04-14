@@ -27,8 +27,7 @@ public class ModelOverviewDocument {
   @Field("matched_controls")
   private List<String> matchedControls;
 
-  @Field("gene_expression")
-  private @Nullable Link geneExpression;
+  private @Nullable Link transcriptomics;
 
   @Field("disease_correlation")
   private @Nullable Link diseaseCorrelation;

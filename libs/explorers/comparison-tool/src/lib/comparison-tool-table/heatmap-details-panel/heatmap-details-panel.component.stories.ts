@@ -56,7 +56,7 @@ type Story = StoryObj<HeatmapDetailsPanelWrapperComponent>;
 
 export const Demo: Story = {};
 
-export const GeneExpression: Story = {
+export const DifferentialExpression: Story = {
   args: {
     data: {
       label: { left: 'Trem2', right: 'ENSMUSG00000023992' },

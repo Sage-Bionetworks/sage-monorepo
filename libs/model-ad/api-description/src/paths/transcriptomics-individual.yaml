@@ -1,0 +1,23 @@
+get:
+  tags:
+    - Transcriptomics Individual
+  summary: Get transcriptomics individual data
+  description: Retrieve transcriptomics individual data based on specified filter criteria.
+  operationId: getTranscriptomicsIndividual
+  parameters:
+    - $ref: ./query/transcriptomicsIndividualFilterQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/TranscriptomicsIndividual.yaml
+      description: Successfully retrieved individual transcriptomics data
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

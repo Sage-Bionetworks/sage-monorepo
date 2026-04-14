@@ -1,0 +1,8 @@
+name: transcriptomicsIndividualFilterQuery
+description: The filter query used to retrieve a specific set of transcriptomics individual data.
+in: query
+required: true
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/TranscriptomicsIndividualFilterQuery.yaml
