@@ -1,19 +1,19 @@
 @use 'shared/typescript/styles/src/shared-styles/variables' as shared;
 
 footer {
-  border-top: 1px solid var(--p-surface-100);
+  border-top: 1px solid var(--p-surface-200);
   padding: 1rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   color: var(--p-text-muted-color);
   position: relative;
   z-index: 2;
 }
 
 a {
-  color: var(--p-surface-400);
+  color: var(--p-surface-500);
   text-decoration: none;
   transition: color 0.12s;
 

@@ -9,6 +9,10 @@
   box-sizing: border-box;
 }
 
+:focus {
+  outline: none;
+}
+
 body {
   margin: 0;
   background: var(--p-surface-0);
@@ -17,6 +21,12 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+// Routed components inserted by router-outlet need to participate in flex layout.
+// Angular host elements default to display: inline, breaking the flex chain.
+main > * {
+  display: contents;
 }
 
 body::after {

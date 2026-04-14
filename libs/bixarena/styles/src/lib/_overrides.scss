@@ -1,13 +1,24 @@
 // PrimeNG component style overrides.
 @layer app {
   bixarena-nav .p-button {
-    padding: 0 0.875rem;
-    font-size: 0.75rem;
+    padding: 0 1rem;
+    font-size: var(--text-sm);
     font-family: inherit;
     font-variation-settings: 'wght' 540;
     letter-spacing: -0.01em;
     border-radius: var(--p-border-radius-md);
-    height: 1.875rem;
-    line-height: 1.875rem;
+    height: 2rem;
+    line-height: 2rem;
+  }
+
+  bixarena-voting-bar .nudge .p-button {
+    padding: 0.5rem 1.25rem;
+    font-size: var(--text-sm);
+    font-family: inherit;
+    font-variation-settings: 'wght' 520;
+    letter-spacing: -0.01em;
+    border-radius: 100px;
+    height: auto;
+    line-height: inherit;
   }
 }

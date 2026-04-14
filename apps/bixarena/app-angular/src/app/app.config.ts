@@ -6,7 +6,7 @@ import {
   provideAppInitializer,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { provideClientHydration } from '@angular/platform-browser';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { BASE_PATH } from '@sagebionetworks/bixarena/api-client';
@@ -15,6 +15,7 @@ import { BixArenaPreset } from '@sagebionetworks/bixarena/styles';
 import { AuthService, ThemeService } from '@sagebionetworks/bixarena/services';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { providePrimeNG } from 'primeng/config';
+import { provideMarkdown } from 'ngx-markdown';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -39,7 +40,7 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideHttpClient(withFetch()),
-    provideClientHydration(),
+    provideClientHydration(withEventReplay()),
     provideZoneChangeDetection({ eventCoalescing: true }),
     { provide: APP_ID, useValue: 'bixarena-app' },
     provideRouter(
@@ -64,5 +65,6 @@ export const appConfig: ApplicationConfig = {
       [ConfigService],
     ),
     provideGtmId(),
+    provideMarkdown(),
   ],
 };

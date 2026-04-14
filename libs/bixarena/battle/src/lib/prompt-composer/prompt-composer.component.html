@@ -1,0 +1,33 @@
+<div class="comp-card">
+  <textarea
+    #textarea
+    class="input"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    [attr.maxlength]="maxLength()"
+    rows="1"
+    (input)="onInput($event)"
+    (keydown)="onKeydown($event)"
+  ></textarea>
+  <div class="toolbar">
+    <span class="char-count">{{ text().length }} / {{ maxLength() }}</span>
+    <button
+      class="send"
+      [class.hot]="isHot()"
+      [disabled]="!isHot()"
+      (click)="submit()"
+      aria-label="Send prompt"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M5 12h14M12 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</div>

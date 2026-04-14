@@ -1,17 +1,26 @@
 // rem: font sizes, padding, margins, max-widths
 // px: borders, box-shadows, border-radius
 :root {
-  --nav-height: 3.5rem;
+  --nav-height: 3.75rem;
   --max-width: 80rem;
   --font-serif: 'Playfair Display Variable', 'Playfair Display', 'Georgia', serif;
+
+  // Font size scale
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-md: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
 }
 
 html:not(.dark) {
   --nav-bg: rgb(253 252 251 / 80%);
+  --hover-bg: rgb(0 0 0 / 4%);
   --grain-opacity: 0.08;
 }
 
 html.dark {
   --nav-bg: rgb(27 24 24 / 80%);
+  --hover-bg: rgb(253 252 251 / 4%);
   --grain-opacity: 0.15;
 }
