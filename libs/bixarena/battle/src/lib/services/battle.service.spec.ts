@@ -71,7 +71,6 @@ describe('BattleStateService', () => {
       await service.submitPrompt('test prompt');
       expect(service.phase()).not.toBe('landing');
       expect(service.battleId()).toBe('battle-1');
-      expect(service.roundNumber()).toBe(1);
     });
 
     it('should create battle and round via API', async () => {

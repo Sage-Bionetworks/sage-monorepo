@@ -30,7 +30,7 @@ export class BattleStateService {
   // Battle and round identifiers
   readonly battleId = signal<string | null>(null);
   readonly roundId = signal<string | null>(null);
-  readonly roundNumber = signal(0);
+  private completedRounds = 0;
 
   // Competing models
   readonly model1 = signal<Model | null>(null);
@@ -45,6 +45,7 @@ export class BattleStateService {
   readonly promptUsesRemaining = signal(0);
   readonly promptUseLimit = this.config.battle.promptUseLimit;
   readonly promptLengthLimit = this.config.battle.promptLengthLimit;
+  private readonly roundLimit = this.config.battle.roundLimit;
   readonly promptUseDots = Array.from({ length: this.promptUseLimit }, (_, i) => i + 1);
   readonly canReuse = computed(() => this.lastPrompt() !== null && this.promptUsesRemaining() > 0);
   readonly completedMatches = computed(
@@ -91,7 +92,21 @@ export class BattleStateService {
     this.lastPrompt.set(prompt);
     this.selectedOutcome.set(null);
 
-    // Create a new battle (new match, new model pair)
+    // If a battle already exists, add a new round (follow-up question, same LLMs)
+    const existingBattle = this.battleId();
+    const model1 = this.model1();
+    const model2 = this.model2();
+    if (existingBattle && model1 && model2) {
+      this.prepareStreams(prompt);
+      try {
+        await this.createRoundAndStream(existingBattle, model1.id, model2.id, prompt);
+      } catch {
+        this.setStreamError('Something went wrong', true);
+      }
+      return;
+    }
+
+    // No existing battle — create a new one (new match, new LLM pair)
     this.prepareStreams(prompt);
     let battle;
     try {
@@ -155,6 +170,7 @@ export class BattleStateService {
   async newBattle(prompt?: string): Promise<void> {
     // Cancel active streams and reset stream state, preserving the prompt reuse budget
     this.cleanupStreams();
+    this.completedRounds = 0;
     this.model1Stream.set({ ...INITIAL_STREAM_STATE });
     this.model2Stream.set({ ...INITIAL_STREAM_STATE });
     this.selectedOutcome.set(null);
@@ -169,10 +185,10 @@ export class BattleStateService {
   reset(): void {
     // Full teardown — cancel streams and return to landing state
     this.cleanupStreams();
+    this.completedRounds = 0;
     this.phase.set('landing');
     this.battleId.set(null);
     this.roundId.set(null);
-    this.roundNumber.set(0);
     this.model1.set(null);
     this.model2.set(null);
     this.model1Stream.set({ ...INITIAL_STREAM_STATE });
@@ -198,6 +214,13 @@ export class BattleStateService {
     model2Id: string,
     prompt: string,
   ): Promise<void> {
+    if (this.completedRounds >= this.roundLimit) {
+      this.setStreamError(
+        "You've reached the limit for this battle. Vote or start a new battle",
+        false,
+      );
+      return;
+    }
     const round = await firstValueFrom(
       this.battleApi.createBattleRound(battleId, {
         promptMessage: { role: 'user', content: prompt },
@@ -205,7 +228,6 @@ export class BattleStateService {
     );
     if (!round) throw new Error('Failed to create round');
     this.roundId.set(round.id);
-    this.roundNumber.set(round.roundNumber);
     this.startStreaming(battleId, round.id, model1Id, model2Id);
   }
 
@@ -314,6 +336,7 @@ export class BattleStateService {
       if (s1 === 'error' || s2 === 'error') {
         this.phase.set('error');
       } else {
+        this.completedRounds++;
         this.phase.set('voting');
       }
     }
