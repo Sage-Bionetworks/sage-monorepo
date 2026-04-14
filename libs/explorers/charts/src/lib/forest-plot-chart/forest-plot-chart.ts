@@ -163,10 +163,13 @@ export class ForestPlotChart {
   chart: ECharts | undefined;
 
   constructor(chartDom: HTMLDivElement | HTMLCanvasElement, props: ForestPlotProps) {
-    // Height is set once at construction time. If item count changes after construction
-    // (via setOptions), the DOM height will not update. This is intentional for the
-    // current use case where item count is fixed.
-    this.chart = initChart(chartDom, computeInitialHeight(props.items.length));
+    // Height is set once at construction time based on the number of rows to render.
+    // If row count changes after construction (via setOptions), the DOM height will not update.
+    // This is intentional for the current use case where row count is fixed.
+    this.chart = initChart(
+      chartDom,
+      computeInitialHeight(props.yAxisCategories?.length ?? props.items.length),
+    );
     this.setOptions(props);
   }
 

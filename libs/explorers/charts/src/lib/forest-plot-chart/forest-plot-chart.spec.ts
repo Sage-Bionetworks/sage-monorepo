@@ -115,6 +115,22 @@ describe('ForestPlotChart', () => {
     return mockSetOption.mock.calls[0][0] as EChartsOption;
   }
 
+  describe('constructor — initial height', () => {
+    it('uses items length when yAxisCategories is not provided', () => {
+      makeChart();
+      expect(initChart).toHaveBeenCalledWith(
+        expect.anything(),
+        computeInitialHeight(forestPlotItems.length),
+      );
+    });
+
+    it('uses yAxisCategories length when provided', () => {
+      const yAxisCategories = ['A', 'B', 'C', 'D', 'E'];
+      makeChart({ yAxisCategories });
+      expect(initChart).toHaveBeenCalledWith(expect.anything(), computeInitialHeight(5));
+    });
+  });
+
   describe('destroy', () => {
     it('disposes the chart', () => {
       makeChart().destroy();
