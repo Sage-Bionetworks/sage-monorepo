@@ -7,6 +7,7 @@ export interface ModelStreamState {
   status: 'idle' | 'waiting' | 'streaming' | 'complete' | 'error';
   finishReason: string | null;
   errorMessage: string | null;
+  retryable: boolean;
   isSlowHint: boolean;
 }
 
@@ -16,5 +17,6 @@ export const INITIAL_STREAM_STATE: ModelStreamState = {
   status: 'idle',
   finishReason: null,
   errorMessage: null,
+  retryable: false,
   isSlowHint: false,
 };

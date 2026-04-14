@@ -112,6 +112,7 @@ describe('BattleStateService', () => {
         finishReason: 'stop',
         errorMessage: null,
         isSlowHint: false,
+        retryable: false,
       });
       service.model2Stream.set({
         messages: [],
@@ -120,6 +121,7 @@ describe('BattleStateService', () => {
         finishReason: 'stop',
         errorMessage: null,
         isSlowHint: false,
+        retryable: false,
       });
     });
 
@@ -148,6 +150,7 @@ describe('BattleStateService', () => {
         finishReason: 'stop',
         errorMessage: null,
         isSlowHint: false,
+        retryable: false,
       });
       service.model2Stream.set({
         messages: [],
@@ -156,6 +159,7 @@ describe('BattleStateService', () => {
         finishReason: null,
         errorMessage: 'err',
         isSlowHint: false,
+        retryable: false,
       });
       expect(service.bothComplete()).toBe(true);
     });
@@ -168,6 +172,7 @@ describe('BattleStateService', () => {
         finishReason: 'stop',
         errorMessage: null,
         isSlowHint: false,
+        retryable: false,
       });
       service.model2Stream.set({
         messages: [],
@@ -176,6 +181,7 @@ describe('BattleStateService', () => {
         finishReason: null,
         errorMessage: null,
         isSlowHint: false,
+        retryable: false,
       });
       expect(service.bothComplete()).toBe(false);
     });

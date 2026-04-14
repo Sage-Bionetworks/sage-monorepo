@@ -45,6 +45,7 @@
           [modelName]="state.phase() === 'reveal' ? (state.model1()?.name ?? null) : null"
           [selectedOutcome]="state.selectedOutcome()"
           [hoveredModel]="hoverSide()"
+          (retry)="state.retry()"
         />
         <bixarena-model-panel
           modelId="model2"
@@ -52,6 +53,7 @@
           [modelName]="state.phase() === 'reveal' ? (state.model2()?.name ?? null) : null"
           [selectedOutcome]="state.selectedOutcome()"
           [hoveredModel]="hoverSide()"
+          (retry)="state.retry()"
         />
       </div>
       <bixarena-voting-bar

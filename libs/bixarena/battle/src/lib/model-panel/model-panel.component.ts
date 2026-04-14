@@ -5,6 +5,7 @@ import {
   ElementRef,
   inject,
   input,
+  output,
   PLATFORM_ID,
   viewChild,
 } from '@angular/core';
@@ -29,6 +30,7 @@ export class ModelPanelComponent {
   readonly modelName = input<string | null>(null);
   readonly selectedOutcome = input<BattleEvaluationOutcome | null>(null);
   readonly hoveredModel = input<BattleEvaluationOutcome | null>(null);
+  readonly retry = output<void>();
 
   readonly isSelected = computed(() => {
     const o = this.selectedOutcome();

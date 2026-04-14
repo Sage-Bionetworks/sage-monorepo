@@ -190,12 +190,41 @@
   }
 }
 
-.error-message {
-  color: #ef4444;
-  font-size: var(--text-md);
+.error-line {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  clear: both;
+}
 
-  &::before {
-    content: '\26A0 ';
+.error-line-text {
+  font-size: var(--text-sm);
+  color: var(--p-surface-500);
+}
+
+.retry-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--p-surface-400);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: color 0.15s;
+  flex-shrink: 0;
+
+  svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  &:hover {
+    color: var(--p-surface-600);
   }
 }
 

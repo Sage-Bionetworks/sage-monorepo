@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BASE_PATH, ModelChatCompletionChunk } from '@sagebionetworks/bixarena/api-client';
+import { StreamHttpError } from '../battle-errors';
 
 @Injectable()
 export class BattleStreamService {
@@ -23,7 +24,7 @@ export class BattleStreamService {
       })
         .then(async (response) => {
           if (!response.ok) {
-            subscriber.error(new Error(`Stream request failed: ${response.status}`));
+            subscriber.error(new StreamHttpError(response.status));
             return;
           }
 
