@@ -107,6 +107,10 @@ jobs:
           # devcontainer.json used to build the image.
           export DEVCONTAINER_VERSION="${GITHUB_SHA}"
 
+          # Disable BuildKit's default provenance attestations
+          # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/3904
+          export BUILDX_NO_DEFAULT_ATTESTATIONS=1
+
           # Convert the comma-separated list into the desired format
           images=""
           for image in ${IMAGES}; do
@@ -213,9 +217,14 @@ jobs:
           IMAGE: ${{ needs.build-and-push.outputs.image }}
           IMAGE_DIGEST: ${{ needs.build-and-push.outputs.image_digest }}
         run: |
+          # Skip uploading to the Rekor transparency log because the SBOM (~3.5MB)
+          # exceeds Rekor's entry size limit. The attestation is still signed via
+          # OIDC + Fulcio and attached to the image in GHCR, but will not appear
+          # in the public Rekor log. Note: cosign sign above still uses tlog.
           cosign attest --yes \
             --type spdxjson \
             --predicate sbom.spdx.json \
+            --no-tlog-upload \
             ${IMAGE}@${IMAGE_DIGEST}
 
       - name: Verify the attestation
@@ -223,10 +232,13 @@ jobs:
           set -x
           # Redirect stdout to null to prevent the command from hanging randomly.
           # See https://github.com/sigstore/cosign/issues/3602
+          # --insecure-ignore-tlog required since the attestation was created with
+          # --no-tlog-upload due to SBOM size constraints.
           cosign verify-attestation \
             --certificate-oidc-issuer https://token.actions.githubusercontent.com \
             --certificate-identity "https://github.com/${{ github.repository }}/${WORKFLOW_FILE}@${{ github.ref }}" \
             --type spdxjson \
+            --insecure-ignore-tlog \
             ${{ needs.build-and-push.outputs.image }} \
             1>/dev/null
 
