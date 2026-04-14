@@ -100,7 +100,8 @@ export class BattleStateService {
       this.prepareStreams(prompt);
       try {
         await this.createRoundAndStream(existingBattle, model1.id, model2.id, prompt);
-      } catch {
+      } catch (err) {
+        console.error('Failed to create follow-up round', err);
         this.setStreamError('Something went wrong', true);
       }
       return;
@@ -112,7 +113,8 @@ export class BattleStateService {
     try {
       battle = await firstValueFrom(this.battleApi.createBattle({ title: prompt.slice(0, 50) }));
       if (!battle) throw new Error('Failed to create battle');
-    } catch {
+    } catch (err) {
+      console.error('Failed to create battle', err);
       this.setStreamError('Something went wrong. Try a new battle', false);
       return;
     }
@@ -121,7 +123,8 @@ export class BattleStateService {
     this.model2.set(battle.model2);
     try {
       await this.createRoundAndStream(battle.id, battle.model1.id, battle.model2.id, prompt);
-    } catch {
+    } catch (err) {
+      console.error('Failed to start streaming', err);
       this.setStreamError('Something went wrong', true);
     }
   }
@@ -137,7 +140,8 @@ export class BattleStateService {
     this.prepareStreams(prompt);
     try {
       await this.createRoundAndStream(battleId, model1.id, model2.id, prompt);
-    } catch {
+    } catch (err) {
+      console.error('Failed to retry round', err);
       this.setStreamError('Something went wrong', true);
     }
   }

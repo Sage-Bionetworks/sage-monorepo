@@ -68,7 +68,7 @@
   }
 
   &.error {
-    background: #ef4444;
+    background: var(--p-red-400);
   }
 }
 
@@ -228,23 +228,6 @@
   }
 }
 
-.skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.skeleton-line {
-  height: 14px;
-  border-radius: 4px;
-  background: var(--p-surface-200);
-  animation: shimmer 1.5s ease-in-out infinite;
-
-  &.short {
-    width: 60%;
-  }
-}
-
 .footer {
   padding: 0.5rem 1rem;
   border-top: 1px solid var(--p-surface-200);
@@ -262,16 +245,5 @@
 
   50% {
     opacity: 0.3;
-  }
-}
-
-@keyframes shimmer {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-
-  50% {
-    opacity: 0.8;
   }
 }

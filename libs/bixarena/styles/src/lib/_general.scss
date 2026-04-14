@@ -19,6 +19,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:focus-visible {
+  outline: 2px solid var(--p-primary-color);
+  outline-offset: 2px;
+}
+
 // Routed components inserted by router-outlet need to participate in flex layout.
 // Angular host elements default to display: inline, breaking the flex chain.
 main > * {
