@@ -1,5 +1,6 @@
 import { CustomSeriesOption, ECharts, EChartsOption, ScatterSeriesOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
+import { DARK_TOOLTIP } from '../constants';
 import { ForestPlotProps } from '../models';
 import { initChart, setNoDataOption } from '../utils';
 
@@ -19,12 +20,6 @@ const TITLE_TEXT_STYLE = { color: '#24334f', fontSize: 14, fontWeight: 'bold' as
 
 // --- Layout constants ---
 const GRID = { right: 80, containLabel: true };
-const TOOLTIP: EChartsOption['tooltip'] = {
-  confine: true,
-  backgroundColor: '#63676C',
-  textStyle: { color: 'white' },
-  borderColor: 'transparent',
-};
 
 // Height: ~44px per row + 60px margins; 490px floor
 export function computeInitialHeight(rowCount: number): string {
@@ -215,16 +210,16 @@ export class ForestPlotChart {
         axisLine: { show: false },
         triggerEvent: Boolean(yAxisLabelTooltipFormatter),
         tooltip: {
+          ...DARK_TOOLTIP,
           show: Boolean(yAxisLabelTooltipFormatter),
           ...(yAxisLabelTooltipFormatter && {
             formatter: (params: CallbackDataParams) => yAxisLabelTooltipFormatter(params.name),
-            extraCssText: 'border: unset; opacity: 0.9; background-color: #63676c',
           }),
         },
         axisLabel: { ...Y_AXIS_LABEL_TEXT_STYLE, margin: 30 },
       } as EChartsOption['yAxis'],
       series: [zeroLineSeries(yAxisCategories), ciLineSeries(props), dotSeries(props)],
-      tooltip: TOOLTIP,
+      tooltip: DARK_TOOLTIP,
       title: props.title
         ? [{ text: props.title, left: 'center', textStyle: TITLE_TEXT_STYLE }]
         : [],

@@ -1,5 +1,10 @@
 import type { SeriesOption } from 'echarts';
-import { GRAY_BACKGROUND_COLOR, Y_AXIS_TICK_LABELS_MAX_WIDTH } from '../constants';
+import {
+  DARK_TOOLTIP,
+  GRAY_BACKGROUND_COLOR,
+  LIGHT_TOOLTIP,
+  Y_AXIS_TICK_LABELS_MAX_WIDTH,
+} from '../constants';
 import { BoxplotChartTheme } from '../models/boxplot';
 import { grayGridBaseChartTheme, minimalBaseChartTheme } from './base-theme';
 
@@ -27,17 +32,7 @@ export const minimalBoxplotChartTheme: BoxplotChartTheme = {
   },
   yAxisSplitLine: { show: false },
   yAxisTickLabelMaxWidth: Y_AXIS_TICK_LABELS_MAX_WIDTH,
-  tooltip: {
-    confine: true,
-    position: 'top',
-    backgroundColor: '#63676C',
-    borderColor: 'transparent',
-    textStyle: {
-      color: 'white',
-    },
-    extraCssText:
-      'opacity: 0.9; width: auto; max-width: 300px; white-space: pre-wrap; text-align: center;',
-  },
+  tooltip: DARK_TOOLTIP,
   grid: {
     // The total left margin for the y-axis. Use a hardcoded value to ensure y-axis labels and plot areas
     // are aligned across multiple charts. ECharts' `containLabel: true` will shift the plot area if tick
@@ -72,14 +67,7 @@ export const grayGridBoxplotChartTheme: BoxplotChartTheme = {
     fontSize: '14px',
   },
   yAxisSplitLine: { show: true },
-  tooltip: {
-    ...minimalBoxplotChartTheme.tooltip,
-    backgroundColor: 'white',
-    borderRadius: 0,
-    textStyle: {
-      color: '#22252A',
-    },
-  },
+  tooltip: LIGHT_TOOLTIP,
   grid: {
     ...minimalBoxplotChartTheme.grid,
     left: minimalBoxplotChartTheme.grid.left - 3, // ensure y-axis title with smaller font is still at the leftmost edge of the plot
