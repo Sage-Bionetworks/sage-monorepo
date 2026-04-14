@@ -2,29 +2,44 @@ import { CustomSeriesOption, ECharts, EChartsOption, ScatterSeriesOption } from 
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 import { DARK_TOOLTIP, DEFAULT_COLOR, DEFAULT_POINT_SIZE } from '../constants';
 import { ForestPlotProps } from '../models';
+import { GridCoordSys } from '../types';
 import { initChart, setNoDataOption } from '../utils';
 
-// --- Styling constants ---
-const LINE_WIDTH = 1.5;
-const CI_TEXT_FONT_SIZE = 14;
-const CI_TEXT_COLOR = '#4a5056';
-const ZERO_LINE_COLOR = '#BCC0CA';
-const ZERO_LINE_WIDTH = 2;
-const AXIS_LINE_COLOR = '#989898';
+const CI_LINE_WIDTH = 1.5;
+const CI_LABEL_GAP = 4;
+const CI_LABEL_STYLE = { fill: '#4a5056', fontSize: 14, textVerticalAlign: 'middle' };
+
+const ZERO_LINE_STYLE = { stroke: '#BCC0CA', lineWidth: 2, fill: 'none' };
+const X_AXIS_LINE_STYLE = { width: 2, color: '#989898' };
+
 const AXIS_TICK_LABEL_COLOR = '#000';
 const X_AXIS_LABEL_TEXT_STYLE = { color: AXIS_TICK_LABEL_COLOR, fontSize: 14 };
 const Y_AXIS_LABEL_TEXT_STYLE = { color: AXIS_TICK_LABEL_COLOR, fontSize: 16 };
 const TITLE_TEXT_STYLE = { color: '#24334f', fontSize: 14, fontWeight: 'bold' as const };
 
-// --- Layout constants ---
+// Distance from the x-axis line to the title text; also used as grid bottom so the title isn't clipped
+const X_AXIS_TITLE_GAP = 50;
+
+const GRID_TOP_WITHOUT_CHART_TITLE = 20;
+const GRID_TOP_WITH_CHART_TITLE = 60;
+const GRID_BOTTOM_WITHOUT_X_AXIS_TITLE = 40;
+const GRID_DEFAULT_MARGINS = GRID_TOP_WITHOUT_CHART_TITLE + GRID_BOTTOM_WITHOUT_X_AXIS_TITLE;
+
 const GRID = { right: 80, containLabel: true };
 
-// Height: ~44px per row + 60px margins; 490px floor
-export function computeInitialHeight(rowCount: number): string {
-  return `${Math.max(rowCount * 44 + 60, 490)}px`;
+export function resolveItemColor(
+  itemColor: string | undefined,
+  propDefault: string | undefined,
+): string {
+  return itemColor || propDefault || DEFAULT_COLOR;
 }
 
-// Symmetric bounds from max(|ciLeft|, |ciRight|) ×1.1
+export function computeInitialHeight(rowCount: number): string {
+  // ~44px per row + GRID_DEFAULT_MARGINS; 490px floor
+  return `${Math.max(rowCount * 44 + GRID_DEFAULT_MARGINS, 490)}px`;
+}
+
+// Symmetric bounds from max(|ciLeft|, |ciRight|) x1.1
 export function computeXBounds(props: ForestPlotProps): [number, number] {
   if (props.xAxisMin !== undefined && props.xAxisMax !== undefined) {
     return [props.xAxisMin, props.xAxisMax];
@@ -45,7 +60,7 @@ function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
     clip: false,
     data: props.items.map((item) => ({
       value: [item.ciLeft, item.ciRight, item.yAxisCategory],
-      itemStyle: { color: item.color ?? props.defaultLineColor ?? DEFAULT_COLOR },
+      itemStyle: { color: resolveItemColor(item.color, props.defaultLineColor) },
     })),
     renderItem: (_params, api) => {
       const ciLeft = api.value(0) as number;
@@ -53,7 +68,7 @@ function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
       const yCategory = api.value(2) as string;
       const [x1, y] = api.coord([ciLeft, yCategory]);
       const [x2] = api.coord([ciRight, yCategory]);
-      const color = (api.visual('color') as string) || props.defaultLineColor || DEFAULT_COLOR;
+      const color = api.visual('color') as string;
 
       return {
         type: 'group',
@@ -62,7 +77,7 @@ function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
           {
             type: 'line',
             shape: { x1, y1: y, x2, y2: y },
-            style: { stroke: color, lineWidth: LINE_WIDTH },
+            style: { stroke: color, lineWidth: CI_LINE_WIDTH },
           },
           // optional CI text labels
           ...(props.showCILabels
@@ -70,25 +85,21 @@ function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
                 {
                   type: 'text' as const,
                   style: {
+                    ...CI_LABEL_STYLE,
                     text: formatCILabel(ciLeft),
-                    x: x1 - 4,
+                    x: x1 - CI_LABEL_GAP,
                     y,
-                    textAlign: 'right' as const,
-                    textVerticalAlign: 'middle' as const,
-                    fill: CI_TEXT_COLOR,
-                    fontSize: CI_TEXT_FONT_SIZE,
+                    textAlign: 'right',
                   },
                 },
                 {
                   type: 'text' as const,
                   style: {
+                    ...CI_LABEL_STYLE,
                     text: formatCILabel(ciRight),
-                    x: x2 + 4,
+                    x: x2 + CI_LABEL_GAP,
                     y,
-                    textAlign: 'left' as const,
-                    textVerticalAlign: 'middle' as const,
-                    fill: CI_TEXT_COLOR,
-                    fontSize: CI_TEXT_FONT_SIZE,
+                    textAlign: 'left',
                   },
                 },
               ]
@@ -113,16 +124,11 @@ function zeroLineSeries(yAxisCategories: string[]): CustomSeriesOption {
     itemStyle: { color: 'transparent' },
     renderItem: (params, api) => {
       const [zeroX] = api.coord([0, referenceCategory]);
-      const gridBounds = params.coordSys as unknown as {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-      };
+      const gridBounds = params.coordSys as unknown as GridCoordSys;
       return {
         type: 'line',
         shape: { x1: zeroX, y1: gridBounds.y, x2: zeroX, y2: gridBounds.y + gridBounds.height },
-        style: { stroke: ZERO_LINE_COLOR, lineWidth: ZERO_LINE_WIDTH, fill: 'none' },
+        style: ZERO_LINE_STYLE,
       };
     },
     data: [{ value: [0, referenceCategory] }],
@@ -138,7 +144,7 @@ function dotSeries(props: ForestPlotProps): ScatterSeriesOption {
     symbolSize: props.pointSize ?? DEFAULT_POINT_SIZE,
     data: props.items.map((item) => ({
       value: [item.value, item.yAxisCategory],
-      itemStyle: { color: item.color ?? props.defaultPointColor ?? DEFAULT_COLOR, opacity: 1 },
+      itemStyle: { color: resolveItemColor(item.color, props.defaultPointColor), opacity: 1 },
     })),
     tooltip: {
       formatter: (rawParams) => {
@@ -183,16 +189,23 @@ export class ForestPlotChart {
     const yAxisLabelTooltipFormatter = props.yAxisLabelTooltipFormatter;
 
     const option: EChartsOption = {
-      grid: { ...GRID, top: props.title ? 60 : 20, bottom: props.xAxisTitle ? 50 : 40 },
+      grid: {
+        ...GRID,
+        top: props.title ? GRID_TOP_WITH_CHART_TITLE : GRID_TOP_WITHOUT_CHART_TITLE,
+        bottom: props.xAxisTitle ? X_AXIS_TITLE_GAP : GRID_BOTTOM_WITHOUT_X_AXIS_TITLE,
+      },
       xAxis: {
         type: 'value',
         min: xMin,
         max: xMax,
         name: props.xAxisTitle,
         nameLocation: 'middle',
-        nameGap: 50,
+        nameGap: X_AXIS_TITLE_GAP,
         nameTextStyle: { ...TITLE_TEXT_STYLE, fontSize: 18 },
-        axisLine: { show: true, lineStyle: { width: ZERO_LINE_WIDTH, color: AXIS_LINE_COLOR } },
+        axisLine: {
+          show: true,
+          lineStyle: X_AXIS_LINE_STYLE,
+        },
         splitLine: { show: false },
         axisLabel: {
           ...X_AXIS_LABEL_TEXT_STYLE,
