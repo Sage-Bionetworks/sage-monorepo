@@ -207,9 +207,12 @@ export class ForestPlotChart {
           lineStyle: X_AXIS_LINE_STYLE,
         },
         splitLine: { show: false },
+        splitNumber: 10,
         axisLabel: {
           ...X_AXIS_LABEL_TEXT_STYLE,
           formatter: (tickValue: number) => tickValue.toFixed(2),
+          showMinLabel: false,
+          showMaxLabel: false,
         },
       },
       yAxis: {
