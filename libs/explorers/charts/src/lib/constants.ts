@@ -1,6 +1,7 @@
 import type { EChartsOption } from 'echarts';
 
 export const DEFAULT_POINT_SIZE = 18;
+export const DEFAULT_COLOR = '#8b8ad1';
 export const GRAY_BACKGROUND_COLOR = '#AEB5BC1A';
 export const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;
 

@@ -1,11 +1,10 @@
 import { CustomSeriesOption, ECharts, EChartsOption, ScatterSeriesOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
-import { DARK_TOOLTIP, DEFAULT_POINT_SIZE } from '../constants';
+import { DARK_TOOLTIP, DEFAULT_COLOR, DEFAULT_POINT_SIZE } from '../constants';
 import { ForestPlotProps } from '../models';
 import { initChart, setNoDataOption } from '../utils';
 
 // --- Styling constants ---
-const LINE_COLOR = '#8b8ad1';
 const LINE_WIDTH = 1.5;
 const CI_TEXT_FONT_SIZE = 14;
 const CI_TEXT_COLOR = '#4a5056';
@@ -46,7 +45,7 @@ function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
     clip: false,
     data: props.items.map((item) => ({
       value: [item.ciLeft, item.ciRight, item.yAxisCategory],
-      itemStyle: { color: item.color ?? props.defaultLineColor ?? LINE_COLOR },
+      itemStyle: { color: item.color ?? props.defaultLineColor ?? DEFAULT_COLOR },
     })),
     renderItem: (_params, api) => {
       const ciLeft = api.value(0) as number;
@@ -54,7 +53,7 @@ function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
       const yCategory = api.value(2) as string;
       const [x1, y] = api.coord([ciLeft, yCategory]);
       const [x2] = api.coord([ciRight, yCategory]);
-      const color = (api.visual('color') as string) || props.defaultLineColor || LINE_COLOR;
+      const color = (api.visual('color') as string) || props.defaultLineColor || DEFAULT_COLOR;
 
       return {
         type: 'group',
@@ -139,7 +138,7 @@ function dotSeries(props: ForestPlotProps): ScatterSeriesOption {
     symbolSize: props.pointSize ?? DEFAULT_POINT_SIZE,
     data: props.items.map((item) => ({
       value: [item.value, item.yAxisCategory],
-      itemStyle: { color: item.color ?? props.defaultPointColor ?? LINE_COLOR, opacity: 1 },
+      itemStyle: { color: item.color ?? props.defaultPointColor ?? DEFAULT_COLOR, opacity: 1 },
     })),
     tooltip: {
       formatter: (rawParams) => {
