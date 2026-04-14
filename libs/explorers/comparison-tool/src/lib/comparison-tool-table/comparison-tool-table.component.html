@@ -1,6 +1,6 @@
 <div class="comparison-tool-table" #table>
   <div class="table-header-and-pinned" #tableHeaderAndPinned>
-    <explorers-comparison-tool-columns [columnWidth]="columnWidth" />
+    <explorers-comparison-tool-columns [columnWidth]="columnWidths" />
 
     @if (pinnedResultsCount() > 0) {
       <div class="table-divider table-divider-1">
@@ -26,7 +26,7 @@
     <explorers-base-table
       [data]="pinnedData()"
       [shouldShowNoDataMessage]="false"
-      [columnWidth]="columnWidth"
+      [columnWidth]="columnWidths"
     />
   </div>
 
@@ -64,6 +64,6 @@
   <explorers-base-table
     [data]="unpinnedData()"
     [shouldShowNoDataMessage]="true"
-    [columnWidth]="columnWidth"
+    [columnWidth]="columnWidths"
   />
 </div>

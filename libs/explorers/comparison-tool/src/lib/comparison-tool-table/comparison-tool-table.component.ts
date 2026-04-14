@@ -12,7 +12,6 @@ import {
   ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolService,
-  HelperService,
   PlatformService,
 } from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
@@ -20,6 +19,7 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
+import { MAX_COLUMN_WIDTH_PX, MIN_COLUMN_WIDTH_PX } from './comparison-tool-table.constants';
 
 @Component({
   selector: 'explorers-comparison-tool-table',
@@ -38,7 +38,6 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   comparisonToolService = inject(ComparisonToolService);
   comparisonToolFilterService = inject(ComparisonToolFilterService);
   comparisonToolHelperService = inject(ComparisonToolHelperService);
-  helperService = inject(HelperService);
   platformService = inject(PlatformService);
 
   tableElement = viewChild<ElementRef>('table');
@@ -58,26 +57,19 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   pinnedData = this.comparisonToolService.pinnedData;
   unpinnedData = this.comparisonToolService.unpinnedData;
 
-  columnWidth = 'auto';
-  primaryColumnWidth = 300;
+  columnWidths: Record<string, string> = {};
 
   constructor() {
     if (this.platformService.isBrowser) {
-      this.primaryColumnWidth = this.helperService.getNumberFromCSSValue(
-        getComputedStyle(document.documentElement).getPropertyValue(
-          '--comparison-tool-primary-column-width',
-        ),
-      );
-
-      // Recalculate column widths whenever selected columns change
+      // Recalculate column widths whenever selected columns, pinned data, or unpinned data change
       effect((onCleanup) => {
-        // Access selectedColumns to track changes
+        // Access the signals to track changes
         this.selectedColumns();
-        // Recalculate widths on next tick to ensure DOM is updated
+        this.pinnedData();
+        this.unpinnedData();
         const timeoutId = setTimeout(() => {
-          this.onWindowResize();
+          this.recalculateColumnWidths();
         }, 0);
-        // Clean up timeout if effect re-runs before timeout fires
         onCleanup(() => clearTimeout(timeoutId));
       });
     }
@@ -85,18 +77,19 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.onWindowResize();
+      this.recalculateColumnWidths();
     }, 100);
   }
 
   @HostListener('window:resize')
-  onWindowResize() {
+  recalculateColumnWidths() {
     if (this.platformService.isBrowser) {
-      const tableElementWidth = this.tableElement()?.nativeElement?.offsetWidth || 0;
-      this.columnWidth = this.calculateNonprimaryColumnWidth(
-        this.selectedColumns().length - 1,
-        tableElementWidth,
-      );
+      // icon fonts may not be loaded yet on initial render,
+      // so wait for fonts to be ready before calculating column widths
+      // to prevent incorrect measurements
+      document.fonts.ready.then(() => {
+        this.columnWidths = this.calculateColumnWidths();
+      });
     }
   }
 
@@ -131,8 +124,119 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     this.comparisonToolService.resetPinnedItems();
   }
 
-  calculateNonprimaryColumnWidth(nCols: number, tableWidth: number) {
-    const count = Math.max(nCols, 5);
-    return Math.ceil((tableWidth - this.primaryColumnWidth) / count) + 'px';
+  calculateColumnWidths(): Record<string, string> {
+    const container: HTMLElement | undefined = this.tableElement()?.nativeElement;
+    if (!container) return {};
+
+    const columns = this.selectedColumns();
+    const nonPrimaryColumns = columns.filter((col) => col.type !== 'primary');
+    if (nonPrimaryColumns.length === 0) return {};
+
+    // Collect all non-primary cells grouped by column, saving original inline styles
+    const cellsByColumn = new Map<string, HTMLElement[]>();
+    const savedHeaderWidths = new Map<HTMLElement, string>();
+    const saved: {
+      el: HTMLElement;
+      style: string;
+      descendants: { el: HTMLElement; ws: string }[];
+    }[] = [];
+
+    for (const column of nonPrimaryColumns) {
+      const cells = Array.from(
+        container.querySelectorAll(`[data-column-key="${column.data_key}"]`),
+      ) as HTMLElement[];
+      cellsByColumn.set(column.data_key, cells);
+
+      for (const el of cells) {
+        const descEntries: { el: HTMLElement; ws: string }[] = [];
+        el.querySelectorAll('*').forEach((d) => {
+          const desc = d as HTMLElement;
+          descEntries.push({ el: desc, ws: desc.style.whiteSpace });
+          desc.style.whiteSpace = 'nowrap';
+          // Remove width:100% on .column-header so it sizes to content during measurement
+          if (desc.classList.contains('column-header')) {
+            savedHeaderWidths.set(desc, desc.style.width);
+            desc.style.width = 'auto';
+          }
+        });
+        saved.push({ el, style: el.getAttribute('style') || '', descendants: descEntries });
+
+        // position:absolute takes the cell out of the flex row so it sizes to content.
+        // visibility:hidden prevents flash. All CSS selectors and icon fonts still apply
+        // because the element stays in its original DOM tree.
+        el.style.position = 'absolute';
+        el.style.width = 'auto';
+        el.style.visibility = 'hidden';
+        el.style.flex = 'none';
+        el.style.whiteSpace = 'nowrap';
+        el.style.overflow = 'visible';
+        el.style.maxWidth = 'none';
+      }
+    }
+
+    // Measure all cells (single reflow).
+    // For <th> cells without a badge, temporarily inject a dummy badge inside the
+    // <p-sorticon> element (where PrimeNG places the real one) so the measurement
+    // reflects the worst-case width when multi-sort is active.
+    const injectedBadges: { el: HTMLElement; parent: HTMLElement }[] = [];
+    for (const column of nonPrimaryColumns) {
+      const cells = cellsByColumn.get(column.data_key) || [];
+      for (const el of cells) {
+        if (el.tagName === 'TH' && !el.querySelector('.p-sortable-column-badge')) {
+          const sortIcon = el.querySelector('p-sorticon');
+          if (sortIcon) {
+            const dummy = document.createElement('p-badge');
+            dummy.className =
+              'p-sortable-column-badge p-badge p-badge-circle p-badge-sm p-component';
+            dummy.textContent = '0';
+            sortIcon.appendChild(dummy);
+            injectedBadges.push({ el: dummy, parent: sortIcon as HTMLElement });
+          }
+        }
+      }
+    }
+
+    const idealWidths: Record<string, number> = {};
+    for (const column of nonPrimaryColumns) {
+      const cells = cellsByColumn.get(column.data_key) || [];
+      let maxWidth = 0;
+      for (const el of cells) {
+        // Use getBoundingClientRect for subpixel accuracy, ceil + 1px buffer
+        // to prevent rounding-induced wrapping
+        const width = Math.ceil(el.getBoundingClientRect().width) + 1;
+        maxWidth = Math.max(maxWidth, width);
+      }
+      idealWidths[column.data_key] = Math.min(
+        Math.max(maxWidth, MIN_COLUMN_WIDTH_PX),
+        MAX_COLUMN_WIDTH_PX,
+      );
+    }
+
+    // Remove injected dummy badges
+    for (const { el, parent } of injectedBadges) {
+      parent.removeChild(el);
+    }
+
+    // Restore all cells (no paint occurred — all synchronous in one JS frame)
+    for (const { el, style, descendants } of saved) {
+      if (style) {
+        el.setAttribute('style', style);
+      } else {
+        el.removeAttribute('style');
+      }
+      for (const { el: desc, ws } of descendants) {
+        desc.style.whiteSpace = ws;
+        if (desc.classList.contains('column-header')) {
+          desc.style.width = savedHeaderWidths.get(desc) || '';
+        }
+      }
+    }
+
+    const result: Record<string, string> = {};
+    for (const key of Object.keys(idealWidths)) {
+      result[key] = idealWidths[key] + 'px';
+    }
+
+    return result;
   }
 }
