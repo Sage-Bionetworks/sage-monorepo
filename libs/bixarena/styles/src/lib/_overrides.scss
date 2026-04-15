@@ -100,6 +100,29 @@
         height: 14px;
       }
     }
+
+    .secondary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 0.875rem;
+      font-size: var(--text-sm);
+      font-family: inherit;
+      font-variation-settings: 'wght' 480;
+      color: var(--p-text-muted-color);
+      background: transparent;
+      border: 1px solid var(--p-surface-200);
+      border-radius: var(--p-border-radius-md);
+      cursor: pointer;
+      transition: all 0.15s;
+
+      &:hover {
+        color: var(--p-text-color);
+        border-color: var(--p-surface-300);
+        background: transparent;
+      }
+    }
   }
 
   .bixarena-modal.login-modal.p-dialog {
@@ -119,18 +142,8 @@
       font-variation-settings: 'wght' 560;
     }
 
-    .cancel-btn {
-      height: 36px;
-      font-size: var(--text-sm);
-      font-variation-settings: 'wght' 480;
-      color: var(--p-text-muted-color);
-      border-color: var(--p-surface-200);
-
-      &:hover {
-        color: var(--p-text-color);
-        border-color: var(--p-surface-300);
-        background: transparent;
-      }
+    .secondary-btn {
+      width: 100%;
     }
   }
 
@@ -138,6 +151,7 @@
     max-width: 520px;
 
     .p-button {
+      height: 36px;
       font-size: var(--text-sm);
       font-variation-settings: 'wght' 560;
     }

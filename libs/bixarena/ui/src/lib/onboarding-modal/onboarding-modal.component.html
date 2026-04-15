@@ -55,7 +55,7 @@
     </label>
     <div class="btns">
       @if (showAgreement()) {
-        <p-button label="Back" severity="secondary" [text]="true" (onClick)="back()" />
+        <button class="secondary-btn" (click)="back()">Back</button>
         <p-button label="Accept & Battle" (onClick)="agree()" />
       } @else {
         <p-button label="Next" (onClick)="next()" />
