@@ -1,4 +1,4 @@
-import { Component, input, model } from '@angular/core';
+import { Component, input, model, output } from '@angular/core';
 import { Dialog } from 'primeng/dialog';
 
 @Component({
@@ -9,7 +9,14 @@ import { Dialog } from 'primeng/dialog';
 })
 export class ModalDialogComponent {
   readonly visible = model(false);
+  readonly heading = input('');
   readonly styleClass = input('');
   readonly dismissableMask = input(true);
   readonly closable = input(true);
+  readonly closed = output<void>();
+
+  onClose(): void {
+    this.visible.set(false);
+    this.closed.emit();
+  }
 }

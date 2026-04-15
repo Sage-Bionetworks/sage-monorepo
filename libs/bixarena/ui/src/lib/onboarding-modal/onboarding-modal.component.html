@@ -1,0 +1,65 @@
+<bixarena-modal-dialog
+  [heading]="showAgreement() ? 'Before You Start' : 'How it works'"
+  styleClass="onboarding-modal"
+  [dismissableMask]="false"
+  [closable]="true"
+  [(visible)]="visible"
+  (closed)="onDismiss()"
+>
+  @if (!showAgreement()) {
+    <div class="step-list">
+      @for (step of steps; track $index) {
+        <div class="step-item">
+          <div class="step-num">{{ $index + 1 }}</div>
+          <div class="step-content">
+            <div class="step-label">{{ step.title }}</div>
+            <div class="step-desc">{{ step.description }}</div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="agreement-text">
+      <p>
+        We process your prompts to ensure they are relevant to biomedical research. Your prompts are
+        also sent to third-party LLM proxies and AI model providers who may store and use them for
+        training and service improvement.
+      </p>
+      <p>
+        <strong
+          >Do not include private, sensitive, confidential, or personally identifiable information
+          in your prompts.</strong
+        >
+      </p>
+      <p>
+        AI responses may contain errors. Verify all AI responses independently. By continuing, you
+        agree to our
+        <a [href]="termsUrl()" target="_blank" rel="noopener noreferrer">Terms of Service</a>.
+      </p>
+    </div>
+  }
+
+  <div class="modal-dots">
+    <span class="dot" [class.active]="!showAgreement()" (click)="showAgreement.set(false)"></span>
+    <span class="dot" [class.active]="showAgreement()" (click)="showAgreement.set(true)"></span>
+  </div>
+
+  <div class="modal-footer">
+    <label class="dont-show">
+      <input
+        type="checkbox"
+        [checked]="dontShowChecked()"
+        (change)="dontShowChecked.set($any($event.target).checked)"
+      />
+      Don't show again
+    </label>
+    <div class="btns">
+      @if (showAgreement()) {
+        <p-button label="Back" severity="secondary" [text]="true" (onClick)="back()" />
+        <p-button label="Accept & Battle" (onClick)="agree()" />
+      } @else {
+        <p-button label="Next" (onClick)="next()" />
+      }
+    </div>
+  </div>
+</bixarena-modal-dialog>
