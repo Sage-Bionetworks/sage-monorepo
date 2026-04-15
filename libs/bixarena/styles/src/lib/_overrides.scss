@@ -34,7 +34,7 @@
     overflow: hidden;
 
     .p-dialog-content {
-      padding: 2.5rem;
+      padding: 3rem;
       background: transparent;
     }
 
@@ -49,7 +49,15 @@
       font-size: var(--text-md);
       color: var(--p-text-muted-color);
       line-height: 1.5;
-      margin: 0 0 1.5rem;
+      margin: 0 0 1rem;
+    }
+
+    .modal-note {
+      font-size: var(--text-xs);
+      color: var(--p-text-muted-color);
+      line-height: 1.5;
+      margin: 0;
+      padding-top: 1.25rem;
     }
 
     .modal-actions {

@@ -4,10 +4,7 @@
   [closable]="false"
   [(visible)]="visible"
 >
-  <p class="modal-desc">
-    You need a Synapse account to participate in battles. Your votes help rank AI models for
-    biomedical research.
-  </p>
+  <p class="modal-desc">Be part of the community shaping the next generation of biomedical AI.</p>
   <div class="modal-actions">
     <p-button label="Sign in with Synapse" styleClass="sign-in-btn" (onClick)="signIn.emit()">
       <ng-template #icon>
@@ -65,4 +62,7 @@
       (onClick)="dismissed.emit()"
     />
   </div>
+  <p class="modal-note">
+    Synapse uses multi-factor authentication to keep your research account secure.
+  </p>
 </bixarena-modal-dialog>
