@@ -18,17 +18,17 @@ export const BixArenaPreset = definePreset(Lara, {
   },
   semantic: {
     primary: {
-      50: '#fff7ed',
-      100: '#ffedd5',
-      200: '#ffddb3',
-      300: '#fdba74',
-      400: '#fb923c',
-      500: '#f97316',
-      600: '#ea580c',
-      700: '#c2410c',
-      800: '#9a3412',
-      900: '#7c2d12',
-      950: '#6c2e12',
+      50: '#ffedd5',
+      100: '#ffddb3',
+      200: '#fdba74',
+      300: '#fb923c',
+      400: '#f97316',
+      500: '#ea580c',
+      600: '#c2410c',
+      700: '#9a3412',
+      800: '#7c2d12',
+      900: '#6c2e12',
+      950: '#431407',
     },
     colorScheme: {
       light: {

@@ -4,6 +4,5 @@ export * from './lib/candlestick-chart/candlestick-chart.component';
 export * from './lib/median-barchart/median-barchart.component';
 export * from './lib/median-chart/median-chart.component';
 export * from './lib/network-chart/network-chart.component';
-export * from './lib/row-chart/row-chart.component';
 export * from './lib/score-barchart/score-barchart.component';
 export * from './lib/score-chart/score-chart.component';

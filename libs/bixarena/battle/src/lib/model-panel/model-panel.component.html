@@ -1,0 +1,85 @@
+<div
+  class="panel"
+  [class.selected]="isSelected()"
+  [class.unselected]="isUnselected()"
+  [class.hovered]="isHovered()"
+>
+  <div class="header">
+    <span class="header-label">
+      <span
+        class="dot"
+        [class.streaming]="streamState().status === 'streaming'"
+        [class.complete]="streamState().status === 'complete'"
+        [class.error]="streamState().status === 'error'"
+      ></span>
+      {{ modelName() ?? anonymousName() }}
+    </span>
+  </div>
+  <div
+    class="body"
+    #body
+    [attr.aria-live]="streamState().status === 'streaming' ? 'off' : 'polite'"
+    (scroll)="onScroll($event)"
+  >
+    @for (msg of streamState().messages; track $index) {
+      @if (msg.role === 'user') {
+        <div class="user-msg">{{ msg.content }}</div>
+      } @else {
+        <div class="content">
+          <markdown [data]="msg.content" />
+        </div>
+      }
+    }
+    <div
+      class="thk"
+      [class.done]="
+        streamState().text ||
+        streamState().status === 'complete' ||
+        streamState().status === 'error'
+      "
+    >
+      <svg
+        class="thk-ico"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path
+          d="M12 3v2m0 14v2m9-9h-2M5 12H3m14.5-6.5L16 7M8 16l-1.5 1.5M18 18l-1.5-1.5M7 7 5.5 5.5"
+        />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+      <span class="thk-lbl">Generating response...</span>
+    </div>
+    @if (streamState().status === 'error') {
+      <div class="error-line">
+        @if (streamState().retryable) {
+          <button class="retry-btn" (click)="retry.emit()" title="Retry" aria-label="Retry">
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M13.5 8A5.5 5.5 0 1 1 10 3.07" />
+              <polyline points="13.5 2 13.5 5.5 10 5.5" />
+            </svg>
+          </button>
+        }
+        <span class="error-line-text">{{ streamState().errorMessage }}</span>
+      </div>
+    } @else if (streamState().text) {
+      <div class="content">
+        <markdown [data]="displayText()" />
+      </div>
+    }
+  </div>
+  @if (modelName()) {
+    <div class="footer">{{ modelName() }}</div>
+  }
+</div>

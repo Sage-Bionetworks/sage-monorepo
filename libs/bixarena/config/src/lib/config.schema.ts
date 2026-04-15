@@ -26,6 +26,12 @@ export const AppConfigSchema = BaseConfigSchema.extend({
     }),
   }),
 
+  battle: z.object({
+    promptLengthLimit: z.number().int().positive(),
+    roundLimit: z.number().int().positive(),
+    promptUseLimit: z.number().int().positive(),
+  }),
+
   analytics: z.object({
     googleTagManager: z.object({
       enabled: z.boolean(),
@@ -37,7 +43,7 @@ export const AppConfigSchema = BaseConfigSchema.extend({
 export type AppConfig = z.infer<typeof AppConfigSchema>;
 
 export interface RuntimeServerConfig extends AppConfig {
-  isPlatformServer: true;
+  isPlatformServer: boolean;
 }
 
 export function validateConfig(config: unknown): AppConfig {

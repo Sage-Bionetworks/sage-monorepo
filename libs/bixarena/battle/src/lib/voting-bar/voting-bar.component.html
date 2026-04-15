@@ -1,0 +1,86 @@
+<div class="abar">
+  @if (phase() === 'voting') {
+    <div class="votes">
+      <button
+        class="vb left"
+        [disabled]="!canVote()"
+        (click)="voteModel1()"
+        (mouseenter)="hoverSide.emit('model1')"
+        (mouseleave)="hoverSide.emit(null)"
+        aria-label="Vote Model A as better"
+      >
+        <svg
+          class="vb-icon flip"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m11 19-6-6" />
+          <path d="m5 21-2-2" />
+          <path d="m8 16-4 4" />
+          <path d="M9.5 17.5 21 6V3h-3L6.5 14.5" />
+        </svg>
+        A is Better
+      </button>
+      <button
+        class="vb tie"
+        [disabled]="!canVote()"
+        (click)="voteTie()"
+        (mouseenter)="hoverSide.emit('tie')"
+        (mouseleave)="hoverSide.emit(null)"
+        aria-label="Vote tie"
+      >
+        <svg
+          class="vb-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+          />
+        </svg>
+        Tie
+      </button>
+      <button
+        class="vb right"
+        [disabled]="!canVote()"
+        (click)="voteModel2()"
+        (mouseenter)="hoverSide.emit('model2')"
+        (mouseleave)="hoverSide.emit(null)"
+        aria-label="Vote Model B as better"
+      >
+        B is Better
+        <svg
+          class="vb-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m11 19-6-6" />
+          <path d="m5 21-2-2" />
+          <path d="m8 16-4 4" />
+          <path d="M9.5 17.5 21 6V3h-3L6.5 14.5" />
+        </svg>
+      </button>
+    </div>
+  }
+
+  @if (phase() === 'reveal' || phase() === 'error') {
+    <div class="nudge">
+      @if (canReuse()) {
+        <p-button label="Same Question New Matchup" (onClick)="samePrompt.emit()" />
+      }
+      <p-button label="New Battle" severity="secondary" (onClick)="newBattle.emit()" />
+    </div>
+  }
+</div>

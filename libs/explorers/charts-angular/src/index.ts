@@ -1,2 +1,3 @@
 export * from './lib/boxplot';
+export * from './lib/forest-plot';
 export * from './lib/legend';

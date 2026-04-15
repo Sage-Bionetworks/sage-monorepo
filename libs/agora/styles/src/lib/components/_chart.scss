@@ -2,19 +2,19 @@
 /* stylelint-disable plugin/no-unsupported-browser-features */
 /* stylelint-disable no-descending-specificity */
 
+.chart-heading {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: #24334f;
+  text-align: center;
+}
+
 .chart {
   position: relative;
   overflow: hidden;
 
   .chart-container {
     height: 350px;
-  }
-
-  .chart-heading {
-    font-size: var(--font-size-lg);
-    font-weight: 700;
-    color: #24334f;
-    text-align: center;
   }
 
   .chart-no-data {
@@ -210,79 +210,6 @@
     // .chart-body > g {
     //   transform: translateY(-12px);
     // }
-  }
-}
-
-// -------------------------------------------------------------------------- //
-// Row chart
-// -------------------------------------------------------------------------- //
-.row-chart {
-  .chart-container {
-    height: 450px;
-  }
-
-  .chart-body {
-    display: flex;
-
-    > .chart-axis {
-      width: 100px;
-
-      svg {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    > .chart-container {
-      flex-grow: 1;
-    }
-  }
-
-  .chart-axis {
-    svg {
-      text {
-        cursor: default;
-      }
-    }
-  }
-
-  .chart-x-axis-label {
-    padding-top: 15px;
-    padding-left: 120px;
-  }
-
-  svg {
-    g.confidence-text-left text,
-    g.confidence-text-right text {
-      cursor: default;
-      font-size: var(--font-size-sm);
-      fill: #4a5056;
-    }
-
-    g.axis text {
-      pointer-events: auto;
-      line-height: normal;
-      font-size: var(--font-size-sm);
-    }
-
-    g.row rect {
-      fill-opacity: 1 !important;
-      width: 18px;
-      height: 18px;
-      cursor: default;
-    }
-
-    g.axis .tick text {
-      opacity: 1 !important;
-    }
-
-    .confidence-text text {
-      display: none;
-    }
-
-    .hline {
-      pointer-events: none;
-    }
   }
 }
 
