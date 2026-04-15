@@ -1,5 +1,6 @@
 import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
+import { DEFAULT_COLOR } from '../constants';
 import {
   grayGridBoxplotChartTheme,
   minimalBoxplotChartTheme,
@@ -20,7 +21,6 @@ import {
 
 const yAxisPadding = 0.2;
 const defaultPointShape = 'circle';
-const defaultPointColor = '#8b8ad1';
 const defaultPointOpacity = 0.8;
 
 const defaultPointCategoryOffset = 0.3;
@@ -324,14 +324,14 @@ export class BoxplotChart {
         itemStyle: {
           color:
             id === 'points'
-              ? defaultPointColor
+              ? DEFAULT_COLOR
               : getCategoryPointStyle(
                   id,
                   hasPointCategories,
                   pointCategoryColors,
                   getCategoryPointColor,
                   pointCategories,
-                  defaultPointColor,
+                  DEFAULT_COLOR,
                 ),
           opacity: pointOpacity || defaultPointOpacity,
         },
