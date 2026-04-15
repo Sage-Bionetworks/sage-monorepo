@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { authGuard } from '@sagebionetworks/bixarena/services';
 
 export const appRoutes: Route[] = [
   {
@@ -7,6 +8,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'battle',
+    canActivate: [authGuard],
     loadChildren: () => import('@sagebionetworks/bixarena/battle').then((r) => r.routes),
   },
   {
