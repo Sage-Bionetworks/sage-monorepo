@@ -163,6 +163,18 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     return Array.from(new Set(this.selectedModelDataList().map((item) => item.evidence_type)));
   });
 
+  csvFiles = computed(() => {
+    return this.evidenceTypes().map((evidenceType: string) => ({
+      filename: this.generateBoxplotsFilename(
+        evidenceType,
+        this.selectedTissueOption(),
+        this.selectedSexOption().value,
+        this.modelName(),
+      ),
+      data: this.generateBoxplotsCsvData(evidenceType),
+    }));
+  });
+
   domFiles = computed(() => {
     if (
       this.boxplotGrids().length === 0 ||
@@ -171,17 +183,10 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
       return [];
     }
 
-    return this.evidenceTypes().map((evidenceType: string, index: number) => {
-      return {
-        target: this.boxplotGrids()[index].nativeElement,
-        filename: this.generateBoxplotsFilename(
-          evidenceType,
-          this.selectedTissueOption(),
-          this.selectedSexOption().value,
-          this.modelName(),
-        ),
-      };
-    });
+    return this.csvFiles().map((csvFile, index) => ({
+      target: this.boxplotGrids()[index].nativeElement,
+      filename: csvFile.filename,
+    }));
   });
 
   getBoxplotsGridTargetByEvidenceType(evidenceType: string) {
@@ -193,6 +198,24 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     return this.selectedModelDataList().filter(
       (modelData) => modelData.evidence_type === evidenceType,
     );
+  }
+
+  generateBoxplotsCsvData(evidenceType: string): string[][] {
+    const header = ['age', 'sex', 'genotype', 'individual_id', 'value', 'units'];
+    const rows: string[][] = [header];
+    for (const modelData of this.getSelectedModelDataForEvidenceType(evidenceType)) {
+      for (const item of modelData.data) {
+        rows.push([
+          modelData.age,
+          item.sex,
+          item.genotype,
+          item.individual_id,
+          String(item.value),
+          modelData.units,
+        ]);
+      }
+    }
+    return rows;
   }
 
   getDefaultTissue() {

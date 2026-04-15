@@ -44,6 +44,8 @@
       <h2>Table of Contents</h2>
       <explorers-download-dom-images-zip
         [domFiles]="domFiles()"
+        [csvFiles]="csvFiles()"
+        [hasCsvDownload]="true"
         [filename]="
           generateBoxplotsZipFilename(
             selectedTissueOption(),
@@ -109,6 +111,8 @@
               )
             "
             [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
+            [hasCsvDownload]="true"
+            [data]="generateBoxplotsCsvData(evidenceType)"
           />
         </div>
 
