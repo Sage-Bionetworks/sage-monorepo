@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
-import { captureDomToBlob } from '@sagebionetworks/explorers/util';
+import { captureDomToBlob, csvDataToString } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'explorers-download-dom-image',
@@ -45,23 +45,7 @@ export class DownloadDomImageComponent {
       return;
     }
 
-    let csv = '';
-    for (const row of data) {
-      csv += this.arrayToCSVString(row);
-    }
-
-    const blob = new Blob([csv], { type: csvType });
+    const blob = new Blob([csvDataToString(data)], { type: csvType });
     saveAs(blob, this.filename() + fileType);
   };
-
-  arrayToCSVString(values: string[]): string {
-    return (
-      values
-        .map((value) => {
-          const escaped = value.replaceAll('"', '""');
-          return `"${escaped}"`;
-        })
-        .join(',') + '\n'
-    );
-  }
 }

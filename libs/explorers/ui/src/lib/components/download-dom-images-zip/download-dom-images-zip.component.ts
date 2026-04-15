@@ -2,11 +2,16 @@ import { Component, input } from '@angular/core';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
-import { captureDomToBlob } from '@sagebionetworks/explorers/util';
+import { captureDomToBlob, csvDataToString } from '@sagebionetworks/explorers/util';
 
 type DomFile = {
   filename: string;
   target: HTMLElement;
+};
+
+type CsvFile = {
+  filename: string;
+  data: string[][];
 };
 
 @Component({
@@ -17,17 +22,26 @@ type DomFile = {
 })
 export class DownloadDomImagesZipComponent {
   domFiles = input.required<DomFile[]>();
+  csvFiles = input<CsvFile[]>([]);
   filename = input.required();
   downloadImagePaddingPx = input<number>();
+  hasCsvDownload = input<boolean>(false);
+  hasImageDownload = input<boolean>(true);
 
   performDownload = async (fileType: string): Promise<void> => {
     const zip = new JSZip();
-    const paddingPx = this.downloadImagePaddingPx() ?? 0;
 
-    for (const domFile of this.domFiles()) {
-      const blob = await captureDomToBlob(domFile.target, paddingPx);
-      if (blob) {
-        zip.file(domFile.filename + fileType, blob);
+    if (fileType === '.csv') {
+      for (const csvFile of this.csvFiles()) {
+        zip.file(csvFile.filename + fileType, csvDataToString(csvFile.data));
+      }
+    } else {
+      const paddingPx = this.downloadImagePaddingPx() ?? 0;
+      for (const domFile of this.domFiles()) {
+        const blob = await captureDomToBlob(domFile.target, paddingPx);
+        if (blob) {
+          zip.file(domFile.filename + fileType, blob);
+        }
       }
     }
 
