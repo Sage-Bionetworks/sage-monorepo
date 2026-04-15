@@ -562,18 +562,19 @@ body {
 /* stylelint-disable selector-class-pattern */
 /* stylelint-disable plugin/no-unsupported-browser-features */
 /* stylelint-disable no-descending-specificity */
+.chart-heading {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: #24334f;
+  text-align: center;
+}
+
 .chart {
   position: relative;
   overflow: hidden;
 }
 .chart .chart-container {
   height: 350px;
-}
-.chart .chart-heading {
-  font-size: var(--font-size-lg);
-  font-weight: 700;
-  color: #24334f;
-  text-align: center;
 }
 .chart .chart-no-data {
   position: absolute;
@@ -716,56 +717,6 @@ body {
   font-size: 1rem;
   fill: var(--color-chart-axis-label);
   cursor: default;
-}
-
-.row-chart .chart-container {
-  height: 450px;
-}
-.row-chart .chart-body {
-  display: flex;
-}
-.row-chart .chart-body > .chart-axis {
-  width: 100px;
-}
-.row-chart .chart-body > .chart-axis svg {
-  width: 100%;
-  height: 100%;
-}
-.row-chart .chart-body > .chart-container {
-  flex-grow: 1;
-}
-.row-chart .chart-axis svg text {
-  cursor: default;
-}
-.row-chart .chart-x-axis-label {
-  padding-top: 15px;
-  padding-left: 120px;
-}
-.row-chart svg g.confidence-text-left text,
-.row-chart svg g.confidence-text-right text {
-  cursor: default;
-  font-size: var(--font-size-sm);
-  fill: #4a5056;
-}
-.row-chart svg g.axis text {
-  pointer-events: auto;
-  line-height: normal;
-  font-size: var(--font-size-sm);
-}
-.row-chart svg g.row rect {
-  fill-opacity: 1 !important;
-  width: 18px;
-  height: 18px;
-  cursor: default;
-}
-.row-chart svg g.axis .tick text {
-  opacity: 1 !important;
-}
-.row-chart svg .confidence-text text {
-  display: none;
-}
-.row-chart svg .hline {
-  pointer-events: none;
 }
 
 .box-plot-chart .chart-container {
