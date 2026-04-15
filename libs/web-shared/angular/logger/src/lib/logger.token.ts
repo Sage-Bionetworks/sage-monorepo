@@ -1,10 +1,10 @@
 import { InjectionToken } from '@angular/core';
 
-export interface Logger {
+export type Logger = {
   log(message: string, data?: Record<string, unknown>): void;
   warn(message: string, data?: Record<string, unknown>): void;
   error(message: string, error?: unknown): void;
-}
+};
 
 export const LOGGER = new InjectionToken<Logger>('Logger', {
   providedIn: 'root',
