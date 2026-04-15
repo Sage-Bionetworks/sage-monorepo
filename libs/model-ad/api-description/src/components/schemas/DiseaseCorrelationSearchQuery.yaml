@@ -26,7 +26,7 @@ properties:
       type: string
     minItems: 2
     maxItems: 2
-    example: ['CONSENSUS NETWORK MODULES', 'Consensus Cluster A - ECM Organization']
+    example: ['CONSENSUS NETWORK MODULES', 'ECM Organization - Consensus Cluster A']
   items:
     description: |
       List of composite identifiers to filter by. Each identifier uses the format "name~age~sex"

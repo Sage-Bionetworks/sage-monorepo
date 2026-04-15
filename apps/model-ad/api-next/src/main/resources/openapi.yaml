@@ -913,7 +913,7 @@ components:
             Expected format: [mainCategory, clusterCategory]
           example:
             - CONSENSUS NETWORK MODULES
-            - Consensus Cluster A - ECM Organization
+            - ECM Organization - Consensus Cluster A
           items:
             type: string
           maxItems: 2

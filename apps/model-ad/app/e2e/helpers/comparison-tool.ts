@@ -73,7 +73,7 @@ export const fetchModelOverviews = async (page: Page): Promise<ModelOverview[]> 
 
 export const fetchDiseaseCorrelations = async (
   page: Page,
-  categories = ['CONSENSUS NETWORK MODULES', 'Consensus Cluster A - ECM Organization'],
+  categories = ['CONSENSUS NETWORK MODULES', 'ECM Organization - Consensus Cluster A'],
 ): Promise<DiseaseCorrelation[]> => {
   const data = await fetchComparisonToolData<DiseaseCorrelationsPage>(
     page,

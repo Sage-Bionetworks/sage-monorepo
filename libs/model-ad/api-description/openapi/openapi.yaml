@@ -644,7 +644,7 @@ components:
           maxItems: 2
           example:
             - CONSENSUS NETWORK MODULES
-            - Consensus Cluster A - ECM Organization
+            - ECM Organization - Consensus Cluster A
         items:
           description: |
             List of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
