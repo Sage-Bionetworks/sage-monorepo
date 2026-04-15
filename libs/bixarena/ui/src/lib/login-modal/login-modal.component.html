@@ -1,0 +1,59 @@
+<bixarena-modal-dialog [(visible)]="visible" styleClass="login-modal">
+  <h2 class="heading">Sign in to battle</h2>
+  <p class="description">
+    You need a Synapse account to participate in battles. Your votes help rank AI models for
+    biomedical research.
+  </p>
+  <div class="actions">
+    <p-button label="Sign in with Synapse" (onClick)="signIn.emit()" styleClass="sign-in-btn">
+      <ng-template #icon>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 33 33"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M23.1329 7.07671L10.051 14.4955L9.55766 13.6256L22.6396 6.20685L23.1329 7.07671Z"
+            fill="white"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M26.7369 8.80358L26.7369 23.9155L27.7369 23.9155L27.7369 8.80358L26.7369 8.80358Z"
+            fill="white"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M22.2873 27.4281L9.37541 19.7983L9.88414 18.9374L22.7961 26.5672L22.2873 27.4281Z"
+            fill="white"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M26.65 8.39049C28.6909 8.39049 30.3453 6.73607 30.3453 4.69524C30.3453 2.65442 28.6909 1 26.65 1C24.6092 1 22.9548 2.65442 22.9548 4.69524C22.9548 6.73607 24.6092 8.39049 26.65 8.39049ZM26.65 9.39049C29.2431 9.39049 31.3453 7.28835 31.3453 4.69524C31.3453 2.10213 29.2431 0 26.65 0C24.0569 0 21.9548 2.10213 21.9548 4.69524C21.9548 7.28835 24.0569 9.39049 26.65 9.39049Z"
+            fill="white"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M26.65 31.8667C28.6909 31.8667 30.3453 30.2123 30.3453 28.1715C30.3453 26.1306 28.6909 24.4762 26.65 24.4762C24.6092 24.4762 22.9548 26.1306 22.9548 28.1715C22.9548 30.2123 24.6092 31.8667 26.65 31.8667ZM26.65 32.8667C29.2431 32.8667 31.3453 30.7646 31.3453 28.1715C31.3453 25.5784 29.2431 23.4762 26.65 23.4762C24.0569 23.4762 21.9548 25.5784 21.9548 28.1715C21.9548 30.7646 24.0569 32.8667 26.65 32.8667Z"
+            fill="white"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M6.69524 20.1286C8.73607 20.1286 10.3905 18.4742 10.3905 16.4334C10.3905 14.3925 8.73607 12.7381 6.69524 12.7381C4.65442 12.7381 3 14.3925 3 16.4334C3 18.4742 4.65442 20.1286 6.69524 20.1286ZM6.69524 21.1286C9.28835 21.1286 11.3905 19.0265 11.3905 16.4334C11.3905 13.8402 9.28835 11.7381 6.69524 11.7381C4.10213 11.7381 2 13.8402 2 16.4334C2 19.0265 4.10213 21.1286 6.69524 21.1286Z"
+            fill="white"
+          />
+        </svg>
+      </ng-template>
+    </p-button>
+    <p-button label="Cancel" [outlined]="true" (onClick)="onCancel()" styleClass="cancel-btn" />
+  </div>
+</bixarena-modal-dialog>
