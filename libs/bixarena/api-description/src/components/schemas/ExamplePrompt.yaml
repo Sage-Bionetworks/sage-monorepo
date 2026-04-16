@@ -26,6 +26,7 @@ properties:
     type: array
     items:
       $ref: BiomedicalCategory.yaml
+    maxItems: 3
     default: []
     description: Categories from the effective categorization. Empty array if not yet categorized.
   createdAt:

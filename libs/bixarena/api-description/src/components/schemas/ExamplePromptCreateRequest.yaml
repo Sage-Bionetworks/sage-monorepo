@@ -18,6 +18,7 @@ properties:
     items:
       $ref: BiomedicalCategory.yaml
     minItems: 1
+    maxItems: 3
     nullable: true
     description: >-
       Human override categories. If provided, a manual categorization is created

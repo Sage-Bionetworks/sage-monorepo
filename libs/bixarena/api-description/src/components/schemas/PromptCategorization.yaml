@@ -9,7 +9,8 @@ properties:
       type: string
       maxLength: 100
     minItems: 1
-    description: One or more biomedical subject category slugs
+    maxItems: 3
+    description: One to three biomedical subject category slugs
   method:
     type: string
     maxLength: 100
