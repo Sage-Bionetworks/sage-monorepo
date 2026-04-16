@@ -22,7 +22,6 @@ jobs:
     env:
       TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
       TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
-    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
@@ -45,6 +44,7 @@ jobs:
 
       # Deliberately chosen master here to keep up-to-date.
       - name: Run Trivy vulnerability scanner for any major issues
+        continue-on-error: true # scan may exit non-zero when vulnerabilities are found
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
           image-ref: ghcr.io/sage-bionetworks/${{ matrix.image }}:edge
@@ -58,6 +58,7 @@ jobs:
       # Show all detected issues.
       # Note this will show a lot more, including major un-fixed ones.
       - name: Run Trivy vulnerability scanner for local output
+        continue-on-error: true # scan may exit non-zero when vulnerabilities are found
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
           image-ref: ghcr.io/sage-bionetworks/${{ matrix.image }}:edge
