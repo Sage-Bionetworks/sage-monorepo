@@ -38,29 +38,7 @@ CREATE INDEX idx_epc_prompt_id ON api.example_prompt_categorization(prompt_id);
 
 CREATE TABLE api.example_prompt_categorization_category (
   categorization_id UUID         NOT NULL REFERENCES api.example_prompt_categorization(id) ON DELETE CASCADE,
-  category          VARCHAR(100) NOT NULL
-    CHECK (category IN (
-      'biochemistry',
-      'bioengineering',
-      'bioinformatics',
-      'cancer-biology',
-      'cell-biology',
-      'clinical-trials',
-      'developmental-biology',
-      'epidemiology',
-      'evolutionary-biology',
-      'genetics',
-      'genomics',
-      'immunology',
-      'microbiology',
-      'molecular-biology',
-      'neuroscience',
-      'pathology',
-      'pharmacology-and-toxicology',
-      'physiology',
-      'synthetic-biology',
-      'systems-biology'
-    )),
+  category          VARCHAR(100) NOT NULL,
   PRIMARY KEY (categorization_id, category)
 );
 
@@ -105,29 +83,7 @@ CREATE INDEX idx_bc_battle_id ON api.battle_categorization(battle_id);
 
 CREATE TABLE api.battle_categorization_category (
   categorization_id UUID         NOT NULL REFERENCES api.battle_categorization(id) ON DELETE CASCADE,
-  category          VARCHAR(100) NOT NULL
-    CHECK (category IN (
-      'biochemistry',
-      'bioengineering',
-      'bioinformatics',
-      'cancer-biology',
-      'cell-biology',
-      'clinical-trials',
-      'developmental-biology',
-      'epidemiology',
-      'evolutionary-biology',
-      'genetics',
-      'genomics',
-      'immunology',
-      'microbiology',
-      'molecular-biology',
-      'neuroscience',
-      'pathology',
-      'pharmacology-and-toxicology',
-      'physiology',
-      'synthetic-biology',
-      'systems-biology'
-    )),
+  category          VARCHAR(100) NOT NULL,
   PRIMARY KEY (categorization_id, category)
 );
 
