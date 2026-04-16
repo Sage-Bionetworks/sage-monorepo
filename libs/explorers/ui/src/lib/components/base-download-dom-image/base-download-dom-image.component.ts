@@ -13,6 +13,7 @@ import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { ButtonModule } from 'primeng/button';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { FILE_TYPE_CSV, FILE_TYPE_JPEG, FILE_TYPE_PNG } from './file-types';
 
 interface Type {
   value: string;
@@ -43,11 +44,11 @@ export class BaseDownloadDomImageComponent {
     const hasImage = this.hasImageDownload();
 
     const imageTypes: Type[] = [
-      { value: '.png', label: hasCsv ? 'PNG image' : 'PNG' },
-      { value: '.jpeg', label: hasCsv ? 'JPEG image' : 'JPEG' },
+      { value: FILE_TYPE_PNG, label: hasCsv ? 'PNG image' : 'PNG' },
+      { value: FILE_TYPE_JPEG, label: hasCsv ? 'JPEG image' : 'JPEG' },
     ];
 
-    const csvType: Type = { value: '.csv', label: 'CSV data' };
+    const csvType: Type = { value: FILE_TYPE_CSV, label: 'CSV data' };
 
     if (hasImage && hasCsv) return [...imageTypes, csvType];
     if (hasImage) return imageTypes;

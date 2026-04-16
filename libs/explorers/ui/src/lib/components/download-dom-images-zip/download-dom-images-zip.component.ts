@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
 import { captureDomToBlob, csvDataToString } from '@sagebionetworks/explorers/util';
+import { FILE_TYPE_CSV } from '../base-download-dom-image/file-types';
 
 type DomFile = {
   filename: string;
@@ -31,7 +32,7 @@ export class DownloadDomImagesZipComponent {
   performDownload = async (fileType: string): Promise<void> => {
     const zip = new JSZip();
 
-    if (fileType === '.csv') {
+    if (fileType === FILE_TYPE_CSV) {
       for (const csvFile of this.csvFiles()) {
         zip.file(csvFile.filename + fileType, csvDataToString(csvFile.data));
       }
