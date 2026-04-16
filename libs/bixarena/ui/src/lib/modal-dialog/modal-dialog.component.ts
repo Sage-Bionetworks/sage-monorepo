@@ -11,8 +11,8 @@ export class ModalDialogComponent {
   readonly visible = model(false);
   readonly heading = input('');
   readonly styleClass = input('');
-  readonly dismissableMask = input(true);
-  readonly closable = input(true);
+  readonly dismissableMask = input(false);
+  readonly closable = input(true); // Controls visibility of the X close button.
   readonly closed = output<void>();
 
   onClose(): void {
