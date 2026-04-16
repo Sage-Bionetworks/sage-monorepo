@@ -163,8 +163,9 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     return Array.from(new Set(this.selectedModelDataList().map((item) => item.evidence_type)));
   });
 
-  csvFiles = computed(() => {
+  boxplotSections = computed(() => {
     return this.evidenceTypes().map((evidenceType: string) => ({
+      evidenceType,
       filename: this.generateBoxplotsFilename(
         evidenceType,
         this.selectedTissueOption(),
@@ -183,9 +184,9 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
       return [];
     }
 
-    return this.csvFiles().map((csvFile, index) => ({
+    return this.boxplotSections().map((section, index) => ({
       target: this.boxplotGrids()[index].nativeElement,
-      filename: csvFile.filename,
+      filename: section.filename,
     }));
   });
 

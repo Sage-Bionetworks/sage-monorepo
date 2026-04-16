@@ -44,8 +44,9 @@
       <h2>Table of Contents</h2>
       <explorers-download-dom-images-zip
         [domFiles]="domFiles()"
-        [csvFiles]="csvFiles()"
+        [csvFiles]="boxplotSections()"
         [hasCsvDownload]="true"
+        [hasImageDownload]="true"
         [filename]="
           generateBoxplotsZipFilename(
             selectedTissueOption(),
@@ -69,7 +70,8 @@
   </div>
 
   <div class="boxplots-container" #boxplotsContainer>
-    @for (evidenceType of evidenceTypes(); track evidenceType; let last = $last; let i = $index) {
+    @for (section of boxplotSections(); track section.evidenceType; let last = $last) {
+      @let evidenceType = section.evidenceType;
       <div
         class="boxplots-evidence-type"
         [id]="generateAnchorId(evidenceType)"
@@ -102,14 +104,14 @@
           <explorers-download-dom-image
             [target]="getBoxplotsGridTargetByEvidenceType(evidenceType)"
             buttonLabel="Download"
-            [filename]="csvFiles()[i].filename"
+            [filename]="section.filename"
             [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
             [hasCsvDownload]="true"
-            [data]="csvFiles()[i].data"
+            [data]="section.data"
           />
         </div>
 
-        <!-- Wrapper handles full-width positioning while keeping grid in normal document flow 
+        <!-- Wrapper handles full-width positioning while keeping grid in normal document flow
          so the full grid is captured in the download image -->
         <div class="boxplots-grid-wrapper">
           <model-ad-boxplots-grid
