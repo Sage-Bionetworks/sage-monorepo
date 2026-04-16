@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from './auth.service';
 import { BattleGateService } from './battle-gate.service';
 import { authGuard } from './auth.guard';
@@ -22,7 +20,6 @@ describe('authGuard', () => {
 
   const setup = (platformId: string, isAuthenticated: boolean) => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
       providers: [
         AuthService,
         BattleGateService,
