@@ -69,7 +69,7 @@
   </div>
 
   <div class="boxplots-container" #boxplotsContainer>
-    @for (evidenceType of evidenceTypes(); track evidenceType; let last = $last) {
+    @for (evidenceType of evidenceTypes(); track evidenceType; let last = $last; let i = $index) {
       <div
         class="boxplots-evidence-type"
         [id]="generateAnchorId(evidenceType)"
@@ -102,17 +102,10 @@
           <explorers-download-dom-image
             [target]="getBoxplotsGridTargetByEvidenceType(evidenceType)"
             buttonLabel="Download"
-            [filename]="
-              generateBoxplotsFilename(
-                evidenceType,
-                selectedTissueOption(),
-                selectedSexOption().value,
-                modelName()
-              )
-            "
+            [filename]="csvFiles()[i].filename"
             [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
             [hasCsvDownload]="true"
-            [data]="generateBoxplotsCsvData(evidenceType)"
+            [data]="csvFiles()[i].data"
           />
         </div>
 
