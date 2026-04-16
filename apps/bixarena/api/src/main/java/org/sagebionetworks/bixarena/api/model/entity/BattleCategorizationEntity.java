@@ -15,40 +15,31 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "battle", schema = "api")
+@Table(name = "battle_categorization", schema = "api")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BattleEntity {
+public class BattleCategorizationEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "id")
   private UUID id;
 
-  @Column(name = "title", length = 255)
-  private String title;
+  @Column(name = "battle_id", nullable = false)
+  private UUID battleId;
 
-  @Column(name = "user_id", nullable = false)
-  private UUID userId;
+  @Column(name = "method", nullable = false, length = 100)
+  private String method;
 
-  @Column(name = "model1_id", nullable = false)
-  private UUID model1Id;
+  @Column(name = "categorized_by")
+  private UUID categorizedBy;
 
-  @Column(name = "model2_id", nullable = false)
-  private UUID model2Id;
+  @Column(name = "reason", length = 1000)
+  private String reason;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;
-
-  @Column(name = "ended_at")
-  private OffsetDateTime endedAt;
-
-  @Column(name = "effective_validation_id")
-  private UUID effectiveValidationId;
-
-  @Column(name = "effective_categorization_id")
-  private UUID effectiveCategorizationId;
 }
