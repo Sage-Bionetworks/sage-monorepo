@@ -22,6 +22,12 @@ properties:
     format: uuid
     nullable: true
     description: ID of the effective categorization for this prompt (null = not yet categorized)
+  categories:
+    type: array
+    items:
+      $ref: BiomedicalCategory.yaml
+    default: []
+    description: Categories from the effective categorization. Empty array if not yet categorized.
   createdAt:
     type: string
     format: date-time
@@ -32,4 +38,5 @@ required:
   - question
   - source
   - active
+  - categories
   - createdAt
