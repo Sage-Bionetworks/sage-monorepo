@@ -7,7 +7,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
+import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSourceDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
@@ -39,6 +43,9 @@ public class ExamplePromptDto {
 
   private @Nullable UUID effectiveCategorizationId = null;
 
+  @Valid
+  private List<BiomedicalCategoryDto> categories = new ArrayList<>();
+
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
@@ -49,11 +56,12 @@ public class ExamplePromptDto {
   /**
    * Constructor with only required parameters
    */
-  public ExamplePromptDto(String id, String question, ExamplePromptSourceDto source, Boolean active, OffsetDateTime createdAt) {
+  public ExamplePromptDto(String id, String question, ExamplePromptSourceDto source, Boolean active, List<BiomedicalCategoryDto> categories, OffsetDateTime createdAt) {
     this.id = id;
     this.question = question;
     this.source = source;
     this.active = active;
+    this.categories = categories;
     this.createdAt = createdAt;
   }
 
@@ -157,6 +165,34 @@ public class ExamplePromptDto {
     this.effectiveCategorizationId = effectiveCategorizationId;
   }
 
+  public ExamplePromptDto categories(List<BiomedicalCategoryDto> categories) {
+    this.categories = categories;
+    return this;
+  }
+
+  public ExamplePromptDto addCategoriesItem(BiomedicalCategoryDto categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
+    return this;
+  }
+
+  /**
+   * Categories from the effective categorization. Empty array if not yet categorized.
+   * @return categories
+   */
+  @NotNull @Valid 
+  @Schema(name = "categories", description = "Categories from the effective categorization. Empty array if not yet categorized.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("categories")
+  public List<BiomedicalCategoryDto> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<BiomedicalCategoryDto> categories) {
+    this.categories = categories;
+  }
+
   public ExamplePromptDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -191,12 +227,13 @@ public class ExamplePromptDto {
         Objects.equals(this.source, examplePrompt.source) &&
         Objects.equals(this.active, examplePrompt.active) &&
         Objects.equals(this.effectiveCategorizationId, examplePrompt.effectiveCategorizationId) &&
+        Objects.equals(this.categories, examplePrompt.categories) &&
         Objects.equals(this.createdAt, examplePrompt.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, question, source, active, effectiveCategorizationId, createdAt);
+    return Objects.hash(id, question, source, active, effectiveCategorizationId, categories, createdAt);
   }
 
   @Override
@@ -208,6 +245,7 @@ public class ExamplePromptDto {
     sb.append("    source: ").append(toIndentedString(source)).append("\n");
     sb.append("    active: ").append(toIndentedString(active)).append("\n");
     sb.append("    effectiveCategorizationId: ").append(toIndentedString(effectiveCategorizationId)).append("\n");
+    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -242,6 +280,7 @@ public class ExamplePromptDto {
       this.instance.setSource(value.source);
       this.instance.setActive(value.active);
       this.instance.setEffectiveCategorizationId(value.effectiveCategorizationId);
+      this.instance.setCategories(value.categories);
       this.instance.setCreatedAt(value.createdAt);
       return this;
     }
@@ -268,6 +307,11 @@ public class ExamplePromptDto {
     
     public ExamplePromptDto.Builder effectiveCategorizationId(UUID effectiveCategorizationId) {
       this.instance.effectiveCategorizationId(effectiveCategorizationId);
+      return this;
+    }
+    
+    public ExamplePromptDto.Builder categories(List<BiomedicalCategoryDto> categories) {
+      this.instance.categories(categories);
       return this;
     }
     

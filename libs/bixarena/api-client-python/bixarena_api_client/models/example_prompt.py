@@ -21,6 +21,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from uuid import UUID
+from bixarena_api_client.models.biomedical_category import BiomedicalCategory
 from bixarena_api_client.models.example_prompt_source import ExamplePromptSource
 from typing import Optional, Set
 from typing_extensions import Self
@@ -44,6 +45,9 @@ class ExamplePrompt(BaseModel):
         description="ID of the effective categorization for this prompt (null = not yet categorized)",
         alias="effectiveCategorizationId",
     )
+    categories: List[BiomedicalCategory] = Field(
+        description="Categories from the effective categorization. Empty array if not yet categorized."
+    )
     created_at: datetime = Field(
         description="When the example prompt was created.", alias="createdAt"
     )
@@ -53,6 +57,7 @@ class ExamplePrompt(BaseModel):
         "source",
         "active",
         "effectiveCategorizationId",
+        "categories",
         "createdAt",
     ]
 
@@ -119,6 +124,7 @@ class ExamplePrompt(BaseModel):
                 "source": obj.get("source"),
                 "active": obj.get("active"),
                 "effectiveCategorizationId": obj.get("effectiveCategorizationId"),
+                "categories": obj.get("categories"),
                 "createdAt": obj.get("createdAt"),
             }
         )

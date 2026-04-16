@@ -2468,6 +2468,12 @@ components:
           format: uuid
           nullable: true
           description: ID of the effective categorization for this prompt (null = not yet categorized)
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomedicalCategory'
+          default: []
+          description: Categories from the effective categorization. Empty array if not yet categorized.
         createdAt:
           type: string
           format: date-time
@@ -2478,6 +2484,7 @@ components:
         - question
         - source
         - active
+        - categories
         - createdAt
     ExamplePromptPage:
       type: object

@@ -3152,6 +3152,9 @@ components:
         active: true
         id: 123e4567-e89b-12d3-a456-426614174000
         source: pubmedqa
+        categories:
+          - genetics
+          - genetics
         effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         id:
@@ -3177,6 +3180,13 @@ components:
           format: uuid
           nullable: true
           type: string
+        categories:
+          default: []
+          description: Categories from the effective categorization. Empty array if
+            not yet categorized.
+          items:
+            $ref: '#/components/schemas/BiomedicalCategory'
+          type: array
         createdAt:
           description: When the example prompt was created.
           example: 2025-08-01T09:00:00Z
@@ -3184,6 +3194,7 @@ components:
           type: string
       required:
         - active
+        - categories
         - createdAt
         - id
         - question
@@ -3213,12 +3224,18 @@ components:
             active: true
             id: 123e4567-e89b-12d3-a456-426614174000
             source: pubmedqa
+            categories:
+              - genetics
+              - genetics
             effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           - createdAt: 2025-08-01T09:00:00Z
             question: What are the main symptoms of Type 2 diabetes?
             active: true
             id: 123e4567-e89b-12d3-a456-426614174000
             source: pubmedqa
+            categories:
+              - genetics
+              - genetics
             effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         hasNext: true
         totalElements: 99
