@@ -165,7 +165,7 @@ jobs:
     steps:
       - name: Attest the provenance of the Docker image build
         if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
+        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
         id: attest
         with:
           subject-name: ${{ needs.build-and-push.outputs.image }}
