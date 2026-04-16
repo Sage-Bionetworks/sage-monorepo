@@ -1,0 +1,20 @@
+type: object
+properties:
+  prompt:
+    type: string
+    description: The original prompt that was categorized
+  categories:
+    type: array
+    items:
+      type: string
+      maxLength: 100
+    minItems: 1
+    description: One or more biomedical subject category slugs
+  method:
+    type: string
+    maxLength: 100
+    description: The categorization method used (e.g. 'openrouter-haiku-v1')
+required:
+  - prompt
+  - categories
+  - method
