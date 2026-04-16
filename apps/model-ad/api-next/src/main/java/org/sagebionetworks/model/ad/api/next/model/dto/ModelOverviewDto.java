@@ -38,7 +38,7 @@ public class ModelOverviewDto {
   @Valid
   private List<String> matchedControls = new ArrayList<>();
 
-  private @Nullable LinkDto geneExpression;
+  private @Nullable LinkDto transcriptomics;
 
   private @Nullable LinkDto diseaseCorrelation;
 
@@ -50,7 +50,7 @@ public class ModelOverviewDto {
 
   private LinkDto jaxStrain;
 
-  private LinkDto center;
+  private String center = null;
 
   @Valid
   private List<String> modifiedGenes = new ArrayList<>();
@@ -59,7 +59,7 @@ public class ModelOverviewDto {
    * Gets or Sets availableData
    */
   public enum AvailableDataEnum {
-    GENE_EXPRESSION("Gene Expression"),
+    TRANSCRIPTOMICS("Transcriptomics"),
     
     PATHOLOGY("Pathology"),
     
@@ -104,7 +104,7 @@ public class ModelOverviewDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelOverviewDto(String id, String name, String modelType, List<String> matchedControls, LinkDto studyData, LinkDto jaxStrain, LinkDto center, List<String> modifiedGenes, List<AvailableDataEnum> availableData) {
+  public ModelOverviewDto(String id, String name, String modelType, List<String> matchedControls, LinkDto studyData, LinkDto jaxStrain, String center, List<String> modifiedGenes, List<AvailableDataEnum> availableData) {
     this.id = id;
     this.name = name;
     this.modelType = modelType;
@@ -204,24 +204,24 @@ public class ModelOverviewDto {
     this.matchedControls = matchedControls;
   }
 
-  public ModelOverviewDto geneExpression(@Nullable LinkDto geneExpression) {
-    this.geneExpression = geneExpression;
+  public ModelOverviewDto transcriptomics(@Nullable LinkDto transcriptomics) {
+    this.transcriptomics = transcriptomics;
     return this;
   }
 
   /**
-   * Get geneExpression
-   * @return geneExpression
+   * Get transcriptomics
+   * @return transcriptomics
    */
   @Valid 
-  @Schema(name = "gene_expression", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("gene_expression")
-  public @Nullable LinkDto getGeneExpression() {
-    return geneExpression;
+  @Schema(name = "transcriptomics", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("transcriptomics")
+  public @Nullable LinkDto getTranscriptomics() {
+    return transcriptomics;
   }
 
-  public void setGeneExpression(@Nullable LinkDto geneExpression) {
-    this.geneExpression = geneExpression;
+  public void setTranscriptomics(@Nullable LinkDto transcriptomics) {
+    this.transcriptomics = transcriptomics;
   }
 
   public ModelOverviewDto diseaseCorrelation(@Nullable LinkDto diseaseCorrelation) {
@@ -324,7 +324,7 @@ public class ModelOverviewDto {
     this.jaxStrain = jaxStrain;
   }
 
-  public ModelOverviewDto center(LinkDto center) {
+  public ModelOverviewDto center(String center) {
     this.center = center;
     return this;
   }
@@ -333,14 +333,14 @@ public class ModelOverviewDto {
    * Get center
    * @return center
    */
-  @NotNull @Valid 
+  @NotNull 
   @Schema(name = "center", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("center")
-  public LinkDto getCenter() {
+  public String getCenter() {
     return center;
   }
 
-  public void setCenter(LinkDto center) {
+  public void setCenter(String center) {
     this.center = center;
   }
 
@@ -413,7 +413,7 @@ public class ModelOverviewDto {
         Objects.equals(this.name, modelOverview.name) &&
         Objects.equals(this.modelType, modelOverview.modelType) &&
         Objects.equals(this.matchedControls, modelOverview.matchedControls) &&
-        Objects.equals(this.geneExpression, modelOverview.geneExpression) &&
+        Objects.equals(this.transcriptomics, modelOverview.transcriptomics) &&
         Objects.equals(this.diseaseCorrelation, modelOverview.diseaseCorrelation) &&
         Objects.equals(this.biomarkers, modelOverview.biomarkers) &&
         Objects.equals(this.pathology, modelOverview.pathology) &&
@@ -426,7 +426,7 @@ public class ModelOverviewDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, modelType, matchedControls, geneExpression, diseaseCorrelation, biomarkers, pathology, studyData, jaxStrain, center, modifiedGenes, availableData);
+    return Objects.hash(id, name, modelType, matchedControls, transcriptomics, diseaseCorrelation, biomarkers, pathology, studyData, jaxStrain, center, modifiedGenes, availableData);
   }
 
   @Override
@@ -437,7 +437,7 @@ public class ModelOverviewDto {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
     sb.append("    matchedControls: ").append(toIndentedString(matchedControls)).append("\n");
-    sb.append("    geneExpression: ").append(toIndentedString(geneExpression)).append("\n");
+    sb.append("    transcriptomics: ").append(toIndentedString(transcriptomics)).append("\n");
     sb.append("    diseaseCorrelation: ").append(toIndentedString(diseaseCorrelation)).append("\n");
     sb.append("    biomarkers: ").append(toIndentedString(biomarkers)).append("\n");
     sb.append("    pathology: ").append(toIndentedString(pathology)).append("\n");
@@ -478,7 +478,7 @@ public class ModelOverviewDto {
       this.instance.setName(value.name);
       this.instance.setModelType(value.modelType);
       this.instance.setMatchedControls(value.matchedControls);
-      this.instance.setGeneExpression(value.geneExpression);
+      this.instance.setTranscriptomics(value.transcriptomics);
       this.instance.setDiseaseCorrelation(value.diseaseCorrelation);
       this.instance.setBiomarkers(value.biomarkers);
       this.instance.setPathology(value.pathology);
@@ -510,8 +510,8 @@ public class ModelOverviewDto {
       return this;
     }
     
-    public ModelOverviewDto.Builder geneExpression(LinkDto geneExpression) {
-      this.instance.geneExpression(geneExpression);
+    public ModelOverviewDto.Builder transcriptomics(LinkDto transcriptomics) {
+      this.instance.transcriptomics(transcriptomics);
       return this;
     }
     
@@ -540,7 +540,7 @@ public class ModelOverviewDto {
       return this;
     }
     
-    public ModelOverviewDto.Builder center(LinkDto center) {
+    public ModelOverviewDto.Builder center(String center) {
       this.instance.center(center);
       return this;
     }

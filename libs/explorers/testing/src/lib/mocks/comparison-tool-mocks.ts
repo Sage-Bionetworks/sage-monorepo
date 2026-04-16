@@ -158,7 +158,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       correlation: 0.084295638183579,
       adj_p_val: 0.409231075552908,
     },
-    available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
+    available_data: ['Transcriptomics', 'Pathology', 'Biomarkers'],
     modified_genes: ['APP', 'MAPT', 'Psen1'],
   },
   {
@@ -181,7 +181,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       correlation: 0.120000548192961,
       adj_p_val: 0.239210931286464,
     },
-    available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
+    available_data: ['Transcriptomics', 'Pathology', 'Biomarkers'],
     modified_genes: ['APP', 'Psen1'],
   },
   {
@@ -206,7 +206,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       correlation: 0.0555691060937462,
       adj_p_val: 0.586807542376288,
     },
-    available_data: ['Gene Expression', 'Disease Correlation'],
+    available_data: ['Transcriptomics', 'Disease Correlation'],
     modified_genes: ['APP', 'Psen1'],
   },
   {
@@ -229,7 +229,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       correlation: 0.0748918760876008,
       adj_p_val: 0.463613681499704,
     },
-    available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
+    available_data: ['Transcriptomics', 'Pathology', 'Biomarkers'],
     modified_genes: ['Abca7'],
   },
   {
@@ -254,7 +254,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       correlation: 0.0472918655548024,
       adj_p_val: 0.638623415843113,
     },
-    available_data: ['Gene Expression', 'Disease Correlation'],
+    available_data: ['Transcriptomics', 'Disease Correlation'],
     modified_genes: ['APOE'],
   },
 ];

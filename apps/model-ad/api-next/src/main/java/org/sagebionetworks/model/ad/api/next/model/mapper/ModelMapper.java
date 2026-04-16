@@ -52,7 +52,7 @@ public class ModelMapper {
       document.getAlzforumId(),
       document.getGenotype(),
       aliases,
-      document.getGeneExpression(),
+      document.getTranscriptomics(),
       document.getDiseaseCorrelation(),
       document.getSpatialTranscriptomics(),
       geneticInfo,

@@ -1,0 +1,57 @@
+type: object
+description: Transcriptomics
+properties:
+  composite_id:
+    type: string
+    description: Unique identifier for the transcriptomics object
+    example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+  ensembl_gene_id:
+    type: string
+    description: Ensembl Gene ID
+  gene_symbol:
+    type: string
+    description: Gene Symbol
+    example: Gnai3
+  biodomains:
+    type: array
+    description: List of biodomains associated with the gene
+    items:
+      type: string
+  name:
+    $ref: ./Link.yaml
+    description: Model name and link to model details page
+  matched_control:
+    type: string
+    description: Matched control for the model
+    example: C57BL/6J
+  model_group:
+    type: string
+    description: Model group
+    nullable: true
+  model_type:
+    type: string
+    description: Type of model
+    example: Familial AD
+  tissue:
+    type: string
+    description: Tissue type
+    example: Hemibrain
+  sex_cohort:
+    $ref: ./SexCohort.yaml
+  4 months:
+    $ref: ./FoldChangeResult.yaml
+  12 months:
+    $ref: ./FoldChangeResult.yaml
+  18 months:
+    $ref: ./FoldChangeResult.yaml
+required:
+  - composite_id
+  - ensembl_gene_id
+  - gene_symbol
+  - biodomains
+  - name
+  - matched_control
+  - model_group
+  - model_type
+  - tissue
+  - sex_cohort

@@ -9,7 +9,7 @@ import { CallbackDataParams } from 'echarts/types/dist/shared';
 
 /**
  * Common interface for boxplot data.
- * Both GeneExpressionDetail and ModelData satisfy this interface.
+ * Both TranscriptomicsIndividual and ModelData satisfy this interface.
  */
 export interface BoxplotData {
   age: string;

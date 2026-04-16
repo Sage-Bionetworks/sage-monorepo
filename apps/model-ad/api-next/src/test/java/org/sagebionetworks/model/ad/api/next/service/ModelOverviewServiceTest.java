@@ -368,7 +368,7 @@ class ModelOverviewServiceTest {
     document.setAvailableData(List.of());
     document.setStudyData(requiredLink);
     document.setJaxStrain(requiredLink);
-    document.setCenter(requiredLink);
+    document.setCenter("IU/Jax/Pitt");
     return document;
   }
 }

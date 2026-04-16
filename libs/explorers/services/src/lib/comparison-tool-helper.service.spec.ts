@@ -20,11 +20,11 @@ describe('Service: ComparisonToolHelper', () => {
   it('should create filename for ct with primary dropdown', () => {
     const config: ComparisonToolConfig = {
       ...mockComparisonToolDataConfig[0],
-      page: 'Gene Expression',
+      page: 'Differential Expression',
       dropdowns: ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain', 'Sex - Females & Males'],
     };
     const filename = ctHelperService.getComparisonToolDataFilename(config);
-    expect(filename).toBe('gene_expression_rna_differential_expression');
+    expect(filename).toBe('differential_expression_rna_differential_expression');
   });
 
   it('should reshape comparison tool data with heatmap data into one row per heatmap category', () => {

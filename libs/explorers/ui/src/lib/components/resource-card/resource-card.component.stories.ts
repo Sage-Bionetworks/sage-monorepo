@@ -23,8 +23,8 @@ type Story = StoryObj<ResourceCardComponent>;
 
 export const InternalLinkHomeCard: Story = {
   args: {
-    title: 'Gene Expression',
-    description: 'View Gene Expression results for this model in the comparison tool.',
+    title: 'Transcriptomics',
+    description: 'View Transcriptomics results for this model in the comparison tool.',
     imagePath: 'model-ad-assets/images/gene-expression.svg',
     altText: 'gene expression icon',
     link: '/comparison/expression?models=APOE4',

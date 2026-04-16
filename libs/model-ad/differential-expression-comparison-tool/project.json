@@ -1,0 +1,27 @@
+{
+  "name": "model-ad-differential-expression-comparison-tool",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/model-ad/differential-expression-comparison-tool/src",
+  "prefix": "model-ad",
+  "tags": ["type:feature", "scope:model-ad", "language:typescript"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/model-ad/differential-expression-comparison-tool"],
+      "options": {
+        "jestConfig": "libs/model-ad/differential-expression-comparison-tool/jest.config.ts",
+        "tsConfig": "libs/model-ad/differential-expression-comparison-tool/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  }
+}

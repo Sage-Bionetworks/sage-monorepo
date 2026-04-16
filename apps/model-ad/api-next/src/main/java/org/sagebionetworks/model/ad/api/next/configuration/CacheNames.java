@@ -25,21 +25,21 @@ public final class CacheNames {
   public static final String MODEL_OVERVIEW = "modelOverview";
 
   /**
-   * Cache for gene expression queries.
-   * Stores results from gene expression comparison queries filtered by tissue, sex_cohort, items,
+   * Cache for transcriptomics queries.
+   * Stores results from transcriptomics comparison queries filtered by tissue, sex_cohort, items,
    * and filter type.
    * Key format: Dynamic based on query parameters (tissue, sex_cohort, items, filterType)
    */
-  public static final String GENE_EXPRESSION = "geneExpression";
+  public static final String TRANSCRIPTOMICS = "transcriptomics";
 
   /**
-   * Cache for gene expression individual queries.
-   * Stores results from gene expression individual queries filtered by tissue,
+   * Cache for transcriptomics individual queries.
+   * Stores results from transcriptomics individual queries filtered by tissue,
    * modelIdentifier, modelIdentifierType, and ensemblGeneId.
    * Key format: Dynamic based on query parameters (tissue, modelIdentifier,
    * modelIdentifierType, ensemblGeneId)
    */
-  public static final String GENE_EXPRESSION_INDIVIDUAL = "geneExpressionIndividual";
+  public static final String TRANSCRIPTOMICS_INDIVIDUAL = "transcriptomicsIndividual";
 
   /**
    * Cache for model queries.

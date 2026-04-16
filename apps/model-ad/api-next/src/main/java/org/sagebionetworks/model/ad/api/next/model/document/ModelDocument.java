@@ -47,8 +47,7 @@ public class ModelDocument {
 
   private List<String> aliases;
 
-  @Field("gene_expression")
-  private @Nullable String geneExpression;
+  private @Nullable String transcriptomics;
 
   @Field("disease_correlation")
   private @Nullable String diseaseCorrelation;

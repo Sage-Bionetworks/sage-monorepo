@@ -54,7 +54,10 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
       cluster
     );
 
-    log.debug("Successfully retrieved {} disease correlations", results.getDiseaseCorrelations().size());
+    log.debug(
+      "Successfully retrieved {} disease correlations",
+      results.getDiseaseCorrelations().size()
+    );
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
@@ -65,7 +68,7 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
    * Extracts cluster from categories list.
    * Expected format: List of 2 items where:
    * - First value is the main category (e.g., "CONSENSUS NETWORK MODULES")
-   * - Second value is the cluster category (e.g., "Consensus Cluster A - ECM Organization")
+   * - Second value is the cluster category (e.g., "ECM Organization - Consensus Cluster A")
    *
    * @param categories List of category values
    * @return cluster name

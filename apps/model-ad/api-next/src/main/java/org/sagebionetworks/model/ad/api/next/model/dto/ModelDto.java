@@ -51,7 +51,7 @@ public class ModelDto {
   @Valid
   private List<String> aliases = new ArrayList<>();
 
-  private String geneExpression = null;
+  private String transcriptomics = null;
 
   private String diseaseCorrelation = null;
 
@@ -73,7 +73,7 @@ public class ModelDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelDto(String name, List<String> matchedControls, String modelType, String contributingGroup, String studySynid, String rrid, String jaxId, String alzforumId, String genotype, List<String> aliases, String geneExpression, String diseaseCorrelation, String spatialTranscriptomics, List<@Valid GeneticInfoDto> geneticInfo, List<@Valid ModelDataDto> biomarkers, List<@Valid ModelDataDto> pathology) {
+  public ModelDto(String name, List<String> matchedControls, String modelType, String contributingGroup, String studySynid, String rrid, String jaxId, String alzforumId, String genotype, List<String> aliases, String transcriptomics, String diseaseCorrelation, String spatialTranscriptomics, List<@Valid GeneticInfoDto> geneticInfo, List<@Valid ModelDataDto> biomarkers, List<@Valid ModelDataDto> pathology) {
     this.name = name;
     this.matchedControls = matchedControls;
     this.modelType = modelType;
@@ -84,7 +84,7 @@ public class ModelDto {
     this.alzforumId = alzforumId;
     this.genotype = genotype;
     this.aliases = aliases;
-    this.geneExpression = geneExpression;
+    this.transcriptomics = transcriptomics;
     this.diseaseCorrelation = diseaseCorrelation;
     this.spatialTranscriptomics = spatialTranscriptomics;
     this.geneticInfo = geneticInfo;
@@ -308,24 +308,24 @@ public class ModelDto {
     this.aliases = aliases;
   }
 
-  public ModelDto geneExpression(String geneExpression) {
-    this.geneExpression = geneExpression;
+  public ModelDto transcriptomics(String transcriptomics) {
+    this.transcriptomics = transcriptomics;
     return this;
   }
 
   /**
-   * Link to gene expression comparison tool data
-   * @return geneExpression
+   * Link to transcriptomics comparison tool data
+   * @return transcriptomics
    */
   @NotNull 
-  @Schema(name = "gene_expression", description = "Link to gene expression comparison tool data", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("gene_expression")
-  public String getGeneExpression() {
-    return geneExpression;
+  @Schema(name = "transcriptomics", description = "Link to transcriptomics comparison tool data", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("transcriptomics")
+  public String getTranscriptomics() {
+    return transcriptomics;
   }
 
-  public void setGeneExpression(String geneExpression) {
-    this.geneExpression = geneExpression;
+  public void setTranscriptomics(String transcriptomics) {
+    this.transcriptomics = transcriptomics;
   }
 
   public ModelDto diseaseCorrelation(String diseaseCorrelation) {
@@ -471,7 +471,7 @@ public class ModelDto {
         Objects.equals(this.alzforumId, model.alzforumId) &&
         Objects.equals(this.genotype, model.genotype) &&
         Objects.equals(this.aliases, model.aliases) &&
-        Objects.equals(this.geneExpression, model.geneExpression) &&
+        Objects.equals(this.transcriptomics, model.transcriptomics) &&
         Objects.equals(this.diseaseCorrelation, model.diseaseCorrelation) &&
         Objects.equals(this.spatialTranscriptomics, model.spatialTranscriptomics) &&
         Objects.equals(this.geneticInfo, model.geneticInfo) &&
@@ -481,7 +481,7 @@ public class ModelDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, matchedControls, modelType, contributingGroup, studySynid, rrid, jaxId, alzforumId, genotype, aliases, geneExpression, diseaseCorrelation, spatialTranscriptomics, geneticInfo, biomarkers, pathology);
+    return Objects.hash(name, matchedControls, modelType, contributingGroup, studySynid, rrid, jaxId, alzforumId, genotype, aliases, transcriptomics, diseaseCorrelation, spatialTranscriptomics, geneticInfo, biomarkers, pathology);
   }
 
   @Override
@@ -498,7 +498,7 @@ public class ModelDto {
     sb.append("    alzforumId: ").append(toIndentedString(alzforumId)).append("\n");
     sb.append("    genotype: ").append(toIndentedString(genotype)).append("\n");
     sb.append("    aliases: ").append(toIndentedString(aliases)).append("\n");
-    sb.append("    geneExpression: ").append(toIndentedString(geneExpression)).append("\n");
+    sb.append("    transcriptomics: ").append(toIndentedString(transcriptomics)).append("\n");
     sb.append("    diseaseCorrelation: ").append(toIndentedString(diseaseCorrelation)).append("\n");
     sb.append("    spatialTranscriptomics: ").append(toIndentedString(spatialTranscriptomics)).append("\n");
     sb.append("    geneticInfo: ").append(toIndentedString(geneticInfo)).append("\n");
@@ -542,7 +542,7 @@ public class ModelDto {
       this.instance.setAlzforumId(value.alzforumId);
       this.instance.setGenotype(value.genotype);
       this.instance.setAliases(value.aliases);
-      this.instance.setGeneExpression(value.geneExpression);
+      this.instance.setTranscriptomics(value.transcriptomics);
       this.instance.setDiseaseCorrelation(value.diseaseCorrelation);
       this.instance.setSpatialTranscriptomics(value.spatialTranscriptomics);
       this.instance.setGeneticInfo(value.geneticInfo);
@@ -601,8 +601,8 @@ public class ModelDto {
       return this;
     }
     
-    public ModelDto.Builder geneExpression(String geneExpression) {
-      this.instance.geneExpression(geneExpression);
+    public ModelDto.Builder transcriptomics(String transcriptomics) {
+      this.instance.transcriptomics(transcriptomics);
       return this;
     }
     

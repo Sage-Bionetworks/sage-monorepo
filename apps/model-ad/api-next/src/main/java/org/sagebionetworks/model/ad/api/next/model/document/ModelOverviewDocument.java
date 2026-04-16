@@ -27,8 +27,7 @@ public class ModelOverviewDocument {
   @Field("matched_controls")
   private List<String> matchedControls;
 
-  @Field("gene_expression")
-  private @Nullable Link geneExpression;
+  private @Nullable Link transcriptomics;
 
   @Field("disease_correlation")
   private @Nullable Link diseaseCorrelation;
@@ -45,7 +44,7 @@ public class ModelOverviewDocument {
   @Field("jax_strain")
   private Link jaxStrain;
 
-  private Link center;
+  private String center;
 
   @Field("modified_genes")
   private List<String> modifiedGenes;
