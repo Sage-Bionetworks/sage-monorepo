@@ -27,7 +27,7 @@ properties:
     type: string
     maxLength: 1000
     nullable: true
-    description: Required when categories is provided.
+    description: Reason for the manual categorization decision, if categories is provided.
 required:
   - question
   - source

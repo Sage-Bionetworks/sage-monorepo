@@ -10,6 +10,7 @@ properties:
   reason:
     type: string
     maxLength: 1000
+    nullable: true
+    description: Reason for the categorization decision
 required:
   - categories
-  - reason

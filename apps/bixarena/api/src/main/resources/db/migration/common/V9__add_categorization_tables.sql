@@ -14,7 +14,7 @@
 -- Each row represents one run (AI or human override).
 -- categorized_by NULL  = AI run
 -- categorized_by <uid> = admin human override
--- reason is required for human overrides, always NULL for AI runs.
+-- reason is optional for human overrides, always NULL for AI runs.
 -- ============================================================================
 
 CREATE TABLE api.example_prompt_categorization (
@@ -22,7 +22,7 @@ CREATE TABLE api.example_prompt_categorization (
   prompt_id        UUID NOT NULL REFERENCES api.example_prompt(id) ON DELETE CASCADE,
   method           VARCHAR(100) NOT NULL,
   categorized_by   UUID NULL,           -- NULL = AI, non-NULL = admin user ID
-  reason           VARCHAR(1000) NULL,  -- human overrides only, always NULL for AI
+  reason           VARCHAR(1000) NULL,  -- optional for human overrides, always NULL for AI
   created_at       TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
