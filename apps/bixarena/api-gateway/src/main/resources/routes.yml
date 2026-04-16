@@ -5,6 +5,10 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 30
     - method: 'DELETE'
+      path: '/api/v1/example-prompts/{examplePromptId}'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 60
+    - method: 'DELETE'
       path: '/api/v1/quests/{questId}'
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 30
@@ -34,11 +38,33 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 300
     - method: 'GET'
+      path: '/api/v1/battles/{battleId}/categorizations'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 60
+    - method: 'GET'
+      path: '/api/v1/battles/{battleId}/categorizations/effective'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 100
+    - method: 'GET'
       path: '/api/v1/battles/{battleId}/validations'
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 60
     - method: 'GET'
       path: '/api/v1/example-prompts'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+      rateLimitRequestsPerMinute: 100
+    - method: 'GET'
+      path: '/api/v1/example-prompts/{examplePromptId}'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+      rateLimitRequestsPerMinute: 100
+    - method: 'GET'
+      path: '/api/v1/example-prompts/{examplePromptId}/categorizations'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 60
+    - method: 'GET'
+      path: '/api/v1/example-prompts/{examplePromptId}/categorizations/effective'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
       rateLimitRequestsPerMinute: 100
@@ -121,6 +147,14 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 30
     - method: 'POST'
+      path: '/api/v1/battles/{battleId}/categorizations'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 60
+    - method: 'POST'
+      path: '/api/v1/battles/{battleId}/categorizations/run'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'POST'
       path: '/api/v1/battles/{battleId}/evaluations'
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 60
@@ -144,6 +178,18 @@ app:
       path: '/api/v1/chat/completions'
       audience: 'urn:bixarena:ai'
       rateLimitRequestsPerMinute: 60
+    - method: 'POST'
+      path: '/api/v1/example-prompts'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 60
+    - method: 'POST'
+      path: '/api/v1/example-prompts/{examplePromptId}/categorizations'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 60
+    - method: 'POST'
+      path: '/api/v1/example-prompts/{examplePromptId}/categorizations/run'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
     - method: 'POST'
       path: '/api/v1/models/{modelId}/errors'
       audience: 'urn:bixarena:api'
@@ -176,6 +222,10 @@ app:
       path: '/oauth2/token'
       audience: 'urn:bixarena:auth'
       anonymousAccess: true
+      rateLimitRequestsPerMinute: 60
+    - method: 'PUT'
+      path: '/api/v1/example-prompts/{examplePromptId}'
+      audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 60
     - method: 'PUT'
       path: '/api/v1/quests/{questId}'
