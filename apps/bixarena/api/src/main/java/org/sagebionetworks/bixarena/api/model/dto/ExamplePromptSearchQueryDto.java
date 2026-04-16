@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSourceDto;
 import org.sagebionetworks.bixarena.api.model.dto.SortDirectionDto;
@@ -41,6 +45,9 @@ public class ExamplePromptSearchQueryDto {
   private @Nullable Boolean active = null;
 
   private @Nullable String search = null;
+
+  @Valid
+  private @Nullable List<BiomedicalCategoryDto> categories;
 
   public ExamplePromptSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
@@ -185,6 +192,34 @@ public class ExamplePromptSearchQueryDto {
     this.search = search;
   }
 
+  public ExamplePromptSearchQueryDto categories(@Nullable List<BiomedicalCategoryDto> categories) {
+    this.categories = categories;
+    return this;
+  }
+
+  public ExamplePromptSearchQueryDto addCategoriesItem(BiomedicalCategoryDto categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
+    return this;
+  }
+
+  /**
+   * Filter by one or more categories. Returns prompts matching any of the given categories.
+   * @return categories
+   */
+  @Valid 
+  @Schema(name = "categories", description = "Filter by one or more categories. Returns prompts matching any of the given categories.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("categories")
+  public @Nullable List<BiomedicalCategoryDto> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(@Nullable List<BiomedicalCategoryDto> categories) {
+    this.categories = categories;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -200,12 +235,13 @@ public class ExamplePromptSearchQueryDto {
         Objects.equals(this.direction, examplePromptSearchQuery.direction) &&
         Objects.equals(this.source, examplePromptSearchQuery.source) &&
         Objects.equals(this.active, examplePromptSearchQuery.active) &&
-        Objects.equals(this.search, examplePromptSearchQuery.search);
+        Objects.equals(this.search, examplePromptSearchQuery.search) &&
+        Objects.equals(this.categories, examplePromptSearchQuery.categories);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, source, active, search);
+    return Objects.hash(pageNumber, pageSize, sort, direction, source, active, search, categories);
   }
 
   @Override
@@ -219,6 +255,7 @@ public class ExamplePromptSearchQueryDto {
     sb.append("    source: ").append(toIndentedString(source)).append("\n");
     sb.append("    active: ").append(toIndentedString(active)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
+    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -254,6 +291,7 @@ public class ExamplePromptSearchQueryDto {
       this.instance.setSource(value.source);
       this.instance.setActive(value.active);
       this.instance.setSearch(value.search);
+      this.instance.setCategories(value.categories);
       return this;
     }
 
@@ -289,6 +327,11 @@ public class ExamplePromptSearchQueryDto {
     
     public ExamplePromptSearchQueryDto.Builder search(String search) {
       this.instance.search(search);
+      return this;
+    }
+    
+    public ExamplePromptSearchQueryDto.Builder categories(List<BiomedicalCategoryDto> categories) {
+      this.instance.categories(categories);
       return this;
     }
     

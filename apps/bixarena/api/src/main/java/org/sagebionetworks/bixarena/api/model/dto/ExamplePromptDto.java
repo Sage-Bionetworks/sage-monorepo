@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSourceDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
@@ -35,6 +36,8 @@ public class ExamplePromptDto {
   private ExamplePromptSourceDto source;
 
   private Boolean active;
+
+  private @Nullable UUID effectiveCategorizationId = null;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -134,6 +137,26 @@ public class ExamplePromptDto {
     this.active = active;
   }
 
+  public ExamplePromptDto effectiveCategorizationId(@Nullable UUID effectiveCategorizationId) {
+    this.effectiveCategorizationId = effectiveCategorizationId;
+    return this;
+  }
+
+  /**
+   * ID of the effective categorization for this prompt (null = not yet categorized)
+   * @return effectiveCategorizationId
+   */
+  @Valid 
+  @Schema(name = "effectiveCategorizationId", description = "ID of the effective categorization for this prompt (null = not yet categorized)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("effectiveCategorizationId")
+  public @Nullable UUID getEffectiveCategorizationId() {
+    return effectiveCategorizationId;
+  }
+
+  public void setEffectiveCategorizationId(@Nullable UUID effectiveCategorizationId) {
+    this.effectiveCategorizationId = effectiveCategorizationId;
+  }
+
   public ExamplePromptDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -167,12 +190,13 @@ public class ExamplePromptDto {
         Objects.equals(this.question, examplePrompt.question) &&
         Objects.equals(this.source, examplePrompt.source) &&
         Objects.equals(this.active, examplePrompt.active) &&
+        Objects.equals(this.effectiveCategorizationId, examplePrompt.effectiveCategorizationId) &&
         Objects.equals(this.createdAt, examplePrompt.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, question, source, active, createdAt);
+    return Objects.hash(id, question, source, active, effectiveCategorizationId, createdAt);
   }
 
   @Override
@@ -183,6 +207,7 @@ public class ExamplePromptDto {
     sb.append("    question: ").append(toIndentedString(question)).append("\n");
     sb.append("    source: ").append(toIndentedString(source)).append("\n");
     sb.append("    active: ").append(toIndentedString(active)).append("\n");
+    sb.append("    effectiveCategorizationId: ").append(toIndentedString(effectiveCategorizationId)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -216,6 +241,7 @@ public class ExamplePromptDto {
       this.instance.setQuestion(value.question);
       this.instance.setSource(value.source);
       this.instance.setActive(value.active);
+      this.instance.setEffectiveCategorizationId(value.effectiveCategorizationId);
       this.instance.setCreatedAt(value.createdAt);
       return this;
     }
@@ -237,6 +263,11 @@ public class ExamplePromptDto {
     
     public ExamplePromptDto.Builder active(Boolean active) {
       this.instance.active(active);
+      return this;
+    }
+    
+    public ExamplePromptDto.Builder effectiveCategorizationId(UUID effectiveCategorizationId) {
+      this.instance.effectiveCategorizationId(effectiveCategorizationId);
       return this;
     }
     

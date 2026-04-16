@@ -18,6 +18,8 @@ git_push.sh
 index.ts
 model/admin-stats200-response.ts
 model/basic-error.ts
+model/battle-categorization-create-request.ts
+model/battle-categorization-response.ts
 model/battle-create-request.ts
 model/battle-create-response.ts
 model/battle-evaluation-create-request.ts
@@ -33,7 +35,11 @@ model/battle-update-request.ts
 model/battle-validation-create-request.ts
 model/battle-validation-response.ts
 model/battle.ts
+model/biomedical-category.ts
 model/callback200-response.ts
+model/example-prompt-categorization-create-request.ts
+model/example-prompt-categorization-response.ts
+model/example-prompt-create-request.ts
 model/example-prompt-page.ts
 model/example-prompt-search-query.ts
 model/example-prompt-sort.ts

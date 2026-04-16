@@ -45,6 +45,8 @@ public class BattleDto {
 
   private @Nullable UUID effectiveValidationId = null;
 
+  private @Nullable UUID effectiveCategorizationId = null;
+
   public BattleDto() {
     super();
   }
@@ -220,6 +222,26 @@ public class BattleDto {
     this.effectiveValidationId = effectiveValidationId;
   }
 
+  public BattleDto effectiveCategorizationId(@Nullable UUID effectiveCategorizationId) {
+    this.effectiveCategorizationId = effectiveCategorizationId;
+    return this;
+  }
+
+  /**
+   * ID of the effective battle categorization (null = not yet categorized)
+   * @return effectiveCategorizationId
+   */
+  @Valid 
+  @Schema(name = "effectiveCategorizationId", description = "ID of the effective battle categorization (null = not yet categorized)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("effectiveCategorizationId")
+  public @Nullable UUID getEffectiveCategorizationId() {
+    return effectiveCategorizationId;
+  }
+
+  public void setEffectiveCategorizationId(@Nullable UUID effectiveCategorizationId) {
+    this.effectiveCategorizationId = effectiveCategorizationId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -236,12 +258,13 @@ public class BattleDto {
         Objects.equals(this.model2Id, battle.model2Id) &&
         Objects.equals(this.createdAt, battle.createdAt) &&
         Objects.equals(this.endedAt, battle.endedAt) &&
-        Objects.equals(this.effectiveValidationId, battle.effectiveValidationId);
+        Objects.equals(this.effectiveValidationId, battle.effectiveValidationId) &&
+        Objects.equals(this.effectiveCategorizationId, battle.effectiveCategorizationId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, userId, model1Id, model2Id, createdAt, endedAt, effectiveValidationId);
+    return Objects.hash(id, title, userId, model1Id, model2Id, createdAt, endedAt, effectiveValidationId, effectiveCategorizationId);
   }
 
   @Override
@@ -256,6 +279,7 @@ public class BattleDto {
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    endedAt: ").append(toIndentedString(endedAt)).append("\n");
     sb.append("    effectiveValidationId: ").append(toIndentedString(effectiveValidationId)).append("\n");
+    sb.append("    effectiveCategorizationId: ").append(toIndentedString(effectiveCategorizationId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -292,6 +316,7 @@ public class BattleDto {
       this.instance.setCreatedAt(value.createdAt);
       this.instance.setEndedAt(value.endedAt);
       this.instance.setEffectiveValidationId(value.effectiveValidationId);
+      this.instance.setEffectiveCategorizationId(value.effectiveCategorizationId);
       return this;
     }
 
@@ -332,6 +357,11 @@ public class BattleDto {
     
     public BattleDto.Builder effectiveValidationId(UUID effectiveValidationId) {
       this.instance.effectiveValidationId(effectiveValidationId);
+      return this;
+    }
+    
+    public BattleDto.Builder effectiveCategorizationId(UUID effectiveCategorizationId) {
+      this.instance.effectiveCategorizationId(effectiveCategorizationId);
       return this;
     }
     

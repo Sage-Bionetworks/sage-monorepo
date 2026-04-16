@@ -39,6 +39,8 @@ __all__ = [
     "AdminStats200Response",
     "BasicError",
     "Battle",
+    "BattleCategorizationCreateRequest",
+    "BattleCategorizationResponse",
     "BattleCreateRequest",
     "BattleCreateResponse",
     "BattleEvaluation",
@@ -53,8 +55,12 @@ __all__ = [
     "BattleUpdateRequest",
     "BattleValidationCreateRequest",
     "BattleValidationResponse",
+    "BiomedicalCategory",
     "Callback200Response",
     "ExamplePrompt",
+    "ExamplePromptCategorizationCreateRequest",
+    "ExamplePromptCategorizationResponse",
+    "ExamplePromptCreateRequest",
     "ExamplePromptPage",
     "ExamplePromptSearchQuery",
     "ExamplePromptSort",
@@ -134,6 +140,12 @@ from bixarena_api_client.models.admin_stats200_response import (
 )
 from bixarena_api_client.models.basic_error import BasicError as BasicError
 from bixarena_api_client.models.battle import Battle as Battle
+from bixarena_api_client.models.battle_categorization_create_request import (
+    BattleCategorizationCreateRequest as BattleCategorizationCreateRequest,
+)
+from bixarena_api_client.models.battle_categorization_response import (
+    BattleCategorizationResponse as BattleCategorizationResponse,
+)
 from bixarena_api_client.models.battle_create_request import (
     BattleCreateRequest as BattleCreateRequest,
 )
@@ -170,10 +182,22 @@ from bixarena_api_client.models.battle_validation_create_request import (
 from bixarena_api_client.models.battle_validation_response import (
     BattleValidationResponse as BattleValidationResponse,
 )
+from bixarena_api_client.models.biomedical_category import (
+    BiomedicalCategory as BiomedicalCategory,
+)
 from bixarena_api_client.models.callback200_response import (
     Callback200Response as Callback200Response,
 )
 from bixarena_api_client.models.example_prompt import ExamplePrompt as ExamplePrompt
+from bixarena_api_client.models.example_prompt_categorization_create_request import (
+    ExamplePromptCategorizationCreateRequest as ExamplePromptCategorizationCreateRequest,
+)
+from bixarena_api_client.models.example_prompt_categorization_response import (
+    ExamplePromptCategorizationResponse as ExamplePromptCategorizationResponse,
+)
+from bixarena_api_client.models.example_prompt_create_request import (
+    ExamplePromptCreateRequest as ExamplePromptCreateRequest,
+)
 from bixarena_api_client.models.example_prompt_page import (
     ExamplePromptPage as ExamplePromptPage,
 )

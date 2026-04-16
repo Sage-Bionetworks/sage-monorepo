@@ -10,6 +10,7 @@
 import { ExamplePromptSource } from './example-prompt-source';
 import { SortDirection } from './sort-direction';
 import { ExamplePromptSort } from './example-prompt-sort';
+import { BiomedicalCategory } from './biomedical-category';
 
 /**
  * An example prompt search query with pagination and filtering options.
@@ -34,5 +35,9 @@ export interface ExamplePromptSearchQuery {
    * Search by question content (case-insensitive partial match).
    */
   search?: string | null;
+  /**
+   * Filter by one or more categories. Returns prompts matching any of the given categories.
+   */
+  categories?: Array<BiomedicalCategory> | null;
 }
 export namespace ExamplePromptSearchQuery {}

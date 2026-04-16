@@ -2,21 +2,25 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                                                            | HTTP request                                         | Description                                 |
-| --------------------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------- |
-| [**create_battle**](BattleApi.md#create_battle)                                   | **POST** /battles                                    | Create a battle                             |
-| [**create_battle_evaluation**](BattleApi.md#create_battle_evaluation)             | **POST** /battles/{battleId}/evaluations             | Create a battle evaluation                  |
-| [**create_battle_round**](BattleApi.md#create_battle_round)                       | **POST** /battles/{battleId}/rounds                  | Create a battle round                       |
-| [**create_battle_round_completion**](BattleApi.md#create_battle_round_completion) | **POST** /battles/{battleId}/rounds/{roundId}/stream | Stream a chat completion for a battle round |
-| [**create_battle_validation**](BattleApi.md#create_battle_validation)             | **POST** /battles/{battleId}/validations             | Create a battle validation                  |
-| [**delete_battle**](BattleApi.md#delete_battle)                                   | **DELETE** /battles/{battleId}                       | Delete a battle                             |
-| [**get_battle**](BattleApi.md#get_battle)                                         | **GET** /battles/{battleId}                          | Get a battle by ID                          |
-| [**list_battle_validations**](BattleApi.md#list_battle_validations)               | **GET** /battles/{battleId}/validations              | List battle validations                     |
-| [**list_battles**](BattleApi.md#list_battles)                                     | **GET** /battles                                     | List battles                                |
-| [**run_battle_validation**](BattleApi.md#run_battle_validation)                   | **POST** /battles/{battleId}/validations/run         | Run an automated validation method          |
-| [**set_effective_validation**](BattleApi.md#set_effective_validation)             | **PATCH** /battles/{battleId}/validations/effective  | Set effective validation                    |
-| [**update_battle**](BattleApi.md#update_battle)                                   | **PATCH** /battles/{battleId}                        | Update a battle                             |
-| [**update_battle_round**](BattleApi.md#update_battle_round)                       | **PATCH** /battles/{battleId}/rounds/{roundId}       | Update a battle round                       |
+| Method                                                                                      | HTTP request                                          | Description                                 |
+| ------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------- |
+| [**create_battle**](BattleApi.md#create_battle)                                             | **POST** /battles                                     | Create a battle                             |
+| [**create_battle_categorization**](BattleApi.md#create_battle_categorization)               | **POST** /battles/{battleId}/categorizations          | Create a battle categorization              |
+| [**create_battle_evaluation**](BattleApi.md#create_battle_evaluation)                       | **POST** /battles/{battleId}/evaluations              | Create a battle evaluation                  |
+| [**create_battle_round**](BattleApi.md#create_battle_round)                                 | **POST** /battles/{battleId}/rounds                   | Create a battle round                       |
+| [**create_battle_round_completion**](BattleApi.md#create_battle_round_completion)           | **POST** /battles/{battleId}/rounds/{roundId}/stream  | Stream a chat completion for a battle round |
+| [**create_battle_validation**](BattleApi.md#create_battle_validation)                       | **POST** /battles/{battleId}/validations              | Create a battle validation                  |
+| [**delete_battle**](BattleApi.md#delete_battle)                                             | **DELETE** /battles/{battleId}                        | Delete a battle                             |
+| [**get_battle**](BattleApi.md#get_battle)                                                   | **GET** /battles/{battleId}                           | Get a battle by ID                          |
+| [**get_battle_effective_categorization**](BattleApi.md#get_battle_effective_categorization) | **GET** /battles/{battleId}/categorizations/effective | Get effective battle categorization         |
+| [**list_battle_categorizations**](BattleApi.md#list_battle_categorizations)                 | **GET** /battles/{battleId}/categorizations           | List battle categorizations                 |
+| [**list_battle_validations**](BattleApi.md#list_battle_validations)                         | **GET** /battles/{battleId}/validations               | List battle validations                     |
+| [**list_battles**](BattleApi.md#list_battles)                                               | **GET** /battles                                      | List battles                                |
+| [**run_battle_categorization**](BattleApi.md#run_battle_categorization)                     | **POST** /battles/{battleId}/categorizations/run      | Run an automated categorization             |
+| [**run_battle_validation**](BattleApi.md#run_battle_validation)                             | **POST** /battles/{battleId}/validations/run          | Run an automated validation method          |
+| [**set_effective_validation**](BattleApi.md#set_effective_validation)                       | **PATCH** /battles/{battleId}/validations/effective   | Set effective validation                    |
+| [**update_battle**](BattleApi.md#update_battle)                                             | **PATCH** /battles/{battleId}                         | Update a battle                             |
+| [**update_battle_round**](BattleApi.md#update_battle_round)                                 | **PATCH** /battles/{battleId}/rounds/{roundId}        | Update a battle round                       |
 
 # **create_battle**
 
@@ -99,6 +103,91 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 | **409**     | The request conflicts with current state of the target resource                                   | -                                                                                                                                                                                                                                                                     |
 | **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
 | **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_battle_categorization**
+
+> BattleCategorizationResponse create_battle_categorization(battle_id, battle_categorization_create_request)
+
+Create a battle categorization
+
+Manually categorize a battle (admin only). The created categorization is automatically set as the effective categorization.
+
+### Example
+
+- Bearer (JWT) Authentication (jwtBearer):
+
+```python
+import bixarena_api_client
+from bixarena_api_client.models.battle_categorization_create_request import BattleCategorizationCreateRequest
+from bixarena_api_client.models.battle_categorization_response import BattleCategorizationResponse
+from bixarena_api_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client.Configuration(
+    host = "https://bixarena.ai/api/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwtBearer
+configuration = bixarena_api_client.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with bixarena_api_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client.BattleApi(api_client)
+    battle_id = 'battle_id_example' # str | The unique identifier of the battle
+    battle_categorization_create_request = bixarena_api_client.BattleCategorizationCreateRequest() # BattleCategorizationCreateRequest |
+
+    try:
+        # Create a battle categorization
+        api_response = api_instance.create_battle_categorization(battle_id, battle_categorization_create_request)
+        print("The response of BattleApi->create_battle_categorization:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BattleApi->create_battle_categorization: %s\n" % e)
+```
+
+### Parameters
+
+| Name                                     | Type                                                                          | Description                         | Notes |
+| ---------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------- | ----- |
+| **battle_id**                            | **str**                                                                       | The unique identifier of the battle |
+| **battle_categorization_create_request** | [**BattleCategorizationCreateRequest**](BattleCategorizationCreateRequest.md) |                                     |
+
+### Return type
+
+[**BattleCategorizationResponse**](BattleCategorizationResponse.md)
+
+### Authorization
+
+[jwtBearer](../README.md#jwtBearer)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **201**     | Battle categorization created successfully                        | -                |
+| **400**     | Invalid request                                                   | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **409**     | The request conflicts with current state of the target resource   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -601,6 +690,165 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_battle_effective_categorization**
+
+> BattleCategorizationResponse get_battle_effective_categorization(battle_id)
+
+Get effective battle categorization
+
+Get the current effective categorization for a battle.
+
+### Example
+
+- Bearer (JWT) Authentication (jwtBearer):
+
+```python
+import bixarena_api_client
+from bixarena_api_client.models.battle_categorization_response import BattleCategorizationResponse
+from bixarena_api_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client.Configuration(
+    host = "https://bixarena.ai/api/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwtBearer
+configuration = bixarena_api_client.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with bixarena_api_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client.BattleApi(api_client)
+    battle_id = 'battle_id_example' # str | The unique identifier of the battle
+
+    try:
+        # Get effective battle categorization
+        api_response = api_instance.get_battle_effective_categorization(battle_id)
+        print("The response of BattleApi->get_battle_effective_categorization:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BattleApi->get_battle_effective_categorization: %s\n" % e)
+```
+
+### Parameters
+
+| Name          | Type    | Description                         | Notes |
+| ------------- | ------- | ----------------------------------- | ----- |
+| **battle_id** | **str** | The unique identifier of the battle |
+
+### Return type
+
+[**BattleCategorizationResponse**](BattleCategorizationResponse.md)
+
+### Authorization
+
+[jwtBearer](../README.md#jwtBearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_battle_categorizations**
+
+> List[BattleCategorizationResponse] list_battle_categorizations(battle_id)
+
+List battle categorizations
+
+Get all categorizations for a battle (admin only).
+
+### Example
+
+- Bearer (JWT) Authentication (jwtBearer):
+
+```python
+import bixarena_api_client
+from bixarena_api_client.models.battle_categorization_response import BattleCategorizationResponse
+from bixarena_api_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client.Configuration(
+    host = "https://bixarena.ai/api/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwtBearer
+configuration = bixarena_api_client.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with bixarena_api_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client.BattleApi(api_client)
+    battle_id = 'battle_id_example' # str | The unique identifier of the battle
+
+    try:
+        # List battle categorizations
+        api_response = api_instance.list_battle_categorizations(battle_id)
+        print("The response of BattleApi->list_battle_categorizations:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BattleApi->list_battle_categorizations: %s\n" % e)
+```
+
+### Parameters
+
+| Name          | Type    | Description                         | Notes |
+| ------------- | ------- | ----------------------------------- | ----- |
+| **battle_id** | **str** | The unique identifier of the battle |
+
+### Return type
+
+[**List[BattleCategorizationResponse]**](BattleCategorizationResponse.md)
+
+### Authorization
+
+[jwtBearer](../README.md#jwtBearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | List of battle categorizations                                    | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **list_battle_validations**
 
 > List[BattleValidationResponse] list_battle_validations(battle_id)
@@ -759,6 +1007,88 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 | **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
 | **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
 | **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **run_battle_categorization**
+
+> BattleCategorizationResponse run_battle_categorization(battle_id)
+
+Run an automated categorization
+
+Run an automated categorization against a battle and return the result. Admin only.
+
+### Example
+
+- Bearer (JWT) Authentication (jwtBearer):
+
+```python
+import bixarena_api_client
+from bixarena_api_client.models.battle_categorization_response import BattleCategorizationResponse
+from bixarena_api_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client.Configuration(
+    host = "https://bixarena.ai/api/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwtBearer
+configuration = bixarena_api_client.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with bixarena_api_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client.BattleApi(api_client)
+    battle_id = 'battle_id_example' # str | The unique identifier of the battle
+
+    try:
+        # Run an automated categorization
+        api_response = api_instance.run_battle_categorization(battle_id)
+        print("The response of BattleApi->run_battle_categorization:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BattleApi->run_battle_categorization: %s\n" % e)
+```
+
+### Parameters
+
+| Name          | Type    | Description                         | Notes |
+| ------------- | ------- | ----------------------------------- | ----- |
+| **battle_id** | **str** | The unique identifier of the battle |
+
+### Return type
+
+[**BattleCategorizationResponse**](BattleCategorizationResponse.md)
+
+### Authorization
+
+[jwtBearer](../README.md#jwtBearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **201**     | Categorization completed and persisted successfully               | -                |
+| **400**     | Invalid request                                                   | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **409**     | The request conflicts with current state of the target resource   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

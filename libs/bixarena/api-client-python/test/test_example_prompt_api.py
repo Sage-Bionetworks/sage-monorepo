@@ -25,10 +25,66 @@ class TestExamplePromptApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
+    def test_create_example_prompt(self) -> None:
+        """Test case for create_example_prompt
+
+        Create an example prompt
+        """
+        pass
+
+    def test_create_example_prompt_categorization(self) -> None:
+        """Test case for create_example_prompt_categorization
+
+        Create an example prompt categorization
+        """
+        pass
+
+    def test_delete_example_prompt(self) -> None:
+        """Test case for delete_example_prompt
+
+        Delete an example prompt
+        """
+        pass
+
+    def test_get_example_prompt(self) -> None:
+        """Test case for get_example_prompt
+
+        Get an example prompt
+        """
+        pass
+
+    def test_get_example_prompt_effective_categorization(self) -> None:
+        """Test case for get_example_prompt_effective_categorization
+
+        Get effective example prompt categorization
+        """
+        pass
+
+    def test_list_example_prompt_categorizations(self) -> None:
+        """Test case for list_example_prompt_categorizations
+
+        List example prompt categorizations
+        """
+        pass
+
     def test_list_example_prompts(self) -> None:
         """Test case for list_example_prompts
 
         List example prompts
+        """
+        pass
+
+    def test_run_example_prompt_categorization(self) -> None:
+        """Test case for run_example_prompt_categorization
+
+        Run an automated categorization
+        """
+        pass
+
+    def test_update_example_prompt(self) -> None:
+        """Test case for update_example_prompt
+
+        Update an example prompt
         """
         pass
 

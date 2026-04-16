@@ -16,6 +16,12 @@ Do not edit the class manually.
 from bixarena_api_client.models.admin_stats200_response import AdminStats200Response
 from bixarena_api_client.models.basic_error import BasicError
 from bixarena_api_client.models.battle import Battle
+from bixarena_api_client.models.battle_categorization_create_request import (
+    BattleCategorizationCreateRequest,
+)
+from bixarena_api_client.models.battle_categorization_response import (
+    BattleCategorizationResponse,
+)
 from bixarena_api_client.models.battle_create_request import BattleCreateRequest
 from bixarena_api_client.models.battle_create_response import BattleCreateResponse
 from bixarena_api_client.models.battle_evaluation import BattleEvaluation
@@ -40,8 +46,18 @@ from bixarena_api_client.models.battle_validation_create_request import (
 from bixarena_api_client.models.battle_validation_response import (
     BattleValidationResponse,
 )
+from bixarena_api_client.models.biomedical_category import BiomedicalCategory
 from bixarena_api_client.models.callback200_response import Callback200Response
 from bixarena_api_client.models.example_prompt import ExamplePrompt
+from bixarena_api_client.models.example_prompt_categorization_create_request import (
+    ExamplePromptCategorizationCreateRequest,
+)
+from bixarena_api_client.models.example_prompt_categorization_response import (
+    ExamplePromptCategorizationResponse,
+)
+from bixarena_api_client.models.example_prompt_create_request import (
+    ExamplePromptCreateRequest,
+)
 from bixarena_api_client.models.example_prompt_page import ExamplePromptPage
 from bixarena_api_client.models.example_prompt_search_query import (
     ExamplePromptSearchQuery,

@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.configuration;
 
 import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationOutcomeDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSortDto;
+import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSourceDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardHistorySortDto;
@@ -35,6 +36,15 @@ public class EnumConverterConfiguration {
             @Override
             public BattleSortDto convert(String source) {
                 return BattleSortDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.bixarena.api.configuration.EnumConverterConfiguration.biomedicalCategoryConverter")
+    Converter<String, BiomedicalCategoryDto> biomedicalCategoryConverter() {
+        return new Converter<String, BiomedicalCategoryDto>() {
+            @Override
+            public BiomedicalCategoryDto convert(String source) {
+                return BiomedicalCategoryDto.fromValue(source);
             }
         };
     }

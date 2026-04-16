@@ -27,6 +27,10 @@ export interface ExamplePrompt {
    */
   active: boolean;
   /**
+   * ID of the effective categorization for this prompt (null = not yet categorized)
+   */
+  effectiveCategorizationId?: string | null;
+  /**
    * When the example prompt was created.
    */
   createdAt: string;

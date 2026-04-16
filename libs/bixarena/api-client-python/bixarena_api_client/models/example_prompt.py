@@ -18,8 +18,9 @@ import json
 
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from uuid import UUID
 from bixarena_api_client.models.example_prompt_source import ExamplePromptSource
 from typing import Optional, Set
 from typing_extensions import Self
@@ -38,6 +39,11 @@ class ExamplePrompt(BaseModel):
     active: StrictBool = Field(
         description="Whether this example prompt is currently active/visible for use."
     )
+    effective_categorization_id: Optional[UUID] = Field(
+        default=None,
+        description="ID of the effective categorization for this prompt (null = not yet categorized)",
+        alias="effectiveCategorizationId",
+    )
     created_at: datetime = Field(
         description="When the example prompt was created.", alias="createdAt"
     )
@@ -46,6 +52,7 @@ class ExamplePrompt(BaseModel):
         "question",
         "source",
         "active",
+        "effectiveCategorizationId",
         "createdAt",
     ]
 
@@ -86,6 +93,14 @@ class ExamplePrompt(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if effective_categorization_id (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.effective_categorization_id is None
+            and "effective_categorization_id" in self.model_fields_set
+        ):
+            _dict["effectiveCategorizationId"] = None
+
         return _dict
 
     @classmethod
@@ -103,6 +118,7 @@ class ExamplePrompt(BaseModel):
                 "question": obj.get("question"),
                 "source": obj.get("source"),
                 "active": obj.get("active"),
+                "effectiveCategorizationId": obj.get("effectiveCategorizationId"),
                 "createdAt": obj.get("createdAt"),
             }
         )
