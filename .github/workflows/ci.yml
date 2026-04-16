@@ -10,6 +10,9 @@ on:
       - synchronize
   merge_group:
 
+permissions:
+  contents: read
+
 env:
   # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   HEAD_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
@@ -21,6 +24,9 @@ jobs:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     timeout-minutes: 45
     if: ${{ github.event_name != 'pull_request' }}
+    permissions:
+      contents: read
+      packages: write # push images to ghcr.io
     env:
       # Scoped to this job (not workflow-level) so the secret is not exposed to the `pr`
       # job, which executes PR-controlled code from fork checkouts.

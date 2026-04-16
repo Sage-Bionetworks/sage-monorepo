@@ -6,6 +6,9 @@ name: Deploy Docs
 on:
   workflow_call:
 
+permissions:
+  contents: write # ghp-import pushes to gh-pages
+
 jobs:
   deploy:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD

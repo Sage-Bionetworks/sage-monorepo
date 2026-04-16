@@ -10,6 +10,11 @@ on:
     - cron: 29 19 * * 4
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: read # pull images from ghcr.io
+  security-events: write # upload Trivy SARIF to the Security tab
+
 jobs:
   trivy-edge:
     name: ${{ matrix.image }}

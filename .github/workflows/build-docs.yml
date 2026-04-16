@@ -6,6 +6,9 @@ name: Build Docs
 on:
   workflow_call:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -10,8 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: update-synapse-api
@@ -42,6 +41,9 @@ jobs:
   update-synapse-api:
     runs-on: ubuntu-latest
     needs: extract-devcontainer-image
+    permissions:
+      contents: write # peter-evans/create-pull-request commits to a new branch
+      pull-requests: write # peter-evans/create-pull-request opens/updates the PR
     env:
       # By default, Corepack prompts for a confirmation before downloading and enabling
       # a package manager. We disable the prompt here to ensure non-interactive execution.

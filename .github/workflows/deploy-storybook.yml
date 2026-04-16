@@ -12,6 +12,9 @@ on:
         type: string
         # Examples: "agora", "explorers", "agora explorers"
 
+permissions:
+  contents: write # ghp-import pushes to gh-pages
+
 jobs:
   deploy:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD

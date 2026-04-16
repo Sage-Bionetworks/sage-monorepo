@@ -10,7 +10,8 @@ on:
       - 'sage/v*'
 
 permissions:
-  packages: write
+  contents: read
+  packages: write # push images to ghcr.io
 
 env:
   PRODUCT: ''
