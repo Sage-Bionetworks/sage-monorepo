@@ -120,6 +120,10 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && ${cmd}"
 
+      # SYNAPSE_AUTH_TOKEN is stored as an environment secret on the {explorer} and
+      # {explorer}-pr environments (see the environment comment on this job above), so it
+      # resolves via `secrets.*` here without the caller passing it through. This is why
+      # the caller workflow does not need `secrets: inherit` or an explicit `secrets:` block.
       - name: Write Synapse PAT for Explorer
         run: |
           env_filename="apps/${{ inputs.explorer }}/data/.env"
