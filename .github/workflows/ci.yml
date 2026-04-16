@@ -15,7 +15,6 @@ env:
   HEAD_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
   HEAD_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
   NX_BRANCH: ${{ github.event_name == 'pull_request' && github.event.number || github.ref_name }}
-  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
 
 jobs:
   push:
@@ -23,6 +22,9 @@ jobs:
     timeout-minutes: 45
     if: ${{ github.event_name != 'pull_request' }}
     env:
+      # Scoped to this job (not workflow-level) so the secret is not exposed to the `pr`
+      # job, which executes PR-controlled code from fork checkouts.
+      NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_WRITE }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
