@@ -47,7 +47,6 @@ class TestBattleCategorizationCreateRequest(unittest.TestCase):
                 categories = [
                     'genetics'
                     ],
-                reason = '',
         )
         """
 

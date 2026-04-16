@@ -31,7 +31,7 @@ public class BattleCategorizationCreateRequestDto {
   @Valid
   private List<BiomedicalCategoryDto> categories = new ArrayList<>();
 
-  private String reason;
+  private @Nullable String reason = null;
 
   public BattleCategorizationCreateRequestDto() {
     super();
@@ -40,9 +40,8 @@ public class BattleCategorizationCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public BattleCategorizationCreateRequestDto(List<BiomedicalCategoryDto> categories, String reason) {
+  public BattleCategorizationCreateRequestDto(List<BiomedicalCategoryDto> categories) {
     this.categories = categories;
-    this.reason = reason;
   }
 
   public BattleCategorizationCreateRequestDto categories(List<BiomedicalCategoryDto> categories) {
@@ -73,23 +72,23 @@ public class BattleCategorizationCreateRequestDto {
     this.categories = categories;
   }
 
-  public BattleCategorizationCreateRequestDto reason(String reason) {
+  public BattleCategorizationCreateRequestDto reason(@Nullable String reason) {
     this.reason = reason;
     return this;
   }
 
   /**
-   * Get reason
+   * Reason for the categorization decision
    * @return reason
    */
-  @NotNull @Size(max = 1000) 
-  @Schema(name = "reason", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Size(max = 1000) 
+  @Schema(name = "reason", description = "Reason for the categorization decision", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("reason")
-  public String getReason() {
+  public @Nullable String getReason() {
     return reason;
   }
 
-  public void setReason(String reason) {
+  public void setReason(@Nullable String reason) {
     this.reason = reason;
   }
 

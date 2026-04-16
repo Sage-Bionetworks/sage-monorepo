@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from bixarena_api_client.models.biomedical_category import BiomedicalCategory
 from typing import Optional, Set
@@ -30,7 +30,9 @@ class BattleCategorizationCreateRequest(BaseModel):
     """  # noqa: E501
 
     categories: Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
-    reason: Annotated[str, Field(strict=True, max_length=1000)]
+    reason: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = Field(
+        default=None, description="Reason for the categorization decision"
+    )
     __properties: ClassVar[List[str]] = ["categories", "reason"]
 
     model_config = ConfigDict(
@@ -70,6 +72,11 @@ class BattleCategorizationCreateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if reason (nullable) is None
+        # and model_fields_set contains the field
+        if self.reason is None and "reason" in self.model_fields_set:
+            _dict["reason"] = None
+
         return _dict
 
     @classmethod

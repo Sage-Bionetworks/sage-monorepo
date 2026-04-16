@@ -101,10 +101,8 @@ public class ExamplePromptService {
     UUID promptId = saved.getId();
     if (request.getCategories() != null && !request.getCategories().isEmpty()) {
       ExamplePromptCategorizationCreateRequestDto categorizationRequest =
-        new ExamplePromptCategorizationCreateRequestDto(
-          request.getCategories(),
-          request.getReason()
-        );
+        new ExamplePromptCategorizationCreateRequestDto(request.getCategories())
+          .reason(request.getReason());
       categorizationService.createManualCategorization(promptId, categorizationRequest, createdBy);
       saved = examplePromptRepository.findById(promptId).orElseThrow();
     } else {
@@ -141,10 +139,8 @@ public class ExamplePromptService {
 
     if (request.getCategories() != null && !request.getCategories().isEmpty()) {
       ExamplePromptCategorizationCreateRequestDto categorizationRequest =
-        new ExamplePromptCategorizationCreateRequestDto(
-          request.getCategories(),
-          request.getReason()
-        );
+        new ExamplePromptCategorizationCreateRequestDto(request.getCategories())
+          .reason(request.getReason());
       categorizationService.createManualCategorization(promptId, categorizationRequest, updatedBy);
       saved = examplePromptRepository.findById(promptId).orElseThrow();
     } else if (questionChanged) {

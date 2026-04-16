@@ -28,7 +28,7 @@ export interface ExamplePromptCreateRequest {
    */
   categories?: Array<BiomedicalCategory> | null;
   /**
-   * Required when categories is provided.
+   * Reason for the manual categorization decision, if categories is provided.
    */
   reason?: string | null;
 }

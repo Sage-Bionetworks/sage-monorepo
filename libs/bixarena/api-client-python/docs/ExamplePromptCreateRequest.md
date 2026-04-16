@@ -10,7 +10,7 @@ The information used to create or update an example prompt.
 | **source**     | [**ExamplePromptSource**](ExamplePromptSource.md)     |                                                                                                                                                           |
 | **active**     | **bool**                                              | Whether this example prompt is currently active/visible for use.                                                                                          |
 | **categories** | [**List[BiomedicalCategory]**](BiomedicalCategory.md) | Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously. | [optional] |
-| **reason**     | **str**                                               | Required when categories is provided.                                                                                                                     | [optional] |
+| **reason**     | **str**                                               | Reason for the manual categorization decision, if categories is provided.                                                                                 | [optional] |
 
 ## Example
 

@@ -44,7 +44,8 @@ class ExamplePromptCreateRequest(BaseModel):
         description="Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.",
     )
     reason: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = Field(
-        default=None, description="Required when categories is provided."
+        default=None,
+        description="Reason for the manual categorization decision, if categories is provided.",
     )
     __properties: ClassVar[List[str]] = [
         "question",

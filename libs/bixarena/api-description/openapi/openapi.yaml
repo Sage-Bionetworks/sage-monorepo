@@ -2529,7 +2529,7 @@ components:
           type: string
           maxLength: 1000
           nullable: true
-          description: Required when categories is provided.
+          description: Reason for the manual categorization decision, if categories is provided.
       required:
         - question
         - source
@@ -2585,9 +2585,10 @@ components:
         reason:
           type: string
           maxLength: 1000
+          nullable: true
+          description: Reason for the categorization decision
       required:
         - categories
-        - reason
     LeaderboardList:
       type: array
       description: A list of leaderboards.
@@ -3157,9 +3158,10 @@ components:
         reason:
           type: string
           maxLength: 1000
+          nullable: true
+          description: Reason for the categorization decision
       required:
         - categories
-        - reason
     BattleValidationResponse:
       type: object
       properties:

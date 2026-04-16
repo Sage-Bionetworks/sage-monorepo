@@ -14,5 +14,8 @@ import { BiomedicalCategory } from './biomedical-category';
  */
 export interface BattleCategorizationCreateRequest {
   categories: Array<BiomedicalCategory>;
-  reason: string;
+  /**
+   * Reason for the categorization decision
+   */
+  reason?: string | null;
 }

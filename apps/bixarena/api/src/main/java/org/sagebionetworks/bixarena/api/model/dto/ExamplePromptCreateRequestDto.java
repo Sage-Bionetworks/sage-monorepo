@@ -148,11 +148,11 @@ public class ExamplePromptCreateRequestDto {
   }
 
   /**
-   * Required when categories is provided.
+   * Reason for the manual categorization decision, if categories is provided.
    * @return reason
    */
   @Size(max = 1000) 
-  @Schema(name = "reason", description = "Required when categories is provided.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "reason", description = "Reason for the manual categorization decision, if categories is provided.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("reason")
   public @Nullable String getReason() {
     return reason;

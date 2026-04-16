@@ -31,7 +31,7 @@ public class ExamplePromptCategorizationCreateRequestDto {
   @Valid
   private List<BiomedicalCategoryDto> categories = new ArrayList<>();
 
-  private String reason;
+  private @Nullable String reason = null;
 
   public ExamplePromptCategorizationCreateRequestDto() {
     super();
@@ -40,9 +40,8 @@ public class ExamplePromptCategorizationCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ExamplePromptCategorizationCreateRequestDto(List<BiomedicalCategoryDto> categories, String reason) {
+  public ExamplePromptCategorizationCreateRequestDto(List<BiomedicalCategoryDto> categories) {
     this.categories = categories;
-    this.reason = reason;
   }
 
   public ExamplePromptCategorizationCreateRequestDto categories(List<BiomedicalCategoryDto> categories) {
@@ -73,23 +72,23 @@ public class ExamplePromptCategorizationCreateRequestDto {
     this.categories = categories;
   }
 
-  public ExamplePromptCategorizationCreateRequestDto reason(String reason) {
+  public ExamplePromptCategorizationCreateRequestDto reason(@Nullable String reason) {
     this.reason = reason;
     return this;
   }
 
   /**
-   * Get reason
+   * Reason for the categorization decision
    * @return reason
    */
-  @NotNull @Size(max = 1000) 
-  @Schema(name = "reason", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Size(max = 1000) 
+  @Schema(name = "reason", description = "Reason for the categorization decision", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("reason")
-  public String getReason() {
+  public @Nullable String getReason() {
     return reason;
   }
 
-  public void setReason(String reason) {
+  public void setReason(@Nullable String reason) {
     this.reason = reason;
   }
 

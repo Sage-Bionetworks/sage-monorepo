@@ -3271,7 +3271,8 @@ components:
           nullable: true
           type: array
         reason:
-          description: Required when categories is provided.
+          description: "Reason for the manual categorization decision, if categories\
+            \ is provided."
           maxLength: 1000
           nullable: true
           type: string
@@ -3339,11 +3340,12 @@ components:
           minItems: 1
           type: array
         reason:
+          description: Reason for the categorization decision
           maxLength: 1000
+          nullable: true
           type: string
       required:
         - categories
-        - reason
       type: object
     LeaderboardList:
       description: A list of leaderboards.
@@ -4100,11 +4102,12 @@ components:
           minItems: 1
           type: array
         reason:
+          description: Reason for the categorization decision
           maxLength: 1000
+          nullable: true
           type: string
       required:
         - categories
-        - reason
       type: object
     BattleValidationResponse:
       example:

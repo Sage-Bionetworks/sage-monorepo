@@ -49,7 +49,6 @@ class TestExamplePromptCategorizationCreateRequest(unittest.TestCase):
                 categories = [
                     'genetics'
                     ],
-                reason = '',
         )
         """
 

@@ -4,10 +4,10 @@ Request to manually categorize a battle.
 
 ## Properties
 
-| Name           | Type                                                  | Description | Notes |
-| -------------- | ----------------------------------------------------- | ----------- | ----- |
-| **categories** | [**List[BiomedicalCategory]**](BiomedicalCategory.md) |             |
-| **reason**     | **str**                                               |             |
+| Name           | Type                                                  | Description                            | Notes      |
+| -------------- | ----------------------------------------------------- | -------------------------------------- | ---------- |
+| **categories** | [**List[BiomedicalCategory]**](BiomedicalCategory.md) |                                        |
+| **reason**     | **str**                                               | Reason for the categorization decision | [optional] |
 
 ## Example
 

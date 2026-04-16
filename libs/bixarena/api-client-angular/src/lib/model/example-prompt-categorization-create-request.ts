@@ -14,5 +14,8 @@ import { BiomedicalCategory } from './biomedical-category';
  */
 export interface ExamplePromptCategorizationCreateRequest {
   categories: Array<BiomedicalCategory>;
-  reason: string;
+  /**
+   * Reason for the categorization decision
+   */
+  reason?: string | null;
 }
