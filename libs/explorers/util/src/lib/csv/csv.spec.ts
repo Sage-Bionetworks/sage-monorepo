@@ -1,12 +1,8 @@
 import { csvDataToString } from './csv';
 
 describe('csvDataToString', () => {
-  it('should return an empty string for empty input', () => {
-    expect(csvDataToString([])).toBe('');
-  });
-
-  it('should format a header row', () => {
-    expect(csvDataToString([['age', 'sex', 'value']])).toBe('"age","sex","value"\n');
+  it('should double quote and escape values', () => {
+    expect(csvDataToString([['a', 'b', 'c']])).toBe('"a","b","c"\n');
   });
 
   it('should format multiple rows', () => {
@@ -20,15 +16,23 @@ describe('csvDataToString', () => {
     );
   });
 
-  it('should escape double quotes within values', () => {
-    expect(csvDataToString([['say "hello"', 'normal']])).toBe('"say ""hello""","normal"\n');
+  it('should handle empty array', () => {
+    expect(csvDataToString([])).toBe('');
   });
 
-  it('should handle values containing commas', () => {
-    expect(csvDataToString([['one, two', 'three']])).toBe('"one, two","three"\n');
+  it('should handle a row with no columns', () => {
+    expect(csvDataToString([[]])).toBe('\n');
   });
 
-  it('should handle empty string values', () => {
-    expect(csvDataToString([['', 'value', '']])).toBe('"","value",""\n');
+  it('should handle embedded quotes', () => {
+    expect(csvDataToString([['a"b', 'c']])).toBe('"a""b","c"\n');
+  });
+
+  it('should handle commas and newlines', () => {
+    expect(csvDataToString([['a,b', 'c\nd']])).toBe('"a,b","c\nd"\n');
+  });
+
+  it('should handle empty string', () => {
+    expect(csvDataToString([['']])).toBe('""\n');
   });
 });
