@@ -28,7 +28,7 @@
           @let cellData = rowData[column.data_key];
           @let rowId = rowData[this.viewConfig().rowIdDataKey];
           <td
-            [style]="{ width: columnWidth()[column.data_key] || 'auto' }"
+            [style]="{ width: columnWidths()[column.data_key] || 'auto' }"
             [class]="columnType"
             [attr.data-column-key]="column.data_key"
           >
