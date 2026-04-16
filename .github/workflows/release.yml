@@ -55,11 +55,17 @@ jobs:
             && workspace-install-affected"
 
       - name: Build the Docker images for the specified product
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_ACTOR: ${{ github.actor }}
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+          devcontainer exec --workspace-folder ../sage-monorepo \
+            --remote-env GH_TOKEN="$GH_TOKEN" \
+            --remote-env GH_ACTOR="$GH_ACTOR" \
+            bash -c '. ./dev-env.sh \
             && export VERSION=${{ env.VERSION }} \
-            && echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin \
-            && nx run-many --target=build-image --projects=${{ env.PRODUCT }}-* --configuration=release"
+            && echo "$GH_TOKEN" | docker login ghcr.io -u "$GH_ACTOR" --password-stdin \
+            && nx run-many --target=build-image --projects=${{ env.PRODUCT }}-* --configuration=release'
 
       - name: Upload Sentry sourcemaps for the specified product
         run: |
