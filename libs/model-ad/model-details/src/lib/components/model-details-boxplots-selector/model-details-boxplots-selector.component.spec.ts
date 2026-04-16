@@ -181,9 +181,39 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     );
 
     const csv = component.generateBoxplotsCsvData('NfL');
-    expect(csv[0]).toEqual(['age', 'sex', 'genotype', 'individual_id', 'value', 'units']);
-    expect(csv[1]).toEqual(['4 months', 'Female', 'TestModel', '100', '42.5', 'pg/mg']);
-    expect(csv[2]).toEqual(['4 months', 'Male', 'Control', '101', '55.1', 'pg/mg']);
+    expect(csv[0]).toEqual([
+      'name',
+      'evidence_type',
+      'tissue',
+      'age',
+      'sex',
+      'genotype',
+      'individual_id',
+      'value',
+      'units',
+    ]);
+    expect(csv[1]).toEqual([
+      'TestModel',
+      'NfL',
+      'Brain',
+      '4 months',
+      'Female',
+      'TestModel',
+      '100',
+      '42.5',
+      'pg/mg',
+    ]);
+    expect(csv[2]).toEqual([
+      'TestModel',
+      'NfL',
+      'Brain',
+      '4 months',
+      'Male',
+      'Control',
+      '101',
+      '55.1',
+      'pg/mg',
+    ]);
   });
 
   it('should generate boxplots zip filename correctly', async () => {

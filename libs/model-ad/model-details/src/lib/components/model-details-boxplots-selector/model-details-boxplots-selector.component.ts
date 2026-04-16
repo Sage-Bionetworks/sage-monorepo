@@ -202,11 +202,24 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   }
 
   generateBoxplotsCsvData(evidenceType: string): string[][] {
-    const header = ['age', 'sex', 'genotype', 'individual_id', 'value', 'units'];
+    const header = [
+      'name',
+      'evidence_type',
+      'tissue',
+      'age',
+      'sex',
+      'genotype',
+      'individual_id',
+      'value',
+      'units',
+    ];
     const rows: string[][] = [header];
     for (const modelData of this.getSelectedModelDataForEvidenceType(evidenceType)) {
       for (const item of modelData.data) {
         rows.push([
+          modelData.name,
+          modelData.evidence_type,
+          modelData.tissue,
           modelData.age,
           item.sex,
           item.genotype,
