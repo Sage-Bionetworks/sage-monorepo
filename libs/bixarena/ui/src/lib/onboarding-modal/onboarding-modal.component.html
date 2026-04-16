@@ -39,8 +39,20 @@
   }
 
   <div class="modal-dots">
-    <span class="dot" [class.active]="!showAgreement()" (click)="showAgreement.set(false)"></span>
-    <span class="dot" [class.active]="showAgreement()" (click)="showAgreement.set(true)"></span>
+    <button
+      type="button"
+      class="dot"
+      [class.active]="!showAgreement()"
+      aria-label="Go to How it works"
+      (click)="showAgreement.set(false)"
+    ></button>
+    <button
+      type="button"
+      class="dot"
+      [class.active]="showAgreement()"
+      aria-label="Go to Before You Start"
+      (click)="showAgreement.set(true)"
+    ></button>
   </div>
 
   <div class="modal-footer">

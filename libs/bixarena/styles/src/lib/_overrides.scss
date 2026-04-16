@@ -83,6 +83,8 @@
     .dot {
       width: 8px;
       height: 8px;
+      padding: 0;
+      border: none;
       border-radius: 50%;
       background: var(--p-surface-300);
       cursor: pointer;

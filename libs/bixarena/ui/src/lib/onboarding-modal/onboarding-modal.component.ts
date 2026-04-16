@@ -57,6 +57,7 @@ export class OnboardingModalComponent {
   onDismiss(): void {
     this.visible.set(false);
     this.showAgreement.set(false);
+    this.dontShowChecked.set(false);
     this.dismissed.emit();
   }
 }
