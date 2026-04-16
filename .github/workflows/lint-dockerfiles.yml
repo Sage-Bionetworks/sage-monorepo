@@ -11,6 +11,9 @@ on:
       - 'sage/**'
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   hadolint:
     runs-on: ubuntu-latest
