@@ -1,0 +1,33 @@
+type: object
+description: The information used to create or update an example prompt.
+properties:
+  question:
+    type: string
+    description: The biomedical question text.
+    minLength: 1
+    maxLength: 160
+    example: 'What are the main symptoms of Type 2 diabetes?'
+  source:
+    $ref: ExamplePromptSource.yaml
+  active:
+    type: boolean
+    description: Whether this example prompt is currently active/visible for use.
+    example: true
+  categories:
+    type: array
+    items:
+      $ref: BiomedicalCategory.yaml
+    minItems: 1
+    nullable: true
+    description: >-
+      Human override categories. If provided, a manual categorization is created
+      and reason is required. If absent, AI auto-categorization runs asynchronously.
+  reason:
+    type: string
+    maxLength: 1000
+    nullable: true
+    description: Required when categories is provided.
+required:
+  - question
+  - source
+  - active

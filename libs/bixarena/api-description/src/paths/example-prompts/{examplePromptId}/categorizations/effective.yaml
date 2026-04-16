@@ -1,0 +1,24 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/examplePromptId.yaml
+
+get:
+  x-anonymous-access: true
+  x-rate-limit-requests-per-minute: 100
+  tags:
+    - Example Prompt
+  summary: Get effective example prompt categorization
+  description: Get the current effective categorization for an example prompt.
+  operationId: getExamplePromptEffectiveCategorization
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/ExamplePromptCategorizationResponse.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

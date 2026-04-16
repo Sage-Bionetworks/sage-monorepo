@@ -1,0 +1,23 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/battleId.yaml
+
+get:
+  x-rate-limit-requests-per-minute: 100
+  tags:
+    - Battle
+  summary: Get effective battle categorization
+  description: Get the current effective categorization for a battle.
+  operationId: getBattleEffectiveCategorization
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/BattleCategorizationResponse.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

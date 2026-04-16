@@ -1,0 +1,14 @@
+type: object
+description: Request to manually categorize an example prompt.
+properties:
+  categories:
+    type: array
+    items:
+      $ref: BiomedicalCategory.yaml
+    minItems: 1
+  reason:
+    type: string
+    maxLength: 1000
+required:
+  - categories
+  - reason

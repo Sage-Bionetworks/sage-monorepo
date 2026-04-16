@@ -1,0 +1,29 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/examplePromptId.yaml
+
+post:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Example Prompt
+  summary: Run an automated categorization
+  description: Run an automated categorization against an example prompt and return the result. Admin only.
+  operationId: runExamplePromptCategorization
+  responses:
+    '201':
+      description: Categorization completed and persisted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/ExamplePromptCategorizationResponse.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

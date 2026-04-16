@@ -1,0 +1,60 @@
+parameters:
+  - $ref: ../../../components/parameters/path/examplePromptId.yaml
+
+get:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Example Prompt
+  summary: List example prompt categorizations
+  description: Get all categorizations for an example prompt (admin only).
+  operationId: listExamplePromptCategorizations
+  responses:
+    '200':
+      description: List of example prompt categorizations
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../../../components/schemas/ExamplePromptCategorizationResponse.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml
+
+post:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Example Prompt
+  summary: Create an example prompt categorization
+  description: Manually categorize an example prompt (admin only). The created categorization is automatically set as the effective categorization.
+  operationId: createExamplePromptCategorization
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/ExamplePromptCategorizationCreateRequest.yaml
+  responses:
+    '201':
+      description: Example prompt categorization created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/ExamplePromptCategorizationResponse.yaml
+    '400':
+      $ref: ../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

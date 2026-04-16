@@ -21,3 +21,34 @@ get:
       $ref: ../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml
+
+post:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Example Prompt
+  summary: Create an example prompt
+  description: Create a new example prompt (admin only). AI auto-categorization runs asynchronously unless categories are provided.
+  operationId: createExamplePrompt
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ExamplePromptCreateRequest.yaml
+  responses:
+    '201':
+      description: Example prompt created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ExamplePrompt.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '409':
+      $ref: ../components/responses/Conflict.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

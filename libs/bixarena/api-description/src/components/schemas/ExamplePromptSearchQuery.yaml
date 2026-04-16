@@ -33,4 +33,10 @@ properties:
     type: string
     nullable: true
     example: 'diabetes'
+  categories:
+    description: Filter by one or more categories. Returns prompts matching any of the given categories.
+    type: array
+    items:
+      $ref: BiomedicalCategory.yaml
+    nullable: true
 required: []
