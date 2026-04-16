@@ -110,6 +110,62 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
+  @ExceptionHandler(ExamplePromptNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleExamplePromptNotFound(
+    ExamplePromptNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Example Prompt Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(ExamplePromptCategorizationNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleExamplePromptCategorizationNotFound(
+    ExamplePromptCategorizationNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Example Prompt Categorization Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(BattleCategorizationNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleBattleCategorizationNotFound(
+    BattleCategorizationNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Battle Categorization Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(BattleNotEligibleForCategorizationException.class)
+  protected ResponseEntity<BasicErrorDto> handleBattleNotEligibleForCategorization(
+    BattleNotEligibleForCategorizationException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(
+      BasicErrorDto.builder()
+        .title("Battle Not Eligible For Categorization")
+        .status(HttpStatus.CONFLICT.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
   @ExceptionHandler(QuestPostNotFoundException.class)
   protected ResponseEntity<BasicErrorDto> handleQuestPostNotFoundException(
     QuestPostNotFoundException ex,
