@@ -12,6 +12,7 @@ export class BattleGateService {
 
   private pendingResolver: ((passed: boolean) => void) | null = null;
 
+  // TODO: if concurrent calls become an issue, cache the pending Promise so all callers share it
   async checkOnboarding(): Promise<boolean> {
     if (!this.onboardingService.hasCompleted()) {
       this.showOnboardingModal.set(true);
