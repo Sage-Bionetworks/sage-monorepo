@@ -6,3 +6,9 @@
   <router-outlet />
 </main>
 <bixarena-footer />
+
+<bixarena-login-modal
+  [(visible)]="gate.showLoginModal"
+  (signIn)="gate.onLoginComplete()"
+  (dismissed)="gate.onLoginCancel()"
+/>

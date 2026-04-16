@@ -65,8 +65,8 @@ export const BixArenaPreset = definePreset(Lara, {
         text: {
           color: '{surface.950}',
           hoverColor: '{surface.950}',
-          mutedColor: '{surface.400}',
-          hoverMutedColor: '{surface.300}',
+          mutedColor: '{surface.500}',
+          hoverMutedColor: '{surface.400}',
         },
       },
     },
