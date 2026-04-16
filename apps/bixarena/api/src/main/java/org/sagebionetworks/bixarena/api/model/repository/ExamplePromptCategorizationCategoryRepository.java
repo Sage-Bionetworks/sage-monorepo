@@ -1,5 +1,6 @@
 package org.sagebionetworks.bixarena.api.model.repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptCategorizationCategoryEntity;
@@ -11,4 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface ExamplePromptCategorizationCategoryRepository
     extends JpaRepository<ExamplePromptCategorizationCategoryEntity, CategoryKey> {
   List<ExamplePromptCategorizationCategoryEntity> findByCategorizationId(UUID categorizationId);
+
+  List<ExamplePromptCategorizationCategoryEntity> findByCategorizationIdIn(
+      Collection<UUID> categorizationIds);
 }
