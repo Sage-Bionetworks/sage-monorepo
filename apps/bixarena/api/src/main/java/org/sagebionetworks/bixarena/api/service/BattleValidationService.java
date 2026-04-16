@@ -42,6 +42,7 @@ public class BattleValidationService {
   private final AppProperties appProperties;
   private final ObjectMapper objectMapper;
   private final StatsCacheService statsCacheService;
+  private final BattleCategorizationService battleCategorizationService;
 
   /** Response from the AI service /validate-battle endpoint. */
   private record AiBattleValidationResponse(
@@ -224,6 +225,11 @@ public class BattleValidationService {
           .orElse(null);
       if (userId != null) {
         statsCacheService.invalidateStatsForValidation(userId);
+      }
+      // Fire categorization only when this validation became effective AND it's biomedical.
+      // Skipping non-biomedical battles saves LLM cost.
+      if (validation.isBiomedical()) {
+        battleCategorizationService.categorizeBattleAsync(battleId);
       }
     }
 
