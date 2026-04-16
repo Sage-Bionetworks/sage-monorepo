@@ -175,6 +175,14 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 30
     - method: 'POST'
+      path: '/api/v1/categorize-battle'
+      audience: 'urn:bixarena:ai'
+      rateLimitRequestsPerMinute: 60
+    - method: 'POST'
+      path: '/api/v1/categorize-prompt'
+      audience: 'urn:bixarena:ai'
+      rateLimitRequestsPerMinute: 60
+    - method: 'POST'
       path: '/api/v1/chat/completions'
       audience: 'urn:bixarena:ai'
       rateLimitRequestsPerMinute: 60
