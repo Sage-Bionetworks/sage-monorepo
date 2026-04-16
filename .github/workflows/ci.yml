@@ -94,8 +94,8 @@ jobs:
       - name: Upload Sentry sourcemaps for the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo \
-            --remote-env SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
-            --remote-env SENTRY_RELEASE=$SENTRY_RELEASE \
+            --remote-env SENTRY_AUTH_TOKEN="$SENTRY_AUTH_TOKEN" \
+            --remote-env SENTRY_RELEASE="$SENTRY_RELEASE" \
             bash -c ". ./dev-env.sh \
             && nx affected --target=sentry-sourcemaps"
         env:
