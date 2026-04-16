@@ -17,6 +17,7 @@ public class ExamplePromptMapper {
       .question(entity.getQuestion())
       .source(ExamplePromptSourceDto.fromValue(entity.getSource()))
       .active(entity.isActive())
+      .effectiveCategorizationId(entity.getEffectiveCategorizationId())
       .createdAt(entity.getCreatedAt())
       .build();
   }
