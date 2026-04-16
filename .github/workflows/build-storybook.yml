@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0
 

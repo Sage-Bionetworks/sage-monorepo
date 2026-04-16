@@ -13,7 +13,7 @@ runs:
   using: 'composite'
   steps:
     # - name: Set up pnpm cache
-    #   uses: actions/cache@v3
+    #   uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c #v3.5.0
     #   with:
     #     path: '/tmp/.pnpm-store'
     #     key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -21,7 +21,7 @@ runs:
     #       ${{ runner.os }}-pnpm-store-
 
     # - name: Set up Renv cache
-    #   uses: actions/cache@v3
+    #   uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c #v3.5.0
     #   with:
     #     path: '/tmp/.cache/R/renv/cache'
     #     key: ${{ runner.os }}-renv-cache-${{ hashFiles('**/renv.lock') }}
@@ -29,7 +29,7 @@ runs:
     #       ${{ runner.os }}-renv-cache-
 
     # - name: Set up venv cache
-    #   uses: actions/cache@v3
+    #   uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c #v3.5.0
     #   with:
     #     path: |
     #       /tmp/.local/share/virtualenv
@@ -37,7 +37,7 @@ runs:
     #     key: ${{ runner.os }}-venv-${{ hashFiles('**/uv.lock') }}
 
     # - name: Set up Gradle cache
-    #   uses: actions/cache@v3
+    #   uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c #v3.5.0
     #   with:
     #     path: |
     #       /tmp/.gradle/caches
