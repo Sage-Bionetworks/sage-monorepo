@@ -10,6 +10,11 @@ on:
     - cron: 29 19 * * 4
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: read # pull images from ghcr.io
+  security-events: write # upload Trivy SARIF to the Security tab
+
 jobs:
   trivy-edge:
     name: ${{ matrix.image }}
@@ -17,7 +22,6 @@ jobs:
     env:
       TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
       TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
-    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
@@ -40,6 +44,7 @@ jobs:
 
       # Deliberately chosen master here to keep up-to-date.
       - name: Run Trivy vulnerability scanner for any major issues
+        continue-on-error: true # scan may exit non-zero when vulnerabilities are found
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
           image-ref: ghcr.io/sage-bionetworks/${{ matrix.image }}:edge
@@ -53,20 +58,21 @@ jobs:
       # Show all detected issues.
       # Note this will show a lot more, including major un-fixed ones.
       - name: Run Trivy vulnerability scanner for local output
+        continue-on-error: true # scan may exit non-zero when vulnerabilities are found
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
           image-ref: ghcr.io/sage-bionetworks/${{ matrix.image }}:edge
           format: table
 
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@ce64ddcb0d8d890d2df4a9d1c04ff297367dea2a # v3.35.2
         with:
           sarif_file: trivy-results-${{ matrix.image }}-edge.sarif
           category: trivy-image-${{ matrix.image }}:edge
           wait-for-processing: true
 
       - name: Detain results for debug if needed
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: trivy-results-${{ matrix.image }}-edge.sarif
           path: trivy-results-${{ matrix.image }}-edge.sarif
