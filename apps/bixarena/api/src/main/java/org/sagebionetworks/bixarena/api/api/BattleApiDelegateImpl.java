@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.api.model.dto.BattleCategorizationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleCategorizationResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
@@ -22,6 +24,7 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
 
 import org.sagebionetworks.bixarena.api.model.dto.ModelChatCompletionChunkDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
+import org.sagebionetworks.bixarena.api.service.BattleCategorizationService;
 import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
 import org.sagebionetworks.bixarena.api.service.BattleService;
@@ -45,6 +48,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   private final BattleRoundService battleRoundService;
   private final BattleEvaluationService battleEvaluationService;
   private final BattleValidationService battleValidationService;
+  private final BattleCategorizationService battleCategorizationService;
   private final ChatCompletionStreamService chatCompletionStreamService;
   private final NativeWebRequest request;
 
@@ -221,5 +225,47 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
 
     battleService.deleteBattle(battleId);
     return ResponseEntity.noContent().build();
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<List<BattleCategorizationResponseDto>> listBattleCategorizations(
+    UUID battleId
+  ) {
+    log.info("Listing battle categorizations for battle {}", battleId);
+    return ResponseEntity.ok(battleCategorizationService.listCategorizations(battleId));
+  }
+
+  @Override
+  public ResponseEntity<BattleCategorizationResponseDto> getBattleEffectiveCategorization(
+    UUID battleId
+  ) {
+    return ResponseEntity.ok(battleCategorizationService.getEffectiveCategorization(battleId));
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<BattleCategorizationResponseDto> createBattleCategorization(
+    UUID battleId,
+    BattleCategorizationCreateRequestDto request
+  ) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UUID categorizedBy = UUID.fromString(authentication.getName());
+    log.info("Admin {} creating categorization override for battle {}", categorizedBy, battleId);
+
+    BattleCategorizationResponseDto dto = battleCategorizationService.createManualCategorization(
+      battleId,
+      request,
+      categorizedBy
+    );
+    return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<BattleCategorizationResponseDto> runBattleCategorization(UUID battleId) {
+    log.info("Admin triggering AI categorization for battle {}", battleId);
+    BattleCategorizationResponseDto dto = battleCategorizationService.categorizeBattle(battleId);
+    return ResponseEntity.status(HttpStatus.CREATED).body(dto);
   }
 }
