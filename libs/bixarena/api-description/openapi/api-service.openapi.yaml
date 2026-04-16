@@ -2212,6 +2212,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
+          maxItems: 3
           default: []
           description: Categories from the effective categorization. Empty array if not yet categorized.
         createdAt:
@@ -2261,6 +2262,7 @@ components:
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
           minItems: 1
+          maxItems: 3
           nullable: true
           description: Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.
         reason:
@@ -2287,6 +2289,7 @@ components:
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
           minItems: 1
+          maxItems: 3
         method:
           type: string
           maxLength: 100
@@ -2318,6 +2321,7 @@ components:
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
           minItems: 1
+          maxItems: 3
         reason:
           type: string
           maxLength: 1000
@@ -2857,6 +2861,7 @@ components:
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
           minItems: 1
+          maxItems: 3
         method:
           type: string
           maxLength: 100
@@ -2888,6 +2893,7 @@ components:
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
           minItems: 1
+          maxItems: 3
         reason:
           type: string
           maxLength: 1000

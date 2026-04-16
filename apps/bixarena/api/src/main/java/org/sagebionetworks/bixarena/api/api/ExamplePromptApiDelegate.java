@@ -51,7 +51,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }";
+                    String exampleString = "{ \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -106,7 +106,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\" ] }";
+                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -202,7 +202,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }";
+                    String exampleString = "{ \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -242,7 +242,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\" ] }";
+                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -283,7 +283,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\" ] }, { \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\" ] } ]";
+                    String exampleString = "[ { \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ] }, { \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ] } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -328,7 +328,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"examplePrompts\" : [ { \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }, { \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" } ], \"hasNext\" : true, \"totalElements\" : 99 }";
+                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"examplePrompts\" : [ { \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }, { \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" } ], \"hasNext\" : true, \"totalElements\" : 99 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -371,7 +371,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\" ] }";
+                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -430,7 +430,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }";
+                    String exampleString = "{ \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

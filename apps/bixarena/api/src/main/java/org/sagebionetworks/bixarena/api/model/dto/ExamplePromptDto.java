@@ -182,7 +182,7 @@ public class ExamplePromptDto {
    * Categories from the effective categorization. Empty array if not yet categorized.
    * @return categories
    */
-  @NotNull @Valid 
+  @NotNull @Valid @Size(max = 3) 
   @Schema(name = "categories", description = "Categories from the effective categorization. Empty array if not yet categorized.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
   public List<BiomedicalCategoryDto> getCategories() {

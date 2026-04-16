@@ -29,7 +29,7 @@ class BattleCategorizationCreateRequest(BaseModel):
     Request to manually categorize a battle.
     """  # noqa: E501
 
-    categories: Annotated[List[BiomedicalCategory], Field(min_length=1)]
+    categories: Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
     reason: Annotated[str, Field(strict=True, max_length=1000)]
     __properties: ClassVar[List[str]] = ["categories", "reason"]
 

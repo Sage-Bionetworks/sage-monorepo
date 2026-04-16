@@ -45,7 +45,7 @@ class ExamplePrompt(BaseModel):
         description="ID of the effective categorization for this prompt (null = not yet categorized)",
         alias="effectiveCategorizationId",
     )
-    categories: List[BiomedicalCategory] = Field(
+    categories: Annotated[List[BiomedicalCategory], Field(max_length=3)] = Field(
         description="Categories from the effective categorization. Empty array if not yet categorized."
     )
     created_at: datetime = Field(

@@ -62,7 +62,7 @@ public class BattleCategorizationCreateRequestDto {
    * Get categories
    * @return categories
    */
-  @NotNull @Valid @Size(min = 1) 
+  @NotNull @Valid @Size(min = 1, max = 3) 
   @Schema(name = "categories", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
   public List<BiomedicalCategoryDto> getCategories() {

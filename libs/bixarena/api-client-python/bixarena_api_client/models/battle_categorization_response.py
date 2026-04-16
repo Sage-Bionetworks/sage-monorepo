@@ -33,7 +33,7 @@ class BattleCategorizationResponse(BaseModel):
 
     id: UUID
     battle_id: UUID = Field(alias="battleId")
-    categories: Annotated[List[BiomedicalCategory], Field(min_length=1)]
+    categories: Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
     method: Annotated[str, Field(strict=True, max_length=100)]
     categorized_by: Optional[UUID] = Field(
         default=None,

@@ -131,7 +131,7 @@ public class ExamplePromptCreateRequestDto {
    * Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.
    * @return categories
    */
-  @Valid @Size(min = 1) 
+  @Valid @Size(min = 1, max = 3) 
   @Schema(name = "categories", description = "Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("categories")
   public @Nullable List<BiomedicalCategoryDto> getCategories() {

@@ -3155,6 +3155,7 @@ components:
         categories:
           - genetics
           - genetics
+          - genetics
         effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         id:
@@ -3186,6 +3187,7 @@ components:
             not yet categorized.
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
+          maxItems: 3
           type: array
         createdAt:
           description: When the example prompt was created.
@@ -3227,6 +3229,7 @@ components:
             categories:
               - genetics
               - genetics
+              - genetics
             effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           - createdAt: 2025-08-01T09:00:00Z
             question: What are the main symptoms of Type 2 diabetes?
@@ -3234,6 +3237,7 @@ components:
             id: 123e4567-e89b-12d3-a456-426614174000
             source: pubmedqa
             categories:
+              - genetics
               - genetics
               - genetics
             effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -3262,6 +3266,7 @@ components:
             \ runs asynchronously."
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
+          maxItems: 3
           minItems: 1
           nullable: true
           type: array
@@ -3287,6 +3292,7 @@ components:
         categories:
           - genetics
           - genetics
+          - genetics
       properties:
         id:
           format: uuid
@@ -3297,6 +3303,7 @@ components:
         categories:
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
+          maxItems: 3
           minItems: 1
           type: array
         method:
@@ -3328,6 +3335,7 @@ components:
         categories:
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
+          maxItems: 3
           minItems: 1
           type: array
         reason:
@@ -4045,6 +4053,7 @@ components:
         categories:
           - genetics
           - genetics
+          - genetics
       properties:
         id:
           format: uuid
@@ -4055,6 +4064,7 @@ components:
         categories:
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
+          maxItems: 3
           minItems: 1
           type: array
         method:
@@ -4086,6 +4096,7 @@ components:
         categories:
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
+          maxItems: 3
           minItems: 1
           type: array
         reason:

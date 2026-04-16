@@ -37,11 +37,11 @@ class ExamplePromptCreateRequest(BaseModel):
     active: StrictBool = Field(
         description="Whether this example prompt is currently active/visible for use."
     )
-    categories: Optional[Annotated[List[BiomedicalCategory], Field(min_length=1)]] = (
-        Field(
-            default=None,
-            description="Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.",
-        )
+    categories: Optional[
+        Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
+    ] = Field(
+        default=None,
+        description="Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.",
     )
     reason: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = Field(
         default=None, description="Required when categories is provided."
