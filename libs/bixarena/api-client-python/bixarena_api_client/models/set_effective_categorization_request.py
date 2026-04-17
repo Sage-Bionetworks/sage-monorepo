@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena AI Service
+BixArena API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -16,38 +16,30 @@ import pprint
 import re  # noqa: F401
 import json
 
-
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List
-from typing_extensions import Annotated
-
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Any, ClassVar, Dict, List, Optional
+from uuid import UUID
+from typing import Optional, Set
+from typing_extensions import Self
 
 
-class BattleCategorization(BaseModel):
+class SetEffectiveCategorizationRequest(BaseModel):
     """
-    BattleCategorization
+    Request to set or clear the effective categorization for an example prompt or battle.
     """  # noqa: E501
 
-    categories: Annotated[
-        List[Annotated[str, Field(strict=True, max_length=100)]],
-        Field(min_length=0, max_length=3),
-    ] = Field(
-        description="Up to three biomedical subject category slugs assigned by the classifier. May be empty when the classifier did not assign any category."
+    categorization_id: Optional[UUID] = Field(
+        default=None,
+        description="ID of the categorization row to set as effective. Set to null to clear the effective categorization.",
+        alias="categorizationId",
     )
-    method: Annotated[str, Field(strict=True, max_length=100)] = Field(
-        description="The categorization method used (e.g. 'openrouter-haiku-v1')"
-    )
-    __properties: ClassVar[List[str]] = ["categories", "method"]
+    __properties: ClassVar[List[str]] = ["categorizationId"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True,
-        "protected_namespaces": (),
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -59,8 +51,8 @@ class BattleCategorization(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
-        """Create an instance of BattleCategorization from a JSON string"""
+    def from_json(cls, json_str: str) -> Optional[Self]:
+        """Create an instance of SetEffectiveCategorizationRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,23 +65,31 @@ class BattleCategorization(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={},
+            exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if categorization_id (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.categorization_id is None
+            and "categorization_id" in self.model_fields_set
+        ):
+            _dict["categorizationId"] = None
+
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of BattleCategorization from a dict"""
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
+        """Create an instance of SetEffectiveCategorizationRequest from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {"categories": obj.get("categories"), "method": obj.get("method")}
-        )
+        _obj = cls.model_validate({"categorizationId": obj.get("categorizationId")})
         return _obj

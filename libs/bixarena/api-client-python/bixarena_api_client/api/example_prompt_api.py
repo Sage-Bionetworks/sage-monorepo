@@ -34,6 +34,12 @@ from bixarena_api_client.models.example_prompt_page import ExamplePromptPage
 from bixarena_api_client.models.example_prompt_search_query import (
     ExamplePromptSearchQuery,
 )
+from bixarena_api_client.models.example_prompt_update_request import (
+    ExamplePromptUpdateRequest,
+)
+from bixarena_api_client.models.set_effective_categorization_request import (
+    SetEffectiveCategorizationRequest,
+)
 
 from bixarena_api_client.api_client import ApiClient, RequestSerialized
 from bixarena_api_client.api_response import ApiResponse
@@ -70,7 +76,7 @@ class ExamplePromptApi:
     ) -> ExamplePrompt:
         """Create an example prompt
 
-        Create a new example prompt (admin only). AI auto-categorization runs asynchronously unless categories are provided.
+        Create a new example prompt (admin only). The new prompt is created as inactive regardless of the active field in the request body; a reviewer publishes it via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
 
         :param example_prompt_create_request: (required)
         :type example_prompt_create_request: ExamplePromptCreateRequest
@@ -139,7 +145,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[ExamplePrompt]:
         """Create an example prompt
 
-        Create a new example prompt (admin only). AI auto-categorization runs asynchronously unless categories are provided.
+        Create a new example prompt (admin only). The new prompt is created as inactive regardless of the active field in the request body; a reviewer publishes it via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
 
         :param example_prompt_create_request: (required)
         :type example_prompt_create_request: ExamplePromptCreateRequest
@@ -208,7 +214,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """Create an example prompt
 
-        Create a new example prompt (admin only). AI auto-categorization runs asynchronously unless categories are provided.
+        Create a new example prompt (admin only). The new prompt is created as inactive regardless of the active field in the request body; a reviewer publishes it via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
 
         :param example_prompt_create_request: (required)
         :type example_prompt_create_request: ExamplePromptCreateRequest
@@ -1124,262 +1130,6 @@ class ExamplePromptApi:
         )
 
     @validate_call
-    def get_example_prompt_effective_categorization(
-        self,
-        example_prompt_id: Annotated[
-            UUID, Field(description="The unique identifier of an example prompt")
-        ],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ExamplePromptCategorizationResponse:
-        """Get effective example prompt categorization
-
-        Get the current effective categorization for an example prompt.
-
-        :param example_prompt_id: The unique identifier of an example prompt (required)
-        :type example_prompt_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """  # noqa: E501
-
-        _param = self._get_example_prompt_effective_categorization_serialize(
-            example_prompt_id=example_prompt_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index,
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            "200": "ExamplePromptCategorizationResponse",
-            "404": "BasicError",
-            "429": "RateLimitError",
-            "500": "BasicError",
-        }
-        response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-    @validate_call
-    def get_example_prompt_effective_categorization_with_http_info(
-        self,
-        example_prompt_id: Annotated[
-            UUID, Field(description="The unique identifier of an example prompt")
-        ],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[ExamplePromptCategorizationResponse]:
-        """Get effective example prompt categorization
-
-        Get the current effective categorization for an example prompt.
-
-        :param example_prompt_id: The unique identifier of an example prompt (required)
-        :type example_prompt_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """  # noqa: E501
-
-        _param = self._get_example_prompt_effective_categorization_serialize(
-            example_prompt_id=example_prompt_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index,
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            "200": "ExamplePromptCategorizationResponse",
-            "404": "BasicError",
-            "429": "RateLimitError",
-            "500": "BasicError",
-        }
-        response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-    @validate_call
-    def get_example_prompt_effective_categorization_without_preload_content(
-        self,
-        example_prompt_id: Annotated[
-            UUID, Field(description="The unique identifier of an example prompt")
-        ],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get effective example prompt categorization
-
-        Get the current effective categorization for an example prompt.
-
-        :param example_prompt_id: The unique identifier of an example prompt (required)
-        :type example_prompt_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """  # noqa: E501
-
-        _param = self._get_example_prompt_effective_categorization_serialize(
-            example_prompt_id=example_prompt_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index,
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            "200": "ExamplePromptCategorizationResponse",
-            "404": "BasicError",
-            "429": "RateLimitError",
-            "500": "BasicError",
-        }
-        response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-    def _get_example_prompt_effective_categorization_serialize(
-        self,
-        example_prompt_id,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-        _host = None
-
-        _collection_formats: Dict[str, str] = {}
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if example_prompt_id is not None:
-            _path_params["examplePromptId"] = example_prompt_id
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-
-        # set the HTTP header `Accept`
-        if "Accept" not in _header_params:
-            _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/json", "application/problem+json"]
-            )
-
-        # authentication setting
-        _auth_settings: List[str] = ["jwtBearer"]
-
-        return self.api_client.param_serialize(
-            method="GET",
-            resource_path="/example-prompts/{examplePromptId}/categorizations/effective",
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth,
-        )
-
-    @validate_call
     def list_example_prompt_categorizations(
         self,
         example_prompt_id: Annotated[
@@ -1927,7 +1677,7 @@ class ExamplePromptApi:
     ) -> ExamplePromptCategorizationResponse:
         """Run an automated categorization
 
-        Run an automated categorization against an example prompt and return the result. Admin only.
+        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1963,6 +1713,7 @@ class ExamplePromptApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "ExamplePromptCategorizationResponse",
+            "204": None,
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
@@ -1999,7 +1750,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[ExamplePromptCategorizationResponse]:
         """Run an automated categorization
 
-        Run an automated categorization against an example prompt and return the result. Admin only.
+        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -2035,6 +1786,7 @@ class ExamplePromptApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "ExamplePromptCategorizationResponse",
+            "204": None,
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
@@ -2071,7 +1823,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """Run an automated categorization
 
-        Run an automated categorization against an example prompt and return the result. Admin only.
+        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -2107,6 +1859,7 @@ class ExamplePromptApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "ExamplePromptCategorizationResponse",
+            "204": None,
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
@@ -2173,12 +1926,12 @@ class ExamplePromptApi:
         )
 
     @validate_call
-    def update_example_prompt(
+    def set_effective_example_prompt_categorization(
         self,
         example_prompt_id: Annotated[
             UUID, Field(description="The unique identifier of an example prompt")
         ],
-        example_prompt_create_request: ExamplePromptCreateRequest,
+        set_effective_categorization_request: SetEffectiveCategorizationRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2191,14 +1944,14 @@ class ExamplePromptApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ExamplePrompt:
-        """Update an example prompt
+        """Set effective example prompt categorization
 
-        Update an example prompt (admin only). AI auto-categorization runs asynchronously if the question changed and no categories are provided.
+        Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
-        :param example_prompt_create_request: (required)
-        :type example_prompt_create_request: ExamplePromptCreateRequest
+        :param set_effective_categorization_request: (required)
+        :type set_effective_categorization_request: SetEffectiveCategorizationRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2221,9 +1974,9 @@ class ExamplePromptApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._update_example_prompt_serialize(
+        _param = self._set_effective_example_prompt_categorization_serialize(
             example_prompt_id=example_prompt_id,
-            example_prompt_create_request=example_prompt_create_request,
+            set_effective_categorization_request=set_effective_categorization_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2248,12 +2001,12 @@ class ExamplePromptApi:
         ).data
 
     @validate_call
-    def update_example_prompt_with_http_info(
+    def set_effective_example_prompt_categorization_with_http_info(
         self,
         example_prompt_id: Annotated[
             UUID, Field(description="The unique identifier of an example prompt")
         ],
-        example_prompt_create_request: ExamplePromptCreateRequest,
+        set_effective_categorization_request: SetEffectiveCategorizationRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2266,14 +2019,14 @@ class ExamplePromptApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[ExamplePrompt]:
-        """Update an example prompt
+        """Set effective example prompt categorization
 
-        Update an example prompt (admin only). AI auto-categorization runs asynchronously if the question changed and no categories are provided.
+        Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
-        :param example_prompt_create_request: (required)
-        :type example_prompt_create_request: ExamplePromptCreateRequest
+        :param set_effective_categorization_request: (required)
+        :type set_effective_categorization_request: SetEffectiveCategorizationRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2296,9 +2049,9 @@ class ExamplePromptApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._update_example_prompt_serialize(
+        _param = self._set_effective_example_prompt_categorization_serialize(
             example_prompt_id=example_prompt_id,
-            example_prompt_create_request=example_prompt_create_request,
+            set_effective_categorization_request=set_effective_categorization_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2323,12 +2076,12 @@ class ExamplePromptApi:
         )
 
     @validate_call
-    def update_example_prompt_without_preload_content(
+    def set_effective_example_prompt_categorization_without_preload_content(
         self,
         example_prompt_id: Annotated[
             UUID, Field(description="The unique identifier of an example prompt")
         ],
-        example_prompt_create_request: ExamplePromptCreateRequest,
+        set_effective_categorization_request: SetEffectiveCategorizationRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2341,14 +2094,14 @@ class ExamplePromptApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Update an example prompt
+        """Set effective example prompt categorization
 
-        Update an example prompt (admin only). AI auto-categorization runs asynchronously if the question changed and no categories are provided.
+        Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
-        :param example_prompt_create_request: (required)
-        :type example_prompt_create_request: ExamplePromptCreateRequest
+        :param set_effective_categorization_request: (required)
+        :type set_effective_categorization_request: SetEffectiveCategorizationRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2371,9 +2124,9 @@ class ExamplePromptApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._update_example_prompt_serialize(
+        _param = self._set_effective_example_prompt_categorization_serialize(
             example_prompt_id=example_prompt_id,
-            example_prompt_create_request=example_prompt_create_request,
+            set_effective_categorization_request=set_effective_categorization_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2393,10 +2146,10 @@ class ExamplePromptApi:
         )
         return response_data.response
 
-    def _update_example_prompt_serialize(
+    def _set_effective_example_prompt_categorization_serialize(
         self,
         example_prompt_id,
-        example_prompt_create_request,
+        set_effective_categorization_request,
         _request_auth,
         _content_type,
         _headers,
@@ -2422,8 +2175,8 @@ class ExamplePromptApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if example_prompt_create_request is not None:
-            _body_params = example_prompt_create_request
+        if set_effective_categorization_request is not None:
+            _body_params = set_effective_categorization_request
 
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
@@ -2445,7 +2198,297 @@ class ExamplePromptApi:
         _auth_settings: List[str] = ["jwtBearer"]
 
         return self.api_client.param_serialize(
-            method="PUT",
+            method="PATCH",
+            resource_path="/example-prompts/{examplePromptId}/categorizations/effective",
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth,
+        )
+
+    @validate_call
+    def update_example_prompt(
+        self,
+        example_prompt_id: Annotated[
+            UUID, Field(description="The unique identifier of an example prompt")
+        ],
+        example_prompt_update_request: ExamplePromptUpdateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ExamplePrompt:
+        """Update an example prompt
+
+        Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+
+        :param example_prompt_id: The unique identifier of an example prompt (required)
+        :type example_prompt_id: str
+        :param example_prompt_update_request: (required)
+        :type example_prompt_update_request: ExamplePromptUpdateRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._update_example_prompt_serialize(
+            example_prompt_id=example_prompt_id,
+            example_prompt_update_request=example_prompt_update_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "ExamplePrompt",
+            "400": "BasicError",
+            "401": "BasicError",
+            "403": "BasicError",
+            "404": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+    @validate_call
+    def update_example_prompt_with_http_info(
+        self,
+        example_prompt_id: Annotated[
+            UUID, Field(description="The unique identifier of an example prompt")
+        ],
+        example_prompt_update_request: ExamplePromptUpdateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[ExamplePrompt]:
+        """Update an example prompt
+
+        Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+
+        :param example_prompt_id: The unique identifier of an example prompt (required)
+        :type example_prompt_id: str
+        :param example_prompt_update_request: (required)
+        :type example_prompt_update_request: ExamplePromptUpdateRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._update_example_prompt_serialize(
+            example_prompt_id=example_prompt_id,
+            example_prompt_update_request=example_prompt_update_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "ExamplePrompt",
+            "400": "BasicError",
+            "401": "BasicError",
+            "403": "BasicError",
+            "404": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+    @validate_call
+    def update_example_prompt_without_preload_content(
+        self,
+        example_prompt_id: Annotated[
+            UUID, Field(description="The unique identifier of an example prompt")
+        ],
+        example_prompt_update_request: ExamplePromptUpdateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Update an example prompt
+
+        Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+
+        :param example_prompt_id: The unique identifier of an example prompt (required)
+        :type example_prompt_id: str
+        :param example_prompt_update_request: (required)
+        :type example_prompt_update_request: ExamplePromptUpdateRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._update_example_prompt_serialize(
+            example_prompt_id=example_prompt_id,
+            example_prompt_update_request=example_prompt_update_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "ExamplePrompt",
+            "400": "BasicError",
+            "401": "BasicError",
+            "403": "BasicError",
+            "404": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+    def _update_example_prompt_serialize(
+        self,
+        example_prompt_id,
+        example_prompt_update_request,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+        _host = None
+
+        _collection_formats: Dict[str, str] = {}
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if example_prompt_id is not None:
+            _path_params["examplePromptId"] = example_prompt_id
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if example_prompt_update_request is not None:
+            _body_params = example_prompt_update_request
+
+        # set the HTTP header `Accept`
+        if "Accept" not in _header_params:
+            _header_params["Accept"] = self.api_client.select_header_accept(
+                ["application/json", "application/problem+json"]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params["Content-Type"] = _content_type
+        else:
+            _default_content_type = self.api_client.select_header_content_type(
+                ["application/json"]
+            )
+            if _default_content_type is not None:
+                _header_params["Content-Type"] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = ["jwtBearer"]
+
+        return self.api_client.param_serialize(
+            method="PATCH",
             resource_path="/example-prompts/{examplePromptId}",
             path_params=_path_params,
             query_params=_query_params,

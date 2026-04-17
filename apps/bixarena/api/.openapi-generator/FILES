@@ -55,6 +55,7 @@ src/main/java/org/sagebionetworks/bixarena/api/model/dto/ExamplePromptPageDto.ja
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ExamplePromptSearchQueryDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ExamplePromptSortDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ExamplePromptSourceDto.java
+src/main/java/org/sagebionetworks/bixarena/api/model/dto/ExamplePromptUpdateRequestDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/HistoricalLeaderboardEntryDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/LeaderboardEntryDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/LeaderboardEntryPageDto.java
@@ -89,6 +90,7 @@ src/main/java/org/sagebionetworks/bixarena/api/model/dto/QuestPostCreateOrUpdate
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/QuestPostDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/QuestPostReorderDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/RateLimitErrorDto.java
+src/main/java/org/sagebionetworks/bixarena/api/model/dto/SetEffectiveCategorizationRequestDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/SetEffectiveValidationRequestDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/SortDirectionDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/UserStatsDto.java

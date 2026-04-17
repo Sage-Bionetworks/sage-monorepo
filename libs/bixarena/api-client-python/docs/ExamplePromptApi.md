@@ -2,17 +2,17 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                                                                                             | HTTP request                                                         | Description                                 |
-| ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- | ------------------------------------------- |
-| [**create_example_prompt**](ExamplePromptApi.md#create_example_prompt)                                             | **POST** /example-prompts                                            | Create an example prompt                    |
-| [**create_example_prompt_categorization**](ExamplePromptApi.md#create_example_prompt_categorization)               | **POST** /example-prompts/{examplePromptId}/categorizations          | Create an example prompt categorization     |
-| [**delete_example_prompt**](ExamplePromptApi.md#delete_example_prompt)                                             | **DELETE** /example-prompts/{examplePromptId}                        | Delete an example prompt                    |
-| [**get_example_prompt**](ExamplePromptApi.md#get_example_prompt)                                                   | **GET** /example-prompts/{examplePromptId}                           | Get an example prompt                       |
-| [**get_example_prompt_effective_categorization**](ExamplePromptApi.md#get_example_prompt_effective_categorization) | **GET** /example-prompts/{examplePromptId}/categorizations/effective | Get effective example prompt categorization |
-| [**list_example_prompt_categorizations**](ExamplePromptApi.md#list_example_prompt_categorizations)                 | **GET** /example-prompts/{examplePromptId}/categorizations           | List example prompt categorizations         |
-| [**list_example_prompts**](ExamplePromptApi.md#list_example_prompts)                                               | **GET** /example-prompts                                             | List example prompts                        |
-| [**run_example_prompt_categorization**](ExamplePromptApi.md#run_example_prompt_categorization)                     | **POST** /example-prompts/{examplePromptId}/categorizations/run      | Run an automated categorization             |
-| [**update_example_prompt**](ExamplePromptApi.md#update_example_prompt)                                             | **PUT** /example-prompts/{examplePromptId}                           | Update an example prompt                    |
+| Method                                                                                                             | HTTP request                                                           | Description                                 |
+| ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------- |
+| [**create_example_prompt**](ExamplePromptApi.md#create_example_prompt)                                             | **POST** /example-prompts                                              | Create an example prompt                    |
+| [**create_example_prompt_categorization**](ExamplePromptApi.md#create_example_prompt_categorization)               | **POST** /example-prompts/{examplePromptId}/categorizations            | Create an example prompt categorization     |
+| [**delete_example_prompt**](ExamplePromptApi.md#delete_example_prompt)                                             | **DELETE** /example-prompts/{examplePromptId}                          | Delete an example prompt                    |
+| [**get_example_prompt**](ExamplePromptApi.md#get_example_prompt)                                                   | **GET** /example-prompts/{examplePromptId}                             | Get an example prompt                       |
+| [**list_example_prompt_categorizations**](ExamplePromptApi.md#list_example_prompt_categorizations)                 | **GET** /example-prompts/{examplePromptId}/categorizations             | List example prompt categorizations         |
+| [**list_example_prompts**](ExamplePromptApi.md#list_example_prompts)                                               | **GET** /example-prompts                                               | List example prompts                        |
+| [**run_example_prompt_categorization**](ExamplePromptApi.md#run_example_prompt_categorization)                     | **POST** /example-prompts/{examplePromptId}/categorizations/run        | Run an automated categorization             |
+| [**set_effective_example_prompt_categorization**](ExamplePromptApi.md#set_effective_example_prompt_categorization) | **PATCH** /example-prompts/{examplePromptId}/categorizations/effective | Set effective example prompt categorization |
+| [**update_example_prompt**](ExamplePromptApi.md#update_example_prompt)                                             | **PATCH** /example-prompts/{examplePromptId}                           | Update an example prompt                    |
 
 # **create_example_prompt**
 
@@ -20,7 +20,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 
 Create an example prompt
 
-Create a new example prompt (admin only). AI auto-categorization runs asynchronously unless categories are provided.
+Create a new example prompt (admin only). The new prompt is created as inactive regardless of the active field in the request body; a reviewer publishes it via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
 
 ### Example
 
@@ -337,85 +337,6 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **get_example_prompt_effective_categorization**
-
-> ExamplePromptCategorizationResponse get_example_prompt_effective_categorization(example_prompt_id)
-
-Get effective example prompt categorization
-
-Get the current effective categorization for an example prompt.
-
-### Example
-
-- Bearer (JWT) Authentication (jwtBearer):
-
-```python
-import bixarena_api_client
-from bixarena_api_client.models.example_prompt_categorization_response import ExamplePromptCategorizationResponse
-from bixarena_api_client.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
-# See configuration.py for a list of all supported configuration parameters.
-configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-# Configure Bearer authorization (JWT): jwtBearer
-configuration = bixarena_api_client.Configuration(
-    access_token = os.environ["BEARER_TOKEN"]
-)
-
-# Enter a context with an instance of the API client
-with bixarena_api_client.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = bixarena_api_client.ExamplePromptApi(api_client)
-    example_prompt_id = '123e4567-e89b-12d3-a456-426614174000' # str | The unique identifier of an example prompt
-
-    try:
-        # Get effective example prompt categorization
-        api_response = api_instance.get_example_prompt_effective_categorization(example_prompt_id)
-        print("The response of ExamplePromptApi->get_example_prompt_effective_categorization:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling ExamplePromptApi->get_example_prompt_effective_categorization: %s\n" % e)
-```
-
-### Parameters
-
-| Name                  | Type    | Description                                | Notes |
-| --------------------- | ------- | ------------------------------------------ | ----- |
-| **example_prompt_id** | **str** | The unique identifier of an example prompt |
-
-### Return type
-
-[**ExamplePromptCategorizationResponse**](ExamplePromptCategorizationResponse.md)
-
-### Authorization
-
-[jwtBearer](../README.md#jwtBearer)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
-
-### HTTP response details
-
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **200**     | Success                                                                                           | -                                                                                                                                                                                                                                                                     |
-| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **list_example_prompt_categorizations**
 
 > List[ExamplePromptCategorizationResponse] list_example_prompt_categorizations(example_prompt_id)
@@ -582,7 +503,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Run an automated categorization
 
-Run an automated categorization against an example prompt and return the result. Admin only.
+Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
 
 ### Example
 
@@ -646,25 +567,26 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **201**     | Categorization completed and persisted successfully               | -                |
-| **400**     | Invalid request                                                   | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **403**     | The user does not have the permission to perform this action      | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **409**     | The request conflicts with current state of the target resource   | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description                                                        | Response headers |
+| ----------- | ------------------------------------------------------------------ | ---------------- |
+| **201**     | Categorization completed and persisted successfully                | -                |
+| **204**     | Categorization run completed but the AI did not match any category | -                |
+| **400**     | Invalid request                                                    | -                |
+| **401**     | Unauthorized                                                       | -                |
+| **403**     | The user does not have the permission to perform this action       | -                |
+| **404**     | The specified resource was not found                               | -                |
+| **409**     | The request conflicts with current state of the target resource    | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error  | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **update_example_prompt**
+# **set_effective_example_prompt_categorization**
 
-> ExamplePrompt update_example_prompt(example_prompt_id, example_prompt_create_request)
+> ExamplePrompt set_effective_example_prompt_categorization(example_prompt_id, set_effective_categorization_request)
 
-Update an example prompt
+Set effective example prompt categorization
 
-Update an example prompt (admin only). AI auto-categorization runs asynchronously if the question changed and no categories are provided.
+Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
 
 ### Example
 
@@ -673,7 +595,7 @@ Update an example prompt (admin only). AI auto-categorization runs asynchronousl
 ```python
 import bixarena_api_client
 from bixarena_api_client.models.example_prompt import ExamplePrompt
-from bixarena_api_client.models.example_prompt_create_request import ExamplePromptCreateRequest
+from bixarena_api_client.models.set_effective_categorization_request import SetEffectiveCategorizationRequest
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
@@ -698,23 +620,23 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.ExamplePromptApi(api_client)
     example_prompt_id = '123e4567-e89b-12d3-a456-426614174000' # str | The unique identifier of an example prompt
-    example_prompt_create_request = bixarena_api_client.ExamplePromptCreateRequest() # ExamplePromptCreateRequest |
+    set_effective_categorization_request = bixarena_api_client.SetEffectiveCategorizationRequest() # SetEffectiveCategorizationRequest |
 
     try:
-        # Update an example prompt
-        api_response = api_instance.update_example_prompt(example_prompt_id, example_prompt_create_request)
-        print("The response of ExamplePromptApi->update_example_prompt:\n")
+        # Set effective example prompt categorization
+        api_response = api_instance.set_effective_example_prompt_categorization(example_prompt_id, set_effective_categorization_request)
+        print("The response of ExamplePromptApi->set_effective_example_prompt_categorization:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling ExamplePromptApi->update_example_prompt: %s\n" % e)
+        print("Exception when calling ExamplePromptApi->set_effective_example_prompt_categorization: %s\n" % e)
 ```
 
 ### Parameters
 
-| Name                              | Type                                                            | Description                                | Notes |
-| --------------------------------- | --------------------------------------------------------------- | ------------------------------------------ | ----- |
-| **example_prompt_id**             | **str**                                                         | The unique identifier of an example prompt |
-| **example_prompt_create_request** | [**ExamplePromptCreateRequest**](ExamplePromptCreateRequest.md) |                                            |
+| Name                                     | Type                                                                          | Description                                | Notes |
+| ---------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------ | ----- |
+| **example_prompt_id**                    | **str**                                                                       | The unique identifier of an example prompt |
+| **set_effective_categorization_request** | [**SetEffectiveCategorizationRequest**](SetEffectiveCategorizationRequest.md) |                                            |
 
 ### Return type
 
@@ -733,11 +655,96 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 | Status code | Description                                                       | Response headers |
 | ----------- | ----------------------------------------------------------------- | ---------------- |
-| **200**     | Example prompt updated successfully                               | -                |
+| **200**     | Effective categorization updated successfully                     | -                |
 | **400**     | Invalid request                                                   | -                |
 | **401**     | Unauthorized                                                      | -                |
 | **403**     | The user does not have the permission to perform this action      | -                |
 | **404**     | The specified resource was not found                              | -                |
 | **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_example_prompt**
+
+> ExamplePrompt update_example_prompt(example_prompt_id, example_prompt_update_request)
+
+Update an example prompt
+
+Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+
+### Example
+
+- Bearer (JWT) Authentication (jwtBearer):
+
+```python
+import bixarena_api_client
+from bixarena_api_client.models.example_prompt import ExamplePrompt
+from bixarena_api_client.models.example_prompt_update_request import ExamplePromptUpdateRequest
+from bixarena_api_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client.Configuration(
+    host = "https://bixarena.ai/api/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwtBearer
+configuration = bixarena_api_client.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with bixarena_api_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client.ExamplePromptApi(api_client)
+    example_prompt_id = '123e4567-e89b-12d3-a456-426614174000' # str | The unique identifier of an example prompt
+    example_prompt_update_request = bixarena_api_client.ExamplePromptUpdateRequest() # ExamplePromptUpdateRequest |
+
+    try:
+        # Update an example prompt
+        api_response = api_instance.update_example_prompt(example_prompt_id, example_prompt_update_request)
+        print("The response of ExamplePromptApi->update_example_prompt:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ExamplePromptApi->update_example_prompt: %s\n" % e)
+```
+
+### Parameters
+
+| Name                              | Type                                                            | Description                                | Notes |
+| --------------------------------- | --------------------------------------------------------------- | ------------------------------------------ | ----- |
+| **example_prompt_id**             | **str**                                                         | The unique identifier of an example prompt |
+| **example_prompt_update_request** | [**ExamplePromptUpdateRequest**](ExamplePromptUpdateRequest.md) |                                            |
+
+### Return type
+
+[**ExamplePrompt**](ExamplePrompt.md)
+
+### Authorization
+
+[jwtBearer](../README.md#jwtBearer)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **200**     | Example prompt updated successfully                                                               | -                                                                                                                                                                                                                                                                     |
+| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
+| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
+| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
+| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
+| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
+| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

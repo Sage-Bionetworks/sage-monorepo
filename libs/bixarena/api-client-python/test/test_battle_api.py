@@ -81,13 +81,6 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
-    def test_get_battle_effective_categorization(self) -> None:
-        """Test case for get_battle_effective_categorization
-
-        Get effective battle categorization
-        """
-        pass
-
     def test_list_battle_categorizations(self) -> None:
         """Test case for list_battle_categorizations
 
@@ -120,6 +113,13 @@ class TestBattleApi(unittest.TestCase):
         """Test case for run_battle_validation
 
         Run an automated validation method
+        """
+        pass
+
+    def test_set_effective_battle_categorization(self) -> None:
+        """Test case for set_effective_battle_categorization
+
+        Set effective battle categorization
         """
         pass
 

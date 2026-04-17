@@ -45,6 +45,7 @@ bixarena_api_client/models/example_prompt_page.py
 bixarena_api_client/models/example_prompt_search_query.py
 bixarena_api_client/models/example_prompt_sort.py
 bixarena_api_client/models/example_prompt_source.py
+bixarena_api_client/models/example_prompt_update_request.py
 bixarena_api_client/models/get_jwks200_response.py
 bixarena_api_client/models/historical_leaderboard_entry.py
 bixarena_api_client/models/leaderboard_entry.py
@@ -81,6 +82,7 @@ bixarena_api_client/models/quest_post.py
 bixarena_api_client/models/quest_post_create_or_update.py
 bixarena_api_client/models/quest_post_reorder.py
 bixarena_api_client/models/rate_limit_error.py
+bixarena_api_client/models/set_effective_categorization_request.py
 bixarena_api_client/models/set_effective_validation_request.py
 bixarena_api_client/models/sort_direction.py
 bixarena_api_client/models/token200_response.py
@@ -123,6 +125,7 @@ docs/ExamplePromptPage.md
 docs/ExamplePromptSearchQuery.md
 docs/ExamplePromptSort.md
 docs/ExamplePromptSource.md
+docs/ExamplePromptUpdateRequest.md
 docs/GetJwks200Response.md
 docs/HistoricalLeaderboardEntry.md
 docs/LeaderboardApi.md
@@ -162,6 +165,7 @@ docs/QuestPost.md
 docs/QuestPostCreateOrUpdate.md
 docs/QuestPostReorder.md
 docs/RateLimitError.md
+docs/SetEffectiveCategorizationRequest.md
 docs/SetEffectiveValidationRequest.md
 docs/SortDirection.md
 docs/StatsApi.md
@@ -205,6 +209,7 @@ test/test_example_prompt_page.py
 test/test_example_prompt_search_query.py
 test/test_example_prompt_sort.py
 test/test_example_prompt_source.py
+test/test_example_prompt_update_request.py
 test/test_get_jwks200_response.py
 test/test_historical_leaderboard_entry.py
 test/test_leaderboard_api.py
@@ -244,6 +249,7 @@ test/test_quest_post.py
 test/test_quest_post_create_or_update.py
 test/test_quest_post_reorder.py
 test/test_rate_limit_error.py
+test/test_set_effective_categorization_request.py
 test/test_set_effective_validation_request.py
 test/test_sort_direction.py
 test/test_stats_api.py

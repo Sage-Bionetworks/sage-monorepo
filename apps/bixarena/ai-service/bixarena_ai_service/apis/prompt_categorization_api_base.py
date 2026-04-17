@@ -22,5 +22,5 @@ class BasePromptCategorizationApi:
         self,
         prompt_categorization_request: PromptCategorizationRequest,
     ) -> PromptCategorization:
-        """Classifies a single prompt into one or more biomedical subject categories using an LLM. Requires authentication."""
+        """Classifies a single prompt into up to 3 biomedical subject categories using an LLM. The categories array may be empty when the classifier did not assign any category. Requires authentication."""
         ...

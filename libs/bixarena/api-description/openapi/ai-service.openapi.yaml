@@ -116,7 +116,7 @@ paths:
       tags:
         - Prompt Categorization
       summary: Categorize a prompt
-      description: Classifies a single prompt into one or more biomedical subject categories using an LLM. Requires authentication.
+      description: Classifies a single prompt into up to 3 biomedical subject categories using an LLM. The categories array may be empty when the classifier did not assign any category. Requires authentication.
       operationId: categorizePrompt
       requestBody:
         content:
@@ -144,7 +144,7 @@ paths:
       tags:
         - Battle Categorization
       summary: Categorize a battle
-      description: Classifies the prompts of a battle conversation into one or more biomedical subject categories using an LLM. Requires authentication.
+      description: Classifies the prompts of a battle conversation into up to 3 biomedical subject categories using an LLM. The categories array may be empty when the classifier did not assign any category. Requires authentication.
       operationId: categorizeBattle
       requestBody:
         content:
@@ -323,9 +323,9 @@ components:
           items:
             type: string
             maxLength: 100
-          minItems: 1
+          minItems: 0
           maxItems: 3
-          description: One to three biomedical subject category slugs
+          description: Up to three biomedical subject category slugs assigned by the classifier. May be empty when the classifier did not assign any category.
         method:
           type: string
           maxLength: 100
@@ -357,9 +357,9 @@ components:
           items:
             type: string
             maxLength: 100
-          minItems: 1
+          minItems: 0
           maxItems: 3
-          description: One to three biomedical subject category slugs
+          description: Up to three biomedical subject category slugs assigned by the classifier. May be empty when the classifier did not assign any category.
         method:
           type: string
           maxLength: 100

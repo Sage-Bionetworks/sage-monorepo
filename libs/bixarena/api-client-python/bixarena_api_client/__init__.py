@@ -65,6 +65,7 @@ __all__ = [
     "ExamplePromptSearchQuery",
     "ExamplePromptSort",
     "ExamplePromptSource",
+    "ExamplePromptUpdateRequest",
     "GetJwks200Response",
     "HistoricalLeaderboardEntry",
     "LeaderboardEntry",
@@ -101,6 +102,7 @@ __all__ = [
     "QuestPostCreateOrUpdate",
     "QuestPostReorder",
     "RateLimitError",
+    "SetEffectiveCategorizationRequest",
     "SetEffectiveValidationRequest",
     "SortDirection",
     "Token200Response",
@@ -210,6 +212,9 @@ from bixarena_api_client.models.example_prompt_sort import (
 from bixarena_api_client.models.example_prompt_source import (
     ExamplePromptSource as ExamplePromptSource,
 )
+from bixarena_api_client.models.example_prompt_update_request import (
+    ExamplePromptUpdateRequest as ExamplePromptUpdateRequest,
+)
 from bixarena_api_client.models.get_jwks200_response import (
     GetJwks200Response as GetJwks200Response,
 )
@@ -292,6 +297,9 @@ from bixarena_api_client.models.quest_post_reorder import (
     QuestPostReorder as QuestPostReorder,
 )
 from bixarena_api_client.models.rate_limit_error import RateLimitError as RateLimitError
+from bixarena_api_client.models.set_effective_categorization_request import (
+    SetEffectiveCategorizationRequest as SetEffectiveCategorizationRequest,
+)
 from bixarena_api_client.models.set_effective_validation_request import (
     SetEffectiveValidationRequest as SetEffectiveValidationRequest,
 )

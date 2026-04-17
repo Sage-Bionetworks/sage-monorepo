@@ -59,7 +59,7 @@ async def categorize_prompt(
         None, description=""
     ),
 ) -> PromptCategorization:
-    """Classifies a single prompt into one or more biomedical subject categories using an LLM. Requires authentication."""
+    """Classifies a single prompt into up to 3 biomedical subject categories using an LLM. The categories array may be empty when the classifier did not assign any category. Requires authentication."""
     if not BasePromptCategorizationApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
     return await BasePromptCategorizationApi.subclasses[0]().categorize_prompt(

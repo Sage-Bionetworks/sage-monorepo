@@ -12,7 +12,9 @@ import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveCategorizationRequestDto;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,7 +51,7 @@ public interface ExamplePromptApi {
 
     /**
      * POST /example-prompts : Create an example prompt
-     * Create a new example prompt (admin only). AI auto-categorization runs asynchronously unless categories are provided.
+     * Create a new example prompt (admin only). The new prompt is created as inactive regardless of the active field in the request body; a reviewer publishes it via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
      *
      * @param examplePromptCreateRequestDto  (required)
      * @return Example prompt created successfully (status code 201)
@@ -62,7 +64,7 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "createExamplePrompt",
         summary = "Create an example prompt",
-        description = "Create a new example prompt (admin only). AI auto-categorization runs asynchronously unless categories are provided.",
+        description = "Create a new example prompt (admin only). The new prompt is created as inactive regardless of the active field in the request body; a reviewer publishes it via PATCH. AI auto-categorization runs asynchronously unless categories are provided.",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Example prompt created successfully", content = {
@@ -275,56 +277,6 @@ public interface ExamplePromptApi {
 
 
     /**
-     * GET /example-prompts/{examplePromptId}/categorizations/effective : Get effective example prompt categorization
-     * Get the current effective categorization for an example prompt.
-     *
-     * @param examplePromptId The unique identifier of an example prompt (required)
-     * @return Success (status code 200)
-     *         or The specified resource was not found (status code 404)
-     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "getExamplePromptEffectiveCategorization",
-        summary = "Get effective example prompt categorization",
-        description = "Get the current effective categorization for an example prompt.",
-        tags = { "Example Prompt" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        },
-        security = {
-            @SecurityRequirement(name = "jwtBearer")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/example-prompts/{examplePromptId}/categorizations/effective",
-        produces = { "application/json", "application/problem+json" }
-    )
-    
-    default ResponseEntity<ExamplePromptCategorizationResponseDto> getExamplePromptEffectiveCategorization(
-        @Parameter(name = "examplePromptId", description = "The unique identifier of an example prompt", required = true, in = ParameterIn.PATH) @PathVariable("examplePromptId") UUID examplePromptId
-    ) {
-        return getDelegate().getExamplePromptEffectiveCategorization(examplePromptId);
-    }
-
-
-    /**
      * GET /example-prompts/{examplePromptId}/categorizations : List example prompt categorizations
      * Get all categorizations for an example prompt (admin only).
      *
@@ -431,10 +383,11 @@ public interface ExamplePromptApi {
 
     /**
      * POST /example-prompts/{examplePromptId}/categorizations/run : Run an automated categorization
-     * Run an automated categorization against an example prompt and return the result. Admin only.
+     * Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @return Categorization completed and persisted successfully (status code 201)
+     *         or Categorization run completed but the AI did not match any category (status code 204)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
@@ -445,13 +398,14 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "runExamplePromptCategorization",
         summary = "Run an automated categorization",
-        description = "Run an automated categorization against an example prompt and return the result. Admin only.",
+        description = "Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Categorization completed and persisted successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class))
             }),
+            @ApiResponse(responseCode = "204", description = "Categorization run completed but the AI did not match any category"),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
@@ -495,12 +449,12 @@ public interface ExamplePromptApi {
 
 
     /**
-     * PUT /example-prompts/{examplePromptId} : Update an example prompt
-     * Update an example prompt (admin only). AI auto-categorization runs asynchronously if the question changed and no categories are provided.
+     * PATCH /example-prompts/{examplePromptId}/categorizations/effective : Set effective example prompt categorization
+     * Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
-     * @param examplePromptCreateRequestDto  (required)
-     * @return Example prompt updated successfully (status code 200)
+     * @param setEffectiveCategorizationRequestDto  (required)
+     * @return Effective categorization updated successfully (status code 200)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
@@ -508,12 +462,12 @@ public interface ExamplePromptApi {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "updateExamplePrompt",
-        summary = "Update an example prompt",
-        description = "Update an example prompt (admin only). AI auto-categorization runs asynchronously if the question changed and no categories are provided.",
+        operationId = "setEffectiveExamplePromptCategorization",
+        summary = "Set effective example prompt categorization",
+        description = "Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.",
         tags = { "Example Prompt" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Example prompt updated successfully", content = {
+            @ApiResponse(responseCode = "200", description = "Effective categorization updated successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptDto.class))
             }),
@@ -543,7 +497,75 @@ public interface ExamplePromptApi {
         }
     )
     @RequestMapping(
-        method = RequestMethod.PUT,
+        method = RequestMethod.PATCH,
+        value = "/example-prompts/{examplePromptId}/categorizations/effective",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<ExamplePromptDto> setEffectiveExamplePromptCategorization(
+        @Parameter(name = "examplePromptId", description = "The unique identifier of an example prompt", required = true, in = ParameterIn.PATH) @PathVariable("examplePromptId") UUID examplePromptId,
+        @Parameter(name = "SetEffectiveCategorizationRequestDto", description = "", required = true) @Valid @RequestBody SetEffectiveCategorizationRequestDto setEffectiveCategorizationRequestDto
+    ) {
+        return getDelegate().setEffectiveExamplePromptCategorization(examplePromptId, setEffectiveCategorizationRequestDto);
+    }
+
+
+    /**
+     * PATCH /example-prompts/{examplePromptId} : Update an example prompt
+     * Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+     *
+     * @param examplePromptId The unique identifier of an example prompt (required)
+     * @param examplePromptUpdateRequestDto  (required)
+     * @return Example prompt updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "updateExamplePrompt",
+        summary = "Update an example prompt",
+        description = "Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.",
+        tags = { "Example Prompt" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Example prompt updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PATCH,
         value = "/example-prompts/{examplePromptId}",
         produces = { "application/json", "application/problem+json" },
         consumes = { "application/json" }
@@ -551,9 +573,9 @@ public interface ExamplePromptApi {
     
     default ResponseEntity<ExamplePromptDto> updateExamplePrompt(
         @Parameter(name = "examplePromptId", description = "The unique identifier of an example prompt", required = true, in = ParameterIn.PATH) @PathVariable("examplePromptId") UUID examplePromptId,
-        @Parameter(name = "ExamplePromptCreateRequestDto", description = "", required = true) @Valid @RequestBody ExamplePromptCreateRequestDto examplePromptCreateRequestDto
+        @Parameter(name = "ExamplePromptUpdateRequestDto", description = "", required = true) @Valid @RequestBody ExamplePromptUpdateRequestDto examplePromptUpdateRequestDto
     ) {
-        return getDelegate().updateExamplePrompt(examplePromptId, examplePromptCreateRequestDto);
+        return getDelegate().updateExamplePrompt(examplePromptId, examplePromptUpdateRequestDto);
     }
 
 }

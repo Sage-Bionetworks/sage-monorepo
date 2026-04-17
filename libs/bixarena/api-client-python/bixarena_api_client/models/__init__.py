@@ -64,6 +64,9 @@ from bixarena_api_client.models.example_prompt_search_query import (
 )
 from bixarena_api_client.models.example_prompt_sort import ExamplePromptSort
 from bixarena_api_client.models.example_prompt_source import ExamplePromptSource
+from bixarena_api_client.models.example_prompt_update_request import (
+    ExamplePromptUpdateRequest,
+)
 from bixarena_api_client.models.get_jwks200_response import GetJwks200Response
 from bixarena_api_client.models.historical_leaderboard_entry import (
     HistoricalLeaderboardEntry,
@@ -114,6 +117,9 @@ from bixarena_api_client.models.quest_post_create_or_update import (
 )
 from bixarena_api_client.models.quest_post_reorder import QuestPostReorder
 from bixarena_api_client.models.rate_limit_error import RateLimitError
+from bixarena_api_client.models.set_effective_categorization_request import (
+    SetEffectiveCategorizationRequest,
+)
 from bixarena_api_client.models.set_effective_validation_request import (
     SetEffectiveValidationRequest,
 )

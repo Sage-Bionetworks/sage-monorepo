@@ -42,10 +42,6 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 60
     - method: 'GET'
-      path: '/api/v1/battles/{battleId}/categorizations/effective'
-      audience: 'urn:bixarena:api'
-      rateLimitRequestsPerMinute: 100
-    - method: 'GET'
       path: '/api/v1/battles/{battleId}/validations'
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 60
@@ -63,11 +59,6 @@ app:
       path: '/api/v1/example-prompts/{examplePromptId}/categorizations'
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 60
-    - method: 'GET'
-      path: '/api/v1/example-prompts/{examplePromptId}/categorizations/effective'
-      audience: 'urn:bixarena:api'
-      anonymousAccess: true
-      rateLimitRequestsPerMinute: 100
     - method: 'GET'
       path: '/api/v1/health-check'
       audience: 'urn:bixarena:ai'
@@ -135,11 +126,23 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 30
     - method: 'PATCH'
+      path: '/api/v1/battles/{battleId}/categorizations/effective'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'PATCH'
       path: '/api/v1/battles/{battleId}/rounds/{roundId}'
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 30
     - method: 'PATCH'
       path: '/api/v1/battles/{battleId}/validations/effective'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'PATCH'
+      path: '/api/v1/example-prompts/{examplePromptId}'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'PATCH'
+      path: '/api/v1/example-prompts/{examplePromptId}/categorizations/effective'
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 30
     - method: 'POST'
@@ -230,10 +233,6 @@ app:
       path: '/oauth2/token'
       audience: 'urn:bixarena:auth'
       anonymousAccess: true
-      rateLimitRequestsPerMinute: 60
-    - method: 'PUT'
-      path: '/api/v1/example-prompts/{examplePromptId}'
-      audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 60
     - method: 'PUT'
       path: '/api/v1/quests/{questId}'

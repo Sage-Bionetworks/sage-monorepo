@@ -22,5 +22,5 @@ class BaseBattleCategorizationApi:
         self,
         battle_categorization_request: BattleCategorizationRequest,
     ) -> BattleCategorization:
-        """Classifies the prompts of a battle conversation into one or more biomedical subject categories using an LLM. Requires authentication."""
+        """Classifies the prompts of a battle conversation into up to 3 biomedical subject categories using an LLM. The categories array may be empty when the classifier did not assign any category. Requires authentication."""
         ...

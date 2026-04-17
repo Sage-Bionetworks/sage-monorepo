@@ -53,13 +53,6 @@ class TestExamplePromptApi(unittest.TestCase):
         """
         pass
 
-    def test_get_example_prompt_effective_categorization(self) -> None:
-        """Test case for get_example_prompt_effective_categorization
-
-        Get effective example prompt categorization
-        """
-        pass
-
     def test_list_example_prompt_categorizations(self) -> None:
         """Test case for list_example_prompt_categorizations
 
@@ -78,6 +71,13 @@ class TestExamplePromptApi(unittest.TestCase):
         """Test case for run_example_prompt_categorization
 
         Run an automated categorization
+        """
+        pass
+
+    def test_set_effective_example_prompt_categorization(self) -> None:
+        """Test case for set_effective_example_prompt_categorization
+
+        Set effective example prompt categorization
         """
         pass
 

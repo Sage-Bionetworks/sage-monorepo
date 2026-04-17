@@ -44,6 +44,7 @@ model/example-prompt-page.ts
 model/example-prompt-search-query.ts
 model/example-prompt-sort.ts
 model/example-prompt-source.ts
+model/example-prompt-update-request.ts
 model/example-prompt.ts
 model/get-jwks200-response.ts
 model/historical-leaderboard-entry.ts
@@ -82,6 +83,7 @@ model/quest-post-reorder.ts
 model/quest-post.ts
 model/quest.ts
 model/rate-limit-error.ts
+model/set-effective-categorization-request.ts
 model/set-effective-validation-request.ts
 model/sort-direction.ts
 model/token200-response.ts

@@ -59,6 +59,8 @@ import { ModelChatCompletionChunk } from '../model/model-chat-completion-chunk';
 // @ts-ignore
 import { RateLimitError } from '../model/rate-limit-error';
 // @ts-ignore
+import { SetEffectiveCategorizationRequest } from '../model/set-effective-categorization-request';
+// @ts-ignore
 import { SetEffectiveValidationRequest } from '../model/set-effective-validation-request';
 
 // @ts-ignore
@@ -1125,115 +1127,6 @@ export class BattleService {
   }
 
   /**
-   * Get effective battle categorization
-   * Get the current effective categorization for a battle.
-   * @param battleId The unique identifier of the battle
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getBattleEffectiveCategorization(
-    battleId: string,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<BattleCategorizationResponse>;
-  public getBattleEffectiveCategorization(
-    battleId: string,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<BattleCategorizationResponse>>;
-  public getBattleEffectiveCategorization(
-    battleId: string,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<BattleCategorizationResponse>>;
-  public getBattleEffectiveCategorization(
-    battleId: string,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (battleId === null || battleId === undefined) {
-      throw new Error(
-        'Required parameter battleId was null or undefined when calling getBattleEffectiveCategorization.',
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (jwtBearer) required
-    localVarCredential = this.configuration.lookupCredential('jwtBearer');
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/battles/${this.configuration.encodeParam({ name: 'battleId', value: battleId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid' })}/categorizations/effective`;
-    return this.httpClient.request<BattleCategorizationResponse>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
    * List battle categorizations
    * Get all categorizations for a battle (admin only).
    * @param battleId The unique identifier of the battle
@@ -1566,7 +1459,7 @@ export class BattleService {
 
   /**
    * Run an automated categorization
-   * Run an automated categorization against a battle and return the result. Admin only.
+   * Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical. Admin only.
    * @param battleId The unique identifier of the battle
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
@@ -1772,6 +1665,137 @@ export class BattleService {
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Set effective battle categorization
+   * Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided. Admin only.
+   * @param battleId The unique identifier of the battle
+   * @param setEffectiveCategorizationRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public setEffectiveBattleCategorization(
+    battleId: string,
+    setEffectiveCategorizationRequest: SetEffectiveCategorizationRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<Battle>;
+  public setEffectiveBattleCategorization(
+    battleId: string,
+    setEffectiveCategorizationRequest: SetEffectiveCategorizationRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<Battle>>;
+  public setEffectiveBattleCategorization(
+    battleId: string,
+    setEffectiveCategorizationRequest: SetEffectiveCategorizationRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<Battle>>;
+  public setEffectiveBattleCategorization(
+    battleId: string,
+    setEffectiveCategorizationRequest: SetEffectiveCategorizationRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (battleId === null || battleId === undefined) {
+      throw new Error(
+        'Required parameter battleId was null or undefined when calling setEffectiveBattleCategorization.',
+      );
+    }
+    if (
+      setEffectiveCategorizationRequest === null ||
+      setEffectiveCategorizationRequest === undefined
+    ) {
+      throw new Error(
+        'Required parameter setEffectiveCategorizationRequest was null or undefined when calling setEffectiveBattleCategorization.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/battles/${this.configuration.encodeParam({ name: 'battleId', value: battleId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid' })}/categorizations/effective`;
+    return this.httpClient.request<Battle>(
+      'patch',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: setEffectiveCategorizationRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

@@ -35,8 +35,10 @@ class PromptCategorization(BaseModel):
     prompt: StrictStr = Field(description="The original prompt that was categorized")
     categories: Annotated[
         List[Annotated[str, Field(strict=True, max_length=100)]],
-        Field(min_length=1, max_length=3),
-    ] = Field(description="One to three biomedical subject category slugs")
+        Field(min_length=0, max_length=3),
+    ] = Field(
+        description="Up to three biomedical subject category slugs assigned by the classifier. May be empty when the classifier did not assign any category."
+    )
     method: Annotated[str, Field(strict=True, max_length=100)] = Field(
         description="The categorization method used (e.g. 'openrouter-haiku-v1')"
     )
