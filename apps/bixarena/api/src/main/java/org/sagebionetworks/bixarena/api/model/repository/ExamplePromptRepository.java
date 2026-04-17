@@ -23,10 +23,12 @@ public interface ExamplePromptRepository
   List<ExamplePromptEntity> findRandom(@Param("page_size") int pageSize);
 
   @Query(
-    value = "SELECT DISTINCT ep.* FROM api.example_prompt ep " +
-    "JOIN api.example_prompt_categorization_category epcc " +
-    "  ON ep.effective_categorization_id = epcc.categorization_id " +
-    "WHERE ep.active = TRUE AND epcc.category IN (:slugs) " +
+    value = "SELECT ep.* FROM api.example_prompt ep " +
+    "WHERE ep.active = TRUE AND EXISTS (" +
+    "  SELECT 1 FROM api.example_prompt_categorization_category epcc " +
+    "  WHERE epcc.categorization_id = ep.effective_categorization_id " +
+    "    AND epcc.category IN (:slugs)" +
+    ") " +
     "ORDER BY random() LIMIT :page_size",
     nativeQuery = true
   )
