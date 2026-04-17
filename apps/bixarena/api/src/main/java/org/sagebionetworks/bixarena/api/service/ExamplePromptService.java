@@ -31,6 +31,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @RequiredArgsConstructor
 @Service
@@ -106,7 +108,8 @@ public class ExamplePromptService {
       categorizationService.createManualCategorization(promptId, categorizationRequest, createdBy);
       saved = examplePromptRepository.findById(promptId).orElseThrow();
     } else {
-      categorizationService.categorizePromptAsync(promptId);
+      // Deferred so the async thread sees the committed prompt row.
+      afterCommit(() -> categorizationService.categorizePromptAsync(promptId));
     }
 
     log.info("Created example prompt with ID: {}", promptId);
@@ -144,7 +147,8 @@ public class ExamplePromptService {
       categorizationService.createManualCategorization(promptId, categorizationRequest, updatedBy);
       saved = examplePromptRepository.findById(promptId).orElseThrow();
     } else if (questionChanged) {
-      categorizationService.categorizePromptAsync(promptId);
+      // Deferred so the async thread sees the committed question update.
+      afterCommit(() -> categorizationService.categorizePromptAsync(promptId));
     }
 
     log.info("Updated example prompt with ID: {}", promptId);
@@ -206,6 +210,15 @@ public class ExamplePromptService {
 
   private ExamplePromptDto toDtoWithCategories(ExamplePromptEntity entity) {
     return toDtosWithCategories(List.of(entity)).get(0);
+  }
+
+  private static void afterCommit(Runnable action) {
+    TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+      @Override
+      public void afterCommit() {
+        action.run();
+      }
+    });
   }
 
   private ExamplePromptEntity getPromptOrThrow(UUID promptId) {

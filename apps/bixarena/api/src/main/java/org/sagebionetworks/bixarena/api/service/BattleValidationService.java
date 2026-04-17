@@ -28,6 +28,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
 @RequiredArgsConstructor
@@ -227,9 +229,14 @@ public class BattleValidationService {
         statsCacheService.invalidateStatsForValidation(userId);
       }
       // Fire categorization only when this validation became effective AND it's biomedical.
-      // Skipping non-biomedical battles saves LLM cost.
+      // Deferred to afterCommit so the async thread sees the committed effective validation.
       if (validation.isBiomedical()) {
-        battleCategorizationService.categorizeBattleAsync(battleId);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+          @Override
+          public void afterCommit() {
+            battleCategorizationService.categorizeBattleAsync(battleId);
+          }
+        });
       }
     }
 
