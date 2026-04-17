@@ -12,8 +12,6 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from fastapi import HTTPException, status
-
 from bixarena_ai_service.apis.battle_categorization_api_base import (
     BaseBattleCategorizationApi,
 )
@@ -56,7 +54,11 @@ class BattleCategorizationApiImpl(BaseBattleCategorizationApi):
         self,
         battle_categorization_request: BattleCategorizationRequest,
     ) -> BattleCategorization:
-        """Classify all user prompts in a battle into biomedical categories."""
+        """Classify all user prompts in a battle into up to 3 biomedical categories.
+
+        The categories array may be empty if the classifier could not assign any
+        category to the conversation.
+        """
         settings = get_settings()
         prompts = battle_categorization_request.prompts
 
@@ -66,21 +68,15 @@ class BattleCategorizationApiImpl(BaseBattleCategorizationApi):
         sanitized = [p.strip()[: settings.prompt_max_length] for p in prompts]
         method = settings.battle_categorization_method
 
-        # Check Valkey cache first.
+        # Check Valkey cache first. Empty cached lists are valid "no fit" results
+        # and short-circuit the LLM call.
         cached = await get_cached_battle_categorization(sanitized, settings)
-        if cached is not None and len(cached) > 0:
+        if cached is not None:
             return BattleCategorization(categories=cached, method=method)
 
         # Cache miss — classify via LLM.
         user_message = _build_user_message(sanitized)
         categories = await categorize(_SYSTEM_PROMPT, user_message)
-
-        if not categories:
-            logger.warning("Battle categorization empty — LLM unavailable or invalid")
-            raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail="Categorization unavailable: LLM returned no valid categories",
-            )
 
         await set_cached_battle_categorization(sanitized, categories, settings)
 

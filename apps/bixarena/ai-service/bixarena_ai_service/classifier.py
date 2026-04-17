@@ -67,10 +67,11 @@ CATEGORIZATION_SCHEMA = {
             "categories": {
                 "type": "array",
                 "items": {"type": "string", "enum": list(BIOMEDICAL_CATEGORIES)},
-                "minItems": 1,
+                "minItems": 0,
                 "maxItems": 3,
                 "description": (
-                    "1-3 most relevant bioRxiv category slugs from the allowed list"
+                    "Up to three most relevant category slugs from the allowed list; "
+                    "empty when no category fits."
                 ),
             }
         },

@@ -12,8 +12,6 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from fastapi import HTTPException, status
-
 from bixarena_ai_service.apis.prompt_categorization_api_base import (
     BasePromptCategorizationApi,
 )
@@ -46,11 +44,12 @@ class PromptCategorizationApiImpl(BasePromptCategorizationApi):
         self,
         prompt_categorization_request: PromptCategorizationRequest,
     ) -> PromptCategorization:
-        """Classify a prompt into 1-3 biomedical subject categories.
+        """Classify a prompt into up to 3 biomedical subject categories.
 
         The prompt text is sent to an LLM classifier via OpenRouter with a
-        structured-output schema restricting the response to the 20 bioRxiv
-        slugs. The LLM is instructed to treat the text as opaque data.
+        structured-output schema restricting the response to allowed slugs.
+        The LLM is instructed to treat the text as opaque data. The categories
+        array may be empty if the classifier could not assign any category.
         """
         settings = get_settings()
         prompt = prompt_categorization_request.prompt
@@ -62,9 +61,10 @@ class PromptCategorizationApiImpl(BasePromptCategorizationApi):
         sanitized = prompt.strip()[: settings.prompt_max_length]
         method = settings.prompt_categorization_method
 
-        # Check Valkey cache first.
+        # Check Valkey cache first. Empty cached lists are valid "no fit" results
+        # and short-circuit the LLM call.
         cached = await get_cached_prompt_categorization(sanitized, settings)
-        if cached is not None and len(cached) > 0:
+        if cached is not None:
             return PromptCategorization(
                 prompt=prompt,
                 categories=cached,
@@ -74,13 +74,6 @@ class PromptCategorizationApiImpl(BasePromptCategorizationApi):
         # Cache miss — classify via LLM.
         user_message = f"TEXT:\n{sanitized}"
         categories = await categorize(_SYSTEM_PROMPT, user_message)
-
-        if not categories:
-            logger.warning("Categorization returned empty — LLM unavailable or invalid")
-            raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail="Categorization unavailable: LLM returned no valid categories",
-            )
 
         await set_cached_prompt_categorization(sanitized, categories, settings)
 
