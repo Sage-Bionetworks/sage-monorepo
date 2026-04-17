@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
 import org.sagebionetworks.bixarena.api.exception.BattleNotEligibleForCategorizationException;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
+import org.sagebionetworks.bixarena.api.exception.BattleRoundNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCategorizationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCategorizationResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
@@ -85,7 +86,7 @@ public class BattleCategorizationService {
     List<String> prompts = collectPrompts(battleId);
 
     if (prompts.isEmpty()) {
-      throw new IllegalStateException("No prompts found for battle " + battleId);
+      throw new BattleRoundNotFoundException("No rounds found for battle " + battleId);
     }
 
     try {

@@ -259,9 +259,7 @@ public class ExamplePromptService {
     return examplePromptRepository
       .findById(promptId)
       .orElseThrow(() ->
-        new ExamplePromptNotFoundException(
-          String.format("The example prompt with ID %s does not exist.", promptId)
-        )
+        new ExamplePromptNotFoundException("Example prompt not found: " + promptId)
       );
   }
 

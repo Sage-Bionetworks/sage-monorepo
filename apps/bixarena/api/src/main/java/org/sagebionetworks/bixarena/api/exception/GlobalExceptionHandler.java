@@ -182,6 +182,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
+  @ExceptionHandler(BattleRoundNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleBattleRoundNotFoundException(
+    BattleRoundNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Battle Round Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
   @ExceptionHandler(DuplicateBattleValidationException.class)
   protected ResponseEntity<BasicErrorDto> handleDuplicateBattleValidation(
     DuplicateBattleValidationException ex,

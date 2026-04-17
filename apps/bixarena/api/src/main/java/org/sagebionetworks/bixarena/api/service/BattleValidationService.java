@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
+import org.sagebionetworks.bixarena.api.exception.BattleRoundNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.DuplicateBattleValidationException;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
@@ -74,15 +75,16 @@ public class BattleValidationService {
    * Validates all user prompts in a battle by calling the AI service
    * and persisting the result. Returns the persisted entity.
    *
-   * @throws IllegalStateException if no prompts found or AI service call fails
+   * @throws BattleRoundNotFoundException if the battle has no rounds to collect prompts from
+   * @throws IllegalStateException if the AI service call fails
    */
   @Transactional
   public BattleValidationEntity validateAndPersistBattle(UUID battleId) {
     List<String> prompts = collectPrompts(battleId);
 
     if (prompts.isEmpty()) {
-      throw new IllegalStateException(
-        "No prompts found for battle " + battleId
+      throw new BattleRoundNotFoundException(
+        "No rounds found for battle " + battleId
       );
     }
 

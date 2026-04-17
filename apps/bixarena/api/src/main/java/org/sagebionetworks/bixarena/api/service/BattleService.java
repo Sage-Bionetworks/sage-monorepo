@@ -193,8 +193,10 @@ public class BattleService {
 
   /**
    * Sets or clears the effective categorization for a battle by pointing at a row from history.
-   * Pass {@code null} to clear. Setting a non-null categorization requires the battle to be
-   * biomedical (same gate as the AI and human-override paths).
+   * Pass {@code null} to clear. The battle must be biomedical regardless of whether we are
+   * setting or clearing — non-biomedical battles are not eligible for any categorization state
+   * change. If an admin needs to clear a stale categorization, they must first override
+   * validation to biomedical.
    */
   @Transactional
   public BattleDto setEffectiveCategorization(UUID battleId, UUID categorizationId) {
@@ -204,9 +206,9 @@ public class BattleService {
     );
 
     BattleEntity battle = getBattleEntity(battleId);
+    battleCategorizationService.assertBiomedicalOrThrow(battleId);
 
     if (categorizationId != null) {
-      battleCategorizationService.assertBiomedicalOrThrow(battleId);
       battleCategorizationRepository.findById(categorizationId)
         .filter(c -> c.getBattleId().equals(battleId))
         .orElseThrow(() -> new BattleCategorizationNotFoundException(
@@ -238,9 +240,7 @@ public class BattleService {
     return battleRepository
       .findById(battleId)
       .orElseThrow(() ->
-        new BattleNotFoundException(
-          String.format("The battle with ID %s does not exist.", battleId)
-        )
+        new BattleNotFoundException("Battle not found: " + battleId)
       );
   }
 
@@ -248,7 +248,7 @@ public class BattleService {
     return modelRepository
       .findById(modelId)
       .orElseThrow(() ->
-        new ModelNotFoundException(String.format("The model with ID %s does not exist.", modelId))
+        new ModelNotFoundException("Model not found: " + modelId)
       );
   }
 
