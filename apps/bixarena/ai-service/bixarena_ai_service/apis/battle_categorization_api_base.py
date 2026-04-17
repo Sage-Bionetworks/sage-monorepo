@@ -3,11 +3,9 @@
 from typing import ClassVar, Dict, List, Tuple  # noqa: F401
 
 from bixarena_ai_service.models.basic_error import BasicError
+from bixarena_ai_service.models.battle_categorization import BattleCategorization
 from bixarena_ai_service.models.battle_categorization_request import (
     BattleCategorizationRequest,
-)
-from bixarena_ai_service.models.battle_categorization_result import (
-    BattleCategorizationResult,
 )
 
 
@@ -23,6 +21,6 @@ class BaseBattleCategorizationApi:
     async def categorize_battle(
         self,
         battle_categorization_request: BattleCategorizationRequest,
-    ) -> BattleCategorizationResult:
+    ) -> BattleCategorization:
         """Classifies the prompts of a battle conversation into one or more biomedical subject categories using an LLM. Requires authentication."""
         ...

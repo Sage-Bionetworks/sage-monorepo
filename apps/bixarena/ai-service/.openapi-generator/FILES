@@ -15,8 +15,8 @@ bixarena_ai_service/impl/__init__.py
 bixarena_ai_service/main.py
 bixarena_ai_service/models/__init__.py
 bixarena_ai_service/models/basic_error.py
+bixarena_ai_service/models/battle_categorization.py
 bixarena_ai_service/models/battle_categorization_request.py
-bixarena_ai_service/models/battle_categorization_result.py
 bixarena_ai_service/models/battle_validation.py
 bixarena_ai_service/models/battle_validation_request.py
 bixarena_ai_service/models/extra_models.py

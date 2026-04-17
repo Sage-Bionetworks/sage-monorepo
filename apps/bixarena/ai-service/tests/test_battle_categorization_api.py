@@ -4,11 +4,9 @@ from fastapi.testclient import TestClient
 
 
 from bixarena_ai_service.models.basic_error import BasicError  # noqa: F401
+from bixarena_ai_service.models.battle_categorization import BattleCategorization  # noqa: F401
 from bixarena_ai_service.models.battle_categorization_request import (
     BattleCategorizationRequest,
-)  # noqa: F401
-from bixarena_ai_service.models.battle_categorization_result import (
-    BattleCategorizationResult,
 )  # noqa: F401
 
 

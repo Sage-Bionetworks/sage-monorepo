@@ -27,9 +27,9 @@ except ImportError:
     from typing_extensions import Self
 
 
-class BattleCategorizationResult(BaseModel):
+class BattleCategorization(BaseModel):
     """
-    BattleCategorizationResult
+    BattleCategorization
     """  # noqa: E501
 
     categories: Annotated[
@@ -58,7 +58,7 @@ class BattleCategorizationResult(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of BattleCategorizationResult from a JSON string"""
+        """Create an instance of BattleCategorization from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -80,7 +80,7 @@ class BattleCategorizationResult(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of BattleCategorizationResult from a dict"""
+        """Create an instance of BattleCategorization from a dict"""
         if obj is None:
             return None
 
