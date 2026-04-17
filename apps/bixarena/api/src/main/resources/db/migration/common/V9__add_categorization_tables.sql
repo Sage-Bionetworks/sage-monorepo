@@ -33,7 +33,6 @@ CREATE INDEX idx_epc_prompt_id ON api.example_prompt_categorization(prompt_id);
 -- Example Prompt Categorization Category Join Table
 -- ============================================================================
 -- One row per category assigned in a categorization run.
--- A single run may assign 1-3 categories from the bioRxiv taxonomy.
 -- ============================================================================
 
 CREATE TABLE api.example_prompt_categorization_category (
@@ -62,7 +61,8 @@ CREATE INDEX idx_example_prompt_effective_categorization
 -- Battle Categorization Table
 -- ============================================================================
 -- Same structure as example_prompt_categorization but scoped to battles.
--- Auto-triggered when a battle ends; admins can create manual overrides.
+-- Auto-triggered after a battle's biomedical validation becomes effective.
+-- Admins can create manual overrides (subject to the same biomedical gate).
 -- ============================================================================
 
 CREATE TABLE api.battle_categorization (
