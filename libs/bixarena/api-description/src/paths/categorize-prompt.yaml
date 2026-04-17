@@ -4,7 +4,10 @@ post:
   tags:
     - Prompt Categorization
   summary: Categorize a prompt
-  description: Classifies a single prompt into one or more biomedical subject categories using an LLM. Requires authentication.
+  description: >-
+    Classifies a single prompt into up to 3 biomedical subject categories using an LLM.
+    The categories array may be empty when the classifier did not assign any category.
+    Requires authentication.
   operationId: categorizePrompt
   requestBody:
     content:
