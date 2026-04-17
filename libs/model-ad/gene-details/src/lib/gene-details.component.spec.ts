@@ -3,18 +3,18 @@ import { PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import {
-  GeneExpressionIndividual,
-  GeneExpressionIndividualService,
+  TranscriptomicsIndividual,
+  TranscriptomicsIndividualService,
 } from '@sagebionetworks/model-ad/api-client';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
-import { geneExpressionIndividualMocks } from '@sagebionetworks/model-ad/testing';
+import { transcriptomicsIndividualMocks } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { GeneDetailsComponent } from './gene-details.component';
 
 async function setup(
-  geneDetails = geneExpressionIndividualMocks,
+  geneDetails = transcriptomicsIndividualMocks,
   platformService: Partial<PlatformService> | null = null,
 ) {
   const user = userEvent.setup();
@@ -33,8 +33,8 @@ async function setup(
     ),
   };
 
-  const mockGeneExpressionIndividualService = {
-    getGeneExpressionIndividual: jest.fn(() => of(geneDetails)),
+  const mockTranscriptomicsIndividualService = {
+    getTranscriptomicsIndividual: jest.fn(() => of(geneDetails)),
   };
 
   const mockPlatformService = platformService || {
@@ -45,7 +45,7 @@ async function setup(
   const component = await render(GeneDetailsComponent, {
     imports: [LoadingIconComponent],
     providers: [
-      { provide: GeneExpressionIndividualService, useValue: mockGeneExpressionIndividualService },
+      { provide: TranscriptomicsIndividualService, useValue: mockTranscriptomicsIndividualService },
       { provide: PlatformService, useValue: mockPlatformService },
       {
         provide: ActivatedRoute,
@@ -67,13 +67,13 @@ describe('GeneDetailsComponent', () => {
       isServer: true,
     };
 
-    const { component } = await setup(geneExpressionIndividualMocks, mockPlatformService);
+    const { component } = await setup(transcriptomicsIndividualMocks, mockPlatformService);
     expect(component.container.querySelector('.loading-icon')).toBeVisible();
     expect(screen.queryByText(/This page isn't available/i)).not.toBeInTheDocument();
   });
 
   it('should display label', async () => {
-    const gene = geneExpressionIndividualMocks[0];
+    const gene = transcriptomicsIndividualMocks[0];
     const label = `${gene.gene_symbol} | ${gene.ensembl_gene_id}`;
     await setup();
     expect(screen.getByText(gene.ensembl_gene_id, { exact: false })).toHaveTextContent(label);
@@ -82,19 +82,19 @@ describe('GeneDetailsComponent', () => {
   it('should display tissue in header', async () => {
     await setup();
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      `Individual RNA Expression (${geneExpressionIndividualMocks[0].tissue})`,
+      `Individual RNA Expression (${transcriptomicsIndividualMocks[0].tissue})`,
     );
   });
 
   it('should display model name', async () => {
     await setup();
     expect(
-      screen.getByText(`${geneExpressionIndividualMocks[0].name} (Females & Males)`),
+      screen.getByText(`${transcriptomicsIndividualMocks[0].name} (Females & Males)`),
     ).toBeInTheDocument();
   });
 
   it('should convert data to CSV and set filename correctly', async () => {
-    const mockData: GeneExpressionIndividual[] = [
+    const mockData: TranscriptomicsIndividual[] = [
       {
         ensembl_gene_id: 'ENSMUSG00000001',
         gene_symbol: 'TestGene',
@@ -125,6 +125,6 @@ describe('GeneDetailsComponent', () => {
     const filename = instance.filename();
 
     expect(csvData).toEqual(expectedCsvData);
-    expect(filename).toBe('gene-expression-individual-TestGene-TestModel-brain');
+    expect(filename).toBe('transcriptomics-individual-TestGene-TestModel-brain');
   });
 });

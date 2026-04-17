@@ -156,7 +156,7 @@ test.describe('model details', () => {
 });
 
 test.describe('model details - omics', () => {
-  test('transcriptomics card links to gene expression CT in new tab', async ({ page }) => {
+  test('transcriptomics card links to differential expression CT in new tab', async ({ page }) => {
     await page.goto('/models/APOE4');
     const card = page.getByRole('link', {
       name: /view rna differential expression results.*comparison tool/i,
@@ -167,7 +167,7 @@ test.describe('model details - omics', () => {
     const popup = await popupPromise;
 
     await popup.waitForURL('/comparison/expression?models=APOE4');
-    await expectComparisonToolTableLoaded(popup, 'Gene Expression', true);
+    await expectComparisonToolTableLoaded(popup, 'Differential Expression', true);
     await expectFiltersParams(popup, { models: ['APOE4'] });
     await expectFilters(popup, { 'Mouse Model': ['APOE4'] });
   });

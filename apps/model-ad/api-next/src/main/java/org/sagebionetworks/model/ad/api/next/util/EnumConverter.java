@@ -23,7 +23,7 @@ public final class EnumConverter {
    * @param value the string value to convert (can be null)
    * @param converter the function to convert string to enum (e.g., EnumType::fromValue)
    * @param fieldName the name of the field for error messages
-   * @param recordType the type of record for error messages (e.g., "gene expression record")
+   * @param recordType the type of record for error messages (e.g., "transcriptomics record")
    * @return the converted enum value
    * @throws DataIntegrityException if value is null or conversion fails
    */
@@ -64,7 +64,7 @@ public final class EnumConverter {
    * Convenience method for sex cohort field conversions.
    *
    * @param value the string value to convert (can be null)
-   * @param recordType the type of record for error messages (e.g., "gene expression record")
+   * @param recordType the type of record for error messages (e.g., "transcriptomics record")
    * @return the converted SexCohortDto value
    * @throws DataIntegrityException if value is null or conversion fails
    */

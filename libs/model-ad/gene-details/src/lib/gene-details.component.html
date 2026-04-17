@@ -4,7 +4,7 @@
       <div id="loading">
         <explorers-loading-icon />
       </div>
-    } @else if (geneExpressionIndividualData) {
+    } @else if (transcriptomicsIndividualData) {
       <div class="gene-details-header">
         @if (label().left !== '') {
           <div class="gene-details-label">
@@ -30,7 +30,7 @@
       </div>
       <div #boxplotGrid class="boxplots-grid-wrapper">
         <model-ad-boxplots-grid
-          [boxplotDataList]="geneExpressionIndividualData"
+          [boxplotDataList]="transcriptomicsIndividualData"
           [xAxisOrder]="xAxisOrder()"
         />
       </div>

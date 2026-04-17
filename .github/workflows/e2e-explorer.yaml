@@ -7,6 +7,9 @@ on:
         type: string
         description: The name of the Explorer to run e2e tests for
 
+permissions:
+  contents: read
+
 jobs:
   validate-explorer-input:
     runs-on: ubuntu-22.04
@@ -22,10 +25,15 @@ jobs:
     needs: validate-explorer-input
     timeout-minutes: 15
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
+    # This job checks out PR HEAD and runs a composite action from the PR workspace,
+    # so it must sit behind the same environment approval used by run-explorer-e2e-tests
+    # when the PR is from a fork. See the environment comment on that job below.
+    environment: ${{ github.event_name == 'pull_request_target' &&
+      github.event.pull_request.head.repo.full_name != github.repository && format('{0}-pr', inputs.explorer) || inputs.explorer }}
     outputs:
       explorer_affected: ${{ steps.explorer_affected.outputs.affected }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare
           # against.
@@ -73,7 +81,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare
           # against.
@@ -115,6 +123,10 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && ${cmd}"
 
+      # SYNAPSE_AUTH_TOKEN is stored as an environment secret on the {explorer} and
+      # {explorer}-pr environments (see the environment comment on this job above), so it
+      # resolves via `secrets.*` here without the caller passing it through. This is why
+      # the caller workflow does not need `secrets: inherit` or an explicit `secrets:` block.
       - name: Write Synapse PAT for Explorer
         run: |
           env_filename="apps/${{ inputs.explorer }}/data/.env"
@@ -143,7 +155,7 @@ jobs:
 
       - name: Upload Explorer data logs
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: 'data-logs-${{ inputs.explorer }}'
           path: data-logs.txt
@@ -161,7 +173,7 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && workspace-docker-stop"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: ${{ !cancelled() && steps.start-explorer.conclusion != 'failure' }}
         with:
           name: 'playwright-report-${{ inputs.explorer }}'

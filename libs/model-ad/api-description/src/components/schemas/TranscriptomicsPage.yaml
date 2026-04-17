@@ -1,0 +1,13 @@
+type: object
+description: A paginated response containing transcriptomics objects and pagination metadata.
+properties:
+  transcriptomics:
+    type: array
+    description: The list of transcriptomics objects for the current page
+    items:
+      $ref: ./Transcriptomics.yaml
+  page:
+    $ref: ./PageMetadata.yaml
+required:
+  - transcriptomics
+  - page

@@ -11,10 +11,13 @@
 /**
  * The type of comparison tool page
  */
-export type ComparisonToolPage = 'Model Overview' | 'Gene Expression' | 'Disease Correlation';
+export type ComparisonToolPage =
+  | 'Model Overview'
+  | 'Differential Expression'
+  | 'Disease Correlation';
 
 export const ComparisonToolPage = {
   ModelOverview: 'Model Overview' as ComparisonToolPage,
-  GeneExpression: 'Gene Expression' as ComparisonToolPage,
+  DifferentialExpression: 'Differential Expression' as ComparisonToolPage,
   DiseaseCorrelation: 'Disease Correlation' as ComparisonToolPage,
 };

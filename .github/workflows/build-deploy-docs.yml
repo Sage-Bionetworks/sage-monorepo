@@ -11,7 +11,7 @@ on:
   pull_request:
 
 permissions:
-  contents: write # Required for ghp-import to push to gh-pages
+  contents: read # Deploy jobs override to `write`; PR-validation jobs stay read-only.
 
 concurrency:
   group: 'pages-${{ github.ref }}'
@@ -32,7 +32,7 @@ jobs:
       affected_storybooks: ${{ steps.check-storybook.outputs.affected_storybooks }}
       has_affected_storybooks: ${{ steps.check-storybook.outputs.has_affected_storybooks }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -120,6 +120,8 @@ jobs:
       github.event_name == 'push' &&
       github.ref_name == 'main' &&
       (needs.check-affected.outputs.docs_changed == 'true' || needs.check-affected.outputs.composite_storybook_affected == 'true')
+    permissions:
+      contents: write # ghp-import pushes to gh-pages
     uses: ./.github/workflows/deploy-docs.yml
 
   # Deploy individual storybooks when parent products affected (but NOT when full site deploy is happening)
@@ -132,6 +134,8 @@ jobs:
       needs.check-affected.outputs.has_affected_storybooks == 'true' &&
       needs.check-affected.outputs.docs_changed == 'false' &&
       needs.check-affected.outputs.composite_storybook_affected == 'false'
+    permissions:
+      contents: write # ghp-import pushes to gh-pages
     uses: ./.github/workflows/deploy-storybook.yml
     with:
       storybooks: ${{ needs.check-affected.outputs.affected_storybooks }}

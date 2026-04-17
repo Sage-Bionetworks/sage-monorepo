@@ -9,6 +9,7 @@ import { BattleComponent } from './battle.component';
 const mockConfig = {
   config: {
     battle: { promptLengthLimit: 5000, roundLimit: 20, promptUseLimit: 5 },
+    links: { termsOfService: 'https://example.com/terms' },
   },
 };
 

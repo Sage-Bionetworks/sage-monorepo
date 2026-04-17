@@ -55,9 +55,9 @@ export interface Model {
    */
   aliases: Array<string>;
   /**
-   * Link to gene expression comparison tool data
+   * Link to transcriptomics comparison tool data
    */
-  gene_expression: string | null;
+  transcriptomics: string | null;
   /**
    * Link to disease correlation comparison tool data
    */

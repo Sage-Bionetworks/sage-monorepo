@@ -94,7 +94,7 @@ export interface ComparisonToolConfigFilter {
 
 export type ComparisonToolPage =
   | 'Model Overview'
-  | 'Gene Expression'
+  | 'Differential Expression'
   | 'Disease Correlation'
   | 'Nominated Targets'
   | 'Nominated Drugs';

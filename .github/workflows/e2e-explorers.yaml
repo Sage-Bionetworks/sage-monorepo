@@ -7,6 +7,9 @@ on:
   pull_request_target:
     types: [opened, synchronize, reopened, labeled]
 
+permissions:
+  contents: read
+
 jobs:
   run-explorer-e2e:
     # Run in Sage repo on main branch and on all branches in user-owned forks
@@ -19,4 +22,3 @@ jobs:
     uses: ./.github/workflows/e2e-explorer.yaml
     with:
       explorer: ${{ matrix.explorer }}
-    secrets: inherit

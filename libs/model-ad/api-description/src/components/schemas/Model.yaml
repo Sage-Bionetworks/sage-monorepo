@@ -35,9 +35,9 @@ properties:
     description: List of aliases for the model
     items:
       type: string
-  gene_expression:
+  transcriptomics:
     type: string
-    description: Link to gene expression comparison tool data
+    description: Link to transcriptomics comparison tool data
     nullable: true
   disease_correlation:
     type: string
@@ -73,7 +73,7 @@ required:
   - alzforum_id
   - genotype
   - aliases
-  - gene_expression
+  - transcriptomics
   - disease_correlation
   - spatial_transcriptomics
   - genetic_info

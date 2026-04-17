@@ -4,10 +4,10 @@ import {
   ComparisonToolConfig,
   DiseaseCorrelation,
   DiseaseCorrelationsPage,
-  GeneExpression,
-  GeneExpressionsPage,
   ModelOverview,
   ModelOverviewsPage,
+  Transcriptomics,
+  TranscriptomicsPage,
 } from '@sagebionetworks/model-ad/api-client';
 import { baseURL } from '../../playwright.config';
 import {
@@ -73,7 +73,7 @@ export const fetchModelOverviews = async (page: Page): Promise<ModelOverview[]> 
 
 export const fetchDiseaseCorrelations = async (
   page: Page,
-  categories = ['CONSENSUS NETWORK MODULES', 'Consensus Cluster A - ECM Organization'],
+  categories = ['CONSENSUS NETWORK MODULES', 'ECM Organization - Consensus Cluster A'],
 ): Promise<DiseaseCorrelation[]> => {
   const data = await fetchComparisonToolData<DiseaseCorrelationsPage>(
     page,
@@ -83,16 +83,16 @@ export const fetchDiseaseCorrelations = async (
   return data.diseaseCorrelations;
 };
 
-export const fetchGeneExpressions = async (
+export const fetchTranscriptomics = async (
   page: Page,
   categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Cortex', 'female'],
-): Promise<GeneExpression[]> => {
-  const data = await fetchComparisonToolData<GeneExpressionsPage>(
+): Promise<Transcriptomics[]> => {
+  const data = await fetchComparisonToolData<TranscriptomicsPage>(
     page,
-    'Gene Expression',
+    'Transcriptomics',
     categories,
   );
-  return data.geneExpressions;
+  return data.transcriptomics;
 };
 
 export const fetchComparisonToolConfig = async (

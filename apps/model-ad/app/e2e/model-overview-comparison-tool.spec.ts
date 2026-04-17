@@ -225,11 +225,11 @@ test.describe('model overview', () => {
   });
 
   test.describe('sort URL sync', () => {
-    // Columns: 0=Model (name), 1=Model Type, 2=Matched Controls, 3=Gene Expression, 4=Disease Correlation, ...
+    // Columns: 0=Model (name), 1=Model Type, 2=Matched Controls, 3=Transcriptomics, 4=Disease Correlation, ...
     // Default sort: model_type DESC, name ASC
 
     const sortColumns: ColumnConfig[] = [
-      { name: 'Gene Expression', field: 'gene_expression' },
+      { name: 'Transcriptomics', field: 'transcriptomics' },
       { name: 'Disease Correlation', field: 'disease_correlation' },
       { name: 'Pathology', field: 'pathology' },
       { name: 'Biomarkers', field: 'biomarkers' },
@@ -272,7 +272,7 @@ test.describe('model overview', () => {
         CT_PAGE,
         true,
         'url',
-        'sortFields=gene_expression,disease_correlation&sortOrders=-1,1',
+        'sortFields=transcriptomics,disease_correlation&sortOrders=-1,1',
       );
       await testMultiColumnSortRestoredFromUrl(page, sortColumns.slice(0, 2), sortColumns[2]);
     });
@@ -314,7 +314,7 @@ test.describe('model overview', () => {
     test('filters are removed from URL when Clear All is clicked', async ({ page }) => {
       const expectedInitialFilterParams = {
         modelTypes: ['Familial AD'],
-        availableData: ['Gene Expression'],
+        availableData: ['Transcriptomics'],
       };
 
       await navigateToComparison(
@@ -328,7 +328,9 @@ test.describe('model overview', () => {
     });
   });
 
-  test('gene expression link opens gene expression CT in new tab', async ({ page }) => {
+  test('differential expression link opens differential expression CT in new tab', async ({
+    page,
+  }) => {
     await navigateToComparison(page, CT_PAGE, true);
 
     const link = page.getByRole('link', { name: 'Results' }).first();

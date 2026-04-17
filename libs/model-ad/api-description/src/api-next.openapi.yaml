@@ -24,10 +24,10 @@ tags:
     description: Operations about Model Overview.
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
-  - name: Gene Expression
-    description: Operations about Gene Expression results.
-  - name: Gene Expression Individual
-    description: Operations about Individual Gene Expression results.
+  - name: Transcriptomics
+    description: Operations about Transcriptomics results.
+  - name: Transcriptomics Individual
+    description: Operations about Individual Transcriptomics results.
 paths:
   /data-version:
     $ref: paths/data-version.yaml
@@ -37,9 +37,9 @@ paths:
     $ref: paths/comparison-tools/model-overview.yaml
   /comparison-tools/disease-correlation:
     $ref: paths/comparison-tools/disease-correlation.yaml
-  /comparison-tools/gene-expression:
-    $ref: paths/comparison-tools/gene-expression.yaml
-  /gene-expression-individual:
-    $ref: paths/gene-expression-individual.yaml
+  /comparison-tools/transcriptomics:
+    $ref: paths/comparison-tools/transcriptomics.yaml
+  /transcriptomics-individual:
+    $ref: paths/transcriptomics-individual.yaml
   /models/{name}:
     $ref: paths/model.yaml

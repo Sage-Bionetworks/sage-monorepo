@@ -35,7 +35,7 @@ export class ComparisonToolService<T> {
   private readonly appStorageService = inject(AppStorageService);
 
   // Cache column selections only for dropdown selections up to this length
-  // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
+  // Currently, Differential Expression has 3 dropdowns, but we only want to cache selections
   // for the first 2 levels. Disease Correlation has 2 dropdowns, so all selections are cached.
   // If future tools have more dropdowns and different column selection caching requirements,
   // this depth value may need to be included in the ui_config instead, so the cutoff can be set per tool.

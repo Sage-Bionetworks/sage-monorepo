@@ -54,13 +54,13 @@ export const routes: Route[] = [
     },
   },
   {
-    path: ROUTE_PATHS.GENE_EXPRESSION,
+    path: ROUTE_PATHS.DIFFERENTIAL_EXPRESSION,
     loadChildren: () =>
-      import('@sagebionetworks/model-ad/gene-expression-comparison-tool').then(
+      import('@sagebionetworks/model-ad/differential-expression-comparison-tool').then(
         (routes) => routes.routes,
       ),
     data: {
-      title: 'Gene Expression | Visual comparison tool for differential expression results',
+      title: 'Differential Expression | Visual comparison tool for differential expression results',
       description:
         "Explore high-dimensional omics data for next-generation mouse models of Alzheimer's Disease.",
     },

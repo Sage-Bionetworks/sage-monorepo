@@ -21,22 +21,22 @@ Mock data and test fixtures come from `@sagebionetworks/model-ad/testing`.
 
 ## Library Map
 
-| Nx Project                                     | Path                                   | Purpose                                                                                          |
-| ---------------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `model-ad-api-description`                     | `api-description/`                     | OpenAPI specs (source of truth for the API)                                                      |
-| `model-ad-api-client-angular`                  | `api-client-angular/`                  | **Generated** Angular HTTP client — do not hand-edit                                             |
-| `model-ad-config`                              | `config/`                              | Route paths, colors, help URLs, boxplot styles                                                   |
-| `model-ad-ui`                                  | `ui/`                                  | Shared presentational components (BoxplotComponent, BoxplotsGridComponent, SearchInputComponent) |
-| `model-ad-util`                                | `util/`                                | Header and footer navigation link definitions                                                    |
-| `model-ad-home`                                | `home/`                                | Landing page with stats and search                                                               |
-| `model-ad-gene-details`                        | `gene-details/`                        | Gene details page with boxplots and RNA data                                                     |
-| `model-ad-model-details`                       | `model-details/`                       | Model details page with omics, biomarkers, pathology panels                                      |
-| `model-ad-gene-expression-comparison-tool`     | `gene-expression-comparison-tool/`     | Gene expression heatmap comparison tool                                                          |
-| `model-ad-disease-correlation-comparison-tool` | `disease-correlation-comparison-tool/` | Disease correlation heatmap comparison tool                                                      |
-| `model-ad-model-overview-comparison-tool`      | `model-overview-comparison-tool/`      | Model overview comparison tool                                                                   |
-| `model-ad-services`                            | `services/`                            | Angular services (currently minimal)                                                             |
-| `model-ad-styles`                              | `styles/`                              | Shared SCSS variables and mixins                                                                 |
-| `model-ad-testing`                             | `testing/`                             | Mock data and test fixtures                                                                      |
+| Nx Project                                         | Path                                       | Purpose                                                                                          |
+| -------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `model-ad-api-description`                         | `api-description/`                         | OpenAPI specs (source of truth for the API)                                                      |
+| `model-ad-api-client-angular`                      | `api-client-angular/`                      | **Generated** Angular HTTP client — do not hand-edit                                             |
+| `model-ad-config`                                  | `config/`                                  | Route paths, colors, help URLs, boxplot styles                                                   |
+| `model-ad-ui`                                      | `ui/`                                      | Shared presentational components (BoxplotComponent, BoxplotsGridComponent, SearchInputComponent) |
+| `model-ad-util`                                    | `util/`                                    | Header and footer navigation link definitions                                                    |
+| `model-ad-home`                                    | `home/`                                    | Landing page with stats and search                                                               |
+| `model-ad-gene-details`                            | `gene-details/`                            | Gene details page with boxplots and RNA data                                                     |
+| `model-ad-model-details`                           | `model-details/`                           | Model details page with omics, biomarkers, pathology panels                                      |
+| `model-ad-differential-expression-comparison-tool` | `differential-expression-comparison-tool/` | Differential expression heatmap comparison tool                                                  |
+| `model-ad-disease-correlation-comparison-tool`     | `disease-correlation-comparison-tool/`     | Disease correlation heatmap comparison tool                                                      |
+| `model-ad-model-overview-comparison-tool`          | `model-overview-comparison-tool/`          | Model overview comparison tool                                                                   |
+| `model-ad-services`                                | `services/`                                | Angular services (currently minimal)                                                             |
+| `model-ad-styles`                                  | `styles/`                                  | Shared SCSS variables and mixins                                                                 |
+| `model-ad-testing`                                 | `testing/`                                 | Mock data and test fixtures                                                                      |
 
 ## Dependency Layers
 

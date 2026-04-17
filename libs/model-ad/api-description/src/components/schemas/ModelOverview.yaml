@@ -15,7 +15,7 @@ properties:
     items:
       type: string
     description: List of matched control models
-  gene_expression:
+  transcriptomics:
     $ref: ./Link.yaml
     nullable: true
   disease_correlation:
@@ -34,7 +34,7 @@ properties:
     $ref: ./Link.yaml
     nullable: true
   center:
-    $ref: ./Link.yaml
+    type: string
     nullable: true
   modified_genes:
     type: array
@@ -46,7 +46,7 @@ properties:
     items:
       type: string
       enum:
-        - Gene Expression
+        - Transcriptomics
         - Pathology
         - Biomarkers
         - Disease Correlation

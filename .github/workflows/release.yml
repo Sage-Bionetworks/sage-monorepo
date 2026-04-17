@@ -10,7 +10,8 @@ on:
       - 'sage/v*'
 
 permissions:
-  packages: write
+  contents: read
+  packages: write # push images to ghcr.io
 
 env:
   PRODUCT: ''
@@ -23,7 +24,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 1
 
@@ -54,19 +55,25 @@ jobs:
             && workspace-install-affected"
 
       - name: Build the Docker images for the specified product
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_ACTOR: ${{ github.actor }}
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && export VERSION=${{ env.VERSION }} \
-            && echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin \
-            && nx run-many --target=build-image --projects=${{ env.PRODUCT }}-* --configuration=release"
+          devcontainer exec --workspace-folder ../sage-monorepo \
+            --remote-env GH_TOKEN="$GH_TOKEN" \
+            --remote-env GH_ACTOR="$GH_ACTOR" \
+            bash -c '. ./dev-env.sh \
+            && export VERSION="${{ env.VERSION }}" \
+            && echo "$GH_TOKEN" | docker login ghcr.io -u "$GH_ACTOR" --password-stdin \
+            && nx run-many --target=build-image --projects="${{ env.PRODUCT }}-*" --configuration=release'
 
       - name: Upload Sentry sourcemaps for the specified product
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo \
-            --remote-env SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
-            --remote-env SENTRY_RELEASE=$SENTRY_RELEASE \
-            bash -c ". ./dev-env.sh \
-            && nx run-many --target=sentry-sourcemaps --projects=${{ env.PRODUCT }}-*"
+            --remote-env SENTRY_AUTH_TOKEN="$SENTRY_AUTH_TOKEN" \
+            --remote-env SENTRY_RELEASE="$SENTRY_RELEASE" \
+            bash -c '. ./dev-env.sh \
+            && nx run-many --target=sentry-sourcemaps --projects="${{ env.PRODUCT }}-*"'
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_RELEASE: ${{ env.VERSION }}+${{ env.SHORT_SHA }}

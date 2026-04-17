@@ -13,13 +13,13 @@ export class ModelDetailsOmicsComponent {
 
   cards = computed(() => {
     const cards = [];
-    if (this.model().gene_expression) {
+    if (this.model().transcriptomics) {
       cards.push({
         imagePath: 'model-ad-assets/images/gene-expression.svg',
         description:
           'View RNA differential expression results for this model in the comparison tool.',
         title: 'Transcriptomics',
-        link: `/${this.model().gene_expression}`,
+        link: `/${this.model().transcriptomics}`,
       });
     }
     if (this.model().disease_correlation) {

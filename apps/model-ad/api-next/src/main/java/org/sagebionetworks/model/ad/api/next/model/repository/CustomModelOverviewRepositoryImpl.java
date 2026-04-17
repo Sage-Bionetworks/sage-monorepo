@@ -91,9 +91,9 @@ public class CustomModelOverviewRepositoryImpl implements CustomModelOverviewRep
       andCriteria.add(Criteria.where("available_data").in(availableData));
     }
 
-    // center: nested field - query center.link_text
+    // center: string field - use $in (matches if value equals any)
     if (center != null && !center.isEmpty()) {
-      andCriteria.add(Criteria.where("center.link_text").in(center));
+      andCriteria.add(Criteria.where("center").in(center));
     }
 
     // model_type: string field - use $in (matches if value equals any)

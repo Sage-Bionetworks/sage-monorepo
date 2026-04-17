@@ -68,13 +68,13 @@
       "@sagebionetworks/explorers/util": ["libs/explorers/util/src/index.ts"],
       "@sagebionetworks/model-ad/api-client": ["libs/model-ad/api-client-angular/src/index.ts"],
       "@sagebionetworks/model-ad/config": ["libs/model-ad/config/src/index.ts"],
+      "@sagebionetworks/model-ad/differential-expression-comparison-tool": [
+        "libs/model-ad/differential-expression-comparison-tool/src/index.ts"
+      ],
       "@sagebionetworks/model-ad/disease-correlation-comparison-tool": [
         "libs/model-ad/disease-correlation-comparison-tool/src/index.ts"
       ],
       "@sagebionetworks/model-ad/gene-details": ["libs/model-ad/gene-details/src/index.ts"],
-      "@sagebionetworks/model-ad/gene-expression-comparison-tool": [
-        "libs/model-ad/gene-expression-comparison-tool/src/index.ts"
-      ],
       "@sagebionetworks/model-ad/home": ["libs/model-ad/home/src/index.ts"],
       "@sagebionetworks/model-ad/model-details": ["libs/model-ad/model-details/src/index.ts"],
       "@sagebionetworks/model-ad/model-overview-comparison-tool": [

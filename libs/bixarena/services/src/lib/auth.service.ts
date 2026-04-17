@@ -1,5 +1,6 @@
 import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { LocalStorageService } from '@sagebionetworks/web-shared/angular/storage';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { UserInfo } from '@sagebionetworks/bixarena/api-client';
 
@@ -13,6 +14,7 @@ const CACHE_KEY = 'ba-user';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly storage = inject(LocalStorageService);
   private readonly configService = inject(ConfigService);
 
   readonly user = signal<UserInfo | null>(null);
@@ -60,10 +62,9 @@ export class AuthService {
   }
 
   private loadCache(): CachedUser | null {
-    if (!this.isBrowser) return null;
+    const raw = this.storage.getItem(CACHE_KEY);
+    if (!raw) return null;
     try {
-      const raw = localStorage.getItem(CACHE_KEY);
-      if (!raw) return null;
       return JSON.parse(raw) as CachedUser;
     } catch {
       return null;
@@ -71,19 +72,11 @@ export class AuthService {
   }
 
   private saveCache(cached: CachedUser): void {
-    try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
-    } catch {
-      // localStorage unavailable
-    }
+    this.storage.setItem(CACHE_KEY, JSON.stringify(cached));
   }
 
   private clearCache(): void {
     this.cachedUser.set(null);
-    try {
-      localStorage.removeItem(CACHE_KEY);
-    } catch {
-      // localStorage unavailable
-    }
+    this.storage.removeItem(CACHE_KEY);
   }
 }
