@@ -28,9 +28,9 @@ post:
     - Example Prompt
   summary: Create an example prompt
   description: >-
-    Create a new example prompt (admin only). The new prompt is created as inactive
-    regardless of the active field in the request body; a reviewer publishes it via PATCH.
-    AI auto-categorization runs asynchronously unless categories are provided.
+    Create a new example prompt (admin only). Newly created prompts are inactive;
+    a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously
+    unless categories are provided.
   operationId: createExamplePrompt
   requestBody:
     required: true
