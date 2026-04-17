@@ -158,7 +158,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BattleCategorizationResult'
+                $ref: '#/components/schemas/BattleCategorization'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -349,7 +349,7 @@ components:
           description: List of user prompts from all rounds of the battle
       required:
         - prompts
-    BattleCategorizationResult:
+    BattleCategorization:
       type: object
       properties:
         categories:

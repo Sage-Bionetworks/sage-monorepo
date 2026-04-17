@@ -21,11 +21,11 @@ from bixarena_ai_service.cache import (
 )
 from bixarena_ai_service.classifier import categorize
 from bixarena_ai_service.config import get_settings
+from bixarena_ai_service.models.battle_categorization import (
+    BattleCategorization,
+)
 from bixarena_ai_service.models.battle_categorization_request import (
     BattleCategorizationRequest,
-)
-from bixarena_ai_service.models.battle_categorization_result import (
-    BattleCategorizationResult,
 )
 
 logger = logging.getLogger(__name__)
@@ -53,7 +53,7 @@ class BattleCategorizationApiImpl(BaseBattleCategorizationApi):
     async def categorize_battle(
         self,
         battle_categorization_request: BattleCategorizationRequest,
-    ) -> BattleCategorizationResult:
+    ) -> BattleCategorization:
         """Classify all user prompts in a battle into biomedical categories."""
         settings = get_settings()
         prompts = battle_categorization_request.prompts
@@ -67,7 +67,7 @@ class BattleCategorizationApiImpl(BaseBattleCategorizationApi):
         # Check Valkey cache first.
         cached = await get_cached_battle_categorization(sanitized, settings)
         if cached is not None and len(cached) > 0:
-            return BattleCategorizationResult(categories=cached, method=method)
+            return BattleCategorization(categories=cached, method=method)
 
         # Cache miss — classify via LLM.
         user_message = _build_user_message(sanitized)
@@ -81,7 +81,7 @@ class BattleCategorizationApiImpl(BaseBattleCategorizationApi):
         else:
             await set_cached_battle_categorization(sanitized, categories, settings)
 
-        result = BattleCategorizationResult(categories=categories, method=method)
+        result = BattleCategorization(categories=categories, method=method)
 
         logger.info("Battle categorization result: categories=%s", result.categories)
         return result

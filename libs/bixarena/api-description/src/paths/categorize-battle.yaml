@@ -18,7 +18,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/BattleCategorizationResult.yaml
+            $ref: ../components/schemas/BattleCategorization.yaml
     '400':
       $ref: ../components/responses/BadRequest.yaml
     '401':
