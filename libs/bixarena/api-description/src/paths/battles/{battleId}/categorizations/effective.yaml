@@ -1,23 +1,38 @@
 parameters:
   - $ref: ../../../../components/parameters/path/battleId.yaml
 
-get:
-  x-rate-limit-requests-per-minute: 100
+patch:
+  x-rate-limit-requests-per-minute: 30
   tags:
     - Battle
-  summary: Get effective battle categorization
-  description: Get the current effective categorization for a battle.
-  operationId: getBattleEffectiveCategorization
+  summary: Set effective battle categorization
+  description: >-
+    Set or clear the effective categorization for a battle by pointing at a row from history.
+    Pass null to clear. Returns 409 if the battle is not biomedical and a non-null
+    categorizationId is provided. Admin only.
+  operationId: setEffectiveBattleCategorization
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../../components/schemas/SetEffectiveCategorizationRequest.yaml
   responses:
     '200':
-      description: Success
+      description: Effective categorization updated successfully
       content:
         application/json:
           schema:
-            $ref: ../../../../components/schemas/BattleCategorizationResponse.yaml
+            $ref: ../../../../components/schemas/Battle.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
     '401':
       $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
     '404':
       $ref: ../../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../../components/responses/Conflict.yaml
     '500':
       $ref: ../../../../components/responses/InternalServerError.yaml

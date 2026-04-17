@@ -1,24 +1,35 @@
 parameters:
   - $ref: ../../../../components/parameters/path/examplePromptId.yaml
 
-get:
-  x-anonymous-access: true
-  x-rate-limit-requests-per-minute: 100
+patch:
+  x-rate-limit-requests-per-minute: 30
   tags:
     - Example Prompt
-  summary: Get effective example prompt categorization
-  description: Get the current effective categorization for an example prompt.
-  operationId: getExamplePromptEffectiveCategorization
+  summary: Set effective example prompt categorization
+  description: >-
+    Set or clear the effective categorization for an example prompt by pointing
+    at a row from history. Pass null to clear. Admin only.
+  operationId: setEffectiveExamplePromptCategorization
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../../components/schemas/SetEffectiveCategorizationRequest.yaml
   responses:
     '200':
-      description: Success
+      description: Effective categorization updated successfully
       content:
         application/json:
           schema:
-            $ref: ../../../../components/schemas/ExamplePromptCategorizationResponse.yaml
+            $ref: ../../../../components/schemas/ExamplePrompt.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
     '404':
       $ref: ../../../../components/responses/NotFound.yaml
-    '429':
-      $ref: ../../../../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../../../../components/responses/InternalServerError.yaml

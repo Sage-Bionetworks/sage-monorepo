@@ -23,19 +23,21 @@ get:
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
 
-put:
-  x-rate-limit-requests-per-minute: 60
+patch:
+  x-rate-limit-requests-per-minute: 30
   tags:
     - Example Prompt
   summary: Update an example prompt
-  description: Update an example prompt (admin only). AI auto-categorization runs asynchronously if the question changed and no categories are provided.
+  description: >-
+    Partially update an example prompt (admin only). Only fields present in the request body
+    are modified. If the question text changes, AI auto-categorization runs asynchronously.
   operationId: updateExamplePrompt
   requestBody:
     required: true
     content:
       application/json:
         schema:
-          $ref: ../../components/schemas/ExamplePromptCreateRequest.yaml
+          $ref: ../../components/schemas/ExamplePromptUpdateRequest.yaml
   responses:
     '200':
       description: Example prompt updated successfully
@@ -51,6 +53,8 @@ put:
       $ref: ../../components/responses/Forbidden.yaml
     '404':
       $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
 
