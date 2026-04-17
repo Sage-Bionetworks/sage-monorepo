@@ -1,15 +1,13 @@
 # ExamplePromptCreateRequest
 
-The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.
+The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.
 
 ## Properties
 
-| Name           | Type                                                  | Description                                                                                                                                               | Notes      |
-| -------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| **question**   | **str**                                               | The biomedical question text.                                                                                                                             |
-| **source**     | [**ExamplePromptSource**](ExamplePromptSource.md)     |                                                                                                                                                           |
-| **categories** | [**List[BiomedicalCategory]**](BiomedicalCategory.md) | Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously. | [optional] |
-| **reason**     | **str**                                               | Reason for the manual categorization decision, if categories is provided.                                                                                 | [optional] |
+| Name         | Type                                              | Description                   | Notes |
+| ------------ | ------------------------------------------------- | ----------------------------- | ----- |
+| **question** | **str**                                           | The biomedical question text. |
+| **source**   | [**ExamplePromptSource**](ExamplePromptSource.md) |                               |
 
 ## Example
 

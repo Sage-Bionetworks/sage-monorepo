@@ -76,7 +76,7 @@ class ExamplePromptApi:
     ) -> ExamplePrompt:
         """Create an example prompt
 
-        Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
+        Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
 
         :param example_prompt_create_request: (required)
         :type example_prompt_create_request: ExamplePromptCreateRequest
@@ -145,7 +145,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[ExamplePrompt]:
         """Create an example prompt
 
-        Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
+        Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
 
         :param example_prompt_create_request: (required)
         :type example_prompt_create_request: ExamplePromptCreateRequest
@@ -214,7 +214,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """Create an example prompt
 
-        Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
+        Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
 
         :param example_prompt_create_request: (required)
         :type example_prompt_create_request: ExamplePromptCreateRequest

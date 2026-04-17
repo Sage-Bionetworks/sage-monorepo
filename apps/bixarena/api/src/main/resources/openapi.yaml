@@ -502,7 +502,7 @@ paths:
     post:
       description: Create a new example prompt (admin only). Newly created prompts
         are inactive; a reviewer publishes them via PATCH. AI auto-categorization
-        runs asynchronously unless categories are provided.
+        runs asynchronously after creation.
       operationId: createExamplePrompt
       requestBody:
         content:
@@ -3284,7 +3284,9 @@ components:
       type: object
     ExamplePromptCreateRequest:
       description: The information used to create an example prompt. Newly created
-        prompts are inactive until a reviewer publishes them via PATCH.
+        prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization
+        runs asynchronously after creation; admins can manually override later via
+        the categorization endpoints.
       properties:
         question:
           description: The biomedical question text.
@@ -3294,22 +3296,6 @@ components:
           type: string
         source:
           $ref: '#/components/schemas/ExamplePromptSource'
-        categories:
-          description: "Human override categories. If provided, a manual categorization\
-            \ is created and reason is required. If absent, AI auto-categorization\
-            \ runs asynchronously."
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          maxItems: 3
-          minItems: 1
-          nullable: true
-          type: array
-        reason:
-          description: "Reason for the manual categorization decision, if categories\
-            \ is provided."
-          maxLength: 1000
-          nullable: true
-          type: string
       required:
         - question
         - source

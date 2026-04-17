@@ -124,7 +124,7 @@ export class ExamplePromptService {
 
   /**
    * Create an example prompt
-   * Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
+   * Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
    * @param examplePromptCreateRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.

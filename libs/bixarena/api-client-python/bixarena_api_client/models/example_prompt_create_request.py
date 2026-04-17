@@ -17,9 +17,8 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List
 from typing_extensions import Annotated
-from bixarena_api_client.models.biomedical_category import BiomedicalCategory
 from bixarena_api_client.models.example_prompt_source import ExamplePromptSource
 from typing import Optional, Set
 from typing_extensions import Self
@@ -27,24 +26,14 @@ from typing_extensions import Self
 
 class ExamplePromptCreateRequest(BaseModel):
     """
-    The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.
+    The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.
     """  # noqa: E501
 
     question: Annotated[str, Field(min_length=1, strict=True, max_length=160)] = Field(
         description="The biomedical question text."
     )
     source: ExamplePromptSource
-    categories: Optional[
-        Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
-    ] = Field(
-        default=None,
-        description="Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.",
-    )
-    reason: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = Field(
-        default=None,
-        description="Reason for the manual categorization decision, if categories is provided.",
-    )
-    __properties: ClassVar[List[str]] = ["question", "source", "categories", "reason"]
+    __properties: ClassVar[List[str]] = ["question", "source"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -83,16 +72,6 @@ class ExamplePromptCreateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if categories (nullable) is None
-        # and model_fields_set contains the field
-        if self.categories is None and "categories" in self.model_fields_set:
-            _dict["categories"] = None
-
-        # set to None if reason (nullable) is None
-        # and model_fields_set contains the field
-        if self.reason is None and "reason" in self.model_fields_set:
-            _dict["reason"] = None
-
         return _dict
 
     @classmethod
@@ -105,11 +84,6 @@ class ExamplePromptCreateRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate(
-            {
-                "question": obj.get("question"),
-                "source": obj.get("source"),
-                "categories": obj.get("categories"),
-                "reason": obj.get("reason"),
-            }
+            {"question": obj.get("question"), "source": obj.get("source")}
         )
         return _obj

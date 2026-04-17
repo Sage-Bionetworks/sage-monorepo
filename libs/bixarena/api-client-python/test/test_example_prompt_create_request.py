@@ -38,11 +38,7 @@ class TestExamplePromptCreateRequest(unittest.TestCase):
         if include_optional:
             return ExamplePromptCreateRequest(
                 question = 'What are the main symptoms of Type 2 diabetes?',
-                source = 'pubmedqa',
-                categories = [
-                    'genetics'
-                    ],
-                reason = ''
+                source = 'pubmedqa'
             )
         else:
             return ExamplePromptCreateRequest(

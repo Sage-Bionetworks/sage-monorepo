@@ -51,7 +51,7 @@ public interface ExamplePromptApi {
 
     /**
      * POST /example-prompts : Create an example prompt
-     * Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
+     * Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
      *
      * @param examplePromptCreateRequestDto  (required)
      * @return Example prompt created successfully (status code 201)
@@ -64,7 +64,7 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "createExamplePrompt",
         summary = "Create an example prompt",
-        description = "Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously unless categories are provided.",
+        description = "Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Example prompt created successfully", content = {

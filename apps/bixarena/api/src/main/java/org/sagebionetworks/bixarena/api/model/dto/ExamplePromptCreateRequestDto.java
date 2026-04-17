@@ -6,10 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSourceDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -22,10 +18,10 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.
+ * The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.
  */
 
-@Schema(name = "ExamplePromptCreateRequest", description = "The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.")
+@Schema(name = "ExamplePromptCreateRequest", description = "The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.")
 @JsonTypeName("ExamplePromptCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ExamplePromptCreateRequestDto {
@@ -33,11 +29,6 @@ public class ExamplePromptCreateRequestDto {
   private String question;
 
   private ExamplePromptSourceDto source;
-
-  @Valid
-  private @Nullable List<BiomedicalCategoryDto> categories;
-
-  private @Nullable String reason = null;
 
   public ExamplePromptCreateRequestDto() {
     super();
@@ -91,54 +82,6 @@ public class ExamplePromptCreateRequestDto {
     this.source = source;
   }
 
-  public ExamplePromptCreateRequestDto categories(@Nullable List<BiomedicalCategoryDto> categories) {
-    this.categories = categories;
-    return this;
-  }
-
-  public ExamplePromptCreateRequestDto addCategoriesItem(BiomedicalCategoryDto categoriesItem) {
-    if (this.categories == null) {
-      this.categories = new ArrayList<>();
-    }
-    this.categories.add(categoriesItem);
-    return this;
-  }
-
-  /**
-   * Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.
-   * @return categories
-   */
-  @Valid @Size(min = 1, max = 3) 
-  @Schema(name = "categories", description = "Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("categories")
-  public @Nullable List<BiomedicalCategoryDto> getCategories() {
-    return categories;
-  }
-
-  public void setCategories(@Nullable List<BiomedicalCategoryDto> categories) {
-    this.categories = categories;
-  }
-
-  public ExamplePromptCreateRequestDto reason(@Nullable String reason) {
-    this.reason = reason;
-    return this;
-  }
-
-  /**
-   * Reason for the manual categorization decision, if categories is provided.
-   * @return reason
-   */
-  @Size(max = 1000) 
-  @Schema(name = "reason", description = "Reason for the manual categorization decision, if categories is provided.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("reason")
-  public @Nullable String getReason() {
-    return reason;
-  }
-
-  public void setReason(@Nullable String reason) {
-    this.reason = reason;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -149,14 +92,12 @@ public class ExamplePromptCreateRequestDto {
     }
     ExamplePromptCreateRequestDto examplePromptCreateRequest = (ExamplePromptCreateRequestDto) o;
     return Objects.equals(this.question, examplePromptCreateRequest.question) &&
-        Objects.equals(this.source, examplePromptCreateRequest.source) &&
-        Objects.equals(this.categories, examplePromptCreateRequest.categories) &&
-        Objects.equals(this.reason, examplePromptCreateRequest.reason);
+        Objects.equals(this.source, examplePromptCreateRequest.source);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(question, source, categories, reason);
+    return Objects.hash(question, source);
   }
 
   @Override
@@ -165,8 +106,6 @@ public class ExamplePromptCreateRequestDto {
     sb.append("class ExamplePromptCreateRequestDto {\n");
     sb.append("    question: ").append(toIndentedString(question)).append("\n");
     sb.append("    source: ").append(toIndentedString(source)).append("\n");
-    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
-    sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -197,8 +136,6 @@ public class ExamplePromptCreateRequestDto {
     protected Builder copyOf(ExamplePromptCreateRequestDto value) { 
       this.instance.setQuestion(value.question);
       this.instance.setSource(value.source);
-      this.instance.setCategories(value.categories);
-      this.instance.setReason(value.reason);
       return this;
     }
 
@@ -209,16 +146,6 @@ public class ExamplePromptCreateRequestDto {
     
     public ExamplePromptCreateRequestDto.Builder source(ExamplePromptSourceDto source) {
       this.instance.source(source);
-      return this;
-    }
-    
-    public ExamplePromptCreateRequestDto.Builder categories(List<BiomedicalCategoryDto> categories) {
-      this.instance.categories(categories);
-      return this;
-    }
-    
-    public ExamplePromptCreateRequestDto.Builder reason(String reason) {
-      this.instance.reason(reason);
       return this;
     }
     

@@ -360,7 +360,7 @@ paths:
       tags:
         - Example Prompt
       summary: Create an example prompt
-      description: Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
+      description: Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
       operationId: createExamplePrompt
       requestBody:
         required: true
@@ -2270,7 +2270,7 @@ components:
             - examplePrompts
     ExamplePromptCreateRequest:
       type: object
-      description: The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.
+      description: The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.
       properties:
         question:
           type: string
@@ -2280,19 +2280,6 @@ components:
           example: What are the main symptoms of Type 2 diabetes?
         source:
           $ref: '#/components/schemas/ExamplePromptSource'
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          minItems: 1
-          maxItems: 3
-          nullable: true
-          description: Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.
-        reason:
-          type: string
-          maxLength: 1000
-          nullable: true
-          description: Reason for the manual categorization decision, if categories is provided.
       required:
         - question
         - source

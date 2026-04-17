@@ -8,10 +8,9 @@
  * Do not edit the class manually.
  */
 import { ExamplePromptSource } from './example-prompt-source';
-import { BiomedicalCategory } from './biomedical-category';
 
 /**
- * The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.
+ * The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.
  */
 export interface ExamplePromptCreateRequest {
   /**
@@ -19,13 +18,5 @@ export interface ExamplePromptCreateRequest {
    */
   question: string;
   source: ExamplePromptSource;
-  /**
-   * Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.
-   */
-  categories?: Array<BiomedicalCategory> | null;
-  /**
-   * Reason for the manual categorization decision, if categories is provided.
-   */
-  reason?: string | null;
 }
 export namespace ExamplePromptCreateRequest {}
