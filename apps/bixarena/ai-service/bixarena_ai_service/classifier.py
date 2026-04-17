@@ -105,31 +105,25 @@ def parse_categories(raw: str) -> list[str]:
 
     Filters out any slug that is not in the allowed ``BIOMEDICAL_CATEGORIES``
     list (defence-in-depth even though the structured-output schema already
-    restricts the enum). Returns an empty list if parsing fails.
+    restricts the enum). Parse failures propagate as exceptions so the outer
+    ``categorize()`` caller can distinguish them from a legit empty-list "no
+    fit" result and avoid caching them.
     """
     allowed = set(BIOMEDICAL_CATEGORIES)
-    try:
-        data = json.loads(raw)
-        raw_categories = data["categories"]
-        if not isinstance(raw_categories, list):
-            raise ValueError("categories field is not a list")
-        # Preserve order, dedup, keep only allowed slugs, cap at 3.
-        seen: set[str] = set()
-        result: list[str] = []
-        for item in raw_categories:
-            if isinstance(item, str) and item in allowed and item not in seen:
-                seen.add(item)
-                result.append(item)
-                if len(result) >= 3:
-                    break
-        return result
-    except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
-        logger.warning(
-            "Failed to parse LLM categorization response: %s — raw: %s",
-            exc,
-            raw[:200],
-        )
-        return []
+    data = json.loads(raw)
+    raw_categories = data["categories"]
+    if not isinstance(raw_categories, list):
+        raise ValueError("categories field is not a list")
+    # Preserve order, dedup, keep only allowed slugs, cap at 3.
+    seen: set[str] = set()
+    result: list[str] = []
+    for item in raw_categories:
+        if isinstance(item, str) and item in allowed and item not in seen:
+            seen.add(item)
+            result.append(item)
+            if len(result) >= 3:
+                break
+    return result
 
 
 async def classify(system_prompt: str, user_message: str) -> float:
