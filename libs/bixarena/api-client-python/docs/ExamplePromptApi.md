@@ -20,7 +20,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 
 Create an example prompt
 
-Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
+Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
 
 ### Example
 
@@ -102,7 +102,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Create an example prompt categorization
 
-Manually categorize an example prompt (admin only). The created categorization is automatically set as the effective categorization.
+Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
 
 ### Example
 
@@ -187,7 +187,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Delete an example prompt
 
-Delete an example prompt (admin only).
+Delete an example prompt.
 
 ### Example
 
@@ -343,7 +343,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 List example prompt categorizations
 
-Get all categorizations for an example prompt (admin only).
+Get all categorizations for an example prompt.
 
 ### Example
 
@@ -503,7 +503,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Run an automated categorization
 
-Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
+Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
 
 ### Example
 
@@ -586,7 +586,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Set effective example prompt categorization
 
-Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
+Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.
 
 ### Example
 
@@ -670,7 +670,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Update an example prompt
 
-Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
 
 ### Example
 

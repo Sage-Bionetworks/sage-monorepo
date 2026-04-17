@@ -262,7 +262,7 @@ export class BattleService {
 
   /**
    * Create a battle categorization
-   * Manually categorize a battle (admin only). The created categorization is automatically set as the effective categorization.
+   * Manually categorize a battle. The created categorization is automatically set as the effective categorization.
    * @param battleId The unique identifier of the battle
    * @param battleCategorizationCreateRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1128,7 +1128,7 @@ export class BattleService {
 
   /**
    * List battle categorizations
-   * Get all categorizations for a battle (admin only).
+   * Get all categorizations for a battle.
    * @param battleId The unique identifier of the battle
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
@@ -1459,7 +1459,7 @@ export class BattleService {
 
   /**
    * Run an automated categorization
-   * Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical. Admin only.
+   * Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
    * @param battleId The unique identifier of the battle
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
@@ -1677,7 +1677,7 @@ export class BattleService {
 
   /**
    * Set effective battle categorization
-   * Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided. Admin only.
+   * Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided.
    * @param battleId The unique identifier of the battle
    * @param setEffectiveCategorizationRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

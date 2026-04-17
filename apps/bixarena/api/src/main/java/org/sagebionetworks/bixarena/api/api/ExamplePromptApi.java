@@ -51,7 +51,7 @@ public interface ExamplePromptApi {
 
     /**
      * POST /example-prompts : Create an example prompt
-     * Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
+     * Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
      *
      * @param examplePromptCreateRequestDto  (required)
      * @return Example prompt created successfully (status code 201)
@@ -64,7 +64,7 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "createExamplePrompt",
         summary = "Create an example prompt",
-        description = "Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.",
+        description = "Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Example prompt created successfully", content = {
@@ -112,7 +112,7 @@ public interface ExamplePromptApi {
 
     /**
      * POST /example-prompts/{examplePromptId}/categorizations : Create an example prompt categorization
-     * Manually categorize an example prompt (admin only). The created categorization is automatically set as the effective categorization.
+     * Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @param examplePromptCategorizationCreateRequestDto  (required)
@@ -127,7 +127,7 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "createExamplePromptCategorization",
         summary = "Create an example prompt categorization",
-        description = "Manually categorize an example prompt (admin only). The created categorization is automatically set as the effective categorization.",
+        description = "Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Example prompt categorization created successfully", content = {
@@ -180,7 +180,7 @@ public interface ExamplePromptApi {
 
     /**
      * DELETE /example-prompts/{examplePromptId} : Delete an example prompt
-     * Delete an example prompt (admin only).
+     * Delete an example prompt.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @return Example prompt deleted successfully (status code 204)
@@ -192,7 +192,7 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "deleteExamplePrompt",
         summary = "Delete an example prompt",
-        description = "Delete an example prompt (admin only).",
+        description = "Delete an example prompt.",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "204", description = "Example prompt deleted successfully"),
@@ -278,7 +278,7 @@ public interface ExamplePromptApi {
 
     /**
      * GET /example-prompts/{examplePromptId}/categorizations : List example prompt categorizations
-     * Get all categorizations for an example prompt (admin only).
+     * Get all categorizations for an example prompt.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @return List of example prompt categorizations (status code 200)
@@ -290,7 +290,7 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "listExamplePromptCategorizations",
         summary = "List example prompt categorizations",
-        description = "Get all categorizations for an example prompt (admin only).",
+        description = "Get all categorizations for an example prompt.",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "200", description = "List of example prompt categorizations", content = {
@@ -383,7 +383,7 @@ public interface ExamplePromptApi {
 
     /**
      * POST /example-prompts/{examplePromptId}/categorizations/run : Run an automated categorization
-     * Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
+     * Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @return Categorization completed and persisted successfully (status code 201)
@@ -398,7 +398,7 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "runExamplePromptCategorization",
         summary = "Run an automated categorization",
-        description = "Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.",
+        description = "Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Categorization completed and persisted successfully", content = {
@@ -450,7 +450,7 @@ public interface ExamplePromptApi {
 
     /**
      * PATCH /example-prompts/{examplePromptId}/categorizations/effective : Set effective example prompt categorization
-     * Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
+     * Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @param setEffectiveCategorizationRequestDto  (required)
@@ -464,7 +464,7 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "setEffectiveExamplePromptCategorization",
         summary = "Set effective example prompt categorization",
-        description = "Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.",
+        description = "Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Effective categorization updated successfully", content = {
@@ -513,7 +513,7 @@ public interface ExamplePromptApi {
 
     /**
      * PATCH /example-prompts/{examplePromptId} : Update an example prompt
-     * Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+     * Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @param examplePromptUpdateRequestDto  (required)
@@ -528,7 +528,7 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "updateExamplePrompt",
         summary = "Update an example prompt",
-        description = "Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.",
+        description = "Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Example prompt updated successfully", content = {

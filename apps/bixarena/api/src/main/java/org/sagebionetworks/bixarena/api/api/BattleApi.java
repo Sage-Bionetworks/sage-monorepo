@@ -132,7 +132,7 @@ public interface BattleApi {
 
     /**
      * POST /battles/{battleId}/categorizations : Create a battle categorization
-     * Manually categorize a battle (admin only). The created categorization is automatically set as the effective categorization.
+     * Manually categorize a battle. The created categorization is automatically set as the effective categorization.
      *
      * @param battleId The unique identifier of the battle (required)
      * @param battleCategorizationCreateRequestDto  (required)
@@ -147,7 +147,7 @@ public interface BattleApi {
     @Operation(
         operationId = "createBattleCategorization",
         summary = "Create a battle categorization",
-        description = "Manually categorize a battle (admin only). The created categorization is automatically set as the effective categorization.",
+        description = "Manually categorize a battle. The created categorization is automatically set as the effective categorization.",
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Battle categorization created successfully", content = {
@@ -592,7 +592,7 @@ public interface BattleApi {
 
     /**
      * GET /battles/{battleId}/categorizations : List battle categorizations
-     * Get all categorizations for a battle (admin only).
+     * Get all categorizations for a battle.
      *
      * @param battleId The unique identifier of the battle (required)
      * @return List of battle categorizations (status code 200)
@@ -604,7 +604,7 @@ public interface BattleApi {
     @Operation(
         operationId = "listBattleCategorizations",
         summary = "List battle categorizations",
-        description = "Get all categorizations for a battle (admin only).",
+        description = "Get all categorizations for a battle.",
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "200", description = "List of battle categorizations", content = {
@@ -757,7 +757,7 @@ public interface BattleApi {
 
     /**
      * POST /battles/{battleId}/categorizations/run : Run an automated categorization
-     * Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical. Admin only.
+     * Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
      *
      * @param battleId The unique identifier of the battle (required)
      * @return Categorization completed and persisted successfully (status code 201)
@@ -772,7 +772,7 @@ public interface BattleApi {
     @Operation(
         operationId = "runBattleCategorization",
         summary = "Run an automated categorization",
-        description = "Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical. Admin only.",
+        description = "Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.",
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Categorization completed and persisted successfully", content = {
@@ -889,7 +889,7 @@ public interface BattleApi {
 
     /**
      * PATCH /battles/{battleId}/categorizations/effective : Set effective battle categorization
-     * Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided. Admin only.
+     * Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided.
      *
      * @param battleId The unique identifier of the battle (required)
      * @param setEffectiveCategorizationRequestDto  (required)
@@ -904,7 +904,7 @@ public interface BattleApi {
     @Operation(
         operationId = "setEffectiveBattleCategorization",
         summary = "Set effective battle categorization",
-        description = "Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided. Admin only.",
+        description = "Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided.",
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Effective categorization updated successfully", content = {

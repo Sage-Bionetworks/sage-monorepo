@@ -38,7 +38,7 @@ public interface ExamplePromptApiDelegate {
 
     /**
      * POST /example-prompts : Create an example prompt
-     * Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
+     * Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
      *
      * @param examplePromptCreateRequestDto  (required)
      * @return Example prompt created successfully (status code 201)
@@ -90,7 +90,7 @@ public interface ExamplePromptApiDelegate {
 
     /**
      * POST /example-prompts/{examplePromptId}/categorizations : Create an example prompt categorization
-     * Manually categorize an example prompt (admin only). The created categorization is automatically set as the effective categorization.
+     * Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @param examplePromptCategorizationCreateRequestDto  (required)
@@ -150,7 +150,7 @@ public interface ExamplePromptApiDelegate {
 
     /**
      * DELETE /example-prompts/{examplePromptId} : Delete an example prompt
-     * Delete an example prompt (admin only).
+     * Delete an example prompt.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @return Example prompt deleted successfully (status code 204)
@@ -231,7 +231,7 @@ public interface ExamplePromptApiDelegate {
 
     /**
      * GET /example-prompts/{examplePromptId}/categorizations : List example prompt categorizations
-     * Get all categorizations for an example prompt (admin only).
+     * Get all categorizations for an example prompt.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @return List of example prompt categorizations (status code 200)
@@ -317,7 +317,7 @@ public interface ExamplePromptApiDelegate {
 
     /**
      * POST /example-prompts/{examplePromptId}/categorizations/run : Run an automated categorization
-     * Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
+     * Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @return Categorization completed and persisted successfully (status code 201)
@@ -376,7 +376,7 @@ public interface ExamplePromptApiDelegate {
 
     /**
      * PATCH /example-prompts/{examplePromptId}/categorizations/effective : Set effective example prompt categorization
-     * Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
+     * Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @param setEffectiveCategorizationRequestDto  (required)
@@ -430,7 +430,7 @@ public interface ExamplePromptApiDelegate {
 
     /**
      * PATCH /example-prompts/{examplePromptId} : Update an example prompt
-     * Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+     * Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @param examplePromptUpdateRequestDto  (required)

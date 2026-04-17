@@ -76,7 +76,7 @@ class ExamplePromptApi:
     ) -> ExamplePrompt:
         """Create an example prompt
 
-        Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
+        Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
 
         :param example_prompt_create_request: (required)
         :type example_prompt_create_request: ExamplePromptCreateRequest
@@ -145,7 +145,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[ExamplePrompt]:
         """Create an example prompt
 
-        Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
+        Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
 
         :param example_prompt_create_request: (required)
         :type example_prompt_create_request: ExamplePromptCreateRequest
@@ -214,7 +214,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """Create an example prompt
 
-        Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
+        Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
 
         :param example_prompt_create_request: (required)
         :type example_prompt_create_request: ExamplePromptCreateRequest
@@ -345,7 +345,7 @@ class ExamplePromptApi:
     ) -> ExamplePromptCategorizationResponse:
         """Create an example prompt categorization
 
-        Manually categorize an example prompt (admin only). The created categorization is automatically set as the effective categorization.
+        Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -421,7 +421,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[ExamplePromptCategorizationResponse]:
         """Create an example prompt categorization
 
-        Manually categorize an example prompt (admin only). The created categorization is automatically set as the effective categorization.
+        Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -497,7 +497,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """Create an example prompt categorization
 
-        Manually categorize an example prompt (admin only). The created categorization is automatically set as the effective categorization.
+        Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -634,7 +634,7 @@ class ExamplePromptApi:
     ) -> None:
         """Delete an example prompt
 
-        Delete an example prompt (admin only).
+        Delete an example prompt.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -704,7 +704,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[None]:
         """Delete an example prompt
 
-        Delete an example prompt (admin only).
+        Delete an example prompt.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -774,7 +774,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """Delete an example prompt
 
-        Delete an example prompt (admin only).
+        Delete an example prompt.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1149,7 +1149,7 @@ class ExamplePromptApi:
     ) -> List[ExamplePromptCategorizationResponse]:
         """List example prompt categorizations
 
-        Get all categorizations for an example prompt (admin only).
+        Get all categorizations for an example prompt.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1219,7 +1219,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[List[ExamplePromptCategorizationResponse]]:
         """List example prompt categorizations
 
-        Get all categorizations for an example prompt (admin only).
+        Get all categorizations for an example prompt.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1289,7 +1289,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """List example prompt categorizations
 
-        Get all categorizations for an example prompt (admin only).
+        Get all categorizations for an example prompt.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1677,7 +1677,7 @@ class ExamplePromptApi:
     ) -> ExamplePromptCategorizationResponse:
         """Run an automated categorization
 
-        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
+        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1750,7 +1750,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[ExamplePromptCategorizationResponse]:
         """Run an automated categorization
 
-        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
+        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1823,7 +1823,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """Run an automated categorization
 
-        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
+        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1946,7 +1946,7 @@ class ExamplePromptApi:
     ) -> ExamplePrompt:
         """Set effective example prompt categorization
 
-        Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
+        Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -2021,7 +2021,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[ExamplePrompt]:
         """Set effective example prompt categorization
 
-        Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
+        Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -2096,7 +2096,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """Set effective example prompt categorization
 
-        Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
+        Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -2233,7 +2233,7 @@ class ExamplePromptApi:
     ) -> ExamplePrompt:
         """Update an example prompt
 
-        Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+        Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -2309,7 +2309,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[ExamplePrompt]:
         """Update an example prompt
 
-        Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+        Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -2385,7 +2385,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """Update an example prompt
 
-        Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+        Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str

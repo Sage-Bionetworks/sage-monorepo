@@ -124,7 +124,7 @@ export class ExamplePromptService {
 
   /**
    * Create an example prompt
-   * Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
+   * Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
    * @param examplePromptCreateRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
@@ -242,7 +242,7 @@ export class ExamplePromptService {
 
   /**
    * Create an example prompt categorization
-   * Manually categorize an example prompt (admin only). The created categorization is automatically set as the effective categorization.
+   * Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
    * @param examplePromptId The unique identifier of an example prompt
    * @param examplePromptCategorizationCreateRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -373,7 +373,7 @@ export class ExamplePromptService {
 
   /**
    * Delete an example prompt
-   * Delete an example prompt (admin only).
+   * Delete an example prompt.
    * @param examplePromptId The unique identifier of an example prompt
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
@@ -587,7 +587,7 @@ export class ExamplePromptService {
 
   /**
    * List example prompt categorizations
-   * Get all categorizations for an example prompt (admin only).
+   * Get all categorizations for an example prompt.
    * @param examplePromptId The unique identifier of an example prompt
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
@@ -809,7 +809,7 @@ export class ExamplePromptService {
 
   /**
    * Run an automated categorization
-   * Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Admin only.
+   * Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
    * @param examplePromptId The unique identifier of an example prompt
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
@@ -918,7 +918,7 @@ export class ExamplePromptService {
 
   /**
    * Set effective example prompt categorization
-   * Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear. Admin only.
+   * Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.
    * @param examplePromptId The unique identifier of an example prompt
    * @param setEffectiveCategorizationRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1049,7 +1049,7 @@ export class ExamplePromptService {
 
   /**
    * Update an example prompt
-   * Partially update an example prompt (admin only). Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+   * Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
    * @param examplePromptId The unique identifier of an example prompt
    * @param examplePromptUpdateRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

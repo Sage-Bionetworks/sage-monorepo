@@ -112,7 +112,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Create a battle categorization
 
-Manually categorize a battle (admin only). The created categorization is automatically set as the effective categorization.
+Manually categorize a battle. The created categorization is automatically set as the effective categorization.
 
 ### Example
 
@@ -696,7 +696,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 List battle categorizations
 
-Get all categorizations for a battle (admin only).
+Get all categorizations for a battle.
 
 ### Example
 
@@ -937,7 +937,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Run an automated categorization
 
-Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical. Admin only.
+Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
 
 ### Example
 
@@ -1102,7 +1102,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Set effective battle categorization
 
-Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided. Admin only.
+Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided.
 
 ### Example
 
