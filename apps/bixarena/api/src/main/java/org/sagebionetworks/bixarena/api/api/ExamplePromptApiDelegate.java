@@ -45,7 +45,6 @@ public interface ExamplePromptApiDelegate {
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
-     *         or The request conflicts with current state of the target resource (status code 409)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see ExamplePromptApi#createExamplePrompt
      */
@@ -55,11 +54,6 @@ public interface ExamplePromptApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"createdAt\" : \"2025-08-01T09:00:00Z\", \"question\" : \"What are the main symptoms of Type 2 diabetes?\", \"active\" : true, \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"source\" : \"pubmedqa\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ], \"effectiveCategorizationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {

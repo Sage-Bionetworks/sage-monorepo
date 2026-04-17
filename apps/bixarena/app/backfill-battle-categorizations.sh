@@ -10,15 +10,14 @@
 #
 # Prerequisites:
 #   - Admin account (JSESSIONID from an admin user)
-#   - API gateway running on localhost:8113
+#   - API reachable at $GATEWAY_BASE_URL (default: http://localhost:8113)
 #   - AI service running
 #   - Battles have been validated (effectiveValidationId populated)
 #
 # To get your JSESSIONID:
-# 1. Open http://localhost:8100 in browser
-# 2. Click Login and authenticate with Synapse
-# 3. Press F12 -> Application -> Cookies -> localhost:8100
-# 4. Copy the JSESSIONID value
+# 1. Log in to the BixArena web app in your browser as an admin user.
+# 2. Open browser DevTools -> Application -> Cookies.
+# 3. Copy the value of the JSESSIONID cookie.
 
 set -e
 
@@ -33,7 +32,7 @@ fi
 SESSION_ID="$1"
 GATEWAY_BASE_URL="${GATEWAY_BASE_URL:-http://localhost:8113}"
 PAGE_SIZE=100
-DELAY="${DELAY:-1}"
+DELAY="${DELAY:-3}"
 
 echo "============================================"
 echo "BixArena Battle Categorization Backfill"
@@ -48,6 +47,8 @@ echo ""
 # Counters
 CATEGORIZED=0
 SKIPPED=0
+NO_FIT=0
+NO_ROUNDS=0
 NOT_BIOMEDICAL=0
 FAILED=0
 
@@ -103,6 +104,16 @@ for page in $(seq 0 $((TOTAL_PAGES - 1))); do
                 CATEGORIZED=$((CATEGORIZED + 1))
                 echo "  [OK]   $BATTLE_ID -> categories=[$CATEGORIES]"
                 ;;
+            204)
+                NO_FIT=$((NO_FIT + 1))
+                echo "  [NOFIT] $BATTLE_ID -> AI matched no category"
+                ;;
+            404)
+                # BattleRoundNotFoundException — battle exists but has no rounds
+                # to collect prompts from. Not an error, just nothing to do.
+                NO_ROUNDS=$((NO_ROUNDS + 1))
+                echo "  [SKIP] $BATTLE_ID -> no rounds (404)"
+                ;;
             409)
                 NOT_BIOMEDICAL=$((NOT_BIOMEDICAL + 1))
                 echo "  [SKIP] $BATTLE_ID -> not biomedical (409)"
@@ -124,9 +135,11 @@ echo "Backfill Complete"
 echo "============================================"
 echo "  Categorized: $CATEGORIZED"
 echo "  Already had categorization / not ended: $SKIPPED"
+echo "  No category fit (204): $NO_FIT"
+echo "  No rounds (404): $NO_ROUNDS"
 echo "  Not biomedical (409): $NOT_BIOMEDICAL"
 echo "  Failed: $FAILED"
-echo "  Total processed: $((CATEGORIZED + SKIPPED + NOT_BIOMEDICAL + FAILED))"
+echo "  Total processed: $((CATEGORIZED + SKIPPED + NO_FIT + NO_ROUNDS + NOT_BIOMEDICAL + FAILED))"
 echo ""
 
 if [ "$FAILED" -gt 0 ]; then

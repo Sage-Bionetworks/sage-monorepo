@@ -91,7 +91,6 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 | **400**     | Invalid request                                                   | -                |
 | **401**     | Unauthorized                                                      | -                |
 | **403**     | The user does not have the permission to perform this action      | -                |
-| **409**     | The request conflicts with current state of the target resource   | -                |
 | **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

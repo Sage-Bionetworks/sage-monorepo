@@ -7,6 +7,7 @@ properties:
       $ref: BiomedicalCategory.yaml
     minItems: 1
     maxItems: 3
+    uniqueItems: true
   reason:
     type: string
     maxLength: 1000

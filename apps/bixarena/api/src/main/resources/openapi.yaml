@@ -523,8 +523,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        '409':
-          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Create an example prompt
@@ -3374,6 +3372,7 @@ components:
           maxItems: 3
           minItems: 1
           type: array
+          uniqueItems: true
         reason:
           description: Reason for the categorization decision
           maxLength: 1000
@@ -4147,6 +4146,7 @@ components:
           maxItems: 3
           minItems: 1
           type: array
+          uniqueItems: true
         reason:
           description: Reason for the categorization decision
           maxLength: 1000

@@ -5,9 +5,9 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -29,7 +29,7 @@ import jakarta.annotation.Generated;
 public class ExamplePromptCategorizationCreateRequestDto {
 
   @Valid
-  private List<BiomedicalCategoryDto> categories = new ArrayList<>();
+  private Set<BiomedicalCategoryDto> categories = new LinkedHashSet<>();
 
   private @Nullable String reason = null;
 
@@ -40,18 +40,18 @@ public class ExamplePromptCategorizationCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ExamplePromptCategorizationCreateRequestDto(List<BiomedicalCategoryDto> categories) {
+  public ExamplePromptCategorizationCreateRequestDto(Set<BiomedicalCategoryDto> categories) {
     this.categories = categories;
   }
 
-  public ExamplePromptCategorizationCreateRequestDto categories(List<BiomedicalCategoryDto> categories) {
+  public ExamplePromptCategorizationCreateRequestDto categories(Set<BiomedicalCategoryDto> categories) {
     this.categories = categories;
     return this;
   }
 
   public ExamplePromptCategorizationCreateRequestDto addCategoriesItem(BiomedicalCategoryDto categoriesItem) {
     if (this.categories == null) {
-      this.categories = new ArrayList<>();
+      this.categories = new LinkedHashSet<>();
     }
     this.categories.add(categoriesItem);
     return this;
@@ -64,11 +64,12 @@ public class ExamplePromptCategorizationCreateRequestDto {
   @NotNull @Valid @Size(min = 1, max = 3) 
   @Schema(name = "categories", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
-  public List<BiomedicalCategoryDto> getCategories() {
+  public Set<BiomedicalCategoryDto> getCategories() {
     return categories;
   }
 
-  public void setCategories(List<BiomedicalCategoryDto> categories) {
+  @JsonDeserialize(as = LinkedHashSet.class)
+  public void setCategories(Set<BiomedicalCategoryDto> categories) {
     this.categories = categories;
   }
 
@@ -149,7 +150,7 @@ public class ExamplePromptCategorizationCreateRequestDto {
       return this;
     }
 
-    public ExamplePromptCategorizationCreateRequestDto.Builder categories(List<BiomedicalCategoryDto> categories) {
+    public ExamplePromptCategorizationCreateRequestDto.Builder categories(Set<BiomedicalCategoryDto> categories) {
       this.instance.categories(categories);
       return this;
     }

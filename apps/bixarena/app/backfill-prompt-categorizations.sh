@@ -9,14 +9,13 @@
 #
 # Prerequisites:
 #   - Admin account (JSESSIONID from an admin user)
-#   - API gateway running on localhost:8113
+#   - API reachable at $GATEWAY_BASE_URL (default: http://localhost:8113)
 #   - AI service running
 #
 # To get your JSESSIONID:
-# 1. Open http://localhost:8100 in browser
-# 2. Click Login and authenticate with Synapse
-# 3. Press F12 -> Application -> Cookies -> localhost:8100
-# 4. Copy the JSESSIONID value
+# 1. Log in to the BixArena web app in your browser as an admin user.
+# 2. Open browser DevTools -> Application -> Cookies.
+# 3. Copy the value of the JSESSIONID cookie.
 
 set -e
 
@@ -31,7 +30,7 @@ fi
 SESSION_ID="$1"
 GATEWAY_BASE_URL="${GATEWAY_BASE_URL:-http://localhost:8113}"
 PAGE_SIZE=100
-DELAY="${DELAY:-1}"
+DELAY="${DELAY:-3}"
 
 echo "============================================"
 echo "BixArena Example Prompt Categorization Backfill"
@@ -46,6 +45,7 @@ echo ""
 # Counters
 CATEGORIZED=0
 SKIPPED=0
+NO_FIT=0
 FAILED=0
 
 # Get total number of example prompts
@@ -89,15 +89,22 @@ for page in $(seq 0 $((TOTAL_PAGES - 1))); do
         HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
         BODY=$(echo "$RESPONSE" | head -n-1)
 
-        if [ "$HTTP_CODE" = "201" ]; then
-            CATEGORIES=$(echo "$BODY" | jq -r '.categories | join(",")')
-            CATEGORIZED=$((CATEGORIZED + 1))
-            echo "  [OK]   $PROMPT_ID -> categories=[$CATEGORIES]"
-        else
-            FAILED=$((FAILED + 1))
-            DETAIL=$(echo "$BODY" | jq -r '.detail // .message // "unknown error"' 2>/dev/null)
-            echo "  [FAIL] $PROMPT_ID -> HTTP $HTTP_CODE: $DETAIL"
-        fi
+        case "$HTTP_CODE" in
+            201)
+                CATEGORIES=$(echo "$BODY" | jq -r '.categories | join(",")')
+                CATEGORIZED=$((CATEGORIZED + 1))
+                echo "  [OK]   $PROMPT_ID -> categories=[$CATEGORIES]"
+                ;;
+            204)
+                NO_FIT=$((NO_FIT + 1))
+                echo "  [NOFIT] $PROMPT_ID -> AI matched no category"
+                ;;
+            *)
+                FAILED=$((FAILED + 1))
+                DETAIL=$(echo "$BODY" | jq -r '.detail // .message // "unknown error"' 2>/dev/null)
+                echo "  [FAIL] $PROMPT_ID -> HTTP $HTTP_CODE: $DETAIL"
+                ;;
+        esac
 
         sleep "$DELAY"
     done <<< "$ALL_PROMPTS"
@@ -109,8 +116,9 @@ echo "Backfill Complete"
 echo "============================================"
 echo "  Categorized: $CATEGORIZED"
 echo "  Already had categorization: $SKIPPED"
+echo "  No category fit (204): $NO_FIT"
 echo "  Failed: $FAILED"
-echo "  Total processed: $((CATEGORIZED + SKIPPED + FAILED))"
+echo "  Total processed: $((CATEGORIZED + SKIPPED + NO_FIT + FAILED))"
 echo ""
 
 if [ "$FAILED" -gt 0 ]; then

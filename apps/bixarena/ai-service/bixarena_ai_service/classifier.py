@@ -115,6 +115,7 @@ def parse_categories(raw: str) -> list[str]:
     if not isinstance(raw_categories, list):
         raise ValueError("categories field is not a list")
     # Preserve order, dedup, keep only allowed slugs, cap at 3.
+    # This is the AI response's uniqueness guarantee; DB join-table PK is the last line.
     seen: set[str] = set()
     result: list[str] = []
     for item in raw_categories:

@@ -381,8 +381,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        '409':
-          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /example-prompts/{examplePromptId}:
@@ -2346,6 +2344,7 @@ components:
             $ref: '#/components/schemas/BiomedicalCategory'
           minItems: 1
           maxItems: 3
+          uniqueItems: true
         reason:
           type: string
           maxLength: 1000
@@ -2928,6 +2927,7 @@ components:
             $ref: '#/components/schemas/BiomedicalCategory'
           minItems: 1
           maxItems: 3
+          uniqueItems: true
         reason:
           type: string
           maxLength: 1000

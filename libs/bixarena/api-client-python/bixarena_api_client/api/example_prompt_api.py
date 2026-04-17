@@ -115,7 +115,6 @@ class ExamplePromptApi:
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
-            "409": "BasicError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -184,7 +183,6 @@ class ExamplePromptApi:
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
-            "409": "BasicError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -253,7 +251,6 @@ class ExamplePromptApi:
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
-            "409": "BasicError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(

@@ -13,7 +13,7 @@ import { BiomedicalCategory } from './biomedical-category';
  * Request to manually categorize a battle.
  */
 export interface BattleCategorizationCreateRequest {
-  categories: Array<BiomedicalCategory>;
+  categories: Set<BiomedicalCategory>;
   /**
    * Reason for the categorization decision
    */

@@ -58,7 +58,6 @@ public interface ExamplePromptApi {
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
-     *         or The request conflicts with current state of the target resource (status code 409)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -80,10 +79,6 @@ public interface ExamplePromptApi {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
