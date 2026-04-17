@@ -388,7 +388,6 @@ class ExamplePromptApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
-            "409": "BasicError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -464,7 +463,6 @@ class ExamplePromptApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
-            "409": "BasicError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -540,7 +538,6 @@ class ExamplePromptApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
-            "409": "BasicError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1718,7 +1715,6 @@ class ExamplePromptApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
-            "409": "BasicError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1791,7 +1787,6 @@ class ExamplePromptApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
-            "409": "BasicError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1864,7 +1859,6 @@ class ExamplePromptApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
-            "409": "BasicError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(

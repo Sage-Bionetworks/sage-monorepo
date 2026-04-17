@@ -99,7 +99,6 @@ public interface ExamplePromptApiDelegate {
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
-     *         or The request conflicts with current state of the target resource (status code 409)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see ExamplePromptApi#createExamplePromptCategorization
      */
@@ -110,11 +109,6 @@ public interface ExamplePromptApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -326,7 +320,6 @@ public interface ExamplePromptApiDelegate {
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
-     *         or The request conflicts with current state of the target resource (status code 409)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see ExamplePromptApi#runExamplePromptCategorization
      */
@@ -336,11 +329,6 @@ public interface ExamplePromptApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categories\" : [ \"genetics\", \"genetics\", \"genetics\" ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {

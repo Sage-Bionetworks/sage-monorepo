@@ -889,7 +889,7 @@ public interface BattleApi {
 
     /**
      * PATCH /battles/{battleId}/categorizations/effective : Set effective battle categorization
-     * Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided.
+     * Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical — the gate applies to both setting and clearing; non-biomedical battles are not eligible for any effective categorization state change.
      *
      * @param battleId The unique identifier of the battle (required)
      * @param setEffectiveCategorizationRequestDto  (required)
@@ -904,7 +904,7 @@ public interface BattleApi {
     @Operation(
         operationId = "setEffectiveBattleCategorization",
         summary = "Set effective battle categorization",
-        description = "Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided.",
+        description = "Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical — the gate applies to both setting and clearing; non-biomedical battles are not eligible for any effective categorization state change.",
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Effective categorization updated successfully", content = {

@@ -736,8 +736,6 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Create an example prompt categorization
@@ -834,8 +832,6 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Run an automated categorization
@@ -1266,7 +1262,8 @@ paths:
     patch:
       description: Set or clear the effective categorization for a battle by pointing
         at a row from history. Pass null to clear. Returns 409 if the battle is not
-        biomedical and a non-null categorizationId is provided.
+        biomedical — the gate applies to both setting and clearing; non-biomedical
+        battles are not eligible for any effective categorization state change.
       operationId: setEffectiveBattleCategorization
       parameters:
         - description: The unique identifier of the battle

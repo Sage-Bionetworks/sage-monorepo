@@ -1102,7 +1102,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Set effective battle categorization
 
-Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical and a non-null categorizationId is provided.
+Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical — the gate applies to both setting and clearing; non-biomedical battles are not eligible for any effective categorization state change.
 
 ### Example
 

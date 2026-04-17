@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 FALLBACK_CONFIDENCE = 0.0
 
 # The 20 bioRxiv subject categories (stable since 2013).
-# Also referenced by the Java API's CHECK constraint and OpenAPI enum.
+# Keep in sync with the OpenAPI BiomedicalCategory enum.
 BIOMEDICAL_CATEGORIES: tuple[str, ...] = (
     "biochemistry",
     "bioengineering",
