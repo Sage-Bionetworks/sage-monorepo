@@ -6,7 +6,7 @@ get:
   tags:
     - Example Prompt
   summary: List example prompt categorizations
-  description: Get all categorizations for an example prompt (admin only).
+  description: Get all categorizations for an example prompt.
   operationId: listExamplePromptCategorizations
   responses:
     '200':
@@ -31,7 +31,7 @@ post:
   tags:
     - Example Prompt
   summary: Create an example prompt categorization
-  description: Manually categorize an example prompt (admin only). The created categorization is automatically set as the effective categorization.
+  description: Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
   operationId: createExamplePromptCategorization
   requestBody:
     required: true

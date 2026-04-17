@@ -29,7 +29,7 @@ patch:
     - Example Prompt
   summary: Update an example prompt
   description: >-
-    Partially update an example prompt (admin only). Only fields present in the request body
+    Partially update an example prompt. Only fields present in the request body
     are modified. If the question text changes, AI auto-categorization runs asynchronously.
   operationId: updateExamplePrompt
   requestBody:
@@ -63,7 +63,7 @@ delete:
   tags:
     - Example Prompt
   summary: Delete an example prompt
-  description: Delete an example prompt (admin only).
+  description: Delete an example prompt.
   operationId: deleteExamplePrompt
   responses:
     '204':

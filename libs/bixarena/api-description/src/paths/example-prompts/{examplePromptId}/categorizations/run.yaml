@@ -10,7 +10,6 @@ post:
     Run an automated AI categorization against an example prompt. Returns 201 with the
     persisted row when the AI matched at least one category, or 204 when the AI could
     not match any category from the taxonomy (no row is persisted in that case).
-    Admin only.
   operationId: runExamplePromptCategorization
   responses:
     '201':

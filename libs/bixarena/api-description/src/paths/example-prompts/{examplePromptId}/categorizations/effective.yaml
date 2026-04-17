@@ -8,7 +8,7 @@ patch:
   summary: Set effective example prompt categorization
   description: >-
     Set or clear the effective categorization for an example prompt by pointing
-    at a row from history. Pass null to clear. Admin only.
+    at a row from history. Pass null to clear.
   operationId: setEffectiveExamplePromptCategorization
   requestBody:
     required: true

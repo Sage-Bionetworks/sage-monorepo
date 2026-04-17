@@ -10,7 +10,7 @@ post:
     Run an automated AI categorization against a battle. Returns 201 with the persisted
     row when the AI matched at least one category, or 204 when the AI could not match
     any category from the taxonomy (no row is persisted in that case). Returns 409
-    if the battle is not biomedical. Admin only.
+    if the battle is not biomedical.
   operationId: runBattleCategorization
   responses:
     '201':

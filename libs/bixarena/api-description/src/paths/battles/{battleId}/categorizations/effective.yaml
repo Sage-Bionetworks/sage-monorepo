@@ -9,7 +9,7 @@ patch:
   description: >-
     Set or clear the effective categorization for a battle by pointing at a row from history.
     Pass null to clear. Returns 409 if the battle is not biomedical and a non-null
-    categorizationId is provided. Admin only.
+    categorizationId is provided.
   operationId: setEffectiveBattleCategorization
   requestBody:
     required: true
