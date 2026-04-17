@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.api.exception.BattleCategorizationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.BattleValidationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.ModelNotFoundException;
@@ -18,6 +19,7 @@ import org.sagebionetworks.bixarena.api.model.dto.PageMetadataDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.BattleMapper;
+import org.sagebionetworks.bixarena.api.model.repository.BattleCategorizationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
@@ -37,6 +39,8 @@ public class BattleService {
 
   private final BattleRepository battleRepository;
   private final BattleValidationRepository battleValidationRepository;
+  private final BattleCategorizationRepository battleCategorizationRepository;
+  private final BattleCategorizationService battleCategorizationService;
   private final ModelRepository modelRepository;
   private final StatsCacheService statsCacheService;
   private final BattleMapper battleMapper = new BattleMapper();
@@ -184,6 +188,37 @@ public class BattleService {
     BattleEntity updated = battleRepository.save(battle);
 
     statsCacheService.invalidateStatsForValidation(battle.getUserId());
+    return battleMapper.convertToDto(updated);
+  }
+
+  /**
+   * Sets or clears the effective categorization for a battle by pointing at a row from history.
+   * Pass {@code null} to clear. Setting a non-null categorization requires the battle to be
+   * biomedical (same gate as the AI and human-override paths).
+   */
+  @Transactional
+  public BattleDto setEffectiveCategorization(UUID battleId, UUID categorizationId) {
+    log.info(
+      "Setting effective categorization for battle {}: {}",
+      battleId, categorizationId
+    );
+
+    BattleEntity battle = getBattleEntity(battleId);
+
+    if (categorizationId != null) {
+      battleCategorizationService.assertBiomedicalOrThrow(battleId);
+      battleCategorizationRepository.findById(categorizationId)
+        .filter(c -> c.getBattleId().equals(battleId))
+        .orElseThrow(() -> new BattleCategorizationNotFoundException(
+          String.format(
+            "Battle categorization %s not found for battle %s",
+            categorizationId, battleId
+          )
+        ));
+    }
+
+    battle.setEffectiveCategorizationId(categorizationId);
+    BattleEntity updated = battleRepository.save(battle);
     return battleMapper.convertToDto(updated);
   }
 

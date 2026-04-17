@@ -10,18 +10,20 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.api.exception.ExamplePromptCategorizationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.ExamplePromptNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
-import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCategorizationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSortDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptCategorizationCategoryEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.ExamplePromptMapper;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptCategorizationCategoryRepository;
+import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptCategorizationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -40,6 +42,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 public class ExamplePromptService {
 
   private final ExamplePromptRepository examplePromptRepository;
+  private final ExamplePromptCategorizationRepository categorizationRepository;
   private final ExamplePromptCategorizationCategoryRepository categoryRepository;
   private final ExamplePromptCategorizationService categorizationService;
   private final ExamplePromptMapper examplePromptMapper = new ExamplePromptMapper();
@@ -91,26 +94,23 @@ public class ExamplePromptService {
   ) {
     log.info("Creating example prompt");
 
+    // Source defaults to bixarena when omitted.
+    String source = request.getSource() != null
+      ? request.getSource().getValue()
+      : "bixarena";
+
     ExamplePromptEntity entity = ExamplePromptEntity.builder()
       .question(request.getQuestion())
-      .source(request.getSource().getValue())
-      .active(request.getActive())
+      .source(source)
+      .createdBy(createdBy)
       .build();
 
     ExamplePromptEntity saved = examplePromptRepository.save(entity);
     examplePromptRepository.flush();
 
     UUID promptId = saved.getId();
-    if (request.getCategories() != null && !request.getCategories().isEmpty()) {
-      ExamplePromptCategorizationCreateRequestDto categorizationRequest =
-        new ExamplePromptCategorizationCreateRequestDto(request.getCategories())
-          .reason(request.getReason());
-      categorizationService.createManualCategorization(promptId, categorizationRequest, createdBy);
-      saved = examplePromptRepository.findById(promptId).orElseThrow();
-    } else {
-      // Deferred so the async thread sees the committed prompt row.
-      afterCommit(() -> categorizationService.categorizePromptAsync(promptId));
-    }
+    // Deferred so the async thread sees the committed prompt row.
+    afterCommit(() -> categorizationService.categorizePromptAsync(promptId));
 
     log.info("Created example prompt with ID: {}", promptId);
     return toDtoWithCategories(saved);
@@ -125,33 +125,67 @@ public class ExamplePromptService {
   @Transactional
   public ExamplePromptDto updateExamplePrompt(
     UUID promptId,
-    ExamplePromptCreateRequestDto request,
-    UUID updatedBy
+    ExamplePromptUpdateRequestDto request
   ) {
     log.info("Updating example prompt with ID: {}", promptId);
 
     ExamplePromptEntity entity = getPromptOrThrow(promptId);
-    boolean questionChanged = !entity.getQuestion().equals(request.getQuestion());
 
-    entity.setQuestion(request.getQuestion());
-    entity.setSource(request.getSource().getValue());
-    entity.setActive(request.getActive());
+    boolean questionChanged = false;
+    if (request.getQuestion() != null && !request.getQuestion().equals(entity.getQuestion())) {
+      entity.setQuestion(request.getQuestion());
+      questionChanged = true;
+    }
+    if (request.getSource() != null) {
+      entity.setSource(request.getSource().getValue());
+    }
+    if (request.getActive() != null) {
+      entity.setActive(request.getActive());
+    }
 
     ExamplePromptEntity saved = examplePromptRepository.save(entity);
     examplePromptRepository.flush();
 
-    if (request.getCategories() != null && !request.getCategories().isEmpty()) {
-      ExamplePromptCategorizationCreateRequestDto categorizationRequest =
-        new ExamplePromptCategorizationCreateRequestDto(request.getCategories())
-          .reason(request.getReason());
-      categorizationService.createManualCategorization(promptId, categorizationRequest, updatedBy);
-      saved = examplePromptRepository.findById(promptId).orElseThrow();
-    } else if (questionChanged) {
+    if (questionChanged) {
       // Deferred so the async thread sees the committed question update.
       afterCommit(() -> categorizationService.categorizePromptAsync(promptId));
     }
 
     log.info("Updated example prompt with ID: {}", promptId);
+    return toDtoWithCategories(saved);
+  }
+
+  /**
+   * Sets or clears the effective categorization for a prompt by pointing at a row from history.
+   * Pass {@code null} to clear.
+   *
+   * @throws ExamplePromptNotFoundException if the prompt is not found
+   * @throws ExamplePromptCategorizationNotFoundException if categorizationId is non-null and
+   *     does not belong to this prompt
+   */
+  @Transactional
+  public ExamplePromptDto setEffectiveCategorization(UUID promptId, UUID categorizationId) {
+    log.info("Setting effective categorization for prompt {}: {}", promptId, categorizationId);
+
+    ExamplePromptEntity prompt = getPromptOrThrow(promptId);
+
+    if (categorizationId != null) {
+      categorizationRepository
+        .findById(categorizationId)
+        .filter(c -> c.getPromptId().equals(promptId))
+        .orElseThrow(() ->
+          new ExamplePromptCategorizationNotFoundException(
+            String.format(
+              "Categorization %s not found for prompt %s",
+              categorizationId,
+              promptId
+            )
+          )
+        );
+    }
+
+    prompt.setEffectiveCategorizationId(categorizationId);
+    ExamplePromptEntity saved = examplePromptRepository.save(prompt);
     return toDtoWithCategories(saved);
   }
 

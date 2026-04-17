@@ -12,7 +12,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
-import org.sagebionetworks.bixarena.api.exception.BattleCategorizationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.BattleNotEligibleForCategorizationException;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCategorizationCreateRequestDto;
@@ -70,8 +69,9 @@ public class BattleCategorizationService {
   }
 
   /**
-   * Calls the AI service to categorize a battle, persists the result, and returns the DTO.
-   * Used for synchronous admin-triggered runs.
+   * Calls the AI service to categorize a battle and persists the result if the classifier
+   * matched at least one category. Returns the persisted row, or an empty Optional when the
+   * classifier did not assign any category (no row is persisted in that case).
    *
    * <p>Only the first AI categorization auto-becomes the effective categorization (compare-and-set).
    * Subsequent AI re-runs are persisted but do not override the effective categorization.
@@ -80,7 +80,7 @@ public class BattleCategorizationService {
    *     or is not biomedical
    */
   @Transactional
-  public BattleCategorizationResponseDto categorizeBattle(UUID battleId) {
+  public Optional<BattleCategorizationResponseDto> categorizeBattle(UUID battleId) {
     assertBiomedicalOrThrow(battleId);
     List<String> prompts = collectPrompts(battleId);
 
@@ -91,6 +91,12 @@ public class BattleCategorizationService {
     try {
       String serviceToken = serviceTokenProvider.obtainServiceToken();
       AiCategorizationResponse aiResponse = callAiService(serviceToken, prompts);
+
+      if (aiResponse.categories() == null || aiResponse.categories().isEmpty()) {
+        log.info("AI returned no categories for battle {} — nothing persisted", battleId);
+        return Optional.empty();
+      }
+
       BattleCategorizationEntity entity = persistCategorization(
         battleId,
         aiResponse.method(),
@@ -114,7 +120,7 @@ public class BattleCategorizationService {
         aiResponse.method(),
         aiResponse.categories()
       );
-      return toDto(entity);
+      return Optional.of(toDto(entity));
     } catch (BattleNotEligibleForCategorizationException e) {
       throw e;
     } catch (Exception e) {
@@ -180,30 +186,6 @@ public class BattleCategorizationService {
       .toList();
   }
 
-  /**
-   * Returns the effective categorization for a battle.
-   */
-  @Transactional(readOnly = true)
-  public BattleCategorizationResponseDto getEffectiveCategorization(UUID battleId) {
-    BattleEntity battle = battleRepository
-      .findById(battleId)
-      .orElseThrow(() -> new BattleNotFoundException("Battle not found: " + battleId));
-    UUID effectiveId = battle.getEffectiveCategorizationId();
-    if (effectiveId == null) {
-      throw new BattleCategorizationNotFoundException(
-        "No effective categorization found for battle: " + battleId
-      );
-    }
-    BattleCategorizationEntity entity = categorizationRepository
-      .findById(effectiveId)
-      .orElseThrow(() ->
-        new BattleCategorizationNotFoundException(
-          "Effective categorization not found: " + effectiveId
-        )
-      );
-    return toDto(entity);
-  }
-
   public BattleCategorizationResponseDto toDto(BattleCategorizationEntity entity) {
     List<BiomedicalCategoryDto> categories = categoryRepository
       .findByCategorizationId(entity.getId())
@@ -224,10 +206,13 @@ public class BattleCategorizationService {
 
   /**
    * Verifies the battle has a biomedical effective validation.
-   * All categorization paths (AI + human override) share this gate — categorization records
-   * only exist for biomedical battles.
+   * All categorization paths (AI + human override + set effective) share this gate —
+   * categorization records only exist for biomedical battles.
+   *
+   * @throws BattleNotEligibleForCategorizationException if the battle is missing an effective
+   *     validation or is not biomedical.
    */
-  private void assertBiomedicalOrThrow(UUID battleId) {
+  public void assertBiomedicalOrThrow(UUID battleId) {
     BattleEntity battle = battleRepository
       .findById(battleId)
       .orElseThrow(() -> new BattleNotFoundException("Battle not found: " + battleId));

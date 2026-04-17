@@ -7,11 +7,11 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
-import org.sagebionetworks.bixarena.api.exception.ExamplePromptCategorizationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.ExamplePromptNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCategorizationCreateRequestDto;
@@ -60,19 +60,26 @@ public class ExamplePromptCategorizationService {
   }
 
   /**
-   * Calls the AI service to categorize a prompt, persists the result, and returns the DTO.
-   * Used for synchronous admin-triggered runs.
+   * Calls the AI service to categorize a prompt and persists the result if the classifier
+   * matched at least one category. Returns the persisted row, or an empty Optional when the
+   * classifier did not assign any category (no row is persisted in that case).
    *
    * <p>Only the first AI categorization auto-becomes the effective categorization (compare-and-set).
    * Subsequent AI re-runs are persisted but do not override the effective categorization.
    */
   @Transactional
-  public ExamplePromptCategorizationResponseDto categorizePrompt(UUID promptId) {
+  public Optional<ExamplePromptCategorizationResponseDto> categorizePrompt(UUID promptId) {
     ExamplePromptEntity prompt = getPromptOrThrow(promptId);
 
     try {
       String serviceToken = serviceTokenProvider.obtainServiceToken();
       AiCategorizationResponse aiResponse = callAiService(serviceToken, prompt.getQuestion());
+
+      if (aiResponse.categories() == null || aiResponse.categories().isEmpty()) {
+        log.info("AI returned no categories for prompt {} — nothing persisted", promptId);
+        return Optional.empty();
+      }
+
       ExamplePromptCategorizationEntity entity = persistCategorization(
         promptId,
         aiResponse.method(),
@@ -99,7 +106,7 @@ public class ExamplePromptCategorizationService {
         aiResponse.method(),
         aiResponse.categories()
       );
-      return toDto(entity);
+      return Optional.of(toDto(entity));
     } catch (Exception e) {
       throw new IllegalStateException(
         "Prompt categorization failed for prompt " + promptId + ": " + e.getMessage(),
@@ -157,28 +164,6 @@ public class ExamplePromptCategorizationService {
       .stream()
       .map(this::toDto)
       .toList();
-  }
-
-  /**
-   * Returns the effective categorization for a prompt.
-   */
-  @Transactional(readOnly = true)
-  public ExamplePromptCategorizationResponseDto getEffectiveCategorization(UUID promptId) {
-    ExamplePromptEntity prompt = getPromptOrThrow(promptId);
-    UUID effectiveId = prompt.getEffectiveCategorizationId();
-    if (effectiveId == null) {
-      throw new ExamplePromptCategorizationNotFoundException(
-        "No effective categorization found for prompt: " + promptId
-      );
-    }
-    ExamplePromptCategorizationEntity entity = categorizationRepository
-      .findById(effectiveId)
-      .orElseThrow(() ->
-        new ExamplePromptCategorizationNotFoundException(
-          "Effective categorization not found: " + effectiveId
-        )
-      );
-    return toDto(entity);
   }
 
   public ExamplePromptCategorizationResponseDto toDto(ExamplePromptCategorizationEntity entity) {

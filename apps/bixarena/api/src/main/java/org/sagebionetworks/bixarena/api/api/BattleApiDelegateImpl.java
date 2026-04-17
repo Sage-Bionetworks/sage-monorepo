@@ -3,6 +3,7 @@ package org.sagebionetworks.bixarena.api.api;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveCategorizationRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCategorizationCreateRequestDto;
@@ -237,13 +238,6 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
-  public ResponseEntity<BattleCategorizationResponseDto> getBattleEffectiveCategorization(
-    UUID battleId
-  ) {
-    return ResponseEntity.ok(battleCategorizationService.getEffectiveCategorization(battleId));
-  }
-
-  @Override
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<BattleCategorizationResponseDto> createBattleCategorization(
     UUID battleId,
@@ -251,7 +245,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   ) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UUID categorizedBy = UUID.fromString(authentication.getName());
-    log.info("Admin {} creating categorization override for battle {}", categorizedBy, battleId);
+    log.info("User {} creating categorization override for battle {}", categorizedBy, battleId);
 
     BattleCategorizationResponseDto dto = battleCategorizationService.createManualCategorization(
       battleId,
@@ -264,8 +258,30 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   @Override
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<BattleCategorizationResponseDto> runBattleCategorization(UUID battleId) {
-    log.info("Admin triggering AI categorization for battle {}", battleId);
-    BattleCategorizationResponseDto dto = battleCategorizationService.categorizeBattle(battleId);
-    return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+    log.info("Triggering AI categorization for battle {}", battleId);
+    Optional<BattleCategorizationResponseDto> result = battleCategorizationService.categorizeBattle(
+      battleId
+    );
+    return result
+      .map(dto -> ResponseEntity.status(HttpStatus.CREATED).body(dto))
+      .orElseGet(() -> ResponseEntity.noContent().build());
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<BattleDto> setEffectiveBattleCategorization(
+    UUID battleId,
+    SetEffectiveCategorizationRequestDto request
+  ) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UUID categorizationId = request.getCategorizationId();
+    log.info(
+      "User {} setting effective categorization for battle {}: {}",
+      authentication.getName(),
+      battleId,
+      categorizationId
+    );
+    BattleDto dto = battleService.setEffectiveCategorization(battleId, categorizationId);
+    return ResponseEntity.ok(dto);
   }
 }
