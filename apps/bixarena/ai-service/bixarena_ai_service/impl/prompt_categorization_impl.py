@@ -12,6 +12,8 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
+from fastapi import HTTPException, status
+
 from bixarena_ai_service.apis.prompt_categorization_api_base import (
     BasePromptCategorizationApi,
 )
@@ -74,16 +76,13 @@ class PromptCategorizationApiImpl(BasePromptCategorizationApi):
         categories = await categorize(_SYSTEM_PROMPT, user_message)
 
         if not categories:
-            # Degrade gracefully: if the LLM fails or returns invalid data,
-            # return a single fallback category so callers still get a valid
-            # response shape. Upstream can decide whether to persist it.
-            logger.warning(
-                "Categorization returned empty — falling back to 'bioinformatics'"
+            logger.warning("Categorization returned empty — LLM unavailable or invalid")
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Categorization unavailable: LLM returned no valid categories",
             )
-            categories = ["bioinformatics"]
-        else:
-            # Only cache valid LLM results.
-            await set_cached_prompt_categorization(sanitized, categories, settings)
+
+        await set_cached_prompt_categorization(sanitized, categories, settings)
 
         result = PromptCategorization(
             prompt=prompt,

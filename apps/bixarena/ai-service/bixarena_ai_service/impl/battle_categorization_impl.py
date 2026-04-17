@@ -12,6 +12,8 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
+from fastapi import HTTPException, status
+
 from bixarena_ai_service.apis.battle_categorization_api_base import (
     BaseBattleCategorizationApi,
 )
@@ -74,12 +76,13 @@ class BattleCategorizationApiImpl(BaseBattleCategorizationApi):
         categories = await categorize(_SYSTEM_PROMPT, user_message)
 
         if not categories:
-            logger.warning(
-                "Battle categorization empty — falling back to 'bioinformatics'"
+            logger.warning("Battle categorization empty — LLM unavailable or invalid")
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Categorization unavailable: LLM returned no valid categories",
             )
-            categories = ["bioinformatics"]
-        else:
-            await set_cached_battle_categorization(sanitized, categories, settings)
+
+        await set_cached_battle_categorization(sanitized, categories, settings)
 
         result = BattleCategorization(categories=categories, method=method)
 
