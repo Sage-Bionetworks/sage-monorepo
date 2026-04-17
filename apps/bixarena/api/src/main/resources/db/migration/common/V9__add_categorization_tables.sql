@@ -69,17 +69,6 @@ ALTER TABLE api.example_prompt
 
 
 -- ============================================================================
--- Default source on Example Prompt
--- ============================================================================
--- Defense in depth: aligns with the OpenAPI default for the create endpoint.
--- Direct SQL inserts that omit source will fall back to the same value.
--- ============================================================================
-
-ALTER TABLE api.example_prompt
-  ALTER COLUMN source SET DEFAULT 'bixarena';
-
-
--- ============================================================================
 -- Battle Categorization Table
 -- ============================================================================
 -- Same structure as example_prompt_categorization but scoped to battles.
