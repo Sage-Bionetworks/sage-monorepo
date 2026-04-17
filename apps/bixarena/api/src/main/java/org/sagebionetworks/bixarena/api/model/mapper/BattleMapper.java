@@ -24,6 +24,7 @@ public class BattleMapper {
       .createdAt(entity.getCreatedAt())
       .endedAt(entity.getEndedAt())
       .effectiveValidationId(entity.getEffectiveValidationId())
+      .effectiveCategorizationId(entity.getEffectiveCategorizationId())
       .build();
   }
 

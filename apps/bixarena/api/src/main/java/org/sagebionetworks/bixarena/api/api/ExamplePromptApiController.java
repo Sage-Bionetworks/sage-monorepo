@@ -1,9 +1,16 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCategorizationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCategorizationResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveCategorizationRequestDto;
+import java.util.UUID;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

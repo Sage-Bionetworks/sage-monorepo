@@ -1,0 +1,60 @@
+parameters:
+  - $ref: ../../../components/parameters/path/battleId.yaml
+
+get:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Battle
+  summary: List battle categorizations
+  description: Get all categorizations for a battle.
+  operationId: listBattleCategorizations
+  responses:
+    '200':
+      description: List of battle categorizations
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../../../components/schemas/BattleCategorizationResponse.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml
+
+post:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Battle
+  summary: Create a battle categorization
+  description: Manually categorize a battle. The created categorization is automatically set as the effective categorization.
+  operationId: createBattleCategorization
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/BattleCategorizationCreateRequest.yaml
+  responses:
+    '201':
+      description: Battle categorization created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/BattleCategorizationResponse.yaml
+    '400':
+      $ref: ../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

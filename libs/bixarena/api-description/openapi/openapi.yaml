@@ -420,6 +420,243 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
+    post:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Example Prompt
+      summary: Create an example prompt
+      description: Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
+      operationId: createExamplePrompt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamplePromptCreateRequest'
+      responses:
+        '201':
+          description: Example prompt created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamplePrompt'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /example-prompts/{examplePromptId}:
+    parameters:
+      - $ref: '#/components/parameters/examplePromptId'
+    get:
+      x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
+      tags:
+        - Example Prompt
+      summary: Get an example prompt
+      description: Get an example prompt by ID.
+      operationId: getExamplePrompt
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamplePrompt'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+    patch:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Example Prompt
+      summary: Update an example prompt
+      description: Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+      operationId: updateExamplePrompt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamplePromptUpdateRequest'
+      responses:
+        '200':
+          description: Example prompt updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamplePrompt'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+    delete:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Example Prompt
+      summary: Delete an example prompt
+      description: Delete an example prompt.
+      operationId: deleteExamplePrompt
+      responses:
+        '204':
+          description: Example prompt deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /example-prompts/{examplePromptId}/categorizations:
+    parameters:
+      - $ref: '#/components/parameters/examplePromptId'
+    get:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Example Prompt
+      summary: List example prompt categorizations
+      description: Get all categorizations for an example prompt.
+      operationId: listExamplePromptCategorizations
+      responses:
+        '200':
+          description: List of example prompt categorizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExamplePromptCategorizationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+    post:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Example Prompt
+      summary: Create an example prompt categorization
+      description: Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
+      operationId: createExamplePromptCategorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamplePromptCategorizationCreateRequest'
+      responses:
+        '201':
+          description: Example prompt categorization created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamplePromptCategorizationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /example-prompts/{examplePromptId}/categorizations/effective:
+    parameters:
+      - $ref: '#/components/parameters/examplePromptId'
+    patch:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Example Prompt
+      summary: Set effective example prompt categorization
+      description: Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.
+      operationId: setEffectiveExamplePromptCategorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetEffectiveCategorizationRequest'
+      responses:
+        '200':
+          description: Effective categorization updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamplePrompt'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /example-prompts/{examplePromptId}/categorizations/run:
+    parameters:
+      - $ref: '#/components/parameters/examplePromptId'
+    post:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Example Prompt
+      summary: Run an automated categorization
+      description: Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
+      operationId: runExamplePromptCategorization
+      responses:
+        '201':
+          description: Categorization completed and persisted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamplePromptCategorizationResponse'
+        '204':
+          description: Categorization run completed but the AI did not match any category
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
   /leaderboards:
     get:
       x-anonymous-access: true
@@ -648,6 +885,139 @@ paths:
           $ref: '#/components/responses/NotFound'
         '429':
           $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /battles/{battleId}/categorizations:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+    get:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Battle
+      summary: List battle categorizations
+      description: Get all categorizations for a battle.
+      operationId: listBattleCategorizations
+      responses:
+        '200':
+          description: List of battle categorizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BattleCategorizationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+    post:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Battle
+      summary: Create a battle categorization
+      description: Manually categorize a battle. The created categorization is automatically set as the effective categorization.
+      operationId: createBattleCategorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleCategorizationCreateRequest'
+      responses:
+        '201':
+          description: Battle categorization created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleCategorizationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /battles/{battleId}/categorizations/effective:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+    patch:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Battle
+      summary: Set effective battle categorization
+      description: Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical — the gate applies to both setting and clearing; non-biomedical battles are not eligible for any effective categorization state change.
+      operationId: setEffectiveBattleCategorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetEffectiveCategorizationRequest'
+      responses:
+        '200':
+          description: Effective categorization updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Battle'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /battles/{battleId}/categorizations/run:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+    post:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Battle
+      summary: Run an automated categorization
+      description: Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
+      operationId: runBattleCategorization
+      responses:
+        '201':
+          description: Categorization completed and persisted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleCategorizationResponse'
+        '204':
+          description: Categorization run completed but the AI did not match any category
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -1751,6 +2121,11 @@ components:
           format: uuid
           nullable: true
           description: ID of the effective battle validation (null = not yet validated)
+        effectiveCategorizationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the effective battle categorization (null = not yet categorized)
       required:
         - id
         - userId
@@ -2021,6 +2396,31 @@ components:
         - bixbench
         - bixarena
       example: pubmedqa
+    BiomedicalCategory:
+      description: A category slug used to classify biomedical content.
+      type: string
+      enum:
+        - biochemistry
+        - bioengineering
+        - bioinformatics
+        - cancer-biology
+        - cell-biology
+        - clinical-trials
+        - developmental-biology
+        - epidemiology
+        - evolutionary-biology
+        - genetics
+        - genomics
+        - immunology
+        - microbiology
+        - molecular-biology
+        - neuroscience
+        - pathology
+        - pharmacology-and-toxicology
+        - physiology
+        - synthetic-biology
+        - systems-biology
+      example: genetics
     ExamplePromptSearchQuery:
       type: object
       description: An example prompt search query with pagination and filtering options.
@@ -2057,6 +2457,12 @@ components:
           type: string
           nullable: true
           example: diabetes
+        categories:
+          description: Filter by one or more categories. Returns prompts matching any of the given categories.
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomedicalCategory'
+          nullable: true
       required: []
     ExamplePrompt:
       type: object
@@ -2078,6 +2484,18 @@ components:
           type: boolean
           description: Whether this example prompt is currently active/visible for use.
           example: true
+        effectiveCategorizationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the effective categorization for this prompt (null = not yet categorized)
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomedicalCategory'
+          maxItems: 3
+          default: []
+          description: Categories from the effective categorization. Empty array if not yet categorized.
         createdAt:
           type: string
           format: date-time
@@ -2088,6 +2506,7 @@ components:
         - question
         - source
         - active
+        - categories
         - createdAt
     ExamplePromptPage:
       type: object
@@ -2103,6 +2522,105 @@ components:
                 $ref: '#/components/schemas/ExamplePrompt'
           required:
             - examplePrompts
+    ExamplePromptCreateRequest:
+      type: object
+      description: The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; reviewers can manually override later via the categorization endpoints.
+      properties:
+        question:
+          type: string
+          description: The biomedical question text.
+          minLength: 1
+          maxLength: 160
+          example: What are the main symptoms of Type 2 diabetes?
+        source:
+          $ref: '#/components/schemas/ExamplePromptSource'
+          description: Origin of the prompt.
+      required:
+        - question
+    ExamplePromptUpdateRequest:
+      type: object
+      description: The information used to update an example prompt. Only fields present in the request are modified.
+      properties:
+        question:
+          type: string
+          description: The biomedical question text.
+          minLength: 1
+          maxLength: 160
+          nullable: true
+          example: What are the main symptoms of Type 2 diabetes?
+        source:
+          $ref: '#/components/schemas/ExamplePromptSource'
+          nullable: true
+        active:
+          type: boolean
+          description: Whether this example prompt is currently active/visible for use.
+          nullable: true
+          example: true
+    ExamplePromptCategorizationResponse:
+      type: object
+      description: The result of a categorization run for an example prompt.
+      properties:
+        id:
+          type: string
+          format: uuid
+        promptId:
+          type: string
+          format: uuid
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomedicalCategory'
+          minItems: 1
+          maxItems: 3
+        method:
+          type: string
+          maxLength: 100
+        categorizedBy:
+          type: string
+          format: uuid
+          nullable: true
+          description: User ID of the categorizer. Null for AI runs.
+        reason:
+          type: string
+          maxLength: 1000
+          nullable: true
+          description: Human override reason. Always null for AI runs.
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - promptId
+        - categories
+        - method
+        - createdAt
+    ExamplePromptCategorizationCreateRequest:
+      type: object
+      description: Request to manually categorize an example prompt.
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomedicalCategory'
+          minItems: 1
+          maxItems: 3
+          uniqueItems: true
+        reason:
+          type: string
+          maxLength: 1000
+          nullable: true
+          description: Reason for the categorization decision
+      required:
+        - categories
+    SetEffectiveCategorizationRequest:
+      type: object
+      description: Request to set or clear the effective categorization for an example prompt or battle.
+      properties:
+        categorizationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the categorization row to set as effective. Set to null to clear the effective categorization.
     LeaderboardList:
       type: array
       description: A list of leaderboards.
@@ -2621,6 +3139,62 @@ components:
         - battleId
         - outcome
         - createdAt
+    BattleCategorizationResponse:
+      type: object
+      description: The result of a categorization run for a battle.
+      properties:
+        id:
+          type: string
+          format: uuid
+        battleId:
+          type: string
+          format: uuid
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomedicalCategory'
+          minItems: 1
+          maxItems: 3
+        method:
+          type: string
+          maxLength: 100
+        categorizedBy:
+          type: string
+          format: uuid
+          nullable: true
+          description: User ID of the categorizer. Null for AI runs.
+        reason:
+          type: string
+          maxLength: 1000
+          nullable: true
+          description: Human override reason. Always null for AI runs.
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - battleId
+        - categories
+        - method
+        - createdAt
+    BattleCategorizationCreateRequest:
+      type: object
+      description: Request to manually categorize a battle.
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiomedicalCategory'
+          minItems: 1
+          maxItems: 3
+          uniqueItems: true
+        reason:
+          type: string
+          maxLength: 1000
+          nullable: true
+          description: Reason for the categorization decision
+      required:
+        - categories
     BattleValidationResponse:
       type: object
       properties:
@@ -3082,6 +3656,15 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ExamplePromptSearchQuery'
+    examplePromptId:
+      name: examplePromptId
+      description: The unique identifier of an example prompt
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 123e4567-e89b-12d3-a456-426614174000
     leaderboardId:
       name: leaderboardId
       description: The unique identifier of a leaderboard

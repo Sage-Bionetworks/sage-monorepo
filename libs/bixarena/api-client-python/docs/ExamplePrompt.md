@@ -4,13 +4,15 @@ A self-contained example prompt for biomedical question answering.
 
 ## Properties
 
-| Name           | Type                                              | Description                                                      | Notes |
-| -------------- | ------------------------------------------------- | ---------------------------------------------------------------- | ----- |
-| **id**         | **str**                                           | The unique identifier of the example prompt.                     |
-| **question**   | **str**                                           | The biomedical question text.                                    |
-| **source**     | [**ExamplePromptSource**](ExamplePromptSource.md) |                                                                  |
-| **active**     | **bool**                                          | Whether this example prompt is currently active/visible for use. |
-| **created_at** | **datetime**                                      | When the example prompt was created.                             |
+| Name                            | Type                                                  | Description                                                                          | Notes           |
+| ------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------ | --------------- |
+| **id**                          | **str**                                               | The unique identifier of the example prompt.                                         |
+| **question**                    | **str**                                               | The biomedical question text.                                                        |
+| **source**                      | [**ExamplePromptSource**](ExamplePromptSource.md)     |                                                                                      |
+| **active**                      | **bool**                                              | Whether this example prompt is currently active/visible for use.                     |
+| **effective_categorization_id** | **str**                                               | ID of the effective categorization for this prompt (null &#x3D; not yet categorized) | [optional]      |
+| **categories**                  | [**List[BiomedicalCategory]**](BiomedicalCategory.md) | Categories from the effective categorization. Empty array if not yet categorized.    | [default to []] |
+| **created_at**                  | **datetime**                                          | When the example prompt was created.                                                 |
 
 ## Example
 

@@ -1,0 +1,18 @@
+type: object
+description: The information used to update an example prompt. Only fields present in the request are modified.
+properties:
+  question:
+    type: string
+    description: The biomedical question text.
+    minLength: 1
+    maxLength: 160
+    nullable: true
+    example: 'What are the main symptoms of Type 2 diabetes?'
+  source:
+    $ref: ExamplePromptSource.yaml
+    nullable: true
+  active:
+    type: boolean
+    description: Whether this example prompt is currently active/visible for use.
+    nullable: true
+    example: true

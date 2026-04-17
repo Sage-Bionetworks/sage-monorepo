@@ -1,0 +1,78 @@
+parameters:
+  - $ref: ../../components/parameters/path/examplePromptId.yaml
+
+get:
+  x-anonymous-access: true
+  x-rate-limit-requests-per-minute: 100
+  tags:
+    - Example Prompt
+  summary: Get an example prompt
+  description: Get an example prompt by ID.
+  operationId: getExamplePrompt
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ExamplePrompt.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
+
+patch:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Example Prompt
+  summary: Update an example prompt
+  description: >-
+    Partially update an example prompt. Only fields present in the request body
+    are modified. If the question text changes, AI auto-categorization runs asynchronously.
+  operationId: updateExamplePrompt
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/ExamplePromptUpdateRequest.yaml
+  responses:
+    '200':
+      description: Example prompt updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ExamplePrompt.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
+
+delete:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Example Prompt
+  summary: Delete an example prompt
+  description: Delete an example prompt.
+  operationId: deleteExamplePrompt
+  responses:
+    '204':
+      description: Example prompt deleted successfully
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

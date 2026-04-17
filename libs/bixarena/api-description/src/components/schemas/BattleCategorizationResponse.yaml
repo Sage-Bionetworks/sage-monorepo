@@ -1,0 +1,37 @@
+type: object
+description: The result of a categorization run for a battle.
+properties:
+  id:
+    type: string
+    format: uuid
+  battleId:
+    type: string
+    format: uuid
+  categories:
+    type: array
+    items:
+      $ref: BiomedicalCategory.yaml
+    minItems: 1
+    maxItems: 3
+  method:
+    type: string
+    maxLength: 100
+  categorizedBy:
+    type: string
+    format: uuid
+    nullable: true
+    description: User ID of the categorizer. Null for AI runs.
+  reason:
+    type: string
+    maxLength: 1000
+    nullable: true
+    description: Human override reason. Always null for AI runs.
+  createdAt:
+    type: string
+    format: date-time
+required:
+  - id
+  - battleId
+  - categories
+  - method
+  - createdAt

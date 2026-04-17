@@ -45,6 +45,11 @@ class Battle(BaseModel):
         description="ID of the effective battle validation (null = not yet validated)",
         alias="effectiveValidationId",
     )
+    effective_categorization_id: Optional[UUID] = Field(
+        default=None,
+        description="ID of the effective battle categorization (null = not yet categorized)",
+        alias="effectiveCategorizationId",
+    )
     __properties: ClassVar[List[str]] = [
         "id",
         "title",
@@ -54,6 +59,7 @@ class Battle(BaseModel):
         "createdAt",
         "endedAt",
         "effectiveValidationId",
+        "effectiveCategorizationId",
     ]
 
     model_config = ConfigDict(
@@ -101,6 +107,14 @@ class Battle(BaseModel):
         ):
             _dict["effectiveValidationId"] = None
 
+        # set to None if effective_categorization_id (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.effective_categorization_id is None
+            and "effective_categorization_id" in self.model_fields_set
+        ):
+            _dict["effectiveCategorizationId"] = None
+
         return _dict
 
     @classmethod
@@ -122,6 +136,7 @@ class Battle(BaseModel):
                 "createdAt": obj.get("createdAt"),
                 "endedAt": obj.get("endedAt"),
                 "effectiveValidationId": obj.get("effectiveValidationId"),
+                "effectiveCategorizationId": obj.get("effectiveCategorizationId"),
             }
         )
         return _obj

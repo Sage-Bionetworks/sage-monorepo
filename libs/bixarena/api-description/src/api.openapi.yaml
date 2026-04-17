@@ -55,6 +55,14 @@ paths:
     $ref: paths/battles/{battleId}/rounds/{roundId}/stream.yaml
   /example-prompts:
     $ref: paths/example-prompts.yaml
+  /example-prompts/{examplePromptId}:
+    $ref: paths/example-prompts/{examplePromptId}.yaml
+  /example-prompts/{examplePromptId}/categorizations:
+    $ref: paths/example-prompts/{examplePromptId}/categorizations.yaml
+  /example-prompts/{examplePromptId}/categorizations/effective:
+    $ref: paths/example-prompts/{examplePromptId}/categorizations/effective.yaml
+  /example-prompts/{examplePromptId}/categorizations/run:
+    $ref: paths/example-prompts/{examplePromptId}/categorizations/run.yaml
   /leaderboards:
     $ref: paths/leaderboards.yaml
   /leaderboards/{leaderboardId}:
@@ -69,6 +77,12 @@ paths:
     $ref: paths/models/{modelId}/errors.yaml
   /battles/{battleId}/evaluations:
     $ref: paths/battles/{battleId}/evaluations.yaml
+  /battles/{battleId}/categorizations:
+    $ref: paths/battles/{battleId}/categorizations.yaml
+  /battles/{battleId}/categorizations/effective:
+    $ref: paths/battles/{battleId}/categorizations/effective.yaml
+  /battles/{battleId}/categorizations/run:
+    $ref: paths/battles/{battleId}/categorizations/run.yaml
   /battles/{battleId}/validations:
     $ref: paths/battles/{battleId}/validations.yaml
   /battles/{battleId}/validations/effective:

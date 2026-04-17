@@ -19,6 +19,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from bixarena_api_client.models.biomedical_category import BiomedicalCategory
 from bixarena_api_client.models.example_prompt_sort import ExamplePromptSort
 from bixarena_api_client.models.example_prompt_source import ExamplePromptSource
 from bixarena_api_client.models.sort_direction import SortDirection
@@ -50,6 +51,10 @@ class ExamplePromptSearchQuery(BaseModel):
         default=None,
         description="Search by question content (case-insensitive partial match).",
     )
+    categories: Optional[List[BiomedicalCategory]] = Field(
+        default=None,
+        description="Filter by one or more categories. Returns prompts matching any of the given categories.",
+    )
     __properties: ClassVar[List[str]] = [
         "pageNumber",
         "pageSize",
@@ -58,6 +63,7 @@ class ExamplePromptSearchQuery(BaseModel):
         "source",
         "active",
         "search",
+        "categories",
     ]
 
     model_config = ConfigDict(
@@ -107,6 +113,11 @@ class ExamplePromptSearchQuery(BaseModel):
         if self.search is None and "search" in self.model_fields_set:
             _dict["search"] = None
 
+        # set to None if categories (nullable) is None
+        # and model_fields_set contains the field
+        if self.categories is None and "categories" in self.model_fields_set:
+            _dict["categories"] = None
+
         return _dict
 
     @classmethod
@@ -135,6 +146,7 @@ class ExamplePromptSearchQuery(BaseModel):
                 "source": obj.get("source"),
                 "active": obj.get("active"),
                 "search": obj.get("search"),
+                "categories": obj.get("categories"),
             }
         )
         return _obj

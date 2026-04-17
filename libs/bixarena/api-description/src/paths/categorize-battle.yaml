@@ -1,0 +1,30 @@
+post:
+  x-rate-limit-requests-per-minute: 60
+  x-sage-internal: true
+  tags:
+    - Battle Categorization
+  summary: Categorize a battle
+  description: >-
+    Classifies the prompts of a battle conversation into up to 3 biomedical subject
+    categories using an LLM. The categories array may be empty when the classifier did
+    not assign any category. Requires authentication.
+  operationId: categorizeBattle
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/BattleCategorizationRequest.yaml
+    required: true
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BattleCategorization.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

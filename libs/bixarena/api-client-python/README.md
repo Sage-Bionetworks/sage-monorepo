@@ -99,62 +99,76 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Class              | Method                                                                                 | HTTP request                                            | Description                                        |
-| ------------------ | -------------------------------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------- |
-| _AdminApi_         | [**admin_get_quest**](docs/AdminApi.md#admin_get_quest)                                | **GET** /admin/quests/{questId}                         | Get a quest (admin, ungated)                       |
-| _AdminApi_         | [**admin_stats**](docs/AdminApi.md#admin_stats)                                        | **GET** /admin/stats                                    | Admin statistics                                   |
-| _AdminApi_         | [**create_quest**](docs/AdminApi.md#create_quest)                                      | **POST** /quests                                        | Create a quest                                     |
-| _AdminApi_         | [**create_quest_post**](docs/AdminApi.md#create_quest_post)                            | **POST** /quests/{questId}/posts                        | Create a quest post                                |
-| _AdminApi_         | [**delete_quest**](docs/AdminApi.md#delete_quest)                                      | **DELETE** /quests/{questId}                            | Delete a quest                                     |
-| _AdminApi_         | [**delete_quest_post**](docs/AdminApi.md#delete_quest_post)                            | **DELETE** /quests/{questId}/posts/{postIndex}          | Delete a quest post                                |
-| _AdminApi_         | [**reorder_quest_posts**](docs/AdminApi.md#reorder_quest_posts)                        | **PUT** /quests/{questId}/posts/reorder                 | Reorder quest posts                                |
-| _AdminApi_         | [**update_quest**](docs/AdminApi.md#update_quest)                                      | **PUT** /quests/{questId}                               | Update a quest                                     |
-| _AdminApi_         | [**update_quest_post**](docs/AdminApi.md#update_quest_post)                            | **PUT** /quests/{questId}/posts/{postIndex}             | Update a quest post                                |
-| _AuthApi_          | [**callback**](docs/AuthApi.md#callback)                                               | **GET** /auth/callback                                  | OIDC redirect callback                             |
-| _AuthApi_          | [**get_jwks**](docs/AuthApi.md#get_jwks)                                               | **GET** /.well-known/jwks.json                          | JSON Web Key Set                                   |
-| _AuthApi_          | [**get_user_info**](docs/AuthApi.md#get_user_info)                                     | **GET** /userinfo                                       | Get current user profile                           |
-| _AuthApi_          | [**login**](docs/AuthApi.md#login)                                                     | **GET** /auth/login                                     | Start Synapse OIDC authorization code flow         |
-| _AuthApi_          | [**logout**](docs/AuthApi.md#logout)                                                   | **POST** /auth/logout                                   | Logout current session                             |
-| _AuthApi_          | [**service_token**](docs/AuthApi.md#service_token)                                     | **POST** /oauth2/service-token                          | Mint a service-to-service JWT (client credentials) |
-| _AuthApi_          | [**token**](docs/AuthApi.md#token)                                                     | **POST** /oauth2/token                                  | Mint short-lived internal JWT                      |
-| _BattleApi_        | [**create_battle**](docs/BattleApi.md#create_battle)                                   | **POST** /battles                                       | Create a battle                                    |
-| _BattleApi_        | [**create_battle_evaluation**](docs/BattleApi.md#create_battle_evaluation)             | **POST** /battles/{battleId}/evaluations                | Create a battle evaluation                         |
-| _BattleApi_        | [**create_battle_round**](docs/BattleApi.md#create_battle_round)                       | **POST** /battles/{battleId}/rounds                     | Create a battle round                              |
-| _BattleApi_        | [**create_battle_round_completion**](docs/BattleApi.md#create_battle_round_completion) | **POST** /battles/{battleId}/rounds/{roundId}/stream    | Stream a chat completion for a battle round        |
-| _BattleApi_        | [**create_battle_validation**](docs/BattleApi.md#create_battle_validation)             | **POST** /battles/{battleId}/validations                | Create a battle validation                         |
-| _BattleApi_        | [**delete_battle**](docs/BattleApi.md#delete_battle)                                   | **DELETE** /battles/{battleId}                          | Delete a battle                                    |
-| _BattleApi_        | [**get_battle**](docs/BattleApi.md#get_battle)                                         | **GET** /battles/{battleId}                             | Get a battle by ID                                 |
-| _BattleApi_        | [**list_battle_validations**](docs/BattleApi.md#list_battle_validations)               | **GET** /battles/{battleId}/validations                 | List battle validations                            |
-| _BattleApi_        | [**list_battles**](docs/BattleApi.md#list_battles)                                     | **GET** /battles                                        | List battles                                       |
-| _BattleApi_        | [**run_battle_validation**](docs/BattleApi.md#run_battle_validation)                   | **POST** /battles/{battleId}/validations/run            | Run an automated validation method                 |
-| _BattleApi_        | [**set_effective_validation**](docs/BattleApi.md#set_effective_validation)             | **PATCH** /battles/{battleId}/validations/effective     | Set effective validation                           |
-| _BattleApi_        | [**update_battle**](docs/BattleApi.md#update_battle)                                   | **PATCH** /battles/{battleId}                           | Update a battle                                    |
-| _BattleApi_        | [**update_battle_round**](docs/BattleApi.md#update_battle_round)                       | **PATCH** /battles/{battleId}/rounds/{roundId}          | Update a battle round                              |
-| _ChatApi_          | [**create_chat_completion**](docs/ChatApi.md#create_chat_completion)                   | **POST** /chat/completions                              | Create a chat completion                           |
-| _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)              | **GET** /example-prompts                                | List example prompts                               |
-| _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                          | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                            |
-| _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots)      | **GET** /leaderboards/{leaderboardId}/snapshots         | Get public leaderboard snapshots                   |
-| _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                      | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history                      |
-| _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                      | **GET** /leaderboards                                   | List all available leaderboards                    |
-| _ModelApi_         | [**create_model_error**](docs/ModelApi.md#create_model_error)                          | **POST** /models/{modelId}/errors                       | Report a model error                               |
-| _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                        | **GET** /models                                         | List models                                        |
-| _QuestApi_         | [**create_quest**](docs/QuestApi.md#create_quest)                                      | **POST** /quests                                        | Create a quest                                     |
-| _QuestApi_         | [**create_quest_post**](docs/QuestApi.md#create_quest_post)                            | **POST** /quests/{questId}/posts                        | Create a quest post                                |
-| _QuestApi_         | [**delete_quest**](docs/QuestApi.md#delete_quest)                                      | **DELETE** /quests/{questId}                            | Delete a quest                                     |
-| _QuestApi_         | [**delete_quest_post**](docs/QuestApi.md#delete_quest_post)                            | **DELETE** /quests/{questId}/posts/{postIndex}          | Delete a quest post                                |
-| _QuestApi_         | [**get_quest**](docs/QuestApi.md#get_quest)                                            | **GET** /quests/{questId}                               | Get a quest                                        |
-| _QuestApi_         | [**list_quest_contributors**](docs/QuestApi.md#list_quest_contributors)                | **GET** /quests/{questId}/contributors                  | Get quest contributors                             |
-| _QuestApi_         | [**reorder_quest_posts**](docs/QuestApi.md#reorder_quest_posts)                        | **PUT** /quests/{questId}/posts/reorder                 | Reorder quest posts                                |
-| _QuestApi_         | [**update_quest**](docs/QuestApi.md#update_quest)                                      | **PUT** /quests/{questId}                               | Update a quest                                     |
-| _QuestApi_         | [**update_quest_post**](docs/QuestApi.md#update_quest_post)                            | **PUT** /quests/{questId}/posts/{postIndex}             | Update a quest post                                |
-| _StatsApi_         | [**get_public_stats**](docs/StatsApi.md#get_public_stats)                              | **GET** /stats                                          | Get public platform statistics                     |
-| _UserApi_          | [**get_user_stats**](docs/UserApi.md#get_user_stats)                                   | **GET** /users/me/stats                                 | Get current user&#39;s statistics                  |
+| Class              | Method                                                                                                                  | HTTP request                                                           | Description                                        |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------- |
+| _AdminApi_         | [**admin_get_quest**](docs/AdminApi.md#admin_get_quest)                                                                 | **GET** /admin/quests/{questId}                                        | Get a quest (admin, ungated)                       |
+| _AdminApi_         | [**admin_stats**](docs/AdminApi.md#admin_stats)                                                                         | **GET** /admin/stats                                                   | Admin statistics                                   |
+| _AdminApi_         | [**create_quest**](docs/AdminApi.md#create_quest)                                                                       | **POST** /quests                                                       | Create a quest                                     |
+| _AdminApi_         | [**create_quest_post**](docs/AdminApi.md#create_quest_post)                                                             | **POST** /quests/{questId}/posts                                       | Create a quest post                                |
+| _AdminApi_         | [**delete_quest**](docs/AdminApi.md#delete_quest)                                                                       | **DELETE** /quests/{questId}                                           | Delete a quest                                     |
+| _AdminApi_         | [**delete_quest_post**](docs/AdminApi.md#delete_quest_post)                                                             | **DELETE** /quests/{questId}/posts/{postIndex}                         | Delete a quest post                                |
+| _AdminApi_         | [**reorder_quest_posts**](docs/AdminApi.md#reorder_quest_posts)                                                         | **PUT** /quests/{questId}/posts/reorder                                | Reorder quest posts                                |
+| _AdminApi_         | [**update_quest**](docs/AdminApi.md#update_quest)                                                                       | **PUT** /quests/{questId}                                              | Update a quest                                     |
+| _AdminApi_         | [**update_quest_post**](docs/AdminApi.md#update_quest_post)                                                             | **PUT** /quests/{questId}/posts/{postIndex}                            | Update a quest post                                |
+| _AuthApi_          | [**callback**](docs/AuthApi.md#callback)                                                                                | **GET** /auth/callback                                                 | OIDC redirect callback                             |
+| _AuthApi_          | [**get_jwks**](docs/AuthApi.md#get_jwks)                                                                                | **GET** /.well-known/jwks.json                                         | JSON Web Key Set                                   |
+| _AuthApi_          | [**get_user_info**](docs/AuthApi.md#get_user_info)                                                                      | **GET** /userinfo                                                      | Get current user profile                           |
+| _AuthApi_          | [**login**](docs/AuthApi.md#login)                                                                                      | **GET** /auth/login                                                    | Start Synapse OIDC authorization code flow         |
+| _AuthApi_          | [**logout**](docs/AuthApi.md#logout)                                                                                    | **POST** /auth/logout                                                  | Logout current session                             |
+| _AuthApi_          | [**service_token**](docs/AuthApi.md#service_token)                                                                      | **POST** /oauth2/service-token                                         | Mint a service-to-service JWT (client credentials) |
+| _AuthApi_          | [**token**](docs/AuthApi.md#token)                                                                                      | **POST** /oauth2/token                                                 | Mint short-lived internal JWT                      |
+| _BattleApi_        | [**create_battle**](docs/BattleApi.md#create_battle)                                                                    | **POST** /battles                                                      | Create a battle                                    |
+| _BattleApi_        | [**create_battle_categorization**](docs/BattleApi.md#create_battle_categorization)                                      | **POST** /battles/{battleId}/categorizations                           | Create a battle categorization                     |
+| _BattleApi_        | [**create_battle_evaluation**](docs/BattleApi.md#create_battle_evaluation)                                              | **POST** /battles/{battleId}/evaluations                               | Create a battle evaluation                         |
+| _BattleApi_        | [**create_battle_round**](docs/BattleApi.md#create_battle_round)                                                        | **POST** /battles/{battleId}/rounds                                    | Create a battle round                              |
+| _BattleApi_        | [**create_battle_round_completion**](docs/BattleApi.md#create_battle_round_completion)                                  | **POST** /battles/{battleId}/rounds/{roundId}/stream                   | Stream a chat completion for a battle round        |
+| _BattleApi_        | [**create_battle_validation**](docs/BattleApi.md#create_battle_validation)                                              | **POST** /battles/{battleId}/validations                               | Create a battle validation                         |
+| _BattleApi_        | [**delete_battle**](docs/BattleApi.md#delete_battle)                                                                    | **DELETE** /battles/{battleId}                                         | Delete a battle                                    |
+| _BattleApi_        | [**get_battle**](docs/BattleApi.md#get_battle)                                                                          | **GET** /battles/{battleId}                                            | Get a battle by ID                                 |
+| _BattleApi_        | [**list_battle_categorizations**](docs/BattleApi.md#list_battle_categorizations)                                        | **GET** /battles/{battleId}/categorizations                            | List battle categorizations                        |
+| _BattleApi_        | [**list_battle_validations**](docs/BattleApi.md#list_battle_validations)                                                | **GET** /battles/{battleId}/validations                                | List battle validations                            |
+| _BattleApi_        | [**list_battles**](docs/BattleApi.md#list_battles)                                                                      | **GET** /battles                                                       | List battles                                       |
+| _BattleApi_        | [**run_battle_categorization**](docs/BattleApi.md#run_battle_categorization)                                            | **POST** /battles/{battleId}/categorizations/run                       | Run an automated categorization                    |
+| _BattleApi_        | [**run_battle_validation**](docs/BattleApi.md#run_battle_validation)                                                    | **POST** /battles/{battleId}/validations/run                           | Run an automated validation method                 |
+| _BattleApi_        | [**set_effective_battle_categorization**](docs/BattleApi.md#set_effective_battle_categorization)                        | **PATCH** /battles/{battleId}/categorizations/effective                | Set effective battle categorization                |
+| _BattleApi_        | [**set_effective_validation**](docs/BattleApi.md#set_effective_validation)                                              | **PATCH** /battles/{battleId}/validations/effective                    | Set effective validation                           |
+| _BattleApi_        | [**update_battle**](docs/BattleApi.md#update_battle)                                                                    | **PATCH** /battles/{battleId}                                          | Update a battle                                    |
+| _BattleApi_        | [**update_battle_round**](docs/BattleApi.md#update_battle_round)                                                        | **PATCH** /battles/{battleId}/rounds/{roundId}                         | Update a battle round                              |
+| _ChatApi_          | [**create_chat_completion**](docs/ChatApi.md#create_chat_completion)                                                    | **POST** /chat/completions                                             | Create a chat completion                           |
+| _ExamplePromptApi_ | [**create_example_prompt**](docs/ExamplePromptApi.md#create_example_prompt)                                             | **POST** /example-prompts                                              | Create an example prompt                           |
+| _ExamplePromptApi_ | [**create_example_prompt_categorization**](docs/ExamplePromptApi.md#create_example_prompt_categorization)               | **POST** /example-prompts/{examplePromptId}/categorizations            | Create an example prompt categorization            |
+| _ExamplePromptApi_ | [**delete_example_prompt**](docs/ExamplePromptApi.md#delete_example_prompt)                                             | **DELETE** /example-prompts/{examplePromptId}                          | Delete an example prompt                           |
+| _ExamplePromptApi_ | [**get_example_prompt**](docs/ExamplePromptApi.md#get_example_prompt)                                                   | **GET** /example-prompts/{examplePromptId}                             | Get an example prompt                              |
+| _ExamplePromptApi_ | [**list_example_prompt_categorizations**](docs/ExamplePromptApi.md#list_example_prompt_categorizations)                 | **GET** /example-prompts/{examplePromptId}/categorizations             | List example prompt categorizations                |
+| _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)                                               | **GET** /example-prompts                                               | List example prompts                               |
+| _ExamplePromptApi_ | [**run_example_prompt_categorization**](docs/ExamplePromptApi.md#run_example_prompt_categorization)                     | **POST** /example-prompts/{examplePromptId}/categorizations/run        | Run an automated categorization                    |
+| _ExamplePromptApi_ | [**set_effective_example_prompt_categorization**](docs/ExamplePromptApi.md#set_effective_example_prompt_categorization) | **PATCH** /example-prompts/{examplePromptId}/categorizations/effective | Set effective example prompt categorization        |
+| _ExamplePromptApi_ | [**update_example_prompt**](docs/ExamplePromptApi.md#update_example_prompt)                                             | **PATCH** /example-prompts/{examplePromptId}                           | Update an example prompt                           |
+| _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                                                           | **GET** /leaderboards/{leaderboardId}                                  | Get leaderboard entries                            |
+| _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots)                                       | **GET** /leaderboards/{leaderboardId}/snapshots                        | Get public leaderboard snapshots                   |
+| _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                                                       | **GET** /leaderboards/{leaderboardId}/history/{modelId}                | Get model performance history                      |
+| _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                                                       | **GET** /leaderboards                                                  | List all available leaderboards                    |
+| _ModelApi_         | [**create_model_error**](docs/ModelApi.md#create_model_error)                                                           | **POST** /models/{modelId}/errors                                      | Report a model error                               |
+| _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                                                         | **GET** /models                                                        | List models                                        |
+| _QuestApi_         | [**create_quest**](docs/QuestApi.md#create_quest)                                                                       | **POST** /quests                                                       | Create a quest                                     |
+| _QuestApi_         | [**create_quest_post**](docs/QuestApi.md#create_quest_post)                                                             | **POST** /quests/{questId}/posts                                       | Create a quest post                                |
+| _QuestApi_         | [**delete_quest**](docs/QuestApi.md#delete_quest)                                                                       | **DELETE** /quests/{questId}                                           | Delete a quest                                     |
+| _QuestApi_         | [**delete_quest_post**](docs/QuestApi.md#delete_quest_post)                                                             | **DELETE** /quests/{questId}/posts/{postIndex}                         | Delete a quest post                                |
+| _QuestApi_         | [**get_quest**](docs/QuestApi.md#get_quest)                                                                             | **GET** /quests/{questId}                                              | Get a quest                                        |
+| _QuestApi_         | [**list_quest_contributors**](docs/QuestApi.md#list_quest_contributors)                                                 | **GET** /quests/{questId}/contributors                                 | Get quest contributors                             |
+| _QuestApi_         | [**reorder_quest_posts**](docs/QuestApi.md#reorder_quest_posts)                                                         | **PUT** /quests/{questId}/posts/reorder                                | Reorder quest posts                                |
+| _QuestApi_         | [**update_quest**](docs/QuestApi.md#update_quest)                                                                       | **PUT** /quests/{questId}                                              | Update a quest                                     |
+| _QuestApi_         | [**update_quest_post**](docs/QuestApi.md#update_quest_post)                                                             | **PUT** /quests/{questId}/posts/{postIndex}                            | Update a quest post                                |
+| _StatsApi_         | [**get_public_stats**](docs/StatsApi.md#get_public_stats)                                                               | **GET** /stats                                                         | Get public platform statistics                     |
+| _UserApi_          | [**get_user_stats**](docs/UserApi.md#get_user_stats)                                                                    | **GET** /users/me/stats                                                | Get current user&#39;s statistics                  |
 
 ## Documentation For Models
 
 - [AdminStats200Response](docs/AdminStats200Response.md)
 - [BasicError](docs/BasicError.md)
 - [Battle](docs/Battle.md)
+- [BattleCategorizationCreateRequest](docs/BattleCategorizationCreateRequest.md)
+- [BattleCategorizationResponse](docs/BattleCategorizationResponse.md)
 - [BattleCreateRequest](docs/BattleCreateRequest.md)
 - [BattleCreateResponse](docs/BattleCreateResponse.md)
 - [BattleEvaluation](docs/BattleEvaluation.md)
@@ -169,12 +183,17 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [BattleUpdateRequest](docs/BattleUpdateRequest.md)
 - [BattleValidationCreateRequest](docs/BattleValidationCreateRequest.md)
 - [BattleValidationResponse](docs/BattleValidationResponse.md)
+- [BiomedicalCategory](docs/BiomedicalCategory.md)
 - [Callback200Response](docs/Callback200Response.md)
 - [ExamplePrompt](docs/ExamplePrompt.md)
+- [ExamplePromptCategorizationCreateRequest](docs/ExamplePromptCategorizationCreateRequest.md)
+- [ExamplePromptCategorizationResponse](docs/ExamplePromptCategorizationResponse.md)
+- [ExamplePromptCreateRequest](docs/ExamplePromptCreateRequest.md)
 - [ExamplePromptPage](docs/ExamplePromptPage.md)
 - [ExamplePromptSearchQuery](docs/ExamplePromptSearchQuery.md)
 - [ExamplePromptSort](docs/ExamplePromptSort.md)
 - [ExamplePromptSource](docs/ExamplePromptSource.md)
+- [ExamplePromptUpdateRequest](docs/ExamplePromptUpdateRequest.md)
 - [GetJwks200Response](docs/GetJwks200Response.md)
 - [HistoricalLeaderboardEntry](docs/HistoricalLeaderboardEntry.md)
 - [LeaderboardEntry](docs/LeaderboardEntry.md)
@@ -211,6 +230,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [QuestPostCreateOrUpdate](docs/QuestPostCreateOrUpdate.md)
 - [QuestPostReorder](docs/QuestPostReorder.md)
 - [RateLimitError](docs/RateLimitError.md)
+- [SetEffectiveCategorizationRequest](docs/SetEffectiveCategorizationRequest.md)
 - [SetEffectiveValidationRequest](docs/SetEffectiveValidationRequest.md)
 - [SortDirection](docs/SortDirection.md)
 - [Token200Response](docs/Token200Response.md)

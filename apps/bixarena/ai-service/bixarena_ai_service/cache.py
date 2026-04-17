@@ -23,6 +23,8 @@ logger = logging.getLogger(__name__)
 
 _PROMPT_KEY_PREFIX = "bixarena:ai:prompt-validation"
 _BATTLE_KEY_PREFIX = "bixarena:ai:battle-validation"
+_PROMPT_CAT_KEY_PREFIX = "bixarena:ai:prompt-categorization"
+_BATTLE_CAT_KEY_PREFIX = "bixarena:ai:battle-categorization"
 
 # Module-level client — initialized lazily on first use.
 _client: valkey.Valkey | None = None
@@ -140,6 +142,89 @@ async def set_cached_battle_validation(
         value = json.dumps({"confidence": confidence, "is_biomedical": is_biomedical})
         await client.set(key, value, ex=settings.valkey_cache_ttl)
         logger.debug("Cached battle validation result")
+    except Exception:
+        logger.warning(
+            "Valkey cache write failed — result not cached",
+            exc_info=True,
+        )
+
+
+async def get_cached_prompt_categorization(
+    prompt: str, settings: Settings
+) -> list[str] | None:
+    """Look up a cached prompt categorization result.
+
+    Returns a list of category slugs, or None on cache miss / any error.
+    """
+    try:
+        client = await _get_client(settings)
+        key = _make_key(
+            _PROMPT_CAT_KEY_PREFIX, settings.prompt_categorization_method, prompt
+        )
+        raw = await client.get(key)
+        if raw is not None:
+            logger.info("Cache hit for prompt categorization")
+            return json.loads(raw)
+    except Exception:
+        logger.warning(
+            "Valkey cache read failed — proceeding without cache",
+            exc_info=True,
+        )
+    return None
+
+
+async def set_cached_prompt_categorization(
+    prompt: str, categories: list[str], settings: Settings
+) -> None:
+    """Store a prompt categorization result in the cache."""
+    try:
+        client = await _get_client(settings)
+        key = _make_key(
+            _PROMPT_CAT_KEY_PREFIX, settings.prompt_categorization_method, prompt
+        )
+        value = json.dumps(categories)
+        await client.set(key, value, ex=settings.valkey_cache_ttl)
+        logger.debug("Cached prompt categorization result")
+    except Exception:
+        logger.warning(
+            "Valkey cache write failed — result not cached",
+            exc_info=True,
+        )
+
+
+async def get_cached_battle_categorization(
+    prompts: list[str], settings: Settings
+) -> list[str] | None:
+    """Look up a cached battle categorization result."""
+    try:
+        client = await _get_client(settings)
+        key = _make_battle_key(
+            _BATTLE_CAT_KEY_PREFIX, settings.battle_categorization_method, prompts
+        )
+        raw = await client.get(key)
+        if raw is not None:
+            logger.info("Cache hit for battle categorization")
+            return json.loads(raw)
+    except Exception:
+        logger.warning(
+            "Valkey cache read failed — proceeding without cache",
+            exc_info=True,
+        )
+    return None
+
+
+async def set_cached_battle_categorization(
+    prompts: list[str], categories: list[str], settings: Settings
+) -> None:
+    """Store a battle categorization result in the cache."""
+    try:
+        client = await _get_client(settings)
+        key = _make_battle_key(
+            _BATTLE_CAT_KEY_PREFIX, settings.battle_categorization_method, prompts
+        )
+        value = json.dumps(categories)
+        await client.set(key, value, ex=settings.valkey_cache_ttl)
+        logger.debug("Cached battle categorization result")
     except Exception:
         logger.warning(
             "Valkey cache write failed — result not cached",

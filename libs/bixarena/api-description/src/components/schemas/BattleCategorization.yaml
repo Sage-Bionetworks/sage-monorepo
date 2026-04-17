@@ -1,0 +1,19 @@
+type: object
+properties:
+  categories:
+    type: array
+    items:
+      type: string
+      maxLength: 100
+    minItems: 0
+    maxItems: 3
+    description: >-
+      Up to three biomedical subject category slugs assigned by the classifier.
+      May be empty when the classifier did not assign any category.
+  method:
+    type: string
+    maxLength: 100
+    description: The categorization method used (e.g. 'openrouter-haiku-v1')
+required:
+  - categories
+  - method

@@ -42,7 +42,8 @@ class TestBattle(unittest.TestCase):
                 model2_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
                 created_at = '2024-01-15T10:30Z',
                 ended_at = '2024-01-15T11:45Z',
-                effective_validation_id = ''
+                effective_validation_id = '',
+                effective_categorization_id = ''
             )
         else:
             return Battle(
