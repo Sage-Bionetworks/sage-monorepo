@@ -58,6 +58,17 @@ CREATE INDEX idx_example_prompt_effective_categorization
 
 
 -- ============================================================================
+-- Created-by audit on Example Prompt
+-- ============================================================================
+-- NULL for imported prompts and rows that existed before this migration.
+-- Set to the user ID of the user who created the prompt via the API.
+-- ============================================================================
+
+ALTER TABLE api.example_prompt
+  ADD COLUMN created_by UUID NULL;
+
+
+-- ============================================================================
 -- Battle Categorization Table
 -- ============================================================================
 -- Same structure as example_prompt_categorization but scoped to battles.

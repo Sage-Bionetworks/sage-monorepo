@@ -2,7 +2,7 @@ type: object
 description: >-
   The information used to create an example prompt. Newly created prompts are inactive
   until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously
-  after creation; admins can manually override later via the categorization endpoints.
+  after creation; reviewers can manually override later via the categorization endpoints.
 properties:
   question:
     type: string
@@ -12,6 +12,6 @@ properties:
     example: 'What are the main symptoms of Type 2 diabetes?'
   source:
     $ref: ExamplePromptSource.yaml
+    description: Origin of the prompt.
 required:
   - question
-  - source
