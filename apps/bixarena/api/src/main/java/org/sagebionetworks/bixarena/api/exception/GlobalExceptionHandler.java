@@ -1,6 +1,7 @@
 package org.sagebionetworks.bixarena.api.exception;
 
 import java.util.Locale;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -266,6 +268,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler({ Exception.class })
   protected ResponseEntity<BasicErrorDto> handleGenericException(Exception ex, Locale locale) {
+    log.error("Unhandled exception", ex);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
       BasicErrorDto.builder()
         .title("Internal Server Error")

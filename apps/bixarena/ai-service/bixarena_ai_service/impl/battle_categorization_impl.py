@@ -78,6 +78,14 @@ class BattleCategorizationApiImpl(BaseBattleCategorizationApi):
         user_message = _build_user_message(sanitized)
         categories = await categorize(_SYSTEM_PROMPT, user_message)
 
+        # Only cache LLM responses, not error fallbacks. A None return from
+        # categorize() means the call failed — caching [] here would poison
+        # the cache for 30 days and prevent retry.
+        if categories is None:
+            result = BattleCategorization(categories=[], method=method)
+            logger.info("Battle categorization failed, returning empty (not cached)")
+            return result
+
         await set_cached_battle_categorization(sanitized, categories, settings)
 
         result = BattleCategorization(categories=categories, method=method)

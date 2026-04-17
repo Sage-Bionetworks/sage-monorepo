@@ -67,8 +67,9 @@ CATEGORIZATION_SCHEMA = {
             "categories": {
                 "type": "array",
                 "items": {"type": "string", "enum": list(BIOMEDICAL_CATEGORIES)},
-                "minItems": 0,
-                "maxItems": 3,
+                # NOTE: no minItems/maxItems — Anthropic structured-output rejects
+                # these keywords on arrays. Count (0-3) is guided by the system
+                # prompt and bounded by max_tokens.
                 "description": (
                     "Up to three most relevant category slugs from the allowed list; "
                     "empty when no category fits."
@@ -172,19 +173,19 @@ async def classify(system_prompt: str, user_message: str) -> float:
         return FALLBACK_CONFIDENCE
 
 
-async def categorize(system_prompt: str, user_message: str) -> list[str]:
+async def categorize(system_prompt: str, user_message: str) -> list[str] | None:
     """Call the OpenRouter LLM and return a list of bioRxiv category slugs.
 
-    Returns an empty list on any error. Callers should fall back to a
-    sensible default (e.g. not persist) when the list is empty.
+    Returns:
+      - list of slugs on a successful LLM response (may be empty for legitimate "no fit")
+      - None on error (API failure, missing key, parse failure) — callers should
+        not cache this; an empty list would be indistinguishable from "no fit".
     """
     settings = get_settings()
 
     if not settings.openrouter_api_key:
-        logger.warning(
-            "BIXARENA_AI_OPENROUTER_API_KEY is not set — returning empty categorization"
-        )
-        return []
+        logger.warning("BIXARENA_AI_OPENROUTER_API_KEY is not set — returning None")
+        return None
 
     try:
         client = get_openai_client()
@@ -208,5 +209,5 @@ async def categorize(system_prompt: str, user_message: str) -> list[str]:
         return parse_categories(raw)
 
     except Exception:
-        logger.exception("OpenRouter API call failed — returning empty categorization")
-        return []
+        logger.exception("OpenRouter API call failed — returning None")
+        return None

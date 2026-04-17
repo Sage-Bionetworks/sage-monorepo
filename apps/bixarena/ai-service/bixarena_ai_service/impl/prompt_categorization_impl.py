@@ -75,6 +75,14 @@ class PromptCategorizationApiImpl(BasePromptCategorizationApi):
         user_message = f"TEXT:\n{sanitized}"
         categories = await categorize(_SYSTEM_PROMPT, user_message)
 
+        # Only cache LLM responses, not error fallbacks. A None return from
+        # categorize() means the call failed (API error, bad schema, etc.) —
+        # caching [] here would poison the cache for 30 days and prevent retry.
+        if categories is None:
+            result = PromptCategorization(prompt=prompt, categories=[], method=method)
+            logger.info("Categorization failed, returning empty (not cached)")
+            return result
+
         await set_cached_prompt_categorization(sanitized, categories, settings)
 
         result = PromptCategorization(
