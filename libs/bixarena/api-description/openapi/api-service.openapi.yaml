@@ -360,7 +360,7 @@ paths:
       tags:
         - Example Prompt
       summary: Create an example prompt
-      description: Create a new example prompt (admin only). The new prompt is created as inactive regardless of the active field in the request body; a reviewer publishes it via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
+      description: Create a new example prompt (admin only). Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously unless categories are provided.
       operationId: createExamplePrompt
       requestBody:
         required: true
@@ -2270,7 +2270,7 @@ components:
             - examplePrompts
     ExamplePromptCreateRequest:
       type: object
-      description: The information used to create or update an example prompt.
+      description: The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.
       properties:
         question:
           type: string
@@ -2280,10 +2280,6 @@ components:
           example: What are the main symptoms of Type 2 diabetes?
         source:
           $ref: '#/components/schemas/ExamplePromptSource'
-        active:
-          type: boolean
-          description: Whether this example prompt is currently active/visible for use.
-          example: true
         categories:
           type: array
           items:
@@ -2300,7 +2296,6 @@ components:
       required:
         - question
         - source
-        - active
     ExamplePromptUpdateRequest:
       type: object
       description: The information used to update an example prompt. Only fields present in the request are modified.

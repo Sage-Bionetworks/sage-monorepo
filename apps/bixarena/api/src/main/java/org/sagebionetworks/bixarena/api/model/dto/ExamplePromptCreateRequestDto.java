@@ -22,10 +22,10 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * The information used to create or update an example prompt.
+ * The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.
  */
 
-@Schema(name = "ExamplePromptCreateRequest", description = "The information used to create or update an example prompt.")
+@Schema(name = "ExamplePromptCreateRequest", description = "The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.")
 @JsonTypeName("ExamplePromptCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ExamplePromptCreateRequestDto {
@@ -33,8 +33,6 @@ public class ExamplePromptCreateRequestDto {
   private String question;
 
   private ExamplePromptSourceDto source;
-
-  private Boolean active;
 
   @Valid
   private @Nullable List<BiomedicalCategoryDto> categories;
@@ -48,10 +46,9 @@ public class ExamplePromptCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ExamplePromptCreateRequestDto(String question, ExamplePromptSourceDto source, Boolean active) {
+  public ExamplePromptCreateRequestDto(String question, ExamplePromptSourceDto source) {
     this.question = question;
     this.source = source;
-    this.active = active;
   }
 
   public ExamplePromptCreateRequestDto question(String question) {
@@ -92,26 +89,6 @@ public class ExamplePromptCreateRequestDto {
 
   public void setSource(ExamplePromptSourceDto source) {
     this.source = source;
-  }
-
-  public ExamplePromptCreateRequestDto active(Boolean active) {
-    this.active = active;
-    return this;
-  }
-
-  /**
-   * Whether this example prompt is currently active/visible for use.
-   * @return active
-   */
-  @NotNull 
-  @Schema(name = "active", example = "true", description = "Whether this example prompt is currently active/visible for use.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("active")
-  public Boolean getActive() {
-    return active;
-  }
-
-  public void setActive(Boolean active) {
-    this.active = active;
   }
 
   public ExamplePromptCreateRequestDto categories(@Nullable List<BiomedicalCategoryDto> categories) {
@@ -173,14 +150,13 @@ public class ExamplePromptCreateRequestDto {
     ExamplePromptCreateRequestDto examplePromptCreateRequest = (ExamplePromptCreateRequestDto) o;
     return Objects.equals(this.question, examplePromptCreateRequest.question) &&
         Objects.equals(this.source, examplePromptCreateRequest.source) &&
-        Objects.equals(this.active, examplePromptCreateRequest.active) &&
         Objects.equals(this.categories, examplePromptCreateRequest.categories) &&
         Objects.equals(this.reason, examplePromptCreateRequest.reason);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(question, source, active, categories, reason);
+    return Objects.hash(question, source, categories, reason);
   }
 
   @Override
@@ -189,7 +165,6 @@ public class ExamplePromptCreateRequestDto {
     sb.append("class ExamplePromptCreateRequestDto {\n");
     sb.append("    question: ").append(toIndentedString(question)).append("\n");
     sb.append("    source: ").append(toIndentedString(source)).append("\n");
-    sb.append("    active: ").append(toIndentedString(active)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
     sb.append("}");
@@ -222,7 +197,6 @@ public class ExamplePromptCreateRequestDto {
     protected Builder copyOf(ExamplePromptCreateRequestDto value) { 
       this.instance.setQuestion(value.question);
       this.instance.setSource(value.source);
-      this.instance.setActive(value.active);
       this.instance.setCategories(value.categories);
       this.instance.setReason(value.reason);
       return this;
@@ -235,11 +209,6 @@ public class ExamplePromptCreateRequestDto {
     
     public ExamplePromptCreateRequestDto.Builder source(ExamplePromptSourceDto source) {
       this.instance.source(source);
-      return this;
-    }
-    
-    public ExamplePromptCreateRequestDto.Builder active(Boolean active) {
-      this.instance.active(active);
       return this;
     }
     

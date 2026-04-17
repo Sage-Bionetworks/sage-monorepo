@@ -1,6 +1,6 @@
 # ExamplePromptCreateRequest
 
-The information used to create or update an example prompt.
+The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.
 
 ## Properties
 
@@ -8,7 +8,6 @@ The information used to create or update an example prompt.
 | -------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | **question**   | **str**                                               | The biomedical question text.                                                                                                                             |
 | **source**     | [**ExamplePromptSource**](ExamplePromptSource.md)     |                                                                                                                                                           |
-| **active**     | **bool**                                              | Whether this example prompt is currently active/visible for use.                                                                                          |
 | **categories** | [**List[BiomedicalCategory]**](BiomedicalCategory.md) | Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously. | [optional] |
 | **reason**     | **str**                                               | Reason for the manual categorization decision, if categories is provided.                                                                                 | [optional] |
 

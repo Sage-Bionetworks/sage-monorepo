@@ -11,7 +11,7 @@ import { ExamplePromptSource } from './example-prompt-source';
 import { BiomedicalCategory } from './biomedical-category';
 
 /**
- * The information used to create or update an example prompt.
+ * The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.
  */
 export interface ExamplePromptCreateRequest {
   /**
@@ -19,10 +19,6 @@ export interface ExamplePromptCreateRequest {
    */
   question: string;
   source: ExamplePromptSource;
-  /**
-   * Whether this example prompt is currently active/visible for use.
-   */
-  active: boolean;
   /**
    * Human override categories. If provided, a manual categorization is created and reason is required. If absent, AI auto-categorization runs asynchronously.
    */

@@ -16,7 +16,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from bixarena_api_client.models.biomedical_category import BiomedicalCategory
@@ -27,16 +27,13 @@ from typing_extensions import Self
 
 class ExamplePromptCreateRequest(BaseModel):
     """
-    The information used to create or update an example prompt.
+    The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH.
     """  # noqa: E501
 
     question: Annotated[str, Field(min_length=1, strict=True, max_length=160)] = Field(
         description="The biomedical question text."
     )
     source: ExamplePromptSource
-    active: StrictBool = Field(
-        description="Whether this example prompt is currently active/visible for use."
-    )
     categories: Optional[
         Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
     ] = Field(
@@ -47,13 +44,7 @@ class ExamplePromptCreateRequest(BaseModel):
         default=None,
         description="Reason for the manual categorization decision, if categories is provided.",
     )
-    __properties: ClassVar[List[str]] = [
-        "question",
-        "source",
-        "active",
-        "categories",
-        "reason",
-    ]
+    __properties: ClassVar[List[str]] = ["question", "source", "categories", "reason"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -117,7 +108,6 @@ class ExamplePromptCreateRequest(BaseModel):
             {
                 "question": obj.get("question"),
                 "source": obj.get("source"),
-                "active": obj.get("active"),
                 "categories": obj.get("categories"),
                 "reason": obj.get("reason"),
             }
