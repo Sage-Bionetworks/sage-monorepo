@@ -10,13 +10,13 @@
 import { ExamplePromptSource } from './example-prompt-source';
 
 /**
- * The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.
+ * The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; reviewers can manually override later via the categorization endpoints.
  */
 export interface ExamplePromptCreateRequest {
   /**
    * The biomedical question text.
    */
   question: string;
-  source: ExamplePromptSource;
+  source?: ExamplePromptSource;
 }
 export namespace ExamplePromptCreateRequest {}

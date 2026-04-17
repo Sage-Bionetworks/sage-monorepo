@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from bixarena_api_client.models.example_prompt_source import ExamplePromptSource
 from typing import Optional, Set
@@ -26,13 +26,13 @@ from typing_extensions import Self
 
 class ExamplePromptCreateRequest(BaseModel):
     """
-    The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.
+    The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; reviewers can manually override later via the categorization endpoints.
     """  # noqa: E501
 
     question: Annotated[str, Field(min_length=1, strict=True, max_length=160)] = Field(
         description="The biomedical question text."
     )
-    source: ExamplePromptSource
+    source: Optional[ExamplePromptSource] = None
     __properties: ClassVar[List[str]] = ["question", "source"]
 
     model_config = ConfigDict(

@@ -3285,8 +3285,8 @@ components:
     ExamplePromptCreateRequest:
       description: The information used to create an example prompt. Newly created
         prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization
-        runs asynchronously after creation; admins can manually override later via
-        the categorization endpoints.
+        runs asynchronously after creation; reviewers can manually override later
+        via the categorization endpoints.
       properties:
         question:
           description: The biomedical question text.
@@ -3298,7 +3298,6 @@ components:
           $ref: '#/components/schemas/ExamplePromptSource'
       required:
         - question
-        - source
       type: object
     ExamplePromptUpdateRequest:
       description: The information used to update an example prompt. Only fields present

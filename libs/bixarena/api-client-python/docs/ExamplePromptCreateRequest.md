@@ -1,13 +1,13 @@
 # ExamplePromptCreateRequest
 
-The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.
+The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; reviewers can manually override later via the categorization endpoints.
 
 ## Properties
 
-| Name         | Type                                              | Description                   | Notes |
-| ------------ | ------------------------------------------------- | ----------------------------- | ----- |
+| Name         | Type                                              | Description                   | Notes      |
+| ------------ | ------------------------------------------------- | ----------------------------- | ---------- |
 | **question** | **str**                                           | The biomedical question text. |
-| **source**   | [**ExamplePromptSource**](ExamplePromptSource.md) |                               |
+| **source**   | [**ExamplePromptSource**](ExamplePromptSource.md) |                               | [optional] |
 
 ## Example
 

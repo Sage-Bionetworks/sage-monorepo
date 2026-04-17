@@ -2530,7 +2530,7 @@ components:
             - examplePrompts
     ExamplePromptCreateRequest:
       type: object
-      description: The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.
+      description: The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; reviewers can manually override later via the categorization endpoints.
       properties:
         question:
           type: string
@@ -2540,9 +2540,9 @@ components:
           example: What are the main symptoms of Type 2 diabetes?
         source:
           $ref: '#/components/schemas/ExamplePromptSource'
+          description: Origin of the prompt.
       required:
         - question
-        - source
     ExamplePromptUpdateRequest:
       type: object
       description: The information used to update an example prompt. Only fields present in the request are modified.

@@ -43,7 +43,6 @@ class TestExamplePromptCreateRequest(unittest.TestCase):
         else:
             return ExamplePromptCreateRequest(
                 question = 'What are the main symptoms of Type 2 diabetes?',
-                source = 'pubmedqa',
         )
         """
 

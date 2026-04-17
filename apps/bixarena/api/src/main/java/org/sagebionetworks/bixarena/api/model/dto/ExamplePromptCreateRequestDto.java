@@ -18,17 +18,17 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.
+ * The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; reviewers can manually override later via the categorization endpoints.
  */
 
-@Schema(name = "ExamplePromptCreateRequest", description = "The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; admins can manually override later via the categorization endpoints.")
+@Schema(name = "ExamplePromptCreateRequest", description = "The information used to create an example prompt. Newly created prompts are inactive until a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation; reviewers can manually override later via the categorization endpoints.")
 @JsonTypeName("ExamplePromptCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ExamplePromptCreateRequestDto {
 
   private String question;
 
-  private ExamplePromptSourceDto source;
+  private @Nullable ExamplePromptSourceDto source;
 
   public ExamplePromptCreateRequestDto() {
     super();
@@ -37,9 +37,8 @@ public class ExamplePromptCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ExamplePromptCreateRequestDto(String question, ExamplePromptSourceDto source) {
+  public ExamplePromptCreateRequestDto(String question) {
     this.question = question;
-    this.source = source;
   }
 
   public ExamplePromptCreateRequestDto question(String question) {
@@ -62,7 +61,7 @@ public class ExamplePromptCreateRequestDto {
     this.question = question;
   }
 
-  public ExamplePromptCreateRequestDto source(ExamplePromptSourceDto source) {
+  public ExamplePromptCreateRequestDto source(@Nullable ExamplePromptSourceDto source) {
     this.source = source;
     return this;
   }
@@ -71,14 +70,14 @@ public class ExamplePromptCreateRequestDto {
    * Get source
    * @return source
    */
-  @NotNull @Valid 
-  @Schema(name = "source", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Valid 
+  @Schema(name = "source", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("source")
-  public ExamplePromptSourceDto getSource() {
+  public @Nullable ExamplePromptSourceDto getSource() {
     return source;
   }
 
-  public void setSource(ExamplePromptSourceDto source) {
+  public void setSource(@Nullable ExamplePromptSourceDto source) {
     this.source = source;
   }
 
