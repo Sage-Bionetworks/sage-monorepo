@@ -5,11 +5,18 @@ properties:
     type: string
     description: The common name of the drug
     example: Agomelatine
+  chembl_id:
+    type: string
+    description: The ChEMBL ID of the drug
+    example: CHEMBL2105758
   total_nominations:
     type: integer
     description: The total number of nominations for the drug
     example: 1
-  year_first_nominated:
+  combined_with:
+    $ref: ./Link.yaml
+    nullable: true
+  initial_nomination:
     type: integer
     description: The year the drug was first nominated
     example: 2025
@@ -25,9 +32,26 @@ properties:
     items:
       type: string
     example: ['ACTDRx AD']
+  modality:
+    $ref: './Modality.yaml'
+    nullable: true
+  year_of_first_approval:
+    type: integer
+    description: The year the drug was first approved, if applicable
+    example: 2010
+    nullable: true
+  maximum_clinical_trial_phase:
+    type: string
+    description: The maximum clinical trial phase the drug has reached, if applicable
+    example: Phase IV
+    nullable: true
 required:
   - common_name
   - total_nominations
-  - year_first_nominated
+  - combined_with
+  - initial_nomination
   - principal_investigators
   - programs
+  - modality
+  - year_of_first_approval
+  - maximum_clinical_trial_phase

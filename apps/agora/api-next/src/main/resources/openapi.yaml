@@ -506,26 +506,59 @@ components:
         - sortFields
         - sortOrders
       type: object
+    Link:
+      description: Link
+      example:
+        link_url: link_url
+        link_text: link_text
+      properties:
+        link_text:
+          description: Link text
+          type: string
+        link_url:
+          description: URL for the related resource
+          type: string
+      type: object
+    Modality:
+      description: The drug modality
+      enum:
+        - Small Molecule
+        - Protein
+      example: Protein
+      type: string
     NominatedDrug:
       description: A nominated drug entry
       example:
+        maximum_clinical_trial_phase: Phase IV
+        year_of_first_approval: 2010
+        initial_nomination: 2025
+        modality: Protein
         total_nominations: 1
-        year_first_nominated: 2025
         principal_investigators:
           - Xie
         programs:
           - ACTDRx AD
         common_name: Agomelatine
+        chembl_id: CHEMBL2105758
+        combined_with:
+          link_url: link_url
+          link_text: link_text
       properties:
         common_name:
           description: The common name of the drug
           example: Agomelatine
           type: string
+        chembl_id:
+          description: The ChEMBL ID of the drug
+          example: CHEMBL2105758
+          type: string
         total_nominations:
           description: The total number of nominations for the drug
           example: 1
           type: integer
-        year_first_nominated:
+        combined_with:
+          $ref: '#/components/schemas/Link'
+        initial_nomination:
           description: The year the drug was first nominated
           example: 2025
           type: integer
@@ -543,12 +576,29 @@ components:
           items:
             type: string
           type: array
+        modality:
+          $ref: '#/components/schemas/Modality'
+        year_of_first_approval:
+          description: 'The year the drug was first approved, if applicable'
+          example: 2010
+          nullable: true
+          type: integer
+        maximum_clinical_trial_phase:
+          description: "The maximum clinical trial phase the drug has reached, if\
+            \ applicable"
+          example: Phase IV
+          nullable: true
+          type: string
       required:
+        - combined_with
         - common_name
+        - initial_nomination
+        - maximum_clinical_trial_phase
+        - modality
         - principal_investigators
         - programs
         - total_nominations
-        - year_first_nominated
+        - year_of_first_approval
       type: object
     PageMetadata:
       description: The metadata of a page.
@@ -597,20 +647,34 @@ components:
       description: A page of nominated drug objects.
       example:
         nominatedDrugs:
-          - total_nominations: 1
-            year_first_nominated: 2025
+          - maximum_clinical_trial_phase: Phase IV
+            year_of_first_approval: 2010
+            initial_nomination: 2025
+            modality: Protein
+            total_nominations: 1
             principal_investigators:
               - Xie
             programs:
               - ACTDRx AD
             common_name: Agomelatine
-          - total_nominations: 1
-            year_first_nominated: 2025
+            chembl_id: CHEMBL2105758
+            combined_with:
+              link_url: link_url
+              link_text: link_text
+          - maximum_clinical_trial_phase: Phase IV
+            year_of_first_approval: 2010
+            initial_nomination: 2025
+            modality: Protein
+            total_nominations: 1
             principal_investigators:
               - Xie
             programs:
               - ACTDRx AD
             common_name: Agomelatine
+            chembl_id: CHEMBL2105758
+            combined_with:
+              link_url: link_url
+              link_text: link_text
         page:
           number: 0
           size: 100

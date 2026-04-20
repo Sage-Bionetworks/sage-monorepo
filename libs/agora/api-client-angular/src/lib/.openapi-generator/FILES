@@ -34,8 +34,10 @@ model/gct-genes-list.ts
 model/gene-network-links.ts
 model/gene.ts
 model/item-filter-type-query.ts
+model/link.ts
 model/median-expression.ts
 model/metabolomics.ts
+model/modality.ts
 model/models.ts
 model/neuropathologic-correlation.ts
 model/nominated-drug-search-query.ts
