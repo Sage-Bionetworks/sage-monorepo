@@ -40,10 +40,7 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
   private static final String PRIMARY_FIELD = "common_name";
 
   /** Array fields that need computed fields for custom sort handling */
-  private static final Set<String> ARRAY_FIELDS = Set.of(
-    "principal_investigators",
-    "programs"
-  );
+  private static final Set<String> ARRAY_FIELDS = Set.of("principal_investigators", "programs");
 
   private final MongoTemplate mongoTemplate;
 
@@ -111,7 +108,7 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       query.getPrincipalInvestigators(),
       query.getPrograms(),
       query.getTotalNominations(),
-      query.getYearFirstNominated(),
+      query.getInitialNomination(),
       andCriteria
     );
 
@@ -205,7 +202,7 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     List<String> principalInvestigators,
     List<String> programs,
     List<Integer> totalNominations,
-    List<Integer> yearFirstNominated,
+    List<Integer> initialNomination,
     List<Criteria> andCriteria
   ) {
     // principal_investigators: array field - use $in (matches if array contains any value)
@@ -223,9 +220,9 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       andCriteria.add(Criteria.where("total_nominations").in(totalNominations));
     }
 
-    // yearFirstNominated: scalar field - use $in
-    if (yearFirstNominated != null && !yearFirstNominated.isEmpty()) {
-      andCriteria.add(Criteria.where("year_first_nominated").in(yearFirstNominated));
+    // initialNomination: scalar field - use $in
+    if (initialNomination != null && !initialNomination.isEmpty()) {
+      andCriteria.add(Criteria.where("initial_nomination").in(initialNomination));
     }
   }
 

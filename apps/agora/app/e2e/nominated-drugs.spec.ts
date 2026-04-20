@@ -110,7 +110,7 @@ test.describe('nominated drugs - comparison tool', () => {
   test.describe('sort URL sync', () => {
     // Non-default sort columns that are present on the page and can be sorted in tests
     const sortColumns: ColumnConfig[] = [
-      { name: 'First Nominated', field: 'year_first_nominated' },
+      { name: 'First Nominated', field: 'initial_nomination' },
       { name: 'Principal Investigators', field: 'principal_investigators' },
       { name: 'Programs', field: 'programs' },
     ];
@@ -131,7 +131,7 @@ test.describe('nominated drugs - comparison tool', () => {
         CT_PAGE,
         true,
         'url',
-        'sortFields=year_first_nominated&sortOrders=1',
+        'sortFields=initial_nomination&sortOrders=1',
       );
       await testSortRestoredFromUrl(page, sortColumns[0].name, sortColumns[0].field);
     });
@@ -152,7 +152,7 @@ test.describe('nominated drugs - comparison tool', () => {
         CT_PAGE,
         true,
         'url',
-        'sortFields=year_first_nominated,principal_investigators&sortOrders=-1,1',
+        'sortFields=initial_nomination,principal_investigators&sortOrders=-1,1',
       );
       await testMultiColumnSortRestoredFromUrl(page, sortColumns.slice(0, 2), sortColumns[2]);
     });

@@ -588,7 +588,7 @@ components:
           example:
             - 1
             - 2
-        yearFirstNominated:
+        initialNomination:
           description: Filter by year first nominated.
           type: array
           items:

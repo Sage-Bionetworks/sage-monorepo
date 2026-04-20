@@ -466,7 +466,7 @@ components:
             type: integer
           nullable: true
           type: array
-        yearFirstNominated:
+        initialNomination:
           description: Filter by year first nominated.
           example:
             - 2024

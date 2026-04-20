@@ -21,14 +21,28 @@ public class NominatedDrugDocument {
   @Field("common_name")
   private String commonName;
 
+  @Field("chembl_id")
+  private String chemblId;
+
   @Field("total_nominations")
   private Integer totalNominations;
 
-  @Field("year_first_nominated")
-  private Integer yearFirstNominated;
+  @Field("combined_with")
+  private LinkDocument combinedWith;
+
+  @Field("initial_nomination")
+  private Integer initialNomination;
 
   @Field("principal_investigators")
   private List<String> principalInvestigators;
 
   private List<String> programs;
+
+  private String modality;
+
+  @Field("year_of_first_approval")
+  private Integer yearOfFirstApproval;
+
+  @Field("maximum_clinical_trial_phase")
+  private String maximumClinicalTrialPhase;
 }

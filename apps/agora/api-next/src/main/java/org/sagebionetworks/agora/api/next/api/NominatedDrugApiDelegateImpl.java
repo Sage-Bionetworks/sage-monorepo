@@ -25,7 +25,7 @@ public class NominatedDrugApiDelegateImpl implements NominatedDrugApiDelegate {
     "principalInvestigators",
     "programs",
     "totalNominations",
-    "yearFirstNominated",
+    "initialNomination",
     "sortFields",
     "sortOrders"
   );

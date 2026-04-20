@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.agora.api.next.model.document.NominatedDrugDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.agora.api.next.model.dto.ModalityDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugSearchQueryDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugsPageDto;
@@ -142,9 +143,12 @@ class NominatedDrugApiDelegateImplTest {
     NominatedDrugDto dto = response.getBody().getNominatedDrugs().get(0);
     assertThat(dto.getCommonName()).isEqualTo(commonName);
     assertThat(dto.getTotalNominations()).isEqualTo(3);
-    assertThat(dto.getYearFirstNominated()).isEqualTo(2022);
+    assertThat(dto.getInitialNomination()).isEqualTo(2022);
     assertThat(dto.getPrincipalInvestigators()).containsExactly("PI One", "PI Two");
     assertThat(dto.getPrograms()).containsExactly("ACTDRx AD", "Community");
+    assertThat(dto.getModality()).isEqualTo(ModalityDto.SMALL_MOLECULE);
+    assertThat(dto.getYearOfFirstApproval()).isEqualTo(2010);
+    assertThat(dto.getMaximumClinicalTrialPhase()).isEqualTo("Phase IV");
 
     HttpHeaders headers = response.getHeaders();
     assertThat(headers.getCacheControl()).isEqualTo("no-cache, no-store, must-revalidate");
@@ -255,9 +259,12 @@ class NominatedDrugApiDelegateImplTest {
     document.setId(new ObjectId());
     document.setCommonName(commonName);
     document.setTotalNominations(3);
-    document.setYearFirstNominated(2022);
+    document.setInitialNomination(2022);
     document.setPrincipalInvestigators(List.of("PI One", "PI Two"));
     document.setPrograms(List.of("ACTDRx AD", "Community"));
+    document.setModality("Small Molecule");
+    document.setYearOfFirstApproval(2010);
+    document.setMaximumClinicalTrialPhase("Phase IV");
     return document;
   }
 }

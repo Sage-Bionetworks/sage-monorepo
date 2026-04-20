@@ -44,11 +44,7 @@ class NominatedDrugServiceTest {
     Page<NominatedDrugDocument> page = new PageImpl<>(List.of());
 
     when(
-      repository.findAll(
-        any(Pageable.class),
-        any(NominatedDrugSearchQueryDto.class),
-        eq(List.of())
-      )
+      repository.findAll(any(Pageable.class), any(NominatedDrugSearchQueryDto.class), eq(List.of()))
     ).thenReturn(page);
 
     NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
@@ -76,11 +72,7 @@ class NominatedDrugServiceTest {
     Page<NominatedDrugDocument> page = new PageImpl<>(List.of(doc));
 
     when(
-      repository.findAll(
-        any(Pageable.class),
-        any(NominatedDrugSearchQueryDto.class),
-        eq(List.of())
-      )
+      repository.findAll(any(Pageable.class), any(NominatedDrugSearchQueryDto.class), eq(List.of()))
     ).thenReturn(page);
 
     NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
@@ -271,11 +263,7 @@ class NominatedDrugServiceTest {
     Page<NominatedDrugDocument> page = new PageImpl<>(List.of());
 
     when(
-      repository.findAll(
-        any(Pageable.class),
-        any(NominatedDrugSearchQueryDto.class),
-        eq(List.of())
-      )
+      repository.findAll(any(Pageable.class), any(NominatedDrugSearchQueryDto.class), eq(List.of()))
     ).thenReturn(page);
 
     NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
@@ -338,18 +326,14 @@ class NominatedDrugServiceTest {
     Page<NominatedDrugDocument> page = new PageImpl<>(List.of(doc));
 
     when(
-      repository.findAll(
-        any(Pageable.class),
-        any(NominatedDrugSearchQueryDto.class),
-        eq(List.of())
-      )
+      repository.findAll(any(Pageable.class), any(NominatedDrugSearchQueryDto.class), eq(List.of()))
     ).thenReturn(page);
 
     NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
       .principalInvestigators(List.of("PI One"))
       .programs(List.of("ACTDRx AD"))
       .totalNominations(List.of(3))
-      .yearFirstNominated(List.of(2022))
+      .initialNomination(List.of(2022))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -371,9 +355,12 @@ class NominatedDrugServiceTest {
     document.setId(new ObjectId());
     document.setCommonName(commonName);
     document.setTotalNominations(3);
-    document.setYearFirstNominated(2022);
+    document.setInitialNomination(2022);
     document.setPrincipalInvestigators(List.of("PI One", "PI Two"));
     document.setPrograms(List.of("ACTDRx AD", "Community"));
+    document.setModality("Small Molecule");
+    document.setYearOfFirstApproval(2010);
+    document.setMaximumClinicalTrialPhase("Phase IV");
     return document;
   }
 }
