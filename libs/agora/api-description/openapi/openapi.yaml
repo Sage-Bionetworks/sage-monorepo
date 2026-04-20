@@ -542,14 +542,14 @@ components:
           example: 100
         items:
           description: |
-            List of chembl_id values to filter by.
+            List of composite_id values to filter by (format: chembl_id~combined_with).
           type: array
           items:
             type: string
           nullable: true
           example:
-            - CHEMBL2105758
-            - CHEMBL1023
+            - CHEMBL2105758~null
+            - CHEMBL1023~Donepezil
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
@@ -647,6 +647,10 @@ components:
       type: object
       description: A nominated drug entry
       properties:
+        composite_id:
+          type: string
+          description: Unique identifier for the nominated drug entry
+          example: CHEMBL2105758~null
         common_name:
           type: string
           description: The common name of the drug
@@ -695,6 +699,7 @@ components:
           example: Phase IV
           nullable: true
       required:
+        - composite_id
         - common_name
         - total_nominations
         - combined_with

@@ -22,7 +22,7 @@ export interface NominatedDrugSearchQuery {
    */
   pageSize?: number;
   /**
-   * List of chembl_id values to filter by.
+   * List of composite_id values to filter by (format: chembl_id~combined_with).
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;

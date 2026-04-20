@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorConstants {
   ENTITY_NOT_FOUND("about:blank", "Entity not found", HttpStatus.NOT_FOUND),
+  INVALID_FILTER("about:blank", "Invalid Filter", HttpStatus.BAD_REQUEST),
   BAD_REQUEST("about:blank", "Bad Request", HttpStatus.BAD_REQUEST),
   INTERNAL_SERVER_ERROR("about:blank", "Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
 

@@ -14,6 +14,10 @@ import { Modality } from './modality';
  */
 export interface NominatedDrug {
   /**
+   * Unique identifier for the nominated drug entry
+   */
+  composite_id: string;
+  /**
    * The common name of the drug
    */
   common_name: string;

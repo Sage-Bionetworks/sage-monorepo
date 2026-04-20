@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.agora.api.next.model.document.NominatedDrugDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ModalityDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugDto;
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugIdentifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,7 @@ public class NominatedDrugMapper {
       : null;
 
     NominatedDrugDto dto = new NominatedDrugDto(
+      getCompositeId(document),
       document.getCommonName(),
       document.getTotalNominations(),
       document.getCombinedWith(),
@@ -41,5 +43,13 @@ public class NominatedDrugMapper {
     );
     dto.setChemblId(document.getChemblId());
     return dto;
+  }
+
+  private String getCompositeId(NominatedDrugDocument document) {
+    return NominatedDrugIdentifier.builder()
+      .chemblId(document.getChemblId())
+      .combinedWith(document.getCombinedWith())
+      .build()
+      .toCompositeId();
   }
 }

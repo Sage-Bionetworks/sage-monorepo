@@ -29,6 +29,8 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class NominatedDrugDto {
 
+  private String compositeId;
+
   private String commonName;
 
   private @Nullable String chemblId;
@@ -58,7 +60,8 @@ public class NominatedDrugDto {
   /**
    * Constructor with only required parameters
    */
-  public NominatedDrugDto(String commonName, Integer totalNominations, String combinedWith, Integer initialNomination, List<String> principalInvestigators, List<String> programs, ModalityDto modality, Integer yearOfFirstApproval, String maximumClinicalTrialPhase) {
+  public NominatedDrugDto(String compositeId, String commonName, Integer totalNominations, String combinedWith, Integer initialNomination, List<String> principalInvestigators, List<String> programs, ModalityDto modality, Integer yearOfFirstApproval, String maximumClinicalTrialPhase) {
+    this.compositeId = compositeId;
     this.commonName = commonName;
     this.totalNominations = totalNominations;
     this.combinedWith = combinedWith;
@@ -68,6 +71,26 @@ public class NominatedDrugDto {
     this.modality = modality;
     this.yearOfFirstApproval = yearOfFirstApproval;
     this.maximumClinicalTrialPhase = maximumClinicalTrialPhase;
+  }
+
+  public NominatedDrugDto compositeId(String compositeId) {
+    this.compositeId = compositeId;
+    return this;
+  }
+
+  /**
+   * Unique identifier for the nominated drug entry
+   * @return compositeId
+   */
+  @NotNull 
+  @Schema(name = "composite_id", example = "CHEMBL2105758~null", description = "Unique identifier for the nominated drug entry", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("composite_id")
+  public String getCompositeId() {
+    return compositeId;
+  }
+
+  public void setCompositeId(String compositeId) {
+    this.compositeId = compositeId;
   }
 
   public NominatedDrugDto commonName(String commonName) {
@@ -295,7 +318,8 @@ public class NominatedDrugDto {
       return false;
     }
     NominatedDrugDto nominatedDrug = (NominatedDrugDto) o;
-    return Objects.equals(this.commonName, nominatedDrug.commonName) &&
+    return Objects.equals(this.compositeId, nominatedDrug.compositeId) &&
+        Objects.equals(this.commonName, nominatedDrug.commonName) &&
         Objects.equals(this.chemblId, nominatedDrug.chemblId) &&
         Objects.equals(this.totalNominations, nominatedDrug.totalNominations) &&
         Objects.equals(this.combinedWith, nominatedDrug.combinedWith) &&
@@ -309,13 +333,14 @@ public class NominatedDrugDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(commonName, chemblId, totalNominations, combinedWith, initialNomination, principalInvestigators, programs, modality, yearOfFirstApproval, maximumClinicalTrialPhase);
+    return Objects.hash(compositeId, commonName, chemblId, totalNominations, combinedWith, initialNomination, principalInvestigators, programs, modality, yearOfFirstApproval, maximumClinicalTrialPhase);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NominatedDrugDto {\n");
+    sb.append("    compositeId: ").append(toIndentedString(compositeId)).append("\n");
     sb.append("    commonName: ").append(toIndentedString(commonName)).append("\n");
     sb.append("    chemblId: ").append(toIndentedString(chemblId)).append("\n");
     sb.append("    totalNominations: ").append(toIndentedString(totalNominations)).append("\n");
@@ -354,6 +379,7 @@ public class NominatedDrugDto {
     }
 
     protected Builder copyOf(NominatedDrugDto value) { 
+      this.instance.setCompositeId(value.compositeId);
       this.instance.setCommonName(value.commonName);
       this.instance.setChemblId(value.chemblId);
       this.instance.setTotalNominations(value.totalNominations);
@@ -367,6 +393,11 @@ public class NominatedDrugDto {
       return this;
     }
 
+    public NominatedDrugDto.Builder compositeId(String compositeId) {
+      this.instance.compositeId(compositeId);
+      return this;
+    }
+    
     public NominatedDrugDto.Builder commonName(String commonName) {
       this.instance.commonName(commonName);
       return this;

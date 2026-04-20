@@ -1,6 +1,10 @@
 type: object
 description: A nominated drug entry
 properties:
+  composite_id:
+    type: string
+    description: Unique identifier for the nominated drug entry
+    example: CHEMBL2105758~null
   common_name:
     type: string
     description: The common name of the drug
@@ -47,6 +51,7 @@ properties:
     example: Phase IV
     nullable: true
 required:
+  - composite_id
   - common_name
   - total_nominations
   - combined_with

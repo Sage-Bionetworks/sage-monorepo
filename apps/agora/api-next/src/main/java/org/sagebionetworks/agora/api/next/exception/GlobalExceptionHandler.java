@@ -47,6 +47,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .body(errorDto);
   }
 
+  @ExceptionHandler(InvalidFilterException.class)
+  protected ResponseEntity<BasicErrorDto> handleInvalidFilter(
+    InvalidFilterException ex,
+    NativeWebRequest request,
+    Locale locale
+  ) {
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.INVALID_FILTER.getTitle())
+      .status(ErrorConstants.INVALID_FILTER.getStatus().value())
+      .detail(ex.getMessage())
+      .instance(resolveInstance(request))
+      .build();
+    return ResponseEntity.status(ErrorConstants.INVALID_FILTER.getStatus())
+      .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+      .body(errorDto);
+  }
+
   @ExceptionHandler(IllegalArgumentException.class)
   protected ResponseEntity<BasicErrorDto> handleIllegalArgument(
     IllegalArgumentException ex,

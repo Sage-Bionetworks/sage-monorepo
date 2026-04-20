@@ -65,7 +65,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
       window.open(url, '_blank');
     },
     legendEnabled: false,
-    rowIdDataKey: 'chembl_id',
+    rowIdDataKey: 'composite_id',
     allowPinnedImageDownload: false,
     defaultSort: [
       { field: 'total_nominations', order: -1 },

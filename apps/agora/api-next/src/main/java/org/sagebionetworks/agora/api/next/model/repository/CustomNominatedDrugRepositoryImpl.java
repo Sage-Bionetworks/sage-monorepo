@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.sagebionetworks.agora.api.next.model.document.NominatedDrugDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugIdentifier;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugSearchQueryDto;
 import org.sagebionetworks.agora.api.next.util.ApiHelper;
 import org.springframework.data.domain.Page;
@@ -37,7 +38,6 @@ import org.springframework.stereotype.Repository;
 public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRepository {
 
   private static final String COLLECTION_NAME = "nominateddrugs";
-  private static final String ITEM_FIELD = "chembl_id";
   private static final String SEARCH_FIELD = "common_name";
 
   /** Array fields that need computed fields for custom sort handling */
@@ -248,11 +248,40 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       return;
     }
 
-    if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
-      andCriteria.add(Criteria.where(ITEM_FIELD).in(items));
-    } else {
-      andCriteria.add(Criteria.where(ITEM_FIELD).nin(items));
+    // Parse composite identifiers (format: chembl_id~combined_with)
+    List<NominatedDrugIdentifier> identifiers = parseIdentifiers(items);
+
+    // Build criteria for each identifier (must match BOTH chembl_id AND combined_with)
+    List<Criteria> compositeConditions = new ArrayList<>();
+    for (NominatedDrugIdentifier id : identifiers) {
+      Criteria idCondition = new Criteria()
+        .andOperator(
+          Criteria.where("chembl_id").is(id.getChemblId()),
+          Criteria.where("combined_with").is(id.getCombinedWith())
+        );
+      compositeConditions.add(idCondition);
     }
+
+    // Apply INCLUDE or EXCLUDE logic
+    if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
+      // Match ANY of the composite identifiers ($or)
+      andCriteria.add(
+        new Criteria().orOperator(compositeConditions.toArray(new Criteria[0]))
+      );
+    } else {
+      // Exclude ALL of the composite identifiers ($nor)
+      andCriteria.add(
+        new Criteria().norOperator(compositeConditions.toArray(new Criteria[0]))
+      );
+    }
+  }
+
+  private List<NominatedDrugIdentifier> parseIdentifiers(List<String> items) {
+    List<NominatedDrugIdentifier> identifiers = new ArrayList<>();
+    for (String item : items) {
+      identifiers.add(NominatedDrugIdentifier.parse(item));
+    }
+    return identifiers;
   }
 
   private void addSearchFilterCriteria(
