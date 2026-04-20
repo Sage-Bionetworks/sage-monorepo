@@ -379,6 +379,11 @@ components:
       enum:
         - Small molecule
         - Protein
+        - Antibody
+        - Oligonucleotide
+        - Oligosaccharide
+        - Gene
+        - PROTAC
       example: Protein
     NominatedDrug:
       type: object

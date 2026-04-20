@@ -24,7 +24,17 @@ public enum ModalityDto {
   
   SMALL_MOLECULE("Small molecule"),
   
-  PROTEIN("Protein");
+  PROTEIN("Protein"),
+  
+  ANTIBODY("Antibody"),
+  
+  OLIGONUCLEOTIDE("Oligonucleotide"),
+  
+  OLIGOSACCHARIDE("Oligosaccharide"),
+  
+  GENE("Gene"),
+  
+  PROTAC("PROTAC");
 
   private final String value;
 

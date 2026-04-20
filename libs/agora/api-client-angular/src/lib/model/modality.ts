@@ -11,9 +11,21 @@
 /**
  * The drug modality
  */
-export type Modality = 'Small molecule' | 'Protein';
+export type Modality =
+  | 'Small molecule'
+  | 'Protein'
+  | 'Antibody'
+  | 'Oligonucleotide'
+  | 'Oligosaccharide'
+  | 'Gene'
+  | 'PROTAC';
 
 export const Modality = {
   SmallMolecule: 'Small molecule' as Modality,
   Protein: 'Protein' as Modality,
+  Antibody: 'Antibody' as Modality,
+  Oligonucleotide: 'Oligonucleotide' as Modality,
+  Oligosaccharide: 'Oligosaccharide' as Modality,
+  Gene: 'Gene' as Modality,
+  Protac: 'PROTAC' as Modality,
 };
