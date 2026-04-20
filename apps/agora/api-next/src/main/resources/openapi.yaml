@@ -478,7 +478,7 @@ components:
         modality:
           description: Filter by drug modality.
           example:
-            - Small Molecule
+            - Small molecule
             - Protein
           items:
             type: string
@@ -531,7 +531,7 @@ components:
     Modality:
       description: The drug modality
       enum:
-        - Small Molecule
+        - Small molecule
         - Protein
       example: Protein
       type: string

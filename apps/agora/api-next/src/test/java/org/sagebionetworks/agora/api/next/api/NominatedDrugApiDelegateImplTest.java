@@ -51,10 +51,7 @@ class NominatedDrugApiDelegateImplTest {
     ServletRequestAttributes attributes = new ServletRequestAttributes(request);
     RequestContextHolder.setRequestAttributes(attributes);
 
-    NominatedDrugService service = new NominatedDrugService(
-      repository,
-      new NominatedDrugMapper()
-    );
+    NominatedDrugService service = new NominatedDrugService(repository, new NominatedDrugMapper());
     delegate = new NominatedDrugApiDelegateImpl(service);
   }
 
@@ -68,11 +65,7 @@ class NominatedDrugApiDelegateImplTest {
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
     Page<NominatedDrugDocument> page = new PageImpl<>(List.of());
     when(
-      repository.findAll(
-        any(Pageable.class),
-        any(NominatedDrugSearchQueryDto.class),
-        eq(List.of())
-      )
+      repository.findAll(any(Pageable.class), any(NominatedDrugSearchQueryDto.class), eq(List.of()))
     ).thenReturn(page);
 
     NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
@@ -107,11 +100,7 @@ class NominatedDrugApiDelegateImplTest {
   void shouldReturnMappedResultsWhenItemsProvided() {
     String commonName = "Agomelatine";
     NominatedDrugDocument document = buildDocument(commonName);
-    Page<NominatedDrugDocument> page = new PageImpl<>(
-      List.of(document),
-      PageRequest.of(0, 100),
-      1
-    );
+    Page<NominatedDrugDocument> page = new PageImpl<>(List.of(document), PageRequest.of(0, 100), 1);
 
     when(
       repository.findAll(
@@ -166,11 +155,7 @@ class NominatedDrugApiDelegateImplTest {
     );
 
     when(
-      repository.findAll(
-        any(Pageable.class),
-        any(NominatedDrugSearchQueryDto.class),
-        eq(List.of())
-      )
+      repository.findAll(any(Pageable.class), any(NominatedDrugSearchQueryDto.class), eq(List.of()))
     ).thenReturn(page);
 
     NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
@@ -262,7 +247,7 @@ class NominatedDrugApiDelegateImplTest {
     document.setInitialNomination(2022);
     document.setPrincipalInvestigators(List.of("PI One", "PI Two"));
     document.setPrograms(List.of("ACTDRx AD", "Community"));
-    document.setModality("Small Molecule");
+    document.setModality("Small molecule");
     document.setYearOfFirstApproval(2010);
     document.setMaximumClinicalTrialPhase("Phase IV");
     return document;

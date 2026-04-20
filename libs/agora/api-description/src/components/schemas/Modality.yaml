@@ -1,6 +1,6 @@
 type: string
 description: The drug modality
 enum:
-  - Small Molecule
+  - Small molecule
   - Protein
 example: Protein

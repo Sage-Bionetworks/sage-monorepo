@@ -341,7 +341,7 @@ components:
             type: string
           nullable: true
           example:
-            - Small Molecule
+            - Small molecule
             - Protein
         sortFields:
           description: |
@@ -387,7 +387,7 @@ components:
       type: string
       description: The drug modality
       enum:
-        - Small Molecule
+        - Small molecule
         - Protein
       example: Protein
     NominatedDrug:

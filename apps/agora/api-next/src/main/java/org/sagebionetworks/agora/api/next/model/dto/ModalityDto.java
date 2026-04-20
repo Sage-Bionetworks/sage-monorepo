@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public enum ModalityDto {
   
-  SMALL_MOLECULE("Small Molecule"),
+  SMALL_MOLECULE("Small molecule"),
   
   PROTEIN("Protein");
 

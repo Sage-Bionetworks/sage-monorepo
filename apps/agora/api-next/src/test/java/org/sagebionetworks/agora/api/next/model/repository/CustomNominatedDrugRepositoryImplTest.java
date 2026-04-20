@@ -279,7 +279,7 @@ class CustomNominatedDrugRepositoryImplTest {
       .programs(List.of("ACTDRx AD"))
       .totalNominations(List.of(3))
       .initialNomination(List.of(2022))
-      .modality(List.of("Small Molecule"))
+      .modality(List.of("Small molecule"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 

@@ -349,7 +349,7 @@ public class NominatedDrugSearchQueryDto {
    * @return modality
    */
   
-  @Schema(name = "modality", example = "[\"Small Molecule\",\"Protein\"]", description = "Filter by drug modality.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "modality", example = "[\"Small molecule\",\"Protein\"]", description = "Filter by drug modality.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("modality")
   public @Nullable List<String> getModality() {
     return modality;

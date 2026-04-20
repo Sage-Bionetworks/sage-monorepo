@@ -11,9 +11,9 @@
 /**
  * The drug modality
  */
-export type Modality = 'Small Molecule' | 'Protein';
+export type Modality = 'Small molecule' | 'Protein';
 
 export const Modality = {
-  SmallMolecule: 'Small Molecule' as Modality,
+  SmallMolecule: 'Small molecule' as Modality,
   Protein: 'Protein' as Modality,
 };

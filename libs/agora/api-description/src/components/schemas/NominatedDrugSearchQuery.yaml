@@ -69,7 +69,7 @@ properties:
     items:
       type: string
     nullable: true
-    example: ['Small Molecule', 'Protein']
+    example: ['Small molecule', 'Protein']
   sortFields:
     description: |
       List of field names to sort by (e.g., ["total_nominations", "common_name"]).
