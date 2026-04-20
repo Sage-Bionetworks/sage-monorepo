@@ -28,7 +28,7 @@ public class NominatedDrugDocument {
   private Integer totalNominations;
 
   @Field("combined_with")
-  private LinkDocument combinedWith;
+  private String combinedWith;
 
   @Field("initial_nomination")
   private Integer initialNomination;

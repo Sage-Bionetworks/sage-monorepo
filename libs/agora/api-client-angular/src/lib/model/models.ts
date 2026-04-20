@@ -18,7 +18,6 @@ export * from './gct-genes-list';
 export * from './gene';
 export * from './gene-network-links';
 export * from './item-filter-type-query';
-export * from './link';
 export * from './median-expression';
 export * from './metabolomics';
 export * from './modality';

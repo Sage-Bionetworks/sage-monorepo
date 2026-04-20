@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.sagebionetworks.agora.api.next.model.dto.LinkDto;
 import org.sagebionetworks.agora.api.next.model.dto.ModalityDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -36,7 +35,7 @@ public class NominatedDrugDto {
 
   private Integer totalNominations;
 
-  private LinkDto combinedWith;
+  private String combinedWith = null;
 
   private Integer initialNomination;
 
@@ -59,7 +58,7 @@ public class NominatedDrugDto {
   /**
    * Constructor with only required parameters
    */
-  public NominatedDrugDto(String commonName, Integer totalNominations, LinkDto combinedWith, Integer initialNomination, List<String> principalInvestigators, List<String> programs, ModalityDto modality, Integer yearOfFirstApproval, String maximumClinicalTrialPhase) {
+  public NominatedDrugDto(String commonName, Integer totalNominations, String combinedWith, Integer initialNomination, List<String> principalInvestigators, List<String> programs, ModalityDto modality, Integer yearOfFirstApproval, String maximumClinicalTrialPhase) {
     this.commonName = commonName;
     this.totalNominations = totalNominations;
     this.combinedWith = combinedWith;
@@ -131,23 +130,23 @@ public class NominatedDrugDto {
     this.totalNominations = totalNominations;
   }
 
-  public NominatedDrugDto combinedWith(LinkDto combinedWith) {
+  public NominatedDrugDto combinedWith(String combinedWith) {
     this.combinedWith = combinedWith;
     return this;
   }
 
   /**
-   * Get combinedWith
+   * The name of the drug this is combined with, if applicable
    * @return combinedWith
    */
-  @NotNull @Valid 
-  @Schema(name = "combined_with", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull 
+  @Schema(name = "combined_with", description = "The name of the drug this is combined with, if applicable", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("combined_with")
-  public LinkDto getCombinedWith() {
+  public String getCombinedWith() {
     return combinedWith;
   }
 
-  public void setCombinedWith(LinkDto combinedWith) {
+  public void setCombinedWith(String combinedWith) {
     this.combinedWith = combinedWith;
   }
 
@@ -383,7 +382,7 @@ public class NominatedDrugDto {
       return this;
     }
     
-    public NominatedDrugDto.Builder combinedWith(LinkDto combinedWith) {
+    public NominatedDrugDto.Builder combinedWith(String combinedWith) {
       this.instance.combinedWith(combinedWith);
       return this;
     }

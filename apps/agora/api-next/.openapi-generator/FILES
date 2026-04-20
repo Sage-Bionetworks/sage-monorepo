@@ -23,7 +23,6 @@ src/main/java/org/sagebionetworks/agora/api/next/model/dto/ComparisonToolConfigF
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/ComparisonToolConfigPageDto.java
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/DataVersionDto.java
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/ItemFilterTypeQueryDto.java
-src/main/java/org/sagebionetworks/agora/api/next/model/dto/LinkDto.java
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/ModalityDto.java
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/NominatedDrugDto.java
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/NominatedDrugSearchQueryDto.java

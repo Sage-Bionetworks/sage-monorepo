@@ -373,16 +373,6 @@ components:
       required:
         - sortFields
         - sortOrders
-    Link:
-      type: object
-      description: Link
-      properties:
-        link_text:
-          type: string
-          description: Link text
-        link_url:
-          type: string
-          description: URL for the related resource
     Modality:
       type: string
       description: The drug modality
@@ -407,7 +397,8 @@ components:
           description: The total number of nominations for the drug
           example: 1
         combined_with:
-          $ref: '#/components/schemas/Link'
+          type: string
+          description: The name of the drug this is combined with, if applicable
           nullable: true
         initial_nomination:
           type: integer

@@ -515,19 +515,6 @@ components:
         - sortFields
         - sortOrders
       type: object
-    Link:
-      description: Link
-      example:
-        link_url: link_url
-        link_text: link_text
-      properties:
-        link_text:
-          description: Link text
-          type: string
-        link_url:
-          description: URL for the related resource
-          type: string
-      type: object
     Modality:
       description: The drug modality
       enum:
@@ -549,9 +536,7 @@ components:
           - ACTDRx AD
         common_name: Agomelatine
         chembl_id: CHEMBL2105758
-        combined_with:
-          link_url: link_url
-          link_text: link_text
+        combined_with: combined_with
       properties:
         common_name:
           description: The common name of the drug
@@ -566,7 +551,9 @@ components:
           example: 1
           type: integer
         combined_with:
-          $ref: '#/components/schemas/Link'
+          description: 'The name of the drug this is combined with, if applicable'
+          nullable: true
+          type: string
         initial_nomination:
           description: The year the drug was first nominated
           example: 2025
@@ -667,9 +654,7 @@ components:
               - ACTDRx AD
             common_name: Agomelatine
             chembl_id: CHEMBL2105758
-            combined_with:
-              link_url: link_url
-              link_text: link_text
+            combined_with: combined_with
           - maximum_clinical_trial_phase: Phase IV
             year_of_first_approval: 2010
             initial_nomination: 2025
@@ -681,9 +666,7 @@ components:
               - ACTDRx AD
             common_name: Agomelatine
             chembl_id: CHEMBL2105758
-            combined_with:
-              link_url: link_url
-              link_text: link_text
+            combined_with: combined_with
         page:
           number: 0
           size: 100

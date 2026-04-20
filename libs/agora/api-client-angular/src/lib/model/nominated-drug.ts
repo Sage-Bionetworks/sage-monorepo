@@ -8,7 +8,6 @@
  * Do not edit the class manually.
  */
 import { Modality } from './modality';
-import { Link } from './link';
 
 /**
  * A nominated drug entry
@@ -26,7 +25,10 @@ export interface NominatedDrug {
    * The total number of nominations for the drug
    */
   total_nominations: number;
-  combined_with: Link;
+  /**
+   * The name of the drug this is combined with, if applicable
+   */
+  combined_with: string | null;
   /**
    * The year the drug was first nominated
    */
