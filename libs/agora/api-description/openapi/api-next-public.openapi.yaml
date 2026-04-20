@@ -443,6 +443,7 @@ components:
       required:
         - composite_id
         - common_name
+        - chembl_id
         - total_nominations
         - combined_with
         - initial_nomination

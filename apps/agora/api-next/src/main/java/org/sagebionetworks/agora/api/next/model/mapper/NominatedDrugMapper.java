@@ -29,9 +29,10 @@ public class NominatedDrugMapper {
       ? ModalityDto.fromValue(document.getModality())
       : null;
 
-    NominatedDrugDto dto = new NominatedDrugDto(
+    return new NominatedDrugDto(
       getCompositeId(document),
       document.getCommonName(),
+      document.getChemblId(),
       document.getTotalNominations(),
       document.getCombinedWith(),
       document.getInitialNomination(),
@@ -41,8 +42,6 @@ public class NominatedDrugMapper {
       document.getYearOfFirstApproval(),
       document.getMaximumClinicalTrialPhase()
     );
-    dto.setChemblId(document.getChemblId());
-    return dto;
   }
 
   private String getCompositeId(NominatedDrugDocument document) {

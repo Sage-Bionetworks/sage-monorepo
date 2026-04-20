@@ -1,7 +1,6 @@
 package org.sagebionetworks.agora.api.next.model.dto;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.Value;
 import org.sagebionetworks.agora.api.next.exception.InvalidFilterException;
 
@@ -11,12 +10,12 @@ import org.sagebionetworks.agora.api.next.exception.InvalidFilterException;
  */
 @Value
 @Builder
-@Getter
 public class NominatedDrugIdentifier {
 
   String chemblId;
   String combinedWith;
 
+  // Using '~' as delimiter — unlikely in drug names but would break parsing if present
   private static final String DELIMITER = "~";
   private static final int EXPECTED_PARTS = 2;
 

@@ -33,7 +33,7 @@ public class NominatedDrugDto {
 
   private String commonName;
 
-  private @Nullable String chemblId;
+  private String chemblId;
 
   private Integer totalNominations;
 
@@ -60,9 +60,10 @@ public class NominatedDrugDto {
   /**
    * Constructor with only required parameters
    */
-  public NominatedDrugDto(String compositeId, String commonName, Integer totalNominations, String combinedWith, Integer initialNomination, List<String> principalInvestigators, List<String> programs, ModalityDto modality, Integer yearOfFirstApproval, String maximumClinicalTrialPhase) {
+  public NominatedDrugDto(String compositeId, String commonName, String chemblId, Integer totalNominations, String combinedWith, Integer initialNomination, List<String> principalInvestigators, List<String> programs, ModalityDto modality, Integer yearOfFirstApproval, String maximumClinicalTrialPhase) {
     this.compositeId = compositeId;
     this.commonName = commonName;
+    this.chemblId = chemblId;
     this.totalNominations = totalNominations;
     this.combinedWith = combinedWith;
     this.initialNomination = initialNomination;
@@ -113,7 +114,7 @@ public class NominatedDrugDto {
     this.commonName = commonName;
   }
 
-  public NominatedDrugDto chemblId(@Nullable String chemblId) {
+  public NominatedDrugDto chemblId(String chemblId) {
     this.chemblId = chemblId;
     return this;
   }
@@ -122,14 +123,14 @@ public class NominatedDrugDto {
    * The ChEMBL ID of the drug
    * @return chemblId
    */
-  
-  @Schema(name = "chembl_id", example = "CHEMBL2105758", description = "The ChEMBL ID of the drug", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "chembl_id", example = "CHEMBL2105758", description = "The ChEMBL ID of the drug", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("chembl_id")
-  public @Nullable String getChemblId() {
+  public String getChemblId() {
     return chemblId;
   }
 
-  public void setChemblId(@Nullable String chemblId) {
+  public void setChemblId(String chemblId) {
     this.chemblId = chemblId;
   }
 

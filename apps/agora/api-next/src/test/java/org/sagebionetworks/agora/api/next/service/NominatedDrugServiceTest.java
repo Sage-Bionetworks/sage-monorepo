@@ -355,6 +355,7 @@ class NominatedDrugServiceTest {
     NominatedDrugDocument document = new NominatedDrugDocument();
     document.setId(new ObjectId());
     document.setCommonName(commonName);
+    document.setChemblId("CHEMBL2105758");
     document.setTotalNominations(3);
     document.setInitialNomination(2022);
     document.setPrincipalInvestigators(List.of("PI One", "PI Two"));

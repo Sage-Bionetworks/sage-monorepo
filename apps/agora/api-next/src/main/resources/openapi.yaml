@@ -596,6 +596,7 @@ components:
           nullable: true
           type: string
       required:
+        - chembl_id
         - combined_with
         - common_name
         - composite_id

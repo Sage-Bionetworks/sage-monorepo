@@ -24,7 +24,7 @@ export interface NominatedDrug {
   /**
    * The ChEMBL ID of the drug
    */
-  chembl_id?: string;
+  chembl_id: string;
   /**
    * The total number of nominations for the drug
    */
