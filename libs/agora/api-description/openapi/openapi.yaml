@@ -597,6 +597,15 @@ components:
           example:
             - 2024
             - 2025
+        modality:
+          description: Filter by drug modality.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Small Molecule
+            - Protein
         sortFields:
           description: |
             List of field names to sort by (e.g., ["total_nominations", "common_name"]).

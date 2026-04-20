@@ -279,6 +279,7 @@ class CustomNominatedDrugRepositoryImplTest {
       .programs(List.of("ACTDRx AD"))
       .totalNominations(List.of(3))
       .initialNomination(List.of(2022))
+      .modality(List.of("Small Molecule"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
@@ -299,5 +300,6 @@ class CustomNominatedDrugRepositoryImplTest {
     assertThat(pipelineString).contains("programs");
     assertThat(pipelineString).contains("total_nominations");
     assertThat(pipelineString).contains("initial_nomination");
+    assertThat(pipelineString).contains("modality");
   }
 }

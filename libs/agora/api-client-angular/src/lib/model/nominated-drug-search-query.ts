@@ -47,6 +47,10 @@ export interface NominatedDrugSearchQuery {
    */
   initialNomination?: Array<number> | null;
   /**
+   * Filter by drug modality.
+   */
+  modality?: Array<string> | null;
+  /**
    * List of field names to sort by (e.g., [\"total_nominations\", \"common_name\"]). Each field in sortFields must have a corresponding order in sortOrders.
    */
   sortFields: Array<string>;

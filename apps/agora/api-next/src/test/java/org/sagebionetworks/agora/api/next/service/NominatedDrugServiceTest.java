@@ -334,6 +334,7 @@ class NominatedDrugServiceTest {
       .programs(List.of("ACTDRx AD"))
       .totalNominations(List.of(3))
       .initialNomination(List.of(2022))
+      .modality(List.of("Small Molecule"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)

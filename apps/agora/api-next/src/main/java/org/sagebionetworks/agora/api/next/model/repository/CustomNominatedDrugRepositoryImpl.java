@@ -109,6 +109,7 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       query.getPrograms(),
       query.getTotalNominations(),
       query.getInitialNomination(),
+      query.getModality(),
       andCriteria
     );
 
@@ -203,6 +204,7 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     List<String> programs,
     List<Integer> totalNominations,
     List<Integer> initialNomination,
+    List<String> modality,
     List<Criteria> andCriteria
   ) {
     // principal_investigators: array field - use $in (matches if array contains any value)
@@ -223,6 +225,11 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     // initialNomination: scalar field - use $in
     if (initialNomination != null && !initialNomination.isEmpty()) {
       andCriteria.add(Criteria.where("initial_nomination").in(initialNomination));
+    }
+
+    // modality: scalar field - use $in
+    if (modality != null && !modality.isEmpty()) {
+      andCriteria.add(Criteria.where("modality").in(modality));
     }
   }
 

@@ -123,6 +123,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
       search: currentQuery.searchTerm,
       principalInvestigators: selectedFilters['nominatingPis'],
       totalNominations: selectedFilters['totalNominations']?.map(Number) ?? [],
+      modality: selectedFilters['modality'],
       sortFields,
       sortOrders,
     };

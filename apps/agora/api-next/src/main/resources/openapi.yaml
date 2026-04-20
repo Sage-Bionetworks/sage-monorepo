@@ -475,6 +475,15 @@ components:
             type: integer
           nullable: true
           type: array
+        modality:
+          description: Filter by drug modality.
+          example:
+            - Small Molecule
+            - Protein
+          items:
+            type: string
+          nullable: true
+          type: array
         sortFields:
           description: |
             List of field names to sort by (e.g., ["total_nominations", "common_name"]).

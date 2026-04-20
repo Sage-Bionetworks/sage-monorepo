@@ -53,6 +53,9 @@ public class NominatedDrugSearchQueryDto {
   private @Nullable List<Integer> initialNomination;
 
   @Valid
+  private @Nullable List<String> modality;
+
+  @Valid
   private List<String> sortFields = new ArrayList<>();
 
   /**
@@ -328,6 +331,34 @@ public class NominatedDrugSearchQueryDto {
     this.initialNomination = initialNomination;
   }
 
+  public NominatedDrugSearchQueryDto modality(@Nullable List<String> modality) {
+    this.modality = modality;
+    return this;
+  }
+
+  public NominatedDrugSearchQueryDto addModalityItem(String modalityItem) {
+    if (this.modality == null) {
+      this.modality = new ArrayList<>();
+    }
+    this.modality.add(modalityItem);
+    return this;
+  }
+
+  /**
+   * Filter by drug modality.
+   * @return modality
+   */
+  
+  @Schema(name = "modality", example = "[\"Small Molecule\",\"Protein\"]", description = "Filter by drug modality.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modality")
+  public @Nullable List<String> getModality() {
+    return modality;
+  }
+
+  public void setModality(@Nullable List<String> modality) {
+    this.modality = modality;
+  }
+
   public NominatedDrugSearchQueryDto sortFields(List<String> sortFields) {
     this.sortFields = sortFields;
     return this;
@@ -402,13 +433,14 @@ public class NominatedDrugSearchQueryDto {
         Objects.equals(this.programs, nominatedDrugSearchQuery.programs) &&
         Objects.equals(this.totalNominations, nominatedDrugSearchQuery.totalNominations) &&
         Objects.equals(this.initialNomination, nominatedDrugSearchQuery.initialNomination) &&
+        Objects.equals(this.modality, nominatedDrugSearchQuery.modality) &&
         Objects.equals(this.sortFields, nominatedDrugSearchQuery.sortFields) &&
         Objects.equals(this.sortOrders, nominatedDrugSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, principalInvestigators, programs, totalNominations, initialNomination, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, principalInvestigators, programs, totalNominations, initialNomination, modality, sortFields, sortOrders);
   }
 
   @Override
@@ -424,6 +456,7 @@ public class NominatedDrugSearchQueryDto {
     sb.append("    programs: ").append(toIndentedString(programs)).append("\n");
     sb.append("    totalNominations: ").append(toIndentedString(totalNominations)).append("\n");
     sb.append("    initialNomination: ").append(toIndentedString(initialNomination)).append("\n");
+    sb.append("    modality: ").append(toIndentedString(modality)).append("\n");
     sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
     sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
@@ -463,6 +496,7 @@ public class NominatedDrugSearchQueryDto {
       this.instance.setPrograms(value.programs);
       this.instance.setTotalNominations(value.totalNominations);
       this.instance.setInitialNomination(value.initialNomination);
+      this.instance.setModality(value.modality);
       this.instance.setSortFields(value.sortFields);
       this.instance.setSortOrders(value.sortOrders);
       return this;
@@ -510,6 +544,11 @@ public class NominatedDrugSearchQueryDto {
     
     public NominatedDrugSearchQueryDto.Builder initialNomination(List<Integer> initialNomination) {
       this.instance.initialNomination(initialNomination);
+      return this;
+    }
+    
+    public NominatedDrugSearchQueryDto.Builder modality(List<String> modality) {
+      this.instance.modality(modality);
       return this;
     }
     
