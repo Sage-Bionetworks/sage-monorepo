@@ -165,11 +165,11 @@ public class NominatedDrugSearchQueryDto {
   }
 
   /**
-   * List of common_name values to filter by. 
+   * List of chembl_id values to filter by. 
    * @return items
    */
   
-  @Schema(name = "items", example = "[\"Agomelatine\",\"Bexarotene\"]", description = "List of common_name values to filter by. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "items", example = "[\"CHEMBL2105758\",\"CHEMBL1023\"]", description = "List of chembl_id values to filter by. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
   public @Nullable List<String> getItems() {
     return items;

@@ -37,7 +37,8 @@ import org.springframework.stereotype.Repository;
 public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRepository {
 
   private static final String COLLECTION_NAME = "nominateddrugs";
-  private static final String PRIMARY_FIELD = "common_name";
+  private static final String ITEM_FIELD = "chembl_id";
+  private static final String SEARCH_FIELD = "common_name";
 
   /** Array fields that need computed fields for custom sort handling */
   private static final Set<String> ARRAY_FIELDS = Set.of("principal_investigators", "programs");
@@ -114,7 +115,7 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     );
 
     // Add common_name filtering (items + itemFilterType)
-    addCommonNameFilterCriteria(items, filterType, andCriteria);
+    addItemFilterCriteria(items, filterType, andCriteria);
 
     // Add search filtering (only when itemFilterType is EXCLUDE)
     addSearchFilterCriteria(search, filterType, andCriteria);
@@ -233,7 +234,7 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     }
   }
 
-  private void addCommonNameFilterCriteria(
+  private void addItemFilterCriteria(
     List<String> items,
     ItemFilterTypeQueryDto filterType,
     List<Criteria> andCriteria
@@ -248,9 +249,9 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     }
 
     if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
-      andCriteria.add(Criteria.where(PRIMARY_FIELD).in(items));
+      andCriteria.add(Criteria.where(ITEM_FIELD).in(items));
     } else {
-      andCriteria.add(Criteria.where(PRIMARY_FIELD).nin(items));
+      andCriteria.add(Criteria.where(ITEM_FIELD).nin(items));
     }
   }
 
@@ -268,11 +269,11 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     if (trimmedSearch.contains(",")) {
       // Comma-separated list: case-insensitive full matches
       List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
-      andCriteria.add(Criteria.where(PRIMARY_FIELD).in(patterns));
+      andCriteria.add(Criteria.where(SEARCH_FIELD).in(patterns));
     } else {
       // Single term: case-insensitive partial match
       String quotedSearch = Pattern.quote(trimmedSearch);
-      andCriteria.add(Criteria.where(PRIMARY_FIELD).regex(quotedSearch, "i"));
+      andCriteria.add(Criteria.where(SEARCH_FIELD).regex(quotedSearch, "i"));
     }
   }
 }

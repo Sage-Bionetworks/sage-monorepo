@@ -421,10 +421,10 @@ components:
           type: integer
         items:
           description: |
-            List of common_name values to filter by.
+            List of chembl_id values to filter by.
           example:
-            - Agomelatine
-            - Bexarotene
+            - CHEMBL2105758
+            - CHEMBL1023
           items:
             type: string
           nullable: true
