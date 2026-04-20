@@ -55,5 +55,9 @@
   {
     "name": "uiconfig",
     "indexes": [{ "page": 1 }]
+  },
+  {
+    "name": "druginfo",
+    "indexes": [{ "chembl_id": 1 }]
   }
 ]
