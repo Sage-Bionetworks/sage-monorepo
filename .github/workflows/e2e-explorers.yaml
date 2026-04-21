@@ -22,3 +22,5 @@ jobs:
     uses: ./.github/workflows/e2e-explorer.yaml
     with:
       explorer: ${{ matrix.explorer }}
+    secrets:
+      SYNAPSE_AUTH_TOKEN: ${{ secrets.SYNAPSE_AUTH_TOKEN }}

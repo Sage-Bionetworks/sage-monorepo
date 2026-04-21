@@ -6,6 +6,10 @@ on:
         required: true
         type: string
         description: The name of the Explorer to run e2e tests for
+    secrets:
+      SYNAPSE_AUTH_TOKEN:
+        required: false
+        description: Synapse PAT for explorer data sources
 
 permissions:
   contents: read
@@ -123,10 +127,8 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && ${cmd}"
 
-      # SYNAPSE_AUTH_TOKEN is stored as an environment secret on the {explorer} and
-      # {explorer}-pr environments (see the environment comment on this job above), so it
-      # resolves via `secrets.*` here without the caller passing it through. This is why
-      # the caller workflow does not need `secrets: inherit` or an explicit `secrets:` block.
+      # SYNAPSE_AUTH_TOKEN must be passed explicitly from the caller workflow (not via
+      # `secrets: inherit`) so only this one secret is exposed to the reusable workflow.
       - name: Write Synapse PAT for Explorer
         run: |
           env_filename="apps/${{ inputs.explorer }}/data/.env"
