@@ -1,40 +1,139 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of, throwError } from 'rxjs';
+import {
+  BiomedicalCategory,
+  ExamplePrompt,
+  ExamplePromptPage,
+  ExamplePromptSearchQuery,
+  ExamplePromptService,
+  ExamplePromptSort,
+} from '@sagebionetworks/bixarena/api-client';
 import { ExamplePromptsComponent } from './example-prompts.component';
 
 describe('ExamplePromptsComponent', () => {
   let component: ExamplePromptsComponent;
   let fixture: ComponentFixture<ExamplePromptsComponent>;
+  let listSpy: jest.Mock;
 
-  beforeEach(async () => {
+  const makePrompts = (ids: string[]): ExamplePrompt[] =>
+    ids.map((id) => ({
+      id,
+      question: `Question ${id}?`,
+      source: 'bixarena',
+      active: true,
+      categories: [BiomedicalCategory.Genetics],
+      createdAt: '2026-04-20T00:00:00Z',
+    })) as ExamplePrompt[];
+
+  const pageOf = (ids: string[]): Partial<ExamplePromptPage> => ({
+    examplePrompts: makePrompts(ids),
+  });
+
+  async function setup(initialIds = ['p1', 'p2', 'p3']) {
+    listSpy = jest.fn(() => of(pageOf(initialIds) as ExamplePromptPage));
+
     await TestBed.configureTestingModule({
       imports: [ExamplePromptsComponent],
+      providers: [{ provide: ExamplePromptService, useValue: { listExamplePrompts: listSpy } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExamplePromptsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  }
+
+  beforeEach(() => {
+    jest.useFakeTimers();
   });
 
-  it('should create', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('creates and fetches initial prompts with default filter', async () => {
+    await setup();
     expect(component).toBeTruthy();
+    expect(listSpy).toHaveBeenCalledTimes(1);
+    const query = listSpy.mock.calls[0][0] as ExamplePromptSearchQuery;
+    expect(query.sort).toBe(ExamplePromptSort.Random);
+    expect(query.pageSize).toBe(3);
+    expect(query.active).toBe(true);
+    expect(query.categories).toBeUndefined();
+    expect(component.prompts()).toHaveLength(3);
   });
 
-  it('should have 5 helix nodes', () => {
-    expect(component.nodes).toHaveLength(5);
+  it('emits promptSelect with the question text on card click', async () => {
+    await setup(['pX']);
+    const emitted: string[] = [];
+    component.promptSelect.subscribe((q) => emitted.push(q));
+    component.onCardClick(component.prompts()[0]);
+    expect(emitted).toEqual(['Question pX?']);
   });
 
-  it('should select a prompt on node click', () => {
-    component.onNodeClick(component.nodes[0]);
-    expect(component.selectedPrompt()).toBeTruthy();
-    expect(component.selectedCategory()).toBe('Cardiology');
+  it('refetches with a category filter when the category changes', async () => {
+    await setup();
+    listSpy.mockClear();
+    component.selectCategory(BiomedicalCategory.Neuroscience);
+    expect(listSpy).toHaveBeenCalledTimes(1);
+    const query = listSpy.mock.calls[0][0] as ExamplePromptSearchQuery;
+    expect(query.categories).toEqual([BiomedicalCategory.Neuroscience]);
+    expect(component.category()).toBe(BiomedicalCategory.Neuroscience);
   });
 
-  it('should emit prompt on usePrompt', () => {
-    const spy = jest.fn();
-    component.promptSelect.subscribe(spy);
-    component.onNodeClick(component.nodes[0]);
-    component.usePrompt();
-    expect(spy).toHaveBeenCalled();
-    expect(component.selectedPrompt()).toBeNull();
+  it('selecting the already-active category does not refetch', async () => {
+    await setup();
+    listSpy.mockClear();
+    component.selectCategory('all');
+    expect(listSpy).not.toHaveBeenCalled();
+  });
+
+  it('tryAnother fetches a fresh set with the current filter', async () => {
+    await setup();
+    component.selectCategory(BiomedicalCategory.CancerBiology);
+    listSpy.mockClear();
+    component.tryAnother();
+    jest.advanceTimersByTime(500);
+    expect(listSpy).toHaveBeenCalledTimes(1);
+    const query = listSpy.mock.calls[0][0] as ExamplePromptSearchQuery;
+    expect(query.categories).toEqual([BiomedicalCategory.CancerBiology]);
+  });
+
+  it('tryAnother is debounced while a fetch is in-flight', async () => {
+    await setup();
+    listSpy.mockImplementation(() => of(pageOf(['qA']) as ExamplePromptPage));
+    component.loading.set(true);
+    component.tryAnother();
+    jest.advanceTimersByTime(500);
+    const baseline = listSpy.mock.calls.length;
+    component.tryAnother();
+    jest.advanceTimersByTime(500);
+    expect(listSpy.mock.calls.length).toBe(baseline);
+  });
+
+  it('renders empty state when the API returns no prompts', async () => {
+    await setup();
+    listSpy.mockImplementation(() => of({ examplePrompts: [] } as unknown as ExamplePromptPage));
+    component.selectCategory(BiomedicalCategory.Genomics);
+    expect(component.prompts()).toEqual([]);
+    expect(component.error()).toBe(false);
+  });
+
+  it('sets the error flag when the API call fails', async () => {
+    await setup();
+    listSpy.mockImplementation(() => throwError(() => new Error('boom')));
+    component.selectCategory(BiomedicalCategory.Physiology);
+    expect(component.error()).toBe(true);
+    expect(component.prompts()).toEqual([]);
+  });
+
+  it('exposes static helix geometry for the template', async () => {
+    await setup();
+    expect(component.frontPath.startsWith('M')).toBe(true);
+    expect(component.backPath.startsWith('M')).toBe(true);
+    expect(component.rungs.length).toBeGreaterThan(0);
+    for (const r of component.rungs) {
+      expect(typeof r.x).toBe('number');
+      expect(r.y1).not.toBe(r.y2);
+    }
   });
 });

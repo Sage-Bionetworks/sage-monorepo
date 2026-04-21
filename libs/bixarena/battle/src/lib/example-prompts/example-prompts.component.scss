@@ -1,208 +1,274 @@
 :host {
   display: block;
   width: 100%;
-  max-width: 640px;
+  max-width: 64rem;
   margin: 0 auto;
 }
 
-.dna-section {
-  position: relative;
+.picker {
+  width: 100%;
 }
 
-.dna-label {
-  text-align: center;
-  font-size: var(--text-xs);
+.unwind-icon {
+  width: 13px;
+  height: 13px;
   color: var(--p-text-muted-color);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-weight: 500;
-  margin-bottom: 0.25rem;
+  transition:
+    transform 0.9s cubic-bezier(0.5, 0, 0.5, 1),
+    color 0.2s;
 }
 
-.dna-wrap {
-  position: relative;
-  height: 130px;
+.unwind-label {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.45rem;
+  width: fit-content;
+  margin: 0 auto 0.75rem;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--p-surface-200);
+  border-radius: 999px;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--p-text-muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background 0.2s,
+    opacity 0.2s;
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    color: var(--p-teal-400);
+    border-color: rgb(52 212 180 / 45%);
+    background: rgb(52 212 180 / 6%);
+
+    .unwind-icon {
+      transform: rotate(180deg);
+      color: var(--p-teal-400);
+    }
+  }
 }
 
-.helix {
+.stage {
   position: relative;
-  width: 400px;
-  height: 100px;
+  width: 100%;
+  padding: 4rem 0;
 }
 
-.strand {
+.helix-bg {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.helix-svg {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
 }
 
-.strand path {
+.helix-svg .strand {
   fill: none;
   stroke-width: 1.5;
   stroke-linecap: round;
-  opacity: 0.25;
+  opacity: 0.55;
 }
 
-.strand-front path {
+.helix-svg .strand-front {
   stroke: var(--p-teal-400);
 }
 
-.strand-back path {
+.helix-svg .strand-back {
   stroke: var(--p-primary-color);
 }
 
-.helix-node {
-  position: absolute;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  cursor: pointer;
+.helix-svg .rung {
+  stroke: var(--p-surface-400);
+  stroke-width: 1;
+  opacity: 0.45;
+  stroke-linecap: round;
+}
+
+.cards {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.card-question {
+  font-size: var(--text-sm);
+  color: var(--p-text-color);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  font-weight: 460;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-meta {
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 2;
-  border: none;
-  padding: 0;
-  background: none;
-  will-change: transform;
+  gap: 0.75rem;
+}
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: var(--p-surface-100);
-    border: 1.5px solid var(--p-surface-200);
-    transition: all 0.3s;
+.card-tag {
+  font-size: var(--text-xs);
+  color: var(--p-primary-color);
+  font-weight: 540;
+  background: rgb(249 115 22 / 8%);
+  padding: 0.125rem 0.5rem;
+  border-radius: 100px;
+}
+
+.card-cta {
+  font-size: var(--text-xs);
+  color: var(--p-text-muted-color);
+  transition: color 0.15s;
+  margin-left: auto;
+}
+
+.card {
+  background: var(--p-surface-100);
+  border: 1px solid var(--p-surface-200);
+  border-radius: var(--p-border-radius-lg);
+  padding: 1.25rem;
+  min-height: 8.75rem;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+
+  &:hover {
+    border-color: var(--p-surface-300);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 25%);
+
+    .card-cta {
+      color: var(--p-primary-color);
+    }
   }
+}
+
+.card-skeleton {
+  cursor: default;
+  position: relative;
+  overflow: hidden;
 
   &::after {
     content: '';
     position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    background: transparent;
-    transition: all 0.3s;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 3%) 50%, transparent 100%);
+    animation: card-shimmer 1.4s ease-in-out infinite;
   }
 
   &:hover {
-    transform: scale(1.15);
-
-    &::before {
-      border-color: rgb(52 212 180 / 40%);
-      background: rgb(52 212 180 / 8%);
-    }
-
-    &::after {
-      background: rgb(52 212 180 / 6%);
-    }
-  }
-
-  &.active {
-    transform: scale(1.2);
-    animation: node-pulse 2s ease-in-out infinite;
-
-    &::before {
-      border-color: var(--p-teal-400);
-      background: rgb(52 212 180 / 10%);
-    }
-
-    &::after {
-      background: rgb(52 212 180 / 8%);
-    }
+    border-color: var(--p-surface-200);
+    transform: none;
+    box-shadow: none;
   }
 }
 
-.node-icon {
-  position: relative;
-  z-index: 1;
-  width: 16px;
-  height: 16px;
-  color: var(--p-surface-500);
-  transition: color 0.3s;
-
-  .helix-node:hover & {
-    color: var(--p-text-color);
+@keyframes card-shimmer {
+  0% {
+    transform: translateX(-100%);
   }
 
-  .helix-node.active & {
-    color: var(--p-teal-400);
-  }
-}
-
-.node-label {
-  position: absolute;
-  bottom: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: var(--text-xs);
-  color: var(--p-text-muted-color);
-  font-weight: 500;
-  white-space: nowrap;
-  letter-spacing: 0.02em;
-  transition: color 0.3s;
-  pointer-events: none;
-
-  .helix-node:hover & {
-    color: var(--p-text-color);
-  }
-
-  .helix-node.active & {
-    color: var(--p-teal-400);
-  }
-}
-
-.dna-reveal {
-  text-align: center;
-  margin-top: 1rem;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
-  &.show {
-    max-height: 80px;
-    opacity: 1;
-  }
-}
-
-.dna-prompt {
-  display: inline-block;
-  max-width: 31.25rem;
-  padding: 0.5rem 1rem;
-  background: var(--p-surface-100);
-  border: 1px solid var(--p-surface-200);
-  border-radius: 100px;
-  font: inherit;
-  font-size: var(--text-sm);
-  color: var(--p-text-color);
-  line-height: 1.5;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
-
-  &:hover {
-    border-color: var(--p-surface-300);
-  }
-}
-
-.dna-hint {
-  font-size: 0.625rem;
-  color: var(--p-text-muted-color);
-  margin-top: 0.25rem;
-}
-
-@keyframes node-pulse {
-  0%,
   100% {
-    box-shadow: 0 0 0 0 rgb(52 212 180 / 15%);
+    transform: translateX(100%);
+  }
+}
+
+.cards-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--p-text-muted-color);
+  font-size: var(--text-sm);
+  padding: 2rem;
+  border: 1px dashed var(--p-surface-200);
+  border-radius: var(--p-border-radius-lg);
+}
+
+.cards.swap-out .card {
+  animation: card-swap-out 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.cards.swap-in .card {
+  animation: card-swap-in 0.45s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+@keyframes card-swap-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  50% {
-    box-shadow: 0 0 0 10px rgb(52 212 180 / 0%);
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes card-swap-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (width <= 720px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .helix-bg {
+    display: none;
+  }
+
+  .stage {
+    padding: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+
+  .cards.swap-out .card,
+  .cards.swap-in .card,
+  .card-skeleton::after {
+    animation: none;
   }
 }
