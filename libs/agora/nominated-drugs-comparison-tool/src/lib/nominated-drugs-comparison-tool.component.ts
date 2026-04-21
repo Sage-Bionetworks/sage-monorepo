@@ -121,8 +121,8 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
       pageSize: currentQuery.pageSize,
       search: currentQuery.searchTerm,
       principalInvestigators: selectedFilters['nominatingPis'],
-      totalNominations: selectedFilters['totalNominations']?.map(Number) ?? [],
-      modality: selectedFilters['modality'],
+      totalNominations: selectedFilters['nominations']?.map(Number) ?? [],
+      modality: selectedFilters['modalities'],
       sortFields,
       sortOrders,
     };
