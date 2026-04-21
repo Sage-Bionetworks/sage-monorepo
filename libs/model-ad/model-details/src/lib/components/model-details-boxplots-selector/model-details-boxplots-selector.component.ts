@@ -213,9 +213,11 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
       'value',
       'units',
     ];
+    const sexes = this.selectedSexOption().value;
     const rows: string[][] = [header];
     for (const modelData of this.getSelectedModelDataForEvidenceType(evidenceType)) {
       for (const item of modelData.data) {
+        if (!sexes.includes(item.sex as Sex)) continue;
         rows.push([
           modelData.name,
           modelData.evidence_type,
