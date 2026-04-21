@@ -1,7 +1,6 @@
 @use 'model-ad/styles/src/variables' as vars;
 
 .model-details {
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
   overflow-x: clip;
 
   &.loading {
@@ -9,7 +8,8 @@
   }
 
   #loading {
-    flex: 1 1 auto;
+    width: 100%;
+    min-height: calc(100vh - var(--header-height) - var(--footer-height));
     display: flex;
     align-items: center;
     justify-content: center;

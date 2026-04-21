@@ -1,14 +1,13 @@
 @use 'model-ad/styles/src/variables' as vars;
 
 .gene-details {
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
-
   &.loading {
     display: flex;
   }
 
   #loading {
-    flex: 1 1 auto;
+    width: 100%;
+    min-height: calc(100vh - var(--header-height) - var(--footer-height));
     display: flex;
     align-items: center;
     justify-content: center;
