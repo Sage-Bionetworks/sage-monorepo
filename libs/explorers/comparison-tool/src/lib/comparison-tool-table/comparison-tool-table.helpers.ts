@@ -47,7 +47,7 @@ export function prepareCellsForMeasurement(
         const desc = d as HTMLElement;
         descEntries.push({ el: desc, ws: desc.style.whiteSpace });
         desc.style.whiteSpace = 'nowrap';
-        // Remove width:100% on .column-header so it sizes to content during measurement
+        // Remove width:100% on COLUMN_HEADER_CLASS so it sizes to content during measurement
         if (desc.classList.contains(COLUMN_HEADER_CLASS)) {
           savedHeaderWidths.set(desc, desc.style.width);
           desc.style.width = 'auto';

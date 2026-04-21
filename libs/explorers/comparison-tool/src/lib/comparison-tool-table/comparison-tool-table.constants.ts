@@ -1,32 +1,26 @@
-// Constants for the Comparison Tool Table component
-// Minimum and maximum column widths in pixels
-// These constants can be used to ensure that columns in the comparison tool table
-// do not become too narrow or too wide, especially when the table is displaying
-// narrow visualizations such as heat maps.
+// Constants for the Comparison Tool Table component.
+//
+// The *_PX values are consumed by measureCellWidths() in
+// comparison-tool-table.helpers.ts to compute total column width from the
+// measured header text. Each value must match its CSS counterpart.
+
+// Clamping bounds for computed column widths. No CSS counterpart.
 export const MIN_COLUMN_WIDTH_PX = 80;
 export const MAX_COLUMN_WIDTH_PX = 300;
 
-// CSS class applied to column header elements in the comparison tool table.
-// Used during width measurement to temporarily override styles.
+// CSS classes — bound in comparison-tool-columns.component.html, styled by the
+// component's SCSS, and queried in helpers.ts.
 export const COLUMN_HEADER_CLASS = 'column-header';
-
-// CSS class applied to the text container inside column headers.
 export const COLUMN_HEADER_TEXT_CLASS = 'column-header-text';
 
-// Left margin in pixels applied to column header content.
+// Keep in sync with the corresponding $comparison-tool-* variables in
+// libs/explorers/styles/src/lib/_variables.scss.
 export const COLUMN_HEADER_MARGIN_LEFT_PX = 10;
-
-// Right margin in pixels applied to column header content.
 export const COLUMN_HEADER_MARGIN_RIGHT_PX = 22;
-
-// Border width in pixels on each side of a column header cell.
-export const COLUMN_HEADER_BORDER_WIDTH_PX = 1;
-
-// Width in pixels of the sort icon in column headers.
-export const SORT_ICON_WIDTH_PX = 14;
-// Width in pixels of the multi-sort badge that PrimeNG
-// renders next to sortable column headers.
-export const SORT_BADGE_WIDTH_PX = 20;
-
-// Width in pixels of the spacing next to the multi-sort badge
 export const SORT_BADGE_SPACING_PX = 8;
+
+// PrimeNG-rendered sizes — no local CSS counterpart. Update if the PrimeNG
+// theme or icon changes.
+export const COLUMN_HEADER_BORDER_WIDTH_PX = 1; // th border (showGridlines)
+export const SORT_ICON_WIDTH_PX = 14; // sort icon
+export const SORT_BADGE_WIDTH_PX = 20; // multi-sort badge

@@ -68,9 +68,8 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   constructor() {
     if (this.platformService.isBrowser) {
-      // Recalculate column widths whenever selected columns, pinned data, or unpinned data change
       effect((onCleanup) => {
-        // Access the signals to track changes
+        // Recalculate column widths whenever selectedColumns, pinnedData, or unpinnedData changes
         this.selectedColumns();
         this.pinnedData();
         this.unpinnedData();
@@ -95,7 +94,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
       // so wait for fonts to be ready before calculating column widths
       // to prevent incorrect measurements
       document.fonts.ready.then(() => {
-        this.columnWidths.set(this.calculateColumnWidths());
+        this.columnWidths.set(this.calculateNonPrimaryColumnWidths());
       });
     }
   }
@@ -131,7 +130,8 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     this.comparisonToolService.resetPinnedItems();
   }
 
-  calculateColumnWidths(): Record<string, string> {
+  // Calculate widths for non-primary columns since primary columns have fixed widths in the design
+  calculateNonPrimaryColumnWidths(): Record<string, string> {
     const container: HTMLElement | undefined = this.tableElement()?.nativeElement;
     if (!container) return {};
 

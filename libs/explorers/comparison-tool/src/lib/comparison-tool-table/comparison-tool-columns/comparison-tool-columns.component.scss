@@ -24,15 +24,15 @@
     }
 
     .column-header-text {
-      padding-left: 10px;
+      padding-left: vars.$comparison-tool-column-header-margin-left;
       flex-grow: 1;
       text-align: left;
     }
 
     .column-header-sort {
       flex-shrink: 0;
-      margin-left: 8px;
-      margin-right: 22px;
+      margin-left: vars.$comparison-tool-sort-badge-spacing;
+      margin-right: vars.$comparison-tool-column-header-margin-right;
     }
 
     &.primary {
