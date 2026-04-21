@@ -36,9 +36,9 @@ public class NominatedDrugIdentifier {
     if (parts.length != EXPECTED_PARTS) {
       throw new InvalidFilterException(
         String.format(
-          "Invalid composite identifier format: '%s'. "
-            + "Expected format: 'chembl_id~combined_with' "
-            + "(e.g., 'CHEMBL2105758~null')",
+          "Invalid composite identifier format: '%s'. " +
+          "Expected format: 'chembl_id~combined_with' " +
+          "(e.g., 'CHEMBL2105758~null')",
           compositeId
         )
       );
@@ -68,6 +68,6 @@ public class NominatedDrugIdentifier {
    * @return the composite identifier string
    */
   public String toCompositeId() {
-    return String.format("%s~%s", chemblId, combinedWith);
+    return chemblId + DELIMITER + (combinedWith != null ? combinedWith : "null");
   }
 }

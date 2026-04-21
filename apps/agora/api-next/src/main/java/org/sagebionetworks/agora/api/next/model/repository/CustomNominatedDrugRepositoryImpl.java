@@ -114,7 +114,7 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       andCriteria
     );
 
-    // Add common_name filtering (items + itemFilterType)
+    // Add composite_id filtering (items + itemFilterType)
     addItemFilterCriteria(items, filterType, andCriteria);
 
     // Add search filtering (only when itemFilterType is EXCLUDE)
@@ -265,14 +265,10 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     // Apply INCLUDE or EXCLUDE logic
     if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
       // Match ANY of the composite identifiers ($or)
-      andCriteria.add(
-        new Criteria().orOperator(compositeConditions.toArray(new Criteria[0]))
-      );
+      andCriteria.add(new Criteria().orOperator(compositeConditions.toArray(new Criteria[0])));
     } else {
       // Exclude ALL of the composite identifiers ($nor)
-      andCriteria.add(
-        new Criteria().norOperator(compositeConditions.toArray(new Criteria[0]))
-      );
+      andCriteria.add(new Criteria().norOperator(compositeConditions.toArray(new Criteria[0])));
     }
   }
 

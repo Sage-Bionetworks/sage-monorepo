@@ -46,7 +46,7 @@
   },
   {
     "name": "nominateddrugs",
-    "indexes": [{ "common_name": 1 }]
+    "indexes": [{ "common_name": 1 }, { "chembl_id": 1, "combined_with": 1 }]
   },
   {
     "name": "nominatedtargets",
