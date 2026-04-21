@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostListener,
   inject,
+  signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -12,7 +13,6 @@ import {
   ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolService,
-  HelperService,
   PlatformService,
 } from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
@@ -20,6 +20,13 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
+import {
+  clampAndFormatWidths,
+  getCellsByColumn,
+  measureCellWidths,
+  prepareCellsForMeasurement,
+  restoreCellStyles,
+} from './comparison-tool-table.helpers';
 
 @Component({
   selector: 'explorers-comparison-tool-table',
@@ -38,7 +45,6 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   comparisonToolService = inject(ComparisonToolService);
   comparisonToolFilterService = inject(ComparisonToolFilterService);
   comparisonToolHelperService = inject(ComparisonToolHelperService);
-  helperService = inject(HelperService);
   platformService = inject(PlatformService);
 
   tableElement = viewChild<ElementRef>('table');
@@ -58,26 +64,18 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   pinnedData = this.comparisonToolService.pinnedData;
   unpinnedData = this.comparisonToolService.unpinnedData;
 
-  columnWidth = 'auto';
-  primaryColumnWidth = 300;
+  columnWidths = signal<Record<string, string>>({});
 
   constructor() {
     if (this.platformService.isBrowser) {
-      this.primaryColumnWidth = this.helperService.getNumberFromCSSValue(
-        getComputedStyle(document.documentElement).getPropertyValue(
-          '--comparison-tool-primary-column-width',
-        ),
-      );
-
-      // Recalculate column widths whenever selected columns change
       effect((onCleanup) => {
-        // Access selectedColumns to track changes
+        // Recalculate column widths whenever selectedColumns, pinnedData, or unpinnedData changes
         this.selectedColumns();
-        // Recalculate widths on next tick to ensure DOM is updated
+        this.pinnedData();
+        this.unpinnedData();
         const timeoutId = setTimeout(() => {
-          this.onWindowResize();
+          this.recalculateColumnWidths();
         }, 0);
-        // Clean up timeout if effect re-runs before timeout fires
         onCleanup(() => clearTimeout(timeoutId));
       });
     }
@@ -85,18 +83,19 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.onWindowResize();
+      this.recalculateColumnWidths();
     }, 100);
   }
 
   @HostListener('window:resize')
-  onWindowResize() {
+  recalculateColumnWidths() {
     if (this.platformService.isBrowser) {
-      const tableElementWidth = this.tableElement()?.nativeElement?.offsetWidth || 0;
-      this.columnWidth = this.calculateNonprimaryColumnWidth(
-        this.selectedColumns().length - 1,
-        tableElementWidth,
-      );
+      // icon fonts may not be loaded yet on initial render,
+      // so wait for fonts to be ready before calculating column widths
+      // to prevent incorrect measurements
+      document.fonts.ready.then(() => {
+        this.columnWidths.set(this.calculateNonPrimaryColumnWidths());
+      });
     }
   }
 
@@ -131,8 +130,24 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     this.comparisonToolService.resetPinnedItems();
   }
 
-  calculateNonprimaryColumnWidth(nCols: number, tableWidth: number) {
-    const count = Math.max(nCols, 5);
-    return Math.ceil((tableWidth - this.primaryColumnWidth) / count) + 'px';
+  // Calculate widths for non-primary columns since primary columns have fixed widths in the design
+  calculateNonPrimaryColumnWidths(): Record<string, string> {
+    const container: HTMLElement | undefined = this.tableElement()?.nativeElement;
+    if (!container) return {};
+
+    const nonPrimaryColumns = this.selectedColumns().filter((col) => col.type !== 'primary');
+    if (nonPrimaryColumns.length === 0) return {};
+
+    const cellsByColumn = getCellsByColumn(container, nonPrimaryColumns);
+    const { saved, savedHeaderWidths } = prepareCellsForMeasurement(
+      cellsByColumn,
+      nonPrimaryColumns,
+    );
+
+    const rawWidths = measureCellWidths(cellsByColumn, nonPrimaryColumns);
+
+    restoreCellStyles(saved, savedHeaderWidths);
+
+    return clampAndFormatWidths(rawWidths);
   }
 }
