@@ -16,6 +16,8 @@ servers:
 tags:
   - description: Operations about Comparison Tool UI configuration.
     name: Comparison Tool Config
+  - description: Operations about Drugs.
+    name: Drug
   - description: Operations about Nominated Drugs.
     name: Nominated Drug
   - description: Operations about the data version.
@@ -154,6 +156,37 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Data Version
+  /drugs/{chembl_id}:
+    get:
+      operationId: getDrug
+      parameters:
+        - description: ChEMBL ID of the drug
+          explode: false
+          in: path
+          name: chembl_id
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Drug'
+          description: Drug details successfully retrieved
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get drug details by ChEMBL ID
+      tags:
+        - Drug
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Drug
 components:
   parameters:
     nominatedDrugSearchQuery:
@@ -996,4 +1029,268 @@ components:
         - data_file
         - data_version
         - team_images_id
+      type: object
+    LinkedTarget:
+      description: A linked target
+      example:
+        ensembl_gene_id: ENSG00000139618
+        hgnc_symbol: BRCA1
+      properties:
+        ensembl_gene_id:
+          description: The Ensembl gene ID of the linked target
+          example: ENSG00000139618
+          type: string
+        hgnc_symbol:
+          description: The HGNC symbol of the linked target
+          example: BRCA1
+          type: string
+      required:
+        - ensembl_gene_id
+        - hgnc_symbol
+      type: object
+    NominatedDrugEvidence:
+      description: Evidence for a drug nomination
+      example:
+        computational_validation_status: computational validation studies completed
+        evidence: Preclinical studies showing efficacy in AD mouse models
+        data_used: 'transcriptomics data, drug target'
+        combined_with_common_name: combined_with_common_name
+        experimental_validation_results: "improve cognitive, reduce neuroinflamation\
+          \ in female Tg344 rat AD models."
+        program: ACTDRx AD
+        contact_pi: Dr. Jane Doe
+        computational_validation_results: Based on putative targets associated with
+          AD
+        reference: https://doi.org/10.1101/2023.12.26.573348
+        additional_evidence: may penetrate blood-brain barrier
+        grant_number: R01AG123456
+        experimental_validation_status: experimental validation studies completed
+        initial_nomination: 2025
+        ad_moa: DDIT3
+        contributors: "Kelechi Ndukwe, Peter A Serrano, Patricia Rockwell, Lei Xie,\
+          \ Maria Figueiredo-Pereira"
+        combined_with_chembl_id: combined_with_chembl_id
+      properties:
+        grant_number:
+          description: The grant number associated with the drug nomination
+          example: R01AG123456
+          type: string
+        contact_pi:
+          description: The contact principal investigator for the drug nomination
+          example: Dr. Jane Doe
+          type: string
+        combined_with_common_name:
+          description: 'The common name of the drug this is combined with, if applicable'
+          nullable: true
+          type: string
+        combined_with_chembl_id:
+          description: 'The ChEMBL ID of the drug this is combined with, if applicable'
+          nullable: true
+          type: string
+        evidence:
+          description: The evidence supporting the drug nomination
+          example: Preclinical studies showing efficacy in AD mouse models
+          type: string
+        data_used:
+          description: The data used to support the drug nomination
+          example: 'transcriptomics data, drug target'
+          type: string
+        ad_moa:
+          description: The proposed mechanism of action for Alzheimer's disease
+          example: DDIT3
+          nullable: true
+          type: string
+        reference:
+          description: A reference supporting the drug nomination
+          example: https://doi.org/10.1101/2023.12.26.573348
+          type: string
+        computational_validation_status:
+          description: The status of computational validation for the drug nomination
+          example: computational validation studies completed
+          type: string
+        computational_validation_results:
+          description: The results of computational validation for the drug nomination
+          example: Based on putative targets associated with AD
+          nullable: true
+          type: string
+        experimental_validation_status:
+          description: The status of experimental validation for the drug nomination
+          example: experimental validation studies completed
+          type: string
+        experimental_validation_results:
+          description: The results of experimental validation for the drug nomination
+          example: "improve cognitive, reduce neuroinflamation in female Tg344 rat\
+            \ AD models."
+          nullable: true
+          type: string
+        additional_evidence:
+          description: Any additional evidence supporting the drug nomination
+          example: may penetrate blood-brain barrier
+          nullable: true
+          type: string
+        contributors:
+          description: The contributors to the drug nomination
+          example: "Kelechi Ndukwe, Peter A Serrano, Patricia Rockwell, Lei Xie, Maria\
+            \ Figueiredo-Pereira"
+          nullable: true
+          type: string
+        initial_nomination:
+          description: The year the drug was first nominated
+          example: 2025
+          type: integer
+        program:
+          description: The program associated with the drug nomination
+          example: ACTDRx AD
+          type: string
+      required:
+        - ad_moa
+        - additional_evidence
+        - combined_with_chembl_id
+        - combined_with_common_name
+        - computational_validation_results
+        - computational_validation_status
+        - contact_pi
+        - contributors
+        - data_used
+        - evidence
+        - experimental_validation_results
+        - experimental_validation_status
+        - grant_number
+        - initial_nomination
+        - program
+        - reference
+      type: object
+    Drug:
+      description: A drug entry
+      example:
+        drug_bank_id: DB04819
+        maximum_clinical_trial_phase: Phase IV
+        year_of_first_approval: 2010
+        linked_targets:
+          ensembl_gene_id: ENSG00000139618
+          hgnc_symbol: BRCA1
+        aliases:
+          - Agomelatina
+          - S-20098
+          - Valdoxan
+        modality: Protein
+        drug_nominations:
+          - computational_validation_status: computational validation studies completed
+            evidence: Preclinical studies showing efficacy in AD mouse models
+            data_used: 'transcriptomics data, drug target'
+            combined_with_common_name: combined_with_common_name
+            experimental_validation_results: "improve cognitive, reduce neuroinflamation\
+              \ in female Tg344 rat AD models."
+            program: ACTDRx AD
+            contact_pi: Dr. Jane Doe
+            computational_validation_results: Based on putative targets associated with
+              AD
+            reference: https://doi.org/10.1101/2023.12.26.573348
+            additional_evidence: may penetrate blood-brain barrier
+            grant_number: R01AG123456
+            experimental_validation_status: experimental validation studies completed
+            initial_nomination: 2025
+            ad_moa: DDIT3
+            contributors: "Kelechi Ndukwe, Peter A Serrano, Patricia Rockwell, Lei Xie,\
+              \ Maria Figueiredo-Pereira"
+            combined_with_chembl_id: combined_with_chembl_id
+          - computational_validation_status: computational validation studies completed
+            evidence: Preclinical studies showing efficacy in AD mouse models
+            data_used: 'transcriptomics data, drug target'
+            combined_with_common_name: combined_with_common_name
+            experimental_validation_results: "improve cognitive, reduce neuroinflamation\
+              \ in female Tg344 rat AD models."
+            program: ACTDRx AD
+            contact_pi: Dr. Jane Doe
+            computational_validation_results: Based on putative targets associated with
+              AD
+            reference: https://doi.org/10.1101/2023.12.26.573348
+            additional_evidence: may penetrate blood-brain barrier
+            grant_number: R01AG123456
+            experimental_validation_status: experimental validation studies completed
+            initial_nomination: 2025
+            ad_moa: DDIT3
+            contributors: "Kelechi Ndukwe, Peter A Serrano, Patricia Rockwell, Lei Xie,\
+              \ Maria Figueiredo-Pereira"
+            combined_with_chembl_id: combined_with_chembl_id
+        mechanisms_of_action:
+          - Melatonin receptor agonist
+          - Serotonin 2c (5-HT2c) receptor antagonist
+        description: description
+        common_name: Agomelatine
+        iupac_id: iupac_id
+        chembl_id: CHEMBL2105758
+      properties:
+        common_name:
+          description: The common name of the drug
+          example: Agomelatine
+          type: string
+        description:
+          description: A brief description of the drug
+          nullable: true
+          type: string
+        iupac_id:
+          description: The IUPAC ID of the drug
+          nullable: true
+          type: string
+        chembl_id:
+          description: The ChEMBL ID of the drug
+          example: CHEMBL2105758
+          type: string
+        drug_bank_id:
+          description: The DrugBank ID of the drug
+          example: DB04819
+          type: string
+        aliases:
+          description: Alternative names for the drug
+          example:
+            - Agomelatina
+            - S-20098
+            - Valdoxan
+          items:
+            type: string
+          nullable: true
+          type: array
+        modality:
+          $ref: '#/components/schemas/Modality'
+        year_of_first_approval:
+          description: 'The year the drug was first approved, if applicable'
+          example: 2010
+          nullable: true
+          type: integer
+        maximum_clinical_trial_phase:
+          description: "The maximum clinical trial phase the drug has reached, if\
+            \ applicable"
+          example: Phase IV
+          nullable: true
+          type: string
+        linked_targets:
+          $ref: '#/components/schemas/LinkedTarget'
+        mechanisms_of_action:
+          description: The mechanisms of action associated with the drug
+          example:
+            - Melatonin receptor agonist
+            - Serotonin 2c (5-HT2c) receptor antagonist
+          items:
+            type: string
+          nullable: true
+          type: array
+        drug_nominations:
+          description: The drug nomination evidence associated with the drug
+          items:
+            $ref: '#/components/schemas/NominatedDrugEvidence'
+          type: array
+      required:
+        - aliases
+        - chembl_id
+        - common_name
+        - description
+        - drug_bank_id
+        - drug_nominations
+        - iupac_id
+        - linked_targets
+        - maximum_clinical_trial_phase
+        - mechanisms_of_action
+        - modality
+        - year_of_first_approval
       type: object

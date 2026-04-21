@@ -1,0 +1,89 @@
+type: object
+description: Evidence for a drug nomination
+properties:
+  grant_number:
+    type: string
+    description: The grant number associated with the drug nomination
+    example: R01AG123456
+  contact_pi:
+    type: string
+    description: The contact principal investigator for the drug nomination
+    example: Dr. Jane Doe
+  combined_with_common_name:
+    type: string
+    description: The common name of the drug this is combined with, if applicable
+    nullable: true
+  combined_with_chembl_id:
+    type: string
+    description: The ChEMBL ID of the drug this is combined with, if applicable
+    nullable: true
+  evidence:
+    type: string
+    description: The evidence supporting the drug nomination
+    example: 'Preclinical studies showing efficacy in AD mouse models'
+  data_used:
+    type: string
+    description: The data used to support the drug nomination
+    example: 'transcriptomics data, drug target'
+  ad_moa:
+    type: string
+    description: The proposed mechanism of action for Alzheimer's disease
+    example: 'DDIT3'
+    nullable: true
+  reference:
+    type: string
+    description: A reference supporting the drug nomination
+    example: 'https://doi.org/10.1101/2023.12.26.573348'
+  computational_validation_status:
+    type: string
+    description: The status of computational validation for the drug nomination
+    example: 'computational validation studies completed'
+  computational_validation_results:
+    type: string
+    description: The results of computational validation for the drug nomination
+    example: 'Based on putative targets associated with AD'
+    nullable: true
+  experimental_validation_status:
+    type: string
+    description: The status of experimental validation for the drug nomination
+    example: 'experimental validation studies completed'
+  experimental_validation_results:
+    type: string
+    description: The results of experimental validation for the drug nomination
+    example: 'improve cognitive, reduce neuroinflamation in female Tg344 rat AD models.'
+    nullable: true
+  additional_evidence:
+    type: string
+    description: Any additional evidence supporting the drug nomination
+    example: 'may penetrate blood-brain barrier'
+    nullable: true
+  contributors:
+    type: string
+    description: The contributors to the drug nomination
+    example: 'Kelechi Ndukwe, Peter A Serrano, Patricia Rockwell, Lei Xie, Maria Figueiredo-Pereira'
+    nullable: true
+  initial_nomination:
+    type: integer
+    description: The year the drug was first nominated
+    example: 2025
+  program:
+    type: string
+    description: The program associated with the drug nomination
+    example: 'ACTDRx AD'
+required:
+  - grant_number
+  - contact_pi
+  - combined_with_common_name
+  - combined_with_chembl_id
+  - evidence
+  - data_used
+  - ad_moa
+  - reference
+  - computational_validation_status
+  - computational_validation_results
+  - experimental_validation_status
+  - experimental_validation_results
+  - additional_evidence
+  - contributors
+  - initial_nomination
+  - program

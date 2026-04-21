@@ -1,0 +1,14 @@
+type: object
+description: A linked target
+properties:
+  ensembl_gene_id:
+    type: string
+    description: The Ensembl gene ID of the linked target
+    example: ENSG00000139618
+  hgnc_symbol:
+    type: string
+    description: The HGNC symbol of the linked target
+    example: BRCA1
+required:
+  - ensembl_gene_id
+  - hgnc_symbol
