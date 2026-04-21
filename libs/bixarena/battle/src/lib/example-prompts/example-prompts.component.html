@@ -49,19 +49,15 @@
     >
       @if (loading() && prompts().length === 0) {
         @for (_ of skeletonSlots; track $index) {
-          <div class="prompt-card prompt-card-skeleton" aria-hidden="true"></div>
+          <bixarena-prompt-card [question]="''" [skeleton]="true" />
         }
       } @else if (prompts().length > 0) {
         @for (p of prompts(); track p.id) {
-          <button class="prompt-card" type="button" (click)="onCardClick(p)">
-            <div class="prompt-card-question">{{ p.question }}</div>
-            <div class="prompt-card-meta">
-              @if (p.categories && p.categories.length > 0) {
-                <span class="prompt-card-tag">{{ formatCategory(p.categories[0]) }}</span>
-              }
-              <span class="prompt-card-cta">Battle this &rarr;</span>
-            </div>
-          </button>
+          <bixarena-prompt-card
+            [question]="p.question"
+            [category]="categoryLabel(p)"
+            (cardClick)="onCardClick(p)"
+          />
         }
       } @else {
         <div class="prompt-cards-empty">

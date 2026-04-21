@@ -18,6 +18,7 @@ import {
   ExamplePromptService,
   ExamplePromptSort,
 } from '@sagebionetworks/bixarena/api-client';
+import { PromptCardComponent } from '@sagebionetworks/bixarena/ui';
 
 type CategoryFilter = 'all' | BiomedicalCategory;
 
@@ -110,6 +111,7 @@ function formatCategory(slug: BiomedicalCategory): string {
 
 @Component({
   selector: 'bixarena-example-prompts',
+  imports: [PromptCardComponent],
   templateUrl: './example-prompts.component.html',
   styleUrl: './example-prompts.component.scss',
 })
@@ -131,7 +133,6 @@ export class ExamplePromptsComponent implements AfterViewInit, OnDestroy {
   readonly swapClass = signal<'swap-out' | 'swap-in' | null>(null);
 
   readonly skeletonSlots = [0, 1, 2];
-  readonly formatCategory = formatCategory;
 
   private spinRaf: number | null = null;
   private swapTimer: ReturnType<typeof setTimeout> | null = null;
@@ -179,6 +180,11 @@ export class ExamplePromptsComponent implements AfterViewInit, OnDestroy {
 
   onCardClick(p: ExamplePrompt): void {
     this.promptSelect.emit(p.question);
+  }
+
+  categoryLabel(p: ExamplePrompt): string | undefined {
+    const slug = p.categories?.[0];
+    return slug ? formatCategory(slug) : undefined;
   }
 
   private commitFetch(): void {

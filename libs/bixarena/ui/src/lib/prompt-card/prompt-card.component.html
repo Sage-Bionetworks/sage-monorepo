@@ -1,0 +1,16 @@
+@if (skeleton()) {
+  <div class="prompt-card prompt-card-skeleton" aria-hidden="true"></div>
+} @else {
+  <button class="prompt-card" type="button" (click)="onClick()">
+    <div class="prompt-card-question">{{ question() }}</div>
+    <div class="prompt-card-meta">
+      @if (category()) {
+        <span class="prompt-card-tag">{{ category() }}</span>
+      }
+      @if (count() !== undefined) {
+        <span class="prompt-card-stat">{{ count() }} {{ countLabel() }}</span>
+      }
+      <span class="prompt-card-cta">{{ ctaText() }} &rarr;</span>
+    </div>
+  </button>
+}
