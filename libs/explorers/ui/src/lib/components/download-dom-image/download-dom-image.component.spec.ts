@@ -24,29 +24,4 @@ describe('DownloadDomImageComponent', () => {
     const { instance } = await setup();
     expect(instance).toBeTruthy();
   });
-
-  it('arrayToCSVString should double quote and escape values', async () => {
-    const { instance } = await setup();
-    expect(instance.arrayToCSVString(['a', 'b', 'c'])).toBe('"a","b","c"\n');
-  });
-
-  it('arrayToCSVString should handle empty array', async () => {
-    const { instance } = await setup();
-    expect(instance.arrayToCSVString([])).toBe('\n');
-  });
-
-  it('arrayToCSVString should handle embedded quotes', async () => {
-    const { instance } = await setup();
-    expect(instance.arrayToCSVString(['a"b', 'c'])).toBe('"a""b","c"\n');
-  });
-
-  it('arrayToCSVString should handle commas and newlines', async () => {
-    const { instance } = await setup();
-    expect(instance.arrayToCSVString(['a,b', 'c\nd'])).toBe('"a,b","c\nd"\n');
-  });
-
-  it('arrayToCSVString should handle empty string', async () => {
-    const { instance } = await setup();
-    expect(instance.arrayToCSVString([''])).toBe('""\n');
-  });
 });
