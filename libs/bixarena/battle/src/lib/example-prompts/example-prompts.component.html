@@ -1,10 +1,10 @@
-<div class="picker">
+<div class="prompt-picker">
   <button
     class="unwind-label"
     type="button"
-    (click)="tryAnother()"
+    (click)="refresh()"
     [disabled]="loading()"
-    aria-label="Unwind another example"
+    aria-label="Unwind an example"
   >
     <svg
       class="unwind-icon"
@@ -43,28 +43,28 @@
     </div>
 
     <div
-      class="cards"
+      class="prompt-cards"
       [class.swap-out]="swapClass() === 'swap-out'"
       [class.swap-in]="swapClass() === 'swap-in'"
     >
       @if (loading() && prompts().length === 0) {
         @for (_ of skeletonSlots; track $index) {
-          <div class="card card-skeleton" aria-hidden="true"></div>
+          <div class="prompt-card prompt-card-skeleton" aria-hidden="true"></div>
         }
       } @else if (prompts().length > 0) {
         @for (p of prompts(); track p.id) {
-          <button class="card" type="button" (click)="onCardClick(p)">
-            <div class="card-question">{{ p.question }}</div>
-            <div class="card-meta">
+          <button class="prompt-card" type="button" (click)="onCardClick(p)">
+            <div class="prompt-card-question">{{ p.question }}</div>
+            <div class="prompt-card-meta">
               @if (p.categories && p.categories.length > 0) {
-                <span class="card-tag">{{ formatCategory(p.categories[0]) }}</span>
+                <span class="prompt-card-tag">{{ formatCategory(p.categories[0]) }}</span>
               }
-              <span class="card-cta">Battle this &rarr;</span>
+              <span class="prompt-card-cta">Battle this &rarr;</span>
             </div>
           </button>
         }
       } @else {
-        <div class="cards-empty">
+        <div class="prompt-cards-empty">
           @if (error()) {
             Couldn't load example prompts. Try again.
           } @else {

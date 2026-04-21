@@ -87,25 +87,25 @@ describe('ExamplePromptsComponent', () => {
     expect(listSpy).not.toHaveBeenCalled();
   });
 
-  it('tryAnother fetches a fresh set with the current filter', async () => {
+  it('refresh fetches a fresh set with the current filter', async () => {
     await setup();
     component.selectCategory(BiomedicalCategory.CancerBiology);
     listSpy.mockClear();
-    component.tryAnother();
+    component.refresh();
     jest.advanceTimersByTime(500);
     expect(listSpy).toHaveBeenCalledTimes(1);
     const query = listSpy.mock.calls[0][0] as ExamplePromptSearchQuery;
     expect(query.categories).toEqual([BiomedicalCategory.CancerBiology]);
   });
 
-  it('tryAnother is debounced while a fetch is in-flight', async () => {
+  it('refresh is debounced while a fetch is in-flight', async () => {
     await setup();
     listSpy.mockImplementation(() => of(pageOf(['qA']) as ExamplePromptPage));
     component.loading.set(true);
-    component.tryAnother();
+    component.refresh();
     jest.advanceTimersByTime(500);
     const baseline = listSpy.mock.calls.length;
-    component.tryAnother();
+    component.refresh();
     jest.advanceTimersByTime(500);
     expect(listSpy.mock.calls.length).toBe(baseline);
   });

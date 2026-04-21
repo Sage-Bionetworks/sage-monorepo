@@ -5,7 +5,7 @@
   margin: 0 auto;
 }
 
-.picker {
+.prompt-picker {
   width: 100%;
 }
 
@@ -104,7 +104,7 @@
   stroke-linecap: round;
 }
 
-.cards {
+.prompt-cards {
   position: relative;
   z-index: 1;
   display: grid;
@@ -112,7 +112,7 @@
   gap: 0.75rem;
 }
 
-.card-question {
+.prompt-card-question {
   font-size: var(--text-sm);
   color: var(--p-text-color);
   line-height: 1.5;
@@ -125,13 +125,13 @@
   overflow: hidden;
 }
 
-.card-meta {
+.prompt-card-meta {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-.card-tag {
+.prompt-card-tag {
   font-size: var(--text-xs);
   color: var(--p-primary-color);
   font-weight: 540;
@@ -140,14 +140,14 @@
   border-radius: 100px;
 }
 
-.card-cta {
+.prompt-card-cta {
   font-size: var(--text-xs);
   color: var(--p-text-muted-color);
   transition: color 0.15s;
   margin-left: auto;
 }
 
-.card {
+.prompt-card {
   background: var(--p-surface-100);
   border: 1px solid var(--p-surface-200);
   border-radius: var(--p-border-radius-lg);
@@ -169,13 +169,13 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgb(0 0 0 / 25%);
 
-    .card-cta {
+    .prompt-card-cta {
       color: var(--p-primary-color);
     }
   }
 }
 
-.card-skeleton {
+.prompt-card-skeleton {
   cursor: default;
   position: relative;
   overflow: hidden;
@@ -185,7 +185,7 @@
     position: absolute;
     inset: 0;
     background: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 3%) 50%, transparent 100%);
-    animation: card-shimmer 1.4s ease-in-out infinite;
+    animation: prompt-card-shimmer 1.4s ease-in-out infinite;
   }
 
   &:hover {
@@ -195,7 +195,7 @@
   }
 }
 
-@keyframes card-shimmer {
+@keyframes prompt-card-shimmer {
   0% {
     transform: translateX(-100%);
   }
@@ -205,7 +205,7 @@
   }
 }
 
-.cards-empty {
+.prompt-cards-empty {
   grid-column: 1 / -1;
   text-align: center;
   color: var(--p-text-muted-color);
@@ -215,15 +215,15 @@
   border-radius: var(--p-border-radius-lg);
 }
 
-.cards.swap-out .card {
-  animation: card-swap-out 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
+.prompt-cards.swap-out .prompt-card {
+  animation: prompt-card-swap-out 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
-.cards.swap-in .card {
-  animation: card-swap-in 0.45s cubic-bezier(0.2, 0.8, 0.3, 1);
+.prompt-cards.swap-in .prompt-card {
+  animation: prompt-card-swap-in 0.45s cubic-bezier(0.2, 0.8, 0.3, 1);
 }
 
-@keyframes card-swap-out {
+@keyframes prompt-card-swap-out {
   from {
     opacity: 1;
     transform: translateY(0);
@@ -235,7 +235,7 @@
   }
 }
 
-@keyframes card-swap-in {
+@keyframes prompt-card-swap-in {
   from {
     opacity: 0;
     transform: translateY(12px);
@@ -248,7 +248,7 @@
 }
 
 @media (width <= 720px) {
-  .cards {
+  .prompt-cards {
     grid-template-columns: 1fr;
   }
 
@@ -262,13 +262,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card {
+  .prompt-card {
     transition: none;
   }
 
-  .cards.swap-out .card,
-  .cards.swap-in .card,
-  .card-skeleton::after {
+  .prompt-cards.swap-out .prompt-card,
+  .prompt-cards.swap-in .prompt-card,
+  .prompt-card-skeleton::after {
     animation: none;
   }
 }

@@ -153,7 +153,7 @@ export class ExamplePromptsComponent implements AfterViewInit, OnDestroy {
     this.commitFetch();
   }
 
-  tryAnother(): void {
+  refresh(): void {
     if (this.loading() || this.swapClass() !== null) return;
 
     this.animateSpin();
