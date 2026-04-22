@@ -39,6 +39,12 @@ public class ExamplePromptCategorizationEntity {
   @Column(name = "reason", length = 1000)
   private String reason;
 
+  // Single category assigned by this run. NULL means the classifier declared
+  // no category fits (legitimate "no fit"). See the classifier prompt at
+  // biomedical_prompt_category_classifier.md for the contract.
+  @Column(name = "category", length = 100)
+  private String category;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;

@@ -16,10 +16,8 @@ import org.sagebionetworks.bixarena.api.exception.ExamplePromptNotFoundException
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCategorizationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCategorizationResponseDto;
-import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptCategorizationCategoryEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptCategorizationEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptEntity;
-import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptCategorizationCategoryRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptCategorizationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptRepository;
 import org.springframework.scheduling.annotation.Async;
@@ -33,13 +31,12 @@ public class ExamplePromptCategorizationService {
 
   private final ExamplePromptRepository examplePromptRepository;
   private final ExamplePromptCategorizationRepository categorizationRepository;
-  private final ExamplePromptCategorizationCategoryRepository categoryRepository;
   private final ServiceTokenProvider serviceTokenProvider;
   private final AppProperties appProperties;
   private final ObjectMapper objectMapper;
 
   /** Response from the AI service /categorize-prompt endpoint. */
-  private record AiCategorizationResponse(String prompt, List<String> categories, String method) {}
+  private record AiCategorizationResponse(String prompt, String category, String method) {}
 
   /**
    * Calls the AI service to categorize a prompt and persists the result.
@@ -75,15 +72,15 @@ public class ExamplePromptCategorizationService {
       String serviceToken = serviceTokenProvider.obtainServiceToken();
       AiCategorizationResponse aiResponse = callAiService(serviceToken, prompt.getQuestion());
 
-      if (aiResponse.categories() == null || aiResponse.categories().isEmpty()) {
-        log.info("AI returned no categories for prompt {} — nothing persisted", promptId);
+      if (aiResponse.category() == null) {
+        log.info("AI returned no category for prompt {} — nothing persisted", promptId);
         return Optional.empty();
       }
 
       ExamplePromptCategorizationEntity entity = persistCategorization(
         promptId,
         aiResponse.method(),
-        aiResponse.categories(),
+        aiResponse.category(),
         null,
         null
       );
@@ -101,10 +98,10 @@ public class ExamplePromptCategorizationService {
       }
 
       log.info(
-        "Prompt categorization persisted for prompt {}: method={}, categories={}",
+        "Prompt categorization persisted for prompt {}: method={}, category={}",
         promptId,
         aiResponse.method(),
-        aiResponse.categories()
+        aiResponse.category()
       );
       return Optional.of(toDto(entity));
     } catch (Exception e) {
@@ -126,16 +123,12 @@ public class ExamplePromptCategorizationService {
   ) {
     ExamplePromptEntity prompt = getPromptOrThrow(promptId);
 
-    List<String> categorySlugs = request
-      .getCategories()
-      .stream()
-      .map(BiomedicalCategoryDto::getValue)
-      .toList();
+    String categorySlug = request.getCategory().getValue();
 
     ExamplePromptCategorizationEntity entity = persistCategorization(
       promptId,
       "human-review",
-      categorySlugs,
+      categorySlug,
       categorizedBy,
       request.getReason()
     );
@@ -167,16 +160,10 @@ public class ExamplePromptCategorizationService {
   }
 
   public ExamplePromptCategorizationResponseDto toDto(ExamplePromptCategorizationEntity entity) {
-    List<BiomedicalCategoryDto> categories = categoryRepository
-      .findByCategorizationId(entity.getId())
-      .stream()
-      .map(c -> BiomedicalCategoryDto.fromValue(c.getCategory()))
-      .toList();
-
     ExamplePromptCategorizationResponseDto dto = new ExamplePromptCategorizationResponseDto();
     dto.setId(entity.getId());
     dto.setPromptId(entity.getPromptId());
-    dto.setCategories(categories);
+    dto.setCategory(BiomedicalCategoryDto.fromValue(entity.getCategory()));
     dto.setMethod(entity.getMethod());
     dto.setCategorizedBy(entity.getCategorizedBy());
     dto.setReason(entity.getReason());
@@ -187,7 +174,7 @@ public class ExamplePromptCategorizationService {
   private ExamplePromptCategorizationEntity persistCategorization(
     UUID promptId,
     String method,
-    List<String> categorySlugs,
+    String categorySlug,
     UUID categorizedBy,
     String reason
   ) {
@@ -196,23 +183,11 @@ public class ExamplePromptCategorizationService {
       .method(method)
       .categorizedBy(categorizedBy)
       .reason(reason)
+      .category(categorySlug)
       .build();
 
     categorizationRepository.save(entity);
     categorizationRepository.flush();
-
-    List<ExamplePromptCategorizationCategoryEntity> categoryEntities = categorySlugs
-      .stream()
-      .map(slug ->
-        ExamplePromptCategorizationCategoryEntity.builder()
-          .categorizationId(entity.getId())
-          .category(slug)
-          .build()
-      )
-      .toList();
-    categoryRepository.saveAll(categoryEntities);
-    categoryRepository.flush();
-
     return entity;
   }
 
