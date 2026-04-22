@@ -13,9 +13,10 @@ import { BiomedicalCategory } from './biomedical-category';
  * Request to manually categorize an example prompt.
  */
 export interface ExamplePromptCategorizationCreateRequest {
-  categories: Set<BiomedicalCategory>;
+  category: BiomedicalCategory;
   /**
    * Reason for the categorization decision
    */
   reason?: string | null;
 }
+export namespace ExamplePromptCategorizationCreateRequest {}

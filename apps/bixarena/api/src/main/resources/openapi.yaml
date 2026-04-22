@@ -3185,11 +3185,8 @@ components:
         active: true
         id: 123e4567-e89b-12d3-a456-426614174000
         source: pubmedqa
-        categories:
-          - genetics
-          - genetics
-          - genetics
         effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        category: genetics
       properties:
         id:
           description: The unique identifier of the example prompt.
@@ -3214,14 +3211,8 @@ components:
           format: uuid
           nullable: true
           type: string
-        categories:
-          default: []
-          description: Categories from the effective categorization. Empty array if
-            not yet categorized.
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          maxItems: 3
-          type: array
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
         createdAt:
           description: When the example prompt was created.
           example: 2025-08-01T09:00:00Z
@@ -3229,7 +3220,6 @@ components:
           type: string
       required:
         - active
-        - categories
         - createdAt
         - id
         - question
@@ -3259,21 +3249,15 @@ components:
             active: true
             id: 123e4567-e89b-12d3-a456-426614174000
             source: pubmedqa
-            categories:
-              - genetics
-              - genetics
-              - genetics
             effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            category: genetics
           - createdAt: 2025-08-01T09:00:00Z
             question: What are the main symptoms of Type 2 diabetes?
             active: true
             id: 123e4567-e89b-12d3-a456-426614174000
             source: pubmedqa
-            categories:
-              - genetics
-              - genetics
-              - genetics
             effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            category: genetics
         hasNext: true
         totalElements: 99
       type: object
@@ -3323,10 +3307,7 @@ components:
         promptId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         categorizedBy: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        categories:
-          - genetics
-          - genetics
-          - genetics
+        category: genetics
       properties:
         id:
           format: uuid
@@ -3334,12 +3315,8 @@ components:
         promptId:
           format: uuid
           type: string
-        categories:
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          maxItems: 3
-          minItems: 1
-          type: array
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
         method:
           maxLength: 100
           type: string
@@ -3357,7 +3334,7 @@ components:
           format: date-time
           type: string
       required:
-        - categories
+        - category
         - createdAt
         - id
         - method
@@ -3366,20 +3343,15 @@ components:
     ExamplePromptCategorizationCreateRequest:
       description: Request to manually categorize an example prompt.
       properties:
-        categories:
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          maxItems: 3
-          minItems: 1
-          type: array
-          uniqueItems: true
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
         reason:
           description: Reason for the categorization decision
           maxLength: 1000
           nullable: true
           type: string
       required:
-        - categories
+        - category
       type: object
     SetEffectiveCategorizationRequest:
       description: Request to set or clear the effective categorization for an example

@@ -5,10 +5,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,8 +33,7 @@ public class ExamplePromptCategorizationResponseDto {
 
   private UUID promptId;
 
-  @Valid
-  private List<BiomedicalCategoryDto> categories = new ArrayList<>();
+  private BiomedicalCategoryDto category;
 
   private String method;
 
@@ -54,10 +51,10 @@ public class ExamplePromptCategorizationResponseDto {
   /**
    * Constructor with only required parameters
    */
-  public ExamplePromptCategorizationResponseDto(UUID id, UUID promptId, List<BiomedicalCategoryDto> categories, String method, OffsetDateTime createdAt) {
+  public ExamplePromptCategorizationResponseDto(UUID id, UUID promptId, BiomedicalCategoryDto category, String method, OffsetDateTime createdAt) {
     this.id = id;
     this.promptId = promptId;
-    this.categories = categories;
+    this.category = category;
     this.method = method;
     this.createdAt = createdAt;
   }
@@ -102,32 +99,24 @@ public class ExamplePromptCategorizationResponseDto {
     this.promptId = promptId;
   }
 
-  public ExamplePromptCategorizationResponseDto categories(List<BiomedicalCategoryDto> categories) {
-    this.categories = categories;
-    return this;
-  }
-
-  public ExamplePromptCategorizationResponseDto addCategoriesItem(BiomedicalCategoryDto categoriesItem) {
-    if (this.categories == null) {
-      this.categories = new ArrayList<>();
-    }
-    this.categories.add(categoriesItem);
+  public ExamplePromptCategorizationResponseDto category(BiomedicalCategoryDto category) {
+    this.category = category;
     return this;
   }
 
   /**
-   * Get categories
-   * @return categories
+   * Get category
+   * @return category
    */
-  @NotNull @Valid @Size(min = 1, max = 3) 
-  @Schema(name = "categories", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("categories")
-  public List<BiomedicalCategoryDto> getCategories() {
-    return categories;
+  @NotNull @Valid 
+  @Schema(name = "category", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("category")
+  public BiomedicalCategoryDto getCategory() {
+    return category;
   }
 
-  public void setCategories(List<BiomedicalCategoryDto> categories) {
-    this.categories = categories;
+  public void setCategory(BiomedicalCategoryDto category) {
+    this.category = category;
   }
 
   public ExamplePromptCategorizationResponseDto method(String method) {
@@ -221,7 +210,7 @@ public class ExamplePromptCategorizationResponseDto {
     ExamplePromptCategorizationResponseDto examplePromptCategorizationResponse = (ExamplePromptCategorizationResponseDto) o;
     return Objects.equals(this.id, examplePromptCategorizationResponse.id) &&
         Objects.equals(this.promptId, examplePromptCategorizationResponse.promptId) &&
-        Objects.equals(this.categories, examplePromptCategorizationResponse.categories) &&
+        Objects.equals(this.category, examplePromptCategorizationResponse.category) &&
         Objects.equals(this.method, examplePromptCategorizationResponse.method) &&
         Objects.equals(this.categorizedBy, examplePromptCategorizationResponse.categorizedBy) &&
         Objects.equals(this.reason, examplePromptCategorizationResponse.reason) &&
@@ -230,7 +219,7 @@ public class ExamplePromptCategorizationResponseDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, promptId, categories, method, categorizedBy, reason, createdAt);
+    return Objects.hash(id, promptId, category, method, categorizedBy, reason, createdAt);
   }
 
   @Override
@@ -239,7 +228,7 @@ public class ExamplePromptCategorizationResponseDto {
     sb.append("class ExamplePromptCategorizationResponseDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    promptId: ").append(toIndentedString(promptId)).append("\n");
-    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
+    sb.append("    category: ").append(toIndentedString(category)).append("\n");
     sb.append("    method: ").append(toIndentedString(method)).append("\n");
     sb.append("    categorizedBy: ").append(toIndentedString(categorizedBy)).append("\n");
     sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
@@ -274,7 +263,7 @@ public class ExamplePromptCategorizationResponseDto {
     protected Builder copyOf(ExamplePromptCategorizationResponseDto value) { 
       this.instance.setId(value.id);
       this.instance.setPromptId(value.promptId);
-      this.instance.setCategories(value.categories);
+      this.instance.setCategory(value.category);
       this.instance.setMethod(value.method);
       this.instance.setCategorizedBy(value.categorizedBy);
       this.instance.setReason(value.reason);
@@ -292,8 +281,8 @@ public class ExamplePromptCategorizationResponseDto {
       return this;
     }
     
-    public ExamplePromptCategorizationResponseDto.Builder categories(List<BiomedicalCategoryDto> categories) {
-      this.instance.categories(categories);
+    public ExamplePromptCategorizationResponseDto.Builder category(BiomedicalCategoryDto category) {
+      this.instance.category(category);
       return this;
     }
     

@@ -18,7 +18,7 @@ import json
 
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 
 try:
@@ -33,16 +33,13 @@ class PromptCategorization(BaseModel):
     """  # noqa: E501
 
     prompt: StrictStr = Field(description="The original prompt that was categorized")
-    categories: Annotated[
-        List[Annotated[str, Field(strict=True, max_length=100)]],
-        Field(min_length=0, max_length=3),
-    ] = Field(
-        description="Up to three biomedical subject category slugs assigned by the classifier. May be empty when the classifier did not assign any category."
+    category: Optional[Annotated[str, Field(strict=True, max_length=100)]] = Field(
+        description="Biomedical subject category slug assigned by the classifier. Null when the classifier could not assign any category."
     )
     method: Annotated[str, Field(strict=True, max_length=100)] = Field(
         description="The categorization method used (e.g. 'openrouter-haiku-v1')"
     )
-    __properties: ClassVar[List[str]] = ["prompt", "categories", "method"]
+    __properties: ClassVar[List[str]] = ["prompt", "category", "method"]
 
     model_config = {
         "populate_by_name": True,
@@ -79,6 +76,11 @@ class PromptCategorization(BaseModel):
             exclude={},
             exclude_none=True,
         )
+        # set to None if category (nullable) is None
+        # and model_fields_set contains the field
+        if self.category is None and "category" in self.model_fields_set:
+            _dict["category"] = None
+
         return _dict
 
     @classmethod
@@ -93,7 +95,7 @@ class PromptCategorization(BaseModel):
         _obj = cls.model_validate(
             {
                 "prompt": obj.get("prompt"),
-                "categories": obj.get("categories"),
+                "category": obj.get("category"),
                 "method": obj.get("method"),
             }
         )

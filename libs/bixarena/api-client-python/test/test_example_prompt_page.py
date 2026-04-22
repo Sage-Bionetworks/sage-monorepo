@@ -48,9 +48,7 @@ class TestExamplePromptPage(unittest.TestCase):
                         source = 'pubmedqa', 
                         active = True, 
                         effective_categorization_id = '', 
-                        categories = [
-                            'genetics'
-                            ], 
+                        category = 'genetics', 
                         created_at = '2025-08-01T09:00Z', )
                     ]
             )
@@ -69,9 +67,7 @@ class TestExamplePromptPage(unittest.TestCase):
                         source = 'pubmedqa', 
                         active = True, 
                         effective_categorization_id = '', 
-                        categories = [
-                            'genetics'
-                            ], 
+                        category = 'genetics', 
                         created_at = '2025-08-01T09:00Z', )
                     ],
         )

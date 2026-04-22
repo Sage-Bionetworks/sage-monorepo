@@ -2229,13 +2229,10 @@ components:
           format: uuid
           nullable: true
           description: ID of the effective categorization for this prompt (null = not yet categorized)
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          maxItems: 3
-          default: []
-          description: Categories from the effective categorization. Empty array if not yet categorized.
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
+          nullable: true
+          description: Category from the effective categorization. Null if not yet categorized or if the classifier could not assign a category.
         createdAt:
           type: string
           format: date-time
@@ -2246,7 +2243,6 @@ components:
         - question
         - source
         - active
-        - categories
         - createdAt
     ExamplePromptPage:
       type: object
@@ -2306,12 +2302,9 @@ components:
         promptId:
           type: string
           format: uuid
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          minItems: 1
-          maxItems: 3
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
+          description: Category assigned by this run.
         method:
           type: string
           maxLength: 100
@@ -2331,27 +2324,23 @@ components:
       required:
         - id
         - promptId
-        - categories
+        - category
         - method
         - createdAt
     ExamplePromptCategorizationCreateRequest:
       type: object
       description: Request to manually categorize an example prompt.
       properties:
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          minItems: 1
-          maxItems: 3
-          uniqueItems: true
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
+          description: Category to assign.
         reason:
           type: string
           maxLength: 1000
           nullable: true
           description: Reason for the categorization decision
       required:
-        - categories
+        - category
     SetEffectiveCategorizationRequest:
       type: object
       description: Request to set or clear the effective categorization for an example prompt or battle.

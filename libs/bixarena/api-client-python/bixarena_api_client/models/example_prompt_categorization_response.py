@@ -33,7 +33,7 @@ class ExamplePromptCategorizationResponse(BaseModel):
 
     id: UUID
     prompt_id: UUID = Field(alias="promptId")
-    categories: Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
+    category: BiomedicalCategory
     method: Annotated[str, Field(strict=True, max_length=100)]
     categorized_by: Optional[UUID] = Field(
         default=None,
@@ -47,7 +47,7 @@ class ExamplePromptCategorizationResponse(BaseModel):
     __properties: ClassVar[List[str]] = [
         "id",
         "promptId",
-        "categories",
+        "category",
         "method",
         "categorizedBy",
         "reason",
@@ -116,7 +116,7 @@ class ExamplePromptCategorizationResponse(BaseModel):
             {
                 "id": obj.get("id"),
                 "promptId": obj.get("promptId"),
-                "categories": obj.get("categories"),
+                "category": obj.get("category"),
                 "method": obj.get("method"),
                 "categorizedBy": obj.get("categorizedBy"),
                 "reason": obj.get("reason"),

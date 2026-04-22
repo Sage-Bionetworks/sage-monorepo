@@ -4,15 +4,15 @@ The result of a categorization run for an example prompt.
 
 ## Properties
 
-| Name               | Type                                                  | Description                                     | Notes      |
-| ------------------ | ----------------------------------------------------- | ----------------------------------------------- | ---------- |
-| **id**             | **str**                                               |                                                 |
-| **prompt_id**      | **str**                                               |                                                 |
-| **categories**     | [**List[BiomedicalCategory]**](BiomedicalCategory.md) |                                                 |
-| **method**         | **str**                                               |                                                 |
-| **categorized_by** | **str**                                               | User ID of the categorizer. Null for AI runs.   | [optional] |
-| **reason**         | **str**                                               | Human override reason. Always null for AI runs. | [optional] |
-| **created_at**     | **datetime**                                          |                                                 |
+| Name               | Type                                            | Description                                     | Notes      |
+| ------------------ | ----------------------------------------------- | ----------------------------------------------- | ---------- |
+| **id**             | **str**                                         |                                                 |
+| **prompt_id**      | **str**                                         |                                                 |
+| **category**       | [**BiomedicalCategory**](BiomedicalCategory.md) |                                                 |
+| **method**         | **str**                                         |                                                 |
+| **categorized_by** | **str**                                         | User ID of the categorizer. Null for AI runs.   | [optional] |
+| **reason**         | **str**                                         | Human override reason. Always null for AI runs. | [optional] |
+| **created_at**     | **datetime**                                    |                                                 |
 
 ## Example
 

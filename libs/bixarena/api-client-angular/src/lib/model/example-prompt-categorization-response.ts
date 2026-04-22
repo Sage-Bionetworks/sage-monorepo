@@ -15,7 +15,7 @@ import { BiomedicalCategory } from './biomedical-category';
 export interface ExamplePromptCategorizationResponse {
   id: string;
   promptId: string;
-  categories: Array<BiomedicalCategory>;
+  category: BiomedicalCategory;
   method: string;
   /**
    * User ID of the categorizer. Null for AI runs.
@@ -27,3 +27,4 @@ export interface ExamplePromptCategorizationResponse {
   reason?: string | null;
   createdAt: string;
 }
+export namespace ExamplePromptCategorizationResponse {}

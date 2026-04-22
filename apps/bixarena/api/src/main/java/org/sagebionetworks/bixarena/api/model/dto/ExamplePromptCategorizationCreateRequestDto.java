@@ -5,9 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonValue;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -28,8 +26,7 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ExamplePromptCategorizationCreateRequestDto {
 
-  @Valid
-  private Set<BiomedicalCategoryDto> categories = new LinkedHashSet<>();
+  private BiomedicalCategoryDto category;
 
   private @Nullable String reason = null;
 
@@ -40,37 +37,28 @@ public class ExamplePromptCategorizationCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ExamplePromptCategorizationCreateRequestDto(Set<BiomedicalCategoryDto> categories) {
-    this.categories = categories;
+  public ExamplePromptCategorizationCreateRequestDto(BiomedicalCategoryDto category) {
+    this.category = category;
   }
 
-  public ExamplePromptCategorizationCreateRequestDto categories(Set<BiomedicalCategoryDto> categories) {
-    this.categories = categories;
-    return this;
-  }
-
-  public ExamplePromptCategorizationCreateRequestDto addCategoriesItem(BiomedicalCategoryDto categoriesItem) {
-    if (this.categories == null) {
-      this.categories = new LinkedHashSet<>();
-    }
-    this.categories.add(categoriesItem);
+  public ExamplePromptCategorizationCreateRequestDto category(BiomedicalCategoryDto category) {
+    this.category = category;
     return this;
   }
 
   /**
-   * Get categories
-   * @return categories
+   * Get category
+   * @return category
    */
-  @NotNull @Valid @Size(min = 1, max = 3) 
-  @Schema(name = "categories", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("categories")
-  public Set<BiomedicalCategoryDto> getCategories() {
-    return categories;
+  @NotNull @Valid 
+  @Schema(name = "category", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("category")
+  public BiomedicalCategoryDto getCategory() {
+    return category;
   }
 
-  @JsonDeserialize(as = LinkedHashSet.class)
-  public void setCategories(Set<BiomedicalCategoryDto> categories) {
-    this.categories = categories;
+  public void setCategory(BiomedicalCategoryDto category) {
+    this.category = category;
   }
 
   public ExamplePromptCategorizationCreateRequestDto reason(@Nullable String reason) {
@@ -102,20 +90,20 @@ public class ExamplePromptCategorizationCreateRequestDto {
       return false;
     }
     ExamplePromptCategorizationCreateRequestDto examplePromptCategorizationCreateRequest = (ExamplePromptCategorizationCreateRequestDto) o;
-    return Objects.equals(this.categories, examplePromptCategorizationCreateRequest.categories) &&
+    return Objects.equals(this.category, examplePromptCategorizationCreateRequest.category) &&
         Objects.equals(this.reason, examplePromptCategorizationCreateRequest.reason);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(categories, reason);
+    return Objects.hash(category, reason);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ExamplePromptCategorizationCreateRequestDto {\n");
-    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
+    sb.append("    category: ").append(toIndentedString(category)).append("\n");
     sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -145,13 +133,13 @@ public class ExamplePromptCategorizationCreateRequestDto {
     }
 
     protected Builder copyOf(ExamplePromptCategorizationCreateRequestDto value) { 
-      this.instance.setCategories(value.categories);
+      this.instance.setCategory(value.category);
       this.instance.setReason(value.reason);
       return this;
     }
 
-    public ExamplePromptCategorizationCreateRequestDto.Builder categories(Set<BiomedicalCategoryDto> categories) {
-      this.instance.categories(categories);
+    public ExamplePromptCategorizationCreateRequestDto.Builder category(BiomedicalCategoryDto category) {
+      this.instance.category(category);
       return this;
     }
     
