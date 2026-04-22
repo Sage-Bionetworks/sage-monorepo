@@ -7,12 +7,9 @@ properties:
   promptId:
     type: string
     format: uuid
-  categories:
-    type: array
-    items:
-      $ref: BiomedicalCategory.yaml
-    minItems: 1
-    maxItems: 3
+  category:
+    $ref: BiomedicalCategory.yaml
+    description: Category assigned by this run.
   method:
     type: string
     maxLength: 100
@@ -32,6 +29,6 @@ properties:
 required:
   - id
   - promptId
-  - categories
+  - category
   - method
   - createdAt
