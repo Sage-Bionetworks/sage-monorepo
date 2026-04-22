@@ -91,9 +91,9 @@ for page in $(seq 0 $((TOTAL_PAGES - 1))); do
 
         case "$HTTP_CODE" in
             201)
-                CATEGORIES=$(echo "$BODY" | jq -r '.categories | join(",")')
+                CATEGORY=$(echo "$BODY" | jq -r '.category')
                 CATEGORIZED=$((CATEGORIZED + 1))
-                echo "  [OK]   $PROMPT_ID -> categories=[$CATEGORIES]"
+                echo "  [OK]   $PROMPT_ID -> category=$CATEGORY"
                 ;;
             204)
                 NO_FIT=$((NO_FIT + 1))
