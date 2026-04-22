@@ -38,7 +38,7 @@ export interface Drug {
   /**
    * Alternative names for the drug
    */
-  aliases: Array<string> | null;
+  aliases: Array<string>;
   modality: Modality;
   /**
    * The year the drug was first approved, if applicable
@@ -51,11 +51,11 @@ export interface Drug {
   /**
    * The linked targets associated with the drug
    */
-  linked_targets: Array<LinkedTarget> | null;
+  linked_targets: Array<LinkedTarget>;
   /**
    * The mechanisms of action associated with the drug
    */
-  mechanisms_of_action: Array<string> | null;
+  mechanisms_of_action: Array<string>;
   /**
    * The drug nomination evidence associated with the drug
    */

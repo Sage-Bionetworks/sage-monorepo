@@ -1251,7 +1251,6 @@ components:
             - Valdoxan
           items:
             type: string
-          nullable: true
           type: array
         modality:
           $ref: '#/components/schemas/Modality'
@@ -1270,7 +1269,6 @@ components:
           description: The linked targets associated with the drug
           items:
             $ref: '#/components/schemas/LinkedTarget'
-          nullable: true
           type: array
         mechanisms_of_action:
           description: The mechanisms of action associated with the drug
@@ -1279,7 +1277,6 @@ components:
             - Serotonin 2c (5-HT2c) receptor antagonist
           items:
             type: string
-          nullable: true
           type: array
         drug_nominations:
           description: The drug nomination evidence associated with the drug

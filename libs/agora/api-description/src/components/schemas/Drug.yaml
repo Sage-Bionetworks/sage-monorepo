@@ -27,7 +27,6 @@ properties:
     items:
       type: string
     example: ['Agomelatina', 'S-20098', 'Valdoxan']
-    nullable: true
   modality:
     $ref: './Modality.yaml'
     nullable: true
@@ -46,14 +45,12 @@ properties:
     description: The linked targets associated with the drug
     items:
       $ref: './LinkedTarget.yaml'
-    nullable: true
   mechanisms_of_action:
     type: array
     description: The mechanisms of action associated with the drug
     items:
       type: string
     example: ['Melatonin receptor agonist', 'Serotonin 2c (5-HT2c) receptor antagonist']
-    nullable: true
   drug_nominations:
     type: array
     description: The drug nomination evidence associated with the drug

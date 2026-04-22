@@ -1160,7 +1160,6 @@ components:
             - Agomelatina
             - S-20098
             - Valdoxan
-          nullable: true
         modality:
           $ref: '#/components/schemas/Modality'
           nullable: true
@@ -1179,7 +1178,6 @@ components:
           description: The linked targets associated with the drug
           items:
             $ref: '#/components/schemas/LinkedTarget'
-          nullable: true
         mechanisms_of_action:
           type: array
           description: The mechanisms of action associated with the drug
@@ -1188,7 +1186,6 @@ components:
           example:
             - Melatonin receptor agonist
             - Serotonin 2c (5-HT2c) receptor antagonist
-          nullable: true
         drug_nominations:
           type: array
           description: The drug nomination evidence associated with the drug

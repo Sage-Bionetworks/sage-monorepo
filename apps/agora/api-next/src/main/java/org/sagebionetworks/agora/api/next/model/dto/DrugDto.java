@@ -42,7 +42,7 @@ public class DrugDto {
   private String drugBankId;
 
   @Valid
-  private List<String> aliases;
+  private List<String> aliases = new ArrayList<>();
 
   private ModalityDto modality;
 
@@ -51,10 +51,10 @@ public class DrugDto {
   private String maximumClinicalTrialPhase = null;
 
   @Valid
-  private List<@Valid LinkedTargetDto> linkedTargets;
+  private List<@Valid LinkedTargetDto> linkedTargets = new ArrayList<>();
 
   @Valid
-  private List<String> mechanismsOfAction;
+  private List<String> mechanismsOfAction = new ArrayList<>();
 
   @Valid
   private List<@Valid NominatedDrugEvidenceDto> drugNominations = new ArrayList<>();
