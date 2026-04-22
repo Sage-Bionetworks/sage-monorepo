@@ -2,8 +2,10 @@
 -- Categorization Tables
 -- ============================================================================
 -- This migration creates the example_prompt_categorization and
--- battle_categorization tables (with their category join tables), and adds
--- the effective_categorization_id FK on the example_prompt and battle tables.
+-- battle_categorization tables, and adds the effective_categorization_id FK
+-- on the example_prompt and battle tables. Prompt categorizations carry a
+-- single category per run (1-to-1); battle categorizations use a join table
+-- because each run can produce 1-3 categories (1-to-many).
 -- ============================================================================
 
 
@@ -15,31 +17,22 @@
 -- categorized_by NULL  = AI run
 -- categorized_by <uid> = admin human override
 -- reason is optional for human overrides, always NULL for AI runs.
+-- category is the single most relevant slug chosen by this run; NULL when the
+-- classifier declared no category fits (legitimate "no fit" result).
 -- ============================================================================
 
 CREATE TABLE api.example_prompt_categorization (
   id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   prompt_id        UUID NOT NULL REFERENCES api.example_prompt(id) ON DELETE CASCADE,
   method           VARCHAR(100) NOT NULL,
-  categorized_by   UUID NULL,           -- NULL = AI, non-NULL = admin user ID
-  reason           VARCHAR(1000) NULL,  -- optional for human overrides, always NULL for AI
+  categorized_by   UUID NULL,            -- NULL = AI, non-NULL = admin user ID
+  reason           VARCHAR(1000) NULL,   -- optional for human overrides, always NULL for AI
+  category         VARCHAR(100) NULL,    -- single category; NULL = classifier abstained
   created_at       TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE INDEX idx_epc_prompt_id ON api.example_prompt_categorization(prompt_id);
-
-
--- ============================================================================
--- Example Prompt Categorization Category Join Table
--- ============================================================================
--- One row per category assigned in a categorization run.
--- ============================================================================
-
-CREATE TABLE api.example_prompt_categorization_category (
-  categorization_id UUID         NOT NULL REFERENCES api.example_prompt_categorization(id) ON DELETE CASCADE,
-  category          VARCHAR(100) NOT NULL,
-  PRIMARY KEY (categorization_id, category)
-);
+CREATE INDEX idx_epc_category ON api.example_prompt_categorization(category);
 
 
 -- ============================================================================
