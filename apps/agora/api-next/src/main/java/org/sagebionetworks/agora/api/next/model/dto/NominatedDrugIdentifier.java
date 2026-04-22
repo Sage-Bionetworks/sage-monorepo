@@ -56,6 +56,15 @@ public class NominatedDrugIdentifier {
       );
     }
 
+    if (combinedWith.isEmpty()) {
+      throw new InvalidFilterException(
+        String.format(
+          "Invalid composite identifier: '%s'. combined_with must be non-empty (use 'null' for no value)",
+          compositeId
+        )
+      );
+    }
+
     return NominatedDrugIdentifier.builder()
       .chemblId(chemblId)
       .combinedWith("null".equals(combinedWith) ? null : combinedWith)

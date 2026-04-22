@@ -76,6 +76,14 @@ class NominatedDrugIdentifierTest {
   }
 
   @Test
+  @DisplayName("should throw exception when combined_with is empty")
+  void shouldThrowExceptionWhenCombinedWithIsEmpty() {
+    assertThatThrownBy(() -> NominatedDrugIdentifier.parse("CHEMBL2105758~"))
+      .isInstanceOf(InvalidFilterException.class)
+      .hasMessageContaining("combined_with must be non-empty");
+  }
+
+  @Test
   @DisplayName("should convert identifier back to composite string")
   void shouldConvertIdentifierBackToCompositeString() {
     NominatedDrugIdentifier identifier = NominatedDrugIdentifier.builder()
