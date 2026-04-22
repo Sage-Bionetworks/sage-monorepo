@@ -34,10 +34,18 @@
 }
 
 .prompt-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
   font-size: var(--text-xs);
   color: var(--p-text-muted-color);
   transition: color 0.15s;
   margin-left: auto;
+}
+
+.prompt-card-cta-icon {
+  width: 0.875rem;
+  height: 0.875rem;
 }
 
 .prompt-card {
