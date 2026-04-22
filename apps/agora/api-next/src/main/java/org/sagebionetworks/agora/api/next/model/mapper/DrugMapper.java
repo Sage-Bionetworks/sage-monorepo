@@ -33,6 +33,10 @@ public class DrugMapper {
       ? ModalityDto.fromValue(document.getModality())
       : null;
 
+    List<LinkedTargetDto> linkedTargets = document.getLinkedTargets() == null
+      ? List.of()
+      : document.getLinkedTargets().stream().map(this::toLinkedTargetDto).toList();
+
     List<NominatedDrugEvidenceDto> drugNominations = document.getDrugNominations() == null
       ? List.of()
       : document.getDrugNominations().stream().map(this::toEvidenceDto).toList();
@@ -47,17 +51,13 @@ public class DrugMapper {
       modalityDto,
       document.getYearOfFirstApproval(),
       document.getMaximumClinicalTrialPhase(),
-      toLinkedTargetDto(document.getLinkedTargets()),
+      linkedTargets,
       mechanismsOfAction,
       drugNominations
     );
   }
 
-  @Nullable
-  private LinkedTargetDto toLinkedTargetDto(@Nullable LinkedTargetDocument document) {
-    if (document == null) {
-      return null;
-    }
+  private LinkedTargetDto toLinkedTargetDto(LinkedTargetDocument document) {
     return new LinkedTargetDto(document.getEnsemblGeneId(), document.getHgncSymbol());
   }
 

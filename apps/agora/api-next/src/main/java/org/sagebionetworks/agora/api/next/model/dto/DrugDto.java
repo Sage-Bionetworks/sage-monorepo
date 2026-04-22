@@ -50,7 +50,8 @@ public class DrugDto {
 
   private String maximumClinicalTrialPhase = null;
 
-  private LinkedTargetDto linkedTargets;
+  @Valid
+  private List<@Valid LinkedTargetDto> linkedTargets;
 
   @Valid
   private List<String> mechanismsOfAction;
@@ -65,7 +66,7 @@ public class DrugDto {
   /**
    * Constructor with only required parameters
    */
-  public DrugDto(String commonName, String description, String iupacId, String chemblId, String drugBankId, List<String> aliases, ModalityDto modality, Integer yearOfFirstApproval, String maximumClinicalTrialPhase, LinkedTargetDto linkedTargets, List<String> mechanismsOfAction, List<@Valid NominatedDrugEvidenceDto> drugNominations) {
+  public DrugDto(String commonName, String description, String iupacId, String chemblId, String drugBankId, List<String> aliases, ModalityDto modality, Integer yearOfFirstApproval, String maximumClinicalTrialPhase, List<@Valid LinkedTargetDto> linkedTargets, List<String> mechanismsOfAction, List<@Valid NominatedDrugEvidenceDto> drugNominations) {
     this.commonName = commonName;
     this.description = description;
     this.iupacId = iupacId;
@@ -268,23 +269,31 @@ public class DrugDto {
     this.maximumClinicalTrialPhase = maximumClinicalTrialPhase;
   }
 
-  public DrugDto linkedTargets(LinkedTargetDto linkedTargets) {
+  public DrugDto linkedTargets(List<@Valid LinkedTargetDto> linkedTargets) {
     this.linkedTargets = linkedTargets;
     return this;
   }
 
+  public DrugDto addLinkedTargetsItem(LinkedTargetDto linkedTargetsItem) {
+    if (this.linkedTargets == null) {
+      this.linkedTargets = new ArrayList<>();
+    }
+    this.linkedTargets.add(linkedTargetsItem);
+    return this;
+  }
+
   /**
-   * Get linkedTargets
+   * The linked targets associated with the drug
    * @return linkedTargets
    */
   @NotNull @Valid 
-  @Schema(name = "linked_targets", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "linked_targets", description = "The linked targets associated with the drug", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("linked_targets")
-  public LinkedTargetDto getLinkedTargets() {
+  public List<@Valid LinkedTargetDto> getLinkedTargets() {
     return linkedTargets;
   }
 
-  public void setLinkedTargets(LinkedTargetDto linkedTargets) {
+  public void setLinkedTargets(List<@Valid LinkedTargetDto> linkedTargets) {
     this.linkedTargets = linkedTargets;
   }
 
@@ -476,7 +485,7 @@ public class DrugDto {
       return this;
     }
     
-    public DrugDto.Builder linkedTargets(LinkedTargetDto linkedTargets) {
+    public DrugDto.Builder linkedTargets(List<LinkedTargetDto> linkedTargets) {
       this.instance.linkedTargets(linkedTargets);
       return this;
     }

@@ -51,9 +51,9 @@ class DrugMapperTest {
 
     DrugDto dto = mapper.toDto(document);
 
-    assertThat(dto.getLinkedTargets()).isNotNull();
-    assertThat(dto.getLinkedTargets().getEnsemblGeneId()).isEqualTo("ENSG00000139618");
-    assertThat(dto.getLinkedTargets().getHgncSymbol()).isEqualTo("BRCA1");
+    assertThat(dto.getLinkedTargets()).hasSize(1);
+    assertThat(dto.getLinkedTargets().get(0).getEnsemblGeneId()).isEqualTo("ENSG00000139618");
+    assertThat(dto.getLinkedTargets().get(0).getHgncSymbol()).isEqualTo("BRCA1");
   }
 
   @Test
@@ -85,7 +85,7 @@ class DrugMapperTest {
     assertThat(dto.getCommonName()).isEqualTo("TestDrug");
     assertThat(dto.getAliases()).isEmpty();
     assertThat(dto.getModality()).isNull();
-    assertThat(dto.getLinkedTargets()).isNull();
+    assertThat(dto.getLinkedTargets()).isEmpty();
     assertThat(dto.getMechanismsOfAction()).isEmpty();
     assertThat(dto.getDrugNominations()).isEmpty();
   }
@@ -117,7 +117,7 @@ class DrugMapperTest {
     document.setModality("Small molecule");
     document.setYearOfFirstApproval(2010);
     document.setMaximumClinicalTrialPhase("Phase IV");
-    document.setLinkedTargets(linkedTarget);
+    document.setLinkedTargets(List.of(linkedTarget));
     document.setMechanismsOfAction(List.of(
       "Melatonin receptor agonist",
       "Serotonin 2c (5-HT2c) receptor antagonist"

@@ -1167,8 +1167,10 @@ components:
         maximum_clinical_trial_phase: Phase IV
         year_of_first_approval: 2010
         linked_targets:
-          ensembl_gene_id: ENSG00000139618
-          hgnc_symbol: BRCA1
+          - ensembl_gene_id: ENSG00000139618
+            hgnc_symbol: BRCA1
+          - ensembl_gene_id: ENSG00000139618
+            hgnc_symbol: BRCA1
         aliases:
           - Agomelatina
           - S-20098
@@ -1265,7 +1267,11 @@ components:
           nullable: true
           type: string
         linked_targets:
-          $ref: '#/components/schemas/LinkedTarget'
+          description: The linked targets associated with the drug
+          items:
+            $ref: '#/components/schemas/LinkedTarget'
+          nullable: true
+          type: array
         mechanisms_of_action:
           description: The mechanisms of action associated with the drug
           example:

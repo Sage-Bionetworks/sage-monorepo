@@ -48,7 +48,10 @@ export interface Drug {
    * The maximum clinical trial phase the drug has reached, if applicable
    */
   maximum_clinical_trial_phase: string | null;
-  linked_targets: LinkedTarget;
+  /**
+   * The linked targets associated with the drug
+   */
+  linked_targets: Array<LinkedTarget> | null;
   /**
    * The mechanisms of action associated with the drug
    */

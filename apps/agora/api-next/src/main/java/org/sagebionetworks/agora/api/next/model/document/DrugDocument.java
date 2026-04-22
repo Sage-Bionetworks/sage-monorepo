@@ -43,7 +43,7 @@ public class DrugDocument {
   private String maximumClinicalTrialPhase;
 
   @Field("linked_targets")
-  private LinkedTargetDocument linkedTargets;
+  private List<LinkedTargetDocument> linkedTargets;
 
   @Field("mechanisms_of_action")
   private List<String> mechanismsOfAction;

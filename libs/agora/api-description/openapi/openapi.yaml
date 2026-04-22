@@ -1175,8 +1175,10 @@ components:
           example: Phase IV
           nullable: true
         linked_targets:
-          $ref: '#/components/schemas/LinkedTarget'
+          type: array
           description: The linked targets associated with the drug
+          items:
+            $ref: '#/components/schemas/LinkedTarget'
           nullable: true
         mechanisms_of_action:
           type: array

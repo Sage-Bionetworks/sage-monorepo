@@ -42,8 +42,10 @@ properties:
     example: Phase IV
     nullable: true
   linked_targets:
-    $ref: './LinkedTarget.yaml'
+    type: array
     description: The linked targets associated with the drug
+    items:
+      $ref: './LinkedTarget.yaml'
     nullable: true
   mechanisms_of_action:
     type: array
