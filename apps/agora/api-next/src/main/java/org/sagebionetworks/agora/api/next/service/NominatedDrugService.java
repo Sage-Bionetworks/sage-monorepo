@@ -32,11 +32,11 @@ public class NominatedDrugService {
   private final NominatedDrugMapper nominatedDrugMapper;
 
   @Cacheable(
-    key = "T(org.sagebionetworks.agora.api.next.util.ApiHelper)" +
-    ".buildCacheKey('nominatedDrug', #query.itemFilterType, " +
-    "#query.items, #query.search, #query.principalInvestigators, #query.programs, " +
-    "#query.totalNominations, #query.yearFirstNominated, #query.pageNumber, " +
-    "#query.pageSize, #query.sortFields, #query.sortOrders)"
+    key = "T(org.sagebionetworks.agora.api.next.util.ApiHelper)"
+    + ".buildCacheKey('nominatedDrug', #query.itemFilterType, "
+    + "#query.items, #query.search, #query.principalInvestigators, #query.programs, "
+    + "#query.totalNominations, #query.initialNomination, #query.modality, "
+    + "#query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
   )
   public NominatedDrugsPageDto loadNominatedDrugs(NominatedDrugSearchQueryDto query) {
     List<String> items = ApiHelper.sanitizeItems(query.getItems());

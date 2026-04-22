@@ -1,0 +1,11 @@
+type: string
+description: The drug modality
+enum:
+  - Small molecule
+  - Protein
+  - Antibody
+  - Oligonucleotide
+  - Oligosaccharide
+  - Gene
+  - PROTAC
+example: Protein

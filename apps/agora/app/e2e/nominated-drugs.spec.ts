@@ -43,15 +43,19 @@ test.describe('nominated drugs - comparison tool', () => {
   runFilterPanelTests(async (page) => navigateToComparison(page, CT_PAGE, true, 'url'));
 
   test.describe('filterbox search', () => {
+    const pinnedItems = [
+      'CHEMBL611~null', // Terazosin
+      'CHEMBL621~null', // Trazodone
+    ];
+
     test('filterbox search without comma returns partial case-insensitive matches', async ({
       page,
     }) => {
       await navigateToComparison(page, CT_PAGE, true, 'url');
-      await testPartialCaseInsensitiveSearch(page, 'raz', ['Terazosin', 'Trazodone']);
+      await testPartialCaseInsensitiveSearch(page, 'raz', pinnedItems);
     });
 
     test('filterbox search excludes pinned items from results', async ({ page }) => {
-      const pinnedItems = ['Terazosin', 'Trazodone'];
       await navigateToComparison(
         page,
         CT_PAGE,
@@ -59,18 +63,23 @@ test.describe('nominated drugs - comparison tool', () => {
         'url',
         getQueryParamFromValues(pinnedItems, 'pinned'),
       );
-      await testSearchExcludesPinnedItems(page, ['Terazosin', 'Trazodone'], 'raz', 'terazosin,');
+      await testSearchExcludesPinnedItems(page, pinnedItems, 'raz', 'terazosin,');
     });
 
     test('filterbox search with commas returns full, case-insensitive matches', async ({
       page,
     }) => {
+      const pinnedItems = [
+        'CHEMBL457~null', // Gemfibrozil
+        'CHEMBL19449~null', // Ibudilast
+        'CHEMBL1371770~null', // Piribedil
+      ];
       await navigateToComparison(page, CT_PAGE, true, 'url');
       await testFullCaseInsensitiveMatch(
         page,
         'ibudilast,gemfibrozil,piribedil',
-        ['Gemfibrozil', 'Ibudilast', 'Piribedil'],
-        'Amibegron',
+        pinnedItems,
+        'CHEMBL545437~null', // Amibegron
       );
     });
   });
@@ -110,9 +119,9 @@ test.describe('nominated drugs - comparison tool', () => {
   test.describe('sort URL sync', () => {
     // Non-default sort columns that are present on the page and can be sorted in tests
     const sortColumns: ColumnConfig[] = [
-      { name: 'First Nominated', field: 'year_first_nominated' },
+      { name: 'First Nominated', field: 'initial_nomination' },
       { name: 'Principal Investigators', field: 'principal_investigators' },
-      { name: 'Programs', field: 'programs' },
+      { name: 'Modality', field: 'modality' },
     ];
 
     test('clicking column updates URL with sortFields and sortOrders', async ({ page }) => {
@@ -131,7 +140,7 @@ test.describe('nominated drugs - comparison tool', () => {
         CT_PAGE,
         true,
         'url',
-        'sortFields=year_first_nominated&sortOrders=1',
+        'sortFields=initial_nomination&sortOrders=1',
       );
       await testSortRestoredFromUrl(page, sortColumns[0].name, sortColumns[0].field);
     });
@@ -152,7 +161,7 @@ test.describe('nominated drugs - comparison tool', () => {
         CT_PAGE,
         true,
         'url',
-        'sortFields=year_first_nominated,principal_investigators&sortOrders=-1,1',
+        'sortFields=initial_nomination,principal_investigators&sortOrders=-1,1',
       );
       await testMultiColumnSortRestoredFromUrl(page, sortColumns.slice(0, 2), sortColumns[2]);
     });
@@ -168,15 +177,15 @@ test.describe('nominated drugs - comparison tool', () => {
       page,
     }) => {
       await navigateToComparison(page, CT_PAGE, true);
-      await testFilterSelectionUpdatesUrl(page, 'nominatingPis', 'Nominating PI', 'Albers');
+      await testFilterSelectionUpdatesUrl(page, 'nominatingPis', 'Nominating PI', 'Mark Albers');
     });
 
     test('filter selections are restored from URL on page load', async ({ page }) => {
       const expectedFilterParams = {
-        nominatingPis: ['Albers', 'Krumsiek', 'Xie'],
+        nominatingPis: ['Mark Albers', 'Jan Krumsiek', 'Lei Xie'],
       };
       const expectedSelectedFilters = {
-        'Nominating PI': ['Albers', 'Krumsiek', 'Xie'],
+        'Nominating PI': ['Mark Albers', 'Jan Krumsiek', 'Lei Xie'],
       };
 
       await navigateToComparison(
@@ -191,8 +200,8 @@ test.describe('nominated drugs - comparison tool', () => {
 
     test('filters are removed from URL when Clear All is clicked', async ({ page }) => {
       const expectedInitialFilterParams = {
-        totalNominations: ['2'],
-        nominatingPis: ['Krumsiek', 'Marina Sirota'],
+        nominations: ['2'],
+        nominatingPis: ['Jan Krumsiek', 'Marina Sirota'],
       };
 
       await navigateToComparison(

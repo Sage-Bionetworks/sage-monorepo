@@ -279,14 +279,14 @@ components:
           example: 100
         items:
           description: |
-            List of common_name values to filter by.
+            List of composite_id values to filter by (format: chembl_id~combined_with).
           type: array
           items:
             type: string
           nullable: true
           example:
-            - Agomelatine
-            - Bexarotene
+            - CHEMBL2105758~null
+            - CHEMBL1023~Donepezil
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
@@ -325,7 +325,7 @@ components:
           example:
             - 1
             - 2
-        yearFirstNominated:
+        initialNomination:
           description: Filter by year first nominated.
           type: array
           items:
@@ -334,6 +334,15 @@ components:
           example:
             - 2024
             - 2025
+        modality:
+          description: Filter by drug modality.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Small molecule
+            - Protein
         sortFields:
           description: |
             List of field names to sort by (e.g., ["total_nominations", "common_name"]).
@@ -364,19 +373,43 @@ components:
       required:
         - sortFields
         - sortOrders
+    Modality:
+      type: string
+      description: The drug modality
+      enum:
+        - Small molecule
+        - Protein
+        - Antibody
+        - Oligonucleotide
+        - Oligosaccharide
+        - Gene
+        - PROTAC
+      example: Protein
     NominatedDrug:
       type: object
       description: A nominated drug entry
       properties:
+        composite_id:
+          type: string
+          description: Unique identifier for the nominated drug entry
+          example: CHEMBL2105758~null
         common_name:
           type: string
           description: The common name of the drug
           example: Agomelatine
+        chembl_id:
+          type: string
+          description: The ChEMBL ID of the drug
+          example: CHEMBL2105758
         total_nominations:
           type: integer
           description: The total number of nominations for the drug
           example: 1
-        year_first_nominated:
+        combined_with:
+          type: string
+          description: The name of the drug this is combined with, if applicable
+          nullable: true
+        initial_nomination:
           type: integer
           description: The year the drug was first nominated
           example: 2025
@@ -394,12 +427,31 @@ components:
             type: string
           example:
             - ACTDRx AD
+        modality:
+          $ref: '#/components/schemas/Modality'
+          nullable: true
+        year_of_first_approval:
+          type: integer
+          description: The year the drug was first approved, if applicable
+          example: 2010
+          nullable: true
+        maximum_clinical_trial_phase:
+          type: string
+          description: The maximum clinical trial phase the drug has reached, if applicable
+          example: Phase IV
+          nullable: true
       required:
+        - composite_id
         - common_name
+        - chembl_id
         - total_nominations
-        - year_first_nominated
+        - combined_with
+        - initial_nomination
         - principal_investigators
         - programs
+        - modality
+        - year_of_first_approval
+        - maximum_clinical_trial_phase
     PageMetadata:
       type: object
       description: The metadata of a page.

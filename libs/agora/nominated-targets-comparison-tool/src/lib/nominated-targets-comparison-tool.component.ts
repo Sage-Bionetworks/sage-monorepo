@@ -127,9 +127,9 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
       inputData: selectedFilters['data'],
       initialNomination: selectedFilters['firstNominations']?.map(Number) ?? [],
       nominatingTeams: selectedFilters['teams'],
-      pharosClass: selectedFilters['pharosClass'],
+      pharosClass: selectedFilters['pharosClasses'],
       programs: selectedFilters['programs'],
-      totalNominations: selectedFilters['totalNominations']?.map(Number) ?? [],
+      totalNominations: selectedFilters['nominations']?.map(Number) ?? [],
       sortFields,
       sortOrders,
     };

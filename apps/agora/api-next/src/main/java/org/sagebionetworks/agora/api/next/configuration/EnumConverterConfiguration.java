@@ -2,6 +2,7 @@ package org.sagebionetworks.agora.api.next.configuration;
 
 import org.sagebionetworks.agora.api.next.model.dto.ComparisonToolConfigPageDto;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.agora.api.next.model.dto.ModalityDto;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,15 @@ public class EnumConverterConfiguration {
             @Override
             public ItemFilterTypeQueryDto convert(String source) {
                 return ItemFilterTypeQueryDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.agora.api.next.configuration.EnumConverterConfiguration.modalityConverter")
+    Converter<String, ModalityDto> modalityConverter() {
+        return new Converter<String, ModalityDto>() {
+            @Override
+            public ModalityDto convert(String source) {
+                return ModalityDto.fromValue(source);
             }
         };
     }

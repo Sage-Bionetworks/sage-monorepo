@@ -7,23 +7,36 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Modality } from './modality';
 
 /**
  * A nominated drug entry
  */
 export interface NominatedDrug {
   /**
+   * Unique identifier for the nominated drug entry
+   */
+  composite_id: string;
+  /**
    * The common name of the drug
    */
   common_name: string;
+  /**
+   * The ChEMBL ID of the drug
+   */
+  chembl_id: string;
   /**
    * The total number of nominations for the drug
    */
   total_nominations: number;
   /**
+   * The name of the drug this is combined with, if applicable
+   */
+  combined_with: string | null;
+  /**
    * The year the drug was first nominated
    */
-  year_first_nominated: number;
+  initial_nomination: number;
   /**
    * The principal investigators who nominated the drug
    */
@@ -32,4 +45,14 @@ export interface NominatedDrug {
    * The programs associated with the drug nomination
    */
   programs: Array<string>;
+  modality: Modality;
+  /**
+   * The year the drug was first approved, if applicable
+   */
+  year_of_first_approval: number | null;
+  /**
+   * The maximum clinical trial phase the drug has reached, if applicable
+   */
+  maximum_clinical_trial_phase: string | null;
 }
+export namespace NominatedDrug {}
