@@ -58,16 +58,15 @@ All imports use `@sagebionetworks/model-ad/<lib-name>` path aliases. Feature com
 
 ## OpenAPI Workflow
 
-API contracts live in `api-description/`. The Angular HTTP client in `api-client-angular/` is fully generated — never edit it directly.
+API contracts live in `api-description/`. The Angular HTTP client in `api-client-angular/` is fully generated -- never edit it directly.
+
+After modifying any OpenAPI schema, always regenerate **all** generated clients -- not just `model-ad-api-description`. The `generate` target on client projects depends on `model-ad-api-description:build` automatically, so a single command handles the full chain:
 
 ```bash
-# Regenerate api-client-angular from the OpenAPI spec
-nx run model-ad-api-client-angular:generate
-
-# Regenerate all model-ad generated clients at once
+# After any OpenAPI schema change, regenerate everything
 nx run-many -t=generate -p=model-ad-*
 
-# Bundle the individual OpenAPI specs into one
+# Bundle the OpenAPI specs only (rarely needed standalone)
 nx build model-ad-api-description
 ```
 
