@@ -24,6 +24,8 @@ import { buildRungs, buildStrandPath, WAVELEN } from './dna-helix';
 const PAGE_SIZE = 3;
 
 const SPIN_MS = 1200;
+// 70 ms past the 350 ms `.swap-out` CSS keyframe duration so the browser
+// has time to finish the fade-out paint before we swap content in.
 const SWAP_MIDPOINT_MS = 420;
 const SWAP_IN_MS = 500;
 

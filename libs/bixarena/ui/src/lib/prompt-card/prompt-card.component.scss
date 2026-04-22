@@ -98,7 +98,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 3%) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, var(--p-surface-200) 50%, transparent 100%);
     animation: prompt-card-shimmer 1.4s ease-in-out infinite;
   }
 

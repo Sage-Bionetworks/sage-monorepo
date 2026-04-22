@@ -70,6 +70,19 @@ describe('ExamplePromptsComponent', () => {
     expect(emitted).toEqual(['Question pX?']);
   });
 
+  it('categoryLabel formats multi-word slugs with preserved "and"', async () => {
+    await setup();
+    const prompt = {
+      id: 'p',
+      question: 'q?',
+      source: 'bixarena',
+      active: true,
+      categories: [BiomedicalCategory.PharmacologyAndToxicology],
+      createdAt: '2026-04-20T00:00:00Z',
+    } as ExamplePrompt;
+    expect(component.categoryLabel(prompt)).toBe('Pharmacology and Toxicology');
+  });
+
   it('refresh fetches a fresh set', async () => {
     await setup();
     listSpy.mockClear();
