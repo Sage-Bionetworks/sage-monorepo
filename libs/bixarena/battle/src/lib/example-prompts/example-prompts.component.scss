@@ -1,3 +1,5 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
 :host {
   display: block;
   width: 100%;
@@ -154,9 +156,11 @@
   }
 }
 
-@media (width <= 720px) {
+@media (width <= #{shared.$lg-breakpoint}) {
   .prompt-cards {
     grid-template-columns: 1fr;
+    max-width: 40rem;
+    margin: 0 auto;
   }
 
   .helix-bg {

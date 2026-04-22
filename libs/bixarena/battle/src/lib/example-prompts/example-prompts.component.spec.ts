@@ -50,7 +50,7 @@ describe('ExamplePromptsComponent', () => {
     jest.useRealTimers();
   });
 
-  it('creates and fetches initial prompts with default filter', async () => {
+  it('creates and fetches initial prompts', async () => {
     await setup();
     expect(component).toBeTruthy();
     expect(listSpy).toHaveBeenCalledTimes(1);
@@ -70,32 +70,12 @@ describe('ExamplePromptsComponent', () => {
     expect(emitted).toEqual(['Question pX?']);
   });
 
-  it('refetches with a category filter when the category changes', async () => {
+  it('refresh fetches a fresh set', async () => {
     await setup();
-    listSpy.mockClear();
-    component.selectCategory(BiomedicalCategory.Neuroscience);
-    expect(listSpy).toHaveBeenCalledTimes(1);
-    const query = listSpy.mock.calls[0][0] as ExamplePromptSearchQuery;
-    expect(query.categories).toEqual([BiomedicalCategory.Neuroscience]);
-    expect(component.category()).toBe(BiomedicalCategory.Neuroscience);
-  });
-
-  it('selecting the already-active category does not refetch', async () => {
-    await setup();
-    listSpy.mockClear();
-    component.selectCategory('all');
-    expect(listSpy).not.toHaveBeenCalled();
-  });
-
-  it('refresh fetches a fresh set with the current filter', async () => {
-    await setup();
-    component.selectCategory(BiomedicalCategory.CancerBiology);
     listSpy.mockClear();
     component.refresh();
     jest.advanceTimersByTime(500);
     expect(listSpy).toHaveBeenCalledTimes(1);
-    const query = listSpy.mock.calls[0][0] as ExamplePromptSearchQuery;
-    expect(query.categories).toEqual([BiomedicalCategory.CancerBiology]);
   });
 
   it('refresh is debounced while a fetch is in-flight', async () => {
@@ -111,17 +91,27 @@ describe('ExamplePromptsComponent', () => {
   });
 
   it('renders empty state when the API returns no prompts', async () => {
-    await setup();
-    listSpy.mockImplementation(() => of({ examplePrompts: [] } as unknown as ExamplePromptPage));
-    component.selectCategory(BiomedicalCategory.Genomics);
+    listSpy = jest.fn(() => of({ examplePrompts: [] } as unknown as ExamplePromptPage));
+    await TestBed.configureTestingModule({
+      imports: [ExamplePromptsComponent],
+      providers: [{ provide: ExamplePromptService, useValue: { listExamplePrompts: listSpy } }],
+    }).compileComponents();
+    fixture = TestBed.createComponent(ExamplePromptsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component.prompts()).toEqual([]);
     expect(component.error()).toBe(false);
   });
 
   it('sets the error flag when the API call fails', async () => {
-    await setup();
-    listSpy.mockImplementation(() => throwError(() => new Error('boom')));
-    component.selectCategory(BiomedicalCategory.Physiology);
+    listSpy = jest.fn(() => throwError(() => new Error('boom')));
+    await TestBed.configureTestingModule({
+      imports: [ExamplePromptsComponent],
+      providers: [{ provide: ExamplePromptService, useValue: { listExamplePrompts: listSpy } }],
+    }).compileComponents();
+    fixture = TestBed.createComponent(ExamplePromptsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component.error()).toBe(true);
     expect(component.prompts()).toEqual([]);
   });
