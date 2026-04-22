@@ -151,10 +151,14 @@ async def set_cached_battle_validation(
 
 async def get_cached_prompt_categorization(
     prompt: str, settings: Settings
-) -> list[str] | None:
+) -> dict | None:
     """Look up a cached prompt categorization result.
 
-    Returns a list of category slugs, or None on cache miss / any error.
+    Returns a dict ``{"category": str | None}`` on cache hit — the inner
+    ``category`` is the slug the classifier picked, or ``None`` for a
+    legitimate "no fit" result. Returns outer ``None`` on cache miss / any
+    error so the caller can distinguish "no cached answer" from "cached
+    answer was null".
     """
     try:
         client = await _get_client(settings)
@@ -174,15 +178,19 @@ async def get_cached_prompt_categorization(
 
 
 async def set_cached_prompt_categorization(
-    prompt: str, categories: list[str], settings: Settings
+    prompt: str, category: str | None, settings: Settings
 ) -> None:
-    """Store a prompt categorization result in the cache."""
+    """Store a prompt categorization result in the cache.
+
+    ``category`` may be ``None`` to cache a legitimate "no fit" response;
+    callers should NOT call this on API/parse errors.
+    """
     try:
         client = await _get_client(settings)
         key = _make_key(
             _PROMPT_CAT_KEY_PREFIX, settings.prompt_categorization_method, prompt
         )
-        value = json.dumps(categories)
+        value = json.dumps({"category": category})
         await client.set(key, value, ex=settings.valkey_cache_ttl)
         logger.debug("Cached prompt categorization result")
     except Exception:

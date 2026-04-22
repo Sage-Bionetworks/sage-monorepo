@@ -19,7 +19,7 @@ from bixarena_ai_service.cache import (
     get_cached_prompt_categorization,
     set_cached_prompt_categorization,
 )
-from bixarena_ai_service.classifier import categorize
+from bixarena_ai_service.classifier import categorize_single
 from bixarena_ai_service.config import get_settings
 from bixarena_ai_service.models.prompt_categorization import PromptCategorization
 from bixarena_ai_service.models.prompt_categorization_request import (
@@ -44,12 +44,13 @@ class PromptCategorizationApiImpl(BasePromptCategorizationApi):
         self,
         prompt_categorization_request: PromptCategorizationRequest,
     ) -> PromptCategorization:
-        """Classify a prompt into up to 3 biomedical subject categories.
+        """Classify a prompt into a single biomedical subject category.
 
         The prompt text is sent to an LLM classifier via OpenRouter with a
         structured-output schema restricting the response to allowed slugs.
-        The LLM is instructed to treat the text as opaque data. The categories
-        array may be empty if the classifier could not assign any category.
+        The LLM is instructed to treat the text as opaque data. The returned
+        ``category`` is ``None`` when the classifier could not assign any
+        category.
         """
         settings = get_settings()
         prompt = prompt_categorization_request.prompt
@@ -61,35 +62,28 @@ class PromptCategorizationApiImpl(BasePromptCategorizationApi):
         sanitized = prompt.strip()[: settings.prompt_max_length]
         method = settings.prompt_categorization_method
 
-        # Check Valkey cache first. Empty cached lists are valid "no fit" results
-        # and short-circuit the LLM call.
+        # Check Valkey cache first. A cached ``{"category": null}`` is a valid
+        # "no fit" result and short-circuits the LLM call.
         cached = await get_cached_prompt_categorization(sanitized, settings)
         if cached is not None:
             return PromptCategorization(
                 prompt=prompt,
-                categories=cached,
+                category=cached["category"],
                 method=method,
             )
 
         # Cache miss — classify via LLM.
         user_message = f"TEXT:\n{sanitized}"
-        categories = await categorize(_SYSTEM_PROMPT, user_message)
+        try:
+            category = await categorize_single(_SYSTEM_PROMPT, user_message)
+        except Exception:
+            # Only cache successful LLM responses. An exception here means the
+            # call failed (API error, bad schema, etc.); caching ``None`` would
+            # poison the cache for 30 days and prevent retry.
+            logger.exception("Categorization failed, returning null (not cached)")
+            return PromptCategorization(prompt=prompt, category=None, method=method)
 
-        # Only cache LLM responses, not error fallbacks. A None return from
-        # categorize() means the call failed (API error, bad schema, etc.) —
-        # caching [] here would poison the cache for 30 days and prevent retry.
-        if categories is None:
-            result = PromptCategorization(prompt=prompt, categories=[], method=method)
-            logger.info("Categorization failed, returning empty (not cached)")
-            return result
+        await set_cached_prompt_categorization(sanitized, category, settings)
 
-        await set_cached_prompt_categorization(sanitized, categories, settings)
-
-        result = PromptCategorization(
-            prompt=prompt,
-            categories=categories,
-            method=method,
-        )
-
-        logger.info("Categorization result: categories=%s", result.categories)
-        return result
+        logger.info("Categorization result: category=%s", category)
+        return PromptCategorization(prompt=prompt, category=category, method=method)
