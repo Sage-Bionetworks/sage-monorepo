@@ -19,12 +19,11 @@
 
 .prompt-card-tag {
   font-size: var(--text-xs);
-  color: var(--p-primary-color);
-  font-weight: 540;
-  background: rgb(249 115 22 / 8%);
+  color: var(--p-text-muted-color);
+  font-weight: 500;
+  border: 1px solid var(--p-surface-200);
   padding: 0.125rem 0.5rem;
-  border-radius: 100px;
-  margin-left: -0.25rem;
+  border-radius: 999px;
 }
 
 .prompt-card-stat {
@@ -43,7 +42,7 @@
 .prompt-card {
   background: var(--p-surface-100);
   border: 1px solid var(--p-surface-200);
-  border-radius: var(--p-border-radius-lg);
+  border-radius: var(--p-border-radius-xl);
   padding: 1.25rem;
   min-height: 8.75rem;
   width: 100%;
