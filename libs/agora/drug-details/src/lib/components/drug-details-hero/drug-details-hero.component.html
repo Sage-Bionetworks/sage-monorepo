@@ -1,0 +1,21 @@
+<div class="drug-details-hero" [style.background-image]="'url(' + backgroundImagePath + ')'">
+  <section>
+    <h1>{{ drug().common_name }}</h1>
+    <p>Nominated Drug</p>
+
+    <h4>ALSO KNOWN AS</h4>
+    <br />
+
+    <p>
+      CHEMBL ID
+      <a
+        [href]="`https://www.ebi.ac.uk/chembl/explore/compound/${drug().chembl_id}`"
+        target="_blank"
+        >{{ drug().chembl_id }}</a
+      >
+    </p>
+    @if (drug().drug_bank_id) {
+      <p>DrugBank ID {{ drug().drug_bank_id }}</p>
+    }
+  </section>
+</div>

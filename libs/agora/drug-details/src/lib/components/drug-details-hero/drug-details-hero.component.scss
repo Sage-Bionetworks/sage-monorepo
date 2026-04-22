@@ -1,0 +1,25 @@
+@use 'explorers/styles/src/variables' as vars;
+@use 'explorers/styles/src/mixins' as mixins;
+
+.drug-details-hero {
+  background-size: cover !important;
+
+  section {
+    color: #fff;
+
+    h1,
+    h4,
+    a {
+      color: #fff;
+    }
+
+    h4 {
+      font-weight: 700;
+    }
+
+    hr {
+      margin-top: var(--section-padding);
+      margin-bottom: var(--section-padding);
+    }
+  }
+}

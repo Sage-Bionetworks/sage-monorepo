@@ -3,7 +3,9 @@ import { HttpContext } from '@angular/common/http';
 import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Panel, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { Drug, DrugService } from '@sagebionetworks/agora/api-client';
+import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { Panel } from '@sagebionetworks/explorers/models';
 import {
   HelperService,
   LoggerService,
@@ -12,62 +14,47 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { Model, ModelService } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { ModelDetailsBoxplotsSelectorComponent } from './components/model-details-boxplots-selector/model-details-boxplots-selector.component';
-import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
-import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
-import { ModelDetailsResourcesComponent } from './components/model-details-resources/model-details-resources.component';
+import { DrugDetailsHeroComponent } from './components/drug-details-hero/drug-details-hero.component';
+import { DrugDetailsResourcesComponent } from './components/drug-details-resources/drug-details-resources.component';
 
 @Component({
-  selector: 'model-ad-model-details',
+  selector: 'agora-drug-details',
   imports: [
     PanelNavigationComponent,
     LoadingIconComponent,
-    ModelDetailsOmicsComponent,
-    ModelDetailsResourcesComponent,
-    ModelDetailsHeroComponent,
-    ModelDetailsBoxplotsSelectorComponent,
+    DrugDetailsResourcesComponent,
+    DrugDetailsHeroComponent,
   ],
-  templateUrl: './model-details.component.html',
-  styleUrls: ['./model-details.component.scss'],
+  templateUrl: './drug-details.component.html',
+  styleUrls: ['./drug-details.component.scss'],
 })
-export class ModelDetailsComponent implements OnInit, AfterViewInit {
+export class DrugDetailsComponent implements OnInit, AfterViewInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   location = inject(Location);
   helperService = inject(HelperService);
-  modelService = inject(ModelService);
+  drugService = inject(DrugService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
-  private logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService);
 
   isLoading = true;
-
-  model: Model | undefined;
-
-  biomarkersWikiParams: SynapseWikiParams = { ownerId: 'syn66271427', wikiId: '632871' };
-  pathologyWikiParams: SynapseWikiParams = { ownerId: 'syn66271427', wikiId: '632872' };
+  drug: Drug | undefined;
 
   panels: Panel[] = [
     {
-      name: 'omics',
-      label: 'Omics',
-      disabled: false,
-    },
-    {
-      name: 'biomarkers',
-      label: 'Biomarkers',
-      disabled: false,
-    },
-    {
-      name: 'pathology',
-      label: 'Pathology',
+      name: 'summary',
+      label: 'Summary',
       disabled: false,
     },
     {
       name: 'resources',
       label: 'Resources',
+      disabled: false,
+    },
+    {
+      name: 'nominationDetails',
+      label: 'Nomination Details',
       disabled: false,
     },
   ];
@@ -79,7 +66,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   scrollToPanelNavElementOnInitialLoad = false;
 
   reset() {
-    this.model = undefined;
+    this.drug = undefined;
     this.activePanel = '';
     this.activeParent = '';
     this.isLoading = true;
@@ -97,18 +84,17 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   }
 
   private loadPanelData(params: ParamMap) {
-    const modelName = params.get('name');
-    if (modelName) {
-      this.modelService
-        .getModelByName(modelName, 'body', false, {
+    const chemblId = params.get('chembl_id');
+    if (chemblId) {
+      this.drugService
+        .getDrug(chemblId, 'body', false, {
           context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
         })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: (model: Model) => {
-            this.model = model;
+          next: (drug: Drug) => {
+            this.drug = drug;
             this.setActivePanelAndParentFromUrl(params);
-            this.updatePanelDisabledState();
             this.changePanelAndUrlIfInitialActivePanelIsInvalid();
             this.scrollToPanelNavElementOnInitialLoad =
               this.maybeScrollToPanelNavElementOnInitialLoad;
@@ -117,30 +103,12 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
           error: () => {
             this.isLoading = false;
             this.logger.log(
-              `ModelDetailsComponent: loadPanelData: Model ${modelName} not found, redirecting`,
+              `DrugDetailsComponent: loadPanelData: Drug ${chemblId} not found, redirecting`,
             );
             this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });
     }
-  }
-
-  private updatePanelDisabledState() {
-    this.panels.forEach((p: Panel) => {
-      if (p.name === 'biomarkers' && this.model?.biomarkers.length === 0) {
-        p.disabled = true;
-      } else if (p.name === 'pathology' && this.model?.pathology.length === 0) {
-        p.disabled = true;
-      } else if (
-        p.name === 'omics' &&
-        this.model?.transcriptomics === null &&
-        this.model?.disease_correlation === null
-      ) {
-        p.disabled = true;
-      } else {
-        p.disabled = false;
-      }
-    });
   }
 
   private setActivePanelAndParentFromUrl(params: ParamMap) {
@@ -163,16 +131,13 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (!this.model?.name) {
+    if (!this.drug?.chembl_id) {
       this.isLoading = true;
     }
   }
 
   getUrlBasePath() {
-    const encodedModel = this.helperService.encodeParenthesesForwardSlashes(
-      encodeURIComponent(this.model?.name || ''),
-    );
-    return `/${ROUTE_PATHS.MODELS}/${encodedModel}`;
+    return `/${ROUTE_PATHS.DRUG_DETAILS}/${this.drug?.chembl_id}`;
   }
 
   onPanelChange(event: Panel) {
