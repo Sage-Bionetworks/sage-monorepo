@@ -23,11 +23,12 @@
 .input {
   width: 100%;
   min-height: 3.5rem;
-  max-height: 8.75rem;
+  max-height: 14rem;
   padding: 1rem 1.125rem 0.5rem;
   border: none;
   outline: none;
   resize: none;
+  overflow-y: auto;
   font: inherit;
   font-size: var(--text-md);
   line-height: 1.5;

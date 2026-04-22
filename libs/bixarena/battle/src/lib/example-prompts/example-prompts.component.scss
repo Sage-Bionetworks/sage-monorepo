@@ -26,7 +26,7 @@
   justify-content: center;
   gap: 0.45rem;
   width: fit-content;
-  margin: 0 auto 0.75rem;
+  margin: 0 auto;
   padding: 0.35rem 0.9rem;
   border: 1px solid var(--p-surface-200);
   border-radius: 999px;
@@ -64,7 +64,7 @@
 .stage {
   position: relative;
   width: 100%;
-  padding: 3rem 0;
+  padding: 2.8rem 0;
 }
 
 .helix-bg {

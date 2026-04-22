@@ -21,7 +21,8 @@ export class PromptComposerComponent {
     const el = event.target as HTMLTextAreaElement;
     this.text.set(el.value);
     el.style.height = 'auto';
-    el.style.height = `${el.scrollHeight}px`;
+    const max = parseFloat(getComputedStyle(el).maxHeight) || Infinity;
+    el.style.height = `${Math.min(el.scrollHeight, max)}px`;
   }
 
   onKeydown(event: KeyboardEvent): void {
