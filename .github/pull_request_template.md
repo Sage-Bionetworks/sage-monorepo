@@ -10,8 +10,6 @@ the changes in the section Changelog (see below). -->
 <!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
 <!--- Please link to the issue here: -->
 
-Fixes #(issue)
-
 ## Changelog
 
 <!-- Itemize the changes made in this PR. -->
@@ -24,3 +22,10 @@ Fixes #(issue)
 <!-- Demonstrate the feature or bug fix implemented in this PR. For example, -->
 <!-- - a screencast that illustrates a new UI feature (e.g. using https://gifcap.dev) -->
 <!-- - a request example and its response from a new/updated REST API endpoint -->
+
+## Testing
+
+<!-- Suggest tests reviewers can run to verify correct behavior. For example: -->
+<!-- - Steps to manually exercise the feature or bug fix -->
+<!-- - Commands to run the relevant automated tests (e.g. `nx test <project>`) -->
+<!-- - Edge cases or regressions to watch for -->
