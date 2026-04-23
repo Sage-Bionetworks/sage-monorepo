@@ -65,3 +65,66 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.validation-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.validation-spinner {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  animation: validation-spin 1s linear infinite;
+}
+
+.validation-text {
+  font-size: var(--text-sm);
+  color: var(--p-text-muted-color);
+
+  b {
+    color: var(--p-primary-color);
+    font-weight: 600;
+  }
+}
+
+.validation-track {
+  width: 6.25rem;
+  height: 0.125rem;
+  background: var(--p-surface-200);
+  border-radius: 0.125rem;
+  overflow: hidden;
+}
+
+.validation-fill {
+  height: 100%;
+  width: 0;
+  background: var(--p-primary-color);
+  border-radius: 0.125rem;
+  box-shadow: 0 0 0.5rem color-mix(in srgb, var(--p-primary-color) 30%, transparent);
+  animation: validation-progress 2.2s ease-out forwards;
+}
+
+@keyframes validation-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes validation-progress {
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .validation-spinner {
+    animation: none;
+  }
+
+  .validation-fill {
+    animation: none;
+    width: 100%;
+  }
+}
