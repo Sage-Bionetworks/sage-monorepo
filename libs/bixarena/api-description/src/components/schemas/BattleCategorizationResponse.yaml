@@ -7,16 +7,17 @@ properties:
   battleId:
     type: string
     format: uuid
+  status:
+    $ref: CategorizationStatus.yaml
   categories:
     type: array
     items:
       $ref: BiomedicalCategory.yaml
     maxItems: 3
     description: >-
-      Categories assigned by this run. Empty when the classifier ran
-      successfully but declared no category fits (legitimate "no fit" result).
-      Always non-empty for human-review rows (the create request requires at
-      least one).
+      Categories assigned by this run. Non-empty only when status is `matched`.
+      Empty for `abstained` (classifier declared no fit) and `failed`
+      (classifier error).
   method:
     type: string
     maxLength: 100
@@ -36,6 +37,7 @@ properties:
 required:
   - id
   - battleId
+  - status
   - categories
   - method
   - createdAt
