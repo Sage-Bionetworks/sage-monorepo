@@ -17,8 +17,11 @@
 -- categorized_by NULL  = AI run
 -- categorized_by <uid> = admin human override
 -- reason is optional for human overrides, always NULL for AI runs.
--- category is the single most relevant slug chosen by this run; NULL when the
--- classifier declared no category fits (legitimate "no fit" result).
+-- status records the terminal outcome of the run:
+--   'matched'   — classifier picked a category (category column is non-NULL)
+--   'abstained' — classifier ran successfully but declared no category fits
+--   'failed'    — classifier could not run (AI service / LLM error; retry-able)
+-- category holds the slug for 'matched' rows; NULL for 'abstained' and 'failed'.
 -- ============================================================================
 
 CREATE TABLE api.example_prompt_categorization (
@@ -27,12 +30,14 @@ CREATE TABLE api.example_prompt_categorization (
   method           VARCHAR(100) NOT NULL,
   categorized_by   UUID NULL,            -- NULL = AI, non-NULL = admin user ID
   reason           VARCHAR(1000) NULL,   -- optional for human overrides, always NULL for AI
-  category         VARCHAR(100) NULL,    -- single category; NULL = classifier abstained
+  status           VARCHAR(20) NOT NULL, -- 'matched' | 'abstained' | 'failed'
+  category         VARCHAR(100) NULL,    -- non-NULL only when status='matched'
   created_at       TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE INDEX idx_epc_prompt_id ON api.example_prompt_categorization(prompt_id);
 CREATE INDEX idx_epc_category ON api.example_prompt_categorization(category);
+CREATE INDEX idx_epc_status ON api.example_prompt_categorization(status);
 
 
 -- ============================================================================
@@ -67,6 +72,10 @@ ALTER TABLE api.example_prompt
 -- Same structure as example_prompt_categorization but scoped to battles.
 -- Auto-triggered after a battle's biomedical validation becomes effective.
 -- Admins can create manual overrides (subject to the same biomedical gate).
+-- status semantics mirror example_prompt_categorization:
+--   'matched'   — classifier picked at least one category (join table non-empty)
+--   'abstained' — classifier ran successfully but declared no fit (empty join table)
+--   'failed'    — classifier could not run (AI service / LLM error; retry-able)
 -- ============================================================================
 
 CREATE TABLE api.battle_categorization (
@@ -75,10 +84,12 @@ CREATE TABLE api.battle_categorization (
   method           VARCHAR(100) NOT NULL,
   categorized_by   UUID NULL,
   reason           VARCHAR(1000) NULL,
+  status           VARCHAR(20) NOT NULL, -- 'matched' | 'abstained' | 'failed'
   created_at       TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE INDEX idx_bc_battle_id ON api.battle_categorization(battle_id);
+CREATE INDEX idx_bc_status ON api.battle_categorization(status);
 
 
 -- ============================================================================
