@@ -1,19 +1,19 @@
 @if (skeleton()) {
-  <div class="prompt-card prompt-card-skeleton" aria-hidden="true"></div>
+  <div class="prompt-card skeleton" aria-hidden="true"></div>
 } @else {
   <button class="prompt-card" type="button" (click)="onClick()">
-    <div class="prompt-card-question">{{ question() }}</div>
-    <div class="prompt-card-meta">
+    <div class="question">{{ question() }}</div>
+    <div class="meta">
       @if (category()) {
-        <span class="prompt-card-tag">{{ category() }}</span>
+        <span class="tag">{{ category() }}</span>
       }
       @if (count() !== undefined) {
-        <span class="prompt-card-stat">{{ count() }} {{ countLabel() }}</span>
+        <span class="stat">{{ count() }} {{ countLabel() }}</span>
       }
-      <span class="prompt-card-cta">
-        <span class="prompt-card-cta-text">{{ ctaText() }}</span>
+      <span class="cta">
+        <span class="cta-text">{{ ctaText() }}</span>
         <svg
-          class="prompt-card-cta-icon"
+          class="cta-icon"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
