@@ -86,6 +86,17 @@ export class ExamplePromptsComponent implements AfterViewInit, OnDestroy {
     // being replaced, producing a visible flash.
     const started = performance.now();
     this.fetchPrompts().subscribe((newPrompts) => {
+      if (newPrompts === null) {
+        // Refresh failed — preserve the existing cards instead of wiping
+        // them. A transient blip shouldn't destroy content the user was
+        // already reading.
+        this.error.set(true);
+        if (this.swapTimer) clearTimeout(this.swapTimer);
+        this.swapClass.set(null);
+        return;
+      }
+
+      this.error.set(false);
       const elapsed = performance.now() - started;
       const wait = Math.max(0, SWAP_MIDPOINT_MS - elapsed);
       if (this.swapTimer) clearTimeout(this.swapTimer);
@@ -107,23 +118,30 @@ export class ExamplePromptsComponent implements AfterViewInit, OnDestroy {
   }
 
   private commitFetch(): void {
-    this.fetchPrompts().subscribe((p) => this.prompts.set(p));
+    this.fetchPrompts().subscribe((p) => {
+      if (p === null) {
+        this.error.set(true);
+        this.prompts.set([]);
+      } else {
+        this.error.set(false);
+        this.prompts.set(p);
+      }
+    });
   }
 
-  private fetchPrompts(): Observable<ExamplePrompt[]> {
+  // Returns null on fetch failure so callers can distinguish a legitimate
+  // empty result from a network/API error and decide whether to wipe the
+  // current cards.
+  private fetchPrompts(): Observable<ExamplePrompt[] | null> {
     this.loading.set(true);
-    this.error.set(false);
     const query: ExamplePromptSearchQuery = {
       sort: ExamplePromptSort.Random,
       pageSize: PAGE_SIZE,
       active: true,
     };
     return this.svc.listExamplePrompts(query).pipe(
-      map((page) => page.examplePrompts ?? []),
-      catchError(() => {
-        this.error.set(true);
-        return of<ExamplePrompt[]>([]);
-      }),
+      map((page): ExamplePrompt[] | null => page.examplePrompts ?? []),
+      catchError(() => of<ExamplePrompt[] | null>(null)),
       finalize(() => this.loading.set(false)),
     );
   }
