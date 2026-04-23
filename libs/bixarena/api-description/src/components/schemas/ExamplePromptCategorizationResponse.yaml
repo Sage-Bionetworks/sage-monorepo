@@ -9,7 +9,11 @@ properties:
     format: uuid
   category:
     $ref: BiomedicalCategory.yaml
-    description: Category assigned by this run.
+    nullable: true
+    description: >-
+      Category assigned by this run. Null when the classifier ran successfully
+      but declared no category fits (legitimate "no fit" result). Always
+      non-null for human-review rows (the create request requires it).
   method:
     type: string
     maxLength: 100

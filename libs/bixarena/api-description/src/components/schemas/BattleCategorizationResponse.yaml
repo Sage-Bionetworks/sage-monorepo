@@ -11,8 +11,12 @@ properties:
     type: array
     items:
       $ref: BiomedicalCategory.yaml
-    minItems: 1
     maxItems: 3
+    description: >-
+      Categories assigned by this run. Empty when the classifier ran
+      successfully but declared no category fits (legitimate "no fit" result).
+      Always non-empty for human-review rows (the create request requires at
+      least one).
   method:
     type: string
     maxLength: 100
