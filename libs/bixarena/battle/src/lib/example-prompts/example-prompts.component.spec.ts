@@ -21,7 +21,7 @@ describe('ExamplePromptsComponent', () => {
       question: `Question ${id}?`,
       source: 'bixarena',
       active: true,
-      categories: [BiomedicalCategory.Genetics],
+      category: BiomedicalCategory.Genetics,
       createdAt: '2026-04-20T00:00:00Z',
     })) as ExamplePrompt[];
 
@@ -77,7 +77,7 @@ describe('ExamplePromptsComponent', () => {
       question: 'q?',
       source: 'bixarena',
       active: true,
-      categories: [BiomedicalCategory.PharmacologyAndToxicology],
+      category: BiomedicalCategory.PharmacologyAndToxicology,
       createdAt: '2026-04-20T00:00:00Z',
     } as ExamplePrompt;
     expect(component.categoryLabel(prompt)).toBe('Pharmacology and Toxicology');
