@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CategorizationStatus } from './categorization-status';
 import { BiomedicalCategory } from './biomedical-category';
 
 /**
@@ -15,6 +16,7 @@ import { BiomedicalCategory } from './biomedical-category';
 export interface ExamplePromptCategorizationResponse {
   id: string;
   promptId: string;
+  status: CategorizationStatus;
   category: BiomedicalCategory;
   method: string;
   /**

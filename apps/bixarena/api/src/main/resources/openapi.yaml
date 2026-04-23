@@ -3295,6 +3295,23 @@ components:
           nullable: true
           type: boolean
       type: object
+    CategorizationStatus:
+      description: |-
+        Terminal outcome of a categorization run.
+        - `matched`: the classifier picked at least one category.
+        - `abstained`: the classifier ran successfully but declared no category fits.
+          The row is persisted for audit; the effective categorization is not
+          auto-promoted.
+
+        - `failed`: the classifier could not run (AI service or LLM error). The row
+          is persisted so admins can identify and retry; the effective categorization
+          is not auto-promoted.
+      enum:
+        - matched
+        - abstained
+        - failed
+      example: matched
+      type: string
     ExamplePromptCategorizationResponse:
       description: The result of a categorization run for an example prompt.
       example:
@@ -3305,6 +3322,7 @@ components:
         categorizedBy: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         category: genetics
+        status: matched
       properties:
         id:
           format: uuid
@@ -3312,6 +3330,8 @@ components:
         promptId:
           format: uuid
           type: string
+        status:
+          $ref: '#/components/schemas/CategorizationStatus'
         category:
           $ref: '#/components/schemas/BiomedicalCategory'
         method:
@@ -3336,6 +3356,7 @@ components:
         - id
         - method
         - promptId
+        - status
       type: object
     ExamplePromptCategorizationCreateRequest:
       description: Request to manually categorize an example prompt.
@@ -4070,6 +4091,7 @@ components:
           - genetics
           - genetics
           - genetics
+        status: matched
       properties:
         id:
           format: uuid
@@ -4077,11 +4099,12 @@ components:
         battleId:
           format: uuid
           type: string
+        status:
+          $ref: '#/components/schemas/CategorizationStatus'
         categories:
-          description: Categories assigned by this run. Empty when the classifier
-            ran successfully but declared no category fits (legitimate "no fit" result).
-            Always non-empty for human-review rows (the create request requires at
-            least one).
+          description: Categories assigned by this run. Non-empty only when status
+            is `matched`. Empty for `abstained` (classifier declared no fit) and `failed`
+            (classifier error).
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
           maxItems: 3
@@ -4108,6 +4131,7 @@ components:
         - createdAt
         - id
         - method
+        - status
       type: object
     BattleCategorizationCreateRequest:
       description: Request to manually categorize a battle.

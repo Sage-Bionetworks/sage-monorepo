@@ -185,6 +185,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [BattleValidationResponse](docs/BattleValidationResponse.md)
 - [BiomedicalCategory](docs/BiomedicalCategory.md)
 - [Callback200Response](docs/Callback200Response.md)
+- [CategorizationStatus](docs/CategorizationStatus.md)
 - [ExamplePrompt](docs/ExamplePrompt.md)
 - [ExamplePromptCategorizationCreateRequest](docs/ExamplePromptCategorizationCreateRequest.md)
 - [ExamplePromptCategorizationResponse](docs/ExamplePromptCategorizationResponse.md)

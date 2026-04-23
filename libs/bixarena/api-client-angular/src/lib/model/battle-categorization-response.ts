@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CategorizationStatus } from './categorization-status';
 import { BiomedicalCategory } from './biomedical-category';
 
 /**
@@ -15,8 +16,9 @@ import { BiomedicalCategory } from './biomedical-category';
 export interface BattleCategorizationResponse {
   id: string;
   battleId: string;
+  status: CategorizationStatus;
   /**
-   * Categories assigned by this run. Empty when the classifier ran successfully but declared no category fits (legitimate \"no fit\" result). Always non-empty for human-review rows (the create request requires at least one).
+   * Categories assigned by this run. Non-empty only when status is `matched`. Empty for `abstained` (classifier declared no fit) and `failed` (classifier error).
    */
   categories: Array<BiomedicalCategory>;
   method: string;
@@ -30,3 +32,4 @@ export interface BattleCategorizationResponse {
   reason?: string | null;
   createdAt: string;
 }
+export namespace BattleCategorizationResponse {}

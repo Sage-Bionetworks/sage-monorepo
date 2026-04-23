@@ -19,6 +19,7 @@ export * from './battle-validation-create-request';
 export * from './battle-validation-response';
 export * from './biomedical-category';
 export * from './callback200-response';
+export * from './categorization-status';
 export * from './example-prompt';
 export * from './example-prompt-categorization-create-request';
 export * from './example-prompt-categorization-response';

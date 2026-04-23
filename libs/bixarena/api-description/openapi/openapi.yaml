@@ -2548,6 +2548,23 @@ components:
           description: Whether this example prompt is currently active/visible for use.
           nullable: true
           example: true
+    CategorizationStatus:
+      type: string
+      description: |-
+        Terminal outcome of a categorization run.
+        - `matched`: the classifier picked at least one category.
+        - `abstained`: the classifier ran successfully but declared no category fits.
+          The row is persisted for audit; the effective categorization is not
+          auto-promoted.
+
+        - `failed`: the classifier could not run (AI service or LLM error). The row
+          is persisted so admins can identify and retry; the effective categorization
+          is not auto-promoted.
+      enum:
+        - matched
+        - abstained
+        - failed
+      example: matched
     ExamplePromptCategorizationResponse:
       type: object
       description: The result of a categorization run for an example prompt.
@@ -2558,10 +2575,12 @@ components:
         promptId:
           type: string
           format: uuid
+        status:
+          $ref: '#/components/schemas/CategorizationStatus'
         category:
           $ref: '#/components/schemas/BiomedicalCategory'
           nullable: true
-          description: Category assigned by this run. Null when the classifier ran successfully but declared no category fits (legitimate "no fit" result). Always non-null for human-review rows (the create request requires it).
+          description: Category assigned by this run. Non-null only when status is `matched`. Null for `abstained` (classifier declared no fit) and `failed` (classifier error).
         method:
           type: string
           maxLength: 100
@@ -2581,6 +2600,7 @@ components:
       required:
         - id
         - promptId
+        - status
         - category
         - method
         - createdAt
@@ -3135,12 +3155,14 @@ components:
         battleId:
           type: string
           format: uuid
+        status:
+          $ref: '#/components/schemas/CategorizationStatus'
         categories:
           type: array
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
           maxItems: 3
-          description: Categories assigned by this run. Empty when the classifier ran successfully but declared no category fits (legitimate "no fit" result). Always non-empty for human-review rows (the create request requires at least one).
+          description: Categories assigned by this run. Non-empty only when status is `matched`. Empty for `abstained` (classifier declared no fit) and `failed` (classifier error).
         method:
           type: string
           maxLength: 100
@@ -3160,6 +3182,7 @@ components:
       required:
         - id
         - battleId
+        - status
         - categories
         - method
         - createdAt

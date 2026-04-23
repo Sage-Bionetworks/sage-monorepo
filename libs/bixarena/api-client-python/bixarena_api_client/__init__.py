@@ -57,6 +57,7 @@ __all__ = [
     "BattleValidationResponse",
     "BiomedicalCategory",
     "Callback200Response",
+    "CategorizationStatus",
     "ExamplePrompt",
     "ExamplePromptCategorizationCreateRequest",
     "ExamplePromptCategorizationResponse",
@@ -189,6 +190,9 @@ from bixarena_api_client.models.biomedical_category import (
 )
 from bixarena_api_client.models.callback200_response import (
     Callback200Response as Callback200Response,
+)
+from bixarena_api_client.models.categorization_status import (
+    CategorizationStatus as CategorizationStatus,
 )
 from bixarena_api_client.models.example_prompt import ExamplePrompt as ExamplePrompt
 from bixarena_api_client.models.example_prompt_categorization_create_request import (

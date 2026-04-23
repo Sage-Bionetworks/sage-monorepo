@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
+import org.sagebionetworks.bixarena.api.model.dto.CategorizationStatusDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -33,6 +34,8 @@ public class ExamplePromptCategorizationResponseDto {
 
   private UUID promptId;
 
+  private CategorizationStatusDto status;
+
   private BiomedicalCategoryDto category;
 
   private String method;
@@ -51,9 +54,10 @@ public class ExamplePromptCategorizationResponseDto {
   /**
    * Constructor with only required parameters
    */
-  public ExamplePromptCategorizationResponseDto(UUID id, UUID promptId, BiomedicalCategoryDto category, String method, OffsetDateTime createdAt) {
+  public ExamplePromptCategorizationResponseDto(UUID id, UUID promptId, CategorizationStatusDto status, BiomedicalCategoryDto category, String method, OffsetDateTime createdAt) {
     this.id = id;
     this.promptId = promptId;
+    this.status = status;
     this.category = category;
     this.method = method;
     this.createdAt = createdAt;
@@ -97,6 +101,26 @@ public class ExamplePromptCategorizationResponseDto {
 
   public void setPromptId(UUID promptId) {
     this.promptId = promptId;
+  }
+
+  public ExamplePromptCategorizationResponseDto status(CategorizationStatusDto status) {
+    this.status = status;
+    return this;
+  }
+
+  /**
+   * Get status
+   * @return status
+   */
+  @NotNull @Valid 
+  @Schema(name = "status", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("status")
+  public CategorizationStatusDto getStatus() {
+    return status;
+  }
+
+  public void setStatus(CategorizationStatusDto status) {
+    this.status = status;
   }
 
   public ExamplePromptCategorizationResponseDto category(BiomedicalCategoryDto category) {
@@ -210,6 +234,7 @@ public class ExamplePromptCategorizationResponseDto {
     ExamplePromptCategorizationResponseDto examplePromptCategorizationResponse = (ExamplePromptCategorizationResponseDto) o;
     return Objects.equals(this.id, examplePromptCategorizationResponse.id) &&
         Objects.equals(this.promptId, examplePromptCategorizationResponse.promptId) &&
+        Objects.equals(this.status, examplePromptCategorizationResponse.status) &&
         Objects.equals(this.category, examplePromptCategorizationResponse.category) &&
         Objects.equals(this.method, examplePromptCategorizationResponse.method) &&
         Objects.equals(this.categorizedBy, examplePromptCategorizationResponse.categorizedBy) &&
@@ -219,7 +244,7 @@ public class ExamplePromptCategorizationResponseDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, promptId, category, method, categorizedBy, reason, createdAt);
+    return Objects.hash(id, promptId, status, category, method, categorizedBy, reason, createdAt);
   }
 
   @Override
@@ -228,6 +253,7 @@ public class ExamplePromptCategorizationResponseDto {
     sb.append("class ExamplePromptCategorizationResponseDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    promptId: ").append(toIndentedString(promptId)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    category: ").append(toIndentedString(category)).append("\n");
     sb.append("    method: ").append(toIndentedString(method)).append("\n");
     sb.append("    categorizedBy: ").append(toIndentedString(categorizedBy)).append("\n");
@@ -263,6 +289,7 @@ public class ExamplePromptCategorizationResponseDto {
     protected Builder copyOf(ExamplePromptCategorizationResponseDto value) { 
       this.instance.setId(value.id);
       this.instance.setPromptId(value.promptId);
+      this.instance.setStatus(value.status);
       this.instance.setCategory(value.category);
       this.instance.setMethod(value.method);
       this.instance.setCategorizedBy(value.categorizedBy);
@@ -278,6 +305,11 @@ public class ExamplePromptCategorizationResponseDto {
     
     public ExamplePromptCategorizationResponseDto.Builder promptId(UUID promptId) {
       this.instance.promptId(promptId);
+      return this;
+    }
+    
+    public ExamplePromptCategorizationResponseDto.Builder status(CategorizationStatusDto status) {
+      this.instance.status(status);
       return this;
     }
     

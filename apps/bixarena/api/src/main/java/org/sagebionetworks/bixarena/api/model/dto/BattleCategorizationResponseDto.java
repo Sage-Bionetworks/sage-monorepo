@@ -5,12 +5,14 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
+import org.sagebionetworks.bixarena.api.model.dto.CategorizationStatusDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -35,6 +37,8 @@ public class BattleCategorizationResponseDto {
 
   private UUID battleId;
 
+  private CategorizationStatusDto status;
+
   @Valid
   private List<BiomedicalCategoryDto> categories = new ArrayList<>();
 
@@ -54,9 +58,10 @@ public class BattleCategorizationResponseDto {
   /**
    * Constructor with only required parameters
    */
-  public BattleCategorizationResponseDto(UUID id, UUID battleId, List<BiomedicalCategoryDto> categories, String method, OffsetDateTime createdAt) {
+  public BattleCategorizationResponseDto(UUID id, UUID battleId, CategorizationStatusDto status, List<BiomedicalCategoryDto> categories, String method, OffsetDateTime createdAt) {
     this.id = id;
     this.battleId = battleId;
+    this.status = status;
     this.categories = categories;
     this.method = method;
     this.createdAt = createdAt;
@@ -102,6 +107,26 @@ public class BattleCategorizationResponseDto {
     this.battleId = battleId;
   }
 
+  public BattleCategorizationResponseDto status(CategorizationStatusDto status) {
+    this.status = status;
+    return this;
+  }
+
+  /**
+   * Get status
+   * @return status
+   */
+  @NotNull @Valid 
+  @Schema(name = "status", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("status")
+  public CategorizationStatusDto getStatus() {
+    return status;
+  }
+
+  public void setStatus(CategorizationStatusDto status) {
+    this.status = status;
+  }
+
   public BattleCategorizationResponseDto categories(List<BiomedicalCategoryDto> categories) {
     this.categories = categories;
     return this;
@@ -116,11 +141,11 @@ public class BattleCategorizationResponseDto {
   }
 
   /**
-   * Categories assigned by this run. Empty when the classifier ran successfully but declared no category fits (legitimate \"no fit\" result). Always non-empty for human-review rows (the create request requires at least one).
+   * Categories assigned by this run. Non-empty only when status is `matched`. Empty for `abstained` (classifier declared no fit) and `failed` (classifier error).
    * @return categories
    */
   @NotNull @Valid @Size(max = 3) 
-  @Schema(name = "categories", description = "Categories assigned by this run. Empty when the classifier ran successfully but declared no category fits (legitimate \"no fit\" result). Always non-empty for human-review rows (the create request requires at least one).", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "categories", description = "Categories assigned by this run. Non-empty only when status is `matched`. Empty for `abstained` (classifier declared no fit) and `failed` (classifier error).", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
   public List<BiomedicalCategoryDto> getCategories() {
     return categories;
@@ -221,6 +246,7 @@ public class BattleCategorizationResponseDto {
     BattleCategorizationResponseDto battleCategorizationResponse = (BattleCategorizationResponseDto) o;
     return Objects.equals(this.id, battleCategorizationResponse.id) &&
         Objects.equals(this.battleId, battleCategorizationResponse.battleId) &&
+        Objects.equals(this.status, battleCategorizationResponse.status) &&
         Objects.equals(this.categories, battleCategorizationResponse.categories) &&
         Objects.equals(this.method, battleCategorizationResponse.method) &&
         Objects.equals(this.categorizedBy, battleCategorizationResponse.categorizedBy) &&
@@ -230,7 +256,7 @@ public class BattleCategorizationResponseDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, battleId, categories, method, categorizedBy, reason, createdAt);
+    return Objects.hash(id, battleId, status, categories, method, categorizedBy, reason, createdAt);
   }
 
   @Override
@@ -239,6 +265,7 @@ public class BattleCategorizationResponseDto {
     sb.append("class BattleCategorizationResponseDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    battleId: ").append(toIndentedString(battleId)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    method: ").append(toIndentedString(method)).append("\n");
     sb.append("    categorizedBy: ").append(toIndentedString(categorizedBy)).append("\n");
@@ -274,6 +301,7 @@ public class BattleCategorizationResponseDto {
     protected Builder copyOf(BattleCategorizationResponseDto value) { 
       this.instance.setId(value.id);
       this.instance.setBattleId(value.battleId);
+      this.instance.setStatus(value.status);
       this.instance.setCategories(value.categories);
       this.instance.setMethod(value.method);
       this.instance.setCategorizedBy(value.categorizedBy);
@@ -289,6 +317,11 @@ public class BattleCategorizationResponseDto {
     
     public BattleCategorizationResponseDto.Builder battleId(UUID battleId) {
       this.instance.battleId(battleId);
+      return this;
+    }
+    
+    public BattleCategorizationResponseDto.Builder status(CategorizationStatusDto status) {
+      this.instance.status(status);
       return this;
     }
     

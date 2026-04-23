@@ -101,7 +101,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"category\" : \"genetics\" }";
+                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"category\" : \"genetics\", \"status\" : \"matched\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -233,7 +233,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"category\" : \"genetics\" }, { \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"category\" : \"genetics\" } ]";
+                    String exampleString = "[ { \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"category\" : \"genetics\", \"status\" : \"matched\" }, { \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"category\" : \"genetics\", \"status\" : \"matched\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -320,7 +320,7 @@ public interface ExamplePromptApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"category\" : \"genetics\" }";
+                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"method\" : \"method\", \"promptId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"categorizedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"category\" : \"genetics\", \"status\" : \"matched\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
