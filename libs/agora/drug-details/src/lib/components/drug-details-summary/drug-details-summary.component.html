@@ -8,9 +8,11 @@
     <p>{{ drug().maximum_clinical_trial_phase }}</p>
     <br />
 
-    <p class="drug-details-label">Year of first approval</p>
-    <p>{{ drug().year_of_first_approval }}</p>
-    <br />
+    @if (drug().year_of_first_approval) {
+      <p class="drug-details-label">Year of first approval</p>
+      <p>{{ drug().year_of_first_approval }}</p>
+      <br />
+    }
 
     @if (drug().mechanisms_of_action.length > 0) {
       <p class="drug-details-label">Mechanisms of Action</p>
