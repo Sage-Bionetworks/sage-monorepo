@@ -103,8 +103,7 @@ export class ExamplePromptsComponent implements AfterViewInit, OnDestroy {
   }
 
   categoryLabel(p: ExamplePrompt): string | undefined {
-    const slug = p.categories?.[0];
-    return slug ? formatCategory(slug) : undefined;
+    return p.category ? formatCategory(p.category) : undefined;
   }
 
   private commitFetch(): void {
