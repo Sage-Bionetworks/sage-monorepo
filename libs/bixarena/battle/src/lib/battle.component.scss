@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   min-height: calc(100dvh - var(--nav-height));
+  padding-bottom: 0;
 }
 
 .landing {
@@ -9,13 +10,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 2.5rem;
-  padding-bottom: 4rem;
+  padding: 3rem 1rem 1rem;
 }
 
 .hero {
   text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+bixarena-example-prompts {
+  margin-bottom: 1rem;
+}
+
+.composer-group {
+  position: sticky;
+  bottom: 1rem;
+  z-index: 5;
+  margin-top: auto;
+  width: 100%;
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
 }
 
 .title {
@@ -49,6 +65,7 @@
   min-height: 0;
   overflow: hidden;
   gap: 0.5rem;
+  padding-bottom: 1rem;
 }
 
 .rail {
@@ -127,5 +144,9 @@
   text-align: center;
   font-size: var(--text-xs);
   color: var(--p-text-muted-color);
-  margin: 0.5rem 0 0;
+  margin: 1.5rem 0 0;
+}
+
+.battle-view > .disclaimer {
+  margin-top: 1rem;
 }

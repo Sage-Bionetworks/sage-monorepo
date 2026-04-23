@@ -1,0 +1,37 @@
+@if (skeleton()) {
+  <div class="prompt-card skeleton" aria-hidden="true"></div>
+} @else {
+  <button class="prompt-card" type="button" (click)="onClick()">
+    <div class="question">{{ question() }}</div>
+    <div class="meta">
+      @if (category()) {
+        <span class="tag">{{ category() }}</span>
+      }
+      @if (count() !== undefined) {
+        <span class="stat">{{ count() }} {{ countLabel() }}</span>
+      }
+      <span class="cta">
+        <span class="cta-text">{{ ctaText() }}</span>
+        <svg
+          class="cta-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M14.5 17.5 3 6V3h3l11.5 11.5" />
+          <path d="m13 19 6-6" />
+          <path d="m16 16 4 4" />
+          <path d="m19 21 2-2" />
+          <path d="M14.5 6.5 18 3h3v3l-3.5 3.5" />
+          <path d="m5 14 4 4" />
+          <path d="m7 17-3 3" />
+          <path d="M4 20h2" />
+        </svg>
+      </span>
+    </div>
+  </button>
+}

@@ -9,15 +9,17 @@
         </p>
       </div>
       <bixarena-example-prompts (promptSelect)="onPromptSubmit($event)" />
-      <bixarena-prompt-composer
-        placeholder="Ask anything biomedical..."
-        [maxLength]="state.promptLengthLimit"
-        [disabled]="state.phase() === 'creating'"
-        (promptSubmit)="onPromptSubmit($event)"
-      />
-      <p class="disclaimer">
-        AI may make mistakes. Do not include sensitive or personal information.
-      </p>
+      <div class="composer-group">
+        <bixarena-prompt-composer
+          placeholder="Ask anything biomedical..."
+          [maxLength]="state.promptLengthLimit"
+          [disabled]="state.phase() === 'creating'"
+          (promptSubmit)="onPromptSubmit($event)"
+        />
+        <p class="disclaimer">
+          AI may make mistakes. Do not include sensitive or personal information.
+        </p>
+      </div>
     </section>
   }
 

@@ -1,0 +1,130 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
+:host {
+  display: block;
+}
+
+.question {
+  font-size: var(--text-sm);
+  color: var(--p-text-color);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  font-weight: 460;
+  flex: 1;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tag {
+  font-size: var(--text-xs);
+  color: var(--p-text-muted-color);
+  font-weight: 500;
+  border: 1px solid var(--p-surface-200);
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  margin-left: -0.25rem;
+  white-space: nowrap;
+}
+
+.stat {
+  font-size: var(--text-xs);
+  color: var(--p-text-muted-color);
+  font-weight: 440;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
+  font-size: var(--text-xs);
+  color: var(--p-text-muted-color);
+  transition: color 0.15s;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.cta-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+@media (#{shared.$lg-breakpoint} < width <= #{shared.$xl-breakpoint}) {
+  .cta-text {
+    display: none;
+  }
+}
+
+.prompt-card {
+  background: var(--p-surface-100);
+  border: 1px solid var(--p-surface-200);
+  border-radius: var(--p-border-radius-xl);
+  padding: 1.25rem;
+  min-height: 8.75rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+
+  &:hover {
+    border-color: var(--p-surface-300);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 25%);
+
+    .cta {
+      color: var(--p-primary-color);
+    }
+  }
+}
+
+.skeleton {
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, var(--p-surface-200) 50%, transparent 100%);
+    animation: prompt-card-shimmer 1.4s ease-in-out infinite;
+  }
+
+  &:hover {
+    border-color: var(--p-surface-200);
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+@keyframes prompt-card-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prompt-card {
+    transition: none;
+  }
+
+  .skeleton::after {
+    animation: none;
+  }
+}
