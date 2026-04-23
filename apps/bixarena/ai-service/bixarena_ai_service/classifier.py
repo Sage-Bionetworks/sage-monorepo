@@ -81,6 +81,8 @@ CATEGORIZATION_SCHEMA = {
     },
 }
 
+_NO_FIT_SENTINEL = "none"
+
 SINGLE_CATEGORY_SCHEMA = {
     "name": "categorization",
     "strict": True,
@@ -88,11 +90,15 @@ SINGLE_CATEGORY_SCHEMA = {
         "type": "object",
         "properties": {
             "category": {
-                "type": ["string", "null"],
-                "enum": list(BIOMEDICAL_CATEGORIES) + [None],
+                "type": "string",
+                # Anthropic's strict structured-output rejects multi-type enums
+                # (e.g. type:[string,null] with null in enum). Use a sentinel
+                # string for "no fit" instead; parse_single_category maps it
+                # back to None.
+                "enum": list(BIOMEDICAL_CATEGORIES) + [_NO_FIT_SENTINEL],
                 "description": (
                     "The single most relevant category slug from the allowed list, "
-                    "or null when no category fits."
+                    f"or {_NO_FIT_SENTINEL!r} when no category fits."
                 ),
             }
         },
@@ -192,17 +198,18 @@ def parse_single_category(raw: str) -> str | None:
     """Extract and validate a single category slug from the LLM response.
 
     Returns the slug when it is in the allowed list, or ``None`` for a
-    legitimate "no fit" response. Parse failures propagate as exceptions
-    so the outer ``categorize_single()`` caller can distinguish them from
-    a legit ``None`` result and avoid caching them.
+    legitimate "no fit" response (LLM returned the sentinel). Parse
+    failures propagate as exceptions so the outer ``categorize_single()``
+    caller can distinguish them from a legit ``None`` result and avoid
+    caching them.
     """
     allowed = set(BIOMEDICAL_CATEGORIES)
     data = json.loads(raw)
     category = data["category"]
-    if category is None:
-        return None
     if not isinstance(category, str):
-        raise ValueError("category field is not a string or null")
+        raise ValueError("category field is not a string")
+    if category == _NO_FIT_SENTINEL:
+        return None
     if category not in allowed:
         raise ValueError(f"category {category!r} is not an allowed slug")
     return category
