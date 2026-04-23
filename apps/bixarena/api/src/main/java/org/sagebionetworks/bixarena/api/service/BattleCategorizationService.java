@@ -18,6 +18,7 @@ import org.sagebionetworks.bixarena.api.exception.BattleRoundNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCategorizationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCategorizationResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
+import org.sagebionetworks.bixarena.api.model.dto.CategorizationStatusDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleCategorizationCategoryEntity;
 import org.sagebionetworks.bixarena.api.model.entity.BattleCategorizationEntity;
 import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
@@ -70,18 +71,20 @@ public class BattleCategorizationService {
   }
 
   /**
-   * Calls the AI service to categorize a battle and persists the result if the classifier
-   * matched at least one category. Returns the persisted row, or an empty Optional when the
-   * classifier did not assign any category (no row is persisted in that case).
+   * Calls the AI service to categorize a battle and always persists a row —
+   * including when the classifier abstained (status='abstained') or the AI
+   * service itself errored (status='failed'). Persisting every attempt
+   * preserves the audit trail and prevents redundant LLM calls.
    *
-   * <p>Only the first AI categorization auto-becomes the effective categorization (compare-and-set).
-   * Subsequent AI re-runs are persisted but do not override the effective categorization.
+   * <p>Only rows with status='matched' auto-promote to the effective
+   * categorization via compare-and-set. Subsequent matched AI re-runs are
+   * persisted but do not override the effective categorization.
    *
    * @throws BattleNotEligibleForCategorizationException if the battle has no effective validation
    *     or is not biomedical
    */
   @Transactional
-  public Optional<BattleCategorizationResponseDto> categorizeBattle(UUID battleId) {
+  public BattleCategorizationResponseDto categorizeBattle(UUID battleId) {
     assertBiomedicalOrThrow(battleId);
     List<String> prompts = collectPrompts(battleId);
 
@@ -89,23 +92,43 @@ public class BattleCategorizationService {
       throw new BattleRoundNotFoundException("No rounds found for battle " + battleId);
     }
 
+    String method;
+    List<String> categories = List.of();
+    String status;
+
     try {
       String serviceToken = serviceTokenProvider.obtainServiceToken();
       AiCategorizationResponse aiResponse = callAiService(serviceToken, prompts);
-
-      if (aiResponse.categories() == null || aiResponse.categories().isEmpty()) {
-        log.info("AI returned no categories for battle {} — nothing persisted", battleId);
-        return Optional.empty();
-      }
-
-      BattleCategorizationEntity entity = persistCategorization(
+      method = aiResponse.method();
+      categories = aiResponse.categories() == null ? List.of() : aiResponse.categories();
+      status = categories.isEmpty()
+        ? CategorizationStatusDto.ABSTAINED.getValue()
+        : CategorizationStatusDto.MATCHED.getValue();
+    } catch (Exception e) {
+      // AI service unreachable or returned non-200. Persist a failed row so
+      // admins can identify and retry; do not let transient errors crash the
+      // caller (e.g. the async trigger after a user vote).
+      log.warn(
+        "AI categorization failed for battle {} — persisting status=failed: {}",
         battleId,
-        aiResponse.method(),
-        aiResponse.categories(),
-        null,
-        null
+        e.getMessage()
       );
+      method = "ai-service-error";
+      status = CategorizationStatusDto.FAILED.getValue();
+    }
 
+    BattleCategorizationEntity entity = persistCategorization(
+      battleId,
+      method,
+      categories,
+      null,
+      null,
+      status
+    );
+
+    // Only matched rows auto-promote to effective. Abstained and failed rows
+    // are persisted for audit but never claim the effective pointer.
+    if (CategorizationStatusDto.MATCHED.getValue().equals(status)) {
       int updated = battleRepository.setEffectiveCategorizationIfNull(battleId, entity.getId());
       if (updated > 0) {
         log.info(
@@ -114,22 +137,16 @@ public class BattleCategorizationService {
           battleId
         );
       }
-
-      log.info(
-        "Battle categorization persisted for battle {}: method={}, categories={}",
-        battleId,
-        aiResponse.method(),
-        aiResponse.categories()
-      );
-      return Optional.of(toDto(entity));
-    } catch (BattleNotEligibleForCategorizationException e) {
-      throw e;
-    } catch (Exception e) {
-      throw new IllegalStateException(
-        "Battle categorization failed for battle " + battleId + ": " + e.getMessage(),
-        e
-      );
     }
+
+    log.info(
+      "Battle categorization persisted for battle {}: status={}, method={}, categories={}",
+      battleId,
+      status,
+      method,
+      categories
+    );
+    return toDto(entity);
   }
 
   /**
@@ -157,7 +174,8 @@ public class BattleCategorizationService {
       "human-review",
       categorySlugs,
       categorizedBy,
-      request.getReason()
+      request.getReason(),
+      CategorizationStatusDto.MATCHED.getValue()
     );
 
     BattleEntity battle = battleRepository.findById(battleId).orElseThrow();
@@ -197,6 +215,7 @@ public class BattleCategorizationService {
     BattleCategorizationResponseDto dto = new BattleCategorizationResponseDto();
     dto.setId(entity.getId());
     dto.setBattleId(entity.getBattleId());
+    dto.setStatus(CategorizationStatusDto.fromValue(entity.getStatus()));
     dto.setCategories(categories);
     dto.setMethod(entity.getMethod());
     dto.setCategorizedBy(entity.getCategorizedBy());
@@ -259,29 +278,33 @@ public class BattleCategorizationService {
     String method,
     List<String> categorySlugs,
     UUID categorizedBy,
-    String reason
+    String reason,
+    String status
   ) {
     BattleCategorizationEntity entity = BattleCategorizationEntity.builder()
       .battleId(battleId)
       .method(method)
       .categorizedBy(categorizedBy)
       .reason(reason)
+      .status(status)
       .build();
 
     categorizationRepository.save(entity);
     categorizationRepository.flush();
 
-    List<BattleCategorizationCategoryEntity> categoryEntities = categorySlugs
-      .stream()
-      .map(slug ->
-        BattleCategorizationCategoryEntity.builder()
-          .categorizationId(entity.getId())
-          .category(slug)
-          .build()
-      )
-      .toList();
-    categoryRepository.saveAll(categoryEntities);
-    categoryRepository.flush();
+    if (!categorySlugs.isEmpty()) {
+      List<BattleCategorizationCategoryEntity> categoryEntities = categorySlugs
+        .stream()
+        .map(slug ->
+          BattleCategorizationCategoryEntity.builder()
+            .categorizationId(entity.getId())
+            .category(slug)
+            .build()
+        )
+        .toList();
+      categoryRepository.saveAll(categoryEntities);
+      categoryRepository.flush();
+    }
 
     return entity;
   }

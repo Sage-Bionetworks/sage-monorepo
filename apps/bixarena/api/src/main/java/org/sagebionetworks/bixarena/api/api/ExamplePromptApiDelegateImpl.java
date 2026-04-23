@@ -1,7 +1,6 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -102,12 +101,10 @@ public class ExamplePromptApiDelegateImpl implements ExamplePromptApiDelegate {
     UUID examplePromptId
   ) {
     log.info("User {} triggering AI categorization for prompt {}", currentUserId(), examplePromptId);
-    Optional<ExamplePromptCategorizationResponseDto> result = categorizationService.categorizePrompt(
+    ExamplePromptCategorizationResponseDto dto = categorizationService.categorizePrompt(
       examplePromptId
     );
-    return result
-      .map(dto -> ResponseEntity.status(HttpStatus.CREATED).body(dto))
-      .orElseGet(() -> ResponseEntity.noContent().build());
+    return ResponseEntity.status(HttpStatus.CREATED).body(dto);
   }
 
   @Override

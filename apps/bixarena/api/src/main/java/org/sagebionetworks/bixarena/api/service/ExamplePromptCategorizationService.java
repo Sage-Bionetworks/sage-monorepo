@@ -7,13 +7,13 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
 import org.sagebionetworks.bixarena.api.exception.ExamplePromptNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
+import org.sagebionetworks.bixarena.api.model.dto.CategorizationStatusDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCategorizationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCategorizationResponseDto;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptCategorizationEntity;
@@ -57,34 +57,56 @@ public class ExamplePromptCategorizationService {
   }
 
   /**
-   * Calls the AI service to categorize a prompt and persists the result if the classifier
-   * matched at least one category. Returns the persisted row, or an empty Optional when the
-   * classifier did not assign any category (no row is persisted in that case).
+   * Calls the AI service to categorize a prompt and always persists a row —
+   * including when the classifier abstained (status='abstained') or the AI
+   * service itself errored (status='failed'). Persisting every attempt
+   * preserves the audit trail and prevents redundant LLM calls.
    *
-   * <p>Only the first AI categorization auto-becomes the effective categorization (compare-and-set).
-   * Subsequent AI re-runs are persisted but do not override the effective categorization.
+   * <p>Only rows with status='matched' auto-promote to the effective
+   * categorization via compare-and-set. Subsequent matched AI re-runs are
+   * persisted but do not override the effective categorization.
    */
   @Transactional
-  public Optional<ExamplePromptCategorizationResponseDto> categorizePrompt(UUID promptId) {
+  public ExamplePromptCategorizationResponseDto categorizePrompt(UUID promptId) {
     ExamplePromptEntity prompt = getPromptOrThrow(promptId);
+
+    String method;
+    String category = null;
+    String status;
 
     try {
       String serviceToken = serviceTokenProvider.obtainServiceToken();
       AiCategorizationResponse aiResponse = callAiService(serviceToken, prompt.getQuestion());
-
-      if (aiResponse.category() == null) {
-        log.info("AI returned no category for prompt {} — nothing persisted", promptId);
-        return Optional.empty();
-      }
-
-      ExamplePromptCategorizationEntity entity = persistCategorization(
+      method = aiResponse.method();
+      category = aiResponse.category();
+      status = category != null
+        ? CategorizationStatusDto.MATCHED.getValue()
+        : CategorizationStatusDto.ABSTAINED.getValue();
+    } catch (Exception e) {
+      // AI service unreachable or returned non-200. Persist a failed row so
+      // admins can identify and retry; do not let transient errors crash the
+      // caller (e.g. the async trigger after a user vote).
+      log.warn(
+        "AI categorization failed for prompt {} — persisting status=failed: {}",
         promptId,
-        aiResponse.method(),
-        aiResponse.category(),
-        null,
-        null
+        e.getMessage()
       );
+      method = "ai-service-error";
+      status = CategorizationStatusDto.FAILED.getValue();
+    }
 
+    ExamplePromptCategorizationEntity entity = persistCategorization(
+      promptId,
+      method,
+      category,
+      null,
+      null,
+      status
+    );
+
+    // Only matched rows auto-promote to effective. Abstained and failed rows
+    // are persisted for audit but never claim the effective pointer.
+    if (CategorizationStatusDto.MATCHED.getValue().equals(status)) {
       int updated = examplePromptRepository.setEffectiveCategorizationIfNull(
         promptId,
         entity.getId()
@@ -96,20 +118,16 @@ public class ExamplePromptCategorizationService {
           promptId
         );
       }
-
-      log.info(
-        "Prompt categorization persisted for prompt {}: method={}, category={}",
-        promptId,
-        aiResponse.method(),
-        aiResponse.category()
-      );
-      return Optional.of(toDto(entity));
-    } catch (Exception e) {
-      throw new IllegalStateException(
-        "Prompt categorization failed for prompt " + promptId + ": " + e.getMessage(),
-        e
-      );
     }
+
+    log.info(
+      "Prompt categorization persisted for prompt {}: status={}, method={}, category={}",
+      promptId,
+      status,
+      method,
+      category
+    );
+    return toDto(entity);
   }
 
   /**
@@ -130,7 +148,8 @@ public class ExamplePromptCategorizationService {
       "human-review",
       categorySlug,
       categorizedBy,
-      request.getReason()
+      request.getReason(),
+      CategorizationStatusDto.MATCHED.getValue()
     );
 
     prompt.setEffectiveCategorizationId(entity.getId());
@@ -163,7 +182,11 @@ public class ExamplePromptCategorizationService {
     ExamplePromptCategorizationResponseDto dto = new ExamplePromptCategorizationResponseDto();
     dto.setId(entity.getId());
     dto.setPromptId(entity.getPromptId());
-    dto.setCategory(BiomedicalCategoryDto.fromValue(entity.getCategory()));
+    dto.setStatus(CategorizationStatusDto.fromValue(entity.getStatus()));
+    // category is non-null only for status='matched'.
+    dto.setCategory(
+      entity.getCategory() == null ? null : BiomedicalCategoryDto.fromValue(entity.getCategory())
+    );
     dto.setMethod(entity.getMethod());
     dto.setCategorizedBy(entity.getCategorizedBy());
     dto.setReason(entity.getReason());
@@ -176,13 +199,15 @@ public class ExamplePromptCategorizationService {
     String method,
     String categorySlug,
     UUID categorizedBy,
-    String reason
+    String reason,
+    String status
   ) {
     ExamplePromptCategorizationEntity entity = ExamplePromptCategorizationEntity.builder()
       .promptId(promptId)
       .method(method)
       .categorizedBy(categorizedBy)
       .reason(reason)
+      .status(status)
       .category(categorySlug)
       .build();
 
