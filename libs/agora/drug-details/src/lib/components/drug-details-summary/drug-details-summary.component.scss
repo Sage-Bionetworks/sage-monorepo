@@ -1,0 +1,18 @@
+@use 'agora/styles/src/mixins' as mixins;
+
+.drug-details-summary {
+  .drug-details-label {
+    font-weight: 700;
+  }
+
+  ul {
+    margin-top: 10px;
+    list-style: unset;
+    padding-left: 1.5rem;
+  }
+
+  a {
+    @include mixins.link;
+    @include mixins.link-hover;
+  }
+}
