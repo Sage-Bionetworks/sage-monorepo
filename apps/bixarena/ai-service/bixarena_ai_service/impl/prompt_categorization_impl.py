@@ -12,6 +12,8 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
+from fastapi import HTTPException
+
 from bixarena_ai_service.apis.prompt_categorization_api_base import (
     BasePromptCategorizationApi,
 )
@@ -76,12 +78,17 @@ class PromptCategorizationApiImpl(BasePromptCategorizationApi):
         user_message = f"TEXT:\n{sanitized}"
         try:
             category = await categorize_single(_SYSTEM_PROMPT, user_message)
-        except Exception:
-            # Only cache successful LLM responses. An exception here means the
-            # call failed (API error, bad schema, etc.); caching ``None`` would
-            # poison the cache for 30 days and prevent retry.
-            logger.exception("Categorization failed, returning null (not cached)")
-            return PromptCategorization(prompt=prompt, category=None, method=method)
+        except Exception as exc:
+            # Surface classifier failures as 503 so the caller persists a
+            # `status=failed` row and can retry. Returning 200-with-null would
+            # be indistinguishable from a legitimate "no fit" result, polluting
+            # the audit trail. Not cached — a transient error must not be
+            # burned into the cache.
+            logger.exception("Categorization failed for prompt")
+            raise HTTPException(
+                status_code=503,
+                detail="AI classifier temporarily unavailable",
+            ) from exc
 
         await set_cached_prompt_categorization(sanitized, category, settings)
 
