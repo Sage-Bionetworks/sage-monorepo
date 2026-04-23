@@ -4,15 +4,15 @@ The result of a categorization run for a battle.
 
 ## Properties
 
-| Name               | Type                                                  | Description                                     | Notes      |
-| ------------------ | ----------------------------------------------------- | ----------------------------------------------- | ---------- |
-| **id**             | **str**                                               |                                                 |
-| **battle_id**      | **str**                                               |                                                 |
-| **categories**     | [**List[BiomedicalCategory]**](BiomedicalCategory.md) |                                                 |
-| **method**         | **str**                                               |                                                 |
-| **categorized_by** | **str**                                               | User ID of the categorizer. Null for AI runs.   | [optional] |
-| **reason**         | **str**                                               | Human override reason. Always null for AI runs. | [optional] |
-| **created_at**     | **datetime**                                          |                                                 |
+| Name               | Type                                                  | Description                                                                                                                                                                                                                            | Notes      |
+| ------------------ | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **id**             | **str**                                               |                                                                                                                                                                                                                                        |
+| **battle_id**      | **str**                                               |                                                                                                                                                                                                                                        |
+| **categories**     | [**List[BiomedicalCategory]**](BiomedicalCategory.md) | Categories assigned by this run. Empty when the classifier ran successfully but declared no category fits (legitimate \&quot;no fit\&quot; result). Always non-empty for human-review rows (the create request requires at least one). |
+| **method**         | **str**                                               |                                                                                                                                                                                                                                        |
+| **categorized_by** | **str**                                               | User ID of the categorizer. Null for AI runs.                                                                                                                                                                                          | [optional] |
+| **reason**         | **str**                                               | Human override reason. Always null for AI runs.                                                                                                                                                                                        | [optional] |
+| **created_at**     | **datetime**                                          |                                                                                                                                                                                                                                        |
 
 ## Example
 

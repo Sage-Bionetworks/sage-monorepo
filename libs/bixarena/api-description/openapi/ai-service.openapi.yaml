@@ -354,7 +354,6 @@ components:
           items:
             type: string
             maxLength: 100
-          minItems: 0
           maxItems: 3
           description: Up to three biomedical subject category slugs assigned by the classifier. May be empty when the classifier did not assign any category.
         method:

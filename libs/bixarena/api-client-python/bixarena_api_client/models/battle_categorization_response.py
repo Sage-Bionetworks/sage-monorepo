@@ -33,7 +33,9 @@ class BattleCategorizationResponse(BaseModel):
 
     id: UUID
     battle_id: UUID = Field(alias="battleId")
-    categories: Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
+    categories: Annotated[List[BiomedicalCategory], Field(max_length=3)] = Field(
+        description='Categories assigned by this run. Empty when the classifier ran successfully but declared no category fits (legitimate "no fit" result). Always non-empty for human-review rows (the create request requires at least one).'
+    )
     method: Annotated[str, Field(strict=True, max_length=100)]
     categorized_by: Optional[UUID] = Field(
         default=None,

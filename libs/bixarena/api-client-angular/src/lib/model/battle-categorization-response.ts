@@ -15,6 +15,9 @@ import { BiomedicalCategory } from './biomedical-category';
 export interface BattleCategorizationResponse {
   id: string;
   battleId: string;
+  /**
+   * Categories assigned by this run. Empty when the classifier ran successfully but declared no category fits (legitimate \"no fit\" result). Always non-empty for human-review rows (the create request requires at least one).
+   */
   categories: Array<BiomedicalCategory>;
   method: string;
   /**

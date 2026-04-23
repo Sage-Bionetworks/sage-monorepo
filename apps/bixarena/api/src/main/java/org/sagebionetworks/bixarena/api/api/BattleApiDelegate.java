@@ -645,11 +645,10 @@ public interface BattleApiDelegate {
 
     /**
      * POST /battles/{battleId}/categorizations/run : Run an automated categorization
-     * Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
+     * Run an automated AI categorization against a battle. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with an empty &#x60;categories&#x60; array to preserve the audit trail and avoid redundant re-classification. Returns 409 if the battle is not biomedical.
      *
      * @param battleId The unique identifier of the battle (required)
      * @return Categorization completed and persisted successfully (status code 201)
-     *         or Categorization run completed but the AI did not match any category (status code 204)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)

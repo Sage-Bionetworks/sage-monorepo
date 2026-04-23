@@ -555,7 +555,7 @@ paths:
       tags:
         - Example Prompt
       summary: Run an automated categorization
-      description: Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
+      description: Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null `category` to preserve the audit trail and avoid redundant re-classification.
       operationId: runExamplePromptCategorization
       responses:
         '201':
@@ -564,8 +564,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExamplePromptCategorizationResponse'
-        '204':
-          description: Categorization run completed but the AI did not match any category
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -896,7 +894,7 @@ paths:
       tags:
         - Battle
       summary: Run an automated categorization
-      description: Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
+      description: Run an automated AI categorization against a battle. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with an empty `categories` array to preserve the audit trail and avoid redundant re-classification. Returns 409 if the battle is not biomedical.
       operationId: runBattleCategorization
       responses:
         '201':
@@ -905,8 +903,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BattleCategorizationResponse'
-        '204':
-          description: Categorization run completed but the AI did not match any category
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2304,7 +2300,8 @@ components:
           format: uuid
         category:
           $ref: '#/components/schemas/BiomedicalCategory'
-          description: Category assigned by this run.
+          nullable: true
+          description: Category assigned by this run. Null when the classifier ran successfully but declared no category fits (legitimate "no fit" result). Always non-null for human-review rows (the create request requires it).
         method:
           type: string
           maxLength: 100
@@ -2882,8 +2879,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
-          minItems: 1
           maxItems: 3
+          description: Categories assigned by this run. Empty when the classifier ran successfully but declared no category fits (legitimate "no fit" result). Always non-empty for human-review rows (the create request requires at least one).
         method:
           type: string
           maxLength: 100

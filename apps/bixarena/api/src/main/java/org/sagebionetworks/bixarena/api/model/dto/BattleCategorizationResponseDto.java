@@ -116,11 +116,11 @@ public class BattleCategorizationResponseDto {
   }
 
   /**
-   * Get categories
+   * Categories assigned by this run. Empty when the classifier ran successfully but declared no category fits (legitimate \"no fit\" result). Always non-empty for human-review rows (the create request requires at least one).
    * @return categories
    */
-  @NotNull @Valid @Size(min = 1, max = 3) 
-  @Schema(name = "categories", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Valid @Size(max = 3) 
+  @Schema(name = "categories", description = "Categories assigned by this run. Empty when the classifier ran successfully but declared no category fits (legitimate \"no fit\" result). Always non-empty for human-review rows (the create request requires at least one).", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
   public List<BiomedicalCategoryDto> getCategories() {
     return categories;
