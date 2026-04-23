@@ -38,7 +38,7 @@ public class NominatedDrugEvidenceDto {
 
   private String adMoa = null;
 
-  private String reference;
+  private String reference = null;
 
   private String computationalValidationStatus;
 

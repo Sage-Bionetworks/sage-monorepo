@@ -158,6 +158,8 @@ paths:
                 $ref: '#/components/schemas/Drug'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /bio-domains:
@@ -1074,6 +1076,7 @@ components:
           type: string
           description: A reference supporting the drug nomination
           example: https://doi.org/10.1101/2023.12.26.573348
+          nullable: true
         computational_validation_status:
           type: string
           description: The status of computational validation for the drug nomination
@@ -1151,6 +1154,7 @@ components:
           type: string
           description: The DrugBank ID of the drug
           example: DB04819
+          nullable: true
         aliases:
           type: array
           description: Alternative names for the drug

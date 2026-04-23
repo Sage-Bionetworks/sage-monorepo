@@ -21,6 +21,7 @@ properties:
     type: string
     description: The DrugBank ID of the drug
     example: DB04819
+    nullable: true
   aliases:
     type: array
     description: Alternative names for the drug

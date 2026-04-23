@@ -39,7 +39,7 @@ public class DrugDto {
 
   private String chemblId;
 
-  private String drugBankId;
+  private String drugBankId = null;
 
   @Valid
   private List<String> aliases = new ArrayList<>();

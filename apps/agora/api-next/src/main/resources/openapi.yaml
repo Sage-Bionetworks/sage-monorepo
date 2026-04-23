@@ -177,6 +177,8 @@ paths:
           description: Drug details successfully retrieved
         '400':
           $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Get drug details by ChEMBL ID
@@ -1103,6 +1105,7 @@ components:
         reference:
           description: A reference supporting the drug nomination
           example: https://doi.org/10.1101/2023.12.26.573348
+          nullable: true
           type: string
         computational_validation_status:
           description: The status of computational validation for the drug nomination
@@ -1242,6 +1245,7 @@ components:
         drug_bank_id:
           description: The DrugBank ID of the drug
           example: DB04819
+          nullable: true
           type: string
         aliases:
           description: Alternative names for the drug

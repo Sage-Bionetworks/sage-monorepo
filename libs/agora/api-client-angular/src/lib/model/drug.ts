@@ -34,7 +34,7 @@ export interface Drug {
   /**
    * The DrugBank ID of the drug
    */
-  drug_bank_id: string;
+  drug_bank_id: string | null;
   /**
    * Alternative names for the drug
    */

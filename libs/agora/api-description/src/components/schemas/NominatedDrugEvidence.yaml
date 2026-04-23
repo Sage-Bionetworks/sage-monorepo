@@ -34,6 +34,7 @@ properties:
     type: string
     description: A reference supporting the drug nomination
     example: 'https://doi.org/10.1101/2023.12.26.573348'
+    nullable: true
   computational_validation_status:
     type: string
     description: The status of computational validation for the drug nomination

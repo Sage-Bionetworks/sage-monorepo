@@ -43,7 +43,7 @@ export interface NominatedDrugEvidence {
   /**
    * A reference supporting the drug nomination
    */
-  reference: string;
+  reference: string | null;
   /**
    * The status of computational validation for the drug nomination
    */

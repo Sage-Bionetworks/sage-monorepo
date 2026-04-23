@@ -46,6 +46,7 @@ public interface DrugApi {
      * @param chemblId ChEMBL ID of the drug (required)
      * @return Drug details successfully retrieved (status code 200)
      *         or Invalid request (status code 400)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -58,6 +59,10 @@ public interface DrugApi {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = DrugDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
