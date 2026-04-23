@@ -61,16 +61,18 @@ Fixes [ISSUE-NUMBER](link-to-issue)
 - [High-level change description]
 - [Continue for major changes only...]
 
-## Testing
+## Preview
 
-[Propose concrete verification steps reviewers can run — do NOT leave as a placeholder]
-[Base suggestions on the actual diff; avoid generic boilerplate]
-[Group into: manual steps, automated commands, regressions to watch]
+The [component/service/application] now has:
 
-- [Manual step to exercise the feature or bug fix — golden path]
-- [Manual step covering a notable edge case]
-- Run `nx test <project>` / `./gradlew :<project>:test` / `uv run pytest` as applicable
-- [Adjacent behavior or regression worth spot-checking]
+[CRITICAL: Use flat, single-level bullets with NO sub-items]
+[Keep items high-level - focus on major outcomes and benefits]
+[DO NOT use checkmark emojis (✅) or green checkboxes]
+[Use simple bullet points with dashes (-)]
+
+- [Major improvement or feature outcome]
+- [Major improvement or feature outcome]
+- [Continue for key accomplishments only...]
 ```
 
 ## Content Guidelines
@@ -103,20 +105,18 @@ Fixes [ISSUE-NUMBER](link-to-issue)
 - Aim for 3-7 bullet points total, not an exhaustive list
 - DO NOT list individual file changes
 
-### Testing Section
+### Preview Section
 
 **CRITICAL RULES:**
 
-- ALWAYS propose concrete verification steps — never leave this section as a placeholder or comment-only block
-- Base every suggestion on the actual diff; do not emit generic boilerplate
-- Cover three angles when relevant:
-  1. **Manual steps** — how a reviewer exercises the feature or bug fix (golden path + notable edge cases)
-  2. **Automated commands** — the exact commands for affected projects, e.g. `nx test <project>`, `nx lint <project>`, `nx e2e <project>`, `./gradlew :<project>:test`, `uv run pytest`
-  3. **Regressions / adjacent behavior** — related flows worth spot-checking to catch unintended impact
-- Use flat, single-level bullets with dashes (-); no nested items, no emojis
-- Reference the real project names, URLs, fixtures, or flags touched by the diff
-- For visual changes, suggest the user add a Before/After preview table (the PR template includes a commented-out example); do not fabricate screenshots
-- Scope the content to what the change actually warrants — cover the golden path, automated checks, and any edge cases or regressions worth spot-checking
+- Use ONLY single-level flat bullets with NO nested items
+- Keep items coarse-grained - focus on major outcomes
+- DO NOT use checkmark emojis (✅) or any emojis
+- Use simple bullet points with dashes (-)
+- Focus on end results and benefits from user/system perspective
+- Highlight key improvements, features, or fixes
+- Mention metrics if applicable (test coverage, performance)
+- Aim for 3-5 bullet points describing major accomplishments
 
 ## Technology-Specific Details
 
@@ -166,16 +166,14 @@ Before finalizing:
 - [ ] Technical terminology is accurate
 - [ ] Related issues are properly linked
 - [ ] Changelog items are specific but coarse-grained
-- [ ] Testing section proposes concrete manual verification steps (not a placeholder)
-- [ ] Testing section names the exact automated commands for affected projects
-- [ ] Testing suggestions reference the actual diff (real projects, routes, fixtures)
-- [ ] NO emojis anywhere in the description
-- [ ] NO nested bullets in Changelog or Testing
+- [ ] Preview items highlight actual benefits
+- [ ] NO checkmark emojis in Preview section
+- [ ] NO nested bullets in Changelog or Preview
 - [ ] Grammar and formatting are correct
 - [ ] Description follows exact template structure
 - [ ] Business value is clearly communicated
 - [ ] Only 3-7 bullets in Changelog
-- [ ] Testing bullets cover golden path, automated checks, and relevant edge cases
+- [ ] Only 3-5 bullets in Preview
 
 ## Example Usage
 
