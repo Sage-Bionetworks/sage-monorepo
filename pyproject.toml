@@ -55,9 +55,6 @@ workspace = true
 [tool.uv.sources.bixarena-tools]
 workspace = true
 
-[tool.uv.sources.openchallenges-infra-cdk]
-workspace = true
-
 [tool.uv.sources.platform-infra-cdk-common]
 workspace = true
 
@@ -73,7 +70,6 @@ members = [
   "apps/bixarena/infra/cdk",
   "apps/bixarena/worker",
   "apps/bixarena/tools",
-  "apps/openchallenges/infra/cdk",
   "libs/bixarena/api-client-python",
   "libs/bixarena/leaderboard-python",
   "libs/platform/infra/cdk/common"
@@ -95,8 +91,7 @@ requires-python = "==3.13.3"
 # they will be installed transitively.
 dependencies = [
   "bixarena-infra-cdk",
-  "bixarena-tools",
-  "openchallenges-infra-cdk"
+  "bixarena-tools"
 ]
 name = "sage-monorepo"
 version = "1.0.0"

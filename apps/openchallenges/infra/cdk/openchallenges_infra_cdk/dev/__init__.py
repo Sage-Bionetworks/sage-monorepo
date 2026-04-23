@@ -1,1 +1,0 @@
-"""Development environment CDK app."""
