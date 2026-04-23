@@ -18,7 +18,7 @@ This rule provides coding standards and guidelines for editing Gradle build scri
 ### Example of correct indentation:
 
 ```gradle-kotlin-dsl
-configure(listOf(project(":openchallenges-mcp-server"))) {
+configure(listOf(project(":bixarena-api"))) {
   apply(plugin = "org.springframework.boot")
   apply(plugin = "org.graalvm.buildtools.native")
   apply(plugin = "dev.nx.gradle.project-graph")

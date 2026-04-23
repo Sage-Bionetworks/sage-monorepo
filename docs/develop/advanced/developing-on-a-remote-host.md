@@ -21,7 +21,7 @@ the compute resources of a remote host.
 ## Motivation
 
 To illustrate the benefit of developing on a remote host, this table summarizes the local compute
-resources available to the developers of OpenChallenges in 2023. The same information is displayed
+resources available to the monorepo developers in 2023. The same information is displayed
 for two types of Amazon EC2 instances and one type of GitHub Codespace instance that were selected
 as candidate alternative development environments for the team members. The table also includes the
 runtimes in seconds of different tasks such as linting or testing all the projects included in the

@@ -18,7 +18,7 @@ nav:
       - Agora: products/agora.md
       - BixArena: api/bixarena.md
       - Model-AD: api/model-ad.md
-      - OpenChallenges: products/openchallenges.md
+      - OpenChallenges (legacy): products/openchallenges.md
       - Synapse: api/synapse.md
   - Develop:
       - Quick Start: develop/quick-start.md
@@ -64,14 +64,12 @@ nav:
       - Agora: api/agora.md
       - BixArena: api/bixarena.md
       - Model-AD: api/model-ad.md
-      - OpenChallenges: api/openchallenges.md
       - Synapse: api/synapse.md
   - Resources:
       - FAQ: resources/faq.md
       - Bug Reports: resources/bug-report.md
       - Feature Requests: resources/feature-requests.md
       - Contributing: contributions/overview.md
-      - OpenChallenges Schemas: resources/oc-schemas.md
   - Technical Documentation:
       - Overview: technical-documentation-overview.md
       - Submission Workflow: submission-workflow.md

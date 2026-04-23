@@ -10,7 +10,6 @@ site/
 
 # Config files
 .act.secrets
-.openchallenges.toml
 
 # Generated Dockerfiles from centralized container image system
 **/Dockerfile.generated

@@ -135,20 +135,13 @@ void shouldThrowExceptionWhenInputIsNull() {
 
 This Sage monorepo uses a multi-module Gradle setup. **You no longer need to navigate to project directories.** Run all Gradle tasks from the repository root using the project path notation.
 
-**For OpenChallenges projects:**
-
-```bash
-# Run from repository root /workspaces/sage-monorepo
-./gradlew :openchallenges-challenge-service:test --info
-./gradlew :openchallenges-auth-service:test --info
-```
-
-**For other projects, examples:**
+**Examples:**
 
 ```bash
 # Run from repository root /workspaces/sage-monorepo
 ./gradlew :bixarena-api:test --info
-./gradlew :agora-api:test --info
+./gradlew :bixarena-auth-service:test --info
+./gradlew :agora-api-next:test --info
 ```
 
 ### Running Specific Tests
@@ -157,16 +150,16 @@ When running tests in the multi-module workspace, use targeted commands with pro
 
 ```bash
 # RECOMMENDED: Start with specific test class to identify issues quickly
-./gradlew :openchallenges-challenge-service:test --tests "*YourTestClass*" --stacktrace --no-daemon --console=plain
+./gradlew :bixarena-api:test --tests "*YourTestClass*" --stacktrace --no-daemon --console=plain
 
 # If tests fail, use --rerun-tasks to bypass cache
-./gradlew :openchallenges-challenge-service:test --tests "*YourTestClass*" --rerun-tasks --stacktrace --no-daemon --console=plain
+./gradlew :bixarena-api:test --tests "*YourTestClass*" --rerun-tasks --stacktrace --no-daemon --console=plain
 
 # After fixes, verify all unit tests pass for the specific project
-./gradlew :openchallenges-challenge-service:testUnit --no-daemon --console=plain
+./gradlew :bixarena-api:testUnit --no-daemon --console=plain
 
 # Finally, verify integration tests still work for the specific project
-./gradlew :openchallenges-challenge-service:testIntegration --no-daemon --console=plain
+./gradlew :bixarena-api:testIntegration --no-daemon --console=plain
 ```
 
 **Efficient Testing Strategy:**

@@ -12,7 +12,6 @@ This directory contains visual diagrams for system architecture and design docum
 ## Current Diagrams
 
 - [bixarena-architecture.gif](./bixarena-architecture.gif) - Current BixArena system architecture
-- [openchallenges-architecture.gif](./openchallenges-architecture.gif) - Current OpenChallenges system architecture
 
 ## Guidelines
 

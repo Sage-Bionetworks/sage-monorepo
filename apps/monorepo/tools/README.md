@@ -30,24 +30,24 @@ The tool is already set up in the monorepo. Dependencies are managed via the wor
 tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts --help
 
 # Analyze files (dry run)
-tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts libs/openchallenges/api-description/src
+tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts libs/agora/api-description/src
 
 # Generate detailed report with dependency graph
-tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts libs/openchallenges/api-description/src --report
+tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts libs/agora/api-description/src --report
 
 # Actually delete unused files (DESTRUCTIVE!)
-tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts libs/openchallenges/api-description/src --delete
+tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts libs/agora/api-description/src --delete
 
 # Pipe output (works correctly with EPIPE handling)
-tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts libs/openchallenges/api-description/src --report | head -20
-tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts libs/openchallenges/api-description/src --report | grep "🗂️"
+tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts libs/agora/api-description/src --report | head -20
+tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts libs/agora/api-description/src --report | grep "🗂️"
 ```
 
 ### Option 2: Via Nx
 
 ```bash
 # Works fine without piping
-nx run monorepo-tools:analyze-openapi -- libs/openchallenges/api-description/src --report
+nx run monorepo-tools:analyze-openapi -- libs/agora/api-description/src --report
 
 # Note: Has EPIPE issues when piped (use direct execution instead)
 ```
@@ -55,7 +55,7 @@ nx run monorepo-tools:analyze-openapi -- libs/openchallenges/api-description/src
 ## Example Output
 
 ```
-Analyzing OpenAPI files in: libs/openchallenges/api-description/src
+Analyzing OpenAPI files in: libs/agora/api-description/src
 Entry points found: ['auth.openapi.yaml', 'challenge.openapi.yaml', 'image.openapi.yaml', 'organization.openapi.yaml']
 
 === OpenAPI File Usage Report ===
@@ -110,13 +110,6 @@ Entry points found: ['auth.openapi.yaml', 'challenge.openapi.yaml', 'image.opena
 - **Performance**: Processes 200+ files in seconds
 - **Architecture**: Object-oriented design with comprehensive error handling
 
-## Analysis Results for OpenChallenges
+## Usage Notes
 
-Current analysis of `libs/openchallenges/api-description/src`:
-
-- **Total files**: 207
-- **Used files**: 120 (58%)
-- **Unused files**: 87 (42%)
-- **Potential cleanup**: Remove 87 unused files to significantly reduce repository size
-
-Safe to delete 87 unused files that have no references and are not entry points.
+Run the analyzer against any product's `api-description/src` directory to generate a usage report and optionally clean up unused files. The dry run default (no `--delete`) is safe to use for exploration.

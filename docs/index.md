@@ -48,13 +48,12 @@ Ready to start building? Choose your path:
 
 Explore the biomedical research platforms built with Sage Monorepo:
 
-| Product                                                | Description                                                                                                              | Links                                                             |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| **[Agora](https://agora.adknowledgeportal.org/genes)** | High-dimensional human transcriptomic, proteomic, and metabolomic evidence for genes associated with Alzheimer's disease | [Docs](products/agora.md) • [API](api/agora.md)                   |
-| **[BixArena](https://bixarena.synapse.org/)**          | Platform for biomedical data analysis competitions and challenges                                                        | [API](api/bixarena.md)                                            |
-| **[Model-AD](https://www.model-ad.org/)**              | Resource for Alzheimer's disease model development and validation                                                        | [API](api/model-ad.md)                                            |
-| **[OpenChallenges](https://openchallenges.io/home)**   | Cloud-native platform for biomedical challenges and citizen science data benchmarking                                    | [Docs](products/openchallenges.md) • [API](api/openchallenges.md) |
-| **[Synapse](https://www.synapse.org/)**                | Collaborative platform for data sharing and analysis in biomedical research                                              | [API](api/synapse.md)                                             |
+| Product                                                | Description                                                                                                              | Links                                           |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
+| **[Agora](https://agora.adknowledgeportal.org/genes)** | High-dimensional human transcriptomic, proteomic, and metabolomic evidence for genes associated with Alzheimer's disease | [Docs](products/agora.md) • [API](api/agora.md) |
+| **[BixArena](https://bixarena.synapse.org/)**          | Platform for biomedical data analysis competitions and challenges                                                        | [API](api/bixarena.md)                          |
+| **[Model-AD](https://www.model-ad.org/)**              | Resource for Alzheimer's disease model development and validation                                                        | [API](api/model-ad.md)                          |
+| **[Synapse](https://www.synapse.org/)**                | Collaborative platform for data sharing and analysis in biomedical research                                              | [API](api/synapse.md)                           |
 
 ## Platform Statistics
 

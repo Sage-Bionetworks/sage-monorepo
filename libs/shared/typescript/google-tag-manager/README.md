@@ -87,5 +87,4 @@ The GTM component will only be active if the `googleTagManagerId` property is se
 This component is currently used in the following applications:
 
 - Agora
-- OpenChallenges
 - Model-AD

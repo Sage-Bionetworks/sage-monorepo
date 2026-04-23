@@ -110,7 +110,7 @@ Create `project.json` to integrate with Nx:
 }
 ```
 
-**Replace** `<product>` with your product name (e.g., `bixarena`, `openchallenges`).
+**Replace** `<product>` with your product name (e.g., `bixarena`, `agora`).
 
 ## Step 4: Create the Project Configuration
 

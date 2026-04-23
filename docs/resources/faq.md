@@ -51,7 +51,6 @@ Yes! We support remote development through:
 See our [Service Catalog](../products/services.md) for a complete list of all 145 projects, or explore our main products:
 
 - [Agora](../products/agora.md)
-- [OpenChallenges](../products/openchallenges.md)
 
 ### How do I access the APIs?
 
@@ -64,7 +63,6 @@ API documentation is auto-generated and available for:
 - [Agora API](../api/agora.md)
 - [BixArena API](../api/bixarena.md)
 - [Model-AD API](../api/model-ad.md)
-- [OpenChallenges API](../api/openchallenges.md)
 - [Synapse API](../api/synapse.md)
 
 ## Contributing

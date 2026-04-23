@@ -53,7 +53,7 @@ Count PRs per contributor. Check commit messages for `Co-authored-by:` lines to 
 
 ### 4. Categorize Changes
 
-**→ Project Updates** (user-facing work): Features, bug fixes, and UI changes for specific product areas. If the scope is a product name (`model-ad`, `openchallenges`, `agora`, `bixarena`, `explorers`), it goes here.
+**→ Project Updates** (user-facing work): Features, bug fixes, and UI changes for specific product areas. If the scope is a product name (`model-ad`, `agora`, `bixarena`, `explorers`), it goes here.
 
 **→ Technical Improvements** (infrastructure/tooling): Changes to build systems, CI/CD, shared libraries, Angular modernization, developer tooling, dependency upgrades, or repo-wide automation. Scopes like `monorepo`, `synapse`, `ci`, `build`, or generic framework-level scopes.
 

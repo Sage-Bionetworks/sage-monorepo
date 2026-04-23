@@ -17,10 +17,9 @@ Architecture documents typically originate from approved RFCs in `docs/rfcs/`. O
 
 Diagrams are stored in the [docs/architecture/diagrams/](diagrams/README.md) subdirectory.
 
-| Diagram                                                                   | Description                 | Last Updated |
-| ------------------------------------------------------------------------- | --------------------------- | ------------ |
-| [BixArena Architecture](./diagrams/bixarena-architecture.gif)             | Current system architecture | 2026-01-26   |
-| [OpenChallenges Architecture](./diagrams/openchallenges-architecture.gif) | Current system architecture | 2026-01-26   |
+| Diagram                                                       | Description                 | Last Updated |
+| ------------------------------------------------------------- | --------------------------- | ------------ |
+| [BixArena Architecture](./diagrams/bixarena-architecture.gif) | Current system architecture | 2026-01-26   |
 
 ## Directory Structure
 

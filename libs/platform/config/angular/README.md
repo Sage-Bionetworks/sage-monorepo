@@ -22,11 +22,11 @@ The configuration management system is organized into reusable layers:
 ```mermaid
 graph TB
     subgraph "Application Layer"
-        APP[openchallenges-app<br/>Angular SSR Application]
+        APP[agora-app<br/>Angular SSR Application]
     end
 
     subgraph "App-Specific Config Layer"
-        APP_CONFIG[openchallenges-web-angular-config<br/>Application-specific schemas & transformer]
+        APP_CONFIG[agora-config<br/>Application-specific schemas & transformer]
         APP_CONFIG_ITEMS["• ServerConfigSchema<br/>• ClientConfigSchema<br/>• transformServerToClientConfig()<br/>• ConfigService"]
     end
 
@@ -56,14 +56,14 @@ graph TB
   - Generic `ConfigLoaderService<T, S>` for flexible type handling
   - Can be reused across any Angular application
 
-- **`openchallenges-web-angular-config`** (App-Specific Library, e.g. OpenChallenges)
+- **`agora-config`** (App-Specific Library, e.g. Agora)
 
-  - Defines OpenChallenges-specific configuration schemas (Zod)
+  - Defines Agora-specific configuration schemas (Zod)
   - Implements `ConfigService` extending `ConfigLoaderService`
   - Provides `transformServerToClientConfig()` for server/client separation
   - Bridges platform library and application needs
 
-- **`openchallenges-app`** (Application, e.g. OpenChallenges)
+- **`agora-app`** (Application, e.g. Agora)
   - Consumes configuration via dependency injection
   - Uses `ConfigService.config` throughout the application
   - Provides YAML configuration files in `/src/config/`
@@ -365,7 +365,7 @@ export class MyComponent {
 
 ### Example Implementation
 
-See `@sagebionetworks/openchallenges/web/angular/config` for a complete example implementation.
+See `@sagebionetworks/agora/config` for a complete example implementation.
 
 ## Running unit tests
 

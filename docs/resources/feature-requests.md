@@ -58,10 +58,6 @@ Source `dev-env.sh`.
 
     . dev-env.sh
 
-Prepare the development environment.
-
-    openchallenges-prepare
-
 ### Linting
 
 Lint all the projects.
@@ -76,12 +72,6 @@ Build and test all the projects.
 yarn build
 yarn test
 ```
-
-### Start the OpenChallenges
-
-Start the web app and its dependencies (API, API database).
-
-    yarn start
 
 ## Release Procedure
 

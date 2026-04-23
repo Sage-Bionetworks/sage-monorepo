@@ -166,13 +166,13 @@ This prevents HTTPS certificate errors when loading GTM scripts locally.
 - **Tech**: `angular` - Angular-specific implementation
 - **Type**: `ui` - UI component library
 
-## Example: OpenChallenges Integration
+## Example: Agora Integration
 
 ```typescript
-// apps/openchallenges/app/src/app/app.config.ts
+// apps/agora/app/src/app/app.config.ts
 import { ApplicationConfig, inject } from '@angular/core';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
-import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
+import { ConfigService } from '@sagebionetworks/agora/config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -190,10 +190,10 @@ export const appConfig: ApplicationConfig = {
 ```
 
 ```typescript
-// apps/openchallenges/app/src/app/app.component.ts
+// apps/agora/app/src/app/app.component.ts
 import { Component, inject } from '@angular/core';
 import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm';
-import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
+import { ConfigService } from '@sagebionetworks/agora/config';
 
 @Component({
   selector: 'app-root',
