@@ -7,7 +7,7 @@
 #
 # Requires the environment variable SONAR_TOKEN to be set.
 #
-# Run locally, e.g. nx sonar openchallenges-app
+# Run locally, e.g. nx sonar agora-app
 
 # Default variable values
 ## The Sonar host receiving scan results
