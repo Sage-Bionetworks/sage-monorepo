@@ -84,7 +84,7 @@
   color: var(--p-text-muted-color);
 
   b {
-    color: var(--p-primary-color);
+    color: var(--p-teal-400);
     font-weight: 600;
   }
 }
@@ -100,9 +100,9 @@
 .validation-fill {
   height: 100%;
   width: 0;
-  background: var(--p-primary-color);
+  background: var(--p-teal-400);
   border-radius: 0.125rem;
-  box-shadow: 0 0 0.5rem color-mix(in srgb, var(--p-primary-color) 30%, transparent);
+  box-shadow: 0 0 0.5rem color-mix(in srgb, var(--p-teal-400) 30%, transparent);
   animation: validation-progress 2.2s ease-out forwards;
 }
 
