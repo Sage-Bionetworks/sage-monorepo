@@ -1,8 +1,0 @@
-description: The incentive type of the challenge.
-type: string
-enum:
-  - monetary
-  - publication
-  - speaking_engagement
-  - other
-example: publication

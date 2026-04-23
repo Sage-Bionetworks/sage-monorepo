@@ -1,5 +1,0 @@
-name: organizationSearchQuery
-description: The search query used to find organizations.
-in: query
-schema:
-  $ref: ../../schemas/OrganizationSearchQuery.yaml

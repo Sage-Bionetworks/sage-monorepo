@@ -1,6 +1,0 @@
-description: The unique slug of the challenge.
-type: string
-minLength: 3
-maxLength: 255
-pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
-example: awesome-challenge
