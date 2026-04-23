@@ -48,6 +48,7 @@ from bixarena_api_client.models.battle_validation_response import (
 )
 from bixarena_api_client.models.biomedical_category import BiomedicalCategory
 from bixarena_api_client.models.callback200_response import Callback200Response
+from bixarena_api_client.models.categorization_status import CategorizationStatus
 from bixarena_api_client.models.example_prompt import ExamplePrompt
 from bixarena_api_client.models.example_prompt_categorization_create_request import (
     ExamplePromptCategorizationCreateRequest,

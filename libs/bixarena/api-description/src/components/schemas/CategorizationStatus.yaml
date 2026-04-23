@@ -1,0 +1,18 @@
+type: string
+description: >-
+  Terminal outcome of a categorization run.
+
+  - `matched`: the classifier picked at least one category.
+
+  - `abstained`: the classifier ran successfully but declared no category fits.
+    The row is persisted for audit; the effective categorization is not
+    auto-promoted.
+
+  - `failed`: the classifier could not run (AI service or LLM error). The row
+    is persisted so admins can identify and retry; the effective categorization
+    is not auto-promoted.
+enum:
+  - matched
+  - abstained
+  - failed
+example: matched

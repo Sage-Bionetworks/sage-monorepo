@@ -81,6 +81,32 @@ CATEGORIZATION_SCHEMA = {
     },
 }
 
+_NO_FIT_SENTINEL = "none"
+
+SINGLE_CATEGORY_SCHEMA = {
+    "name": "categorization",
+    "strict": True,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "category": {
+                "type": "string",
+                # Anthropic's strict structured-output rejects multi-type enums
+                # (e.g. type:[string,null] with null in enum). Use a sentinel
+                # string for "no fit" instead; parse_single_category maps it
+                # back to None.
+                "enum": list(BIOMEDICAL_CATEGORIES) + [_NO_FIT_SENTINEL],
+                "description": (
+                    "The single most relevant category slug from the allowed list, "
+                    f"or {_NO_FIT_SENTINEL!r} when no category fits."
+                ),
+            }
+        },
+        "required": ["category"],
+        "additionalProperties": False,
+    },
+}
+
 
 def parse_confidence(raw: str) -> float:
     """Extract and clamp the confidence value from the LLM response.
@@ -168,41 +194,90 @@ async def classify(system_prompt: str, user_message: str) -> float:
         return FALLBACK_CONFIDENCE
 
 
-async def categorize(system_prompt: str, user_message: str) -> list[str] | None:
+def parse_single_category(raw: str) -> str | None:
+    """Extract and validate a single category slug from the LLM response.
+
+    Returns the slug when it is in the allowed list, or ``None`` for a
+    legitimate "no fit" response (LLM returned the sentinel). Parse
+    failures propagate as exceptions so the outer ``categorize_single()``
+    caller can distinguish them from a legit ``None`` result and avoid
+    caching them.
+    """
+    allowed = set(BIOMEDICAL_CATEGORIES)
+    data = json.loads(raw)
+    category = data["category"]
+    if not isinstance(category, str):
+        raise ValueError("category field is not a string")
+    if category == _NO_FIT_SENTINEL:
+        return None
+    if category not in allowed:
+        raise ValueError(f"category {category!r} is not an allowed slug")
+    return category
+
+
+async def categorize(system_prompt: str, user_message: str) -> list[str]:
     """Call the OpenRouter LLM and return a list of bioRxiv category slugs.
 
-    Returns:
-      - list of slugs on a successful LLM response (may be empty for legitimate "no fit")
-      - None on error (API failure, missing key, parse failure) — callers should
-        not cache this; an empty list would be indistinguishable from "no fit".
+    Returns a list of slugs on success (possibly empty for a legitimate "no
+    fit"). Raises on API failure, missing key, or parse failure — callers
+    should log and skip caching in that case so a transient error is not
+    burned into the cache.
     """
     settings = get_settings()
 
     if not settings.openrouter_api_key:
-        logger.warning("BIXARENA_AI_OPENROUTER_API_KEY is not set — returning None")
-        return None
+        raise RuntimeError("BIXARENA_AI_OPENROUTER_API_KEY is not set")
 
-    try:
-        client = get_openai_client()
+    client = get_openai_client()
 
-        response = await client.chat.completions.create(
-            model=settings.openrouter_model,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message},
-            ],
-            temperature=0.0,
-            max_tokens=100,
-            response_format={
-                "type": "json_schema",
-                "json_schema": CATEGORIZATION_SCHEMA,
-            },
-        )
+    response = await client.chat.completions.create(
+        model=settings.openrouter_model,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_message},
+        ],
+        temperature=0.0,
+        max_tokens=100,
+        response_format={
+            "type": "json_schema",
+            "json_schema": CATEGORIZATION_SCHEMA,
+        },
+    )
 
-        raw = response.choices[0].message.content or ""
-        logger.debug("LLM raw response: %s", raw[:200])
-        return parse_categories(raw)
+    raw = response.choices[0].message.content or ""
+    logger.debug("LLM raw response: %s", raw[:200])
+    return parse_categories(raw)
 
-    except Exception:
-        logger.exception("OpenRouter API call failed — returning None")
-        return None
+
+async def categorize_single(system_prompt: str, user_message: str) -> str | None:
+    """Call the OpenRouter LLM and return a single bioRxiv category slug.
+
+    Returns the matched slug on success, or ``None`` when the classifier
+    declared no category fits the text. Raises on API failure, missing key,
+    or parse failure — callers should log and skip caching in that case so
+    a transient error is not burned into the cache.
+    """
+    settings = get_settings()
+
+    if not settings.openrouter_api_key:
+        raise RuntimeError("BIXARENA_AI_OPENROUTER_API_KEY is not set")
+
+    client = get_openai_client()
+
+    response = await client.chat.completions.create(
+        model=settings.openrouter_model,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_message},
+        ],
+        temperature=0.0,
+        max_tokens=50,
+        response_format={
+            "type": "json_schema",
+            "json_schema": SINGLE_CATEGORY_SCHEMA,
+        },
+    )
+
+    raw = response.choices[0].message.content or ""
+    logger.debug("LLM raw response: %s", raw[:200])
+    return parse_single_category(raw)

@@ -37,6 +37,7 @@ bixarena_api_client/models/battle_validation_create_request.py
 bixarena_api_client/models/battle_validation_response.py
 bixarena_api_client/models/biomedical_category.py
 bixarena_api_client/models/callback200_response.py
+bixarena_api_client/models/categorization_status.py
 bixarena_api_client/models/example_prompt.py
 bixarena_api_client/models/example_prompt_categorization_create_request.py
 bixarena_api_client/models/example_prompt_categorization_response.py
@@ -115,6 +116,7 @@ docs/BattleValidationCreateRequest.md
 docs/BattleValidationResponse.md
 docs/BiomedicalCategory.md
 docs/Callback200Response.md
+docs/CategorizationStatus.md
 docs/ChatApi.md
 docs/ExamplePrompt.md
 docs/ExamplePromptApi.md
@@ -199,6 +201,7 @@ test/test_battle_validation_create_request.py
 test/test_battle_validation_response.py
 test/test_biomedical_category.py
 test/test_callback200_response.py
+test/test_categorization_status.py
 test/test_chat_api.py
 test/test_example_prompt.py
 test/test_example_prompt_api.py

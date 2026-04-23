@@ -31,10 +31,7 @@ export interface ExamplePrompt {
    * ID of the effective categorization for this prompt (null = not yet categorized)
    */
   effectiveCategorizationId?: string | null;
-  /**
-   * Categories from the effective categorization. Empty array if not yet categorized.
-   */
-  categories: Array<BiomedicalCategory>;
+  category?: BiomedicalCategory;
   /**
    * When the example prompt was created.
    */

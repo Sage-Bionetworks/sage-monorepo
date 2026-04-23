@@ -3135,7 +3135,7 @@ class BattleApi:
     ) -> BattleCategorizationResponse:
         """Run an automated categorization
 
-        Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
+        Run an automated AI categorization against a battle. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with an empty `categories` array to preserve the audit trail and avoid redundant re-classification. Returns 409 if the battle is not biomedical.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
@@ -3171,7 +3171,6 @@ class BattleApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "BattleCategorizationResponse",
-            "204": None,
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
@@ -3208,7 +3207,7 @@ class BattleApi:
     ) -> ApiResponse[BattleCategorizationResponse]:
         """Run an automated categorization
 
-        Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
+        Run an automated AI categorization against a battle. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with an empty `categories` array to preserve the audit trail and avoid redundant re-classification. Returns 409 if the battle is not biomedical.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
@@ -3244,7 +3243,6 @@ class BattleApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "BattleCategorizationResponse",
-            "204": None,
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
@@ -3281,7 +3279,7 @@ class BattleApi:
     ) -> RESTResponseType:
         """Run an automated categorization
 
-        Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
+        Run an automated AI categorization against a battle. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with an empty `categories` array to preserve the audit trail and avoid redundant re-classification. Returns 409 if the battle is not biomedical.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
@@ -3317,7 +3315,6 @@ class BattleApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "BattleCategorizationResponse",
-            "204": None,
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",

@@ -39,6 +39,9 @@ public class BattleCategorizationEntity {
   @Column(name = "reason", length = 1000)
   private String reason;
 
+  @Column(name = "status", nullable = false, length = 20)
+  private String status;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;

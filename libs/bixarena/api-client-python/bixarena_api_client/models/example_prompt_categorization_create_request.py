@@ -29,11 +29,11 @@ class ExamplePromptCategorizationCreateRequest(BaseModel):
     Request to manually categorize an example prompt.
     """  # noqa: E501
 
-    categories: Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
+    category: BiomedicalCategory
     reason: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = Field(
         default=None, description="Reason for the categorization decision"
     )
-    __properties: ClassVar[List[str]] = ["categories", "reason"]
+    __properties: ClassVar[List[str]] = ["category", "reason"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -89,6 +89,6 @@ class ExamplePromptCategorizationCreateRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate(
-            {"categories": obj.get("categories"), "reason": obj.get("reason")}
+            {"category": obj.get("category"), "reason": obj.get("reason")}
         )
         return _obj

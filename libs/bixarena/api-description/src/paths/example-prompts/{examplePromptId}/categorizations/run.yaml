@@ -7,9 +7,10 @@ post:
     - Example Prompt
   summary: Run an automated categorization
   description: >-
-    Run an automated AI categorization against an example prompt. Returns 201 with the
-    persisted row when the AI matched at least one category, or 204 when the AI could
-    not match any category from the taxonomy (no row is persisted in that case).
+    Run an automated AI categorization against an example prompt. Always returns
+    201 with the persisted row — when the AI could not match any category, the
+    row is still persisted with a null `category` to preserve the audit trail
+    and avoid redundant re-classification.
   operationId: runExamplePromptCategorization
   responses:
     '201':
@@ -18,8 +19,6 @@ post:
         application/json:
           schema:
             $ref: ../../../../components/schemas/ExamplePromptCategorizationResponse.yaml
-    '204':
-      description: Categorization run completed but the AI did not match any category
     '400':
       $ref: ../../../../components/responses/BadRequest.yaml
     '401':

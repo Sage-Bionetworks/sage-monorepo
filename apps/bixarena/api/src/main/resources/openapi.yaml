@@ -798,9 +798,9 @@ paths:
   /example-prompts/{examplePromptId}/categorizations/run:
     post:
       description: "Run an automated AI categorization against an example prompt.\
-        \ Returns 201 with the persisted row when the AI matched at least one category,\
-        \ or 204 when the AI could not match any category from the taxonomy (no row\
-        \ is persisted in that case)."
+        \ Always returns 201 with the persisted row — when the AI could not match\
+        \ any category, the row is still persisted with a null `category` to preserve\
+        \ the audit trail and avoid redundant re-classification."
       operationId: runExamplePromptCategorization
       parameters:
         - description: The unique identifier of an example prompt
@@ -820,8 +820,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExamplePromptCategorizationResponse'
           description: Categorization completed and persisted successfully
-        '204':
-          description: Categorization run completed but the AI did not match any category
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1309,10 +1307,11 @@ paths:
         - tag: Battle
   /battles/{battleId}/categorizations/run:
     post:
-      description: "Run an automated AI categorization against a battle. Returns 201\
-        \ with the persisted row when the AI matched at least one category, or 204\
-        \ when the AI could not match any category from the taxonomy (no row is persisted\
-        \ in that case). Returns 409 if the battle is not biomedical."
+      description: "Run an automated AI categorization against a battle. Always returns\
+        \ 201 with the persisted row — when the AI could not match any category, the\
+        \ row is still persisted with an empty `categories` array to preserve the\
+        \ audit trail and avoid redundant re-classification. Returns 409 if the battle\
+        \ is not biomedical."
       operationId: runBattleCategorization
       parameters:
         - description: The unique identifier of the battle
@@ -1330,8 +1329,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/BattleCategorizationResponse'
           description: Categorization completed and persisted successfully
-        '204':
-          description: Categorization run completed but the AI did not match any category
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -3185,11 +3182,8 @@ components:
         active: true
         id: 123e4567-e89b-12d3-a456-426614174000
         source: pubmedqa
-        categories:
-          - genetics
-          - genetics
-          - genetics
         effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        category: genetics
       properties:
         id:
           description: The unique identifier of the example prompt.
@@ -3214,14 +3208,8 @@ components:
           format: uuid
           nullable: true
           type: string
-        categories:
-          default: []
-          description: Categories from the effective categorization. Empty array if
-            not yet categorized.
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          maxItems: 3
-          type: array
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
         createdAt:
           description: When the example prompt was created.
           example: 2025-08-01T09:00:00Z
@@ -3229,7 +3217,6 @@ components:
           type: string
       required:
         - active
-        - categories
         - createdAt
         - id
         - question
@@ -3259,21 +3246,15 @@ components:
             active: true
             id: 123e4567-e89b-12d3-a456-426614174000
             source: pubmedqa
-            categories:
-              - genetics
-              - genetics
-              - genetics
             effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            category: genetics
           - createdAt: 2025-08-01T09:00:00Z
             question: What are the main symptoms of Type 2 diabetes?
             active: true
             id: 123e4567-e89b-12d3-a456-426614174000
             source: pubmedqa
-            categories:
-              - genetics
-              - genetics
-              - genetics
             effectiveCategorizationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            category: genetics
         hasNext: true
         totalElements: 99
       type: object
@@ -3314,6 +3295,23 @@ components:
           nullable: true
           type: boolean
       type: object
+    CategorizationStatus:
+      description: |-
+        Terminal outcome of a categorization run.
+        - `matched`: the classifier picked at least one category.
+        - `abstained`: the classifier ran successfully but declared no category fits.
+          The row is persisted for audit; the effective categorization is not
+          auto-promoted.
+
+        - `failed`: the classifier could not run (AI service or LLM error). The row
+          is persisted so admins can identify and retry; the effective categorization
+          is not auto-promoted.
+      enum:
+        - matched
+        - abstained
+        - failed
+      example: matched
+      type: string
     ExamplePromptCategorizationResponse:
       description: The result of a categorization run for an example prompt.
       example:
@@ -3323,10 +3321,8 @@ components:
         promptId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         categorizedBy: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        categories:
-          - genetics
-          - genetics
-          - genetics
+        category: genetics
+        status: matched
       properties:
         id:
           format: uuid
@@ -3334,12 +3330,10 @@ components:
         promptId:
           format: uuid
           type: string
-        categories:
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          maxItems: 3
-          minItems: 1
-          type: array
+        status:
+          $ref: '#/components/schemas/CategorizationStatus'
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
         method:
           maxLength: 100
           type: string
@@ -3357,29 +3351,25 @@ components:
           format: date-time
           type: string
       required:
-        - categories
+        - category
         - createdAt
         - id
         - method
         - promptId
+        - status
       type: object
     ExamplePromptCategorizationCreateRequest:
       description: Request to manually categorize an example prompt.
       properties:
-        categories:
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          maxItems: 3
-          minItems: 1
-          type: array
-          uniqueItems: true
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
         reason:
           description: Reason for the categorization decision
           maxLength: 1000
           nullable: true
           type: string
       required:
-        - categories
+        - category
       type: object
     SetEffectiveCategorizationRequest:
       description: Request to set or clear the effective categorization for an example
@@ -4101,6 +4091,7 @@ components:
           - genetics
           - genetics
           - genetics
+        status: matched
       properties:
         id:
           format: uuid
@@ -4108,11 +4099,15 @@ components:
         battleId:
           format: uuid
           type: string
+        status:
+          $ref: '#/components/schemas/CategorizationStatus'
         categories:
+          description: Categories assigned by this run. Non-empty only when status
+            is `matched`. Empty for `abstained` (classifier declared no fit) and `failed`
+            (classifier error).
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
           maxItems: 3
-          minItems: 1
           type: array
         method:
           maxLength: 100
@@ -4136,6 +4131,7 @@ components:
         - createdAt
         - id
         - method
+        - status
       type: object
     BattleCategorizationCreateRequest:
       description: Request to manually categorize a battle.

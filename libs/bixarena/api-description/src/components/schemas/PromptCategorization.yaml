@@ -3,21 +3,18 @@ properties:
   prompt:
     type: string
     description: The original prompt that was categorized
-  categories:
-    type: array
-    items:
-      type: string
-      maxLength: 100
-    minItems: 0
-    maxItems: 3
+  category:
+    type: string
+    maxLength: 100
+    nullable: true
     description: >-
-      Up to three biomedical subject category slugs assigned by the classifier.
-      May be empty when the classifier did not assign any category.
+      Biomedical subject category slug assigned by the classifier. Null when
+      the classifier could not assign any category.
   method:
     type: string
     maxLength: 100
     description: The categorization method used (e.g. 'openrouter-haiku-v1')
 required:
   - prompt
-  - categories
+  - category
   - method

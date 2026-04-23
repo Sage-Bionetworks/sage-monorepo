@@ -259,12 +259,8 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<BattleCategorizationResponseDto> runBattleCategorization(UUID battleId) {
     log.info("Triggering AI categorization for battle {}", battleId);
-    Optional<BattleCategorizationResponseDto> result = battleCategorizationService.categorizeBattle(
-      battleId
-    );
-    return result
-      .map(dto -> ResponseEntity.status(HttpStatus.CREATED).body(dto))
-      .orElseGet(() -> ResponseEntity.noContent().build());
+    BattleCategorizationResponseDto dto = battleCategorizationService.categorizeBattle(battleId);
+    return ResponseEntity.status(HttpStatus.CREATED).body(dto);
   }
 
   @Override

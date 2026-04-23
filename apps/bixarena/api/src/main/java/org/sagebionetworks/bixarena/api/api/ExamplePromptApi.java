@@ -373,11 +373,10 @@ public interface ExamplePromptApi {
 
     /**
      * POST /example-prompts/{examplePromptId}/categorizations/run : Run an automated categorization
-     * Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
+     * Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null &#x60;category&#x60; to preserve the audit trail and avoid redundant re-classification.
      *
      * @param examplePromptId The unique identifier of an example prompt (required)
      * @return Categorization completed and persisted successfully (status code 201)
-     *         or Categorization run completed but the AI did not match any category (status code 204)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
@@ -387,14 +386,13 @@ public interface ExamplePromptApi {
     @Operation(
         operationId = "runExamplePromptCategorization",
         summary = "Run an automated categorization",
-        description = "Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).",
+        description = "Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null `category` to preserve the audit trail and avoid redundant re-classification.",
         tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Categorization completed and persisted successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class))
             }),
-            @ApiResponse(responseCode = "204", description = "Categorization run completed but the AI did not match any category"),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))

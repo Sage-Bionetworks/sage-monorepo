@@ -45,9 +45,7 @@ class ExamplePrompt(BaseModel):
         description="ID of the effective categorization for this prompt (null = not yet categorized)",
         alias="effectiveCategorizationId",
     )
-    categories: Annotated[List[BiomedicalCategory], Field(max_length=3)] = Field(
-        description="Categories from the effective categorization. Empty array if not yet categorized."
-    )
+    category: Optional[BiomedicalCategory] = None
     created_at: datetime = Field(
         description="When the example prompt was created.", alias="createdAt"
     )
@@ -57,7 +55,7 @@ class ExamplePrompt(BaseModel):
         "source",
         "active",
         "effectiveCategorizationId",
-        "categories",
+        "category",
         "createdAt",
     ]
 
@@ -124,7 +122,7 @@ class ExamplePrompt(BaseModel):
                 "source": obj.get("source"),
                 "active": obj.get("active"),
                 "effectiveCategorizationId": obj.get("effectiveCategorizationId"),
-                "categories": obj.get("categories"),
+                "category": obj.get("category"),
                 "createdAt": obj.get("createdAt"),
             }
         )

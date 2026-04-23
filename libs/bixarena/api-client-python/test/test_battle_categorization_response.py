@@ -39,6 +39,7 @@ class TestBattleCategorizationResponse(unittest.TestCase):
             return BattleCategorizationResponse(
                 id = '',
                 battle_id = '',
+                status = 'matched',
                 categories = [
                     'genetics'
                     ],
@@ -51,6 +52,7 @@ class TestBattleCategorizationResponse(unittest.TestCase):
             return BattleCategorizationResponse(
                 id = '',
                 battle_id = '',
+                status = 'matched',
                 categories = [
                     'genetics'
                     ],

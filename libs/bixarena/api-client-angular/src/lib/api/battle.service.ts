@@ -1459,7 +1459,7 @@ export class BattleService {
 
   /**
    * Run an automated categorization
-   * Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
+   * Run an automated AI categorization against a battle. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with an empty &#x60;categories&#x60; array to preserve the audit trail and avoid redundant re-classification. Returns 409 if the battle is not biomedical.
    * @param battleId The unique identifier of the battle
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.

@@ -634,7 +634,7 @@ paths:
       tags:
         - Example Prompt
       summary: Run an automated categorization
-      description: Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
+      description: Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null `category` to preserve the audit trail and avoid redundant re-classification.
       operationId: runExamplePromptCategorization
       responses:
         '201':
@@ -643,8 +643,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExamplePromptCategorizationResponse'
-        '204':
-          description: Categorization run completed but the AI did not match any category
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -997,7 +995,7 @@ paths:
       tags:
         - Battle
       summary: Run an automated categorization
-      description: Run an automated AI categorization against a battle. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case). Returns 409 if the battle is not biomedical.
+      description: Run an automated AI categorization against a battle. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with an empty `categories` array to preserve the audit trail and avoid redundant re-classification. Returns 409 if the battle is not biomedical.
       operationId: runBattleCategorization
       responses:
         '201':
@@ -1006,8 +1004,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BattleCategorizationResponse'
-        '204':
-          description: Categorization run completed but the AI did not match any category
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2489,13 +2485,10 @@ components:
           format: uuid
           nullable: true
           description: ID of the effective categorization for this prompt (null = not yet categorized)
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          maxItems: 3
-          default: []
-          description: Categories from the effective categorization. Empty array if not yet categorized.
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
+          nullable: true
+          description: Category from the effective categorization. Null if not yet categorized or if the classifier could not assign a category.
         createdAt:
           type: string
           format: date-time
@@ -2506,7 +2499,6 @@ components:
         - question
         - source
         - active
-        - categories
         - createdAt
     ExamplePromptPage:
       type: object
@@ -2556,6 +2548,23 @@ components:
           description: Whether this example prompt is currently active/visible for use.
           nullable: true
           example: true
+    CategorizationStatus:
+      type: string
+      description: |-
+        Terminal outcome of a categorization run.
+        - `matched`: the classifier picked at least one category.
+        - `abstained`: the classifier ran successfully but declared no category fits.
+          The row is persisted for audit; the effective categorization is not
+          auto-promoted.
+
+        - `failed`: the classifier could not run (AI service or LLM error). The row
+          is persisted so admins can identify and retry; the effective categorization
+          is not auto-promoted.
+      enum:
+        - matched
+        - abstained
+        - failed
+      example: matched
     ExamplePromptCategorizationResponse:
       type: object
       description: The result of a categorization run for an example prompt.
@@ -2566,12 +2575,12 @@ components:
         promptId:
           type: string
           format: uuid
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          minItems: 1
-          maxItems: 3
+        status:
+          $ref: '#/components/schemas/CategorizationStatus'
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
+          nullable: true
+          description: Category assigned by this run. Non-null only when status is `matched`. Null for `abstained` (classifier declared no fit) and `failed` (classifier error).
         method:
           type: string
           maxLength: 100
@@ -2591,27 +2600,24 @@ components:
       required:
         - id
         - promptId
-        - categories
+        - status
+        - category
         - method
         - createdAt
     ExamplePromptCategorizationCreateRequest:
       type: object
       description: Request to manually categorize an example prompt.
       properties:
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/BiomedicalCategory'
-          minItems: 1
-          maxItems: 3
-          uniqueItems: true
+        category:
+          $ref: '#/components/schemas/BiomedicalCategory'
+          description: Category to assign.
         reason:
           type: string
           maxLength: 1000
           nullable: true
           description: Reason for the categorization decision
       required:
-        - categories
+        - category
     SetEffectiveCategorizationRequest:
       type: object
       description: Request to set or clear the effective categorization for an example prompt or battle.
@@ -3149,12 +3155,14 @@ components:
         battleId:
           type: string
           format: uuid
+        status:
+          $ref: '#/components/schemas/CategorizationStatus'
         categories:
           type: array
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
-          minItems: 1
           maxItems: 3
+          description: Categories assigned by this run. Non-empty only when status is `matched`. Empty for `abstained` (classifier declared no fit) and `failed` (classifier error).
         method:
           type: string
           maxLength: 100
@@ -3174,6 +3182,7 @@ components:
       required:
         - id
         - battleId
+        - status
         - categories
         - method
         - createdAt

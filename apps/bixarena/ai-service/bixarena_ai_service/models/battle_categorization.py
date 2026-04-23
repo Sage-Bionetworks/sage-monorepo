@@ -33,8 +33,7 @@ class BattleCategorization(BaseModel):
     """  # noqa: E501
 
     categories: Annotated[
-        List[Annotated[str, Field(strict=True, max_length=100)]],
-        Field(min_length=0, max_length=3),
+        List[Annotated[str, Field(strict=True, max_length=100)]], Field(max_length=3)
     ] = Field(
         description="Up to three biomedical subject category slugs assigned by the classifier. May be empty when the classifier did not assign any category."
     )

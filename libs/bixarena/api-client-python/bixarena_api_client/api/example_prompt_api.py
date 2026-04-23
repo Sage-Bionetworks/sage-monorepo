@@ -1671,7 +1671,7 @@ class ExamplePromptApi:
     ) -> ExamplePromptCategorizationResponse:
         """Run an automated categorization
 
-        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
+        Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null `category` to preserve the audit trail and avoid redundant re-classification.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1707,7 +1707,6 @@ class ExamplePromptApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "ExamplePromptCategorizationResponse",
-            "204": None,
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
@@ -1743,7 +1742,7 @@ class ExamplePromptApi:
     ) -> ApiResponse[ExamplePromptCategorizationResponse]:
         """Run an automated categorization
 
-        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
+        Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null `category` to preserve the audit trail and avoid redundant re-classification.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1779,7 +1778,6 @@ class ExamplePromptApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "ExamplePromptCategorizationResponse",
-            "204": None,
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
@@ -1815,7 +1813,7 @@ class ExamplePromptApi:
     ) -> RESTResponseType:
         """Run an automated categorization
 
-        Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
+        Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null `category` to preserve the audit trail and avoid redundant re-classification.
 
         :param example_prompt_id: The unique identifier of an example prompt (required)
         :type example_prompt_id: str
@@ -1851,7 +1849,6 @@ class ExamplePromptApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "ExamplePromptCategorizationResponse",
-            "204": None,
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",

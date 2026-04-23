@@ -22,6 +22,7 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from uuid import UUID
 from bixarena_api_client.models.biomedical_category import BiomedicalCategory
+from bixarena_api_client.models.categorization_status import CategorizationStatus
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -33,7 +34,8 @@ class ExamplePromptCategorizationResponse(BaseModel):
 
     id: UUID
     prompt_id: UUID = Field(alias="promptId")
-    categories: Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
+    status: CategorizationStatus
+    category: BiomedicalCategory
     method: Annotated[str, Field(strict=True, max_length=100)]
     categorized_by: Optional[UUID] = Field(
         default=None,
@@ -47,7 +49,8 @@ class ExamplePromptCategorizationResponse(BaseModel):
     __properties: ClassVar[List[str]] = [
         "id",
         "promptId",
-        "categories",
+        "status",
+        "category",
         "method",
         "categorizedBy",
         "reason",
@@ -116,7 +119,8 @@ class ExamplePromptCategorizationResponse(BaseModel):
             {
                 "id": obj.get("id"),
                 "promptId": obj.get("promptId"),
-                "categories": obj.get("categories"),
+                "status": obj.get("status"),
+                "category": obj.get("category"),
                 "method": obj.get("method"),
                 "categorizedBy": obj.get("categorizedBy"),
                 "reason": obj.get("reason"),

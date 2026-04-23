@@ -39,16 +39,12 @@ class TestExamplePromptCategorizationCreateRequest(unittest.TestCase):
         model = ExamplePromptCategorizationCreateRequest()
         if include_optional:
             return ExamplePromptCategorizationCreateRequest(
-                categories = [
-                    'genetics'
-                    ],
+                category = 'genetics',
                 reason = ''
             )
         else:
             return ExamplePromptCategorizationCreateRequest(
-                categories = [
-                    'genetics'
-                    ],
+                category = 'genetics',
         )
         """
 

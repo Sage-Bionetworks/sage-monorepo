@@ -12,6 +12,8 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
+from fastapi import HTTPException
+
 from bixarena_ai_service.apis.battle_categorization_api_base import (
     BaseBattleCategorizationApi,
 )
@@ -76,15 +78,19 @@ class BattleCategorizationApiImpl(BaseBattleCategorizationApi):
 
         # Cache miss — classify via LLM.
         user_message = _build_user_message(sanitized)
-        categories = await categorize(_SYSTEM_PROMPT, user_message)
-
-        # Only cache LLM responses, not error fallbacks. A None return from
-        # categorize() means the call failed — caching [] here would poison
-        # the cache for 30 days and prevent retry.
-        if categories is None:
-            result = BattleCategorization(categories=[], method=method)
-            logger.info("Battle categorization failed, returning empty (not cached)")
-            return result
+        try:
+            categories = await categorize(_SYSTEM_PROMPT, user_message)
+        except Exception as exc:
+            # Surface classifier failures as 503 so the caller persists a
+            # `status=failed` row and can retry. Returning 200-with-empty-array
+            # would be indistinguishable from a legitimate "no fit" result,
+            # polluting the audit trail. Not cached — a transient error must
+            # not be burned into the cache.
+            logger.exception("Categorization failed for battle")
+            raise HTTPException(
+                status_code=503,
+                detail="AI classifier temporarily unavailable",
+            ) from exc
 
         await set_cached_battle_categorization(sanitized, categories, settings)
 

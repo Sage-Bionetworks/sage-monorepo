@@ -501,7 +501,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Run an automated categorization
 
-Run an automated AI categorization against an example prompt. Returns 201 with the persisted row when the AI matched at least one category, or 204 when the AI could not match any category from the taxonomy (no row is persisted in that case).
+Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null `category` to preserve the audit trail and avoid redundant re-classification.
 
 ### Example
 
@@ -565,15 +565,14 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP response details
 
-| Status code | Description                                                        | Response headers |
-| ----------- | ------------------------------------------------------------------ | ---------------- |
-| **201**     | Categorization completed and persisted successfully                | -                |
-| **204**     | Categorization run completed but the AI did not match any category | -                |
-| **400**     | Invalid request                                                    | -                |
-| **401**     | Unauthorized                                                       | -                |
-| **403**     | The user does not have the permission to perform this action       | -                |
-| **404**     | The specified resource was not found                               | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error  | -                |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **201**     | Categorization completed and persisted successfully               | -                |
+| **400**     | Invalid request                                                   | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

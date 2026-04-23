@@ -37,6 +37,7 @@ model/battle-validation-response.ts
 model/battle.ts
 model/biomedical-category.ts
 model/callback200-response.ts
+model/categorization-status.ts
 model/example-prompt-categorization-create-request.ts
 model/example-prompt-categorization-response.ts
 model/example-prompt-create-request.ts

@@ -100,28 +100,41 @@ for page in $(seq 0 $((TOTAL_PAGES - 1))); do
 
         case "$HTTP_CODE" in
             201)
+                STATUS=$(echo "$BODY" | jq -r '.status')
                 CATEGORIES=$(echo "$BODY" | jq -r '.categories | join(",")')
-                CATEGORIZED=$((CATEGORIZED + 1))
-                echo "  [OK]   $BATTLE_ID -> categories=[$CATEGORIES]"
-                ;;
-            204)
-                NO_FIT=$((NO_FIT + 1))
-                echo "  [NOFIT] $BATTLE_ID -> AI matched no category"
+                case "$STATUS" in
+                    matched)
+                        CATEGORIZED=$((CATEGORIZED + 1))
+                        echo "  [OK]    $BATTLE_ID -> categories=[$CATEGORIES]"
+                        ;;
+                    abstained)
+                        NO_FIT=$((NO_FIT + 1))
+                        echo "  [NOFIT] $BATTLE_ID -> classifier declared no fit (persisted)"
+                        ;;
+                    failed)
+                        FAILED=$((FAILED + 1))
+                        echo "  [FAIL]  $BATTLE_ID -> ai classifier error (persisted, retryable)"
+                        ;;
+                    *)
+                        FAILED=$((FAILED + 1))
+                        echo "  [FAIL]  $BATTLE_ID -> unknown status=$STATUS"
+                        ;;
+                esac
                 ;;
             404)
                 # BattleRoundNotFoundException — battle exists but has no rounds
                 # to collect prompts from. Not an error, just nothing to do.
                 NO_ROUNDS=$((NO_ROUNDS + 1))
-                echo "  [SKIP] $BATTLE_ID -> no rounds (404)"
+                echo "  [SKIP]  $BATTLE_ID -> no rounds (404)"
                 ;;
             409)
                 NOT_BIOMEDICAL=$((NOT_BIOMEDICAL + 1))
-                echo "  [SKIP] $BATTLE_ID -> not biomedical (409)"
+                echo "  [SKIP]  $BATTLE_ID -> not biomedical (409)"
                 ;;
             *)
                 FAILED=$((FAILED + 1))
                 DETAIL=$(echo "$BODY" | jq -r '.detail // .message // "unknown error"' 2>/dev/null)
-                echo "  [FAIL] $BATTLE_ID -> HTTP $HTTP_CODE: $DETAIL"
+                echo "  [FAIL]  $BATTLE_ID -> HTTP $HTTP_CODE: $DETAIL"
                 ;;
         esac
 
@@ -133,12 +146,12 @@ echo ""
 echo "============================================"
 echo "Backfill Complete"
 echo "============================================"
-echo "  Categorized: $CATEGORIZED"
+echo "  Categorized (status=matched): $CATEGORIZED"
 echo "  Already had categorization / not ended: $SKIPPED"
-echo "  No category fit (204): $NO_FIT"
+echo "  No category fit (status=abstained): $NO_FIT"
 echo "  No rounds (404): $NO_ROUNDS"
 echo "  Not biomedical (409): $NOT_BIOMEDICAL"
-echo "  Failed: $FAILED"
+echo "  Classifier failed (status=failed or HTTP error): $FAILED"
 echo "  Total processed: $((CATEGORIZED + SKIPPED + NO_FIT + NO_ROUNDS + NOT_BIOMEDICAL + FAILED))"
 echo ""
 

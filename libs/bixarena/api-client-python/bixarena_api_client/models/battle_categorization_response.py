@@ -22,6 +22,7 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from uuid import UUID
 from bixarena_api_client.models.biomedical_category import BiomedicalCategory
+from bixarena_api_client.models.categorization_status import CategorizationStatus
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -33,7 +34,10 @@ class BattleCategorizationResponse(BaseModel):
 
     id: UUID
     battle_id: UUID = Field(alias="battleId")
-    categories: Annotated[List[BiomedicalCategory], Field(min_length=1, max_length=3)]
+    status: CategorizationStatus
+    categories: Annotated[List[BiomedicalCategory], Field(max_length=3)] = Field(
+        description="Categories assigned by this run. Non-empty only when status is `matched`. Empty for `abstained` (classifier declared no fit) and `failed` (classifier error)."
+    )
     method: Annotated[str, Field(strict=True, max_length=100)]
     categorized_by: Optional[UUID] = Field(
         default=None,
@@ -47,6 +51,7 @@ class BattleCategorizationResponse(BaseModel):
     __properties: ClassVar[List[str]] = [
         "id",
         "battleId",
+        "status",
         "categories",
         "method",
         "categorizedBy",
@@ -116,6 +121,7 @@ class BattleCategorizationResponse(BaseModel):
             {
                 "id": obj.get("id"),
                 "battleId": obj.get("battleId"),
+                "status": obj.get("status"),
                 "categories": obj.get("categories"),
                 "method": obj.get("method"),
                 "categorizedBy": obj.get("categorizedBy"),

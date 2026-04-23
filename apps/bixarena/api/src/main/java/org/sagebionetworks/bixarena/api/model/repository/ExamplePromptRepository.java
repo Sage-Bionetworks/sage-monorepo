@@ -24,11 +24,8 @@ public interface ExamplePromptRepository
 
   @Query(
     value = "SELECT ep.* FROM api.example_prompt ep " +
-    "WHERE ep.active = TRUE AND EXISTS (" +
-    "  SELECT 1 FROM api.example_prompt_categorization_category epcc " +
-    "  WHERE epcc.categorization_id = ep.effective_categorization_id " +
-    "    AND epcc.category IN (:slugs)" +
-    ") " +
+    "JOIN api.example_prompt_categorization epc ON epc.id = ep.effective_categorization_id " +
+    "WHERE ep.active = TRUE AND epc.category IN (:slugs) " +
     "ORDER BY random() LIMIT :page_size",
     nativeQuery = true
   )

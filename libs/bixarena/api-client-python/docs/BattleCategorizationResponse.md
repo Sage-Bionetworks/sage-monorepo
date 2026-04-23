@@ -4,15 +4,16 @@ The result of a categorization run for a battle.
 
 ## Properties
 
-| Name               | Type                                                  | Description                                     | Notes      |
-| ------------------ | ----------------------------------------------------- | ----------------------------------------------- | ---------- |
-| **id**             | **str**                                               |                                                 |
-| **battle_id**      | **str**                                               |                                                 |
-| **categories**     | [**List[BiomedicalCategory]**](BiomedicalCategory.md) |                                                 |
-| **method**         | **str**                                               |                                                 |
-| **categorized_by** | **str**                                               | User ID of the categorizer. Null for AI runs.   | [optional] |
-| **reason**         | **str**                                               | Human override reason. Always null for AI runs. | [optional] |
-| **created_at**     | **datetime**                                          |                                                 |
+| Name               | Type                                                  | Description                                                                                                                                                                                 | Notes      |
+| ------------------ | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **id**             | **str**                                               |                                                                                                                                                                                             |
+| **battle_id**      | **str**                                               |                                                                                                                                                                                             |
+| **status**         | [**CategorizationStatus**](CategorizationStatus.md)   |                                                                                                                                                                                             |
+| **categories**     | [**List[BiomedicalCategory]**](BiomedicalCategory.md) | Categories assigned by this run. Non-empty only when status is &#x60;matched&#x60;. Empty for &#x60;abstained&#x60; (classifier declared no fit) and &#x60;failed&#x60; (classifier error). |
+| **method**         | **str**                                               |                                                                                                                                                                                             |
+| **categorized_by** | **str**                                               | User ID of the categorizer. Null for AI runs.                                                                                                                                               | [optional] |
+| **reason**         | **str**                                               | Human override reason. Always null for AI runs.                                                                                                                                             | [optional] |
+| **created_at**     | **datetime**                                          |                                                                                                                                                                                             |
 
 ## Example
 

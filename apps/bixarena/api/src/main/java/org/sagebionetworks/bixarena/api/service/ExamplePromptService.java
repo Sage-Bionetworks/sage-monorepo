@@ -1,7 +1,5 @@
 package org.sagebionetworks.bixarena.api.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,10 +17,9 @@ import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptUpdateRequestDto;
-import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptCategorizationCategoryEntity;
+import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptCategorizationEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.ExamplePromptMapper;
-import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptCategorizationCategoryRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptCategorizationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptRepository;
 import org.springframework.data.domain.Page;
@@ -43,7 +40,6 @@ public class ExamplePromptService {
 
   private final ExamplePromptRepository examplePromptRepository;
   private final ExamplePromptCategorizationRepository categorizationRepository;
-  private final ExamplePromptCategorizationCategoryRepository categoryRepository;
   private final ExamplePromptCategorizationService categorizationService;
   private final ExamplePromptMapper examplePromptMapper = new ExamplePromptMapper();
 
@@ -198,8 +194,8 @@ public class ExamplePromptService {
   }
 
   /**
-   * Batch-loads categories for all effective categorizations in the list to avoid N+1.
-   * Total queries: 1 (list) + 1 (categories IN), regardless of page size.
+   * Batch-loads the effective category for each prompt in the list to avoid N+1.
+   * Total queries: 1 (list) + 1 (categorizations IN), regardless of page size.
    */
   private List<ExamplePromptDto> toDtosWithCategories(List<ExamplePromptEntity> entities) {
     if (entities.isEmpty()) {
@@ -212,18 +208,16 @@ public class ExamplePromptService {
       .filter(Objects::nonNull)
       .toList();
 
-    Map<UUID, List<BiomedicalCategoryDto>> categoriesByCatId = categorizationIds.isEmpty()
+    Map<UUID, String> categoryByCatId = categorizationIds.isEmpty()
       ? Map.of()
-      : categoryRepository
-          .findByCategorizationIdIn(categorizationIds)
+      : categorizationRepository
+          .findAllById(categorizationIds)
           .stream()
+          .filter(c -> c.getCategory() != null)
           .collect(
-            Collectors.groupingBy(
-              ExamplePromptCategorizationCategoryEntity::getCategorizationId,
-              Collectors.mapping(
-                c -> BiomedicalCategoryDto.fromValue(c.getCategory()),
-                Collectors.toList()
-              )
+            Collectors.toMap(
+              ExamplePromptCategorizationEntity::getId,
+              ExamplePromptCategorizationEntity::getCategory
             )
           );
 
@@ -232,11 +226,8 @@ public class ExamplePromptService {
       .map(e -> {
         ExamplePromptDto dto = examplePromptMapper.convertToDto(e);
         UUID effId = e.getEffectiveCategorizationId();
-        dto.setCategories(
-          effId == null
-            ? Collections.emptyList()
-            : new ArrayList<>(categoriesByCatId.getOrDefault(effId, List.of()))
-        );
+        String slug = effId == null ? null : categoryByCatId.get(effId);
+        dto.setCategory(slug == null ? null : BiomedicalCategoryDto.fromValue(slug));
         return dto;
       })
       .toList();
@@ -331,8 +322,8 @@ public class ExamplePromptService {
     List<String> slugs = categories.stream().map(BiomedicalCategoryDto::getValue).toList();
     return (root, cq, cb) -> {
       var subquery = cq.subquery(UUID.class);
-      var epcc = subquery.from(ExamplePromptCategorizationCategoryEntity.class);
-      subquery.select(epcc.get("categorizationId")).where(epcc.get("category").in(slugs));
+      var epc = subquery.from(ExamplePromptCategorizationEntity.class);
+      subquery.select(epc.get("id")).where(epc.get("category").in(slugs));
       return root.get("effectiveCategorizationId").in(subquery);
     };
   }

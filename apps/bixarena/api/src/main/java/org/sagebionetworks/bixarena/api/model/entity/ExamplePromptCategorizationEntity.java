@@ -39,6 +39,12 @@ public class ExamplePromptCategorizationEntity {
   @Column(name = "reason", length = 1000)
   private String reason;
 
+  @Column(name = "status", nullable = false, length = 20)
+  private String status;
+
+  @Column(name = "category", length = 100)
+  private String category;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;

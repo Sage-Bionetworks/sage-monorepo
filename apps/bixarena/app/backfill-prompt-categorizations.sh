@@ -91,18 +91,31 @@ for page in $(seq 0 $((TOTAL_PAGES - 1))); do
 
         case "$HTTP_CODE" in
             201)
-                CATEGORIES=$(echo "$BODY" | jq -r '.categories | join(",")')
-                CATEGORIZED=$((CATEGORIZED + 1))
-                echo "  [OK]   $PROMPT_ID -> categories=[$CATEGORIES]"
-                ;;
-            204)
-                NO_FIT=$((NO_FIT + 1))
-                echo "  [NOFIT] $PROMPT_ID -> AI matched no category"
+                STATUS=$(echo "$BODY" | jq -r '.status')
+                CATEGORY=$(echo "$BODY" | jq -r '.category')
+                case "$STATUS" in
+                    matched)
+                        CATEGORIZED=$((CATEGORIZED + 1))
+                        echo "  [OK]    $PROMPT_ID -> category=$CATEGORY"
+                        ;;
+                    abstained)
+                        NO_FIT=$((NO_FIT + 1))
+                        echo "  [NOFIT] $PROMPT_ID -> classifier declared no fit (persisted)"
+                        ;;
+                    failed)
+                        FAILED=$((FAILED + 1))
+                        echo "  [FAIL]  $PROMPT_ID -> ai classifier error (persisted, retryable)"
+                        ;;
+                    *)
+                        FAILED=$((FAILED + 1))
+                        echo "  [FAIL]  $PROMPT_ID -> unknown status=$STATUS"
+                        ;;
+                esac
                 ;;
             *)
                 FAILED=$((FAILED + 1))
                 DETAIL=$(echo "$BODY" | jq -r '.detail // .message // "unknown error"' 2>/dev/null)
-                echo "  [FAIL] $PROMPT_ID -> HTTP $HTTP_CODE: $DETAIL"
+                echo "  [FAIL]  $PROMPT_ID -> HTTP $HTTP_CODE: $DETAIL"
                 ;;
         esac
 
@@ -114,10 +127,10 @@ echo ""
 echo "============================================"
 echo "Backfill Complete"
 echo "============================================"
-echo "  Categorized: $CATEGORIZED"
+echo "  Categorized (status=matched): $CATEGORIZED"
 echo "  Already had categorization: $SKIPPED"
-echo "  No category fit (204): $NO_FIT"
-echo "  Failed: $FAILED"
+echo "  No category fit (status=abstained): $NO_FIT"
+echo "  Classifier failed (status=failed or HTTP error): $FAILED"
 echo "  Total processed: $((CATEGORIZED + SKIPPED + NO_FIT + FAILED))"
 echo ""
 

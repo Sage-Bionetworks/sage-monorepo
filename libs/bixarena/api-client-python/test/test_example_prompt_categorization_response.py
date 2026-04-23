@@ -39,9 +39,8 @@ class TestExamplePromptCategorizationResponse(unittest.TestCase):
             return ExamplePromptCategorizationResponse(
                 id = '',
                 prompt_id = '',
-                categories = [
-                    'genetics'
-                    ],
+                status = 'matched',
+                category = 'genetics',
                 method = '',
                 categorized_by = '',
                 reason = '',
@@ -51,9 +50,8 @@ class TestExamplePromptCategorizationResponse(unittest.TestCase):
             return ExamplePromptCategorizationResponse(
                 id = '',
                 prompt_id = '',
-                categories = [
-                    'genetics'
-                    ],
+                status = 'matched',
+                category = 'genetics',
                 method = '',
                 created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
         )
