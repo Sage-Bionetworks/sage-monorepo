@@ -86,7 +86,7 @@
       "useNxReleaseLegacyVersioning": false
     }
   },
-  "defaultProject": "openchallenges-app",
+  "defaultProject": "agora-app",
   "plugins": [
     {
       "plugin": "@nxlv/python",

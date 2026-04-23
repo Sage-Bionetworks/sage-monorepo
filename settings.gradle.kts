@@ -11,15 +11,6 @@ include(":bixarena-auth-service")
 // Include the Model-AD projects as submodules
 include(":model-ad-api-next")
 
-// Include the OpenChallenges projects as submodules
-include(":openchallenges-api-client-java")
-include(":openchallenges-api-gateway")
-include(":openchallenges-auth-service")
-include(":openchallenges-challenge-service")
-include(":openchallenges-image-service")
-include(":openchallenges-mcp-server")
-include(":openchallenges-organization-service")
-
 // Include the shared Java utilities
 include(":sagebionetworks-util")
 
@@ -29,11 +20,4 @@ project(":bixarena-api-gateway").projectDir = file("apps/bixarena/api-gateway")
 project(":bixarena-api").projectDir = file("apps/bixarena/api")
 project(":bixarena-auth-service").projectDir = file("apps/bixarena/auth-service")
 project(":model-ad-api-next").projectDir = file("apps/model-ad/api-next")
-project(":openchallenges-api-client-java").projectDir = file("libs/openchallenges/api-client-java")
-project(":openchallenges-api-gateway").projectDir = file("apps/openchallenges/api-gateway")
-project(":openchallenges-auth-service").projectDir = file("apps/openchallenges/auth-service")
-project(":openchallenges-challenge-service").projectDir = file("apps/openchallenges/challenge-service")
-project(":openchallenges-image-service").projectDir = file("apps/openchallenges/image-service")
-project(":openchallenges-mcp-server").projectDir = file("apps/openchallenges/mcp-server")
-project(":openchallenges-organization-service").projectDir = file("apps/openchallenges/organization-service")
 project(":sagebionetworks-util").projectDir = file("libs/shared/java/util")
