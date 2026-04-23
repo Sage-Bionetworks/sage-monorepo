@@ -15,7 +15,7 @@
     <div class="panel-content">
       @switch (activePanel) {
         @case ('summary') {
-          <h2>Summary</h2>
+          <agora-drug-details-summary [drug]="drug" />
         }
         @case ('resources') {
           <agora-drug-details-resources [drug]="drug" />

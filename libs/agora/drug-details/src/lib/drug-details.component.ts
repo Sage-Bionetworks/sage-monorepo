@@ -16,6 +16,7 @@ import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { DrugDetailsHeroComponent } from './components/drug-details-hero/drug-details-hero.component';
 import { DrugDetailsResourcesComponent } from './components/drug-details-resources/drug-details-resources.component';
+import { DrugDetailsSummaryComponent } from './components/drug-details-summary/drug-details-summary.component';
 
 @Component({
   selector: 'agora-drug-details',
@@ -24,6 +25,7 @@ import { DrugDetailsResourcesComponent } from './components/drug-details-resourc
     LoadingIconComponent,
     DrugDetailsResourcesComponent,
     DrugDetailsHeroComponent,
+    DrugDetailsSummaryComponent,
   ],
   templateUrl: './drug-details.component.html',
   styleUrls: ['./drug-details.component.scss'],
