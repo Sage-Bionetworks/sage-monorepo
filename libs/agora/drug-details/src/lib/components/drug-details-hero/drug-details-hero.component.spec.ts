@@ -68,7 +68,7 @@ describe('DrugDetailsHeroComponent', () => {
     it('should display drug bank id when present', async () => {
       await setup();
       expect(screen.getByText('DrugBank ID')).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: drugMock.drug_bank_id })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'DB01006' })).toBeInTheDocument();
     });
 
     it('should not display drug bank id when not present', async () => {
