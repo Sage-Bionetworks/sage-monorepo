@@ -78,19 +78,19 @@ class BattleCategorizationApiImpl(BaseBattleCategorizationApi):
 
         # Cache miss — classify via LLM.
         user_message = _build_user_message(sanitized)
-        categories = await categorize(_SYSTEM_PROMPT, user_message)
-
-        # Surface classifier failures as 503 so the caller persists a
-        # `status=failed` row and can retry. Returning 200-with-empty-array
-        # would be indistinguishable from a legitimate "no fit" result,
-        # polluting the audit trail. Not cached — a transient error must not
-        # be burned into the cache.
-        if categories is None:
-            logger.warning("Battle categorization failed — classifier returned None")
+        try:
+            categories = await categorize(_SYSTEM_PROMPT, user_message)
+        except Exception as exc:
+            # Surface classifier failures as 503 so the caller persists a
+            # `status=failed` row and can retry. Returning 200-with-empty-array
+            # would be indistinguishable from a legitimate "no fit" result,
+            # polluting the audit trail. Not cached — a transient error must
+            # not be burned into the cache.
+            logger.exception("Categorization failed for battle")
             raise HTTPException(
                 status_code=503,
                 detail="AI classifier temporarily unavailable",
-            )
+            ) from exc
 
         await set_cached_battle_categorization(sanitized, categories, settings)
 
