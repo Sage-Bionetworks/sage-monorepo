@@ -24,10 +24,17 @@ describe('DrugDetailsSummaryComponent', () => {
     expect(screen.getByText(drugMock.maximum_clinical_trial_phase as string)).toBeInTheDocument();
   });
 
-  it('should display year of first approval', async () => {
-    await setup();
-    expect(screen.getByText('Year of first approval')).toBeInTheDocument();
-    expect(screen.getByText(String(drugMock.year_of_first_approval))).toBeInTheDocument();
+  describe('year of first approval', () => {
+    it('should display year when present', async () => {
+      await setup();
+      expect(screen.getByText('Year of first approval')).toBeInTheDocument();
+      expect(screen.getByText(String(drugMock.year_of_first_approval))).toBeInTheDocument();
+    });
+
+    it('should not display year when null', async () => {
+      await setup({ year_of_first_approval: null });
+      expect(screen.queryByText('Year of first approval')).not.toBeInTheDocument();
+    });
   });
 
   describe('mechanisms of action', () => {
