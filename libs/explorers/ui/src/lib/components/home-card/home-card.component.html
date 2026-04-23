@@ -2,7 +2,7 @@
   <div class="home-card">
     <div>
       <h2>{{ title() }}</h2>
-      <p>{{ description() }}</p>
+      <p [innerHTML]="description()"></p>
     </div>
     @if (!!routerLink()) {
       <div class="icon-container">
