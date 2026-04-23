@@ -10,11 +10,6 @@
 /libs/bixarena/ @rrchai
 /docker/bixarena/ @rrchai
 
-# OpenChallenges
-/apps/openchallenges/ @rrchai
-/libs/openchallenges/ @rrchai
-/libs/openchallenges/web/config/angular @rrchai
-
 ## Sage
 /apps/sage/ @hallieswan
 /libs/sage/ @hallieswan

@@ -6,7 +6,6 @@ on:
       - main
       - 'agora/**'
       - 'iatlas/**'
-      - 'openchallenges/**'
       - 'sage-monorepo/**'
       - 'sage/**'
   pull_request:
