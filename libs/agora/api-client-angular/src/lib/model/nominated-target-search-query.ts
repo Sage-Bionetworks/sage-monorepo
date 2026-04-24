@@ -25,7 +25,7 @@ export interface NominatedTargetSearchQuery {
    * List of hgnc_symbol values to filter by.
    */
   items?: Array<string> | null;
-  itemFilterType?: ItemFilterTypeQuery;
+  itemFilterType?: ItemFilterTypeQuery | null;
   /**
    * Search by hgnc_symbol value (case-insensitive partial match) or by comma separated list of hgnc_symbol values (case-insensitive full matches). Examples: \'pten,plec\' (comma-separated list) or \'ple\' (partial match). Only applied when itemFilterType is \'exclude\'.
    */

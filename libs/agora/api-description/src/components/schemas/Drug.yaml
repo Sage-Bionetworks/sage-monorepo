@@ -29,8 +29,10 @@ properties:
       type: string
     example: ['Agomelatina', 'S-20098', 'Valdoxan']
   modality:
-    $ref: './Modality.yaml'
+    type: string
     nullable: true
+    allOf:
+      - $ref: './Modality.yaml'
   year_of_first_approval:
     type: integer
     description: The year the drug was first approved, if applicable

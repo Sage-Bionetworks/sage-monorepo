@@ -25,7 +25,7 @@ export interface NominatedDrugSearchQuery {
    * List of composite_id values to filter by (format: chembl_id~combined_with).
    */
   items?: Array<string> | null;
-  itemFilterType?: ItemFilterTypeQuery;
+  itemFilterType?: ItemFilterTypeQuery | null;
   /**
    * Search by common_name value (case-insensitive partial match) or by comma separated list of common_name values (case-insensitive full matches). Examples: \'agomelatine,bexarotene\' (comma-separated list) or \'agom\' (partial match). Only applied when itemFilterType is \'exclude\'.
    */

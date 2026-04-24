@@ -36,7 +36,7 @@ public class NominatedTargetSearchQueryDto {
   @Valid
   private @Nullable List<String> items;
 
-  private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
+  private @Nullable ItemFilterTypeQueryDto itemFilterType = null;
 
   private @Nullable String search = null;
 
@@ -185,7 +185,7 @@ public class NominatedTargetSearchQueryDto {
     this.items = items;
   }
 
-  public NominatedTargetSearchQueryDto itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
+  public NominatedTargetSearchQueryDto itemFilterType(@Nullable ItemFilterTypeQueryDto itemFilterType) {
     this.itemFilterType = itemFilterType;
     return this;
   }
@@ -197,11 +197,11 @@ public class NominatedTargetSearchQueryDto {
   @Valid 
   @Schema(name = "itemFilterType", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("itemFilterType")
-  public ItemFilterTypeQueryDto getItemFilterType() {
+  public @Nullable ItemFilterTypeQueryDto getItemFilterType() {
     return itemFilterType;
   }
 
-  public void setItemFilterType(ItemFilterTypeQueryDto itemFilterType) {
+  public void setItemFilterType(@Nullable ItemFilterTypeQueryDto itemFilterType) {
     this.itemFilterType = itemFilterType;
   }
 

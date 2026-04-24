@@ -580,8 +580,10 @@ components:
             - CHEMBL2105758~null
             - CHEMBL1023~Donepezil
         itemFilterType:
-          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          type: string
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
           description: |
             Search by common_name value (case-insensitive partial match) or by comma separated list of common_name values (case-insensitive full matches).
@@ -720,8 +722,10 @@ components:
           example:
             - ACTDRx AD
         modality:
-          $ref: '#/components/schemas/Modality'
+          type: string
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Modality'
         year_of_first_approval:
           type: integer
           description: The year the drug was first approved, if applicable
@@ -823,8 +827,10 @@ components:
             - CFH
             - SEMA3F
         itemFilterType:
-          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          type: string
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
           description: |
             Search by hgnc_symbol value (case-insensitive partial match) or by comma separated list of hgnc_symbol values (case-insensitive full matches).
@@ -1165,8 +1171,10 @@ components:
             - S-20098
             - Valdoxan
         modality:
-          $ref: '#/components/schemas/Modality'
+          type: string
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Modality'
         year_of_first_approval:
           type: integer
           description: The year the drug was first approved, if applicable
@@ -1782,9 +1790,11 @@ components:
           $ref: '#/components/schemas/Metabolomics'
           description: added by API (not in mongo document)
         overall_scores:
-          $ref: '#/components/schemas/OverallScores'
+          type: object
           nullable: true
           description: added by API (not in mongo document)
+          allOf:
+            - $ref: '#/components/schemas/OverallScores'
         neuropathologic_correlations:
           type: array
           items:
@@ -1804,9 +1814,11 @@ components:
           nullable: true
           description: added by API (not in mongo document)
         similar_genes_network:
-          $ref: '#/components/schemas/SimilarGenesNetwork'
+          type: object
           nullable: true
           description: added by app (not in mongo document)
+          allOf:
+            - $ref: '#/components/schemas/SimilarGenesNetwork'
         ab_modality_display_value:
           type: string
           nullable: true
@@ -1855,8 +1867,10 @@ components:
           nullable: true
           description: nominated table (not in mongo document)
         bio_domains:
-          $ref: '#/components/schemas/BioDomains'
+          type: object
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/BioDomains'
         ensembl_info:
           $ref: '#/components/schemas/EnsemblInfo'
       required:
@@ -1921,8 +1935,10 @@ components:
           format: float
           description: Upper confidence interval.
         medianexpression:
-          $ref: '#/components/schemas/MedianExpression'
+          type: object
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/MedianExpression'
       required:
         - name
         - logfc
@@ -2007,9 +2023,11 @@ components:
             $ref: '#/components/schemas/GCTGeneTissue'
           description: Array of gene tissues
         nominations:
-          $ref: '#/components/schemas/GCTGeneNominations'
+          type: object
           nullable: true
           description: Gene nominations data
+          allOf:
+            - $ref: '#/components/schemas/GCTGeneNominations'
         associations:
           type: array
           items:

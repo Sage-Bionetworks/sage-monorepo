@@ -21,8 +21,10 @@ properties:
     format: float
     description: 'Upper confidence interval.'
   medianexpression:
-    $ref: MedianExpression.yaml
+    type: object
     nullable: true
+    allOf:
+      - $ref: MedianExpression.yaml
 required:
   - name
   - logfc

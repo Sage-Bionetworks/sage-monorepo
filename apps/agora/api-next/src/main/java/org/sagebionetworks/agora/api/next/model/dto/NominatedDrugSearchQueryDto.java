@@ -36,7 +36,7 @@ public class NominatedDrugSearchQueryDto {
   @Valid
   private @Nullable List<String> items;
 
-  private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
+  private @Nullable ItemFilterTypeQueryDto itemFilterType = null;
 
   private @Nullable String search = null;
 
@@ -179,7 +179,7 @@ public class NominatedDrugSearchQueryDto {
     this.items = items;
   }
 
-  public NominatedDrugSearchQueryDto itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
+  public NominatedDrugSearchQueryDto itemFilterType(@Nullable ItemFilterTypeQueryDto itemFilterType) {
     this.itemFilterType = itemFilterType;
     return this;
   }
@@ -191,11 +191,11 @@ public class NominatedDrugSearchQueryDto {
   @Valid 
   @Schema(name = "itemFilterType", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("itemFilterType")
-  public ItemFilterTypeQueryDto getItemFilterType() {
+  public @Nullable ItemFilterTypeQueryDto getItemFilterType() {
     return itemFilterType;
   }
 
-  public void setItemFilterType(ItemFilterTypeQueryDto itemFilterType) {
+  public void setItemFilterType(@Nullable ItemFilterTypeQueryDto itemFilterType) {
     this.itemFilterType = itemFilterType;
   }
 

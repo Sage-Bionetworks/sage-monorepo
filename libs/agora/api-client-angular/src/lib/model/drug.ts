@@ -39,7 +39,7 @@ export interface Drug {
    * Alternative names for the drug
    */
   aliases: Array<string>;
-  modality: Modality;
+  modality: Modality | null;
   /**
    * The year the drug was first approved, if applicable
    */

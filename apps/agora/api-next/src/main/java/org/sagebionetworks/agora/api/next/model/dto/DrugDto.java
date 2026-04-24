@@ -44,7 +44,7 @@ public class DrugDto {
   @Valid
   private List<String> aliases = new ArrayList<>();
 
-  private ModalityDto modality;
+  private ModalityDto modality = null;
 
   private Integer yearOfFirstApproval = null;
 

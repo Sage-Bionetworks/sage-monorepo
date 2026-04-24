@@ -316,8 +316,10 @@ components:
             - CHEMBL2105758~null
             - CHEMBL1023~Donepezil
         itemFilterType:
-          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          type: string
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
           description: |
             Search by common_name value (case-insensitive partial match) or by comma separated list of common_name values (case-insensitive full matches).
@@ -456,8 +458,10 @@ components:
           example:
             - ACTDRx AD
         modality:
-          $ref: '#/components/schemas/Modality'
+          type: string
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Modality'
         year_of_first_approval:
           type: integer
           description: The year the drug was first approved, if applicable
@@ -559,8 +563,10 @@ components:
             - CFH
             - SEMA3F
         itemFilterType:
-          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          type: string
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
           description: |
             Search by hgnc_symbol value (case-insensitive partial match) or by comma separated list of hgnc_symbol values (case-insensitive full matches).
@@ -901,8 +907,10 @@ components:
             - S-20098
             - Valdoxan
         modality:
-          $ref: '#/components/schemas/Modality'
+          type: string
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Modality'
         year_of_first_approval:
           type: integer
           description: The year the drug was first approved, if applicable

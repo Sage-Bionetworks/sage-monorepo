@@ -25,8 +25,10 @@ properties:
     nullable: true
     example: ['CFH', 'SEMA3F']
   itemFilterType:
-    $ref: ItemFilterTypeQuery.yaml
+    type: string
     nullable: true
+    allOf:
+      - $ref: ItemFilterTypeQuery.yaml
   search:
     description: |
       Search by hgnc_symbol value (case-insensitive partial match) or by comma separated list of hgnc_symbol values (case-insensitive full matches).

@@ -465,7 +465,10 @@ components:
           nullable: true
           type: array
         itemFilterType:
-          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          allOf:
+            - $ref: '#/components/schemas/ItemFilterTypeQuery'
+          nullable: true
+          type: string
         search:
           description: |
             Search by common_name value (case-insensitive partial match) or by comma separated list of common_name values (case-insensitive full matches).
@@ -569,7 +572,7 @@ components:
         year_of_first_approval: 2010
         composite_id: CHEMBL2105758~null
         initial_nomination: 2025
-        modality: Protein
+        modality: modality
         total_nominations: 1
         principal_investigators:
           - Xie
@@ -618,7 +621,10 @@ components:
             type: string
           type: array
         modality:
-          $ref: '#/components/schemas/Modality'
+          allOf:
+            - $ref: '#/components/schemas/Modality'
+          nullable: true
+          type: string
         year_of_first_approval:
           description: 'The year the drug was first approved, if applicable'
           example: 2010
@@ -694,7 +700,7 @@ components:
             year_of_first_approval: 2010
             composite_id: CHEMBL2105758~null
             initial_nomination: 2025
-            modality: Protein
+            modality: modality
             total_nominations: 1
             principal_investigators:
               - Xie
@@ -707,7 +713,7 @@ components:
             year_of_first_approval: 2010
             composite_id: CHEMBL2105758~null
             initial_nomination: 2025
-            modality: Protein
+            modality: modality
             total_nominations: 1
             principal_investigators:
               - Xie
@@ -763,7 +769,10 @@ components:
           nullable: true
           type: array
         itemFilterType:
-          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          allOf:
+            - $ref: '#/components/schemas/ItemFilterTypeQuery'
+          nullable: true
+          type: string
         search:
           description: |
             Search by hgnc_symbol value (case-insensitive partial match) or by comma separated list of hgnc_symbol values (case-insensitive full matches).
@@ -1178,7 +1187,7 @@ components:
           - Agomelatina
           - S-20098
           - Valdoxan
-        modality: Protein
+        modality: modality
         drug_nominations:
           - computational_validation_status: computational validation studies completed
             evidence: Preclinical studies showing efficacy in AD mouse models
@@ -1257,7 +1266,10 @@ components:
             type: string
           type: array
         modality:
-          $ref: '#/components/schemas/Modality'
+          allOf:
+            - $ref: '#/components/schemas/Modality'
+          nullable: true
+          type: string
         year_of_first_approval:
           description: 'The year the drug was first approved, if applicable'
           example: 2010

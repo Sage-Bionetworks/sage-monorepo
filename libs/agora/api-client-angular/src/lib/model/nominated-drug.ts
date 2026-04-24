@@ -45,7 +45,7 @@ export interface NominatedDrug {
    * The programs associated with the drug nomination
    */
   programs: Array<string>;
-  modality: Modality;
+  modality: Modality | null;
   /**
    * The year the drug was first approved, if applicable
    */
