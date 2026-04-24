@@ -29,7 +29,7 @@ class ModelChatCompletionChunk(BaseModel):
     A streaming event chunk from the model chat completion
     """  # noqa: E501
 
-    content: Optional[Annotated[str, Field(strict=True, max_length=10000)]] = Field(
+    content: Optional[Annotated[str, Field(strict=True, max_length=50000)]] = Field(
         default=None, description="The content of a message."
     )
     status: StrictStr = Field(description="Current state of the streaming response")

@@ -132,7 +132,7 @@ public class ModelChatCompletionChunkDto {
    * The content of a message.
    * @return content
    */
-  @Size(max = 10000) 
+  @Size(max = 50000) 
   @Schema(name = "content", example = "What is the capital of France?", description = "The content of a message.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("content")
   public @Nullable String getContent() {
