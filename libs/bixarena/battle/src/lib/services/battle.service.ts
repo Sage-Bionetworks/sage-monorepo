@@ -8,7 +8,7 @@ import {
 } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { BattlePhase, INITIAL_STREAM_STATE, ModelStreamState } from '../battle.types';
-import { SLOW_MODEL_THRESHOLD_MS, MODEL_TIMEOUT_MS, VALIDATION_MS } from '../battle.constants';
+import { SLOW_MODEL_THRESHOLD_MS, MODEL_TIMEOUT_MS, VALIDATION_UI_MS } from '../battle.constants';
 import { StreamHttpError, mapStreamHttpError } from '../battle-errors';
 import { BattleStreamService } from './battle-stream.service';
 
@@ -217,7 +217,7 @@ export class BattleStateService {
     this.validationTimer = setTimeout(() => {
       this.validationTimer = undefined;
       this.phase.set('reveal');
-    }, VALIDATION_MS);
+    }, VALIDATION_UI_MS);
   }
 
   reset(): void {
