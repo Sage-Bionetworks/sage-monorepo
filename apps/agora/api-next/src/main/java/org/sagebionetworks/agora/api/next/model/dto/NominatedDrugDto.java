@@ -47,7 +47,7 @@ public class NominatedDrugDto {
   @Valid
   private List<String> programs = new ArrayList<>();
 
-  private ModalityDto modality;
+  private ModalityDto modality = null;
 
   private Integer yearOfFirstApproval = null;
 

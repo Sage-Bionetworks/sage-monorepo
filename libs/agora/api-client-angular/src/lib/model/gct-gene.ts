@@ -42,7 +42,10 @@ export interface GCTGene {
    * Array of gene tissues
    */
   tissues: Array<GCTGeneTissue>;
-  nominations?: GCTGeneNominations;
+  /**
+   * Gene nominations data
+   */
+  nominations?: GCTGeneNominations | null;
   /**
    * Array of association values
    */

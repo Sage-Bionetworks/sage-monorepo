@@ -38,8 +38,11 @@ properties:
       type: string
     example: ['ACTDRx AD']
   modality:
-    $ref: './Modality.yaml'
+    type: string
     nullable: true
+    example: Protein
+    allOf:
+      - $ref: './Modality.yaml'
   year_of_first_approval:
     type: integer
     description: The year the drug was first approved, if applicable

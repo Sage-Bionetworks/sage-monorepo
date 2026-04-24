@@ -16,6 +16,8 @@ servers:
 tags:
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
+  - name: Drug
+    description: Operations about Drugs.
   - name: Nominated Drug
     description: Operations about Nominated Drugs.
   - name: Data Version
@@ -31,3 +33,5 @@ paths:
     $ref: paths/comparison-tools/targets.yaml
   /data-version:
     $ref: paths/data-version.yaml
+  /drugs/{chemblId}:
+    $ref: paths/drugs.yaml

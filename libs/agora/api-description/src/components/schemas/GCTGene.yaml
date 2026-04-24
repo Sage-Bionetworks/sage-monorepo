@@ -31,9 +31,11 @@ properties:
       $ref: GCTGeneTissue.yaml
     description: 'Array of gene tissues'
   nominations:
-    $ref: GCTGeneNominations.yaml
+    type: object
     nullable: true
     description: 'Gene nominations data'
+    allOf:
+      - $ref: GCTGeneNominations.yaml
   associations:
     type: array
     items:

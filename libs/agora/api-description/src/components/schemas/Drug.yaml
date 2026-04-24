@@ -1,0 +1,75 @@
+type: object
+description: A drug entry
+properties:
+  common_name:
+    type: string
+    description: The common name of the drug
+    example: Agomelatine
+  description:
+    type: string
+    description: A brief description of the drug
+    nullable: true
+  iupac_id:
+    type: string
+    description: The IUPAC ID of the drug
+    nullable: true
+  chembl_id:
+    type: string
+    description: The ChEMBL ID of the drug
+    example: CHEMBL2105758
+  drug_bank_id:
+    type: string
+    description: The DrugBank ID of the drug
+    example: DB04819
+    nullable: true
+  aliases:
+    type: array
+    description: Alternative names for the drug
+    items:
+      type: string
+    example: ['Agomelatina', 'S-20098', 'Valdoxan']
+  modality:
+    type: string
+    nullable: true
+    example: Protein
+    allOf:
+      - $ref: './Modality.yaml'
+  year_of_first_approval:
+    type: integer
+    description: The year the drug was first approved, if applicable
+    example: 2010
+    nullable: true
+  maximum_clinical_trial_phase:
+    type: string
+    description: The maximum clinical trial phase the drug has reached, if applicable
+    example: Phase IV
+    nullable: true
+  linked_targets:
+    type: array
+    description: The linked targets associated with the drug
+    items:
+      $ref: './LinkedTarget.yaml'
+  mechanisms_of_action:
+    type: array
+    description: The mechanisms of action associated with the drug
+    items:
+      type: string
+    example: ['Melatonin receptor agonist', 'Serotonin 2c (5-HT2c) receptor antagonist']
+  drug_nominations:
+    type: array
+    description: The drug nomination evidence associated with the drug
+    items:
+      $ref: './NominatedDrugEvidence.yaml'
+required:
+  - common_name
+  - description
+  - iupac_id
+  - chembl_id
+  - drug_bank_id
+  - aliases
+  - modality
+  - year_of_first_approval
+  - maximum_clinical_trial_phase
+  - linked_targets
+  - mechanisms_of_action
+  - drug_nominations

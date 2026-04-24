@@ -6,6 +6,8 @@ export * from './data-version.service';
 import { DataVersionService } from './data-version.service';
 export * from './distribution.service';
 import { DistributionService } from './distribution.service';
+export * from './drug.service';
+import { DrugService } from './drug.service';
 export * from './gene.service';
 import { GeneService } from './gene.service';
 export * from './nominated-drug.service';
@@ -19,6 +21,7 @@ export const APIS = [
   ComparisonToolConfigService,
   DataVersionService,
   DistributionService,
+  DrugService,
   GeneService,
   NominatedDrugService,
   NominatedTargetService,

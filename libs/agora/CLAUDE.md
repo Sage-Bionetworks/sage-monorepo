@@ -61,14 +61,13 @@ All imports use `@sagebionetworks/agora/<lib-name>` path aliases. Feature compon
 
 Same pattern as described in the root `CLAUDE.md`. API contracts live in `api-description/`; the Angular HTTP client in `api-client-angular/` is fully generated.
 
-```bash
-# Regenerate api-client-angular from the OpenAPI spec
-nx run agora-api-client-angular:generate
+After modifying any OpenAPI schema, always regenerate **all** generated clients -- not just `agora-api-description`. The `generate` target on client projects depends on `agora-api-description:build` automatically, so a single command handles the full chain:
 
-# Regenerate all agora generated clients at once
+```bash
+# After any OpenAPI schema change, regenerate everything
 nx run-many -t=generate -p=agora-*
 
-# Bundle the OpenAPI specs
+# Bundle the OpenAPI specs only (rarely needed standalone)
 nx build agora-api-description
 ```
 

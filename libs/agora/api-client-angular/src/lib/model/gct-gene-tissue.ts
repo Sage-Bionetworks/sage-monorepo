@@ -33,5 +33,5 @@ export interface GCTGeneTissue {
    * Upper confidence interval.
    */
   ci_r: number;
-  medianexpression?: MedianExpression;
+  medianexpression?: MedianExpression | null;
 }

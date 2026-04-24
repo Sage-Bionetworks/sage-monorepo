@@ -80,9 +80,11 @@ properties:
     $ref: Metabolomics.yaml
     description: added by API (not in mongo document)
   overall_scores:
-    $ref: OverallScores.yaml
+    type: object
     nullable: true
     description: added by API (not in mongo document)
+    allOf:
+      - $ref: OverallScores.yaml
   neuropathologic_correlations:
     type: array
     items:
@@ -102,9 +104,11 @@ properties:
     nullable: true
     description: added by API (not in mongo document)
   similar_genes_network:
-    $ref: SimilarGenesNetwork.yaml
+    type: object
     nullable: true
     description: added by app (not in mongo document)
+    allOf:
+      - $ref: SimilarGenesNetwork.yaml
   ab_modality_display_value:
     type: string
     nullable: true
@@ -153,8 +157,10 @@ properties:
     nullable: true
     description: nominated table (not in mongo document)
   bio_domains:
-    $ref: BioDomains.yaml
+    type: object
     nullable: true
+    allOf:
+      - $ref: BioDomains.yaml
   ensembl_info:
     $ref: EnsemblInfo.yaml
 required:

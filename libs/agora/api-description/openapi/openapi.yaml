@@ -17,6 +17,9 @@ tags:
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
     x-displayName: Comparison Tool Config
+  - name: Drug
+    description: Operations about Drugs.
+    x-displayName: Drug
   - name: Nominated Drug
     description: Operations about Nominated Drugs.
     x-displayName: Nominated Drug
@@ -131,6 +134,32 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /drugs/{chemblId}:
+    get:
+      tags:
+        - Drug
+      summary: Get drug details by ChEMBL ID
+      operationId: getDrug
+      parameters:
+        - name: chemblId
+          in: path
+          required: true
+          description: ChEMBL ID of the drug
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Drug details successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Drug'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /bio-domains:
@@ -551,8 +580,10 @@ components:
             - CHEMBL2105758~null
             - CHEMBL1023~Donepezil
         itemFilterType:
-          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          type: string
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
           description: |
             Search by common_name value (case-insensitive partial match) or by comma separated list of common_name values (case-insensitive full matches).
@@ -691,8 +722,11 @@ components:
           example:
             - ACTDRx AD
         modality:
-          $ref: '#/components/schemas/Modality'
+          type: string
           nullable: true
+          example: Protein
+          allOf:
+            - $ref: '#/components/schemas/Modality'
         year_of_first_approval:
           type: integer
           description: The year the drug was first approved, if applicable
@@ -794,8 +828,10 @@ components:
             - CFH
             - SEMA3F
         itemFilterType:
-          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          type: string
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
           description: |
             Search by hgnc_symbol value (case-insensitive partial match) or by comma separated list of hgnc_symbol values (case-insensitive full matches).
@@ -995,6 +1031,193 @@ components:
         - data_file
         - data_version
         - team_images_id
+    LinkedTarget:
+      type: object
+      description: A linked target
+      properties:
+        ensembl_gene_id:
+          type: string
+          description: The Ensembl gene ID of the linked target
+          example: ENSG00000139618
+        hgnc_symbol:
+          type: string
+          description: The HGNC symbol of the linked target
+          example: BRCA1
+      required:
+        - ensembl_gene_id
+        - hgnc_symbol
+    NominatedDrugEvidence:
+      type: object
+      description: Evidence for a drug nomination
+      properties:
+        grant_number:
+          type: string
+          description: The grant number associated with the drug nomination
+          example: R01AG123456
+        contact_pi:
+          type: string
+          description: The contact principal investigator for the drug nomination
+          example: Dr. Jane Doe
+        combined_with_common_name:
+          type: string
+          description: The common name of the drug this is combined with, if applicable
+          nullable: true
+        combined_with_chembl_id:
+          type: string
+          description: The ChEMBL ID of the drug this is combined with, if applicable
+          nullable: true
+        evidence:
+          type: string
+          description: The evidence supporting the drug nomination
+          example: Preclinical studies showing efficacy in AD mouse models
+        data_used:
+          type: string
+          description: The data used to support the drug nomination
+          example: transcriptomics data, drug target
+        ad_moa:
+          type: string
+          description: The proposed mechanism of action for Alzheimer's disease
+          example: DDIT3
+          nullable: true
+        reference:
+          type: string
+          description: A reference supporting the drug nomination
+          example: https://doi.org/10.1101/2023.12.26.573348
+          nullable: true
+        computational_validation_status:
+          type: string
+          description: The status of computational validation for the drug nomination
+          example: computational validation studies completed
+        computational_validation_results:
+          type: string
+          description: The results of computational validation for the drug nomination
+          example: Based on putative targets associated with AD
+          nullable: true
+        experimental_validation_status:
+          type: string
+          description: The status of experimental validation for the drug nomination
+          example: experimental validation studies completed
+        experimental_validation_results:
+          type: string
+          description: The results of experimental validation for the drug nomination
+          example: improve cognitive, reduce neuroinflamation in female Tg344 rat AD models.
+          nullable: true
+        additional_evidence:
+          type: string
+          description: Any additional evidence supporting the drug nomination
+          example: may penetrate blood-brain barrier
+          nullable: true
+        contributors:
+          type: string
+          description: The contributors to the drug nomination
+          example: Kelechi Ndukwe, Peter A Serrano, Patricia Rockwell, Lei Xie, Maria Figueiredo-Pereira
+          nullable: true
+        initial_nomination:
+          type: integer
+          description: The year the drug was first nominated
+          example: 2025
+        program:
+          type: string
+          description: The program associated with the drug nomination
+          example: ACTDRx AD
+      required:
+        - grant_number
+        - contact_pi
+        - combined_with_common_name
+        - combined_with_chembl_id
+        - evidence
+        - data_used
+        - ad_moa
+        - reference
+        - computational_validation_status
+        - computational_validation_results
+        - experimental_validation_status
+        - experimental_validation_results
+        - additional_evidence
+        - contributors
+        - initial_nomination
+        - program
+    Drug:
+      type: object
+      description: A drug entry
+      properties:
+        common_name:
+          type: string
+          description: The common name of the drug
+          example: Agomelatine
+        description:
+          type: string
+          description: A brief description of the drug
+          nullable: true
+        iupac_id:
+          type: string
+          description: The IUPAC ID of the drug
+          nullable: true
+        chembl_id:
+          type: string
+          description: The ChEMBL ID of the drug
+          example: CHEMBL2105758
+        drug_bank_id:
+          type: string
+          description: The DrugBank ID of the drug
+          example: DB04819
+          nullable: true
+        aliases:
+          type: array
+          description: Alternative names for the drug
+          items:
+            type: string
+          example:
+            - Agomelatina
+            - S-20098
+            - Valdoxan
+        modality:
+          type: string
+          nullable: true
+          example: Protein
+          allOf:
+            - $ref: '#/components/schemas/Modality'
+        year_of_first_approval:
+          type: integer
+          description: The year the drug was first approved, if applicable
+          example: 2010
+          nullable: true
+        maximum_clinical_trial_phase:
+          type: string
+          description: The maximum clinical trial phase the drug has reached, if applicable
+          example: Phase IV
+          nullable: true
+        linked_targets:
+          type: array
+          description: The linked targets associated with the drug
+          items:
+            $ref: '#/components/schemas/LinkedTarget'
+        mechanisms_of_action:
+          type: array
+          description: The mechanisms of action associated with the drug
+          items:
+            type: string
+          example:
+            - Melatonin receptor agonist
+            - Serotonin 2c (5-HT2c) receptor antagonist
+        drug_nominations:
+          type: array
+          description: The drug nomination evidence associated with the drug
+          items:
+            $ref: '#/components/schemas/NominatedDrugEvidence'
+      required:
+        - common_name
+        - description
+        - iupac_id
+        - chembl_id
+        - drug_bank_id
+        - aliases
+        - modality
+        - year_of_first_approval
+        - maximum_clinical_trial_phase
+        - linked_targets
+        - mechanisms_of_action
+        - drug_nominations
     BioDomainInfo:
       type: object
       description: BioDomainInfo
@@ -1569,9 +1792,11 @@ components:
           $ref: '#/components/schemas/Metabolomics'
           description: added by API (not in mongo document)
         overall_scores:
-          $ref: '#/components/schemas/OverallScores'
+          type: object
           nullable: true
           description: added by API (not in mongo document)
+          allOf:
+            - $ref: '#/components/schemas/OverallScores'
         neuropathologic_correlations:
           type: array
           items:
@@ -1591,9 +1816,11 @@ components:
           nullable: true
           description: added by API (not in mongo document)
         similar_genes_network:
-          $ref: '#/components/schemas/SimilarGenesNetwork'
+          type: object
           nullable: true
           description: added by app (not in mongo document)
+          allOf:
+            - $ref: '#/components/schemas/SimilarGenesNetwork'
         ab_modality_display_value:
           type: string
           nullable: true
@@ -1642,8 +1869,10 @@ components:
           nullable: true
           description: nominated table (not in mongo document)
         bio_domains:
-          $ref: '#/components/schemas/BioDomains'
+          type: object
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/BioDomains'
         ensembl_info:
           $ref: '#/components/schemas/EnsemblInfo'
       required:
@@ -1708,8 +1937,10 @@ components:
           format: float
           description: Upper confidence interval.
         medianexpression:
-          $ref: '#/components/schemas/MedianExpression'
+          type: object
           nullable: true
+          allOf:
+            - $ref: '#/components/schemas/MedianExpression'
       required:
         - name
         - logfc
@@ -1794,9 +2025,11 @@ components:
             $ref: '#/components/schemas/GCTGeneTissue'
           description: Array of gene tissues
         nominations:
-          $ref: '#/components/schemas/GCTGeneNominations'
+          type: object
           nullable: true
           description: Gene nominations data
+          allOf:
+            - $ref: '#/components/schemas/GCTGeneNominations'
         associations:
           type: array
           items:
@@ -2083,6 +2316,7 @@ x-tagGroups:
   - name: Agora API Next
     tags:
       - Comparison Tool Config
+      - Drug
       - Nominated Drug
       - Data Version
       - Nominated Target

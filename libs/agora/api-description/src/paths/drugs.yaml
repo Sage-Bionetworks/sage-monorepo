@@ -1,0 +1,25 @@
+get:
+  tags:
+    - Drug
+  summary: Get drug details by ChEMBL ID
+  operationId: getDrug
+  parameters:
+    - name: chemblId
+      in: path
+      required: true
+      description: ChEMBL ID of the drug
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Drug details successfully retrieved
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Drug.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

@@ -36,4 +36,11 @@ public final class CacheNames {
    * Key format: Dynamic based on query parameters (items, filterType)
    */
   public static final String NOMINATED_TARGET = "nominatedTarget";
+
+  /**
+   * Cache for drug detail queries.
+   * Stores individual drug details keyed by ChEMBL ID.
+   * Key format: Dynamic based on chemblId parameter
+   */
+  public static final String DRUG = "drug";
 }

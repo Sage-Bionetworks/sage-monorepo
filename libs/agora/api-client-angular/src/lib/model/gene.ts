@@ -62,7 +62,10 @@ export interface Gene {
    */
   proteomics_TMT?: Array<ProteinDifferentialExpression> | null;
   metabolomics?: Metabolomics;
-  overall_scores?: OverallScores;
+  /**
+   * added by API (not in mongo document)
+   */
+  overall_scores?: OverallScores | null;
   /**
    * added by API (not in mongo document)
    */
@@ -75,7 +78,10 @@ export interface Gene {
    * added by API (not in mongo document)
    */
   links?: Array<GeneNetworkLinks> | null;
-  similar_genes_network?: SimilarGenesNetwork;
+  /**
+   * added by app (not in mongo document)
+   */
+  similar_genes_network?: SimilarGenesNetwork | null;
   ab_modality_display_value?: string | null;
   safety_rating_display_value?: string | null;
   sm_druggability_display_value?: string | null;
@@ -115,6 +121,6 @@ export interface Gene {
    * nominated table (not in mongo document)
    */
   input_data_display_value?: string | null;
-  bio_domains?: BioDomains;
+  bio_domains?: BioDomains | null;
   ensembl_info: EnsemblInfo;
 }
