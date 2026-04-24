@@ -8,7 +8,12 @@ import {
 } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { BattlePhase, INITIAL_STREAM_STATE, ModelStreamState } from '../battle.types';
-import { SLOW_MODEL_THRESHOLD_MS, MODEL_TIMEOUT_MS, VALIDATION_UI_MS } from '../battle.constants';
+import {
+  CONTINUE_PROMPT,
+  MODEL_TIMEOUT_MS,
+  SLOW_MODEL_THRESHOLD_MS,
+  VALIDATION_UI_MS,
+} from '../battle.constants';
 import { StreamHttpError, mapStreamHttpError } from '../battle-errors';
 import { BattleStreamService } from './battle-stream.service';
 
@@ -120,6 +125,14 @@ export class BattleStateService {
       console.error('Failed to start streaming', err);
       this.setStreamError('Something went wrong', true);
     }
+  }
+
+  // Continue a truncated response. Consumes a round — the LLM sees the prior
+  // context (including the cut-off assistant message) plus a terse "continue"
+  // instruction and resumes from where it stopped. The prompt text is filtered
+  // out of the rendered transcript so users don't see the internal instruction.
+  async continueRound(): Promise<void> {
+    await this.submitFollowUp(CONTINUE_PROMPT);
   }
 
   async submitFollowUp(prompt: string): Promise<void> {

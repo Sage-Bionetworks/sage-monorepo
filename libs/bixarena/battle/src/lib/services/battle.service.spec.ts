@@ -6,6 +6,7 @@ import {
   BattleEvaluationOutcome,
 } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
+import { CONTINUE_PROMPT } from '../battle.constants';
 import { BattleStateService } from './battle.service';
 import { BattleStreamService } from './battle-stream.service';
 
@@ -222,6 +223,22 @@ describe('BattleStateService', () => {
       expect(service.phase()).toBe('landing');
       expect(service.battleId()).toBeNull();
       expect(service.model1()).toBeNull();
+    });
+  });
+
+  describe('continueRound', () => {
+    it('creates a new round with a continuation prompt', async () => {
+      await service.submitPrompt('test');
+      battleApi.createBattleRound.mockClear();
+
+      await service.continueRound();
+
+      expect(battleApi.createBattleRound).toHaveBeenCalledWith('battle-1', {
+        promptMessage: {
+          role: 'user',
+          content: CONTINUE_PROMPT,
+        },
+      });
     });
   });
 });
