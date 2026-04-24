@@ -1,0 +1,67 @@
+<div class="drug-details-nomination-details">
+  <section>
+    <h2>Evidence Supporting the Nomination of {{ drug().common_name }}</h2>
+    <br />
+    <p>This drug has been nominated as a potential therapeutic for AD.</p>
+    <br />
+
+    @for (nomination of drug().drug_nominations; track nomination) {
+      <hr />
+      <br />
+
+      <h2>{{ nomination.program }}</h2>
+      <h2>Contact PI: {{ nomination.contact_pi }}</h2>
+      <br />
+
+      <p class="drug-details-label">
+        @let nominationLabel =
+          nomination.combined_with_common_name === null ? drug().common_name : `${drug().common_name} + ${nomination.combined_with_common_name}`;
+        Why was {{ nominationLabel }} nominated?
+      </p>
+      <p>{{ nomination.evidence }}</p>
+      <br />
+
+      <p class="drug-details-label">Data used</p>
+      <p>{{ nomination.data_used }}</p>
+      <br />
+
+      <p class="drug-details-label">Mechanism of action in AD</p>
+      <p>{{ nomination.ad_moa }}</p>
+      <br />
+
+      <p class="drug-details-label">Initial date of nomination</p>
+      <p>{{ nomination.initial_nomination }}</p>
+      <br />
+
+      <p class="drug-details-label">Planned validation</p>
+      <p><strong>Computational:</strong> {{ nomination.computational_validation_status }}</p>
+      <p><strong>Experimental:</strong> {{ nomination.experimental_validation_status }}</p>
+      <br />
+
+      <p class="drug-details-label">Validation results</p>
+      <p><strong>Computational:</strong> {{ nomination.computational_validation_results }}</p>
+      <p><strong>Experimental:</strong> {{ nomination.experimental_validation_results }}</p>
+      <br />
+
+      @if (nomination.additional_evidence) {
+        <p class="drug-details-label">Additional evidence</p>
+        <p>{{ nomination.additional_evidence }}</p>
+        <br />
+      }
+
+      @if (nomination.reference) {
+        <p class="drug-details-label">Related publication</p>
+        <p>
+          <a [href]="nomination.reference" target="_blank" rel="noopener noreferrer">
+            {{ nomination.reference }}
+          </a>
+        </p>
+        <br />
+      }
+
+      <p class="drug-details-label">Funding</p>
+      <p>{{ nomination.grant_number }}</p>
+      <br />
+    }
+  </section>
+</div>
