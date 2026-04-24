@@ -15,7 +15,7 @@ describe('DrugDetailsSummaryComponent', () => {
   it('should display modality', async () => {
     await setup();
     expect(screen.getByText('Modality')).toBeInTheDocument();
-    expect(screen.getByText(drugMock.modality)).toBeInTheDocument();
+    expect(screen.getByText(drugMock.modality as string)).toBeInTheDocument();
   });
 
   it('should display max clinical trial phase', async () => {
