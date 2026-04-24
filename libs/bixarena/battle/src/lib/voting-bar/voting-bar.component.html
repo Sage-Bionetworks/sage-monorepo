@@ -75,6 +75,22 @@
     </div>
   }
 
+  @if (phase() === 'validating') {
+    <div class="validation-row" role="status" aria-live="polite">
+      <svg class="validation-spinner" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke="var(--p-surface-300)" stroke-width="2.5" />
+        <path
+          d="M22 12a10 10 0 0 0-10-10"
+          stroke="var(--p-teal-400)"
+          stroke-width="2.5"
+          stroke-linecap="round"
+        />
+      </svg>
+      <span class="validation-text">Validating <b>biomedical relevance</b></span>
+      <div class="validation-track"><div class="validation-fill"></div></div>
+    </div>
+  }
+
   @if (phase() === 'reveal' || phase() === 'error') {
     <div class="nudge">
       @if (canReuse()) {

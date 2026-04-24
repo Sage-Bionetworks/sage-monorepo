@@ -124,19 +124,43 @@ describe('BattleStateService', () => {
       });
     });
 
-    it('should submit evaluation and transition to reveal', async () => {
-      await service.submitVote(BattleEvaluationOutcome.Model1);
-      expect(battleApi.createBattleEvaluation).toHaveBeenCalledWith('battle-1', {
-        outcome: 'model1',
-      });
-      expect(service.phase()).toBe('reveal');
-      expect(service.selectedOutcome()).toBe('model1');
+    it('should submit evaluation and transition voting -> validating -> reveal', async () => {
+      jest.useFakeTimers();
+      try {
+        await service.submitVote(BattleEvaluationOutcome.Model1);
+        expect(battleApi.createBattleEvaluation).toHaveBeenCalledWith('battle-1', {
+          outcome: 'model1',
+        });
+        expect(service.phase()).toBe('validating');
+        expect(service.selectedOutcome()).toBe('model1');
+
+        jest.advanceTimersByTime(2500);
+        expect(service.phase()).toBe('reveal');
+      } finally {
+        jest.useRealTimers();
+      }
     });
 
     it('should decrement prompt uses remaining', async () => {
       const before = service.promptUsesRemaining();
       await service.submitVote(BattleEvaluationOutcome.Tie);
       expect(service.promptUsesRemaining()).toBe(before - 1);
+    });
+
+    it('reset during validation cancels the pending reveal', async () => {
+      jest.useFakeTimers();
+      try {
+        await service.submitVote(BattleEvaluationOutcome.Model1);
+        expect(service.phase()).toBe('validating');
+
+        service.reset();
+        expect(service.phase()).toBe('landing');
+
+        jest.advanceTimersByTime(5000);
+        expect(service.phase()).toBe('landing');
+      } finally {
+        jest.useRealTimers();
+      }
     });
   });
 

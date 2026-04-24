@@ -8,7 +8,7 @@ import {
 } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { BattlePhase, INITIAL_STREAM_STATE, ModelStreamState } from '../battle.types';
-import { SLOW_MODEL_THRESHOLD_MS, MODEL_TIMEOUT_MS } from '../battle.constants';
+import { SLOW_MODEL_THRESHOLD_MS, MODEL_TIMEOUT_MS, VALIDATION_UI_MS } from '../battle.constants';
 import { StreamHttpError, mapStreamHttpError } from '../battle-errors';
 import { BattleStreamService } from './battle-stream.service';
 
@@ -20,8 +20,13 @@ export class BattleStateService {
   private readonly config = inject(ConfigService).config;
 
   constructor() {
-    // Cancel active streams when the service is destroyed
-    inject(DestroyRef).onDestroy(() => this.cleanupStreams());
+    inject(DestroyRef).onDestroy(() => {
+      this.cleanupStreams();
+      if (this.validationTimer) {
+        clearTimeout(this.validationTimer);
+        this.validationTimer = undefined;
+      }
+    });
   }
 
   // Phase state machine
@@ -57,7 +62,8 @@ export class BattleStateService {
   );
   readonly currentMatch = computed(() => {
     const completed = this.completedMatches();
-    return this.phase() === 'reveal' ? completed : completed + 1;
+    const phase = this.phase();
+    return phase === 'reveal' || phase === 'validating' ? completed : completed + 1;
   });
   readonly allMatchesComplete = computed(
     () => this.completedMatches() >= this.config.battle.promptUseLimit,
@@ -83,6 +89,7 @@ export class BattleStateService {
   private model2Timeout?: ReturnType<typeof setTimeout>;
   private model1SlowTimeout?: ReturnType<typeof setTimeout>;
   private model2SlowTimeout?: ReturnType<typeof setTimeout>;
+  private validationTimer?: ReturnType<typeof setTimeout>;
   private isVoting = false;
 
   async submitPrompt(prompt: string): Promise<void> {
@@ -202,16 +209,29 @@ export class BattleStateService {
 
     this.selectedOutcome.set(outcome);
     this.promptUsesRemaining.update((n) => Math.max(0, n - 1));
-    this.phase.set('reveal');
+    this.phase.set('validating');
     this.isVoting = false;
 
     firstValueFrom(this.battleApi.updateBattle(battleId, { endedAt: new Date().toISOString() }))
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       .catch(() => {});
+
+    // Hold on the validation animation for a fixed window so the user sees the
+    // biomedical-relevance check signaled visually, then reveal results.
+    // Backend validation is fire-and-forget, so this is a UX beat, not a wait.
+    if (this.validationTimer) clearTimeout(this.validationTimer);
+    this.validationTimer = setTimeout(() => {
+      this.validationTimer = undefined;
+      this.phase.set('reveal');
+    }, VALIDATION_UI_MS);
   }
 
   reset(): void {
     this.cleanupStreams();
+    if (this.validationTimer) {
+      clearTimeout(this.validationTimer);
+      this.validationTimer = undefined;
+    }
     this.completedRounds = 0;
     this.phase.set('landing');
     this.battleId.set(null);

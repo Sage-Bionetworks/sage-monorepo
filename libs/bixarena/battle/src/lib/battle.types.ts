@@ -1,4 +1,11 @@
-export type BattlePhase = 'landing' | 'creating' | 'streaming' | 'voting' | 'reveal' | 'error';
+export type BattlePhase =
+  | 'landing'
+  | 'creating'
+  | 'streaming'
+  | 'voting'
+  | 'validating'
+  | 'reveal'
+  | 'error';
 
 // Per-model streaming state. 'text' holds in-progress chunks; on complete it moves to 'messages'.
 export interface ModelStreamState {
