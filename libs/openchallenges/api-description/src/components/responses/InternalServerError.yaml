@@ -1,5 +1,0 @@
-description: The request cannot be fulfilled due to an unexpected server error
-content:
-  application/problem+json:
-    schema:
-      $ref: ../schemas/BasicError.yaml

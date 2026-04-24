@@ -1,4 +1,0 @@
-description: The unique identifier of an organization
-type: integer
-format: int64
-example: 1

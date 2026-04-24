@@ -1,1 +1,0 @@
-FROM beeyev/thumbor-s3:7.7-debian

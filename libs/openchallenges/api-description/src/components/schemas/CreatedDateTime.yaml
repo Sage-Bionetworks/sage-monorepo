@@ -1,4 +1,0 @@
-description: Datetime when the object was added to the database.
-type: string
-format: date-time
-example: '2022-07-04T22:19:11Z'

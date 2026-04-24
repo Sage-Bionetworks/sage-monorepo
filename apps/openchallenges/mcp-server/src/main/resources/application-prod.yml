@@ -1,5 +1,0 @@
-# Production profile configuration
-logging:
-  level:
-    org.sagebionetworks.openchallenges: WARN
-    org.springframework.security: WARN

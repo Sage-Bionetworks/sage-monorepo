@@ -1,4 +1,0 @@
-# Staging profile configuration
-logging:
-  level:
-    org.sagebionetworks.openchallenges: INFO

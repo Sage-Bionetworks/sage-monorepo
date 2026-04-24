@@ -1,5 +1,0 @@
-description: The unique identifier of the EDAM concept.
-type: integer
-format: int32
-minimum: 1
-example: 1

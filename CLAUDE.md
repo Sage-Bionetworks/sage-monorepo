@@ -64,20 +64,19 @@ uv run ruff check         # lint
 
 ### Structure
 
-- `apps/` — standalone applications (agora, openchallenges, model-ad, bixarena, amp-als, etc.)
-- `libs/` — shared libraries organized by scope (e.g., `libs/agora/`, `libs/openchallenges/`)
+- `apps/` — standalone applications (agora, model-ad, bixarena, amp-als, etc.)
+- `libs/` — shared libraries organized by scope (e.g., `libs/agora/`, `libs/bixarena/`)
 - `tools/` — build utilities and custom Nx executors
 - `gradle/libs.versions.toml` — single source of truth for all Java dependency versions
 - `buildSrc/` — Gradle convention plugins applied automatically by project location
 
 ### Main Products
 
-| Product            | Description                           | Stack                            |
-| ------------------ | ------------------------------------- | -------------------------------- |
-| **agora**          | Alzheimer's disease evidence explorer | Angular, Node.js, MongoDB        |
-| **openchallenges** | Scientific challenge platform         | Angular, Spring Boot, PostgreSQL |
-| **model-ad**       | AD model data platform                | Angular, Spring Boot             |
-| **bixarena**       | Battle arena platform                 | Angular, Spring Boot, Python     |
+| Product      | Description                           | Stack                        |
+| ------------ | ------------------------------------- | ---------------------------- |
+| **agora**    | Alzheimer's disease evidence explorer | Angular, Node.js, MongoDB    |
+| **model-ad** | AD model data platform                | Angular, Spring Boot         |
+| **bixarena** | Battle arena platform                 | Angular, Spring Boot, Python |
 
 ### OpenAPI-First Workflow
 
@@ -122,7 +121,7 @@ import { Component } from '../../../libs/agora/ui';
 Each project has a `project.json` defining targets (build, test, lint, serve, integration-test) and tags:
 
 - `type:feature|service|app|util|db|config|styles|ui`
-- `scope:backend|agora|openchallenges|model-ad|bixarena|explorers|shared`
+- `scope:backend|agora|model-ad|bixarena|explorers|shared`
 - `language:typescript|java|python`
 
 Always refer to `package.json` for exact dependency versions when looking up API docs.

@@ -61,10 +61,6 @@ subprojects {
       group = "org.sagebionetworks.model.ad"
       version = "0.0.1-SNAPSHOT"
     }
-    name.startsWith("openchallenges") -> {
-      group = "org.sagebionetworks.openchallenges"
-      version = "0.0.1-SNAPSHOT"
-    }
     name.startsWith("sagebionetworks") -> {
       group = "org.sagebionetworks"
       version = "0.0.1-SNAPSHOT"

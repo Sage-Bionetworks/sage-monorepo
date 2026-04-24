@@ -87,10 +87,6 @@ function workspace-graph {
   nx graph
 }
 
-function openchallenges-infra {
-  node dist/apps/openchallenges/infra/src/main.js "$@"
-}
-
 function agora-build-images {
   nx run-many --target=build-image --projects=agora-* --parallel=3
 }
@@ -157,22 +153,6 @@ function model-ad-docker-stop {
 
 function model-ad-docker-rm {
   docker rm -f $(docker ps -a --filter "name=^/model-ad-" --format "{{.ID}}")
-}
-
-function openchallenges-build-images {
-  nx run-many --target=build-image --projects=openchallenges-* --parallel=3
-}
-
-function openchallenges-docker-start {
-  nx serve-detach openchallenges-apex
-}
-
-function openchallenges-docker-stop {
-  docker stop $(docker ps -a --filter "name=^/openchallenges-" --format "{{.ID}}")
-}
-
-function openchallenges-docker-rm {
-  docker rm -f $(docker ps -a --filter "name=^/openchallenges-" --format "{{.ID}}")
 }
 
 function iatlas-build-images {

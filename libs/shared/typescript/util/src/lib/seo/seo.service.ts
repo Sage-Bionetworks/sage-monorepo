@@ -47,7 +47,7 @@ export class SeoService {
     return {
       AUTHOR: {
         name: 'author',
-        content: 'The OpenChallenges Team',
+        content: 'Sage Bionetworks',
       },
       DESCRIPTION: {
         name: 'description',

@@ -1,9 +1,0 @@
-{
-  "name": "openchallenges-themes",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/openchallenges/themes/src",
-  "projectType": "library",
-  "generators": {},
-  "targets": {},
-  "tags": ["type:themes", "scope:openchallenges", "language:typescript"]
-}

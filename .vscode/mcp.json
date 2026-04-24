@@ -7,10 +7,6 @@
     "github": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/"
-    },
-    "openchallenges-mcp-server": {
-      "type": "http",
-      "url": "http://localhost:8000/mcp"
     }
   }
 }

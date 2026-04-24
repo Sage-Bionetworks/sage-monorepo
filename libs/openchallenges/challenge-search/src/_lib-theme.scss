@@ -1,5 +1,0 @@
-@use './lib/challenge-search-theme' as challenge-search;
-
-@mixin theme($theme) {
-  @include challenge-search.theme($theme);
-}

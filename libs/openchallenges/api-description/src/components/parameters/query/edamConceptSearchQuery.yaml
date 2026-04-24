@@ -1,5 +1,0 @@
-name: edamConceptSearchQuery
-description: The search query used to find EDAM concepts.
-in: query
-schema:
-  $ref: ../../schemas/EdamConceptSearchQuery.yaml

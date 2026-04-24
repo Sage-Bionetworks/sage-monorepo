@@ -1,4 +1,0 @@
-networks:
-  openchallenges:
-    name: openchallenges
-    driver: bridge

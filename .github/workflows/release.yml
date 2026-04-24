@@ -6,7 +6,6 @@ on:
       - 'agora/v*'
       - 'bixarena/v*'
       - 'model-ad/v*'
-      - 'openchallenges/v*'
       - 'sage/v*'
 
 permissions:

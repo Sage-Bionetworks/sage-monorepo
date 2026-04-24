@@ -14,7 +14,6 @@ permissions:
   contents: read
 
 env:
-  # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   HEAD_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
   HEAD_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
   NX_BRANCH: ${{ github.event_name == 'pull_request' && github.event.number || github.ref_name }}
@@ -70,11 +69,6 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=integration-test"
-
-      # - name: Scan the affected projects with Sonar
-      #   run: |
-      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-      #       && nx affected --target=sonar"
 
       - name: Set short SHA
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"

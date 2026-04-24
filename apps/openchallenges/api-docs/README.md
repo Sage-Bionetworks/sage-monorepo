@@ -1,3 +1,0 @@
-# OpenChallenges API Docs
-
-TODO

@@ -18,9 +18,9 @@
   },
   "features": {},
   "forwardPorts": [
-    2000, 2432, 3333, 3334, 4200, 4211, 4400, 4401, 4402, 5200, 5601, 8010, 8071, 8000, 8080, 8082,
-    8084, 8085, 8086, 8087, 8091, 8100, 8111, 8112, 8113, 8114, 8115, 8116, 8200, 8500, 8501, 8502,
-    8503, 8504, 8505, 8506, 8507, 8508, 8509, 8510, 8511, 8887, 8888, 8889, 9200, 21000, 27017
+    2000, 2432, 3333, 3334, 4200, 4211, 4400, 4401, 4402, 5200, 8000, 8010, 8080, 8100, 8111, 8112,
+    8113, 8114, 8115, 8116, 8200, 8500, 8501, 8502, 8503, 8504, 8505, 8506, 8507, 8508, 8509, 8510,
+    8511, 21000, 27017
   ],
   "portsAttributes": {
     "2000": {
@@ -40,7 +40,7 @@
       "onAutoForward": "silent"
     },
     "4200": {
-      "label": "openchallenges-app",
+      "label": "angular-app",
       "onAutoForward": "silent"
     },
     "4211": {
@@ -63,48 +63,16 @@
       "label": "agora-app",
       "onAutoForward": "silent"
     },
-    "5601": {
-      "label": "openchallenges-opensearch-dashboards",
-      "onAutoForward": "silent"
-    },
     "8000": {
-      "label": "openchallenges-apex",
+      "label": "apex",
       "onAutoForward": "silent"
     },
     "8010": {
-      "label": "openchallenges-api-docs",
-      "onAutoForward": "silent"
-    },
-    "8071": {
-      "label": "openchallenges-schema-registry",
+      "label": "api-docs",
       "onAutoForward": "silent"
     },
     "8080": {
       "label": "storybook-static",
-      "onAutoForward": "silent"
-    },
-    "8082": {
-      "label": "openchallenges-api-gateway",
-      "onAutoForward": "silent"
-    },
-    "8084": {
-      "label": "openchallenges-organization-service",
-      "onAutoForward": "silent"
-    },
-    "8085": {
-      "label": "openchallenges-challenge-service",
-      "onAutoForward": "silent"
-    },
-    "8086": {
-      "label": "openchallenges-image-service",
-      "onAutoForward": "silent"
-    },
-    "8087": {
-      "label": "openchallenges-auth-service",
-      "onAutoForward": "silent"
-    },
-    "8091": {
-      "label": "openchallenges-postgres",
       "onAutoForward": "silent"
     },
     "8100": {
@@ -181,22 +149,6 @@
     },
     "8511": {
       "label": "observability-pyroscope",
-      "onAutoForward": "silent"
-    },
-    "8887": {
-      "label": "openchallenges-mcp-server",
-      "onAutoForward": "silent"
-    },
-    "8888": {
-      "label": "openchallenges-notebook",
-      "onAutoForward": "silent"
-    },
-    "8889": {
-      "label": "openchallenges-thumbor",
-      "onAutoForward": "silent"
-    },
-    "9200": {
-      "label": "openchallenges-opensearch",
       "onAutoForward": "silent"
     },
     "21000": {

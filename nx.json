@@ -86,7 +86,6 @@
       "useNxReleaseLegacyVersioning": false
     }
   },
-  "defaultProject": "openchallenges-app",
   "plugins": [
     {
       "plugin": "@nxlv/python",

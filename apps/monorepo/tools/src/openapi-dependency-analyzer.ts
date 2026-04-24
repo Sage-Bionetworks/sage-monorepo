@@ -561,8 +561,8 @@ Options:
 
 Examples:
   nx run monorepo-tools:analyze-openapi -- --help
-  nx run monorepo-tools:analyze-openapi libs/openchallenges/api-description/src --report
-  nx run monorepo-tools:analyze-openapi libs/openchallenges/api-description/src --delete
+  nx run monorepo-tools:analyze-openapi libs/agora/api-description/src --report
+  nx run monorepo-tools:analyze-openapi libs/agora/api-description/src --delete
     `);
     return;
   }
