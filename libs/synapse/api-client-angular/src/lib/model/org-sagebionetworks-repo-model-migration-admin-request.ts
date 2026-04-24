@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeChecksumRequest } from './org-sagebionetworks-repo-model-migration-async-migration-type-checksum-request';
+import { OrgSagebionetworksRepoModelMigrationCreateForumsForAccessRequirementsRequest } from './org-sagebionetworks-repo-model-migration-create-forums-for-access-requirements-request';
 import { OrgSagebionetworksRepoModelMigrationAsyncMigrationRangeChecksumRequest } from './org-sagebionetworks-repo-model-migration-async-migration-range-checksum-request';
 import { OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeRequest } from './org-sagebionetworks-repo-model-migration-calculate-optimal-range-request';
 import { OrgSagebionetworksRepoModelMigrationRestoreTypeRequest } from './org-sagebionetworks-repo-model-migration-restore-type-request';
@@ -32,4 +33,5 @@ export type OrgSagebionetworksRepoModelMigrationAdminRequest =
   | OrgSagebionetworksRepoModelMigrationBackupTypeRangeRequest
   | OrgSagebionetworksRepoModelMigrationBatchChecksumRequest
   | OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeRequest
+  | OrgSagebionetworksRepoModelMigrationCreateForumsForAccessRequirementsRequest
   | OrgSagebionetworksRepoModelMigrationRestoreTypeRequest;

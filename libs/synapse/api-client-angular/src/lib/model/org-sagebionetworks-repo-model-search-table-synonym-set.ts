@@ -7,14 +7,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverrideEntry } from './org-sagebionetworks-repo-model-search-table-column-analyzer-override-entry';
+import { OrgSagebionetworksRepoModelSearchTableSynonymRule } from './org-sagebionetworks-repo-model-search-table-synonym-rule';
 
 /**
- * A shared resource containing per-column analyzer override entries. ColumnAnalyzerOverrides belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
+ * A shared set of synonym rules. SynonymSets belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
  */
-export interface OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride {
+export interface OrgSagebionetworksRepoModelSearchTableSynonymSet {
   /**
-   * The unique ID of this column analyzer override.
+   * The unique ID of this synonym set.
    */
   id?: string;
   /**
@@ -26,13 +26,13 @@ export interface OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride {
    */
   name?: string;
   /**
-   * Optional description.
+   * Optional description of the synonym set.
    */
   description?: string;
   /**
-   * The list of per-column analyzer override entries.
+   * The list of synonym rules in this set.
    */
-  overrides?: Array<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverrideEntry>;
+  rules?: Array<OrgSagebionetworksRepoModelSearchTableSynonymRule>;
   /**
    * Synapse employs an Optimistic Concurrency Control (OCC) scheme.
    */

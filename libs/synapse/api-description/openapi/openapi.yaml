@@ -210,8 +210,6 @@ tags:
        specific to challenges.  This set of services provides "CRUD" for Challenge objects and
        ChallengeTeam objects, which register a Team for a Challenge.  The services also provide
        a number of queries regarding Challenges, challenge participants and challenge Teams.
-  - name: Column Analyzer Override Services
-    description: Services for managing column analyzer overrides used in search configurations.
   - name: Curation Task Services
     description: |-
       The Curation Task services are used to manage <a href="${org.sagebionetworks.repo.model.curation.CurationTask}">Curation Tasks</a>.
@@ -731,7 +729,58 @@ tags:
        <a href="${POST.fileHandle.batch}">POST /fileHandle/batch</a> providing the
        formData.dataFileHandleId with <a href="${org.sagebionetworks.repo.model.file.FileHandleAssociateType}">FileHandleAssociateType.FormData</a>
   - name: Grid Services
-    description: Services for create and managing grid data session.
+    description: |-
+      Services for creating and managing curation grid sessions.
+
+       <h2>CLI / Programmatic Access (No WebSocket or CRDT Required)</h2>
+
+       <p>
+       CLI clients and programmatic callers (e.g., Python scripts using the Synapse
+       client) can read and write grid data without establishing a WebSocket
+       connection or implementing CRDT binary decoding. The following workflow uses
+       only standard HTTP async jobs:
+       </p>
+
+       <ol>
+       <li><b>Create a grid session</b> (if one does not already exist):
+       <ul>
+       <li>Start: <a href="${POST.grid.session.async.start}">POST /grid/session/async/start</a></li>
+       <li>Poll: <a href="${GET.grid.session.async.get.asyncToken}">GET /grid/session/async/get/{asyncToken}</a></li>
+       </ul>
+       </li>
+       <li><b>Create a replica</b> (if one does not already exist for this session):
+       <ul>
+       <li><a href="${POST.grid.session.sessionId.replica}">POST /grid/session/{sessionId}/replica</a></li>
+       <li>Save the returned {@code replicaId} \u2014 it is required for all query and
+       update requests and is used to attribute changes to the calling user.</li>
+       </ul>
+       </li>
+       <li><b>Query grid data</b> (read rows with optional per-row validation results):
+       <ul>
+       <li>Start: <a href="${POST.grid.session.query.async.start}">POST /grid/session/query/async/start</a>
+       \u2014 body is a {@link org.sagebionetworks.repo.model.grid.GridQueryJobRequest}
+       containing {@code sessionId}, {@code replicaId}, and a structured
+       {@link org.sagebionetworks.repo.model.grid.query.QueryRequest}</li>
+       <li>Poll: <a href="${GET.grid.session.query.async.get.asyncToken}">GET /grid/session/query/async/get/{asyncToken}</a></li>
+       </ul>
+       </li>
+       <li><b>Update grid data</b> (apply batch cell-level updates):
+       <ul>
+       <li>Start: <a href="${POST.grid.session.update.async.start}">POST /grid/session/update/async/start</a>
+       \u2014 body is a {@link org.sagebionetworks.repo.model.grid.GridUpdateJobRequest}
+       containing {@code sessionId}, {@code replicaId}, and a
+       {@link org.sagebionetworks.repo.model.grid.update.GridUpdateRequest} with the
+       batch of updates to apply</li>
+       <li>Poll: <a href="${GET.grid.session.update.async.get.asyncToken}">GET /grid/session/update/async/get/{asyncToken}</a></li>
+       </ul>
+       </li>
+       </ol>
+
+       <p>
+       Update patches are attributed to the caller's replica, preserving cell-level
+       attribution (who last updated each cell) and ensuring the synchronization
+       logic correctly distinguishes user changes from system changes.
+       </p>
   - name: JSON Schema Services
     description: |-
       This set of services provide project designers with tools to define their own
@@ -844,6 +893,217 @@ tags:
        Services are provided for users to delete entities into the trash can, to view entities
        in the trash can, to purge entities from the trash can, and to restore entities out
        of the trash can.
+  - name: Search Management Services
+    description: |-
+      <p>
+       Services for managing search configuration objects. These reusable building blocks
+       define how a search index analyzes, tokenizes, and matches text. They map directly to
+       <a href="https://docs.opensearch.org/latest/analyzers/custom-analyzer/">OpenSearch custom analyzer</a>
+       concepts and are assembled into a
+       <a href="${org.sagebionetworks.repo.model.search.table.SearchConfiguration}">SearchConfiguration</a>
+       that can be attached to a project.
+       </p>
+
+       <h6>Text Analyzers</h6>
+       <p>
+       A <a href="${org.sagebionetworks.repo.model.search.table.TextAnalyzer}">TextAnalyzer</a> defines
+       a text analysis pipeline consisting of a
+       <a href="https://docs.opensearch.org/latest/analyzers/tokenizers/index/">tokenizer</a> and an
+       ordered list of <a href="https://docs.opensearch.org/latest/analyzers/token-filters/index/">token filters</a>.
+       The tokenizer breaks text into individual tokens, and the filters process those tokens
+       (e.g., lowercasing, stemming, stop word removal). Custom token filters such as stop word lists
+       can also be defined inline.
+       </p>
+       <ul>
+       <li><a href="${POST.search.text.analyzer}">POST /search/text/analyzer</a></li>
+       <li><a href="${GET.search.text.analyzer.id}">GET /search/text/analyzer/{id}</a></li>
+       <li><a href="${PUT.search.text.analyzer.id}">PUT /search/text/analyzer/{id}</a></li>
+       <li><a href="${POST.search.text.analyzer.list}">POST /search/text/analyzer/list</a></li>
+       </ul>
+
+       <h6>Column Analyzer Overrides</h6>
+       <p>
+       A <a href="${org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride}">ColumnAnalyzerOverride</a>
+       assigns specific <a href="${org.sagebionetworks.repo.model.search.table.TextAnalyzer}">TextAnalyzers</a>
+       to individual columns, overriding the SearchConfiguration's default analyzer. Each override entry
+       specifies an index analyzer (used when building the index) and a search analyzer (used at query time).
+       This corresponds to the OpenSearch
+       <a href="https://docs.opensearch.org/latest/mappings/mapping-parameters/analyzer/">per-field analyzer mapping</a>
+       capability.
+       </p>
+       <ul>
+       <li><a href="${POST.search.column.analyzer.override}">POST /search/column/analyzer/override</a></li>
+       <li><a href="${GET.search.column.analyzer.override.columnAnalyzerOverrideId}">GET /search/column/analyzer/override/{columnAnalyzerOverrideId}</a></li>
+       <li><a href="${PUT.search.column.analyzer.override.columnAnalyzerOverrideId}">PUT /search/column/analyzer/override/{columnAnalyzerOverrideId}</a></li>
+       <li><a href="${POST.search.column.analyzer.override.list}">POST /search/column/analyzer/override/list</a></li>
+       </ul>
+
+       <h6>Synonym Sets</h6>
+       <p>
+       A <a href="${org.sagebionetworks.repo.model.search.table.SynonymSet}">SynonymSet</a> defines
+       synonym rules that are applied during index construction via the OpenSearch
+       <a href="https://docs.opensearch.org/latest/analyzers/token-filters/synonym/">synonym token filter</a>.
+       Two rule types are supported:
+       </p>
+       <ul>
+       <li><b>Equivalent</b> &mdash; all terms are interchangeable (e.g., &quot;cancer&quot;,
+           &quot;tumor&quot;, &quot;neoplasm&quot;). Searching for any one term matches documents
+           containing any of the others.</li>
+       <li><b>Explicit</b> &mdash; a directional expansion where the first term expands to the
+           remaining terms (e.g., &quot;AD&quot; expands to &quot;Alzheimer's disease&quot;).</li>
+       </ul>
+       <ul>
+       <li><a href="${POST.search.synonym.set}">POST /search/synonym/set</a></li>
+       <li><a href="${GET.search.synonym.set.synonymSetId}">GET /search/synonym/set/{synonymSetId}</a></li>
+       <li><a href="${PUT.search.synonym.set.synonymSetId}">PUT /search/synonym/set/{synonymSetId}</a></li>
+       <li><a href="${POST.search.synonym.set.list}">POST /search/synonym/set/list</a></li>
+       </ul>
+
+       <h6>Search Configurations</h6>
+       <p>
+       A <a href="${org.sagebionetworks.repo.model.search.table.SearchConfiguration}">SearchConfiguration</a>
+       bundles a default <a href="${org.sagebionetworks.repo.model.search.table.TextAnalyzer}">TextAnalyzer</a>,
+       zero or more <a href="${org.sagebionetworks.repo.model.search.table.SynonymSet}">SynonymSets</a>,
+       and zero or more <a href="${org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride}">ColumnAnalyzerOverrides</a>
+       into a reusable configuration. These settings are used to build the
+       <code>analysis</code> section of an OpenSearch index definition when a search index is created.
+       </p>
+       <p>
+       Attach a SearchConfiguration to an entity (SearchIndex, Folder, or Project) by creating a binding.
+       The effective configuration for any entity is resolved by walking up the entity hierarchy.
+       </p>
+       <ul>
+       <li><a href="${POST.search.configuration}">POST /search/configuration</a></li>
+       <li><a href="${GET.search.configuration.searchConfigurationId}">GET /search/configuration/{searchConfigurationId}</a></li>
+       <li><a href="${PUT.search.configuration.searchConfigurationId}">PUT /search/configuration/{searchConfigurationId}</a></li>
+       <li><a href="${POST.search.configuration.list}">POST /search/configuration/list</a></li>
+       </ul>
+
+       <h6>Search Configuration Bindings</h6>
+       <p>
+       Bind a <a href="${org.sagebionetworks.repo.model.search.table.SearchConfiguration}">SearchConfiguration</a>
+       to an entity. The effective configuration for any entity is resolved by walking up the hierarchy
+       (entity \u2192 folder \u2192 project). Requires EDIT permission on the entity.
+       </p>
+       <ul>
+       <li><a href="${PUT.entity.entityId.searchconfig.binding}">PUT /entity/{entityId}/searchconfig/binding</a></li>
+       <li><a href="${GET.entity.entityId.searchconfig.binding}">GET /entity/{entityId}/searchconfig/binding</a></li>
+       <li><a href="${DELETE.entity.entityId.searchconfig.binding}">DELETE /entity/{entityId}/searchconfig/binding</a></li>
+       </ul>
+
+       <h6>Public Resources and Cross-Organization Referencing</h6>
+       <p>
+       All search management resources (TextAnalyzers, SynonymSets, ColumnAnalyzerOverrides) are
+       <b>publicly readable</b>. Any authenticated user can list and retrieve resources from any
+       Organization. This enables cross-organization reuse: a
+       <a href="${org.sagebionetworks.repo.model.search.table.SearchConfiguration}">SearchConfiguration</a>
+       can reference resources from any Organization using <b>qualified names</b> in the format
+       <code>{organizationName}-{resourceName}</code> (e.g., <code>org.sagebionetworks-SCIENTIFIC</code>).
+       For example, any user can build a SearchConfiguration that uses the platform-provided
+       <code>org.sagebionetworks</code> analyzers alongside custom resources from their own Organization.
+       </p>
+
+       <h6>Name Immutability</h6>
+       <p>
+       Because resources are referenced by qualified name, the <code>name</code> and
+       <code>organizationName</code> fields are <b>immutable after creation</b>. Attempting to change
+       either on update will return a 400 error. To use a different name, create a new resource and
+       update any SearchConfigurations that reference the old one.
+       </p>
+
+       <h6>Authorization</h6>
+       <p>
+       All management operations (create, update, delete) are restricted to <b>Sage Bionetworks employees</b>
+       who have the appropriate
+       <a href="${org.sagebionetworks.repo.model.ACCESS_TYPE}">ACCESS_TYPE</a> permission on the
+       <a href="${org.sagebionetworks.repo.model.schema.Organization}">Organization</a> that owns the resource.
+       Read and list operations are publicly accessible.
+       </p>
+
+       <h6>Organization Scoping</h6>
+       <p>
+       All search management objects belong to an
+       <a href="${org.sagebionetworks.repo.model.schema.Organization}">Organization</a> identified by
+       <code>organizationName</code>. The organization and name cannot be changed after creation.
+       Resource names must start with a letter and contain only letters, digits, and underscores.
+       </p>
+
+       <h6>Search Index Field Limits</h6>
+       <p>
+       When a search index is built, each column from the defining SQL query is mapped to an
+       OpenSearch field type. Text and keyword fields have an <code>ignore_above</code> limit on
+       their keyword sub-field &mdash; values longer than this limit are <b>not indexed</b> for
+       exact-match or sorting, but remain stored in the source document. Numeric, boolean, and
+       JSON fields have no such limit.
+       </p>
+       <b>Search Index Field Mapping and Limits</b>
+       <table border="1">
+       <tr>
+       <th>Synapse Column Type</th>
+       <th>OpenSearch Field Type</th>
+       <th>Keyword ignore_above</th>
+       <th>Default Analyzer</th>
+       </tr>
+       <tr>
+       <td>STRING, STRING_LIST</td>
+       <td>text + keyword sub-field</td>
+       <td>1,000 characters</td>
+       <td>SCIENTIFIC</td>
+       </tr>
+       <tr>
+       <td>MEDIUMTEXT</td>
+       <td>text + keyword sub-field</td>
+       <td>2,000 characters</td>
+       <td>SCIENTIFIC</td>
+       </tr>
+       <tr>
+       <td>LARGETEXT</td>
+       <td>text + keyword sub-field</td>
+       <td>8,192 characters</td>
+       <td>SCIENTIFIC</td>
+       </tr>
+       <tr>
+       <td>LINK</td>
+       <td>text + keyword sub-field (or keyword + searchable, depending on analyzer)</td>
+       <td>1,000 characters</td>
+       <td>KEYWORD</td>
+       </tr>
+       <tr>
+       <td>ENTITYID, USERID, ENTITYID_LIST, USERID_LIST</td>
+       <td>keyword</td>
+       <td>256 characters</td>
+       <td>KEYWORD</td>
+       </tr>
+       <tr>
+       <td>INTEGER, DATE, INTEGER_LIST, DATE_LIST, FILEHANDLEID, SUBMISSIONID, EVALUATIONID</td>
+       <td>long</td>
+       <td>N/A</td>
+       <td>KEYWORD</td>
+       </tr>
+       <tr>
+       <td>DOUBLE</td>
+       <td>double</td>
+       <td>N/A</td>
+       <td>KEYWORD</td>
+       </tr>
+       <tr>
+       <td>BOOLEAN, BOOLEAN_LIST</td>
+       <td>boolean</td>
+       <td>N/A</td>
+       <td>KEYWORD</td>
+       </tr>
+       <tr>
+       <td>JSON</td>
+       <td>object (dynamic mapping)</td>
+       <td>N/A</td>
+       <td>STANDARD</td>
+       </tr>
+       </table>
+       <p>
+       <b>Query Limits:</b> Results per page default to 25 with a maximum of 100.
+       Autocomplete results are capped at 8. The maximum number of rows that can be indexed
+       in a single search index is 500,000.
+       </p>
   - name: Search Query Services
     description: Services for search queries and autocomplete.
   - name: Search Services
@@ -1016,8 +1276,6 @@ tags:
        <li> accept Team membership invitations (join the Team),
        <li> unilaterally choose to leave a Team once added.
        </ul>
-  - name: Text Analyzer Services
-    description: Services for managing text analyzer configurations used in search indexes.
   - name: User & Group Services
     description: Auto-generated description
   - name: User Profile Services
@@ -3087,6 +3345,33 @@ paths:
           description: '- The ID of the forum.'
           schema:
             type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.discussion.Forum'
+  /repo/v1/forum/{objectId}/{objectType}:
+    get:
+      tags:
+        - Discussion Services
+      operationId: get-/repo/v1/forum/{objectId}/{objectType}
+      parameters:
+        - name: objectId
+          in: path
+          required: true
+          description: '- The ID of the object to which the forum belongs.'
+          schema:
+            type: string
+        - name: objectType
+          in: path
+          required: true
+          description: '- The type of the object (ENTITY or ACCESS_REQUIREMENT).'
+          schema:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.discussion.ForumObjectType'
       security:
         - bearerAuth: []
       responses:
@@ -8173,6 +8458,88 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.SynchronizeGridResponse'
+  /repo/v1/grid/session/query/async/start:
+    post:
+      tags:
+        - Grid Services
+      operationId: post-/repo/v1/grid/session/query/async/start
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridQueryJobRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
+  /repo/v1/grid/session/query/async/get/{asyncToken}:
+    get:
+      tags:
+        - Grid Services
+      operationId: get-/repo/v1/grid/session/query/async/get/{asyncToken}
+      parameters:
+        - name: asyncToken
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridQueryJobResponse'
+  /repo/v1/grid/session/update/async/start:
+    post:
+      tags:
+        - Grid Services
+      operationId: post-/repo/v1/grid/session/update/async/start
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridUpdateJobRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
+  /repo/v1/grid/session/update/async/get/{asyncToken}:
+    get:
+      tags:
+        - Grid Services
+      operationId: get-/repo/v1/grid/session/update/async/get/{asyncToken}
+      parameters:
+        - name: asyncToken
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridUpdateJobResponse'
   /repo/v1/userProfile:
     get:
       tags:
@@ -9040,111 +9407,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.subscription.SubscriberCount'
-  /repo/v1/search/text/analyzer:
-    post:
-      tags:
-        - Text Analyzer Services
-      operationId: post-/repo/v1/search/text/analyzer
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: The created text analyzer
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
-  /repo/v1/search/text/analyzer/{id}:
-    get:
-      tags:
-        - Text Analyzer Services
-      operationId: get-/repo/v1/search/text/analyzer/{id}
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The text analyzer ID
-          schema:
-            type: number
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: The text analyzer
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
-    put:
-      tags:
-        - Text Analyzer Services
-      operationId: put-/repo/v1/search/text/analyzer/{id}
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The text analyzer ID
-          schema:
-            type: number
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: The updated text analyzer
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
-    delete:
-      tags:
-        - Text Analyzer Services
-      operationId: delete-/repo/v1/search/text/analyzer/{id}
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The text analyzer ID
-          schema:
-            type: number
-      security:
-        - bearerAuth: []
-      responses:
-        '204':
-          description: Void
-  /repo/v1/search/text/analyzer/list:
-    post:
-      tags:
-        - Text Analyzer Services
-      operationId: post-/repo/v1/search/text/analyzer/list
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListTextAnalyzersRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: The list response with results and optional pagination token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListTextAnalyzersResponse'
   /repo/v1/log:
     post:
       tags:
@@ -15209,10 +15471,99 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.principal.PrincipalAliasResponse'
+  /repo/v1/search/text/analyzer:
+    post:
+      tags:
+        - Search Management Services
+      operationId: post-/repo/v1/search/text/analyzer
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: The created text analyzer with a generated ID, etag, and audit timestamps.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
+  /repo/v1/search/text/analyzer/{id}:
+    get:
+      tags:
+        - Search Management Services
+      operationId: get-/repo/v1/search/text/analyzer/{id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The numeric ID of the text analyzer to retrieve.
+          schema:
+            type: number
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The requested text analyzer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
+    put:
+      tags:
+        - Search Management Services
+      operationId: put-/repo/v1/search/text/analyzer/{id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The path ID of the text analyzer (must match the request body's ID).
+          schema:
+            type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The updated text analyzer with a new etag.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
+  /repo/v1/search/text/analyzer/list:
+    post:
+      tags:
+        - Search Management Services
+      operationId: post-/repo/v1/search/text/analyzer/list
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListTextAnalyzersRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A paginated list of text analyzers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListTextAnalyzersResponse'
   /repo/v1/search/column/analyzer/override:
     post:
       tags:
-        - Column Analyzer Override Services
+        - Search Management Services
       operationId: post-/repo/v1/search/column/analyzer/override
       parameters: []
       requestBody:
@@ -15225,7 +15576,7 @@ paths:
         - bearerAuth: []
       responses:
         '201':
-          description: Auto-generated description
+          description: The created column analyzer override with a generated ID, etag, and audit timestamps.
           content:
             application/json:
               schema:
@@ -15233,31 +15584,33 @@ paths:
   /repo/v1/search/column/analyzer/override/{columnAnalyzerOverrideId}:
     get:
       tags:
-        - Column Analyzer Override Services
+        - Search Management Services
       operationId: get-/repo/v1/search/column/analyzer/override/{columnAnalyzerOverrideId}
       parameters:
         - name: columnAnalyzerOverrideId
           in: path
           required: true
+          description: The ID of the column analyzer override to retrieve.
           schema:
             type: string
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: Auto-generated description
+          description: The requested column analyzer override.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride'
     put:
       tags:
-        - Column Analyzer Override Services
+        - Search Management Services
       operationId: put-/repo/v1/search/column/analyzer/override/{columnAnalyzerOverrideId}
       parameters:
         - name: columnAnalyzerOverrideId
           in: path
           required: true
+          description: The path ID (must match the request body's ID).
           schema:
             type: string
       requestBody:
@@ -15270,30 +15623,15 @@ paths:
         - bearerAuth: []
       responses:
         '200':
-          description: Auto-generated description
+          description: The updated column analyzer override with a new etag.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride'
-    delete:
-      tags:
-        - Column Analyzer Override Services
-      operationId: delete-/repo/v1/search/column/analyzer/override/{columnAnalyzerOverrideId}
-      parameters:
-        - name: columnAnalyzerOverrideId
-          in: path
-          required: true
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '204':
-          description: Void
   /repo/v1/search/column/analyzer/override/list:
     post:
       tags:
-        - Column Analyzer Override Services
+        - Search Management Services
       operationId: post-/repo/v1/search/column/analyzer/override/list
       parameters: []
       requestBody:
@@ -15306,11 +15644,252 @@ paths:
         - bearerAuth: []
       responses:
         '200':
-          description: Auto-generated description
+          description: A paginated list of column analyzer overrides.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListColumnAnalyzerOverridesResponse'
+  /repo/v1/search/synonym/set:
+    post:
+      tags:
+        - Search Management Services
+      operationId: post-/repo/v1/search/synonym/set
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SynonymSet'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: The created synonym set with a generated ID, etag, and audit timestamps.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SynonymSet'
+  /repo/v1/search/synonym/set/{synonymSetId}:
+    get:
+      tags:
+        - Search Management Services
+      operationId: get-/repo/v1/search/synonym/set/{synonymSetId}
+      parameters:
+        - name: synonymSetId
+          in: path
+          required: true
+          description: The ID of the synonym set to retrieve.
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The requested synonym set.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SynonymSet'
+    put:
+      tags:
+        - Search Management Services
+      operationId: put-/repo/v1/search/synonym/set/{synonymSetId}
+      parameters:
+        - name: synonymSetId
+          in: path
+          required: true
+          description: The path ID (must match the request body's ID).
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SynonymSet'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The updated synonym set with a new etag.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SynonymSet'
+  /repo/v1/search/synonym/set/list:
+    post:
+      tags:
+        - Search Management Services
+      operationId: post-/repo/v1/search/synonym/set/list
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListSynonymSetsRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A paginated list of synonym sets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListSynonymSetsResponse'
+  /repo/v1/search/configuration:
+    post:
+      tags:
+        - Search Management Services
+      operationId: post-/repo/v1/search/configuration
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchConfiguration'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: The created search configuration with a generated ID, etag, and audit timestamps.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchConfiguration'
+  /repo/v1/search/configuration/{searchConfigurationId}:
+    get:
+      tags:
+        - Search Management Services
+      operationId: get-/repo/v1/search/configuration/{searchConfigurationId}
+      parameters:
+        - name: searchConfigurationId
+          in: path
+          required: true
+          description: The ID of the search configuration to retrieve.
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The requested search configuration.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchConfiguration'
+    put:
+      tags:
+        - Search Management Services
+      operationId: put-/repo/v1/search/configuration/{searchConfigurationId}
+      parameters:
+        - name: searchConfigurationId
+          in: path
+          required: true
+          description: The path ID (must match the request body's ID).
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchConfiguration'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The updated search configuration with a new etag.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchConfiguration'
+  /repo/v1/search/configuration/list:
+    post:
+      tags:
+        - Search Management Services
+      operationId: post-/repo/v1/search/configuration/list
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListSearchConfigurationsRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A paginated list of search configurations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListSearchConfigurationsResponse'
+  /repo/v1/entity/{entityId}/searchconfig/binding:
+    put:
+      tags:
+        - Search Management Services
+      operationId: put-/repo/v1/entity/{entityId}/searchconfig/binding
+      parameters:
+        - name: entityId
+          in: path
+          required: true
+          description: The ID of the entity to bind to.
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.BindSearchConfigToEntityRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The created binding.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchConfigBinding'
+    get:
+      tags:
+        - Search Management Services
+      operationId: get-/repo/v1/entity/{entityId}/searchconfig/binding
+      parameters:
+        - name: entityId
+          in: path
+          required: true
+          description: The ID of the entity to look up.
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The effective binding.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchConfigBinding'
+    delete:
+      tags:
+        - Search Management Services
+      operationId: delete-/repo/v1/entity/{entityId}/searchconfig/binding
+      parameters:
+        - name: entityId
+          in: path
+          required: true
+          description: The ID of the entity whose binding to clear.
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Void
 components:
   schemas:
     org.sagebionetworks.repo.model.RestrictionInformationRequest:
@@ -15741,6 +16320,7 @@ components:
               - DISCUSSION_THREAD
               - DISCUSSION_THREAD_VIEW
               - DISCUSSION_THREAD_ENTITY_REFERENCE
+              - DISCUSSION_THREAD_SUBMISSION_REFERENCE
               - DISCUSSION_REPLY
               - SUBSCRIPTION
               - BROADCAST_MESSAGE
@@ -15804,6 +16384,9 @@ components:
               - RECORDSET_VALIDATION_STATS
               - TEXT_ANALYZER
               - COLUMN_ANALYZER_OVERRIDE
+              - SYNONYM_SET
+              - SEARCH_CONFIGURATION
+              - SEARCH_CONFIG_OBJECT_BINDING
               - CHANGE
       description: Request count for migration types
       required:
@@ -15977,6 +16560,12 @@ components:
             description: a single question in a Quiz
           description: The questions in the Quiz
       description: Schema for a quiz and, optionally, its answer key
+    org.sagebionetworks.repo.model.search.table.SearchIndexState:
+      type: string
+      enum:
+        - CREATING
+        - ACTIVE
+        - FAILED
     org.sagebionetworks.repo.model.auth.TwoFactorAuthResetRequest:
       type: object
       properties:
@@ -16149,6 +16738,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -16212,6 +16802,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         type:
           type: string
@@ -16287,6 +16880,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -16350,6 +16944,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         checksum:
           type: string
@@ -17327,6 +17924,50 @@ components:
       required:
         - bucket
         - concreteType
+    org.sagebionetworks.repo.model.search.table.SearchIndex:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'The name of this entity.  Must be 256 characters or less. Names may only contain: letters, numbers, spaces, underscores, hyphens, periods, plus signs, apostrophes, and parentheses'
+        description:
+          type: string
+          description: The description of this entity.  Must be 1000 characters or less.
+        id:
+          type: string
+          description: The unique immutable ID for this entity.  A new ID will be generated for new Entities.  Once issued, this ID is guaranteed to never change or be re-issued
+        etag:
+          type: string
+          description: Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.
+        createdOn:
+          type: string
+          description: The date this entity was created.
+        modifiedOn:
+          type: string
+          description: The date this entity was last modified.
+        createdBy:
+          type: string
+          description: The ID of the user that created this entity.
+        modifiedBy:
+          type: string
+          description: The ID of the user that last modified this entity.
+        parentId:
+          type: string
+          description: The ID of the Entity that is the parent of this Entity.
+        concreteType:
+          type: string
+          description: Indicates which implementation of Entity this object represents.  The value is the fully qualified class name, e.g. org.sagebionetworks.repo.model.FileEntity.
+          enum:
+            - org.sagebionetworks.repo.model.search.table.SearchIndex
+        definingSQL:
+          type: string
+          description: The Synapse SQL statement that defines which columns and rows are indexed. Must reference exactly one entity. Multi-entity JOINs are not supported.
+        searchConfigurationId:
+          type: string
+          description: The ID of the SearchConfiguration to apply when building this search index. If not provided, the system will check for a search configuration binding on the parent project/folder hierarchy, or use platform defaults.
+      description: A search index entity. Its content is defined by a Synapse SQL query (definingSQL) that references a single table-like entity. An OpenSearch index is built from the query results, supporting full-text search, faceted search, and autocomplete. Optionally references a SearchConfiguration for analyzer and synonym settings.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.principal.AliasCheckRequest:
       type: object
       properties:
@@ -17343,6 +17984,16 @@ components:
             - USER_OPEN_ID
             - USER_ORCID
       description: Request to check if an alias is available.
+    org.sagebionetworks.repo.model.search.table.BindSearchConfigToEntityRequest:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: The ID of the entity to bind the search configuration to.
+        searchConfigurationId:
+          type: string
+          description: The ID of the SearchConfiguration to bind.
+      description: Request to bind a SearchConfiguration to an entity. The caller must have edit permission on the entity. Replaces any existing binding for the entity.
     PaginatedResultsOfSubmissionBundle:
       type: object
       properties:
@@ -17552,6 +18203,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -17615,6 +18267,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         ranges:
           type: array
@@ -17949,6 +18604,7 @@ components:
             - materializedview
             - virtualtable
             - recordset
+            - searchindex
         eTag:
           type: string
         versionNumber:
@@ -17972,13 +18628,13 @@ components:
           type: array
           items:
             type: string
-          description: For FileVeiws, the list of IDs the define the scope of the view.
+          description: For FileViews, the list of IDs that define the scope of the view.
         items:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.EntityRef'
             description: Represents a reference to the id and version of an entity to be used in collections.
-          description: For Datasets and Dataset Collections, the list of entity references the define the view.
+          description: For Datasets and Dataset Collections, the list of entity references that define the view.
         upsertKey:
           type: array
           items:
@@ -17997,7 +18653,7 @@ components:
           description: For table entities, specifies if the full text search index is enabled or not.
         definingSQL:
           type: string
-          description: For materialized views and virtual tables, specifies the SQL defining the content of the table.
+          description: For materialized views, virtual tables, and search indexes, specifies the SQL defining the content.
         validationResultFileHandleId:
           type: string
           description: For a RecordSet, the file handle that contains the detailed validation results.
@@ -18429,6 +19085,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -18492,6 +19149,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         aliasType:
           type: string
@@ -18981,6 +19641,7 @@ components:
         - DISCUSSION_THREAD
         - DISCUSSION_THREAD_VIEW
         - DISCUSSION_THREAD_ENTITY_REFERENCE
+        - DISCUSSION_THREAD_SUBMISSION_REFERENCE
         - DISCUSSION_REPLY
         - SUBSCRIPTION
         - BROADCAST_MESSAGE
@@ -19044,6 +19705,9 @@ components:
         - RECORDSET_VALIDATION_STATS
         - TEXT_ANALYZER
         - COLUMN_ANALYZER_OVERRIDE
+        - SYNONYM_SET
+        - SEARCH_CONFIGURATION
+        - SEARCH_CONFIG_OBJECT_BINDING
         - CHANGE
     org.sagebionetworks.repo.model.schema.Type:
       type: string
@@ -19834,6 +20498,7 @@ components:
             - materializedview
             - virtualtable
             - recordset
+            - searchindex
         defaultParentPath:
           type: string
           description: The full path of the entity schema.
@@ -20161,6 +20826,15 @@ components:
         projectId:
           type: string
           description: The ID of the project this Thread belongs to
+        objectId:
+          type: string
+          description: The ID of the object this Thread belongs to
+        objectType:
+          type: string
+          description: The type of object to which a Forum is associated.
+          enum:
+            - ENTITY
+            - ACCESS_REQUIREMENT
         title:
           type: string
           description: The title of the Thread
@@ -21234,6 +21908,7 @@ components:
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.SynchronizeGridRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListRequest'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridQueryJobRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.DownloadFromTableRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListPackageRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.QueryBundleRequest'
@@ -21263,6 +21938,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.AppendableRowSetRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.CreateSchemaRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.GetValidationSchemaRequest'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridUpdateJobRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.AddFileToDownloadListRequest'
       required:
         - concreteType
@@ -22065,6 +22741,19 @@ components:
           type: string
           description: The token to get the next page of results.
       description: Metadata for a paginated list of personal access token records.
+    org.sagebionetworks.repo.model.grid.GridUpdateJobResponse:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.grid.GridUpdateJobResponse
+        updateResponse:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.update.GridUpdateResponse'
+          description: Response summarizing the outcome of a grid update operation.
+      description: Response for the grid update asynchronous job.
+      required:
+        - concreteType
     PaginatedResultsOfSubmissionStatus:
       type: object
       properties:
@@ -22511,6 +23200,7 @@ components:
             - materializedview
             - virtualtable
             - recordset
+            - searchindex
         deletedByPrincipalId:
           type: string
           description: The ID of the user who deleted the entity.
@@ -23253,6 +23943,26 @@ components:
       description: Represents a set of row of a TableEntity
       required:
         - concreteType
+    org.sagebionetworks.repo.model.grid.GridQueryJobRequest:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.grid.GridQueryJobRequest
+        sessionId:
+          type: string
+          description: Required. The grid session ID to query.
+        replicaId:
+          type: integer
+          description: Required. The caller's replica ID. Used for row-selection filtering and must be owned by the caller.
+          format: int32
+        queryRequest:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.QueryRequest'
+          description: Request to run a query.
+      description: Asynchronous job request to query a grid session and return a single page of rows with optional per-row validation data. Does not require a WebSocket connection.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.table.ViewColumnModelRequest:
       type: object
       properties:
@@ -23365,7 +24075,16 @@ components:
           description: The ID of this object
         projectId:
           type: string
-          description: The ID of the project to which this forum belongs. This ID may or may not start with prefix 'syn'.
+          description: Deprecated. Use objectId instead. The ID of the project to which this forum belongs. This ID may or may not start with prefix 'syn'.
+        objectId:
+          type: string
+          description: The ID of the object to which this forum belongs.
+        objectType:
+          type: string
+          description: The type of object to which a Forum is associated.
+          enum:
+            - ENTITY
+            - ACCESS_REQUIREMENT
         etag:
           type: string
           description: Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.
@@ -24004,6 +24723,26 @@ components:
           type: boolean
           description: True when this key value should be negated
       description: JSON schema for a faceted key-value pair.
+    org.sagebionetworks.repo.model.search.table.SearchIndexStatus:
+      type: object
+      properties:
+        searchIndexId:
+          type: string
+          description: The ID of the SearchIndex entity.
+        state:
+          type: string
+          description: The state of a search index's OpenSearch index.
+          enum:
+            - CREATING
+            - ACTIVE
+            - FAILED
+        changedOn:
+          type: string
+          description: The date-time when the status last changed.
+        errorMessage:
+          type: string
+          description: When the build fails, this is the error message.
+      description: The build status of a SearchIndex's OpenSearch index.
     org.sagebionetworks.repo.model.migration.BackupManifest:
       type: object
       properties:
@@ -24392,6 +25131,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -24455,6 +25195,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         type:
           type: string
@@ -25231,10 +25974,10 @@ components:
           description: The unique ID of this column analyzer override.
         organizationName:
           type: string
-          description: The name of the Organization this resource belongs to.
+          description: The name of the Organization this resource belongs to. Immutable after creation.
         name:
           type: string
-          description: Display name. Unique within the organization.
+          description: The resource name. Must start with a letter and contain only letters, digits, and underscores. Unique within the organization and immutable after creation. Used as part of the qualified name ({organizationName}-{name}) when referenced by other resources.
         description:
           type: string
           description: Optional description.
@@ -25548,11 +26291,13 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListManifestResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleRestoreResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.TableUpdateTransactionResponse'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridUpdateJobResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleArchivalResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.UploadToTableResult'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.GetValidationSchemaResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.SynchronizeGridResponse'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridQueryJobResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.SearchQueryResults'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.report.DownloadStorageReportResponse'
@@ -26338,6 +27083,11 @@ components:
       description: A materialized view is a type of table that is automatically built from a Synapse SQL query. Its content is persisted. The SQL of the materialized view may contain JOIN clauses on multiple tables.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.discussion.ForumObjectType:
+      type: string
+      enum:
+        - ENTITY
+        - ACCESS_REQUIREMENT
     org.sagebionetworks.repo.model.file.ExternalUploadDestination:
       type: object
       properties:
@@ -27020,6 +27770,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -27083,6 +27834,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         minimumId:
           type: integer
@@ -27994,6 +28748,21 @@ components:
           type: boolean
           description: When true, all rows are selected, and 'rowSelection' will be ignored.
       description: Defines a user's selection of columns and rows for a replica.
+    org.sagebionetworks.repo.model.search.table.SynonymRule:
+      type: object
+      properties:
+        ruleType:
+          type: string
+          description: The type of a synonym rule.
+          enum:
+            - EQUIVALENT
+            - EXPLICIT
+        terms:
+          type: array
+          items:
+            type: string
+          description: 'The list of synonym terms. Minimum 2. For EQUIVALENT: all terms are interchangeable. For EXPLICIT: first term expands to the rest.'
+      description: A single synonym rule. For EQUIVALENT rules, all terms are bidirectionally interchangeable. For EXPLICIT rules, the first term maps one-way to the remaining terms.
     org.sagebionetworks.repo.model.wiki.WikiPage:
       type: object
       properties:
@@ -28098,6 +28867,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.MigrationTypeCounts'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.MigrationRangeChecksum'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.MigrationTypeCount'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.CreateForumsForAccessRequirementsResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.BatchChecksumResponse'
       required:
         - concreteType
@@ -28117,6 +28887,19 @@ components:
           description: Total number of rows updated across all updates in the batch.
           format: int32
       description: Response summarizing the outcome of a grid update operation.
+    org.sagebionetworks.repo.model.search.table.ListSearchConfigurationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchConfiguration'
+            description: A reusable search configuration resource. Bundles synonym sets, column analyzer overrides, and a default analyzer. Bind to any entity in the hierarchy (entity, folder, or project) to define inherited search configuration.
+          description: The list of search configurations for this page.
+        nextPageToken:
+          type: string
+          description: Token for the next page of results, if more results exist.
+      description: Response containing a page of search configurations.
     org.sagebionetworks.repo.model.table.EntityRefCollectionView:
       type: object
       properties:
@@ -28357,6 +29140,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.FileEntity'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.TableEntity'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.Folder'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndex'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.SubmissionView'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.MaterializedView'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.Project'
@@ -28463,6 +29247,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -28526,6 +29311,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         checksum:
           type: string
@@ -28881,6 +29669,25 @@ components:
         bucket:
           type: string
           description: Bucket where the field resides
+    org.sagebionetworks.repo.model.discussion.DiscussionThread:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the Thread
+        forumId:
+          type: string
+          description: The ID of the forum this Thread belongs to
+        objectId:
+          type: string
+          description: The ID of the object this Thread belongs to
+        objectType:
+          type: string
+          description: The type of object to which a Forum is associated.
+          enum:
+            - ENTITY
+            - ACCESS_REQUIREMENT
+      description: The Thread model object represents a Thread info.
     org.sagebionetworks.repo.model.RestrictionInformationBatchRequest:
       type: object
       properties:
@@ -29651,6 +30458,28 @@ components:
         - NUMBER_OF_VIEWS
         - PINNED_AND_LAST_ACTIVITY
         - THREAD_TITLE
+    org.sagebionetworks.repo.model.search.table.SearchConfigBinding:
+      type: object
+      properties:
+        bindId:
+          type: string
+          description: The unique ID of this binding.
+        searchConfigurationId:
+          type: string
+          description: The ID of the SearchConfiguration bound to this entity.
+        objectId:
+          type: string
+          description: The ID of the entity this configuration is bound to.
+        objectType:
+          type: string
+          description: The type of the object this configuration is bound to.
+        createdBy:
+          type: string
+          description: The ID of the user that created this binding.
+        createdOn:
+          type: string
+          description: The date this binding was created.
+      description: Represents a binding between a search configuration and an entity. Walk the entity hierarchy (entity → folder → project) to find the effective configuration.
     org.sagebionetworks.repo.model.form.ListResponse:
       type: object
       properties:
@@ -29755,6 +30584,7 @@ components:
             - materializedview
             - virtualtable
             - recordset
+            - searchindex
         annotations:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.annotation.v2.Annotations'
           description: Annotations are additional key-value pair metadata that are associated with an object.
@@ -30181,6 +31011,16 @@ components:
           type: integer
           description: The total number of threads.
           format: int32
+    org.sagebionetworks.repo.model.migration.CreateForumsForAccessRequirementsRequest:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.migration.CreateForumsForAccessRequirementsRequest
+      description: Request to create forums for all ManagedACTAccessRequirements that do not yet have a forum. This is a one-time backfill operation intended to be run after migration.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.file.ExternalFileHandleInterface:
       type: object
       properties:
@@ -30362,6 +31202,7 @@ components:
               - DISCUSSION_THREAD
               - DISCUSSION_THREAD_VIEW
               - DISCUSSION_THREAD_ENTITY_REFERENCE
+              - DISCUSSION_THREAD_SUBMISSION_REFERENCE
               - DISCUSSION_REPLY
               - SUBSCRIPTION
               - BROADCAST_MESSAGE
@@ -30425,6 +31266,9 @@ components:
               - RECORDSET_VALIDATION_STATS
               - TEXT_ANALYZER
               - COLUMN_ANALYZER_OVERRIDE
+              - SYNONYM_SET
+              - SEARCH_CONFIGURATION
+              - SEARCH_CONFIG_OBJECT_BINDING
               - CHANGE
       description: List of Migration types.
     org.sagebionetworks.repo.model.TermsOfUseAccessRequirement:
@@ -31143,12 +31987,12 @@ components:
         columnName:
           type: string
           description: The name of the column to override. Must exist in the entity's schema.
-        indexAnalyzerId:
+        indexAnalyzer:
           type: string
-          description: The ID of the TextAnalyzer to use when indexing this column.
-        searchAnalyzerId:
+          description: The qualified name ('{organizationName}-{name}') of the TextAnalyzer to use when indexing this column.
+        searchAnalyzer:
           type: string
-          description: The ID of the TextAnalyzer to use when searching this column.
+          description: The qualified name ('{organizationName}-{name}') of the TextAnalyzer to use when searching this column.
       description: A per-column analyzer override entry. Specifies which analyzers to use at index time and search time for a specific column.
     org.sagebionetworks.repo.model.oauth.OIDCClaimsRequestDetails:
       type: object
@@ -31247,6 +32091,16 @@ components:
           description: The ID of the user that establilshed this connection.
           format: int32
       description: Connection information from a presigned URL.
+    org.sagebionetworks.repo.model.search.table.ListSynonymSetsRequest:
+      type: object
+      properties:
+        organizationName:
+          type: string
+          description: Optional filter by organization name.
+        nextPageToken:
+          type: string
+          description: Token for the next page of results.
+      description: Request to list synonym sets, optionally filtered by organization.
     org.sagebionetworks.repo.model.auth.TwoFactorAuthLoginRequest:
       type: object
       properties:
@@ -31348,6 +32202,19 @@ components:
           description: The number of threads that the current user can view.
           format: int32
       description: The model object represents the number of threads that mentioned a particular entity.
+    org.sagebionetworks.repo.model.search.table.ListSynonymSetsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SynonymSet'
+            description: A shared set of synonym rules. SynonymSets belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
+          description: The list of synonym sets for this page.
+        nextPageToken:
+          type: string
+          description: Token for the next page of results, if more results exist.
+      description: Response containing a page of synonym sets.
     org.sagebionetworks.repo.model.discussion.Match:
       type: object
       properties:
@@ -31919,6 +32786,16 @@ components:
           type: string
           description: The version of software in which Drs services released.
       description: Drs service information
+    org.sagebionetworks.repo.model.search.table.ListSearchConfigurationsRequest:
+      type: object
+      properties:
+        organizationName:
+          type: string
+          description: Optional filter by organization name.
+        nextPageToken:
+          type: string
+          description: Token for the next page of results.
+      description: Request to list search configurations, optionally filtered by organization.
     org.sagebionetworks.repo.model.report.StorageReportType:
       type: string
       enum:
@@ -31930,6 +32807,19 @@ components:
           type: string
           description: An organization name must be one or more alphanumeric strings each separated by a dot [ <alpha_num>('.'<alpha_num>)]. An alphanumeric string must start with a letter followed by one or more letters or digits a-z. The name must be at least 6 characters and no more than 250 characters. Names are case insensitive. Names cannot contain the reserved word 'sagebionetworks'
       description: Request to create a new Organization.
+    org.sagebionetworks.repo.model.grid.GridQueryJobResponse:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.grid.GridQueryJobResponse
+        queryResult:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.result.QueryResult'
+          description: Results of a query against a grid session.
+      description: Response for the grid query asynchronous job.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.ManagedACTAccessRequirement:
       type: object
       properties:
@@ -32060,6 +32950,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.BatchChecksumRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.BackupTypeRangeRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationTypeCountRequest'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.CreateForumsForAccessRequirementsRequest'
       required:
         - concreteType
       discriminator:
@@ -32495,6 +33386,11 @@ components:
         - UNSUPPORTED_WEBHOOK_DOMAIN
         - PROJECT_STORAGE_LIMIT_EXCEEDED
         - TWO_FA_ENABLED_REQUIRED
+    org.sagebionetworks.repo.model.search.table.SynonymRuleType:
+      type: string
+      enum:
+        - EQUIVALENT
+        - EXPLICIT
     org.sagebionetworks.repo.model.curation.TaskStatus:
       type: object
       properties:
@@ -32523,6 +33419,20 @@ components:
           type: string
           description: Optimistic concurrency control token for the task status.
       description: Tracks the dynamic lifecycle and progress of a CurationTask.
+    org.sagebionetworks.repo.model.migration.CreateForumsForAccessRequirementsResponse:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.migration.CreateForumsForAccessRequirementsResponse
+        forumsCreated:
+          type: integer
+          description: The number of forums created for access requirements.
+          format: int32
+      description: Response for the CreateForumsForAccessRequirementsRequest.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.download.Action:
       type: object
       properties:
@@ -32682,6 +33592,7 @@ components:
           description: The synapse SQL statement that defines the data in the table.
       description: The object that implements this interface contains an SQL query that defines its content.
       oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndex'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.VirtualTable'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.MaterializedView'
       discriminator:
@@ -32739,6 +33650,7 @@ components:
         - materializedview
         - virtualtable
         - recordset
+        - searchindex
     org.sagebionetworks.evaluation.model.MemberSubmissionEligibility:
       type: object
       properties:
@@ -32926,6 +33838,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -32989,6 +33902,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         type:
           type: string
@@ -33060,6 +33976,7 @@ components:
             - materializedview
             - virtualtable
             - recordset
+            - searchindex
         eTag:
           type: string
         versionNumber:
@@ -33083,13 +34000,13 @@ components:
           type: array
           items:
             type: string
-          description: For FileVeiws, the list of IDs the define the scope of the view.
+          description: For FileViews, the list of IDs that define the scope of the view.
         items:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.EntityRef'
             description: Represents a reference to the id and version of an entity to be used in collections.
-          description: For Datasets and Dataset Collections, the list of entity references the define the view.
+          description: For Datasets and Dataset Collections, the list of entity references that define the view.
         upsertKey:
           type: array
           items:
@@ -33108,7 +34025,7 @@ components:
           description: For table entities, specifies if the full text search index is enabled or not.
         definingSQL:
           type: string
-          description: For materialized views and virtual tables, specifies the SQL defining the content of the table.
+          description: For materialized views, virtual tables, and search indexes, specifies the SQL defining the content.
         validationResultFileHandleId:
           type: string
           description: For a RecordSet, the file handle that contains the detailed validation results.
@@ -33369,6 +34286,7 @@ components:
               - materializedview
               - virtualtable
               - recordset
+              - searchindex
           description: The types of children to be include. Must include at least one type.
         sortBy:
           type: string
@@ -33390,6 +34308,26 @@ components:
           type: boolean
           description: When true, the sum of the files sizes (bytes) with the given parentId and types will be included.  False by default
       description: Request for EntityHeaders of the children of a given parent Entity
+    org.sagebionetworks.repo.model.grid.GridUpdateJobRequest:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.grid.GridUpdateJobRequest
+        sessionId:
+          type: string
+          description: Required. The grid session ID to update.
+        replicaId:
+          type: integer
+          description: Required. The caller's replica ID. Patches are attributed to this replica for cell-level attribution and sync change detection. Must be owned by the caller.
+          format: int32
+        updateRequest:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.update.GridUpdateRequest'
+          description: Request to update one or more cells of the current grid session.
+      description: Asynchronous job request to execute a batch of update operations against a grid session. Patches are attributed to the caller's replica. Does not require a WebSocket connection.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.download.AddToDownloadListRequest:
       type: object
       properties:
@@ -33498,6 +34436,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -33561,6 +34500,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         count:
           type: integer
@@ -33651,6 +34593,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -33714,6 +34657,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
       description: Abstraction for Admin request
       oneOf:
@@ -34118,6 +35064,50 @@ components:
           description: The total number of results
           format: int32
       description: A paginated list of Challenge objects
+    org.sagebionetworks.repo.model.search.table.SearchConfiguration:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique ID of this search configuration.
+        organizationName:
+          type: string
+          description: The name of the Organization this resource belongs to. Immutable after creation.
+        name:
+          type: string
+          description: The resource name. Must start with a letter and contain only letters, digits, and underscores. Unique within the organization and immutable after creation. Used as part of the qualified name ({organizationName}-{name}) when referenced by other resources.
+        description:
+          type: string
+          description: Optional description.
+        synonymSets:
+          type: array
+          items:
+            type: string
+          description: Ordered list of SynonymSet qualified names in '{organizationName}-{name}' format to apply. Rules from all sets are unioned.
+        columnAnalyzerOverrides:
+          type: array
+          items:
+            type: string
+          description: Ordered list of ColumnAnalyzerOverride qualified names in '{organizationName}-{name}' format to apply. First-found-wins for duplicate columns.
+        defaultAnalyzer:
+          type: string
+          description: Default text analyzer for columns without an explicit override, in '{organizationName}-{name}' format.
+        etag:
+          type: string
+          description: Synapse employs an Optimistic Concurrency Control (OCC) scheme.
+        createdOn:
+          type: string
+          description: The date this resource was created.
+        createdBy:
+          type: string
+          description: The ID of the user that created this resource.
+        modifiedOn:
+          type: string
+          description: The date this resource was last modified.
+        modifiedBy:
+          type: string
+          description: The ID of the user that last modified this resource.
+      description: A reusable search configuration resource. Bundles synonym sets, column analyzer overrides, and a default analyzer. Bind to any entity in the hierarchy (entity, folder, or project) to define inherited search configuration.
     org.sagebionetworks.repo.model.oauth.OIDCAuthorizationRequestDescription:
       type: object
       properties:
@@ -34339,6 +35329,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -34402,6 +35393,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         aliasType:
           type: string
@@ -34592,6 +35586,43 @@ components:
         - loaded
         - processed
         - published
+    org.sagebionetworks.repo.model.search.table.SynonymSet:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique ID of this synonym set.
+        organizationName:
+          type: string
+          description: The name of the Organization this resource belongs to. Immutable after creation.
+        name:
+          type: string
+          description: The resource name. Must start with a letter and contain only letters, digits, and underscores. Unique within the organization and immutable after creation. Used as part of the qualified name ({organizationName}-{name}) when referenced by other resources.
+        description:
+          type: string
+          description: Optional description of the synonym set.
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SynonymRule'
+            description: A single synonym rule. For EQUIVALENT rules, all terms are bidirectionally interchangeable. For EXPLICIT rules, the first term maps one-way to the remaining terms.
+          description: The list of synonym rules in this set.
+        etag:
+          type: string
+          description: Synapse employs an Optimistic Concurrency Control (OCC) scheme.
+        createdOn:
+          type: string
+          description: The date this resource was created.
+        createdBy:
+          type: string
+          description: The ID of the user that created this resource.
+        modifiedOn:
+          type: string
+          description: The date this resource was last modified.
+        modifiedBy:
+          type: string
+          description: The ID of the user that last modified this resource.
+      description: A shared set of synonym rules. SynonymSets belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
     org.sagebionetworks.repo.model.webhook.CreateOrUpdateWebhookRequest:
       type: object
       properties:
@@ -34831,10 +35862,10 @@ components:
           description: The unique ID of this text analyzer.
         organizationName:
           type: string
-          description: The name of the Organization this resource belongs to.
+          description: The name of the Organization this resource belongs to. Immutable after creation.
         name:
           type: string
-          description: Display name. Unique within the organization.
+          description: The resource name. Must start with a letter and contain only letters, digits, and underscores. Unique within the organization and immutable after creation. Used as part of the qualified name ({organizationName}-{name}) when referenced by other resources.
         description:
           type: string
           description: Optional description.
@@ -35660,6 +36691,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -35723,6 +36755,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         salt:
           type: string
@@ -36201,6 +37236,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -36264,6 +37300,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         aliasType:
           type: string
@@ -37241,6 +38280,7 @@ components:
             - DISCUSSION_THREAD
             - DISCUSSION_THREAD_VIEW
             - DISCUSSION_THREAD_ENTITY_REFERENCE
+            - DISCUSSION_THREAD_SUBMISSION_REFERENCE
             - DISCUSSION_REPLY
             - SUBSCRIPTION
             - BROADCAST_MESSAGE
@@ -37304,6 +38344,9 @@ components:
             - RECORDSET_VALIDATION_STATS
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
+            - SYNONYM_SET
+            - SEARCH_CONFIGURATION
+            - SEARCH_CONFIG_OBJECT_BINDING
             - CHANGE
         cheksums:
           type: array

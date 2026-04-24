@@ -14,11 +14,26 @@ export interface OrgSagebionetworksRepoModelDiscussionForum {
    */
   id?: string;
   /**
-   * The ID of the project to which this forum belongs. This ID may or may not start with prefix \'syn\'.
+   * Deprecated. Use objectId instead. The ID of the project to which this forum belongs. This ID may or may not start with prefix \'syn\'.
    */
   projectId?: string;
+  /**
+   * The ID of the object to which this forum belongs.
+   */
+  objectId?: string;
+  /**
+   * The type of object to which a Forum is associated.
+   */
+  objectType?: OrgSagebionetworksRepoModelDiscussionForum.ObjectTypeEnum;
   /**
    * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
    */
   etag?: string;
+}
+export namespace OrgSagebionetworksRepoModelDiscussionForum {
+  export type ObjectTypeEnum = 'ENTITY' | 'ACCESS_REQUIREMENT';
+  export const ObjectTypeEnum = {
+    Entity: 'ENTITY' as ObjectTypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as ObjectTypeEnum,
+  };
 }

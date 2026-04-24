@@ -15,6 +15,7 @@ import { OrgSagebionetworksRepoModelMigrationMigrationTypeCounts } from './org-s
 import { OrgSagebionetworksRepoModelMigrationBatchChecksumResponse } from './org-sagebionetworks-repo-model-migration-batch-checksum-response';
 import { OrgSagebionetworksRepoModelMigrationIdRange } from './org-sagebionetworks-repo-model-migration-id-range';
 import { OrgSagebionetworksRepoModelMigrationMigrationTypeCount } from './org-sagebionetworks-repo-model-migration-migration-type-count';
+import { OrgSagebionetworksRepoModelMigrationCreateForumsForAccessRequirementsResponse } from './org-sagebionetworks-repo-model-migration-create-forums-for-access-requirements-response';
 import { OrgSagebionetworksRepoModelMigrationMigrationRangeChecksum } from './org-sagebionetworks-repo-model-migration-migration-range-checksum';
 import { OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum } from './org-sagebionetworks-repo-model-migration-migration-type-checksum';
 
@@ -30,6 +31,7 @@ export type OrgSagebionetworksRepoModelMigrationAdminResponse =
   | OrgSagebionetworksRepoModelMigrationBackupTypeResponse
   | OrgSagebionetworksRepoModelMigrationBatchChecksumResponse
   | OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeResponse
+  | OrgSagebionetworksRepoModelMigrationCreateForumsForAccessRequirementsResponse
   | OrgSagebionetworksRepoModelMigrationMigrationRangeChecksum
   | OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum
   | OrgSagebionetworksRepoModelMigrationMigrationTypeCount

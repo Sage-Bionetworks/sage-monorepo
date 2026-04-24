@@ -86,6 +86,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     | 'DISCUSSION_THREAD'
     | 'DISCUSSION_THREAD_VIEW'
     | 'DISCUSSION_THREAD_ENTITY_REFERENCE'
+    | 'DISCUSSION_THREAD_SUBMISSION_REFERENCE'
     | 'DISCUSSION_REPLY'
     | 'SUBSCRIPTION'
     | 'BROADCAST_MESSAGE'
@@ -149,6 +150,9 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     | 'RECORDSET_VALIDATION_STATS'
     | 'TEXT_ANALYZER'
     | 'COLUMN_ANALYZER_OVERRIDE'
+    | 'SYNONYM_SET'
+    | 'SEARCH_CONFIGURATION'
+    | 'SEARCH_CONFIG_OBJECT_BINDING'
     | 'CHANGE';
   export const ListEnum = {
     Realm: 'REALM' as ListEnum,
@@ -221,6 +225,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     DiscussionThread: 'DISCUSSION_THREAD' as ListEnum,
     DiscussionThreadView: 'DISCUSSION_THREAD_VIEW' as ListEnum,
     DiscussionThreadEntityReference: 'DISCUSSION_THREAD_ENTITY_REFERENCE' as ListEnum,
+    DiscussionThreadSubmissionReference: 'DISCUSSION_THREAD_SUBMISSION_REFERENCE' as ListEnum,
     DiscussionReply: 'DISCUSSION_REPLY' as ListEnum,
     Subscription: 'SUBSCRIPTION' as ListEnum,
     BroadcastMessage: 'BROADCAST_MESSAGE' as ListEnum,
@@ -284,6 +289,9 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as ListEnum,
     TextAnalyzer: 'TEXT_ANALYZER' as ListEnum,
     ColumnAnalyzerOverride: 'COLUMN_ANALYZER_OVERRIDE' as ListEnum,
+    SynonymSet: 'SYNONYM_SET' as ListEnum,
+    SearchConfiguration: 'SEARCH_CONFIGURATION' as ListEnum,
+    SearchConfigObjectBinding: 'SEARCH_CONFIG_OBJECT_BINDING' as ListEnum,
     Change: 'CHANGE' as ListEnum,
   };
 }

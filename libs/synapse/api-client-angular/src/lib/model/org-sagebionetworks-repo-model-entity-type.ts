@@ -21,7 +21,8 @@ export type OrgSagebionetworksRepoModelEntityType =
   | 'datasetcollection'
   | 'materializedview'
   | 'virtualtable'
-  | 'recordset';
+  | 'recordset'
+  | 'searchindex';
 
 export const OrgSagebionetworksRepoModelEntityType = {
   Project: 'project' as OrgSagebionetworksRepoModelEntityType,
@@ -37,4 +38,5 @@ export const OrgSagebionetworksRepoModelEntityType = {
   Materializedview: 'materializedview' as OrgSagebionetworksRepoModelEntityType,
   Virtualtable: 'virtualtable' as OrgSagebionetworksRepoModelEntityType,
   Recordset: 'recordset' as OrgSagebionetworksRepoModelEntityType,
+  Searchindex: 'searchindex' as OrgSagebionetworksRepoModelEntityType,
 };

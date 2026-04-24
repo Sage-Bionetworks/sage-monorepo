@@ -55,7 +55,8 @@ export namespace OrgSagebionetworksRepoModelEntityChildrenRequest {
     | 'datasetcollection'
     | 'materializedview'
     | 'virtualtable'
-    | 'recordset';
+    | 'recordset'
+    | 'searchindex';
   export const IncludeTypesEnum = {
     Project: 'project' as IncludeTypesEnum,
     Folder: 'folder' as IncludeTypesEnum,
@@ -70,6 +71,7 @@ export namespace OrgSagebionetworksRepoModelEntityChildrenRequest {
     Materializedview: 'materializedview' as IncludeTypesEnum,
     Virtualtable: 'virtualtable' as IncludeTypesEnum,
     Recordset: 'recordset' as IncludeTypesEnum,
+    Searchindex: 'searchindex' as IncludeTypesEnum,
   };
   export type SortByEnum = 'NAME' | 'CREATED_ON' | 'MODIFIED_ON';
   export const SortByEnum = {

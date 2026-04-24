@@ -36,11 +36,11 @@ export interface OrgSagebionetworksRepoModelNode {
   fileHandleId?: string;
   columnModelIds?: Array<string>;
   /**
-   * For FileVeiws, the list of IDs the define the scope of the view.
+   * For FileViews, the list of IDs that define the scope of the view.
    */
   scopeIds?: Array<string>;
   /**
-   * For Datasets and Dataset Collections, the list of entity references the define the view.
+   * For Datasets and Dataset Collections, the list of entity references that define the view.
    */
   items?: Array<OrgSagebionetworksRepoModelEntityRef>;
   /**
@@ -55,7 +55,7 @@ export interface OrgSagebionetworksRepoModelNode {
    */
   isSearchEnabled?: boolean;
   /**
-   * For materialized views and virtual tables, specifies the SQL defining the content of the table.
+   * For materialized views, virtual tables, and search indexes, specifies the SQL defining the content.
    */
   definingSQL?: string;
   /**
@@ -77,7 +77,8 @@ export namespace OrgSagebionetworksRepoModelNode {
     | 'datasetcollection'
     | 'materializedview'
     | 'virtualtable'
-    | 'recordset';
+    | 'recordset'
+    | 'searchindex';
   export const NodeTypeEnum = {
     Project: 'project' as NodeTypeEnum,
     Folder: 'folder' as NodeTypeEnum,
@@ -92,5 +93,6 @@ export namespace OrgSagebionetworksRepoModelNode {
     Materializedview: 'materializedview' as NodeTypeEnum,
     Virtualtable: 'virtualtable' as NodeTypeEnum,
     Recordset: 'recordset' as NodeTypeEnum,
+    Searchindex: 'searchindex' as NodeTypeEnum,
   };
 }
