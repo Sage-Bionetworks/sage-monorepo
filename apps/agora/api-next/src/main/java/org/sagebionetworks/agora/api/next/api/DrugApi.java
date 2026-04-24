@@ -41,7 +41,7 @@ public interface DrugApi {
     }
 
     /**
-     * GET /drugs/{chembl_id} : Get drug details by ChEMBL ID
+     * GET /drugs/{chemblId} : Get drug details by ChEMBL ID
      *
      * @param chemblId ChEMBL ID of the drug (required)
      * @return Drug details successfully retrieved (status code 200)
@@ -74,12 +74,12 @@ public interface DrugApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/drugs/{chembl_id}",
+        value = "/drugs/{chemblId}",
         produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<DrugDto> getDrug(
-        @Parameter(name = "chembl_id", description = "ChEMBL ID of the drug", required = true, in = ParameterIn.PATH) @PathVariable("chembl_id") String chemblId
+        @Parameter(name = "chemblId", description = "ChEMBL ID of the drug", required = true, in = ParameterIn.PATH) @PathVariable("chemblId") String chemblId
     ) {
         return getDelegate().getDrug(chemblId);
     }

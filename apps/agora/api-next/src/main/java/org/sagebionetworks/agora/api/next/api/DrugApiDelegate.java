@@ -28,7 +28,7 @@ public interface DrugApiDelegate {
     }
 
     /**
-     * GET /drugs/{chembl_id} : Get drug details by ChEMBL ID
+     * GET /drugs/{chemblId} : Get drug details by ChEMBL ID
      *
      * @param chemblId ChEMBL ID of the drug (required)
      * @return Drug details successfully retrieved (status code 200)

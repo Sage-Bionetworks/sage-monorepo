@@ -33,5 +33,5 @@ paths:
     $ref: paths/comparison-tools/targets.yaml
   /data-version:
     $ref: paths/data-version.yaml
-  /drugs/{chembl_id}:
+  /drugs/{chemblId}:
     $ref: paths/drugs.yaml
