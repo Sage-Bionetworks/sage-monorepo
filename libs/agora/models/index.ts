@@ -7,6 +7,5 @@ export * from './gene-links';
 export * from './genes';
 export * from './misc';
 export * from './navigation-link';
-export * from './ResourceCard';
 export * from './scores';
 export * from './unsub';

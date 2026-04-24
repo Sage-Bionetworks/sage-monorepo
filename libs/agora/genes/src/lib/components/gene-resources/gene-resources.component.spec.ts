@@ -1,133 +1,78 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { geneMock1, noHGNCgeneMock } from '@sagebionetworks/agora/testing';
+import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
+import { Gene } from '@sagebionetworks/agora/api-client';
+import { render, screen } from '@testing-library/angular';
 import { GeneResourcesComponent } from './gene-resources.component';
 
-describe('Component: Gene Resources', () => {
-  let fixture: ComponentFixture<GeneResourcesComponent>;
-  let component: GeneResourcesComponent;
-  let element: HTMLElement;
+async function setup(gene: Gene = geneMock1) {
+  return render(GeneResourcesComponent, {
+    imports: [ResourceCardsComponent],
+    componentInputs: { gene },
+  });
+}
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({}).compileComponents();
+describe('GeneResourcesComponent', () => {
+  it('should create', async () => {
+    const { fixture } = await setup();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
-  beforeEach(async () => {
-    fixture = TestBed.createComponent(GeneResourcesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    element = fixture.nativeElement;
+  it('should not display Target Enabling Resources section when is_tep and is_adi are false', async () => {
+    await setup({ ...geneMock1, is_tep: false, is_adi: false });
+
+    expect(screen.queryByText('Target Enabling Resources')).not.toBeInTheDocument();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should display Target Enabling Resources section when is_tep is true', async () => {
+    await setup({ ...geneMock1, is_tep: true, is_adi: false });
+
+    expect(screen.getByText('Target Enabling Resources')).toBeInTheDocument();
+    expect(screen.getByText(/TREAT-AD resources/i)).toBeInTheDocument();
+    expect(screen.getByText(/Target Portfolio and Progress Dashboard/i)).toBeInTheDocument();
+    expect(screen.queryByText(/AD Informer Set/i)).not.toBeInTheDocument();
   });
 
-  it('should not display TREAT-AD resource section if is_tep and is_adi is false', () => {
-    component.gene = geneMock1;
-    component.gene.is_adi = false;
-    component.gene.is_tep = false;
+  it('should display AD Informer Set card when is_adi is true', async () => {
+    await setup({ ...geneMock1, is_tep: false, is_adi: true });
 
-    fixture.detectChanges();
-
-    const header = element.querySelector('#target-enabling-resources-header');
-    expect(header).toBe(null);
-
-    const resource_url = element.querySelector('#target-enabling-resources-url');
-    expect(resource_url).toBe(null);
+    expect(screen.getByText('Target Enabling Resources')).toBeInTheDocument();
+    expect(screen.getByText(/AD Informer Set/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Target Portfolio and Progress Dashboard/i)).not.toBeInTheDocument();
   });
 
-  it('should display TREAT-AD resource sections if is_tep or is_adi is true', () => {
-    component.gene = geneMock1;
-    component.gene.is_adi = false;
-    component.gene.is_tep = true;
+  it('should display Drug Development Resources section', async () => {
+    await setup();
 
-    fixture.detectChanges();
-
-    const expectedHeader = 'Target Enabling Resources';
-    let elHeader = element.querySelector('#target-enabling-resources-header') as HTMLElement;
-    expect(elHeader.textContent?.trim()).toBe(expectedHeader);
-
-    const expectedCard1 = 'Target Enabling Resources';
-    let elCard1 = element.querySelector('#target-enabling-resources-card1') as HTMLElement;
-    expect(elCard1.textContent?.trim()).toBe(expectedCard1);
-
-    const expectedCard2 = 'Target Portfolio';
-    const elCard2 = element.querySelector('#target-enabling-resources-card2') as HTMLElement;
-    expect(elCard2.textContent?.trim()).toBe(expectedCard2);
-
-    // adi is false so card3 should be null
-    const card3 = element.querySelector('#target-enabling-resources-card3');
-    expect(card3).toBe(null);
-
-    // switch the booleans on adi and tep
-    component.gene = geneMock1;
-    component.gene.is_adi = true;
-    component.gene.is_tep = false;
-
-    fixture.detectChanges();
-
-    elHeader = element.querySelector('#target-enabling-resources-header') as HTMLElement;
-    expect(elHeader.textContent?.trim()).toBe(expectedHeader);
-
-    elCard1 = element.querySelector('#target-enabling-resources-card1') as HTMLElement;
-    expect(elCard1.textContent?.trim()).toBe(expectedCard1);
-
-    // tep is false so card2 should be null
-    const card2 = element.querySelector('#target-enabling-resources-card2');
-    expect(card2).toBe(null);
-
-    const expectedCard3 = 'AD Informer Set';
-    const elCard3 = element.querySelector('#target-enabling-resources-card3') as HTMLElement;
-    expect(elCard3.textContent?.trim()).toBe(expectedCard3);
+    expect(screen.getByText('Drug Development Resources')).toBeInTheDocument();
+    expect(screen.getByText(/expert reviews and evaluations/i)).toBeInTheDocument();
+    expect(screen.getByText(/genome-scale experiments/i)).toBeInTheDocument();
+    expect(screen.getByText(/Druggable Genome/i)).toBeInTheDocument();
   });
 
-  it('should have an hgnc link to Pub AD if the gene has an hgnc symbol', () => {
-    component.gene = geneMock1;
-    component.init();
+  it('should display Additional Resources section', async () => {
+    await setup();
 
-    fixture.detectChanges();
+    expect(screen.getByText('Additional Resources')).toBeInTheDocument();
+    expect(screen.getByText(/network and enrichment analyses/i)).toBeInTheDocument();
+    expect(screen.getByText(/news and information resources about AD/i)).toBeInTheDocument();
+    expect(screen.getByText(/publications related to this target on PubMed/i)).toBeInTheDocument();
+    expect(screen.getByText(/protein sequence and functional information/i)).toBeInTheDocument();
+  });
 
-    const expectedLinkAddress = 'https://adexplorer.medicine.iu.edu/pubad/external/MSN';
+  it('should use hgnc_symbol in Pub AD link when available', async () => {
+    await setup(geneMock1);
 
-    const additionalResourceLinks = element.querySelectorAll(
-      'a.additional-resource-links.link.no-bold',
+    const pubAdCard = screen.getByText(/dementia-related publication/i).closest('a');
+    expect(pubAdCard).toHaveAttribute(
+      'href',
+      'https://adexplorer.medicine.iu.edu/pubad/external/MSN',
     );
-
-    let pubADLink: Element | undefined;
-    additionalResourceLinks.forEach((a) => {
-      if (a.textContent?.trim() === 'Visit PubAD') {
-        pubADLink = a;
-      }
-    });
-
-    expect(pubADLink).toBeTruthy();
-
-    const result = pubADLink?.getAttribute('href');
-    expect(result).toBe(expectedLinkAddress);
   });
 
-  it('should have a default link to Pub AD if the gene does not have an hgnc symbol', () => {
-    component.gene = noHGNCgeneMock;
-    component.init();
+  it('should use default Pub AD link when hgnc_symbol is not available', async () => {
+    await setup(noHGNCgeneMock);
 
-    fixture.detectChanges();
-
-    const expectedLinkAddress = 'https://adexplorer.medicine.iu.edu/pubad';
-
-    const additionalResourceLinks = element.querySelectorAll(
-      'a.additional-resource-links.link.no-bold',
-    );
-
-    let pubADLink: Element | undefined;
-    additionalResourceLinks.forEach((a) => {
-      if (a.textContent?.trim() === 'Visit PubAD') {
-        pubADLink = a;
-      }
-    });
-
-    expect(pubADLink).toBeTruthy();
-
-    const result = pubADLink?.getAttribute('href');
-    expect(result).toBe(expectedLinkAddress);
+    const pubAdCard = screen.getByText(/dementia-related publication/i).closest('a');
+    expect(pubAdCard).toHaveAttribute('href', 'https://adexplorer.medicine.iu.edu/pubad');
   });
 });

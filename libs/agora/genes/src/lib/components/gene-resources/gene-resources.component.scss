@@ -1,35 +1,7 @@
-@use 'agora/styles/src/variables' as vars;
-@use 'agora/styles/src/mixins' as mixins;
-
-.row {
-  display: flex;
-  flex-wrap: nowrap;
-  border: 1px solid var(--color-gray-300);
-  margin: 0 0 var(--spacing-lg) 0;
+:host {
+  display: block;
 }
 
-.card {
-  display: flex;
-  align-items: center;
-  margin: 50px;
-}
-
-.card-title,
-.card-link {
-  flex: 1 1 25%; /* Fixed 25% width */
-}
-
-.card-description {
-  flex: 1 1 50%; /* Fixed 50% width */
-}
-
-/* Responsive adjustment for mobile screens */
-@media (width <= 768px) {
-  .row {
-    flex-wrap: wrap;
-  }
-
-  .card {
-    flex: 1 1 100%; /* Full width for each child on small screens */
-  }
+section {
+  margin-bottom: var(--spacing-xxl);
 }
