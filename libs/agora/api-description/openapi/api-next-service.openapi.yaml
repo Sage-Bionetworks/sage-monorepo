@@ -460,6 +460,7 @@ components:
         modality:
           type: string
           nullable: true
+          example: Protein
           allOf:
             - $ref: '#/components/schemas/Modality'
         year_of_first_approval:
@@ -909,6 +910,7 @@ components:
         modality:
           type: string
           nullable: true
+          example: Protein
           allOf:
             - $ref: '#/components/schemas/Modality'
         year_of_first_approval:
