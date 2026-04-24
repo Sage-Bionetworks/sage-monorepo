@@ -18,11 +18,11 @@ export interface OrgSagebionetworksRepoModelSearchTableTextAnalyzer {
    */
   id?: string;
   /**
-   * The name of the Organization this resource belongs to.
+   * The name of the Organization this resource belongs to. Immutable after creation.
    */
   organizationName?: string;
   /**
-   * Display name. Unique within the organization.
+   * The resource name. Must start with a letter and contain only letters, digits, and underscores. Unique within the organization and immutable after creation. Used as part of the qualified name ({organizationName}-{name}) when referenced by other resources.
    */
   name?: string;
   /**

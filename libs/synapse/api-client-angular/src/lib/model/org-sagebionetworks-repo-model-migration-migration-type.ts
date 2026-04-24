@@ -79,6 +79,7 @@ export type OrgSagebionetworksRepoModelMigrationMigrationType =
   | 'DISCUSSION_THREAD'
   | 'DISCUSSION_THREAD_VIEW'
   | 'DISCUSSION_THREAD_ENTITY_REFERENCE'
+  | 'DISCUSSION_THREAD_SUBMISSION_REFERENCE'
   | 'DISCUSSION_REPLY'
   | 'SUBSCRIPTION'
   | 'BROADCAST_MESSAGE'
@@ -142,6 +143,9 @@ export type OrgSagebionetworksRepoModelMigrationMigrationType =
   | 'RECORDSET_VALIDATION_STATS'
   | 'TEXT_ANALYZER'
   | 'COLUMN_ANALYZER_OVERRIDE'
+  | 'SYNONYM_SET'
+  | 'SEARCH_CONFIGURATION'
+  | 'SEARCH_CONFIG_OBJECT_BINDING'
   | 'CHANGE';
 
 export const OrgSagebionetworksRepoModelMigrationMigrationType = {
@@ -229,6 +233,8 @@ export const OrgSagebionetworksRepoModelMigrationMigrationType = {
     'DISCUSSION_THREAD_VIEW' as OrgSagebionetworksRepoModelMigrationMigrationType,
   DiscussionThreadEntityReference:
     'DISCUSSION_THREAD_ENTITY_REFERENCE' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  DiscussionThreadSubmissionReference:
+    'DISCUSSION_THREAD_SUBMISSION_REFERENCE' as OrgSagebionetworksRepoModelMigrationMigrationType,
   DiscussionReply: 'DISCUSSION_REPLY' as OrgSagebionetworksRepoModelMigrationMigrationType,
   Subscription: 'SUBSCRIPTION' as OrgSagebionetworksRepoModelMigrationMigrationType,
   BroadcastMessage: 'BROADCAST_MESSAGE' as OrgSagebionetworksRepoModelMigrationMigrationType,
@@ -306,5 +312,9 @@ export const OrgSagebionetworksRepoModelMigrationMigrationType = {
   TextAnalyzer: 'TEXT_ANALYZER' as OrgSagebionetworksRepoModelMigrationMigrationType,
   ColumnAnalyzerOverride:
     'COLUMN_ANALYZER_OVERRIDE' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  SynonymSet: 'SYNONYM_SET' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  SearchConfiguration: 'SEARCH_CONFIGURATION' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  SearchConfigObjectBinding:
+    'SEARCH_CONFIG_OBJECT_BINDING' as OrgSagebionetworksRepoModelMigrationMigrationType,
   Change: 'CHANGE' as OrgSagebionetworksRepoModelMigrationMigrationType,
 };

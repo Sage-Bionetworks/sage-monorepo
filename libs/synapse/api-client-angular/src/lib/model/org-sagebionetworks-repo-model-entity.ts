@@ -15,6 +15,7 @@ import { OrgSagebionetworksRepoModelTableMaterializedView } from './org-sagebion
 import { OrgSagebionetworksRepoModelEnvironmentDescriptor } from './org-sagebionetworks-repo-model-environment-descriptor';
 import { OrgSagebionetworksRepoModelLink } from './org-sagebionetworks-repo-model-link';
 import { OrgSagebionetworksRepoModelTableVirtualTable } from './org-sagebionetworks-repo-model-table-virtual-table';
+import { OrgSagebionetworksRepoModelSearchTableSearchIndex } from './org-sagebionetworks-repo-model-search-table-search-index';
 import { OrgSagebionetworksRepoModelTableTableEntity } from './org-sagebionetworks-repo-model-table-table-entity';
 import { OrgSagebionetworksRepoModelTableDataset } from './org-sagebionetworks-repo-model-table-dataset';
 import { OrgSagebionetworksRepoModelTableSubmissionView } from './org-sagebionetworks-repo-model-table-submission-view';
@@ -46,6 +47,7 @@ export type OrgSagebionetworksRepoModelEntity =
   | OrgSagebionetworksRepoModelPreview
   | OrgSagebionetworksRepoModelProject
   | OrgSagebionetworksRepoModelRecordSet
+  | OrgSagebionetworksRepoModelSearchTableSearchIndex
   | OrgSagebionetworksRepoModelTableDataset
   | OrgSagebionetworksRepoModelTableDatasetCollection
   | OrgSagebionetworksRepoModelTableEntityView

@@ -115,6 +115,7 @@ export namespace OrgSagebionetworksRepoModelMigrationRestoreTypeRequest {
     | 'DISCUSSION_THREAD'
     | 'DISCUSSION_THREAD_VIEW'
     | 'DISCUSSION_THREAD_ENTITY_REFERENCE'
+    | 'DISCUSSION_THREAD_SUBMISSION_REFERENCE'
     | 'DISCUSSION_REPLY'
     | 'SUBSCRIPTION'
     | 'BROADCAST_MESSAGE'
@@ -178,6 +179,9 @@ export namespace OrgSagebionetworksRepoModelMigrationRestoreTypeRequest {
     | 'RECORDSET_VALIDATION_STATS'
     | 'TEXT_ANALYZER'
     | 'COLUMN_ANALYZER_OVERRIDE'
+    | 'SYNONYM_SET'
+    | 'SEARCH_CONFIGURATION'
+    | 'SEARCH_CONFIG_OBJECT_BINDING'
     | 'CHANGE';
   export const MigrationTypeEnum = {
     Realm: 'REALM' as MigrationTypeEnum,
@@ -250,6 +254,8 @@ export namespace OrgSagebionetworksRepoModelMigrationRestoreTypeRequest {
     DiscussionThread: 'DISCUSSION_THREAD' as MigrationTypeEnum,
     DiscussionThreadView: 'DISCUSSION_THREAD_VIEW' as MigrationTypeEnum,
     DiscussionThreadEntityReference: 'DISCUSSION_THREAD_ENTITY_REFERENCE' as MigrationTypeEnum,
+    DiscussionThreadSubmissionReference:
+      'DISCUSSION_THREAD_SUBMISSION_REFERENCE' as MigrationTypeEnum,
     DiscussionReply: 'DISCUSSION_REPLY' as MigrationTypeEnum,
     Subscription: 'SUBSCRIPTION' as MigrationTypeEnum,
     BroadcastMessage: 'BROADCAST_MESSAGE' as MigrationTypeEnum,
@@ -314,6 +320,9 @@ export namespace OrgSagebionetworksRepoModelMigrationRestoreTypeRequest {
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as MigrationTypeEnum,
     TextAnalyzer: 'TEXT_ANALYZER' as MigrationTypeEnum,
     ColumnAnalyzerOverride: 'COLUMN_ANALYZER_OVERRIDE' as MigrationTypeEnum,
+    SynonymSet: 'SYNONYM_SET' as MigrationTypeEnum,
+    SearchConfiguration: 'SEARCH_CONFIGURATION' as MigrationTypeEnum,
+    SearchConfigObjectBinding: 'SEARCH_CONFIG_OBJECT_BINDING' as MigrationTypeEnum,
     Change: 'CHANGE' as MigrationTypeEnum,
   };
   export type AliasTypeEnum = 'TABLE_NAME' | 'MIGRATION_TYPE_NAME';

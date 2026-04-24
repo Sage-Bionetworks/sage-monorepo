@@ -71,7 +71,8 @@ export namespace OrgSagebionetworksRepoModelEntitybundleV2EntityBundle {
     | 'datasetcollection'
     | 'materializedview'
     | 'virtualtable'
-    | 'recordset';
+    | 'recordset'
+    | 'searchindex';
   export const EntityTypeEnum = {
     Project: 'project' as EntityTypeEnum,
     Folder: 'folder' as EntityTypeEnum,
@@ -86,5 +87,6 @@ export namespace OrgSagebionetworksRepoModelEntitybundleV2EntityBundle {
     Materializedview: 'materializedview' as EntityTypeEnum,
     Virtualtable: 'virtualtable' as EntityTypeEnum,
     Recordset: 'recordset' as EntityTypeEnum,
+    Searchindex: 'searchindex' as EntityTypeEnum,
   };
 }

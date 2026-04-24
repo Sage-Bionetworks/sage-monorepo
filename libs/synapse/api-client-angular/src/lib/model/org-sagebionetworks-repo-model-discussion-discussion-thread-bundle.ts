@@ -25,6 +25,14 @@ export interface OrgSagebionetworksRepoModelDiscussionDiscussionThreadBundle {
    */
   projectId?: string;
   /**
+   * The ID of the object this Thread belongs to
+   */
+  objectId?: string;
+  /**
+   * The type of object to which a Forum is associated.
+   */
+  objectType?: OrgSagebionetworksRepoModelDiscussionDiscussionThreadBundle.ObjectTypeEnum;
+  /**
    * The title of the Thread
    */
   title?: string;
@@ -76,4 +84,11 @@ export interface OrgSagebionetworksRepoModelDiscussionDiscussionThreadBundle {
    * Has this Thread been pinned?
    */
   isPinned?: boolean;
+}
+export namespace OrgSagebionetworksRepoModelDiscussionDiscussionThreadBundle {
+  export type ObjectTypeEnum = 'ENTITY' | 'ACCESS_REQUIREMENT';
+  export const ObjectTypeEnum = {
+    Entity: 'ENTITY' as ObjectTypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as ObjectTypeEnum,
+  };
 }

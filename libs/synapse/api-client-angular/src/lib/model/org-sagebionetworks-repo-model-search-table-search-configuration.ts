@@ -7,14 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverrideEntry } from './org-sagebionetworks-repo-model-search-table-column-analyzer-override-entry';
 
 /**
- * A shared resource containing per-column analyzer override entries. ColumnAnalyzerOverrides belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
+ * A reusable search configuration resource. Bundles synonym sets, column analyzer overrides, and a default analyzer. Bind to any entity in the hierarchy (entity, folder, or project) to define inherited search configuration.
  */
-export interface OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride {
+export interface OrgSagebionetworksRepoModelSearchTableSearchConfiguration {
   /**
-   * The unique ID of this column analyzer override.
+   * The unique ID of this search configuration.
    */
   id?: string;
   /**
@@ -30,9 +29,17 @@ export interface OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride {
    */
   description?: string;
   /**
-   * The list of per-column analyzer override entries.
+   * Ordered list of SynonymSet qualified names in \'{organizationName}-{name}\' format to apply. Rules from all sets are unioned.
    */
-  overrides?: Array<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverrideEntry>;
+  synonymSets?: Array<string>;
+  /**
+   * Ordered list of ColumnAnalyzerOverride qualified names in \'{organizationName}-{name}\' format to apply. First-found-wins for duplicate columns.
+   */
+  columnAnalyzerOverrides?: Array<string>;
+  /**
+   * Default text analyzer for columns without an explicit override, in \'{organizationName}-{name}\' format.
+   */
+  defaultAnalyzer?: string;
   /**
    * Synapse employs an Optimistic Concurrency Control (OCC) scheme.
    */

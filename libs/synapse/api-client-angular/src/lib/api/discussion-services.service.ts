@@ -45,6 +45,8 @@ import { OrgSagebionetworksRepoModelDiscussionEntityThreadCounts } from '../mode
 // @ts-ignore
 import { OrgSagebionetworksRepoModelDiscussionForum } from '../model/org-sagebionetworks-repo-model-discussion-forum';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelDiscussionForumObjectType } from '../model/org-sagebionetworks-repo-model-discussion-forum-object-type';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelDiscussionMessageURL } from '../model/org-sagebionetworks-repo-model-discussion-message-url';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelDiscussionReplyCount } from '../model/org-sagebionetworks-repo-model-discussion-reply-count';
@@ -1019,6 +1021,123 @@ export class DiscussionServicesService {
       {
         context: localVarHttpContext,
         params: localVarQueryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param objectId - The ID of the object to which the forum belongs.
+   * @param objectType - The type of the object (ENTITY or ACCESS_REQUIREMENT).
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRepoV1ForumObjectIdObjectType(
+    objectId: string,
+    objectType: OrgSagebionetworksRepoModelDiscussionForumObjectType,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelDiscussionForum>;
+  public getRepoV1ForumObjectIdObjectType(
+    objectId: string,
+    objectType: OrgSagebionetworksRepoModelDiscussionForumObjectType,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelDiscussionForum>>;
+  public getRepoV1ForumObjectIdObjectType(
+    objectId: string,
+    objectType: OrgSagebionetworksRepoModelDiscussionForumObjectType,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelDiscussionForum>>;
+  public getRepoV1ForumObjectIdObjectType(
+    objectId: string,
+    objectType: OrgSagebionetworksRepoModelDiscussionForumObjectType,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (objectId === null || objectId === undefined) {
+      throw new Error(
+        'Required parameter objectId was null or undefined when calling getRepoV1ForumObjectIdObjectType.',
+      );
+    }
+    if (objectType === null || objectType === undefined) {
+      throw new Error(
+        'Required parameter objectType was null or undefined when calling getRepoV1ForumObjectIdObjectType.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/forum/${this.configuration.encodeParam({ name: 'objectId', value: objectId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/${this.configuration.encodeParam({ name: 'objectType', value: objectType, in: 'path', style: 'simple', explode: false, dataType: 'OrgSagebionetworksRepoModelDiscussionForumObjectType', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelDiscussionForum>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

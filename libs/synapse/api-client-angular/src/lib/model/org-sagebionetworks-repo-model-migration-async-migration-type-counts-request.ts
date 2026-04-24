@@ -93,6 +93,7 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     | 'DISCUSSION_THREAD'
     | 'DISCUSSION_THREAD_VIEW'
     | 'DISCUSSION_THREAD_ENTITY_REFERENCE'
+    | 'DISCUSSION_THREAD_SUBMISSION_REFERENCE'
     | 'DISCUSSION_REPLY'
     | 'SUBSCRIPTION'
     | 'BROADCAST_MESSAGE'
@@ -156,6 +157,9 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     | 'RECORDSET_VALIDATION_STATS'
     | 'TEXT_ANALYZER'
     | 'COLUMN_ANALYZER_OVERRIDE'
+    | 'SYNONYM_SET'
+    | 'SEARCH_CONFIGURATION'
+    | 'SEARCH_CONFIG_OBJECT_BINDING'
     | 'CHANGE';
   export const TypesEnum = {
     Realm: 'REALM' as TypesEnum,
@@ -228,6 +232,7 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     DiscussionThread: 'DISCUSSION_THREAD' as TypesEnum,
     DiscussionThreadView: 'DISCUSSION_THREAD_VIEW' as TypesEnum,
     DiscussionThreadEntityReference: 'DISCUSSION_THREAD_ENTITY_REFERENCE' as TypesEnum,
+    DiscussionThreadSubmissionReference: 'DISCUSSION_THREAD_SUBMISSION_REFERENCE' as TypesEnum,
     DiscussionReply: 'DISCUSSION_REPLY' as TypesEnum,
     Subscription: 'SUBSCRIPTION' as TypesEnum,
     BroadcastMessage: 'BROADCAST_MESSAGE' as TypesEnum,
@@ -291,6 +296,9 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as TypesEnum,
     TextAnalyzer: 'TEXT_ANALYZER' as TypesEnum,
     ColumnAnalyzerOverride: 'COLUMN_ANALYZER_OVERRIDE' as TypesEnum,
+    SynonymSet: 'SYNONYM_SET' as TypesEnum,
+    SearchConfiguration: 'SEARCH_CONFIGURATION' as TypesEnum,
+    SearchConfigObjectBinding: 'SEARCH_CONFIG_OBJECT_BINDING' as TypesEnum,
     Change: 'CHANGE' as TypesEnum,
   };
 }

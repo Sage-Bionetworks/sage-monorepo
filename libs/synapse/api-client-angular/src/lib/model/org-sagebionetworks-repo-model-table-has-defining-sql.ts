@@ -9,6 +9,7 @@
  */
 import { OrgSagebionetworksRepoModelTableMaterializedView } from './org-sagebionetworks-repo-model-table-materialized-view';
 import { OrgSagebionetworksRepoModelTableVirtualTable } from './org-sagebionetworks-repo-model-table-virtual-table';
+import { OrgSagebionetworksRepoModelSearchTableSearchIndex } from './org-sagebionetworks-repo-model-search-table-search-index';
 
 /**
  * The object that implements this interface contains an SQL query that defines its content.
@@ -19,5 +20,6 @@ import { OrgSagebionetworksRepoModelTableVirtualTable } from './org-sagebionetwo
  * @export
  */
 export type OrgSagebionetworksRepoModelTableHasDefiningSql =
+  | OrgSagebionetworksRepoModelSearchTableSearchIndex
   | OrgSagebionetworksRepoModelTableMaterializedView
   | OrgSagebionetworksRepoModelTableVirtualTable;

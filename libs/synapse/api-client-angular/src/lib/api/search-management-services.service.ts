@@ -23,55 +23,33 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { OrgSagebionetworksRepoModelAsynchAsyncJobId } from '../model/org-sagebionetworks-repo-model-asynch-async-job-id';
+import { OrgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest } from '../model/org-sagebionetworks-repo-model-search-table-bind-search-config-to-entity-request';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest } from '../model/org-sagebionetworks-repo-model-grid-create-grid-presigned-url-request';
+import { OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride } from '../model/org-sagebionetworks-repo-model-search-table-column-analyzer-override';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridCreateGridPresignedUrlResponse } from '../model/org-sagebionetworks-repo-model-grid-create-grid-presigned-url-response';
+import { OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest } from '../model/org-sagebionetworks-repo-model-search-table-list-column-analyzer-overrides-request';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridCreateGridRequest } from '../model/org-sagebionetworks-repo-model-grid-create-grid-request';
+import { OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse } from '../model/org-sagebionetworks-repo-model-search-table-list-column-analyzer-overrides-response';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridCreateGridResponse } from '../model/org-sagebionetworks-repo-model-grid-create-grid-response';
+import { OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest } from '../model/org-sagebionetworks-repo-model-search-table-list-search-configurations-request';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridCreateReplicaRequest } from '../model/org-sagebionetworks-repo-model-grid-create-replica-request';
+import { OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsResponse } from '../model/org-sagebionetworks-repo-model-search-table-list-search-configurations-response';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridCreateReplicaResponse } from '../model/org-sagebionetworks-repo-model-grid-create-replica-response';
+import { OrgSagebionetworksRepoModelSearchTableListSynonymSetsRequest } from '../model/org-sagebionetworks-repo-model-search-table-list-synonym-sets-request';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridDownloadFromGridRequest } from '../model/org-sagebionetworks-repo-model-grid-download-from-grid-request';
+import { OrgSagebionetworksRepoModelSearchTableListSynonymSetsResponse } from '../model/org-sagebionetworks-repo-model-search-table-list-synonym-sets-response';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridDownloadFromGridResult } from '../model/org-sagebionetworks-repo-model-grid-download-from-grid-result';
+import { OrgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest } from '../model/org-sagebionetworks-repo-model-search-table-list-text-analyzers-request';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridGridCsvImportRequest } from '../model/org-sagebionetworks-repo-model-grid-grid-csv-import-request';
+import { OrgSagebionetworksRepoModelSearchTableListTextAnalyzersResponse } from '../model/org-sagebionetworks-repo-model-search-table-list-text-analyzers-response';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridGridCsvImportResponse } from '../model/org-sagebionetworks-repo-model-grid-grid-csv-import-response';
+import { OrgSagebionetworksRepoModelSearchTableSearchConfigBinding } from '../model/org-sagebionetworks-repo-model-search-table-search-config-binding';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridGridQueryJobRequest } from '../model/org-sagebionetworks-repo-model-grid-grid-query-job-request';
+import { OrgSagebionetworksRepoModelSearchTableSearchConfiguration } from '../model/org-sagebionetworks-repo-model-search-table-search-configuration';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridGridQueryJobResponse } from '../model/org-sagebionetworks-repo-model-grid-grid-query-job-response';
+import { OrgSagebionetworksRepoModelSearchTableSynonymSet } from '../model/org-sagebionetworks-repo-model-search-table-synonym-set';
 // @ts-ignore
-import { OrgSagebionetworksRepoModelGridGridRecordSetExportRequest } from '../model/org-sagebionetworks-repo-model-grid-grid-record-set-export-request';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridGridRecordSetExportResponse } from '../model/org-sagebionetworks-repo-model-grid-grid-record-set-export-response';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridGridReplica } from '../model/org-sagebionetworks-repo-model-grid-grid-replica';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridGridSession } from '../model/org-sagebionetworks-repo-model-grid-grid-session';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridGridUpdateJobRequest } from '../model/org-sagebionetworks-repo-model-grid-grid-update-job-request';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridGridUpdateJobResponse } from '../model/org-sagebionetworks-repo-model-grid-grid-update-job-response';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridListGridReplicasRequest } from '../model/org-sagebionetworks-repo-model-grid-list-grid-replicas-request';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridListGridReplicasResponse } from '../model/org-sagebionetworks-repo-model-grid-list-grid-replicas-response';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridListGridSessionsRequest } from '../model/org-sagebionetworks-repo-model-grid-list-grid-sessions-request';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridListGridSessionsResponse } from '../model/org-sagebionetworks-repo-model-grid-list-grid-sessions-response';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridSynchronizeGridRequest } from '../model/org-sagebionetworks-repo-model-grid-synchronize-grid-request';
-// @ts-ignore
-import { OrgSagebionetworksRepoModelGridSynchronizeGridResponse } from '../model/org-sagebionetworks-repo-model-grid-synchronize-grid-response';
+import { OrgSagebionetworksRepoModelSearchTableTextAnalyzer } from '../model/org-sagebionetworks-repo-model-search-table-text-analyzer';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -80,7 +58,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class GridServicesService {
+export class SearchManagementServicesService {
   protected basePath = 'https://repo-prod.prod.sagebase.org';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -153,37 +131,37 @@ export class GridServicesService {
   }
 
   /**
-   * @param sessionId
+   * @param entityId The ID of the entity whose binding to clear.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public deleteRepoV1GridSessionSessionId(
-    sessionId: string,
+  public deleteRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
   ): Observable<any>;
-  public deleteRepoV1GridSessionSessionId(
-    sessionId: string,
+  public deleteRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpResponse<any>>;
-  public deleteRepoV1GridSessionSessionId(
-    sessionId: string,
+  public deleteRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpEvent<any>>;
-  public deleteRepoV1GridSessionSessionId(
-    sessionId: string,
+  public deleteRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
   ): Observable<any> {
-    if (sessionId === null || sessionId === undefined) {
+    if (entityId === null || entityId === undefined) {
       throw new Error(
-        'Required parameter sessionId was null or undefined when calling deleteRepoV1GridSessionSessionId.',
+        'Required parameter entityId was null or undefined when calling deleteRepoV1EntityEntityIdSearchconfigBinding.',
       );
     }
 
@@ -227,7 +205,7 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/session/${this.configuration.encodeParam({ name: 'sessionId', value: sessionId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    let localVarPath = `/repo/v1/entity/${this.configuration.encodeParam({ name: 'entityId', value: entityId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/searchconfig/binding`;
     return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
       responseType: <any>responseType_,
@@ -240,12 +218,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param asyncToken
+   * @param entityId The ID of the entity to look up.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getRepoV1GridDownloadCsvAsyncGetAsyncToken(
-    asyncToken: string,
+  public getRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -253,9 +231,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelGridDownloadFromGridResult>;
-  public getRepoV1GridDownloadCsvAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableSearchConfigBinding>;
+  public getRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -263,9 +241,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridDownloadFromGridResult>>;
-  public getRepoV1GridDownloadCsvAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableSearchConfigBinding>>;
+  public getRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -273,9 +251,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridDownloadFromGridResult>>;
-  public getRepoV1GridDownloadCsvAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableSearchConfigBinding>>;
+  public getRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -284,9 +262,9 @@ export class GridServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (asyncToken === null || asyncToken === undefined) {
+    if (entityId === null || entityId === undefined) {
       throw new Error(
-        'Required parameter asyncToken was null or undefined when calling getRepoV1GridDownloadCsvAsyncGetAsyncToken.',
+        'Required parameter entityId was null or undefined when calling getRepoV1EntityEntityIdSearchconfigBinding.',
       );
     }
 
@@ -330,8 +308,8 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/download/csv/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridDownloadFromGridResult>(
+    let localVarPath = `/repo/v1/entity/${this.configuration.encodeParam({ name: 'entityId', value: entityId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/searchconfig/binding`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableSearchConfigBinding>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -347,12 +325,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param asyncToken
+   * @param columnAnalyzerOverrideId The ID of the column analyzer override to retrieve.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getRepoV1GridExportRecordsetAsyncGetAsyncToken(
-    asyncToken: string,
+  public getRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -360,9 +338,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelGridGridRecordSetExportResponse>;
-  public getRepoV1GridExportRecordsetAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>;
+  public getRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -370,9 +348,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridGridRecordSetExportResponse>>;
-  public getRepoV1GridExportRecordsetAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public getRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -380,9 +358,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridGridRecordSetExportResponse>>;
-  public getRepoV1GridExportRecordsetAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public getRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -391,9 +369,9 @@ export class GridServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (asyncToken === null || asyncToken === undefined) {
+    if (columnAnalyzerOverrideId === null || columnAnalyzerOverrideId === undefined) {
       throw new Error(
-        'Required parameter asyncToken was null or undefined when calling getRepoV1GridExportRecordsetAsyncGetAsyncToken.',
+        'Required parameter columnAnalyzerOverrideId was null or undefined when calling getRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId.',
       );
     }
 
@@ -437,8 +415,8 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/export/recordset/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridGridRecordSetExportResponse>(
+    let localVarPath = `/repo/v1/search/column/analyzer/override/${this.configuration.encodeParam({ name: 'columnAnalyzerOverrideId', value: columnAnalyzerOverrideId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -454,12 +432,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param asyncToken
+   * @param searchConfigurationId The ID of the search configuration to retrieve.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getRepoV1GridImportCsvAsyncGetAsyncToken(
-    asyncToken: string,
+  public getRepoV1SearchConfigurationSearchConfigurationId(
+    searchConfigurationId: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -467,9 +445,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelGridGridCsvImportResponse>;
-  public getRepoV1GridImportCsvAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>;
+  public getRepoV1SearchConfigurationSearchConfigurationId(
+    searchConfigurationId: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -477,9 +455,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridGridCsvImportResponse>>;
-  public getRepoV1GridImportCsvAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>>;
+  public getRepoV1SearchConfigurationSearchConfigurationId(
+    searchConfigurationId: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -487,9 +465,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridGridCsvImportResponse>>;
-  public getRepoV1GridImportCsvAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>>;
+  public getRepoV1SearchConfigurationSearchConfigurationId(
+    searchConfigurationId: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -498,9 +476,9 @@ export class GridServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (asyncToken === null || asyncToken === undefined) {
+    if (searchConfigurationId === null || searchConfigurationId === undefined) {
       throw new Error(
-        'Required parameter asyncToken was null or undefined when calling getRepoV1GridImportCsvAsyncGetAsyncToken.',
+        'Required parameter searchConfigurationId was null or undefined when calling getRepoV1SearchConfigurationSearchConfigurationId.',
       );
     }
 
@@ -544,8 +522,8 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/import/csv/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridGridCsvImportResponse>(
+    let localVarPath = `/repo/v1/search/configuration/${this.configuration.encodeParam({ name: 'searchConfigurationId', value: searchConfigurationId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -561,12 +539,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param asyncToken
+   * @param synonymSetId The ID of the synonym set to retrieve.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getRepoV1GridSessionAsyncGetAsyncToken(
-    asyncToken: string,
+  public getRepoV1SearchSynonymSetSynonymSetId(
+    synonymSetId: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -574,9 +552,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelGridCreateGridResponse>;
-  public getRepoV1GridSessionAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableSynonymSet>;
+  public getRepoV1SearchSynonymSetSynonymSetId(
+    synonymSetId: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -584,9 +562,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridCreateGridResponse>>;
-  public getRepoV1GridSessionAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableSynonymSet>>;
+  public getRepoV1SearchSynonymSetSynonymSetId(
+    synonymSetId: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -594,9 +572,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridCreateGridResponse>>;
-  public getRepoV1GridSessionAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableSynonymSet>>;
+  public getRepoV1SearchSynonymSetSynonymSetId(
+    synonymSetId: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -605,9 +583,9 @@ export class GridServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (asyncToken === null || asyncToken === undefined) {
+    if (synonymSetId === null || synonymSetId === undefined) {
       throw new Error(
-        'Required parameter asyncToken was null or undefined when calling getRepoV1GridSessionAsyncGetAsyncToken.',
+        'Required parameter synonymSetId was null or undefined when calling getRepoV1SearchSynonymSetSynonymSetId.',
       );
     }
 
@@ -651,8 +629,8 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/session/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridCreateGridResponse>(
+    let localVarPath = `/repo/v1/search/synonym/set/${this.configuration.encodeParam({ name: 'synonymSetId', value: synonymSetId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableSynonymSet>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -668,12 +646,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param asyncToken
+   * @param id The numeric ID of the text analyzer to retrieve.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getRepoV1GridSessionQueryAsyncGetAsyncToken(
-    asyncToken: string,
+  public getRepoV1SearchTextAnalyzerId(
+    id: number,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -681,9 +659,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelGridGridQueryJobResponse>;
-  public getRepoV1GridSessionQueryAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>;
+  public getRepoV1SearchTextAnalyzerId(
+    id: number,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -691,9 +669,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridGridQueryJobResponse>>;
-  public getRepoV1GridSessionQueryAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>>;
+  public getRepoV1SearchTextAnalyzerId(
+    id: number,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -701,9 +679,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridGridQueryJobResponse>>;
-  public getRepoV1GridSessionQueryAsyncGetAsyncToken(
-    asyncToken: string,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>>;
+  public getRepoV1SearchTextAnalyzerId(
+    id: number,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -712,9 +690,9 @@ export class GridServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (asyncToken === null || asyncToken === undefined) {
+    if (id === null || id === undefined) {
       throw new Error(
-        'Required parameter asyncToken was null or undefined when calling getRepoV1GridSessionQueryAsyncGetAsyncToken.',
+        'Required parameter id was null or undefined when calling getRepoV1SearchTextAnalyzerId.',
       );
     }
 
@@ -758,8 +736,8 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/session/query/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridGridQueryJobResponse>(
+    let localVarPath = `/repo/v1/search/text/analyzer/${this.configuration.encodeParam({ name: 'id', value: id, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -775,12 +753,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param sessionId
+   * @param orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getRepoV1GridSessionSessionId(
-    sessionId: string,
+  public postRepoV1SearchColumnAnalyzerOverride(
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -788,9 +766,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelGridGridSession>;
-  public getRepoV1GridSessionSessionId(
-    sessionId: string,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>;
+  public postRepoV1SearchColumnAnalyzerOverride(
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -798,9 +776,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridGridSession>>;
-  public getRepoV1GridSessionSessionId(
-    sessionId: string,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public postRepoV1SearchColumnAnalyzerOverride(
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -808,447 +786,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridGridSession>>;
-  public getRepoV1GridSessionSessionId(
-    sessionId: string,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (sessionId === null || sessionId === undefined) {
-      throw new Error(
-        'Required parameter sessionId was null or undefined when calling getRepoV1GridSessionSessionId.',
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (bearerAuth) required
-    localVarCredential = this.configuration.lookupCredential('bearerAuth');
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/repo/v1/grid/session/${this.configuration.encodeParam({ name: 'sessionId', value: sessionId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridGridSession>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
-   * @param sessionId - The grid session ID.
-   * @param replicaId - The ID of the replica.
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getRepoV1GridSessionSessionIdReplicaReplicaId(
-    sessionId: string,
-    replicaId: number,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<OrgSagebionetworksRepoModelGridGridReplica>;
-  public getRepoV1GridSessionSessionIdReplicaReplicaId(
-    sessionId: string,
-    replicaId: number,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridGridReplica>>;
-  public getRepoV1GridSessionSessionIdReplicaReplicaId(
-    sessionId: string,
-    replicaId: number,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridGridReplica>>;
-  public getRepoV1GridSessionSessionIdReplicaReplicaId(
-    sessionId: string,
-    replicaId: number,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (sessionId === null || sessionId === undefined) {
-      throw new Error(
-        'Required parameter sessionId was null or undefined when calling getRepoV1GridSessionSessionIdReplicaReplicaId.',
-      );
-    }
-    if (replicaId === null || replicaId === undefined) {
-      throw new Error(
-        'Required parameter replicaId was null or undefined when calling getRepoV1GridSessionSessionIdReplicaReplicaId.',
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (bearerAuth) required
-    localVarCredential = this.configuration.lookupCredential('bearerAuth');
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/repo/v1/grid/session/${this.configuration.encodeParam({ name: 'sessionId', value: sessionId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/replica/${this.configuration.encodeParam({ name: 'replicaId', value: replicaId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridGridReplica>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
-   * @param asyncToken
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getRepoV1GridSessionUpdateAsyncGetAsyncToken(
-    asyncToken: string,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<OrgSagebionetworksRepoModelGridGridUpdateJobResponse>;
-  public getRepoV1GridSessionUpdateAsyncGetAsyncToken(
-    asyncToken: string,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridGridUpdateJobResponse>>;
-  public getRepoV1GridSessionUpdateAsyncGetAsyncToken(
-    asyncToken: string,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridGridUpdateJobResponse>>;
-  public getRepoV1GridSessionUpdateAsyncGetAsyncToken(
-    asyncToken: string,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (asyncToken === null || asyncToken === undefined) {
-      throw new Error(
-        'Required parameter asyncToken was null or undefined when calling getRepoV1GridSessionUpdateAsyncGetAsyncToken.',
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (bearerAuth) required
-    localVarCredential = this.configuration.lookupCredential('bearerAuth');
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/repo/v1/grid/session/update/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridGridUpdateJobResponse>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
-   * @param asyncToken The job ID returned from the start request
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getRepoV1GridSynchronizeAsyncGetAsyncToken(
-    asyncToken: string,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<OrgSagebionetworksRepoModelGridSynchronizeGridResponse>;
-  public getRepoV1GridSynchronizeAsyncGetAsyncToken(
-    asyncToken: string,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridSynchronizeGridResponse>>;
-  public getRepoV1GridSynchronizeAsyncGetAsyncToken(
-    asyncToken: string,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridSynchronizeGridResponse>>;
-  public getRepoV1GridSynchronizeAsyncGetAsyncToken(
-    asyncToken: string,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (asyncToken === null || asyncToken === undefined) {
-      throw new Error(
-        'Required parameter asyncToken was null or undefined when calling getRepoV1GridSynchronizeAsyncGetAsyncToken.',
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (bearerAuth) required
-    localVarCredential = this.configuration.lookupCredential('bearerAuth');
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/repo/v1/grid/synchronize/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridSynchronizeGridResponse>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
-   * @param orgSagebionetworksRepoModelGridDownloadFromGridRequest
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public postRepoV1GridDownloadCsvAsyncStart(
-    orgSagebionetworksRepoModelGridDownloadFromGridRequest: OrgSagebionetworksRepoModelGridDownloadFromGridRequest,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<OrgSagebionetworksRepoModelAsynchAsyncJobId>;
-  public postRepoV1GridDownloadCsvAsyncStart(
-    orgSagebionetworksRepoModelGridDownloadFromGridRequest: OrgSagebionetworksRepoModelGridDownloadFromGridRequest,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridDownloadCsvAsyncStart(
-    orgSagebionetworksRepoModelGridDownloadFromGridRequest: OrgSagebionetworksRepoModelGridDownloadFromGridRequest,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridDownloadCsvAsyncStart(
-    orgSagebionetworksRepoModelGridDownloadFromGridRequest: OrgSagebionetworksRepoModelGridDownloadFromGridRequest,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public postRepoV1SearchColumnAnalyzerOverride(
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -1258,11 +798,11 @@ export class GridServicesService {
     },
   ): Observable<any> {
     if (
-      orgSagebionetworksRepoModelGridDownloadFromGridRequest === null ||
-      orgSagebionetworksRepoModelGridDownloadFromGridRequest === undefined
+      orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride === null ||
+      orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridDownloadFromGridRequest was null or undefined when calling postRepoV1GridDownloadCsvAsyncStart.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride was null or undefined when calling postRepoV1SearchColumnAnalyzerOverride.',
       );
     }
 
@@ -1314,13 +854,13 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/download/csv/async/start`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelAsynchAsyncJobId>(
+    let localVarPath = `/repo/v1/search/column/analyzer/override`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridDownloadFromGridRequest,
+        body: orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -1332,12 +872,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param orgSagebionetworksRepoModelGridGridRecordSetExportRequest
+   * @param orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1GridExportRecordsetAsyncStart(
-    orgSagebionetworksRepoModelGridGridRecordSetExportRequest: OrgSagebionetworksRepoModelGridGridRecordSetExportRequest,
+  public postRepoV1SearchColumnAnalyzerOverrideList(
+    orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest: OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -1345,9 +885,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelAsynchAsyncJobId>;
-  public postRepoV1GridExportRecordsetAsyncStart(
-    orgSagebionetworksRepoModelGridGridRecordSetExportRequest: OrgSagebionetworksRepoModelGridGridRecordSetExportRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse>;
+  public postRepoV1SearchColumnAnalyzerOverrideList(
+    orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest: OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -1355,9 +895,11 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridExportRecordsetAsyncStart(
-    orgSagebionetworksRepoModelGridGridRecordSetExportRequest: OrgSagebionetworksRepoModelGridGridRecordSetExportRequest,
+  ): Observable<
+    HttpResponse<OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse>
+  >;
+  public postRepoV1SearchColumnAnalyzerOverrideList(
+    orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest: OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -1365,9 +907,11 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridExportRecordsetAsyncStart(
-    orgSagebionetworksRepoModelGridGridRecordSetExportRequest: OrgSagebionetworksRepoModelGridGridRecordSetExportRequest,
+  ): Observable<
+    HttpEvent<OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse>
+  >;
+  public postRepoV1SearchColumnAnalyzerOverrideList(
+    orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest: OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -1377,11 +921,11 @@ export class GridServicesService {
     },
   ): Observable<any> {
     if (
-      orgSagebionetworksRepoModelGridGridRecordSetExportRequest === null ||
-      orgSagebionetworksRepoModelGridGridRecordSetExportRequest === undefined
+      orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest === null ||
+      orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridGridRecordSetExportRequest was null or undefined when calling postRepoV1GridExportRecordsetAsyncStart.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest was null or undefined when calling postRepoV1SearchColumnAnalyzerOverrideList.',
       );
     }
 
@@ -1433,13 +977,13 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/export/recordset/async/start`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelAsynchAsyncJobId>(
+    let localVarPath = `/repo/v1/search/column/analyzer/override/list`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridGridRecordSetExportRequest,
+        body: orgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -1451,12 +995,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param orgSagebionetworksRepoModelGridGridCsvImportRequest
+   * @param orgSagebionetworksRepoModelSearchTableSearchConfiguration
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1GridImportCsvAsyncStart(
-    orgSagebionetworksRepoModelGridGridCsvImportRequest: OrgSagebionetworksRepoModelGridGridCsvImportRequest,
+  public postRepoV1SearchConfiguration(
+    orgSagebionetworksRepoModelSearchTableSearchConfiguration: OrgSagebionetworksRepoModelSearchTableSearchConfiguration,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -1464,9 +1008,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelAsynchAsyncJobId>;
-  public postRepoV1GridImportCsvAsyncStart(
-    orgSagebionetworksRepoModelGridGridCsvImportRequest: OrgSagebionetworksRepoModelGridGridCsvImportRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>;
+  public postRepoV1SearchConfiguration(
+    orgSagebionetworksRepoModelSearchTableSearchConfiguration: OrgSagebionetworksRepoModelSearchTableSearchConfiguration,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -1474,9 +1018,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridImportCsvAsyncStart(
-    orgSagebionetworksRepoModelGridGridCsvImportRequest: OrgSagebionetworksRepoModelGridGridCsvImportRequest,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>>;
+  public postRepoV1SearchConfiguration(
+    orgSagebionetworksRepoModelSearchTableSearchConfiguration: OrgSagebionetworksRepoModelSearchTableSearchConfiguration,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -1484,9 +1028,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridImportCsvAsyncStart(
-    orgSagebionetworksRepoModelGridGridCsvImportRequest: OrgSagebionetworksRepoModelGridGridCsvImportRequest,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>>;
+  public postRepoV1SearchConfiguration(
+    orgSagebionetworksRepoModelSearchTableSearchConfiguration: OrgSagebionetworksRepoModelSearchTableSearchConfiguration,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -1496,11 +1040,11 @@ export class GridServicesService {
     },
   ): Observable<any> {
     if (
-      orgSagebionetworksRepoModelGridGridCsvImportRequest === null ||
-      orgSagebionetworksRepoModelGridGridCsvImportRequest === undefined
+      orgSagebionetworksRepoModelSearchTableSearchConfiguration === null ||
+      orgSagebionetworksRepoModelSearchTableSearchConfiguration === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridGridCsvImportRequest was null or undefined when calling postRepoV1GridImportCsvAsyncStart.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableSearchConfiguration was null or undefined when calling postRepoV1SearchConfiguration.',
       );
     }
 
@@ -1552,13 +1096,13 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/import/csv/async/start`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelAsynchAsyncJobId>(
+    let localVarPath = `/repo/v1/search/configuration`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridGridCsvImportRequest,
+        body: orgSagebionetworksRepoModelSearchTableSearchConfiguration,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -1570,12 +1114,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param orgSagebionetworksRepoModelGridCreateGridRequest
+   * @param orgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1GridSessionAsyncStart(
-    orgSagebionetworksRepoModelGridCreateGridRequest: OrgSagebionetworksRepoModelGridCreateGridRequest,
+  public postRepoV1SearchConfigurationList(
+    orgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest: OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -1583,9 +1127,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelAsynchAsyncJobId>;
-  public postRepoV1GridSessionAsyncStart(
-    orgSagebionetworksRepoModelGridCreateGridRequest: OrgSagebionetworksRepoModelGridCreateGridRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsResponse>;
+  public postRepoV1SearchConfigurationList(
+    orgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest: OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -1593,9 +1137,11 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridSessionAsyncStart(
-    orgSagebionetworksRepoModelGridCreateGridRequest: OrgSagebionetworksRepoModelGridCreateGridRequest,
+  ): Observable<
+    HttpResponse<OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsResponse>
+  >;
+  public postRepoV1SearchConfigurationList(
+    orgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest: OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -1603,9 +1149,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridSessionAsyncStart(
-    orgSagebionetworksRepoModelGridCreateGridRequest: OrgSagebionetworksRepoModelGridCreateGridRequest,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsResponse>>;
+  public postRepoV1SearchConfigurationList(
+    orgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest: OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -1615,11 +1161,11 @@ export class GridServicesService {
     },
   ): Observable<any> {
     if (
-      orgSagebionetworksRepoModelGridCreateGridRequest === null ||
-      orgSagebionetworksRepoModelGridCreateGridRequest === undefined
+      orgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest === null ||
+      orgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridCreateGridRequest was null or undefined when calling postRepoV1GridSessionAsyncStart.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest was null or undefined when calling postRepoV1SearchConfigurationList.',
       );
     }
 
@@ -1671,13 +1217,13 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/session/async/start`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelAsynchAsyncJobId>(
+    let localVarPath = `/repo/v1/search/configuration/list`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsResponse>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridCreateGridRequest,
+        body: orgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -1689,12 +1235,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param orgSagebionetworksRepoModelGridListGridSessionsRequest
+   * @param orgSagebionetworksRepoModelSearchTableSynonymSet
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1GridSessionList(
-    orgSagebionetworksRepoModelGridListGridSessionsRequest: OrgSagebionetworksRepoModelGridListGridSessionsRequest,
+  public postRepoV1SearchSynonymSet(
+    orgSagebionetworksRepoModelSearchTableSynonymSet: OrgSagebionetworksRepoModelSearchTableSynonymSet,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -1702,9 +1248,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelGridListGridSessionsResponse>;
-  public postRepoV1GridSessionList(
-    orgSagebionetworksRepoModelGridListGridSessionsRequest: OrgSagebionetworksRepoModelGridListGridSessionsRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableSynonymSet>;
+  public postRepoV1SearchSynonymSet(
+    orgSagebionetworksRepoModelSearchTableSynonymSet: OrgSagebionetworksRepoModelSearchTableSynonymSet,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -1712,9 +1258,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridListGridSessionsResponse>>;
-  public postRepoV1GridSessionList(
-    orgSagebionetworksRepoModelGridListGridSessionsRequest: OrgSagebionetworksRepoModelGridListGridSessionsRequest,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableSynonymSet>>;
+  public postRepoV1SearchSynonymSet(
+    orgSagebionetworksRepoModelSearchTableSynonymSet: OrgSagebionetworksRepoModelSearchTableSynonymSet,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -1722,9 +1268,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridListGridSessionsResponse>>;
-  public postRepoV1GridSessionList(
-    orgSagebionetworksRepoModelGridListGridSessionsRequest: OrgSagebionetworksRepoModelGridListGridSessionsRequest,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableSynonymSet>>;
+  public postRepoV1SearchSynonymSet(
+    orgSagebionetworksRepoModelSearchTableSynonymSet: OrgSagebionetworksRepoModelSearchTableSynonymSet,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -1734,11 +1280,11 @@ export class GridServicesService {
     },
   ): Observable<any> {
     if (
-      orgSagebionetworksRepoModelGridListGridSessionsRequest === null ||
-      orgSagebionetworksRepoModelGridListGridSessionsRequest === undefined
+      orgSagebionetworksRepoModelSearchTableSynonymSet === null ||
+      orgSagebionetworksRepoModelSearchTableSynonymSet === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridListGridSessionsRequest was null or undefined when calling postRepoV1GridSessionList.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableSynonymSet was null or undefined when calling postRepoV1SearchSynonymSet.',
       );
     }
 
@@ -1790,13 +1336,13 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/session/list`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridListGridSessionsResponse>(
+    let localVarPath = `/repo/v1/search/synonym/set`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableSynonymSet>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridListGridSessionsRequest,
+        body: orgSagebionetworksRepoModelSearchTableSynonymSet,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -1808,12 +1354,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param orgSagebionetworksRepoModelGridGridQueryJobRequest
+   * @param orgSagebionetworksRepoModelSearchTableListSynonymSetsRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1GridSessionQueryAsyncStart(
-    orgSagebionetworksRepoModelGridGridQueryJobRequest: OrgSagebionetworksRepoModelGridGridQueryJobRequest,
+  public postRepoV1SearchSynonymSetList(
+    orgSagebionetworksRepoModelSearchTableListSynonymSetsRequest: OrgSagebionetworksRepoModelSearchTableListSynonymSetsRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -1821,9 +1367,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelAsynchAsyncJobId>;
-  public postRepoV1GridSessionQueryAsyncStart(
-    orgSagebionetworksRepoModelGridGridQueryJobRequest: OrgSagebionetworksRepoModelGridGridQueryJobRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableListSynonymSetsResponse>;
+  public postRepoV1SearchSynonymSetList(
+    orgSagebionetworksRepoModelSearchTableListSynonymSetsRequest: OrgSagebionetworksRepoModelSearchTableListSynonymSetsRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -1831,9 +1377,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridSessionQueryAsyncStart(
-    orgSagebionetworksRepoModelGridGridQueryJobRequest: OrgSagebionetworksRepoModelGridGridQueryJobRequest,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableListSynonymSetsResponse>>;
+  public postRepoV1SearchSynonymSetList(
+    orgSagebionetworksRepoModelSearchTableListSynonymSetsRequest: OrgSagebionetworksRepoModelSearchTableListSynonymSetsRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -1841,9 +1387,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridSessionQueryAsyncStart(
-    orgSagebionetworksRepoModelGridGridQueryJobRequest: OrgSagebionetworksRepoModelGridGridQueryJobRequest,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableListSynonymSetsResponse>>;
+  public postRepoV1SearchSynonymSetList(
+    orgSagebionetworksRepoModelSearchTableListSynonymSetsRequest: OrgSagebionetworksRepoModelSearchTableListSynonymSetsRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -1853,11 +1399,11 @@ export class GridServicesService {
     },
   ): Observable<any> {
     if (
-      orgSagebionetworksRepoModelGridGridQueryJobRequest === null ||
-      orgSagebionetworksRepoModelGridGridQueryJobRequest === undefined
+      orgSagebionetworksRepoModelSearchTableListSynonymSetsRequest === null ||
+      orgSagebionetworksRepoModelSearchTableListSynonymSetsRequest === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridGridQueryJobRequest was null or undefined when calling postRepoV1GridSessionQueryAsyncStart.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableListSynonymSetsRequest was null or undefined when calling postRepoV1SearchSynonymSetList.',
       );
     }
 
@@ -1909,13 +1455,13 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/session/query/async/start`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelAsynchAsyncJobId>(
+    let localVarPath = `/repo/v1/search/synonym/set/list`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableListSynonymSetsResponse>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridGridQueryJobRequest,
+        body: orgSagebionetworksRepoModelSearchTableListSynonymSetsRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -1927,14 +1473,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param sessionId
-   * @param orgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest
+   * @param orgSagebionetworksRepoModelSearchTableTextAnalyzer
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1GridSessionSessionIdPresignedUrl(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest: OrgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest,
+  public postRepoV1SearchTextAnalyzer(
+    orgSagebionetworksRepoModelSearchTableTextAnalyzer: OrgSagebionetworksRepoModelSearchTableTextAnalyzer,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -1942,10 +1486,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelGridCreateGridPresignedUrlResponse>;
-  public postRepoV1GridSessionSessionIdPresignedUrl(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest: OrgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>;
+  public postRepoV1SearchTextAnalyzer(
+    orgSagebionetworksRepoModelSearchTableTextAnalyzer: OrgSagebionetworksRepoModelSearchTableTextAnalyzer,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -1953,10 +1496,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridCreateGridPresignedUrlResponse>>;
-  public postRepoV1GridSessionSessionIdPresignedUrl(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest: OrgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>>;
+  public postRepoV1SearchTextAnalyzer(
+    orgSagebionetworksRepoModelSearchTableTextAnalyzer: OrgSagebionetworksRepoModelSearchTableTextAnalyzer,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -1964,10 +1506,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridCreateGridPresignedUrlResponse>>;
-  public postRepoV1GridSessionSessionIdPresignedUrl(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest: OrgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>>;
+  public postRepoV1SearchTextAnalyzer(
+    orgSagebionetworksRepoModelSearchTableTextAnalyzer: OrgSagebionetworksRepoModelSearchTableTextAnalyzer,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -1976,17 +1517,12 @@ export class GridServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (sessionId === null || sessionId === undefined) {
-      throw new Error(
-        'Required parameter sessionId was null or undefined when calling postRepoV1GridSessionSessionIdPresignedUrl.',
-      );
-    }
     if (
-      orgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest === null ||
-      orgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest === undefined
+      orgSagebionetworksRepoModelSearchTableTextAnalyzer === null ||
+      orgSagebionetworksRepoModelSearchTableTextAnalyzer === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest was null or undefined when calling postRepoV1GridSessionSessionIdPresignedUrl.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableTextAnalyzer was null or undefined when calling postRepoV1SearchTextAnalyzer.',
       );
     }
 
@@ -2038,13 +1574,13 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/session/${this.configuration.encodeParam({ name: 'sessionId', value: sessionId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/presigned/url`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridCreateGridPresignedUrlResponse>(
+    let localVarPath = `/repo/v1/search/text/analyzer`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest,
+        body: orgSagebionetworksRepoModelSearchTableTextAnalyzer,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -2056,14 +1592,12 @@ export class GridServicesService {
   }
 
   /**
-   * @param sessionId - The grid session ID.
-   * @param orgSagebionetworksRepoModelGridCreateReplicaRequest
+   * @param orgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1GridSessionSessionIdReplica(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridCreateReplicaRequest: OrgSagebionetworksRepoModelGridCreateReplicaRequest,
+  public postRepoV1SearchTextAnalyzerList(
+    orgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest: OrgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -2071,10 +1605,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelGridCreateReplicaResponse>;
-  public postRepoV1GridSessionSessionIdReplica(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridCreateReplicaRequest: OrgSagebionetworksRepoModelGridCreateReplicaRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableListTextAnalyzersResponse>;
+  public postRepoV1SearchTextAnalyzerList(
+    orgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest: OrgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -2082,10 +1615,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridCreateReplicaResponse>>;
-  public postRepoV1GridSessionSessionIdReplica(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridCreateReplicaRequest: OrgSagebionetworksRepoModelGridCreateReplicaRequest,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableListTextAnalyzersResponse>>;
+  public postRepoV1SearchTextAnalyzerList(
+    orgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest: OrgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -2093,10 +1625,9 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridCreateReplicaResponse>>;
-  public postRepoV1GridSessionSessionIdReplica(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridCreateReplicaRequest: OrgSagebionetworksRepoModelGridCreateReplicaRequest,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableListTextAnalyzersResponse>>;
+  public postRepoV1SearchTextAnalyzerList(
+    orgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest: OrgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -2105,17 +1636,12 @@ export class GridServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (sessionId === null || sessionId === undefined) {
-      throw new Error(
-        'Required parameter sessionId was null or undefined when calling postRepoV1GridSessionSessionIdReplica.',
-      );
-    }
     if (
-      orgSagebionetworksRepoModelGridCreateReplicaRequest === null ||
-      orgSagebionetworksRepoModelGridCreateReplicaRequest === undefined
+      orgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest === null ||
+      orgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridCreateReplicaRequest was null or undefined when calling postRepoV1GridSessionSessionIdReplica.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest was null or undefined when calling postRepoV1SearchTextAnalyzerList.',
       );
     }
 
@@ -2167,13 +1693,13 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/session/${this.configuration.encodeParam({ name: 'sessionId', value: sessionId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/replica`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridCreateReplicaResponse>(
+    let localVarPath = `/repo/v1/search/text/analyzer/list`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableListTextAnalyzersResponse>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridCreateReplicaRequest,
+        body: orgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -2185,14 +1711,14 @@ export class GridServicesService {
   }
 
   /**
-   * @param sessionId - The grid session ID.
-   * @param orgSagebionetworksRepoModelGridListGridReplicasRequest
+   * @param entityId The ID of the entity to bind to.
+   * @param orgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1GridSessionSessionIdReplicaList(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridListGridReplicasRequest: OrgSagebionetworksRepoModelGridListGridReplicasRequest,
+  public putRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
+    orgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest: OrgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -2200,10 +1726,10 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelGridListGridReplicasResponse>;
-  public postRepoV1GridSessionSessionIdReplicaList(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridListGridReplicasRequest: OrgSagebionetworksRepoModelGridListGridReplicasRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableSearchConfigBinding>;
+  public putRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
+    orgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest: OrgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -2211,10 +1737,10 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridListGridReplicasResponse>>;
-  public postRepoV1GridSessionSessionIdReplicaList(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridListGridReplicasRequest: OrgSagebionetworksRepoModelGridListGridReplicasRequest,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableSearchConfigBinding>>;
+  public putRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
+    orgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest: OrgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -2222,10 +1748,10 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridListGridReplicasResponse>>;
-  public postRepoV1GridSessionSessionIdReplicaList(
-    sessionId: string,
-    orgSagebionetworksRepoModelGridListGridReplicasRequest: OrgSagebionetworksRepoModelGridListGridReplicasRequest,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableSearchConfigBinding>>;
+  public putRepoV1EntityEntityIdSearchconfigBinding(
+    entityId: string,
+    orgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest: OrgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -2234,17 +1760,17 @@ export class GridServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (sessionId === null || sessionId === undefined) {
+    if (entityId === null || entityId === undefined) {
       throw new Error(
-        'Required parameter sessionId was null or undefined when calling postRepoV1GridSessionSessionIdReplicaList.',
+        'Required parameter entityId was null or undefined when calling putRepoV1EntityEntityIdSearchconfigBinding.',
       );
     }
     if (
-      orgSagebionetworksRepoModelGridListGridReplicasRequest === null ||
-      orgSagebionetworksRepoModelGridListGridReplicasRequest === undefined
+      orgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest === null ||
+      orgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridListGridReplicasRequest was null or undefined when calling postRepoV1GridSessionSessionIdReplicaList.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest was null or undefined when calling putRepoV1EntityEntityIdSearchconfigBinding.',
       );
     }
 
@@ -2296,13 +1822,13 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/session/${this.configuration.encodeParam({ name: 'sessionId', value: sessionId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/replica/list`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelGridListGridReplicasResponse>(
-      'post',
+    let localVarPath = `/repo/v1/entity/${this.configuration.encodeParam({ name: 'entityId', value: entityId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/searchconfig/binding`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableSearchConfigBinding>(
+      'put',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridListGridReplicasRequest,
+        body: orgSagebionetworksRepoModelSearchTableBindSearchConfigToEntityRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -2314,12 +1840,14 @@ export class GridServicesService {
   }
 
   /**
-   * @param orgSagebionetworksRepoModelGridGridUpdateJobRequest
+   * @param columnAnalyzerOverrideId The path ID (must match the request body\&#39;s ID).
+   * @param orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1GridSessionUpdateAsyncStart(
-    orgSagebionetworksRepoModelGridGridUpdateJobRequest: OrgSagebionetworksRepoModelGridGridUpdateJobRequest,
+  public putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -2327,9 +1855,10 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelAsynchAsyncJobId>;
-  public postRepoV1GridSessionUpdateAsyncStart(
-    orgSagebionetworksRepoModelGridGridUpdateJobRequest: OrgSagebionetworksRepoModelGridGridUpdateJobRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>;
+  public putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -2337,9 +1866,10 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridSessionUpdateAsyncStart(
-    orgSagebionetworksRepoModelGridGridUpdateJobRequest: OrgSagebionetworksRepoModelGridGridUpdateJobRequest,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -2347,9 +1877,10 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridSessionUpdateAsyncStart(
-    orgSagebionetworksRepoModelGridGridUpdateJobRequest: OrgSagebionetworksRepoModelGridGridUpdateJobRequest,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>>;
+  public putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId(
+    columnAnalyzerOverrideId: string,
+    orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride: OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -2358,12 +1889,17 @@ export class GridServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
+    if (columnAnalyzerOverrideId === null || columnAnalyzerOverrideId === undefined) {
+      throw new Error(
+        'Required parameter columnAnalyzerOverrideId was null or undefined when calling putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId.',
+      );
+    }
     if (
-      orgSagebionetworksRepoModelGridGridUpdateJobRequest === null ||
-      orgSagebionetworksRepoModelGridGridUpdateJobRequest === undefined
+      orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride === null ||
+      orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridGridUpdateJobRequest was null or undefined when calling postRepoV1GridSessionUpdateAsyncStart.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride was null or undefined when calling putRepoV1SearchColumnAnalyzerOverrideColumnAnalyzerOverrideId.',
       );
     }
 
@@ -2415,13 +1951,13 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/session/update/async/start`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelAsynchAsyncJobId>(
-      'post',
+    let localVarPath = `/repo/v1/search/column/analyzer/override/${this.configuration.encodeParam({ name: 'columnAnalyzerOverrideId', value: columnAnalyzerOverrideId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride>(
+      'put',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridGridUpdateJobRequest,
+        body: orgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -2433,12 +1969,14 @@ export class GridServicesService {
   }
 
   /**
-   * @param orgSagebionetworksRepoModelGridSynchronizeGridRequest
+   * @param searchConfigurationId The path ID (must match the request body\&#39;s ID).
+   * @param orgSagebionetworksRepoModelSearchTableSearchConfiguration
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public postRepoV1GridSynchronizeAsyncStart(
-    orgSagebionetworksRepoModelGridSynchronizeGridRequest: OrgSagebionetworksRepoModelGridSynchronizeGridRequest,
+  public putRepoV1SearchConfigurationSearchConfigurationId(
+    searchConfigurationId: string,
+    orgSagebionetworksRepoModelSearchTableSearchConfiguration: OrgSagebionetworksRepoModelSearchTableSearchConfiguration,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -2446,9 +1984,10 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrgSagebionetworksRepoModelAsynchAsyncJobId>;
-  public postRepoV1GridSynchronizeAsyncStart(
-    orgSagebionetworksRepoModelGridSynchronizeGridRequest: OrgSagebionetworksRepoModelGridSynchronizeGridRequest,
+  ): Observable<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>;
+  public putRepoV1SearchConfigurationSearchConfigurationId(
+    searchConfigurationId: string,
+    orgSagebionetworksRepoModelSearchTableSearchConfiguration: OrgSagebionetworksRepoModelSearchTableSearchConfiguration,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -2456,9 +1995,10 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridSynchronizeAsyncStart(
-    orgSagebionetworksRepoModelGridSynchronizeGridRequest: OrgSagebionetworksRepoModelGridSynchronizeGridRequest,
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>>;
+  public putRepoV1SearchConfigurationSearchConfigurationId(
+    searchConfigurationId: string,
+    orgSagebionetworksRepoModelSearchTableSearchConfiguration: OrgSagebionetworksRepoModelSearchTableSearchConfiguration,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -2466,9 +2006,10 @@ export class GridServicesService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
-  public postRepoV1GridSynchronizeAsyncStart(
-    orgSagebionetworksRepoModelGridSynchronizeGridRequest: OrgSagebionetworksRepoModelGridSynchronizeGridRequest,
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>>;
+  public putRepoV1SearchConfigurationSearchConfigurationId(
+    searchConfigurationId: string,
+    orgSagebionetworksRepoModelSearchTableSearchConfiguration: OrgSagebionetworksRepoModelSearchTableSearchConfiguration,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -2477,12 +2018,17 @@ export class GridServicesService {
       transferCache?: boolean;
     },
   ): Observable<any> {
+    if (searchConfigurationId === null || searchConfigurationId === undefined) {
+      throw new Error(
+        'Required parameter searchConfigurationId was null or undefined when calling putRepoV1SearchConfigurationSearchConfigurationId.',
+      );
+    }
     if (
-      orgSagebionetworksRepoModelGridSynchronizeGridRequest === null ||
-      orgSagebionetworksRepoModelGridSynchronizeGridRequest === undefined
+      orgSagebionetworksRepoModelSearchTableSearchConfiguration === null ||
+      orgSagebionetworksRepoModelSearchTableSearchConfiguration === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelGridSynchronizeGridRequest was null or undefined when calling postRepoV1GridSynchronizeAsyncStart.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableSearchConfiguration was null or undefined when calling putRepoV1SearchConfigurationSearchConfigurationId.',
       );
     }
 
@@ -2534,13 +2080,271 @@ export class GridServicesService {
       }
     }
 
-    let localVarPath = `/repo/v1/grid/synchronize/async/start`;
-    return this.httpClient.request<OrgSagebionetworksRepoModelAsynchAsyncJobId>(
-      'post',
+    let localVarPath = `/repo/v1/search/configuration/${this.configuration.encodeParam({ name: 'searchConfigurationId', value: searchConfigurationId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>(
+      'put',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelGridSynchronizeGridRequest,
+        body: orgSagebionetworksRepoModelSearchTableSearchConfiguration,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param synonymSetId The path ID (must match the request body\&#39;s ID).
+   * @param orgSagebionetworksRepoModelSearchTableSynonymSet
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public putRepoV1SearchSynonymSetSynonymSetId(
+    synonymSetId: string,
+    orgSagebionetworksRepoModelSearchTableSynonymSet: OrgSagebionetworksRepoModelSearchTableSynonymSet,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelSearchTableSynonymSet>;
+  public putRepoV1SearchSynonymSetSynonymSetId(
+    synonymSetId: string,
+    orgSagebionetworksRepoModelSearchTableSynonymSet: OrgSagebionetworksRepoModelSearchTableSynonymSet,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableSynonymSet>>;
+  public putRepoV1SearchSynonymSetSynonymSetId(
+    synonymSetId: string,
+    orgSagebionetworksRepoModelSearchTableSynonymSet: OrgSagebionetworksRepoModelSearchTableSynonymSet,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableSynonymSet>>;
+  public putRepoV1SearchSynonymSetSynonymSetId(
+    synonymSetId: string,
+    orgSagebionetworksRepoModelSearchTableSynonymSet: OrgSagebionetworksRepoModelSearchTableSynonymSet,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (synonymSetId === null || synonymSetId === undefined) {
+      throw new Error(
+        'Required parameter synonymSetId was null or undefined when calling putRepoV1SearchSynonymSetSynonymSetId.',
+      );
+    }
+    if (
+      orgSagebionetworksRepoModelSearchTableSynonymSet === null ||
+      orgSagebionetworksRepoModelSearchTableSynonymSet === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelSearchTableSynonymSet was null or undefined when calling putRepoV1SearchSynonymSetSynonymSetId.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/search/synonym/set/${this.configuration.encodeParam({ name: 'synonymSetId', value: synonymSetId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableSynonymSet>(
+      'put',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelSearchTableSynonymSet,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param id The path ID of the text analyzer (must match the request body\&#39;s ID).
+   * @param orgSagebionetworksRepoModelSearchTableTextAnalyzer
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public putRepoV1SearchTextAnalyzerId(
+    id: number,
+    orgSagebionetworksRepoModelSearchTableTextAnalyzer: OrgSagebionetworksRepoModelSearchTableTextAnalyzer,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>;
+  public putRepoV1SearchTextAnalyzerId(
+    id: number,
+    orgSagebionetworksRepoModelSearchTableTextAnalyzer: OrgSagebionetworksRepoModelSearchTableTextAnalyzer,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>>;
+  public putRepoV1SearchTextAnalyzerId(
+    id: number,
+    orgSagebionetworksRepoModelSearchTableTextAnalyzer: OrgSagebionetworksRepoModelSearchTableTextAnalyzer,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>>;
+  public putRepoV1SearchTextAnalyzerId(
+    id: number,
+    orgSagebionetworksRepoModelSearchTableTextAnalyzer: OrgSagebionetworksRepoModelSearchTableTextAnalyzer,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error(
+        'Required parameter id was null or undefined when calling putRepoV1SearchTextAnalyzerId.',
+      );
+    }
+    if (
+      orgSagebionetworksRepoModelSearchTableTextAnalyzer === null ||
+      orgSagebionetworksRepoModelSearchTableTextAnalyzer === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelSearchTableTextAnalyzer was null or undefined when calling putRepoV1SearchTextAnalyzerId.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/search/text/analyzer/${this.configuration.encodeParam({ name: 'id', value: id, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableTextAnalyzer>(
+      'put',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelSearchTableTextAnalyzer,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

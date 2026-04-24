@@ -17,11 +17,11 @@ export interface OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverrideEnt
    */
   columnName?: string;
   /**
-   * The ID of the TextAnalyzer to use when indexing this column.
+   * The qualified name (\'{organizationName}-{name}\') of the TextAnalyzer to use when indexing this column.
    */
-  indexAnalyzerId?: string;
+  indexAnalyzer?: string;
   /**
-   * The ID of the TextAnalyzer to use when searching this column.
+   * The qualified name (\'{organizationName}-{name}\') of the TextAnalyzer to use when searching this column.
    */
-  searchAnalyzerId?: string;
+  searchAnalyzer?: string;
 }
