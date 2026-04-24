@@ -73,7 +73,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chembl_id`,
+    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chemblId`,
     loadChildren: () =>
       import('@sagebionetworks/agora/drug-details').then((routes) => routes.routes),
     data: {
@@ -83,12 +83,12 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chembl_id/:tab`,
+    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chemblId/:tab`,
     loadChildren: () =>
       import('@sagebionetworks/agora/drug-details').then((routes) => routes.routes),
   },
   {
-    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chembl_id/:tab/:subtab`,
+    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chemblId/:tab/:subtab`,
     loadChildren: () =>
       import('@sagebionetworks/agora/drug-details').then((routes) => routes.routes),
   },

@@ -19,7 +19,7 @@ async function setup(
   const user = userEvent.setup();
 
   const mockActivatedRoute = {
-    paramMap: of(convertToParamMap({ chembl_id: drug.chembl_id, tab: tab, subtab: subtab })),
+    paramMap: of(convertToParamMap({ chemblId: drug.chembl_id, tab: tab, subtab: subtab })),
   };
 
   const mockDrugService = {

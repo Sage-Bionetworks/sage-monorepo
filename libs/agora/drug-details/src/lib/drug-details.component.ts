@@ -84,7 +84,7 @@ export class DrugDetailsComponent implements OnInit, AfterViewInit {
   }
 
   private loadPanelData(params: ParamMap) {
-    const chemblId = params.get('chembl_id');
+    const chemblId = params.get('chemblId');
     if (chemblId) {
       this.drugService
         .getDrug(chemblId, 'body', false, {
