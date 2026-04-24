@@ -80,12 +80,13 @@ describe('DrugDetailsHeroComponent', () => {
   describe('iupac id', () => {
     it('should display iupac id when present', async () => {
       await setup({ iupac_id: 'test-iupac-id' });
-      expect(screen.getByText(/IUPAC ID: test-iupac-id/)).toBeInTheDocument();
+      expect(screen.getByText('IUPAC ID:')).toBeInTheDocument();
+      expect(screen.getByText('test-iupac-id')).toBeInTheDocument();
     });
 
     it('should not display iupac id when null', async () => {
       await setup();
-      expect(screen.queryByText(/IUPAC ID:/)).not.toBeInTheDocument();
+      expect(screen.queryByText('IUPAC ID:')).not.toBeInTheDocument();
     });
   });
 
