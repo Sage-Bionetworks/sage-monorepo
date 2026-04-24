@@ -20,8 +20,13 @@ export class BattleStateService {
   private readonly config = inject(ConfigService).config;
 
   constructor() {
-    // Cancel active streams when the service is destroyed
-    inject(DestroyRef).onDestroy(() => this.cleanupStreams());
+    inject(DestroyRef).onDestroy(() => {
+      this.cleanupStreams();
+      if (this.validationTimer) {
+        clearTimeout(this.validationTimer);
+        this.validationTimer = undefined;
+      }
+    });
   }
 
   // Phase state machine
@@ -57,7 +62,8 @@ export class BattleStateService {
   );
   readonly currentMatch = computed(() => {
     const completed = this.completedMatches();
-    return this.phase() === 'reveal' ? completed : completed + 1;
+    const phase = this.phase();
+    return phase === 'reveal' || phase === 'validating' ? completed : completed + 1;
   });
   readonly allMatchesComplete = computed(
     () => this.completedMatches() >= this.config.battle.promptUseLimit,
