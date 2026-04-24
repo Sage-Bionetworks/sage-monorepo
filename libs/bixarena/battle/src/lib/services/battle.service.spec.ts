@@ -227,18 +227,28 @@ describe('BattleStateService', () => {
   });
 
   describe('continueRound', () => {
-    it('creates a new round with a continuation prompt', async () => {
+    it('creates a new round and streams only the target side', async () => {
       await service.submitPrompt('test');
       battleApi.createBattleRound.mockClear();
+      streamService.streamCompletion.mockClear();
 
-      await service.continueRound();
+      await service.continueRound('model1');
 
       expect(battleApi.createBattleRound).toHaveBeenCalledWith('battle-1', {
-        promptMessage: {
-          role: 'user',
-          content: CONTINUE_PROMPT,
-        },
+        promptMessage: { role: 'user', content: CONTINUE_PROMPT },
       });
+      expect(streamService.streamCompletion).toHaveBeenCalledTimes(1);
+      expect(streamService.streamCompletion).toHaveBeenCalledWith('battle-1', 'round-1', 'model-1');
+    });
+
+    it('streams only model2 when continuing the model2 side', async () => {
+      await service.submitPrompt('test');
+      streamService.streamCompletion.mockClear();
+
+      await service.continueRound('model2');
+
+      expect(streamService.streamCompletion).toHaveBeenCalledTimes(1);
+      expect(streamService.streamCompletion).toHaveBeenCalledWith('battle-1', 'round-1', 'model-2');
     });
   });
 });
