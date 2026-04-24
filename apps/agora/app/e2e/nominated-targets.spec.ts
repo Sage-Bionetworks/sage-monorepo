@@ -201,7 +201,7 @@ test.describe('nominated targets - comparison tool', () => {
 
     test('filters are removed from URL when Clear All is clicked', async ({ page }) => {
       const expectedInitialFilterParams = {
-        totalNominations: ['5'],
+        nominations: ['5'],
         data: ['Clinical', 'Metabolomics'],
       };
 

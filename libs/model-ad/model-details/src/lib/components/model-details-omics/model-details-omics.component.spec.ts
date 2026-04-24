@@ -24,7 +24,7 @@ describe('ModelDetailsOmicsComponent', () => {
   });
 
   it('should display transcriptomics resource card when available', async () => {
-    await setup({ ...modelMock, gene_expression: transcriptomicsPath, disease_correlation: null });
+    await setup({ ...modelMock, transcriptomics: transcriptomicsPath, disease_correlation: null });
     expect(screen.getByText('Transcriptomics')).toBeInTheDocument();
     expect(screen.queryByText('Disease Correlation')).not.toBeInTheDocument();
   });
@@ -32,7 +32,7 @@ describe('ModelDetailsOmicsComponent', () => {
   it('should display disease correlation resource card when available', async () => {
     await setup({
       ...modelMock,
-      gene_expression: null,
+      transcriptomics: null,
       disease_correlation: diseaseCorrelationPath,
     });
     expect(screen.queryByText('Transcriptomics')).not.toBeInTheDocument();
@@ -42,7 +42,7 @@ describe('ModelDetailsOmicsComponent', () => {
   it('should display both transcriptomics and disease correlation when both cards available', async () => {
     await setup({
       ...modelMock,
-      gene_expression: transcriptomicsPath,
+      transcriptomics: transcriptomicsPath,
       disease_correlation: diseaseCorrelationPath,
     });
     expect(screen.getByText('Transcriptomics')).toBeInTheDocument();

@@ -44,4 +44,8 @@ export interface Battle {
    * ID of the effective battle validation (null = not yet validated)
    */
   effectiveValidationId?: string | null;
+  /**
+   * ID of the effective battle categorization (null = not yet categorized)
+   */
+  effectiveCategorizationId?: string | null;
 }

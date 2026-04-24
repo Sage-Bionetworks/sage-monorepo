@@ -1,0 +1,20 @@
+type: object
+properties:
+  prompt:
+    type: string
+    description: The original prompt that was categorized
+  category:
+    type: string
+    maxLength: 100
+    nullable: true
+    description: >-
+      Biomedical subject category slug assigned by the classifier. Null when
+      the classifier could not assign any category.
+  method:
+    type: string
+    maxLength: 100
+    description: The categorization method used (e.g. 'openrouter-haiku-v1')
+required:
+  - prompt
+  - category
+  - method

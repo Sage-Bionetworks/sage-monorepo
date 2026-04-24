@@ -237,4 +237,18 @@ public interface BattleRepository
   int setEffectiveValidationIfNull(
       @Param("battleId") UUID battleId,
       @Param("validationId") UUID validationId);
+
+  /**
+   * Atomically set effective_categorization_id only if it is currently NULL.
+   * Returns 1 if the update was applied, 0 if a categorization was already set.
+   */
+  @Modifying
+  @Query(
+      value =
+          "UPDATE api.battle SET effective_categorization_id = :categorizationId "
+              + "WHERE id = :battleId AND effective_categorization_id IS NULL",
+      nativeQuery = true)
+  int setEffectiveCategorizationIfNull(
+      @Param("battleId") UUID battleId,
+      @Param("categorizationId") UUID categorizationId);
 }

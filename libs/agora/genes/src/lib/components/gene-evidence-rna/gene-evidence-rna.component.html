@@ -142,11 +142,17 @@
         <div class="container-lg">
           <div #rnaCCChart>
             @defer {
-              <agora-row-chart
-                [data]="consistencyOfChangeChartData"
-                [heading]="selectedStatisticalModel"
-                xAxisLabel="LOG 2 FOLD CHANGE"
-              ></agora-row-chart>
+              @if (selectedStatisticalModel) {
+                <h4 class="chart-heading">{{ selectedStatisticalModel }}</h4>
+              }
+              <div
+                sageForestPlot
+                [items]="consistencyOfChangeChartData"
+                xAxisTitle="LOG 2 FOLD CHANGE"
+                [showCILabels]="true"
+                [yAxisLabelTooltipFormatter]="yAxisLabelTooltipFormatter"
+                [pointTooltipFormatter]="pointTooltipFormatter"
+              ></div>
             }
           </div>
         </div>

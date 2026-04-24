@@ -1,0 +1,30 @@
+post:
+  x-rate-limit-requests-per-minute: 60
+  x-sage-internal: true
+  tags:
+    - Prompt Categorization
+  summary: Categorize a prompt
+  description: >-
+    Classifies a single prompt into up to 3 biomedical subject categories using an LLM.
+    The categories array may be empty when the classifier did not assign any category.
+    Requires authentication.
+  operationId: categorizePrompt
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/PromptCategorizationRequest.yaml
+    required: true
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PromptCategorization.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

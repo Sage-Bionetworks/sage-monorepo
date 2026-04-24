@@ -1,0 +1,10 @@
+type: object
+description: Request to set or clear the effective categorization for an example prompt or battle.
+properties:
+  categorizationId:
+    type: string
+    format: uuid
+    nullable: true
+    description: >-
+      ID of the categorization row to set as effective.
+      Set to null to clear the effective categorization.

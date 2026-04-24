@@ -16,11 +16,12 @@
         <th
           [id]="column.name"
           [class]="column.type"
+          [attr.data-column-key]="column.data_key"
           [pSortableColumn]="column.data_key"
-          [style]="{ width: columnWidth() }"
+          [style]="{ width: columnWidths()[column.data_key] || 'auto' }"
         >
-          <div class="column-header">
-            <div class="column-header-text">
+          <div [class]="COLUMN_HEADER_CLASS">
+            <div [class]="COLUMN_HEADER_TEXT_CLASS">
               <span [pTooltip]="column.tooltip" tooltipPosition="top">
                 {{ column.name }}
               </span>

@@ -22,7 +22,7 @@ export interface NominatedDrugSearchQuery {
    */
   pageSize?: number;
   /**
-   * List of common_name values to filter by.
+   * List of composite_id values to filter by (format: chembl_id~combined_with).
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
@@ -45,7 +45,11 @@ export interface NominatedDrugSearchQuery {
   /**
    * Filter by year first nominated.
    */
-  yearFirstNominated?: Array<number> | null;
+  initialNomination?: Array<number> | null;
+  /**
+   * Filter by drug modality.
+   */
+  modality?: Array<string> | null;
   /**
    * List of field names to sort by (e.g., [\"total_nominations\", \"common_name\"]). Each field in sortFields must have a corresponding order in sortOrders.
    */

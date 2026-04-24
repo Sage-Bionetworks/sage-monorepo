@@ -23,6 +23,12 @@ tags:
   - name: Battle Validation
     description: Operations for validating biomedical battles
     x-sage-internal: true
+  - name: Prompt Categorization
+    description: Operations for classifying a single prompt into biomedical categories
+    x-sage-internal: true
+  - name: Battle Categorization
+    description: Operations for classifying a battle conversation into biomedical categories
+    x-sage-internal: true
   - name: Chat
     description: Operations for streaming chat completions from LLM models
     x-sage-internal: true
@@ -97,6 +103,62 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BattleValidation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /categorize-prompt:
+    post:
+      x-rate-limit-requests-per-minute: 60
+      x-sage-internal: true
+      tags:
+        - Prompt Categorization
+      summary: Categorize a prompt
+      description: Classifies a single prompt into up to 3 biomedical subject categories using an LLM. The categories array may be empty when the classifier did not assign any category. Requires authentication.
+      operationId: categorizePrompt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromptCategorizationRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptCategorization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /categorize-battle:
+    post:
+      x-rate-limit-requests-per-minute: 60
+      x-sage-internal: true
+      tags:
+        - Battle Categorization
+      summary: Categorize a battle
+      description: Classifies the prompts of a battle conversation into up to 3 biomedical subject categories using an LLM. The categories array may be empty when the classifier did not assign any category. Requires authentication.
+      operationId: categorizeBattle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleCategorizationRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleCategorization'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -238,6 +300,68 @@ components:
       required:
         - confidence
         - isBiomedical
+        - method
+    PromptCategorizationRequest:
+      type: object
+      description: The prompt text to categorize into biomedical subject categories.
+      properties:
+        prompt:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          description: The prompt text to categorize
+      required:
+        - prompt
+    PromptCategorization:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: The original prompt that was categorized
+        category:
+          type: string
+          maxLength: 100
+          nullable: true
+          description: Biomedical subject category slug assigned by the classifier. Null when the classifier could not assign any category.
+        method:
+          type: string
+          maxLength: 100
+          description: The categorization method used (e.g. 'openrouter-haiku-v1')
+      required:
+        - prompt
+        - category
+        - method
+    BattleCategorizationRequest:
+      type: object
+      description: The prompts from a battle to categorize into biomedical subject categories.
+      properties:
+        prompts:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 10000
+          minItems: 1
+          maxItems: 20
+          description: List of user prompts from all rounds of the battle
+      required:
+        - prompts
+    BattleCategorization:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          maxItems: 3
+          description: Up to three biomedical subject category slugs assigned by the classifier. May be empty when the classifier did not assign any category.
+        method:
+          type: string
+          maxLength: 100
+          description: The categorization method used (e.g. 'openrouter-haiku-v1')
+      required:
+        - categories
         - method
     ModelId:
       description: UUID of an AI model.

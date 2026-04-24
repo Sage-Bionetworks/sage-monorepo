@@ -1,0 +1,169 @@
+// PrimeNG component style overrides.
+@layer app {
+  bixarena-nav .p-button {
+    padding: 0 1rem;
+    font-size: var(--text-sm);
+    font-family: inherit;
+    font-variation-settings: 'wght' 540;
+    letter-spacing: -0.01em;
+    border-radius: var(--p-border-radius-md);
+    height: 2rem;
+    line-height: 2rem;
+    box-shadow: none;
+  }
+
+  bixarena-voting-bar .nudge .p-button {
+    padding: 0.5rem 1.25rem;
+    font-size: var(--text-sm);
+    font-family: inherit;
+    font-variation-settings: 'wght' 520;
+    letter-spacing: -0.01em;
+    border-radius: 100px;
+    height: auto;
+    line-height: inherit;
+    box-shadow: none;
+  }
+
+  .bixarena-modal.p-dialog {
+    background: var(--p-surface-100);
+    border-color: var(--p-surface-200);
+    border-radius: 16px;
+    box-shadow: 0 16px 64px rgb(0 0 0 / 30%);
+    max-width: 480px;
+    width: 90vw;
+    overflow: hidden;
+
+    .p-dialog-content {
+      padding: 3rem;
+      background: transparent;
+    }
+
+    .p-button {
+      font-family: inherit;
+      letter-spacing: -0.01em;
+      border-radius: var(--p-border-radius-md);
+      box-shadow: none;
+    }
+
+    .modal-desc {
+      font-size: var(--text-md);
+      color: var(--p-text-muted-color);
+      line-height: 1.5;
+      margin: 0 0 1rem;
+    }
+
+    .modal-note {
+      font-size: var(--text-xs);
+      color: var(--p-text-muted-color);
+      line-height: 1.5;
+      margin: 0;
+      padding-top: 1.25rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.25rem;
+    }
+
+    .modal-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      padding: 1.25rem 0 0;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: var(--p-surface-300);
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &.active {
+        background: var(--p-primary-color);
+      }
+    }
+
+    .dont-show {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--text-xs);
+      color: var(--p-text-muted-color);
+      cursor: pointer;
+      user-select: none;
+
+      input {
+        accent-color: var(--p-primary-color);
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    .secondary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 0.875rem;
+      font-size: var(--text-sm);
+      font-family: inherit;
+      font-variation-settings: 'wght' 480;
+      color: var(--p-text-muted-color);
+      background: transparent;
+      border: 1px solid var(--p-surface-200);
+      border-radius: var(--p-border-radius-md);
+      cursor: pointer;
+      transition: all 0.15s;
+
+      &:hover {
+        color: var(--p-text-color);
+        border-color: var(--p-surface-300);
+        background: transparent;
+      }
+    }
+  }
+
+  .bixarena-modal.login-modal.p-dialog {
+    max-width: 400px;
+
+    .p-dialog-content {
+      text-align: center;
+    }
+
+    .p-button {
+      width: 100%;
+    }
+
+    .sign-in-btn {
+      height: 44px;
+      font-size: var(--text-md);
+      font-variation-settings: 'wght' 560;
+    }
+
+    .secondary-btn {
+      width: 100%;
+    }
+  }
+
+  .bixarena-modal.onboarding-modal.p-dialog {
+    max-width: 520px;
+
+    .p-button {
+      height: 36px;
+      font-size: var(--text-sm);
+      font-variation-settings: 'wght' 560;
+    }
+  }
+}

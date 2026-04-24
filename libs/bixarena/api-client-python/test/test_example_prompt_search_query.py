@@ -43,7 +43,10 @@ class TestExamplePromptSearchQuery(unittest.TestCase):
                 direction = 'asc',
                 source = 'pubmedqa',
                 active = True,
-                search = 'diabetes'
+                search = 'diabetes',
+                categories = [
+                    'genetics'
+                    ]
             )
         else:
             return ExamplePromptSearchQuery(

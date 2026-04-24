@@ -24,8 +24,8 @@ type Story = StoryObj<ResourceCardsComponent>;
 const cards = [
   {
     imagePath: 'model-ad-assets/images/gene-expression.svg',
-    description: 'View Gene Expression results for this model in the comparison tool.',
-    title: 'Gene Expression',
+    description: 'View Transcriptomics results for this model in the comparison tool.',
+    title: 'Transcriptomics',
     link: '/comparison/expression?models=APOE4',
   },
   {

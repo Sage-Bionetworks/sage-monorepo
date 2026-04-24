@@ -59,15 +59,13 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     viewDetailsTooltip: 'Open nominated drugs details page',
     viewDetailsClick: (rowData: unknown) => {
       const drug = rowData as NominatedDrug;
-      // TODO (AG-1996): replace common_name with chembl_id once available in the backend
       const url = this.router.serializeUrl(
-        this.router.createUrlTree([ROUTE_PATHS.DRUG_DETAILS, drug.common_name]),
+        this.router.createUrlTree([ROUTE_PATHS.DRUG_DETAILS, drug.chembl_id]),
       );
       window.open(url, '_blank');
     },
     legendEnabled: false,
-    rowsPerPage: 10,
-    rowIdDataKey: 'common_name',
+    rowIdDataKey: 'composite_id',
     allowPinnedImageDownload: false,
     defaultSort: [
       { field: 'total_nominations', order: -1 },
@@ -123,7 +121,8 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
       pageSize: currentQuery.pageSize,
       search: currentQuery.searchTerm,
       principalInvestigators: selectedFilters['nominatingPis'],
-      totalNominations: selectedFilters['totalNominations']?.map(Number) ?? [],
+      totalNominations: selectedFilters['nominations']?.map(Number) ?? [],
+      modality: selectedFilters['modalities'],
       sortFields,
       sortOrders,
     };

@@ -38,7 +38,7 @@ class ComparisonToolConfigMapperTest {
     // given
     ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
     document.setId(new ObjectId());
-    document.setPage("Gene Expression");
+    document.setPage("Differential Expression");
     document.setDropdowns(List.of("dropdown1", "dropdown2"));
     document.setRowCount("100");
     document.setColumns(List.of());
@@ -49,7 +49,7 @@ class ComparisonToolConfigMapperTest {
 
     // then
     assertThat(result).isNotNull();
-    assertThat(result.getPage()).isEqualTo(ComparisonToolPageDto.GENE_EXPRESSION);
+    assertThat(result.getPage()).isEqualTo(ComparisonToolPageDto.DIFFERENTIAL_EXPRESSION);
     assertThat(result.getDropdowns()).containsExactly("dropdown1", "dropdown2");
     assertThat(result.getRowCount()).isEqualTo("100");
     assertThat(result.getColumns()).isEmpty();
@@ -134,7 +134,7 @@ class ComparisonToolConfigMapperTest {
         .build();
 
     ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
-    document.setPage("Gene Expression");
+    document.setPage("Differential Expression");
     document.setColumns(List.of());
     document.setFilters(List.of(filter));
 
@@ -181,7 +181,7 @@ class ComparisonToolConfigMapperTest {
   void shouldHandleNullColumnsList() {
     // given
     ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
-    document.setPage("Gene Expression");
+    document.setPage("Differential Expression");
     document.setColumns(null);
     document.setFilters(List.of());
 
@@ -267,7 +267,7 @@ class ComparisonToolConfigMapperTest {
     doc1.setFilters(List.of());
 
     ComparisonToolConfigDocument doc2 = new ComparisonToolConfigDocument();
-    doc2.setPage("Gene Expression");
+    doc2.setPage("Differential Expression");
     doc2.setColumns(List.of());
     doc2.setFilters(List.of());
 
@@ -283,7 +283,7 @@ class ComparisonToolConfigMapperTest {
 
     // then
     assertThat(result1.getPage()).isEqualTo(ComparisonToolPageDto.MODEL_OVERVIEW);
-    assertThat(result2.getPage()).isEqualTo(ComparisonToolPageDto.GENE_EXPRESSION);
+    assertThat(result2.getPage()).isEqualTo(ComparisonToolPageDto.DIFFERENTIAL_EXPRESSION);
     assertThat(result3.getPage()).isEqualTo(ComparisonToolPageDto.DISEASE_CORRELATION);
   }
 }

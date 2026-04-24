@@ -6,6 +6,8 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleCategorizationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleCategorizationResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
@@ -21,6 +23,7 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestD
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelChatCompletionChunkDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveCategorizationRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestDto;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -124,6 +127,74 @@ public interface BattleApi {
         @Parameter(name = "BattleCreateRequestDto", description = "", required = true) @Valid @RequestBody BattleCreateRequestDto battleCreateRequestDto
     ) {
         return getDelegate().createBattle(battleCreateRequestDto);
+    }
+
+
+    /**
+     * POST /battles/{battleId}/categorizations : Create a battle categorization
+     * Manually categorize a battle. The created categorization is automatically set as the effective categorization.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @param battleCategorizationCreateRequestDto  (required)
+     * @return Battle categorization created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createBattleCategorization",
+        summary = "Create a battle categorization",
+        description = "Manually categorize a battle. The created categorization is automatically set as the effective categorization.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Battle categorization created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleCategorizationResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleCategorizationResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/battles/{battleId}/categorizations",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<BattleCategorizationResponseDto> createBattleCategorization(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
+        @Parameter(name = "BattleCategorizationCreateRequestDto", description = "", required = true) @Valid @RequestBody BattleCategorizationCreateRequestDto battleCategorizationCreateRequestDto
+    ) {
+        return getDelegate().createBattleCategorization(battleId, battleCategorizationCreateRequestDto);
     }
 
 
@@ -520,6 +591,61 @@ public interface BattleApi {
 
 
     /**
+     * GET /battles/{battleId}/categorizations : List battle categorizations
+     * Get all categorizations for a battle.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @return List of battle categorizations (status code 200)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "listBattleCategorizations",
+        summary = "List battle categorizations",
+        description = "Get all categorizations for a battle.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "List of battle categorizations", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BattleCategorizationResponseDto.class))),
+                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = BattleCategorizationResponseDto.class)))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/battles/{battleId}/categorizations",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<List<BattleCategorizationResponseDto>> listBattleCategorizations(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId
+    ) {
+        return getDelegate().listBattleCategorizations(battleId);
+    }
+
+
+    /**
      * GET /battles/{battleId}/validations : List battle validations
      * Get all validations for a battle (admin only).
      *
@@ -630,6 +756,71 @@ public interface BattleApi {
 
 
     /**
+     * POST /battles/{battleId}/categorizations/run : Run an automated categorization
+     * Run an automated AI categorization against a battle. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with an empty &#x60;categories&#x60; array to preserve the audit trail and avoid redundant re-classification. Returns 409 if the battle is not biomedical.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @return Categorization completed and persisted successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "runBattleCategorization",
+        summary = "Run an automated categorization",
+        description = "Run an automated AI categorization against a battle. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with an empty `categories` array to preserve the audit trail and avoid redundant re-classification. Returns 409 if the battle is not biomedical.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Categorization completed and persisted successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleCategorizationResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleCategorizationResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/battles/{battleId}/categorizations/run",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<BattleCategorizationResponseDto> runBattleCategorization(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId
+    ) {
+        return getDelegate().runBattleCategorization(battleId);
+    }
+
+
+    /**
      * POST /battles/{battleId}/validations/run : Run an automated validation method
      * Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
      *
@@ -691,6 +882,74 @@ public interface BattleApi {
         @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId
     ) {
         return getDelegate().runBattleValidation(battleId);
+    }
+
+
+    /**
+     * PATCH /battles/{battleId}/categorizations/effective : Set effective battle categorization
+     * Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical — the gate applies to both setting and clearing; non-biomedical battles are not eligible for any effective categorization state change.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @param setEffectiveCategorizationRequestDto  (required)
+     * @return Effective categorization updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "setEffectiveBattleCategorization",
+        summary = "Set effective battle categorization",
+        description = "Set or clear the effective categorization for a battle by pointing at a row from history. Pass null to clear. Returns 409 if the battle is not biomedical — the gate applies to both setting and clearing; non-biomedical battles are not eligible for any effective categorization state change.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Effective categorization updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PATCH,
+        value = "/battles/{battleId}/categorizations/effective",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<BattleDto> setEffectiveBattleCategorization(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
+        @Parameter(name = "SetEffectiveCategorizationRequestDto", description = "", required = true) @Valid @RequestBody SetEffectiveCategorizationRequestDto setEffectiveCategorizationRequestDto
+    ) {
+        return getDelegate().setEffectiveBattleCategorization(battleId, setEffectiveCategorizationRequestDto);
     }
 
 

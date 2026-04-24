@@ -94,10 +94,7 @@ class CustomNominatedDrugRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .build();
 
-    Sort sort = Sort.by(
-      Sort.Order.asc("principal_investigators"),
-      Sort.Order.desc("programs")
-    );
+    Sort sort = Sort.by(Sort.Order.asc("principal_investigators"), Sort.Order.desc("programs"));
     Pageable pageable = PageRequest.of(0, 10, sort);
 
     repository.findAll(pageable, query, List.of());
@@ -195,10 +192,7 @@ class CustomNominatedDrugRepositoryImplTest {
       .build();
 
     // Sort by both array fields simultaneously — would fail without scalar computation
-    Sort sort = Sort.by(
-      Sort.Order.asc("principal_investigators"),
-      Sort.Order.desc("programs")
-    );
+    Sort sort = Sort.by(Sort.Order.asc("principal_investigators"), Sort.Order.desc("programs"));
     Pageable pageable = PageRequest.of(0, 10, sort);
 
     repository.findAll(pageable, query, List.of());
@@ -218,9 +212,7 @@ class CustomNominatedDrugRepositoryImplTest {
     assertThat(pipelineString)
       .as("Should compute sort field for programs")
       .contains("programs_sort");
-    assertThat(pipelineString)
-      .as("Should use $reduce to concatenate elements")
-      .contains("$reduce");
+    assertThat(pipelineString).as("Should use $reduce to concatenate elements").contains("$reduce");
   }
 
   @Test
@@ -242,8 +234,8 @@ class CustomNominatedDrugRepositoryImplTest {
 
     Sort sort = Sort.by(
       Sort.Order.asc("principal_investigators"), // array
-      Sort.Order.asc("common_name"),             // string
-      Sort.Order.desc("total_nominations")       // scalar integer
+      Sort.Order.asc("common_name"), // string
+      Sort.Order.desc("total_nominations") // scalar integer
     );
     Pageable pageable = PageRequest.of(0, 10, sort);
 
@@ -286,7 +278,8 @@ class CustomNominatedDrugRepositoryImplTest {
       .principalInvestigators(List.of("PI One"))
       .programs(List.of("ACTDRx AD"))
       .totalNominations(List.of(3))
-      .yearFirstNominated(List.of(2022))
+      .initialNomination(List.of(2022))
+      .modality(List.of("Small molecule"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
@@ -306,6 +299,7 @@ class CustomNominatedDrugRepositoryImplTest {
     assertThat(pipelineString).contains("principal_investigators");
     assertThat(pipelineString).contains("programs");
     assertThat(pipelineString).contains("total_nominations");
-    assertThat(pipelineString).contains("year_first_nominated");
+    assertThat(pipelineString).contains("initial_nomination");
+    assertThat(pipelineString).contains("modality");
   }
 }

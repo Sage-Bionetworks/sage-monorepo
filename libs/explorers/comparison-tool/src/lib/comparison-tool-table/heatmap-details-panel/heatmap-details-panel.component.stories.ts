@@ -56,7 +56,7 @@ type Story = StoryObj<HeatmapDetailsPanelWrapperComponent>;
 
 export const Demo: Story = {};
 
-export const GeneExpression: Story = {
+export const DifferentialExpression: Story = {
   args: {
     data: {
       label: { left: 'Trem2', right: 'ENSMUSG00000023992' },
@@ -76,7 +76,7 @@ export const DiseaseCorrelation: Story = {
       heading: 'Disease Correlation (Consensus Network Modules)',
       subHeadings: [
         '3xTg-AD (4 months, Female)',
-        'Human Consensus Cluster A - ECM Organization | IFG module',
+        'ECM Organization - Consensus Cluster A | IFG module',
       ],
       valueLabel: 'Correlation',
       value: 0.29,

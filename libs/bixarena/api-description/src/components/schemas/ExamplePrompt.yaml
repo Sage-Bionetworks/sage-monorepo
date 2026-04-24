@@ -17,6 +17,17 @@ properties:
     type: boolean
     description: Whether this example prompt is currently active/visible for use.
     example: true
+  effectiveCategorizationId:
+    type: string
+    format: uuid
+    nullable: true
+    description: ID of the effective categorization for this prompt (null = not yet categorized)
+  category:
+    $ref: BiomedicalCategory.yaml
+    nullable: true
+    description: >-
+      Category from the effective categorization. Null if not yet categorized
+      or if the classifier could not assign a category.
   createdAt:
     type: string
     format: date-time

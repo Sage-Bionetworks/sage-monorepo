@@ -36,6 +36,12 @@ public class ExamplePromptEntity {
   @Column(name = "active", nullable = false)
   private boolean active;
 
+  @Column(name = "effective_categorization_id")
+  private UUID effectiveCategorizationId;
+
+  @Column(name = "created_by")
+  private UUID createdBy;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;

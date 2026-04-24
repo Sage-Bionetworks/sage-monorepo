@@ -1,0 +1,31 @@
+.close-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--p-text-muted-color);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+
+  &:hover {
+    background: var(--p-surface-300);
+    color: var(--p-text-color);
+  }
+}
+
+.heading {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--p-text-color);
+  margin: 0 0 0.5rem;
+  text-align: center;
+}

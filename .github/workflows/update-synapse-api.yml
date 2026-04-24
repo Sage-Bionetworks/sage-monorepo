@@ -10,8 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: update-synapse-api
@@ -33,7 +32,7 @@ jobs:
       image: ${{ steps.devcontainer.outputs.image }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - id: devcontainer
         name: Read .devcontainer/devcontainer.json
@@ -42,6 +41,9 @@ jobs:
   update-synapse-api:
     runs-on: ubuntu-latest
     needs: extract-devcontainer-image
+    permissions:
+      contents: write # peter-evans/create-pull-request commits to a new branch
+      pull-requests: write # peter-evans/create-pull-request opens/updates the PR
     env:
       # By default, Corepack prompts for a confirmation before downloading and enabling
       # a package manager. We disable the prompt here to ensure non-interactive execution.
@@ -70,7 +72,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Adjust ownership & prepare workspace (unprivileged)
         run: |
@@ -99,9 +101,17 @@ jobs:
       - name: Check for changes (unprivileged)
         id: check-changes
         run: |
-          # Run git status as ubuntu since workspace files are owned by ubuntu.
-          CHANGES=$(sudo -u ubuntu bash -lc "git -C \"$GITHUB_WORKSPACE\" status --porcelain")
-          if [ -z "$CHANGES" ]; then
+          # Stage all changes and run lint-staged (same as the pre-commit hook) with
+          # --allow-empty so it succeeds even when formatting produces no net diff.
+          # Anything still staged afterward is a true content change; an empty index
+          # means only cosmetic formatting differed and there is nothing to commit.
+          sudo -u ubuntu bash -lc '
+            set -euo pipefail
+            . ./dev-env.sh
+            git add -A
+            pnpm dlx lint-staged --relative --allow-empty
+          '
+          if sudo -u ubuntu bash -lc "git -C \"$GITHUB_WORKSPACE\" diff --cached --quiet"; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "::notice::No changes detected in the Synapse API generated artifacts. The specification has not changed since the last update. Skipping pull request creation."
           else
@@ -117,7 +127,7 @@ jobs:
         # only root-originated effects here are git commits / ref updates, which is acceptable.
         # To make this unprivileged in future, replace the action with explicit git commands run
         # under 'sudo -u ubuntu bash -lc ...', or add a thin wrapper that exports required env vars.
-        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7.0.11
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           branch: synapse/update-synapse-api
           delete-branch: true

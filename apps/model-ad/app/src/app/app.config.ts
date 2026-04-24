@@ -15,10 +15,11 @@ import {
   withComponentInputBinding,
   withInMemoryScrolling,
 } from '@angular/router';
-import { provideExplorersConfig } from '@sagebionetworks/explorers/services';
+import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client';
 import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
+import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { provideMarkdown } from 'ngx-markdown';
 import { MessageService } from 'primeng/api';
@@ -82,6 +83,7 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     { provide: UrlSerializer, useClass: CustomUrlSerializer },
+    provideLogger(LoggerService),
     MessageService,
     {
       provide: ErrorHandler,

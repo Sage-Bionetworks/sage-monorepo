@@ -173,7 +173,7 @@ public class DiseaseCorrelationSearchQueryDto {
    * @return categories
    */
   @NotNull @Size(min = 2, max = 2) 
-  @Schema(name = "categories", example = "[\"CONSENSUS NETWORK MODULES\",\"Consensus Cluster A - ECM Organization\"]", description = "Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory] ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "categories", example = "[\"CONSENSUS NETWORK MODULES\",\"ECM Organization - Consensus Cluster A\"]", description = "Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory] ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
   public List<String> getCategories() {
     return categories;

@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
+import { HttpContext } from '@angular/common/http';
 import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { HttpContext } from '@angular/common/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Panel, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import {
@@ -133,7 +133,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
         p.disabled = true;
       } else if (
         p.name === 'omics' &&
-        this.model?.gene_expression === null &&
+        this.model?.transcriptomics === null &&
         this.model?.disease_correlation === null
       ) {
         p.disabled = true;

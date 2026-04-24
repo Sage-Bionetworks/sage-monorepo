@@ -66,7 +66,6 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
       window.open(url, '_blank');
     },
     legendEnabled: false,
-    rowsPerPage: 10,
     rowIdDataKey: 'hgnc_symbol',
     allowPinnedImageDownload: false,
     defaultSort: [
@@ -128,9 +127,9 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
       inputData: selectedFilters['data'],
       initialNomination: selectedFilters['firstNominations']?.map(Number) ?? [],
       nominatingTeams: selectedFilters['teams'],
-      pharosClass: selectedFilters['pharosClass'],
+      pharosClass: selectedFilters['pharosClasses'],
       programs: selectedFilters['programs'],
-      totalNominations: selectedFilters['totalNominations']?.map(Number) ?? [],
+      totalNominations: selectedFilters['nominations']?.map(Number) ?? [],
       sortFields,
       sortOrders,
     };

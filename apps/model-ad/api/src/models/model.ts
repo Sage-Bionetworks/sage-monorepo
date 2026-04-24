@@ -44,7 +44,7 @@ const ModelSchema = new Schema<Model>(
     alzforum_id: { type: String, required: true },
     genotype: { type: String, required: true },
     aliases: { type: [String], required: true },
-    gene_expression: { type: String, required: true, default: null },
+    transcriptomics: { type: String, required: true, default: null },
     disease_correlation: { type: String, required: true, default: null },
     spatial_transcriptomics: { type: String, required: true, default: null },
     genetic_info: { type: [GeneticInfoSchema], required: true },

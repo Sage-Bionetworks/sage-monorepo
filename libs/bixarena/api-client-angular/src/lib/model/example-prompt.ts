@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { ExamplePromptSource } from './example-prompt-source';
+import { BiomedicalCategory } from './biomedical-category';
 
 /**
  * A self-contained example prompt for biomedical question answering.
@@ -26,6 +27,11 @@ export interface ExamplePrompt {
    * Whether this example prompt is currently active/visible for use.
    */
   active: boolean;
+  /**
+   * ID of the effective categorization for this prompt (null = not yet categorized)
+   */
+  effectiveCategorizationId?: string | null;
+  category?: BiomedicalCategory;
   /**
    * When the example prompt was created.
    */

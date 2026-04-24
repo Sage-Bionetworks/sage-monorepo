@@ -1,0 +1,34 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/battleId.yaml
+
+post:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Battle
+  summary: Run an automated categorization
+  description: >-
+    Run an automated AI categorization against a battle. Always returns 201 with
+    the persisted row — when the AI could not match any category, the row is
+    still persisted with an empty `categories` array to preserve the audit trail
+    and avoid redundant re-classification. Returns 409 if the battle is not
+    biomedical.
+  operationId: runBattleCategorization
+  responses:
+    '201':
+      description: Categorization completed and persisted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/BattleCategorizationResponse.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

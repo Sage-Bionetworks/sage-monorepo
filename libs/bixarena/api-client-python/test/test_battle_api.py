@@ -32,6 +32,13 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
+    def test_create_battle_categorization(self) -> None:
+        """Test case for create_battle_categorization
+
+        Create a battle categorization
+        """
+        pass
+
     def test_create_battle_evaluation(self) -> None:
         """Test case for create_battle_evaluation
 
@@ -74,6 +81,13 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
+    def test_list_battle_categorizations(self) -> None:
+        """Test case for list_battle_categorizations
+
+        List battle categorizations
+        """
+        pass
+
     def test_list_battle_validations(self) -> None:
         """Test case for list_battle_validations
 
@@ -88,10 +102,24 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
+    def test_run_battle_categorization(self) -> None:
+        """Test case for run_battle_categorization
+
+        Run an automated categorization
+        """
+        pass
+
     def test_run_battle_validation(self) -> None:
         """Test case for run_battle_validation
 
         Run an automated validation method
+        """
+        pass
+
+    def test_set_effective_battle_categorization(self) -> None:
+        """Test case for set_effective_battle_categorization
+
+        Set effective battle categorization
         """
         pass
 

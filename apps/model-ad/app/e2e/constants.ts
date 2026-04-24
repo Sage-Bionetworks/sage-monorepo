@@ -1,12 +1,12 @@
 export const COMPARISON_TOOL_PATHS: Record<string, string> = {
   'Model Overview': '/comparison/model',
-  'Gene Expression': '/comparison/expression',
+  'Differential Expression': '/comparison/expression',
   'Disease Correlation': '/comparison/correlation',
 };
 
 export const COMPARISON_TOOL_API_PATHS: Record<string, string> = {
   'Model Overview': '/comparison-tools/model-overview',
-  'Gene Expression': '/comparison-tools/gene-expression',
+  'Differential Expression': '/comparison-tools/transcriptomics',
   'Disease Correlation': '/comparison-tools/disease-correlation',
 };
 
@@ -18,7 +18,7 @@ export const COMPARISON_TOOL_DEFAULT_SORTS: Record<string, { field: string; orde
     { field: 'model_type', order: -1 },
     { field: 'name', order: 1 },
   ],
-  'Gene Expression': [
+  'Differential Expression': [
     { field: 'gene_symbol', order: 1 },
     { field: 'name', order: 1 },
   ],

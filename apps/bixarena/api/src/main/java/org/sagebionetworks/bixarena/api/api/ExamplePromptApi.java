@@ -6,9 +6,16 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCategorizationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCategorizationResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveCategorizationRequestDto;
+import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,6 +48,278 @@ public interface ExamplePromptApi {
     default ExamplePromptApiDelegate getDelegate() {
         return new ExamplePromptApiDelegate() {};
     }
+
+    /**
+     * POST /example-prompts : Create an example prompt
+     * Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
+     *
+     * @param examplePromptCreateRequestDto  (required)
+     * @return Example prompt created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createExamplePrompt",
+        summary = "Create an example prompt",
+        description = "Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.",
+        tags = { "Example Prompt" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Example prompt created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/example-prompts",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<ExamplePromptDto> createExamplePrompt(
+        @Parameter(name = "ExamplePromptCreateRequestDto", description = "", required = true) @Valid @RequestBody ExamplePromptCreateRequestDto examplePromptCreateRequestDto
+    ) {
+        return getDelegate().createExamplePrompt(examplePromptCreateRequestDto);
+    }
+
+
+    /**
+     * POST /example-prompts/{examplePromptId}/categorizations : Create an example prompt categorization
+     * Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
+     *
+     * @param examplePromptId The unique identifier of an example prompt (required)
+     * @param examplePromptCategorizationCreateRequestDto  (required)
+     * @return Example prompt categorization created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createExamplePromptCategorization",
+        summary = "Create an example prompt categorization",
+        description = "Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.",
+        tags = { "Example Prompt" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Example prompt categorization created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/example-prompts/{examplePromptId}/categorizations",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<ExamplePromptCategorizationResponseDto> createExamplePromptCategorization(
+        @Parameter(name = "examplePromptId", description = "The unique identifier of an example prompt", required = true, in = ParameterIn.PATH) @PathVariable("examplePromptId") UUID examplePromptId,
+        @Parameter(name = "ExamplePromptCategorizationCreateRequestDto", description = "", required = true) @Valid @RequestBody ExamplePromptCategorizationCreateRequestDto examplePromptCategorizationCreateRequestDto
+    ) {
+        return getDelegate().createExamplePromptCategorization(examplePromptId, examplePromptCategorizationCreateRequestDto);
+    }
+
+
+    /**
+     * DELETE /example-prompts/{examplePromptId} : Delete an example prompt
+     * Delete an example prompt.
+     *
+     * @param examplePromptId The unique identifier of an example prompt (required)
+     * @return Example prompt deleted successfully (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "deleteExamplePrompt",
+        summary = "Delete an example prompt",
+        description = "Delete an example prompt.",
+        tags = { "Example Prompt" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Example prompt deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/example-prompts/{examplePromptId}",
+        produces = { "application/problem+json" }
+    )
+    
+    default ResponseEntity<Void> deleteExamplePrompt(
+        @Parameter(name = "examplePromptId", description = "The unique identifier of an example prompt", required = true, in = ParameterIn.PATH) @PathVariable("examplePromptId") UUID examplePromptId
+    ) {
+        return getDelegate().deleteExamplePrompt(examplePromptId);
+    }
+
+
+    /**
+     * GET /example-prompts/{examplePromptId} : Get an example prompt
+     * Get an example prompt by ID.
+     *
+     * @param examplePromptId The unique identifier of an example prompt (required)
+     * @return Success (status code 200)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "getExamplePrompt",
+        summary = "Get an example prompt",
+        description = "Get an example prompt by ID.",
+        tags = { "Example Prompt" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/example-prompts/{examplePromptId}",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<ExamplePromptDto> getExamplePrompt(
+        @Parameter(name = "examplePromptId", description = "The unique identifier of an example prompt", required = true, in = ParameterIn.PATH) @PathVariable("examplePromptId") UUID examplePromptId
+    ) {
+        return getDelegate().getExamplePrompt(examplePromptId);
+    }
+
+
+    /**
+     * GET /example-prompts/{examplePromptId}/categorizations : List example prompt categorizations
+     * Get all categorizations for an example prompt.
+     *
+     * @param examplePromptId The unique identifier of an example prompt (required)
+     * @return List of example prompt categorizations (status code 200)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "listExamplePromptCategorizations",
+        summary = "List example prompt categorizations",
+        description = "Get all categorizations for an example prompt.",
+        tags = { "Example Prompt" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "List of example prompt categorizations", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class))),
+                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class)))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/example-prompts/{examplePromptId}/categorizations",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<List<ExamplePromptCategorizationResponseDto>> listExamplePromptCategorizations(
+        @Parameter(name = "examplePromptId", description = "The unique identifier of an example prompt", required = true, in = ParameterIn.PATH) @PathVariable("examplePromptId") UUID examplePromptId
+    ) {
+        return getDelegate().listExamplePromptCategorizations(examplePromptId);
+    }
+
 
     /**
      * GET /example-prompts : List example prompts
@@ -89,6 +368,197 @@ public interface ExamplePromptApi {
         @Parameter(name = "examplePromptSearchQuery", description = "The search query used to find and filter example prompts.", in = ParameterIn.QUERY) @Valid @Nullable ExamplePromptSearchQueryDto examplePromptSearchQuery
     ) {
         return getDelegate().listExamplePrompts(examplePromptSearchQuery);
+    }
+
+
+    /**
+     * POST /example-prompts/{examplePromptId}/categorizations/run : Run an automated categorization
+     * Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null &#x60;category&#x60; to preserve the audit trail and avoid redundant re-classification.
+     *
+     * @param examplePromptId The unique identifier of an example prompt (required)
+     * @return Categorization completed and persisted successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "runExamplePromptCategorization",
+        summary = "Run an automated categorization",
+        description = "Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null `category` to preserve the audit trail and avoid redundant re-classification.",
+        tags = { "Example Prompt" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Categorization completed and persisted successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptCategorizationResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/example-prompts/{examplePromptId}/categorizations/run",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<ExamplePromptCategorizationResponseDto> runExamplePromptCategorization(
+        @Parameter(name = "examplePromptId", description = "The unique identifier of an example prompt", required = true, in = ParameterIn.PATH) @PathVariable("examplePromptId") UUID examplePromptId
+    ) {
+        return getDelegate().runExamplePromptCategorization(examplePromptId);
+    }
+
+
+    /**
+     * PATCH /example-prompts/{examplePromptId}/categorizations/effective : Set effective example prompt categorization
+     * Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.
+     *
+     * @param examplePromptId The unique identifier of an example prompt (required)
+     * @param setEffectiveCategorizationRequestDto  (required)
+     * @return Effective categorization updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "setEffectiveExamplePromptCategorization",
+        summary = "Set effective example prompt categorization",
+        description = "Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.",
+        tags = { "Example Prompt" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Effective categorization updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PATCH,
+        value = "/example-prompts/{examplePromptId}/categorizations/effective",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<ExamplePromptDto> setEffectiveExamplePromptCategorization(
+        @Parameter(name = "examplePromptId", description = "The unique identifier of an example prompt", required = true, in = ParameterIn.PATH) @PathVariable("examplePromptId") UUID examplePromptId,
+        @Parameter(name = "SetEffectiveCategorizationRequestDto", description = "", required = true) @Valid @RequestBody SetEffectiveCategorizationRequestDto setEffectiveCategorizationRequestDto
+    ) {
+        return getDelegate().setEffectiveExamplePromptCategorization(examplePromptId, setEffectiveCategorizationRequestDto);
+    }
+
+
+    /**
+     * PATCH /example-prompts/{examplePromptId} : Update an example prompt
+     * Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+     *
+     * @param examplePromptId The unique identifier of an example prompt (required)
+     * @param examplePromptUpdateRequestDto  (required)
+     * @return Example prompt updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "updateExamplePrompt",
+        summary = "Update an example prompt",
+        description = "Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.",
+        tags = { "Example Prompt" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Example prompt updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PATCH,
+        value = "/example-prompts/{examplePromptId}",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<ExamplePromptDto> updateExamplePrompt(
+        @Parameter(name = "examplePromptId", description = "The unique identifier of an example prompt", required = true, in = ParameterIn.PATH) @PathVariable("examplePromptId") UUID examplePromptId,
+        @Parameter(name = "ExamplePromptUpdateRequestDto", description = "", required = true) @Valid @RequestBody ExamplePromptUpdateRequestDto examplePromptUpdateRequestDto
+    ) {
+        return getDelegate().updateExamplePrompt(examplePromptId, examplePromptUpdateRequestDto);
     }
 
 }

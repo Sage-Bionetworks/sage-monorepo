@@ -17,3 +17,4 @@ proteomicssrm,proteomics_srm.json
 genesbiodomains,genes_biodomains.json
 biodomaininfo,biodomain_info.json
 uiconfig,ui_config.json
+druginfo,drug_info.json

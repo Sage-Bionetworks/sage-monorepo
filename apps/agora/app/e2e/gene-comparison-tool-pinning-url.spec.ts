@@ -20,6 +20,7 @@ import {
   expectPinnedGenesCountText,
   expectPinnedProteinsCountText,
   expectTooManyPinnedGenesToast,
+  expectTooManyPinnedProteinsToast,
   formatPinnedGenesQueryParam,
   getPinnedItemsFromUrl,
 } from './helpers/gct-pinning';
@@ -213,10 +214,11 @@ test.describe('GCT: Pinning Genes from URL', () => {
       (uniProtId) => `${geneWithMultipleProteinsTMT.ensemblId}${uniProtId}`,
     );
     const allProteins = [...fiftyProteinsToFiftyUniqueGenesTMT, ...oneGeneWithManyProteins];
+    const sortedFiftyProteins = [...fiftyProteinsToFiftyUniqueGenesTMT].sort();
     const expectedPinnedProteins = [
-      ...fiftyProteinsToFiftyUniqueGenesTMT.slice(0, -1),
+      ...sortedFiftyProteins.slice(0, -1),
       ...oneGeneWithManyProteins,
-    ];
+    ].sort();
 
     const url = `${URL_GCT_PROTEIN_TMT}&${formatPinnedGenesQueryParam(allProteins)}`;
 
@@ -228,6 +230,13 @@ test.describe('GCT: Pinning Genes from URL', () => {
       await expectPinnedGenesCountText(page, 50);
       await confirmPinnedItemsCount(page, expectedPinnedProteins.length);
       await expectPinnedProteinsCountText(page, expectedPinnedProteins.length);
+      await expectTooManyPinnedProteinsToast(page, 54);
+    });
+
+    await test.step('confirm url dropped 51st gene', () => {
+      const geneProteins = getPinnedItemsFromUrl(page.url());
+      expect(geneProteins).toHaveLength(expectedPinnedProteins.length);
+      expect(geneProteins).toEqual(expectedPinnedProteins);
     });
   });
 

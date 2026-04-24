@@ -158,6 +158,64 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     ).toBe('Abca7_V1599M_Plaque_Size_(Thio-S)_Hippocampus_Female');
   });
 
+  it('should generate CSV data for an evidence type', async () => {
+    const mockModelDataList: ModelData[] = [
+      {
+        name: 'TestModel',
+        evidence_type: 'NfL',
+        tissue: 'Brain',
+        age: '4 months',
+        units: 'pg/mg',
+        y_axis_max: 1000,
+        data: [
+          { sex: Sex.Female, individual_id: '100', value: 42.5, genotype: 'TestModel' },
+          { sex: Sex.Male, individual_id: '101', value: 55.1, genotype: 'Control' },
+        ],
+      },
+    ];
+
+    const { component } = await setup(
+      { ...modelMock, pathology: mockModelDataList },
+      mockTitle,
+      validWikiParams,
+    );
+
+    const csv = component.generateBoxplotsCsvData('NfL');
+    expect(csv[0]).toEqual([
+      'name',
+      'evidence_type',
+      'tissue',
+      'age',
+      'sex',
+      'genotype',
+      'individual_id',
+      'value',
+      'units',
+    ]);
+    expect(csv[1]).toEqual([
+      'TestModel',
+      'NfL',
+      'Brain',
+      '4 months',
+      'Female',
+      'TestModel',
+      '100',
+      '42.5',
+      'pg/mg',
+    ]);
+    expect(csv[2]).toEqual([
+      'TestModel',
+      'NfL',
+      'Brain',
+      '4 months',
+      'Male',
+      'Control',
+      '101',
+      '55.1',
+      'pg/mg',
+    ]);
+  });
+
   it('should generate boxplots zip filename correctly', async () => {
     const { component } = await setup();
     expect(

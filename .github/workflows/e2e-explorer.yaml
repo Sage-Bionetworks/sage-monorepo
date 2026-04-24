@@ -6,6 +6,13 @@ on:
         required: true
         type: string
         description: The name of the Explorer to run e2e tests for
+    secrets:
+      SYNAPSE_AUTH_TOKEN:
+        required: false
+        description: Synapse PAT for explorer data sources
+
+permissions:
+  contents: read
 
 jobs:
   validate-explorer-input:
@@ -18,62 +25,19 @@ jobs:
             echo "Invalid Explorer input: ${{ inputs.explorer }}"
             exit 1
           fi
-  check-explorer-affected:
-    needs: validate-explorer-input
-    timeout-minutes: 15
-    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
-    outputs:
-      explorer_affected: ${{ steps.explorer_affected.outputs.affected }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          # We need to fetch all branches and commits so that Nx affected has a base to compare
-          # against.
-          fetch-depth: 0
-          persist-credentials: false
-          # By default, actions/checkout@v4 will checkout the main branch instead of the merge
-          # commit when when using pull_request_target. It is currently difficult to checkout the
-          # merge commit in this context. The current solution is to checkout the PR HEAD instead
-          # and enable the branch protection rule "Require branches to be up to date before
-          # merging".
-          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.pull_request.head.sha || github.ref }}
-
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
-
-      - name: Set up the dev container
-        id: setup-dev-container
-        uses: ./.github/actions/setup-dev-container
-
-      - name: Check if Explorer was affected
-        id: explorer_affected
-        run: |
-          IFS=',' read -ra PROJECTS <<< "${{ steps.setup-dev-container.outputs.affected_projects }}"
-          for project in "${PROJECTS[@]}"; do
-            if [[ "$project" == "${{ inputs.explorer }}"-* ]]; then
-              echo "affected=true" >> "${GITHUB_OUTPUT}"
-              exit 0
-            fi
-          done
-          echo "affected=false" >> "${GITHUB_OUTPUT}"
-
-      - name: Remove the dev container
-        run: docker rm -f sage_devcontainer
-
   run-explorer-e2e-tests:
-    needs: check-explorer-affected
-    if: needs.check-explorer-affected.outputs.explorer_affected == 'true'
+    needs: validate-explorer-input
     # The explorer and explorer-pr environments should contain the same secrets. However, the explorer
     # environment should be configured to run workflows automatically and should only be used when
     # the workflow is running against trusted code. The explorer-pr environment should be configured
     # to require an authorized user's approval to run the workflow, so should be used when running
-    # against untrused code, e.g. PRs from forked repos.
+    # against untrusted code, e.g. PRs from forked repos.
     environment: ${{ github.event_name == 'pull_request_target' &&
       github.event.pull_request.head.repo.full_name != github.repository && format('{0}-pr', inputs.explorer) || inputs.explorer }}
     timeout-minutes: 60
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare
           # against.
@@ -92,30 +56,48 @@ jobs:
         run: git switch -c new-branch
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
+        uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
 
       - name: Set up the dev container
         id: setup-dev-container
         uses: ./.github/actions/setup-dev-container
 
+      - name: Check if Explorer was affected
+        id: explorer_affected
+        run: |
+          IFS=',' read -ra PROJECTS <<< "${{ steps.setup-dev-container.outputs.affected_projects }}"
+          for project in "${PROJECTS[@]}"; do
+            if [[ "$project" == "${{ inputs.explorer }}"-* ]]; then
+              echo "affected=true" >> "${GITHUB_OUTPUT}"
+              exit 0
+            fi
+          done
+          echo "affected=false" >> "${GITHUB_OUTPUT}"
+
       - name: Install Playwright Browsers
+        if: ${{ steps.explorer_affected.outputs.affected == 'true' }}
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && npx playwright install --with-deps"
 
       - name: Setup Explorer
+        if: ${{ steps.explorer_affected.outputs.affected == 'true' }}
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && bash ./tools/setup-projects.sh ${{ inputs.explorer }}"
 
       - name: Build Explorer
+        if: ${{ steps.explorer_affected.outputs.affected == 'true' }}
         env:
           cmd: '${{ inputs.explorer }}-build-images'
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && ${cmd}"
 
+      # SYNAPSE_AUTH_TOKEN must be passed explicitly from the caller workflow (not via
+      # `secrets: inherit`) so only this one secret is exposed to the reusable workflow.
       - name: Write Synapse PAT for Explorer
+        if: ${{ steps.explorer_affected.outputs.affected == 'true' }}
         run: |
           env_filename="apps/${{ inputs.explorer }}/data/.env"
           if [ -f "$env_filename" ]; then
@@ -126,6 +108,7 @@ jobs:
 
       - name: Start Explorer
         id: start-explorer
+        if: ${{ steps.explorer_affected.outputs.affected == 'true' }}
         timeout-minutes: 40
         env:
           cmd: 'nx run ${{ inputs.explorer }}-apex:serve-detach'
@@ -134,7 +117,7 @@ jobs:
               && ${cmd}"
 
       - name: Write out Explorer data logs
-        if: ${{ failure() }}
+        if: ${{ failure() && steps.explorer_affected.outputs.affected == 'true' }}
         env:
           cmd: 'docker logs ${{ inputs.explorer }}-data > data-logs.txt'
         run: |
@@ -142,14 +125,15 @@ jobs:
               && ${cmd}"
 
       - name: Upload Explorer data logs
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        if: ${{ failure() && steps.explorer_affected.outputs.affected == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'data-logs-${{ inputs.explorer }}'
           path: data-logs.txt
           retention-days: 5
 
       - name: Run Explorer e2e tests
+        if: ${{ steps.explorer_affected.outputs.affected == 'true' }}
         env:
           cmd: 'CI=true nx run ${{ inputs.explorer }}-app:e2e --no-cloud'
         run: |
@@ -157,16 +141,19 @@ jobs:
               && ${cmd}"
 
       - name: Stop Explorer
+        if: ${{ always() && steps.explorer_affected.outputs.affected == 'true' }}
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && workspace-docker-stop"
 
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() && steps.start-explorer.conclusion != 'failure' }}
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: ${{ !cancelled() && steps.start-explorer.conclusion != 'failure' && steps.explorer_affected.outputs.affected == 'true' }}
         with:
           name: 'playwright-report-${{ inputs.explorer }}'
           path: playwright-report/
           retention-days: 5
 
       - name: Remove the dev container
+        if: ${{ always() }}
         run: docker rm -f sage_devcontainer

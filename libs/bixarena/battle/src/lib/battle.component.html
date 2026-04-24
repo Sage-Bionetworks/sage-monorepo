@@ -1,3 +1,90 @@
-<div class="container">
-  <p>BixarenaBattle works!</p>
+<div class="page-content shell">
+  @if (state.phase() === 'landing') {
+    <section class="landing">
+      <div class="hero">
+        <h1 class="title">Bio<em>Arena</em></h1>
+        <p class="subtitle">
+          Discover how different AIs answer biomedical questions.<br />
+          No expertise needed — just vote for the response you trust.
+        </p>
+      </div>
+      <bixarena-example-prompts (promptSelect)="onPromptSubmit($event)" />
+      <div class="composer-group">
+        <bixarena-prompt-composer
+          placeholder="Ask anything biomedical..."
+          [maxLength]="state.promptLengthLimit"
+          [disabled]="state.phase() === 'creating'"
+          (promptSubmit)="onPromptSubmit($event)"
+        />
+        <p class="disclaimer">
+          AI may make mistakes. Do not include sensitive or personal information.
+        </p>
+      </div>
+    </section>
+  }
+
+  @if (state.phase() !== 'landing') {
+    <section class="battle-view">
+      <div class="rail">
+        @for (i of state.promptUseDots; track i) {
+          <span
+            class="rd"
+            [class.done]="i <= state.completedMatches()"
+            [class.now]="i === state.currentMatch() && !state.allMatchesComplete()"
+            [class.fut]="i > state.currentMatch()"
+          ></span>
+        }
+        @if (state.allMatchesComplete()) {
+          <span class="rl complete">You've stress-tested this question! Try a new one.</span>
+        } @else {
+          <span class="rl">Match {{ state.currentMatch() }} / {{ state.promptUseLimit }}</span>
+        }
+      </div>
+      <div class="panels">
+        <bixarena-model-panel
+          modelId="model1"
+          [streamState]="state.model1Stream()"
+          [modelName]="state.phase() === 'reveal' ? (state.model1()?.name ?? null) : null"
+          [selectedOutcome]="state.selectedOutcome()"
+          [hoveredModel]="hoverSide()"
+          (retry)="state.retry()"
+        />
+        <bixarena-model-panel
+          modelId="model2"
+          [streamState]="state.model2Stream()"
+          [modelName]="state.phase() === 'reveal' ? (state.model2()?.name ?? null) : null"
+          [selectedOutcome]="state.selectedOutcome()"
+          [hoveredModel]="hoverSide()"
+          (retry)="state.retry()"
+        />
+      </div>
+      <bixarena-voting-bar
+        [phase]="state.phase()"
+        [canVote]="state.canVote()"
+        [canReuse]="state.canReuse()"
+        (vote)="onVote($event)"
+        (hoverSide)="hoverSide.set($event)"
+        (newBattle)="onNewBattle()"
+        (samePrompt)="onSamePromptSubmit()"
+      />
+      <div class="btm">
+        <bixarena-prompt-composer
+          placeholder="Ask a follow-up..."
+          [maxLength]="state.promptLengthLimit"
+          [disabled]="state.phase() !== 'voting'"
+          (promptSubmit)="onFollowUpSubmit($event)"
+        />
+      </div>
+      <p class="disclaimer">
+        AI may make mistakes. Do not include sensitive or personal information.
+      </p>
+    </section>
+  }
 </div>
+
+<bixarena-onboarding-modal
+  [(visible)]="gate.showOnboardingModal"
+  [termsUrl]="termsUrl"
+  (agreed)="gate.onOnboardingComplete($event)"
+  (dismissed)="gate.onOnboardingDismiss()"
+/>

@@ -64,7 +64,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       window.open(url, '_blank');
     },
     legendEnabled: false,
-    rowsPerPage: 10,
     rowIdDataKey: 'name',
     allowPinnedImageDownload: false,
     defaultSort: [

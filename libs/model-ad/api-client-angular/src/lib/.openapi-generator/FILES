@@ -5,10 +5,10 @@ api/api.ts
 api/comparison-tool-config.service.ts
 api/data-version.service.ts
 api/disease-correlation.service.ts
-api/gene-expression-individual.service.ts
-api/gene-expression.service.ts
 api/model-overview.service.ts
 api/model.service.ts
+api/transcriptomics-individual.service.ts
+api/transcriptomics.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -24,11 +24,6 @@ model/disease-correlation-search-query.ts
 model/disease-correlation.ts
 model/disease-correlations-page.ts
 model/fold-change-result.ts
-model/gene-expression-individual-filter-query.ts
-model/gene-expression-individual.ts
-model/gene-expression-search-query.ts
-model/gene-expression.ts
-model/gene-expressions-page.ts
 model/genetic-info.ts
 model/individual-data.ts
 model/item-filter-type-query.ts
@@ -44,5 +39,10 @@ model/page-metadata.ts
 model/search-result.ts
 model/sex-cohort.ts
 model/sex.ts
+model/transcriptomics-individual-filter-query.ts
+model/transcriptomics-individual.ts
+model/transcriptomics-page.ts
+model/transcriptomics-search-query.ts
+model/transcriptomics.ts
 param.ts
 variables.ts

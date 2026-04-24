@@ -29,12 +29,12 @@ jobs:
       DOCKERFILE: .github/.devcontainer/Dockerfile
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 1
 
       - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
+        uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5 # v3.3.0
         with:
           dockerfile: ${{ env.DOCKERFILE }}
 
@@ -59,7 +59,7 @@ jobs:
       image_digest: ${{ steps.push.outputs.image_digest }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 1
 
@@ -143,7 +143,7 @@ jobs:
           done
 
       - name: Generate SBOM for Docker image
-        uses: anchore/sbom-action@df80a981bc6edbc4e220a492d3cbe9f5547a6e75 # v0.17.9
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
         env:
           IMAGE: ${{ steps.meta_sha.outputs.tags }}
         with:
@@ -165,7 +165,7 @@ jobs:
     steps:
       - name: Attest the provenance of the Docker image build
         if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
         id: attest
         with:
           subject-name: ${{ needs.build-and-push.outputs.image }}
@@ -217,9 +217,15 @@ jobs:
           IMAGE: ${{ needs.build-and-push.outputs.image }}
           IMAGE_DIGEST: ${{ needs.build-and-push.outputs.image_digest }}
         run: |
+          # Skip uploading to the Rekor transparency log because the SBOM (~3.5MB)
+          # exceeds Rekor's entry size limit. The attestation is still signed via
+          # OIDC + Fulcio and attached to the image in GHCR, but will not appear
+          # in the public Rekor log. Note: cosign sign above still uses tlog.
+          # --tlog-upload=false is valid in v2.x; deprecated/broken in v3 — see sigstore/cosign#4503
           cosign attest --yes \
             --type spdxjson \
             --predicate sbom.spdx.json \
+            --tlog-upload=false \
             ${IMAGE}@${IMAGE_DIGEST}
 
       - name: Verify the attestation
@@ -227,10 +233,13 @@ jobs:
           set -x
           # Redirect stdout to null to prevent the command from hanging randomly.
           # See https://github.com/sigstore/cosign/issues/3602
+          # --insecure-ignore-tlog required since the attestation was created with
+          # --tlog-upload=false due to SBOM size constraints.
           cosign verify-attestation \
             --certificate-oidc-issuer https://token.actions.githubusercontent.com \
             --certificate-identity "https://github.com/${{ github.repository }}/${WORKFLOW_FILE}@${{ github.ref }}" \
             --type spdxjson \
+            --insecure-ignore-tlog \
             ${{ needs.build-and-push.outputs.image }} \
             1>/dev/null
 

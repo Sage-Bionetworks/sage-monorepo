@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.api.exception.BattleCategorizationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.BattleValidationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.ModelNotFoundException;
@@ -18,6 +19,7 @@ import org.sagebionetworks.bixarena.api.model.dto.PageMetadataDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.BattleMapper;
+import org.sagebionetworks.bixarena.api.model.repository.BattleCategorizationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
@@ -37,6 +39,8 @@ public class BattleService {
 
   private final BattleRepository battleRepository;
   private final BattleValidationRepository battleValidationRepository;
+  private final BattleCategorizationRepository battleCategorizationRepository;
+  private final BattleCategorizationService battleCategorizationService;
   private final ModelRepository modelRepository;
   private final StatsCacheService statsCacheService;
   private final BattleMapper battleMapper = new BattleMapper();
@@ -187,6 +191,39 @@ public class BattleService {
     return battleMapper.convertToDto(updated);
   }
 
+  /**
+   * Sets or clears the effective categorization for a battle by pointing at a row from history.
+   * Pass {@code null} to clear. The battle must be biomedical regardless of whether we are
+   * setting or clearing — non-biomedical battles are not eligible for any categorization state
+   * change. If an admin needs to clear a stale categorization, they must first override
+   * validation to biomedical.
+   */
+  @Transactional
+  public BattleDto setEffectiveCategorization(UUID battleId, UUID categorizationId) {
+    log.info(
+      "Setting effective categorization for battle {}: {}",
+      battleId, categorizationId
+    );
+
+    BattleEntity battle = getBattleEntity(battleId);
+    battleCategorizationService.assertBiomedicalOrThrow(battleId);
+
+    if (categorizationId != null) {
+      battleCategorizationRepository.findById(categorizationId)
+        .filter(c -> c.getBattleId().equals(battleId))
+        .orElseThrow(() -> new BattleCategorizationNotFoundException(
+          String.format(
+            "Battle categorization %s not found for battle %s",
+            categorizationId, battleId
+          )
+        ));
+    }
+
+    battle.setEffectiveCategorizationId(categorizationId);
+    BattleEntity updated = battleRepository.save(battle);
+    return battleMapper.convertToDto(updated);
+  }
+
   @Transactional
   public void deleteBattle(UUID battleId) {
     log.info("Deleting battle with ID: {}", battleId);
@@ -203,9 +240,7 @@ public class BattleService {
     return battleRepository
       .findById(battleId)
       .orElseThrow(() ->
-        new BattleNotFoundException(
-          String.format("The battle with ID %s does not exist.", battleId)
-        )
+        new BattleNotFoundException("Battle not found: " + battleId)
       );
   }
 
@@ -213,7 +248,7 @@ public class BattleService {
     return modelRepository
       .findById(modelId)
       .orElseThrow(() ->
-        new ModelNotFoundException(String.format("The model with ID %s does not exist.", modelId))
+        new ModelNotFoundException("Model not found: " + modelId)
       );
   }
 

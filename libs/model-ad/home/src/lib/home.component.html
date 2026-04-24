@@ -6,15 +6,15 @@
           <h1 class="home-heading">Find the right model for your research</h1>
         </div>
         <p class="description">
-          Explore gene expression and pathology data from next-generation mouse models of
-          Alzheimer's Disease (AD) developed by the MODEL-AD consortium.
+          Explore next-generation mouse models of Alzheimer's Disease (AD) generated, characterized,
+          and validated by the MODEL-AD consortium.
         </p>
       </div>
       <div class="card-container">
         <explorers-home-card
           [title]="'Model Overview'"
           [description]="
-            'View summary information about the available mouse models, see what data is currently available, and quickly navigate to detailed information and results. New data and analyses will be incorporated as they are available.'
+            'See an overview of the mouse models and currently available results, and quickly navigate to detailed model-specific information, source data, and visualizations.'
           "
           [routerLink]="ROUTE_PATHS.MODEL_OVERVIEW"
           [imagePath]="'model-ad-assets/images/mouse-with-brain-network.svg'"
@@ -23,7 +23,7 @@
         <explorers-home-card
           [title]="'Model Search'"
           [description]="
-            'Find a mouse model by name, JAX ID, or RRID to view detailed information and experimental evidence, including pathology and biomarker results.'
+            'Find a mouse model by name, JAX ID, or RRID to explore <strong>Biomarker</strong> data, <strong>Pathology</strong> results, and detailed model information.'
           "
         >
           <model-ad-search-input
@@ -38,7 +38,7 @@
           [description]="
             'Explore differential RNA expression results for mouse models by sex and age. Build custom result sets by sorting, filtering, and searching for results of particular interest.'
           "
-          [routerLink]="ROUTE_PATHS.GENE_EXPRESSION"
+          [routerLink]="ROUTE_PATHS.DIFFERENTIAL_EXPRESSION"
           [imagePath]="'model-ad-assets/images/gene-expression.svg'"
           [imageAltText]="'gene expression icon'"
         />

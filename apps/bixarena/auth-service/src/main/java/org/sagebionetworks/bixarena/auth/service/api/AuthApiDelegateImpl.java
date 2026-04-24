@@ -231,6 +231,9 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       url(appProperties.auth().redirectUri().toString()) +
       "&scope=" +
       url("openid profile email") +
+      // Request Synapse-specific "userid" claim (numeric ID, e.g. 3417574).
+      // The standard OIDC "sub" is an opaque pairwise identifier, not the numeric ID.
+      // The numeric ID is needed to construct the Synapse profile image URL.
       "&claims=" +
       url("{\"id_token\":{\"userid\":null}}") +
       "&state=" +

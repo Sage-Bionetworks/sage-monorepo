@@ -10,22 +10,30 @@ on:
       - synchronize
   merge_group:
 
+permissions:
+  contents: read
+
 env:
   # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   HEAD_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
   HEAD_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
   NX_BRANCH: ${{ github.event_name == 'pull_request' && github.event.number || github.ref_name }}
-  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
 
 jobs:
   push:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     timeout-minutes: 45
     if: ${{ github.event_name != 'pull_request' }}
+    permissions:
+      contents: read
+      packages: write # push images to ghcr.io
     env:
+      # Scoped to this job (not workflow-level) so the secret is not exposed to the `pr`
+      # job, which executes PR-controlled code from fork checkouts.
+      NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_WRITE }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare
@@ -33,7 +41,7 @@ jobs:
           fetch-depth: 0
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
+        uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
@@ -72,16 +80,22 @@ jobs:
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"
 
       - name: Build and publish the images of the affected projects
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_ACTOR: ${{ github.actor }}
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin \
-            && nx affected --target=build-image --configuration=edge"
+          devcontainer exec --workspace-folder ../sage-monorepo \
+            --remote-env GH_TOKEN="$GH_TOKEN" \
+            --remote-env GH_ACTOR="$GH_ACTOR" \
+            bash -c '. ./dev-env.sh \
+            && echo "$GH_TOKEN" | docker login ghcr.io -u "$GH_ACTOR" --password-stdin \
+            && nx affected --target=build-image --configuration=edge'
 
       - name: Upload Sentry sourcemaps for the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo \
-            --remote-env SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
-            --remote-env SENTRY_RELEASE=$SENTRY_RELEASE \
+            --remote-env SENTRY_AUTH_TOKEN="$SENTRY_AUTH_TOKEN" \
+            --remote-env SENTRY_RELEASE="$SENTRY_RELEASE" \
             bash -c ". ./dev-env.sh \
             && nx affected --target=sentry-sourcemaps"
         env:
@@ -97,7 +111,7 @@ jobs:
     # Runs for any pull_request (fork or same-repo)
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         name: Checkout merge commit
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare
@@ -110,7 +124,7 @@ jobs:
         run: git switch -c new-branch
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
+        uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container

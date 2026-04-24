@@ -96,35 +96,29 @@
 
   table.p-datatable-table {
     box-sizing: border-box;
-    max-width: 100%;
-    table-layout: fixed;
+    min-width: 100%;
   }
 
   th,
   td {
     box-sizing: border-box;
-    max-width: 100%;
     min-width: 0;
     overflow: hidden;
-  }
-
-  th {
     white-space: normal;
-  }
-
-  td {
-    white-space: nowrap;
   }
 
   .p-datatable-thead,
   .p-datatable-tbody {
     tr {
       display: flex;
+      min-width: 100%;
+      width: max-content;
     }
 
     td,
     th {
       display: flex;
+      flex-shrink: 0;
       align-items: center;
       justify-content: flex-start;
       border-bottom: none !important;

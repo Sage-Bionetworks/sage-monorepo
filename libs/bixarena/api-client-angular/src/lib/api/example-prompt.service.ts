@@ -25,11 +25,23 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
+import { ExamplePrompt } from '../model/example-prompt';
+// @ts-ignore
+import { ExamplePromptCategorizationCreateRequest } from '../model/example-prompt-categorization-create-request';
+// @ts-ignore
+import { ExamplePromptCategorizationResponse } from '../model/example-prompt-categorization-response';
+// @ts-ignore
+import { ExamplePromptCreateRequest } from '../model/example-prompt-create-request';
+// @ts-ignore
 import { ExamplePromptPage } from '../model/example-prompt-page';
 // @ts-ignore
 import { ExamplePromptSearchQuery } from '../model/example-prompt-search-query';
 // @ts-ignore
+import { ExamplePromptUpdateRequest } from '../model/example-prompt-update-request';
+// @ts-ignore
 import { RateLimitError } from '../model/rate-limit-error';
+// @ts-ignore
+import { SetEffectiveCategorizationRequest } from '../model/set-effective-categorization-request';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -108,6 +120,578 @@ export class ExamplePromptService {
       throw Error('key may not be null if value is not object or array');
     }
     return httpParams;
+  }
+
+  /**
+   * Create an example prompt
+   * Create a new example prompt. Newly created prompts are inactive; a reviewer publishes them via PATCH. AI auto-categorization runs asynchronously after creation.
+   * @param examplePromptCreateRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public createExamplePrompt(
+    examplePromptCreateRequest: ExamplePromptCreateRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<ExamplePrompt>;
+  public createExamplePrompt(
+    examplePromptCreateRequest: ExamplePromptCreateRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<ExamplePrompt>>;
+  public createExamplePrompt(
+    examplePromptCreateRequest: ExamplePromptCreateRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<ExamplePrompt>>;
+  public createExamplePrompt(
+    examplePromptCreateRequest: ExamplePromptCreateRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (examplePromptCreateRequest === null || examplePromptCreateRequest === undefined) {
+      throw new Error(
+        'Required parameter examplePromptCreateRequest was null or undefined when calling createExamplePrompt.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/example-prompts`;
+    return this.httpClient.request<ExamplePrompt>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: examplePromptCreateRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Create an example prompt categorization
+   * Manually categorize an example prompt. The created categorization is automatically set as the effective categorization.
+   * @param examplePromptId The unique identifier of an example prompt
+   * @param examplePromptCategorizationCreateRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public createExamplePromptCategorization(
+    examplePromptId: string,
+    examplePromptCategorizationCreateRequest: ExamplePromptCategorizationCreateRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<ExamplePromptCategorizationResponse>;
+  public createExamplePromptCategorization(
+    examplePromptId: string,
+    examplePromptCategorizationCreateRequest: ExamplePromptCategorizationCreateRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<ExamplePromptCategorizationResponse>>;
+  public createExamplePromptCategorization(
+    examplePromptId: string,
+    examplePromptCategorizationCreateRequest: ExamplePromptCategorizationCreateRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<ExamplePromptCategorizationResponse>>;
+  public createExamplePromptCategorization(
+    examplePromptId: string,
+    examplePromptCategorizationCreateRequest: ExamplePromptCategorizationCreateRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (examplePromptId === null || examplePromptId === undefined) {
+      throw new Error(
+        'Required parameter examplePromptId was null or undefined when calling createExamplePromptCategorization.',
+      );
+    }
+    if (
+      examplePromptCategorizationCreateRequest === null ||
+      examplePromptCategorizationCreateRequest === undefined
+    ) {
+      throw new Error(
+        'Required parameter examplePromptCategorizationCreateRequest was null or undefined when calling createExamplePromptCategorization.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/example-prompts/${this.configuration.encodeParam({ name: 'examplePromptId', value: examplePromptId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid' })}/categorizations`;
+    return this.httpClient.request<ExamplePromptCategorizationResponse>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: examplePromptCategorizationCreateRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Delete an example prompt
+   * Delete an example prompt.
+   * @param examplePromptId The unique identifier of an example prompt
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public deleteExamplePrompt(
+    examplePromptId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any>;
+  public deleteExamplePrompt(
+    examplePromptId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<any>>;
+  public deleteExamplePrompt(
+    examplePromptId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<any>>;
+  public deleteExamplePrompt(
+    examplePromptId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (examplePromptId === null || examplePromptId === undefined) {
+      throw new Error(
+        'Required parameter examplePromptId was null or undefined when calling deleteExamplePrompt.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/example-prompts/${this.configuration.encodeParam({ name: 'examplePromptId', value: examplePromptId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid' })}`;
+    return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      responseType: <any>responseType_,
+      withCredentials: this.configuration.withCredentials,
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * Get an example prompt
+   * Get an example prompt by ID.
+   * @param examplePromptId The unique identifier of an example prompt
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getExamplePrompt(
+    examplePromptId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<ExamplePrompt>;
+  public getExamplePrompt(
+    examplePromptId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<ExamplePrompt>>;
+  public getExamplePrompt(
+    examplePromptId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<ExamplePrompt>>;
+  public getExamplePrompt(
+    examplePromptId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (examplePromptId === null || examplePromptId === undefined) {
+      throw new Error(
+        'Required parameter examplePromptId was null or undefined when calling getExamplePrompt.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/example-prompts/${this.configuration.encodeParam({ name: 'examplePromptId', value: examplePromptId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid' })}`;
+    return this.httpClient.request<ExamplePrompt>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * List example prompt categorizations
+   * Get all categorizations for an example prompt.
+   * @param examplePromptId The unique identifier of an example prompt
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public listExamplePromptCategorizations(
+    examplePromptId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<Array<ExamplePromptCategorizationResponse>>;
+  public listExamplePromptCategorizations(
+    examplePromptId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<Array<ExamplePromptCategorizationResponse>>>;
+  public listExamplePromptCategorizations(
+    examplePromptId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<Array<ExamplePromptCategorizationResponse>>>;
+  public listExamplePromptCategorizations(
+    examplePromptId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (examplePromptId === null || examplePromptId === undefined) {
+      throw new Error(
+        'Required parameter examplePromptId was null or undefined when calling listExamplePromptCategorizations.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/example-prompts/${this.configuration.encodeParam({ name: 'examplePromptId', value: examplePromptId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid' })}/categorizations`;
+    return this.httpClient.request<Array<ExamplePromptCategorizationResponse>>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
   }
 
   /**
@@ -213,6 +797,374 @@ export class ExamplePromptService {
       {
         context: localVarHttpContext,
         params: localVarQueryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Run an automated categorization
+   * Run an automated AI categorization against an example prompt. Always returns 201 with the persisted row — when the AI could not match any category, the row is still persisted with a null &#x60;category&#x60; to preserve the audit trail and avoid redundant re-classification.
+   * @param examplePromptId The unique identifier of an example prompt
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public runExamplePromptCategorization(
+    examplePromptId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<ExamplePromptCategorizationResponse>;
+  public runExamplePromptCategorization(
+    examplePromptId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<ExamplePromptCategorizationResponse>>;
+  public runExamplePromptCategorization(
+    examplePromptId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<ExamplePromptCategorizationResponse>>;
+  public runExamplePromptCategorization(
+    examplePromptId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (examplePromptId === null || examplePromptId === undefined) {
+      throw new Error(
+        'Required parameter examplePromptId was null or undefined when calling runExamplePromptCategorization.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/example-prompts/${this.configuration.encodeParam({ name: 'examplePromptId', value: examplePromptId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid' })}/categorizations/run`;
+    return this.httpClient.request<ExamplePromptCategorizationResponse>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Set effective example prompt categorization
+   * Set or clear the effective categorization for an example prompt by pointing at a row from history. Pass null to clear.
+   * @param examplePromptId The unique identifier of an example prompt
+   * @param setEffectiveCategorizationRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public setEffectiveExamplePromptCategorization(
+    examplePromptId: string,
+    setEffectiveCategorizationRequest: SetEffectiveCategorizationRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<ExamplePrompt>;
+  public setEffectiveExamplePromptCategorization(
+    examplePromptId: string,
+    setEffectiveCategorizationRequest: SetEffectiveCategorizationRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<ExamplePrompt>>;
+  public setEffectiveExamplePromptCategorization(
+    examplePromptId: string,
+    setEffectiveCategorizationRequest: SetEffectiveCategorizationRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<ExamplePrompt>>;
+  public setEffectiveExamplePromptCategorization(
+    examplePromptId: string,
+    setEffectiveCategorizationRequest: SetEffectiveCategorizationRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (examplePromptId === null || examplePromptId === undefined) {
+      throw new Error(
+        'Required parameter examplePromptId was null or undefined when calling setEffectiveExamplePromptCategorization.',
+      );
+    }
+    if (
+      setEffectiveCategorizationRequest === null ||
+      setEffectiveCategorizationRequest === undefined
+    ) {
+      throw new Error(
+        'Required parameter setEffectiveCategorizationRequest was null or undefined when calling setEffectiveExamplePromptCategorization.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/example-prompts/${this.configuration.encodeParam({ name: 'examplePromptId', value: examplePromptId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid' })}/categorizations/effective`;
+    return this.httpClient.request<ExamplePrompt>(
+      'patch',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: setEffectiveCategorizationRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Update an example prompt
+   * Partially update an example prompt. Only fields present in the request body are modified. If the question text changes, AI auto-categorization runs asynchronously.
+   * @param examplePromptId The unique identifier of an example prompt
+   * @param examplePromptUpdateRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public updateExamplePrompt(
+    examplePromptId: string,
+    examplePromptUpdateRequest: ExamplePromptUpdateRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<ExamplePrompt>;
+  public updateExamplePrompt(
+    examplePromptId: string,
+    examplePromptUpdateRequest: ExamplePromptUpdateRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<ExamplePrompt>>;
+  public updateExamplePrompt(
+    examplePromptId: string,
+    examplePromptUpdateRequest: ExamplePromptUpdateRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<ExamplePrompt>>;
+  public updateExamplePrompt(
+    examplePromptId: string,
+    examplePromptUpdateRequest: ExamplePromptUpdateRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (examplePromptId === null || examplePromptId === undefined) {
+      throw new Error(
+        'Required parameter examplePromptId was null or undefined when calling updateExamplePrompt.',
+      );
+    }
+    if (examplePromptUpdateRequest === null || examplePromptUpdateRequest === undefined) {
+      throw new Error(
+        'Required parameter examplePromptUpdateRequest was null or undefined when calling updateExamplePrompt.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/example-prompts/${this.configuration.encodeParam({ name: 'examplePromptId', value: examplePromptId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid' })}`;
+    return this.httpClient.request<ExamplePrompt>(
+      'patch',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: examplePromptUpdateRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

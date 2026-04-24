@@ -49,10 +49,12 @@ class Settings(BaseSettings):
     app_url: str = "https://bioarena.io"
     app_title: str = "BioArena"
 
-    # Validation method IDs — used as part of the cache key.
+    # Validation / categorization method IDs — used as part of the cache key.
     # Bump when changing the classification prompt or model.
     prompt_validation_method: str = "openrouter-haiku-v1"
     battle_validation_method: str = "openrouter-haiku-v1"
+    prompt_categorization_method: str = "openrouter-haiku-v1"
+    battle_categorization_method: str = "openrouter-haiku-v1"
 
     # Valkey configuration (DB 3 — DB 0/1/2 used by api/gateway/auth)
     valkey_host: str = "bixarena-valkey"

@@ -48,4 +48,7 @@ public class BattleEntity {
 
   @Column(name = "effective_validation_id")
   private UUID effectiveValidationId;
+
+  @Column(name = "effective_categorization_id")
+  private UUID effectiveCategorizationId;
 }

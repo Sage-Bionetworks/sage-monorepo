@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # Batch all non-major bumps into a single PR to reduce noise.
+      # Major version bumps land as individual PRs for review.
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch

@@ -20,6 +20,7 @@ export * from './gene-network-links';
 export * from './item-filter-type-query';
 export * from './median-expression';
 export * from './metabolomics';
+export * from './modality';
 export * from './neuropathologic-correlation';
 export * from './nominated-drug';
 export * from './nominated-drug-search-query';

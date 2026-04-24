@@ -12,18 +12,21 @@ on:
         type: string
         # Examples: "agora", "explorers", "agora explorers"
 
+permissions:
+  contents: write # ghp-import pushes to gh-pages
+
 jobs:
   deploy:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0
           persist-credentials: true
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
+        uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container

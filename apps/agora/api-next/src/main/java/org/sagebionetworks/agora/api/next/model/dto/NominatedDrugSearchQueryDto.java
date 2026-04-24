@@ -50,7 +50,10 @@ public class NominatedDrugSearchQueryDto {
   private @Nullable List<Integer> totalNominations;
 
   @Valid
-  private @Nullable List<Integer> yearFirstNominated;
+  private @Nullable List<Integer> initialNomination;
+
+  @Valid
+  private @Nullable List<String> modality;
 
   @Valid
   private List<String> sortFields = new ArrayList<>();
@@ -162,11 +165,11 @@ public class NominatedDrugSearchQueryDto {
   }
 
   /**
-   * List of common_name values to filter by. 
+   * List of composite_id values to filter by (format: chembl_id~combined_with). 
    * @return items
    */
   
-  @Schema(name = "items", example = "[\"Agomelatine\",\"Bexarotene\"]", description = "List of common_name values to filter by. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "items", example = "[\"CHEMBL2105758~null\",\"CHEMBL1023~Donepezil\"]", description = "List of composite_id values to filter by (format: chembl_id~combined_with). ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
   public @Nullable List<String> getItems() {
     return items;
@@ -300,32 +303,60 @@ public class NominatedDrugSearchQueryDto {
     this.totalNominations = totalNominations;
   }
 
-  public NominatedDrugSearchQueryDto yearFirstNominated(@Nullable List<Integer> yearFirstNominated) {
-    this.yearFirstNominated = yearFirstNominated;
+  public NominatedDrugSearchQueryDto initialNomination(@Nullable List<Integer> initialNomination) {
+    this.initialNomination = initialNomination;
     return this;
   }
 
-  public NominatedDrugSearchQueryDto addYearFirstNominatedItem(Integer yearFirstNominatedItem) {
-    if (this.yearFirstNominated == null) {
-      this.yearFirstNominated = new ArrayList<>();
+  public NominatedDrugSearchQueryDto addInitialNominationItem(Integer initialNominationItem) {
+    if (this.initialNomination == null) {
+      this.initialNomination = new ArrayList<>();
     }
-    this.yearFirstNominated.add(yearFirstNominatedItem);
+    this.initialNomination.add(initialNominationItem);
     return this;
   }
 
   /**
    * Filter by year first nominated.
-   * @return yearFirstNominated
+   * @return initialNomination
    */
   
-  @Schema(name = "yearFirstNominated", example = "[2024,2025]", description = "Filter by year first nominated.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("yearFirstNominated")
-  public @Nullable List<Integer> getYearFirstNominated() {
-    return yearFirstNominated;
+  @Schema(name = "initialNomination", example = "[2024,2025]", description = "Filter by year first nominated.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("initialNomination")
+  public @Nullable List<Integer> getInitialNomination() {
+    return initialNomination;
   }
 
-  public void setYearFirstNominated(@Nullable List<Integer> yearFirstNominated) {
-    this.yearFirstNominated = yearFirstNominated;
+  public void setInitialNomination(@Nullable List<Integer> initialNomination) {
+    this.initialNomination = initialNomination;
+  }
+
+  public NominatedDrugSearchQueryDto modality(@Nullable List<String> modality) {
+    this.modality = modality;
+    return this;
+  }
+
+  public NominatedDrugSearchQueryDto addModalityItem(String modalityItem) {
+    if (this.modality == null) {
+      this.modality = new ArrayList<>();
+    }
+    this.modality.add(modalityItem);
+    return this;
+  }
+
+  /**
+   * Filter by drug modality.
+   * @return modality
+   */
+  
+  @Schema(name = "modality", example = "[\"Small molecule\",\"Protein\"]", description = "Filter by drug modality.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modality")
+  public @Nullable List<String> getModality() {
+    return modality;
+  }
+
+  public void setModality(@Nullable List<String> modality) {
+    this.modality = modality;
   }
 
   public NominatedDrugSearchQueryDto sortFields(List<String> sortFields) {
@@ -401,14 +432,15 @@ public class NominatedDrugSearchQueryDto {
         Objects.equals(this.principalInvestigators, nominatedDrugSearchQuery.principalInvestigators) &&
         Objects.equals(this.programs, nominatedDrugSearchQuery.programs) &&
         Objects.equals(this.totalNominations, nominatedDrugSearchQuery.totalNominations) &&
-        Objects.equals(this.yearFirstNominated, nominatedDrugSearchQuery.yearFirstNominated) &&
+        Objects.equals(this.initialNomination, nominatedDrugSearchQuery.initialNomination) &&
+        Objects.equals(this.modality, nominatedDrugSearchQuery.modality) &&
         Objects.equals(this.sortFields, nominatedDrugSearchQuery.sortFields) &&
         Objects.equals(this.sortOrders, nominatedDrugSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, principalInvestigators, programs, totalNominations, yearFirstNominated, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, principalInvestigators, programs, totalNominations, initialNomination, modality, sortFields, sortOrders);
   }
 
   @Override
@@ -423,7 +455,8 @@ public class NominatedDrugSearchQueryDto {
     sb.append("    principalInvestigators: ").append(toIndentedString(principalInvestigators)).append("\n");
     sb.append("    programs: ").append(toIndentedString(programs)).append("\n");
     sb.append("    totalNominations: ").append(toIndentedString(totalNominations)).append("\n");
-    sb.append("    yearFirstNominated: ").append(toIndentedString(yearFirstNominated)).append("\n");
+    sb.append("    initialNomination: ").append(toIndentedString(initialNomination)).append("\n");
+    sb.append("    modality: ").append(toIndentedString(modality)).append("\n");
     sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
     sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
@@ -462,7 +495,8 @@ public class NominatedDrugSearchQueryDto {
       this.instance.setPrincipalInvestigators(value.principalInvestigators);
       this.instance.setPrograms(value.programs);
       this.instance.setTotalNominations(value.totalNominations);
-      this.instance.setYearFirstNominated(value.yearFirstNominated);
+      this.instance.setInitialNomination(value.initialNomination);
+      this.instance.setModality(value.modality);
       this.instance.setSortFields(value.sortFields);
       this.instance.setSortOrders(value.sortOrders);
       return this;
@@ -508,8 +542,13 @@ public class NominatedDrugSearchQueryDto {
       return this;
     }
     
-    public NominatedDrugSearchQueryDto.Builder yearFirstNominated(List<Integer> yearFirstNominated) {
-      this.instance.yearFirstNominated(yearFirstNominated);
+    public NominatedDrugSearchQueryDto.Builder initialNomination(List<Integer> initialNomination) {
+      this.instance.initialNomination(initialNomination);
+      return this;
+    }
+    
+    public NominatedDrugSearchQueryDto.Builder modality(List<String> modality) {
+      this.instance.modality(modality);
       return this;
     }
     

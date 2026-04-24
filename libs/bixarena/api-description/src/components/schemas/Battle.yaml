@@ -22,6 +22,11 @@ properties:
     format: uuid
     nullable: true
     description: ID of the effective battle validation (null = not yet validated)
+  effectiveCategorizationId:
+    type: string
+    format: uuid
+    nullable: true
+    description: ID of the effective battle categorization (null = not yet categorized)
 required:
   - id
   - userId

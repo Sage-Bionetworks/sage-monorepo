@@ -92,10 +92,10 @@ class ComparisonToolConfigApiDelegateImplTest {
   }
 
   @Test
-  @DisplayName("should handle gene expression page")
-  void shouldHandleGeneExpressionPage() {
+  @DisplayName("should handle differential expression page")
+  void shouldHandleDifferentialExpressionPage() {
     // given
-    ComparisonToolPageDto page = ComparisonToolPageDto.GENE_EXPRESSION;
+    ComparisonToolPageDto page = ComparisonToolPageDto.DIFFERENTIAL_EXPRESSION;
     ComparisonToolConfigDto config = new ComparisonToolConfigDto();
     config.setPage(page);
 

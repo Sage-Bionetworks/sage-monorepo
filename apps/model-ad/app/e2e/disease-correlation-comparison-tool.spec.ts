@@ -416,13 +416,13 @@ test.describe('disease correlation', () => {
   });
 
   test.describe('sort URL sync', () => {
-    // Columns: 0=Model (name), 1=Age, 2=Sex, 3=IFG, 4=PHG, 5=TCX
+    // Columns: 0=Model (name), 1=Age, 2=Sex, 3=IFG module, 4=PHG module, 5=TCX module
     // Default sort: name ASC, age ASC, sex ASC
 
     const sortColumns: ColumnConfig[] = [
-      { name: 'IFG', field: 'IFG' },
-      { name: 'PHG', field: 'PHG' },
-      { name: 'TCX', field: 'TCX' },
+      { name: 'IFG module', field: 'IFG' },
+      { name: 'PHG module', field: 'PHG' },
+      { name: 'TCX module', field: 'TCX' },
     ];
 
     test('clicking column updates URL with sortFields and sortOrders', async ({ page }) => {

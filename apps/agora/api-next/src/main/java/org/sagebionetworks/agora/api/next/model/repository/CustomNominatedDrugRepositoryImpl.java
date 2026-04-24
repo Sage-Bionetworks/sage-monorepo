@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.sagebionetworks.agora.api.next.model.document.NominatedDrugDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugIdentifier;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugSearchQueryDto;
 import org.sagebionetworks.agora.api.next.util.ApiHelper;
 import org.springframework.data.domain.Page;
@@ -37,13 +38,10 @@ import org.springframework.stereotype.Repository;
 public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRepository {
 
   private static final String COLLECTION_NAME = "nominateddrugs";
-  private static final String PRIMARY_FIELD = "common_name";
+  private static final String SEARCH_FIELD = "common_name";
 
   /** Array fields that need computed fields for custom sort handling */
-  private static final Set<String> ARRAY_FIELDS = Set.of(
-    "principal_investigators",
-    "programs"
-  );
+  private static final Set<String> ARRAY_FIELDS = Set.of("principal_investigators", "programs");
 
   private final MongoTemplate mongoTemplate;
 
@@ -111,12 +109,13 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       query.getPrincipalInvestigators(),
       query.getPrograms(),
       query.getTotalNominations(),
-      query.getYearFirstNominated(),
+      query.getInitialNomination(),
+      query.getModality(),
       andCriteria
     );
 
-    // Add common_name filtering (items + itemFilterType)
-    addCommonNameFilterCriteria(items, filterType, andCriteria);
+    // Add composite_id filtering (items + itemFilterType)
+    addItemFilterCriteria(items, filterType, andCriteria);
 
     // Add search filtering (only when itemFilterType is EXCLUDE)
     addSearchFilterCriteria(search, filterType, andCriteria);
@@ -205,7 +204,8 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     List<String> principalInvestigators,
     List<String> programs,
     List<Integer> totalNominations,
-    List<Integer> yearFirstNominated,
+    List<Integer> initialNomination,
+    List<String> modality,
     List<Criteria> andCriteria
   ) {
     // principal_investigators: array field - use $in (matches if array contains any value)
@@ -223,13 +223,18 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       andCriteria.add(Criteria.where("total_nominations").in(totalNominations));
     }
 
-    // yearFirstNominated: scalar field - use $in
-    if (yearFirstNominated != null && !yearFirstNominated.isEmpty()) {
-      andCriteria.add(Criteria.where("year_first_nominated").in(yearFirstNominated));
+    // initialNomination: scalar field - use $in
+    if (initialNomination != null && !initialNomination.isEmpty()) {
+      andCriteria.add(Criteria.where("initial_nomination").in(initialNomination));
+    }
+
+    // modality: scalar field - use $in
+    if (modality != null && !modality.isEmpty()) {
+      andCriteria.add(Criteria.where("modality").in(modality));
     }
   }
 
-  private void addCommonNameFilterCriteria(
+  private void addItemFilterCriteria(
     List<String> items,
     ItemFilterTypeQueryDto filterType,
     List<Criteria> andCriteria
@@ -243,11 +248,36 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       return;
     }
 
-    if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
-      andCriteria.add(Criteria.where(PRIMARY_FIELD).in(items));
-    } else {
-      andCriteria.add(Criteria.where(PRIMARY_FIELD).nin(items));
+    // Parse composite identifiers (format: chembl_id~combined_with)
+    List<NominatedDrugIdentifier> identifiers = parseIdentifiers(items);
+
+    // Build criteria for each identifier (must match BOTH chembl_id AND combined_with)
+    List<Criteria> compositeConditions = new ArrayList<>();
+    for (NominatedDrugIdentifier id : identifiers) {
+      Criteria idCondition = new Criteria()
+        .andOperator(
+          Criteria.where("chembl_id").is(id.getChemblId()),
+          Criteria.where("combined_with").is(id.getCombinedWith())
+        );
+      compositeConditions.add(idCondition);
     }
+
+    // Apply INCLUDE or EXCLUDE logic
+    if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
+      // Match ANY of the composite identifiers ($or)
+      andCriteria.add(new Criteria().orOperator(compositeConditions.toArray(new Criteria[0])));
+    } else {
+      // Exclude ALL of the composite identifiers ($nor)
+      andCriteria.add(new Criteria().norOperator(compositeConditions.toArray(new Criteria[0])));
+    }
+  }
+
+  private List<NominatedDrugIdentifier> parseIdentifiers(List<String> items) {
+    List<NominatedDrugIdentifier> identifiers = new ArrayList<>();
+    for (String item : items) {
+      identifiers.add(NominatedDrugIdentifier.parse(item));
+    }
+    return identifiers;
   }
 
   private void addSearchFilterCriteria(
@@ -264,11 +294,11 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     if (trimmedSearch.contains(",")) {
       // Comma-separated list: case-insensitive full matches
       List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
-      andCriteria.add(Criteria.where(PRIMARY_FIELD).in(patterns));
+      andCriteria.add(Criteria.where(SEARCH_FIELD).in(patterns));
     } else {
       // Single term: case-insensitive partial match
       String quotedSearch = Pattern.quote(trimmedSearch);
-      andCriteria.add(Criteria.where(PRIMARY_FIELD).regex(quotedSearch, "i"));
+      andCriteria.add(Criteria.where(SEARCH_FIELD).regex(quotedSearch, "i"));
     }
   }
 }

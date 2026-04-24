@@ -24,7 +24,7 @@ public enum ComparisonToolPageDto {
   
   MODEL_OVERVIEW("Model Overview"),
   
-  GENE_EXPRESSION("Gene Expression"),
+  DIFFERENTIAL_EXPRESSION("Differential Expression"),
   
   DISEASE_CORRELATION("Disease Correlation");
 

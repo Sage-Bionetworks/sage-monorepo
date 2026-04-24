@@ -1,0 +1,43 @@
+type: object
+description: The result of a categorization run for a battle.
+properties:
+  id:
+    type: string
+    format: uuid
+  battleId:
+    type: string
+    format: uuid
+  status:
+    $ref: CategorizationStatus.yaml
+  categories:
+    type: array
+    items:
+      $ref: BiomedicalCategory.yaml
+    maxItems: 3
+    description: >-
+      Categories assigned by this run. Non-empty only when status is `matched`.
+      Empty for `abstained` (classifier declared no fit) and `failed`
+      (classifier error).
+  method:
+    type: string
+    maxLength: 100
+  categorizedBy:
+    type: string
+    format: uuid
+    nullable: true
+    description: User ID of the categorizer. Null for AI runs.
+  reason:
+    type: string
+    maxLength: 1000
+    nullable: true
+    description: Human override reason. Always null for AI runs.
+  createdAt:
+    type: string
+    format: date-time
+required:
+  - id
+  - battleId
+  - status
+  - categories
+  - method
+  - createdAt

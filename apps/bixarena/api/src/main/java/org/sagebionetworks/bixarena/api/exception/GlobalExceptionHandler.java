@@ -1,6 +1,7 @@
 package org.sagebionetworks.bixarena.api.exception;
 
 import java.util.Locale;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -110,6 +112,62 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
+  @ExceptionHandler(ExamplePromptNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleExamplePromptNotFound(
+    ExamplePromptNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Example Prompt Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(ExamplePromptCategorizationNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleExamplePromptCategorizationNotFound(
+    ExamplePromptCategorizationNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Example Prompt Categorization Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(BattleCategorizationNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleBattleCategorizationNotFound(
+    BattleCategorizationNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Battle Categorization Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(BattleNotEligibleForCategorizationException.class)
+  protected ResponseEntity<BasicErrorDto> handleBattleNotEligibleForCategorization(
+    BattleNotEligibleForCategorizationException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(
+      BasicErrorDto.builder()
+        .title("Battle Not Eligible For Categorization")
+        .status(HttpStatus.CONFLICT.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
   @ExceptionHandler(QuestPostNotFoundException.class)
   protected ResponseEntity<BasicErrorDto> handleQuestPostNotFoundException(
     QuestPostNotFoundException ex,
@@ -118,6 +176,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
       BasicErrorDto.builder()
         .title("Quest Post Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(BattleRoundNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleBattleRoundNotFoundException(
+    BattleRoundNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Battle Round Not Found")
         .status(HttpStatus.NOT_FOUND.value())
         .detail(ex.getMessage())
         .build()
@@ -210,6 +282,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler({ Exception.class })
   protected ResponseEntity<BasicErrorDto> handleGenericException(Exception ex, Locale locale) {
+    log.error("Unhandled exception", ex);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
       BasicErrorDto.builder()
         .title("Internal Server Error")

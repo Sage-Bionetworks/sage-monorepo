@@ -163,6 +163,19 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     return Array.from(new Set(this.selectedModelDataList().map((item) => item.evidence_type)));
   });
 
+  boxplotSections = computed(() => {
+    return this.evidenceTypes().map((evidenceType: string) => ({
+      evidenceType,
+      filename: this.generateBoxplotsFilename(
+        evidenceType,
+        this.selectedTissueOption(),
+        this.selectedSexOption().value,
+        this.modelName(),
+      ),
+      data: this.generateBoxplotsCsvData(evidenceType),
+    }));
+  });
+
   domFiles = computed(() => {
     if (
       this.boxplotGrids().length === 0 ||
@@ -171,17 +184,10 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
       return [];
     }
 
-    return this.evidenceTypes().map((evidenceType: string, index: number) => {
-      return {
-        target: this.boxplotGrids()[index].nativeElement,
-        filename: this.generateBoxplotsFilename(
-          evidenceType,
-          this.selectedTissueOption(),
-          this.selectedSexOption().value,
-          this.modelName(),
-        ),
-      };
-    });
+    return this.boxplotSections().map((section, index) => ({
+      target: this.boxplotGrids()[index].nativeElement,
+      filename: section.filename,
+    }));
   });
 
   getBoxplotsGridTargetByEvidenceType(evidenceType: string) {
@@ -193,6 +199,39 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     return this.selectedModelDataList().filter(
       (modelData) => modelData.evidence_type === evidenceType,
     );
+  }
+
+  generateBoxplotsCsvData(evidenceType: string): string[][] {
+    const header = [
+      'name',
+      'evidence_type',
+      'tissue',
+      'age',
+      'sex',
+      'genotype',
+      'individual_id',
+      'value',
+      'units',
+    ];
+    const sexes = this.selectedSexOption().value;
+    const rows: string[][] = [header];
+    for (const modelData of this.getSelectedModelDataForEvidenceType(evidenceType)) {
+      for (const item of modelData.data) {
+        if (!sexes.includes(item.sex as Sex)) continue;
+        rows.push([
+          modelData.name,
+          modelData.evidence_type,
+          modelData.tissue,
+          modelData.age,
+          item.sex,
+          item.genotype,
+          item.individual_id,
+          String(item.value),
+          modelData.units,
+        ]);
+      }
+    }
+    return rows;
   }
 
   getDefaultTissue() {

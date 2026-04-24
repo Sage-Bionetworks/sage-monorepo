@@ -1,0 +1,24 @@
+description: A category slug used to classify biomedical content.
+type: string
+enum:
+  - biochemistry
+  - bioengineering
+  - bioinformatics
+  - cancer-biology
+  - cell-biology
+  - clinical-trials
+  - developmental-biology
+  - epidemiology
+  - evolutionary-biology
+  - genetics
+  - genomics
+  - immunology
+  - microbiology
+  - molecular-biology
+  - neuroscience
+  - pathology
+  - pharmacology-and-toxicology
+  - physiology
+  - synthetic-biology
+  - systems-biology
+example: genetics

@@ -40,15 +40,15 @@ class ComparisonToolConfigServiceTest {
   @DisplayName("should throw exception when repository returns null")
   void shouldThrowExceptionWhenRepositoryReturnsNull() {
     // given
-    ComparisonToolPageDto page = ComparisonToolPageDto.GENE_EXPRESSION;
+    ComparisonToolPageDto page = ComparisonToolPageDto.DIFFERENTIAL_EXPRESSION;
     when(repository.findByPage(page.getValue())).thenReturn(null);
 
     // when & then
     assertThatThrownBy(() -> service.getConfigsByPage(page))
       .isInstanceOf(ComparisonToolConfigNotFoundException.class)
-      .hasMessage("Comparison Tool config not found for page: Gene Expression");
+      .hasMessage("Comparison Tool config not found for page: Differential Expression");
 
-    verify(repository).findByPage("Gene Expression");
+    verify(repository).findByPage("Differential Expression");
   }
 
   @Test
@@ -91,7 +91,7 @@ class ComparisonToolConfigServiceTest {
   @DisplayName("should return mapped configs when repository returns documents")
   void shouldReturnMappedConfigsWhenRepositoryReturnsDocuments() {
     // given
-    ComparisonToolPageDto page = ComparisonToolPageDto.GENE_EXPRESSION;
+    ComparisonToolPageDto page = ComparisonToolPageDto.DIFFERENTIAL_EXPRESSION;
     ComparisonToolConfigDocument doc1 = createDocument(page.getValue());
     ComparisonToolConfigDocument doc2 = createDocument(page.getValue());
     ComparisonToolConfigDto dto1 = new ComparisonToolConfigDto();
@@ -107,7 +107,7 @@ class ComparisonToolConfigServiceTest {
     // then
     assertThat(result).hasSize(2);
     assertThat(result).containsExactly(dto1, dto2);
-    verify(repository).findByPage("Gene Expression");
+    verify(repository).findByPage("Differential Expression");
     verify(mapper).toDto(doc1);
     verify(mapper).toDto(doc2);
   }

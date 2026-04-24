@@ -1,0 +1,41 @@
+type: object
+description: The result of a categorization run for an example prompt.
+properties:
+  id:
+    type: string
+    format: uuid
+  promptId:
+    type: string
+    format: uuid
+  status:
+    $ref: CategorizationStatus.yaml
+  category:
+    $ref: BiomedicalCategory.yaml
+    nullable: true
+    description: >-
+      Category assigned by this run. Non-null only when status is `matched`.
+      Null for `abstained` (classifier declared no fit) and `failed` (classifier
+      error).
+  method:
+    type: string
+    maxLength: 100
+  categorizedBy:
+    type: string
+    format: uuid
+    nullable: true
+    description: User ID of the categorizer. Null for AI runs.
+  reason:
+    type: string
+    maxLength: 1000
+    nullable: true
+    description: Human override reason. Always null for AI runs.
+  createdAt:
+    type: string
+    format: date-time
+required:
+  - id
+  - promptId
+  - status
+  - category
+  - method
+  - createdAt

@@ -13,11 +13,17 @@ Do not edit the class manually.
 
 from fastapi import FastAPI
 
+from bixarena_ai_service.apis.battle_categorization_api import (
+    router as BattleCategorizationApiRouter,
+)
 from bixarena_ai_service.apis.battle_validation_api import (
     router as BattleValidationApiRouter,
 )
 from bixarena_ai_service.apis.chat_api import router as ChatApiRouter
 from bixarena_ai_service.apis.health_check_api import router as HealthCheckApiRouter
+from bixarena_ai_service.apis.prompt_categorization_api import (
+    router as PromptCategorizationApiRouter,
+)
 from bixarena_ai_service.apis.prompt_validation_api import (
     router as PromptValidationApiRouter,
 )
@@ -28,7 +34,9 @@ app = FastAPI(
     version="1.0.0",
 )
 
+app.include_router(BattleCategorizationApiRouter)
 app.include_router(BattleValidationApiRouter)
 app.include_router(ChatApiRouter)
 app.include_router(HealthCheckApiRouter)
+app.include_router(PromptCategorizationApiRouter)
 app.include_router(PromptValidationApiRouter)

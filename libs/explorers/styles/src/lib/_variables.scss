@@ -187,6 +187,15 @@ $panel-nav-height: 80px;
 
 $comparison-tool-primary-column-width: 300px;
 
+// The following variables are read by measureCellWidths() in
+// libs/explorers/comparison-tool/src/lib/comparison-tool-table/comparison-tool-table.helpers.ts
+// to compute total column width. Keep values in sync with the matching *_PX
+// constants in
+// libs/explorers/comparison-tool/src/lib/comparison-tool-table/comparison-tool-table.constants.ts.
+$comparison-tool-column-header-margin-left: 10px;
+$comparison-tool-column-header-margin-right: 22px;
+$comparison-tool-sort-badge-spacing: 8px;
+
 :root {
   --comparison-tool-primary-column-width: #{$comparison-tool-primary-column-width};
 }

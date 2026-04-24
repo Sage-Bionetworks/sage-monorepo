@@ -3,6 +3,7 @@ import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { SortEvent } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
+import { COLUMN_HEADER_CLASS, COLUMN_HEADER_TEXT_CLASS } from '../comparison-tool-table.constants';
 
 @Component({
   selector: 'explorers-comparison-tool-columns',
@@ -14,7 +15,10 @@ import { TooltipModule } from 'primeng/tooltip';
 export class ComparisonToolColumnsComponent {
   readonly comparisonToolService = inject(ComparisonToolService);
 
-  columnWidth = input<string>('auto');
+  readonly COLUMN_HEADER_CLASS = COLUMN_HEADER_CLASS;
+  readonly COLUMN_HEADER_TEXT_CLASS = COLUMN_HEADER_TEXT_CLASS;
+
+  columnWidths = input<Record<string, string>>({});
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   currentConfig = this.comparisonToolService.currentConfig;

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
+import org.sagebionetworks.bixarena.api.exception.BattleRoundNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.DuplicateBattleValidationException;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
@@ -28,6 +29,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +45,7 @@ public class BattleValidationService {
   private final AppProperties appProperties;
   private final ObjectMapper objectMapper;
   private final StatsCacheService statsCacheService;
+  private final BattleCategorizationService battleCategorizationService;
 
   /** Response from the AI service /validate-battle endpoint. */
   private record AiBattleValidationResponse(
@@ -71,15 +75,16 @@ public class BattleValidationService {
    * Validates all user prompts in a battle by calling the AI service
    * and persisting the result. Returns the persisted entity.
    *
-   * @throws IllegalStateException if no prompts found or AI service call fails
+   * @throws BattleRoundNotFoundException if the battle has no rounds to collect prompts from
+   * @throws IllegalStateException if the AI service call fails
    */
   @Transactional
   public BattleValidationEntity validateAndPersistBattle(UUID battleId) {
     List<String> prompts = collectPrompts(battleId);
 
     if (prompts.isEmpty()) {
-      throw new IllegalStateException(
-        "No prompts found for battle " + battleId
+      throw new BattleRoundNotFoundException(
+        "No rounds found for battle " + battleId
       );
     }
 
@@ -224,6 +229,16 @@ public class BattleValidationService {
           .orElse(null);
       if (userId != null) {
         statsCacheService.invalidateStatsForValidation(userId);
+      }
+      // Fire categorization only when this validation became effective AND it's biomedical.
+      // Deferred to afterCommit so the async thread sees the committed effective validation.
+      if (validation.isBiomedical()) {
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+          @Override
+          public void afterCommit() {
+            battleCategorizationService.categorizeBattleAsync(battleId);
+          }
+        });
       }
     }
 

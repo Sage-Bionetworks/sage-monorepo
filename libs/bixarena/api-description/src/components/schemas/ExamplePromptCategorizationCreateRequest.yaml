@@ -1,0 +1,13 @@
+type: object
+description: Request to manually categorize an example prompt.
+properties:
+  category:
+    $ref: BiomedicalCategory.yaml
+    description: Category to assign.
+  reason:
+    type: string
+    maxLength: 1000
+    nullable: true
+    description: Reason for the categorization decision
+required:
+  - category
