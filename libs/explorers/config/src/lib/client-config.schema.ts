@@ -8,6 +8,8 @@ export const ClientConfigSchema = BaseConfigSchema.extend({
   csrApiUrl: z.url(),
   googleTagManagerEnabled: z.boolean(),
   googleTagManagerId: z.string().default(''),
+  sentryDsn: z.string().default(''),
+  sentryEnvironment: z.string().default(''),
   sentryRelease: z.string().default(''),
 });
 
