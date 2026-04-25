@@ -8,6 +8,8 @@ export const configMock: RuntimeServerConfig = {
   apiDocsUrl: 'http://localhost:8000/api-docs',
   googleTagManagerEnabled: false,
   googleTagManagerId: '',
+  sentryDsn: '',
+  sentryEnvironment: '',
   sentryRelease: '',
   environment: 'dev',
   isPlatformServer: true,
