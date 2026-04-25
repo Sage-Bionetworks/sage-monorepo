@@ -48,6 +48,7 @@
           [selectedOutcome]="state.selectedOutcome()"
           [hoveredModel]="hoverSide()"
           (retry)="state.retry()"
+          (continue)="state.continueRound('model1')"
         />
         <bixarena-model-panel
           modelId="model2"
@@ -56,6 +57,7 @@
           [selectedOutcome]="state.selectedOutcome()"
           [hoveredModel]="hoverSide()"
           (retry)="state.retry()"
+          (continue)="state.continueRound('model2')"
         />
       </div>
       <bixarena-voting-bar

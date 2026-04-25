@@ -23,7 +23,9 @@
   >
     @for (msg of streamState().messages; track $index) {
       @if (msg.role === 'user') {
-        <div class="user-msg">{{ msg.content }}</div>
+        @if (msg.content !== continuePrompt) {
+          <div class="user-msg">{{ msg.content }}</div>
+        }
       } @else {
         <div class="content">
           <markdown [data]="msg.content" />
@@ -55,9 +57,9 @@
       <span class="thk-lbl">Generating response...</span>
     </div>
     @if (streamState().status === 'error') {
-      <div class="error-line">
+      <div class="action-line">
         @if (streamState().retryable) {
-          <button class="retry-btn" (click)="retry.emit()" title="Retry" aria-label="Retry">
+          <button class="action-btn" type="button" (click)="retry.emit()" title="Retry">
             <svg
               viewBox="0 0 16 16"
               fill="none"
@@ -69,13 +71,37 @@
               <path d="M13.5 8A5.5 5.5 0 1 1 10 3.07" />
               <polyline points="13.5 2 13.5 5.5 10 5.5" />
             </svg>
+            <span>{{ streamState().errorMessage }}</span>
           </button>
+        } @else {
+          <span class="action-text">{{ streamState().errorMessage }}</span>
         }
-        <span class="error-line-text">{{ streamState().errorMessage }}</span>
       </div>
     } @else if (streamState().text) {
       <div class="content">
         <markdown [data]="displayText()" />
+      </div>
+    }
+    @if (streamState().status === 'complete' && streamState().finishReason === 'length') {
+      <div class="action-line">
+        <button
+          class="action-btn"
+          type="button"
+          (click)="continue.emit()"
+          title="Continue generating"
+        >
+          <svg
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="4 6 8 10 12 6" />
+          </svg>
+          <span>Continue the response</span>
+        </button>
       </div>
     }
   </div>

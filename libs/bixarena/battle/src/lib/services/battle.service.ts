@@ -8,7 +8,12 @@ import {
 } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { BattlePhase, INITIAL_STREAM_STATE, ModelStreamState } from '../battle.types';
-import { SLOW_MODEL_THRESHOLD_MS, MODEL_TIMEOUT_MS, VALIDATION_UI_MS } from '../battle.constants';
+import {
+  CONTINUE_PROMPT,
+  MODEL_TIMEOUT_MS,
+  SLOW_MODEL_THRESHOLD_MS,
+  VALIDATION_UI_MS,
+} from '../battle.constants';
 import { StreamHttpError, mapStreamHttpError } from '../battle-errors';
 import { BattleStreamService } from './battle-stream.service';
 
@@ -119,6 +124,59 @@ export class BattleStateService {
     } catch (err) {
       console.error('Failed to start streaming', err);
       this.setStreamError('Something went wrong', true);
+    }
+  }
+
+  // Streams only the target side; the backend's round history assembly
+  // tolerates a null assistant message for the skipped side.
+  async continueRound(which: 'model1' | 'model2'): Promise<void> {
+    const battleId = this.battleId();
+    const model1 = this.model1();
+    const model2 = this.model2();
+    if (!battleId || !model1 || !model2) return;
+
+    if (this.completedRounds >= this.roundLimit) {
+      this.setStreamError(
+        "You've reached the limit for this battle. Vote or start a new battle",
+        false,
+      );
+      return;
+    }
+
+    const userMsg = { role: 'user' as const, content: CONTINUE_PROMPT };
+    const target = which === 'model1' ? this.model1Stream : this.model2Stream;
+    const other = which === 'model1' ? this.model2Stream : this.model1Stream;
+    const targetModelId = which === 'model1' ? model1.id : model2.id;
+
+    this.cleanupStreams();
+    other.update((s) => ({ ...s, messages: [...s.messages, userMsg] }));
+    target.set({
+      ...INITIAL_STREAM_STATE,
+      messages: [...target().messages, userMsg],
+      status: 'waiting',
+    });
+
+    try {
+      const round = await firstValueFrom(
+        this.battleApi.createBattleRound(battleId, { promptMessage: userMsg }),
+      );
+      if (!round) throw new Error('Failed to create continuation round');
+      this.roundId.set(round.id);
+      this.phase.set('streaming');
+
+      const sub = this.subscribeToStream(battleId, round.id, targetModelId, target);
+      if (which === 'model1') this.model1Sub = sub;
+      else this.model2Sub = sub;
+      this.startTimeouts(target, which);
+    } catch (err) {
+      console.error('Failed to continue round', err);
+      target.update((s) => ({
+        ...s,
+        status: 'error',
+        errorMessage: 'Something went wrong',
+        retryable: true,
+        isSlowHint: false,
+      }));
     }
   }
 

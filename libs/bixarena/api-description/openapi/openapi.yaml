@@ -1753,7 +1753,7 @@ components:
     MessageContent:
       type: string
       description: The content of a message.
-      maxLength: 10000
+      maxLength: 50000
       example: What is the capital of France?
     MessageCreate:
       type: object

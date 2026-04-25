@@ -2904,7 +2904,7 @@ components:
     MessageContent:
       description: The content of a message.
       example: What is the capital of France?
-      maxLength: 10000
+      maxLength: 50000
       type: string
     MessageCreate:
       description: Payload used to create a message.
@@ -2914,7 +2914,7 @@ components:
         content:
           description: The content of a message.
           example: What is the capital of France?
-          maxLength: 10000
+          maxLength: 50000
           type: string
       required:
         - content
@@ -3061,7 +3061,7 @@ components:
         content:
           description: The content of a message.
           example: What is the capital of France?
-          maxLength: 10000
+          maxLength: 50000
           type: string
         status:
           description: Current state of the streaming response

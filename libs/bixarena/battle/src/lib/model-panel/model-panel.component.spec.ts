@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { provideMarkdown } from 'ngx-markdown';
 import { ModelPanelComponent } from './model-panel.component';
 import { INITIAL_STREAM_STATE } from '../battle.types';
+import { CONTINUE_PROMPT } from '../battle.constants';
 
 describe('ModelPanelComponent', () => {
   let component: ModelPanelComponent;
@@ -9,6 +12,7 @@ describe('ModelPanelComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ModelPanelComponent],
+      providers: [provideMarkdown()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ModelPanelComponent);
@@ -50,5 +54,77 @@ describe('ModelPanelComponent', () => {
       status: 'streaming',
     });
     expect(component.streamState().status).toBe('streaming');
+  });
+
+  describe('continue button', () => {
+    it('renders when complete and finishReason is length', () => {
+      fixture.componentRef.setInput('streamState', {
+        ...INITIAL_STREAM_STATE,
+        status: 'complete',
+        finishReason: 'length',
+      });
+      fixture.detectChanges();
+
+      const btn = fixture.debugElement.query(By.css('.action-btn'));
+      expect(btn).toBeTruthy();
+      expect(btn.nativeElement.getAttribute('title')).toBe('Continue generating');
+      expect(btn.nativeElement.textContent).toContain('Continue the response');
+    });
+
+    it('does not render when finishReason is stop', () => {
+      fixture.componentRef.setInput('streamState', {
+        ...INITIAL_STREAM_STATE,
+        status: 'complete',
+        finishReason: 'stop',
+      });
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('.action-btn'))).toBeNull();
+    });
+
+    it('does not render while still streaming', () => {
+      fixture.componentRef.setInput('streamState', {
+        ...INITIAL_STREAM_STATE,
+        status: 'streaming',
+        finishReason: 'length',
+      });
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('.action-btn'))).toBeNull();
+    });
+
+    it('hides the continue prompt from the rendered transcript', () => {
+      fixture.componentRef.setInput('streamState', {
+        ...INITIAL_STREAM_STATE,
+        messages: [
+          { role: 'user', content: 'Original question' },
+          { role: 'assistant', content: 'Truncated answer' },
+          { role: 'user', content: CONTINUE_PROMPT },
+          { role: 'assistant', content: 'Continuation text' },
+        ],
+        status: 'complete',
+        finishReason: 'stop',
+      });
+      fixture.detectChanges();
+
+      const userMsgs = fixture.debugElement
+        .queryAll(By.css('.user-msg'))
+        .map((e) => e.nativeElement.textContent.trim());
+      expect(userMsgs).toEqual(['Original question']);
+    });
+
+    it('emits continue when clicked', () => {
+      fixture.componentRef.setInput('streamState', {
+        ...INITIAL_STREAM_STATE,
+        status: 'complete',
+        finishReason: 'length',
+      });
+      fixture.detectChanges();
+
+      const spy = jest.fn();
+      component.continue.subscribe(spy);
+      fixture.debugElement.query(By.css('.action-btn')).nativeElement.click();
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
 });

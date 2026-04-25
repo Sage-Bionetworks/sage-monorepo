@@ -13,7 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { MarkdownComponent } from 'ngx-markdown';
 import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
 import { ModelStreamState } from '../battle.types';
-import { STREAM_CURSOR } from '../battle.constants';
+import { CONTINUE_PROMPT, STREAM_CURSOR } from '../battle.constants';
 
 @Component({
   selector: 'bixarena-model-panel',
@@ -31,6 +31,9 @@ export class ModelPanelComponent {
   readonly selectedOutcome = input<BattleEvaluationOutcome | null>(null);
   readonly hoveredModel = input<BattleEvaluationOutcome | null>(null);
   readonly retry = output<void>();
+  readonly continue = output<void>();
+
+  protected readonly continuePrompt = CONTINUE_PROMPT;
 
   readonly isSelected = computed(() => {
     const o = this.selectedOutcome();
