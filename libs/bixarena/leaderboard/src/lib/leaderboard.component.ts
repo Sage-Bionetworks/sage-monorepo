@@ -36,7 +36,7 @@ import {
 export class LeaderboardComponent {
   readonly facade = inject(LeaderboardFacadeService);
 
-  readonly activeCategoryTab = signal<string>(DEFAULT_CATEGORY_SLUG);
+  readonly activeCategoryId = signal<string>(DEFAULT_CATEGORY_SLUG);
   readonly searchTerm = signal('');
   readonly filters = signal<LeaderboardFilters>(DEFAULT_LEADERBOARD_FILTERS);
 
@@ -50,7 +50,7 @@ export class LeaderboardComponent {
   private readonly debouncedSearch = signal('');
   private searchTimer?: ReturnType<typeof setTimeout>;
 
-  readonly categoryTabs = computed(() => {
+  readonly categoryOptions = computed(() => {
     const list = this.facade.leaderboards();
     if (list.length === 0) {
       return [{ id: DEFAULT_CATEGORY_SLUG, name: 'Overall' }];
@@ -92,7 +92,7 @@ export class LeaderboardComponent {
 
     effect(() => {
       const search = this.debouncedSearch().trim();
-      const slug = this.activeCategoryTab();
+      const slug = this.activeCategoryId();
       void this.facade.load(slug, {
         pageSize: FETCH_ALL_PAGE_SIZE,
         ...(search ? { search } : {}),
@@ -118,8 +118,8 @@ export class LeaderboardComponent {
     this.pageFirst.set(0);
   }
 
-  onCategoryTabChange(id: string): void {
-    this.activeCategoryTab.set(id);
+  onCategoryChange(id: string): void {
+    this.activeCategoryId.set(id);
     this.pageFirst.set(0);
   }
 
@@ -135,6 +135,6 @@ export class LeaderboardComponent {
   }
 
   retry(): void {
-    void this.facade.load(this.activeCategoryTab(), { pageSize: FETCH_ALL_PAGE_SIZE });
+    void this.facade.load(this.activeCategoryId(), { pageSize: FETCH_ALL_PAGE_SIZE });
   }
 }

@@ -24,11 +24,11 @@
   </header>
 
   <bixarena-leaderboard-toolbar
-    [categories]="categoryTabs()"
-    [activeCategoryId]="activeCategoryTab()"
+    [categories]="categoryOptions()"
+    [activeCategoryId]="activeCategoryId()"
     [searchTerm]="searchTerm()"
     [filters]="filters()"
-    (categoryChange)="onCategoryTabChange($event)"
+    (categoryChange)="onCategoryChange($event)"
     (searchChange)="onSearchInput($event)"
     (filtersChange)="onFiltersChange($event)"
   />

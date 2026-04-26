@@ -119,7 +119,7 @@
     type="button"
     class="filters-trigger"
     [class.active]="hasActiveFilters()"
-    aria-haspopup="dialog"
+    aria-haspopup="true"
     aria-label="Filter results"
     (click)="toggleFilterPopover($event)"
   >
@@ -176,6 +176,7 @@
               type="button"
               class="filter-chip"
               [class.on]="filters().license === license"
+              [attr.aria-pressed]="filters().license === license"
               (click)="toggleLicense(license)"
             >
               {{ license | kebabToTitle }}
