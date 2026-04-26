@@ -94,30 +94,106 @@
     />
   </label>
 
-  <div class="pills" role="group" aria-label="License filter">
-    <button
-      type="button"
-      class="pill"
-      [class.active]="filters().license === 'all'"
-      (click)="onLicenseChange('all')"
+  <button
+    type="button"
+    class="filters-trigger"
+    [class.active]="hasActiveFilters()"
+    aria-haspopup="dialog"
+    aria-label="Filter results"
+    (click)="toggleFilterPopover($event)"
+  >
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
     >
-      All
-    </button>
-    <button
-      type="button"
-      class="pill"
-      [class.active]="filters().license === 'open-source'"
-      (click)="onLicenseChange('open-source')"
+      <path d="M3 5h18M6 12h12M10 19h4" />
+    </svg>
+    <span>Filters</span>
+    @if (activeFilterCount() > 0) {
+      <span class="count">{{ activeFilterCount() }}</span>
+    }
+    <svg
+      class="chev"
+      width="11"
+      height="11"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
     >
-      Open Source
-    </button>
-    <button
-      type="button"
-      class="pill"
-      [class.active]="filters().license === 'commercial'"
-      (click)="onLicenseChange('commercial')"
-    >
-      Commercial
-    </button>
-  </div>
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  </button>
+
+  <p-popover #filterPopover styleClass="leaderboard-filter-popover">
+    <div class="filter-panel">
+      <div class="filter-section">
+        <div class="filter-section-head">
+          <span class="filter-section-h">License</span>
+          <button
+            type="button"
+            class="filter-section-reset"
+            [disabled]="filters().license === null"
+            (click)="resetFilter('license')"
+          >
+            reset
+          </button>
+        </div>
+        <div class="filter-chips">
+          @for (license of licenseOptions; track license) {
+            <button
+              type="button"
+              class="filter-chip"
+              [class.on]="filters().license === license"
+              (click)="toggleLicense(license)"
+            >
+              {{ license | kebabToTitle }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </p-popover>
 </div>
+
+@if (hasActiveFilters()) {
+  <div class="active-filters" role="status" aria-label="Active filters">
+    <span class="active-filters-label">filtering by</span>
+    @if (filters().license; as license) {
+      <span class="chip">
+        <span class="chip-key">License</span>
+        <span class="chip-value">{{ license | kebabToTitle }}</span>
+        <button
+          type="button"
+          class="chip-remove"
+          aria-label="Remove license filter"
+          (click)="resetFilter('license')"
+        >
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6l-12 12" />
+          </svg>
+        </button>
+      </span>
+    }
+    <button type="button" class="clear-all" (click)="clearAllFilters()">clear all</button>
+  </div>
+}

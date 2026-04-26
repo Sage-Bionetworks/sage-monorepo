@@ -3,6 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { SortEvent } from 'primeng/api';
 import { LeaderboardEntry } from '@sagebionetworks/bixarena/api-client';
+import { KebabToTitlePipe } from '@sagebionetworks/bixarena/services';
 import {
   DEFAULT_SORT_FIELD,
   DEFAULT_SORT_ORDER,
@@ -31,7 +32,7 @@ interface RenderedEntry extends LeaderboardEntry {
 
 @Component({
   selector: 'bixarena-leaderboard-table',
-  imports: [TableModule, DecimalPipe],
+  imports: [TableModule, DecimalPipe, KebabToTitlePipe],
   templateUrl: './leaderboard-table.component.html',
   styleUrl: './leaderboard-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

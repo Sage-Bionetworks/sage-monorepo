@@ -50,13 +50,66 @@ describe('LeaderboardToolbarComponent', () => {
     expect(component.pickerSearch()).toBe('');
   });
 
-  it('should emit filtersChange with updated license when a license pill is clicked', () => {
-    const emitted: { license: string }[] = [];
+  it('should set license filter when toggled from default', () => {
+    const emitted: { license: string | null }[] = [];
     component.filtersChange.subscribe((value) => emitted.push(value));
-    const pill = (fixture.nativeElement as HTMLElement).querySelectorAll(
-      '.pill',
-    )[1] as HTMLButtonElement;
-    pill.click();
+    component.toggleLicense('open-source');
     expect(emitted).toEqual([{ license: 'open-source' }]);
+  });
+
+  it('should clear license to null when the active license is toggled again', () => {
+    fixture.componentRef.setInput('filters', { license: 'open-source' });
+    fixture.detectChanges();
+    const emitted: { license: string | null }[] = [];
+    component.filtersChange.subscribe((value) => emitted.push(value));
+    component.toggleLicense('open-source');
+    expect(emitted).toEqual([{ license: null }]);
+  });
+
+  it('should report active filter count', () => {
+    expect(component.activeFilterCount()).toBe(0);
+    expect(component.hasActiveFilters()).toBe(false);
+    fixture.componentRef.setInput('filters', { license: 'commercial' });
+    fixture.detectChanges();
+    expect(component.activeFilterCount()).toBe(1);
+    expect(component.hasActiveFilters()).toBe(true);
+  });
+
+  it('should not render the active-filters rail when no filters are active', () => {
+    expect((fixture.nativeElement as HTMLElement).querySelector('.active-filters')).toBeNull();
+  });
+
+  it('should render an active-filter chip when a license is set', () => {
+    fixture.componentRef.setInput('filters', { license: 'open-source' });
+    fixture.detectChanges();
+    const chip = (fixture.nativeElement as HTMLElement).querySelector(
+      '.active-filters .chip-value',
+    );
+    expect(chip?.textContent?.trim()).toBe('Open Source');
+  });
+
+  it('should reset a specific filter via resetFilter(key)', () => {
+    fixture.componentRef.setInput('filters', { license: 'open-source' });
+    fixture.detectChanges();
+    const emitted: { license: string | null }[] = [];
+    component.filtersChange.subscribe((value) => emitted.push(value));
+    component.resetFilter('license');
+    expect(emitted).toEqual([{ license: null }]);
+  });
+
+  it('should not emit when resetting a filter already at its default', () => {
+    const emitted: unknown[] = [];
+    component.filtersChange.subscribe((value) => emitted.push(value));
+    component.resetFilter('license');
+    expect(emitted).toEqual([]);
+  });
+
+  it('should emit a reset of all filters via clearAllFilters', () => {
+    fixture.componentRef.setInput('filters', { license: 'commercial' });
+    fixture.detectChanges();
+    const emitted: { license: string | null }[] = [];
+    component.filtersChange.subscribe((value) => emitted.push(value));
+    component.clearAllFilters();
+    expect(emitted).toEqual([{ license: null }]);
   });
 });

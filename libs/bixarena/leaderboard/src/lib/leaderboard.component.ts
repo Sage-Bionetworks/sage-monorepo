@@ -8,11 +8,8 @@ import {
   LeaderboardSortField,
   LeaderboardTableComponent,
 } from './leaderboard-table/leaderboard-table.component';
-import {
-  DEFAULT_LEADERBOARD_FILTERS,
-  LeaderboardFilters,
-  LeaderboardToolbarComponent,
-} from './leaderboard-toolbar/leaderboard-toolbar.component';
+import { LeaderboardToolbarComponent } from './leaderboard-toolbar/leaderboard-toolbar.component';
+import { DEFAULT_LEADERBOARD_FILTERS, LeaderboardFilters } from './leaderboard.filters';
 import {
   DEFAULT_PAGE_SIZE,
   DEFAULT_SORT_FIELD,
@@ -64,7 +61,7 @@ export class LeaderboardComponent {
   readonly displayedEntries = computed<LeaderboardEntry[]>(() => {
     const { license } = this.filters();
     const entries = this.facade.entries();
-    if (license === 'all') return entries;
+    if (license === null) return entries;
     return entries.filter((e) => e.license === license);
   });
 

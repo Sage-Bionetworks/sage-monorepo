@@ -42,9 +42,7 @@
         </div>
       </td>
       <td class="col-votes">{{ row.voteCount | number }}</td>
-      <td class="col-license">
-        {{ row.license === 'open-source' ? 'Open Source' : 'Commercial' }}
-      </td>
+      <td class="col-license">{{ row.license | kebabToTitle }}</td>
     </tr>
   </ng-template>
   <ng-template #emptymessage>

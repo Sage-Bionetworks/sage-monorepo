@@ -1,8 +1,9 @@
 // PrimeNG component style overrides.
 @layer app {
-  // Force theme-aware background on the leaderboard category popover panel.
+  // Force theme-aware background on leaderboard popover panels.
   // PrimeNG's --p-popover-background does not flip in dark mode in this project.
-  .p-popover.leaderboard-category-popover {
+  .p-popover.leaderboard-category-popover,
+  .p-popover.leaderboard-filter-popover {
     background: var(--p-surface-0);
     border-color: var(--p-surface-200);
     color: var(--p-text-color);
