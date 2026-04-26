@@ -1,0 +1,98 @@
+:host {
+  display: block;
+}
+
+.col-rank {
+  width: 4rem;
+  font-weight: 620;
+  font-variant-numeric: tabular-nums;
+  color: var(--p-surface-500);
+}
+
+tr.top-three .col-rank {
+  color: var(--p-primary-color);
+  font-weight: 700;
+}
+
+.col-model {
+  min-width: 14rem;
+}
+
+.model-name {
+  font-weight: 560;
+  color: var(--p-text-color);
+  text-decoration: none;
+}
+
+.model-name:hover {
+  text-decoration: underline;
+}
+
+tr.top-three .model-name {
+  font-weight: 700;
+}
+
+.model-org {
+  font-size: var(--text-xs);
+  color: var(--p-surface-500);
+  margin-top: 2px;
+}
+
+.col-score {
+  width: 6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.score-value {
+  font-weight: 580;
+  color: var(--p-text-color);
+}
+
+.col-ci {
+  width: 9rem;
+}
+
+.whisker {
+  position: relative;
+  height: 1.25rem;
+  width: 100%;
+}
+
+.whisker-bar {
+  position: absolute;
+  top: 50%;
+  height: 4px;
+  background: var(--p-primary-color);
+  border-radius: 2px;
+  transform: translateY(-50%);
+  opacity: 0.45;
+}
+
+.whisker-dot {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--p-primary-color);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.col-votes {
+  width: 6rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--p-surface-500);
+}
+
+.col-license {
+  width: 8rem;
+  font-size: var(--text-sm);
+  color: var(--p-surface-500);
+}
+
+.empty-cell {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--p-surface-500);
+  padding: 2rem 1rem;
+}

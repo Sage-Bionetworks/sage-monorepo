@@ -1,0 +1,57 @@
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import {
+  LeaderboardEntry,
+  LeaderboardListInner,
+  LeaderboardSearchQuery,
+  LeaderboardService as LeaderboardApiService,
+} from '@sagebionetworks/bixarena/api-client';
+import { DEFAULT_CATEGORY_SLUG, FETCH_ALL_PAGE_SIZE } from '../leaderboard.constants';
+
+@Injectable()
+export class LeaderboardFacadeService {
+  private readonly api = inject(LeaderboardApiService);
+
+  readonly leaderboards = signal<LeaderboardListInner[]>([]);
+  readonly entries = signal<LeaderboardEntry[]>([]);
+  readonly totalElements = signal(0);
+  readonly snapshotUpdatedAt = signal<string | null>(null);
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
+
+  readonly totalVotes = computed(() =>
+    this.entries().reduce((sum, e) => sum + (e.voteCount ?? 0), 0),
+  );
+
+  async loadLeaderboards(): Promise<void> {
+    try {
+      const list = await firstValueFrom(this.api.listLeaderboards());
+      this.leaderboards.set(list ?? []);
+    } catch (err) {
+      console.error('Failed to load leaderboards', err);
+      this.leaderboards.set([]);
+    }
+  }
+
+  async load(
+    leaderboardId: string = DEFAULT_CATEGORY_SLUG,
+    query: LeaderboardSearchQuery = { pageSize: FETCH_ALL_PAGE_SIZE },
+  ): Promise<void> {
+    this.loading.set(true);
+    this.error.set(null);
+    try {
+      const page = await firstValueFrom(this.api.getLeaderboard(leaderboardId, query));
+      this.entries.set(page.entries);
+      this.totalElements.set(page.totalElements);
+      this.snapshotUpdatedAt.set(page.updatedAt);
+    } catch (err) {
+      console.error('Failed to load leaderboard', err);
+      this.error.set('Could not load leaderboard');
+      this.entries.set([]);
+      this.totalElements.set(0);
+      this.snapshotUpdatedAt.set(null);
+    } finally {
+      this.loading.set(false);
+    }
+  }
+}

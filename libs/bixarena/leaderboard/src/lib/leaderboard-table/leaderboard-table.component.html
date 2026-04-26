@@ -1,0 +1,55 @@
+<p-table
+  [value]="rows()"
+  class="leaderboard-table"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [sortField]="sortField()"
+  [sortOrder]="sortOrder()"
+  [customSort]="true"
+  (sortFunction)="onSort($event)"
+>
+  <ng-template #header>
+    <tr>
+      <th class="col-rank" pSortableColumn="rank">Rank <p-sortIcon field="rank" /></th>
+      <th class="col-model" pSortableColumn="modelName">Model <p-sortIcon field="modelName" /></th>
+      <th class="col-score" pSortableColumn="btScore">Score <p-sortIcon field="btScore" /></th>
+      <th class="col-ci">95% CI</th>
+      <th class="col-votes" pSortableColumn="voteCount">Votes <p-sortIcon field="voteCount" /></th>
+      <th class="col-license" pSortableColumn="license">License <p-sortIcon field="license" /></th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-row>
+    <tr [class.top-three]="row.isTopThree">
+      <td class="col-rank">{{ row.rank }}</td>
+      <td class="col-model">
+        <a [href]="row.modelUrl" target="_blank" rel="noopener" class="model-name">
+          {{ row.modelName }}
+        </a>
+        @if (row.modelOrganization) {
+          <div class="model-org">{{ row.modelOrganization }}</div>
+        }
+      </td>
+      <td class="col-score">
+        <span class="score-value">{{ row.scoreRounded }}</span>
+      </td>
+      <td class="col-ci">
+        <div class="whisker" [title]="'[' + row.q025Rounded + ', ' + row.q975Rounded + ']'">
+          <div
+            class="whisker-bar"
+            [style.left.%]="row.whiskerLeft"
+            [style.width.%]="row.whiskerWidth"
+          ></div>
+          <div class="whisker-dot" [style.left.%]="row.scorePosition"></div>
+        </div>
+      </td>
+      <td class="col-votes">{{ row.voteCount | number }}</td>
+      <td class="col-license">
+        {{ row.license === 'open-source' ? 'Open Source' : 'Commercial' }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="6" class="empty-cell">No models match the current filters.</td>
+    </tr>
+  </ng-template>
+</p-table>

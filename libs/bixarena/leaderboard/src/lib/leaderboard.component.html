@@ -1,3 +1,119 @@
 <div class="page-content">
-  <p>Leaderboard is coming soon</p>
+  <header class="hero">
+    <h1 class="title">Leader<em>board</em></h1>
+    <p class="subtitle">
+      Community-driven evaluation of AI models on biomedical topics. Rankings are computed using the
+      Bradley-Terry model after every battle.
+    </p>
+    <div class="stats-strip">
+      <div class="stat">
+        <span class="stat-value">{{ facade.entries().length }}</span>
+        <span class="stat-label">models evaluated</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ facade.totalVotes() | number }}</span>
+        <span class="stat-label">total votes</span>
+      </div>
+      @if (facade.snapshotUpdatedAt(); as updatedAt) {
+        <div class="stat">
+          <span class="stat-dot"></span>
+          <span class="stat-label">Updated {{ updatedAt | date: 'mediumDate' }}</span>
+        </div>
+      }
+    </div>
+  </header>
+
+  <nav class="category-tabs" aria-label="Leaderboard categories">
+    @for (category of categoryTabs(); track category.id) {
+      <button
+        type="button"
+        class="category-tab"
+        [class.active]="category.id === activeCategoryTab()"
+        (click)="onCategoryTabChange(category)"
+      >
+        {{ category.name }}
+      </button>
+    }
+  </nav>
+
+  <div class="toolbar">
+    <label class="search">
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+      <input
+        type="text"
+        [value]="searchTerm()"
+        (input)="onSearchInput($any($event.target).value)"
+        placeholder="Search models or organizations..."
+        aria-label="Search models"
+      />
+    </label>
+    <div class="pills" role="group" aria-label="License filter">
+      <button
+        type="button"
+        class="pill"
+        [class.active]="licenseFilter() === 'all'"
+        (click)="onLicenseFilterChange('all')"
+      >
+        All
+      </button>
+      <button
+        type="button"
+        class="pill"
+        [class.active]="licenseFilter() === 'open-source'"
+        (click)="onLicenseFilterChange('open-source')"
+      >
+        Open Source
+      </button>
+      <button
+        type="button"
+        class="pill"
+        [class.active]="licenseFilter() === 'commercial'"
+        (click)="onLicenseFilterChange('commercial')"
+      >
+        Commercial
+      </button>
+    </div>
+  </div>
+
+  <section class="table-wrap">
+    @if (facade.loading()) {
+      <div class="state-message">Loading leaderboard&hellip;</div>
+    } @else if (facade.error(); as message) {
+      <div class="state-message error">
+        <span>{{ message }}</span>
+        <button type="button" class="retry-btn" (click)="retry()">Retry</button>
+      </div>
+    } @else {
+      <bixarena-leaderboard-table
+        [entries]="paginatedEntries()"
+        [sortField]="sortField()"
+        [sortOrder]="sortOrder()"
+        (sortChange)="onSortChange($event)"
+      />
+    }
+  </section>
+
+  @if (!facade.loading() && !facade.error() && displayedEntries().length > 0) {
+    <p-paginator
+      class="leaderboard-paginator"
+      [first]="pageFirst()"
+      [rows]="pageRows()"
+      [totalRecords]="displayedEntries().length"
+      [rowsPerPageOptions]="pageSizeOptions"
+      (onPageChange)="onPageChange($event)"
+    />
+  }
 </div>
