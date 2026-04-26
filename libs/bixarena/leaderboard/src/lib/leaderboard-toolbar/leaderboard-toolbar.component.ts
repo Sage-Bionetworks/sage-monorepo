@@ -1,7 +1,11 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
+  Injector,
   input,
   output,
   signal,
@@ -36,7 +40,10 @@ export class LeaderboardToolbarComponent {
 
   private readonly categoryPicker = viewChild.required<Popover>('categoryPicker');
   private readonly filterPopover = viewChild.required<Popover>('filterPopover');
+  private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
+
   readonly pickerSearch = signal('');
+  readonly searchExpanded = signal(false);
 
   readonly licenseOptions: License[] = [License.OpenSource, License.Commercial];
 
@@ -60,8 +67,25 @@ export class LeaderboardToolbarComponent {
 
   readonly hasActiveFilters = computed(() => this.activeFilterCount() > 0);
 
+  readonly searchVisible = computed(() => this.searchExpanded() || this.searchTerm().length > 0);
+
+  private readonly injector = inject(Injector);
+
+  expandSearch(): void {
+    this.searchExpanded.set(true);
+    afterNextRender(() => this.searchInput()?.nativeElement.focus(), {
+      injector: this.injector,
+    });
+  }
+
   onSearchInput(event: Event): void {
     this.searchChange.emit((event.target as HTMLInputElement).value);
+  }
+
+  onSearchBlur(): void {
+    if (!this.searchTerm()) {
+      this.searchExpanded.set(false);
+    }
   }
 
   toggleCategoryPicker(event: Event): void {

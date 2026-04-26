@@ -104,6 +104,40 @@ describe('LeaderboardToolbarComponent', () => {
     expect(emitted).toEqual([]);
   });
 
+  it('should render the search icon trigger when search is empty and not expanded', () => {
+    expect((fixture.nativeElement as HTMLElement).querySelector('.search-trigger')).not.toBeNull();
+    expect((fixture.nativeElement as HTMLElement).querySelector('.search')).toBeNull();
+  });
+
+  it('should render the expanded search input after expandSearch()', () => {
+    component.expandSearch();
+    fixture.detectChanges();
+    expect((fixture.nativeElement as HTMLElement).querySelector('.search')).not.toBeNull();
+    expect((fixture.nativeElement as HTMLElement).querySelector('.search-trigger')).toBeNull();
+  });
+
+  it('should keep the search visible while a non-empty search term is present', () => {
+    fixture.componentRef.setInput('searchTerm', 'gpt');
+    fixture.detectChanges();
+    expect(component.searchVisible()).toBe(true);
+    expect((fixture.nativeElement as HTMLElement).querySelector('.search')).not.toBeNull();
+  });
+
+  it('should collapse the search on blur when the search term is empty', () => {
+    component.expandSearch();
+    fixture.detectChanges();
+    component.onSearchBlur();
+    expect(component.searchExpanded()).toBe(false);
+  });
+
+  it('should keep the search expanded on blur when a search term is present', () => {
+    component.expandSearch();
+    fixture.componentRef.setInput('searchTerm', 'gpt');
+    fixture.detectChanges();
+    component.onSearchBlur();
+    expect(component.searchExpanded()).toBe(true);
+  });
+
   it('should emit a reset of all filters via clearAllFilters', () => {
     fixture.componentRef.setInput('filters', { license: 'commercial' });
     fixture.detectChanges();

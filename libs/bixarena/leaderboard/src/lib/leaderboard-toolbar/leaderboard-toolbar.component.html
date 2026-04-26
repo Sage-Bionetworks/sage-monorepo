@@ -70,29 +70,50 @@
     </div>
   </p-popover>
 
-  <label class="search">
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-    <input
-      type="text"
-      [value]="searchTerm()"
-      (input)="onSearchInput($event)"
-      placeholder="Search models or organizations..."
-      aria-label="Search models"
-    />
-  </label>
+  @if (searchVisible()) {
+    <label class="search">
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+      <input
+        #searchInput
+        type="text"
+        [value]="searchTerm()"
+        (input)="onSearchInput($event)"
+        (blur)="onSearchBlur()"
+        placeholder="Search models or organizations..."
+        aria-label="Search models"
+      />
+    </label>
+  } @else {
+    <button type="button" class="search-trigger" aria-label="Open search" (click)="expandSearch()">
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+    </button>
+  }
 
   <button
     type="button"
@@ -168,7 +189,7 @@
 
 @if (hasActiveFilters()) {
   <div class="active-filters" role="status" aria-label="Active filters">
-    <span class="active-filters-label">filtering by</span>
+    <span class="active-filters-label">Filtering by</span>
     @if (filters().license; as license) {
       <span class="chip">
         <span class="chip-key">License</span>
