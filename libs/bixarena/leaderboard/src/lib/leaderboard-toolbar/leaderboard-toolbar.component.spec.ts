@@ -14,6 +14,7 @@ describe('LeaderboardToolbarComponent', () => {
     fixture.componentRef.setInput('categories', [
       { id: 'overall', name: 'Overall' },
       { id: 'cancer-biology', name: 'Cancer Biology' },
+      { id: 'neuroscience', name: 'Neuroscience' },
     ]);
     fixture.componentRef.setInput('activeCategoryId', 'overall');
     component = fixture.componentInstance;
@@ -24,19 +25,29 @@ describe('LeaderboardToolbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should mark the active category tab', () => {
-    const buttons = (fixture.nativeElement as HTMLElement).querySelectorAll('.category-tab');
-    expect(buttons).toHaveLength(2);
-    expect(buttons[0].classList.contains('active')).toBe(true);
-    expect(buttons[1].classList.contains('active')).toBe(false);
+  it('should display the active category name in the trigger', () => {
+    const trigger = (fixture.nativeElement as HTMLElement).querySelector(
+      '.category-trigger .value',
+    );
+    expect(trigger?.textContent?.trim()).toBe('Overall');
   });
 
-  it('should emit categoryChange on tab click', () => {
+  it('should narrow filtered categories when search is set', () => {
+    component.pickerSearch.set('neuro');
+    expect(component.filteredCategories().map((c) => c.id)).toEqual(['neuroscience']);
+  });
+
+  it('should emit categoryChange when a picker option is selected', () => {
     const emitted: string[] = [];
     component.categoryChange.subscribe((id: string) => emitted.push(id));
-    const buttons = (fixture.nativeElement as HTMLElement).querySelectorAll('.category-tab');
-    (buttons[1] as HTMLButtonElement).click();
+    component.onCategorySelect('cancer-biology');
     expect(emitted).toEqual(['cancer-biology']);
+  });
+
+  it('should reset picker search after selection', () => {
+    component.pickerSearch.set('cancer');
+    component.onCategorySelect('cancer-biology');
+    expect(component.pickerSearch()).toBe('');
   });
 
   it('should emit filtersChange with updated license when a license pill is clicked', () => {

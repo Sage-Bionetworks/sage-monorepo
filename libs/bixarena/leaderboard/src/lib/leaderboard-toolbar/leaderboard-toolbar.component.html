@@ -1,17 +1,75 @@
-<nav class="category-tabs" aria-label="Leaderboard categories">
-  @for (category of categories(); track category.id) {
-    <button
-      type="button"
-      class="category-tab"
-      [class.active]="category.id === activeCategoryId()"
-      (click)="categoryChange.emit(category.id)"
-    >
-      {{ category.name }}
-    </button>
-  }
-</nav>
-
 <div class="toolbar">
+  <button
+    type="button"
+    class="category-trigger"
+    aria-haspopup="listbox"
+    aria-label="Select leaderboard category"
+    (click)="toggleCategoryPicker($event)"
+  >
+    <span class="eyebrow">Category</span>
+    <span class="value">{{ activeCategoryName() }}</span>
+    <svg
+      class="chev"
+      width="11"
+      height="11"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  </button>
+
+  <p-popover #categoryPicker styleClass="leaderboard-category-popover">
+    <div class="picker">
+      <div class="picker-search">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input
+          type="text"
+          [value]="pickerSearch()"
+          (input)="onPickerSearch($event)"
+          placeholder="Find a category..."
+          aria-label="Filter categories"
+        />
+      </div>
+      <ul class="picker-list" role="listbox">
+        @for (category of filteredCategories(); track category.id) {
+          <li>
+            <button
+              type="button"
+              class="picker-option"
+              role="option"
+              [class.selected]="category.id === activeCategoryId()"
+              [attr.aria-selected]="category.id === activeCategoryId()"
+              (click)="onCategorySelect(category.id)"
+            >
+              {{ category.name }}
+            </button>
+          </li>
+        } @empty {
+          <li class="picker-empty">No matching category.</li>
+        }
+      </ul>
+    </div>
+  </p-popover>
+
   <label class="search">
     <svg
       width="15"
@@ -35,6 +93,7 @@
       aria-label="Search models"
     />
   </label>
+
   <div class="pills" role="group" aria-label="License filter">
     <button
       type="button"
