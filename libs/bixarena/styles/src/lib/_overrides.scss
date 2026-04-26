@@ -182,6 +182,13 @@
       border-color: var(--p-surface-200);
     }
 
+    // Shrink sort icons to match the small header type.
+    p-sorticon svg,
+    .p-sortable-column-icon {
+      width: 0.625rem;
+      height: 0.625rem;
+    }
+
     .p-datatable-tbody > tr {
       background: transparent;
       transition: background 0.1s ease;

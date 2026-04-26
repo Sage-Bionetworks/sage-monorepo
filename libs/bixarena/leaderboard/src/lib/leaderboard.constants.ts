@@ -6,3 +6,4 @@ export const WHISKER_PADDING_PCT = 6;
 export const FETCH_ALL_PAGE_SIZE = 1000;
 export const DEFAULT_SORT_FIELD = 'rank';
 export const DEFAULT_SORT_ORDER: 1 | -1 = 1;
+export const LEADERBOARD_TABLE_COLUMN_COUNT = 6;

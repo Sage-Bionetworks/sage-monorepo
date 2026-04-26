@@ -12,9 +12,30 @@
       <th class="col-rank" pSortableColumn="rank">Rank <p-sortIcon field="rank" /></th>
       <th class="col-model" pSortableColumn="modelName">Model <p-sortIcon field="modelName" /></th>
       <th class="col-score" pSortableColumn="btScore">Score <p-sortIcon field="btScore" /></th>
-      <th class="col-ci">95% CI</th>
+      <th class="col-ci">
+        <span class="th-label">
+          95% CI
+          <svg
+            class="info-icon"
+            pTooltip="95% confidence interval from bootstrap resampling. Overlapping intervals may indicate a tie."
+            tooltipPosition="top"
+            width="10"
+            height="10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4M12 8h.01" />
+          </svg>
+        </span>
+      </th>
       <th class="col-votes" pSortableColumn="voteCount">Votes <p-sortIcon field="voteCount" /></th>
-      <th class="col-license" pSortableColumn="license">License <p-sortIcon field="license" /></th>
+      <th class="col-license">License</th>
     </tr>
   </ng-template>
   <ng-template #body let-row>
@@ -47,7 +68,7 @@
   </ng-template>
   <ng-template #emptymessage>
     <tr>
-      <td colspan="6" class="empty-cell">No models match the current filters.</td>
+      <td [attr.colspan]="columnCount" class="empty-cell">No results.</td>
     </tr>
   </ng-template>
 </p-table>

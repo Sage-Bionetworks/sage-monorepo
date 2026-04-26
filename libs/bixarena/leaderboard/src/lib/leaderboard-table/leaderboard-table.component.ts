@@ -2,17 +2,19 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { DecimalPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { SortEvent } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
 import { LeaderboardEntry } from '@sagebionetworks/bixarena/api-client';
 import { KebabToTitlePipe } from '@sagebionetworks/bixarena/services';
 import {
   DEFAULT_SORT_FIELD,
   DEFAULT_SORT_ORDER,
+  LEADERBOARD_TABLE_COLUMN_COUNT,
   WHISKER_PADDING_PCT,
 } from '../leaderboard.constants';
 
 export type LeaderboardSortField = keyof Pick<
   LeaderboardEntry,
-  'rank' | 'modelName' | 'btScore' | 'voteCount' | 'license'
+  'rank' | 'modelName' | 'btScore' | 'voteCount'
 >;
 
 export interface LeaderboardSortChange {
@@ -32,7 +34,7 @@ interface RenderedEntry extends LeaderboardEntry {
 
 @Component({
   selector: 'bixarena-leaderboard-table',
-  imports: [TableModule, DecimalPipe, KebabToTitlePipe],
+  imports: [TableModule, TooltipModule, DecimalPipe, KebabToTitlePipe],
   templateUrl: './leaderboard-table.component.html',
   styleUrl: './leaderboard-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +44,8 @@ export class LeaderboardTableComponent {
   readonly sortField = input<LeaderboardSortField>(DEFAULT_SORT_FIELD);
   readonly sortOrder = input<1 | -1>(DEFAULT_SORT_ORDER);
   readonly sortChange = output<LeaderboardSortChange>();
+
+  readonly columnCount = LEADERBOARD_TABLE_COLUMN_COUNT;
 
   onSort(event: SortEvent): void {
     if (!event.field) return;

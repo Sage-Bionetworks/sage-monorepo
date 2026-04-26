@@ -36,9 +36,9 @@
   <section class="table-wrap">
     @if (facade.loading()) {
       <div class="state-message">Loading leaderboard&hellip;</div>
-    } @else if (facade.error(); as message) {
-      <div class="state-message error">
-        <span>{{ message }}</span>
+    } @else if (facade.error()) {
+      <div class="state-message">
+        <span>Unable to load leaderboard.</span>
         <button type="button" class="retry-btn" (click)="retry()">Retry</button>
       </div>
     } @else {

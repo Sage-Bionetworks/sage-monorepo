@@ -38,6 +38,21 @@ tr.top-three .model-name {
   margin-top: 2px;
 }
 
+.th-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.info-icon {
+  color: var(--p-surface-400);
+  vertical-align: middle;
+
+  &:hover {
+    color: var(--p-text-color);
+  }
+}
+
 .col-score {
   width: 6rem;
   font-variant-numeric: tabular-nums;
