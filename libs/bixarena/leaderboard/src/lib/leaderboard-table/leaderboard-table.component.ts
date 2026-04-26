@@ -5,16 +5,18 @@ import { SortEvent } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
 import { LeaderboardEntry } from '@sagebionetworks/bixarena/api-client';
 import { KebabToTitlePipe } from '@sagebionetworks/bixarena/services';
+import { AvatarComponent } from '@sagebionetworks/bixarena/ui';
 import {
   DEFAULT_SORT_FIELD,
   DEFAULT_SORT_ORDER,
   LEADERBOARD_TABLE_COLUMN_COUNT,
   WHISKER_PADDING_PCT,
 } from '../leaderboard.constants';
+import { getOrgLogoUrl, isMonoOrgLogo } from '../model-org-logo';
 
 export type LeaderboardSortField = keyof Pick<
   LeaderboardEntry,
-  'rank' | 'modelName' | 'btScore' | 'voteCount'
+  'rank' | 'modelId' | 'btScore' | 'voteCount'
 >;
 
 export interface LeaderboardSortChange {
@@ -30,11 +32,13 @@ interface RenderedEntry extends LeaderboardEntry {
   readonly q025Rounded: number;
   readonly q975Rounded: number;
   readonly isTopThree: boolean;
+  readonly orgLogoUrl: string | null;
+  readonly orgLogoMono: boolean;
 }
 
 @Component({
   selector: 'bixarena-leaderboard-table',
-  imports: [TableModule, TooltipModule, DecimalPipe, KebabToTitlePipe],
+  imports: [TableModule, TooltipModule, DecimalPipe, KebabToTitlePipe, AvatarComponent],
   templateUrl: './leaderboard-table.component.html',
   styleUrl: './leaderboard-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -90,6 +94,8 @@ export class LeaderboardTableComponent {
         q025Rounded: Math.round(entry.bootstrapQ025),
         q975Rounded: Math.round(entry.bootstrapQ975),
         isTopThree: entry.rank <= 3,
+        orgLogoUrl: getOrgLogoUrl(entry.modelOrganization),
+        orgLogoMono: isMonoOrgLogo(entry.modelOrganization),
       };
     });
   });

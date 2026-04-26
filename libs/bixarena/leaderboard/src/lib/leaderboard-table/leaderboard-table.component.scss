@@ -18,6 +18,33 @@ tr.top-three .col-rank {
   min-width: 14rem;
 }
 
+.model-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.model-logo {
+  color: var(--p-surface-500);
+}
+
+tr.top-three .model-logo {
+  color: var(--p-text-color);
+}
+
+// LobeHub publishes Anthropic / OpenAI / xAI / Moonshot only as monochrome
+// SVGs whose `currentColor` resolves to black inside an `<img>`. Inverting
+// in dark mode keeps the marks visible against the dark row background.
+:host-context(.dark) .model-logo.is-mono {
+  --avatar-img-filter: invert(1);
+}
+
+.model-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .model-name {
   font-weight: 560;
   color: var(--p-text-color);
@@ -56,6 +83,7 @@ tr.top-three .model-name {
 .col-score {
   width: 6rem;
   font-variant-numeric: tabular-nums;
+  color: var(--p-surface-500);
 }
 
 .col-ci {

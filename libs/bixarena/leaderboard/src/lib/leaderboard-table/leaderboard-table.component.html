@@ -10,7 +10,7 @@
   <ng-template #header>
     <tr>
       <th class="col-rank" pSortableColumn="rank">Rank <p-sortIcon field="rank" /></th>
-      <th class="col-model" pSortableColumn="modelName">Model <p-sortIcon field="modelName" /></th>
+      <th class="col-model" pSortableColumn="modelId">Model <p-sortIcon field="modelId" /></th>
       <th class="col-score" pSortableColumn="btScore">Score <p-sortIcon field="btScore" /></th>
       <th class="col-ci">
         <span class="th-label">
@@ -42,12 +42,24 @@
     <tr [class.top-three]="row.isTopThree">
       <td class="col-rank">{{ row.rank }}</td>
       <td class="col-model">
-        <a [href]="row.modelUrl" target="_blank" rel="noopener" class="model-name">
-          {{ row.modelName }}
-        </a>
-        @if (row.modelOrganization) {
-          <div class="model-org">{{ row.modelOrganization }}</div>
-        }
+        <div class="model-cell">
+          <bixarena-avatar
+            class="model-logo"
+            [class.is-mono]="row.orgLogoMono"
+            size="sm"
+            shape="bare"
+            [imageUrl]="row.orgLogoUrl"
+            [name]="row.modelOrganization ?? row.modelName"
+          />
+          <div class="model-meta">
+            <a [href]="row.modelUrl" target="_blank" rel="noopener" class="model-name">
+              {{ row.modelId }}
+            </a>
+            @if (row.modelOrganization) {
+              <div class="model-org">{{ row.modelOrganization }}</div>
+            }
+          </div>
+        </div>
       </td>
       <td class="col-score">{{ row.scoreRounded }}</td>
       <td class="col-ci">
