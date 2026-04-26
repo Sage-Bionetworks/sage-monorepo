@@ -60,11 +60,15 @@ export class LeaderboardTableComponent {
     if (entries.length === 0) return { min: 0, max: 1 };
     let min = Infinity;
     let max = -Infinity;
+    let minScore = Infinity;
     for (const e of entries) {
       if (e.bootstrapQ025 < min) min = e.bootstrapQ025;
       if (e.bootstrapQ975 > max) max = e.bootstrapQ975;
+      if (e.btScore < minScore) minScore = e.btScore;
     }
-    return min === max ? { min: min - 1, max: max + 1 } : { min, max };
+    // Floor the lower bound at (minScore - 100) to reduce extremely wide whiskers
+    min = Math.max(min, minScore - 100);
+    return min >= max ? { min: min - 1, max: max + 1 } : { min, max };
   });
 
   readonly rows = computed<RenderedEntry[]>(() => {

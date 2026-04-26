@@ -58,11 +58,6 @@ tr.top-three .model-name {
   font-variant-numeric: tabular-nums;
 }
 
-.score-value {
-  font-weight: 580;
-  color: var(--p-text-color);
-}
-
 .col-ci {
   width: 9rem;
 }
@@ -71,23 +66,36 @@ tr.top-three .model-name {
   position: relative;
   height: 1.25rem;
   width: 100%;
+
+  // Faint full-width track — gives every row the same horizontal scale so
+  // CI overlap between models is readable at a glance.
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: var(--p-surface-200);
+    border-radius: 1px;
+    transform: translateY(-50%);
+  }
 }
 
 .whisker-bar {
   position: absolute;
   top: 50%;
-  height: 4px;
-  background: var(--p-primary-color);
-  border-radius: 2px;
+  height: 6px;
+  background: var(--p-surface-400);
+  border-radius: 3px;
   transform: translateY(-50%);
-  opacity: 0.45;
 }
 
 .whisker-dot {
   position: absolute;
   top: 50%;
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   background: var(--p-primary-color);
   border-radius: 50%;
   transform: translate(-50%, -50%);

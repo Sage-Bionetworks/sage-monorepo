@@ -49,9 +49,7 @@
           <div class="model-org">{{ row.modelOrganization }}</div>
         }
       </td>
-      <td class="col-score">
-        <span class="score-value">{{ row.scoreRounded }}</span>
-      </td>
+      <td class="col-score">{{ row.scoreRounded }}</td>
       <td class="col-ci">
         <div class="whisker" [title]="'[' + row.q025Rounded + ', ' + row.q975Rounded + ']'">
           <div
