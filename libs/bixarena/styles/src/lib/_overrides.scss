@@ -1,22 +1,5 @@
 // PrimeNG component style overrides.
 @layer app {
-  // Force theme-aware background on leaderboard popover panels.
-  // PrimeNG's --p-popover-background does not flip in dark mode in this project.
-  .p-popover.leaderboard-category-popover,
-  .p-popover.leaderboard-filter-popover {
-    background: var(--p-surface-0);
-    border-color: var(--p-surface-200);
-    color: var(--p-text-color);
-
-    &::before {
-      border-bottom-color: var(--p-surface-200);
-    }
-
-    &::after {
-      border-bottom-color: var(--p-surface-0);
-    }
-  }
-
   bixarena-nav .p-button {
     padding: 0 1rem;
     font-size: var(--text-sm);
@@ -261,32 +244,22 @@
     box-shadow: none;
   }
 
-  // Dropdown panel (when opened) — same broken `--p-content-background` problem
+  // Tighter selected-option emphasis in select dropdowns. Theme-aware bg
+  // comes from the base preset; this just adds aesthetic weight + hover
+  // contrast.
   .p-select-overlay {
-    background: var(--p-surface-50);
-    border: 1px solid var(--p-surface-200);
-    color: var(--p-text-color);
-
-    .p-select-option {
-      color: var(--p-text-color);
-      background: transparent;
-    }
-
     .p-select-option:not(.p-disabled):hover {
       background: var(--hover-bg);
-      color: var(--p-text-color);
     }
 
     .p-select-option.p-select-option-selected,
     .p-select-option.p-select-option-selected.p-focus {
       background: var(--p-surface-200);
-      color: var(--p-text-color);
       font-weight: 560;
     }
 
     .p-select-option.p-select-option-selected:not(.p-disabled):hover {
       background: var(--p-surface-300);
-      color: var(--p-text-color);
     }
   }
 }
