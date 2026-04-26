@@ -1,13 +1,18 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-import { LeaderboardEntry, LeaderboardListInner } from '@sagebionetworks/bixarena/api-client';
+import { LeaderboardEntry } from '@sagebionetworks/bixarena/api-client';
 import { LeaderboardFacadeService } from './services/leaderboard.service';
 import {
   LeaderboardSortChange,
   LeaderboardSortField,
   LeaderboardTableComponent,
 } from './leaderboard-table/leaderboard-table.component';
+import {
+  DEFAULT_LEADERBOARD_FILTERS,
+  LeaderboardFilters,
+  LeaderboardToolbarComponent,
+} from './leaderboard-toolbar/leaderboard-toolbar.component';
 import {
   DEFAULT_PAGE_SIZE,
   DEFAULT_SORT_FIELD,
@@ -18,11 +23,15 @@ import {
   SEARCH_DEBOUNCE_MS,
 } from './leaderboard.constants';
 
-type LicenseFilter = 'all' | 'open-source' | 'commercial';
-
 @Component({
   selector: 'bixarena-leaderboard',
-  imports: [LeaderboardTableComponent, PaginatorModule, DatePipe, DecimalPipe],
+  imports: [
+    LeaderboardTableComponent,
+    LeaderboardToolbarComponent,
+    PaginatorModule,
+    DatePipe,
+    DecimalPipe,
+  ],
   providers: [LeaderboardFacadeService],
   templateUrl: './leaderboard.component.html',
   styleUrl: './leaderboard.component.scss',
@@ -32,7 +41,7 @@ export class LeaderboardComponent {
 
   readonly activeCategoryTab = signal<string>(DEFAULT_CATEGORY_SLUG);
   readonly searchTerm = signal('');
-  readonly licenseFilter = signal<LicenseFilter>('all');
+  readonly filters = signal<LeaderboardFilters>(DEFAULT_LEADERBOARD_FILTERS);
 
   readonly pageFirst = signal(0);
   readonly pageRows = signal(DEFAULT_PAGE_SIZE);
@@ -53,10 +62,10 @@ export class LeaderboardComponent {
   });
 
   readonly displayedEntries = computed<LeaderboardEntry[]>(() => {
-    const filter = this.licenseFilter();
+    const { license } = this.filters();
     const entries = this.facade.entries();
-    if (filter === 'all') return entries;
-    return entries.filter((e) => e.license === filter);
+    if (license === 'all') return entries;
+    return entries.filter((e) => e.license === license);
   });
 
   readonly sortedEntries = computed<LeaderboardEntry[]>(() => {
@@ -107,13 +116,13 @@ export class LeaderboardComponent {
     }, SEARCH_DEBOUNCE_MS);
   }
 
-  onLicenseFilterChange(filter: LicenseFilter): void {
-    this.licenseFilter.set(filter);
+  onFiltersChange(filters: LeaderboardFilters): void {
+    this.filters.set(filters);
     this.pageFirst.set(0);
   }
 
-  onCategoryTabChange(tab: Pick<LeaderboardListInner, 'id'>): void {
-    this.activeCategoryTab.set(tab.id);
+  onCategoryTabChange(id: string): void {
+    this.activeCategoryTab.set(id);
     this.pageFirst.set(0);
   }
 

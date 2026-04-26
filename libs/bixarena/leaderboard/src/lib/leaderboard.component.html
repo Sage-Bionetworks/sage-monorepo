@@ -23,70 +23,15 @@
     </div>
   </header>
 
-  <nav class="category-tabs" aria-label="Leaderboard categories">
-    @for (category of categoryTabs(); track category.id) {
-      <button
-        type="button"
-        class="category-tab"
-        [class.active]="category.id === activeCategoryTab()"
-        (click)="onCategoryTabChange(category)"
-      >
-        {{ category.name }}
-      </button>
-    }
-  </nav>
-
-  <div class="toolbar">
-    <label class="search">
-      <svg
-        width="15"
-        height="15"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <circle cx="11" cy="11" r="8" />
-        <path d="m21 21-4.3-4.3" />
-      </svg>
-      <input
-        type="text"
-        [value]="searchTerm()"
-        (input)="onSearchInput($any($event.target).value)"
-        placeholder="Search models or organizations..."
-        aria-label="Search models"
-      />
-    </label>
-    <div class="pills" role="group" aria-label="License filter">
-      <button
-        type="button"
-        class="pill"
-        [class.active]="licenseFilter() === 'all'"
-        (click)="onLicenseFilterChange('all')"
-      >
-        All
-      </button>
-      <button
-        type="button"
-        class="pill"
-        [class.active]="licenseFilter() === 'open-source'"
-        (click)="onLicenseFilterChange('open-source')"
-      >
-        Open Source
-      </button>
-      <button
-        type="button"
-        class="pill"
-        [class.active]="licenseFilter() === 'commercial'"
-        (click)="onLicenseFilterChange('commercial')"
-      >
-        Commercial
-      </button>
-    </div>
-  </div>
+  <bixarena-leaderboard-toolbar
+    [categories]="categoryTabs()"
+    [activeCategoryId]="activeCategoryTab()"
+    [searchTerm]="searchTerm()"
+    [filters]="filters()"
+    (categoryChange)="onCategoryTabChange($event)"
+    (searchChange)="onSearchInput($event)"
+    (filtersChange)="onFiltersChange($event)"
+  />
 
   <section class="table-wrap">
     @if (facade.loading()) {
