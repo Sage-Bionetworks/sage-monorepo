@@ -49,6 +49,9 @@ class LeaderboardSearchQuery(BaseModel):
         description="Get a specific historical snapshot instead of latest.",
         alias="snapshotId",
     )
+    lookback: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(
+        default=None, description="Comparison window in days for computing rankDelta."
+    )
     __properties: ClassVar[List[str]] = [
         "pageNumber",
         "pageSize",
@@ -56,6 +59,7 @@ class LeaderboardSearchQuery(BaseModel):
         "direction",
         "search",
         "snapshotId",
+        "lookback",
     ]
 
     model_config = ConfigDict(
@@ -105,6 +109,11 @@ class LeaderboardSearchQuery(BaseModel):
         if self.snapshot_id is None and "snapshot_id" in self.model_fields_set:
             _dict["snapshotId"] = None
 
+        # set to None if lookback (nullable) is None
+        # and model_fields_set contains the field
+        if self.lookback is None and "lookback" in self.model_fields_set:
+            _dict["lookback"] = None
+
         return _dict
 
     @classmethod
@@ -132,6 +141,7 @@ class LeaderboardSearchQuery(BaseModel):
                 else SortDirection.ASC,
                 "search": obj.get("search"),
                 "snapshotId": obj.get("snapshotId"),
+                "lookback": obj.get("lookback"),
             }
         )
         return _obj

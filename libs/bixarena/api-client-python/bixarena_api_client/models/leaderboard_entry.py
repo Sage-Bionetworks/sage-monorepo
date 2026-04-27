@@ -52,6 +52,11 @@ class LeaderboardEntry(BaseModel):
         description="Number of votes/evaluations", alias="voteCount"
     )
     rank: StrictInt = Field(description="Current rank position (1-based)")
+    rank_delta: Optional[StrictInt] = Field(
+        default=None,
+        description="Positions gained vs the comparison snapshot. Positive = improved, negative = dropped, zero = unchanged. Null when no comparison is available. ",
+        alias="rankDelta",
+    )
     bootstrap_q025: Union[StrictFloat, StrictInt] = Field(
         description="Bootstrap confidence interval lower bound (2.5th percentile)",
         alias="bootstrapQ025",
@@ -73,6 +78,7 @@ class LeaderboardEntry(BaseModel):
         "btScore",
         "voteCount",
         "rank",
+        "rankDelta",
         "bootstrapQ025",
         "bootstrapQ975",
         "createdAt",
@@ -123,6 +129,11 @@ class LeaderboardEntry(BaseModel):
         ):
             _dict["modelOrganization"] = None
 
+        # set to None if rank_delta (nullable) is None
+        # and model_fields_set contains the field
+        if self.rank_delta is None and "rank_delta" in self.model_fields_set:
+            _dict["rankDelta"] = None
+
         return _dict
 
     @classmethod
@@ -145,6 +156,7 @@ class LeaderboardEntry(BaseModel):
                 "btScore": obj.get("btScore"),
                 "voteCount": obj.get("voteCount"),
                 "rank": obj.get("rank"),
+                "rankDelta": obj.get("rankDelta"),
                 "bootstrapQ025": obj.get("bootstrapQ025"),
                 "bootstrapQ975": obj.get("bootstrapQ975"),
                 "createdAt": obj.get("createdAt"),

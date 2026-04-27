@@ -47,6 +47,8 @@ public class LeaderboardEntryPageDto {
 
   private String snapshotId;
 
+  private @Nullable String priorSnapshotId = null;
+
   @Valid
   private List<@Valid LeaderboardEntryDto> entries = new ArrayList<>();
 
@@ -229,6 +231,26 @@ public class LeaderboardEntryPageDto {
     this.snapshotId = snapshotId;
   }
 
+  public LeaderboardEntryPageDto priorSnapshotId(@Nullable String priorSnapshotId) {
+    this.priorSnapshotId = priorSnapshotId;
+    return this;
+  }
+
+  /**
+   * Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.
+   * @return priorSnapshotId
+   */
+  
+  @Schema(name = "priorSnapshotId", example = "snapshot_2025-08-09_14-30", description = "Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("priorSnapshotId")
+  public @Nullable String getPriorSnapshotId() {
+    return priorSnapshotId;
+  }
+
+  public void setPriorSnapshotId(@Nullable String priorSnapshotId) {
+    this.priorSnapshotId = priorSnapshotId;
+  }
+
   public LeaderboardEntryPageDto entries(List<@Valid LeaderboardEntryDto> entries) {
     this.entries = entries;
     return this;
@@ -274,12 +296,13 @@ public class LeaderboardEntryPageDto {
         Objects.equals(this.hasPrevious, leaderboardEntryPage.hasPrevious) &&
         Objects.equals(this.updatedAt, leaderboardEntryPage.updatedAt) &&
         Objects.equals(this.snapshotId, leaderboardEntryPage.snapshotId) &&
+        Objects.equals(this.priorSnapshotId, leaderboardEntryPage.priorSnapshotId) &&
         Objects.equals(this.entries, leaderboardEntryPage.entries);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(number, size, totalElements, totalPages, hasNext, hasPrevious, updatedAt, snapshotId, entries);
+    return Objects.hash(number, size, totalElements, totalPages, hasNext, hasPrevious, updatedAt, snapshotId, priorSnapshotId, entries);
   }
 
   @Override
@@ -294,6 +317,7 @@ public class LeaderboardEntryPageDto {
     sb.append("    hasPrevious: ").append(toIndentedString(hasPrevious)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    snapshotId: ").append(toIndentedString(snapshotId)).append("\n");
+    sb.append("    priorSnapshotId: ").append(toIndentedString(priorSnapshotId)).append("\n");
     sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -331,6 +355,7 @@ public class LeaderboardEntryPageDto {
       this.instance.setHasPrevious(value.hasPrevious);
       this.instance.setUpdatedAt(value.updatedAt);
       this.instance.setSnapshotId(value.snapshotId);
+      this.instance.setPriorSnapshotId(value.priorSnapshotId);
       this.instance.setEntries(value.entries);
       return this;
     }
@@ -372,6 +397,11 @@ public class LeaderboardEntryPageDto {
     
     public LeaderboardEntryPageDto.Builder snapshotId(String snapshotId) {
       this.instance.snapshotId(snapshotId);
+      return this;
+    }
+    
+    public LeaderboardEntryPageDto.Builder priorSnapshotId(String priorSnapshotId) {
+      this.instance.priorSnapshotId(priorSnapshotId);
       return this;
     }
     

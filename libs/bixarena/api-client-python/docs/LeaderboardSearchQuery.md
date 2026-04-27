@@ -12,6 +12,7 @@ A leaderboard search query with pagination and filtering options.
 | **direction**   | [**SortDirection**](SortDirection.md)     |                                                        | [optional] [default to SortDirection.ASC]    |
 | **search**      | **str**                                   | Search by model name (case-insensitive partial match). | [optional]                                   |
 | **snapshot_id** | **str**                                   | Get a specific historical snapshot instead of latest.  | [optional]                                   |
+| **lookback**    | **int**                                   | Comparison window in days for computing rankDelta.     | [optional]                                   |
 
 ## Example
 

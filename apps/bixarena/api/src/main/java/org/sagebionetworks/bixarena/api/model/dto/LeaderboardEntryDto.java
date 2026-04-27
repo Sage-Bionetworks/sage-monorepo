@@ -44,6 +44,8 @@ public class LeaderboardEntryDto {
 
   private Integer rank;
 
+  private @Nullable Integer rankDelta = null;
+
   private Double bootstrapQ025;
 
   private Double bootstrapQ975;
@@ -252,6 +254,26 @@ public class LeaderboardEntryDto {
     this.rank = rank;
   }
 
+  public LeaderboardEntryDto rankDelta(@Nullable Integer rankDelta) {
+    this.rankDelta = rankDelta;
+    return this;
+  }
+
+  /**
+   * Positions gained vs the comparison snapshot. Positive = improved, negative = dropped, zero = unchanged. Null when no comparison is available. 
+   * @return rankDelta
+   */
+  
+  @Schema(name = "rankDelta", example = "2", description = "Positions gained vs the comparison snapshot. Positive = improved, negative = dropped, zero = unchanged. Null when no comparison is available. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("rankDelta")
+  public @Nullable Integer getRankDelta() {
+    return rankDelta;
+  }
+
+  public void setRankDelta(@Nullable Integer rankDelta) {
+    this.rankDelta = rankDelta;
+  }
+
   public LeaderboardEntryDto bootstrapQ025(Double bootstrapQ025) {
     this.bootstrapQ025 = bootstrapQ025;
     return this;
@@ -330,6 +352,7 @@ public class LeaderboardEntryDto {
         Objects.equals(this.btScore, leaderboardEntry.btScore) &&
         Objects.equals(this.voteCount, leaderboardEntry.voteCount) &&
         Objects.equals(this.rank, leaderboardEntry.rank) &&
+        Objects.equals(this.rankDelta, leaderboardEntry.rankDelta) &&
         Objects.equals(this.bootstrapQ025, leaderboardEntry.bootstrapQ025) &&
         Objects.equals(this.bootstrapQ975, leaderboardEntry.bootstrapQ975) &&
         Objects.equals(this.createdAt, leaderboardEntry.createdAt);
@@ -337,7 +360,7 @@ public class LeaderboardEntryDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, modelId, modelName, modelOrganization, modelUrl, license, btScore, voteCount, rank, bootstrapQ025, bootstrapQ975, createdAt);
+    return Objects.hash(id, modelId, modelName, modelOrganization, modelUrl, license, btScore, voteCount, rank, rankDelta, bootstrapQ025, bootstrapQ975, createdAt);
   }
 
   @Override
@@ -353,6 +376,7 @@ public class LeaderboardEntryDto {
     sb.append("    btScore: ").append(toIndentedString(btScore)).append("\n");
     sb.append("    voteCount: ").append(toIndentedString(voteCount)).append("\n");
     sb.append("    rank: ").append(toIndentedString(rank)).append("\n");
+    sb.append("    rankDelta: ").append(toIndentedString(rankDelta)).append("\n");
     sb.append("    bootstrapQ025: ").append(toIndentedString(bootstrapQ025)).append("\n");
     sb.append("    bootstrapQ975: ").append(toIndentedString(bootstrapQ975)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
@@ -393,6 +417,7 @@ public class LeaderboardEntryDto {
       this.instance.setBtScore(value.btScore);
       this.instance.setVoteCount(value.voteCount);
       this.instance.setRank(value.rank);
+      this.instance.setRankDelta(value.rankDelta);
       this.instance.setBootstrapQ025(value.bootstrapQ025);
       this.instance.setBootstrapQ975(value.bootstrapQ975);
       this.instance.setCreatedAt(value.createdAt);
@@ -441,6 +466,11 @@ public class LeaderboardEntryDto {
     
     public LeaderboardEntryDto.Builder rank(Integer rank) {
       this.instance.rank(rank);
+      return this;
+    }
+    
+    public LeaderboardEntryDto.Builder rankDelta(Integer rankDelta) {
+      this.instance.rankDelta(rankDelta);
       return this;
     }
     

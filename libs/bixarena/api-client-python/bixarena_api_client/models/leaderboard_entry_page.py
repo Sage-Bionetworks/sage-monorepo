@@ -18,7 +18,7 @@ import json
 
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from bixarena_api_client.models.leaderboard_entry import LeaderboardEntry
 from typing import Optional, Set
 from typing_extensions import Self
@@ -49,6 +49,11 @@ class LeaderboardEntryPage(BaseModel):
     snapshot_id: StrictStr = Field(
         description="Identifier for this snapshot/timepoint", alias="snapshotId"
     )
+    prior_snapshot_id: Optional[StrictStr] = Field(
+        default=None,
+        description="Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.",
+        alias="priorSnapshotId",
+    )
     entries: List[LeaderboardEntry] = Field(
         description="A list of leaderboard entries."
     )
@@ -61,6 +66,7 @@ class LeaderboardEntryPage(BaseModel):
         "hasPrevious",
         "updatedAt",
         "snapshotId",
+        "priorSnapshotId",
         "entries",
     ]
 
@@ -108,6 +114,14 @@ class LeaderboardEntryPage(BaseModel):
                 if _item_entries:
                     _items.append(_item_entries.to_dict())
             _dict["entries"] = _items
+        # set to None if prior_snapshot_id (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.prior_snapshot_id is None
+            and "prior_snapshot_id" in self.model_fields_set
+        ):
+            _dict["priorSnapshotId"] = None
+
         return _dict
 
     @classmethod
@@ -129,6 +143,7 @@ class LeaderboardEntryPage(BaseModel):
                 "hasPrevious": obj.get("hasPrevious"),
                 "updatedAt": obj.get("updatedAt"),
                 "snapshotId": obj.get("snapshotId"),
+                "priorSnapshotId": obj.get("priorSnapshotId"),
                 "entries": [
                     LeaderboardEntry.from_dict(_item) for _item in obj["entries"]
                 ]

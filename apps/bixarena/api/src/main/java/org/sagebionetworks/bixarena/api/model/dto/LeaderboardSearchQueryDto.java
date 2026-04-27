@@ -39,6 +39,8 @@ public class LeaderboardSearchQueryDto {
 
   private @Nullable String snapshotId = null;
 
+  private @Nullable Integer lookback = null;
+
   public LeaderboardSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
     return this;
@@ -162,6 +164,27 @@ public class LeaderboardSearchQueryDto {
     this.snapshotId = snapshotId;
   }
 
+  public LeaderboardSearchQueryDto lookback(@Nullable Integer lookback) {
+    this.lookback = lookback;
+    return this;
+  }
+
+  /**
+   * Comparison window in days for computing rankDelta.
+   * minimum: 1
+   * @return lookback
+   */
+  @Min(1) 
+  @Schema(name = "lookback", example = "7", description = "Comparison window in days for computing rankDelta.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("lookback")
+  public @Nullable Integer getLookback() {
+    return lookback;
+  }
+
+  public void setLookback(@Nullable Integer lookback) {
+    this.lookback = lookback;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -176,12 +199,13 @@ public class LeaderboardSearchQueryDto {
         Objects.equals(this.sort, leaderboardSearchQuery.sort) &&
         Objects.equals(this.direction, leaderboardSearchQuery.direction) &&
         Objects.equals(this.search, leaderboardSearchQuery.search) &&
-        Objects.equals(this.snapshotId, leaderboardSearchQuery.snapshotId);
+        Objects.equals(this.snapshotId, leaderboardSearchQuery.snapshotId) &&
+        Objects.equals(this.lookback, leaderboardSearchQuery.lookback);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, search, snapshotId);
+    return Objects.hash(pageNumber, pageSize, sort, direction, search, snapshotId, lookback);
   }
 
   @Override
@@ -194,6 +218,7 @@ public class LeaderboardSearchQueryDto {
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("    snapshotId: ").append(toIndentedString(snapshotId)).append("\n");
+    sb.append("    lookback: ").append(toIndentedString(lookback)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -228,6 +253,7 @@ public class LeaderboardSearchQueryDto {
       this.instance.setDirection(value.direction);
       this.instance.setSearch(value.search);
       this.instance.setSnapshotId(value.snapshotId);
+      this.instance.setLookback(value.lookback);
       return this;
     }
 
@@ -258,6 +284,11 @@ public class LeaderboardSearchQueryDto {
     
     public LeaderboardSearchQueryDto.Builder snapshotId(String snapshotId) {
       this.instance.snapshotId(snapshotId);
+      return this;
+    }
+    
+    public LeaderboardSearchQueryDto.Builder lookback(Integer lookback) {
+      this.instance.lookback(lookback);
       return this;
     }
     

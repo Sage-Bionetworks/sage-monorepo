@@ -3427,16 +3427,24 @@ components:
           example: snapshot_2025-08-15_10-00
           nullable: true
           type: string
+        lookback:
+          description: Comparison window in days for computing rankDelta.
+          example: 7
+          format: int32
+          minimum: 1
+          nullable: true
+          type: integer
       type: object
     LeaderboardEntry:
       description: A single entry in a leaderboard representing a model's performance.
       example:
-        modelName: GPT-4o
-        license: MIT
-        createdAt: 2025-08-16T10:30:00Z
-        bootstrapQ025: 887
         modelOrganization: OpenAI
         modelId: model_456
+        modelName: GPT-4o
+        license: MIT
+        rankDelta: 2
+        createdAt: 2025-08-16T10:30:00Z
+        bootstrapQ025: 887
         btScore: 0.925
         bootstrapQ975: 1063
         rank: 1
@@ -3484,6 +3492,13 @@ components:
           description: Current rank position (1-based)
           example: 1
           type: integer
+        rankDelta:
+          description: |
+            Positions gained vs the comparison snapshot. Positive = improved,
+            negative = dropped, zero = unchanged. Null when no comparison is available.
+          example: 2
+          nullable: true
+          type: integer
         bootstrapQ025:
           description: Bootstrap confidence interval lower bound (2.5th percentile)
           example: 887
@@ -3525,6 +3540,12 @@ components:
               description: Identifier for this snapshot/timepoint
               example: snapshot_2025-08-16_14-30
               type: string
+            priorSnapshotId:
+              description: Snapshot used as the rankDelta baseline. Null when no prior
+                snapshot was found.
+              example: snapshot_2025-08-09_14-30
+              nullable: true
+              type: string
             entries:
               description: A list of leaderboard entries.
               items:
@@ -3539,24 +3560,26 @@ components:
       example:
         number: 99
         entries:
-          - modelName: GPT-4o
+          - modelOrganization: OpenAI
+            modelId: model_456
+            modelName: GPT-4o
             license: MIT
+            rankDelta: 2
             createdAt: 2025-08-16T10:30:00Z
             bootstrapQ025: 887
-            modelOrganization: OpenAI
-            modelId: model_456
             btScore: 0.925
             bootstrapQ975: 1063
             rank: 1
             id: entry_123
             voteCount: 1250
             modelUrl: https://openai.com/gpt-4
-          - modelName: GPT-4o
+          - modelOrganization: OpenAI
+            modelId: model_456
+            modelName: GPT-4o
             license: MIT
+            rankDelta: 2
             createdAt: 2025-08-16T10:30:00Z
             bootstrapQ025: 887
-            modelOrganization: OpenAI
-            modelId: model_456
             btScore: 0.925
             bootstrapQ975: 1063
             rank: 1
@@ -3565,6 +3588,7 @@ components:
             modelUrl: https://openai.com/gpt-4
         snapshotId: snapshot_2025-08-16_14-30
         size: 99
+        priorSnapshotId: snapshot_2025-08-09_14-30
         totalPages: 99
         hasPrevious: true
         hasNext: true

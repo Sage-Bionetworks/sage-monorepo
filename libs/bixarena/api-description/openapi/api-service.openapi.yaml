@@ -2436,6 +2436,13 @@ components:
           type: string
           nullable: true
           example: snapshot_2025-08-15_10-00
+        lookback:
+          description: Comparison window in days for computing rankDelta.
+          type: integer
+          format: int32
+          nullable: true
+          minimum: 1
+          example: 7
     LeaderboardEntry:
       type: object
       description: A single entry in a leaderboard representing a model's performance.
@@ -2480,6 +2487,13 @@ components:
           type: integer
           description: Current rank position (1-based)
           example: 1
+        rankDelta:
+          type: integer
+          nullable: true
+          description: |
+            Positions gained vs the comparison snapshot. Positive = improved,
+            negative = dropped, zero = unchanged. Null when no comparison is available.
+          example: 2
         bootstrapQ025:
           type: number
           format: double
@@ -2523,6 +2537,11 @@ components:
               type: string
               description: Identifier for this snapshot/timepoint
               example: snapshot_2025-08-16_14-30
+            priorSnapshotId:
+              type: string
+              nullable: true
+              description: Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.
+              example: snapshot_2025-08-09_14-30
             entries:
               description: A list of leaderboard entries.
               type: array

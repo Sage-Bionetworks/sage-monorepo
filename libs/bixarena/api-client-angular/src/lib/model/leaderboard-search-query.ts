@@ -32,5 +32,9 @@ export interface LeaderboardSearchQuery {
    * Get a specific historical snapshot instead of latest.
    */
   snapshotId?: string | null;
+  /**
+   * Comparison window in days for computing rankDelta.
+   */
+  lookback?: number | null;
 }
 export namespace LeaderboardSearchQuery {}

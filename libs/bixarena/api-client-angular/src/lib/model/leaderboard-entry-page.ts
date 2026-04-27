@@ -46,6 +46,10 @@ export interface LeaderboardEntryPage {
    */
   snapshotId: string;
   /**
+   * Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.
+   */
+  priorSnapshotId?: string | null;
+  /**
    * A list of leaderboard entries.
    */
   entries: Array<LeaderboardEntry>;
