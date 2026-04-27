@@ -1,6 +1,6 @@
 import { Page, expect } from '@playwright/test';
+import { ComparisonToolConfig } from '@sagebionetworks/agora/api-client';
 import { expectComparisonToolTableLoaded } from '@sagebionetworks/explorers/testing/e2e';
-import { ComparisonToolConfig } from '@sagebionetworks/model-ad/api-client';
 import { baseURL } from '../../playwright.config';
 import {
   COMPARISON_TOOL_API_PATHS,

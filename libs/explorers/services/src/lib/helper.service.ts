@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ParamMap } from '@angular/router';
 import { Panel } from '@sagebionetworks/explorers/models';
 
 @Injectable({
@@ -47,6 +48,17 @@ export class HelperService {
   getPanelUrl(basePath: string, activePanel: string, activeParent: string) {
     const panelPath = activeParent === '' ? activePanel : `${activeParent}/${activePanel}`;
     return `${basePath}/${panelPath}`;
+  }
+
+  handlePanelChange(
+    panels: Panel[],
+    panel: Panel,
+    basePath: string,
+  ): { activePanel: string; activeParent: string; url: string } | undefined {
+    if (panel.disabled) return undefined;
+    const { activePanel, activeParent } = this.getActivePanelAndParent(panels, panel);
+    const url = this.getPanelUrl(basePath, activePanel, activeParent);
+    return { activePanel, activeParent, url };
   }
 
   getActivePanelAndParent(
@@ -103,6 +115,45 @@ export class HelperService {
   getHashFragment() {
     // Extract hash fragment from URL (e.g. "nfl" from "#nfl")
     return window.location.hash.slice(1);
+  }
+
+  getActivePanelAndParentFromUrl(
+    panels: Panel[],
+    params: ParamMap,
+  ): { activePanel: string; activeParent: string; shouldScrollToPanelNav: boolean } | undefined {
+    const noHashFragment = this.getHashFragment() === '';
+    if (params.get('subtab')) {
+      return {
+        activePanel: params.get('subtab') as string,
+        activeParent: params.get('tab') as string,
+        shouldScrollToPanelNav: noHashFragment,
+      };
+    } else if (params.get('tab')) {
+      const panel = panels.find((p: Panel) => p.name === params.get('tab'));
+      if (panel) {
+        const { activePanel, activeParent } = this.getActivePanelAndParent(panels, panel);
+        return {
+          activePanel,
+          activeParent,
+          shouldScrollToPanelNav: noHashFragment,
+        };
+      }
+    }
+    return undefined;
+  }
+
+  getFallbackPanelIfInvalid(
+    panels: Panel[],
+    activePanel: string,
+  ): { activePanel: string; activeParent: string } | undefined {
+    const currentPanel = this.findPanelByName(panels, activePanel);
+    if (!currentPanel || currentPanel.disabled) {
+      const fallbackPanel = panels.find((panel) => panel.disabled === false);
+      if (fallbackPanel) {
+        return this.getActivePanelAndParent(panels, fallbackPanel);
+      }
+    }
+    return undefined;
   }
 
   encodeParenthesesForwardSlashes(uri: string) {

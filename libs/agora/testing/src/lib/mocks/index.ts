@@ -4,6 +4,7 @@ export * from './chart-mocks';
 export * from './config-mocks';
 export * from './data-version-mocks';
 export * from './distribution-mocks';
+export * from './drug-mocks';
 export * from './gene-comparison-tool-mocks';
 export * from './gene-mocks';
 export * from './gene-network-mocks';
