@@ -92,7 +92,10 @@ describe('LeaderboardFacadeService', () => {
   it('loads entries and exposes snapshot metadata', async () => {
     await service.load();
 
-    expect(api.getLeaderboard).toHaveBeenCalledWith('overall', { pageSize: 1000 });
+    expect(api.getLeaderboard).toHaveBeenCalledWith('overall', {
+      lookback: 7,
+      pageSize: 1000,
+    });
     expect(service.entries().length).toBe(2);
     expect(service.totalElements()).toBe(2);
     expect(service.snapshotUpdatedAt()).toBe('2026-04-25T10:00:00Z');
@@ -108,6 +111,7 @@ describe('LeaderboardFacadeService', () => {
   it('passes through search query', async () => {
     await service.load('overall', { pageSize: 50, search: 'gpt' });
     expect(api.getLeaderboard).toHaveBeenCalledWith('overall', {
+      lookback: 7,
       pageSize: 50,
       search: 'gpt',
     });

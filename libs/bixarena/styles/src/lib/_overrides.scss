@@ -251,6 +251,11 @@
     box-shadow: none;
   }
 
+  .p-tooltip-text {
+    font-size: var(--text-xs);
+    padding: 0.4rem 0.6rem;
+  }
+
   // Tighter selected-option emphasis in select dropdowns. Theme-aware bg
   // comes from the base preset; this just adds aesthetic weight + hover
   // contrast.

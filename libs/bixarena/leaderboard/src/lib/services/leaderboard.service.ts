@@ -6,7 +6,11 @@ import {
   LeaderboardSearchQuery,
   LeaderboardService as LeaderboardApiService,
 } from '@sagebionetworks/bixarena/api-client';
-import { DEFAULT_CATEGORY_SLUG, FETCH_ALL_PAGE_SIZE } from '../leaderboard.constants';
+import {
+  DEFAULT_CATEGORY_SLUG,
+  FETCH_ALL_PAGE_SIZE,
+  LOOKBACK_DAYS,
+} from '../leaderboard.constants';
 
 @Injectable()
 export class LeaderboardFacadeService {
@@ -40,8 +44,9 @@ export class LeaderboardFacadeService {
   ): Promise<void> {
     this.loading.set(true);
     this.error.set(null);
+    const finalQuery: LeaderboardSearchQuery = { lookback: LOOKBACK_DAYS, ...query };
     try {
-      const page = await firstValueFrom(this.api.getLeaderboard(leaderboardId, query));
+      const page = await firstValueFrom(this.api.getLeaderboard(leaderboardId, finalQuery));
       this.entries.set(page.entries);
       this.totalElements.set(page.totalElements);
       this.snapshotUpdatedAt.set(page.updatedAt);
@@ -49,9 +54,14 @@ export class LeaderboardFacadeService {
         leaderboardId,
         entries: page.entries.length,
         totalElements: page.totalElements,
+        priorSnapshotId: page.priorSnapshotId ?? null,
       });
     } catch (err) {
-      console.error('❌ Failed to fetch leaderboard data', { leaderboardId, query, err });
+      console.error('❌ Failed to fetch leaderboard data', {
+        leaderboardId,
+        query: finalQuery,
+        err,
+      });
       this.error.set('Could not load leaderboard');
       this.entries.set([]);
       this.totalElements.set(0);

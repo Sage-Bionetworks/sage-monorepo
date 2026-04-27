@@ -14,6 +14,28 @@ tr.top-three .col-rank {
   font-weight: 700;
 }
 
+.col-diff {
+  width: 4.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.diff {
+  font-size: var(--text-sm);
+  font-weight: 560;
+}
+
+.diff-up {
+  color: var(--p-green-600);
+}
+
+.diff-down {
+  color: var(--p-surface-500);
+}
+
+.diff-flat {
+  color: var(--p-surface-400);
+}
+
 .col-model {
   min-width: 14rem;
 }
