@@ -112,21 +112,27 @@ def fetch_all_models(conn) -> list[dict[str, Any]]:
         return cur.fetchall()
 
 
-def fetch_battle_evaluations(conn) -> list[dict[str, Any]]:
+def fetch_battle_evaluations(
+    conn, category_slug: str | None = None
+) -> list[dict[str, Any]]:
     """
     Fetch battle evaluations with model names for ranking.
 
-    Only includes evaluations where the battle is validated as biomedical.
+    Only includes evaluations where the battle is validated as biomedical. When
+    category_slug is provided, also restricts to battles whose effective
+    categorization is status='matched' and includes the given category.
 
     Args:
         conn: Database connection
+        category_slug: Optional BiomedicalCategory slug. When None, all biomedical
+            battles are returned (overall leaderboard). When set, only battles
+            categorized as that slug are returned (per-category leaderboard).
 
     Returns:
         List of dicts with model1_name, model2_name, outcome
     """
-    with conn.cursor() as cur:
-        cur.execute(
-            """
+    if category_slug is None:
+        query = """
             SELECT m1.name as model1_name,
                    m2.name as model2_name,
                    eval.outcome
@@ -136,8 +142,27 @@ def fetch_battle_evaluations(conn) -> list[dict[str, Any]]:
             JOIN api.model m1 ON b.model1_id = m1.id
             JOIN api.model m2 ON b.model2_id = m2.id
             WHERE bv.is_biomedical = true
-            """
-        )
+        """
+        params: tuple = ()
+    else:
+        query = """
+            SELECT m1.name as model1_name,
+                   m2.name as model2_name,
+                   eval.outcome
+            FROM api.battle_evaluation eval
+            JOIN api.battle b ON eval.battle_id = b.id
+            JOIN api.battle_validation bv ON bv.id = b.effective_validation_id
+            JOIN api.battle_categorization bc ON bc.id = b.effective_categorization_id
+            JOIN api.battle_categorization_category bcc ON bcc.categorization_id = bc.id
+            JOIN api.model m1 ON b.model1_id = m1.id
+            JOIN api.model m2 ON b.model2_id = m2.id
+            WHERE bv.is_biomedical = true
+              AND bc.status = 'matched'
+              AND bcc.category = %s
+        """
+        params = (category_slug,)
+    with conn.cursor() as cur:
+        cur.execute(query, params)
         return cur.fetchall()
 
 

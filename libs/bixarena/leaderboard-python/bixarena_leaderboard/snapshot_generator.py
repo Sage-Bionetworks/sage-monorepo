@@ -77,7 +77,11 @@ def generate_snapshot(
             )
 
         all_models = fetch_all_models(conn)
-        all_evaluations = fetch_battle_evaluations(conn)
+        # 'overall' aggregates across all biomedical battles regardless of
+        # category; any other slug filters to battles tagged with that
+        # BiomedicalCategory (slug == category by convention).
+        category_slug = None if leaderboard_slug == "overall" else leaderboard_slug
+        all_evaluations = fetch_battle_evaluations(conn, category_slug=category_slug)
 
         if not all_evaluations:
             raise ValueError("No battle evaluations found in database.")
