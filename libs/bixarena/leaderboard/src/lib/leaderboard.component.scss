@@ -34,6 +34,15 @@
   line-height: 1.55;
 }
 
+.methodology-note {
+  font-size: var(--text-sm);
+  color: var(--p-surface-500);
+  max-width: 53rem;
+  margin: 1.5rem auto 0;
+  line-height: 1.55;
+  text-align: center;
+}
+
 .stats-strip {
   display: flex;
   justify-content: center;

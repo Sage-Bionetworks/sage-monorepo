@@ -2,8 +2,8 @@
   <header class="hero">
     <h1 class="title">Leader<em>board</em></h1>
     <p class="subtitle">
-      Community-driven evaluation of AI models on biomedical topics. Rankings are computed using the
-      Bradley-Terry model after every battle.
+      Community-driven evaluation of AI models on biomedical topics. Every battle counts toward the
+      daily ranking.
     </p>
     <div class="stats-strip">
       <div class="stat">
@@ -61,4 +61,10 @@
       (onPageChange)="onPageChange($event)"
     />
   }
+
+  <p class="methodology-note">
+    Models are ranked by Bradley-Terry score on an Elo scale. 95% bootstrap confidence intervals
+    show statistical uncertainty; once significance-aware ranking is enabled, models with
+    overlapping intervals will share a tied rank.
+  </p>
 </div>
