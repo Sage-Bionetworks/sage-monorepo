@@ -55,7 +55,9 @@ export class LeaderboardComponent {
     if (list.length === 0) {
       return [{ id: DEFAULT_CATEGORY_SLUG, name: 'Overall' }];
     }
-    return list.map((lb) => ({ id: lb.id, name: lb.name }));
+    return list
+      .filter((lb) => (lb.latestSnapshot?.entryCount ?? 0) > 0 || lb.id === DEFAULT_CATEGORY_SLUG)
+      .map((lb) => ({ id: lb.id, name: lb.name }));
   });
 
   readonly displayedEntries = computed<LeaderboardEntry[]>(() => {
