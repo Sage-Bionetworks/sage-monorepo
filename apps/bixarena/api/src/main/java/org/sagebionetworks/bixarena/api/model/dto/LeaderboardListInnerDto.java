@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.OffsetDateTime;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -33,6 +34,8 @@ public class LeaderboardListInnerDto {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
+
+  private @Nullable LeaderboardSnapshotDto latestSnapshot;
 
   public LeaderboardListInnerDto() {
     super();
@@ -128,6 +131,26 @@ public class LeaderboardListInnerDto {
     this.updatedAt = updatedAt;
   }
 
+  public LeaderboardListInnerDto latestSnapshot(@Nullable LeaderboardSnapshotDto latestSnapshot) {
+    this.latestSnapshot = latestSnapshot;
+    return this;
+  }
+
+  /**
+   * Get latestSnapshot
+   * @return latestSnapshot
+   */
+  @Valid 
+  @Schema(name = "latestSnapshot", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("latestSnapshot")
+  public @Nullable LeaderboardSnapshotDto getLatestSnapshot() {
+    return latestSnapshot;
+  }
+
+  public void setLatestSnapshot(@Nullable LeaderboardSnapshotDto latestSnapshot) {
+    this.latestSnapshot = latestSnapshot;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -140,12 +163,13 @@ public class LeaderboardListInnerDto {
     return Objects.equals(this.id, leaderboardListInner.id) &&
         Objects.equals(this.name, leaderboardListInner.name) &&
         Objects.equals(this.description, leaderboardListInner.description) &&
-        Objects.equals(this.updatedAt, leaderboardListInner.updatedAt);
+        Objects.equals(this.updatedAt, leaderboardListInner.updatedAt) &&
+        Objects.equals(this.latestSnapshot, leaderboardListInner.latestSnapshot);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, description, updatedAt);
+    return Objects.hash(id, name, description, updatedAt, latestSnapshot);
   }
 
   @Override
@@ -156,6 +180,7 @@ public class LeaderboardListInnerDto {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
+    sb.append("    latestSnapshot: ").append(toIndentedString(latestSnapshot)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -188,6 +213,7 @@ public class LeaderboardListInnerDto {
       this.instance.setName(value.name);
       this.instance.setDescription(value.description);
       this.instance.setUpdatedAt(value.updatedAt);
+      this.instance.setLatestSnapshot(value.latestSnapshot);
       return this;
     }
 
@@ -208,6 +234,11 @@ public class LeaderboardListInnerDto {
     
     public LeaderboardListInnerDto.Builder updatedAt(OffsetDateTime updatedAt) {
       this.instance.updatedAt(updatedAt);
+      return this;
+    }
+    
+    public LeaderboardListInnerDto.Builder latestSnapshot(LeaderboardSnapshotDto latestSnapshot) {
+      this.instance.latestSnapshot(latestSnapshot);
       return this;
     }
     

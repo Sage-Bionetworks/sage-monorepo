@@ -194,7 +194,7 @@ public interface LeaderboardApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"name\" : \"Open Source Models\", \"description\" : \"Performance ranking of open-source AI models\", \"id\" : \"open-source\", \"updatedAt\" : \"2025-08-16T14:30:00Z\" }, { \"name\" : \"Open Source Models\", \"description\" : \"Performance ranking of open-source AI models\", \"id\" : \"open-source\", \"updatedAt\" : \"2025-08-16T14:30:00Z\" } ]";
+                    String exampleString = "[ { \"name\" : \"Open Source Models\", \"description\" : \"Performance ranking of open-source AI models\", \"id\" : \"open-source\", \"latestSnapshot\" : { \"createdAt\" : \"2025-08-16T14:30:00Z\", \"entryCount\" : 50, \"visibility\" : \"public\", \"description\" : \"Weekly evaluation run\", \"id\" : \"snapshot_2025-08-16_14-30\", \"updatedAt\" : \"2024-01-15T10:45:00Z\" }, \"updatedAt\" : \"2025-08-16T14:30:00Z\" }, { \"name\" : \"Open Source Models\", \"description\" : \"Performance ranking of open-source AI models\", \"id\" : \"open-source\", \"latestSnapshot\" : { \"createdAt\" : \"2025-08-16T14:30:00Z\", \"entryCount\" : 50, \"visibility\" : \"public\", \"description\" : \"Weekly evaluation run\", \"id\" : \"snapshot_2025-08-16_14-30\", \"updatedAt\" : \"2024-01-15T10:45:00Z\" }, \"updatedAt\" : \"2025-08-16T14:30:00Z\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
