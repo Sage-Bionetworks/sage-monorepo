@@ -183,8 +183,8 @@ def generate_all_snapshots(
     num_bootstrap: int = 1000,
     min_evals: int = 10,
     significant: bool = False,
-    min_total_battles: int = 30,
-    min_total_models: int = 3,
+    min_total_battles: int = 100,
+    min_total_models: int = 10,
     dry_run: bool = False,
 ) -> dict:
     """

@@ -157,7 +157,10 @@ class TestGenerateAllSnapshotsBehavior:
         patches = _patch_orchestrator(leaderboards, stats, outcomes)
         _apply_patches(patches)
         try:
-            summary = generate_all_snapshots()
+            summary = generate_all_snapshots(
+                min_total_battles=10,
+                min_total_models=2,
+            )
         finally:
             _stop_patches(patches)
 
@@ -188,7 +191,10 @@ class TestGenerateAllSnapshotsBehavior:
         patches = _patch_orchestrator(leaderboards, stats, outcomes)
         _apply_patches(patches)
         try:
-            summary = generate_all_snapshots()
+            summary = generate_all_snapshots(
+                min_total_battles=10,
+                min_total_models=2,
+            )
         finally:
             _stop_patches(patches)
 
@@ -206,7 +212,11 @@ class TestGenerateAllSnapshotsBehavior:
         patches = _patch_orchestrator(leaderboards, stats, outcomes)
         _apply_patches(patches)
         try:
-            summary = generate_all_snapshots()
+            # 2 < 3 → trips the model gate.
+            summary = generate_all_snapshots(
+                min_total_battles=10,
+                min_total_models=3,
+            )
         finally:
             _stop_patches(patches)
 
@@ -240,7 +250,10 @@ class TestGenerateAllSnapshotsBehavior:
         _apply_patches(patches)
         try:
             with pytest.raises(SnapshotRunError) as excinfo:
-                generate_all_snapshots()
+                generate_all_snapshots(
+                    min_total_battles=10,
+                    min_total_models=2,
+                )
         finally:
             _stop_patches(patches)
 

@@ -61,12 +61,12 @@ def snapshot_add(
         ),
     ),
     min_total_battles: int = typer.Option(
-        30,
+        100,
         "--min-total-battles",
         help="--all only: skip leaderboards with fewer total battles than this",
     ),
     min_total_models: int = typer.Option(
-        3,
+        10,
         "--min-total-models",
         help="--all only: skip leaderboards with fewer distinct models than this",
     ),
