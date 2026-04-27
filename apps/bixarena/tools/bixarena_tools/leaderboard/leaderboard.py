@@ -5,7 +5,11 @@ from bixarena_leaderboard.db_helper import (
     get_db_connection,
     update_leaderboard_snapshot,
 )
-from bixarena_leaderboard.snapshot_generator import generate_snapshot
+from bixarena_leaderboard.snapshot_generator import (
+    SnapshotRunError,
+    generate_all_snapshots,
+    generate_snapshot,
+)
 from rich.console import Console
 from rich.table import Table
 
@@ -91,6 +95,122 @@ def snapshot_add(
     except Exception as e:
         console.print(f"[bold red]Error: {e}[/bold red]")
         raise typer.Exit(1) from e
+
+
+@snapshot_app.command("add-all")
+def snapshot_add_all(
+    num_bootstrap: int = typer.Option(
+        100,
+        "--num-bootstrap",
+        help="Number of bootstrap iterations for confidence intervals",
+    ),
+    min_evals: int = typer.Option(
+        0,
+        "--min",
+        help="Minimum evaluations per model to include in the leaderboard",
+    ),
+    significant: bool = typer.Option(
+        False,
+        "--significant",
+        help="Rank by statistical significance (CI overlap) instead of BT score",
+    ),
+    min_leaderboard_battles: int = typer.Option(
+        30,
+        "--min-leaderboard-battles",
+        help="Skip leaderboards with fewer total battles than this",
+    ),
+    min_leaderboard_models: int = typer.Option(
+        3,
+        "--min-leaderboard-models",
+        help="Skip leaderboards with fewer distinct models than this",
+    ),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Compute and display results without writing to database",
+    ),
+):
+    """
+    Create snapshots for every leaderboard.
+
+    Iterates over every leaderboard in api.leaderboard. Skips any leaderboard
+    whose qualifying battle or model count falls below the gating thresholds;
+    generates a fresh snapshot for the rest. One slug failing does not stop
+    the rest of the run.
+
+    Example:
+        uv run bixarena leaderboard snapshot add-all --num-bootstrap 100
+        uv run bixarena leaderboard snapshot add-all --dry-run
+    """
+    console.print("[bold blue]BixArena Multi-Leaderboard Snapshot Run[/bold blue]")
+    console.print("=" * 60)
+
+    summary: dict | None = None
+    try:
+        summary = generate_all_snapshots(
+            num_bootstrap=num_bootstrap,
+            min_evals=min_evals,
+            significant=significant,
+            min_leaderboard_battles=min_leaderboard_battles,
+            min_leaderboard_models=min_leaderboard_models,
+            dry_run=dry_run,
+        )
+    except SnapshotRunError as exc:
+        # Partial failure — print the summary, then exit non-zero.
+        summary = exc.summary
+        console.print(f"\n[bold red]{exc}[/bold red]")
+    except Exception as e:
+        console.print(f"[bold red]Error: {e}[/bold red]")
+        raise typer.Exit(1) from e
+
+    if summary is None:
+        return
+
+    if dry_run:
+        console.print(
+            "\n[yellow]DRY RUN: Results computed only. Database not updated.[/yellow]"
+        )
+
+    table = Table(title="\nLeaderboard Run Summary")
+    table.add_column("Slug", style="cyan")
+    table.add_column("Outcome", style="bold")
+    table.add_column("Detail", style="dim")
+
+    for entry in summary.get("generated", []):
+        table.add_row(
+            entry["slug"],
+            "[green]generated[/green]",
+            (
+                f"{entry.get('entry_count', 0)} entries, "
+                f"{entry.get('evaluation_count', 0)} evaluations"
+            ),
+        )
+    for entry in summary.get("skipped", []):
+        table.add_row(
+            entry["slug"],
+            "[yellow]skipped[/yellow]",
+            (
+                f"{entry['reason']} "
+                f"(battles={entry['battle_count']}, models={entry['model_count']})"
+            ),
+        )
+    for entry in summary.get("failed", []):
+        table.add_row(
+            entry["slug"],
+            "[red]failed[/red]",
+            entry.get("error", ""),
+        )
+
+    console.print(table)
+    console.print(
+        f"\n[green]{len(summary.get('generated', []))} generated[/green], "
+        f"[yellow]{len(summary.get('skipped', []))} skipped[/yellow], "
+        f"[red]{len(summary.get('failed', []))} failed[/red] "
+        f"(of {summary.get('total', 0)} total)"
+    )
+
+    if summary.get("failed"):
+        raise typer.Exit(1)
 
 
 @snapshot_app.command("list")
