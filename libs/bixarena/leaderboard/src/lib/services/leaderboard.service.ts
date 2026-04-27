@@ -31,7 +31,11 @@ export class LeaderboardFacadeService {
     try {
       const list = await firstValueFrom(this.api.listLeaderboards());
       this.leaderboards.set(list ?? []);
-      console.debug('✅ Fetched leaderboard categories', { count: list?.length ?? 0 });
+      const total = list?.length ?? 0;
+      const withEntries = (list ?? []).filter(
+        (l) => (l.latestSnapshot?.entryCount ?? 0) > 0,
+      ).length;
+      console.debug('✅ Fetched leaderboard categories', { total, withEntries });
     } catch (err) {
       console.error('❌ Failed to fetch leaderboard categories', err);
       this.leaderboards.set([]);
