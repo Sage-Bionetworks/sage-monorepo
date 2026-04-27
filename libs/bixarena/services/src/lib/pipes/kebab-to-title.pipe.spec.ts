@@ -9,7 +9,7 @@ describe('KebabToTitlePipe', () => {
   });
 
   it('passes single-word values through with title casing', () => {
-    expect(pipe.transform('commercial')).toBe('Commercial');
+    expect(pipe.transform('proprietary')).toBe('Proprietary');
   });
 
   it('returns an empty string for null, undefined, or empty input', () => {

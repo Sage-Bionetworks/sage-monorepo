@@ -22,7 +22,7 @@ const samplePage: LeaderboardEntryPage = {
       modelName: 'GPT-5',
       modelOrganization: 'OpenAI',
       modelUrl: 'https://example.com/gpt-5',
-      license: 'commercial',
+      license: 'proprietary',
       btScore: 1280,
       voteCount: 1500,
       rank: 1,
