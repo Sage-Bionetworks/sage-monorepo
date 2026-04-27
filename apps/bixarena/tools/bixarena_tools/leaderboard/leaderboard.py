@@ -32,7 +32,15 @@ def snapshot_add(
     id: str = typer.Option(
         "overall",
         "--id",
-        help="Leaderboard ID to create snapshot for",
+        help="Leaderboard ID to create snapshot for. Ignored when --all is set.",
+    ),
+    all_: bool = typer.Option(
+        False,
+        "--all",
+        help=(
+            "Generate snapshots for every leaderboard in api.leaderboard, "
+            "with sparse-data gating. Mutually exclusive with --id."
+        ),
     ),
     num_bootstrap: int = typer.Option(
         100,
@@ -52,6 +60,16 @@ def snapshot_add(
             "If False, rank by BT score only."
         ),
     ),
+    min_leaderboard_battles: int = typer.Option(
+        30,
+        "--min-leaderboard-battles",
+        help="--all only: skip leaderboards with fewer total battles than this",
+    ),
+    min_leaderboard_models: int = typer.Option(
+        3,
+        "--min-leaderboard-models",
+        help="--all only: skip leaderboards with fewer distinct models than this",
+    ),
     dry_run: bool = typer.Option(
         False,
         "--dry-run",
@@ -59,14 +77,28 @@ def snapshot_add(
     ),
 ):
     """
-    Create a new leaderboard snapshot.
+    Create one or every leaderboard snapshot.
 
-    This command computes Bradley-Terry rankings from battle evaluations
-    and creates a new snapshot in the database.
+    Default: generates a snapshot for the single leaderboard named by --id.
+    Pass --all to iterate every leaderboard in api.leaderboard, applying
+    sparse-data gating so empty categories are skipped instead of failing.
 
-    Example:
+    Examples:
         uv run bixarena leaderboard snapshot add --id overall --num-bootstrap 1000
+        uv run bixarena leaderboard snapshot add --all
+        uv run bixarena leaderboard snapshot add --all --dry-run
     """
+    if all_:
+        _snapshot_add_all(
+            num_bootstrap=num_bootstrap,
+            min_evals=min_evals,
+            significant=significant,
+            min_leaderboard_battles=min_leaderboard_battles,
+            min_leaderboard_models=min_leaderboard_models,
+            dry_run=dry_run,
+        )
+        return
+
     console.print("[bold blue]BixArena Leaderboard Snapshot Creation[/bold blue]")
     console.print("=" * 60)
 
@@ -97,50 +129,17 @@ def snapshot_add(
         raise typer.Exit(1) from e
 
 
-@snapshot_app.command("add-all")
-def snapshot_add_all(
-    num_bootstrap: int = typer.Option(
-        100,
-        "--num-bootstrap",
-        help="Number of bootstrap iterations for confidence intervals",
-    ),
-    min_evals: int = typer.Option(
-        0,
-        "--min",
-        help="Minimum evaluations per model to include in the leaderboard",
-    ),
-    significant: bool = typer.Option(
-        False,
-        "--significant",
-        help="Rank by statistical significance (CI overlap) instead of BT score",
-    ),
-    min_leaderboard_battles: int = typer.Option(
-        30,
-        "--min-leaderboard-battles",
-        help="Skip leaderboards with fewer total battles than this",
-    ),
-    min_leaderboard_models: int = typer.Option(
-        3,
-        "--min-leaderboard-models",
-        help="Skip leaderboards with fewer distinct models than this",
-    ),
-    dry_run: bool = typer.Option(
-        False,
-        "--dry-run",
-        help="Compute and display results without writing to database",
-    ),
-):
-    """
-    Create snapshots for every leaderboard.
+def _snapshot_add_all(
+    num_bootstrap: int,
+    min_evals: int,
+    significant: bool,
+    min_leaderboard_battles: int,
+    min_leaderboard_models: int,
+    dry_run: bool,
+) -> None:
+    """Iterate every leaderboard, gate sparse ones, render a per-slug summary.
 
-    Iterates over every leaderboard in api.leaderboard. Skips any leaderboard
-    whose qualifying battle or model count falls below the gating thresholds;
-    generates a fresh snapshot for the rest. One slug failing does not stop
-    the rest of the run.
-
-    Example:
-        uv run bixarena leaderboard snapshot add-all --num-bootstrap 100
-        uv run bixarena leaderboard snapshot add-all --dry-run
+    Implementation backing `snapshot add --all`.
     """
     console.print("[bold blue]BixArena Multi-Leaderboard Snapshot Run[/bold blue]")
     console.print("=" * 60)
