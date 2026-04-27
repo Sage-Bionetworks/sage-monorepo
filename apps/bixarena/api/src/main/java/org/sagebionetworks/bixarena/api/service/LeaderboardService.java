@@ -1,5 +1,6 @@
 package org.sagebionetworks.bixarena.api.service;
 
+import jakarta.persistence.criteria.JoinType;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,13 +74,7 @@ public class LeaderboardService {
     // Create pageable with sorting
     Pageable pageable = createPageable(searchQuery);
 
-    // Find entries with optional search
-    Page<LeaderboardEntryEntity> entriesPage = findEntries(
-      leaderboard,
-      snapshot,
-      searchQuery.getSearch(),
-      pageable
-    );
+    Page<LeaderboardEntryEntity> entriesPage = findEntries(leaderboard, snapshot, searchQuery, pageable);
 
     List<LeaderboardEntryDto> entryDtos = entryMapper.convertToDtoList(entriesPage.getContent());
     String priorSnapshotId = decorateRankDeltas(
@@ -88,11 +84,16 @@ public class LeaderboardService {
       entryDtos
     );
 
+    int entryCount = (int) entryRepository.countBySnapshot(snapshot);
+    int voteCount = (int) entryRepository.sumVoteCountBySnapshot(snapshot);
+
     return LeaderboardEntryPageDto.builder()
       .entries(entryDtos)
       .updatedAt(snapshot.getCreatedAt())
       .snapshotId(snapshot.getSnapshotIdentifier())
       .priorSnapshotId(priorSnapshotId)
+      .entryCount(entryCount)
+      .voteCount(voteCount)
       .number(entriesPage.getNumber())
       .size(entriesPage.getSize())
       .totalElements(entriesPage.getTotalElements())
@@ -196,6 +197,9 @@ public class LeaderboardService {
     // Map API sort fields to entity fields
     String entityField =
       switch (sortField) {
+        case "bt_score" -> "btScore";
+        case "vote_count" -> "voteCount";
+        case "model_slug" -> "model.slug";
         case "created_at" -> "createdAt";
         default -> "rank";
       };
@@ -215,19 +219,61 @@ public class LeaderboardService {
   private Page<LeaderboardEntryEntity> findEntries(
     LeaderboardEntity leaderboard,
     LeaderboardSnapshotEntity snapshot,
-    String search,
+    LeaderboardSearchQueryDto searchQuery,
     Pageable pageable
   ) {
-    if (search != null && !search.trim().isEmpty()) {
-      return entryRepository.findByLeaderboardAndSnapshotAndModelNameContaining(
-        leaderboard,
-        snapshot,
-        search.trim(),
-        pageable
-      );
-    } else {
-      return entryRepository.findByLeaderboardAndSnapshot(leaderboard, snapshot, pageable);
+    Specification<LeaderboardEntryEntity> spec = Specification.where(
+      scopeFilter(leaderboard, snapshot)
+    )
+      .and(searchFilter(searchQuery))
+      .and(licenseFilter(searchQuery))
+      .and(organizationFilter(searchQuery))
+      .and(fetchModel());
+    return entryRepository.findAll(spec, pageable);
+  }
+
+  private Specification<LeaderboardEntryEntity> scopeFilter(
+    LeaderboardEntity leaderboard,
+    LeaderboardSnapshotEntity snapshot
+  ) {
+    return (root, cq, cb) ->
+      cb.and(cb.equal(root.get("leaderboard"), leaderboard), cb.equal(root.get("snapshot"), snapshot));
+  }
+
+  private Specification<LeaderboardEntryEntity> searchFilter(LeaderboardSearchQueryDto query) {
+    if (query.getSearch() == null || query.getSearch().trim().isEmpty()) {
+      return null;
     }
+    String pattern = "%" + query.getSearch().trim().toLowerCase() + "%";
+    return (root, cq, cb) -> cb.like(cb.lower(root.get("model").get("name")), pattern);
+  }
+
+  private Specification<LeaderboardEntryEntity> licenseFilter(LeaderboardSearchQueryDto query) {
+    if (query.getLicense() == null) {
+      return null;
+    }
+    String licenseValue = query.getLicense().getValue();
+    return (root, cq, cb) -> cb.equal(root.get("model").get("license"), licenseValue);
+  }
+
+  private Specification<LeaderboardEntryEntity> organizationFilter(LeaderboardSearchQueryDto query) {
+    if (query.getOrganization() == null || query.getOrganization().trim().isEmpty()) {
+      return null;
+    }
+    String value = query.getOrganization().trim().toLowerCase();
+    return (root, cq, cb) -> cb.equal(cb.lower(root.get("model").get("organization")), value);
+  }
+
+  // Re-apply the JOIN FETCH that the previous JPQL had, but only on the result query
+  // (not on the count query Spring Data issues for pagination).
+  private Specification<LeaderboardEntryEntity> fetchModel() {
+    return (root, cq, cb) -> {
+      Class<?> resultType = cq.getResultType();
+      if (resultType != Long.class && resultType != long.class) {
+        root.fetch("model", JoinType.INNER);
+      }
+      return null;
+    };
   }
 
   private LeaderboardListInnerDto convertToListResponse(LeaderboardEntity entity) {

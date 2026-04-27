@@ -9,37 +9,28 @@ import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LeaderboardEntryRepository extends JpaRepository<LeaderboardEntryEntity, UUID> {
+public interface LeaderboardEntryRepository
+  extends
+    JpaRepository<LeaderboardEntryEntity, UUID>,
+    JpaSpecificationExecutor<LeaderboardEntryEntity> {
 
   interface RankBySlug {
     String getModelSlug();
     Integer getRank();
   }
 
-  @Query(
-    "SELECT e FROM LeaderboardEntryEntity e JOIN FETCH e.model WHERE e.leaderboard = :leaderboard AND e.snapshot = :snapshot"
-  )
-  Page<LeaderboardEntryEntity> findByLeaderboardAndSnapshot(
-    @Param("leaderboard") LeaderboardEntity leaderboard,
-    @Param("snapshot") LeaderboardSnapshotEntity snapshot,
-    Pageable pageable
-  );
+  long countBySnapshot(LeaderboardSnapshotEntity snapshot);
 
   @Query(
-    "SELECT e FROM LeaderboardEntryEntity e JOIN FETCH e.model WHERE e.leaderboard = :leaderboard AND e.snapshot = :snapshot " +
-    "AND LOWER(e.model.name) LIKE LOWER(CONCAT('%', :search, '%'))"
+    "SELECT COALESCE(SUM(e.voteCount), 0) FROM LeaderboardEntryEntity e WHERE e.snapshot = :snapshot"
   )
-  Page<LeaderboardEntryEntity> findByLeaderboardAndSnapshotAndModelNameContaining(
-    @Param("leaderboard") LeaderboardEntity leaderboard,
-    @Param("snapshot") LeaderboardSnapshotEntity snapshot,
-    @Param("search") String search,
-    Pageable pageable
-  );
+  long sumVoteCountBySnapshot(@Param("snapshot") LeaderboardSnapshotEntity snapshot);
 
   Page<LeaderboardEntryEntity> findByLeaderboardAndModel(
     LeaderboardEntity leaderboard,
