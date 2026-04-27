@@ -9,6 +9,7 @@ Encapsulates the full snapshot workflow:
   5. Publish the snapshot (set visibility = 'public')
 """
 
+import json
 import logging
 from datetime import UTC, datetime
 
@@ -247,7 +248,7 @@ def generate_all_snapshots(
                     "min_battles": min_leaderboard_battles,
                 }
                 skipped.append(entry)
-                logger.info("Skipping leaderboard %s: %s", slug, entry)
+                logger.info(json.dumps({"event": "leaderboard_skipped", **entry}))
                 continue
             if stats["model_count"] < min_leaderboard_models:
                 entry = {
@@ -258,7 +259,7 @@ def generate_all_snapshots(
                     "min_models": min_leaderboard_models,
                 }
                 skipped.append(entry)
-                logger.info("Skipping leaderboard %s: %s", slug, entry)
+                logger.info(json.dumps({"event": "leaderboard_skipped", **entry}))
                 continue
             candidates.append(
                 {
@@ -273,6 +274,16 @@ def generate_all_snapshots(
     failed: list[dict] = []
     for cand in candidates:
         slug = cand["slug"]
+        logger.info(
+            json.dumps(
+                {
+                    "event": "leaderboard_starting",
+                    "slug": slug,
+                    "battle_count": cand["battle_count"],
+                    "model_count": cand["model_count"],
+                }
+            )
+        )
         try:
             result = generate_snapshot(
                 leaderboard_slug=slug,
@@ -283,14 +294,30 @@ def generate_all_snapshots(
             )
             generated.append({"slug": slug, **result})
             logger.info(
-                "Generated leaderboard %s: %d entries from %d evaluations",
-                slug,
-                result.get("entry_count", 0),
-                result.get("evaluation_count", 0),
+                json.dumps(
+                    {
+                        "event": "leaderboard_generated",
+                        "slug": slug,
+                        "snapshot_id": result.get("snapshot_id"),
+                        "snapshot_identifier": result.get("snapshot_identifier"),
+                        "entry_count": result.get("entry_count", 0),
+                        "evaluation_count": result.get("evaluation_count", 0),
+                    }
+                )
             )
         except Exception as exc:  # noqa: BLE001 — intentional broad catch
             failed.append({"slug": slug, "error": str(exc)})
-            logger.exception("Failed to generate leaderboard %s", slug)
+            # logger.exception emits the traceback alongside the JSON line so
+            # CloudWatch keeps both the structured event and the stack frame.
+            logger.exception(
+                json.dumps(
+                    {
+                        "event": "leaderboard_failed",
+                        "slug": slug,
+                        "error": str(exc),
+                    }
+                )
+            )
 
     summary = {
         "total": len(leaderboards),
@@ -299,11 +326,15 @@ def generate_all_snapshots(
         "failed": failed,
     }
     logger.info(
-        "Snapshot run complete: %d generated, %d skipped, %d failed (of %d total)",
-        len(generated),
-        len(skipped),
-        len(failed),
-        len(leaderboards),
+        json.dumps(
+            {
+                "event": "snapshot_run_complete",
+                "total": len(leaderboards),
+                "generated": len(generated),
+                "skipped": len(skipped),
+                "failed": len(failed),
+            }
+        )
     )
 
     if failed:
