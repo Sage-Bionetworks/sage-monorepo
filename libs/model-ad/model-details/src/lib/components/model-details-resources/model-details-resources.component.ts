@@ -14,13 +14,13 @@ export class ModelDetailsResourcesComponent {
   modelSpecificResourceCards = computed(() => {
     const cards = [
       {
-        imagePath: 'model-ad-assets/images/ad-knowledge-portal-logo.svg',
+        imagePath: 'explorers-assets/images/ad-knowledge-portal-logo.svg',
         description:
           "Explore all of the data and metadata that's available for this model in the AD Knowledge Portal.",
         link: `https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage/StudyDetails?Study=${this.model().study_synid}`,
       },
       {
-        imagePath: 'model-ad-assets/images/alzforum-logo.svg',
+        imagePath: 'explorers-assets/images/alzforum-logo.svg',
         description: 'Visit Alzforum to find more information about this model.',
         link: `https://www.alzforum.org/research-models/${this.model().alzforum_id}`,
       },

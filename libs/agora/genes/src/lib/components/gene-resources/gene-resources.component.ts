@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 
 import { Gene } from '@sagebionetworks/agora/api-client';
-import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
+import { ResourceCardComponent, ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
 
 @Component({
   selector: 'agora-gene-resources',
@@ -16,15 +16,9 @@ export class GeneResourcesComponent {
     const gene = this.gene();
     if (!gene) return [];
 
-    const cards: Partial<{
-      link: string;
-      description: string;
-      title: string;
-      imagePath: string;
-      altText: string;
-    }>[] = [
+    const cards: Partial<ResourceCardComponent>[] = [
       {
-        imagePath: 'agora-assets/images/adknowledgeportal-logo.svg',
+        imagePath: 'explorers-assets/images/ad-knowledge-portal-logo.svg',
         description: `View the openly available TREAT-AD resources for experimental validation of ${gene.hgnc_symbol || gene.ensembl_gene_id} in the AD Knowledge Portal.`,
         link: gene.resource_url ?? '',
       },
@@ -51,7 +45,7 @@ export class GeneResourcesComponent {
     return cards;
   });
 
-  drugDevelopmentResources = computed(() => {
+  drugDevelopmentResources = computed((): Partial<ResourceCardComponent>[] => {
     const gene = this.gene();
     if (!gene) return [];
 
@@ -88,7 +82,7 @@ export class GeneResourcesComponent {
     ];
   });
 
-  additionalResources = computed(() => {
+  additionalResources = computed((): Partial<ResourceCardComponent>[] => {
     const gene = this.gene();
     if (!gene) return [];
 
@@ -100,7 +94,7 @@ export class GeneResourcesComponent {
         link: `https://adatlas.org/?type=geneEnsembl&ids=${gene.ensembl_gene_id}`,
       },
       {
-        imagePath: 'agora-assets/images/alzforum-logo.svg',
+        imagePath: 'explorers-assets/images/alzforum-logo.svg',
         description:
           'Visit Alzforum for news and information resources about AD and related disorders.',
         link: 'https://www.alzforum.org',
