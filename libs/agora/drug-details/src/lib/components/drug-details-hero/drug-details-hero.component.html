@@ -5,7 +5,7 @@
       @for (badge of badges(); track badge.label; let last = $last) {
         @if (badge.link) {
           {{ badge.label }}
-          <a [href]="badge.link">{{ badge.linkText }}</a
+          <a [routerLink]="badge.link">{{ badge.linkText }}</a
           >{{ last ? '' : ',' }}
         } @else {
           {{ badge.label }}{{ last ? '' : ',' }}

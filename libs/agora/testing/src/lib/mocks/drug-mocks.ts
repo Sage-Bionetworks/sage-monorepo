@@ -52,7 +52,7 @@ export const drugMock: Drug = {
     {
       grant_number: 'R01AG060393, R01AG057683, RF1AG076647, R01AG078164, P01AG073082',
       contact_pi: 'Marina Sirota',
-      combined_with_common_name: ' Irinotecan',
+      combined_with_common_name: 'Irinotecan',
       combined_with_chembl_id: 'CHEMBL481',
       evidence: 'combinating two drugs to correct both neuronal and glial cell AD signatures',
       data_used:

@@ -34,7 +34,7 @@ describe('DrugDetailsHeroComponent', () => {
       expect(screen.getByText(/Nominated Combination Therapy, with/)).toBeInTheDocument();
       const link = screen.getByRole('link', { name: /Irinotecan/ });
       expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute('href', 'drugs/CHEMBL481');
+      expect(link).toHaveAttribute('href', '/drugs/CHEMBL481');
     });
 
     it('should display both badges when drug has solo and combo nominations', async () => {

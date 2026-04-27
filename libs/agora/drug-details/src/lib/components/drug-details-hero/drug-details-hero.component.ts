@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Drug } from '@sagebionetworks/agora/api-client';
 import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 
@@ -11,7 +11,7 @@ export interface DrugBadge {
 
 @Component({
   selector: 'agora-drug-details-hero',
-  imports: [CommonModule],
+  imports: [RouterLink],
   templateUrl: './drug-details-hero.component.html',
   styleUrls: ['./drug-details-hero.component.scss'],
 })
@@ -26,7 +26,7 @@ export class DrugDetailsHeroComponent {
       if (evidence.combined_with_chembl_id === null) {
         badges.set('nominated', { label: 'Nominated Drug' });
       } else {
-        const link = `${ROUTE_PATHS.DRUG_DETAILS}/${evidence.combined_with_chembl_id}`;
+        const link = `/${ROUTE_PATHS.DRUG_DETAILS}/${evidence.combined_with_chembl_id}`;
         const linkText = evidence.combined_with_common_name || evidence.combined_with_chembl_id;
         badges.set(link, { label: 'Nominated Combination Therapy, with', link, linkText });
       }
