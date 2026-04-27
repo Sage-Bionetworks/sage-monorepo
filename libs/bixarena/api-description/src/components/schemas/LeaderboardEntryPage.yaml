@@ -13,6 +13,11 @@ allOf:
         type: string
         description: Identifier for this snapshot/timepoint
         example: 'snapshot_2025-08-16_14-30'
+      priorSnapshotId:
+        type: string
+        nullable: true
+        description: Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.
+        example: 'snapshot_2025-08-09_14-30'
       entries:
         description: A list of leaderboard entries.
         type: array
