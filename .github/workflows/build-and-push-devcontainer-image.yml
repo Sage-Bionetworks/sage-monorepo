@@ -72,7 +72,7 @@ jobs:
 
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: |
@@ -84,7 +84,7 @@ jobs:
         # The SHA is always available and unique per commit, ensuring traceability.
         # Used for steps in the workflow that require a single, unique tag.
         id: meta_sha
-        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: |
