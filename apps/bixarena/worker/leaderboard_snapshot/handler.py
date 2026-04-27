@@ -18,9 +18,9 @@ Optional environment variables:
   NUM_BOOTSTRAP             - Bootstrap iterations for BT ranking
   MIN_EVALS                 - Minimum evaluations per model to include
   SIGNIFICANT               - Rank by statistical significance if "true"
-  MIN_LEADERBOARD_BATTLES   - Iterate-all mode only: skip leaderboards with
+  MIN_TOTAL_BATTLES   - Iterate-all mode only: skip leaderboards with
                               fewer total battles than this
-  MIN_LEADERBOARD_MODELS    - Iterate-all mode only: skip leaderboards with
+  MIN_TOTAL_MODELS    - Iterate-all mode only: skip leaderboards with
                               fewer distinct participating models than this
 """
 
@@ -69,8 +69,8 @@ def run() -> None:
     num_bootstrap = _int_env("NUM_BOOTSTRAP", 1000)
     min_evals = _int_env("MIN_EVALS", 10)
     significant = os.getenv("SIGNIFICANT", "false").lower() == "true"
-    min_leaderboard_battles = _int_env("MIN_LEADERBOARD_BATTLES", 30)
-    min_leaderboard_models = _int_env("MIN_LEADERBOARD_MODELS", 3)
+    min_total_battles = _int_env("MIN_TOTAL_BATTLES", 30)
+    min_total_models = _int_env("MIN_TOTAL_MODELS", 3)
 
     logger.info(
         json.dumps(
@@ -82,8 +82,8 @@ def run() -> None:
                 "num_bootstrap": num_bootstrap,
                 "min_evals": min_evals,
                 "significant": significant,
-                "min_leaderboard_battles": min_leaderboard_battles,
-                "min_leaderboard_models": min_leaderboard_models,
+                "min_total_battles": min_total_battles,
+                "min_total_models": min_total_models,
             }
         )
     )
@@ -106,8 +106,8 @@ def run() -> None:
                     num_bootstrap=num_bootstrap,
                     min_evals=min_evals,
                     significant=significant,
-                    min_leaderboard_battles=min_leaderboard_battles,
-                    min_leaderboard_models=min_leaderboard_models,
+                    min_total_battles=min_total_battles,
+                    min_total_models=min_total_models,
                 )
             break
         except SnapshotRunError as exc:

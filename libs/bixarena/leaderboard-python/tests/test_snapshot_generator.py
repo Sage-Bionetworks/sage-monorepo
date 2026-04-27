@@ -59,13 +59,13 @@ class TestMinEvalsValidation:
 
 
 class TestGenerateAllSnapshotsValidation:
-    def test_negative_min_leaderboard_battles(self):
-        with pytest.raises(ValueError, match="min_leaderboard_battles must be >= 0"):
-            generate_all_snapshots(min_leaderboard_battles=-1)
+    def test_negative_min_total_battles(self):
+        with pytest.raises(ValueError, match="min_total_battles must be >= 0"):
+            generate_all_snapshots(min_total_battles=-1)
 
-    def test_negative_min_leaderboard_models(self):
-        with pytest.raises(ValueError, match="min_leaderboard_models must be >= 0"):
-            generate_all_snapshots(min_leaderboard_models=-1)
+    def test_negative_min_total_models(self):
+        with pytest.raises(ValueError, match="min_total_models must be >= 0"):
+            generate_all_snapshots(min_total_models=-1)
 
 
 @contextmanager

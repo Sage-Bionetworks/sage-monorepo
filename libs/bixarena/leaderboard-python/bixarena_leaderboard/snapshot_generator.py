@@ -183,16 +183,16 @@ def generate_all_snapshots(
     num_bootstrap: int = 1000,
     min_evals: int = 10,
     significant: bool = False,
-    min_leaderboard_battles: int = 30,
-    min_leaderboard_models: int = 3,
+    min_total_battles: int = 30,
+    min_total_models: int = 3,
     dry_run: bool = False,
 ) -> dict:
     """
     Generate snapshots for every leaderboard in the database.
 
     Iterates all api.leaderboard rows. For each slug, gates by the per-
-    leaderboard sparse-data thresholds (min_leaderboard_battles,
-    min_leaderboard_models); below either threshold, the leaderboard is
+    leaderboard sparse-data thresholds (min_total_battles,
+    min_total_models); below either threshold, the leaderboard is
     skipped (no snapshot written, no exception raised). Above thresholds,
     delegates to generate_snapshot. Per-leaderboard exceptions are caught
     so one bad slug does not block the rest of the run.
@@ -201,10 +201,10 @@ def generate_all_snapshots(
         num_bootstrap: Forwarded to generate_snapshot (1-5000).
         min_evals: Forwarded to generate_snapshot (per-model filter).
         significant: Forwarded to generate_snapshot.
-        min_leaderboard_battles: Skip the leaderboard when its qualifying
+        min_total_battles: Skip the leaderboard when its qualifying
             battle count falls below this. Bootstrap CIs are too noisy
             below ~30 evaluations.
-        min_leaderboard_models: Skip the leaderboard when its qualifying
+        min_total_models: Skip the leaderboard when its qualifying
             model count falls below this. Bradley-Terry needs >= 3 distinct
             models to produce a non-trivial ranking.
         dry_run: Forwarded to generate_snapshot (computes but does not write).
@@ -221,14 +221,10 @@ def generate_all_snapshots(
             summary attribute carries the same dict that would otherwise be
             returned.
     """
-    if min_leaderboard_battles < 0:
-        raise ValueError(
-            f"min_leaderboard_battles must be >= 0, got {min_leaderboard_battles}"
-        )
-    if min_leaderboard_models < 0:
-        raise ValueError(
-            f"min_leaderboard_models must be >= 0, got {min_leaderboard_models}"
-        )
+    if min_total_battles < 0:
+        raise ValueError(f"min_total_battles must be >= 0, got {min_total_battles}")
+    if min_total_models < 0:
+        raise ValueError(f"min_total_models must be >= 0, got {min_total_models}")
 
     skipped: list[dict] = []
     candidates: list[dict] = []
@@ -239,24 +235,24 @@ def generate_all_snapshots(
             slug = lb["slug"]
             category = None if slug == "overall" else slug
             stats = fetch_battle_evaluation_stats(conn, category_slug=category)
-            if stats["battle_count"] < min_leaderboard_battles:
+            if stats["battle_count"] < min_total_battles:
                 entry = {
                     "slug": slug,
                     "reason": "insufficient_battles",
                     "battle_count": stats["battle_count"],
                     "model_count": stats["model_count"],
-                    "min_battles": min_leaderboard_battles,
+                    "min_total_battles": min_total_battles,
                 }
                 skipped.append(entry)
                 logger.info(json.dumps({"event": "leaderboard_skipped", **entry}))
                 continue
-            if stats["model_count"] < min_leaderboard_models:
+            if stats["model_count"] < min_total_models:
                 entry = {
                     "slug": slug,
                     "reason": "insufficient_models",
                     "battle_count": stats["battle_count"],
                     "model_count": stats["model_count"],
-                    "min_models": min_leaderboard_models,
+                    "min_total_models": min_total_models,
                 }
                 skipped.append(entry)
                 logger.info(json.dumps({"event": "leaderboard_skipped", **entry}))

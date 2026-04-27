@@ -60,14 +60,14 @@ def snapshot_add(
             "If False, rank by BT score only."
         ),
     ),
-    min_leaderboard_battles: int = typer.Option(
+    min_total_battles: int = typer.Option(
         30,
-        "--min-leaderboard-battles",
+        "--min-total-battles",
         help="--all only: skip leaderboards with fewer total battles than this",
     ),
-    min_leaderboard_models: int = typer.Option(
+    min_total_models: int = typer.Option(
         3,
-        "--min-leaderboard-models",
+        "--min-total-models",
         help="--all only: skip leaderboards with fewer distinct models than this",
     ),
     dry_run: bool = typer.Option(
@@ -93,8 +93,8 @@ def snapshot_add(
             num_bootstrap=num_bootstrap,
             min_evals=min_evals,
             significant=significant,
-            min_leaderboard_battles=min_leaderboard_battles,
-            min_leaderboard_models=min_leaderboard_models,
+            min_total_battles=min_total_battles,
+            min_total_models=min_total_models,
             dry_run=dry_run,
         )
         return
@@ -133,8 +133,8 @@ def _snapshot_add_all(
     num_bootstrap: int,
     min_evals: int,
     significant: bool,
-    min_leaderboard_battles: int,
-    min_leaderboard_models: int,
+    min_total_battles: int,
+    min_total_models: int,
     dry_run: bool,
 ) -> None:
     """Iterate every leaderboard, gate sparse ones, render a per-slug summary.
@@ -150,8 +150,8 @@ def _snapshot_add_all(
             num_bootstrap=num_bootstrap,
             min_evals=min_evals,
             significant=significant,
-            min_leaderboard_battles=min_leaderboard_battles,
-            min_leaderboard_models=min_leaderboard_models,
+            min_total_battles=min_total_battles,
+            min_total_models=min_total_models,
             dry_run=dry_run,
         )
     except SnapshotRunError as exc:
