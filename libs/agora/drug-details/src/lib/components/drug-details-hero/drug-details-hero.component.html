@@ -1,0 +1,54 @@
+<div class="drug-details-hero" [style.background-image]="'url(' + backgroundImagePath + ')'">
+  <section>
+    <h1>{{ drug().common_name }}</h1>
+    <p>
+      @for (badge of badges(); track badge.label; let last = $last) {
+        @if (badge.link) {
+          {{ badge.label }}
+          <a [href]="badge.link">{{ badge.linkText }}</a
+          >{{ last ? '' : ',' }}
+        } @else {
+          {{ badge.label }}{{ last ? '' : ',' }}
+        }
+      }
+    </p>
+
+    @if (drug().description) {
+      <br />
+      <p>{{ drug().description }}</p>
+    }
+
+    <br />
+    <hr />
+    <br />
+
+    <h4>ALSO KNOWN AS</h4>
+
+    <p>
+      CHEMBL ID
+      <a
+        [href]="`https://www.ebi.ac.uk/chembl/explore/compound/${drug().chembl_id}`"
+        target="_blank"
+        >{{ drug().chembl_id }}</a
+      >
+    </p>
+    @if (drug().drug_bank_id) {
+      DrugBank ID
+      <a [href]="`https://go.drugbank.com/drugs/${drug().drug_bank_id}`" target="_blank">{{
+        drug().drug_bank_id
+      }}</a>
+      <br />
+    }
+    <br />
+
+    @if (drug().iupac_id) {
+      <p>IUPAC ID:</p>
+      <p>{{ drug().iupac_id }}</p>
+      <br />
+    }
+
+    @if (drug().aliases.length > 0) {
+      <p>{{ drug().aliases.join(', ') }}</p>
+    }
+  </section>
+</div>
