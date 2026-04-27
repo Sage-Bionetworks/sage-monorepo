@@ -1,7 +1,11 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-import { LeaderboardEntry } from '@sagebionetworks/bixarena/api-client';
+import {
+  LeaderboardSearchQuery,
+  LeaderboardSort,
+  SortDirection,
+} from '@sagebionetworks/bixarena/api-client';
 import { LeaderboardFacadeService } from './services/leaderboard.service';
 import {
   LeaderboardSortChange,
@@ -15,10 +19,16 @@ import {
   DEFAULT_SORT_FIELD,
   DEFAULT_SORT_ORDER,
   DEFAULT_CATEGORY_SLUG,
-  FETCH_ALL_PAGE_SIZE,
   PAGE_SIZE_OPTIONS,
   SEARCH_DEBOUNCE_MS,
 } from './leaderboard.constants';
+
+const SORT_FIELD_MAP: Record<LeaderboardSortField, LeaderboardSort> = {
+  rank: 'rank',
+  modelId: 'model_slug',
+  btScore: 'bt_score',
+  voteCount: 'vote_count',
+};
 
 @Component({
   selector: 'bixarena-leaderboard',
@@ -55,48 +65,31 @@ export class LeaderboardComponent {
     if (list.length === 0) {
       return [{ id: DEFAULT_CATEGORY_SLUG, name: 'Overall' }];
     }
-    return list.map((lb) => ({ id: lb.id, name: lb.name }));
+    return list
+      .filter((lb) => (lb.latestSnapshot?.entryCount ?? 0) > 0 || lb.id === DEFAULT_CATEGORY_SLUG)
+      .map((lb) => ({ id: lb.id, name: lb.name }));
   });
 
-  readonly displayedEntries = computed<LeaderboardEntry[]>(() => {
-    const { license } = this.filters();
-    const entries = this.facade.entries();
-    if (license === null) return entries;
-    return entries.filter((e) => e.license === license);
-  });
-
-  readonly sortedEntries = computed<LeaderboardEntry[]>(() => {
-    const entries = [...this.displayedEntries()];
-    const field = this.sortField();
-    const order = this.sortOrder();
-    entries.sort((a, b) => {
-      const av = a[field];
-      const bv = b[field];
-      if (av === bv) return 0;
-      if (av == null) return 1;
-      if (bv == null) return -1;
-      return (av < bv ? -1 : 1) * order;
-    });
-    return entries;
-  });
-
-  readonly paginatedEntries = computed<LeaderboardEntry[]>(() => {
-    const all = this.sortedEntries();
-    const first = this.pageFirst();
+  readonly query = computed<LeaderboardSearchQuery>(() => {
+    const search = this.debouncedSearch().trim();
+    const license = this.filters().license;
     const rows = this.pageRows();
-    return all.slice(first, first + rows);
+    const pageNumber = rows > 0 ? Math.floor(this.pageFirst() / rows) : 0;
+    return {
+      pageNumber,
+      pageSize: rows,
+      sort: SORT_FIELD_MAP[this.sortField()],
+      direction: this.sortOrder() === -1 ? SortDirection.Desc : SortDirection.Asc,
+      ...(search ? { search } : {}),
+      ...(license !== null ? { license } : {}),
+    };
   });
 
   constructor() {
     void this.facade.loadLeaderboards();
 
     effect(() => {
-      const search = this.debouncedSearch().trim();
-      const slug = this.activeCategoryId();
-      void this.facade.load(slug, {
-        pageSize: FETCH_ALL_PAGE_SIZE,
-        ...(search ? { search } : {}),
-      });
+      void this.facade.load(this.activeCategoryId(), this.query());
     });
 
     inject(DestroyRef).onDestroy(() => {
@@ -135,6 +128,6 @@ export class LeaderboardComponent {
   }
 
   retry(): void {
-    void this.facade.load(this.activeCategoryId(), { pageSize: FETCH_ALL_PAGE_SIZE });
+    void this.facade.load(this.activeCategoryId(), this.query());
   }
 }

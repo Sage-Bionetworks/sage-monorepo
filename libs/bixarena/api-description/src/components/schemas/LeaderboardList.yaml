@@ -20,6 +20,10 @@ items:
       format: date-time
       description: When this leaderboard was last updated
       example: '2025-08-16T14:30:00Z'
+    latestSnapshot:
+      $ref: LeaderboardSnapshot.yaml
+      nullable: true
+      description: Most recent public snapshot, or null if none has been published yet.
   required:
     - id
     - name

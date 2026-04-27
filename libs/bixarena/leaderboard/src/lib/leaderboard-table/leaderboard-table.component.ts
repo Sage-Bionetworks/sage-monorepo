@@ -34,6 +34,7 @@ interface RenderedEntry extends LeaderboardEntry {
   readonly isTopThree: boolean;
   readonly orgLogoUrl: string | null;
   readonly orgLogoMono: boolean;
+  readonly absDelta: number;
 }
 
 @Component({
@@ -57,6 +58,13 @@ export class LeaderboardTableComponent {
       field: event.field as LeaderboardSortField,
       order: (event.order === -1 ? -1 : 1) as 1 | -1,
     });
+  }
+
+  diffStateOf(row: RenderedEntry): 'up' | 'down' | 'flat' {
+    const delta = row.rankDelta;
+    if (delta != null && delta > 0) return 'up';
+    if (delta != null && delta < 0) return 'down';
+    return 'flat';
   }
 
   private readonly bounds = computed(() => {
@@ -96,6 +104,7 @@ export class LeaderboardTableComponent {
         isTopThree: entry.rank <= 3,
         orgLogoUrl: getOrgLogoUrl(entry.modelOrganization),
         orgLogoMono: isMonoOrgLogo(entry.modelOrganization),
+        absDelta: entry.rankDelta != null ? Math.abs(entry.rankDelta) : 0,
       };
     });
   });

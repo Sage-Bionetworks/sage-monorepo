@@ -7,11 +7,11 @@
     </p>
     <div class="stats-strip">
       <div class="stat">
-        <span class="stat-value">{{ facade.entries().length }}</span>
+        <span class="stat-value">{{ facade.entryCount() | number }}</span>
         <span class="stat-label">models evaluated</span>
       </div>
       <div class="stat">
-        <span class="stat-value">{{ facade.totalVotes() | number }}</span>
+        <span class="stat-value">{{ facade.voteCount() | number }}</span>
         <span class="stat-label">total votes</span>
       </div>
       @if (facade.snapshotUpdatedAt(); as updatedAt) {
@@ -43,7 +43,7 @@
       </div>
     } @else {
       <bixarena-leaderboard-table
-        [entries]="paginatedEntries()"
+        [entries]="facade.entries()"
         [sortField]="sortField()"
         [sortOrder]="sortOrder()"
         (sortChange)="onSortChange($event)"
@@ -51,12 +51,12 @@
     }
   </section>
 
-  @if (!facade.loading() && !facade.error() && displayedEntries().length > 0) {
+  @if (!facade.loading() && !facade.error() && facade.totalElements() > 0) {
     <p-paginator
       class="leaderboard-paginator"
       [first]="pageFirst()"
       [rows]="pageRows()"
-      [totalRecords]="displayedEntries().length"
+      [totalRecords]="facade.totalElements()"
       [rowsPerPageOptions]="pageSizeOptions"
       (onPageChange)="onPageChange($event)"
     />

@@ -26,6 +26,9 @@ class LeaderboardSort(str, Enum):
     allowed enum values
     """
     RANK = "rank"
+    BT_SCORE = "bt_score"
+    VOTE_COUNT = "vote_count"
+    MODEL_SLUG = "model_slug"
     CREATED_AT = "created_at"
 
     @classmethod

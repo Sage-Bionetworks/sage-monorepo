@@ -2,12 +2,13 @@
 
 ## Properties
 
-| Name            | Type         | Description                                   | Notes |
-| --------------- | ------------ | --------------------------------------------- | ----- |
-| **id**          | **str**      | Unique identifier for the leaderboard         |
-| **name**        | **str**      | Display name for the leaderboard              |
-| **description** | **str**      | Description of what this leaderboard measures |
-| **updated_at**  | **datetime** | When this leaderboard was last updated        |
+| Name                | Type                                              | Description                                   | Notes      |
+| ------------------- | ------------------------------------------------- | --------------------------------------------- | ---------- |
+| **id**              | **str**                                           | Unique identifier for the leaderboard         |
+| **name**            | **str**                                           | Display name for the leaderboard              |
+| **description**     | **str**                                           | Description of what this leaderboard measures |
+| **updated_at**      | **datetime**                                      | When this leaderboard was last updated        |
+| **latest_snapshot** | [**LeaderboardSnapshot**](LeaderboardSnapshot.md) |                                               | [optional] |
 
 ## Example
 

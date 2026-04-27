@@ -25,8 +25,24 @@ properties:
     type: string
     nullable: true
     example: 'gpt'
+  license:
+    $ref: License.yaml
+    nullable: true
+    description: Filter entries by model license.
+  organization:
+    type: string
+    nullable: true
+    description: Filter entries by model organization.
+    example: 'OpenAI'
   snapshotId:
     description: Get a specific historical snapshot instead of latest.
     type: string
     nullable: true
     example: 'snapshot_2025-08-15_10-00'
+  lookback:
+    description: Comparison window in days for computing rankDelta.
+    type: integer
+    format: int32
+    nullable: true
+    minimum: 1
+    example: 7

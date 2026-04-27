@@ -13,6 +13,19 @@ allOf:
         type: string
         description: Identifier for this snapshot/timepoint
         example: 'snapshot_2025-08-16_14-30'
+      priorSnapshotId:
+        type: string
+        nullable: true
+        description: Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.
+        example: 'snapshot_2025-08-09_14-30'
+      entryCount:
+        type: integer
+        description: Total models in the snapshot.
+        example: 50
+      voteCount:
+        type: integer
+        description: Total evaluations across all models in the snapshot.
+        example: 9682
       entries:
         description: A list of leaderboard entries.
         type: array
@@ -21,4 +34,6 @@ allOf:
     required:
       - updatedAt
       - snapshotId
+      - entryCount
+      - voteCount
       - entries

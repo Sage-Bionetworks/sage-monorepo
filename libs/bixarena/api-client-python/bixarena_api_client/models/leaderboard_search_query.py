@@ -20,6 +20,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from bixarena_api_client.models.leaderboard_sort import LeaderboardSort
+from bixarena_api_client.models.license import License
 from bixarena_api_client.models.sort_direction import SortDirection
 from typing import Optional, Set
 from typing_extensions import Self
@@ -44,10 +45,17 @@ class LeaderboardSearchQuery(BaseModel):
         default=None,
         description="Search by model name (case-insensitive partial match).",
     )
+    license: Optional[License] = None
+    organization: Optional[StrictStr] = Field(
+        default=None, description="Filter entries by model organization."
+    )
     snapshot_id: Optional[StrictStr] = Field(
         default=None,
         description="Get a specific historical snapshot instead of latest.",
         alias="snapshotId",
+    )
+    lookback: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(
+        default=None, description="Comparison window in days for computing rankDelta."
     )
     __properties: ClassVar[List[str]] = [
         "pageNumber",
@@ -55,7 +63,10 @@ class LeaderboardSearchQuery(BaseModel):
         "sort",
         "direction",
         "search",
+        "license",
+        "organization",
         "snapshotId",
+        "lookback",
     ]
 
     model_config = ConfigDict(
@@ -100,10 +111,20 @@ class LeaderboardSearchQuery(BaseModel):
         if self.search is None and "search" in self.model_fields_set:
             _dict["search"] = None
 
+        # set to None if organization (nullable) is None
+        # and model_fields_set contains the field
+        if self.organization is None and "organization" in self.model_fields_set:
+            _dict["organization"] = None
+
         # set to None if snapshot_id (nullable) is None
         # and model_fields_set contains the field
         if self.snapshot_id is None and "snapshot_id" in self.model_fields_set:
             _dict["snapshotId"] = None
+
+        # set to None if lookback (nullable) is None
+        # and model_fields_set contains the field
+        if self.lookback is None and "lookback" in self.model_fields_set:
+            _dict["lookback"] = None
 
         return _dict
 
@@ -131,7 +152,10 @@ class LeaderboardSearchQuery(BaseModel):
                 if obj.get("direction") is not None
                 else SortDirection.ASC,
                 "search": obj.get("search"),
+                "license": obj.get("license"),
+                "organization": obj.get("organization"),
                 "snapshotId": obj.get("snapshotId"),
+                "lookback": obj.get("lookback"),
             }
         )
         return _obj

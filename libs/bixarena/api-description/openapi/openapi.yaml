@@ -2193,7 +2193,7 @@ components:
       description: The license of the model
       enum:
         - open-source
-        - commercial
+        - proprietary
       example: open-source
     Model:
       type: object
@@ -2627,6 +2627,47 @@ components:
           format: uuid
           nullable: true
           description: ID of the categorization row to set as effective. Set to null to clear the effective categorization.
+    Visibility:
+      type: string
+      maxLength: 20
+      enum:
+        - public
+        - private
+      description: Visibility status of a resource.
+      default: private
+      example: public
+    LeaderboardSnapshot:
+      type: object
+      description: A snapshot representing the state of a leaderboard at a specific point in time.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this snapshot
+          example: snapshot_2025-08-16_14-30
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+        createdAt:
+          type: string
+          format: date-time
+          description: When this snapshot was created
+          example: '2025-08-16T14:30:00Z'
+        updatedAt:
+          $ref: '#/components/schemas/UpdatedAt'
+        entryCount:
+          type: integer
+          description: Number of models in this snapshot
+          example: 50
+        description:
+          type: string
+          nullable: true
+          description: Optional description of this snapshot
+          example: Weekly evaluation run
+      required:
+        - id
+        - visibility
+        - createdAt
+        - updatedAt
+        - entryCount
     LeaderboardList:
       type: array
       description: A list of leaderboards.
@@ -2650,6 +2691,10 @@ components:
             format: date-time
             description: When this leaderboard was last updated
             example: '2025-08-16T14:30:00Z'
+          latestSnapshot:
+            $ref: '#/components/schemas/LeaderboardSnapshot'
+            nullable: true
+            description: Most recent public snapshot, or null if none has been published yet.
         required:
           - id
           - name
@@ -2660,6 +2705,9 @@ components:
       description: The field to sort leaderboard entries by.
       enum:
         - rank
+        - bt_score
+        - vote_count
+        - model_slug
         - created_at
       default: rank
       example: rank
@@ -2691,11 +2739,27 @@ components:
           type: string
           nullable: true
           example: gpt
+        license:
+          $ref: '#/components/schemas/License'
+          nullable: true
+          description: Filter entries by model license.
+        organization:
+          type: string
+          nullable: true
+          description: Filter entries by model organization.
+          example: OpenAI
         snapshotId:
           description: Get a specific historical snapshot instead of latest.
           type: string
           nullable: true
           example: snapshot_2025-08-15_10-00
+        lookback:
+          description: Comparison window in days for computing rankDelta.
+          type: integer
+          format: int32
+          nullable: true
+          minimum: 1
+          example: 7
     LeaderboardEntry:
       type: object
       description: A single entry in a leaderboard representing a model's performance.
@@ -2740,6 +2804,13 @@ components:
           type: integer
           description: Current rank position (1-based)
           example: 1
+        rankDelta:
+          type: integer
+          nullable: true
+          description: |
+            Positions gained vs the comparison snapshot. Positive = improved,
+            negative = dropped, zero = unchanged. Null when no comparison is available.
+          example: 2
         bootstrapQ025:
           type: number
           format: double
@@ -2783,6 +2854,19 @@ components:
               type: string
               description: Identifier for this snapshot/timepoint
               example: snapshot_2025-08-16_14-30
+            priorSnapshotId:
+              type: string
+              nullable: true
+              description: Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.
+              example: snapshot_2025-08-09_14-30
+            entryCount:
+              type: integer
+              description: Total models in the snapshot.
+              example: 50
+            voteCount:
+              type: integer
+              description: Total evaluations across all models in the snapshot.
+              example: 9682
             entries:
               description: A list of leaderboard entries.
               type: array
@@ -2791,6 +2875,8 @@ components:
           required:
             - updatedAt
             - snapshotId
+            - entryCount
+            - voteCount
             - entries
     LeaderboardHistorySort:
       type: string
@@ -2934,47 +3020,6 @@ components:
           $ref: '#/components/schemas/LeaderboardSnapshotSort'
         direction:
           $ref: '#/components/schemas/SortDirection'
-    Visibility:
-      type: string
-      maxLength: 20
-      enum:
-        - public
-        - private
-      description: Visibility status of a resource.
-      default: private
-      example: public
-    LeaderboardSnapshot:
-      type: object
-      description: A snapshot representing the state of a leaderboard at a specific point in time.
-      properties:
-        id:
-          type: string
-          description: Unique identifier for this snapshot
-          example: snapshot_2025-08-16_14-30
-        visibility:
-          $ref: '#/components/schemas/Visibility'
-        createdAt:
-          type: string
-          format: date-time
-          description: When this snapshot was created
-          example: '2025-08-16T14:30:00Z'
-        updatedAt:
-          $ref: '#/components/schemas/UpdatedAt'
-        entryCount:
-          type: integer
-          description: Number of models in this snapshot
-          example: 50
-        description:
-          type: string
-          nullable: true
-          description: Optional description of this snapshot
-          example: Weekly evaluation run
-      required:
-        - id
-        - visibility
-        - createdAt
-        - updatedAt
-        - entryCount
     LeaderboardSnapshotPage:
       type: object
       description: A page of leaderboard snapshots.

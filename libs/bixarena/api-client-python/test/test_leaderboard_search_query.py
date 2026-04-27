@@ -40,7 +40,10 @@ class TestLeaderboardSearchQuery(unittest.TestCase):
                 sort = 'rank',
                 direction = 'asc',
                 search = 'gpt',
-                snapshot_id = 'snapshot_2025-08-15_10-00'
+                license = 'open-source',
+                organization = 'OpenAI',
+                snapshot_id = 'snapshot_2025-08-15_10-00',
+                lookback = 7
             )
         else:
             return LeaderboardSearchQuery(

@@ -15,6 +15,8 @@ const samplePage: LeaderboardEntryPage = {
   hasPrevious: false,
   updatedAt: '2026-04-25T10:00:00Z',
   snapshotId: 'snap-1',
+  entryCount: 50,
+  voteCount: 9682,
   entries: [
     {
       id: 'entry-1',
@@ -22,7 +24,7 @@ const samplePage: LeaderboardEntryPage = {
       modelName: 'GPT-5',
       modelOrganization: 'OpenAI',
       modelUrl: 'https://example.com/gpt-5',
-      license: 'commercial',
+      license: 'proprietary',
       btScore: 1280,
       voteCount: 1500,
       rank: 1,
@@ -66,7 +68,8 @@ describe('LeaderboardFacadeService', () => {
     expect(service.entries()).toEqual([]);
     expect(service.leaderboards()).toEqual([]);
     expect(service.totalElements()).toBe(0);
-    expect(service.totalVotes()).toBe(0);
+    expect(service.entryCount()).toBe(0);
+    expect(service.voteCount()).toBe(0);
     expect(service.snapshotUpdatedAt()).toBeNull();
     expect(service.loading()).toBe(false);
     expect(service.error()).toBeNull();
@@ -92,7 +95,7 @@ describe('LeaderboardFacadeService', () => {
   it('loads entries and exposes snapshot metadata', async () => {
     await service.load();
 
-    expect(api.getLeaderboard).toHaveBeenCalledWith('overall', { pageSize: 1000 });
+    expect(api.getLeaderboard).toHaveBeenCalledWith('overall', { lookback: 7 });
     expect(service.entries().length).toBe(2);
     expect(service.totalElements()).toBe(2);
     expect(service.snapshotUpdatedAt()).toBe('2026-04-25T10:00:00Z');
@@ -100,14 +103,16 @@ describe('LeaderboardFacadeService', () => {
     expect(service.loading()).toBe(false);
   });
 
-  it('computes totalVotes from loaded entries', async () => {
+  it('exposes snapshot totals from page response', async () => {
     await service.load();
-    expect(service.totalVotes()).toBe(2600);
+    expect(service.entryCount()).toBe(50);
+    expect(service.voteCount()).toBe(9682);
   });
 
   it('passes through search query', async () => {
     await service.load('overall', { pageSize: 50, search: 'gpt' });
     expect(api.getLeaderboard).toHaveBeenCalledWith('overall', {
+      lookback: 7,
       pageSize: 50,
       search: 'gpt',
     });
@@ -122,6 +127,8 @@ describe('LeaderboardFacadeService', () => {
     expect(service.error()).toBe('Could not load leaderboard');
     expect(service.entries()).toEqual([]);
     expect(service.totalElements()).toBe(0);
+    expect(service.entryCount()).toBe(0);
+    expect(service.voteCount()).toBe(0);
     expect(service.snapshotUpdatedAt()).toBeNull();
     expect(service.loading()).toBe(false);
     errorSpy.mockRestore();

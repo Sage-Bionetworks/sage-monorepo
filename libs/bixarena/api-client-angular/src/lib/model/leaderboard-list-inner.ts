@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { LeaderboardSnapshot } from './leaderboard-snapshot';
 
 export interface LeaderboardListInner {
   /**
@@ -25,4 +26,5 @@ export interface LeaderboardListInner {
    * When this leaderboard was last updated
    */
   updatedAt: string;
+  latestSnapshot?: LeaderboardSnapshot;
 }

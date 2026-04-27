@@ -46,6 +46,18 @@ export interface LeaderboardEntryPage {
    */
   snapshotId: string;
   /**
+   * Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.
+   */
+  priorSnapshotId?: string | null;
+  /**
+   * Total models in the snapshot.
+   */
+  entryCount: number;
+  /**
+   * Total evaluations across all models in the snapshot.
+   */
+  voteCount: number;
+  /**
    * A list of leaderboard entries.
    */
   entries: Array<LeaderboardEntry>;

@@ -4,20 +4,21 @@ A single entry in a leaderboard representing a model's performance.
 
 ## Properties
 
-| Name                   | Type         | Description                                                   | Notes      |
-| ---------------------- | ------------ | ------------------------------------------------------------- | ---------- |
-| **id**                 | **str**      | Unique identifier for this leaderboard entry                  |
-| **model_id**           | **str**      | Identifier for the model                                      |
-| **model_name**         | **str**      | Display name of the model                                     |
-| **model_organization** | **str**      | Organization that created the model                           | [optional] |
-| **model_url**          | **str**      | External link to model information                            |
-| **license**            | **str**      | License type of the model                                     |
-| **bt_score**           | **float**    | Bradley-Terry score - primary ranking metric                  |
-| **vote_count**         | **int**      | Number of votes/evaluations                                   |
-| **rank**               | **int**      | Current rank position (1-based)                               |
-| **bootstrap_q025**     | **float**    | Bootstrap confidence interval lower bound (2.5th percentile)  |
-| **bootstrap_q975**     | **float**    | Bootstrap confidence interval upper bound (97.5th percentile) |
-| **created_at**         | **datetime** | When this entry was created                                   |
+| Name                   | Type         | Description                                                                                                                                                  | Notes      |
+| ---------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **id**                 | **str**      | Unique identifier for this leaderboard entry                                                                                                                 |
+| **model_id**           | **str**      | Identifier for the model                                                                                                                                     |
+| **model_name**         | **str**      | Display name of the model                                                                                                                                    |
+| **model_organization** | **str**      | Organization that created the model                                                                                                                          | [optional] |
+| **model_url**          | **str**      | External link to model information                                                                                                                           |
+| **license**            | **str**      | License type of the model                                                                                                                                    |
+| **bt_score**           | **float**    | Bradley-Terry score - primary ranking metric                                                                                                                 |
+| **vote_count**         | **int**      | Number of votes/evaluations                                                                                                                                  |
+| **rank**               | **int**      | Current rank position (1-based)                                                                                                                              |
+| **rank_delta**         | **int**      | Positions gained vs the comparison snapshot. Positive &#x3D; improved, negative &#x3D; dropped, zero &#x3D; unchanged. Null when no comparison is available. | [optional] |
+| **bootstrap_q025**     | **float**    | Bootstrap confidence interval lower bound (2.5th percentile)                                                                                                 |
+| **bootstrap_q975**     | **float**    | Bootstrap confidence interval upper bound (97.5th percentile)                                                                                                |
+| **created_at**         | **datetime** | When this entry was created                                                                                                                                  |
 
 ## Example
 

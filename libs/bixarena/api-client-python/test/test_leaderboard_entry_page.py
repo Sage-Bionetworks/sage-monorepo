@@ -43,6 +43,9 @@ class TestLeaderboardEntryPage(unittest.TestCase):
                 has_previous = True,
                 updated_at = '2025-08-16T14:30Z',
                 snapshot_id = 'snapshot_2025-08-16_14-30',
+                prior_snapshot_id = 'snapshot_2025-08-09_14-30',
+                entry_count = 50,
+                vote_count = 9682,
                 entries = [
                     bixarena_api_client.models.leaderboard_entry.LeaderboardEntry(
                         id = 'entry_123', 
@@ -54,6 +57,7 @@ class TestLeaderboardEntryPage(unittest.TestCase):
                         bt_score = 0.925, 
                         vote_count = 1250, 
                         rank = 1, 
+                        rank_delta = 2, 
                         bootstrap_q025 = 887, 
                         bootstrap_q975 = 1063, 
                         created_at = '2025-08-16T10:30Z', )
@@ -69,6 +73,8 @@ class TestLeaderboardEntryPage(unittest.TestCase):
                 has_previous = True,
                 updated_at = '2025-08-16T14:30Z',
                 snapshot_id = 'snapshot_2025-08-16_14-30',
+                entry_count = 50,
+                vote_count = 9682,
                 entries = [
                     bixarena_api_client.models.leaderboard_entry.LeaderboardEntry(
                         id = 'entry_123', 
@@ -80,6 +86,7 @@ class TestLeaderboardEntryPage(unittest.TestCase):
                         bt_score = 0.925, 
                         vote_count = 1250, 
                         rank = 1, 
+                        rank_delta = 2, 
                         bootstrap_q025 = 887, 
                         bootstrap_q975 = 1063, 
                         created_at = '2025-08-16T10:30Z', )

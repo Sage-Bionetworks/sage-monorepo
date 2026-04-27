@@ -18,7 +18,8 @@ import json
 
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
+from bixarena_api_client.models.leaderboard_snapshot import LeaderboardSnapshot
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -36,7 +37,16 @@ class LeaderboardListInner(BaseModel):
     updated_at: datetime = Field(
         description="When this leaderboard was last updated", alias="updatedAt"
     )
-    __properties: ClassVar[List[str]] = ["id", "name", "description", "updatedAt"]
+    latest_snapshot: Optional[LeaderboardSnapshot] = Field(
+        default=None, alias="latestSnapshot"
+    )
+    __properties: ClassVar[List[str]] = [
+        "id",
+        "name",
+        "description",
+        "updatedAt",
+        "latestSnapshot",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -75,6 +85,9 @@ class LeaderboardListInner(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of latest_snapshot
+        if self.latest_snapshot:
+            _dict["latestSnapshot"] = self.latest_snapshot.to_dict()
         return _dict
 
     @classmethod
@@ -92,6 +105,9 @@ class LeaderboardListInner(BaseModel):
                 "name": obj.get("name"),
                 "description": obj.get("description"),
                 "updatedAt": obj.get("updatedAt"),
+                "latestSnapshot": LeaderboardSnapshot.from_dict(obj["latestSnapshot"])
+                if obj.get("latestSnapshot") is not None
+                else None,
             }
         )
         return _obj

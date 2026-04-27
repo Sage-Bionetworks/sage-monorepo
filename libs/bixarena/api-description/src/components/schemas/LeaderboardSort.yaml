@@ -2,6 +2,9 @@ type: string
 description: The field to sort leaderboard entries by.
 enum:
   - rank
+  - bt_score
+  - vote_count
+  - model_slug
   - created_at
 default: rank
 example: rank

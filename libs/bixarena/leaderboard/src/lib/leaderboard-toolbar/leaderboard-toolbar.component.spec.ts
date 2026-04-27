@@ -69,7 +69,7 @@ describe('LeaderboardToolbarComponent', () => {
   it('should report active filter count', () => {
     expect(component.activeFilterCount()).toBe(0);
     expect(component.hasActiveFilters()).toBe(false);
-    fixture.componentRef.setInput('filters', { license: 'commercial' });
+    fixture.componentRef.setInput('filters', { license: 'proprietary' });
     fixture.detectChanges();
     expect(component.activeFilterCount()).toBe(1);
     expect(component.hasActiveFilters()).toBe(true);
@@ -139,7 +139,7 @@ describe('LeaderboardToolbarComponent', () => {
   });
 
   it('should emit a reset of all filters via clearAllFilters', () => {
-    fixture.componentRef.setInput('filters', { license: 'commercial' });
+    fixture.componentRef.setInput('filters', { license: 'proprietary' });
     fixture.detectChanges();
     const emitted: { license: string | null }[] = [];
     component.filtersChange.subscribe((value) => emitted.push(value));

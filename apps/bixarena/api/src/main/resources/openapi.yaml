@@ -2712,7 +2712,7 @@ components:
       description: The license of the model
       enum:
         - open-source
-        - commercial
+        - proprietary
       example: open-source
       type: string
     Model:
@@ -3382,6 +3382,58 @@ components:
           nullable: true
           type: string
       type: object
+    Visibility:
+      default: private
+      description: Visibility status of a resource.
+      enum:
+        - public
+        - private
+      example: public
+      maxLength: 20
+      type: string
+    LeaderboardSnapshot:
+      description: A snapshot representing the state of a leaderboard at a specific
+        point in time.
+      example:
+        createdAt: 2025-08-16T14:30:00Z
+        entryCount: 50
+        visibility: public
+        description: Weekly evaluation run
+        id: snapshot_2025-08-16_14-30
+        updatedAt: 2024-01-15T10:45:00Z
+      properties:
+        id:
+          description: Unique identifier for this snapshot
+          example: snapshot_2025-08-16_14-30
+          type: string
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+        createdAt:
+          description: When this snapshot was created
+          example: 2025-08-16T14:30:00Z
+          format: date-time
+          type: string
+        updatedAt:
+          description: Timestamp when the entity was last updated.
+          example: 2024-01-15T10:45:00Z
+          format: date-time
+          type: string
+        entryCount:
+          description: Number of models in this snapshot
+          example: 50
+          type: integer
+        description:
+          description: Optional description of this snapshot
+          example: Weekly evaluation run
+          nullable: true
+          type: string
+      required:
+        - createdAt
+        - entryCount
+        - id
+        - updatedAt
+        - visibility
+      type: object
     LeaderboardList:
       description: A list of leaderboards.
       items:
@@ -3392,6 +3444,9 @@ components:
       description: The field to sort leaderboard entries by.
       enum:
         - rank
+        - bt_score
+        - vote_count
+        - model_slug
         - created_at
       example: rank
       type: string
@@ -3422,21 +3477,36 @@ components:
           example: gpt
           nullable: true
           type: string
+        license:
+          $ref: '#/components/schemas/License'
+        organization:
+          description: Filter entries by model organization.
+          example: OpenAI
+          nullable: true
+          type: string
         snapshotId:
           description: Get a specific historical snapshot instead of latest.
           example: snapshot_2025-08-15_10-00
           nullable: true
           type: string
+        lookback:
+          description: Comparison window in days for computing rankDelta.
+          example: 7
+          format: int32
+          minimum: 1
+          nullable: true
+          type: integer
       type: object
     LeaderboardEntry:
       description: A single entry in a leaderboard representing a model's performance.
       example:
-        modelName: GPT-4o
-        license: MIT
-        createdAt: 2025-08-16T10:30:00Z
-        bootstrapQ025: 887
         modelOrganization: OpenAI
         modelId: model_456
+        modelName: GPT-4o
+        license: MIT
+        rankDelta: 2
+        createdAt: 2025-08-16T10:30:00Z
+        bootstrapQ025: 887
         btScore: 0.925
         bootstrapQ975: 1063
         rank: 1
@@ -3484,6 +3554,13 @@ components:
           description: Current rank position (1-based)
           example: 1
           type: integer
+        rankDelta:
+          description: |
+            Positions gained vs the comparison snapshot. Positive = improved,
+            negative = dropped, zero = unchanged. Null when no comparison is available.
+          example: 2
+          nullable: true
+          type: integer
         bootstrapQ025:
           description: Bootstrap confidence interval lower bound (2.5th percentile)
           example: 887
@@ -3525,6 +3602,20 @@ components:
               description: Identifier for this snapshot/timepoint
               example: snapshot_2025-08-16_14-30
               type: string
+            priorSnapshotId:
+              description: Snapshot used as the rankDelta baseline. Null when no prior
+                snapshot was found.
+              example: snapshot_2025-08-09_14-30
+              nullable: true
+              type: string
+            entryCount:
+              description: Total models in the snapshot.
+              example: 50
+              type: integer
+            voteCount:
+              description: Total evaluations across all models in the snapshot.
+              example: 9682
+              type: integer
             entries:
               description: A list of leaderboard entries.
               items:
@@ -3532,31 +3623,35 @@ components:
               type: array
           required:
             - entries
+            - entryCount
             - snapshotId
             - updatedAt
+            - voteCount
           type: object
       description: A page of leaderboard entries.
       example:
         number: 99
         entries:
-          - modelName: GPT-4o
+          - modelOrganization: OpenAI
+            modelId: model_456
+            modelName: GPT-4o
             license: MIT
+            rankDelta: 2
             createdAt: 2025-08-16T10:30:00Z
             bootstrapQ025: 887
-            modelOrganization: OpenAI
-            modelId: model_456
             btScore: 0.925
             bootstrapQ975: 1063
             rank: 1
             id: entry_123
             voteCount: 1250
             modelUrl: https://openai.com/gpt-4
-          - modelName: GPT-4o
+          - modelOrganization: OpenAI
+            modelId: model_456
+            modelName: GPT-4o
             license: MIT
+            rankDelta: 2
             createdAt: 2025-08-16T10:30:00Z
             bootstrapQ025: 887
-            modelOrganization: OpenAI
-            modelId: model_456
             btScore: 0.925
             bootstrapQ975: 1063
             rank: 1
@@ -3564,10 +3659,13 @@ components:
             voteCount: 1250
             modelUrl: https://openai.com/gpt-4
         snapshotId: snapshot_2025-08-16_14-30
+        entryCount: 50
         size: 99
+        priorSnapshotId: snapshot_2025-08-09_14-30
         totalPages: 99
         hasPrevious: true
         hasNext: true
+        voteCount: 9682
         totalElements: 99
         updatedAt: 2025-08-16T14:30:00Z
       type: object
@@ -3746,58 +3844,6 @@ components:
           $ref: '#/components/schemas/LeaderboardSnapshotSort'
         direction:
           $ref: '#/components/schemas/SortDirection'
-      type: object
-    Visibility:
-      default: private
-      description: Visibility status of a resource.
-      enum:
-        - public
-        - private
-      example: public
-      maxLength: 20
-      type: string
-    LeaderboardSnapshot:
-      description: A snapshot representing the state of a leaderboard at a specific
-        point in time.
-      example:
-        createdAt: 2025-08-16T14:30:00Z
-        entryCount: 50
-        visibility: public
-        description: Weekly evaluation run
-        id: snapshot_2025-08-16_14-30
-        updatedAt: 2024-01-15T10:45:00Z
-      properties:
-        id:
-          description: Unique identifier for this snapshot
-          example: snapshot_2025-08-16_14-30
-          type: string
-        visibility:
-          $ref: '#/components/schemas/Visibility'
-        createdAt:
-          description: When this snapshot was created
-          example: 2025-08-16T14:30:00Z
-          format: date-time
-          type: string
-        updatedAt:
-          description: Timestamp when the entity was last updated.
-          example: 2024-01-15T10:45:00Z
-          format: date-time
-          type: string
-        entryCount:
-          description: Number of models in this snapshot
-          example: 50
-          type: integer
-        description:
-          description: Optional description of this snapshot
-          example: Weekly evaluation run
-          nullable: true
-          type: string
-      required:
-        - createdAt
-        - entryCount
-        - id
-        - updatedAt
-        - visibility
       type: object
     LeaderboardSnapshotPage:
       allOf:
@@ -4520,6 +4566,13 @@ components:
         name: Open Source Models
         description: Performance ranking of open-source AI models
         id: open-source
+        latestSnapshot:
+          createdAt: 2025-08-16T14:30:00Z
+          entryCount: 50
+          visibility: public
+          description: Weekly evaluation run
+          id: snapshot_2025-08-16_14-30
+          updatedAt: 2024-01-15T10:45:00Z
         updatedAt: 2025-08-16T14:30:00Z
       properties:
         id:
@@ -4539,6 +4592,8 @@ components:
           example: 2025-08-16T14:30:00Z
           format: date-time
           type: string
+        latestSnapshot:
+          $ref: '#/components/schemas/LeaderboardSnapshot'
       required:
         - description
         - id

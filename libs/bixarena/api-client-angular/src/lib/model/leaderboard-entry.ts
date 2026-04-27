@@ -49,6 +49,10 @@ export interface LeaderboardEntry {
    */
   rank: number;
   /**
+   * Positions gained vs the comparison snapshot. Positive = improved, negative = dropped, zero = unchanged. Null when no comparison is available.
+   */
+  rankDelta?: number | null;
+  /**
    * Bootstrap confidence interval lower bound (2.5th percentile)
    */
   bootstrapQ025: number;

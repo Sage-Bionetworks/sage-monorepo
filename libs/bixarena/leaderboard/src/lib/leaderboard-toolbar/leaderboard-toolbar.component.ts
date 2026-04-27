@@ -45,7 +45,7 @@ export class LeaderboardToolbarComponent {
   readonly pickerSearch = signal('');
   readonly searchExpanded = signal(false);
 
-  readonly licenseOptions: License[] = [License.OpenSource, License.Commercial];
+  readonly licenseOptions: License[] = [License.OpenSource, License.Proprietary];
 
   readonly activeCategoryName = computed(() => {
     const id = this.activeCategoryId();

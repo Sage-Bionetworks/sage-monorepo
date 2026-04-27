@@ -41,6 +41,13 @@ properties:
     type: integer
     description: Current rank position (1-based)
     example: 1
+  rankDelta:
+    type: integer
+    nullable: true
+    description: |
+      Positions gained vs the comparison snapshot. Positive = improved,
+      negative = dropped, zero = unchanged. Null when no comparison is available.
+    example: 2
   bootstrapQ025:
     type: number
     format: double
