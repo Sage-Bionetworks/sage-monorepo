@@ -22,13 +22,6 @@ public interface LeaderboardSnapshotRepository
   );
 
   @Query(
-    "SELECT s FROM LeaderboardSnapshotEntity s WHERE s.leaderboard = :leaderboard ORDER BY s.createdAt DESC"
-  )
-  List<LeaderboardSnapshotEntity> findLatestByLeaderboard(
-    @Param("leaderboard") LeaderboardEntity leaderboard
-  );
-
-  @Query(
     "SELECT s.id as id, s.snapshotIdentifier as snapshotIdentifier, s.description as description, " +
     "s.createdAt as createdAt, s.updatedAt as updatedAt, s.visibility as visibility, " +
     "(SELECT COUNT(e) FROM LeaderboardEntryEntity e WHERE e.snapshot = s) as entryCount " +

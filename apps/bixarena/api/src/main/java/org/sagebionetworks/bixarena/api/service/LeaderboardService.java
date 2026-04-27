@@ -13,10 +13,13 @@ import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardListInnerDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSearchQueryDto;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotDto;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardEntity;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardEntryEntity;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardSnapshotEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.LeaderboardEntryMapper;
+import org.sagebionetworks.bixarena.api.model.mapper.LeaderboardSnapshotMapper;
+import org.sagebionetworks.bixarena.api.model.projection.SnapshotWithEntryCount;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardEntryRepository;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardEntryRepository.RankBySlug;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardRepository;
@@ -37,6 +40,7 @@ public class LeaderboardService {
   private final LeaderboardSnapshotRepository snapshotRepository;
   private final LeaderboardEntryRepository entryRepository;
   private final LeaderboardEntryMapper entryMapper = new LeaderboardEntryMapper();
+  private final LeaderboardSnapshotMapper snapshotMapper = new LeaderboardSnapshotMapper();
 
   @Transactional(readOnly = true)
   public List<LeaderboardListInnerDto> listLeaderboards() {
@@ -227,17 +231,26 @@ public class LeaderboardService {
   }
 
   private LeaderboardListInnerDto convertToListResponse(LeaderboardEntity entity) {
-    // Get latest snapshot for last updated time
-    List<LeaderboardSnapshotEntity> snapshots = snapshotRepository.findLatestByLeaderboard(entity);
-    OffsetDateTime updatedAt = snapshots.isEmpty()
-      ? entity.getUpdatedAt()
-      : snapshots.get(0).getCreatedAt();
+    // Latest PUBLIC snapshot only
+    Page<SnapshotWithEntryCount> latestPage =
+      snapshotRepository.findPublicSnapshotsWithEntryCountByLeaderboard(
+        entity,
+        PageRequest.of(0, 1)
+      );
+    LeaderboardSnapshotDto latestSnapshot = latestPage.hasContent()
+      ? snapshotMapper.convertFromProjection(latestPage.getContent().get(0))
+      : null;
+
+    OffsetDateTime updatedAt = latestSnapshot != null
+      ? latestSnapshot.getCreatedAt()
+      : entity.getUpdatedAt();
 
     return LeaderboardListInnerDto.builder()
       .id(entity.getSlug())
       .name(entity.getName())
       .description(entity.getDescription())
       .updatedAt(updatedAt)
+      .latestSnapshot(latestSnapshot)
       .build();
   }
 }
