@@ -1,5 +1,6 @@
 package org.sagebionetworks.bixarena.api.model.repository;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardEntity;
@@ -60,5 +61,19 @@ public interface LeaderboardSnapshotRepository
   )
   List<LeaderboardSnapshotEntity> findLatestPublicByLeaderboard(
     @Param("leaderboard") LeaderboardEntity leaderboard
+  );
+
+  @Query(
+    "SELECT s FROM LeaderboardSnapshotEntity s " +
+    "WHERE s.leaderboard = :leaderboard AND s.visibility = 'public' " +
+    "  AND s.id <> :excludeId " +
+    "  AND s.createdAt <= :target " +
+    "ORDER BY s.createdAt DESC"
+  )
+  List<LeaderboardSnapshotEntity> findLatestPublicAtOrBefore(
+    @Param("leaderboard") LeaderboardEntity leaderboard,
+    @Param("target") OffsetDateTime target,
+    @Param("excludeId") UUID excludeId,
+    Pageable pageable
   );
 }

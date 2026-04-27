@@ -2,12 +2,14 @@ package org.sagebionetworks.bixarena.api.service;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.exception.LeaderboardNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.LeaderboardSnapshotNotFoundException;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardListInnerDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSearchQueryDto;
@@ -16,6 +18,7 @@ import org.sagebionetworks.bixarena.api.model.entity.LeaderboardEntryEntity;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardSnapshotEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.LeaderboardEntryMapper;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardEntryRepository;
+import org.sagebionetworks.bixarena.api.model.repository.LeaderboardEntryRepository.RankBySlug;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardRepository;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardSnapshotRepository;
 import org.springframework.data.domain.Page;
@@ -73,10 +76,19 @@ public class LeaderboardService {
       pageable
     );
 
+    List<LeaderboardEntryDto> entryDtos = entryMapper.convertToDtoList(entriesPage.getContent());
+    String priorSnapshotId = decorateRankDeltas(
+      leaderboard,
+      snapshot,
+      searchQuery.getLookback(),
+      entryDtos
+    );
+
     return LeaderboardEntryPageDto.builder()
-      .entries(entryMapper.convertToDtoList(entriesPage.getContent()))
+      .entries(entryDtos)
       .updatedAt(snapshot.getCreatedAt())
       .snapshotId(snapshot.getSnapshotIdentifier())
+      .priorSnapshotId(priorSnapshotId)
       .number(entriesPage.getNumber())
       .size(entriesPage.getSize())
       .totalElements(entriesPage.getTotalElements())
@@ -84,6 +96,37 @@ public class LeaderboardService {
       .hasNext(entriesPage.hasNext())
       .hasPrevious(entriesPage.hasPrevious())
       .build();
+  }
+
+  private String decorateRankDeltas(
+    LeaderboardEntity leaderboard,
+    LeaderboardSnapshotEntity currentSnapshot,
+    Integer lookbackDays,
+    List<LeaderboardEntryDto> entryDtos
+  ) {
+    if (lookbackDays == null) {
+      return null;
+    }
+    OffsetDateTime target = currentSnapshot.getCreatedAt().minusDays(lookbackDays);
+    List<LeaderboardSnapshotEntity> priorMatches = snapshotRepository.findLatestPublicAtOrBefore(
+      leaderboard,
+      target,
+      currentSnapshot.getId(),
+      PageRequest.of(0, 1)
+    );
+    if (priorMatches.isEmpty()) {
+      return null;
+    }
+    LeaderboardSnapshotEntity prior = priorMatches.get(0);
+    Map<String, Integer> priorRanks = entryRepository
+      .findRanksBySnapshotId(prior.getId())
+      .stream()
+      .collect(Collectors.toMap(RankBySlug::getModelSlug, RankBySlug::getRank));
+    for (LeaderboardEntryDto dto : entryDtos) {
+      Integer priorRank = priorRanks.get(dto.getModelId());
+      dto.setRankDelta(priorRank == null ? null : priorRank - dto.getRank());
+    }
+    return prior.getSnapshotIdentifier();
   }
 
   private LeaderboardEntity findLeaderboardBySlug(String slug) {

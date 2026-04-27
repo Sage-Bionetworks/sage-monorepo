@@ -1,5 +1,6 @@
 package org.sagebionetworks.bixarena.api.model.repository;
 
+import java.util.List;
 import java.util.UUID;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardEntity;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardEntryEntity;
@@ -14,6 +15,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LeaderboardEntryRepository extends JpaRepository<LeaderboardEntryEntity, UUID> {
+
+  interface RankBySlug {
+    String getModelSlug();
+    Integer getRank();
+  }
+
   @Query(
     "SELECT e FROM LeaderboardEntryEntity e JOIN FETCH e.model WHERE e.leaderboard = :leaderboard AND e.snapshot = :snapshot"
   )
@@ -39,4 +46,11 @@ public interface LeaderboardEntryRepository extends JpaRepository<LeaderboardEnt
     ModelEntity model,
     Pageable pageable
   );
+
+  @Query(
+    "SELECT e.model.slug AS modelSlug, e.rank AS rank " +
+    "FROM LeaderboardEntryEntity e " +
+    "WHERE e.snapshot.id = :snapshotId"
+  )
+  List<RankBySlug> findRanksBySnapshotId(@Param("snapshotId") UUID snapshotId);
 }
