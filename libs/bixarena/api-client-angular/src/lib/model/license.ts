@@ -11,9 +11,9 @@
 /**
  * The license of the model
  */
-export type License = 'open-source' | 'commercial';
+export type License = 'open-source' | 'proprietary';
 
 export const License = {
   OpenSource: 'open-source' as License,
-  Commercial: 'commercial' as License,
+  Proprietary: 'proprietary' as License,
 };

@@ -26,7 +26,7 @@ class License(str, Enum):
     allowed enum values
     """
     OPEN_MINUS_SOURCE = "open-source"
-    COMMERCIAL = "commercial"
+    PROPRIETARY = "proprietary"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

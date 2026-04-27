@@ -2712,7 +2712,7 @@ components:
       description: The license of the model
       enum:
         - open-source
-        - commercial
+        - proprietary
       example: open-source
       type: string
     Model:

@@ -1843,7 +1843,7 @@ components:
       description: The license of the model
       enum:
         - open-source
-        - commercial
+        - proprietary
       example: open-source
     Model:
       type: object

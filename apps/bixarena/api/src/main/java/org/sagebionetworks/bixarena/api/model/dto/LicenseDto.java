@@ -24,7 +24,7 @@ public enum LicenseDto {
   
   OPEN_SOURCE("open-source"),
   
-  COMMERCIAL("commercial");
+  PROPRIETARY("proprietary");
 
   private final String value;
 
