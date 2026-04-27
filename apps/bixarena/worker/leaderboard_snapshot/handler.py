@@ -41,6 +41,19 @@ logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 logger = logging.getLogger(__name__)
 
 
+def _int_env(name: str, default: int) -> int:
+    """Read an int env var, treating set-but-empty values as missing.
+
+    `os.getenv("X", default)` returns `""` (not the default) when the variable
+    is set but empty, and `int("")` raises ValueError before any logging. This
+    helper falls back to `default` for both unset and empty cases.
+    """
+    raw = os.getenv(name)
+    if raw is None or raw == "":
+        return default
+    return int(raw)
+
+
 def run() -> None:
     """Generate and publish leaderboard snapshots.
 
@@ -52,12 +65,12 @@ def run() -> None:
     correlation_id = str(uuid.uuid4())
     start = time.monotonic()
 
-    leaderboard_slug = os.getenv("LEADERBOARD_SLUG")
-    num_bootstrap = int(os.getenv("NUM_BOOTSTRAP", "1000"))
-    min_evals = int(os.getenv("MIN_EVALS", "10"))
+    leaderboard_slug = os.getenv("LEADERBOARD_SLUG") or None
+    num_bootstrap = _int_env("NUM_BOOTSTRAP", 1000)
+    min_evals = _int_env("MIN_EVALS", 10)
     significant = os.getenv("SIGNIFICANT", "false").lower() == "true"
-    min_leaderboard_battles = int(os.getenv("MIN_LEADERBOARD_BATTLES", "30"))
-    min_leaderboard_models = int(os.getenv("MIN_LEADERBOARD_MODELS", "3"))
+    min_leaderboard_battles = _int_env("MIN_LEADERBOARD_BATTLES", 30)
+    min_leaderboard_models = _int_env("MIN_LEADERBOARD_MODELS", 3)
 
     logger.info(
         json.dumps(
@@ -97,6 +110,25 @@ def run() -> None:
                     min_leaderboard_models=min_leaderboard_models,
                 )
             break
+        except SnapshotRunError as exc:
+            # Per-leaderboard failures are surfaced via SnapshotRunError. They
+            # are not transient (bad data, schema drift) and re-running the
+            # full loop wastes compute and re-collides on the unique
+            # snapshot-identifier constraint for slugs that already succeeded.
+            # Log the structured error and exit non-zero immediately.
+            duration_s = round(time.monotonic() - start, 2)
+            logger.error(
+                json.dumps(
+                    {
+                        "event": "error",
+                        "correlation_id": correlation_id,
+                        "error": str(exc),
+                        "duration_s": duration_s,
+                        "summary": exc.summary,
+                    }
+                )
+            )
+            raise
         except Exception as exc:
             last_exc = exc
             if attempt < max_attempts:

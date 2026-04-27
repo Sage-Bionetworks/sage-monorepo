@@ -41,7 +41,7 @@ class SnapshotRunError(RuntimeError):
         self.summary = summary
 
 
-SNAPSHOT_IDENTIFIER_FORMAT = "snapshot_%Y-%m-%d_%H-%M"
+SNAPSHOT_IDENTIFIER_FORMAT = "snapshot_%Y-%m-%d_%H-%M-%S"
 
 
 def generate_snapshot(
@@ -307,9 +307,12 @@ def generate_all_snapshots(
             )
         except Exception as exc:  # noqa: BLE001 — intentional broad catch
             failed.append({"slug": slug, "error": str(exc)})
-            # logger.exception emits the traceback alongside the JSON line so
-            # CloudWatch keeps both the structured event and the stack frame.
-            logger.exception(
+            # Emit the structured event as one parseable JSON line, then a
+            # separate line carrying the traceback. Mixing the two on one
+            # logger.exception(json.dumps(...)) call would append the stack
+            # frames inside the JSON message, breaking CloudWatch Insights
+            # `parse @message` queries.
+            logger.error(
                 json.dumps(
                     {
                         "event": "leaderboard_failed",
@@ -318,6 +321,7 @@ def generate_all_snapshots(
                     }
                 )
             )
+            logger.exception("Traceback for failed leaderboard %s", slug)
 
     summary = {
         "total": len(leaderboards),
