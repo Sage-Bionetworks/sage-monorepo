@@ -1,3 +1,70 @@
 <div class="page-content">
-  <p>Leaderboard is coming soon</p>
+  <header class="hero">
+    <h1 class="title">Leader<em>board</em></h1>
+    <p class="subtitle">
+      Community-driven evaluation of AI models on biomedical topics. Every battle counts toward the
+      daily ranking.
+    </p>
+    <div class="stats-strip">
+      <div class="stat">
+        <span class="stat-value">{{ facade.entries().length }}</span>
+        <span class="stat-label">models evaluated</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ facade.totalVotes() | number }}</span>
+        <span class="stat-label">total votes</span>
+      </div>
+      @if (facade.snapshotUpdatedAt(); as updatedAt) {
+        <div class="stat">
+          <span class="stat-dot"></span>
+          <span class="stat-label">Updated {{ updatedAt | date: 'mediumDate' }}</span>
+        </div>
+      }
+    </div>
+  </header>
+
+  <bixarena-leaderboard-toolbar
+    [categories]="categoryOptions()"
+    [activeCategoryId]="activeCategoryId()"
+    [searchTerm]="searchTerm()"
+    [filters]="filters()"
+    (categoryChange)="onCategoryChange($event)"
+    (searchChange)="onSearchInput($event)"
+    (filtersChange)="onFiltersChange($event)"
+  />
+
+  <section class="table-wrap">
+    @if (facade.loading()) {
+      <div class="state-message">Loading leaderboard&hellip;</div>
+    } @else if (facade.error()) {
+      <div class="state-message">
+        <span>Unable to load leaderboard.</span>
+        <button type="button" class="retry-btn" (click)="retry()">Retry</button>
+      </div>
+    } @else {
+      <bixarena-leaderboard-table
+        [entries]="paginatedEntries()"
+        [sortField]="sortField()"
+        [sortOrder]="sortOrder()"
+        (sortChange)="onSortChange($event)"
+      />
+    }
+  </section>
+
+  @if (!facade.loading() && !facade.error() && displayedEntries().length > 0) {
+    <p-paginator
+      class="leaderboard-paginator"
+      [first]="pageFirst()"
+      [rows]="pageRows()"
+      [totalRecords]="displayedEntries().length"
+      [rowsPerPageOptions]="pageSizeOptions"
+      (onPageChange)="onPageChange($event)"
+    />
+  }
+
+  <p class="methodology-note">
+    Models are ranked by Bradley-Terry score on an Elo scale. 95% bootstrap confidence intervals
+    show statistical uncertainty; once significance-aware ranking is enabled, models with
+    overlapping intervals will share a tied rank.
+  </p>
 </div>

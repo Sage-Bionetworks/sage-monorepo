@@ -166,4 +166,107 @@
       font-variation-settings: 'wght' 560;
     }
   }
+
+  bixarena-leaderboard-table .leaderboard-table.p-datatable {
+    background: transparent;
+
+    .p-datatable-thead > tr > th {
+      font-size: var(--text-xs);
+      font-weight: 560;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--p-surface-500);
+      background: var(--p-surface-100);
+      padding: 0.75rem 1rem;
+      white-space: nowrap;
+      border-color: var(--p-surface-200);
+    }
+
+    // Shrink sort icons to match the small header type.
+    p-sorticon svg,
+    .p-sortable-column-icon {
+      width: 0.625rem;
+      height: 0.625rem;
+    }
+
+    .p-datatable-tbody > tr {
+      background: transparent;
+      transition: background 0.1s ease;
+    }
+
+    .p-datatable-tbody > tr > td {
+      font-size: var(--text-md);
+      padding: 0.75rem 1rem;
+      vertical-align: middle;
+      background: transparent;
+      color: var(--p-text-color);
+      border-bottom: 1px solid var(--p-surface-200);
+    }
+
+    .p-datatable-tbody > tr:last-child > td {
+      border-bottom: none;
+    }
+
+    .p-datatable-tbody > tr:hover > td {
+      background: var(--hover-bg);
+    }
+  }
+
+  // Standalone paginator (sibling of the table-wrap), minimalist styling —
+  // no bg/border, centered, just the controls.
+  .leaderboard-paginator.p-paginator {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-top: 1rem;
+    justify-content: center;
+    color: var(--p-surface-500);
+  }
+
+  .leaderboard-paginator .p-paginator-page.p-paginator-page-selected,
+  .leaderboard-paginator .p-paginator-page.p-paginator-page-selected:hover {
+    background: var(--p-surface-100);
+    border-color: var(--p-surface-200);
+    color: var(--p-text-color);
+  }
+
+  .leaderboard-paginator .p-paginator-rpp-dropdown.p-select {
+    background: var(--p-surface-100);
+    border-color: var(--p-surface-200);
+    color: var(--p-text-color);
+
+    // PrimeNG hardcodes this ring to orange-300 (#fdba74), bypassing tokens.
+    --p-select-focus-ring-shadow: none;
+
+    // PrimeNG paints the inner label with a hardcoded near-black color
+    // that ignores theme tokens — override so the label follows text color.
+    .p-select-label {
+      color: var(--p-text-color);
+    }
+  }
+
+  .leaderboard-paginator .p-paginator-rpp-dropdown.p-select.p-focus,
+  .leaderboard-paginator .p-paginator-rpp-dropdown.p-select:focus-within {
+    border-color: var(--p-surface-400);
+    box-shadow: none;
+  }
+
+  // Tighter selected-option emphasis in select dropdowns. Theme-aware bg
+  // comes from the base preset; this just adds aesthetic weight + hover
+  // contrast.
+  .p-select-overlay {
+    .p-select-option:not(.p-disabled):hover {
+      background: var(--hover-bg);
+    }
+
+    .p-select-option.p-select-option-selected,
+    .p-select-option.p-select-option-selected.p-focus {
+      background: var(--p-surface-200);
+      font-weight: 560;
+    }
+
+    .p-select-option.p-select-option-selected:not(.p-disabled):hover {
+      background: var(--p-surface-300);
+    }
+  }
 }

@@ -1,0 +1,128 @@
+:host {
+  display: block;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 400;
+  letter-spacing: -0.96px;
+  line-height: 1.08;
+  margin: 0;
+  color: var(--p-text-color);
+
+  em {
+    font-style: italic;
+    color: var(--p-primary-color);
+  }
+}
+
+.subtitle {
+  font-size: var(--text-lg);
+  color: var(--p-surface-600);
+  max-width: 37.5rem;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.methodology-note {
+  font-size: var(--text-sm);
+  color: var(--p-surface-500);
+  max-width: 53rem;
+  margin: 1.5rem auto 0;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.stats-strip {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  font-size: var(--text-md);
+  color: var(--p-surface-500);
+}
+
+.stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.stat-value {
+  font-weight: 620;
+  color: var(--p-text-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+  white-space: nowrap;
+}
+
+.stat-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--p-teal-400);
+  align-self: center;
+  animation: bx-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-dot {
+    animation: none;
+  }
+}
+
+@keyframes bx-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.table-wrap {
+  background: var(--p-surface-50);
+  border: 1px solid var(--p-surface-200);
+  border-radius: var(--p-border-radius-md);
+  overflow: hidden;
+}
+
+.state-message {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--p-surface-500);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.retry-btn {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--p-surface-200);
+  border-radius: var(--p-border-radius-md);
+  background: var(--p-surface-100);
+  color: var(--p-text-color);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.retry-btn:hover {
+  background: var(--hover-bg);
+}

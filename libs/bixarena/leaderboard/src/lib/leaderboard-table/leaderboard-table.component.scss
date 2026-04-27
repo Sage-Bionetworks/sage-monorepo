@@ -1,0 +1,149 @@
+:host {
+  display: block;
+}
+
+.col-rank {
+  width: 4rem;
+  font-weight: 620;
+  font-variant-numeric: tabular-nums;
+  color: var(--p-surface-500);
+}
+
+tr.top-three .col-rank {
+  color: var(--p-primary-color);
+  font-weight: 700;
+}
+
+.col-model {
+  min-width: 14rem;
+}
+
+.model-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.model-logo {
+  color: var(--p-surface-500);
+}
+
+tr.top-three .model-logo {
+  color: var(--p-text-color);
+}
+
+// LobeHub publishes Anthropic / OpenAI / xAI / Moonshot only as monochrome
+// SVGs whose `currentColor` resolves to black inside an `<img>`. Inverting
+// in dark mode keeps the marks visible against the dark row background.
+:host-context(.dark) .model-logo.is-mono {
+  --avatar-img-filter: invert(1);
+}
+
+.model-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.model-name {
+  font-weight: 560;
+  color: var(--p-text-color);
+  text-decoration: none;
+}
+
+.model-name:hover {
+  text-decoration: underline;
+}
+
+tr.top-three .model-name {
+  font-weight: 700;
+}
+
+.model-org {
+  font-size: var(--text-xs);
+  color: var(--p-surface-500);
+  margin-top: 2px;
+}
+
+.th-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.info-icon {
+  color: var(--p-surface-400);
+  vertical-align: middle;
+
+  &:hover {
+    color: var(--p-text-color);
+  }
+}
+
+.col-score {
+  width: 6rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--p-surface-500);
+}
+
+.col-ci {
+  width: 9rem;
+}
+
+.whisker {
+  position: relative;
+  height: 1.25rem;
+  width: 100%;
+
+  // Faint full-width track — gives every row the same horizontal scale so
+  // CI overlap between models is readable at a glance.
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: var(--p-surface-200);
+    border-radius: 1px;
+    transform: translateY(-50%);
+  }
+}
+
+.whisker-bar {
+  position: absolute;
+  top: 50%;
+  height: 6px;
+  background: var(--p-surface-400);
+  border-radius: 3px;
+  transform: translateY(-50%);
+}
+
+.whisker-dot {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  background: var(--p-primary-color);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.col-votes {
+  width: 6rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--p-surface-500);
+}
+
+.col-license {
+  width: 8rem;
+  font-size: var(--text-sm);
+  color: var(--p-surface-500);
+}
+
+.empty-cell {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--p-surface-500);
+  padding: 2rem 1rem;
+}

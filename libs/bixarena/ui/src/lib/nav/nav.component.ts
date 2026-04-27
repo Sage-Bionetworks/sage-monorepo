@@ -2,10 +2,11 @@ import { Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AuthService, ThemeService } from '@sagebionetworks/bixarena/services';
+import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'bixarena-nav',
-  imports: [RouterModule, ButtonModule],
+  imports: [RouterModule, ButtonModule, AvatarComponent],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss',
 })
@@ -20,8 +21,4 @@ export class NavComponent {
   });
 
   readonly showAvatar = computed(() => this.displayUser() !== null);
-  readonly initials = computed(() =>
-    (this.displayUser()?.username ?? '').slice(0, 2).toUpperCase(),
-  );
-  readonly avatarUrl = computed(() => this.displayUser()?.avatarUrl ?? null);
 }

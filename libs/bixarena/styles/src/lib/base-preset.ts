@@ -46,6 +46,15 @@ export const BixArenaPreset = definePreset(Lara, {
           900: '#1b1818',
           950: '#110f0e',
         },
+        content: {
+          background: '{surface.0}',
+          borderColor: '{surface.200}',
+        },
+        overlay: {
+          select: { background: '{surface.0}', borderColor: '{surface.200}' },
+          popover: { background: '{surface.0}', borderColor: '{surface.200}' },
+          modal: { background: '{surface.0}', borderColor: '{surface.200}' },
+        },
       },
       dark: {
         surface: {
@@ -67,6 +76,15 @@ export const BixArenaPreset = definePreset(Lara, {
           hoverColor: '{surface.950}',
           mutedColor: '{surface.500}',
           hoverMutedColor: '{surface.400}',
+        },
+        content: {
+          background: '{surface.0}',
+          borderColor: '{surface.200}',
+        },
+        overlay: {
+          select: { background: '{surface.0}', borderColor: '{surface.200}' },
+          popover: { background: '{surface.0}', borderColor: '{surface.200}' },
+          modal: { background: '{surface.0}', borderColor: '{surface.200}' },
         },
       },
     },
