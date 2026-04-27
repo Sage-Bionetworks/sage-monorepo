@@ -62,12 +62,17 @@ class WorkerStack(cdk.Stack):
             f"ghcr.io/sage-bionetworks/bixarena-worker:{app_version}",
         )
 
-        # Environment variables for the leaderboard snapshot container
+        # Environment variables for the leaderboard snapshot container.
+        # LEADERBOARD_SLUG is intentionally unset so the handler enters
+        # iterate-all mode and refreshes every leaderboard in api.leaderboard
+        # (overall + each per-category). Operators can still target a single
+        # slug for backfill via `aws ecs run-task --overrides`.
         container_env = {
-            "LEADERBOARD_SLUG": "overall",
             "NUM_BOOTSTRAP": "1000",
             "MIN_EVALS": "10",
             "SIGNIFICANT": "false",
+            "MIN_TOTAL_BATTLES": "100",
+            "MIN_TOTAL_MODELS": "10",
             "POSTGRES_HOST": database.db_instance_endpoint_address,
             "POSTGRES_PORT": database.db_instance_endpoint_port,
             "POSTGRES_DB": "bixarena",

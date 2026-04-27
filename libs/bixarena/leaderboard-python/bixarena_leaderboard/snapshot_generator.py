@@ -9,10 +9,13 @@ Encapsulates the full snapshot workflow:
   5. Publish the snapshot (set visibility = 'public')
 """
 
+import json
+import logging
 from datetime import UTC, datetime
 
 from bixarena_leaderboard.db_helper import (
     fetch_all_models,
+    fetch_battle_evaluation_stats,
     fetch_battle_evaluations,
     fetch_leaderboard_ids,
     fetch_leaderboards,
@@ -23,7 +26,22 @@ from bixarena_leaderboard.db_helper import (
 )
 from bixarena_leaderboard.rank_battle import compute_leaderboard_bt
 
-SNAPSHOT_IDENTIFIER_FORMAT = "snapshot_%Y-%m-%d_%H-%M"
+logger = logging.getLogger(__name__)
+
+
+class SnapshotRunError(RuntimeError):
+    """Raised at the end of generate_all_snapshots if any slug failed.
+
+    The summary attribute carries the full per-leaderboard outcome breakdown
+    so callers (worker handler, CLI) can log structured detail before exiting.
+    """
+
+    def __init__(self, message: str, summary: dict) -> None:
+        super().__init__(message)
+        self.summary = summary
+
+
+SNAPSHOT_IDENTIFIER_FORMAT = "snapshot_%Y-%m-%d_%H-%M-%S"
 
 
 def generate_snapshot(
@@ -77,7 +95,11 @@ def generate_snapshot(
             )
 
         all_models = fetch_all_models(conn)
-        all_evaluations = fetch_battle_evaluations(conn)
+        # 'overall' aggregates across all biomedical battles regardless of
+        # category; any other slug filters to battles tagged with that
+        # BiomedicalCategory (slug == category by convention).
+        category_slug = None if leaderboard_slug == "overall" else leaderboard_slug
+        all_evaluations = fetch_battle_evaluations(conn, category_slug=category_slug)
 
         if not all_evaluations:
             raise ValueError("No battle evaluations found in database.")
@@ -155,3 +177,169 @@ def generate_snapshot(
             "evaluation_count": len(all_evaluations),
             "leaderboard_name": target_leaderboard["name"],
         }
+
+
+def generate_all_snapshots(
+    num_bootstrap: int = 1000,
+    min_evals: int = 10,
+    significant: bool = False,
+    min_total_battles: int = 100,
+    min_total_models: int = 10,
+    dry_run: bool = False,
+) -> dict:
+    """
+    Generate snapshots for every leaderboard in the database.
+
+    Iterates all api.leaderboard rows. For each slug, gates by the per-
+    leaderboard sparse-data thresholds (min_total_battles,
+    min_total_models); below either threshold, the leaderboard is
+    skipped (no snapshot written, no exception raised). Above thresholds,
+    delegates to generate_snapshot. Per-leaderboard exceptions are caught
+    so one bad slug does not block the rest of the run.
+
+    Args:
+        num_bootstrap: Forwarded to generate_snapshot (1-5000).
+        min_evals: Forwarded to generate_snapshot (per-model filter).
+        significant: Forwarded to generate_snapshot.
+        min_total_battles: Skip the leaderboard when its qualifying
+            battle count falls below this. Bootstrap CIs are too noisy
+            below ~30 evaluations.
+        min_total_models: Skip the leaderboard when its qualifying
+            model count falls below this. Bradley-Terry needs >= 3 distinct
+            models to produce a non-trivial ranking.
+        dry_run: Forwarded to generate_snapshot (computes but does not write).
+
+    Returns:
+        Summary dict with keys 'generated', 'skipped', 'failed', and 'total'.
+        Each list contains one dict per leaderboard with at minimum a 'slug'
+        key plus outcome-specific detail (snapshot_id, entry_count, reason,
+        error, etc.).
+
+    Raises:
+        ValueError: If thresholds are negative.
+        SnapshotRunError: At end of run when one or more slugs failed. The
+            summary attribute carries the same dict that would otherwise be
+            returned.
+    """
+    if min_total_battles < 0:
+        raise ValueError(f"min_total_battles must be >= 0, got {min_total_battles}")
+    if min_total_models < 0:
+        raise ValueError(f"min_total_models must be >= 0, got {min_total_models}")
+
+    skipped: list[dict] = []
+    candidates: list[dict] = []
+
+    with get_db_connection() as conn:
+        leaderboards = fetch_leaderboards(conn)
+        for lb in leaderboards:
+            slug = lb["slug"]
+            category = None if slug == "overall" else slug
+            stats = fetch_battle_evaluation_stats(conn, category_slug=category)
+            if stats["battle_count"] < min_total_battles:
+                entry = {
+                    "slug": slug,
+                    "reason": "insufficient_battles",
+                    "battle_count": stats["battle_count"],
+                    "model_count": stats["model_count"],
+                    "min_total_battles": min_total_battles,
+                }
+                skipped.append(entry)
+                logger.info(json.dumps({"event": "leaderboard_skipped", **entry}))
+                continue
+            if stats["model_count"] < min_total_models:
+                entry = {
+                    "slug": slug,
+                    "reason": "insufficient_models",
+                    "battle_count": stats["battle_count"],
+                    "model_count": stats["model_count"],
+                    "min_total_models": min_total_models,
+                }
+                skipped.append(entry)
+                logger.info(json.dumps({"event": "leaderboard_skipped", **entry}))
+                continue
+            candidates.append(
+                {
+                    "slug": slug,
+                    "name": lb["name"],
+                    "battle_count": stats["battle_count"],
+                    "model_count": stats["model_count"],
+                }
+            )
+
+    generated: list[dict] = []
+    failed: list[dict] = []
+    for cand in candidates:
+        slug = cand["slug"]
+        logger.info(
+            json.dumps(
+                {
+                    "event": "leaderboard_starting",
+                    "slug": slug,
+                    "battle_count": cand["battle_count"],
+                    "model_count": cand["model_count"],
+                }
+            )
+        )
+        try:
+            result = generate_snapshot(
+                leaderboard_slug=slug,
+                num_bootstrap=num_bootstrap,
+                min_evals=min_evals,
+                significant=significant,
+                dry_run=dry_run,
+            )
+            generated.append({"slug": slug, **result})
+            logger.info(
+                json.dumps(
+                    {
+                        "event": "leaderboard_generated",
+                        "slug": slug,
+                        "snapshot_id": result.get("snapshot_id"),
+                        "snapshot_identifier": result.get("snapshot_identifier"),
+                        "entry_count": result.get("entry_count", 0),
+                        "evaluation_count": result.get("evaluation_count", 0),
+                    }
+                )
+            )
+        except Exception as exc:  # noqa: BLE001 — intentional broad catch
+            failed.append({"slug": slug, "error": str(exc)})
+            # Emit the structured event as one parseable JSON line, then a
+            # separate line carrying the traceback. Mixing the two on one
+            # logger.exception(json.dumps(...)) call would append the stack
+            # frames inside the JSON message, breaking CloudWatch Insights
+            # `parse @message` queries.
+            logger.error(
+                json.dumps(
+                    {
+                        "event": "leaderboard_failed",
+                        "slug": slug,
+                        "error": str(exc),
+                    }
+                )
+            )
+            logger.exception("Traceback for failed leaderboard %s", slug)
+
+    summary = {
+        "total": len(leaderboards),
+        "generated": generated,
+        "skipped": skipped,
+        "failed": failed,
+    }
+    logger.info(
+        json.dumps(
+            {
+                "event": "snapshot_run_complete",
+                "total": len(leaderboards),
+                "generated": len(generated),
+                "skipped": len(skipped),
+                "failed": len(failed),
+            }
+        )
+    )
+
+    if failed:
+        raise SnapshotRunError(
+            f"{len(failed)} leaderboard(s) failed to generate",
+            summary=summary,
+        )
+    return summary

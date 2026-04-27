@@ -113,3 +113,37 @@ ALTER TABLE api.battle
 
 CREATE INDEX idx_battle_effective_categorization
   ON api.battle(effective_categorization_id);
+
+
+-- ============================================================================
+-- Per-Category Leaderboards
+-- ============================================================================
+-- Seed one leaderboard per BiomedicalCategory enum value. The slug column on
+-- api.leaderboard mirrors the BiomedicalCategory slug exactly so the snapshot
+-- worker can derive its category filter directly from the leaderboard slug
+-- (LEADERBOARD_SLUG=cancer-biology generates a snapshot filtered to
+-- cancer-biology battles). 'overall' (seeded in V2) is the special case with
+-- no category filter.
+-- ============================================================================
+
+INSERT INTO api.leaderboard (id, slug, name, description) VALUES
+  ('44444444-4444-4444-4444-444444440001', 'biochemistry',                'Biochemistry',                'Performance on biochemistry questions'),
+  ('44444444-4444-4444-4444-444444440002', 'bioengineering',              'Bioengineering',              'Performance on bioengineering questions'),
+  ('44444444-4444-4444-4444-444444440003', 'bioinformatics',              'Bioinformatics',              'Performance on bioinformatics questions'),
+  ('22222222-2222-2222-2222-222222222222', 'cancer-biology',              'Cancer Biology',              'Performance on cancer biology questions'),
+  ('44444444-4444-4444-4444-444444440004', 'cell-biology',                'Cell Biology',                'Performance on cell biology questions'),
+  ('44444444-4444-4444-4444-444444440005', 'clinical-trials',             'Clinical Trials',             'Performance on clinical trials questions'),
+  ('44444444-4444-4444-4444-444444440006', 'developmental-biology',       'Developmental Biology',       'Performance on developmental biology questions'),
+  ('44444444-4444-4444-4444-444444440007', 'epidemiology',                'Epidemiology',                'Performance on epidemiology questions'),
+  ('44444444-4444-4444-4444-444444440008', 'evolutionary-biology',        'Evolutionary Biology',        'Performance on evolutionary biology questions'),
+  ('44444444-4444-4444-4444-444444440009', 'genetics',                    'Genetics',                    'Performance on genetics questions'),
+  ('44444444-4444-4444-4444-44444444000a', 'genomics',                    'Genomics',                    'Performance on genomics questions'),
+  ('44444444-4444-4444-4444-44444444000b', 'immunology',                  'Immunology',                  'Performance on immunology questions'),
+  ('44444444-4444-4444-4444-44444444000c', 'microbiology',                'Microbiology',                'Performance on microbiology questions'),
+  ('44444444-4444-4444-4444-44444444000d', 'molecular-biology',           'Molecular Biology',           'Performance on molecular biology questions'),
+  ('33333333-3333-3333-3333-333333333333', 'neuroscience',                'Neuroscience',                'Performance on neuroscience questions'),
+  ('44444444-4444-4444-4444-44444444000e', 'pathology',                   'Pathology',                   'Performance on pathology questions'),
+  ('44444444-4444-4444-4444-44444444000f', 'pharmacology-and-toxicology', 'Pharmacology and Toxicology', 'Performance on pharmacology and toxicology questions'),
+  ('44444444-4444-4444-4444-444444440010', 'physiology',                  'Physiology',                  'Performance on physiology questions'),
+  ('44444444-4444-4444-4444-444444440011', 'synthetic-biology',           'Synthetic Biology',           'Performance on synthetic biology questions'),
+  ('44444444-4444-4444-4444-444444440012', 'systems-biology',             'Systems Biology',             'Performance on systems biology questions');

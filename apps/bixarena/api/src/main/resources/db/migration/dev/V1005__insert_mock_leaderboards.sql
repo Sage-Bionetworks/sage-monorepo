@@ -6,15 +6,6 @@
 -- Elo-scale data and the category tabs visibly switch rankings.
 -- ============================================================================
 
--- Category leaderboard definitions
-INSERT INTO api.leaderboard (id, slug, name, description, created_at, updated_at) VALUES
-  ('22222222-2222-2222-2222-222222222222', 'cancer-biology', 'Cancer Biology',
-   'Performance on cancer biology questions',
-   '2025-08-01 10:00:00+00', '2025-08-16 14:30:00+00'),
-  ('33333333-3333-3333-3333-333333333333', 'neuroscience', 'Neuroscience',
-   'Performance on neuroscience questions',
-   '2025-08-01 10:00:00+00', '2025-08-16 14:30:00+00');
-
 -- Snapshots for all three leaderboards
 INSERT INTO api.leaderboard_snapshot
   (id, leaderboard_id, snapshot_identifier, description, visibility, created_at)

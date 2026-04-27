@@ -5,7 +5,11 @@ from bixarena_leaderboard.db_helper import (
     get_db_connection,
     update_leaderboard_snapshot,
 )
-from bixarena_leaderboard.snapshot_generator import generate_snapshot
+from bixarena_leaderboard.snapshot_generator import (
+    SnapshotRunError,
+    generate_all_snapshots,
+    generate_snapshot,
+)
 from rich.console import Console
 from rich.table import Table
 
@@ -25,10 +29,21 @@ leaderboard_app.add_typer(snapshot_app, name="snapshot")
 
 @snapshot_app.command("add")
 def snapshot_add(
-    id: str = typer.Option(
-        "overall",
+    id: str | None = typer.Option(
+        None,
         "--id",
-        help="Leaderboard ID to create snapshot for",
+        help=(
+            "Leaderboard ID to create snapshot for (default 'overall' when "
+            "neither --id nor --all is set). Mutually exclusive with --all."
+        ),
+    ),
+    all_: bool = typer.Option(
+        False,
+        "--all",
+        help=(
+            "Generate snapshots for every leaderboard in api.leaderboard, "
+            "with sparse-data gating. Mutually exclusive with --id."
+        ),
     ),
     num_bootstrap: int = typer.Option(
         100,
@@ -48,6 +63,16 @@ def snapshot_add(
             "If False, rank by BT score only."
         ),
     ),
+    min_total_battles: int = typer.Option(
+        100,
+        "--min-total-battles",
+        help="--all only: skip leaderboards with fewer total battles than this",
+    ),
+    min_total_models: int = typer.Option(
+        10,
+        "--min-total-models",
+        help="--all only: skip leaderboards with fewer distinct models than this",
+    ),
     dry_run: bool = typer.Option(
         False,
         "--dry-run",
@@ -55,20 +80,41 @@ def snapshot_add(
     ),
 ):
     """
-    Create a new leaderboard snapshot.
+    Create one or every leaderboard snapshot.
 
-    This command computes Bradley-Terry rankings from battle evaluations
-    and creates a new snapshot in the database.
+    Default: generates a snapshot for the single leaderboard named by --id.
+    Pass --all to iterate every leaderboard in api.leaderboard, applying
+    sparse-data gating so empty categories are skipped instead of failing.
 
-    Example:
+    Examples:
         uv run bixarena leaderboard snapshot add --id overall --num-bootstrap 1000
+        uv run bixarena leaderboard snapshot add --all
+        uv run bixarena leaderboard snapshot add --all --dry-run
     """
+    if all_ and id is not None:
+        raise typer.BadParameter(
+            "--id and --all are mutually exclusive — pass one or the other."
+        )
+
+    if all_:
+        _snapshot_add_all(
+            num_bootstrap=num_bootstrap,
+            min_evals=min_evals,
+            significant=significant,
+            min_total_battles=min_total_battles,
+            min_total_models=min_total_models,
+            dry_run=dry_run,
+        )
+        return
+
+    target_slug = id or "overall"
+
     console.print("[bold blue]BixArena Leaderboard Snapshot Creation[/bold blue]")
     console.print("=" * 60)
 
     try:
         result = generate_snapshot(
-            leaderboard_slug=id,
+            leaderboard_slug=target_slug,
             num_bootstrap=num_bootstrap,
             min_evals=min_evals,
             significant=significant,
@@ -91,6 +137,89 @@ def snapshot_add(
     except Exception as e:
         console.print(f"[bold red]Error: {e}[/bold red]")
         raise typer.Exit(1) from e
+
+
+def _snapshot_add_all(
+    num_bootstrap: int,
+    min_evals: int,
+    significant: bool,
+    min_total_battles: int,
+    min_total_models: int,
+    dry_run: bool,
+) -> None:
+    """Iterate every leaderboard, gate sparse ones, render a per-slug summary.
+
+    Implementation backing `snapshot add --all`.
+    """
+    console.print("[bold blue]BixArena Multi-Leaderboard Snapshot Run[/bold blue]")
+    console.print("=" * 60)
+
+    summary: dict | None = None
+    try:
+        summary = generate_all_snapshots(
+            num_bootstrap=num_bootstrap,
+            min_evals=min_evals,
+            significant=significant,
+            min_total_battles=min_total_battles,
+            min_total_models=min_total_models,
+            dry_run=dry_run,
+        )
+    except SnapshotRunError as exc:
+        # Partial failure — print the summary, then exit non-zero.
+        summary = exc.summary
+        console.print(f"\n[bold red]{exc}[/bold red]")
+    except Exception as e:
+        console.print(f"[bold red]Error: {e}[/bold red]")
+        raise typer.Exit(1) from e
+
+    if summary is None:
+        return
+
+    if dry_run:
+        console.print(
+            "\n[yellow]DRY RUN: Results computed only. Database not updated.[/yellow]"
+        )
+
+    table = Table(title="\nLeaderboard Run Summary")
+    table.add_column("Slug", style="cyan")
+    table.add_column("Outcome", style="bold")
+    table.add_column("Detail", style="dim")
+
+    for entry in summary.get("generated", []):
+        table.add_row(
+            entry["slug"],
+            "[green]generated[/green]",
+            (
+                f"{entry.get('entry_count', 0)} entries, "
+                f"{entry.get('evaluation_count', 0)} evaluations"
+            ),
+        )
+    for entry in summary.get("skipped", []):
+        table.add_row(
+            entry["slug"],
+            "[yellow]skipped[/yellow]",
+            (
+                f"{entry['reason']} "
+                f"(battles={entry['battle_count']}, models={entry['model_count']})"
+            ),
+        )
+    for entry in summary.get("failed", []):
+        table.add_row(
+            entry["slug"],
+            "[red]failed[/red]",
+            entry.get("error", ""),
+        )
+
+    console.print(table)
+    console.print(
+        f"\n[green]{len(summary.get('generated', []))} generated[/green], "
+        f"[yellow]{len(summary.get('skipped', []))} skipped[/yellow], "
+        f"[red]{len(summary.get('failed', []))} failed[/red] "
+        f"(of {summary.get('total', 0)} total)"
+    )
+
+    if summary.get("failed"):
+        raise typer.Exit(1)
 
 
 @snapshot_app.command("list")

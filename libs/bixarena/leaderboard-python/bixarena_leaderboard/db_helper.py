@@ -112,21 +112,27 @@ def fetch_all_models(conn) -> list[dict[str, Any]]:
         return cur.fetchall()
 
 
-def fetch_battle_evaluations(conn) -> list[dict[str, Any]]:
+def fetch_battle_evaluations(
+    conn, category_slug: str | None = None
+) -> list[dict[str, Any]]:
     """
     Fetch battle evaluations with model names for ranking.
 
-    Only includes evaluations where the battle is validated as biomedical.
+    Only includes evaluations where the battle is validated as biomedical. When
+    category_slug is provided, also restricts to battles whose effective
+    categorization is status='matched' and includes the given category.
 
     Args:
         conn: Database connection
+        category_slug: Optional BiomedicalCategory slug. When None, all biomedical
+            battles are returned (overall leaderboard). When set, only battles
+            categorized as that slug are returned (per-category leaderboard).
 
     Returns:
         List of dicts with model1_name, model2_name, outcome
     """
-    with conn.cursor() as cur:
-        cur.execute(
-            """
+    if category_slug is None:
+        query = """
             SELECT m1.name as model1_name,
                    m2.name as model2_name,
                    eval.outcome
@@ -136,9 +142,133 @@ def fetch_battle_evaluations(conn) -> list[dict[str, Any]]:
             JOIN api.model m1 ON b.model1_id = m1.id
             JOIN api.model m2 ON b.model2_id = m2.id
             WHERE bv.is_biomedical = true
-            """
-        )
+        """
+        params: tuple = ()
+    else:
+        query = """
+            SELECT m1.name as model1_name,
+                   m2.name as model2_name,
+                   eval.outcome
+            FROM api.battle_evaluation eval
+            JOIN api.battle b ON eval.battle_id = b.id
+            JOIN api.battle_validation bv ON bv.id = b.effective_validation_id
+            JOIN api.battle_categorization bc ON bc.id = b.effective_categorization_id
+            JOIN api.battle_categorization_category bcc ON bcc.categorization_id = bc.id
+            JOIN api.model m1 ON b.model1_id = m1.id
+            JOIN api.model m2 ON b.model2_id = m2.id
+            WHERE bv.is_biomedical = true
+              AND bc.status = 'matched'
+              AND bcc.category = %s
+        """
+        params = (category_slug,)
+    with conn.cursor() as cur:
+        cur.execute(query, params)
         return cur.fetchall()
+
+
+def fetch_battle_evaluation_stats(
+    conn, category_slug: str | None = None
+) -> dict[str, int]:
+    """
+    Count battles and unique models that would feed a leaderboard, without
+    fetching the full evaluation rows.
+
+    Used by the multi-leaderboard worker to gate sparse categories before
+    paying the cost of running Bradley-Terry. Mirrors the qualifying-rows
+    predicates of fetch_battle_evaluations (biomedical validation + optional
+    matched-categorization filter); the model joins are omitted because the
+    api.model FK uses ON DELETE CASCADE, so a deleted model also deletes its
+    battles, keeping the counts consistent with what fetch_battle_evaluations
+    would return.
+
+    Args:
+        conn: Database connection
+        category_slug: Optional BiomedicalCategory slug. When None, counts
+            apply to all biomedical battles (overall leaderboard).
+
+    Returns:
+        dict with two keys:
+          - battle_count: number of qualifying battle_evaluation rows
+          - model_count: number of distinct models that participate in any
+            qualifying battle as either model1 or model2
+    """
+    if category_slug is None:
+        battle_query = """
+            SELECT COUNT(*) AS battle_count
+            FROM api.battle_evaluation eval
+            JOIN api.battle b ON eval.battle_id = b.id
+            JOIN api.battle_validation bv ON bv.id = b.effective_validation_id
+            WHERE bv.is_biomedical = true
+        """
+        model_query = """
+            SELECT COUNT(DISTINCT m_id) AS model_count
+            FROM (
+              SELECT b.model1_id AS m_id
+              FROM api.battle_evaluation eval
+              JOIN api.battle b ON eval.battle_id = b.id
+              JOIN api.battle_validation bv ON bv.id = b.effective_validation_id
+              WHERE bv.is_biomedical = true
+              UNION ALL
+              SELECT b.model2_id AS m_id
+              FROM api.battle_evaluation eval
+              JOIN api.battle b ON eval.battle_id = b.id
+              JOIN api.battle_validation bv ON bv.id = b.effective_validation_id
+              WHERE bv.is_biomedical = true
+            ) AS m
+        """
+        battle_params: tuple = ()
+        model_params: tuple = ()
+    else:
+        battle_query = """
+            SELECT COUNT(*) AS battle_count
+            FROM api.battle_evaluation eval
+            JOIN api.battle b ON eval.battle_id = b.id
+            JOIN api.battle_validation bv ON bv.id = b.effective_validation_id
+            JOIN api.battle_categorization bc ON bc.id = b.effective_categorization_id
+            JOIN api.battle_categorization_category bcc ON bcc.categorization_id = bc.id
+            WHERE bv.is_biomedical = true
+              AND bc.status = 'matched'
+              AND bcc.category = %s
+        """
+        model_query = """
+            SELECT COUNT(DISTINCT m_id) AS model_count
+            FROM (
+              SELECT b.model1_id AS m_id
+              FROM api.battle_evaluation eval
+              JOIN api.battle b ON eval.battle_id = b.id
+              JOIN api.battle_validation bv ON bv.id = b.effective_validation_id
+              JOIN api.battle_categorization bc
+                ON bc.id = b.effective_categorization_id
+              JOIN api.battle_categorization_category bcc
+                ON bcc.categorization_id = bc.id
+              WHERE bv.is_biomedical = true
+                AND bc.status = 'matched'
+                AND bcc.category = %s
+              UNION ALL
+              SELECT b.model2_id AS m_id
+              FROM api.battle_evaluation eval
+              JOIN api.battle b ON eval.battle_id = b.id
+              JOIN api.battle_validation bv ON bv.id = b.effective_validation_id
+              JOIN api.battle_categorization bc
+                ON bc.id = b.effective_categorization_id
+              JOIN api.battle_categorization_category bcc
+                ON bcc.categorization_id = bc.id
+              WHERE bv.is_biomedical = true
+                AND bc.status = 'matched'
+                AND bcc.category = %s
+            ) AS m
+        """
+        battle_params = (category_slug,)
+        model_params = (category_slug, category_slug)
+    with conn.cursor() as cur:
+        cur.execute(battle_query, battle_params)
+        battle_row = cur.fetchone() or {}
+        cur.execute(model_query, model_params)
+        model_row = cur.fetchone() or {}
+    return {
+        "battle_count": int(battle_row.get("battle_count") or 0),
+        "model_count": int(model_row.get("model_count") or 0),
+    }
 
 
 def insert_battle_evaluation(conn, battle_id: str, outcome: str) -> dict[str, Any]:
