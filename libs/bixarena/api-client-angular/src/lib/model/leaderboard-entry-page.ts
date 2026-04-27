@@ -50,6 +50,14 @@ export interface LeaderboardEntryPage {
    */
   priorSnapshotId?: string | null;
   /**
+   * Total models in the snapshot.
+   */
+  entryCount: number;
+  /**
+   * Total evaluations across all models in the snapshot.
+   */
+  voteCount: number;
+  /**
    * A list of leaderboard entries.
    */
   entries: Array<LeaderboardEntry>;

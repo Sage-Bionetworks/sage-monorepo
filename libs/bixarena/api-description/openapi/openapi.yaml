@@ -2705,6 +2705,9 @@ components:
       description: The field to sort leaderboard entries by.
       enum:
         - rank
+        - bt_score
+        - vote_count
+        - model_slug
         - created_at
       default: rank
       example: rank
@@ -2736,6 +2739,15 @@ components:
           type: string
           nullable: true
           example: gpt
+        license:
+          $ref: '#/components/schemas/License'
+          nullable: true
+          description: Filter entries by model license.
+        organization:
+          type: string
+          nullable: true
+          description: Filter entries by model organization.
+          example: OpenAI
         snapshotId:
           description: Get a specific historical snapshot instead of latest.
           type: string
@@ -2847,6 +2859,14 @@ components:
               nullable: true
               description: Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.
               example: snapshot_2025-08-09_14-30
+            entryCount:
+              type: integer
+              description: Total models in the snapshot.
+              example: 50
+            voteCount:
+              type: integer
+              description: Total evaluations across all models in the snapshot.
+              example: 9682
             entries:
               description: A list of leaderboard entries.
               type: array
@@ -2855,6 +2875,8 @@ components:
           required:
             - updatedAt
             - snapshotId
+            - entryCount
+            - voteCount
             - entries
     LeaderboardHistorySort:
       type: string

@@ -9,6 +9,7 @@
  */
 import { SortDirection } from './sort-direction';
 import { LeaderboardSort } from './leaderboard-sort';
+import { License } from './license';
 
 /**
  * A leaderboard search query with pagination and filtering options.
@@ -28,6 +29,11 @@ export interface LeaderboardSearchQuery {
    * Search by model name (case-insensitive partial match).
    */
   search?: string | null;
+  license?: License;
+  /**
+   * Filter entries by model organization.
+   */
+  organization?: string | null;
   /**
    * Get a specific historical snapshot instead of latest.
    */

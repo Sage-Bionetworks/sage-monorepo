@@ -54,6 +54,13 @@ class LeaderboardEntryPage(BaseModel):
         description="Snapshot used as the rankDelta baseline. Null when no prior snapshot was found.",
         alias="priorSnapshotId",
     )
+    entry_count: StrictInt = Field(
+        description="Total models in the snapshot.", alias="entryCount"
+    )
+    vote_count: StrictInt = Field(
+        description="Total evaluations across all models in the snapshot.",
+        alias="voteCount",
+    )
     entries: List[LeaderboardEntry] = Field(
         description="A list of leaderboard entries."
     )
@@ -67,6 +74,8 @@ class LeaderboardEntryPage(BaseModel):
         "updatedAt",
         "snapshotId",
         "priorSnapshotId",
+        "entryCount",
+        "voteCount",
         "entries",
     ]
 
@@ -144,6 +153,8 @@ class LeaderboardEntryPage(BaseModel):
                 "updatedAt": obj.get("updatedAt"),
                 "snapshotId": obj.get("snapshotId"),
                 "priorSnapshotId": obj.get("priorSnapshotId"),
+                "entryCount": obj.get("entryCount"),
+                "voteCount": obj.get("voteCount"),
                 "entries": [
                     LeaderboardEntry.from_dict(_item) for _item in obj["entries"]
                 ]

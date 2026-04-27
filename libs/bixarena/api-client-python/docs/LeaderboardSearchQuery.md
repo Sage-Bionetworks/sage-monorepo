@@ -4,15 +4,17 @@ A leaderboard search query with pagination and filtering options.
 
 ## Properties
 
-| Name            | Type                                      | Description                                            | Notes                                        |
-| --------------- | ----------------------------------------- | ------------------------------------------------------ | -------------------------------------------- |
-| **page_number** | **int**                                   | The page number.                                       | [optional] [default to 0]                    |
-| **page_size**   | **int**                                   | The number of items in a single page.                  | [optional] [default to 100]                  |
-| **sort**        | [**LeaderboardSort**](LeaderboardSort.md) |                                                        | [optional] [default to LeaderboardSort.RANK] |
-| **direction**   | [**SortDirection**](SortDirection.md)     |                                                        | [optional] [default to SortDirection.ASC]    |
-| **search**      | **str**                                   | Search by model name (case-insensitive partial match). | [optional]                                   |
-| **snapshot_id** | **str**                                   | Get a specific historical snapshot instead of latest.  | [optional]                                   |
-| **lookback**    | **int**                                   | Comparison window in days for computing rankDelta.     | [optional]                                   |
+| Name             | Type                                      | Description                                            | Notes                                        |
+| ---------------- | ----------------------------------------- | ------------------------------------------------------ | -------------------------------------------- |
+| **page_number**  | **int**                                   | The page number.                                       | [optional] [default to 0]                    |
+| **page_size**    | **int**                                   | The number of items in a single page.                  | [optional] [default to 100]                  |
+| **sort**         | [**LeaderboardSort**](LeaderboardSort.md) |                                                        | [optional] [default to LeaderboardSort.RANK] |
+| **direction**    | [**SortDirection**](SortDirection.md)     |                                                        | [optional] [default to SortDirection.ASC]    |
+| **search**       | **str**                                   | Search by model name (case-insensitive partial match). | [optional]                                   |
+| **license**      | [**License**](License.md)                 |                                                        | [optional]                                   |
+| **organization** | **str**                                   | Filter entries by model organization.                  | [optional]                                   |
+| **snapshot_id**  | **str**                                   | Get a specific historical snapshot instead of latest.  | [optional]                                   |
+| **lookback**     | **int**                                   | Comparison window in days for computing rankDelta.     | [optional]                                   |
 
 ## Example
 

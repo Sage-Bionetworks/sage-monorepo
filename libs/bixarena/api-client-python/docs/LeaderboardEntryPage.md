@@ -15,6 +15,8 @@ A page of leaderboard entries.
 | **updated_at**        | **datetime**                                      | When this leaderboard was last updated                                          |
 | **snapshot_id**       | **str**                                           | Identifier for this snapshot/timepoint                                          |
 | **prior_snapshot_id** | **str**                                           | Snapshot used as the rankDelta baseline. Null when no prior snapshot was found. | [optional] |
+| **entry_count**       | **int**                                           | Total models in the snapshot.                                                   |
+| **vote_count**        | **int**                                           | Total evaluations across all models in the snapshot.                            |
 | **entries**           | [**List[LeaderboardEntry]**](LeaderboardEntry.md) | A list of leaderboard entries.                                                  |
 
 ## Example

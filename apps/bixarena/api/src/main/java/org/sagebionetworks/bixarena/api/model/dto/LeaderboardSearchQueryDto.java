@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSortDto;
+import org.sagebionetworks.bixarena.api.model.dto.LicenseDto;
 import org.sagebionetworks.bixarena.api.model.dto.SortDirectionDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -36,6 +37,10 @@ public class LeaderboardSearchQueryDto {
   private SortDirectionDto direction = SortDirectionDto.ASC;
 
   private @Nullable String search = null;
+
+  private @Nullable LicenseDto license;
+
+  private @Nullable String organization = null;
 
   private @Nullable String snapshotId = null;
 
@@ -144,6 +149,46 @@ public class LeaderboardSearchQueryDto {
     this.search = search;
   }
 
+  public LeaderboardSearchQueryDto license(@Nullable LicenseDto license) {
+    this.license = license;
+    return this;
+  }
+
+  /**
+   * Get license
+   * @return license
+   */
+  @Valid 
+  @Schema(name = "license", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("license")
+  public @Nullable LicenseDto getLicense() {
+    return license;
+  }
+
+  public void setLicense(@Nullable LicenseDto license) {
+    this.license = license;
+  }
+
+  public LeaderboardSearchQueryDto organization(@Nullable String organization) {
+    this.organization = organization;
+    return this;
+  }
+
+  /**
+   * Filter entries by model organization.
+   * @return organization
+   */
+  
+  @Schema(name = "organization", example = "OpenAI", description = "Filter entries by model organization.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("organization")
+  public @Nullable String getOrganization() {
+    return organization;
+  }
+
+  public void setOrganization(@Nullable String organization) {
+    this.organization = organization;
+  }
+
   public LeaderboardSearchQueryDto snapshotId(@Nullable String snapshotId) {
     this.snapshotId = snapshotId;
     return this;
@@ -199,13 +244,15 @@ public class LeaderboardSearchQueryDto {
         Objects.equals(this.sort, leaderboardSearchQuery.sort) &&
         Objects.equals(this.direction, leaderboardSearchQuery.direction) &&
         Objects.equals(this.search, leaderboardSearchQuery.search) &&
+        Objects.equals(this.license, leaderboardSearchQuery.license) &&
+        Objects.equals(this.organization, leaderboardSearchQuery.organization) &&
         Objects.equals(this.snapshotId, leaderboardSearchQuery.snapshotId) &&
         Objects.equals(this.lookback, leaderboardSearchQuery.lookback);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, search, snapshotId, lookback);
+    return Objects.hash(pageNumber, pageSize, sort, direction, search, license, organization, snapshotId, lookback);
   }
 
   @Override
@@ -217,6 +264,8 @@ public class LeaderboardSearchQueryDto {
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
+    sb.append("    license: ").append(toIndentedString(license)).append("\n");
+    sb.append("    organization: ").append(toIndentedString(organization)).append("\n");
     sb.append("    snapshotId: ").append(toIndentedString(snapshotId)).append("\n");
     sb.append("    lookback: ").append(toIndentedString(lookback)).append("\n");
     sb.append("}");
@@ -252,6 +301,8 @@ public class LeaderboardSearchQueryDto {
       this.instance.setSort(value.sort);
       this.instance.setDirection(value.direction);
       this.instance.setSearch(value.search);
+      this.instance.setLicense(value.license);
+      this.instance.setOrganization(value.organization);
       this.instance.setSnapshotId(value.snapshotId);
       this.instance.setLookback(value.lookback);
       return this;
@@ -279,6 +330,16 @@ public class LeaderboardSearchQueryDto {
     
     public LeaderboardSearchQueryDto.Builder search(String search) {
       this.instance.search(search);
+      return this;
+    }
+    
+    public LeaderboardSearchQueryDto.Builder license(LicenseDto license) {
+      this.instance.license(license);
+      return this;
+    }
+    
+    public LeaderboardSearchQueryDto.Builder organization(String organization) {
+      this.instance.organization(organization);
       return this;
     }
     

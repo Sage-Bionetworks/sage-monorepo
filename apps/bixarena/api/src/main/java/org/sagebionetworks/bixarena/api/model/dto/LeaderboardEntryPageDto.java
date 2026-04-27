@@ -49,6 +49,10 @@ public class LeaderboardEntryPageDto {
 
   private @Nullable String priorSnapshotId = null;
 
+  private Integer entryCount;
+
+  private Integer voteCount;
+
   @Valid
   private List<@Valid LeaderboardEntryDto> entries = new ArrayList<>();
 
@@ -59,7 +63,7 @@ public class LeaderboardEntryPageDto {
   /**
    * Constructor with only required parameters
    */
-  public LeaderboardEntryPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, OffsetDateTime updatedAt, String snapshotId, List<@Valid LeaderboardEntryDto> entries) {
+  public LeaderboardEntryPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, OffsetDateTime updatedAt, String snapshotId, Integer entryCount, Integer voteCount, List<@Valid LeaderboardEntryDto> entries) {
     this.number = number;
     this.size = size;
     this.totalElements = totalElements;
@@ -68,6 +72,8 @@ public class LeaderboardEntryPageDto {
     this.hasPrevious = hasPrevious;
     this.updatedAt = updatedAt;
     this.snapshotId = snapshotId;
+    this.entryCount = entryCount;
+    this.voteCount = voteCount;
     this.entries = entries;
   }
 
@@ -251,6 +257,46 @@ public class LeaderboardEntryPageDto {
     this.priorSnapshotId = priorSnapshotId;
   }
 
+  public LeaderboardEntryPageDto entryCount(Integer entryCount) {
+    this.entryCount = entryCount;
+    return this;
+  }
+
+  /**
+   * Total models in the snapshot.
+   * @return entryCount
+   */
+  @NotNull 
+  @Schema(name = "entryCount", example = "50", description = "Total models in the snapshot.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("entryCount")
+  public Integer getEntryCount() {
+    return entryCount;
+  }
+
+  public void setEntryCount(Integer entryCount) {
+    this.entryCount = entryCount;
+  }
+
+  public LeaderboardEntryPageDto voteCount(Integer voteCount) {
+    this.voteCount = voteCount;
+    return this;
+  }
+
+  /**
+   * Total evaluations across all models in the snapshot.
+   * @return voteCount
+   */
+  @NotNull 
+  @Schema(name = "voteCount", example = "9682", description = "Total evaluations across all models in the snapshot.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("voteCount")
+  public Integer getVoteCount() {
+    return voteCount;
+  }
+
+  public void setVoteCount(Integer voteCount) {
+    this.voteCount = voteCount;
+  }
+
   public LeaderboardEntryPageDto entries(List<@Valid LeaderboardEntryDto> entries) {
     this.entries = entries;
     return this;
@@ -297,12 +343,14 @@ public class LeaderboardEntryPageDto {
         Objects.equals(this.updatedAt, leaderboardEntryPage.updatedAt) &&
         Objects.equals(this.snapshotId, leaderboardEntryPage.snapshotId) &&
         Objects.equals(this.priorSnapshotId, leaderboardEntryPage.priorSnapshotId) &&
+        Objects.equals(this.entryCount, leaderboardEntryPage.entryCount) &&
+        Objects.equals(this.voteCount, leaderboardEntryPage.voteCount) &&
         Objects.equals(this.entries, leaderboardEntryPage.entries);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(number, size, totalElements, totalPages, hasNext, hasPrevious, updatedAt, snapshotId, priorSnapshotId, entries);
+    return Objects.hash(number, size, totalElements, totalPages, hasNext, hasPrevious, updatedAt, snapshotId, priorSnapshotId, entryCount, voteCount, entries);
   }
 
   @Override
@@ -318,6 +366,8 @@ public class LeaderboardEntryPageDto {
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    snapshotId: ").append(toIndentedString(snapshotId)).append("\n");
     sb.append("    priorSnapshotId: ").append(toIndentedString(priorSnapshotId)).append("\n");
+    sb.append("    entryCount: ").append(toIndentedString(entryCount)).append("\n");
+    sb.append("    voteCount: ").append(toIndentedString(voteCount)).append("\n");
     sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -356,6 +406,8 @@ public class LeaderboardEntryPageDto {
       this.instance.setUpdatedAt(value.updatedAt);
       this.instance.setSnapshotId(value.snapshotId);
       this.instance.setPriorSnapshotId(value.priorSnapshotId);
+      this.instance.setEntryCount(value.entryCount);
+      this.instance.setVoteCount(value.voteCount);
       this.instance.setEntries(value.entries);
       return this;
     }
@@ -402,6 +454,16 @@ public class LeaderboardEntryPageDto {
     
     public LeaderboardEntryPageDto.Builder priorSnapshotId(String priorSnapshotId) {
       this.instance.priorSnapshotId(priorSnapshotId);
+      return this;
+    }
+    
+    public LeaderboardEntryPageDto.Builder entryCount(Integer entryCount) {
+      this.instance.entryCount(entryCount);
+      return this;
+    }
+    
+    public LeaderboardEntryPageDto.Builder voteCount(Integer voteCount) {
+      this.instance.voteCount(voteCount);
       return this;
     }
     

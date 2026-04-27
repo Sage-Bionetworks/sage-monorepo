@@ -11,9 +11,12 @@
 /**
  * The field to sort leaderboard entries by.
  */
-export type LeaderboardSort = 'rank' | 'created_at';
+export type LeaderboardSort = 'rank' | 'bt_score' | 'vote_count' | 'model_slug' | 'created_at';
 
 export const LeaderboardSort = {
   Rank: 'rank' as LeaderboardSort,
+  BtScore: 'bt_score' as LeaderboardSort,
+  VoteCount: 'vote_count' as LeaderboardSort,
+  ModelSlug: 'model_slug' as LeaderboardSort,
   CreatedAt: 'created_at' as LeaderboardSort,
 };

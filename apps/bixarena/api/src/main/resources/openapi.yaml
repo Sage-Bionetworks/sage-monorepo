@@ -3444,6 +3444,9 @@ components:
       description: The field to sort leaderboard entries by.
       enum:
         - rank
+        - bt_score
+        - vote_count
+        - model_slug
         - created_at
       example: rank
       type: string
@@ -3472,6 +3475,13 @@ components:
         search:
           description: Search by model name (case-insensitive partial match).
           example: gpt
+          nullable: true
+          type: string
+        license:
+          $ref: '#/components/schemas/License'
+        organization:
+          description: Filter entries by model organization.
+          example: OpenAI
           nullable: true
           type: string
         snapshotId:
@@ -3598,6 +3608,14 @@ components:
               example: snapshot_2025-08-09_14-30
               nullable: true
               type: string
+            entryCount:
+              description: Total models in the snapshot.
+              example: 50
+              type: integer
+            voteCount:
+              description: Total evaluations across all models in the snapshot.
+              example: 9682
+              type: integer
             entries:
               description: A list of leaderboard entries.
               items:
@@ -3605,8 +3623,10 @@ components:
               type: array
           required:
             - entries
+            - entryCount
             - snapshotId
             - updatedAt
+            - voteCount
           type: object
       description: A page of leaderboard entries.
       example:
@@ -3639,11 +3659,13 @@ components:
             voteCount: 1250
             modelUrl: https://openai.com/gpt-4
         snapshotId: snapshot_2025-08-16_14-30
+        entryCount: 50
         size: 99
         priorSnapshotId: snapshot_2025-08-09_14-30
         totalPages: 99
         hasPrevious: true
         hasNext: true
+        voteCount: 9682
         totalElements: 99
         updatedAt: 2025-08-16T14:30:00Z
       type: object
