@@ -46,9 +46,13 @@
   width: 100%;
   height: 100%;
   border-radius: inherit;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
   filter: var(--avatar-img-filter, none);
+}
+
+:host(.shape-bare) .avatar-img {
+  object-fit: contain;
 }
 
 .avatar-initials {

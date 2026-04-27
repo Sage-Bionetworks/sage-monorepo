@@ -27,8 +27,9 @@ export class LeaderboardFacadeService {
     try {
       const list = await firstValueFrom(this.api.listLeaderboards());
       this.leaderboards.set(list ?? []);
+      console.debug('✅ Fetched leaderboard categories', { count: list?.length ?? 0 });
     } catch (err) {
-      console.error('Failed to load leaderboards', err);
+      console.error('❌ Failed to fetch leaderboard categories', err);
       this.leaderboards.set([]);
     }
   }
@@ -44,8 +45,13 @@ export class LeaderboardFacadeService {
       this.entries.set(page.entries);
       this.totalElements.set(page.totalElements);
       this.snapshotUpdatedAt.set(page.updatedAt);
+      console.debug('✅ Fetched leaderboard data', {
+        leaderboardId,
+        entries: page.entries.length,
+        totalElements: page.totalElements,
+      });
     } catch (err) {
-      console.error('Failed to load leaderboard', err);
+      console.error('❌ Failed to fetch leaderboard data', { leaderboardId, query, err });
       this.error.set('Could not load leaderboard');
       this.entries.set([]);
       this.totalElements.set(0);
