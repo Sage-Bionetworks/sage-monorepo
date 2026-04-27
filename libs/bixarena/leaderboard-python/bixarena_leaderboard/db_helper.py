@@ -174,9 +174,12 @@ def fetch_battle_evaluation_stats(
     fetching the full evaluation rows.
 
     Used by the multi-leaderboard worker to gate sparse categories before
-    paying the cost of running Bradley-Terry. Mirrors the JOIN structure of
-    fetch_battle_evaluations exactly so the counts always reflect what that
-    query would actually return.
+    paying the cost of running Bradley-Terry. Mirrors the qualifying-rows
+    predicates of fetch_battle_evaluations (biomedical validation + optional
+    matched-categorization filter); the model joins are omitted because the
+    api.model FK uses ON DELETE CASCADE, so a deleted model also deletes its
+    battles, keeping the counts consistent with what fetch_battle_evaluations
+    would return.
 
     Args:
         conn: Database connection

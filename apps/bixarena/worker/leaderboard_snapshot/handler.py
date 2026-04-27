@@ -146,16 +146,20 @@ def run() -> None:
                 )
                 time.sleep(retry_delay_s)
     else:
+        # Reachable only when the generic `except Exception` branch above
+        # exhausted all retries; SnapshotRunError is handled (and re-raised)
+        # in its own except branch and never lands here.
         duration_s = round(time.monotonic() - start, 2)
-        error_payload = {
-            "event": "error",
-            "correlation_id": correlation_id,
-            "error": str(last_exc),
-            "duration_s": duration_s,
-        }
-        if isinstance(last_exc, SnapshotRunError):
-            error_payload["summary"] = last_exc.summary
-        logger.error(json.dumps(error_payload))
+        logger.error(
+            json.dumps(
+                {
+                    "event": "error",
+                    "correlation_id": correlation_id,
+                    "error": str(last_exc),
+                    "duration_s": duration_s,
+                }
+            )
+        )
         raise last_exc  # type: ignore[misc]
 
     duration_s = round(time.monotonic() - start, 2)

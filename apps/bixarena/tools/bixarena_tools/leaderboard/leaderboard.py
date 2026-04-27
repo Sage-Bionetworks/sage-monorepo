@@ -29,10 +29,13 @@ leaderboard_app.add_typer(snapshot_app, name="snapshot")
 
 @snapshot_app.command("add")
 def snapshot_add(
-    id: str = typer.Option(
-        "overall",
+    id: str | None = typer.Option(
+        None,
         "--id",
-        help="Leaderboard ID to create snapshot for. Ignored when --all is set.",
+        help=(
+            "Leaderboard ID to create snapshot for (default 'overall' when "
+            "neither --id nor --all is set). Mutually exclusive with --all."
+        ),
     ),
     all_: bool = typer.Option(
         False,
@@ -88,6 +91,11 @@ def snapshot_add(
         uv run bixarena leaderboard snapshot add --all
         uv run bixarena leaderboard snapshot add --all --dry-run
     """
+    if all_ and id is not None:
+        raise typer.BadParameter(
+            "--id and --all are mutually exclusive — pass one or the other."
+        )
+
     if all_:
         _snapshot_add_all(
             num_bootstrap=num_bootstrap,
@@ -99,12 +107,14 @@ def snapshot_add(
         )
         return
 
+    target_slug = id or "overall"
+
     console.print("[bold blue]BixArena Leaderboard Snapshot Creation[/bold blue]")
     console.print("=" * 60)
 
     try:
         result = generate_snapshot(
-            leaderboard_slug=id,
+            leaderboard_slug=target_slug,
             num_bootstrap=num_bootstrap,
             min_evals=min_evals,
             significant=significant,
