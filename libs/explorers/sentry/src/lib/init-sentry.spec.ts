@@ -16,12 +16,12 @@ describe('initSentry', () => {
   });
 
   it('initializes Sentry with dsn, environment, and release', () => {
-    initSentry({ ...mockConfig, release: '1.0.0+abc1234' });
+    initSentry({ ...mockConfig, release: 'agora@1.0.0+abc1234' });
 
     expect(Sentry.init).toHaveBeenCalledWith({
       dsn: mockConfig.dsn,
       environment: 'dev',
-      release: '1.0.0+abc1234',
+      release: 'agora@1.0.0+abc1234',
       sendDefaultPii: false,
     });
   });
