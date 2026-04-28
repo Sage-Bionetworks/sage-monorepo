@@ -69,6 +69,24 @@ describe('LeaderboardComponent', () => {
     expect(title?.textContent).toContain('Leader');
   });
 
+  describe('view toggle', () => {
+    it('defaults to table view', () => {
+      const fixture = createFixture();
+      expect(fixture.componentInstance.view()).toBe('table');
+    });
+
+    it('switches to chart view and hides the paginator', async () => {
+      const fixture = createFixture();
+      await fixture.whenStable();
+      fixture.componentInstance.view.set('chart');
+      fixture.detectChanges();
+      const root = fixture.nativeElement as HTMLElement;
+      expect(root.querySelector('bixarena-leaderboard-bar-chart')).not.toBeNull();
+      expect(root.querySelector('bixarena-leaderboard-table')).toBeNull();
+      expect(root.querySelector('p-paginator')).toBeNull();
+    });
+  });
+
   describe('categoryOptions filtering', () => {
     it('hides categories with no latestSnapshot', async () => {
       apiStub.listLeaderboards.mockReturnValueOnce(

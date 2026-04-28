@@ -28,9 +28,11 @@
     [activeCategoryId]="activeCategoryId()"
     [searchTerm]="searchTerm()"
     [filters]="filters()"
+    [view]="view()"
     (categoryChange)="onCategoryChange($event)"
     (searchChange)="onSearchInput($event)"
     (filtersChange)="onFiltersChange($event)"
+    (viewChange)="onViewChange($event)"
   />
 
   <section class="table-wrap">
@@ -41,6 +43,8 @@
         <span>Unable to load leaderboard.</span>
         <button type="button" class="retry-btn" (click)="retry()">Retry</button>
       </div>
+    } @else if (view() === 'chart') {
+      <bixarena-leaderboard-bar-chart [entries]="facade.entries()" />
     } @else {
       <bixarena-leaderboard-table
         [entries]="facade.entries()"
@@ -51,7 +55,7 @@
     }
   </section>
 
-  @if (!facade.loading() && !facade.error() && facade.totalElements() > 0) {
+  @if (view() === 'table' && !facade.loading() && !facade.error() && facade.totalElements() > 0) {
     <p-paginator
       class="leaderboard-paginator"
       [first]="pageFirst()"
