@@ -12,7 +12,11 @@ import {
   LeaderboardSortField,
   LeaderboardTableComponent,
 } from './leaderboard-table/leaderboard-table.component';
-import { LeaderboardToolbarComponent } from './leaderboard-toolbar/leaderboard-toolbar.component';
+import {
+  LeaderboardToolbarComponent,
+  LeaderboardView,
+} from './leaderboard-toolbar/leaderboard-toolbar.component';
+import { LeaderboardBarChartComponent } from './leaderboard-bar-chart/leaderboard-bar-chart.component';
 import { DEFAULT_LEADERBOARD_FILTERS, LeaderboardFilters } from './leaderboard.filters';
 import {
   DEFAULT_PAGE_SIZE,
@@ -35,6 +39,7 @@ const SORT_FIELD_MAP: Record<LeaderboardSortField, LeaderboardSort> = {
   imports: [
     LeaderboardTableComponent,
     LeaderboardToolbarComponent,
+    LeaderboardBarChartComponent,
     PaginatorModule,
     DatePipe,
     DecimalPipe,
@@ -56,6 +61,8 @@ export class LeaderboardComponent {
 
   readonly sortField = signal<LeaderboardSortField>(DEFAULT_SORT_FIELD);
   readonly sortOrder = signal<1 | -1>(DEFAULT_SORT_ORDER);
+
+  readonly view = signal<LeaderboardView>('table');
 
   private readonly debouncedSearch = signal('');
   private searchTimer?: ReturnType<typeof setTimeout>;
@@ -129,5 +136,9 @@ export class LeaderboardComponent {
 
   retry(): void {
     void this.facade.load(this.activeCategoryId(), this.query());
+  }
+
+  onViewChange(next: LeaderboardView): void {
+    this.view.set(next);
   }
 }

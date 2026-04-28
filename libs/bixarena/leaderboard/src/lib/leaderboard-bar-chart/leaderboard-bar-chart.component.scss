@@ -1,0 +1,115 @@
+:host {
+  display: block;
+}
+
+// Horizontal row of bars. Centers when content fits, scrolls horizontally otherwise.
+// Top padding leaves room for the score labels that float above the tallest bar.
+.chart-row {
+  display: flex;
+  gap: 1.25rem;
+  padding: 3rem 1rem 1.5rem;
+  margin: 0;
+  list-style: none;
+  overflow: auto hidden;
+  justify-content: safe center;
+}
+
+// One column per bar: track on top, slug label beneath.
+.chart-bar {
+  flex: 0 0 auto;
+  width: 6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+// Positioning context for the bar shape, score, and logo. Receives two custom props
+// from the template: --bar-final-height (target % of track) and --bar-index (for stagger).
+.bar-track {
+  position: relative;
+  width: 3.5rem;
+  height: 16rem;
+}
+
+// The animated colored rectangle. Empty element so transform/height changes don't drag children.
+.bar-shape {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bar-final-height, 0);
+  border-radius: var(--p-border-radius-md) var(--p-border-radius-md) 0 0;
+  animation: bar-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--bar-index, 0) * 60ms);
+}
+
+@keyframes bar-rise {
+  from {
+    height: 0;
+  }
+
+  to {
+    height: var(--bar-final-height);
+  }
+}
+
+// Score label floats just above the bar tip; fades in after the bar finishes rising.
+.bar-score {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--bar-final-height) + 0.4rem);
+  text-align: center;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--p-text-color);
+  opacity: 0;
+  animation: bar-content-appear 0.3s ease forwards;
+  animation-delay: calc(var(--bar-index, 0) * 60ms + 0.55s);
+}
+
+// Org logo sits inside the bar near its tip. Fades in slightly after the score.
+.bar-logo {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--bar-final-height) - 2.6rem);
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: bar-content-appear 0.3s ease forwards;
+  animation-delay: calc(var(--bar-index, 0) * 60ms + 0.6s);
+}
+
+@keyframes bar-content-appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.bar-name {
+  font-size: var(--text-xs);
+  color: var(--p-text-muted-color);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  text-align: center;
+  max-width: 6rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  line-height: 1.25;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-shape,
+  .bar-score,
+  .bar-logo {
+    animation: none;
+    opacity: 1;
+  }
+}

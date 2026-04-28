@@ -7,3 +7,4 @@ export const LOOKBACK_DAYS = 7;
 export const DEFAULT_SORT_FIELD = 'rank';
 export const DEFAULT_SORT_ORDER: 1 | -1 = 1;
 export const LEADERBOARD_TABLE_COLUMN_COUNT = 7;
+export const LEADERBOARD_BAR_CHART_TOP_N = 10;
