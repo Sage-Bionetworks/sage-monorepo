@@ -202,6 +202,7 @@
 }
 
 .view-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -224,6 +225,22 @@
     background: var(--p-surface-100);
     color: var(--p-text-color);
   }
+}
+
+// TODO: remove together with the matching span in the template once the chart view is no longer "new".
+.new-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  padding: 1px 5px;
+  background: var(--p-primary-500);
+  color: var(--p-primary-contrast-color, #fff);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  border-radius: 999px;
+  pointer-events: none;
 }
 
 .filters-trigger {
