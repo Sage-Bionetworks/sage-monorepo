@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { LeaderboardEntry } from '@sagebionetworks/bixarena/api-client';
+import { ModelOrgLogoService } from '@sagebionetworks/bixarena/services';
 import { AvatarComponent } from '@sagebionetworks/bixarena/ui';
 import { LEADERBOARD_BAR_CHART_TOP_N } from '../leaderboard.constants';
-import { getOrgLogoUrl, isMonoOrgLogo } from '../model-org-logo';
 import { ChartBar } from './chart-bar';
 
 // Top-N bar chart visualization for the leaderboard. Pure HTML/SCSS — no chart library.
@@ -16,6 +16,8 @@ import { ChartBar } from './chart-bar';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeaderboardBarChartComponent {
+  private readonly orgLogoService = inject(ModelOrgLogoService);
+
   readonly entries = input.required<LeaderboardEntry[]>();
 
   // Map raw entries → ChartBar view-models. Slices to top-N, normalizes heights to
@@ -52,8 +54,8 @@ export class LeaderboardBarChartComponent {
         score: Math.round(entry.btScore),
         heightPct,
         barGradient: entry.rank <= 3 ? podiumGradient : silverGradient,
-        orgLogoUrl: getOrgLogoUrl(entry.modelOrganization),
-        orgLogoMono: isMonoOrgLogo(entry.modelOrganization),
+        orgLogoUrl: this.orgLogoService.getLogoUrl(entry.modelOrganization),
+        orgLogoMono: this.orgLogoService.isMonoLogo(entry.modelOrganization),
       };
     });
   });

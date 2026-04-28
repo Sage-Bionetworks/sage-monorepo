@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { SortEvent } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
 import { LeaderboardEntry } from '@sagebionetworks/bixarena/api-client';
-import { KebabToTitlePipe } from '@sagebionetworks/bixarena/services';
+import { KebabToTitlePipe, ModelOrgLogoService } from '@sagebionetworks/bixarena/services';
 import { AvatarComponent } from '@sagebionetworks/bixarena/ui';
 import {
   DEFAULT_SORT_FIELD,
@@ -12,7 +12,6 @@ import {
   LEADERBOARD_TABLE_COLUMN_COUNT,
   WHISKER_PADDING_PCT,
 } from '../leaderboard.constants';
-import { getOrgLogoUrl, isMonoOrgLogo } from '../model-org-logo';
 
 export type LeaderboardSortField = keyof Pick<
   LeaderboardEntry,
@@ -45,6 +44,8 @@ interface RenderedEntry extends LeaderboardEntry {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeaderboardTableComponent {
+  private readonly orgLogoService = inject(ModelOrgLogoService);
+
   readonly entries = input.required<LeaderboardEntry[]>();
   readonly sortField = input<LeaderboardSortField>(DEFAULT_SORT_FIELD);
   readonly sortOrder = input<1 | -1>(DEFAULT_SORT_ORDER);
@@ -102,8 +103,8 @@ export class LeaderboardTableComponent {
         q025Rounded: Math.round(entry.bootstrapQ025),
         q975Rounded: Math.round(entry.bootstrapQ975),
         isTopThree: entry.rank <= 3,
-        orgLogoUrl: getOrgLogoUrl(entry.modelOrganization),
-        orgLogoMono: isMonoOrgLogo(entry.modelOrganization),
+        orgLogoUrl: this.orgLogoService.getLogoUrl(entry.modelOrganization),
+        orgLogoMono: this.orgLogoService.isMonoLogo(entry.modelOrganization),
         absDelta: entry.rankDelta != null ? Math.abs(entry.rankDelta) : 0,
       };
     });
