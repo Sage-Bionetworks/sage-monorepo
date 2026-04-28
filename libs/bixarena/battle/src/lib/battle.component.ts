@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
 import { BattleGateService } from '@sagebionetworks/bixarena/services';
 import { OnboardingModalComponent, PromptComposerComponent } from '@sagebionetworks/bixarena/ui';
@@ -22,11 +22,16 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
   templateUrl: './battle.component.html',
   styleUrl: './battle.component.scss',
 })
-export class BattleComponent implements OnDestroy {
+export class BattleComponent implements OnInit, OnDestroy {
   readonly state = inject(BattleStateService);
   readonly gate = inject(BattleGateService);
   readonly hoverSide = signal<BattleEvaluationOutcome | null>(null);
   readonly termsUrl = inject(ConfigService).config.links.termsOfService;
+
+  ngOnInit(): void {
+    const pending = this.gate.consumePendingPrompt();
+    if (pending) void this.gatedSubmit(pending);
+  }
 
   onPromptSubmit(prompt: string): void {
     void this.gatedSubmit(prompt);
