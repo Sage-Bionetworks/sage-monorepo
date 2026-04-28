@@ -19,6 +19,7 @@ jobs:
         explorer:
           - agora
           - model-ad
+          - qtl
     uses: ./.github/workflows/e2e-explorer.yaml
     with:
       explorer: ${{ matrix.explorer }}

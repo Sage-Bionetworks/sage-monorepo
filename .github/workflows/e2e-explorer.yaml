@@ -1,4 +1,4 @@
-# Reusable workflow to run e2e tests for an Explorer (e.g. Agora, Model-AD, etc.)
+# Reusable workflow to run e2e tests for an Explorer (e.g. Agora, Model-AD, QTL, etc.)
 on:
   workflow_call:
     inputs:
@@ -21,7 +21,7 @@ jobs:
       - name: Check if explorer input is valid
         id: validate-explorer-input
         run: |
-          if [[ "${{ inputs.explorer }}" != "agora" && "${{ inputs.explorer }}" != "model-ad" ]]; then
+          if [[ "${{ inputs.explorer }}" != "agora" && "${{ inputs.explorer }}" != "model-ad" && "${{ inputs.explorer }}" != "qtl" ]]; then
             echo "Invalid Explorer input: ${{ inputs.explorer }}"
             exit 1
           fi
