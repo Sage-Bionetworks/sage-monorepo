@@ -1,6 +1,6 @@
-<section class="composer-section">
+<section class="composer-section" (focusin)="onComposerFocus()">
   <bixarena-prompt-composer
-    placeholder="Ask anything biomedical..."
+    [placeholder]="placeholder()"
     [maxLength]="promptLengthLimit"
     (promptSubmit)="onPromptSubmit($event)"
   />
