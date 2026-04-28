@@ -22,6 +22,14 @@ describe('HomeComponent', () => {
       'bixarena-trending-section',
       'bixarena-leaderboard-section',
     ]);
-    expect(root.querySelector('.hero')).toBeTruthy();
+  });
+
+  it('renders the hero title with biomedical highlighted', () => {
+    const root = fixture.nativeElement as HTMLElement;
+    const title = root.querySelector('.hero .title');
+    expect(title?.textContent?.replace(/\s+/g, ' ').trim()).toBe(
+      'Your vote shapes the future ofbiomedical AI',
+    );
+    expect(title?.querySelector('em')?.textContent).toBe('biomedical');
   });
 });
