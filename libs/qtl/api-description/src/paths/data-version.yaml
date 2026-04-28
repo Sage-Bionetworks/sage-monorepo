@@ -1,0 +1,21 @@
+x-audience:
+  - public
+get:
+  tags:
+    - Data Version
+  summary: Get data version
+  description: Get data version
+  operationId: getDataVersion
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/DataVersion.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

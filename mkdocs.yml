@@ -18,6 +18,7 @@ nav:
       - Agora: products/agora.md
       - BixArena: api/bixarena.md
       - Model-AD: api/model-ad.md
+      - QTL: api/qtl.md
       - OpenChallenges (legacy): products/openchallenges.md
       - Synapse: api/synapse.md
   - Develop:

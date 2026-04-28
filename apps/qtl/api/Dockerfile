@@ -1,0 +1,1 @@
+FROM ghcr.io/sage-bionetworks/qtl-api-base:local

@@ -1,0 +1,34 @@
+{
+  "name": "qtl-api-description",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/qtl/api-description/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/openapi"],
+      "options": {
+        "commands": [
+          "redocly bundle qtl-public --output openapi/openapi.yaml",
+          "redocly bundle api-service --output openapi/api-service.openapi.yaml"
+        ],
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "redocly lint --config redocly.yaml {projectName}"
+      },
+      "dependsOn": ["build"]
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -fr openapi/*",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["language:openapi", "scope:qtl"]
+}

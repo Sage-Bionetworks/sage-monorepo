@@ -1,0 +1,106 @@
+openapi: 3.0.3
+info:
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  title: QTL API
+  version: 1.0.0
+  x-logo:
+    url: https://xqtlexplorer.adknowledgeportal.org/opengraph/opengraph.png
+    altText: QTL Explorer
+servers:
+  - description: Local development server
+    url: http://localhost/v1
+tags:
+  - description: Operations about the data version.
+    name: Data Version
+paths:
+  /data-version:
+    get:
+      description: Get data version
+      operationId: getDataVersion
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataVersion'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get data version
+      tags:
+        - Data Version
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Data Version
+    x-audience:
+      - public
+components:
+  responses:
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
+  schemas:
+    DataVersion:
+      description: Synapse data version
+      example:
+        data_file: data_file
+        data_version: data_version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+      required:
+        - data_file
+        - data_version
+      type: object
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+        instance:
+          description: An absolute URI that identifies the specific occurrence of
+            the problem
+          type: string
+      required:
+        - status
+        - title
+      type: object
