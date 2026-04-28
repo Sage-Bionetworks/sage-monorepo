@@ -146,4 +146,26 @@ describe('LeaderboardToolbarComponent', () => {
     component.clearAllFilters();
     expect(emitted).toEqual([{ license: null }]);
   });
+
+  it('should mark the active view button with is-active', () => {
+    fixture.componentRef.setInput('view', 'chart');
+    fixture.detectChanges();
+    const buttons = (fixture.nativeElement as HTMLElement).querySelectorAll('.view-btn');
+    expect(buttons[0].classList.contains('is-active')).toBe(false);
+    expect(buttons[1].classList.contains('is-active')).toBe(true);
+  });
+
+  it('should emit viewChange when a different view is clicked', () => {
+    const emitted: string[] = [];
+    component.viewChange.subscribe((v) => emitted.push(v));
+    component.setView('chart');
+    expect(emitted).toEqual(['chart']);
+  });
+
+  it('should not emit viewChange when clicking the already-active view', () => {
+    const emitted: string[] = [];
+    component.viewChange.subscribe((v) => emitted.push(v));
+    component.setView('table');
+    expect(emitted).toEqual([]);
+  });
 });

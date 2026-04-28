@@ -115,6 +115,54 @@
     </button>
   }
 
+  <div class="view-toggle" role="group" aria-label="View mode">
+    <button
+      type="button"
+      class="view-btn"
+      [class.is-active]="view() === 'table'"
+      [attr.aria-pressed]="view() === 'table'"
+      aria-label="Table view"
+      (click)="setView('table')"
+    >
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M3 9h18M3 15h18M9 3v18M15 3v18" />
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="view-btn"
+      [class.is-active]="view() === 'chart'"
+      [attr.aria-pressed]="view() === 'chart'"
+      aria-label="Chart view"
+      (click)="setView('chart')"
+    >
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M5 21V10M12 21V4M19 21v-7" />
+      </svg>
+    </button>
+  </div>
+
   <button
     type="button"
     class="filters-trigger"

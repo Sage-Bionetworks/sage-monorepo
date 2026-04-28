@@ -21,6 +21,8 @@ export interface LeaderboardCategoryOption {
   readonly name: string;
 }
 
+export type LeaderboardView = 'table' | 'chart';
+
 @Component({
   selector: 'bixarena-leaderboard-toolbar',
   imports: [PopoverModule, KebabToTitlePipe],
@@ -33,10 +35,12 @@ export class LeaderboardToolbarComponent {
   readonly activeCategoryId = input.required<string>();
   readonly searchTerm = input<string>('');
   readonly filters = input<LeaderboardFilters>(DEFAULT_LEADERBOARD_FILTERS);
+  readonly view = input<LeaderboardView>('table');
 
   readonly categoryChange = output<string>();
   readonly searchChange = output<string>();
   readonly filtersChange = output<LeaderboardFilters>();
+  readonly viewChange = output<LeaderboardView>();
 
   private readonly categoryPicker = viewChild.required<Popover>('categoryPicker');
   private readonly filterPopover = viewChild.required<Popover>('filterPopover');
@@ -122,5 +126,9 @@ export class LeaderboardToolbarComponent {
 
   clearAllFilters(): void {
     this.filtersChange.emit(DEFAULT_LEADERBOARD_FILTERS);
+  }
+
+  setView(next: LeaderboardView): void {
+    if (this.view() !== next) this.viewChange.emit(next);
   }
 }
