@@ -1,13 +1,19 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { StatsService } from '@sagebionetworks/bixarena/api-client';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ComposerSectionComponent } from './composer-section/composer-section.component';
+import { LeaderboardSectionComponent } from './leaderboard-section/leaderboard-section.component';
+import { StatsSectionComponent } from './stats-section/stats-section.component';
+import { TrendingSectionComponent } from './trending-section/trending-section.component';
 
 @Component({
   selector: 'bixarena-home',
-  imports: [AsyncPipe],
+  imports: [
+    ComposerSectionComponent,
+    StatsSectionComponent,
+    TrendingSectionComponent,
+    LeaderboardSectionComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
-  readonly stats$ = inject(StatsService).getPublicStats();
-}
+export class HomeComponent {}

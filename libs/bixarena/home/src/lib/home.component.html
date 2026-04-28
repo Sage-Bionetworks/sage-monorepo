@@ -1,9 +1,9 @@
 <div class="page-content">
-  <p>BioArena home</p>
-  @if (stats$ | async; as stats) {
-    <p>
-      Battles: {{ stats.completedBattles }} | Models: {{ stats.modelsEvaluated }} | Users:
-      {{ stats.totalUsers }}
-    </p>
-  }
+  <header class="hero">
+    <p class="placeholder">[hero]</p>
+  </header>
+  <bixarena-composer-section />
+  <bixarena-stats-section />
+  <bixarena-trending-section />
+  <bixarena-leaderboard-section />
 </div>
