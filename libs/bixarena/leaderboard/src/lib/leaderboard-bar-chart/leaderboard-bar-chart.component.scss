@@ -104,3 +104,12 @@
   word-break: break-word;
   line-height: 1.25;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-shape,
+  .bar-score,
+  .bar-logo {
+    animation: none;
+    opacity: 1;
+  }
+}

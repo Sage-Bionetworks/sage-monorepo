@@ -32,13 +32,17 @@ export class LeaderboardBarChartComponent {
     }
     // Floor keeps even the shortest bar tall enough to fit the logo.
     const MIN_HEIGHT_PCT = 32;
-    const scoreRange = maxScore - minScore || 1;
+    const scoreRange = maxScore - minScore;
 
     // Top 3 ranks get the warm brand gradient (podium); the rest get a neutral silver.
     const podiumGradient = 'linear-gradient(to bottom, var(--p-primary-300), var(--p-primary-500))';
     const silverGradient = 'linear-gradient(to bottom, var(--p-slate-300), var(--p-slate-500))';
-    return visible.map((entry, index) => {
-      const rawRatio = (entry.btScore - minScore) / scoreRange;
+    return visible.map((entry) => {
+      // When all visible entries share the same score, render at full height instead of the floor.
+      const heightPct =
+        scoreRange === 0
+          ? 100
+          : MIN_HEIGHT_PCT + ((entry.btScore - minScore) / scoreRange) * (100 - MIN_HEIGHT_PCT);
       return {
         id: entry.id,
         rank: entry.rank,
@@ -46,8 +50,8 @@ export class LeaderboardBarChartComponent {
         modelName: entry.modelName,
         modelOrganization: entry.modelOrganization ?? null,
         score: Math.round(entry.btScore),
-        heightPct: MIN_HEIGHT_PCT + rawRatio * (100 - MIN_HEIGHT_PCT),
-        barGradient: index < 3 ? podiumGradient : silverGradient,
+        heightPct,
+        barGradient: entry.rank <= 3 ? podiumGradient : silverGradient,
         orgLogoUrl: getOrgLogoUrl(entry.modelOrganization),
         orgLogoMono: isMonoOrgLogo(entry.modelOrganization),
       };
