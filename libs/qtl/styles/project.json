@@ -1,0 +1,9 @@
+{
+  "name": "qtl-styles",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/qtl/styles/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": ["type:styles", "scope:qtl", "language:typescript"]
+}
