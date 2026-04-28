@@ -154,7 +154,7 @@
       "options": {
         "commands": [
           "sentry-cli sourcemaps inject dist/apps/agora/app",
-          "sentry-cli sourcemaps upload --org sage-bionetworks --project agora --release agora@$SENTRY_RELEASE dist/apps/agora/app",
+          "sentry-cli sourcemaps upload --org sage-bionetworks --project agora --release agora@$SENTRY_RELEASE_SUFFIX dist/apps/agora/app",
           "find dist/apps/agora/app -name '*.map' -delete"
         ],
         "parallel": false
