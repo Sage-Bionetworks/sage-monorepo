@@ -24,6 +24,7 @@ describe('BattleGateService', () => {
   beforeEach(() => {
     hasCompleted.set(false);
     mockOnboardingService.markComplete.mockReset();
+    sessionStorage.clear();
 
     TestBed.configureTestingModule({
       providers: [
@@ -99,6 +100,29 @@ describe('BattleGateService', () => {
       service.showLoginModal.set(true);
       service.onLoginCancel();
       expect(service.showLoginModal()).toBe(false);
+    });
+  });
+
+  describe('pending prompt', () => {
+    it('savePendingPrompt persists trimmed text and consumePendingPrompt returns + clears it', () => {
+      service.savePendingPrompt('  hello world  ');
+      expect(service.consumePendingPrompt()).toBe('hello world');
+      expect(service.consumePendingPrompt()).toBeNull();
+    });
+
+    it('savePendingPrompt ignores empty / whitespace input', () => {
+      service.savePendingPrompt('   ');
+      expect(service.consumePendingPrompt()).toBeNull();
+    });
+
+    it('consumePendingPrompt returns null when nothing is saved', () => {
+      expect(service.consumePendingPrompt()).toBeNull();
+    });
+
+    it('savePendingPrompt overwrites a previously saved prompt', () => {
+      service.savePendingPrompt('first');
+      service.savePendingPrompt('second');
+      expect(service.consumePendingPrompt()).toBe('second');
     });
   });
 });
