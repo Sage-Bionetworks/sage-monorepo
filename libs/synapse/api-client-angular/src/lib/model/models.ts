@@ -736,6 +736,7 @@ export * from './org-sagebionetworks-repo-model-search-query-suggestion-results'
 export * from './org-sagebionetworks-repo-model-search-search-field-value';
 export * from './org-sagebionetworks-repo-model-search-search-hit';
 export * from './org-sagebionetworks-repo-model-search-search-query';
+export * from './org-sagebionetworks-repo-model-search-search-query-part';
 export * from './org-sagebionetworks-repo-model-search-search-query-results';
 export * from './org-sagebionetworks-repo-model-search-search-query-type';
 export * from './org-sagebionetworks-repo-model-search-search-results';

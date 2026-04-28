@@ -13,10 +13,9 @@ import { OrgSagebionetworksRepoModelSearchFacetRequest } from './org-sagebionetw
 import { OrgSagebionetworksRepoModelSearchSortField } from './org-sagebionetworks-repo-model-search-sort-field';
 
 /**
- * A structured search query against an OpenSearch index. Can be submitted as an asynchronous job.
+ * A structured search query against an OpenSearch index. Composed into request objects (e.g., SearchIndexQuery) that wrap it with context such as which index to target.
  */
 export interface OrgSagebionetworksRepoModelSearchSearchQuery {
-  concreteType: OrgSagebionetworksRepoModelSearchSearchQuery.ConcreteTypeEnum;
   /**
    * The type of full-text query to execute against a search index.
    */
@@ -75,11 +74,6 @@ export interface OrgSagebionetworksRepoModelSearchSearchQuery {
   limit?: number;
 }
 export namespace OrgSagebionetworksRepoModelSearchSearchQuery {
-  export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.search.SearchQuery';
-  export const ConcreteTypeEnum = {
-    OrgSagebionetworksRepoModelSearchSearchQuery:
-      'org.sagebionetworks.repo.model.search.SearchQuery' as ConcreteTypeEnum,
-  };
   export type QueryTypeEnum =
     | 'SIMPLE_QUERY_STRING'
     | 'MATCH'

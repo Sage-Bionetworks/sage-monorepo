@@ -9,26 +9,31 @@
  */
 import { OrgSagebionetworksRepoModelSearchSearchHit } from './org-sagebionetworks-repo-model-search-search-hit';
 import { OrgSagebionetworksRepoModelTableFacetColumnResult } from './org-sagebionetworks-repo-model-table-facet-column-result';
+import { OrgSagebionetworksRepoModelTableSelectColumn } from './org-sagebionetworks-repo-model-table-select-column';
 
 /**
- * Results of a search query against an OpenSearch index.
+ * Results of a search query against an OpenSearch index. The set of populated fields is governed by the request\'s responseParts: hits and offset are populated by default; the remaining fields are populated only when the corresponding SearchQueryPart is requested.
  */
 export interface OrgSagebionetworksRepoModelSearchSearchQueryResults {
   concreteType: OrgSagebionetworksRepoModelSearchSearchQueryResults.ConcreteTypeEnum;
   /**
-   * The total number of matching documents.
-   */
-  totalHits?: number;
-  /**
-   * The list of search result hits for this page.
+   * Matching documents. Populated by default (or whenever SearchQueryPart.HITS is requested).
    */
   hits?: Array<OrgSagebionetworksRepoModelSearchSearchHit>;
   /**
-   * Facet aggregation results, if requested.
+   * The total number of matching documents. Populated when SearchQueryPart.TOTAL_HITS is requested.
+   */
+  totalHits?: number;
+  /**
+   * The columns represented in each hit\'s fields, in SELECT-clause order. Populated when SearchQueryPart.SELECT_COLUMNS is requested. When SearchQuery.returnFields is non-empty, this is the subset of columns matching those names.
+   */
+  selectColumns?: Array<OrgSagebionetworksRepoModelTableSelectColumn>;
+  /**
+   * Facet aggregation results. Populated when SearchQueryPart.FACETS is requested. Autocomplete never produces facets regardless of this part being requested.
    */
   facets?: Array<OrgSagebionetworksRepoModelTableFacetColumnResult>;
   /**
-   * The offset used for this page of results.
+   * Zero-based pagination offset echoed from the request. Always populated.
    */
   offset?: number;
 }

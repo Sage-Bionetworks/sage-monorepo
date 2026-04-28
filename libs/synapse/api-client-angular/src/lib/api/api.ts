@@ -72,8 +72,6 @@ export * from './recycle-bin-services.service';
 import { RecycleBinServicesService } from './recycle-bin-services.service';
 export * from './search-management-services.service';
 import { SearchManagementServicesService } from './search-management-services.service';
-export * from './search-query-services.service';
-import { SearchQueryServicesService } from './search-query-services.service';
 export * from './search-services.service';
 import { SearchServicesService } from './search-services.service';
 export * from './statistics-services.service';
@@ -136,7 +134,6 @@ export const APIS = [
   RealmServicesService,
   RecycleBinServicesService,
   SearchManagementServicesService,
-  SearchQueryServicesService,
   SearchServicesService,
   StatisticsServicesService,
   StorageReportServicesService,

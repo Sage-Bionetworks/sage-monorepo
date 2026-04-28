@@ -1028,6 +1028,21 @@ tags:
        Resource names must start with a letter and contain only letters, digits, and underscores.
        </p>
 
+       <h6>Search Queries</h6>
+       <p>
+       Query a <a href="${org.sagebionetworks.repo.model.search.table.SearchIndex}">SearchIndex</a>
+       using the async job pattern. Submit a
+       <a href="${org.sagebionetworks.repo.model.search.table.SearchIndexQuery}">SearchIndexQuery</a>
+       to start a job, then poll for
+       <a href="${org.sagebionetworks.repo.model.search.SearchQueryResults}">SearchQueryResults</a>.
+       A synchronous autocomplete endpoint is also available for typeahead patterns.
+       </p>
+       <ul>
+       <li><a href="${POST.search.query.async.start}">POST /search/query/async/start</a> &mdash; Start async query</li>
+       <li><a href="${GET.search.query.async.get.asyncToken}">GET /search/query/async/get/{asyncToken}</a> &mdash; Poll for results</li>
+       <li><a href="${POST.search.autocomplete}">POST /search/autocomplete</a> &mdash; Synchronous autocomplete (max 8 results)</li>
+       </ul>
+
        <h6>Search Index Field Limits</h6>
        <p>
        When a search index is built, each column from the defining SQL query is mapped to an
@@ -1104,8 +1119,6 @@ tags:
        Autocomplete results are capped at 8. The maximum number of rows that can be indexed
        in a single search index is 500,000.
        </p>
-  - name: Search Query Services
-    description: Services for search queries and autocomplete.
   - name: Search Services
     description: Search for Entities on Synapse
   - name: Statistics Services
@@ -11850,68 +11863,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.PaginatedIds'
-  /repo/v1/search/query/async/start:
-    post:
-      tags:
-        - Search Query Services
-      operationId: post-/repo/v1/search/query/async/start
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndexQuery'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
-  /repo/v1/search/query/async/get/{asyncToken}:
-    get:
-      tags:
-        - Search Query Services
-      operationId: get-/repo/v1/search/query/async/get/{asyncToken}
-      parameters:
-        - name: asyncToken
-          in: path
-          required: true
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.SearchQueryResults'
-  /repo/v1/search/autocomplete:
-    post:
-      tags:
-        - Search Query Services
-      operationId: post-/repo/v1/search/autocomplete
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndexQuery'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.SearchQueryResults'
   /repo/v1/message:
     post:
       tags:
@@ -15890,6 +15841,69 @@ paths:
       responses:
         '204':
           description: Void
+  /repo/v1/search/query/async/start:
+    post:
+      tags:
+        - Search Management Services
+      operationId: post-/repo/v1/search/query/async/start
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndexQuery'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: An async job token to poll for results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
+  /repo/v1/search/query/async/get/{asyncToken}:
+    get:
+      tags:
+        - Search Management Services
+      operationId: get-/repo/v1/search/query/async/get/{asyncToken}
+      parameters:
+        - name: asyncToken
+          in: path
+          required: true
+          description: The token returned by the start query endpoint.
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The search query results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.SearchQueryResults'
+  /repo/v1/search/autocomplete:
+    post:
+      tags:
+        - Search Management Services
+      operationId: post-/repo/v1/search/autocomplete
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndexQuery'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The autocomplete results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.SearchQueryResults'
 components:
   schemas:
     org.sagebionetworks.repo.model.RestrictionInformationRequest:
@@ -19215,10 +19229,6 @@ components:
     org.sagebionetworks.repo.model.search.SearchQuery:
       type: object
       properties:
-        concreteType:
-          type: string
-          enum:
-            - org.sagebionetworks.repo.model.search.SearchQuery
         queryType:
           type: string
           description: The type of full-text query to execute against a search index.
@@ -19291,9 +19301,7 @@ components:
           type: integer
           description: 'Results per page. Default: 25. Max: 100.'
           format: int32
-      description: A structured search query against an OpenSearch index. Can be submitted as an asynchronous job.
-      required:
-        - concreteType
+      description: A structured search query against an OpenSearch index. Composed into request objects (e.g., SearchIndexQuery) that wrap it with context such as which index to target.
     org.sagebionetworks.repo.model.file.BatchPresignedUploadUrlResponse:
       type: object
       properties:
@@ -21921,7 +21929,6 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.CreateGridRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleRestoreRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.QueryNextPageToken'
-        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.SearchQuery'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListManifestRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.DownloadFromGridRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.report.DownloadStorageReportRequest'
@@ -21932,6 +21939,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.TableSchemaChangeRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.ViewColumnModelRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridCsvImportRequest'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndexQuery'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleArchivalRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.BulkFileDownloadRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationRequest'
@@ -27330,6 +27338,15 @@ components:
         projectId:
           type: string
           description: The ID of the project this Reply belongs to
+        objectId:
+          type: string
+          description: The ID of the object this Reply belongs to
+        objectType:
+          type: string
+          description: The type of object to which a Forum is associated.
+          enum:
+            - ENTITY
+            - ACCESS_REQUIREMENT
         createdOn:
           type: string
           description: The timestamp when this Reply was created
@@ -27488,82 +27505,31 @@ components:
     org.sagebionetworks.repo.model.search.table.SearchIndexQuery:
       type: object
       properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.search.table.SearchIndexQuery
         searchIndexId:
           type: string
           description: The ID of the SearchIndex entity to query.
-        queryType:
-          type: string
-          description: The type of full-text query to execute against a search index.
-          enum:
-            - SIMPLE_QUERY_STRING
-            - MATCH
-            - MULTI_MATCH
-            - MATCH_PHRASE
-            - PREFIX
-            - WILDCARD
-            - MATCH_ALL
-        queryText:
-          type: string
-          description: The search text. Null or empty matches all documents.
-        queryFields:
+        searchQuery:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.SearchQuery'
+          description: A structured search query against an OpenSearch index. Composed into request objects (e.g., SearchIndexQuery) that wrap it with context such as which index to target.
+        responseParts:
           type: array
           items:
             type: string
-          description: Column names with optional boost (e.g., 'studyName^3'). Empty means all indexed fields.
-        termsFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.KeyValues'
-            description: A multi-value filter (IN clause). Matches rows where the key column contains any of the listed values.
-          description: Multi-value filters (IN clause).
-        rangeFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.KeyRange'
-            description: A range filter. Matches rows where min <= value <= max. At least one of either 'min' or 'max' must be set for this range to be valid.
-          description: Range filters with min and max.
-        existsFilters:
-          type: array
-          items:
-            type: string
-          description: Columns that must have a non-null value.
-        notExistsFilters:
-          type: array
-          items:
-            type: string
-          description: Columns that must be null or missing.
-        fuzziness:
-          type: string
-          description: "Typo tolerance: 'AUTO', '0', '1', or '2'."
-        facetRequests:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.FacetRequest'
-            description: A request to aggregate a column as a facet in search results.
-          description: Columns to aggregate as facets.
-        returnFields:
-          type: array
-          items:
-            type: string
-          description: Columns to include in results. Empty means all columns.
-        sort:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.SortField'
-            description: Sort specification for search results.
-          description: 'Sort order. Default: relevance descending.'
-        highlight:
-          type: boolean
-          description: 'Whether to return highlighted snippets. Default: false.'
-        offset:
-          type: integer
-          description: 'Zero-based pagination offset. Default: 0.'
-          format: int32
-        limit:
-          type: integer
-          description: 'Results per page. Default: 25. Max: 100.'
-          format: int32
-      description: A search query against a SearchIndex entity's OpenSearch index. Extends SearchQuery with searchIndexId to identify which index to query.
+            description: Identifiers for the opt-in parts of a SearchQueryResults. Clients pass a list of these values in SearchIndexQuery.responseParts to widen what the server computes and returns. When the list is null or empty the server returns the default minimal payload — HITS plus the always-populated offset — and skips the corresponding work in OpenSearch (no aggregations, no total-hit tracking).
+            enum:
+              - HITS
+              - TOTAL_HITS
+              - SELECT_COLUMNS
+              - FACETS
+          description: Optional list of additional parts to include in the SearchQueryResults beyond the default HITS + offset. Null or empty means HITS only (the default minimal payload). Requesting parts also drives the corresponding work in OpenSearch (aggregations, total-hit tracking).
+          uniqueItems: true
+      description: Async request to query a SearchIndex entity's OpenSearch index. Identifies the target index and carries the search parameters.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.schema.JsonSchemaVersionInfo:
       type: object
       properties:
@@ -31968,6 +31934,13 @@ components:
           type: string
           description: The date-time when the statistics were calculated.
       description: Summary statistics for the JSON schema validation results for the children of an Entity container (Project or Folder)
+    org.sagebionetworks.repo.model.search.SearchQueryPart:
+      type: string
+      enum:
+        - HITS
+        - TOTAL_HITS
+        - SELECT_COLUMNS
+        - FACETS
     org.sagebionetworks.repo.model.grid.CreateGridResponse:
       type: object
       properties:
@@ -33183,27 +33156,33 @@ components:
           type: string
           enum:
             - org.sagebionetworks.repo.model.search.SearchQueryResults
-        totalHits:
-          type: integer
-          description: The total number of matching documents.
-          format: int32
         hits:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.SearchHit'
             description: A single search result hit.
-          description: The list of search result hits for this page.
+          description: Matching documents. Populated by default (or whenever SearchQueryPart.HITS is requested).
+        totalHits:
+          type: integer
+          description: The total number of matching documents. Populated when SearchQueryPart.TOTAL_HITS is requested.
+          format: int32
+        selectColumns:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.SelectColumn'
+            description: A column model contains the metadata of a single column of a TableEntity
+          description: The columns represented in each hit's fields, in SELECT-clause order. Populated when SearchQueryPart.SELECT_COLUMNS is requested. When SearchQuery.returnFields is non-empty, this is the subset of columns matching those names.
         facets:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.FacetColumnResult'
             description: Resulting information about a faceted column
-          description: Facet aggregation results, if requested.
+          description: Facet aggregation results. Populated when SearchQueryPart.FACETS is requested. Autocomplete never produces facets regardless of this part being requested.
         offset:
           type: integer
-          description: The offset used for this page of results.
+          description: Zero-based pagination offset echoed from the request. Always populated.
           format: int32
-      description: Results of a search query against an OpenSearch index.
+      description: "Results of a search query against an OpenSearch index. The set of populated fields is governed by the request's responseParts: hits and offset are populated by default; the remaining fields are populated only when the corresponding SearchQueryPart is requested."
       required:
         - concreteType
     org.sagebionetworks.repo.model.webhook.WebhookVerificationStatus:
