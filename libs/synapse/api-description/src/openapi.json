@@ -152,11 +152,7 @@
     },
     {
       "name": "Search Management Services",
-      "description": "<p>\n Services for managing search configuration objects. These reusable building blocks\n define how a search index analyzes, tokenizes, and matches text. They map directly to\n <a href=\"https://docs.opensearch.org/latest/analyzers/custom-analyzer/\">OpenSearch custom analyzer</a>\n concepts and are assembled into a\n <a href=\"${org.sagebionetworks.repo.model.search.table.SearchConfiguration}\">SearchConfiguration</a>\n that can be attached to a project.\n </p>\n\n <h6>Text Analyzers</h6>\n <p>\n A <a href=\"${org.sagebionetworks.repo.model.search.table.TextAnalyzer}\">TextAnalyzer</a> defines\n a text analysis pipeline consisting of a\n <a href=\"https://docs.opensearch.org/latest/analyzers/tokenizers/index/\">tokenizer</a> and an\n ordered list of <a href=\"https://docs.opensearch.org/latest/analyzers/token-filters/index/\">token filters</a>.\n The tokenizer breaks text into individual tokens, and the filters process those tokens\n (e.g., lowercasing, stemming, stop word removal). Custom token filters such as stop word lists\n can also be defined inline.\n </p>\n <ul>\n <li><a href=\"${POST.search.text.analyzer}\">POST /search/text/analyzer</a></li>\n <li><a href=\"${GET.search.text.analyzer.id}\">GET /search/text/analyzer/{id}</a></li>\n <li><a href=\"${PUT.search.text.analyzer.id}\">PUT /search/text/analyzer/{id}</a></li>\n <li><a href=\"${POST.search.text.analyzer.list}\">POST /search/text/analyzer/list</a></li>\n </ul>\n\n <h6>Column Analyzer Overrides</h6>\n <p>\n A <a href=\"${org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride}\">ColumnAnalyzerOverride</a>\n assigns specific <a href=\"${org.sagebionetworks.repo.model.search.table.TextAnalyzer}\">TextAnalyzers</a>\n to individual columns, overriding the SearchConfiguration's default analyzer. Each override entry\n specifies an index analyzer (used when building the index) and a search analyzer (used at query time).\n This corresponds to the OpenSearch\n <a href=\"https://docs.opensearch.org/latest/mappings/mapping-parameters/analyzer/\">per-field analyzer mapping</a>\n capability.\n </p>\n <ul>\n <li><a href=\"${POST.search.column.analyzer.override}\">POST /search/column/analyzer/override</a></li>\n <li><a href=\"${GET.search.column.analyzer.override.columnAnalyzerOverrideId}\">GET /search/column/analyzer/override/{columnAnalyzerOverrideId}</a></li>\n <li><a href=\"${PUT.search.column.analyzer.override.columnAnalyzerOverrideId}\">PUT /search/column/analyzer/override/{columnAnalyzerOverrideId}</a></li>\n <li><a href=\"${POST.search.column.analyzer.override.list}\">POST /search/column/analyzer/override/list</a></li>\n </ul>\n\n <h6>Synonym Sets</h6>\n <p>\n A <a href=\"${org.sagebionetworks.repo.model.search.table.SynonymSet}\">SynonymSet</a> defines\n synonym rules that are applied during index construction via the OpenSearch\n <a href=\"https://docs.opensearch.org/latest/analyzers/token-filters/synonym/\">synonym token filter</a>.\n Two rule types are supported:\n </p>\n <ul>\n <li><b>Equivalent</b> &mdash; all terms are interchangeable (e.g., &quot;cancer&quot;,\n     &quot;tumor&quot;, &quot;neoplasm&quot;). Searching for any one term matches documents\n     containing any of the others.</li>\n <li><b>Explicit</b> &mdash; a directional expansion where the first term expands to the\n     remaining terms (e.g., &quot;AD&quot; expands to &quot;Alzheimer's disease&quot;).</li>\n </ul>\n <ul>\n <li><a href=\"${POST.search.synonym.set}\">POST /search/synonym/set</a></li>\n <li><a href=\"${GET.search.synonym.set.synonymSetId}\">GET /search/synonym/set/{synonymSetId}</a></li>\n <li><a href=\"${PUT.search.synonym.set.synonymSetId}\">PUT /search/synonym/set/{synonymSetId}</a></li>\n <li><a href=\"${POST.search.synonym.set.list}\">POST /search/synonym/set/list</a></li>\n </ul>\n\n <h6>Search Configurations</h6>\n <p>\n A <a href=\"${org.sagebionetworks.repo.model.search.table.SearchConfiguration}\">SearchConfiguration</a>\n bundles a default <a href=\"${org.sagebionetworks.repo.model.search.table.TextAnalyzer}\">TextAnalyzer</a>,\n zero or more <a href=\"${org.sagebionetworks.repo.model.search.table.SynonymSet}\">SynonymSets</a>,\n and zero or more <a href=\"${org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride}\">ColumnAnalyzerOverrides</a>\n into a reusable configuration. These settings are used to build the\n <code>analysis</code> section of an OpenSearch index definition when a search index is created.\n </p>\n <p>\n Attach a SearchConfiguration to an entity (SearchIndex, Folder, or Project) by creating a binding.\n The effective configuration for any entity is resolved by walking up the entity hierarchy.\n </p>\n <ul>\n <li><a href=\"${POST.search.configuration}\">POST /search/configuration</a></li>\n <li><a href=\"${GET.search.configuration.searchConfigurationId}\">GET /search/configuration/{searchConfigurationId}</a></li>\n <li><a href=\"${PUT.search.configuration.searchConfigurationId}\">PUT /search/configuration/{searchConfigurationId}</a></li>\n <li><a href=\"${POST.search.configuration.list}\">POST /search/configuration/list</a></li>\n </ul>\n\n <h6>Search Configuration Bindings</h6>\n <p>\n Bind a <a href=\"${org.sagebionetworks.repo.model.search.table.SearchConfiguration}\">SearchConfiguration</a>\n to an entity. The effective configuration for any entity is resolved by walking up the hierarchy\n (entity \\u2192 folder \\u2192 project). Requires EDIT permission on the entity.\n </p>\n <ul>\n <li><a href=\"${PUT.entity.entityId.searchconfig.binding}\">PUT /entity/{entityId}/searchconfig/binding</a></li>\n <li><a href=\"${GET.entity.entityId.searchconfig.binding}\">GET /entity/{entityId}/searchconfig/binding</a></li>\n <li><a href=\"${DELETE.entity.entityId.searchconfig.binding}\">DELETE /entity/{entityId}/searchconfig/binding</a></li>\n </ul>\n\n <h6>Public Resources and Cross-Organization Referencing</h6>\n <p>\n All search management resources (TextAnalyzers, SynonymSets, ColumnAnalyzerOverrides) are\n <b>publicly readable</b>. Any authenticated user can list and retrieve resources from any\n Organization. This enables cross-organization reuse: a\n <a href=\"${org.sagebionetworks.repo.model.search.table.SearchConfiguration}\">SearchConfiguration</a>\n can reference resources from any Organization using <b>qualified names</b> in the format\n <code>{organizationName}-{resourceName}</code> (e.g., <code>org.sagebionetworks-SCIENTIFIC</code>).\n For example, any user can build a SearchConfiguration that uses the platform-provided\n <code>org.sagebionetworks</code> analyzers alongside custom resources from their own Organization.\n </p>\n\n <h6>Name Immutability</h6>\n <p>\n Because resources are referenced by qualified name, the <code>name</code> and\n <code>organizationName</code> fields are <b>immutable after creation</b>. Attempting to change\n either on update will return a 400 error. To use a different name, create a new resource and\n update any SearchConfigurations that reference the old one.\n </p>\n\n <h6>Authorization</h6>\n <p>\n All management operations (create, update, delete) are restricted to <b>Sage Bionetworks employees</b>\n who have the appropriate\n <a href=\"${org.sagebionetworks.repo.model.ACCESS_TYPE}\">ACCESS_TYPE</a> permission on the\n <a href=\"${org.sagebionetworks.repo.model.schema.Organization}\">Organization</a> that owns the resource.\n Read and list operations are publicly accessible.\n </p>\n\n <h6>Organization Scoping</h6>\n <p>\n All search management objects belong to an\n <a href=\"${org.sagebionetworks.repo.model.schema.Organization}\">Organization</a> identified by\n <code>organizationName</code>. The organization and name cannot be changed after creation.\n Resource names must start with a letter and contain only letters, digits, and underscores.\n </p>\n\n <h6>Search Index Field Limits</h6>\n <p>\n When a search index is built, each column from the defining SQL query is mapped to an\n OpenSearch field type. Text and keyword fields have an <code>ignore_above</code> limit on\n their keyword sub-field &mdash; values longer than this limit are <b>not indexed</b> for\n exact-match or sorting, but remain stored in the source document. Numeric, boolean, and\n JSON fields have no such limit.\n </p>\n <b>Search Index Field Mapping and Limits</b>\n <table border=\"1\">\n <tr>\n <th>Synapse Column Type</th>\n <th>OpenSearch Field Type</th>\n <th>Keyword ignore_above</th>\n <th>Default Analyzer</th>\n </tr>\n <tr>\n <td>STRING, STRING_LIST</td>\n <td>text + keyword sub-field</td>\n <td>1,000 characters</td>\n <td>SCIENTIFIC</td>\n </tr>\n <tr>\n <td>MEDIUMTEXT</td>\n <td>text + keyword sub-field</td>\n <td>2,000 characters</td>\n <td>SCIENTIFIC</td>\n </tr>\n <tr>\n <td>LARGETEXT</td>\n <td>text + keyword sub-field</td>\n <td>8,192 characters</td>\n <td>SCIENTIFIC</td>\n </tr>\n <tr>\n <td>LINK</td>\n <td>text + keyword sub-field (or keyword + searchable, depending on analyzer)</td>\n <td>1,000 characters</td>\n <td>KEYWORD</td>\n </tr>\n <tr>\n <td>ENTITYID, USERID, ENTITYID_LIST, USERID_LIST</td>\n <td>keyword</td>\n <td>256 characters</td>\n <td>KEYWORD</td>\n </tr>\n <tr>\n <td>INTEGER, DATE, INTEGER_LIST, DATE_LIST, FILEHANDLEID, SUBMISSIONID, EVALUATIONID</td>\n <td>long</td>\n <td>N/A</td>\n <td>KEYWORD</td>\n </tr>\n <tr>\n <td>DOUBLE</td>\n <td>double</td>\n <td>N/A</td>\n <td>KEYWORD</td>\n </tr>\n <tr>\n <td>BOOLEAN, BOOLEAN_LIST</td>\n <td>boolean</td>\n <td>N/A</td>\n <td>KEYWORD</td>\n </tr>\n <tr>\n <td>JSON</td>\n <td>object (dynamic mapping)</td>\n <td>N/A</td>\n <td>STANDARD</td>\n </tr>\n </table>\n <p>\n <b>Query Limits:</b> Results per page default to 25 with a maximum of 100.\n Autocomplete results are capped at 8. The maximum number of rows that can be indexed\n in a single search index is 500,000.\n </p>"
-    },
-    {
-      "name": "Search Query Services",
-      "description": "Services for search queries and autocomplete."
+      "description": "<p>\n Services for managing search configuration objects. These reusable building blocks\n define how a search index analyzes, tokenizes, and matches text. They map directly to\n <a href=\"https://docs.opensearch.org/latest/analyzers/custom-analyzer/\">OpenSearch custom analyzer</a>\n concepts and are assembled into a\n <a href=\"${org.sagebionetworks.repo.model.search.table.SearchConfiguration}\">SearchConfiguration</a>\n that can be attached to a project.\n </p>\n\n <h6>Text Analyzers</h6>\n <p>\n A <a href=\"${org.sagebionetworks.repo.model.search.table.TextAnalyzer}\">TextAnalyzer</a> defines\n a text analysis pipeline consisting of a\n <a href=\"https://docs.opensearch.org/latest/analyzers/tokenizers/index/\">tokenizer</a> and an\n ordered list of <a href=\"https://docs.opensearch.org/latest/analyzers/token-filters/index/\">token filters</a>.\n The tokenizer breaks text into individual tokens, and the filters process those tokens\n (e.g., lowercasing, stemming, stop word removal). Custom token filters such as stop word lists\n can also be defined inline.\n </p>\n <ul>\n <li><a href=\"${POST.search.text.analyzer}\">POST /search/text/analyzer</a></li>\n <li><a href=\"${GET.search.text.analyzer.id}\">GET /search/text/analyzer/{id}</a></li>\n <li><a href=\"${PUT.search.text.analyzer.id}\">PUT /search/text/analyzer/{id}</a></li>\n <li><a href=\"${POST.search.text.analyzer.list}\">POST /search/text/analyzer/list</a></li>\n </ul>\n\n <h6>Column Analyzer Overrides</h6>\n <p>\n A <a href=\"${org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride}\">ColumnAnalyzerOverride</a>\n assigns specific <a href=\"${org.sagebionetworks.repo.model.search.table.TextAnalyzer}\">TextAnalyzers</a>\n to individual columns, overriding the SearchConfiguration's default analyzer. Each override entry\n specifies an index analyzer (used when building the index) and a search analyzer (used at query time).\n This corresponds to the OpenSearch\n <a href=\"https://docs.opensearch.org/latest/mappings/mapping-parameters/analyzer/\">per-field analyzer mapping</a>\n capability.\n </p>\n <ul>\n <li><a href=\"${POST.search.column.analyzer.override}\">POST /search/column/analyzer/override</a></li>\n <li><a href=\"${GET.search.column.analyzer.override.columnAnalyzerOverrideId}\">GET /search/column/analyzer/override/{columnAnalyzerOverrideId}</a></li>\n <li><a href=\"${PUT.search.column.analyzer.override.columnAnalyzerOverrideId}\">PUT /search/column/analyzer/override/{columnAnalyzerOverrideId}</a></li>\n <li><a href=\"${POST.search.column.analyzer.override.list}\">POST /search/column/analyzer/override/list</a></li>\n </ul>\n\n <h6>Synonym Sets</h6>\n <p>\n A <a href=\"${org.sagebionetworks.repo.model.search.table.SynonymSet}\">SynonymSet</a> defines\n synonym rules that are applied during index construction via the OpenSearch\n <a href=\"https://docs.opensearch.org/latest/analyzers/token-filters/synonym/\">synonym token filter</a>.\n Two rule types are supported:\n </p>\n <ul>\n <li><b>Equivalent</b> &mdash; all terms are interchangeable (e.g., &quot;cancer&quot;,\n     &quot;tumor&quot;, &quot;neoplasm&quot;). Searching for any one term matches documents\n     containing any of the others.</li>\n <li><b>Explicit</b> &mdash; a directional expansion where the first term expands to the\n     remaining terms (e.g., &quot;AD&quot; expands to &quot;Alzheimer's disease&quot;).</li>\n </ul>\n <ul>\n <li><a href=\"${POST.search.synonym.set}\">POST /search/synonym/set</a></li>\n <li><a href=\"${GET.search.synonym.set.synonymSetId}\">GET /search/synonym/set/{synonymSetId}</a></li>\n <li><a href=\"${PUT.search.synonym.set.synonymSetId}\">PUT /search/synonym/set/{synonymSetId}</a></li>\n <li><a href=\"${POST.search.synonym.set.list}\">POST /search/synonym/set/list</a></li>\n </ul>\n\n <h6>Search Configurations</h6>\n <p>\n A <a href=\"${org.sagebionetworks.repo.model.search.table.SearchConfiguration}\">SearchConfiguration</a>\n bundles a default <a href=\"${org.sagebionetworks.repo.model.search.table.TextAnalyzer}\">TextAnalyzer</a>,\n zero or more <a href=\"${org.sagebionetworks.repo.model.search.table.SynonymSet}\">SynonymSets</a>,\n and zero or more <a href=\"${org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride}\">ColumnAnalyzerOverrides</a>\n into a reusable configuration. These settings are used to build the\n <code>analysis</code> section of an OpenSearch index definition when a search index is created.\n </p>\n <p>\n Attach a SearchConfiguration to an entity (SearchIndex, Folder, or Project) by creating a binding.\n The effective configuration for any entity is resolved by walking up the entity hierarchy.\n </p>\n <ul>\n <li><a href=\"${POST.search.configuration}\">POST /search/configuration</a></li>\n <li><a href=\"${GET.search.configuration.searchConfigurationId}\">GET /search/configuration/{searchConfigurationId}</a></li>\n <li><a href=\"${PUT.search.configuration.searchConfigurationId}\">PUT /search/configuration/{searchConfigurationId}</a></li>\n <li><a href=\"${POST.search.configuration.list}\">POST /search/configuration/list</a></li>\n </ul>\n\n <h6>Search Configuration Bindings</h6>\n <p>\n Bind a <a href=\"${org.sagebionetworks.repo.model.search.table.SearchConfiguration}\">SearchConfiguration</a>\n to an entity. The effective configuration for any entity is resolved by walking up the hierarchy\n (entity \\u2192 folder \\u2192 project). Requires EDIT permission on the entity.\n </p>\n <ul>\n <li><a href=\"${PUT.entity.entityId.searchconfig.binding}\">PUT /entity/{entityId}/searchconfig/binding</a></li>\n <li><a href=\"${GET.entity.entityId.searchconfig.binding}\">GET /entity/{entityId}/searchconfig/binding</a></li>\n <li><a href=\"${DELETE.entity.entityId.searchconfig.binding}\">DELETE /entity/{entityId}/searchconfig/binding</a></li>\n </ul>\n\n <h6>Public Resources and Cross-Organization Referencing</h6>\n <p>\n All search management resources (TextAnalyzers, SynonymSets, ColumnAnalyzerOverrides) are\n <b>publicly readable</b>. Any authenticated user can list and retrieve resources from any\n Organization. This enables cross-organization reuse: a\n <a href=\"${org.sagebionetworks.repo.model.search.table.SearchConfiguration}\">SearchConfiguration</a>\n can reference resources from any Organization using <b>qualified names</b> in the format\n <code>{organizationName}-{resourceName}</code> (e.g., <code>org.sagebionetworks-SCIENTIFIC</code>).\n For example, any user can build a SearchConfiguration that uses the platform-provided\n <code>org.sagebionetworks</code> analyzers alongside custom resources from their own Organization.\n </p>\n\n <h6>Name Immutability</h6>\n <p>\n Because resources are referenced by qualified name, the <code>name</code> and\n <code>organizationName</code> fields are <b>immutable after creation</b>. Attempting to change\n either on update will return a 400 error. To use a different name, create a new resource and\n update any SearchConfigurations that reference the old one.\n </p>\n\n <h6>Authorization</h6>\n <p>\n All management operations (create, update, delete) are restricted to <b>Sage Bionetworks employees</b>\n who have the appropriate\n <a href=\"${org.sagebionetworks.repo.model.ACCESS_TYPE}\">ACCESS_TYPE</a> permission on the\n <a href=\"${org.sagebionetworks.repo.model.schema.Organization}\">Organization</a> that owns the resource.\n Read and list operations are publicly accessible.\n </p>\n\n <h6>Organization Scoping</h6>\n <p>\n All search management objects belong to an\n <a href=\"${org.sagebionetworks.repo.model.schema.Organization}\">Organization</a> identified by\n <code>organizationName</code>. The organization and name cannot be changed after creation.\n Resource names must start with a letter and contain only letters, digits, and underscores.\n </p>\n\n <h6>Search Queries</h6>\n <p>\n Query a <a href=\"${org.sagebionetworks.repo.model.search.table.SearchIndex}\">SearchIndex</a>\n using the async job pattern. Submit a\n <a href=\"${org.sagebionetworks.repo.model.search.table.SearchIndexQuery}\">SearchIndexQuery</a>\n to start a job, then poll for\n <a href=\"${org.sagebionetworks.repo.model.search.SearchQueryResults}\">SearchQueryResults</a>.\n A synchronous autocomplete endpoint is also available for typeahead patterns.\n </p>\n <ul>\n <li><a href=\"${POST.search.query.async.start}\">POST /search/query/async/start</a> &mdash; Start async query</li>\n <li><a href=\"${GET.search.query.async.get.asyncToken}\">GET /search/query/async/get/{asyncToken}</a> &mdash; Poll for results</li>\n <li><a href=\"${POST.search.autocomplete}\">POST /search/autocomplete</a> &mdash; Synchronous autocomplete (max 8 results)</li>\n </ul>\n\n <h6>Search Index Field Limits</h6>\n <p>\n When a search index is built, each column from the defining SQL query is mapped to an\n OpenSearch field type. Text and keyword fields have an <code>ignore_above</code> limit on\n their keyword sub-field &mdash; values longer than this limit are <b>not indexed</b> for\n exact-match or sorting, but remain stored in the source document. Numeric, boolean, and\n JSON fields have no such limit.\n </p>\n <b>Search Index Field Mapping and Limits</b>\n <table border=\"1\">\n <tr>\n <th>Synapse Column Type</th>\n <th>OpenSearch Field Type</th>\n <th>Keyword ignore_above</th>\n <th>Default Analyzer</th>\n </tr>\n <tr>\n <td>STRING, STRING_LIST</td>\n <td>text + keyword sub-field</td>\n <td>1,000 characters</td>\n <td>SCIENTIFIC</td>\n </tr>\n <tr>\n <td>MEDIUMTEXT</td>\n <td>text + keyword sub-field</td>\n <td>2,000 characters</td>\n <td>SCIENTIFIC</td>\n </tr>\n <tr>\n <td>LARGETEXT</td>\n <td>text + keyword sub-field</td>\n <td>8,192 characters</td>\n <td>SCIENTIFIC</td>\n </tr>\n <tr>\n <td>LINK</td>\n <td>text + keyword sub-field (or keyword + searchable, depending on analyzer)</td>\n <td>1,000 characters</td>\n <td>KEYWORD</td>\n </tr>\n <tr>\n <td>ENTITYID, USERID, ENTITYID_LIST, USERID_LIST</td>\n <td>keyword</td>\n <td>256 characters</td>\n <td>KEYWORD</td>\n </tr>\n <tr>\n <td>INTEGER, DATE, INTEGER_LIST, DATE_LIST, FILEHANDLEID, SUBMISSIONID, EVALUATIONID</td>\n <td>long</td>\n <td>N/A</td>\n <td>KEYWORD</td>\n </tr>\n <tr>\n <td>DOUBLE</td>\n <td>double</td>\n <td>N/A</td>\n <td>KEYWORD</td>\n </tr>\n <tr>\n <td>BOOLEAN, BOOLEAN_LIST</td>\n <td>boolean</td>\n <td>N/A</td>\n <td>KEYWORD</td>\n </tr>\n <tr>\n <td>JSON</td>\n <td>object (dynamic mapping)</td>\n <td>N/A</td>\n <td>STANDARD</td>\n </tr>\n </table>\n <p>\n <b>Query Limits:</b> Results per page default to 25 with a maximum of 100.\n Autocomplete results are capped at 8. The maximum number of rows that can be indexed\n in a single search index is 500,000.\n </p>"
     },
     {
       "name": "Search Services",
@@ -13496,93 +13492,6 @@
         }
       }
     },
-    "/repo/v1/search/query/async/start": {
-      "post": {
-        "tags": ["Search Query Services"],
-        "operationId": "post-/repo/v1/search/query/async/start",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndexQuery"
-              }
-            }
-          },
-          "required": true
-        },
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "201": {
-            "description": "Auto-generated description",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/repo/v1/search/query/async/get/{asyncToken}": {
-      "get": {
-        "tags": ["Search Query Services"],
-        "operationId": "get-/repo/v1/search/query/async/get/{asyncToken}",
-        "parameters": [
-          {
-            "name": "asyncToken",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "200": {
-            "description": "Auto-generated description",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.SearchQueryResults"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/repo/v1/search/autocomplete": {
-      "post": {
-        "tags": ["Search Query Services"],
-        "operationId": "post-/repo/v1/search/autocomplete",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndexQuery"
-              }
-            }
-          },
-          "required": true
-        },
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "200": {
-            "description": "Auto-generated description",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.SearchQueryResults"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/repo/v1/message": {
       "post": {
         "tags": ["Message Services"],
@@ -18582,6 +18491,94 @@
         "security": [{ "bearerAuth": [] }],
         "responses": { "204": { "description": "Void" } }
       }
+    },
+    "/repo/v1/search/query/async/start": {
+      "post": {
+        "tags": ["Search Management Services"],
+        "operationId": "post-/repo/v1/search/query/async/start",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndexQuery"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "An async job token to poll for results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/search/query/async/get/{asyncToken}": {
+      "get": {
+        "tags": ["Search Management Services"],
+        "operationId": "get-/repo/v1/search/query/async/get/{asyncToken}",
+        "parameters": [
+          {
+            "name": "asyncToken",
+            "in": "path",
+            "required": true,
+            "description": "The token returned by the start query endpoint.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "The search query results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.SearchQueryResults"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/search/autocomplete": {
+      "post": {
+        "tags": ["Search Management Services"],
+        "operationId": "post-/repo/v1/search/autocomplete",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndexQuery"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "The autocomplete results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.SearchQueryResults"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -22503,10 +22500,6 @@
       "org.sagebionetworks.repo.model.search.SearchQuery": {
         "type": "object",
         "properties": {
-          "concreteType": {
-            "type": "string",
-            "enum": ["org.sagebionetworks.repo.model.search.SearchQuery"]
-          },
           "queryType": {
             "type": "string",
             "description": "The type of full-text query to execute against a search index.",
@@ -22595,8 +22588,7 @@
             "format": "int32"
           }
         },
-        "description": "A structured search query against an OpenSearch index. Can be submitted as an asynchronous job.",
-        "required": ["concreteType"]
+        "description": "A structured search query against an OpenSearch index. Composed into request objects (e.g., SearchIndexQuery) that wrap it with context such as which index to target."
       },
       "org.sagebionetworks.repo.model.file.BatchPresignedUploadUrlResponse": {
         "type": "object",
@@ -25815,7 +25807,6 @@
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.QueryNextPageToken"
           },
-          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.SearchQuery" },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListManifestRequest"
           },
@@ -25843,6 +25834,9 @@
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.GridCsvImportRequest"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchIndexQuery"
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleArchivalRequest"
@@ -32437,6 +32431,15 @@
             "type": "string",
             "description": "The ID of the project this Reply belongs to"
           },
+          "objectId": {
+            "type": "string",
+            "description": "The ID of the object this Reply belongs to"
+          },
+          "objectType": {
+            "type": "string",
+            "description": "The type of object to which a Forum is associated.",
+            "enum": ["ENTITY", "ACCESS_REQUIREMENT"]
+          },
           "createdOn": {
             "type": "string",
             "description": "The timestamp when this Reply was created"
@@ -32644,99 +32647,31 @@
       "org.sagebionetworks.repo.model.search.table.SearchIndexQuery": {
         "type": "object",
         "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.search.table.SearchIndexQuery"]
+          },
           "searchIndexId": {
             "type": "string",
             "description": "The ID of the SearchIndex entity to query."
           },
-          "queryType": {
-            "type": "string",
-            "description": "The type of full-text query to execute against a search index.",
-            "enum": [
-              "SIMPLE_QUERY_STRING",
-              "MATCH",
-              "MULTI_MATCH",
-              "MATCH_PHRASE",
-              "PREFIX",
-              "WILDCARD",
-              "MATCH_ALL"
-            ]
+          "searchQuery": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.SearchQuery",
+            "description": "A structured search query against an OpenSearch index. Composed into request objects (e.g., SearchIndexQuery) that wrap it with context such as which index to target."
           },
-          "queryText": {
-            "type": "string",
-            "description": "The search text. Null or empty matches all documents."
-          },
-          "queryFields": {
-            "type": "array",
-            "items": { "type": "string" },
-            "description": "Column names with optional boost (e.g., 'studyName^3'). Empty means all indexed fields."
-          },
-          "termsFilters": {
+          "responseParts": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.KeyValues",
-              "description": "A multi-value filter (IN clause). Matches rows where the key column contains any of the listed values."
+              "type": "string",
+              "description": "Identifiers for the opt-in parts of a SearchQueryResults. Clients pass a list of these values in SearchIndexQuery.responseParts to widen what the server computes and returns. When the list is null or empty the server returns the default minimal payload \u2014 HITS plus the always-populated offset \u2014 and skips the corresponding work in OpenSearch (no aggregations, no total-hit tracking).",
+              "enum": ["HITS", "TOTAL_HITS", "SELECT_COLUMNS", "FACETS"]
             },
-            "description": "Multi-value filters (IN clause)."
-          },
-          "rangeFilters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.KeyRange",
-              "description": "A range filter. Matches rows where min <= value <= max. At least one of either 'min' or 'max' must be set for this range to be valid."
-            },
-            "description": "Range filters with min and max."
-          },
-          "existsFilters": {
-            "type": "array",
-            "items": { "type": "string" },
-            "description": "Columns that must have a non-null value."
-          },
-          "notExistsFilters": {
-            "type": "array",
-            "items": { "type": "string" },
-            "description": "Columns that must be null or missing."
-          },
-          "fuzziness": {
-            "type": "string",
-            "description": "Typo tolerance: 'AUTO', '0', '1', or '2'."
-          },
-          "facetRequests": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.FacetRequest",
-              "description": "A request to aggregate a column as a facet in search results."
-            },
-            "description": "Columns to aggregate as facets."
-          },
-          "returnFields": {
-            "type": "array",
-            "items": { "type": "string" },
-            "description": "Columns to include in results. Empty means all columns."
-          },
-          "sort": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.SortField",
-              "description": "Sort specification for search results."
-            },
-            "description": "Sort order. Default: relevance descending."
-          },
-          "highlight": {
-            "type": "boolean",
-            "description": "Whether to return highlighted snippets. Default: false."
-          },
-          "offset": {
-            "type": "integer",
-            "description": "Zero-based pagination offset. Default: 0.",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "Results per page. Default: 25. Max: 100.",
-            "format": "int32"
+            "description": "Optional list of additional parts to include in the SearchQueryResults beyond the default HITS + offset. Null or empty means HITS only (the default minimal payload). Requesting parts also drives the corresponding work in OpenSearch (aggregations, total-hit tracking).",
+            "uniqueItems": true
           }
         },
-        "description": "A search query against a SearchIndex entity's OpenSearch index. Extends SearchQuery with searchIndexId to identify which index to query."
+        "description": "Async request to query a SearchIndex entity's OpenSearch index. Identifies the target index and carries the search parameters.",
+        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.schema.JsonSchemaVersionInfo": {
         "type": "object",
@@ -38047,6 +37982,10 @@
         },
         "description": "Summary statistics for the JSON schema validation results for the children of an Entity container (Project or Folder)"
       },
+      "org.sagebionetworks.repo.model.search.SearchQueryPart": {
+        "type": "string",
+        "enum": ["HITS", "TOTAL_HITS", "SELECT_COLUMNS", "FACETS"]
+      },
       "org.sagebionetworks.repo.model.grid.CreateGridResponse": {
         "type": "object",
         "properties": {
@@ -39493,18 +39432,26 @@
             "type": "string",
             "enum": ["org.sagebionetworks.repo.model.search.SearchQueryResults"]
           },
-          "totalHits": {
-            "type": "integer",
-            "description": "The total number of matching documents.",
-            "format": "int32"
-          },
           "hits": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/org.sagebionetworks.repo.model.search.SearchHit",
               "description": "A single search result hit."
             },
-            "description": "The list of search result hits for this page."
+            "description": "Matching documents. Populated by default (or whenever SearchQueryPart.HITS is requested)."
+          },
+          "totalHits": {
+            "type": "integer",
+            "description": "The total number of matching documents. Populated when SearchQueryPart.TOTAL_HITS is requested.",
+            "format": "int32"
+          },
+          "selectColumns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.SelectColumn",
+              "description": "A column model contains the metadata of a single column of a TableEntity"
+            },
+            "description": "The columns represented in each hit's fields, in SELECT-clause order. Populated when SearchQueryPart.SELECT_COLUMNS is requested. When SearchQuery.returnFields is non-empty, this is the subset of columns matching those names."
           },
           "facets": {
             "type": "array",
@@ -39512,15 +39459,15 @@
               "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.FacetColumnResult",
               "description": "Resulting information about a faceted column"
             },
-            "description": "Facet aggregation results, if requested."
+            "description": "Facet aggregation results. Populated when SearchQueryPart.FACETS is requested. Autocomplete never produces facets regardless of this part being requested."
           },
           "offset": {
             "type": "integer",
-            "description": "The offset used for this page of results.",
+            "description": "Zero-based pagination offset echoed from the request. Always populated.",
             "format": "int32"
           }
         },
-        "description": "Results of a search query against an OpenSearch index.",
+        "description": "Results of a search query against an OpenSearch index. The set of populated fields is governed by the request's responseParts: hits and offset are populated by default; the remaining fields are populated only when the corresponding SearchQueryPart is requested.",
         "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.webhook.WebhookVerificationStatus": {

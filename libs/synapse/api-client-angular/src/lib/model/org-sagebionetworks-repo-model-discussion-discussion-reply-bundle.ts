@@ -29,6 +29,14 @@ export interface OrgSagebionetworksRepoModelDiscussionDiscussionReplyBundle {
    */
   projectId?: string;
   /**
+   * The ID of the object this Reply belongs to
+   */
+  objectId?: string;
+  /**
+   * The type of object to which a Forum is associated.
+   */
+  objectType?: OrgSagebionetworksRepoModelDiscussionDiscussionReplyBundle.ObjectTypeEnum;
+  /**
    * The timestamp when this Reply was created
    */
   createdOn?: string;
@@ -56,4 +64,11 @@ export interface OrgSagebionetworksRepoModelDiscussionDiscussionReplyBundle {
    * Has this Reply been deleted?
    */
   isDeleted?: boolean;
+}
+export namespace OrgSagebionetworksRepoModelDiscussionDiscussionReplyBundle {
+  export type ObjectTypeEnum = 'ENTITY' | 'ACCESS_REQUIREMENT';
+  export const ObjectTypeEnum = {
+    Entity: 'ENTITY' as ObjectTypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as ObjectTypeEnum,
+  };
 }

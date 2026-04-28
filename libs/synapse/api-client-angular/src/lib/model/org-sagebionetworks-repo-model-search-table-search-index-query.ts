@@ -7,92 +7,34 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrgSagebionetworksRepoModelSearchKeyRange } from './org-sagebionetworks-repo-model-search-key-range';
-import { OrgSagebionetworksRepoModelSearchKeyValues } from './org-sagebionetworks-repo-model-search-key-values';
-import { OrgSagebionetworksRepoModelSearchFacetRequest } from './org-sagebionetworks-repo-model-search-facet-request';
-import { OrgSagebionetworksRepoModelSearchSortField } from './org-sagebionetworks-repo-model-search-sort-field';
+import { OrgSagebionetworksRepoModelSearchSearchQuery } from './org-sagebionetworks-repo-model-search-search-query';
 
 /**
- * A search query against a SearchIndex entity\'s OpenSearch index. Extends SearchQuery with searchIndexId to identify which index to query.
+ * Async request to query a SearchIndex entity\'s OpenSearch index. Identifies the target index and carries the search parameters.
  */
 export interface OrgSagebionetworksRepoModelSearchTableSearchIndexQuery {
+  concreteType: OrgSagebionetworksRepoModelSearchTableSearchIndexQuery.ConcreteTypeEnum;
   /**
    * The ID of the SearchIndex entity to query.
    */
   searchIndexId?: string;
+  searchQuery?: OrgSagebionetworksRepoModelSearchSearchQuery;
   /**
-   * The type of full-text query to execute against a search index.
+   * Optional list of additional parts to include in the SearchQueryResults beyond the default HITS + offset. Null or empty means HITS only (the default minimal payload). Requesting parts also drives the corresponding work in OpenSearch (aggregations, total-hit tracking).
    */
-  queryType?: OrgSagebionetworksRepoModelSearchTableSearchIndexQuery.QueryTypeEnum;
-  /**
-   * The search text. Null or empty matches all documents.
-   */
-  queryText?: string;
-  /**
-   * Column names with optional boost (e.g., \'studyName^3\'). Empty means all indexed fields.
-   */
-  queryFields?: Array<string>;
-  /**
-   * Multi-value filters (IN clause).
-   */
-  termsFilters?: Array<OrgSagebionetworksRepoModelSearchKeyValues>;
-  /**
-   * Range filters with min and max.
-   */
-  rangeFilters?: Array<OrgSagebionetworksRepoModelSearchKeyRange>;
-  /**
-   * Columns that must have a non-null value.
-   */
-  existsFilters?: Array<string>;
-  /**
-   * Columns that must be null or missing.
-   */
-  notExistsFilters?: Array<string>;
-  /**
-   * Typo tolerance: \'AUTO\', \'0\', \'1\', or \'2\'.
-   */
-  fuzziness?: string;
-  /**
-   * Columns to aggregate as facets.
-   */
-  facetRequests?: Array<OrgSagebionetworksRepoModelSearchFacetRequest>;
-  /**
-   * Columns to include in results. Empty means all columns.
-   */
-  returnFields?: Array<string>;
-  /**
-   * Sort order. Default: relevance descending.
-   */
-  sort?: Array<OrgSagebionetworksRepoModelSearchSortField>;
-  /**
-   * Whether to return highlighted snippets. Default: false.
-   */
-  highlight?: boolean;
-  /**
-   * Zero-based pagination offset. Default: 0.
-   */
-  offset?: number;
-  /**
-   * Results per page. Default: 25. Max: 100.
-   */
-  limit?: number;
+  responseParts?: Set<OrgSagebionetworksRepoModelSearchTableSearchIndexQuery.ResponsePartsEnum>;
 }
 export namespace OrgSagebionetworksRepoModelSearchTableSearchIndexQuery {
-  export type QueryTypeEnum =
-    | 'SIMPLE_QUERY_STRING'
-    | 'MATCH'
-    | 'MULTI_MATCH'
-    | 'MATCH_PHRASE'
-    | 'PREFIX'
-    | 'WILDCARD'
-    | 'MATCH_ALL';
-  export const QueryTypeEnum = {
-    SimpleQueryString: 'SIMPLE_QUERY_STRING' as QueryTypeEnum,
-    Match: 'MATCH' as QueryTypeEnum,
-    MultiMatch: 'MULTI_MATCH' as QueryTypeEnum,
-    MatchPhrase: 'MATCH_PHRASE' as QueryTypeEnum,
-    Prefix: 'PREFIX' as QueryTypeEnum,
-    Wildcard: 'WILDCARD' as QueryTypeEnum,
-    MatchAll: 'MATCH_ALL' as QueryTypeEnum,
+  export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.search.table.SearchIndexQuery';
+  export const ConcreteTypeEnum = {
+    OrgSagebionetworksRepoModelSearchTableSearchIndexQuery:
+      'org.sagebionetworks.repo.model.search.table.SearchIndexQuery' as ConcreteTypeEnum,
+  };
+  export type ResponsePartsEnum = 'HITS' | 'TOTAL_HITS' | 'SELECT_COLUMNS' | 'FACETS';
+  export const ResponsePartsEnum = {
+    Hits: 'HITS' as ResponsePartsEnum,
+    TotalHits: 'TOTAL_HITS' as ResponsePartsEnum,
+    SelectColumns: 'SELECT_COLUMNS' as ResponsePartsEnum,
+    Facets: 'FACETS' as ResponsePartsEnum,
   };
 }

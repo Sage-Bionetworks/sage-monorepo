@@ -39,7 +39,6 @@ api/project-storage-services.service.ts
 api/realm-services.service.ts
 api/recycle-bin-services.service.ts
 api/search-management-services.service.ts
-api/search-query-services.service.ts
 api/search-services.service.ts
 api/statistics-services.service.ts
 api/storage-report-services.service.ts
@@ -794,6 +793,7 @@ model/org-sagebionetworks-repo-model-search-query-suggestion-results.ts
 model/org-sagebionetworks-repo-model-search-query-suggestion.ts
 model/org-sagebionetworks-repo-model-search-search-field-value.ts
 model/org-sagebionetworks-repo-model-search-search-hit.ts
+model/org-sagebionetworks-repo-model-search-search-query-part.ts
 model/org-sagebionetworks-repo-model-search-search-query-results.ts
 model/org-sagebionetworks-repo-model-search-search-query-type.ts
 model/org-sagebionetworks-repo-model-search-search-query.ts
