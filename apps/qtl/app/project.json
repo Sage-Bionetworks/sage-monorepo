@@ -154,7 +154,7 @@
       "options": {
         "commands": [
           "sentry-cli sourcemaps inject dist/apps/qtl/app",
-          "sentry-cli sourcemaps upload --org sage-bionetworks --project qtl --release $SENTRY_RELEASE dist/apps/qtl/app",
+          "sentry-cli sourcemaps upload --org sage-bionetworks --project qtl --release qtl@$SENTRY_RELEASE_SUFFIX dist/apps/qtl/app",
           "find dist/apps/qtl/app -name '*.map' -delete"
         ],
         "parallel": false

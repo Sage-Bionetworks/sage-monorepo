@@ -10,6 +10,7 @@ import {
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
+import { initSentry } from '@sagebionetworks/explorers/sentry';
 import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/qtl/api-client';
@@ -30,10 +31,12 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       const configService = inject(ConfigService);
       return configFactory(configService)().then(() => {
-        const release = configService.config.sentryRelease;
-        if (release) {
-          Sentry.addEventProcessor((event) => ({ ...event, release }));
-        }
+        const { sentryDsn, sentryEnvironment, sentryRelease } = configService.config;
+        initSentry({
+          dsn: sentryDsn,
+          environment: sentryEnvironment,
+          release: sentryRelease,
+        });
       });
     }),
     provideExplorersConfig({
