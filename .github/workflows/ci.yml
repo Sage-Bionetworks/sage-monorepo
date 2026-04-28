@@ -89,12 +89,12 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo \
             --remote-env SENTRY_AUTH_TOKEN="$SENTRY_AUTH_TOKEN" \
-            --remote-env SENTRY_RELEASE="$SENTRY_RELEASE" \
+            --remote-env SENTRY_RELEASE_SUFFIX="$SENTRY_RELEASE_SUFFIX" \
             bash -c ". ./dev-env.sh \
             && nx affected --target=sentry-sourcemaps"
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_RELEASE: edge+${{ env.SHORT_SHA }}
+          SENTRY_RELEASE_SUFFIX: edge+${{ env.SHORT_SHA }}
 
       - name: Remove the dev container
         run: docker rm -f sage_devcontainer

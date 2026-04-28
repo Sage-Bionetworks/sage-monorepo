@@ -2,26 +2,24 @@ import * as Sentry from '@sentry/angular';
 
 export interface SentryConfig {
   dsn: string;
-  hostEnvironmentMap: Record<string, string>;
+  environment: string;
   release?: string;
-}
-
-export function getSentryEnvironment(
-  hostEnvironmentMap: Record<string, string>,
-  hostname = typeof window !== 'undefined' ? window.location.hostname : undefined,
-): string {
-  if (!hostname) return 'server';
-  if (hostname === 'localhost' || hostname === '127.0.0.1') return 'localhost';
-
-  return hostEnvironmentMap[hostname] ?? hostname;
 }
 
 export function initSentry(config: SentryConfig): void {
   if (typeof window === 'undefined') return;
+  if (!config.dsn) {
+    console.warn('[Sentry] SENTRY_DSN is empty; skipping init.');
+    return;
+  }
+  if (!config.environment) {
+    console.warn('[Sentry] SENTRY_DSN is set but SENTRY_ENVIRONMENT is empty; skipping init.');
+    return;
+  }
 
   Sentry.init({
     dsn: config.dsn,
-    environment: getSentryEnvironment(config.hostEnvironmentMap),
+    environment: config.environment,
     release: config.release || undefined,
     sendDefaultPii: false,
   });

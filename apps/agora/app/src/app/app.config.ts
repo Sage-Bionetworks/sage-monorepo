@@ -17,6 +17,7 @@ import {
 } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client';
 import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
+import { initSentry } from '@sagebionetworks/explorers/sentry';
 import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
@@ -42,10 +43,12 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       const configService = inject(ConfigService);
       return configFactory(configService)().then(() => {
-        const release = configService.config.sentryRelease;
-        if (release) {
-          Sentry.addEventProcessor((event) => ({ ...event, release }));
-        }
+        const { sentryDsn, sentryEnvironment, sentryRelease } = configService.config;
+        initSentry({
+          dsn: sentryDsn,
+          environment: sentryEnvironment,
+          release: sentryRelease,
+        });
       });
     }),
     provideExplorersConfig({

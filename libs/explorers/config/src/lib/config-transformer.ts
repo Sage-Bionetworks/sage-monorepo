@@ -10,6 +10,8 @@ export function transformServerToClientConfig(serverConfig: AppConfig): ClientCo
     csrApiUrl: serverConfig.csrApiUrl,
     googleTagManagerEnabled: serverConfig.googleTagManagerEnabled,
     googleTagManagerId: serverConfig.googleTagManagerId,
+    sentryDsn: serverConfig.sentryDsn,
+    sentryEnvironment: serverConfig.sentryEnvironment,
     sentryRelease: serverConfig.sentryRelease,
   };
 }
