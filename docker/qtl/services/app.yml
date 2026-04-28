@@ -1,0 +1,20 @@
+services:
+  qtl-app:
+    image: ghcr.io/sage-bionetworks/qtl-app:${QTL_VERSION:-local}
+    container_name: qtl-app
+    restart: always
+    networks:
+      - qtl
+    ports:
+      - '4200:4200'
+    env_file:
+      - ../../../apps/qtl/app/.env
+    depends_on:
+      qtl-data:
+        condition: service_completed_successfully
+      qtl-api:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 1G
