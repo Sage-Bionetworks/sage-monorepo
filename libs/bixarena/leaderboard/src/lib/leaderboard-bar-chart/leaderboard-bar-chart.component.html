@@ -1,21 +1,20 @@
 <ol class="chart-row" role="list">
-  @for (bar of bars(); track bar.id) {
+  @for (bar of bars(); track bar.id; let i = $index) {
     <li
       class="chart-bar"
       [attr.aria-label]="'Rank ' + bar.rank + ': ' + bar.modelName + ', score ' + bar.score"
     >
-      <div class="bar-track">
-        <div class="bar-fill" [style.height.%]="bar.heightPct" [style.background]="bar.barGradient">
-          <span class="bar-score">{{ bar.score }}</span>
-          <bixarena-avatar
-            class="bar-logo"
-            [class.is-mono]="bar.orgLogoMono"
-            shape="bare"
-            size="md"
-            [imageUrl]="bar.orgLogoUrl"
-            [name]="bar.modelOrganization ?? bar.modelName"
-          />
-        </div>
+      <div class="bar-track" [style.--bar-final-height.%]="bar.heightPct" [style.--bar-index]="i">
+        <div class="bar-shape" [style.background]="bar.barGradient"></div>
+        <span class="bar-score">{{ bar.score }}</span>
+        <bixarena-avatar
+          class="bar-logo"
+          [class.is-mono]="bar.orgLogoMono"
+          shape="bare"
+          size="md"
+          [imageUrl]="bar.orgLogoUrl"
+          [name]="bar.modelOrganization ?? bar.modelName"
+        />
       </div>
       <span class="bar-name" [title]="bar.modelName">{{ bar.slug }}</span>
     </li>
