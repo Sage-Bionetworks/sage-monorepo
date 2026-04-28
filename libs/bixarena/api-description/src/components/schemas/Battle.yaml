@@ -27,6 +27,13 @@ properties:
     format: uuid
     nullable: true
     description: ID of the effective battle categorization (null = not yet categorized)
+  examplePromptId:
+    type: string
+    format: uuid
+    nullable: true
+    description: >-
+      ID of the curated example prompt this battle was started from.
+      Null for free-form battles.
 required:
   - id
   - userId
