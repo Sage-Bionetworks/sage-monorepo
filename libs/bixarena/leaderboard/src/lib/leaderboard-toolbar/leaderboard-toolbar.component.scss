@@ -8,6 +8,11 @@
   gap: 0.75rem;
   margin-bottom: 0.75rem;
   flex-wrap: wrap;
+
+  // Keep empty p-popover hosts out of flex layout so the trailing gap is gone.
+  > p-popover {
+    display: contents;
+  }
 }
 
 .category-trigger {
