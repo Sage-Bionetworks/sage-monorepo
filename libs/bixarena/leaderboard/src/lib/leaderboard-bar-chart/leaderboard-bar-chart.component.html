@@ -4,9 +4,9 @@
       class="chart-bar"
       [attr.aria-label]="'Rank ' + bar.rank + ': ' + bar.modelName + ', score ' + bar.score"
     >
-      <span class="bar-score">{{ bar.score }}</span>
       <div class="bar-track">
-        <div class="bar-fill" [style.height.%]="bar.heightPct">
+        <div class="bar-fill" [style.height.%]="bar.heightPct" [style.background]="bar.barGradient">
+          <span class="bar-score">{{ bar.score }}</span>
           <bixarena-avatar
             class="bar-logo"
             [class.is-mono]="bar.orgLogoMono"
@@ -17,7 +17,7 @@
           />
         </div>
       </div>
-      <span class="bar-name" [title]="bar.modelName">{{ bar.modelName }}</span>
+      <span class="bar-name" [title]="bar.modelName">{{ bar.slug }}</span>
     </li>
   }
 </ol>

@@ -57,12 +57,24 @@ describe('LeaderboardBarChartComponent', () => {
     expect(bars.length).toBe(5);
   });
 
-  it('normalizes height — top entry at 100, lowest at the floor (>= 8)', () => {
+  it('maps height linearly so the lowest bar sits at the floor and others scale proportionally', () => {
     fixture.componentRef.setInput('entries', buildEntries(3));
     fixture.detectChanges();
     const bars = fixture.componentInstance.bars();
     expect(bars[0].heightPct).toBe(100);
-    expect(bars[bars.length - 1].heightPct).toBeGreaterThanOrEqual(8);
+    expect(bars[bars.length - 1].heightPct).toBe(32);
+    expect(bars[1].heightPct).toBeGreaterThan(32);
+    expect(bars[1].heightPct).toBeLessThan(100);
+  });
+
+  it('uses brand gradient for top three and silver gradient for the rest', () => {
+    fixture.componentRef.setInput('entries', buildEntries(5));
+    fixture.detectChanges();
+    const bars = fixture.componentInstance.bars();
+    expect(bars[0].barGradient).toContain('--p-primary-300');
+    expect(bars[2].barGradient).toContain('--p-primary-500');
+    expect(bars[3].barGradient).toContain('--p-slate-300');
+    expect(bars[4].barGradient).toContain('--p-slate-500');
   });
 
   it('exposes rank, model name, and score via aria-label', () => {

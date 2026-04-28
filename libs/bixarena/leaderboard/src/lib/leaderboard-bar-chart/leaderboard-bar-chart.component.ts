@@ -25,18 +25,25 @@ export class LeaderboardBarChartComponent {
       if (e.btScore < minScore) minScore = e.btScore;
       if (e.btScore > maxScore) maxScore = e.btScore;
     }
-    const floor = minScore - 10;
-    const range = maxScore - floor || 1;
+    const MIN_HEIGHT_PCT = 32;
+    const scoreRange = maxScore - minScore || 1;
 
-    return visible.map((entry) => ({
-      id: entry.id,
-      rank: entry.rank,
-      modelName: entry.modelName,
-      modelOrganization: entry.modelOrganization ?? null,
-      score: Math.round(entry.btScore),
-      heightPct: Math.max(8, ((entry.btScore - floor) / range) * 100),
-      orgLogoUrl: getOrgLogoUrl(entry.modelOrganization),
-      orgLogoMono: isMonoOrgLogo(entry.modelOrganization),
-    }));
+    const podiumGradient = 'linear-gradient(to bottom, var(--p-primary-300), var(--p-primary-500))';
+    const silverGradient = 'linear-gradient(to bottom, var(--p-slate-300), var(--p-slate-500))';
+    return visible.map((entry, index) => {
+      const rawRatio = (entry.btScore - minScore) / scoreRange;
+      return {
+        id: entry.id,
+        rank: entry.rank,
+        slug: entry.modelId,
+        modelName: entry.modelName,
+        modelOrganization: entry.modelOrganization ?? null,
+        score: Math.round(entry.btScore),
+        heightPct: MIN_HEIGHT_PCT + rawRatio * (100 - MIN_HEIGHT_PCT),
+        barGradient: index < 3 ? podiumGradient : silverGradient,
+        orgLogoUrl: getOrgLogoUrl(entry.modelOrganization),
+        orgLogoMono: isMonoOrgLogo(entry.modelOrganization),
+      };
+    });
   });
 }
