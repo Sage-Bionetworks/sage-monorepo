@@ -58,7 +58,7 @@ Collect unique `author.login` values across all PRs. These go in the Thank You s
 Group PRs into logical categories based on conventional commit scopes and titles. Common categories:
 
 - **Authentication & gateway** — auth flows, API gateways, reverse proxy
-- **[Product name]** — product-specific features, fixes, and data work (agora, model-ad, bixarena, amp-als, explorers)
+- **[Product name]** — product-specific features, fixes, and data work (agora, model-ad, bixarena, amp-als, explorers, qtl)
 - **OpenAPI governance** — spec changes, client generation, tag/path normalization
 - **Developer environment** — dev container, toolchain, dependency upgrades
 - **Infrastructure & composability** — Docker Compose, Caddy, CI/CD pipelines

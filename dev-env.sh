@@ -155,6 +155,22 @@ function model-ad-docker-rm {
   docker rm -f $(docker ps -a --filter "name=^/model-ad-" --format "{{.ID}}")
 }
 
+function qtl-build-images {
+  nx run-many --target=build-image --projects=qtl-* --parallel=3
+}
+
+function qtl-docker-start {
+  nx serve-detach qtl-apex
+}
+
+function qtl-docker-stop {
+  docker stop $(docker ps -a --filter "name=^/qtl-" --format "{{.ID}}")
+}
+
+function qtl-docker-rm {
+  docker rm -f $(docker ps -a --filter "name=^/qtl-" --format "{{.ID}}")
+}
+
 function iatlas-build-images {
   nx run-many --target=build-image --projects=iatlas-* --parallel=3
 }

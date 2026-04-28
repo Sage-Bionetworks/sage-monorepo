@@ -35,6 +35,10 @@
                 "onlyDependOnLibsWithTags": ["scope:agora", "scope:explorers", "scope:shared"]
               },
               {
+                "sourceTag": "scope:qtl",
+                "onlyDependOnLibsWithTags": ["scope:qtl", "scope:explorers", "scope:shared"]
+              },
+              {
                 "sourceTag": "scope:explorers",
                 "onlyDependOnLibsWithTags": ["scope:explorers", "scope:shared", "scope:global"]
               },
