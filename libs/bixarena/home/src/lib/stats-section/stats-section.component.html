@@ -13,6 +13,16 @@
         <div class="stat-val">{{ s.totalUsers | number }}</div>
         <div class="stat-lbl">Total Users</div>
       </div>
+      @if (userStats(); as u) {
+        <div class="stat user-stat">
+          <div class="stat-val">{{ u.completedBattles | number }}</div>
+          <div class="stat-lbl">Battles Completed</div>
+        </div>
+        <div class="stat user-stat">
+          <div class="stat-val">#{{ u.rank | number }}</div>
+          <div class="stat-lbl">Your Rank</div>
+        </div>
+      }
     </div>
   }
   <p class="disclaimer">Only battles on biomedical topics count toward stats and rankings.</p>

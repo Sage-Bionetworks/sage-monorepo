@@ -39,6 +39,10 @@
   margin-top: 0.25rem;
 }
 
+.user-stat .stat-val {
+  color: var(--p-primary-color);
+}
+
 .disclaimer {
   font-size: var(--text-xs);
   font-style: italic;
