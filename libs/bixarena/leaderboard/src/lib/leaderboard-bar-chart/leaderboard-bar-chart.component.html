@@ -1,3 +1,13 @@
+<!--
+  Layout per bar:
+    .chart-bar (column)
+      .bar-track (the 16rem-tall positioning context)
+        .bar-shape   ← animated colored rectangle (bar fill)
+        .bar-score   ← absolute, anchored above bar tip via --bar-final-height
+        .bar-logo    ← absolute, anchored inside bar tip via --bar-final-height
+      .bar-name      ← slug label below the track
+  Track exposes --bar-final-height (% of track) and --bar-index (for staggered animation).
+-->
 <ol class="chart-row" role="list">
   @for (bar of bars(); track bar.id; let i = $index) {
     <li

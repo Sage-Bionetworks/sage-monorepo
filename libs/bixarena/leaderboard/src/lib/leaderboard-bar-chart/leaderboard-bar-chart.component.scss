@@ -2,6 +2,8 @@
   display: block;
 }
 
+// Horizontal row of bars. Centers when content fits, scrolls horizontally otherwise.
+// Top padding leaves room for the score labels that float above the tallest bar.
 .chart-row {
   display: flex;
   gap: 1.25rem;
@@ -12,6 +14,7 @@
   justify-content: safe center;
 }
 
+// One column per bar: track on top, slug label beneath.
 .chart-bar {
   flex: 0 0 auto;
   width: 6rem;
@@ -21,12 +24,15 @@
   gap: 0.75rem;
 }
 
+// Positioning context for the bar shape, score, and logo. Receives two custom props
+// from the template: --bar-final-height (target % of track) and --bar-index (for stagger).
 .bar-track {
   position: relative;
   width: 3.5rem;
   height: 16rem;
 }
 
+// The animated colored rectangle. Empty element so transform/height changes don't drag children.
 .bar-shape {
   position: absolute;
   bottom: 0;
@@ -48,6 +54,7 @@
   }
 }
 
+// Score label floats just above the bar tip; fades in after the bar finishes rising.
 .bar-score {
   position: absolute;
   left: 0;
@@ -62,6 +69,7 @@
   animation-delay: calc(var(--bar-index, 0) * 60ms + 0.55s);
 }
 
+// Org logo sits inside the bar near its tip. Fades in slightly after the score.
 .bar-logo {
   position: absolute;
   left: 50%;
