@@ -62,13 +62,16 @@ export class BattleGateService {
     }
   }
 
-  // One-shot read: returns the saved prompt and clears it.
+  // One-shot read: returns the saved prompt (trimmed) and clears it.
+  // Whitespace-only values are treated as empty so external/manual seeds
+  // can't bypass the trim that savePendingPrompt enforces.
   consumePendingPrompt(): string | null {
     if (!this.isBrowser) return null;
     try {
       const value = sessionStorage.getItem(PENDING_PROMPT_KEY);
       if (value !== null) sessionStorage.removeItem(PENDING_PROMPT_KEY);
-      return value;
+      const trimmed = value?.trim();
+      return trimmed ? trimmed : null;
     } catch {
       return null;
     }

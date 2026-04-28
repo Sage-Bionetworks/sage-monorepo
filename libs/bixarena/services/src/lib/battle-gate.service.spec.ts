@@ -124,5 +124,11 @@ describe('BattleGateService', () => {
       service.savePendingPrompt('second');
       expect(service.consumePendingPrompt()).toBe('second');
     });
+
+    it('consumePendingPrompt returns null when storage holds whitespace-only text', () => {
+      sessionStorage.setItem('bixarena.pendingPrompt', '   ');
+      expect(service.consumePendingPrompt()).toBeNull();
+      expect(sessionStorage.getItem('bixarena.pendingPrompt')).toBeNull();
+    });
   });
 });
