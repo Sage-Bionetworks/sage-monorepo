@@ -1,11 +1,29 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { PLATFORM_ID } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { HomeComponent } from './home.component';
+
+const mockConfig = {
+  config: {
+    auth: { baseUrls: { csr: 'http://127.0.0.1:8111' } },
+    battle: { promptLengthLimit: 5000 },
+    links: { termsOfService: '' },
+  },
+};
 
 describe('HomeComponent', () => {
   let fixture: ComponentFixture<HomeComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [HomeComponent] }).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [HomeComponent],
+      providers: [
+        provideHttpClient(),
+        { provide: PLATFORM_ID, useValue: 'browser' },
+        { provide: ConfigService, useValue: mockConfig },
+      ],
+    }).compileComponents();
     fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
   });
