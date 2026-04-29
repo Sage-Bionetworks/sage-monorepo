@@ -51,9 +51,14 @@ public class CacheConfiguration {
     // Custom configuration for user ranks (5 minute TTL for better performance)
     RedisCacheConfiguration userRanksConfig = defaultConfig.entryTtl(Duration.ofMinutes(5));
 
+    // Custom configuration for trending example prompts (1 day TTL)
+    RedisCacheConfiguration trendingExamplePromptsConfig =
+        defaultConfig.entryTtl(Duration.ofDays(1));
+
     return RedisCacheManager.builder(connectionFactory)
         .cacheDefaults(defaultConfig)
         .withCacheConfiguration(CacheNames.USER_RANKS, userRanksConfig)
+        .withCacheConfiguration(CacheNames.TRENDING_EXAMPLE_PROMPTS, trendingExamplePromptsConfig)
         .build();
   }
 }
