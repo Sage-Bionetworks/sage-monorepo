@@ -1,3 +1,42 @@
-<section class="leaderboard-section">
-  <p class="placeholder">[leaderboard-section]</p>
-</section>
+@if (visible()) {
+  <section class="leaderboard-section">
+    <h2 class="title">Leaderboard</h2>
+    <p class="subtitle">
+      <span>Rankings shift with every battle. See where your vote makes a difference.</span>
+      <span class="sep">&middot;</span>
+      <a class="full-link" routerLink="/leaderboard">Full leaderboard &rarr;</a>
+    </p>
+    <div class="grid">
+      @for (col of columns(); track col.slug) {
+        <div class="col">
+          <div class="col-head">{{ col.name }}</div>
+          @for (entry of col.entries; track entry.id) {
+            <div class="row">
+              <span class="row-rank">{{ entry.rank }}</span>
+              <bixarena-avatar
+                class="row-logo"
+                [class.is-mono]="entry.orgLogoMono"
+                size="sm"
+                shape="bare"
+                [imageUrl]="entry.orgLogoUrl"
+                [name]="entry.modelOrganization ?? entry.modelName"
+              />
+              <span class="row-name">{{ entry.modelId }}</span>
+              @switch (diffStateOf(entry)) {
+                @case ('up') {
+                  <span class="diff diff-up">&#9650;&thinsp;{{ entry.absDelta }}</span>
+                }
+                @case ('down') {
+                  <span class="diff diff-down">&#9660;&thinsp;{{ entry.absDelta }}</span>
+                }
+                @default {
+                  <span class="diff diff-flat">&mdash;</span>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+}

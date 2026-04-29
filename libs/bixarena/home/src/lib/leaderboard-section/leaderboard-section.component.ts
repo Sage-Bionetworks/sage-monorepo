@@ -1,9 +1,133 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
+import { catchError, forkJoin, map, of } from 'rxjs';
+import {
+  LeaderboardEntry,
+  LeaderboardEntryPage,
+  LeaderboardListInner,
+  LeaderboardService,
+} from '@sagebionetworks/bixarena/api-client';
+import { ModelOrgLogoService } from '@sagebionetworks/bixarena/services';
+import { AvatarComponent } from '@sagebionetworks/bixarena/ui';
+
+// Render exactly this many columns or hide the section.
+const COLUMN_COUNT = 3;
+// Matches the leaderboard page's LOOKBACK_DAYS so rankDelta is consistent.
+const LOOKBACK_DAYS = 7;
+
+interface LeaderboardColumn {
+  slug: string;
+  name: string;
+  voteCount: number;
+  entries: RenderedEntry[];
+}
+
+interface RenderedEntry {
+  id: string;
+  rank: number;
+  modelId: string;
+  modelName: string;
+  modelOrganization: string | null;
+  orgLogoUrl: string | null;
+  orgLogoMono: boolean;
+  rankDelta: number | null;
+  absDelta: number;
+}
 
 @Component({
   selector: 'bixarena-leaderboard-section',
+  imports: [RouterLink, AvatarComponent],
   templateUrl: './leaderboard-section.component.html',
   styleUrl: './leaderboard-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LeaderboardSectionComponent {}
+export class LeaderboardSectionComponent implements OnInit {
+  private readonly leaderboardApi = inject(LeaderboardService);
+  private readonly orgLogo = inject(ModelOrgLogoService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  private readonly columnsSignal = signal<LeaderboardColumn[]>([]);
+  // Hidden until enough data — keeps SSR/pre-fetch from rendering an empty grid.
+  private readonly hidden = signal(true);
+
+  readonly visible = computed(() => !this.hidden());
+  readonly columns = this.columnsSignal.asReadonly();
+
+  ngOnInit(): void {
+    if (!this.isBrowser) return;
+
+    this.leaderboardApi
+      .listLeaderboards()
+      .pipe(
+        catchError(() => of<LeaderboardListInner[]>([])),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((all) => {
+        const withSnapshot = all.filter((l) => (l.latestSnapshot?.entryCount ?? 0) > 0);
+        if (withSnapshot.length < COLUMN_COUNT) return;
+
+        forkJoin(
+          withSnapshot.map((l) =>
+            this.leaderboardApi
+              .getLeaderboard(l.id, { pageSize: COLUMN_COUNT, lookback: LOOKBACK_DAYS })
+              .pipe(
+                map((page) => this.toColumn(l, page)),
+                catchError(() => of<LeaderboardColumn | null>(null)),
+              ),
+          ),
+        )
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((results) => {
+            const columns = results
+              .filter((c): c is LeaderboardColumn => c !== null && c.entries.length > 0)
+              .sort((a, b) => b.voteCount - a.voteCount)
+              .slice(0, COLUMN_COUNT);
+            if (columns.length < COLUMN_COUNT) return;
+            this.columnsSignal.set(columns);
+            this.hidden.set(false);
+          });
+      });
+  }
+
+  diffStateOf(entry: RenderedEntry): 'up' | 'down' | 'flat' {
+    const delta = entry.rankDelta;
+    if (delta != null && delta > 0) return 'up';
+    if (delta != null && delta < 0) return 'down';
+    return 'flat';
+  }
+
+  private toColumn(meta: LeaderboardListInner, page: LeaderboardEntryPage): LeaderboardColumn {
+    return {
+      slug: meta.id,
+      name: meta.name,
+      voteCount: page.voteCount,
+      entries: page.entries.slice(0, COLUMN_COUNT).map((e) => this.renderedEntry(e)),
+    };
+  }
+
+  private renderedEntry(entry: LeaderboardEntry): RenderedEntry {
+    return {
+      id: entry.id,
+      rank: entry.rank,
+      modelId: entry.modelId,
+      modelName: entry.modelName,
+      modelOrganization: entry.modelOrganization ?? null,
+      orgLogoUrl: this.orgLogo.getLogoUrl(entry.modelOrganization),
+      orgLogoMono: this.orgLogo.isMonoLogo(entry.modelOrganization),
+      rankDelta: entry.rankDelta ?? null,
+      absDelta: entry.rankDelta != null ? Math.abs(entry.rankDelta) : 0,
+    };
+  }
+}
