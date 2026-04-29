@@ -86,6 +86,7 @@ jobs:
             && nx affected --target=build-image --configuration=edge'
 
       - name: Upload Sentry sourcemaps for the affected projects
+        if: github.event_name == 'push'
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo \
             --remote-env SENTRY_AUTH_TOKEN="$SENTRY_AUTH_TOKEN" \
