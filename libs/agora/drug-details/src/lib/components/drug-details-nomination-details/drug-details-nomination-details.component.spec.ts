@@ -98,6 +98,47 @@ describe('DrugDetailsNominationDetailsComponent', () => {
     ).toBeGreaterThanOrEqual(1);
   });
 
+  it('should not display validation results when both results are null', async () => {
+    await setup({
+      drug_nominations: [
+        {
+          ...drugMock.drug_nominations[0],
+          computational_validation_results: null,
+          experimental_validation_results: null,
+        },
+      ],
+    });
+    expect(screen.queryByText('Validation results')).not.toBeInTheDocument();
+  });
+
+  it('should display validation results when only computational result is present', async () => {
+    await setup({
+      drug_nominations: [
+        {
+          ...drugMock.drug_nominations[0],
+          computational_validation_results: 'computational only result',
+          experimental_validation_results: null,
+        },
+      ],
+    });
+    expect(screen.getByText('Validation results')).toBeInTheDocument();
+    expect(screen.getByText('Computational only result')).toBeInTheDocument();
+  });
+
+  it('should display validation results when only experimental result is present', async () => {
+    await setup({
+      drug_nominations: [
+        {
+          ...drugMock.drug_nominations[0],
+          computational_validation_results: null,
+          experimental_validation_results: 'experimental only result',
+        },
+      ],
+    });
+    expect(screen.getByText('Validation results')).toBeInTheDocument();
+    expect(screen.getByText('Experimental only result')).toBeInTheDocument();
+  });
+
   it('should display contributors', async () => {
     await setup();
     expect(screen.getAllByText('Contributors').length).toBeGreaterThanOrEqual(1);

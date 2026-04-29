@@ -25,9 +25,11 @@
       <p>{{ nomination.data_used | capitalizeFirst }}</p>
       <br />
 
-      <p class="drug-details-label">Mechanism of action in AD</p>
-      <p>{{ nomination.ad_moa | capitalizeFirst }}</p>
-      <br />
+      @if (nomination.ad_moa) {
+        <p class="drug-details-label">Mechanism of action in AD</p>
+        <p>{{ nomination.ad_moa | capitalizeFirst }}</p>
+        <br />
+      }
 
       <p class="drug-details-label">Initial date of nomination</p>
       <p>{{ nomination.initial_nomination }}</p>
@@ -38,10 +40,18 @@
       <p>{{ nomination.experimental_validation_status | capitalizeFirst }}</p>
       <br />
 
-      <p class="drug-details-label">Validation results</p>
-      <p>{{ nomination.computational_validation_results | capitalizeFirst }}</p>
-      <p>{{ nomination.experimental_validation_results | capitalizeFirst }}</p>
-      <br />
+      @if (
+        nomination.computational_validation_results || nomination.experimental_validation_results
+      ) {
+        <p class="drug-details-label">Validation results</p>
+        @if (nomination.computational_validation_results) {
+          <p>{{ nomination.computational_validation_results | capitalizeFirst }}</p>
+        }
+        @if (nomination.experimental_validation_results) {
+          <p>{{ nomination.experimental_validation_results | capitalizeFirst }}</p>
+        }
+        <br />
+      }
 
       @if (nomination.additional_evidence) {
         <p class="drug-details-label">Additional evidence</p>
@@ -49,9 +59,11 @@
         <br />
       }
 
-      <p class="drug-details-label">Contributors</p>
-      <p>{{ nomination.contributors }}</p>
-      <br />
+      @if (nomination.contributors) {
+        <p class="drug-details-label">Contributors</p>
+        <p>{{ nomination.contributors }}</p>
+        <br />
+      }
 
       @if (nomination.reference) {
         <p class="drug-details-label">Related publication</p>
