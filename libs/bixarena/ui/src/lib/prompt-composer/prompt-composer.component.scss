@@ -14,9 +14,7 @@
 
   &:focus-within {
     border-color: var(--p-surface-300);
-    box-shadow:
-      0 4px 32px rgb(0 0 0 / 20%),
-      0 0 0 3px rgb(249 115 22 / 4%);
+    box-shadow: 0 4px 32px rgb(0 0 0 / 20%);
   }
 }
 
@@ -64,26 +62,25 @@
 }
 
 .send {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--p-surface-500);
-  color: var(--p-text-color);
+  background: var(--p-surface-200);
+  color: var(--p-text-muted-color);
   transition: all 0.2s;
-  opacity: 0.5;
 
   &.hot {
-    background: var(--p-text-color);
-    color: var(--p-surface-0);
-    opacity: 1;
+    background: var(--p-primary-color);
+    color: #fff;
   }
 
   &.hot:hover {
+    background: var(--p-primary-600);
     transform: scale(1.06);
   }
 
