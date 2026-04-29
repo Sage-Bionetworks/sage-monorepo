@@ -31,7 +31,6 @@
             "glob": "**/*.yaml",
             "output": "config"
           },
-          "apps/qtl/app/src/humans.txt",
           "apps/qtl/app/src/robots.txt",
           {
             "input": "libs/shared/typescript/assets/src/assets",

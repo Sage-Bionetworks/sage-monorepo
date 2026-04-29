@@ -1,5 +1,5 @@
 server:
-  port: 3334
+  port: 3333
   forward-headers-strategy: native
 
 spring:

@@ -15,7 +15,7 @@ describe('HomeComponent', () => {
   it('should render welcome message', async () => {
     await setup();
     expect(
-      screen.getByRole('heading', { name: /welcome to the qtl explorer!/i }),
+      screen.getByRole('heading', { name: /welcome to the xqtl explorer!/i }),
     ).toBeInTheDocument();
   });
 });
