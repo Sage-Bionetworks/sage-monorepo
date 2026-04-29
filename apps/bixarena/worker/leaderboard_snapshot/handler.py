@@ -69,8 +69,8 @@ def run() -> None:
     num_bootstrap = _int_env("NUM_BOOTSTRAP", 1000)
     min_evals = _int_env("MIN_EVALS", 10)
     significant = os.getenv("SIGNIFICANT", "false").lower() == "true"
-    min_total_battles = _int_env("MIN_TOTAL_BATTLES", 100)
-    min_total_models = _int_env("MIN_TOTAL_MODELS", 10)
+    min_total_battles = _int_env("MIN_TOTAL_BATTLES", 30)
+    min_total_models = _int_env("MIN_TOTAL_MODELS", 4)
 
     logger.info(
         json.dumps(
