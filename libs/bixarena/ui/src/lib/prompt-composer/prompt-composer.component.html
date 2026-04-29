@@ -2,6 +2,7 @@
   <textarea
     #textarea
     class="input"
+    aria-label="Ask a biomedical question"
     [placeholder]="placeholder()"
     [disabled]="disabled()"
     [attr.maxlength]="maxLength()"
@@ -10,7 +11,7 @@
     (keydown)="onKeydown($event)"
   ></textarea>
   <div class="toolbar">
-    <span class="char-count">{{ text().length }} / {{ maxLength() }}</span>
+    <span class="char-count" aria-live="polite">{{ text().length }} / {{ maxLength() }}</span>
     <button
       class="send"
       [class.hot]="isHot()"

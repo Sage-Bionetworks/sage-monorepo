@@ -24,13 +24,29 @@
               <span class="row-name">{{ entry.modelId }}</span>
               @switch (diffStateOf(entry)) {
                 @case ('up') {
-                  <span class="diff diff-up">&#9650;&thinsp;{{ entry.absDelta }}</span>
+                  <span
+                    class="diff diff-up"
+                    [attr.aria-label]="
+                      'up ' + entry.absDelta + ' position' + (entry.absDelta === 1 ? '' : 's')
+                    "
+                  >
+                    <span aria-hidden="true">&#9650;&thinsp;{{ entry.absDelta }}</span>
+                  </span>
                 }
                 @case ('down') {
-                  <span class="diff diff-down">&#9660;&thinsp;{{ entry.absDelta }}</span>
+                  <span
+                    class="diff diff-down"
+                    [attr.aria-label]="
+                      'down ' + entry.absDelta + ' position' + (entry.absDelta === 1 ? '' : 's')
+                    "
+                  >
+                    <span aria-hidden="true">&#9660;&thinsp;{{ entry.absDelta }}</span>
+                  </span>
                 }
                 @default {
-                  <span class="diff diff-flat">&mdash;</span>
+                  <span class="diff diff-flat" aria-label="rank unchanged">
+                    <span aria-hidden="true">&mdash;</span>
+                  </span>
                 }
               }
             </div>
