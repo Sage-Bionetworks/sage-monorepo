@@ -17,6 +17,10 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
+  // Browsers and crawlers auto-request /favicon.ico even though index.html only declares
+  // SVG/PNG icons; short-circuit it so the SSR engine doesn't throw NG04002 on the missing route.
+  server.get('/favicon.ico', (_req, res) => res.status(204).end());
+
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
