@@ -45,7 +45,7 @@ class ExamplePromptSearchQuery(BaseModel):
     source: Optional[ExamplePromptSource] = None
     active: Optional[StrictBool] = Field(
         default=None,
-        description="Filter by active status (true returns only active prompts; false only inactive; omit for all).",
+        description="Filter by active status. Ignored for sort=random and sort=usage, which always return only active prompts. ",
     )
     search: Optional[StrictStr] = Field(
         default=None,

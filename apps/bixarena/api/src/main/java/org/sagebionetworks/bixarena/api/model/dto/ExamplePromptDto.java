@@ -209,12 +209,12 @@ public class ExamplePromptDto {
   }
 
   /**
-   * Number of battles started from this prompt.
+   * Number of completed battles started from this prompt.
    * minimum: 0
    * @return battleCount
    */
   @NotNull @Min(0) 
-  @Schema(name = "battleCount", example = "42", description = "Number of battles started from this prompt.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "battleCount", example = "42", description = "Number of completed battles started from this prompt.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("battleCount")
   public Integer getBattleCount() {
     return battleCount;

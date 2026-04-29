@@ -37,7 +37,7 @@ export interface ExamplePrompt {
    */
   createdAt: string;
   /**
-   * Number of battles started from this prompt.
+   * Number of completed battles started from this prompt.
    */
   battleCount: number;
 }

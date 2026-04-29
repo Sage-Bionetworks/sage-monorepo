@@ -2465,7 +2465,9 @@ components:
           $ref: '#/components/schemas/ExamplePromptSource'
           nullable: true
         active:
-          description: Filter by active status (true returns only active prompts; false only inactive; omit for all).
+          description: |
+            Filter by active status. Ignored for sort=random and sort=usage, which always return
+            only active prompts.
           type: boolean
           nullable: true
           example: true
@@ -2521,7 +2523,7 @@ components:
         battleCount:
           type: integer
           minimum: 0
-          description: Number of battles started from this prompt.
+          description: Number of completed battles started from this prompt.
           example: 42
       required:
         - id

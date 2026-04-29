@@ -160,11 +160,11 @@ public class ExamplePromptSearchQueryDto {
   }
 
   /**
-   * Filter by active status (true returns only active prompts; false only inactive; omit for all).
+   * Filter by active status. Ignored for sort=random and sort=usage, which always return only active prompts. 
    * @return active
    */
   
-  @Schema(name = "active", example = "true", description = "Filter by active status (true returns only active prompts; false only inactive; omit for all).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "active", example = "true", description = "Filter by active status. Ignored for sort=random and sort=usage, which always return only active prompts. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("active")
   public @Nullable Boolean getActive() {
     return active;
