@@ -49,8 +49,10 @@ export class BattleGateService {
     this.authService.login();
   }
 
+  // Drop pending so a later /battle visit doesn't auto-submit the abandoned prompt.
   onLoginCancel(): void {
     this.showLoginModal.set(false);
+    this.consumePendingPrompt();
   }
 
   // sessionStorage survives the OIDC redirect round-trips. Both keys are

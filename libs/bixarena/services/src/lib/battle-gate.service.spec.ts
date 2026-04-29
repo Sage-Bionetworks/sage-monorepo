@@ -101,6 +101,13 @@ describe('BattleGateService', () => {
       service.onLoginCancel();
       expect(service.showLoginModal()).toBe(false);
     });
+
+    it('clears any pending prompt so a later /battle visit lands on empty composer', () => {
+      service.savePendingPrompt('Q1', 'ep-p1');
+      service.showLoginModal.set(true);
+      service.onLoginCancel();
+      expect(service.consumePendingPrompt()).toBeNull();
+    });
   });
 
   describe('pending prompt', () => {
