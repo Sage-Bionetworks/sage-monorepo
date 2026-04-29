@@ -17,5 +17,10 @@
         }
       }
     </div>
+    @if (!showSkeletons()) {
+      <div class="footer">
+        <p-button label="Ask your own question" styleClass="ask-own-btn" (onClick)="onAskOwn()" />
+      </div>
+    }
   </section>
 }

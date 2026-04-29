@@ -33,6 +33,13 @@
   width: 100%;
 }
 
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+  width: 100%;
+}
+
 @media (width <= #{shared.$lg-breakpoint}) {
   .grid {
     grid-template-columns: 1fr;

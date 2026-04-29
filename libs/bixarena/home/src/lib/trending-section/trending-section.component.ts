@@ -12,6 +12,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
+import { ButtonModule } from 'primeng/button';
 import {
   BiomedicalCategory,
   ExamplePrompt,
@@ -33,7 +34,7 @@ function formatCategory(slug: BiomedicalCategory): string {
 
 @Component({
   selector: 'bixarena-trending-section',
-  imports: [PromptCardComponent],
+  imports: [PromptCardComponent, ButtonModule],
   templateUrl: './trending-section.component.html',
   styleUrl: './trending-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -86,6 +87,14 @@ export class TrendingSectionComponent implements OnInit {
 
   onCardClick(p: ExamplePrompt): void {
     this.gate.savePendingPrompt(p.question, p.id);
+    if (this.auth.isAuthenticated()) {
+      void this.router.navigate(['/battle']);
+    } else {
+      this.gate.showLoginModal.set(true);
+    }
+  }
+
+  onAskOwn(): void {
     if (this.auth.isAuthenticated()) {
       void this.router.navigate(['/battle']);
     } else {
