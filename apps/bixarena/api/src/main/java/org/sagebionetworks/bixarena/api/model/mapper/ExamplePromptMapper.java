@@ -1,6 +1,5 @@
 package org.sagebionetworks.bixarena.api.model.mapper;
 
-import java.util.List;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSourceDto;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptEntity;
@@ -20,9 +19,5 @@ public class ExamplePromptMapper {
       .effectiveCategorizationId(entity.getEffectiveCategorizationId())
       .createdAt(entity.getCreatedAt())
       .build();
-  }
-
-  public List<ExamplePromptDto> convertToDtoList(List<ExamplePromptEntity> entities) {
-    return entities.stream().map(this::convertToDto).toList();
   }
 }

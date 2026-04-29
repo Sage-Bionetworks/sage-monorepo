@@ -64,14 +64,7 @@ public class ExamplePromptService {
     // Handle random sort specially since JPA Sort doesn't support SQL functions
     if (effectiveQuery.getSort() == ExamplePromptSortDto.RANDOM) {
       int pageSize = Optional.ofNullable(effectiveQuery.getPageSize()).orElse(25);
-      List<BiomedicalCategoryDto> categories = effectiveQuery.getCategories();
-      List<ExamplePromptEntity> randomList;
-      if (categories == null || categories.isEmpty()) {
-        randomList = examplePromptRepository.findRandom(pageSize);
-      } else {
-        List<String> slugs = categories.stream().map(BiomedicalCategoryDto::getValue).toList();
-        randomList = examplePromptRepository.findRandomByCategory(slugs, pageSize);
-      }
+      List<ExamplePromptEntity> randomList = examplePromptRepository.findRandom(pageSize);
       int size = Math.max(randomList.size(), 1);
       page = new PageImpl<>(randomList, PageRequest.of(0, size), randomList.size());
     } else if (effectiveQuery.getSort() == ExamplePromptSortDto.USAGE) {

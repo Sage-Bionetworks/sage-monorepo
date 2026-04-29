@@ -9,7 +9,6 @@ import org.sagebionetworks.bixarena.api.exception.BattleCategorizationNotFoundEx
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.BattleValidationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.ExamplePromptNotFoundException;
-import org.sagebionetworks.bixarena.api.exception.ModelNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
@@ -252,14 +251,6 @@ public class BattleService {
       .findById(battleId)
       .orElseThrow(() ->
         new BattleNotFoundException("Battle not found: " + battleId)
-      );
-  }
-
-  private ModelEntity getModelEntity(UUID modelId) {
-    return modelRepository
-      .findById(modelId)
-      .orElseThrow(() ->
-        new ModelNotFoundException("Model not found: " + modelId)
       );
   }
 
