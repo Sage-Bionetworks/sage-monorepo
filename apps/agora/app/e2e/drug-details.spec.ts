@@ -66,10 +66,10 @@ test.describe('drug details - summary', () => {
     await expect(page.getByText('Linked Targets')).toBeVisible();
     const jak1Link = page.getByRole('link', { name: 'JAK1' });
     await expect(jak1Link).toBeVisible();
-    await expect(jak1Link).toHaveAttribute('href', 'genes/ENSG00000162434');
+    await expect(jak1Link).toHaveAttribute('href', '/genes/ENSG00000162434');
     const jak2Link = page.getByRole('link', { name: 'JAK2' });
     await expect(jak2Link).toBeVisible();
-    await expect(jak2Link).toHaveAttribute('href', 'genes/ENSG00000096968');
+    await expect(jak2Link).toHaveAttribute('href', '/genes/ENSG00000096968');
   });
 
   test('linked target navigates to gene details page', async ({ page }) => {

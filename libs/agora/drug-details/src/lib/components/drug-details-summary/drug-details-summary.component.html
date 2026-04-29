@@ -29,7 +29,7 @@
       <ul>
         @for (target of drug().linked_targets; track target) {
           <li>
-            <a [href]="`${ROUTE_PATHS.DETAILS}/${target.ensembl_gene_id}`">{{
+            <a [routerLink]="['/' + ROUTE_PATHS.DETAILS, target.ensembl_gene_id]">{{
               target.hgnc_symbol || target.ensembl_gene_id
             }}</a>
           </li>

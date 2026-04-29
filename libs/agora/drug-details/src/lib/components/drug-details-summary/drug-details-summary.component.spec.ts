@@ -1,3 +1,4 @@
+import { provideRouter } from '@angular/router';
 import { Drug } from '@sagebionetworks/agora/api-client';
 import { drugMock } from '@sagebionetworks/agora/testing';
 import { render, screen } from '@testing-library/angular';
@@ -8,6 +9,7 @@ async function setup(drugOverrides: Partial<Drug> = {}) {
     componentInputs: {
       drug: { ...drugMock, ...drugOverrides },
     },
+    providers: [provideRouter([])],
   });
 }
 
@@ -56,7 +58,7 @@ describe('DrugDetailsSummaryComponent', () => {
       expect(screen.getByText('Linked Targets')).toBeInTheDocument();
       const link = screen.getByRole('link', { name: 'CYP19A1' });
       expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute('href', 'genes/ENSG00000137869');
+      expect(link).toHaveAttribute('href', '/genes/ENSG00000137869');
     });
 
     it('should fall back to ensembl_gene_id when hgnc_symbol is missing', async () => {
@@ -65,7 +67,7 @@ describe('DrugDetailsSummaryComponent', () => {
       });
       const link = screen.getByRole('link', { name: 'ENSG00000000001' });
       expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute('href', 'genes/ENSG00000000001');
+      expect(link).toHaveAttribute('href', '/genes/ENSG00000000001');
     });
 
     it('should not display linked targets section when empty', async () => {
