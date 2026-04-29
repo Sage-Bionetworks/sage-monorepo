@@ -106,8 +106,28 @@ describe('BattleGateService', () => {
   describe('pending prompt', () => {
     it('savePendingPrompt persists trimmed text and consumePendingPrompt returns + clears it', () => {
       service.savePendingPrompt('  hello world  ');
-      expect(service.consumePendingPrompt()).toBe('hello world');
+      expect(service.consumePendingPrompt()).toEqual({
+        prompt: 'hello world',
+        examplePromptId: null,
+      });
       expect(service.consumePendingPrompt()).toBeNull();
+    });
+
+    it('savePendingPrompt persists the example_prompt FK when provided', () => {
+      service.savePendingPrompt('curated question', 'ep-42');
+      expect(service.consumePendingPrompt()).toEqual({
+        prompt: 'curated question',
+        examplePromptId: 'ep-42',
+      });
+    });
+
+    it('savePendingPrompt without an FK clears any previously saved FK', () => {
+      service.savePendingPrompt('first', 'ep-old');
+      service.savePendingPrompt('second');
+      expect(service.consumePendingPrompt()).toEqual({
+        prompt: 'second',
+        examplePromptId: null,
+      });
     });
 
     it('savePendingPrompt ignores empty / whitespace input', () => {
@@ -119,16 +139,12 @@ describe('BattleGateService', () => {
       expect(service.consumePendingPrompt()).toBeNull();
     });
 
-    it('savePendingPrompt overwrites a previously saved prompt', () => {
-      service.savePendingPrompt('first');
-      service.savePendingPrompt('second');
-      expect(service.consumePendingPrompt()).toBe('second');
-    });
-
-    it('consumePendingPrompt returns null when storage holds whitespace-only text', () => {
+    it('consumePendingPrompt returns null and clears both keys when prompt is whitespace-only', () => {
       sessionStorage.setItem('bixarena.pendingPrompt', '   ');
+      sessionStorage.setItem('bixarena.pendingExamplePromptId', 'ep-stale');
       expect(service.consumePendingPrompt()).toBeNull();
       expect(sessionStorage.getItem('bixarena.pendingPrompt')).toBeNull();
+      expect(sessionStorage.getItem('bixarena.pendingExamplePromptId')).toBeNull();
     });
   });
 });

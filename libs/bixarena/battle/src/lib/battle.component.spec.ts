@@ -74,7 +74,22 @@ describe('BattleComponent', () => {
     fixture.detectChanges();
     await Promise.resolve();
 
-    expect(submitSpy).toHaveBeenCalledWith('hello biomedical world');
+    expect(submitSpy).toHaveBeenCalledWith('hello biomedical world', null);
+    expect(gate.consumePendingPrompt()).toBeNull();
+  });
+
+  it('forwards a pending example_prompt id when present', async () => {
+    const gate = TestBed.inject(BattleGateService);
+    gate.savePendingPrompt('curated question', 'ep-99');
+    jest.spyOn(BattleGateService.prototype, 'checkOnboarding').mockResolvedValue(true);
+
+    fixture = TestBed.createComponent(BattleComponent);
+    component = fixture.componentInstance;
+    const submitSpy = jest.spyOn(component.state, 'submitPrompt').mockResolvedValue();
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    expect(submitSpy).toHaveBeenCalledWith('curated question', 'ep-99');
     expect(gate.consumePendingPrompt()).toBeNull();
   });
 });

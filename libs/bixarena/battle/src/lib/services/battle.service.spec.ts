@@ -74,11 +74,22 @@ describe('BattleStateService', () => {
       expect(service.battleId()).toBe('battle-1');
     });
 
-    it('should create battle and round via API', async () => {
+    it('should create battle and round via API without an example_prompt FK', async () => {
       await service.submitPrompt('test prompt');
-      expect(battleApi.createBattle).toHaveBeenCalledWith({ title: 'test prompt' });
+      expect(battleApi.createBattle).toHaveBeenCalledWith({
+        title: 'test prompt',
+        examplePromptId: null,
+      });
       expect(battleApi.createBattleRound).toHaveBeenCalledWith('battle-1', {
         promptMessage: { role: 'user', content: 'test prompt' },
+      });
+    });
+
+    it('should pass examplePromptId to createBattle when provided', async () => {
+      await service.submitPrompt('test prompt', 'ep-42');
+      expect(battleApi.createBattle).toHaveBeenCalledWith({
+        title: 'test prompt',
+        examplePromptId: 'ep-42',
       });
     });
 

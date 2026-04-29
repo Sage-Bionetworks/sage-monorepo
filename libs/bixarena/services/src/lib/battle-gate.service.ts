@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { OnboardingService } from './onboarding.service';
 
 const PENDING_PROMPT_KEY = 'bixarena.pendingPrompt';
+const PENDING_EXAMPLE_PROMPT_ID_KEY = 'bixarena.pendingExamplePromptId';
 
 @Injectable({ providedIn: 'root' })
 export class BattleGateService {
@@ -40,6 +41,9 @@ export class BattleGateService {
     this.pendingResolver = null;
   }
 
+  // TODO: after the auth-service supports a post-login redirect target,
+  // route directly to /battle when a pending prompt exists so the user
+  // doesn't land back on home with an unconsumed pending submission.
   onLoginComplete(): void {
     this.showLoginModal.set(false);
     this.authService.login();
@@ -49,29 +53,37 @@ export class BattleGateService {
     this.showLoginModal.set(false);
   }
 
-  // Persist a prompt for the unauthenticated submit → login → /battle flow.
-  // Stored in sessionStorage so it survives the OIDC redirect round-trips
-  savePendingPrompt(text: string): void {
+  // sessionStorage survives the OIDC redirect round-trips. Both keys are
+  // written as a unit — omitting examplePromptId removes it, so a free-form
+  // composer submit can't inherit a stale id from a prior curated click.
+  savePendingPrompt(text: string, examplePromptId?: string | null): void {
     if (!this.isBrowser) return;
     const trimmed = text.trim();
     if (!trimmed) return;
     try {
       sessionStorage.setItem(PENDING_PROMPT_KEY, trimmed);
+      if (examplePromptId) {
+        sessionStorage.setItem(PENDING_EXAMPLE_PROMPT_ID_KEY, examplePromptId);
+      } else {
+        sessionStorage.removeItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
+      }
     } catch {
       // sessionStorage can throw in private mode or when over quota — fail silent.
     }
   }
 
-  // One-shot read: returns the saved prompt (trimmed) and clears it.
-  // Whitespace-only values are treated as empty so external/manual seeds
-  // can't bypass the trim that savePendingPrompt enforces.
-  consumePendingPrompt(): string | null {
+  // Whitespace-only prompts return null (defends against external seeds
+  // that bypass save's trim). Both keys clear regardless.
+  consumePendingPrompt(): { prompt: string; examplePromptId: string | null } | null {
     if (!this.isBrowser) return null;
     try {
-      const value = sessionStorage.getItem(PENDING_PROMPT_KEY);
-      if (value !== null) sessionStorage.removeItem(PENDING_PROMPT_KEY);
-      const trimmed = value?.trim();
-      return trimmed ? trimmed : null;
+      const prompt = sessionStorage.getItem(PENDING_PROMPT_KEY);
+      const examplePromptId = sessionStorage.getItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
+      if (prompt !== null) sessionStorage.removeItem(PENDING_PROMPT_KEY);
+      if (examplePromptId !== null) sessionStorage.removeItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
+      const trimmed = prompt?.trim();
+      if (!trimmed) return null;
+      return { prompt: trimmed, examplePromptId: examplePromptId || null };
     } catch {
       return null;
     }

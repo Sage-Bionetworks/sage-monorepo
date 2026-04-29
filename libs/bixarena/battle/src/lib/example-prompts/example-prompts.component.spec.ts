@@ -62,12 +62,12 @@ describe('ExamplePromptsComponent', () => {
     expect(component.prompts()).toHaveLength(3);
   });
 
-  it('emits promptSelect with the question text on card click', async () => {
+  it('emits promptSelect with the question and example_prompt id on card click', async () => {
     await setup(['pX']);
-    const emitted: string[] = [];
-    component.promptSelect.subscribe((q) => emitted.push(q));
+    const emitted: { question: string; examplePromptId: string }[] = [];
+    component.promptSelect.subscribe((e) => emitted.push(e));
     component.onCardClick(component.prompts()[0]);
-    expect(emitted).toEqual(['Question pX?']);
+    expect(emitted).toEqual([{ question: 'Question pX?', examplePromptId: 'pX' }]);
   });
 
   it('categoryLabel formats multi-word slugs with preserved "and"', async () => {

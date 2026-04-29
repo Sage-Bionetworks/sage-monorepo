@@ -80,7 +80,7 @@ describe('TrendingSectionComponent', () => {
     expect(component.visible()).toBe(false);
   });
 
-  it('saves the prompt and navigates to /battle when authenticated', async () => {
+  it('saves the prompt + example_prompt id and navigates to /battle when authenticated', async () => {
     await setup();
     auth.user.set({ sub: 'user-1', preferred_username: 'tester' });
     const navSpy = jest.spyOn(router, 'navigate').mockResolvedValue(true);
@@ -88,6 +88,7 @@ describe('TrendingSectionComponent', () => {
     component.onCardClick(SAMPLE_PROMPTS[0] as ExamplePrompt);
 
     expect(sessionStorage.getItem('bixarena.pendingPrompt')).toBe('Q1');
+    expect(sessionStorage.getItem('bixarena.pendingExamplePromptId')).toBe('p1');
     expect(navSpy).toHaveBeenCalledWith(['/battle']);
     expect(gate.showLoginModal()).toBe(false);
   });

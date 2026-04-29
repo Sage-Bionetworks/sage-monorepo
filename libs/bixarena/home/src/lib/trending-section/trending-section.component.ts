@@ -85,7 +85,7 @@ export class TrendingSectionComponent implements OnInit {
   }
 
   onCardClick(p: ExamplePrompt): void {
-    this.gate.savePendingPrompt(p.question);
+    this.gate.savePendingPrompt(p.question, p.id);
     if (this.auth.isAuthenticated()) {
       void this.router.navigate(['/battle']);
     } else {

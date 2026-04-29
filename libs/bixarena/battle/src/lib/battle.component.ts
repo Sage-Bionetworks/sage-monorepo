@@ -30,11 +30,15 @@ export class BattleComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const pending = this.gate.consumePendingPrompt();
-    if (pending) void this.gatedSubmit(pending);
+    if (pending) void this.gatedSubmit(pending.prompt, pending.examplePromptId);
   }
 
   onPromptSubmit(prompt: string): void {
     void this.gatedSubmit(prompt);
+  }
+
+  onExamplePromptSelect(event: { question: string; examplePromptId: string }): void {
+    void this.gatedSubmit(event.question, event.examplePromptId);
   }
 
   onFollowUpSubmit(prompt: string): void {
@@ -57,10 +61,10 @@ export class BattleComponent implements OnInit, OnDestroy {
     this.state.reset();
   }
 
-  private async gatedSubmit(prompt: string): Promise<void> {
+  private async gatedSubmit(prompt: string, examplePromptId?: string | null): Promise<void> {
     const passed = await this.gate.checkOnboarding();
     if (passed) {
-      void this.state.submitPrompt(prompt);
+      void this.state.submitPrompt(prompt, examplePromptId);
     }
   }
 }
