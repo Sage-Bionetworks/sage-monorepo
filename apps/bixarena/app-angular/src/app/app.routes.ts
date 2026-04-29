@@ -15,9 +15,9 @@ export const appRoutes: Route[] = [
     path: 'leaderboard',
     loadChildren: () => import('@sagebionetworks/bixarena/leaderboard').then((r) => r.routes),
   },
-  {
-    path: 'arena',
-    loadChildren: () => import('@sagebionetworks/bixarena/arena').then((r) => r.routes),
-  },
+  // {
+  //   path: 'arena',
+  //   loadChildren: () => import('@sagebionetworks/bixarena/arena').then((r) => r.routes),
+  // },
   { path: '**', redirectTo: '' },
 ];

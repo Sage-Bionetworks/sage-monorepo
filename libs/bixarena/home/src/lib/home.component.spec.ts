@@ -38,7 +38,6 @@ describe('HomeComponent', () => {
       'bixarena-composer-section',
       'bixarena-stats-section',
       'bixarena-trending-section',
-      'bixarena-community-quest-section',
       'bixarena-leaderboard-section',
     ]);
   });
