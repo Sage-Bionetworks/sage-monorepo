@@ -14,6 +14,7 @@ An example prompt search query with pagination and filtering options.
 | **active**      | **bool**                                              | Filter by active status (true returns only active prompts; false only inactive; omit for all). | [optional]                                           |
 | **search**      | **str**                                               | Search by question content (case-insensitive partial match).                                   | [optional]                                           |
 | **categories**  | [**List[BiomedicalCategory]**](BiomedicalCategory.md) | Filter by one or more categories. Returns prompts matching any of the given categories.        | [optional]                                           |
+| **lookback**    | **int**                                               | Lookback window in days.                                                                       | [optional]                                           |
 
 ## Example
 

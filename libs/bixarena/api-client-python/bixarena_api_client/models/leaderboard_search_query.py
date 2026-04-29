@@ -55,7 +55,7 @@ class LeaderboardSearchQuery(BaseModel):
         alias="snapshotId",
     )
     lookback: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(
-        default=None, description="Comparison window in days for computing rankDelta."
+        default=None, description="Lookback window in days."
     )
     __properties: ClassVar[List[str]] = [
         "pageNumber",
@@ -120,11 +120,6 @@ class LeaderboardSearchQuery(BaseModel):
         # and model_fields_set contains the field
         if self.snapshot_id is None and "snapshot_id" in self.model_fields_set:
             _dict["snapshotId"] = None
-
-        # set to None if lookback (nullable) is None
-        # and model_fields_set contains the field
-        if self.lookback is None and "lookback" in self.model_fields_set:
-            _dict["lookback"] = None
 
         return _dict
 

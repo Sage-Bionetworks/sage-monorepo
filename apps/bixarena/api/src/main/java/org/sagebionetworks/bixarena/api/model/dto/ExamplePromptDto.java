@@ -45,6 +45,8 @@ public class ExamplePromptDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
+  private Integer battleCount;
+
   public ExamplePromptDto() {
     super();
   }
@@ -52,12 +54,13 @@ public class ExamplePromptDto {
   /**
    * Constructor with only required parameters
    */
-  public ExamplePromptDto(String id, String question, ExamplePromptSourceDto source, Boolean active, OffsetDateTime createdAt) {
+  public ExamplePromptDto(String id, String question, ExamplePromptSourceDto source, Boolean active, OffsetDateTime createdAt, Integer battleCount) {
     this.id = id;
     this.question = question;
     this.source = source;
     this.active = active;
     this.createdAt = createdAt;
+    this.battleCount = battleCount;
   }
 
   public ExamplePromptDto id(String id) {
@@ -200,6 +203,27 @@ public class ExamplePromptDto {
     this.createdAt = createdAt;
   }
 
+  public ExamplePromptDto battleCount(Integer battleCount) {
+    this.battleCount = battleCount;
+    return this;
+  }
+
+  /**
+   * Number of battles started from this prompt.
+   * minimum: 0
+   * @return battleCount
+   */
+  @NotNull @Min(0) 
+  @Schema(name = "battleCount", example = "42", description = "Number of battles started from this prompt.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("battleCount")
+  public Integer getBattleCount() {
+    return battleCount;
+  }
+
+  public void setBattleCount(Integer battleCount) {
+    this.battleCount = battleCount;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -215,12 +239,13 @@ public class ExamplePromptDto {
         Objects.equals(this.active, examplePrompt.active) &&
         Objects.equals(this.effectiveCategorizationId, examplePrompt.effectiveCategorizationId) &&
         Objects.equals(this.category, examplePrompt.category) &&
-        Objects.equals(this.createdAt, examplePrompt.createdAt);
+        Objects.equals(this.createdAt, examplePrompt.createdAt) &&
+        Objects.equals(this.battleCount, examplePrompt.battleCount);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, question, source, active, effectiveCategorizationId, category, createdAt);
+    return Objects.hash(id, question, source, active, effectiveCategorizationId, category, createdAt, battleCount);
   }
 
   @Override
@@ -234,6 +259,7 @@ public class ExamplePromptDto {
     sb.append("    effectiveCategorizationId: ").append(toIndentedString(effectiveCategorizationId)).append("\n");
     sb.append("    category: ").append(toIndentedString(category)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    battleCount: ").append(toIndentedString(battleCount)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -269,6 +295,7 @@ public class ExamplePromptDto {
       this.instance.setEffectiveCategorizationId(value.effectiveCategorizationId);
       this.instance.setCategory(value.category);
       this.instance.setCreatedAt(value.createdAt);
+      this.instance.setBattleCount(value.battleCount);
       return this;
     }
 
@@ -304,6 +331,11 @@ public class ExamplePromptDto {
     
     public ExamplePromptDto.Builder createdAt(OffsetDateTime createdAt) {
       this.instance.createdAt(createdAt);
+      return this;
+    }
+    
+    public ExamplePromptDto.Builder battleCount(Integer battleCount) {
+      this.instance.battleCount(battleCount);
       return this;
     }
     

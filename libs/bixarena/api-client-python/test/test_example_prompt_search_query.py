@@ -46,7 +46,8 @@ class TestExamplePromptSearchQuery(unittest.TestCase):
                 search = 'diabetes',
                 categories = [
                     'genetics'
-                    ]
+                    ],
+                lookback = 7
             )
         else:
             return ExamplePromptSearchQuery(

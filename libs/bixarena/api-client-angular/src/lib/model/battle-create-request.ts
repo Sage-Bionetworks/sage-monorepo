@@ -16,4 +16,8 @@ export interface BattleCreateRequest {
    * Title of the battle.
    */
   title?: string;
+  /**
+   * ID of the curated example prompt this battle was started from. Omit or pass null for free-form battles.
+   */
+  examplePromptId?: string | null;
 }

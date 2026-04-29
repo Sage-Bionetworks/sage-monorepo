@@ -46,6 +46,11 @@ class BattleCreateResponse(BaseModel):
         description="ID of the effective battle validation (null = not yet validated)",
         alias="effectiveValidationId",
     )
+    example_prompt_id: Optional[UUID] = Field(
+        default=None,
+        description="ID of the curated example prompt this battle was started from. Null for free-form battles.",
+        alias="examplePromptId",
+    )
     __properties: ClassVar[List[str]] = [
         "id",
         "title",
@@ -55,6 +60,7 @@ class BattleCreateResponse(BaseModel):
         "createdAt",
         "endedAt",
         "effectiveValidationId",
+        "examplePromptId",
     ]
 
     model_config = ConfigDict(
@@ -108,6 +114,14 @@ class BattleCreateResponse(BaseModel):
         ):
             _dict["effectiveValidationId"] = None
 
+        # set to None if example_prompt_id (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.example_prompt_id is None
+            and "example_prompt_id" in self.model_fields_set
+        ):
+            _dict["examplePromptId"] = None
+
         return _dict
 
     @classmethod
@@ -133,6 +147,7 @@ class BattleCreateResponse(BaseModel):
                 "createdAt": obj.get("createdAt"),
                 "endedAt": obj.get("endedAt"),
                 "effectiveValidationId": obj.get("effectiveValidationId"),
+                "examplePromptId": obj.get("examplePromptId"),
             }
         )
         return _obj

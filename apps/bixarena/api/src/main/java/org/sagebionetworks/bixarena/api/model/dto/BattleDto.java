@@ -47,6 +47,8 @@ public class BattleDto {
 
   private @Nullable UUID effectiveCategorizationId = null;
 
+  private @Nullable UUID examplePromptId = null;
+
   public BattleDto() {
     super();
   }
@@ -242,6 +244,26 @@ public class BattleDto {
     this.effectiveCategorizationId = effectiveCategorizationId;
   }
 
+  public BattleDto examplePromptId(@Nullable UUID examplePromptId) {
+    this.examplePromptId = examplePromptId;
+    return this;
+  }
+
+  /**
+   * ID of the curated example prompt this battle was started from. Null for free-form battles.
+   * @return examplePromptId
+   */
+  @Valid 
+  @Schema(name = "examplePromptId", description = "ID of the curated example prompt this battle was started from. Null for free-form battles.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("examplePromptId")
+  public @Nullable UUID getExamplePromptId() {
+    return examplePromptId;
+  }
+
+  public void setExamplePromptId(@Nullable UUID examplePromptId) {
+    this.examplePromptId = examplePromptId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -259,12 +281,13 @@ public class BattleDto {
         Objects.equals(this.createdAt, battle.createdAt) &&
         Objects.equals(this.endedAt, battle.endedAt) &&
         Objects.equals(this.effectiveValidationId, battle.effectiveValidationId) &&
-        Objects.equals(this.effectiveCategorizationId, battle.effectiveCategorizationId);
+        Objects.equals(this.effectiveCategorizationId, battle.effectiveCategorizationId) &&
+        Objects.equals(this.examplePromptId, battle.examplePromptId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, userId, model1Id, model2Id, createdAt, endedAt, effectiveValidationId, effectiveCategorizationId);
+    return Objects.hash(id, title, userId, model1Id, model2Id, createdAt, endedAt, effectiveValidationId, effectiveCategorizationId, examplePromptId);
   }
 
   @Override
@@ -280,6 +303,7 @@ public class BattleDto {
     sb.append("    endedAt: ").append(toIndentedString(endedAt)).append("\n");
     sb.append("    effectiveValidationId: ").append(toIndentedString(effectiveValidationId)).append("\n");
     sb.append("    effectiveCategorizationId: ").append(toIndentedString(effectiveCategorizationId)).append("\n");
+    sb.append("    examplePromptId: ").append(toIndentedString(examplePromptId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -317,6 +341,7 @@ public class BattleDto {
       this.instance.setEndedAt(value.endedAt);
       this.instance.setEffectiveValidationId(value.effectiveValidationId);
       this.instance.setEffectiveCategorizationId(value.effectiveCategorizationId);
+      this.instance.setExamplePromptId(value.examplePromptId);
       return this;
     }
 
@@ -362,6 +387,11 @@ public class BattleDto {
     
     public BattleDto.Builder effectiveCategorizationId(UUID effectiveCategorizationId) {
       this.instance.effectiveCategorizationId(effectiveCategorizationId);
+      return this;
+    }
+    
+    public BattleDto.Builder examplePromptId(UUID examplePromptId) {
+      this.instance.examplePromptId(examplePromptId);
       return this;
     }
     

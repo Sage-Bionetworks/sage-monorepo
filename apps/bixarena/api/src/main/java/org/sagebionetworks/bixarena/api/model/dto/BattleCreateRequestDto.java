@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -26,6 +27,8 @@ public class BattleCreateRequestDto {
 
   private @Nullable String title;
 
+  private @Nullable UUID examplePromptId = null;
+
   public BattleCreateRequestDto title(@Nullable String title) {
     this.title = title;
     return this;
@@ -46,6 +49,26 @@ public class BattleCreateRequestDto {
     this.title = title;
   }
 
+  public BattleCreateRequestDto examplePromptId(@Nullable UUID examplePromptId) {
+    this.examplePromptId = examplePromptId;
+    return this;
+  }
+
+  /**
+   * ID of the curated example prompt this battle was started from. Omit or pass null for free-form battles.
+   * @return examplePromptId
+   */
+  @Valid 
+  @Schema(name = "examplePromptId", description = "ID of the curated example prompt this battle was started from. Omit or pass null for free-form battles.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("examplePromptId")
+  public @Nullable UUID getExamplePromptId() {
+    return examplePromptId;
+  }
+
+  public void setExamplePromptId(@Nullable UUID examplePromptId) {
+    this.examplePromptId = examplePromptId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -55,12 +78,13 @@ public class BattleCreateRequestDto {
       return false;
     }
     BattleCreateRequestDto battleCreateRequest = (BattleCreateRequestDto) o;
-    return Objects.equals(this.title, battleCreateRequest.title);
+    return Objects.equals(this.title, battleCreateRequest.title) &&
+        Objects.equals(this.examplePromptId, battleCreateRequest.examplePromptId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title);
+    return Objects.hash(title, examplePromptId);
   }
 
   @Override
@@ -68,6 +92,7 @@ public class BattleCreateRequestDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class BattleCreateRequestDto {\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
+    sb.append("    examplePromptId: ").append(toIndentedString(examplePromptId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -97,11 +122,17 @@ public class BattleCreateRequestDto {
 
     protected Builder copyOf(BattleCreateRequestDto value) { 
       this.instance.setTitle(value.title);
+      this.instance.setExamplePromptId(value.examplePromptId);
       return this;
     }
 
     public BattleCreateRequestDto.Builder title(String title) {
       this.instance.title(title);
+      return this;
+    }
+    
+    public BattleCreateRequestDto.Builder examplePromptId(UUID examplePromptId) {
+      this.instance.examplePromptId(examplePromptId);
       return this;
     }
     

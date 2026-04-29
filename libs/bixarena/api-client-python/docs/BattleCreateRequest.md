@@ -4,9 +4,10 @@ The information used to create a new battle.
 
 ## Properties
 
-| Name      | Type    | Description          | Notes      |
-| --------- | ------- | -------------------- | ---------- |
-| **title** | **str** | Title of the battle. | [optional] |
+| Name                  | Type    | Description                                                                                             | Notes      |
+| --------------------- | ------- | ------------------------------------------------------------------------------------------------------- | ---------- |
+| **title**             | **str** | Title of the battle.                                                                                    | [optional] |
+| **example_prompt_id** | **str** | ID of the curated example prompt this battle was started from. Omit or pass null for free-form battles. | [optional] |
 
 ## Example
 

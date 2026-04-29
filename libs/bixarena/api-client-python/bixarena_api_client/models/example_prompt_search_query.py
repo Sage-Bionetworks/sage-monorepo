@@ -55,6 +55,9 @@ class ExamplePromptSearchQuery(BaseModel):
         default=None,
         description="Filter by one or more categories. Returns prompts matching any of the given categories.",
     )
+    lookback: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(
+        default=None, description="Lookback window in days."
+    )
     __properties: ClassVar[List[str]] = [
         "pageNumber",
         "pageSize",
@@ -64,6 +67,7 @@ class ExamplePromptSearchQuery(BaseModel):
         "active",
         "search",
         "categories",
+        "lookback",
     ]
 
     model_config = ConfigDict(
@@ -147,6 +151,7 @@ class ExamplePromptSearchQuery(BaseModel):
                 "active": obj.get("active"),
                 "search": obj.get("search"),
                 "categories": obj.get("categories"),
+                "lookback": obj.get("lookback"),
             }
         )
         return _obj

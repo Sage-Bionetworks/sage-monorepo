@@ -44,7 +44,7 @@ public class LeaderboardSearchQueryDto {
 
   private @Nullable String snapshotId = null;
 
-  private @Nullable Integer lookback = null;
+  private @Nullable Integer lookback;
 
   public LeaderboardSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
@@ -215,12 +215,12 @@ public class LeaderboardSearchQueryDto {
   }
 
   /**
-   * Comparison window in days for computing rankDelta.
+   * Lookback window in days.
    * minimum: 1
    * @return lookback
    */
   @Min(1) 
-  @Schema(name = "lookback", example = "7", description = "Comparison window in days for computing rankDelta.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "lookback", example = "7", description = "Lookback window in days.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("lookback")
   public @Nullable Integer getLookback() {
     return lookback;

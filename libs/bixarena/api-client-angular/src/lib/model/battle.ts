@@ -48,4 +48,8 @@ export interface Battle {
    * ID of the effective battle categorization (null = not yet categorized)
    */
   effectiveCategorizationId?: string | null;
+  /**
+   * ID of the curated example prompt this battle was started from. Null for free-form battles.
+   */
+  examplePromptId?: string | null;
 }

@@ -43,7 +43,8 @@ class TestBattle(unittest.TestCase):
                 created_at = '2024-01-15T10:30Z',
                 ended_at = '2024-01-15T11:45Z',
                 effective_validation_id = '',
-                effective_categorization_id = ''
+                effective_categorization_id = '',
+                example_prompt_id = ''
             )
         else:
             return Battle(
