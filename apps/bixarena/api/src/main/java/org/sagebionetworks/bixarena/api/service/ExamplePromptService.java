@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.api.configuration.CacheNames;
 import org.sagebionetworks.bixarena.api.exception.ExamplePromptCategorizationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.ExamplePromptNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BiomedicalCategoryDto;
@@ -20,8 +21,10 @@ import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptCategorizationEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.ExamplePromptMapper;
+import org.sagebionetworks.bixarena.api.model.projection.PromptBattleCountProjection;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptCategorizationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +46,11 @@ public class ExamplePromptService {
   private final ExamplePromptCategorizationService categorizationService;
   private final ExamplePromptMapper examplePromptMapper = new ExamplePromptMapper();
 
+  @Cacheable(
+    value = CacheNames.TRENDING_EXAMPLE_PROMPTS,
+    condition = "#query != null && #query.sort?.toString() == 'usage'",
+    key = "#query.lookback + '-' + #query.pageSize"
+  )
   @Transactional(readOnly = true)
   public ExamplePromptPageDto listExamplePrompts(ExamplePromptSearchQueryDto query) {
     log.info("List example prompts with query {}", query);
@@ -56,16 +64,15 @@ public class ExamplePromptService {
     // Handle random sort specially since JPA Sort doesn't support SQL functions
     if (effectiveQuery.getSort() == ExamplePromptSortDto.RANDOM) {
       int pageSize = Optional.ofNullable(effectiveQuery.getPageSize()).orElse(25);
-      List<BiomedicalCategoryDto> categories = effectiveQuery.getCategories();
-      List<ExamplePromptEntity> randomList;
-      if (categories == null || categories.isEmpty()) {
-        randomList = examplePromptRepository.findRandom(pageSize);
-      } else {
-        List<String> slugs = categories.stream().map(BiomedicalCategoryDto::getValue).toList();
-        randomList = examplePromptRepository.findRandomByCategory(slugs, pageSize);
-      }
+      List<ExamplePromptEntity> randomList = examplePromptRepository.findRandom(pageSize);
       int size = Math.max(randomList.size(), 1);
       page = new PageImpl<>(randomList, PageRequest.of(0, size), randomList.size());
+    } else if (effectiveQuery.getSort() == ExamplePromptSortDto.USAGE) {
+      int pageSize = Optional.ofNullable(effectiveQuery.getPageSize()).orElse(25);
+      int lookback = Optional.ofNullable(effectiveQuery.getLookback()).orElse(7);
+      List<ExamplePromptEntity> rankedList = findTopActivePromptsByUsage(lookback, pageSize);
+      int size = Math.max(rankedList.size(), 1);
+      page = new PageImpl<>(rankedList, PageRequest.of(0, size), rankedList.size());
     } else {
       Pageable pageable = createPageable(effectiveQuery);
       Specification<ExamplePromptEntity> spec = buildSpecification(effectiveQuery);
@@ -194,8 +201,9 @@ public class ExamplePromptService {
   }
 
   /**
-   * Batch-loads the effective category for each prompt in the list to avoid N+1.
-   * Total queries: 1 (list) + 1 (categorizations IN), regardless of page size.
+   * Batch-loads the effective category and battle count for each prompt to
+   * avoid N+1. Total queries: 1 (list) + 1 (categorizations IN) + 1 (battle
+   * counts IN), regardless of page size.
    */
   private List<ExamplePromptDto> toDtosWithCategories(List<ExamplePromptEntity> entities) {
     if (entities.isEmpty()) {
@@ -221,6 +229,17 @@ public class ExamplePromptService {
             )
           );
 
+    List<UUID> promptIds = entities.stream().map(ExamplePromptEntity::getId).toList();
+    Map<UUID, Integer> battleCountByPromptId = examplePromptRepository
+      .findBattleCountsByPromptIds(promptIds)
+      .stream()
+      .collect(
+        Collectors.toMap(
+          PromptBattleCountProjection::getPromptId,
+          PromptBattleCountProjection::getBattleCount
+        )
+      );
+
     return entities
       .stream()
       .map(e -> {
@@ -228,6 +247,7 @@ public class ExamplePromptService {
         UUID effId = e.getEffectiveCategorizationId();
         String slug = effId == null ? null : categoryByCatId.get(effId);
         dto.setCategory(slug == null ? null : BiomedicalCategoryDto.fromValue(slug));
+        dto.setBattleCount(battleCountByPromptId.getOrDefault(e.getId(), 0));
         return dto;
       })
       .toList();
@@ -235,6 +255,43 @@ public class ExamplePromptService {
 
   private ExamplePromptDto toDtoWithCategories(ExamplePromptEntity entity) {
     return toDtosWithCategories(List.of(entity)).get(0);
+  }
+
+  private static final int FALLBACK_LOOKBACK_DAYS = 30;
+  private static final int SENTINEL_ALL_TIME = -1;
+
+  /**
+   * Cascades the usage-ranking query through the requested window, then 30 days,
+   * then all-time. Returns the first window whose result has at least pageSize
+   * entries, or the widest window's result if none reach the threshold.
+   */
+  private List<ExamplePromptEntity> findTopActivePromptsByUsage(int requestedLookback, int pageSize) {
+    int[] cascade = buildCascade(requestedLookback);
+    List<UUID> rankedIds = List.of();
+    for (int lookback : cascade) {
+      rankedIds = examplePromptRepository.findTopActivePromptIdsByUsage(lookback, pageSize);
+      if (rankedIds.size() >= pageSize || lookback == SENTINEL_ALL_TIME) {
+        break;
+      }
+    }
+    if (rankedIds.isEmpty()) {
+      return List.of();
+    }
+    Map<UUID, ExamplePromptEntity> byId = examplePromptRepository
+      .findAllById(rankedIds)
+      .stream()
+      .collect(Collectors.toMap(ExamplePromptEntity::getId, e -> e));
+    return rankedIds.stream().map(byId::get).filter(Objects::nonNull).toList();
+  }
+
+  private static int[] buildCascade(int requestedLookback) {
+    if (requestedLookback <= 7) {
+      return new int[] { requestedLookback, FALLBACK_LOOKBACK_DAYS, SENTINEL_ALL_TIME };
+    }
+    if (requestedLookback <= FALLBACK_LOOKBACK_DAYS) {
+      return new int[] { requestedLookback, SENTINEL_ALL_TIME };
+    }
+    return new int[] { requestedLookback };
   }
 
   private static void afterCommit(Runnable action) {

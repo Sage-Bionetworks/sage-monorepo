@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.exception.BattleCategorizationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.BattleValidationNotFoundException;
-import org.sagebionetworks.bixarena.api.exception.ModelNotFoundException;
+import org.sagebionetworks.bixarena.api.exception.ExamplePromptNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
@@ -22,6 +22,7 @@ import org.sagebionetworks.bixarena.api.model.mapper.BattleMapper;
 import org.sagebionetworks.bixarena.api.model.repository.BattleCategorizationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
+import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +43,7 @@ public class BattleService {
   private final BattleCategorizationRepository battleCategorizationRepository;
   private final BattleCategorizationService battleCategorizationService;
   private final ModelRepository modelRepository;
+  private final ExamplePromptRepository examplePromptRepository;
   private final StatsCacheService statsCacheService;
   private final BattleMapper battleMapper = new BattleMapper();
 
@@ -95,6 +97,13 @@ public class BattleService {
 
     log.info("Creating battle for user: {}", userId);
 
+    UUID examplePromptId = request.getExamplePromptId();
+    if (examplePromptId != null && !examplePromptRepository.existsById(examplePromptId)) {
+      throw new ExamplePromptNotFoundException(
+        "Example prompt not found: " + examplePromptId
+      );
+    }
+
     // Randomly select 2 active models
     List<ModelEntity> randomModels = modelRepository.findRandomActiveModels(2);
 
@@ -115,6 +124,7 @@ public class BattleService {
       .userId(userId)
       .model1Id(model1.getId())
       .model2Id(model2.getId())
+      .examplePromptId(examplePromptId)
       .build();
 
     // Save the battle
@@ -241,14 +251,6 @@ public class BattleService {
       .findById(battleId)
       .orElseThrow(() ->
         new BattleNotFoundException("Battle not found: " + battleId)
-      );
-  }
-
-  private ModelEntity getModelEntity(UUID modelId) {
-    return modelRepository
-      .findById(modelId)
-      .orElseThrow(() ->
-        new ModelNotFoundException("Model not found: " + modelId)
       );
   }
 

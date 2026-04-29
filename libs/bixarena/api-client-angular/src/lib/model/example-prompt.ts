@@ -36,5 +36,9 @@ export interface ExamplePrompt {
    * When the example prompt was created.
    */
   createdAt: string;
+  /**
+   * Number of battles started from this prompt.
+   */
+  battleCount: number;
 }
 export namespace ExamplePrompt {}

@@ -51,4 +51,7 @@ public class BattleEntity {
 
   @Column(name = "effective_categorization_id")
   private UUID effectiveCategorizationId;
+
+  @Column(name = "example_prompt_id")
+  private UUID examplePromptId;
 }

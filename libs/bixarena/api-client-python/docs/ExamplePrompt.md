@@ -13,6 +13,7 @@ A self-contained example prompt for biomedical question answering.
 | **effective_categorization_id** | **str**                                           | ID of the effective categorization for this prompt (null &#x3D; not yet categorized) | [optional] |
 | **category**                    | [**BiomedicalCategory**](BiomedicalCategory.md)   |                                                                                      | [optional] |
 | **created_at**                  | **datetime**                                      | When the example prompt was created.                                                 |
+| **battle_count**                | **int**                                           | Number of battles started from this prompt.                                          |
 
 ## Example
 

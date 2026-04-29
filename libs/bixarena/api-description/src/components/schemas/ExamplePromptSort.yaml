@@ -3,5 +3,6 @@ description: The field to sort example prompts by.
 enum:
   - created_at
   - random
+  - usage
 default: created_at
 example: random

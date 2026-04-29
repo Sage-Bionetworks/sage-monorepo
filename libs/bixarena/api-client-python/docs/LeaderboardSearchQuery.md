@@ -14,7 +14,7 @@ A leaderboard search query with pagination and filtering options.
 | **license**      | [**License**](License.md)                 |                                                        | [optional]                                   |
 | **organization** | **str**                                   | Filter entries by model organization.                  | [optional]                                   |
 | **snapshot_id**  | **str**                                   | Get a specific historical snapshot instead of latest.  | [optional]                                   |
-| **lookback**     | **int**                                   | Comparison window in days for computing rankDelta.     | [optional]                                   |
+| **lookback**     | **int**                                   | Lookback window in days.                               | [optional]                                   |
 
 ## Example
 

@@ -24,7 +24,9 @@ public enum ExamplePromptSortDto {
   
   CREATED_AT("created_at"),
   
-  RANDOM("random");
+  RANDOM("random"),
+  
+  USAGE("usage");
 
   private final String value;
 

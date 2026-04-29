@@ -18,6 +18,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from uuid import UUID
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,7 +29,12 @@ class BattleCreateRequest(BaseModel):
     """  # noqa: E501
 
     title: Optional[StrictStr] = Field(default=None, description="Title of the battle.")
-    __properties: ClassVar[List[str]] = ["title"]
+    example_prompt_id: Optional[UUID] = Field(
+        default=None,
+        description="ID of the curated example prompt this battle was started from. Omit or pass null for free-form battles.",
+        alias="examplePromptId",
+    )
+    __properties: ClassVar[List[str]] = ["title", "examplePromptId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -67,6 +73,14 @@ class BattleCreateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if example_prompt_id (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.example_prompt_id is None
+            and "example_prompt_id" in self.model_fields_set
+        ):
+            _dict["examplePromptId"] = None
+
         return _dict
 
     @classmethod
@@ -78,5 +92,7 @@ class BattleCreateRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"title": obj.get("title")})
+        _obj = cls.model_validate(
+            {"title": obj.get("title"), "examplePromptId": obj.get("examplePromptId")}
+        )
         return _obj

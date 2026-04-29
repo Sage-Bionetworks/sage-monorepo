@@ -49,7 +49,8 @@ class TestExamplePromptPage(unittest.TestCase):
                         active = True, 
                         effective_categorization_id = '', 
                         category = 'genetics', 
-                        created_at = '2025-08-01T09:00Z', )
+                        created_at = '2025-08-01T09:00Z', 
+                        battle_count = 42, )
                     ]
             )
         else:
@@ -68,7 +69,8 @@ class TestExamplePromptPage(unittest.TestCase):
                         active = True, 
                         effective_categorization_id = '', 
                         category = 'genetics', 
-                        created_at = '2025-08-01T09:00Z', )
+                        created_at = '2025-08-01T09:00Z', 
+                        battle_count = 42, )
                     ],
         )
         """

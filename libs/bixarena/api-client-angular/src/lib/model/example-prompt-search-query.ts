@@ -39,5 +39,9 @@ export interface ExamplePromptSearchQuery {
    * Filter by one or more categories. Returns prompts matching any of the given categories.
    */
   categories?: Array<BiomedicalCategory> | null;
+  /**
+   * Lookback window in days.
+   */
+  lookback?: number;
 }
 export namespace ExamplePromptSearchQuery {}

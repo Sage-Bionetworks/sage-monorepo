@@ -33,9 +33,15 @@ properties:
     format: date-time
     description: When the example prompt was created.
     example: '2025-08-01T09:00:00Z'
+  battleCount:
+    type: integer
+    minimum: 0
+    description: Number of completed battles started from this prompt.
+    example: 42
 required:
   - id
   - question
   - source
   - active
+  - battleCount
   - createdAt

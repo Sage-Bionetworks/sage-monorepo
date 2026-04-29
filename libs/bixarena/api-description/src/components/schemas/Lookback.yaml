@@ -1,0 +1,4 @@
+type: integer
+description: Lookback window in days.
+minimum: 1
+example: 7

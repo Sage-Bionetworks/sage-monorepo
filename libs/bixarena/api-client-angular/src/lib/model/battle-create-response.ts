@@ -39,4 +39,8 @@ export interface BattleCreateResponse {
    * ID of the effective battle validation (null = not yet validated)
    */
   effectiveValidationId?: string | null;
+  /**
+   * ID of the curated example prompt this battle was started from. Null for free-form battles.
+   */
+  examplePromptId?: string | null;
 }

@@ -50,6 +50,11 @@ class Battle(BaseModel):
         description="ID of the effective battle categorization (null = not yet categorized)",
         alias="effectiveCategorizationId",
     )
+    example_prompt_id: Optional[UUID] = Field(
+        default=None,
+        description="ID of the curated example prompt this battle was started from. Null for free-form battles.",
+        alias="examplePromptId",
+    )
     __properties: ClassVar[List[str]] = [
         "id",
         "title",
@@ -60,6 +65,7 @@ class Battle(BaseModel):
         "endedAt",
         "effectiveValidationId",
         "effectiveCategorizationId",
+        "examplePromptId",
     ]
 
     model_config = ConfigDict(
@@ -115,6 +121,14 @@ class Battle(BaseModel):
         ):
             _dict["effectiveCategorizationId"] = None
 
+        # set to None if example_prompt_id (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.example_prompt_id is None
+            and "example_prompt_id" in self.model_fields_set
+        ):
+            _dict["examplePromptId"] = None
+
         return _dict
 
     @classmethod
@@ -137,6 +151,7 @@ class Battle(BaseModel):
                 "endedAt": obj.get("endedAt"),
                 "effectiveValidationId": obj.get("effectiveValidationId"),
                 "effectiveCategorizationId": obj.get("effectiveCategorizationId"),
+                "examplePromptId": obj.get("examplePromptId"),
             }
         )
         return _obj

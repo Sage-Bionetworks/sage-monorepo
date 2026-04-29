@@ -11,9 +11,10 @@
 /**
  * The field to sort example prompts by.
  */
-export type ExamplePromptSort = 'created_at' | 'random';
+export type ExamplePromptSort = 'created_at' | 'random' | 'usage';
 
 export const ExamplePromptSort = {
   CreatedAt: 'created_at' as ExamplePromptSort,
   Random: 'random' as ExamplePromptSort,
+  Usage: 'usage' as ExamplePromptSort,
 };

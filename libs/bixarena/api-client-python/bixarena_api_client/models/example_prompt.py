@@ -49,6 +49,9 @@ class ExamplePrompt(BaseModel):
     created_at: datetime = Field(
         description="When the example prompt was created.", alias="createdAt"
     )
+    battle_count: Annotated[int, Field(strict=True, ge=0)] = Field(
+        description="Number of battles started from this prompt.", alias="battleCount"
+    )
     __properties: ClassVar[List[str]] = [
         "id",
         "question",
@@ -57,6 +60,7 @@ class ExamplePrompt(BaseModel):
         "effectiveCategorizationId",
         "category",
         "createdAt",
+        "battleCount",
     ]
 
     model_config = ConfigDict(
@@ -124,6 +128,7 @@ class ExamplePrompt(BaseModel):
                 "effectiveCategorizationId": obj.get("effectiveCategorizationId"),
                 "category": obj.get("category"),
                 "createdAt": obj.get("createdAt"),
+                "battleCount": obj.get("battleCount"),
             }
         )
         return _obj

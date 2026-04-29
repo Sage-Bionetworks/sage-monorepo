@@ -38,4 +38,12 @@ public final class CacheNames {
    * Invalidation: Time-based (1 minute TTL)
    */
   public static final String QUEST_CONTRIBUTORS = "bixarena:api:questContributors";
+
+  /**
+   * Cache for trending example prompts.
+   * Key format: bixarena:api:trendingExamplePrompts::{lookback}-{pageSize}
+   * TTL: 1 day (aggregates over a 7-day window; ranking changes are gradual)
+   * Invalidation: Time-based (24h TTL)
+   */
+  public static final String TRENDING_EXAMPLE_PROMPTS = "bixarena:api:trendingExamplePrompts";
 }

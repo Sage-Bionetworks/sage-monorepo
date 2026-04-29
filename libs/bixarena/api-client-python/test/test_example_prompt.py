@@ -41,7 +41,8 @@ class TestExamplePrompt(unittest.TestCase):
                 active = True,
                 effective_categorization_id = '',
                 category = 'genetics',
-                created_at = '2025-08-01T09:00Z'
+                created_at = '2025-08-01T09:00Z',
+                battle_count = 42
             )
         else:
             return ExamplePrompt(
@@ -50,6 +51,7 @@ class TestExamplePrompt(unittest.TestCase):
                 source = 'pubmedqa',
                 active = True,
                 created_at = '2025-08-01T09:00Z',
+                battle_count = 42,
         )
         """
 

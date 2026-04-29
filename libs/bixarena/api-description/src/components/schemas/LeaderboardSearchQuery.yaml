@@ -40,9 +40,5 @@ properties:
     nullable: true
     example: 'snapshot_2025-08-15_10-00'
   lookback:
-    description: Comparison window in days for computing rankDelta.
-    type: integer
-    format: int32
+    $ref: Lookback.yaml
     nullable: true
-    minimum: 1
-    example: 7

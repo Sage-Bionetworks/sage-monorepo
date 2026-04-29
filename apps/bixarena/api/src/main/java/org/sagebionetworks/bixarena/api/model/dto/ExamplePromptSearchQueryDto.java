@@ -49,6 +49,8 @@ public class ExamplePromptSearchQueryDto {
   @Valid
   private @Nullable List<BiomedicalCategoryDto> categories;
 
+  private @Nullable Integer lookback;
+
   public ExamplePromptSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
     return this;
@@ -220,6 +222,27 @@ public class ExamplePromptSearchQueryDto {
     this.categories = categories;
   }
 
+  public ExamplePromptSearchQueryDto lookback(@Nullable Integer lookback) {
+    this.lookback = lookback;
+    return this;
+  }
+
+  /**
+   * Lookback window in days.
+   * minimum: 1
+   * @return lookback
+   */
+  @Min(1) 
+  @Schema(name = "lookback", example = "7", description = "Lookback window in days.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("lookback")
+  public @Nullable Integer getLookback() {
+    return lookback;
+  }
+
+  public void setLookback(@Nullable Integer lookback) {
+    this.lookback = lookback;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -236,12 +259,13 @@ public class ExamplePromptSearchQueryDto {
         Objects.equals(this.source, examplePromptSearchQuery.source) &&
         Objects.equals(this.active, examplePromptSearchQuery.active) &&
         Objects.equals(this.search, examplePromptSearchQuery.search) &&
-        Objects.equals(this.categories, examplePromptSearchQuery.categories);
+        Objects.equals(this.categories, examplePromptSearchQuery.categories) &&
+        Objects.equals(this.lookback, examplePromptSearchQuery.lookback);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, source, active, search, categories);
+    return Objects.hash(pageNumber, pageSize, sort, direction, source, active, search, categories, lookback);
   }
 
   @Override
@@ -256,6 +280,7 @@ public class ExamplePromptSearchQueryDto {
     sb.append("    active: ").append(toIndentedString(active)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
+    sb.append("    lookback: ").append(toIndentedString(lookback)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -292,6 +317,7 @@ public class ExamplePromptSearchQueryDto {
       this.instance.setActive(value.active);
       this.instance.setSearch(value.search);
       this.instance.setCategories(value.categories);
+      this.instance.setLookback(value.lookback);
       return this;
     }
 
@@ -332,6 +358,11 @@ public class ExamplePromptSearchQueryDto {
     
     public ExamplePromptSearchQueryDto.Builder categories(List<BiomedicalCategoryDto> categories) {
       this.instance.categories(categories);
+      return this;
+    }
+    
+    public ExamplePromptSearchQueryDto.Builder lookback(Integer lookback) {
+      this.instance.lookback(lookback);
       return this;
     }
     

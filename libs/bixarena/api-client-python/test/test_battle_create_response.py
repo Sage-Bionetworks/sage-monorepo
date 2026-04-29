@@ -68,7 +68,8 @@ class TestBattleCreateResponse(unittest.TestCase):
                     updated_at = '2025-09-20T08:30Z', ),
                 created_at = '2024-01-15T10:30Z',
                 ended_at = '2024-01-15T11:45Z',
-                effective_validation_id = ''
+                effective_validation_id = '',
+                example_prompt_id = ''
             )
         else:
             return BattleCreateResponse(

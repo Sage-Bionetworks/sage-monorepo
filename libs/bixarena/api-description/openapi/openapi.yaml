@@ -2122,6 +2122,11 @@ components:
           format: uuid
           nullable: true
           description: ID of the effective battle categorization (null = not yet categorized)
+        examplePromptId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the curated example prompt this battle was started from. Null for free-form battles.
       required:
         - id
         - userId
@@ -2188,6 +2193,11 @@ components:
         title:
           $ref: '#/components/schemas/BattleTitle'
           nullable: true
+        examplePromptId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the curated example prompt this battle was started from. Omit or pass null for free-form battles.
     License:
       type: string
       description: The license of the model
@@ -2292,6 +2302,11 @@ components:
           format: uuid
           nullable: true
           description: ID of the effective battle validation (null = not yet validated)
+        examplePromptId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the curated example prompt this battle was started from. Null for free-form battles.
       required:
         - id
         - userId
@@ -2382,6 +2397,7 @@ components:
       enum:
         - created_at
         - random
+        - usage
       default: created_at
       example: random
     ExamplePromptSource:
@@ -2417,6 +2433,11 @@ components:
         - synthetic-biology
         - systems-biology
       example: genetics
+    Lookback:
+      type: integer
+      description: Lookback window in days.
+      minimum: 1
+      example: 7
     ExamplePromptSearchQuery:
       type: object
       description: An example prompt search query with pagination and filtering options.
@@ -2459,6 +2480,9 @@ components:
           items:
             $ref: '#/components/schemas/BiomedicalCategory'
           nullable: true
+        lookback:
+          $ref: '#/components/schemas/Lookback'
+          nullable: true
       required: []
     ExamplePrompt:
       type: object
@@ -2494,11 +2518,17 @@ components:
           format: date-time
           description: When the example prompt was created.
           example: '2025-08-01T09:00:00Z'
+        battleCount:
+          type: integer
+          minimum: 0
+          description: Number of battles started from this prompt.
+          example: 42
       required:
         - id
         - question
         - source
         - active
+        - battleCount
         - createdAt
     ExamplePromptPage:
       type: object
@@ -2754,12 +2784,8 @@ components:
           nullable: true
           example: snapshot_2025-08-15_10-00
         lookback:
-          description: Comparison window in days for computing rankDelta.
-          type: integer
-          format: int32
+          $ref: '#/components/schemas/Lookback'
           nullable: true
-          minimum: 1
-          example: 7
     LeaderboardEntry:
       type: object
       description: A single entry in a leaderboard representing a model's performance.

@@ -25,6 +25,7 @@ public class BattleMapper {
       .endedAt(entity.getEndedAt())
       .effectiveValidationId(entity.getEffectiveValidationId())
       .effectiveCategorizationId(entity.getEffectiveCategorizationId())
+      .examplePromptId(entity.getExamplePromptId())
       .build();
   }
 
@@ -50,6 +51,7 @@ public class BattleMapper {
       .createdAt(battle.getCreatedAt())
       .endedAt(battle.getEndedAt())
       .effectiveValidationId(battle.getEffectiveValidationId())
+      .examplePromptId(battle.getExamplePromptId())
       .build();
   }
 }

@@ -39,8 +39,8 @@ export interface LeaderboardSearchQuery {
    */
   snapshotId?: string | null;
   /**
-   * Comparison window in days for computing rankDelta.
+   * Lookback window in days.
    */
-  lookback?: number | null;
+  lookback?: number;
 }
 export namespace LeaderboardSearchQuery {}

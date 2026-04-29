@@ -35,7 +35,8 @@ class TestBattleCreateRequest(unittest.TestCase):
         model = BattleCreateRequest()
         if include_optional:
             return BattleCreateRequest(
-                title = 'Gene Expression Analysis Comparison'
+                title = 'Gene Expression Analysis Comparison',
+                example_prompt_id = ''
             )
         else:
             return BattleCreateRequest(
