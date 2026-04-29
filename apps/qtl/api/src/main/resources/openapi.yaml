@@ -10,7 +10,7 @@ info:
   version: 1.0.0
   x-logo:
     url: https://xqtlexplorer.adknowledgeportal.org/opengraph/opengraph.png
-    altText: QTL Explorer
+    altText: xQTL Explorer
 servers:
   - description: Local development server
     url: http://localhost/v1

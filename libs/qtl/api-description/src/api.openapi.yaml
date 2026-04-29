@@ -10,7 +10,7 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
     url: https://xqtlexplorer.adknowledgeportal.org/opengraph/opengraph.png
-    altText: QTL Explorer
+    altText: xQTL Explorer
 servers:
   - url: http://localhost/v1
     description: Local development server

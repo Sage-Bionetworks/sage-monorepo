@@ -6,7 +6,7 @@ export const routes: Route[] = [
     path: ROUTE_PATHS.HOME,
     loadChildren: () => import('@sagebionetworks/qtl/home').then((routes) => routes.routes),
     data: {
-      title: 'QTL Explorer',
+      title: 'xQTL Explorer',
       description: 'home page',
     },
   },

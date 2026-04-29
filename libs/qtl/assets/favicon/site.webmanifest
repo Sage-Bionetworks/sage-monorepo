@@ -1,6 +1,6 @@
 {
-  "name": "QTL Explorer",
-  "short_name": "QTL",
+  "name": "xQTL Explorer",
+  "short_name": "xQTL",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

@@ -5,6 +5,6 @@ test.describe('home', () => {
     await page.goto('/');
 
     const welcomeMessage = page.locator('h1');
-    await expect(welcomeMessage).toHaveText('Welcome to the QTL Explorer!');
+    await expect(welcomeMessage).toHaveText('Welcome to the xQTL Explorer!');
   });
 });
