@@ -10,7 +10,7 @@
       <br />
 
       <h2>{{ nomination.program }}</h2>
-      <h2>Contact PI: {{ nomination.contact_pi }}</h2>
+      <h3>Contact PI: {{ nomination.contact_pi }}</h3>
       <br />
 
       <p class="drug-details-label">
@@ -18,15 +18,15 @@
           nomination.combined_with_common_name === null ? drug().common_name : `${drug().common_name} + ${nomination.combined_with_common_name}`;
         Why was {{ nominationLabel }} nominated?
       </p>
-      <p>{{ nomination.evidence }}</p>
+      <p>{{ nomination.evidence | capitalizeFirst }}</p>
       <br />
 
       <p class="drug-details-label">Data used</p>
-      <p>{{ nomination.data_used }}</p>
+      <p>{{ nomination.data_used | capitalizeFirst }}</p>
       <br />
 
       <p class="drug-details-label">Mechanism of action in AD</p>
-      <p>{{ nomination.ad_moa }}</p>
+      <p>{{ nomination.ad_moa | capitalizeFirst }}</p>
       <br />
 
       <p class="drug-details-label">Initial date of nomination</p>
@@ -34,27 +34,38 @@
       <br />
 
       <p class="drug-details-label">Planned validation</p>
-      <p><strong>Computational:</strong> {{ nomination.computational_validation_status }}</p>
-      <p><strong>Experimental:</strong> {{ nomination.experimental_validation_status }}</p>
+      <p>{{ nomination.computational_validation_status | capitalizeFirst }}</p>
+      <p>{{ nomination.experimental_validation_status | capitalizeFirst }}</p>
       <br />
 
       <p class="drug-details-label">Validation results</p>
-      <p><strong>Computational:</strong> {{ nomination.computational_validation_results }}</p>
-      <p><strong>Experimental:</strong> {{ nomination.experimental_validation_results }}</p>
+      <p>{{ nomination.computational_validation_results | capitalizeFirst }}</p>
+      <p>{{ nomination.experimental_validation_results | capitalizeFirst }}</p>
       <br />
 
       @if (nomination.additional_evidence) {
         <p class="drug-details-label">Additional evidence</p>
-        <p>{{ nomination.additional_evidence }}</p>
+        <p>{{ nomination.additional_evidence | capitalizeFirst }}</p>
         <br />
       }
+
+      <p class="drug-details-label">Contributors</p>
+      <p>{{ nomination.contributors }}</p>
+      <br />
 
       @if (nomination.reference) {
         <p class="drug-details-label">Related publication</p>
         <p>
-          <a [href]="nomination.reference" target="_blank" rel="noopener noreferrer">
-            {{ nomination.reference }}
-          </a>
+          @if (
+            nomination.reference.startsWith('http://') ||
+            nomination.reference.startsWith('https://')
+          ) {
+            <a [href]="nomination.reference" target="_blank" rel="noopener noreferrer">
+              {{ nomination.reference }}
+            </a>
+          } @else {
+            {{ nomination.reference | capitalizeFirst }}
+          }
         </p>
         <br />
       }

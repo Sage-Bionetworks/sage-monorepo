@@ -46,9 +46,11 @@ describe('DrugDetailsNominationDetailsComponent', () => {
     expect(screen.getByText(/Why was Letrozole \+.*Irinotecan nominated\?/)).toBeInTheDocument();
   });
 
-  it('should display evidence text', async () => {
+  it('should display evidence text with the first letter capitalized', async () => {
     await setup();
-    expect(screen.getByText(drugMock.drug_nominations[0].evidence as string)).toBeInTheDocument();
+    const evidence = drugMock.drug_nominations[0].evidence as string;
+    const capitalized = evidence.charAt(0).toUpperCase() + evidence.slice(1);
+    expect(screen.getByText(capitalized)).toBeInTheDocument();
   });
 
   it('should display data used', async () => {
@@ -70,14 +72,38 @@ describe('DrugDetailsNominationDetailsComponent', () => {
     expect(screen.getAllByText('2025').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('should display planned validation', async () => {
+  it('should display planned validation with the first letter capitalized', async () => {
     await setup();
     expect(screen.getAllByText('Planned validation').length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getAllByText('Computational validation studies completed').length,
+    ).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getAllByText('Experimental validation studies completed').length,
+    ).toBeGreaterThanOrEqual(1);
   });
 
-  it('should display validation results', async () => {
+  it('should display validation results with the first letter capitalized', async () => {
     await setup();
     expect(screen.getAllByText('Validation results').length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getByText(
+        'Relative risk score was validated in human using electronic medical records',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getAllByText(
+        'Improved behavior performance and pathological hallmarks in drug treated in vivo models',
+      ).length,
+    ).toBeGreaterThanOrEqual(1);
+  });
+
+  it('should display contributors', async () => {
+    await setup();
+    expect(screen.getAllByText('Contributors').length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getAllByText(drugMock.drug_nominations[0].contributors as string).length,
+    ).toBeGreaterThanOrEqual(1);
   });
 
   it('should display funding', async () => {
@@ -103,15 +129,26 @@ describe('DrugDetailsNominationDetailsComponent', () => {
     expect(screen.getByText('Some extra evidence')).toBeInTheDocument();
   });
 
-  it('should display related publication as a link that opens in a new tab when reference is present', async () => {
-    await setup();
-    expect(screen.getAllByText('Related publication').length).toBeGreaterThanOrEqual(1);
-    const reference = drugMock.drug_nominations[0].reference as string;
-    const links = screen.getAllByRole('link', { name: reference });
-    expect(links.length).toBeGreaterThanOrEqual(1);
-    expect(links[0]).toHaveAttribute('href', reference);
-    expect(links[0]).toHaveAttribute('target', '_blank');
-    expect(links[0]).toHaveAttribute('rel', 'noopener noreferrer');
+  it('should display related publication as a link that opens in a new tab when reference is a url', async () => {
+    const url = 'https://doi.org/10.1101/2024.12.09.627436';
+    await setup({
+      drug_nominations: [{ ...drugMock.drug_nominations[0], reference: url }],
+    });
+    expect(screen.getByText('Related publication')).toBeInTheDocument();
+    const link = screen.getByRole('link', { name: url });
+    expect(link).toHaveAttribute('href', url);
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('should display related publication as plain text when reference is not a url', async () => {
+    const citation = "Xu et al., Alzheimer's & Dementia 2024, in press";
+    await setup({
+      drug_nominations: [{ ...drugMock.drug_nominations[0], reference: citation }],
+    });
+    expect(screen.getByText('Related publication')).toBeInTheDocument();
+    expect(screen.getByText(citation)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: citation })).not.toBeInTheDocument();
   });
 
   it('should not display related publication when reference is absent', async () => {
