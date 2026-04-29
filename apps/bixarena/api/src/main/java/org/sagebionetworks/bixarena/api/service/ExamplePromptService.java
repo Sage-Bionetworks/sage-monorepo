@@ -49,7 +49,7 @@ public class ExamplePromptService {
   @Cacheable(
     value = CacheNames.TRENDING_EXAMPLE_PROMPTS,
     condition = "#query != null && #query.sort?.toString() == 'usage'",
-    key = "{#query.lookback, #query.pageSize}"
+    key = "#query.lookback + '-' + #query.pageSize"
   )
   @Transactional(readOnly = true)
   public ExamplePromptPageDto listExamplePrompts(ExamplePromptSearchQueryDto query) {

@@ -36,7 +36,7 @@ properties:
   battleCount:
     type: integer
     minimum: 0
-    description: Number of battles started from this prompt.
+    description: Number of completed battles started from this prompt.
     example: 42
 required:
   - id
