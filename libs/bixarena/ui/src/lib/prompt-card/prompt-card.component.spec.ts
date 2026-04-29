@@ -32,25 +32,6 @@ describe('PromptCardComponent', () => {
     expect(tag.textContent).toContain('Genetics');
   });
 
-  it('hides count stat when count is undefined', () => {
-    expect(fixture.debugElement.query(By.css('.stat'))).toBeNull();
-  });
-
-  it('shows count stat with default label when count is set', () => {
-    fixture.componentRef.setInput('count', 42);
-    fixture.detectChanges();
-    const stat = fixture.debugElement.query(By.css('.stat')).nativeElement;
-    expect(stat.textContent.replace(/\s+/g, ' ').trim()).toBe('42 battles');
-  });
-
-  it('uses countLabel when provided', () => {
-    fixture.componentRef.setInput('count', 7);
-    fixture.componentRef.setInput('countLabel', 'matches');
-    fixture.detectChanges();
-    const stat = fixture.debugElement.query(By.css('.stat')).nativeElement;
-    expect(stat.textContent.replace(/\s+/g, ' ').trim()).toBe('7 matches');
-  });
-
   it('emits cardClick when the button is clicked', () => {
     const spy = jest.fn();
     component.cardClick.subscribe(spy);

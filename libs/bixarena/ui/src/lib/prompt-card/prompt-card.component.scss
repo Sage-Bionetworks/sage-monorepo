@@ -31,18 +31,13 @@
   white-space: nowrap;
 }
 
-.stat {
-  font-size: var(--text-xs);
-  color: var(--p-text-muted-color);
-  font-weight: 440;
-}
-
 .cta {
   display: inline-flex;
   align-items: center;
   gap: 0.3125rem;
   font-size: var(--text-xs);
-  color: var(--p-text-muted-color);
+  color: var(--p-primary-color);
+  font-weight: 500;
   transition: color 0.15s;
   margin-left: auto;
   white-space: nowrap;
@@ -82,10 +77,6 @@
     border-color: var(--p-surface-300);
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgb(0 0 0 / 25%);
-
-    .cta {
-      color: var(--p-primary-color);
-    }
   }
 }
 

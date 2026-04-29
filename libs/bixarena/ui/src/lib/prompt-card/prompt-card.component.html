@@ -7,9 +7,6 @@
       @if (category()) {
         <span class="tag">{{ category() }}</span>
       }
-      @if (count() !== undefined) {
-        <span class="stat">{{ count() }} {{ countLabel() }}</span>
-      }
       <span class="cta">
         <span class="cta-text">{{ ctaText() }}</span>
         <svg
