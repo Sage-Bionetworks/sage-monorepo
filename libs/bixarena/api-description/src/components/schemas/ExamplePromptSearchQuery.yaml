@@ -39,4 +39,7 @@ properties:
     items:
       $ref: BiomedicalCategory.yaml
     nullable: true
+  lookback:
+    $ref: Lookback.yaml
+    nullable: true
 required: []
