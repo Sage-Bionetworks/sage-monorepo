@@ -29,3 +29,6 @@ export const AGORA_LOADING_ICON_COLORS: LoadingIconColors = {
   colorCentral: '#8b8ad1',
   colorOutermost: '#8b8ad1',
 };
+
+export const ALZPED_URL = 'https://alzped.nia.nih.gov/';
+export const FDA_URL = 'https://www.fda.gov/';

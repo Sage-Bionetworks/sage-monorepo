@@ -20,6 +20,7 @@
       "@sagebionetworks/agora/api-client": ["libs/agora/api-client-angular/src/index.ts"],
       "@sagebionetworks/agora/charts": ["libs/agora/charts/src/index.ts"],
       "@sagebionetworks/agora/config": ["libs/agora/config/src/index.ts"],
+      "@sagebionetworks/agora/drug-details": ["libs/agora/drug-details/src/index.ts"],
       "@sagebionetworks/agora/gene-comparison-tool": [
         "libs/agora/gene-comparison-tool/src/index.ts"
       ],

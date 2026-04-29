@@ -1,0 +1,27 @@
+{
+  "name": "agora-drug-details",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/agora/drug-details/src",
+  "prefix": "agora",
+  "tags": ["type:feature", "scope:agora", "language:typescript"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/drug-details"],
+      "options": {
+        "jestConfig": "libs/agora/drug-details/jest.config.ts",
+        "tsConfig": "libs/agora/drug-details/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  }
+}
