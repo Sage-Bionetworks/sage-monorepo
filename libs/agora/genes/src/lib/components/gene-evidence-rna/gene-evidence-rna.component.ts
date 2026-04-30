@@ -6,16 +6,15 @@ import {
   MedianExpression,
   RnaDifferentialExpression,
 } from '@sagebionetworks/agora/api-client';
-import {
-  BoxPlotComponent,
-  CandlestickChartComponent,
-  MedianBarChartComponent,
-} from '@sagebionetworks/agora/charts';
+import { BoxPlotComponent, MedianBarChartComponent } from '@sagebionetworks/agora/charts';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { ForestPlotItem } from '@sagebionetworks/explorers/charts';
-import { ForestPlotDirective } from '@sagebionetworks/explorers/charts-angular';
+import { CandlestickItem, ForestPlotItem } from '@sagebionetworks/explorers/charts';
+import {
+  CandlestickDirective,
+  ForestPlotDirective,
+} from '@sagebionetworks/explorers/charts-angular';
 import {
   HelperService as ExplorersHelperService,
   LoggerService,
@@ -33,7 +32,7 @@ import { GeneNetworkComponent } from '../gene-network/gene-network.component';
   imports: [
     GeneNetworkComponent,
     GeneModelSelectorComponent,
-    CandlestickChartComponent,
+    CandlestickDirective,
     ForestPlotDirective,
     MedianBarChartComponent,
     ModalLinkComponent,
@@ -76,11 +75,23 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
 
   consistencyOfChangeChartData: ForestPlotItem[] = [];
 
+  neuropathologicCorrelationsChartData: CandlestickItem[] = [];
+  private neuropathologicPValuesByCategory: Record<string, number> = {};
+
   readonly yAxisLabelTooltipFormatter = (category: string) =>
     this.helperService.getGCTColumnTooltipText(category);
 
   readonly pointTooltipFormatter = (item: ForestPlotItem) =>
     `Log Fold Change: ${this.explorersHelperService.getSignificantFigures(item.value, 3)}`;
+
+  readonly neuropathologicCorrelationTooltipFormatter = (item: CandlestickItem) => {
+    const geneLabel = this._gene?.hgnc_symbol || this._gene?.ensembl_gene_id;
+    const pVal = this.neuropathologicPValuesByCategory[item.xAxisCategory];
+    const isOrNot = pVal <= 0.05 ? 'is' : 'is not';
+    const oddsRatio = this.explorersHelperService.getSignificantFigures(item.value, 3);
+    const adjPVal = this.explorersHelperService.getSignificantFigures(pVal, 3);
+    return `${geneLabel} ${isOrNot} significantly correlated with ${item.xAxisCategory}, with an odds ratio of ${oddsRatio} and an adjusted p-value of ${adjPVal}.`;
+  };
 
   @ViewChild(BoxPlotComponent) boxPlotComponent: BoxPlotComponent | null = null;
   hasScrolled = false;
@@ -95,6 +106,9 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
 
     this.consistencyOfChangeChartData = [];
 
+    this.neuropathologicCorrelationsChartData = [];
+    this.neuropathologicPValuesByCategory = {};
+
     this.hasScrolled = false;
   }
 
@@ -108,6 +122,8 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   init() {
     this.reset();
 
+    this.initNeuropathologicCorrelations();
+
     if (!this._gene?.rna_differential_expression) {
       return;
     }
@@ -120,6 +136,25 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
     this.initMedianExpression();
     this.initDifferentialExpression();
     this.initConsistencyOfChange();
+  }
+
+  initNeuropathologicCorrelations() {
+    const correlations = this._gene?.neuropathologic_correlations ?? [];
+    const filtered = correlations
+      .filter((item) => item.neuropath_type !== 'DCFDX')
+      .sort((a, b) => (a.neuropath_type > b.neuropath_type ? 1 : -1));
+
+    this.neuropathologicCorrelationsChartData = filtered.map((item) => ({
+      xAxisCategory: item.neuropath_type,
+      value: item.oddsratio,
+      ciLower: item.ci_lower,
+      ciUpper: item.ci_upper,
+    }));
+
+    this.neuropathologicPValuesByCategory = filtered.reduce<Record<string, number>>((acc, item) => {
+      acc[item.neuropath_type] = item.pval_adj;
+      return acc;
+    }, {});
   }
 
   ngAfterViewChecked() {
