@@ -12,6 +12,16 @@
     box-shadow: none;
   }
 
+  bixarena-nav .mobile-menu p-button {
+    display: block;
+    width: 100%;
+  }
+
+  bixarena-nav .mobile-menu .p-button {
+    height: 2.75rem;
+    line-height: 2.75rem;
+  }
+
   bixarena-voting-bar .nudge .p-button {
     padding: 0.5rem 1.25rem;
     font-size: var(--text-sm);
