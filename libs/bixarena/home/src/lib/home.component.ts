@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommunityQuestSectionComponent } from './community-quest-section/community-quest-section.component';
 import { ComposerSectionComponent } from './composer-section/composer-section.component';
 import { LeaderboardSectionComponent } from './leaderboard-section/leaderboard-section.component';
 import { StatsSectionComponent } from './stats-section/stats-section.component';
@@ -11,7 +10,6 @@ import { TrendingSectionComponent } from './trending-section/trending-section.co
     ComposerSectionComponent,
     StatsSectionComponent,
     TrendingSectionComponent,
-    CommunityQuestSectionComponent,
     LeaderboardSectionComponent,
   ],
   templateUrl: './home.component.html',

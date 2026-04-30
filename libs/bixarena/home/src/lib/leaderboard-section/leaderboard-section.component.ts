@@ -21,11 +21,7 @@ import {
 import { ModelOrgLogoService } from '@sagebionetworks/bixarena/services';
 import { AvatarComponent } from '@sagebionetworks/bixarena/ui';
 import { TooltipModule } from 'primeng/tooltip';
-
-// Render exactly this many columns or hide the section.
-const COLUMN_COUNT = 3;
-// Matches the leaderboard page's LOOKBACK_DAYS so rankDelta is consistent.
-const LOOKBACK_DAYS = 7;
+import { LEADERBOARD_COLUMN_COUNT, LOOKBACK_DAYS } from '../home.constants';
 
 interface LeaderboardColumn {
   slug: string;
@@ -83,11 +79,11 @@ export class LeaderboardSectionComponent implements OnInit {
       )
       .subscribe((all) => {
         const withSnapshot = all.filter((l) => (l.latestSnapshot?.entryCount ?? 0) > 0);
-        if (withSnapshot.length < COLUMN_COUNT) return;
+        if (withSnapshot.length < LEADERBOARD_COLUMN_COUNT) return;
 
         forkJoin(
           withSnapshot.map((l) => {
-            const query = { pageSize: COLUMN_COUNT, lookback: LOOKBACK_DAYS };
+            const query = { pageSize: LEADERBOARD_COLUMN_COUNT, lookback: LOOKBACK_DAYS };
             console.debug('🔎 Fetching leaderboard column', { leaderboardId: l.id, query });
             return this.leaderboardApi.getLeaderboard(l.id, query).pipe(
               tap((page) =>
@@ -110,8 +106,8 @@ export class LeaderboardSectionComponent implements OnInit {
             const columns = results
               .filter((c): c is LeaderboardColumn => c !== null && c.entries.length > 0)
               .sort((a, b) => b.voteCount - a.voteCount)
-              .slice(0, COLUMN_COUNT);
-            if (columns.length < COLUMN_COUNT) return;
+              .slice(0, LEADERBOARD_COLUMN_COUNT);
+            if (columns.length < LEADERBOARD_COLUMN_COUNT) return;
             this.columnsSignal.set(columns);
             this.hidden.set(false);
           });
@@ -130,7 +126,7 @@ export class LeaderboardSectionComponent implements OnInit {
       slug: meta.id,
       name: meta.name,
       voteCount: page.voteCount,
-      entries: page.entries.slice(0, COLUMN_COUNT).map((e) => this.renderedEntry(e)),
+      entries: page.entries.slice(0, LEADERBOARD_COLUMN_COUNT).map((e) => this.renderedEntry(e)),
     };
   }
 

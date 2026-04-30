@@ -20,9 +20,7 @@ import {
 } from '@sagebionetworks/bixarena/api-client';
 import { AuthService, BattleGateService } from '@sagebionetworks/bixarena/services';
 import { PromptCardComponent } from '@sagebionetworks/bixarena/ui';
-
-const PAGE_SIZE = 3;
-const LOOKBACK_DAYS = 7;
+import { LOOKBACK_DAYS, TRENDING_PAGE_SIZE } from '../home.constants';
 
 function formatCategory(slug: BiomedicalCategory): string {
   return slug
@@ -46,7 +44,7 @@ export class TrendingSectionComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  readonly skeletonSlots = Array.from({ length: PAGE_SIZE }, (_, i) => i);
+  readonly skeletonSlots = Array.from({ length: TRENDING_PAGE_SIZE }, (_, i) => i);
 
   private readonly prompts = signal<ExamplePrompt[]>([]);
   private readonly loading = signal(true);
@@ -66,7 +64,7 @@ export class TrendingSectionComponent implements OnInit {
     const query = {
       sort: ExamplePromptSort.Usage,
       lookback: LOOKBACK_DAYS,
-      pageSize: PAGE_SIZE,
+      pageSize: TRENDING_PAGE_SIZE,
     };
     console.debug('🔎 Fetching trending prompts', query);
     this.examplePrompts
