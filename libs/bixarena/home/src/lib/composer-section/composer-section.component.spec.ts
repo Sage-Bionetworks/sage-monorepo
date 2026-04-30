@@ -3,11 +3,7 @@ import { PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
-import {
-  ExamplePromptPage,
-  ExamplePromptService,
-  ExamplePromptSort,
-} from '@sagebionetworks/bixarena/api-client';
+import { ExamplePromptPage, ExamplePromptService } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { AuthService, BattleGateService } from '@sagebionetworks/bixarena/services';
 import { ComposerSectionComponent } from './composer-section.component';

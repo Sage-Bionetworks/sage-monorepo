@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { LocalStorageService } from '@sagebionetworks/web-shared/angular/storage';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { UserInfo } from '@sagebionetworks/bixarena/api-client';
+import { clearPendingPromptStorage } from './battle-gate.service';
 
 export interface CachedUser {
   username: string;
@@ -58,6 +59,7 @@ export class AuthService {
     }
     this.user.set(null);
     this.clearCache();
+    clearPendingPromptStorage();
     window.location.href = '/';
   }
 

@@ -5,6 +5,24 @@ import { OnboardingService } from './onboarding.service';
 
 const PENDING_PROMPT_KEY = 'bixarena.pendingPrompt';
 const PENDING_EXAMPLE_PROMPT_ID_KEY = 'bixarena.pendingExamplePromptId';
+const PENDING_PROMPT_TS_KEY = 'bixarena.pendingPromptTs';
+const PENDING_PROMPT_OWNER_KEY = 'bixarena.pendingPromptOwner';
+const PENDING_PROMPT_TTL_MS = 15 * 60 * 1000;
+const PENDING_PROMPT_MAX_LENGTH = 5000;
+
+// Module-level helper so AuthService.logout can clear pending without
+// importing the service class (would create a circular dep).
+export function clearPendingPromptStorage(): void {
+  if (typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.removeItem(PENDING_PROMPT_KEY);
+    sessionStorage.removeItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
+    sessionStorage.removeItem(PENDING_PROMPT_TS_KEY);
+    sessionStorage.removeItem(PENDING_PROMPT_OWNER_KEY);
+  } catch {
+    /* ignore */
+  }
+}
 
 @Injectable({ providedIn: 'root' })
 export class BattleGateService {
@@ -41,53 +59,116 @@ export class BattleGateService {
     this.pendingResolver = null;
   }
 
-  // TODO: after the auth-service supports a post-login redirect target,
-  // route directly to /battle when a pending prompt exists so the user
-  // doesn't land back on home with an unconsumed pending submission.
+  // The home route guard picks up pending and routes to /battle after OIDC
+  // returns to /. If auth-service ever supports a dynamic post-login URL,
+  // we can route from here directly and skip the / hop.
   onLoginComplete(): void {
     this.showLoginModal.set(false);
     this.authService.login();
   }
 
-  // Drop pending so a later /battle visit doesn't auto-submit the abandoned prompt.
   onLoginCancel(): void {
     this.showLoginModal.set(false);
     this.consumePendingPrompt();
   }
 
-  // sessionStorage survives the OIDC redirect round-trips. Both keys are
-  // written as a unit — omitting examplePromptId removes it, so a free-form
-  // composer submit can't inherit a stale id from a prior curated click.
+  // Stamp owner from cachedUser when known so a different user logging in
+  // on the same browser can't inherit this prompt. cachedUser is null for
+  // first-time visitors — accepted, the TTL is the only defense in that case.
   savePendingPrompt(text: string, examplePromptId?: string | null): void {
     if (!this.isBrowser) return;
     const trimmed = text.trim();
     if (!trimmed) return;
     try {
       sessionStorage.setItem(PENDING_PROMPT_KEY, trimmed);
+      sessionStorage.setItem(PENDING_PROMPT_TS_KEY, String(Date.now()));
+      const owner = this.authService.cachedUser()?.username ?? '';
+      if (owner) {
+        sessionStorage.setItem(PENDING_PROMPT_OWNER_KEY, owner);
+      } else {
+        sessionStorage.removeItem(PENDING_PROMPT_OWNER_KEY);
+      }
       if (examplePromptId) {
         sessionStorage.setItem(PENDING_EXAMPLE_PROMPT_ID_KEY, examplePromptId);
       } else {
         sessionStorage.removeItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
       }
     } catch {
-      // sessionStorage can throw in private mode or when over quota — fail silent.
+      /* private mode / quota — fail silent */
     }
   }
 
-  // Whitespace-only prompts return null (defends against external seeds
-  // that bypass save's trim). Both keys clear regardless.
+  hasPendingPrompt(): boolean {
+    return this.peekValidPrompt() !== null;
+  }
+
   consumePendingPrompt(): { prompt: string; examplePromptId: string | null } | null {
     if (!this.isBrowser) return null;
+    const valid = this.peekValidPrompt();
+    if (!valid) {
+      this.clearPending();
+      return null;
+    }
+    const examplePromptId = sessionStorage.getItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
+    this.clearPending();
+    return { prompt: valid, examplePromptId: examplePromptId || null };
+  }
+
+  // Public so guards / logout can drop stale state explicitly.
+  clearPending(): void {
+    if (!this.isBrowser) return;
+    clearPendingPromptStorage();
+  }
+
+  // Returns the trimmed prompt if storage holds a valid, fresh, in-shape,
+  // owner-matched entry — otherwise null. Self-clears expired/invalid entries.
+  private peekValidPrompt(): string | null {
+    if (!this.isBrowser) return null;
+    if (this.isExpired() || this.ownerMismatches()) {
+      this.clearPending();
+      return null;
+    }
     try {
-      const prompt = sessionStorage.getItem(PENDING_PROMPT_KEY);
-      const examplePromptId = sessionStorage.getItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
-      if (prompt !== null) sessionStorage.removeItem(PENDING_PROMPT_KEY);
-      if (examplePromptId !== null) sessionStorage.removeItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
-      const trimmed = prompt?.trim();
+      const raw = sessionStorage.getItem(PENDING_PROMPT_KEY);
+      const trimmed = raw?.trim();
       if (!trimmed) return null;
-      return { prompt: trimmed, examplePromptId: examplePromptId || null };
+      if (trimmed.length > PENDING_PROMPT_MAX_LENGTH) {
+        this.clearPending();
+        return null;
+      }
+      return trimmed;
     } catch {
       return null;
+    }
+  }
+
+  // Treat missing/non-numeric timestamp as expired.
+  private isExpired(): boolean {
+    try {
+      const tsRaw = sessionStorage.getItem(PENDING_PROMPT_TS_KEY);
+      if (!tsRaw) return true;
+      const ts = parseInt(tsRaw, 10);
+      if (Number.isNaN(ts)) return true;
+      return Date.now() - ts > PENDING_PROMPT_TTL_MS;
+    } catch {
+      return true;
+    }
+  }
+
+  // True if entry was stamped for a different user than the one currently
+  // signed in. Anonymous-saved (no stamp) is accepted by any user.
+  private ownerMismatches(): boolean {
+    try {
+      const owner = sessionStorage.getItem(PENDING_PROMPT_OWNER_KEY);
+      if (!owner) return false;
+      const current =
+        this.authService.user()?.preferred_username ??
+        this.authService.cachedUser()?.username ??
+        null;
+      if (!current) return false;
+      return owner !== current;
+    } catch {
+      return false;
     }
   }
 }
