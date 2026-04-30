@@ -5,19 +5,12 @@ import {
   DestroyRef,
   effect,
   inject,
-  OnInit,
-  PLATFORM_ID,
   signal,
 } from '@angular/core';
-import { DecimalPipe, isPlatformBrowser } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DecimalPipe } from '@angular/common';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, of } from 'rxjs';
-import {
-  PublicStats,
-  StatsService,
-  UserService,
-  UserStats,
-} from '@sagebionetworks/bixarena/api-client';
+import { StatsService, UserService, UserStats } from '@sagebionetworks/bixarena/api-client';
 import { AuthService } from '@sagebionetworks/bixarena/services';
 
 @Component({
@@ -27,15 +20,21 @@ import { AuthService } from '@sagebionetworks/bixarena/services';
   styleUrl: './stats-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatsSectionComponent implements OnInit {
+export class StatsSectionComponent {
   private readonly auth = inject(AuthService);
-  private readonly statsService = inject(StatsService);
   private readonly userStatsService = inject(UserService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  readonly stats = signal<PublicStats | null>(null);
+  readonly stats = toSignal(
+    inject(StatsService)
+      .getPublicStats()
+      .pipe(catchError(() => of(null))),
+    { initialValue: null },
+  );
 
+  // Authed-only signal: filled when the user is logged in, cleared on logout.
+  // Refetched whenever isAuthenticated flips true (covers mid-session login
+  // after an OIDC redirect, which technically reloads the page anyway).
   private readonly userStatsSignal = signal<UserStats | null>(null);
   readonly userStats = computed(() =>
     this.auth.isAuthenticated() ? this.userStatsSignal() : null,
@@ -47,7 +46,6 @@ export class StatsSectionComponent implements OnInit {
         this.userStatsSignal.set(null);
         return;
       }
-      if (!this.isBrowser) return;
       this.userStatsService
         .getUserStats()
         .pipe(
@@ -55,20 +53,10 @@ export class StatsSectionComponent implements OnInit {
           takeUntilDestroyed(this.destroyRef),
         )
         .subscribe((s) => {
-          // Drop if logout raced the in-flight request.
+          // Guard against logout-while-in-flight: if auth flipped false
+          // between the request and the response, drop the result.
           if (this.auth.isAuthenticated()) this.userStatsSignal.set(s);
         });
     });
-  }
-
-  ngOnInit(): void {
-    if (!this.isBrowser) return;
-    this.statsService
-      .getPublicStats()
-      .pipe(
-        catchError(() => of(null)),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((s) => this.stats.set(s));
   }
 }
