@@ -1,3 +1,5 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
 .shell {
   display: flex;
   flex-direction: column;
@@ -131,7 +133,7 @@ bixarena-example-prompts {
   flex: 1;
   min-height: 0;
 
-  @media (width <= 768px) {
+  @media (width < #{shared.$md-breakpoint}) {
     grid-template-columns: 1fr;
   }
 }

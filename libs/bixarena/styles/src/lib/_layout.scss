@@ -1,0 +1,45 @@
+// Layout tokens — primitives that respond to viewport width.
+// Components consume these via var(--…) instead of writing their own
+// media queries for sizing/spacing.
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
+:root {
+  --nav-height: 3.75rem;
+  --max-width: 80rem;
+  --content-padding-x: 2.5rem;
+  --hero-padding-y: 5rem;
+  --section-gap: 2.5rem;
+  --hero-title-font-size: 2.625rem;
+  --hero-title-line-height: 1.05;
+  --hero-subtitle-font-size: 1rem;
+  --hero-subtitle-max-width: 36rem;
+  --composer-max-width: 45rem;
+  --composer-input-min-height: 5rem;
+}
+
+// Tablet portrait and below (< lg)
+@media (width < #{shared.$lg-breakpoint}) {
+  :root {
+    --nav-height: 3.5rem;
+    --content-padding-x: 2rem;
+    --hero-padding-y: 3.5rem;
+    --section-gap: 2rem;
+    --hero-title-font-size: 2.25rem;
+    --composer-max-width: 36.25rem;
+  }
+}
+
+// Phone portrait (< md)
+@media (width < #{shared.$md-breakpoint}) {
+  :root {
+    --nav-height: 3rem;
+    --content-padding-x: 1rem;
+    --hero-padding-y: 2.5rem;
+    --section-gap: 1.5rem;
+    --hero-title-font-size: 1.875rem;
+    --hero-title-line-height: 1.15;
+    --hero-subtitle-font-size: 0.875rem;
+    --composer-max-width: 100%;
+    --composer-input-min-height: 4rem;
+  }
+}
