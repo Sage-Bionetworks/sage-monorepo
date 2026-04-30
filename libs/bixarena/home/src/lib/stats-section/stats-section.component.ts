@@ -25,6 +25,11 @@ export class StatsSectionComponent {
   private readonly userStatsService = inject(UserService);
   private readonly destroyRef = inject(DestroyRef);
 
+  // Public stats fetch deliberately runs in SSR — unlike the sibling home
+  // sections which gate with isPlatformBrowser. The numerals render
+  // prominently above the fold; if SSR renders zeros/blanks and CSR fills
+  // them, the user sees a visible flash. Siblings can gate because they
+  // default to hidden until data loads.
   readonly stats = toSignal(
     inject(StatsService)
       .getPublicStats()
