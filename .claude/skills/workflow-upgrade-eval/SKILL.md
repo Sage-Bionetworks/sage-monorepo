@@ -62,6 +62,14 @@ Use `Grep` with the action name across both `.github/workflows/` _and_ `.github/
 
 For hits inside `.github/actions/<name>/action.yml`, the surrounding context is different: there's no `on:` trigger and no job-level `permissions:` -- the security posture is inherited from every workflow that calls the composite action. Note this in the report and, if any caller workflow uses a sensitive trigger (`pull_request_target`, etc.), surface that connection explicitly.
 
+**Verify the current pin against the canonical tag ref.** For each call site, the workflow pins a SHA with a `# v<old>` comment. Resolve what the canonical tag actually points to and compare:
+
+```bash
+gh api repos/<owner>/<repo>/git/ref/tags/v<old> --jq '.object.sha'
+```
+
+If the returned SHA matches the pinned SHA, the existing pin is intact -- record this in the report. If they diverge, halt the evaluation and flag it explicitly: this means either the version comment is wrong (typo, drift), the tag was rewritten upstream after pinning (annotated-vs-lightweight tag mismatch is a benign cause; a hijacked tag is the dangerous one), or a previous bump landed a pin that didn't match its claimed version. Don't proceed with a bump recommendation until the divergence is understood.
+
 **B. Upstream changelog research.** Goal: collect the release notes for every release between `<old>` and `<new>` (inclusive of intermediate majors), plus any migration docs, then synthesize the breaking changes.
 
 **Preferred: `gh` CLI.** It's already authenticated in this devcontainer and gives structured JSON, which is faster and more reliable than HTML scraping. Probe first:
@@ -145,6 +153,14 @@ Use this exact structure:
 | File | Line | Trigger                                         | Inputs used | Sensitive context                                                                                         |
 | ---- | ---- | ----------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------- |
 | ...  | ...  | `push` / `pull_request` / `pull_request_target` | ...         | none / `pull_request_target` + secrets / elevated `permissions:` / containerized job / self-hosted runner |
+
+### SHA pin transition
+
+| Action / workflow / composite | Current pin                     | Proposed pin                    |
+| ----------------------------- | ------------------------------- | ------------------------------- |
+| `<owner>/<action>`            | `<short-sha-old>...` (`v<old>`) | `<short-sha-new>...` (`v<new>`) |
+
+Both pins verified against canonical tag refs via `gh api repos/<owner>/<repo>/git/ref/tags/<tag>`. <Note any divergence found, or "no divergence" if both match.>
 
 ### Breaking changes <by version if multiple majors crossed>
 
