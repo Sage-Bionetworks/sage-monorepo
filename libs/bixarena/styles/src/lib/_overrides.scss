@@ -181,7 +181,7 @@
       font-weight: 560;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--p-surface-500);
+      color: var(--p-text-muted-color);
       background: var(--p-surface-100);
       padding: 0.75rem 1rem;
       white-space: nowrap;
@@ -226,7 +226,7 @@
     padding: 0;
     margin-top: 1rem;
     justify-content: center;
-    color: var(--p-surface-500);
+    color: var(--p-text-muted-color);
   }
 
   .leaderboard-paginator .p-paginator-page.p-paginator-page-selected,
