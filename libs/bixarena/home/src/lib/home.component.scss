@@ -26,10 +26,11 @@
 
 .title {
   font-family: var(--font-serif);
-  font-size: 3rem;
+  font-size: var(--hero-title-font-size);
   font-weight: 400;
-  letter-spacing: -0.96px;
-  line-height: 1.08;
+  letter-spacing: -0.02em;
+  line-height: var(--hero-title-line-height);
+  text-wrap: balance;
   margin: 0;
   color: var(--p-text-color);
 
@@ -40,9 +41,10 @@
 }
 
 .subtitle {
-  font-size: var(--text-base);
+  font-size: var(--hero-subtitle-font-size);
   color: var(--p-text-muted-color);
-  max-width: 36rem;
+  max-width: var(--hero-subtitle-max-width);
+  text-wrap: pretty;
   margin: 0;
   line-height: 1.55;
 }
