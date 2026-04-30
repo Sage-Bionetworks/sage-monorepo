@@ -1,7 +1,7 @@
 :host {
   display: block;
   width: 100%;
-  max-width: 40rem;
+  max-width: 48rem;
   margin: 0 auto;
 }
 
@@ -12,6 +12,11 @@
   overflow: hidden;
   transition: all 0.25s;
 
+  &:hover {
+    border-color: var(--p-surface-300);
+    box-shadow: 0 2px 16px rgb(0 0 0 / 8%);
+  }
+
   &:focus-within {
     border-color: var(--p-surface-300);
     box-shadow: 0 4px 32px rgb(0 0 0 / 20%);
@@ -20,8 +25,8 @@
 
 .input {
   width: 100%;
-  min-height: 3.5rem;
-  max-height: 8rem;
+  min-height: 6rem;
+  max-height: 10rem;
   padding: 1rem 1.125rem 0.5rem;
   border: none;
   outline: none;

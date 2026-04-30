@@ -6,6 +6,7 @@ import {
   OnInit,
   PLATFORM_ID,
   signal,
+  viewChild,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -21,7 +22,13 @@ import { AuthService, BattleGateService } from '@sagebionetworks/bixarena/servic
 import { PromptComposerComponent } from '@sagebionetworks/bixarena/ui';
 
 const STATIC_PLACEHOLDER = 'Ask anything biomedical...';
-const TYPE_INTERVAL_MS = 35;
+const PROMPT_POOL_SIZE = 5;
+const TYPE_INTERVAL_MS = 45;
+const ERASE_INTERVAL_MS = 12;
+const HOLD_MS = 3500;
+const BETWEEN_PROMPT_MS = 500;
+const RESUME_AFTER_BLUR_MS = 600;
+const REDUCED_MOTION_ROTATE_MS = 5000;
 
 @Component({
   selector: 'bixarena-composer-section',
@@ -40,17 +47,18 @@ export class ComposerSectionComponent implements OnInit {
 
   readonly promptLengthLimit = inject(ConfigService).config.battle.promptLengthLimit;
   readonly placeholder = signal(STATIC_PLACEHOLDER);
+  readonly composer = viewChild(PromptComposerComponent);
 
-  private intervalId: ReturnType<typeof setInterval> | null = null;
-  private targetPrompt: string | null = null;
-  private interacted = false;
+  private timeoutId: ReturnType<typeof setTimeout> | null = null;
+  private prompts: string[] = [];
+  private currentIndex = 0;
 
   ngOnInit(): void {
     if (!this.isBrowser) return;
 
     const query: ExamplePromptSearchQuery = {
       sort: ExamplePromptSort.Random,
-      pageSize: 1,
+      pageSize: PROMPT_POOL_SIZE,
       active: true,
     };
     this.examplePrompts
@@ -60,26 +68,32 @@ export class ComposerSectionComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((page) => {
-        const prompt = page?.examplePrompts?.[0]?.question;
-        if (!prompt || this.interacted) return;
-        if (this.prefersReducedMotion()) {
-          this.targetPrompt = prompt;
-          this.placeholder.set(prompt);
-        } else {
-          this.beginTyping(prompt);
-        }
+        const prompts = (page?.examplePrompts ?? []).map((p) => p.question).filter(Boolean);
+        if (prompts.length === 0) return;
+        this.prompts = prompts;
+        this.resumeAnimation();
       });
 
-    this.destroyRef.onDestroy(() => this.clearTypingInterval());
+    this.destroyRef.onDestroy(() => this.clearTimer());
   }
 
-  // Bound from the section wrapper's `(focusin)` — fires on click/focus into
-  // the composer's textarea (event bubbles up). One-shot: once the user has
-  // engaged, animation completes and never re-runs even after blur.
+  // On focus, show the static "Ask anything..." placeholder so the user gets
+  // a clean "your turn" signal instead of a half-typed prompt.
   onComposerFocus(): void {
-    if (this.interacted) return;
-    this.interacted = true;
-    this.completeTyping();
+    this.clearTimer();
+    this.placeholder.set(STATIC_PLACEHOLDER);
+  }
+
+  // On blur, if the user didn't type anything, advance to the next prompt
+  // and resume the rotation after a brief delay. The delay lets quick
+  // re-focuses (e.g. focus moving within the section) cancel the resume.
+  onComposerBlur(): void {
+    this.clearTimer();
+    this.timeoutId = setTimeout(() => {
+      if (this.composer()?.text()?.length || this.prompts.length === 0) return;
+      this.currentIndex = (this.currentIndex + 1) % this.prompts.length;
+      this.resumeAnimation();
+    }, RESUME_AFTER_BLUR_MS);
   }
 
   onPromptSubmit(prompt: string): void {
@@ -91,29 +105,53 @@ export class ComposerSectionComponent implements OnInit {
     }
   }
 
-  private beginTyping(text: string): void {
-    this.targetPrompt = text;
+  private resumeAnimation(): void {
+    if (this.prompts.length === 0) return;
+    if (this.prefersReducedMotion()) {
+      this.placeholder.set(this.prompts[this.currentIndex]);
+      this.scheduleReducedMotionRotate();
+    } else {
+      this.typeNext();
+    }
+  }
+
+  private typeNext(): void {
+    const text = this.prompts[this.currentIndex];
     this.placeholder.set('');
-    let i = 0;
-    this.intervalId = setInterval(() => {
-      if (this.interacted || i >= text.length) {
-        this.completeTyping();
-        return;
-      }
-      i++;
-      this.placeholder.set(text.slice(0, i));
-    }, TYPE_INTERVAL_MS);
+    this.typeChar(text, 0);
   }
 
-  private completeTyping(): void {
-    this.clearTypingInterval();
-    if (this.targetPrompt) this.placeholder.set(this.targetPrompt);
+  private typeChar(text: string, i: number): void {
+    if (i >= text.length) {
+      this.timeoutId = setTimeout(() => this.eraseChar(text, text.length), HOLD_MS);
+      return;
+    }
+    this.placeholder.set(text.slice(0, i + 1));
+    this.timeoutId = setTimeout(() => this.typeChar(text, i + 1), TYPE_INTERVAL_MS);
   }
 
-  private clearTypingInterval(): void {
-    if (this.intervalId !== null) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
+  private eraseChar(text: string, i: number): void {
+    if (i <= 0) {
+      this.currentIndex = (this.currentIndex + 1) % this.prompts.length;
+      this.timeoutId = setTimeout(() => this.typeNext(), BETWEEN_PROMPT_MS);
+      return;
+    }
+    this.placeholder.set(text.slice(0, i - 1));
+    this.timeoutId = setTimeout(() => this.eraseChar(text, i - 1), ERASE_INTERVAL_MS);
+  }
+
+  private scheduleReducedMotionRotate(): void {
+    this.timeoutId = setTimeout(() => {
+      this.currentIndex = (this.currentIndex + 1) % this.prompts.length;
+      this.placeholder.set(this.prompts[this.currentIndex]);
+      this.scheduleReducedMotionRotate();
+    }, REDUCED_MOTION_ROTATE_MS);
+  }
+
+  private clearTimer(): void {
+    if (this.timeoutId !== null) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = null;
     }
   }
 

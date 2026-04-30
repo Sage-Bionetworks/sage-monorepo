@@ -1,4 +1,4 @@
-<section class="composer-section" (focusin)="onComposerFocus()">
+<section class="composer-section" (focusin)="onComposerFocus()" (focusout)="onComposerBlur()">
   <bixarena-prompt-composer
     [placeholder]="placeholder()"
     [maxLength]="promptLengthLimit"
