@@ -32,21 +32,21 @@ describe('PromptCardComponent', () => {
     expect(tag.textContent).toContain('Genetics');
   });
 
-  it('hides battle count when battleCount is undefined', () => {
+  it('hides vote count when battleCount is undefined', () => {
     expect(fixture.debugElement.query(By.css('.count'))).toBeNull();
   });
 
-  it('shows battle count with correct pluralization', () => {
+  it('shows vote count with correct pluralization', () => {
     fixture.componentRef.setInput('battleCount', 1);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('.count')).nativeElement.textContent).toContain(
-      '1 battle',
+      '1 vote',
     );
 
     fixture.componentRef.setInput('battleCount', 5);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('.count')).nativeElement.textContent).toContain(
-      '5 battles',
+      '5 votes',
     );
   });
 
