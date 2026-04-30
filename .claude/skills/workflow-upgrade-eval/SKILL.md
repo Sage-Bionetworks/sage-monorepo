@@ -93,6 +93,8 @@ gh api repos/<owner>/<repo>/security-advisories \
 
 If the API returns nothing or 404s (advisories disabled), fall back to a quick `WebFetch` of `https://github.com/<owner>/<repo>/security/advisories`.
 
+**Compute release age** from the `publishedAt` field on the target release. If the target version is less than **3 days old**, flag it -- a freshly-cut release hasn't had time for the community to spot a malicious or accidental bad publish (compromised maintainer token, supply-chain injection, etc.). The skill should _not_ silently approve a < 3-day-old version. Surface the age in the Security implications section and recommend either waiting until the release ages past 3 days or, if the user wants to proceed anyway, calling the risk out explicitly. This applies to the target version specifically; intermediate releases in the changelog don't matter for this check.
+
 **Fallback: subagent with web fetching.** If `gh` is unavailable or unauthenticated, spawn a `general-purpose` agent. Be explicit about coverage so it doesn't skip intermediate majors and so it surfaces security-relevant changes:
 
 ```
@@ -111,6 +113,7 @@ between version <old> and <new>.
    - Changes to what the action writes to disk, env, or stdout
    - Changes to publisher / maintainer / signing
    - Any CVEs or security advisories filed against versions in this range
+5. Report the publish date of the target version (`<new>`) so age can be computed against the current date. Flag if < 3 days old.
 
 Report all of the above plus migration steps. Be thorough -- this is for evaluating whether we
 can safely bump, both for compatibility and security posture.
@@ -157,6 +160,7 @@ For each security-relevant change identified upstream, note whether it improves,
 - **Sensitive trigger interactions** -- if any call site uses `pull_request_target`, `workflow_run`, or similar, does the bump change what fork-controlled code can influence?
 - **Permissions / token scope** -- does the new version need `permissions:` adjustments?
 - **Supply chain** -- publisher unchanged? Any CVEs or advisories filed against versions in this range? SHA-pinning still effective?
+- **Release age** -- how old is the target release (`publishedAt` from `gh release view`)? Flag if < 3 days; recommend waiting through the community quarantine window unless the user has reason to bump immediately.
 - **Runtime / container compatibility** -- if the bump raises Node version and any call site runs inside a `container:`, flag glibc/musl compatibility (Node 24 needs glibc >= 2.28).
 - **Self-hosted runner exposure** -- new runner version requirements, new disk/network behavior.
 
@@ -222,3 +226,4 @@ The one-sentence summary should make the verdict obvious in a glance: state what
 - **Containerized jobs and Node version bumps.** When a call site runs inside a job-level `container:`, the runner mounts its bundled Node into the container. A Node-version bump (e.g. 20 -> 24) requires the container's glibc to be compatible (Node 24 needs glibc >= 2.28). Flag this for any containerized call site.
 - **Credential storage location changes are usually security improvements -- but verify.** Actions moving secrets out of `.git/config` or workspace files into `$RUNNER_TEMP` are net positive; just confirm nothing in the repo (artifact uploads, debug `git config --list` calls, custom credential extraction) relied on the old location.
 - **Forks and re-publishes.** If the action is _not_ published by a well-known org (GitHub itself, large vendors), check the publisher hasn't changed and there are no open security advisories. Mention publisher reputation explicitly when the action is third-party.
+- **Quarantine fresh releases.** Don't recommend bumping to a release that's < 3 days old. The 3-day window is when compromised maintainer tokens, malicious tag pushes, or accidental bad publishes are most likely to be caught and yanked by the community. The age check uses `publishedAt` from `gh release view`. If the user has a strong reason to bump immediately (e.g. urgent CVE fix in the new release), say so explicitly and call out the heightened risk -- but don't silently approve a freshly-cut release.
