@@ -3,9 +3,14 @@
 } @else {
   <button class="prompt-card" type="button" (click)="onClick()">
     <div class="question">{{ question() }}</div>
-    <div class="meta">
+    <div class="footer">
       @if (category()) {
         <span class="tag">{{ category() }}</span>
+      }
+      @if (battleCount() !== undefined) {
+        <span class="count">
+          {{ battleCount() }} {{ battleCount() === 1 ? 'battle' : 'battles' }}
+        </span>
       }
       <span class="cta">
         <span class="cta-text">{{ ctaText() }}</span>

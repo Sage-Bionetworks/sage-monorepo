@@ -32,6 +32,24 @@ describe('PromptCardComponent', () => {
     expect(tag.textContent).toContain('Genetics');
   });
 
+  it('hides battle count when battleCount is undefined', () => {
+    expect(fixture.debugElement.query(By.css('.count'))).toBeNull();
+  });
+
+  it('shows battle count with correct pluralization', () => {
+    fixture.componentRef.setInput('battleCount', 1);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.count')).nativeElement.textContent).toContain(
+      '1 battle',
+    );
+
+    fixture.componentRef.setInput('battleCount', 5);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.count')).nativeElement.textContent).toContain(
+      '5 battles',
+    );
+  });
+
   it('emits cardClick when the button is clicked', () => {
     const spy = jest.fn();
     component.cardClick.subscribe(spy);
