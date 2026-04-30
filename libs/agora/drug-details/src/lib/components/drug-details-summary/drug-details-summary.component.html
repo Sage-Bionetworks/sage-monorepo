@@ -1,0 +1,40 @@
+<div class="drug-details-summary">
+  <section>
+    <p class="drug-details-label">Modality</p>
+    <p>{{ drug().modality }}</p>
+    <br />
+
+    <p class="drug-details-label">Max Clinical Trial Phase</p>
+    <p>{{ drug().maximum_clinical_trial_phase }}</p>
+    <br />
+
+    @if (drug().year_of_first_approval) {
+      <p class="drug-details-label">Year of first approval</p>
+      <p>{{ drug().year_of_first_approval }}</p>
+      <br />
+    }
+
+    @if (drug().mechanisms_of_action.length > 0) {
+      <p class="drug-details-label">Mechanisms of Action</p>
+      <ul>
+        @for (mechanism of drug().mechanisms_of_action; track mechanism) {
+          <li>{{ mechanism }}</li>
+        }
+      </ul>
+      <br />
+    }
+
+    @if (drug().linked_targets.length > 0) {
+      <p class="drug-details-label">Linked Targets</p>
+      <ul>
+        @for (target of drug().linked_targets; track target) {
+          <li>
+            <a [routerLink]="['/' + ROUTE_PATHS.DETAILS, target.ensembl_gene_id]">{{
+              target.hgnc_symbol || target.ensembl_gene_id
+            }}</a>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</div>
