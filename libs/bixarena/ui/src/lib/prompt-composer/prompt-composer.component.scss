@@ -1,7 +1,7 @@
 :host {
   display: block;
   width: 100%;
-  max-width: 40rem;
+  max-width: var(--composer-max-width);
   margin: 0 auto;
 }
 
@@ -12,18 +12,21 @@
   overflow: hidden;
   transition: all 0.25s;
 
+  &:hover {
+    border-color: var(--p-surface-300);
+    box-shadow: 0 2px 16px rgb(0 0 0 / 8%);
+  }
+
   &:focus-within {
     border-color: var(--p-surface-300);
-    box-shadow:
-      0 4px 32px rgb(0 0 0 / 20%),
-      0 0 0 3px rgb(249 115 22 / 4%);
+    box-shadow: 0 4px 32px rgb(0 0 0 / 20%);
   }
 }
 
 .input {
   width: 100%;
-  min-height: 3.5rem;
-  max-height: 8rem;
+  min-height: var(--composer-input-min-height);
+  max-height: 10rem;
   padding: 1rem 1.125rem 0.5rem;
   border: none;
   outline: none;
@@ -34,6 +37,10 @@
   line-height: 1.5;
   background: transparent;
   color: var(--p-text-color);
+
+  &:focus-visible {
+    box-shadow: none;
+  }
 
   &::placeholder {
     color: var(--p-text-muted-color);
@@ -64,26 +71,36 @@
 }
 
 .send {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--p-surface-500);
-  color: var(--p-text-color);
+  background: var(--p-surface-200);
+  color: var(--p-text-muted-color);
   transition: all 0.2s;
-  opacity: 0.5;
+
+  // Expand the tap target to ≥44×44px on touch screens without enlarging
+  // the visual button. The toolbar's flex layout absorbs the inset space.
+  @media (hover: none) and (pointer: coarse) {
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -0.5rem;
+    }
+  }
 
   &.hot {
-    background: var(--p-text-color);
-    color: var(--p-surface-0);
-    opacity: 1;
+    background: var(--p-primary-color);
+    color: #fff;
   }
 
   &.hot:hover {
+    background: var(--p-primary-600);
     transform: scale(1.06);
   }
 

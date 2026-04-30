@@ -96,11 +96,13 @@ export class BattleStateService {
   private model2SlowTimeout?: ReturnType<typeof setTimeout>;
   private validationTimer?: ReturnType<typeof setTimeout>;
   private isVoting = false;
+  private examplePromptId: string | null = null;
 
-  async submitPrompt(prompt: string): Promise<void> {
+  async submitPrompt(prompt: string, examplePromptId?: string | null): Promise<void> {
     if (!this.isBrowser) return;
     this.initialPrompt.set(prompt);
     this.lastPrompt.set(prompt);
+    this.examplePromptId = examplePromptId ?? null;
     this.promptUsesRemaining.set(this.config.battle.promptUseLimit);
     this.selectedOutcome.set(null);
 
@@ -109,7 +111,12 @@ export class BattleStateService {
 
     let battle;
     try {
-      battle = await firstValueFrom(this.battleApi.createBattle({ title: prompt.slice(0, 50) }));
+      battle = await firstValueFrom(
+        this.battleApi.createBattle({
+          title: prompt.slice(0, 50),
+          examplePromptId: this.examplePromptId,
+        }),
+      );
       if (!battle) throw new Error('Failed to create battle');
     } catch (err) {
       console.error('Failed to create battle', err);
@@ -219,7 +226,12 @@ export class BattleStateService {
 
     let battle;
     try {
-      battle = await firstValueFrom(this.battleApi.createBattle({ title: prompt.slice(0, 50) }));
+      battle = await firstValueFrom(
+        this.battleApi.createBattle({
+          title: prompt.slice(0, 50),
+          examplePromptId: this.examplePromptId,
+        }),
+      );
       if (!battle) throw new Error('Failed to create battle');
     } catch (err) {
       console.error('Failed to create matchup', err);
@@ -300,6 +312,7 @@ export class BattleStateService {
     this.model2Stream.set({ ...INITIAL_STREAM_STATE });
     this.initialPrompt.set(null);
     this.lastPrompt.set(null);
+    this.examplePromptId = null;
     this.promptUsesRemaining.set(0);
     this.selectedOutcome.set(null);
   }

@@ -24,6 +24,7 @@ describe('BattleGateService', () => {
   beforeEach(() => {
     hasCompleted.set(false);
     mockOnboardingService.markComplete.mockReset();
+    sessionStorage.clear();
 
     TestBed.configureTestingModule({
       providers: [
@@ -99,6 +100,58 @@ describe('BattleGateService', () => {
       service.showLoginModal.set(true);
       service.onLoginCancel();
       expect(service.showLoginModal()).toBe(false);
+    });
+
+    it('clears any pending prompt so a later /battle visit lands on empty composer', () => {
+      service.savePendingPrompt('Q1', 'ep-p1');
+      service.showLoginModal.set(true);
+      service.onLoginCancel();
+      expect(service.consumePendingPrompt()).toBeNull();
+    });
+  });
+
+  describe('pending prompt', () => {
+    it('savePendingPrompt persists trimmed text and consumePendingPrompt returns + clears it', () => {
+      service.savePendingPrompt('  hello world  ');
+      expect(service.consumePendingPrompt()).toEqual({
+        prompt: 'hello world',
+        examplePromptId: null,
+      });
+      expect(service.consumePendingPrompt()).toBeNull();
+    });
+
+    it('savePendingPrompt persists the example_prompt FK when provided', () => {
+      service.savePendingPrompt('curated question', 'ep-42');
+      expect(service.consumePendingPrompt()).toEqual({
+        prompt: 'curated question',
+        examplePromptId: 'ep-42',
+      });
+    });
+
+    it('savePendingPrompt without an FK clears any previously saved FK', () => {
+      service.savePendingPrompt('first', 'ep-old');
+      service.savePendingPrompt('second');
+      expect(service.consumePendingPrompt()).toEqual({
+        prompt: 'second',
+        examplePromptId: null,
+      });
+    });
+
+    it('savePendingPrompt ignores empty / whitespace input', () => {
+      service.savePendingPrompt('   ');
+      expect(service.consumePendingPrompt()).toBeNull();
+    });
+
+    it('consumePendingPrompt returns null when nothing is saved', () => {
+      expect(service.consumePendingPrompt()).toBeNull();
+    });
+
+    it('consumePendingPrompt returns null and clears both keys when prompt is whitespace-only', () => {
+      sessionStorage.setItem('bixarena.pendingPrompt', '   ');
+      sessionStorage.setItem('bixarena.pendingExamplePromptId', 'ep-stale');
+      expect(service.consumePendingPrompt()).toBeNull();
+      expect(sessionStorage.getItem('bixarena.pendingPrompt')).toBeNull();
+      expect(sessionStorage.getItem('bixarena.pendingExamplePromptId')).toBeNull();
     });
   });
 });

@@ -47,7 +47,7 @@ export class ExamplePromptsComponent implements AfterViewInit, OnDestroy {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly flowGroupRef = viewChild<ElementRef<SVGGElement>>('flowGroup');
 
-  readonly promptSelect = output<string>();
+  readonly promptSelect = output<{ question: string; examplePromptId: string }>();
 
   readonly frontPath = buildStrandPath(true);
   readonly backPath = buildStrandPath(false);
@@ -110,7 +110,7 @@ export class ExamplePromptsComponent implements AfterViewInit, OnDestroy {
   }
 
   onCardClick(p: ExamplePrompt): void {
-    this.promptSelect.emit(p.question);
+    this.promptSelect.emit({ question: p.question, examplePromptId: p.id });
   }
 
   categoryLabel(p: ExamplePrompt): string | undefined {

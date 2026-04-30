@@ -4,6 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { EMPTY } from 'rxjs';
 import { BattleService as BattleApiService, BASE_PATH } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
+import { BattleGateService } from '@sagebionetworks/bixarena/services';
 import { BattleComponent } from './battle.component';
 
 const mockConfig = {
@@ -20,6 +21,7 @@ describe('BattleComponent', () => {
   beforeEach(async () => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     globalThis.fetch = jest.fn().mockReturnValue(new Promise(() => {}));
+    sessionStorage.clear();
 
     await TestBed.configureTestingModule({
       imports: [BattleComponent],
@@ -51,5 +53,43 @@ describe('BattleComponent', () => {
 
   it('should start in landing phase', () => {
     expect(component.state.phase()).toBe('landing');
+  });
+
+  it('does not consume a pending prompt when none is saved', () => {
+    const consumeSpy = jest.spyOn(BattleGateService.prototype, 'consumePendingPrompt');
+    fixture = TestBed.createComponent(BattleComponent);
+    fixture.detectChanges();
+    expect(consumeSpy).toHaveBeenCalledTimes(1);
+    expect(consumeSpy.mock.results[0].value).toBeNull();
+  });
+
+  it('auto-submits a saved pending prompt on init', async () => {
+    const gate = TestBed.inject(BattleGateService);
+    gate.savePendingPrompt('hello biomedical world');
+    jest.spyOn(BattleGateService.prototype, 'checkOnboarding').mockResolvedValue(true);
+
+    fixture = TestBed.createComponent(BattleComponent);
+    component = fixture.componentInstance;
+    const submitSpy = jest.spyOn(component.state, 'submitPrompt').mockResolvedValue();
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    expect(submitSpy).toHaveBeenCalledWith('hello biomedical world', null);
+    expect(gate.consumePendingPrompt()).toBeNull();
+  });
+
+  it('forwards a pending example_prompt id when present', async () => {
+    const gate = TestBed.inject(BattleGateService);
+    gate.savePendingPrompt('curated question', 'ep-99');
+    jest.spyOn(BattleGateService.prototype, 'checkOnboarding').mockResolvedValue(true);
+
+    fixture = TestBed.createComponent(BattleComponent);
+    component = fixture.componentInstance;
+    const submitSpy = jest.spyOn(component.state, 'submitPrompt').mockResolvedValue();
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    expect(submitSpy).toHaveBeenCalledWith('curated question', 'ep-99');
+    expect(gate.consumePendingPrompt()).toBeNull();
   });
 });

@@ -28,7 +28,7 @@ export interface ExamplePromptSearchQuery {
   direction?: SortDirection;
   source?: ExamplePromptSource;
   /**
-   * Filter by active status (true returns only active prompts; false only inactive; omit for all).
+   * Filter by active status. Ignored for sort=random and sort=usage, which always return only active prompts.
    */
   active?: boolean | null;
   /**

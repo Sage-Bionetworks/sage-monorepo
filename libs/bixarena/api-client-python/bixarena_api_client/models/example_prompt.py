@@ -50,7 +50,8 @@ class ExamplePrompt(BaseModel):
         description="When the example prompt was created.", alias="createdAt"
     )
     battle_count: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Number of battles started from this prompt.", alias="battleCount"
+        description="Number of completed battles started from this prompt.",
+        alias="battleCount",
     )
     __properties: ClassVar[List[str]] = [
         "id",

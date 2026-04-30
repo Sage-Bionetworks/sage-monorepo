@@ -32,19 +32,32 @@ export const BixArenaPreset = definePreset(Lara, {
     },
     colorScheme: {
       light: {
+        primary: {
+          color: '{primary.300}',
+          contrastColor: '#ffffff',
+          hoverColor: '{primary.400}',
+          activeColor: '{primary.500}',
+        },
+        teal: { 400: '#4ab8a3' },
         surface: {
-          0: '#fdfcfb',
-          50: '#f9f7f4',
-          100: '#f4f0eb',
-          200: '#e8e2db',
-          300: '#d6cfc7',
-          400: '#b3aca5',
-          500: '#918a83',
+          0: '#fbf7ef',
+          50: '#f6f2ec',
+          100: '#fffefb',
+          200: '#ece7e0',
+          300: '#dad4cb',
+          400: '#c6bab3',
+          500: '#9f9792',
           600: '#7c746f',
-          700: '#3a3a40',
-          800: '#24252d',
+          700: '#3d3737',
+          800: '#292726',
           900: '#1b1818',
-          950: '#110f0e',
+          950: '#1a1714',
+        },
+        text: {
+          color: '{surface.950}',
+          hoverColor: '{surface.950}',
+          mutedColor: '{surface.600}',
+          hoverMutedColor: '{surface.700}',
         },
         content: {
           background: '{surface.0}',
@@ -57,6 +70,7 @@ export const BixArenaPreset = definePreset(Lara, {
         },
       },
       dark: {
+        teal: { 400: '#34d4b4' },
         surface: {
           0: '#1b1818',
           50: '#221f1d',
@@ -74,8 +88,8 @@ export const BixArenaPreset = definePreset(Lara, {
         text: {
           color: '{surface.950}',
           hoverColor: '{surface.950}',
-          mutedColor: '{surface.500}',
-          hoverMutedColor: '{surface.400}',
+          mutedColor: '{surface.600}',
+          hoverMutedColor: '{surface.700}',
         },
         content: {
           background: '{surface.0}',

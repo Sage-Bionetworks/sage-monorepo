@@ -8,8 +8,7 @@ import { Component, input, output } from '@angular/core';
 export class PromptCardComponent {
   readonly question = input.required<string>();
   readonly category = input<string | undefined>(undefined);
-  readonly count = input<number | undefined>(undefined);
-  readonly countLabel = input<string>('battles');
+  readonly battleCount = input<number | undefined>(undefined);
   readonly ctaText = input<string>('Battle this');
   readonly skeleton = input<boolean>(false);
 

@@ -1,8 +1,10 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
 .nav {
   display: flex;
   align-items: center;
   gap: 0;
-  padding: 0 2rem;
+  padding: 0 var(--content-padding-x);
   height: var(--nav-height);
   color: var(--p-text-color);
   border-bottom: 1px solid var(--p-surface-200);
@@ -32,7 +34,7 @@
     align-items: center;
     padding: 0.5rem 0.875rem;
     text-decoration: none;
-    color: var(--p-surface-500);
+    color: var(--p-text-muted-color);
     font-size: var(--text-base);
     font-variation-settings: 'wght' 440;
     letter-spacing: -0.01em;
@@ -100,5 +102,111 @@
   &:hover {
     color: var(--p-text-color);
     background: var(--hover-bg);
+  }
+}
+
+.hamburger {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (width < #{shared.$md-breakpoint}) {
+  .links,
+  .divider,
+  .login-btn {
+    display: none;
+  }
+
+  // .links normally carries margin-left:auto to push .actions to the right.
+  // When .links is hidden, .actions has to assume that role itself.
+  .actions {
+    margin-left: auto;
+  }
+
+  .theme-toggle {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: none;
+    border-radius: var(--p-border-radius-md);
+    background: transparent;
+    color: var(--p-text-color);
+    cursor: pointer;
+    transition:
+      color 0.12s,
+      background 0.12s;
+
+    &:hover {
+      background: var(--hover-bg);
+    }
+  }
+
+  .mobile-menu {
+    position: fixed;
+    top: var(--nav-height);
+    inset-inline: 0;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem var(--content-padding-x);
+    background: var(--p-surface-0);
+    border-bottom: 1px solid var(--p-surface-200);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 8%);
+    animation: slide-down 0.18s cubic-bezier(0.2, 0.7, 0.3, 1);
+
+    a {
+      display: flex;
+      align-items: center;
+      min-height: 2.75rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--p-border-radius-md);
+      text-decoration: none;
+      color: var(--p-text-color);
+      font-size: var(--text-base);
+      font-variation-settings: 'wght' 460;
+
+      &:hover {
+        background: var(--hover-bg);
+      }
+
+      &.active {
+        font-variation-settings: 'wght' 560;
+      }
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--p-surface-200);
+      margin: 0.5rem 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu {
+    animation: none;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

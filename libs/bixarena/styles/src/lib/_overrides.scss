@@ -12,6 +12,16 @@
     box-shadow: none;
   }
 
+  bixarena-nav .mobile-menu p-button {
+    display: block;
+    width: 100%;
+  }
+
+  bixarena-nav .mobile-menu .p-button {
+    height: 2.75rem;
+    line-height: 2.75rem;
+  }
+
   bixarena-voting-bar .nudge .p-button {
     padding: 0.5rem 1.25rem;
     font-size: var(--text-sm);
@@ -175,7 +185,7 @@
       font-weight: 560;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--p-surface-500);
+      color: var(--p-text-muted-color);
       background: var(--p-surface-100);
       padding: 0.75rem 1rem;
       white-space: nowrap;
@@ -220,7 +230,7 @@
     padding: 0;
     margin-top: 1rem;
     justify-content: center;
-    color: var(--p-surface-500);
+    color: var(--p-text-muted-color);
   }
 
   .leaderboard-paginator .p-paginator-page.p-paginator-page-selected,

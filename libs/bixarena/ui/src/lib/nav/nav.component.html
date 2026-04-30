@@ -1,11 +1,11 @@
-<header class="nav">
+<header class="nav" [class.menu-open]="menuOpen()">
   <a routerLink="/" class="brand">
-    <img src="/assets/bioarena-logo.svg" alt="BioArena" height="32" />
+    <img src="/assets/bioarena-logo.svg" alt="" height="32" />
     <span>BioArena</span>
   </a>
   <nav class="links">
     <a routerLink="/battle" routerLinkActive="active">Battle</a>
-    <a routerLink="/arena" routerLinkActive="active">3D Arena</a>
+    <!-- <a routerLink="/arena" routerLinkActive="active">3D Arena</a> -->
     <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
   </nav>
   <div class="actions">
@@ -25,7 +25,7 @@
         />
       </button>
     } @else {
-      <p-button label="Login" (onClick)="authService.login()" />
+      <p-button class="login-btn" label="Login" (onClick)="authService.login()" />
     }
     <button
       class="theme-toggle"
@@ -65,5 +65,55 @@
         </svg>
       }
     </button>
+    <button
+      class="hamburger"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="mobile-menu"
+      [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'"
+    >
+      @if (menuOpen()) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      } @else {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <path d="M3 6h18" />
+          <path d="M3 12h18" />
+          <path d="M3 18h18" />
+        </svg>
+      }
+    </button>
   </div>
 </header>
+
+@if (menuOpen()) {
+  <nav id="mobile-menu" class="mobile-menu" role="navigation" aria-label="Primary mobile">
+    <a routerLink="/battle" routerLinkActive="active" (click)="closeMenu()">Battle</a>
+    <a routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a>
+    @if (!showAvatar()) {
+      <hr />
+      <p-button label="Login" fluid (onClick)="authService.login(); closeMenu()" />
+    }
+  </nav>
+}

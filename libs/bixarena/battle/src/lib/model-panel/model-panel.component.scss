@@ -58,13 +58,13 @@
 
   &.streaming {
     background: var(--p-teal-400);
-    box-shadow: 0 0 8px rgb(52 212 180 / 30%);
+    box-shadow: 0 0 8px rgb(from var(--p-teal-400) r g b / 30%);
     animation: bd 1.2s ease-in-out infinite;
   }
 
   &.complete {
     background: var(--p-teal-400);
-    box-shadow: 0 0 6px rgb(52 212 180 / 20%);
+    box-shadow: 0 0 6px rgb(from var(--p-teal-400) r g b / 20%);
   }
 
   &.error {

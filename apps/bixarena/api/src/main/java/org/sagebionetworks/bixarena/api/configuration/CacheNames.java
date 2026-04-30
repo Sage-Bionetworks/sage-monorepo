@@ -46,4 +46,20 @@ public final class CacheNames {
    * Invalidation: Time-based (24h TTL)
    */
   public static final String TRENDING_EXAMPLE_PROMPTS = "bixarena:api:trendingExamplePrompts";
+
+  /**
+   * Cache for the leaderboard list (no params).
+   * Key format: bixarena:api:leaderboardList::SimpleKey []
+   * TTL: 6 hours (snapshots refresh daily via the worker)
+   * Invalidation: Time-based (6h TTL)
+   */
+  public static final String LEADERBOARD_LIST = "bixarena:api:leaderboardList";
+
+  /**
+   * Cache for individual leaderboard entry pages.
+   * Key format: bixarena:api:leaderboardEntries::{leaderboardId}|{query-fields}
+   * TTL: 6 hours (matches LEADERBOARD_LIST; snapshots refresh daily via the worker)
+   * Invalidation: Time-based (6h TTL)
+   */
+  public static final String LEADERBOARD_ENTRIES = "bixarena:api:leaderboardEntries";
 }

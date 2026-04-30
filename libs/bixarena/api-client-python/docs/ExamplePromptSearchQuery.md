@@ -4,17 +4,17 @@ An example prompt search query with pagination and filtering options.
 
 ## Properties
 
-| Name            | Type                                                  | Description                                                                                    | Notes                                                |
-| --------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| **page_number** | **int**                                               | The page number.                                                                               | [optional] [default to 0]                            |
-| **page_size**   | **int**                                               | The number of items in a single page.                                                          | [optional] [default to 25]                           |
-| **sort**        | [**ExamplePromptSort**](ExamplePromptSort.md)         |                                                                                                | [optional] [default to ExamplePromptSort.CREATED_AT] |
-| **direction**   | [**SortDirection**](SortDirection.md)                 |                                                                                                | [optional] [default to SortDirection.ASC]            |
-| **source**      | [**ExamplePromptSource**](ExamplePromptSource.md)     |                                                                                                | [optional]                                           |
-| **active**      | **bool**                                              | Filter by active status (true returns only active prompts; false only inactive; omit for all). | [optional]                                           |
-| **search**      | **str**                                               | Search by question content (case-insensitive partial match).                                   | [optional]                                           |
-| **categories**  | [**List[BiomedicalCategory]**](BiomedicalCategory.md) | Filter by one or more categories. Returns prompts matching any of the given categories.        | [optional]                                           |
-| **lookback**    | **int**                                               | Lookback window in days.                                                                       | [optional]                                           |
+| Name            | Type                                                  | Description                                                                                                         | Notes                                                |
+| --------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| **page_number** | **int**                                               | The page number.                                                                                                    | [optional] [default to 0]                            |
+| **page_size**   | **int**                                               | The number of items in a single page.                                                                               | [optional] [default to 25]                           |
+| **sort**        | [**ExamplePromptSort**](ExamplePromptSort.md)         |                                                                                                                     | [optional] [default to ExamplePromptSort.CREATED_AT] |
+| **direction**   | [**SortDirection**](SortDirection.md)                 |                                                                                                                     | [optional] [default to SortDirection.ASC]            |
+| **source**      | [**ExamplePromptSource**](ExamplePromptSource.md)     |                                                                                                                     | [optional]                                           |
+| **active**      | **bool**                                              | Filter by active status. Ignored for sort&#x3D;random and sort&#x3D;usage, which always return only active prompts. | [optional]                                           |
+| **search**      | **str**                                               | Search by question content (case-insensitive partial match).                                                        | [optional]                                           |
+| **categories**  | [**List[BiomedicalCategory]**](BiomedicalCategory.md) | Filter by one or more categories. Returns prompts matching any of the given categories.                             | [optional]                                           |
+| **lookback**    | **int**                                               | Lookback window in days.                                                                                            | [optional]                                           |
 
 ## Example
 

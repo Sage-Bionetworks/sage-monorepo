@@ -43,4 +43,37 @@ describe('NavComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('starts with menu closed', () => {
+    expect(component.menuOpen()).toBe(false);
+  });
+
+  it('toggleMenu flips menuOpen', () => {
+    component.toggleMenu();
+    expect(component.menuOpen()).toBe(true);
+    component.toggleMenu();
+    expect(component.menuOpen()).toBe(false);
+  });
+
+  it('closeMenu sets menuOpen to false when open', () => {
+    component.toggleMenu();
+    expect(component.menuOpen()).toBe(true);
+    component.closeMenu();
+    expect(component.menuOpen()).toBe(false);
+  });
+
+  it('Escape key closes the menu', () => {
+    component.toggleMenu();
+    expect(component.menuOpen()).toBe(true);
+    component.onEscape();
+    expect(component.menuOpen()).toBe(false);
+  });
+
+  it('resize past md closes the menu', () => {
+    component.toggleMenu();
+    expect(component.menuOpen()).toBe(true);
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1024 });
+    component.onResize();
+    expect(component.menuOpen()).toBe(false);
+  });
 });

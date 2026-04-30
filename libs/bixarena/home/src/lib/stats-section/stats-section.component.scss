@@ -1,0 +1,67 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
+:host {
+  display: block;
+}
+
+.stats-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat + .stat {
+  border-left: 1px solid var(--p-surface-200);
+  padding-left: 2rem;
+}
+
+.stat-val {
+  font-size: 1.5rem;
+  font-weight: 540;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  color: var(--p-text-color);
+}
+
+.stat-lbl {
+  font-size: var(--text-sm);
+  color: var(--p-text-muted-color);
+  margin-top: 0.25rem;
+}
+
+.user-stat .stat-val {
+  color: var(--p-primary-color);
+}
+
+@media (width < #{shared.$md-breakpoint}) {
+  .stats {
+    gap: 1.5rem;
+  }
+
+  // Drop the divider on mobile: when stats wrap to multiple rows the left
+  // border on the wrapped row's first item reads as a stray vertical line.
+  .stat + .stat {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .stat-val {
+    font-size: var(--text-xl);
+  }
+
+  .stat-lbl {
+    font-size: 0.6875rem;
+  }
+}

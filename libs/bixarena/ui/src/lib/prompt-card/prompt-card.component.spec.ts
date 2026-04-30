@@ -32,23 +32,22 @@ describe('PromptCardComponent', () => {
     expect(tag.textContent).toContain('Genetics');
   });
 
-  it('hides count stat when count is undefined', () => {
-    expect(fixture.debugElement.query(By.css('.stat'))).toBeNull();
+  it('hides vote count when battleCount is undefined', () => {
+    expect(fixture.debugElement.query(By.css('.count'))).toBeNull();
   });
 
-  it('shows count stat with default label when count is set', () => {
-    fixture.componentRef.setInput('count', 42);
+  it('shows vote count with correct pluralization', () => {
+    fixture.componentRef.setInput('battleCount', 1);
     fixture.detectChanges();
-    const stat = fixture.debugElement.query(By.css('.stat')).nativeElement;
-    expect(stat.textContent.replace(/\s+/g, ' ').trim()).toBe('42 battles');
-  });
+    expect(fixture.debugElement.query(By.css('.count')).nativeElement.textContent).toContain(
+      '1 vote',
+    );
 
-  it('uses countLabel when provided', () => {
-    fixture.componentRef.setInput('count', 7);
-    fixture.componentRef.setInput('countLabel', 'matches');
+    fixture.componentRef.setInput('battleCount', 5);
     fixture.detectChanges();
-    const stat = fixture.debugElement.query(By.css('.stat')).nativeElement;
-    expect(stat.textContent.replace(/\s+/g, ' ').trim()).toBe('7 matches');
+    expect(fixture.debugElement.query(By.css('.count')).nativeElement.textContent).toContain(
+      '5 votes',
+    );
   });
 
   it('emits cardClick when the button is clicked', () => {

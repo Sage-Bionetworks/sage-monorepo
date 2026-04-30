@@ -21,44 +21,54 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 @EnableCaching
 @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(
-    name = "spring.cache.type", havingValue = "redis", matchIfMissing = true)
+  name = "spring.cache.type",
+  havingValue = "redis",
+  matchIfMissing = true
+)
 public class CacheConfiguration {
 
   @Bean
   public RedisCacheManager cacheManager(
-      RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
-
+    RedisConnectionFactory connectionFactory,
+    ObjectMapper objectMapper
+  ) {
     // Create ObjectMapper configured for caching with type information
     ObjectMapper cacheObjectMapper = objectMapper.copy();
     cacheObjectMapper.activateDefaultTyping(
-        BasicPolymorphicTypeValidator.builder()
-            .allowIfBaseType(Object.class)
-            .build(),
-        ObjectMapper.DefaultTyping.NON_FINAL);
+      BasicPolymorphicTypeValidator.builder().allowIfBaseType(Object.class).build(),
+      ObjectMapper.DefaultTyping.NON_FINAL
+    );
 
     // Default cache configuration (1 minute TTL)
-    RedisCacheConfiguration defaultConfig =
-        RedisCacheConfiguration.defaultCacheConfig()
-            .entryTtl(Duration.ofMinutes(1))
-            .serializeKeysWith(
-                RedisSerializationContext.SerializationPair.fromSerializer(
-                    new StringRedisSerializer()))
-            .serializeValuesWith(
-                RedisSerializationContext.SerializationPair.fromSerializer(
-                    new GenericJackson2JsonRedisSerializer(cacheObjectMapper)))
-            .disableCachingNullValues();
+    RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
+      .entryTtl(Duration.ofMinutes(1))
+      .serializeKeysWith(
+        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+      )
+      .serializeValuesWith(
+        RedisSerializationContext.SerializationPair.fromSerializer(
+          new GenericJackson2JsonRedisSerializer(cacheObjectMapper)
+        )
+      )
+      .disableCachingNullValues();
 
     // Custom configuration for user ranks (5 minute TTL for better performance)
     RedisCacheConfiguration userRanksConfig = defaultConfig.entryTtl(Duration.ofMinutes(5));
 
     // Custom configuration for trending example prompts (1 day TTL)
-    RedisCacheConfiguration trendingExamplePromptsConfig =
-        defaultConfig.entryTtl(Duration.ofDays(1));
+    RedisCacheConfiguration trendingExamplePromptsConfig = defaultConfig.entryTtl(
+      Duration.ofDays(1)
+    );
+
+    // Custom configuration for leaderboard reads (6 hour TTL — snapshots refresh daily)
+    RedisCacheConfiguration leaderboardConfig = defaultConfig.entryTtl(Duration.ofHours(6));
 
     return RedisCacheManager.builder(connectionFactory)
-        .cacheDefaults(defaultConfig)
-        .withCacheConfiguration(CacheNames.USER_RANKS, userRanksConfig)
-        .withCacheConfiguration(CacheNames.TRENDING_EXAMPLE_PROMPTS, trendingExamplePromptsConfig)
-        .build();
+      .cacheDefaults(defaultConfig)
+      .withCacheConfiguration(CacheNames.USER_RANKS, userRanksConfig)
+      .withCacheConfiguration(CacheNames.TRENDING_EXAMPLE_PROMPTS, trendingExamplePromptsConfig)
+      .withCacheConfiguration(CacheNames.LEADERBOARD_LIST, leaderboardConfig)
+      .withCacheConfiguration(CacheNames.LEADERBOARD_ENTRIES, leaderboardConfig)
+      .build();
   }
 }

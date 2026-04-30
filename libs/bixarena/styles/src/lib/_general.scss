@@ -13,6 +13,11 @@
   outline: none;
 }
 
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--p-primary-color) 18%, transparent);
+}
+
 body {
   margin: 0;
   background: var(--p-surface-0);
@@ -36,5 +41,6 @@ body::after {
   z-index: 0;
   pointer-events: none;
   opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend, normal);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
 }

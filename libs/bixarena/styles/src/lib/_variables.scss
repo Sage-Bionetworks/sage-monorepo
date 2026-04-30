@@ -1,8 +1,6 @@
 // rem: font sizes, padding, margins, max-widths
 // px: borders, box-shadows, border-radius
 :root {
-  --nav-height: 3.75rem;
-  --max-width: 80rem;
   --font-serif: 'Playfair Display Variable', 'Playfair Display', 'Georgia', serif;
 
   // Font size scale
@@ -11,16 +9,21 @@
   --text-md: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.625rem;
 }
 
 html:not(.dark) {
-  --nav-bg: rgb(253 252 251 / 80%);
+  --nav-bg: rgb(251 247 239 / 80%);
   --hover-bg: rgb(0 0 0 / 4%);
-  --grain-opacity: 0.08;
+  --grain-opacity: 0.06;
+  --grain-blend: multiply;
 }
 
 html.dark {
   --nav-bg: rgb(27 24 24 / 80%);
   --hover-bg: rgb(253 252 251 / 4%);
   --grain-opacity: 0.15;
+  --grain-blend: normal;
 }

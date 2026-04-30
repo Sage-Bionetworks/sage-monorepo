@@ -51,7 +51,7 @@ def snapshot_add(
         help="Number of bootstrap iterations for confidence intervals",
     ),
     min_evals: int = typer.Option(
-        0,
+        10,
         "--min",
         help="Minimum evaluations per model to include in the leaderboard",
     ),
@@ -64,12 +64,12 @@ def snapshot_add(
         ),
     ),
     min_total_battles: int = typer.Option(
-        100,
+        30,
         "--min-total-battles",
         help="--all only: skip leaderboards with fewer total battles than this",
     ),
     min_total_models: int = typer.Option(
-        10,
+        4,
         "--min-total-models",
         help="--all only: skip leaderboards with fewer distinct models than this",
     ),

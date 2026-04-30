@@ -1,0 +1,36 @@
+@if (visible()) {
+  <section class="trending-section">
+    <header class="header">
+      <div class="header-text">
+        <h2 class="title">Trending this week</h2>
+        <p class="subtitle">The most popular biomedical questions from the community</p>
+      </div>
+      @if (!showSkeletons()) {
+        <button class="ask-own-link" type="button" (click)="onAskOwn()">
+          Ask your own question <span class="arrow" aria-hidden="true">&rarr;</span>
+        </button>
+      }
+    </header>
+    <div class="grid">
+      @if (showSkeletons()) {
+        @for (_ of skeletonSlots; track $index) {
+          <bixarena-prompt-card [question]="''" [skeleton]="true" />
+        }
+      } @else {
+        @for (p of cards(); track p.id) {
+          <bixarena-prompt-card
+            [question]="p.question"
+            [category]="categoryLabel(p)"
+            [battleCount]="p.battleCount"
+            (cardClick)="onCardClick(p)"
+          />
+        }
+      }
+    </div>
+    @if (!showSkeletons()) {
+      <button class="section-cta" type="button" (click)="onAskOwn()">
+        Ask your own question <span class="arrow" aria-hidden="true">&rarr;</span>
+      </button>
+    }
+  </section>
+}
