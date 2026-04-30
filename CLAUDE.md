@@ -123,7 +123,7 @@ import { Component } from '../../../libs/agora/ui';
 Each project has a `project.json` defining targets (build, test, lint, serve, integration-test) and tags:
 
 - `type:feature|service|app|util|db|config|styles|ui`
-- `scope:backend|agora|model-ad|bixarena|explorers|shared`
+- `scope:backend|agora|model-ad|bixarena|explorers|qtl|shared`
 - `language:typescript|java|python`
 
 Always refer to `package.json` for exact dependency versions when looking up API docs.

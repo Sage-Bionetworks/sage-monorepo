@@ -65,6 +65,7 @@ nav:
       - Agora: api/agora.md
       - BixArena: api/bixarena.md
       - Model-AD: api/model-ad.md
+      - QTL: api/qtl.md
       - Synapse: api/synapse.md
   - Resources:
       - FAQ: resources/faq.md

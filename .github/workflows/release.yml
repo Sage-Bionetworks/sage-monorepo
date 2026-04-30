@@ -6,8 +6,8 @@ on:
       - 'agora/v*'
       - 'bixarena/v*'
       - 'model-ad/v*'
-      - 'sage/v*'
       - 'qtl/v*'
+      - 'sage/v*'
 
 permissions:
   contents: read

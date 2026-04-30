@@ -12,6 +12,6 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1GB
+          memory: 1G
     depends_on:
       - qtl-mongo
