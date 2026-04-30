@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, of } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 import { StatsService, UserService, UserStats } from '@sagebionetworks/bixarena/api-client';
 import { AuthService } from '@sagebionetworks/bixarena/services';
 
@@ -28,7 +28,13 @@ export class StatsSectionComponent {
   readonly stats = toSignal(
     inject(StatsService)
       .getPublicStats()
-      .pipe(catchError(() => of(null))),
+      .pipe(
+        tap((s) => console.debug('✅ Fetched public stats', s)),
+        catchError((err) => {
+          console.error('❌ Failed to fetch public stats', err);
+          return of(null);
+        }),
+      ),
     { initialValue: null },
   );
 
@@ -49,7 +55,11 @@ export class StatsSectionComponent {
       this.userStatsService
         .getUserStats()
         .pipe(
-          catchError(() => of(null)),
+          tap((s) => console.debug('✅ Fetched user stats', s)),
+          catchError((err) => {
+            console.error('❌ Failed to fetch user stats', err);
+            return of(null);
+          }),
           takeUntilDestroyed(this.destroyRef),
         )
         .subscribe((s) => {

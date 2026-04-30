@@ -11,7 +11,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { catchError, of } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 import {
   BiomedicalCategory,
   ExamplePrompt,
@@ -63,14 +63,24 @@ export class TrendingSectionComponent implements OnInit {
       return;
     }
 
+    const query = {
+      sort: ExamplePromptSort.Usage,
+      lookback: LOOKBACK_DAYS,
+      pageSize: PAGE_SIZE,
+    };
+    console.debug('🔎 Fetching trending prompts', query);
     this.examplePrompts
-      .listExamplePrompts({
-        sort: ExamplePromptSort.Usage,
-        lookback: LOOKBACK_DAYS,
-        pageSize: PAGE_SIZE,
-      })
+      .listExamplePrompts(query)
       .pipe(
-        catchError(() => of(null)),
+        tap((page) =>
+          console.debug('✅ Fetched trending prompts', {
+            count: page?.examplePrompts?.length ?? 0,
+          }),
+        ),
+        catchError((err) => {
+          console.error('❌ Failed to fetch trending prompts', err);
+          return of(null);
+        }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((page) => {

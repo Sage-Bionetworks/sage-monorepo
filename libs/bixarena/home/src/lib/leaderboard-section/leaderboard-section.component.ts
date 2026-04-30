@@ -11,7 +11,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { catchError, forkJoin, map, of } from 'rxjs';
+import { catchError, forkJoin, map, of, tap } from 'rxjs';
 import {
   LeaderboardEntry,
   LeaderboardEntryPage,
@@ -70,10 +70,15 @@ export class LeaderboardSectionComponent implements OnInit {
   ngOnInit(): void {
     if (!this.isBrowser) return;
 
+    console.debug('🔎 Fetching leaderboard list for home columns');
     this.leaderboardApi
       .listLeaderboards()
       .pipe(
-        catchError(() => of<LeaderboardListInner[]>([])),
+        tap((all) => console.debug('✅ Fetched leaderboard list', { count: all.length })),
+        catchError((err) => {
+          console.error('❌ Failed to fetch leaderboard list', err);
+          return of<LeaderboardListInner[]>([]);
+        }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((all) => {
@@ -81,14 +86,24 @@ export class LeaderboardSectionComponent implements OnInit {
         if (withSnapshot.length < COLUMN_COUNT) return;
 
         forkJoin(
-          withSnapshot.map((l) =>
-            this.leaderboardApi
-              .getLeaderboard(l.id, { pageSize: COLUMN_COUNT, lookback: LOOKBACK_DAYS })
-              .pipe(
-                map((page) => this.toColumn(l, page)),
-                catchError(() => of<LeaderboardColumn | null>(null)),
+          withSnapshot.map((l) => {
+            const query = { pageSize: COLUMN_COUNT, lookback: LOOKBACK_DAYS };
+            console.debug('🔎 Fetching leaderboard column', { leaderboardId: l.id, query });
+            return this.leaderboardApi.getLeaderboard(l.id, query).pipe(
+              tap((page) =>
+                console.debug('✅ Fetched leaderboard column', {
+                  leaderboardId: l.id,
+                  entries: page.entries.length,
+                  voteCount: page.voteCount,
+                }),
               ),
-          ),
+              map((page) => this.toColumn(l, page)),
+              catchError((err) => {
+                console.error('❌ Failed to fetch leaderboard column', err);
+                return of<LeaderboardColumn | null>(null);
+              }),
+            );
+          }),
         )
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((results) => {

@@ -11,7 +11,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { catchError, of } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 import {
   ExamplePromptSearchQuery,
   ExamplePromptService,
@@ -61,10 +61,19 @@ export class ComposerSectionComponent implements OnInit {
       pageSize: PROMPT_POOL_SIZE,
       active: true,
     };
+    console.debug('🔎 Fetching composer placeholder prompts', query);
     this.examplePrompts
       .listExamplePrompts(query)
       .pipe(
-        catchError(() => of(null)),
+        tap((page) =>
+          console.debug('✅ Fetched composer placeholder prompts', {
+            count: page?.examplePrompts?.length ?? 0,
+          }),
+        ),
+        catchError((err) => {
+          console.error('❌ Failed to fetch composer placeholder prompts', err);
+          return of(null);
+        }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((page) => {
