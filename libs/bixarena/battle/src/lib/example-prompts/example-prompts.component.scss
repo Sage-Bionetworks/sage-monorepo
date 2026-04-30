@@ -51,8 +51,8 @@
 
   &:hover:not(:disabled) {
     color: var(--p-teal-400);
-    border-color: rgb(52 212 180 / 45%);
-    background: rgb(52 212 180 / 6%);
+    border-color: rgb(from var(--p-teal-400) r g b / 45%);
+    background: rgb(from var(--p-teal-400) r g b / 6%);
 
     .unwind-icon {
       transform: rotate(180deg);

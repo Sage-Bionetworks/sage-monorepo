@@ -38,6 +38,7 @@ export const BixArenaPreset = definePreset(Lara, {
           hoverColor: '{primary.400}',
           activeColor: '{primary.500}',
         },
+        teal: { 400: '#4ab8a3' },
         surface: {
           0: '#fbf7ef',
           50: '#f6f2ec',
@@ -69,6 +70,7 @@ export const BixArenaPreset = definePreset(Lara, {
         },
       },
       dark: {
+        teal: { 400: '#34d4b4' },
         surface: {
           0: '#1b1818',
           50: '#221f1d',
