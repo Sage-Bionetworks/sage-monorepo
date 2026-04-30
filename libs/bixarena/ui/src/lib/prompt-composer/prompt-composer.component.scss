@@ -1,7 +1,7 @@
 :host {
   display: block;
   width: 100%;
-  max-width: 48rem;
+  max-width: var(--composer-max-width);
   margin: 0 auto;
 }
 
@@ -25,7 +25,7 @@
 
 .input {
   width: 100%;
-  min-height: 6rem;
+  min-height: var(--composer-input-min-height);
   max-height: 10rem;
   padding: 1rem 1.125rem 0.5rem;
   border: none;
@@ -67,6 +67,7 @@
 }
 
 .send {
+  position: relative;
   width: 32px;
   height: 32px;
   border-radius: 8px;
@@ -78,6 +79,16 @@
   background: var(--p-surface-200);
   color: var(--p-text-muted-color);
   transition: all 0.2s;
+
+  // Expand the tap target to ≥44×44px on touch screens without enlarging
+  // the visual button. The toolbar's flex layout absorbs the inset space.
+  @media (hover: none) and (pointer: coarse) {
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -0.5rem;
+    }
+  }
 
   &.hot {
     background: var(--p-primary-color);
