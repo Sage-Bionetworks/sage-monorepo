@@ -1,10 +1,10 @@
 import { Component, input } from '@angular/core';
 import { Drug } from '@sagebionetworks/agora/api-client';
-import { CapitalizeFirstPipe } from '@sagebionetworks/explorers/util';
+import { CapitalizeFirstLetterPipe } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'agora-drug-details-nomination-details',
-  imports: [CapitalizeFirstPipe],
+  imports: [CapitalizeFirstLetterPipe],
   templateUrl: './drug-details-nomination-details.component.html',
   styleUrls: ['./drug-details-nomination-details.component.scss'],
 })

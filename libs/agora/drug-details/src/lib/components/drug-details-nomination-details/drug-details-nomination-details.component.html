@@ -18,16 +18,16 @@
           nomination.combined_with_common_name === null ? drug().common_name : `${drug().common_name} + ${nomination.combined_with_common_name}`;
         Why was {{ nominationLabel }} nominated?
       </p>
-      <p>{{ nomination.evidence | capitalizeFirst }}</p>
+      <p>{{ nomination.evidence | capitalizeFirstLetter }}</p>
       <br />
 
       <p class="drug-details-label">Data used</p>
-      <p>{{ nomination.data_used | capitalizeFirst }}</p>
+      <p>{{ nomination.data_used | capitalizeFirstLetter }}</p>
       <br />
 
       @if (nomination.ad_moa) {
         <p class="drug-details-label">Mechanism of action in AD</p>
-        <p>{{ nomination.ad_moa | capitalizeFirst }}</p>
+        <p>{{ nomination.ad_moa | capitalizeFirstLetter }}</p>
         <br />
       }
 
@@ -36,8 +36,8 @@
       <br />
 
       <p class="drug-details-label">Planned validation</p>
-      <p>{{ nomination.computational_validation_status | capitalizeFirst }}</p>
-      <p>{{ nomination.experimental_validation_status | capitalizeFirst }}</p>
+      <p>{{ nomination.computational_validation_status | capitalizeFirstLetter }}</p>
+      <p>{{ nomination.experimental_validation_status | capitalizeFirstLetter }}</p>
       <br />
 
       @if (
@@ -45,17 +45,17 @@
       ) {
         <p class="drug-details-label">Validation results</p>
         @if (nomination.computational_validation_results) {
-          <p>{{ nomination.computational_validation_results | capitalizeFirst }}</p>
+          <p>{{ nomination.computational_validation_results | capitalizeFirstLetter }}</p>
         }
         @if (nomination.experimental_validation_results) {
-          <p>{{ nomination.experimental_validation_results | capitalizeFirst }}</p>
+          <p>{{ nomination.experimental_validation_results | capitalizeFirstLetter }}</p>
         }
         <br />
       }
 
       @if (nomination.additional_evidence) {
         <p class="drug-details-label">Additional evidence</p>
-        <p>{{ nomination.additional_evidence | capitalizeFirst }}</p>
+        <p>{{ nomination.additional_evidence | capitalizeFirstLetter }}</p>
         <br />
       }
 
@@ -76,7 +76,7 @@
               {{ nomination.reference }}
             </a>
           } @else {
-            {{ nomination.reference | capitalizeFirst }}
+            {{ nomination.reference | capitalizeFirstLetter }}
           }
         </p>
         <br />

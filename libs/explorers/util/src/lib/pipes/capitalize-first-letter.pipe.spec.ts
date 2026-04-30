@@ -1,10 +1,10 @@
-import { CapitalizeFirstPipe } from './capitalize-first.pipe';
+import { CapitalizeFirstLetterPipe } from './capitalize-first-letter.pipe';
 
-describe('CapitalizeFirstPipe', () => {
-  let pipe: CapitalizeFirstPipe;
+describe('CapitalizeFirstLetterPipe', () => {
+  let pipe: CapitalizeFirstLetterPipe;
 
   beforeEach(() => {
-    pipe = new CapitalizeFirstPipe();
+    pipe = new CapitalizeFirstLetterPipe();
   });
 
   it('should return empty string when input is null or undefined', () => {
