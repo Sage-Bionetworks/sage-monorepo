@@ -11,6 +11,6 @@ type Story = StoryObj<GeneResourcesComponent>;
 
 export const GeneResources: Story = {
   args: {
-    gene: geneMock1,
+    gene: { ...geneMock1, is_adi: true, is_tep: true },
   },
 };
