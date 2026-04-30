@@ -198,9 +198,9 @@ If a category is genuinely N/A, say so explicitly -- the user needs to see what 
 <A single sentence the user can paste into a PR description or Slack message. State the verdict on both compatibility and security.>
 ```
 
-### 4. Be honest about risk
+#### Calibrating the verdict
 
-If a breaking change _does_ affect a call site, say so plainly. Don't soften it. The structure for a risky bump:
+If a breaking change _does_ affect a call site, say so plainly -- don't soften the verdict. For a risky bump:
 
 - Flag the specific call site(s) affected
 - Quote the exact behavior change
@@ -208,7 +208,7 @@ If a breaking change _does_ affect a call site, say so plainly. Don't soften it.
 
 If self-hosted runners are in play and the new version raises the minimum runner version, flag it -- this repo uses `ubuntu-latest` for most workflows, but verify rather than assume.
 
-### 5. Offer to apply the bump
+### 4. Offer to apply the bump
 
 After delivering the report, ask whether to update the SHA pin. Don't update preemptively. The pinned SHA for the new version comes from the GitHub release page or `git ls-remote https://github.com/<owner>/<repo> refs/tags/v<new>`.
 
@@ -232,7 +232,6 @@ The one-sentence summary should make the verdict obvious in a glance: state what
 - **Don't trust the action description.** The README often lags releases. The release notes are authoritative.
 - **Pinned SHAs hide the version.** Workflows in this repo pin to a SHA with a `# v7.0.11` comment. The comment is the source of truth for "current version" -- the SHA alone tells you nothing without resolving it.
 - **Companion actions drift.** If `actions/upload-artifact` is bumped, check whether `actions/download-artifact` should move in lockstep -- they share a server-side protocol and version mismatches can break artifact retrieval. Mention this when relevant, but don't auto-expand scope unless the user asks.
-- **Don't auto-edit the workflow.** The deliverable is the evaluation. Wait for the user to greenlight the actual bump before editing files.
 
 ### Security
 
