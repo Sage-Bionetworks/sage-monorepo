@@ -12,7 +12,6 @@ import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
-import { ButtonModule } from 'primeng/button';
 import {
   BiomedicalCategory,
   ExamplePrompt,
@@ -34,7 +33,7 @@ function formatCategory(slug: BiomedicalCategory): string {
 
 @Component({
   selector: 'bixarena-trending-section',
-  imports: [PromptCardComponent, ButtonModule],
+  imports: [PromptCardComponent],
   templateUrl: './trending-section.component.html',
   styleUrl: './trending-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
