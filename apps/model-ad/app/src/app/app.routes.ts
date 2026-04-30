@@ -140,15 +140,6 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'sentry-test',
-    loadComponent: () =>
-      import('./sentry-test/sentry-test.component').then((m) => m.SentryTestComponent),
-    data: {
-      title: 'Model AD Explorer | Sentry Test',
-      description: 'Diagnostic page for testing Sentry integration.',
-    },
-  },
-  {
     path: '**',
     redirectTo: `/${ROUTE_PATHS.NOT_FOUND}`,
   },
