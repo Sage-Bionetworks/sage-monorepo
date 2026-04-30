@@ -16,7 +16,12 @@
         <div class="col">
           <div class="col-head">
             <span>{{ col.name }}</span>
-            <span class="metric" title="Bradley-Terry score on an Elo scale">Elo</span>
+            <span
+              class="metric"
+              pTooltip="Bradley-Terry score on an Elo scale"
+              tooltipPosition="top"
+              >Elo</span
+            >
           </div>
           @for (entry of col.entries; track entry.id) {
             <div class="row">

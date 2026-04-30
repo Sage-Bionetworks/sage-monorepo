@@ -20,6 +20,7 @@ import {
 } from '@sagebionetworks/bixarena/api-client';
 import { ModelOrgLogoService } from '@sagebionetworks/bixarena/services';
 import { AvatarComponent } from '@sagebionetworks/bixarena/ui';
+import { TooltipModule } from 'primeng/tooltip';
 
 // Render exactly this many columns or hide the section.
 const COLUMN_COUNT = 3;
@@ -48,7 +49,7 @@ interface RenderedEntry {
 
 @Component({
   selector: 'bixarena-leaderboard-section',
-  imports: [RouterLink, AvatarComponent],
+  imports: [RouterLink, AvatarComponent, TooltipModule],
   templateUrl: './leaderboard-section.component.html',
   styleUrl: './leaderboard-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
