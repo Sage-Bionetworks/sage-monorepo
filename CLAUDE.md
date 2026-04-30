@@ -72,11 +72,12 @@ uv run ruff check         # lint
 
 ### Main Products
 
-| Product      | Description                           | Stack                        |
-| ------------ | ------------------------------------- | ---------------------------- |
-| **agora**    | Alzheimer's disease evidence explorer | Angular, Node.js, MongoDB    |
-| **model-ad** | AD model data platform                | Angular, Spring Boot         |
-| **bixarena** | Battle arena platform                 | Angular, Spring Boot, Python |
+| Product      | Description                           | Stack                         |
+| ------------ | ------------------------------------- | ----------------------------- |
+| **agora**    | Alzheimer's disease evidence explorer | Angular, Node.js, MongoDB     |
+| **model-ad** | AD model data platform                | Angular, Spring Boot, MongoDB |
+| **qtl**      | QTL analysis explorer                 | Angular, Spring Boot, MongoDB |
+| **bixarena** | Battle arena platform                 | Angular, Spring Boot, Python  |
 
 ### OpenAPI-First Workflow
 
@@ -94,6 +95,7 @@ Module boundaries are enforced via ESLint (`@nx/enforce-module-boundaries`). Sco
 
 - `scope:agora` → can use `agora`, `explorers`, `shared`
 - `scope:model-ad` → can use `model-ad`, `explorers`, `shared`
+- `scope:qtl` → can use `qtl`, `explorers`, `shared`
 - `scope:explorers` → can use `explorers`, `global`, `shared`
 - `scope:shared` → can only use `shared`
 
@@ -121,7 +123,7 @@ import { Component } from '../../../libs/agora/ui';
 Each project has a `project.json` defining targets (build, test, lint, serve, integration-test) and tags:
 
 - `type:feature|service|app|util|db|config|styles|ui`
-- `scope:backend|agora|model-ad|bixarena|explorers|shared`
+- `scope:backend|agora|model-ad|bixarena|explorers|qtl|shared`
 - `language:typescript|java|python`
 
 Always refer to `package.json` for exact dependency versions when looking up API docs.

@@ -1,0 +1,10 @@
+@if (useGoogleTagManager) {
+  <web-shared-angular-analytics-gtm />
+}
+<explorers-error-overlay />
+<div id="container">
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+<p-toast class="global-toast" position="bottom-center"></p-toast>

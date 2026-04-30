@@ -1,0 +1,10 @@
+type: object
+description: Synapse data version
+properties:
+  data_file:
+    type: string
+  data_version:
+    type: string
+required:
+  - data_file
+  - data_version

@@ -1,0 +1,17 @@
+services:
+  qtl-api:
+    image: ghcr.io/sage-bionetworks/qtl-api:${QTL_VERSION:-local}
+    container_name: qtl-api
+    restart: always
+    env_file:
+      - ../../../apps/qtl/api/.env
+    networks:
+      - qtl
+    ports:
+      - '3333:3333'
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    depends_on:
+      - qtl-mongo

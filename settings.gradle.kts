@@ -11,6 +11,9 @@ include(":bixarena-auth-service")
 // Include the Model-AD projects as submodules
 include(":model-ad-api-next")
 
+// Include the QTL projects as submodules
+include(":qtl-api")
+
 // Include the shared Java utilities
 include(":sagebionetworks-util")
 
@@ -20,4 +23,5 @@ project(":bixarena-api-gateway").projectDir = file("apps/bixarena/api-gateway")
 project(":bixarena-api").projectDir = file("apps/bixarena/api")
 project(":bixarena-auth-service").projectDir = file("apps/bixarena/auth-service")
 project(":model-ad-api-next").projectDir = file("apps/model-ad/api-next")
+project(":qtl-api").projectDir = file("apps/qtl/api")
 project(":sagebionetworks-util").projectDir = file("libs/shared/java/util")

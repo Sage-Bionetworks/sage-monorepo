@@ -17,16 +17,21 @@
 /apps/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /libs/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /docker/agora/ @Sage-Bionetworks/sage-monorepo-agora
-/.github/workflows/e2e-agora.yaml @Sage-Bionetworks/sage-monorepo-agora
 
 /libs/shared/ @hallieswan
 
 /apps/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
 /docker/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
 /libs/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
-/libs/results-visualization-framework/ @Sage-Bionetworks/sage-monorepo-agora
+
+/apps/qtl/ @Sage-Bionetworks/sage-monorepo-agora
+/docker/qtl/ @Sage-Bionetworks/sage-monorepo-agora
+/libs/qtl/ @Sage-Bionetworks/sage-monorepo-agora
 
 /libs/explorers/ @Sage-Bionetworks/sage-monorepo-agora
+/libs/results-visualization-framework/ @Sage-Bionetworks/sage-monorepo-agora
+/.github/workflows/e2e-explorer.yaml @Sage-Bionetworks/sage-monorepo-agora
+/.github/workflows/e2e-explorers.yaml @Sage-Bionetworks/sage-monorepo-agora
 
 /libs/synapse/ @Sage-Bionetworks/sage-monorepo-agora
 

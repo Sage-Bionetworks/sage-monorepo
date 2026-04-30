@@ -1,0 +1,17 @@
+services:
+  qtl-data:
+    image: ghcr.io/sage-bionetworks/qtl-data:${QTL_VERSION:-local}
+    container_name: qtl-data
+    restart: no
+    env_file:
+      - ../../../apps/qtl/data/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - qtl
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+    depends_on:
+      - qtl-mongo

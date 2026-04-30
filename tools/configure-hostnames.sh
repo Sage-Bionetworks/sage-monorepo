@@ -27,6 +27,9 @@ declare -a hostnames=(
   "127.0.0.1 observability-prometheus"
   "127.0.0.1 observability-pyroscope"
   "127.0.0.1 observability-tempo"
+  "127.0.0.1 qtl-api"
+  "127.0.0.1 qtl-app"
+  "127.0.0.1 qtl-mongo"
 )
 
 # add hostnames

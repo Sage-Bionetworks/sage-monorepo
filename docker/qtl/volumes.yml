@@ -1,0 +1,3 @@
+volumes:
+  qtl-mongo-data:
+    name: qtl-mongo-data

@@ -1,0 +1,27 @@
+{
+  "name": "qtl-home",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/qtl/home/src",
+  "prefix": "qtl",
+  "tags": ["type:feature", "scope:qtl", "language:typescript"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/qtl/home"],
+      "options": {
+        "jestConfig": "libs/qtl/home/jest.config.ts",
+        "tsConfig": "libs/qtl/home/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+/* stylelint-disable no-duplicate-selectors */
+@use 'sass:map';
+
+$main-colors: (
+  secondary: #2c5182,
+);
+
+:root {
+  @each $key, $color in $main-colors {
+    --color-#{$key}: #{$color};
+  }
+}

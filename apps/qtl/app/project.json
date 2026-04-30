@@ -1,0 +1,178 @@
+{
+  "name": "qtl-app",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/qtl/app/src",
+  "tags": [],
+  "implicitDependencies": ["qtl-styles", "shared-typescript-assets"],
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "@nx/angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/qtl/app",
+        "index": "apps/qtl/app/src/index.html",
+        "browser": "apps/qtl/app/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/qtl/app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/qtl/app/src/assets",
+          {
+            "input": "apps/qtl/app/src/config",
+            "glob": "**/*.yaml",
+            "output": "config"
+          },
+          "apps/qtl/app/src/robots.txt",
+          {
+            "input": "libs/shared/typescript/assets/src/assets",
+            "glob": "**/*",
+            "output": "assets"
+          },
+          {
+            "input": "libs/qtl/assets",
+            "glob": "**/*",
+            "output": "qtl-assets"
+          },
+          {
+            "input": "libs/explorers/assets",
+            "glob": "**/*",
+            "output": "explorers-assets"
+          },
+          {
+            "input": "libs/qtl/assets/favicon",
+            "glob": "**/*",
+            "output": "/"
+          }
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs"]
+        },
+        "styles": ["apps/qtl/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
+        "scripts": [],
+        "server": "apps/qtl/app/src/main.server.ts",
+        "prerender": false,
+        "ssr": {
+          "entry": "apps/qtl/app/server.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "sourceMap": {
+            "hidden": true,
+            "scripts": true,
+            "styles": false
+          },
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "1mb",
+              "maximumError": "4mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "10kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "host": "0.0.0.0",
+        "port": 4200
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "qtl-app:build:production"
+        },
+        "development": {
+          "buildTarget": "qtl-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/qtl/app/jest.config.ts",
+        "tsConfig": "apps/qtl/app/tsconfig.spec.json"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@nx/angular:extract-i18n",
+      "options": {
+        "buildTarget": "qtl-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "qtl-app:build",
+        "staticFilePath": "dist/apps/qtl/app/browser",
+        "spa": true
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/qtl/serve-detach.sh qtl-app"
+      },
+      "dependsOn": []
+    },
+    "sentry-sourcemaps": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "sentry-cli sourcemaps inject dist/apps/qtl/app",
+          "sentry-cli sourcemaps upload --org sage-bionetworks --project qtl --release qtl@$SENTRY_RELEASE_SUFFIX dist/apps/qtl/app",
+          "find dist/apps/qtl/app -name '*.map' -delete"
+        ],
+        "parallel": false
+      },
+      "dependsOn": ["build"]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/qtl-app:local --quiet",
+        "color": true
+      }
+    },
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "outputs": ["{workspaceRoot}/dist/.playwright/{projectRoot}"],
+      "options": {
+        "config": "{projectRoot}/playwright.config.ts"
+      }
+    }
+  }
+}

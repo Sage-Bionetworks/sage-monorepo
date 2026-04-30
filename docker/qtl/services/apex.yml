@@ -1,0 +1,33 @@
+services:
+  qtl-apex:
+    image: ghcr.io/sage-bionetworks/qtl-apex:${QTL_VERSION:-local}
+    container_name: qtl-apex
+    restart: always
+    env_file:
+      - ../../../apps/qtl/apex/.env
+    volumes:
+      - ../../../apps/qtl/apex/Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - qtl
+    ports:
+      - '8000:80'
+    healthcheck:
+      test: ['CMD', 'wget', '--spider', '--quiet', 'http://localhost:80/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      qtl-api-docs:
+        condition: service_healthy
+      qtl-api:
+        condition: service_started
+      qtl-app:
+        condition: service_healthy
+    extra_hosts:
+      - 'qtl-api-docs:host-gateway'
+      - 'qtl-api:host-gateway'
+      - 'qtl-app:host-gateway'
+    deploy:
+      resources:
+        limits:
+          memory: 200M
