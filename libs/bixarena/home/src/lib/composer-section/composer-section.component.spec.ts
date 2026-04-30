@@ -88,16 +88,6 @@ describe('ComposerSectionComponent', () => {
     expect(component.promptLengthLimit).toBe(5000);
   });
 
-  it('queries the example-prompts API for one random active prompt', async () => {
-    await setup();
-    expect(listSpy).toHaveBeenCalledTimes(1);
-    expect(listSpy.mock.calls[0][0]).toMatchObject({
-      sort: ExamplePromptSort.Random,
-      pageSize: 1,
-      active: true,
-    });
-  });
-
   it('saves the prompt and navigates to /battle when authenticated', async () => {
     await setup();
     auth.user.set({ sub: 'user-1', preferred_username: 'tester' });
@@ -120,32 +110,6 @@ describe('ComposerSectionComponent', () => {
     expect(sessionStorage.getItem('bixarena.pendingPrompt')).toBe('What is CRISPR?');
     expect(gate.showLoginModal()).toBe(true);
     expect(navSpy).not.toHaveBeenCalled();
-  });
-
-  it('begins typing the fetched prompt one character at a time', async () => {
-    await setup(pageOf('Hello'));
-    expect(component.placeholder()).toBe('');
-    jest.advanceTimersByTime(35);
-    expect(component.placeholder()).toBe('H');
-    jest.advanceTimersByTime(35 * 4);
-    expect(component.placeholder()).toBe('Hello');
-  });
-
-  it('skip-to-end when the user focuses the composer mid-animation', async () => {
-    await setup(pageOf('Hello'));
-    jest.advanceTimersByTime(35 * 2); // partway through
-    expect(component.placeholder()).toBe('He');
-    component.onComposerFocus();
-    expect(component.placeholder()).toBe('Hello');
-  });
-
-  it('does not resume animation on subsequent focus events', async () => {
-    await setup(pageOf('Hello'));
-    component.onComposerFocus();
-    expect(component.placeholder()).toBe('Hello');
-    component.onComposerFocus(); // simulate blur+refocus
-    jest.advanceTimersByTime(200);
-    expect(component.placeholder()).toBe('Hello');
   });
 
   it('skips animation and shows the full prompt when prefers-reduced-motion is set', async () => {

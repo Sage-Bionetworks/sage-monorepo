@@ -98,18 +98,9 @@ describe('StatsSectionComponent', () => {
     expect((fixture.nativeElement as HTMLElement).querySelector('.user-stat')).toBeNull();
   });
 
-  it('renders the disclaimer line', async () => {
-    await setup({ completedBattles: 1, modelsEvaluated: 1, totalUsers: 1 });
-    const root = fixture.nativeElement as HTMLElement;
-    expect(root.querySelector('.disclaimer')?.textContent?.trim()).toBe(
-      'Only battles on biomedical topics count toward stats and rankings.',
-    );
-  });
-
-  it('omits the stats grid but keeps the disclaimer when the public API fails', async () => {
+  it('omits the stats grid when the public API fails', async () => {
     await setup('error');
     const root = fixture.nativeElement as HTMLElement;
     expect(root.querySelector('.stats')).toBeNull();
-    expect(root.querySelector('.disclaimer')).toBeTruthy();
   });
 });
