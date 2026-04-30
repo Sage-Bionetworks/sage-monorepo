@@ -41,6 +41,7 @@ interface RenderedEntry {
   modelOrganization: string | null;
   orgLogoUrl: string | null;
   orgLogoMono: boolean;
+  score: number;
   rankDelta: number | null;
   absDelta: number;
 }
@@ -126,6 +127,7 @@ export class LeaderboardSectionComponent implements OnInit {
       modelOrganization: entry.modelOrganization ?? null,
       orgLogoUrl: this.orgLogo.getLogoUrl(entry.modelOrganization),
       orgLogoMono: this.orgLogo.isMonoLogo(entry.modelOrganization),
+      score: Math.round(entry.btScore),
       rankDelta: entry.rankDelta ?? null,
       absDelta: entry.rankDelta != null ? Math.abs(entry.rankDelta) : 0,
     };
