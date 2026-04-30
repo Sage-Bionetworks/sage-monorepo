@@ -32,6 +32,12 @@ export const BixArenaPreset = definePreset(Lara, {
     },
     colorScheme: {
       light: {
+        primary: {
+          color: '{primary.300}',
+          contrastColor: '#ffffff',
+          hoverColor: '{primary.400}',
+          activeColor: '{primary.500}',
+        },
         surface: {
           0: '#fbf7ef',
           50: '#f6f2ec',
