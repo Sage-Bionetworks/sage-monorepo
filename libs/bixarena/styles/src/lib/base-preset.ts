@@ -42,7 +42,7 @@ export const BixArenaPreset = definePreset(Lara, {
         surface: {
           0: '#fbf7ef',
           50: '#f6f2ec',
-          100: '#ffffff',
+          100: '#fffefb',
           200: '#ece7e0',
           300: '#dad4cb',
           400: '#c6bab3',
