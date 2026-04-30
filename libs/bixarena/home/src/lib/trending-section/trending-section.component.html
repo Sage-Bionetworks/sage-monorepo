@@ -27,5 +27,10 @@
         }
       }
     </div>
+    @if (!showSkeletons()) {
+      <button class="section-cta" type="button" (click)="onAskOwn()">
+        Ask your own question <span class="arrow" aria-hidden="true">&rarr;</span>
+      </button>
+    }
   </section>
 }
