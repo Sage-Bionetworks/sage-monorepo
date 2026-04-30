@@ -5,8 +5,15 @@
 .page-content {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
-  max-width: 64rem;
+  gap: 5rem;
+  max-width: 75rem;
+}
+
+.landing-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 6rem 0 3rem;
 }
 
 .hero {
@@ -14,7 +21,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .title {
@@ -33,9 +40,9 @@
 }
 
 .subtitle {
-  font-size: var(--text-lg);
-  color: var(--p-surface-600);
-  max-width: 37.5rem;
+  font-size: var(--text-base);
+  color: var(--p-text-muted-color);
+  max-width: 36rem;
   margin: 0;
   line-height: 1.55;
 }
