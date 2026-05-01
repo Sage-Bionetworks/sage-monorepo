@@ -47,9 +47,7 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
       - name: Deploy to GitHub Pages
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-              && uv run ghp-import -n -p -f -m 'Deploy full site (docs + all storybooks)' site"
+        run: pipx run ghp-import -n -p -f -m 'Deploy full site (docs + all storybooks)' site
 
       - name: Remove the dev container
         if: always()
