@@ -32,14 +32,6 @@ bixarena-example-prompts {
   align-self: center;
 }
 
-// Pin composer to viewport bottom on landing's page-level scroll.
-.landing .composer-group {
-  position: sticky;
-  bottom: 1rem;
-  z-index: 5;
-  margin-top: auto;
-}
-
 // Fixed height so panels scroll internally instead of growing infinitely.
 .battle-view {
   position: relative;
@@ -129,13 +121,7 @@ bixarena-example-prompts {
   margin: 1rem 0 0;
 }
 
-// Mobile: page-level scroll, sticky composer/rail, stacked panels.
 @media (width < #{shared.$md-breakpoint}) {
-  .landing .composer-group {
-    position: static;
-    margin-top: auto;
-  }
-
   .battle-view {
     height: auto;
     min-height: calc(100dvh - var(--nav-height));
