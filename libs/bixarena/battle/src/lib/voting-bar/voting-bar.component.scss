@@ -1,3 +1,5 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
 :host {
   display: block;
   flex-shrink: 0;
@@ -133,9 +135,7 @@
   }
 }
 
-// Mobile: shrink A/B labels to single letters so all three buttons fit one row.
-// Tie keeps its full label. min-height enforces a 44px tap target.
-@media (width < 768px) {
+@media (width < #{shared.$md-breakpoint}) {
   .vb {
     min-height: 2.75rem;
   }
@@ -147,5 +147,17 @@
   .vb.left .vb-label-short,
   .vb.right .vb-label-short {
     display: inline;
+  }
+
+  .validation-row {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.5rem;
+  }
+
+  .validation-track {
+    flex-basis: 100%;
+    width: 100%;
+    max-width: 12rem;
   }
 }

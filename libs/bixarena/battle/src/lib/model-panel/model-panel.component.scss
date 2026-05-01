@@ -1,3 +1,5 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
 :host {
   display: block;
   min-width: 0;
@@ -285,11 +287,7 @@
   }
 }
 
-// Mobile: page-level scroll moves between rounds/panels, but each panel still
-// caps its own height so a long response doesn't dominate the page and the
-// next panel stays reachable. overscroll-behavior keeps inner scroll from
-// chaining into page scroll on touch.
-@media (width < 768px) {
+@media (width < #{shared.$md-breakpoint}) {
   .panel {
     height: auto;
     max-height: 38dvh;
