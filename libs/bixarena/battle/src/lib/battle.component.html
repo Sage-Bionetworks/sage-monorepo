@@ -1,13 +1,10 @@
 <div class="page-content shell">
   @if (state.phase() === 'landing') {
     <section class="landing">
-      <div class="hero">
-        <h1 class="title">Bio<em>Arena</em></h1>
-        <p class="subtitle">
-          Discover how different AIs answer biomedical questions.<br />
-          No expertise needed — just vote for the response you trust.
-        </p>
-      </div>
+      <bixarena-hero
+        titleHtml="Bio<em>Arena</em>"
+        subtitleHtml="Discover how different AIs answer biomedical questions.<br>No expertise needed — just vote for the response you trust."
+      />
       <bixarena-example-prompts (promptSelect)="onExamplePromptSelect($event)" />
       <div class="composer-group">
         <bixarena-prompt-composer

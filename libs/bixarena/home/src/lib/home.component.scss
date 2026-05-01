@@ -24,36 +24,3 @@
   opacity: 0.35;
   mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
 }
-
-.hero {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.title {
-  font-family: var(--font-serif);
-  font-size: var(--hero-title-font-size);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: var(--hero-title-line-height);
-  text-wrap: balance;
-  margin: 0;
-  color: var(--p-text-color);
-
-  em {
-    font-style: italic;
-    color: var(--p-primary-color);
-  }
-}
-
-.subtitle {
-  font-size: var(--hero-subtitle-font-size);
-  color: var(--p-text-muted-color);
-  max-width: var(--hero-subtitle-max-width);
-  text-wrap: pretty;
-  margin: 0;
-  line-height: 1.55;
-}

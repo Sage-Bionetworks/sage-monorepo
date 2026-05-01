@@ -4,6 +4,7 @@ import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
 import { BattleGateService } from '@sagebionetworks/bixarena/services';
 import {
   BlueprintBgComponent,
+  HeroComponent,
   OnboardingModalComponent,
   PromptComposerComponent,
 } from '@sagebionetworks/bixarena/ui';
@@ -23,6 +24,7 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
     ExamplePromptsComponent,
     OnboardingModalComponent,
     BlueprintBgComponent,
+    HeroComponent,
     TooltipModule,
   ],
   providers: [BattleStateService, BattleStreamService],
