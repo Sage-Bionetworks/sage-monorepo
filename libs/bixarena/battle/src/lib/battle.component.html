@@ -39,12 +39,9 @@
             [class.fut]="i > state.currentMatch()"
           ></span>
         }
+        <span class="rl">Match {{ state.currentMatch() }} / {{ state.promptUseLimit }}</span>
         @if (state.allMatchesComplete()) {
-          <span class="rl complete"
-            >Nice work — {{ state.promptUseLimit }} matchups in. Battle a new question?</span
-          >
-        } @else {
-          <span class="rl">Match {{ state.currentMatch() }} / {{ state.promptUseLimit }}</span>
+          <span class="rl complete">Nice run! Start a new battle to continue.</span>
         }
       </div>
       <div class="panels">
