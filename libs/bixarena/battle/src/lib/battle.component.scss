@@ -33,9 +33,7 @@ bixarena-example-prompts {
   align-self: center;
 }
 
-// Landing has page-level scroll, so pin the composer to the viewport bottom.
-// Battle-view is a fixed-height container with no scroll — flex layout already
-// puts the composer at the bottom; sticky there only creates z-index overlap.
+// Pin composer to viewport bottom on landing's page-level scroll.
 .landing .composer-group {
   position: sticky;
   bottom: 1rem;
@@ -141,10 +139,6 @@ bixarena-example-prompts {
   gap: 0.75rem;
   flex: 1;
   min-height: 0;
-
-  @media (width < #{shared.$md-breakpoint}) {
-    grid-template-columns: 1fr;
-  }
 }
 
 .disclaimer {
@@ -152,4 +146,40 @@ bixarena-example-prompts {
   font-size: var(--text-xs);
   color: var(--p-text-muted-color);
   margin: 1rem 0 0;
+}
+
+// Mobile: page-level scroll, sticky composer/rail, stacked panels.
+@media (width < #{shared.$md-breakpoint}) {
+  .landing .composer-group {
+    position: static;
+    margin-top: auto;
+  }
+
+  .battle-view {
+    height: auto;
+    min-height: calc(100dvh - var(--nav-height));
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .battle-view .rail {
+    position: sticky;
+    top: var(--nav-height);
+    z-index: 4;
+    background: var(--p-surface-0);
+  }
+
+  .battle-view .composer-group {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    padding: 0.5rem var(--content-padding-x) calc(0.5rem + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--p-surface-0) 70%, transparent);
+  }
+
+  .panels {
+    display: flex;
+    flex-direction: column;
+    flex: none;
+  }
 }
