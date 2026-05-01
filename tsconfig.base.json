@@ -90,6 +90,7 @@
       "@sagebionetworks/qtl/api-client": ["libs/qtl/api-client-angular/src/index.ts"],
       "@sagebionetworks/qtl/config": ["libs/qtl/config/src/index.ts"],
       "@sagebionetworks/qtl/home": ["libs/qtl/home/src/index.ts"],
+      "@sagebionetworks/qtl/util": ["libs/qtl/util/src/index.ts"],
       "@sagebionetworks/results-visualization-framework/ui": [
         "libs/results-visualization-framework/ui/src/index.ts"
       ],

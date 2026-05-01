@@ -1,5 +1,8 @@
 import { LoadingIconColors } from '@sagebionetworks/explorers/models';
 
+export const HELP_URL =
+  'https://help.adknowledgeportal.org/apd/xQTL-Explorer-Resources.4669014109.html';
+
 export const SUPPORT_EMAIL = 'xqtlexplorer@sagebionetworks.org';
 
 // TODO: update to QTL-specific colors (QTL-69)
