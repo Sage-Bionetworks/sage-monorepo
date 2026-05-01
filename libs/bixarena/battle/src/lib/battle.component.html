@@ -1,13 +1,10 @@
 <div class="page-content shell">
   @if (state.phase() === 'landing') {
     <section class="landing">
-      <div class="hero">
-        <h1 class="title">Bio<em>Arena</em></h1>
-        <p class="subtitle">
-          Discover how different AIs answer biomedical questions.<br />
-          No expertise needed — just vote for the response you trust.
-        </p>
-      </div>
+      <bixarena-hero
+        titleHtml="Bio<em>Arena</em>"
+        subtitleHtml="Discover how different AIs answer biomedical questions.<br>No expertise needed — just vote for the response you trust."
+      />
       <bixarena-example-prompts (promptSelect)="onExamplePromptSelect($event)" />
       <div class="composer-group">
         <bixarena-prompt-composer
@@ -25,7 +22,12 @@
 
   @if (state.phase() !== 'landing') {
     <section class="battle-view">
-      <div class="rail">
+      <bixarena-blueprint-bg />
+      <div
+        class="rail"
+        pTooltip="Submit the same question against a fresh pair of models. The dots track your progress."
+        tooltipPosition="bottom"
+      >
         @for (i of state.promptUseDots; track i) {
           <span
             class="rd"
@@ -34,10 +36,9 @@
             [class.fut]="i > state.currentMatch()"
           ></span>
         }
+        <span class="rl">Match {{ state.currentMatch() }} / {{ state.promptUseLimit }}</span>
         @if (state.allMatchesComplete()) {
-          <span class="rl complete">You've stress-tested this question! Try a new one.</span>
-        } @else {
-          <span class="rl">Match {{ state.currentMatch() }} / {{ state.promptUseLimit }}</span>
+          <span class="rl complete">Nice run! Start a new battle to continue.</span>
         }
       </div>
       <div class="panels">
@@ -60,26 +61,26 @@
           (continue)="state.continueRound('model2')"
         />
       </div>
-      <bixarena-voting-bar
-        [phase]="state.phase()"
-        [canVote]="state.canVote()"
-        [canReuse]="state.canReuse()"
-        (vote)="onVote($event)"
-        (hoverSide)="hoverSide.set($event)"
-        (newBattle)="onNewBattle()"
-        (samePrompt)="onSamePromptSubmit()"
-      />
-      <div class="btm">
+      <div class="composer-group">
+        <bixarena-voting-bar
+          [phase]="state.phase()"
+          [canVote]="state.canVote()"
+          [canReuse]="state.canReuse()"
+          (vote)="onVote($event)"
+          (hoverSide)="hoverSide.set($event)"
+          (newBattle)="onNewBattle()"
+          (samePrompt)="onSamePromptSubmit()"
+        />
         <bixarena-prompt-composer
           placeholder="Ask a follow-up..."
           [maxLength]="state.promptLengthLimit"
           [disabled]="state.phase() !== 'voting'"
           (promptSubmit)="onFollowUpSubmit($event)"
         />
+        <p class="disclaimer">
+          AI may make mistakes. Do not include sensitive or personal information.
+        </p>
       </div>
-      <p class="disclaimer">
-        AI may make mistakes. Do not include sensitive or personal information.
-      </p>
     </section>
   }
 </div>

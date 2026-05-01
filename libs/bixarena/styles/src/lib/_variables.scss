@@ -19,6 +19,8 @@ html:not(.dark) {
   --hover-bg: rgb(0 0 0 / 4%);
   --grain-opacity: 0.06;
   --grain-blend: multiply;
+  --blueprint-stroke: #9a6f48;
+  --blueprint-opacity: 0.32;
 }
 
 html.dark {
@@ -26,4 +28,6 @@ html.dark {
   --hover-bg: rgb(253 252 251 / 4%);
   --grain-opacity: 0.15;
   --grain-blend: normal;
+  --blueprint-stroke: #e8c8a0;
+  --blueprint-opacity: 0.28;
 }

@@ -5,7 +5,9 @@
 <main>
   <router-outlet />
 </main>
-<bixarena-footer />
+@if (showFooter()) {
+  <bixarena-footer />
+}
 
 <bixarena-login-modal
   [(visible)]="gate.showLoginModal"

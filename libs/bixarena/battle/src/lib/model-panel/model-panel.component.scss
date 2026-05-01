@@ -1,3 +1,5 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
 :host {
   display: block;
   min-width: 0;
@@ -10,13 +12,14 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--p-surface-100);
+  background: color-mix(in srgb, var(--p-surface-100) 70%, transparent);
+  backdrop-filter: blur(4px);
   height: 100%;
   max-height: 100%;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   &.selected {
-    border-color: var(--p-primary-color);
+    border-color: var(--p-surface-400);
   }
 
   &.unselected {
@@ -37,6 +40,39 @@
   padding: 0.625rem 1rem;
   border-bottom: 1px solid var(--p-surface-200);
   flex-shrink: 0;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--p-text-muted-color);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:disabled {
+    opacity: 0;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--p-surface-200);
+    color: var(--p-text-color);
+  }
 }
 
 .header-label {
@@ -77,7 +113,7 @@
   min-height: 0;
   padding: 1rem 1.125rem;
   overflow-y: auto;
-  font-size: var(--text-md);
+  font-size: var(--panel-body-font-size, var(--text-md));
   line-height: 1.7;
   scroll-behavior: smooth;
   color: var(--p-surface-700);
@@ -196,6 +232,10 @@
   justify-content: flex-end;
   clear: both;
   margin-top: 0.5rem;
+
+  &--left {
+    justify-content: flex-start;
+  }
 }
 
 .action-btn {
@@ -244,5 +284,16 @@
 
   50% {
     opacity: 0.3;
+  }
+}
+
+@media (width < #{shared.$md-breakpoint}) {
+  .panel {
+    height: auto;
+    max-height: 38dvh;
+  }
+
+  .body {
+    overscroll-behavior: contain;
   }
 }

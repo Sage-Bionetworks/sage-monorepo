@@ -1,11 +1,18 @@
 @use 'shared/typescript/styles/src/shared-styles/variables' as shared;
 
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
 .nav {
   display: flex;
   align-items: center;
   gap: 0;
   padding: 0 var(--content-padding-x);
   height: var(--nav-height);
+  background: var(--p-surface-0);
   color: var(--p-text-color);
   border-bottom: 1px solid var(--p-surface-200);
 }

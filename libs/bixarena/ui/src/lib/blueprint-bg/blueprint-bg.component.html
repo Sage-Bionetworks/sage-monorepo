@@ -1,0 +1,82 @@
+<svg class="bp" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <radialGradient id="ai-fade" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="1" />
+      <stop offset="60%" stop-color="#fff" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+    </radialGradient>
+    <mask id="ai-mask">
+      <rect width="1200" height="700" fill="url(#ai-fade)" />
+    </mask>
+
+    <radialGradient id="ai-sand" cx="50%" cy="50%" r="35%">
+      <stop offset="0%" stop-color="#e8723b" stop-opacity="0.06" />
+      <stop offset="70%" stop-color="#d4a574" stop-opacity="0.03" />
+      <stop offset="100%" stop-color="#d4a574" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="ai-tier" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#d4a574" stop-opacity="0" />
+      <stop offset="60%" stop-color="#d4a574" stop-opacity="0.04" />
+      <stop offset="100%" stop-color="#d4a574" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <g [attr.transform]="transform()">
+    <ellipse cx="600" cy="350" rx="280" ry="140" fill="url(#ai-sand)" />
+    <ellipse cx="600" cy="350" rx="700" ry="360" fill="url(#ai-tier)" />
+
+    <g mask="url(#ai-mask)" stroke="currentColor" fill="none">
+      <g opacity="0.5" stroke-width="1">
+        <ellipse cx="600" cy="350" rx="700" ry="360" />
+        <ellipse cx="600" cy="350" rx="660" ry="338" />
+      </g>
+
+      <g opacity="0.7" fill="currentColor" stroke="none">
+        @for (d of vomitoriums; track $index) {
+          <circle [attr.cx]="d.x" [attr.cy]="d.y" r="2.5" />
+        }
+      </g>
+
+      <g opacity="0.3" stroke-width="1">
+        <ellipse cx="600" cy="350" rx="560" ry="290" />
+        <ellipse cx="600" cy="350" rx="520" ry="270" />
+      </g>
+
+      <g opacity="0.32" stroke-width="1">
+        <ellipse cx="600" cy="350" rx="420" ry="220" />
+        <ellipse cx="600" cy="350" rx="380" ry="200" />
+      </g>
+
+      <g opacity="0.36" stroke-width="0.7">
+        @for (l of radials; track $index) {
+          <line [attr.x1]="l.x1" [attr.y1]="l.y1" [attr.x2]="l.x2" [attr.y2]="l.y2" />
+        }
+      </g>
+
+      <g opacity="0.75" fill="currentColor" stroke="none">
+        @for (s of seats; track $index) {
+          <circle [attr.cx]="s.x" [attr.cy]="s.y" [attr.r]="s.r" [attr.opacity]="s.o" />
+        }
+      </g>
+
+      <g opacity="0.35" stroke-width="0.9">
+        <ellipse cx="600" cy="350" rx="280" ry="140" />
+        <ellipse cx="600" cy="350" rx="240" ry="120" stroke-dasharray="2 5" opacity="0.7" />
+        <ellipse cx="600" cy="350" rx="195" ry="98" stroke-dasharray="1 4" opacity="0.5" />
+      </g>
+
+      <g opacity="0.4" stroke-width="0.7" stroke-dasharray="3 8">
+        <line x1="305" y1="350" x2="895" y2="350" />
+        <line x1="600" y1="200" x2="600" y2="500" />
+      </g>
+
+      <g fill="currentColor" stroke="none" opacity="0.85">
+        <circle cx="600" cy="210" r="2" />
+        <circle cx="600" cy="490" r="2" />
+        <circle cx="320" cy="350" r="2" />
+        <circle cx="880" cy="350" r="2" />
+      </g>
+    </g>
+  </g>
+</svg>

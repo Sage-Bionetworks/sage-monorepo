@@ -1,3 +1,5 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
 :host {
   display: block;
   flex-shrink: 0;
@@ -57,6 +59,10 @@
   &.flip {
     transform: scaleX(-1);
   }
+}
+
+.vb-label-short {
+  display: none;
 }
 
 .nudge {
@@ -126,5 +132,32 @@
   .validation-fill {
     animation: none;
     width: 100%;
+  }
+}
+
+@media (width < #{shared.$md-breakpoint}) {
+  .vb {
+    min-height: 2.75rem;
+  }
+
+  .vb-label {
+    display: none;
+  }
+
+  .vb.left .vb-label-short,
+  .vb.right .vb-label-short {
+    display: inline;
+  }
+
+  .validation-row {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.5rem;
+  }
+
+  .validation-track {
+    flex-basis: 100%;
+    width: 100%;
+    max-width: 12rem;
   }
 }
