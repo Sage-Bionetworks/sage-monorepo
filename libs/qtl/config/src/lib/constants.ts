@@ -11,4 +11,5 @@ export const ROUTE_PATHS = {
   HOME: '',
   ABOUT: 'about',
   NEWS: 'news',
+  TERMS_OF_SERVICE: 'terms-of-service',
 } as const;

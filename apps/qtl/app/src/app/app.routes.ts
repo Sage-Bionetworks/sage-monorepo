@@ -41,4 +41,14 @@ export const routes: Route[] = [
       } as SynapseWikiParams,
     },
   },
+  {
+    path: ROUTE_PATHS.TERMS_OF_SERVICE,
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.termsOfServiceRoute),
+    data: {
+      title: 'xQTL Explorer | Terms of Service',
+      description:
+        'The xQTL Explorer is powered by Synapse, a platform for supporting scientific collaborations centered around shared biomedical data sets. Our goal is to make biomedical research more transparent, more reproducible, and more accessible to a broader audience of scientists.',
+    },
+  },
 ];
