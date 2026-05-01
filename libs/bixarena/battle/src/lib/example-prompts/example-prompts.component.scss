@@ -50,13 +50,14 @@
   }
 
   &:hover:not(:disabled) {
-    color: var(--p-teal-400);
-    border-color: rgb(from var(--p-teal-400) r g b / 45%);
-    background: rgb(from var(--p-teal-400) r g b / 6%);
+    background: var(--p-surface-200);
+    border-color: var(--p-surface-300);
+    color: var(--p-text-color);
+    transform: translateY(-1px);
 
     .unwind-icon {
       transform: rotate(180deg);
-      color: var(--p-teal-400);
+      color: var(--p-text-color);
     }
   }
 }

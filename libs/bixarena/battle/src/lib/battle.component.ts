@@ -1,4 +1,5 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { TooltipModule } from 'primeng/tooltip';
 import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
 import { BattleGateService } from '@sagebionetworks/bixarena/services';
 import {
@@ -22,6 +23,7 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
     ExamplePromptsComponent,
     OnboardingModalComponent,
     BlueprintBgComponent,
+    TooltipModule,
   ],
   providers: [BattleStateService, BattleStreamService],
   templateUrl: './battle.component.html',

@@ -26,7 +26,11 @@
   @if (state.phase() !== 'landing') {
     <section class="battle-view">
       <bixarena-blueprint-bg />
-      <div class="rail">
+      <div
+        class="rail"
+        pTooltip="Submit the same question against a fresh pair of models. The dots track your progress."
+        tooltipPosition="bottom"
+      >
         @for (i of state.promptUseDots; track i) {
           <span
             class="rd"
@@ -36,7 +40,9 @@
           ></span>
         }
         @if (state.allMatchesComplete()) {
-          <span class="rl complete">You've stress-tested this question! Try a new one.</span>
+          <span class="rl complete"
+            >Nice work — {{ state.promptUseLimit }} matchups in. Battle a new question?</span
+          >
         } @else {
           <span class="rl">Match {{ state.currentMatch() }} / {{ state.promptUseLimit }}</span>
         }
