@@ -59,6 +59,10 @@
   }
 }
 
+.vb-label-short {
+  display: none;
+}
+
 .nudge {
   display: flex;
   gap: 0.5rem;
@@ -126,5 +130,22 @@
   .validation-fill {
     animation: none;
     width: 100%;
+  }
+}
+
+// Mobile: shrink A/B labels to single letters so all three buttons fit one row.
+// Tie keeps its full label. min-height enforces a 44px tap target.
+@media (width < 768px) {
+  .vb {
+    min-height: 2.75rem;
+  }
+
+  .vb-label {
+    display: none;
+  }
+
+  .vb.left .vb-label-short,
+  .vb.right .vb-label-short {
+    display: inline;
   }
 }

@@ -23,7 +23,8 @@
           <path d="m8 16-4 4" />
           <path d="M9.5 17.5 21 6V3h-3L6.5 14.5" />
         </svg>
-        A is Better
+        <span class="vb-label">A is Better</span>
+        <span class="vb-label-short">A</span>
       </button>
       <button
         class="vb tie"
@@ -56,7 +57,8 @@
         (mouseleave)="hoverSide.emit(null)"
         aria-label="Vote Model B as better"
       >
-        B is Better
+        <span class="vb-label">B is Better</span>
+        <span class="vb-label-short">B</span>
         <svg
           class="vb-icon"
           viewBox="0 0 24 24"
@@ -94,7 +96,7 @@
   @if (phase() === 'reveal' || phase() === 'error') {
     <div class="nudge">
       @if (canReuse()) {
-        <p-button label="Same Question New Matchup" (onClick)="samePrompt.emit()" />
+        <p-button label="New Matchup" (onClick)="samePrompt.emit()" />
       }
       <p-button label="New Battle" severity="secondary" (onClick)="newBattle.emit()" />
     </div>
