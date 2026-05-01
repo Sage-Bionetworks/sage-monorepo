@@ -7,6 +7,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 interface RouteMetaData {
   title?: string | ((snapshot: ActivatedRouteSnapshot) => string);
   description?: string | ((snapshot: ActivatedRouteSnapshot) => string);
+  robots?: string | ((snapshot: ActivatedRouteSnapshot) => string);
 }
 
 @Injectable({
@@ -35,6 +36,7 @@ export class MetaTagService {
       .subscribe(({ data, snapshot }) => {
         this.setPageTitle(data, snapshot, defaultTitle);
         this.setPageDescription(data, snapshot);
+        this.setPageRobots(data, snapshot);
       });
   }
 
@@ -68,6 +70,18 @@ export class MetaTagService {
       this.metaService.updateTag({ name: 'description', content: description });
     } else {
       this.metaService.removeTag("name='description'");
+    }
+  }
+
+  private setPageRobots(data: RouteMetaData, currentSnapshot: ActivatedRouteSnapshot) {
+    let robots = data.robots;
+    if (typeof robots === 'function') {
+      robots = robots(currentSnapshot);
+    }
+    if (robots) {
+      this.metaService.updateTag({ name: 'robots', content: robots });
+    } else {
+      this.metaService.removeTag("name='robots'");
     }
   }
 }

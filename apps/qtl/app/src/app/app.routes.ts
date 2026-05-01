@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { ROUTE_PATHS } from '@sagebionetworks/qtl/config';
+import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/qtl/config';
 
 export const routes: Route[] = [
   {
@@ -50,5 +50,20 @@ export const routes: Route[] = [
       description:
         'The xQTL Explorer is powered by Synapse, a platform for supporting scientific collaborations centered around shared biomedical data sets. Our goal is to make biomedical research more transparent, more reproducible, and more accessible to a broader audience of scientists.',
     },
+  },
+  {
+    path: ROUTE_PATHS.NOT_FOUND,
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
+    data: {
+      title: 'xQTL Explorer | Page Not Found',
+      description: 'The link you followed may be broken, or the page may have been removed.',
+      robots: 'noindex, follow',
+      supportEmail: SUPPORT_EMAIL,
+    },
+  },
+  {
+    path: '**',
+    redirectTo: `/${ROUTE_PATHS.NOT_FOUND}`,
   },
 ];
