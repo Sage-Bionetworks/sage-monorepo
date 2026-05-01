@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'qtlutil',
+  displayName: 'qtl-util',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
