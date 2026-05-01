@@ -15,6 +15,7 @@ import {
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { DrugDetailsHeroComponent } from './components/drug-details-hero/drug-details-hero.component';
+import { DrugDetailsNominationDetailsComponent } from './components/drug-details-nomination-details/drug-details-nomination-details.component';
 import { DrugDetailsResourcesComponent } from './components/drug-details-resources/drug-details-resources.component';
 import { DrugDetailsSummaryComponent } from './components/drug-details-summary/drug-details-summary.component';
 
@@ -25,6 +26,7 @@ import { DrugDetailsSummaryComponent } from './components/drug-details-summary/d
     LoadingIconComponent,
     DrugDetailsResourcesComponent,
     DrugDetailsHeroComponent,
+    DrugDetailsNominationDetailsComponent,
     DrugDetailsSummaryComponent,
   ],
   templateUrl: './drug-details.component.html',

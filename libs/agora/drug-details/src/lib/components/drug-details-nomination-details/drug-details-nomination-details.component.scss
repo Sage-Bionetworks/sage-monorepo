@@ -1,0 +1,18 @@
+@use 'agora/styles/src/mixins' as mixins;
+
+.drug-details-nomination-details {
+  h2,
+  h3 {
+    margin-bottom: 0;
+  }
+
+  .drug-details-label {
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  a {
+    @include mixins.link;
+    @include mixins.link-hover;
+  }
+}
