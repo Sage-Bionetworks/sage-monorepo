@@ -7,22 +7,26 @@ import {
   input,
   output,
   PLATFORM_ID,
+  signal,
   viewChild,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Clipboard } from '@angular/cdk/clipboard';
 import { MarkdownComponent } from 'ngx-markdown';
+import { TooltipModule } from 'primeng/tooltip';
 import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
 import { ModelStreamState } from '../battle.types';
 import { CONTINUE_PROMPT, STREAM_CURSOR } from '../battle.constants';
 
 @Component({
   selector: 'bixarena-model-panel',
-  imports: [MarkdownComponent],
+  imports: [MarkdownComponent, TooltipModule],
   templateUrl: './model-panel.component.html',
   styleUrl: './model-panel.component.scss',
 })
 export class ModelPanelComponent {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly clipboard = inject(Clipboard);
 
   readonly modelId = input.required<'model1' | 'model2'>();
   readonly anonymousName = computed(() => (this.modelId() === 'model1' ? 'Model A' : 'Model B'));
@@ -34,6 +38,15 @@ export class ModelPanelComponent {
   readonly continue = output<void>();
 
   protected readonly continuePrompt = CONTINUE_PROMPT;
+
+  readonly copiedIndex = signal<number | null>(null);
+
+  copy(content: string, index: number): void {
+    if (!content) return;
+    this.clipboard.copy(content);
+    this.copiedIndex.set(index);
+    setTimeout(() => this.copiedIndex.set(null), 2000);
+  }
 
   readonly isSelected = computed(() => {
     const o = this.selectedOutcome();

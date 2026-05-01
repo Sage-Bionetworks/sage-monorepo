@@ -25,15 +25,22 @@ bixarena-example-prompts {
 }
 
 .composer-group {
-  position: sticky;
-  bottom: 1rem;
-  z-index: 5;
-  margin-top: auto;
   width: 100%;
   max-width: 40rem;
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
   align-self: center;
+}
+
+// Landing has page-level scroll, so pin the composer to the viewport bottom.
+// Battle-view is a fixed-height container with no scroll — flex layout already
+// puts the composer at the bottom; sticky there only creates z-index overlap.
+.landing .composer-group {
+  position: sticky;
+  bottom: 1rem;
+  z-index: 5;
+  margin-top: auto;
 }
 
 .title {
@@ -138,17 +145,9 @@ bixarena-example-prompts {
   }
 }
 
-.btm bixarena-prompt-composer {
-  max-width: 100%;
-}
-
 .disclaimer {
   text-align: center;
   font-size: var(--text-xs);
   color: var(--p-text-muted-color);
-  margin: 1.5rem 0 0;
-}
-
-.battle-view > .disclaimer {
-  margin-top: 1rem;
+  margin: 1rem 0 0;
 }

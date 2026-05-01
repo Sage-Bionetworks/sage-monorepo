@@ -60,26 +60,26 @@
           (continue)="state.continueRound('model2')"
         />
       </div>
-      <bixarena-voting-bar
-        [phase]="state.phase()"
-        [canVote]="state.canVote()"
-        [canReuse]="state.canReuse()"
-        (vote)="onVote($event)"
-        (hoverSide)="hoverSide.set($event)"
-        (newBattle)="onNewBattle()"
-        (samePrompt)="onSamePromptSubmit()"
-      />
-      <div class="btm">
+      <div class="composer-group">
+        <bixarena-voting-bar
+          [phase]="state.phase()"
+          [canVote]="state.canVote()"
+          [canReuse]="state.canReuse()"
+          (vote)="onVote($event)"
+          (hoverSide)="hoverSide.set($event)"
+          (newBattle)="onNewBattle()"
+          (samePrompt)="onSamePromptSubmit()"
+        />
         <bixarena-prompt-composer
           placeholder="Ask a follow-up..."
           [maxLength]="state.promptLengthLimit"
           [disabled]="state.phase() !== 'voting'"
           (promptSubmit)="onFollowUpSubmit($event)"
         />
+        <p class="disclaimer">
+          AI may make mistakes. Do not include sensitive or personal information.
+        </p>
       </div>
-      <p class="disclaimer">
-        AI may make mistakes. Do not include sensitive or personal information.
-      </p>
     </section>
   }
 </div>

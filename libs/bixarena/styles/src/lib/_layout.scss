@@ -14,7 +14,7 @@
   --hero-subtitle-font-size: 1rem;
   --hero-subtitle-max-width: 36rem;
   --composer-max-width: 48rem;
-  --composer-input-min-height: 6rem;
+  --composer-input-min-height: 3.5rem;
 }
 
 // Tablet portrait and below (< lg)
@@ -40,6 +40,5 @@
     --hero-title-line-height: 1.15;
     --hero-subtitle-font-size: 0.875rem;
     --composer-max-width: 100%;
-    --composer-input-min-height: 4rem;
   }
 }

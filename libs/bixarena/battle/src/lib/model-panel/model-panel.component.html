@@ -30,6 +30,29 @@
         <div class="content">
           <markdown [data]="msg.content" />
         </div>
+        <div class="action-line action-line--left">
+          <button
+            type="button"
+            class="copy-btn"
+            [pTooltip]="copiedIndex() === $index ? 'Copied!' : 'Copy'"
+            tooltipPosition="top"
+            aria-label="Copy response"
+            (click)="copy(msg.content, $index)"
+          >
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="5" y="5" width="9" height="9" rx="1.5" />
+              <path d="M11 5V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h2" />
+            </svg>
+          </button>
+        </div>
       }
     }
     <div
