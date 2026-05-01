@@ -10,4 +10,5 @@ export const QTL_LOADING_ICON_COLORS: LoadingIconColors = {
 export const ROUTE_PATHS = {
   HOME: '',
   ABOUT: 'about',
+  NEWS: 'news',
 } as const;

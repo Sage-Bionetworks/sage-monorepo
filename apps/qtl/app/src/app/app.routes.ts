@@ -26,4 +26,19 @@ export const routes: Route[] = [
       } as SynapseWikiParams,
     },
   },
+  {
+    path: ROUTE_PATHS.NEWS,
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
+    data: {
+      title: 'News | xQTL Explorer Releases',
+      description:
+        "See what's new in the xQTL Explorer, from new features to our latest data updates.",
+      heroTitle: 'News',
+      wikiParams: {
+        wikiId: '640478',
+        ownerId: 'syn74592415',
+      } as SynapseWikiParams,
+    },
+  },
 ];
