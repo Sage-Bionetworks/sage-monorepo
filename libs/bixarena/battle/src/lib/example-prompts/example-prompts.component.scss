@@ -157,7 +157,7 @@
   }
 }
 
-@media (width <= #{shared.$lg-breakpoint}) {
+@media (width < #{shared.$md-breakpoint}) {
   .prompt-cards {
     grid-template-columns: 1fr;
     max-width: 40rem;

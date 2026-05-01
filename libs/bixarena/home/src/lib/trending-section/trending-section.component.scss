@@ -75,15 +75,13 @@
   display: none;
 }
 
-@media (width <= #{shared.$lg-breakpoint}) {
+@media (width < #{shared.$md-breakpoint}) {
   .grid {
     grid-template-columns: 1fr;
     max-width: 40rem;
     margin: 0 auto;
   }
-}
 
-@media (width < #{shared.$md-breakpoint}) {
   .header {
     flex-direction: column;
     align-items: flex-start;
