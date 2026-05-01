@@ -65,10 +65,12 @@ For hits inside `.github/actions/<name>/action.yml`, the surrounding context is 
 **Verify the current pin against the canonical tag ref.** For each call site, the workflow pins a SHA with a `# v<old>` comment. Resolve what the canonical tag actually points to and compare:
 
 ```bash
-gh api repos/<owner>/<repo>/git/ref/tags/v<old> --jq '.object.sha'
+gh api repos/<owner>/<repo>/commits/v<old> --jq '.sha'
 ```
 
-If the returned SHA matches the pinned SHA, the existing pin is intact -- record this in the report. If they diverge, halt the evaluation and flag it explicitly: this means either the version comment is wrong (typo, drift), the tag was rewritten upstream after pinning (annotated-vs-lightweight tag mismatch is a benign cause; a hijacked tag is the dangerous one), or a previous bump landed a pin that didn't match its claimed version. Don't proceed with a bump recommendation until the divergence is understood.
+Use the `commits/<ref>` endpoint, **not** `git/ref/tags/<ref>`. Annotated tags (used by `actions/*`, `sigstore/*`, and most well-maintained actions) point to a tag _object_, not directly to a commit -- `git/ref/tags` returns the tag object's SHA, while `commits/<ref>` transparently peels through to the underlying commit, which is what the workflow actually pins. Falling back to `git/ref/tags` produces a false-positive divergence on every annotated-tag-pinned action.
+
+If the returned commit SHA matches the pinned SHA, the existing pin is intact -- record this in the report. If they diverge, halt the evaluation and flag it explicitly: either the version comment is wrong (typo, drift), the tag was force-moved upstream after pinning (a hijacked tag is the dangerous case), or a previous bump landed a pin that didn't match its claimed version. Don't proceed with a bump recommendation until the divergence is understood.
 
 **B. Upstream changelog research.** Goal: collect the release notes for every release between `<old>` and `<new>` (inclusive of intermediate majors), plus any migration docs, then synthesize the breaking changes.
 
@@ -81,8 +83,8 @@ gh auth status >/dev/null 2>&1 && echo "gh ready" || echo "gh unavailable"
 If `gh` is ready, enumerate and fetch in one shot:
 
 ```bash
-# List releases (most recent first; bump --limit if the gap is wider)
-gh release list --repo <owner>/<repo> --limit 30 \
+# List releases (most recent first)
+gh release list --repo <owner>/<repo> --limit 100 \
   --json tagName,name,publishedAt,isPrerelease
 
 # For each release between <old> and <new>, fetch the body
@@ -101,7 +103,18 @@ gh api repos/<owner>/<repo>/security-advisories \
 
 If the API returns nothing or 404s (advisories disabled), fall back to a quick `WebFetch` of `https://github.com/<owner>/<repo>/security/advisories`.
 
-**Compute release age** from the `publishedAt` field on the target release. If the target version is less than **3 days old**, flag it -- a freshly-cut release hasn't had time for the community to spot a malicious or accidental bad publish (compromised maintainer token, supply-chain injection, etc.). The skill should _not_ silently approve a < 3-day-old version. Surface the age in the Security implications section and recommend either waiting until the release ages past 3 days or, if the user wants to proceed anyway, calling the risk out explicitly. This applies to the target version specifically; intermediate releases in the changelog don't matter for this check.
+**Compute release age and apply the bump-type quarantine.** Pull `publishedAt` from the target release, classify the bump type from the semver diff between `<old>` and `<new>`, then apply the matching window. The thresholds are tuned for CI/workflow dependencies, which sit on the critical path of every PR -- a bad publish here breaks the whole team, so we lean conservative.
+
+| Bump type       | Quarantine                                 | Why                                                                                                                                             |
+| --------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Patch (`x.y.Z`) | 0-3 days                                   | Small surface area; three days is enough for the community to spot a compromised maintainer token, malicious tag, or accidental bad publish.    |
+| Minor (`x.Y.0`) | 3-14 days                                  | New features can introduce subtle behavioral changes that take a couple weeks of real workloads to surface.                                     |
+| Major (`X.0.0`) | 14-30 days (default to 30 for CI/workflow) | Breaking changes; hotfix releases (`X.0.1`, `X.0.2`) are common in the first weeks. Prefer the long end of the window for CI dependencies.      |
+| Security fix    | Bump sooner, with explicit risk acceptance | A patched CVE in the new release usually outweighs supply-chain quarantine -- but make the trade-off explicit; don't silently waive the window. |
+
+Classify by the highest level of the semver diff: `7.0.11 -> 8.1.1` is a major bump, even if intermediate minors/patches existed. Treat the bump as a security fix when the release notes reference a CVE/GHSA fixed in the new version, when `gh api .../security-advisories` returns an advisory resolved by the bump, or when the user explicitly frames it as a security update (e.g. "Dependabot opened a security PR").
+
+If the target release is younger than its window, surface the age and the threshold in the Security implications section and recommend waiting. For a security fix, present the trade-off (vulnerable today vs. potentially compromised release) and let the user decide rather than blocking. The check applies to the target version only -- intermediate releases between `<old>` and `<new>` don't count.
 
 **Fallback: subagent with web fetching.** If `gh` is unavailable or unauthenticated, spawn a `general-purpose` agent. Be explicit about coverage so it doesn't skip intermediate majors and so it surfaces security-relevant changes:
 
@@ -121,7 +134,7 @@ between version <old> and <new>.
    - Changes to what the action writes to disk, env, or stdout
    - Changes to publisher / maintainer / signing
    - Any CVEs or security advisories filed against versions in this range
-5. Report the publish date of the target version (`<new>`) so age can be computed against the current date. Flag if < 3 days old.
+5. Report the publish date of the target version (`<new>`) so age can be computed against the current date.
 
 Report all of the above plus migration steps. Be thorough -- this is for evaluating whether we
 can safely bump, both for compatibility and security posture.
@@ -160,7 +173,7 @@ Use this exact structure:
 | ----------------------------- | ------------------------------- | ------------------------------- |
 | `<owner>/<action>`            | `<short-sha-old>...` (`v<old>`) | `<short-sha-new>...` (`v<new>`) |
 
-Both pins verified against canonical tag refs via `gh api repos/<owner>/<repo>/git/ref/tags/<tag>`. <Note any divergence found, or "no divergence" if both match.>
+Both pins verified against canonical tag refs via `gh api repos/<owner>/<repo>/commits/<tag>`. <Note any divergence found, or "no divergence" if both match.>
 
 ### Breaking changes <by version if multiple majors crossed>
 
@@ -176,7 +189,7 @@ For each security-relevant change identified upstream, note whether it improves,
 - **Sensitive trigger interactions** -- if any call site uses `pull_request_target`, `workflow_run`, or similar, does the bump change what fork-controlled code can influence?
 - **Permissions / token scope** -- does the new version need `permissions:` adjustments?
 - **Supply chain** -- publisher unchanged? Any CVEs or advisories filed against versions in this range? SHA-pinning still effective?
-- **Release age** -- how old is the target release (`publishedAt` from `gh release view`)? Flag if < 3 days; recommend waiting through the community quarantine window unless the user has reason to bump immediately.
+- **Release age** -- how old is the target release (`publishedAt` from `gh release view`), and does it clear the bump-type quarantine (patch: 3d, minor: 14d, major: 30d for CI)? If younger than its window, recommend waiting; if it's a security fix, present the trade-off (vulnerable today vs. potentially compromised release) rather than blocking.
 - **Runtime / container compatibility** -- if the bump raises Node version and any call site runs inside a `container:`, flag glibc/musl compatibility (Node 24 needs glibc >= 2.28).
 - **Self-hosted runner exposure** -- new runner version requirements, new disk/network behavior.
 
@@ -210,7 +223,7 @@ If self-hosted runners are in play and the new version raises the minimum runner
 
 ### 4. Offer to apply the bump
 
-After delivering the report, ask whether to update the SHA pin. Don't update preemptively. The pinned SHA for the new version comes from the GitHub release page or `git ls-remote https://github.com/<owner>/<repo> refs/tags/v<new>`.
+After delivering the report, ask whether to update the SHA pin. Don't update preemptively. Resolve the new pinned SHA the same way as the existing pin was verified earlier: `gh api repos/<owner>/<repo>/commits/v<new> --jq '.sha'`, or `git ls-remote https://github.com/<owner>/<repo> 'refs/tags/v<new>^{}'` as a fallback (the `^{}` peel is required for annotated tags).
 
 ## Examples of good output
 
@@ -235,10 +248,10 @@ The one-sentence summary should make the verdict obvious in a glance: state what
 
 ### Security
 
-- **Verify the SHA, don't trust the tag.** When you produce the new pinned SHA, get it from `gh api repos/<owner>/<repo>/git/ref/tags/v<new>` (or `git ls-remote`) -- a hijacked tag is the classic supply-chain vector that SHA pinning defends against. Note in the report that the SHA was resolved from the canonical tag ref.
+- **Verify the SHA, don't trust the tag.** Resolve the new pinned SHA from `gh api repos/<owner>/<repo>/commits/v<new> --jq '.sha'` (see the pin-verification step in the workflow for why `commits` and not `git/ref/tags`). A hijacked tag is the classic supply-chain vector that SHA pinning defends against -- note in the report that the SHA was resolved from the canonical tag ref.
 - **`pull_request_target` and friends are the danger zone.** If a call site uses `pull_request_target`, `workflow_run`, or `issue_comment`, the workflow runs with the _base_ repo's secrets while potentially executing fork-controlled code. Any bump that changes how the action handles inputs, secrets, or `ref:` deserves extra scrutiny here. Existing mitigations (`persist-credentials: false`, explicit PR-HEAD `ref:`) only hold if the bump preserves them.
 - **Default value changes are silent regressions.** A "non-breaking" bump that flips a default (e.g. `persist-credentials` from `true` to `false`, or vice versa) won't appear in any code change but can break or expose downstream steps. Diff the defaults explicitly.
 - **Containerized jobs and Node version bumps.** When a call site runs inside a job-level `container:`, the runner mounts its bundled Node into the container. A Node-version bump (e.g. 20 -> 24) requires the container's glibc to be compatible (Node 24 needs glibc >= 2.28). Flag this for any containerized call site.
 - **Credential storage location changes are usually security improvements -- but verify.** Actions moving secrets out of `.git/config` or workspace files into `$RUNNER_TEMP` are net positive; just confirm nothing in the repo (artifact uploads, debug `git config --list` calls, custom credential extraction) relied on the old location.
 - **Forks and re-publishes.** If the action is _not_ published by a well-known org (GitHub itself, large vendors), check the publisher hasn't changed and there are no open security advisories. Mention publisher reputation explicitly when the action is third-party.
-- **Quarantine fresh releases.** Don't recommend bumping to a release that's < 3 days old. The 3-day window is when compromised maintainer tokens, malicious tag pushes, or accidental bad publishes are most likely to be caught and yanked by the community. The age check uses `publishedAt` from `gh release view`. If the user has a strong reason to bump immediately (e.g. urgent CVE fix in the new release), say so explicitly and call out the heightened risk -- but don't silently approve a freshly-cut release.
+- **Quarantine fresh releases by bump type.** Patches need only a few days to shake out a bad publish, but minors and majors need weeks because new behavior takes real workloads to surface -- and CI dependencies sit on every PR's critical path. See the bump-type quarantine table in the workflow above for windows. Security fixes are the documented exception: present the trade-off rather than silently waiving the quarantine.
