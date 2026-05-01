@@ -15,4 +15,5 @@ export const ROUTE_PATHS = {
   NEWS: 'news',
   TERMS_OF_SERVICE: 'terms-of-service',
   NOT_FOUND: 'not-found',
+  ERROR: 'error',
 } as const;
