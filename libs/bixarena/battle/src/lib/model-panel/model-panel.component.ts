@@ -99,7 +99,8 @@ export class ModelPanelComponent {
 
   private scrollToBottom(): void {
     const el = this.bodyEl()?.nativeElement;
-    if (el) {
+    // Skip when content fits
+    if (el && el.scrollHeight > el.clientHeight) {
       // Flag prevents onScroll from treating our scrollTo as a user-initiated scroll
       this.isAutoScroll = true;
       el.scrollTop = el.scrollHeight;
