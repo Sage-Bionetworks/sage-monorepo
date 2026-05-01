@@ -10,7 +10,8 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--p-surface-100);
+  background: color-mix(in srgb, var(--p-surface-100) 70%, transparent);
+  backdrop-filter: blur(4px);
   height: 100%;
   max-height: 100%;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);

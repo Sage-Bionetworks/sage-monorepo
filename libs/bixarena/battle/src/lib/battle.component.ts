@@ -1,7 +1,11 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
 import { BattleGateService } from '@sagebionetworks/bixarena/services';
-import { OnboardingModalComponent, PromptComposerComponent } from '@sagebionetworks/bixarena/ui';
+import {
+  BlueprintBgComponent,
+  OnboardingModalComponent,
+  PromptComposerComponent,
+} from '@sagebionetworks/bixarena/ui';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { BattleStateService } from './services/battle.service';
 import { BattleStreamService } from './services/battle-stream.service';
@@ -17,6 +21,7 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
     VotingBarComponent,
     ExamplePromptsComponent,
     OnboardingModalComponent,
+    BlueprintBgComponent,
   ],
   providers: [BattleStateService, BattleStreamService],
   templateUrl: './battle.component.html',

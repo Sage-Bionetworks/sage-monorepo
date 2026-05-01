@@ -25,6 +25,7 @@
 
   @if (state.phase() !== 'landing') {
     <section class="battle-view">
+      <bixarena-blueprint-bg />
       <div class="rail">
         @for (i of state.promptUseDots; track i) {
           <span

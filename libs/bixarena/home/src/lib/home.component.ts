@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, PLATFORM_ID } from 
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService, BattleGateService } from '@sagebionetworks/bixarena/services';
+import { BlueprintBgComponent } from '@sagebionetworks/bixarena/ui';
 import { ComposerSectionComponent } from './composer-section/composer-section.component';
 import { LeaderboardSectionComponent } from './leaderboard-section/leaderboard-section.component';
 import { StatsSectionComponent } from './stats-section/stats-section.component';
@@ -10,6 +11,7 @@ import { TrendingSectionComponent } from './trending-section/trending-section.co
 @Component({
   selector: 'bixarena-home',
   imports: [
+    BlueprintBgComponent,
     ComposerSectionComponent,
     StatsSectionComponent,
     TrendingSectionComponent,

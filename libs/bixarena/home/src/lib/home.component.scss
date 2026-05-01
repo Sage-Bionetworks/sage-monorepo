@@ -10,10 +10,19 @@
 }
 
 .landing-wrapper {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: 3rem;
   padding: 6rem 0 3rem;
+}
+
+.landing-wrapper bixarena-blueprint-bg {
+  bottom: auto;
+  height: 70%;
+  opacity: 0.35;
+  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
 }
 
 .hero {

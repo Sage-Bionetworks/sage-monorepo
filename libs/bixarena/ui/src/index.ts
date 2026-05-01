@@ -1,4 +1,5 @@
 export * from './lib/avatar/avatar.component';
+export * from './lib/blueprint-bg/blueprint-bg.component';
 export * from './lib/footer/footer.component';
 export * from './lib/login-modal/login-modal.component';
 export * from './lib/modal-dialog/modal-dialog.component';

@@ -66,8 +66,10 @@ bixarena-example-prompts {
   line-height: 1.55;
 }
 
-// Fixed height so panels scroll internally instead of growing infinitely
+// Fixed height so panels scroll internally instead of growing infinitely.
 .battle-view {
+  position: relative;
+  isolation: isolate;
   height: calc(100dvh - var(--nav-height));
   display: flex;
   flex-direction: column;
