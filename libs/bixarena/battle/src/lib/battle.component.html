@@ -80,3 +80,5 @@
 </div>
 
 <bixarena-onboarding-modal [(visible)]="showOnboardingModal" (closed)="onOnboardingClose()" />
+
+<bixarena-onboarding-fab (openRequested)="showOnboardingModal.set(true)" />

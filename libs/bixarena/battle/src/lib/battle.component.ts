@@ -9,6 +9,7 @@ import {
 import {
   BlueprintBgComponent,
   HeroComponent,
+  OnboardingFabComponent,
   OnboardingModalComponent,
   PromptComposerComponent,
 } from '@sagebionetworks/bixarena/ui';
@@ -26,6 +27,7 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
     VotingBarComponent,
     ExamplePromptsComponent,
     OnboardingModalComponent,
+    OnboardingFabComponent,
     BlueprintBgComponent,
     HeroComponent,
     TooltipModule,
