@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { LocalStorageService } from '@sagebionetworks/web-shared/angular/storage';
 
 const ONBOARDING_KEY = 'ba-onboarding-done';
@@ -7,12 +7,11 @@ const ONBOARDING_KEY = 'ba-onboarding-done';
 export class OnboardingService {
   private readonly storage = inject(LocalStorageService);
 
-  readonly hasCompleted = signal<boolean>(this.storage.getItem(ONBOARDING_KEY) === 'true');
+  hasSeen(): boolean {
+    return this.storage.getItem(ONBOARDING_KEY) === 'true';
+  }
 
-  markComplete(dontShowAgain: boolean): void {
-    this.hasCompleted.set(true);
-    if (dontShowAgain) {
-      this.storage.setItem(ONBOARDING_KEY, 'true');
-    }
+  markSeen(): void {
+    this.storage.setItem(ONBOARDING_KEY, 'true');
   }
 }

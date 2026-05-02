@@ -1,68 +1,168 @@
-.step-list {
+.carousel {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-}
-
-.step-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.875rem;
-  padding: 0.75rem;
-}
-
-.step-num {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgb(249 115 22 / 10%);
-  color: var(--p-primary-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.step-content {
-  flex: 1;
+  gap: 1.5rem;
   min-width: 0;
 }
 
-.step-label {
-  font-size: var(--text-sm);
+.viewport {
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--p-surface-100);
+}
+
+.track {
+  display: flex;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.frame {
+  flex: 0 0 100%;
+  min-width: 0;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+// Placeholder art block; replaced once the design lands.
+.art {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-width: 24rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--p-primary-color) 14%, transparent),
+    color-mix(in srgb, var(--p-primary-color) 4%, transparent)
+  );
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--p-primary-color);
+  letter-spacing: 0.05em;
+}
+
+.title {
+  font-size: var(--text-lg);
   font-weight: 600;
   color: var(--p-text-color);
-  margin-bottom: 0.2rem;
+  margin: 0;
+  line-height: 1.3;
+  text-wrap: balance;
 }
 
-.step-desc {
-  font-size: var(--text-xs);
+.description {
+  font-size: var(--text-sm);
   color: var(--p-text-muted-color);
   line-height: 1.55;
+  margin: 0;
+  max-width: 28rem;
+  text-wrap: pretty;
 }
 
-.agreement-text {
-  font-size: var(--text-xs);
-  color: var(--p-text-color);
-  line-height: 1.6;
-
-  p {
-    margin: 0 0 0.5rem;
-  }
-
-  a {
-    color: var(--p-primary-color);
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
-.btns {
+.controls {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.nav-btn {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--p-surface-200);
+  background: transparent;
+  color: var(--p-text-muted-color);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+
+  &:hover {
+    background: var(--p-surface-100);
+    color: var(--p-text-color);
+    border-color: var(--p-surface-300);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--p-primary-color);
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.dots {
+  display: inline-flex;
+  align-items: center;
   gap: 0.5rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: var(--p-surface-300);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background 0.15s,
+    transform 0.15s;
+
+  &:hover {
+    background: var(--p-surface-400);
+  }
+
+  &.active {
+    background: var(--p-primary-color);
+    transform: scale(1.2);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--p-primary-color);
+    outline-offset: 3px;
+  }
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.skip {
+  border: none;
+  background: transparent;
+  color: var(--p-text-muted-color);
+  font: inherit;
+  font-size: var(--text-sm);
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  border-radius: 6px;
+
+  &:hover {
+    color: var(--p-text-color);
+    background: var(--p-surface-100);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--p-primary-color);
+    outline-offset: 2px;
+  }
 }

@@ -1,11 +1,29 @@
-import { Component, input, model, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  isDevMode,
+  model,
+  OnDestroy,
+  output,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 
-interface OnboardingStep {
-  title: string;
-  description: string;
+interface OnboardingFrame {
+  readonly id: string;
+  readonly title: string;
+  readonly description: string;
+  // Placeholder illustration; replaced once design lands.
+  readonly art: string;
 }
+
+const AUTOPLAY_INTERVAL_MS = 2500;
 
 @Component({
   selector: 'bixarena-onboarding-modal',
@@ -13,51 +31,103 @@ interface OnboardingStep {
   templateUrl: './onboarding-modal.component.html',
   styleUrl: './onboarding-modal.component.scss',
 })
-export class OnboardingModalComponent {
+export class OnboardingModalComponent implements OnDestroy {
   readonly visible = model(false);
-  readonly termsUrl = input('');
-  readonly agreed = output<boolean>();
-  readonly dismissed = output<void>();
+  readonly closed = output<void>();
 
-  readonly steps: OnboardingStep[] = [
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly destroyRef = inject(DestroyRef);
+
+  readonly frames: OnboardingFrame[] = [
     {
-      title: 'Start a Battle',
+      id: 'stream',
+      title: 'Two anonymous models answer',
       description:
-        'Pick a curated biomedical question or submit your own prompt. Two AI models are randomly chosen to face off, and their identities stay anonymous so you can focus purely on the response quality.',
+        'You ask a biomedical question. Two AI models respond side-by-side, identities hidden so you compare answers, not brands.',
+      art: 'A',
     },
     {
-      title: 'Select the Better',
+      id: 'vote',
+      title: 'You pick the winner',
       description:
-        'Review the two AI-generated answers side by side and decide which model demonstrates clearer reasoning or insight. Your choice directly shapes model performance metrics.',
+        'Read both answers. Vote for the one with clearer reasoning, better evidence, or sharper insight.',
+      art: 'B',
     },
     {
-      title: 'Reveal & Impact',
+      id: 'reveal',
+      title: 'Models revealed, leaderboard updates',
       description:
-        "Once you've made your choice, the models are revealed. Only biomedical battles count toward the daily leaderboard. Ready for another round? Jump into your next battle.",
+        'The reveal shows which models you compared. Your vote feeds the live daily leaderboard ranking biomedical AI performance.',
+      art: 'C',
     },
   ];
 
-  readonly showAgreement = signal(false);
-  readonly dontShowChecked = signal(false);
+  readonly currentFrame = signal(0);
+  readonly autoplayPaused = signal(false);
+  readonly isLastFrame = computed(() => this.currentFrame() === this.frames.length - 1);
+
+  private readonly reducedMotion = this.isBrowser
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false;
+
+  private autoplayTimer: ReturnType<typeof setInterval> | null = null;
+
+  constructor() {
+    // Reset to first frame whenever the modal is opened so re-entry starts fresh.
+    effect(() => {
+      if (this.visible()) this.currentFrame.set(0);
+    });
+
+    effect(() => {
+      const shouldRun =
+        this.visible() && !this.autoplayPaused() && !this.reducedMotion && this.isBrowser;
+      if (shouldRun) {
+        this.startAutoplay();
+      } else {
+        this.stopAutoplay();
+      }
+    });
+
+    this.destroyRef.onDestroy(() => this.stopAutoplay());
+  }
 
   next(): void {
-    this.showAgreement.set(true);
+    this.currentFrame.update((i) => (i + 1) % this.frames.length);
   }
 
-  back(): void {
-    this.showAgreement.set(false);
+  prev(): void {
+    this.currentFrame.update((i) => (i - 1 + this.frames.length) % this.frames.length);
   }
 
-  agree(): void {
+  goTo(index: number): void {
+    if (index < 0 || index >= this.frames.length) {
+      if (isDevMode()) console.warn('OnboardingModal: invalid frame index', index);
+      return;
+    }
+    this.currentFrame.set(index);
+  }
+
+  done(): void {
     this.visible.set(false);
-    this.showAgreement.set(false);
-    this.agreed.emit(this.dontShowChecked());
+    this.closed.emit();
   }
 
-  onDismiss(): void {
-    this.visible.set(false);
-    this.showAgreement.set(false);
-    this.dontShowChecked.set(false);
-    this.dismissed.emit();
+  onModalClosed(): void {
+    this.closed.emit();
+  }
+
+  ngOnDestroy(): void {
+    this.stopAutoplay();
+  }
+
+  private startAutoplay(): void {
+    if (this.autoplayTimer !== null) return;
+    this.autoplayTimer = setInterval(() => this.next(), AUTOPLAY_INTERVAL_MS);
+  }
+
+  private stopAutoplay(): void {
+    if (this.autoplayTimer === null) return;
+    clearInterval(this.autoplayTimer);
+    this.autoplayTimer = null;
   }
 }

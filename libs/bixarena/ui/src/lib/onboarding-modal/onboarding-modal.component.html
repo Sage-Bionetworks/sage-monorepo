@@ -1,76 +1,87 @@
 <bixarena-modal-dialog
-  [heading]="showAgreement() ? 'Before You Start' : 'How it works'"
   styleClass="onboarding-modal"
   [closable]="true"
   [(visible)]="visible"
-  (closed)="onDismiss()"
+  (closed)="onModalClosed()"
 >
-  @if (!showAgreement()) {
-    <div class="step-list">
-      @for (step of steps; track $index) {
-        <div class="step-item">
-          <div class="step-num">{{ $index + 1 }}</div>
-          <div class="step-content">
-            <div class="step-label">{{ step.title }}</div>
-            <div class="step-desc">{{ step.description }}</div>
-          </div>
-        </div>
-      }
+  <div
+    class="carousel"
+    role="group"
+    aria-roledescription="carousel"
+    aria-label="How BixArena works"
+    (mouseenter)="autoplayPaused.set(true)"
+    (mouseleave)="autoplayPaused.set(false)"
+    (focusin)="autoplayPaused.set(true)"
+    (focusout)="autoplayPaused.set(false)"
+  >
+    <div class="viewport">
+      <div class="track" [style.transform]="'translateX(' + -currentFrame() * 100 + '%)'">
+        @for (frame of frames; track frame.id; let i = $index) {
+          <section
+            class="frame"
+            role="group"
+            aria-roledescription="slide"
+            [attr.aria-label]="i + 1 + ' of ' + frames.length"
+            [attr.aria-hidden]="i !== currentFrame()"
+          >
+            <div class="art" aria-hidden="true">{{ frame.art }}</div>
+            <h2 class="title">{{ frame.title }}</h2>
+            <p class="description">{{ frame.description }}</p>
+          </section>
+        }
+      </div>
     </div>
-  } @else {
-    <div class="agreement-text">
-      <p>
-        We process your prompts to ensure they are relevant to biomedical research. Your prompts are
-        also sent to third-party LLM proxies and AI model providers who may store and use them for
-        training and service improvement.
-      </p>
-      <p>
-        <strong
-          >Do not include private, sensitive, confidential, or personally identifiable information
-          in your prompts.</strong
+
+    <div class="controls">
+      <button type="button" class="nav-btn" aria-label="Previous slide" (click)="prev()">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
         >
-      </p>
-      <p>
-        AI responses may contain errors. Verify all AI responses independently. By continuing, you
-        agree to our
-        <a [href]="termsUrl()" target="_blank" rel="noopener noreferrer">Terms of Service</a>.
-      </p>
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+      </button>
+      <div class="dots" role="tablist" aria-label="Slide selection">
+        @for (frame of frames; track frame.id; let i = $index) {
+          <button
+            type="button"
+            class="dot"
+            role="tab"
+            [class.active]="i === currentFrame()"
+            [attr.aria-selected]="i === currentFrame()"
+            [attr.aria-label]="'Go to slide ' + (i + 1)"
+            (click)="goTo(i)"
+          ></button>
+        }
+      </div>
+      <button type="button" class="nav-btn" aria-label="Next slide" (click)="next()">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </button>
     </div>
-  }
 
-  <div class="modal-dots">
-    <button
-      type="button"
-      class="dot"
-      [class.active]="!showAgreement()"
-      aria-label="Go to How it works"
-      (click)="showAgreement.set(false)"
-    ></button>
-    <button
-      type="button"
-      class="dot"
-      [class.active]="showAgreement()"
-      aria-label="Go to Before You Start"
-      (click)="showAgreement.set(true)"
-    ></button>
-  </div>
-
-  <div class="modal-footer">
-    <label class="dont-show">
-      <input
-        type="checkbox"
-        [checked]="dontShowChecked()"
-        (change)="dontShowChecked.set($any($event.target).checked)"
-      />
-      Don't show again
-    </label>
-    <div class="btns">
-      @if (showAgreement()) {
-        <button class="secondary-btn" (click)="back()">Back</button>
-        <p-button label="Accept & Battle" (onClick)="agree()" />
-      } @else {
-        <p-button label="Next" (onClick)="next()" />
+    <div class="footer">
+      @if (!isLastFrame()) {
+        <button type="button" class="skip" (click)="done()">Skip</button>
       }
+      <p-button
+        [label]="isLastFrame() ? 'Get started' : 'Next'"
+        (onClick)="isLastFrame() ? done() : next()"
+      />
     </div>
   </div>
 </bixarena-modal-dialog>

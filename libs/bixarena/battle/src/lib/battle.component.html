@@ -79,9 +79,4 @@
   }
 </div>
 
-<bixarena-onboarding-modal
-  [(visible)]="gate.showOnboardingModal"
-  [termsUrl]="termsUrl"
-  (agreed)="gate.onOnboardingComplete($event)"
-  (dismissed)="gate.onOnboardingDismiss()"
-/>
+<bixarena-onboarding-modal [(visible)]="showOnboardingModal" (closed)="onOnboardingClose()" />
