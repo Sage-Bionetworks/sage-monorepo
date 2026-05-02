@@ -14,6 +14,10 @@
     (focusin)="autoplayPaused.set(true)"
     (focusout)="autoplayPaused.set(false)"
   >
+    <div class="header">
+      <h2 class="header-title">How It Works</h2>
+    </div>
+
     <div class="viewport">
       <div class="track" [style.transform]="'translateX(' + -currentFrame() * 100 + '%)'">
         @for (frame of frames; track frame.id; let i = $index) {
@@ -24,64 +28,84 @@
             [attr.aria-label]="i + 1 + ' of ' + frames.length"
             [attr.aria-hidden]="i !== currentFrame()"
           >
-            <div class="art" aria-hidden="true">{{ frame.art }}</div>
-            <h2 class="title">{{ frame.title }}</h2>
-            <p class="description">{{ frame.description }}</p>
+            <div class="art" aria-hidden="true">
+              @switch (frame.id) {
+                @case ('start') {
+                  <div class="battle-mock">
+                    <div class="prompt-bubble">
+                      <span class="q-badge">Q</span>
+                      <span class="prompt-text">{{ samplePrompt }}</span>
+                    </div>
+                    <div class="panels">
+                      <div class="panel">
+                        <div class="panel-header">
+                          <span class="panel-name">Model A</span>
+                        </div>
+                        <div class="panel-body">
+                          <span class="line w-100"></span>
+                          <span class="line w-85"></span>
+                          <span class="line w-90"></span>
+                          <span class="line w-70"></span>
+                          <span class="line w-50"></span>
+                          <span class="cursor"></span>
+                        </div>
+                      </div>
+                      <div class="panel">
+                        <div class="panel-header">
+                          <span class="panel-name">Model B</span>
+                        </div>
+                        <div class="panel-body">
+                          <span class="line w-95"></span>
+                          <span class="line w-75"></span>
+                          <span class="line w-90"></span>
+                          <span class="line w-60"></span>
+                          <span class="cursor"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+                @default {
+                  <div class="art-placeholder">{{ i + 1 }}</div>
+                }
+              }
+            </div>
+
+            <div class="copy">
+              <h3 class="title">{{ frame.title }}</h3>
+              <p class="description">{{ frame.description }}</p>
+            </div>
           </section>
         }
       </div>
     </div>
 
-    <div class="controls">
-      <button type="button" class="nav-btn" aria-label="Previous slide" (click)="prev()">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="m15 18-6-6 6-6" />
-        </svg>
-      </button>
-      <div class="dots" role="tablist" aria-label="Slide selection">
-        @for (frame of frames; track frame.id; let i = $index) {
-          <button
-            type="button"
-            class="dot"
-            role="tab"
-            [class.active]="i === currentFrame()"
-            [attr.aria-selected]="i === currentFrame()"
-            [attr.aria-label]="'Go to slide ' + (i + 1)"
-            (click)="goTo(i)"
-          ></button>
-        }
-      </div>
-      <button type="button" class="nav-btn" aria-label="Next slide" (click)="next()">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="m9 18 6-6-6-6" />
-        </svg>
-      </button>
+    <div class="dots" role="tablist" aria-label="Slide selection">
+      @for (frame of frames; track frame.id; let i = $index) {
+        <button
+          type="button"
+          class="dot"
+          role="tab"
+          [class.active]="i === currentFrame()"
+          [attr.aria-selected]="i === currentFrame()"
+          [attr.aria-label]="'Go to slide ' + (i + 1)"
+          (click)="goTo(i)"
+        ></button>
+      }
     </div>
 
     <div class="footer">
-      @if (!isLastFrame()) {
-        <button type="button" class="skip" (click)="done()">Skip</button>
-      }
-      <p-button
-        [label]="isLastFrame() ? 'Get started' : 'Next'"
-        (onClick)="isLastFrame() ? done() : next()"
-      />
+      <button type="button" class="skip" (click)="done()">Skip</button>
+      <div class="nav-actions">
+        @if (!isFirstFrame()) {
+          <p-button label="Back" styleClass="secondary-btn" (onClick)="prev()" />
+        }
+        @if (isLastFrame()) {
+          <p-button label="Get started" (onClick)="done()" />
+        } @else {
+          <p-button label="Next" (onClick)="next()" />
+        }
+      </div>
     </div>
   </div>
 </bixarena-modal-dialog>

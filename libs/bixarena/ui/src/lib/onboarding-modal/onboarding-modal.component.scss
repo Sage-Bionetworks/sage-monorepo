@@ -1,14 +1,30 @@
 .carousel {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
   min-width: 0;
+  width: 100%;
+  max-width: 46rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.header-title {
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--p-text-color);
+  margin: 0;
+  line-height: 1.2;
 }
 
 .viewport {
   overflow: hidden;
-  border-radius: 12px;
-  background: var(--p-surface-100);
+  border-radius: 14px;
 }
 
 .track {
@@ -20,19 +36,24 @@
 .frame {
   flex: 0 0 100%;
   min-width: 0;
-  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
-// Placeholder art block; replaced once the design lands.
 .art {
   width: 100%;
-  aspect-ratio: 16 / 10;
-  max-width: 24rem;
+  border-radius: 14px;
+  background: var(--p-surface-100);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.art-placeholder {
+  width: 100%;
+  height: 15rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,7 +66,164 @@
   font-size: 3rem;
   font-weight: 700;
   color: var(--p-primary-color);
-  letter-spacing: 0.05em;
+}
+
+// Frame 1 — battle illustration mock.
+.battle-mock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.prompt-bubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.85rem;
+  background: color-mix(in srgb, var(--p-primary-color) 6%, var(--p-surface-0));
+  border: 1px solid color-mix(in srgb, var(--p-primary-color) 18%, transparent);
+  border-radius: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  color: var(--p-text-color);
+  align-self: stretch;
+}
+
+.q-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--p-primary-color);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.prompt-text {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.panel {
+  background: var(--p-surface-0);
+  border: 1px solid var(--p-surface-200);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--p-surface-200);
+}
+
+.panel-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--p-text-color);
+}
+
+.panel-body {
+  padding: 0.85rem 0.75rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 7rem;
+  position: relative;
+}
+
+.line {
+  display: block;
+  height: 6px;
+  border-radius: 4px;
+  background: var(--p-surface-200);
+}
+
+.line.w-100 {
+  width: 100%;
+}
+
+.line.w-95 {
+  width: 95%;
+}
+
+.line.w-90 {
+  width: 90%;
+}
+
+.line.w-85 {
+  width: 85%;
+}
+
+.line.w-75 {
+  width: 75%;
+}
+
+.line.w-70 {
+  width: 70%;
+}
+
+.line.w-60 {
+  width: 60%;
+}
+
+.line.w-50 {
+  width: 50%;
+}
+
+.cursor {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.65rem;
+  width: 4px;
+  height: 14px;
+  background: var(--p-text-muted-color);
+  border-radius: 1px;
+  opacity: 0.7;
+  animation: cursor-blink 1.1s ease-in-out infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 0.15;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
 }
 
 .title {
@@ -62,88 +240,56 @@
   color: var(--p-text-muted-color);
   line-height: 1.55;
   margin: 0;
-  max-width: 28rem;
   text-wrap: pretty;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.nav-btn {
-  width: 32px;
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: 1px solid var(--p-surface-200);
-  background: transparent;
-  color: var(--p-text-muted-color);
-  cursor: pointer;
-  transition:
-    background 0.15s,
-    color 0.15s,
-    border-color 0.15s;
-
-  &:hover {
-    background: var(--p-surface-100);
-    color: var(--p-text-color);
-    border-color: var(--p-surface-300);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--p-primary-color);
-    outline-offset: 2px;
-  }
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
 }
 
 .dots {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 0.4rem;
+  align-self: center;
 }
 
 .dot {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  border-radius: 999px;
   border: none;
   background: var(--p-surface-300);
   cursor: pointer;
   padding: 0;
   transition:
-    background 0.15s,
-    transform 0.15s;
+    background 0.18s,
+    width 0.18s;
+}
 
-  &:hover {
-    background: var(--p-surface-400);
-  }
+.dot:hover {
+  background: var(--p-surface-400);
+}
 
-  &.active {
-    background: var(--p-primary-color);
-    transform: scale(1.2);
-  }
+.dot.active {
+  background: var(--p-primary-color);
+  width: 22px;
+}
 
-  &:focus-visible {
-    outline: 2px solid var(--p-primary-color);
-    outline-offset: 3px;
-  }
+.dot:focus-visible {
+  outline: 2px solid var(--p-primary-color);
+  outline-offset: 3px;
 }
 
 .footer {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.nav-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .skip {
@@ -152,17 +298,17 @@
   color: var(--p-text-muted-color);
   font: inherit;
   font-size: var(--text-sm);
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem;
   cursor: pointer;
   border-radius: 6px;
+}
 
-  &:hover {
-    color: var(--p-text-color);
-    background: var(--p-surface-100);
-  }
+.skip:hover {
+  color: var(--p-text-color);
+  background: var(--p-surface-100);
+}
 
-  &:focus-visible {
-    outline: 2px solid var(--p-primary-color);
-    outline-offset: 2px;
-  }
+.skip:focus-visible {
+  outline: 2px solid var(--p-primary-color);
+  outline-offset: 2px;
 }

@@ -18,11 +18,10 @@ interface OnboardingFrame {
   readonly id: string;
   readonly title: string;
   readonly description: string;
-  // Placeholder illustration; replaced once design lands.
-  readonly art: string;
 }
 
-const AUTOPLAY_INTERVAL_MS = 2500;
+const AUTOPLAY_INTERVAL_MS = 7000;
+const SAMPLE_PROMPT = 'How does sleep affect the immune system?';
 
 @Component({
   selector: 'bixarena-onboarding-modal',
@@ -37,32 +36,32 @@ export class OnboardingModalComponent {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly destroyRef = inject(DestroyRef);
 
+  readonly samplePrompt = SAMPLE_PROMPT;
+
   readonly frames: OnboardingFrame[] = [
     {
-      id: 'stream',
-      title: 'Two anonymous models answer',
+      id: 'start',
+      title: 'Start a Battle',
       description:
-        'You ask a biomedical question. Two AI models respond side-by-side, identities hidden so you compare answers, not brands.',
-      art: 'A',
+        'Pick a curated example or ask your own biomedical question. Two AI models are randomly chosen to face off, and their identities stay anonymous so you can focus purely on the response quality.',
     },
     {
-      id: 'vote',
-      title: 'You pick the winner',
+      id: 'select',
+      title: 'Select the Better',
       description:
-        'Read both answers. Vote for the one with clearer reasoning, better evidence, or sharper insight.',
-      art: 'B',
+        'Review the two AI-generated answers side by side and decide which model demonstrates clearer reasoning or insight. Your choice directly shapes model performance metrics.',
     },
     {
       id: 'reveal',
-      title: 'Models revealed, leaderboard updates',
+      title: 'Reveal & Impact',
       description:
-        'The reveal shows which models you compared. Your vote feeds the live daily leaderboard ranking biomedical AI performance.',
-      art: 'C',
+        "Once you've made your choice, the models are revealed. Only biomedical battles count toward the daily leaderboard. Ready for another round? Jump into your next battle.",
     },
   ];
 
   readonly currentFrame = signal(0);
   readonly autoplayPaused = signal(false);
+  readonly isFirstFrame = computed(() => this.currentFrame() === 0);
   readonly isLastFrame = computed(() => this.currentFrame() === this.frames.length - 1);
 
   private readonly reducedMotion = this.isBrowser
