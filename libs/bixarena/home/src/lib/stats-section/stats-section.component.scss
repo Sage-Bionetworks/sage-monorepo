@@ -45,18 +45,19 @@
   color: var(--p-primary-color);
 }
 
-@media (width < #{shared.$md-breakpoint}) {
+// Drop the divider + tighten gap for mobile views
+@media (width < #{shared.$lg-breakpoint}) {
   .stats {
     gap: 1.5rem;
   }
 
-  // Drop the divider on mobile: when stats wrap to multiple rows the left
-  // border on the wrapped row's first item reads as a stray vertical line.
   .stat + .stat {
     border-left: none;
     padding-left: 0;
   }
+}
 
+@media (width < #{shared.$md-breakpoint}) {
   .stat-val {
     font-size: var(--text-xl);
   }

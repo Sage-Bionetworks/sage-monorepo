@@ -6,6 +6,7 @@ import {
   LeaderboardSort,
   SortDirection,
 } from '@sagebionetworks/bixarena/api-client';
+import { HeroComponent } from '@sagebionetworks/bixarena/ui';
 import { LeaderboardFacadeService } from './services/leaderboard.service';
 import {
   LeaderboardSortChange,
@@ -40,6 +41,7 @@ const SORT_FIELD_MAP: Record<LeaderboardSortField, LeaderboardSort> = {
     LeaderboardTableComponent,
     LeaderboardToolbarComponent,
     LeaderboardBarChartComponent,
+    HeroComponent,
     PaginatorModule,
     DatePipe,
     DecimalPipe,
