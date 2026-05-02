@@ -131,15 +131,246 @@
 .panel-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
   padding: 0.55rem 0.75rem;
   border-bottom: 1px solid var(--p-surface-200);
 }
 
+.panel.selected {
+  border-color: var(--p-surface-500);
+  box-shadow: 0 0 0 1px var(--p-surface-500);
+  animation: panel-select 4s ease-in-out infinite;
+}
+
+@keyframes panel-select {
+  0%,
+  25% {
+    border-color: var(--p-surface-200);
+    box-shadow: none;
+  }
+
+  35%,
+  78% {
+    border-color: var(--p-surface-500);
+    box-shadow: 0 0 0 1px var(--p-surface-500);
+  }
+
+  100% {
+    border-color: var(--p-surface-200);
+    box-shadow: none;
+  }
+}
+
+.pick-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+  background: var(--p-text-color);
+  color: var(--p-surface-0);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  animation: pick-badge-in 4s ease-in-out infinite;
+  transform-origin: right center;
+}
+
+@keyframes pick-badge-in {
+  0%,
+  25% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  35%,
+  78% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+.vote-bar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.vb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--p-surface-200);
+  border-radius: 100px;
+  background: var(--p-surface-100);
+  color: var(--p-surface-600);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 520;
+  cursor: default;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+}
+
+.vb.active {
+  background: var(--p-surface-200);
+  border-color: var(--p-surface-300);
+  color: var(--p-text-color);
+  transform: translateY(-1px);
+  animation: vb-activate 4s ease-in-out infinite;
+}
+
+@keyframes vb-activate {
+  0%,
+  20% {
+    background: var(--p-surface-100);
+    border-color: var(--p-surface-200);
+    color: var(--p-surface-600);
+    transform: translateY(0);
+  }
+
+  30%,
+  78% {
+    background: var(--p-surface-200);
+    border-color: var(--p-surface-300);
+    color: var(--p-text-color);
+    transform: translateY(-1px);
+  }
+
+  100% {
+    background: var(--p-surface-100);
+    border-color: var(--p-surface-200);
+    color: var(--p-surface-600);
+    transform: translateY(0);
+  }
+}
+
+.vb-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.vb-icon.flip {
+  transform: scaleX(-1);
+}
+
+.cursor-icon {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: calc(50% - 5.4rem);
+  top: 0.95rem;
+  color: var(--p-text-color);
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 25%));
+  pointer-events: none;
+  animation: cursor-glide 4s ease-in-out infinite;
+}
+
+@keyframes cursor-glide {
+  0% {
+    transform: translate(2.8rem, -1.4rem) scale(1);
+  }
+
+  20% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(0, 0) scale(0.82);
+  }
+
+  30%,
+  78% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate(2.8rem, -1.4rem) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-icon,
+  .vb.active,
+  .panel.selected,
+  .pick-badge,
+  .name-generic,
+  .name-real {
+    animation: none;
+  }
+
+  .name-real {
+    opacity: 0;
+  }
+}
+
 .panel-name {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--p-text-color);
+}
+
+.name-generic {
+  display: inline-block;
+  animation: name-generic-out 4s ease-in-out infinite;
+}
+
+.name-real {
+  position: absolute;
+  inset: 0;
+  display: inline-block;
+  white-space: nowrap;
+  opacity: 0;
+  animation: name-real-in 4s ease-in-out infinite;
+}
+
+@keyframes name-generic-out {
+  0%,
+  45% {
+    opacity: 1;
+  }
+
+  55%,
+  78% {
+    opacity: 0;
+  }
+
+  90%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes name-real-in {
+  0%,
+  45% {
+    opacity: 0;
+  }
+
+  55%,
+  78% {
+    opacity: 1;
+  }
+
+  90%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .panel-body {

@@ -65,6 +65,106 @@
                     </div>
                   </div>
                 }
+                @case ('select') {
+                  <div class="battle-mock">
+                    <div class="panels">
+                      <div class="panel selected">
+                        <div class="panel-header">
+                          <span class="panel-name">
+                            <span class="name-generic">Model A</span>
+                            <span class="name-real">Claude Opus 4.7</span>
+                          </span>
+                          <span class="pick-badge">YOUR PICK</span>
+                        </div>
+                        <div class="panel-body">
+                          <span class="line w-100"></span>
+                          <span class="line w-85"></span>
+                          <span class="line w-90"></span>
+                          <span class="line w-70"></span>
+                          <span class="line w-50"></span>
+                        </div>
+                      </div>
+                      <div class="panel">
+                        <div class="panel-header">
+                          <span class="panel-name">
+                            <span class="name-generic">Model B</span>
+                            <span class="name-real">GPT-5</span>
+                          </span>
+                        </div>
+                        <div class="panel-body">
+                          <span class="line w-95"></span>
+                          <span class="line w-75"></span>
+                          <span class="line w-90"></span>
+                          <span class="line w-60"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="vote-bar">
+                      <button type="button" class="vb left active" tabindex="-1">
+                        <svg
+                          class="vb-icon flip"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="m11 19-6-6" />
+                          <path d="m5 21-2-2" />
+                          <path d="m8 16-4 4" />
+                          <path d="M9.5 17.5 21 6V3h-3L6.5 14.5" />
+                        </svg>
+                        <span>A is Better</span>
+                      </button>
+                      <button type="button" class="vb" tabindex="-1">
+                        <svg
+                          class="vb-icon"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+                          />
+                        </svg>
+                        Tie
+                      </button>
+                      <button type="button" class="vb right" tabindex="-1">
+                        <span>B is Better</span>
+                        <svg
+                          class="vb-icon"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="m11 19-6-6" />
+                          <path d="m5 21-2-2" />
+                          <path d="m8 16-4 4" />
+                          <path d="M9.5 17.5 21 6V3h-3L6.5 14.5" />
+                        </svg>
+                      </button>
+                      <svg class="cursor-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M3 2.5 L3 19.5 L8 14.5 L11 21.5 L13.5 20.5 L10.5 13.5 L17 13.5 Z"
+                          fill="currentColor"
+                          stroke="#fff"
+                          stroke-width="1.4"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                }
                 @default {
                   <div class="art-placeholder">{{ i + 1 }}</div>
                 }

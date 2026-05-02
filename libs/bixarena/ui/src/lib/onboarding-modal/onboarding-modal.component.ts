@@ -49,7 +49,7 @@ export class OnboardingModalComponent {
       id: 'select',
       title: 'Select the Better',
       description:
-        'Review the two AI-generated answers side by side and decide which model demonstrates clearer reasoning or insight. Your choice directly shapes model performance metrics.',
+        'Review the two AI-generated answers side by side and pick the one with clearer reasoning or sharper insight. After you vote, both models are revealed.',
     },
     {
       id: 'reveal',
