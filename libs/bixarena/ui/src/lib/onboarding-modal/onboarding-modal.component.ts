@@ -6,7 +6,6 @@ import {
   inject,
   isDevMode,
   model,
-  OnDestroy,
   output,
   PLATFORM_ID,
   signal,
@@ -31,7 +30,7 @@ const AUTOPLAY_INTERVAL_MS = 2500;
   templateUrl: './onboarding-modal.component.html',
   styleUrl: './onboarding-modal.component.scss',
 })
-export class OnboardingModalComponent implements OnDestroy {
+export class OnboardingModalComponent {
   readonly visible = model(false);
   readonly closed = output<void>();
 
@@ -114,10 +113,6 @@ export class OnboardingModalComponent implements OnDestroy {
 
   onModalClosed(): void {
     this.closed.emit();
-  }
-
-  ngOnDestroy(): void {
-    this.stopAutoplay();
   }
 
   private startAutoplay(): void {

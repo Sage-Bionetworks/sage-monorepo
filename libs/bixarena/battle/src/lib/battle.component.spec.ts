@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EMPTY } from 'rxjs';
 import { BattleService as BattleApiService, BASE_PATH } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
@@ -11,7 +11,6 @@ import { BattleComponent } from './battle.component';
 const mockConfig = {
   config: {
     battle: { promptLengthLimit: 5000, roundLimit: 20, promptUseLimit: 5 },
-    links: { termsOfService: 'https://example.com/terms' },
   },
 };
 
@@ -41,10 +40,9 @@ describe('BattleComponent', () => {
     });
 
     await TestBed.configureTestingModule({
-      imports: [BattleComponent],
+      imports: [BattleComponent, NoopAnimationsModule],
       providers: [
         provideHttpClient(),
-        provideNoopAnimations(),
         { provide: PLATFORM_ID, useValue: 'browser' },
         { provide: BASE_PATH, useValue: 'http://test/api/v1' },
         { provide: ConfigService, useValue: mockConfig },
