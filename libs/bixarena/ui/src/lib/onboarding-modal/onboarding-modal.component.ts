@@ -53,7 +53,7 @@ export class OnboardingModalComponent {
     },
     {
       id: 'reveal',
-      title: 'Battles Drive Impact',
+      title: 'Make Your Impact',
       description:
         'Only biomedical battles count toward the daily leaderboard. Ready for another round? Jump into your next battle with the same question against new models, or start a fresh battle.',
     },
