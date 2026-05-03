@@ -166,6 +166,7 @@ export * from './org-sagebionetworks-repo-model-dataaccess-access-approval-searc
 export * from './org-sagebionetworks-repo-model-dataaccess-access-approval-search-sort';
 export * from './org-sagebionetworks-repo-model-dataaccess-access-approval-sort-field';
 export * from './org-sagebionetworks-repo-model-dataaccess-access-requirement-conversion-request';
+export * from './org-sagebionetworks-repo-model-dataaccess-access-requirement-permissions';
 export * from './org-sagebionetworks-repo-model-dataaccess-access-requirement-search-request';
 export * from './org-sagebionetworks-repo-model-dataaccess-access-requirement-search-response';
 export * from './org-sagebionetworks-repo-model-dataaccess-access-requirement-search-result';

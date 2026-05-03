@@ -27,7 +27,7 @@ export interface OrgSagebionetworksRepoModelFileFileResult {
    */
   previewPreSignedURL?: string;
   /**
-   * Failure code for a files that cannot be downloaded.
+   * Failure code for files that cannot be downloaded.
    */
   failureCode?: OrgSagebionetworksRepoModelFileFileResult.FailureCodeEnum;
 }
