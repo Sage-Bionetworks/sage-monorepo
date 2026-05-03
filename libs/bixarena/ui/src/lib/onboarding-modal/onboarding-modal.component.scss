@@ -83,8 +83,8 @@
   align-items: center;
   gap: 0.6rem;
   padding: 0.6rem 0.85rem;
-  background: color-mix(in srgb, var(--p-primary-color) 6%, var(--p-surface-0));
-  border: 1px solid color-mix(in srgb, var(--p-primary-color) 18%, transparent);
+  background: var(--p-surface-0);
+  border: 1px solid var(--p-surface-200);
   border-radius: 10px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.85rem;
