@@ -1,3 +1,5 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
 .carousel {
   display: flex;
   flex-direction: column;
@@ -266,6 +268,10 @@
   transform: scaleX(-1);
 }
 
+.vb-label-short {
+  display: none;
+}
+
 .cursor-icon {
   position: absolute;
   width: 18px;
@@ -514,27 +520,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cursor-icon,
-  .vb.active,
-  .panel.selected,
-  .pick-badge,
-  .name-generic,
-  .name-real,
-  .claude-row,
-  .gpt-row,
-  .rank-old,
-  .rank-new {
-    animation: none;
-  }
-
-  .name-real,
-  .rank-new,
-  .score-new {
-    opacity: 0;
-  }
-}
-
 .panel-name {
   position: relative;
   display: inline-flex;
@@ -663,12 +648,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cursor {
-    animation: none;
-  }
-}
-
 .copy {
   display: flex;
   flex-direction: column;
@@ -761,4 +740,43 @@
 .skip:focus-visible {
   outline: 2px solid var(--p-primary-color);
   outline-offset: 2px;
+}
+
+@media (width < #{shared.$md-breakpoint}) {
+  .vb-label {
+    display: none;
+  }
+
+  .vb.left .vb-label-short,
+  .vb.right .vb-label-short {
+    display: inline;
+  }
+
+  .pick-badge {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor,
+  .cursor-icon,
+  .vb.active,
+  .panel.selected,
+  .pick-badge,
+  .name-generic,
+  .name-real,
+  .claude-row,
+  .gpt-row,
+  .rank-old,
+  .rank-new,
+  .score-old,
+  .score-new {
+    animation: none;
+  }
+
+  .name-real,
+  .rank-new,
+  .score-new {
+    opacity: 0;
+  }
 }
