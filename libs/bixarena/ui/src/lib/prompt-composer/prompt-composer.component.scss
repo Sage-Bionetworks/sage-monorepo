@@ -128,31 +128,25 @@
 .more-info {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background: color-mix(in srgb, var(--p-primary-color) 10%, transparent);
-  color: var(--p-primary-color);
+  gap: 0.25rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--p-text-muted-color);
   font: inherit;
   font-size: inherit;
   font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
   cursor: pointer;
-  transition:
-    background 0.15s,
-    border-color 0.15s;
+  transition: color 0.15s;
 
   &:hover {
-    background: color-mix(in srgb, var(--p-primary-color) 18%, transparent);
-  }
-
-  &:focus-visible {
-    outline: none;
-    border-color: var(--p-primary-color);
+    color: var(--p-text-color);
   }
 
   &[aria-expanded='true'] {
-    background: color-mix(in srgb, var(--p-primary-color) 22%, transparent);
+    color: var(--p-text-color);
   }
 }
 
