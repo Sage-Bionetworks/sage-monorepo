@@ -11,8 +11,6 @@
     aria-label="How BixArena works"
     (mouseenter)="autoplayPaused.set(true)"
     (mouseleave)="autoplayPaused.set(false)"
-    (focusin)="autoplayPaused.set(true)"
-    (focusout)="autoplayPaused.set(false)"
   >
     <div class="header">
       <h2 class="header-title">How It Works</h2>
@@ -219,14 +217,13 @@
       </div>
     </div>
 
-    <div class="dots" role="tablist" aria-label="Slide selection">
+    <div class="dots" aria-label="Slide selection">
       @for (frame of frames; track frame.id; let i = $index) {
         <button
           type="button"
           class="dot"
-          role="tab"
           [class.active]="i === currentFrame()"
-          [attr.aria-selected]="i === currentFrame()"
+          [attr.aria-current]="i === currentFrame() ? 'true' : null"
           [attr.aria-label]="'Go to slide ' + (i + 1)"
           (click)="goTo(i)"
         ></button>

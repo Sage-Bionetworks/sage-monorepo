@@ -77,8 +77,13 @@ export class OnboardingModalComponent {
     });
 
     effect(() => {
+      // No autoplay on last frame: wrap would scroll backward through prior slides.
       const shouldRun =
-        this.visible() && !this.autoplayPaused() && !this.reducedMotion && this.isBrowser;
+        this.visible() &&
+        !this.autoplayPaused() &&
+        !this.reducedMotion &&
+        this.isBrowser &&
+        !this.isLastFrame();
       if (shouldRun) {
         this.startAutoplay();
       } else {
@@ -90,11 +95,13 @@ export class OnboardingModalComponent {
   }
 
   next(): void {
-    this.currentFrame.update((i) => (i + 1) % this.frames.length);
+    if (this.isLastFrame()) return;
+    this.currentFrame.update((i) => i + 1);
   }
 
   prev(): void {
-    this.currentFrame.update((i) => (i - 1 + this.frames.length) % this.frames.length);
+    if (this.isFirstFrame()) return;
+    this.currentFrame.update((i) => i - 1);
   }
 
   goTo(index: number): void {
