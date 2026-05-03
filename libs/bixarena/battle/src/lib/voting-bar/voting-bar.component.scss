@@ -67,9 +67,23 @@
 
 .nudge {
   display: flex;
-  gap: 0.5rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: flex-start;
+}
+
+.nudge-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nudge-caption {
+  font-size: 0.7rem;
+  color: var(--p-text-muted-color);
+  font-style: italic;
 }
 
 .validation-row {

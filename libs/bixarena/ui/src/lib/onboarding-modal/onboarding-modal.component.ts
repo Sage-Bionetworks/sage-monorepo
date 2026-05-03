@@ -53,9 +53,9 @@ export class OnboardingModalComponent {
     },
     {
       id: 'reveal',
-      title: 'Reveal & Impact',
+      title: 'Battles Drive Impact',
       description:
-        "Once you've made your choice, the models are revealed. Only biomedical battles count toward the daily leaderboard. Ready for another round? Jump into your next battle.",
+        'Only biomedical battles count toward the daily leaderboard. Ready for another round? Jump into your next battle with the same question against new models, or start a fresh battle.',
     },
   ];
 

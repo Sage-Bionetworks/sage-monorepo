@@ -96,9 +96,15 @@
   @if (phase() === 'reveal' || phase() === 'error') {
     <div class="nudge">
       @if (canReuse()) {
-        <p-button label="New Matchup" (onClick)="samePrompt.emit()" />
+        <div class="nudge-action">
+          <p-button label="New Matchup" (onClick)="samePrompt.emit()" />
+          <span class="nudge-caption">same question, new models</span>
+        </div>
       }
-      <p-button label="New Battle" severity="secondary" (onClick)="newBattle.emit()" />
+      <div class="nudge-action">
+        <p-button label="New Battle" severity="secondary" (onClick)="newBattle.emit()" />
+        <span class="nudge-caption">brand-new question</span>
+      </div>
     </div>
   }
 </div>
