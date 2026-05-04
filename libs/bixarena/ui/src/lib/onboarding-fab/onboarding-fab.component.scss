@@ -1,0 +1,88 @@
+@use 'shared/typescript/styles/src/shared-styles/variables' as shared;
+
+:host {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
+}
+
+.fab {
+  --fab-bg: var(--p-surface-100);
+  --fab-bg-hover: var(--p-surface-200);
+  --fab-fg: var(--p-text-color);
+  --fab-border: var(--p-surface-200);
+
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  background: var(--fab-bg);
+  border: 1px solid var(--fab-border);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 12%);
+  color: var(--fab-fg);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    box-shadow 0.2s;
+}
+
+.fab:focus-visible {
+  outline: 2px solid var(--p-primary-color);
+  outline-offset: 2px;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.label {
+  display: inline-block;
+  white-space: nowrap;
+  max-width: 0;
+  padding-left: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-width 0.25s ease,
+    opacity 0.2s ease,
+    padding-left 0.25s ease;
+}
+
+.fab:hover,
+.fab:focus-visible {
+  background: var(--fab-bg-hover);
+  border-color: var(--p-surface-300);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 16%);
+}
+
+.fab:hover .label,
+.fab:focus-visible .label {
+  max-width: 12rem;
+  opacity: 1;
+  padding-left: 0.5rem;
+}
+
+// Touch / no-hover devices: keep the label visible so the affordance is
+// discoverable without hover.
+@media (hover: none) {
+  .label {
+    max-width: 12rem;
+    opacity: 1;
+    padding-left: 0.5rem;
+  }
+}
+
+@media (width < #{shared.$md-breakpoint}) {
+  :host {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}

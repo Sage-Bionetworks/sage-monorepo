@@ -114,13 +114,6 @@ bixarena-example-prompts {
   min-height: 0;
 }
 
-.disclaimer {
-  text-align: center;
-  font-size: var(--text-xs);
-  color: var(--p-text-muted-color);
-  margin: 1rem 0 0;
-}
-
 @media (width < #{shared.$md-breakpoint}) {
   .battle-view {
     height: auto;

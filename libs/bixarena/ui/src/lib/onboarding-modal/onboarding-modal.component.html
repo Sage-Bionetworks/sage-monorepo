@@ -1,76 +1,244 @@
 <bixarena-modal-dialog
-  [heading]="showAgreement() ? 'Before You Start' : 'How it works'"
   styleClass="onboarding-modal"
   [closable]="true"
   [(visible)]="visible"
-  (closed)="onDismiss()"
+  (closed)="onModalClosed()"
 >
-  @if (!showAgreement()) {
-    <div class="step-list">
-      @for (step of steps; track $index) {
-        <div class="step-item">
-          <div class="step-num">{{ $index + 1 }}</div>
-          <div class="step-content">
-            <div class="step-label">{{ step.title }}</div>
-            <div class="step-desc">{{ step.description }}</div>
-          </div>
-        </div>
+  <div
+    class="carousel"
+    role="group"
+    aria-roledescription="carousel"
+    aria-label="How BixArena works"
+    (mouseenter)="autoplayPaused.set(true)"
+    (mouseleave)="autoplayPaused.set(false)"
+  >
+    <div class="header">
+      <h2 class="header-title">How It Works</h2>
+    </div>
+
+    <div class="viewport">
+      <div class="track" [style.transform]="'translateX(' + -currentFrame() * 100 + '%)'">
+        @for (frame of frames; track frame.id; let i = $index) {
+          <section
+            class="frame"
+            role="group"
+            aria-roledescription="slide"
+            [attr.aria-label]="i + 1 + ' of ' + frames.length"
+            [attr.aria-hidden]="i !== currentFrame()"
+          >
+            <div class="art" aria-hidden="true">
+              @switch (frame.id) {
+                @case ('start') {
+                  <div class="battle-mock">
+                    <div class="prompt-bubble">
+                      <span class="q-badge">Q</span>
+                      <span class="prompt-text">{{ samplePrompt }}</span>
+                    </div>
+                    <div class="panels">
+                      <div class="panel">
+                        <div class="panel-header">
+                          <span class="panel-name">Model A</span>
+                        </div>
+                        <div class="panel-body">
+                          <span class="line" style="width: 100%"></span>
+                          <span class="line" style="width: 85%"></span>
+                          <span class="line" style="width: 90%"></span>
+                          <span class="line" style="width: 70%"></span>
+                          <span class="line" style="width: 50%"></span>
+                          <span class="cursor"></span>
+                        </div>
+                      </div>
+                      <div class="panel">
+                        <div class="panel-header">
+                          <span class="panel-name">Model B</span>
+                        </div>
+                        <div class="panel-body">
+                          <span class="line" style="width: 95%"></span>
+                          <span class="line" style="width: 75%"></span>
+                          <span class="line" style="width: 90%"></span>
+                          <span class="line" style="width: 60%"></span>
+                          <span class="cursor"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+                @case ('select') {
+                  <div class="battle-mock">
+                    <div class="panels">
+                      <div class="panel selected">
+                        <div class="panel-header">
+                          <span class="panel-name">
+                            <span class="name-generic">Model A</span>
+                            <span class="name-real">Claude Opus 4.7</span>
+                          </span>
+                          <span class="pick-badge">YOUR PICK</span>
+                        </div>
+                        <div class="panel-body">
+                          <span class="line" style="width: 100%"></span>
+                          <span class="line" style="width: 85%"></span>
+                          <span class="line" style="width: 90%"></span>
+                          <span class="line" style="width: 70%"></span>
+                          <span class="line" style="width: 50%"></span>
+                        </div>
+                      </div>
+                      <div class="panel">
+                        <div class="panel-header">
+                          <span class="panel-name">
+                            <span class="name-generic">Model B</span>
+                            <span class="name-real">GPT-5</span>
+                          </span>
+                        </div>
+                        <div class="panel-body">
+                          <span class="line" style="width: 95%"></span>
+                          <span class="line" style="width: 75%"></span>
+                          <span class="line" style="width: 90%"></span>
+                          <span class="line" style="width: 60%"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="vote-bar">
+                      <button type="button" class="vb left active" tabindex="-1">
+                        <svg
+                          class="vb-icon flip"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="m11 19-6-6" />
+                          <path d="m5 21-2-2" />
+                          <path d="m8 16-4 4" />
+                          <path d="M9.5 17.5 21 6V3h-3L6.5 14.5" />
+                        </svg>
+                        <span class="vb-label">A is Better</span>
+                        <span class="vb-label-short">A</span>
+                      </button>
+                      <button type="button" class="vb" tabindex="-1">
+                        <svg
+                          class="vb-icon"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+                          />
+                        </svg>
+                        Tie
+                      </button>
+                      <button type="button" class="vb right" tabindex="-1">
+                        <span class="vb-label">B is Better</span>
+                        <span class="vb-label-short">B</span>
+                        <svg
+                          class="vb-icon"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="m11 19-6-6" />
+                          <path d="m5 21-2-2" />
+                          <path d="m8 16-4 4" />
+                          <path d="M9.5 17.5 21 6V3h-3L6.5 14.5" />
+                        </svg>
+                      </button>
+                      <svg class="cursor-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M3 2.5 L3 19.5 L8 14.5 L11 21.5 L13.5 20.5 L10.5 13.5 L17 13.5 Z"
+                          fill="currentColor"
+                          stroke="#fff"
+                          stroke-width="1.4"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                }
+                @case ('reveal') {
+                  <div class="lb-mock">
+                    <div class="lb-header">Daily Leaderboard</div>
+
+                    <div class="lb-rows">
+                      <div class="lb-row claude-row">
+                        <span class="lb-rank">
+                          <span class="rank-old">2</span>
+                          <span class="rank-new">1</span>
+                        </span>
+                        <span class="lb-name">Claude Opus 4.7</span>
+                        <span class="lb-score">
+                          <span class="score-old">1542</span>
+                          <span class="score-new">1551</span>
+                        </span>
+                      </div>
+                      <div class="lb-row gpt-row">
+                        <span class="lb-rank">
+                          <span class="rank-old">1</span>
+                          <span class="rank-new">2</span>
+                        </span>
+                        <span class="lb-name">GPT-5</span>
+                        <span class="lb-score">
+                          <span class="score-old">1547</span>
+                          <span class="score-new">1538</span>
+                        </span>
+                      </div>
+                      <div class="lb-row">
+                        <span class="lb-rank">3</span>
+                        <span class="lb-name">Gemini 2.5 Pro</span>
+                        <span class="lb-score static-score">1518</span>
+                      </div>
+                    </div>
+
+                    <p class="lb-disclaimer">Example only — not live data</p>
+                  </div>
+                }
+              }
+            </div>
+
+            <div class="copy">
+              <h3 class="title">{{ frame.title }}</h3>
+              <p class="description">{{ frame.description }}</p>
+            </div>
+          </section>
+        }
+      </div>
+    </div>
+
+    <div class="dots" aria-label="Slide selection">
+      @for (frame of frames; track frame.id; let i = $index) {
+        <button
+          type="button"
+          class="dot"
+          [class.active]="i === currentFrame()"
+          [attr.aria-current]="i === currentFrame() ? 'true' : null"
+          [attr.aria-label]="'Go to slide ' + (i + 1)"
+          (click)="goTo(i)"
+        ></button>
       }
     </div>
-  } @else {
-    <div class="agreement-text">
-      <p>
-        We process your prompts to ensure they are relevant to biomedical research. Your prompts are
-        also sent to third-party LLM proxies and AI model providers who may store and use them for
-        training and service improvement.
-      </p>
-      <p>
-        <strong
-          >Do not include private, sensitive, confidential, or personally identifiable information
-          in your prompts.</strong
-        >
-      </p>
-      <p>
-        AI responses may contain errors. Verify all AI responses independently. By continuing, you
-        agree to our
-        <a [href]="termsUrl()" target="_blank" rel="noopener noreferrer">Terms of Service</a>.
-      </p>
-    </div>
-  }
 
-  <div class="modal-dots">
-    <button
-      type="button"
-      class="dot"
-      [class.active]="!showAgreement()"
-      aria-label="Go to How it works"
-      (click)="showAgreement.set(false)"
-    ></button>
-    <button
-      type="button"
-      class="dot"
-      [class.active]="showAgreement()"
-      aria-label="Go to Before You Start"
-      (click)="showAgreement.set(true)"
-    ></button>
-  </div>
-
-  <div class="modal-footer">
-    <label class="dont-show">
-      <input
-        type="checkbox"
-        [checked]="dontShowChecked()"
-        (change)="dontShowChecked.set($any($event.target).checked)"
-      />
-      Don't show again
-    </label>
-    <div class="btns">
-      @if (showAgreement()) {
-        <button class="secondary-btn" (click)="back()">Back</button>
-        <p-button label="Accept & Battle" (onClick)="agree()" />
-      } @else {
-        <p-button label="Next" (onClick)="next()" />
-      }
+    <div class="footer">
+      <button type="button" class="skip" (click)="done()">Skip</button>
+      <div class="nav-actions">
+        @if (!isFirstFrame()) {
+          <p-button label="Back" styleClass="secondary-btn" (onClick)="prev()" />
+        }
+        @if (isLastFrame()) {
+          <p-button label="Get started" (onClick)="done()" />
+        } @else {
+          <p-button label="Next" (onClick)="next()" />
+        }
+      </div>
     </div>
   </div>
 </bixarena-modal-dialog>

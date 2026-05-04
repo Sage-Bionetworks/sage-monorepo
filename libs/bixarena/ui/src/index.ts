@@ -5,6 +5,7 @@ export * from './lib/hero/hero.component';
 export * from './lib/login-modal/login-modal.component';
 export * from './lib/modal-dialog/modal-dialog.component';
 export * from './lib/nav/nav.component';
+export * from './lib/onboarding-fab/onboarding-fab.component';
 export * from './lib/onboarding-modal/onboarding-modal.component';
 export * from './lib/prompt-card/prompt-card.component';
 export * from './lib/prompt-composer/prompt-composer.component';

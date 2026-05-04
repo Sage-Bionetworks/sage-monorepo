@@ -168,7 +168,12 @@
   }
 
   .bixarena-modal.onboarding-modal.p-dialog {
-    max-width: 520px;
+    max-width: 760px;
+    background: var(--p-surface-0);
+
+    .p-dialog-content {
+      padding: 1.75rem;
+    }
 
     .p-button {
       height: 36px;

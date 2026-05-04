@@ -1,30 +1,46 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EMPTY } from 'rxjs';
 import { BattleService as BattleApiService, BASE_PATH } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
-import { BattleGateService } from '@sagebionetworks/bixarena/services';
+import { BattleGateService, OnboardingService } from '@sagebionetworks/bixarena/services';
 import { BattleComponent } from './battle.component';
 
 const mockConfig = {
   config: {
     battle: { promptLengthLimit: 5000, roundLimit: 20, promptUseLimit: 5 },
-    links: { termsOfService: 'https://example.com/terms' },
   },
 };
 
 describe('BattleComponent', () => {
   let component: BattleComponent;
   let fixture: ComponentFixture<BattleComponent>;
+  let onboarding: OnboardingService;
 
   beforeEach(async () => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     globalThis.fetch = jest.fn().mockReturnValue(new Promise(() => {}));
     sessionStorage.clear();
+    localStorage.clear();
+
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      configurable: true,
+      value: jest.fn().mockReturnValue({
+        matches: false,
+        media: '',
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      }),
+    });
 
     await TestBed.configureTestingModule({
-      imports: [BattleComponent],
+      imports: [BattleComponent, NoopAnimationsModule],
       providers: [
         provideHttpClient(),
         { provide: PLATFORM_ID, useValue: 'browser' },
@@ -41,6 +57,9 @@ describe('BattleComponent', () => {
         },
       ],
     }).compileComponents();
+
+    onboarding = TestBed.inject(OnboardingService);
+    onboarding.markSeen();
 
     fixture = TestBed.createComponent(BattleComponent);
     component = fixture.componentInstance;
@@ -63,10 +82,9 @@ describe('BattleComponent', () => {
     expect(consumeSpy.mock.results[0].value).toBeNull();
   });
 
-  it('auto-submits a saved pending prompt on init', async () => {
+  it('auto-submits a saved pending prompt on init when onboarding has been seen', async () => {
     const gate = TestBed.inject(BattleGateService);
     gate.savePendingPrompt('hello biomedical world');
-    jest.spyOn(BattleGateService.prototype, 'checkOnboarding').mockResolvedValue(true);
 
     fixture = TestBed.createComponent(BattleComponent);
     component = fixture.componentInstance;
@@ -81,7 +99,6 @@ describe('BattleComponent', () => {
   it('forwards a pending example_prompt id when present', async () => {
     const gate = TestBed.inject(BattleGateService);
     gate.savePendingPrompt('curated question', 'ep-99');
-    jest.spyOn(BattleGateService.prototype, 'checkOnboarding').mockResolvedValue(true);
 
     fixture = TestBed.createComponent(BattleComponent);
     component = fixture.componentInstance;
@@ -91,5 +108,44 @@ describe('BattleComponent', () => {
 
     expect(submitSpy).toHaveBeenCalledWith('curated question', 'ep-99');
     expect(gate.consumePendingPrompt()).toBeNull();
+  });
+
+  it('opens onboarding modal and defers pending prompt for first-time users', async () => {
+    localStorage.clear();
+    const gate = TestBed.inject(BattleGateService);
+    gate.savePendingPrompt('deferred prompt', 'ep-1');
+
+    fixture = TestBed.createComponent(BattleComponent);
+    component = fixture.componentInstance;
+    const submitSpy = jest.spyOn(component.state, 'submitPrompt').mockResolvedValue();
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    expect(component.showOnboardingModal()).toBe(true);
+    expect(submitSpy).not.toHaveBeenCalled();
+
+    component.onOnboardingClose();
+    await Promise.resolve();
+
+    expect(component.showOnboardingModal()).toBe(false);
+    expect(submitSpy).toHaveBeenCalledWith('deferred prompt', 'ep-1');
+    expect(onboarding.hasSeen()).toBe(true);
+  });
+
+  it('opens onboarding without a pending prompt for first-time users with no submission', () => {
+    localStorage.clear();
+
+    fixture = TestBed.createComponent(BattleComponent);
+    component = fixture.componentInstance;
+    const submitSpy = jest.spyOn(component.state, 'submitPrompt').mockResolvedValue();
+    fixture.detectChanges();
+
+    expect(component.showOnboardingModal()).toBe(true);
+    expect(submitSpy).not.toHaveBeenCalled();
+
+    component.onOnboardingClose();
+
+    expect(component.showOnboardingModal()).toBe(false);
+    expect(submitSpy).not.toHaveBeenCalled();
   });
 });
