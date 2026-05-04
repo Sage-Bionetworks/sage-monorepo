@@ -1,7 +1,6 @@
 import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from './auth.service';
-import { OnboardingService } from './onboarding.service';
 
 const PENDING_PROMPT_KEY = 'bixarena.pendingPrompt';
 const PENDING_EXAMPLE_PROMPT_ID_KEY = 'bixarena.pendingExamplePromptId';
@@ -9,6 +8,11 @@ const PENDING_PROMPT_TS_KEY = 'bixarena.pendingPromptTs';
 const PENDING_PROMPT_OWNER_KEY = 'bixarena.pendingPromptOwner';
 const PENDING_PROMPT_TTL_MS = 15 * 60 * 1000;
 const PENDING_PROMPT_MAX_LENGTH = 5000;
+
+export interface PendingPrompt {
+  prompt: string;
+  examplePromptId: string | null;
+}
 
 // Module-level helper so AuthService.logout can clear pending without
 // importing the service class (would create a circular dep).
@@ -27,37 +31,9 @@ export function clearPendingPromptStorage(): void {
 @Injectable({ providedIn: 'root' })
 export class BattleGateService {
   readonly authService = inject(AuthService);
-  private readonly onboardingService = inject(OnboardingService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly showLoginModal = signal(false);
-  readonly showOnboardingModal = signal(false);
-
-  private pendingResolver: ((passed: boolean) => void) | null = null;
-
-  // TODO: if concurrent calls become an issue, cache the pending Promise so all callers share it
-  async checkOnboarding(): Promise<boolean> {
-    if (!this.onboardingService.hasCompleted()) {
-      this.showOnboardingModal.set(true);
-      return new Promise((resolve) => {
-        this.pendingResolver = resolve;
-      });
-    }
-    return true;
-  }
-
-  onOnboardingComplete(dontShowAgain: boolean): void {
-    this.onboardingService.markComplete(dontShowAgain);
-    this.showOnboardingModal.set(false);
-    this.pendingResolver?.(true);
-    this.pendingResolver = null;
-  }
-
-  onOnboardingDismiss(): void {
-    this.showOnboardingModal.set(false);
-    this.pendingResolver?.(false);
-    this.pendingResolver = null;
-  }
 
   // The home route guard picks up pending and routes to /battle after OIDC
   // returns to /. If auth-service ever supports a dynamic post-login URL,
@@ -102,7 +78,7 @@ export class BattleGateService {
     return this.peekValidPrompt() !== null;
   }
 
-  consumePendingPrompt(): { prompt: string; examplePromptId: string | null } | null {
+  consumePendingPrompt(): PendingPrompt | null {
     if (!this.isBrowser) return null;
     const valid = this.peekValidPrompt();
     if (!valid) {

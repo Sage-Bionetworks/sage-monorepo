@@ -13,9 +13,6 @@
           [disabled]="state.phase() === 'creating'"
           (promptSubmit)="onPromptSubmit($event)"
         />
-        <p class="disclaimer">
-          AI may make mistakes. Do not include sensitive or personal information.
-        </p>
       </div>
     </section>
   }
@@ -77,17 +74,11 @@
           [disabled]="state.phase() !== 'voting'"
           (promptSubmit)="onFollowUpSubmit($event)"
         />
-        <p class="disclaimer">
-          AI may make mistakes. Do not include sensitive or personal information.
-        </p>
       </div>
     </section>
   }
 </div>
 
-<bixarena-onboarding-modal
-  [(visible)]="gate.showOnboardingModal"
-  [termsUrl]="termsUrl"
-  (agreed)="gate.onOnboardingComplete($event)"
-  (dismissed)="gate.onOnboardingDismiss()"
-/>
+<bixarena-onboarding-modal [(visible)]="showOnboardingModal" (closed)="onOnboardingClose()" />
+
+<bixarena-onboarding-fab (openRequested)="showOnboardingModal.set(true)" />
