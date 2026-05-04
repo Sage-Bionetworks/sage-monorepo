@@ -1,0 +1,8 @@
+<div class="chiclet-card">
+  <h2>{{ title() }}</h2>
+  <div class="chiclets">
+    @for (chiclet of chiclets(); track chiclet.label) {
+      <span class="chiclet" [style.background-color]="chiclet.color">{{ chiclet.label }}</span>
+    }
+  </div>
+</div>

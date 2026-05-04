@@ -1,0 +1,38 @@
+.chiclet-card {
+  display: flex;
+  padding: 40px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1 0 0;
+  align-self: stretch;
+  border-radius: 10px;
+  border: 1px solid var(--color-gray-300);
+  background: rgb(255 255 255 / 80%);
+  box-shadow:
+    0 6px 24px 0 rgb(0 0 0 / 5%),
+    0 0 0 1px rgb(0 0 0 / 8%);
+
+  h2 {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+    margin: 0 0 20px;
+  }
+}
+
+.chiclets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chiclet {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 40px;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  user-select: none;
+}
