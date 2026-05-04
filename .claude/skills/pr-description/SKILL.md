@@ -1,186 +1,216 @@
 ---
 name: pr-description
-description: Generates comprehensive pull request descriptions following repository template standards. Use when asked to create, update, or generate PR descriptions, or when working with active pull requests that need documentation.
+description: >
+  Generates a PR title and description body following this repository's conventions.
+  Use this skill whenever the user asks to create, write, generate, or update a PR description,
+  or when working with an active pull request that needs documentation. Also use this when the
+  user says things like "write up this PR", "draft the PR", "prepare the PR", or "describe these changes".
 ---
 
 # PR Description Generator
 
-## When to use this skill
+Generate a PR title and a markdown description body that a contributor can paste directly into
+a new GitHub pull request. Save the output to a single file in `tmp/pr-description/` at the
+repo root (this directory is gitignored).
 
-Use this skill when:
+## Output File
 
-- The user asks to update the PR description
-- Working with an active pull request that needs a description
-- Creating documentation for code changes in a PR
-- Following the repository's GitHub template standards
+Write one file: `tmp/pr-description/<ticket-id>.md`, where `<ticket-id>` is the Jira ticket
+found in Step 1 (from the branch name or commit messages). For example, if the branch is
+`model-ad/MG-893-cutoff-button-alignment`, the output file is `tmp/pr-description/MG-893.md`.
 
-## Workflow
+The file starts with the PR title as an H1 heading, followed by the description body:
 
-### 1. Gather PR Context
+```markdown
+# feat(model-ad): fix alignment of significance controls (MG-893)
 
-First, get the active pull request details:
+## Description
 
-- Use `github-pull-request_activePullRequest` to retrieve PR information
-- Analyze all file changes (additions, deletions, modifications)
-- Identify related issues or Jira tickets (format: SMR-XXX)
-- Note the target merge branch (usually `main`)
+...
+```
 
-### 2. Analyze Changes
+Tell the user where the file is after writing it.
 
-Categorize the changes by:
+---
 
-- **Type**: Use repository-defined PR types from [lint-pr.yml](/.github/workflows/lint-pr.yml)
-- **Scope**: Use repository-defined scopes from [lint-pr.yml](/.github/workflows/lint-pr.yml)
-- **Technology stack**: Java/Spring Boot, TypeScript/Angular, Python, etc.
-- **Breaking changes**: API modifications, schema changes
-- **Configuration**: build files, application properties
-- **Database**: migrations, schema modifications
+## Step 1 — Identify the Jira Ticket
 
-### 3. Generate Description
+The ticket ID appears in one of these places (check in order):
 
-Create the PR description using this exact template structure:
+1. The current git branch name — pattern is usually `scope/TICKET-ID-slug`
+   (e.g., `model-ad/MG-897-revert-debug-logging` → ticket `MG-897`)
+2. Recent commit messages on the current branch (not on `main`)
+3. The user may state it directly
+
+Common ticket prefixes in this repo: **AG**, **MG**, **QTL**, **SMR**.
+
+### Fetching ticket details from Jira
+
+This skill expects a Jira MCP server (e.g., `mcp-jira-cloud`) to be configured. Use the
+MCP tools to fetch the ticket. Pull:
+
+- Summary, description, and acceptance criteria
+- All **sub-tasks** (fetch them individually to get their full details)
+- All **linked/related issues**
+
+Acceptance criteria are especially valuable — they feed directly into the Testing section.
+
+**If the Jira request fails due to an authentication or authorization error (401, 403, or
+similar), stop immediately and ask the user to authenticate. Do not continue generating the
+PR description until Jira access is confirmed.** Non-auth errors (404, network timeout) are
+fine to work around — just note that the ticket couldn't be fetched and proceed with what you
+have.
+
+If no Jira MCP server is configured, skip the fetch and note in the output that Jira details
+could not be retrieved. Use whatever context is available from the branch name, commit
+messages, and code changes.
+
+---
+
+## Step 2 — Analyze the Changes
+
+Look at all commits on the current branch that are not on `main`:
+
+```bash
+git log main..HEAD --oneline
+git diff main...HEAD --stat
+```
+
+Read the changed files to understand what was done. Categorize changes by:
+
+- **Type** and **scope** — see the allowed values in `/.github/workflows/lint-pr.yml`
+- **Technology stack** — Java/Spring Boot, TypeScript/Angular, Python, etc.
+- **Breaking changes** — API modifications, schema changes
+- **Visual changes** — UI component additions/modifications, styling updates, layout changes
+
+---
+
+## Step 3 — Generate the PR Title
+
+The title must pass the `lint-pr` workflow (semantic PR format):
+
+```
+type(scope): lowercase subject (TICKET-IDs)
+```
+
+Rules (from `/.github/workflows/lint-pr.yml`):
+
+- **type**: one of `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `infra`, `perf`, `refactor`, `revert`, `style`, `test`
+- **scope** (optional): one of the scopes defined in `lint-pr.yml`
+- **subject**: must NOT start with an uppercase letter
+- Append the Jira ticket ID(s) in parentheses at the end, e.g., `(AG-2068)` or `(AG-2049, AG-2067)`
+
+Match the style of recent merged PRs. Check a few with:
+
+```bash
+git log main --oneline -10
+```
+
+Examples from this repo:
+
+- `feat(agora): add drug details summary tab (AG-2068)`
+- `fix(model-ad): fix alignment of significance controls (MG-893)`
+- `chore(deps): bump docker/metadata-action from 5.6.1 to 6.0.0`
+
+---
+
+## Step 4 — Generate the Description Body
+
+Use this exact template. Do not add sections or change headings — this matches the
+repository's `.github/pull_request_template.md`.
 
 ```markdown
 ## Description
 
-[2-4 sentences explaining WHY these changes were made and the business/technical impact. Focus on the objective and benefits, not just what changed.]
+[2-4 sentences explaining WHY these changes were made and the business/technical motivation.
+Focus on the objective and benefits, not a list of what changed.]
 
 ## Related Issue
 
-[If applicable, link to Jira ticket or GitHub issue]
-Fixes [ISSUE-NUMBER](link-to-issue)
+[Link to the Jira ticket. Include sub-tasks and related issues if they exist.]
+
+- [TICKET-ID](https://sagebionetworks.jira.com/browse/TICKET-ID)
+  - Sub-task: [TICKET-ID](url) — summary
+  - Related: [TICKET-ID](url) — summary
 
 ## Changelog
 
-[CRITICAL: Use flat, single-level bullets with NO sub-items]
-[Keep items high-level and coarse-grained - avoid excessive detail]
-[Group related low-level changes into one high-level bullet]
-[Aim for 3-7 bullet points total]
+- [High-level change — imperative voice, e.g., "Add feature X"]
+- [Another high-level change]
 
-- [High-level change description]
-- [High-level change description]
-- [Continue for major changes only...]
+## Testing
 
-## Preview
+[Steps a human reviewer can follow to verify this PR works correctly.
+Do NOT include unit test or e2e test commands — CI handles those.]
 
-The [component/service/application] now has:
+- [ ] Step a reviewer can perform manually
+- [ ] Another verification step
 
-[CRITICAL: Use flat, single-level bullets with NO sub-items]
-[Keep items high-level - focus on major outcomes and benefits]
-[DO NOT use checkmark emojis (✅) or green checkboxes]
-[Use simple bullet points with dashes (-)]
+### Screenshots
 
-- [Major improvement or feature outcome]
-- [Major improvement or feature outcome]
-- [Continue for key accomplishments only...]
+[If the PR includes visual/UI changes, suggest specific screenshots to capture.]
+
+| Before                                       | After                                       |
+| -------------------------------------------- | ------------------------------------------- |
+| [describe what to screenshot before merging] | [describe what to screenshot after merging] |
 ```
+
+---
 
 ## Content Guidelines
 
-### Description Section
+### Description
 
-- Start with the primary business or technical objective
-- Explain the motivation behind changes
-- Highlight main benefits or improvements
-- Mention architectural or design decisions if significant
-- Keep concise but comprehensive (2-4 sentences)
+- Lead with the business or technical objective — why was this work done?
+- Mention the Jira ticket context if it adds clarity
+- Keep it to 2-4 sentences
 
-### Related Issue Section
+### Related Issue
 
-- Always search for related Jira tickets (SMR-XXX format)
-- Include GitHub issue numbers if applicable
-- Use proper linking format: `[ISSUE-NUMBER](full-url)`
-- Omit this section if no related issue exists
+- Always link the Jira ticket with a full URL: `[MG-893](https://sagebionetworks.jira.com/browse/MG-893)`
+- List sub-tasks and related issues underneath, indented, with their summaries
+- If acceptance criteria were found, you do not need to reproduce them here — they inform the Testing section instead
+- Omit this section only if there is genuinely no related ticket
 
-### Changelog Section
+### Changelog
 
-**CRITICAL RULES:**
-
-- Use ONLY single-level flat bullets with NO nested items
-- Keep items coarse-grained and high-level
-- Avoid excessive technical detail or implementation specifics
-- Group multiple related low-level changes into one bullet
-- Use imperative form: "Add feature X", "Remove deprecated Y"
+- Use **flat, single-level bullets only** — no nested items
+- Write in imperative voice: "Add", "Remove", "Update", "Fix"
+- Keep items coarse-grained — group related file-level changes into one bullet
 - Order from most to least important
-- Aim for 3-7 bullet points total, not an exhaustive list
-- DO NOT list individual file changes
+- Aim for **3–7 bullets**; this is not an exhaustive file list
 
-### Preview Section
+### Testing
 
-**CRITICAL RULES:**
+This section is for **human reviewers**, not CI. Think about what a reviewer should manually
+verify to gain confidence this PR is correct.
 
-- Use ONLY single-level flat bullets with NO nested items
-- Keep items coarse-grained - focus on major outcomes
-- DO NOT use checkmark emojis (✅) or any emojis
-- Use simple bullet points with dashes (-)
-- Focus on end results and benefits from user/system perspective
-- Highlight key improvements, features, or fixes
-- Mention metrics if applicable (test coverage, performance)
-- Aim for 3-5 bullet points describing major accomplishments
+- Use a **task-list format** (`- [ ]`) so reviewers can check items off
+- Pull from Jira acceptance criteria when available — translate them into concrete reviewer steps
+- Focus on functional verification: navigation flows, data correctness, edge cases
+- Include API verification steps if relevant (e.g., "call GET /api/x and confirm the response includes field Y")
+- **Do NOT suggest running unit tests, e2e tests, or lint commands** — CI covers those
+- Aim for **3–6 actionable steps**
 
-## Technology-Specific Details
+### Screenshots
 
-### For Java/Spring Boot Changes
+- Only include this sub-section when the PR has **visual or UI changes**
+- Suggest **specific screens or components** to screenshot, not generic "take a screenshot"
+- Use the before/after table format from the template
+- Be precise: "Screenshot the gene details page header at /genes/APOE" is better than "Screenshot the page"
+- If the change is purely backend or config, omit the Screenshots sub-section entirely
 
-Include when relevant:
+---
 
-- JPA entity modifications
-- Database schema changes
-- Spring configuration updates
-- Dependency updates (Gradle/Maven)
-- Test infrastructure changes
+## Final Checklist (internal — do not include in output)
 
-### For TypeScript/Angular Changes
+Before writing the files, verify:
 
-Include when relevant:
-
-- Component updates
-- Service modifications
-- Configuration changes (tsconfig, angular.json)
-- Dependency updates
-- Build system changes
-
-### For Python Changes
-
-Include when relevant:
-
-- Library/package updates
-- Configuration changes (pyproject.toml)
-- Dependency updates
-- Test infrastructure
-
-### For Database Changes
-
-Include when relevant:
-
-- Migration files
-- Schema modifications
-- Index changes
-- Constraint updates
-
-## Quality Checklist
-
-Before finalizing:
-
-- [ ] All major file changes are documented at high level
-- [ ] Technical terminology is accurate
-- [ ] Related issues are properly linked
-- [ ] Changelog items are specific but coarse-grained
-- [ ] Preview items highlight actual benefits
-- [ ] NO checkmark emojis in Preview section
-- [ ] NO nested bullets in Changelog or Preview
-- [ ] Grammar and formatting are correct
-- [ ] Description follows exact template structure
-- [ ] Business value is clearly communicated
-- [ ] Only 3-7 bullets in Changelog
-- [ ] Only 3-5 bullets in Preview
-
-## Example Usage
-
-When the user says:
-
-- "Update the PR description"
-- "Generate a PR description"
-- "Create documentation for this PR"
-
-Follow the workflow above and generate a comprehensive description using the template.
+- Title passes lint-pr format (type, scope, lowercase subject, ticket ID)
+- Description explains the "why", not just the "what"
+- Related Issue links are full URLs
+- Changelog is 3–7 flat bullets in imperative voice
+- Testing has actionable human-verification steps (no CI commands)
+- Screenshots sub-section is present only for visual changes, with specific guidance
+- Jira acceptance criteria are reflected in Testing steps where applicable
+- Output is saved to `tmp/pr-description/TICKET-ID.md`
