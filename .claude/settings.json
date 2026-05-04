@@ -2,7 +2,9 @@
   "permissions": {
     "deny": [
       "Read(./.env)",
+      "Read(./.env.*)",
       "Read(**/.env)",
+      "Read(**/.env.*)",
       "Read(./**/*.env)",
       "Read(./secrets/**)",
       "Read(./**/secrets/**)",
