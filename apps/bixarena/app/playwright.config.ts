@@ -11,7 +11,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'pnpm exec nx run bixarena-app-angular:serve',
+    command: 'pnpm exec nx run bixarena-app:serve',
     url: 'http://localhost:4200',
     reuseExistingServer: !process.env['CI'],
     cwd: workspaceRoot,

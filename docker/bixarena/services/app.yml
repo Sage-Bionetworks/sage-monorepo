@@ -1,6 +1,6 @@
 services:
   bixarena-app:
-    image: ghcr.io/sage-bionetworks/bixarena-app-angular:${BIXARENA_VERSION:-local}
+    image: ghcr.io/sage-bionetworks/bixarena-app:${BIXARENA_VERSION:-local}
     container_name: bixarena-app
     restart: always
     networks:
@@ -8,7 +8,7 @@ services:
     ports:
       - '4200:4200'
     env_file:
-      - ../../../apps/bixarena/app-angular/.env
+      - ../../../apps/bixarena/app/.env
     depends_on:
       bixarena-api-gateway:
         condition: service_started

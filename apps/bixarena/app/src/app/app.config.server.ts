@@ -6,7 +6,7 @@ import { appConfig } from './app.config';
 const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering(),
-    { provide: CONFIG_BASE_PATH, useValue: 'apps/bixarena/app-angular/src/config' },
+    { provide: CONFIG_BASE_PATH, useValue: 'apps/bixarena/app/src/config' },
   ],
 };
 

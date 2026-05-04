@@ -8,7 +8,7 @@ services:
     ports:
       - '8100:8100'
     env_file:
-      - ../../../apps/bixarena/app/.env
+      - ../../../apps/bixarena/app-gradio/.env
     depends_on:
       bixarena-api:
         condition: service_started
