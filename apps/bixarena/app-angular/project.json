@@ -76,8 +76,7 @@
     "serve": {
       "executor": "@nx/angular:dev-server",
       "options": {
-        "host": "0.0.0.0",
-        "port": 8100
+        "host": "0.0.0.0"
       },
       "configurations": {
         "production": {
@@ -124,7 +123,7 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/bixarena/serve-detach.sh bixarena-app-angular"
+        "command": "docker/bixarena/serve-detach.sh bixarena-app"
       },
       "dependsOn": []
     },

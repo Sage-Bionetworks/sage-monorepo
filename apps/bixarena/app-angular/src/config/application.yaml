@@ -8,12 +8,12 @@ app:
 
 api:
   baseUrls:
-    csr: http://127.0.0.1:8111/api/v1
-    ssr: http://bixarena-apex:8111/api/v1
+    csr: http://127.0.0.1:8000/api/v1
+    ssr: http://bixarena-api-gateway:8113/api/v1
 
 auth:
   baseUrls:
-    csr: http://127.0.0.1:8111
+    csr: http://127.0.0.1:8000
 
 battle:
   promptLengthLimit: 5000

@@ -2,7 +2,7 @@ import { nxE2EPreset } from '@nx/playwright/preset';
 import { defineConfig, devices } from '@playwright/test';
 import { workspaceRoot } from '@nx/devkit';
 
-const baseURL = process.env['BASE_URL'] || 'http://localhost:8100';
+const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
 
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './e2e' }),
@@ -12,7 +12,7 @@ export default defineConfig({
   },
   webServer: {
     command: 'pnpm exec nx run bixarena-app-angular:serve',
-    url: 'http://localhost:8100',
+    url: 'http://localhost:4200',
     reuseExistingServer: !process.env['CI'],
     cwd: workspaceRoot,
   },
