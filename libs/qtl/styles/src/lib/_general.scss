@@ -1,5 +1,8 @@
 :root {
   --font-family-primary: 'DM Sans Variable', sans-serif;
+  --footer-background: linear-gradient(0deg, rgb(0 0 0 / 40%) 0%, rgb(0 0 0 / 40%) 100%),
+    linear-gradient(90deg, #2a77dc 0%, #b186df 51.44%, #65d8bf 100%);
+  --footer-padding-x: 60px;
 }
 
 html,
