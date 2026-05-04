@@ -62,17 +62,17 @@ class AlbStack(cdk.Stack):
             internet_facing=True,
         )
 
-        # Create target group for the web client (Gradio app)
+        # Create target group for the Angular web client
         # This will be used by the Fargate service
         self.web_target_group = elbv2.ApplicationTargetGroup(
             self,
             "WebTargetGroup",
             vpc=vpc,
-            port=8100,  # Gradio app port
+            port=4200,  # Angular app port
             protocol=elbv2.ApplicationProtocol.HTTP,
             target_type=elbv2.TargetType.IP,
             health_check=elbv2.HealthCheck(
-                path="/health",  # Gradio app health endpoint
+                path="/health",  # Angular app health endpoint
                 interval=cdk.Duration.seconds(30),
                 timeout=cdk.Duration.seconds(5),
                 healthy_threshold_count=2,

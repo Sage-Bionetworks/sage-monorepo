@@ -21,7 +21,7 @@ Architecture Overview:
        - API Service: Backend business logic and data access
        - AI Service: Biomedical prompt and battle validation via LLM
        - API Gateway: Request routing, session validation, and service aggregation
-       - Web Client: Gradio-based Python frontend application
+       - Web Client: Angular frontend application
 
     4. Management Layer:
        - Bastion host: ECS task for secure database access via Session Manager
@@ -33,7 +33,7 @@ Service Discovery:
     - bixarena-api.{cluster_name}.local:8112 (API Service)
     - bixarena-ai-service.{cluster_name}.local:8114 (AI Service)
     - bixarena-api-gateway.{cluster_name}.local:8113 (API Gateway)
-    - bixarena-app.{cluster_name}.local:8100 (Web Client)
+    - bixarena-app.{cluster_name}.local:4200 (Web Client)
 
     External traffic flows through the ALB:
     - /health → Fixed ALB response (health check)
