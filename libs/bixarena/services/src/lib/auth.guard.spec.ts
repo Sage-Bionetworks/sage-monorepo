@@ -7,7 +7,8 @@ import { ConfigService } from '@sagebionetworks/bixarena/config';
 
 const mockConfig = {
   config: {
-    auth: { baseUrls: { csr: 'http://127.0.0.1:8111' } },
+    auth: { baseUrls: { csr: 'http://127.0.0.1:8000' } },
+    links: { termsOfService: '' },
   },
 };
 

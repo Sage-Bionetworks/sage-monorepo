@@ -10,14 +10,14 @@ show_missing = true
 addopts = """
  --cov
  --cov-fail-under=50
- --cov-report html:'../../../coverage/apps/bixarena/app/html'
- --cov-report xml:'../../../coverage/apps/bixarena/app/coverage.xml'
- --html='../../../reports/apps/bixarena/app/unittests/html/index.html'
- --junitxml='../../../reports/apps/bixarena/app/unittests/junit.xml'
+ --cov-report html:'../../../coverage/apps/bixarena/app-gradio/html'
+ --cov-report xml:'../../../coverage/apps/bixarena/app-gradio/coverage.xml'
+ --html='../../../reports/apps/bixarena/app-gradio/unittests/html/index.html'
+ --junitxml='../../../reports/apps/bixarena/app-gradio/unittests/junit.xml'
 """
 
 [project]
-name = "bixarena-app"
+name = "bixarena-app-gradio"
 version = "1.0.0"
 description = "Bixarena application for serving and evaluating large language models"
 requires-python = "==3.13.3"

@@ -75,9 +75,11 @@ class AiServiceStack(cdk.Stack):
             "BIXARENA_AI_OPENROUTER_MODEL": "anthropic/claude-haiku-4.5",
             "BIXARENA_AI_OPENROUTER_TIMEOUT": "30.0",
             "BIXARENA_AI_OPENROUTER_MAX_RETRIES": "2",
-            # Validation method IDs (bump when changing prompt or model)
+            # Validation/categorization method IDs (bump when changing prompt or model)
             "BIXARENA_AI_PROMPT_VALIDATION_METHOD": "openrouter-haiku-v1",
             "BIXARENA_AI_BATTLE_VALIDATION_METHOD": "openrouter-haiku-v1",
+            "BIXARENA_AI_PROMPT_CATEGORIZATION_METHOD": "openrouter-haiku-v1",
+            "BIXARENA_AI_BATTLE_CATEGORIZATION_METHOD": "openrouter-haiku-v1",
             # Valkey cache connection
             "BIXARENA_AI_VALKEY_HOST": valkey_endpoint,
             "BIXARENA_AI_VALKEY_PORT": valkey_port,

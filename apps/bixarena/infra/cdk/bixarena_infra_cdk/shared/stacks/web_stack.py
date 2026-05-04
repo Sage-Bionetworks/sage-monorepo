@@ -65,38 +65,23 @@ class WebStack(cdk.Stack):
             f"ghcr.io/sage-bionetworks/bixarena-app:{app_version}",
         )
 
-        # Environment variables for the Gradio app container
-        # The app needs access to auth and API services through the gateway
+        # Environment variables for the Angular app container
         container_env = {
-            # Server configuration
-            "APP_HOST": "127.0.0.1",
-            "APP_PORT": "8100",
             "APP_VERSION": app_version,
-            "LOG_LEVEL": "DEBUG",
-            # Auth service URLs:
-            # - SSR (server-side): Use internal API Gateway via service discovery
-            # - CSR (client-side): Use public ALB (browser calls)
-            "AUTH_BASE_URL_SSR": (
-                f"http://bixarena-api-gateway.{cluster.cluster_name}.local:8113"
-            ),
-            "AUTH_BASE_URL_CSR": f"{protocol}://{base_url}",  # Client-side
-            # API service URL: Use internal API Gateway via service discovery
-            "API_BASE_URL": (
+            "ENVIRONMENT": environment,
+            # API URLs: CSR via ALB (browser), SSR via service discovery (Node.js)
+            "API_BASE_URLS_CSR": f"{protocol}://{base_url}/api/v1",
+            "API_BASE_URLS_SSR": (
                 f"http://bixarena-api-gateway.{cluster.cluster_name}.local:8113/api/v1"
             ),
-            "APP_SAGEBIONETWORKS_URL": "https://sagebionetworks.org",
-            "APP_CONTACT_URL": "https://sagebionetworks.org/contact",
-            "APP_FEEDBACK_URL": "https://forms.gle/WsvSdEfv5MfFpeedA",
-            "APP_TERMS_OF_SERVICE_URL": "https://sagebionetworks.org/trust-center",
-            "ENABLE_CRISP": "false",
-            "GTM_CONTAINER_ID": gtm_container_id,
-            "BATTLE_ROUND_LIMIT": "5",
-            "PROMPT_LEN_LIMIT": "5000",
-            "PROMPT_USE_LIMIT": "5",
-            "APP_COMMUNITY_QUEST_ENABLED": "true",
+            # Auth URL: CSR via ALB (browser)
+            "AUTH_BASE_URLS_CSR": f"{protocol}://{base_url}",
+            # Analytics
+            "ANALYTICS_GOOGLE_TAG_MANAGER_ENABLED": "true",
+            "ANALYTICS_GOOGLE_TAG_MANAGER_ID": gtm_container_id,
         }
 
-        # Create Fargate service for the Gradio app
+        # Create Fargate service for the Angular app
         service_construct = BixArenaFargateService(
             self,
             "WebService",
@@ -104,9 +89,9 @@ class WebStack(cdk.Stack):
             cluster=cluster,
             service_name="bixarena-app",
             container_image=image,
-            container_port=8100,  # Gradio app default port
-            cpu=512,  # 0.5 vCPU - Gradio needs more than nginx
-            memory_limit_mib=1024,  # 1 GB - Gradio/Python apps need memory
+            container_port=4200,  # Angular app port
+            cpu=512,  # 0.5 vCPU
+            memory_limit_mib=1024,  # 1 GB
             environment=container_env,
             desired_count=1,
             target_group=target_group,

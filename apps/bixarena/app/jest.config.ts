@@ -1,8 +1,8 @@
 export default {
-  displayName: 'bixarena-app-angular',
+  displayName: 'bixarena-app',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../coverage/apps/bixarena/app-angular',
+  coverageDirectory: '../../../coverage/apps/bixarena/app',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

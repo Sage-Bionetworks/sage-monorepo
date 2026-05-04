@@ -1,4 +1,4 @@
-:8111 {
+:8000 {
 	handle_path /health {
 		respond `{"status":"healthy"}` 200
 		header Content-Type application/json
