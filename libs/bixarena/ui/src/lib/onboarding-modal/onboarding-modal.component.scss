@@ -53,23 +53,6 @@
   justify-content: center;
 }
 
-.art-placeholder {
-  width: 100%;
-  height: 15rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--p-primary-color) 14%, transparent),
-    color-mix(in srgb, var(--p-primary-color) 4%, transparent)
-  );
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--p-primary-color);
-}
-
 // Frame 1 — battle illustration mock.
 .battle-mock {
   display: flex;
@@ -566,38 +549,6 @@
   height: 6px;
   border-radius: 4px;
   background: var(--p-surface-200);
-}
-
-.line.w-100 {
-  width: 100%;
-}
-
-.line.w-95 {
-  width: 95%;
-}
-
-.line.w-90 {
-  width: 90%;
-}
-
-.line.w-85 {
-  width: 85%;
-}
-
-.line.w-75 {
-  width: 75%;
-}
-
-.line.w-70 {
-  width: 70%;
-}
-
-.line.w-60 {
-  width: 60%;
-}
-
-.line.w-50 {
-  width: 50%;
 }
 
 .cursor {
