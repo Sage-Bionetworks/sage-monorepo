@@ -1,10 +1,11 @@
 import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from './auth.service';
-import { AnalyticsService, LoginEntryPoint } from './analytics.service';
+import { AnalyticsService, BattleEntryPoint, LoginEntryPoint } from './analytics.service';
 
 const PENDING_PROMPT_KEY = 'bixarena.pendingPrompt';
 const PENDING_EXAMPLE_PROMPT_ID_KEY = 'bixarena.pendingExamplePromptId';
+const PENDING_PROMPT_ENTRY_POINT_KEY = 'bixarena.pendingPromptEntryPoint';
 const PENDING_PROMPT_TS_KEY = 'bixarena.pendingPromptTs';
 const PENDING_PROMPT_OWNER_KEY = 'bixarena.pendingPromptOwner';
 const PENDING_PROMPT_TTL_MS = 15 * 60 * 1000;
@@ -13,6 +14,7 @@ const PENDING_PROMPT_MAX_LENGTH = 5000;
 export interface PendingPrompt {
   prompt: string;
   examplePromptId: string | null;
+  entryPoint: BattleEntryPoint | null;
 }
 
 // Module-level helper so AuthService.logout can clear pending without
@@ -22,6 +24,7 @@ export function clearPendingPromptStorage(): void {
   try {
     sessionStorage.removeItem(PENDING_PROMPT_KEY);
     sessionStorage.removeItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
+    sessionStorage.removeItem(PENDING_PROMPT_ENTRY_POINT_KEY);
     sessionStorage.removeItem(PENDING_PROMPT_TS_KEY);
     sessionStorage.removeItem(PENDING_PROMPT_OWNER_KEY);
   } catch {
@@ -61,7 +64,11 @@ export class BattleGateService {
   // Stamp owner from cachedUser when known so a different user logging in
   // on the same browser can't inherit this prompt. cachedUser is null for
   // first-time visitors — accepted, the TTL is the only defense in that case.
-  savePendingPrompt(text: string, examplePromptId?: string | null): void {
+  savePendingPrompt(
+    text: string,
+    examplePromptId?: string | null,
+    entryPoint?: BattleEntryPoint,
+  ): void {
     if (!this.isBrowser) return;
     const trimmed = text.trim();
     if (!trimmed) return;
@@ -78,6 +85,11 @@ export class BattleGateService {
         sessionStorage.setItem(PENDING_EXAMPLE_PROMPT_ID_KEY, examplePromptId);
       } else {
         sessionStorage.removeItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
+      }
+      if (entryPoint) {
+        sessionStorage.setItem(PENDING_PROMPT_ENTRY_POINT_KEY, entryPoint);
+      } else {
+        sessionStorage.removeItem(PENDING_PROMPT_ENTRY_POINT_KEY);
       }
     } catch {
       /* private mode / quota — fail silent */
@@ -96,8 +108,11 @@ export class BattleGateService {
       return null;
     }
     const examplePromptId = sessionStorage.getItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
+    const entryPoint = sessionStorage.getItem(
+      PENDING_PROMPT_ENTRY_POINT_KEY,
+    ) as BattleEntryPoint | null;
     this.clearPending();
-    return { prompt: valid, examplePromptId: examplePromptId || null };
+    return { prompt: valid, examplePromptId: examplePromptId || null, entryPoint };
   }
 
   // Public so guards / logout can drop stale state explicitly.

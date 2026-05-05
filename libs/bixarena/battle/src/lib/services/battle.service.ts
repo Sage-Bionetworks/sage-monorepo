@@ -7,6 +7,7 @@ import {
   Model,
 } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
+import { AnalyticsService, BattleEntryPoint } from '@sagebionetworks/bixarena/services';
 import { BattlePhase, INITIAL_STREAM_STATE, ModelStreamState } from '../battle.types';
 import {
   CONTINUE_PROMPT,
@@ -23,6 +24,7 @@ export class BattleStateService {
   private readonly battleApi = inject(BattleApiService);
   private readonly streamService = inject(BattleStreamService);
   private readonly config = inject(ConfigService).config;
+  private readonly analytics = inject(AnalyticsService);
 
   constructor() {
     inject(DestroyRef).onDestroy(() => {
@@ -98,7 +100,11 @@ export class BattleStateService {
   private isVoting = false;
   private examplePromptId: string | null = null;
 
-  async submitPrompt(prompt: string, examplePromptId?: string | null): Promise<void> {
+  async submitPrompt(
+    prompt: string,
+    examplePromptId?: string | null,
+    entryPoint?: BattleEntryPoint,
+  ): Promise<void> {
     if (!this.isBrowser) return;
     this.initialPrompt.set(prompt);
     this.lastPrompt.set(prompt);
@@ -126,6 +132,11 @@ export class BattleStateService {
     this.battleId.set(battle.id);
     this.model1.set(battle.model1);
     this.model2.set(battle.model2);
+    this.analytics.trackBattleStarted(
+      battle.id,
+      entryPoint ?? 'battle_composer',
+      !!examplePromptId,
+    );
     try {
       await this.createRoundAndStream(battle.id, battle.model1.id, battle.model2.id, prompt);
     } catch (err) {
@@ -203,6 +214,7 @@ export class BattleStateService {
     );
     try {
       await this.createRoundAndStream(battleId, model1.id, model2.id, prompt);
+      this.analytics.trackFollowupQuestionSubmitted(battleId, this.completedRounds + 1);
     } catch (err) {
       console.error('Failed to create follow-up round', err);
       this.setStreamError('Something went wrong', true);
@@ -241,6 +253,7 @@ export class BattleStateService {
     this.battleId.set(battle.id);
     this.model1.set(battle.model1);
     this.model2.set(battle.model2);
+    this.analytics.trackBattleStarted(battle.id, 'new_matchup_button', !!this.examplePromptId);
     try {
       await this.createRoundAndStream(battle.id, battle.model1.id, battle.model2.id, prompt);
     } catch (err) {
@@ -277,6 +290,7 @@ export class BattleStateService {
       return;
     }
 
+    this.analytics.trackVoteSubmitted(battleId, outcome, this.completedRounds);
     this.selectedOutcome.set(outcome);
     this.promptUsesRemaining.update((n) => Math.max(0, n - 1));
     this.phase.set('validating');

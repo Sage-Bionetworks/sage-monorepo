@@ -55,16 +55,20 @@ export class BattleComponent implements OnInit, OnDestroy {
       this.pendingPrompt = pending;
       this.showOnboardingModal.set(true);
     } else if (pending) {
-      void this.state.submitPrompt(pending.prompt, pending.examplePromptId);
+      void this.state.submitPrompt(
+        pending.prompt,
+        pending.examplePromptId,
+        pending.entryPoint ?? undefined,
+      );
     }
   }
 
   onPromptSubmit(prompt: string): void {
-    void this.state.submitPrompt(prompt);
+    void this.state.submitPrompt(prompt, null, 'battle_composer');
   }
 
   onExamplePromptSelect(event: { question: string; examplePromptId: string }): void {
-    void this.state.submitPrompt(event.question, event.examplePromptId);
+    void this.state.submitPrompt(event.question, event.examplePromptId, 'battle_example_card');
   }
 
   onFollowUpSubmit(prompt: string): void {
@@ -89,7 +93,11 @@ export class BattleComponent implements OnInit, OnDestroy {
     const pending = this.pendingPrompt;
     this.pendingPrompt = null;
     if (pending) {
-      void this.state.submitPrompt(pending.prompt, pending.examplePromptId);
+      void this.state.submitPrompt(
+        pending.prompt,
+        pending.examplePromptId,
+        pending.entryPoint ?? undefined,
+      );
     }
   }
 

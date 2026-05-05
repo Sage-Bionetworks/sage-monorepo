@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { AnalyticsService } from '@sagebionetworks/bixarena/services';
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 
 interface OnboardingFrame {
@@ -35,6 +36,8 @@ export class OnboardingModalComponent {
 
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly destroyRef = inject(DestroyRef);
+  private readonly analytics = inject(AnalyticsService);
+  private completedDone = false;
 
   readonly samplePrompt = SAMPLE_PROMPT;
 
@@ -73,7 +76,10 @@ export class OnboardingModalComponent {
   constructor() {
     // Reset to first frame whenever the modal is opened so re-entry starts fresh.
     effect(() => {
-      if (this.visible()) this.currentFrame.set(0);
+      if (this.visible()) {
+        this.currentFrame.set(0);
+        this.analytics.trackOnboardingViewed();
+      }
     });
 
     effect(() => {
@@ -113,11 +119,17 @@ export class OnboardingModalComponent {
   }
 
   done(): void {
+    this.completedDone = true;
+    this.analytics.trackOnboardingCompleted();
     this.visible.set(false);
     this.closed.emit();
   }
 
   onModalClosed(): void {
+    if (!this.completedDone) {
+      this.analytics.trackOnboardingDismissed(this.currentFrame());
+    }
+    this.completedDone = false;
     this.closed.emit();
   }
 

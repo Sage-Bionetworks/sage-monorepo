@@ -1,4 +1,5 @@
-import { Component, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
+import { AnalyticsService } from '@sagebionetworks/bixarena/services';
 
 @Component({
   selector: 'bixarena-onboarding-fab',
@@ -7,8 +8,10 @@ import { Component, output } from '@angular/core';
 })
 export class OnboardingFabComponent {
   readonly openRequested = output<void>();
+  private readonly analytics = inject(AnalyticsService);
 
   open(): void {
+    this.analytics.trackOnboardingReopened();
     this.openRequested.emit();
   }
 }

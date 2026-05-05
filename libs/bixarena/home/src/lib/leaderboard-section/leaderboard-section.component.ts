@@ -18,7 +18,7 @@ import {
   LeaderboardListInner,
   LeaderboardService,
 } from '@sagebionetworks/bixarena/api-client';
-import { ModelOrgLogoService } from '@sagebionetworks/bixarena/services';
+import { AnalyticsService, ModelOrgLogoService } from '@sagebionetworks/bixarena/services';
 import { AvatarComponent } from '@sagebionetworks/bixarena/ui';
 import { TooltipModule } from 'primeng/tooltip';
 import { LEADERBOARD_COLUMN_COUNT, LOOKBACK_DAYS } from '../home.constants';
@@ -53,6 +53,7 @@ interface RenderedEntry {
 export class LeaderboardSectionComponent implements OnInit {
   private readonly leaderboardApi = inject(LeaderboardService);
   private readonly orgLogo = inject(ModelOrgLogoService);
+  private readonly analytics = inject(AnalyticsService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
@@ -110,6 +111,8 @@ export class LeaderboardSectionComponent implements OnInit {
             if (columns.length < LEADERBOARD_COLUMN_COUNT) return;
             this.columnsSignal.set(columns);
             this.hidden.set(false);
+            const totalEntries = columns.reduce((sum, c) => sum + c.entries.length, 0);
+            this.analytics.trackLeaderboardViewed('home_preview', totalEntries, 'home_section');
           });
       });
   }

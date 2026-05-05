@@ -95,10 +95,6 @@ export class AnalyticsService {
     });
   }
 
-  trackSelectContent(contentType: 'trending_prompt' | 'example_prompt', itemId: string): void {
-    this.push('select_content', { content_type: contentType, item_id: itemId });
-  }
-
   trackVoteSubmitted(
     battleId: string,
     outcome: BattleEvaluationOutcome,
@@ -111,15 +107,10 @@ export class AnalyticsService {
     });
   }
 
-  trackFollowupQuestionSubmitted(
-    battleId: string,
-    roundNumber: number,
-    questionLengthChars: number,
-  ): void {
+  trackFollowupQuestionSubmitted(battleId: string, roundNumber: number): void {
     this.push('followup_question_submitted', {
       battle_id: battleId,
       round_number: roundNumber,
-      question_length_chars: questionLengthChars,
     });
   }
 
