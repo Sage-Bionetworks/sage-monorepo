@@ -4,7 +4,6 @@ import {
   DestroyRef,
   effect,
   inject,
-  isDevMode,
   model,
   output,
   PLATFORM_ID,
@@ -12,7 +11,7 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { AnalyticsService } from '@sagebionetworks/bixarena/services';
+import { AnalyticsService, LoggerService } from '@sagebionetworks/bixarena/services';
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 
 interface OnboardingFrame {
@@ -37,6 +36,7 @@ export class OnboardingModalComponent {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly destroyRef = inject(DestroyRef);
   private readonly analytics = inject(AnalyticsService);
+  private readonly logger = inject(LoggerService);
   private completedDone = false;
 
   readonly samplePrompt = SAMPLE_PROMPT;
@@ -112,7 +112,7 @@ export class OnboardingModalComponent {
 
   goTo(index: number): void {
     if (index < 0 || index >= this.frames.length) {
-      if (isDevMode()) console.warn('OnboardingModal: invalid frame index', index);
+      this.logger.warn('OnboardingModal: invalid frame index', { index });
       return;
     }
     this.currentFrame.set(index);

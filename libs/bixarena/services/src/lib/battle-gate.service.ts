@@ -2,6 +2,7 @@ import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from './auth.service';
 import { AnalyticsService, BattleEntryPoint, LoginEntryPoint } from './analytics.service';
+import { LoggerService } from './logger.service';
 
 const PENDING_PROMPT_KEY = 'bixarena.pendingPrompt';
 const PENDING_EXAMPLE_PROMPT_ID_KEY = 'bixarena.pendingExamplePromptId';
@@ -36,6 +37,7 @@ export function clearPendingPromptStorage(): void {
 export class BattleGateService {
   readonly authService = inject(AuthService);
   private readonly analytics = inject(AnalyticsService);
+  private readonly logger = inject(LoggerService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly showLoginModal = signal(false);
@@ -52,10 +54,12 @@ export class BattleGateService {
     if (entryPoint) {
       this.analytics.trackLoginInitiated(entryPoint);
     }
+    this.logger.debug('battle-gate: login confirmed, redirecting to /battle');
     this.authService.login('/battle');
   }
 
   onLoginCancel(): void {
+    this.logger.debug('battle-gate: login cancelled');
     this.showLoginModal.set(false);
     this.loginEntryPoint.set(null);
     this.consumePendingPrompt();
@@ -105,6 +109,7 @@ export class BattleGateService {
     const valid = this.peekValidPrompt();
     if (!valid) {
       this.clearPending();
+      this.logger.debug('battle-gate: no valid pending prompt');
       return null;
     }
     const examplePromptId = sessionStorage.getItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
@@ -112,6 +117,7 @@ export class BattleGateService {
       PENDING_PROMPT_ENTRY_POINT_KEY,
     ) as BattleEntryPoint | null;
     this.clearPending();
+    this.logger.debug('battle-gate: pending prompt consumed');
     return { prompt: valid, examplePromptId: examplePromptId || null, entryPoint };
   }
 

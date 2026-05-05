@@ -18,7 +18,11 @@ import {
   LeaderboardListInner,
   LeaderboardService,
 } from '@sagebionetworks/bixarena/api-client';
-import { AnalyticsService, ModelOrgLogoService } from '@sagebionetworks/bixarena/services';
+import {
+  AnalyticsService,
+  LoggerService,
+  ModelOrgLogoService,
+} from '@sagebionetworks/bixarena/services';
 import { AvatarComponent } from '@sagebionetworks/bixarena/ui';
 import { TooltipModule } from 'primeng/tooltip';
 import { LEADERBOARD_COLUMN_COUNT, LOOKBACK_DAYS } from '../home.constants';
@@ -54,6 +58,7 @@ export class LeaderboardSectionComponent implements OnInit {
   private readonly leaderboardApi = inject(LeaderboardService);
   private readonly orgLogo = inject(ModelOrgLogoService);
   private readonly analytics = inject(AnalyticsService);
+  private readonly logger = inject(LoggerService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
@@ -67,13 +72,13 @@ export class LeaderboardSectionComponent implements OnInit {
   ngOnInit(): void {
     if (!this.isBrowser) return;
 
-    console.debug('🔎 Fetching leaderboard list for home columns');
+    this.logger.debug('🔎 Fetching leaderboard list for home columns');
     this.leaderboardApi
       .listLeaderboards()
       .pipe(
-        tap((all) => console.debug('✅ Fetched leaderboard list', { count: all.length })),
+        tap((all) => this.logger.debug('✅ Fetched leaderboard list', { count: all.length })),
         catchError((err) => {
-          console.error('❌ Failed to fetch leaderboard list', err);
+          this.logger.error('❌ Failed to fetch leaderboard list', err);
           return of<LeaderboardListInner[]>([]);
         }),
         takeUntilDestroyed(this.destroyRef),
@@ -85,10 +90,10 @@ export class LeaderboardSectionComponent implements OnInit {
         forkJoin(
           withSnapshot.map((l) => {
             const query = { pageSize: LEADERBOARD_COLUMN_COUNT, lookback: LOOKBACK_DAYS };
-            console.debug('🔎 Fetching leaderboard column', { leaderboardId: l.id, query });
+            this.logger.debug('🔎 Fetching leaderboard column', { leaderboardId: l.id, query });
             return this.leaderboardApi.getLeaderboard(l.id, query).pipe(
               tap((page) =>
-                console.debug('✅ Fetched leaderboard column', {
+                this.logger.debug('✅ Fetched leaderboard column', {
                   leaderboardId: l.id,
                   entries: page.entries.length,
                   voteCount: page.voteCount,
@@ -96,7 +101,7 @@ export class LeaderboardSectionComponent implements OnInit {
               ),
               map((page) => this.toColumn(l, page)),
               catchError((err) => {
-                console.error('❌ Failed to fetch leaderboard column', err);
+                this.logger.error('❌ Failed to fetch leaderboard column', err);
                 return of<LeaderboardColumn | null>(null);
               }),
             );

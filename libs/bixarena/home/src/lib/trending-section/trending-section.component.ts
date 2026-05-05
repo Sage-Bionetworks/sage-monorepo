@@ -18,7 +18,7 @@ import {
   ExamplePromptService,
   ExamplePromptSort,
 } from '@sagebionetworks/bixarena/api-client';
-import { AuthService, BattleGateService } from '@sagebionetworks/bixarena/services';
+import { AuthService, BattleGateService, LoggerService } from '@sagebionetworks/bixarena/services';
 import { PromptCardComponent } from '@sagebionetworks/bixarena/ui';
 import { LOOKBACK_DAYS, TRENDING_PAGE_SIZE } from '../home.constants';
 
@@ -39,6 +39,7 @@ function formatCategory(slug: BiomedicalCategory): string {
 export class TrendingSectionComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly gate = inject(BattleGateService);
+  private readonly logger = inject(LoggerService);
   private readonly router = inject(Router);
   private readonly examplePrompts = inject(ExamplePromptService);
   private readonly destroyRef = inject(DestroyRef);
@@ -66,17 +67,17 @@ export class TrendingSectionComponent implements OnInit {
       lookback: LOOKBACK_DAYS,
       pageSize: TRENDING_PAGE_SIZE,
     };
-    console.debug('🔎 Fetching trending prompts', query);
+    this.logger.debug('🔎 Fetching trending prompts', query);
     this.examplePrompts
       .listExamplePrompts(query)
       .pipe(
         tap((page) =>
-          console.debug('✅ Fetched trending prompts', {
+          this.logger.debug('✅ Fetched trending prompts', {
             count: page?.examplePrompts?.length ?? 0,
           }),
         ),
         catchError((err) => {
-          console.error('❌ Failed to fetch trending prompts', err);
+          this.logger.error('❌ Failed to fetch trending prompts', err);
           return of(null);
         }),
         takeUntilDestroyed(this.destroyRef),

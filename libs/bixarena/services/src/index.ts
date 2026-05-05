@@ -1,4 +1,5 @@
 export * from './lib/analytics.service';
+export * from './lib/logger.service';
 export * from './lib/meta-tag.service';
 export * from './lib/auth.guard';
 export * from './lib/auth.service';

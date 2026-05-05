@@ -31,4 +31,7 @@ links:
   feedback: https://forms.gle/WsvSdEfv5MfFpeedA
   sageBionetworks: https://sagebionetworks.org
 
+logging:
+  level: warn
+
 environment: dev

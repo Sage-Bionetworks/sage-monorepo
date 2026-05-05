@@ -3,3 +3,6 @@
 analytics:
   googleTagManager:
     enabled: false
+
+logging:
+  level: debug

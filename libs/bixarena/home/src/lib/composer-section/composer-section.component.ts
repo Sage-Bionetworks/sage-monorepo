@@ -18,7 +18,7 @@ import {
   ExamplePromptSort,
 } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
-import { AuthService, BattleGateService } from '@sagebionetworks/bixarena/services';
+import { AuthService, BattleGateService, LoggerService } from '@sagebionetworks/bixarena/services';
 import { PromptComposerComponent } from '@sagebionetworks/bixarena/ui';
 
 const STATIC_PLACEHOLDER = 'Ask anything biomedical...';
@@ -40,6 +40,7 @@ const REDUCED_MOTION_ROTATE_MS = 5000;
 export class ComposerSectionComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly gate = inject(BattleGateService);
+  private readonly logger = inject(LoggerService);
   private readonly router = inject(Router);
   private readonly examplePrompts = inject(ExamplePromptService);
   private readonly destroyRef = inject(DestroyRef);
@@ -61,17 +62,17 @@ export class ComposerSectionComponent implements OnInit {
       pageSize: PROMPT_POOL_SIZE,
       active: true,
     };
-    console.debug('🔎 Fetching composer placeholder prompts', query);
+    this.logger.debug('🔎 Fetching composer placeholder prompts', query);
     this.examplePrompts
       .listExamplePrompts(query)
       .pipe(
         tap((page) =>
-          console.debug('✅ Fetched composer placeholder prompts', {
+          this.logger.debug('✅ Fetched composer placeholder prompts', {
             count: page?.examplePrompts?.length ?? 0,
           }),
         ),
         catchError((err) => {
-          console.error('❌ Failed to fetch composer placeholder prompts', err);
+          this.logger.error('❌ Failed to fetch composer placeholder prompts', err);
           return of(null);
         }),
         takeUntilDestroyed(this.destroyRef),
