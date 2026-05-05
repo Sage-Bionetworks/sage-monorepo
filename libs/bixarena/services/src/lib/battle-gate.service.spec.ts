@@ -61,6 +61,7 @@ describe('BattleGateService', () => {
       expect(service.consumePendingPrompt()).toEqual({
         prompt: 'hello world',
         examplePromptId: null,
+        entryPoint: null,
       });
       expect(service.consumePendingPrompt()).toBeNull();
     });
@@ -70,6 +71,7 @@ describe('BattleGateService', () => {
       expect(service.consumePendingPrompt()).toEqual({
         prompt: 'curated question',
         examplePromptId: 'ep-42',
+        entryPoint: null,
       });
     });
 
@@ -79,6 +81,7 @@ describe('BattleGateService', () => {
       expect(service.consumePendingPrompt()).toEqual({
         prompt: 'second',
         examplePromptId: null,
+        entryPoint: null,
       });
     });
 

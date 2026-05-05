@@ -92,7 +92,7 @@ describe('BattleComponent', () => {
     fixture.detectChanges();
     await Promise.resolve();
 
-    expect(submitSpy).toHaveBeenCalledWith('hello biomedical world', null);
+    expect(submitSpy).toHaveBeenCalledWith('hello biomedical world', null, undefined);
     expect(gate.consumePendingPrompt()).toBeNull();
   });
 
@@ -106,7 +106,7 @@ describe('BattleComponent', () => {
     fixture.detectChanges();
     await Promise.resolve();
 
-    expect(submitSpy).toHaveBeenCalledWith('curated question', 'ep-99');
+    expect(submitSpy).toHaveBeenCalledWith('curated question', 'ep-99', undefined);
     expect(gate.consumePendingPrompt()).toBeNull();
   });
 
@@ -128,7 +128,7 @@ describe('BattleComponent', () => {
     await Promise.resolve();
 
     expect(component.showOnboardingModal()).toBe(false);
-    expect(submitSpy).toHaveBeenCalledWith('deferred prompt', 'ep-1');
+    expect(submitSpy).toHaveBeenCalledWith('deferred prompt', 'ep-1', undefined);
     expect(onboarding.hasSeen()).toBe(true);
   });
 
