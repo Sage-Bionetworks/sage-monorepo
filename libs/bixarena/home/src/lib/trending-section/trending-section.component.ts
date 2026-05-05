@@ -77,7 +77,7 @@ export class TrendingSectionComponent implements OnInit {
           }),
         ),
         catchError((err) => {
-          this.logger.error('❌ Failed to fetch trending prompts', err);
+          this.logger.error('Failed to fetch trending prompts', err);
           return of(null);
         }),
         takeUntilDestroyed(this.destroyRef),

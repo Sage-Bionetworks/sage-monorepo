@@ -34,6 +34,7 @@ export class LoggerService {
   }
 
   warn(message: string, data?: unknown): void {
+    if (!this.allows('warn')) return;
     if (data !== undefined) {
       console.warn(message, data);
     } else {
@@ -42,6 +43,7 @@ export class LoggerService {
   }
 
   error(message: string, error?: unknown): void {
+    if (!this.allows('error')) return;
     if (error !== undefined) {
       console.error(message, error);
     } else {

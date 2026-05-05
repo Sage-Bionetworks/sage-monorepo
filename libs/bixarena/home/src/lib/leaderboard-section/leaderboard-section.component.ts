@@ -78,7 +78,7 @@ export class LeaderboardSectionComponent implements OnInit {
       .pipe(
         tap((all) => this.logger.debug('✅ Fetched leaderboard list', { count: all.length })),
         catchError((err) => {
-          this.logger.error('❌ Failed to fetch leaderboard list', err);
+          this.logger.error('Failed to fetch leaderboard list', err);
           return of<LeaderboardListInner[]>([]);
         }),
         takeUntilDestroyed(this.destroyRef),
@@ -101,7 +101,7 @@ export class LeaderboardSectionComponent implements OnInit {
               ),
               map((page) => this.toColumn(l, page)),
               catchError((err) => {
-                this.logger.error('❌ Failed to fetch leaderboard column', err);
+                this.logger.error('Failed to fetch leaderboard column', err);
                 return of<LeaderboardColumn | null>(null);
               }),
             );

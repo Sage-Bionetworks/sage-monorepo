@@ -32,6 +32,6 @@ links:
   sageBionetworks: https://sagebionetworks.org
 
 logging:
-  level: warn
+  level: info
 
 environment: dev

@@ -37,7 +37,7 @@ export class StatsSectionComponent {
       .pipe(
         tap((s) => this.logger.debug('✅ Fetched public stats', s)),
         catchError((err) => {
-          this.logger.error('❌ Failed to fetch public stats', err);
+          this.logger.error('Failed to fetch public stats', err);
           return of(null);
         }),
       ),
@@ -63,7 +63,7 @@ export class StatsSectionComponent {
         .pipe(
           tap((s) => this.logger.debug('✅ Fetched user stats', s)),
           catchError((err) => {
-            this.logger.error('❌ Failed to fetch user stats', err);
+            this.logger.error('Failed to fetch user stats', err);
             return of(null);
           }),
           takeUntilDestroyed(this.destroyRef),

@@ -33,7 +33,7 @@ export class LeaderboardFacadeService {
       ).length;
       this.logger.debug('✅ Fetched leaderboard categories', { total, withEntries });
     } catch (err) {
-      this.logger.error('❌ Failed to fetch leaderboard categories', err);
+      this.logger.error('Failed to fetch leaderboard categories', err);
       this.leaderboards.set([]);
     }
   }
@@ -62,7 +62,7 @@ export class LeaderboardFacadeService {
         priorSnapshotId: page.priorSnapshotId ?? null,
       });
     } catch (err) {
-      this.logger.error('❌ Failed to fetch leaderboard data', {
+      this.logger.error('Failed to fetch leaderboard data', {
         leaderboardId,
         query: finalQuery,
         err,

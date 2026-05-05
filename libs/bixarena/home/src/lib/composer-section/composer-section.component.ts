@@ -72,7 +72,7 @@ export class ComposerSectionComponent implements OnInit {
           }),
         ),
         catchError((err) => {
-          this.logger.error('❌ Failed to fetch composer placeholder prompts', err);
+          this.logger.error('Failed to fetch composer placeholder prompts', err);
           return of(null);
         }),
         takeUntilDestroyed(this.destroyRef),
