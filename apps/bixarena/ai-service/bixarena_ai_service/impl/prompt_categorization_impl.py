@@ -62,7 +62,7 @@ class PromptCategorizationApiImpl(BasePromptCategorizationApi):
         # Sanitize: strip whitespace and enforce max length
         # (defence-in-depth; the API layer already validates length).
         sanitized = prompt.strip()[: settings.prompt_max_length]
-        method = settings.prompt_categorization_method
+        method = settings.classification_method
 
         # Check Valkey cache first. A cached ``{"category": null}`` is a valid
         # "no fit" result and short-circuits the LLM call.

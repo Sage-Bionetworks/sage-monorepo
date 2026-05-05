@@ -60,7 +60,7 @@ class BattleValidationApiImpl(BaseBattleValidationApi):
         # Sanitize each prompt
         sanitized = [p.strip()[: settings.prompt_max_length] for p in prompts]
 
-        method = settings.battle_validation_method
+        method = settings.classification_method
 
         # Check Valkey cache first.
         cached = await get_cached_battle_validation(sanitized, settings)
