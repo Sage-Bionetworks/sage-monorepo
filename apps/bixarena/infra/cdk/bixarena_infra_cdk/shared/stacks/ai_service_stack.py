@@ -73,7 +73,7 @@ class AiServiceStack(cdk.Stack):
             # OpenRouter / LLM configuration
             "BIXARENA_AI_OPENROUTER_BASE_URL": "https://openrouter.ai/api/v1",
             "BIXARENA_AI_OPENROUTER_MODEL": "anthropic/claude-haiku-4.5",
-            "BIXARENA_AI_OPENROUTER_FALLBACK_MODEL": "google/gemini-2.5-flash",
+            "BIXARENA_AI_OPENROUTER_FALLBACK_MODEL": "anthropic/claude-3.5-haiku",
             "BIXARENA_AI_OPENROUTER_TIMEOUT": "30.0",
             "BIXARENA_AI_OPENROUTER_MAX_RETRIES": "2",
             # Classification method ID (bump when changing prompt or model)
