@@ -126,10 +126,7 @@ export class AnalyticsService {
     });
   }
 
-  trackLeaderboardFilterChanged(
-    filterType: 'category' | 'license' | 'view',
-    filterValue: string,
-  ): void {
+  trackLeaderboardFilterChanged(filterType: 'category' | 'view', filterValue: string): void {
     this.push('leaderboard_filter_changed', {
       filter_type: filterType,
       filter_value: filterValue,

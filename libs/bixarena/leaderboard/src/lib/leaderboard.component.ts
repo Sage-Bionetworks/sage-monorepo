@@ -54,6 +54,7 @@ const SORT_FIELD_MAP: Record<LeaderboardSortField, LeaderboardSort> = {
 export class LeaderboardComponent {
   readonly facade = inject(LeaderboardFacadeService);
   private readonly analytics = inject(AnalyticsService);
+  private hasTrackedView = false;
 
   readonly activeCategoryId = signal<string>(DEFAULT_CATEGORY_SLUG);
   readonly searchTerm = signal('');
@@ -105,7 +106,8 @@ export class LeaderboardComponent {
       this.facade
         .load(categoryId, q)
         .then(() => {
-          if (!this.facade.error()) {
+          if (!this.facade.error() && !this.hasTrackedView) {
+            this.hasTrackedView = true;
             this.analytics.trackLeaderboardViewed(categoryId, this.facade.entryCount());
           }
         })
@@ -127,10 +129,6 @@ export class LeaderboardComponent {
   }
 
   onFiltersChange(filters: LeaderboardFilters): void {
-    const old = this.filters();
-    if (filters.license !== old.license) {
-      this.analytics.trackLeaderboardFilterChanged('license', String(filters.license ?? 'all'));
-    }
     this.filters.set(filters);
     this.pageFirst.set(0);
   }
