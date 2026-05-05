@@ -173,6 +173,12 @@ async def classify(system_prompt: str, user_message: str) -> float:
 
         response = await client.chat.completions.create(
             model=settings.openrouter_model,
+            extra_body={
+                "models": [
+                    settings.openrouter_model,
+                    settings.openrouter_fallback_model,
+                ],
+            },
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message},
@@ -232,6 +238,12 @@ async def categorize(system_prompt: str, user_message: str) -> list[str]:
 
     response = await client.chat.completions.create(
         model=settings.openrouter_model,
+        extra_body={
+            "models": [
+                settings.openrouter_model,
+                settings.openrouter_fallback_model,
+            ],
+        },
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message},
@@ -266,6 +278,12 @@ async def categorize_single(system_prompt: str, user_message: str) -> str | None
 
     response = await client.chat.completions.create(
         model=settings.openrouter_model,
+        extra_body={
+            "models": [
+                settings.openrouter_model,
+                settings.openrouter_fallback_model,
+            ],
+        },
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message},

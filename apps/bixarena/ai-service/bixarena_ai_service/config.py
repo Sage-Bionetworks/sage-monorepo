@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     openrouter_api_key: str = ""
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     openrouter_model: str = "anthropic/claude-haiku-4.5"
+    openrouter_fallback_model: str = "google/gemini-2.5-flash"
     openrouter_timeout: float = 30.0
     openrouter_max_retries: int = 2
 
