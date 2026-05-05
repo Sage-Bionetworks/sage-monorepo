@@ -2,9 +2,8 @@ import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
-import { MetaTagService } from '@sagebionetworks/explorers/services';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
-import { BattleGateService } from '@sagebionetworks/bixarena/services';
+import { BattleGateService, MetaTagService } from '@sagebionetworks/bixarena/services';
 import { NavComponent, FooterComponent, LoginModalComponent } from '@sagebionetworks/bixarena/ui';
 import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 
