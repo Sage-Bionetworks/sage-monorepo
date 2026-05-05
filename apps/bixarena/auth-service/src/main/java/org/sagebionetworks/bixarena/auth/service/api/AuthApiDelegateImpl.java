@@ -383,6 +383,9 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body);
     } catch (Exception e) {
       log.info("OIDC callback: exception {}", e.getMessage());
+      if (session != null) {
+        session.removeAttribute("OIDC_RETURN_TO");
+      }
       return ResponseEntity.status(400)
         .contentType(MediaType.APPLICATION_JSON)
         .body(Callback200ResponseDto.builder().status("error:exception").build());
