@@ -22,6 +22,16 @@ paths:
       description: Initiates the OIDC login by redirecting the user to Synapse with
         state and nonce.
       operationId: login
+      parameters:
+        - description: Relative path to redirect to after login (e.g. /battle).
+          explode: true
+          in: query
+          name: return_to
+          required: false
+          schema:
+            maxLength: 500
+            type: string
+          style: form
       responses:
         '204':
           description: Flow started (no content; clients should follow redirect)
