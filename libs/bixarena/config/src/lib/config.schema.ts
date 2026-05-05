@@ -39,9 +39,11 @@ export const AppConfigSchema = BaseConfigSchema.extend({
     }),
   }),
 
-  logging: z.object({
-    level: z.enum(['debug', 'info', 'warn', 'error']).default('warn'),
-  }),
+  logging: z
+    .object({
+      level: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
+    })
+    .default({ level: 'info' }),
 });
 
 export type AppConfig = z.infer<typeof AppConfigSchema>;

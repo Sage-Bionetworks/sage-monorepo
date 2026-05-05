@@ -112,7 +112,7 @@ export class OnboardingModalComponent {
 
   goTo(index: number): void {
     if (index < 0 || index >= this.frames.length) {
-      this.logger.warn('OnboardingModal: invalid frame index', { index });
+      this.logger.debug('OnboardingModal: invalid frame index', { index });
       return;
     }
     this.currentFrame.set(index);

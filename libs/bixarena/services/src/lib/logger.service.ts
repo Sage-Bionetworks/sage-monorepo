@@ -10,7 +10,7 @@ export class LoggerService {
   private readonly configService = inject(ConfigService);
 
   private allows(level: LogLevel): boolean {
-    const configured = (this.configService.config?.logging?.level ?? 'warn') as LogLevel;
+    const configured = this.configService.config?.logging?.level ?? 'info';
     return LEVEL_ORDER[level] >= LEVEL_ORDER[configured];
   }
 
