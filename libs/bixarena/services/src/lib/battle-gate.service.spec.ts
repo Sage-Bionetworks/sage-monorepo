@@ -36,7 +36,7 @@ describe('BattleGateService', () => {
       service.showLoginModal.set(true);
       service.onLoginComplete();
       expect(service.showLoginModal()).toBe(false);
-      expect(authService.login).toHaveBeenCalled();
+      expect(authService.login).toHaveBeenCalledWith('/battle');
     });
   });
 

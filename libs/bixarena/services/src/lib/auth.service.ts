@@ -42,9 +42,10 @@ export class AuthService {
     }
   }
 
-  login(): void {
+  login(returnTo?: string): void {
     if (!this.isBrowser) return;
-    window.location.href = `${this.authUrl}/auth/login`;
+    const base = `${this.authUrl}/auth/login`;
+    window.location.href = returnTo ? `${base}?return_to=${encodeURIComponent(returnTo)}` : base;
   }
 
   // Only clears local state after server confirms session invalidation.

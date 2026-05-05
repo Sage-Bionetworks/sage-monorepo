@@ -35,12 +35,9 @@ export class BattleGateService {
 
   readonly showLoginModal = signal(false);
 
-  // The home route guard picks up pending and routes to /battle after OIDC
-  // returns to /. If auth-service ever supports a dynamic post-login URL,
-  // we can route from here directly and skip the / hop.
   onLoginComplete(): void {
     this.showLoginModal.set(false);
-    this.authService.login();
+    this.authService.login('/battle');
   }
 
   onLoginCancel(): void {
