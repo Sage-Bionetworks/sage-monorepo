@@ -180,7 +180,16 @@ async def classify(system_prompt: str, user_message: str) -> float:
                 ],
             },
             messages=[
-                {"role": "system", "content": system_prompt},
+                {
+                    "role": "system",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": system_prompt,
+                            "cache_control": {"type": "ephemeral"},
+                        }
+                    ],
+                },
                 {"role": "user", "content": user_message},
             ],
             temperature=0.0,
@@ -245,7 +254,16 @@ async def categorize(system_prompt: str, user_message: str) -> list[str]:
             ],
         },
         messages=[
-            {"role": "system", "content": system_prompt},
+            {
+                "role": "system",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": system_prompt,
+                        "cache_control": {"type": "ephemeral"},
+                    }
+                ],
+            },
             {"role": "user", "content": user_message},
         ],
         temperature=0.0,
@@ -285,7 +303,16 @@ async def categorize_single(system_prompt: str, user_message: str) -> str | None
             ],
         },
         messages=[
-            {"role": "system", "content": system_prompt},
+            {
+                "role": "system",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": system_prompt,
+                        "cache_control": {"type": "ephemeral"},
+                    }
+                ],
+            },
             {"role": "user", "content": user_message},
         ],
         temperature=0.0,
