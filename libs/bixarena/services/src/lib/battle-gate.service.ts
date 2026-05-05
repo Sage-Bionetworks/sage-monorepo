@@ -1,6 +1,7 @@
 import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from './auth.service';
+import { AnalyticsService, LoginEntryPoint } from './analytics.service';
 
 const PENDING_PROMPT_KEY = 'bixarena.pendingPrompt';
 const PENDING_EXAMPLE_PROMPT_ID_KEY = 'bixarena.pendingExamplePromptId';
@@ -31,17 +32,29 @@ export function clearPendingPromptStorage(): void {
 @Injectable({ providedIn: 'root' })
 export class BattleGateService {
   readonly authService = inject(AuthService);
+  private readonly analytics = inject(AnalyticsService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly showLoginModal = signal(false);
+  private readonly loginEntryPoint = signal<LoginEntryPoint | null>(null);
+
+  setLoginEntryPoint(entryPoint: LoginEntryPoint): void {
+    this.loginEntryPoint.set(entryPoint);
+  }
 
   onLoginComplete(): void {
     this.showLoginModal.set(false);
+    const entryPoint = this.loginEntryPoint();
+    this.loginEntryPoint.set(null);
+    if (entryPoint) {
+      this.analytics.trackLoginInitiated(entryPoint);
+    }
     this.authService.login('/battle');
   }
 
   onLoginCancel(): void {
     this.showLoginModal.set(false);
+    this.loginEntryPoint.set(null);
     this.consumePendingPrompt();
   }
 

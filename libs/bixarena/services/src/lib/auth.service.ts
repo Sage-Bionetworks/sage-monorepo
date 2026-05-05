@@ -4,6 +4,7 @@ import { LocalStorageService } from '@sagebionetworks/web-shared/angular/storage
 import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { UserInfo } from '@sagebionetworks/bixarena/api-client';
 import { clearPendingPromptStorage } from './battle-gate.service';
+import { AnalyticsService } from './analytics.service';
 
 export interface CachedUser {
   username: string;
@@ -17,6 +18,7 @@ export class AuthService {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly storage = inject(LocalStorageService);
   private readonly configService = inject(ConfigService);
+  private readonly analytics = inject(AnalyticsService);
 
   readonly user = signal<UserInfo | null>(null);
   readonly isAuthenticated = computed(() => this.user() !== null);
@@ -28,12 +30,16 @@ export class AuthService {
 
   async init(): Promise<void> {
     if (!this.isBrowser) return;
+    const wasAuthenticated = this.cachedUser() !== null;
     try {
       const res = await fetch('/userinfo');
       if (res.ok) {
         const user: UserInfo = await res.json();
         this.user.set(user);
         this.saveCache({ username: user.preferred_username ?? '', avatarUrl: user.avatar_url });
+        if (!wasAuthenticated) {
+          this.analytics.trackLogin();
+        }
       } else {
         this.clearCache();
       }
@@ -61,6 +67,7 @@ export class AuthService {
     this.user.set(null);
     this.clearCache();
     clearPendingPromptStorage();
+    this.analytics.trackLogout();
     window.location.href = '/';
   }
 

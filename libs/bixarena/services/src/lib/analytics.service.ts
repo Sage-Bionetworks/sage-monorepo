@@ -22,6 +22,8 @@ const OUTCOME_MAP: Record<BattleEvaluationOutcome, string> = {
   tie: 'tie',
 };
 
+const LOGIN_ENTRY_POINT_KEY = 'bixarena.loginEntryPoint';
+
 @Injectable({ providedIn: 'root' })
 export class AnalyticsService {
   private readonly gtm = inject(GoogleTagManagerService, { optional: true });
@@ -30,11 +32,31 @@ export class AnalyticsService {
     this.gtm?.pushTag({ event, ...params }).catch(() => undefined);
   }
 
+  private saveLoginEntryPoint(entryPoint: LoginEntryPoint): void {
+    try {
+      sessionStorage.setItem(LOGIN_ENTRY_POINT_KEY, entryPoint);
+    } catch {
+      /* private mode / SSR */
+    }
+  }
+
+  private consumeLoginEntryPoint(): string | null {
+    try {
+      const value = sessionStorage.getItem(LOGIN_ENTRY_POINT_KEY);
+      sessionStorage.removeItem(LOGIN_ENTRY_POINT_KEY);
+      return value;
+    } catch {
+      return null;
+    }
+  }
+
   trackLoginInitiated(entryPoint: LoginEntryPoint): void {
+    this.saveLoginEntryPoint(entryPoint);
     this.push('login_initiated', { entry_point: entryPoint });
   }
 
-  trackLogin(entryPoint?: string): void {
+  trackLogin(): void {
+    const entryPoint = this.consumeLoginEntryPoint();
     this.push('login', {
       method: 'synapse_oauth',
       ...(entryPoint ? { entry_point: entryPoint } : {}),
