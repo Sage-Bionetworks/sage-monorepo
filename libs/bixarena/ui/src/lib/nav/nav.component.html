@@ -25,7 +25,7 @@
         />
       </button>
     } @else {
-      <p-button class="login-btn" label="Login" (onClick)="authService.login()" />
+      <p-button class="login-btn" label="Login" (onClick)="login()" />
     }
     <button
       class="theme-toggle"
@@ -113,7 +113,7 @@
     <a routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a>
     @if (!showAvatar()) {
       <hr />
-      <p-button label="Login" fluid (onClick)="authService.login(); closeMenu()" />
+      <p-button label="Login" fluid (onClick)="login(); closeMenu()" />
     }
   </nav>
 }

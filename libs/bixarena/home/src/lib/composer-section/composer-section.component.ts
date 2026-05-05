@@ -110,6 +110,7 @@ export class ComposerSectionComponent implements OnInit {
     if (this.auth.isAuthenticated()) {
       void this.router.navigate(['/battle']);
     } else {
+      this.gate.setLoginEntryPoint('home_composer');
       this.gate.showLoginModal.set(true);
     }
   }
