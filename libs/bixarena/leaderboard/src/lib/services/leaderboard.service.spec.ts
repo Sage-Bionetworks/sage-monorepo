@@ -1,3 +1,5 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { noop, of, throwError } from 'rxjs';
 import {
@@ -59,7 +61,12 @@ describe('LeaderboardFacadeService', () => {
       listLeaderboards: jest.fn().mockReturnValue(of([])),
     };
     TestBed.configureTestingModule({
-      providers: [LeaderboardFacadeService, { provide: LeaderboardApiService, useValue: api }],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        LeaderboardFacadeService,
+        { provide: LeaderboardApiService, useValue: api },
+      ],
     });
     service = TestBed.inject(LeaderboardFacadeService);
   });
