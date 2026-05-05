@@ -2,6 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
+import { MetaTagService } from '@sagebionetworks/explorers/services';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
 import { BattleGateService } from '@sagebionetworks/bixarena/services';
 import { NavComponent, FooterComponent, LoginModalComponent } from '@sagebionetworks/bixarena/ui';
@@ -18,6 +19,11 @@ export class AppComponent {
   readonly gate = inject(BattleGateService);
 
   private readonly router = inject(Router);
+  private readonly metaTagService = inject(MetaTagService);
+
+  constructor() {
+    this.metaTagService.initialize('BioArena');
+  }
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
