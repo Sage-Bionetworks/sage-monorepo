@@ -16,11 +16,23 @@ export class ConfigService extends ConfigLoaderService<RuntimeServerConfig, AppC
   }
 
   override async loadConfig(basePath?: string): Promise<RuntimeServerConfig> {
-    const loaded = await super.loadConfig(basePath);
-    this.config = {
-      ...(loaded as AppConfig),
-      isPlatformServer: isPlatformServer(this.platformId),
-    } as RuntimeServerConfig;
-    return this.config;
+    // TODO: remove once the shared platform/config lib routes its logs through the
+    // shared Logger token (with isDevMode-gated default). This is a bixarena-only
+    // workaround to keep [ConfigLoader] and [YamlParser] noise out of the console.
+    const originalLog = console.log;
+    const originalDebug = console.debug;
+    console.log = () => undefined;
+    console.debug = () => undefined;
+    try {
+      const loaded = await super.loadConfig(basePath);
+      this.config = {
+        ...(loaded as AppConfig),
+        isPlatformServer: isPlatformServer(this.platformId),
+      } as RuntimeServerConfig;
+      return this.config;
+    } finally {
+      console.log = originalLog;
+      console.debug = originalDebug;
+    }
   }
 }
