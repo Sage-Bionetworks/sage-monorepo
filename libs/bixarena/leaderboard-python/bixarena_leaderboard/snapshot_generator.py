@@ -11,6 +11,7 @@ Encapsulates the full snapshot workflow:
 
 import json
 import logging
+import math
 from datetime import UTC, datetime
 
 from bixarena_leaderboard.db_helper import (
@@ -43,20 +44,37 @@ class SnapshotRunError(RuntimeError):
 
 SNAPSHOT_IDENTIFIER_FORMAT = "snapshot_%Y-%m-%d_%H-%M-%S"
 
+# BT can diverge to ±inf on perfectly separable per-category data. Drop entries
+# with extreme btScore; clamp bootstrap CI bounds so they fit NUMERIC(10, 6).
+_BT_SCORE_MIN_EXCLUSIVE = 0.0  # drop if btScore <= this
+_BT_SCORE_MAX = 3000.0  # drop if btScore > this
+_CI_CLAMP = 3000.0  # bootstrap quantiles clamped to [-_CI_CLAMP, _CI_CLAMP]
+
+
+def _entry_has_valid_score(entry: dict) -> bool:
+    s = entry["btScore"]
+    return math.isfinite(s) and _BT_SCORE_MIN_EXCLUSIVE < s <= _BT_SCORE_MAX
+
+
+def _clamp_ci_bounds(entry: dict) -> None:
+    for field in ("bootstrapQ025", "bootstrapQ975"):
+        v = entry[field]
+        if not math.isfinite(v) or v < -_CI_CLAMP:
+            entry[field] = -_CI_CLAMP
+        elif v > _CI_CLAMP:
+            entry[field] = _CI_CLAMP
+
 
 def generate_snapshot(
     leaderboard_slug: str = "overall",
     num_bootstrap: int = 1000,
     min_evals: int = 10,
     significant: bool = False,
+    min_total_models: int = 4,
     dry_run: bool = False,
 ) -> dict:
     """
     Generate and publish a leaderboard snapshot.
-
-    Mirrors the manual CLI flow:
-      bixarena leaderboard snapshot add --min 10
-      bixarena leaderboard snapshot update <id> --visibility public
 
     Args:
         leaderboard_slug: Slug of the leaderboard to generate (default: 'overall').
@@ -64,19 +82,9 @@ def generate_snapshot(
         min_evals: Minimum evaluations per model to include in the snapshot.
         significant: If True, rank by statistical significance (CI overlap).
                      If False, rank by BT score only.
+        min_total_models: Minimum surviving entries required for the snapshot to
+                          publish. Below this, the leaderboard is skipped.
         dry_run: If True, compute rankings but do not write to the database.
-
-    Returns:
-        dict with keys:
-          - snapshot_id: UUID string of created snapshot (None if dry_run)
-          - snapshot_identifier: human-readable identifier string
-          - entry_count: number of ranked model entries
-          - evaluation_count: total evaluations used
-          - leaderboard_name: display name of the leaderboard
-
-    Raises:
-        ValueError: If num_bootstrap is out of range, min_evals is negative,
-                    the leaderboard slug is not found, or no evaluations exist.
     """
     if not (1 <= num_bootstrap <= 5000):
         raise ValueError(
@@ -84,6 +92,8 @@ def generate_snapshot(
         )
     if min_evals < 0:
         raise ValueError(f"min_evals must be >= 0, got {min_evals}")
+    if min_total_models < 0:
+        raise ValueError(f"min_total_models must be >= 0, got {min_total_models}")
 
     with get_db_connection() as conn:
         # Validate leaderboard slug
@@ -132,11 +142,60 @@ def generate_snapshot(
                 for new_rank, entry in enumerate(leaderboard_entries, start=1):
                     entry["rank"] = new_rank
 
+        # Drop entries with non-finite or out-of-range BT scores; clamp survivors' CIs.
+        before = len(leaderboard_entries)
+        leaderboard_entries = [
+            e for e in leaderboard_entries if _entry_has_valid_score(e)
+        ]
+        dropped_invalid = before - len(leaderboard_entries)
+        if dropped_invalid > 0:
+            logger.warning(
+                json.dumps(
+                    {
+                        "event": "leaderboard_dropped_invalid_entries",
+                        "slug": leaderboard_slug,
+                        "dropped_count": dropped_invalid,
+                    }
+                )
+            )
+            if not significant:
+                for new_rank, entry in enumerate(leaderboard_entries, start=1):
+                    entry["rank"] = new_rank
+        for entry in leaderboard_entries:
+            _clamp_ci_bounds(entry)
+
         snapshot_identifier = datetime.now(UTC).strftime(SNAPSHOT_IDENTIFIER_FORMAT)
         description = (
             f"Leaderboard snapshot with {len(all_evaluations)} evaluations "
             f"and {len(leaderboard_entries)} ranked models"
         )
+
+        if len(leaderboard_entries) < min_total_models:
+            reason = (
+                "no_qualifying_entries"
+                if not leaderboard_entries
+                else "insufficient_qualifying_entries"
+            )
+            logger.warning(
+                json.dumps(
+                    {
+                        "event": "leaderboard_skipped",
+                        "slug": leaderboard_slug,
+                        "reason": reason,
+                        "entry_count": len(leaderboard_entries),
+                        "min_total_models": min_total_models,
+                        "evaluation_count": len(all_evaluations),
+                    }
+                )
+            )
+            return {
+                "snapshot_id": None,
+                "snapshot_identifier": None,
+                "entry_count": len(leaderboard_entries),
+                "evaluation_count": len(all_evaluations),
+                "leaderboard_name": target_leaderboard["name"],
+                "skipped_reason": reason,
+            }
 
         if dry_run:
             return {
@@ -286,8 +345,29 @@ def generate_all_snapshots(
                 num_bootstrap=num_bootstrap,
                 min_evals=min_evals,
                 significant=significant,
+                min_total_models=min_total_models,
                 dry_run=dry_run,
             )
+            if result.get("skipped_reason"):
+                skipped.append(
+                    {
+                        "slug": slug,
+                        "reason": result["skipped_reason"],
+                        "battle_count": cand["battle_count"],
+                        "model_count": cand["model_count"],
+                    }
+                )
+                logger.warning(
+                    json.dumps(
+                        {
+                            "event": "leaderboard_skipped",
+                            "slug": slug,
+                            "reason": result["skipped_reason"],
+                            "evaluation_count": result.get("evaluation_count", 0),
+                        }
+                    )
+                )
+                continue
             generated.append({"slug": slug, **result})
             logger.info(
                 json.dumps(
