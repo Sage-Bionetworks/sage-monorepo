@@ -71,7 +71,10 @@ def snapshot_add(
     min_total_models: int = typer.Option(
         4,
         "--min-total-models",
-        help="--all only: skip leaderboards with fewer distinct models than this",
+        help=(
+            "Skip the snapshot if fewer surviving entries than this. "
+            "In --all mode also gates on raw distinct-model count before BT."
+        ),
     ),
     dry_run: bool = typer.Option(
         False,
@@ -118,6 +121,7 @@ def snapshot_add(
             num_bootstrap=num_bootstrap,
             min_evals=min_evals,
             significant=significant,
+            min_total_models=min_total_models,
             dry_run=dry_run,
         )
 
@@ -126,6 +130,11 @@ def snapshot_add(
                 "\n[yellow]DRY RUN: Results computed only. "
                 "Database not updated.[/yellow]"
             )
+        elif result.get("skipped_reason"):
+            console.print(f"\n[yellow]Skipped: {result['skipped_reason']}[/yellow]")
+            console.print(f"  • Leaderboard: {result['leaderboard_name']}")
+            console.print(f"  • Evaluations considered: {result['evaluation_count']}")
+            return
         else:
             console.print("\n[bold green]✓ Database updated successfully![/bold green]")
             console.print(f"  • Snapshot ID: {result['snapshot_id']}")
