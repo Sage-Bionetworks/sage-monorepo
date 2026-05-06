@@ -1,5 +1,6 @@
 @use 'normalize.css';
 @forward './lib/variables';
+@forward './lib/root';
 @forward './lib/mixins';
 @forward './lib/general';
 @forward './lib/wiki-pages';

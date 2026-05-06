@@ -1,0 +1,45 @@
+@use 'variables' as vars;
+
+:root {
+  @each $key, $value in vars.$spacings {
+    --spacing-#{$key}: #{$value};
+  }
+
+  @each $key, $color in vars.$main-colors {
+    --color-#{$key}: #{$color};
+  }
+
+  @each $key, $color in vars.$main-colors-hover {
+    --color-#{$key}-hover: #{$color};
+  }
+
+  @each $key, $color in vars.$extra-colors {
+    --color-#{$key}: #{$color};
+  }
+
+  @each $size, $properties in vars.$headings {
+    @each $property, $value in $properties {
+      --#{$property}-#{$size}: #{$value};
+    }
+  }
+
+  @each $size, $properties in vars.$font-sizes {
+    @each $property, $value in $properties {
+      --#{$property}-#{$size}: #{$value};
+    }
+  }
+
+  --container-max-width-sm: #{vars.$container-max-width-sm};
+  --container-max-width-md: #{vars.$container-max-width-md};
+  --container-max-width-lg: #{vars.$container-max-width-lg};
+  --container-gutter-width: #{vars.$container-gutter-width};
+  --transition-duration: #{vars.$transition-duration};
+  --header-height: #{vars.$header-height};
+  --footer-height: #{vars.$footer-height};
+  --gene-details-nav-height: #{vars.$gene-details-nav-height};
+  --gene-details-subnav-offset: #{vars.$gene-details-subnav-offset};
+
+  @each $key, $value in vars.$chart-colors {
+    --color-chart-#{$key}: #{$value};
+  }
+}
