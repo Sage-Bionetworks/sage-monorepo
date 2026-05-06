@@ -1,0 +1,20 @@
+{
+  "name": "qtl-util",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/qtl/util/src",
+  "prefix": "qtl",
+  "tags": ["type:util", "scope:qtl", "language:typescript"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/qtl/util"],
+      "options": {
+        "jestConfig": "libs/qtl/util/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

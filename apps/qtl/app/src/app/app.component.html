@@ -6,5 +6,11 @@
   <div class="container">
     <router-outlet></router-outlet>
   </div>
+  <explorers-footer
+    footerLogoPath="qtl-assets/images/footer-logo.svg"
+    [footerLinks]="footerLinks"
+    [siteVersion]="siteVersion"
+    [dataVersion]="dataVersion()"
+  ></explorers-footer>
 </div>
 <p-toast class="global-toast" position="bottom-center"></p-toast>
