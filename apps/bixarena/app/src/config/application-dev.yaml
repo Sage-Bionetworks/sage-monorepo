@@ -3,6 +3,9 @@
 analytics:
   googleTagManager:
     enabled: false
+    # TODO: remove once shared GTM_CONFIG schema makes `gtmId` conditional on `enabled`.
+    # Today the schema requires non-empty `gtmId` regardless of `enabled`, so this
+    # placeholder satisfies validation in dev where GTM is disabled.
     id: 'local'
 
 logging:
