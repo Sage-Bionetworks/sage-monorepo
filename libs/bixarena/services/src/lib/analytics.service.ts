@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
 
@@ -26,7 +27,10 @@ const LOGIN_ENTRY_POINT_KEY = 'bixarena.loginEntryPoint';
 
 @Injectable({ providedIn: 'root' })
 export class AnalyticsService {
-  private readonly gtm = inject(GoogleTagManagerService, { optional: true });
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly gtm = this.isBrowser
+    ? inject(GoogleTagManagerService, { optional: true })
+    : null;
 
   private push(event: string, params?: Record<string, unknown>): void {
     this.gtm?.pushTag({ event, ...params }).catch(() => undefined);
