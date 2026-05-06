@@ -5,6 +5,8 @@ export const HELP_URL =
 
 export const SUPPORT_EMAIL = 'xqtlexplorer@sagebionetworks.org';
 
+export const DEFAULT_HERO_BACKGROUND_IMAGE_PATH = 'qtl-assets/images/hero-background.svg';
+
 export const QTL_LOADING_ICON_COLORS: LoadingIconColors = {
   colorInnermost: '#8D96D6',
   colorCentral: '#8D96D6',
