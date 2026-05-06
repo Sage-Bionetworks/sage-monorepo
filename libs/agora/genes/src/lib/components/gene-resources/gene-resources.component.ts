@@ -1,7 +1,8 @@
 import { Component, computed, input } from '@angular/core';
 
 import { Gene } from '@sagebionetworks/agora/api-client';
-import { ResourceCardComponent, ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
+import { ResourceCardData } from '@sagebionetworks/explorers/models';
+import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
 
 @Component({
   selector: 'agora-gene-resources',
@@ -16,7 +17,7 @@ export class GeneResourcesComponent {
     const gene = this.gene();
     if (!gene) return [];
 
-    const cards: Partial<ResourceCardComponent>[] = [
+    const cards: ResourceCardData[] = [
       {
         imagePath: 'explorers-assets/images/ad-knowledge-portal-logo.svg',
         description: `View the openly available TREAT-AD resources for experimental validation of ${gene.hgnc_symbol || gene.ensembl_gene_id} in the AD Knowledge Portal.`,
@@ -45,7 +46,7 @@ export class GeneResourcesComponent {
     return cards;
   });
 
-  drugDevelopmentResources = computed((): Partial<ResourceCardComponent>[] => {
+  drugDevelopmentResources = computed((): ResourceCardData[] => {
     const gene = this.gene();
     if (!gene) return [];
 
@@ -82,7 +83,7 @@ export class GeneResourcesComponent {
     ];
   });
 
-  additionalResources = computed((): Partial<ResourceCardComponent>[] => {
+  additionalResources = computed((): ResourceCardData[] => {
     const gene = this.gene();
     if (!gene) return [];
 

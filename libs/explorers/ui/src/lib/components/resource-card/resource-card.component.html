@@ -1,14 +1,14 @@
 <div class="resource-card">
-  <a target="_blank" [href]="link" [attr.aria-label]="description">
-    <div [class]="`content ${title ? 'row' : 'column'}`">
+  <a target="_blank" [href]="link()" [attr.aria-label]="description()">
+    <div [class]="'content ' + (title() ? 'row' : 'column')">
       <div class="image">
-        <explorers-svg-image [imagePath]="imagePath" [altText]="altText" />
+        <explorers-svg-image [imagePath]="imagePath()" [altText]="altText()" />
       </div>
       <div class="text-content">
-        @if (title) {
-          <div class="title">{{ title }}</div>
+        @if (title()) {
+          <div class="title">{{ title() }}</div>
         }
-        <div class="description">{{ description }}</div>
+        <div class="description">{{ description() }}</div>
       </div>
     </div>
   </a>

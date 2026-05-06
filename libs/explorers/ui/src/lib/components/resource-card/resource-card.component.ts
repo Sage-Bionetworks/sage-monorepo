@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
@@ -8,10 +8,9 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
   styleUrls: ['./resource-card.component.scss'],
 })
 export class ResourceCardComponent {
-  @Input({ required: true }) link = '';
-  @Input({ required: true }) description = '';
-  @Input() title: string | undefined = undefined;
-
-  @Input({ required: true }) imagePath = '';
-  @Input() altText = '';
+  link = input.required<string>();
+  description = input.required<string>();
+  imagePath = input.required<string>();
+  title = input<string | undefined>();
+  altText = input<string>('');
 }

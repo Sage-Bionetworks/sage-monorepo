@@ -1,0 +1,15 @@
+@use 'explorers/styles/src/mixins' as mixins;
+
+.stat-cards {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+
+  @include mixins.respond-to('medium') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mixins.respond-to('large') {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

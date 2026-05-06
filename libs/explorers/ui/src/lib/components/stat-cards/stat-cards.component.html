@@ -1,0 +1,10 @@
+<div class="stat-cards">
+  @for (card of cards(); track $index) {
+    <explorers-stat-card
+      [value]="card.value"
+      [label]="card.label"
+      [iconPath]="card.iconPath"
+      [iconAltText]="card.iconAltText ?? ''"
+    />
+  }
+</div>

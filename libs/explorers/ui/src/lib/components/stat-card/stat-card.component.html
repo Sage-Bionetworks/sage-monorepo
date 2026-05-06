@@ -1,0 +1,9 @@
+<div class="stat-card">
+  @if (iconPath(); as path) {
+    <div class="stat-card-icon">
+      <explorers-svg-image [imagePath]="path" [altText]="iconAltText()" />
+    </div>
+  }
+  <div class="stat-card-value">{{ value() }}</div>
+  <div class="stat-card-label">{{ label() }}</div>
+</div>
