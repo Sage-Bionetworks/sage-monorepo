@@ -1,7 +1,7 @@
 @use 'shared/typescript/styles/src/shared-styles/variables' as shared;
 
 footer {
-  border-top: 1px solid var(--p-surface-200);
+  border-top: 1px solid var(--border);
   padding: 1rem var(--content-padding-x);
   display: flex;
   align-items: center;

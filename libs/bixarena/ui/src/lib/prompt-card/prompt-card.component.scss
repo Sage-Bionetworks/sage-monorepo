@@ -17,7 +17,7 @@
   gap: 0.5rem;
   margin-top: 0.875rem;
   padding-top: 0.875rem;
-  border-top: 1px solid var(--p-surface-200);
+  border-top: 1px solid var(--border);
 }
 
 .tag {
@@ -55,7 +55,7 @@
 
 .prompt-card {
   background: var(--p-surface-100);
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: var(--p-border-radius-xl);
   padding: 1.25rem;
   min-height: 8.75rem;
@@ -73,7 +73,7 @@
     box-shadow 0.2s;
 
   &:hover {
-    border-color: var(--p-surface-300);
+    border-color: var(--border-hover);
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgb(0 0 0 / 25%);
   }
@@ -93,7 +93,7 @@
   }
 
   &:hover {
-    border-color: var(--p-surface-200);
+    border-color: var(--border);
     transform: none;
     box-shadow: none;
   }
