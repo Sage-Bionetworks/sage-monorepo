@@ -10,23 +10,6 @@
   </nav>
   <div class="actions">
     <span class="divider"></span>
-    @if (showAvatar()) {
-      <button
-        class="avatar-btn"
-        (click)="authService.logout()"
-        [title]="'Logout ' + (displayUser()?.username ?? '')"
-        aria-label="Logout"
-      >
-        <bixarena-avatar
-          size="md"
-          shape="circle"
-          [imageUrl]="displayUser()?.avatarUrl ?? null"
-          [name]="displayUser()?.username ?? ''"
-        />
-      </button>
-    } @else {
-      <p-button class="login-btn" label="Login" (onClick)="login()" />
-    }
     <button
       class="theme-toggle"
       (click)="themeService.toggle()"
@@ -65,6 +48,23 @@
         </svg>
       }
     </button>
+    @if (showAvatar()) {
+      <button
+        class="avatar-btn"
+        (click)="authService.logout()"
+        [title]="'Logout ' + (displayUser()?.username ?? '')"
+        aria-label="Logout"
+      >
+        <bixarena-avatar
+          size="md"
+          shape="circle"
+          [imageUrl]="displayUser()?.avatarUrl ?? null"
+          [name]="displayUser()?.username ?? ''"
+        />
+      </button>
+    } @else {
+      <p-button class="login-btn" label="Login" (onClick)="login()" />
+    }
     <button
       class="hamburger"
       type="button"
