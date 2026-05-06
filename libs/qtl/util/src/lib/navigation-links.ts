@@ -1,6 +1,14 @@
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 import { HELP_URL, ROUTE_PATHS } from '@sagebionetworks/qtl/config';
 
+export const headerLinks: NavigationLink[] = [
+  {
+    label: 'Home',
+    routerLink: [ROUTE_PATHS.HOME],
+    activeOptions: { exact: true },
+  },
+];
+
 export const footerLinks: NavigationLink[] = [
   {
     label: 'About',

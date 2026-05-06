@@ -3,16 +3,27 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
 import { MetaTagService, VersionService } from '@sagebionetworks/explorers/services';
-import { ErrorOverlayComponent, FooterComponent } from '@sagebionetworks/explorers/ui';
+import {
+  ErrorOverlayComponent,
+  FooterComponent,
+  HeaderComponent,
+} from '@sagebionetworks/explorers/ui';
 import { DataVersionService } from '@sagebionetworks/qtl/api-client';
 import { ConfigService, QTL_LOADING_ICON_COLORS } from '@sagebionetworks/qtl/config';
-import { footerLinks } from '@sagebionetworks/qtl/util';
+import { footerLinks, headerLinks } from '@sagebionetworks/qtl/util';
 import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { ToastModule } from 'primeng/toast';
 import { catchError, of } from 'rxjs';
 
 @Component({
-  imports: [RouterModule, ErrorOverlayComponent, FooterComponent, GtmComponent, ToastModule],
+  imports: [
+    RouterModule,
+    ErrorOverlayComponent,
+    FooterComponent,
+    GtmComponent,
+    HeaderComponent,
+    ToastModule,
+  ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -40,6 +51,7 @@ export class AppComponent {
 
   siteVersion = this.versionService.getSiteVersion(this.configService.config);
 
+  headerLinks = headerLinks;
   footerLinks = footerLinks;
 
   constructor() {
