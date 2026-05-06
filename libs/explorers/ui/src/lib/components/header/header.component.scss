@@ -130,7 +130,7 @@
       cursor: pointer;
 
       &:hover {
-        color: var(--color-action-primary);
+        color: var(--header-link-color, var(--color-action-primary));
       }
 
       &::after {
@@ -141,7 +141,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background-color: var(--color-action-primary);
+        background-color: var(--header-link-color, var(--color-action-primary));
         border-radius: 2px;
         opacity: 0;
         visibility: hidden;
@@ -149,7 +149,7 @@
       }
 
       &.active {
-        color: var(--color-action-primary);
+        color: var(--header-link-color, var(--color-action-primary));
 
         &::after {
           opacity: 1;
@@ -198,7 +198,7 @@
     a {
       &.active {
         position: relative;
-        color: var(--color-action-primary);
+        color: var(--header-link-color, var(--color-action-primary));
 
         &::after {
           content: ' ';
@@ -208,7 +208,7 @@
           left: 0;
           right: 0;
           height: 4px;
-          background-color: var(--color-action-primary);
+          background-color: var(--header-link-color, var(--color-action-primary));
           border-radius: 2px;
           transition: var(--transition-duration);
         }
