@@ -3,6 +3,7 @@
 analytics:
   googleTagManager:
     enabled: false
+    id: 'local'
 
 logging:
   level: debug
