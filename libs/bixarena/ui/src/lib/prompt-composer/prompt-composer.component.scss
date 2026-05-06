@@ -111,14 +111,14 @@
 }
 
 .disclaimer {
-  margin: 0.75rem 0 0;
+  margin: 0.625rem 0 0;
   padding: 0.75rem 1rem;
-  background: var(--p-surface-100);
-  border: 1px solid var(--p-surface-200);
+  background: var(--p-surface-50);
   border-radius: 12px;
   font-size: var(--text-xs);
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--p-text-muted-color);
+  text-align: left;
 
   strong {
     color: var(--p-text-color);
