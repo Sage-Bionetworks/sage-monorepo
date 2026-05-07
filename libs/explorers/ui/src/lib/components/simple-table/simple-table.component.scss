@@ -1,0 +1,61 @@
+@use 'explorers/styles/src/mixins' as mixins;
+
+.simple-table {
+  border-collapse: collapse;
+  width: 100%;
+  color: var(--simple-table-text-color, #353a3f);
+
+  th,
+  td {
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  thead th {
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--simple-table-color-border-divider, #eaecee);
+  }
+
+  tbody td {
+    font-size: var(--simple-table-font-size, 16px);
+    line-height: var(--simple-table-line-height, 20px);
+  }
+
+  &.fixed-gap {
+    width: auto;
+    border-collapse: separate;
+    border-spacing: var(--simple-table-column-gap) 0;
+
+    th,
+    td {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .align-right {
+    text-align: right;
+  }
+
+  .align-center {
+    text-align: center;
+  }
+
+  .dotted-underline {
+    text-decoration: underline dotted var(--simple-table-tooltip-underline-color, #469da0) 16%;
+    text-decoration-skip-ink: none;
+    text-underline-offset: 19%;
+  }
+
+  .cell-label {
+    font-weight: 600;
+    color: var(--simple-table-label-color, #353a3f);
+  }
+
+  .cell-link {
+    @include mixins.link;
+  }
+}

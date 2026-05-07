@@ -10,4 +10,5 @@ export * from './lib/components/panel-navigation/panel-navigation.component';
 export * from './lib/components/resource-card/resource-card.component';
 export * from './lib/components/resource-cards/resource-cards.component';
 export * from './lib/components/search-input/search-input.component';
+export * from './lib/components/simple-table/simple-table.component';
 export * from './lib/components/svg-image/svg-image.component';
