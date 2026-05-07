@@ -1,4 +1,5 @@
 import { Component, input, viewChild } from '@angular/core';
+import { SvgIconConfig } from '@sagebionetworks/explorers/models';
 import { ButtonModule, ButtonProps } from 'primeng/button';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { SvgIconComponent } from '../svg-icon/svg-icon.component';
@@ -17,7 +18,7 @@ export class TooltipButtonComponent {
   onClick = input.required<() => void>();
 
   buttonLabel = input<string>();
-  buttonSvgIconConfig = input<Partial<SvgIconComponent>>();
+  buttonSvgIconConfig = input<SvgIconConfig>();
   buttonAriaDescribedBy = input<string>();
   buttonProps = input<ButtonProps>();
 
