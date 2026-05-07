@@ -1,37 +1,34 @@
 import { render, screen } from '@testing-library/angular';
 import { StatCardComponent } from './stat-card.component';
 
-describe('StatCardComponent', () => {
-  it('should display the value', async () => {
-    await render(StatCardComponent, {
-      componentInputs: { value: '1,234', label: 'Total QTLs' },
-    });
-    expect(screen.getByText('1,234')).toBeInTheDocument();
-  });
+const baseInputs = {
+  iconPath: '/path/to/icon.svg',
+  iconAltText: 'icon',
+  header: 'Total QTLs',
+};
 
-  it('should display the label', async () => {
-    await render(StatCardComponent, {
-      componentInputs: { value: '1,234', label: 'Total QTLs' },
-    });
+describe('StatCardComponent', () => {
+  it('should display the header', async () => {
+    await render(StatCardComponent, { componentInputs: baseInputs });
     expect(screen.getByText('Total QTLs')).toBeInTheDocument();
   });
 
-  it('should display an icon when iconPath is provided', async () => {
+  it('should display the sub-header when provided', async () => {
     await render(StatCardComponent, {
-      componentInputs: {
-        value: '42',
-        label: 'Studies',
-        iconPath: '/path/to/icon.svg',
-        iconAltText: 'studies icon',
-      },
+      componentInputs: { ...baseInputs, subHeader: 'across 53 tissues' },
     });
-    expect(screen.getByAltText('studies icon')).toBeInTheDocument();
+    expect(screen.getByText('across 53 tissues')).toBeInTheDocument();
   });
 
-  it('should not display an icon when iconPath is omitted', async () => {
+  it('should not render a sub-header when omitted', async () => {
+    await render(StatCardComponent, { componentInputs: baseInputs });
+    expect(document.querySelector('.stat-card-sub-header')).not.toBeInTheDocument();
+  });
+
+  it('should always display the icon using the provided alt text', async () => {
     await render(StatCardComponent, {
-      componentInputs: { value: '42', label: 'Studies' },
+      componentInputs: { ...baseInputs, iconAltText: 'studies icon' },
     });
-    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    expect(screen.getByAltText('studies icon')).toBeInTheDocument();
   });
 });

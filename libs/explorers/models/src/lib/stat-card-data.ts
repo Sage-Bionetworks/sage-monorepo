@@ -1,6 +1,6 @@
 export interface StatCardData {
-  value: string;
-  label: string;
-  iconPath?: string;
+  iconPath: string;
+  header: string;
+  subHeader?: string;
   iconAltText?: string;
 }

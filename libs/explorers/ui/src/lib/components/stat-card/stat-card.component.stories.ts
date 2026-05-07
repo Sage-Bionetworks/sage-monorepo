@@ -21,25 +21,30 @@ const meta: Meta<StatCardComponent> = {
 export default meta;
 type Story = StoryObj<StatCardComponent>;
 
+const defaultIcon = 'explorers-assets/images/warning-circle.svg';
+
 export const Default: Story = {
   args: {
-    value: '1,234',
-    label: 'Total QTLs',
+    iconPath: defaultIcon,
+    iconAltText: 'icon',
+    header: 'Total QTLs',
   },
 };
 
-export const WithIcon: Story = {
+export const WithSubHeader: Story = {
   args: {
-    value: '42',
-    label: 'Studies analyzed',
-    iconPath: 'explorers-assets/images/warning-circle.svg',
-    iconAltText: 'studies',
+    iconPath: defaultIcon,
+    iconAltText: 'icon',
+    header: 'Total QTLs',
+    subHeader: 'across 53 tissues',
   },
 };
 
-export const LongLabel: Story = {
+export const LongHeader: Story = {
   args: {
-    value: '8.6M',
-    label: 'Significant variant–gene associations across all tissues',
+    iconPath: defaultIcon,
+    iconAltText: 'icon',
+    header: 'Significant variant–gene associations',
+    subHeader: 'across all tissues',
   },
 };

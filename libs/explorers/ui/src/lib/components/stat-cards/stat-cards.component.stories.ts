@@ -21,11 +21,13 @@ const meta: Meta<StatCardsComponent> = {
 export default meta;
 type Story = StoryObj<StatCardsComponent>;
 
+const icon = 'explorers-assets/icons/people.svg';
+
 const fourCards = [
-  { value: '1,234', label: 'Total QTLs' },
-  { value: '42', label: 'Studies' },
-  { value: '8.6M', label: 'Variant–gene associations' },
-  { value: '53', label: 'Tissues covered' },
+  { iconPath: icon, header: 'Total QTLs', subHeader: 'across 53 tissues' },
+  { iconPath: icon, header: 'Studies', subHeader: 'AD cohorts' },
+  { iconPath: icon, header: 'Variant–gene associations' },
+  { iconPath: icon, header: 'Tissues covered' },
 ];
 
 export const FourCards: Story = {
@@ -36,7 +38,18 @@ export const FourCards: Story = {
 
 export const SingleCard: Story = {
   args: {
-    cards: [{ value: '1,234', label: 'Total QTLs' }],
+    cards: [{ iconPath: icon, header: 'Total QTLs', subHeader: 'across 53 tissues' }],
+  },
+};
+
+export const SevenCards: Story = {
+  args: {
+    cards: [
+      ...fourCards,
+      { iconPath: icon, header: 'Cohorts' },
+      { iconPath: icon, header: 'Data types' },
+      { iconPath: icon, header: 'Genes' },
+    ],
   },
 };
 
@@ -44,10 +57,10 @@ export const EightCards: Story = {
   args: {
     cards: [
       ...fourCards,
-      { value: '120', label: 'Cohorts' },
-      { value: '7', label: 'Data types' },
-      { value: '3.2k', label: 'Genes' },
-      { value: '99.9%', label: 'QC pass rate' },
+      { iconPath: icon, header: 'Cohorts' },
+      { iconPath: icon, header: 'Data types' },
+      { iconPath: icon, header: 'Genes' },
+      { iconPath: icon, header: 'QC pass rate' },
     ],
   },
 };

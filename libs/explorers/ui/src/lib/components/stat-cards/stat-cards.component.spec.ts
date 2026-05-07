@@ -2,6 +2,8 @@ import { StatCardData } from '@sagebionetworks/explorers/models';
 import { render, screen } from '@testing-library/angular';
 import { StatCardsComponent } from './stat-cards.component';
 
+const icon = '/path/to/icon.svg';
+
 async function setup(cards: StatCardData[]) {
   return render(StatCardsComponent, {
     componentInputs: {
@@ -13,9 +15,9 @@ async function setup(cards: StatCardData[]) {
 describe('StatCardsComponent', () => {
   it('should render one stat card for each item in cards', async () => {
     const cards: StatCardData[] = [
-      { value: '1', label: 'Card 1' },
-      { value: '2', label: 'Card 2' },
-      { value: '3', label: 'Card 3' },
+      { iconPath: icon, header: 'Card 1' },
+      { iconPath: icon, header: 'Card 2' },
+      { iconPath: icon, header: 'Card 3' },
     ];
     await setup(cards);
 
@@ -24,15 +26,27 @@ describe('StatCardsComponent', () => {
     expect(screen.getByText('Card 3')).toBeInTheDocument();
   });
 
-  it('should render the value of each card', async () => {
+  it('should render sub-headers when provided', async () => {
     const cards: StatCardData[] = [
-      { value: '1,234', label: 'Total QTLs' },
-      { value: '42', label: 'Studies' },
+      { iconPath: icon, header: 'Total QTLs', subHeader: 'across 53 tissues' },
+      { iconPath: icon, header: 'Studies' },
     ];
     await setup(cards);
 
-    expect(screen.getByText('1,234')).toBeInTheDocument();
-    expect(screen.getByText('42')).toBeInTheDocument();
+    expect(screen.getByText('across 53 tissues')).toBeInTheDocument();
+  });
+
+  it('should expose --stat-card-count on the host element matching the card count', async () => {
+    await setup([
+      { iconPath: icon, header: 'a' },
+      { iconPath: icon, header: 'b' },
+      { iconPath: icon, header: 'c' },
+      { iconPath: icon, header: 'd' },
+      { iconPath: icon, header: 'e' },
+    ]);
+    const grid = document.querySelector('.stat-cards') as HTMLElement;
+    const host = grid.parentElement as HTMLElement;
+    expect(host.style.getPropertyValue('--stat-card-count')).toBe('5');
   });
 
   it('should handle empty cards array gracefully', async () => {

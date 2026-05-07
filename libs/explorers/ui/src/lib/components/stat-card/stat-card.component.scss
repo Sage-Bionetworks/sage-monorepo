@@ -1,7 +1,9 @@
 .stat-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   background-color: white;
   box-sizing: border-box;
   border: 1px solid var(--color-border);
@@ -11,19 +13,25 @@
 }
 
 .stat-card-icon {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+
+  img {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+  }
 }
 
-.stat-card-value {
-  font-size: 36px;
+.stat-card-header {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
   font-weight: 700;
-  line-height: 40px;
-  color: var(--color-heading);
-  margin-bottom: 8px;
+  color: var(--color-text);
 }
 
-.stat-card-label {
+.stat-card-sub-header {
   font-size: var(--font-size-sm);
   line-height: var(--line-height-sm);
   color: var(--color-text-secondary);
+  margin-top: 4px;
 }

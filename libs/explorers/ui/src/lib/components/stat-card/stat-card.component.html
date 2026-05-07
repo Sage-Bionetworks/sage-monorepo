@@ -1,9 +1,9 @@
 <div class="stat-card">
-  @if (iconPath(); as path) {
-    <div class="stat-card-icon">
-      <explorers-svg-image [imagePath]="path" [altText]="iconAltText()" />
-    </div>
+  <div class="stat-card-icon">
+    <explorers-svg-image [imagePath]="iconPath()" [altText]="iconAltText()" />
+  </div>
+  <div class="stat-card-header">{{ header() }}</div>
+  @if (subHeader(); as sub) {
+    <div class="stat-card-sub-header">{{ sub }}</div>
   }
-  <div class="stat-card-value">{{ value() }}</div>
-  <div class="stat-card-label">{{ label() }}</div>
 </div>

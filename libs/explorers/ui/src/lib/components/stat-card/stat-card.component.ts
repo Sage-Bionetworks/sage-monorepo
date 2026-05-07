@@ -8,8 +8,8 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
   styleUrls: ['./stat-card.component.scss'],
 })
 export class StatCardComponent {
-  value = input.required<string>();
-  label = input.required<string>();
-  iconPath = input<string | undefined>();
+  iconPath = input.required<string>();
+  header = input.required<string>();
+  subHeader = input<string | undefined>();
   iconAltText = input<string>('');
 }
