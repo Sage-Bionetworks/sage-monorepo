@@ -28,13 +28,13 @@ beb5b1db-90d5-4034-877f-56ab70fb086f
 
 ## Always read related context
 
-A single ticket rarely tells the whole story. When fetching a ticket for any non-trivial purpose (PR descriptions, reviews, planning, status reports), also resolve:
+A single ticket rarely tells the whole story. When fetching a ticket, also resolve:
 
 - **Sub-tasks** — child issues that decompose the work.
 - **Linked issues** — every link, regardless of type.
 - **Parent / epic** — the story or epic the ticket rolls up to, plus that parent's own description and acceptance criteria.
 
-This is what lets a skill speak to _why_ a change exists, not just _what_ changed. Use `searchJiraIssuesUsingJql` (e.g. `parent = SMR-772` or `issue in linkedIssues("SMR-772")`) to pull these in one call rather than chasing them serially.
+This is what lets a skill speak to _why_ a change exists, not just _what_ changed. Use `searchJiraIssuesUsingJql` (e.g. `parent = SMR-772` or `issue in linkedIssues("SMR-772")`) to pull these in one call rather than chasing them serially. Skip the related-context fetch only if the user explicitly asks for the single ticket alone (e.g. "just AG-2010", "only this ticket").
 
 ## Common tools
 
