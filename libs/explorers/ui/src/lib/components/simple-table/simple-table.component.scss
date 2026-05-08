@@ -7,7 +7,6 @@
 
   th,
   td {
-    padding: 8px 12px;
     text-align: left;
     vertical-align: middle;
   }
@@ -16,6 +15,7 @@
     font-size: 14px;
     line-height: 18px;
     font-weight: 600;
+    padding-bottom: 8px;
     border-bottom: 1px solid var(--simple-table-color-border-divider, #eaecee);
   }
 
@@ -24,16 +24,18 @@
     line-height: var(--simple-table-line-height, 20px);
   }
 
+  tbody tr + tr td {
+    padding-top: var(--simple-table-row-padding, 8px);
+  }
+
   &.fixed-gap {
     width: auto;
     border-collapse: separate;
     border-spacing: var(--simple-table-column-gap) 0;
+  }
 
-    th,
-    td {
-      padding-left: 0;
-      padding-right: 0;
-    }
+  thead + tbody tr:first-child td {
+    padding-top: 16px;
   }
 
   .align-left {
@@ -49,9 +51,13 @@
   }
 
   .dotted-underline {
-    text-decoration: underline dotted var(--simple-table-tooltip-underline-color, #469da0) 16%;
+    text-decoration: underline dotted currentcolor 16%;
     text-decoration-skip-ink: none;
     text-underline-offset: 19%;
+
+    &:hover {
+      text-decoration-color: var(--simple-table-tooltip-underline-color, #469da0);
+    }
   }
 
   .cell-label {

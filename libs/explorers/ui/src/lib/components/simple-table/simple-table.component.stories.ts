@@ -27,7 +27,7 @@ export const WithHeader: Story = {
       { name: 'TWAS' },
       {
         name: 'Z-Score',
-        tooltip: 'From transcriptome-wide association study.',
+        tooltip: 'More negative is better',
         align: 'right',
       },
     ],
@@ -101,7 +101,7 @@ export const WithImages: Story = {
   render: (args) => ({
     props: args,
     template: `
-      <div style="--simple-table-font-size: 14px; --simple-table-line-height: 17px; --simple-table-text-color: #4A5056;">
+      <div style="--simple-table-font-size: 14px; --simple-table-line-height: 17px; --simple-table-text-color: #4A5056; --simple-table-row-padding: 16px;">
         <explorers-simple-table [rows]="rows" [columnGap]="columnGap" />
       </div>
     `,
@@ -137,7 +137,7 @@ export const WithoutHeader: Story = {
   render: (args) => ({
     props: args,
     template: `
-      <div style="--simple-table-font-size: 14px; --simple-table-line-height: 17px; --simple-table-text-color: #4A5056;">
+      <div style="--simple-table-font-size: 14px; --simple-table-line-height: 17px; --simple-table-text-color: #4A5056; --simple-table-row-padding: 12px;">
         <explorers-simple-table [rows]="rows" />
       </div>
     `,
