@@ -62,7 +62,6 @@ export const WithImages: Story = {
           kind: 'image',
           src: 'qtl-assets/images/agora-logomark-only.svg',
           alt: 'Agora icon',
-          height: 32,
         },
         {
           kind: 'link',
@@ -76,7 +75,6 @@ export const WithImages: Story = {
           kind: 'image',
           src: 'qtl-assets/images/ucsc-genome-browser-logo.svg',
           alt: 'UCSC icon',
-          height: 32,
         },
         {
           kind: 'link',
@@ -90,7 +88,6 @@ export const WithImages: Story = {
           kind: 'image',
           src: 'qtl-assets/images/czi-logo.svg',
           alt: 'CZI icon',
-          height: 32,
         },
         {
           kind: 'link',
@@ -160,7 +157,6 @@ export const Combined: Story = {
           kind: 'image',
           src: 'explorers-assets/images/gene-comparison-icon.svg',
           alt: 'Agora icon',
-          height: 24,
         },
         { kind: 'link', text: 'View on Agora', url: '/agora' },
         { kind: 'text', value: 0.98 },
@@ -175,7 +171,6 @@ export const Combined: Story = {
           kind: 'image',
           src: 'explorers-assets/images/gene-search-icon.svg',
           alt: 'UCSC icon',
-          height: 24,
         },
         {
           kind: 'link',

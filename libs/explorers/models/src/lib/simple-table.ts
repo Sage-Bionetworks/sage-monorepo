@@ -25,8 +25,6 @@ export interface SimpleTableImageCell {
   kind: 'image';
   src: string;
   alt: string;
-  height?: number;
-  width?: number;
 }
 
 export type SimpleTableCell =
