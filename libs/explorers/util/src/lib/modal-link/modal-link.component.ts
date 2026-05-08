@@ -19,7 +19,6 @@ export class ModalLinkComponent {
   wikiParams = input.required<SynapseWikiParams>();
   iconWidth = input(14);
   iconHeight = input(14);
-  enableHoverEffects = input(false);
   isActive = false;
   hasActivated = false;
 
