@@ -38,7 +38,6 @@ ol {
           user-select: none;
 }
 
-/* stylelint-disable no-duplicate-selectors */
 :root {
   --color-primary: #3c4a63;
   --color-secondary: #8b8ad1;
@@ -58,9 +57,6 @@ ol {
   --color-gray-300: #eaecee;
   --color-gray-200: #f1f3f5;
   --color-gray-100: #fbfbfc;
-}
-
-:root {
   --color-heading: #3c4a63;
   --color-text: #353a3f;
   --color-text-secondary: #4a5056;
@@ -69,9 +65,6 @@ ol {
   --color-separator: #eaecee;
   --color-shadow: #c7c5c5;
   --color-tooltip: #63676c;
-}
-
-:root {
   --font-size-h1: 28px;
   --font-weight-h1: 700;
   --line-height-h1: 32px;
@@ -102,36 +95,15 @@ ol {
   --line-height-xl: 26px;
   --font-size-xxl: 22px;
   --line-height-xxl: 30px;
-}
-
-:root {
   --main-content-desktop-width: 925px;
   --main-content-margin: 20px;
   --main-content-total-width: 965px;
-}
-
-:root {
   --section-max-width: 1120px;
   --section-padding: 40px;
-}
-
-:root {
   --transition-duration: 0.08s;
-}
-
-:root {
   --header-height: 84px;
-}
-
-:root {
   --panel-nav-height: 80px;
-}
-
-:root {
   --comparison-tool-primary-column-width: 300px;
-}
-
-:root {
   --footer-height: 84px;
 }
 
@@ -565,16 +537,12 @@ template {
   display: none;
 }
 
-/* stylelint-disable no-duplicate-selectors */
 :root {
   --spacing-xs: 5px;
   --spacing-sm: 10px;
   --spacing-md: 15px;
   --spacing-lg: 25px;
   --spacing-xl: 50px;
-}
-
-:root {
   --color-primary: #3c4a63;
   --color-secondary: #8b8ad1;
   --color-tertiary: #42c7bb;
@@ -601,9 +569,6 @@ template {
   --color-separator: #eaecee;
   --color-shadow: #c7c5c5;
   --color-tooltip: #63676c;
-}
-
-:root {
   --font-size-h1: 1.75rem;
   --font-weight-h1: 700;
   --line-height-h1: 2rem;
@@ -634,33 +599,15 @@ template {
   --line-height-xl: 1.625rem;
   --font-size-xxl: 1.375rem;
   --line-height-xxl: 1.875rem;
-}
-
-:root {
   --container-max-width-sm: 925px;
   --container-max-width-md: 1440px;
   --container-max-width-lg: 1920px;
   --container-gutter-width: 30px;
-}
-
-:root {
   --transition-duration: 0.08s;
-}
-
-:root {
   --header-height: 86px;
-}
-
-:root {
   --footer-height: 71px;
-}
-
-:root {
   --gene-details-nav-height: 80px;
   --gene-details-subnav-offset: -19px;
-}
-
-:root {
   --color-chart-axis: #989898;
   --color-chart-axis-label: #000;
   --color-chart-axis-tick: #989898;
