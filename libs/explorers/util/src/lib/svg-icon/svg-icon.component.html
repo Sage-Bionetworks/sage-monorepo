@@ -1,16 +1,9 @@
 <div
-  class="svg-icon-wrapper"
-  [class.has-bg]="!!backgroundColor()"
-  [class.circle]="!!backgroundColor() && backgroundShape() === 'circle'"
-  [class.square]="!!backgroundColor() && backgroundShape() === 'square'"
-  [style.background-color]="backgroundColor()"
-  [style.padding.px]="backgroundColor() ? backgroundPadding() : 0"
->
-  <div
-    [ngClass]="className()"
-    [style.width.px]="width()"
-    [style.height.px]="height()"
-    [style.color]="color()"
-    [innerHTML]="svgContent()"
-  ></div>
-</div>
+  [ngClass]="className()"
+  [style.width.px]="width()"
+  [style.height.px]="height()"
+  [style.color]="color()"
+  [innerHTML]="svgContent"
+  [attr.role]="altText() ? 'img' : null"
+  [attr.aria-label]="altText() || null"
+></div>

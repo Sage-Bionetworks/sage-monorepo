@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { SafeHtml } from '@angular/platform-browser';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
-import { render, RenderResult } from '@testing-library/angular';
+import { render } from '@testing-library/angular';
 import { of } from 'rxjs';
 import { SvgIconComponent } from './svg-icon.component';
 
@@ -30,74 +30,33 @@ describe('SvgIconComponent', () => {
     });
 
     expect(mockService.getSvg).toHaveBeenCalledWith(dummyPath);
-    expect(result.fixture.componentInstance.svgContent()).toBe(sanitizedSvg);
+    expect(result.fixture.componentInstance.svgContent).toBe(sanitizedSvg);
   });
 
-  describe('background tile', () => {
-    let renderResult: RenderResult<SvgIconComponent>;
-
-    beforeEach(async () => {
-      renderResult = await render(SvgIconComponent, {
-        componentInputs: { imagePath: dummyPath },
+  describe('accessibility', () => {
+    async function renderWithAltText(altText: string) {
+      return render(SvgIconComponent, {
+        componentInputs: { imagePath: dummyPath, altText },
         providers: [provideHttpClient(), { provide: SvgIconService, useClass: MockSvgIconService }],
       });
-    });
-
-    function getWrapper(): HTMLElement {
-      return renderResult.container.querySelector('.svg-icon-wrapper') as HTMLElement;
     }
 
-    it('should not apply background when backgroundColor is unset', () => {
-      const wrapper = getWrapper();
-      expect(wrapper.classList.contains('has-bg')).toBe(false);
-      expect(wrapper.style.backgroundColor).toBe('');
-      expect(wrapper.style.padding).toBe('0px');
+    function getIconElement(container: Element): HTMLElement {
+      return container.querySelector('.svg-icon, .svg-icon-no-hover') as HTMLElement;
+    }
+
+    it('should expose altText as an aria-label with role="img"', async () => {
+      const result = await renderWithAltText('info');
+      const icon = getIconElement(result.container);
+      expect(icon.getAttribute('role')).toBe('img');
+      expect(icon.getAttribute('aria-label')).toBe('info');
     });
 
-    it('should apply has-bg class and inline background-color when backgroundColor is set', () => {
-      renderResult.fixture.componentRef.setInput('backgroundColor', 'rgb(255, 0, 0)');
-      renderResult.fixture.detectChanges();
-      const wrapper = getWrapper();
-      expect(wrapper.classList.contains('has-bg')).toBe(true);
-      expect(wrapper.style.backgroundColor).toBe('rgb(255, 0, 0)');
-    });
-
-    it('should not apply circle or square classes when backgroundColor is unset', () => {
-      const wrapper = getWrapper();
-      expect(wrapper.classList.contains('circle')).toBe(false);
-      expect(wrapper.classList.contains('square')).toBe(false);
-    });
-
-    it('should apply the circle class by default when backgroundColor is set', () => {
-      renderResult.fixture.componentRef.setInput('backgroundColor', 'rgb(0, 0, 0)');
-      renderResult.fixture.detectChanges();
-      const wrapper = getWrapper();
-      expect(wrapper.classList.contains('circle')).toBe(true);
-      expect(wrapper.classList.contains('square')).toBe(false);
-    });
-
-    it('should apply the square class when backgroundShape is "square" and backgroundColor is set', () => {
-      renderResult.fixture.componentRef.setInput('backgroundColor', 'rgb(0, 0, 0)');
-      renderResult.fixture.componentRef.setInput('backgroundShape', 'square');
-      renderResult.fixture.detectChanges();
-      const wrapper = getWrapper();
-      expect(wrapper.classList.contains('square')).toBe(true);
-      expect(wrapper.classList.contains('circle')).toBe(false);
-    });
-
-    it('should apply backgroundPadding when backgroundColor is set', () => {
-      renderResult.fixture.componentRef.setInput('backgroundColor', 'rgb(0, 128, 0)');
-      renderResult.fixture.componentRef.setInput('backgroundPadding', 12);
-      renderResult.fixture.detectChanges();
-      const wrapper = getWrapper();
-      expect(wrapper.style.padding).toBe('12px');
-    });
-
-    it('should keep padding at 0 when backgroundColor is unset, even with non-zero backgroundPadding', () => {
-      renderResult.fixture.componentRef.setInput('backgroundPadding', 16);
-      renderResult.fixture.detectChanges();
-      const wrapper = getWrapper();
-      expect(wrapper.style.padding).toBe('0px');
+    it('should omit role and aria-label when altText is empty (decorative)', async () => {
+      const result = await renderWithAltText('');
+      const icon = getIconElement(result.container);
+      expect(icon.getAttribute('role')).toBeNull();
+      expect(icon.getAttribute('aria-label')).toBeNull();
     });
   });
 });

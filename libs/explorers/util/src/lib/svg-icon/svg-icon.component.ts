@@ -1,16 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import {
-  Component,
-  computed,
-  effect,
-  inject,
-  input,
-  signal,
-  ViewEncapsulation,
-} from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { SvgIconBackgroundShape } from '@sagebionetworks/explorers/models';
+import { Component, computed, inject, input, OnInit, ViewEncapsulation } from '@angular/core';
+import { SafeHtml } from '@angular/platform-browser';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 
 @Component({
@@ -20,35 +10,26 @@ import { SvgIconService } from '@sagebionetworks/explorers/services';
   styleUrls: ['./svg-icon.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SvgIconComponent {
+export class SvgIconComponent implements OnInit {
   imagePath = input.required<string>();
   altText = input('');
   width = input(14);
   height = input(14);
   color = input('inherit');
-  enableHoverEffects = input(true);
-  backgroundColor = input<string | undefined>();
-  backgroundShape = input<SvgIconBackgroundShape>('circle');
-  backgroundPadding = input(8);
+  enableHoverEffects = input(false);
 
-  http = inject(HttpClient);
-  sanitizer = inject(DomSanitizer);
-  svgService = inject(SvgIconService);
+  private readonly svgService = inject(SvgIconService);
 
-  svgContent = signal<SafeHtml | null>(null);
+  svgContent: SafeHtml | null = null;
 
   className = computed(() => (this.enableHoverEffects() ? 'svg-icon' : 'svg-icon-no-hover'));
 
-  constructor() {
-    effect(() => {
-      const path = this.imagePath();
-      if (!path) return;
-      this.svgService.getSvg(path).subscribe({
-        next: (svg) => this.svgContent.set(svg),
-        error: () => {
-          // Handled by httpErrorInterceptor
-        },
-      });
+  ngOnInit() {
+    this.svgService.getSvg(this.imagePath()).subscribe({
+      next: (svg) => (this.svgContent = svg),
+      error: () => {
+        // Handled by httpErrorInterceptor
+      },
     });
   }
 }
