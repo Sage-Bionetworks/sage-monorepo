@@ -5,17 +5,16 @@ paths:
 
 # Jira / Atlassian MCP
 
-Jira ticket lookups are powered by the official Atlassian plugin (`atlassian@claude-plugins-official`), enabled project-wide via `.claude/settings.json`. Tools are exposed under `mcp__plugin_atlassian_atlassian__*`.
+Jira ticket lookups are powered by the official Atlassian remote MCP server, configured project-wide in [`.mcp.json`](../../.mcp.json) at the repo root. Tools are exposed under `mcp__atlassian__*`.
 
 ## First-time setup
 
-The plugin auto-installs/enables when the repo is opened in Claude Code, but each developer must authenticate once:
+The MCP server loads automatically when the repo is opened, but each developer does two one-time things:
 
-1. Run `/plugin` and click `atlassian`.
-2. A browser window opens — complete the Atlassian OAuth flow.
-3. The token caches in `~/.claude/`, which the devcontainer symlinks to `${workspaceFolder}/.claude-user/`, so auth survives container rebuilds.
+1. **Approve the project MCP** — on first open, Claude Code prompts you to allow the project's `.mcp.json`. Approve it.
+2. **Authenticate** — call any atlassian tool (or run `/mcp` and select atlassian) and complete the Atlassian OAuth flow in the browser. The token caches in `~/.claude/`, which the devcontainer symlinks to `${workspaceFolder}/.claude-user/`, so auth survives container rebuilds.
 
-If a tool call returns an auth error later, re-run `/plugin` to re-authenticate. Do not fall back to scraping or guessing ticket contents.
+If a tool call returns an auth error later, re-run `/mcp` to re-authenticate. Do not fall back to scraping or guessing ticket contents.
 
 ## Cloud ID
 
@@ -25,7 +24,7 @@ All Atlassian tools require a `cloudId`, which is a UUID — **not** a site URL.
 beb5b1db-90d5-4034-877f-56ab70fb086f
 ```
 
-(Site: `sagebionetworks.jira.com`.) If the value drifts, call `mcp__plugin_atlassian_atlassian__getAccessibleAtlassianResources` (no params) to look it up. Passing the URL as `cloudId` returns 404.
+(Site: `sagebionetworks.jira.com`.) If the value drifts, call `mcp__atlassian__getAccessibleAtlassianResources` (no params) to look it up. Passing the URL as `cloudId` returns 404.
 
 ## Always read related context
 
@@ -43,14 +42,14 @@ Always pass `responseContentFormat: "markdown"` for readable output.
 
 ```
 # Fetch a single issue
-mcp__plugin_atlassian_atlassian__getJiraIssue(
+mcp__atlassian__getJiraIssue(
   cloudId="beb5b1db-90d5-4034-877f-56ab70fb086f",
   issueIdOrKey="SMR-772",
   responseContentFormat="markdown"
 )
 
 # Search with JQL (e.g. all sub-tasks of an epic)
-mcp__plugin_atlassian_atlassian__searchJiraIssuesUsingJql(
+mcp__atlassian__searchJiraIssuesUsingJql(
   cloudId="beb5b1db-90d5-4034-877f-56ab70fb086f",
   jql="parent = AG-1925",
   responseContentFormat="markdown"
