@@ -4,9 +4,6 @@
   [style.color]="textColor()"
 >
   <span class="chiclet-label unselectable-text" [style.font-size]="fontSize()">
-    @if (label()) {
-      <span [innerHTML]="label()"></span>
-    }
     <ng-content />
   </span>
   @if (removable()) {

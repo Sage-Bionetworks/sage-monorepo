@@ -5,7 +5,6 @@ import {
   SvgIconService,
 } from '@sagebionetworks/explorers/services';
 import {
-  getChicletRemoveButton,
   mockComparisonToolFiltersWithSelections,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
@@ -47,7 +46,7 @@ describe('Component: Comparison Tool - Filter List', () => {
     const significanceThreshold = screen.getByText('Significance ≤ 0.05');
     expect(significanceThreshold).toBeVisible();
 
-    await user.click(getChicletRemoveButton('Significance ≤ 0.05'));
+    await user.click(screen.getByRole('button', { name: 'Clear Significance ≤ 0.05' }));
 
     expect(significanceThreshold).not.toBeVisible();
   });
@@ -59,7 +58,7 @@ describe('Component: Comparison Tool - Filter List', () => {
     const filter = screen.getByText(filterLabel, { exact: false });
     expect(filter).toBeVisible();
 
-    await user.click(getChicletRemoveButton(filterLabel));
+    await user.click(screen.getByRole('button', { name: `Clear ${filterLabel}` }));
 
     expect(filter).not.toBeVisible();
   });

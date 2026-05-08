@@ -14,19 +14,21 @@
         </button>
       </div>
       <div>
-        <explorers-comparison-tool-filter-list-item
-          [description]="'Significance &leq; ' + significanceThreshold"
-          [(isVisible)]="significanceThresholdActive"
-          (clearEvent)="removeSignificanceThresholdFilter()"
-        ></explorers-comparison-tool-filter-list-item>
-        @for (filter of filters; track filter; let i = $index) {
-          @for (option of filter.options; track option; let j = $index) {
-            <explorers-comparison-tool-filter-list-item
-              [title]="filter.short || ''"
-              [description]="option.label"
-              [isVisible]="option.selected || false"
-              (clearEvent)="clearSelectedFilters(option)"
-            ></explorers-comparison-tool-filter-list-item>
+        @if (significanceThresholdActive) {
+          <explorers-filter-chiclet
+            [value]="'Significance &leq; ' + significanceThreshold"
+            (cleared)="removeSignificanceThresholdFilter()"
+          ></explorers-filter-chiclet>
+        }
+        @for (filter of filters; track $index) {
+          @for (option of filter.options; track $index) {
+            @if (option.selected) {
+              <explorers-filter-chiclet
+                [name]="filter.short || ''"
+                [value]="option.label"
+                (cleared)="clearSelectedFilters(option)"
+              ></explorers-filter-chiclet>
+            }
           }
         }
       </div>

@@ -1,12 +1,10 @@
 <div class="chiclet-card">
   <h2>{{ title() }}</h2>
   <div class="chiclets">
-    @for (chiclet of chiclets(); track chiclet.label) {
-      <explorers-chiclet
-        [label]="chiclet.label"
-        [backgroundColor]="chiclet.color"
-        textColor="white"
-      />
+    @for (chiclet of chiclets(); track $index) {
+      <explorers-chiclet [backgroundColor]="chiclet.backgroundColor" textColor="white">
+        {{ chiclet.text }}
+      </explorers-chiclet>
     }
   </div>
 </div>

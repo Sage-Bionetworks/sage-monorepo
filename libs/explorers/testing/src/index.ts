@@ -2,7 +2,6 @@
 export * from './lib/constants';
 export * from './lib/mocks';
 export * from './lib/providers';
-export * from './lib/queries';
 
 // If you need MSW functionality, import it explicitly from:
 // import { server } from '@sagebionetworks/explorers/testing/msw';

@@ -1,4 +1,4 @@
 export interface Chiclet {
-  label: string;
-  color: string;
+  text: string;
+  backgroundColor: string;
 }

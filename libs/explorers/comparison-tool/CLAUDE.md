@@ -27,8 +27,7 @@ Coverage is output to `coverage/libs/explorers/comparison-tool`.
 - `ComparisonToolControlsComponent` — search input, category selectors, column selector, significance threshold, displayed-results count
 - `ComparisonToolTableComponent` — renders two `BaseTableComponent` instances (pinned rows + unpinned rows), each backed by PrimeNG table
 - `ComparisonToolFilterPanelComponent` — slide-in side panel for advanced filtering
-- `ComparisonToolFilterListComponent` — active filter chips/badges
-  - `ComparisonToolFilterListItemComponent` — single removable filter chip (also a public export)
+- `ComparisonToolFilterListComponent` — active filter chips/badges (each chip is rendered via the shared `FilterChicletComponent` from `@sagebionetworks/explorers/ui`)
 - `HeatmapDetailsPanelComponent` — modal showing detailed heatmap cell info
 - `ComparisonToolFooterComponent` — paginator and help links
   - `HelpLinksComponent` — legend panel and visualization overview panel (also a public export)
@@ -64,7 +63,6 @@ The barrel re-exports the root component plus any sub-component with a legitimat
 
 ```typescript
 export * from './lib/comparison-tool.component';
-export { ComparisonToolFilterListItemComponent } from './lib/comparison-tool-filter-list/comparison-tool-filter-list-item/comparison-tool-filter-list-item.component';
 export { HelpLinksComponent } from './lib/help-links/help-links.component';
 ```
 

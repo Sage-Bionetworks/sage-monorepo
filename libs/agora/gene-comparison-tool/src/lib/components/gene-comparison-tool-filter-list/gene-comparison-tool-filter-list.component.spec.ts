@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { gctFiltersMocks } from '@sagebionetworks/agora/testing';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
-import { getChicletRemoveButton, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
+import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { GeneComparisonToolFilterListComponent } from './gene-comparison-tool-filter-list.component';
@@ -34,7 +34,7 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
     const significanceThreshold = screen.getByText('Significance ≤ 0.05');
     expect(significanceThreshold).toBeVisible();
 
-    await user.click(getChicletRemoveButton('Significance ≤ 0.05'));
+    await user.click(screen.getByRole('button', { name: 'Clear Significance ≤ 0.05' }));
 
     expect(significanceThreshold).not.toBeVisible();
   });
@@ -46,7 +46,7 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
     const filter = screen.getByText(filterLabel, { exact: false });
     expect(filter).toBeVisible();
 
-    await user.click(getChicletRemoveButton(filterLabel));
+    await user.click(screen.getByRole('button', { name: `Clear ${filterLabel}` }));
 
     expect(filter).not.toBeVisible();
   });
