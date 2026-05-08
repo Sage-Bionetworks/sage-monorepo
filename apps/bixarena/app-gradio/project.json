@@ -1,0 +1,41 @@
+{
+  "name": "bixarena-app-gradio",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/bixarena/app-gradio/bixarena_app",
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "show-packages": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv pip list",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run bixarena-app-dev",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "{projectRoot}/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      },
+      "cache": true
+    }
+  },
+  "tags": ["type:app", "scope:backend", "language:python", "package-manager:uv"]
+}

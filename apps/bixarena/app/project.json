@@ -2,7 +2,10 @@
   "name": "bixarena-app",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/bixarena/app/bixarena_app",
+  "prefix": "app",
+  "sourceRoot": "apps/bixarena/app/src",
+  "tags": ["scope:bixarena", "language:typescript"],
+  "implicitDependencies": ["shared-typescript-assets"],
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",
@@ -11,43 +14,129 @@
         "cwd": "{projectRoot}"
       }
     },
-    "show-packages": {
-      "executor": "nx:run-commands",
+    "build": {
+      "executor": "@nx/angular:application",
+      "outputs": ["{options.outputPath}"],
       "options": {
-        "command": "uv pip list",
-        "cwd": "{projectRoot}"
-      }
+        "outputPath": "dist/apps/bixarena/app",
+        "index": "apps/bixarena/app/src/index.html",
+        "browser": "apps/bixarena/app/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/bixarena/app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs"]
+        },
+        "assets": [
+          "apps/bixarena/app/src/assets",
+          {
+            "input": "apps/bixarena/app/src/config",
+            "glob": "**/*.yaml",
+            "output": "config"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/bixarena/app/public"
+          }
+        ],
+        "styles": ["apps/bixarena/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
+        "server": "apps/bixarena/app/src/main.server.ts",
+        "prerender": false,
+        "ssr": {
+          "entry": "apps/bixarena/app/server.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "1mb",
+              "maximumError": "1.5mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "6kb",
+              "maximumError": "12kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/angular:dev-server",
       "options": {
-        "command": "uv run bixarena-app-dev",
-        "cwd": "{projectRoot}"
+        "host": "0.0.0.0"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "bixarena-app:build:production"
+        },
+        "development": {
+          "buildTarget": "bixarena-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
+    },
+    "extract-i18n": {
+      "executor": "@nx/angular:extract-i18n",
+      "options": {
+        "buildTarget": "bixarena-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/bixarena/app/jest.config.ts",
+        "tsConfig": "apps/bixarena/app/tsconfig.spec.json"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "bixarena-app:build",
+        "staticFilePath": "dist/apps/bixarena/app/browser",
+        "spa": true
       }
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/bixarena/serve-detach.sh {projectName}"
-      }
+        "command": "docker/bixarena/serve-detach.sh bixarena-app"
+      },
+      "dependsOn": []
     },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "trivy image ghcr.io/sage-bionetworks/{projectName}:local --quiet",
+        "command": "trivy image ghcr.io/sage-bionetworks/bixarena-app:local --quiet",
         "color": true
       }
     },
-    "build": {
-      "executor": "@nxlv/python:build",
-      "outputs": ["{projectRoot}/dist"],
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "outputs": ["{workspaceRoot}/dist/.playwright/{projectRoot}"],
       "options": {
-        "outputPath": "{projectRoot}/dist",
-        "publish": false,
-        "lockedVersions": true,
-        "bundleLocalDependencies": true
-      },
-      "cache": true
+        "config": "{projectRoot}/playwright.config.ts"
+      }
     },
     "export-image-tarball": {
       "executor": "nx:run-commands",
@@ -56,6 +145,5 @@
       },
       "dependsOn": ["build-image"]
     }
-  },
-  "tags": ["type:app", "scope:backend", "language:python", "package-manager:uv"]
+  }
 }

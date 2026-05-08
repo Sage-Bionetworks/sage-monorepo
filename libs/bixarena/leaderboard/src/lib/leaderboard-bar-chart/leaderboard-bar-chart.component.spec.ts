@@ -67,14 +67,14 @@ describe('LeaderboardBarChartComponent', () => {
     expect(bars[1].heightPct).toBeLessThan(100);
   });
 
-  it('uses brand gradient for top three and silver gradient for the rest', () => {
+  it('uses podium gradient for top three and rest gradient for the others', () => {
     fixture.componentRef.setInput('entries', buildEntries(5));
     fixture.detectChanges();
     const bars = fixture.componentInstance.bars();
-    expect(bars[0].barGradient).toContain('--p-primary-300');
-    expect(bars[2].barGradient).toContain('--p-primary-500');
-    expect(bars[3].barGradient).toContain('--p-slate-300');
-    expect(bars[4].barGradient).toContain('--p-slate-500');
+    expect(bars[0].barGradient).toContain('--bar-podium-from');
+    expect(bars[2].barGradient).toContain('--bar-podium-to');
+    expect(bars[3].barGradient).toContain('--bar-rest-from');
+    expect(bars[4].barGradient).toContain('--bar-rest-to');
   });
 
   it('exposes rank, model name, and score via aria-label', () => {

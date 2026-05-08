@@ -3497,6 +3497,34 @@
         }
       }
     },
+    "/repo/v1/thread/submission/{submissionId}": {
+      "get": {
+        "tags": ["Discussion Services"],
+        "operationId": "get-/repo/v1/thread/submission/{submissionId}",
+        "parameters": [
+          {
+            "name": "submissionId",
+            "in": "path",
+            "required": true,
+            "description": "- The ID of the submission.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.discussion.DiscussionThreadBundle"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/repo/v1/download/list/add": {
       "post": {
         "tags": ["Download List Services"],
@@ -7171,6 +7199,34 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/org.sagebionetworks.repo.model.dataaccess.UserSubmissionSearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/dataAccessSubmission/thread/{threadId}": {
+      "get": {
+        "tags": ["Data Access Services"],
+        "operationId": "get-/repo/v1/dataAccessSubmission/thread/{threadId}",
+        "parameters": [
+          {
+            "name": "threadId",
+            "in": "path",
+            "required": true,
+            "description": "- The ID of the thread.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.dataaccess.Submission"
                 }
               }
             }
@@ -11537,6 +11593,34 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/org.sagebionetworks.repo.model.dataaccess.AccessRequirementSearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/accessRequirement/{requirementId}/permissions": {
+      "get": {
+        "tags": ["Access Requirement Services"],
+        "operationId": "get-/repo/v1/accessRequirement/{requirementId}/permissions",
+        "parameters": [
+          {
+            "name": "requirementId",
+            "in": "path",
+            "required": true,
+            "description": "- The ID of the access requirement.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.dataaccess.AccessRequirementPermissions"
                 }
               }
             }
@@ -41519,6 +41603,16 @@
         },
         "description": "Request to create a new snapshot of a table or view.  The provided comment, label, and activity ID will be applied to the current version thereby creating a snapshot and locking the current version.  After the snapshot is created a new version will be started with an 'in-progress' label."
       },
+      "org.sagebionetworks.repo.model.dataaccess.AccessRequirementPermissions": {
+        "type": "object",
+        "properties": {
+          "canReviewSubmissions": {
+            "type": "boolean",
+            "description": "Can the user review submissions for this access requirement."
+          }
+        },
+        "description": "The permissions a user has on an access requirement."
+      },
       "org.sagebionetworks.repo.model.file.MultipartUploadState": {
         "type": "string",
         "enum": ["UPLOADING", "COMPLETED"]
@@ -45775,7 +45869,7 @@
           },
           "failureCode": {
             "type": "string",
-            "description": "Failure code for a files that cannot be downloaded.",
+            "description": "Failure code for files that cannot be downloaded.",
             "enum": ["NOT_FOUND", "UNAUTHORIZED"]
           }
         },

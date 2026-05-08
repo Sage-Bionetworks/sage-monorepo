@@ -202,8 +202,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Void> login() {
-    // Generate state & nonce (TODO: persist securely in session)
+  public ResponseEntity<Void> login(String returnTo) {
     String state = java.util.UUID.randomUUID().toString();
     String nonce = java.util.UUID.randomUUID().toString();
     HttpServletRequest req =
@@ -211,12 +210,16 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     HttpSession session = req.getSession(true);
     session.setAttribute("OIDC_STATE", state);
     session.setAttribute("OIDC_NONCE", nonce);
+    if (returnTo != null && isSafeReturnTo(returnTo)) {
+      session.setAttribute("OIDC_RETURN_TO", returnTo);
+    }
     if (log.isInfoEnabled()) {
       log.info(
-        "OIDC start: sessionId={} assigned state={} nonce={} host={} port={}",
+        "OIDC start: sessionId={} assigned state={} nonce={} returnTo={} host={} port={}",
         session.getId(),
         state,
         nonce,
+        returnTo,
         req.getServerName(),
         req.getServerPort()
       );
@@ -367,20 +370,31 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       session.setAttribute("AUTH_AVATAR_URL", persistedUser.getAvatarUrl());
       session.removeAttribute("OIDC_STATE");
       session.removeAttribute("OIDC_NONCE");
-      // If browser navigation (prefers HTML) redirect to root instead of showing JSON
+      String returnTo = (String) session.getAttribute("OIDC_RETURN_TO");
+      session.removeAttribute("OIDC_RETURN_TO");
+      // If browser navigation (prefers HTML) redirect to app instead of showing JSON
       String accept = req.getHeader("Accept");
       if (accept != null && accept.contains("text/html")) {
         String uiBase = appProperties.uiBaseUrl();
-        return ResponseEntity.status(302).header("Location", uiBase).build();
+        String location = (returnTo != null) ? uiBase + returnTo : uiBase;
+        return ResponseEntity.status(302).header("Location", location).build();
       }
       var body = Callback200ResponseDto.builder().status("ok").build();
       return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body);
     } catch (Exception e) {
       log.info("OIDC callback: exception {}", e.getMessage());
+      if (session != null) {
+        session.removeAttribute("OIDC_RETURN_TO");
+      }
       return ResponseEntity.status(400)
         .contentType(MediaType.APPLICATION_JSON)
         .body(Callback200ResponseDto.builder().status("error:exception").build());
     }
+  }
+
+  private boolean isSafeReturnTo(String returnTo) {
+    // Accept only relative paths — reject absolute URLs and protocol-relative URLs
+    return returnTo.startsWith("/") && !returnTo.startsWith("//") && !returnTo.contains("://");
   }
 
   private Map<String, Object> exchangeCodeForTokens(String code) {

@@ -1,8 +1,18 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { TooltipModule } from 'primeng/tooltip';
 import { BattleEvaluationOutcome } from '@sagebionetworks/bixarena/api-client';
-import { BattleGateService } from '@sagebionetworks/bixarena/services';
-import { OnboardingModalComponent, PromptComposerComponent } from '@sagebionetworks/bixarena/ui';
-import { ConfigService } from '@sagebionetworks/bixarena/config';
+import {
+  BattleGateService,
+  OnboardingService,
+  PendingPrompt,
+} from '@sagebionetworks/bixarena/services';
+import {
+  BlueprintBgComponent,
+  HeroComponent,
+  OnboardingFabComponent,
+  OnboardingModalComponent,
+  PromptComposerComponent,
+} from '@sagebionetworks/bixarena/ui';
 import { BattleStateService } from './services/battle.service';
 import { BattleStreamService } from './services/battle-stream.service';
 import { ModelPanelComponent } from './model-panel/model-panel.component';
@@ -17,6 +27,10 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
     VotingBarComponent,
     ExamplePromptsComponent,
     OnboardingModalComponent,
+    OnboardingFabComponent,
+    BlueprintBgComponent,
+    HeroComponent,
+    TooltipModule,
   ],
   providers: [BattleStateService, BattleStreamService],
   templateUrl: './battle.component.html',
@@ -25,20 +39,36 @@ import { ExamplePromptsComponent } from './example-prompts/example-prompts.compo
 export class BattleComponent implements OnInit, OnDestroy {
   readonly state = inject(BattleStateService);
   readonly gate = inject(BattleGateService);
+  private readonly onboardingService = inject(OnboardingService);
   readonly hoverSide = signal<BattleEvaluationOutcome | null>(null);
-  readonly termsUrl = inject(ConfigService).config.links.termsOfService;
+
+  readonly showOnboardingModal = signal(false);
+  // Held while the onboarding modal is open so streaming doesn't start behind
+  // the explainer. Submitted on modal close.
+  private pendingPrompt: PendingPrompt | null = null;
 
   ngOnInit(): void {
     const pending = this.gate.consumePendingPrompt();
-    if (pending) void this.gatedSubmit(pending.prompt, pending.examplePromptId);
+    const firstTime = !this.onboardingService.hasSeen();
+
+    if (firstTime) {
+      this.pendingPrompt = pending;
+      this.showOnboardingModal.set(true);
+    } else if (pending) {
+      void this.state.submitPrompt(
+        pending.prompt,
+        pending.examplePromptId,
+        pending.entryPoint ?? undefined,
+      );
+    }
   }
 
   onPromptSubmit(prompt: string): void {
-    void this.gatedSubmit(prompt);
+    void this.state.submitPrompt(prompt, null, 'battle_composer');
   }
 
   onExamplePromptSelect(event: { question: string; examplePromptId: string }): void {
-    void this.gatedSubmit(event.question, event.examplePromptId);
+    void this.state.submitPrompt(event.question, event.examplePromptId, 'battle_example_card');
   }
 
   onFollowUpSubmit(prompt: string): void {
@@ -57,14 +87,21 @@ export class BattleComponent implements OnInit, OnDestroy {
     void this.state.newMatchup();
   }
 
-  ngOnDestroy(): void {
-    this.state.reset();
+  onOnboardingClose(): void {
+    this.onboardingService.markSeen();
+    this.showOnboardingModal.set(false);
+    const pending = this.pendingPrompt;
+    this.pendingPrompt = null;
+    if (pending) {
+      void this.state.submitPrompt(
+        pending.prompt,
+        pending.examplePromptId,
+        pending.entryPoint ?? undefined,
+      );
+    }
   }
 
-  private async gatedSubmit(prompt: string, examplePromptId?: string | null): Promise<void> {
-    const passed = await this.gate.checkOnboarding();
-    if (passed) {
-      void this.state.submitPrompt(prompt, examplePromptId);
-    }
+  ngOnDestroy(): void {
+    this.state.reset();
   }
 }

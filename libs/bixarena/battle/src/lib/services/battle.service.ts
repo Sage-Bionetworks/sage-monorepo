@@ -7,6 +7,11 @@ import {
   Model,
 } from '@sagebionetworks/bixarena/api-client';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
+import {
+  AnalyticsService,
+  BattleEntryPoint,
+  LoggerService,
+} from '@sagebionetworks/bixarena/services';
 import { BattlePhase, INITIAL_STREAM_STATE, ModelStreamState } from '../battle.types';
 import {
   CONTINUE_PROMPT,
@@ -23,6 +28,8 @@ export class BattleStateService {
   private readonly battleApi = inject(BattleApiService);
   private readonly streamService = inject(BattleStreamService);
   private readonly config = inject(ConfigService).config;
+  private readonly analytics = inject(AnalyticsService);
+  private readonly logger = inject(LoggerService);
 
   constructor() {
     inject(DestroyRef).onDestroy(() => {
@@ -98,7 +105,11 @@ export class BattleStateService {
   private isVoting = false;
   private examplePromptId: string | null = null;
 
-  async submitPrompt(prompt: string, examplePromptId?: string | null): Promise<void> {
+  async submitPrompt(
+    prompt: string,
+    examplePromptId?: string | null,
+    entryPoint?: BattleEntryPoint,
+  ): Promise<void> {
     if (!this.isBrowser) return;
     this.initialPrompt.set(prompt);
     this.lastPrompt.set(prompt);
@@ -109,6 +120,7 @@ export class BattleStateService {
     const userMsg = { role: 'user' as const, content: prompt };
     this.resetStreams([userMsg], [userMsg]);
 
+    this.logger.debug('battle: creating battle');
     let battle;
     try {
       battle = await firstValueFrom(
@@ -119,17 +131,23 @@ export class BattleStateService {
       );
       if (!battle) throw new Error('Failed to create battle');
     } catch (err) {
-      console.error('Failed to create battle', err);
+      this.logger.error('battle: failed to create battle', err);
       this.setStreamError('Something went wrong. Try a new battle', false);
       return;
     }
     this.battleId.set(battle.id);
     this.model1.set(battle.model1);
     this.model2.set(battle.model2);
+    this.logger.debug('battle: created', { battleId: battle.id });
+    this.analytics.trackBattleStarted(
+      battle.id,
+      entryPoint ?? 'battle_composer',
+      !!examplePromptId,
+    );
     try {
       await this.createRoundAndStream(battle.id, battle.model1.id, battle.model2.id, prompt);
     } catch (err) {
-      console.error('Failed to start streaming', err);
+      this.logger.error('battle: failed to start streaming', err);
       this.setStreamError('Something went wrong', true);
     }
   }
@@ -163,6 +181,7 @@ export class BattleStateService {
       status: 'waiting',
     });
 
+    this.logger.debug('battle: continuing round', { which });
     try {
       const round = await firstValueFrom(
         this.battleApi.createBattleRound(battleId, { promptMessage: userMsg }),
@@ -176,7 +195,7 @@ export class BattleStateService {
       else this.model2Sub = sub;
       this.startTimeouts(target, which);
     } catch (err) {
-      console.error('Failed to continue round', err);
+      this.logger.error('battle: failed to continue round', err);
       target.update((s) => ({
         ...s,
         status: 'error',
@@ -203,8 +222,9 @@ export class BattleStateService {
     );
     try {
       await this.createRoundAndStream(battleId, model1.id, model2.id, prompt);
+      this.analytics.trackFollowupQuestionSubmitted(battleId, this.completedRounds + 1);
     } catch (err) {
-      console.error('Failed to create follow-up round', err);
+      this.logger.error('battle: failed to create follow-up round', err);
       this.setStreamError('Something went wrong', true);
     }
   }
@@ -234,17 +254,19 @@ export class BattleStateService {
       );
       if (!battle) throw new Error('Failed to create battle');
     } catch (err) {
-      console.error('Failed to create matchup', err);
+      this.logger.error('battle: failed to create matchup', err);
       this.setStreamError('Something went wrong. Try a new battle', false);
       return;
     }
     this.battleId.set(battle.id);
     this.model1.set(battle.model1);
     this.model2.set(battle.model2);
+    this.logger.debug('battle: new matchup created', { battleId: battle.id });
+    this.analytics.trackBattleStarted(battle.id, 'new_matchup_button', !!this.examplePromptId);
     try {
       await this.createRoundAndStream(battle.id, battle.model1.id, battle.model2.id, prompt);
     } catch (err) {
-      console.error('Failed to start streaming', err);
+      this.logger.error('battle: failed to start streaming', err);
       this.setStreamError('Something went wrong', true);
     }
   }
@@ -260,7 +282,7 @@ export class BattleStateService {
     try {
       await this.createRoundAndStream(battleId, model1.id, model2.id, prompt);
     } catch (err) {
-      console.error('Failed to retry round', err);
+      this.logger.error('battle: failed to retry round', err);
       this.setStreamError('Something went wrong', true);
     }
   }
@@ -277,6 +299,8 @@ export class BattleStateService {
       return;
     }
 
+    this.logger.debug('battle: vote submitted', { battleId, outcome, round: this.completedRounds });
+    this.analytics.trackVoteSubmitted(battleId, outcome, this.completedRounds);
     this.selectedOutcome.set(outcome);
     this.promptUsesRemaining.update((n) => Math.max(0, n - 1));
     this.phase.set('validating');
@@ -455,9 +479,11 @@ export class BattleStateService {
       const s2 = this.model2Stream().status;
       if (s1 === 'error' || s2 === 'error') {
         this.phase.set('error');
+        this.logger.debug('battle: both models complete → error phase');
       } else {
         this.completedRounds++;
         this.phase.set('voting');
+        this.logger.debug('battle: both models complete → voting', { round: this.completedRounds });
       }
     }
   }
@@ -476,6 +502,7 @@ export class BattleStateService {
     // Hard cutoff — force error if the model never responds in time
     const hardTimeout = setTimeout(() => {
       if (streamSignal().status === 'waiting' || streamSignal().status === 'streaming') {
+        this.logger.warn('battle: model timed out', { which: key });
         streamSignal.set({
           ...streamSignal(),
           status: 'error',

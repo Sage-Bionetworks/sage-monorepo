@@ -2,36 +2,8 @@
   display: block;
 }
 
-.hero {
-  text-align: center;
+bixarena-hero {
   margin-bottom: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.title {
-  font-family: var(--font-serif);
-  font-size: 3rem;
-  font-weight: 400;
-  letter-spacing: -0.96px;
-  line-height: 1.08;
-  margin: 0;
-  color: var(--p-text-color);
-
-  em {
-    font-style: italic;
-    color: var(--p-primary-color);
-  }
-}
-
-.subtitle {
-  font-size: var(--text-lg);
-  color: var(--p-surface-600);
-  max-width: 37.5rem;
-  margin: 0;
-  line-height: 1.55;
 }
 
 .methodology-note {
@@ -96,7 +68,7 @@
 
 .table-wrap {
   background: var(--p-surface-50);
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: var(--p-border-radius-md);
   overflow: hidden;
 }
@@ -114,7 +86,7 @@
 
 .retry-btn {
   padding: 0.4rem 0.9rem;
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: var(--p-border-radius-md);
   background: var(--p-surface-100);
   color: var(--p-text-color);

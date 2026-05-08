@@ -1,14 +1,22 @@
 import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from './auth.service';
-import { OnboardingService } from './onboarding.service';
+import { AnalyticsService, BattleEntryPoint, LoginEntryPoint } from './analytics.service';
+import { LoggerService } from './logger.service';
 
 const PENDING_PROMPT_KEY = 'bixarena.pendingPrompt';
 const PENDING_EXAMPLE_PROMPT_ID_KEY = 'bixarena.pendingExamplePromptId';
+const PENDING_PROMPT_ENTRY_POINT_KEY = 'bixarena.pendingPromptEntryPoint';
 const PENDING_PROMPT_TS_KEY = 'bixarena.pendingPromptTs';
 const PENDING_PROMPT_OWNER_KEY = 'bixarena.pendingPromptOwner';
 const PENDING_PROMPT_TTL_MS = 15 * 60 * 1000;
 const PENDING_PROMPT_MAX_LENGTH = 5000;
+
+export interface PendingPrompt {
+  prompt: string;
+  examplePromptId: string | null;
+  entryPoint: BattleEntryPoint | null;
+}
 
 // Module-level helper so AuthService.logout can clear pending without
 // importing the service class (would create a circular dep).
@@ -17,6 +25,7 @@ export function clearPendingPromptStorage(): void {
   try {
     sessionStorage.removeItem(PENDING_PROMPT_KEY);
     sessionStorage.removeItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
+    sessionStorage.removeItem(PENDING_PROMPT_ENTRY_POINT_KEY);
     sessionStorage.removeItem(PENDING_PROMPT_TS_KEY);
     sessionStorage.removeItem(PENDING_PROMPT_OWNER_KEY);
   } catch {
@@ -27,55 +36,43 @@ export function clearPendingPromptStorage(): void {
 @Injectable({ providedIn: 'root' })
 export class BattleGateService {
   readonly authService = inject(AuthService);
-  private readonly onboardingService = inject(OnboardingService);
+  private readonly analytics = inject(AnalyticsService);
+  private readonly logger = inject(LoggerService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly showLoginModal = signal(false);
-  readonly showOnboardingModal = signal(false);
+  private readonly loginEntryPoint = signal<LoginEntryPoint | null>(null);
 
-  private pendingResolver: ((passed: boolean) => void) | null = null;
-
-  // TODO: if concurrent calls become an issue, cache the pending Promise so all callers share it
-  async checkOnboarding(): Promise<boolean> {
-    if (!this.onboardingService.hasCompleted()) {
-      this.showOnboardingModal.set(true);
-      return new Promise((resolve) => {
-        this.pendingResolver = resolve;
-      });
-    }
-    return true;
+  setLoginEntryPoint(entryPoint: LoginEntryPoint): void {
+    this.loginEntryPoint.set(entryPoint);
   }
 
-  onOnboardingComplete(dontShowAgain: boolean): void {
-    this.onboardingService.markComplete(dontShowAgain);
-    this.showOnboardingModal.set(false);
-    this.pendingResolver?.(true);
-    this.pendingResolver = null;
-  }
-
-  onOnboardingDismiss(): void {
-    this.showOnboardingModal.set(false);
-    this.pendingResolver?.(false);
-    this.pendingResolver = null;
-  }
-
-  // The home route guard picks up pending and routes to /battle after OIDC
-  // returns to /. If auth-service ever supports a dynamic post-login URL,
-  // we can route from here directly and skip the / hop.
   onLoginComplete(): void {
     this.showLoginModal.set(false);
-    this.authService.login();
+    const entryPoint = this.loginEntryPoint();
+    this.loginEntryPoint.set(null);
+    if (entryPoint) {
+      this.analytics.trackLoginInitiated(entryPoint);
+    }
+    this.logger.debug('battle-gate: login confirmed, redirecting to /battle');
+    this.authService.login('/battle');
   }
 
   onLoginCancel(): void {
+    this.logger.debug('battle-gate: login cancelled');
     this.showLoginModal.set(false);
+    this.loginEntryPoint.set(null);
     this.consumePendingPrompt();
   }
 
   // Stamp owner from cachedUser when known so a different user logging in
   // on the same browser can't inherit this prompt. cachedUser is null for
   // first-time visitors — accepted, the TTL is the only defense in that case.
-  savePendingPrompt(text: string, examplePromptId?: string | null): void {
+  savePendingPrompt(
+    text: string,
+    examplePromptId?: string | null,
+    entryPoint?: BattleEntryPoint,
+  ): void {
     if (!this.isBrowser) return;
     const trimmed = text.trim();
     if (!trimmed) return;
@@ -93,6 +90,11 @@ export class BattleGateService {
       } else {
         sessionStorage.removeItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
       }
+      if (entryPoint) {
+        sessionStorage.setItem(PENDING_PROMPT_ENTRY_POINT_KEY, entryPoint);
+      } else {
+        sessionStorage.removeItem(PENDING_PROMPT_ENTRY_POINT_KEY);
+      }
     } catch {
       /* private mode / quota — fail silent */
     }
@@ -102,16 +104,21 @@ export class BattleGateService {
     return this.peekValidPrompt() !== null;
   }
 
-  consumePendingPrompt(): { prompt: string; examplePromptId: string | null } | null {
+  consumePendingPrompt(): PendingPrompt | null {
     if (!this.isBrowser) return null;
     const valid = this.peekValidPrompt();
     if (!valid) {
       this.clearPending();
+      this.logger.debug('battle-gate: no valid pending prompt');
       return null;
     }
     const examplePromptId = sessionStorage.getItem(PENDING_EXAMPLE_PROMPT_ID_KEY);
+    const entryPoint = sessionStorage.getItem(
+      PENDING_PROMPT_ENTRY_POINT_KEY,
+    ) as BattleEntryPoint | null;
     this.clearPending();
-    return { prompt: valid, examplePromptId: examplePromptId || null };
+    this.logger.debug('battle-gate: pending prompt consumed');
+    return { prompt: valid, examplePromptId: examplePromptId || null, entryPoint };
   }
 
   // Public so guards / logout can drop stale state explicitly.

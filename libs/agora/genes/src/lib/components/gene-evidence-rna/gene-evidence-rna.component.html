@@ -195,10 +195,16 @@
         <div class="container-lg">
           <div #rnaCorrChart>
             @defer {
-              <agora-candlestick-chart
-                [gene]="gene"
-                xAxisLabel="Phenotype"
-              ></agora-candlestick-chart>
+              <div
+                sageCandlestick
+                [items]="neuropathologicCorrelationsChartData"
+                xAxisTitle="PHENOTYPE"
+                yAxisTitle="ODDS RATIO"
+                [yAxisMin]="0"
+                [yAxisMax]="2"
+                [referenceLineValue]="1"
+                [pointTooltipFormatter]="neuropathologicCorrelationTooltipFormatter"
+              ></div>
             }
           </div>
         </div>

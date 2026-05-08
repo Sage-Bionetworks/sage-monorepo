@@ -10,7 +10,7 @@ services:
     networks:
       - bixarena
     ports:
-      - '8111:8111'
+      - '8000:8000'
     depends_on:
       bixarena-api-gateway:
         condition: service_started

@@ -1,10 +1,8 @@
 <div class="page-content">
-  <header class="hero">
-    <h1 class="title">Leader<em>board</em></h1>
-    <p class="subtitle">
-      Community-driven evaluation of AI models on biomedical topics. Every battle counts toward the
-      daily ranking.
-    </p>
+  <bixarena-hero
+    titleHtml="Leader<em>board</em>"
+    subtitleHtml="Community-driven evaluation of AI models on biomedical topics.<br>Every battle counts toward the daily ranking."
+  >
     <div class="stats-strip">
       <div class="stat">
         <span class="stat-value">{{ facade.entryCount() | number }}</span>
@@ -21,7 +19,7 @@
         </div>
       }
     </div>
-  </header>
+  </bixarena-hero>
 
   <bixarena-leaderboard-toolbar
     [categories]="categoryOptions()"

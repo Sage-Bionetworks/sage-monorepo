@@ -7,18 +7,18 @@
 
 .comp-card {
   background: var(--p-surface-100);
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: 16px;
   overflow: hidden;
   transition: all 0.25s;
 
   &:hover {
-    border-color: var(--p-surface-300);
+    border-color: var(--border-hover);
     box-shadow: 0 2px 16px rgb(0 0 0 / 8%);
   }
 
   &:focus-within {
-    border-color: var(--p-surface-300);
+    border-color: var(--border-hover);
     box-shadow: 0 4px 32px rgb(0 0 0 / 20%);
   }
 }
@@ -108,4 +108,26 @@
     width: 14px;
     height: 14px;
   }
+}
+
+.disclaimer {
+  margin: 0.625rem 0 0;
+  padding: 0.75rem 1rem;
+  background: var(--p-surface-50);
+  border-radius: 12px;
+  font-size: 0.6875rem;
+  line-height: 1.6;
+  color: var(--p-text-muted-color);
+  text-align: left;
+
+  strong {
+    color: var(--p-text-color);
+    font-weight: 600;
+  }
+}
+
+:host-context(.battle-view) .disclaimer {
+  padding: 0 1rem;
+  background: transparent;
+  border-radius: 0;
 }

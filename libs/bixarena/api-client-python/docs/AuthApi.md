@@ -229,7 +229,7 @@ This endpoint does not need any parameter.
 
 # **login**
 
-> login()
+> login(return_to=return_to)
 
 Start Synapse OIDC authorization code flow
 
@@ -253,17 +253,20 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.AuthApi(api_client)
+    return_to = 'return_to_example' # str | Relative path to redirect to after login (e.g. /battle). (optional)
 
     try:
         # Start Synapse OIDC authorization code flow
-        api_instance.login()
+        api_instance.login(return_to=return_to)
     except Exception as e:
         print("Exception when calling AuthApi->login: %s\n" % e)
 ```
 
 ### Parameters
 
-This endpoint does not need any parameter.
+| Name          | Type    | Description                                              | Notes      |
+| ------------- | ------- | -------------------------------------------------------- | ---------- |
+| **return_to** | **str** | Relative path to redirect to after login (e.g. /battle). | [optional] |
 
 ### Return type
 

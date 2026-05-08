@@ -59,7 +59,7 @@ class PromptValidationApiImpl(BasePromptValidationApi):
         # (defense-in-depth; the API layer already validates length).
         sanitized = prompt.strip()[: settings.prompt_max_length]
 
-        method = settings.prompt_validation_method
+        method = settings.classification_method
 
         # Check Valkey cache first.
         cached = await get_cached_validation(sanitized, settings)

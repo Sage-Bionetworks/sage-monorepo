@@ -108,6 +108,15 @@ SINGLE_CATEGORY_SCHEMA = {
 }
 
 
+def _log_model_used(actual: str, configured: str) -> None:
+    if actual != configured:
+        logger.warning(
+            "OpenRouter used fallback model: %s (primary: %s)", actual, configured
+        )
+    else:
+        logger.debug("OpenRouter model: %s", actual)
+
+
 def parse_confidence(raw: str) -> float:
     """Extract and clamp the confidence value from the LLM response.
 
@@ -173,6 +182,12 @@ async def classify(system_prompt: str, user_message: str) -> float:
 
         response = await client.chat.completions.create(
             model=settings.openrouter_model,
+            extra_body={
+                "models": [
+                    settings.openrouter_model,
+                    settings.openrouter_fallback_model,
+                ],
+            },
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message},
@@ -186,6 +201,7 @@ async def classify(system_prompt: str, user_message: str) -> float:
         )
 
         raw = response.choices[0].message.content or ""
+        _log_model_used(response.model, settings.openrouter_model)
         logger.debug("LLM raw response: %s", raw[:200])
         return parse_confidence(raw)
 
@@ -232,6 +248,12 @@ async def categorize(system_prompt: str, user_message: str) -> list[str]:
 
     response = await client.chat.completions.create(
         model=settings.openrouter_model,
+        extra_body={
+            "models": [
+                settings.openrouter_model,
+                settings.openrouter_fallback_model,
+            ],
+        },
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message},
@@ -245,6 +267,7 @@ async def categorize(system_prompt: str, user_message: str) -> list[str]:
     )
 
     raw = response.choices[0].message.content or ""
+    _log_model_used(response.model, settings.openrouter_model)
     logger.debug("LLM raw response: %s", raw[:200])
     return parse_categories(raw)
 
@@ -266,6 +289,12 @@ async def categorize_single(system_prompt: str, user_message: str) -> str | None
 
     response = await client.chat.completions.create(
         model=settings.openrouter_model,
+        extra_body={
+            "models": [
+                settings.openrouter_model,
+                settings.openrouter_fallback_model,
+            ],
+        },
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message},
@@ -279,5 +308,6 @@ async def categorize_single(system_prompt: str, user_message: str) -> str | None
     )
 
     raw = response.choices[0].message.content or ""
+    _log_model_used(response.model, settings.openrouter_model)
     logger.debug("LLM raw response: %s", raw[:200])
     return parse_single_category(raw)

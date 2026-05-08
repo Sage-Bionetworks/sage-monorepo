@@ -1,39 +1,22 @@
-FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
+FROM mirror.gcr.io/node:22.17.0-alpine3.21
 
-# Runtime stage
-FROM mirror.gcr.io/python:3.13.3-slim
+ENV APP_DIR=/opt/app
 
-ARG USERNAME=app
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-ENV APP_DIR=/app \
-    APP_USERNAME=${USERNAME}
+RUN apk add --no-cache curl jq su-exec
 
-# Copy uv binary
-COPY --from=uv /uv /bin/uv
-
-# Create user and install system dependencies
-RUN groupadd --gid "$USER_GID" "$USERNAME" \
-  && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
-  && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
-  && apt-get install --no-install-recommends -qq -y gosu \
-  && apt-get -y clean \
-  && apt-get -y autoremove \
-  && rm -rf /var/lib/apt/lists/*
+WORKDIR /
+COPY apps/bixarena/app/docker-entrypoint.sh .
+RUN chmod +x docker-entrypoint.sh
 
 WORKDIR ${APP_DIR}
+COPY dist/apps/bixarena/app/server ./server
+COPY dist/apps/bixarena/app/browser ./browser
 
-# Install the built sdist - this will install all other dependencies
-COPY dist/*.tar.gz /tmp/
-RUN uv pip install /tmp/*.tar.gz --system
+HEALTHCHECK --interval=2s --timeout=3s --retries=20 --start-period=15s \
+  CMD curl --fail --silent "localhost:4200/health" | jq '.status' | grep UP || exit 1
 
-# Copy configuration files
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-
-RUN chown -R ${APP_USERNAME}:${APP_USERNAME} ${APP_DIR} && \
-    chmod +x /docker-entrypoint.sh
-
-EXPOSE 8100
+EXPOSE 4200
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["python"]
+
+CMD ["node", "server/server.mjs"]

@@ -3,6 +3,8 @@
 }
 
 .composer-section {
+  --composer-input-min-height: 6rem;
+
   display: flex;
   justify-content: center;
   padding: 0 var(--content-padding-x);

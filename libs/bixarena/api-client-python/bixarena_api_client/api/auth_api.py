@@ -262,6 +262,7 @@ class AuthApi:
         _headers,
         _host_index,
     ) -> RequestSerialized:
+
         _host = None
 
         _collection_formats: Dict[str, str] = {}
@@ -503,6 +504,7 @@ class AuthApi:
         _headers,
         _host_index,
     ) -> RequestSerialized:
+
         _host = None
 
         _collection_formats: Dict[str, str] = {}
@@ -738,6 +740,7 @@ class AuthApi:
         _headers,
         _host_index,
     ) -> RequestSerialized:
+
         _host = None
 
         _collection_formats: Dict[str, str] = {}
@@ -784,6 +787,12 @@ class AuthApi:
     @validate_call
     def login(
         self,
+        return_to: Annotated[
+            Optional[Annotated[str, Field(strict=True, max_length=500)]],
+            Field(
+                description="Relative path to redirect to after login (e.g. /battle)."
+            ),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -800,6 +809,8 @@ class AuthApi:
 
         Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
 
+        :param return_to: Relative path to redirect to after login (e.g. /battle).
+        :type return_to: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -823,6 +834,7 @@ class AuthApi:
         """  # noqa: E501
 
         _param = self._login_serialize(
+            return_to=return_to,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -848,6 +860,12 @@ class AuthApi:
     @validate_call
     def login_with_http_info(
         self,
+        return_to: Annotated[
+            Optional[Annotated[str, Field(strict=True, max_length=500)]],
+            Field(
+                description="Relative path to redirect to after login (e.g. /battle)."
+            ),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -864,6 +882,8 @@ class AuthApi:
 
         Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
 
+        :param return_to: Relative path to redirect to after login (e.g. /battle).
+        :type return_to: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -887,6 +907,7 @@ class AuthApi:
         """  # noqa: E501
 
         _param = self._login_serialize(
+            return_to=return_to,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -912,6 +933,12 @@ class AuthApi:
     @validate_call
     def login_without_preload_content(
         self,
+        return_to: Annotated[
+            Optional[Annotated[str, Field(strict=True, max_length=500)]],
+            Field(
+                description="Relative path to redirect to after login (e.g. /battle)."
+            ),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -928,6 +955,8 @@ class AuthApi:
 
         Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
 
+        :param return_to: Relative path to redirect to after login (e.g. /battle).
+        :type return_to: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -951,6 +980,7 @@ class AuthApi:
         """  # noqa: E501
 
         _param = self._login_serialize(
+            return_to=return_to,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -971,11 +1001,13 @@ class AuthApi:
 
     def _login_serialize(
         self,
+        return_to,
         _request_auth,
         _content_type,
         _headers,
         _host_index,
     ) -> RequestSerialized:
+
         _host = None
 
         _collection_formats: Dict[str, str] = {}
@@ -991,6 +1023,9 @@ class AuthApi:
 
         # process the path parameters
         # process the query parameters
+        if return_to is not None:
+            _query_params.append(("return_to", return_to))
+
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -1211,6 +1246,7 @@ class AuthApi:
         _headers,
         _host_index,
     ) -> RequestSerialized:
+
         _host = None
 
         _collection_formats: Dict[str, str] = {}
@@ -1465,6 +1501,7 @@ class AuthApi:
         _headers,
         _host_index,
     ) -> RequestSerialized:
+
         _host = None
 
         _collection_formats: Dict[str, str] = {}
@@ -1725,6 +1762,7 @@ class AuthApi:
         _headers,
         _host_index,
     ) -> RequestSerialized:
+
         _host = None
 
         _collection_formats: Dict[str, str] = {}

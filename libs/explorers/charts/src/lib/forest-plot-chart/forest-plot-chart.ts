@@ -2,28 +2,20 @@ import { CustomSeriesOption, ECharts, EChartsOption, ScatterSeriesOption } from 
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 import { DARK_TOOLTIP, DEFAULT_COLOR, DEFAULT_POINT_SIZE } from '../constants';
 import { ForestPlotProps } from '../models';
+import { AXIS_STYLE, CI_LINE_WIDTH, GRID_TOP, TEXT_STYLE } from '../point-plot-defaults';
 import { GridCoordSys } from '../types';
 import { initChart, setNoDataOption } from '../utils';
 
-const CI_LINE_WIDTH = 1.5;
 const CI_LABEL_GAP = 4;
 const CI_LABEL_STYLE = { fill: '#4a5056', fontSize: 14, textVerticalAlign: 'middle' };
 
 const ZERO_LINE_STYLE = { stroke: '#BCC0CA', lineWidth: 2, fill: 'none' };
-const X_AXIS_LINE_STYLE = { width: 2, color: '#989898' };
 
-const AXIS_TICK_LABEL_COLOR = '#000';
-const X_AXIS_LABEL_TEXT_STYLE = { color: AXIS_TICK_LABEL_COLOR, fontSize: 14 };
-const Y_AXIS_LABEL_TEXT_STYLE = { color: AXIS_TICK_LABEL_COLOR, fontSize: 16 };
-const TITLE_TEXT_STYLE = { color: '#24334f', fontSize: 14, fontWeight: 'bold' as const };
+const X_AXIS_LABEL_TEXT_STYLE = { color: AXIS_STYLE.tickLabelColor, fontSize: 14 };
+const Y_AXIS_LABEL_TEXT_STYLE = { color: AXIS_STYLE.tickLabelColor, fontSize: 16 };
 
-// Distance from the x-axis line to the title text; also used as grid bottom so the title isn't clipped
-const X_AXIS_TITLE_GAP = 50;
-
-const GRID_TOP_WITHOUT_CHART_TITLE = 20;
-const GRID_TOP_WITH_CHART_TITLE = 60;
 const GRID_BOTTOM_WITHOUT_X_AXIS_TITLE = 40;
-const GRID_DEFAULT_MARGINS = GRID_TOP_WITHOUT_CHART_TITLE + GRID_BOTTOM_WITHOUT_X_AXIS_TITLE;
+const GRID_DEFAULT_MARGINS = GRID_TOP.withoutTitle + GRID_BOTTOM_WITHOUT_X_AXIS_TITLE;
 
 const GRID = { right: 80, containLabel: true };
 
@@ -194,8 +186,8 @@ export class ForestPlotChart {
     const option: EChartsOption = {
       grid: {
         ...GRID,
-        top: props.title ? GRID_TOP_WITH_CHART_TITLE : GRID_TOP_WITHOUT_CHART_TITLE,
-        bottom: props.xAxisTitle ? X_AXIS_TITLE_GAP : GRID_BOTTOM_WITHOUT_X_AXIS_TITLE,
+        top: props.title ? GRID_TOP.withTitle : GRID_TOP.withoutTitle,
+        bottom: props.xAxisTitle ? AXIS_STYLE.titleGap : GRID_BOTTOM_WITHOUT_X_AXIS_TITLE,
       },
       xAxis: {
         type: 'value',
@@ -203,14 +195,14 @@ export class ForestPlotChart {
         max: xMax,
         name: props.xAxisTitle,
         nameLocation: 'middle',
-        nameGap: X_AXIS_TITLE_GAP,
-        nameTextStyle: { ...TITLE_TEXT_STYLE, fontSize: 18 },
+        nameGap: AXIS_STYLE.titleGap,
+        nameTextStyle: TEXT_STYLE.axisName,
         axisLine: {
           show: true,
-          lineStyle: X_AXIS_LINE_STYLE,
+          lineStyle: AXIS_STYLE.line,
         },
         splitLine: { show: false },
-        splitNumber: 10,
+        splitNumber: AXIS_STYLE.valueAxisSplitNumber,
         axisLabel: {
           ...X_AXIS_LABEL_TEXT_STYLE,
           formatter: (tickValue: number) => tickValue.toFixed(2),
@@ -238,7 +230,7 @@ export class ForestPlotChart {
       series: [zeroLineSeries(yAxisCategories), ciLineSeries(props), dotSeries(props)],
       tooltip: DARK_TOOLTIP,
       title: props.title
-        ? [{ text: props.title, left: 'center', textStyle: TITLE_TEXT_STYLE }]
+        ? [{ text: props.title, left: 'center', textStyle: TEXT_STYLE.title }]
         : [],
       aria: { enabled: true },
     };

@@ -30,7 +30,7 @@ class ApiServiceStack(cdk.Stack):
         valkey_port: str,
         developer_name: str | None = None,
         app_version: str = "edge",
-        ui_base_url: str = "http://localhost:8100",
+        ui_base_url: str = "http://localhost:4200",
         **kwargs,
     ) -> None:
         """

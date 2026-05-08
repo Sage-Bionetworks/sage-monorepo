@@ -1,0 +1,16 @@
+@if (useGoogleTagManager) {
+  <web-shared-angular-analytics-gtm />
+}
+<bixarena-nav />
+<main>
+  <router-outlet />
+</main>
+@if (showFooter()) {
+  <bixarena-footer />
+}
+
+<bixarena-login-modal
+  [(visible)]="gate.showLoginModal"
+  (signIn)="gate.onLoginComplete()"
+  (dismissed)="gate.onLoginCancel()"
+/>

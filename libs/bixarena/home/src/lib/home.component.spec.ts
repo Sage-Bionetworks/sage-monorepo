@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { AuthService, BattleGateService } from '@sagebionetworks/bixarena/services';
+import { HeroComponent } from '@sagebionetworks/bixarena/ui';
 import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
@@ -9,7 +10,8 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     // Strip section imports so they don't mount real services (each child
-    // fires HTTP at construction). This spec only asserts layout shell.
+    // fires HTTP at construction). Keep HeroComponent so the hero markup
+    // actually renders for the title assertion.
     await TestBed.configureTestingModule({
       imports: [HomeComponent],
       providers: [
@@ -22,7 +24,7 @@ describe('HomeComponent', () => {
       ],
     })
       .overrideComponent(HomeComponent, {
-        set: { imports: [], schemas: [NO_ERRORS_SCHEMA] },
+        set: { imports: [HeroComponent], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
     fixture = TestBed.createComponent(HomeComponent);

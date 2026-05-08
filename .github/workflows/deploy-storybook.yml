@@ -49,6 +49,9 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
+      - name: Install ghp-import
+        run: pipx install ghp-import
+
       - name: Deploy storybooks
         env:
           STORYBOOKS: ${{ inputs.storybooks }}
@@ -57,8 +60,7 @@ jobs:
 
           for storybook in $STORYBOOKS; do
             echo "Deploying storybook/${storybook}"
-            devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-                && uv run ghp-import -p -f -m 'Deploy storybook/${storybook}' -x storybook/${storybook} dist/storybook/storybook/${storybook}"
+            ghp-import -p -f -m "Deploy storybook/${storybook}" -x "storybook/${storybook}" "dist/storybook/storybook/${storybook}"
           done
 
           echo ""

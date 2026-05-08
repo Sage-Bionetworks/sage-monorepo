@@ -161,6 +161,7 @@ public interface AuthApiDelegate {
      * GET /auth/login : Start Synapse OIDC authorization code flow
      * Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
      *
+     * @param returnTo Relative path to redirect to after login (e.g. /battle). (optional)
      * @return Flow started (no content; clients should follow redirect) (status code 204)
      *         or Redirect to Synapse login (status code 302)
      *         or Invalid request (status code 400)
@@ -168,7 +169,7 @@ public interface AuthApiDelegate {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see AuthApi#login
      */
-    default ResponseEntity<Void> login() {
+    default ResponseEntity<Void> login(String returnTo) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {

@@ -145,3 +145,44 @@ test.describe('drug details - resources', () => {
     );
   });
 });
+
+test.describe('drug details - nomination details', () => {
+  const nominationsUrl = `/drugs/${chemblId}/nominationDetails`;
+
+  test('displays evidence heading with drug name', async ({ page }) => {
+    await page.goto(nominationsUrl);
+    await expect(
+      page.getByRole('heading', {
+        level: 2,
+        name: `Evidence Supporting the Nomination of ${drugName}`,
+      }),
+    ).toBeVisible();
+  });
+
+  test('displays introductory text', async ({ page }) => {
+    await page.goto(nominationsUrl);
+    await expect(
+      page.getByText('This drug has been nominated as a potential therapeutic for AD.'),
+    ).toBeVisible();
+  });
+
+  test('displays program name', async ({ page }) => {
+    await page.goto(nominationsUrl);
+    await expect(page.getByRole('heading', { name: /ACTDRx/ }).first()).toBeVisible();
+  });
+
+  test('displays contact PI', async ({ page }) => {
+    await page.goto(nominationsUrl);
+    await expect(page.getByRole('heading', { name: /Contact PI:/ }).first()).toBeVisible();
+  });
+
+  test('displays nomination labels', async ({ page }) => {
+    await page.goto(nominationsUrl);
+    await expect(page.getByText('Data used').first()).toBeVisible();
+    await expect(page.getByText('Mechanism of action in AD').first()).toBeVisible();
+    await expect(page.getByText('Initial date of nomination').first()).toBeVisible();
+    await expect(page.getByText('Planned validation').first()).toBeVisible();
+    await expect(page.getByText('Validation results').first()).toBeVisible();
+    await expect(page.getByText('Funding').first()).toBeVisible();
+  });
+});

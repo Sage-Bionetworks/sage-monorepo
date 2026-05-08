@@ -36,7 +36,7 @@
 
   .bixarena-modal.p-dialog {
     background: var(--p-surface-100);
-    border-color: var(--p-surface-200);
+    border-color: var(--border);
     border-radius: 16px;
     box-shadow: 0 16px 64px rgb(0 0 0 / 30%);
     max-width: 480px;
@@ -132,14 +132,14 @@
       font-variation-settings: 'wght' 480;
       color: var(--p-text-muted-color);
       background: transparent;
-      border: 1px solid var(--p-surface-200);
+      border: 1px solid var(--border);
       border-radius: var(--p-border-radius-md);
       cursor: pointer;
       transition: all 0.15s;
 
       &:hover {
         color: var(--p-text-color);
-        border-color: var(--p-surface-300);
+        border-color: var(--border-hover);
         background: transparent;
       }
     }
@@ -168,7 +168,12 @@
   }
 
   .bixarena-modal.onboarding-modal.p-dialog {
-    max-width: 520px;
+    max-width: 760px;
+    background: var(--p-surface-0);
+
+    .p-dialog-content {
+      padding: 1.75rem;
+    }
 
     .p-button {
       height: 36px;
@@ -189,7 +194,7 @@
       background: var(--p-surface-100);
       padding: 0.75rem 1rem;
       white-space: nowrap;
-      border-color: var(--p-surface-200);
+      border-color: var(--border);
     }
 
     // Shrink sort icons to match the small header type.
@@ -210,7 +215,7 @@
       vertical-align: middle;
       background: transparent;
       color: var(--p-text-color);
-      border-bottom: 1px solid var(--p-surface-200);
+      border-bottom: 1px solid var(--border);
     }
 
     .p-datatable-tbody > tr:last-child > td {
@@ -236,13 +241,13 @@
   .leaderboard-paginator .p-paginator-page.p-paginator-page-selected,
   .leaderboard-paginator .p-paginator-page.p-paginator-page-selected:hover {
     background: var(--p-surface-100);
-    border-color: var(--p-surface-200);
+    border-color: var(--border);
     color: var(--p-text-color);
   }
 
   .leaderboard-paginator .p-paginator-rpp-dropdown.p-select {
     background: var(--p-surface-100);
-    border-color: var(--p-surface-200);
+    border-color: var(--border);
     color: var(--p-text-color);
 
     // PrimeNG hardcodes this ring to orange-300 (#fdba74), bypassing tokens.
@@ -257,13 +262,14 @@
 
   .leaderboard-paginator .p-paginator-rpp-dropdown.p-select.p-focus,
   .leaderboard-paginator .p-paginator-rpp-dropdown.p-select:focus-within {
-    border-color: var(--p-surface-400);
+    border-color: var(--border-hover);
     box-shadow: none;
   }
 
   .p-tooltip-text {
-    font-size: var(--text-xs);
-    padding: 0.4rem 0.6rem;
+    font-size: 0.6875rem;
+    padding: 0.3rem 0.5rem;
+    line-height: 1.4;
   }
 
   // Tighter selected-option emphasis in select dropdowns. Theme-aware bg

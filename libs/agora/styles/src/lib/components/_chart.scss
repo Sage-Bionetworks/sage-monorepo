@@ -176,44 +176,6 @@
 }
 
 // -------------------------------------------------------------------------- //
-// Median chart
-// -------------------------------------------------------------------------- //
-.median-chart {
-  .chart-container {
-    height: 350px;
-  }
-
-  .chart-x-axis-label {
-    padding-top: 15px;
-    padding-left: 70px;
-  }
-
-  clipPath {
-    display: none;
-  }
-
-  svg {
-    padding-left: 1px;
-
-    .barLabel {
-      font-size: 1rem;
-      fill: var(--color-chart-axis-label);
-      cursor: default;
-    }
-
-    // .axis.y {
-    //   .tick text {
-    //     transform: translateY(-12px);
-    //   }
-    // }
-
-    // .chart-body > g {
-    //   transform: translateY(-12px);
-    // }
-  }
-}
-
-// -------------------------------------------------------------------------- //
 // Box plot chart
 // -------------------------------------------------------------------------- //
 .box-plot-chart {
@@ -241,74 +203,11 @@
 }
 
 // -------------------------------------------------------------------------- //
-// Candlestick chart
-// -------------------------------------------------------------------------- //
-.candlestick-chart {
-  .chart-x-axis-label {
-    padding-left: 80px;
-  }
-}
-
-// -------------------------------------------------------------------------- //
 // Force chart
 // -------------------------------------------------------------------------- //
 .force-chart {
   .chart-container {
     height: auto;
-  }
-}
-
-// -------------------------------------------------------------------------- //
-// Score chart
-// -------------------------------------------------------------------------- //
-.score-chart {
-  svg {
-    .y-axis-label,
-    .x-axis-label {
-      text-transform: uppercase;
-      font-size: 12px;
-    }
-
-    .axis.x,
-    .axis.y {
-      .tick text {
-        font-size: 12px;
-      }
-    }
-
-    .axis.x {
-      .tick {
-        display: none;
-
-        text {
-          font-weight: 400;
-        }
-      }
-
-      .tick:nth-child(2) {
-        display: block;
-      }
-
-      .tick:last-child {
-        display: block;
-      }
-    }
-
-    .bar {
-      fill-opacity: 0.5;
-
-      &:hover {
-        fill-opacity: 1;
-      }
-    }
-
-    .score-bar {
-      fill-opacity: 1;
-
-      &:hover {
-        fill-opacity: 0.8;
-      }
-    }
   }
 }
 

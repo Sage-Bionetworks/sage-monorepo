@@ -1,0 +1,16 @@
+:host {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+
+  // The improved arena SVG has per-group opacities pre-tuned by the designer,
+  // so we rely on currentColor here and skip the host-level opacity multiplier.
+  color: var(--blueprint-stroke);
+}
+
+.bp {
+  width: 100%;
+  height: 100%;
+}

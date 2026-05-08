@@ -1,4 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
+import { LoggerService } from '@sagebionetworks/bixarena/services';
 import { firstValueFrom } from 'rxjs';
 import {
   LeaderboardEntry,
@@ -11,6 +12,7 @@ import { DEFAULT_CATEGORY_SLUG, LOOKBACK_DAYS } from '../leaderboard.constants';
 @Injectable()
 export class LeaderboardFacadeService {
   private readonly api = inject(LeaderboardApiService);
+  private readonly logger = inject(LoggerService);
 
   readonly leaderboards = signal<LeaderboardListInner[]>([]);
   readonly entries = signal<LeaderboardEntry[]>([]);
@@ -29,9 +31,9 @@ export class LeaderboardFacadeService {
       const withEntries = (list ?? []).filter(
         (l) => (l.latestSnapshot?.entryCount ?? 0) > 0,
       ).length;
-      console.debug('✅ Fetched leaderboard categories', { total, withEntries });
+      this.logger.debug('✅ Fetched leaderboard categories', { total, withEntries });
     } catch (err) {
-      console.error('❌ Failed to fetch leaderboard categories', err);
+      this.logger.error('Failed to fetch leaderboard categories', err);
       this.leaderboards.set([]);
     }
   }
@@ -43,7 +45,7 @@ export class LeaderboardFacadeService {
     this.loading.set(true);
     this.error.set(null);
     const finalQuery: LeaderboardSearchQuery = { lookback: LOOKBACK_DAYS, ...query };
-    console.debug('🔎 Fetching leaderboard data', { leaderboardId, query: finalQuery });
+    this.logger.debug('🔎 Fetching leaderboard data', { leaderboardId, query: finalQuery });
     try {
       const page = await firstValueFrom(this.api.getLeaderboard(leaderboardId, finalQuery));
       this.entries.set(page.entries);
@@ -51,7 +53,7 @@ export class LeaderboardFacadeService {
       this.entryCount.set(page.entryCount);
       this.voteCount.set(page.voteCount);
       this.snapshotUpdatedAt.set(page.updatedAt);
-      console.debug('✅ Fetched leaderboard data', {
+      this.logger.debug('✅ Fetched leaderboard data', {
         leaderboardId,
         entries: page.entries.length,
         totalElements: page.totalElements,
@@ -60,7 +62,7 @@ export class LeaderboardFacadeService {
         priorSnapshotId: page.priorSnapshotId ?? null,
       });
     } catch (err) {
-      console.error('❌ Failed to fetch leaderboard data', {
+      this.logger.error('Failed to fetch leaderboard data', {
         leaderboardId,
         query: finalQuery,
         err,

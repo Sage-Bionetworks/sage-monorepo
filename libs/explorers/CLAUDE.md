@@ -45,7 +45,7 @@ Tests use `@testing-library/angular`. The `testing` lib provides:
 
 ## Charts Libraries
 
-`explorers-charts` and `explorers-charts-angular` use **eCharts** for chart rendering. eCharts is the preferred library — use D3 only when eCharts cannot support the required functionality. Do not use dc.js; it is a legacy dependency being phased out.
+`explorers-charts` and `explorers-charts-angular` use **eCharts** for chart rendering. eCharts is the preferred library -- use D3 only when eCharts cannot support the required functionality.
 
 - `explorers-charts` — framework-agnostic eCharts logic: chart classes (`BoxplotChart`, `LegendChart`), themes, models, and utilities
 - `explorers-charts-angular` — Angular directives wrapping the chart classes (`BoxplotDirective`, `LegendDirective`); has its own Storybook (port 4400)

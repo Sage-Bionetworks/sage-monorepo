@@ -197,6 +197,7 @@ public interface AuthApi {
      * GET /auth/login : Start Synapse OIDC authorization code flow
      * Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
      *
+     * @param returnTo Relative path to redirect to after login (e.g. /battle). (optional)
      * @return Flow started (no content; clients should follow redirect) (status code 204)
      *         or Redirect to Synapse login (status code 302)
      *         or Invalid request (status code 400)
@@ -232,9 +233,9 @@ public interface AuthApi {
     )
     
     default ResponseEntity<Void> login(
-        
+        @Size(max = 500) @Parameter(name = "return_to", description = "Relative path to redirect to after login (e.g. /battle).", in = ParameterIn.QUERY) @Valid @RequestParam(value = "return_to", required = false) @Nullable String returnTo
     ) {
-        return getDelegate().login();
+        return getDelegate().login(returnTo);
     }
 
 

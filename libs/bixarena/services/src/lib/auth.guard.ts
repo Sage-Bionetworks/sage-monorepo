@@ -8,7 +8,9 @@ export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   if (auth.isAuthenticated()) return true;
   if (isPlatformBrowser(inject(PLATFORM_ID))) {
-    inject(BattleGateService).showLoginModal.set(true);
+    const gate = inject(BattleGateService);
+    gate.setLoginEntryPoint('nav_battle_link');
+    gate.showLoginModal.set(true);
   }
   return false;
 };

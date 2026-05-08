@@ -11,7 +11,7 @@ import { DecimalPipe } from '@angular/common';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, of, tap } from 'rxjs';
 import { StatsService, UserService, UserStats } from '@sagebionetworks/bixarena/api-client';
-import { AuthService } from '@sagebionetworks/bixarena/services';
+import { AuthService, LoggerService } from '@sagebionetworks/bixarena/services';
 
 @Component({
   selector: 'bixarena-stats-section',
@@ -22,6 +22,7 @@ import { AuthService } from '@sagebionetworks/bixarena/services';
 })
 export class StatsSectionComponent {
   private readonly auth = inject(AuthService);
+  private readonly logger = inject(LoggerService);
   private readonly userStatsService = inject(UserService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -34,9 +35,9 @@ export class StatsSectionComponent {
     inject(StatsService)
       .getPublicStats()
       .pipe(
-        tap((s) => console.debug('✅ Fetched public stats', s)),
+        tap((s) => this.logger.debug('✅ Fetched public stats', s)),
         catchError((err) => {
-          console.error('❌ Failed to fetch public stats', err);
+          this.logger.error('Failed to fetch public stats', err);
           return of(null);
         }),
       ),
@@ -60,9 +61,9 @@ export class StatsSectionComponent {
       this.userStatsService
         .getUserStats()
         .pipe(
-          tap((s) => console.debug('✅ Fetched user stats', s)),
+          tap((s) => this.logger.debug('✅ Fetched user stats', s)),
           catchError((err) => {
-            console.error('❌ Failed to fetch user stats', err);
+            this.logger.error('Failed to fetch user stats', err);
             return of(null);
           }),
           takeUntilDestroyed(this.destroyRef),

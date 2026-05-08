@@ -2,6 +2,7 @@ import { Component, computed, ElementRef, input, output, signal, viewChild } fro
 
 @Component({
   selector: 'bixarena-prompt-composer',
+  imports: [],
   templateUrl: './prompt-composer.component.html',
   styleUrl: './prompt-composer.component.scss',
 })

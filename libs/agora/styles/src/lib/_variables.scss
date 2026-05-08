@@ -1,4 +1,3 @@
-/* stylelint-disable no-duplicate-selectors */
 @use 'sass:map';
 
 $sm-breakpoint: 600px;
@@ -40,12 +39,6 @@ $spacings: (
   'xl': 50px,
 );
 
-:root {
-  @each $key, $value in $spacings {
-    --spacing-#{$key}: #{$value};
-  }
-}
-
 // -------------------------------------------------------------------------- //
 // Colors
 // -------------------------------------------------------------------------- //
@@ -85,20 +78,6 @@ $extra-colors: (
   shadow: #c7c5c5,
   tooltip: #63676c,
 );
-
-:root {
-  @each $key, $color in $main-colors {
-    --color-#{$key}: #{$color};
-  }
-
-  @each $key, $color in $main-colors-hover {
-    --color-#{$key}-hover: #{$color};
-  }
-
-  @each $key, $color in $extra-colors {
-    --color-#{$key}: #{$color};
-  }
-}
 
 // -------------------------------------------------------------------------- //
 // Fonts
@@ -163,20 +142,6 @@ $font-sizes: (
   ),
 );
 
-:root {
-  @each $size, $properties in $headings {
-    @each $property, $value in $properties {
-      --#{$property}-#{$size}: #{$value};
-    }
-  }
-
-  @each $size, $properties in $font-sizes {
-    @each $property, $value in $properties {
-      --#{$property}-#{$size}: #{$value};
-    }
-  }
-}
-
 // -------------------------------------------------------------------------- //
 // Container
 // -------------------------------------------------------------------------- //
@@ -186,22 +151,11 @@ $container-max-width-md: 1440px;
 $container-max-width-lg: 1920px;
 $container-gutter-width: 30px;
 
-:root {
-  --container-max-width-sm: #{$container-max-width-sm};
-  --container-max-width-md: #{$container-max-width-md};
-  --container-max-width-lg: #{$container-max-width-lg};
-  --container-gutter-width: #{$container-gutter-width};
-}
-
 // -------------------------------------------------------------------------- //
 // Transition
 // -------------------------------------------------------------------------- //
 
 $transition-duration: 0.08s;
-
-:root {
-  --transition-duration: #{$transition-duration};
-}
 
 // -------------------------------------------------------------------------- //
 // Header
@@ -209,19 +163,11 @@ $transition-duration: 0.08s;
 
 $header-height: 86px;
 
-:root {
-  --header-height: #{$header-height};
-}
-
 // -------------------------------------------------------------------------- //
 // Footer
 // -------------------------------------------------------------------------- //
 
 $footer-height: 71px;
-
-:root {
-  --footer-height: #{$footer-height};
-}
 
 // -------------------------------------------------------------------------- //
 // Gene details
@@ -229,11 +175,6 @@ $footer-height: 71px;
 
 $gene-details-nav-height: 80px;
 $gene-details-subnav-offset: -19px;
-
-:root {
-  --gene-details-nav-height: #{$gene-details-nav-height};
-  --gene-details-subnav-offset: #{$gene-details-subnav-offset};
-}
 
 // -------------------------------------------------------------------------- //
 // Charts
@@ -245,12 +186,6 @@ $chart-colors: (
   axis-tick: #989898,
   axis-tick-label: #000,
 );
-
-:root {
-  @each $key, $value in $chart-colors {
-    --color-chart-#{$key}: #{$value};
-  }
-}
 
 // -------------------------------------------------------------------------- //
 // Gene network

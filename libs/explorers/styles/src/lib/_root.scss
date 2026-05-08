@@ -1,0 +1,34 @@
+@use 'variables' as vars;
+
+:root {
+  @each $key, $color in vars.$main-colors {
+    --color-#{$key}: #{$color};
+  }
+
+  @each $key, $color in vars.$extra-colors {
+    --color-#{$key}: #{$color};
+  }
+
+  @each $size, $properties in vars.$headings {
+    @each $property, $value in $properties {
+      --#{$property}-#{$size}: #{$value};
+    }
+  }
+
+  @each $size, $properties in vars.$font-sizes {
+    @each $property, $value in $properties {
+      --#{$property}-#{$size}: #{$value};
+    }
+  }
+
+  --main-content-desktop-width: #{vars.$main-content-desktop-width};
+  --main-content-margin: #{vars.$main-content-margin};
+  --main-content-total-width: #{vars.$main-content-total-width};
+  --section-max-width: #{vars.$section-max-width};
+  --section-padding: #{vars.$section-padding};
+  --transition-duration: #{vars.$transition-duration};
+  --header-height: #{vars.$header-height};
+  --panel-nav-height: #{vars.$panel-nav-height};
+  --comparison-tool-primary-column-width: #{vars.$comparison-tool-primary-column-width};
+  --footer-height: #{vars.$footer-height};
+}

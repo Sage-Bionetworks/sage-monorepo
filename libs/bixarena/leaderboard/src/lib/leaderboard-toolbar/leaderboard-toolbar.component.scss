@@ -21,7 +21,7 @@
   gap: 0.5rem;
   height: 2.25rem;
   padding: 0 0.85rem;
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: var(--p-border-radius-md);
   background: var(--p-surface-100);
   color: var(--p-text-color);
@@ -54,7 +54,7 @@
 
   &:hover {
     background: var(--p-surface-200);
-    border-color: var(--p-surface-300);
+    border-color: var(--border-hover);
   }
 }
 
@@ -70,7 +70,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 0.85rem;
-  border-bottom: 1px solid var(--p-surface-200);
+  border-bottom: 1px solid var(--border);
 
   svg {
     color: var(--p-surface-500);
@@ -140,7 +140,7 @@
   max-width: 100%;
   margin-left: auto;
   padding: 0 0.75rem;
-  border: 1px solid var(--p-surface-300);
+  border: 1px solid var(--border);
   border-radius: var(--p-border-radius-md);
   background: var(--p-surface-100);
   color: var(--p-text-color);
@@ -186,7 +186,7 @@
 
   &:hover {
     background: var(--p-surface-100);
-    border-color: var(--p-surface-200);
+    border-color: var(--border);
     color: var(--p-text-color);
   }
 }
@@ -196,7 +196,7 @@
   align-items: center;
   height: 2.25rem;
   padding: 0.15rem;
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: var(--p-border-radius-md);
   background: transparent;
 }
@@ -249,7 +249,7 @@
   gap: 0.45rem;
   height: 2.25rem;
   padding: 0 0.8rem;
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: var(--p-border-radius-md);
   background: transparent;
   color: var(--p-text-color);
@@ -263,12 +263,12 @@
 
   &:hover {
     background: var(--p-surface-100);
-    border-color: var(--p-surface-300);
+    border-color: var(--border-hover);
   }
 
   &.active {
     background: var(--p-surface-100);
-    border-color: var(--p-surface-300);
+    border-color: var(--border-hover);
   }
 
   .count {
@@ -298,7 +298,7 @@
 }
 
 .filter-section + .filter-section {
-  border-top: 1px solid var(--p-surface-200);
+  border-top: 1px solid var(--border);
 }
 
 .filter-section-head {
@@ -346,7 +346,7 @@
   display: inline-flex;
   align-items: center;
   padding: 0.35rem 0.75rem;
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: 999px;
   background: transparent;
   font-family: inherit;
@@ -363,7 +363,7 @@
 
   &.on {
     background: var(--p-surface-200);
-    border-color: var(--p-surface-300);
+    border-color: var(--border-hover);
     font-weight: 540;
   }
 }
@@ -375,7 +375,7 @@
   gap: 0.4rem;
   padding-top: 0.55rem;
   margin-bottom: 0.75rem;
-  border-top: 1px dotted var(--p-surface-200);
+  border-top: 1px dotted var(--border);
 }
 
 .active-filters-label {
@@ -394,7 +394,7 @@
   height: 1.6rem;
   padding: 0 0.4rem 0 0.6rem;
   background: var(--p-surface-100);
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: 999px;
   font-size: var(--text-sm);
   color: var(--p-text-color);

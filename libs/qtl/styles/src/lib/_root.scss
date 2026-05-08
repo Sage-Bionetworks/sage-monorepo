@@ -1,0 +1,7 @@
+@use 'variables' as vars;
+
+:root {
+  @each $key, $color in vars.$main-colors {
+    --color-#{$key}: #{$color};
+  }
+}

@@ -1,0 +1,26 @@
+services:
+  bixarena-app-gradio:
+    image: ghcr.io/sage-bionetworks/bixarena-app:${BIXARENA_VERSION:-local}
+    container_name: bixarena-app-gradio
+    restart: always
+    networks:
+      - bixarena
+    ports:
+      - '8100:8100'
+    env_file:
+      - ../../../apps/bixarena/app-gradio/.env
+    depends_on:
+      bixarena-api:
+        condition: service_started
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'python',
+          '-c',
+          'import urllib.request; urllib.request.urlopen("http://localhost:8100/health")',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

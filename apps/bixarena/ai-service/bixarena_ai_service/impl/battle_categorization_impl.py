@@ -68,7 +68,7 @@ class BattleCategorizationApiImpl(BaseBattleCategorizationApi):
 
         # Sanitize each prompt
         sanitized = [p.strip()[: settings.prompt_max_length] for p in prompts]
-        method = settings.battle_categorization_method
+        method = settings.classification_method
 
         # Check Valkey cache first. Empty cached lists are valid "no fit" results
         # and short-circuit the LLM call.

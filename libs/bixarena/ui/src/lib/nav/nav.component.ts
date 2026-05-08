@@ -12,7 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ButtonModule } from 'primeng/button';
-import { AuthService, ThemeService } from '@sagebionetworks/bixarena/services';
+import { AnalyticsService, AuthService, ThemeService } from '@sagebionetworks/bixarena/services';
 import { AvatarComponent } from '../avatar/avatar.component';
 
 // Mirror of $md-breakpoint in shared-styles/_variables.scss. Kept as a
@@ -29,6 +29,7 @@ const MD_BREAKPOINT_PX = 768;
 export class NavComponent {
   readonly authService = inject(AuthService);
   readonly themeService = inject(ThemeService);
+  private readonly analytics = inject(AnalyticsService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -72,6 +73,11 @@ export class NavComponent {
     if (this.isBrowser && window.innerWidth >= MD_BREAKPOINT_PX) {
       this.closeMenu();
     }
+  }
+
+  login(): void {
+    this.analytics.trackLoginInitiated('nav_login_button');
+    this.authService.login();
   }
 
   private applyBodyScrollLock(): void {

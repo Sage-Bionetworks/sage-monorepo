@@ -423,10 +423,12 @@ export class AuthService {
   /**
    * Start Synapse OIDC authorization code flow
    * Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
+   * @param returnTo Relative path to redirect to after login (e.g. /battle).
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public login(
+    returnTo?: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -436,6 +438,7 @@ export class AuthService {
     },
   ): Observable<any>;
   public login(
+    returnTo?: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -445,6 +448,7 @@ export class AuthService {
     },
   ): Observable<HttpResponse<any>>;
   public login(
+    returnTo?: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -454,6 +458,7 @@ export class AuthService {
     },
   ): Observable<HttpEvent<any>>;
   public login(
+    returnTo?: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -462,6 +467,15 @@ export class AuthService {
       transferCache?: boolean;
     },
   ): Observable<any> {
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (returnTo !== undefined && returnTo !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>returnTo,
+        'return_to',
+      );
+    }
+
     let localVarHeaders = this.defaultHeaders;
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -498,6 +512,7 @@ export class AuthService {
     let localVarPath = `/auth/login`;
     return this.httpClient.request<any>('get', `${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
+      params: localVarQueryParameters,
       responseType: <any>responseType_,
       withCredentials: this.configuration.withCredentials,
       headers: localVarHeaders,
