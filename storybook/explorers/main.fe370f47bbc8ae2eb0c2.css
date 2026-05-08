@@ -37,7 +37,6 @@ ol {
           user-select: none;
 }
 
-/* stylelint-disable no-duplicate-selectors */
 :root {
   --color-primary: #3c4a63;
   --color-secondary: #8b8ad1;
@@ -57,9 +56,6 @@ ol {
   --color-gray-300: #eaecee;
   --color-gray-200: #f1f3f5;
   --color-gray-100: #fbfbfc;
-}
-
-:root {
   --color-heading: #3c4a63;
   --color-text: #353a3f;
   --color-text-secondary: #4a5056;
@@ -68,9 +64,6 @@ ol {
   --color-separator: #eaecee;
   --color-shadow: #c7c5c5;
   --color-tooltip: #63676c;
-}
-
-:root {
   --font-size-h1: 28px;
   --font-weight-h1: 700;
   --line-height-h1: 32px;
@@ -101,36 +94,15 @@ ol {
   --line-height-xl: 26px;
   --font-size-xxl: 22px;
   --line-height-xxl: 30px;
-}
-
-:root {
   --main-content-desktop-width: 925px;
   --main-content-margin: 20px;
   --main-content-total-width: 965px;
-}
-
-:root {
   --section-max-width: 1120px;
   --section-padding: 40px;
-}
-
-:root {
   --transition-duration: 0.08s;
-}
-
-:root {
   --header-height: 84px;
-}
-
-:root {
   --panel-nav-height: 80px;
-}
-
-:root {
   --comparison-tool-primary-column-width: 300px;
-}
-
-:root {
   --footer-height: 84px;
 }
 
