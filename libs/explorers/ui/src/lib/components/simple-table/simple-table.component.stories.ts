@@ -33,19 +33,19 @@ export const WithHeader: Story = {
     ],
     rows: [
       [
-        { kind: 'link', text: "Alzheimer's Disease", url: '/diseases/alzheimers' },
+        { kind: 'link', text: "Alzheimer's Disease", href: '/diseases/alzheimers' },
         { kind: 'text', value: -20 },
       ],
       [
-        { kind: 'link', text: 'Schizophrenia', url: '/diseases/schizophrenia' },
+        { kind: 'link', text: 'Schizophrenia', href: '/diseases/schizophrenia' },
         { kind: 'text', value: -19.0591 },
       ],
       [
-        { kind: 'link', text: 'Depression', url: '/diseases/depression' },
+        { kind: 'link', text: 'Depression', href: '/diseases/depression' },
         { kind: 'text', value: -18.9775 },
       ],
       [
-        { kind: 'link', text: "Tourette's Syndrome", url: '/diseases/tourettes' },
+        { kind: 'link', text: "Tourette's Syndrome", href: '/diseases/tourettes' },
         { kind: 'text', value: -16.016 },
       ],
     ],
@@ -66,7 +66,7 @@ export const WithImages: Story = {
         {
           kind: 'link',
           text: 'View this gene on Agora',
-          url: 'https://agora.adknowledgeportal.org',
+          href: 'https://agora.adknowledgeportal.org',
         },
       ],
       [
@@ -78,7 +78,7 @@ export const WithImages: Story = {
         {
           kind: 'link',
           text: 'View this variant on the UCSC Genome Browser',
-          url: 'https://genome.ucsc.edu',
+          href: 'https://genome.ucsc.edu',
         },
       ],
       [
@@ -90,7 +90,7 @@ export const WithImages: Story = {
         {
           kind: 'link',
           text: 'View UMAP diagrams on CZI',
-          url: 'https://cellxgene.cziscience.com',
+          href: 'https://cellxgene.cziscience.com',
         },
       ],
     ],
@@ -155,7 +155,7 @@ export const Combined: Story = {
           src: 'explorers-assets/images/gene-comparison-icon.svg',
           alt: 'Agora icon',
         },
-        { kind: 'link', text: 'View on Agora', url: '/agora' },
+        { kind: 'link', text: 'View on Agora', href: '/agora' },
         { kind: 'text', value: 0.98 },
       ],
       [
@@ -172,7 +172,7 @@ export const Combined: Story = {
         {
           kind: 'link',
           text: 'UCSC Genome Browser',
-          url: 'https://genome.ucsc.edu',
+          href: 'https://genome.ucsc.edu',
         },
         { kind: 'text', value: 0.5 },
       ],

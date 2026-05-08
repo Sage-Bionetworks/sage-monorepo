@@ -17,7 +17,7 @@ export interface SimpleTableLabelCell {
 export interface SimpleTableLinkCell {
   kind: 'link';
   text: string;
-  url: string;
+  href: string;
 }
 
 export interface SimpleTableImageCell {

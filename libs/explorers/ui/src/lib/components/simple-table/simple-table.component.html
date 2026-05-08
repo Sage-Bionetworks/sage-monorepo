@@ -34,16 +34,16 @@
                 <span class="cell-label">{{ cell.text }}</span>
               }
               @case ('link') {
-                @if (isExternalLink(cell.url)) {
+                @if (isExternalLink(cell.href)) {
                   <a
                     class="cell-link"
-                    [href]="cell.url"
+                    [href]="cell.href"
                     target="_blank"
                     rel="noopener noreferrer"
                     >{{ cell.text }}</a
                   >
                 } @else {
-                  <a class="cell-link" [routerLink]="cell.url">{{ cell.text }}</a>
+                  <a class="cell-link" [routerLink]="cell.href">{{ cell.text }}</a>
                 }
               }
               @case ('image') {

@@ -96,7 +96,7 @@ describe('SimpleTableComponent', () => {
 
     it('renders internal link cells with routerLink', async () => {
       const { user, component } = await setup({
-        rows: [[{ kind: 'link', text: 'Go internal', url: '/internal' }]],
+        rows: [[{ kind: 'link', text: 'Go internal', href: '/internal' }]],
       });
       const link = screen.getByRole('link', { name: 'Go internal' });
       expect(link).toBeInTheDocument();
@@ -112,7 +112,7 @@ describe('SimpleTableComponent', () => {
             {
               kind: 'link',
               text: 'External',
-              url: 'https://example.com',
+              href: 'https://example.com',
             },
           ],
         ],
@@ -144,7 +144,7 @@ describe('SimpleTableComponent', () => {
         rows: [
           [
             { kind: 'image', src: '/agora.svg', alt: 'Agora' },
-            { kind: 'link', text: 'View', url: '/agora' },
+            { kind: 'link', text: 'View', href: '/agora' },
             { kind: 'text', value: 0.98 },
           ],
           [
