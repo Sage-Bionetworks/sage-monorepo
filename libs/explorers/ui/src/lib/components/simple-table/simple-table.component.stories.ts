@@ -67,7 +67,6 @@ export const WithImages: Story = {
           kind: 'link',
           text: 'View this gene on Agora',
           url: 'https://agora.adknowledgeportal.org',
-          external: true,
         },
       ],
       [
@@ -80,7 +79,6 @@ export const WithImages: Story = {
           kind: 'link',
           text: 'View this variant on the UCSC Genome Browser',
           url: 'https://genome.ucsc.edu',
-          external: true,
         },
       ],
       [
@@ -93,7 +91,6 @@ export const WithImages: Story = {
           kind: 'link',
           text: 'View UMAP diagrams on CZI',
           url: 'https://cellxgene.cziscience.com',
-          external: true,
         },
       ],
     ],
@@ -176,7 +173,6 @@ export const Combined: Story = {
           kind: 'link',
           text: 'UCSC Genome Browser',
           url: 'https://genome.ucsc.edu',
-          external: true,
         },
         { kind: 'text', value: 0.5 },
       ],

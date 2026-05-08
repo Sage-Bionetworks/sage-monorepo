@@ -113,7 +113,6 @@ describe('SimpleTableComponent', () => {
               kind: 'link',
               text: 'External',
               url: 'https://example.com',
-              external: true,
             },
           ],
         ],

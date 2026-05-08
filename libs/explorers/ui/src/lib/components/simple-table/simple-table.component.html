@@ -34,7 +34,7 @@
                 <span class="cell-label">{{ cell.text }}</span>
               }
               @case ('link') {
-                @if (cell.external) {
+                @if (isExternalLink(cell.url)) {
                   <a
                     class="cell-link"
                     [href]="cell.url"
