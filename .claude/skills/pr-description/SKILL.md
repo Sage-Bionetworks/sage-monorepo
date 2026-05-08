@@ -1,7 +1,7 @@
 ---
 name: pr-description
 description: >
-  Generates a PR title and description body following this repository's conventions.
+  Generates a PR title and description body following repository template standards.
   Use this skill whenever the user asks to create, write, generate, or update a PR description,
   or when working with an active pull request that needs documentation. Also use this when the
   user says things like "write up this PR", "draft the PR", "prepare the PR", or "describe these changes".
@@ -46,24 +46,24 @@ Common ticket prefixes in this repo: **AG**, **MG**, **QTL**, **SMR**.
 
 ### Fetching ticket details from Jira
 
-This skill expects a Jira MCP server (e.g., `mcp-jira-cloud`) to be configured. Use the
-MCP tools to fetch the ticket. Pull:
+Use the Atlassian MCP server (`mcp__atlassian__*`). For cloudId, tool signatures, and
+authentication conventions, follow [`.claude/rules/atlassian-mcp.md`](../../rules/atlassian-mcp.md).
 
-- Summary, description, and acceptance criteria
-- All **sub-tasks** (fetch them individually to get their full details)
+For each PR, pull:
+
+- The ticket itself — summary, description, and acceptance criteria
+- All **sub-tasks**
 - All **linked/related issues**
+- The **parent / epic**, including its description and acceptance criteria
 
-Acceptance criteria are especially valuable — they feed directly into the Testing section.
+Acceptance criteria feed the Testing section directly. Parent/epic context explains _why_
+the work exists, which strengthens the Description section.
 
-**If the Jira request fails due to an authentication or authorization error (401, 403, or
-similar), stop immediately and ask the user to authenticate. Do not continue generating the
-PR description until Jira access is confirmed.** Non-auth errors (404, network timeout) are
-fine to work around — just note that the ticket couldn't be fetched and proceed with what you
-have.
-
-If no Jira MCP server is configured, skip the fetch and note in the output that Jira details
-could not be retrieved. Use whatever context is available from the branch name, commit
-messages, and code changes.
+**If a Jira call fails with an auth error (401/403), stop and ask the user to run `/mcp`
+to re-authenticate. Do not continue generating the PR description until access is
+confirmed.** Non-auth errors (404, network timeout) are fine to work around — note that
+the ticket couldn't be fetched and proceed with what you have from the branch name,
+commit messages, and code changes.
 
 ---
 
@@ -146,7 +146,7 @@ Do NOT include unit test or e2e test commands — CI handles those.]
 - [ ] Step a reviewer can perform manually
 - [ ] Another verification step
 
-### Screenshots
+### Preview
 
 [If the PR includes visual/UI changes, suggest specific screenshots to capture.]
 
@@ -168,7 +168,6 @@ Do NOT include unit test or e2e test commands — CI handles those.]
 ### Related Issue
 
 - Always link the Jira ticket with a full URL: `[MG-893](https://sagebionetworks.jira.com/browse/MG-893)`
-- List sub-tasks and related issues underneath, indented, with their summaries
 - If acceptance criteria were found, you do not need to reproduce them here — they inform the Testing section instead
 - Omit this section only if there is genuinely no related ticket
 
