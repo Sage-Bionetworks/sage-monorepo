@@ -5,6 +5,7 @@
       fontSize="12px"
       closeIconColor="var(--color-action-primary)"
       [closeIconSize]="9"
+      [removeAriaLabel]="'Clear ' + (description() || title())"
       (removed)="clearWasClicked()"
     >
       @if (title() !== '') {

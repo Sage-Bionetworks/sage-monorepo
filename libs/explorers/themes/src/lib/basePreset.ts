@@ -76,22 +76,6 @@ export const BasePreset = definePreset(Lara, {
         },
       },
     },
-    chip: {
-      root: {
-        borderRadius: '40px',
-        paddingX: '15px',
-        paddingY: '8px',
-        gap: '0.5rem',
-      },
-      colorScheme: {
-        light: {
-          root: {
-            background: '#dce6ed',
-            color: '{text.color}',
-          },
-        },
-      },
-    },
     datatable: {
       headerCell: {
         selectedBackground: 'transparent',

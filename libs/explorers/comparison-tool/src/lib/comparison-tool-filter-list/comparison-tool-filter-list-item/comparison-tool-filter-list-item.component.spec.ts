@@ -41,4 +41,24 @@ describe('Component: Comparison Tool - Filter List Item', () => {
 
     expect(item).not.toBeVisible();
   });
+
+  it('should label the remove control with the description for screen readers', async () => {
+    await setup();
+
+    expect(screen.getByRole('button', { name: `Clear ${MOCK_DESCRIPTION}` })).toBeInTheDocument();
+  });
+
+  it('should fall back to title when description is empty', async () => {
+    await render(ComparisonToolFilterListItemComponent, {
+      componentInputs: {
+        item: { label: 'some option', selected: true },
+        title: MOCK_TITLE,
+        description: '',
+        isVisible: true,
+      },
+      providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+    });
+
+    expect(screen.getByRole('button', { name: `Clear ${MOCK_TITLE}` })).toBeInTheDocument();
+  });
 });

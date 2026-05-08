@@ -59,31 +59,36 @@ describe('ChicletComponent', () => {
     expect(projectionIndex).toBeGreaterThan(inputIndex);
   });
 
-  it('should pass color and size inputs through to the matching PrimeNG chip CSS variables', async () => {
+  it('should apply backgroundColor and textColor inputs to the chiclet root', async () => {
     const { fixture } = await renderChiclet({
-      inputs: {
-        label: 'PAK1',
-        backgroundColor: '#4caf50',
-        textColor: 'white',
-        closeIconColor: '#000',
-        closeIconSize: 10,
-        removable: true,
-      },
+      inputs: { label: 'PAK1', backgroundColor: '#4caf50', textColor: 'white' },
     });
-    const chip = fixture.nativeElement.querySelector('p-chip') as HTMLElement;
-    expect(chip.style.getPropertyValue('--p-chip-background')).toBe('#4caf50');
-    expect(chip.style.getPropertyValue('--p-chip-color')).toBe('white');
-    expect(chip.style.getPropertyValue('--p-chip-remove-icon-color')).toBe('#000');
-    expect(chip.style.getPropertyValue('--p-chip-remove-icon-size')).toBe('10px');
+    const root = fixture.nativeElement.querySelector('.explorers-chiclet') as HTMLElement;
+    expect(root.style.backgroundColor).toBe('rgb(76, 175, 80)');
+    expect(root.style.color).toBe('white');
   });
 
-  it('should leave color CSS variables unset and size at the 14px default when inputs are omitted', async () => {
+  it('should apply closeIconColor to the remove button and pass closeIconSize through to the icon', async () => {
+    const { fixture } = await renderChiclet({
+      inputs: { label: 'PAK1', closeIconColor: '#000', closeIconSize: 10, removable: true },
+    });
+    const removeBtn = screen.getByRole('button');
+    expect(removeBtn.style.color).toBe('rgb(0, 0, 0)');
+    const iconBox = fixture.nativeElement.querySelector('explorers-svg-icon > div') as HTMLElement;
+    expect(iconBox.style.width).toBe('10px');
+    expect(iconBox.style.height).toBe('10px');
+  });
+
+  it('should leave color styles unset and default close icon size to 14 when inputs are omitted', async () => {
     const { fixture } = await renderChiclet({ inputs: { label: 'PAK1', removable: true } });
-    const chip = fixture.nativeElement.querySelector('p-chip') as HTMLElement;
-    expect(chip.style.getPropertyValue('--p-chip-background')).toBe('');
-    expect(chip.style.getPropertyValue('--p-chip-color')).toBe('');
-    expect(chip.style.getPropertyValue('--p-chip-remove-icon-color')).toBe('');
-    expect(chip.style.getPropertyValue('--p-chip-remove-icon-size')).toBe('14px');
+    const root = fixture.nativeElement.querySelector('.explorers-chiclet') as HTMLElement;
+    expect(root.style.backgroundColor).toBe('');
+    expect(root.style.color).toBe('');
+    const removeBtn = screen.getByRole('button');
+    expect(removeBtn.style.color).toBe('');
+    const iconBox = fixture.nativeElement.querySelector('explorers-svg-icon > div') as HTMLElement;
+    expect(iconBox.style.width).toBe('14px');
+    expect(iconBox.style.height).toBe('14px');
   });
 
   it('should not render a remove control by default', async () => {
@@ -105,11 +110,22 @@ describe('ChicletComponent', () => {
     expect(removed).toHaveBeenCalledTimes(1);
   });
 
+  it('should apply removeAriaLabel to the remove control when provided', async () => {
+    await renderChiclet({
+      inputs: { label: 'sex: Female', removable: true, removeAriaLabel: 'Clear sex: Female' },
+    });
+    expect(screen.getByRole('button', { name: 'Clear sex: Female' })).toBeInTheDocument();
+  });
+
+  it('should default the remove control aria-label to "Remove" when removeAriaLabel is omitted', async () => {
+    await renderChiclet({ inputs: { label: 'sex: Female', removable: true } });
+    expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument();
+  });
+
   it('should render the close icon via the shared SvgIconComponent', async () => {
     const { fixture } = await renderChiclet({
       inputs: { label: 'PAK1', removable: true, closeIconSize: 10 },
     });
-    expect(fixture.nativeElement.querySelector('[data-p-icon="times-circle"]')).toBeNull();
     expect(fixture.nativeElement.querySelector('explorers-svg-icon')).not.toBeNull();
     expect(fixture.nativeElement.querySelector(`[data-testid="${mockSvgTestId}"]`)).not.toBeNull();
   });

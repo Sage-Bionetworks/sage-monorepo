@@ -1,19 +1,34 @@
-explorers-chiclet {
-  --p-chip-gap: 12px;
+@use 'explorers/styles/src/variables' as vars;
 
-  .chiclet-label {
-    font-weight: 400;
+.explorers-chiclet {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 15px;
+  background-color: rgb(80 129 167 / 20%);
+  border-radius: 40px;
+  font-weight: 400;
+
+  b {
+    font-weight: 700;
   }
 
-  .p-chip-remove-icon svg path {
-    stroke-width: 5;
+  .chiclet-label > *:hover {
+    cursor: default;
   }
 
-  // Overrides PrimeNG's own .p-chip:has(.p-chip-remove-icon) rule, which
-  // shrinks padding-inline-end to chip.padding.y when a remove icon is
-  // present. We want symmetric horizontal padding to match the legacy chip
-  // design.
-  .p-chip:has(.p-chip-remove-icon) {
-    padding-inline-end: var(--p-chip-padding-x);
+  .chiclet-remove {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: #5081a7;
+    cursor: pointer;
+
+    svg path {
+      transition: vars.$transition-duration;
+      stroke-width: 5;
+    }
   }
 }

@@ -52,6 +52,10 @@ export const RemovableWithCloseIconSize: Story = {
   args: { label: 'sex: Female', removable: true, closeIconSize: 10 },
 };
 
+export const RemovableWithCustomAriaLabel: Story = {
+  args: { label: 'sex: Female', removable: true, removeAriaLabel: 'Clear sex: Female' },
+};
+
 export const Playground: Story = {
   args: {
     label: '<b>biodomain:</b>&nbsp;Synapse',

@@ -1,12 +1,10 @@
-import { Component, computed, input, output, ViewEncapsulation } from '@angular/core';
+import { Component, input, output, ViewEncapsulation } from '@angular/core';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
-import { PrimeTemplate } from 'primeng/api';
-import { Chip } from 'primeng/chip';
 
 @Component({
   selector: 'explorers-chiclet',
   standalone: true,
-  imports: [Chip, PrimeTemplate, SvgIconComponent],
+  imports: [SvgIconComponent],
   templateUrl: './chiclet.component.html',
   styleUrls: ['./chiclet.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -32,7 +30,6 @@ export class ChicletComponent {
   closeIconSize = input<number>(14);
   fontSize = input<string>();
   removable = input<boolean>(false);
+  removeAriaLabel = input<string>('Remove');
   removed = output<void>();
-
-  protected closeIconSizePx = computed(() => `${this.closeIconSize()}px`);
 }

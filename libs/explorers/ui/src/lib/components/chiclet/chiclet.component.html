@@ -1,11 +1,7 @@
-<p-chip
-  [removable]="removable()"
+<div
   class="explorers-chiclet"
-  [style.--p-chip-background]="backgroundColor()"
-  [style.--p-chip-color]="textColor()"
-  [style.--p-chip-remove-icon-color]="closeIconColor()"
-  [style.--p-chip-remove-icon-size]="closeIconSizePx()"
-  (onRemove)="removed.emit()"
+  [style.background-color]="backgroundColor()"
+  [style.color]="textColor()"
 >
   <span class="chiclet-label unselectable-text" [style.font-size]="fontSize()">
     @if (label()) {
@@ -13,12 +9,20 @@
     }
     <ng-content />
   </span>
-  <ng-template pTemplate="removeicon">
-    <explorers-svg-icon
-      imagePath="explorers-assets/icons/close.svg"
-      [width]="closeIconSize()"
-      [height]="closeIconSize()"
-      [enableHoverEffects]="false"
-    />
-  </ng-template>
-</p-chip>
+  @if (removable()) {
+    <button
+      type="button"
+      class="chiclet-remove"
+      [style.color]="closeIconColor()"
+      [attr.aria-label]="removeAriaLabel()"
+      (click)="removed.emit()"
+    >
+      <explorers-svg-icon
+        imagePath="explorers-assets/icons/close.svg"
+        [width]="closeIconSize()"
+        [height]="closeIconSize()"
+        [enableHoverEffects]="false"
+      />
+    </button>
+  }
+</div>
