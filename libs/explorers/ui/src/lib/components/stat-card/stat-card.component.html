@@ -1,0 +1,9 @@
+<div class="stat-card">
+  <div class="stat-card-icon">
+    <explorers-svg-image [imagePath]="iconPath()" [altText]="iconAltText()" />
+  </div>
+  <div class="stat-card-header">{{ header() }}</div>
+  @if (subHeader(); as sub) {
+    <div class="stat-card-sub-header">{{ sub }}</div>
+  }
+</div>

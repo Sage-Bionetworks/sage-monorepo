@@ -1,0 +1,18 @@
+@use 'explorers/styles/src/mixins' as mixins;
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  > :nth-child(odd):last-child {
+    grid-column: 1 / -1;
+  }
+
+  @include mixins.respond-to('large') {
+    grid-template-columns: repeat(var(--stat-card-count, 1), 1fr);
+
+    > :nth-child(odd):last-child {
+      grid-column: auto;
+    }
+  }
+}

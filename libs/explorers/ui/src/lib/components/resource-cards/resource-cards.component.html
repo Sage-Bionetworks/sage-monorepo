@@ -1,11 +1,11 @@
 <div class="resource-cards">
   @for (card of cards(); track $index) {
     <explorers-resource-card
-      [link]="card.link || ''"
-      [description]="card.description || ''"
+      [link]="card.link"
+      [description]="card.description"
+      [imagePath]="card.imagePath"
       [title]="card.title"
-      [imagePath]="card.imagePath || ''"
-      [altText]="card.altText || ''"
+      [altText]="card.altText ?? ''"
     />
   }
 </div>
