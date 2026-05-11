@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { SafeHtml } from '@angular/platform-browser';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
-import { render } from '@testing-library/angular';
+import { render, RenderResult } from '@testing-library/angular';
 import { of } from 'rxjs';
 import { SvgIconComponent } from './svg-icon.component';
 
@@ -12,12 +12,13 @@ class MockSvgIconService {
 const dummyPath = '/libs/explorers/assets/icons/cog.svg';
 
 describe('SvgIconComponent', () => {
-  it('should create the component', async () => {
+  it('should create the component without a background by default', async () => {
     const result = await render(SvgIconComponent, {
       componentInputs: { imagePath: dummyPath },
       providers: [provideHttpClient(), { provide: SvgIconService, useClass: MockSvgIconService }],
     });
     expect(result.fixture.componentInstance).toBeTruthy();
+    expect(result.container.querySelector('.svg-icon-background')).toBeNull();
   });
 
   it('should load SVG through service and set as svgContent', async () => {
@@ -57,6 +58,59 @@ describe('SvgIconComponent', () => {
       const icon = getIconElement(result.container);
       expect(icon.getAttribute('role')).toBeNull();
       expect(icon.getAttribute('aria-label')).toBeNull();
+    });
+  });
+
+  describe('background', () => {
+    let renderResult: RenderResult<SvgIconComponent>;
+
+    beforeEach(async () => {
+      renderResult = await render(SvgIconComponent, {
+        componentInputs: { imagePath: dummyPath, enableBackground: true },
+        providers: [provideHttpClient(), { provide: SvgIconService, useClass: MockSvgIconService }],
+      });
+    });
+
+    function getBackground(): HTMLElement {
+      return renderResult.container.querySelector('.svg-icon-background') as HTMLElement;
+    }
+
+    it('should render the background when enableBackground is true', () => {
+      expect(getBackground()).not.toBeNull();
+    });
+
+    it('should apply a default background color', () => {
+      expect(getBackground().style.backgroundColor).not.toBe('');
+    });
+
+    it('should apply a configured background color', () => {
+      renderResult.fixture.componentRef.setInput('backgroundColor', 'rgb(255, 0, 0)');
+      renderResult.fixture.detectChanges();
+      expect(getBackground().style.backgroundColor).toBe('rgb(255, 0, 0)');
+    });
+
+    it('should default to the circle shape', () => {
+      const bg = getBackground();
+      expect(bg.classList.contains('circle')).toBe(true);
+      expect(bg.classList.contains('square')).toBe(false);
+    });
+
+    it('should apply the square class when backgroundShape is "square"', () => {
+      renderResult.fixture.componentRef.setInput('backgroundShape', 'square');
+      renderResult.fixture.detectChanges();
+      const bg = getBackground();
+      expect(bg.classList.contains('square')).toBe(true);
+      expect(bg.classList.contains('circle')).toBe(false);
+    });
+
+    it('should default backgroundPadding to 8px', () => {
+      expect(getBackground().style.padding).toBe('8px');
+    });
+
+    it('should apply the configured backgroundPadding', () => {
+      renderResult.fixture.componentRef.setInput('backgroundPadding', 16);
+      renderResult.fixture.detectChanges();
+      expect(getBackground().style.padding).toBe('16px');
     });
   });
 });

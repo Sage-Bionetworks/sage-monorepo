@@ -3,6 +3,8 @@ import { Component, computed, inject, input, OnInit, ViewEncapsulation } from '@
 import { SafeHtml } from '@angular/platform-browser';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 
+export type SvgIconBackgroundShape = 'circle' | 'square';
+
 @Component({
   selector: 'explorers-svg-icon',
   imports: [CommonModule],
@@ -17,6 +19,11 @@ export class SvgIconComponent implements OnInit {
   height = input(14);
   color = input('inherit');
   enableHoverEffects = input(false);
+
+  enableBackground = input(false);
+  backgroundColor = input('var(--color-primary)');
+  backgroundShape = input<SvgIconBackgroundShape>('circle');
+  backgroundPadding = input(8);
 
   private readonly svgService = inject(SvgIconService);
 

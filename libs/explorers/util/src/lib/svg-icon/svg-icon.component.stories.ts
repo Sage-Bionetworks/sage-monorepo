@@ -36,3 +36,41 @@ export const CustomColor: Story = {
     color: '#ff33c2',
   },
 };
+
+export const BackgroundDefault: Story = {
+  args: {
+    imagePath: peopleIcon,
+    altText: 'people',
+    width: 24,
+    height: 24,
+    color: 'white',
+    enableBackground: true,
+  },
+};
+
+export const BackgroundSquare: Story = {
+  args: {
+    imagePath: peopleIcon,
+    altText: 'people',
+    width: 24,
+    height: 24,
+    color: 'white',
+    enableBackground: true,
+    backgroundColor: 'var(--color-action-primary)',
+    backgroundShape: 'square',
+  },
+};
+
+export const BackgroundLargerPadding: Story = {
+  args: {
+    imagePath: peopleIcon,
+    altText: 'people',
+    width: 24,
+    height: 24,
+    color: 'white',
+    enableBackground: true,
+    backgroundColor: 'var(--color-tertiary)',
+    backgroundShape: 'circle',
+    backgroundPadding: 16,
+  },
+};
