@@ -26,7 +26,7 @@
         @for (cell of row; track $index; let colIndex = $index) {
           @let col = columns()?.[colIndex];
           <td [class]="col?.align ? 'align-' + col?.align : null">
-            @switch (cell.kind) {
+            @switch (cell.type) {
               @case ('text') {
                 {{ cell.value }}
               }

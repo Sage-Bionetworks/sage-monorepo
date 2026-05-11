@@ -5,23 +5,23 @@ export interface SimpleTableColumn {
 }
 
 export interface SimpleTableTextCell {
-  kind: 'text';
+  type: 'text';
   value: string | number;
 }
 
 export interface SimpleTableLabelCell {
-  kind: 'label';
+  type: 'label';
   text: string;
 }
 
 export interface SimpleTableLinkCell {
-  kind: 'link';
+  type: 'link';
   text: string;
   href: string;
 }
 
 export interface SimpleTableImageCell {
-  kind: 'image';
+  type: 'image';
   src: string;
   alt: string;
 }

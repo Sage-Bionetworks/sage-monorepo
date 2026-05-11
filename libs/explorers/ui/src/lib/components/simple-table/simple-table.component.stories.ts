@@ -33,20 +33,20 @@ export const WithHeader: Story = {
     ],
     rows: [
       [
-        { kind: 'link', text: "Alzheimer's Disease", href: '/diseases/alzheimers' },
-        { kind: 'text', value: -20 },
+        { type: 'link', text: "Alzheimer's Disease", href: '/diseases/alzheimers' },
+        { type: 'text', value: -20 },
       ],
       [
-        { kind: 'link', text: 'Schizophrenia', href: '/diseases/schizophrenia' },
-        { kind: 'text', value: -19.0591 },
+        { type: 'link', text: 'Schizophrenia', href: '/diseases/schizophrenia' },
+        { type: 'text', value: -19.0591 },
       ],
       [
-        { kind: 'link', text: 'Depression', href: '/diseases/depression' },
-        { kind: 'text', value: -18.9775 },
+        { type: 'link', text: 'Depression', href: '/diseases/depression' },
+        { type: 'text', value: -18.9775 },
       ],
       [
-        { kind: 'link', text: "Tourette's Syndrome", href: '/diseases/tourettes' },
-        { kind: 'text', value: -16.016 },
+        { type: 'link', text: "Tourette's Syndrome", href: '/diseases/tourettes' },
+        { type: 'text', value: -16.016 },
       ],
     ],
   },
@@ -59,36 +59,36 @@ export const WithImages: Story = {
     rows: [
       [
         {
-          kind: 'image',
+          type: 'image',
           src: 'qtl-assets/images/agora-logomark-only.svg',
           alt: 'Agora icon',
         },
         {
-          kind: 'link',
+          type: 'link',
           text: 'View this gene on Agora',
           href: 'https://agora.adknowledgeportal.org',
         },
       ],
       [
         {
-          kind: 'image',
+          type: 'image',
           src: 'qtl-assets/images/ucsc-genome-browser-logo.svg',
           alt: 'UCSC icon',
         },
         {
-          kind: 'link',
+          type: 'link',
           text: 'View this variant on the UCSC Genome Browser',
           href: 'https://genome.ucsc.edu',
         },
       ],
       [
         {
-          kind: 'image',
+          type: 'image',
           src: 'qtl-assets/images/czi-logo.svg',
           alt: 'CZI icon',
         },
         {
-          kind: 'link',
+          type: 'link',
           text: 'View UMAP diagrams on CZI',
           href: 'https://cellxgene.cziscience.com',
         },
@@ -110,24 +110,24 @@ export const WithoutHeader: Story = {
     columns: undefined,
     rows: [
       [
-        { kind: 'label', text: 'Correlation' },
-        { kind: 'text', value: '.98' },
+        { type: 'label', text: 'Correlation' },
+        { type: 'text', value: '.98' },
       ],
       [
-        { kind: 'label', text: 'P-Value' },
-        { kind: 'text', value: '1.25e-08' },
+        { type: 'label', text: 'P-Value' },
+        { type: 'text', value: '1.25e-08' },
       ],
       [
-        { kind: 'label', text: 'Variant Loc.' },
-        { kind: 'text', value: 'chr11:54455-252455' },
+        { type: 'label', text: 'Variant Loc.' },
+        { type: 'text', value: 'chr11:54455-252455' },
       ],
       [
-        { kind: 'label', text: 'Gene Loc.' },
-        { kind: 'text', value: 'chr11:54455-252455' },
+        { type: 'label', text: 'Gene Loc.' },
+        { type: 'text', value: 'chr11:54455-252455' },
       ],
       [
-        { kind: 'label', text: 'Cell Type' },
-        { kind: 'text', value: 'Microglia' },
+        { type: 'label', text: 'Cell Type' },
+        { type: 'text', value: 'Microglia' },
       ],
     ],
   },
@@ -151,30 +151,30 @@ export const Combined: Story = {
     rows: [
       [
         {
-          kind: 'image',
+          type: 'image',
           src: 'explorers-assets/images/gene-comparison-icon.svg',
           alt: 'Agora icon',
         },
-        { kind: 'link', text: 'View on Agora', href: '/agora' },
-        { kind: 'text', value: 0.98 },
+        { type: 'link', text: 'View on Agora', href: '/agora' },
+        { type: 'text', value: 0.98 },
       ],
       [
-        { kind: 'label', text: 'Manual' },
-        { kind: 'text', value: 'Curated by the QTL team.' },
-        { kind: 'text', value: 0.75 },
+        { type: 'label', text: 'Manual' },
+        { type: 'text', value: 'Curated by the QTL team.' },
+        { type: 'text', value: 0.75 },
       ],
       [
         {
-          kind: 'image',
+          type: 'image',
           src: 'explorers-assets/images/gene-search-icon.svg',
           alt: 'UCSC icon',
         },
         {
-          kind: 'link',
+          type: 'link',
           text: 'UCSC Genome Browser',
           href: 'https://genome.ucsc.edu',
         },
-        { kind: 'text', value: 0.5 },
+        { type: 'text', value: 0.5 },
       ],
     ],
   },

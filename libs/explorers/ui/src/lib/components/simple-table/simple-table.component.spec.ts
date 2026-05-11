@@ -31,8 +31,8 @@ describe('SimpleTableComponent', () => {
         columns: [{ name: 'TWAS' }, { name: 'Z-Score' }],
         rows: [
           [
-            { kind: 'text', value: 'AD' },
-            { kind: 'text', value: -20 },
+            { type: 'text', value: 'AD' },
+            { type: 'text', value: -20 },
           ],
         ],
       });
@@ -44,8 +44,8 @@ describe('SimpleTableComponent', () => {
       await setup({
         rows: [
           [
-            { kind: 'text', value: 'AD' },
-            { kind: 'text', value: -20 },
+            { type: 'text', value: 'AD' },
+            { type: 'text', value: -20 },
           ],
         ],
       });
@@ -57,8 +57,8 @@ describe('SimpleTableComponent', () => {
         columns: [{ name: 'TWAS' }, { name: 'Z-Score', tooltip: 'A z-score' }],
         rows: [
           [
-            { kind: 'text', value: 'AD' },
-            { kind: 'text', value: -20 },
+            { type: 'text', value: 'AD' },
+            { type: 'text', value: -20 },
           ],
         ],
       });
@@ -73,8 +73,8 @@ describe('SimpleTableComponent', () => {
       await setup({
         rows: [
           [
-            { kind: 'text', value: 'Microglia' },
-            { kind: 'text', value: 0.98 },
+            { type: 'text', value: 'Microglia' },
+            { type: 'text', value: 0.98 },
           ],
         ],
       });
@@ -86,8 +86,8 @@ describe('SimpleTableComponent', () => {
       await setup({
         rows: [
           [
-            { kind: 'label', text: 'P-Value' },
-            { kind: 'text', value: '1.25e-08' },
+            { type: 'label', text: 'P-Value' },
+            { type: 'text', value: '1.25e-08' },
           ],
         ],
       });
@@ -96,7 +96,7 @@ describe('SimpleTableComponent', () => {
 
     it('renders internal link cells with routerLink', async () => {
       const { user, component } = await setup({
-        rows: [[{ kind: 'link', text: 'Go internal', href: '/internal' }]],
+        rows: [[{ type: 'link', text: 'Go internal', href: '/internal' }]],
       });
       const link = screen.getByRole('link', { name: 'Go internal' });
       expect(link).toBeInTheDocument();
@@ -110,7 +110,7 @@ describe('SimpleTableComponent', () => {
         rows: [
           [
             {
-              kind: 'link',
+              type: 'link',
               text: 'External',
               href: 'https://example.com',
             },
@@ -126,8 +126,8 @@ describe('SimpleTableComponent', () => {
       await setup({
         rows: [
           [
-            { kind: 'image', src: '/img.png', alt: 'Logo' },
-            { kind: 'text', value: 'Caption' },
+            { type: 'image', src: '/img.png', alt: 'Logo' },
+            { type: 'text', value: 'Caption' },
           ],
         ],
       });
@@ -143,14 +143,14 @@ describe('SimpleTableComponent', () => {
         columns: [{ name: 'Source' }, { name: 'Detail' }, { name: 'Score', align: 'right' }],
         rows: [
           [
-            { kind: 'image', src: '/agora.svg', alt: 'Agora' },
-            { kind: 'link', text: 'View', href: '/agora' },
-            { kind: 'text', value: 0.98 },
+            { type: 'image', src: '/agora.svg', alt: 'Agora' },
+            { type: 'link', text: 'View', href: '/agora' },
+            { type: 'text', value: 0.98 },
           ],
           [
-            { kind: 'label', text: 'Manual' },
-            { kind: 'text', value: 'Curated' },
-            { kind: 'text', value: 0.5 },
+            { type: 'label', text: 'Manual' },
+            { type: 'text', value: 'Curated' },
+            { type: 'text', value: 0.5 },
           ],
         ],
       });
