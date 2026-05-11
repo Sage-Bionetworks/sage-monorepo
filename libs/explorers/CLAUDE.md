@@ -32,7 +32,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 nx test explorers-<lib-name>               # run unit tests for a lib
 nx lint explorers-<lib-name>               # lint a lib
 nx start explorers-storybook       # serve explorers Storybook (port 4402)
-nx run explorers-charts-angular:storybook  # serve charts Storybook (port 4400)
+nx start explorers-charts-angular          # serve charts Storybook (port 4400)
 ```
 
 ## Testing Conventions
