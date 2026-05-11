@@ -1,0 +1,58 @@
+<table
+  class="simple-table"
+  [class.fixed-gap]="columnGap()"
+  [style.--simple-table-column-gap]="columnGap()"
+>
+  @if (columns(); as cols) {
+    <thead>
+      <tr>
+        @for (col of cols; track $index) {
+          <th [class]="col?.align ? 'align-' + col?.align : null">
+            @if (col.tooltip) {
+              <span class="dotted-underline" [pTooltip]="col.tooltip" tooltipPosition="left">
+                {{ col.name }}
+              </span>
+            } @else {
+              {{ col.name }}
+            }
+          </th>
+        }
+      </tr>
+    </thead>
+  }
+  <tbody>
+    @for (row of rows(); track $index) {
+      <tr>
+        @for (cell of row; track $index; let colIndex = $index) {
+          @let col = columns()?.[colIndex];
+          <td [class]="col?.align ? 'align-' + col?.align : null">
+            @switch (cell.type) {
+              @case ('text') {
+                {{ cell.value }}
+              }
+              @case ('label') {
+                <span class="cell-label">{{ cell.text }}</span>
+              }
+              @case ('link') {
+                @if (isExternalLink(cell.href)) {
+                  <a
+                    class="cell-link"
+                    [href]="cell.href"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >{{ cell.text }}</a
+                  >
+                } @else {
+                  <a class="cell-link" [routerLink]="cell.href">{{ cell.text }}</a>
+                }
+              }
+              @case ('image') {
+                <explorers-svg-image [imagePath]="cell.src" [altText]="cell.alt" />
+              }
+            }
+          </td>
+        }
+      </tr>
+    }
+  </tbody>
+</table>
