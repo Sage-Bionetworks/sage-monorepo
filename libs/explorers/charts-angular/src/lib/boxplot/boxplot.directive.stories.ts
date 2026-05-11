@@ -19,7 +19,7 @@ const meta: Meta<BoxplotDirective> = {
   },
   render: (args: BoxplotProps) => ({
     props: args,
-    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [xAxisLabelFormatter]="xAxisLabelFormatter" [xAxisCategories]="xAxisCategories" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisLabelTooltipFormatter]="xAxisLabelTooltipFormatter" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity" [noDataStyle]="noDataStyle" [chartStyle]="chartStyle"></div>`,
+    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [xAxisLabelFormatter]="xAxisLabelFormatter" [xAxisCategories]="xAxisCategories" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisLabelTooltipFormatter]="xAxisLabelTooltipFormatter" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity" [noDataStyle]="noDataStyle" [chartStyle]="chartStyle" [laneBackgroundColors]="laneBackgroundColors" [showAxisTicks]="showAxisTicks" [boxplotBoxFillColor]="boxplotBoxFillColor" [boxplotBoxBorderColor]="boxplotBoxBorderColor" [axisTickLabelStyle]="axisTickLabelStyle" [axisLineStyle]="axisLineStyle"></div>`,
   }),
 };
 export default meta;
@@ -69,5 +69,19 @@ export const DynamicSummary: Story = {
     pointOpacity: 0.5,
     noDataStyle: 'grayBackground',
     chartStyle: 'grayGrid',
+  },
+};
+
+export const Styled: Story = {
+  args: {
+    summaries: staticBoxplotSummaries,
+    points: [],
+    pointTooltipFormatter: (pt: CategoryPoint) => `${pt.pointCategory}: ${pt.value}`,
+    laneBackgroundColors: ['#F9F9FA', '#FFFFFF'],
+    showAxisTicks: false,
+    boxplotBoxFillColor: 'rgba(210, 175, 129, 0.5)',
+    boxplotBoxBorderColor: '#22252A',
+    axisTickLabelStyle: { fontSize: '12px', fontWeight: 400, color: '#4A5056' },
+    axisLineStyle: { width: 1, color: '#000' },
   },
 };

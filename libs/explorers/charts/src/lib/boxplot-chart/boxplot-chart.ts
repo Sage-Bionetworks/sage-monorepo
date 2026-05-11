@@ -73,6 +73,9 @@ export class BoxplotChart {
     xAxisLabelFormatter: BoxplotProps['xAxisLabelFormatter'],
     xAxisLabelTooltipFormatter: BoxplotProps['xAxisLabelTooltipFormatter'],
     boxplotChartTheme: BoxplotChartTheme,
+    showAxisTicks: BoxplotProps['showAxisTicks'],
+    axisTickLabelStyle: BoxplotProps['axisTickLabelStyle'],
+    axisLineStyle: BoxplotProps['axisLineStyle'],
   ) {
     // Use two xAxes:
     //  - value: used to jitter points with multiple pointCategories, where
@@ -85,6 +88,8 @@ export class BoxplotChart {
       {
         id: 'value-x-axis',
         type: 'value',
+        // Render above the boxplot series so lane background fills don't occlude the axis line.
+        z: 10,
         axisLine: {
           onZero: false,
         },
@@ -104,9 +109,11 @@ export class BoxplotChart {
       {
         id: 'category-x-axis',
         type: 'category',
+        z: 10,
         data: xAxisCategories,
         axisLabel: {
           ...boxplotChartTheme.xAxisLabelTextStyle,
+          ...(axisTickLabelStyle ?? {}),
           interval: 0, // ensure all labels are shown
           formatter: (value) => {
             if (xAxisLabelFormatter) {
@@ -117,9 +124,11 @@ export class BoxplotChart {
         },
         axisTick: {
           alignWithLabel: true,
+          show: showAxisTicks !== false,
         },
         axisLine: {
           onZero: false,
+          ...(axisLineStyle ? { lineStyle: axisLineStyle } : {}),
         },
         tooltip: {
           ...(xAxisLabelTooltipFormatter && {
@@ -142,21 +151,31 @@ export class BoxplotChart {
     yAxisMin: BoxplotProps['yAxisMin'],
     yAxisMax: BoxplotProps['yAxisMax'],
     boxplotChartTheme: BoxplotChartTheme,
+    showAxisTicks: BoxplotProps['showAxisTicks'],
+    axisTickLabelStyle: BoxplotProps['axisTickLabelStyle'],
+    axisLineStyle: BoxplotProps['axisLineStyle'],
   ) {
     const yAxisOptions: EChartsOption['yAxis'] = {
       type: 'value',
+      // Render above the boxplot series so lane background fills don't occlude the axis line.
+      z: 10,
       name: yAxisTitle,
       nameLocation: 'middle',
       nameGap: boxplotChartTheme.yAxisTickLabelMaxWidth,
       nameTextStyle: boxplotChartTheme.yAxisTitleTextStyle,
       axisLine: {
         show: true,
+        ...(axisLineStyle ? { lineStyle: axisLineStyle } : {}),
+      },
+      axisTick: {
+        show: showAxisTicks !== false,
       },
       axisLabel: {
         width: boxplotChartTheme.yAxisTickLabelMaxWidth,
         hideOverlap: true,
         showMinLabel: yAxisMin == null,
         showMaxLabel: yAxisMax == null,
+        ...(axisTickLabelStyle ?? {}),
       },
       splitLine: boxplotChartTheme.yAxisSplitLine,
       min: yAxisMin ? yAxisMin - yAxisPadding : undefined,
@@ -183,6 +202,12 @@ export class BoxplotChart {
       pointCategoryShapes,
       pointOpacity,
       chartStyle,
+      laneBackgroundColors,
+      showAxisTicks,
+      boxplotBoxFillColor,
+      boxplotBoxBorderColor,
+      axisTickLabelStyle,
+      axisLineStyle,
     } = boxplotProps;
 
     const showLegend = boxplotProps.showLegend || false;
@@ -272,13 +297,34 @@ export class BoxplotChart {
     const boxplotSeriesBase: SeriesOption = {
       type: 'boxplot',
       z: 1,
-      itemStyle: boxplotChartTheme.boxplotItemStyle,
+      itemStyle: {
+        ...boxplotChartTheme.boxplotItemStyle,
+        ...(boxplotBoxFillColor ? { color: boxplotBoxFillColor } : {}),
+        ...(boxplotBoxBorderColor ? { borderColor: boxplotBoxBorderColor } : {}),
+      },
       boxWidth: [7, 115],
       silent: true,
       tooltip: {
         show: false,
       },
-      markArea: boxplotChartTheme.getBoxplotMarkArea?.(xAxisCategories),
+      markArea: laneBackgroundColors?.length
+        ? {
+            itemStyle: {},
+            data: xAxisCategories.map((_, idx) => {
+              const halfWidth = 0.5; // lanes butt up against each other (no gap)
+              const pcIndex = idx + 1;
+              return [
+                {
+                  xAxis: pcIndex - halfWidth,
+                  itemStyle: {
+                    color: laneBackgroundColors[idx % laneBackgroundColors.length],
+                  },
+                },
+                { xAxis: pcIndex + halfWidth },
+              ];
+            }),
+          }
+        : boxplotChartTheme.getBoxplotMarkArea?.(xAxisCategories),
     };
     if (summaries) {
       seriesOpts.push({
@@ -372,8 +418,19 @@ export class BoxplotChart {
         xAxisLabelFormatter,
         xAxisLabelTooltipFormatter,
         boxplotChartTheme,
+        showAxisTicks,
+        axisTickLabelStyle,
+        axisLineStyle,
       ),
-      yAxis: this.getYAxisOptions(yAxisTitle, yAxisMin, yAxisMax, boxplotChartTheme),
+      yAxis: this.getYAxisOptions(
+        yAxisTitle,
+        yAxisMin,
+        yAxisMax,
+        boxplotChartTheme,
+        showAxisTicks,
+        axisTickLabelStyle,
+        axisLineStyle,
+      ),
       tooltip: boxplotChartTheme.tooltip,
       series: seriesOpts,
     };

@@ -1,4 +1,6 @@
 export type {
+  AxisTickLabelStyle,
+  AxisLineStyle,
   BoxplotProps,
   CategoryAsValueBoxplotSummary,
   CategoryAsValuePoint,

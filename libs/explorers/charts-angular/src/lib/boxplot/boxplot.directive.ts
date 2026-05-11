@@ -1,5 +1,7 @@
 import { Directive, ElementRef, inject, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import {
+  AxisTickLabelStyle,
+  AxisLineStyle,
   BoxplotChart,
   BoxplotProps,
   CategoryBoxplotSummary,
@@ -36,6 +38,12 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() pointOpacity: undefined | number;
   @Input() noDataStyle: undefined | 'textOnly' | 'grayBackground';
   @Input() chartStyle: undefined | ChartStyle;
+  @Input() laneBackgroundColors: undefined | string[];
+  @Input() showAxisTicks: undefined | boolean;
+  @Input() boxplotBoxFillColor: undefined | string;
+  @Input() boxplotBoxBorderColor: undefined | string;
+  @Input() axisTickLabelStyle: undefined | AxisTickLabelStyle;
+  @Input() axisLineStyle: undefined | AxisLineStyle;
 
   ngOnInit() {
     this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
@@ -68,6 +76,12 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       pointOpacity: this.pointOpacity,
       noDataStyle: this.noDataStyle,
       chartStyle: this.chartStyle,
+      laneBackgroundColors: this.laneBackgroundColors,
+      showAxisTicks: this.showAxisTicks,
+      boxplotBoxFillColor: this.boxplotBoxFillColor,
+      boxplotBoxBorderColor: this.boxplotBoxBorderColor,
+      axisTickLabelStyle: this.axisTickLabelStyle,
+      axisLineStyle: this.axisLineStyle,
     };
   }
 }
