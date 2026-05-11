@@ -11,7 +11,7 @@
   --fab-bg: var(--p-surface-100);
   --fab-bg-hover: var(--p-surface-200);
   --fab-fg: var(--p-text-color);
-  --fab-border: var(--p-surface-200);
+  --fab-border: var(--border);
 
   display: inline-flex;
   align-items: center;
@@ -59,7 +59,7 @@
 .fab:hover,
 .fab:focus-visible {
   background: var(--fab-bg-hover);
-  border-color: var(--p-surface-300);
+  border-color: var(--border-hover);
   box-shadow: 0 8px 24px rgb(0 0 0 / 16%);
 }
 

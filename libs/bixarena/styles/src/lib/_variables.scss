@@ -12,6 +12,8 @@
   --text-xl: 1.25rem;
   --text-2xl: 2rem;
   --text-3xl: 2.625rem;
+  --border: var(--p-surface-300);
+  --border-hover: var(--p-surface-400);
 }
 
 html:not(.dark) {

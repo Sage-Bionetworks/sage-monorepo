@@ -28,7 +28,7 @@
   width: fit-content;
   margin: 0 auto;
   padding: 0.35rem 0.9rem;
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: 999px;
   background: transparent;
   font-family: inherit;
@@ -51,7 +51,7 @@
 
   &:hover:not(:disabled) {
     background: var(--p-surface-200);
-    border-color: var(--p-surface-300);
+    border-color: var(--border-hover);
     color: var(--p-text-color);
     transform: translateY(-1px);
 
@@ -131,7 +131,7 @@
   color: var(--p-text-muted-color);
   font-size: var(--text-sm);
   padding: 2rem;
-  border: 1px dashed var(--p-surface-200);
+  border: 1px dashed var(--border);
   border-radius: var(--p-border-radius-lg);
 }
 

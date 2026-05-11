@@ -1,9 +1,8 @@
 import { Component, computed, ElementRef, input, output, signal, viewChild } from '@angular/core';
-import { Popover, PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'bixarena-prompt-composer',
-  imports: [PopoverModule],
+  imports: [],
   templateUrl: './prompt-composer.component.html',
   styleUrl: './prompt-composer.component.scss',
 })
@@ -16,12 +15,6 @@ export class PromptComposerComponent {
 
   readonly text = signal('');
   readonly textareaEl = viewChild<ElementRef<HTMLTextAreaElement>>('textarea');
-  private readonly disclaimerPopover = viewChild.required<Popover>('disclaimerPopover');
-  readonly disclaimerOpen = signal(false);
-
-  toggleDisclaimer(event: Event): void {
-    this.disclaimerPopover().toggle(event);
-  }
 
   readonly isHot = computed(() => this.text().trim().length > 0 && !this.disabled());
 

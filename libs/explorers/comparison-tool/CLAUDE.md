@@ -27,7 +27,7 @@ Coverage is output to `coverage/libs/explorers/comparison-tool`.
 - `ComparisonToolControlsComponent` — search input, category selectors, column selector, significance threshold, displayed-results count
 - `ComparisonToolTableComponent` — renders two `BaseTableComponent` instances (pinned rows + unpinned rows), each backed by PrimeNG table
 - `ComparisonToolFilterPanelComponent` — slide-in side panel for advanced filtering
-- `ComparisonToolFilterListComponent` — active filter chips/badges
+- `ComparisonToolFilterListComponent` — active filter chips/badges (each chip is rendered via the shared `FilterChicletComponent` from `@sagebionetworks/explorers/ui`)
 - `HeatmapDetailsPanelComponent` — modal showing detailed heatmap cell info
 - `ComparisonToolFooterComponent` — paginator and help links
   - `HelpLinksComponent` — legend panel and visualization overview panel (also a public export)
@@ -59,9 +59,11 @@ Bootstrap tests with `provideComparisonToolService()` and `provideComparisonTool
 
 ### Public API
 
-Only two exports from `src/index.ts`:
+The barrel re-exports the root component plus any sub-component with a legitimate cross-package consumer; everything else stays internal so it can be refactored freely.
 
 ```typescript
 export * from './lib/comparison-tool.component';
 export { HelpLinksComponent } from './lib/help-links/help-links.component';
 ```
+
+When adding a new export, treat it as a deliberate API decision: the symbol becomes a contract, and renaming/restructuring it later is a breaking change. Prefer keeping internals private and only promote a sub-component when an external consumer needs it.

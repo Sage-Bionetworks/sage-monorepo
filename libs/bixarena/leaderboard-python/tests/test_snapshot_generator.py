@@ -1,12 +1,18 @@
 """Unit tests for generate_snapshot() input validation."""
 
+import math
 from contextlib import contextmanager
 from unittest.mock import patch
 
 import pytest
 
 from bixarena_leaderboard.snapshot_generator import (
+    _BT_SCORE_MAX,
+    _BT_SCORE_MIN_EXCLUSIVE,
+    _CI_CLAMP,
     SnapshotRunError,
+    _clamp_ci_bounds,
+    _entry_has_valid_score,
     generate_all_snapshots,
     generate_snapshot,
 )
@@ -58,6 +64,12 @@ class TestMinEvalsValidation:
             pass  # DB connection error expected in unit test environment
 
 
+class TestMinTotalModelsValidation:
+    def test_negative(self):
+        with pytest.raises(ValueError, match="min_total_models must be >= 0"):
+            generate_snapshot(num_bootstrap=100, min_total_models=-1)
+
+
 class TestGenerateAllSnapshotsValidation:
     def test_negative_min_total_battles(self):
         with pytest.raises(ValueError, match="min_total_battles must be >= 0"):
@@ -66,6 +78,67 @@ class TestGenerateAllSnapshotsValidation:
     def test_negative_min_total_models(self):
         with pytest.raises(ValueError, match="min_total_models must be >= 0"):
             generate_all_snapshots(min_total_models=-1)
+
+
+class TestEntryHasValidScore:
+    def test_typical_score_is_valid(self):
+        assert _entry_has_valid_score({"btScore": 500.0}) is True
+
+    def test_score_at_max_is_valid(self):
+        assert _entry_has_valid_score({"btScore": _BT_SCORE_MAX}) is True
+
+    def test_score_above_max_is_invalid(self):
+        assert _entry_has_valid_score({"btScore": _BT_SCORE_MAX + 1}) is False
+
+    def test_score_at_lower_threshold_is_invalid(self):
+        # Strict > _BT_SCORE_MIN_EXCLUSIVE; equality is rejected.
+        assert _entry_has_valid_score({"btScore": _BT_SCORE_MIN_EXCLUSIVE}) is False
+
+    def test_negative_score_is_invalid(self):
+        assert _entry_has_valid_score({"btScore": -100.0}) is False
+
+    def test_positive_inf_is_invalid(self):
+        assert _entry_has_valid_score({"btScore": math.inf}) is False
+
+    def test_negative_inf_is_invalid(self):
+        assert _entry_has_valid_score({"btScore": -math.inf}) is False
+
+    def test_nan_is_invalid(self):
+        assert _entry_has_valid_score({"btScore": math.nan}) is False
+
+
+class TestClampCiBounds:
+    @staticmethod
+    def _entry(lo, hi):
+        return {"bootstrapQ025": lo, "bootstrapQ975": hi}
+
+    def test_in_range_unchanged(self):
+        e = self._entry(-100.0, 200.0)
+        _clamp_ci_bounds(e)
+        assert e["bootstrapQ025"] == -100.0
+        assert e["bootstrapQ975"] == 200.0
+
+    def test_above_upper_bound_clamped(self):
+        e = self._entry(-100.0, _CI_CLAMP + 5000)
+        _clamp_ci_bounds(e)
+        assert e["bootstrapQ025"] == -100.0
+        assert e["bootstrapQ975"] == _CI_CLAMP
+
+    def test_below_lower_bound_clamped(self):
+        e = self._entry(-_CI_CLAMP - 5000, 200.0)
+        _clamp_ci_bounds(e)
+        assert e["bootstrapQ025"] == -_CI_CLAMP
+        assert e["bootstrapQ975"] == 200.0
+
+    def test_non_finite_clamped_to_lower_bound(self):
+        # Current behavior: any non-finite value (inf, -inf, NaN) collapses to
+        # -_CI_CLAMP. Asymmetric for +inf, but acceptable since divergent CIs
+        # are uninterpretable anyway.
+        for bad in (math.inf, -math.inf, math.nan):
+            e = self._entry(bad, bad)
+            _clamp_ci_bounds(e)
+            assert e["bootstrapQ025"] == -_CI_CLAMP
+            assert e["bootstrapQ975"] == -_CI_CLAMP
 
 
 @contextmanager
@@ -261,3 +334,63 @@ class TestGenerateAllSnapshotsBehavior:
         assert {e["slug"] for e in summary["generated"]} == {"overall"}
         assert summary["failed"] == [{"slug": "cancer-biology", "error": "boom"}]
         assert summary["total"] == 2
+
+    def test_no_qualifying_entries_routes_to_skipped(self):
+        leaderboards = [{"slug": "cancer-biology", "name": "Cancer Biology"}]
+        stats: dict = {"cancer-biology": {"battle_count": 50, "model_count": 5}}
+        outcomes: dict = {
+            "cancer-biology": {
+                "snapshot_id": None,
+                "snapshot_identifier": None,
+                "entry_count": 0,
+                "evaluation_count": 50,
+                "leaderboard_name": "Cancer Biology",
+                "skipped_reason": "no_qualifying_entries",
+            },
+        }
+        patches = _patch_orchestrator(leaderboards, stats, outcomes)
+        _apply_patches(patches)
+        try:
+            summary = generate_all_snapshots(
+                min_total_battles=10,
+                min_total_models=2,
+            )
+        finally:
+            _stop_patches(patches)
+
+        assert summary["generated"] == []
+        assert summary["failed"] == []
+        assert len(summary["skipped"]) == 1
+        skip = summary["skipped"][0]
+        assert skip["slug"] == "cancer-biology"
+        assert skip["reason"] == "no_qualifying_entries"
+        assert skip["battle_count"] == 50
+        assert skip["model_count"] == 5
+
+    def test_insufficient_qualifying_entries_routes_to_skipped(self):
+        leaderboards = [{"slug": "cancer-biology", "name": "Cancer Biology"}]
+        stats: dict = {"cancer-biology": {"battle_count": 50, "model_count": 5}}
+        outcomes: dict = {
+            "cancer-biology": {
+                "snapshot_id": None,
+                "snapshot_identifier": None,
+                "entry_count": 2,
+                "evaluation_count": 50,
+                "leaderboard_name": "Cancer Biology",
+                "skipped_reason": "insufficient_qualifying_entries",
+            },
+        }
+        patches = _patch_orchestrator(leaderboards, stats, outcomes)
+        _apply_patches(patches)
+        try:
+            summary = generate_all_snapshots(
+                min_total_battles=10,
+                min_total_models=2,
+            )
+        finally:
+            _stop_patches(patches)
+
+        assert summary["generated"] == []
+        assert len(summary["skipped"]) == 1
+        skip = summary["skipped"][0]
+        assert skip["reason"] == "insufficient_qualifying_entries"

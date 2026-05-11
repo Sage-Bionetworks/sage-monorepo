@@ -25,11 +25,17 @@ bixarena-example-prompts {
 
 .composer-group {
   width: 100%;
-  max-width: 40rem;
+  max-width: 52rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   align-self: center;
+}
+
+.battle-view .composer-group {
+  --composer-max-width: 100%;
+
+  max-width: none;
 }
 
 // Fixed height so panels scroll internally instead of growing infinitely.

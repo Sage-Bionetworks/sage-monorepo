@@ -224,6 +224,7 @@ model/org-sagebionetworks-repo-model-dataaccess-access-approval-search-result.ts
 model/org-sagebionetworks-repo-model-dataaccess-access-approval-search-sort.ts
 model/org-sagebionetworks-repo-model-dataaccess-access-approval-sort-field.ts
 model/org-sagebionetworks-repo-model-dataaccess-access-requirement-conversion-request.ts
+model/org-sagebionetworks-repo-model-dataaccess-access-requirement-permissions.ts
 model/org-sagebionetworks-repo-model-dataaccess-access-requirement-search-request.ts
 model/org-sagebionetworks-repo-model-dataaccess-access-requirement-search-response.ts
 model/org-sagebionetworks-repo-model-dataaccess-access-requirement-search-result.ts

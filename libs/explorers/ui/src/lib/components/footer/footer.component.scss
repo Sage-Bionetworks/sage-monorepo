@@ -6,8 +6,8 @@ footer {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-primary);
-  padding: 10px;
+  background: var(--footer-background, var(--color-primary));
+  padding: 10px var(--footer-padding-x, 10px);
   min-height: var(--footer-height);
 
   @media (min-width: vars.$md-breakpoint) {

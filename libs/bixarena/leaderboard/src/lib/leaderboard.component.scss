@@ -68,7 +68,7 @@ bixarena-hero {
 
 .table-wrap {
   background: var(--p-surface-50);
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: var(--p-border-radius-md);
   overflow: hidden;
 }
@@ -86,7 +86,7 @@ bixarena-hero {
 
 .retry-btn {
   padding: 0.4rem 0.9rem;
-  border: 1px solid var(--p-surface-200);
+  border: 1px solid var(--border);
   border-radius: var(--p-border-radius-md);
   background: var(--p-surface-100);
   color: var(--p-text-color);

@@ -1,0 +1,25 @@
+<div
+  class="explorers-chiclet"
+  [style.background-color]="backgroundColor()"
+  [style.color]="textColor()"
+>
+  <span class="chiclet-label unselectable-text" [style.font-size]="fontSize()">
+    <ng-content />
+  </span>
+  @if (removable()) {
+    <button
+      type="button"
+      class="chiclet-remove"
+      [style.color]="closeIconColor()"
+      [attr.aria-label]="removeAriaLabel()"
+      (click)="removed.emit()"
+    >
+      <explorers-svg-icon
+        imagePath="explorers-assets/icons/close.svg"
+        [width]="closeIconSize()"
+        [height]="closeIconSize()"
+        [enableHoverEffects]="false"
+      />
+    </button>
+  }
+</div>
