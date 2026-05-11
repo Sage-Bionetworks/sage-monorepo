@@ -30,6 +30,11 @@ const renderTestComponent = async (props: BoxplotProps) => {
       [pointOpacity]="pointOpacity"
       [noDataStyle]="noDataStyle"
       [chartStyle]="chartStyle"
+      [laneBackgroundColors]="laneBackgroundColors"
+      [showAxisTicks]="showAxisTicks"
+      [boxplotBoxStyle]="boxplotBoxStyle"
+      [axisTickLabelStyle]="axisTickLabelStyle"
+      [axisLineStyle]="axisLineStyle"
     ></div>`,
   })
   class TestComponent {
@@ -50,6 +55,11 @@ const renderTestComponent = async (props: BoxplotProps) => {
     pointOpacity = props.pointOpacity;
     noDataStyle = props.noDataStyle;
     chartStyle = props.chartStyle;
+    laneBackgroundColors = props.laneBackgroundColors;
+    showAxisTicks = props.showAxisTicks;
+    boxplotBoxStyle = props.boxplotBoxStyle;
+    axisTickLabelStyle = props.axisTickLabelStyle;
+    axisLineStyle = props.axisLineStyle;
   }
 
   return await render(TestComponent, {

@@ -1,10 +1,10 @@
 import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
-import { DEFAULT_COLOR } from '../constants';
 import {
   grayGridBoxplotChartTheme,
   minimalBoxplotChartTheme,
 } from '../chart-theme/boxplot-chart-theme';
+import { DEFAULT_COLOR } from '../constants';
 import { BoxplotProps, CategoryPoint } from '../models';
 import { BoxplotChartTheme } from '../models/boxplot';
 import {
@@ -88,7 +88,7 @@ export class BoxplotChart {
       {
         id: 'value-x-axis',
         type: 'value',
-        // Render above the boxplot series so lane background fills don't occlude the axis line.
+        // Ensure axes render above series markAreas
         z: 10,
         axisLine: {
           onZero: false,
@@ -113,7 +113,7 @@ export class BoxplotChart {
         data: xAxisCategories,
         axisLabel: {
           ...boxplotChartTheme.xAxisLabelTextStyle,
-          ...(axisTickLabelStyle ?? {}),
+          ...axisTickLabelStyle,
           interval: 0, // ensure all labels are shown
           formatter: (value) => {
             if (xAxisLabelFormatter) {
@@ -157,7 +157,7 @@ export class BoxplotChart {
   ) {
     const yAxisOptions: EChartsOption['yAxis'] = {
       type: 'value',
-      // Render above the boxplot series so lane background fills don't occlude the axis line.
+      // Ensure axes render above series markAreas
       z: 10,
       name: yAxisTitle,
       nameLocation: 'middle',
@@ -171,11 +171,11 @@ export class BoxplotChart {
         show: showAxisTicks !== false,
       },
       axisLabel: {
+        ...axisTickLabelStyle,
         width: boxplotChartTheme.yAxisTickLabelMaxWidth,
         hideOverlap: true,
         showMinLabel: yAxisMin == null,
         showMaxLabel: yAxisMax == null,
-        ...(axisTickLabelStyle ?? {}),
       },
       splitLine: boxplotChartTheme.yAxisSplitLine,
       min: yAxisMin ? yAxisMin - yAxisPadding : undefined,
@@ -311,7 +311,6 @@ export class BoxplotChart {
       },
       markArea: laneBackgroundColors?.length
         ? {
-            itemStyle: {},
             data: xAxisCategories.map((_, idx) => {
               const halfWidth = 0.5; // lanes butt up against each other (no gap)
               const pcIndex = idx + 1;

@@ -71,7 +71,8 @@ export interface BoxplotProps {
   noDataStyle?: 'textOnly' | 'grayBackground';
   chartStyle?: ChartStyle;
   /* if defined, lanes will be filled with these colors, cycling through the array
-  per x-axis category. Lanes butt up against each other with no gap. */
+  per x-axis category. Lanes butt up against each other with no gap. Overrides the
+  active chartStyle's lane background (e.g. grayGrid's gray bands). */
   laneBackgroundColors?: string[];
   /* if false, hides axis tick marks on the category x-axis and the y-axis. */
   showAxisTicks?: boolean;
