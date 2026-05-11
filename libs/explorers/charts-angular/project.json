@@ -23,7 +23,7 @@
         "fix": true
       }
     },
-    "storybook": {
+    "start": {
       "executor": "@storybook/angular:start-storybook",
       "options": {
         "port": 4400,
