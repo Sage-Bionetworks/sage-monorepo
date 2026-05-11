@@ -1,9 +1,9 @@
 import { Component, input } from '@angular/core';
-import { SvgImageComponent } from '../svg-image/svg-image.component';
+import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'explorers-stat-card',
-  imports: [SvgImageComponent],
+  imports: [SvgIconComponent],
   templateUrl: './stat-card.component.html',
   styleUrls: ['./stat-card.component.scss'],
 })

@@ -1,6 +1,12 @@
 <div class="stat-card">
   <div class="stat-card-icon">
-    <explorers-svg-image [imagePath]="iconPath()" [altText]="iconAltText()" />
+    <explorers-svg-icon
+      [imagePath]="iconPath()"
+      [altText]="iconAltText()"
+      [width]="72"
+      [height]="72"
+      [enableHoverEffects]="false"
+    />
   </div>
   <div class="stat-card-header">{{ header() }}</div>
   @if (subHeader(); as sub) {

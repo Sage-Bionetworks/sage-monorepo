@@ -1,4 +1,7 @@
+import { provideHttpClient } from '@angular/common/http';
 import { StatCardData } from '@sagebionetworks/explorers/models';
+import { SvgIconService } from '@sagebionetworks/explorers/services';
+import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import { StatCardsComponent } from './stat-cards.component';
 
@@ -9,6 +12,7 @@ async function setup(cards: StatCardData[]) {
     componentInputs: {
       cards,
     },
+    providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
   });
 }
 
