@@ -89,6 +89,7 @@
       "@sagebionetworks/platform/config/angular": ["libs/platform/config/angular/src/index.ts"],
       "@sagebionetworks/qtl/api-client": ["libs/qtl/api-client-angular/src/index.ts"],
       "@sagebionetworks/qtl/config": ["libs/qtl/config/src/index.ts"],
+      "@sagebionetworks/qtl/eqtl-comparison-tool": ["libs/qtl/eqtl-comparison-tool/src/index.ts"],
       "@sagebionetworks/qtl/home": ["libs/qtl/home/src/index.ts"],
       "@sagebionetworks/qtl/util": ["libs/qtl/util/src/index.ts"],
       "@sagebionetworks/results-visualization-framework/ui": [
