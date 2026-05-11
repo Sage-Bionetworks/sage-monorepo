@@ -1,3 +1,24 @@
+explorers-svg-icon {
+  display: inline-flex;
+  vertical-align: middle;
+  line-height: 0;
+}
+
+.svg-icon-background {
+  display: inline-flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+
+  &.circle {
+    border-radius: 50%;
+  }
+
+  &.square {
+    border-radius: 4px;
+  }
+}
+
 .svg-icon,
 .svg-icon-no-hover {
   display: flex;

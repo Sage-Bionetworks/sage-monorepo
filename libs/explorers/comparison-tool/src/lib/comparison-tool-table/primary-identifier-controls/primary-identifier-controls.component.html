@@ -12,11 +12,7 @@
       tooltipStyleClass="tooltip"
       [ariaLabel]="'View Details'"
     >
-      <explorers-svg-icon
-        imagePath="explorers-assets/icons/external-link.svg"
-        [enableHoverEffects]="false"
-        altText="link"
-      />
+      <explorers-svg-icon imagePath="explorers-assets/icons/external-link.svg" altText="link" />
     </button>
 
     <button
@@ -28,11 +24,7 @@
       [disabled]="isPinDisabled()"
       [ariaLabel]="`${isPinned() ? 'Unpin' : 'Pin'}`"
     >
-      <explorers-svg-icon
-        imagePath="explorers-assets/icons/pin.svg"
-        [enableHoverEffects]="false"
-        altText="pin"
-      />
+      <explorers-svg-icon imagePath="explorers-assets/icons/pin.svg" altText="pin" />
     </button>
   </div>
 </div>

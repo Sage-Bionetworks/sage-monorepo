@@ -91,13 +91,11 @@
                   style: { 'padding': '0' }
                 }"
                 [tooltipText]="getShareLinkTooltipText(evidenceType)"
-                [buttonSvgIconConfig]="{
-                  imagePath: 'explorers-assets/icons/link.svg',
-                  altText: 'link',
-                  color: '#878E95',
-                  height: 12,
-                  width: 24,
-                }"
+                iconImagePath="explorers-assets/icons/link.svg"
+                iconAltText="link"
+                iconColor="#878E95"
+                [iconHeight]="12"
+                [iconWidth]="24"
               />
             }
           </div>

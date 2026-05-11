@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Component, computed, inject, input, OnInit, ViewEncapsulation } from '@angular/core';
+import { SafeHtml } from '@angular/platform-browser';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
+
+export type SvgIconBackgroundShape = 'circle' | 'square';
 
 @Component({
   selector: 'explorers-svg-icon',
@@ -12,27 +13,26 @@ import { SvgIconService } from '@sagebionetworks/explorers/services';
   encapsulation: ViewEncapsulation.None,
 })
 export class SvgIconComponent implements OnInit {
-  @Input() imagePath!: string;
-  @Input() altText = '';
-  @Input() width = 14;
-  @Input() height = 14;
-  @Input() color = 'inherit'; // Default to parent color
-  @Input() enableHoverEffects = true;
+  imagePath = input.required<string>();
+  altText = input('');
+  width = input(14);
+  height = input(14);
+  color = input('inherit');
+  enableHoverEffects = input(false);
 
-  http = inject(HttpClient);
-  sanitizer = inject(DomSanitizer);
-  svgService = inject(SvgIconService);
+  enableBackground = input(false);
+  backgroundColor = input('var(--color-primary)');
+  backgroundShape = input<SvgIconBackgroundShape>('circle');
+  backgroundPadding = input(8);
+
+  private readonly svgService = inject(SvgIconService);
 
   svgContent: SafeHtml | null = null;
 
-  className = 'svg-icon';
+  className = computed(() => (this.enableHoverEffects() ? 'svg-icon' : 'svg-icon-no-hover'));
 
   ngOnInit() {
-    if (!this.imagePath) return;
-
-    this.className = this.enableHoverEffects ? 'svg-icon' : 'svg-icon-no-hover';
-
-    this.svgService.getSvg(this.imagePath).subscribe({
+    this.svgService.getSvg(this.imagePath()).subscribe({
       next: (svg) => (this.svgContent = svg),
       error: () => {
         // Handled by httpErrorInterceptor

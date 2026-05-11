@@ -17,9 +17,14 @@ export class TooltipButtonComponent {
   onClick = input.required<() => void>();
 
   buttonLabel = input<string>();
-  buttonSvgIconConfig = input<Partial<SvgIconComponent>>();
   buttonAriaDescribedBy = input<string>();
   buttonProps = input<ButtonProps>();
+
+  iconImagePath = input<string>();
+  iconAltText = input('');
+  iconWidth = input(14);
+  iconHeight = input(14);
+  iconColor = input('inherit');
 
   showTooltip() {
     this.tooltip()?.show();

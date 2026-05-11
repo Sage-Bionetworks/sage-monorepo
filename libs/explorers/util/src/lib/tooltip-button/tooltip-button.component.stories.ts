@@ -30,13 +30,11 @@ const mockOnClick = (): void => {
 
 export const IconButton: Story = {
   args: {
-    buttonSvgIconConfig: {
-      imagePath: 'explorers-assets/icons/link.svg',
-      altText: 'Icon button',
-      color: 'blue',
-      height: 12,
-      width: 24,
-    },
+    iconImagePath: 'explorers-assets/icons/link.svg',
+    iconAltText: 'Icon button',
+    iconColor: 'blue',
+    iconHeight: 12,
+    iconWidth: 24,
     buttonProps: { ariaLabel: 'Icon button', link: true },
     tooltipText: 'This is an icon button',
     onClick: mockOnClick,
@@ -54,10 +52,8 @@ export const TextButton: Story = {
 export const TextIconButton: Story = {
   args: {
     buttonLabel: 'Text Icon Button',
-    buttonSvgIconConfig: {
-      imagePath: 'explorers-assets/icons/info-circle.svg',
-      altText: 'Icon button',
-    },
+    iconImagePath: 'explorers-assets/icons/info-circle.svg',
+    iconAltText: 'Icon button',
     tooltipText: 'This is a text icon button',
     onClick: mockOnClick,
   },
