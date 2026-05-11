@@ -1,7 +1,8 @@
 import { Directive, ElementRef, inject, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import {
-  AxisTickLabelStyle,
   AxisLineStyle,
+  AxisTickLabelStyle,
+  BoxplotBoxStyle,
   BoxplotChart,
   BoxplotProps,
   CategoryBoxplotSummary,
@@ -40,8 +41,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() chartStyle: undefined | ChartStyle;
   @Input() laneBackgroundColors: undefined | string[];
   @Input() showAxisTicks: undefined | boolean;
-  @Input() boxplotBoxFillColor: undefined | string;
-  @Input() boxplotBoxBorderColor: undefined | string;
+  @Input() boxplotBoxStyle: undefined | BoxplotBoxStyle;
   @Input() axisTickLabelStyle: undefined | AxisTickLabelStyle;
   @Input() axisLineStyle: undefined | AxisLineStyle;
 
@@ -78,8 +78,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       chartStyle: this.chartStyle,
       laneBackgroundColors: this.laneBackgroundColors,
       showAxisTicks: this.showAxisTicks,
-      boxplotBoxFillColor: this.boxplotBoxFillColor,
-      boxplotBoxBorderColor: this.boxplotBoxBorderColor,
+      boxplotBoxStyle: this.boxplotBoxStyle,
       axisTickLabelStyle: this.axisTickLabelStyle,
       axisLineStyle: this.axisLineStyle,
     };

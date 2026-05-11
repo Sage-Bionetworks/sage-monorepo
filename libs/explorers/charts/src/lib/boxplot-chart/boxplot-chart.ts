@@ -204,8 +204,7 @@ export class BoxplotChart {
       chartStyle,
       laneBackgroundColors,
       showAxisTicks,
-      boxplotBoxFillColor,
-      boxplotBoxBorderColor,
+      boxplotBoxStyle,
       axisTickLabelStyle,
       axisLineStyle,
     } = boxplotProps;
@@ -299,8 +298,11 @@ export class BoxplotChart {
       z: 1,
       itemStyle: {
         ...boxplotChartTheme.boxplotItemStyle,
-        ...(boxplotBoxFillColor ? { color: boxplotBoxFillColor } : {}),
-        ...(boxplotBoxBorderColor ? { borderColor: boxplotBoxBorderColor } : {}),
+        ...(boxplotBoxStyle?.fillColor ? { color: boxplotBoxStyle.fillColor } : {}),
+        ...(boxplotBoxStyle?.borderColor ? { borderColor: boxplotBoxStyle.borderColor } : {}),
+        ...(typeof boxplotBoxStyle?.borderWidth === 'number'
+          ? { borderWidth: boxplotBoxStyle.borderWidth }
+          : {}),
       },
       boxWidth: [7, 115],
       silent: true,
