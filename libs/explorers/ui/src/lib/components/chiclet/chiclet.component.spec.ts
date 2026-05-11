@@ -117,4 +117,20 @@ describe('ChicletComponent', () => {
     const labelEl = fixture.nativeElement.querySelector('.chiclet-label') as HTMLElement;
     expect(labelEl.style.fontSize).toBe('');
   });
+
+  it('should apply borderRadius and padding inputs to the chiclet root', async () => {
+    const { fixture } = await renderTemplate(
+      `<explorers-chiclet borderRadius="3px" padding="6px">PAK1</explorers-chiclet>`,
+    );
+    const root = fixture.nativeElement.querySelector('.explorers-chiclet') as HTMLElement;
+    expect(root.style.borderRadius).toBe('3px');
+    expect(root.style.padding).toBe('6px');
+  });
+
+  it('should not set inline border-radius or padding when those inputs are omitted', async () => {
+    const { fixture } = await renderTemplate(`<explorers-chiclet>PAK1</explorers-chiclet>`);
+    const root = fixture.nativeElement.querySelector('.explorers-chiclet') as HTMLElement;
+    expect(root.style.borderRadius).toBe('');
+    expect(root.style.padding).toBe('');
+  });
 });

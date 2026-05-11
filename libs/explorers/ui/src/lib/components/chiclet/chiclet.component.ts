@@ -21,6 +21,8 @@ export class ChicletComponent {
   closeIconColor = input<string>();
   closeIconSize = input<number>(14);
   fontSize = input<string>();
+  borderRadius = input<string>();
+  padding = input<string>();
   removable = input<boolean>(false);
   removeAriaLabel = input<string>('Remove');
   removed = output<void>();
