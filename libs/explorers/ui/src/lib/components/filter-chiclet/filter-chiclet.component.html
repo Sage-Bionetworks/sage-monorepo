@@ -1,0 +1,15 @@
+<explorers-chiclet
+  [removable]="true"
+  fontSize="12px"
+  closeIconColor="var(--color-action-primary)"
+  [closeIconSize]="9"
+  [removeAriaLabel]="'Clear ' + (value() || name())"
+  (removed)="cleared.emit()"
+>
+  @if (name() !== '') {
+    <b>{{ name() }}:&nbsp;</b>
+  }
+  @if (value() !== '') {
+    <span>{{ value() }}</span>
+  }
+</explorers-chiclet>

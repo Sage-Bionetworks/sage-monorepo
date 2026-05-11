@@ -1,34 +1,30 @@
 @use 'explorers/styles/src/variables' as vars;
 
-.filter-list-item {
-  display: flex;
+.explorers-chiclet {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   padding: 8px 15px;
   background-color: rgb(80 129 167 / 20%);
   border-radius: 40px;
-  margin-left: 8px;
-  margin-bottom: 8px;
-  font-size: 12px;
   font-weight: 400;
-  float: left;
-  align-items: center;
 
   b {
     font-weight: 700;
   }
 
-  > div {
-    display: flex;
-    align-items: center;
-  }
-
-  .filter-list-item-text > *:hover {
+  .chiclet-label > *:hover {
     cursor: default;
   }
 
-  .filter-list-item-clear {
-    cursor: pointer;
-    margin-left: 12px;
+  .chiclet-remove {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    background: transparent;
+    border: none;
     color: #5081a7;
+    cursor: pointer;
 
     svg path {
       transition: vars.$transition-duration;

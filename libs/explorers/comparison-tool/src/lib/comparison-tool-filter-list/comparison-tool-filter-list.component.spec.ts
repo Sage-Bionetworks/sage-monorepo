@@ -36,7 +36,7 @@ describe('Component: Comparison Tool - Filter List', () => {
     await setup();
     expect(screen.getByText('Significance ≤ 0.05')).toBeVisible();
     for (const filter of mockComparisonToolFiltersWithSelections[0].options) {
-      expect(screen.getByText(filter.label)).toBeVisible();
+      expect(screen.getByText(filter.label, { exact: false })).toBeVisible();
     }
   });
 
@@ -46,8 +46,7 @@ describe('Component: Comparison Tool - Filter List', () => {
     const significanceThreshold = screen.getByText('Significance ≤ 0.05');
     expect(significanceThreshold).toBeVisible();
 
-    const clearButton = screen.getByRole('button', { name: /Clear Significance/ });
-    await user.click(clearButton);
+    await user.click(screen.getByRole('button', { name: 'Clear Significance ≤ 0.05' }));
 
     expect(significanceThreshold).not.toBeVisible();
   });
@@ -56,11 +55,10 @@ describe('Component: Comparison Tool - Filter List', () => {
     const filterLabel = mockComparisonToolFiltersWithSelections[0].options[0].label;
     const { user } = await setup();
 
-    const filter = screen.getByText(filterLabel);
+    const filter = screen.getByText(filterLabel, { exact: false });
     expect(filter).toBeVisible();
 
-    const clearButton = screen.getByRole('button', { name: new RegExp(`Clear ${filterLabel}`) });
-    await user.click(clearButton);
+    await user.click(screen.getByRole('button', { name: `Clear ${filterLabel}` }));
 
     expect(filter).not.toBeVisible();
   });
@@ -72,20 +70,24 @@ describe('Component: Comparison Tool - Filter List', () => {
     await user.click(clearAllButton);
 
     for (const option of mockComparisonToolFiltersWithSelections[0].options) {
-      expect(screen.queryByText(option.label)).toBeNull();
+      expect(screen.queryByText(option.label, { exact: false })).toBeNull();
     }
   });
 
   it('should use short name if available for filter title', async () => {
     const filterWithShortName = mockComparisonToolFiltersWithSelections[0];
     await setup();
-    const filterTitles = screen.getAllByText(`${filterWithShortName.short_name}:`);
+    const filterTitles = screen.getAllByText(`${filterWithShortName.short_name}:`, {
+      exact: false,
+    });
     expect(filterTitles).toHaveLength(filterWithShortName.options.length);
   });
 
   it('should fall back to name if short name is not available for filter title', async () => {
     await setup();
-    const filterTitle = screen.getByText(`${mockComparisonToolFiltersWithSelections[3].name}:`);
+    const filterTitle = screen.getByText(`${mockComparisonToolFiltersWithSelections[3].name}:`, {
+      exact: false,
+    });
     expect(filterTitle).toBeVisible();
   });
 });

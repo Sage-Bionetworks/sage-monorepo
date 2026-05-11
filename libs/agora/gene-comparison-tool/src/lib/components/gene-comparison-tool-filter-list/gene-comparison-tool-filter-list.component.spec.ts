@@ -24,7 +24,7 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
     await setup();
     expect(screen.getByText('Significance ≤ 0.05')).toBeVisible();
     for (const filter of gctFiltersMocks[0].options) {
-      expect(screen.getByText(filter.label)).toBeVisible();
+      expect(screen.getByText(filter.label, { exact: false })).toBeVisible();
     }
   });
 
@@ -34,8 +34,7 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
     const significanceThreshold = screen.getByText('Significance ≤ 0.05');
     expect(significanceThreshold).toBeVisible();
 
-    const clearButton = screen.getByRole('button', { name: /Clear Significance/ });
-    await user.click(clearButton);
+    await user.click(screen.getByRole('button', { name: 'Clear Significance ≤ 0.05' }));
 
     expect(significanceThreshold).not.toBeVisible();
   });
@@ -44,11 +43,10 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
     const filterLabel = gctFiltersMocks[0].options[0].label;
     const { user } = await setup();
 
-    const filter = screen.getByText(filterLabel);
+    const filter = screen.getByText(filterLabel, { exact: false });
     expect(filter).toBeVisible();
 
-    const clearButton = screen.getByRole('button', { name: new RegExp(`Clear ${filterLabel}`) });
-    await user.click(clearButton);
+    await user.click(screen.getByRole('button', { name: `Clear ${filterLabel}` }));
 
     expect(filter).not.toBeVisible();
   });
@@ -60,7 +58,7 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
     await user.click(clearAllButton);
 
     for (const option of gctFiltersMocks[0].options) {
-      expect(screen.queryByText(option.label)).toBeNull();
+      expect(screen.queryByText(option.label, { exact: false })).toBeNull();
     }
   });
 });

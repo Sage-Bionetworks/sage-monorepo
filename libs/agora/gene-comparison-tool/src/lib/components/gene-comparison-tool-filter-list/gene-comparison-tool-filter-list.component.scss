@@ -9,6 +9,11 @@
     @include mixins.reset-button;
   }
 
+  explorers-filter-chiclet {
+    display: inline-block;
+    margin: 0 0 8px 8px;
+  }
+
   .gct-filter-list-inner {
     display: flex;
     padding: 28px 44px 20px;
