@@ -40,3 +40,7 @@ explorers-svg-icon {
     }
   }
 }
+
+.svg-icon-stroke-override :is(path, line, polyline, rect, circle, ellipse, polygon) {
+  stroke-width: var(--svg-icon-stroke-width);
+}

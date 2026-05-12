@@ -16,6 +16,7 @@ export default meta;
 type Story = StoryObj<SvgIconComponent>;
 
 const peopleIcon = 'explorers-assets/icons/people.svg';
+const cardArrowIcon = 'explorers-assets/icons/card-arrow.svg';
 
 export const Default: Story = {
   args: {
@@ -72,5 +73,37 @@ export const BackgroundLargerPadding: Story = {
     backgroundColor: 'var(--color-tertiary)',
     backgroundShape: 'circle',
     backgroundPadding: 16,
+  },
+};
+
+export const DefaultStroke: Story = {
+  args: {
+    imagePath: cardArrowIcon,
+    altText: 'arrow',
+    width: 32,
+    height: 30,
+    color: 'var(--color-primary)',
+  },
+};
+
+export const ThinStroke: Story = {
+  args: {
+    imagePath: cardArrowIcon,
+    altText: 'arrow',
+    width: 32,
+    height: 30,
+    color: 'var(--color-primary)',
+    strokeWidth: 2,
+  },
+};
+
+export const ThickStroke: Story = {
+  args: {
+    imagePath: cardArrowIcon,
+    altText: 'arrow',
+    width: 32,
+    height: 30,
+    color: 'var(--color-primary)',
+    strokeWidth: 8,
   },
 };

@@ -18,6 +18,7 @@ export class SvgIconComponent implements OnInit {
   width = input(14);
   height = input(14);
   color = input('inherit');
+  strokeWidth = input<number>();
   enableHoverEffects = input(false);
 
   enableBackground = input(false);

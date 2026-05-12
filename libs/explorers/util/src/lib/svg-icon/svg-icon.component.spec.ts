@@ -61,6 +61,32 @@ describe('SvgIconComponent', () => {
     });
   });
 
+  describe('strokeWidth', () => {
+    function getIconDiv(container: Element): HTMLElement {
+      return container.querySelector('.svg-icon, .svg-icon-no-hover') as HTMLElement;
+    }
+
+    it('should not apply the stroke-override class or CSS variable when strokeWidth is unset', async () => {
+      const result = await render(SvgIconComponent, {
+        componentInputs: { imagePath: dummyPath },
+        providers: [provideHttpClient(), { provide: SvgIconService, useClass: MockSvgIconService }],
+      });
+      const icon = getIconDiv(result.container);
+      expect(icon.classList.contains('svg-icon-stroke-override')).toBe(false);
+      expect(icon.style.getPropertyValue('--svg-icon-stroke-width')).toBe('');
+    });
+
+    it('should apply the stroke-override class and CSS variable when strokeWidth is set', async () => {
+      const result = await render(SvgIconComponent, {
+        componentInputs: { imagePath: dummyPath, strokeWidth: 2 },
+        providers: [provideHttpClient(), { provide: SvgIconService, useClass: MockSvgIconService }],
+      });
+      const icon = getIconDiv(result.container);
+      expect(icon.classList.contains('svg-icon-stroke-override')).toBe(true);
+      expect(icon.style.getPropertyValue('--svg-icon-stroke-width')).toBe('2');
+    });
+  });
+
   describe('background', () => {
     let renderResult: RenderResult<SvgIconComponent>;
 

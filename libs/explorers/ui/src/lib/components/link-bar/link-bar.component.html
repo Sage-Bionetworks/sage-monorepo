@@ -1,0 +1,16 @@
+<div class="explorers-link-bar">
+  <a class="link-bar-text" [routerLink]="link()">
+    <ng-content />
+  </a>
+  <p-button type="button" size="small" (onClick)="navigate()" [ariaLabel]="altText()">
+    <explorers-svg-icon
+      imagePath="explorers-assets/icons/card-arrow.svg"
+      altText="arrow"
+      [color]="'var(--color-arrow)'"
+      [height]="12"
+      [width]="13"
+      [strokeWidth]="4"
+      [enableHoverEffects]="false"
+    />
+  </p-button>
+</div>
