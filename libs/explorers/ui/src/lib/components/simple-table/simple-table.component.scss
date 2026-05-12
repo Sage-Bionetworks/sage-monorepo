@@ -13,6 +13,7 @@
   td {
     text-align: left;
     vertical-align: middle;
+    padding: 0;
   }
 
   thead th {
@@ -21,7 +22,8 @@
     font-weight: var(--simple-table-header-font-weight, 600);
     color: var(--simple-table-header-color, inherit);
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--simple-table-color-border-divider, #eaecee);
+    border-bottom: var(--simple-table-header-border-width, 1px) solid
+      var(--simple-table-color-border-divider, #eaecee);
   }
 
   tbody td {
