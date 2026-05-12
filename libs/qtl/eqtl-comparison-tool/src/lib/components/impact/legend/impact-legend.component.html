@@ -1,8 +1,7 @@
 @if (platformService.isBrowser) {
   <p-dialog
     header="Legend"
-    [visible]="visible()"
-    (visibleChange)="visible.set($event)"
+    [(visible)]="visible"
     [modal]="true"
     [draggable]="false"
     [resizable]="false"

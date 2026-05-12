@@ -13,7 +13,7 @@ import { DialogModule } from 'primeng/dialog';
   styleUrls: ['./impact-legend.component.scss'],
 })
 export class ImpactLegendComponent {
-  platformService = inject(PlatformService);
+  protected readonly platformService = inject(PlatformService);
 
   visible = model<boolean>(false);
 

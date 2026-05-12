@@ -9,7 +9,7 @@ function provideTheme(): void {
   config.theme.set({
     preset: QtlPreset,
     options: {
-      darkModeSelector: false || 'none',
+      darkModeSelector: 'none',
     },
   });
 }
