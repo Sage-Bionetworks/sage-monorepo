@@ -52,6 +52,38 @@ describe('SimpleTableComponent', () => {
       expect(screen.queryByRole('columnheader')).not.toBeInTheDocument();
     });
 
+    it('renders a colgroup with explicit widths when any column has width', async () => {
+      const { component } = await setup({
+        columns: [
+          { name: 'Abbreviation', width: '30%' },
+          { name: 'Description', width: '70%' },
+        ],
+        rows: [
+          [
+            { type: 'text', value: 'AD' },
+            { type: 'text', value: 'Alzheimer disease' },
+          ],
+        ],
+      });
+      const cols = component.container.querySelectorAll<HTMLTableColElement>('colgroup col');
+      expect(cols).toHaveLength(2);
+      expect(cols[0].style.width).toBe('30%');
+      expect(cols[1].style.width).toBe('70%');
+    });
+
+    it('does not render a colgroup when no column has width', async () => {
+      const { component } = await setup({
+        columns: [{ name: 'TWAS' }, { name: 'Z-Score' }],
+        rows: [
+          [
+            { type: 'text', value: 'AD' },
+            { type: 'text', value: -20 },
+          ],
+        ],
+      });
+      expect(component.container.querySelector('colgroup')).toBeNull();
+    });
+
     it('marks tooltip-bearing headers with the dotted-underline class', async () => {
       await setup({
         columns: [{ name: 'TWAS' }, { name: 'Z-Score', tooltip: 'A z-score' }],
@@ -120,6 +152,25 @@ describe('SimpleTableComponent', () => {
       const link = screen.getByRole('link', { name: 'External' });
       expect(link).toHaveAttribute('href', 'https://example.com');
       expect(link).toHaveAttribute('target', '_blank');
+    });
+
+    it('renders text cells in italics when italic is true', async () => {
+      await setup({
+        rows: [[{ type: 'text', value: 'Immune Cell', italic: true }]],
+      });
+      const italicText = screen.getByText('Immune Cell');
+      expect(italicText.tagName).toBe('EM');
+      expect(italicText).toHaveClass('cell-text-italic');
+    });
+
+    it('renders swatch cells with a color square and text', async () => {
+      const { component } = await setup({
+        rows: [[{ type: 'swatch', color: '#bd2438', text: 'Immune' }]],
+      });
+      expect(screen.getByText('Immune')).toBeInTheDocument();
+      const swatchColor = component.container.querySelector<HTMLElement>('.cell-swatch-color');
+      expect(swatchColor).not.toBeNull();
+      expect(swatchColor?.style.backgroundColor).toBe('rgb(189, 36, 56)');
     });
 
     it('renders image cells with src and alt', async () => {

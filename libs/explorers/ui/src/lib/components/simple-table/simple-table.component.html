@@ -4,6 +4,13 @@
   [style.--simple-table-column-gap]="columnGap()"
 >
   @if (columns(); as cols) {
+    @if (hasColumnWidths()) {
+      <colgroup>
+        @for (col of cols; track $index) {
+          <col [style.width]="col.width || null" />
+        }
+      </colgroup>
+    }
     <thead>
       <tr>
         @for (col of cols; track $index) {
@@ -28,7 +35,11 @@
           <td [class]="col?.align ? 'align-' + col?.align : null">
             @switch (cell.type) {
               @case ('text') {
-                {{ cell.value }}
+                @if (cell.italic) {
+                  <em class="cell-text-italic">{{ cell.value }}</em>
+                } @else {
+                  {{ cell.value }}
+                }
               }
               @case ('label') {
                 <span class="cell-label">{{ cell.text }}</span>
@@ -48,6 +59,12 @@
               }
               @case ('image') {
                 <explorers-svg-image [imagePath]="cell.src" [altText]="cell.alt" />
+              }
+              @case ('swatch') {
+                <span class="cell-swatch">
+                  <span class="cell-swatch-color" [style.background-color]="cell.color"></span>
+                  {{ cell.text }}
+                </span>
               }
             }
           </td>

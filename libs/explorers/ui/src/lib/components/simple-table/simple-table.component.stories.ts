@@ -141,6 +141,27 @@ export const WithoutHeader: Story = {
   }),
 };
 
+export const WithSwatch: Story = {
+  args: {
+    columns: [{ name: 'Abbreviation' }, { name: 'Description' }],
+    rows: [
+      [
+        { type: 'swatch', color: '#bd2438', text: 'Immune' },
+        { type: 'text', value: 'Immune Cell', italic: true },
+      ],
+      [
+        { type: 'swatch', color: '#c7a87c', text: 'Astro' },
+        { type: 'text', value: 'Astrocyte', italic: true },
+      ],
+      [
+        { type: 'swatch', color: '#f0c419', text: 'OPC' },
+        { type: 'text', value: 'Oligodendrocyte Progenitor Cell', italic: true },
+      ],
+    ],
+    columnGap: '40px',
+  },
+};
+
 export const Combined: Story = {
   args: {
     columns: [

@@ -2,11 +2,13 @@ export interface SimpleTableColumn {
   name: string;
   tooltip?: string;
   align?: 'left' | 'right' | 'center';
+  width?: string;
 }
 
 export interface SimpleTableTextCell {
   type: 'text';
   value: string | number;
+  italic?: boolean;
 }
 
 export interface SimpleTableLabelCell {
@@ -26,8 +28,15 @@ export interface SimpleTableImageCell {
   alt: string;
 }
 
+export interface SimpleTableSwatchCell {
+  type: 'swatch';
+  color: string;
+  text: string;
+}
+
 export type SimpleTableCell =
   | SimpleTableTextCell
   | SimpleTableLabelCell
   | SimpleTableLinkCell
-  | SimpleTableImageCell;
+  | SimpleTableImageCell
+  | SimpleTableSwatchCell;

@@ -1,5 +1,9 @@
 @use 'explorers/styles/src/mixins' as mixins;
 
+:host {
+  display: block;
+}
+
 .simple-table {
   border-collapse: collapse;
   width: 100%;
@@ -14,7 +18,8 @@
   thead th {
     font-size: 14px;
     line-height: 18px;
-    font-weight: 600;
+    font-weight: var(--simple-table-header-font-weight, 600);
+    color: var(--simple-table-header-color, inherit);
     padding-bottom: 8px;
     border-bottom: 1px solid var(--simple-table-color-border-divider, #eaecee);
   }
@@ -28,14 +33,21 @@
     padding-top: var(--simple-table-row-padding, 8px);
   }
 
-  &.fixed-gap {
-    width: auto;
-    border-collapse: separate;
-    border-spacing: var(--simple-table-column-gap) 0;
+  tbody td:not(:first-child) {
+    color: var(--simple-table-text-color-secondary, var(--simple-table-text-color, #353a3f));
   }
 
   thead + tbody tr:first-child td {
     padding-top: 16px;
+  }
+
+  &.fixed-gap {
+    width: auto;
+
+    th:not(:last-child),
+    td:not(:last-child) {
+      padding-right: var(--simple-table-column-gap);
+    }
   }
 
   .align-left {
@@ -67,5 +79,22 @@
 
   .cell-link {
     @include mixins.link;
+  }
+
+  .cell-text-italic {
+    font-style: italic;
+  }
+
+  .cell-swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cell-swatch-color {
+    width: 18px;
+    height: 18px;
+    border-radius: 0;
+    flex-shrink: 0;
   }
 }
