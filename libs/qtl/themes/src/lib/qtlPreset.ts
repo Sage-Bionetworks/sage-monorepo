@@ -13,6 +13,17 @@ export const QtlPreset = definePreset(BasePreset, {
         roundedBorderRadius: '40px',
       },
     },
+    dialog: {
+      root: {
+        borderRadius: '3px',
+      },
+      header: {
+        padding: '32px 32px 24px',
+      },
+      content: {
+        padding: '0 32px 32px',
+      },
+    },
     tooltip: {
       root: {
         borderRadius: '0',
