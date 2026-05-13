@@ -2,7 +2,9 @@ import { EChartsOption, SeriesOption } from 'echarts';
 import type { BoxplotSeriesOption } from 'echarts/charts';
 import type { TitleComponentOption } from 'echarts/components';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
+import type { AxisLineStyle, AxisTickLabelStyle } from './axis';
 import type { BaseChartTheme, ChartStyle } from './chart';
+import type { TooltipStyle } from './tooltip';
 
 export type CategoryPoint = {
   // x-axis category for this point
@@ -82,23 +84,14 @@ export interface BoxplotProps {
   axisTickLabelStyle?: AxisTickLabelStyle;
   /* if defined, overrides the axis line stroke on both the category x-axis and the y-axis. */
   axisLineStyle?: AxisLineStyle;
+  /* if defined, overrides individual fields on the default tooltip styling. */
+  tooltipStyle?: TooltipStyle;
 }
 
 export type BoxplotBoxStyle = {
   fillColor?: string;
   borderColor?: string;
   borderWidth?: number;
-};
-
-export type AxisTickLabelStyle = {
-  fontSize?: string;
-  fontWeight?: 'normal' | 'bold' | 'bolder' | 'lighter' | number;
-  color?: string;
-};
-
-export type AxisLineStyle = {
-  width?: number;
-  color?: string;
 };
 
 export interface BoxplotChartTheme extends BaseChartTheme {

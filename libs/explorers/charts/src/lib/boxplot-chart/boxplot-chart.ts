@@ -10,6 +10,7 @@ import { BoxplotChartTheme } from '../models/boxplot';
 import {
   addXAxisValueToBoxplotSummaries,
   addXAxisValueToCategoryPoint,
+  buildTooltip,
   formatCategoryPointsForBoxplotTransform,
   getCategoryPointColor,
   getCategoryPointShape,
@@ -76,7 +77,9 @@ export class BoxplotChart {
     showAxisTicks: BoxplotProps['showAxisTicks'],
     axisTickLabelStyle: BoxplotProps['axisTickLabelStyle'],
     axisLineStyle: BoxplotProps['axisLineStyle'],
+    tooltipStyle: BoxplotProps['tooltipStyle'],
   ) {
+    const xAxisTooltipBackground = tooltipStyle?.backgroundColor ?? '#63676c';
     // Use two xAxes:
     //  - value: used to jitter points with multiple pointCategories, where
     //           xAxisCategory is mapped to 1-based index values for both
@@ -135,7 +138,7 @@ export class BoxplotChart {
             formatter: (params: CallbackDataParams) => {
               return xAxisLabelTooltipFormatter(params);
             },
-            extraCssText: 'border: unset; opacity: 0.9; background-color: #63676c',
+            extraCssText: `border: unset; opacity: 0.9; background-color: ${xAxisTooltipBackground}`,
           }),
           show: Boolean(xAxisLabelTooltipFormatter),
         },
@@ -207,6 +210,7 @@ export class BoxplotChart {
       boxplotBoxStyle,
       axisTickLabelStyle,
       axisLineStyle,
+      tooltipStyle,
     } = boxplotProps;
 
     const showLegend = boxplotProps.showLegend || false;
@@ -422,6 +426,7 @@ export class BoxplotChart {
         showAxisTicks,
         axisTickLabelStyle,
         axisLineStyle,
+        tooltipStyle,
       ),
       yAxis: this.getYAxisOptions(
         yAxisTitle,
@@ -432,7 +437,7 @@ export class BoxplotChart {
         axisTickLabelStyle,
         axisLineStyle,
       ),
-      tooltip: boxplotChartTheme.tooltip,
+      tooltip: buildTooltip(boxplotChartTheme.tooltip, tooltipStyle),
       series: seriesOpts,
     };
 
