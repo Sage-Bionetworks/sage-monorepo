@@ -143,8 +143,8 @@ Focus on the objective and benefits, not a list of what changed.]
 [Steps a human reviewer can follow to verify this PR works correctly.
 Do NOT include unit test or e2e test commands — CI handles those.]
 
-- [ ] Step a reviewer can perform manually
-- [ ] Another verification step
+- Step a reviewer can perform manually
+- Another verification step
 
 ### Preview
 
@@ -184,14 +184,14 @@ Do NOT include unit test or e2e test commands — CI handles those.]
 This section is for **human reviewers**, not CI. Think about what a reviewer should manually
 verify to gain confidence this PR is correct.
 
-- Use a **task-list format** (`- [ ]`) so reviewers can check items off
+- Use a **bullet list** (`-`)
 - Pull from Jira acceptance criteria when available — translate them into concrete reviewer steps
 - Focus on functional verification: navigation flows, data correctness, edge cases
 - Include API verification steps if relevant (e.g., "call GET /api/x and confirm the response includes field Y")
 - **Do NOT suggest running unit tests, e2e tests, or lint commands** — CI covers those
 - Aim for **3–6 actionable steps**
 
-### Screenshots
+### Preview
 
 - Only include this sub-section when the PR has **visual or UI changes**
 - Suggest **specific screens or components** to screenshot, not generic "take a screenshot"
