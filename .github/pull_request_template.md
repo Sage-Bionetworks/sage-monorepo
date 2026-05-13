@@ -27,8 +27,10 @@ the changes in the section Changelog (see below). -->
 <!-- - Commands to run the relevant automated tests (e.g. `curl https://example.com`) -->
 <!-- - Edge cases or regressions to watch for -->
 
-<!-- - Consider adding a preview if there is a visual aspect to this PR>
+## Preview
+
+<!-- Consider adding a preview if there is a visual aspect to this PR -->
 
 | Before                   | After                   |
-|--------------------------|-------------------------|
+| ------------------------ | ----------------------- |
 | Sample text/image before | Sample text/image after |
