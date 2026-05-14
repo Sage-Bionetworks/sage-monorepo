@@ -79,7 +79,6 @@ export class BoxplotChart {
     axisLineStyle: BoxplotProps['axisLineStyle'],
     tooltipStyle: BoxplotProps['tooltipStyle'],
   ) {
-    const xAxisTooltipBackground = tooltipStyle?.backgroundColor ?? '#63676c';
     // Use two xAxes:
     //  - value: used to jitter points with multiple pointCategories, where
     //           xAxisCategory is mapped to 1-based index values for both
@@ -138,7 +137,12 @@ export class BoxplotChart {
             formatter: (params: CallbackDataParams) => {
               return xAxisLabelTooltipFormatter(params);
             },
-            extraCssText: `border: unset; opacity: 0.9; background-color: ${xAxisTooltipBackground}`,
+            backgroundColor: tooltipStyle?.backgroundColor ?? '#63676c',
+            // borderWidth: 0 preserves the historical "no border" look when borderColor is unset
+            borderColor: tooltipStyle?.borderColor ?? 'transparent',
+            borderWidth: tooltipStyle?.borderColor ? 1 : 0,
+            ...(tooltipStyle?.color && { textStyle: { color: tooltipStyle.color } }),
+            extraCssText: 'opacity: 0.9',
           }),
           show: Boolean(xAxisLabelTooltipFormatter),
         },

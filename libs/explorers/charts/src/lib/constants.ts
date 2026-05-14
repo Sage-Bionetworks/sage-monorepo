@@ -1,11 +1,11 @@
-import type { EChartsOption } from 'echarts';
+import type { TooltipOption } from './models';
 
 export const DEFAULT_POINT_SIZE = 18;
 export const DEFAULT_COLOR = '#8b8ad1';
 export const GRAY_BACKGROUND_COLOR = '#AEB5BC1A';
 export const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;
 
-export const DARK_TOOLTIP: EChartsOption['tooltip'] = {
+export const DARK_TOOLTIP: TooltipOption = {
   confine: true,
   position: 'top',
   backgroundColor: '#63676C',
@@ -15,7 +15,7 @@ export const DARK_TOOLTIP: EChartsOption['tooltip'] = {
     'opacity: 1 !important; width: auto; max-width: 300px; white-space: pre-wrap; text-align: center;',
 };
 
-export const LIGHT_TOOLTIP: EChartsOption['tooltip'] = {
+export const LIGHT_TOOLTIP: TooltipOption = {
   ...DARK_TOOLTIP,
   backgroundColor: 'white',
   borderRadius: 0,
