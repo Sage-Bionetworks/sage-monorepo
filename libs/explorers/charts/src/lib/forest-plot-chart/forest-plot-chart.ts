@@ -52,17 +52,19 @@ export class ForestPlotChart {
       ...new Set(props.items.map((item) => item.yAxisCategory)),
     ];
     const [xMin, xMax] = computeXBounds(props);
-    // Tick positions are anchored to integer multiples of the interval (not to xMin),
-    // so an interval of 0.2 within [-0.1, 0.7] yields [0, 0.2, 0.4, 0.6] rather than
-    // [-0.1, 0.1, 0.3, 0.5, 0.7]. We pass these positions to ECharts via customValues
-    // so axis ticks align with our gridLineSeries.
-    // Coerce non-positive values (e.g. an upstream `(xMax - xMin) / n` that resolved to 0
-    // on zero-range data) back to the default so we still render a labelled axis.
-    const xAxisInterval =
+    // When xAxisInterval is given, tick positions are anchored to integer multiples of
+    // the interval (not to xMin), so an interval of 0.2 within [-0.1, 0.7] yields
+    // [0, 0.2, 0.4, 0.6] rather than [-0.1, 0.1, 0.3, 0.5, 0.7]. We pass these positions
+    // to ECharts via customValues so axis ticks align with our gridLineSeries.
+    // When xAxisInterval is not provided (or is non-positive), we return an empty array
+    // and buildXAxis falls back to ECharts' splitNumber, which picks "nice" round tick
+    // values via its own algorithm. The grid-line series renders no vertical lines in
+    // that mode (it can't align with ticks it doesn't know about); consumers who set
+    // xAxisGridLineStyle should also set xAxisInterval.
+    const xTickPositions =
       props.xAxisInterval && props.xAxisInterval > 0
-        ? props.xAxisInterval
-        : (xMax - xMin) / AXIS_STYLE.valueAxisSplitNumber;
-    const xTickPositions = computeXTickPositions(xMin, xMax, xAxisInterval);
+        ? computeXTickPositions(xMin, xMax, props.xAxisInterval)
+        : [];
     const tooltip = buildTooltip(DARK_TOOLTIP, props.tooltipStyle);
 
     // Detach the previous row-hover controller before re-rendering so its listener

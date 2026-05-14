@@ -302,45 +302,51 @@ describe('ForestPlotChart', () => {
       expect((getOption().series as unknown[]).length).toBe(2);
     });
 
-    it('pins x-axis tick positions via customValues by default', () => {
+    it('lets ECharts pick x-axis ticks via splitNumber when no xAxisInterval is provided', () => {
+      // Default mode: customValues is not set; ECharts uses its own "nice number"
+      // algorithm to pick round tick values from the configured splitNumber.
       makeChart();
       const xAxis = getOption().xAxis as {
-        axisLabel: { customValues: number[] };
-        axisTick: { customValues: number[] };
+        splitNumber?: number;
+        axisTick?: { customValues?: number[] };
+        axisLabel: { customValues?: number[] };
       };
-      expect(xAxis.axisLabel.customValues.length).toBeGreaterThan(0);
-      expect(xAxis.axisTick.customValues).toEqual(xAxis.axisLabel.customValues);
+      expect(xAxis.splitNumber).toBe(10);
+      expect(xAxis.axisTick).toBeUndefined();
+      expect(xAxis.axisLabel.customValues).toBeUndefined();
     });
 
     it('anchors x-axis ticks to round multiples of xAxisInterval', () => {
       makeChart({ xAxisMin: -0.1, xAxisMax: 0.7, xAxisInterval: 0.2 });
-      const xAxis = getOption().xAxis as { axisLabel: { customValues: number[] } };
+      const xAxis = getOption().xAxis as {
+        axisLabel: { customValues: number[] };
+        axisTick: { customValues: number[] };
+      };
       // 0.2 anchored within [-0.1, 0.7] yields [0, 0.2, 0.4, 0.6], not the
       // xMin-anchored [-0.1, 0.1, 0.3, 0.5, 0.7]
       const rounded = xAxis.axisLabel.customValues.map((v) => Math.round(v * 100) / 100);
       expect(rounded).toEqual([0, 0.2, 0.4, 0.6]);
+      expect(xAxis.axisTick.customValues).toEqual(xAxis.axisLabel.customValues);
     });
 
-    it('falls back to the default interval when xAxisInterval is non-positive', () => {
-      // 0 (or negative) would otherwise yield an empty customValues array via
-      // computeXTickPositions, leaving the chart with no x-axis labels at all.
-      const zeroIntervalTicks = (() => {
-        makeChart({ xAxisInterval: 0 });
-        return (getOption().xAxis as { axisLabel: { customValues: number[] } }).axisLabel
-          .customValues;
-      })();
-      const defaultTicks = (() => {
-        makeChart();
-        return (getOption().xAxis as { axisLabel: { customValues: number[] } }).axisLabel
-          .customValues;
-      })();
-      expect(zeroIntervalTicks).toEqual(defaultTicks);
-      expect(zeroIntervalTicks.length).toBeGreaterThan(0);
+    it('falls back to ECharts splitNumber when xAxisInterval is non-positive', () => {
+      // 0 (or negative) would otherwise produce an empty customValues array via
+      // computeXTickPositions, leaving the chart with no x-axis labels at all. Falling
+      // back to splitNumber matches the no-interval default so the axis stays labelled.
+      makeChart({ xAxisInterval: 0 });
+      const xAxis = getOption().xAxis as {
+        splitNumber?: number;
+        axisTick?: { customValues?: number[] };
+        axisLabel: { customValues?: number[] };
+      };
+      expect(xAxis.splitNumber).toBe(10);
+      expect(xAxis.axisTick).toBeUndefined();
+      expect(xAxis.axisLabel.customValues).toBeUndefined();
     });
 
     it('hides min/max x-axis labels when bounds are auto-computed', () => {
-      // Auto-bounds land on tick multiples (±maxAbs * 1.1 with splitNumber 10),
-      // so labels would otherwise render right at the chart edges.
+      // Auto-bounds (±maxAbs * 1.1) sit just past the data; suppress edge labels so
+      // they don't clip against the axis-line end if ECharts places a tick there.
       makeChart();
       const xAxis = getOption().xAxis as {
         axisLabel: { showMinLabel: boolean; showMaxLabel: boolean };

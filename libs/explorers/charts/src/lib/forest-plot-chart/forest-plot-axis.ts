@@ -43,10 +43,15 @@ export function buildXAxis(
   xMax: number,
   xTickPositions: number[],
 ): EChartsOption['xAxis'] {
-  // With auto-computed bounds (±maxAbs * 1.1) and the default interval, xMin and xMax
-  // land on tick multiples, so customValues includes labels right at the chart edges
-  // where they tend to clip against the axis-line end. Suppress them in that case.
-  // When the consumer explicitly sets bounds, we show every tick they asked for.
+  // Two tick modes: an empty xTickPositions means the caller did not pin tick
+  // values, so we let ECharts pick "nice" round ticks via splitNumber. A non-empty
+  // array means tick positions were precomputed (typically from xAxisInterval) and
+  // we pin them with customValues so axis ticks align with our gridLineSeries.
+  const useCustomTicks = xTickPositions.length > 0;
+
+  // With auto-computed bounds (±maxAbs * 1.1), labels at xMin/xMax clip against the
+  // axis-line end -- suppress them in that case. When the consumer sets bounds
+  // explicitly, we show every label they asked for.
   const boundsAreExplicit = props.xAxisMin !== undefined && props.xAxisMax !== undefined;
 
   const bottomXAxis = {
@@ -65,13 +70,13 @@ export function buildXAxis(
     },
     // splitLine is rendered via gridLineSeries so we control alignment + z-order
     splitLine: { show: false },
-    // customValues pins ticks/labels to the exact positions our gridLineSeries
-    // draws at, anchored to round multiples of the interval.
-    axisTick: { customValues: xTickPositions },
+    ...(useCustomTicks
+      ? { axisTick: { customValues: xTickPositions } }
+      : { splitNumber: AXIS_STYLE.valueAxisSplitNumber }),
     axisLabel: {
       ...X_AXIS_LABEL_TEXT_STYLE,
       formatter: (tickValue: number) => tickValue.toFixed(props.xAxisLabelPrecision ?? 2),
-      customValues: xTickPositions,
+      ...(useCustomTicks && { customValues: xTickPositions }),
       ...(!boundsAreExplicit && { showMinLabel: false, showMaxLabel: false }),
       ...props.xAxisTickLabelStyle,
     },
