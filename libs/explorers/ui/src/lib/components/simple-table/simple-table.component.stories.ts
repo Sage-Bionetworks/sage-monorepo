@@ -142,19 +142,19 @@ export const WithoutHeader: Story = {
 
 export const WithSwatch: Story = {
   args: {
-    columns: [{ name: 'Abbreviation' }, { name: 'Description' }],
+    columns: [{ name: 'Status' }, { name: 'Description' }],
     rows: [
       [
-        { type: 'swatch', color: '#bd2438', text: 'Immune' },
-        { type: 'text', value: 'Immune Cell' },
+        { type: 'swatch', color: '#22c55e', text: 'Active' },
+        { type: 'text', value: 'Currently running' },
       ],
       [
-        { type: 'swatch', color: '#c7a87c', text: 'Astro' },
-        { type: 'text', value: 'Astrocyte' },
+        { type: 'swatch', color: '#eab308', text: 'Pending' },
+        { type: 'text', value: 'Awaiting review' },
       ],
       [
-        { type: 'swatch', color: '#f0c419', text: 'OPC' },
-        { type: 'text', value: 'Oligodendrocyte Progenitor Cell' },
+        { type: 'swatch', color: '#ef4444', text: 'Blocked' },
+        { type: 'text', value: 'Requires attention' },
       ],
     ],
     columnGap: '40px',
