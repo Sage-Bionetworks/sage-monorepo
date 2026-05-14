@@ -76,7 +76,7 @@ footer {
       display: flex;
       flex-direction: row;
       gap: 40px;
-      color: var(--color-gray-100);
+      color: var(--footer-versions-color, var(--color-gray-100));
     }
   }
 }
