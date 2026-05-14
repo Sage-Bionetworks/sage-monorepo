@@ -5,20 +5,29 @@
     </div>
   }
 
-  <div [style.display]="isLoading() ? 'none' : 'block'">
+  <div class="comparison-tool-content" [style.display]="isLoading() ? 'none' : 'flex'">
     <explorers-comparison-tool-header />
     <explorers-comparison-tool-filter-list />
-    <div class="comparison-tool-body">
-      <div class="comparison-tool-body-inner">
-        <div class="comparison-tool-tables">
-          <explorers-comparison-tool-controls />
-          <explorers-comparison-tool-table />
-          <ng-content></ng-content>
-          <explorers-comparison-tool-filter-panel />
+    <div class="comparison-tool-with-sidebar">
+      <div class="comparison-tool-main">
+        <div class="comparison-tool-body">
+          <div class="comparison-tool-body-inner">
+            <div class="comparison-tool-tables">
+              <explorers-comparison-tool-controls />
+              <explorers-comparison-tool-table />
+              <ng-content></ng-content>
+              <explorers-comparison-tool-filter-panel />
+            </div>
+          </div>
+          <explorers-heatmap-details-panel />
         </div>
+        <explorers-comparison-tool-footer />
       </div>
-      <explorers-heatmap-details-panel />
+      @if (hasSidebar()) {
+        <aside class="comparison-tool-sidebar">
+          <ng-content select="[ctSidebar]"></ng-content>
+        </aside>
+      }
     </div>
-    <explorers-comparison-tool-footer />
   </div>
 </main>

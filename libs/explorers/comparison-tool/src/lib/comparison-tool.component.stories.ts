@@ -36,6 +36,8 @@ type StoryArgs = Omit<
   // Panel visibility
   legendVisible?: boolean;
   visualizationOverviewVisible?: boolean;
+  // Sidebar
+  hasSidebar?: boolean;
 };
 
 // Inner component that provides services - will be remounted when configs change
@@ -48,7 +50,17 @@ type StoryArgs = Omit<
     ...provideComparisonToolService(),
     ...provideComparisonToolFilterService(),
   ],
-  template: '<explorers-comparison-tool [isLoading]="false" />',
+  template: `
+    <explorers-comparison-tool [isLoading]="false" [hasSidebar]="hasSidebar() ?? false">
+      @if (hasSidebar()) {
+        <div ctSidebar style="padding: 16px;">
+          <h3 style="margin-top: 0;">Sidebar placeholder</h3>
+          <p>Content projected into the comparison-tool sidebar slot.</p>
+          <p>Resize the viewport past ~1920px to see the width grow toward 600px.</p>
+        </div>
+      }
+    </explorers-comparison-tool>
+  `,
 })
 class ComparisonToolInnerComponent {
   // Header inputs
@@ -74,6 +86,8 @@ class ComparisonToolInnerComponent {
   // Panel visibility inputs
   legendVisible = input<boolean>();
   visualizationOverviewVisible = input<boolean>();
+  // Sidebar input
+  hasSidebar = input<boolean>();
 
   private readonly comparisonToolService = inject(ComparisonToolService);
 
@@ -183,6 +197,7 @@ class ComparisonToolInnerComponent {
         [pinnedItems]="pinnedItems()"
         [legendVisible]="legendVisible()"
         [visualizationOverviewVisible]="visualizationOverviewVisible()"
+        [hasSidebar]="hasSidebar()"
       />
     }
   `,
@@ -206,6 +221,7 @@ class ComparisonToolStoryWrapperComponent {
   pinnedItems = input<string[]>();
   legendVisible = input<boolean>();
   visualizationOverviewVisible = input<boolean>();
+  hasSidebar = input<boolean>();
 
   // Key changes when configs or defaultSort change, triggering inner component remount
   protected readonly configKey = computed(() => {
@@ -331,6 +347,15 @@ const meta: Meta<StoryArgs> = {
         'User can toggle visibility afterward.',
       table: { category: 'Controls' },
     },
+    // Sidebar category
+    hasSidebar: {
+      control: 'boolean',
+      description:
+        'Whether to render the optional right-hand sidebar panel. ' +
+        'When true, content projected via the `ctSidebar` attribute is shown alongside the body and footer. ' +
+        'Width responsively clamps between 300px and 600px based on viewport.',
+      table: { category: 'Sidebar' },
+    },
   },
   decorators: [
     applicationConfig({
@@ -386,5 +411,12 @@ export const Demo: Story = {
     // Panel visibility
     legendVisible: false,
     visualizationOverviewVisible: false,
+  },
+};
+
+export const WithSidebar: Story = {
+  args: {
+    ...Demo.args,
+    hasSidebar: true,
   },
 };

@@ -28,6 +28,7 @@ export class ComparisonToolComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
   isLoading = input(true);
+  hasSidebar = input(false);
 
   currentConfig = this.comparisonToolService.currentConfig;
   loadingResultsCount = this.comparisonToolService.loadingResultsCount;
