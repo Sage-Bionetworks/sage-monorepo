@@ -56,7 +56,12 @@ export class ForestPlotChart {
     // so an interval of 0.2 within [-0.1, 0.7] yields [0, 0.2, 0.4, 0.6] rather than
     // [-0.1, 0.1, 0.3, 0.5, 0.7]. We pass these positions to ECharts via customValues
     // so axis ticks align with our gridLineSeries.
-    const xAxisInterval = props.xAxisInterval ?? (xMax - xMin) / AXIS_STYLE.valueAxisSplitNumber;
+    // Coerce non-positive values (e.g. an upstream `(xMax - xMin) / n` that resolved to 0
+    // on zero-range data) back to the default so we still render a labelled axis.
+    const xAxisInterval =
+      props.xAxisInterval && props.xAxisInterval > 0
+        ? props.xAxisInterval
+        : (xMax - xMin) / AXIS_STYLE.valueAxisSplitNumber;
     const xTickPositions = computeXTickPositions(xMin, xMax, xAxisInterval);
     const tooltip = buildTooltip(DARK_TOOLTIP, props.tooltipStyle);
 

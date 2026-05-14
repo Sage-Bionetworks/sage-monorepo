@@ -44,6 +44,7 @@ export interface ForestPlotProps {
    * Explicit step between x-axis ticks. Ticks fall on multiples of the interval (anchored
    * to 0), so they land on round values regardless of `xAxisMin` -- e.g. interval 0.2
    * within [-0.1, 0.7] yields ticks at 0, 0.2, 0.4, 0.6. Defaults to `(xMax - xMin) / 10`.
+   * Non-positive values fall through to the default.
    */
   xAxisInterval?: number;
   /** Number of decimal places to render on each x-axis tick label. Defaults to 2. */

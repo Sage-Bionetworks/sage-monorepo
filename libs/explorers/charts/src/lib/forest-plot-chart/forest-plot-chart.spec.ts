@@ -321,6 +321,23 @@ describe('ForestPlotChart', () => {
       expect(rounded).toEqual([0, 0.2, 0.4, 0.6]);
     });
 
+    it('falls back to the default interval when xAxisInterval is non-positive', () => {
+      // 0 (or negative) would otherwise yield an empty customValues array via
+      // computeXTickPositions, leaving the chart with no x-axis labels at all.
+      const zeroIntervalTicks = (() => {
+        makeChart({ xAxisInterval: 0 });
+        return (getOption().xAxis as { axisLabel: { customValues: number[] } }).axisLabel
+          .customValues;
+      })();
+      const defaultTicks = (() => {
+        makeChart();
+        return (getOption().xAxis as { axisLabel: { customValues: number[] } }).axisLabel
+          .customValues;
+      })();
+      expect(zeroIntervalTicks).toEqual(defaultTicks);
+      expect(zeroIntervalTicks.length).toBeGreaterThan(0);
+    });
+
     it('hides min/max x-axis labels when bounds are auto-computed', () => {
       // Auto-bounds land on tick multiples (±maxAbs * 1.1 with splitNumber 10),
       // so labels would otherwise render right at the chart edges.
