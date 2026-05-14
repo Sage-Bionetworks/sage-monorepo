@@ -1,6 +1,6 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { applicationConfig } from '@storybook/angular';
 import type { Meta, StoryObj } from '@storybook/angular';
+import { applicationConfig } from '@storybook/angular';
 import { ChicletComponent } from './chiclet.component';
 
 interface ChicletStoryArgs {
@@ -10,13 +10,15 @@ interface ChicletStoryArgs {
   closeIconColor?: string;
   closeIconSize?: number;
   fontSize?: string;
+  borderRadius?: string;
+  padding?: string;
   removable?: boolean;
   removeAriaLabel?: string;
 }
 
 const meta: Meta<ChicletStoryArgs> = {
   component: ChicletComponent,
-  title: 'UI/ChicletComponent',
+  title: 'UI/Chiclets/ChicletComponent',
   decorators: [
     applicationConfig({
       providers: [provideHttpClient(withInterceptorsFromDi())],
@@ -31,6 +33,8 @@ const meta: Meta<ChicletStoryArgs> = {
         [closeIconColor]="closeIconColor"
         [closeIconSize]="closeIconSize ?? 14"
         [fontSize]="fontSize"
+        [borderRadius]="borderRadius"
+        [padding]="padding"
         [removable]="removable ?? false"
         [removeAriaLabel]="removeAriaLabel ?? 'Remove'"
       >${args.content}</explorers-chiclet>
@@ -55,6 +59,17 @@ export const WithTextColor: Story = {
 
 export const WithFontSize: Story = {
   args: { content: 'APOE', fontSize: '14px' },
+};
+
+export const WithSquareShape: Story = {
+  args: {
+    content: '<b>variant:</b>&nbsp;rs29475839',
+    backgroundColor: 'var(--color-gray-300)',
+    textColor: 'var(--color-gray-900)',
+    fontSize: '14px',
+    borderRadius: '3px',
+    padding: '6px',
+  },
 };
 
 export const WithBoldPrefix: Story = {

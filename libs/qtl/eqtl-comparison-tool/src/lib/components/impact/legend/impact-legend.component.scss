@@ -1,0 +1,27 @@
+.impact-legend-table {
+  --simple-table-font-size: 14px;
+  --simple-table-line-height: normal;
+  --simple-table-row-padding: 6px;
+  --simple-table-text-color: var(--color-gray-900);
+  --simple-table-text-color-secondary: var(--color-gray-800);
+  --simple-table-header-color: var(--color-gray-1000);
+  --simple-table-header-font-weight: 700;
+  --simple-table-header-border-width: 2px;
+
+  .impact-legend-abbreviation-col {
+    width: 30%;
+  }
+
+  .impact-legend-description-col {
+    width: 70%;
+  }
+
+  tbody td.impact-legend-description-col {
+    font-style: italic;
+  }
+}
+
+.impact-legend-footer {
+  max-width: 260px;
+  margin: 24px auto 0;
+}

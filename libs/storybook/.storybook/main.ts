@@ -24,6 +24,10 @@ const config: StorybookConfig = {
           title: 'Explorers',
           url: './explorers',
         },
+        qtl: {
+          title: 'QTL',
+          url: './qtl',
+        },
       }
     : {
         agora: {
@@ -33,6 +37,10 @@ const config: StorybookConfig = {
         explorers: {
           title: 'Explorers',
           url: 'http://localhost:4402',
+        },
+        qtl: {
+          title: 'QTL',
+          url: 'http://localhost:4403',
         },
       },
 };

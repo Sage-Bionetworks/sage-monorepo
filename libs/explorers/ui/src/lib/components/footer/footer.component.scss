@@ -9,8 +9,9 @@ footer {
   background: var(--footer-background, var(--color-primary));
   padding: 10px var(--footer-padding-x, 10px);
   min-height: var(--footer-height);
+  column-gap: 40px;
 
-  @media (min-width: vars.$md-breakpoint) {
+  @media (min-width: vars.$lg-breakpoint) {
     justify-content: space-between;
   }
 
@@ -24,7 +25,7 @@ footer {
       padding: 0;
       margin: 10px 0;
 
-      @media (min-width: vars.$md-breakpoint) {
+      @media (min-width: vars.$lg-breakpoint) {
         margin: 0;
       }
 
@@ -67,7 +68,7 @@ footer {
     gap: 50px;
     margin: 10px 0;
 
-    @media (min-width: vars.$md-breakpoint) {
+    @media (min-width: vars.$lg-breakpoint) {
       margin: 0;
     }
 
@@ -75,7 +76,7 @@ footer {
       display: flex;
       flex-direction: row;
       gap: 40px;
-      color: var(--color-gray-100);
+      color: var(--footer-versions-color, var(--color-gray-100));
     }
   }
 }

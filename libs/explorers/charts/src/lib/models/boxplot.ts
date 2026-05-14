@@ -70,7 +70,36 @@ export interface BoxplotProps {
   pointOpacity?: number;
   noDataStyle?: 'textOnly' | 'grayBackground';
   chartStyle?: ChartStyle;
+  /* if defined, lanes will be filled with these colors, cycling through the array
+  per x-axis category. Lanes butt up against each other with no gap. Overrides the
+  active chartStyle's lane background (e.g. grayGrid's gray bands). */
+  laneBackgroundColors?: string[];
+  /* if false, hides axis tick marks on the category x-axis and the y-axis. */
+  showAxisTicks?: boolean;
+  /* if defined, overrides the boxplot box fill, border color, and/or border width. */
+  boxplotBoxStyle?: BoxplotBoxStyle;
+  /* if defined, overrides tick-label typography on both the category x-axis and the y-axis. */
+  axisTickLabelStyle?: AxisTickLabelStyle;
+  /* if defined, overrides the axis line stroke on both the category x-axis and the y-axis. */
+  axisLineStyle?: AxisLineStyle;
 }
+
+export type BoxplotBoxStyle = {
+  fillColor?: string;
+  borderColor?: string;
+  borderWidth?: number;
+};
+
+export type AxisTickLabelStyle = {
+  fontSize?: string;
+  fontWeight?: 'normal' | 'bold' | 'bolder' | 'lighter' | number;
+  color?: string;
+};
+
+export type AxisLineStyle = {
+  width?: number;
+  color?: string;
+};
 
 export interface BoxplotChartTheme extends BaseChartTheme {
   boxplotItemStyle: BoxplotSeriesOption['itemStyle'];

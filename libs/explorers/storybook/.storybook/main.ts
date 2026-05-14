@@ -15,6 +15,7 @@ const config: StorybookConfig = {
     { from: '../../../explorers/assets', to: 'explorers-assets' },
     { from: '../../../agora/assets', to: 'agora-assets' },
     { from: '../../../model-ad/assets', to: 'model-ad-assets' },
+    { from: '../../../qtl/assets', to: 'qtl-assets' },
   ],
 };
 

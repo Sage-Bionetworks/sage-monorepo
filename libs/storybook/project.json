@@ -56,7 +56,8 @@
         "commands": [
           "STORYBOOK_STATIC_BUILD=true nx build-storybook storybook",
           "STORYBOOK_STATIC_BUILD=true nx build-storybook agora-storybook --outputDir=dist/storybook/storybook/agora",
-          "STORYBOOK_STATIC_BUILD=true nx build-storybook explorers-storybook --outputDir=dist/storybook/storybook/explorers"
+          "STORYBOOK_STATIC_BUILD=true nx build-storybook explorers-storybook --outputDir=dist/storybook/storybook/explorers",
+          "STORYBOOK_STATIC_BUILD=true nx build-storybook qtl-storybook --outputDir=dist/storybook/storybook/qtl"
         ],
         "parallel": false
       }

@@ -1,0 +1,27 @@
+{
+  "name": "qtl-eqtl-comparison-tool",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/qtl/eqtl-comparison-tool/src",
+  "prefix": "qtl",
+  "tags": ["type:feature", "scope:qtl", "language:typescript"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/qtl/eqtl-comparison-tool"],
+      "options": {
+        "jestConfig": "libs/qtl/eqtl-comparison-tool/jest.config.ts",
+        "tsConfig": "libs/qtl/eqtl-comparison-tool/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  }
+}

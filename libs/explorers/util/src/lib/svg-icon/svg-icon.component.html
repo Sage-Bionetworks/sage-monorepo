@@ -1,7 +1,27 @@
-<div
-  [ngClass]="className"
-  [style.width.px]="width"
-  [style.height.px]="height"
-  [style.color]="color"
-  [innerHTML]="svgContent"
-></div>
+@if (enableBackground()) {
+  <div
+    class="svg-icon-background"
+    [class.circle]="backgroundShape() === 'circle'"
+    [class.square]="backgroundShape() === 'square'"
+    [style.background-color]="backgroundColor()"
+    [style.padding.px]="backgroundPadding()"
+  >
+    <ng-container [ngTemplateOutlet]="iconBody" />
+  </div>
+} @else {
+  <ng-container [ngTemplateOutlet]="iconBody" />
+}
+
+<ng-template #iconBody>
+  <div
+    [ngClass]="className()"
+    [class.svg-icon-stroke-override]="strokeWidth() !== undefined"
+    [style.width.px]="width()"
+    [style.height.px]="height()"
+    [style.color]="color()"
+    [style.--svg-icon-stroke-width]="strokeWidth()"
+    [innerHTML]="svgContent"
+    [attr.role]="altText() ? 'img' : null"
+    [attr.aria-label]="altText() || null"
+  ></div>
+</ng-template>
