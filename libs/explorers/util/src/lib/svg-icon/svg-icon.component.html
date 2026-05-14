@@ -15,9 +15,11 @@
 <ng-template #iconBody>
   <div
     [ngClass]="className()"
+    [class.svg-icon-stroke-override]="strokeWidth() !== undefined"
     [style.width.px]="width()"
     [style.height.px]="height()"
     [style.color]="color()"
+    [style.--svg-icon-stroke-width]="strokeWidth()"
     [innerHTML]="svgContent"
     [attr.role]="altText() ? 'img' : null"
     [attr.aria-label]="altText() || null"
