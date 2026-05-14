@@ -4,17 +4,10 @@
   [style.--simple-table-column-gap]="columnGap()"
 >
   @if (columns(); as cols) {
-    @if (hasColumnWidths()) {
-      <colgroup>
-        @for (col of cols; track $index) {
-          <col [style.width]="col.width || null" />
-        }
-      </colgroup>
-    }
     <thead>
       <tr>
         @for (col of cols; track $index) {
-          <th [class]="col?.align ? 'align-' + col?.align : null">
+          <th [class]="col?.className">
             @if (col.tooltip) {
               <span class="dotted-underline" [pTooltip]="col.tooltip" tooltipPosition="left">
                 {{ col.name }}
@@ -32,14 +25,10 @@
       <tr>
         @for (cell of row; track $index; let colIndex = $index) {
           @let col = columns()?.[colIndex];
-          <td [class]="col?.align ? 'align-' + col?.align : null">
+          <td [class]="col?.className">
             @switch (cell.type) {
               @case ('text') {
-                @if (cell.italic) {
-                  <em class="cell-text-italic">{{ cell.value }}</em>
-                } @else {
-                  {{ cell.value }}
-                }
+                {{ cell.value }}
               }
               @case ('label') {
                 <span class="cell-label">{{ cell.text }}</span>

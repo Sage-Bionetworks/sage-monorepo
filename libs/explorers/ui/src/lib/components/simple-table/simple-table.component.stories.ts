@@ -28,7 +28,6 @@ export const WithHeader: Story = {
       {
         name: 'Z-Score',
         tooltip: 'More negative is better',
-        align: 'right',
       },
     ],
     rows: [
@@ -147,15 +146,15 @@ export const WithSwatch: Story = {
     rows: [
       [
         { type: 'swatch', color: '#bd2438', text: 'Immune' },
-        { type: 'text', value: 'Immune Cell', italic: true },
+        { type: 'text', value: 'Immune Cell' },
       ],
       [
         { type: 'swatch', color: '#c7a87c', text: 'Astro' },
-        { type: 'text', value: 'Astrocyte', italic: true },
+        { type: 'text', value: 'Astrocyte' },
       ],
       [
         { type: 'swatch', color: '#f0c419', text: 'OPC' },
-        { type: 'text', value: 'Oligodendrocyte Progenitor Cell', italic: true },
+        { type: 'text', value: 'Oligodendrocyte Progenitor Cell' },
       ],
     ],
     columnGap: '40px',
@@ -167,7 +166,7 @@ export const Combined: Story = {
     columns: [
       { name: 'Source' },
       { name: 'Description' },
-      { name: 'Score', tooltip: 'Higher is better.', align: 'right' },
+      { name: 'Score', tooltip: 'Higher is better.' },
     ],
     rows: [
       [

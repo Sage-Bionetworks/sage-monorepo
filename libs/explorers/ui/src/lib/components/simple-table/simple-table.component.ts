@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SimpleTableCell, SimpleTableColumn } from '@sagebionetworks/explorers/models';
 import { isExternalLink } from '@sagebionetworks/shared/util';
@@ -15,10 +15,6 @@ export class SimpleTableComponent {
   columns = input<SimpleTableColumn[]>();
   rows = input.required<SimpleTableCell[][]>();
   columnGap = input<string>();
-
-  protected readonly hasColumnWidths = computed(() =>
-    (this.columns() ?? []).some((col) => !!col.width),
-  );
 
   protected readonly isExternalLink = isExternalLink;
 }

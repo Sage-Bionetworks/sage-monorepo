@@ -52,12 +52,9 @@ describe('SimpleTableComponent', () => {
       expect(screen.queryByRole('columnheader')).not.toBeInTheDocument();
     });
 
-    it('renders a colgroup with explicit widths when any column has width', async () => {
+    it('applies the column className to the matching header and body cells', async () => {
       const { component } = await setup({
-        columns: [
-          { name: 'Abbreviation', width: '30%' },
-          { name: 'Description', width: '70%' },
-        ],
+        columns: [{ name: 'Abbreviation' }, { name: 'Description', className: 'description-col' }],
         rows: [
           [
             { type: 'text', value: 'AD' },
@@ -65,23 +62,12 @@ describe('SimpleTableComponent', () => {
           ],
         ],
       });
-      const cols = component.container.querySelectorAll<HTMLTableColElement>('colgroup col');
-      expect(cols).toHaveLength(2);
-      expect(cols[0].style.width).toBe('30%');
-      expect(cols[1].style.width).toBe('70%');
-    });
-
-    it('does not render a colgroup when no column has width', async () => {
-      const { component } = await setup({
-        columns: [{ name: 'TWAS' }, { name: 'Z-Score' }],
-        rows: [
-          [
-            { type: 'text', value: 'AD' },
-            { type: 'text', value: -20 },
-          ],
-        ],
-      });
-      expect(component.container.querySelector('colgroup')).toBeNull();
+      const headers = component.container.querySelectorAll<HTMLElement>('thead th');
+      const cells = component.container.querySelectorAll<HTMLElement>('tbody td');
+      expect(headers[0]).not.toHaveClass('description-col');
+      expect(headers[1]).toHaveClass('description-col');
+      expect(cells[0]).not.toHaveClass('description-col');
+      expect(cells[1]).toHaveClass('description-col');
     });
 
     it('marks tooltip-bearing headers with the dotted-underline class', async () => {
@@ -154,15 +140,6 @@ describe('SimpleTableComponent', () => {
       expect(link).toHaveAttribute('target', '_blank');
     });
 
-    it('renders text cells in italics when italic is true', async () => {
-      await setup({
-        rows: [[{ type: 'text', value: 'Immune Cell', italic: true }]],
-      });
-      const italicText = screen.getByText('Immune Cell');
-      expect(italicText.tagName).toBe('EM');
-      expect(italicText).toHaveClass('cell-text-italic');
-    });
-
     it('renders swatch cells with a color square and text', async () => {
       const { component } = await setup({
         rows: [[{ type: 'swatch', color: '#bd2438', text: 'Immune' }]],
@@ -191,7 +168,7 @@ describe('SimpleTableComponent', () => {
   describe('combinations', () => {
     it('supports a header with mixed image/link/label/text cells in the body', async () => {
       await setup({
-        columns: [{ name: 'Source' }, { name: 'Detail' }, { name: 'Score', align: 'right' }],
+        columns: [{ name: 'Source' }, { name: 'Detail' }, { name: 'Score' }],
         rows: [
           [
             { type: 'image', src: '/agora.svg', alt: 'Agora' },

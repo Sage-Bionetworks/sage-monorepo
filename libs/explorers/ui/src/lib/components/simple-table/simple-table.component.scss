@@ -52,18 +52,6 @@
     }
   }
 
-  .align-left {
-    text-align: left;
-  }
-
-  .align-right {
-    text-align: right;
-  }
-
-  .align-center {
-    text-align: center;
-  }
-
   .dotted-underline {
     text-decoration: underline dotted currentcolor 16%;
     text-decoration-skip-ink: none;
@@ -81,10 +69,6 @@
 
   .cell-link {
     @include mixins.link;
-  }
-
-  .cell-text-italic {
-    font-style: italic;
   }
 
   .cell-swatch {
