@@ -1,0 +1,64 @@
+{
+  "name": "qtl-storybook",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/qtl/storybook/src",
+  "prefix": "qtl",
+  "projectType": "library",
+  "tags": ["type:docs", "scope:qtl", "language:typescript"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "start": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4403,
+        "configDir": "libs/qtl/storybook/.storybook",
+        "browserTarget": "qtl-storybook:build-storybook",
+        "compodoc": false,
+        "styles": ["apps/qtl/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs", "libs/qtl/styles/src/lib"]
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/qtl-storybook",
+        "configDir": "libs/qtl/storybook/.storybook",
+        "browserTarget": "qtl-storybook:build-storybook",
+        "compodoc": false,
+        "styles": ["apps/qtl/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs", "libs/qtl/styles/src/lib"]
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "dependsOn": ["build-storybook"],
+      "options": {
+        "buildTarget": "qtl-storybook:build-storybook",
+        "staticFilePath": "dist/storybook/qtl-storybook",
+        "spa": true
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "qtl-storybook:build-storybook:ci"
+        }
+      }
+    }
+  }
+}

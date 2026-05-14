@@ -52,6 +52,24 @@ describe('SimpleTableComponent', () => {
       expect(screen.queryByRole('columnheader')).not.toBeInTheDocument();
     });
 
+    it('applies the column className to the matching header and body cells', async () => {
+      const { component } = await setup({
+        columns: [{ name: 'Abbreviation' }, { name: 'Description', className: 'description-col' }],
+        rows: [
+          [
+            { type: 'text', value: 'AD' },
+            { type: 'text', value: 'Alzheimer disease' },
+          ],
+        ],
+      });
+      const headers = component.container.querySelectorAll<HTMLElement>('thead th');
+      const cells = component.container.querySelectorAll<HTMLElement>('tbody td');
+      expect(headers[0]).not.toHaveClass('description-col');
+      expect(headers[1]).toHaveClass('description-col');
+      expect(cells[0]).not.toHaveClass('description-col');
+      expect(cells[1]).toHaveClass('description-col');
+    });
+
     it('marks tooltip-bearing headers with the dotted-underline class', async () => {
       await setup({
         columns: [{ name: 'TWAS' }, { name: 'Z-Score', tooltip: 'A z-score' }],
@@ -122,6 +140,16 @@ describe('SimpleTableComponent', () => {
       expect(link).toHaveAttribute('target', '_blank');
     });
 
+    it('renders swatch cells with a color square and text', async () => {
+      const { component } = await setup({
+        rows: [[{ type: 'swatch', color: '#bd2438', text: 'Immune' }]],
+      });
+      expect(screen.getByText('Immune')).toBeInTheDocument();
+      const swatchColor = component.container.querySelector<HTMLElement>('.cell-swatch-color');
+      expect(swatchColor).not.toBeNull();
+      expect(swatchColor?.style.backgroundColor).toBe('rgb(189, 36, 56)');
+    });
+
     it('renders image cells with src and alt', async () => {
       await setup({
         rows: [
@@ -140,7 +168,7 @@ describe('SimpleTableComponent', () => {
   describe('combinations', () => {
     it('supports a header with mixed image/link/label/text cells in the body', async () => {
       await setup({
-        columns: [{ name: 'Source' }, { name: 'Detail' }, { name: 'Score', align: 'right' }],
+        columns: [{ name: 'Source' }, { name: 'Detail' }, { name: 'Score' }],
         rows: [
           [
             { type: 'image', src: '/agora.svg', alt: 'Agora' },
