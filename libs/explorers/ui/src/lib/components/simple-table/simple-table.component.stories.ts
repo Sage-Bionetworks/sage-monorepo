@@ -28,7 +28,6 @@ export const WithHeader: Story = {
       {
         name: 'Z-Score',
         tooltip: 'More negative is better',
-        align: 'right',
       },
     ],
     rows: [
@@ -141,12 +140,33 @@ export const WithoutHeader: Story = {
   }),
 };
 
+export const WithSwatch: Story = {
+  args: {
+    columns: [{ name: 'Status' }, { name: 'Description' }],
+    rows: [
+      [
+        { type: 'swatch', color: '#22c55e', text: 'Active' },
+        { type: 'text', value: 'Currently running' },
+      ],
+      [
+        { type: 'swatch', color: '#eab308', text: 'Pending' },
+        { type: 'text', value: 'Awaiting review' },
+      ],
+      [
+        { type: 'swatch', color: '#ef4444', text: 'Blocked' },
+        { type: 'text', value: 'Requires attention' },
+      ],
+    ],
+    columnGap: '40px',
+  },
+};
+
 export const Combined: Story = {
   args: {
     columns: [
       { name: 'Source' },
       { name: 'Description' },
-      { name: 'Score', tooltip: 'Higher is better.', align: 'right' },
+      { name: 'Score', tooltip: 'Higher is better.' },
     ],
     rows: [
       [

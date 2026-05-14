@@ -19,6 +19,9 @@ export const QtlPreset = definePreset(BasePreset, {
   },
   components: {
     button: {
+      root: {
+        roundedBorderRadius: '40px',
+      },
       colorScheme: {
         light: {
           root: {
@@ -30,6 +33,17 @@ export const QtlPreset = definePreset(BasePreset, {
             },
           },
         },
+      },
+    },
+    dialog: {
+      root: {
+        borderRadius: '3px',
+      },
+      header: {
+        padding: '32px 32px 24px',
+      },
+      content: {
+        padding: '0 32px 32px',
       },
     },
     tooltip: {

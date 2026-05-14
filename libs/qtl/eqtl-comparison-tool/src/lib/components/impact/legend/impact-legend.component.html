@@ -1,0 +1,23 @@
+@if (platformService.isBrowser) {
+  <p-dialog
+    header="Legend"
+    [(visible)]="visible"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    [style]="{ width: 'min(464px, 90vw)' }"
+    styleClass="impact-legend-panel"
+  >
+    <explorers-simple-table class="impact-legend-table" [columns]="columns" [rows]="rows" />
+    <div class="impact-legend-footer">
+      <p-button
+        label="Open in new tab"
+        [rounded]="true"
+        [outlined]="true"
+        fluid
+        (onClick)="openInNewTab()"
+      />
+    </div>
+  </p-dialog>
+}

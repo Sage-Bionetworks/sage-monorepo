@@ -7,7 +7,7 @@
     <thead>
       <tr>
         @for (col of cols; track $index) {
-          <th [class]="col?.align ? 'align-' + col?.align : null">
+          <th [class]="col?.className">
             @if (col.tooltip) {
               <span class="dotted-underline" [pTooltip]="col.tooltip" tooltipPosition="left">
                 {{ col.name }}
@@ -25,7 +25,7 @@
       <tr>
         @for (cell of row; track $index; let colIndex = $index) {
           @let col = columns()?.[colIndex];
-          <td [class]="col?.align ? 'align-' + col?.align : null">
+          <td [class]="col?.className">
             @switch (cell.type) {
               @case ('text') {
                 {{ cell.value }}
@@ -48,6 +48,12 @@
               }
               @case ('image') {
                 <explorers-svg-image [imagePath]="cell.src" [altText]="cell.alt" />
+              }
+              @case ('swatch') {
+                <span class="cell-swatch">
+                  <span class="cell-swatch-color" [style.background-color]="cell.color"></span>
+                  {{ cell.text }}
+                </span>
               }
             }
           </td>

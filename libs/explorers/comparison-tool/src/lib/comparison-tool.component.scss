@@ -14,8 +14,36 @@ main {
     justify-content: center;
   }
 
-  .comparison-tool-body {
+  .comparison-tool-content {
     flex: 1 1 auto;
+    flex-direction: column;
+
+    .comparison-tool-with-sidebar {
+      display: flex;
+      flex-direction: row;
+      flex: 1 1 auto;
+
+      .comparison-tool-main {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .comparison-tool-sidebar {
+        flex: 0 0 auto;
+        z-index: 1;
+        width: clamp(300px, calc(300px + (100vw - 1920px) * 0.5), 600px);
+        box-shadow:
+          0 6px 24px 0 rgb(0 0 0 / 5%),
+          0 0 0 1px rgb(0 0 0 / 8%);
+        overflow-y: auto;
+      }
+    }
+  }
+
+  .comparison-tool-body {
+    flex: 0 1 auto;
     display: flex;
     flex-direction: column;
     overflow-x: auto;

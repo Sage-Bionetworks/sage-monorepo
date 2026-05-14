@@ -1,7 +1,12 @@
 export interface SimpleTableColumn {
   name: string;
   tooltip?: string;
-  align?: 'left' | 'right' | 'center';
+  /**
+   * Applied to the column's `<th>` and `<td>` elements. Because those elements
+   * live inside SimpleTableComponent's view, the caller must use
+   * `ViewEncapsulation.None` (or global styles) for their CSS rules to reach them.
+   */
+  className?: string;
 }
 
 export interface SimpleTableTextCell {
@@ -26,8 +31,15 @@ export interface SimpleTableImageCell {
   alt: string;
 }
 
+export interface SimpleTableSwatchCell {
+  type: 'swatch';
+  color: string;
+  text: string;
+}
+
 export type SimpleTableCell =
   | SimpleTableTextCell
   | SimpleTableLabelCell
   | SimpleTableLinkCell
-  | SimpleTableImageCell;
+  | SimpleTableImageCell
+  | SimpleTableSwatchCell;
