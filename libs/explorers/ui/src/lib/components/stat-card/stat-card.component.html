@@ -9,7 +9,7 @@
     />
   </div>
   <div class="stat-card-header">{{ header() }}</div>
-  @if (subHeader(); as sub) {
-    <div class="stat-card-sub-header">{{ sub }}</div>
+  @if (subHeader()) {
+    <div class="stat-card-sub-header">{{ subHeader() }}</div>
   }
 </div>

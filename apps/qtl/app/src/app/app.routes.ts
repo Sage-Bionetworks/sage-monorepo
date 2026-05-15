@@ -1,10 +1,31 @@
 import { Route } from '@angular/router';
-import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { StatCardData, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import {
   DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
   ROUTE_PATHS,
   SUPPORT_EMAIL,
 } from '@sagebionetworks/qtl/config';
+
+const HOME_STAT_CARDS: StatCardData[] = [
+  {
+    iconPath: 'explorers-assets/icons/info-circle.svg',
+    iconAltText: 'studies',
+    header: 'TBD studies',
+    subHeader: 'across the xQTL consortium',
+  },
+  {
+    iconPath: 'explorers-assets/icons/info-circle.svg',
+    iconAltText: 'tissues',
+    header: 'TBD tissues',
+    subHeader: 'spanning brain regions and cell types',
+  },
+  {
+    iconPath: 'explorers-assets/icons/info-circle.svg',
+    iconAltText: 'associations',
+    header: 'TBD associations',
+    subHeader: 'significant variant–gene pairs',
+  },
+];
 
 export const routes: Route[] = [
   {
@@ -13,6 +34,7 @@ export const routes: Route[] = [
     data: {
       title: 'xQTL Explorer',
       description: 'home page',
+      statCards: HOME_STAT_CARDS,
     },
   },
   {

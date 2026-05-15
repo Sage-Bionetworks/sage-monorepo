@@ -19,9 +19,9 @@ async function setup(cards: StatCardData[]) {
 describe('StatCardsComponent', () => {
   it('should render one stat card for each item in cards', async () => {
     const cards: StatCardData[] = [
-      { iconPath: icon, header: 'Card 1' },
-      { iconPath: icon, header: 'Card 2' },
-      { iconPath: icon, header: 'Card 3' },
+      { iconPath: icon, iconAltText: 'icon', header: 'Card 1' },
+      { iconPath: icon, iconAltText: 'icon', header: 'Card 2' },
+      { iconPath: icon, iconAltText: 'icon', header: 'Card 3' },
     ];
     await setup(cards);
 
@@ -32,8 +32,13 @@ describe('StatCardsComponent', () => {
 
   it('should render sub-headers when provided', async () => {
     const cards: StatCardData[] = [
-      { iconPath: icon, header: 'Total QTLs', subHeader: 'across 53 tissues' },
-      { iconPath: icon, header: 'Studies' },
+      {
+        iconPath: icon,
+        iconAltText: 'icon',
+        header: 'Total QTLs',
+        subHeader: 'across 53 tissues',
+      },
+      { iconPath: icon, iconAltText: 'icon', header: 'Studies' },
     ];
     await setup(cards);
 
@@ -42,11 +47,11 @@ describe('StatCardsComponent', () => {
 
   it('should expose --stat-card-count on the host element matching the card count', async () => {
     await setup([
-      { iconPath: icon, header: 'a' },
-      { iconPath: icon, header: 'b' },
-      { iconPath: icon, header: 'c' },
-      { iconPath: icon, header: 'd' },
-      { iconPath: icon, header: 'e' },
+      { iconPath: icon, iconAltText: 'icon', header: 'a' },
+      { iconPath: icon, iconAltText: 'icon', header: 'b' },
+      { iconPath: icon, iconAltText: 'icon', header: 'c' },
+      { iconPath: icon, iconAltText: 'icon', header: 'd' },
+      { iconPath: icon, iconAltText: 'icon', header: 'e' },
     ]);
     const grid = document.querySelector('.stat-cards') as HTMLElement;
     const host = grid.parentElement as HTMLElement;

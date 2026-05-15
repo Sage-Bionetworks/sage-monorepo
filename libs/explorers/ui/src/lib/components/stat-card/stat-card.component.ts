@@ -9,7 +9,7 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 })
 export class StatCardComponent {
   iconPath = input.required<string>();
+  iconAltText = input.required<string>();
   header = input.required<string>();
   subHeader = input<string | undefined>();
-  iconAltText = input<string>('');
 }
