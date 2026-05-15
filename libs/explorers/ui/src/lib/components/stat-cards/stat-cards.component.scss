@@ -22,6 +22,35 @@ $stat-card-animation-easing: cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
+// Top-row corner cards round their outer top corners to match a rounded wrapper.
+// Bottom corners are intentionally left square — consumers typically render
+// something else (e.g. a link bar) directly below.
+.stat-cards > :first-child {
+  --stat-card-border-top-left-radius: var(--stat-cards-corner-radius, 0);
+}
+
+.stat-cards > :nth-child(2) {
+  --stat-card-border-top-right-radius: var(--stat-cards-corner-radius, 0);
+}
+
+// Wide layout: every card sits in a single row, so the rightmost is :last-child,
+// not :nth-child(2). Override the narrow rule with the same-specificity selector.
+@include mixins.respond-to('large') {
+  .stat-cards > :nth-child(2) {
+    --stat-card-border-top-right-radius: 0;
+  }
+
+  .stat-cards > :last-child {
+    --stat-card-border-top-right-radius: var(--stat-cards-corner-radius, 0);
+  }
+}
+
+.stat-cards-prepare-animation > * {
+  opacity: 0;
+  transform: translateY($stat-card-animation-travel);
+  will-change: opacity, transform;
+}
+
 .stat-cards-animate-on-load > * {
   will-change: opacity, transform;
   animation: stat-card-fade-up $stat-card-animation-duration $stat-card-animation-easing backwards;

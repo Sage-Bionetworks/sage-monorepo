@@ -23,6 +23,8 @@ $stat-card-hover-easing: cubic-bezier(0.22, 1, 0.36, 1);
   background-color: white;
   box-sizing: border-box;
   border: 1px solid var(--color-border);
+  border-radius: var(--stat-card-border-top-left-radius, 0)
+    var(--stat-card-border-top-right-radius, 0) 0 0;
   padding: 32px;
   height: 100%;
   color: inherit;

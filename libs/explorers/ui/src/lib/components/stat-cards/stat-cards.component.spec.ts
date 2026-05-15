@@ -74,16 +74,21 @@ describe('StatCardsComponent', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('should apply the animate-on-load class when animateOnLoad is true', async () => {
-    await setup([{ iconPath: icon, iconAltText: 'icon', header: 'a', link }], {
+  it('should apply the animate-on-load class once the component has hydrated', async () => {
+    const { fixture } = await setup([{ iconPath: icon, iconAltText: 'icon', header: 'a', link }], {
       animateOnLoad: true,
     });
+    await fixture.whenStable();
+    fixture.detectChanges();
     expect(document.querySelector('.stat-cards.stat-cards-animate-on-load')).toBeInTheDocument();
   });
 
   it('should not apply the animate-on-load class by default', async () => {
-    await setup([{ iconPath: icon, iconAltText: 'icon', header: 'a', link }]);
+    const { fixture } = await setup([{ iconPath: icon, iconAltText: 'icon', header: 'a', link }]);
+    await fixture.whenStable();
+    fixture.detectChanges();
     const grid = document.querySelector('.stat-cards');
     expect(grid).not.toHaveClass('stat-cards-animate-on-load');
+    expect(grid).not.toHaveClass('stat-cards-prepare-animation');
   });
 });

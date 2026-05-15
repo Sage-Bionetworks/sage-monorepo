@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { afterNextRender, Component, computed, input, signal } from '@angular/core';
 import { StatCardData } from '@sagebionetworks/explorers/models';
 import { StatCardComponent } from '../stat-card/stat-card.component';
 
@@ -15,4 +15,11 @@ export class StatCardsComponent {
   cards = input.required<StatCardData[]>();
   animateOnLoad = input<boolean>(false);
   cardCount = computed(() => this.cards().length);
+  protected readonly hydrated = signal(false);
+
+  constructor() {
+    afterNextRender(() => {
+      this.hydrated.set(true);
+    });
+  }
 }

@@ -1,4 +1,8 @@
 .stat-cards-link-bar-container {
+  --stat-cards-corner-radius: 10px;
+  --link-bar-border-bottom-left-radius: 10px;
+  --link-bar-border-bottom-right-radius: 10px;
+
   position: relative;
   max-width: 1140px;
   width: 100%;

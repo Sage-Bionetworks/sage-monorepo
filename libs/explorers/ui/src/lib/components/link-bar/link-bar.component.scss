@@ -10,6 +10,9 @@
   padding: 16px 24px;
   background-color: white;
   border: 1px solid var(--color-border);
+  border-radius: var(--link-bar-border-top-left-radius, 0)
+    var(--link-bar-border-top-right-radius, 0) var(--link-bar-border-bottom-right-radius, 0)
+    var(--link-bar-border-bottom-left-radius, 0);
 }
 
 .explorers-link-bar .link-bar-text {
