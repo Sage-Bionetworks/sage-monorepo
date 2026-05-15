@@ -3,4 +3,6 @@ export interface StatCardData {
   header: string;
   subHeader?: string;
   iconAltText: string;
+  iconBackgroundColor?: string;
+  iconColor?: string;
 }

@@ -12,11 +12,20 @@
 }
 
 .stat-card-icon {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+}
+
+.stat-card-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
 }
 
 .stat-card-header {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   line-height: var(--line-height-sm);
   font-weight: 700;
   color: var(--color-text);

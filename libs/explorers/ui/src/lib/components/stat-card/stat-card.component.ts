@@ -12,4 +12,6 @@ export class StatCardComponent {
   iconAltText = input.required<string>();
   header = input.required<string>();
   subHeader = input<string | undefined>();
+  iconBackgroundColor = input<string | undefined>();
+  iconColor = input<string | undefined>();
 }
