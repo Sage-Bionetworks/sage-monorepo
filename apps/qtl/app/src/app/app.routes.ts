@@ -14,6 +14,7 @@ const HOME_STAT_CARDS: StatCardData[] = [
     iconBackgroundColor: '#2C5182',
     header: '4000',
     subHeader: 'Brain Donors',
+    link: `/${ROUTE_PATHS.NOT_FOUND}`,
   },
   {
     iconPath: 'explorers-assets/icons/cell.svg',
@@ -22,6 +23,7 @@ const HOME_STAT_CARDS: StatCardData[] = [
     iconBackgroundColor: '#388C95',
     header: '81',
     subHeader: 'Cell Types',
+    link: `/${ROUTE_PATHS.NOT_FOUND}`,
   },
   {
     iconPath: 'explorers-assets/icons/gene-search.svg',
@@ -30,6 +32,7 @@ const HOME_STAT_CARDS: StatCardData[] = [
     subHeader: 'Ancestries',
     iconBackgroundColor: '#A5C7F3',
     iconColor: 'white',
+    link: `/${ROUTE_PATHS.NOT_FOUND}`,
   },
   {
     iconPath: 'explorers-assets/icons/erythrocytes.svg',
@@ -38,6 +41,7 @@ const HOME_STAT_CARDS: StatCardData[] = [
     iconBackgroundColor: '#6E76AE',
     header: '2 million',
     subHeader: 'Single Cells',
+    link: `/${ROUTE_PATHS.NOT_FOUND}`,
   },
   {
     iconPath: 'explorers-assets/icons/eqtl.svg',
@@ -46,6 +50,7 @@ const HOME_STAT_CARDS: StatCardData[] = [
     iconBackgroundColor: '#D7AE0C',
     header: '252 million',
     subHeader: 'eQTLs',
+    link: `/${ROUTE_PATHS.ABOUT}`,
   },
 ];
 

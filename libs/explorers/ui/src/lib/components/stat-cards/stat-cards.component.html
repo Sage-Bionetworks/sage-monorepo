@@ -1,4 +1,4 @@
-<div class="stat-cards">
+<div class="stat-cards" [class.stat-cards-animate-on-load]="animateOnLoad()">
   @for (card of cards(); track $index) {
     <explorers-stat-card
       [header]="card.header"
@@ -7,6 +7,7 @@
       [iconAltText]="card.iconAltText"
       [iconBackgroundColor]="card.iconBackgroundColor"
       [iconColor]="card.iconColor"
+      [link]="card.link"
     />
   }
 </div>

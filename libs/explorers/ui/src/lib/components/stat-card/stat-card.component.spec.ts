@@ -1,4 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
+import { provideLocationMocks } from '@angular/common/testing';
+import { provideRouter } from '@angular/router';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import { mockSvgTestId, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
@@ -8,12 +10,18 @@ const baseInputs = {
   iconPath: '/path/to/icon.svg',
   iconAltText: 'icon',
   header: 'Total QTLs',
+  link: '/',
 };
 
 async function setup(inputs: Partial<typeof baseInputs> & Record<string, unknown> = {}) {
   return render(StatCardComponent, {
     componentInputs: { ...baseInputs, ...inputs },
-    providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+    providers: [
+      provideHttpClient(),
+      provideRouter([]),
+      provideLocationMocks(),
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
+    ],
   });
 }
 

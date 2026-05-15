@@ -13,5 +13,6 @@ import { StatCardComponent } from '../stat-card/stat-card.component';
 })
 export class StatCardsComponent {
   cards = input.required<StatCardData[]>();
+  animateOnLoad = input<boolean>(false);
   cardCount = computed(() => this.cards().length);
 }

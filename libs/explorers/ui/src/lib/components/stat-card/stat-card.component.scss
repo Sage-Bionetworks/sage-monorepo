@@ -1,3 +1,19 @@
+$stat-card-hover-scale: 1.25;
+$stat-card-hover-duration: 350ms;
+$stat-card-hover-easing: cubic-bezier(0.22, 1, 0.36, 1);
+
+:host {
+  display: block;
+  position: relative;
+  z-index: 0;
+  transition: transform $stat-card-hover-duration $stat-card-hover-easing;
+}
+
+:host(:hover) {
+  transform: scale($stat-card-hover-scale);
+  z-index: 1;
+}
+
 .stat-card {
   display: flex;
   flex-direction: column;
@@ -9,6 +25,19 @@
   border: 1px solid var(--color-border);
   padding: 32px;
   height: 100%;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    transition: none;
+  }
+
+  :host(:hover) {
+    transform: none;
+  }
 }
 
 .stat-card-icon {

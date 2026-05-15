@@ -1,8 +1,15 @@
 <div id="home-page">
   <h1>Welcome to the xQTL Explorer!</h1>
 </div>
+<br />
+<br />
+<br />
+<br />
+<br />
 
 <div class="stat-cards-link-bar-container">
-  <explorers-stat-cards [cards]="statCards()" />
-  <explorers-link-bar link="/about" altText="TBD link">TBD link bar text</explorers-link-bar>
+  <explorers-stat-cards [cards]="statCards()" [animateOnLoad]="true" />
+  <explorers-link-bar link="/not-found"
+    >View QTLs by cohort, ancestry, or cell type</explorers-link-bar
+  >
 </div>

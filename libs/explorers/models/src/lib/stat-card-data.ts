@@ -5,4 +5,5 @@ export interface StatCardData {
   iconAltText: string;
   iconBackgroundColor?: string;
   iconColor?: string;
+  link: string;
 }

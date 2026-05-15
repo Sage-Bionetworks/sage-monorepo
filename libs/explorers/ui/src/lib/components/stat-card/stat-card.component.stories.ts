@@ -21,13 +21,14 @@ const meta: Meta<StatCardComponent> = {
 export default meta;
 type Story = StoryObj<StatCardComponent>;
 
-const defaultIcon = 'explorers-assets/images/warning-circle.svg';
+const defaultIcon = 'explorers-assets/icons/people.svg';
 
 export const Default: Story = {
   args: {
     iconPath: defaultIcon,
     iconAltText: 'icon',
     header: 'Total QTLs',
+    link: '/',
   },
 };
 
@@ -37,6 +38,7 @@ export const WithSubHeader: Story = {
     iconAltText: 'icon',
     header: 'Total QTLs',
     subHeader: 'across 53 tissues',
+    link: '/',
   },
 };
 
@@ -46,5 +48,18 @@ export const LongHeader: Story = {
     iconAltText: 'icon',
     header: 'Significant variant–gene associations',
     subHeader: 'across all tissues',
+    link: '/',
+  },
+};
+
+export const WithColoredIconCircle: Story = {
+  args: {
+    iconPath: 'explorers-assets/icons/gene-search.svg',
+    iconAltText: 'people',
+    header: '4000',
+    subHeader: 'Brain Donors',
+    iconBackgroundColor: '#2C5182',
+    iconColor: 'white',
+    link: '/',
   },
 };

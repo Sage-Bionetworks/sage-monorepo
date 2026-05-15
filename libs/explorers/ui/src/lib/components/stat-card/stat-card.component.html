@@ -1,4 +1,4 @@
-<div class="stat-card">
+<a class="stat-card" [routerLink]="link()">
   <div
     class="stat-card-icon"
     [class.stat-card-icon-circle]="iconBackgroundColor()"
@@ -17,4 +17,4 @@
   @if (subHeader()) {
     <div class="stat-card-sub-header">{{ subHeader() }}</div>
   }
-</div>
+</a>

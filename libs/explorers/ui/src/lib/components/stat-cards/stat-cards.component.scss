@@ -1,5 +1,10 @@
 @use 'explorers/styles/src/mixins' as mixins;
 
+$stat-card-animation-duration: 2500ms;
+$stat-card-animation-stagger: 250ms;
+$stat-card-animation-travel: 100px;
+$stat-card-animation-easing: cubic-bezier(0.22, 1, 0.36, 1);
+
 .stat-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -14,5 +19,57 @@
     > :nth-child(odd):last-child {
       grid-column: auto;
     }
+  }
+}
+
+.stat-cards-animate-on-load > * {
+  will-change: opacity, transform;
+  animation: stat-card-fade-up $stat-card-animation-duration $stat-card-animation-easing backwards;
+  animation-delay: calc(
+    var(--stat-card-stagger, #{$stat-card-animation-stagger}) * var(--stat-card-index, 0)
+  );
+}
+
+.stat-cards-animate-on-load > :nth-child(1) {
+  --stat-card-index: 0;
+}
+
+.stat-cards-animate-on-load > :nth-child(2) {
+  --stat-card-index: 1;
+}
+
+.stat-cards-animate-on-load > :nth-child(3) {
+  --stat-card-index: 2;
+}
+
+.stat-cards-animate-on-load > :nth-child(4) {
+  --stat-card-index: 3;
+}
+
+.stat-cards-animate-on-load > :nth-child(5) {
+  --stat-card-index: 4;
+}
+
+.stat-cards-animate-on-load > :nth-child(n + 6) {
+  --stat-card-index: 5;
+}
+
+@keyframes stat-card-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY($stat-card-animation-travel);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-cards-animate-on-load > * {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 }
