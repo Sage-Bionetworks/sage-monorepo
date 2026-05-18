@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.agora.api.next.configuration.MongoCollations;
 import org.sagebionetworks.agora.api.next.model.document.NominatedDrugDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugSearchQueryDto;
@@ -213,6 +214,9 @@ class CustomNominatedDrugRepositoryImplTest {
       .as("Should compute sort field for programs")
       .contains("programs_sort");
     assertThat(pipelineString).as("Should use $reduce to concatenate elements").contains("$reduce");
+    assertThat(pipelineString)
+      .as("Case-insensitivity is delegated to pipeline-level Collation; no $toLower in pipeline")
+      .doesNotContain("$toLower");
   }
 
   @Test
@@ -252,6 +256,9 @@ class CustomNominatedDrugRepositoryImplTest {
 
     assertThat(pipelineString).contains("principal_investigators_sort");
     assertThat(pipelineString).contains("$reduce");
+    assertThat(pipelineString)
+      .as("Case-insensitivity is delegated to pipeline-level Collation; no $toLower in pipeline")
+      .doesNotContain("$toLower");
 
     assertThat(pipelineString)
       .as("String fields should not have _sort suffix")
@@ -301,5 +308,79 @@ class CustomNominatedDrugRepositoryImplTest {
     assertThat(pipelineString).contains("total_nominations");
     assertThat(pipelineString).contains("initial_nomination");
     assertThat(pipelineString).contains("modality");
+  }
+
+  @Test
+  @DisplayName("should apply collation even when Pageable has no sort")
+  void shouldApplyCollationEvenWhenPageableHasNoSort() {
+    when(mongoTemplate.count(any(Query.class), eq(COLLECTION_NAME))).thenReturn(0L);
+    when(
+      mongoTemplate.aggregate(
+        any(Aggregation.class),
+        eq(COLLECTION_NAME),
+        eq(NominatedDrugDocument.class)
+      )
+    ).thenReturn(aggregationResults);
+    when(aggregationResults.getMappedResults()).thenReturn(List.of());
+
+    NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
+      .modality(List.of("Small Molecule"))
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .build();
+
+    // Sort.unsorted() is the default for PageRequest.of(page, size)
+    repository.findAll(PageRequest.of(0, 10), query, List.of());
+
+    ArgumentCaptor<Query> countQueryCaptor = ArgumentCaptor.forClass(Query.class);
+    verify(mongoTemplate).count(countQueryCaptor.capture(), eq(COLLECTION_NAME));
+    assertThat(countQueryCaptor.getValue().getCollation())
+      .as("Count Query must carry collation even when sort is unsorted (filter $in still benefits)")
+      .hasValue(MongoCollations.EN_CI);
+
+    ArgumentCaptor<Aggregation> aggregationCaptor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(
+      aggregationCaptor.capture(),
+      eq(COLLECTION_NAME),
+      eq(NominatedDrugDocument.class)
+    );
+    assertThat(aggregationCaptor.getValue().getOptions().getCollation())
+      .as("Aggregation must carry collation even when sort is unsorted")
+      .hasValue(MongoCollations.EN_CI);
+  }
+
+  @Test
+  @DisplayName("should apply case-insensitive collation to count and aggregation")
+  void shouldApplyCaseInsensitiveCollationToCountAndAggregation() {
+    when(mongoTemplate.count(any(Query.class), eq(COLLECTION_NAME))).thenReturn(0L);
+    when(
+      mongoTemplate.aggregate(
+        any(Aggregation.class),
+        eq(COLLECTION_NAME),
+        eq(NominatedDrugDocument.class)
+      )
+    ).thenReturn(aggregationResults);
+    when(aggregationResults.getMappedResults()).thenReturn(List.of());
+
+    NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .build();
+
+    repository.findAll(PageRequest.of(0, 10), query, List.of());
+
+    ArgumentCaptor<Query> countQueryCaptor = ArgumentCaptor.forClass(Query.class);
+    verify(mongoTemplate).count(countQueryCaptor.capture(), eq(COLLECTION_NAME));
+    assertThat(countQueryCaptor.getValue().getCollation())
+      .as("Count Query must carry the same EN_CI collation as the aggregation")
+      .hasValue(MongoCollations.EN_CI);
+
+    ArgumentCaptor<Aggregation> aggregationCaptor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(
+      aggregationCaptor.capture(),
+      eq(COLLECTION_NAME),
+      eq(NominatedDrugDocument.class)
+    );
+    assertThat(aggregationCaptor.getValue().getOptions().getCollation())
+      .as("Aggregation must carry EN_CI collation so v8 collation index is used")
+      .hasValue(MongoCollations.EN_CI);
   }
 }

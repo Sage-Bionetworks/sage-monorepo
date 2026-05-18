@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
+import org.sagebionetworks.agora.api.next.configuration.MongoCollations;
 import org.sagebionetworks.agora.api.next.model.document.NominatedDrugDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugIdentifier;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -60,8 +62,12 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     // Build match criteria with all filters
     Criteria matchCriteria = buildMatchCriteria(query, items, filterType, search);
 
-    // Count total using simple query (faster than aggregation)
-    long total = mongoTemplate.count(new Query(matchCriteria), COLLECTION_NAME);
+    // Count total using simple query (faster than aggregation).
+    // Collation must match the aggregation below so count/results agree on case-insensitive matching.
+    long total = mongoTemplate.count(
+      new Query(matchCriteria).collation(MongoCollations.EN_CI),
+      COLLECTION_NAME
+    );
 
     // Build aggregation pipeline
     List<AggregationOperation> operations = new ArrayList<>();
@@ -80,7 +86,15 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     operations.add(Aggregation.skip(skipCount));
     operations.add(Aggregation.limit(pageable.getPageSize()));
 
-    Aggregation aggregation = Aggregation.newAggregation(operations);
+    // Apply case-insensitive collation to the entire pipeline. Requires DocDB Planner V3
+    // (default on DocDB 8.0); never force a hint that picks v1/v2 or the collation index
+    // is silently bypassed. The locale/strength here must match the index defined in
+    // agora-data-manager byte-for-byte.
+    // NOTE: Aggregation.withOptions(...) REPLACES options — if you ever extend this with
+    // allowDiskUse or similar, build a single AggregationOptions with all settings or the
+    // collation will be silently dropped.
+    Aggregation aggregation = Aggregation.newAggregation(operations)
+      .withOptions(AggregationOptions.builder().collation(MongoCollations.EN_CI).build());
 
     log.debug("Executing aggregation pipeline: {}", aggregation);
 
@@ -129,9 +143,11 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
   /**
    * Builds $addFields operation to create sortable versions of fields.
    *
-   * <p>For array fields: concatenates array elements into a single string
-   * for proper lexicographic comparison. This enables multi-array sorting (avoiding MongoDB's
-   * "parallel arrays" limitation).
+   * <p>For array fields: concatenates array elements into a single string for proper
+   * lexicographic comparison. This enables multi-array sorting (avoiding MongoDB's
+   * "parallel arrays" limitation). Case-insensitive comparison is delegated to the
+   * pipeline-level Collation (see {@link MongoCollations#EN_CI}); no per-document
+   * {@code $toLower} is needed.
    */
   private void buildSortFields(List<AggregationOperation> operations, Sort sort) {
     Document fields = new Document();
@@ -140,7 +156,7 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       String field = order.getProperty();
 
       if (ARRAY_FIELDS.contains(field)) {
-        // For arrays: concatenate into string, lowercase for comparison
+        // For arrays: concatenate into string; collation handles case-insensitivity
         fields.append(field + "_sort", buildArraySortField(field));
       }
     }
@@ -153,25 +169,26 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
   /**
    * Builds a MongoDB expression to create a sortable string from an array field.
    *
-   * <p>Formula: $toLower($reduce(field))
+   * <p>Formula: $reduce(field) — concatenates array elements with a NUL separator.
+   * Case-insensitivity is provided by the pipeline-level Collation, not by an inner
+   * {@code $toLower}.
    *
-   * <p>Example: ["Duke", "Emory", "Columbia"] → "duke\0emory\0columbia"
+   * <p>Example: ["Duke", "Emory", "Columbia"] → "\0Duke\0Emory\0Columbia" (collation
+   * handles case during sort).
    *
    * @param field the array field name
    * @return Document representing the aggregation expression
    */
   private Document buildArraySortField(String field) {
-    // $reduce: concatenate elements with null separator
-    Document reduce = new Document(
+    // $reduce: concatenate elements with NUL separator. Collation on the parent
+    // aggregation provides case-insensitive comparison at sort time.
+    return new Document(
       "$reduce",
       new Document()
         .append("input", "$" + field)
         .append("initialValue", "")
         .append("in", new Document("$concat", List.of("$$value", "\u0000", "$$this")))
     );
-
-    // $toLower: case-insensitive comparison
-    return new Document("$toLower", reduce);
   }
 
   /**
@@ -290,6 +307,8 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       return;
     }
 
+    // NOTE: MongoDB $regex ignores pipeline-level collation for case-insensitivity, so
+    // the "i" flag here is still required even after the v8 collation adoption.
     String trimmedSearch = search.trim();
     if (trimmedSearch.contains(",")) {
       // Comma-separated list: case-insensitive full matches
