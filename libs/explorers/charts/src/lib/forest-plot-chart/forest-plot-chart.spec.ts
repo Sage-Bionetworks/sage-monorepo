@@ -67,6 +67,14 @@ describe('computeXTickPositions', () => {
     expect(computeXTickPositions(0, 1, 0)).toEqual([]);
     expect(computeXTickPositions(0, 1, -0.1)).toEqual([]);
   });
+
+  it('rounds away floating-point drift so ticks match nominal values', () => {
+    // Without rounding, 3 * 0.2 evaluates to 0.6000000000000001, which is > xMax = 0.6
+    // and can cause ECharts to drop the max tick or render it just past the axis line.
+    const positions = computeXTickPositions(0, 0.6, 0.2);
+    expect(positions).toEqual([0, 0.2, 0.4, 0.6]);
+    expect(positions[positions.length - 1]).toBe(0.6);
+  });
 });
 
 describe('computeXBounds', () => {

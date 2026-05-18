@@ -31,8 +31,11 @@ export function computeXTickPositions(xMin: number, xMax: number, interval: numb
   const lastK = Math.floor(xMax / interval + epsilon);
   const positions: number[] = [];
   for (let k = firstK; k <= lastK; k++) {
-    // `+ 0` normalizes -0 to 0 for strict-equality assertions.
-    positions.push(k * interval + 0);
+    // Re-multiplication drifts (e.g. 3 * 0.2 = 0.6000000000000001). Round to 10 decimals
+    // so each tick matches its nominal value -- otherwise ECharts can drop the max tick
+    // when xMax lands exactly on an interval multiple. `+ 0` normalizes -0 to 0 for
+    // strict-equality assertions.
+    positions.push(Math.round(k * interval * 1e10) / 1e10 + 0);
   }
   return positions;
 }
