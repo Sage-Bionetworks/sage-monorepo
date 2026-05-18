@@ -52,4 +52,45 @@ describe('ForestPlotDirective', () => {
 
     setOptionsSpy.mockRestore();
   });
+
+  it('should forward QTL styling inputs to ForestPlotChart.setOptions', async () => {
+    @Component({
+      imports: [ForestPlotDirective],
+      template: `<div
+        sageForestPlot
+        [items]="items"
+        [showZeroLine]="false"
+        [xAxisLineStyle]="{ width: 1, color: '#22252A' }"
+        [yAxisLineStyle]="{ width: 1, color: '#22252A' }"
+        [xAxisTickLabelStyle]="{ fontSize: '12px', fontWeight: 400, color: '#4A5056' }"
+        [yAxisTickLabelStyle]="{ fontSize: '16px', fontWeight: 400, color: '#353A3F' }"
+        [showXAxisLabelsOnTop]="true"
+        [xAxisGridLineStyle]="{ width: 1, color: '#D0D4D9', type: 'dotted' }"
+        [yAxisGridLineStyle]="{ width: 1, color: '#F1F2F4', type: 'solid' }"
+        [rowHoverHighlightStyle]="{ backgroundColor: 'rgba(158, 158, 158, 0.15)', thickness: 13 }"
+      ></div>`,
+    })
+    class StyledTestComponent {
+      items = forestPlotItems;
+    }
+
+    const setOptionsSpy = jest.spyOn(ForestPlotChart.prototype, 'setOptions');
+    await render(StyledTestComponent);
+
+    expect(setOptionsSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        showZeroLine: false,
+        xAxisLineStyle: { width: 1, color: '#22252A' },
+        yAxisLineStyle: { width: 1, color: '#22252A' },
+        xAxisTickLabelStyle: { fontSize: '12px', fontWeight: 400, color: '#4A5056' },
+        yAxisTickLabelStyle: { fontSize: '16px', fontWeight: 400, color: '#353A3F' },
+        showXAxisLabelsOnTop: true,
+        xAxisGridLineStyle: { width: 1, color: '#D0D4D9', type: 'dotted' },
+        yAxisGridLineStyle: { width: 1, color: '#F1F2F4', type: 'solid' },
+        rowHoverHighlightStyle: { backgroundColor: 'rgba(158, 158, 158, 0.15)', thickness: 13 },
+      }),
+    );
+
+    setOptionsSpy.mockRestore();
+  });
 });

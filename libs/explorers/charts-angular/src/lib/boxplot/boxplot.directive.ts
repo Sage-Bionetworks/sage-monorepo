@@ -8,6 +8,7 @@ import {
   CategoryBoxplotSummary,
   CategoryPoint,
   ChartStyle,
+  TooltipStyle,
 } from '@sagebionetworks/explorers/charts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 
@@ -44,6 +45,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() boxplotBoxStyle: undefined | BoxplotBoxStyle;
   @Input() axisTickLabelStyle: undefined | AxisTickLabelStyle;
   @Input() axisLineStyle: undefined | AxisLineStyle;
+  @Input() tooltipStyle: undefined | TooltipStyle;
 
   ngOnInit() {
     this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
@@ -81,6 +83,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       boxplotBoxStyle: this.boxplotBoxStyle,
       axisTickLabelStyle: this.axisTickLabelStyle,
       axisLineStyle: this.axisLineStyle,
+      tooltipStyle: this.tooltipStyle,
     };
   }
 }
