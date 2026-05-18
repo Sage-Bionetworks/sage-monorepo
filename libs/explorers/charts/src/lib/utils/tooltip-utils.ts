@@ -1,4 +1,5 @@
-import { TooltipOption, TooltipStyle } from '../models';
+import { TooltipStyle } from '../models';
+import { TooltipOption } from '../types';
 
 // Merges TooltipStyle overrides onto a base tooltip config. Fields not present
 // on `style` fall through, so callers only need to specify what they want to

@@ -1,4 +1,4 @@
-import type { TooltipOption } from './models';
+import type { TooltipOption } from './types';
 
 export const DEFAULT_POINT_SIZE = 18;
 export const DEFAULT_COLOR = '#8b8ad1';

@@ -2,9 +2,10 @@ import type { SeriesOption } from 'echarts';
 import type { BoxplotSeriesOption } from 'echarts/charts';
 import type { TitleComponentOption } from 'echarts/components';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
+import type { TooltipOption } from '../types';
 import type { AxisLineStyle, AxisTickLabelStyle } from './axis';
 import type { BaseChartTheme, ChartStyle } from './chart';
-import type { TooltipOption, TooltipStyle } from './tooltip';
+import type { TooltipStyle } from './tooltip';
 
 export type CategoryPoint = {
   // x-axis category for this point

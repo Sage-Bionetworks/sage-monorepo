@@ -1,3 +1,5 @@
+import type { EChartsOption } from 'echarts';
+
 /**
  * Pixel bounds of the ECharts grid, available at render time via `params.coordSys` in a custom
  * series `renderItem` callback. ECharts only types `coordSys` as `{ type: string }` — the
@@ -17,3 +19,13 @@ export type GridCoordSys = { x: number; y: number; width: number; height: number
 export type UpdateAxisPointerEvent = {
   axesInfo?: { axisDim: string; value: string | number }[];
 };
+
+/**
+ * EChartsOption['tooltip'] is `TooltipOption | TooltipOption[] | undefined`. We never use
+ * the array or undefined form, so narrow to the single-object case. NonNullable strips
+ * `undefined` before Exclude removes the array variant (Exclude alone would leave
+ * `undefined` since it isn't assignable to `unknown[]`). Importing from
+ * `echarts/components` instead triggers nominal-type mismatches when callers assign the
+ * result back into `EChartsOption['tooltip']`.
+ */
+export type TooltipOption = Exclude<NonNullable<EChartsOption['tooltip']>, unknown[]>;
