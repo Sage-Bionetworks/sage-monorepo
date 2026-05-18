@@ -50,6 +50,12 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install-affected"
 
+      - name: Verify svg-icon registry is up-to-date
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && pnpm generate:svg-icon-registry \
+            && git diff --exit-code libs/explorers/services/src/lib/svg-icon-registry.gen.ts"
+
       - name: Lint the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
@@ -130,6 +136,12 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install-affected"
+
+      - name: Verify svg-icon registry is up-to-date
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && pnpm generate:svg-icon-registry \
+            && git diff --exit-code libs/explorers/services/src/lib/svg-icon-registry.gen.ts"
 
       - name: Lint the affected projects
         run: |

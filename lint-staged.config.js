@@ -40,6 +40,13 @@ module.exports = {
     `hadolint ${filenames.join(' ')}`,
   ],
 
+  'libs/explorers/assets/icons/*.svg': () => [
+    // Regenerate the bundled icon registry whenever a source SVG changes,
+    // and stage the generated file so the commit stays in sync.
+    'pnpm generate:svg-icon-registry',
+    'git add libs/explorers/services/src/lib/svg-icon-registry.gen.ts',
+  ],
+
   '**/*.sql': (filenames) => [
     // Format files with Prettier
     // `prettier --write ${filenames.join(' ')}`,

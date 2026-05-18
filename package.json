@@ -4,6 +4,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "coverage:merge": "node ./tools/coverage-merger.js",
+    "generate:svg-icon-registry": "node ./tools/generate-svg-icon-registry.js",
     "postinstall": "husky",
     "prepare": "husky",
     "affected:apps": "nx affected:apps",

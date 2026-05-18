@@ -8,10 +8,6 @@ export const mockSvgTestId = 'mock-svg';
 export class SvgIconServiceStub {
   sanitizer = inject(DomSanitizer);
 
-  constructor() {
-    // No need to preloadCommonSvgs in the stub
-  }
-
   isValidImagePath(path: string): boolean {
     return true;
   }
