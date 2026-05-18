@@ -1,4 +1,3 @@
-import { provideHttpClient } from '@angular/common/http';
 import { SafeHtml } from '@angular/platform-browser';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import { render, RenderResult } from '@testing-library/angular';
@@ -15,7 +14,7 @@ describe('SvgIconComponent', () => {
   it('should create the component without a background by default', async () => {
     const result = await render(SvgIconComponent, {
       componentInputs: { imagePath: dummyPath },
-      providers: [provideHttpClient(), { provide: SvgIconService, useClass: MockSvgIconService }],
+      providers: [{ provide: SvgIconService, useClass: MockSvgIconService }],
     });
     expect(result.fixture.componentInstance).toBeTruthy();
     expect(result.container.querySelector('.svg-icon-background')).toBeNull();
@@ -27,7 +26,7 @@ describe('SvgIconComponent', () => {
 
     const result = await render(SvgIconComponent, {
       componentInputs: { imagePath: dummyPath },
-      providers: [provideHttpClient(), { provide: SvgIconService, useValue: mockService }],
+      providers: [{ provide: SvgIconService, useValue: mockService }],
     });
 
     expect(mockService.getSvg).toHaveBeenCalledWith(dummyPath);
@@ -38,7 +37,7 @@ describe('SvgIconComponent', () => {
     async function renderWithAltText(altText: string) {
       return render(SvgIconComponent, {
         componentInputs: { imagePath: dummyPath, altText },
-        providers: [provideHttpClient(), { provide: SvgIconService, useClass: MockSvgIconService }],
+        providers: [{ provide: SvgIconService, useClass: MockSvgIconService }],
       });
     }
 
@@ -69,7 +68,7 @@ describe('SvgIconComponent', () => {
     it('should not apply the stroke-override class or CSS variable when strokeWidth is unset', async () => {
       const result = await render(SvgIconComponent, {
         componentInputs: { imagePath: dummyPath },
-        providers: [provideHttpClient(), { provide: SvgIconService, useClass: MockSvgIconService }],
+        providers: [{ provide: SvgIconService, useClass: MockSvgIconService }],
       });
       const icon = getIconDiv(result.container);
       expect(icon.classList.contains('svg-icon-stroke-override')).toBe(false);
@@ -79,7 +78,7 @@ describe('SvgIconComponent', () => {
     it('should apply the stroke-override class and CSS variable when strokeWidth is set', async () => {
       const result = await render(SvgIconComponent, {
         componentInputs: { imagePath: dummyPath, strokeWidth: 2 },
-        providers: [provideHttpClient(), { provide: SvgIconService, useClass: MockSvgIconService }],
+        providers: [{ provide: SvgIconService, useClass: MockSvgIconService }],
       });
       const icon = getIconDiv(result.container);
       expect(icon.classList.contains('svg-icon-stroke-override')).toBe(true);
@@ -93,7 +92,7 @@ describe('SvgIconComponent', () => {
     beforeEach(async () => {
       renderResult = await render(SvgIconComponent, {
         componentInputs: { imagePath: dummyPath, enableBackground: true },
-        providers: [provideHttpClient(), { provide: SvgIconService, useClass: MockSvgIconService }],
+        providers: [{ provide: SvgIconService, useClass: MockSvgIconService }],
       });
     });
 

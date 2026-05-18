@@ -1,90 +1,44 @@
-import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import { isExternalLink } from '@sagebionetworks/shared/util';
-import { Observable, map, of, shareReplay } from 'rxjs';
-import { PlatformService } from './platform.service';
+import { Observable, of } from 'rxjs';
+import { SVG_ICON_REGISTRY } from './svg-icon-registry.gen';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SvgIconService {
   /**
-   * Service for managing SVG icons in the Explorer applications
+   * Service for resolving SVG icons in the Explorer applications.
    *
-   * This service provides the following functionality:
-   * - Load SVG files from `*-assets/icons/` directories (e.g., explorers-assets, agora-assets, model-ad-assets)
-   * - Cache SVGs to prevent redundant HTTP requests
-   * - Sanitize SVG content for safe rendering in the browser
-   * - Preload commonly used SVG icons for better performance
+   * SVG content is bundled at build time via the registry in
+   * `svg-icon-registry.gen.ts` (regenerate with `pnpm generate:svg-icon-registry`).
+   * No HTTP request is made — content is available synchronously on both server
+   * and client, so SSR-rendered HTML contains the inline SVG markup directly.
    *
-   * The service ensures security by:
-   * - Only allowing SVGs from approved asset directories matching the pattern `[app]-assets/icons/*.svg`
-   * - Sanitizing SVG content before rendering
+   * Security boundary: only allows SVGs from approved asset directories matching
+   * the pattern `<scope>-assets/icons/*.svg` and sanitizes content before rendering.
    */
-  private readonly http = inject(HttpClient);
   private readonly sanitizer = inject(DomSanitizer);
-  private readonly svgCache = new Map<string, Observable<SafeHtml>>();
-  private readonly platformService = inject(PlatformService);
-
-  // Common SVGs we want to preload
-  private readonly commonSvgPaths = [
-    'explorers-assets/icons/card-arrow.svg',
-    'explorers-assets/icons/caret-right-outline.svg',
-    'explorers-assets/icons/close.svg',
-    'explorers-assets/icons/cog.svg',
-    'explorers-assets/icons/column.svg',
-    'explorers-assets/icons/download.svg',
-    'explorers-assets/icons/external-link.svg',
-    'explorers-assets/icons/gct.svg',
-    'explorers-assets/icons/info-circle.svg',
-    'explorers-assets/icons/link.svg',
-    'explorers-assets/icons/pin.svg',
-    'explorers-assets/icons/search.svg',
-    'explorers-assets/icons/trash.svg',
-  ];
-
-  constructor() {
-    this.preloadCommonSvgs();
-  }
-
-  private preloadCommonSvgs(): void {
-    this.commonSvgPaths.forEach((path) => {
-      this.getSvg(path).subscribe(); // Trigger the load
-    });
-  }
 
   isValidImagePath(path: string): boolean {
-    // We don't want to load SVGs from external sources
-    // Block URLs
     if (isExternalLink(path)) {
       return false;
     }
-    // Ensure the path comes from '*-assets/icons/*.svg'
     return Boolean(path) && /^[a-z-]+-assets\/icons\/[^/]+\.svg$/.test(path);
   }
 
   getSvg(path: string): Observable<SafeHtml> {
-    // Do not load SVGs on the server side
-    if (this.platformService.isServer) return of('');
-
     if (!this.isValidImagePath(path)) {
       throw new Error('Invalid SVG path');
     }
 
-    // check cache for the SVG
-    const cached = this.svgCache.get(path);
-    if (cached) {
-      return cached;
+    const content = SVG_ICON_REGISTRY[path];
+    if (content === undefined) {
+      console.warn(`SvgIconService: no registry entry for "${path}"`);
+      return of('');
     }
 
-    const context = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
-    const request = this.http.get(path, { responseType: 'text', context }).pipe(
-      map((svg) => this.sanitizer.bypassSecurityTrustHtml(svg)),
-      shareReplay(1),
-    );
-    this.svgCache.set(path, request);
-    return request;
+    return of(this.sanitizer.bypassSecurityTrustHtml(content));
   }
 }
