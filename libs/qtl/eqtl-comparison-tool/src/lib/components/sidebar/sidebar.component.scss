@@ -1,0 +1,47 @@
+@use 'explorers/styles/src/mixins' as mixins;
+
+:host {
+  --panel-padding-y: 16px;
+  --panel-padding-x: 20px;
+
+  display: block;
+}
+
+.sidebar-chiclets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: var(--panel-padding-y) var(--panel-padding-x) 0;
+  margin-bottom: 12px;
+}
+
+.sidebar-tabs {
+  display: flex;
+  gap: 28px;
+  padding: 0 var(--panel-padding-x) 16px;
+
+  button {
+    @include mixins.reset-button;
+
+    cursor: pointer;
+    color: var(--color-gray-900);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    border-bottom: 3px solid transparent;
+
+    &.active {
+      border-bottom-color: var(--color-accent-lavender-600);
+    }
+  }
+}
+
+.sidebar-divider {
+  border: 0;
+  border-top: 1px solid var(--color-gray-300);
+  margin: 0;
+}
+
+.sidebar-tabpanel {
+  padding: 16px var(--panel-padding-x) var(--panel-padding-y);
+}
