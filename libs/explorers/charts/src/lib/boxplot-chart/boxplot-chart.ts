@@ -139,8 +139,8 @@ export class BoxplotChart {
             },
             backgroundColor: tooltipStyle?.backgroundColor ?? '#63676c',
             // borderWidth: 0 preserves the historical "no border" look when borderColor is unset
-            borderColor: tooltipStyle?.borderColor ?? 'transparent',
             borderWidth: tooltipStyle?.borderColor ? 1 : 0,
+            borderColor: tooltipStyle?.borderColor ?? 'transparent',
             ...(tooltipStyle?.color && { textStyle: { color: tooltipStyle.color } }),
             extraCssText: 'opacity: 0.9',
           }),
