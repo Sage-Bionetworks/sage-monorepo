@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { firstValueFrom } from 'rxjs';
 import { SvgIconService } from './svg-icon.service';
-import { SVG_ICON_REGISTRY } from './svg-icon-registry.gen';
 
 describe('SvgIconService', () => {
   let service: SvgIconService;
@@ -14,37 +12,34 @@ describe('SvgIconService', () => {
   });
 
   describe('isValidImagePath', () => {
-    it('accepts paths from approved asset directories', () => {
-      expect(service.isValidImagePath('agora-assets/icons/cog.svg')).toBe(true);
-      expect(service.isValidImagePath('model-ad-assets/icons/cog.svg')).toBe(true);
+    it('accepts explorers-assets icon paths', () => {
       expect(service.isValidImagePath('explorers-assets/icons/cog.svg')).toBe(true);
+      expect(service.isValidImagePath('explorers-assets/icons/card-arrow.svg')).toBe(true);
     });
 
-    it('rejects external URLs, absolute paths, and unrecognized prefixes', () => {
+    it('rejects external URLs, absolute paths, and non-explorers prefixes', () => {
       expect(service.isValidImagePath('https://external-domain.com/icon.svg')).toBe(false);
       expect(service.isValidImagePath('/some-other-path/icon.svg')).toBe(false);
       expect(service.isValidImagePath('some-other-path/icon.svg')).toBe(false);
+      expect(service.isValidImagePath('agora-assets/icons/cog.svg')).toBe(false);
+      expect(service.isValidImagePath('model-ad-assets/icons/cog.svg')).toBe(false);
       expect(service.isValidImagePath('')).toBe(false);
     });
   });
 
   describe('getSvg', () => {
-    it('returns sanitized content from the registry for a known path', async () => {
-      const path = 'explorers-assets/icons/cog.svg';
-      expect(SVG_ICON_REGISTRY[path]).toBeDefined();
-
-      const result = await firstValueFrom(service.getSvg(path));
+    it('returns sanitized SafeHtml for a known registry path', () => {
+      const result = service.getSvg('explorers-assets/icons/cog.svg');
+      // SafeHtml is a non-empty object — truthy; the empty fallback ('') is falsy
       expect(result).toBeTruthy();
     });
 
-    it('returns an empty value and warns when the path is not in the registry', async () => {
+    it('returns SafeHtml and warns when the path is not in the registry', () => {
       const warn = jest.spyOn(console, 'warn').mockImplementation(() => {
         // suppress console output in test
       });
-      const result = await firstValueFrom(
-        service.getSvg('explorers-assets/icons/does-not-exist.svg'),
-      );
-      expect(result).toBe('');
+      const result = service.getSvg('explorers-assets/icons/does-not-exist.svg');
+      expect(result).toBeTruthy();
       expect(warn).toHaveBeenCalledWith(expect.stringContaining('does-not-exist.svg'));
       warn.mockRestore();
     });

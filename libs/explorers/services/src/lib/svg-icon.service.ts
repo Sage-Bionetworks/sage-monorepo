@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { isExternalLink } from '@sagebionetworks/shared/util';
-import { Observable, of } from 'rxjs';
 import { SVG_ICON_REGISTRY } from './svg-icon-registry.gen';
 
 @Injectable({
@@ -16,8 +15,8 @@ export class SvgIconService {
    * No HTTP request is made — content is available synchronously on both server
    * and client, so SSR-rendered HTML contains the inline SVG markup directly.
    *
-   * Security boundary: only allows SVGs from approved asset directories matching
-   * the pattern `<scope>-assets/icons/*.svg` and sanitizes content before rendering.
+   * Security boundary: only allows SVGs from the `explorers-assets/icons/` directory
+   * and sanitizes content before rendering.
    */
   private readonly sanitizer = inject(DomSanitizer);
 
@@ -25,10 +24,10 @@ export class SvgIconService {
     if (isExternalLink(path)) {
       return false;
     }
-    return Boolean(path) && /^[a-z-]+-assets\/icons\/[^/]+\.svg$/.test(path);
+    return Boolean(path) && /^explorers-assets\/icons\/[^/]+\.svg$/.test(path);
   }
 
-  getSvg(path: string): Observable<SafeHtml> {
+  getSvg(path: string): SafeHtml {
     if (!this.isValidImagePath(path)) {
       throw new Error('Invalid SVG path');
     }
@@ -36,9 +35,9 @@ export class SvgIconService {
     const content = SVG_ICON_REGISTRY[path];
     if (content === undefined) {
       console.warn(`SvgIconService: no registry entry for "${path}"`);
-      return of('');
+      return this.sanitizer.bypassSecurityTrustHtml('');
     }
 
-    return of(this.sanitizer.bypassSecurityTrustHtml(content));
+    return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 }

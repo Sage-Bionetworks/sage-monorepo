@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Observable, of } from 'rxjs';
 
 export const mockSvgTestId = 'mock-svg';
 
@@ -12,9 +11,9 @@ export class SvgIconServiceStub {
     return true;
   }
 
-  getSvg(path: string): Observable<SafeHtml> {
-    return of(
-      this.sanitizer.bypassSecurityTrustHtml(`<svg data-testid="${mockSvgTestId}">MockSvg</svg>`),
+  getSvg(path: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(
+      `<svg data-testid="${mockSvgTestId}">MockSvg</svg>`,
     );
   }
 }

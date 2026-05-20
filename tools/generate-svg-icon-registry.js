@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const fs = require('node:fs');
 const path = require('node:path');
+const prettier = require('prettier');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const ICONS_DIR = path.join(REPO_ROOT, 'libs', 'explorers', 'assets', 'icons');
@@ -15,7 +16,7 @@ const OUTPUT_FILE = path.join(
   'svg-icon-registry.gen.ts',
 );
 
-function generate() {
+async function generate() {
   if (!fs.existsSync(ICONS_DIR)) {
     console.error(`Icons directory not found: ${ICONS_DIR}`);
     process.exit(1);
@@ -46,7 +47,13 @@ function generate() {
   lines.push('});');
   lines.push('');
 
-  fs.writeFileSync(OUTPUT_FILE, lines.join('\n'));
+  const prettierConfig = await prettier.resolveConfig(OUTPUT_FILE);
+  const formatted = await prettier.format(lines.join('\n'), {
+    ...prettierConfig,
+    filepath: OUTPUT_FILE,
+  });
+
+  fs.writeFileSync(OUTPUT_FILE, formatted);
   console.log(`Wrote ${OUTPUT_FILE} (${entries.length} icons).`);
 }
 

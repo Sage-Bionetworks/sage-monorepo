@@ -1,11 +1,10 @@
 import { SafeHtml } from '@angular/platform-browser';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import { render, RenderResult } from '@testing-library/angular';
-import { of } from 'rxjs';
 import { SvgIconComponent } from './svg-icon.component';
 
 class MockSvgIconService {
-  getSvg = jest.fn().mockReturnValue(of(null));
+  getSvg = jest.fn().mockReturnValue(null);
 }
 
 const dummyPath = '/libs/explorers/assets/icons/cog.svg';
@@ -22,7 +21,7 @@ describe('SvgIconComponent', () => {
 
   it('should load SVG through service and set as svgContent', async () => {
     const sanitizedSvg = {} as SafeHtml;
-    const mockService = { getSvg: jest.fn().mockReturnValue(of(sanitizedSvg)) };
+    const mockService = { getSvg: jest.fn().mockReturnValue(sanitizedSvg) };
 
     const result = await render(SvgIconComponent, {
       componentInputs: { imagePath: dummyPath },
@@ -30,7 +29,7 @@ describe('SvgIconComponent', () => {
     });
 
     expect(mockService.getSvg).toHaveBeenCalledWith(dummyPath);
-    expect(result.fixture.componentInstance.svgContent).toBe(sanitizedSvg);
+    expect(result.fixture.componentInstance.svgContent()).toBe(sanitizedSvg);
   });
 
   describe('accessibility', () => {
