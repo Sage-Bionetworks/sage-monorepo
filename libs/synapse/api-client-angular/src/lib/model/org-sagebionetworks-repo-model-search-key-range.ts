@@ -9,19 +9,19 @@
  */
 
 /**
- * A range filter. Matches rows where min <= value <= max. At least one of either \'min\' or \'max\' must be set for this range to be valid.
+ * A range filter over one column. Matches rows where the column value falls between min and max, inclusive on both ends. At least one of min or max must be set (omit either bound for an open-ended range). Values are strings and are parsed per the column type: integer / double columns accept numeric literals; date columns accept ISO-8601 strings. Runs in non-scoring context.
  */
 export interface OrgSagebionetworksRepoModelSearchKeyRange {
   /**
-   * The column name to filter on.
+   * The column name to filter on. Must be a column present on the SearchIndex\'s schema.
    */
   key: string;
   /**
-   * The minimum value in the range (inclusive). At least one of either \'min\' or \'max\' must be set.
+   * Minimum value (inclusive). Omit for an open-ended lower bound. At least one of min / max must be set.
    */
   min?: string;
   /**
-   * The maximum value in the range (inclusive). At least one of either \'min\' or \'max\' must be set.
+   * Maximum value (inclusive). Omit for an open-ended upper bound. At least one of min / max must be set.
    */
   max?: string;
 }

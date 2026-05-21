@@ -1,0 +1,55 @@
+<div class="sidebar-chiclets">
+  <qtl-metadata-chiclet
+    backgroundColor="var(--color-variant-muted)"
+    label="variant"
+    [value]="data.variant_id"
+  />
+  <qtl-metadata-chiclet
+    backgroundColor="var(--color-gene-muted)"
+    label="gene"
+    [value]="data.hgnc_symbol"
+  />
+  <qtl-metadata-chiclet
+    [backgroundColor]="cellTypeBackgroundColor"
+    label="cell type"
+    [value]="data.cell_type"
+  />
+</div>
+
+<div role="tablist" class="sidebar-tabs">
+  @for (tab of tabs; track tab.value; let i = $index) {
+    <button
+      #tabButton
+      [id]="'tab-' + tab.value"
+      role="tab"
+      type="button"
+      [class.active]="activeTab() === tab.value"
+      [attr.aria-selected]="activeTab() === tab.value"
+      [attr.aria-controls]="'tabpanel-' + tab.value"
+      [attr.tabindex]="activeTab() === tab.value ? 0 : -1"
+      (click)="activeTab.set(tab.value)"
+      (keydown)="onTabKeydown($event, i)"
+    >
+      {{ tab.label }}
+    </button>
+  }
+</div>
+<hr class="sidebar-divider" />
+<div
+  role="tabpanel"
+  class="sidebar-tabpanel"
+  [id]="'tabpanel-' + activeTab()"
+  [attr.aria-labelledby]="'tab-' + activeTab()"
+>
+  @switch (activeTab()) {
+    @case ('impact') {
+      <p>Impact panel content -- see QTL-37.</p>
+    }
+    @case ('traits') {
+      <p>Traits panel content -- see QTL-43.</p>
+    }
+    @case ('resources') {
+      <p>Resources panel content -- see QTL-44.</p>
+    }
+  }
+</div>

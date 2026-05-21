@@ -59,7 +59,7 @@
             </div>
             <div class="mb-xl">
               @if (nomination.validation_study_details) {
-                <h3>Planned Experimental Validation</h3>
+                <h3>Planned experimental validation</h3>
                 <p class="mb-xl validation-study-details">
                   {{ nomination.validation_study_details }}
                 </p>
@@ -67,11 +67,11 @@
               @if (nomination.data_synapseid) {
                 <a
                   class="link"
-                href="https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage?Study={{
-                  nomination.data_synapseid
-                }}"
+                  href="https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage?Study={{
+                    nomination.data_synapseid
+                  }}"
                   target="_blank"
-                  >
+                >
                   Learn more about the target nomination process
                 </a>
               }

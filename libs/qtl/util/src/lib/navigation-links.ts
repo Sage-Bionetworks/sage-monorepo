@@ -7,6 +7,10 @@ export const headerLinks: NavigationLink[] = [
     routerLink: [ROUTE_PATHS.HOME],
     activeOptions: { exact: true },
   },
+  {
+    label: 'eQTL Explorer',
+    routerLink: [ROUTE_PATHS.EQTL],
+  },
 ];
 
 export const footerLinks: NavigationLink[] = [

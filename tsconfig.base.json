@@ -93,6 +93,7 @@
       "@sagebionetworks/qtl/home": ["libs/qtl/home/src/index.ts"],
       "@sagebionetworks/qtl/storybook": ["libs/qtl/storybook/src/index.ts"],
       "@sagebionetworks/qtl/themes": ["libs/qtl/themes/src/index.ts"],
+      "@sagebionetworks/qtl/ui": ["libs/qtl/ui/src/index.ts"],
       "@sagebionetworks/qtl/util": ["libs/qtl/util/src/index.ts"],
       "@sagebionetworks/results-visualization-framework/ui": [
         "libs/results-visualization-framework/ui/src/index.ts"

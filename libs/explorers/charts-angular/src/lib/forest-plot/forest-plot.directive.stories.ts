@@ -30,8 +30,21 @@ const meta: Meta<ForestPlotDirective> = {
       [defaultLineColor]="defaultLineColor"
       [defaultPointColor]="defaultPointColor"
       [pointSize]="pointSize"
+      [ciLineWidth]="ciLineWidth"
       [showCILabels]="showCILabels"
       [noDataStyle]="noDataStyle"
+      [showZeroLine]="showZeroLine"
+      [xAxisInterval]="xAxisInterval"
+      [xAxisLabelPrecision]="xAxisLabelPrecision"
+      [xAxisLineStyle]="xAxisLineStyle"
+      [yAxisLineStyle]="yAxisLineStyle"
+      [xAxisTickLabelStyle]="xAxisTickLabelStyle"
+      [yAxisTickLabelStyle]="yAxisTickLabelStyle"
+      [showXAxisLabelsOnTop]="showXAxisLabelsOnTop"
+      [xAxisGridLineStyle]="xAxisGridLineStyle"
+      [yAxisGridLineStyle]="yAxisGridLineStyle"
+      [rowHoverHighlightStyle]="rowHoverHighlightStyle"
+      [tooltipStyle]="tooltipStyle"
     ></div>`,
   }),
 };
@@ -65,12 +78,26 @@ export const Default: Story = {
   },
 };
 
-export const ColoredByLine: Story = {
+export const Styled: Story = {
   args: {
     items: forestPlotItemsColoredByLine,
-    showCILabels: true,
-    xAxisTitle: 'LOG 2 FOLD CHANGE',
-    yAxisLabelTooltipFormatter: (category: string) => TISSUE_NAMES[category] ?? category,
-    pointTooltipFormatter: (item) => `Log Fold Change: ${item.value.toPrecision(3)}`,
+    xAxisMin: -0.1,
+    xAxisMax: 0.7,
+    showCILabels: false,
+    pointSize: 11,
+    ciLineWidth: 1,
+    pointTooltipFormatter: (item) => `Effect size: ${item.value.toPrecision(2)}`,
+    showZeroLine: false,
+    xAxisInterval: 0.2,
+    xAxisLabelPrecision: 1,
+    xAxisLineStyle: { width: 1, color: '#22252A' },
+    yAxisLineStyle: { width: 1, color: '#22252A' },
+    xAxisTickLabelStyle: { fontSize: '18px', fontWeight: 400, color: '#4A5056' },
+    yAxisTickLabelStyle: { fontSize: '18px', fontWeight: 400, color: '#4A5056' },
+    showXAxisLabelsOnTop: true,
+    xAxisGridLineStyle: { width: 1, color: '#D0D4D9', type: 'dotted' },
+    yAxisGridLineStyle: { width: 1, color: '#F1F2F4', type: 'solid' },
+    rowHoverHighlightStyle: { backgroundColor: 'rgba(158, 158, 158, 0.15)', thickness: 13 },
+    tooltipStyle: { backgroundColor: '#22252A' },
   },
 };
