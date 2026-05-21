@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, signal, viewChildren } from '@angular/core';
 import { CELL_CLASSES } from '@sagebionetworks/qtl/config';
 import { MetadataChicletComponent } from '@sagebionetworks/qtl/ui';
 import { getCellTypeMutedColor } from '@sagebionetworks/qtl/util';
@@ -28,4 +28,32 @@ export class SidebarComponent {
   ];
 
   protected readonly activeTab = signal<SidebarTab>('impact');
+
+  private readonly tabButtons = viewChildren<ElementRef<HTMLButtonElement>>('tabButton');
+
+  protected onTabKeydown(event: KeyboardEvent, index: number): void {
+    const last = this.tabs.length - 1;
+    let nextIndex: number | null = null;
+
+    switch (event.key) {
+      case 'ArrowRight':
+        nextIndex = index === last ? 0 : index + 1;
+        break;
+      case 'ArrowLeft':
+        nextIndex = index === 0 ? last : index - 1;
+        break;
+      case 'Home':
+        nextIndex = 0;
+        break;
+      case 'End':
+        nextIndex = last;
+        break;
+    }
+
+    if (nextIndex === null) return;
+
+    event.preventDefault();
+    this.activeTab.set(this.tabs[nextIndex].value);
+    this.tabButtons()[nextIndex]?.nativeElement.focus();
+  }
 }
