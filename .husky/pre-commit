@@ -1,3 +1,10 @@
 # Pre-commit: run only fast, auto-fixable checks on staged files
 # (formatters + ultra-fast linters; keep this step under a few seconds)
+
+# Regenerate SVG icon registry on any change (add, modify, or delete) to icons
+if git diff --cached --name-only | grep -q 'libs/explorers/assets/icons/'; then
+  pnpm generate:svg-icon-registry
+  git add libs/explorers/services/src/lib/svg-icon-registry.gen.ts
+fi
+
 pnpm dlx lint-staged --relative
