@@ -8,7 +8,7 @@
   --footer-versions-color: rgb(255 255 255 / 70%);
   --header-padding-y: 24px;
   --header-padding-x: 60px;
-  --header-link-color: #6e76ae;
+  --header-link-color: var(--color-accent-lavender-600);
 
   @media (width < #{variables.$lg-breakpoint}) {
     --footer-background: linear-gradient(0deg, rgb(0 0 0 / 40%) 0%, rgb(0 0 0 / 40%) 100%),
