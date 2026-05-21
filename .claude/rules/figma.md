@@ -1,3 +1,18 @@
+# Figma MCP
+
+The Figma MCP server is configured project-wide in [`.mcp.json`](../../.mcp.json) at the repo root. Tools are exposed under `mcp__figma__*`.
+
+## First-time setup
+
+The MCP server loads automatically when the repo is opened, but each developer does two one-time things:
+
+1. **Approve the project MCP** — on first open, Claude Code prompts you to allow the project's `.mcp.json`. Approve it.
+2. **Authenticate** — call any figma tool (or run `/mcp` and select figma) and complete the Figma OAuth flow in the browser. The token caches in `~/.claude/`, which the devcontainer symlinks to `${workspaceFolder}/.claude-user/`, so auth survives container rebuilds.
+
+If a tool call returns an auth error later, re-run `/mcp` to re-authenticate.
+
+The plugin entry in `.claude/settings.json` (`figma@claude-plugins-official`) is kept separately because it ships additional skills and slash commands (`/figma-use`, `/figma-generate-design`, `/figma-create-new-file`) that the bare MCP server does not include. The `.mcp.json` entry is what makes the MCP tools actually register on devcontainer start.
+
 # Figma -> Code
 
 **Scope:** these rules apply only to the explorers-based UI stack -- `libs/explorers/`, `libs/agora/`, `libs/model-ad/`, `libs/qtl/`, and `apps/{agora,model-ad,qtl}/`. They do not apply to bixarena or any other scope (different styling, components, and conventions). If you're working outside the listed scopes, ignore this file.

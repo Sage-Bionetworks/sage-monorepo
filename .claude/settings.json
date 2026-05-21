@@ -24,7 +24,7 @@
   },
   "enabledPlugins": {
     "claude-md-management@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
-    "figma@claude-plugins-official": true
+    "figma@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
   }
 }
