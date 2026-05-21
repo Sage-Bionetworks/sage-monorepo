@@ -22,6 +22,8 @@ async function generate() {
     process.exit(1);
   }
 
+  const checkMode = process.argv.includes('--check');
+
   const files = fs
     .readdirSync(ICONS_DIR)
     .filter((file) => file.endsWith('.svg'))
@@ -52,6 +54,18 @@ async function generate() {
     ...prettierConfig,
     filepath: OUTPUT_FILE,
   });
+
+  if (checkMode) {
+    const existing = fs.existsSync(OUTPUT_FILE) ? fs.readFileSync(OUTPUT_FILE, 'utf-8') : '';
+    if (existing !== formatted) {
+      console.error(
+        `${OUTPUT_FILE} is out of date. Run \`pnpm generate:svg-icon-registry\` and commit the result.`,
+      );
+      process.exit(1);
+    }
+    console.log(`${OUTPUT_FILE} is up to date (${entries.length} icons).`);
+    return;
+  }
 
   fs.writeFileSync(OUTPUT_FILE, formatted);
   console.log(`Wrote ${OUTPUT_FILE} (${entries.length} icons).`);

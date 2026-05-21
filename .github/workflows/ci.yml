@@ -53,8 +53,7 @@ jobs:
       - name: Verify svg-icon registry is up-to-date
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && pnpm generate:svg-icon-registry \
-            && git diff --exit-code libs/explorers/services/src/lib/svg-icon-registry.gen.ts"
+            && pnpm generate:svg-icon-registry --check"
 
       - name: Lint the affected projects
         run: |
@@ -140,8 +139,7 @@ jobs:
       - name: Verify svg-icon registry is up-to-date
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && pnpm generate:svg-icon-registry \
-            && git diff --exit-code libs/explorers/services/src/lib/svg-icon-registry.gen.ts"
+            && pnpm generate:svg-icon-registry --check"
 
       - name: Lint the affected projects
         run: |
