@@ -49,13 +49,6 @@ public final class CacheNames {
   public static final String MODEL = "model";
 
   /**
-   * Cache for data version queries.
-   * Stores the data version information from Synapse.
-   * Key format: Static key "dataVersion"
-   */
-  public static final String DATA_VERSION = "dataVersion";
-
-  /**
    * Cache for comparison tool config queries.
    * Stores the comparison tool config information.
    * Key format: Static key "comparisonToolConfig"

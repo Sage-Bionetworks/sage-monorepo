@@ -31,7 +31,6 @@ public class CacheConfiguration {
     // Define the cache names used by query services
     cacheManager.setCacheNames(
       List.of(
-        CacheNames.DATA_VERSION,
         CacheNames.COMPARISON_TOOL_CONFIG,
         CacheNames.DRUG,
         CacheNames.NOMINATED_DRUG,

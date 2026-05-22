@@ -1,7 +1,6 @@
 package org.sagebionetworks.qtl.api.configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
-import java.util.List;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -25,8 +24,6 @@ public class CacheConfiguration {
     CaffeineCacheManager cacheManager = new CaffeineCacheManager();
 
     cacheManager.setCaffeine(Caffeine.newBuilder().recordStats());
-
-    cacheManager.setCacheNames(List.of(CacheNames.DATA_VERSION));
 
     return cacheManager;
   }

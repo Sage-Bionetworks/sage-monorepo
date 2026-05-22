@@ -36,7 +36,6 @@ public class CacheConfiguration {
         CacheNames.TRANSCRIPTOMICS,
         CacheNames.TRANSCRIPTOMICS_INDIVIDUAL,
         CacheNames.MODEL,
-        CacheNames.DATA_VERSION,
         CacheNames.COMPARISON_TOOL_CONFIG
       )
     );
