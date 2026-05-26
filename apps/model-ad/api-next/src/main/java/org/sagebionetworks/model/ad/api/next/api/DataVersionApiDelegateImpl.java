@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.model.dto.DataVersionDto;
 import org.sagebionetworks.model.ad.api.next.service.DataVersionService;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

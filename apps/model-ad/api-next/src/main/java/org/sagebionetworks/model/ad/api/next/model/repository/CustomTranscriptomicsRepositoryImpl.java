@@ -11,7 +11,7 @@ import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocum
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsIdentifier;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

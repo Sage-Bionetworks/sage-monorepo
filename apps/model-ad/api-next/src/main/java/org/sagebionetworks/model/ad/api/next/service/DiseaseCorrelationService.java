@@ -13,7 +13,7 @@ import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDt
 import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.DiseaseCorrelationMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.DiseaseCorrelationRepository;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ public class DiseaseCorrelationService {
   private final DiseaseCorrelationMapper diseaseCorrelationMapper;
 
   @Cacheable(
-    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
+    key = "T(org.sagebionetworks.explorers.ApiHelper)" +
     ".buildCacheKey('diseaseCorrelation', #query.itemFilterType, #query.items, " +
     "#query.search, #query.age, #query.modelType, #query.modifiedGenes, " +
     "#query.name, #query.sex, #cluster, #query.pageNumber, #query.pageSize, " +

@@ -11,7 +11,7 @@ import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDo
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationIdentifier;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

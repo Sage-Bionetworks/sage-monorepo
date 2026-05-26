@@ -13,7 +13,7 @@ import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.TranscriptomicsMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.TranscriptomicsRepository;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ public class TranscriptomicsService {
   private final TranscriptomicsMapper transcriptomicsMapper;
 
   @Cacheable(
-    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
+    key = "T(org.sagebionetworks.explorers.ApiHelper)" +
     ".buildCacheKey('transcriptomics', #query.itemFilterType, #query.items, " +
     "#query.search, #query.biodomains, #query.modelType, #query.name, " +
     "#tissue, #sexCohort, #query.pageNumber, #query.pageSize, " +

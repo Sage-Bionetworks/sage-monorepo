@@ -11,7 +11,7 @@ import org.bson.Document;
 import org.sagebionetworks.agora.api.next.model.document.NominatedTargetDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedTargetSearchQueryDto;
-import org.sagebionetworks.agora.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
