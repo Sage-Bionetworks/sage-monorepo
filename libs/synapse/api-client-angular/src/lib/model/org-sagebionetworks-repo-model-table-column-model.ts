@@ -40,7 +40,7 @@ export interface OrgSagebionetworksRepoModelTableColumnModel {
    */
   maximumSize?: number;
   /**
-   * Required if using a columnType with a \"_LIST\" suffix. Describes the maximum number of values that will appear in that list. Value range 1-100 inclusive. Default 100
+   * Required if using a columnType with a \"_LIST\" suffix. Describes the maximum number of values that will appear in that list. The maximum allowed value is determined by a total character budget of 100,000: for STRING_LIST, maximumListLength * maximumSize must not exceed 100,000; for other list types the per-element character size is fixed (INTEGER_LIST/DATE_LIST/USERID_LIST: 20, BOOLEAN_LIST: 5, ENTITYID_LIST: 44) and maximumListLength * that size must not exceed 100,000. Default 100.
    */
   maximumListLength?: number;
   /**

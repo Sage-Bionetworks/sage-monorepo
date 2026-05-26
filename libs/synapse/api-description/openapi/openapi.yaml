@@ -497,12 +497,15 @@ tags:
        </tr>
        <tr>
        <td>Maximum number of values associated with a single key in Annotations</td>
-       <td>100</td>
+       <td>1,000</td>
        </tr>
        <tr>
-       <td>Maximum total character count for all values associated with a single key
-       in Annotations when the AnnotationValueType is STRING</td>
-       <td>500</td>
+       <td>Maximum size of a single STRING value in Annotations</td>
+       <td>1,000 characters</td>
+       </tr>
+       <tr>
+       <td>Maximum total character count for all STRING values associated with a single key in Annotations</td>
+       <td>100,000 characters</td>
        </tr>
        <tr>
        <td>Maximum hierarchical depth of an Entity</td>
@@ -1068,7 +1071,7 @@ tags:
        <tr>
        <td>MEDIUMTEXT</td>
        <td>text + keyword sub-field</td>
-       <td>2,000 characters</td>
+       <td>100,000 characters</td>
        <td>SCIENTIFIC</td>
        </tr>
        <tr>
@@ -1258,14 +1261,25 @@ tags:
        <td></td>
        </tr>
        <tr>
-       <td>Entity View only: The maximum total character length for a STRING or STRING_LIST <a href="${org.sagebionetworks.repo.model.table.ColumnType}">ColumnType</a></td>
-       <td>500 characters</td>
-       <td>Entity Views ONLY! This follows limitations placed on Annotations. For the type STRING_LIST, the total character count is the cumulative length of all string contained in the list.</td>
+       <td>Maximum number of characters for a MEDIUMTEXT column value</td>
+       <td>100,000 characters</td>
+       <td>152 MEDIUMTEXT columns fit within MySQL's 64 KB inline row limit (stored off-page) and the
+       2% server memory budget (152 * 100,000 chars * 4 bytes = ~58 MB).</td>
+       </tr>
+       <tr>
+       <td>Entity View only: The maximum size of a single string annotation value</td>
+       <td>1,000 characters</td>
+       <td>Entity Views ONLY! This follows limitations placed on Annotations. Applies to both STRING and STRING_LIST column types.</td>
+       </tr>
+       <tr>
+       <td>Entity View only: The maximum total character count for all string values in a single STRING_LIST annotation</td>
+       <td>100,000 characters</td>
+       <td>Entity Views ONLY! This is the cumulative character length of all strings in the list.</td>
        </tr>
        <tr>
        <td>Entity View only: The maximum list length for "_LIST" suffixed <a href="${org.sagebionetworks.repo.model.table.ColumnType}">ColumnType</a></td>
-       <td>100 values</td>
-       <td>Entity Views ONLY! This follows limitations placed on Annotations.</td>
+       <td>1,000 values</td>
+       <td>Entity Views ONLY! This follows limitations placed on Annotations. The effective maximum for STRING_LIST is further constrained by the 100,000-character total budget.</td>
        </tr>
        </table>
   - name: Team Services
@@ -22180,19 +22194,24 @@ components:
         tokenFilters:
           type: string
           description: JSON string defining named token filter configurations. Each key is a filter name, each value is the filter config object.
-        filterOrder:
+        indexFilterOrder:
           type: array
           items:
             type: string
-          description: Ordered list of token filter names to apply. Can reference built-in filters (e.g., 'lowercase') or custom ones defined in 'tokenFilters'.
+          description: Ordered list of token filter names applied at INDEX time. Can reference built-in filters (e.g., 'lowercase') or custom ones defined in 'tokenFilters'.
+        searchFilterOrder:
+          type: array
+          items:
+            type: string
+          description: Ordered list of token filter names applied at SEARCH time. Optional. If absent, search reuses 'indexFilterOrder' (symmetric analysis). Set this when index-time and search-time analysis legitimately differ — e.g., index with 'edge_ngram' and search without it (autocomplete pattern), or index without stop words and search with stop-word removal. When 'synonymAware' is true this field is REQUIRED and must include the literal 'synapse_synonyms' token (the system-managed synonym filter); every filter BEFORE 'synapse_synonyms' must produce single-position output (positionLength=1), so 'word_delimiter' and 'word_delimiter_graph' must be placed AFTER it. Synonym rule casing is handled automatically — see SynonymRule.terms.
         charFilterOrder:
           type: array
           items:
             type: string
-          description: Ordered list of character filter names to apply.
+          description: Ordered list of character filter names to apply. Used for both index-time and search-time analysis.
         synonymAware:
           type: boolean
-          description: Whether the synonym token filter should be appended when synonyms are configured.
+          description: When true, the system-managed 'synapse_synonyms' token filter is wired into the search-time chain at the position the user authored in 'searchFilterOrder'. Setting this true requires 'searchFilterOrder' to be provided and to contain 'synapse_synonyms'.
       description: The OpenSearch analyzer configuration. Stores the full definition of how text is analyzed.
     org.sagebionetworks.repo.model.table.QueryResult:
       type: object
@@ -26563,7 +26582,7 @@ components:
           format: int32
         maximumListLength:
           type: integer
-          description: Required if using a columnType with a "_LIST" suffix. Describes the maximum number of values that will appear in that list. Value range 1-100 inclusive. Default 100
+          description: 'Required if using a columnType with a "_LIST" suffix. Describes the maximum number of values that will appear in that list. The maximum allowed value is determined by a total character budget of 100,000: for STRING_LIST, maximumListLength * maximumSize must not exceed 100,000; for other list types the per-element character size is fixed (INTEGER_LIST/DATE_LIST/USERID_LIST: 20, BOOLEAN_LIST: 5, ENTITYID_LIST: 44) and maximumListLength * that size must not exceed 100,000. Default 100.'
           format: int32
         enumValues:
           type: array
@@ -28793,7 +28812,7 @@ components:
           type: array
           items:
             type: string
-          description: 'The list of synonym terms. Minimum 2. For EQUIVALENT: all terms are interchangeable. For EXPLICIT: first term expands to the rest.'
+          description: "The list of synonym terms. Minimum 2. For EQUIVALENT: all terms are interchangeable. For EXPLICIT: first term expands to the rest. Authoring is case-insensitive — a rule authored as 'BRCA1, breast cancer 1' triggers expansion for any casing of the query (BRCA1, brca1, Brca1), because the system registers both the user-authored form and a lowercased copy with the synonym filter."
       description: A single synonym rule. For EQUIVALENT rules, all terms are bidirectionally interchangeable. For EXPLICIT rules, the first term maps one-way to the remaining terms.
     org.sagebionetworks.repo.model.wiki.WikiPage:
       type: object
@@ -32031,7 +32050,7 @@ components:
           description: The qualified name ('{organizationName}-{name}') of the TextAnalyzer to use when indexing this column.
         searchAnalyzer:
           type: string
-          description: The qualified name ('{organizationName}-{name}') of the TextAnalyzer to use when searching this column.
+          description: The qualified name ('{organizationName}-{name}') of the TextAnalyzer to use when searching this column. Most asymmetric analysis should be expressed by setting 'searchFilterOrder' on the analyzer itself; reach for this field only when search needs a *different analyzer record* than indexing (for example, when reusing a single search-time analyzer across columns indexed with different analyzers). Synonym handling does NOT require setting this — when the chosen analyzer has 'synonymAware=true', the synonym-enabled search variant is selected automatically.
       description: A per-column analyzer override entry. Specifies which analyzers to use at index time and search time for a specific column.
     org.sagebionetworks.repo.model.oauth.OIDCClaimsRequestDetails:
       type: object
