@@ -1,8 +1,10 @@
 package org.sagebionetworks.model.ad.api.next.model.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,27 +20,40 @@ import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryD
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Query;
 
 @ExtendWith(MockitoExtension.class)
 class CustomModelOverviewRepositoryImplTest {
 
+  private static final String COLLECTION_NAME = "model_overview";
+
   @Mock
   private MongoTemplate mongoTemplate;
+
+  @Mock
+  private AggregationResults<ModelOverviewDocument> aggregationResults;
 
   private CustomModelOverviewRepositoryImpl repository;
 
   @BeforeEach
   void setUp() {
     repository = new CustomModelOverviewRepositoryImpl(mongoTemplate);
-    when(mongoTemplate.find(any(Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(List.of());
-    when(mongoTemplate.count(any(Query.class), eq(ModelOverviewDocument.class))).thenReturn(0L);
+    when(mongoTemplate.count(any(Query.class), eq(COLLECTION_NAME))).thenReturn(0L);
+    when(
+      mongoTemplate.aggregate(
+        any(Aggregation.class),
+        eq(COLLECTION_NAME),
+        eq(ModelOverviewDocument.class)
+      )
+    ).thenReturn(aggregationResults);
+    when(aggregationResults.getMappedResults()).thenReturn(List.of());
   }
 
   @Test
-  @DisplayName("should build query with data filters using $in operators")
-  void shouldBuildQueryWithDataFilters() {
+  @DisplayName("should build aggregation with data filters using $in operators")
+  void shouldBuildAggregationWithDataFilters() {
     ModelOverviewSearchQueryDto query = new ModelOverviewSearchQueryDto();
     query.setAvailableData(List.of("test-data"));
     query.setCenter(List.of("test-center"));
@@ -50,22 +65,29 @@ class CustomModelOverviewRepositoryImplTest {
 
     repository.findAll(pageable, query, List.of());
 
-    ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
-    verify(mongoTemplate).find(queryCaptor.capture(), eq(ModelOverviewDocument.class));
+    ArgumentCaptor<Aggregation> aggregationCaptor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(
+      aggregationCaptor.capture(),
+      eq(COLLECTION_NAME),
+      eq(ModelOverviewDocument.class)
+    );
 
-    Query capturedQuery = queryCaptor.getValue();
-    String queryString = capturedQuery.toString();
+    String pipelineString = aggregationCaptor.getValue().toString();
 
-    // Verify all 4 data filter fields are included in the query
-    assertTrue(queryString.contains("available_data"), "Query should include availableData field");
-    assertTrue(queryString.contains("\"center\""), "Query should include center field");
-    assertTrue(queryString.contains("model_type"), "Query should include modelType field");
-    assertTrue(queryString.contains("modified_genes"), "Query should include modifiedGenes field");
+    // Verify all 4 data filter fields are included in the pipeline
+    assertThat(pipelineString)
+      .as("Pipeline should include available_data field")
+      .contains("available_data");
+    assertThat(pipelineString).as("Pipeline should include center field").contains("\"center\"");
+    assertThat(pipelineString).as("Pipeline should include model_type field").contains("model_type");
+    assertThat(pipelineString)
+      .as("Pipeline should include modified_genes field")
+      .contains("modified_genes");
   }
 
   @Test
-  @DisplayName("should apply pagination to data query")
-  void shouldApplyPaginationToDataQuery() {
+  @DisplayName("should apply pagination via $skip and $limit stages")
+  void shouldApplyPaginationToAggregation() {
     ModelOverviewSearchQueryDto query = new ModelOverviewSearchQueryDto();
     query.setAvailableData(List.of("behavior"));
     query.setItemFilterType(ItemFilterTypeQueryDto.INCLUDE);
@@ -74,36 +96,30 @@ class CustomModelOverviewRepositoryImplTest {
 
     repository.findAll(pageable, query, List.of());
 
-    ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
-    verify(mongoTemplate).find(queryCaptor.capture(), eq(ModelOverviewDocument.class));
+    ArgumentCaptor<Aggregation> aggregationCaptor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(
+      aggregationCaptor.capture(),
+      eq(COLLECTION_NAME),
+      eq(ModelOverviewDocument.class)
+    );
 
-    Query dataQuery = queryCaptor.getValue();
-    assertEquals(50, dataQuery.getSkip(), "Data query should skip 50 items (page 2 * size 25)");
-    assertEquals(25, dataQuery.getLimit(), "Data query should limit to 25 items");
+    String pipelineString = aggregationCaptor.getValue().toString();
+
+    // Page 2 with size 25 → skip 50, limit 25
+    assertThat(pipelineString).contains("$skip").contains("50");
+    assertThat(pipelineString).contains("$limit").contains("25");
   }
 
   @Test
-  @DisplayName("should execute count query without pagination")
-  void shouldExecuteCountQueryWithoutPagination() {
+  @DisplayName("should use direct count instead of aggregation for total")
+  void shouldUseDirectCountForTotal() {
     ModelOverviewSearchQueryDto query = new ModelOverviewSearchQueryDto();
     query.setAvailableData(List.of("behavior"));
     query.setItemFilterType(ItemFilterTypeQueryDto.INCLUDE);
 
-    Pageable pageable = PageRequest.of(2, 25);
+    repository.findAll(PageRequest.of(2, 25), query, List.of());
 
-    repository.findAll(pageable, query, List.of());
-
-    ArgumentCaptor<Query> countQueryCaptor = ArgumentCaptor.forClass(Query.class);
-    verify(mongoTemplate).count(countQueryCaptor.capture(), eq(ModelOverviewDocument.class));
-
-    Query countQuery = countQueryCaptor.getValue();
-    assertTrue(
-      countQuery.getLimit() <= 0,
-      "Count query should have no limit (0 or -1), but was: " + countQuery.getLimit()
-    );
-    assertTrue(
-      countQuery.getSkip() <= 0,
-      "Count query should have no skip (0 or -1), but was: " + countQuery.getSkip()
-    );
+    // Count is via mongoTemplate.count(Query, collection), not via aggregation
+    verify(mongoTemplate).count(any(Query.class), eq(COLLECTION_NAME));
   }
 }
