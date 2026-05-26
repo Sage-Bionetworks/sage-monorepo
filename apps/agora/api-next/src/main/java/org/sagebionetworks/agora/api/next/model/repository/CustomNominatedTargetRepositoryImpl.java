@@ -2,26 +2,19 @@ package org.sagebionetworks.agora.api.next.model.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.regex.Pattern;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
 import org.sagebionetworks.agora.api.next.model.document.NominatedTargetDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedTargetSearchQueryDto;
 import org.sagebionetworks.explorers.ApiHelper;
+import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -29,25 +22,45 @@ import org.springframework.stereotype.Repository;
  *
  * <p>Uses aggregation to support sorting by array fields. MongoDB cannot sort by multiple
  * array fields simultaneously ("parallel arrays"), so we compute scalar sort fields for
- * lexicographic comparison.
+ * lexicographic comparison. The pipeline scaffold (count, $match, $addFields, $sort, $skip,
+ * $limit) lives in {@link ComparisonToolRepositorySupport}.
  */
 @Repository
-@RequiredArgsConstructor
 @Slf4j
-public class CustomNominatedTargetRepositoryImpl implements CustomNominatedTargetRepository {
+public class CustomNominatedTargetRepositoryImpl
+  extends ComparisonToolRepositorySupport<NominatedTargetDocument>
+  implements CustomNominatedTargetRepository {
 
   private static final String COLLECTION_NAME = "nominatedtargets";
   private static final String PRIMARY_FIELD = "hgnc_symbol";
 
-  /** Array fields that need computed fields for custom sort handling */
-  private static final Set<String> ARRAY_FIELDS = Set.of(
-    "nominating_teams",
-    "cohort_studies",
-    "input_data",
-    "programs"
-  );
+  public CustomNominatedTargetRepositoryImpl(MongoTemplate mongoTemplate) {
+    super(mongoTemplate);
+  }
 
-  private final MongoTemplate mongoTemplate;
+  @Override
+  protected String getCollectionName() {
+    return COLLECTION_NAME;
+  }
+
+  @Override
+  protected Class<NominatedTargetDocument> getDocumentClass() {
+    return NominatedTargetDocument.class;
+  }
+
+  /**
+   * Array fields are reduced to a NUL-separated lowercase string so they can sort
+   * alongside other array fields without hitting MongoDB's "parallel arrays" limit.
+   */
+  @Override
+  protected Map<String, Object> getComputedSortFieldExpressions() {
+    return Map.of(
+      "nominating_teams", arrayToLoweredStringExpr("nominating_teams"),
+      "cohort_studies", arrayToLoweredStringExpr("cohort_studies"),
+      "input_data", arrayToLoweredStringExpr("input_data"),
+      "programs", arrayToLoweredStringExpr("programs")
+    );
+  }
 
   @Override
   public Page<NominatedTargetDocument> findAll(
@@ -64,37 +77,7 @@ public class CustomNominatedTargetRepositoryImpl implements CustomNominatedTarge
     // Build match criteria with all filters
     Criteria matchCriteria = buildMatchCriteria(query, items, filterType, search);
 
-    // Count total using simple query (faster than aggregation)
-    long total = mongoTemplate.count(new Query(matchCriteria), COLLECTION_NAME);
-
-    // Build aggregation pipeline
-    List<AggregationOperation> operations = new ArrayList<>();
-
-    // $match first to filter documents
-    operations.add(Aggregation.match(matchCriteria));
-
-    // Add computed sort fields for arrays
-    buildSortFields(operations, pageable.getSort());
-
-    // Add $sort using computed fields
-    addSortOperation(operations, pageable.getSort());
-
-    // Add pagination
-    long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
-    operations.add(Aggregation.skip(skipCount));
-    operations.add(Aggregation.limit(pageable.getPageSize()));
-
-    Aggregation aggregation = Aggregation.newAggregation(operations);
-
-    log.debug("Executing aggregation pipeline: {}", aggregation);
-
-    AggregationResults<NominatedTargetDocument> results = mongoTemplate.aggregate(
-      aggregation,
-      COLLECTION_NAME,
-      NominatedTargetDocument.class
-    );
-
-    return new PageImpl<>(results.getMappedResults(), pageable, total);
+    return executePagedAggregation(matchCriteria, pageable);
   }
 
   /**
@@ -130,80 +113,6 @@ public class CustomNominatedTargetRepositoryImpl implements CustomNominatedTarge
       return new Criteria();
     }
     return new Criteria().andOperator(andCriteria.toArray(new Criteria[0]));
-  }
-
-  /**
-   * Builds $addFields operation to create sortable versions of fields.
-   *
-   * <p>For array fields: concatenates array elements into a single string
-   * for proper lexicographic comparison. This enables multi-array sorting (avoiding MongoDB's
-   * "parallel arrays" limitation).
-   */
-  private void buildSortFields(List<AggregationOperation> operations, Sort sort) {
-    Document fields = new Document();
-
-    for (Sort.Order order : sort) {
-      String field = order.getProperty();
-
-      if (ARRAY_FIELDS.contains(field)) {
-        // For arrays: concatenate into string, lowercase for comparison
-        fields.append(field + "_sort", buildArraySortField(field));
-      }
-    }
-
-    if (!fields.isEmpty()) {
-      operations.add(context -> new Document("$addFields", fields));
-    }
-  }
-
-  /**
-   * Builds a MongoDB expression to create a sortable string from an array field.
-   *
-   * <p>Formula: $toLower($reduce(field))
-   *
-   * <p>Example: ["Duke", "Emory", "Columbia"] → "duke\0emory\0columbia"
-   *
-   * @param field the array field name
-   * @return Document representing the aggregation expression
-   */
-  private Document buildArraySortField(String field) {
-    // $reduce: concatenate elements with null separator
-    Document reduce = new Document(
-      "$reduce",
-      new Document()
-        .append("input", "$" + field)
-        .append("initialValue", "")
-        .append("in", new Document("$concat", List.of("$$value", "\u0000", "$$this")))
-    );
-
-    // $toLower: case-insensitive comparison
-    return new Document("$toLower", reduce);
-  }
-
-  /**
-   * Adds $sort operation using computed sort fields where applicable.
-   */
-  private void addSortOperation(List<AggregationOperation> operations, Sort sort) {
-    if (sort.isUnsorted()) {
-      return;
-    }
-
-    Document sortDocument = new Document();
-    for (Sort.Order order : sort) {
-      String field = order.getProperty();
-      int direction = order.isAscending() ? 1 : -1;
-
-      // Use computed _sort field for arrays
-      if (ARRAY_FIELDS.contains(field)) {
-        sortDocument.append(field + "_sort", direction);
-      } else {
-        sortDocument.append(field, direction);
-      }
-    }
-
-    if (!sortDocument.isEmpty()) {
-      operations.add(context -> new Document("$sort", sortDocument));
-    }
   }
 
   private void addDataFilterCriteria(

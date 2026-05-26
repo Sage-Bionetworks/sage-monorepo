@@ -2,44 +2,92 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
+import org.sagebionetworks.explorers.ApiHelper;
+import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsIdentifier;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
-import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /**
  * Custom repository implementation using MongoDB aggregation pipeline.
  *
- * <p>Uses aggregation to support computed field (display_gene_symbol) for proper sorting
- * when gene_symbol is null/blank. All filtering logic is unified in a single implementation.
+ * <p>Uses aggregation to support a computed field ({@code display_gene_symbol}) for proper sorting
+ * when {@code gene_symbol} is null/blank. All filtering logic is unified in a single
+ * implementation. The pipeline scaffold (count, $match, $addFields, $sort, $skip, $limit) lives
+ * in {@link ComparisonToolRepositorySupport}.
  */
 @Repository
-@RequiredArgsConstructor
 @Slf4j
-public class CustomTranscriptomicsRepositoryImpl implements CustomTranscriptomicsRepository {
+public class CustomTranscriptomicsRepositoryImpl
+  extends ComparisonToolRepositorySupport<TranscriptomicsDocument>
+  implements CustomTranscriptomicsRepository {
 
   private static final String COLLECTION_NAME = "rna_de_aggregate";
   private static final String DISPLAY_GENE_SYMBOL_FIELD = "display_gene_symbol";
   private static final String GENE_SYMBOL_FIELD = "gene_symbol";
 
-  private final MongoTemplate mongoTemplate;
+  public CustomTranscriptomicsRepositoryImpl(MongoTemplate mongoTemplate) {
+    super(mongoTemplate);
+  }
+
+  @Override
+  protected String getCollectionName() {
+    return COLLECTION_NAME;
+  }
+
+  @Override
+  protected Class<TranscriptomicsDocument> getDocumentClass() {
+    return TranscriptomicsDocument.class;
+  }
+
+  /**
+   * Case-insensitive sort. {@code gene_symbol} routes through the computed
+   * {@code display_gene_symbol} (with the ensembl_gene_id fallback added by
+   * {@link #getExtraSortFieldComputations(Sort)}); {@code name} routes through its nested
+   * {@code link_text} child.
+   */
+  @Override
+  protected Map<String, Object> getComputedSortFieldExpressions() {
+    return Map.of(
+      GENE_SYMBOL_FIELD, toLowerExpr(DISPLAY_GENE_SYMBOL_FIELD),
+      "name", toLowerExpr("name.link_text"),
+      "model_type", toLowerExpr("model_type"),
+      "tissue", toLowerExpr("tissue"),
+      "sex_cohort", toLowerExpr("sex_cohort"),
+      "ensembl_gene_id", toLowerExpr("ensembl_gene_id"),
+      "matched_control", toLowerExpr("matched_control"),
+      "model_group", toLowerExpr("model_group")
+    );
+  }
+
+  /**
+   * When the user sorts by {@code gene_symbol}, we need to compute the
+   * {@code display_gene_symbol} fallback first so the lowercase step ({@code $toLower}) can
+   * reference it.
+   */
+  @Override
+  protected List<AggregationOperation> getExtraSortFieldComputations(Sort sort) {
+    boolean sortsByGeneSymbol = sort
+      .stream()
+      .anyMatch(o -> GENE_SYMBOL_FIELD.equals(o.getProperty()));
+    if (!sortsByGeneSymbol) {
+      return List.of();
+    }
+    return List.of(buildDisplayGeneSymbolField());
+  }
 
   @Override
   public Page<TranscriptomicsDocument> findAll(
@@ -49,52 +97,10 @@ public class CustomTranscriptomicsRepositoryImpl implements CustomTranscriptomic
     String tissue,
     String sexCohort
   ) {
-    try {
-      // Build match criteria with all filters (shared by count and data queries)
-      Criteria matchCriteria = buildMatchCriteria(tissue, sexCohort, query, items);
+    // Build match criteria with all filters (shared by count and data queries)
+    Criteria matchCriteria = buildMatchCriteria(tissue, sexCohort, query, items);
 
-      // OPTIMIZATION: Use mongoTemplate.count() for counting (faster than aggregation)
-      // This uses indexes directly without loading documents or running $addFields
-      final long total = mongoTemplate.count(new Query(matchCriteria), COLLECTION_NAME);
-
-      List<AggregationOperation> operations = new ArrayList<>();
-
-      // Add $match FIRST to filter documents before transformation
-      operations.add(Aggregation.match(matchCriteria));
-
-      // Add display_gene_symbol field (with fallback) if sorting by gene_symbol
-      boolean sortsByGeneSymbol = pageable
-        .getSort()
-        .stream()
-        .anyMatch(o -> GENE_SYMBOL_FIELD.equals(o.getProperty()));
-
-      if (sortsByGeneSymbol) {
-        operations.add(buildDisplayGeneSymbolField());
-      }
-
-      buildLowercaseSortFields(operations, pageable.getSort());
-
-      // Add sorting (uses lowercase fields for case-insensitive sorting)
-      addSortOperation(operations, pageable.getSort());
-
-      // Add pagination
-      long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
-      operations.add(Aggregation.skip(skipCount));
-      operations.add(Aggregation.limit(pageable.getPageSize()));
-
-      Aggregation aggregation = Aggregation.newAggregation(operations);
-
-      AggregationResults<TranscriptomicsDocument> results = mongoTemplate.aggregate(
-        aggregation,
-        COLLECTION_NAME,
-        TranscriptomicsDocument.class
-      );
-
-      return new PageImpl<>(results.getMappedResults(), pageable, total);
-    } catch (Exception e) {
-      log.error("Error executing transcriptomics query", e);
-      throw e;
-    }
+    return executePagedAggregation(matchCriteria, pageable);
   }
 
   /**
@@ -136,62 +142,6 @@ public class CustomTranscriptomicsRepositoryImpl implements CustomTranscriptomic
     );
 
     return context -> addFieldsDoc;
-  }
-
-  /**
-   * Builds $addFields operation to create lowercase versions of sort fields
-   * for case-insensitive sorting (DocumentDB compatible).
-   *
-   * <p>Applies $toLower to string fields only.
-   * Only adds the operation if there are string fields to transform.
-   *
-   * @param operations the list of aggregation operations to add to
-   * @param sort the Sort object containing the fields to sort by
-   */
-  private void buildLowercaseSortFields(List<AggregationOperation> operations, Sort sort) {
-    Document fields = new Document();
-
-    for (Sort.Order order : sort) {
-      String field = order.getProperty();
-
-      if (GENE_SYMBOL_FIELD.equals(field)) {
-        // For gene_symbol, use display_gene_symbol (which has fallback logic)
-        fields.append(
-          "gene_symbol_lower",
-          new Document("$toLower", "$" + DISPLAY_GENE_SYMBOL_FIELD)
-        );
-      } else if ("name".equals(field)) {
-        // For name (Link field), use name.link_text
-        fields.append("name_lower", new Document("$toLower", "$name.link_text"));
-      } else if (needsCaseInsensitiveSort(field)) {
-        // For other string fields, apply lowercase transformation
-        fields.append(field + "_lower", new Document("$toLower", "$" + field));
-      }
-    }
-
-    // Only add $addFields if there are fields
-    if (!fields.isEmpty()) {
-      operations.add(context -> new Document("$addFields", fields));
-    }
-  }
-
-  /**
-   * Checks if a field needs case-insensitive sorting.
-   * Non-string fields (like age columns with nested objects) are excluded.
-   *
-   * @param field the field name
-   * @return true if the field needs case-insensitive sorting
-   */
-  private boolean needsCaseInsensitiveSort(String field) {
-    return (
-      "name".equals(field) ||
-      "model_type".equals(field) ||
-      "tissue".equals(field) ||
-      "sex_cohort".equals(field) ||
-      "ensembl_gene_id".equals(field) ||
-      "matched_control".equals(field) ||
-      "model_group".equals(field)
-    );
   }
 
   /**
@@ -350,39 +300,5 @@ public class CustomTranscriptomicsRepositoryImpl implements CustomTranscriptomic
       identifiers.add(TranscriptomicsIdentifier.parse(item));
     }
     return identifiers;
-  }
-
-  /**
-   * Adds $sort operation, using lowercase versions of string fields for
-   * case-insensitive sorting (DocumentDB compatible).
-   *
-   * <p>Applies _lower suffix only to string fields.
-   */
-  private void addSortOperation(List<AggregationOperation> operations, Sort sort) {
-    if (sort.isUnsorted()) {
-      return;
-    }
-
-    List<Document> sortFields = new ArrayList<>();
-    for (Sort.Order order : sort) {
-      String field = order.getProperty();
-
-      // Use lowercase version for string fields (case-insensitive sorting)
-      if (needsCaseInsensitiveSort(field) || GENE_SYMBOL_FIELD.equals(field)) {
-        field = field + "_lower";
-      }
-      // Non-string fields (like age columns) are sorted directly
-
-      int direction = order.isAscending() ? 1 : -1;
-      sortFields.add(new Document(field, direction));
-    }
-
-    if (!sortFields.isEmpty()) {
-      Document sortDocument = new Document();
-      for (Document sortField : sortFields) {
-        sortDocument.putAll(sortField);
-      }
-      operations.add(context -> new Document("$sort", sortDocument));
-    }
   }
 }

@@ -2,43 +2,75 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
+import org.sagebionetworks.explorers.ApiHelper;
+import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationIdentifier;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /**
  * Custom repository implementation using MongoDB aggregation pipeline.
  *
  * <p>Uses aggregation to support case-insensitive sorting and complex filtering logic.
- * All filtering logic is unified in a single implementation.
+ * All filtering logic is unified in a single implementation. The pipeline scaffold (count,
+ * $match, $addFields, $sort, $skip, $limit) lives in {@link ComparisonToolRepositorySupport}.
  */
 @Repository
-@RequiredArgsConstructor
 @Slf4j
-public class CustomDiseaseCorrelationRepositoryImpl implements CustomDiseaseCorrelationRepository {
+public class CustomDiseaseCorrelationRepositoryImpl
+  extends ComparisonToolRepositorySupport<DiseaseCorrelationDocument>
+  implements CustomDiseaseCorrelationRepository {
 
   private static final String COLLECTION_NAME = "disease_correlation";
   private static final String NAME_FIELD = "name";
 
-  private final MongoTemplate mongoTemplate;
+  public CustomDiseaseCorrelationRepositoryImpl(MongoTemplate mongoTemplate) {
+    super(mongoTemplate);
+  }
+
+  @Override
+  protected String getCollectionName() {
+    return COLLECTION_NAME;
+  }
+
+  @Override
+  protected Class<DiseaseCorrelationDocument> getDocumentClass() {
+    return DiseaseCorrelationDocument.class;
+  }
+
+  /**
+   * Case-insensitive sort: each string field gets a lowercase {@code _sort} alias
+   * (DocumentDB-compatible).
+   */
+  @Override
+  protected Map<String, Object> getComputedSortFieldExpressions() {
+    return Map.of(
+      "name", toLowerExpr("name"),
+      "sex", toLowerExpr("sex"),
+      "model_type", toLowerExpr("model_type"),
+      "matched_control", toLowerExpr("matched_control"),
+      "cluster", toLowerExpr("cluster")
+    );
+  }
+
+  /**
+   * Map {@code age} (a string column) to the numeric companion field so sorts are numeric
+   * instead of lexicographic.
+   */
+  @Override
+  protected Map<String, String> getSortFieldAliases() {
+    return Map.of("age", "age_numeric");
+  }
 
   @Override
   public Page<DiseaseCorrelationDocument> findAll(
@@ -47,88 +79,10 @@ public class CustomDiseaseCorrelationRepositoryImpl implements CustomDiseaseCorr
     List<String> items,
     String cluster
   ) {
-    try {
-      // Build match criteria with all filters (shared by count and data queries)
-      Criteria matchCriteria = buildMatchCriteria(cluster, query, items);
+    // Build match criteria with all filters (shared by count and data queries)
+    Criteria matchCriteria = buildMatchCriteria(cluster, query, items);
 
-      // OPTIMIZATION: Use mongoTemplate.count() for counting (faster than aggregation)
-      // This uses indexes directly without loading documents or running $addFields
-      final long total = mongoTemplate.count(new Query(matchCriteria), COLLECTION_NAME);
-
-      List<AggregationOperation> operations = new ArrayList<>();
-
-      // Add $match FIRST to filter documents before transformation
-      operations.add(Aggregation.match(matchCriteria));
-
-      // Add lowercase versions of string sort fields for case-insensitive sorting
-      buildLowercaseSortFields(operations, pageable.getSort());
-
-      // Add sorting (uses lowercase fields for case-insensitive sorting)
-      addSortOperation(operations, pageable.getSort());
-
-      // Add pagination
-      long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
-      operations.add(Aggregation.skip(skipCount));
-      operations.add(Aggregation.limit(pageable.getPageSize()));
-
-      Aggregation aggregation = Aggregation.newAggregation(operations);
-
-      AggregationResults<DiseaseCorrelationDocument> results = mongoTemplate.aggregate(
-        aggregation,
-        COLLECTION_NAME,
-        DiseaseCorrelationDocument.class
-      );
-
-      return new PageImpl<>(results.getMappedResults(), pageable, total);
-    } catch (Exception e) {
-      log.error("Error executing disease correlation query", e);
-      throw e;
-    }
-  }
-
-  /**
-   * Builds $addFields operation to create lowercase versions of sort fields
-   * for case-insensitive sorting (DocumentDB compatible).
-   *
-   * <p>Only applies $toLower to string fields. Non-string fields (like correlation result
-   * objects) are excluded to prevent aggregation errors.
-   * Only adds the operation if there are string fields to transform.
-   *
-   * @param operations the list of aggregation operations to add to
-   * @param sort the Sort object containing the fields to sort by
-   */
-  private void buildLowercaseSortFields(List<AggregationOperation> operations, Sort sort) {
-    Document fields = new Document();
-
-    for (Sort.Order order : sort) {
-      String field = order.getProperty();
-      if (needsCaseInsensitiveSort(field)) {
-        // For string fields, apply lowercase transformation
-        fields.append(field + "_lower", new Document("$toLower", "$" + field));
-      }
-    }
-
-    // Only add $addFields if there are fields
-    if (!fields.isEmpty()) {
-      operations.add(context -> new Document("$addFields", fields));
-    }
-  }
-
-  /**
-   * Checks if a field needs case-insensitive sorting.
-   * Non-string fields (like correlation result objects with numeric values) are excluded.
-   *
-   * @param field the field name
-   * @return true if the field needs case-insensitive sorting
-   */
-  private boolean needsCaseInsensitiveSort(String field) {
-    return (
-      "name".equals(field) ||
-      "sex".equals(field) ||
-      "model_type".equals(field) ||
-      "matched_control".equals(field) ||
-      "cluster".equals(field)
-    );
+    return executePagedAggregation(matchCriteria, pageable);
   }
 
   /**
@@ -273,42 +227,5 @@ public class CustomDiseaseCorrelationRepositoryImpl implements CustomDiseaseCorr
       identifiers.add(DiseaseCorrelationIdentifier.parse(item));
     }
     return identifiers;
-  }
-
-  /**
-   * Adds $sort operation, using lowercase versions of string fields for
-   * case-insensitive sorting (DocumentDB compatible).
-   *
-   * <p>Applies _lower suffix only to string fields.
-   */
-  private void addSortOperation(List<AggregationOperation> operations, Sort sort) {
-    if (sort.isUnsorted()) {
-      return;
-    }
-
-    List<Document> sortFields = new ArrayList<>();
-    for (Sort.Order order : sort) {
-      String field = order.getProperty();
-
-      // Map age to age_numeric for proper numeric sorting
-      if ("age".equals(field)) {
-        field = "age_numeric";
-      } else if (needsCaseInsensitiveSort(field)) {
-        // Use lowercase version for string fields (case-insensitive sorting)
-        field = field + "_lower";
-      }
-      // Non-string fields (like correlation result objects) are sorted directly
-
-      int direction = order.isAscending() ? 1 : -1;
-      sortFields.add(new Document(field, direction));
-    }
-
-    if (!sortFields.isEmpty()) {
-      Document sortDocument = new Document();
-      for (Document sortField : sortFields) {
-        sortDocument.putAll(sortField);
-      }
-      operations.add(context -> new Document("$sort", sortDocument));
-    }
   }
 }
