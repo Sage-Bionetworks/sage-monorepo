@@ -77,6 +77,14 @@ public class CustomTranscriptomicsRepositoryImpl
    * When the user sorts by {@code gene_symbol}, we need to compute the
    * {@code display_gene_symbol} fallback first so the lowercase step ({@code $toLower}) can
    * reference it.
+   *
+   * <p><strong>Invariant:</strong> this method MUST emit the {@code display_gene_symbol}
+   * {@code $addFields} stage whenever {@link #getComputedSortFieldExpressions()} would invoke
+   * its {@code gene_symbol} entry — i.e. whenever the requested sort includes
+   * {@value #GENE_SYMBOL_FIELD}. Narrowing the gating here without narrowing the computed
+   * expression (or vice versa) silently produces {@code $toLower(null)} sort keys.
+   * {@code CustomTranscriptomicsRepositoryImplTest#shouldEmitDisplayGeneSymbolPipelineWhenSortingByGeneSymbol}
+   * pins this invariant.
    */
   @Override
   protected List<AggregationOperation> getExtraSortFieldComputations(Sort sort) {

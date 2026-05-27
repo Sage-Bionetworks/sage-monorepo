@@ -31,6 +31,14 @@ import org.springframework.data.mongodb.core.query.Query;
  *   $skip / $limit
  * </pre>
  *
+ * <p><strong>Field-name convention:</strong> sort field names ({@link Pageable#getSort()} order
+ * properties, and the keys of {@link #getComputedSortFieldExpressions()} /
+ * {@link #getSortFieldAliases()}) must be the names stored in MongoDB, NOT the Java POJO
+ * property names. The {@code $sort} stage is emitted as a raw {@code Document} and bypasses
+ * Spring Data's {@link org.springframework.data.mongodb.core.convert.QueryMapper}, so
+ * {@code @Field}-aliased property names are not auto-translated — pass the document-side name
+ * directly.
+ *
  * @param <T> the MongoDB document type returned by this repository
  */
 @Slf4j
@@ -87,18 +95,26 @@ public abstract class ComparisonToolRepositorySupport<T> {
    */
   protected final Page<T> executePagedAggregation(Criteria matchCriteria, Pageable pageable) {
     try {
-      long total = mongoTemplate.count(new Query(matchCriteria), getCollectionName());
-
       List<AggregationOperation> operations = new ArrayList<>();
       operations.add(Aggregation.match(matchCriteria));
       operations.addAll(getExtraSortFieldComputations(pageable.getSort()));
 
-      AggregationOperation computedSort = buildComputedSortFields(pageable.getSort());
+      Map<String, Object> computedExpressions = getComputedSortFieldExpressions();
+      Map<String, String> aliases = getSortFieldAliases();
+
+      AggregationOperation computedSort = buildComputedSortFields(
+        pageable.getSort(),
+        computedExpressions
+      );
       if (computedSort != null) {
         operations.add(computedSort);
       }
 
-      AggregationOperation sort = buildSortOperation(pageable.getSort());
+      AggregationOperation sort = buildSortOperation(
+        pageable.getSort(),
+        computedExpressions,
+        aliases
+      );
       if (sort != null) {
         operations.add(sort);
       }
@@ -108,12 +124,14 @@ public abstract class ComparisonToolRepositorySupport<T> {
       operations.add(Aggregation.limit(pageable.getPageSize()));
 
       Aggregation aggregation = Aggregation.newAggregation(operations);
+      log.debug("Executing aggregation on collection {}: {}", getCollectionName(), aggregation);
       AggregationResults<T> results = mongoTemplate.aggregate(
         aggregation,
         getCollectionName(),
         getDocumentClass()
       );
 
+      long total = mongoTemplate.count(new Query(matchCriteria), getCollectionName());
       return new PageImpl<>(results.getMappedResults(), pageable, total);
     } catch (Exception e) {
       log.error("Error executing aggregation on collection {}", getCollectionName(), e);
@@ -141,8 +159,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
     return new Document("$toLower", reduce);
   }
 
-  private AggregationOperation buildComputedSortFields(Sort sort) {
-    Map<String, Object> expressions = getComputedSortFieldExpressions();
+  private AggregationOperation buildComputedSortFields(Sort sort, Map<String, Object> expressions) {
     if (sort.isUnsorted() || expressions.isEmpty()) {
       return null;
     }
@@ -161,13 +178,14 @@ public abstract class ComparisonToolRepositorySupport<T> {
     return context -> new Document("$addFields", fields);
   }
 
-  private AggregationOperation buildSortOperation(Sort sort) {
+  private AggregationOperation buildSortOperation(
+    Sort sort,
+    Map<String, Object> computed,
+    Map<String, String> aliases
+  ) {
     if (sort.isUnsorted()) {
       return null;
     }
-
-    Map<String, Object> computed = getComputedSortFieldExpressions();
-    Map<String, String> aliases = getSortFieldAliases();
 
     Document sortDoc = new Document();
     for (Sort.Order order : sort) {

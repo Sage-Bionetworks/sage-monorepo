@@ -100,8 +100,16 @@ public final class ApiHelper {
    * accepted as {@code Object} so callers can pass any per-app generated enum (or string)
    * without coupling this helper to a specific OpenAPI-generated type.
    *
+   * <p><strong>{@code toString()} contract:</strong> whatever {@code filterType.toString()}
+   * returns is what lands in the cache key. OpenAPI-generated enums override {@code toString()}
+   * to return the schema value (e.g. {@code "include"} / {@code "exclude"}), so passing the
+   * enum directly produces keys keyed by the lowercase schema value. Plain Java enums without
+   * a custom {@code toString()} fall back to {@link Enum#name()} ({@code "INCLUDE"} /
+   * {@code "EXCLUDE"}) — callers wanting the schema-value convention should extract the
+   * value to a {@code String} explicitly in that case.
+   *
    * @param prefix the cache key prefix
-   * @param filterType the filter type — its {@code toString()} is appended to the key
+   * @param filterType the filter type — its {@code toString()} is appended to the key (see contract above)
    * @param items the list of items to include in the key
    * @param extraParts additional parts to append to the key
    * @return the constructed cache key
