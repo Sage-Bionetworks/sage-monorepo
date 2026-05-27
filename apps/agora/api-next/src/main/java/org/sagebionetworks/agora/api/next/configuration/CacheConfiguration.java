@@ -2,6 +2,9 @@ package org.sagebionetworks.agora.api.next.configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.List;
+import org.sagebionetworks.agora.api.next.model.document.DataVersionDocument;
+import org.sagebionetworks.agora.api.next.model.repository.DataVersionRepository;
+import org.sagebionetworks.cacheinvalidation.DataVersionProvider;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -39,5 +42,10 @@ public class CacheConfiguration {
     );
 
     return cacheManager;
+  }
+
+  @Bean
+  public DataVersionProvider dataVersionProvider(DataVersionRepository repository) {
+    return () -> repository.findFirstBy().map(DataVersionDocument::getDataVersion);
   }
 }

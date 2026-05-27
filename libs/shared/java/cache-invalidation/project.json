@@ -1,0 +1,8 @@
+{
+  "name": "shared-java-cache-invalidation",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/java/cache-invalidation/src",
+  "projectType": "library",
+  "targets": {},
+  "tags": ["type:feature", "scope:shared", "language:java", "package-manager:gradle"]
+}
