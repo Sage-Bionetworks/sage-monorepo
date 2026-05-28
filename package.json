@@ -59,7 +59,7 @@
     "rxjs": "7.8.1",
     "sanitize-html": "2.13.0",
     "screenfull": "5.2.0",
-    "simple-git": "3.28.0",
+    "simple-git": "3.36.0",
     "tslib": "2.4.1",
     "type-guards": "0.15.0",
     "validator": "13.7.0",
