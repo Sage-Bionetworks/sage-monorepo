@@ -187,6 +187,7 @@
       "basic-ftp": "6.0.1",
       "caniuse-lite": "1.0.30001777",
       "cross-spawn": "7.0.6",
+      "fast-xml-parser": "5.8.0",
       "form-data": "4.0.4",
       "glob": "13.0.6"
     }
