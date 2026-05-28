@@ -29,15 +29,19 @@ export interface OrgSagebionetworksRepoModelSearchTableTextAnalyzerSettings {
    */
   tokenFilters?: string;
   /**
-   * Ordered list of token filter names to apply. Can reference built-in filters (e.g., \'lowercase\') or custom ones defined in \'tokenFilters\'.
+   * Ordered list of token filter names applied at INDEX time. Can reference built-in filters (e.g., \'lowercase\') or custom ones defined in \'tokenFilters\'.
    */
-  filterOrder?: Array<string>;
+  indexFilterOrder?: Array<string>;
   /**
-   * Ordered list of character filter names to apply.
+   * Ordered list of token filter names applied at SEARCH time. Optional. If absent, search reuses \'indexFilterOrder\' (symmetric analysis). Set this when index-time and search-time analysis legitimately differ — e.g., index with \'edge_ngram\' and search without it (autocomplete pattern), or index without stop words and search with stop-word removal. When \'synonymAware\' is true this field is REQUIRED and must include the literal \'synapse_synonyms\' token (the system-managed synonym filter); every filter BEFORE \'synapse_synonyms\' must produce single-position output (positionLength=1), so \'word_delimiter\' and \'word_delimiter_graph\' must be placed AFTER it. Synonym rule casing is handled automatically — see SynonymRule.terms.
+   */
+  searchFilterOrder?: Array<string>;
+  /**
+   * Ordered list of character filter names to apply. Used for both index-time and search-time analysis.
    */
   charFilterOrder?: Array<string>;
   /**
-   * Whether the synonym token filter should be appended when synonyms are configured.
+   * When true, the system-managed \'synapse_synonyms\' token filter is wired into the search-time chain at the position the user authored in \'searchFilterOrder\'. Setting this true requires \'searchFilterOrder\' to be provided and to contain \'synapse_synonyms\'.
    */
   synonymAware?: boolean;
 }

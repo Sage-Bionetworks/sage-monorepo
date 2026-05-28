@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, input, OnInit, ViewEncapsulation } from '@angular/core';
-import { SafeHtml } from '@angular/platform-browser';
+import { Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 
 export type SvgIconBackgroundShape = 'circle' | 'square';
@@ -12,7 +11,7 @@ export type SvgIconBackgroundShape = 'circle' | 'square';
   styleUrls: ['./svg-icon.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SvgIconComponent implements OnInit {
+export class SvgIconComponent {
   imagePath = input.required<string>();
   altText = input('');
   width = input(14);
@@ -28,16 +27,8 @@ export class SvgIconComponent implements OnInit {
 
   private readonly svgService = inject(SvgIconService);
 
-  svgContent: SafeHtml | null = null;
-
-  className = computed(() => (this.enableHoverEffects() ? 'svg-icon' : 'svg-icon-no-hover'));
-
-  ngOnInit() {
-    this.svgService.getSvg(this.imagePath()).subscribe({
-      next: (svg) => (this.svgContent = svg),
-      error: () => {
-        // Handled by httpErrorInterceptor
-      },
-    });
-  }
+  readonly svgContent = computed(() => this.svgService.getSvg(this.imagePath()));
+  readonly className = computed(() =>
+    this.enableHoverEffects() ? 'svg-icon' : 'svg-icon-no-hover',
+  );
 }

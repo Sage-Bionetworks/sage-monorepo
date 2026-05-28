@@ -1,16 +1,9 @@
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { applicationConfig } from '@storybook/angular';
 import { SvgIconComponent } from './svg-icon.component';
 
 const meta: Meta<SvgIconComponent> = {
   component: SvgIconComponent,
   title: 'UI/SvgIconComponent',
-  decorators: [
-    applicationConfig({
-      providers: [provideHttpClient(withInterceptorsFromDi())],
-    }),
-  ],
 };
 export default meta;
 type Story = StoryObj<SvgIconComponent>;
