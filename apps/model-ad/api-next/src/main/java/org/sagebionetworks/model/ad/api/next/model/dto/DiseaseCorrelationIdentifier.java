@@ -69,4 +69,19 @@ public class DiseaseCorrelationIdentifier {
   public String toCompositeString() {
     return name + DELIMITER + age + DELIMITER + sex;
   }
+
+  /**
+   * Converts this identifier to a MongoDB {@link org.springframework.data.mongodb.core.query.Criteria}
+   * that matches documents with this exact name, age, and sex.
+   *
+   * @return a Criteria requiring all three fields to match
+   */
+  public org.springframework.data.mongodb.core.query.Criteria toCriteria() {
+    return new org.springframework.data.mongodb.core.query.Criteria()
+      .andOperator(
+        org.springframework.data.mongodb.core.query.Criteria.where("name").is(name),
+        org.springframework.data.mongodb.core.query.Criteria.where("age").is(age),
+        org.springframework.data.mongodb.core.query.Criteria.where("sex").is(sex)
+      );
+  }
 }

@@ -67,4 +67,18 @@ public class TranscriptomicsIdentifier {
   public String toCompositeId() {
     return String.format("%s~%s", ensemblGeneId, name);
   }
+
+  /**
+   * Converts this identifier to a MongoDB {@link org.springframework.data.mongodb.core.query.Criteria}
+   * that matches documents with this exact ensembl_gene_id and name.link_text.
+   *
+   * @return a Criteria requiring both fields to match
+   */
+  public org.springframework.data.mongodb.core.query.Criteria toCriteria() {
+    return new org.springframework.data.mongodb.core.query.Criteria()
+      .andOperator(
+        org.springframework.data.mongodb.core.query.Criteria.where("ensembl_gene_id").is(ensemblGeneId),
+        org.springframework.data.mongodb.core.query.Criteria.where("name.link_text").is(name)
+      );
+  }
 }

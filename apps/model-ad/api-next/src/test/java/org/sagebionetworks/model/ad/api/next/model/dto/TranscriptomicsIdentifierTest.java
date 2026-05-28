@@ -141,4 +141,20 @@ class TranscriptomicsIdentifierTest {
     assertThat(result.getName()).isEqualTo("Model-123 (Test/Lab)");
     assertThat(result.toCompositeId()).isEqualTo(compositeId);
   }
+
+  @Test
+  @DisplayName("should build correct criteria from identifier")
+  void shouldBuildCorrectCriteriaFromIdentifier() {
+    TranscriptomicsIdentifier identifier = TranscriptomicsIdentifier.builder()
+      .ensemblGeneId("ENSMUSG00000000001")
+      .name("5xFAD")
+      .build();
+
+    org.springframework.data.mongodb.core.query.Criteria result = identifier.toCriteria();
+
+    String criteriaStr = result.getCriteriaObject().toString();
+    assertThat(criteriaStr).contains("ensembl_gene_id").contains("ENSMUSG00000000001");
+    assertThat(criteriaStr).contains("name.link_text").contains("5xFAD");
+    assertThat(criteriaStr).contains("$and");
+  }
 }

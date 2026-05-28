@@ -79,4 +79,18 @@ public class NominatedDrugIdentifier {
   public String toCompositeId() {
     return chemblId + DELIMITER + (combinedWith != null ? combinedWith : "null");
   }
+
+  /**
+   * Converts this identifier to a MongoDB {@link org.springframework.data.mongodb.core.query.Criteria}
+   * that matches documents with this exact chembl_id and combined_with.
+   *
+   * @return a Criteria requiring both fields to match
+   */
+  public org.springframework.data.mongodb.core.query.Criteria toCriteria() {
+    return new org.springframework.data.mongodb.core.query.Criteria()
+      .andOperator(
+        org.springframework.data.mongodb.core.query.Criteria.where("chembl_id").is(chemblId),
+        org.springframework.data.mongodb.core.query.Criteria.where("combined_with").is(combinedWith)
+      );
+  }
 }

@@ -91,4 +91,22 @@ class DiseaseCorrelationIdentifierTest {
 
     assertThat(result).isEqualTo("APOE4~4 months~Female");
   }
+
+  @Test
+  @DisplayName("should build correct criteria from identifier")
+  void shouldBuildCorrectCriteriaFromIdentifier() {
+    DiseaseCorrelationIdentifier identifier = DiseaseCorrelationIdentifier.builder()
+      .name("APOE4")
+      .age("4 months")
+      .sex("Female")
+      .build();
+
+    org.springframework.data.mongodb.core.query.Criteria result = identifier.toCriteria();
+
+    String criteriaStr = result.getCriteriaObject().toString();
+    assertThat(criteriaStr).contains("name").contains("APOE4");
+    assertThat(criteriaStr).contains("age").contains("4 months");
+    assertThat(criteriaStr).contains("sex").contains("Female");
+    assertThat(criteriaStr).contains("$and");
+  }
 }

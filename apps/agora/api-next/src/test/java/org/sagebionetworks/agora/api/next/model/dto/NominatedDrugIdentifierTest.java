@@ -106,4 +106,36 @@ class NominatedDrugIdentifierTest {
 
     assertThat(result).isEqualTo(original);
   }
+
+  @Test
+  @DisplayName("should build correct criteria from identifier")
+  void shouldBuildCorrectCriteriaFromIdentifier() {
+    NominatedDrugIdentifier identifier = NominatedDrugIdentifier.builder()
+      .chemblId("CHEMBL2105758")
+      .combinedWith("Donepezil")
+      .build();
+
+    org.springframework.data.mongodb.core.query.Criteria result = identifier.toCriteria();
+
+    String criteriaStr = result.getCriteriaObject().toString();
+    assertThat(criteriaStr).contains("chembl_id").contains("CHEMBL2105758");
+    assertThat(criteriaStr).contains("combined_with").contains("Donepezil");
+    assertThat(criteriaStr).contains("$and");
+  }
+
+  @Test
+  @DisplayName("should build correct criteria from identifier with null combined_with")
+  void shouldBuildCorrectCriteriaFromIdentifierWithNullCombinedWith() {
+    NominatedDrugIdentifier identifier = NominatedDrugIdentifier.builder()
+      .chemblId("CHEMBL2105758")
+      .combinedWith(null)
+      .build();
+
+    org.springframework.data.mongodb.core.query.Criteria result = identifier.toCriteria();
+
+    String criteriaStr = result.getCriteriaObject().toString();
+    assertThat(criteriaStr).contains("chembl_id").contains("CHEMBL2105758");
+    assertThat(criteriaStr).contains("combined_with");
+    assertThat(criteriaStr).contains("$and");
+  }
 }
