@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 /**
  * Represents a composite identifier for transcriptomics documents.
@@ -69,16 +70,16 @@ public class TranscriptomicsIdentifier {
   }
 
   /**
-   * Converts this identifier to a MongoDB {@link org.springframework.data.mongodb.core.query.Criteria}
+   * Converts this identifier to a MongoDB {@link Criteria}
    * that matches documents with this exact ensembl_gene_id and name.link_text.
    *
    * @return a Criteria requiring both fields to match
    */
-  public org.springframework.data.mongodb.core.query.Criteria toCriteria() {
-    return new org.springframework.data.mongodb.core.query.Criteria()
+  public Criteria toCriteria() {
+    return new Criteria()
       .andOperator(
-        org.springframework.data.mongodb.core.query.Criteria.where("ensembl_gene_id").is(ensemblGeneId),
-        org.springframework.data.mongodb.core.query.Criteria.where("name.link_text").is(name)
+        Criteria.where("ensembl_gene_id").is(ensemblGeneId),
+        Criteria.where("name.link_text").is(name)
       );
   }
 }

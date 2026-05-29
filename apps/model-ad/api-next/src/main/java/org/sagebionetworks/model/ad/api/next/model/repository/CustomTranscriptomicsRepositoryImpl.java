@@ -3,6 +3,7 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
@@ -10,7 +11,6 @@ import org.sagebionetworks.explorers.ApiHelper;
 import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.sagebionetworks.explorers.ComputedSortField;
 import org.sagebionetworks.explorers.CtFilterConfig;
-import org.sagebionetworks.explorers.SearchFilterDef;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsIdentifier;
@@ -83,15 +83,18 @@ public class CustomTranscriptomicsRepositoryImpl
     );
   }
 
-  @Override
-  protected CtFilterConfig<TranscriptomicsSearchQueryDto> getFilterConfig() {
-    return CtFilterConfig.<TranscriptomicsSearchQueryDto>builder()
+  private final CtFilterConfig<TranscriptomicsSearchQueryDto> filterConfig =
+    CtFilterConfig.<TranscriptomicsSearchQueryDto>builder()
       .dataFilter("biodomains", TranscriptomicsSearchQueryDto::getBiodomains)
       .dataFilter("model_type", TranscriptomicsSearchQueryDto::getModelType)
       .dataFilter("name.link_text", TranscriptomicsSearchQueryDto::getName)
       .compositeItemFilter(item -> TranscriptomicsIdentifier.parse(item).toCriteria())
       .searchFilter(GENE_SYMBOL_FIELD)
       .build();
+
+  @Override
+  protected CtFilterConfig<TranscriptomicsSearchQueryDto> getFilterConfig() {
+    return filterConfig;
   }
 
   @Override
@@ -102,7 +105,11 @@ public class CustomTranscriptomicsRepositoryImpl
     String tissue,
     String sexCohort
   ) {
-    boolean isInclude = query.getItemFilterType() == ItemFilterTypeQueryDto.INCLUDE;
+    ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
+      query.getItemFilterType(),
+      ItemFilterTypeQueryDto.INCLUDE
+    );
+    boolean isInclude = filterType == ItemFilterTypeQueryDto.INCLUDE;
     Criteria matchCriteria = buildCtMatchCriteria(
       query,
       items,
@@ -170,7 +177,7 @@ public class CustomTranscriptomicsRepositoryImpl
    * raw {@code gene_symbol} and {@code ensembl_gene_id} fields.
    */
   @Override
-  protected Criteria buildSearchCriteria(SearchFilterDef def, String trimmedSearch) {
+  protected Criteria buildSearchCriteria(String field, String trimmedSearch) {
     Criteria geneSymbolIsNullOrEmpty = new Criteria()
       .orOperator(
         Criteria.where(GENE_SYMBOL_FIELD).is(null),

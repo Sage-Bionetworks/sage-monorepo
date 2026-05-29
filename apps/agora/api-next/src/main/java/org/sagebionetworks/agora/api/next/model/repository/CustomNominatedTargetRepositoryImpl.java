@@ -2,12 +2,13 @@ package org.sagebionetworks.agora.api.next.model.repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.agora.api.next.model.document.NominatedTargetDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedTargetSearchQueryDto;
-import org.sagebionetworks.explorers.ComputedSortField;
 import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
+import org.sagebionetworks.explorers.ComputedSortField;
 import org.sagebionetworks.explorers.CtFilterConfig;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,16 +54,19 @@ public class CustomNominatedTargetRepositoryImpl
   @Override
   protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
     return Map.of(
-      "nominating_teams", ComputedSortField.of(arrayToLoweredStringExpr("nominating_teams")),
-      "cohort_studies", ComputedSortField.of(arrayToLoweredStringExpr("cohort_studies")),
-      "input_data", ComputedSortField.of(arrayToLoweredStringExpr("input_data")),
-      "programs", ComputedSortField.of(arrayToLoweredStringExpr("programs"))
+      "nominating_teams",
+      ComputedSortField.of(arrayToLoweredStringExpr("nominating_teams")),
+      "cohort_studies",
+      ComputedSortField.of(arrayToLoweredStringExpr("cohort_studies")),
+      "input_data",
+      ComputedSortField.of(arrayToLoweredStringExpr("input_data")),
+      "programs",
+      ComputedSortField.of(arrayToLoweredStringExpr("programs"))
     );
   }
 
-  @Override
-  protected CtFilterConfig<NominatedTargetSearchQueryDto> getFilterConfig() {
-    return CtFilterConfig.<NominatedTargetSearchQueryDto>builder()
+  private final CtFilterConfig<NominatedTargetSearchQueryDto> filterConfig =
+    CtFilterConfig.<NominatedTargetSearchQueryDto>builder()
       .dataFilter("cohort_studies", NominatedTargetSearchQueryDto::getCohortStudies)
       .dataFilter("input_data", NominatedTargetSearchQueryDto::getInputData)
       .dataFilter("initial_nomination", NominatedTargetSearchQueryDto::getInitialNomination)
@@ -73,6 +77,10 @@ public class CustomNominatedTargetRepositoryImpl
       .simpleItemFilter(PRIMARY_FIELD)
       .searchFilter(PRIMARY_FIELD)
       .build();
+
+  @Override
+  protected CtFilterConfig<NominatedTargetSearchQueryDto> getFilterConfig() {
+    return filterConfig;
   }
 
   @Override
@@ -81,7 +89,11 @@ public class CustomNominatedTargetRepositoryImpl
     NominatedTargetSearchQueryDto query,
     List<String> items
   ) {
-    boolean isInclude = query.getItemFilterType() == ItemFilterTypeQueryDto.INCLUDE;
+    ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
+      query.getItemFilterType(),
+      ItemFilterTypeQueryDto.INCLUDE
+    );
+    boolean isInclude = filterType == ItemFilterTypeQueryDto.INCLUDE;
     Criteria matchCriteria = buildCtMatchCriteria(
       query,
       items,

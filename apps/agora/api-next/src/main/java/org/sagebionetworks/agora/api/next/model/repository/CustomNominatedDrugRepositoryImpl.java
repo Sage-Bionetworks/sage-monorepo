@@ -2,6 +2,7 @@ package org.sagebionetworks.agora.api.next.model.repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.agora.api.next.model.document.NominatedDrugDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -61,9 +62,8 @@ public class CustomNominatedDrugRepositoryImpl
     );
   }
 
-  @Override
-  protected CtFilterConfig<NominatedDrugSearchQueryDto> getFilterConfig() {
-    return CtFilterConfig.<NominatedDrugSearchQueryDto>builder()
+  private final CtFilterConfig<NominatedDrugSearchQueryDto> filterConfig =
+    CtFilterConfig.<NominatedDrugSearchQueryDto>builder()
       .dataFilter("principal_investigators", NominatedDrugSearchQueryDto::getPrincipalInvestigators)
       .dataFilter("programs", NominatedDrugSearchQueryDto::getPrograms)
       .dataFilter("total_nominations", NominatedDrugSearchQueryDto::getTotalNominations)
@@ -72,6 +72,10 @@ public class CustomNominatedDrugRepositoryImpl
       .compositeItemFilter(item -> NominatedDrugIdentifier.parse(item).toCriteria())
       .searchFilter(SEARCH_FIELD)
       .build();
+
+  @Override
+  protected CtFilterConfig<NominatedDrugSearchQueryDto> getFilterConfig() {
+    return filterConfig;
   }
 
   @Override
@@ -80,7 +84,11 @@ public class CustomNominatedDrugRepositoryImpl
     NominatedDrugSearchQueryDto query,
     List<String> items
   ) {
-    boolean isInclude = query.getItemFilterType() == ItemFilterTypeQueryDto.INCLUDE;
+    ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
+      query.getItemFilterType(),
+      ItemFilterTypeQueryDto.INCLUDE
+    );
+    boolean isInclude = filterType == ItemFilterTypeQueryDto.INCLUDE;
     Criteria matchCriteria = buildCtMatchCriteria(
       query,
       items,

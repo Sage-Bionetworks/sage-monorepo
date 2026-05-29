@@ -2,9 +2,10 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.explorers.ComputedSortField;
 import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
+import org.sagebionetworks.explorers.ComputedSortField;
 import org.sagebionetworks.explorers.CtFilterConfig;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationIdentifier;
@@ -53,11 +54,16 @@ public class CustomDiseaseCorrelationRepositoryImpl
   @Override
   protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
     return Map.of(
-      "name", ComputedSortField.of(toLowerExpr("name")),
-      "sex", ComputedSortField.of(toLowerExpr("sex")),
-      "model_type", ComputedSortField.of(toLowerExpr("model_type")),
-      "matched_control", ComputedSortField.of(toLowerExpr("matched_control")),
-      "cluster", ComputedSortField.of(toLowerExpr("cluster"))
+      "name",
+      ComputedSortField.of(toLowerExpr("name")),
+      "sex",
+      ComputedSortField.of(toLowerExpr("sex")),
+      "model_type",
+      ComputedSortField.of(toLowerExpr("model_type")),
+      "matched_control",
+      ComputedSortField.of(toLowerExpr("matched_control")),
+      "cluster",
+      ComputedSortField.of(toLowerExpr("cluster"))
     );
   }
 
@@ -70,9 +76,8 @@ public class CustomDiseaseCorrelationRepositoryImpl
     return Map.of("age", "age_numeric");
   }
 
-  @Override
-  protected CtFilterConfig<DiseaseCorrelationSearchQueryDto> getFilterConfig() {
-    return CtFilterConfig.<DiseaseCorrelationSearchQueryDto>builder()
+  private final CtFilterConfig<DiseaseCorrelationSearchQueryDto> filterConfig =
+    CtFilterConfig.<DiseaseCorrelationSearchQueryDto>builder()
       .dataFilter("age", DiseaseCorrelationSearchQueryDto::getAge)
       .dataFilter("model_type", DiseaseCorrelationSearchQueryDto::getModelType)
       .dataFilter("modified_genes", DiseaseCorrelationSearchQueryDto::getModifiedGenes)
@@ -81,6 +86,10 @@ public class CustomDiseaseCorrelationRepositoryImpl
       .compositeItemFilter(item -> DiseaseCorrelationIdentifier.parse(item).toCriteria())
       .searchFilter(NAME_FIELD)
       .build();
+
+  @Override
+  protected CtFilterConfig<DiseaseCorrelationSearchQueryDto> getFilterConfig() {
+    return filterConfig;
   }
 
   @Override
@@ -90,7 +99,11 @@ public class CustomDiseaseCorrelationRepositoryImpl
     List<String> items,
     String cluster
   ) {
-    boolean isInclude = query.getItemFilterType() == ItemFilterTypeQueryDto.INCLUDE;
+    ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
+      query.getItemFilterType(),
+      ItemFilterTypeQueryDto.INCLUDE
+    );
+    boolean isInclude = filterType == ItemFilterTypeQueryDto.INCLUDE;
     Criteria matchCriteria = buildCtMatchCriteria(
       query,
       items,

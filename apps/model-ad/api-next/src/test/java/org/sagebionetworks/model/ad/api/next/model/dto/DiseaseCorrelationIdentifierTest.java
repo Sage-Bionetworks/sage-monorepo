@@ -3,9 +3,12 @@ package org.sagebionetworks.model.ad.api.next.model.dto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
+import org.bson.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 class DiseaseCorrelationIdentifierTest {
 
@@ -101,12 +104,12 @@ class DiseaseCorrelationIdentifierTest {
       .sex("Female")
       .build();
 
-    org.springframework.data.mongodb.core.query.Criteria result = identifier.toCriteria();
+    Criteria result = identifier.toCriteria();
 
-    String criteriaStr = result.getCriteriaObject().toString();
-    assertThat(criteriaStr).contains("name").contains("APOE4");
-    assertThat(criteriaStr).contains("age").contains("4 months");
-    assertThat(criteriaStr).contains("sex").contains("Female");
-    assertThat(criteriaStr).contains("$and");
+    List<Document> andClauses = result.getCriteriaObject().getList("$and", Document.class);
+    assertThat(andClauses).hasSize(3);
+    assertThat(andClauses.get(0)).isEqualTo(new Document("name", "APOE4"));
+    assertThat(andClauses.get(1)).isEqualTo(new Document("age", "4 months"));
+    assertThat(andClauses.get(2)).isEqualTo(new Document("sex", "Female"));
   }
 }

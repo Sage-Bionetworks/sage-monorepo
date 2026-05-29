@@ -1,6 +1,7 @@
 package org.sagebionetworks.explorers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -115,6 +116,16 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Test
+  @DisplayName("should throw UnsupportedOperationException when getFilterConfig is not overridden")
+  void shouldThrowWhenGetFilterConfigNotOverridden() {
+    BareRepo repo = new BareRepo(mongoTemplate);
+
+    assertThatThrownBy(repo::getFilterConfig)
+      .isInstanceOf(UnsupportedOperationException.class)
+      .hasMessageContaining("getFilterConfig");
+  }
+
+  @Test
   @DisplayName("should count using mongoTemplate.count, not aggregation")
   void shouldCountWithoutAggregation() {
     BareRepo repo = new BareRepo(mongoTemplate);
@@ -164,6 +175,12 @@ class ComparisonToolRepositorySupportTest {
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
       return executePagedAggregation(criteria, pageable);
+    }
+
+    // expose for testing
+    @Override
+    public <Q> CtFilterConfig<Q> getFilterConfig() {
+      return super.getFilterConfig();
     }
   }
 

@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.sagebionetworks.explorers.CtFilterConfig;
@@ -42,9 +43,8 @@ public class CustomModelOverviewRepositoryImpl
     return ModelOverviewDocument.class;
   }
 
-  @Override
-  protected CtFilterConfig<ModelOverviewSearchQueryDto> getFilterConfig() {
-    return CtFilterConfig.<ModelOverviewSearchQueryDto>builder()
+  private final CtFilterConfig<ModelOverviewSearchQueryDto> filterConfig =
+    CtFilterConfig.<ModelOverviewSearchQueryDto>builder()
       .dataFilter("available_data", ModelOverviewSearchQueryDto::getAvailableData)
       .dataFilter("center", ModelOverviewSearchQueryDto::getCenter)
       .dataFilter("model_type", ModelOverviewSearchQueryDto::getModelType)
@@ -52,6 +52,10 @@ public class CustomModelOverviewRepositoryImpl
       .simpleItemFilter("name")
       .searchFilter("name")
       .build();
+
+  @Override
+  protected CtFilterConfig<ModelOverviewSearchQueryDto> getFilterConfig() {
+    return filterConfig;
   }
 
   @Override
@@ -60,7 +64,11 @@ public class CustomModelOverviewRepositoryImpl
     ModelOverviewSearchQueryDto query,
     List<String> items
   ) {
-    boolean isInclude = query.getItemFilterType() == ItemFilterTypeQueryDto.INCLUDE;
+    ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
+      query.getItemFilterType(),
+      ItemFilterTypeQueryDto.INCLUDE
+    );
+    boolean isInclude = filterType == ItemFilterTypeQueryDto.INCLUDE;
     Criteria matchCriteria = buildCtMatchCriteria(
       query,
       items,

@@ -1,8 +1,10 @@
 package org.sagebionetworks.explorers;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
@@ -61,11 +63,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * <p>Subclasses override to declare their data filters, item filter, and search filter. Used by
    * {@link #buildCtMatchCriteria}.
    *
-   * <p>Default implementation returns null; subclasses that use {@link #buildCtMatchCriteria} must
-   * override.
+   * <p>Default implementation throws {@link UnsupportedOperationException}; subclasses that use
+   * {@link #buildCtMatchCriteria} must override.
    */
   protected <Q> CtFilterConfig<Q> getFilterConfig() {
-    return null;
+    throw new UnsupportedOperationException("Subclasses that use buildCtMatchCriteria must override getFilterConfig()");
   }
 
   /**
@@ -229,7 +231,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
     // 4. Add search filter (only in EXCLUDE mode)
     if (!isInclude && search != null && !search.trim().isEmpty()) {
       String trimmedSearch = search.trim();
-      Criteria searchCriteria = buildSearchCriteria(config.searchFilter(), trimmedSearch);
+      Criteria searchCriteria = buildSearchCriteria(config.searchFilter().field(), trimmedSearch);
       allCriteria.add(searchCriteria);
     }
 
@@ -241,7 +243,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
   }
 
   /**
-   * Builds search criteria for the given search filter definition.
+   * Builds search criteria for the given field and search term.
    *
    * <p>Default implementation:
    *
@@ -252,14 +254,14 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * </ul>
    *
    * <p>Subclasses can override to provide custom search logic (e.g. fallback fields or
-   * multi-field matching).
+   * multi-field matching). The {@code field} parameter can be ignored by overrides that manage
+   * their own field names.
    *
-   * @param def the search filter definition
+   * @param field the MongoDB field to search against
    * @param trimmedSearch the trimmed search string (never null or blank)
    * @return the search criteria
    */
-  protected Criteria buildSearchCriteria(SearchFilterDef def, String trimmedSearch) {
-    String field = def.field();
+  protected Criteria buildSearchCriteria(String field, String trimmedSearch) {
     if (trimmedSearch.contains(",")) {
       // Comma-separated list: exact match (case-insensitive)
       List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
@@ -321,14 +323,14 @@ public abstract class ComparisonToolRepositorySupport<T> {
       return List.of();
     }
 
-    List<AggregationOperation> prerequisites = new ArrayList<>();
+    Set<AggregationOperation> seen = new LinkedHashSet<>();
     for (Sort.Order order : sort) {
       ComputedSortField field = computedFields.get(order.getProperty());
-      if (field != null && !field.prerequisites().isEmpty()) {
-        prerequisites.addAll(field.prerequisites());
+      if (field != null) {
+        seen.addAll(field.prerequisites());
       }
     }
-    return prerequisites;
+    return new ArrayList<>(seen);
   }
 
   private AggregationOperation buildComputedSortFields(

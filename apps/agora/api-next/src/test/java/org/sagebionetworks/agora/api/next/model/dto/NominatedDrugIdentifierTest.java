@@ -3,9 +3,12 @@ package org.sagebionetworks.agora.api.next.model.dto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
+import org.bson.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.agora.api.next.exception.InvalidFilterException;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 class NominatedDrugIdentifierTest {
 
@@ -115,12 +118,12 @@ class NominatedDrugIdentifierTest {
       .combinedWith("Donepezil")
       .build();
 
-    org.springframework.data.mongodb.core.query.Criteria result = identifier.toCriteria();
+    Criteria result = identifier.toCriteria();
 
-    String criteriaStr = result.getCriteriaObject().toString();
-    assertThat(criteriaStr).contains("chembl_id").contains("CHEMBL2105758");
-    assertThat(criteriaStr).contains("combined_with").contains("Donepezil");
-    assertThat(criteriaStr).contains("$and");
+    List<Document> andClauses = result.getCriteriaObject().getList("$and", Document.class);
+    assertThat(andClauses).hasSize(2);
+    assertThat(andClauses.get(0)).isEqualTo(new Document("chembl_id", "CHEMBL2105758"));
+    assertThat(andClauses.get(1)).isEqualTo(new Document("combined_with", "Donepezil"));
   }
 
   @Test
@@ -131,11 +134,11 @@ class NominatedDrugIdentifierTest {
       .combinedWith(null)
       .build();
 
-    org.springframework.data.mongodb.core.query.Criteria result = identifier.toCriteria();
+    Criteria result = identifier.toCriteria();
 
-    String criteriaStr = result.getCriteriaObject().toString();
-    assertThat(criteriaStr).contains("chembl_id").contains("CHEMBL2105758");
-    assertThat(criteriaStr).contains("combined_with");
-    assertThat(criteriaStr).contains("$and");
+    List<Document> andClauses = result.getCriteriaObject().getList("$and", Document.class);
+    assertThat(andClauses).hasSize(2);
+    assertThat(andClauses.get(0)).isEqualTo(new Document("chembl_id", "CHEMBL2105758"));
+    assertThat(andClauses.get(1)).isEqualTo(new Document("combined_with", null));
   }
 }
