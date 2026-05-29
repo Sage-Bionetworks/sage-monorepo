@@ -1,4 +1,4 @@
-package org.sagebionetworks.model.ad.api.next.util;
+package org.sagebionetworks.explorers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -8,9 +8,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
-import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -98,29 +95,28 @@ public final class ApiHelper {
     return headers;
   }
 
-  public static List<ObjectId> parseObjectIds(List<String> items) {
-    try {
-      return items.stream().map(ObjectId::new).toList();
-    } catch (IllegalArgumentException ex) {
-      throw new InvalidObjectIdException(
-        "Query parameter item must contain valid ObjectId values",
-        ex
-      );
-    }
-  }
-
   /**
-   * Builds a cache key string from the provided components.
+   * Builds a cache key string from the provided components. The {@code filterType} is
+   * accepted as {@code Object} so callers can pass any per-app generated enum (or string)
+   * without coupling this helper to a specific OpenAPI-generated type.
+   *
+   * <p><strong>{@code toString()} contract:</strong> whatever {@code filterType.toString()}
+   * returns is what lands in the cache key. OpenAPI-generated enums override {@code toString()}
+   * to return the schema value (e.g. {@code "include"} / {@code "exclude"}), so passing the
+   * enum directly produces keys keyed by the lowercase schema value. Plain Java enums without
+   * a custom {@code toString()} fall back to {@link Enum#name()} ({@code "INCLUDE"} /
+   * {@code "EXCLUDE"}) — callers wanting the schema-value convention should extract the
+   * value to a {@code String} explicitly in that case.
    *
    * @param prefix the cache key prefix
-   * @param filterType the filter type (can be null)
+   * @param filterType the filter type — its {@code toString()} is appended to the key (see contract above)
    * @param items the list of items to include in the key
    * @param extraParts additional parts to append to the key
    * @return the constructed cache key
    */
   public static String buildCacheKey(
     String prefix,
-    ItemFilterTypeQueryDto filterType,
+    @Nullable Object filterType,
     List<String> items,
     Object... extraParts
   ) {
@@ -129,7 +125,7 @@ public final class ApiHelper {
     builder
       .append(prefix)
       .append('-')
-      .append(filterType != null ? filterType.getValue() : "null")
+      .append(filterType != null ? filterType.toString() : "null")
       .append('-')
       .append(items != null ? items : List.of());
 
@@ -165,8 +161,8 @@ public final class ApiHelper {
    * @throws IllegalArgumentException if an unknown query parameter is encountered
    */
   public static void validateQueryParameters(Set<String> validQueryParams) {
-    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
-      .getRequestAttributes();
+    ServletRequestAttributes attributes =
+      (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
     if (attributes == null) {
       log.debug("Skipping query parameter validation: RequestContextHolder returned null");
       return;

@@ -1,4 +1,4 @@
-package org.sagebionetworks.agora.api.next.util;
+package org.sagebionetworks.explorers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -159,6 +159,72 @@ class ApiHelperTest {
       assertThatThrownBy(() -> ApiHelper.createSort(List.of("name", "age"), List.of(1)))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("sortFields and sortOrders must have the same number of elements");
+    }
+  }
+
+  @Nested
+  @DisplayName("buildCacheKey")
+  class BuildCacheKey {
+
+    @Test
+    @DisplayName("should append toString of filterType so any enum or string works as input")
+    void shouldAppendToStringOfFilterType() {
+      String key = ApiHelper.buildCacheKey("scope", SampleEnum.INCLUDE, List.of("a", "b"));
+
+      assertThat(key).isEqualTo("scope-include-[a, b]");
+    }
+
+    @Test
+    @DisplayName("should use literal 'null' when filterType is null")
+    void shouldUseLiteralNullWhenFilterTypeIsNull() {
+      String key = ApiHelper.buildCacheKey("scope", null, List.of("a"));
+
+      assertThat(key).isEqualTo("scope-null-[a]");
+    }
+
+    @Test
+    @DisplayName("should append extra parts using Objects.toString")
+    void shouldAppendExtraParts() {
+      String key = ApiHelper.buildCacheKey(
+        "scope",
+        SampleEnum.EXCLUDE,
+        List.of("a"),
+        1,
+        null,
+        "x"
+      );
+
+      assertThat(key).isEqualTo("scope-exclude-[a]-1-null-x");
+    }
+
+    @Test
+    @DisplayName("should serialize empty items list to []")
+    void shouldSerializeEmptyItemsList() {
+      String key = ApiHelper.buildCacheKey("scope", SampleEnum.INCLUDE, List.of());
+
+      assertThat(key).isEqualTo("scope-include-[]");
+    }
+
+    /**
+     * Mirrors the shape of OpenAPI-generated filter-type enums (lowercase {@code value}
+     * exposed by both {@code getValue()} and {@code toString()}). Confirms that swapping
+     * the original {@code ItemFilterTypeQueryDto} parameter for {@code Object} produces
+     * byte-identical cache keys.
+     */
+    private enum SampleEnum {
+      INCLUDE("include"),
+      EXCLUDE("exclude");
+
+      private final String value;
+
+      SampleEnum(String value) {
+        this.value = value;
+      }
+
+      @Override
+      public String toString() {
+        return String.valueOf(value);
+      }
     }
   }
 }
