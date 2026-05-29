@@ -25,6 +25,10 @@ export interface OrgSagebionetworksRepoModelTableRow {
    */
   etag?: string;
   /**
+   * For queries against views, this field will contain the benefactorId of the entity. Will be null for all other cases.
+   */
+  benefactorId?: number;
+  /**
    * The values for each column of this row. To delete a row, set this to an empty list: []
    */
   values?: Array<string>;

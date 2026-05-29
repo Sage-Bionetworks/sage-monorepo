@@ -9,7 +9,7 @@
  */
 
 /**
- * The build status of a SearchIndex\'s OpenSearch index.
+ * Build status of a SearchIndex\'s OpenSearch index. Read it to find out whether the index is ready, still being built, or in a failed state — and, if FAILED, what went wrong.
  */
 export interface OrgSagebionetworksRepoModelSearchTableSearchIndexStatus {
   /**
@@ -25,7 +25,7 @@ export interface OrgSagebionetworksRepoModelSearchTableSearchIndexStatus {
    */
   changedOn?: string;
   /**
-   * When the build fails, this is the error message.
+   * Set when state is FAILED. Captures the diagnostic from the failed build — pre-flight validation errors (e.g. \'TextAnalyzer X does not resolve\'), AOSS rejection messages from index creation, or sample per-document failures from bulk indexing. Capped at 3000 characters; the most-recent failure replaces any earlier message.
    */
   errorMessage?: string;
 }
