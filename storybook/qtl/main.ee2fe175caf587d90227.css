@@ -232,9 +232,16 @@ h6,
   --footer-background: linear-gradient(0deg, rgb(0 0 0 / 40%) 0%, rgb(0 0 0 / 40%) 100%),
     linear-gradient(90deg, #2a77dc 0%, #b186df 51.44%, #65d8bf 100%);
   --footer-padding-x: 60px;
+  --footer-versions-color: rgb(255 255 255 / 70%);
   --header-padding-y: 24px;
   --header-padding-x: 60px;
-  --header-link-color: #6e76ae;
+  --header-link-color: var(--color-accent-lavender-600);
+}
+@media (width < 992px) {
+  :root {
+    --footer-background: linear-gradient(0deg, rgb(0 0 0 / 40%) 0%, rgb(0 0 0 / 40%) 100%),
+      linear-gradient(90deg, #2a77dc 0%, #b186df 122.55%);
+  }
 }
 
 html,
@@ -249,8 +256,12 @@ body {
 }
 
 :root {
+  --color-primary: #2c5182;
   --color-secondary: #2c5182;
   --color-action-primary: #2c5182;
+  --color-accent-lavender-600: #6e76ae;
+  --color-variant-muted: #c8e6e9;
+  --color-gene-muted: #d9e5f4;
 }
 
 h1,
