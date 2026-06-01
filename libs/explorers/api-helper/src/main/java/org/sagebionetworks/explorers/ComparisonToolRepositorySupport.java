@@ -60,8 +60,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
   /**
    * Declarative filter configuration for this comparison-tool repository.
    *
-   * <p>Subclasses override to declare their data filters, item filter, and search filter. Used by
-   * {@link #buildCtMatchCriteria}.
+   * <p>Subclasses override to declare their data filters, item filter, and search filter. Pass the
+   * return value as the {@code config} argument to {@link #buildCtMatchCriteria}.
    *
    * <p>Default implementation throws {@link UnsupportedOperationException}; subclasses that use
    * {@link #buildCtMatchCriteria} must override.
