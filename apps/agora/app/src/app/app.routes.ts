@@ -105,6 +105,11 @@ export const routes: Route[] = [
     },
   },
   {
+    path: 'genes/nominated-targets',
+    redirectTo: ROUTE_PATHS.NOMINATED_TARGETS,
+    pathMatch: 'full',
+  },
+  {
     path: 'genes/genes-router:genes-list',
     redirectTo: ROUTE_PATHS.NOMINATED_TARGETS,
     pathMatch: 'full',

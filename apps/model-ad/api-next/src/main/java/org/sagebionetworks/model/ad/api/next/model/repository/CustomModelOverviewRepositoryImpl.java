@@ -2,28 +2,48 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.Objects;
-import lombok.RequiredArgsConstructor;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.explorers.ApiHelper;
+import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Custom repository implementation backed by the shared CT aggregation pipeline.
+ *
+ * <p>ModelOverview has no case-insensitive sort, sort-field aliases, or computed sort fields,
+ * so it overrides only the two abstract collection/document hooks. The pipeline scaffold
+ * (count, $match, $sort, $skip, $limit) lives in {@link ComparisonToolRepositorySupport}.
+ */
 @Repository
-@RequiredArgsConstructor
 @Slf4j
-public class CustomModelOverviewRepositoryImpl implements CustomModelOverviewRepository {
+public class CustomModelOverviewRepositoryImpl
+  extends ComparisonToolRepositorySupport<ModelOverviewDocument>
+  implements CustomModelOverviewRepository {
 
-  private final MongoTemplate mongoTemplate;
+  private static final String COLLECTION_NAME = "model_overview";
+
+  public CustomModelOverviewRepositoryImpl(MongoTemplate mongoTemplate) {
+    super(mongoTemplate);
+  }
+
+  @Override
+  protected String getCollectionName() {
+    return COLLECTION_NAME;
+  }
+
+  @Override
+  protected Class<ModelOverviewDocument> getDocumentClass() {
+    return ModelOverviewDocument.class;
+  }
 
   @Override
   public Page<ModelOverviewDocument> findAll(
@@ -31,14 +51,23 @@ public class CustomModelOverviewRepositoryImpl implements CustomModelOverviewRep
     ModelOverviewSearchQueryDto query,
     List<String> items
   ) {
-    Query mongoQuery = new Query();
-    List<Criteria> andCriteria = new ArrayList<>();
-
     ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
       query.getItemFilterType(),
       ItemFilterTypeQueryDto.INCLUDE
     );
     String search = query.getSearch();
+
+    Criteria matchCriteria = buildMatchCriteria(query, items, filterType, search);
+    return executePagedAggregation(matchCriteria, pageable);
+  }
+
+  private Criteria buildMatchCriteria(
+    ModelOverviewSearchQueryDto query,
+    List<String> items,
+    ItemFilterTypeQueryDto filterType,
+    String search
+  ) {
+    List<Criteria> andCriteria = new ArrayList<>();
 
     // Add data filters (AND between fields, OR within field)
     addDataFilterCriteria(
@@ -55,28 +84,10 @@ public class CustomModelOverviewRepositoryImpl implements CustomModelOverviewRep
     // Add search filtering (only when itemFilterType is EXCLUDE)
     addSearchFilterCriteria(search, filterType, andCriteria);
 
-    // Combine all criteria with AND
-    if (!andCriteria.isEmpty()) {
-      mongoQuery.addCriteria(new Criteria().andOperator(andCriteria.toArray(new Criteria[0])));
+    if (andCriteria.isEmpty()) {
+      return new Criteria();
     }
-
-    mongoQuery.with(pageable);
-
-    log.debug("Executing MongoDB query: {}", mongoQuery);
-
-    // Execute query
-    List<ModelOverviewDocument> results = mongoTemplate.find(
-      mongoQuery,
-      ModelOverviewDocument.class
-    );
-
-    // Count total for pagination (without limit/skip)
-    long total = mongoTemplate.count(
-      Query.of(mongoQuery).limit(-1).skip(-1),
-      ModelOverviewDocument.class
-    );
-
-    return new PageImpl<>(results, pageable, total);
+    return new Criteria().andOperator(andCriteria.toArray(new Criteria[0]));
   }
 
   private void addDataFilterCriteria(

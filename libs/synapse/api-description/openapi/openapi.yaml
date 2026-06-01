@@ -497,12 +497,15 @@ tags:
        </tr>
        <tr>
        <td>Maximum number of values associated with a single key in Annotations</td>
-       <td>100</td>
+       <td>1,000</td>
        </tr>
        <tr>
-       <td>Maximum total character count for all values associated with a single key
-       in Annotations when the AnnotationValueType is STRING</td>
-       <td>500</td>
+       <td>Maximum size of a single STRING value in Annotations</td>
+       <td>1,000 characters</td>
+       </tr>
+       <tr>
+       <td>Maximum total character count for all STRING values associated with a single key in Annotations</td>
+       <td>100,000 characters</td>
        </tr>
        <tr>
        <td>Maximum hierarchical depth of an Entity</td>
@@ -781,6 +784,57 @@ tags:
        attribution (who last updated each cell) and ensuring the synchronization
        logic correctly distinguishes user changes from system changes.
        </p>
+
+       <h2>Authorization Modes</h2>
+
+       <p>
+       Grid sessions support two authorization modes, set at creation time via
+       {@link org.sagebionetworks.repo.model.grid.CreateGridRequest#setAuthorizationMode(org.sagebionetworks.repo.model.grid.AuthorizationMode)}.
+       The mode controls both who may join the session and which rows are included
+       in the initial snapshot.
+       </p>
+
+       <h3>SESSION_OWNER (default)</h3>
+       <p>
+       Only the session owner or members of the owner's team may join. The
+       {@code ownerPrincipalId} field on {@link org.sagebionetworks.repo.model.grid.CreateGridRequest}
+       sets the owner; if omitted, it defaults to the creating user. When the source
+       is a view, the snapshot is built using the owner's access scope \u2014 non-owner
+       team members see exactly what the owner sees, not a filtered subset of their
+       own access.
+       </p>
+       <p>
+       Use this mode when a named curator or a specific team should control both
+       who participates and what data is visible in the session.
+       </p>
+
+       <h3>SOURCE_BENEFACTOR</h3>
+       <p>
+       Access is granted to any user who has EDIT (UPDATE) access on all benefactor
+       IDs captured at session creation. The set of captured benefactors is
+       determined by the creating user's own EDIT access at the time the session is
+       created:
+       </p>
+       <ul>
+         <li><b>View source</b>: the distinct set of benefactor IDs from the rows
+         the creating user can edit (rows returned when querying the view with
+         READ + UPDATE access).</li>
+         <li><b>Table or RecordSet source</b>: the single benefactor of the source
+         entity itself.</li>
+       </ul>
+       <p>
+       Any user with EDIT access on <em>all</em> of those captured benefactors may
+       join the session and create a replica. Each joining user's own permissions
+       determine which rows they see when querying live data \u2014 they are not proxied
+       through the session creator's scope.
+       </p>
+       <p>
+       Use this mode when all editors of a project (or a set of projects) should
+       be able to collaborate without the session creator needing to maintain an
+       explicit owner team. For example, if a view spans three projects and the
+       creating user has EDIT on all three, then any other user who also has EDIT
+       on all three can join the session automatically.
+       </p>
   - name: JSON Schema Services
     description: |-
       This set of services provide project designers with tools to define their own
@@ -897,7 +951,8 @@ tags:
     description: |-
       <p>
        Services for managing search configuration objects. These reusable building blocks
-       define how a search index analyzes, tokenizes, and matches text. They map directly to
+       define how a <a href="${org.sagebionetworks.repo.model.search.table.SearchIndex}">SearchIndex</a>
+       analyzes, tokenizes, and matches text. They map directly to
        <a href="https://docs.opensearch.org/latest/analyzers/custom-analyzer/">OpenSearch custom analyzer</a>
        concepts and are assembled into a
        <a href="${org.sagebionetworks.repo.model.search.table.SearchConfiguration}">SearchConfiguration</a>
@@ -907,12 +962,14 @@ tags:
        <h6>Text Analyzers</h6>
        <p>
        A <a href="${org.sagebionetworks.repo.model.search.table.TextAnalyzer}">TextAnalyzer</a> defines
-       a text analysis pipeline consisting of a
-       <a href="https://docs.opensearch.org/latest/analyzers/tokenizers/index/">tokenizer</a> and an
-       ordered list of <a href="https://docs.opensearch.org/latest/analyzers/token-filters/index/">token filters</a>.
-       The tokenizer breaks text into individual tokens, and the filters process those tokens
-       (e.g., lowercasing, stemming, stop word removal). Custom token filters such as stop word lists
-       can also be defined inline.
+       a text analysis pipeline as the OpenSearch <code>settings.analysis</code> block: any combination
+       of <a href="https://docs.opensearch.org/latest/analyzers/character-filters/index/">char filters</a>,
+       <a href="https://docs.opensearch.org/latest/analyzers/tokenizers/index/">tokenizers</a>, and
+       <a href="https://docs.opensearch.org/latest/analyzers/token-filters/index/">token filters</a>,
+       plus one or more named custom analyzers that compose them. The whole <code>settings</code> field
+       is an opaque JSON-object string &mdash; you can paste a snippet from the OpenSearch docs straight
+       in. Synapse only checks that the JSON parses and that any <code>$ref</code> entries resolve;
+       AOSS validates the analyzer shape itself at index-build time.
        </p>
        <ul>
        <li><a href="${POST.search.text.analyzer}">POST /search/text/analyzer</a></li>
@@ -927,9 +984,10 @@ tags:
        assigns specific <a href="${org.sagebionetworks.repo.model.search.table.TextAnalyzer}">TextAnalyzers</a>
        to individual columns, overriding the SearchConfiguration's default analyzer. Each override entry
        specifies an index analyzer (used when building the index) and a search analyzer (used at query time).
-       This corresponds to the OpenSearch
-       <a href="https://docs.opensearch.org/latest/mappings/mapping-parameters/analyzer/">per-field analyzer mapping</a>
-       capability.
+       This corresponds to the OpenSearch per-field
+       <a href="https://docs.opensearch.org/latest/analyzers/index-analyzers/">analyzer</a> +
+       <a href="https://docs.opensearch.org/latest/analyzers/search-analyzers/">search_analyzer</a>
+       mapping.
        </p>
        <ul>
        <li><a href="${POST.search.column.analyzer.override}">POST /search/column/analyzer/override</a></li>
@@ -940,18 +998,16 @@ tags:
 
        <h6>Synonym Sets</h6>
        <p>
-       A <a href="${org.sagebionetworks.repo.model.search.table.SynonymSet}">SynonymSet</a> defines
-       synonym rules that are applied during index construction via the OpenSearch
-       <a href="https://docs.opensearch.org/latest/analyzers/token-filters/synonym/">synonym token filter</a>.
-       Two rule types are supported:
+       A <a href="${org.sagebionetworks.repo.model.search.table.SynonymSet}">SynonymSet</a> is a shareable
+       OpenSearch <a href="https://docs.opensearch.org/latest/analyzers/token-filters/synonym-graph/">synonym_graph</a>
+       (or legacy <a href="https://docs.opensearch.org/latest/analyzers/token-filters/synonym/">synonym</a>)
+       token filter. Its <code>definition</code> is the full filter JSON, exactly as documented by
+       OpenSearch &mdash; supply OpenSearch's native synonym syntax (<code>a, b, c</code> for equivalent
+       (bidirectional) and <code>a, b =&gt; c, d</code> for explicit (directional) expansion).
+       A TextAnalyzer brings a SynonymSet into its filter registry by writing
+       <code>{"$ref": "{organizationName}-{name}"}</code> in place of an inline filter definition;
+       Synapse resolves the reference at index-build time before sending the analyzer to AOSS.
        </p>
-       <ul>
-       <li><b>Equivalent</b> &mdash; all terms are interchangeable (e.g., &quot;cancer&quot;,
-           &quot;tumor&quot;, &quot;neoplasm&quot;). Searching for any one term matches documents
-           containing any of the others.</li>
-       <li><b>Explicit</b> &mdash; a directional expansion where the first term expands to the
-           remaining terms (e.g., &quot;AD&quot; expands to &quot;Alzheimer's disease&quot;).</li>
-       </ul>
        <ul>
        <li><a href="${POST.search.synonym.set}">POST /search/synonym/set</a></li>
        <li><a href="${GET.search.synonym.set.synonymSetId}">GET /search/synonym/set/{synonymSetId}</a></li>
@@ -962,11 +1018,12 @@ tags:
        <h6>Search Configurations</h6>
        <p>
        A <a href="${org.sagebionetworks.repo.model.search.table.SearchConfiguration}">SearchConfiguration</a>
-       bundles a default <a href="${org.sagebionetworks.repo.model.search.table.TextAnalyzer}">TextAnalyzer</a>,
-       zero or more <a href="${org.sagebionetworks.repo.model.search.table.SynonymSet}">SynonymSets</a>,
-       and zero or more <a href="${org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride}">ColumnAnalyzerOverrides</a>
-       into a reusable configuration. These settings are used to build the
-       <code>analysis</code> section of an OpenSearch index definition when a search index is created.
+       bundles a default index-time and search-time
+       <a href="${org.sagebionetworks.repo.model.search.table.TextAnalyzer}">TextAnalyzer</a> together with
+       zero or more <a href="${org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride}">ColumnAnalyzerOverrides</a>
+       into a reusable configuration. These settings populate the <code>analysis</code> section of the
+       OpenSearch index definition when a search index is created. Synonyms are wired in at the
+       TextAnalyzer level via <code>$ref</code>, not on the SearchConfiguration.
        </p>
        <p>
        Attach a SearchConfiguration to an entity (SearchIndex, Folder, or Project) by creating a binding.
@@ -983,7 +1040,7 @@ tags:
        <p>
        Bind a <a href="${org.sagebionetworks.repo.model.search.table.SearchConfiguration}">SearchConfiguration</a>
        to an entity. The effective configuration for any entity is resolved by walking up the hierarchy
-       (entity \u2192 folder \u2192 project). Requires EDIT permission on the entity.
+       (entity &rarr; folder &rarr; project). Requires EDIT permission on the entity.
        </p>
        <ul>
        <li><a href="${PUT.entity.entityId.searchconfig.binding}">PUT /entity/{entityId}/searchconfig/binding</a></li>
@@ -993,9 +1050,9 @@ tags:
 
        <h6>Public Resources and Cross-Organization Referencing</h6>
        <p>
-       All search management resources (TextAnalyzers, SynonymSets, ColumnAnalyzerOverrides) are
-       <b>publicly readable</b>. Any authenticated user can list and retrieve resources from any
-       Organization. This enables cross-organization reuse: a
+       All search management resources (TextAnalyzers, SynonymSets, ColumnAnalyzerOverrides,
+       SearchConfigurations) are <b>publicly readable</b>. Any authenticated user can list and retrieve
+       resources from any Organization. This enables cross-organization reuse: a
        <a href="${org.sagebionetworks.repo.model.search.table.SearchConfiguration}">SearchConfiguration</a>
        can reference resources from any Organization using <b>qualified names</b> in the format
        <code>{organizationName}-{resourceName}</code> (e.g., <code>org.sagebionetworks-SCIENTIFIC</code>).
@@ -1026,6 +1083,23 @@ tags:
        <a href="${org.sagebionetworks.repo.model.schema.Organization}">Organization</a> identified by
        <code>organizationName</code>. The organization and name cannot be changed after creation.
        Resource names must start with a letter and contain only letters, digits, and underscores.
+       </p>
+
+       <h6>Built-in OpenSearch Names Pass Through</h6>
+       <p>
+       Filter and tokenizer names inside a TextAnalyzer's chain arrays pass through to OpenSearch
+       verbatim when they don't match a name registered in the same TextAnalyzer's
+       <code>filter</code> / <code>tokenizer</code> / <code>char_filter</code> registry maps.
+       <code>lowercase</code>, <code>standard</code>, <code>english_stemmer</code>,
+       <code>icu_tokenizer</code>, <code>phonetic</code>, etc. all work without any Synapse-side
+       registration &mdash; the
+       <a href="https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-genref.html">analysis-icu, analysis-phonetic, analysis-kuromoji, analysis-nori, analysis-smartcn</a>
+       plugins ship with AOSS. File-based parameters (<code>stopwords_path</code>,
+       <code>synonyms_path</code>, <code>mappings_path</code>, <code>protected_words_path</code>,
+       and any other <code>*_path</code> key) are <b>not supported in AOSS Serverless</b> and will be
+       rejected by AOSS at index-build time &mdash; use the inline equivalents
+       (<code>stopwords</code>, <code>synonyms</code>, <code>mappings</code>,
+       <code>protected_words</code>).
        </p>
 
        <h6>Search Queries</h6>
@@ -1068,7 +1142,7 @@ tags:
        <tr>
        <td>MEDIUMTEXT</td>
        <td>text + keyword sub-field</td>
-       <td>2,000 characters</td>
+       <td>100,000 characters</td>
        <td>SCIENTIFIC</td>
        </tr>
        <tr>
@@ -1079,7 +1153,7 @@ tags:
        </tr>
        <tr>
        <td>LINK</td>
-       <td>text + keyword sub-field (or keyword + searchable, depending on analyzer)</td>
+       <td>text + keyword sub-field</td>
        <td>1,000 characters</td>
        <td>KEYWORD</td>
        </tr>
@@ -1258,14 +1332,25 @@ tags:
        <td></td>
        </tr>
        <tr>
-       <td>Entity View only: The maximum total character length for a STRING or STRING_LIST <a href="${org.sagebionetworks.repo.model.table.ColumnType}">ColumnType</a></td>
-       <td>500 characters</td>
-       <td>Entity Views ONLY! This follows limitations placed on Annotations. For the type STRING_LIST, the total character count is the cumulative length of all string contained in the list.</td>
+       <td>Maximum number of characters for a MEDIUMTEXT column value</td>
+       <td>100,000 characters</td>
+       <td>152 MEDIUMTEXT columns fit within MySQL's 64 KB inline row limit (stored off-page) and the
+       2% server memory budget (152 * 100,000 chars * 4 bytes = ~58 MB).</td>
+       </tr>
+       <tr>
+       <td>Entity View only: The maximum size of a single string annotation value</td>
+       <td>1,000 characters</td>
+       <td>Entity Views ONLY! This follows limitations placed on Annotations. Applies to both STRING and STRING_LIST column types.</td>
+       </tr>
+       <tr>
+       <td>Entity View only: The maximum total character count for all string values in a single STRING_LIST annotation</td>
+       <td>100,000 characters</td>
+       <td>Entity Views ONLY! This is the cumulative character length of all strings in the list.</td>
        </tr>
        <tr>
        <td>Entity View only: The maximum list length for "_LIST" suffixed <a href="${org.sagebionetworks.repo.model.table.ColumnType}">ColumnType</a></td>
-       <td>100 values</td>
-       <td>Entity Views ONLY! This follows limitations placed on Annotations.</td>
+       <td>1,000 values</td>
+       <td>Entity Views ONLY! This follows limitations placed on Annotations. The effective maximum for STRING_LIST is further constrained by the 100,000-character total budget.</td>
        </tr>
        </table>
   - name: Team Services
@@ -15863,7 +15948,7 @@ paths:
         - bearerAuth: []
       responses:
         '200':
-          description: The created binding.
+          description: The created (or replaced) binding.
           content:
             application/json:
               schema:
@@ -18041,11 +18126,11 @@ components:
             - org.sagebionetworks.repo.model.search.table.SearchIndex
         definingSQL:
           type: string
-          description: The Synapse SQL statement that defines which columns and rows are indexed. Must reference exactly one entity. Multi-entity JOINs are not supported.
+          description: The Synapse SQL statement that defines which columns and rows are indexed. Must reference exactly one entity (multi-entity JOINs are not supported). Each SELECT-list column becomes a field in the index — including literals and aliased expressions, which get a real ColumnModel id and behave as first-class columns.
         searchConfigurationId:
           type: string
-          description: The ID of the SearchConfiguration to apply when building this search index. If not provided, the system will check for a search configuration binding on the parent project/folder hierarchy, or use platform defaults.
-      description: A search index entity. Its content is defined by a Synapse SQL query (definingSQL) that references a single table-like entity. An OpenSearch index is built from the query results, supporting full-text search, faceted search, and autocomplete. Optionally references a SearchConfiguration for analyzer and synonym settings.
+          description: Optional. ID of the SearchConfiguration to apply when building this index. If omitted, the build walks up the entity hierarchy (entity → folder → project) looking for the closest SearchConfigBinding; if none is found, platform defaults are used.
+      description: <p>A Synapse entity that materializes an OpenSearch index from a SQL view of a table-like entity. The <code>definingSQL</code> picks the columns and rows to index; the SearchConfiguration (either pointed at directly via <code>searchConfigurationId</code> or inherited from an ancestor binding) controls analyzers and synonyms. Once built, the index supports full-text search, faceted search, and autocomplete via the search endpoints on the SearchManagementController.</p><p><b>Per-column <code>ignore_above</code> limit at index-build time</b> &mdash; values longer than this on a given field are NOT indexed for exact match or sort, but remain stored in the source document:</p><table border='1'><tr><th>Synapse column type</th><th>ignore_above (keyword sub-field)</th></tr><tr><td>STRING, STRING_LIST, LINK</td><td>1,000 chars</td></tr><tr><td>MEDIUMTEXT</td><td>100,000 chars</td></tr><tr><td>LARGETEXT</td><td>8,192 chars</td></tr><tr><td>ENTITYID, USERID, ENTITYID_LIST, USERID_LIST</td><td>256 chars</td></tr><tr><td>INTEGER, DATE, INTEGER_LIST, DATE_LIST, FILEHANDLEID, SUBMISSIONID, EVALUATIONID, DOUBLE, BOOLEAN, BOOLEAN_LIST, JSON</td><td>n/a</td></tr></table><p>Maximum 500,000 indexed rows per SearchIndex.</p>
       required:
         - concreteType
     org.sagebionetworks.repo.model.principal.AliasCheckRequest:
@@ -19393,6 +19478,17 @@ components:
         ownerPrincipalId:
           type: string
           description: "The owner of the grid determines who is allowed to join and participate in the grid's session. The default owner will be the user that started the grid session, but only that user will have access to the grid. In order to allow other users to access the grid, set this value to the id of a team. When a team ID is provided as the owner, all members of that team will have equal access to the grid. Note: If a team ID is provided, the creator of the grid must be a member of the team."
+        authorizationMode:
+          type: string
+          description: |-
+            Defines the authorization mode used to gate access to a grid session. The mode is set at session creation time and cannot be changed. It controls both who may join the session (create a replica) and which rows are included in the session's initial snapshot.
+
+            SESSION_OWNER (default): Access is determined by the session owner. Only the owner (or members of the owner's team) may join. When the source is a view, the snapshot includes rows that the owner has access to; non-owner members see data through the owner's access scope.
+
+            SOURCE_BENEFACTOR: Access is determined by EDIT access on the source entity's benefactor(s). At session creation the set of benefactor IDs that the creating user (the 'action user') has EDIT access on is captured and stored on the session. Any user who has EDIT access on all of those captured benefactors may join the session and see all rows in the snapshot. This mode is useful when a project administrator wants all editors of a project to be able to collaborate on a grid, without needing to manage a separate owner team.
+          enum:
+            - SESSION_OWNER
+            - SOURCE_BENEFACTOR
       description: Start a job to create a new Grid session.
       required:
         - concreteType
@@ -22165,35 +22261,6 @@ components:
           description: The version number of this row. Each row version is immutable, so when a row is updated a new version is created.
           format: int32
       description: Reference for a single Row of a TableEntity
-    org.sagebionetworks.repo.model.search.table.TextAnalyzerSettings:
-      type: object
-      properties:
-        charFilters:
-          type: string
-          description: JSON string defining named character filter configurations. Each key is a filter name, each value is the filter config object.
-        tokenizer:
-          type: string
-          description: The tokenizer name (e.g., 'standard', 'whitespace'). For custom tokenizers, define in 'tokenizerConfig'.
-        tokenizerConfig:
-          type: string
-          description: 'JSON-serialized custom tokenizer configuration object. Must include a ''type'' field. Example: {"type":"edge_ngram","min_gram":2,"max_gram":20,"token_chars":["letter","digit"]}'
-        tokenFilters:
-          type: string
-          description: JSON string defining named token filter configurations. Each key is a filter name, each value is the filter config object.
-        filterOrder:
-          type: array
-          items:
-            type: string
-          description: Ordered list of token filter names to apply. Can reference built-in filters (e.g., 'lowercase') or custom ones defined in 'tokenFilters'.
-        charFilterOrder:
-          type: array
-          items:
-            type: string
-          description: Ordered list of character filter names to apply.
-        synonymAware:
-          type: boolean
-          description: Whether the synonym token filter should be appended when synonyms are configured.
-      description: The OpenSearch analyzer configuration. Stores the full definition of how text is analyzed.
     org.sagebionetworks.repo.model.table.QueryResult:
       type: object
       properties:
@@ -23503,7 +23570,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverride'
-            description: A shared resource containing per-column analyzer override entries. ColumnAnalyzerOverrides belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
+            description: |-
+              <p>A shareable bundle of per-column analyzer assignments. Each entry binds one column to an analyzer; that analyzer's <code>analyzer.default</code> drives the column's index-time analyzer and (if declared) <code>analyzer.default_search</code> drives its search-time analyzer &mdash; see OpenSearch's <a href='https://docs.opensearch.org/latest/analyzers/index-analyzers/'>index analyzers</a> and <a href='https://docs.opensearch.org/latest/analyzers/search-analyzers/'>search analyzers</a>. Overrides win over the SearchConfiguration's <code>defaultAnalyzer</code> for the named columns.</p><p><b>Example with $ref entries</b> (preferred — supports reuse). Each entry's <code>analyzer</code> is a saved TextAnalyzer:</p><pre><code>{
+                "organizationName": "biomed",
+                "name": "publication_columns",
+                "overrides": [
+                  { "columnName": "disease_code", "analyzer": { "$ref": "biomed-acronym_exact" } },
+                  { "columnName": "authors",      "analyzer": { "$ref": "biomed-scientific_search" } }
+                ]
+              }</code></pre><p><b>Example with inline analyzer entries</b> &mdash; each entry's <code>analyzer</code> is the bare OpenSearch <code>settings.analysis</code> block (allowed root keys: <code>char_filter</code>, <code>tokenizer</code>, <code>filter</code>, <code>analyzer</code>):</p><pre><code>{
+                "organizationName": "biomed",
+                "name": "publication_columns_inline",
+                "overrides": [
+                  {
+                    "columnName": "disease_code",
+                    "analyzer": {
+                      "analyzer": {
+                        "default": {
+                          "type": "custom",
+                          "tokenizer": "keyword",
+                          "filter": ["lowercase"]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "columnName": "authors",
+                    "analyzer": { "$ref": "biomed-scientific_search" }
+                  }
+                ]
+              }</code></pre><p>The <code>analyzer</code> field on each entry accepts a <code>{"$ref": "{organizationName}-{name}"}</code> reference (preferred &mdash; supports reuse) or an inline analyzer literal. Refs to SynonymSets are not permitted inside an inline analyzer literal &mdash; save a TextAnalyzer and reference it by qualified name to use synonyms. Referenced from a SearchConfiguration's <code>columnAnalyzerOverrides</code> by qualified name <code>{organizationName}-{name}</code> or inlined directly there. Entries whose <code>columnName</code> is not present in a given SearchIndex's schema are silently skipped &mdash; a single override resource can therefore apply to multiple indexes that share some column names. Cannot be deleted while referenced by any SearchConfiguration.</p>
           description: The list of column analyzer overrides for this page.
         nextPageToken:
           type: string
@@ -24815,8 +24911,8 @@ components:
           description: The date-time when the status last changed.
         errorMessage:
           type: string
-          description: When the build fails, this is the error message.
-      description: The build status of a SearchIndex's OpenSearch index.
+          description: Set when state is FAILED. Captures the diagnostic from the failed build — pre-flight validation errors (e.g. 'TextAnalyzer X does not resolve'), AOSS rejection messages from index creation, or sample per-document failures from bulk indexing. Capped at 3000 characters; the most-recent failure replaces any earlier message.
+      description: Build status of a SearchIndex's OpenSearch index. Read it to find out whether the index is ready, still being built, or in a failed state — and, if FAILED, what went wrong.
     org.sagebionetworks.repo.model.migration.BackupManifest:
       type: object
       properties:
@@ -24950,6 +25046,11 @@ components:
       description: Use this filter to find rows that have data quality issues or schema validation errors. This is ideal for requests about finding 'errors', 'invalid data', or 'rows that failed validation'. To find rows with a specific error message, set the 'operator' to 'LIKE' and provide the error text in 'validationResultValue'. For example, for a user request like 'show me all rows with a type error', a good value for 'validationResultValue' would be '%expected type:%'.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.grid.AuthorizationMode:
+      type: string
+      enum:
+        - SESSION_OWNER
+        - SOURCE_BENEFACTOR
     org.sagebionetworks.repo.model.doi.DoiStatus:
       type: string
       enum:
@@ -26059,8 +26160,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ColumnAnalyzerOverrideEntry'
-            description: A per-column analyzer override entry. Specifies which analyzers to use at index time and search time for a specific column.
-          description: The list of per-column analyzer override entries.
+            description: "Assigns one TextAnalyzer to one column. The referenced TextAnalyzer is the single source of truth for both index-time and search-time analysis on this column: its <code>analyzer.default</code> entry drives OpenSearch's <a href='https://docs.opensearch.org/latest/analyzers/index-analyzers/'><code>analyzer</code> field mapping</a>, and its <code>analyzer.default_search</code> entry (if declared) drives the <a href='https://docs.opensearch.org/latest/analyzers/search-analyzers/'><code>search_analyzer</code> field mapping</a>. To express asymmetric index/search analysis (e.g. an edge n-gram chain at index time paired with a non-ngram chain at search time), declare both entries inside the TextAnalyzer's <code>settings</code>; do not split the configuration into two TextAnalyzer records."
+          description: The per-column analyzer assignments — see ColumnAnalyzerOverrideEntry.
         etag:
           type: string
           description: Synapse employs an Optimistic Concurrency Control (OCC) scheme.
@@ -26076,7 +26177,36 @@ components:
         modifiedBy:
           type: string
           description: The ID of the user that last modified this resource.
-      description: A shared resource containing per-column analyzer override entries. ColumnAnalyzerOverrides belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
+      description: |-
+        <p>A shareable bundle of per-column analyzer assignments. Each entry binds one column to an analyzer; that analyzer's <code>analyzer.default</code> drives the column's index-time analyzer and (if declared) <code>analyzer.default_search</code> drives its search-time analyzer &mdash; see OpenSearch's <a href='https://docs.opensearch.org/latest/analyzers/index-analyzers/'>index analyzers</a> and <a href='https://docs.opensearch.org/latest/analyzers/search-analyzers/'>search analyzers</a>. Overrides win over the SearchConfiguration's <code>defaultAnalyzer</code> for the named columns.</p><p><b>Example with $ref entries</b> (preferred — supports reuse). Each entry's <code>analyzer</code> is a saved TextAnalyzer:</p><pre><code>{
+          "organizationName": "biomed",
+          "name": "publication_columns",
+          "overrides": [
+            { "columnName": "disease_code", "analyzer": { "$ref": "biomed-acronym_exact" } },
+            { "columnName": "authors",      "analyzer": { "$ref": "biomed-scientific_search" } }
+          ]
+        }</code></pre><p><b>Example with inline analyzer entries</b> &mdash; each entry's <code>analyzer</code> is the bare OpenSearch <code>settings.analysis</code> block (allowed root keys: <code>char_filter</code>, <code>tokenizer</code>, <code>filter</code>, <code>analyzer</code>):</p><pre><code>{
+          "organizationName": "biomed",
+          "name": "publication_columns_inline",
+          "overrides": [
+            {
+              "columnName": "disease_code",
+              "analyzer": {
+                "analyzer": {
+                  "default": {
+                    "type": "custom",
+                    "tokenizer": "keyword",
+                    "filter": ["lowercase"]
+                  }
+                }
+              }
+            },
+            {
+              "columnName": "authors",
+              "analyzer": { "$ref": "biomed-scientific_search" }
+            }
+          ]
+        }</code></pre><p>The <code>analyzer</code> field on each entry accepts a <code>{"$ref": "{organizationName}-{name}"}</code> reference (preferred &mdash; supports reuse) or an inline analyzer literal. Refs to SynonymSets are not permitted inside an inline analyzer literal &mdash; save a TextAnalyzer and reference it by qualified name to use synonyms. Referenced from a SearchConfiguration's <code>columnAnalyzerOverrides</code> by qualified name <code>{organizationName}-{name}</code> or inlined directly there. Entries whose <code>columnName</code> is not present in a given SearchIndex's schema are silently skipped &mdash; a single override resource can therefore apply to multiple indexes that share some column names. Cannot be deleted while referenced by any SearchConfiguration.</p>
     org.sagebionetworks.repo.model.grid.update.GridUpdateRequest:
       type: object
       properties:
@@ -26563,7 +26693,7 @@ components:
           format: int32
         maximumListLength:
           type: integer
-          description: Required if using a columnType with a "_LIST" suffix. Describes the maximum number of values that will appear in that list. Value range 1-100 inclusive. Default 100
+          description: 'Required if using a columnType with a "_LIST" suffix. Describes the maximum number of values that will appear in that list. The maximum allowed value is determined by a total character budget of 100,000: for STRING_LIST, maximumListLength * maximumSize must not exceed 100,000; for other list types the per-element character size is fixed (INTEGER_LIST/DATE_LIST/USERID_LIST: 20, BOOLEAN_LIST: 5, ENTITYID_LIST: 44) and maximumListLength * that size must not exceed 100,000. Default 100.'
           format: int32
         enumValues:
           type: array
@@ -28780,21 +28910,6 @@ components:
           type: boolean
           description: When true, all rows are selected, and 'rowSelection' will be ignored.
       description: Defines a user's selection of columns and rows for a replica.
-    org.sagebionetworks.repo.model.search.table.SynonymRule:
-      type: object
-      properties:
-        ruleType:
-          type: string
-          description: The type of a synonym rule.
-          enum:
-            - EQUIVALENT
-            - EXPLICIT
-        terms:
-          type: array
-          items:
-            type: string
-          description: 'The list of synonym terms. Minimum 2. For EQUIVALENT: all terms are interchangeable. For EXPLICIT: first term expands to the rest.'
-      description: A single synonym rule. For EQUIVALENT rules, all terms are bidirectionally interchangeable. For EXPLICIT rules, the first term maps one-way to the remaining terms.
     org.sagebionetworks.repo.model.wiki.WikiPage:
       type: object
       properties:
@@ -28926,7 +29041,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SearchConfiguration'
-            description: A reusable search configuration resource. Bundles synonym sets, column analyzer overrides, and a default analyzer. Bind to any entity in the hierarchy (entity, folder, or project) to define inherited search configuration.
+            description: |-
+              <p>Bundles the index-wide default analyzer and per-column overrides used to build a SearchIndex. A SearchConfiguration is the equivalent of the analyzer wiring in the <code>settings.analysis</code> block of an OpenSearch <a href='https://docs.opensearch.org/latest/api-reference/index-apis/create-index/'>create-index</a> request &mdash; it points at the TextAnalyzer that supplies <code>analysis.analyzer.default</code> (and optionally <code>analysis.analyzer.default_search</code>) for the index, then layers any per-column overrides on top. Bind one to a project (or any entity) and every SearchIndex below it inherits the configuration.</p><p><b>Reference vs inline.</b> Every analyzer / override slot accepts the same shape: either a reference to a saved resource &mdash; <code>{"$ref": "{organizationName}-{name}"}</code> &mdash; or an inline literal pasted directly. References preserve reuse and central editing; inline literals keep the configuration self-contained but cannot be referenced from elsewhere. The same <code>$ref</code> shape is also used inside a TextAnalyzer's <code>settings.filter</code> registry map to point at a SynonymSet, so curators learn one rule.</p><p>Example using a saved TextAnalyzer plus a saved override (both via <code>$ref</code>):</p><pre><code>{
+                "organizationName": "biomed",
+                "name": "publications_v1",
+                "defaultAnalyzer": { "$ref": "org.sagebionetworks-SCIENTIFIC" },
+                "columnAnalyzerOverrides": [
+                  { "$ref": "biomed-publications_overrides" }
+                ]
+              }</code></pre><p>Same shape, but with an inline override (the analyzer for the override's columns is itself a <code>$ref</code>):</p><pre><code>{
+                "organizationName": "biomed",
+                "name": "publications_v1",
+                "defaultAnalyzer": { "$ref": "org.sagebionetworks-SCIENTIFIC" },
+                "columnAnalyzerOverrides": [
+                  {
+                    "overrides": [
+                      { "columnName": "disease_code", "analyzer": { "$ref": "biomed-acronym_exact" } },
+                      { "columnName": "authors",      "analyzer": { "$ref": "biomed-scientific_search" } }
+                    ]
+                  }
+                ]
+              }</code></pre><p><b>Asymmetric index/search analysis</b> (e.g. edge_ngram autocomplete) is expressed inside the chosen TextAnalyzer's settings JSON by declaring both <code>analyzer.default</code> and <code>analyzer.default_search</code>; OpenSearch picks the right one per its <a href='https://docs.opensearch.org/latest/analyzers/search-analyzers/'>search-analyzer precedence</a> rules. There is no separate search-time analyzer field on the SearchConfiguration &mdash; in line with the OpenSearch docs' guidance that this case is uncommon.</p><p><b>Synonyms</b> are not wired through the SearchConfiguration. A TextAnalyzer that wants synonyms references a SynonymSet directly via <code>{"$ref": "{org}-{name}"}</code> inside its own <code>settings.filter</code> registry map &mdash; see TextAnalyzer.</p><p>See SearchConfigBinding for how the configuration attaches to a project, TextAnalyzer / ColumnAnalyzerOverride for the analyzer components.</p>
           description: The list of search configurations for this page.
         nextPageToken:
           type: string
@@ -29679,7 +29814,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzer'
-            description: A text analyzer configuration. Used to configure how text is tokenized for a search index.
+            description: |-
+              <p>A shareable, named OpenSearch <a href='https://docs.opensearch.org/latest/analyzers/custom-analyzer/'>custom analyzer</a>. The <code>settings</code> field is an opaque JSON object that holds the <i>contents of</i> the <code>settings.analysis</code> block of an OpenSearch <a href='https://docs.opensearch.org/latest/api-reference/index-apis/create-index/'>create-index</a> request body &mdash; <b>not</b> the outer <code>settings</code> wrapper, and <b>not</b> the full create-index body. The allowed root keys are <code>char_filter</code>, <code>tokenizer</code>, <code>filter</code>, and <code>analyzer</code>; index-level keys (<code>index.max_ngram_diff</code>, <code>index.refresh_interval</code>, <code>analysis.normalizer</code>, etc.) are out of scope here.</p><p>Synapse parses the JSON, enforces the addressability contract below, and resolves <code>$ref</code> entries against existing SynonymSets at index-build time. AOSS validates the rest of the analyzer shape (component types, parameters, chain ordering) at index-build time.</p><p><b>One TextAnalyzer record = one externally-addressable analyzer.</b> The inner <code>analyzer</code> map must declare exactly one entry named <code>default</code> (required), and may optionally declare a second entry named <code>default_search</code>. Any other entry inside <code>analyzer</code> is rejected at create / update time. Curators who need separate analyzers (e.g. <code>headline</code> + <code>body</code>) create separate TextAnalyzer records &mdash; each TextAnalyzer record is itself shareable across SearchConfigurations and organizations, so this does not duplicate the addressing model.</p><p><b><code>analyzer.default</code> (required):</b> the entry SearchConfiguration / ColumnAnalyzerOverride bind to when they reference this TextAnalyzer by qualified name. When this TextAnalyzer is the <code>defaultAnalyzer</code> of a SearchConfiguration, this entry lands at the index's <code>analysis.analyzer.default</code> reserved slot (see <a href='https://docs.opensearch.org/latest/analyzers/index-analyzers/'>OpenSearch index analyzers</a>).</p><p><b><code>analyzer.default_search</code> (optional):</b> declare alongside <code>analyzer.default</code> when index-time and search-time should produce different token streams (the typical edge_ngram autocomplete pattern). When this TextAnalyzer is a SearchConfiguration's <code>defaultAnalyzer</code>, this entry lands at the index's <code>analysis.analyzer.default_search</code> reserved slot per OpenSearch's <a href='https://docs.opensearch.org/latest/analyzers/search-analyzers/'>search-analyzer precedence</a>.</p><p><b>Example</b> (the <code>settings</code> field is a JSON object &mdash; paste OpenSearch examples directly without escaping):</p><pre><code>{
+                "organizationName": "biomed",
+                "name": "publications",
+                "settings": {
+                  "char_filter": { "strip_html": { "type": "html_strip" } },
+                  "tokenizer":   { "std": { "type": "standard" } },
+                  "filter": {
+                    "english_stop": { "type": "stop", "stopwords": "_english_" },
+                    "med_syn":      { "$ref": "biomed-medical_terms" }
+                  },
+                  "analyzer": {
+                    "default": {
+                      "type": "custom",
+                      "tokenizer": "std",
+                      "char_filter": ["strip_html"],
+                      "filter": ["lowercase", "med_syn", "english_stop"],
+                      "position_increment_gap": 100
+                    }
+                  }
+                }
+              }</code></pre><p><b>Cross-resource references &mdash; <code>$ref</code></b>: anywhere in the analyzer's <code>filter</code> registry map you may write <code>{"$ref": "{organizationName}-{name}"}</code> in place of an inline filter definition. The reference must resolve to a SynonymSet by qualified name. <code>$ref</code> values are resolved at index-build time; cycles are rejected. <code>$ref</code> entries are NOT permitted inside chain arrays (<code>analyzer.*.filter</code>, <code>analyzer.*.char_filter</code>) &mdash; those stay as plain string arrays mirroring OpenSearch.</p><p>Reference this analyzer from a SearchConfiguration's <code>defaultAnalyzer</code> field or from a ColumnAnalyzerOverride entry, using its qualified name <code>{organizationName}-{name}</code>.</p>
           description: The list of text analyzers.
         nextPageToken:
           type: string
@@ -30187,6 +30343,10 @@ components:
         etag:
           type: string
           description: For queries against EntityViews with query.includeEntityEtag=true, this field will contain the etag of the entity.  Will be null for all other cases.
+        benefactorId:
+          type: integer
+          description: For queries against views, this field will contain the benefactorId of the entity. Will be null for all other cases.
+          format: int32
         values:
           type: array
           items:
@@ -30511,7 +30671,7 @@ components:
         createdOn:
           type: string
           description: The date this binding was created.
-      description: Represents a binding between a search configuration and an entity. Walk the entity hierarchy (entity → folder → project) to find the effective configuration.
+      description: Attaches a SearchConfiguration to an entity. When a SearchIndex is built, the effective SearchConfiguration is resolved by walking up the entity hierarchy (entity → folder → project) and using the first binding found. The typical setup is one binding on the project so every descendant SearchIndex inherits it automatically. Create / replace via PUT /entity/{entityId}/searchconfig/binding; read the effective binding via GET; remove via DELETE.
     org.sagebionetworks.repo.model.form.ListResponse:
       type: object
       properties:
@@ -32025,14 +32185,19 @@ components:
       properties:
         columnName:
           type: string
-          description: The name of the column to override. Must exist in the entity's schema.
-        indexAnalyzer:
-          type: string
-          description: The qualified name ('{organizationName}-{name}') of the TextAnalyzer to use when indexing this column.
-        searchAnalyzer:
-          type: string
-          description: The qualified name ('{organizationName}-{name}') of the TextAnalyzer to use when searching this column.
-      description: A per-column analyzer override entry. Specifies which analyzers to use at index time and search time for a specific column.
+          description: The name of the column to override. Silently skipped at index-build time if the column is not present in the target SearchIndex's schema — a single override bundle can therefore be applied across several indexes that share some column names.
+        analyzer:
+          description: |-
+            <p>The analyzer to use for this column. Either a reference to a saved TextAnalyzer (preferred &mdash; supports reuse) written as <code>{"$ref": "{organizationName}-{name}"}</code>, or an inline analyzer literal pasted directly.</p><p><b>$ref form:</b></p><pre><code>"analyzer": { "$ref": "biomed-acronym_exact" }</code></pre><p><b>Inline form</b> &mdash; the bare OpenSearch <code>settings.analysis</code> block (same shape as a TextAnalyzer record's <code>settings</code> field, with no surrounding identity / audit fields and no outer <code>settings</code> wrapper). Allowed root keys are <code>char_filter</code>, <code>tokenizer</code>, <code>filter</code>, and <code>analyzer</code>. The inner <code>analyzer</code> map must declare <code>default</code> (required), and may optionally declare <code>default_search</code> for asymmetric search-time analysis. Refs to SynonymSets are not permitted inside an inline analyzer literal &mdash; save a TextAnalyzer and reference it by qualified name to use synonyms.</p><pre><code>"analyzer": {
+              "analyzer": {
+                "default": {
+                  "type": "custom",
+                  "tokenizer": "keyword",
+                  "filter": ["lowercase"]
+                }
+              }
+            }</code></pre><p>The analyzer's <code>analyzer.default</code> entry is bound at index time; if it also declares <code>analyzer.default_search</code>, that entry is bound at search time.</p>
+      description: "Assigns one TextAnalyzer to one column. The referenced TextAnalyzer is the single source of truth for both index-time and search-time analysis on this column: its <code>analyzer.default</code> entry drives OpenSearch's <a href='https://docs.opensearch.org/latest/analyzers/index-analyzers/'><code>analyzer</code> field mapping</a>, and its <code>analyzer.default_search</code> entry (if declared) drives the <a href='https://docs.opensearch.org/latest/analyzers/search-analyzers/'><code>search_analyzer</code> field mapping</a>. To express asymmetric index/search analysis (e.g. an edge n-gram chain at index time paired with a non-ngram chain at search time), declare both entries inside the TextAnalyzer's <code>settings</code>; do not split the configuration into two TextAnalyzer records."
     org.sagebionetworks.repo.model.oauth.OIDCClaimsRequestDetails:
       type: object
       properties:
@@ -32248,7 +32413,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SynonymSet'
-            description: A shared set of synonym rules. SynonymSets belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
+            description: |-
+              <p>A shareable OpenSearch <a href='https://docs.opensearch.org/latest/analyzers/token-filters/synonym-graph/'>synonym_graph</a> (or legacy <a href='https://docs.opensearch.org/latest/analyzers/token-filters/synonym/'>synonym</a>) token filter. SynonymSets belong to an Organization; the qualified name <code>{organizationName}-{name}</code> is what a TextAnalyzer references via <code>{"$ref": "{organizationName}-{name}"}</code> inside its <code>settings.filter</code> registry map to bring this filter into the analyzer.</p><p>Example &mdash; OpenSearch native synonym syntax: <code>a, b, c</code> for equivalent (bidirectional) and <code>a, b =&gt; c, d</code> for explicit (directional) expansion. The <code>definition</code> field is a JSON object &mdash; paste OpenSearch examples directly without escaping:</p><pre><code>{
+                "organizationName": "biomed",
+                "name": "medical_terms",
+                "definition": {
+                  "type": "synonym_graph",
+                  "synonyms": [
+                    "tumor, neoplasm, cancer",
+                    "AD =&gt; Alzheimer's disease"
+                  ]
+                }
+              }</code></pre><p>Tuning suggestions:</p><ul><li>Multi-word synonyms &mdash; prefer <code>synonym_graph</code> (it handles phrases correctly).</li><li>Disable bidirectional expansion (only the LHS is a synonym source): set <code>"expand":false</code> in the definition.</li><li>Tolerate malformed rule lines without failing the whole filter: set <code>"lenient":true</code> in the definition.</li></ul><p>Cannot be deleted while any persisted resource references it. See the OpenSearch <a href='https://docs.opensearch.org/latest/analyzers/token-filters/synonym-graph/'>synonym_graph filter docs</a> for the full parameter list (synonyms, format, expand, lenient, etc.).</p>
           description: The list of synonym sets for this page.
         nextPageToken:
           type: string
@@ -33431,11 +33607,6 @@ components:
         - UNSUPPORTED_WEBHOOK_DOMAIN
         - PROJECT_STORAGE_LIMIT_EXCEEDED
         - TWO_FA_ENABLED_REQUIRED
-    org.sagebionetworks.repo.model.search.table.SynonymRuleType:
-      type: string
-      enum:
-        - EQUIVALENT
-        - EXPLICIT
     org.sagebionetworks.repo.model.curation.TaskStatus:
       type: object
       properties:
@@ -35131,19 +35302,37 @@ components:
         description:
           type: string
           description: Optional description.
-        synonymSets:
-          type: array
-          items:
-            type: string
-          description: Ordered list of SynonymSet qualified names in '{organizationName}-{name}' format to apply. Rules from all sets are unioned.
+        defaultAnalyzer:
+          description: |-
+            <p>Optional. The analyzer that supplies this index's <code>analysis.analyzer.default</code> slot. Either a reference to a saved TextAnalyzer (preferred &mdash; supports reuse) written as <code>{"$ref": "{organizationName}-{name}"}</code>, or an inline analyzer literal pasted directly. The <code>$ref</code> form looks up the row by qualified name; the inline form lives only inside this SearchConfiguration's JSON, has no persisted id, and cannot be reused elsewhere.</p><p><b>$ref form:</b></p><pre><code>"defaultAnalyzer": { "$ref": "biomed-publications" }</code></pre><p><b>Inline form</b> &mdash; the bare OpenSearch <code>settings.analysis</code> block. Allowed root keys are <code>char_filter</code>, <code>tokenizer</code>, <code>filter</code>, and <code>analyzer</code>. Refs to SynonymSets are not permitted inside an inline analyzer literal &mdash; save a TextAnalyzer and reference it by qualified name to use synonyms.</p><pre><code>"defaultAnalyzer": {
+              "tokenizer": { "std": { "type": "standard" } },
+              "filter":    { "english_stop": { "type": "stop", "stopwords": "_english_" } },
+              "analyzer": {
+                "default": {
+                  "type": "custom",
+                  "tokenizer": "std",
+                  "filter": ["lowercase", "english_stop"]
+                }
+              }
+            }</code></pre><p>If the analyzer also declares an <code>analyzer.default_search</code> entry, that becomes the index's <code>analysis.analyzer.default_search</code> &mdash; see OpenSearch's <a href='https://docs.opensearch.org/latest/analyzers/index-analyzers/'>index analyzers</a> and <a href='https://docs.opensearch.org/latest/analyzers/search-analyzers/'>search analyzers</a> for the precedence rules. If omitted, each column falls back to the system default analyzer for its data type (see ColumnTypeToOpenSearchMapping).</p>
         columnAnalyzerOverrides:
           type: array
-          items:
-            type: string
-          description: Ordered list of ColumnAnalyzerOverride qualified names in '{organizationName}-{name}' format to apply. First-found-wins for duplicate columns.
-        defaultAnalyzer:
-          type: string
-          description: Default text analyzer for columns without an explicit override, in '{organizationName}-{name}' format.
+          items: {}
+          description: |-
+            <p>Optional ordered list of ColumnAnalyzerOverride entries. Each entry is either a reference written as <code>{"$ref": "{organizationName}-{name}"}</code> (preferred &mdash; supports reuse) or an inline ColumnAnalyzerOverride literal. Inline entries live only inside this SearchConfiguration's JSON. First match wins for duplicated column names across overrides.</p><p><b>$ref form:</b></p><pre><code>"columnAnalyzerOverrides": [
+              { "$ref": "biomed-publications_overrides" }
+            ]</code></pre><p><b>Inline form</b> &mdash; the same JSON shape a ColumnAnalyzerOverride record would have, minus identity / audit fields. The inner per-column <code>analyzer</code> slot still accepts either a <code>$ref</code> to a saved TextAnalyzer or a bare OpenSearch <code>settings.analysis</code> block:</p><pre><code>"columnAnalyzerOverrides": [
+              {
+                "overrides": [
+                  { "columnName": "disease_code", "analyzer": { "$ref": "biomed-acronym_exact" } },
+                  { "columnName": "abstract",     "analyzer": {
+                    "analyzer": {
+                      "default": { "type": "custom", "tokenizer": "standard", "filter": ["lowercase"] }
+                    }
+                  } }
+                ]
+              }
+            ]</code></pre>
         etag:
           type: string
           description: Synapse employs an Optimistic Concurrency Control (OCC) scheme.
@@ -35159,7 +35348,27 @@ components:
         modifiedBy:
           type: string
           description: The ID of the user that last modified this resource.
-      description: A reusable search configuration resource. Bundles synonym sets, column analyzer overrides, and a default analyzer. Bind to any entity in the hierarchy (entity, folder, or project) to define inherited search configuration.
+      description: |-
+        <p>Bundles the index-wide default analyzer and per-column overrides used to build a SearchIndex. A SearchConfiguration is the equivalent of the analyzer wiring in the <code>settings.analysis</code> block of an OpenSearch <a href='https://docs.opensearch.org/latest/api-reference/index-apis/create-index/'>create-index</a> request &mdash; it points at the TextAnalyzer that supplies <code>analysis.analyzer.default</code> (and optionally <code>analysis.analyzer.default_search</code>) for the index, then layers any per-column overrides on top. Bind one to a project (or any entity) and every SearchIndex below it inherits the configuration.</p><p><b>Reference vs inline.</b> Every analyzer / override slot accepts the same shape: either a reference to a saved resource &mdash; <code>{"$ref": "{organizationName}-{name}"}</code> &mdash; or an inline literal pasted directly. References preserve reuse and central editing; inline literals keep the configuration self-contained but cannot be referenced from elsewhere. The same <code>$ref</code> shape is also used inside a TextAnalyzer's <code>settings.filter</code> registry map to point at a SynonymSet, so curators learn one rule.</p><p>Example using a saved TextAnalyzer plus a saved override (both via <code>$ref</code>):</p><pre><code>{
+          "organizationName": "biomed",
+          "name": "publications_v1",
+          "defaultAnalyzer": { "$ref": "org.sagebionetworks-SCIENTIFIC" },
+          "columnAnalyzerOverrides": [
+            { "$ref": "biomed-publications_overrides" }
+          ]
+        }</code></pre><p>Same shape, but with an inline override (the analyzer for the override's columns is itself a <code>$ref</code>):</p><pre><code>{
+          "organizationName": "biomed",
+          "name": "publications_v1",
+          "defaultAnalyzer": { "$ref": "org.sagebionetworks-SCIENTIFIC" },
+          "columnAnalyzerOverrides": [
+            {
+              "overrides": [
+                { "columnName": "disease_code", "analyzer": { "$ref": "biomed-acronym_exact" } },
+                { "columnName": "authors",      "analyzer": { "$ref": "biomed-scientific_search" } }
+              ]
+            }
+          ]
+        }</code></pre><p><b>Asymmetric index/search analysis</b> (e.g. edge_ngram autocomplete) is expressed inside the chosen TextAnalyzer's settings JSON by declaring both <code>analyzer.default</code> and <code>analyzer.default_search</code>; OpenSearch picks the right one per its <a href='https://docs.opensearch.org/latest/analyzers/search-analyzers/'>search-analyzer precedence</a> rules. There is no separate search-time analyzer field on the SearchConfiguration &mdash; in line with the OpenSearch docs' guidance that this case is uncommon.</p><p><b>Synonyms</b> are not wired through the SearchConfiguration. A TextAnalyzer that wants synonyms references a SynonymSet directly via <code>{"$ref": "{org}-{name}"}</code> inside its own <code>settings.filter</code> registry map &mdash; see TextAnalyzer.</p><p>See SearchConfigBinding for how the configuration attaches to a project, TextAnalyzer / ColumnAnalyzerOverride for the analyzer components.</p>
     org.sagebionetworks.repo.model.oauth.OIDCAuthorizationRequestDescription:
       type: object
       properties:
@@ -35653,12 +35862,8 @@ components:
         description:
           type: string
           description: Optional description of the synonym set.
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.SynonymRule'
-            description: A single synonym rule. For EQUIVALENT rules, all terms are bidirectionally interchangeable. For EXPLICIT rules, the first term maps one-way to the remaining terms.
-          description: The list of synonym rules in this set.
+        definition:
+          description: <p>Required. The full OpenSearch token filter definition as a JSON object, exactly as documented for the <a href='https://docs.opensearch.org/latest/analyzers/token-filters/synonym-graph/'>synonym_graph</a> / <a href='https://docs.opensearch.org/latest/analyzers/token-filters/synonym/'>synonym</a> token filters. Synapse parses this to confirm it's valid JSON and otherwise passes it through to AOSS verbatim. AOSS Serverless does not support file-based parameters &mdash; use inline <code>synonyms</code>; AOSS rejects <code>synonyms_path</code> at index-build time.</p>
         etag:
           type: string
           description: Synapse employs an Optimistic Concurrency Control (OCC) scheme.
@@ -35674,7 +35879,20 @@ components:
         modifiedBy:
           type: string
           description: The ID of the user that last modified this resource.
-      description: A shared set of synonym rules. SynonymSets belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
+      description: |-
+        <p>A shareable OpenSearch <a href='https://docs.opensearch.org/latest/analyzers/token-filters/synonym-graph/'>synonym_graph</a> (or legacy <a href='https://docs.opensearch.org/latest/analyzers/token-filters/synonym/'>synonym</a>) token filter. SynonymSets belong to an Organization; the qualified name <code>{organizationName}-{name}</code> is what a TextAnalyzer references via <code>{"$ref": "{organizationName}-{name}"}</code> inside its <code>settings.filter</code> registry map to bring this filter into the analyzer.</p><p>Example &mdash; OpenSearch native synonym syntax: <code>a, b, c</code> for equivalent (bidirectional) and <code>a, b =&gt; c, d</code> for explicit (directional) expansion. The <code>definition</code> field is a JSON object &mdash; paste OpenSearch examples directly without escaping:</p><pre><code>{
+          "organizationName": "biomed",
+          "name": "medical_terms",
+          "definition": {
+            "type": "synonym_graph",
+            "synonyms": [
+              "tumor, neoplasm, cancer",
+              "AD =&gt; Alzheimer's disease"
+            ]
+          }
+        }</code></pre><p>Tuning suggestions:</p><ul><li>Multi-word synonyms &mdash; prefer <code>synonym_graph</code> (it handles phrases correctly).</li><li>Disable bidirectional expansion (only the LHS is a synonym source): set <code>"expand":false</code> in the definition.</li><li>Tolerate malformed rule lines without failing the whole filter: set <code>"lenient":true</code> in the definition.</li></ul><p>Cannot be deleted while any persisted resource references it. See the OpenSearch <a href='https://docs.opensearch.org/latest/analyzers/token-filters/synonym-graph/'>synonym_graph filter docs</a> for the full parameter list (synonyms, format, expand, lenient, etc.).</p>
+      required:
+        - definition
     org.sagebionetworks.repo.model.webhook.CreateOrUpdateWebhookRequest:
       type: object
       properties:
@@ -35922,8 +36140,7 @@ components:
           type: string
           description: Optional description.
         settings:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.TextAnalyzerSettings'
-          description: The OpenSearch analyzer configuration. Stores the full definition of how text is analyzed.
+          description: '<p>Required. JSON object holding the <i>contents of</i> the <code>settings.analysis</code> block of an OpenSearch <a href=''https://docs.opensearch.org/latest/api-reference/index-apis/create-index/''>create-index</a> request body &mdash; see also the OpenSearch <a href=''https://docs.opensearch.org/latest/analyzers/''>text analysis overview</a>. <b>Do not</b> wrap the value in an outer <code>{"settings": {"analysis": ...}}</code> envelope; the allowed root keys are <code>char_filter</code>, <code>tokenizer</code>, <code>filter</code>, and <code>analyzer</code>. Index-level keys such as <code>index.max_ngram_diff</code>, <code>index.refresh_interval</code>, and <code>analysis.normalizer</code> are out of scope here.</p><p>The inner <code>analyzer</code> map must declare exactly one entry named <code>default</code> (required), and may optionally declare a second entry named <code>default_search</code>; any other entry under <code>analyzer</code> is rejected at create / update time. See the type-level description for the rationale.</p><p>Synapse parses this object and resolves any <code>{"$ref": "{org}-{name}"}</code> entries against existing SynonymSets at index-build time; everything else passes through to AOSS verbatim, including <a href=''https://docs.opensearch.org/latest/analyzers/custom-analyzer/''>custom analyzer</a> shape, parameter names, and built-in component types. Per AOSS Serverless, file-based parameters (any <code>*_path</code> key) will be rejected at index-build time &mdash; use the inline equivalents (<code>stopwords</code>, <code>synonyms</code>, <code>mappings</code>, <code>protected_words</code>).</p>'
         etag:
           type: string
           description: Synapse employs an Optimistic Concurrency Control (OCC) scheme.
@@ -35939,7 +36156,28 @@ components:
         modifiedBy:
           type: string
           description: The ID of the user that last modified this resource.
-      description: A text analyzer configuration. Used to configure how text is tokenized for a search index.
+      description: |-
+        <p>A shareable, named OpenSearch <a href='https://docs.opensearch.org/latest/analyzers/custom-analyzer/'>custom analyzer</a>. The <code>settings</code> field is an opaque JSON object that holds the <i>contents of</i> the <code>settings.analysis</code> block of an OpenSearch <a href='https://docs.opensearch.org/latest/api-reference/index-apis/create-index/'>create-index</a> request body &mdash; <b>not</b> the outer <code>settings</code> wrapper, and <b>not</b> the full create-index body. The allowed root keys are <code>char_filter</code>, <code>tokenizer</code>, <code>filter</code>, and <code>analyzer</code>; index-level keys (<code>index.max_ngram_diff</code>, <code>index.refresh_interval</code>, <code>analysis.normalizer</code>, etc.) are out of scope here.</p><p>Synapse parses the JSON, enforces the addressability contract below, and resolves <code>$ref</code> entries against existing SynonymSets at index-build time. AOSS validates the rest of the analyzer shape (component types, parameters, chain ordering) at index-build time.</p><p><b>One TextAnalyzer record = one externally-addressable analyzer.</b> The inner <code>analyzer</code> map must declare exactly one entry named <code>default</code> (required), and may optionally declare a second entry named <code>default_search</code>. Any other entry inside <code>analyzer</code> is rejected at create / update time. Curators who need separate analyzers (e.g. <code>headline</code> + <code>body</code>) create separate TextAnalyzer records &mdash; each TextAnalyzer record is itself shareable across SearchConfigurations and organizations, so this does not duplicate the addressing model.</p><p><b><code>analyzer.default</code> (required):</b> the entry SearchConfiguration / ColumnAnalyzerOverride bind to when they reference this TextAnalyzer by qualified name. When this TextAnalyzer is the <code>defaultAnalyzer</code> of a SearchConfiguration, this entry lands at the index's <code>analysis.analyzer.default</code> reserved slot (see <a href='https://docs.opensearch.org/latest/analyzers/index-analyzers/'>OpenSearch index analyzers</a>).</p><p><b><code>analyzer.default_search</code> (optional):</b> declare alongside <code>analyzer.default</code> when index-time and search-time should produce different token streams (the typical edge_ngram autocomplete pattern). When this TextAnalyzer is a SearchConfiguration's <code>defaultAnalyzer</code>, this entry lands at the index's <code>analysis.analyzer.default_search</code> reserved slot per OpenSearch's <a href='https://docs.opensearch.org/latest/analyzers/search-analyzers/'>search-analyzer precedence</a>.</p><p><b>Example</b> (the <code>settings</code> field is a JSON object &mdash; paste OpenSearch examples directly without escaping):</p><pre><code>{
+          "organizationName": "biomed",
+          "name": "publications",
+          "settings": {
+            "char_filter": { "strip_html": { "type": "html_strip" } },
+            "tokenizer":   { "std": { "type": "standard" } },
+            "filter": {
+              "english_stop": { "type": "stop", "stopwords": "_english_" },
+              "med_syn":      { "$ref": "biomed-medical_terms" }
+            },
+            "analyzer": {
+              "default": {
+                "type": "custom",
+                "tokenizer": "std",
+                "char_filter": ["strip_html"],
+                "filter": ["lowercase", "med_syn", "english_stop"],
+                "position_increment_gap": 100
+              }
+            }
+          }
+        }</code></pre><p><b>Cross-resource references &mdash; <code>$ref</code></b>: anywhere in the analyzer's <code>filter</code> registry map you may write <code>{"$ref": "{organizationName}-{name}"}</code> in place of an inline filter definition. The reference must resolve to a SynonymSet by qualified name. <code>$ref</code> values are resolved at index-build time; cycles are rejected. <code>$ref</code> entries are NOT permitted inside chain arrays (<code>analyzer.*.filter</code>, <code>analyzer.*.char_filter</code>) &mdash; those stay as plain string arrays mirroring OpenSearch.</p><p>Reference this analyzer from a SearchConfiguration's <code>defaultAnalyzer</code> field or from a ColumnAnalyzerOverride entry, using its qualified name <code>{organizationName}-{name}</code>.</p>
     org.sagebionetworks.repo.model.schema.ListJsonSchemaVersionInfoResponse:
       type: object
       properties:
@@ -36341,6 +36579,17 @@ components:
         ownerPrincipalId:
           type: string
           description: The principal ID (user or team) that owns this grid session. If the owner is a user, only that user can access the grid. If the owner is a team, all members of that team have equal access to the grid.
+        authorizationMode:
+          type: string
+          description: |-
+            Defines the authorization mode used to gate access to a grid session. The mode is set at session creation time and cannot be changed. It controls both who may join the session (create a replica) and which rows are included in the session's initial snapshot.
+
+            SESSION_OWNER (default): Access is determined by the session owner. Only the owner (or members of the owner's team) may join. When the source is a view, the snapshot includes rows that the owner has access to; non-owner members see data through the owner's access scope.
+
+            SOURCE_BENEFACTOR: Access is determined by EDIT access on the source entity's benefactor(s). At session creation the set of benefactor IDs that the creating user (the 'action user') has EDIT access on is captured and stored on the session. Any user who has EDIT access on all of those captured benefactors may join the session and see all rows in the snapshot. This mode is useful when a project administrator wants all editors of a project to be able to collaborate on a grid, without needing to manage a separate owner team.
+          enum:
+            - SESSION_OWNER
+            - SOURCE_BENEFACTOR
       description: Basic information about a grid session.
     org.sagebionetworks.repo.model.file.FileEvent:
       type: object

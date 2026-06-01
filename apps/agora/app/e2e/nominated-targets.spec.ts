@@ -43,6 +43,11 @@ test.describe('legacy url redirects', () => {
     await page.goto('/genes/(genes-router:genes-list)');
     await expect(page).toHaveURL(`${baseURL}/comparison/targets`);
   });
+
+  test('redirects /genes/nominated-targets to /comparison/targets', async ({ page }) => {
+    await page.goto('/genes/nominated-targets');
+    await expect(page).toHaveURL(`${baseURL}/comparison/targets`);
+  });
 });
 
 test.describe('nominated targets - comparison tool', () => {

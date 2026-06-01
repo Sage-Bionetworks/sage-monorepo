@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.agora.api.next.model.dto.ComparisonToolConfigDto;
 import org.sagebionetworks.agora.api.next.model.dto.ComparisonToolConfigPageDto;
 import org.sagebionetworks.agora.api.next.service.ComparisonToolConfigService;
-import org.sagebionetworks.agora.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

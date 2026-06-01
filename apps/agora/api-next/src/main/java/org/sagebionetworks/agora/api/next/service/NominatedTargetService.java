@@ -13,7 +13,7 @@ import org.sagebionetworks.agora.api.next.model.dto.NominatedTargetsPageDto;
 import org.sagebionetworks.agora.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.agora.api.next.model.mapper.NominatedTargetMapper;
 import org.sagebionetworks.agora.api.next.model.repository.NominatedTargetRepository;
-import org.sagebionetworks.agora.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ public class NominatedTargetService {
   private final NominatedTargetMapper nominatedTargetMapper;
 
   @Cacheable(
-    key = "T(org.sagebionetworks.agora.api.next.util.ApiHelper)" +
+    key = "T(org.sagebionetworks.explorers.ApiHelper)" +
     ".buildCacheKey('nominatedTarget', #query.itemFilterType, " +
     "#query.items, #query.search, #query.cohortStudies, #query.inputData, " +
     "#query.initialNomination, #query.nominatingTeams, #query.pharosClass, " +
