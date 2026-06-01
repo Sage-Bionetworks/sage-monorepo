@@ -9,7 +9,7 @@
  */
 
 /**
- * A search index entity. Its content is defined by a Synapse SQL query (definingSQL) that references a single table-like entity. An OpenSearch index is built from the query results, supporting full-text search, faceted search, and autocomplete. Optionally references a SearchConfiguration for analyzer and synonym settings.
+ * <p>A Synapse entity that materializes an OpenSearch index from a SQL view of a table-like entity. The <code>definingSQL</code> picks the columns and rows to index; the SearchConfiguration (either pointed at directly via <code>searchConfigurationId</code> or inherited from an ancestor binding) controls analyzers and synonyms. Once built, the index supports full-text search, faceted search, and autocomplete via the search endpoints on the SearchManagementController.</p><p><b>Per-column <code>ignore_above</code> limit at index-build time</b> &mdash; values longer than this on a given field are NOT indexed for exact match or sort, but remain stored in the source document:</p><table border=\'1\'><tr><th>Synapse column type</th><th>ignore_above (keyword sub-field)</th></tr><tr><td>STRING, STRING_LIST, LINK</td><td>1,000 chars</td></tr><tr><td>MEDIUMTEXT</td><td>100,000 chars</td></tr><tr><td>LARGETEXT</td><td>8,192 chars</td></tr><tr><td>ENTITYID, USERID, ENTITYID_LIST, USERID_LIST</td><td>256 chars</td></tr><tr><td>INTEGER, DATE, INTEGER_LIST, DATE_LIST, FILEHANDLEID, SUBMISSIONID, EVALUATIONID, DOUBLE, BOOLEAN, BOOLEAN_LIST, JSON</td><td>n/a</td></tr></table><p>Maximum 500,000 indexed rows per SearchIndex.</p>
  */
 export interface OrgSagebionetworksRepoModelSearchTableSearchIndex {
   /**
@@ -53,11 +53,11 @@ export interface OrgSagebionetworksRepoModelSearchTableSearchIndex {
    */
   concreteType: OrgSagebionetworksRepoModelSearchTableSearchIndex.ConcreteTypeEnum;
   /**
-   * The Synapse SQL statement that defines which columns and rows are indexed. Must reference exactly one entity. Multi-entity JOINs are not supported.
+   * The Synapse SQL statement that defines which columns and rows are indexed. Must reference exactly one entity (multi-entity JOINs are not supported). Each SELECT-list column becomes a field in the index — including literals and aliased expressions, which get a real ColumnModel id and behave as first-class columns.
    */
   definingSQL?: string;
   /**
-   * The ID of the SearchConfiguration to apply when building this search index. If not provided, the system will check for a search configuration binding on the parent project/folder hierarchy, or use platform defaults.
+   * Optional. ID of the SearchConfiguration to apply when building this index. If omitted, the build walks up the entity hierarchy (entity → folder → project) looking for the closest SearchConfigBinding; if none is found, platform defaults are used.
    */
   searchConfigurationId?: string;
 }

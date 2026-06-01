@@ -9,7 +9,7 @@
  */
 
 /**
- * Represents a binding between a search configuration and an entity. Walk the entity hierarchy (entity → folder → project) to find the effective configuration.
+ * Attaches a SearchConfiguration to an entity. When a SearchIndex is built, the effective SearchConfiguration is resolved by walking up the entity hierarchy (entity → folder → project) and using the first binding found. The typical setup is one binding on the project so every descendant SearchIndex inherits it automatically. Create / replace via PUT /entity/{entityId}/searchconfig/binding; read the effective binding via GET; remove via DELETE.
  */
 export interface OrgSagebionetworksRepoModelSearchTableSearchConfigBinding {
   /**

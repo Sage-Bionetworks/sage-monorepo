@@ -52,4 +52,15 @@ export interface OrgSagebionetworksRepoModelGridGridSession {
    * The principal ID (user or team) that owns this grid session. If the owner is a user, only that user can access the grid. If the owner is a team, all members of that team have equal access to the grid.
    */
   ownerPrincipalId?: string;
+  /**
+   * Defines the authorization mode used to gate access to a grid session. The mode is set at session creation time and cannot be changed. It controls both who may join the session (create a replica) and which rows are included in the session\'s initial snapshot.  SESSION_OWNER (default): Access is determined by the session owner. Only the owner (or members of the owner\'s team) may join. When the source is a view, the snapshot includes rows that the owner has access to; non-owner members see data through the owner\'s access scope.  SOURCE_BENEFACTOR: Access is determined by EDIT access on the source entity\'s benefactor(s). At session creation the set of benefactor IDs that the creating user (the \'action user\') has EDIT access on is captured and stored on the session. Any user who has EDIT access on all of those captured benefactors may join the session and see all rows in the snapshot. This mode is useful when a project administrator wants all editors of a project to be able to collaborate on a grid, without needing to manage a separate owner team.
+   */
+  authorizationMode?: OrgSagebionetworksRepoModelGridGridSession.AuthorizationModeEnum;
+}
+export namespace OrgSagebionetworksRepoModelGridGridSession {
+  export type AuthorizationModeEnum = 'SESSION_OWNER' | 'SOURCE_BENEFACTOR';
+  export const AuthorizationModeEnum = {
+    SessionOwner: 'SESSION_OWNER' as AuthorizationModeEnum,
+    SourceBenefactor: 'SOURCE_BENEFACTOR' as AuthorizationModeEnum,
+  };
 }

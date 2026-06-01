@@ -23,8 +23,8 @@ subprojects {
     // Library projects in libs/ folder
     projectDir.path.contains("/libs/") -> {
       when {
-        // Spring Boot libraries (app-config-data projects)
-        name.contains("app-config-data") -> {
+        // Spring Boot libraries (app-config-data projects, explorers api-helper)
+        name.contains("app-config-data") || name == "explorers-api-helper" -> {
           apply(plugin = "sage.spring-boot-library")
         }
         // Regular Java libraries
@@ -63,6 +63,10 @@ subprojects {
     }
     name.startsWith("qtl") -> {
       group = "org.sagebionetworks.qtl"
+      version = "0.0.1-SNAPSHOT"
+    }
+    name.startsWith("explorers") -> {
+      group = "org.sagebionetworks.explorers"
       version = "0.0.1-SNAPSHOT"
     }
     name.startsWith("sagebionetworks") -> {

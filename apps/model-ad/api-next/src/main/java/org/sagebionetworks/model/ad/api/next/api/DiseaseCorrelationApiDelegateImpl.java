@@ -9,7 +9,7 @@ import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
 import org.sagebionetworks.model.ad.api.next.service.DiseaseCorrelationService;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

@@ -4,7 +4,8 @@ plugins {
 }
 
 dependencies {
-  implementation(project(":sagebionetworks-cache-invalidation"))
+  implementation(project(":shared-java-cache-invalidation"))
+  implementation(project(":explorers-api-helper"))
   implementation(libs.caffeine)
   implementation(libs.findbugs.jsr305)
   implementation(libs.jackson.databind)

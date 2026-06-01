@@ -1,5 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.configuration;
 
+import org.sagebionetworks.explorers.SortOrdersConverterFactory;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
@@ -19,12 +20,7 @@ public class IntegerEnumConverterConfiguration {
 
   @Bean
   Converter<String, ModelOverviewSearchQueryDto.SortOrdersEnum> modelOverviewSortOrdersConverter() {
-    return new Converter<String, ModelOverviewSearchQueryDto.SortOrdersEnum>() {
-      @Override
-      public ModelOverviewSearchQueryDto.SortOrdersEnum convert(String source) {
-        return ModelOverviewSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
-      }
-    };
+    return SortOrdersConverterFactory.from(ModelOverviewSearchQueryDto.SortOrdersEnum::fromValue);
   }
 
   @Bean
@@ -32,12 +28,9 @@ public class IntegerEnumConverterConfiguration {
     String,
     DiseaseCorrelationSearchQueryDto.SortOrdersEnum
   > diseaseCorrelationSortOrdersConverter() {
-    return new Converter<String, DiseaseCorrelationSearchQueryDto.SortOrdersEnum>() {
-      @Override
-      public DiseaseCorrelationSearchQueryDto.SortOrdersEnum convert(String source) {
-        return DiseaseCorrelationSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
-      }
-    };
+    return SortOrdersConverterFactory.from(
+      DiseaseCorrelationSearchQueryDto.SortOrdersEnum::fromValue
+    );
   }
 
   @Bean
@@ -45,11 +38,6 @@ public class IntegerEnumConverterConfiguration {
     String,
     TranscriptomicsSearchQueryDto.SortOrdersEnum
   > transcriptomicsSortOrdersConverter() {
-    return new Converter<String, TranscriptomicsSearchQueryDto.SortOrdersEnum>() {
-      @Override
-      public TranscriptomicsSearchQueryDto.SortOrdersEnum convert(String source) {
-        return TranscriptomicsSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
-      }
-    };
+    return SortOrdersConverterFactory.from(TranscriptomicsSearchQueryDto.SortOrdersEnum::fromValue);
   }
 }

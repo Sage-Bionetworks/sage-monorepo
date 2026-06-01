@@ -466,6 +466,7 @@ model/org-sagebionetworks-repo-model-form-list-response.ts
 model/org-sagebionetworks-repo-model-form-state-enum.ts
 model/org-sagebionetworks-repo-model-form-submission-status.ts
 model/org-sagebionetworks-repo-model-grid-agent-feature-request.ts
+model/org-sagebionetworks-repo-model-grid-authorization-mode.ts
 model/org-sagebionetworks-repo-model-grid-cell-id.ts
 model/org-sagebionetworks-repo-model-grid-crdt-id.ts
 model/org-sagebionetworks-repo-model-grid-create-grid-presigned-url-request.ts
@@ -818,10 +819,7 @@ model/org-sagebionetworks-repo-model-search-table-search-index-query.ts
 model/org-sagebionetworks-repo-model-search-table-search-index-state.ts
 model/org-sagebionetworks-repo-model-search-table-search-index-status.ts
 model/org-sagebionetworks-repo-model-search-table-search-index.ts
-model/org-sagebionetworks-repo-model-search-table-synonym-rule-type.ts
-model/org-sagebionetworks-repo-model-search-table-synonym-rule.ts
 model/org-sagebionetworks-repo-model-search-table-synonym-set.ts
-model/org-sagebionetworks-repo-model-search-table-text-analyzer-settings.ts
 model/org-sagebionetworks-repo-model-search-table-text-analyzer.ts
 model/org-sagebionetworks-repo-model-self-sign-access-requirement-interface.ts
 model/org-sagebionetworks-repo-model-self-sign-access-requirement.ts
