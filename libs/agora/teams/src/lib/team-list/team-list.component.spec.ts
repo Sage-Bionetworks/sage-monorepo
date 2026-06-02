@@ -48,18 +48,21 @@ describe('TeamListComponent', () => {
   });
 
   describe('teams input', () => {
-    it('should set _teams', () => {
-      component.teams = [team1, team2];
-      expect(component._teams).toEqual([team1, team2]);
+    it('should render teams', () => {
+      fixture.componentRef.setInput('teams', [team1, team2]);
+      TestBed.tick();
+      expect(component.teams()).toEqual([team1, team2]);
     });
 
     it('should reset images when a new teams value arrives', () => {
-      component.teams = [team1];
-      component.imagesByTeam = { 'team-1': { 'Alice Smith': 'blob:old' } };
+      fixture.componentRef.setInput('teams', [team1]);
+      TestBed.tick();
+      component.imagesByTeam.set({ 'team-1': { 'Alice Smith': 'blob:old' } });
 
-      component.teams = [team2];
+      fixture.componentRef.setInput('teams', [team2]);
+      TestBed.tick();
 
-      expect(component.imagesByTeam['team-1']).toBeUndefined();
+      expect(component.imagesByTeam()['team-1']).toBeUndefined();
     });
 
     it('should store images per team so members with the same name across teams do not collide', () => {
@@ -88,14 +91,16 @@ describe('TeamListComponent', () => {
       let callCount = 0;
       URL.createObjectURL = jest.fn(() => `blob:mock-${++callCount}`);
 
-      component.teams = [teamA, teamB];
+      fixture.componentRef.setInput('teams', [teamA, teamB]);
+      TestBed.tick();
 
-      expect(component.imagesByTeam['team-a']?.['Alice Smith']).toBe('blob:mock-1');
-      expect(component.imagesByTeam['team-b']?.['Alice Smith']).toBe('blob:mock-2');
+      expect(component.imagesByTeam()['team-a']?.['Alice Smith']).toBe('blob:mock-1');
+      expect(component.imagesByTeam()['team-b']?.['Alice Smith']).toBe('blob:mock-2');
     });
 
     it('should call getTeamMemberImage once per member across all teams', () => {
-      component.teams = [team1, team2];
+      fixture.componentRef.setInput('teams', [team1, team2]);
+      TestBed.tick();
 
       expect(getTeamMemberImageSpy).toHaveBeenCalledTimes(2);
       expect(getTeamMemberImageSpy).toHaveBeenCalledWith('alice-smith');

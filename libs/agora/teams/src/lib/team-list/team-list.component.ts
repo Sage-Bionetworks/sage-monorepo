@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Input } from '@angular/core';
+import { Component, DestroyRef, effect, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Team, TeamMember, TeamService } from '@sagebionetworks/agora/api-client';
 import { LoggerService } from '@sagebionetworks/explorers/services';
@@ -16,27 +16,28 @@ export class TeamListComponent {
   private readonly logger = inject(LoggerService);
   private readonly teamService = inject(TeamService);
 
-  _teams: Team[] = [];
-  imagesByTeam: Partial<Record<string, Record<string, string>>> = {};
+  teams = input<Team[]>([]);
+  imagesByTeam = signal<Partial<Record<string, Record<string, string>>>>({});
 
-  @Input() set teams(teams: Team[]) {
-    this._teams = teams;
-    this.imagesByTeam = {};
-    teams.forEach((team) => {
-      (team.members ?? []).forEach((member: TeamMember) => {
-        const name = member.name.toLowerCase().replace(/[- ]/g, '-');
-        this.logger.log(`TeamListComponent: Loading image for ${name}`);
+  constructor() {
+    effect(() => {
+      const teams = this.teams();
+      this.imagesByTeam.set({});
+      teams.forEach((team) => {
+        (team.members ?? []).forEach((member: TeamMember) => {
+          const name = member.name.toLowerCase().replace(/[- ]/g, '-');
+          this.logger.log(`TeamListComponent: Loading image for ${name}`);
 
-        this.getTeamMemberImageUrl(name)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe((url) => {
-            if (!url) return;
-            const prev = this.imagesByTeam[team.team] ?? {};
-            this.imagesByTeam = {
-              ...this.imagesByTeam,
-              [team.team]: { ...prev, [member.name]: url },
-            };
-          });
+          this.getTeamMemberImageUrl(name)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((url) => {
+              if (!url) return;
+              this.imagesByTeam.update((current) => ({
+                ...current,
+                [team.team]: { ...current[team.team], [member.name]: url },
+              }));
+            });
+        });
       });
     });
   }

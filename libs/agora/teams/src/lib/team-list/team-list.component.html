@@ -1,5 +1,5 @@
 <div class="team-list">
-  @for (team of _teams; track team.team) {
-    <agora-team-card [team]="team" [images]="imagesByTeam[team.team] ?? {}" />
+  @for (team of teams(); track team.team) {
+    <agora-team-card [team]="team" [images]="imagesByTeam()[team.team] ?? {}" />
   }
 </div>
