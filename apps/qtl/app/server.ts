@@ -13,7 +13,7 @@ export function app(): express.Express {
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
   const commonEngine = new CommonEngine({
-    allowedHosts: ['localhost'],
+    allowedHosts: ['localhost', '*.adknowledgeportal.org'],
   });
 
   server.set('view engine', 'html');
