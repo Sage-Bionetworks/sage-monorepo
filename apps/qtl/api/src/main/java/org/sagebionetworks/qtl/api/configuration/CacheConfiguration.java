@@ -1,7 +1,7 @@
 package org.sagebionetworks.qtl.api.configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.sagebionetworks.cacheinvalidation.DataVersionProvider;
+import org.sagebionetworks.explorers.cacheinvalidation.DataVersionProvider;
 import org.sagebionetworks.qtl.api.model.document.DataVersionDocument;
 import org.sagebionetworks.qtl.api.model.repository.DataVersionRepository;
 import org.springframework.cache.CacheManager;

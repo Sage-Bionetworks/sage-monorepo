@@ -1,4 +1,4 @@
-package org.sagebionetworks.cacheinvalidation;
+package org.sagebionetworks.explorers.cacheinvalidation;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;

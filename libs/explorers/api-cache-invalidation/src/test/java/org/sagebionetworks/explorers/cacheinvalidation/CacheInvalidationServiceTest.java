@@ -1,5 +1,6 @@
-package org.sagebionetworks.cacheinvalidation;
+package org.sagebionetworks.explorers.cacheinvalidation;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -115,5 +116,13 @@ class CacheInvalidationServiceTest {
     service.pollForDataVersionChange();
 
     verify(cacheB).clear();
+  }
+
+  @Test
+  @DisplayName("should not propagate exception thrown by data version provider")
+  void shouldNotPropagateExceptionThrownByDataVersionProvider() {
+    when(dataVersionProvider.getCurrentDataVersion()).thenThrow(new RuntimeException("db error"));
+
+    assertThatCode(() -> service.pollForDataVersionChange()).doesNotThrowAnyException();
   }
 }

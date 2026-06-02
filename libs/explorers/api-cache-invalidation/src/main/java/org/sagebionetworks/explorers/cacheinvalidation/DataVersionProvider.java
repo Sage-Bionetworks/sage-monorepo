@@ -1,4 +1,4 @@
-package org.sagebionetworks.cacheinvalidation;
+package org.sagebionetworks.explorers.cacheinvalidation;
 
 import java.util.Optional;
 
