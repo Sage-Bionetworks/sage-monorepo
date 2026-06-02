@@ -25,8 +25,8 @@ importers:
         specifier: 20.3.23
         version: 20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))
       '@angular/cdk':
-        specifier: 20.2.4
-        version: 20.2.4(@angular/common@20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
+        specifier: 20.2.14
+        version: 20.2.14(@angular/common@20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
       '@angular/common':
         specifier: 20.3.23
         version: 20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
@@ -143,7 +143,7 @@ importers:
         version: 8.0.1
       primeng:
         specifier: 20.4.0
-        version: 20.4.0(647bc54e7dea5416148e4be0120ad643)
+        version: 20.4.0(8733b799b9bcfccaeedd3cf1cb6ab2f3)
       rxjs:
         specifier: 7.8.1
         version: 7.8.1
@@ -770,8 +770,8 @@ packages:
       vitest:
         optional: true
 
-  '@angular/cdk@20.2.4':
-    resolution: {integrity: sha512-5UzrN854pnQH+Qw6XZRxx2zWkcOxKrzWPLXe+gHFxFhxWUZfJKGcTJeAj8bnmyb+C3lqBbGpoNQPQ8pFXQGEaQ==}
+  '@angular/cdk@20.2.14':
+    resolution: {integrity: sha512-7bZxc01URbiPiIBWThQ69XwOxVduqEKN4PhpbF2AAyfMc/W8Hcr4VoIJOwL0O1Nkq5beS8pCAqoOeIgFyXd/kg==}
     peerDependencies:
       '@angular/common': ^20.0.0 || ^21.0.0
       '@angular/core': ^20.0.0 || ^21.0.0
@@ -13997,7 +13997,7 @@ snapshots:
       - tsx
       - yaml
 
-  '@angular/cdk@20.2.4(@angular/common@20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)':
+  '@angular/cdk@20.2.14(@angular/common@20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)':
     dependencies:
       '@angular/common': 20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
       '@angular/core': 20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0)
@@ -16631,7 +16631,7 @@ snapshots:
 
   '@neoconfetti/react@1.0.0': {}
 
-  '@nestjs/axios@4.0.0(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.1))(axios@1.12.0(debug@4.3.7))(rxjs@7.8.2)':
+  '@nestjs/axios@4.0.0(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.12.0(debug@4.3.7))(rxjs@7.8.2)':
     dependencies:
       '@nestjs/common': 11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2)
       axios: 1.12.0(debug@4.3.7)
@@ -16649,7 +16649,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nestjs/core@11.0.20(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.2)':
+  '@nestjs/core@11.0.20(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)':
     dependencies:
       '@nestjs/common': 11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nuxt/opencollective': 0.4.1
@@ -17696,9 +17696,9 @@ snapshots:
 
   '@openapitools/openapi-generator-cli@2.19.1(debug@4.3.7)(encoding@0.1.13)':
     dependencies:
-      '@nestjs/axios': 4.0.0(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.1))(axios@1.12.0(debug@4.3.7))(rxjs@7.8.2)
+      '@nestjs/axios': 4.0.0(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.12.0(debug@4.3.7))(rxjs@7.8.2)
       '@nestjs/common': 11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      '@nestjs/core': 11.0.20(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/core': 11.0.20(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nuxtjs/opencollective': 0.3.2(encoding@0.1.13)
       axios: 1.12.0(debug@4.3.7)
       chalk: 4.1.2
@@ -26367,10 +26367,10 @@ snapshots:
 
   primeicons@7.0.0: {}
 
-  primeng@20.4.0(647bc54e7dea5416148e4be0120ad643):
+  primeng@20.4.0(8733b799b9bcfccaeedd3cf1cb6ab2f3):
     dependencies:
       '@angular/animations': 20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))
-      '@angular/cdk': 20.2.4(@angular/common@20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
+      '@angular/cdk': 20.2.14(@angular/common@20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
       '@angular/common': 20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
       '@angular/core': 20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0)
       '@angular/forms': 20.3.23(@angular/common@20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.23(@angular/animations@20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.23(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.23(@angular/compiler@20.3.23)(rxjs@7.8.1)(zone.js@0.15.0)))(rxjs@7.8.1)
