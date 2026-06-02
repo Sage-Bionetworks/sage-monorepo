@@ -12,7 +12,7 @@ export function app(): express.Express {
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
   const commonEngine = new CommonEngine({
-    allowedHosts: ['*'],
+    allowedHosts: ['localhost', '*.bioarena.io', 'bioarena.io', '*.elb.amazonaws.com'],
   });
 
   server.set('view engine', 'html');
