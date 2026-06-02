@@ -55,9 +55,12 @@ importers:
         specifier: 20.3.17
         version: 20.3.17(1179b510b08cc37c769fd58ccbee8346)
       '@fontsource-variable/dm-sans':
-        specifier: 5.2.5
-        version: 5.2.5
+        specifier: 5.2.8
+        version: 5.2.8
       '@fontsource-variable/playfair-display':
+        specifier: 5.2.8
+        version: 5.2.8
+      '@fontsource/dm-serif-text':
         specifier: 5.2.8
         version: 5.2.8
       '@fortawesome/angular-fontawesome':
@@ -2056,11 +2059,14 @@ packages:
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
-  '@fontsource-variable/dm-sans@5.2.5':
-    resolution: {integrity: sha512-ynWdb1Ncn5ywUOE6OkTsvgjkiZKj+xM/GS2iVE47MBvS3AlfOSyOy3xynfkQsM3ngaxdCamT/06hZGAgPmao0A==}
+  '@fontsource-variable/dm-sans@5.2.8':
+    resolution: {integrity: sha512-AxkvMTvNWgfrmlyjiV05vlHYJa+nRQCf1EfvIrQAPBpFJW0O9VTz7oAFr9S3lvbWdmnFoBk7yFqQL86u64nl2g==}
 
   '@fontsource-variable/playfair-display@5.2.8':
     resolution: {integrity: sha512-ZzVIXPOrL85yyOvZYoBzUszIJM+xKkHqni4IYn2CVLaGQQdJR8sBeC8yFNgjxSJ7ludTwta8qpULeOFuk5X75A==}
+
+  '@fontsource/dm-serif-text@5.2.8':
+    resolution: {integrity: sha512-Zbo9UKc/9cWWTTGleFk/oL9TQWHcEA8IXLqGaVvWC90Q5GqOe7DdPmU38hIF7KQqDmxuk2sT2gJV5raYBeu1VA==}
 
   '@fortawesome/angular-fontawesome@1.0.0':
     resolution: {integrity: sha512-EC2fYuXIuw2ld1kzJi+zysWus6OeGGfLQtbh0hW9zyyq5aBo8ZJkcJKBsVQ8E6Mg7nHyTWaXn+sdcXTPDWz+UQ==}
@@ -14765,9 +14771,11 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@fontsource-variable/dm-sans@5.2.5': {}
+  '@fontsource-variable/dm-sans@5.2.8': {}
 
   '@fontsource-variable/playfair-display@5.2.8': {}
+
+  '@fontsource/dm-serif-text@5.2.8': {}
 
   '@fortawesome/angular-fontawesome@1.0.0(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))':
     dependencies:

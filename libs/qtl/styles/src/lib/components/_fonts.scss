@@ -1,1 +1,5 @@
-@use '@fontsource-variable/dm-sans';
+@use '@fontsource/dm-serif-text';
+
+:root {
+  --font-family-secondary: 'DM Serif Text', serif;
+}
