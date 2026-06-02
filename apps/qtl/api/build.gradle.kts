@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-  implementation(project(":shared-java-cache-invalidation"))
+  implementation(project(":explorers-api-cache-invalidation"))
   implementation(libs.caffeine)
   implementation(libs.findbugs.jsr305)
   implementation(libs.jackson.databind)
