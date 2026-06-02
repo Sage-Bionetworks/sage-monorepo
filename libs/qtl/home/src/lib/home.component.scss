@@ -1,3 +1,41 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: relative;
+  color: var(--color-primary);
+  padding: 80px clamp(30px, 5vw, 160px);
+}
+
+.content {
+  max-width: 1120px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.home-header {
+  margin-bottom: 32px;
+}
+
+.home-heading {
+  color: var(--color-primary);
+  font-family: 'DM Serif Text', serif;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 72px;
+  margin: 0;
+}
+
+.home-description {
+  font-size: 16px;
+  margin-bottom: 32px;
+}
+
+.chiclet-card {
+  margin-bottom: 32px;
+}
+
 .stat-cards-link-bar-container {
   --stat-cards-corner-radius: 10px;
   --link-bar-border-bottom-left-radius: 10px;

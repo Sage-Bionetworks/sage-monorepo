@@ -1,10 +1,30 @@
 <div id="home-page">
-  <h1>Welcome to the xQTL Explorer!</h1>
-</div>
-
-<div class="stat-cards-link-bar-container">
-  <explorers-stat-cards [cards]="statCards()" [animateOnLoad]="true" />
-  <explorers-link-bar link="/not-found"
-    >View QTLs by cohort, ancestry, or cell type</explorers-link-bar
-  >
+  <div class="section">
+    <div class="content">
+      <div class="home-header">
+        <div>
+          <h1 class="home-heading">Explore Quantitative Trait Loci Across Models and Studies</h1>
+        </div>
+      </div>
+      <div class="home-description">
+        <p>
+          Dive into harmonized QTL datasets from diverse populations, platforms, and experimental
+          designs. Search, compare, and visualize genetic associations to uncover variants linked to
+          key biological traits and disease-relevant phenotypes.
+        </p>
+      </div>
+      <div class="chiclet-card">
+        <explorers-chiclet-card
+          title="What are QTLs?"
+          [chiclets]="chiclets"
+        ></explorers-chiclet-card>
+      </div>
+      <div class="stat-cards-link-bar-container">
+        <explorers-stat-cards [cards]="statCards()" [animateOnLoad]="true" />
+        <explorers-link-bar link="/not-found"
+          >View QTLs by cohort, ancestry, or cell type</explorers-link-bar
+        >
+      </div>
+    </div>
+  </div>
 </div>
