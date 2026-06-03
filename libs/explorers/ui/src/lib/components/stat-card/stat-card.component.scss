@@ -1,10 +1,10 @@
 $stat-card-hover-scale: 1.1;
-$stat-card-hover-duration: 350ms;
+$stat-card-hover-duration: 700ms;
 $stat-card-hover-easing: cubic-bezier(0.22, 1, 0.36, 1);
-$stat-card-rise-duration: 250ms;
+$stat-card-rise-duration: 500ms;
 $stat-card-rise-easing: cubic-bezier(0.34, 2, 0.64, 1);
-$stat-card-rise-stagger: 80ms;
-$stat-card-rise-text-delay: 50ms;
+$stat-card-rise-stagger: 160ms;
+$stat-card-rise-text-delay: 100ms;
 
 :host {
   display: block;
