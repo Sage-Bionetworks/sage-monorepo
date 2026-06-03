@@ -148,17 +148,23 @@
       },
       "dependsOn": []
     },
-    "sentry-sourcemaps": {
+    "sentry-sourcemaps-inject": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sentry-cli sourcemaps inject dist/apps/qtl/app"
+      },
+      "dependsOn": ["build"]
+    },
+    "sentry-sourcemaps-upload": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "sentry-cli sourcemaps inject dist/apps/qtl/app",
           "sentry-cli sourcemaps upload --org sage-bionetworks --project qtl --release qtl@$SENTRY_RELEASE_SUFFIX dist/apps/qtl/app",
           "find dist/apps/qtl/app -name '*.map' -delete"
         ],
         "parallel": false
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["sentry-sourcemaps-inject"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
