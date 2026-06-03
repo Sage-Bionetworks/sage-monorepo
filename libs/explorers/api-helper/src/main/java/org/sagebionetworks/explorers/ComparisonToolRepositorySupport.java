@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -142,7 +143,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
       operations.add(Aggregation.skip(skipCount));
       operations.add(Aggregation.limit(pageable.getPageSize()));
 
-      Aggregation aggregation = Aggregation.newAggregation(operations);
+      // Permits disk spillover when the $sort working set exceeds 100MB; only activates
+      // when needed -- required for deep pagination on large collections
+      Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(
+        AggregationOptions.builder().allowDiskUse(true).build()
+      );
       log.debug("Executing aggregation on collection {}: {}", getCollectionName(), aggregation);
       AggregationResults<T> results = mongoTemplate.aggregate(
         aggregation,
