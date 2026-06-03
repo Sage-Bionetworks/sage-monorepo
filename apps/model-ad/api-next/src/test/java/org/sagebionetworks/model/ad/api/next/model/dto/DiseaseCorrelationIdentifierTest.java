@@ -3,9 +3,12 @@ package org.sagebionetworks.model.ad.api.next.model.dto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
+import org.bson.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 class DiseaseCorrelationIdentifierTest {
 
@@ -90,5 +93,23 @@ class DiseaseCorrelationIdentifierTest {
     String result = identifier.toCompositeString();
 
     assertThat(result).isEqualTo("APOE4~4 months~Female");
+  }
+
+  @Test
+  @DisplayName("should build correct criteria from identifier")
+  void shouldBuildCorrectCriteriaFromIdentifier() {
+    DiseaseCorrelationIdentifier identifier = DiseaseCorrelationIdentifier.builder()
+      .name("APOE4")
+      .age("4 months")
+      .sex("Female")
+      .build();
+
+    Criteria result = identifier.toCriteria();
+
+    List<Document> andClauses = result.getCriteriaObject().getList("$and", Document.class);
+    assertThat(andClauses).hasSize(3);
+    assertThat(andClauses.get(0)).isEqualTo(new Document("name", "APOE4"));
+    assertThat(andClauses.get(1)).isEqualTo(new Document("age", "4 months"));
+    assertThat(andClauses.get(2)).isEqualTo(new Document("sex", "Female"));
   }
 }

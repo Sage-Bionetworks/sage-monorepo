@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+  implementation(project(":explorers-api-cache-invalidation"))
   implementation(project(":explorers-api-helper"))
   implementation(libs.caffeine)
   implementation(libs.findbugs.jsr305)

@@ -18,7 +18,6 @@ class CacheConfigurationTest {
     CacheManager cacheManager = new CacheConfiguration().cacheManager();
 
     for (String name : new String[] {
-      CacheNames.DATA_VERSION,
       CacheNames.COMPARISON_TOOL_CONFIG,
       CacheNames.DRUG,
       CacheNames.NOMINATED_DRUG,
@@ -29,9 +28,7 @@ class CacheConfigurationTest {
 
       Cache<Object, Object> nativeCache = springCache.getNativeCache();
       long maximum = nativeCache.policy().eviction().orElseThrow().getMaximum();
-      assertThat(maximum)
-        .as("cache '%s' maximumSize", name)
-        .isEqualTo(EXPECTED_MAXIMUM_SIZE);
+      assertThat(maximum).as("cache '%s' maximumSize", name).isEqualTo(EXPECTED_MAXIMUM_SIZE);
     }
   }
 }
