@@ -1,8 +1,8 @@
+import { ResourceCardData } from '@sagebionetworks/explorers/models';
 import { render, screen } from '@testing-library/angular';
-import { ResourceCardComponent } from '../resource-card/resource-card.component';
 import { ResourceCardsComponent } from './resource-cards.component';
 
-async function setup(cards: Partial<ResourceCardComponent>[]) {
+async function setup(cards: ResourceCardData[]) {
   return render(ResourceCardsComponent, {
     componentInputs: {
       cards,
@@ -12,12 +12,31 @@ async function setup(cards: Partial<ResourceCardComponent>[]) {
 
 describe('ResourceCardsComponent', () => {
   it('should render one resource card for each item in cards', async () => {
-    const cards = [{ title: 'Card 1' }, { title: 'Card 2' }, { title: 'Card 3' }];
+    const cards: ResourceCardData[] = [
+      {
+        title: 'Card 1',
+        description: 'Description 1',
+        link: 'https://example.com/1',
+        imagePath: '/img1.svg',
+      },
+      {
+        title: 'Card 2',
+        description: 'Description 2',
+        link: 'https://example.com/2',
+        imagePath: '/img2.svg',
+      },
+      {
+        title: 'Card 3',
+        description: 'Description 3',
+        link: 'https://example.com/3',
+        imagePath: '/img3.svg',
+      },
+    ];
     await setup(cards);
 
-    expect(screen.getByText(cards[0].title)).toBeInTheDocument();
-    expect(screen.getByText(cards[1].title)).toBeInTheDocument();
-    expect(screen.getByText(cards[2].title)).toBeInTheDocument();
+    expect(screen.getByText('Card 1')).toBeInTheDocument();
+    expect(screen.getByText('Card 2')).toBeInTheDocument();
+    expect(screen.getByText('Card 3')).toBeInTheDocument();
   });
 
   it('should handle empty cards array gracefully', async () => {

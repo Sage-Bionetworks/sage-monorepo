@@ -1,5 +1,5 @@
-
 import { Component, input } from '@angular/core';
+import { ResourceCardData } from '@sagebionetworks/explorers/models';
 import { ResourceCardComponent } from '../resource-card/resource-card.component';
 
 @Component({
@@ -9,5 +9,5 @@ import { ResourceCardComponent } from '../resource-card/resource-card.component'
   styleUrls: ['./resource-cards.component.scss'],
 })
 export class ResourceCardsComponent {
-  cards = input.required<Partial<ResourceCardComponent>[]>();
+  cards = input.required<ResourceCardData[]>();
 }
