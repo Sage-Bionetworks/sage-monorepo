@@ -1,6 +1,7 @@
 package org.sagebionetworks.explorers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
@@ -136,6 +139,66 @@ public final class ApiHelper {
     }
 
     return builder.toString();
+  }
+
+  /**
+   * Builds an {@code $addFields} stage that emits a {@code <field>_isEmpty} boolean for every sort
+   * order in {@code sort}. The flag is {@code true} when the field is {@code null} or an empty
+   * string, {@code false} otherwise.
+   *
+   * <p>Prepending {@code <field>_isEmpty: 1} to the {@code $sort} doc (always ascending) before the
+   * user's chosen sort key pushes empty/null rows to the tail regardless of the user's sort
+   * direction, while non-empty rows sort normally within themselves.
+   *
+   * @param sort the requested sort; if unsorted, returns {@code null}
+   * @return an {@code $addFields} {@link AggregationOperation}, or {@code null} when sort is empty
+   */
+  public static AggregationOperation buildEmptyFlagFields(Sort sort) {
+    if (sort.isUnsorted()) {
+      return null;
+    }
+
+    Document fields = new Document();
+    for (Sort.Order order : sort) {
+      String field = order.getProperty();
+
+      // null or missing -- ArrayList because List.of() prohibits null elements
+      List<Object> isNullArgs = new ArrayList<>(2);
+      isNullArgs.add("$" + field);
+      isNullArgs.add(null);
+
+      // empty string
+      List<Object> isEmptyStringArgs = List.of("$" + field, "");
+
+      // empty array: $cond guards with $isArray so non-array fields return -1 (not 0)
+      Document isEmptyArrayExpr = new Document(
+        "$eq",
+        List.of(
+          new Document(
+            "$cond",
+            List.of(
+              new Document("$isArray", "$" + field),
+              new Document("$size", "$" + field),
+              -1
+            )
+          ),
+          0
+        )
+      );
+
+      Document isEmptyExpr = new Document(
+        "$or",
+        List.of(
+          new Document("$eq", isNullArgs),
+          new Document("$eq", isEmptyStringArgs),
+          isEmptyArrayExpr
+        )
+      );
+
+      fields.append(field + "_isEmpty", isEmptyExpr);
+    }
+
+    return context -> new Document("$addFields", fields);
   }
 
   /**

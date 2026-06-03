@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 
 class ApiHelperTest {
 
@@ -225,6 +226,55 @@ class ApiHelperTest {
       public String toString() {
         return String.valueOf(value);
       }
+    }
+  }
+
+  @Nested
+  @DisplayName("buildEmptyFlagFields")
+  class BuildEmptyFlagFields {
+
+    @Test
+    @DisplayName("should return null when sort is unsorted")
+    void shouldReturnNullWhenSortIsUnsorted() {
+      assertThat(ApiHelper.buildEmptyFlagFields(Sort.unsorted())).isNull();
+    }
+
+    @Test
+    @DisplayName("should emit _isEmpty flag covering null, empty string, and empty array when sort has one field")
+    void shouldEmitIsEmptyFlagWhenSortHasOneField() {
+      AggregationOperation op = ApiHelper.buildEmptyFlagFields(Sort.by(Sort.Order.asc("name")));
+
+      assertThat(op).isNotNull();
+      String doc = op.toDocument(null).toJson();
+      assertThat(doc)
+        .contains("name_isEmpty")
+        .contains("$or")
+        .contains("$eq")
+        .contains("$isArray")  // empty-array branch
+        .contains("$size");
+    }
+
+    @Test
+    @DisplayName("should emit _isEmpty flags for all fields when sort has multiple fields")
+    void shouldEmitIsEmptyFlagsWhenSortHasMultipleFields() {
+      AggregationOperation op = ApiHelper.buildEmptyFlagFields(
+        Sort.by(Sort.Order.asc("name"), Sort.Order.desc("age"))
+      );
+
+      assertThat(op).isNotNull();
+      String doc = op.toDocument(null).toJson();
+      assertThat(doc).contains("name_isEmpty").contains("age_isEmpty");
+    }
+
+    @Test
+    @DisplayName("should produce the same _isEmpty expression when sort direction differs")
+    void shouldProduceSameExpressionWhenSortDirectionDiffers() {
+      AggregationOperation asc = ApiHelper.buildEmptyFlagFields(Sort.by(Sort.Order.asc("name")));
+      AggregationOperation desc = ApiHelper.buildEmptyFlagFields(Sort.by(Sort.Order.desc("name")));
+
+      assertThat(asc).isNotNull();
+      assertThat(desc).isNotNull();
+      assertThat(asc.toDocument(null).toJson()).isEqualTo(desc.toDocument(null).toJson());
     }
   }
 }

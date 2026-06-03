@@ -67,7 +67,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * {@link #buildCtMatchCriteria} must override.
    */
   protected <Q> CtFilterConfig<Q> getFilterConfig() {
-    throw new UnsupportedOperationException("Subclasses that use buildCtMatchCriteria must override getFilterConfig()");
+    throw new UnsupportedOperationException(
+      "Subclasses that use buildCtMatchCriteria must override getFilterConfig()"
+    );
   }
 
   /**
@@ -122,6 +124,12 @@ public abstract class ComparisonToolRepositorySupport<T> {
       );
       if (computedSort != null) {
         operations.add(computedSort);
+      }
+
+      // Inject empty-flag fields so null/empty values always sort last regardless of direction
+      AggregationOperation emptyFlags = ApiHelper.buildEmptyFlagFields(pageable.getSort());
+      if (emptyFlags != null) {
+        operations.add(emptyFlags);
       }
 
       // Build and add sort operation
@@ -375,6 +383,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
       } else {
         resolved = field;
       }
+      // _isEmpty is the raw field name (not the resolved alias) to match the $addFields output,
+      // and is always ascending so nulls/empties tail regardless of user direction
+      sortDoc.append(field + "_isEmpty", 1);
       sortDoc.append(resolved, order.isAscending() ? 1 : -1);
     }
 

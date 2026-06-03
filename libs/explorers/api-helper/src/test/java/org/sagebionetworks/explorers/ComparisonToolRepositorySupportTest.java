@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import org.bson.Document;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -48,12 +49,13 @@ class ComparisonToolRepositorySupportTest {
 
     String pipeline = capturePipeline().toString();
     assertThat(pipeline).contains("$match").contains("$sort").contains("$skip").contains("$limit");
-    assertThat(pipeline).doesNotContain("$addFields");
+    // isEmpty stage is always present; no computed-sort _sort addFields expected
+    assertThat(pipeline).contains("name_isEmpty").doesNotContain("name_sort");
     assertThat(pipeline).contains("\"name\" : 1");
   }
 
   @Test
-  @DisplayName("should resolve sort field aliases to the aliased name (no $addFields)")
+  @DisplayName("should resolve sort field aliases to the aliased name without a computed-sort $addFields")
   void shouldResolveSortFieldAliases() {
     AliasingRepo repo = new AliasingRepo(mongoTemplate);
     stubMongoTemplate(0L);
@@ -63,7 +65,8 @@ class ComparisonToolRepositorySupportTest {
 
     String pipeline = capturePipeline().toString();
     assertThat(pipeline).contains("\"age_numeric\" : -1");
-    assertThat(pipeline).doesNotContain("$addFields");
+    // isEmpty stage present but no computed-sort alias _sort addFields
+    assertThat(pipeline).contains("age_isEmpty").doesNotContain("age_sort");
   }
 
   @Test
@@ -83,7 +86,7 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Test
-  @DisplayName("should skip $addFields when the sort doesn't include any computed field")
+  @DisplayName("should skip computed-sort $addFields when the sort does not include any computed field")
   void shouldSkipComputedAddFieldsWhenUnused() {
     ComputedRepo repo = new ComputedRepo(mongoTemplate);
     stubMongoTemplate(0L);
@@ -92,7 +95,8 @@ class ComparisonToolRepositorySupportTest {
     repo.run(new Criteria(), pageable);
 
     String pipeline = capturePipeline().toString();
-    assertThat(pipeline).doesNotContain("$addFields").doesNotContain("name_sort");
+    // isEmpty stage is still present, but no computed-sort _sort addFields
+    assertThat(pipeline).contains("hgnc_symbol_isEmpty").doesNotContain("name_sort");
     assertThat(pipeline).contains("\"hgnc_symbol\" : 1");
   }
 
@@ -279,6 +283,68 @@ class ComparisonToolRepositorySupportTest {
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
       return executePagedAggregation(criteria, pageable);
+    }
+  }
+
+  @Nested
+  @DisplayName("null-last sort")
+  class NullLastSort {
+
+    @Test
+    @DisplayName("should include _isEmpty $addFields stage before $sort when sort is provided")
+    void shouldIncludeIsEmptyAddFieldsBeforeSortWhenSortIsProvided() {
+      BareRepo repo = new BareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("name")));
+      repo.run(new Criteria(), pageable);
+
+      String pipeline = capturePipeline().toString();
+      assertThat(pipeline).contains("name_isEmpty").contains("$or").contains("$eq");
+
+      int isEmptyIdx = pipeline.indexOf("name_isEmpty");
+      int sortIdx = pipeline.indexOf("\"$sort\"");
+      assertThat(isEmptyIdx).isLessThan(sortIdx);
+    }
+
+    @Test
+    @DisplayName("should include _isEmpty: 1 key in $sort doc alongside the resolved sort key")
+    void shouldIncludeIsEmptyKeyInSortDocWhenSortIsProvided() {
+      BareRepo repo = new BareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("name")));
+      repo.run(new Criteria(), pageable);
+
+      String pipeline = capturePipeline().toString();
+      assertThat(pipeline).contains("\"name_isEmpty\" : 1").contains("\"name\" : 1");
+    }
+
+    @Test
+    @DisplayName("should not include _isEmpty stage when sort is unsorted")
+    void shouldNotIncludeIsEmptyStageWhenSortIsUnsorted() {
+      BareRepo repo = new BareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      Pageable pageable = PageRequest.of(0, 10);
+      repo.run(new Criteria(), pageable);
+
+      String pipeline = capturePipeline().toString();
+      assertThat(pipeline).doesNotContain("_isEmpty");
+    }
+
+    @Test
+    @DisplayName("should use original field name for _isEmpty when sort resolves through a computed alias")
+    void shouldUseOriginalFieldNameForIsEmptyWhenSortResolvesToComputedAlias() {
+      ComputedRepo repo = new ComputedRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("name")));
+      repo.run(new Criteria(), pageable);
+
+      String pipeline = capturePipeline().toString();
+      assertThat(pipeline).contains("\"name_isEmpty\" : 1");
+      assertThat(pipeline).contains("\"name_sort\" : 1");
     }
   }
 }
