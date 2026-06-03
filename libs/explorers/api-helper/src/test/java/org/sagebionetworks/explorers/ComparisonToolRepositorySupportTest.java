@@ -1,6 +1,7 @@
 package org.sagebionetworks.explorers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -96,9 +97,9 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Test
-  @DisplayName("should add extra sort field computations before the standard computed-sort step")
-  void shouldAddExtraSortFieldComputations() {
-    ExtraComputationRepo repo = new ExtraComputationRepo(mongoTemplate);
+  @DisplayName("should add prerequisites before computed-sort step when using ComputedSortField")
+  void shouldAddPrerequisitesForComputedSortFields() {
+    PrerequisiteRepo repo = new PrerequisiteRepo(mongoTemplate);
     stubMongoTemplate(0L);
 
     Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("gene_symbol")));
@@ -112,6 +113,16 @@ class ComparisonToolRepositorySupportTest {
       .as("$toLower over display_gene_symbol drives the gene_symbol_sort key")
       .contains("display_gene_symbol")
       .contains("\"gene_symbol_sort\" : 1");
+  }
+
+  @Test
+  @DisplayName("should throw UnsupportedOperationException when getFilterConfig is not overridden")
+  void shouldThrowWhenGetFilterConfigNotOverridden() {
+    BareRepo repo = new BareRepo(mongoTemplate);
+
+    assertThatThrownBy(repo::getFilterConfig)
+      .isInstanceOf(UnsupportedOperationException.class)
+      .hasMessageContaining("getFilterConfig");
   }
 
   @Test
@@ -165,6 +176,12 @@ class ComparisonToolRepositorySupportTest {
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
       return executePagedAggregation(criteria, pageable);
     }
+
+    // expose for testing
+    @Override
+    public <Q> CtFilterConfig<Q> getFilterConfig() {
+      return super.getFilterConfig();
+    }
   }
 
   /** Subclass that exercises {@link #getSortFieldAliases()}. */
@@ -212,8 +229,8 @@ class ComparisonToolRepositorySupportTest {
     }
 
     @Override
-    protected Map<String, Object> getComputedSortFieldExpressions() {
-      return Map.of("name", toLowerExpr("name"));
+    protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
+      return Map.of("name", ComputedSortField.of(toLowerExpr("name")));
     }
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
@@ -221,11 +238,11 @@ class ComparisonToolRepositorySupportTest {
     }
   }
 
-  /** Subclass that exercises {@link #getExtraSortFieldComputations(Sort)}. */
-  private static final class ExtraComputationRepo
+  /** Subclass that exercises {@link ComputedSortField} with prerequisites. */
+  private static final class PrerequisiteRepo
     extends ComparisonToolRepositorySupport<TestDocument> {
 
-    ExtraComputationRepo(MongoTemplate mongoTemplate) {
+    PrerequisiteRepo(MongoTemplate mongoTemplate) {
       super(mongoTemplate);
     }
 
@@ -240,16 +257,7 @@ class ComparisonToolRepositorySupportTest {
     }
 
     @Override
-    protected Map<String, Object> getComputedSortFieldExpressions() {
-      return Map.of("gene_symbol", toLowerExpr("display_gene_symbol"));
-    }
-
-    @Override
-    protected List<AggregationOperation> getExtraSortFieldComputations(Sort sort) {
-      boolean sortsByGeneSymbol = sort.stream().anyMatch(o -> "gene_symbol".equals(o.getProperty()));
-      if (!sortsByGeneSymbol) {
-        return List.of();
-      }
+    protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
       java.util.List<Object> eqArgs = new java.util.ArrayList<>();
       eqArgs.add("$gene_symbol");
       eqArgs.add(null);
@@ -261,7 +269,12 @@ class ComparisonToolRepositorySupportTest {
         "$addFields",
         new Document("display_gene_symbol", new Document("$cond", condArgs))
       );
-      return List.of(context -> addFields);
+      AggregationOperation prereq = context -> addFields;
+
+      return Map.of(
+        "gene_symbol",
+        ComputedSortField.of(toLowerExpr("display_gene_symbol")).withPrerequisite(prereq)
+      );
     }
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
