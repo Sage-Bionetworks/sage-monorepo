@@ -1,8 +1,4 @@
-<div
-  class="stat-cards"
-  [class.stat-cards-prepare-animation]="animateOnLoad() && !hydrated()"
-  [class.stat-cards-animate-on-load]="animateOnLoad() && hydrated()"
->
+<div class="stat-cards" [class.stat-cards-animate-on-load]="animateOnLoad()">
   @for (card of cards(); track $index) {
     <explorers-stat-card
       [header]="card.header"

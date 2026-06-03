@@ -39,3 +39,31 @@
     --stat-card-border-top-right-radius: var(--stat-cards-corner-radius, 0);
   }
 }
+
+// On-load animation. When `animateOnLoad` is set, the component applies
+// `.stat-cards-animate-on-load`, which runs the per-element rise defined in
+// stat-card.component.scss so only the card's contents move while the card box
+// stays put; here we just assign each card its stagger index.
+.stat-cards-animate-on-load > :nth-child(1) {
+  --stat-card-index: 0;
+}
+
+.stat-cards-animate-on-load > :nth-child(2) {
+  --stat-card-index: 1;
+}
+
+.stat-cards-animate-on-load > :nth-child(3) {
+  --stat-card-index: 2;
+}
+
+.stat-cards-animate-on-load > :nth-child(4) {
+  --stat-card-index: 3;
+}
+
+.stat-cards-animate-on-load > :nth-child(5) {
+  --stat-card-index: 4;
+}
+
+.stat-cards-animate-on-load > :nth-child(n + 6) {
+  --stat-card-index: 5;
+}

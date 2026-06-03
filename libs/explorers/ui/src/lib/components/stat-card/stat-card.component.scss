@@ -1,3 +1,11 @@
+$stat-card-hover-scale: 1.1;
+$stat-card-hover-duration: 350ms;
+$stat-card-hover-easing: cubic-bezier(0.22, 1, 0.36, 1);
+$stat-card-rise-duration: 250ms;
+$stat-card-rise-easing: cubic-bezier(0.34, 2, 0.64, 1);
+$stat-card-rise-stagger: 80ms;
+$stat-card-rise-text-delay: 50ms;
+
 :host {
   display: block;
   position: relative;
@@ -24,6 +32,16 @@
   color: inherit;
   text-decoration: none;
   cursor: pointer;
+  transition:
+    transform $stat-card-hover-duration $stat-card-hover-easing,
+    box-shadow $stat-card-hover-duration $stat-card-hover-easing;
+}
+
+.stat-card:hover {
+  transform: scale($stat-card-hover-scale);
+  box-shadow:
+    0 6px 12px rgb(0 0 0 / 5%),
+    0 1px 2px 1px rgb(0 0 0 / 5%);
 }
 
 .stat-card-icon {
@@ -51,4 +69,70 @@
   line-height: var(--line-height-sm);
   color: var(--color-text-secondary);
   margin-top: 4px;
+}
+
+// On-load rise animation. The parent stat-cards component applies
+// `.stat-cards-animate-on-load` and assigns each card its `--stat-card-index`;
+// here the icon and text rise in with a staggered, bouncy ease. The `backwards`
+// fill holds each element in its hidden start state until its delay elapses, so
+// the animation runs on first paint without a flash. The icon travels further
+// and adds a slight scale-up, while the text rises a shorter distance and trails
+// the icon by a small delay.
+:host-context(.stat-cards-animate-on-load) {
+  .stat-card-icon {
+    animation: stat-card-icon-rise $stat-card-rise-duration $stat-card-rise-easing backwards;
+    animation-delay: calc(#{$stat-card-rise-stagger} * var(--stat-card-index, 0));
+  }
+
+  .stat-card-header,
+  .stat-card-sub-header {
+    animation: stat-card-rise $stat-card-rise-duration $stat-card-rise-easing backwards;
+    animation-delay: calc(
+      #{$stat-card-rise-stagger} * var(--stat-card-index, 0) + #{$stat-card-rise-text-delay}
+    );
+  }
+}
+
+@keyframes stat-card-icon-rise {
+  from {
+    opacity: 0;
+    transform: translateY(35px) scale(0.6);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes stat-card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card {
+    transition: none;
+  }
+
+  .stat-card:hover {
+    transform: none;
+  }
+
+  :host-context(.stat-cards-animate-on-load) {
+    .stat-card-icon,
+    .stat-card-header,
+    .stat-card-sub-header {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
