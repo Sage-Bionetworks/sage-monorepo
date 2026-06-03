@@ -19,6 +19,7 @@ import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -108,6 +109,37 @@ class CustomModelOverviewRepositoryImplTest {
     // Page 2 with size 25 → skip 50, limit 25
     assertThat(pipelineString).contains("$skip").contains("50");
     assertThat(pipelineString).contains("$limit").contains("25");
+  }
+
+  @Test
+  @DisplayName("should compute matched_controls_sort via $reduce when sorting by matched_controls")
+  void shouldComputeMatchedControlsSortWhenSortingByMatchedControls() {
+    ModelOverviewSearchQueryDto query = new ModelOverviewSearchQueryDto();
+    query.setItemFilterType(ItemFilterTypeQueryDto.EXCLUDE);
+
+    Pageable pageable = PageRequest.of(
+      0,
+      10,
+      Sort.by(Sort.Order.asc("matched_controls"))
+    );
+
+    repository.findAll(pageable, query, List.of());
+
+    ArgumentCaptor<Aggregation> aggregationCaptor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(
+      aggregationCaptor.capture(),
+      eq(COLLECTION_NAME),
+      eq(ModelOverviewDocument.class)
+    );
+
+    String pipelineString = aggregationCaptor.getValue().toString();
+    assertThat(pipelineString)
+      .as("Should compute a sort key via $reduce for matched_controls array")
+      .contains("matched_controls_sort")
+      .contains("$reduce");
+    assertThat(pipelineString)
+      .as("$sort should use the computed key, not the raw array field")
+      .contains("\"matched_controls_sort\" : 1");
   }
 
   @Test
