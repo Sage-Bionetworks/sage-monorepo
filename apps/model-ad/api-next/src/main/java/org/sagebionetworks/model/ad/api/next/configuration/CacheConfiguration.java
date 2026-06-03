@@ -2,6 +2,9 @@ package org.sagebionetworks.model.ad.api.next.configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.List;
+import org.sagebionetworks.explorers.cacheinvalidation.DataVersionProvider;
+import org.sagebionetworks.model.ad.api.next.model.document.DataVersionDocument;
+import org.sagebionetworks.model.ad.api.next.model.repository.DataVersionRepository;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -36,11 +39,15 @@ public class CacheConfiguration {
         CacheNames.TRANSCRIPTOMICS,
         CacheNames.TRANSCRIPTOMICS_INDIVIDUAL,
         CacheNames.MODEL,
-        CacheNames.DATA_VERSION,
         CacheNames.COMPARISON_TOOL_CONFIG
       )
     );
 
     return cacheManager;
+  }
+
+  @Bean
+  public DataVersionProvider dataVersionProvider(DataVersionRepository repository) {
+    return () -> repository.findFirstBy().map(DataVersionDocument::getDataVersion);
   }
 }

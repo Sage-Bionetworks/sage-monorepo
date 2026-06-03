@@ -23,7 +23,6 @@ class CacheConfigurationTest {
       CacheNames.TRANSCRIPTOMICS,
       CacheNames.TRANSCRIPTOMICS_INDIVIDUAL,
       CacheNames.MODEL,
-      CacheNames.DATA_VERSION,
       CacheNames.COMPARISON_TOOL_CONFIG,
     }) {
       CaffeineCache springCache = (CaffeineCache) cacheManager.getCache(name);
@@ -31,9 +30,7 @@ class CacheConfigurationTest {
 
       Cache<Object, Object> nativeCache = springCache.getNativeCache();
       long maximum = nativeCache.policy().eviction().orElseThrow().getMaximum();
-      assertThat(maximum)
-        .as("cache '%s' maximumSize", name)
-        .isEqualTo(EXPECTED_MAXIMUM_SIZE);
+      assertThat(maximum).as("cache '%s' maximumSize", name).isEqualTo(EXPECTED_MAXIMUM_SIZE);
     }
   }
 }
