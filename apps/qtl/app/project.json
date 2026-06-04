@@ -166,6 +166,9 @@
       },
       "dependsOn": ["sentry-sourcemaps-inject"]
     },
+    "build-image": {
+      "dependsOn": ["sentry-sourcemaps-inject"]
+    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {

@@ -64,7 +64,6 @@ jobs:
             --remote-env GH_ACTOR="$GH_ACTOR" \
             bash -c '. ./dev-env.sh \
             && export VERSION="${{ env.VERSION }}" \
-            && nx run-many --target=sentry-sourcemaps-inject --projects="${{ env.PRODUCT }}-*" \
             && echo "$GH_TOKEN" | docker login ghcr.io -u "$GH_ACTOR" --password-stdin \
             && nx run-many --target=build-image --projects="${{ env.PRODUCT }}-*" --configuration=release'
 
