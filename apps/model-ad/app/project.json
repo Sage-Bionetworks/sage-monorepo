@@ -154,17 +154,29 @@
       },
       "dependsOn": []
     },
-    "sentry-sourcemaps": {
+    "sentry-sourcemaps-inject": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sentry-cli sourcemaps inject dist/apps/model-ad/app"
+      },
+      "dependsOn": ["build"]
+    },
+    "sentry-sourcemaps-upload": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "sentry-cli sourcemaps inject dist/apps/model-ad/app",
           "sentry-cli sourcemaps upload --org sage-bionetworks --project model-ad --release model-ad@$SENTRY_RELEASE_SUFFIX dist/apps/model-ad/app",
           "find dist/apps/model-ad/app -name '*.map' -delete"
         ],
         "parallel": false
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["sentry-sourcemaps-inject"]
+    },
+    "build-image": {
+      "dependsOn": ["sentry-sourcemaps-inject"],
+      "metadata": {
+        "description": "Depends on sentry-sourcemaps-inject (not build) so the Sentry Debug IDs survive Nx's cached build restore and are baked into the published image. See MG-902."
+      }
     },
     "scan-image": {
       "executor": "nx:run-commands",
