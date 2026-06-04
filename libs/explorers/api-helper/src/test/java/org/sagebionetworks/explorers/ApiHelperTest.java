@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -186,14 +187,7 @@ class ApiHelperTest {
     @Test
     @DisplayName("should append extra parts using Objects.toString")
     void shouldAppendExtraParts() {
-      String key = ApiHelper.buildCacheKey(
-        "scope",
-        SampleEnum.EXCLUDE,
-        List.of("a"),
-        1,
-        null,
-        "x"
-      );
+      String key = ApiHelper.buildCacheKey("scope", SampleEnum.EXCLUDE, List.of("a"), 1, null, "x");
 
       assertThat(key).isEqualTo("scope-exclude-[a]-1-null-x");
     }
@@ -240,7 +234,9 @@ class ApiHelperTest {
     }
 
     @Test
-    @DisplayName("should emit _isEmpty flag covering null, empty string, and empty array when sort has one field")
+    @DisplayName(
+      "should emit _isEmpty flag covering null, empty string, and empty array when sort has one field"
+    )
     void shouldEmitIsEmptyFlagWhenSortHasOneField() {
       AggregationOperation op = ApiHelper.buildEmptyFlagFields(Sort.by(Sort.Order.asc("name")));
 
@@ -250,7 +246,7 @@ class ApiHelperTest {
         .contains("name_isEmpty")
         .contains("$or")
         .contains("$eq")
-        .contains("$isArray")  // empty-array branch
+        .contains("$isArray") // empty-array branch
         .contains("$size");
     }
 
@@ -275,6 +271,36 @@ class ApiHelperTest {
       assertThat(asc).isNotNull();
       assertThat(desc).isNotNull();
       assertThat(asc.toDocument(null).toJson()).isEqualTo(desc.toDocument(null).toJson());
+    }
+
+    @Test
+    @DisplayName("should use aliased path in isEmpty expression when aliases map is provided")
+    void shouldUseAliasedPathInIsEmptyExpressionWhenAliasesMapIsProvided() {
+      Map<String, String> aliases = Map.of("4 months", "4 months.log2_fc");
+      AggregationOperation op = ApiHelper.buildEmptyFlagFields(
+        Sort.by(Sort.Order.asc("4 months")),
+        aliases
+      );
+
+      assertThat(op).isNotNull();
+      String doc = op.toDocument(null).toJson();
+      assertThat(doc)
+        .as("flag name should use the sort key with spaces replaced by underscores")
+        .contains("4_months_isEmpty");
+      assertThat(doc)
+        .as("isEmpty expression should use $let to bind the field access to $$val")
+        .contains("$let");
+      assertThat(doc)
+        .as("isEmpty expression should use $getField to navigate the spaced parent field")
+        .contains("$getField");
+      assertThat(doc)
+        .as("isEmpty expression should reference log2_fc as the child field")
+        .contains("log2_fc");
+      assertThat(doc)
+        .as("isEmpty expression should cover null, empty string, and empty array via $$val")
+        .contains("$$val")
+        .contains("$isArray")
+        .contains("$size");
     }
   }
 }

@@ -55,7 +55,9 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Test
-  @DisplayName("should resolve sort field aliases to the aliased name without a computed-sort $addFields")
+  @DisplayName(
+    "should resolve sort field aliases to the aliased name without a computed-sort $addFields"
+  )
   void shouldResolveSortFieldAliases() {
     AliasingRepo repo = new AliasingRepo(mongoTemplate);
     stubMongoTemplate(0L);
@@ -86,7 +88,9 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Test
-  @DisplayName("should skip computed-sort $addFields when the sort does not include any computed field")
+  @DisplayName(
+    "should skip computed-sort $addFields when the sort does not include any computed field"
+  )
   void shouldSkipComputedAddFieldsWhenUnused() {
     ComputedRepo repo = new ComputedRepo(mongoTemplate);
     stubMongoTemplate(0L);
@@ -120,6 +124,37 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Test
+  @DisplayName(
+    "should use $let/$getField and cover null, empty string, and empty array when sort alias contains spaces"
+  )
+  void shouldUseGetFieldWhenSortAliasContainsSpaces() {
+    SpacedAliasRepo repo = new SpacedAliasRepo(mongoTemplate);
+    stubMongoTemplate(0L);
+
+    Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("4 months")));
+    repo.run(new Criteria(), pageable);
+
+    String pipeline = capturePipeline().toString();
+    assertThat(pipeline)
+      .as("isEmpty key should have spaces replaced with underscores")
+      .contains("4_months_isEmpty");
+    assertThat(pipeline)
+      .as("$sort should use the nested alias path directly")
+      .contains("4 months.log2_fc");
+    assertThat(pipeline).as("isEmpty expression must use $let to bind $$val").contains("$let");
+    assertThat(pipeline)
+      .as(
+        "isEmpty expression must use $getField for spaced field names, not $-prefix expression syntax"
+      )
+      .contains("$getField");
+    assertThat(pipeline)
+      .as("isEmpty expression must cover null, empty string, and empty array via $$val")
+      .contains("$$val")
+      .contains("$isArray")
+      .contains("$size");
+  }
+
+  @Test
   @DisplayName("should throw UnsupportedOperationException when getFilterConfig is not overridden")
   void shouldThrowWhenGetFilterConfigNotOverridden() {
     BareRepo repo = new BareRepo(mongoTemplate);
@@ -142,8 +177,9 @@ class ComparisonToolRepositorySupportTest {
 
   private void stubMongoTemplate(long total) {
     when(mongoTemplate.count(any(Query.class), eq(COLLECTION))).thenReturn(total);
-    when(mongoTemplate.aggregate(any(Aggregation.class), eq(COLLECTION), eq(TestDocument.class)))
-      .thenReturn(aggregationResults);
+    when(
+      mongoTemplate.aggregate(any(Aggregation.class), eq(COLLECTION), eq(TestDocument.class))
+    ).thenReturn(aggregationResults);
     when(aggregationResults.getMappedResults()).thenReturn(List.of());
   }
 
@@ -208,6 +244,33 @@ class ComparisonToolRepositorySupportTest {
     @Override
     protected Map<String, String> getSortFieldAliases() {
       return Map.of("age", "age_numeric");
+    }
+
+    Page<TestDocument> run(Criteria criteria, Pageable pageable) {
+      return executePagedAggregation(criteria, pageable);
+    }
+  }
+
+  /** Subclass that exercises a sort alias whose key and value both contain spaces. */
+  private static final class SpacedAliasRepo extends ComparisonToolRepositorySupport<TestDocument> {
+
+    SpacedAliasRepo(MongoTemplate mongoTemplate) {
+      super(mongoTemplate);
+    }
+
+    @Override
+    protected String getCollectionName() {
+      return COLLECTION;
+    }
+
+    @Override
+    protected Class<TestDocument> getDocumentClass() {
+      return TestDocument.class;
+    }
+
+    @Override
+    protected Map<String, String> getSortFieldAliases() {
+      return Map.of("4 months", "4 months.log2_fc");
     }
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
@@ -334,7 +397,9 @@ class ComparisonToolRepositorySupportTest {
     }
 
     @Test
-    @DisplayName("should use original field name for _isEmpty when sort resolves through a computed alias")
+    @DisplayName(
+      "should use original field name for _isEmpty when sort resolves through a computed alias"
+    )
     void shouldUseOriginalFieldNameForIsEmptyWhenSortResolvesToComputedAlias() {
       ComputedRepo repo = new ComputedRepo(mongoTemplate);
       stubMongoTemplate(0L);

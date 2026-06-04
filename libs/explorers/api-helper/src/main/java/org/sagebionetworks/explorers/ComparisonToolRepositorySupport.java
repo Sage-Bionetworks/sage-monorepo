@@ -128,7 +128,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
       }
 
       // Inject empty-flag fields so null/empty values always sort last regardless of direction
-      AggregationOperation emptyFlags = ApiHelper.buildEmptyFlagFields(pageable.getSort());
+      AggregationOperation emptyFlags = ApiHelper.buildEmptyFlagFields(pageable.getSort(), aliases);
       if (emptyFlags != null) {
         operations.add(emptyFlags);
       }
@@ -385,12 +385,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
         resolved = field + "_sort";
       } else if (aliases.containsKey(field)) {
         resolved = aliases.get(field);
+        log.debug("Resolved sort alias: '{}' -> '{}'", field, resolved);
       } else {
         resolved = field;
       }
-      // _isEmpty is the raw field name (not the resolved alias) to match the $addFields output,
-      // and is always ascending so nulls/empties tail regardless of user direction
-      sortDoc.append(field + "_isEmpty", 1);
+      sortDoc.append(ApiHelper.isEmptyFlagKey(field), 1);
       sortDoc.append(resolved, order.isAscending() ? 1 : -1);
     }
 

@@ -68,12 +68,22 @@ public class CustomDiseaseCorrelationRepositoryImpl
   }
 
   /**
-   * Map {@code age} (a string column) to the numeric companion field so sorts are numeric
-   * instead of lexicographic.
+   * Maps {@code age} to its numeric companion field, and each heatmap column to its nested
+   * {@code correlation} value. Without the heatmap aliases, {@code $sort} operates on the
+   * full object ({@code { correlation, adj_p_val }}) and produces undefined ordering.
    */
   @Override
   protected Map<String, String> getSortFieldAliases() {
-    return Map.of("age", "age_numeric");
+    return Map.ofEntries(
+      Map.entry("age", "age_numeric"),
+      Map.entry("CBE", "CBE.correlation"),
+      Map.entry("DLPFC", "DLPFC.correlation"),
+      Map.entry("FP", "FP.correlation"),
+      Map.entry("IFG", "IFG.correlation"),
+      Map.entry("PHG", "PHG.correlation"),
+      Map.entry("STG", "STG.correlation"),
+      Map.entry("TCX", "TCX.correlation")
+    );
   }
 
   private final CtFilterConfig<DiseaseCorrelationSearchQueryDto> filterConfig =

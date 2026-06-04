@@ -83,14 +83,31 @@ public class CustomTranscriptomicsRepositoryImpl
     );
   }
 
-  private final CtFilterConfig<TranscriptomicsSearchQueryDto> filterConfig =
-    CtFilterConfig.<TranscriptomicsSearchQueryDto>builder()
-      .dataFilter("biodomains", TranscriptomicsSearchQueryDto::getBiodomains)
-      .dataFilter("model_type", TranscriptomicsSearchQueryDto::getModelType)
-      .dataFilter("name.link_text", TranscriptomicsSearchQueryDto::getName)
-      .compositeItemFilter(item -> TranscriptomicsIdentifier.parse(item).toCriteria())
-      .searchFilter(GENE_SYMBOL_FIELD)
-      .build();
+  private final CtFilterConfig<TranscriptomicsSearchQueryDto> filterConfig = CtFilterConfig.<
+    TranscriptomicsSearchQueryDto
+  >builder()
+    .dataFilter("biodomains", TranscriptomicsSearchQueryDto::getBiodomains)
+    .dataFilter("model_type", TranscriptomicsSearchQueryDto::getModelType)
+    .dataFilter("name.link_text", TranscriptomicsSearchQueryDto::getName)
+    .compositeItemFilter(item -> TranscriptomicsIdentifier.parse(item).toCriteria())
+    .searchFilter(GENE_SYMBOL_FIELD)
+    .build();
+
+  /**
+   * Heatmap columns store nested objects ({@code { log2_fc, adj_p_val }}); alias each to
+   * the numeric sub-field so {@code $sort} operates on the actual fold-change value.
+   */
+  @Override
+  protected Map<String, String> getSortFieldAliases() {
+    return Map.of(
+      "4 months",
+      "4 months.log2_fc",
+      "12 months",
+      "12 months.log2_fc",
+      "18 months",
+      "18 months.log2_fc"
+    );
+  }
 
   @Override
   protected CtFilterConfig<TranscriptomicsSearchQueryDto> getFilterConfig() {

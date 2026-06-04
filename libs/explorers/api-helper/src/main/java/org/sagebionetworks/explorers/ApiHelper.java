@@ -143,17 +143,22 @@ public final class ApiHelper {
 
   /**
    * Builds an {@code $addFields} stage that emits a {@code <field>_isEmpty} boolean for every sort
-   * order in {@code sort}. The flag is {@code true} when the field is {@code null} or an empty
-   * string, {@code false} otherwise.
+   * order in {@code sort}. The flag is {@code true} when the field is {@code null}, missing, an
+   * empty string, or an empty array; {@code false} otherwise.
    *
    * <p>Prepending {@code <field>_isEmpty: 1} to the {@code $sort} doc (always ascending) before the
    * user's chosen sort key pushes empty/null rows to the tail regardless of the user's sort
    * direction, while non-empty rows sort normally within themselves.
    *
+   * <p>When {@code aliases} is provided, the isEmpty expression is evaluated against the aliased
+   * path rather than the raw sort field, so null detection targets the actual value being sorted
+   * rather than a parent object that may be present even when the value itself is absent.
+   *
    * @param sort the requested sort; if unsorted, returns {@code null}
+   * @param aliases map from sort field name to the aliased document path used in {@code $sort}
    * @return an {@code $addFields} {@link AggregationOperation}, or {@code null} when sort is empty
    */
-  public static AggregationOperation buildEmptyFlagFields(Sort sort) {
+  public static AggregationOperation buildEmptyFlagFields(Sort sort, Map<String, String> aliases) {
     if (sort.isUnsorted()) {
       return null;
     }
@@ -161,44 +166,90 @@ public final class ApiHelper {
     Document fields = new Document();
     for (Sort.Order order : sort) {
       String field = order.getProperty();
+      String resolvedField = aliases.getOrDefault(field, field);
 
-      // null or missing -- ArrayList because List.of() prohibits null elements
-      List<Object> isNullArgs = new ArrayList<>(2);
-      isNullArgs.add("$" + field);
-      isNullArgs.add(null);
+      Document isEmptyExpr = buildIsEmptyExpr(resolvedField);
 
-      // empty string
-      List<Object> isEmptyStringArgs = List.of("$" + field, "");
-
-      // empty array: $cond guards with $isArray so non-array fields return -1 (not 0)
-      Document isEmptyArrayExpr = new Document(
-        "$eq",
-        List.of(
-          new Document(
-            "$cond",
-            List.of(
-              new Document("$isArray", "$" + field),
-              new Document("$size", "$" + field),
-              -1
-            )
-          ),
-          0
-        )
-      );
-
-      Document isEmptyExpr = new Document(
-        "$or",
-        List.of(
-          new Document("$eq", isNullArgs),
-          new Document("$eq", isEmptyStringArgs),
-          isEmptyArrayExpr
-        )
-      );
-
-      fields.append(field + "_isEmpty", isEmptyExpr);
+      fields.append(isEmptyFlagKey(field), isEmptyExpr);
     }
 
     return context -> new Document("$addFields", fields);
+  }
+
+  /** Overload for callers with no sort-field aliases. */
+  public static AggregationOperation buildEmptyFlagFields(Sort sort) {
+    return buildEmptyFlagFields(sort, Map.of());
+  }
+
+  /**
+   * Returns the {@code $addFields} output key for the isEmpty flag of the given sort field.
+   * Spaces are replaced with underscores because spaces in {@code $addFields} key names are
+   * unreliable in DocumentDB's {@code $sort} parser -- the flag would silently have no effect.
+   */
+  static String isEmptyFlagKey(String field) {
+    return field.replace(" ", "_") + "_isEmpty";
+  }
+
+  /**
+   * Builds an isEmpty expression for the given resolved field path. The flag is {@code true} when
+   * the field is null, missing, an empty string, or an empty array.
+   *
+   * <p>For field paths containing spaces (e.g. {@code "4 months.log2_fc"}), {@code "$field"}
+   * expression syntax silently fails to resolve the name, so {@code $getField} is used instead.
+   * Both access strategies are bound to {@code $$val} via {@code $let} so the three isEmpty checks
+   * (null/missing, empty string, empty array) apply uniformly regardless of how the field is
+   * accessed.
+   *
+   * <p>Spaced paths support one level of nesting by splitting on the first dot. Deeper nesting
+   * would require additional chained {@code $getField} calls.
+   */
+  private static Document buildIsEmptyExpr(String resolvedField) {
+    Object fieldAccess;
+    if (resolvedField.contains(" ")) {
+      int dotIndex = resolvedField.indexOf('.');
+      if (dotIndex >= 0) {
+        String parent = resolvedField.substring(0, dotIndex);
+        String child = resolvedField.substring(dotIndex + 1);
+        fieldAccess = new Document(
+          "$getField",
+          new Document("field", child).append("input", new Document("$getField", parent))
+        );
+      } else {
+        fieldAccess = new Document("$getField", resolvedField);
+      }
+    } else {
+      fieldAccess = "$" + resolvedField;
+    }
+
+    // null or missing -- ArrayList because List.of() prohibits null elements
+    List<Object> isNullArgs = new ArrayList<>(2);
+    isNullArgs.add("$$val");
+    isNullArgs.add(null);
+
+    // empty string
+    List<Object> isEmptyStringArgs = List.of("$$val", "");
+
+    // empty array: $cond guards with $isArray so non-array fields return -1 (not 0)
+    Document isEmptyArrayExpr = new Document(
+      "$eq",
+      List.of(
+        new Document("$cond", List.of(
+          new Document("$isArray", "$$val"),
+          new Document("$size", "$$val"),
+          -1
+        )),
+        0
+      )
+    );
+
+    return new Document("$let", new Document()
+      .append("vars", new Document("val", fieldAccess))
+      .append("in", new Document("$or", List.of(
+        new Document("$eq", isNullArgs),
+        new Document("$eq", isEmptyStringArgs),
+        isEmptyArrayExpr
+      )))
+    );
   }
 
   /**

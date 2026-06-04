@@ -223,6 +223,30 @@ class CustomTranscriptomicsRepositoryImplTest {
     assertThat(pipeline).contains("\"gene_symbol_sort\" : 1");
   }
 
+  @Test
+  @DisplayName("should sort by log2_fc sub-field when sorting by a heatmap month column")
+  void shouldSortByLog2FcWhenSortingByMonthColumn() {
+    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .build();
+
+    repository.findAll(
+      PageRequest.of(0, 10, Sort.by(Sort.Order.asc("4 months"))),
+      query,
+      Collections.emptyList(),
+      "Hippocampus",
+      "Females & Males"
+    );
+
+    String pipeline = captureAggregation().toString();
+    assertThat(pipeline)
+      .as("$sort should use the nested log2_fc path, not the raw object")
+      .contains("4 months.log2_fc");
+    assertThat(pipeline)
+      .as("$sort should not reference the raw '4 months' object directly as a sort key")
+      .doesNotContain("\"4 months\" :");
+  }
+
   private Query captureCountQuery() {
     ArgumentCaptor<Query> captor = ArgumentCaptor.forClass(Query.class);
     verify(mongoTemplate).count(captor.capture(), eq(COLLECTION_NAME));

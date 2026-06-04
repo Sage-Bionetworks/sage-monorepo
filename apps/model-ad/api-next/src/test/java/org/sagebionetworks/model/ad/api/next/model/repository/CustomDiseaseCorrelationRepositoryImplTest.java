@@ -1,5 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.model.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -192,5 +193,49 @@ class CustomDiseaseCorrelationRepositoryImplTest {
       aggregationString.contains("age_lower"),
       "Aggregation should not create age_lower field"
     );
+  }
+
+  @Test
+  @DisplayName("should sort by correlation sub-field when sorting by a heatmap module column")
+  void shouldSortByCorrelationWhenSortingByHeatmapColumn() {
+    DiseaseCorrelationSearchQueryDto query = new DiseaseCorrelationSearchQueryDto();
+    query.setItemFilterType(ItemFilterTypeQueryDto.EXCLUDE);
+
+    when(
+      mongoTemplate.aggregate(
+        any(Aggregation.class),
+        eq("disease_correlation"),
+        eq(DiseaseCorrelationDocument.class)
+      )
+    ).thenReturn(aggregationResults);
+    when(aggregationResults.getMappedResults()).thenReturn(List.of());
+
+    repository.findAll(
+      PageRequest.of(
+        0,
+        10,
+        org.springframework.data.domain.Sort.by(
+          org.springframework.data.domain.Sort.Order.asc("CBE")
+        )
+      ),
+      query,
+      List.of(),
+      "Immune System - Consensus Cluster B"
+    );
+
+    ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(
+      captor.capture(),
+      eq("disease_correlation"),
+      eq(DiseaseCorrelationDocument.class)
+    );
+    String pipeline = captor.getValue().toString();
+
+    assertThat(pipeline)
+      .as("$sort should use the nested correlation path, not the raw object")
+      .contains("CBE.correlation");
+    assertThat(pipeline)
+      .as("$sort should not reference the raw CBE object directly as a sort key")
+      .doesNotContain("\"CBE\" :");
   }
 }
