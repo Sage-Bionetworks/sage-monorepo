@@ -1,0 +1,8 @@
+{
+  "name": "explorers-api-cache-invalidation",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/explorers/api-cache-invalidation/src",
+  "projectType": "library",
+  "targets": {},
+  "tags": ["type:feature", "scope:explorers", "language:java", "package-manager:gradle"]
+}

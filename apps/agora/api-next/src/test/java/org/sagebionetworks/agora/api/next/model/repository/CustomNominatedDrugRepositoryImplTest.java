@@ -45,6 +45,58 @@ class CustomNominatedDrugRepositoryImplTest {
     repository = new CustomNominatedDrugRepositoryImpl(mongoTemplate);
   }
 
+  private Pageable pageable() {
+    return PageRequest.of(0, 10);
+  }
+
+  @Test
+  @DisplayName("should default null itemFilterType to INCLUDE mode")
+  void shouldDefaultNullItemFilterTypeToInclude() {
+    when(mongoTemplate.count(any(Query.class), eq(COLLECTION_NAME))).thenReturn(0L);
+    when(
+      mongoTemplate.aggregate(
+        any(Aggregation.class),
+        eq(COLLECTION_NAME),
+        eq(NominatedDrugDocument.class)
+      )
+    ).thenReturn(aggregationResults);
+    when(aggregationResults.getMappedResults()).thenReturn(List.of());
+
+    // null itemFilterType with a non-empty items list — should behave as INCLUDE ($in)
+    NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder().build();
+
+    repository.findAll(pageable(), query, List.of("CHEMBL2105758~null"));
+
+    ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(captor.capture(), eq(COLLECTION_NAME), eq(NominatedDrugDocument.class));
+
+    assertThat(captor.getValue().toString()).contains("$or").contains("CHEMBL2105758");
+  }
+
+  @Test
+  @DisplayName("should return empty result set when itemFilterType is null and items list is empty")
+  void shouldReturnEmptyWhenNullItemFilterTypeAndEmptyItems() {
+    when(mongoTemplate.count(any(Query.class), eq(COLLECTION_NAME))).thenReturn(0L);
+    when(
+      mongoTemplate.aggregate(
+        any(Aggregation.class),
+        eq(COLLECTION_NAME),
+        eq(NominatedDrugDocument.class)
+      )
+    ).thenReturn(aggregationResults);
+    when(aggregationResults.getMappedResults()).thenReturn(List.of());
+
+    // null itemFilterType with empty items — should default to INCLUDE and inject impossible condition
+    NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder().build();
+
+    repository.findAll(pageable(), query, List.of());
+
+    ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(captor.capture(), eq(COLLECTION_NAME), eq(NominatedDrugDocument.class));
+
+    assertThat(captor.getValue().toString()).contains("_id").contains("null");
+  }
+
   @Test
   @DisplayName("should use aggregation pipeline for queries")
   void shouldUseAggregationPipeline() {

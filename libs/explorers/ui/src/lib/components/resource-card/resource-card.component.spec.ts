@@ -1,3 +1,4 @@
+import { ResourceCardData } from '@sagebionetworks/explorers/models';
 import { render, screen } from '@testing-library/angular';
 import { ResourceCardComponent } from './resource-card.component';
 
@@ -9,7 +10,7 @@ const mockExternalLink = 'https://synapse.org';
 const mockAltText = 'Test alt text';
 
 describe('ResourceCardComponent', () => {
-  async function setup(inputs?: Partial<ResourceCardComponent>) {
+  async function setup(inputs?: Partial<ResourceCardData>) {
     const component = await render(ResourceCardComponent, {
       componentInputs: {
         imagePath: '/assets/test.svg',

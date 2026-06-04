@@ -1,16 +1,9 @@
-<div class="section section-hero" [style.background-image]="'url(' + heroBackgroundImagePath + ')'">
+<div class="section" [style.background-image]="'url(' + heroBackgroundImagePath + ')'">
   <div class="section-inner">
     <div class="container-sm">
       <h1 class="h2">Contributing Teams</h1>
-    </div>
-  </div>
-</div>
-
-<div class="section">
-  <div class="section-inner">
-    <div class="container-sm">
       @if (teams$ | async; as teams) {
-        <agora-team-list [teams]="teams"></agora-team-list>
+        <agora-team-list [teams]="teams" />
       }
     </div>
   </div>
