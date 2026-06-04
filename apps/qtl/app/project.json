@@ -167,7 +167,10 @@
       "dependsOn": ["sentry-sourcemaps-inject"]
     },
     "build-image": {
-      "dependsOn": ["sentry-sourcemaps-inject"]
+      "dependsOn": ["sentry-sourcemaps-inject"],
+      "metadata": {
+        "description": "Depends on sentry-sourcemaps-inject (not build) so the Sentry Debug IDs survive Nx's cached build restore and are baked into the published image. See MG-902."
+      }
     },
     "scan-image": {
       "executor": "nx:run-commands",
