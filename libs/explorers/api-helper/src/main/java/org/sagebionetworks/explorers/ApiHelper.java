@@ -194,19 +194,21 @@ public final class ApiHelper {
    * Builds an isEmpty expression for the given resolved field path. The flag is {@code true} when
    * the field is null, missing, an empty string, or an empty array.
    *
-   * <p>For field paths containing spaces (e.g. {@code "4 months.log2_fc"}), {@code "$field"}
-   * expression syntax silently fails to resolve the name, so {@code $getField} is used instead.
-   * Both access strategies are bound to {@code $$val} via {@code $let} so the three isEmpty checks
-   * (null/missing, empty string, empty array) apply uniformly regardless of how the field is
-   * accessed.
+   * <p>For field paths containing no spaces, uses {@code "$field"} expression syntax directly.
+   * For field paths containing spaces (e.g. {@code "4 months.log2_fc"}), {@code "$field"}
+   * expression syntax silently fails to resolve the name, so {@code $getField} is used instead,
+   * and the field access expression is bound to {@code $$val} via {@code $let} so all three
+   * isEmpty checks can reference it uniformly. The null/missing branch uses {@code $type} rather
+   * than {@code $eq null} because {@code $getField} returns {@code $$REMOVE} (not {@code null})
+   * when the parent field is absent, and {@code $eq [$$REMOVE, null]} evaluates to {@code false}.
    *
    * <p>Spaced paths support one level of nesting by splitting on the first dot. Deeper nesting
    * would require additional chained {@code $getField} calls.
    */
   private static Document buildIsEmptyExpr(String resolvedField) {
-    Object fieldAccess;
     if (resolvedField.contains(" ")) {
       int dotIndex = resolvedField.indexOf('.');
+      Object fieldAccess;
       if (dotIndex >= 0) {
         String parent = resolvedField.substring(0, dotIndex);
         String child = resolvedField.substring(dotIndex + 1);
@@ -217,39 +219,59 @@ public final class ApiHelper {
       } else {
         fieldAccess = new Document("$getField", resolvedField);
       }
-    } else {
-      fieldAccess = "$" + resolvedField;
+
+      // null/missing: $type returns "null" or "missing" for absent/null; $eq null fails for
+      // $$REMOVE so $type is required here
+      Document isNullOrMissing = new Document(
+        "$in", List.of(new Document("$type", "$$val"), List.of("null", "missing"))
+      );
+      // empty string
+      Document isEmptyString = new Document("$eq", List.of("$$val", ""));
+      // empty array: $cond guards with $isArray so non-array fields return -1 (not 0)
+      Document isEmptyArray = new Document(
+        "$eq",
+        List.of(
+          new Document("$cond", List.of(
+            new Document("$isArray", "$$val"),
+            new Document("$size", "$$val"),
+            -1
+          )),
+          0
+        )
+      );
+
+      return new Document("$let", new Document()
+        .append("vars", new Document("val", fieldAccess))
+        .append("in", new Document("$or", List.of(isNullOrMissing, isEmptyString, isEmptyArray)))
+      );
     }
 
     // null or missing -- ArrayList because List.of() prohibits null elements
     List<Object> isNullArgs = new ArrayList<>(2);
-    isNullArgs.add("$$val");
+    isNullArgs.add("$" + resolvedField);
     isNullArgs.add(null);
 
     // empty string
-    List<Object> isEmptyStringArgs = List.of("$$val", "");
+    List<Object> isEmptyStringArgs = List.of("$" + resolvedField, "");
 
     // empty array: $cond guards with $isArray so non-array fields return -1 (not 0)
     Document isEmptyArrayExpr = new Document(
       "$eq",
       List.of(
         new Document("$cond", List.of(
-          new Document("$isArray", "$$val"),
-          new Document("$size", "$$val"),
+          new Document("$isArray", "$" + resolvedField),
+          new Document("$size", "$" + resolvedField),
           -1
         )),
         0
       )
     );
 
-    return new Document("$let", new Document()
-      .append("vars", new Document("val", fieldAccess))
-      .append("in", new Document("$or", List.of(
-        new Document("$eq", isNullArgs),
-        new Document("$eq", isEmptyStringArgs),
-        isEmptyArrayExpr
-      )))
-    );
+    return new Document("$or", List.of(
+      new Document("$eq", isNullArgs),
+      new Document("$eq", isEmptyStringArgs),
+      isEmptyArrayExpr
+    ));
   }
 
   /**

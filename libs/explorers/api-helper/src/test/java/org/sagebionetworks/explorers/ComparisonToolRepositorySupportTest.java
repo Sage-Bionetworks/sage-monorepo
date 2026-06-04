@@ -125,7 +125,7 @@ class ComparisonToolRepositorySupportTest {
 
   @Test
   @DisplayName(
-    "should use $let/$getField and cover null, empty string, and empty array when sort alias contains spaces"
+    "should use $let/$getField/$type and cover null, empty string, and empty array when sort alias contains spaces"
   )
   void shouldUseGetFieldWhenSortAliasContainsSpaces() {
     SpacedAliasRepo repo = new SpacedAliasRepo(mongoTemplate);
@@ -141,17 +141,16 @@ class ComparisonToolRepositorySupportTest {
     assertThat(pipeline)
       .as("$sort should use the nested alias path directly")
       .contains("4 months.log2_fc");
-    assertThat(pipeline).as("isEmpty expression must use $let to bind $$val").contains("$let");
     assertThat(pipeline)
-      .as(
-        "isEmpty expression must use $getField for spaced field names, not $-prefix expression syntax"
-      )
+      .as("isEmpty expression must use $let to bind $$val to the $getField result")
+      .contains("$let");
+    assertThat(pipeline)
+      .as("isEmpty expression must use $getField for spaced field names, not $-prefix expression syntax")
       .contains("$getField");
     assertThat(pipeline)
-      .as("isEmpty expression must cover null, empty string, and empty array via $$val")
-      .contains("$$val")
-      .contains("$isArray")
-      .contains("$size");
+      .as("isEmpty expression must use $type for null/missing and cover empty string and empty array")
+      .contains("$type").contains("missing")
+      .contains("$isArray").contains("$size");
   }
 
   @Test

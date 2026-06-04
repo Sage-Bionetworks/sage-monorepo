@@ -288,7 +288,7 @@ class ApiHelperTest {
         .as("flag name should use the sort key with spaces replaced by underscores")
         .contains("4_months_isEmpty");
       assertThat(doc)
-        .as("isEmpty expression should use $let to bind the field access to $$val")
+        .as("isEmpty expression should use $let to bind $$val to the $getField access expression")
         .contains("$let");
       assertThat(doc)
         .as("isEmpty expression should use $getField to navigate the spaced parent field")
@@ -297,10 +297,9 @@ class ApiHelperTest {
         .as("isEmpty expression should reference log2_fc as the child field")
         .contains("log2_fc");
       assertThat(doc)
-        .as("isEmpty expression should cover null, empty string, and empty array via $$val")
-        .contains("$$val")
-        .contains("$isArray")
-        .contains("$size");
+        .as("isEmpty expression should use $type for null/missing and cover empty string and empty array")
+        .contains("$type").contains("missing")
+        .contains("$isArray").contains("$size");
     }
   }
 }
