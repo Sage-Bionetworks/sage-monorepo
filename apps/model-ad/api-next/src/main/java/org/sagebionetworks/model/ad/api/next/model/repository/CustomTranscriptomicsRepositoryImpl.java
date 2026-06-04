@@ -96,10 +96,17 @@ public class CustomTranscriptomicsRepositoryImpl
   /**
    * Heatmap columns store nested objects ({@code { log2_fc, adj_p_val }}); alias each to
    * the numeric sub-field so {@code $sort} operates on the actual fold-change value.
+   *
+   * <p>{@code gene_symbol} is aliased to {@code display_gene_symbol} so the isEmpty flag checks
+   * the computed fallback value (gene_symbol ?? ensembl_gene_id) rather than the raw field.
+   * Without this, rows where {@code gene_symbol} is blank but {@code ensembl_gene_id} is populated
+   * would be treated as empty and incorrectly sorted to the tail.
    */
   @Override
   protected Map<String, String> getSortFieldAliases() {
     return Map.of(
+      GENE_SYMBOL_FIELD,
+      DISPLAY_GENE_SYMBOL_FIELD,
       "4 months",
       "4 months.log2_fc",
       "12 months",
