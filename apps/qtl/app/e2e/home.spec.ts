@@ -5,6 +5,8 @@ test.describe('home', () => {
     await page.goto('/');
 
     const welcomeMessage = page.locator('h1');
-    await expect(welcomeMessage).toHaveText('Welcome to the xQTL Explorer!');
+    await expect(welcomeMessage).toHaveText(
+      'Explore Quantitative Trait Loci Across Models and Studies',
+    );
   });
 });
