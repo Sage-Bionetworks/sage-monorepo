@@ -183,11 +183,12 @@ public final class ApiHelper {
 
   /**
    * Returns the {@code $addFields} output key for the isEmpty flag of the given sort field.
-   * Spaces are replaced with underscores because spaces in {@code $addFields} key names are
-   * unreliable in DocumentDB's {@code $sort} parser -- the flag would silently have no effect.
+   * Spaces and dots are replaced with underscores: spaces because they are unreliable in
+   * DocumentDB's {@code $sort} parser, and dots because MongoDB interprets them as nested-path
+   * separators in {@code $addFields} keys, which would silently corrupt the flag.
    */
   static String isEmptyFlagKey(String field) {
-    return field.replace(" ", "_") + "_isEmpty";
+    return field.replace(" ", "_").replace(".", "_") + "_isEmpty";
   }
 
   /**

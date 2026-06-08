@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 
 class ApiHelperTest {
@@ -241,7 +242,7 @@ class ApiHelperTest {
       AggregationOperation op = ApiHelper.buildEmptyFlagFields(Sort.by(Sort.Order.asc("name")));
 
       assertThat(op).isNotNull();
-      String doc = op.toDocument(null).toJson();
+      String doc = op.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson();
       assertThat(doc)
         .contains("name_isEmpty")
         .contains("$or")
@@ -258,7 +259,7 @@ class ApiHelperTest {
       );
 
       assertThat(op).isNotNull();
-      String doc = op.toDocument(null).toJson();
+      String doc = op.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson();
       assertThat(doc).contains("name_isEmpty").contains("age_isEmpty");
     }
 
@@ -270,7 +271,9 @@ class ApiHelperTest {
 
       assertThat(asc).isNotNull();
       assertThat(desc).isNotNull();
-      assertThat(asc.toDocument(null).toJson()).isEqualTo(desc.toDocument(null).toJson());
+      assertThat(asc.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson()).isEqualTo(
+        desc.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson()
+      );
     }
 
     @Test
@@ -286,6 +289,21 @@ class ApiHelperTest {
     }
 
     @Test
+    @DisplayName("should replace dots with underscores in isEmpty flag key for dotted sort fields")
+    void shouldReplaceDotsWithUnderscoresInIsEmptyFlagKeyForDottedSortFields() {
+      AggregationOperation op = ApiHelper.buildEmptyFlagFields(
+        Sort.by(Sort.Order.asc("name.link_text"))
+      );
+
+      assertThat(op).isNotNull();
+      String doc = op.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson();
+      assertThat(doc)
+        .as("dots in sort field name should be replaced with underscores in flag key")
+        .contains("name_link_text_isEmpty")
+        .doesNotContain("name.link_text_isEmpty");
+    }
+
+    @Test
     @DisplayName("should use aliased path in isEmpty expression when aliases map is provided")
     void shouldUseAliasedPathInIsEmptyExpressionWhenAliasesMapIsProvided() {
       Map<String, String> aliases = Map.of("4 months", "4 months.log2_fc");
@@ -295,7 +313,7 @@ class ApiHelperTest {
       );
 
       assertThat(op).isNotNull();
-      String doc = op.toDocument(null).toJson();
+      String doc = op.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson();
       assertThat(doc)
         .as("flag name should use the sort key with spaces replaced by underscores")
         .contains("4_months_isEmpty");
