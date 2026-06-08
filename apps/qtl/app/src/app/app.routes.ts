@@ -1,58 +1,10 @@
 import { Route } from '@angular/router';
-import { StatCardData, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import {
   DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
   ROUTE_PATHS,
   SUPPORT_EMAIL,
 } from '@sagebionetworks/qtl/config';
-
-const HOME_STAT_CARDS: StatCardData[] = [
-  {
-    iconPath: 'explorers-assets/icons/people.svg',
-    iconAltText: 'people',
-    iconColor: 'white',
-    iconBackgroundColor: '#2C5182',
-    header: '4000',
-    subHeader: 'Brain Donors',
-    link: `/${ROUTE_PATHS.NOT_FOUND}`,
-  },
-  {
-    iconPath: 'explorers-assets/icons/cell.svg',
-    iconAltText: 'cell',
-    iconColor: 'white',
-    iconBackgroundColor: '#388C95',
-    header: '81',
-    subHeader: 'Cell Types',
-    link: `/${ROUTE_PATHS.NOT_FOUND}`,
-  },
-  {
-    iconPath: 'explorers-assets/icons/gene-search.svg',
-    iconAltText: 'gene search',
-    header: '3',
-    subHeader: 'Ancestries',
-    iconBackgroundColor: '#A5C7F3',
-    iconColor: 'white',
-    link: `/${ROUTE_PATHS.NOT_FOUND}`,
-  },
-  {
-    iconPath: 'explorers-assets/icons/erythrocytes.svg',
-    iconAltText: 'erythrocytes',
-    iconColor: 'white',
-    iconBackgroundColor: '#6E76AE',
-    header: '2 million',
-    subHeader: 'Single Cells',
-    link: `/${ROUTE_PATHS.NOT_FOUND}`,
-  },
-  {
-    iconPath: 'explorers-assets/icons/eqtl.svg',
-    iconAltText: 'eQTL',
-    iconColor: 'white',
-    iconBackgroundColor: '#D7AE0C',
-    header: '252 million',
-    subHeader: 'eQTLs',
-    link: `/${ROUTE_PATHS.ABOUT}`,
-  },
-];
 
 export const routes: Route[] = [
   {
@@ -61,7 +13,6 @@ export const routes: Route[] = [
     data: {
       title: 'xQTL Explorer',
       description: 'home page',
-      statCards: HOME_STAT_CARDS,
     },
   },
   {

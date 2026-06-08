@@ -15,5 +15,5 @@ export class StatCardComponent {
   link = input.required<string>();
   subHeader = input<string | undefined>();
   iconBackgroundColor = input<string | undefined>();
-  iconColor = input<string | undefined>();
+  iconColor = input<string>('inherit');
 }

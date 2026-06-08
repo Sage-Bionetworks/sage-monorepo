@@ -15,12 +15,13 @@
       </div>
       <div class="chiclet-card">
         <explorers-chiclet-card
-          title="What are QTLs?"
+          title="Example searches"
           [chiclets]="chiclets"
         ></explorers-chiclet-card>
       </div>
       <div class="stat-cards-link-bar-container">
-        <explorers-stat-cards [cards]="statCards()" [animateOnLoad]="true" />
+        <explorers-stat-cards [cards]="statCards" [animateOnLoad]="true" />
+        <!-- TODO: update link bar link (QTL-110) -->
         <explorers-link-bar link="/not-found"
           >View QTLs by cohort, ancestry, or cell type</explorers-link-bar
         >
