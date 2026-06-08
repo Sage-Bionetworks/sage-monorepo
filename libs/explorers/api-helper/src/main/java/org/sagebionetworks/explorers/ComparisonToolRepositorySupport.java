@@ -91,9 +91,21 @@ public abstract class ComparisonToolRepositorySupport<T> {
   }
 
   /**
-   * Map of sort field → aliased field name for a direct {@code $sort} rename (no {@code $addFields}
-   * stage). Use when an alternate field is already present on the document (e.g.
-   * {@code "age" → "age_numeric"} for a numeric companion to a string column).
+   * Map of sort field name → aliased document path for a direct {@code $sort} rename (no
+   * {@code $addFields} stage). Two cases require an entry:
+   *
+   * <ol>
+   *   <li><strong>Companion-field redirect</strong> — a separate field already on the document
+   *       carries the sortable value (e.g. {@code "age" → "age_numeric"}).
+   *   <li><strong>Nested-object columns</strong> — any column whose document value is an object
+   *       (rather than a scalar) must be aliased to the specific sub-field to sort on (e.g.
+   *       {@code "CBE" → "CBE.correlation"}, {@code "4 months" → "4 months.log2_fc"}). Without the
+   *       alias, {@code $sort} operates on the full object and produces undefined ordering. This
+   *       applies to any object-valued column — heatmap modules, time-point buckets, or similar.
+   * </ol>
+   *
+   * <p>Subclass overrides must stay in sync with the document schema: whenever a new object-valued
+   * column is added, add the corresponding alias here.
    */
   protected Map<String, String> getSortFieldAliases() {
     return Map.of();

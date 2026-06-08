@@ -68,9 +68,9 @@ public class CustomDiseaseCorrelationRepositoryImpl
   }
 
   /**
-   * Maps {@code age} to its numeric companion field, and each heatmap column to its nested
-   * {@code correlation} value. Without the heatmap aliases, {@code $sort} operates on the
-   * full object ({@code { correlation, adj_p_val }}) and produces undefined ordering.
+   * Maps {@code age} to its numeric companion field, and each brain-region heatmap column to its
+   * nested {@code correlation} value ({@code { correlation, adj_p_val }}). Keys must stay in sync
+   * with the {@link DiseaseCorrelationDocument} heatmap fields.
    */
   @Override
   protected Map<String, String> getSortFieldAliases() {

@@ -274,6 +274,18 @@ class ApiHelperTest {
     }
 
     @Test
+    @DisplayName("should throw when a spaced alias resolves to a path with more than one dot")
+    void shouldThrowWhenSpacedAliasHasMoreThanOneDot() {
+      Map<String, String> aliases = Map.of("4 months", "4 months.nested.value");
+      assertThatThrownBy(() ->
+        ApiHelper.buildEmptyFlagFields(Sort.by(Sort.Order.asc("4 months")), aliases)
+      )
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("4 months.nested.value")
+        .hasMessageContaining("one level of nesting");
+    }
+
+    @Test
     @DisplayName("should use aliased path in isEmpty expression when aliases map is provided")
     void shouldUseAliasedPathInIsEmptyExpressionWhenAliasesMapIsProvided() {
       Map<String, String> aliases = Map.of("4 months", "4 months.log2_fc");
@@ -297,9 +309,13 @@ class ApiHelperTest {
         .as("isEmpty expression should reference log2_fc as the child field")
         .contains("log2_fc");
       assertThat(doc)
-        .as("isEmpty expression should use $type for null/missing and cover empty string and empty array")
-        .contains("$type").contains("missing")
-        .contains("$isArray").contains("$size");
+        .as(
+          "isEmpty expression should use $type for null/missing and cover empty string and empty array"
+        )
+        .contains("$type")
+        .contains("missing")
+        .contains("$isArray")
+        .contains("$size");
     }
   }
 }

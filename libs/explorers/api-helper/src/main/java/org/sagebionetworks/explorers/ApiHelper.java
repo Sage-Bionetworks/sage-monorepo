@@ -212,6 +212,14 @@ public final class ApiHelper {
       if (dotIndex >= 0) {
         String parent = resolvedField.substring(0, dotIndex);
         String child = resolvedField.substring(dotIndex + 1);
+        if (child.contains(".")) {
+          throw new IllegalArgumentException(
+            "Spaced field paths support only one level of nesting via $getField; '"
+              + resolvedField
+              + "' contains more than one dot."
+              + " Add an explicit sort-field alias to a single-dot path instead."
+          );
+        }
         fieldAccess = new Document(
           "$getField",
           new Document("field", child).append("input", new Document("$getField", parent))

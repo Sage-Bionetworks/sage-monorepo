@@ -94,8 +94,9 @@ public class CustomTranscriptomicsRepositoryImpl
     .build();
 
   /**
-   * Heatmap columns store nested objects ({@code { log2_fc, adj_p_val }}); alias each to
-   * the numeric sub-field so {@code $sort} operates on the actual fold-change value.
+   * Maps each heatmap time-point column to its nested {@code log2_fc} value
+   * ({@code { log2_fc, adj_p_val }}). Keys must stay in sync with the
+   * {@link TranscriptomicsDocument} heatmap fields.
    *
    * <p>{@code gene_symbol} is aliased to {@code display_gene_symbol} so the isEmpty flag checks
    * the computed fallback value (gene_symbol ?? ensembl_gene_id) rather than the raw field.
