@@ -147,6 +147,13 @@ export class ComparisonToolService<T> {
   });
 
   constructor() {
+    effect(() => {
+      if (this.isLoadingTableData()) return;
+      if (!this.viewConfig().rowSelectionEnabled) return;
+      if (this.selectedRowIdSignal() !== null) return;
+      this.autoSelectFirstRow();
+    });
+
     // Close the filter panel when the current config has no filters to avoid showing an empty panel.
     effect(() => {
       const config = this.currentConfig();
@@ -597,10 +604,6 @@ export class ComparisonToolService<T> {
   setUnpinnedData(unpinnedData: T[]) {
     this.unpinnedDataSignal.set(unpinnedData);
     this.completeFetch();
-
-    if (this.viewConfig().rowSelectionEnabled && this.selectedRowIdSignal() === null) {
-      this.autoSelectFirstRow();
-    }
   }
 
   setPinnedData(pinnedData: T[]) {
