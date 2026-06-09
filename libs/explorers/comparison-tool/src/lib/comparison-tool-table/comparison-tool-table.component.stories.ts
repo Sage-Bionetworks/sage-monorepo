@@ -125,6 +125,7 @@ export const RowSelectionAndHover: Story = {
           viewConfig: {
             rowSelectionEnabled: true,
             rowHoverEnabled: true,
+            rowIdDataKey: '_id',
           },
         }),
       ],

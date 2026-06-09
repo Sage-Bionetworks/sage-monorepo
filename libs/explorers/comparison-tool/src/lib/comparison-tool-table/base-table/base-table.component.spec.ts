@@ -164,8 +164,7 @@ describe('BaseTableComponent', () => {
       fixture.detectChanges();
 
       const selectSpy = jest.spyOn(service, 'selectRow');
-      const firstRow =
-        nativeElement.querySelector('tr[class]') ?? nativeElement.querySelector('tr');
+      const firstRow = nativeElement.querySelector('tbody tr');
       if (firstRow) {
         await user.click(firstRow);
       }
@@ -176,7 +175,7 @@ describe('BaseTableComponent', () => {
       const { fixture, service, nativeElement, user } = await setup({ rowIdDataKey: '_id' });
       fixture.detectChanges();
 
-      const firstRow = nativeElement.querySelector('tr');
+      const firstRow = nativeElement.querySelector('tbody tr');
       if (firstRow) {
         await user.click(firstRow);
       }
@@ -191,8 +190,7 @@ describe('BaseTableComponent', () => {
       fixture.detectChanges();
 
       const hoverSpy = jest.spyOn(service, 'setHoveredRowId');
-      const firstRow =
-        nativeElement.querySelector('tr[class]') ?? nativeElement.querySelector('tr');
+      const firstRow = nativeElement.querySelector('tbody tr');
       if (firstRow) {
         firstRow.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
       }
@@ -207,8 +205,7 @@ describe('BaseTableComponent', () => {
       fixture.detectChanges();
 
       const hoverSpy = jest.spyOn(service, 'setHoveredRowId');
-      const firstRow =
-        nativeElement.querySelector('tr[class]') ?? nativeElement.querySelector('tr');
+      const firstRow = nativeElement.querySelector('tbody tr');
       if (firstRow) {
         firstRow.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
       }
@@ -219,7 +216,7 @@ describe('BaseTableComponent', () => {
       const { fixture, service, nativeElement } = await setup({ rowIdDataKey: '_id' });
       fixture.detectChanges();
 
-      const firstRow = nativeElement.querySelector('tr');
+      const firstRow = nativeElement.querySelector('tbody tr');
       if (firstRow) {
         firstRow.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
         firstRow.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
