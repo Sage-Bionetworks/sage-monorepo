@@ -96,6 +96,8 @@ export class ComparisonToolService<T> {
   } | null>(null);
   private readonly isFilterPanelOpenSignal = signal(false);
   private readonly pendingFetchesSignal = signal(0);
+  private readonly selectedRowIdSignal = signal<string | null>(null);
+  private readonly hoveredRowIdSignal = signal<string | null>(null);
 
   // URL Sync State
   private lastSyncedUrlParamsState: ComparisonToolUrlParams | null = null;
@@ -113,6 +115,8 @@ export class ComparisonToolService<T> {
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
   readonly isFilterPanelOpen = this.isFilterPanelOpenSignal.asReadonly();
   readonly pendingFetches = this.pendingFetchesSignal.asReadonly();
+  readonly selectedRowId = this.selectedRowIdSignal.asReadonly();
+  readonly hoveredRowId = this.hoveredRowIdSignal.asReadonly();
   readonly isLoadingTableData = computed(() => this.pendingFetches() > 0);
 
   // Computed Query Accessors
@@ -441,6 +445,11 @@ export class ComparisonToolService<T> {
       return;
     }
 
+    // PrimeNG Popover.show() calls stopPropagation, so the click never reaches the <tr>.
+    // Select the row here so heatmap circle clicks still update the selection.
+    const rowIdKey = this.viewConfig().rowIdDataKey;
+    this.selectRow(String((rowData as Record<string, unknown>)[rowIdKey]));
+
     const data = transform({
       rowData,
       cellData,
@@ -588,11 +597,57 @@ export class ComparisonToolService<T> {
   setUnpinnedData(unpinnedData: T[]) {
     this.unpinnedDataSignal.set(unpinnedData);
     this.completeFetch();
+
+    if (this.viewConfig().rowSelectionEnabled && this.selectedRowIdSignal() === null) {
+      this.autoSelectFirstRow();
+    }
   }
 
   setPinnedData(pinnedData: T[]) {
     this.pinnedDataSignal.set(pinnedData);
     this.completeFetch();
+  }
+
+  private autoSelectFirstRow(): void {
+    const unpinned = this.unpinnedDataSignal();
+    const pinned = this.pinnedDataSignal();
+    const rowIdKey = this.viewConfig().rowIdDataKey;
+
+    if (unpinned.length > 0) {
+      this.selectedRowIdSignal.set(String((unpinned[0] as Record<string, unknown>)[rowIdKey]));
+    } else if (pinned.length > 0) {
+      this.selectedRowIdSignal.set(String((pinned[0] as Record<string, unknown>)[rowIdKey]));
+    }
+  }
+
+  selectRow(id: string): void {
+    if (!this.viewConfig().rowSelectionEnabled) return;
+    if (this.selectedRowIdSignal() === id) return;
+    this.selectedRowIdSignal.set(id);
+  }
+
+  setHoveredRowId(id: string | null): void {
+    if (!this.viewConfig().rowHoverEnabled) return;
+    this.hoveredRowIdSignal.set(id);
+  }
+
+  /** Call after a filtered fetch to report whether the selected row exists in the full result set;
+   * resets to first row if not */
+  notifySelectedRowValidity(isInResults: boolean): void {
+    if (!this.viewConfig().rowSelectionEnabled) return;
+    if (isInResults) return;
+
+    const selectedId = this.selectedRowIdSignal();
+    if (selectedId !== null) {
+      const rowIdKey = this.viewConfig().rowIdDataKey;
+      const isInPinned = this.pinnedDataSignal().some(
+        (row) => String((row as Record<string, unknown>)[rowIdKey]) === selectedId,
+      );
+      if (isInPinned) return;
+    }
+
+    this.selectedRowIdSignal.set(null);
+    this.autoSelectFirstRow();
   }
 
   /** Call before starting a data fetch to increment loading counter */

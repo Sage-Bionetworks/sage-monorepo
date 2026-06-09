@@ -15,12 +15,12 @@ import {
   mockComparisonToolDataConfig,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
-import { MessageService } from 'primeng/api';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { MessageService } from 'primeng/api';
 import { BaseTableComponent } from './base-table.component';
 
-async function setup() {
+async function setup(viewConfig?: Partial<ComparisonToolViewConfig>) {
   const user = userEvent.setup();
   const component = await render(BaseTableComponent, {
     imports: [RouterModule],
@@ -28,7 +28,10 @@ async function setup() {
       provideRouter([]),
       provideHttpClient(withInterceptorsFromDi()),
       MessageService,
-      ...provideComparisonToolService({ configs: mockComparisonToolDataConfig }),
+      ...provideComparisonToolService({
+        configs: mockComparisonToolDataConfig,
+        viewConfig,
+      }),
       ...provideComparisonToolFilterService({ significanceThresholdActive: false }),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
@@ -149,6 +152,107 @@ describe('BaseTableComponent', () => {
         expect.any(String),
         expect.any(MouseEvent),
       );
+    });
+  });
+
+  describe('row selection and hover', () => {
+    it('clicking a row calls selectRow() when rowSelectionEnabled=true', async () => {
+      const { fixture, service, nativeElement, user } = await setup({
+        rowSelectionEnabled: true,
+        rowIdDataKey: '_id',
+      });
+      fixture.detectChanges();
+
+      const selectSpy = jest.spyOn(service, 'selectRow');
+      const firstRow =
+        nativeElement.querySelector('tr[class]') ?? nativeElement.querySelector('tr');
+      if (firstRow) {
+        await user.click(firstRow);
+      }
+      expect(selectSpy).toHaveBeenCalled();
+    });
+
+    it('clicking a row does nothing when rowSelectionEnabled=false', async () => {
+      const { fixture, service, nativeElement, user } = await setup({ rowIdDataKey: '_id' });
+      fixture.detectChanges();
+
+      const firstRow = nativeElement.querySelector('tr');
+      if (firstRow) {
+        await user.click(firstRow);
+      }
+      expect(service.selectedRowId()).toBeNull();
+    });
+
+    it('mouseenter calls setHoveredRowId() when rowHoverEnabled=true', async () => {
+      const { fixture, service, nativeElement } = await setup({
+        rowHoverEnabled: true,
+        rowIdDataKey: '_id',
+      });
+      fixture.detectChanges();
+
+      const hoverSpy = jest.spyOn(service, 'setHoveredRowId');
+      const firstRow =
+        nativeElement.querySelector('tr[class]') ?? nativeElement.querySelector('tr');
+      if (firstRow) {
+        firstRow.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+      }
+      expect(hoverSpy).toHaveBeenCalled();
+    });
+
+    it('mouseleave calls setHoveredRowId(null) when rowHoverEnabled=true', async () => {
+      const { fixture, service, nativeElement } = await setup({
+        rowHoverEnabled: true,
+        rowIdDataKey: '_id',
+      });
+      fixture.detectChanges();
+
+      const hoverSpy = jest.spyOn(service, 'setHoveredRowId');
+      const firstRow =
+        nativeElement.querySelector('tr[class]') ?? nativeElement.querySelector('tr');
+      if (firstRow) {
+        firstRow.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+      }
+      expect(hoverSpy).toHaveBeenCalledWith(null);
+    });
+
+    it('mouse events do nothing when rowHoverEnabled=false', async () => {
+      const { fixture, service, nativeElement } = await setup({ rowIdDataKey: '_id' });
+      fixture.detectChanges();
+
+      const firstRow = nativeElement.querySelector('tr');
+      if (firstRow) {
+        firstRow.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+        firstRow.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+      }
+      expect(service.hoveredRowId()).toBeNull();
+    });
+
+    it('.selected class appears on the correct row', async () => {
+      const { fixture, service, nativeElement } = await setup({
+        rowSelectionEnabled: true,
+        rowIdDataKey: '_id',
+      });
+
+      const firstRowId = String(mockComparisonToolData[0]['_id']);
+      service.selectRow(firstRowId);
+      fixture.detectChanges();
+
+      const rows = nativeElement.querySelectorAll('tr.selected');
+      expect(rows.length).toBe(1);
+    });
+
+    it('.hovered class appears on the correct row', async () => {
+      const { fixture, service, nativeElement } = await setup({
+        rowHoverEnabled: true,
+        rowIdDataKey: '_id',
+      });
+
+      const firstRowId = String(mockComparisonToolData[0]['_id']);
+      service.setHoveredRowId(firstRowId);
+      fixture.detectChanges();
+
+      const rows = nativeElement.querySelectorAll('tr.hovered');
+      expect(rows.length).toBe(1);
     });
   });
 });

@@ -109,3 +109,25 @@ export const FiltersActiveMaxPinned: Story = {
     }),
   ],
 };
+
+export const RowSelectionAndHover: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: [],
+          maxPinnedItems: 5,
+          pinnedData: [],
+          unpinnedData: mockComparisonToolData,
+          configs: mockComparisonToolDataConfig,
+          viewConfig: {
+            rowSelectionEnabled: true,
+            rowHoverEnabled: true,
+          },
+        }),
+      ],
+    }),
+  ],
+};

@@ -43,4 +43,16 @@ export class BaseTableComponent {
   onHeatmapCircleClick(rowData: unknown, cellData: unknown, columnKey: string, event: Event): void {
     this.comparisonToolService.showHeatmapDetailsPanel(rowData, cellData, columnKey, event);
   }
+
+  onRowClick(rowId: string): void {
+    this.comparisonToolService.selectRow(rowId);
+  }
+
+  onRowMouseEnter(rowId: string): void {
+    this.comparisonToolService.setHoveredRowId(rowId);
+  }
+
+  onRowMouseLeave(): void {
+    this.comparisonToolService.setHoveredRowId(null);
+  }
 }

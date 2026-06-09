@@ -22,11 +22,21 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-rowData>
-      <tr>
+      @let rowId = rowData[viewConfig().rowIdDataKey];
+      <tr
+        (click)="onRowClick(rowId)"
+        (mouseenter)="onRowMouseEnter(rowId)"
+        (mouseleave)="onRowMouseLeave()"
+        [class.selected]="
+          viewConfig().rowSelectionEnabled && comparisonToolService.selectedRowId() === rowId
+        "
+        [class.hovered]="
+          viewConfig().rowHoverEnabled && comparisonToolService.hoveredRowId() === rowId
+        "
+      >
         @for (column of selectedColumns(); track column) {
           @let columnType = column.type;
           @let cellData = rowData[column.data_key];
-          @let rowId = rowData[this.viewConfig().rowIdDataKey];
           <td
             [style]="{ width: columnWidths()[column.data_key] || 'auto' }"
             [class]="columnType"
