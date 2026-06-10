@@ -70,6 +70,7 @@ class ComparisonToolInnerComponent {
   // Controls inputs
   filterResultsButtonTooltip = input<string>();
   showSignificanceControls = input<boolean>();
+  showTableSearch = input<boolean>();
   viewDetailsTooltip = input<string>();
   // Legend inputs
   legendEnabled = input<boolean>();
@@ -122,6 +123,7 @@ class ComparisonToolInnerComponent {
       viewConfig.selectorsWikiParams = this.selectorsWikiParams();
       viewConfig.filterResultsButtonTooltip = this.filterResultsButtonTooltip();
       viewConfig.showSignificanceControls = this.showSignificanceControls();
+      viewConfig.showTableSearch = this.showTableSearch();
       viewConfig.viewDetailsTooltip = this.viewDetailsTooltip();
       viewConfig.legendEnabled = this.legendEnabled();
       viewConfig.legendPanelConfig = this.legendPanelConfig();
@@ -185,6 +187,7 @@ class ComparisonToolInnerComponent {
         [selectorsWikiParams]="selectorsWikiParams()"
         [filterResultsButtonTooltip]="filterResultsButtonTooltip()"
         [showSignificanceControls]="showSignificanceControls()"
+        [showTableSearch]="showTableSearch()"
         [viewDetailsTooltip]="viewDetailsTooltip()"
         [legendEnabled]="legendEnabled()"
         [legendPanelConfig]="legendPanelConfig()"
@@ -209,6 +212,7 @@ class ComparisonToolStoryWrapperComponent {
   selectorsWikiParams = input<Record<string, SynapseWikiParams>>();
   filterResultsButtonTooltip = input<string>();
   showSignificanceControls = input<boolean>();
+  showTableSearch = input<boolean>();
   viewDetailsTooltip = input<string>();
   legendEnabled = input<boolean>();
   legendPanelConfig = input<LegendPanelConfig>();
@@ -267,6 +271,11 @@ const meta: Meta<StoryArgs> = {
     showSignificanceControls: {
       control: 'boolean',
       description: 'Whether to show significance threshold controls',
+      table: { category: 'Controls' },
+    },
+    showTableSearch: {
+      control: 'boolean',
+      description: 'Whether to show the search input in the controls bar',
       table: { category: 'Controls' },
     },
     viewDetailsTooltip: {
@@ -385,6 +394,7 @@ export const Demo: Story = {
     // Controls
     filterResultsButtonTooltip: 'Filter the results based on the selected criteria',
     showSignificanceControls: true,
+    showTableSearch: true,
     viewDetailsTooltip: 'View details',
     // Legend
     legendEnabled: true,
