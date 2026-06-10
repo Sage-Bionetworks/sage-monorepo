@@ -19,9 +19,10 @@ import org.springframework.stereotype.Repository;
 /**
  * Custom repository implementation backed by the shared CT aggregation pipeline.
  *
- * <p>ModelOverview has no case-insensitive sort, sort-field aliases, or computed sort fields,
- * so it overrides only the two abstract collection/document hooks. The pipeline scaffold
- * (count, $match, $sort, $skip, $limit) lives in {@link ComparisonToolRepositorySupport}.
+ * <p>Uses aggregation to support sorting by array fields. MongoDB cannot sort by multiple
+ * array fields simultaneously ("parallel arrays"), so we compute scalar sort fields for
+ * lexicographic comparison. The pipeline scaffold (count, $match, $addFields, $sort, $skip,
+ * $limit) lives in {@link ComparisonToolRepositorySupport}.
  */
 @Repository
 @Slf4j
