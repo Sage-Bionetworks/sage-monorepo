@@ -13,6 +13,16 @@
     align-items: center;
     width: 100%;
 
+    .comparison-tool-header-left,
+    .comparison-tool-header-right {
+      flex: 1;
+    }
+
+    .comparison-tool-header-right {
+      display: flex;
+      justify-content: flex-end;
+    }
+
     .comparison-tool-header-title {
       display: flex;
       gap: 5px;

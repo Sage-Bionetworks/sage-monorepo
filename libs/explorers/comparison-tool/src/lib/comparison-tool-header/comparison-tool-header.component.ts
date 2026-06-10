@@ -18,4 +18,5 @@ export class ComparisonToolHeaderComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
   viewConfig = this.comparisonToolService.viewConfig;
+  currentConfig = this.comparisonToolService.currentConfig;
 }

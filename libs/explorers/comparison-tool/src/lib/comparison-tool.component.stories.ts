@@ -325,7 +325,9 @@ const meta: Meta<StoryArgs> = {
       description:
         'Array of comparison tool configurations defining columns, filters, and dropdowns. ' +
         'Each config defines the table structure with columns, filters, and dropdown options for different data views. ' +
-        'For story configuration, only include one value for `page` across all objects.',
+        'For story configuration, only include one value for `page` across all objects. ' +
+        'The Filter Results button is hidden when the currently selected config has an empty `filters` array, ' +
+        'and reappears when switching to a config that has filters.',
       table: { category: 'Data' },
     },
     data: {
@@ -405,7 +407,9 @@ export const Demo: Story = {
     ],
     linkExportField: 'link_text',
     // Data
-    configs: mockComparisonToolDataConfigWithDropdowns,
+    configs: mockComparisonToolDataConfigWithDropdowns.map((c, i) =>
+      i === mockComparisonToolDataConfigWithDropdowns.length - 1 ? { ...c, filters: [] } : c,
+    ),
     data: mockComparisonToolData,
     pinnedItems: ['3xTg-AD', '5xFAD (UCI)', '5xFAD (IU/Jax/Pitt)'],
     // Panel visibility

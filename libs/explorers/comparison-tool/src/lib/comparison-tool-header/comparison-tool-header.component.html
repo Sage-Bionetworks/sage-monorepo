@@ -1,14 +1,20 @@
 <div class="comparison-tool-header">
   <div class="comparison-tool-header-inner">
-    <explorers-comparison-tool-filter-results-button
-      [tooltip]="viewConfig().filterResultsButtonTooltip"
-    />
+    <div class="comparison-tool-header-left">
+      @if (currentConfig()?.filters?.length) {
+        <explorers-comparison-tool-filter-results-button
+          [tooltip]="viewConfig().filterResultsButtonTooltip"
+        />
+      }
+    </div>
     <div class="comparison-tool-header-title">
       <h1>{{ viewConfig().headerTitle }}</h1>
       @if (viewConfig().headerTitleWikiParams) {
         <explorers-popover-link [wikiParams]="viewConfig().headerTitleWikiParams!" />
       }
     </div>
-    <explorers-comparison-tool-share-url-button />
+    <div class="comparison-tool-header-right">
+      <explorers-comparison-tool-share-url-button />
+    </div>
   </div>
 </div>

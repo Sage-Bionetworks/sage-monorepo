@@ -643,6 +643,10 @@ export class ComparisonToolService<T> {
       pinnedItems: currentPins,
       pageNumber: this.FIRST_PAGE_NUMBER,
     });
+
+    if (!newFilters.length && this.isFilterPanelOpenSignal()) {
+      this.isFilterPanelOpenSignal.set(false);
+    }
   }
 
   private normalizeSelection(selection: string[], configs: ComparisonToolConfig[]): string[] {
