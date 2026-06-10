@@ -7,10 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrgSagebionetworksRepoModelSearchTableSynonymRule } from './org-sagebionetworks-repo-model-search-table-synonym-rule';
 
 /**
- * A shared set of synonym rules. SynonymSets belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
+ * <p>A shareable OpenSearch <a href=\'https://docs.opensearch.org/latest/analyzers/token-filters/synonym-graph/\'>synonym_graph</a> (or legacy <a href=\'https://docs.opensearch.org/latest/analyzers/token-filters/synonym/\'>synonym</a>) token filter. SynonymSets belong to an Organization; the qualified name <code>{organizationName}-{name}</code> is what a TextAnalyzer references via <code>{\"$ref\": \"{organizationName}-{name}\"}</code> inside its <code>settings.filter</code> registry map to bring this filter into the analyzer.</p><p>Example &mdash; OpenSearch native synonym syntax: <code>a, b, c</code> for equivalent (bidirectional) and <code>a, b =&gt; c, d</code> for explicit (directional) expansion. The <code>definition</code> field is a JSON object &mdash; paste OpenSearch examples directly without escaping:</p><pre><code>{   \"organizationName\": \"biomed\",   \"name\": \"medical_terms\",   \"definition\": {     \"type\": \"synonym_graph\",     \"synonyms\": [       \"tumor, neoplasm, cancer\",       \"AD =&gt; Alzheimer\'s disease\"     ]   } }</code></pre><p>Tuning suggestions:</p><ul><li>Multi-word synonyms &mdash; prefer <code>synonym_graph</code> (it handles phrases correctly).</li><li>Disable bidirectional expansion (only the LHS is a synonym source): set <code>\"expand\":false</code> in the definition.</li><li>Tolerate malformed rule lines without failing the whole filter: set <code>\"lenient\":true</code> in the definition.</li></ul><p>Cannot be deleted while any persisted resource references it. See the OpenSearch <a href=\'https://docs.opensearch.org/latest/analyzers/token-filters/synonym-graph/\'>synonym_graph filter docs</a> for the full parameter list (synonyms, format, expand, lenient, etc.).</p>
  */
 export interface OrgSagebionetworksRepoModelSearchTableSynonymSet {
   /**
@@ -30,9 +29,9 @@ export interface OrgSagebionetworksRepoModelSearchTableSynonymSet {
    */
   description?: string;
   /**
-   * The list of synonym rules in this set.
+   * <p>Required. The full OpenSearch token filter definition as a JSON object, exactly as documented for the <a href=\'https://docs.opensearch.org/latest/analyzers/token-filters/synonym-graph/\'>synonym_graph</a> / <a href=\'https://docs.opensearch.org/latest/analyzers/token-filters/synonym/\'>synonym</a> token filters. Synapse parses this to confirm it\'s valid JSON and otherwise passes it through to AOSS verbatim. AOSS Serverless does not support file-based parameters &mdash; use inline <code>synonyms</code>; AOSS rejects <code>synonyms_path</code> at index-build time.</p>
    */
-  rules?: Array<OrgSagebionetworksRepoModelSearchTableSynonymRule>;
+  definition: any | null;
   /**
    * Synapse employs an Optimistic Concurrency Control (OCC) scheme.
    */

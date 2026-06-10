@@ -1,28 +1,20 @@
 package org.sagebionetworks.agora.api.next.model.repository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.regex.Pattern;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
 import org.sagebionetworks.agora.api.next.model.document.NominatedDrugDocument;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugIdentifier;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugSearchQueryDto;
-import org.sagebionetworks.agora.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
+import org.sagebionetworks.explorers.ComputedSortField;
+import org.sagebionetworks.explorers.CtFilterConfig;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -30,20 +22,61 @@ import org.springframework.stereotype.Repository;
  *
  * <p>Uses aggregation to support sorting by array fields. MongoDB cannot sort by multiple
  * array fields simultaneously ("parallel arrays"), so we compute scalar sort fields for
- * lexicographic comparison.
+ * lexicographic comparison. The pipeline scaffold (count, $match, $addFields, $sort, $skip,
+ * $limit) lives in {@link ComparisonToolRepositorySupport}.
  */
 @Repository
-@RequiredArgsConstructor
 @Slf4j
-public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRepository {
+public class CustomNominatedDrugRepositoryImpl
+  extends ComparisonToolRepositorySupport<NominatedDrugDocument>
+  implements CustomNominatedDrugRepository {
 
   private static final String COLLECTION_NAME = "nominateddrugs";
   private static final String SEARCH_FIELD = "common_name";
 
-  /** Array fields that need computed fields for custom sort handling */
-  private static final Set<String> ARRAY_FIELDS = Set.of("principal_investigators", "programs");
+  public CustomNominatedDrugRepositoryImpl(MongoTemplate mongoTemplate) {
+    super(mongoTemplate);
+  }
 
-  private final MongoTemplate mongoTemplate;
+  @Override
+  protected String getCollectionName() {
+    return COLLECTION_NAME;
+  }
+
+  @Override
+  protected Class<NominatedDrugDocument> getDocumentClass() {
+    return NominatedDrugDocument.class;
+  }
+
+  /**
+   * Array fields are reduced to a NUL-separated lowercase string so they can sort
+   * alongside other array fields without hitting MongoDB's "parallel arrays" limit.
+   */
+  @Override
+  protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
+    return Map.of(
+      "principal_investigators",
+      ComputedSortField.of(arrayToLoweredStringExpr("principal_investigators")),
+      "programs",
+      ComputedSortField.of(arrayToLoweredStringExpr("programs"))
+    );
+  }
+
+  private final CtFilterConfig<NominatedDrugSearchQueryDto> filterConfig =
+    CtFilterConfig.<NominatedDrugSearchQueryDto>builder()
+      .dataFilter("principal_investigators", NominatedDrugSearchQueryDto::getPrincipalInvestigators)
+      .dataFilter("programs", NominatedDrugSearchQueryDto::getPrograms)
+      .dataFilter("total_nominations", NominatedDrugSearchQueryDto::getTotalNominations)
+      .dataFilter("initial_nomination", NominatedDrugSearchQueryDto::getInitialNomination)
+      .dataFilter("modality", NominatedDrugSearchQueryDto::getModality)
+      .compositeItemFilter(item -> NominatedDrugIdentifier.parse(item).toCriteria())
+      .searchFilter(SEARCH_FIELD)
+      .build();
+
+  @Override
+  protected CtFilterConfig<NominatedDrugSearchQueryDto> getFilterConfig() {
+    return filterConfig;
+  }
 
   @Override
   public Page<NominatedDrugDocument> findAll(
@@ -55,250 +88,15 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       query.getItemFilterType(),
       ItemFilterTypeQueryDto.INCLUDE
     );
-    String search = query.getSearch();
-
-    // Build match criteria with all filters
-    Criteria matchCriteria = buildMatchCriteria(query, items, filterType, search);
-
-    // Count total using simple query (faster than aggregation)
-    long total = mongoTemplate.count(new Query(matchCriteria), COLLECTION_NAME);
-
-    // Build aggregation pipeline
-    List<AggregationOperation> operations = new ArrayList<>();
-
-    // $match first to filter documents
-    operations.add(Aggregation.match(matchCriteria));
-
-    // Add computed sort fields for arrays
-    buildSortFields(operations, pageable.getSort());
-
-    // Add $sort using computed fields
-    addSortOperation(operations, pageable.getSort());
-
-    // Add pagination
-    long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
-    operations.add(Aggregation.skip(skipCount));
-    operations.add(Aggregation.limit(pageable.getPageSize()));
-
-    Aggregation aggregation = Aggregation.newAggregation(operations);
-
-    log.debug("Executing aggregation pipeline: {}", aggregation);
-
-    AggregationResults<NominatedDrugDocument> results = mongoTemplate.aggregate(
-      aggregation,
-      COLLECTION_NAME,
-      NominatedDrugDocument.class
+    boolean isInclude = filterType == ItemFilterTypeQueryDto.INCLUDE;
+    Criteria matchCriteria = buildCtMatchCriteria(
+      query,
+      items,
+      isInclude,
+      query.getSearch(),
+      getFilterConfig()
     );
 
-    return new PageImpl<>(results.getMappedResults(), pageable, total);
-  }
-
-  /**
-   * Builds match criteria combining all filters.
-   */
-  private Criteria buildMatchCriteria(
-    NominatedDrugSearchQueryDto query,
-    List<String> items,
-    ItemFilterTypeQueryDto filterType,
-    String search
-  ) {
-    List<Criteria> andCriteria = new ArrayList<>();
-
-    // Add data filters (AND between fields, OR within field)
-    addDataFilterCriteria(
-      query.getPrincipalInvestigators(),
-      query.getPrograms(),
-      query.getTotalNominations(),
-      query.getInitialNomination(),
-      query.getModality(),
-      andCriteria
-    );
-
-    // Add composite_id filtering (items + itemFilterType)
-    addItemFilterCriteria(items, filterType, andCriteria);
-
-    // Add search filtering (only when itemFilterType is EXCLUDE)
-    addSearchFilterCriteria(search, filterType, andCriteria);
-
-    if (andCriteria.isEmpty()) {
-      return new Criteria();
-    }
-    return new Criteria().andOperator(andCriteria.toArray(new Criteria[0]));
-  }
-
-  /**
-   * Builds $addFields operation to create sortable versions of fields.
-   *
-   * <p>For array fields: concatenates array elements into a single string
-   * for proper lexicographic comparison. This enables multi-array sorting (avoiding MongoDB's
-   * "parallel arrays" limitation).
-   */
-  private void buildSortFields(List<AggregationOperation> operations, Sort sort) {
-    Document fields = new Document();
-
-    for (Sort.Order order : sort) {
-      String field = order.getProperty();
-
-      if (ARRAY_FIELDS.contains(field)) {
-        // For arrays: concatenate into string, lowercase for comparison
-        fields.append(field + "_sort", buildArraySortField(field));
-      }
-    }
-
-    if (!fields.isEmpty()) {
-      operations.add(context -> new Document("$addFields", fields));
-    }
-  }
-
-  /**
-   * Builds a MongoDB expression to create a sortable string from an array field.
-   *
-   * <p>Formula: $toLower($reduce(field))
-   *
-   * <p>Example: ["Duke", "Emory", "Columbia"] → "duke\0emory\0columbia"
-   *
-   * @param field the array field name
-   * @return Document representing the aggregation expression
-   */
-  private Document buildArraySortField(String field) {
-    // $reduce: concatenate elements with null separator
-    Document reduce = new Document(
-      "$reduce",
-      new Document()
-        .append("input", "$" + field)
-        .append("initialValue", "")
-        .append("in", new Document("$concat", List.of("$$value", "\u0000", "$$this")))
-    );
-
-    // $toLower: case-insensitive comparison
-    return new Document("$toLower", reduce);
-  }
-
-  /**
-   * Adds $sort operation using computed sort fields where applicable.
-   */
-  private void addSortOperation(List<AggregationOperation> operations, Sort sort) {
-    if (sort.isUnsorted()) {
-      return;
-    }
-
-    Document sortDocument = new Document();
-    for (Sort.Order order : sort) {
-      String field = order.getProperty();
-      int direction = order.isAscending() ? 1 : -1;
-
-      // Use computed _sort field for arrays
-      if (ARRAY_FIELDS.contains(field)) {
-        sortDocument.append(field + "_sort", direction);
-      } else {
-        sortDocument.append(field, direction);
-      }
-    }
-
-    if (!sortDocument.isEmpty()) {
-      operations.add(context -> new Document("$sort", sortDocument));
-    }
-  }
-
-  private void addDataFilterCriteria(
-    List<String> principalInvestigators,
-    List<String> programs,
-    List<Integer> totalNominations,
-    List<Integer> initialNomination,
-    List<String> modality,
-    List<Criteria> andCriteria
-  ) {
-    // principal_investigators: array field - use $in (matches if array contains any value)
-    if (principalInvestigators != null && !principalInvestigators.isEmpty()) {
-      andCriteria.add(Criteria.where("principal_investigators").in(principalInvestigators));
-    }
-
-    // programs: array field - use $in (matches if array contains any value)
-    if (programs != null && !programs.isEmpty()) {
-      andCriteria.add(Criteria.where("programs").in(programs));
-    }
-
-    // totalNominations: scalar field - use $in
-    if (totalNominations != null && !totalNominations.isEmpty()) {
-      andCriteria.add(Criteria.where("total_nominations").in(totalNominations));
-    }
-
-    // initialNomination: scalar field - use $in
-    if (initialNomination != null && !initialNomination.isEmpty()) {
-      andCriteria.add(Criteria.where("initial_nomination").in(initialNomination));
-    }
-
-    // modality: scalar field - use $in
-    if (modality != null && !modality.isEmpty()) {
-      andCriteria.add(Criteria.where("modality").in(modality));
-    }
-  }
-
-  private void addItemFilterCriteria(
-    List<String> items,
-    ItemFilterTypeQueryDto filterType,
-    List<Criteria> andCriteria
-  ) {
-    if (items.isEmpty()) {
-      // For INCLUDE mode with empty items, add impossible condition to return empty results
-      if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
-        andCriteria.add(Criteria.where("_id").is(null));
-      }
-      // For EXCLUDE mode with empty items, no filtering needed (return all)
-      return;
-    }
-
-    // Parse composite identifiers (format: chembl_id~combined_with)
-    List<NominatedDrugIdentifier> identifiers = parseIdentifiers(items);
-
-    // Build criteria for each identifier (must match BOTH chembl_id AND combined_with)
-    List<Criteria> compositeConditions = new ArrayList<>();
-    for (NominatedDrugIdentifier id : identifiers) {
-      Criteria idCondition = new Criteria()
-        .andOperator(
-          Criteria.where("chembl_id").is(id.getChemblId()),
-          Criteria.where("combined_with").is(id.getCombinedWith())
-        );
-      compositeConditions.add(idCondition);
-    }
-
-    // Apply INCLUDE or EXCLUDE logic
-    if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
-      // Match ANY of the composite identifiers ($or)
-      andCriteria.add(new Criteria().orOperator(compositeConditions.toArray(new Criteria[0])));
-    } else {
-      // Exclude ALL of the composite identifiers ($nor)
-      andCriteria.add(new Criteria().norOperator(compositeConditions.toArray(new Criteria[0])));
-    }
-  }
-
-  private List<NominatedDrugIdentifier> parseIdentifiers(List<String> items) {
-    List<NominatedDrugIdentifier> identifiers = new ArrayList<>();
-    for (String item : items) {
-      identifiers.add(NominatedDrugIdentifier.parse(item));
-    }
-    return identifiers;
-  }
-
-  private void addSearchFilterCriteria(
-    String search,
-    ItemFilterTypeQueryDto filterType,
-    List<Criteria> andCriteria
-  ) {
-    // Search only applies when itemFilterType is EXCLUDE
-    if (filterType != ItemFilterTypeQueryDto.EXCLUDE || search == null || search.trim().isEmpty()) {
-      return;
-    }
-
-    String trimmedSearch = search.trim();
-    if (trimmedSearch.contains(",")) {
-      // Comma-separated list: case-insensitive full matches
-      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
-      andCriteria.add(Criteria.where(SEARCH_FIELD).in(patterns));
-    } else {
-      // Single term: case-insensitive partial match
-      String quotedSearch = Pattern.quote(trimmedSearch);
-      andCriteria.add(Criteria.where(SEARCH_FIELD).regex(quotedSearch, "i"));
-    }
+    return executePagedAggregation(matchCriteria, pageable);
   }
 }

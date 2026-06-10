@@ -9,19 +9,15 @@
  */
 
 /**
- * A per-column analyzer override entry. Specifies which analyzers to use at index time and search time for a specific column.
+ * Assigns one TextAnalyzer to one column. The referenced TextAnalyzer is the single source of truth for both index-time and search-time analysis on this column: its <code>analyzer.default</code> entry drives OpenSearch\'s <a href=\'https://docs.opensearch.org/latest/analyzers/index-analyzers/\'><code>analyzer</code> field mapping</a>, and its <code>analyzer.default_search</code> entry (if declared) drives the <a href=\'https://docs.opensearch.org/latest/analyzers/search-analyzers/\'><code>search_analyzer</code> field mapping</a>. To express asymmetric index/search analysis (e.g. an edge n-gram chain at index time paired with a non-ngram chain at search time), declare both entries inside the TextAnalyzer\'s <code>settings</code>; do not split the configuration into two TextAnalyzer records.
  */
 export interface OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverrideEntry {
   /**
-   * The name of the column to override. Must exist in the entity\'s schema.
+   * The name of the column to override. Silently skipped at index-build time if the column is not present in the target SearchIndex\'s schema — a single override bundle can therefore be applied across several indexes that share some column names.
    */
   columnName?: string;
   /**
-   * The qualified name (\'{organizationName}-{name}\') of the TextAnalyzer to use when indexing this column.
+   * <p>The analyzer to use for this column. Either a reference to a saved TextAnalyzer (preferred &mdash; supports reuse) written as <code>{\"$ref\": \"{organizationName}-{name}\"}</code>, or an inline analyzer literal pasted directly.</p><p><b>$ref form:</b></p><pre><code>\"analyzer\": { \"$ref\": \"biomed-acronym_exact\" }</code></pre><p><b>Inline form</b> &mdash; the bare OpenSearch <code>settings.analysis</code> block (same shape as a TextAnalyzer record\'s <code>settings</code> field, with no surrounding identity / audit fields and no outer <code>settings</code> wrapper). Allowed root keys are <code>char_filter</code>, <code>tokenizer</code>, <code>filter</code>, and <code>analyzer</code>. The inner <code>analyzer</code> map must declare <code>default</code> (required), and may optionally declare <code>default_search</code> for asymmetric search-time analysis. Refs to SynonymSets are not permitted inside an inline analyzer literal &mdash; save a TextAnalyzer and reference it by qualified name to use synonyms.</p><pre><code>\"analyzer\": {   \"analyzer\": {     \"default\": {       \"type\": \"custom\",       \"tokenizer\": \"keyword\",       \"filter\": [\"lowercase\"]     }   } }</code></pre><p>The analyzer\'s <code>analyzer.default</code> entry is bound at index time; if it also declares <code>analyzer.default_search</code>, that entry is bound at search time.</p>
    */
-  indexAnalyzer?: string;
-  /**
-   * The qualified name (\'{organizationName}-{name}\') of the TextAnalyzer to use when searching this column.
-   */
-  searchAnalyzer?: string;
+  analyzer?: any | null;
 }

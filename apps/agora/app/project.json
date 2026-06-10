@@ -149,17 +149,29 @@
       },
       "dependsOn": []
     },
-    "sentry-sourcemaps": {
+    "sentry-sourcemaps-inject": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sentry-cli sourcemaps inject dist/apps/agora/app"
+      },
+      "dependsOn": ["build"]
+    },
+    "sentry-sourcemaps-upload": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "sentry-cli sourcemaps inject dist/apps/agora/app",
           "sentry-cli sourcemaps upload --org sage-bionetworks --project agora --release agora@$SENTRY_RELEASE_SUFFIX dist/apps/agora/app",
           "find dist/apps/agora/app -name '*.map' -delete"
         ],
         "parallel": false
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["sentry-sourcemaps-inject"]
+    },
+    "build-image": {
+      "dependsOn": ["sentry-sourcemaps-inject"],
+      "metadata": {
+        "description": "Depends on sentry-sourcemaps-inject (not build) so the Sentry Debug IDs survive Nx's cached build restore and are baked into the published image. See MG-902."
+      }
     },
     "scan-image": {
       "executor": "nx:run-commands",

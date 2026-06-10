@@ -48,6 +48,16 @@ export const routes: Route[] = [
     },
   },
   {
+    path: ROUTE_PATHS.EQTL,
+    loadChildren: () =>
+      import('@sagebionetworks/qtl/eqtl-comparison-tool').then((routes) => routes.routes),
+    data: {
+      // TODO: update based on values in QTL-34
+      title: 'eQTL Comparison',
+      description: '',
+    },
+  },
+  {
     path: ROUTE_PATHS.TERMS_OF_SERVICE,
     loadChildren: () =>
       import('@sagebionetworks/explorers/shared').then((routes) => routes.termsOfServiceRoute),

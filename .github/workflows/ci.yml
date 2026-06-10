@@ -50,6 +50,11 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install-affected"
 
+      - name: Verify svg-icon registry is up-to-date
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && pnpm generate:svg-icon-registry --check"
+
       - name: Lint the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
@@ -94,7 +99,7 @@ jobs:
             --remote-env SENTRY_AUTH_TOKEN="$SENTRY_AUTH_TOKEN" \
             --remote-env SENTRY_RELEASE_SUFFIX="$SENTRY_RELEASE_SUFFIX" \
             bash -c ". ./dev-env.sh \
-            && nx affected --target=sentry-sourcemaps"
+            && nx affected --target=sentry-sourcemaps-upload"
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_RELEASE_SUFFIX: edge+${{ env.SHORT_SHA }}
@@ -130,6 +135,11 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install-affected"
+
+      - name: Verify svg-icon registry is up-to-date
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && pnpm generate:svg-icon-registry --check"
 
       - name: Lint the affected projects
         run: |

@@ -10,7 +10,7 @@
 import { OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverrideEntry } from './org-sagebionetworks-repo-model-search-table-column-analyzer-override-entry';
 
 /**
- * A shared resource containing per-column analyzer override entries. ColumnAnalyzerOverrides belong to an Organization and can be referenced by SearchConfigurations. Cannot be deleted while referenced by any SearchConfiguration.
+ * <p>A shareable bundle of per-column analyzer assignments. Each entry binds one column to an analyzer; that analyzer\'s <code>analyzer.default</code> drives the column\'s index-time analyzer and (if declared) <code>analyzer.default_search</code> drives its search-time analyzer &mdash; see OpenSearch\'s <a href=\'https://docs.opensearch.org/latest/analyzers/index-analyzers/\'>index analyzers</a> and <a href=\'https://docs.opensearch.org/latest/analyzers/search-analyzers/\'>search analyzers</a>. Overrides win over the SearchConfiguration\'s <code>defaultAnalyzer</code> for the named columns.</p><p><b>Example with $ref entries</b> (preferred — supports reuse). Each entry\'s <code>analyzer</code> is a saved TextAnalyzer:</p><pre><code>{   \"organizationName\": \"biomed\",   \"name\": \"publication_columns\",   \"overrides\": [     { \"columnName\": \"disease_code\", \"analyzer\": { \"$ref\": \"biomed-acronym_exact\" } },     { \"columnName\": \"authors\",      \"analyzer\": { \"$ref\": \"biomed-scientific_search\" } }   ] }</code></pre><p><b>Example with inline analyzer entries</b> &mdash; each entry\'s <code>analyzer</code> is the bare OpenSearch <code>settings.analysis</code> block (allowed root keys: <code>char_filter</code>, <code>tokenizer</code>, <code>filter</code>, <code>analyzer</code>):</p><pre><code>{   \"organizationName\": \"biomed\",   \"name\": \"publication_columns_inline\",   \"overrides\": [     {       \"columnName\": \"disease_code\",       \"analyzer\": {         \"analyzer\": {           \"default\": {             \"type\": \"custom\",             \"tokenizer\": \"keyword\",             \"filter\": [\"lowercase\"]           }         }       }     },     {       \"columnName\": \"authors\",       \"analyzer\": { \"$ref\": \"biomed-scientific_search\" }     }   ] }</code></pre><p>The <code>analyzer</code> field on each entry accepts a <code>{\"$ref\": \"{organizationName}-{name}\"}</code> reference (preferred &mdash; supports reuse) or an inline analyzer literal. Refs to SynonymSets are not permitted inside an inline analyzer literal &mdash; save a TextAnalyzer and reference it by qualified name to use synonyms. Referenced from a SearchConfiguration\'s <code>columnAnalyzerOverrides</code> by qualified name <code>{organizationName}-{name}</code> or inlined directly there. Entries whose <code>columnName</code> is not present in a given SearchIndex\'s schema are silently skipped &mdash; a single override resource can therefore apply to multiple indexes that share some column names. Cannot be deleted while referenced by any SearchConfiguration.</p>
  */
 export interface OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride {
   /**
@@ -30,7 +30,7 @@ export interface OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverride {
    */
   description?: string;
   /**
-   * The list of per-column analyzer override entries.
+   * The per-column analyzer assignments — see ColumnAnalyzerOverrideEntry.
    */
   overrides?: Array<OrgSagebionetworksRepoModelSearchTableColumnAnalyzerOverrideEntry>;
   /**

@@ -13,7 +13,7 @@ import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugsPageDto;
 import org.sagebionetworks.agora.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.agora.api.next.model.mapper.NominatedDrugMapper;
 import org.sagebionetworks.agora.api.next.model.repository.NominatedDrugRepository;
-import org.sagebionetworks.agora.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ public class NominatedDrugService {
   private final NominatedDrugMapper nominatedDrugMapper;
 
   @Cacheable(
-    key = "T(org.sagebionetworks.agora.api.next.util.ApiHelper)"
+    key = "T(org.sagebionetworks.explorers.ApiHelper)"
     + ".buildCacheKey('nominatedDrug', #query.itemFilterType, "
     + "#query.items, #query.search, #query.principalInvestigators, #query.programs, "
     + "#query.totalNominations, #query.initialNomination, #query.modality, "

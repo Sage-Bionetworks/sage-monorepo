@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 /**
  * Represents a composite identifier for disease correlation documents.
@@ -68,5 +69,20 @@ public class DiseaseCorrelationIdentifier {
    */
   public String toCompositeString() {
     return name + DELIMITER + age + DELIMITER + sex;
+  }
+
+  /**
+   * Converts this identifier to a MongoDB {@link Criteria}
+   * that matches documents with this exact name, age, and sex.
+   *
+   * @return a Criteria requiring all three fields to match
+   */
+  public Criteria toCriteria() {
+    return new Criteria()
+      .andOperator(
+        Criteria.where("name").is(name),
+        Criteria.where("age").is(age),
+        Criteria.where("sex").is(sex)
+      );
   }
 }

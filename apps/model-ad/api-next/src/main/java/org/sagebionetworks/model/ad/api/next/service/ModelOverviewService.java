@@ -13,7 +13,7 @@ import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ public class ModelOverviewService {
   private final ModelOverviewMapper modelOverviewMapper;
 
   @Cacheable(
-    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
+    key = "T(org.sagebionetworks.explorers.ApiHelper)" +
     ".buildCacheKey('modelOverview', #query.itemFilterType, " +
     "#query.items, #query.search, #query.availableData, #query.center, " +
     "#query.modelType, #query.modifiedGenes, #query.pageNumber, #query.pageSize, " +

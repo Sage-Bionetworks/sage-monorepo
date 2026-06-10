@@ -16,6 +16,8 @@ include(":qtl-api")
 
 // Include the shared Java utilities
 include(":sagebionetworks-util")
+include(":explorers-api-cache-invalidation")
+include(":explorers-api-helper")
 
 // Set the project directories
 project(":agora-api-next").projectDir = file("apps/agora/api-next")
@@ -25,3 +27,5 @@ project(":bixarena-auth-service").projectDir = file("apps/bixarena/auth-service"
 project(":model-ad-api-next").projectDir = file("apps/model-ad/api-next")
 project(":qtl-api").projectDir = file("apps/qtl/api")
 project(":sagebionetworks-util").projectDir = file("libs/shared/java/util")
+project(":explorers-api-cache-invalidation").projectDir = file("libs/explorers/api-cache-invalidation")
+project(":explorers-api-helper").projectDir = file("libs/explorers/api-helper")

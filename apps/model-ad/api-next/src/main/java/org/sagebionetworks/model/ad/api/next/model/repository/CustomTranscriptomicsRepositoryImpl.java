@@ -2,44 +2,100 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
+import org.sagebionetworks.explorers.ApiHelper;
+import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
+import org.sagebionetworks.explorers.ComputedSortField;
+import org.sagebionetworks.explorers.CtFilterConfig;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsIdentifier;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /**
  * Custom repository implementation using MongoDB aggregation pipeline.
  *
- * <p>Uses aggregation to support computed field (display_gene_symbol) for proper sorting
- * when gene_symbol is null/blank. All filtering logic is unified in a single implementation.
+ * <p>Uses aggregation to support a computed field ({@code display_gene_symbol}) for proper sorting
+ * when {@code gene_symbol} is null/blank. All filtering logic is unified in a single
+ * implementation. The pipeline scaffold (count, $match, $addFields, $sort, $skip, $limit) lives
+ * in {@link ComparisonToolRepositorySupport}.
  */
 @Repository
-@RequiredArgsConstructor
 @Slf4j
-public class CustomTranscriptomicsRepositoryImpl implements CustomTranscriptomicsRepository {
+public class CustomTranscriptomicsRepositoryImpl
+  extends ComparisonToolRepositorySupport<TranscriptomicsDocument>
+  implements CustomTranscriptomicsRepository {
 
   private static final String COLLECTION_NAME = "rna_de_aggregate";
   private static final String DISPLAY_GENE_SYMBOL_FIELD = "display_gene_symbol";
   private static final String GENE_SYMBOL_FIELD = "gene_symbol";
 
-  private final MongoTemplate mongoTemplate;
+  public CustomTranscriptomicsRepositoryImpl(MongoTemplate mongoTemplate) {
+    super(mongoTemplate);
+  }
+
+  @Override
+  protected String getCollectionName() {
+    return COLLECTION_NAME;
+  }
+
+  @Override
+  protected Class<TranscriptomicsDocument> getDocumentClass() {
+    return TranscriptomicsDocument.class;
+  }
+
+  /**
+   * Case-insensitive sort. {@code gene_symbol} routes through the computed
+   * {@code display_gene_symbol} (with the ensembl_gene_id fallback bundled as a prerequisite);
+   * {@code name} routes through its nested {@code link_text} child.
+   */
+  @Override
+  protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
+    return Map.of(
+      GENE_SYMBOL_FIELD,
+      ComputedSortField.of(toLowerExpr(DISPLAY_GENE_SYMBOL_FIELD)).withPrerequisite(
+        buildDisplayGeneSymbolField()
+      ),
+      "name",
+      ComputedSortField.of(toLowerExpr("name.link_text")),
+      "model_type",
+      ComputedSortField.of(toLowerExpr("model_type")),
+      "tissue",
+      ComputedSortField.of(toLowerExpr("tissue")),
+      "sex_cohort",
+      ComputedSortField.of(toLowerExpr("sex_cohort")),
+      "ensembl_gene_id",
+      ComputedSortField.of(toLowerExpr("ensembl_gene_id")),
+      "matched_control",
+      ComputedSortField.of(toLowerExpr("matched_control")),
+      "model_group",
+      ComputedSortField.of(toLowerExpr("model_group"))
+    );
+  }
+
+  private final CtFilterConfig<TranscriptomicsSearchQueryDto> filterConfig =
+    CtFilterConfig.<TranscriptomicsSearchQueryDto>builder()
+      .dataFilter("biodomains", TranscriptomicsSearchQueryDto::getBiodomains)
+      .dataFilter("model_type", TranscriptomicsSearchQueryDto::getModelType)
+      .dataFilter("name.link_text", TranscriptomicsSearchQueryDto::getName)
+      .compositeItemFilter(item -> TranscriptomicsIdentifier.parse(item).toCriteria())
+      .searchFilter(GENE_SYMBOL_FIELD)
+      .build();
+
+  @Override
+  protected CtFilterConfig<TranscriptomicsSearchQueryDto> getFilterConfig() {
+    return filterConfig;
+  }
 
   @Override
   public Page<TranscriptomicsDocument> findAll(
@@ -49,52 +105,22 @@ public class CustomTranscriptomicsRepositoryImpl implements CustomTranscriptomic
     String tissue,
     String sexCohort
   ) {
-    try {
-      // Build match criteria with all filters (shared by count and data queries)
-      Criteria matchCriteria = buildMatchCriteria(tissue, sexCohort, query, items);
+    ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
+      query.getItemFilterType(),
+      ItemFilterTypeQueryDto.INCLUDE
+    );
+    boolean isInclude = filterType == ItemFilterTypeQueryDto.INCLUDE;
+    Criteria matchCriteria = buildCtMatchCriteria(
+      query,
+      items,
+      isInclude,
+      query.getSearch(),
+      getFilterConfig(),
+      Criteria.where("tissue").is(tissue),
+      Criteria.where("sex_cohort").is(sexCohort)
+    );
 
-      // OPTIMIZATION: Use mongoTemplate.count() for counting (faster than aggregation)
-      // This uses indexes directly without loading documents or running $addFields
-      final long total = mongoTemplate.count(new Query(matchCriteria), COLLECTION_NAME);
-
-      List<AggregationOperation> operations = new ArrayList<>();
-
-      // Add $match FIRST to filter documents before transformation
-      operations.add(Aggregation.match(matchCriteria));
-
-      // Add display_gene_symbol field (with fallback) if sorting by gene_symbol
-      boolean sortsByGeneSymbol = pageable
-        .getSort()
-        .stream()
-        .anyMatch(o -> GENE_SYMBOL_FIELD.equals(o.getProperty()));
-
-      if (sortsByGeneSymbol) {
-        operations.add(buildDisplayGeneSymbolField());
-      }
-
-      buildLowercaseSortFields(operations, pageable.getSort());
-
-      // Add sorting (uses lowercase fields for case-insensitive sorting)
-      addSortOperation(operations, pageable.getSort());
-
-      // Add pagination
-      long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
-      operations.add(Aggregation.skip(skipCount));
-      operations.add(Aggregation.limit(pageable.getPageSize()));
-
-      Aggregation aggregation = Aggregation.newAggregation(operations);
-
-      AggregationResults<TranscriptomicsDocument> results = mongoTemplate.aggregate(
-        aggregation,
-        COLLECTION_NAME,
-        TranscriptomicsDocument.class
-      );
-
-      return new PageImpl<>(results.getMappedResults(), pageable, total);
-    } catch (Exception e) {
-      log.error("Error executing transcriptomics query", e);
-      throw e;
-    }
+    return executePagedAggregation(matchCriteria, pageable);
   }
 
   /**
@@ -139,190 +165,24 @@ public class CustomTranscriptomicsRepositoryImpl implements CustomTranscriptomic
   }
 
   /**
-   * Builds $addFields operation to create lowercase versions of sort fields
-   * for case-insensitive sorting (DocumentDB compatible).
+   * Override search to add gene_symbol/ensembl_gene_id fallback logic.
    *
-   * <p>Applies $toLower to string fields only.
-   * Only adds the operation if there are string fields to transform.
-   *
-   * @param operations the list of aggregation operations to add to
-   * @param sort the Sort object containing the fields to sort by
-   */
-  private void buildLowercaseSortFields(List<AggregationOperation> operations, Sort sort) {
-    Document fields = new Document();
-
-    for (Sort.Order order : sort) {
-      String field = order.getProperty();
-
-      if (GENE_SYMBOL_FIELD.equals(field)) {
-        // For gene_symbol, use display_gene_symbol (which has fallback logic)
-        fields.append(
-          "gene_symbol_lower",
-          new Document("$toLower", "$" + DISPLAY_GENE_SYMBOL_FIELD)
-        );
-      } else if ("name".equals(field)) {
-        // For name (Link field), use name.link_text
-        fields.append("name_lower", new Document("$toLower", "$name.link_text"));
-      } else if (needsCaseInsensitiveSort(field)) {
-        // For other string fields, apply lowercase transformation
-        fields.append(field + "_lower", new Document("$toLower", "$" + field));
-      }
-    }
-
-    // Only add $addFields if there are fields
-    if (!fields.isEmpty()) {
-      operations.add(context -> new Document("$addFields", fields));
-    }
-  }
-
-  /**
-   * Checks if a field needs case-insensitive sorting.
-   * Non-string fields (like age columns with nested objects) are excluded.
-   *
-   * @param field the field name
-   * @return true if the field needs case-insensitive sorting
-   */
-  private boolean needsCaseInsensitiveSort(String field) {
-    return (
-      "name".equals(field) ||
-      "model_type".equals(field) ||
-      "tissue".equals(field) ||
-      "sex_cohort".equals(field) ||
-      "ensembl_gene_id".equals(field) ||
-      "matched_control".equals(field) ||
-      "model_group".equals(field)
-    );
-  }
-
-  /**
-   * Builds match criteria combining all filters: tissue, sex_cohort, data filters,
-   * composite identifiers, and gene symbol search.
-   */
-  private Criteria buildMatchCriteria(
-    String tissue,
-    String sexCohort,
-    TranscriptomicsSearchQueryDto query,
-    List<String> items
-  ) {
-    List<Criteria> allCriteria = new ArrayList<>();
-
-    ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
-      query.getItemFilterType(),
-      ItemFilterTypeQueryDto.INCLUDE
-    );
-    String search = query.getSearch();
-
-    // Base criteria for tissue and sex_cohort (required)
-    allCriteria.add(Criteria.where("tissue").is(tissue));
-    allCriteria.add(Criteria.where("sex_cohort").is(sexCohort));
-
-    // Data filters: biodomains, modelType, name (OR within field, AND between fields)
-    addDataFilterCriteria(
-      query.getBiodomains(),
-      query.getModelType(),
-      query.getName(),
-      allCriteria
-    );
-
-    // Composite identifier filtering (items + itemFilterType)
-    addCompositeIdentifierCriteria(items, filterType, allCriteria);
-
-    // Gene symbol search (only for EXCLUDE mode)
-    addSearchCriteria(search, filterType, allCriteria);
-
-    // Combine all criteria with AND
-    return new Criteria().andOperator(allCriteria.toArray(new Criteria[0]));
-  }
-
-  private void addDataFilterCriteria(
-    List<String> biodomains,
-    List<String> modelType,
-    List<String> name,
-    List<Criteria> criteriaList
-  ) {
-    // biodomains: array field - use $in (matches if array contains any value)
-    if (biodomains != null && !biodomains.isEmpty()) {
-      criteriaList.add(Criteria.where("biodomains").in(biodomains));
-    }
-
-    // model_type: string field - use $in (matches if value equals any)
-    if (modelType != null && !modelType.isEmpty()) {
-      criteriaList.add(Criteria.where("model_type").in(modelType));
-    }
-
-    // name.link_text: nested field - use $in (matches if value equals any)
-    if (name != null && !name.isEmpty()) {
-      criteriaList.add(Criteria.where("name.link_text").in(name));
-    }
-  }
-
-  private void addCompositeIdentifierCriteria(
-    List<String> items,
-    ItemFilterTypeQueryDto filterType,
-    List<Criteria> criteriaList
-  ) {
-    if (items.isEmpty()) {
-      // For INCLUDE mode with empty items, add impossible condition (return empty)
-      if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
-        criteriaList.add(Criteria.where("_id").is(null));
-      }
-      // For EXCLUDE mode with empty items, no filtering needed (return all)
-      return;
-    }
-
-    // Parse composite identifiers (format: ensembl_gene_id~name)
-    List<TranscriptomicsIdentifier> identifiers = parseIdentifiers(items);
-
-    // Build criteria for each identifier (must match BOTH ensembl_gene_id AND name.link_text)
-    List<Criteria> compositeConditions = new ArrayList<>();
-    for (TranscriptomicsIdentifier identifier : identifiers) {
-      Criteria idCondition = new Criteria()
-        .andOperator(
-          Criteria.where("ensembl_gene_id").is(identifier.getEnsemblGeneId()),
-          Criteria.where("name.link_text").is(identifier.getName())
-        );
-      compositeConditions.add(idCondition);
-    }
-
-    // Apply INCLUDE or EXCLUDE logic
-    if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
-      // Match ANY of the composite identifiers ($or)
-      criteriaList.add(new Criteria().orOperator(compositeConditions.toArray(new Criteria[0])));
-    } else {
-      // Exclude ALL of the composite identifiers ($nor)
-      criteriaList.add(new Criteria().norOperator(compositeConditions.toArray(new Criteria[0])));
-    }
-  }
-
-  /**
-   * Adds search criteria that matches the display_gene_symbol logic using raw fields.
-   *
-   * <p>Since display_gene_symbol = gene_symbol ?? ensembl_gene_id, the search matches:
+   * <p>Since {@code display_gene_symbol = gene_symbol ?? ensembl_gene_id}, the search matches:
    * (gene_symbol matches) OR (gene_symbol is null/empty AND ensembl_gene_id matches)
    *
-   * <p>NOTE: We cannot use DISPLAY_GENE_SYMBOL_FIELD here because it's a computed field
-   * created by $addFields in the aggregation pipeline. The count query uses
-   * mongoTemplate.count() for performance, which doesn't run the aggregation pipeline
-   * and therefore has no access to the computed field.
+   * <p><strong>NOTE:</strong> We cannot use {@code DISPLAY_GENE_SYMBOL_FIELD} here because it's a
+   * computed field created by {@code $addFields} in the aggregation pipeline. The count query uses
+   * {@code mongoTemplate.count()} for performance, which doesn't run the aggregation pipeline and
+   * therefore has no access to the computed field. We must replicate the fallback logic using the
+   * raw {@code gene_symbol} and {@code ensembl_gene_id} fields.
    */
-  private void addSearchCriteria(
-    String search,
-    ItemFilterTypeQueryDto filterType,
-    List<Criteria> criteriaList
-  ) {
-    // Search only applies when itemFilterType is EXCLUDE
-    if (search == null || search.trim().isEmpty() || filterType == ItemFilterTypeQueryDto.INCLUDE) {
-      return;
-    }
-
-    String trimmedSearch = search.trim();
-
-    // Match if gene_symbol matches, OR if gene_symbol is null/empty and ensembl_gene_id matches
+  @Override
+  protected Criteria buildSearchCriteria(String field, String trimmedSearch) {
     Criteria geneSymbolIsNullOrEmpty = new Criteria()
       .orOperator(
         Criteria.where(GENE_SYMBOL_FIELD).is(null),
         Criteria.where(GENE_SYMBOL_FIELD).is(""),
-        Criteria.where(GENE_SYMBOL_FIELD).regex("^\\s*$") // whitespace only
+        Criteria.where(GENE_SYMBOL_FIELD).regex("^\\s*$")
       );
 
     if (trimmedSearch.contains(",")) {
@@ -332,7 +192,7 @@ public class CustomTranscriptomicsRepositoryImpl implements CustomTranscriptomic
       Criteria ensemblFallbackMatches = new Criteria()
         .andOperator(geneSymbolIsNullOrEmpty, Criteria.where("ensembl_gene_id").in(patterns));
 
-      criteriaList.add(new Criteria().orOperator(geneSymbolMatches, ensemblFallbackMatches));
+      return new Criteria().orOperator(geneSymbolMatches, ensemblFallbackMatches);
     } else {
       // Single term: partial match (case-insensitive)
       String regex = Pattern.quote(trimmedSearch);
@@ -340,49 +200,7 @@ public class CustomTranscriptomicsRepositoryImpl implements CustomTranscriptomic
       Criteria ensemblFallbackMatches = new Criteria()
         .andOperator(geneSymbolIsNullOrEmpty, Criteria.where("ensembl_gene_id").regex(regex, "i"));
 
-      criteriaList.add(new Criteria().orOperator(geneSymbolMatches, ensemblFallbackMatches));
-    }
-  }
-
-  private List<TranscriptomicsIdentifier> parseIdentifiers(List<String> items) {
-    List<TranscriptomicsIdentifier> identifiers = new ArrayList<>();
-    for (String item : items) {
-      identifiers.add(TranscriptomicsIdentifier.parse(item));
-    }
-    return identifiers;
-  }
-
-  /**
-   * Adds $sort operation, using lowercase versions of string fields for
-   * case-insensitive sorting (DocumentDB compatible).
-   *
-   * <p>Applies _lower suffix only to string fields.
-   */
-  private void addSortOperation(List<AggregationOperation> operations, Sort sort) {
-    if (sort.isUnsorted()) {
-      return;
-    }
-
-    List<Document> sortFields = new ArrayList<>();
-    for (Sort.Order order : sort) {
-      String field = order.getProperty();
-
-      // Use lowercase version for string fields (case-insensitive sorting)
-      if (needsCaseInsensitiveSort(field) || GENE_SYMBOL_FIELD.equals(field)) {
-        field = field + "_lower";
-      }
-      // Non-string fields (like age columns) are sorted directly
-
-      int direction = order.isAscending() ? 1 : -1;
-      sortFields.add(new Document(field, direction));
-    }
-
-    if (!sortFields.isEmpty()) {
-      Document sortDocument = new Document();
-      for (Document sortField : sortFields) {
-        sortDocument.putAll(sortField);
-      }
-      operations.add(context -> new Document("$sort", sortDocument));
+      return new Criteria().orOperator(geneSymbolMatches, ensemblFallbackMatches);
     }
   }
 }

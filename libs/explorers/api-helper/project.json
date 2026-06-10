@@ -1,0 +1,8 @@
+{
+  "name": "explorers-api-helper",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/explorers/api-helper/src",
+  "targets": {},
+  "tags": ["type:util", "scope:explorers", "language:java", "package-manager:gradle"]
+}

@@ -3,6 +3,7 @@ package org.sagebionetworks.agora.api.next.model.dto;
 import lombok.Builder;
 import lombok.Value;
 import org.sagebionetworks.agora.api.next.exception.InvalidFilterException;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 /**
  * Represents a composite identifier for nominated drug documents.
@@ -78,5 +79,19 @@ public class NominatedDrugIdentifier {
    */
   public String toCompositeId() {
     return chemblId + DELIMITER + (combinedWith != null ? combinedWith : "null");
+  }
+
+  /**
+   * Converts this identifier to a MongoDB {@link Criteria}
+   * that matches documents with this exact chembl_id and combined_with.
+   *
+   * @return a Criteria requiring both fields to match
+   */
+  public Criteria toCriteria() {
+    return new Criteria()
+      .andOperator(
+        Criteria.where("chembl_id").is(chemblId),
+        Criteria.where("combined_with").is(combinedWith)
+      );
   }
 }
