@@ -3,29 +3,33 @@
 
 footer {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: var(--footer-background, var(--color-primary));
   padding: 10px var(--footer-padding-x, 10px);
   min-height: var(--footer-height);
-  column-gap: 40px;
+  gap: 32px 40px;
 
   @media (min-width: vars.$lg-breakpoint) {
+    flex-direction: row;
     justify-content: space-between;
   }
 
   .footer-links {
     ul {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: center;
       list-style: none;
-      gap: 40px;
+      gap: 24px;
       padding: 0;
       margin: 10px 0;
 
       @media (min-width: vars.$lg-breakpoint) {
+        flex-wrap: nowrap;
+        gap: 40px;
         margin: 0;
       }
 
@@ -44,39 +48,63 @@ footer {
       }
 
       .footer-logo {
+        width: 100%;
         height: 64px;
         display: flex;
+        justify-content: center;
         align-items: center;
 
-        @media (width < 600px) {
-          display: none;
-        }
-
-        @media (width >= 600px) {
-          display: flex;
+        @media (min-width: vars.$lg-breakpoint) {
+          width: auto;
         }
       }
     }
   }
 
-  .footer-versions {
+  .footer-info {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: stretch;
-    font-size: 12px;
-    gap: 50px;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
     margin: 10px 0;
+    color: var(--footer-versions-color, var(--color-gray-100));
 
     @media (min-width: vars.$lg-breakpoint) {
+      align-items: flex-end;
+      gap: 8px;
       margin: 0;
+    }
+  }
+
+  .footer-sage-branding {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+
+    img {
+      height: 26px;
+      width: auto;
+    }
+  }
+
+  .footer-versions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    gap: 4px;
+
+    @media (min-width: vars.$lg-breakpoint) {
+      flex-direction: row;
+      align-items: stretch;
+      gap: 50px;
     }
 
     div {
       display: flex;
       flex-direction: row;
       gap: 40px;
-      color: var(--footer-versions-color, var(--color-gray-100));
     }
   }
 }
