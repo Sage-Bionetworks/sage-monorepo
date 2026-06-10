@@ -12,10 +12,17 @@ async function setup() {
 }
 
 describe('HomeComponent', () => {
-  it('should render welcome message', async () => {
+  it('should render the home page heading', async () => {
     await setup();
     expect(
-      screen.getByRole('heading', { name: /welcome to the xqtl explorer!/i }),
+      screen.getByRole('heading', {
+        name: /explore quantitative trait loci across models and studies/i,
+      }),
     ).toBeInTheDocument();
+  });
+
+  it('should render the link bar', async () => {
+    await setup();
+    expect(screen.getByText(/view qtls by cohort, ancestry, or cell type/i)).toBeInTheDocument();
   });
 });

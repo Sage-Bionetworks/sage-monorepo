@@ -1,0 +1,69 @@
+@use 'explorers/styles/src/mixins' as mixins;
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  > :nth-child(odd):last-child {
+    grid-column: 1 / -1;
+  }
+
+  @include mixins.respond-to('large') {
+    grid-template-columns: repeat(var(--stat-card-count, 1), 1fr);
+
+    > :nth-child(odd):last-child {
+      grid-column: auto;
+    }
+  }
+}
+
+// Top-row corner cards round their outer top corners to match a rounded wrapper.
+// Bottom corners are intentionally left square — consumers typically render
+// something else (e.g. a link bar) directly below.
+.stat-cards > :first-child {
+  --stat-card-border-top-left-radius: var(--stat-cards-corner-radius, 0);
+}
+
+.stat-cards > :nth-child(2) {
+  --stat-card-border-top-right-radius: var(--stat-cards-corner-radius, 0);
+}
+
+// Wide layout: every card sits in a single row, so the rightmost is :last-child,
+// not :nth-child(2). Override the narrow rule with the same-specificity selector.
+@include mixins.respond-to('large') {
+  .stat-cards > :nth-child(2) {
+    --stat-card-border-top-right-radius: 0;
+  }
+
+  .stat-cards > :last-child {
+    --stat-card-border-top-right-radius: var(--stat-cards-corner-radius, 0);
+  }
+}
+
+// On-load animation. When `animateOnLoad` is set, the component applies
+// `.stat-cards-animate-on-load`, which runs the per-element rise defined in
+// stat-card.component.scss so only the card's contents move while the card box
+// stays put; here we just assign each card its stagger index.
+.stat-cards-animate-on-load > :nth-child(1) {
+  --stat-card-index: 0;
+}
+
+.stat-cards-animate-on-load > :nth-child(2) {
+  --stat-card-index: 1;
+}
+
+.stat-cards-animate-on-load > :nth-child(3) {
+  --stat-card-index: 2;
+}
+
+.stat-cards-animate-on-load > :nth-child(4) {
+  --stat-card-index: 3;
+}
+
+.stat-cards-animate-on-load > :nth-child(5) {
+  --stat-card-index: 4;
+}
+
+.stat-cards-animate-on-load > :nth-child(n + 6) {
+  --stat-card-index: 5;
+}

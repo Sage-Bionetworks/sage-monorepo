@@ -1,0 +1,20 @@
+<a class="stat-card" [routerLink]="link()">
+  <div
+    class="stat-card-icon"
+    [class.stat-card-icon-circle]="iconBackgroundColor()"
+    [style.background-color]="iconBackgroundColor()"
+  >
+    <explorers-svg-icon
+      [imagePath]="iconPath()"
+      [altText]="iconAltText()"
+      [width]="40"
+      [height]="40"
+      [enableHoverEffects]="false"
+      [color]="iconColor()"
+    />
+  </div>
+  <div class="stat-card-header">{{ header() }}</div>
+  @if (subHeader()) {
+    <div class="stat-card-sub-header">{{ subHeader() }}</div>
+  }
+</a>
