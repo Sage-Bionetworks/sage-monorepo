@@ -1,6 +1,9 @@
 @use 'qtl/styles/src/variables' as variables;
 
 #home-page {
+  // Shared translucency for the home page's cards so they stay in sync.
+  --home-card-background-color: rgb(255 255 255 / 60%);
+
   position: relative;
   overflow: hidden;
   background-position: center top;
@@ -43,6 +46,8 @@
 }
 
 .chiclet-card {
+  --chiclet-card-background-color: var(--home-card-background-color);
+
   margin-bottom: 32px;
 }
 
@@ -52,7 +57,7 @@
   --link-bar-border-bottom-right-radius: 10px;
 
   // Translucent cards let the decorative background show through the panel.
-  --stat-card-background-color: rgb(255 255 255 / 60%);
+  --stat-card-background-color: var(--home-card-background-color);
 
   position: relative;
   max-width: 1140px;
