@@ -10,4 +10,10 @@ describe('FooterComponent', () => {
     await setup();
     expect(screen.getByAltText(/footer logo/i)).toBeInTheDocument();
   });
+
+  it('should include Sage Bionetworks branding', async () => {
+    await setup();
+    expect(screen.getByText(/powered by/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/sage bionetworks logo/i)).toBeInTheDocument();
+  });
 });
