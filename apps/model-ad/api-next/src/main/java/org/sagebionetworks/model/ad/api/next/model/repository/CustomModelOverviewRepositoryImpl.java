@@ -1,9 +1,11 @@
 package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
+import org.sagebionetworks.explorers.ComputedSortField;
 import org.sagebionetworks.explorers.CtFilterConfig;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -17,9 +19,10 @@ import org.springframework.stereotype.Repository;
 /**
  * Custom repository implementation backed by the shared CT aggregation pipeline.
  *
- * <p>ModelOverview has no case-insensitive sort, sort-field aliases, or computed sort fields,
- * so it overrides only the two abstract collection/document hooks. The pipeline scaffold
- * (count, $match, $sort, $skip, $limit) lives in {@link ComparisonToolRepositorySupport}.
+ * <p>Uses aggregation to support sorting by array fields. MongoDB cannot sort by multiple
+ * array fields simultaneously ("parallel arrays"), so we compute scalar sort fields for
+ * lexicographic comparison. The pipeline scaffold (count, $match, $addFields, $sort, $skip,
+ * $limit) lives in {@link ComparisonToolRepositorySupport}.
  */
 @Repository
 @Slf4j
@@ -43,15 +46,24 @@ public class CustomModelOverviewRepositoryImpl
     return ModelOverviewDocument.class;
   }
 
-  private final CtFilterConfig<ModelOverviewSearchQueryDto> filterConfig =
-    CtFilterConfig.<ModelOverviewSearchQueryDto>builder()
-      .dataFilter("available_data", ModelOverviewSearchQueryDto::getAvailableData)
-      .dataFilter("center", ModelOverviewSearchQueryDto::getCenter)
-      .dataFilter("model_type", ModelOverviewSearchQueryDto::getModelType)
-      .dataFilter("modified_genes", ModelOverviewSearchQueryDto::getModifiedGenes)
-      .simpleItemFilter("name")
-      .searchFilter("name")
-      .build();
+  @Override
+  protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
+    return Map.of(
+      "matched_controls",
+      ComputedSortField.of(arrayToLoweredStringExpr("matched_controls"))
+    );
+  }
+
+  private final CtFilterConfig<ModelOverviewSearchQueryDto> filterConfig = CtFilterConfig.<
+    ModelOverviewSearchQueryDto
+  >builder()
+    .dataFilter("available_data", ModelOverviewSearchQueryDto::getAvailableData)
+    .dataFilter("center", ModelOverviewSearchQueryDto::getCenter)
+    .dataFilter("model_type", ModelOverviewSearchQueryDto::getModelType)
+    .dataFilter("modified_genes", ModelOverviewSearchQueryDto::getModifiedGenes)
+    .simpleItemFilter("name")
+    .searchFilter("name")
+    .build();
 
   @Override
   protected CtFilterConfig<ModelOverviewSearchQueryDto> getFilterConfig() {

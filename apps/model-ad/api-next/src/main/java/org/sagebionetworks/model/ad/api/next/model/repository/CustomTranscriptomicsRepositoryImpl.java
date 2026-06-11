@@ -83,14 +83,39 @@ public class CustomTranscriptomicsRepositoryImpl
     );
   }
 
-  private final CtFilterConfig<TranscriptomicsSearchQueryDto> filterConfig =
-    CtFilterConfig.<TranscriptomicsSearchQueryDto>builder()
-      .dataFilter("biodomains", TranscriptomicsSearchQueryDto::getBiodomains)
-      .dataFilter("model_type", TranscriptomicsSearchQueryDto::getModelType)
-      .dataFilter("name.link_text", TranscriptomicsSearchQueryDto::getName)
-      .compositeItemFilter(item -> TranscriptomicsIdentifier.parse(item).toCriteria())
-      .searchFilter(GENE_SYMBOL_FIELD)
-      .build();
+  private final CtFilterConfig<TranscriptomicsSearchQueryDto> filterConfig = CtFilterConfig.<
+    TranscriptomicsSearchQueryDto
+  >builder()
+    .dataFilter("biodomains", TranscriptomicsSearchQueryDto::getBiodomains)
+    .dataFilter("model_type", TranscriptomicsSearchQueryDto::getModelType)
+    .dataFilter("name.link_text", TranscriptomicsSearchQueryDto::getName)
+    .compositeItemFilter(item -> TranscriptomicsIdentifier.parse(item).toCriteria())
+    .searchFilter(GENE_SYMBOL_FIELD)
+    .build();
+
+  /**
+   * Maps each heatmap time-point column to its nested {@code log2_fc} value
+   * ({@code { log2_fc, adj_p_val }}). Keys must stay in sync with the
+   * {@link TranscriptomicsDocument} heatmap fields.
+   *
+   * <p>{@code gene_symbol} is aliased to {@code display_gene_symbol} so the isEmpty flag checks
+   * the computed fallback value (gene_symbol ?? ensembl_gene_id) rather than the raw field.
+   * Without this, rows where {@code gene_symbol} is blank but {@code ensembl_gene_id} is populated
+   * would be treated as empty and incorrectly sorted to the tail.
+   */
+  @Override
+  protected Map<String, String> getSortFieldAliases() {
+    return Map.of(
+      GENE_SYMBOL_FIELD,
+      DISPLAY_GENE_SYMBOL_FIELD,
+      "4 months",
+      "4 months.log2_fc",
+      "12 months",
+      "12 months.log2_fc",
+      "18 months",
+      "18 months.log2_fc"
+    );
+  }
 
   @Override
   protected CtFilterConfig<TranscriptomicsSearchQueryDto> getFilterConfig() {

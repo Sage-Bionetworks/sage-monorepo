@@ -5,10 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 
 class ApiHelperTest {
 
@@ -185,14 +188,7 @@ class ApiHelperTest {
     @Test
     @DisplayName("should append extra parts using Objects.toString")
     void shouldAppendExtraParts() {
-      String key = ApiHelper.buildCacheKey(
-        "scope",
-        SampleEnum.EXCLUDE,
-        List.of("a"),
-        1,
-        null,
-        "x"
-      );
+      String key = ApiHelper.buildCacheKey("scope", SampleEnum.EXCLUDE, List.of("a"), 1, null, "x");
 
       assertThat(key).isEqualTo("scope-exclude-[a]-1-null-x");
     }
@@ -225,6 +221,119 @@ class ApiHelperTest {
       public String toString() {
         return String.valueOf(value);
       }
+    }
+  }
+
+  @Nested
+  @DisplayName("buildEmptyFlagFields")
+  class BuildEmptyFlagFields {
+
+    @Test
+    @DisplayName("should return null when sort is unsorted")
+    void shouldReturnNullWhenSortIsUnsorted() {
+      assertThat(ApiHelper.buildEmptyFlagFields(Sort.unsorted())).isNull();
+    }
+
+    @Test
+    @DisplayName(
+      "should emit _isEmpty flag covering null, empty string, and empty array when sort has one field"
+    )
+    void shouldEmitIsEmptyFlagWhenSortHasOneField() {
+      AggregationOperation op = ApiHelper.buildEmptyFlagFields(Sort.by(Sort.Order.asc("name")));
+
+      assertThat(op).isNotNull();
+      String doc = op.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson();
+      assertThat(doc)
+        .contains("name_isEmpty")
+        .contains("$or")
+        .contains("$eq")
+        .contains("$isArray") // empty-array branch
+        .contains("$size");
+    }
+
+    @Test
+    @DisplayName("should emit _isEmpty flags for all fields when sort has multiple fields")
+    void shouldEmitIsEmptyFlagsWhenSortHasMultipleFields() {
+      AggregationOperation op = ApiHelper.buildEmptyFlagFields(
+        Sort.by(Sort.Order.asc("name"), Sort.Order.desc("age"))
+      );
+
+      assertThat(op).isNotNull();
+      String doc = op.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson();
+      assertThat(doc).contains("name_isEmpty").contains("age_isEmpty");
+    }
+
+    @Test
+    @DisplayName("should produce the same _isEmpty expression when sort direction differs")
+    void shouldProduceSameExpressionWhenSortDirectionDiffers() {
+      AggregationOperation asc = ApiHelper.buildEmptyFlagFields(Sort.by(Sort.Order.asc("name")));
+      AggregationOperation desc = ApiHelper.buildEmptyFlagFields(Sort.by(Sort.Order.desc("name")));
+
+      assertThat(asc).isNotNull();
+      assertThat(desc).isNotNull();
+      assertThat(asc.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson()).isEqualTo(
+        desc.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson()
+      );
+    }
+
+    @Test
+    @DisplayName("should throw when a spaced alias resolves to a path with more than one dot")
+    void shouldThrowWhenSpacedAliasHasMoreThanOneDot() {
+      Map<String, String> aliases = Map.of("4 months", "4 months.nested.value");
+      assertThatThrownBy(() ->
+        ApiHelper.buildEmptyFlagFields(Sort.by(Sort.Order.asc("4 months")), aliases)
+      )
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("4 months.nested.value")
+        .hasMessageContaining("one level of nesting");
+    }
+
+    @Test
+    @DisplayName("should replace dots with underscores in isEmpty flag key for dotted sort fields")
+    void shouldReplaceDotsWithUnderscoresInIsEmptyFlagKeyForDottedSortFields() {
+      AggregationOperation op = ApiHelper.buildEmptyFlagFields(
+        Sort.by(Sort.Order.asc("name.link_text"))
+      );
+
+      assertThat(op).isNotNull();
+      String doc = op.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson();
+      assertThat(doc)
+        .as("dots in sort field name should be replaced with underscores in flag key")
+        .contains("name_link_text_isEmpty")
+        .doesNotContain("name.link_text_isEmpty");
+    }
+
+    @Test
+    @DisplayName("should use aliased path in isEmpty expression when aliases map is provided")
+    void shouldUseAliasedPathInIsEmptyExpressionWhenAliasesMapIsProvided() {
+      Map<String, String> aliases = Map.of("4 months", "4 months.log2_fc");
+      AggregationOperation op = ApiHelper.buildEmptyFlagFields(
+        Sort.by(Sort.Order.asc("4 months")),
+        aliases
+      );
+
+      assertThat(op).isNotNull();
+      String doc = op.toPipelineStages(Aggregation.DEFAULT_CONTEXT).get(0).toJson();
+      assertThat(doc)
+        .as("flag name should use the sort key with spaces replaced by underscores")
+        .contains("4_months_isEmpty");
+      assertThat(doc)
+        .as("isEmpty expression should use $let to bind $$val to the $getField access expression")
+        .contains("$let");
+      assertThat(doc)
+        .as("isEmpty expression should use $getField to navigate the spaced parent field")
+        .contains("$getField");
+      assertThat(doc)
+        .as("isEmpty expression should reference log2_fc as the child field")
+        .contains("log2_fc");
+      assertThat(doc)
+        .as(
+          "isEmpty expression should use $type for null/missing and cover empty string and empty array"
+        )
+        .contains("$type")
+        .contains("missing")
+        .contains("$isArray")
+        .contains("$size");
     }
   }
 }

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -67,7 +68,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * {@link #buildCtMatchCriteria} must override.
    */
   protected <Q> CtFilterConfig<Q> getFilterConfig() {
-    throw new UnsupportedOperationException("Subclasses that use buildCtMatchCriteria must override getFilterConfig()");
+    throw new UnsupportedOperationException(
+      "Subclasses that use buildCtMatchCriteria must override getFilterConfig()"
+    );
   }
 
   /**
@@ -88,9 +91,21 @@ public abstract class ComparisonToolRepositorySupport<T> {
   }
 
   /**
-   * Map of sort field → aliased field name for a direct {@code $sort} rename (no {@code $addFields}
-   * stage). Use when an alternate field is already present on the document (e.g.
-   * {@code "age" → "age_numeric"} for a numeric companion to a string column).
+   * Map of sort field name → aliased document path for a direct {@code $sort} rename (no
+   * {@code $addFields} stage). Two cases require an entry:
+   *
+   * <ol>
+   *   <li><strong>Companion-field redirect</strong> — a separate field already on the document
+   *       carries the sortable value (e.g. {@code "age" → "age_numeric"}).
+   *   <li><strong>Nested-object columns</strong> — any column whose document value is an object
+   *       (rather than a scalar) must be aliased to the specific sub-field to sort on (e.g.
+   *       {@code "CBE" → "CBE.correlation"}, {@code "4 months" → "4 months.log2_fc"}). Without the
+   *       alias, {@code $sort} operates on the full object and produces undefined ordering. This
+   *       applies to any object-valued column — heatmap modules, time-point buckets, or similar.
+   * </ol>
+   *
+   * <p>Subclass overrides must stay in sync with the document schema: whenever a new object-valued
+   * column is added, add the corresponding alias here.
    */
   protected Map<String, String> getSortFieldAliases() {
     return Map.of();
@@ -124,6 +139,12 @@ public abstract class ComparisonToolRepositorySupport<T> {
         operations.add(computedSort);
       }
 
+      // Inject empty-flag fields so null/empty values always sort last regardless of direction
+      AggregationOperation emptyFlags = ApiHelper.buildEmptyFlagFields(pageable.getSort(), aliases);
+      if (emptyFlags != null) {
+        operations.add(emptyFlags);
+      }
+
       // Build and add sort operation
       AggregationOperation sort = buildSortOperation(pageable.getSort(), computedFields, aliases);
       if (sort != null) {
@@ -134,7 +155,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
       operations.add(Aggregation.skip(skipCount));
       operations.add(Aggregation.limit(pageable.getPageSize()));
 
-      Aggregation aggregation = Aggregation.newAggregation(operations);
+      // Permits disk spillover when the $sort working set exceeds 100MB; only activates
+      // when needed -- required for deep pagination on large collections
+      Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(
+        AggregationOptions.builder().allowDiskUse(true).build()
+      );
       log.debug("Executing aggregation on collection {}: {}", getCollectionName(), aggregation);
       AggregationResults<T> results = mongoTemplate.aggregate(
         aggregation,
@@ -372,9 +397,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
         resolved = field + "_sort";
       } else if (aliases.containsKey(field)) {
         resolved = aliases.get(field);
+        log.debug("Resolved sort alias: '{}' -> '{}'", field, resolved);
       } else {
         resolved = field;
       }
+      sortDoc.append(ApiHelper.isEmptyFlagKey(field), 1);
       sortDoc.append(resolved, order.isAscending() ? 1 : -1);
     }
 
