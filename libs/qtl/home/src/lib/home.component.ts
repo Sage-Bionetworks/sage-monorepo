@@ -14,6 +14,8 @@ import { ROUTE_PATHS } from '@sagebionetworks/qtl/config';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+  readonly backgroundImage = 'qtl-assets/images/home-background.svg';
+
   chiclets: Chiclet[] = [
     { text: 'PAK1', backgroundColor: 'var(--color-chiclet-purple)' },
     { text: 'chr1:109.8Mb', backgroundColor: 'var(--color-chiclet-blue)' },
