@@ -1,6 +1,7 @@
 export * from './lib/components/base-download-dom-image/base-download-dom-image.component';
 export * from './lib/components/chiclet-card/chiclet-card.component';
 export * from './lib/components/chiclet/chiclet.component';
+export * from './lib/components/copy-link-button/copy-link-button.component';
 export * from './lib/components/download-dom-image/download-dom-image.component';
 export * from './lib/components/download-dom-images-zip/download-dom-images-zip.component';
 export * from './lib/components/error-overlay/error-overlay.component';
