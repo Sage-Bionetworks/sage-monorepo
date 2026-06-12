@@ -14,6 +14,19 @@ export const headerLinks: NavigationLink[] = [
     ],
   },
   {
+    label: 'DropdownWithSubheader',
+    children: [
+      {
+        label: 'SubheaderLabel',
+        isSubheader: true,
+        children: [
+          { label: 'SubChildLink1', routerLink: ['/sub-child-link-1'] },
+          { label: 'SubChildLink2', routerLink: ['/sub-child-link-2'] },
+        ],
+      },
+    ],
+  },
+  {
     label: 'HeaderLink2',
     routerLink: ['/header-link-2'],
   },

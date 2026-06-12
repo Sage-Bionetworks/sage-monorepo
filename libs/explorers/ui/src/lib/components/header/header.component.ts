@@ -64,30 +64,59 @@ export class HeaderComponent implements OnInit {
 
   isDropdownActive(link: NavigationLink): boolean {
     if (!link.children) return false;
-    return link.children.some((child) =>
-      child.routerLink
-        ? this.router.isActive(child.routerLink.join('/'), {
-            paths: 'subset',
-            queryParams: 'ignored',
-            fragment: 'ignored',
-            matrixParams: 'ignored',
-          })
-        : false,
-    );
+    return link.children.some((child) => {
+      const candidates = child.isSubheader && child.children ? child.children : [child];
+      return candidates.some((c) =>
+        c.routerLink
+          ? this.router.isActive(c.routerLink.join('/'), {
+              paths: 'subset',
+              queryParams: 'ignored',
+              fragment: 'ignored',
+              matrixParams: 'ignored',
+            })
+          : false,
+      );
+    });
   }
 
   private buildDropdownMenuItems(links: NavigationLink[]) {
     this.dropdownMenuItems.clear();
     for (const link of links) {
       if (link.children) {
-        this.dropdownMenuItems.set(
-          link.label,
-          link.children.map((child) => ({
-            label: child.label,
-            routerLink: child.routerLink,
-          })),
-        );
+        this.dropdownMenuItems.set(link.label, this.toMenuItems(link.children));
       }
     }
+  }
+
+  private toMenuItems(children: NavigationLink[]): MenuItem[] {
+    const hasSubheaders = children.some((c) => c.isSubheader);
+    const hasFlat = children.some((c) => !c.isSubheader);
+    // PrimeNG renders all top-level MenuItem entries as group headers when any entry has nested
+    // `items`, making flat siblings non-clickable. Mixed layouts are therefore not supported.
+    if (hasSubheaders && hasFlat) {
+      throw new Error(
+        'HeaderComponent: mixing subheader and flat children in the same dropdown is not supported. All children should be either subheaders or flat links.',
+      );
+    }
+
+    const items: MenuItem[] = [];
+    for (const child of children) {
+      if (child.isSubheader) {
+        if (child.children?.length) {
+          items.push({
+            label: child.label,
+            items: child.children.map((grandchild) => ({
+              label: grandchild.label,
+              routerLink: grandchild.routerLink,
+              styleClass: 'header-dropdown-subheader-child',
+            })),
+          });
+        }
+        // isSubheader with no children is a no-op
+      } else {
+        items.push({ label: child.label, routerLink: child.routerLink });
+      }
+    }
+    return items;
   }
 }
