@@ -64,6 +64,7 @@ export class ComparisonToolService<T> {
     rowIdDataKey: '_id',
     allowPinnedImageDownload: true,
     linkExportField: 'link_url',
+    showTableSearch: true,
   };
 
   // Private State Signals
@@ -142,6 +143,14 @@ export class ComparisonToolService<T> {
   });
 
   constructor() {
+    // Close the filter panel when the current config has no filters to avoid showing an empty panel.
+    effect(() => {
+      const config = this.currentConfig();
+      if (config !== null && !config.filters?.length && this.isFilterPanelOpenSignal()) {
+        this.isFilterPanelOpenSignal.set(false);
+      }
+    });
+
     // Automatically sync state changes to URL.
     // This effect re-runs whenever any of the tracked signals change,
     // keeping the URL in sync with the component's state.
