@@ -6,5 +6,6 @@ export type NavigationLink = {
   target?: '_blank' | '_self' | '_parent' | '_top';
   routerLink?: string[];
   activeOptions?: { exact: boolean } | IsActiveMatchOptions;
+  isSubheader?: boolean;
   children?: NavigationLink[];
 };

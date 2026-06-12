@@ -36,6 +36,8 @@ async function setup() {
         { path: 'header-link-2', component: DummyComponent },
         { path: 'child-link-1', component: DummyComponent },
         { path: 'child-link-2', component: DummyComponent },
+        { path: 'sub-child-link-1', component: DummyComponent },
+        { path: 'sub-child-link-2', component: DummyComponent },
         { path: 'footer-link-internal-1', component: DummyComponent },
         { path: 'footer-link-internal-2', component: DummyComponent },
       ]),
@@ -170,6 +172,31 @@ describe('HeaderComponent', () => {
 
     expect(component.isShown).toBe(false);
     expect(component.isMobile).toBe(true);
+  });
+
+  it('should build grouped MenuItem structure for dropdown with subheaders', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { component } = await setup();
+
+    const items = component.dropdownMenuItems.get('DropdownWithSubheader');
+    expect(items).toHaveLength(1);
+
+    const subheaderItem = items?.[0];
+    expect(subheaderItem?.label).toBe('SubheaderLabel');
+    expect(subheaderItem?.items).toHaveLength(2);
+    expect(subheaderItem?.items?.[0].label).toBe('SubChildLink1');
+    expect(subheaderItem?.items?.[1].label).toBe('SubChildLink2');
+  });
+
+  it('should render subheader as non-link text and its children as links in mobile mode', async () => {
+    changeWindowSize(MOBILE_WIDTH);
+    const { user } = await setup();
+    await user.click(screen.getByRole('button', { name: 'Toggle navigation' }));
+
+    expect(screen.getByText('SubheaderLabel')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'SubheaderLabel' })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'SubChildLink1' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'SubChildLink2' })).toBeInTheDocument();
   });
 
   function verifyHeaderLinks() {

@@ -64,30 +64,45 @@ export class HeaderComponent implements OnInit {
 
   isDropdownActive(link: NavigationLink): boolean {
     if (!link.children) return false;
-    return link.children.some((child) =>
-      child.routerLink
-        ? this.router.isActive(child.routerLink.join('/'), {
-            paths: 'subset',
-            queryParams: 'ignored',
-            fragment: 'ignored',
-            matrixParams: 'ignored',
-          })
-        : false,
-    );
+    return link.children.some((child) => {
+      const candidates = child.isSubheader && child.children ? child.children : [child];
+      return candidates.some((c) =>
+        c.routerLink
+          ? this.router.isActive(c.routerLink.join('/'), {
+              paths: 'subset',
+              queryParams: 'ignored',
+              fragment: 'ignored',
+              matrixParams: 'ignored',
+            })
+          : false,
+      );
+    });
   }
 
   private buildDropdownMenuItems(links: NavigationLink[]) {
     this.dropdownMenuItems.clear();
     for (const link of links) {
       if (link.children) {
-        this.dropdownMenuItems.set(
-          link.label,
-          link.children.map((child) => ({
-            label: child.label,
-            routerLink: child.routerLink,
-          })),
-        );
+        this.dropdownMenuItems.set(link.label, this.toMenuItems(link.children));
       }
     }
+  }
+
+  private toMenuItems(children: NavigationLink[]): MenuItem[] {
+    const items: MenuItem[] = [];
+    for (const child of children) {
+      if (child.isSubheader && child.children?.length) {
+        items.push({
+          label: child.label,
+          items: child.children.map((grandchild) => ({
+            label: grandchild.label,
+            routerLink: grandchild.routerLink,
+          })),
+        });
+      } else if (!child.isSubheader) {
+        items.push({ label: child.label, routerLink: child.routerLink });
+      }
+    }
+    return items;
   }
 }

@@ -1,0 +1,10 @@
+.header-dropdown-menu {
+  .p-menu-item-label,
+  .p-menu-submenu-label {
+    font-weight: 700;
+  }
+
+  .p-menu-submenu-label ~ .p-menu-item .p-menu-item-label {
+    font-weight: 400;
+  }
+}
