@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
 import { footerLinks, headerLinks } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
@@ -174,6 +174,33 @@ describe('HeaderComponent', () => {
     expect(component.isMobile).toBe(true);
   });
 
+  it('should throw when a dropdown mixes subheader and flat children', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+
+    await expect(
+      render(HeaderComponent, {
+        componentInputs: {
+          headerLogoPath: 'path/to/logo.svg',
+          headerLinks: [
+            {
+              label: 'MixedDropdown',
+              children: [
+                { label: 'Flat Item', routerLink: ['/flat'] },
+                {
+                  label: 'SubheaderLabel',
+                  isSubheader: true,
+                  children: [{ label: 'Child', routerLink: ['/child'] }],
+                },
+              ],
+            },
+          ],
+        },
+        imports: [CommonModule, SvgImageComponent],
+        providers: [provideRouter([])],
+      }),
+    ).rejects.toThrow('mixing subheader and flat');
+  });
+
   it('should build grouped MenuItem structure for dropdown with subheaders', async () => {
     changeWindowSize(DESKTOP_WIDTH);
     const { component } = await setup();
@@ -186,6 +213,18 @@ describe('HeaderComponent', () => {
     expect(subheaderItem?.items).toHaveLength(2);
     expect(subheaderItem?.items?.[0].label).toBe('SubChildLink1');
     expect(subheaderItem?.items?.[1].label).toBe('SubChildLink2');
+  });
+
+  it('should mark dropdown as active when a subheader grandchild route is active', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { component, fixture } = await setup();
+
+    const router = fixture.debugElement.injector.get(Router);
+    await router.navigate(['/sub-child-link-1']);
+
+    const subheaderLink = headerLinks.find((l) => l.label === 'DropdownWithSubheader');
+    expect(subheaderLink).toBeDefined();
+    expect(component.isDropdownActive(subheaderLink ?? { label: '' })).toBe(true);
   });
 
   it('should render subheader as non-link text and its children as links in mobile mode', async () => {

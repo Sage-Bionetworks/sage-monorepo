@@ -89,17 +89,31 @@ export class HeaderComponent implements OnInit {
   }
 
   private toMenuItems(children: NavigationLink[]): MenuItem[] {
+    const hasSubheaders = children.some((c) => c.isSubheader);
+    const hasFlat = children.some((c) => !c.isSubheader);
+    // PrimeNG renders all top-level MenuItem entries as group headers when any entry has nested
+    // `items`, making flat siblings non-clickable. Mixed layouts are therefore not supported.
+    if (hasSubheaders && hasFlat) {
+      throw new Error(
+        'HeaderComponent: mixing subheader and flat children in the same dropdown is not supported. All children should be either subheaders or flat links.',
+      );
+    }
+
     const items: MenuItem[] = [];
     for (const child of children) {
-      if (child.isSubheader && child.children?.length) {
-        items.push({
-          label: child.label,
-          items: child.children.map((grandchild) => ({
-            label: grandchild.label,
-            routerLink: grandchild.routerLink,
-          })),
-        });
-      } else if (!child.isSubheader) {
+      if (child.isSubheader) {
+        if (child.children?.length) {
+          items.push({
+            label: child.label,
+            items: child.children.map((grandchild) => ({
+              label: grandchild.label,
+              routerLink: grandchild.routerLink,
+              styleClass: 'header-dropdown-subheader-child',
+            })),
+          });
+        }
+        // isSubheader with no children is a no-op
+      } else {
         items.push({ label: child.label, routerLink: child.routerLink });
       }
     }

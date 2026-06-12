@@ -2,9 +2,10 @@
   .p-menu-item-label,
   .p-menu-submenu-label {
     font-weight: 700;
+    color: var(--color-text);
   }
 
-  .p-menu-submenu-label ~ .p-menu-item .p-menu-item-label {
+  .header-dropdown-subheader-child .p-menu-item-label {
     font-weight: 400;
   }
 }
