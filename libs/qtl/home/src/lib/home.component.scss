@@ -1,9 +1,18 @@
 @use 'qtl/styles/src/variables' as variables;
 
+// Fill the vertical space the app shell's flex column makes available so the
+// background reaches the footer even when the content is shorter than the viewport.
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 #home-page {
   // Shared translucency for the home page's cards so they stay in sync.
   --home-card-background-color: rgb(255 255 255 / 60%);
 
+  flex: 1;
   position: relative;
   overflow: hidden;
   background-position: center top;
