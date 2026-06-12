@@ -25,4 +25,10 @@ describe('HomeComponent', () => {
     await setup();
     expect(screen.getByText(/view qtls by cohort, ancestry, or cell type/i)).toBeInTheDocument();
   });
+
+  it('should apply the home background image', async () => {
+    const { fixture } = await setup();
+    const homePage = fixture.nativeElement.querySelector('#home-page') as HTMLElement;
+    expect(homePage.style.backgroundImage).toContain('qtl-assets/images/home-background.svg');
+  });
 });
