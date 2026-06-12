@@ -22,6 +22,21 @@
       word-wrap: break-word;
       overflow-wrap: break-word;
     }
+
+    tr {
+      &.hovered,
+      &.selected {
+        background-color: var(--color-comparison-tool-row-highlight) !important;
+
+        // PrimeNG transitions background on `tr` but not on `td`, so the trailing area
+        // past the last column would animate while cells snap. Suppressing it keeps the row in sync.
+        transition: none !important;
+
+        td {
+          background-color: var(--color-comparison-tool-row-highlight) !important;
+        }
+      }
+    }
   }
 
   .heatmap-circle-button {

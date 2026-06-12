@@ -69,6 +69,8 @@ export interface ComparisonToolViewConfig {
   defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
   heatmapCircleClickTransformFn?: heatmapCircleClickTransformFn;
   linkExportField: 'link_url' | 'link_text';
+  rowSelectionEnabled?: boolean;
+  rowHoverEnabled?: boolean;
   showTableSearch?: boolean;
 }
 

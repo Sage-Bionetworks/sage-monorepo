@@ -860,6 +860,153 @@ describe('ComparisonToolService', () => {
     });
   });
 
+  describe('row selection', () => {
+    it('selectRow() sets selectedRowId', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true });
+      service.selectRow('row-1');
+      expect(service.selectedRowId()).toBe('row-1');
+    });
+
+    it('selectRow() is a no-op when same ID is already selected', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true });
+      service.selectRow('row-1');
+      expect(service.selectedRowId()).toBe('row-1');
+      service.selectRow('row-1');
+      expect(service.selectedRowId()).toBe('row-1');
+    });
+
+    it('selectRow() is a no-op when rowSelectionEnabled is false', () => {
+      connectService();
+      service.selectRow('row-1');
+      expect(service.selectedRowId()).toBeNull();
+    });
+
+    it('setHoveredRowId() sets hoveredRowId', () => {
+      connectService();
+      service.setViewConfig({ rowHoverEnabled: true });
+      service.setHoveredRowId('row-1');
+      expect(service.hoveredRowId()).toBe('row-1');
+    });
+
+    it('setHoveredRowId() clears hoveredRowId when null is passed', () => {
+      connectService();
+      service.setViewConfig({ rowHoverEnabled: true });
+      service.setHoveredRowId('row-1');
+      service.setHoveredRowId(null);
+      expect(service.hoveredRowId()).toBeNull();
+    });
+
+    it('setHoveredRowId() is a no-op when rowHoverEnabled is false', () => {
+      connectService();
+      service.setHoveredRowId('row-1');
+      expect(service.hoveredRowId()).toBeNull();
+    });
+
+    it('auto-selects first unpinned row when fetches complete and rowSelectionEnabled=true', fakeAsync(() => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.startFetch();
+      service.setUnpinnedData([{ _id: 'row-1' }, { _id: 'row-2' }]);
+      tick();
+      expect(service.selectedRowId()).toBe('row-1');
+    }));
+
+    it('falls back to first pinned row when unpinned is empty and fetches complete', fakeAsync(() => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.startFetch();
+      service.startFetch();
+      service.setPinnedData([{ _id: 'pinned-1' }]);
+      service.setUnpinnedData([]);
+      tick();
+      expect(service.selectedRowId()).toBe('pinned-1');
+    }));
+
+    it('auto-selects regardless of which fetch completes first', fakeAsync(() => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.startFetch();
+      service.startFetch();
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      tick();
+      expect(service.selectedRowId()).toBeNull();
+      service.setPinnedData([]);
+      tick();
+      expect(service.selectedRowId()).toBe('row-1');
+    }));
+
+    it('auto-selects unpinned[0] whether pinned or unpinned data arrives first', fakeAsync(() => {
+      // pinned arrives first
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.startFetch();
+      service.startFetch();
+      service.setPinnedData([{ _id: 'pinned-1' }]);
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      tick();
+      expect(service.selectedRowId()).toBe('row-1');
+    }));
+
+    it('does not auto-select when rowSelectionEnabled is false', fakeAsync(() => {
+      connectService();
+      service.startFetch();
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      tick();
+      expect(service.selectedRowId()).toBeNull();
+    }));
+
+    it('does not overwrite an existing selection when new data arrives', fakeAsync(() => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.startFetch();
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      tick();
+      expect(service.selectedRowId()).toBe('row-1');
+      service.selectRow('row-2');
+      service.startFetch();
+      service.setUnpinnedData([{ _id: 'row-1' }, { _id: 'row-2' }]);
+      tick();
+      expect(service.selectedRowId()).toBe('row-2');
+    }));
+
+    it('notifySelectedRowValidity(false) resets and re-selects first row', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setUnpinnedData([{ _id: 'row-1' }, { _id: 'row-2' }]);
+      service.selectRow('row-2');
+      service.notifySelectedRowValidity(false);
+      expect(service.selectedRowId()).toBe('row-1');
+    });
+
+    it('notifySelectedRowValidity(false) is a no-op when selected row is in pinned data', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setPinnedData([{ _id: 'pinned-1' }]);
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.selectRow('pinned-1');
+      service.notifySelectedRowValidity(false);
+      expect(service.selectedRowId()).toBe('pinned-1');
+    });
+
+    it('notifySelectedRowValidity(true) is a no-op', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.selectRow('row-1');
+      service.notifySelectedRowValidity(true);
+      expect(service.selectedRowId()).toBe('row-1');
+    });
+
+    it('notifySelectedRowValidity() is a no-op when rowSelectionEnabled is false', () => {
+      connectService();
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.notifySelectedRowValidity(false);
+      expect(service.selectedRowId()).toBeNull();
+    });
+  });
+
   describe('loading state', () => {
     it('should have isLoading false initially', () => {
       connectService();

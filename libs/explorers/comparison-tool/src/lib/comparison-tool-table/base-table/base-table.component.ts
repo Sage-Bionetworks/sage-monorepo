@@ -22,7 +22,7 @@ import { PrimaryIdentifierControlsComponent } from '../primary-identifier-contro
   encapsulation: ViewEncapsulation.None,
 })
 export class BaseTableComponent {
-  readonly comparisonToolService = inject(ComparisonToolService);
+  protected readonly comparisonToolService = inject(ComparisonToolService);
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   viewConfig = this.comparisonToolService.viewConfig;
@@ -42,5 +42,17 @@ export class BaseTableComponent {
 
   onHeatmapCircleClick(rowData: unknown, cellData: unknown, columnKey: string, event: Event): void {
     this.comparisonToolService.showHeatmapDetailsPanel(rowData, cellData, columnKey, event);
+  }
+
+  onRowClick(rowId: string): void {
+    this.comparisonToolService.selectRow(rowId);
+  }
+
+  onRowMouseEnter(rowId: string): void {
+    this.comparisonToolService.setHoveredRowId(rowId);
+  }
+
+  onRowMouseLeave(): void {
+    this.comparisonToolService.setHoveredRowId(null);
   }
 }
