@@ -2,6 +2,8 @@
 @use 'explorers/styles/src/mixins' as mixins;
 
 .comparison-tool-table {
+  min-width: max-content;
+
   .table-divider {
     background-color: var(--color-gray-300);
     font-size: var(--font-size-sm);
