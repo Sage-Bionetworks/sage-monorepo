@@ -126,6 +126,7 @@ export interface ComparisonToolConfigColumn {
   link_url?: string;
   is_exported: boolean;
   is_hidden: boolean;
+  column_width?: number;
 }
 
 export interface ComparisonToolColumn extends ComparisonToolConfigColumn {

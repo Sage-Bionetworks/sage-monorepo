@@ -83,6 +83,8 @@ public class ComparisonToolConfigColumnDto {
 
   private Boolean isHidden;
 
+  private @Nullable Integer columnWidth;
+
   public ComparisonToolConfigColumnDto() {
     super();
   }
@@ -277,6 +279,26 @@ public class ComparisonToolConfigColumnDto {
     this.isHidden = isHidden;
   }
 
+  public ComparisonToolConfigColumnDto columnWidth(@Nullable Integer columnWidth) {
+    this.columnWidth = columnWidth;
+    return this;
+  }
+
+  /**
+   * Optional fixed width for the column in pixels. When set, the UI uses this width verbatim instead of auto-sizing the column from content.
+   * @return columnWidth
+   */
+  
+  @Schema(name = "column_width", description = "Optional fixed width for the column in pixels. When set, the UI uses this width verbatim instead of auto-sizing the column from content.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("column_width")
+  public @Nullable Integer getColumnWidth() {
+    return columnWidth;
+  }
+
+  public void setColumnWidth(@Nullable Integer columnWidth) {
+    this.columnWidth = columnWidth;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -294,12 +316,13 @@ public class ComparisonToolConfigColumnDto {
         Objects.equals(this.linkText, comparisonToolConfigColumn.linkText) &&
         Objects.equals(this.linkUrl, comparisonToolConfigColumn.linkUrl) &&
         Objects.equals(this.isExported, comparisonToolConfigColumn.isExported) &&
-        Objects.equals(this.isHidden, comparisonToolConfigColumn.isHidden);
+        Objects.equals(this.isHidden, comparisonToolConfigColumn.isHidden) &&
+        Objects.equals(this.columnWidth, comparisonToolConfigColumn.columnWidth);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, type, dataKey, tooltip, sortTooltip, linkText, linkUrl, isExported, isHidden);
+    return Objects.hash(name, type, dataKey, tooltip, sortTooltip, linkText, linkUrl, isExported, isHidden, columnWidth);
   }
 
   @Override
@@ -315,6 +338,7 @@ public class ComparisonToolConfigColumnDto {
     sb.append("    linkUrl: ").append(toIndentedString(linkUrl)).append("\n");
     sb.append("    isExported: ").append(toIndentedString(isExported)).append("\n");
     sb.append("    isHidden: ").append(toIndentedString(isHidden)).append("\n");
+    sb.append("    columnWidth: ").append(toIndentedString(columnWidth)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -352,6 +376,7 @@ public class ComparisonToolConfigColumnDto {
       this.instance.setLinkUrl(value.linkUrl);
       this.instance.setIsExported(value.isExported);
       this.instance.setIsHidden(value.isHidden);
+      this.instance.setColumnWidth(value.columnWidth);
       return this;
     }
 
@@ -397,6 +422,11 @@ public class ComparisonToolConfigColumnDto {
     
     public ComparisonToolConfigColumnDto.Builder isHidden(Boolean isHidden) {
       this.instance.isHidden(isHidden);
+      return this;
+    }
+    
+    public ComparisonToolConfigColumnDto.Builder columnWidth(Integer columnWidth) {
+      this.instance.columnWidth(columnWidth);
       return this;
     }
     

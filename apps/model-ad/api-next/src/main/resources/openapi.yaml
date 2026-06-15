@@ -383,6 +383,7 @@ components:
         is_hidden: true
         link_url: link_url
         sort_tooltip: sort_tooltip
+        column_width: 0
         is_exported: true
         type: text
         data_key: data_key
@@ -425,6 +426,11 @@ components:
           description: Indicates whether the column is shown in the comparison table
             UI.
           type: boolean
+        column_width:
+          description: "Optional fixed width for the column in pixels. When set, the\
+            \ UI uses this width verbatim instead of auto-sizing the column from content."
+          format: int32
+          type: integer
       required:
         - data_key
         - is_exported
@@ -478,6 +484,7 @@ components:
             is_hidden: true
             link_url: link_url
             sort_tooltip: sort_tooltip
+            column_width: 0
             is_exported: true
             type: text
             data_key: data_key
@@ -487,6 +494,7 @@ components:
             is_hidden: true
             link_url: link_url
             sort_tooltip: sort_tooltip
+            column_width: 0
             is_exported: true
             type: text
             data_key: data_key

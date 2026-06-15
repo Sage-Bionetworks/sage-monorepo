@@ -129,6 +129,27 @@ export function restoreCellStyles(
   }
 }
 
+// Splits columns by whether they have an explicit column_width, resolving the fixed widths in
+// the process. Columns with a column_width skip auto-sizing entirely — their width is applied
+// verbatim (bypassing the MIN/MAX clamp) so it stays constant across sorts. Returns:
+//  - fixedWidthByColumn: a `data_key -> "{n}px"` lookup for the fixed-width columns
+//  - columnsToMeasure: the remaining columns, which the caller still auto-sizes by measurement
+export function resolveFixedColumnWidths(columns: ComparisonToolColumn[]): {
+  fixedWidthByColumn: Record<string, string>;
+  columnsToMeasure: ComparisonToolColumn[];
+} {
+  const fixedWidthByColumn: Record<string, string> = {};
+  const columnsToMeasure: ComparisonToolColumn[] = [];
+  for (const column of columns) {
+    if (column.column_width != null) {
+      fixedWidthByColumn[column.data_key] = `${column.column_width}px`;
+    } else {
+      columnsToMeasure.push(column);
+    }
+  }
+  return { fixedWidthByColumn, columnsToMeasure };
+}
+
 export function clampAndFormatWidths(rawWidths: Record<string, number>): Record<string, string> {
   const result: Record<string, string> = {};
   for (const key of Object.keys(rawWidths)) {

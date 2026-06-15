@@ -59,6 +59,9 @@ public class ComparisonToolConfigDocument {
 
     @Field("is_hidden")
     private Boolean isHidden;
+
+    @Field("column_width")
+    private @Nullable Integer columnWidth;
   }
 
   @Builder
