@@ -6,6 +6,10 @@ explorers-home-card {
   --color-arrow: var(--color-action-primary);
   --description-font-size: 16px;
   --description-line-height: 20px;
+
+  display: flex;
+  height: 100%;
+  min-height: 300px;
 }
 
 .section {
