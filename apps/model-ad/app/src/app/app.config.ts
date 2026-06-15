@@ -20,16 +20,16 @@ import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorer
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client';
 import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
-import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
+import { ModelAdPreset } from '@sagebionetworks/model-ad/themes';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
+import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
+import * as Sentry from '@sentry/angular';
 import { provideMarkdown } from 'ngx-markdown';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import { CustomUrlSerializer } from './app.custom-url-serializer';
 import { routes } from './app.routes';
 import { VISUALIZATION_OVERVIEW_PANES } from './content/visualization-overview.content';
-import { ModelAdPreset } from './primeNGPreset';
-import * as Sentry from '@sentry/angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [

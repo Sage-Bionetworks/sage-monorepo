@@ -4,6 +4,8 @@ Browse interactive component documentation for each domain:
 
 - **[Agora Storybook](storybook/agora/index.html)** - AD research platform components
 - **[Explorers Storybook](storybook/explorers/index.html)** - Data exploration components
+- **[QTL Storybook](storybook/qtl/index.html)** - QTL analysis explorer components
+- **[Model AD Storybook](storybook/model-ad/index.html)** - AD model data platform components
 - **[All Storybooks](storybook/index.html)** - Unified navigation (composition host)
 
 ## About Storybook

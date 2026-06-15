@@ -16,6 +16,8 @@ import type { Meta, StoryObj } from '@storybook/angular';
       <ul>
         <li><strong>Agora</strong> - AD research platform components</li>
         <li><strong>Explorers</strong> - Data exploration and visualization components</li>
+        <li><strong>QTL</strong> - QTL analysis explorer components</li>
+        <li><strong>Model AD</strong> - AD model data platform components</li>
       </ul>
 
       <h2>Local Development</h2>
@@ -31,7 +33,13 @@ nx start storybook            # http://localhost:4400</code>
 nx start agora-storybook      # http://localhost:4401
 
 # Explorers storybook only
-nx start explorers-storybook  # http://localhost:4402</code>
+nx start explorers-storybook  # http://localhost:4402
+
+# QTL storybook only
+nx start qtl-storybook        # http://localhost:4403
+
+# Model AD storybook only
+nx start model-ad-storybook   # http://localhost:4404</code>
       </pre>
 
       <h2>Learn More</h2>
