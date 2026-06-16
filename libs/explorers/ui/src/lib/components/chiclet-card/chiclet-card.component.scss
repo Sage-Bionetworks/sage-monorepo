@@ -1,11 +1,9 @@
-@use 'explorers/styles/src/variables' as vars;
-
 .chiclet-card {
   display: flex;
   padding: 40px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
+  gap: 16px;
   flex: 1 0 0;
   align-self: stretch;
   border-radius: 10px;
@@ -14,15 +12,11 @@
   box-shadow: 0 6px 24px 0 rgb(0 0 0 / 5%);
 
   h2 {
-    font-weight: bold;
-    font-size: 24px;
-    line-height: 28px;
-    margin: 0 0 20px;
-
-    @media (width < #{vars.$lg-breakpoint}) {
-      font-size: 16px;
-      line-height: 20px;
-    }
+    color: var(--color-action-primary);
+    font-size: var(--chiclet-card-title-font-size, 21px);
+    font-weight: 600;
+    line-height: var(--chiclet-card-title-line-height, 24px);
+    margin: 0;
   }
 }
 

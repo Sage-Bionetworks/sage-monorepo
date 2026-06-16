@@ -20,13 +20,19 @@
   background-size: auto;
 }
 
+@media (width <= #{variables.$desktop-breakpoint}) {
+  #home-page {
+    background-position: left top;
+  }
+}
+
 .section {
   display: flex;
   flex-direction: column;
   gap: 40px;
   position: relative;
   color: var(--color-primary);
-  padding: 100px clamp(30px, 5vw, 160px);
+  padding: clamp(24px, 5vw, 80px) clamp(20px, 5vw, 94px);
 }
 
 .content {
@@ -87,12 +93,13 @@
 }
 
 @media (width < #{variables.$desktop-breakpoint}) {
-  #home-page {
-    background-position: left top;
-  }
-
   .home-heading {
     font-size: 24px;
     line-height: 30px;
+  }
+
+  .chiclet-card {
+    --chiclet-card-title-font-size: 16px;
+    --chiclet-card-title-line-height: 20px;
   }
 }
