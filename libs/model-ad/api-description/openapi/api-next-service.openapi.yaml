@@ -1191,7 +1191,6 @@ components:
       required:
         - name
         - evidence_type
-        - tissue
         - age
         - units
         - y_axis_max

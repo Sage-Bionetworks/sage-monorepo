@@ -79,11 +79,10 @@ public class ModelMapper {
     return new ModelDataDto(
       modelData.getName(),
       modelData.getEvidenceType(),
-      modelData.getTissue(),
       modelData.getAge(),
       modelData.getUnits(),
       modelData.getYAxisMax(),
       data
-    );
+    ).tissue(modelData.getTissue());
   }
 }
