@@ -1,4 +1,5 @@
 .claude-user/
+.claude/worktrees/
 .nx-container/
 .nx/
 .pnpm-store/

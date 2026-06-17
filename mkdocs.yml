@@ -60,6 +60,7 @@ nav:
       - Advanced:
           - Remote Development: develop/advanced/developing-on-a-remote-host.md
           - Multi-author Commits: develop/advanced/creating-a-commit-with-multiple-authors.md
+          - Git Worktrees with Claude Code: develop/advanced/working-with-git-worktrees.md
   - API:
       - Overview: api/overview.md
       - Agora: api/agora.md
