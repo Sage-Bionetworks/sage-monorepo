@@ -84,6 +84,7 @@
       "@sagebionetworks/model-ad/not-found": ["libs/model-ad/not-found/src/index.ts"],
       "@sagebionetworks/model-ad/services": ["libs/model-ad/services/src/index.ts"],
       "@sagebionetworks/model-ad/testing": ["libs/model-ad/testing/src/index.ts"],
+      "@sagebionetworks/model-ad/themes": ["libs/model-ad/themes/src/index.ts"],
       "@sagebionetworks/model-ad/ui": ["libs/model-ad/ui/src/index.ts"],
       "@sagebionetworks/model-ad/util": ["libs/model-ad/util/src/index.ts"],
       "@sagebionetworks/platform/config/angular": ["libs/platform/config/angular/src/index.ts"],
