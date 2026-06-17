@@ -33,6 +33,7 @@ import {
   getCellsByColumn,
   measureCellWidths,
   prepareCellsForMeasurement,
+  resolveFixedColumnWidths,
   restoreCellStyles,
 } from './comparison-tool-table.helpers';
 
@@ -161,6 +162,55 @@ describe('ComparisonToolTableComponent — column-width helpers', () => {
 
     it('formats in-range values as px strings', () => {
       expect(clampAndFormatWidths({ a: 150 })).toEqual({ a: '150px' });
+    });
+  });
+
+  // --- resolveFixedColumnWidths ---
+
+  describe('resolveFixedColumnWidths', () => {
+    const fixedCol = (data_key: string, column_width: number): ComparisonToolColumn => ({
+      ...col(data_key),
+      column_width,
+    });
+
+    it('routes columns with column_width to fixedWidthByColumn as px strings', () => {
+      const { fixedWidthByColumn, columnsToMeasure } = resolveFixedColumnWidths([
+        fixedCol('nominating_teams', 300),
+      ]);
+
+      expect(fixedWidthByColumn).toEqual({ nominating_teams: '300px' });
+      expect(columnsToMeasure).toEqual([]);
+    });
+
+    it('routes columns without column_width to columnsToMeasure', () => {
+      const gene = col('gene');
+      const { fixedWidthByColumn, columnsToMeasure } = resolveFixedColumnWidths([gene]);
+
+      expect(fixedWidthByColumn).toEqual({});
+      expect(columnsToMeasure).toEqual([gene]);
+    });
+
+    it('splits a mixed list into fixed and measured columns', () => {
+      const gene = col('gene');
+      const { fixedWidthByColumn, columnsToMeasure } = resolveFixedColumnWidths([
+        gene,
+        fixedCol('nominating_teams', 300),
+      ]);
+
+      expect(fixedWidthByColumn).toEqual({ nominating_teams: '300px' });
+      expect(columnsToMeasure).toEqual([gene]);
+    });
+
+    it('applies column_width verbatim, bypassing the MIN/MAX clamp', () => {
+      const { fixedWidthByColumn } = resolveFixedColumnWidths([
+        fixedCol('narrow', MIN_COLUMN_WIDTH_PX - 30),
+        fixedCol('wide', MAX_COLUMN_WIDTH_PX + 200),
+      ]);
+
+      expect(fixedWidthByColumn).toEqual({
+        narrow: `${MIN_COLUMN_WIDTH_PX - 30}px`,
+        wide: `${MAX_COLUMN_WIDTH_PX + 200}px`,
+      });
     });
   });
 

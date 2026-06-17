@@ -25,6 +25,7 @@ import {
   getCellsByColumn,
   measureCellWidths,
   prepareCellsForMeasurement,
+  resolveFixedColumnWidths,
   restoreCellStyles,
 } from './comparison-tool-table.helpers';
 
@@ -138,16 +139,22 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     const nonPrimaryColumns = this.selectedColumns().filter((col) => col.type !== 'primary');
     if (nonPrimaryColumns.length === 0) return {};
 
-    const cellsByColumn = getCellsByColumn(container, nonPrimaryColumns);
+    // Columns with an explicit column_width skip auto-sizing entirely so their width stays
+    // constant across sorts. These widths are applied verbatim, bypassing the MIN/MAX clamp.
+    const { fixedWidthByColumn, columnsToMeasure } = resolveFixedColumnWidths(nonPrimaryColumns);
+
+    if (columnsToMeasure.length === 0) return fixedWidthByColumn;
+
+    const cellsByColumn = getCellsByColumn(container, columnsToMeasure);
     const { saved, savedHeaderWidths } = prepareCellsForMeasurement(
       cellsByColumn,
-      nonPrimaryColumns,
+      columnsToMeasure,
     );
 
-    const rawWidths = measureCellWidths(cellsByColumn, nonPrimaryColumns);
+    const rawWidths = measureCellWidths(cellsByColumn, columnsToMeasure);
 
     restoreCellStyles(saved, savedHeaderWidths);
 
-    return clampAndFormatWidths(rawWidths);
+    return { ...clampAndFormatWidths(rawWidths), ...fixedWidthByColumn };
   }
 }

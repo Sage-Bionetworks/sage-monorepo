@@ -22,7 +22,14 @@ import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
 import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
+import { LoggerService } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
+
+/**
+ * Fallback width applied when a column's configured column_width is invalid (non-positive). The
+ * OpenAPI contract declares column_width as `minimum: 1`, so any value <= 0 is treated as bad config.
+ */
+export const DEFAULT_COLUMN_WIDTH_PX = 300;
 
 /** Core state management service for comparison tool pages. */
 @Injectable()
@@ -33,6 +40,7 @@ export class ComparisonToolService<T> {
   private readonly helperService = inject(ComparisonToolHelperService);
   private readonly coordinatorService = inject(ComparisonToolCoordinatorService);
   private readonly appStorageService = inject(AppStorageService);
+  private readonly logger = inject(LoggerService);
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Differential Expression has 3 dropdowns, but we only want to cache selections
@@ -259,11 +267,17 @@ export class ComparisonToolService<T> {
     configs: ComparisonToolConfig[],
     params: ComparisonToolUrlParams,
   ): void {
-    this.configsSignal.set(configs ?? []);
+    // Normalize column widths once at the ingestion boundary so all downstream reads (including
+    // the `columns` computed) can trust the value without re-validating or re-logging.
+    const sanitizedConfigs = (configs ?? []).map((config) => ({
+      ...config,
+      columns: config.columns.map((column) => this.sanitizeColumnWidth(column)),
+    }));
+    this.configsSignal.set(sanitizedConfigs);
 
-    const selection = this.resolveInitialDropdownSelection(params, configs);
+    const selection = this.resolveInitialDropdownSelection(params, sanitizedConfigs);
     const initialSort = this.resolveInitialSortMeta(params);
-    const initialFilters = this.resolveInitialFilters(params, configs, selection);
+    const initialFilters = this.resolveInitialFilters(params, sanitizedConfigs, selection);
 
     this.updateQuery({
       categories: selection,
@@ -273,7 +287,7 @@ export class ComparisonToolService<T> {
 
     // Initialize column preferences cache for all configs
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
-    for (const config of configs) {
+    for (const config of sanitizedConfigs) {
       columnsMap.set(
         this.dropdownKey(config.dropdowns),
         this.applyColumnPreferences(config.columns),
@@ -708,6 +722,22 @@ export class ComparisonToolService<T> {
       ...column,
       selected: selectionMap.get(column.data_key) ?? true,
     }));
+  }
+
+  /**
+   * Normalizes a column's configured width at the config-ingestion boundary. A non-positive
+   * column_width is invalid config (the OpenAPI contract declares `minimum: 1`); such values are
+   * logged and replaced with DEFAULT_COLUMN_WIDTH_PX so downstream layout can trust the value.
+   */
+  private sanitizeColumnWidth(column: ComparisonToolConfigColumn): ComparisonToolConfigColumn {
+    if (column.column_width != null && column.column_width <= 0) {
+      this.logger.warn(
+        `Invalid column_width for column "${column.data_key}"; falling back to ${DEFAULT_COLUMN_WIDTH_PX}px.`,
+        { dataKey: column.data_key, columnWidth: column.column_width },
+      );
+      return { ...column, column_width: DEFAULT_COLUMN_WIDTH_PX };
+    }
+    return column;
   }
 
   private dropdownKey(dropdowns: string[] | undefined): string {
