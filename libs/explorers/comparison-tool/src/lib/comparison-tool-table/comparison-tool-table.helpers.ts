@@ -131,7 +131,9 @@ export function restoreCellStyles(
 
 // Splits columns by whether they have an explicit column_width, resolving the fixed widths in
 // the process. Columns with a column_width skip auto-sizing entirely — their width is applied
-// verbatim (bypassing the MIN/MAX clamp) so it stays constant across sorts. Returns:
+// verbatim (bypassing the MIN/MAX clamp) so it stays constant across sorts. Width values are
+// trusted here: invalid (non-positive) widths are normalized upstream at config ingestion in
+// ComparisonToolService. Returns:
 //  - fixedWidthByColumn: a `data_key -> "{n}px"` lookup for the fixed-width columns
 //  - columnsToMeasure: the remaining columns, which the caller still auto-sizes by measurement
 export function resolveFixedColumnWidths(columns: ComparisonToolColumn[]): {

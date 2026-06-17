@@ -286,10 +286,11 @@ public class ComparisonToolConfigColumnDto {
 
   /**
    * Optional fixed width for the column in pixels. When set, the UI uses this width verbatim instead of auto-sizing the column from content.
+   * minimum: 1
    * @return columnWidth
    */
-  
-  @Schema(name = "column_width", description = "Optional fixed width for the column in pixels. When set, the UI uses this width verbatim instead of auto-sizing the column from content.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Min(1) 
+  @Schema(name = "column_width", example = "300", description = "Optional fixed width for the column in pixels. When set, the UI uses this width verbatim instead of auto-sizing the column from content.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("column_width")
   public @Nullable Integer getColumnWidth() {
     return columnWidth;

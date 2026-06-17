@@ -8,8 +8,9 @@ import {
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, of } from 'rxjs';
-import { ComparisonToolService } from './comparison-tool.service';
+import { ComparisonToolService, DEFAULT_COLUMN_WIDTH_PX } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
+import { LoggerService } from './logger.service';
 
 describe('ComparisonToolService', () => {
   let service: ComparisonToolService<Record<string, unknown>>;
@@ -88,6 +89,60 @@ describe('ComparisonToolService', () => {
     expect(cachedColumns).toBeDefined();
     expect(cachedColumns?.find((column) => column.data_key === 'available_data')).toBeUndefined();
     expect(cachedColumns?.every((column) => column.selected)).toBe(true);
+  });
+
+  describe('column_width sanitization', () => {
+    const configWithWidths: ComparisonToolConfig[] = [
+      {
+        page: 'Model Overview',
+        dropdowns: [],
+        row_count: null,
+        columns: [
+          { type: 'primary', data_key: 'name', is_exported: true, is_hidden: false },
+          {
+            type: 'text',
+            data_key: 'good',
+            column_width: 200,
+            is_exported: true,
+            is_hidden: false,
+          },
+          { type: 'text', data_key: 'bad', column_width: -50, is_exported: true, is_hidden: false },
+        ],
+        filters: [],
+      },
+    ];
+
+    it('normalizes a non-positive column_width to the default and warns once', () => {
+      const warnSpy = jest
+        .spyOn(TestBed.inject(LoggerService), 'warn')
+        .mockImplementation(() => undefined);
+
+      connectService(configWithWidths);
+
+      const columns = service.columns();
+      expect(columns.find((column) => column.data_key === 'good')?.column_width).toBe(200);
+      expect(columns.find((column) => column.data_key === 'bad')?.column_width).toBe(
+        DEFAULT_COLUMN_WIDTH_PX,
+      );
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('bad'), {
+        dataKey: 'bad',
+        columnWidth: -50,
+      });
+    });
+
+    it('leaves a positive column_width untouched without warning', () => {
+      const warnSpy = jest
+        .spyOn(TestBed.inject(LoggerService), 'warn')
+        .mockImplementation(() => undefined);
+
+      connectService(configWithWidths);
+
+      expect(service.columns().find((column) => column.data_key === 'good')?.column_width).toBe(
+        200,
+      );
+      expect(warnSpy).not.toHaveBeenCalledWith(expect.stringContaining('good'), expect.anything());
+    });
   });
 
   describe('global pinned items cache', () => {
