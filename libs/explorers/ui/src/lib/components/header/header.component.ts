@@ -34,6 +34,8 @@ export class HeaderComponent implements OnInit {
     const headerLinks = this.headerLinks();
     const footerLinks = this.footerLinks();
 
+    this.validateHeaderLinks(headerLinks);
+
     if (this.isMobile) {
       this.links = [...headerLinks, ...footerLinks];
     } else {
@@ -79,6 +81,21 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  private validateHeaderLinks(links: NavigationLink[]) {
+    for (const link of links) {
+      if (!link.children) continue;
+      const hasSubheaders = link.children.some((c) => c.isSubheader);
+      const hasFlat = link.children.some((c) => !c.isSubheader);
+      // PrimeNG renders all top-level MenuItem entries as group headers when any entry has nested
+      // `items`, making flat siblings non-clickable. Mixed layouts are therefore not supported.
+      if (hasSubheaders && hasFlat) {
+        throw new Error(
+          'HeaderComponent: mixing subheader and flat children in the same dropdown is not supported. All children should be either subheaders or flat links.',
+        );
+      }
+    }
+  }
+
   private buildDropdownMenuItems(links: NavigationLink[]) {
     this.dropdownMenuItems.clear();
     for (const link of links) {
@@ -89,16 +106,6 @@ export class HeaderComponent implements OnInit {
   }
 
   private toMenuItems(children: NavigationLink[]): MenuItem[] {
-    const hasSubheaders = children.some((c) => c.isSubheader);
-    const hasFlat = children.some((c) => !c.isSubheader);
-    // PrimeNG renders all top-level MenuItem entries as group headers when any entry has nested
-    // `items`, making flat siblings non-clickable. Mixed layouts are therefore not supported.
-    if (hasSubheaders && hasFlat) {
-      throw new Error(
-        'HeaderComponent: mixing subheader and flat children in the same dropdown is not supported. All children should be either subheaders or flat links.',
-      );
-    }
-
     const items: MenuItem[] = [];
     for (const child of children) {
       if (child.isSubheader) {

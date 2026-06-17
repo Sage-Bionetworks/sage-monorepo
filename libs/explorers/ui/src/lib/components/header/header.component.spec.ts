@@ -174,8 +174,8 @@ describe('HeaderComponent', () => {
     expect(component.isMobile).toBe(true);
   });
 
-  it('should throw when a dropdown mixes subheader and flat children', async () => {
-    changeWindowSize(DESKTOP_WIDTH);
+  it('should throw when a dropdown mixes subheader and flat children regardless of screen size', async () => {
+    changeWindowSize(MOBILE_WIDTH);
 
     await expect(
       render(HeaderComponent, {
