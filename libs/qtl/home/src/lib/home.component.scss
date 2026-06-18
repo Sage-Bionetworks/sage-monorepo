@@ -86,6 +86,7 @@
   }
 }
 
+// mobile styling
 @media (width < #{variables.$desktop-breakpoint}) {
   #home-page {
     background-position: left top;
@@ -97,6 +98,7 @@
   }
 
   .chiclet-card {
+    --chiclet-card-padding: 16px;
     --chiclet-card-title-font-size: 16px;
     --chiclet-card-title-line-height: 20px;
   }

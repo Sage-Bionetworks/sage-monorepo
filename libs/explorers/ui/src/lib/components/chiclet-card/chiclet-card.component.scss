@@ -1,9 +1,6 @@
-/* stylelint-disable media-feature-name-no-unknown */
-@use 'explorers/styles/src/variables' as vars;
-
 .chiclet-card {
   display: flex;
-  padding: 40px;
+  padding: var(--chiclet-card-padding, 40px);
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
@@ -20,10 +17,6 @@
     font-weight: 600;
     line-height: var(--chiclet-card-title-line-height, 24px);
     margin: 0;
-  }
-
-  @media (width < #{vars.$lg-breakpoint}) {
-    padding: 16px;
   }
 }
 
