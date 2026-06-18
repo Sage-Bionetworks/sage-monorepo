@@ -1,4 +1,4 @@
-@use 'explorers/styles/src/variables' as variables;
+@use 'variables' as variables;
 
 :root {
   --footer-background: linear-gradient(0deg, rgb(0 0 0 / 40%) 0%, rgb(0 0 0 / 40%) 100%),
@@ -8,7 +8,7 @@
   --header-padding-x: 60px;
   --header-link-color: var(--color-accent-lavender-600);
 
-  @media (width < #{variables.$lg-breakpoint}) {
+  @media (width < #{variables.$desktop-breakpoint}) {
     --footer-background: linear-gradient(0deg, rgb(0 0 0 / 40%) 0%, rgb(0 0 0 / 40%) 100%),
       linear-gradient(90deg, #2a77dc 0%, #b186df 122.55%);
   }

@@ -1,10 +1,32 @@
+@use 'qtl/styles/src/variables' as variables;
+
+// Fill the vertical space the app shell's flex column makes available so the
+// background reaches the footer even when the content is shorter than the viewport.
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+#home-page {
+  // Shared translucency for the home page's cards so they stay in sync.
+  --home-card-background-color: rgb(255 255 255 / 60%);
+
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
 .section {
   display: flex;
   flex-direction: column;
   gap: 40px;
   position: relative;
   color: var(--color-primary);
-  padding: 80px clamp(30px, 5vw, 160px);
+  padding: clamp(24px, 5vw, 80px) clamp(20px, 5vw, 94px);
 }
 
 .content {
@@ -33,6 +55,8 @@
 }
 
 .chiclet-card {
+  --chiclet-card-background-color: var(--home-card-background-color);
+
   margin-bottom: 32px;
 }
 
@@ -41,12 +65,15 @@
   --link-bar-border-bottom-left-radius: 10px;
   --link-bar-border-bottom-right-radius: 10px;
 
+  // Translucent cards let the decorative background show through the panel.
+  --stat-card-background-color: var(--home-card-background-color);
+
   position: relative;
   max-width: 1140px;
   width: 100%;
   margin: 0 auto;
   border-radius: 10px;
-  background-color: var(--color-gray-200);
+  background-color: transparent;
   box-shadow: 0 6px 24px 0 rgb(0 0 0 / 5%);
 
   &::after {
@@ -56,5 +83,23 @@
     border: 1px solid var(--color-border);
     border-radius: inherit;
     pointer-events: none;
+  }
+}
+
+// mobile styling
+@media (width < #{variables.$desktop-breakpoint}) {
+  #home-page {
+    background-position: left top;
+  }
+
+  .home-heading {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .chiclet-card {
+    --chiclet-card-padding: 16px;
+    --chiclet-card-title-font-size: 16px;
+    --chiclet-card-title-line-height: 20px;
   }
 }

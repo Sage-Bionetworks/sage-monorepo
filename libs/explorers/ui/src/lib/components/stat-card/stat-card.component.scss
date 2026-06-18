@@ -22,7 +22,7 @@ $stat-card-rise-text-delay: 100ms;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-color: white;
+  background-color: var(--stat-card-background-color, white);
   box-sizing: border-box;
   border: 1px solid var(--color-border);
   border-radius: var(--stat-card-border-top-left-radius, 0)
@@ -38,6 +38,7 @@ $stat-card-rise-text-delay: 100ms;
 }
 
 .stat-card:hover {
+  background-color: var(--stat-card-background-color-hover, white);
   transform: scale($stat-card-hover-scale);
   box-shadow:
     0 6px 12px rgb(0 0 0 / 5%),
