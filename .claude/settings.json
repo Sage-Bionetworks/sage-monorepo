@@ -1,4 +1,26 @@
 {
+  "hooks": {
+    "WorktreeCreate": [
+      {
+        "matcher": "",
+        "hooks": [{ "type": "command", "command": "node .claude/hooks/WorktreeCreate.js" }],
+        "statusMessage": "Creating worktree..."
+      }
+    ],
+    "WorktreeRemove": [
+      {
+        "matcher": "",
+        "hooks": [{ "type": "command", "command": "node .claude/hooks/WorktreeRemove.js" }],
+        "statusMessage": "Removing worktree..."
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [{ "type": "command", "command": "node .claude/hooks/SessionStart.js" }]
+      }
+    ]
+  },
   "permissions": {
     "deny": [
       "Read(./.env)",
