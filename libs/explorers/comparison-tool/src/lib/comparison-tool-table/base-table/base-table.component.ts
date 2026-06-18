@@ -23,6 +23,7 @@ import { PrimaryIdentifierControlsComponent } from '../primary-identifier-contro
 })
 export class BaseTableComponent {
   protected readonly comparisonToolService = inject(ComparisonToolService);
+  protected readonly String = String;
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   viewConfig = this.comparisonToolService.viewConfig;

@@ -20,7 +20,10 @@ import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
 import { BaseTableComponent } from './base-table.component';
 
-async function setup(viewConfig?: Partial<ComparisonToolViewConfig>) {
+async function setup(
+  viewConfig?: Partial<ComparisonToolViewConfig>,
+  data: Record<string, unknown>[] = mockComparisonToolData,
+) {
   const user = userEvent.setup();
   const component = await render(BaseTableComponent, {
     imports: [RouterModule],
@@ -35,9 +38,7 @@ async function setup(viewConfig?: Partial<ComparisonToolViewConfig>) {
       ...provideComparisonToolFilterService({ significanceThresholdActive: false }),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
-    componentInputs: {
-      data: mockComparisonToolData,
-    },
+    componentInputs: { data },
   });
 
   const fixture = component.fixture;
@@ -232,6 +233,23 @@ describe('BaseTableComponent', () => {
 
       const firstRowId = String(mockComparisonToolData[0]['_id']);
       service.selectRow(firstRowId);
+      fixture.detectChanges();
+
+      const rows = nativeElement.querySelectorAll('tr.selected');
+      expect(rows.length).toBe(1);
+    });
+
+    it('.selected class appears when rowIdDataKey is a numeric value', async () => {
+      const numericData = [
+        { id: 1, name: 'Row One' },
+        { id: 2, name: 'Row Two' },
+      ];
+      const { fixture, service, nativeElement } = await setup(
+        { rowSelectionEnabled: true, rowIdDataKey: 'id' },
+        numericData,
+      );
+
+      service.selectRow('1');
       fixture.detectChanges();
 
       const rows = nativeElement.querySelectorAll('tr.selected');

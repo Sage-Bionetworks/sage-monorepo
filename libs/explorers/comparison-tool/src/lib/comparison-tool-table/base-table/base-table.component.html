@@ -22,7 +22,7 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-rowData>
-      @let rowId = rowData[viewConfig().rowIdDataKey];
+      @let rowId = String(rowData[viewConfig().rowIdDataKey]);
       <tr
         (click)="onRowClick(rowId)"
         (mouseenter)="onRowMouseEnter(rowId)"
