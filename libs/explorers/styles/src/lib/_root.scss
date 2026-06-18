@@ -9,6 +9,10 @@
     --color-#{$key}: #{$color};
   }
 
+  @each $key, $color in vars.$comparison-tool-colors {
+    --color-comparison-tool-#{$key}: #{$color};
+  }
+
   @each $size, $properties in vars.$headings {
     @each $property, $value in $properties {
       --#{$property}-#{$size}: #{$value};
