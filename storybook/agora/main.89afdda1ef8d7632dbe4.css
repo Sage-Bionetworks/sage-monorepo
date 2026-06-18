@@ -228,6 +228,15 @@ h6,
   line-height: var(--line-height-h6);
 }
 
+.header-dropdown-menu .p-menu-item-label,
+.header-dropdown-menu .p-menu-submenu-label {
+  font-weight: 700;
+  color: var(--color-text);
+}
+.header-dropdown-menu .header-dropdown-subheader-child .p-menu-item-label {
+  font-weight: 400;
+}
+
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 /* Document
    ========================================================================== */
