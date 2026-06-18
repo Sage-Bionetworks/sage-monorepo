@@ -65,3 +65,7 @@ comparison-tool / charts-angular / ui / util / shared   (feature/UI)
 ```
 
 All imports use `@sagebionetworks/explorers/<lib-name>` path aliases. Never use relative paths across library boundaries.
+
+## Storybook
+
+For components that don't call our own backend APIs (third-party service calls like Synapse wiki fetches are fine): add a `.stories.ts` file for new components; for changes to existing components, adjust the existing story if the new behavior fits naturally, or add a new story variant for sufficiently distinct behavior. When it's unclear whether a new story is warranted, ask the user. See `libs/explorers/util/src/lib/tooltip-button/tooltip-button.component.stories.ts` for the canonical pattern.

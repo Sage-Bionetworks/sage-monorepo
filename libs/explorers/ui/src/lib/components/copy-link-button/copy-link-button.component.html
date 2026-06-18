@@ -1,0 +1,11 @@
+<explorers-tooltip-button
+  [onClick]="onClick()"
+  [buttonAriaDescribedBy]="anchorId()"
+  [buttonProps]="{ ariaLabel: ariaLabel(), link: true, style: { padding: '0' } }"
+  [tooltipText]="tooltipText()"
+  iconImagePath="explorers-assets/icons/link.svg"
+  iconAltText="link"
+  iconColor="var(--color-gray-700)"
+  [iconHeight]="12"
+  [iconWidth]="24"
+/>
