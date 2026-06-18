@@ -1,0 +1,11 @@
+.header-dropdown-menu {
+  .p-menu-item-label,
+  .p-menu-submenu-label {
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .header-dropdown-subheader-child .p-menu-item-label {
+    font-weight: 400;
+  }
+}
