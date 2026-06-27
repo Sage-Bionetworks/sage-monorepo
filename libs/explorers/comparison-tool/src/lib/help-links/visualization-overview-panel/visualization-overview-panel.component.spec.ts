@@ -28,6 +28,7 @@ describe('VisualizationOverviewPanelComponent', () => {
     isVisible?: boolean;
     isHidden?: boolean;
     visualizationOverviewPanes?: VisualizationOverviewPane[];
+    viewConfigOverviewPanes?: VisualizationOverviewPane[];
   }) {
     const user = userEvent.setup();
     const mockStorageService = createMockStorageService(options?.isHidden);
@@ -47,6 +48,14 @@ describe('VisualizationOverviewPanelComponent', () => {
 
     const component = fixture.componentInstance;
     const comparisonToolService = fixture.debugElement.injector.get(ComparisonToolService);
+
+    // Set a per-CT view config override if provided
+    if (options?.viewConfigOverviewPanes !== undefined) {
+      comparisonToolService.setViewConfig({
+        visualizationOverviewPanes: options.viewConfigOverviewPanes,
+      });
+      fixture.detectChanges();
+    }
 
     // Set initial visibility states if provided
     if (options?.isVisible !== undefined) {
@@ -93,6 +102,22 @@ describe('VisualizationOverviewPanelComponent', () => {
     const { component } = await setup({ visualizationOverviewPanes: appConfigPanes });
     expect(component.panes).toHaveLength(1);
     expect(component.panes[0].heading).toBe('App Config Pane');
+  });
+
+  it('should prefer view config panes over app config panes when both are set', async () => {
+    const appConfigPanes: VisualizationOverviewPane[] = [
+      { heading: 'App Config Pane', content: '<p>From app config</p>' },
+    ];
+    const viewConfigPanes: VisualizationOverviewPane[] = [
+      { heading: 'View Config Pane A', content: '<p>From view config A</p>' },
+      { heading: 'View Config Pane B', content: '<p>From view config B</p>' },
+    ];
+    const { component } = await setup({
+      visualizationOverviewPanes: appConfigPanes,
+      viewConfigOverviewPanes: viewConfigPanes,
+    });
+    expect(component.panes).toHaveLength(2);
+    expect(component.panes[0].heading).toBe('View Config Pane A');
   });
 
   it('should display dialog when isVisualizationOverviewVisible is true', async () => {

@@ -36,9 +36,15 @@ export class VisualizationOverviewPanelComponent implements AfterViewChecked {
   activePane = 0;
   private lastPlayedPane = -1;
 
-  /** Gets the panes to display in the visualization overview dialog from app config. */
+  /**
+   * Gets the panes to display in the visualization overview dialog. A per-CT override on the
+   * view config takes precedence; otherwise the app-level `EXPLORERS_CONFIG` panes are used.
+   */
   get panes(): VisualizationOverviewPane[] {
-    return this.explorerConfig.visualizationOverviewPanes;
+    return (
+      this.comparisonToolService.viewConfig().visualizationOverviewPanes ??
+      this.explorerConfig.visualizationOverviewPanes
+    );
   }
 
   get activePaneHasVideo(): boolean {

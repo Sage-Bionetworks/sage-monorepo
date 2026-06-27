@@ -7,3 +7,4 @@ export {
   configFactory,
 } from '@sagebionetworks/explorers/config';
 export * from './lib/constants';
+export * from './lib/visualization-overview.content';

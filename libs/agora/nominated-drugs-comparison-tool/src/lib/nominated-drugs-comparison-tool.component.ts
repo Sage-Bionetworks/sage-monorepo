@@ -10,7 +10,11 @@ import {
   NominatedDrugService,
   NominatedDrugsPage,
 } from '@sagebionetworks/agora/api-client';
-import { DEFAULT_SYNAPSE_WIKI_OWNER_ID, ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import {
+  DEFAULT_SYNAPSE_WIKI_OWNER_ID,
+  NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
+  ROUTE_PATHS,
+} from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
@@ -67,6 +71,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     legendEnabled: false,
     rowIdDataKey: 'composite_id',
     allowPinnedImageDownload: false,
+    visualizationOverviewPanes: NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
     defaultSort: [
       { field: 'total_nominations', order: -1 },
       { field: 'common_name', order: 1 },
