@@ -25,6 +25,12 @@
           font-weight: 700;
           flex-grow: 1;
         }
+
+        &:not(:first-child) {
+          position: sticky;
+          right: 50px;
+          z-index: 1;
+        }
       }
 
       .pinned-items-controls {
