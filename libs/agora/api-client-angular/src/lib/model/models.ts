@@ -2,6 +2,7 @@ export * from './basic-error';
 export * from './bio-domain';
 export * from './bio-domain-info';
 export * from './bio-domains';
+export * from './combined-with';
 export * from './comparison-tool-config';
 export * from './comparison-tool-config-column';
 export * from './comparison-tool-config-filter';

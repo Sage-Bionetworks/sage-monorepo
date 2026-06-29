@@ -23,12 +23,14 @@ export class DrugDetailsHeroComponent {
   badges = computed<DrugBadge[]>(() => {
     const badges = new Map<string, DrugBadge>();
     for (const evidence of this.drug().drug_nominations) {
-      if (evidence.combined_with_chembl_id === null) {
+      if (evidence.combined_with.length === 0) {
         badges.set('nominated', { label: 'Nominated Drug' });
       } else {
-        const link = `/${ROUTE_PATHS.DRUG_DETAILS}/${evidence.combined_with_chembl_id}`;
-        const linkText = evidence.combined_with_common_name || evidence.combined_with_chembl_id;
-        badges.set(link, { label: 'Nominated Combination Therapy with', link, linkText });
+        for (const partner of evidence.combined_with) {
+          const link = `/${ROUTE_PATHS.DRUG_DETAILS}/${partner.chembl_id}`;
+          const linkText = partner.common_name || partner.chembl_id;
+          badges.set(link, { label: 'Nominated Combination Therapy with', link, linkText });
+        }
       }
     }
     return Array.from(badges.values());

@@ -13,11 +13,7 @@
       <h3>Contact PI: {{ nomination.contact_pi }}</h3>
       <br />
 
-      <p class="drug-details-label">
-        @let nominationLabel =
-          nomination.combined_with_common_name === null ? drug().common_name : `${drug().common_name} + ${nomination.combined_with_common_name}`;
-        Why was {{ nominationLabel }} nominated?
-      </p>
+      <p class="drug-details-label">Why was {{ getNominationLabel(nomination) }} nominated?</p>
       <p>{{ nomination.evidence | capitalizeFirstLetter }}</p>
       <br />
 

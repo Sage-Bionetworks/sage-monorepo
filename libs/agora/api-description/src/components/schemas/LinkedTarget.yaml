@@ -9,6 +9,11 @@ properties:
     type: string
     description: The HGNC symbol of the linked target
     example: BRCA1
+  is_nominated_target:
+    type: boolean
+    description: Whether this linked target is also a nominated target
+    example: false
 required:
   - ensembl_gene_id
   - hgnc_symbol
+  - is_nominated_target

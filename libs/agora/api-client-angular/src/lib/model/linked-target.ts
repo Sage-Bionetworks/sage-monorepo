@@ -20,4 +20,8 @@ export interface LinkedTarget {
    * The HGNC symbol of the linked target
    */
   hgnc_symbol: string;
+  /**
+   * Whether this linked target is also a nominated target
+   */
+  is_nominated_target: boolean;
 }

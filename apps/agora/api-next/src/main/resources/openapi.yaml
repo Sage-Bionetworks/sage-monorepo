@@ -1057,6 +1057,7 @@ components:
       example:
         ensembl_gene_id: ENSG00000139618
         hgnc_symbol: BRCA1
+        is_nominated_target: false
       properties:
         ensembl_gene_id:
           description: The Ensembl gene ID of the linked target
@@ -1066,9 +1067,34 @@ components:
           description: The HGNC symbol of the linked target
           example: BRCA1
           type: string
+        is_nominated_target:
+          description: Whether this linked target is also a nominated target
+          example: false
+          type: boolean
       required:
         - ensembl_gene_id
         - hgnc_symbol
+        - is_nominated_target
+      type: object
+    CombinedWith:
+      description: A drug that a nomination is combined with as part of a combination
+        therapy
+      example:
+        common_name: Irinotecan
+        chembl_id: CHEMBL481
+      properties:
+        common_name:
+          description: The common name of the drug this is combined with
+          example: Irinotecan
+          nullable: true
+          type: string
+        chembl_id:
+          description: The ChEMBL ID of the drug this is combined with
+          example: CHEMBL481
+          type: string
+      required:
+        - chembl_id
+        - common_name
       type: object
     NominatedDrugEvidence:
       description: Evidence for a drug nomination
@@ -1076,11 +1102,15 @@ components:
         computational_validation_status: computational validation studies completed
         evidence: Preclinical studies showing efficacy in AD mouse models
         data_used: 'transcriptomics data, drug target'
-        combined_with_common_name: combined_with_common_name
         experimental_validation_results: "improve cognitive, reduce neuroinflamation\
           \ in female Tg344 rat AD models."
         program: ACTDRx AD
         contact_pi: Dr. Jane Doe
+        combined_with:
+          - common_name: Irinotecan
+            chembl_id: CHEMBL481
+          - common_name: Irinotecan
+            chembl_id: CHEMBL481
         computational_validation_results: Based on putative targets associated with
           AD
         reference: https://doi.org/10.1101/2023.12.26.573348
@@ -1091,7 +1121,6 @@ components:
         ad_moa: DDIT3
         contributors: "Kelechi Ndukwe, Peter A Serrano, Patricia Rockwell, Lei Xie,\
           \ Maria Figueiredo-Pereira"
-        combined_with_chembl_id: combined_with_chembl_id
       properties:
         grant_number:
           description: The grant number associated with the drug nomination
@@ -1101,14 +1130,12 @@ components:
           description: The contact principal investigator for the drug nomination
           example: Dr. Jane Doe
           type: string
-        combined_with_common_name:
-          description: 'The common name of the drug this is combined with, if applicable'
-          nullable: true
-          type: string
-        combined_with_chembl_id:
-          description: 'The ChEMBL ID of the drug this is combined with, if applicable'
-          nullable: true
-          type: string
+        combined_with:
+          description: The drugs this nomination is combined with as part of a combination
+            therapy. Empty for mono-therapy nominations.
+          items:
+            $ref: '#/components/schemas/CombinedWith'
+          type: array
         evidence:
           description: The evidence supporting the drug nomination
           example: Preclinical studies showing efficacy in AD mouse models
@@ -1168,8 +1195,7 @@ components:
       required:
         - ad_moa
         - additional_evidence
-        - combined_with_chembl_id
-        - combined_with_common_name
+        - combined_with
         - computational_validation_results
         - computational_validation_status
         - contact_pi
@@ -1192,8 +1218,10 @@ components:
         linked_targets:
           - ensembl_gene_id: ENSG00000139618
             hgnc_symbol: BRCA1
+            is_nominated_target: false
           - ensembl_gene_id: ENSG00000139618
             hgnc_symbol: BRCA1
+            is_nominated_target: false
         aliases:
           - Agomelatina
           - S-20098
@@ -1203,11 +1231,15 @@ components:
           - computational_validation_status: computational validation studies completed
             evidence: Preclinical studies showing efficacy in AD mouse models
             data_used: 'transcriptomics data, drug target'
-            combined_with_common_name: combined_with_common_name
             experimental_validation_results: "improve cognitive, reduce neuroinflamation\
               \ in female Tg344 rat AD models."
             program: ACTDRx AD
             contact_pi: Dr. Jane Doe
+            combined_with:
+              - common_name: Irinotecan
+                chembl_id: CHEMBL481
+              - common_name: Irinotecan
+                chembl_id: CHEMBL481
             computational_validation_results: Based on putative targets associated with
               AD
             reference: https://doi.org/10.1101/2023.12.26.573348
@@ -1218,15 +1250,18 @@ components:
             ad_moa: DDIT3
             contributors: "Kelechi Ndukwe, Peter A Serrano, Patricia Rockwell, Lei Xie,\
               \ Maria Figueiredo-Pereira"
-            combined_with_chembl_id: combined_with_chembl_id
           - computational_validation_status: computational validation studies completed
             evidence: Preclinical studies showing efficacy in AD mouse models
             data_used: 'transcriptomics data, drug target'
-            combined_with_common_name: combined_with_common_name
             experimental_validation_results: "improve cognitive, reduce neuroinflamation\
               \ in female Tg344 rat AD models."
             program: ACTDRx AD
             contact_pi: Dr. Jane Doe
+            combined_with:
+              - common_name: Irinotecan
+                chembl_id: CHEMBL481
+              - common_name: Irinotecan
+                chembl_id: CHEMBL481
             computational_validation_results: Based on putative targets associated with
               AD
             reference: https://doi.org/10.1101/2023.12.26.573348
@@ -1237,7 +1272,6 @@ components:
             ad_moa: DDIT3
             contributors: "Kelechi Ndukwe, Peter A Serrano, Patricia Rockwell, Lei Xie,\
               \ Maria Figueiredo-Pereira"
-            combined_with_chembl_id: combined_with_chembl_id
         mechanisms_of_action:
           - Melatonin receptor agonist
           - Serotonin 2c (5-HT2c) receptor antagonist

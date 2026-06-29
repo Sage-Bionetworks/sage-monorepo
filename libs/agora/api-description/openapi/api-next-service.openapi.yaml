@@ -785,9 +785,30 @@ components:
           type: string
           description: The HGNC symbol of the linked target
           example: BRCA1
+        is_nominated_target:
+          type: boolean
+          description: Whether this linked target is also a nominated target
+          example: false
       required:
         - ensembl_gene_id
         - hgnc_symbol
+        - is_nominated_target
+    CombinedWith:
+      type: object
+      description: A drug that a nomination is combined with as part of a combination therapy
+      properties:
+        common_name:
+          type: string
+          description: The common name of the drug this is combined with
+          example: Irinotecan
+          nullable: true
+        chembl_id:
+          type: string
+          description: The ChEMBL ID of the drug this is combined with
+          example: CHEMBL481
+      required:
+        - common_name
+        - chembl_id
     NominatedDrugEvidence:
       type: object
       description: Evidence for a drug nomination
@@ -800,14 +821,11 @@ components:
           type: string
           description: The contact principal investigator for the drug nomination
           example: Dr. Jane Doe
-        combined_with_common_name:
-          type: string
-          description: The common name of the drug this is combined with, if applicable
-          nullable: true
-        combined_with_chembl_id:
-          type: string
-          description: The ChEMBL ID of the drug this is combined with, if applicable
-          nullable: true
+        combined_with:
+          type: array
+          description: The drugs this nomination is combined with as part of a combination therapy. Empty for mono-therapy nominations.
+          items:
+            $ref: '#/components/schemas/CombinedWith'
         evidence:
           type: string
           description: The evidence supporting the drug nomination
@@ -865,8 +883,7 @@ components:
       required:
         - grant_number
         - contact_pi
-        - combined_with_common_name
-        - combined_with_chembl_id
+        - combined_with
         - evidence
         - data_used
         - ad_moa

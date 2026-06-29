@@ -6,6 +6,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.sagebionetworks.agora.api.next.model.document.CombinedWithDocument;
 import org.sagebionetworks.agora.api.next.model.document.DrugDocument;
 import org.sagebionetworks.agora.api.next.model.document.DrugNominationEvidenceDocument;
 import org.sagebionetworks.agora.api.next.model.document.LinkedTargetDocument;
@@ -54,6 +55,7 @@ class DrugMapperTest {
     assertThat(dto.getLinkedTargets()).hasSize(1);
     assertThat(dto.getLinkedTargets().get(0).getEnsemblGeneId()).isEqualTo("ENSG00000139618");
     assertThat(dto.getLinkedTargets().get(0).getHgncSymbol()).isEqualTo("BRCA1");
+    assertThat(dto.getLinkedTargets().get(0).getIsNominatedTarget()).isTrue();
   }
 
   @Test
@@ -69,6 +71,11 @@ class DrugMapperTest {
     assertThat(dto.getDrugNominations().get(0).getEvidence()).isEqualTo("Preclinical studies");
     assertThat(dto.getDrugNominations().get(0).getInitialNomination()).isEqualTo(2025);
     assertThat(dto.getDrugNominations().get(0).getProgram()).isEqualTo("ACTDRx AD");
+    assertThat(dto.getDrugNominations().get(0).getCombinedWith()).hasSize(1);
+    assertThat(dto.getDrugNominations().get(0).getCombinedWith().get(0).getCommonName())
+      .isEqualTo("Irinotecan");
+    assertThat(dto.getDrugNominations().get(0).getCombinedWith().get(0).getChemblId())
+      .isEqualTo("CHEMBL481");
   }
 
   @Test
@@ -94,10 +101,16 @@ class DrugMapperTest {
     LinkedTargetDocument linkedTarget = new LinkedTargetDocument();
     linkedTarget.setEnsemblGeneId("ENSG00000139618");
     linkedTarget.setHgncSymbol("BRCA1");
+    linkedTarget.setIsNominatedTarget(true);
+
+    CombinedWithDocument combinedWith = new CombinedWithDocument();
+    combinedWith.setCommonName("Irinotecan");
+    combinedWith.setChemblId("CHEMBL481");
 
     DrugNominationEvidenceDocument nomination = new DrugNominationEvidenceDocument();
     nomination.setGrantNumber("R01AG123456");
     nomination.setContactPi("Dr. Jane Doe");
+    nomination.setCombinedWith(List.of(combinedWith));
     nomination.setEvidence("Preclinical studies");
     nomination.setDataUsed("transcriptomics data");
     nomination.setReference("https://doi.org/10.1101/2023.12.26.573348");
