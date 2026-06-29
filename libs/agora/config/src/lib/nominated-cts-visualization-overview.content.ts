@@ -1,22 +1,10 @@
 import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
 
-/**
- * Visualization overview content shared by Agora's Nominated Targets and Nominated Drugs
- * comparison tools. The text is copied verbatim from Model-AD's tutorial (the heatmap-specific
- * "Customize your view" panel is intentionally omitted since these CTs have no heatmap).
- *
- * TODO: Two references describe features disabled for the Nominated CTs and should be revised
- * after stakeholder review:
- *   - Panel 1 mentions the Legend link, but these CTs set `legendEnabled: false` (no Legend link).
- *   - Panel 3 mentions "download an image of the pinned results", but these CTs set
- *     `allowPinnedImageDownload: false` (no image download control).
- */
 export const NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES: VisualizationOverviewPane[] = [
   {
     heading: 'Comparison Tool Tutorial',
     content: `<p>Comparison Tools allow you to discover, compare and share results and related information. While each Comparison Tool presents different kinds of information, they all support similar exploration features. This tutorial demonstrates how you can use these features to find, download, and share results.</p>
       <p>You can always revisit this tutorial by clicking the Visualization Overview link at the bottom of the page.</p>
-      <p>If the tool you're using has a legend, you can view it by clicking on the Legend link at the bottom of the page.</p>
       <div class="image-container"><img src="agora-assets/images/nomination-overview-1.png" /></div>`,
   },
   {
