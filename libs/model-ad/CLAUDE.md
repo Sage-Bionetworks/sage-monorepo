@@ -13,7 +13,17 @@ nx test model-ad-<lib-name>   # run unit tests for a lib
 nx lint model-ad-<lib-name>   # lint a lib
 ```
 
-For serving the Model-AD app, see the "Serving an App" section in the root `CLAUDE.md` — the full stack must be running first.
+For serving the Model-AD app, see the "Serving an App" section in the root `CLAUDE.md` -- the full stack must be running first.
+
+## Storybook
+
+For components that don't call our own backend APIs: add a `.stories.ts` file for new components; for changes to existing components, adjust the existing story if the new behavior fits naturally, or add a new story variant for sufficiently distinct behavior.
+
+Run the model-ad Storybook:
+
+```bash
+nx run model-ad-storybook:start
+```
 
 ## Testing Conventions
 
@@ -37,6 +47,8 @@ Mock data and test fixtures come from `@sagebionetworks/model-ad/testing`.
 | `model-ad-services`                                | `services/`                                | Angular services (currently minimal)                                                             |
 | `model-ad-styles`                                  | `styles/`                                  | Shared SCSS variables and mixins                                                                 |
 | `model-ad-testing`                                 | `testing/`                                 | Mock data and test fixtures                                                                      |
+| `model-ad-themes`                                  | `themes/`                                  | PrimeNG preset (`ModelAdPreset`) consumed by the app and Storybook                               |
+| `model-ad-storybook`                               | `storybook/`                               | Storybook host (port 4404) -- picks up all `*.stories.ts` under `libs/model-ad/`                 |
 
 ## Dependency Layers
 

@@ -1,0 +1,64 @@
+{
+  "name": "model-ad-storybook",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/model-ad/storybook/src",
+  "prefix": "model-ad",
+  "projectType": "library",
+  "tags": ["type:docs", "scope:model-ad", "language:typescript"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "start": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4404,
+        "configDir": "libs/model-ad/storybook/.storybook",
+        "browserTarget": "model-ad-storybook:build-storybook",
+        "compodoc": false,
+        "styles": ["apps/model-ad/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs", "libs/model-ad/styles/src/lib"]
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/model-ad-storybook",
+        "configDir": "libs/model-ad/storybook/.storybook",
+        "browserTarget": "model-ad-storybook:build-storybook",
+        "compodoc": false,
+        "styles": ["apps/model-ad/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs", "libs/model-ad/styles/src/lib"]
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "dependsOn": ["build-storybook"],
+      "options": {
+        "buildTarget": "model-ad-storybook:build-storybook",
+        "staticFilePath": "dist/storybook/model-ad-storybook",
+        "spa": true
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "model-ad-storybook:build-storybook:ci"
+        }
+      }
+    }
+  }
+}

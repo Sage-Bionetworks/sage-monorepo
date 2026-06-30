@@ -100,6 +100,7 @@ class ComparisonToolConfigMapperTest {
         .linkUrl("/genes/{id}")
         .isExported(true)
         .isHidden(false)
+        .columnWidth(300)
         .build();
 
     ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
@@ -119,6 +120,32 @@ class ComparisonToolConfigMapperTest {
     assertThat(columnDto.getSortTooltip()).isEqualTo("Sort by gene");
     assertThat(columnDto.getLinkText()).isEqualTo("View details");
     assertThat(columnDto.getLinkUrl()).isEqualTo("/genes/{id}");
+    assertThat(columnDto.getColumnWidth()).isEqualTo(300);
+  }
+
+  @Test
+  @DisplayName("should map column with null column width")
+  void shouldMapColumnWithNullColumnWidth() {
+    // given
+    ComparisonToolConfigDocument.ComparisonToolConfigColumn column =
+      ComparisonToolConfigDocument.ComparisonToolConfigColumn.builder()
+        .type("text")
+        .dataKey("geneSymbol")
+        .isExported(true)
+        .isHidden(false)
+        .build();
+
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("Model Overview");
+    document.setColumns(List.of(column));
+    document.setFilters(List.of());
+
+    // when
+    ComparisonToolConfigDto result = mapper.toDto(document);
+
+    // then
+    assertThat(result.getColumns()).hasSize(1);
+    assertThat(result.getColumns().get(0).getColumnWidth()).isNull();
   }
 
   @Test

@@ -69,6 +69,9 @@ export interface ComparisonToolViewConfig {
   defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
   heatmapCircleClickTransformFn?: heatmapCircleClickTransformFn;
   linkExportField: 'link_url' | 'link_text';
+  rowSelectionEnabled?: boolean;
+  rowHoverEnabled?: boolean;
+  showTableSearch?: boolean;
 }
 
 export interface ComparisonToolFilterOption {
@@ -125,6 +128,7 @@ export interface ComparisonToolConfigColumn {
   link_url?: string;
   is_exported: boolean;
   is_hidden: boolean;
+  column_width?: number;
 }
 
 export interface ComparisonToolColumn extends ComparisonToolConfigColumn {

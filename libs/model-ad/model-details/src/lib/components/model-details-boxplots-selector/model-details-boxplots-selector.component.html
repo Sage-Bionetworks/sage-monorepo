@@ -82,20 +82,11 @@
           <div class="boxplots-evidence-type-title">
             <h2>{{ evidenceType | decodeGreekEntity }}</h2>
             @if (activeShareLink() === evidenceType) {
-              <explorers-tooltip-button
+              <explorers-copy-link-button
                 [onClick]="copyShareLinkCallbackFn(evidenceType)"
-                [buttonAriaDescribedBy]="generateAnchorId(evidenceType)"
-                [buttonProps]="{
-                  ariaLabel: `Copy link to ${evidenceType | decodeGreekEntity }`,
-                  link: true,
-                  style: { 'padding': '0' }
-                }"
+                [anchorId]="generateAnchorId(evidenceType)"
+                [ariaLabel]="'Copy link to ' + (evidenceType | decodeGreekEntity)"
                 [tooltipText]="getShareLinkTooltipText(evidenceType)"
-                iconImagePath="explorers-assets/icons/link.svg"
-                iconAltText="link"
-                iconColor="#878E95"
-                [iconHeight]="12"
-                [iconWidth]="24"
               />
             }
           </div>

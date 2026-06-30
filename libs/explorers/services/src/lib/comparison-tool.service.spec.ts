@@ -8,8 +8,9 @@ import {
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, of } from 'rxjs';
-import { ComparisonToolService } from './comparison-tool.service';
+import { ComparisonToolService, DEFAULT_COLUMN_WIDTH_PX } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
+import { LoggerService } from './logger.service';
 
 describe('ComparisonToolService', () => {
   let service: ComparisonToolService<Record<string, unknown>>;
@@ -88,6 +89,60 @@ describe('ComparisonToolService', () => {
     expect(cachedColumns).toBeDefined();
     expect(cachedColumns?.find((column) => column.data_key === 'available_data')).toBeUndefined();
     expect(cachedColumns?.every((column) => column.selected)).toBe(true);
+  });
+
+  describe('column_width sanitization', () => {
+    const configWithWidths: ComparisonToolConfig[] = [
+      {
+        page: 'Model Overview',
+        dropdowns: [],
+        row_count: null,
+        columns: [
+          { type: 'primary', data_key: 'name', is_exported: true, is_hidden: false },
+          {
+            type: 'text',
+            data_key: 'good',
+            column_width: 200,
+            is_exported: true,
+            is_hidden: false,
+          },
+          { type: 'text', data_key: 'bad', column_width: -50, is_exported: true, is_hidden: false },
+        ],
+        filters: [],
+      },
+    ];
+
+    it('normalizes a non-positive column_width to the default and warns once', () => {
+      const warnSpy = jest
+        .spyOn(TestBed.inject(LoggerService), 'warn')
+        .mockImplementation(() => undefined);
+
+      connectService(configWithWidths);
+
+      const columns = service.columns();
+      expect(columns.find((column) => column.data_key === 'good')?.column_width).toBe(200);
+      expect(columns.find((column) => column.data_key === 'bad')?.column_width).toBe(
+        DEFAULT_COLUMN_WIDTH_PX,
+      );
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('bad'), {
+        dataKey: 'bad',
+        columnWidth: -50,
+      });
+    });
+
+    it('leaves a positive column_width untouched without warning', () => {
+      const warnSpy = jest
+        .spyOn(TestBed.inject(LoggerService), 'warn')
+        .mockImplementation(() => undefined);
+
+      connectService(configWithWidths);
+
+      expect(service.columns().find((column) => column.data_key === 'good')?.column_width).toBe(
+        200,
+      );
+      expect(warnSpy).not.toHaveBeenCalledWith(expect.stringContaining('good'), expect.anything());
+    });
   });
 
   describe('global pinned items cache', () => {
@@ -857,6 +912,153 @@ describe('ComparisonToolService', () => {
 
       service.toggleFilterPanel();
       expect(service.isFilterPanelOpen()).toBe(false);
+    });
+  });
+
+  describe('row selection', () => {
+    it('selectRow() sets selectedRowId', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true });
+      service.selectRow('row-1');
+      expect(service.selectedRowId()).toBe('row-1');
+    });
+
+    it('selectRow() is a no-op when same ID is already selected', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true });
+      service.selectRow('row-1');
+      expect(service.selectedRowId()).toBe('row-1');
+      service.selectRow('row-1');
+      expect(service.selectedRowId()).toBe('row-1');
+    });
+
+    it('selectRow() is a no-op when rowSelectionEnabled is false', () => {
+      connectService();
+      service.selectRow('row-1');
+      expect(service.selectedRowId()).toBeNull();
+    });
+
+    it('setHoveredRowId() sets hoveredRowId', () => {
+      connectService();
+      service.setViewConfig({ rowHoverEnabled: true });
+      service.setHoveredRowId('row-1');
+      expect(service.hoveredRowId()).toBe('row-1');
+    });
+
+    it('setHoveredRowId() clears hoveredRowId when null is passed', () => {
+      connectService();
+      service.setViewConfig({ rowHoverEnabled: true });
+      service.setHoveredRowId('row-1');
+      service.setHoveredRowId(null);
+      expect(service.hoveredRowId()).toBeNull();
+    });
+
+    it('setHoveredRowId() is a no-op when rowHoverEnabled is false', () => {
+      connectService();
+      service.setHoveredRowId('row-1');
+      expect(service.hoveredRowId()).toBeNull();
+    });
+
+    it('auto-selects first unpinned row when fetches complete and rowSelectionEnabled=true', fakeAsync(() => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.startFetch();
+      service.setUnpinnedData([{ _id: 'row-1' }, { _id: 'row-2' }]);
+      tick();
+      expect(service.selectedRowId()).toBe('row-1');
+    }));
+
+    it('falls back to first pinned row when unpinned is empty and fetches complete', fakeAsync(() => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.startFetch();
+      service.startFetch();
+      service.setPinnedData([{ _id: 'pinned-1' }]);
+      service.setUnpinnedData([]);
+      tick();
+      expect(service.selectedRowId()).toBe('pinned-1');
+    }));
+
+    it('auto-selects regardless of which fetch completes first', fakeAsync(() => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.startFetch();
+      service.startFetch();
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      tick();
+      expect(service.selectedRowId()).toBeNull();
+      service.setPinnedData([]);
+      tick();
+      expect(service.selectedRowId()).toBe('row-1');
+    }));
+
+    it('auto-selects unpinned[0] whether pinned or unpinned data arrives first', fakeAsync(() => {
+      // pinned arrives first
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.startFetch();
+      service.startFetch();
+      service.setPinnedData([{ _id: 'pinned-1' }]);
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      tick();
+      expect(service.selectedRowId()).toBe('row-1');
+    }));
+
+    it('does not auto-select when rowSelectionEnabled is false', fakeAsync(() => {
+      connectService();
+      service.startFetch();
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      tick();
+      expect(service.selectedRowId()).toBeNull();
+    }));
+
+    it('does not overwrite an existing selection when new data arrives', fakeAsync(() => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.startFetch();
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      tick();
+      expect(service.selectedRowId()).toBe('row-1');
+      service.selectRow('row-2');
+      service.startFetch();
+      service.setUnpinnedData([{ _id: 'row-1' }, { _id: 'row-2' }]);
+      tick();
+      expect(service.selectedRowId()).toBe('row-2');
+    }));
+
+    it('notifySelectedRowValidity(false) resets and re-selects first row', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setUnpinnedData([{ _id: 'row-1' }, { _id: 'row-2' }]);
+      service.selectRow('row-2');
+      service.notifySelectedRowValidity(false);
+      expect(service.selectedRowId()).toBe('row-1');
+    });
+
+    it('notifySelectedRowValidity(false) is a no-op when selected row is in pinned data', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setPinnedData([{ _id: 'pinned-1' }]);
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.selectRow('pinned-1');
+      service.notifySelectedRowValidity(false);
+      expect(service.selectedRowId()).toBe('pinned-1');
+    });
+
+    it('notifySelectedRowValidity(true) is a no-op', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.selectRow('row-1');
+      service.notifySelectedRowValidity(true);
+      expect(service.selectedRowId()).toBe('row-1');
+    });
+
+    it('notifySelectedRowValidity() is a no-op when rowSelectionEnabled is false', () => {
+      connectService();
+      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.notifySelectedRowValidity(false);
+      expect(service.selectedRowId()).toBeNull();
     });
   });
 

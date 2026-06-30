@@ -22,7 +22,14 @@ import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
 import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
+import { LoggerService } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
+
+/**
+ * Fallback width applied when a column's configured column_width is invalid (non-positive). The
+ * OpenAPI contract declares column_width as `minimum: 1`, so any value <= 0 is treated as bad config.
+ */
+export const DEFAULT_COLUMN_WIDTH_PX = 300;
 
 /** Core state management service for comparison tool pages. */
 @Injectable()
@@ -33,6 +40,7 @@ export class ComparisonToolService<T> {
   private readonly helperService = inject(ComparisonToolHelperService);
   private readonly coordinatorService = inject(ComparisonToolCoordinatorService);
   private readonly appStorageService = inject(AppStorageService);
+  private readonly logger = inject(LoggerService);
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Differential Expression has 3 dropdowns, but we only want to cache selections
@@ -64,6 +72,7 @@ export class ComparisonToolService<T> {
     rowIdDataKey: '_id',
     allowPinnedImageDownload: true,
     linkExportField: 'link_url',
+    showTableSearch: true,
   };
 
   // Private State Signals
@@ -95,6 +104,8 @@ export class ComparisonToolService<T> {
   } | null>(null);
   private readonly isFilterPanelOpenSignal = signal(false);
   private readonly pendingFetchesSignal = signal(0);
+  private readonly selectedRowIdSignal = signal<string | null>(null);
+  private readonly hoveredRowIdSignal = signal<string | null>(null);
 
   // URL Sync State
   private lastSyncedUrlParamsState: ComparisonToolUrlParams | null = null;
@@ -112,6 +123,8 @@ export class ComparisonToolService<T> {
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
   readonly isFilterPanelOpen = this.isFilterPanelOpenSignal.asReadonly();
   readonly pendingFetches = this.pendingFetchesSignal.asReadonly();
+  readonly selectedRowId = this.selectedRowIdSignal.asReadonly();
+  readonly hoveredRowId = this.hoveredRowIdSignal.asReadonly();
   readonly isLoadingTableData = computed(() => this.pendingFetches() > 0);
 
   // Computed Query Accessors
@@ -142,6 +155,21 @@ export class ComparisonToolService<T> {
   });
 
   constructor() {
+    effect(() => {
+      if (this.isLoadingTableData()) return;
+      if (!this.viewConfig().rowSelectionEnabled) return;
+      if (this.selectedRowIdSignal() !== null) return;
+      this.autoSelectFirstRow();
+    });
+
+    // Close the filter panel when the current config has no filters to avoid showing an empty panel.
+    effect(() => {
+      const config = this.currentConfig();
+      if (config !== null && !config.filters?.length && this.isFilterPanelOpenSignal()) {
+        this.isFilterPanelOpenSignal.set(false);
+      }
+    });
+
     // Automatically sync state changes to URL.
     // This effect re-runs whenever any of the tracked signals change,
     // keeping the URL in sync with the component's state.
@@ -250,11 +278,17 @@ export class ComparisonToolService<T> {
     configs: ComparisonToolConfig[],
     params: ComparisonToolUrlParams,
   ): void {
-    this.configsSignal.set(configs ?? []);
+    // Normalize column widths once at the ingestion boundary so all downstream reads (including
+    // the `columns` computed) can trust the value without re-validating or re-logging.
+    const sanitizedConfigs = (configs ?? []).map((config) => ({
+      ...config,
+      columns: config.columns.map((column) => this.sanitizeColumnWidth(column)),
+    }));
+    this.configsSignal.set(sanitizedConfigs);
 
-    const selection = this.resolveInitialDropdownSelection(params, configs);
+    const selection = this.resolveInitialDropdownSelection(params, sanitizedConfigs);
     const initialSort = this.resolveInitialSortMeta(params);
-    const initialFilters = this.resolveInitialFilters(params, configs, selection);
+    const initialFilters = this.resolveInitialFilters(params, sanitizedConfigs, selection);
 
     this.updateQuery({
       categories: selection,
@@ -264,7 +298,7 @@ export class ComparisonToolService<T> {
 
     // Initialize column preferences cache for all configs
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
-    for (const config of configs) {
+    for (const config of sanitizedConfigs) {
       columnsMap.set(
         this.dropdownKey(config.dropdowns),
         this.applyColumnPreferences(config.columns),
@@ -432,6 +466,11 @@ export class ComparisonToolService<T> {
       return;
     }
 
+    // PrimeNG Popover.show() calls stopPropagation, so the click never reaches the <tr>.
+    // Select the row here so heatmap circle clicks still update the selection.
+    const rowIdKey = this.viewConfig().rowIdDataKey;
+    this.selectRow(String((rowData as Record<string, unknown>)[rowIdKey]));
+
     const data = transform({
       rowData,
       cellData,
@@ -586,6 +625,48 @@ export class ComparisonToolService<T> {
     this.completeFetch();
   }
 
+  private autoSelectFirstRow(): void {
+    const unpinned = this.unpinnedDataSignal();
+    const pinned = this.pinnedDataSignal();
+    const rowIdKey = this.viewConfig().rowIdDataKey;
+
+    if (unpinned.length > 0) {
+      this.selectedRowIdSignal.set(String((unpinned[0] as Record<string, unknown>)[rowIdKey]));
+    } else if (pinned.length > 0) {
+      this.selectedRowIdSignal.set(String((pinned[0] as Record<string, unknown>)[rowIdKey]));
+    }
+  }
+
+  selectRow(id: string): void {
+    if (!this.viewConfig().rowSelectionEnabled) return;
+    if (this.selectedRowIdSignal() === id) return;
+    this.selectedRowIdSignal.set(id);
+  }
+
+  setHoveredRowId(id: string | null): void {
+    if (!this.viewConfig().rowHoverEnabled) return;
+    this.hoveredRowIdSignal.set(id);
+  }
+
+  /** Call after a filtered fetch to report whether the selected row exists in the full result set;
+   * resets to first row if not */
+  notifySelectedRowValidity(isInResults: boolean): void {
+    if (!this.viewConfig().rowSelectionEnabled) return;
+    if (isInResults) return;
+
+    const selectedId = this.selectedRowIdSignal();
+    if (selectedId !== null) {
+      const rowIdKey = this.viewConfig().rowIdDataKey;
+      const isInPinned = this.pinnedDataSignal().some(
+        (row) => String((row as Record<string, unknown>)[rowIdKey]) === selectedId,
+      );
+      if (isInPinned) return;
+    }
+
+    this.selectedRowIdSignal.set(null);
+    this.autoSelectFirstRow();
+  }
+
   /** Call before starting a data fetch to increment loading counter */
   startFetch() {
     this.pendingFetchesSignal.update((count) => count + 1);
@@ -699,6 +780,22 @@ export class ComparisonToolService<T> {
       ...column,
       selected: selectionMap.get(column.data_key) ?? true,
     }));
+  }
+
+  /**
+   * Normalizes a column's configured width at the config-ingestion boundary. A non-positive
+   * column_width is invalid config (the OpenAPI contract declares `minimum: 1`); such values are
+   * logged and replaced with DEFAULT_COLUMN_WIDTH_PX so downstream layout can trust the value.
+   */
+  private sanitizeColumnWidth(column: ComparisonToolConfigColumn): ComparisonToolConfigColumn {
+    if (column.column_width != null && column.column_width <= 0) {
+      this.logger.warn(
+        `Invalid column_width for column "${column.data_key}"; falling back to ${DEFAULT_COLUMN_WIDTH_PX}px.`,
+        { dataKey: column.data_key, columnWidth: column.column_width },
+      );
+      return { ...column, column_width: DEFAULT_COLUMN_WIDTH_PX };
+    }
+    return column;
   }
 
   private dropdownKey(dropdowns: string[] | undefined): string {

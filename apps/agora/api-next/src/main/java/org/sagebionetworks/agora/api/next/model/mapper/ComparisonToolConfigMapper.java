@@ -54,6 +54,7 @@ public class ComparisonToolConfigMapper {
     dto.setSortTooltip(column.getSortTooltip());
     dto.setLinkText(column.getLinkText());
     dto.setLinkUrl(column.getLinkUrl());
+    dto.setColumnWidth(column.getColumnWidth());
 
     return dto;
   }

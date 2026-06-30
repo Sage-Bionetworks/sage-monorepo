@@ -18,14 +18,11 @@ import { FormsModule } from '@angular/forms';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { HelperService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
+  CopyLinkButtonComponent,
   DownloadDomImageComponent,
   DownloadDomImagesZipComponent,
 } from '@sagebionetworks/explorers/ui';
-import {
-  DecodeGreekEntityPipe,
-  ModalLinkComponent,
-  TooltipButtonComponent,
-} from '@sagebionetworks/explorers/util';
+import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
 import { SelectModule } from 'primeng/select';
@@ -40,7 +37,7 @@ import { SelectModule } from 'primeng/select';
     DecodeGreekEntityPipe,
     DownloadDomImageComponent,
     DownloadDomImagesZipComponent,
-    TooltipButtonComponent,
+    CopyLinkButtonComponent,
   ],
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],

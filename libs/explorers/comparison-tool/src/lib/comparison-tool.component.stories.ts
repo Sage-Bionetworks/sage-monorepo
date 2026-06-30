@@ -5,6 +5,7 @@ import { provideRouter } from '@angular/router';
 import {
   ComparisonToolConfig,
   ComparisonToolViewConfig,
+  HeatmapCircleClickTransformFnContext,
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
@@ -38,6 +39,9 @@ type StoryArgs = Omit<
   visualizationOverviewVisible?: boolean;
   // Sidebar
   hasSidebar?: boolean;
+  // Row interaction
+  rowSelectionEnabled?: boolean;
+  rowHoverEnabled?: boolean;
 };
 
 // Inner component that provides services - will be remounted when configs change
@@ -70,6 +74,7 @@ class ComparisonToolInnerComponent {
   // Controls inputs
   filterResultsButtonTooltip = input<string>();
   showSignificanceControls = input<boolean>();
+  showTableSearch = input<boolean>();
   viewDetailsTooltip = input<string>();
   // Legend inputs
   legendEnabled = input<boolean>();
@@ -88,6 +93,9 @@ class ComparisonToolInnerComponent {
   visualizationOverviewVisible = input<boolean>();
   // Sidebar input
   hasSidebar = input<boolean>();
+  // Row interaction inputs
+  rowSelectionEnabled = input<boolean>();
+  rowHoverEnabled = input<boolean>();
 
   private readonly comparisonToolService = inject(ComparisonToolService);
 
@@ -122,6 +130,7 @@ class ComparisonToolInnerComponent {
       viewConfig.selectorsWikiParams = this.selectorsWikiParams();
       viewConfig.filterResultsButtonTooltip = this.filterResultsButtonTooltip();
       viewConfig.showSignificanceControls = this.showSignificanceControls();
+      viewConfig.showTableSearch = this.showTableSearch();
       viewConfig.viewDetailsTooltip = this.viewDetailsTooltip();
       viewConfig.legendEnabled = this.legendEnabled();
       viewConfig.legendPanelConfig = this.legendPanelConfig();
@@ -129,6 +138,24 @@ class ComparisonToolInnerComponent {
       viewConfig.allowPinnedImageDownload = this.allowPinnedImageDownload();
       viewConfig.defaultSort = this.defaultSort();
       viewConfig.linkExportField = this.linkExportField();
+      viewConfig.rowSelectionEnabled = this.rowSelectionEnabled();
+      viewConfig.rowHoverEnabled = this.rowHoverEnabled();
+      viewConfig.heatmapCircleClickTransformFn = ({
+        rowData,
+        cellData,
+        columnKey,
+      }: HeatmapCircleClickTransformFnContext) => {
+        const row = rowData as Record<string, unknown>;
+        const cell = cellData as Record<string, unknown>;
+        return {
+          heading: String(row['name']),
+          subHeadings: [columnKey],
+          value: cell['correlation'] as number,
+          valueLabel: 'Correlation',
+          pValue: cell['adj_p_val'] as number,
+          footer: 'Significance is considered to be an adjusted p-value < 0.05',
+        };
+      };
 
       this.comparisonToolService.setViewConfig(viewConfig);
 
@@ -185,6 +212,7 @@ class ComparisonToolInnerComponent {
         [selectorsWikiParams]="selectorsWikiParams()"
         [filterResultsButtonTooltip]="filterResultsButtonTooltip()"
         [showSignificanceControls]="showSignificanceControls()"
+        [showTableSearch]="showTableSearch()"
         [viewDetailsTooltip]="viewDetailsTooltip()"
         [legendEnabled]="legendEnabled()"
         [legendPanelConfig]="legendPanelConfig()"
@@ -198,6 +226,8 @@ class ComparisonToolInnerComponent {
         [legendVisible]="legendVisible()"
         [visualizationOverviewVisible]="visualizationOverviewVisible()"
         [hasSidebar]="hasSidebar()"
+        [rowSelectionEnabled]="rowSelectionEnabled()"
+        [rowHoverEnabled]="rowHoverEnabled()"
       />
     }
   `,
@@ -209,6 +239,7 @@ class ComparisonToolStoryWrapperComponent {
   selectorsWikiParams = input<Record<string, SynapseWikiParams>>();
   filterResultsButtonTooltip = input<string>();
   showSignificanceControls = input<boolean>();
+  showTableSearch = input<boolean>();
   viewDetailsTooltip = input<string>();
   legendEnabled = input<boolean>();
   legendPanelConfig = input<LegendPanelConfig>();
@@ -222,6 +253,8 @@ class ComparisonToolStoryWrapperComponent {
   legendVisible = input<boolean>();
   visualizationOverviewVisible = input<boolean>();
   hasSidebar = input<boolean>();
+  rowSelectionEnabled = input<boolean>();
+  rowHoverEnabled = input<boolean>();
 
   // Key changes when configs or defaultSort change, triggering inner component remount
   protected readonly configKey = computed(() => {
@@ -267,6 +300,11 @@ const meta: Meta<StoryArgs> = {
     showSignificanceControls: {
       control: 'boolean',
       description: 'Whether to show significance threshold controls',
+      table: { category: 'Controls' },
+    },
+    showTableSearch: {
+      control: 'boolean',
+      description: 'Whether to show the search input in the controls bar',
       table: { category: 'Controls' },
     },
     viewDetailsTooltip: {
@@ -325,7 +363,9 @@ const meta: Meta<StoryArgs> = {
       description:
         'Array of comparison tool configurations defining columns, filters, and dropdowns. ' +
         'Each config defines the table structure with columns, filters, and dropdown options for different data views. ' +
-        'For story configuration, only include one value for `page` across all objects.',
+        'For story configuration, only include one value for `page` across all objects. ' +
+        'The Filter Results button is hidden when the currently selected config has an empty `filters` array, ' +
+        'and reappears when switching to a config that has filters.',
       table: { category: 'Data' },
     },
     data: {
@@ -346,6 +386,19 @@ const meta: Meta<StoryArgs> = {
         'Whether the visualization overview help panel is initially visible when the page loads. ' +
         'User can toggle visibility afterward.',
       table: { category: 'Controls' },
+    },
+    // Row interaction category
+    rowSelectionEnabled: {
+      control: 'boolean',
+      description:
+        'Enables click-to-select row highlighting. The selected row ID is available via `comparisonToolService.selectedRowId()`. Auto-selects the first unpinned row on initial data load.',
+      table: { category: 'Table' },
+    },
+    rowHoverEnabled: {
+      control: 'boolean',
+      description:
+        'Enables hover row highlighting. The hovered row ID is available via `comparisonToolService.hoveredRowId()` for use by other components.',
+      table: { category: 'Table' },
     },
     // Sidebar category
     hasSidebar: {
@@ -383,6 +436,7 @@ export const Demo: Story = {
     // Controls
     filterResultsButtonTooltip: 'Filter the results based on the selected criteria',
     showSignificanceControls: true,
+    showTableSearch: true,
     viewDetailsTooltip: 'View details',
     // Legend
     legendEnabled: true,
@@ -405,12 +459,17 @@ export const Demo: Story = {
     ],
     linkExportField: 'link_text',
     // Data
-    configs: mockComparisonToolDataConfigWithDropdowns,
+    configs: mockComparisonToolDataConfigWithDropdowns.map((c, i) =>
+      i === mockComparisonToolDataConfigWithDropdowns.length - 1 ? { ...c, filters: [] } : c,
+    ),
     data: mockComparisonToolData,
     pinnedItems: ['3xTg-AD', '5xFAD (UCI)', '5xFAD (IU/Jax/Pitt)'],
     // Panel visibility
     legendVisible: false,
     visualizationOverviewVisible: false,
+    // Row interaction
+    rowSelectionEnabled: true,
+    rowHoverEnabled: true,
   },
 };
 

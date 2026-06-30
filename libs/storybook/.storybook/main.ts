@@ -28,6 +28,10 @@ const config: StorybookConfig = {
           title: 'QTL',
           url: './qtl',
         },
+        'model-ad': {
+          title: 'Model AD',
+          url: './model-ad',
+        },
       }
     : {
         agora: {
@@ -41,6 +45,10 @@ const config: StorybookConfig = {
         qtl: {
           title: 'QTL',
           url: 'http://localhost:4403',
+        },
+        'model-ad': {
+          title: 'Model AD',
+          url: 'http://localhost:4404',
         },
       },
 };

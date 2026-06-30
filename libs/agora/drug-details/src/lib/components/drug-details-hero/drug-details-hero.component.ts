@@ -28,7 +28,7 @@ export class DrugDetailsHeroComponent {
       } else {
         const link = `/${ROUTE_PATHS.DRUG_DETAILS}/${evidence.combined_with_chembl_id}`;
         const linkText = evidence.combined_with_common_name || evidence.combined_with_chembl_id;
-        badges.set(link, { label: 'Nominated Combination Therapy, with', link, linkText });
+        badges.set(link, { label: 'Nominated Combination Therapy with', link, linkText });
       }
     }
     return Array.from(badges.values());

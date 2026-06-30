@@ -1,7 +1,9 @@
 <div class="controls">
   <div class="controls-left">
     <explorers-displayed-results />
-    <explorers-comparison-tool-search-input />
+    @if (viewConfig().showTableSearch) {
+      <explorers-comparison-tool-search-input />
+    }
   </div>
   <div class="controls-right">
     <explorers-comparison-tool-category-selectors />

@@ -34,6 +34,13 @@ properties:
   is_hidden:
     type: boolean
     description: Indicates whether the column is shown in the comparison table UI.
+  column_width:
+    type: integer
+    format: int32
+    minimum: 1
+    example: 300
+    description: Optional fixed width for the column in pixels. When set, the UI uses this
+      width verbatim instead of auto-sizing the column from content.
 required:
   - type
   - data_key

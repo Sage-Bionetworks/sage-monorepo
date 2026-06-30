@@ -76,6 +76,7 @@
 
   a {
     font-size: var(--font-size-lg);
+    font-weight: 700;
     color: var(--color-text);
     text-decoration: none;
   }
@@ -122,7 +123,6 @@
     a {
       position: relative;
       display: flex;
-      font-weight: 700;
       padding: 8px 0;
       color: var(--color-text-secondary);
       transition: var(--transition-duration);
@@ -218,6 +218,7 @@
     .mobile-dropdown-label {
       display: block;
       font-size: var(--font-size-lg);
+      font-weight: 700;
       color: var(--color-text);
       padding: 10px 0;
       cursor: default;
@@ -226,6 +227,10 @@
 
     .mobile-submenu {
       margin-left: 1.25rem;
+
+      .mobile-submenu a {
+        font-weight: 500;
+      }
     }
 
     &.show {

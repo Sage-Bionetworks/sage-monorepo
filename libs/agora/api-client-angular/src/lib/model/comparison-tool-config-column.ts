@@ -45,6 +45,10 @@ export interface ComparisonToolConfigColumn {
    * Indicates whether the column is shown in the comparison table UI.
    */
   is_hidden: boolean;
+  /**
+   * Optional fixed width for the column in pixels. When set, the UI uses this width verbatim instead of auto-sizing the column from content.
+   */
+  column_width?: number;
 }
 export namespace ComparisonToolConfigColumn {
   export type TypeEnum =
