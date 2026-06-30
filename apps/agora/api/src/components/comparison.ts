@@ -14,7 +14,7 @@ import {
   Team,
 } from '@sagebionetworks/agora/api-client';
 import { Scores } from '@sagebionetworks/agora/models';
-import { altCache, setHeaders } from '../helpers';
+import { altCache, CASE_INSENSITIVE_COLLATION, setHeaders } from '../helpers';
 import {
   GCTGene,
   GCTGeneNominations,
@@ -162,6 +162,7 @@ export async function getRnaComparisonGenes(model: string) {
     })
       .lean()
       .sort({ hgnc_symbol: 1, tissue: 1 })
+      .collation(CASE_INSENSITIVE_COLLATION)
       .exec();
 
   if (differentialExpression) {
@@ -210,11 +211,23 @@ export async function getProteinComparisonGenes(method: string) {
   let items: ProteinDifferentialExpression[] = [];
 
   if ('TMT' === method) {
-    items = await ProteomicsTMTCollection.find().lean().sort({ hgnc_symbol: 1, tissue: 1 }).exec();
+    items = await ProteomicsTMTCollection.find()
+      .lean()
+      .sort({ hgnc_symbol: 1, tissue: 1 })
+      .collation(CASE_INSENSITIVE_COLLATION)
+      .exec();
   } else if ('LFQ' === method) {
-    items = await ProteomicsLFQCollection.find().lean().sort({ hgnc_symbol: 1, tissue: 1 }).exec();
+    items = await ProteomicsLFQCollection.find()
+      .lean()
+      .sort({ hgnc_symbol: 1, tissue: 1 })
+      .collation(CASE_INSENSITIVE_COLLATION)
+      .exec();
   } else if ('SRM' === method) {
-    items = await ProteomicsSRMCollection.find().lean().sort({ hgnc_symbol: 1, tissue: 1 }).exec();
+    items = await ProteomicsSRMCollection.find()
+      .lean()
+      .sort({ hgnc_symbol: 1, tissue: 1 })
+      .collation(CASE_INSENSITIVE_COLLATION)
+      .exec();
   } else {
     // TODO capture corner scenarios
     throw 'unknown method selected: ' + method;

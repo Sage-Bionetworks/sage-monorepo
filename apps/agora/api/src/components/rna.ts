@@ -2,7 +2,7 @@
 // Internal
 // -------------------------------------------------------------------------- //
 import { RnaDifferentialExpression } from '@sagebionetworks/agora/api-client';
-import { cache } from '../helpers';
+import { cache, CASE_INSENSITIVE_COLLATION } from '../helpers';
 import { RnaDifferentialExpressionCollection } from '../models';
 // -------------------------------------------------------------------------- //
 // Functions
@@ -20,6 +20,7 @@ export async function getRnaDifferentialExpression(ensg: string) {
   })
     .lean()
     .sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
+    .collation(CASE_INSENSITIVE_COLLATION)
     .exec();
 
   if (result) {
