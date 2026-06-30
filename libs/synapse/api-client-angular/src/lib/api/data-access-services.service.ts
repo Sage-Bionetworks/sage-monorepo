@@ -57,6 +57,10 @@ import { OrgSagebionetworksRepoModelDataaccessUserSubmissionSearchRequest } from
 // @ts-ignore
 import { OrgSagebionetworksRepoModelDataaccessUserSubmissionSearchResponse } from '../model/org-sagebionetworks-repo-model-dataaccess-user-submission-search-response';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelEducEDucTemplateListRequest } from '../model/org-sagebionetworks-repo-model-educ-e-duc-template-list-request';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelEducEDucTemplatePage } from '../model/org-sagebionetworks-repo-model-educ-e-duc-template-page';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelRestrictionInformationBatchRequest } from '../model/org-sagebionetworks-repo-model-restriction-information-batch-request';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelRestrictionInformationBatchResponse } from '../model/org-sagebionetworks-repo-model-restriction-information-batch-response';
@@ -1718,6 +1722,125 @@ export class DataAccessServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelDataaccessUserSubmissionSearchRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param orgSagebionetworksRepoModelEducEDucTemplateListRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1EDucTemplate(
+    orgSagebionetworksRepoModelEducEDucTemplateListRequest: OrgSagebionetworksRepoModelEducEDucTemplateListRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelEducEDucTemplatePage>;
+  public postRepoV1EDucTemplate(
+    orgSagebionetworksRepoModelEducEDucTemplateListRequest: OrgSagebionetworksRepoModelEducEDucTemplateListRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelEducEDucTemplatePage>>;
+  public postRepoV1EDucTemplate(
+    orgSagebionetworksRepoModelEducEDucTemplateListRequest: OrgSagebionetworksRepoModelEducEDucTemplateListRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelEducEDucTemplatePage>>;
+  public postRepoV1EDucTemplate(
+    orgSagebionetworksRepoModelEducEDucTemplateListRequest: OrgSagebionetworksRepoModelEducEDucTemplateListRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (
+      orgSagebionetworksRepoModelEducEDucTemplateListRequest === null ||
+      orgSagebionetworksRepoModelEducEDucTemplateListRequest === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelEducEDucTemplateListRequest was null or undefined when calling postRepoV1EDucTemplate.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/eDuc/template`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelEducEDucTemplatePage>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelEducEDucTemplateListRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

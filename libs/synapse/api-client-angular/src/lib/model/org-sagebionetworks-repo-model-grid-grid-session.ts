@@ -49,6 +49,10 @@ export interface OrgSagebionetworksRepoModelGridGridSession {
    */
   sourceEntityId?: string;
   /**
+   * If referencing a RecordSet (CSV), this represents the version number of the source entity at the time this grid was created or last synchronized. This reference enables the system to identify if rows were deleted in a GridSession.
+   */
+  sourceEntityVersionNumber?: number;
+  /**
    * The principal ID (user or team) that owns this grid session. If the owner is a user, only that user can access the grid. If the owner is a team, all members of that team have equal access to the grid.
    */
   ownerPrincipalId?: string;

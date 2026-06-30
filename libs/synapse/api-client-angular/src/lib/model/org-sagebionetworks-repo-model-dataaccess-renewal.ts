@@ -8,6 +8,8 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelDataaccessAccessorChange } from './org-sagebionetworks-repo-model-dataaccess-accessor-change';
+import { OrgSagebionetworksRepoModelDataaccessSigningOfficial } from './org-sagebionetworks-repo-model-dataaccess-signing-official';
+import { OrgSagebionetworksRepoModelDataaccessPrincipalInvestigator } from './org-sagebionetworks-repo-model-dataaccess-principal-investigator';
 
 /**
  * A Renewal contains information required by an AccessRequirement and additional information about renewing a request.
@@ -65,6 +67,12 @@ export interface OrgSagebionetworksRepoModelDataaccessRenewal {
    * Indicates which implementation of RequestInterface this object represents.
    */
   concreteType: OrgSagebionetworksRepoModelDataaccessRenewal.ConcreteTypeEnum;
+  /**
+   * The name of the institution where the collaborators work.
+   */
+  institution?: string;
+  principalInvestigator?: OrgSagebionetworksRepoModelDataaccessPrincipalInvestigator;
+  signingOfficial?: OrgSagebionetworksRepoModelDataaccessSigningOfficial;
   /**
    * Link(s) to publication that used the controlled data.
    */

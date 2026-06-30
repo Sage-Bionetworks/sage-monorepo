@@ -74,7 +74,8 @@ export namespace OrgSagebionetworksRepoModelDaoWikiPageKey {
     | 'REPLICATED_EVENT'
     | 'PORTAL'
     | 'OAUTH_CLIENT'
-    | 'GRID_SESSION';
+    | 'GRID_SESSION'
+    | 'RECORDSET';
   export const OwnerObjectTypeEnum = {
     Entity: 'ENTITY' as OwnerObjectTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as OwnerObjectTypeEnum,
@@ -124,5 +125,6 @@ export namespace OrgSagebionetworksRepoModelDaoWikiPageKey {
     Portal: 'PORTAL' as OwnerObjectTypeEnum,
     OauthClient: 'OAUTH_CLIENT' as OwnerObjectTypeEnum,
     GridSession: 'GRID_SESSION' as OwnerObjectTypeEnum,
+    Recordset: 'RECORDSET' as OwnerObjectTypeEnum,
   };
 }

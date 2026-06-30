@@ -10,7 +10,7 @@
 import { OrgSagebionetworksRepoModelSearchSearchQuery } from './org-sagebionetworks-repo-model-search-search-query';
 
 /**
- * Async request to query a SearchIndex entity\'s OpenSearch index. Identifies the target index and carries the search parameters.
+ * <p>Async request to query a SearchIndex entity\'s OpenSearch index. Identifies the target index and carries the search-request body.</p>
  */
 export interface OrgSagebionetworksRepoModelSearchTableSearchIndexQuery {
   concreteType: OrgSagebionetworksRepoModelSearchTableSearchIndexQuery.ConcreteTypeEnum;
@@ -30,11 +30,10 @@ export namespace OrgSagebionetworksRepoModelSearchTableSearchIndexQuery {
     OrgSagebionetworksRepoModelSearchTableSearchIndexQuery:
       'org.sagebionetworks.repo.model.search.table.SearchIndexQuery' as ConcreteTypeEnum,
   };
-  export type ResponsePartsEnum = 'HITS' | 'TOTAL_HITS' | 'SELECT_COLUMNS' | 'FACETS';
+  export type ResponsePartsEnum = 'HITS' | 'TOTAL_HITS' | 'SELECT_COLUMNS';
   export const ResponsePartsEnum = {
     Hits: 'HITS' as ResponsePartsEnum,
     TotalHits: 'TOTAL_HITS' as ResponsePartsEnum,
     SelectColumns: 'SELECT_COLUMNS' as ResponsePartsEnum,
-    Facets: 'FACETS' as ResponsePartsEnum,
   };
 }

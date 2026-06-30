@@ -30,11 +30,13 @@ export namespace OrgSagebionetworksRepoModelOauthOAuthValidationRequest {
     | 'GOOGLE_OAUTH_2_0'
     | 'ORCID'
     | 'ARCUS_BIOSCIENCES'
-    | 'SAGE_BIONETWORKS';
+    | 'SAGE_BIONETWORKS'
+    | 'NIH_RESEARCHER_AUTH_SERVICE';
   export const ProviderEnum = {
     GoogleOauth20: 'GOOGLE_OAUTH_2_0' as ProviderEnum,
     Orcid: 'ORCID' as ProviderEnum,
     ArcusBiosciences: 'ARCUS_BIOSCIENCES' as ProviderEnum,
     SageBionetworks: 'SAGE_BIONETWORKS' as ProviderEnum,
+    NihResearcherAuthService: 'NIH_RESEARCHER_AUTH_SERVICE' as ProviderEnum,
   };
 }
