@@ -32,6 +32,9 @@
             <a [routerLink]="['/' + ROUTE_PATHS.DETAILS, target.ensembl_gene_id]">{{
               target.hgnc_symbol || target.ensembl_gene_id
             }}</a>
+            @if (target.is_nominated_target) {
+              - Nominated Target
+            }
           </li>
         }
       </ul>

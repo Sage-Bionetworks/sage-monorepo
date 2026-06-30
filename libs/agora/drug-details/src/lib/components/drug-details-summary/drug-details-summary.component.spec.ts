@@ -53,12 +53,28 @@ describe('DrugDetailsSummaryComponent', () => {
   });
 
   describe('linked targets', () => {
-    it('should display linked targets when present', async () => {
+    it('should show "- Nominated Target" as plain text beside the link when target is nominated', async () => {
       await setup();
       expect(screen.getByText('Linked Targets')).toBeInTheDocument();
       const link = screen.getByRole('link', { name: 'CYP19A1' });
       expect(link).toBeInTheDocument();
       expect(link).toHaveAttribute('href', '/genes/ENSG00000137869');
+      expect(link).not.toHaveTextContent('Nominated Target');
+      expect(screen.getByText('- Nominated Target')).toBeInTheDocument();
+    });
+
+    it('should not show "- Nominated Target" when target is not nominated', async () => {
+      await setup({
+        linked_targets: [
+          {
+            ensembl_gene_id: 'ENSG00000137869',
+            hgnc_symbol: 'CYP19A1',
+            is_nominated_target: false,
+          },
+        ],
+      });
+      expect(screen.getByRole('link', { name: 'CYP19A1' })).toBeInTheDocument();
+      expect(screen.queryByText('- Nominated Target')).not.toBeInTheDocument();
     });
 
     it('should fall back to ensembl_gene_id when hgnc_symbol is missing', async () => {
