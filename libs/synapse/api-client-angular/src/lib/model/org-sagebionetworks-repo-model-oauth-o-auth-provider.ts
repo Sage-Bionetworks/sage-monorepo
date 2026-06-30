@@ -12,11 +12,14 @@ export type OrgSagebionetworksRepoModelOauthOAuthProvider =
   | 'GOOGLE_OAUTH_2_0'
   | 'ORCID'
   | 'ARCUS_BIOSCIENCES'
-  | 'SAGE_BIONETWORKS';
+  | 'SAGE_BIONETWORKS'
+  | 'NIH_RESEARCHER_AUTH_SERVICE';
 
 export const OrgSagebionetworksRepoModelOauthOAuthProvider = {
   GoogleOauth20: 'GOOGLE_OAUTH_2_0' as OrgSagebionetworksRepoModelOauthOAuthProvider,
   Orcid: 'ORCID' as OrgSagebionetworksRepoModelOauthOAuthProvider,
   ArcusBiosciences: 'ARCUS_BIOSCIENCES' as OrgSagebionetworksRepoModelOauthOAuthProvider,
   SageBionetworks: 'SAGE_BIONETWORKS' as OrgSagebionetworksRepoModelOauthOAuthProvider,
+  NihResearcherAuthService:
+    'NIH_RESEARCHER_AUTH_SERVICE' as OrgSagebionetworksRepoModelOauthOAuthProvider,
 };

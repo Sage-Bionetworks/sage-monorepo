@@ -17,6 +17,14 @@ export interface OrgSagebionetworksRepoModelCurationMetadataRecordBasedMetadataT
    */
   concreteType: OrgSagebionetworksRepoModelCurationMetadataRecordBasedMetadataTaskProperties.ConcreteTypeEnum;
   /**
+   * The set of principal IDs that should collaborate on the grid session. This field may be used to set the ownerPrincipalId(s) of a linked <a href=\"${org.sagebionetworks.repo.model.grid.GridSession}\">GridSession</a> if the suggestedAuthorizationMode is SESSION_OWNER
+   */
+  collaboratorPrincipalIds?: Array<string>;
+  /**
+   * Defines the authorization mode used to gate access to a grid session. The mode is set at session creation time and cannot be changed. It controls both who may join the session (create a replica) and which rows are included in the session\'s initial snapshot.  SESSION_OWNER (default): Access is determined by the session owner. Only the owner (or members of the owner\'s team) may join. When the source is a view, the snapshot includes rows that the owner has access to; non-owner members see data through the owner\'s access scope.  SOURCE_BENEFACTOR: Access is determined by EDIT access on the source entity\'s benefactor(s). At session creation the set of benefactor IDs that the creating user (the \'action user\') has EDIT access on is captured and stored on the session. Any user who has EDIT access on all of those captured benefactors may join the session and see all rows in the snapshot. This mode is useful when a project administrator wants all editors of a project to be able to collaborate on a grid, without needing to manage a separate owner team.
+   */
+  suggestedAuthorizationMode?: OrgSagebionetworksRepoModelCurationMetadataRecordBasedMetadataTaskProperties.SuggestedAuthorizationModeEnum;
+  /**
    * The synId of the RecordSet that will contain all record-based metadata for a specific type.  This RecordSet will be used to start new grid sessions for both \'upsert\' and record-based curation for this type.
    */
   recordSetId?: string;
@@ -27,5 +35,10 @@ export namespace OrgSagebionetworksRepoModelCurationMetadataRecordBasedMetadataT
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelCurationMetadataRecordBasedMetadataTaskProperties:
       'org.sagebionetworks.repo.model.curation.metadata.RecordBasedMetadataTaskProperties' as ConcreteTypeEnum,
+  };
+  export type SuggestedAuthorizationModeEnum = 'SESSION_OWNER' | 'SOURCE_BENEFACTOR';
+  export const SuggestedAuthorizationModeEnum = {
+    SessionOwner: 'SESSION_OWNER' as SuggestedAuthorizationModeEnum,
+    SourceBenefactor: 'SOURCE_BENEFACTOR' as SuggestedAuthorizationModeEnum,
   };
 }

@@ -11,12 +11,10 @@
 export type OrgSagebionetworksRepoModelSearchSearchQueryPart =
   | 'HITS'
   | 'TOTAL_HITS'
-  | 'SELECT_COLUMNS'
-  | 'FACETS';
+  | 'SELECT_COLUMNS';
 
 export const OrgSagebionetworksRepoModelSearchSearchQueryPart = {
   Hits: 'HITS' as OrgSagebionetworksRepoModelSearchSearchQueryPart,
   TotalHits: 'TOTAL_HITS' as OrgSagebionetworksRepoModelSearchSearchQueryPart,
   SelectColumns: 'SELECT_COLUMNS' as OrgSagebionetworksRepoModelSearchSearchQueryPart,
-  Facets: 'FACETS' as OrgSagebionetworksRepoModelSearchSearchQueryPart,
 };

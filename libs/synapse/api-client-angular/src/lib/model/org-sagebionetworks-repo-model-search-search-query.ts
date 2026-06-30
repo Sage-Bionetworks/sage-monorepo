@@ -7,88 +7,41 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrgSagebionetworksRepoModelSearchKeyRange } from './org-sagebionetworks-repo-model-search-key-range';
-import { OrgSagebionetworksRepoModelSearchKeyValues } from './org-sagebionetworks-repo-model-search-key-values';
-import { OrgSagebionetworksRepoModelSearchFacetRequest } from './org-sagebionetworks-repo-model-search-facet-request';
-import { OrgSagebionetworksRepoModelSearchSortField } from './org-sagebionetworks-repo-model-search-sort-field';
+import { OrgSagebionetworksRepoModelSearchDslQuery } from './org-sagebionetworks-repo-model-search-dsl-query';
+import { OrgSagebionetworksRepoModelSearchDslHighlight } from './org-sagebionetworks-repo-model-search-dsl-highlight';
+import { OrgSagebionetworksRepoModelSearchDslAggregation } from './org-sagebionetworks-repo-model-search-dsl-aggregation';
+import { OrgSagebionetworksRepoModelSearchDslRescore } from './org-sagebionetworks-repo-model-search-dsl-rescore';
+import { OrgSagebionetworksRepoModelSearchDslFieldCollapse } from './org-sagebionetworks-repo-model-search-dsl-field-collapse';
+import { OrgSagebionetworksRepoModelSearchDslSourceFilter } from './org-sagebionetworks-repo-model-search-dsl-source-filter';
 
 /**
- * A structured search query against a Synapse SearchIndex, composed of a main full-text query, zero or more structured filters, optional facet aggregations, and response-shaping options (sort, highlight, pagination). Most callers will set at least queryText (or leave it empty for a catalog-style MATCH_ALL browse) and possibly queryType + queryFields. Filters, facets, sort, and returnFields are independent layers — any combination is valid. Filters run in non-scoring context: they narrow the result set without influencing relevance.
+ * <p>The body of an OpenSearch <a href=\"https://docs.opensearch.org/latest/api-reference/search-apis/search/\"><code>_search</code></a> request, narrowed to the top-level keys Synapse accepts. Each slot\'s contents are pass-through <a href=\"https://docs.opensearch.org/latest/query-dsl/\">OpenSearch query DSL</a>; see the search REST endpoint for the inner-clause allowlist, field-reference rules, pagination semantics, and per-request limits.</p>
  */
 export interface OrgSagebionetworksRepoModelSearchSearchQuery {
+  query?: OrgSagebionetworksRepoModelSearchDslQuery;
+  post_filter?: OrgSagebionetworksRepoModelSearchDslQuery;
   /**
-   * The type of full-text query to execute against a search index. Each type has a distinct analyzer behavior, scoring model, and accepted parameters — pick the one whose semantics match the caller\'s intent rather than the one that happens to return results. Fuzziness compatibility is documented per type; passing fuzziness with an incompatible type is rejected with HTTP 400.
+   * <p>Optional. Map of caller-chosen name to <a href=\"${org.sagebionetworks.repo.model.search.dsl.Aggregation}\">aggregation</a> definition. The raw aggregation result comes back on <code>SearchQueryResults.aggregationResults</code>. For the facet-counting pattern (a <code>terms</code> aggregation alongside <code>post_filter</code>), see the <a href=\"https://docs.opensearch.org/latest/tutorials/faceted-search/#maintaining-facet-options-during-filtering\">faceted search tutorial</a>.</p>
    */
-  queryType?: OrgSagebionetworksRepoModelSearchSearchQuery.QueryTypeEnum;
+  aggregations?: { [key: string]: OrgSagebionetworksRepoModelSearchDslAggregation };
+  highlight?: OrgSagebionetworksRepoModelSearchDslHighlight;
+  collapse?: OrgSagebionetworksRepoModelSearchDslFieldCollapse;
+  rescore?: OrgSagebionetworksRepoModelSearchDslRescore;
   /**
-   * The text to search for. Interpretation depends on queryType: SIMPLE_QUERY_STRING parses operators like +, -, |, \"...\", ~, *, (); MATCH / MULTI_MATCH analyze it into tokens and run each against the indexed tokens; MATCH_PHRASE treats it as an ordered phrase; PREFIX treats the final token as a prefix; WILDCARD treats * and ? as glob wildcards. Null or empty triggers MATCH_ALL.
+   * Optional. Result <a href=\"https://docs.opensearch.org/latest/search-plugins/searching-data/sort/\">ordering</a>, in native OpenSearch sort shape (a string column name, <code>{column: \"asc|desc\"}</code>, or <code>{column: {order: ..., mode: ..., missing: ...}}</code>) applied in order. Only the <code>field</code> and <code>_score</code> sort kinds are accepted &mdash; script and geo-distance sorts are rejected server-side. The pseudo-column <code>_score</code> sorts by relevance. When omitted, results are sorted by relevance descending.
    */
-  queryText?: string;
+  sort?: Array<any>;
+  _source?: OrgSagebionetworksRepoModelSearchDslSourceFilter;
   /**
-   * Columns to search, with optional per-field boost using \'field^N\' syntax (e.g. \'title^3\' weighs title matches three times as much as unboosted fields). Empty or null means all indexed fields. Required for MATCH, MATCH_PHRASE, and WILDCARD (single field); optional for MULTI_MATCH and PREFIX (multi-field); ignored by SIMPLE_QUERY_STRING when empty (searches every indexed field).
+   * Optional. Zero-based <a href=\"https://docs.opensearch.org/latest/search-plugins/searching-data/paginate/\">pagination</a> offset; default <code>0</code>. Ignored when <code>search_after</code> is supplied (the cursor determines the page start).
    */
-  queryFields?: Array<string>;
+  from?: number;
   /**
-   * Multi-value IN-clause filters. Each entry restricts a column to a specified set of values; set \'not: true\' on an entry to express NOT IN. Runs in non-scoring context against the column\'s keyword sub-field, so filter values must match stored tokens exactly (case-sensitive for text columns analyzed with lowercase filters — compare your values to what the analyzer produced).
+   * Optional. Maximum number of hits to return per <a href=\"https://docs.opensearch.org/latest/search-plugins/searching-data/paginate/\">page</a>. Default: 25. Maximum: 100 (larger values are silently capped).
    */
-  termsFilters?: Array<OrgSagebionetworksRepoModelSearchKeyValues>;
+  size?: number;
   /**
-   * Inclusive range filters on numeric or date columns. Each entry restricts a column to min <= value <= max; either bound may be omitted for open-ended ranges. Values are strings and are parsed per the column type (integer, double, date). Runs in non-scoring context.
+   * Optional. Opaque <a href=\"https://docs.opensearch.org/latest/search-plugins/searching-data/paginate/\">cursor</a> emitted as <code>nextSearchAfter</code> on the previous response. Pass back unchanged. When supplied, <code>from</code> is ignored.
    */
-  rangeFilters?: Array<OrgSagebionetworksRepoModelSearchKeyRange>;
-  /**
-   * Column names that must have a non-null value in the matched documents. Useful for narrowing to rows that have been fully annotated. Runs in non-scoring context.
-   */
-  existsFilters?: Array<string>;
-  /**
-   * Column names that must be null or missing in the matched documents. Inverse of existsFilters; useful for surfacing under-annotated rows. Runs in non-scoring context.
-   */
-  notExistsFilters?: Array<string>;
-  /**
-   * Typo tolerance expressed as a Levenshtein edit distance. Accepted values: \'AUTO\' (recommended — 0 edits for tokens <=2 chars, 1 edit for 3-5 chars, 2 edits for >=6 chars), \'0\' (disabled, exact), \'1\', \'2\'. Only meaningful for queryType=MATCH or MULTI_MATCH — OpenSearch silently ignores fuzziness on other query types. See SearchQueryType for the right alternative per type (e.g. per-term \'~\' syntax in queryText for SIMPLE_QUERY_STRING, or an edge-ngram analyzer for PREFIX autocomplete).
-   */
-  fuzziness?: string;
-  /**
-   * Columns to aggregate as facet buckets alongside the primary hit results. Each entry produces one terms aggregation; use maxValueCount to cap the bucket count, and sortField/sortDirection to order buckets by count or by key. Returned in SearchQueryResults.facets only when the caller opts into the FACETS response part.
-   */
-  facetRequests?: Array<OrgSagebionetworksRepoModelSearchFacetRequest>;
-  /**
-   * Columns to include in each hit\'s field list. Empty or null returns every indexed column on the matched documents. Narrowing this to the columns the caller actually displays reduces response size and transport cost, especially for wide SearchIndexes.
-   */
-  returnFields?: Array<string>;
-  /**
-   * Result ordering. Each entry specifies a column name (or the special \'_score\' pseudo-column, which sorts by relevance) and an ASC/DESC direction. When omitted, results are sorted by relevance descending (_score DESC). Sort columns must be stored as keyword or numeric sub-fields — for text columns this is handled automatically by routing through the keyword sub-field.
-   */
-  sort?: Array<OrgSagebionetworksRepoModelSearchSortField>;
-  /**
-   * When true, each hit\'s field list includes HTML-tagged excerpts showing where the query matched. Uses OpenSearch\'s default highlighter with <em> tags around matched terms. Default: false. Ignored by autocomplete endpoint.
-   */
-  highlight?: boolean;
-  /**
-   * Zero-based pagination offset into the hit list. Default: 0. For deep pagination (offset > ~10,000), prefer reshaping the query with filters and sort to narrow the result set rather than scrolling.
-   */
-  offset?: number;
-  /**
-   * Maximum number of hits to return per page. Default: 25. Maximum: 100 (larger values are silently capped). Set to 0 in combination with FACETS-only response parts to retrieve only aggregate counts.
-   */
-  limit?: number;
-}
-export namespace OrgSagebionetworksRepoModelSearchSearchQuery {
-  export type QueryTypeEnum =
-    | 'SIMPLE_QUERY_STRING'
-    | 'MATCH'
-    | 'MULTI_MATCH'
-    | 'MATCH_PHRASE'
-    | 'PREFIX'
-    | 'WILDCARD'
-    | 'MATCH_ALL';
-  export const QueryTypeEnum = {
-    SimpleQueryString: 'SIMPLE_QUERY_STRING' as QueryTypeEnum,
-    Match: 'MATCH' as QueryTypeEnum,
-    MultiMatch: 'MULTI_MATCH' as QueryTypeEnum,
-    MatchPhrase: 'MATCH_PHRASE' as QueryTypeEnum,
-    Prefix: 'PREFIX' as QueryTypeEnum,
-    Wildcard: 'WILDCARD' as QueryTypeEnum,
-    MatchAll: 'MATCH_ALL' as QueryTypeEnum,
-  };
+  search_after?: Array<any>;
 }

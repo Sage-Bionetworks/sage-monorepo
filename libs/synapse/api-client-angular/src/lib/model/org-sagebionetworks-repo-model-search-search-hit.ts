@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelSearchSearchHighlight } from './org-sagebionetworks-repo-model-search-search-highlight';
 import { OrgSagebionetworksRepoModelSearchSearchFieldValue } from './org-sagebionetworks-repo-model-search-search-field-value';
 
 /**
@@ -30,7 +31,7 @@ export interface OrgSagebionetworksRepoModelSearchSearchHit {
    */
   fields?: Array<OrgSagebionetworksRepoModelSearchSearchFieldValue>;
   /**
-   * Column name/highlighted snippet pairs, if highlight was requested.
+   * Per-field <a href=\"https://docs.opensearch.org/latest/search-plugins/searching-data/highlight/\">highlight</a> payload, populated when <code>body.highlight</code> was supplied. Each entry reports the column\'s bare name and the AOSS-returned snippet fragments in their original order.
    */
-  highlights?: Array<OrgSagebionetworksRepoModelSearchSearchFieldValue>;
+  highlights?: Array<OrgSagebionetworksRepoModelSearchSearchHighlight>;
 }

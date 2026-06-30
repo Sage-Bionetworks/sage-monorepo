@@ -8,7 +8,6 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelSearchSearchHit } from './org-sagebionetworks-repo-model-search-search-hit';
-import { OrgSagebionetworksRepoModelTableFacetColumnResult } from './org-sagebionetworks-repo-model-table-facet-column-result';
 import { OrgSagebionetworksRepoModelTableSelectColumn } from './org-sagebionetworks-repo-model-table-select-column';
 
 /**
@@ -25,13 +24,17 @@ export interface OrgSagebionetworksRepoModelSearchSearchQueryResults {
    */
   totalHits?: number;
   /**
-   * The columns represented in each hit\'s fields, in SELECT-clause order. Populated when SearchQueryPart.SELECT_COLUMNS is requested. When SearchQuery.returnFields is non-empty, this is the subset of columns matching those names.
+   * The columns represented in each hit\'s fields, in SELECT-clause order. Populated when SearchQueryPart.SELECT_COLUMNS is requested. When <code>body._source.includes</code> is non-empty, this is the subset of columns matching those names.
    */
   selectColumns?: Array<OrgSagebionetworksRepoModelTableSelectColumn>;
   /**
-   * Facet aggregation results. Populated when SearchQueryPart.FACETS is requested. Autocomplete never produces facets regardless of this part being requested.
+   * The raw <a href=\"https://docs.opensearch.org/latest/aggregations/\">OpenSearch aggregations</a> response &mdash; the contents of the <code>aggregations</code> key returned by AOSS, with field references rewritten back to column names. Populated whenever the request supplied <code>body.aggregations</code>; not gated by SearchQueryPart. Returned as an opaque JSON object because the OpenSearch DSL produces a wide variety of bucket shapes per aggregation type and per sub-aggregation.
    */
-  facets?: Array<OrgSagebionetworksRepoModelTableFacetColumnResult>;
+  aggregationResults?: any | null;
+  /**
+   * Opaque cursor for the next <a href=\"https://docs.opensearch.org/latest/search-plugins/searching-data/paginate/\">page</a>. Populated whenever the response carries hits and the underlying sort yielded sort values for the last hit. Pass back unchanged on the next request as <code>body.search_after</code>. Null when there are no further pages.
+   */
+  nextSearchAfter?: Array<any>;
   /**
    * Zero-based pagination offset echoed from the request. Always populated.
    */

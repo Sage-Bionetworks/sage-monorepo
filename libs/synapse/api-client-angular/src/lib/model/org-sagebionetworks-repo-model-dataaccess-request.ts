@@ -8,6 +8,8 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelDataaccessAccessorChange } from './org-sagebionetworks-repo-model-dataaccess-accessor-change';
+import { OrgSagebionetworksRepoModelDataaccessSigningOfficial } from './org-sagebionetworks-repo-model-dataaccess-signing-official';
+import { OrgSagebionetworksRepoModelDataaccessPrincipalInvestigator } from './org-sagebionetworks-repo-model-dataaccess-principal-investigator';
 
 /**
  * A Request contains information required by an AccessRequirement.
@@ -65,6 +67,12 @@ export interface OrgSagebionetworksRepoModelDataaccessRequest {
    * Indicates which implementation of RequestInterface this object represents.
    */
   concreteType: OrgSagebionetworksRepoModelDataaccessRequest.ConcreteTypeEnum;
+  /**
+   * The name of the institution where the collaborators work.
+   */
+  institution?: string;
+  principalInvestigator?: OrgSagebionetworksRepoModelDataaccessPrincipalInvestigator;
+  signingOfficial?: OrgSagebionetworksRepoModelDataaccessSigningOfficial;
 }
 export namespace OrgSagebionetworksRepoModelDataaccessRequest {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.dataaccess.Request';

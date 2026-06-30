@@ -88,7 +88,8 @@ export namespace OrgSagebionetworksRepoModelTableQueryCacheHitEvent {
     | 'REPLICATED_EVENT'
     | 'PORTAL'
     | 'OAUTH_CLIENT'
-    | 'GRID_SESSION';
+    | 'GRID_SESSION'
+    | 'RECORDSET';
   export const ObjectTypeEnum = {
     Entity: 'ENTITY' as ObjectTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as ObjectTypeEnum,
@@ -138,5 +139,6 @@ export namespace OrgSagebionetworksRepoModelTableQueryCacheHitEvent {
     Portal: 'PORTAL' as ObjectTypeEnum,
     OauthClient: 'OAUTH_CLIENT' as ObjectTypeEnum,
     GridSession: 'GRID_SESSION' as ObjectTypeEnum,
+    Recordset: 'RECORDSET' as ObjectTypeEnum,
   };
 }

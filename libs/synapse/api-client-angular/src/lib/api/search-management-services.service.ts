@@ -47,6 +47,8 @@ import { OrgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest } from '
 // @ts-ignore
 import { OrgSagebionetworksRepoModelSearchTableListTextAnalyzersResponse } from '../model/org-sagebionetworks-repo-model-search-table-list-text-analyzers-response';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest } from '../model/org-sagebionetworks-repo-model-search-table-search-autocomplete-request';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelSearchTableSearchConfigBinding } from '../model/org-sagebionetworks-repo-model-search-table-search-config-binding';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelSearchTableSearchConfiguration } from '../model/org-sagebionetworks-repo-model-search-table-search-configuration';
@@ -866,12 +868,12 @@ export class SearchManagementServicesService {
   }
 
   /**
-   * @param orgSagebionetworksRepoModelSearchTableSearchIndexQuery
+   * @param orgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public postRepoV1SearchAutocomplete(
-    orgSagebionetworksRepoModelSearchTableSearchIndexQuery: OrgSagebionetworksRepoModelSearchTableSearchIndexQuery,
+    orgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest: OrgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -881,7 +883,7 @@ export class SearchManagementServicesService {
     },
   ): Observable<OrgSagebionetworksRepoModelSearchSearchQueryResults>;
   public postRepoV1SearchAutocomplete(
-    orgSagebionetworksRepoModelSearchTableSearchIndexQuery: OrgSagebionetworksRepoModelSearchTableSearchIndexQuery,
+    orgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest: OrgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -891,7 +893,7 @@ export class SearchManagementServicesService {
     },
   ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchSearchQueryResults>>;
   public postRepoV1SearchAutocomplete(
-    orgSagebionetworksRepoModelSearchTableSearchIndexQuery: OrgSagebionetworksRepoModelSearchTableSearchIndexQuery,
+    orgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest: OrgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -901,7 +903,7 @@ export class SearchManagementServicesService {
     },
   ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchSearchQueryResults>>;
   public postRepoV1SearchAutocomplete(
-    orgSagebionetworksRepoModelSearchTableSearchIndexQuery: OrgSagebionetworksRepoModelSearchTableSearchIndexQuery,
+    orgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest: OrgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -911,11 +913,11 @@ export class SearchManagementServicesService {
     },
   ): Observable<any> {
     if (
-      orgSagebionetworksRepoModelSearchTableSearchIndexQuery === null ||
-      orgSagebionetworksRepoModelSearchTableSearchIndexQuery === undefined
+      orgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest === null ||
+      orgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest === undefined
     ) {
       throw new Error(
-        'Required parameter orgSagebionetworksRepoModelSearchTableSearchIndexQuery was null or undefined when calling postRepoV1SearchAutocomplete.',
+        'Required parameter orgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest was null or undefined when calling postRepoV1SearchAutocomplete.',
       );
     }
 
@@ -973,7 +975,7 @@ export class SearchManagementServicesService {
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: orgSagebionetworksRepoModelSearchTableSearchIndexQuery,
+        body: orgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

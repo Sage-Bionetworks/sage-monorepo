@@ -86,7 +86,8 @@ export namespace OrgSagebionetworksRepoModelMessageComment {
     | 'REPLICATED_EVENT'
     | 'PORTAL'
     | 'OAUTH_CLIENT'
-    | 'GRID_SESSION';
+    | 'GRID_SESSION'
+    | 'RECORDSET';
   export const TargetTypeEnum = {
     Entity: 'ENTITY' as TargetTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as TargetTypeEnum,
@@ -136,5 +137,6 @@ export namespace OrgSagebionetworksRepoModelMessageComment {
     Portal: 'PORTAL' as TargetTypeEnum,
     OauthClient: 'OAUTH_CLIENT' as TargetTypeEnum,
     GridSession: 'GRID_SESSION' as TargetTypeEnum,
+    Recordset: 'RECORDSET' as TargetTypeEnum,
   };
 }
