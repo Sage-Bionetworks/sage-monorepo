@@ -55,31 +55,17 @@ public class CustomTranscriptomicsRepositoryImpl
   }
 
   /**
-   * Case-insensitive sort. {@code gene_symbol} routes through the computed
-   * {@code display_gene_symbol} (with the ensembl_gene_id fallback bundled as a prerequisite);
-   * {@code name} routes through its nested {@code link_text} child.
+   * {@code gene_symbol} routes through the computed {@code display_gene_symbol}
+   * (gene_symbol ?? ensembl_gene_id fallback) bundled as a prerequisite.
+   * Case-insensitive ordering is handled by pipeline-level collation.
    */
   @Override
   protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
     return Map.of(
       GENE_SYMBOL_FIELD,
-      ComputedSortField.of(toLowerExpr(DISPLAY_GENE_SYMBOL_FIELD)).withPrerequisite(
+      ComputedSortField.of("$" + DISPLAY_GENE_SYMBOL_FIELD).withPrerequisite(
         buildDisplayGeneSymbolField()
-      ),
-      "name",
-      ComputedSortField.of(toLowerExpr("name.link_text")),
-      "model_type",
-      ComputedSortField.of(toLowerExpr("model_type")),
-      "tissue",
-      ComputedSortField.of(toLowerExpr("tissue")),
-      "sex_cohort",
-      ComputedSortField.of(toLowerExpr("sex_cohort")),
-      "ensembl_gene_id",
-      ComputedSortField.of(toLowerExpr("ensembl_gene_id")),
-      "matched_control",
-      ComputedSortField.of(toLowerExpr("matched_control")),
-      "model_group",
-      ComputedSortField.of(toLowerExpr("model_group"))
+      )
     );
   }
 
