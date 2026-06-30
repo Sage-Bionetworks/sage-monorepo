@@ -28,8 +28,7 @@
 
         &:not(:first-child) {
           position: sticky;
-          right: 50px;
-          z-index: 1;
+          right: 30px;
         }
       }
 
