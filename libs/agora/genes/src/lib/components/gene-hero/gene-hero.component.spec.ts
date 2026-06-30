@@ -33,25 +33,30 @@ describe('Component: Gene Hero', () => {
   });
 
   it('should show nomination and TEP text for MSN if nomination exists and is either is_tep or is_adi is true', () => {
-    const expected = 'Nominated Target, Selected for Target Enabling Resource Development';
+    const nominatedTargetText = 'Nominated Target';
+    const tepText = 'Selected for Target Enabling Resource Development';
 
     component.gene = geneMock1;
     component.gene.is_tep = true;
     component.gene.is_adi = false;
     fixture.detectChanges();
 
-    let el = element.querySelector('.gene-hero-nominated') as HTMLElement;
+    let lines = element.querySelectorAll('.gene-hero-nominated div');
 
-    expect(el.textContent?.trim()).toBe(expected);
+    expect(lines.length).toBe(2);
+    expect(lines[0].textContent?.trim()).toBe(nominatedTargetText);
+    expect(lines[1].textContent?.trim()).toBe(tepText);
 
     component.gene = geneMock1;
     component.gene.is_tep = false;
     component.gene.is_adi = true;
     fixture.detectChanges();
 
-    el = element.querySelector('.gene-hero-nominated') as HTMLElement;
+    lines = element.querySelectorAll('.gene-hero-nominated div');
 
-    expect(el.textContent?.trim()).toBe(expected);
+    expect(lines.length).toBe(2);
+    expect(lines[0].textContent?.trim()).toBe(nominatedTargetText);
+    expect(lines[1].textContent?.trim()).toBe(tepText);
   });
 
   it('should show nomination and not show TEP text for MSN if both is_tep and is_adi is false', () => {

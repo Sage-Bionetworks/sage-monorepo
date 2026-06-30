@@ -29,12 +29,8 @@ hr {
 
 .gene-hero-nominated {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   margin-bottom: 15px;
-
-  svg {
-    margin-right: 6px;
-  }
 }
 
 .gene-hero-biodomains {

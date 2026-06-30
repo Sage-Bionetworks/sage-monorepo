@@ -13,7 +13,12 @@
         </h2>
         @if (showNominationsOrTEP()) {
           <div class="gene-hero-nominated">
-            {{ getNominationText() }}
+            @if (gene.total_nominations) {
+              <div>Nominated Target</div>
+            }
+            @if (gene.is_adi || gene.is_tep) {
+              <div>Selected for Target Enabling Resource Development</div>
+            }
           </div>
         }
         <p class="gene-hero-summary">

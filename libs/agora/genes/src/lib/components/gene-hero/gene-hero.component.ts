@@ -19,19 +19,6 @@ export class GeneHeroComponent {
     return this.gene.total_nominations || this.gene.is_adi || this.gene.is_tep;
   }
 
-  getNominationText() {
-    if (!this.gene) return '';
-    let result = '';
-    if (this.gene.total_nominations) {
-      result += 'Nominated Target';
-    }
-    if (this.gene.is_adi || this.gene.is_tep) {
-      result += this.gene.total_nominations ? ', ' : '';
-      return (result += 'Selected for Target Enabling Resource Development');
-    }
-    return result;
-  }
-
   getSummary(body = false): string {
     if (this.gene?.summary) {
       let finalString = '';
