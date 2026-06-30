@@ -55,7 +55,7 @@ describe('DrugDetailsSummaryComponent', () => {
   describe('linked targets', () => {
     it('should show "- Nominated Target" as plain text beside the link when target is nominated', async () => {
       await setup();
-      expect(screen.getByText('Linked Targets')).toBeInTheDocument();
+      expect(screen.getByText(`Targets linked to ${drugMock.common_name}`)).toBeInTheDocument();
       const link = screen.getByRole('link', { name: 'CYP19A1' });
       expect(link).toBeInTheDocument();
       expect(link).toHaveAttribute('href', '/genes/ENSG00000137869');
@@ -90,7 +90,7 @@ describe('DrugDetailsSummaryComponent', () => {
 
     it('should not display linked targets section when empty', async () => {
       await setup({ linked_targets: [] });
-      expect(screen.queryByText('Linked Targets')).not.toBeInTheDocument();
+      expect(screen.queryByText(/Targets linked to/)).not.toBeInTheDocument();
     });
   });
 });

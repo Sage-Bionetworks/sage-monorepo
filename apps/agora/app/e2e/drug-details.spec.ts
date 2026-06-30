@@ -63,7 +63,7 @@ test.describe('drug details - summary', () => {
 
   test('displays linked targets with links', async ({ page }) => {
     await page.goto(summaryUrl);
-    await expect(page.getByText('Linked Targets')).toBeVisible();
+    await expect(page.getByText(`Targets linked to ${drugName}`)).toBeVisible();
     const jak1Link = page.getByRole('link', { name: 'JAK1' });
     await expect(jak1Link).toBeVisible();
     await expect(jak1Link).toHaveAttribute('href', '/genes/ENSG00000162434');
