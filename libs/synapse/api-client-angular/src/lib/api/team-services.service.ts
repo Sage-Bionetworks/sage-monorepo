@@ -2314,7 +2314,7 @@ export class TeamServicesService {
    * @param id the ID of the Team to which the user is to be added.
    * @param principalId the ID of the user to be added to the Team.
    * @param teamEndpoint the portal prefix for the Team URL. The team ID is appended to create the complete URL.
-   * @param notificationUnsubscribeEndpoint the portal prefix for one-click email unsubscription.    A signed, serialized token is appended to create the complete URL:   ,&lt;,ahref&#x3D;\&quot;${org.sagebionetworks.repo.model.message.NotificationSettingsSignedToken}\&quot;,&gt;,NotificationSettingsSignedToken,&lt;/a&gt;
+   * @param notificationUnsubscribeEndpoint the portal prefix for one-click email unsubscription.    A signed, serialized token is appended to create the complete URL:   ,&lt;,ahref&#x3D;\&quot;${org.sagebionetworks.repo.model.message.NotificationSettingsSignedToken}\&quot;&gt;NotificationSettingsSignedToken,&lt;/a&gt;
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */

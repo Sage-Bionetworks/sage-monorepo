@@ -10,6 +10,8 @@
 import { OrgSagebionetworksRepoModelDataaccessRequest } from './org-sagebionetworks-repo-model-dataaccess-request';
 import { OrgSagebionetworksRepoModelDataaccessRenewal } from './org-sagebionetworks-repo-model-dataaccess-renewal';
 import { OrgSagebionetworksRepoModelDataaccessAccessorChange } from './org-sagebionetworks-repo-model-dataaccess-accessor-change';
+import { OrgSagebionetworksRepoModelDataaccessSigningOfficial } from './org-sagebionetworks-repo-model-dataaccess-signing-official';
+import { OrgSagebionetworksRepoModelDataaccessPrincipalInvestigator } from './org-sagebionetworks-repo-model-dataaccess-principal-investigator';
 
 /**
  * This is the base interface that all Request implements.

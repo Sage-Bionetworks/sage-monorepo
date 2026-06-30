@@ -89,7 +89,8 @@ export namespace OrgSagebionetworksRepoModelAuditAclRecord {
     | 'REPLICATED_EVENT'
     | 'PORTAL'
     | 'OAUTH_CLIENT'
-    | 'GRID_SESSION';
+    | 'GRID_SESSION'
+    | 'RECORDSET';
   export const OwnerTypeEnum = {
     Entity: 'ENTITY' as OwnerTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as OwnerTypeEnum,
@@ -139,5 +140,6 @@ export namespace OrgSagebionetworksRepoModelAuditAclRecord {
     Portal: 'PORTAL' as OwnerTypeEnum,
     OauthClient: 'OAUTH_CLIENT' as OwnerTypeEnum,
     GridSession: 'GRID_SESSION' as OwnerTypeEnum,
+    Recordset: 'RECORDSET' as OwnerTypeEnum,
   };
 }
