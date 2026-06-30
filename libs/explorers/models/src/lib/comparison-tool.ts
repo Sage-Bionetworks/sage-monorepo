@@ -72,6 +72,11 @@ export interface ComparisonToolViewConfig {
   rowSelectionEnabled?: boolean;
   rowHoverEnabled?: boolean;
   showTableSearch?: boolean;
+  /**
+   * Per-CT visualization overview content. When set, it takes precedence over the app-level
+   * `EXPLORERS_CONFIG.visualizationOverviewPanes`; when unset, the app-level panes are used.
+   */
+  visualizationOverviewPanes?: VisualizationOverviewPane[];
 }
 
 export interface ComparisonToolFilterOption {

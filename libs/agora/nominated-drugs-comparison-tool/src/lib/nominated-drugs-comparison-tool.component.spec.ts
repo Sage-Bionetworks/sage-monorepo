@@ -2,7 +2,10 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { ComparisonToolConfigService } from '@sagebionetworks/agora/api-client';
-import { AGORA_LOADING_ICON_COLORS } from '@sagebionetworks/agora/config';
+import {
+  AGORA_LOADING_ICON_COLORS,
+  NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
+} from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   PlatformService,
@@ -44,12 +47,22 @@ async function setup() {
   });
 
   const component = fixture.componentInstance;
-  return { component };
+  const comparisonToolService = fixture.debugElement.injector.get(
+    NominatedDrugsComparisonToolService,
+  );
+  return { component, comparisonToolService };
 }
 
 describe('NominatedDrugsComparisonToolComponent', () => {
   it('should create', async () => {
     const { component } = await setup();
     expect(component).toBeTruthy();
+  });
+
+  it('should configure the shared nominated CTs visualization overview content', async () => {
+    const { comparisonToolService } = await setup();
+    expect(comparisonToolService.viewConfig().visualizationOverviewPanes).toBe(
+      NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
+    );
   });
 });

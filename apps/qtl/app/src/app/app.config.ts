@@ -14,7 +14,11 @@ import { initSentry } from '@sagebionetworks/explorers/sentry';
 import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/qtl/api-client';
-import { configFactory, ConfigService } from '@sagebionetworks/qtl/config';
+import {
+  configFactory,
+  ConfigService,
+  VISUALIZATION_OVERVIEW_PANES,
+} from '@sagebionetworks/qtl/config';
 import { QtlPreset } from '@sagebionetworks/qtl/themes';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
@@ -23,7 +27,6 @@ import { provideMarkdown } from 'ngx-markdown';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
-import { VISUALIZATION_OVERVIEW_PANES } from './content/visualization-overview.content';
 
 export const appConfig: ApplicationConfig = {
   providers: [

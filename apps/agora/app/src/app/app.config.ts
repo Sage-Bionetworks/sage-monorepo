@@ -16,7 +16,11 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client';
-import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
+import {
+  configFactory,
+  ConfigService,
+  GCT_VISUALIZATION_OVERVIEW_PANES,
+} from '@sagebionetworks/agora/config';
 import { initSentry } from '@sagebionetworks/explorers/sentry';
 import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
@@ -29,7 +33,6 @@ import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import { CustomUrlSerializer } from './app.custom-uri-serializer';
 import { routes } from './app.routes';
-import { VISUALIZATION_OVERVIEW_PANES } from './content/visualization-overview.content';
 import { AgoraPreset } from './primeNGPreset';
 
 export const appConfig: ApplicationConfig = {
@@ -52,7 +55,7 @@ export const appConfig: ApplicationConfig = {
       });
     }),
     provideExplorersConfig({
-      visualizationOverviewPanes: VISUALIZATION_OVERVIEW_PANES,
+      visualizationOverviewPanes: GCT_VISUALIZATION_OVERVIEW_PANES,
     }),
     {
       provide: API_CLIENT_BASE_PATH,

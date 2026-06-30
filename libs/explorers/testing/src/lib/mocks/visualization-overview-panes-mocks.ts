@@ -16,7 +16,7 @@ export const mockVisualizationOverviewPanes: VisualizationOverviewPane[] = [
   },
   {
     heading: 'Build, share and export custom comparisons',
-    content: `<p>Pin up to 50 rows of results so that you can easily compare them. Once you've built your custom result set, you can share it with your colleagues by Share URL, download an image of the pinned results, and export the underlying data for further analysis.</p>
+    content: `<p>Pin up to 50 rows of results so that you can easily compare them. Once you've built your custom result set, you can share it with your colleagues by Share URL and export the underlying data for further analysis.</p>
       <div class="video-container"><video autoplay muted loop playsinline preload="none" controls><source src="model-ad-assets/videos/visualization-overview-3.mp4" type="video/mp4"></video></div>`,
   },
   {
