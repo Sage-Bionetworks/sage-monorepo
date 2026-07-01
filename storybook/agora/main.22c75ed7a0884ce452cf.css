@@ -1625,10 +1625,6 @@ h6 explorers-modal-link {
   float: right;
 }
 
-h2 explorers-modal-link {
-  transform: translateY(-3px);
-}
-
 p {
   margin-top: 0;
 }
