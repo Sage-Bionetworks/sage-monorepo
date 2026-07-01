@@ -5,8 +5,14 @@ import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH, ROUTE_PATHS } from '@sagebionetwork
 
 export interface DrugBadge {
   label: string;
-  link?: string;
-  linkText?: string;
+  partners?: { link: string; linkText: string; separator: string }[];
+}
+
+// Human-readable list separator: "A", "A & B", "A, B & C".
+function partnerSeparator(index: number, count: number): string {
+  if (index === count - 1) return '';
+  if (index === count - 2) return ' & ';
+  return ', ';
 }
 
 @Component({
@@ -23,14 +29,17 @@ export class DrugDetailsHeroComponent {
   badges = computed<DrugBadge[]>(() => {
     const badges = new Map<string, DrugBadge>();
     for (const evidence of this.drug().drug_nominations) {
-      if (evidence.combined_with.length === 0) {
+      const combinedWith = evidence.combined_with ?? [];
+      if (combinedWith.length === 0) {
         badges.set('nominated', { label: 'Nominated Drug' });
       } else {
-        for (const partner of evidence.combined_with) {
-          const link = `/${ROUTE_PATHS.DRUG_DETAILS}/${partner.chembl_id}`;
-          const linkText = partner.common_name || partner.chembl_id;
-          badges.set(link, { label: 'Nominated Combination Therapy with', link, linkText });
-        }
+        const partners = combinedWith.map((partner, index) => ({
+          link: `/${ROUTE_PATHS.DRUG_DETAILS}/${partner.chembl_id}`,
+          linkText: partner.common_name || partner.chembl_id,
+          separator: partnerSeparator(index, combinedWith.length),
+        }));
+        const key = partners.map((partner) => partner.link).join('|');
+        badges.set(key, { label: 'Nominated Combination Therapy with', partners });
       }
     }
     return Array.from(badges.values());

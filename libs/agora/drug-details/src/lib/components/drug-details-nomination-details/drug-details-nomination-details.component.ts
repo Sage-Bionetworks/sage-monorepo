@@ -12,7 +12,7 @@ export class DrugDetailsNominationDetailsComponent {
   drug = input.required<Drug>();
 
   getNominationLabel(nomination: NominatedDrugEvidence): string {
-    const partners = nomination.combined_with.map(
+    const partners = (nomination.combined_with ?? []).map(
       (partner) => partner.common_name || partner.chembl_id,
     );
     return [this.drug().common_name, ...partners].join(' + ');

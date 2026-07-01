@@ -22,3 +22,29 @@ export const DrugDetailsHero: Story = {
     drug: drugMock,
   },
 };
+
+export const MultiDrugCombinations: Story = {
+  args: {
+    drug: {
+      ...drugMock,
+      drug_nominations: [
+        drugMock.drug_nominations[0],
+        {
+          ...drugMock.drug_nominations[1],
+          combined_with: [
+            { common_name: 'Letrozole', chembl_id: 'CHEMBL1' },
+            { common_name: 'Pharmatanium', chembl_id: 'CHEMBL2' },
+          ],
+        },
+        {
+          ...drugMock.drug_nominations[1],
+          combined_with: [
+            { common_name: 'Letrozole', chembl_id: 'CHEMBL1' },
+            { common_name: 'Pharmatanium', chembl_id: 'CHEMBL2' },
+            { common_name: 'Unpharmatanium', chembl_id: 'CHEMBL3' },
+          ],
+        },
+      ],
+    },
+  },
+};

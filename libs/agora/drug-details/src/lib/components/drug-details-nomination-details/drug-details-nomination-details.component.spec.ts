@@ -41,6 +41,16 @@ describe('DrugDetailsNominationDetailsComponent', () => {
     expect(screen.getByText(`Why was ${drugMock.common_name} nominated?`)).toBeInTheDocument();
   });
 
+  it('should display nomination label without combined drug when combined_with is missing', async () => {
+    await setup({
+      drug_nominations: [
+        // combined_with omitted at runtime despite the generated model typing it as required
+        { ...drugMock.drug_nominations[0], combined_with: undefined as never },
+      ],
+    });
+    expect(screen.getByText(`Why was ${drugMock.common_name} nominated?`)).toBeInTheDocument();
+  });
+
   it('should display nomination label with combined drug when combined_with has one entry', async () => {
     await setup();
     expect(screen.getByText(/Why was Letrozole \+.*Irinotecan nominated\?/)).toBeInTheDocument();
