@@ -9,7 +9,7 @@ info:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
+    url: https://agora.adknowledgeportal.org/opengraph/opengraph.png?v=1.0.0
     altText: Agora logo
 servers:
   - url: http://localhost/v1

@@ -9,7 +9,7 @@ info:
   title: Model-AD API Next
   version: 1.0.0
   x-logo:
-    url: https://dev.modeladexplorer.org/opengraph/opengraph.png
+    url: https://modeladexplorer.org/opengraph/opengraph.png?v=1.0.0
     altText: Model-AD Explorer
 servers:
   - url: http://localhost/v1
