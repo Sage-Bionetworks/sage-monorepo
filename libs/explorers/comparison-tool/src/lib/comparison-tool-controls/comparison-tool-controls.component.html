@@ -7,17 +7,19 @@
   </div>
   <div class="controls-right">
     <explorers-comparison-tool-category-selectors />
-    @if (viewConfig().showSignificanceControls) {
-      <div class="significance-and-column-selector">
-        <div>
-          <explorers-significance-controls />
+    <div class="controls-right-inner">
+      @if (viewConfig().showSignificanceControls) {
+        <div class="significance-and-column-selector">
+          <div>
+            <explorers-significance-controls />
+          </div>
+          <div>
+            <explorers-comparison-tool-column-selector />
+          </div>
         </div>
-        <div>
-          <explorers-comparison-tool-column-selector />
-        </div>
-      </div>
-    } @else {
-      <explorers-comparison-tool-column-selector />
-    }
+      } @else {
+        <explorers-comparison-tool-column-selector />
+      }
+    </div>
   </div>
 </div>

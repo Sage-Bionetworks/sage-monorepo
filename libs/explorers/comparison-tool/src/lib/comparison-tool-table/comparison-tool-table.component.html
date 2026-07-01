@@ -5,10 +5,10 @@
     @if (pinnedResultsCount() > 0) {
       <div class="table-divider table-divider-1">
         <div class="table-divider-inner">
-          <div id="pinned-genes-header">
+          <div id="pinned-genes-header" class="table-divider-label">
             <span> Pinned Results ({{ pinnedResultsCount() }}/{{ maxPinnedItems() }}) </span>
           </div>
-          <div class="pinned-items-controls">
+          <div class="table-divider-controls pinned-items-controls">
             <explorers-download-dom-image
               [target]="tableHeaderAndPinned"
               [filename]="getPinnedDataFilename()"
@@ -33,9 +33,11 @@
   @if (searchTerm() || hasSelectedFilters()) {
     <div class="table-divider">
       <div class="table-divider-inner">
-        <div>{{`${searchTerm() ? 'Matching' : 'Filtered'} Results`}}</div>
+        <div class="table-divider-label">
+          {{ `${searchTerm() ? 'Matching' : 'Filtered'} Results` }}
+        </div>
         @if (unpinnedData().length) {
-          <div>
+          <div class="table-divider-controls">
             <button
               class="pin-all-button"
               [disabled]="hasMaxPinnedItems()"
@@ -56,7 +58,7 @@
   @if (!searchTerm() && !hasSelectedFilters() && pinnedResultsCount() > 0) {
     <div class="table-divider">
       <div class="table-divider-inner">
-        <div>All Results</div>
+        <div class="table-divider-label">All Results</div>
       </div>
     </div>
   }

@@ -1,6 +1,8 @@
 @use 'explorers/styles/src/variables' as vars;
 @use 'explorers/styles/src/mixins' as mixins;
 
+$divider-margin: 30px;
+
 .comparison-tool-table {
   min-width: max-content;
 
@@ -11,19 +13,24 @@
     .table-divider-inner {
       display: flex;
       padding: 17px 44px;
-      margin-left: 30px;
-      margin-right: 30px;
+      margin-left: $divider-margin;
+      margin-right: $divider-margin;
 
       > div {
         display: flex;
         align-items: center;
 
-        &:first-child {
+        &.table-divider-label {
           color: #1a1c29;
           text-transform: uppercase;
           font-size: 15px;
           font-weight: 700;
           flex-grow: 1;
+        }
+
+        &.table-divider-controls {
+          position: sticky;
+          right: $divider-margin;
         }
       }
 
