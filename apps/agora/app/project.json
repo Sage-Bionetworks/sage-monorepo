@@ -52,6 +52,11 @@
             "input": "libs/agora/assets/favicon",
             "glob": "**/*",
             "output": "/"
+          },
+          {
+            "input": "apps/agora/app/src/public/images/opengraph",
+            "glob": "**/*",
+            "output": "opengraph"
           }
         ],
         "stylePreprocessorOptions": {
