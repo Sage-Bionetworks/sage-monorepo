@@ -131,4 +131,39 @@ Always refer to `package.json` for exact dependency versions when looking up API
 ## Code Quality
 
 - Write self-documenting code with meaningful names
-- Avoid unnecessary comments; use docstrings/Javadoc for public APIs only
+- Pull magic numbers, repeated strings, and limits into named constants; reference the same constant from both the implementation and its tests so they can't drift.
+- Hardcoding is acceptable when there's genuinely no variation yet -- don't over-parameterize prematurely. But hardcode deliberately: be wary of hardcoding data (counts, stats, page content) that a reader would expect to be query- or config-driven, and be ready to say where a value comes from.
+
+## Reuse over duplication
+
+- Before adding a helper, component, or service, check whether one already exists in the relevant scope libs (`libs/agora/`, `libs/explorers/`, `libs/shared/`, etc.) and reuse it.
+- If a new component would closely duplicate an existing one, extend the existing component to cover the missing case rather than forking a near-copy.
+- Extract repeated style declarations into a shared SCSS class instead of copy-pasting them across component stylesheets.
+
+## Comments
+
+- Default to no comment. Code should be self-explanatory through clear naming and structure; a comment is a last resort for genuinely non-obvious intent -- a subtle invariant, a workaround for external behavior, or a "why this and not the obvious thing" that the code can't express on its own. Never comment to restate what the code does.
+- Never write historical-context comments in a refactor -- e.g. `// previously this used X`, `// changed from the old approach`. Once a PR merges, the old behavior lives in git history. Comment what the code does now, not what it used to do.
+
+## Code Review Norms
+
+Recurring expectations from this repo's PR review history. Following them up front avoids review churn.
+
+### Color tokens
+
+Use CSS custom property tokens (e.g., `--color-action-primary`) instead of inline hex values or raw scale names for any color applied in stylesheets or templates.
+
+### New scope completeness
+
+When a new product scope (e.g., a new app) is introduced, update all supporting cross-repo config and documentation files in the same PR: CLAUDE.md scope table, mkdocs.yml nav, CODEOWNERS, release.yml tag patterns, and any relevant CI workflow matrices.
+
+### Verify impact before deleting shared dependencies
+
+Before removing a shared dependency, devcontainer port, or workspace package, confirm it is not consumed by any product or app that the PR author may not be directly familiar with.
+
+### PR hygiene
+
+- When a reviewer points out an issue, apply the fix consistently across every file the change touches -- not just the first instance flagged.
+- Don't leave `console.*`, commented-out code, or other dead code in the diff.
+- Keep list entries in config and workflow files sorted alphabetically when order is otherwise arbitrary.
+- Whenever code is left incomplete or contains a known placeholder, add a TODO comment with the Jira ticket ID tracking the follow-up work.
