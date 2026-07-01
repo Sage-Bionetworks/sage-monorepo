@@ -1,6 +1,12 @@
 @use 'explorers/styles/src/mixins' as mixins;
 
+:host {
+  align-self: center;
+}
+
 .popover-link-container {
+  display: flex;
+
   button {
     @include mixins.reset-button;
   }
@@ -9,6 +15,7 @@
     display: flex;
 
     .popover-link-icon {
+      display: flex;
       color: var(--color-gray-600);
       transform: translateY(1px);
 

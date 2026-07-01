@@ -1,3 +1,13 @@
 explorers-download-dom-image {
   float: right;
 }
+
+h2.filter-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  explorers-modal-link {
+    margin-left: auto;
+  }
+}
