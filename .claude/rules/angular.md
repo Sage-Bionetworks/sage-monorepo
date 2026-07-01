@@ -87,3 +87,23 @@ Use these links to look up Angular concepts and APIs:
 - [Style Guide](https://next.angular.dev/style-guide)
 - [API reference](https://angular.dev/api)
 - [Error encyclopedia](https://angular.dev/errors)
+
+## Code Review Norms
+
+Recurring expectations from this repo's PR review history. Following them up front avoids review churn.
+
+### Signals and inputs
+
+- Migrate component inputs from `@Input()` to the `input()` signal function for consistency
+- Use `effect()` for reactive side effects triggered by signal changes instead of calling imperative methods inside `@Input` setters
+
+### Templates
+
+- Omit explicit input bindings that repeat the component's declared default value
+- Track `@for` loops by a stable unique identifier field; use `$index` only when items have no reliable unique key (tracking by a non-unique field causes Angular to reuse wrong DOM nodes)
+
+### Styles
+
+- Replace inline hex color values with the matching `var(--color-*)` CSS custom property whenever one exists
+- Keep `:root { --color-* }` emission blocks in `_root.scss` only; `_variables.scss` must be pure Sass variable declarations with no CSS output (Sass `@use` re-emits any `:root {}` block into every lazy-loaded stylesheet, which can silently override global CSS custom-property values)
+- Place page-specific responsive overrides in the consuming component's stylesheet, not in the shared UI library component
