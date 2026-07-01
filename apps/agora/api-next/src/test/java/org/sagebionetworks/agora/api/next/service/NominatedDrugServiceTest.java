@@ -335,6 +335,7 @@ class NominatedDrugServiceTest {
       .totalNominations(List.of(3))
       .initialNomination(List.of(2022))
       .modality(List.of("Small molecule"))
+      .maximumClinicalTrialPhase(List.of("Phase I"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)

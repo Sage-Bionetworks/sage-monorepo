@@ -34,6 +34,8 @@ export const COMPARISON_TOOL_API_PATHS: Record<string, string> = {
 
 export const COMPARISON_TOOL_CONFIG_PATH = 'comparison-tools/config';
 
+export const COMPARISON_TOOL_DEFAULT_PAGE_SIZE = 10;
+
 // Default sort configurations for each comparison tool (required by API)
 export const COMPARISON_TOOL_DEFAULT_SORTS: Record<string, { field: string; order: 1 | -1 }[]> = {
   'Nominated Targets': [

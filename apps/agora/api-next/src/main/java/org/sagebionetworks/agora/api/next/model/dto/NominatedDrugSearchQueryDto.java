@@ -56,6 +56,9 @@ public class NominatedDrugSearchQueryDto {
   private @Nullable List<String> modality;
 
   @Valid
+  private @Nullable List<String> maximumClinicalTrialPhase;
+
+  @Valid
   private List<String> sortFields = new ArrayList<>();
 
   /**
@@ -359,6 +362,34 @@ public class NominatedDrugSearchQueryDto {
     this.modality = modality;
   }
 
+  public NominatedDrugSearchQueryDto maximumClinicalTrialPhase(@Nullable List<String> maximumClinicalTrialPhase) {
+    this.maximumClinicalTrialPhase = maximumClinicalTrialPhase;
+    return this;
+  }
+
+  public NominatedDrugSearchQueryDto addMaximumClinicalTrialPhaseItem(String maximumClinicalTrialPhaseItem) {
+    if (this.maximumClinicalTrialPhase == null) {
+      this.maximumClinicalTrialPhase = new ArrayList<>();
+    }
+    this.maximumClinicalTrialPhase.add(maximumClinicalTrialPhaseItem);
+    return this;
+  }
+
+  /**
+   * Filter by maximum clinical trial phase.
+   * @return maximumClinicalTrialPhase
+   */
+  
+  @Schema(name = "maximumClinicalTrialPhase", example = "[\"Phase I\",\"Phase II\"]", description = "Filter by maximum clinical trial phase.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("maximumClinicalTrialPhase")
+  public @Nullable List<String> getMaximumClinicalTrialPhase() {
+    return maximumClinicalTrialPhase;
+  }
+
+  public void setMaximumClinicalTrialPhase(@Nullable List<String> maximumClinicalTrialPhase) {
+    this.maximumClinicalTrialPhase = maximumClinicalTrialPhase;
+  }
+
   public NominatedDrugSearchQueryDto sortFields(List<String> sortFields) {
     this.sortFields = sortFields;
     return this;
@@ -434,13 +465,14 @@ public class NominatedDrugSearchQueryDto {
         Objects.equals(this.totalNominations, nominatedDrugSearchQuery.totalNominations) &&
         Objects.equals(this.initialNomination, nominatedDrugSearchQuery.initialNomination) &&
         Objects.equals(this.modality, nominatedDrugSearchQuery.modality) &&
+        Objects.equals(this.maximumClinicalTrialPhase, nominatedDrugSearchQuery.maximumClinicalTrialPhase) &&
         Objects.equals(this.sortFields, nominatedDrugSearchQuery.sortFields) &&
         Objects.equals(this.sortOrders, nominatedDrugSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, principalInvestigators, programs, totalNominations, initialNomination, modality, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, principalInvestigators, programs, totalNominations, initialNomination, modality, maximumClinicalTrialPhase, sortFields, sortOrders);
   }
 
   @Override
@@ -457,6 +489,7 @@ public class NominatedDrugSearchQueryDto {
     sb.append("    totalNominations: ").append(toIndentedString(totalNominations)).append("\n");
     sb.append("    initialNomination: ").append(toIndentedString(initialNomination)).append("\n");
     sb.append("    modality: ").append(toIndentedString(modality)).append("\n");
+    sb.append("    maximumClinicalTrialPhase: ").append(toIndentedString(maximumClinicalTrialPhase)).append("\n");
     sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
     sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
@@ -497,6 +530,7 @@ public class NominatedDrugSearchQueryDto {
       this.instance.setTotalNominations(value.totalNominations);
       this.instance.setInitialNomination(value.initialNomination);
       this.instance.setModality(value.modality);
+      this.instance.setMaximumClinicalTrialPhase(value.maximumClinicalTrialPhase);
       this.instance.setSortFields(value.sortFields);
       this.instance.setSortOrders(value.sortOrders);
       return this;
@@ -549,6 +583,11 @@ public class NominatedDrugSearchQueryDto {
     
     public NominatedDrugSearchQueryDto.Builder modality(List<String> modality) {
       this.instance.modality(modality);
+      return this;
+    }
+    
+    public NominatedDrugSearchQueryDto.Builder maximumClinicalTrialPhase(List<String> maximumClinicalTrialPhase) {
+      this.instance.maximumClinicalTrialPhase(maximumClinicalTrialPhase);
       return this;
     }
     

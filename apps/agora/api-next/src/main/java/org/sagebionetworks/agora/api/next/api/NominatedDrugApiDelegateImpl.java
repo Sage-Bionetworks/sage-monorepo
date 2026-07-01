@@ -27,6 +27,7 @@ public class NominatedDrugApiDelegateImpl implements NominatedDrugApiDelegate {
     "totalNominations",
     "initialNomination",
     "modality",
+    "maximumClinicalTrialPhase",
     "sortFields",
     "sortOrders"
   );
