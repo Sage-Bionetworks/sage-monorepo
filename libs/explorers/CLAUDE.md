@@ -66,6 +66,16 @@ comparison-tool / charts-angular / ui / util / shared   (feature/UI)
 
 All imports use `@sagebionetworks/explorers/<lib-name>` path aliases. Never use relative paths across library boundaries.
 
+## Backend and Database
+
+The explorers products use MongoDB locally but Amazon DocumentDB in the deployed stack. Any MongoDB query or aggregation change must be verified for DocumentDB compatibility -- not all MongoDB features are supported. To check the current DocumentDB engine version for a product, ask the user first -- they'll usually know. If not, consult the relevant infra repo:
+
+- agora: https://github.com/Sage-Bionetworks-IT/agora-infra-v3/
+- model-ad: https://github.com/Sage-Bionetworks-IT/modeladexplorer-infra
+- qtl: TBD (infra repo pending)
+
+No external products outside this repo depend on the explorers APIs, so breaking API changes are acceptable as long as all explorer products within this repo continue to work.
+
 ## Storybook
 
 For components that don't call our own backend APIs (third-party service calls like Synapse wiki fetches are fine): add a `.stories.ts` file for new components; for changes to existing components, adjust the existing story if the new behavior fits naturally, or add a new story variant for sufficiently distinct behavior. When it's unclear whether a new story is warranted, ask the user. See `libs/explorers/util/src/lib/tooltip-button/tooltip-button.component.stories.ts` for the canonical pattern.
