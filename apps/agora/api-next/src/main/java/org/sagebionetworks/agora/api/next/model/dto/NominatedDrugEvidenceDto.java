@@ -5,6 +5,10 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.sagebionetworks.agora.api.next.model.dto.CombinedWithDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -28,9 +32,8 @@ public class NominatedDrugEvidenceDto {
 
   private String contactPi;
 
-  private String combinedWithCommonName = null;
-
-  private String combinedWithChemblId = null;
+  @Valid
+  private List<@Valid CombinedWithDto> combinedWith = new ArrayList<>();
 
   private String evidence;
 
@@ -63,11 +66,10 @@ public class NominatedDrugEvidenceDto {
   /**
    * Constructor with only required parameters
    */
-  public NominatedDrugEvidenceDto(String grantNumber, String contactPi, String combinedWithCommonName, String combinedWithChemblId, String evidence, String dataUsed, String adMoa, String reference, String computationalValidationStatus, String computationalValidationResults, String experimentalValidationStatus, String experimentalValidationResults, String additionalEvidence, String contributors, Integer initialNomination, String program) {
+  public NominatedDrugEvidenceDto(String grantNumber, String contactPi, List<@Valid CombinedWithDto> combinedWith, String evidence, String dataUsed, String adMoa, String reference, String computationalValidationStatus, String computationalValidationResults, String experimentalValidationStatus, String experimentalValidationResults, String additionalEvidence, String contributors, Integer initialNomination, String program) {
     this.grantNumber = grantNumber;
     this.contactPi = contactPi;
-    this.combinedWithCommonName = combinedWithCommonName;
-    this.combinedWithChemblId = combinedWithChemblId;
+    this.combinedWith = combinedWith;
     this.evidence = evidence;
     this.dataUsed = dataUsed;
     this.adMoa = adMoa;
@@ -122,44 +124,32 @@ public class NominatedDrugEvidenceDto {
     this.contactPi = contactPi;
   }
 
-  public NominatedDrugEvidenceDto combinedWithCommonName(String combinedWithCommonName) {
-    this.combinedWithCommonName = combinedWithCommonName;
+  public NominatedDrugEvidenceDto combinedWith(List<@Valid CombinedWithDto> combinedWith) {
+    this.combinedWith = combinedWith;
+    return this;
+  }
+
+  public NominatedDrugEvidenceDto addCombinedWithItem(CombinedWithDto combinedWithItem) {
+    if (this.combinedWith == null) {
+      this.combinedWith = new ArrayList<>();
+    }
+    this.combinedWith.add(combinedWithItem);
     return this;
   }
 
   /**
-   * The common name of the drug this is combined with, if applicable
-   * @return combinedWithCommonName
+   * The drugs this nomination is combined with as part of a combination therapy. Empty for mono-therapy nominations.
+   * @return combinedWith
    */
-  @NotNull 
-  @Schema(name = "combined_with_common_name", description = "The common name of the drug this is combined with, if applicable", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("combined_with_common_name")
-  public String getCombinedWithCommonName() {
-    return combinedWithCommonName;
+  @NotNull @Valid 
+  @Schema(name = "combined_with", description = "The drugs this nomination is combined with as part of a combination therapy. Empty for mono-therapy nominations.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("combined_with")
+  public List<@Valid CombinedWithDto> getCombinedWith() {
+    return combinedWith;
   }
 
-  public void setCombinedWithCommonName(String combinedWithCommonName) {
-    this.combinedWithCommonName = combinedWithCommonName;
-  }
-
-  public NominatedDrugEvidenceDto combinedWithChemblId(String combinedWithChemblId) {
-    this.combinedWithChemblId = combinedWithChemblId;
-    return this;
-  }
-
-  /**
-   * The ChEMBL ID of the drug this is combined with, if applicable
-   * @return combinedWithChemblId
-   */
-  @NotNull 
-  @Schema(name = "combined_with_chembl_id", description = "The ChEMBL ID of the drug this is combined with, if applicable", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("combined_with_chembl_id")
-  public String getCombinedWithChemblId() {
-    return combinedWithChemblId;
-  }
-
-  public void setCombinedWithChemblId(String combinedWithChemblId) {
-    this.combinedWithChemblId = combinedWithChemblId;
+  public void setCombinedWith(List<@Valid CombinedWithDto> combinedWith) {
+    this.combinedWith = combinedWith;
   }
 
   public NominatedDrugEvidenceDto evidence(String evidence) {
@@ -413,8 +403,7 @@ public class NominatedDrugEvidenceDto {
     NominatedDrugEvidenceDto nominatedDrugEvidence = (NominatedDrugEvidenceDto) o;
     return Objects.equals(this.grantNumber, nominatedDrugEvidence.grantNumber) &&
         Objects.equals(this.contactPi, nominatedDrugEvidence.contactPi) &&
-        Objects.equals(this.combinedWithCommonName, nominatedDrugEvidence.combinedWithCommonName) &&
-        Objects.equals(this.combinedWithChemblId, nominatedDrugEvidence.combinedWithChemblId) &&
+        Objects.equals(this.combinedWith, nominatedDrugEvidence.combinedWith) &&
         Objects.equals(this.evidence, nominatedDrugEvidence.evidence) &&
         Objects.equals(this.dataUsed, nominatedDrugEvidence.dataUsed) &&
         Objects.equals(this.adMoa, nominatedDrugEvidence.adMoa) &&
@@ -431,7 +420,7 @@ public class NominatedDrugEvidenceDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(grantNumber, contactPi, combinedWithCommonName, combinedWithChemblId, evidence, dataUsed, adMoa, reference, computationalValidationStatus, computationalValidationResults, experimentalValidationStatus, experimentalValidationResults, additionalEvidence, contributors, initialNomination, program);
+    return Objects.hash(grantNumber, contactPi, combinedWith, evidence, dataUsed, adMoa, reference, computationalValidationStatus, computationalValidationResults, experimentalValidationStatus, experimentalValidationResults, additionalEvidence, contributors, initialNomination, program);
   }
 
   @Override
@@ -440,8 +429,7 @@ public class NominatedDrugEvidenceDto {
     sb.append("class NominatedDrugEvidenceDto {\n");
     sb.append("    grantNumber: ").append(toIndentedString(grantNumber)).append("\n");
     sb.append("    contactPi: ").append(toIndentedString(contactPi)).append("\n");
-    sb.append("    combinedWithCommonName: ").append(toIndentedString(combinedWithCommonName)).append("\n");
-    sb.append("    combinedWithChemblId: ").append(toIndentedString(combinedWithChemblId)).append("\n");
+    sb.append("    combinedWith: ").append(toIndentedString(combinedWith)).append("\n");
     sb.append("    evidence: ").append(toIndentedString(evidence)).append("\n");
     sb.append("    dataUsed: ").append(toIndentedString(dataUsed)).append("\n");
     sb.append("    adMoa: ").append(toIndentedString(adMoa)).append("\n");
@@ -484,8 +472,7 @@ public class NominatedDrugEvidenceDto {
     protected Builder copyOf(NominatedDrugEvidenceDto value) { 
       this.instance.setGrantNumber(value.grantNumber);
       this.instance.setContactPi(value.contactPi);
-      this.instance.setCombinedWithCommonName(value.combinedWithCommonName);
-      this.instance.setCombinedWithChemblId(value.combinedWithChemblId);
+      this.instance.setCombinedWith(value.combinedWith);
       this.instance.setEvidence(value.evidence);
       this.instance.setDataUsed(value.dataUsed);
       this.instance.setAdMoa(value.adMoa);
@@ -511,13 +498,8 @@ public class NominatedDrugEvidenceDto {
       return this;
     }
     
-    public NominatedDrugEvidenceDto.Builder combinedWithCommonName(String combinedWithCommonName) {
-      this.instance.combinedWithCommonName(combinedWithCommonName);
-      return this;
-    }
-    
-    public NominatedDrugEvidenceDto.Builder combinedWithChemblId(String combinedWithChemblId) {
-      this.instance.combinedWithChemblId(combinedWithChemblId);
+    public NominatedDrugEvidenceDto.Builder combinedWith(List<CombinedWithDto> combinedWith) {
+      this.instance.combinedWith(combinedWith);
       return this;
     }
     

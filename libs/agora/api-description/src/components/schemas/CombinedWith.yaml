@@ -1,0 +1,15 @@
+type: object
+description: A drug that a nomination is combined with as part of a combination therapy
+properties:
+  common_name:
+    type: string
+    description: The common name of the drug this is combined with
+    example: Irinotecan
+    nullable: true
+  chembl_id:
+    type: string
+    description: The ChEMBL ID of the drug this is combined with
+    example: CHEMBL481
+required:
+  - common_name
+  - chembl_id

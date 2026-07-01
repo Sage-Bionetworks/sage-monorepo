@@ -28,6 +28,8 @@ public class LinkedTargetDto {
 
   private String hgncSymbol;
 
+  private Boolean isNominatedTarget;
+
   public LinkedTargetDto() {
     super();
   }
@@ -35,9 +37,10 @@ public class LinkedTargetDto {
   /**
    * Constructor with only required parameters
    */
-  public LinkedTargetDto(String ensemblGeneId, String hgncSymbol) {
+  public LinkedTargetDto(String ensemblGeneId, String hgncSymbol, Boolean isNominatedTarget) {
     this.ensemblGeneId = ensemblGeneId;
     this.hgncSymbol = hgncSymbol;
+    this.isNominatedTarget = isNominatedTarget;
   }
 
   public LinkedTargetDto ensemblGeneId(String ensemblGeneId) {
@@ -80,6 +83,26 @@ public class LinkedTargetDto {
     this.hgncSymbol = hgncSymbol;
   }
 
+  public LinkedTargetDto isNominatedTarget(Boolean isNominatedTarget) {
+    this.isNominatedTarget = isNominatedTarget;
+    return this;
+  }
+
+  /**
+   * Whether this linked target is also a nominated target
+   * @return isNominatedTarget
+   */
+  @NotNull 
+  @Schema(name = "is_nominated_target", example = "false", description = "Whether this linked target is also a nominated target", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("is_nominated_target")
+  public Boolean getIsNominatedTarget() {
+    return isNominatedTarget;
+  }
+
+  public void setIsNominatedTarget(Boolean isNominatedTarget) {
+    this.isNominatedTarget = isNominatedTarget;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -90,12 +113,13 @@ public class LinkedTargetDto {
     }
     LinkedTargetDto linkedTarget = (LinkedTargetDto) o;
     return Objects.equals(this.ensemblGeneId, linkedTarget.ensemblGeneId) &&
-        Objects.equals(this.hgncSymbol, linkedTarget.hgncSymbol);
+        Objects.equals(this.hgncSymbol, linkedTarget.hgncSymbol) &&
+        Objects.equals(this.isNominatedTarget, linkedTarget.isNominatedTarget);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ensemblGeneId, hgncSymbol);
+    return Objects.hash(ensemblGeneId, hgncSymbol, isNominatedTarget);
   }
 
   @Override
@@ -104,6 +128,7 @@ public class LinkedTargetDto {
     sb.append("class LinkedTargetDto {\n");
     sb.append("    ensemblGeneId: ").append(toIndentedString(ensemblGeneId)).append("\n");
     sb.append("    hgncSymbol: ").append(toIndentedString(hgncSymbol)).append("\n");
+    sb.append("    isNominatedTarget: ").append(toIndentedString(isNominatedTarget)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -134,6 +159,7 @@ public class LinkedTargetDto {
     protected Builder copyOf(LinkedTargetDto value) { 
       this.instance.setEnsemblGeneId(value.ensemblGeneId);
       this.instance.setHgncSymbol(value.hgncSymbol);
+      this.instance.setIsNominatedTarget(value.isNominatedTarget);
       return this;
     }
 
@@ -144,6 +170,11 @@ public class LinkedTargetDto {
     
     public LinkedTargetDto.Builder hgncSymbol(String hgncSymbol) {
       this.instance.hgncSymbol(hgncSymbol);
+      return this;
+    }
+    
+    public LinkedTargetDto.Builder isNominatedTarget(Boolean isNominatedTarget) {
+      this.instance.isNominatedTarget(isNominatedTarget);
       return this;
     }
     

@@ -36,14 +36,31 @@ describe('DrugDetailsNominationDetailsComponent', () => {
     expect(screen.getAllByText('Contact PI: Marina Sirota').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('should display nomination label without combined drug when combined_with_common_name is null', async () => {
+  it('should display nomination label without combined drug when combined_with is empty', async () => {
     await setup();
     expect(screen.getByText(`Why was ${drugMock.common_name} nominated?`)).toBeInTheDocument();
   });
 
-  it('should display nomination label with combined drug when combined_with_common_name is set', async () => {
+  it('should display nomination label with combined drug when combined_with has one entry', async () => {
     await setup();
     expect(screen.getByText(/Why was Letrozole \+.*Irinotecan nominated\?/)).toBeInTheDocument();
+  });
+
+  it('should display all constituents in the nomination label for multi-drug combinations', async () => {
+    await setup({
+      drug_nominations: [
+        {
+          ...drugMock.drug_nominations[1],
+          combined_with: [
+            { common_name: 'Irinotecan', chembl_id: 'CHEMBL481' },
+            { common_name: 'Donepezil', chembl_id: 'CHEMBL502' },
+          ],
+        },
+      ],
+    });
+    expect(
+      screen.getByText(`Why was ${drugMock.common_name} + Irinotecan + Donepezil nominated?`),
+    ).toBeInTheDocument();
   });
 
   it('should display evidence text with the first letter capitalized', async () => {

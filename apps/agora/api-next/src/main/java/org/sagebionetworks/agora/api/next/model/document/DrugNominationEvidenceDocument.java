@@ -1,5 +1,6 @@
 package org.sagebionetworks.agora.api.next.model.document;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,11 +17,8 @@ public class DrugNominationEvidenceDocument {
   @Field("contact_pi")
   private String contactPi;
 
-  @Field("combined_with_common_name")
-  private String combinedWithCommonName;
-
-  @Field("combined_with_chembl_id")
-  private String combinedWithChemblId;
+  @Field("combined_with")
+  private List<CombinedWithDocument> combinedWith;
 
   private String evidence;
 

@@ -2,9 +2,11 @@ package org.sagebionetworks.agora.api.next.model.mapper;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.sagebionetworks.agora.api.next.model.document.CombinedWithDocument;
 import org.sagebionetworks.agora.api.next.model.document.DrugDocument;
 import org.sagebionetworks.agora.api.next.model.document.DrugNominationEvidenceDocument;
 import org.sagebionetworks.agora.api.next.model.document.LinkedTargetDocument;
+import org.sagebionetworks.agora.api.next.model.dto.CombinedWithDto;
 import org.sagebionetworks.agora.api.next.model.dto.DrugDto;
 import org.sagebionetworks.agora.api.next.model.dto.LinkedTargetDto;
 import org.sagebionetworks.agora.api.next.model.dto.ModalityDto;
@@ -58,15 +60,26 @@ public class DrugMapper {
   }
 
   private LinkedTargetDto toLinkedTargetDto(LinkedTargetDocument document) {
-    return new LinkedTargetDto(document.getEnsemblGeneId(), document.getHgncSymbol());
+    return new LinkedTargetDto(
+      document.getEnsemblGeneId(),
+      document.getHgncSymbol(),
+      document.getIsNominatedTarget()
+    );
+  }
+
+  private CombinedWithDto toCombinedWithDto(CombinedWithDocument document) {
+    return new CombinedWithDto(document.getCommonName(), document.getChemblId());
   }
 
   private NominatedDrugEvidenceDto toEvidenceDto(DrugNominationEvidenceDocument document) {
+    List<CombinedWithDto> combinedWith = document.getCombinedWith() == null
+      ? List.of()
+      : document.getCombinedWith().stream().map(this::toCombinedWithDto).toList();
+
     return new NominatedDrugEvidenceDto(
       document.getGrantNumber(),
       document.getContactPi(),
-      document.getCombinedWithCommonName(),
-      document.getCombinedWithChemblId(),
+      combinedWith,
       document.getEvidence(),
       document.getDataUsed(),
       document.getAdMoa(),

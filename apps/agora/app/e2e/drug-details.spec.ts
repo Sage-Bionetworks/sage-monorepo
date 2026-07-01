@@ -41,7 +41,7 @@ test.describe('drug details - summary', () => {
   test('displays max clinical trial phase', async ({ page }) => {
     await page.goto(summaryUrl);
     await expect(page.getByText('Max Clinical Trial Phase')).toBeVisible();
-    await expect(page.getByText('Preclinical', { exact: true })).toBeVisible();
+    await expect(page.getByText('Phase IV', { exact: true })).toBeVisible();
   });
 
   test('displays year of first approval', async ({ page }) => {

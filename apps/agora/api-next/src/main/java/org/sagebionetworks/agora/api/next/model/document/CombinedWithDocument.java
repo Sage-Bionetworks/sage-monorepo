@@ -8,14 +8,11 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LinkedTargetDocument {
+public class CombinedWithDocument {
 
-  @Field("ensembl_gene_id")
-  private String ensemblGeneId;
+  @Field("common_name")
+  private String commonName;
 
-  @Field("hgnc_symbol")
-  private String hgncSymbol;
-
-  @Field("is_nominated_target")
-  private Boolean isNominatedTarget;
+  @Field("chembl_id")
+  private String chemblId;
 }

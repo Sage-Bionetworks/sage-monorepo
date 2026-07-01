@@ -19,6 +19,7 @@ model/basic-error.ts
 model/bio-domain-info.ts
 model/bio-domain.ts
 model/bio-domains.ts
+model/combined-with.ts
 model/comparison-tool-config-column.ts
 model/comparison-tool-config-filter.ts
 model/comparison-tool-config-page.ts

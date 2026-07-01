@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CombinedWith } from './combined-with';
 
 /**
  * Evidence for a drug nomination
@@ -21,13 +22,9 @@ export interface NominatedDrugEvidence {
    */
   contact_pi: string;
   /**
-   * The common name of the drug this is combined with, if applicable
+   * The drugs this nomination is combined with as part of a combination therapy. Empty for mono-therapy nominations.
    */
-  combined_with_common_name: string | null;
-  /**
-   * The ChEMBL ID of the drug this is combined with, if applicable
-   */
-  combined_with_chembl_id: string | null;
+  combined_with: Array<CombinedWith>;
   /**
    * The evidence supporting the drug nomination
    */

@@ -42,6 +42,24 @@ describe('DrugDetailsHeroComponent', () => {
       expect(screen.getByText(/Nominated Drug/)).toBeInTheDocument();
       expect(screen.getByText(/Nominated Combination Therapy with/)).toBeInTheDocument();
     });
+
+    it('should display a combination badge per constituent for multi-drug combinations', async () => {
+      await setup({
+        drug_nominations: [
+          {
+            ...drugMock.drug_nominations[1],
+            combined_with: [
+              { common_name: 'Irinotecan', chembl_id: 'CHEMBL481' },
+              { common_name: 'Donepezil', chembl_id: 'CHEMBL502' },
+            ],
+          },
+        ],
+      });
+      const irinotecanLink = screen.getByRole('link', { name: /Irinotecan/ });
+      expect(irinotecanLink).toHaveAttribute('href', '/drugs/CHEMBL481');
+      const donepezilLink = screen.getByRole('link', { name: /Donepezil/ });
+      expect(donepezilLink).toHaveAttribute('href', '/drugs/CHEMBL502');
+    });
   });
 
   describe('description', () => {

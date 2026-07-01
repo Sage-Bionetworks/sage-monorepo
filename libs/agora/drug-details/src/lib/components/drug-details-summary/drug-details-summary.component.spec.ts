@@ -63,7 +63,9 @@ describe('DrugDetailsSummaryComponent', () => {
 
     it('should fall back to ensembl_gene_id when hgnc_symbol is missing', async () => {
       await setup({
-        linked_targets: [{ ensembl_gene_id: 'ENSG00000000001', hgnc_symbol: '' }],
+        linked_targets: [
+          { ensembl_gene_id: 'ENSG00000000001', hgnc_symbol: '', is_nominated_target: false },
+        ],
       });
       const link = screen.getByRole('link', { name: 'ENSG00000000001' });
       expect(link).toBeInTheDocument();
