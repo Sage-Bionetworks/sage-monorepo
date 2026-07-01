@@ -219,7 +219,7 @@ class CustomTranscriptomicsRepositoryImplTest {
     assertThat(pipeline)
       .as("computed sort must alias gene_symbol to gene_symbol_sort via display_gene_symbol")
       .contains("gene_symbol_sort")
-      .contains("$toLower");
+      .contains("$display_gene_symbol");
     assertThat(pipeline).contains("\"gene_symbol_sort\" : 1");
   }
 

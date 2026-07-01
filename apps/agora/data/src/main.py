@@ -6,6 +6,7 @@ import logging
 import logging.config as logging_config
 from os import getenv, getcwd, makedirs, path
 from pymongo import MongoClient, database
+from pymongo.collation import Collation
 import synapseclient
 
 # Get config from the environment variables
@@ -154,6 +155,21 @@ def create_collections_indexes(
     logger.debug("All indexes created successfully")
 
 
+def register_collation(db: database.Database) -> None:
+    """Register case-insensitive collation for use in queries.
+
+    DocumentDB 8.0 requires a collation to be used in at least one collection
+    or index before it can be referenced in queries. This creates a dedicated
+    config collection with the collation to make it available cluster-wide.
+    Standard MongoDB does not require this step but is unaffected by it.
+    """
+    if "_collation_config" in db.list_collection_names():
+        logger.debug("Collation already registered")
+        return
+    db.create_collection("_collation_config", collation=Collation("en", strength=2))
+    logger.debug("Registered case-insensitive collation")
+
+
 def main() -> None:
     """Main function to execute preceding functions"""
     local_data_dir = path.join(getcwd(), "local", "data")
@@ -177,6 +193,7 @@ def main() -> None:
         create_data_version_collection(db)
         import_collections_data(db, collections_filepath, local_data_dir)
         create_collections_indexes(db, collections_indexes_filepath)
+        register_collation(db)
         client.close()
     except Exception as e:
         logger.error("Error during MongoDB update: %s", e)

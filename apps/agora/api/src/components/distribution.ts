@@ -6,7 +6,7 @@ import { Request, Response, NextFunction } from 'express';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { setHeaders, cache } from '../helpers';
+import { setHeaders, cache, CASE_INSENSITIVE_COLLATION } from '../helpers';
 import {
   RnaDistributionCollection,
   ProteomicDistributionCollection,
@@ -59,7 +59,11 @@ export async function getOverallScoresDistribution() {
     return result;
   }
 
-  result = await OverallScoresDistributionCollection.find({}).sort('name').lean().exec();
+  result = await OverallScoresDistributionCollection.find({})
+    .sort('name')
+    .collation(CASE_INSENSITIVE_COLLATION)
+    .lean()
+    .exec();
 
   // Handle old format
   if (result.length === 1) {
