@@ -332,6 +332,7 @@ class CustomNominatedDrugRepositoryImplTest {
       .totalNominations(List.of(3))
       .initialNomination(List.of(2022))
       .modality(List.of("Small molecule"))
+      .maximumClinicalTrialPhase(List.of("Phase I"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
@@ -353,5 +354,6 @@ class CustomNominatedDrugRepositoryImplTest {
     assertThat(pipelineString).contains("total_nominations");
     assertThat(pipelineString).contains("initial_nomination");
     assertThat(pipelineString).contains("modality");
+    assertThat(pipelineString).contains("maximum_clinical_trial_phase");
   }
 }
