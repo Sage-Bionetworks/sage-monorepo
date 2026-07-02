@@ -3,14 +3,12 @@
     <h1>{{ drug().common_name }}</h1>
     <p>
       @for (badge of badges(); track $index; let last = $last) {
+        {{ badge.label }}
         @if (badge.partners) {
-          {{ badge.label }}
           @for (partner of badge.partners; track partner.link) {
             <a [routerLink]="partner.link">{{ partner.linkText }}</a
             >{{ partner.separator }}
           }
-        } @else {
-          {{ badge.label }}
         }
         @if (!last) {
           <br />

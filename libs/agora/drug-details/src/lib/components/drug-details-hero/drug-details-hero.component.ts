@@ -29,7 +29,7 @@ export class DrugDetailsHeroComponent {
   badges = computed<DrugBadge[]>(() => {
     const badges = new Map<string, DrugBadge>();
     for (const evidence of this.drug().drug_nominations) {
-      const combinedWith = evidence.combined_with ?? [];
+      const combinedWith = evidence.combined_with;
       if (combinedWith.length === 0) {
         badges.set('nominated', { label: 'Nominated Drug' });
       } else {

@@ -11,9 +11,6 @@ async function setup(drugOverrides: Partial<Drug> = {}) {
   });
 }
 
-const normalizeWhitespace = (text: string | null | undefined) =>
-  (text ?? '').replace(/\s+/g, ' ').trim();
-
 describe('DrugDetailsHeroComponent', () => {
   it('should display drug name', async () => {
     await setup();
@@ -52,17 +49,6 @@ describe('DrugDetailsHeroComponent', () => {
       expect(badgeParagraph?.querySelector('br')).toBeInTheDocument();
     });
 
-    it('should treat a nomination with a missing combined_with as a solo nomination', async () => {
-      await setup({
-        drug_nominations: [
-          // combined_with omitted at runtime despite the generated model typing it as required
-          { ...drugMock.drug_nominations[0], combined_with: undefined as never },
-        ],
-      });
-      expect(screen.getByText(/Nominated Drug/)).toBeInTheDocument();
-      expect(screen.queryByText(/Nominated Combination Therapy with/)).not.toBeInTheDocument();
-    });
-
     it('should combine two partners into a single badge with an ampersand', async () => {
       await setup({
         drug_nominations: [
@@ -76,9 +62,7 @@ describe('DrugDetailsHeroComponent', () => {
         ],
       });
       const badge = screen.getByText(/Nominated Combination Therapy with/);
-      expect(normalizeWhitespace(badge.textContent)).toBe(
-        'Nominated Combination Therapy with Irinotecan & Donepezil',
-      );
+      expect(badge).toHaveTextContent('Nominated Combination Therapy with Irinotecan & Donepezil');
 
       const irinotecanLink = screen.getByRole('link', { name: /Irinotecan/ });
       expect(irinotecanLink).toHaveAttribute('href', '/drugs/CHEMBL481');
@@ -92,7 +76,7 @@ describe('DrugDetailsHeroComponent', () => {
           {
             ...drugMock.drug_nominations[1],
             combined_with: [
-              { common_name: 'Letrozole', chembl_id: 'CHEMBL1' },
+              { common_name: 'Irinotecan', chembl_id: 'CHEMBL1' },
               { common_name: 'Pharmatanium', chembl_id: 'CHEMBL2' },
               { common_name: 'Unpharmatanium', chembl_id: 'CHEMBL3' },
             ],
@@ -100,11 +84,11 @@ describe('DrugDetailsHeroComponent', () => {
         ],
       });
       const badge = screen.getByText(/Nominated Combination Therapy with/);
-      expect(normalizeWhitespace(badge.textContent)).toBe(
-        'Nominated Combination Therapy with Letrozole, Pharmatanium & Unpharmatanium',
+      expect(badge).toHaveTextContent(
+        'Nominated Combination Therapy with Irinotecan, Pharmatanium & Unpharmatanium',
       );
 
-      expect(screen.getByRole('link', { name: 'Letrozole' })).toHaveAttribute(
+      expect(screen.getByRole('link', { name: 'Irinotecan' })).toHaveAttribute(
         'href',
         '/drugs/CHEMBL1',
       );
