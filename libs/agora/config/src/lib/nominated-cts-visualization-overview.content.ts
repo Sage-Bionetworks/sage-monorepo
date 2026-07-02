@@ -18,4 +18,10 @@ export const NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES: VisualizationOverviewPa
     content: `<p>Pin up to 50 rows of results so that you can easily compare them. Once you've built your custom result set, you can share it with your colleagues by Share URL and export the underlying data for further analysis.</p>
       <div class="video-container"><video autoplay muted loop playsinline preload="none" controls><source src="agora-assets/videos/nomination-overview-3.mp4" type="video/mp4"></video></div>`,
   },
+  {
+    heading: 'Customize your view',
+    content: `<p>Sort results on any column by clicking on the sort control for that column. You can sort by multiple columns by holding down the command (⌘ Mac) or control (Windows) key while clicking on additional sort controls.</p>
+      <p>You can also control which columns are visible using the column picker.</p>
+      <div class="video-container"><video autoplay muted loop playsinline preload="none" controls><source src="agora-assets/videos/nomination-overview-4.mp4" type="video/mp4"></video></div>`,
+  },
 ];

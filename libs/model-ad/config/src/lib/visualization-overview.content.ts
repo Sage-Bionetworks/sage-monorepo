@@ -22,7 +22,6 @@ export const VISUALIZATION_OVERVIEW_PANES: VisualizationOverviewPane[] = [
   {
     heading: 'Customize your view',
     content: `<p>Sort results on any column by clicking on the sort control for that column. You can sort by multiple columns by holding down the command (⌘ Mac) or control (Windows) key while clicking on additional sort controls.</p>
-      <p>Use the p-value filter control to mask insignificant heatmap results based on a configurable p-value threshold.</p>
       <p>You can also control which columns are visible using the column picker.</p>
       <div class="video-container"><video autoplay muted loop playsinline preload="none" controls><source src="model-ad-assets/videos/visualization-overview-4.mp4" type="video/mp4"></video></div>`,
   },
