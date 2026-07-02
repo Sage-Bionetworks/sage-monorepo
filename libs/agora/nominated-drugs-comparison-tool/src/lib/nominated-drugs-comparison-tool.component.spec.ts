@@ -10,14 +10,16 @@ import {
   NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
 } from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import { ComparisonToolQuery } from '@sagebionetworks/explorers/models';
 import {
   PlatformService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
   provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
-import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import {
+  mockEmptyComparisonToolQuery,
+  provideLoadingIconColors,
+} from '@sagebionetworks/explorers/testing';
 import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
@@ -58,16 +60,6 @@ async function setup() {
   return { component, comparisonToolService, nominatedDrugService };
 }
 
-const emptyQuery: ComparisonToolQuery = {
-  categories: [],
-  pinnedItems: [],
-  pageNumber: 0,
-  pageSize: 100,
-  multiSortMeta: [],
-  searchTerm: null,
-  filters: [],
-};
-
 describe('NominatedDrugsComparisonToolComponent', () => {
   it('should create', async () => {
     const { component } = await setup();
@@ -89,7 +81,7 @@ describe('NominatedDrugsComparisonToolComponent', () => {
       .spyOn(nominatedDrugService, 'getNominatedDrugs')
       .mockReturnValue(of({ nominatedDrugs: [], page: { totalElements: 0 } }) as never);
 
-    component.getUnpinnedData(emptyQuery);
+    component.getUnpinnedData(mockEmptyComparisonToolQuery);
 
     expect(getNominatedDrugsSpy).toHaveBeenCalledWith(
       expect.objectContaining({ maximumClinicalTrialPhase: selectedPhases }),
