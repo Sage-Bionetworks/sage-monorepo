@@ -112,6 +112,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
       // during initialization to prevent circular updates when reading from URL params
       if (this.hasInitializedOptions) {
         this.updateQueryParams(sexOption.label, filterOption);
+        this.lastShareLinkCopied.set('');
       }
     });
 
