@@ -1,6 +1,11 @@
 import { Page, expect } from '@playwright/test';
-import { ComparisonToolConfig } from '@sagebionetworks/agora/api-client';
+import {
+  ComparisonToolConfig,
+  ComparisonToolConfigFilter,
+} from '@sagebionetworks/agora/api-client';
+import { DEFAULT_PAGE_SIZE } from '@sagebionetworks/explorers/constants';
 import { expectComparisonToolTableLoaded } from '@sagebionetworks/explorers/testing/e2e';
+import { camelCase } from 'lodash';
 import { baseURL } from '../../playwright.config';
 import {
   COMPARISON_TOOL_API_PATHS,
@@ -36,6 +41,7 @@ export const fetchComparisonToolData = async <T>(
   page: Page,
   name: string,
   categories: string[] = [],
+  extraParams?: URLSearchParams,
 ): Promise<T> => {
   const params = new URLSearchParams();
   params.append('itemFilterType', 'exclude');
@@ -48,6 +54,12 @@ export const fetchComparisonToolData = async <T>(
   for (const sort of defaultSort) {
     params.append('sortFields', sort.field);
     params.append('sortOrders', sort.order.toString());
+  }
+
+  if (extraParams) {
+    for (const [key, value] of extraParams) {
+      params.append(key, value);
+    }
   }
 
   const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_API_PATHS[name]}`, {
@@ -68,4 +80,46 @@ export const fetchComparisonToolConfig = async (
   expect(response.ok()).toBeTruthy();
   const data = (await response.json()) as ComparisonToolConfig[];
   return data;
+};
+
+const fetchFilteredPageCount = async (
+  page: Page,
+  name: string,
+  filter: ComparisonToolConfigFilter,
+  value: string,
+): Promise<number> => {
+  const extraParams = new URLSearchParams();
+  extraParams.append('pageSize', DEFAULT_PAGE_SIZE.toString());
+
+  // The config's query_param_key targets the frontend route; the API filters on the
+  // camelCased data_key (e.g. maximum_clinical_trial_phase -> maximumClinicalTrialPhase).
+  extraParams.append(camelCase(filter.data_key), value);
+
+  const data = await fetchComparisonToolData<{ page: { totalPages: number } }>(
+    page,
+    name,
+    [],
+    extraParams,
+  );
+  return data.page.totalPages;
+};
+
+/**
+ * Finds the first (filter, value) pair whose applied result still spans more than one
+ * page. Pagination-reset tests need such a pair; some filters (e.g. Max Clinical Trial
+ * Phase) have no single value large enough to paginate.
+ */
+export const findFilterValueSpanningMultiplePages = async (
+  page: Page,
+  name: string,
+  filters: ComparisonToolConfigFilter[],
+): Promise<{ name: string; value: string }> => {
+  for (const filter of filters) {
+    for (const value of filter.values) {
+      if ((await fetchFilteredPageCount(page, name, filter, value)) > 1) {
+        return { name: filter.name, value };
+      }
+    }
+  }
+  throw new Error(`No filter value spans multiple pages for "${name}"`);
 };

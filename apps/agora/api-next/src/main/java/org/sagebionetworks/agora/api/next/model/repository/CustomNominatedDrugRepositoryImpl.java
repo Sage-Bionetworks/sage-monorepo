@@ -69,6 +69,10 @@ public class CustomNominatedDrugRepositoryImpl
       .dataFilter("total_nominations", NominatedDrugSearchQueryDto::getTotalNominations)
       .dataFilter("initial_nomination", NominatedDrugSearchQueryDto::getInitialNomination)
       .dataFilter("modality", NominatedDrugSearchQueryDto::getModality)
+      .dataFilter(
+        "maximum_clinical_trial_phase",
+        NominatedDrugSearchQueryDto::getMaximumClinicalTrialPhase
+      )
       .compositeItemFilter(item -> NominatedDrugIdentifier.parse(item).toCriteria())
       .searchFilter(SEARCH_FIELD)
       .build();

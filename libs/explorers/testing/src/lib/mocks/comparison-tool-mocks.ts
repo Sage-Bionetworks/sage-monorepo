@@ -1,8 +1,19 @@
 import {
   ComparisonToolConfig,
+  ComparisonToolQuery,
   HeatmapDetailsPanelData,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
+
+export const mockEmptyComparisonToolQuery: ComparisonToolQuery = {
+  categories: [],
+  pinnedItems: [],
+  pageNumber: 0,
+  pageSize: 100,
+  multiSortMeta: [],
+  searchTerm: null,
+  filters: [],
+};
 
 export const mockComparisonToolSelectorsWikiParams: { [key: string]: SynapseWikiParams } = {
   Red: {

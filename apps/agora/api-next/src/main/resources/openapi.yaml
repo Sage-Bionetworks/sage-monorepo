@@ -532,6 +532,15 @@ components:
             type: string
           nullable: true
           type: array
+        maximumClinicalTrialPhase:
+          description: Filter by maximum clinical trial phase.
+          example:
+            - Phase I
+            - Phase II
+          items:
+            type: string
+          nullable: true
+          type: array
         sortFields:
           description: |
             List of field names to sort by (e.g., ["total_nominations", "common_name"]).

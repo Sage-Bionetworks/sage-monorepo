@@ -22,7 +22,11 @@ import {
   testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared,
   testTableReturnsToFirstPageWhenSortChanged,
 } from '@sagebionetworks/explorers/testing/e2e';
-import { fetchComparisonToolConfig, navigateToComparison } from './helpers/comparison-tool';
+import {
+  fetchComparisonToolConfig,
+  findFilterValueSpanningMultiplePages,
+  navigateToComparison,
+} from './helpers/comparison-tool';
 
 test.describe('specific viewport block', () => {
   test.use({ viewport: { width: 1600, height: 1200 } });
@@ -92,16 +96,16 @@ test.describe('nominated drugs - comparison tool', () => {
 
     test('table returns to first page when filter selected and removed', async ({ page }) => {
       const configs = await fetchComparisonToolConfig(page, CT_PAGE);
-      const config = configs[0];
-      const filters = config.filters;
+      const filters = configs[0].filters;
       expect(filters.length).toBeGreaterThan(1);
-      const filter = filters[0];
+
+      const selected = await findFilterValueSpanningMultiplePages(page, CT_PAGE, filters);
 
       await navigateToComparison(page, CT_PAGE, true, 'url');
       await testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
         page,
-        filter.name,
-        filter.values[0],
+        selected.name,
+        selected.value,
       );
     });
 

@@ -1,7 +1,10 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
-import { ComparisonToolConfigService } from '@sagebionetworks/agora/api-client';
+import {
+  ComparisonToolConfigService,
+  NominatedDrugService,
+} from '@sagebionetworks/agora/api-client';
 import {
   AGORA_LOADING_ICON_COLORS,
   NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
@@ -13,7 +16,10 @@ import {
   provideComparisonToolService,
   provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
-import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import {
+  mockEmptyComparisonToolQuery,
+  provideLoadingIconColors,
+} from '@sagebionetworks/explorers/testing';
 import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
@@ -50,7 +56,8 @@ async function setup() {
   const comparisonToolService = fixture.debugElement.injector.get(
     NominatedDrugsComparisonToolService,
   );
-  return { component, comparisonToolService };
+  const nominatedDrugService = fixture.debugElement.injector.get(NominatedDrugService);
+  return { component, comparisonToolService, nominatedDrugService };
 }
 
 describe('NominatedDrugsComparisonToolComponent', () => {
@@ -63,6 +70,21 @@ describe('NominatedDrugsComparisonToolComponent', () => {
     const { comparisonToolService } = await setup();
     expect(comparisonToolService.viewConfig().visualizationOverviewPanes).toBe(
       NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
+    );
+  });
+
+  it('should send the selected clinical trial phase filter in the unpinned query', async () => {
+    const { component, comparisonToolService, nominatedDrugService } = await setup();
+    const selectedPhases = ['Phase I', 'Phase II'];
+    jest.spyOn(comparisonToolService, 'selectedFilters').mockReturnValue({ phase: selectedPhases });
+    const getNominatedDrugsSpy = jest
+      .spyOn(nominatedDrugService, 'getNominatedDrugs')
+      .mockReturnValue(of({ nominatedDrugs: [], page: { totalElements: 0 } }) as never);
+
+    component.getUnpinnedData(mockEmptyComparisonToolQuery);
+
+    expect(getNominatedDrugsSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ maximumClinicalTrialPhase: selectedPhases }),
     );
   });
 });
