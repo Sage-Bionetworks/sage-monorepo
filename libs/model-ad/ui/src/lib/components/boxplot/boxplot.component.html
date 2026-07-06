@@ -1,4 +1,6 @@
-<h3>{{ boxplotData().age }}</h3>
+@if (showTitle()) {
+  <h3>{{ boxplotData().age }}</h3>
+}
 <div
   sageBoxplot
   [style.height]="450"

@@ -1,19 +1,9 @@
+@use 'model-ad/styles/src/mixins' as mixins;
+
 .boxplots-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(495px, 1fr));
-  justify-content: center;
-
-  // negative margin needed to offset the margin of .boxplot-wrapper
-  // otherwise the boxplot headers will be misaligned with the boxplot
-  // when downloading the boxplots
-  margin: -15px -25px;
-
-  .boxplot-wrapper {
-    margin: 15px 25px;
-  }
+  @include mixins.boxplots-auto-grid('.boxplot-wrapper');
 }
 
 .boxplots-grid-legend {
-  display: flex;
-  margin-bottom: 30px;
+  @include mixins.boxplots-legend;
 }

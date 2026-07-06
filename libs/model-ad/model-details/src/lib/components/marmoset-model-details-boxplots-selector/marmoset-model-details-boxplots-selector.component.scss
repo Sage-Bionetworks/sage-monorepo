@@ -1,0 +1,17 @@
+@use 'model-ad/styles/src/mixins' as mixins;
+
+.marmoset-legend {
+  @include mixins.boxplots-legend;
+}
+
+.marmoset-grid {
+  @include mixins.boxplots-auto-grid('.marmoset-grid-item');
+
+  .marmoset-grid-item {
+    .age-group-title {
+      @include mixins.boxplots-section-title('h3');
+
+      margin-bottom: 16px;
+    }
+  }
+}
