@@ -18,7 +18,7 @@
           <model-ad-model-details-omics [model]="model" />
         }
         @case ('biomarkers') {
-          <model-ad-model-details-boxplots-selector
+          <model-ad-mouse-model-details-boxplots-selector
             [title]="'Biomarkers'"
             [modelName]="model.name"
             [modelControls]="model.matched_controls"
@@ -27,7 +27,7 @@
           />
         }
         @case ('pathology') {
-          <model-ad-model-details-boxplots-selector
+          <model-ad-mouse-model-details-boxplots-selector
             [title]="'Pathology'"
             [modelName]="model.name"
             [modelControls]="model.matched_controls"

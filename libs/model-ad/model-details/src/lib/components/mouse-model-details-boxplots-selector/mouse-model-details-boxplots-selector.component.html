@@ -1,0 +1,18 @@
+<ng-template #mouseSection let-data="data" let-sexFilter="sexFilter">
+  <model-ad-boxplots-grid
+    [boxplotDataList]="data"
+    [xAxisOrder]="genotypeOrder()"
+    [sexFilter]="sexFilter"
+  />
+</ng-template>
+
+<model-ad-model-details-boxplots-selector
+  [title]="title()"
+  [description]="description()"
+  [modelName]="modelName()"
+  [modelDataList]="modelDataList()"
+  [wikiParams]="wikiParams()"
+  [filterConfig]="filterConfig"
+  [anchorDataField]="'evidence_type'"
+  [sectionTemplate]="mouseSection"
+/>

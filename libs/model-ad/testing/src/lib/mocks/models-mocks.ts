@@ -1,6 +1,6 @@
-import { Model } from '@sagebionetworks/model-ad/api-client';
+import { Model, ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 
-export const modelMock: Model = {
+export const mouseModelMock: Model = {
   name: '3xTg-AD',
   matched_controls: ['B6129'],
   model_type: 'Familial AD',

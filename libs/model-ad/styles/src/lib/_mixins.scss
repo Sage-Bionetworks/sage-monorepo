@@ -1,1 +1,11 @@
 @forward 'explorers/styles/src/mixins';
+
+@mixin boxplots-section-title($heading-selector: 'h2') {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+
+  #{$heading-selector} {
+    margin-bottom: 0;
+  }
+}

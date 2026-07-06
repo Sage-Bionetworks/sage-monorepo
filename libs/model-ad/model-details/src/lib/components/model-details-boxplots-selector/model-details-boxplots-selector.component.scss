@@ -1,3 +1,4 @@
+@use 'model-ad/styles/src/mixins' as mixins;
 @use 'model-ad/styles/src/variables' as vars;
 
 [class*='-container'] {
@@ -63,6 +64,10 @@
   .table-of-contents {
     list-style: none;
     padding: 0;
+    display: grid;
+    grid-template-rows: repeat(6, auto);
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
 
     li {
       padding-bottom: 10px;
@@ -88,33 +93,22 @@
 }
 
 .boxplots-container {
-  .boxplots-evidence-type-title-bar {
-    padding-bottom: 30px;
-    display: flex;
-    justify-content: space-between;
-
-    .boxplots-evidence-type-title {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-
-      h2 {
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  .boxplots-grid-wrapper {
+  .boxplots-full-width-wrapper {
     width: 100vw;
     max-width: 2500px;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
     padding: 0 15%;
+  }
 
-    model-ad-boxplots-grid {
-      display: block;
-      width: 100%;
+  .boxplots-evidence-type-title-bar {
+    padding-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+
+    .boxplots-evidence-type-title {
+      @include mixins.boxplots-section-title;
     }
   }
 
