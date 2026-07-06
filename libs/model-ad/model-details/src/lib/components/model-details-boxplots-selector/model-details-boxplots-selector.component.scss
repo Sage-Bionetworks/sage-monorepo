@@ -67,7 +67,7 @@
     display: grid;
     grid-template-rows: repeat(6, auto);
     grid-auto-flow: column;
-    grid-auto-columns: max-content;
+    grid-auto-columns: minmax(10rem, max-content);
 
     li {
       padding-bottom: 10px;
