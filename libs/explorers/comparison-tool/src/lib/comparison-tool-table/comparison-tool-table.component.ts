@@ -20,6 +20,7 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
+import { COMPARISON_TOOL_BODY_CLASS } from './comparison-tool-table.constants';
 import {
   clampAndFormatWidths,
   getCellsByColumn,
@@ -99,7 +100,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
         // browser clamps the scroll container's scrollLeft. Save and restore it so
         // sorting/data changes don't reset the user's horizontal scroll position.
         const scrollContainer = this.tableElement()?.nativeElement.closest(
-          '.comparison-tool-body',
+          `.${COMPARISON_TOOL_BODY_CLASS}`,
         ) as HTMLElement | null;
         const savedScrollLeft = scrollContainer?.scrollLeft ?? 0;
         this.columnWidths.set(this.calculateNonPrimaryColumnWidths());

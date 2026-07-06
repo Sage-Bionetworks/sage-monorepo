@@ -13,6 +13,9 @@ export const MAX_COLUMN_WIDTH_PX = 300;
 export const COLUMN_HEADER_CLASS = 'column-header';
 export const COLUMN_HEADER_TEXT_CLASS = 'column-header-text';
 
+// CSS class(es) — bound in comparison-tool.component.html
+export const COMPARISON_TOOL_BODY_CLASS = 'comparison-tool-body';
+
 // Keep in sync with the corresponding $comparison-tool-* variables in
 // libs/explorers/styles/src/lib/_variables.scss.
 export const COLUMN_HEADER_MARGIN_LEFT_PX = 10;
