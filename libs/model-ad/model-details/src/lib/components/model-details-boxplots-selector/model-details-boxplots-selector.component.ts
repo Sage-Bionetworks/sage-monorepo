@@ -78,6 +78,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   anchorDataField = input.required<keyof ModelData>();
   sectionTemplate = input.required<TemplateRef<SectionContext>>();
   showSectionShareLink = input<boolean>(true);
+  showRowDownloadButton = input<boolean>(true);
 
   sexOptions: { label: string; value: Sex[] }[] = [
     { label: 'Female & Male', value: ['Female', 'Male'] },

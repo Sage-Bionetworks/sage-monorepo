@@ -87,14 +87,16 @@
               />
             }
           </div>
-          <explorers-download-dom-image
-            [target]="getSectionBodyTargetByEvidenceType(evidenceType)"
-            buttonLabel="Download"
-            [filename]="section.filename"
-            [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
-            [hasCsvDownload]="true"
-            [data]="section.data"
-          />
+          @if (showRowDownloadButton()) {
+            <explorers-download-dom-image
+              [target]="getSectionBodyTargetByEvidenceType(evidenceType)"
+              buttonLabel="Download"
+              [filename]="section.filename"
+              [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
+              [hasCsvDownload]="true"
+              [data]="section.data"
+            />
+          }
         </div>
 
         <!-- Wrapper handles full-width positioning; inner div is the download capture
