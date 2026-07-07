@@ -26,6 +26,7 @@ import {
 import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { SelectModule } from 'primeng/select';
+import { generateAnchorId } from '../../utils';
 
 export interface FilterConfig {
   label: string;
@@ -65,6 +66,8 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   private readonly platformService = inject(PlatformService);
 
   readonly BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX = 20;
+
+  readonly generateAnchorId = generateAnchorId;
 
   boxplotsContainer = viewChild('boxplotsContainer', { read: ElementRef });
   sectionBodies = viewChildren('sectionBody', { read: ElementRef });
@@ -273,14 +276,6 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
         this.updateUrlFragment(hashFragment);
       }
     }
-  }
-
-  generateAnchorId(label: string): string {
-    return label
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-');
   }
 
   getUpdatedUrlFragment(fragment: string | undefined): string {

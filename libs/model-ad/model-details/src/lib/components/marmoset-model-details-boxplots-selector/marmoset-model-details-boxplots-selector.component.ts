@@ -3,9 +3,9 @@ import { LegendDirective } from '@sagebionetworks/explorers/charts-angular';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { LoggerService } from '@sagebionetworks/explorers/services';
 import { CopyLinkButtonComponent } from '@sagebionetworks/explorers/ui';
-import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
-import { BOXPLOT_POINT_STYLES } from '@sagebionetworks/model-ad/config';
-import { BoxplotComponent } from '@sagebionetworks/model-ad/ui';
+import { ModelData } from '@sagebionetworks/model-ad/api-client';
+import { BoxplotComponent, getPointStylesBySex } from '@sagebionetworks/model-ad/ui';
+import { generateAnchorId } from '../../utils';
 import { ModelDetailsBoxplotsSelectorComponent } from '../model-details-boxplots-selector/model-details-boxplots-selector.component';
 
 @Component({
@@ -21,6 +21,10 @@ import { ModelDetailsBoxplotsSelectorComponent } from '../model-details-boxplots
 })
 export class MarmosetModelDetailsBoxplotsSelectorComponent {
   private readonly logger = inject(LoggerService);
+
+  readonly getPointStyles = getPointStylesBySex;
+  readonly generateAnchorId = generateAnchorId;
+
   title = input.required<string>();
   modelName = input.required<string>();
   modelDataList = input.required<ModelData[]>();
@@ -48,20 +52,5 @@ export class MarmosetModelDetailsBoxplotsSelectorComponent {
       }
       return { age, data: items };
     });
-  }
-
-  getPointStyles(sexFilter: Sex[] | undefined) {
-    if (sexFilter) {
-      return BOXPLOT_POINT_STYLES.filter((s) => sexFilter.includes(s.label as Sex));
-    }
-    return BOXPLOT_POINT_STYLES;
-  }
-
-  generateAnchorId(label: string): string {
-    return label
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-');
   }
 }
