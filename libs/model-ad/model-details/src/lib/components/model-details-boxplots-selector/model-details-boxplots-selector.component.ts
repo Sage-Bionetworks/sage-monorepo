@@ -93,7 +93,11 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
   filterOptions = computed(() => {
     return Array.from(
-      new Set(this.modelDataList().map((item) => item[this.filterConfig().dataField] as string)),
+      new Set(
+        this.modelDataList()
+          .map((item) => item[this.filterConfig().dataField] as string)
+          .filter((v) => v != null),
+      ),
     );
   });
   selectedFilterOption = signal('');
@@ -202,7 +206,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
   getSectionBodyTargetByEvidenceType(evidenceType: string) {
     const index = this.evidenceTypes().indexOf(evidenceType);
-    return this.domFiles()[index].target;
+    return this.domFiles()[index]?.target;
   }
 
   getDataForSection(evidenceType: string) {
@@ -212,7 +216,8 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   }
 
   generateBoxplotsCsvData(evidenceType: string): string[][] {
-    const hasTissue = this.modelDataList().some((item) => item.tissue != null);
+    const sectionData = this.getDataForSection(evidenceType);
+    const hasTissue = sectionData.some((item) => item.tissue != null);
     const header = [
       'name',
       'evidence_type',
@@ -226,7 +231,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     ];
     const sexes = this.selectedSexOption().value;
     const rows: string[][] = [header];
-    for (const modelData of this.getDataForSection(evidenceType)) {
+    for (const modelData of sectionData) {
       for (const item of modelData.data) {
         if (!sexes.includes(item.sex as Sex)) continue;
         rows.push([

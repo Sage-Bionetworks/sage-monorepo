@@ -28,16 +28,6 @@ export class MouseModelDetailsBoxplotsSelectorComponent {
       `The results shown on this page are derived from the analysis of post-mortem brains from ${this.modelName()} mice and matched control animals.`,
   );
 
-  tissueOptions = computed(() => {
-    return Array.from(
-      new Set(
-        this.modelDataList()
-          .map((item) => item.tissue)
-          .filter((t): t is string => t != null),
-      ),
-    );
-  });
-
   genotypeOrder = computed(() => {
     // MG-331: ensure that model name aligns with genotype values
     // to prevent adding additional boxplot x-axis labels
