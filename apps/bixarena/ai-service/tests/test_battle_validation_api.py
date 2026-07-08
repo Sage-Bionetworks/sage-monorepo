@@ -13,18 +13,18 @@ def test_validate_battle(client: TestClient):
 
     Validate biomedical battle
     """
-    battle_validation_request = {
-        "prompts": ["prompts", "prompts", "prompts", "prompts", "prompts"]
-    }
+    battle_validation_request = {"prompts":["prompts","prompts","prompts","prompts","prompts"]}
 
-    headers = {}
+    headers = {
+    }
     # uncomment below to make a request
-    # response = client.request(
+    #response = client.request(
     #    "POST",
     #    "/validate-battle",
     #    headers=headers,
     #    json=battle_validation_request,
-    # )
+    #)
 
     # uncomment below to assert the status code of the HTTP response
-    # assert response.status_code == 200
+    #assert response.status_code == 200
+

@@ -13,13 +13,15 @@ def test_get_health_check(client: TestClient):
     Get health check information
     """
 
-    headers = {}
+    headers = {
+    }
     # uncomment below to make a request
-    # response = client.request(
+    #response = client.request(
     #    "GET",
     #    "/health-check",
     #    headers=headers,
-    # )
+    #)
 
     # uncomment below to assert the status code of the HTTP response
-    # assert response.status_code == 200
+    #assert response.status_code == 200
+

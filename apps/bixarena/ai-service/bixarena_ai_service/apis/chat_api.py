@@ -24,9 +24,7 @@ from fastapi import (  # noqa: F401
 
 from bixarena_ai_service.models.extra_models import TokenModel  # noqa: F401
 from bixarena_ai_service.models.basic_error import BasicError
-from bixarena_ai_service.models.model_chat_completion_chunk import (
-    ModelChatCompletionChunk,
-)
+from bixarena_ai_service.models.model_chat_completion_chunk import ModelChatCompletionChunk
 from bixarena_ai_service.models.model_chat_request import ModelChatRequest
 from bixarena_ai_service.models.rate_limit_error import RateLimitError
 
@@ -41,20 +39,11 @@ for _, name, _ in pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + "."):
 @router.post(
     "/chat/completions",
     responses={
-        200: {
-            "model": ModelChatCompletionChunk,
-            "description": "Streaming HTTP response with chat completion chunks",
-        },
+        200: {"model": ModelChatCompletionChunk, "description": "Streaming HTTP response with chat completion chunks"},
         400: {"model": BasicError, "description": "Invalid request"},
         401: {"model": BasicError, "description": "Unauthorized"},
-        429: {
-            "model": RateLimitError,
-            "description": "Too many requests. Rate limit exceeded. The client should wait before making additional requests.",
-        },
-        500: {
-            "model": BasicError,
-            "description": "The request cannot be fulfilled due to an unexpected server error",
-        },
+        429: {"model": RateLimitError, "description": "Too many requests. Rate limit exceeded. The client should wait before making additional requests."},
+        500: {"model": BasicError, "description": "The request cannot be fulfilled due to an unexpected server error"},
     },
     tags=["Chat"],
     summary="Create a chat completion",

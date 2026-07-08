@@ -4,9 +4,9 @@ Request to set or clear the effective categorization for an example prompt or ba
 
 ## Properties
 
-| Name                  | Type    | Description                                                                                          | Notes      |
-| --------------------- | ------- | ---------------------------------------------------------------------------------------------------- | ---------- |
-| **categorization_id** | **str** | ID of the categorization row to set as effective. Set to null to clear the effective categorization. | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**categorization_id** | **str** | ID of the categorization row to set as effective. Set to null to clear the effective categorization. | [optional] 
 
 ## Example
 
@@ -25,5 +25,6 @@ set_effective_categorization_request_dict = set_effective_categorization_request
 # create an instance of SetEffectiveCategorizationRequest from a dict
 set_effective_categorization_request_from_dict = SetEffectiveCategorizationRequest.from_dict(set_effective_categorization_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

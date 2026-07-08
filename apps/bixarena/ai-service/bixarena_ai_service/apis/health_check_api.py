@@ -38,20 +38,15 @@ for _, name, _ in pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + "."):
     "/health-check",
     responses={
         200: {"model": HealthCheck, "description": "Success"},
-        404: {
-            "model": BasicError,
-            "description": "The specified resource was not found",
-        },
-        500: {
-            "model": BasicError,
-            "description": "The request cannot be fulfilled due to an unexpected server error",
-        },
+        404: {"model": BasicError, "description": "The specified resource was not found"},
+        500: {"model": BasicError, "description": "The request cannot be fulfilled due to an unexpected server error"},
     },
     tags=["Health Check"],
     summary="Get health check information",
     response_model_by_alias=True,
 )
-async def get_health_check() -> HealthCheck:
+async def get_health_check(
+) -> HealthCheck:
     """Get information about the health of the service"""
     if not BaseHealthCheckApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")

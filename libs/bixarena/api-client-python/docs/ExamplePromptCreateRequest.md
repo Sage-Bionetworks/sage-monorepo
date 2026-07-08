@@ -4,10 +4,10 @@ The information used to create an example prompt. Newly created prompts are inac
 
 ## Properties
 
-| Name         | Type                                              | Description                   | Notes      |
-| ------------ | ------------------------------------------------- | ----------------------------- | ---------- |
-| **question** | **str**                                           | The biomedical question text. |
-| **source**   | [**ExamplePromptSource**](ExamplePromptSource.md) |                               | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**question** | **str** | The biomedical question text. | 
+**source** | [**ExamplePromptSource**](ExamplePromptSource.md) |  | [optional] 
 
 ## Example
 
@@ -26,5 +26,6 @@ example_prompt_create_request_dict = example_prompt_create_request_instance.to_d
 # create an instance of ExamplePromptCreateRequest from a dict
 example_prompt_create_request_from_dict = ExamplePromptCreateRequest.from_dict(example_prompt_create_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

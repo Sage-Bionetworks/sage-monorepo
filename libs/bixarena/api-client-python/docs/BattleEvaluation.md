@@ -4,12 +4,12 @@ A battle evaluation describing the outcome of a matchup.
 
 ## Properties
 
-| Name           | Type                                                      | Description                                    | Notes |
-| -------------- | --------------------------------------------------------- | ---------------------------------------------- | ----- |
-| **id**         | **str**                                                   | The unique identifier of the battle evaluation |
-| **battle_id**  | **str**                                                   | Unique identifier (UUID) of the battle.        |
-| **outcome**    | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |                                                |
-| **created_at** | **datetime**                                              | Timestamp when the entity was created.         |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**id** | **str** | The unique identifier of the battle evaluation | 
+**battle_id** | **str** | Unique identifier (UUID) of the battle. | 
+**outcome** | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |  | 
+**created_at** | **datetime** | Timestamp when the entity was created. | 
 
 ## Example
 
@@ -28,5 +28,6 @@ battle_evaluation_dict = battle_evaluation_instance.to_dict()
 # create an instance of BattleEvaluation from a dict
 battle_evaluation_from_dict = BattleEvaluation.from_dict(battle_evaluation_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

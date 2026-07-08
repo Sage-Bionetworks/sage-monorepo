@@ -41,10 +41,7 @@ for _, name, _ in pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + "."):
         200: {"model": BattleValidation, "description": "Success"},
         400: {"model": BasicError, "description": "Invalid request"},
         401: {"model": BasicError, "description": "Unauthorized"},
-        500: {
-            "model": BasicError,
-            "description": "The request cannot be fulfilled due to an unexpected server error",
-        },
+        500: {"model": BasicError, "description": "The request cannot be fulfilled due to an unexpected server error"},
     },
     tags=["Battle Validation"],
     summary="Validate biomedical battle",
@@ -56,6 +53,4 @@ async def validate_battle(
     """Validates whether a battle&#39;s conversation (all user prompts) is biomedically related. Returns a confidence score. Requires authentication."""
     if not BaseBattleValidationApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
-    return await BaseBattleValidationApi.subclasses[0]().validate_battle(
-        battle_validation_request
-    )
+    return await BaseBattleValidationApi.subclasses[0]().validate_battle(battle_validation_request)

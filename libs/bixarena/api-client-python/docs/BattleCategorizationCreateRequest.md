@@ -4,10 +4,10 @@ Request to manually categorize a battle.
 
 ## Properties
 
-| Name           | Type                                                  | Description                            | Notes      |
-| -------------- | ----------------------------------------------------- | -------------------------------------- | ---------- |
-| **categories** | [**List[BiomedicalCategory]**](BiomedicalCategory.md) |                                        |
-| **reason**     | **str**                                               | Reason for the categorization decision | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**categories** | [**List[BiomedicalCategory]**](BiomedicalCategory.md) |  | 
+**reason** | **str** | Reason for the categorization decision | [optional] 
 
 ## Example
 
@@ -26,5 +26,6 @@ battle_categorization_create_request_dict = battle_categorization_create_request
 # create an instance of BattleCategorizationCreateRequest from a dict
 battle_categorization_create_request_from_dict = BattleCategorizationCreateRequest.from_dict(battle_categorization_create_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

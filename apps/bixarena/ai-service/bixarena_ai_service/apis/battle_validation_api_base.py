@@ -13,7 +13,6 @@ class BaseBattleValidationApi:
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         BaseBattleValidationApi.subclasses = BaseBattleValidationApi.subclasses + (cls,)
-
     async def validate_battle(
         self,
         battle_validation_request: BattleValidationRequest,

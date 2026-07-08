@@ -4,9 +4,9 @@ Request to set or clear the effective validation for a battle.
 
 ## Properties
 
-| Name              | Type    | Description                                                                                     | Notes      |
-| ----------------- | ------- | ----------------------------------------------------------------------------------------------- | ---------- |
-| **validation_id** | **str** | ID of the battle validation to set as effective. Set to null to clear the effective validation. | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**validation_id** | **str** | ID of the battle validation to set as effective. Set to null to clear the effective validation. | [optional] 
 
 ## Example
 
@@ -25,5 +25,6 @@ set_effective_validation_request_dict = set_effective_validation_request_instanc
 # create an instance of SetEffectiveValidationRequest from a dict
 set_effective_validation_request_from_dict = SetEffectiveValidationRequest.from_dict(set_effective_validation_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

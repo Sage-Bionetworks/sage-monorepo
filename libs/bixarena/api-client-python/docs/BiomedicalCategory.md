@@ -4,44 +4,46 @@ A category slug used to classify biomedical content.
 
 ## Enum
 
-- `BIOCHEMISTRY` (value: `'biochemistry'`)
+* `BIOCHEMISTRY` (value: `'biochemistry'`)
 
-- `BIOENGINEERING` (value: `'bioengineering'`)
+* `BIOENGINEERING` (value: `'bioengineering'`)
 
-- `BIOINFORMATICS` (value: `'bioinformatics'`)
+* `BIOINFORMATICS` (value: `'bioinformatics'`)
 
-- `CANCER_MINUS_BIOLOGY` (value: `'cancer-biology'`)
+* `CANCER_MINUS_BIOLOGY` (value: `'cancer-biology'`)
 
-- `CELL_MINUS_BIOLOGY` (value: `'cell-biology'`)
+* `CELL_MINUS_BIOLOGY` (value: `'cell-biology'`)
 
-- `CLINICAL_MINUS_TRIALS` (value: `'clinical-trials'`)
+* `CLINICAL_MINUS_TRIALS` (value: `'clinical-trials'`)
 
-- `DEVELOPMENTAL_MINUS_BIOLOGY` (value: `'developmental-biology'`)
+* `DEVELOPMENTAL_MINUS_BIOLOGY` (value: `'developmental-biology'`)
 
-- `EPIDEMIOLOGY` (value: `'epidemiology'`)
+* `EPIDEMIOLOGY` (value: `'epidemiology'`)
 
-- `EVOLUTIONARY_MINUS_BIOLOGY` (value: `'evolutionary-biology'`)
+* `EVOLUTIONARY_MINUS_BIOLOGY` (value: `'evolutionary-biology'`)
 
-- `GENETICS` (value: `'genetics'`)
+* `GENETICS` (value: `'genetics'`)
 
-- `GENOMICS` (value: `'genomics'`)
+* `GENOMICS` (value: `'genomics'`)
 
-- `IMMUNOLOGY` (value: `'immunology'`)
+* `IMMUNOLOGY` (value: `'immunology'`)
 
-- `MICROBIOLOGY` (value: `'microbiology'`)
+* `MICROBIOLOGY` (value: `'microbiology'`)
 
-- `MOLECULAR_MINUS_BIOLOGY` (value: `'molecular-biology'`)
+* `MOLECULAR_MINUS_BIOLOGY` (value: `'molecular-biology'`)
 
-- `NEUROSCIENCE` (value: `'neuroscience'`)
+* `NEUROSCIENCE` (value: `'neuroscience'`)
 
-- `PATHOLOGY` (value: `'pathology'`)
+* `PATHOLOGY` (value: `'pathology'`)
 
-- `PHARMACOLOGY_MINUS_AND_MINUS_TOXICOLOGY` (value: `'pharmacology-and-toxicology'`)
+* `PHARMACOLOGY_MINUS_AND_MINUS_TOXICOLOGY` (value: `'pharmacology-and-toxicology'`)
 
-- `PHYSIOLOGY` (value: `'physiology'`)
+* `PHYSIOLOGY` (value: `'physiology'`)
 
-- `SYNTHETIC_MINUS_BIOLOGY` (value: `'synthetic-biology'`)
+* `SYNTHETIC_MINUS_BIOLOGY` (value: `'synthetic-biology'`)
 
-- `SYSTEMS_MINUS_BIOLOGY` (value: `'systems-biology'`)
+* `SYSTEMS_MINUS_BIOLOGY` (value: `'systems-biology'`)
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

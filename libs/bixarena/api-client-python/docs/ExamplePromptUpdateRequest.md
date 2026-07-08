@@ -4,11 +4,11 @@ The information used to update an example prompt. Only fields present in the req
 
 ## Properties
 
-| Name         | Type                                              | Description                                                      | Notes      |
-| ------------ | ------------------------------------------------- | ---------------------------------------------------------------- | ---------- |
-| **question** | **str**                                           | The biomedical question text.                                    | [optional] |
-| **source**   | [**ExamplePromptSource**](ExamplePromptSource.md) |                                                                  | [optional] |
-| **active**   | **bool**                                          | Whether this example prompt is currently active/visible for use. | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**question** | **str** | The biomedical question text. | [optional] 
+**source** | [**ExamplePromptSource**](ExamplePromptSource.md) |  | [optional] 
+**active** | **bool** | Whether this example prompt is currently active/visible for use. | [optional] 
 
 ## Example
 
@@ -27,5 +27,6 @@ example_prompt_update_request_dict = example_prompt_update_request_instance.to_d
 # create an instance of ExamplePromptUpdateRequest from a dict
 example_prompt_update_request_from_dict = ExamplePromptUpdateRequest.from_dict(example_prompt_update_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

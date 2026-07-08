@@ -4,10 +4,10 @@ Request to manually categorize an example prompt.
 
 ## Properties
 
-| Name         | Type                                            | Description                            | Notes      |
-| ------------ | ----------------------------------------------- | -------------------------------------- | ---------- |
-| **category** | [**BiomedicalCategory**](BiomedicalCategory.md) |                                        |
-| **reason**   | **str**                                         | Reason for the categorization decision | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**category** | [**BiomedicalCategory**](BiomedicalCategory.md) |  | 
+**reason** | **str** | Reason for the categorization decision | [optional] 
 
 ## Example
 
@@ -26,5 +26,6 @@ example_prompt_categorization_create_request_dict = example_prompt_categorizatio
 # create an instance of ExamplePromptCategorizationCreateRequest from a dict
 example_prompt_categorization_create_request_from_dict = ExamplePromptCategorizationCreateRequest.from_dict(example_prompt_categorization_create_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
