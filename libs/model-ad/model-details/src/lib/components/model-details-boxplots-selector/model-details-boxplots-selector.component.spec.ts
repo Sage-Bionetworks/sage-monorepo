@@ -80,7 +80,14 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
   });
 
   it('should use default values for sex and filter', async () => {
-    await setupHost();
+    const { fixture } = await setupHost();
+
+    // Wait for the component to initialize options from URL params before querying
+    const component = fixture.debugElement.children[0]
+      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+    await waitFor(() => {
+      expect(component.hasInitializedOptions).toBe(true);
+    });
 
     const sexFilter = await screen.findByRole('combobox', { name: 'Female & Male' });
     expect(sexFilter).toBeVisible();
