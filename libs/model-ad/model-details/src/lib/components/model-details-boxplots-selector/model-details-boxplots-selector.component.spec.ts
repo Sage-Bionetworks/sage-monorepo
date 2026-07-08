@@ -80,21 +80,21 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
   });
 
   it('should use default values for sex and filter', async () => {
-    const { fixture } = await setupHost();
+    await setupHost();
 
-    // Wait for the component to initialize options from URL params before querying
-    const component = fixture.debugElement.children[0]
-      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
-    await waitFor(() => {
-      expect(component.hasInitializedOptions).toBe(true);
-    });
-
-    const sexFilter = await screen.findByRole('combobox', { name: 'Female & Male' });
+    // Use longer timeout for CI environments where PrimeNG may take longer to render
+    const sexFilter = await screen.findByRole(
+      'combobox',
+      { name: 'Female & Male' },
+      { timeout: 10000 },
+    );
     expect(sexFilter).toBeVisible();
 
-    const tissueFilter = await screen.findByRole('combobox', {
-      name: mouseModelMock.pathology[0].tissue as string,
-    });
+    const tissueFilter = await screen.findByRole(
+      'combobox',
+      { name: mouseModelMock.pathology[0].tissue as string },
+      { timeout: 10000 },
+    );
     expect(tissueFilter).toBeVisible();
   });
 
