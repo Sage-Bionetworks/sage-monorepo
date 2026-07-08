@@ -339,11 +339,14 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
       const element = container.nativeElement.querySelector(`[id="${anchorId}"]`) as HTMLElement;
 
       if (element) {
+        const tocElement = document.querySelector('.table-of-contents-container');
+        const tocHeight = tocElement ? tocElement.getBoundingClientRect().height : 0;
+
         const panelNavHeight = this.helperService.getNumberFromCSSValue(
           getComputedStyle(document.documentElement).getPropertyValue('--panel-nav-height'),
         );
 
-        const yOffset = -(panelNavHeight + this.SCROLL_PADDING);
+        const yOffset = -(tocHeight + panelNavHeight + this.SCROLL_PADDING);
         const elementOffset = this.helperService.getOffset(element);
         const y = elementOffset.top + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
