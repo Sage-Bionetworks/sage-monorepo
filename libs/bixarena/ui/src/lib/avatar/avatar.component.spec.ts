@@ -49,6 +49,31 @@ describe('AvatarComponent', () => {
     expect(fixture.debugElement.query(By.css('img.avatar-img'))).toBeTruthy();
   });
 
+  it('falls back to initials when image fails to load', () => {
+    setInputs({ imageUrl: 'https://example.com/broken.png', name: 'Jane Doe' });
+    const img = fixture.debugElement.query(By.css('img.avatar-img'));
+    expect(img).toBeTruthy();
+
+    img.triggerEventHandler('error', new Event('error'));
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('img.avatar-img'))).toBeNull();
+    const initials = fixture.debugElement.query(By.css('.avatar-initials'));
+    expect(initials.nativeElement.textContent.trim()).toBe('JA');
+  });
+
+  it('resets error state when imageUrl changes', () => {
+    setInputs({ imageUrl: 'https://example.com/broken.png', name: 'Jane Doe' });
+    const img = fixture.debugElement.query(By.css('img.avatar-img'));
+    img.triggerEventHandler('error', new Event('error'));
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.avatar-initials'))).toBeTruthy();
+
+    setInputs({ imageUrl: 'https://example.com/new.png' });
+    expect(fixture.debugElement.query(By.css('img.avatar-img'))).toBeTruthy();
+    expect(fixture.debugElement.query(By.css('.avatar-initials'))).toBeNull();
+  });
+
   it('applies size and shape classes on the host', () => {
     setInputs({ size: 'sm', shape: 'bare', name: 'X' });
     const host = fixture.debugElement.nativeElement as HTMLElement;

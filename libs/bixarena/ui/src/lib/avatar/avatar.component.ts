@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
 
 @Component({
   selector: 'bixarena-avatar',
@@ -20,5 +20,17 @@ export class AvatarComponent {
   readonly size = input<'sm' | 'md' | 'lg'>('md');
   readonly shape = input<'circle' | 'bare'>('circle');
 
+  readonly imageError = signal(false);
   readonly initials = computed(() => this.name().slice(0, 2).toUpperCase());
+
+  constructor() {
+    effect(() => {
+      this.imageUrl();
+      this.imageError.set(false);
+    });
+  }
+
+  onImageError() {
+    this.imageError.set(true);
+  }
 }
