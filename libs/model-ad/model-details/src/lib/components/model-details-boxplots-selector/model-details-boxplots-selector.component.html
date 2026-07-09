@@ -106,7 +106,7 @@
             <ng-container
               [ngTemplateOutlet]="sectionTemplate()"
               [ngTemplateOutletContext]="{
-                data: getDataForSection(evidenceType),
+                data: sectionDataByEvidenceType().get(evidenceType)?.transformedData,
                 sexFilter: selectedSexOption().value,
                 copyLinkFn: copyShareLinkCallbackFn,
                 tooltipTextFn: getShareLinkTooltipText,

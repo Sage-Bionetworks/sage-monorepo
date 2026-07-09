@@ -34,8 +34,8 @@ export interface FilterConfig {
   dataField: keyof ModelData;
 }
 
-export interface SectionContext {
-  data: ModelData[];
+export interface SectionContext<T = ModelData[]> {
+  data: T;
   sexFilter: Sex[];
   copyLinkFn: (anchorId: string) => () => void;
   tooltipTextFn: (anchorId: string) => string;
@@ -80,6 +80,12 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   filterConfig = input.required<FilterConfig>();
   anchorDataField = input.required<keyof ModelData>();
   sectionTemplate = input.required<TemplateRef<SectionContext>>();
+  /**
+   * Optional function to transform section data before passing to the template.
+   * Called once per evidence type when data changes.
+   * Must return an array that can be iterated in the template.
+   */
+  transformSectionData = input<(data: ModelData[]) => unknown[]>();
   showSectionShareLink = input<boolean>(true);
   showRowDownloadButton = input<boolean>(true);
 
@@ -190,6 +196,19 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     }));
   });
 
+  sectionDataByEvidenceType = computed(() => {
+    const transform = this.transformSectionData();
+    return new Map(
+      this.evidenceTypes().map((evidenceType) => {
+        const rawData = this.selectedModelDataList().filter(
+          (modelData) => modelData.evidence_type === evidenceType,
+        );
+        const transformedData = transform ? transform(rawData) : rawData;
+        return [evidenceType, { rawData, transformedData }];
+      }),
+    );
+  });
+
   domFiles = computed(() => {
     if (
       this.sectionBodies().length === 0 ||
@@ -209,14 +228,8 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     return this.domFiles()[index]?.target;
   }
 
-  getDataForSection(evidenceType: string) {
-    return this.selectedModelDataList().filter(
-      (modelData) => modelData.evidence_type === evidenceType,
-    );
-  }
-
   generateBoxplotsCsvData(evidenceType: string): string[][] {
-    const sectionData = this.getDataForSection(evidenceType);
+    const sectionData = this.sectionDataByEvidenceType().get(evidenceType)?.rawData ?? [];
     const hasTissue = sectionData.some((item) => item.tissue != null);
     const header = [
       'name',

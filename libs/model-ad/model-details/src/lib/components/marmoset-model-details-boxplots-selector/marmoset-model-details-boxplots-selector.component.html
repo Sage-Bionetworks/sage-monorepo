@@ -15,7 +15,7 @@
     [chartStyle]="'grayGrid'"
   ></div>
   <div class="marmoset-grid">
-    @for (ageGroup of getAgeGroups(data); track ageGroup.age) {
+    @for (ageGroup of data; track ageGroup.age) {
       @let anchorId = generateAnchorId(ageGroup.age);
       <div
         [id]="anchorId"
@@ -53,6 +53,7 @@
   [wikiParams]="wikiParams()"
   [filterConfig]="filterConfig"
   [anchorDataField]="'age'"
+  [transformSectionData]="transformSectionData"
   [showSectionShareLink]="false"
   [showRowDownloadButton]="false"
   [sectionTemplate]="marmosetSection"

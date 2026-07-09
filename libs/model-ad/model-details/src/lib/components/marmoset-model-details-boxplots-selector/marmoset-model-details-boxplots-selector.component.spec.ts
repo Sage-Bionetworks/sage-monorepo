@@ -82,7 +82,7 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
     });
     const component = fixture.componentInstance;
 
-    component.getAgeGroups(duplicateAgeData);
+    component.transformSectionData(duplicateAgeData);
 
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining('expected 1 ModelData per age group but got 2'),

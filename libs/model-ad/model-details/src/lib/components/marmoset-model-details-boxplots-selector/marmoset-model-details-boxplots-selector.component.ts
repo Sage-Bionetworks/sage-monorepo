@@ -41,7 +41,7 @@ export class MarmosetModelDetailsBoxplotsSelectorComponent {
       `The results shown on this page are derived from the analysis of ${this.modelName()} marmosets and age- and sex-matched contemporaneous non-carrier control animals.`,
   );
 
-  getAgeGroups(data: ModelData[]) {
+  transformSectionData = (data: ModelData[]) => {
     const ages = Array.from(new Set(data.map((item) => item.age)));
     return ages.map((age) => {
       const items = data.filter((item) => item.age === age);
@@ -52,5 +52,5 @@ export class MarmosetModelDetailsBoxplotsSelectorComponent {
       }
       return { age, data: items };
     });
-  }
+  };
 }
