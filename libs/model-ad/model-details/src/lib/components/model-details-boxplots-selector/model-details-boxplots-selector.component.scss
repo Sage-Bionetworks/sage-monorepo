@@ -1,6 +1,10 @@
 @use 'model-ad/styles/src/mixins' as mixins;
 @use 'model-ad/styles/src/variables' as vars;
 
+:host {
+  --toc-items-per-row: 6;
+}
+
 [class*='-container'] {
   padding-top: var(--section-padding);
   padding-bottom: var(--section-padding);
@@ -65,7 +69,7 @@
     list-style: none;
     padding: 0;
     display: grid;
-    grid-template-rows: repeat(6, auto);
+    grid-template-rows: repeat(var(--toc-items-per-row), auto);
     grid-auto-flow: column;
     grid-auto-columns: minmax(10rem, max-content);
 
