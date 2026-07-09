@@ -405,7 +405,10 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     sex: string[],
     modelName: string,
   ) {
-    const filename = `${modelName}_${this.decodeHtmlEntities(evidenceType)}_${filterValue}_${sex.join('_')}`;
+    const decodedEvidenceType = this.decodeHtmlEntities(evidenceType);
+    // Only include filterValue if it differs from evidenceType to avoid duplication
+    const filterPart = filterValue !== evidenceType ? `_${filterValue}` : '';
+    const filename = `${modelName}_${decodedEvidenceType}${filterPart}_${sex.join('_')}`;
     return this.helperService.cleanFilename(filename);
   }
 }

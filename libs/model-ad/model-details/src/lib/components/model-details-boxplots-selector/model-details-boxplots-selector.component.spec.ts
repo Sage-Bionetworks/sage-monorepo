@@ -7,8 +7,8 @@ import {
   validWikiParams,
 } from '@sagebionetworks/explorers/testing';
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
-import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
 import { mouseModelMock } from '@sagebionetworks/model-ad/testing';
+import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
 import { render, screen, waitFor } from '@testing-library/angular';
 import {
   FilterConfig,
@@ -149,6 +149,20 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
         'Abca7*V1599M',
       ),
     ).toBe('Abca7_V1599M_Plaque_Size_(Thio-S)_Hippocampus_Female');
+  });
+
+  it('should not duplicate evidenceType in filename when it matches filterValue', async () => {
+    const { fixture } = await setupHost();
+    const base = fixture.debugElement.children[0]
+      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+    expect(
+      base.generateBoxplotsFilename(
+        'Soluble A&beta;40',
+        'Soluble A&beta;40',
+        ['Female', 'Male'],
+        'APOE4-KI',
+      ),
+    ).toBe('APOE4-KI_Soluble_Abeta40_Female_Male');
   });
 
   it('should generate CSV data with tissue column when tissue is present', async () => {
