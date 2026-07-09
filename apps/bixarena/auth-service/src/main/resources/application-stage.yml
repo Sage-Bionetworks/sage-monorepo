@@ -13,6 +13,6 @@ logging:
     org.sagebionetworks.bixarena: INFO
 # Staging: session cookie uses secure defaults from application.yml
 # - domain: null (host-only)
-# - same-site: Strict
+# - same-site: Lax
 # - secure: true
 # - http-only: true
