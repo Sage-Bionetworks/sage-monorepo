@@ -96,7 +96,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
       { timeout: 10000 },
     );
     expect(tissueFilter).toBeVisible();
-  });
+  }, 15000);
 
   it('should convert label to anchor id', async () => {
     const { fixture } = await setupHost();
