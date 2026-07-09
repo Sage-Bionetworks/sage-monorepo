@@ -30,3 +30,31 @@ export async function waitForScrollToStop(page: Page, timeout = 5000) {
     )
     .toBe(true);
 }
+
+/**
+ * Checks if the page scroll position is at the top (pageYOffset === 0).
+ *
+ * @param page - The Playwright page instance
+ * @returns Promise resolving to true if at top, false otherwise
+ */
+export async function isPageAtTop(page: Page): Promise<boolean> {
+  return await page.evaluate(() => window.pageYOffset === 0);
+}
+
+/**
+ * Asserts that the page scroll position is at the top.
+ *
+ * @param page - The Playwright page instance
+ */
+export async function expectPageAtTop(page: Page): Promise<void> {
+  expect(await isPageAtTop(page)).toBe(true);
+}
+
+/**
+ * Asserts that the page scroll position is not at the top.
+ *
+ * @param page - The Playwright page instance
+ */
+export async function expectPageNotAtTop(page: Page): Promise<void> {
+  expect(await isPageAtTop(page)).toBe(false);
+}

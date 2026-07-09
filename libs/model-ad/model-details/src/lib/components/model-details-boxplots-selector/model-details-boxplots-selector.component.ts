@@ -25,6 +25,7 @@ import {
 } from '@sagebionetworks/explorers/ui';
 import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
+import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { generateAnchorId } from '../../utils';
 
@@ -49,6 +50,7 @@ export interface SectionContext<T = ModelData[]> {
   imports: [
     FormsModule,
     SelectModule,
+    ButtonModule,
     NgTemplateOutlet,
     ModalLinkComponent,
     DecodeGreekEntityPipe,
@@ -116,6 +118,8 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
   activeShareLink = signal('');
   lastShareLinkCopied = signal('');
+
+  isTocCollapsed = signal(true);
 
   constructor() {
     effect(() => {
@@ -413,5 +417,9 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     const filterPart = filterValue !== evidenceType ? `_${filterValue}` : '';
     const filename = `${modelName}_${decodedEvidenceType}${filterPart}_${sex.join('_')}`;
     return this.helperService.cleanFilename(filename);
+  }
+
+  toggleToc(): void {
+    this.isTocCollapsed.set(!this.isTocCollapsed());
   }
 }

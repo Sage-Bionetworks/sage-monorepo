@@ -1,24 +1,20 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import {
   expectComparisonToolTableLoaded,
   expectFilters,
   expectFiltersParams,
+  expectPageAtTop,
+  expectPageNotAtTop,
   waitForScrollToStop,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
+import {
+  getTocCollapseButton,
+  getTocExpandButton,
+  getTocLinks,
+  getTocList,
+} from './helpers/model-details';
 import { searchAndGetSearchListItems } from './helpers/search';
-
-async function isPageAtTop(page: Page) {
-  return await page.evaluate(() => window.pageYOffset === 0);
-}
-
-async function expectPageAtTop(page: Page) {
-  expect(await isPageAtTop(page)).toBe(true);
-}
-
-async function expectPageNotAtTop(page: Page) {
-  expect(await isPageAtTop(page)).toBe(false);
-}
 
 test.describe('model details', () => {
   test('invalid model results in a 404 redirect', async ({ page }) => {
@@ -290,14 +286,17 @@ test.describe('model details - model with special characters', () => {
 });
 
 test.describe('model details - boxplots selector - table of contents', () => {
+  const testModel = 'Abca7*V1599M';
+  const biomarkersPath = `/models/${testModel}/biomarkers`;
+
   test('clicking on table of contents link scrolls to appropriate section', async ({ page }) => {
     const model = '3xTg-AD';
     await page.goto(`/models/${model}/biomarkers`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: 'Table of Contents' })).toBeVisible();
 
-    const toc = page.locator('.table-of-contents-container');
-    const tocLinks = toc.getByRole('button').filter({ hasNotText: /download all/i });
+    await getTocExpandButton(page).click();
+    const tocLinks = getTocLinks(page);
     const tocLinksCount = await tocLinks.count();
 
     for (let i = 0; i < tocLinksCount; i++) {
@@ -315,46 +314,106 @@ test.describe('model details - boxplots selector - table of contents', () => {
   test('appropriate section is shown when url includes an evidence type fragment', async ({
     page,
   }) => {
-    const model = 'Abca7*V1599M';
     const fragment = 'soluble-abeta40';
     const section = 'Soluble Aβ40';
-    await page.goto(`/models/${model}/biomarkers#${fragment}`);
-    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+    await page.goto(`${biomarkersPath}#${fragment}`);
+    await expect(page.getByRole('heading', { level: 1, name: testModel })).toBeVisible();
     await expect(
       page.getByRole('heading', { level: 2, name: section, exact: true }),
     ).toBeInViewport();
   });
 
   test('clicking on a section adds fragment to url', async ({ page }) => {
-    const model = 'Abca7*V1599M';
-    const basePath = `/models/${model}/biomarkers`;
     const section = 'NfL';
     const fragment = 'nfl';
 
-    await page.goto(basePath);
-    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+    await page.goto(biomarkersPath);
+    await expect(page.getByRole('heading', { level: 1, name: testModel })).toBeVisible();
 
-    const nflButton = page.getByRole('button', { name: section, exact: true });
+    await getTocExpandButton(page).click();
+    const nflButton = getTocLinks(page).filter({ hasText: section });
     await nflButton.click();
 
     await expect(page.getByRole('heading', { level: 2, name: section })).toBeInViewport();
-    await page.waitForURL(`${basePath}#${fragment}`);
+    await page.waitForURL(`${biomarkersPath}#${fragment}`);
   });
 
   test('clicking on a section updates fragment in url', async ({ page }) => {
-    const model = 'Abca7*V1599M';
-    const basePath = `/models/${model}/biomarkers`;
     const section = 'NfL';
     const fragment = 'nfl';
 
-    await page.goto(`${basePath}#soluble-abeta40`);
-    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+    await page.goto(`${biomarkersPath}#soluble-abeta40`);
+    await expect(page.getByRole('heading', { level: 1, name: testModel })).toBeVisible();
 
-    const nflButton = page.getByRole('button', { name: section, exact: true });
+    await getTocExpandButton(page).click();
+    const nflButton = getTocLinks(page).filter({ hasText: section });
     await nflButton.click();
 
     await expect(page.getByRole('heading', { level: 2, name: section })).toBeInViewport();
-    await page.waitForURL(`${basePath}#${fragment}`);
+    await page.waitForURL(`${biomarkersPath}#${fragment}`);
+  });
+
+  test('TOC starts collapsed on initial load', async ({ page }) => {
+    await page.goto(biomarkersPath);
+    await expect(page.getByRole('heading', { level: 1, name: testModel })).toBeVisible();
+
+    await expect(getTocExpandButton(page)).toBeVisible();
+    await expect(getTocList(page)).toBeHidden();
+  });
+
+  test('expanding TOC shows items', async ({ page }) => {
+    await page.goto(biomarkersPath);
+
+    await getTocExpandButton(page).click();
+
+    await expect(getTocCollapseButton(page)).toBeVisible();
+    await expect(getTocList(page)).toBeVisible();
+    await expect(getTocLinks(page).first()).toBeVisible();
+  });
+
+  test('collapsing TOC hides items', async ({ page }) => {
+    await page.goto(biomarkersPath);
+
+    await getTocExpandButton(page).click();
+    await expect(getTocList(page)).toBeVisible();
+
+    await getTocCollapseButton(page).click();
+
+    await expect(getTocExpandButton(page)).toBeVisible();
+    await expect(getTocList(page)).toBeHidden();
+  });
+
+  test('TOC remains collapsed when loading page with anchor fragment', async ({ page }) => {
+    const fragment = 'soluble-abeta40';
+    const section = 'Soluble Aβ40';
+    await page.goto(`${biomarkersPath}#${fragment}`);
+
+    await expect(page.getByRole('heading', { level: 1, name: testModel })).toBeVisible();
+
+    await expect(getTocExpandButton(page)).toBeVisible();
+    await expect(getTocList(page)).toBeHidden();
+
+    await expect(
+      page.getByRole('heading', { level: 2, name: section, exact: true }),
+    ).toBeInViewport();
+    await expect(page).toHaveURL(`${biomarkersPath}#${fragment}`);
+  });
+
+  test('TOC stays expanded after clicking a link', async ({ page }) => {
+    await page.goto(biomarkersPath);
+
+    await getTocExpandButton(page).click();
+
+    const firstLink = getTocLinks(page).first();
+    const linkText = (await firstLink.textContent()) ?? '';
+    await firstLink.click();
+
+    await expect(getTocCollapseButton(page)).toBeVisible();
+    await expect(getTocList(page)).toBeVisible();
+
+    await expect(
+      page.getByRole('heading', { level: 2, name: linkText, exact: true }),
+    ).toBeInViewport();
   });
 });
 
@@ -502,6 +561,9 @@ test.describe('model details - boxplots selector - share links - updates', () =>
   test('query parameters are maintained when fragment is updated', async ({ page }) => {
     const pathWithParams = `${basePath}?tissue=Hippocampus&sex=Male`;
     await page.goto(pathWithParams);
+
+    await getTocExpandButton(page).click();
+
     await page.getByRole('button', { name: 'Soluble Aβ42', exact: true }).click();
     await page.waitForURL(`${pathWithParams}#soluble-abeta42`);
   });

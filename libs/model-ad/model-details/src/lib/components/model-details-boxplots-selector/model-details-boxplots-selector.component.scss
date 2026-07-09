@@ -67,6 +67,12 @@
     h2 {
       margin-bottom: 0;
     }
+
+    .title-bar-actions {
+      display: flex;
+      gap: 59px;
+      align-items: center;
+    }
   }
 
   .table-of-contents {

@@ -39,31 +39,46 @@
   <div class="table-of-contents-container full-width-container">
     <div class="table-of-contents-title-bar">
       <h2>Table of Contents</h2>
-      <explorers-download-dom-images-zip
-        [domFiles]="domFiles()"
-        [csvFiles]="boxplotSections()"
-        [hasCsvDownload]="true"
-        [hasImageDownload]="true"
-        [filename]="
-          generateBoxplotsZipFilename(
-            selectedFilterOption(),
-            selectedSexOption().value,
-            modelName(),
-            title()
-          )
-        "
-        [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
-      />
+      <div class="title-bar-actions">
+        <explorers-download-dom-images-zip
+          [domFiles]="domFiles()"
+          [csvFiles]="boxplotSections()"
+          [hasCsvDownload]="true"
+          [hasImageDownload]="true"
+          [filename]="
+            generateBoxplotsZipFilename(
+              selectedFilterOption(),
+              selectedSexOption().value,
+              modelName(),
+              title()
+            )
+          "
+          [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
+        />
+        <p-button
+          (click)="toggleToc()"
+          [label]="isTocCollapsed() ? 'Expand' : 'Collapse'"
+          [icon]="isTocCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"
+          iconPos="left"
+          type="button"
+          rounded="true"
+          size="small"
+          variant="text"
+          [style]="{ 'min-width': '120px' }"
+        />
+      </div>
     </div>
-    <ul class="table-of-contents">
-      @for (item of tocItems(); track item) {
-        <li>
-          <button (click)="scrollToSection(generateAnchorId(item))">
-            {{ item | decodeGreekEntity }}
-          </button>
-        </li>
-      }
-    </ul>
+    @if (!isTocCollapsed()) {
+      <ul class="table-of-contents" id="toc-list">
+        @for (item of tocItems(); track item) {
+          <li>
+            <button (click)="scrollToSection(generateAnchorId(item))" data-testid="toc-item-link">
+              {{ item | decodeGreekEntity }}
+            </button>
+          </li>
+        }
+      </ul>
+    }
   </div>
 
   <div class="boxplots-container" #boxplotsContainer>
