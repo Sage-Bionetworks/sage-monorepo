@@ -23,7 +23,6 @@ export * from './named-link';
 export * from './page-metadata';
 export * from './search-result';
 export * from './sex';
-export * from './sex-cohort';
 export * from './transcriptomics';
 export * from './transcriptomics-individual';
 export * from './transcriptomics-individual-filter-query';

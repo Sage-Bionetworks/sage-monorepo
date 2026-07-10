@@ -360,7 +360,7 @@ components:
           description: List of dropdown options
           items:
             type: string
-            example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
+            example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus
         row_count:
           type: string
           description: Deprecated field that is always null. Previously contained relative description of the total number of rows in the data
@@ -867,17 +867,16 @@ components:
         categories:
           description: |
             Array of category values from the dropdown selections.
-            The API will parse these to extract the tissue and sex_cohort information.
-            Expected format: [mainCategory, tissueCategory, sexCohortCategory]
+            The API will parse these to extract the tissue information.
+            Expected format: [mainCategory, tissueCategory]
           type: array
           items:
             type: string
-          minItems: 3
-          maxItems: 3
+          minItems: 2
+          maxItems: 2
           example:
             - RNA - DIFFERENTIAL EXPRESSION
             - Tissue - Hemibrain
-            - Sex - Females & Males
         items:
           description: |
             List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
@@ -973,13 +972,6 @@ components:
           description: URL for the related resource
       required:
         - link_text
-    SexCohort:
-      type: string
-      description: Sex Cohort
-      enum:
-        - Females
-        - Females & Males
-        - Males
     FoldChangeResult:
       type: object
       description: Fold Change result
@@ -1032,8 +1024,8 @@ components:
           type: string
           description: Tissue type
           example: Hemibrain
-        sex_cohort:
-          $ref: '#/components/schemas/SexCohort'
+        sex:
+          $ref: '#/components/schemas/Sex'
         4 months:
           $ref: '#/components/schemas/FoldChangeResult'
         12 months:
@@ -1050,7 +1042,7 @@ components:
         - model_group
         - model_type
         - tissue
-        - sex_cohort
+        - sex
     TranscriptomicsPage:
       type: object
       description: A paginated response containing transcriptomics objects and pagination metadata.

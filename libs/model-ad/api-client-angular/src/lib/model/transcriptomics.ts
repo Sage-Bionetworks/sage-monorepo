@@ -9,7 +9,7 @@
  */
 import { NamedLink } from './named-link';
 import { FoldChangeResult } from './fold-change-result';
-import { SexCohort } from './sex-cohort';
+import { Sex } from './sex';
 
 /**
  * Transcriptomics
@@ -48,7 +48,7 @@ export interface Transcriptomics {
    * Tissue type
    */
   tissue: string;
-  sex_cohort: SexCohort;
+  sex: Sex;
   '4 months'?: FoldChangeResult;
   '12 months'?: FoldChangeResult;
   '18 months'?: FoldChangeResult;

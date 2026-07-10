@@ -36,8 +36,8 @@ properties:
     type: string
     description: Tissue type
     example: Hemibrain
-  sex_cohort:
-    $ref: ./SexCohort.yaml
+  sex:
+    $ref: ./Sex.yaml
   4 months:
     $ref: ./FoldChangeResult.yaml
   12 months:
@@ -54,4 +54,4 @@ required:
   - model_group
   - model_type
   - tissue
-  - sex_cohort
+  - sex

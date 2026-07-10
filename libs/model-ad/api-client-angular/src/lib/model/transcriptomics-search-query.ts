@@ -22,7 +22,7 @@ export interface TranscriptomicsSearchQuery {
    */
   pageSize?: number;
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory]
+   * Array of category values from the dropdown selections. The API will parse these to extract the tissue information. Expected format: [mainCategory, tissueCategory]
    */
   categories: Array<string>;
   /**

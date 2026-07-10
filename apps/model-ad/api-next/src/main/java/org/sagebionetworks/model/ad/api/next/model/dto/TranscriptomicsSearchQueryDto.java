@@ -163,11 +163,11 @@ public class TranscriptomicsSearchQueryDto {
   }
 
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory] 
+   * Array of category values from the dropdown selections. The API will parse these to extract the tissue information. Expected format: [mainCategory, tissueCategory] 
    * @return categories
    */
-  @NotNull @Size(min = 3, max = 3) 
-  @Schema(name = "categories", example = "[\"RNA - DIFFERENTIAL EXPRESSION\",\"Tissue - Hemibrain\",\"Sex - Females & Males\"]", description = "Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory] ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Size(min = 2, max = 2) 
+  @Schema(name = "categories", example = "[\"RNA - DIFFERENTIAL EXPRESSION\",\"Tissue - Hemibrain\"]", description = "Array of category values from the dropdown selections. The API will parse these to extract the tissue information. Expected format: [mainCategory, tissueCategory] ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
   public List<String> getCategories() {
     return categories;
