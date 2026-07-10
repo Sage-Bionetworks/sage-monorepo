@@ -28,5 +28,21 @@
       { "ensembl_gene_id": 1 },
       { "ensembl_gene_id": 1, "tissue": 1, "name": 1, "model_group": 1 }
     ]
+  },
+  {
+    "name": "marmo_details",
+    "indexes": [{ "name": 1 }]
+  },
+  {
+    "name": "marmo_overview",
+    "indexes": [{ "name": 1 }]
+  },
+  {
+    "name": "model_details",
+    "indexes": [{ "name": 1 }]
+  },
+  {
+    "name": "protein_de_aggregate",
+    "indexes": [{ "unique_id": 1 }]
   }
 ]
