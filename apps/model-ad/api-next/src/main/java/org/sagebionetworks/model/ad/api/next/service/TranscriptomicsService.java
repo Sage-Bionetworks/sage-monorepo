@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
@@ -13,7 +14,6 @@ import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.TranscriptomicsMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.TranscriptomicsRepository;
-import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -35,13 +35,12 @@ public class TranscriptomicsService {
     key = "T(org.sagebionetworks.explorers.ApiHelper)" +
     ".buildCacheKey('transcriptomics', #query.itemFilterType, #query.items, " +
     "#query.search, #query.biodomains, #query.modelType, #query.name, " +
-    "#tissue, #sexCohort, #query.pageNumber, #query.pageSize, " +
+    "#tissue, #query.pageNumber, #query.pageSize, " +
     "#query.sortFields, #query.sortOrders)"
   )
   public TranscriptomicsPageDto loadTranscriptomics(
     TranscriptomicsSearchQueryDto query,
-    String tissue,
-    String sexCohort
+    String tissue
   ) {
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
 
@@ -57,13 +56,7 @@ public class TranscriptomicsService {
     Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize, sort);
 
     // Use custom repository for all queries
-    Page<TranscriptomicsDocument> page = repository.findAll(
-      pageable,
-      query,
-      items,
-      tissue,
-      sexCohort
-    );
+    Page<TranscriptomicsDocument> page = repository.findAll(pageable, query, items, tissue);
 
     List<TranscriptomicsDto> transcriptomics = page
       .getContent()

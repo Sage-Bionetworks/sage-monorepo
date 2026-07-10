@@ -20,14 +20,12 @@ public interface CustomTranscriptomicsRepository {
    * @param query the search query containing all filter criteria
    * @param items the sanitized list of composite identifiers (from query.items)
    * @param tissue the tissue filter value extracted from categories
-   * @param sexCohort the sex cohort filter value extracted from categories
    * @return page of transcriptomics documents matching all criteria
    */
   Page<TranscriptomicsDocument> findAll(
     Pageable pageable,
     TranscriptomicsSearchQueryDto query,
     List<String> items,
-    String tissue,
-    String sexCohort
+    String tissue
   );
 }

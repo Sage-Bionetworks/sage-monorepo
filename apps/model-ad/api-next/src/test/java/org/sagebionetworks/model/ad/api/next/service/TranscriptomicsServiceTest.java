@@ -37,7 +37,6 @@ class TranscriptomicsServiceTest {
   private TranscriptomicsMapper mapper;
 
   private static final String TISSUE = "brain";
-  private static final String SEX_COHORT = "Females";
 
   @BeforeEach
   void setUp() {
@@ -55,8 +54,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of()),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -67,7 +65,7 @@ class TranscriptomicsServiceTest {
       .pageSize(100)
       .build();
 
-    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
 
     assertThat(result.getTranscriptomics()).isEmpty();
     assertThat(result.getPage().getTotalElements()).isZero();
@@ -75,14 +73,13 @@ class TranscriptomicsServiceTest {
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of()),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
   }
 
   @Test
-  @DisplayName("should return all tissue and sex cohort items when exclude filter has no items")
-  void shouldReturnAllTissueAndSexCohortItemsWhenExcludeFilterHasNoItems() {
+  @DisplayName("should return all tissue items when exclude filter has no items")
+  void shouldReturnAllTissueItemsWhenExcludeFilterHasNoItems() {
     TranscriptomicsDocument doc = createTranscriptomicsDocument("ENSG00000001", "GENE1", "Symbol1");
     Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(doc));
 
@@ -91,8 +88,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of()),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -103,7 +99,7 @@ class TranscriptomicsServiceTest {
       .pageSize(100)
       .build();
 
-    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
 
     assertThat(result.getTranscriptomics()).hasSize(1);
     assertThat(result.getTranscriptomics().get(0).getEnsemblGeneId()).isEqualTo("ENSG00000001");
@@ -111,8 +107,7 @@ class TranscriptomicsServiceTest {
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of()),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
   }
 
@@ -127,8 +122,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of()),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -140,7 +134,7 @@ class TranscriptomicsServiceTest {
       .pageSize(100)
       .build();
 
-    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
 
     assertThat(result.getTranscriptomics()).hasSize(1);
     assertThat(result.getTranscriptomics().get(0).getGeneSymbol()).isEqualTo("Symbol1");
@@ -148,8 +142,7 @@ class TranscriptomicsServiceTest {
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of()),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
   }
 
@@ -173,8 +166,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of()),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -186,15 +178,14 @@ class TranscriptomicsServiceTest {
       .pageSize(100)
       .build();
 
-    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
 
     assertThat(result.getTranscriptomics()).hasSize(2);
     verify(repository).findAll(
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of()),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
   }
 
@@ -209,8 +200,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of("ENSG00000001~GENE1")),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -221,7 +211,7 @@ class TranscriptomicsServiceTest {
       .pageSize(100)
       .build();
 
-    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
 
     assertThat(result.getTranscriptomics()).hasSize(1);
     assertThat(result.getTranscriptomics().get(0).getEnsemblGeneId()).isEqualTo("ENSG00000001");
@@ -229,8 +219,7 @@ class TranscriptomicsServiceTest {
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of("ENSG00000001~GENE1")),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
   }
 
@@ -245,8 +234,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of("ENSG00000001~GENE1")),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -257,7 +245,7 @@ class TranscriptomicsServiceTest {
       .pageSize(100)
       .build();
 
-    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
 
     assertThat(result.getTranscriptomics()).hasSize(1);
     assertThat(result.getTranscriptomics().get(0).getEnsemblGeneId()).isEqualTo("ENSG00000002");
@@ -265,8 +253,7 @@ class TranscriptomicsServiceTest {
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of("ENSG00000001~GENE1")),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
   }
 
@@ -285,8 +272,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of("ENSG00000002~GENE2")),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -298,7 +284,7 @@ class TranscriptomicsServiceTest {
       .pageSize(100)
       .build();
 
-    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
 
     assertThat(result.getTranscriptomics()).hasSize(1);
     assertThat(result.getTranscriptomics().get(0).getGeneSymbol()).isEqualTo("TestSymbol");
@@ -306,8 +292,7 @@ class TranscriptomicsServiceTest {
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of("ENSG00000002~GENE2")),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
   }
 
@@ -334,8 +319,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of("ENSG00000003~GENE3")),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -347,15 +331,14 @@ class TranscriptomicsServiceTest {
       .pageSize(100)
       .build();
 
-    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
 
     assertThat(result.getTranscriptomics()).hasSize(2);
     verify(repository).findAll(
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of("ENSG00000003~GENE3")),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
   }
 
@@ -370,8 +353,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of("ENSG00000001~GENE1")),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -383,15 +365,14 @@ class TranscriptomicsServiceTest {
       .pageSize(100)
       .build();
 
-    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
 
     assertThat(result.getTranscriptomics()).hasSize(1);
     verify(repository).findAll(
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of("ENSG00000001~GENE1")),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
   }
 
@@ -415,8 +396,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of("ENSG00000001~GENE1", "ENSG00000002~GENE2")),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -427,15 +407,14 @@ class TranscriptomicsServiceTest {
       .pageSize(100)
       .build();
 
-    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
 
     assertThat(result.getTranscriptomics()).hasSize(2);
     verify(repository).findAll(
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of("ENSG00000001~GENE1", "ENSG00000002~GENE2")),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
   }
 
@@ -449,8 +428,7 @@ class TranscriptomicsServiceTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of()),
-        eq(TISSUE),
-        eq(SEX_COHORT)
+        eq(TISSUE)
       )
     ).thenReturn(page);
 
@@ -460,15 +438,14 @@ class TranscriptomicsServiceTest {
       .pageSize(null)
       .build();
 
-    service.loadTranscriptomics(query, TISSUE, SEX_COHORT);
+    service.loadTranscriptomics(query, TISSUE);
 
     ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
     verify(repository).findAll(
       pageableCaptor.capture(),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of()),
-      eq(TISSUE),
-      eq(SEX_COHORT)
+      eq(TISSUE)
     );
 
     Pageable pageable = pageableCaptor.getValue();
@@ -487,7 +464,7 @@ class TranscriptomicsServiceTest {
     TranscriptomicsDocument document = new TranscriptomicsDocument();
     document.setId(new ObjectId());
     document.setTissue(TISSUE);
-    document.setSexCohort(SEX_COHORT);
+    document.setSex("Female");
     document.setEnsemblGeneId(ensemblGeneId);
     document.setName(Link.builder().linkText(name).linkUrl("").build());
     document.setGeneSymbol(geneSymbol);

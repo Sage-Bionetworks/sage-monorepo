@@ -36,7 +36,7 @@ public class TranscriptomicsMapper {
       document.getModelGroup(),
       document.getModelType(),
       document.getTissue(),
-      EnumConverter.toSexCohortDto(document.getSexCohort(), "transcriptomics record")
+      EnumConverter.toSexDto(document.getSex(), "transcriptomics record")
     );
 
     dto.set4months(toFoldChangeDto(document.getFourMonths()));

@@ -72,8 +72,8 @@ public class CustomTranscriptomicsRepositoryImpl
       ComputedSortField.of(toLowerExpr("model_type")),
       "tissue",
       ComputedSortField.of(toLowerExpr("tissue")),
-      "sex_cohort",
-      ComputedSortField.of(toLowerExpr("sex_cohort")),
+      "sex",
+      ComputedSortField.of(toLowerExpr("sex")),
       "ensembl_gene_id",
       ComputedSortField.of(toLowerExpr("ensembl_gene_id")),
       "matched_control",
@@ -127,8 +127,7 @@ public class CustomTranscriptomicsRepositoryImpl
     Pageable pageable,
     TranscriptomicsSearchQueryDto query,
     List<String> items,
-    String tissue,
-    String sexCohort
+    String tissue
   ) {
     ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
       query.getItemFilterType(),
@@ -141,8 +140,7 @@ public class CustomTranscriptomicsRepositoryImpl
       isInclude,
       query.getSearch(),
       getFilterConfig(),
-      Criteria.where("tissue").is(tissue),
-      Criteria.where("sex_cohort").is(sexCohort)
+      Criteria.where("tissue").is(tissue)
     );
 
     return executePagedAggregation(matchCriteria, pageable);

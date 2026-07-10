@@ -26,9 +26,9 @@ public final class CacheNames {
 
   /**
    * Cache for transcriptomics queries.
-   * Stores results from transcriptomics comparison queries filtered by tissue, sex_cohort, items,
+   * Stores results from transcriptomics comparison queries filtered by tissue, items,
    * and filter type.
-   * Key format: Dynamic based on query parameters (tissue, sex_cohort, items, filterType)
+   * Key format: Dynamic based on query parameters (tissue, items, filterType)
    */
   public static final String TRANSCRIPTOMICS = "transcriptomics";
 

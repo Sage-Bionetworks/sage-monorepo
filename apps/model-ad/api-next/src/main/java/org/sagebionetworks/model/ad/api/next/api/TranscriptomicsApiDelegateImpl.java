@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.service.TranscriptomicsService;
-import org.sagebionetworks.explorers.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -43,15 +43,9 @@ public class TranscriptomicsApiDelegateImpl implements TranscriptomicsApiDelegat
     // Validate query parameters
     ApiHelper.validateQueryParameters(VALID_QUERY_PARAMS);
 
-    String[] tissueAndSexCohort = extractTissueAndSexCohort(query.getCategories());
-    String tissue = tissueAndSexCohort[0];
-    String sexCohort = tissueAndSexCohort[1];
+    String tissue = extractTissue(query.getCategories());
 
-    TranscriptomicsPageDto results = transcriptomicsService.loadTranscriptomics(
-      query,
-      tissue,
-      sexCohort
-    );
+    TranscriptomicsPageDto results = transcriptomicsService.loadTranscriptomics(query, tissue);
 
     log.debug(
       "Successfully retrieved {} transcriptomics data",
@@ -64,25 +58,23 @@ public class TranscriptomicsApiDelegateImpl implements TranscriptomicsApiDelegat
   }
 
   /**
-   * Extracts tissue and sex cohort from categories list.
-   * Expected format: [mainCategory, tissueCategory, sexCohortCategory] where:
+   * Extracts tissue from categories list.
+   * Expected format: [mainCategory, tissueCategory] where:
    * - First value is the main category (e.g., "RNA - DIFFERENTIAL EXPRESSION")
    * - Second value is the tissue with prefix (e.g., "Tissue - Hemibrain")
-   * - Third value is the sex_cohort with prefix (e.g., "Sex - Females & Males")
    *
    * @param categories List of category values
-   * @return Array with [tissue, sex_cohort]
+   * @return String, the tissue
    */
-  private String[] extractTissueAndSexCohort(List<String> categories) {
-    if (categories == null || categories.size() < 3) {
+  private String extractTissue(List<String> categories) {
+    if (categories == null || categories.size() < 2) {
       throw new InvalidCategoryException(
-        "Expected at least 3 category values, got: " + (categories == null ? 0 : categories.size())
+        "Expected at least 2 category values, got: " + (categories == null ? 0 : categories.size())
       );
     }
 
     String mainCategory = categories.get(0).trim();
     String tissueWithPrefix = categories.get(1).trim();
-    String sexCohortWithPrefix = categories.get(2).trim();
 
     // Validate main category (case-insensitive check)
     if (
@@ -95,12 +87,7 @@ public class TranscriptomicsApiDelegateImpl implements TranscriptomicsApiDelegat
     }
 
     // Extract tissue from "Tissue - Hemibrain"
-    String tissue = extractValueAfterPrefix(tissueWithPrefix, "Tissue - ", "tissue");
-
-    // Extract sex_cohort from "Sex - Females & Males"
-    String sexCohort = extractValueAfterPrefix(sexCohortWithPrefix, "Sex - ", "sex_cohort");
-
-    return new String[] { tissue, sexCohort };
+    return extractValueAfterPrefix(tissueWithPrefix, "Tissue - ", "tissue");
   }
 
   private String extractValueAfterPrefix(String value, String prefix, String fieldName) {
