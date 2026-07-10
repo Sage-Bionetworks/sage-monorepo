@@ -12,7 +12,7 @@ import {
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import {
   ComparisonToolConfigService,
-  SexCohort,
+  Sex,
   Transcriptomics,
   TranscriptomicsPage,
   TranscriptomicsService,
@@ -34,7 +34,7 @@ const baseMockRow: Transcriptomics = {
   model_group: 'Abca7*V1599M',
   model_type: 'Familial AD',
   tissue: 'Hippocampus',
-  sex_cohort: SexCohort.FemalesMales,
+  sex: Sex.Female,
 };
 
 function mockPage(rows: Transcriptomics[]): TranscriptomicsPage {
