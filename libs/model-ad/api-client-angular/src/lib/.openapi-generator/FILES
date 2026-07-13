@@ -35,6 +35,7 @@ model/model-overview.ts
 model/model-overviews-page.ts
 model/model.ts
 model/models.ts
+model/named-link.ts
 model/page-metadata.ts
 model/search-result.ts
 model/sex-cohort.ts

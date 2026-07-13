@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.model.ad.api.next.model.dto.FoldChangeResultDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.LinkDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.NamedLinkDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexCohortDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -40,7 +40,7 @@ public class TranscriptomicsDto {
   @Valid
   private List<String> biodomains = new ArrayList<>();
 
-  private LinkDto name;
+  private NamedLinkDto name;
 
   private String matchedControl;
 
@@ -65,7 +65,7 @@ public class TranscriptomicsDto {
   /**
    * Constructor with only required parameters
    */
-  public TranscriptomicsDto(String compositeId, String ensemblGeneId, String geneSymbol, List<String> biodomains, LinkDto name, String matchedControl, String modelGroup, String modelType, String tissue, SexCohortDto sexCohort) {
+  public TranscriptomicsDto(String compositeId, String ensemblGeneId, String geneSymbol, List<String> biodomains, NamedLinkDto name, String matchedControl, String modelGroup, String modelType, String tissue, SexCohortDto sexCohort) {
     this.compositeId = compositeId;
     this.ensemblGeneId = ensemblGeneId;
     this.geneSymbol = geneSymbol;
@@ -166,7 +166,7 @@ public class TranscriptomicsDto {
     this.biodomains = biodomains;
   }
 
-  public TranscriptomicsDto name(LinkDto name) {
+  public TranscriptomicsDto name(NamedLinkDto name) {
     this.name = name;
     return this;
   }
@@ -178,11 +178,11 @@ public class TranscriptomicsDto {
   @NotNull @Valid 
   @Schema(name = "name", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
-  public LinkDto getName() {
+  public NamedLinkDto getName() {
     return name;
   }
 
-  public void setName(LinkDto name) {
+  public void setName(NamedLinkDto name) {
     this.name = name;
   }
 
@@ -456,7 +456,7 @@ public class TranscriptomicsDto {
       return this;
     }
     
-    public TranscriptomicsDto.Builder name(LinkDto name) {
+    public TranscriptomicsDto.Builder name(NamedLinkDto name) {
       this.instance.name(name);
       return this;
     }

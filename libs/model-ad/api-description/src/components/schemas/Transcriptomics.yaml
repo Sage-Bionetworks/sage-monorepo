@@ -18,7 +18,7 @@ properties:
     items:
       type: string
   name:
-    $ref: ./Link.yaml
+    $ref: ./NamedLink.yaml
     description: Model name and link to model details page
   matched_control:
     type: string

@@ -19,6 +19,7 @@ export * from './model-identifier-type';
 export * from './model-overview';
 export * from './model-overview-search-query';
 export * from './model-overviews-page';
+export * from './named-link';
 export * from './page-metadata';
 export * from './search-result';
 export * from './sex';

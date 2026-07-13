@@ -961,6 +961,18 @@ components:
         - categories
         - sortFields
         - sortOrders
+    NamedLink:
+      type: object
+      description: Link with required display text
+      properties:
+        link_text:
+          type: string
+          description: Link text
+        link_url:
+          type: string
+          description: URL for the related resource
+      required:
+        - link_text
     SexCohort:
       type: string
       description: Sex Cohort
@@ -1002,7 +1014,7 @@ components:
           items:
             type: string
         name:
-          $ref: '#/components/schemas/Link'
+          $ref: '#/components/schemas/NamedLink'
           description: Model name and link to model details page
         matched_control:
           type: string

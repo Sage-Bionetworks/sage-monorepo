@@ -1348,6 +1348,21 @@ components:
         - sortFields
         - sortOrders
       type: object
+    NamedLink:
+      description: Link with required display text
+      example:
+        link_url: link_url
+        link_text: link_text
+      properties:
+        link_text:
+          description: Link text
+          type: string
+        link_url:
+          description: URL for the related resource
+          type: string
+      required:
+        - link_text
+      type: object
     SexCohort:
       description: Sex Cohort
       enum:
@@ -1415,7 +1430,7 @@ components:
             type: string
           type: array
         name:
-          $ref: '#/components/schemas/Link'
+          $ref: '#/components/schemas/NamedLink'
         matched_control:
           description: Matched control for the model
           example: C57BL/6J

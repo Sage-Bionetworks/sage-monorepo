@@ -7,8 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { NamedLink } from './named-link';
 import { FoldChangeResult } from './fold-change-result';
-import { Link } from './link';
 import { SexCohort } from './sex-cohort';
 
 /**
@@ -31,7 +31,7 @@ export interface Transcriptomics {
    * List of biodomains associated with the gene
    */
   biodomains: Array<string>;
-  name: Link;
+  name: NamedLink;
   /**
    * Matched control for the model
    */

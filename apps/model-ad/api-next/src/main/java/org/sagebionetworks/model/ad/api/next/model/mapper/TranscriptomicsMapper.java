@@ -31,7 +31,7 @@ public class TranscriptomicsMapper {
       document.getEnsemblGeneId(),
       getGeneSymbolWithFallback(document),
       biodomains,
-      linkMapper.toRequiredDto(document.getName()),
+      linkMapper.toNamedLinkDto(document.getName()),
       document.getMatchedControl(),
       document.getModelGroup(),
       document.getModelType(),
