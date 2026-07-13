@@ -49,8 +49,9 @@ public class TranscriptomicsMapper {
   private String getCompositeId(TranscriptomicsDocument document) {
     String ensemblGeneId = document.getEnsemblGeneId();
     String name = document.getName().getLinkText();
+    String sex = document.getSex();
 
-    return String.format("%s~%s", ensemblGeneId, name);
+    return String.format("%s~%s~%s", ensemblGeneId, name, sex);
   }
 
   private String getGeneSymbolWithFallback(TranscriptomicsDocument document) {

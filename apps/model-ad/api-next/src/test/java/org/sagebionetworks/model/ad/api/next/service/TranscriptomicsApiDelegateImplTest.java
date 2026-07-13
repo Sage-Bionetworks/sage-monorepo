@@ -169,7 +169,7 @@ class TranscriptomicsApiDelegateImplTest {
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
       .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
-      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
+      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -256,7 +256,7 @@ class TranscriptomicsApiDelegateImplTest {
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
       .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
-      .items(List.of("ENSMUSG00000000002~APOE4"))
+      .items(List.of("ENSMUSG00000000002~APOE4~Female"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -287,7 +287,7 @@ class TranscriptomicsApiDelegateImplTest {
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
       .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
-      .items(List.of("ENSMUSG00000099999~ExcludedModel"))
+      .items(List.of("ENSMUSG00000099999~ExcludedModel~Female"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -326,7 +326,7 @@ class TranscriptomicsApiDelegateImplTest {
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
       .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
-      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
+      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)

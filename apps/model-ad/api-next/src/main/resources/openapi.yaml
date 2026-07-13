@@ -1389,7 +1389,7 @@ components:
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
         matched_control: C57BL/6J
-        composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+        composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
         ensembl_gene_id: ensembl_gene_id
         name:
           link_url: link_url
@@ -1405,8 +1405,8 @@ components:
           - biodomains
       properties:
         composite_id:
-          description: Unique identifier for the transcriptomics object
-          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+          description: Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)
+          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
           type: string
         ensembl_gene_id:
           description: Ensembl Gene ID
@@ -1472,7 +1472,7 @@ components:
               log2_fc: 0.8008281904610115
               adj_p_val: 6.027456183070403
             matched_control: C57BL/6J
-            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
             ensembl_gene_id: ensembl_gene_id
             name:
               link_url: link_url
@@ -1495,7 +1495,7 @@ components:
               log2_fc: 0.8008281904610115
               adj_p_val: 6.027456183070403
             matched_control: C57BL/6J
-            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
             ensembl_gene_id: ensembl_gene_id
             name:
               link_url: link_url

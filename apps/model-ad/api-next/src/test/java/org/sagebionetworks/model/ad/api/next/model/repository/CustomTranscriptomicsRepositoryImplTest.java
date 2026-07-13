@@ -142,7 +142,7 @@ class CustomTranscriptomicsRepositoryImplTest {
     repository.findAll(
       PageRequest.of(0, 10),
       query,
-      Arrays.asList("ENSG00000130203~5xFAD"),
+      Arrays.asList("ENSG00000130203~5xFAD~Female"),
       "test-tissue"
     );
 

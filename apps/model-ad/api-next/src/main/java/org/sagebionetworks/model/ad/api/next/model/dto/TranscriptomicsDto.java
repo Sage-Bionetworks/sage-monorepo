@@ -84,11 +84,11 @@ public class TranscriptomicsDto {
   }
 
   /**
-   * Unique identifier for the transcriptomics object
+   * Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)
    * @return compositeId
    */
   @NotNull 
-  @Schema(name = "composite_id", example = "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)", description = "Unique identifier for the transcriptomics object", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "composite_id", example = "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female", description = "Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("composite_id")
   public String getCompositeId() {
     return compositeId;

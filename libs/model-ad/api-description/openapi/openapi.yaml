@@ -991,8 +991,8 @@ components:
       properties:
         composite_id:
           type: string
-          description: Unique identifier for the transcriptomics object
-          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+          description: Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)
+          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
         ensembl_gene_id:
           type: string
           description: Ensembl Gene ID

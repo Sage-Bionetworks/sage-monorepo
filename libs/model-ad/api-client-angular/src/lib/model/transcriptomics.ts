@@ -16,7 +16,7 @@ import { Sex } from './sex';
  */
 export interface Transcriptomics {
   /**
-   * Unique identifier for the transcriptomics object
+   * Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)
    */
   composite_id: string;
   /**

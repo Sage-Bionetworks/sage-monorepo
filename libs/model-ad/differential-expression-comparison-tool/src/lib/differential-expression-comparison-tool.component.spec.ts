@@ -25,7 +25,7 @@ import { DifferentialExpressionComparisonToolComponent } from './differential-ex
 import { DifferentialExpressionComparisonToolService } from './services/differential-expression-comparison-tool.service';
 
 const baseMockRow: Transcriptomics = {
-  composite_id: 'test-id',
+  composite_id: 'ENSG00000001~Abca7*V1599M.5xFAD~Female',
   ensembl_gene_id: 'ENSG00000001',
   gene_symbol: 'ABCA7',
   biodomains: [],
