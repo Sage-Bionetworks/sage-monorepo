@@ -2,13 +2,13 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                                   | HTTP request                      | Description          |
-| -------------------------------------------------------- | --------------------------------- | -------------------- |
-| [**create_model_error**](ModelApi.md#create_model_error) | **POST** /models/{modelId}/errors | Report a model error |
-| [**list_models**](ModelApi.md#list_models)               | **GET** /models                   | List models          |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**create_model_error**](ModelApi.md#create_model_error) | **POST** /models/{modelId}/errors | Report a model error
+[**list_models**](ModelApi.md#list_models) | **GET** /models | List models
+
 
 # **create_model_error**
-
 > ModelError create_model_error(model_id, model_error_create_request)
 
 Report a model error
@@ -17,7 +17,7 @@ Report an error that occurred during model interaction.
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -47,7 +47,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.ModelApi(api_client)
     model_id = 'model_456' # str | The unique identifier of a model
-    model_error_create_request = {"code":429,"message":"Rate limit exceeded","battleId":"123e4567-e89b-12d3-a456-426614174000","roundId":"123e4567-e89b-12d3-a456-426614174001"} # ModelErrorCreateRequest |
+    model_error_create_request = {"code":429,"message":"Rate limit exceeded","battleId":"123e4567-e89b-12d3-a456-426614174000","roundId":"123e4567-e89b-12d3-a456-426614174001"} # ModelErrorCreateRequest | 
 
     try:
         # Report a model error
@@ -58,12 +58,15 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling ModelApi->create_model_error: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                           | Type                                                      | Description                      | Notes |
-| ------------------------------ | --------------------------------------------------------- | -------------------------------- | ----- |
-| **model_id**                   | **str**                                                   | The unique identifier of a model |
-| **model_error_create_request** | [**ModelErrorCreateRequest**](ModelErrorCreateRequest.md) |                                  |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **model_id** | **str**| The unique identifier of a model | 
+ **model_error_create_request** | [**ModelErrorCreateRequest**](ModelErrorCreateRequest.md)|  | 
 
 ### Return type
 
@@ -75,24 +78,23 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **201**     | Model error reported successfully                                                                 | -                                                                                                                                                                                                                                                                     |
-| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
-| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
-| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Model error reported successfully |  -  |
+**400** | Invalid request |  -  |
+**401** | Unauthorized |  -  |
+**404** | The specified resource was not found |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_models**
-
 > ModelPage list_models(model_search_query=model_search_query)
 
 List models
@@ -101,7 +103,7 @@ Get a paginated list of models with optional filters (e.g., active)
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -141,11 +143,14 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling ModelApi->list_models: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                   | Type                        | Description                                      | Notes      |
-| ---------------------- | --------------------------- | ------------------------------------------------ | ---------- |
-| **model_search_query** | [**ModelSearchQuery**](.md) | The search query used to find and filter models. | [optional] |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **model_search_query** | [**ModelSearchQuery**](.md)| The search query used to find and filter models. | [optional] 
 
 ### Return type
 
@@ -157,16 +162,17 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **200**     | Success                                                                                           | -                                                                                                                                                                                                                                                                     |
-| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Invalid request |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+

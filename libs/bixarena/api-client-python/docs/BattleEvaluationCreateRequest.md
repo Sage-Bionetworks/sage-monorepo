@@ -4,9 +4,9 @@ The information used to create a new battle evaluation.
 
 ## Properties
 
-| Name        | Type                                                      | Description | Notes |
-| ----------- | --------------------------------------------------------- | ----------- | ----- |
-| **outcome** | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |             |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**outcome** | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |  | 
 
 ## Example
 
@@ -25,5 +25,6 @@ battle_evaluation_create_request_dict = battle_evaluation_create_request_instanc
 # create an instance of BattleEvaluationCreateRequest from a dict
 battle_evaluation_create_request_from_dict = BattleEvaluationCreateRequest.from_dict(battle_evaluation_create_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

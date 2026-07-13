@@ -145,6 +145,11 @@
   background: var(--p-surface-100);
   color: var(--p-text-color);
 
+  &:hover,
+  &:focus-within {
+    border-color: var(--border-hover);
+  }
+
   svg {
     color: var(--p-surface-500);
     flex-shrink: 0;
@@ -160,6 +165,10 @@
     font-size: var(--text-md);
     padding: 0;
     min-width: 0;
+
+    &:focus-visible {
+      box-shadow: none;
+    }
 
     &::placeholder {
       color: var(--p-surface-500);

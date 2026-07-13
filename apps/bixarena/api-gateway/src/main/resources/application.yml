@@ -60,6 +60,7 @@ spring:
                 allowedmethods:
                   - GET
                   - POST
+                  - PATCH
                   - DELETE
                   - PUT
                 allowedheaders: '*'

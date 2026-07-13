@@ -15,6 +15,6 @@ logging:
     org.springframework.security: INFO
 # Production: session cookie uses secure defaults from application.yml
 # - domain: null (host-only)
-# - same-site: Strict
+# - same-site: Lax
 # - secure: true
 # - http-only: true

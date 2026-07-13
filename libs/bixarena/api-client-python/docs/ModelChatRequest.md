@@ -4,12 +4,12 @@ Request payload for creating a chat completion
 
 ## Properties
 
-| Name               | Type                                        | Description                                    | Notes |
-| ------------------ | ------------------------------------------- | ---------------------------------------------- | ----- |
-| **model_id**       | **str**                                     | UUID of an AI model.                           |
-| **api_model_name** | **str**                                     | The model name used for API calls.             |
-| **api_base**       | **str**                                     | Base URL for the model API.                    |
-| **messages**       | [**List[MessageCreate]**](MessageCreate.md) | The conversation messages to send to the model |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**model_id** | **str** | UUID of an AI model. | 
+**api_model_name** | **str** | The model name used for API calls. | 
+**api_base** | **str** | Base URL for the model API. | 
+**messages** | [**List[MessageCreate]**](MessageCreate.md) | The conversation messages to send to the model | 
 
 ## Example
 
@@ -28,5 +28,6 @@ model_chat_request_dict = model_chat_request_instance.to_dict()
 # create an instance of ModelChatRequest from a dict
 model_chat_request_from_dict = ModelChatRequest.from_dict(model_chat_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

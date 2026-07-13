@@ -2,12 +2,12 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                                          | HTTP request               | Description              |
-| --------------------------------------------------------------- | -------------------------- | ------------------------ |
-| [**create_chat_completion**](ChatApi.md#create_chat_completion) | **POST** /chat/completions | Create a chat completion |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**create_chat_completion**](ChatApi.md#create_chat_completion) | **POST** /chat/completions | Create a chat completion
+
 
 # **create_chat_completion**
-
 > ModelChatCompletionChunk create_chat_completion(model_chat_request)
 
 Create a chat completion
@@ -16,7 +16,7 @@ Sends messages to an LLM model via OpenRouter and returns a streaming HTTP respo
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -45,7 +45,7 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.ChatApi(api_client)
-    model_chat_request = bixarena_api_client.ModelChatRequest() # ModelChatRequest |
+    model_chat_request = bixarena_api_client.ModelChatRequest() # ModelChatRequest | 
 
     try:
         # Create a chat completion
@@ -56,11 +56,14 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling ChatApi->create_chat_completion: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                   | Type                                        | Description | Notes |
-| ---------------------- | ------------------------------------------- | ----------- | ----- |
-| **model_chat_request** | [**ModelChatRequest**](ModelChatRequest.md) |             |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **model_chat_request** | [**ModelChatRequest**](ModelChatRequest.md)|  | 
 
 ### Return type
 
@@ -72,17 +75,18 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
-- **Accept**: text/event-stream, application/problem+json, application/json
+ - **Content-Type**: application/json
+ - **Accept**: text/event-stream, application/problem+json, application/json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **200**     | Streaming HTTP response with chat completion chunks                                               | -                                                                                                                                                                                                                                                                     |
-| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
-| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Streaming HTTP response with chat completion chunks |  -  |
+**400** | Invalid request |  -  |
+**401** | Unauthorized |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+

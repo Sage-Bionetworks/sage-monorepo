@@ -90,7 +90,7 @@ app:
     name: JSESSIONID
     path: /
     domain: null # Host-only cookie by default (secure for production)
-    same-site: Strict # Strictest setting by default
+    same-site: Lax
     secure: true # Require HTTPS by default
     http-only: true # Prevent JavaScript access
   auth:

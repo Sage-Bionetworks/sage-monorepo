@@ -16,8 +16,13 @@
   transition: all 0.15s;
 
   &:hover {
-    background: var(--p-surface-300);
+    background: var(--p-surface-100);
     color: var(--p-text-color);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--p-primary-color);
+    outline-offset: 2px;
   }
 }
 

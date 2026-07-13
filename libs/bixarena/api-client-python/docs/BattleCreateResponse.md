@@ -4,17 +4,17 @@ A battle between two AI models.
 
 ## Properties
 
-| Name                        | Type                  | Description                                                                                | Notes      |
-| --------------------------- | --------------------- | ------------------------------------------------------------------------------------------ | ---------- |
-| **id**                      | **str**               | Unique identifier (UUID) of the battle.                                                    |
-| **title**                   | **str**               | Title of the battle.                                                                       | [optional] |
-| **user_id**                 | **str**               | UUID of a user.                                                                            |
-| **model1**                  | [**Model**](Model.md) |                                                                                            |
-| **model2**                  | [**Model**](Model.md) |                                                                                            |
-| **created_at**              | **datetime**          | Timestamp when the entity was created.                                                     |
-| **ended_at**                | **datetime**          | Timestamp when the entity ended.                                                           | [optional] |
-| **effective_validation_id** | **str**               | ID of the effective battle validation (null &#x3D; not yet validated)                      | [optional] |
-| **example_prompt_id**       | **str**               | ID of the curated example prompt this battle was started from. Null for free-form battles. | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**id** | **str** | Unique identifier (UUID) of the battle. | 
+**title** | **str** | Title of the battle. | [optional] 
+**user_id** | **str** | UUID of a user. | 
+**model1** | [**Model**](Model.md) |  | 
+**model2** | [**Model**](Model.md) |  | 
+**created_at** | **datetime** | Timestamp when the entity was created. | 
+**ended_at** | **datetime** | Timestamp when the entity ended. | [optional] 
+**effective_validation_id** | **str** | ID of the effective battle validation (null &#x3D; not yet validated) | [optional] 
+**example_prompt_id** | **str** | ID of the curated example prompt this battle was started from. Null for free-form battles. | [optional] 
 
 ## Example
 
@@ -33,5 +33,6 @@ battle_create_response_dict = battle_create_response_instance.to_dict()
 # create an instance of BattleCreateResponse from a dict
 battle_create_response_from_dict = BattleCreateResponse.from_dict(battle_create_response_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

@@ -1,4 +1,5 @@
 type: string
 description: The content of a message.
+minLength: 1
 maxLength: 50000
 example: 'What is the capital of France?'
