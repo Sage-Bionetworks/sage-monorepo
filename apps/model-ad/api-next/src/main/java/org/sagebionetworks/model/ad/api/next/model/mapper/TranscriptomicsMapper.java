@@ -26,8 +26,10 @@ public class TranscriptomicsMapper {
       ? List.of()
       : List.copyOf(document.getBiodomains());
 
+    String sex = normalizeSex(document.getSex());
+
     TranscriptomicsDto dto = new TranscriptomicsDto(
-      getCompositeId(document),
+      getCompositeId(document, sex),
       document.getEnsemblGeneId(),
       getGeneSymbolWithFallback(document),
       biodomains,
@@ -36,7 +38,7 @@ public class TranscriptomicsMapper {
       document.getModelGroup(),
       document.getModelType(),
       document.getTissue(),
-      EnumConverter.toSexDto(document.getSex(), "transcriptomics record")
+      EnumConverter.toSexDto(sex, "transcriptomics record")
     );
 
     dto.set4months(toFoldChangeDto(document.getFourMonths()));
@@ -46,12 +48,23 @@ public class TranscriptomicsMapper {
     return dto;
   }
 
-  private String getCompositeId(TranscriptomicsDocument document) {
+  private String getCompositeId(TranscriptomicsDocument document, String sex) {
     String ensemblGeneId = document.getEnsemblGeneId();
     String name = document.getName().getLinkText();
-    String sex = document.getSex();
 
     return String.format("%s~%s~%s", ensemblGeneId, name, sex);
+  }
+
+  // TODO(MG-1004): remove once rna_de_aggregate stores singular Female/Male like the schema and
+  // other collections. The source data currently uses plural Females/Males.
+  private @Nullable String normalizeSex(@Nullable String sex) {
+    if ("Females".equals(sex)) {
+      return "Female";
+    }
+    if ("Males".equals(sex)) {
+      return "Male";
+    }
+    return sex;
   }
 
   private String getGeneSymbolWithFallback(TranscriptomicsDocument document) {
