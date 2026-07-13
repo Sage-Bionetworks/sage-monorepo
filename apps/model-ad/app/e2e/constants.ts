@@ -21,6 +21,7 @@ export const COMPARISON_TOOL_DEFAULT_SORTS: Record<string, { field: string; orde
   'Differential Expression': [
     { field: 'gene_symbol', order: 1 },
     { field: 'name', order: 1 },
+    { field: 'sex', order: 1 },
   ],
   'Disease Correlation': [
     { field: 'name', order: 1 },
