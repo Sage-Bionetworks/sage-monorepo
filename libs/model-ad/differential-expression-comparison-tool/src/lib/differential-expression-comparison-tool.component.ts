@@ -110,7 +110,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
           : { left: row.ensembl_gene_id },
         heading: `Differential RNA Expression (${row.tissue})`,
         subHeadings: [
-          `${row.name} (${columnKey}, ${row.sex_cohort})`,
+          `${row.name.link_text} (${columnKey}, ${row.sex_cohort})`,
           `Matched Control: ${row.matched_control}`,
         ],
         value: cell.log2_fc,

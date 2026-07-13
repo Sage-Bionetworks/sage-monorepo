@@ -3,10 +3,12 @@ import {
   ColumnConfig,
   expectPinnedParams,
   expectPinnedRows,
+  getHeatmapDetailsPanelSubHeadings,
   getPinnedTable,
   getQueryParamFromValues,
   getQueryParamsFromRecords,
   getUnpinnedTable,
+  getVisibleHeatmapCircleButtons,
   pinByName,
   runFilterPanelTests,
   runHeatmapDetailsPanelTests,
@@ -56,6 +58,24 @@ test.describe('differential expression', () => {
   runHeatmapDetailsPanelTests(async (page) =>
     navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams),
   );
+
+  test('heatmap details panel sub-heading includes the model name', async ({ page }) => {
+    const modelName = '3xTg-AD';
+    const pinnedItem = `ENSMUSG00000000001~${modelName}`; // Gnai3
+    const queryParameters = [
+      categoriesQueryParams,
+      getQueryParamFromValues([pinnedItem], 'pinned'),
+    ].join('&');
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await expectPinnedRows(page, [pinnedItem]);
+
+    const heatmapButton = getVisibleHeatmapCircleButtons(getPinnedTable(page)).first();
+    await expect(heatmapButton).toBeVisible();
+    await heatmapButton.click();
+
+    await expect(getHeatmapDetailsPanelSubHeadings(page).first()).toContainText(modelName);
+  });
 
   test('filterbox search without comma returns partial case-insensitive matches', async ({
     page,
