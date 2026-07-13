@@ -36,19 +36,15 @@ import {
 import { fetchComparisonToolConfig, navigateToComparison } from './helpers/comparison-tool';
 
 const CT_PAGE = 'Differential Expression';
-const categories = [
-  'RNA - DIFFERENTIAL EXPRESSION',
-  'Tissue - Hippocampus',
-  'Sex - Females & Males',
-];
+const categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
 const categoriesQueryParams = getQueryParamFromValues(categories, 'categories');
+const modelsQueryParams = getQueryParamFromValues(['3xTg-AD', 'Abca7*V1599M'], 'models');
+const categoriesAndModelsQueryParameters = [categoriesQueryParams, modelsQueryParams].join('&');
 const cacul1Matches = [
-  'ENSMUSG00000033417~3xTg-AD',
-  'ENSMUSG00000033417~5xFAD (UCI)',
-  'ENSMUSG00000033417~Abca7*V1599M',
-  'ENSMUSG00000033417~Abca7*V1599M.5xFAD',
-  'ENSMUSG00000033417~Trem2-R47H_NSS',
-  'ENSMUSG00000033417~Trem2-R47H_NSS.5xFAD',
+  'ENSMUSG00000033417~3xTg-AD~Female',
+  'ENSMUSG00000033417~3xTg-AD~Male',
+  'ENSMUSG00000033417~Abca7*V1599M~Female',
+  'ENSMUSG00000033417~Abca7*V1599M~Male',
 ];
 
 test.describe('differential expression', () => {
@@ -80,13 +76,13 @@ test.describe('differential expression', () => {
   test('filterbox search without comma returns partial case-insensitive matches', async ({
     page,
   }) => {
-    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
     await testPartialCaseInsensitiveSearch(page, 'acul', cacul1Matches);
   });
 
   test('filterbox search excludes pinned items from results', async ({ page }) => {
     const queryParameters = [
-      categoriesQueryParams,
+      categoriesAndModelsQueryParameters,
       getQueryParamFromValues(cacul1Matches, 'pinned'),
     ].join('&');
     await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
@@ -94,43 +90,38 @@ test.describe('differential expression', () => {
   });
 
   test('filterbox search with commas returns full, case-insensitive matches', async ({ page }) => {
-    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
     await testFullCaseInsensitiveMatch(
       page,
       'fer,',
       [
-        'ENSMUSG00000000127~3xTg-AD',
-        'ENSMUSG00000000127~5xFAD (UCI)',
-        'ENSMUSG00000000127~Abca7*V1599M',
-        'ENSMUSG00000000127~Abca7*V1599M.5xFAD',
-        'ENSMUSG00000000127~Trem2-R47H_NSS',
-        'ENSMUSG00000000127~Trem2-R47H_NSS.5xFAD',
+        'ENSMUSG00000000127~3xTg-AD~Female',
+        'ENSMUSG00000000127~3xTg-AD~Male',
+        'ENSMUSG00000000127~Abca7*V1599M~Female',
+        'ENSMUSG00000000127~Abca7*V1599M~Male',
       ], // Fer
-      'ENSMUSG00000027356~3xTg-AD', // Fermt1
+      'ENSMUSG00000027356~3xTg-AD~Female', // Fermt1
     );
   });
 
   test('filterbox search partial case-insensitive matches with special characters', async ({
     page,
   }) => {
-    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
     await testPartialCaseInsensitiveSearch(page, '(r', [
-      'ENSMUSG00000086429~3xTg-AD',
-      'ENSMUSG00000086429~5xFAD (UCI)',
-      'ENSMUSG00000086429~Abca7*V1599M',
-      'ENSMUSG00000086429~Abca7*V1599M.5xFAD',
-      'ENSMUSG00000086429~Trem2-R47H_NSS',
-      'ENSMUSG00000086429~Trem2-R47H_NSS.5xFAD',
+      'ENSMUSG00000086429~3xTg-AD~Female',
+      'ENSMUSG00000086429~3xTg-AD~Male',
+      'ENSMUSG00000086429~Abca7*V1599M~Female',
+      'ENSMUSG00000086429~Abca7*V1599M~Male',
     ]); // Gt(ROSA)26Sor
   });
 
   test('pinned items are cached when switching between categories', async ({ page }) => {
-    const firstCategories = [
-      'RNA - DIFFERENTIAL EXPRESSION',
-      'Tissue - Hippocampus',
-      'Sex - Females & Males',
-    ];
-    const pinnedItems = ['ENSMUSG00000000001~3xTg-AD', 'ENSMUSG00000000001~5xFAD (UCI)']; // Gnai3
+    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const pinnedItems = [
+      'ENSMUSG00000000001~5xFAD (UCI)~Female',
+      'ENSMUSG00000000001~5xFAD (UCI)~Male',
+    ]; // Gnai3
     const queryParameters = [
       getQueryParamFromValues(firstCategories, 'categories'),
       getQueryParamFromValues(pinnedItems, 'pinned'),
@@ -141,12 +132,12 @@ test.describe('differential expression', () => {
     await expectPinnedParams(page, pinnedItems);
 
     const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox').last();
+    const dropdown = categorySelectors.getByRole('combobox').nth(1);
     const listbox = page.getByRole('listbox');
     await dropdown.click();
     await expect(listbox).toBeVisible();
-    const malesOption = page.getByRole('option', { name: /sex - males/i });
-    await malesOption.click();
+    const cerebralCortexOption = page.getByRole('option', { name: /tissue - cerebral cortex/i });
+    await cerebralCortexOption.click();
     await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, pinnedItems);
@@ -154,8 +145,8 @@ test.describe('differential expression', () => {
 
     await dropdown.click();
     await expect(listbox).toBeVisible();
-    const femalesAndMalesOption = page.getByRole('option', { name: /sex - females & males/i });
-    await femalesAndMalesOption.click();
+    const hippocampusOption = page.getByRole('option', { name: /tissue - hippocampus/i });
+    await hippocampusOption.click();
     await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, pinnedItems);
@@ -163,13 +154,12 @@ test.describe('differential expression', () => {
   });
 
   test('pinned items cache is reset when new item is pinned', async ({ page }) => {
-    const firstCategories = [
-      'RNA - DIFFERENTIAL EXPRESSION',
-      'Tissue - Hippocampus',
-      'Sex - Females & Males',
+    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const initialPinned = ['ENSMUSG00000000001~5xFAD (UCI)~Female']; // Gnai3
+    const afterPinPinned = [
+      'ENSMUSG00000000001~5xFAD (UCI)~Female',
+      'ENSMUSG00000000001~5xFAD (UCI)~Male',
     ];
-    const initialPinned = ['ENSMUSG00000000001~3xTg-AD']; // Gnai3
-    const afterPinPinned = ['ENSMUSG00000000001~3xTg-AD', 'ENSMUSG00000000001~5xFAD (UCI)'];
 
     const queryParameters = [
       getQueryParamFromValues(firstCategories, 'categories'),
@@ -181,26 +171,26 @@ test.describe('differential expression', () => {
     await expectPinnedParams(page, initialPinned);
 
     const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox').last();
+    const dropdown = categorySelectors.getByRole('combobox').nth(1);
     const listbox = page.getByRole('listbox');
     await dropdown.click();
     await expect(listbox).toBeVisible();
-    const malesOption = page.getByRole('option', { name: /sex - males/i });
-    await malesOption.click();
+    const cerebralCortexOption = page.getByRole('option', { name: /tissue - cerebral cortex/i });
+    await cerebralCortexOption.click();
     await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
 
     await searchViaFilterbox(page, 'gnai3');
-    await pinByName(getUnpinnedTable(page), page, 'ENSMUSG00000000001~5xFAD (UCI)');
+    await pinByName(getUnpinnedTable(page), page, 'ENSMUSG00000000001~5xFAD (UCI)~Male');
     await expectPinnedRows(page, afterPinPinned);
     await expectPinnedParams(page, afterPinPinned);
 
     await dropdown.click();
     await expect(listbox).toBeVisible();
-    const femalesAndMalesOption = page.getByRole('option', { name: /sex - females & males/i });
-    await femalesAndMalesOption.click();
+    const hippocampusOption = page.getByRole('option', { name: /tissue - hippocampus/i });
+    await hippocampusOption.click();
     await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, afterPinPinned);
@@ -208,13 +198,12 @@ test.describe('differential expression', () => {
   });
 
   test('pinned items cache is reset when new item is unpinned', async ({ page }) => {
-    const firstCategories = [
-      'RNA - DIFFERENTIAL EXPRESSION',
-      'Tissue - Hippocampus',
-      'Sex - Females & Males',
-    ];
-    const initialPinned = ['ENSMUSG00000000001~3xTg-AD', 'ENSMUSG00000000001~5xFAD (UCI)']; // Gnai3
-    const afterUnpinPinned = ['ENSMUSG00000000001~3xTg-AD'];
+    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const initialPinned = [
+      'ENSMUSG00000000001~5xFAD (UCI)~Female',
+      'ENSMUSG00000000001~5xFAD (UCI)~Male',
+    ]; // Gnai3
+    const afterUnpinPinned = ['ENSMUSG00000000001~5xFAD (UCI)~Male'];
 
     const queryParameters = [
       getQueryParamFromValues(firstCategories, 'categories'),
@@ -226,25 +215,25 @@ test.describe('differential expression', () => {
     await expectPinnedParams(page, initialPinned);
 
     const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox').last();
+    const dropdown = categorySelectors.getByRole('combobox').nth(1);
     const listbox = page.getByRole('listbox');
     await dropdown.click();
     await expect(listbox).toBeVisible();
-    const malesOption = page.getByRole('option', { name: /sex - males/i });
-    await malesOption.click();
+    const cerebralCortexOption = page.getByRole('option', { name: /tissue - cerebral cortex/i });
+    await cerebralCortexOption.click();
     await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
 
-    await unPinByName(getPinnedTable(page), page, 'ENSMUSG00000000001~5xFAD (UCI)');
+    await unPinByName(getPinnedTable(page), page, 'ENSMUSG00000000001~5xFAD (UCI)~Female');
     await expectPinnedRows(page, afterUnpinPinned);
     await expectPinnedParams(page, afterUnpinPinned);
 
     await dropdown.click();
     await expect(listbox).toBeVisible();
-    const femalesAndMalesOption = page.getByRole('option', { name: /sex - females & males/i });
-    await femalesAndMalesOption.click();
+    const hippocampusOption = page.getByRole('option', { name: /tissue - hippocampus/i });
+    await hippocampusOption.click();
     await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, afterUnpinPinned);
@@ -254,28 +243,24 @@ test.describe('differential expression', () => {
   test('pinned table and URL should only include currently visible pinned items from cache', async ({
     page,
   }) => {
-    const firstCategories = [
-      'RNA - DIFFERENTIAL EXPRESSION',
-      'Tissue - Hippocampus',
-      'Sex - Females & Males',
-    ];
+    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
     const firstPinned = [
-      'ENSMUSG00000000001~3xTg-AD',
-      'ENSMUSG00000000001~5xFAD (UCI)',
-      'ENSMUSG00000000001~Abca7*V1599M',
+      'ENSMUSG00000000001~3xTg-AD~Female',
+      'ENSMUSG00000000001~5xFAD (UCI)~Female',
+      'ENSMUSG00000000001~Abca7*V1599M~Female',
     ]; // Gnai3
     const queryParameters = [
       getQueryParamFromValues(firstCategories, 'categories'),
       getQueryParamFromValues(firstPinned, 'pinned'),
     ].join('&');
-    const expectedSecondPinned = ['ENSMUSG00000000001~5xFAD (UCI)'];
+    const expectedSecondPinned = ['ENSMUSG00000000001~5xFAD (UCI)~Female'];
 
     await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
     await expectPinnedRows(page, firstPinned);
     await expectPinnedParams(page, firstPinned);
 
     const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox').first();
+    const dropdown = categorySelectors.getByRole('combobox').nth(1);
     const listbox = page.getByRole('listbox');
     await dropdown.click();
     await expect(listbox).toBeVisible();
@@ -297,7 +282,7 @@ test.describe('differential expression', () => {
   });
 
   test('table loads previous page when last item on last page is pinned', async ({ page }) => {
-    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
     await testPinLastItemLastPageGoesToPreviousPage(page);
   });
 
