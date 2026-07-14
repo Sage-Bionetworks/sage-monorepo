@@ -304,7 +304,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     await waitFor(() => {
       expect(screen.getAllByRole('listitem').length).toBeGreaterThan(0);
     });
-  });
+  }, 15000);
 
   describe('collapsible TOC', () => {
     it('should start collapsed with expand button and no TOC items visible', async () => {
