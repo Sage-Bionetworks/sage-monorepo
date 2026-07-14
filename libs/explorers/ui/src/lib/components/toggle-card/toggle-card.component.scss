@@ -1,0 +1,80 @@
+$toggle-card-icon-width: 78px;
+$toggle-card-min-segment-width: 240px;
+
+explorers-toggle-card {
+  display: block;
+}
+
+.toggle-card-scroll {
+  overflow-x: auto;
+
+  // Room on all sides so the pill's drop shadow isn't clipped by the scroll box
+  // (overflow-x: auto forces overflow-y to auto, so it clips vertically too). The
+  // negative inline margins cancel the horizontal inset so segments stay flush with
+  // the container edge.
+  padding: 6px;
+  margin-inline: -6px;
+}
+
+explorers-toggle-card .p-selectbutton {
+  display: flex;
+  min-width: 100%;
+  width: max-content;
+  border-radius: var(--toggle-card-border-radius, 10px);
+  overflow: hidden;
+  box-shadow: var(--toggle-card-shadow, 0 1px 4px rgb(0 0 0 / 16%));
+}
+
+.toggle-card {
+  flex: 1 1 0;
+  min-width: $toggle-card-min-segment-width;
+
+  --p-togglebutton-background: var(--toggle-card-unselected-background, #fff);
+  --p-togglebutton-checked-background: var(
+    --toggle-card-selected-background,
+    var(--color-secondary)
+  );
+  --p-togglebutton-hover-background: color-mix(
+    in srgb,
+    var(--color-secondary) 8%,
+    var(--toggle-card-unselected-background, #fff)
+  );
+  --p-togglebutton-color: var(--toggle-card-unselected-color, var(--color-secondary));
+  --p-togglebutton-checked-color: var(--toggle-card-selected-color, #fff);
+  --p-togglebutton-hover-color: var(--toggle-card-unselected-color, var(--color-secondary));
+  --p-togglebutton-border-color: var(--toggle-card-border-color, var(--color-border));
+  --p-togglebutton-checked-border-color: transparent;
+  --p-togglebutton-border-radius: 0;
+  --p-togglebutton-padding: 0;
+
+  // Extra `.p-togglebutton` qualifier outranks PrimeNG's own
+  // `.p-selectbutton .p-togglebutton` border rule so the divider shows.
+  &.p-togglebutton:not(:last-child) {
+    border-right: 1px solid var(--toggle-card-divider-color, var(--color-border));
+  }
+
+  .toggle-card-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    padding: 18px 30px;
+  }
+
+  .toggle-card-label {
+    font-size: 24px;
+    line-height: 28px;
+    font-weight: 400;
+  }
+
+  explorers-svg-image {
+    flex-shrink: 0;
+    width: $toggle-card-icon-width;
+
+    .svg-image {
+      width: 100%;
+      height: auto;
+    }
+  }
+}

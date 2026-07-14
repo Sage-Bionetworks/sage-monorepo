@@ -19,3 +19,4 @@ export * from './lib/components/simple-table/simple-table.component';
 export * from './lib/components/stat-card/stat-card.component';
 export * from './lib/components/stat-cards/stat-cards.component';
 export * from './lib/components/svg-image/svg-image.component';
+export * from './lib/components/toggle-card/toggle-card.component';

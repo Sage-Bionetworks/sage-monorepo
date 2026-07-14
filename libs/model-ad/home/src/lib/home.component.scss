@@ -58,12 +58,31 @@ explorers-home-card {
   margin: 0;
 }
 
+.models-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
+  margin: 40px auto 20px;
+  padding: 40px 20px;
+  background: rgb(255 255 255 / 90%);
+  border-radius: 15px;
+}
+
+.species-toggle {
+  --toggle-card-selected-background: var(--color-secondary-dark);
+  --toggle-card-divider-color: color-mix(
+    in srgb,
+    var(--color-toggle-card-divider) 50%,
+    transparent
+  );
+  --toggle-card-border-color: var(--toggle-card-divider-color);
+}
+
 .card-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: auto;
   gap: 25px;
-  margin: 40px auto 20px;
 }
 
 .stats-container {
@@ -132,6 +151,22 @@ explorers-home-card {
 
   .card-container {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  // Drop the desktop card-panel framing so the toggle can bleed edge-to-edge.
+  .models-panel {
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .species-toggle {
+    // Keep the left edge aligned with the cards, but bleed off the right so the
+    // segments scroll off-screen; drop the pill frame to sit flat edge-to-edge.
+    --toggle-card-border-radius: 0;
+    --toggle-card-shadow: none;
+
+    margin-inline-end: calc(50% - 50vw);
   }
 
   .stats-container {

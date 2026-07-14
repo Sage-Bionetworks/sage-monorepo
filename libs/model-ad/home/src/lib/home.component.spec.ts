@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 import { BehaviorSubject } from 'rxjs';
 import { HomeComponent } from './home.component';
 
@@ -43,6 +44,25 @@ describe('HomeComponent', () => {
     expect(
       screen.getByRole('heading', { name: /find the right model for your research/i }),
     ).toBeInTheDocument();
+  });
+
+  describe('species toggle', () => {
+    it('should show mouse tiles by default', async () => {
+      await setup();
+      expect(screen.getByText('Model Overview')).toBeInTheDocument();
+      expect(screen.getByText('Differential Expression')).toBeInTheDocument();
+      expect(screen.getByText('Disease Correlation')).toBeInTheDocument();
+    });
+
+    it('should swap to the marmoset placeholder when marmoset is selected', async () => {
+      const user = userEvent.setup();
+      await setup();
+
+      await user.click(screen.getByText('Marmoset Models'));
+
+      expect(screen.getAllByText('Coming soon')).toHaveLength(2);
+      expect(screen.queryByText('Model Overview')).not.toBeInTheDocument();
+    });
   });
 
   describe('background image breakpoint logic', () => {

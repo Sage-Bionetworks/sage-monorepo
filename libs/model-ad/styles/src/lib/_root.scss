@@ -4,4 +4,8 @@
   @each $key, $color in vars.$main-colors {
     --color-#{$key}: #{$color};
   }
+
+  @each $key, $color in vars.$toggle-card-colors {
+    --color-#{$key}: #{$color};
+  }
 }

@@ -1,0 +1,24 @@
+<div class="toggle-card-scroll">
+  <p-selectButton
+    styleClass="toggle-card"
+    [options]="options()"
+    optionValue="value"
+    dataKey="value"
+    [ngModel]="value()"
+    (ngModelChange)="value.set($event)"
+    [allowEmpty]="false"
+    [attr.aria-label]="ariaLabel()"
+  >
+    <ng-template #item let-option>
+      <div class="toggle-card-item">
+        @if (option.imagePath) {
+          <explorers-svg-image
+            [imagePath]="option.imagePath"
+            [altText]="option.imageAltText ?? ''"
+          />
+        }
+        <span class="toggle-card-label">{{ option.label }}</span>
+      </div>
+    </ng-template>
+  </p-selectButton>
+</div>

@@ -1,8 +1,13 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { HomeCardComponent, SvgImageComponent } from '@sagebionetworks/explorers/ui';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import {
+  HomeCardComponent,
+  SvgImageComponent,
+  ToggleCardComponent,
+  ToggleCardOption,
+} from '@sagebionetworks/explorers/ui';
+import { isSpecies, ROUTE_PATHS, Species } from '@sagebionetworks/model-ad/config';
 import { SearchInputComponent } from '@sagebionetworks/model-ad/ui';
 
 interface Stat {
@@ -12,7 +17,7 @@ interface Stat {
 
 @Component({
   selector: 'model-ad-home',
-  imports: [HomeCardComponent, SvgImageComponent, SearchInputComponent],
+  imports: [ToggleCardComponent, HomeCardComponent, SvgImageComponent, SearchInputComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -27,7 +32,30 @@ export class HomeComponent {
 
   readonly backgroundImage = signal(this.backgroundImageDesktop);
 
+  readonly selectedSpecies = signal<Species>('mouse');
+
+  readonly speciesOptions: (ToggleCardOption & { value: Species })[] = [
+    {
+      label: 'Mouse Models',
+      value: 'mouse',
+      imagePath: 'model-ad-assets/images/mouse-model.svg',
+      imageAltText: 'mouse model icon',
+    },
+    {
+      label: 'Marmoset Models',
+      value: 'marmoset',
+      imagePath: 'model-ad-assets/images/marmoset-model.svg',
+      imageAltText: 'marmoset model icon',
+    },
+  ];
+
   ROUTE_PATHS = ROUTE_PATHS;
+
+  setSpecies(value: string | undefined) {
+    if (isSpecies(value)) {
+      this.selectedSpecies.set(value);
+    }
+  }
 
   stats: Stat[] = [
     {
