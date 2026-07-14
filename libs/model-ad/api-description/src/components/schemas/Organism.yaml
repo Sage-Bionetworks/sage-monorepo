@@ -1,0 +1,5 @@
+type: string
+description: Organism
+enum:
+  - marmoset
+  - mouse

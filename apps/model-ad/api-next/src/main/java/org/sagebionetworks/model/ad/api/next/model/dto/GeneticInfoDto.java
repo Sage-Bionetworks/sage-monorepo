@@ -29,11 +29,11 @@ public class GeneticInfoDto {
 
   private String ensemblGeneId;
 
-  private String allele;
+  private @Nullable String allele;
 
   private String alleleType;
 
-  private BigDecimal mgiAlleleId;
+  private @Nullable BigDecimal mgiAlleleId;
 
   public GeneticInfoDto() {
     super();
@@ -42,12 +42,10 @@ public class GeneticInfoDto {
   /**
    * Constructor with only required parameters
    */
-  public GeneticInfoDto(String modifiedGene, String ensemblGeneId, String allele, String alleleType, BigDecimal mgiAlleleId) {
+  public GeneticInfoDto(String modifiedGene, String ensemblGeneId, String alleleType) {
     this.modifiedGene = modifiedGene;
     this.ensemblGeneId = ensemblGeneId;
-    this.allele = allele;
     this.alleleType = alleleType;
-    this.mgiAlleleId = mgiAlleleId;
   }
 
   public GeneticInfoDto modifiedGene(String modifiedGene) {
@@ -90,7 +88,7 @@ public class GeneticInfoDto {
     this.ensemblGeneId = ensemblGeneId;
   }
 
-  public GeneticInfoDto allele(String allele) {
+  public GeneticInfoDto allele(@Nullable String allele) {
     this.allele = allele;
     return this;
   }
@@ -99,14 +97,14 @@ public class GeneticInfoDto {
    * Allele symbol
    * @return allele
    */
-  @NotNull 
-  @Schema(name = "allele", description = "Allele symbol", requiredMode = Schema.RequiredMode.REQUIRED)
+  
+  @Schema(name = "allele", description = "Allele symbol", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("allele")
-  public String getAllele() {
+  public @Nullable String getAllele() {
     return allele;
   }
 
-  public void setAllele(String allele) {
+  public void setAllele(@Nullable String allele) {
     this.allele = allele;
   }
 
@@ -130,7 +128,7 @@ public class GeneticInfoDto {
     this.alleleType = alleleType;
   }
 
-  public GeneticInfoDto mgiAlleleId(BigDecimal mgiAlleleId) {
+  public GeneticInfoDto mgiAlleleId(@Nullable BigDecimal mgiAlleleId) {
     this.mgiAlleleId = mgiAlleleId;
     return this;
   }
@@ -139,14 +137,14 @@ public class GeneticInfoDto {
    * MGI allele ID
    * @return mgiAlleleId
    */
-  @NotNull @Valid 
-  @Schema(name = "mgi_allele_id", description = "MGI allele ID", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Valid 
+  @Schema(name = "mgi_allele_id", description = "MGI allele ID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("mgi_allele_id")
-  public BigDecimal getMgiAlleleId() {
+  public @Nullable BigDecimal getMgiAlleleId() {
     return mgiAlleleId;
   }
 
-  public void setMgiAlleleId(BigDecimal mgiAlleleId) {
+  public void setMgiAlleleId(@Nullable BigDecimal mgiAlleleId) {
     this.mgiAlleleId = mgiAlleleId;
   }
 

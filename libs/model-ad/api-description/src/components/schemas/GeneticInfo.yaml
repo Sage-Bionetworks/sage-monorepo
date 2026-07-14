@@ -19,6 +19,4 @@ properties:
 required:
   - modified_gene
   - ensembl_gene_id
-  - allele
   - allele_type
-  - mgi_allele_id

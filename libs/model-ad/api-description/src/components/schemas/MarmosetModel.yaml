@@ -1,0 +1,32 @@
+type: object
+description: Marmoset model details
+properties:
+  type:
+    type: string
+    description: Organism discriminator (always "marmoset" for this schema)
+  name:
+    type: string
+    description: Name of the model
+  model_type:
+    type: string
+    description: Type of the model
+  study_synid:
+    type: string
+    description: Synapse ID of the study
+  genetic_info:
+    type: array
+    description: Genetic information related to the Model
+    items:
+      $ref: GeneticInfo.yaml
+  biomarkers:
+    type: array
+    description: List of biomarker data associated with the model
+    items:
+      $ref: ModelData.yaml
+required:
+  - type
+  - name
+  - model_type
+  - study_synid
+  - genetic_info
+  - biomarkers

@@ -2,6 +2,7 @@ package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
