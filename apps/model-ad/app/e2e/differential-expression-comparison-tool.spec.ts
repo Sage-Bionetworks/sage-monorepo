@@ -57,7 +57,7 @@ test.describe('differential expression', () => {
 
   test('heatmap details panel sub-heading includes the model name', async ({ page }) => {
     const modelName = '3xTg-AD';
-    const pinnedItem = `ENSMUSG00000000001~${modelName}`; // Gnai3
+    const pinnedItem = `ENSMUSG00000000001~${modelName}~Female`; // Gnai3
     const queryParameters = [
       categoriesQueryParams,
       getQueryParamFromValues([pinnedItem], 'pinned'),
