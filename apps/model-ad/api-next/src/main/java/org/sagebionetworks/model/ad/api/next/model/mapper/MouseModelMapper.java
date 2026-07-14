@@ -2,21 +2,23 @@ package org.sagebionetworks.model.ad.api.next.model.mapper;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.sagebionetworks.model.ad.api.next.model.document.ModelDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.MouseModelDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneticInfoDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.IndividualDataDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDataDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ModelMapper {
+public class MouseModelMapper {
 
-  private final IndividualDataMapper individualDataMapper;
+  private final GeneticInfoMapper geneticInfoMapper;
+  private final ModelDataMapper modelDataMapper;
 
-  public ModelDto toDto(@Nullable ModelDocument document) {
+  public ModelDto toDto(@Nullable MouseModelDocument document) {
     if (document == null) {
       return null;
     }
@@ -31,17 +33,18 @@ public class ModelMapper {
 
     List<GeneticInfoDto> geneticInfo = document.getGeneticInfo() == null
       ? List.of()
-      : document.getGeneticInfo().stream().map(this::toGeneticInfoDto).toList();
+      : document.getGeneticInfo().stream().map(geneticInfoMapper::toDto).toList();
 
     List<ModelDataDto> biomarkers = document.getBiomarkers() == null
       ? List.of()
-      : document.getBiomarkers().stream().map(this::toModelDataDto).toList();
+      : document.getBiomarkers().stream().map(modelDataMapper::toDto).toList();
 
     List<ModelDataDto> pathology = document.getPathology() == null
       ? List.of()
-      : document.getPathology().stream().map(this::toModelDataDto).toList();
+      : document.getPathology().stream().map(modelDataMapper::toDto).toList();
 
-    return new ModelDto(
+    return new MouseModelDto(
+      OrganismDto.MOUSE.getValue(),
       document.getName(),
       matchedControls,
       document.getModelType(),
@@ -59,30 +62,5 @@ public class ModelMapper {
       biomarkers,
       pathology
     );
-  }
-
-  private GeneticInfoDto toGeneticInfoDto(ModelDocument.GeneticInfo geneticInfo) {
-    return new GeneticInfoDto(
-      geneticInfo.getModifiedGene(),
-      geneticInfo.getEnsemblGeneId(),
-      geneticInfo.getAllele(),
-      geneticInfo.getAlleleType(),
-      geneticInfo.getMgiAlleleId()
-    );
-  }
-
-  private ModelDataDto toModelDataDto(ModelDocument.ModelData modelData) {
-    List<IndividualDataDto> data = modelData.getData() == null
-      ? List.of()
-      : modelData.getData().stream().map(individualDataMapper::toIndividualDataDto).toList();
-
-    return new ModelDataDto(
-      modelData.getName(),
-      modelData.getEvidenceType(),
-      modelData.getAge(),
-      modelData.getUnits(),
-      modelData.getYAxisMax(),
-      data
-    ).tissue(modelData.getTissue());
   }
 }
