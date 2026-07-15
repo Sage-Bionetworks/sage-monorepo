@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewSearchQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpStatus;
@@ -19,15 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.server.ResponseStatusException;
 
-class ModelOverviewApiControllerWebTest {
+class MouseModelOverviewApiControllerWebTest {
 
-  private ModelOverviewApiDelegate delegate;
+  private MouseModelOverviewApiDelegate delegate;
   private MockMvc mockMvc;
 
   @BeforeEach
   void setUp() {
-    delegate = mock(ModelOverviewApiDelegate.class);
-    var controller = new ModelOverviewApiController(delegate);
+    delegate = mock(MouseModelOverviewApiDelegate.class);
+    var controller = new MouseModelOverviewApiController(delegate);
     var conversionService = new FormattingConversionService();
     conversionService.addConverter(
       new Converter<String, ItemFilterTypeQueryDto>() {
@@ -38,10 +38,12 @@ class ModelOverviewApiControllerWebTest {
       }
     );
     conversionService.addConverter(
-      new Converter<String, ModelOverviewSearchQueryDto.SortOrdersEnum>() {
+      new Converter<String, MouseModelOverviewSearchQueryDto.SortOrdersEnum>() {
         @Override
-        public ModelOverviewSearchQueryDto.SortOrdersEnum convert(String source) {
-          return ModelOverviewSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
+        public MouseModelOverviewSearchQueryDto.SortOrdersEnum convert(String source) {
+          return MouseModelOverviewSearchQueryDto.SortOrdersEnum.fromValue(
+            Integer.parseInt(source)
+          );
         }
       }
     );
@@ -53,10 +55,10 @@ class ModelOverviewApiControllerWebTest {
 
   @Test
   @DisplayName("should return not found problem when model overview not found")
-  void shouldReturnNotFoundProblemWhenDelegateRaisesModelOverviewNotFoundException()
+  void shouldReturnNotFoundProblemWhenDelegateRaisesMouseModelOverviewNotFoundException()
     throws Exception {
     String modelName = "3xTg-AD";
-    when(delegate.getModelOverviews(any())).thenThrow(
+    when(delegate.getMouseModelOverviews(any())).thenThrow(
       new ResponseStatusException(
         HttpStatus.NOT_FOUND,
         "Model overview not found with name: " + modelName
@@ -65,7 +67,7 @@ class ModelOverviewApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/model-overview")
+        get("/v1/comparison-tools/mouse-model-overview")
           .param("items", modelName)
           .param("sortFields", "name")
           .param("sortOrders", "1")

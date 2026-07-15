@@ -14,7 +14,7 @@ import org.springframework.lang.Nullable;
 @Setter
 @NoArgsConstructor
 @Document(collection = "model_overview")
-public class ModelOverviewDocument {
+public class MouseModelOverviewDocument {
 
   @Id
   private ObjectId id;

@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.sagebionetworks.explorers.ComputedSortField;
 import org.sagebionetworks.explorers.CtFilterConfig;
-import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.MouseModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewSearchQueryDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -26,13 +26,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Slf4j
-public class CustomModelOverviewRepositoryImpl
-  extends ComparisonToolRepositorySupport<ModelOverviewDocument>
-  implements CustomModelOverviewRepository {
+public class CustomMouseModelOverviewRepositoryImpl
+  extends ComparisonToolRepositorySupport<MouseModelOverviewDocument>
+  implements CustomMouseModelOverviewRepository {
 
   private static final String COLLECTION_NAME = "model_overview";
 
-  public CustomModelOverviewRepositoryImpl(MongoTemplate mongoTemplate) {
+  public CustomMouseModelOverviewRepositoryImpl(MongoTemplate mongoTemplate) {
     super(mongoTemplate);
   }
 
@@ -42,8 +42,8 @@ public class CustomModelOverviewRepositoryImpl
   }
 
   @Override
-  protected Class<ModelOverviewDocument> getDocumentClass() {
-    return ModelOverviewDocument.class;
+  protected Class<MouseModelOverviewDocument> getDocumentClass() {
+    return MouseModelOverviewDocument.class;
   }
 
   @Override
@@ -54,26 +54,26 @@ public class CustomModelOverviewRepositoryImpl
     );
   }
 
-  private final CtFilterConfig<ModelOverviewSearchQueryDto> filterConfig = CtFilterConfig.<
-    ModelOverviewSearchQueryDto
+  private final CtFilterConfig<MouseModelOverviewSearchQueryDto> filterConfig = CtFilterConfig.<
+    MouseModelOverviewSearchQueryDto
   >builder()
-    .dataFilter("available_data", ModelOverviewSearchQueryDto::getAvailableData)
-    .dataFilter("center", ModelOverviewSearchQueryDto::getCenter)
-    .dataFilter("model_type", ModelOverviewSearchQueryDto::getModelType)
-    .dataFilter("modified_genes", ModelOverviewSearchQueryDto::getModifiedGenes)
+    .dataFilter("available_data", MouseModelOverviewSearchQueryDto::getAvailableData)
+    .dataFilter("center", MouseModelOverviewSearchQueryDto::getCenter)
+    .dataFilter("model_type", MouseModelOverviewSearchQueryDto::getModelType)
+    .dataFilter("modified_genes", MouseModelOverviewSearchQueryDto::getModifiedGenes)
     .simpleItemFilter("name")
     .searchFilter("name")
     .build();
 
   @Override
-  protected CtFilterConfig<ModelOverviewSearchQueryDto> getFilterConfig() {
+  protected CtFilterConfig<MouseModelOverviewSearchQueryDto> getFilterConfig() {
     return filterConfig;
   }
 
   @Override
-  public Page<ModelOverviewDocument> findAll(
+  public Page<MouseModelOverviewDocument> findAll(
     Pageable pageable,
-    ModelOverviewSearchQueryDto query,
+    MouseModelOverviewSearchQueryDto query,
     List<String> items
   ) {
     ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(

@@ -35,7 +35,7 @@ public class CacheConfiguration {
     cacheManager.setCacheNames(
       List.of(
         CacheNames.DISEASE_CORRELATION,
-        CacheNames.MODEL_OVERVIEW,
+        CacheNames.MOUSE_MODEL_OVERVIEW,
         CacheNames.TRANSCRIPTOMICS,
         CacheNames.TRANSCRIPTOMICS_INDIVIDUAL,
         CacheNames.MODEL,

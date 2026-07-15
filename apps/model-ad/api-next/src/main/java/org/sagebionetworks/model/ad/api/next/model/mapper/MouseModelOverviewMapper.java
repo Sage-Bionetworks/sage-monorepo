@@ -2,18 +2,18 @@ package org.sagebionetworks.model.ad.api.next.model.mapper;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
+import org.sagebionetworks.model.ad.api.next.model.document.MouseModelOverviewDocument;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewDto;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ModelOverviewMapper {
+public class MouseModelOverviewMapper {
 
   private final LinkMapper linkMapper;
 
-  public ModelOverviewDto toDto(@Nullable ModelOverviewDocument document) {
+  public MouseModelOverviewDto toDto(@Nullable MouseModelOverviewDocument document) {
     if (document == null) {
       return null;
     }
@@ -24,15 +24,16 @@ public class ModelOverviewMapper {
     List<String> modifiedGenes = document.getModifiedGenes() == null
       ? List.of()
       : List.copyOf(document.getModifiedGenes());
-    List<ModelOverviewDto.AvailableDataEnum> availableData = document.getAvailableData() == null
+    List<MouseModelOverviewDto.AvailableDataEnum> availableData = document.getAvailableData() ==
+      null
       ? List.of()
       : document
         .getAvailableData()
         .stream()
-        .map(ModelOverviewDto.AvailableDataEnum::fromValue)
+        .map(MouseModelOverviewDto.AvailableDataEnum::fromValue)
         .toList();
 
-    ModelOverviewDto dto = new ModelOverviewDto(
+    MouseModelOverviewDto dto = new MouseModelOverviewDto(
       document.getId() != null ? document.getId().toHexString() : null,
       document.getName(),
       document.getModelType(),

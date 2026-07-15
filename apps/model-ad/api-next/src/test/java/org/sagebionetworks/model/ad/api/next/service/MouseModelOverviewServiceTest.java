@@ -16,55 +16,59 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.model.document.Link;
-import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.MouseModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
-import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
-import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
+import org.sagebionetworks.model.ad.api.next.model.mapper.MouseModelOverviewMapper;
+import org.sagebionetworks.model.ad.api.next.model.repository.MouseModelOverviewRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
-class ModelOverviewServiceTest {
+class MouseModelOverviewServiceTest {
 
   @Mock
-  private ModelOverviewRepository repository;
+  private MouseModelOverviewRepository repository;
 
-  private ModelOverviewService service;
-  private ModelOverviewMapper mapper;
+  private MouseModelOverviewService service;
+  private MouseModelOverviewMapper mapper;
 
   @BeforeEach
   void setUp() {
-    mapper = new ModelOverviewMapper(new LinkMapper());
-    service = new ModelOverviewService(repository, mapper);
+    mapper = new MouseModelOverviewMapper(new LinkMapper());
+    service = new MouseModelOverviewService(repository, mapper);
   }
 
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of());
+    Page<MouseModelOverviewDocument> page = new PageImpl<>(List.of());
 
     when(
-      repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))
+      repository.findAll(
+        any(Pageable.class),
+        any(MouseModelOverviewSearchQueryDto.class),
+        eq(List.of())
+      )
     ).thenReturn(page);
 
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+    MouseModelOverviewSearchQueryDto query = MouseModelOverviewSearchQueryDto.builder()
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
+    MouseModelOverviewsPageDto result = service.loadMouseModelOverviews(query);
 
-    assertThat(result.getModelOverviews()).isEmpty();
+    assertThat(result.getMouseModelOverviews()).isEmpty();
     assertThat(result.getPage().getTotalElements()).isZero();
     verify(repository).findAll(
       any(Pageable.class),
-      any(ModelOverviewSearchQueryDto.class),
+      any(MouseModelOverviewSearchQueryDto.class),
       eq(List.of())
     );
   }
@@ -72,27 +76,31 @@ class ModelOverviewServiceTest {
   @Test
   @DisplayName("should return all items when exclude filter has no items")
   void shouldReturnAllItemsWhenExcludeFilterHasNoItems() {
-    ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
+    MouseModelOverviewDocument doc = createMouseModelOverviewDocument("Model1");
+    Page<MouseModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
     when(
-      repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))
+      repository.findAll(
+        any(Pageable.class),
+        any(MouseModelOverviewSearchQueryDto.class),
+        eq(List.of())
+      )
     ).thenReturn(page);
 
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+    MouseModelOverviewSearchQueryDto query = MouseModelOverviewSearchQueryDto.builder()
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
+    MouseModelOverviewsPageDto result = service.loadMouseModelOverviews(query);
 
-    assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
+    assertThat(result.getMouseModelOverviews()).hasSize(1);
+    assertThat(result.getMouseModelOverviews().get(0).getName()).isEqualTo("Model1");
     verify(repository).findAll(
       any(Pageable.class),
-      any(ModelOverviewSearchQueryDto.class),
+      any(MouseModelOverviewSearchQueryDto.class),
       eq(List.of())
     );
   }
@@ -100,31 +108,31 @@ class ModelOverviewServiceTest {
   @Test
   @DisplayName("should return matching items when include filter has items")
   void shouldReturnMatchingItemsWhenIncludeFilterHasItems() {
-    ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
+    MouseModelOverviewDocument doc = createMouseModelOverviewDocument("Model1");
+    Page<MouseModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
     when(
       repository.findAll(
         any(Pageable.class),
-        any(ModelOverviewSearchQueryDto.class),
+        any(MouseModelOverviewSearchQueryDto.class),
         eq(List.of("Model1"))
       )
     ).thenReturn(page);
 
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+    MouseModelOverviewSearchQueryDto query = MouseModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
+    MouseModelOverviewsPageDto result = service.loadMouseModelOverviews(query);
 
-    assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
+    assertThat(result.getMouseModelOverviews()).hasSize(1);
+    assertThat(result.getMouseModelOverviews().get(0).getName()).isEqualTo("Model1");
     verify(repository).findAll(
       any(Pageable.class),
-      any(ModelOverviewSearchQueryDto.class),
+      any(MouseModelOverviewSearchQueryDto.class),
       eq(List.of("Model1"))
     );
   }
@@ -132,31 +140,31 @@ class ModelOverviewServiceTest {
   @Test
   @DisplayName("should return non-matching items when exclude filter has items")
   void shouldReturnNonMatchingItemsWhenExcludeFilterHasItems() {
-    ModelOverviewDocument doc = createModelOverviewDocument("Model2");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
+    MouseModelOverviewDocument doc = createMouseModelOverviewDocument("Model2");
+    Page<MouseModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
     when(
       repository.findAll(
         any(Pageable.class),
-        any(ModelOverviewSearchQueryDto.class),
+        any(MouseModelOverviewSearchQueryDto.class),
         eq(List.of("Model1"))
       )
     ).thenReturn(page);
 
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+    MouseModelOverviewSearchQueryDto query = MouseModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
+    MouseModelOverviewsPageDto result = service.loadMouseModelOverviews(query);
 
-    assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model2");
+    assertThat(result.getMouseModelOverviews()).hasSize(1);
+    assertThat(result.getMouseModelOverviews().get(0).getName()).isEqualTo("Model2");
     verify(repository).findAll(
       any(Pageable.class),
-      any(ModelOverviewSearchQueryDto.class),
+      any(MouseModelOverviewSearchQueryDto.class),
       eq(List.of("Model1"))
     );
   }
@@ -164,18 +172,18 @@ class ModelOverviewServiceTest {
   @Test
   @DisplayName("should perform partial case-insensitive search when exclude filter has search term")
   void shouldPerformPartialCaseInsensitiveSearchWhenExcludeFilterHasSearchTerm() {
-    ModelOverviewDocument doc = createModelOverviewDocument("TestModel");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
+    MouseModelOverviewDocument doc = createMouseModelOverviewDocument("TestModel");
+    Page<MouseModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
     when(
       repository.findAll(
         any(Pageable.class),
-        any(ModelOverviewSearchQueryDto.class),
+        any(MouseModelOverviewSearchQueryDto.class),
         eq(List.of("Model1"))
       )
     ).thenReturn(page);
 
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+    MouseModelOverviewSearchQueryDto query = MouseModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("test")
@@ -183,13 +191,13 @@ class ModelOverviewServiceTest {
       .pageSize(100)
       .build();
 
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
+    MouseModelOverviewsPageDto result = service.loadMouseModelOverviews(query);
 
-    assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("TestModel");
+    assertThat(result.getMouseModelOverviews()).hasSize(1);
+    assertThat(result.getMouseModelOverviews().get(0).getName()).isEqualTo("TestModel");
     verify(repository).findAll(
       any(Pageable.class),
-      any(ModelOverviewSearchQueryDto.class),
+      any(MouseModelOverviewSearchQueryDto.class),
       eq(List.of("Model1"))
     );
   }
@@ -199,19 +207,19 @@ class ModelOverviewServiceTest {
     "should perform case-insensitive full match search when exclude filter has comma-separated search terms"
   )
   void shouldPerformCaseInsensitiveFullMatchSearchWhenExcludeFilterHasCommaSeparatedSearchTerms() {
-    ModelOverviewDocument doc1 = createModelOverviewDocument("Model1");
-    ModelOverviewDocument doc2 = createModelOverviewDocument("Model2");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc1, doc2));
+    MouseModelOverviewDocument doc1 = createMouseModelOverviewDocument("Model1");
+    MouseModelOverviewDocument doc2 = createMouseModelOverviewDocument("Model2");
+    Page<MouseModelOverviewDocument> page = new PageImpl<>(List.of(doc1, doc2));
 
     when(
       repository.findAll(
         any(Pageable.class),
-        any(ModelOverviewSearchQueryDto.class),
+        any(MouseModelOverviewSearchQueryDto.class),
         eq(List.of("Model3"))
       )
     ).thenReturn(page);
 
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+    MouseModelOverviewSearchQueryDto query = MouseModelOverviewSearchQueryDto.builder()
       .items(List.of("Model3"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("model1,model2")
@@ -219,12 +227,12 @@ class ModelOverviewServiceTest {
       .pageSize(100)
       .build();
 
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
+    MouseModelOverviewsPageDto result = service.loadMouseModelOverviews(query);
 
-    assertThat(result.getModelOverviews()).hasSize(2);
+    assertThat(result.getMouseModelOverviews()).hasSize(2);
     verify(repository).findAll(
       any(Pageable.class),
-      any(ModelOverviewSearchQueryDto.class),
+      any(MouseModelOverviewSearchQueryDto.class),
       eq(List.of("Model3"))
     );
   }
@@ -232,18 +240,18 @@ class ModelOverviewServiceTest {
   @Test
   @DisplayName("should not use search when include filter is specified")
   void shouldNotUseSearchWhenIncludeFilterIsSpecified() {
-    ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
+    MouseModelOverviewDocument doc = createMouseModelOverviewDocument("Model1");
+    Page<MouseModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
     when(
       repository.findAll(
         any(Pageable.class),
-        any(ModelOverviewSearchQueryDto.class),
+        any(MouseModelOverviewSearchQueryDto.class),
         eq(List.of("Model1"))
       )
     ).thenReturn(page);
 
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+    MouseModelOverviewSearchQueryDto query = MouseModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .search("test")
@@ -251,12 +259,12 @@ class ModelOverviewServiceTest {
       .pageSize(100)
       .build();
 
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
+    MouseModelOverviewsPageDto result = service.loadMouseModelOverviews(query);
 
-    assertThat(result.getModelOverviews()).hasSize(1);
+    assertThat(result.getMouseModelOverviews()).hasSize(1);
     verify(repository).findAll(
       any(Pageable.class),
-      any(ModelOverviewSearchQueryDto.class),
+      any(MouseModelOverviewSearchQueryDto.class),
       eq(List.of("Model1"))
     );
   }
@@ -264,24 +272,28 @@ class ModelOverviewServiceTest {
   @Test
   @DisplayName("should use default page size when not specified")
   void shouldUseDefaultPageSizeWhenNotSpecified() {
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of());
+    Page<MouseModelOverviewDocument> page = new PageImpl<>(List.of());
 
     when(
-      repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))
+      repository.findAll(
+        any(Pageable.class),
+        any(MouseModelOverviewSearchQueryDto.class),
+        eq(List.of())
+      )
     ).thenReturn(page);
 
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+    MouseModelOverviewSearchQueryDto query = MouseModelOverviewSearchQueryDto.builder()
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(null)
       .pageSize(null)
       .build();
 
-    service.loadModelOverviews(query);
+    service.loadMouseModelOverviews(query);
 
     ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
     verify(repository).findAll(
       pageableCaptor.capture(),
-      any(ModelOverviewSearchQueryDto.class),
+      any(MouseModelOverviewSearchQueryDto.class),
       eq(List.of())
     );
 
@@ -293,18 +305,18 @@ class ModelOverviewServiceTest {
   @Test
   @DisplayName("should trim whitespace from search term")
   void shouldTrimWhitespaceFromSearchTerm() {
-    ModelOverviewDocument doc = createModelOverviewDocument("TestModel");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
+    MouseModelOverviewDocument doc = createMouseModelOverviewDocument("TestModel");
+    Page<MouseModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
     when(
       repository.findAll(
         any(Pageable.class),
-        any(ModelOverviewSearchQueryDto.class),
+        any(MouseModelOverviewSearchQueryDto.class),
         eq(List.of("Model1"))
       )
     ).thenReturn(page);
 
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+    MouseModelOverviewSearchQueryDto query = MouseModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("  test  ")
@@ -312,13 +324,13 @@ class ModelOverviewServiceTest {
       .pageSize(100)
       .build();
 
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
+    MouseModelOverviewsPageDto result = service.loadMouseModelOverviews(query);
 
-    assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("TestModel");
+    assertThat(result.getMouseModelOverviews()).hasSize(1);
+    assertThat(result.getMouseModelOverviews().get(0).getName()).isEqualTo("TestModel");
     verify(repository).findAll(
       any(Pageable.class),
-      any(ModelOverviewSearchQueryDto.class),
+      any(MouseModelOverviewSearchQueryDto.class),
       eq(List.of("Model1"))
     );
   }
@@ -326,18 +338,18 @@ class ModelOverviewServiceTest {
   @Test
   @DisplayName("should filter empty names from comma-separated search")
   void shouldFilterEmptyNamesFromCommaSeparatedSearch() {
-    ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
+    MouseModelOverviewDocument doc = createMouseModelOverviewDocument("Model1");
+    Page<MouseModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
     when(
       repository.findAll(
         any(Pageable.class),
-        any(ModelOverviewSearchQueryDto.class),
+        any(MouseModelOverviewSearchQueryDto.class),
         eq(List.of("Model2"))
       )
     ).thenReturn(page);
 
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+    MouseModelOverviewSearchQueryDto query = MouseModelOverviewSearchQueryDto.builder()
       .items(List.of("Model2"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("model1, , ,model3")
@@ -345,21 +357,21 @@ class ModelOverviewServiceTest {
       .pageSize(100)
       .build();
 
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
+    MouseModelOverviewsPageDto result = service.loadMouseModelOverviews(query);
 
-    assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
+    assertThat(result.getMouseModelOverviews()).hasSize(1);
+    assertThat(result.getMouseModelOverviews().get(0).getName()).isEqualTo("Model1");
     verify(repository).findAll(
       any(Pageable.class),
-      any(ModelOverviewSearchQueryDto.class),
+      any(MouseModelOverviewSearchQueryDto.class),
       eq(List.of("Model2"))
     );
   }
 
-  private ModelOverviewDocument createModelOverviewDocument(String name) {
+  private MouseModelOverviewDocument createMouseModelOverviewDocument(String name) {
     Link requiredLink = Link.builder().linkText("Link").linkUrl("https://example.org").build();
 
-    ModelOverviewDocument document = new ModelOverviewDocument();
+    MouseModelOverviewDocument document = new MouseModelOverviewDocument();
     document.setId(new ObjectId());
     document.setName(name);
     document.setModelType("Mouse");

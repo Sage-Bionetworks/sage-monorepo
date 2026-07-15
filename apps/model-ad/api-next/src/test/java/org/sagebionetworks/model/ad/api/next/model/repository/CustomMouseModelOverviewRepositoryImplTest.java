@@ -14,9 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.MouseModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewSearchQueryDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +26,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Query;
 
 @ExtendWith(MockitoExtension.class)
-class CustomModelOverviewRepositoryImplTest {
+class CustomMouseModelOverviewRepositoryImplTest {
 
   private static final String COLLECTION_NAME = "model_overview";
 
@@ -34,19 +34,19 @@ class CustomModelOverviewRepositoryImplTest {
   private MongoTemplate mongoTemplate;
 
   @Mock
-  private AggregationResults<ModelOverviewDocument> aggregationResults;
+  private AggregationResults<MouseModelOverviewDocument> aggregationResults;
 
-  private CustomModelOverviewRepositoryImpl repository;
+  private CustomMouseModelOverviewRepositoryImpl repository;
 
   @BeforeEach
   void setUp() {
-    repository = new CustomModelOverviewRepositoryImpl(mongoTemplate);
+    repository = new CustomMouseModelOverviewRepositoryImpl(mongoTemplate);
     when(mongoTemplate.count(any(Query.class), eq(COLLECTION_NAME))).thenReturn(0L);
     when(
       mongoTemplate.aggregate(
         any(Aggregation.class),
         eq(COLLECTION_NAME),
-        eq(ModelOverviewDocument.class)
+        eq(MouseModelOverviewDocument.class)
       )
     ).thenReturn(aggregationResults);
     when(aggregationResults.getMappedResults()).thenReturn(List.of());
@@ -55,7 +55,7 @@ class CustomModelOverviewRepositoryImplTest {
   @Test
   @DisplayName("should build aggregation with data filters using $in operators")
   void shouldBuildAggregationWithDataFilters() {
-    ModelOverviewSearchQueryDto query = new ModelOverviewSearchQueryDto();
+    MouseModelOverviewSearchQueryDto query = new MouseModelOverviewSearchQueryDto();
     query.setAvailableData(List.of("test-data"));
     query.setCenter(List.of("test-center"));
     query.setModelType(List.of("test-type"));
@@ -70,7 +70,7 @@ class CustomModelOverviewRepositoryImplTest {
     verify(mongoTemplate).aggregate(
       aggregationCaptor.capture(),
       eq(COLLECTION_NAME),
-      eq(ModelOverviewDocument.class)
+      eq(MouseModelOverviewDocument.class)
     );
 
     String pipelineString = aggregationCaptor.getValue().toString();
@@ -80,7 +80,9 @@ class CustomModelOverviewRepositoryImplTest {
       .as("Pipeline should include available_data field")
       .contains("available_data");
     assertThat(pipelineString).as("Pipeline should include center field").contains("\"center\"");
-    assertThat(pipelineString).as("Pipeline should include model_type field").contains("model_type");
+    assertThat(pipelineString)
+      .as("Pipeline should include model_type field")
+      .contains("model_type");
     assertThat(pipelineString)
       .as("Pipeline should include modified_genes field")
       .contains("modified_genes");
@@ -89,7 +91,7 @@ class CustomModelOverviewRepositoryImplTest {
   @Test
   @DisplayName("should apply pagination via $skip and $limit stages")
   void shouldApplyPaginationToAggregation() {
-    ModelOverviewSearchQueryDto query = new ModelOverviewSearchQueryDto();
+    MouseModelOverviewSearchQueryDto query = new MouseModelOverviewSearchQueryDto();
     query.setAvailableData(List.of("behavior"));
     query.setItemFilterType(ItemFilterTypeQueryDto.INCLUDE);
 
@@ -101,7 +103,7 @@ class CustomModelOverviewRepositoryImplTest {
     verify(mongoTemplate).aggregate(
       aggregationCaptor.capture(),
       eq(COLLECTION_NAME),
-      eq(ModelOverviewDocument.class)
+      eq(MouseModelOverviewDocument.class)
     );
 
     String pipelineString = aggregationCaptor.getValue().toString();
@@ -114,14 +116,10 @@ class CustomModelOverviewRepositoryImplTest {
   @Test
   @DisplayName("should compute matched_controls_sort via $reduce when sorting by matched_controls")
   void shouldComputeMatchedControlsSortWhenSortingByMatchedControls() {
-    ModelOverviewSearchQueryDto query = new ModelOverviewSearchQueryDto();
+    MouseModelOverviewSearchQueryDto query = new MouseModelOverviewSearchQueryDto();
     query.setItemFilterType(ItemFilterTypeQueryDto.EXCLUDE);
 
-    Pageable pageable = PageRequest.of(
-      0,
-      10,
-      Sort.by(Sort.Order.asc("matched_controls"))
-    );
+    Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("matched_controls")));
 
     repository.findAll(pageable, query, List.of());
 
@@ -129,7 +127,7 @@ class CustomModelOverviewRepositoryImplTest {
     verify(mongoTemplate).aggregate(
       aggregationCaptor.capture(),
       eq(COLLECTION_NAME),
-      eq(ModelOverviewDocument.class)
+      eq(MouseModelOverviewDocument.class)
     );
 
     String pipelineString = aggregationCaptor.getValue().toString();
@@ -145,7 +143,7 @@ class CustomModelOverviewRepositoryImplTest {
   @Test
   @DisplayName("should use direct count instead of aggregation for total")
   void shouldUseDirectCountForTotal() {
-    ModelOverviewSearchQueryDto query = new ModelOverviewSearchQueryDto();
+    MouseModelOverviewSearchQueryDto query = new MouseModelOverviewSearchQueryDto();
     query.setAvailableData(List.of("behavior"));
     query.setItemFilterType(ItemFilterTypeQueryDto.INCLUDE);
 
