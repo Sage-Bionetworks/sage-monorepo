@@ -12,28 +12,28 @@ import {
   ComparisonToolConfigService,
   ComparisonToolPage,
   ItemFilterTypeQuery,
-  ModelOverview,
-  ModelOverviewSearchQuery,
-  ModelOverviewService,
-  ModelOverviewsPage,
+  MouseModelOverview,
+  MouseModelOverviewSearchQuery,
+  MouseModelOverviewService,
+  MouseModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, shareReplay } from 'rxjs';
-import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
+import { MouseModelOverviewComparisonToolService } from './services/mouse-model-overview-comparison-tool.service';
 
 @Component({
-  selector: 'model-ad-model-overview-comparison-tool',
+  selector: 'model-ad-mouse-model-overview-comparison-tool',
   imports: [ComparisonToolComponent],
-  templateUrl: './model-overview-comparison-tool.component.html',
-  styleUrls: ['./model-overview-comparison-tool.component.scss'],
+  templateUrl: './mouse-model-overview-comparison-tool.component.html',
+  styleUrls: ['./mouse-model-overview-comparison-tool.component.scss'],
 })
-export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
+export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly modelOverviewService = inject(ModelOverviewService);
-  private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
+  private readonly mouseModelOverviewService = inject(MouseModelOverviewService);
+  private readonly comparisonToolService = inject(MouseModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
   private readonly logger = inject(LoggerService);
@@ -57,7 +57,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     showSignificanceControls: false,
     viewDetailsTooltip: 'Open model details page',
     viewDetailsClick: (rowData: unknown) => {
-      const data = rowData as ModelOverview;
+      const data = rowData as MouseModelOverview;
       const url = this.router.serializeUrl(
         this.router.createUrlTree([ROUTE_PATHS.MODELS, data.name]),
       );
@@ -113,7 +113,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
 
-    const query: ModelOverviewSearchQuery = {
+    const query: MouseModelOverviewSearchQuery = {
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
       pageNumber: currentQuery.pageNumber,
@@ -128,15 +128,15 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     };
     this.comparisonToolService.startFetch();
     this.logger.log(
-      `ModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
+      `MouseModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
     );
 
-    this.modelOverviewService
-      .getModelOverviews(query)
+    this.mouseModelOverviewService
+      .getMouseModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (response: ModelOverviewsPage) => {
-          const data = response.modelOverviews;
+        next: (response: MouseModelOverviewsPage) => {
+          const data = response.mouseModelOverviews;
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
@@ -150,7 +150,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
 
-    const query: ModelOverviewSearchQuery = {
+    const query: MouseModelOverviewSearchQuery = {
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
       sortFields,
@@ -158,14 +158,16 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     };
 
     this.comparisonToolService.startFetch();
-    this.logger.log(`ModelOverviewComparisonToolComponent: pinned query ${JSON.stringify(query)}`);
+    this.logger.log(
+      `MouseModelOverviewComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
+    );
 
-    this.modelOverviewService
-      .getModelOverviews(query)
+    this.mouseModelOverviewService
+      .getMouseModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (response: ModelOverviewsPage) => {
-          const data = response.modelOverviews;
+        next: (response: MouseModelOverviewsPage) => {
+          const data = response.mouseModelOverviews;
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },

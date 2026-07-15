@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'model-ad-model-overview-comparison-tool',
+  displayName: 'model-ad-mouse-model-overview-comparison-tool',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../coverage/libs/model-ad/model-overview-comparison-tool',
+  coverageDirectory: '../../../coverage/libs/model-ad/mouse-model-overview-comparison-tool',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

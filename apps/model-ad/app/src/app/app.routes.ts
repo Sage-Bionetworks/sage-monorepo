@@ -43,9 +43,9 @@ export const routes: Route[] = [
     },
   },
   {
-    path: ROUTE_PATHS.MODEL_OVERVIEW,
+    path: ROUTE_PATHS.MOUSE_MODEL_OVERVIEW,
     loadChildren: () =>
-      import('@sagebionetworks/model-ad/model-overview-comparison-tool').then(
+      import('@sagebionetworks/model-ad/mouse-model-overview-comparison-tool').then(
         (routes) => routes.routes,
       ),
     data: {

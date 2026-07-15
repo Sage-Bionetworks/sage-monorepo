@@ -16,7 +16,7 @@ export const ROUTE_PATHS = {
   HOME: '',
   ABOUT: 'about',
   NEWS: 'news',
-  MODEL_OVERVIEW: 'comparison/model',
+  MOUSE_MODEL_OVERVIEW: 'comparison/model',
   DIFFERENTIAL_EXPRESSION: 'comparison/expression',
   GENES: 'genes',
   DISEASE_CORRELATION: 'comparison/correlation',
