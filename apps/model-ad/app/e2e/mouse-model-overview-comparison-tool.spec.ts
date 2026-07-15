@@ -36,14 +36,14 @@ import { COMPARISON_TOOL_PATHS } from './constants';
 import {
   fetchComparisonToolConfig,
   fetchDiseaseCorrelations,
-  fetchModelOverviews,
+  fetchMouseModelOverviews,
   navigateToComparison,
 } from './helpers/comparison-tool';
 
 const CT_PAGE = 'Model Overview';
 const MODEL_OVERVIEW_PATH = COMPARISON_TOOL_PATHS[CT_PAGE];
 
-test.describe('model overview', () => {
+test.describe('mouse model overview', () => {
   runFilterPanelTests(async (page) => navigateToComparison(page, CT_PAGE, true));
 
   test('share URL button copies URL to clipboard', async ({ page, context }) => {
@@ -63,7 +63,7 @@ test.describe('model overview', () => {
   });
 
   test('pinning and unpinning items updates the pinned query param', async ({ page }) => {
-    const models = await fetchModelOverviews(page);
+    const models = await fetchMouseModelOverviews(page);
     expect(models.length).toBeGreaterThan(1);
 
     const [firstModel, secondModel] = models;
@@ -91,7 +91,7 @@ test.describe('model overview', () => {
   });
 
   test('pinned items in the URL are restored in the UI', async ({ page }) => {
-    const [firstModel] = await fetchModelOverviews(page);
+    const [firstModel] = await fetchMouseModelOverviews(page);
     expect(firstModel).toBeDefined();
 
     await navigateToComparison(page, CT_PAGE, true, 'url', `pinned=${firstModel.name}`);
@@ -104,7 +104,7 @@ test.describe('model overview', () => {
   test('pinned items are removed from URL when navigating to another comparison tool', async ({
     page,
   }) => {
-    const [firstModel] = await fetchModelOverviews(page);
+    const [firstModel] = await fetchMouseModelOverviews(page);
     expect(firstModel).toBeDefined();
 
     await navigateToComparison(page, CT_PAGE, true, 'url', `pinned=${firstModel.name}`);
@@ -120,7 +120,7 @@ test.describe('model overview', () => {
   }) => {
     const initialCT = 'Disease Correlation';
 
-    const [firstModel] = await fetchModelOverviews(page);
+    const [firstModel] = await fetchMouseModelOverviews(page);
     expect(firstModel).toBeDefined();
 
     const [firstCorrelation] = await fetchDiseaseCorrelations(page);
@@ -151,7 +151,7 @@ test.describe('model overview', () => {
   test('pinned items are loaded from cache and displayed in UI and in URL when returning to the comparison tool', async ({
     page,
   }) => {
-    const [firstModel] = await fetchModelOverviews(page);
+    const [firstModel] = await fetchMouseModelOverviews(page);
     expect(firstModel).toBeDefined();
 
     await navigateToComparison(page, CT_PAGE, true, 'url', `pinned=${firstModel.name}`);

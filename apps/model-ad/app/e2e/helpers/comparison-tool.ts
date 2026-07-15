@@ -4,8 +4,8 @@ import {
   ComparisonToolConfig,
   DiseaseCorrelation,
   DiseaseCorrelationsPage,
-  ModelOverview,
-  ModelOverviewsPage,
+  MouseModelOverview,
+  MouseModelOverviewsPage,
   Transcriptomics,
   TranscriptomicsPage,
 } from '@sagebionetworks/model-ad/api-client';
@@ -66,9 +66,9 @@ export const fetchComparisonToolData = async <T>(
   return data;
 };
 
-export const fetchModelOverviews = async (page: Page): Promise<ModelOverview[]> => {
-  const data = await fetchComparisonToolData<ModelOverviewsPage>(page, 'Model Overview');
-  return data.modelOverviews;
+export const fetchMouseModelOverviews = async (page: Page): Promise<MouseModelOverview[]> => {
+  const data = await fetchComparisonToolData<MouseModelOverviewsPage>(page, 'Model Overview');
+  return data.mouseModelOverviews;
 };
 
 export const fetchDiseaseCorrelations = async (

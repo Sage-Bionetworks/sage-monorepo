@@ -5,7 +5,7 @@ export const COMPARISON_TOOL_PATHS: Record<string, string> = {
 };
 
 export const COMPARISON_TOOL_API_PATHS: Record<string, string> = {
-  'Model Overview': '/comparison-tools/model-overview',
+  'Model Overview': '/comparison-tools/mouse-model-overview',
   'Differential Expression': '/comparison-tools/transcriptomics',
   'Disease Correlation': '/comparison-tools/disease-correlation',
 };
