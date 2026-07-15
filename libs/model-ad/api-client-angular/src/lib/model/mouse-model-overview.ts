@@ -10,11 +10,11 @@
 import { Link } from './link';
 
 /**
- * Model Overview object for comparison tools
+ * Mouse Model Overview object for comparison tools
  */
-export interface ModelOverview {
+export interface MouseModelOverview {
   /**
-   * Unique identifier for the model overview object
+   * Unique identifier for the mouse model overview object
    */
   _id: string;
   /**
@@ -40,9 +40,9 @@ export interface ModelOverview {
    * List of modified genes in the model
    */
   modified_genes: Array<string>;
-  available_data: Array<ModelOverview.AvailableDataEnum>;
+  available_data: Array<MouseModelOverview.AvailableDataEnum>;
 }
-export namespace ModelOverview {
+export namespace MouseModelOverview {
   export type AvailableDataEnum =
     | 'Transcriptomics'
     | 'Pathology'

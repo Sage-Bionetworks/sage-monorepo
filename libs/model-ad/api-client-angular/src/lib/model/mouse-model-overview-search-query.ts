@@ -10,9 +10,9 @@
 import { ItemFilterTypeQuery } from './item-filter-type-query';
 
 /**
- * Model overview search query with pagination and filtering options.
+ * Mouse model overview search query with pagination and filtering options.
  */
-export interface ModelOverviewSearchQuery {
+export interface MouseModelOverviewSearchQuery {
   /**
    * The page number to return (index starts from 0).
    */
@@ -53,9 +53,9 @@ export interface ModelOverviewSearchQuery {
   /**
    * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields.
    */
-  sortOrders: Array<ModelOverviewSearchQuery.SortOrdersEnum>;
+  sortOrders: Array<MouseModelOverviewSearchQuery.SortOrdersEnum>;
 }
-export namespace ModelOverviewSearchQuery {
+export namespace MouseModelOverviewSearchQuery {
   export type SortOrdersEnum = 1 | -1;
   export const SortOrdersEnum = {
     NUMBER_1: 1 as SortOrdersEnum,

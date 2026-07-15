@@ -1,8 +1,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewsPageDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +31,16 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
 @RequestMapping("${openapi.modelADAPINext.base-path:/v1}")
-public class ModelOverviewApiController implements ModelOverviewApi {
+public class MouseModelOverviewApiController implements MouseModelOverviewApi {
 
-    private final ModelOverviewApiDelegate delegate;
+    private final MouseModelOverviewApiDelegate delegate;
 
-    public ModelOverviewApiController(@Autowired(required = false) ModelOverviewApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new ModelOverviewApiDelegate() {});
+    public MouseModelOverviewApiController(@Autowired(required = false) MouseModelOverviewApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new MouseModelOverviewApiDelegate() {});
     }
 
     @Override
-    public ModelOverviewApiDelegate getDelegate() {
+    public MouseModelOverviewApiDelegate getDelegate() {
         return delegate;
     }
 

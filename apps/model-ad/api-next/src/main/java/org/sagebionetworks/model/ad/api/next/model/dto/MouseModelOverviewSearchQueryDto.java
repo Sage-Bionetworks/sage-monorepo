@@ -21,13 +21,13 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * Model overview search query with pagination and filtering options.
+ * Mouse model overview search query with pagination and filtering options.
  */
 
-@Schema(name = "ModelOverviewSearchQuery", description = "Model overview search query with pagination and filtering options.")
-@JsonTypeName("ModelOverviewSearchQuery")
+@Schema(name = "MouseModelOverviewSearchQuery", description = "Mouse model overview search query with pagination and filtering options.")
+@JsonTypeName("MouseModelOverviewSearchQuery")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class ModelOverviewSearchQueryDto {
+public class MouseModelOverviewSearchQueryDto {
 
   private Integer pageNumber = 0;
 
@@ -93,19 +93,19 @@ public class ModelOverviewSearchQueryDto {
   @Valid
   private List<SortOrdersEnum> sortOrders = new ArrayList<>();
 
-  public ModelOverviewSearchQueryDto() {
+  public MouseModelOverviewSearchQueryDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public ModelOverviewSearchQueryDto(List<String> sortFields, List<SortOrdersEnum> sortOrders) {
+  public MouseModelOverviewSearchQueryDto(List<String> sortFields, List<SortOrdersEnum> sortOrders) {
     this.sortFields = sortFields;
     this.sortOrders = sortOrders;
   }
 
-  public ModelOverviewSearchQueryDto pageNumber(Integer pageNumber) {
+  public MouseModelOverviewSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
     return this;
   }
@@ -126,7 +126,7 @@ public class ModelOverviewSearchQueryDto {
     this.pageNumber = pageNumber;
   }
 
-  public ModelOverviewSearchQueryDto pageSize(Integer pageSize) {
+  public MouseModelOverviewSearchQueryDto pageSize(Integer pageSize) {
     this.pageSize = pageSize;
     return this;
   }
@@ -148,12 +148,12 @@ public class ModelOverviewSearchQueryDto {
     this.pageSize = pageSize;
   }
 
-  public ModelOverviewSearchQueryDto items(@Nullable List<String> items) {
+  public MouseModelOverviewSearchQueryDto items(@Nullable List<String> items) {
     this.items = items;
     return this;
   }
 
-  public ModelOverviewSearchQueryDto addItemsItem(String itemsItem) {
+  public MouseModelOverviewSearchQueryDto addItemsItem(String itemsItem) {
     if (this.items == null) {
       this.items = new ArrayList<>();
     }
@@ -176,7 +176,7 @@ public class ModelOverviewSearchQueryDto {
     this.items = items;
   }
 
-  public ModelOverviewSearchQueryDto itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
+  public MouseModelOverviewSearchQueryDto itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
     this.itemFilterType = itemFilterType;
     return this;
   }
@@ -196,7 +196,7 @@ public class ModelOverviewSearchQueryDto {
     this.itemFilterType = itemFilterType;
   }
 
-  public ModelOverviewSearchQueryDto search(@Nullable String search) {
+  public MouseModelOverviewSearchQueryDto search(@Nullable String search) {
     this.search = search;
     return this;
   }
@@ -216,12 +216,12 @@ public class ModelOverviewSearchQueryDto {
     this.search = search;
   }
 
-  public ModelOverviewSearchQueryDto availableData(@Nullable List<String> availableData) {
+  public MouseModelOverviewSearchQueryDto availableData(@Nullable List<String> availableData) {
     this.availableData = availableData;
     return this;
   }
 
-  public ModelOverviewSearchQueryDto addAvailableDataItem(String availableDataItem) {
+  public MouseModelOverviewSearchQueryDto addAvailableDataItem(String availableDataItem) {
     if (this.availableData == null) {
       this.availableData = new ArrayList<>();
     }
@@ -244,12 +244,12 @@ public class ModelOverviewSearchQueryDto {
     this.availableData = availableData;
   }
 
-  public ModelOverviewSearchQueryDto center(@Nullable List<String> center) {
+  public MouseModelOverviewSearchQueryDto center(@Nullable List<String> center) {
     this.center = center;
     return this;
   }
 
-  public ModelOverviewSearchQueryDto addCenterItem(String centerItem) {
+  public MouseModelOverviewSearchQueryDto addCenterItem(String centerItem) {
     if (this.center == null) {
       this.center = new ArrayList<>();
     }
@@ -272,12 +272,12 @@ public class ModelOverviewSearchQueryDto {
     this.center = center;
   }
 
-  public ModelOverviewSearchQueryDto modelType(@Nullable List<String> modelType) {
+  public MouseModelOverviewSearchQueryDto modelType(@Nullable List<String> modelType) {
     this.modelType = modelType;
     return this;
   }
 
-  public ModelOverviewSearchQueryDto addModelTypeItem(String modelTypeItem) {
+  public MouseModelOverviewSearchQueryDto addModelTypeItem(String modelTypeItem) {
     if (this.modelType == null) {
       this.modelType = new ArrayList<>();
     }
@@ -300,12 +300,12 @@ public class ModelOverviewSearchQueryDto {
     this.modelType = modelType;
   }
 
-  public ModelOverviewSearchQueryDto modifiedGenes(@Nullable List<String> modifiedGenes) {
+  public MouseModelOverviewSearchQueryDto modifiedGenes(@Nullable List<String> modifiedGenes) {
     this.modifiedGenes = modifiedGenes;
     return this;
   }
 
-  public ModelOverviewSearchQueryDto addModifiedGenesItem(String modifiedGenesItem) {
+  public MouseModelOverviewSearchQueryDto addModifiedGenesItem(String modifiedGenesItem) {
     if (this.modifiedGenes == null) {
       this.modifiedGenes = new ArrayList<>();
     }
@@ -328,12 +328,12 @@ public class ModelOverviewSearchQueryDto {
     this.modifiedGenes = modifiedGenes;
   }
 
-  public ModelOverviewSearchQueryDto sortFields(List<String> sortFields) {
+  public MouseModelOverviewSearchQueryDto sortFields(List<String> sortFields) {
     this.sortFields = sortFields;
     return this;
   }
 
-  public ModelOverviewSearchQueryDto addSortFieldsItem(String sortFieldsItem) {
+  public MouseModelOverviewSearchQueryDto addSortFieldsItem(String sortFieldsItem) {
     if (this.sortFields == null) {
       this.sortFields = new ArrayList<>();
     }
@@ -356,12 +356,12 @@ public class ModelOverviewSearchQueryDto {
     this.sortFields = sortFields;
   }
 
-  public ModelOverviewSearchQueryDto sortOrders(List<SortOrdersEnum> sortOrders) {
+  public MouseModelOverviewSearchQueryDto sortOrders(List<SortOrdersEnum> sortOrders) {
     this.sortOrders = sortOrders;
     return this;
   }
 
-  public ModelOverviewSearchQueryDto addSortOrdersItem(SortOrdersEnum sortOrdersItem) {
+  public MouseModelOverviewSearchQueryDto addSortOrdersItem(SortOrdersEnum sortOrdersItem) {
     if (this.sortOrders == null) {
       this.sortOrders = new ArrayList<>();
     }
@@ -392,18 +392,18 @@ public class ModelOverviewSearchQueryDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ModelOverviewSearchQueryDto modelOverviewSearchQuery = (ModelOverviewSearchQueryDto) o;
-    return Objects.equals(this.pageNumber, modelOverviewSearchQuery.pageNumber) &&
-        Objects.equals(this.pageSize, modelOverviewSearchQuery.pageSize) &&
-        Objects.equals(this.items, modelOverviewSearchQuery.items) &&
-        Objects.equals(this.itemFilterType, modelOverviewSearchQuery.itemFilterType) &&
-        Objects.equals(this.search, modelOverviewSearchQuery.search) &&
-        Objects.equals(this.availableData, modelOverviewSearchQuery.availableData) &&
-        Objects.equals(this.center, modelOverviewSearchQuery.center) &&
-        Objects.equals(this.modelType, modelOverviewSearchQuery.modelType) &&
-        Objects.equals(this.modifiedGenes, modelOverviewSearchQuery.modifiedGenes) &&
-        Objects.equals(this.sortFields, modelOverviewSearchQuery.sortFields) &&
-        Objects.equals(this.sortOrders, modelOverviewSearchQuery.sortOrders);
+    MouseModelOverviewSearchQueryDto mouseModelOverviewSearchQuery = (MouseModelOverviewSearchQueryDto) o;
+    return Objects.equals(this.pageNumber, mouseModelOverviewSearchQuery.pageNumber) &&
+        Objects.equals(this.pageSize, mouseModelOverviewSearchQuery.pageSize) &&
+        Objects.equals(this.items, mouseModelOverviewSearchQuery.items) &&
+        Objects.equals(this.itemFilterType, mouseModelOverviewSearchQuery.itemFilterType) &&
+        Objects.equals(this.search, mouseModelOverviewSearchQuery.search) &&
+        Objects.equals(this.availableData, mouseModelOverviewSearchQuery.availableData) &&
+        Objects.equals(this.center, mouseModelOverviewSearchQuery.center) &&
+        Objects.equals(this.modelType, mouseModelOverviewSearchQuery.modelType) &&
+        Objects.equals(this.modifiedGenes, mouseModelOverviewSearchQuery.modifiedGenes) &&
+        Objects.equals(this.sortFields, mouseModelOverviewSearchQuery.sortFields) &&
+        Objects.equals(this.sortOrders, mouseModelOverviewSearchQuery.sortOrders);
   }
 
   @Override
@@ -414,7 +414,7 @@ public class ModelOverviewSearchQueryDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ModelOverviewSearchQueryDto {\n");
+    sb.append("class MouseModelOverviewSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
@@ -443,17 +443,17 @@ public class ModelOverviewSearchQueryDto {
   
   public static class Builder {
 
-    private ModelOverviewSearchQueryDto instance;
+    private MouseModelOverviewSearchQueryDto instance;
 
     public Builder() {
-      this(new ModelOverviewSearchQueryDto());
+      this(new MouseModelOverviewSearchQueryDto());
     }
 
-    protected Builder(ModelOverviewSearchQueryDto instance) {
+    protected Builder(MouseModelOverviewSearchQueryDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(ModelOverviewSearchQueryDto value) { 
+    protected Builder copyOf(MouseModelOverviewSearchQueryDto value) { 
       this.instance.setPageNumber(value.pageNumber);
       this.instance.setPageSize(value.pageSize);
       this.instance.setItems(value.items);
@@ -468,67 +468,67 @@ public class ModelOverviewSearchQueryDto {
       return this;
     }
 
-    public ModelOverviewSearchQueryDto.Builder pageNumber(Integer pageNumber) {
+    public MouseModelOverviewSearchQueryDto.Builder pageNumber(Integer pageNumber) {
       this.instance.pageNumber(pageNumber);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder pageSize(Integer pageSize) {
+    public MouseModelOverviewSearchQueryDto.Builder pageSize(Integer pageSize) {
       this.instance.pageSize(pageSize);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder items(List<String> items) {
+    public MouseModelOverviewSearchQueryDto.Builder items(List<String> items) {
       this.instance.items(items);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
+    public MouseModelOverviewSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
       this.instance.itemFilterType(itemFilterType);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder search(String search) {
+    public MouseModelOverviewSearchQueryDto.Builder search(String search) {
       this.instance.search(search);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder availableData(List<String> availableData) {
+    public MouseModelOverviewSearchQueryDto.Builder availableData(List<String> availableData) {
       this.instance.availableData(availableData);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder center(List<String> center) {
+    public MouseModelOverviewSearchQueryDto.Builder center(List<String> center) {
       this.instance.center(center);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder modelType(List<String> modelType) {
+    public MouseModelOverviewSearchQueryDto.Builder modelType(List<String> modelType) {
       this.instance.modelType(modelType);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder modifiedGenes(List<String> modifiedGenes) {
+    public MouseModelOverviewSearchQueryDto.Builder modifiedGenes(List<String> modifiedGenes) {
       this.instance.modifiedGenes(modifiedGenes);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder sortFields(List<String> sortFields) {
+    public MouseModelOverviewSearchQueryDto.Builder sortFields(List<String> sortFields) {
       this.instance.sortFields(sortFields);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder sortOrders(List<SortOrdersEnum> sortOrders) {
+    public MouseModelOverviewSearchQueryDto.Builder sortOrders(List<SortOrdersEnum> sortOrders) {
       this.instance.sortOrders(sortOrders);
       return this;
     }
     
     /**
-    * returns a built ModelOverviewSearchQueryDto instance.
+    * returns a built MouseModelOverviewSearchQueryDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public ModelOverviewSearchQueryDto build() {
+    public MouseModelOverviewSearchQueryDto build() {
       try {
         return this.instance;
       } finally {
@@ -546,15 +546,15 @@ public class ModelOverviewSearchQueryDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static ModelOverviewSearchQueryDto.Builder builder() {
-    return new ModelOverviewSearchQueryDto.Builder();
+  public static MouseModelOverviewSearchQueryDto.Builder builder() {
+    return new MouseModelOverviewSearchQueryDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public ModelOverviewSearchQueryDto.Builder toBuilder() {
-    ModelOverviewSearchQueryDto.Builder builder = new ModelOverviewSearchQueryDto.Builder();
+  public MouseModelOverviewSearchQueryDto.Builder toBuilder() {
+    MouseModelOverviewSearchQueryDto.Builder builder = new MouseModelOverviewSearchQueryDto.Builder();
     return builder.copyOf(this);
   }
 

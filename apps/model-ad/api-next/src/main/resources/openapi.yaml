@@ -20,8 +20,8 @@ tags:
     name: Data Version
   - description: Operations about models.
     name: Model
-  - description: Operations about Model Overview.
-    name: Model Overview
+  - description: Operations about Mouse Model Overview.
+    name: Mouse Model Overview
   - description: Operations about Disease Correlation results.
     name: Disease Correlation
   - description: Operations about Transcriptomics results.
@@ -94,41 +94,41 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Comparison Tool Config
-  /comparison-tools/model-overview:
+  /comparison-tools/mouse-model-overview:
     get:
-      description: Returns a paginated list of model overview objects for use in comparison
-        tools.
-      operationId: getModelOverviews
+      description: Returns a paginated list of mouse model overview objects for use
+        in comparison tools.
+      operationId: getMouseModelOverviews
       parameters:
-        - description: The search query used to find and filter model overviews.
+        - description: The search query used to find and filter mouse model overviews.
           explode: true
           in: query
-          name: modelOverviewSearchQuery
+          name: mouseModelOverviewSearchQuery
           required: false
           schema:
-            $ref: '#/components/schemas/ModelOverviewSearchQuery'
+            $ref: '#/components/schemas/MouseModelOverviewSearchQuery'
           style: deepObject
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ModelOverviewsPage'
-          description: A paginated list of model overview objects
+                $ref: '#/components/schemas/MouseModelOverviewsPage'
+          description: A paginated list of mouse model overview objects
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      summary: Get model overview for comparison tools
+      summary: Get mouse model overview for comparison tools
       tags:
-        - Model Overview
+        - Mouse Model Overview
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: Model Overview
+        - tag: Mouse Model Overview
   /comparison-tools/disease-correlation:
     get:
       description: Returns a paginated list of disease correlation objects for use
@@ -273,14 +273,14 @@ paths:
         - tag: Model
 components:
   parameters:
-    modelOverviewSearchQuery:
-      description: The search query used to find and filter model overviews.
+    mouseModelOverviewSearchQuery:
+      description: The search query used to find and filter mouse model overviews.
       explode: true
       in: query
-      name: modelOverviewSearchQuery
+      name: mouseModelOverviewSearchQuery
       required: false
       schema:
-        $ref: '#/components/schemas/ModelOverviewSearchQuery'
+        $ref: '#/components/schemas/MouseModelOverviewSearchQuery'
       style: deepObject
     diseaseCorrelationSearchQuery:
       description: The search query used to find and filter disease correlations.
@@ -562,8 +562,9 @@ components:
         - include
         - exclude
       type: string
-    ModelOverviewSearchQuery:
-      description: Model overview search query with pagination and filtering options.
+    MouseModelOverviewSearchQuery:
+      description: Mouse model overview search query with pagination and filtering
+        options.
       properties:
         pageNumber:
           default: 0
@@ -680,8 +681,8 @@ components:
           description: URL for the related resource
           type: string
       type: object
-    ModelOverview:
-      description: Model Overview object for comparison tools
+    MouseModelOverview:
+      description: Mouse Model Overview object for comparison tools
       example:
         pathology:
           link_url: link_url
@@ -716,7 +717,7 @@ components:
           link_text: link_text
       properties:
         _id:
-          description: Unique identifier for the model overview object
+          description: Unique identifier for the mouse model overview object
           type: string
         name:
           description: Model name
@@ -812,10 +813,10 @@ components:
         - totalElements
         - totalPages
       type: object
-    ModelOverviewsPage:
-      description: A page of model overview objects.
+    MouseModelOverviewsPage:
+      description: A page of mouse model overview objects.
       example:
-        modelOverviews:
+        mouseModelOverviews:
           - pathology:
               link_url: link_url
               link_text: link_text
@@ -886,15 +887,15 @@ components:
           hasNext: true
           totalElements: 250
       properties:
-        modelOverviews:
-          description: List of model overviews in this page.
+        mouseModelOverviews:
+          description: List of mouse model overviews in this page.
           items:
-            $ref: '#/components/schemas/ModelOverview'
+            $ref: '#/components/schemas/MouseModelOverview'
           type: array
         page:
           $ref: '#/components/schemas/PageMetadata'
       required:
-        - modelOverviews
+        - mouseModelOverviews
         - page
       type: object
     DiseaseCorrelationSearchQuery:

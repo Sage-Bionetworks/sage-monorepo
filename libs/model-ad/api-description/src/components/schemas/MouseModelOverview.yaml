@@ -1,9 +1,9 @@
 type: object
-description: Model Overview object for comparison tools
+description: Mouse Model Overview object for comparison tools
 properties:
   _id:
     type: string
-    description: Unique identifier for the model overview object
+    description: Unique identifier for the mouse model overview object
   name:
     type: string
     description: Model name

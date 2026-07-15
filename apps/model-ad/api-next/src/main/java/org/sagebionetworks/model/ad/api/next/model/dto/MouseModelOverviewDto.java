@@ -21,13 +21,13 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * Model Overview object for comparison tools
+ * Mouse Model Overview object for comparison tools
  */
 
-@Schema(name = "ModelOverview", description = "Model Overview object for comparison tools")
-@JsonTypeName("ModelOverview")
+@Schema(name = "MouseModelOverview", description = "Mouse Model Overview object for comparison tools")
+@JsonTypeName("MouseModelOverview")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class ModelOverviewDto {
+public class MouseModelOverviewDto {
 
   private String id;
 
@@ -97,14 +97,14 @@ public class ModelOverviewDto {
   @Valid
   private List<AvailableDataEnum> availableData = new ArrayList<>();
 
-  public ModelOverviewDto() {
+  public MouseModelOverviewDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public ModelOverviewDto(String id, String name, String modelType, List<String> matchedControls, LinkDto studyData, LinkDto jaxStrain, String center, List<String> modifiedGenes, List<AvailableDataEnum> availableData) {
+  public MouseModelOverviewDto(String id, String name, String modelType, List<String> matchedControls, LinkDto studyData, LinkDto jaxStrain, String center, List<String> modifiedGenes, List<AvailableDataEnum> availableData) {
     this.id = id;
     this.name = name;
     this.modelType = modelType;
@@ -116,17 +116,17 @@ public class ModelOverviewDto {
     this.availableData = availableData;
   }
 
-  public ModelOverviewDto id(String id) {
+  public MouseModelOverviewDto id(String id) {
     this.id = id;
     return this;
   }
 
   /**
-   * Unique identifier for the model overview object
+   * Unique identifier for the mouse model overview object
    * @return id
    */
   @NotNull 
-  @Schema(name = "_id", description = "Unique identifier for the model overview object", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "_id", description = "Unique identifier for the mouse model overview object", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("_id")
   public String getId() {
     return id;
@@ -136,7 +136,7 @@ public class ModelOverviewDto {
     this.id = id;
   }
 
-  public ModelOverviewDto name(String name) {
+  public MouseModelOverviewDto name(String name) {
     this.name = name;
     return this;
   }
@@ -156,7 +156,7 @@ public class ModelOverviewDto {
     this.name = name;
   }
 
-  public ModelOverviewDto modelType(String modelType) {
+  public MouseModelOverviewDto modelType(String modelType) {
     this.modelType = modelType;
     return this;
   }
@@ -176,12 +176,12 @@ public class ModelOverviewDto {
     this.modelType = modelType;
   }
 
-  public ModelOverviewDto matchedControls(List<String> matchedControls) {
+  public MouseModelOverviewDto matchedControls(List<String> matchedControls) {
     this.matchedControls = matchedControls;
     return this;
   }
 
-  public ModelOverviewDto addMatchedControlsItem(String matchedControlsItem) {
+  public MouseModelOverviewDto addMatchedControlsItem(String matchedControlsItem) {
     if (this.matchedControls == null) {
       this.matchedControls = new ArrayList<>();
     }
@@ -204,7 +204,7 @@ public class ModelOverviewDto {
     this.matchedControls = matchedControls;
   }
 
-  public ModelOverviewDto transcriptomics(@Nullable LinkDto transcriptomics) {
+  public MouseModelOverviewDto transcriptomics(@Nullable LinkDto transcriptomics) {
     this.transcriptomics = transcriptomics;
     return this;
   }
@@ -224,7 +224,7 @@ public class ModelOverviewDto {
     this.transcriptomics = transcriptomics;
   }
 
-  public ModelOverviewDto diseaseCorrelation(@Nullable LinkDto diseaseCorrelation) {
+  public MouseModelOverviewDto diseaseCorrelation(@Nullable LinkDto diseaseCorrelation) {
     this.diseaseCorrelation = diseaseCorrelation;
     return this;
   }
@@ -244,7 +244,7 @@ public class ModelOverviewDto {
     this.diseaseCorrelation = diseaseCorrelation;
   }
 
-  public ModelOverviewDto biomarkers(@Nullable LinkDto biomarkers) {
+  public MouseModelOverviewDto biomarkers(@Nullable LinkDto biomarkers) {
     this.biomarkers = biomarkers;
     return this;
   }
@@ -264,7 +264,7 @@ public class ModelOverviewDto {
     this.biomarkers = biomarkers;
   }
 
-  public ModelOverviewDto pathology(@Nullable LinkDto pathology) {
+  public MouseModelOverviewDto pathology(@Nullable LinkDto pathology) {
     this.pathology = pathology;
     return this;
   }
@@ -284,7 +284,7 @@ public class ModelOverviewDto {
     this.pathology = pathology;
   }
 
-  public ModelOverviewDto studyData(LinkDto studyData) {
+  public MouseModelOverviewDto studyData(LinkDto studyData) {
     this.studyData = studyData;
     return this;
   }
@@ -304,7 +304,7 @@ public class ModelOverviewDto {
     this.studyData = studyData;
   }
 
-  public ModelOverviewDto jaxStrain(LinkDto jaxStrain) {
+  public MouseModelOverviewDto jaxStrain(LinkDto jaxStrain) {
     this.jaxStrain = jaxStrain;
     return this;
   }
@@ -324,7 +324,7 @@ public class ModelOverviewDto {
     this.jaxStrain = jaxStrain;
   }
 
-  public ModelOverviewDto center(String center) {
+  public MouseModelOverviewDto center(String center) {
     this.center = center;
     return this;
   }
@@ -344,12 +344,12 @@ public class ModelOverviewDto {
     this.center = center;
   }
 
-  public ModelOverviewDto modifiedGenes(List<String> modifiedGenes) {
+  public MouseModelOverviewDto modifiedGenes(List<String> modifiedGenes) {
     this.modifiedGenes = modifiedGenes;
     return this;
   }
 
-  public ModelOverviewDto addModifiedGenesItem(String modifiedGenesItem) {
+  public MouseModelOverviewDto addModifiedGenesItem(String modifiedGenesItem) {
     if (this.modifiedGenes == null) {
       this.modifiedGenes = new ArrayList<>();
     }
@@ -372,12 +372,12 @@ public class ModelOverviewDto {
     this.modifiedGenes = modifiedGenes;
   }
 
-  public ModelOverviewDto availableData(List<AvailableDataEnum> availableData) {
+  public MouseModelOverviewDto availableData(List<AvailableDataEnum> availableData) {
     this.availableData = availableData;
     return this;
   }
 
-  public ModelOverviewDto addAvailableDataItem(AvailableDataEnum availableDataItem) {
+  public MouseModelOverviewDto addAvailableDataItem(AvailableDataEnum availableDataItem) {
     if (this.availableData == null) {
       this.availableData = new ArrayList<>();
     }
@@ -408,20 +408,20 @@ public class ModelOverviewDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ModelOverviewDto modelOverview = (ModelOverviewDto) o;
-    return Objects.equals(this.id, modelOverview.id) &&
-        Objects.equals(this.name, modelOverview.name) &&
-        Objects.equals(this.modelType, modelOverview.modelType) &&
-        Objects.equals(this.matchedControls, modelOverview.matchedControls) &&
-        Objects.equals(this.transcriptomics, modelOverview.transcriptomics) &&
-        Objects.equals(this.diseaseCorrelation, modelOverview.diseaseCorrelation) &&
-        Objects.equals(this.biomarkers, modelOverview.biomarkers) &&
-        Objects.equals(this.pathology, modelOverview.pathology) &&
-        Objects.equals(this.studyData, modelOverview.studyData) &&
-        Objects.equals(this.jaxStrain, modelOverview.jaxStrain) &&
-        Objects.equals(this.center, modelOverview.center) &&
-        Objects.equals(this.modifiedGenes, modelOverview.modifiedGenes) &&
-        Objects.equals(this.availableData, modelOverview.availableData);
+    MouseModelOverviewDto mouseModelOverview = (MouseModelOverviewDto) o;
+    return Objects.equals(this.id, mouseModelOverview.id) &&
+        Objects.equals(this.name, mouseModelOverview.name) &&
+        Objects.equals(this.modelType, mouseModelOverview.modelType) &&
+        Objects.equals(this.matchedControls, mouseModelOverview.matchedControls) &&
+        Objects.equals(this.transcriptomics, mouseModelOverview.transcriptomics) &&
+        Objects.equals(this.diseaseCorrelation, mouseModelOverview.diseaseCorrelation) &&
+        Objects.equals(this.biomarkers, mouseModelOverview.biomarkers) &&
+        Objects.equals(this.pathology, mouseModelOverview.pathology) &&
+        Objects.equals(this.studyData, mouseModelOverview.studyData) &&
+        Objects.equals(this.jaxStrain, mouseModelOverview.jaxStrain) &&
+        Objects.equals(this.center, mouseModelOverview.center) &&
+        Objects.equals(this.modifiedGenes, mouseModelOverview.modifiedGenes) &&
+        Objects.equals(this.availableData, mouseModelOverview.availableData);
   }
 
   @Override
@@ -432,7 +432,7 @@ public class ModelOverviewDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ModelOverviewDto {\n");
+    sb.append("class MouseModelOverviewDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
@@ -463,17 +463,17 @@ public class ModelOverviewDto {
   
   public static class Builder {
 
-    private ModelOverviewDto instance;
+    private MouseModelOverviewDto instance;
 
     public Builder() {
-      this(new ModelOverviewDto());
+      this(new MouseModelOverviewDto());
     }
 
-    protected Builder(ModelOverviewDto instance) {
+    protected Builder(MouseModelOverviewDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(ModelOverviewDto value) { 
+    protected Builder copyOf(MouseModelOverviewDto value) { 
       this.instance.setId(value.id);
       this.instance.setName(value.name);
       this.instance.setModelType(value.modelType);
@@ -490,77 +490,77 @@ public class ModelOverviewDto {
       return this;
     }
 
-    public ModelOverviewDto.Builder id(String id) {
+    public MouseModelOverviewDto.Builder id(String id) {
       this.instance.id(id);
       return this;
     }
     
-    public ModelOverviewDto.Builder name(String name) {
+    public MouseModelOverviewDto.Builder name(String name) {
       this.instance.name(name);
       return this;
     }
     
-    public ModelOverviewDto.Builder modelType(String modelType) {
+    public MouseModelOverviewDto.Builder modelType(String modelType) {
       this.instance.modelType(modelType);
       return this;
     }
     
-    public ModelOverviewDto.Builder matchedControls(List<String> matchedControls) {
+    public MouseModelOverviewDto.Builder matchedControls(List<String> matchedControls) {
       this.instance.matchedControls(matchedControls);
       return this;
     }
     
-    public ModelOverviewDto.Builder transcriptomics(LinkDto transcriptomics) {
+    public MouseModelOverviewDto.Builder transcriptomics(LinkDto transcriptomics) {
       this.instance.transcriptomics(transcriptomics);
       return this;
     }
     
-    public ModelOverviewDto.Builder diseaseCorrelation(LinkDto diseaseCorrelation) {
+    public MouseModelOverviewDto.Builder diseaseCorrelation(LinkDto diseaseCorrelation) {
       this.instance.diseaseCorrelation(diseaseCorrelation);
       return this;
     }
     
-    public ModelOverviewDto.Builder biomarkers(LinkDto biomarkers) {
+    public MouseModelOverviewDto.Builder biomarkers(LinkDto biomarkers) {
       this.instance.biomarkers(biomarkers);
       return this;
     }
     
-    public ModelOverviewDto.Builder pathology(LinkDto pathology) {
+    public MouseModelOverviewDto.Builder pathology(LinkDto pathology) {
       this.instance.pathology(pathology);
       return this;
     }
     
-    public ModelOverviewDto.Builder studyData(LinkDto studyData) {
+    public MouseModelOverviewDto.Builder studyData(LinkDto studyData) {
       this.instance.studyData(studyData);
       return this;
     }
     
-    public ModelOverviewDto.Builder jaxStrain(LinkDto jaxStrain) {
+    public MouseModelOverviewDto.Builder jaxStrain(LinkDto jaxStrain) {
       this.instance.jaxStrain(jaxStrain);
       return this;
     }
     
-    public ModelOverviewDto.Builder center(String center) {
+    public MouseModelOverviewDto.Builder center(String center) {
       this.instance.center(center);
       return this;
     }
     
-    public ModelOverviewDto.Builder modifiedGenes(List<String> modifiedGenes) {
+    public MouseModelOverviewDto.Builder modifiedGenes(List<String> modifiedGenes) {
       this.instance.modifiedGenes(modifiedGenes);
       return this;
     }
     
-    public ModelOverviewDto.Builder availableData(List<AvailableDataEnum> availableData) {
+    public MouseModelOverviewDto.Builder availableData(List<AvailableDataEnum> availableData) {
       this.instance.availableData(availableData);
       return this;
     }
     
     /**
-    * returns a built ModelOverviewDto instance.
+    * returns a built MouseModelOverviewDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public ModelOverviewDto build() {
+    public MouseModelOverviewDto build() {
       try {
         return this.instance;
       } finally {
@@ -578,15 +578,15 @@ public class ModelOverviewDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static ModelOverviewDto.Builder builder() {
-    return new ModelOverviewDto.Builder();
+  public static MouseModelOverviewDto.Builder builder() {
+    return new MouseModelOverviewDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public ModelOverviewDto.Builder toBuilder() {
-    ModelOverviewDto.Builder builder = new ModelOverviewDto.Builder();
+  public MouseModelOverviewDto.Builder toBuilder() {
+    MouseModelOverviewDto.Builder builder = new MouseModelOverviewDto.Builder();
     return builder.copyOf(this);
   }
 

@@ -23,9 +23,9 @@ tags:
   - name: Model
     description: Operations about models.
     x-displayName: Model
-  - name: Model Overview
-    description: Operations about Model Overview.
-    x-displayName: Model Overview
+  - name: Mouse Model Overview
+    description: Operations about Mouse Model Overview.
+    x-displayName: Mouse Model Overview
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
     x-displayName: Disease Correlation
@@ -85,22 +85,22 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /comparison-tools/model-overview:
+  /comparison-tools/mouse-model-overview:
     get:
       tags:
-        - Model Overview
-      summary: Get model overview for comparison tools
-      description: Returns a paginated list of model overview objects for use in comparison tools.
-      operationId: getModelOverviews
+        - Mouse Model Overview
+      summary: Get mouse model overview for comparison tools
+      description: Returns a paginated list of mouse model overview objects for use in comparison tools.
+      operationId: getMouseModelOverviews
       parameters:
-        - $ref: '#/components/parameters/modelOverviewSearchQuery'
+        - $ref: '#/components/parameters/mouseModelOverviewSearchQuery'
       responses:
         '200':
-          description: A paginated list of model overview objects
+          description: A paginated list of mouse model overview objects
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ModelOverviewsPage'
+                $ref: '#/components/schemas/MouseModelOverviewsPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -390,9 +390,9 @@ components:
         - include: Include only the specified items.
         - exclude: Exclude the specified items.
       default: include
-    ModelOverviewSearchQuery:
+    MouseModelOverviewSearchQuery:
       type: object
-      description: Model overview search query with pagination and filtering options.
+      description: Mouse model overview search query with pagination and filtering options.
       properties:
         pageNumber:
           description: The page number to return (index starts from 0).
@@ -506,13 +506,13 @@ components:
         link_url:
           type: string
           description: URL for the related resource
-    ModelOverview:
+    MouseModelOverview:
       type: object
-      description: Model Overview object for comparison tools
+      description: Mouse Model Overview object for comparison tools
       properties:
         _id:
           type: string
-          description: Unique identifier for the model overview object
+          description: Unique identifier for the mouse model overview object
         name:
           type: string
           description: Model name
@@ -605,19 +605,19 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
-    ModelOverviewsPage:
+    MouseModelOverviewsPage:
       type: object
-      description: A page of model overview objects.
+      description: A page of mouse model overview objects.
       properties:
-        modelOverviews:
+        mouseModelOverviews:
           type: array
-          description: List of model overviews in this page.
+          description: List of mouse model overviews in this page.
           items:
-            $ref: '#/components/schemas/ModelOverview'
+            $ref: '#/components/schemas/MouseModelOverview'
         page:
           $ref: '#/components/schemas/PageMetadata'
       required:
-        - modelOverviews
+        - mouseModelOverviews
         - page
     DiseaseCorrelationSearchQuery:
       type: object
@@ -1359,14 +1359,14 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
   parameters:
-    modelOverviewSearchQuery:
-      name: modelOverviewSearchQuery
-      description: The search query used to find and filter model overviews.
+    mouseModelOverviewSearchQuery:
+      name: mouseModelOverviewSearchQuery
+      description: The search query used to find and filter mouse model overviews.
       in: query
       style: deepObject
       explode: true
       schema:
-        $ref: '#/components/schemas/ModelOverviewSearchQuery'
+        $ref: '#/components/schemas/MouseModelOverviewSearchQuery'
     diseaseCorrelationSearchQuery:
       name: diseaseCorrelationSearchQuery
       description: The search query used to find and filter disease correlations.

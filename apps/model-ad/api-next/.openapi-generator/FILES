@@ -12,8 +12,9 @@ src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApiDel
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiDelegate.java
-src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelOverviewApi.java
-src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelOverviewApiDelegate.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/MouseModelOverviewApi.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/MouseModelOverviewApiController.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/MouseModelOverviewApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/TranscriptomicsApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/TranscriptomicsApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/TranscriptomicsApiDelegate.java
@@ -41,9 +42,9 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/LinkDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDataDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelIdentifierTypeDto.java
-src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewDto.java
-src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewSearchQueryDto.java
-src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewsPageDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/MouseModelOverviewDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/MouseModelOverviewSearchQueryDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/MouseModelOverviewsPageDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/NamedLinkDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/PageMetadataDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/SexCohortDto.java

@@ -6,8 +6,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,32 +34,32 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "Model Overview", description = "Operations about Model Overview.")
-public interface ModelOverviewApi {
+@Tag(name = "Mouse Model Overview", description = "Operations about Mouse Model Overview.")
+public interface MouseModelOverviewApi {
 
-    default ModelOverviewApiDelegate getDelegate() {
-        return new ModelOverviewApiDelegate() {};
+    default MouseModelOverviewApiDelegate getDelegate() {
+        return new MouseModelOverviewApiDelegate() {};
     }
 
     /**
-     * GET /comparison-tools/model-overview : Get model overview for comparison tools
-     * Returns a paginated list of model overview objects for use in comparison tools.
+     * GET /comparison-tools/mouse-model-overview : Get mouse model overview for comparison tools
+     * Returns a paginated list of mouse model overview objects for use in comparison tools.
      *
-     * @param modelOverviewSearchQuery The search query used to find and filter model overviews. (optional)
-     * @return A paginated list of model overview objects (status code 200)
+     * @param mouseModelOverviewSearchQuery The search query used to find and filter mouse model overviews. (optional)
+     * @return A paginated list of mouse model overview objects (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "getModelOverviews",
-        summary = "Get model overview for comparison tools",
-        description = "Returns a paginated list of model overview objects for use in comparison tools.",
-        tags = { "Model Overview" },
+        operationId = "getMouseModelOverviews",
+        summary = "Get mouse model overview for comparison tools",
+        description = "Returns a paginated list of mouse model overview objects for use in comparison tools.",
+        tags = { "Mouse Model Overview" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "A paginated list of model overview objects", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ModelOverviewsPageDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ModelOverviewsPageDto.class))
+            @ApiResponse(responseCode = "200", description = "A paginated list of mouse model overview objects", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = MouseModelOverviewsPageDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = MouseModelOverviewsPageDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -77,14 +77,14 @@ public interface ModelOverviewApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/comparison-tools/model-overview",
+        value = "/comparison-tools/mouse-model-overview",
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<ModelOverviewsPageDto> getModelOverviews(
-        @Parameter(name = "modelOverviewSearchQuery", description = "The search query used to find and filter model overviews.", in = ParameterIn.QUERY) @Valid @Nullable ModelOverviewSearchQueryDto modelOverviewSearchQuery
+    default ResponseEntity<MouseModelOverviewsPageDto> getMouseModelOverviews(
+        @Parameter(name = "mouseModelOverviewSearchQuery", description = "The search query used to find and filter mouse model overviews.", in = ParameterIn.QUERY) @Valid @Nullable MouseModelOverviewSearchQueryDto mouseModelOverviewSearchQuery
     ) {
-        return getDelegate().getModelOverviews(modelOverviewSearchQuery);
+        return getDelegate().getMouseModelOverviews(mouseModelOverviewSearchQuery);
     }
 
 }

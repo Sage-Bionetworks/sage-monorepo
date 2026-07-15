@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { ModelOverviewSearchQuery } from '../model/model-overview-search-query';
+import { MouseModelOverviewSearchQuery } from '../model/mouse-model-overview-search-query';
 // @ts-ignore
-import { ModelOverviewsPage } from '../model/model-overviews-page';
+import { MouseModelOverviewsPage } from '../model/mouse-model-overviews-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -36,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class ModelOverviewService {
+export class MouseModelOverviewService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -109,14 +109,14 @@ export class ModelOverviewService {
   }
 
   /**
-   * Get model overview for comparison tools
-   * Returns a paginated list of model overview objects for use in comparison tools.
-   * @param modelOverviewSearchQuery The search query used to find and filter model overviews.
+   * Get mouse model overview for comparison tools
+   * Returns a paginated list of mouse model overview objects for use in comparison tools.
+   * @param mouseModelOverviewSearchQuery The search query used to find and filter mouse model overviews.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getModelOverviews(
-    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
+  public getMouseModelOverviews(
+    mouseModelOverviewSearchQuery?: MouseModelOverviewSearchQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -124,9 +124,9 @@ export class ModelOverviewService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<ModelOverviewsPage>;
-  public getModelOverviews(
-    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
+  ): Observable<MouseModelOverviewsPage>;
+  public getMouseModelOverviews(
+    mouseModelOverviewSearchQuery?: MouseModelOverviewSearchQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -134,9 +134,9 @@ export class ModelOverviewService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<ModelOverviewsPage>>;
-  public getModelOverviews(
-    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
+  ): Observable<HttpResponse<MouseModelOverviewsPage>>;
+  public getMouseModelOverviews(
+    mouseModelOverviewSearchQuery?: MouseModelOverviewSearchQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -144,9 +144,9 @@ export class ModelOverviewService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<ModelOverviewsPage>>;
-  public getModelOverviews(
-    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
+  ): Observable<HttpEvent<MouseModelOverviewsPage>>;
+  public getMouseModelOverviews(
+    mouseModelOverviewSearchQuery?: MouseModelOverviewSearchQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -156,11 +156,11 @@ export class ModelOverviewService {
     },
   ): Observable<any> {
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (modelOverviewSearchQuery !== undefined && modelOverviewSearchQuery !== null) {
+    if (mouseModelOverviewSearchQuery !== undefined && mouseModelOverviewSearchQuery !== null) {
       localVarQueryParameters = this.addToHttpParams(
         localVarQueryParameters,
-        <any>modelOverviewSearchQuery,
-        'modelOverviewSearchQuery',
+        <any>mouseModelOverviewSearchQuery,
+        'mouseModelOverviewSearchQuery',
       );
     }
 
@@ -197,8 +197,8 @@ export class ModelOverviewService {
       }
     }
 
-    let localVarPath = `/comparison-tools/model-overview`;
-    return this.httpClient.request<ModelOverviewsPage>(
+    let localVarPath = `/comparison-tools/mouse-model-overview`;
+    return this.httpClient.request<MouseModelOverviewsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

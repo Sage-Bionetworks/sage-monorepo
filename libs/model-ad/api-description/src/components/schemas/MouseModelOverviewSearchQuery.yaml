@@ -1,5 +1,5 @@
 type: object
-description: Model overview search query with pagination and filtering options.
+description: Mouse model overview search query with pagination and filtering options.
 properties:
   pageNumber:
     description: The page number to return (index starts from 0).

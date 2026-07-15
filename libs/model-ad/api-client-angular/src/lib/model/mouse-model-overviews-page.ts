@@ -8,15 +8,15 @@
  * Do not edit the class manually.
  */
 import { PageMetadata } from './page-metadata';
-import { ModelOverview } from './model-overview';
+import { MouseModelOverview } from './mouse-model-overview';
 
 /**
- * A page of model overview objects.
+ * A page of mouse model overview objects.
  */
-export interface ModelOverviewsPage {
+export interface MouseModelOverviewsPage {
   /**
-   * List of model overviews in this page.
+   * List of mouse model overviews in this page.
    */
-  modelOverviews: Array<ModelOverview>;
+  mouseModelOverviews: Array<MouseModelOverview>;
   page: PageMetadata;
 }

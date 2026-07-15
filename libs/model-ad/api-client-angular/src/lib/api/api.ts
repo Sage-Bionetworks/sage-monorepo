@@ -6,8 +6,8 @@ export * from './disease-correlation.service';
 import { DiseaseCorrelationService } from './disease-correlation.service';
 export * from './model.service';
 import { ModelService } from './model.service';
-export * from './model-overview.service';
-import { ModelOverviewService } from './model-overview.service';
+export * from './mouse-model-overview.service';
+import { MouseModelOverviewService } from './mouse-model-overview.service';
 export * from './transcriptomics.service';
 import { TranscriptomicsService } from './transcriptomics.service';
 export * from './transcriptomics-individual.service';
@@ -17,7 +17,7 @@ export const APIS = [
   DataVersionService,
   DiseaseCorrelationService,
   ModelService,
-  ModelOverviewService,
+  MouseModelOverviewService,
   TranscriptomicsService,
   TranscriptomicsIndividualService,
 ];

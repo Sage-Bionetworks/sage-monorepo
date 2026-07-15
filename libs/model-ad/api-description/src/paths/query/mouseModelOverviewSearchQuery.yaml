@@ -1,0 +1,7 @@
+name: mouseModelOverviewSearchQuery
+description: The search query used to find and filter mouse model overviews.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/MouseModelOverviewSearchQuery.yaml
