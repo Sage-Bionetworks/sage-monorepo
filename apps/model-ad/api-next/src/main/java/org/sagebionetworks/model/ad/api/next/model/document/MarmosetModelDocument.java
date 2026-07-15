@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Setter
 @NoArgsConstructor
 @Document(collection = "marmo_details")
-public class MarmoModelDocument {
+public class MarmosetModelDocument {
 
   @Id
   private ObjectId id;

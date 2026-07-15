@@ -6,9 +6,9 @@ import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.exception.ModelNotFoundException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
-import org.sagebionetworks.model.ad.api.next.model.mapper.MarmoModelMapper;
+import org.sagebionetworks.model.ad.api.next.model.mapper.MarmosetModelMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.MouseModelMapper;
-import org.sagebionetworks.model.ad.api.next.model.repository.MarmoModelRepository;
+import org.sagebionetworks.model.ad.api.next.model.repository.MarmosetModelRepository;
 import org.sagebionetworks.model.ad.api.next.model.repository.MouseModelRepository;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,8 +22,8 @@ public class ModelService {
 
   private final MouseModelRepository mouseModelRepository;
   private final MouseModelMapper mouseModelMapper;
-  private final MarmoModelRepository marmoModelRepository;
-  private final MarmoModelMapper marmoModelMapper;
+  private final MarmosetModelRepository marmosetModelRepository;
+  private final MarmosetModelMapper marmosetModelMapper;
 
   @Cacheable(key = "#organism.toString() + '-' + #name")
   public ModelDto getModelByName(OrganismDto organism, String name) {
@@ -33,8 +33,8 @@ public class ModelService {
           .findByName(name)
           .orElseThrow(() -> new ModelNotFoundException(organism, name))
       );
-      case MARMOSET -> marmoModelMapper.toDto(
-        marmoModelRepository
+      case MARMOSET -> marmosetModelMapper.toDto(
+        marmosetModelRepository
           .findByName(name)
           .orElseThrow(() -> new ModelNotFoundException(organism, name))
       );

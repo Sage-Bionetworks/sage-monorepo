@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.exception.ModelNotFoundException;
-import org.sagebionetworks.model.ad.api.next.model.document.MarmoModelDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.MarmosetModelDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.MouseModelDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.MarmosetModelDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
@@ -21,10 +21,10 @@ import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.GeneticInfoMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.IndividualDataMapper;
-import org.sagebionetworks.model.ad.api.next.model.mapper.MarmoModelMapper;
+import org.sagebionetworks.model.ad.api.next.model.mapper.MarmosetModelMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelDataMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.MouseModelMapper;
-import org.sagebionetworks.model.ad.api.next.model.repository.MarmoModelRepository;
+import org.sagebionetworks.model.ad.api.next.model.repository.MarmosetModelRepository;
 import org.sagebionetworks.model.ad.api.next.model.repository.MouseModelRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,7 +34,7 @@ class ModelServiceTest {
   private MouseModelRepository mouseModelRepository;
 
   @Mock
-  private MarmoModelRepository marmoModelRepository;
+  private MarmosetModelRepository marmosetModelRepository;
 
   private ModelService service;
 
@@ -45,8 +45,8 @@ class ModelServiceTest {
     service = new ModelService(
       mouseModelRepository,
       new MouseModelMapper(geneticInfoMapper, modelDataMapper),
-      marmoModelRepository,
-      new MarmoModelMapper(geneticInfoMapper, modelDataMapper)
+      marmosetModelRepository,
+      new MarmosetModelMapper(geneticInfoMapper, modelDataMapper)
     );
   }
 
@@ -61,17 +61,17 @@ class ModelServiceTest {
 
     assertThat(result).isInstanceOf(MouseModelDto.class);
     assertThat(((MouseModelDto) result).getType()).isEqualTo(OrganismDto.MOUSE.getValue());
-    verifyNoInteractions(marmoModelRepository);
+    verifyNoInteractions(marmosetModelRepository);
   }
 
   @Test
   @DisplayName("should route to marmoset repository and mapper when organism is marmoset")
   void shouldRouteToMarmosetRepositoryAndMapperWhenOrganismIsMarmoset() {
-    MarmoModelDocument document = new MarmoModelDocument();
-    document.setName("Marmo1");
-    when(marmoModelRepository.findByName("Marmo1")).thenReturn(Optional.of(document));
+    MarmosetModelDocument document = new MarmosetModelDocument();
+    document.setName("Marmoset1");
+    when(marmosetModelRepository.findByName("Marmoset1")).thenReturn(Optional.of(document));
 
-    ModelDto result = service.getModelByName(OrganismDto.MARMOSET, "Marmo1");
+    ModelDto result = service.getModelByName(OrganismDto.MARMOSET, "Marmoset1");
 
     assertThat(result).isInstanceOf(MarmosetModelDto.class);
     assertThat(((MarmosetModelDto) result).getType()).isEqualTo(OrganismDto.MARMOSET.getValue());
@@ -92,7 +92,7 @@ class ModelServiceTest {
   @Test
   @DisplayName("should throw ModelNotFoundException when marmoset model is absent")
   void shouldThrowModelNotFoundExceptionWhenMarmosetModelIsAbsent() {
-    when(marmoModelRepository.findByName("missing")).thenReturn(Optional.empty());
+    when(marmosetModelRepository.findByName("missing")).thenReturn(Optional.empty());
 
     assertThatThrownBy(() -> service.getModelByName(OrganismDto.MARMOSET, "missing"))
       .isInstanceOf(ModelNotFoundException.class)

@@ -10,19 +10,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneticInfo;
 import org.sagebionetworks.model.ad.api.next.model.document.IndividualData;
-import org.sagebionetworks.model.ad.api.next.model.document.MarmoModelDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.MarmosetModelDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelData;
 import org.sagebionetworks.model.ad.api.next.model.dto.MarmosetModelDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
 
-class MarmoModelMapperTest {
+class MarmosetModelMapperTest {
 
-  private MarmoModelMapper mapper;
+  private MarmosetModelMapper mapper;
 
   @BeforeEach
   void setUp() {
-    mapper = new MarmoModelMapper(
+    mapper = new MarmosetModelMapper(
       new GeneticInfoMapper(),
       new ModelDataMapper(new IndividualDataMapper())
     );
@@ -32,7 +32,7 @@ class MarmoModelMapperTest {
   @DisplayName("should map document to MarmosetModelDto with type stamped as marmoset")
   void shouldMapDocumentToMarmosetModelDtoWithTypeStampedAsMarmoset() {
     // given
-    MarmoModelDocument document = buildDocument();
+    MarmosetModelDocument document = buildDocument();
 
     // when
     ModelDto dto = mapper.toDto(document);
@@ -41,7 +41,7 @@ class MarmoModelMapperTest {
     assertThat(dto).isInstanceOf(MarmosetModelDto.class);
     MarmosetModelDto marmosetModel = (MarmosetModelDto) dto;
     assertThat(marmosetModel.getType()).isEqualTo(OrganismDto.MARMOSET.getValue());
-    assertThat(marmosetModel.getName()).isEqualTo("Marmo1");
+    assertThat(marmosetModel.getName()).isEqualTo("Marmoset1");
     assertThat(marmosetModel.getModelType()).isEqualTo("Marmoset AD");
     assertThat(marmosetModel.getStudySynid()).isEqualTo("syn999");
     assertThat(marmosetModel.getGeneticInfo()).hasSize(1);
@@ -57,9 +57,9 @@ class MarmoModelMapperTest {
   @DisplayName("should map null list fields to empty lists")
   void shouldMapNullListFieldsToEmptyLists() {
     // given
-    MarmoModelDocument document = new MarmoModelDocument();
+    MarmosetModelDocument document = new MarmosetModelDocument();
     document.setId(new ObjectId());
-    document.setName("Marmo1");
+    document.setName("Marmoset1");
     document.setModelType("Marmoset AD");
     document.setStudySynid("syn999");
     document.setGeneticInfo(null);
@@ -79,7 +79,7 @@ class MarmoModelMapperTest {
     assertThat(mapper.toDto(null)).isNull();
   }
 
-  private MarmoModelDocument buildDocument() {
+  private MarmosetModelDocument buildDocument() {
     GeneticInfo geneticInfo = GeneticInfo.builder()
       .modifiedGene("PSEN1")
       .ensemblGeneId("ENSG2")
@@ -102,9 +102,9 @@ class MarmoModelMapperTest {
       .data(List.of(individual))
       .build();
 
-    MarmoModelDocument document = new MarmoModelDocument();
+    MarmosetModelDocument document = new MarmosetModelDocument();
     document.setId(new ObjectId());
-    document.setName("Marmo1");
+    document.setName("Marmoset1");
     document.setModelType("Marmoset AD");
     document.setStudySynid("syn999");
     document.setGeneticInfo(List.of(geneticInfo));
