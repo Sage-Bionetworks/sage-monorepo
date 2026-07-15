@@ -23,6 +23,9 @@ tags:
   - name: Model
     description: Operations about models.
     x-displayName: Model
+  - name: Marmoset Model Overview
+    description: Operations about Marmoset Model Overview results.
+    x-displayName: Marmoset Model Overview
   - name: Mouse Model Overview
     description: Operations about Mouse Model Overview.
     x-displayName: Mouse Model Overview
@@ -101,6 +104,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MouseModelOverviewsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/marmoset-model-overview:
+    get:
+      tags:
+        - Marmoset Model Overview
+      summary: Get marmoset model overview for comparison tools
+      description: Returns a paginated list of marmoset model overview objects for use in comparison tools.
+      operationId: getMarmosetModelOverviews
+      parameters:
+        - $ref: '#/components/parameters/marmosetModelOverviewSearchQuery'
+      responses:
+        '200':
+          description: A paginated list of marmoset model overview objects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarmosetModelOverviewsPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -618,6 +643,151 @@ components:
           $ref: '#/components/schemas/PageMetadata'
       required:
         - mouseModelOverviews
+        - page
+    MarmosetModelOverviewSearchQuery:
+      type: object
+      description: Marmoset model overview search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          description: The page number to return (index starts from 0).
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+          example: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+          maximum: 100
+          example: 100
+        items:
+          description: |
+            List of item names to filter by.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Presenilin 1
+            - Another Name
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          nullable: true
+        search:
+          description: |
+            Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
+            Examples: 'presenilin 1,another name' (comma-separated list) or 'presenilin' (partial match). Only applied when
+            itemFilterType is 'exclude'.
+          type: string
+          nullable: true
+          example: presenilin 1,another name
+        availableData:
+          description: Filter by available data types.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Plasma Biomarkers
+        modelTypes:
+          description: Filter by model type.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Familial AD
+            - Late Onset AD
+        modifiedGenes:
+          description: Filter by modified genes.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - PSEN1
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["model_type", "name"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+            - model_type
+            - name
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: array
+          items:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - -1
+          minItems: 1
+          example:
+            - -1
+            - 1
+      required:
+        - sortFields
+        - sortOrders
+    MarmosetModelOverview:
+      type: object
+      description: Marmoset Model Overview object for comparison tools
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the marmoset model overview object
+        name:
+          type: string
+          description: Model name
+        model_type:
+          type: string
+          description: Model type (e.g., Late Onset AD, Familial AD)
+        biomarkers:
+          $ref: '#/components/schemas/Link'
+          nullable: true
+        study_data:
+          $ref: '#/components/schemas/Link'
+        modified_genes:
+          type: array
+          items:
+            type: string
+          description: List of modified genes in the model
+        available_data:
+          type: array
+          items:
+            type: string
+            enum:
+              - Plasma Biomarkers
+      required:
+        - _id
+        - name
+        - model_type
+        - study_data
+        - modified_genes
+        - available_data
+    MarmosetModelOverviewsPage:
+      type: object
+      description: A page of marmoset model overview objects.
+      properties:
+        marmosetModelOverviews:
+          type: array
+          description: List of marmoset model overviews in this page.
+          items:
+            $ref: '#/components/schemas/MarmosetModelOverview'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - marmosetModelOverviews
         - page
     DiseaseCorrelationSearchQuery:
       type: object
@@ -1358,6 +1528,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/MouseModelOverviewSearchQuery'
+    marmosetModelOverviewSearchQuery:
+      name: marmosetModelOverviewSearchQuery
+      description: The search query used to find and filter marmoset model overviews.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/MarmosetModelOverviewSearchQuery'
     diseaseCorrelationSearchQuery:
       name: diseaseCorrelationSearchQuery
       description: The search query used to find and filter disease correlations.

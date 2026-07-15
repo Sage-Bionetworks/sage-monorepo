@@ -20,6 +20,8 @@ tags:
     description: Operations about the data version.
   - name: Model
     description: Operations about models.
+  - name: Marmoset Model Overview
+    description: Operations about Marmoset Model Overview results.
   - name: Mouse Model Overview
     description: Operations about Mouse Model Overview.
   - name: Disease Correlation
@@ -35,6 +37,8 @@ paths:
     $ref: paths/comparison-tools/config.yaml
   /comparison-tools/mouse-model-overview:
     $ref: paths/comparison-tools/mouse-model-overview.yaml
+  /comparison-tools/marmoset-model-overview:
+    $ref: paths/comparison-tools/marmoset-model-overview.yaml
   /comparison-tools/disease-correlation:
     $ref: paths/comparison-tools/disease-correlation.yaml
   /comparison-tools/transcriptomics:

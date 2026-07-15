@@ -1,0 +1,82 @@
+type: object
+description: Marmoset model overview search query with pagination and filtering options.
+properties:
+  pageNumber:
+    description: The page number to return (index starts from 0).
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+    maximum: 100
+    example: 100
+  items:
+    description: |
+      List of item names to filter by.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Presenilin 1', 'Another Name']
+  itemFilterType:
+    $ref: ItemFilterTypeQuery.yaml
+    nullable: true
+  search:
+    description: |
+      Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
+      Examples: 'presenilin 1,another name' (comma-separated list) or 'presenilin' (partial match). Only applied when
+      itemFilterType is 'exclude'.
+    type: string
+    nullable: true
+    example: 'presenilin 1,another name'
+  availableData:
+    description: Filter by available data types.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Plasma Biomarkers']
+  modelTypes:
+    description: Filter by model type.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Familial AD', 'Late Onset AD']
+  modifiedGenes:
+    description: Filter by modified genes.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['PSEN1']
+  sortFields:
+    description: |
+      List of field names to sort by (e.g., ["model_type", "name"]).
+      Each field in sortFields must have a corresponding order in sortOrders.
+    type: array
+    items:
+      type: string
+    minItems: 1
+    example: ['model_type', 'name']
+  sortOrders:
+    description: |
+      List of sort directions corresponding to sortFields.
+      Values: 1 (ascending) or -1 (descending).
+      Must have the same length as sortFields.
+    type: array
+    items:
+      type: integer
+      format: int32
+      enum: [1, -1]
+    minItems: 1
+    example: [-1, 1]
+required:
+  - sortFields
+  - sortOrders

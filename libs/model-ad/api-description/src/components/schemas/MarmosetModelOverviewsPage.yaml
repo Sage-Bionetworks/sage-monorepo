@@ -1,0 +1,13 @@
+type: object
+description: A page of marmoset model overview objects.
+properties:
+  marmosetModelOverviews:
+    type: array
+    description: List of marmoset model overviews in this page.
+    items:
+      $ref: ./MarmosetModelOverview.yaml
+  page:
+    $ref: ./PageMetadata.yaml
+required:
+  - marmosetModelOverviews
+  - page

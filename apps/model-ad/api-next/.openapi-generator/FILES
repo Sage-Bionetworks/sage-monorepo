@@ -9,6 +9,9 @@ src/main/java/org/sagebionetworks/model/ad/api/next/api/DataVersionApiController
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DataVersionApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApiDelegate.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/MarmosetModelOverviewApi.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/MarmosetModelOverviewApiController.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/MarmosetModelOverviewApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiDelegate.java
@@ -39,6 +42,9 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneticInfoDto.jav
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/IndividualDataDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ItemFilterTypeQueryDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/LinkDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/MarmosetModelOverviewDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/MarmosetModelOverviewSearchQueryDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/MarmosetModelOverviewsPageDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDataDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelIdentifierTypeDto.java

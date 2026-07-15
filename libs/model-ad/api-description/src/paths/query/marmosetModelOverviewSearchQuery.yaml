@@ -1,0 +1,7 @@
+name: marmosetModelOverviewSearchQuery
+description: The search query used to find and filter marmoset model overviews.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/MarmosetModelOverviewSearchQuery.yaml

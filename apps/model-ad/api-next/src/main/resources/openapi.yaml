@@ -20,6 +20,8 @@ tags:
     name: Data Version
   - description: Operations about models.
     name: Model
+  - description: Operations about Marmoset Model Overview results.
+    name: Marmoset Model Overview
   - description: Operations about Mouse Model Overview.
     name: Mouse Model Overview
   - description: Operations about Disease Correlation results.
@@ -129,6 +131,41 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Mouse Model Overview
+  /comparison-tools/marmoset-model-overview:
+    get:
+      description: Returns a paginated list of marmoset model overview objects for
+        use in comparison tools.
+      operationId: getMarmosetModelOverviews
+      parameters:
+        - description: The search query used to find and filter marmoset model overviews.
+          explode: true
+          in: query
+          name: marmosetModelOverviewSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/MarmosetModelOverviewSearchQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarmosetModelOverviewsPage'
+          description: A paginated list of marmoset model overview objects
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get marmoset model overview for comparison tools
+      tags:
+        - Marmoset Model Overview
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Marmoset Model Overview
   /comparison-tools/disease-correlation:
     get:
       description: Returns a paginated list of disease correlation objects for use
@@ -281,6 +318,15 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/MouseModelOverviewSearchQuery'
+      style: deepObject
+    marmosetModelOverviewSearchQuery:
+      description: The search query used to find and filter marmoset model overviews.
+      explode: true
+      in: query
+      name: marmosetModelOverviewSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/MarmosetModelOverviewSearchQuery'
       style: deepObject
     diseaseCorrelationSearchQuery:
       description: The search query used to find and filter disease correlations.
@@ -895,6 +941,205 @@ components:
           $ref: '#/components/schemas/PageMetadata'
       required:
         - mouseModelOverviews
+        - page
+      type: object
+    MarmosetModelOverviewSearchQuery:
+      description: Marmoset model overview search query with pagination and filtering
+        options.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number to return (index starts from 0).
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          example: 100
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        items:
+          description: |
+            List of item names to filter by.
+          example:
+            - Presenilin 1
+            - Another Name
+          items:
+            type: string
+          nullable: true
+          type: array
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+        search:
+          description: |
+            Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
+            Examples: 'presenilin 1,another name' (comma-separated list) or 'presenilin' (partial match). Only applied when
+            itemFilterType is 'exclude'.
+          example: 'presenilin 1,another name'
+          nullable: true
+          type: string
+        availableData:
+          description: Filter by available data types.
+          example:
+            - Plasma Biomarkers
+          items:
+            type: string
+          nullable: true
+          type: array
+        modelTypes:
+          description: Filter by model type.
+          example:
+            - Familial AD
+            - Late Onset AD
+          items:
+            type: string
+          nullable: true
+          type: array
+        modifiedGenes:
+          description: Filter by modified genes.
+          example:
+            - PSEN1
+          items:
+            type: string
+          nullable: true
+          type: array
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["model_type", "name"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          example:
+            - model_type
+            - name
+          items:
+            type: string
+          minItems: 1
+          type: array
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          example:
+            - -1
+            - 1
+          items:
+            enum:
+              - 1
+              - -1
+            format: int32
+            type: integer
+          minItems: 1
+          type: array
+      required:
+        - sortFields
+        - sortOrders
+      type: object
+    MarmosetModelOverview:
+      description: Marmoset Model Overview object for comparison tools
+      example:
+        biomarkers:
+          link_url: link_url
+          link_text: link_text
+        name: name
+        model_type: model_type
+        modified_genes:
+          - modified_genes
+          - modified_genes
+        _id: _id
+        study_data:
+          link_url: link_url
+          link_text: link_text
+        available_data:
+          - Plasma Biomarkers
+          - Plasma Biomarkers
+      properties:
+        _id:
+          description: Unique identifier for the marmoset model overview object
+          type: string
+        name:
+          description: Model name
+          type: string
+        model_type:
+          description: 'Model type (e.g., Late Onset AD, Familial AD)'
+          type: string
+        biomarkers:
+          $ref: '#/components/schemas/Link'
+        study_data:
+          $ref: '#/components/schemas/Link'
+        modified_genes:
+          description: List of modified genes in the model
+          items:
+            type: string
+          type: array
+        available_data:
+          items:
+            enum:
+              - Plasma Biomarkers
+            type: string
+          type: array
+      required:
+        - _id
+        - available_data
+        - model_type
+        - modified_genes
+        - name
+        - study_data
+      type: object
+    MarmosetModelOverviewsPage:
+      description: A page of marmoset model overview objects.
+      example:
+        marmosetModelOverviews:
+          - biomarkers:
+              link_url: link_url
+              link_text: link_text
+            name: name
+            model_type: model_type
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            _id: _id
+            study_data:
+              link_url: link_url
+              link_text: link_text
+            available_data:
+              - Plasma Biomarkers
+              - Plasma Biomarkers
+          - biomarkers:
+              link_url: link_url
+              link_text: link_text
+            name: name
+            model_type: model_type
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            _id: _id
+            study_data:
+              link_url: link_url
+              link_text: link_text
+            available_data:
+              - Plasma Biomarkers
+              - Plasma Biomarkers
+        page:
+          number: 0
+          size: 100
+          totalPages: 3
+          hasPrevious: false
+          hasNext: true
+          totalElements: 250
+      properties:
+        marmosetModelOverviews:
+          description: List of marmoset model overviews in this page.
+          items:
+            $ref: '#/components/schemas/MarmosetModelOverview'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - marmosetModelOverviews
         - page
       type: object
     DiseaseCorrelationSearchQuery:
