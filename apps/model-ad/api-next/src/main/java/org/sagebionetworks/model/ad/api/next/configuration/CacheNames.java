@@ -18,6 +18,14 @@ public final class CacheNames {
   public static final String DISEASE_CORRELATION = "diseaseCorrelation";
 
   /**
+   * Cache for marmoset model overview queries.
+   * Stores results from marmoset model overview comparison queries filtered by items and filter
+   * type.
+   * Key format: Dynamic based on query parameters (items, filterType)
+   */
+  public static final String MARMOSET_MODEL_OVERVIEW = "marmosetModelOverview";
+
+  /**
    * Cache for mouse model overview queries.
    * Stores results from mouse model overview comparison queries filtered by items and filter type.
    * Key format: Dynamic based on query parameters (items, filterType)

@@ -2,6 +2,7 @@ package org.sagebionetworks.model.ad.api.next.configuration;
 
 import org.sagebionetworks.explorers.SortOrdersConverterFactory;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.MarmosetModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,16 @@ public class IntegerEnumConverterConfiguration {
   > mouseModelOverviewSortOrdersConverter() {
     return SortOrdersConverterFactory.from(
       MouseModelOverviewSearchQueryDto.SortOrdersEnum::fromValue
+    );
+  }
+
+  @Bean
+  Converter<
+    String,
+    MarmosetModelOverviewSearchQueryDto.SortOrdersEnum
+  > marmosetModelOverviewSortOrdersConverter() {
+    return SortOrdersConverterFactory.from(
+      MarmosetModelOverviewSearchQueryDto.SortOrdersEnum::fromValue
     );
   }
 

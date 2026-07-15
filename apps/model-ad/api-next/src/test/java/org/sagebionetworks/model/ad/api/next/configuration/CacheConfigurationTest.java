@@ -19,6 +19,7 @@ class CacheConfigurationTest {
 
     for (String name : new String[] {
       CacheNames.DISEASE_CORRELATION,
+      CacheNames.MARMOSET_MODEL_OVERVIEW,
       CacheNames.MOUSE_MODEL_OVERVIEW,
       CacheNames.TRANSCRIPTOMICS,
       CacheNames.TRANSCRIPTOMICS_INDIVIDUAL,
