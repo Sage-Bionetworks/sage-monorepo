@@ -16,6 +16,10 @@ import {
   ModelDetailsBoxplotsSelectorComponent,
 } from './model-details-boxplots-selector.component';
 
+// Longer default timeout for all tests; PrimeNG rendering can be slow in CI
+const TEST_TIMEOUT_MS = 15000;
+jest.setTimeout(TEST_TIMEOUT_MS);
+
 const mockTitle = 'Pathology';
 const mockDescription = 'Test description';
 const mouseFilterConfig: FilterConfig = {
@@ -98,7 +102,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
       { timeout: 10000 },
     );
     expect(tissueFilter).toBeVisible();
-  }, 15000);
+  });
 
   it('should convert label to anchor id', async () => {
     const { fixture } = await setupHost();
@@ -304,7 +308,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     await waitFor(() => {
       expect(screen.getAllByRole('listitem').length).toBeGreaterThan(0);
     });
-  }, 15000);
+  });
 
   describe('collapsible TOC', () => {
     it('should start collapsed with expand button and no TOC items visible', async () => {
