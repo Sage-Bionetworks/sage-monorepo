@@ -71,6 +71,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
   readonly generateAnchorId = generateAnchorId;
 
+  tableOfContentsContainer = viewChild('tableOfContentsContainer', { read: ElementRef });
   boxplotsContainer = viewChild('boxplotsContainer', { read: ElementRef });
   sectionBodies = viewChildren('sectionBody', { read: ElementRef });
 
@@ -343,7 +344,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
       const element = container.nativeElement.querySelector(`[id="${anchorId}"]`) as HTMLElement;
 
       if (element) {
-        const tocElement = document.querySelector('.table-of-contents-container');
+        const tocElement = this.tableOfContentsContainer()?.nativeElement;
         const tocHeight = tocElement ? tocElement.getBoundingClientRect().height : 0;
 
         const panelNavHeight = this.helperService.getNumberFromCSSValue(
