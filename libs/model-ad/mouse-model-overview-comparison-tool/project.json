@@ -8,7 +8,7 @@
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/model-ad/model-overview-comparison-tool"],
+      "outputs": ["{workspaceRoot}/coverage/libs/model-ad/mouse-model-overview-comparison-tool"],
       "options": {
         "jestConfig": "libs/model-ad/mouse-model-overview-comparison-tool/jest.config.ts",
         "tsConfig": "libs/model-ad/mouse-model-overview-comparison-tool/tsconfig.spec.json"
