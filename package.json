@@ -192,6 +192,7 @@
       "glob": "13.0.6",
       "handlebars": "4.7.9",
       "protobufjs": "8.4.2",
+      "shell-quote": "1.9.0",
       "tar": "7.5.15",
       "test-exclude": "8.0.0"
     }
