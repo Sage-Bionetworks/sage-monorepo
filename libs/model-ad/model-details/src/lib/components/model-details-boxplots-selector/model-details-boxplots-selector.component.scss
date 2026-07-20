@@ -61,6 +61,8 @@
   .table-of-contents-title-bar {
     padding: 20px 0 25px;
     display: flex;
+    flex-wrap: wrap;
+    gap: 30px 20px;
     justify-content: space-between;
     align-items: center;
 
@@ -70,7 +72,8 @@
 
     .title-bar-actions {
       display: flex;
-      gap: 59px;
+      flex-wrap: wrap;
+      gap: 10px 59px;
       align-items: center;
     }
   }
