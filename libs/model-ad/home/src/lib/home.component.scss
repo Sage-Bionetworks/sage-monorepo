@@ -4,6 +4,7 @@
 $home-mobile-md-max-width: 850px;
 $home-mobile-sm-max-width: 535px;
 $home-mobile-xs-max-width: 385px;
+$models-panel-padding: 59px;
 
 #home-page {
   position: relative;
@@ -62,13 +63,13 @@ explorers-home-card {
   display: flex;
   flex-direction: column;
   gap: 21px;
-  margin: 40px auto 20px;
-  padding: 40px 20px;
+  margin: 0 (-$models-panel-padding) 20px;
+  padding: $models-panel-padding;
   background: rgb(255 255 255 / 90%);
   border-radius: 15px;
 }
 
-.species-toggle {
+.model-organism-toggle {
   --toggle-card-selected-background: var(--color-secondary-dark);
   --toggle-card-divider-color: color-mix(
     in srgb,
@@ -153,20 +154,25 @@ explorers-home-card {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  // Drop the desktop card-panel framing so the toggle can bleed edge-to-edge.
   .models-panel {
+    margin-inline: 0;
     padding: 0;
     background: transparent;
     border-radius: 0;
   }
 
-  .species-toggle {
+  .model-organism-toggle {
     // Keep the left edge aligned with the cards, but bleed off the right so the
     // segments scroll off-screen; drop the pill frame to sit flat edge-to-edge.
     --toggle-card-border-radius: 0;
     --toggle-card-shadow: none;
 
     margin-inline-end: calc(50% - 50vw);
+
+    // Size each label to its longest word so every segment wraps to one word per
+    // line, regardless of segment width. Without this, the shorter "Mouse Models"
+    // stays on one line while the longer "Marmoset Models" wraps.
+    --toggle-card-label-width: min-content;
   }
 
   .stats-container {

@@ -33,14 +33,20 @@ const meta: Meta<ToggleCardComponent> = {
 export default meta;
 type Story = StoryObj<ToggleCardComponent>;
 
-export const FirstSelected: Story = {
+export const Demo: Story = {
   args: {
     value: 'mouse',
   },
 };
 
-export const SecondSelected: Story = {
+export const ManyOptions: Story = {
   args: {
-    value: 'marmoset',
+    options: [
+      { label: 'Mouse', value: 'mouse' },
+      { label: 'Marmoset', value: 'marmoset' },
+      { label: 'Rat', value: 'rat' },
+      { label: 'Zebrafish', value: 'zebrafish' },
+    ],
+    value: 'mouse',
   },
 };

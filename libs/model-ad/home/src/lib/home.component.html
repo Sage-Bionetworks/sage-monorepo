@@ -12,13 +12,13 @@
       </div>
       <div class="models-panel">
         <explorers-toggle-card
-          class="species-toggle"
-          [options]="speciesOptions"
-          [value]="selectedSpecies()"
-          (valueChange)="setSpecies($event)"
-          [ariaLabel]="'Select a model species'"
+          class="model-organism-toggle"
+          [options]="modelOrganismOptions"
+          [value]="selectedModelOrganism()"
+          (valueChange)="setModelOrganism($event)"
+          [ariaLabel]="'Select a model organism'"
         />
-        @if (selectedSpecies() === 'mouse') {
+        @if (selectedModelOrganism() === 'mouse') {
           <div class="card-container">
             <explorers-home-card
               [title]="'Model Overview'"
@@ -61,7 +61,7 @@
               [imageAltText]="'disease correlation icon'"
             />
           </div>
-        } @else if (selectedSpecies() === 'marmoset') {
+        } @else if (selectedModelOrganism() === 'marmoset') {
           <!-- TODO(MG-932): intentional placeholder cards until marmoset data lands; replace with real tiles. -->
           <div class="card-container">
             <explorers-home-card

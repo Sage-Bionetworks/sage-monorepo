@@ -7,7 +7,7 @@ import {
   ToggleCardComponent,
   ToggleCardOption,
 } from '@sagebionetworks/explorers/ui';
-import { isSpecies, ROUTE_PATHS, Species } from '@sagebionetworks/model-ad/config';
+import { isModelOrganism, ModelOrganism, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SearchInputComponent } from '@sagebionetworks/model-ad/ui';
 
 interface Stat {
@@ -32,13 +32,13 @@ export class HomeComponent {
 
   readonly backgroundImage = signal(this.backgroundImageDesktop);
 
-  readonly selectedSpecies = signal<Species>('mouse');
+  readonly selectedModelOrganism = signal<ModelOrganism>('mouse');
 
-  readonly speciesOptions: (ToggleCardOption & { value: Species })[] = [
+  readonly modelOrganismOptions: (ToggleCardOption & { value: ModelOrganism })[] = [
     {
       label: 'Mouse Models',
       value: 'mouse',
-      imagePath: 'model-ad-assets/images/mouse-model.svg',
+      imagePath: 'model-ad-assets/images/mouse-with-brain-network.svg',
       imageAltText: 'mouse model icon',
     },
     {
@@ -51,9 +51,9 @@ export class HomeComponent {
 
   ROUTE_PATHS = ROUTE_PATHS;
 
-  setSpecies(value: string | undefined) {
-    if (isSpecies(value)) {
-      this.selectedSpecies.set(value);
+  setModelOrganism(value: string | undefined) {
+    if (isModelOrganism(value)) {
+      this.selectedModelOrganism.set(value);
     }
   }
 

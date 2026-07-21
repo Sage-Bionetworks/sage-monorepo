@@ -63,6 +63,9 @@ explorers-toggle-card .p-selectbutton {
   }
 
   .toggle-card-label {
+    // `auto` keeps labels on one line by default; consumers can set
+    // `--toggle-card-label-width: min-content` to force one-word-per-line wrapping.
+    width: var(--toggle-card-label-width, auto);
     font-size: 24px;
     line-height: 28px;
     font-weight: 400;

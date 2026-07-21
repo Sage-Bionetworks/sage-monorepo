@@ -6,11 +6,11 @@ export const HELP_URL =
 
 export const SUPPORT_EMAIL = 'modeladexplorer@sagebionetworks.org';
 
-export const SPECIES = ['mouse', 'marmoset'] as const;
-export type Species = (typeof SPECIES)[number];
+export const MODEL_ORGANISMS = ['mouse', 'marmoset'] as const;
+export type ModelOrganism = (typeof MODEL_ORGANISMS)[number];
 
-export function isSpecies(value: unknown): value is Species {
-  return typeof value === 'string' && (SPECIES as readonly string[]).includes(value);
+export function isModelOrganism(value: unknown): value is ModelOrganism {
+  return typeof value === 'string' && (MODEL_ORGANISMS as readonly string[]).includes(value);
 }
 
 export const MODEL_AD_LOADING_ICON_COLORS: LoadingIconColors = {
