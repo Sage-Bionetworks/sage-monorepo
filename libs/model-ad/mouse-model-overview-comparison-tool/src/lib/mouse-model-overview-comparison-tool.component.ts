@@ -1,0 +1,180 @@
+import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
+import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolUrlService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolConfigService,
+  ComparisonToolPage,
+  ItemFilterTypeQuery,
+  MouseModelOverview,
+  MouseModelOverviewSearchQuery,
+  MouseModelOverviewService,
+  MouseModelOverviewsPage,
+} from '@sagebionetworks/model-ad/api-client';
+import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { SortMeta } from 'primeng/api';
+import { catchError, EMPTY, shareReplay } from 'rxjs';
+import { MouseModelOverviewComparisonToolService } from './services/mouse-model-overview-comparison-tool.service';
+
+@Component({
+  selector: 'model-ad-mouse-model-overview-comparison-tool',
+  imports: [ComparisonToolComponent],
+  templateUrl: './mouse-model-overview-comparison-tool.component.html',
+  styleUrls: ['./mouse-model-overview-comparison-tool.component.scss'],
+})
+export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
+  private readonly platformService = inject(PlatformService);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly mouseModelOverviewService = inject(MouseModelOverviewService);
+  private readonly comparisonToolService = inject(MouseModelOverviewComparisonToolService);
+  private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
+  private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService);
+
+  isInitialized = this.comparisonToolService.isInitialized;
+  query = this.comparisonToolService.query;
+
+  readonly config$ = this.comparisonToolConfigService
+    .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
+    .pipe(
+      catchError((error) => {
+        this.logger.error('Error retrieving comparison tool config', error);
+        return EMPTY;
+      }),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
+
+  viewConfig: Partial<ComparisonToolViewConfig> = {
+    headerTitle: ComparisonToolPage.ModelOverview,
+    filterResultsButtonTooltip: 'Filter results by Model Type, Modified Gene, and more',
+    showSignificanceControls: false,
+    viewDetailsTooltip: 'Open model details page',
+    viewDetailsClick: (rowData: unknown) => {
+      const data = rowData as MouseModelOverview;
+      const url = this.router.serializeUrl(
+        this.router.createUrlTree([ROUTE_PATHS.MODELS, data.name]),
+      );
+      window.open(url, '_blank');
+    },
+    legendEnabled: false,
+    rowIdDataKey: 'name',
+    allowPinnedImageDownload: false,
+    defaultSort: [
+      { field: 'model_type', order: -1 },
+      { field: 'name', order: 1 },
+    ],
+  };
+
+  constructor() {
+    this.comparisonToolService.setViewConfig(this.viewConfig);
+  }
+
+  readonly pinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const pinnedItems = this.comparisonToolService.pinnedItems();
+      const sortMeta = this.comparisonToolService.multiSortMeta();
+      this.getPinnedData(pinnedItems, sortMeta);
+    }
+  });
+
+  readonly unpinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const query = this.query();
+      this.getUnpinnedData(query);
+    }
+  });
+
+  ngOnInit() {
+    if (this.platformService.isServer) {
+      return;
+    }
+
+    this.comparisonToolService.connect({
+      config$: this.config$,
+      queryParams$: this.comparisonToolUrlService.params$,
+    });
+  }
+
+  ngOnDestroy() {
+    this.comparisonToolService.disconnect();
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
+      currentQuery.multiSortMeta,
+    );
+
+    const selectedFilters = this.comparisonToolService.selectedFilters();
+
+    const query: MouseModelOverviewSearchQuery = {
+      items: currentQuery.pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      pageNumber: currentQuery.pageNumber,
+      pageSize: currentQuery.pageSize,
+      search: currentQuery.searchTerm,
+      sortFields,
+      sortOrders,
+      availableData: selectedFilters['availableData'],
+      center: selectedFilters['centers'],
+      modelType: selectedFilters['modelTypes'],
+      modifiedGenes: selectedFilters['modifiedGenes'],
+    };
+    this.comparisonToolService.startFetch();
+    this.logger.log(
+      `MouseModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
+    );
+
+    this.mouseModelOverviewService
+      .getMouseModelOverviews(query)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: MouseModelOverviewsPage) => {
+          const data = response.mouseModelOverviews;
+          this.comparisonToolService.setUnpinnedData(data);
+          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
+        },
+        error: () => {
+          this.comparisonToolService.setUnpinnedData([]);
+          this.comparisonToolService.totalResultsCount.set(0);
+        },
+      });
+  }
+
+  getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+
+    const query: MouseModelOverviewSearchQuery = {
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields,
+      sortOrders,
+    };
+
+    this.comparisonToolService.startFetch();
+    this.logger.log(
+      `MouseModelOverviewComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
+    );
+
+    this.mouseModelOverviewService
+      .getMouseModelOverviews(query)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: MouseModelOverviewsPage) => {
+          const data = response.mouseModelOverviews;
+          this.comparisonToolService.setPinnedData(data);
+          this.comparisonToolService.pinnedResultsCount.set(data.length);
+        },
+        error: () => {
+          this.comparisonToolService.setPinnedData([]);
+          this.comparisonToolService.pinnedResultsCount.set(0);
+        },
+      });
+  }
+}

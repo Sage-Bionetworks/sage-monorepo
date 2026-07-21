@@ -1,9 +1,9 @@
 import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
-import { modelMock } from '@sagebionetworks/model-ad/testing';
+import { mouseModelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import { ModelDetailsResourcesComponent } from './model-details-resources.component';
 
-async function setup(model = modelMock) {
+async function setup(model = mouseModelMock) {
   return render(ModelDetailsResourcesComponent, {
     imports: [ResourceCardsComponent],
     componentInputs: {
@@ -38,7 +38,7 @@ describe('ModelDetailsResourcesComponent', () => {
   });
 
   it('should not display alzforum card when alzforum_id is missing', async () => {
-    await setup({ ...modelMock, alzforum_id: '' });
+    await setup({ ...mouseModelMock, alzforum_id: '' });
     expect(screen.queryByText(/alzforum/i)).not.toBeInTheDocument();
   });
 });

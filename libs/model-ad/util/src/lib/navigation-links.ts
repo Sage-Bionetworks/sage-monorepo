@@ -9,7 +9,7 @@ export const headerLinks: NavigationLink[] = [
   },
   {
     label: 'Model Overview',
-    routerLink: [ROUTE_PATHS.MODEL_OVERVIEW],
+    routerLink: [ROUTE_PATHS.MOUSE_MODEL_OVERVIEW],
   },
   {
     label: 'Differential Expression',

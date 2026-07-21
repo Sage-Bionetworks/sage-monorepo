@@ -41,8 +41,8 @@ public class TranscriptomicsDocument {
 
   private String tissue;
 
-  @Field("sex_cohort")
-  private String sexCohort;
+  @Field("sex")
+  private String sex;
 
   @Field("4 months")
   private @Nullable FoldChangeResult fourMonths;

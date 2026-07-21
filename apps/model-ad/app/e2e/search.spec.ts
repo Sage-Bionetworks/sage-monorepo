@@ -39,7 +39,7 @@ test.describe('search', () => {
   });
 
   test('can search for jax id', async ({ page }) => {
-    const expectedResultsCount = 2;
+    const expectedResultsCount = 1;
     const modelQuery = '306';
 
     await page.goto('/');

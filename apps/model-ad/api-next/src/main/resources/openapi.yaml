@@ -20,8 +20,8 @@ tags:
     name: Data Version
   - description: Operations about models.
     name: Model
-  - description: Operations about Model Overview.
-    name: Model Overview
+  - description: Operations about Mouse Model Overview.
+    name: Mouse Model Overview
   - description: Operations about Disease Correlation results.
     name: Disease Correlation
   - description: Operations about Transcriptomics results.
@@ -94,41 +94,41 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Comparison Tool Config
-  /comparison-tools/model-overview:
+  /comparison-tools/mouse-model-overview:
     get:
-      description: Returns a paginated list of model overview objects for use in comparison
-        tools.
-      operationId: getModelOverviews
+      description: Returns a paginated list of mouse model overview objects for use
+        in comparison tools.
+      operationId: getMouseModelOverviews
       parameters:
-        - description: The search query used to find and filter model overviews.
+        - description: The search query used to find and filter mouse model overviews.
           explode: true
           in: query
-          name: modelOverviewSearchQuery
+          name: mouseModelOverviewSearchQuery
           required: false
           schema:
-            $ref: '#/components/schemas/ModelOverviewSearchQuery'
+            $ref: '#/components/schemas/MouseModelOverviewSearchQuery'
           style: deepObject
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ModelOverviewsPage'
-          description: A paginated list of model overview objects
+                $ref: '#/components/schemas/MouseModelOverviewsPage'
+          description: A paginated list of mouse model overview objects
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      summary: Get model overview for comparison tools
+      summary: Get mouse model overview for comparison tools
       tags:
-        - Model Overview
+        - Mouse Model Overview
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: Model Overview
+        - tag: Mouse Model Overview
   /comparison-tools/disease-correlation:
     get:
       description: Returns a paginated list of disease correlation objects for use
@@ -273,14 +273,14 @@ paths:
         - tag: Model
 components:
   parameters:
-    modelOverviewSearchQuery:
-      description: The search query used to find and filter model overviews.
+    mouseModelOverviewSearchQuery:
+      description: The search query used to find and filter mouse model overviews.
       explode: true
       in: query
-      name: modelOverviewSearchQuery
+      name: mouseModelOverviewSearchQuery
       required: false
       schema:
-        $ref: '#/components/schemas/ModelOverviewSearchQuery'
+        $ref: '#/components/schemas/MouseModelOverviewSearchQuery'
       style: deepObject
     diseaseCorrelationSearchQuery:
       description: The search query used to find and filter disease correlations.
@@ -503,8 +503,8 @@ components:
             link_text: link_text
         page: Differential Expression
         dropdowns:
-          - 'RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males'
-          - 'RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males'
+          - 'RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus'
+          - 'RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus'
         filters:
           - values:
               - Apoptosis
@@ -527,8 +527,7 @@ components:
         dropdowns:
           description: List of dropdown options
           items:
-            example: "RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females\
-              \ & Males"
+            example: 'RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus'
             type: string
           type: array
         row_count:
@@ -562,8 +561,9 @@ components:
         - include
         - exclude
       type: string
-    ModelOverviewSearchQuery:
-      description: Model overview search query with pagination and filtering options.
+    MouseModelOverviewSearchQuery:
+      description: Mouse model overview search query with pagination and filtering
+        options.
       properties:
         pageNumber:
           default: 0
@@ -680,8 +680,8 @@ components:
           description: URL for the related resource
           type: string
       type: object
-    ModelOverview:
-      description: Model Overview object for comparison tools
+    MouseModelOverview:
+      description: Mouse Model Overview object for comparison tools
       example:
         pathology:
           link_url: link_url
@@ -716,7 +716,7 @@ components:
           link_text: link_text
       properties:
         _id:
-          description: Unique identifier for the model overview object
+          description: Unique identifier for the mouse model overview object
           type: string
         name:
           description: Model name
@@ -812,10 +812,10 @@ components:
         - totalElements
         - totalPages
       type: object
-    ModelOverviewsPage:
-      description: A page of model overview objects.
+    MouseModelOverviewsPage:
+      description: A page of mouse model overview objects.
       example:
-        modelOverviews:
+        mouseModelOverviews:
           - pathology:
               link_url: link_url
               link_text: link_text
@@ -886,15 +886,15 @@ components:
           hasNext: true
           totalElements: 250
       properties:
-        modelOverviews:
-          description: List of model overviews in this page.
+        mouseModelOverviews:
+          description: List of mouse model overviews in this page.
           items:
-            $ref: '#/components/schemas/ModelOverview'
+            $ref: '#/components/schemas/MouseModelOverview'
           type: array
         page:
           $ref: '#/components/schemas/PageMetadata'
       required:
-        - modelOverviews
+        - mouseModelOverviews
         - page
       type: object
     DiseaseCorrelationSearchQuery:
@@ -1254,27 +1254,26 @@ components:
         categories:
           description: |
             Array of category values from the dropdown selections.
-            The API will parse these to extract the tissue and sex_cohort information.
-            Expected format: [mainCategory, tissueCategory, sexCohortCategory]
+            The API will parse these to extract the tissue information.
+            Expected format: [mainCategory, tissueCategory]
           example:
             - RNA - DIFFERENTIAL EXPRESSION
             - Tissue - Hemibrain
-            - Sex - Females & Males
           items:
             type: string
-          maxItems: 3
-          minItems: 3
+          maxItems: 2
+          minItems: 2
           type: array
         items:
           description: |
-            List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
-            where each identifier represents one complete combination of ensembl gene ID and gene name.
+            List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name~sex"
+            where each identifier represents one complete combination of ensembl gene ID, gene name, and sex.
 
-            Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)" filters for documents matching that exact gene ID and name.
+            Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female" filters for documents matching that exact gene ID, name, and sex.
             Multiple items can be provided to filter for multiple specific combinations.
           example:
-            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
-            - ENSMUSG00000000028~APOE4
+            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
+            - ENSMUSG00000000028~APOE4~Male
           items:
             type: string
           nullable: true
@@ -1348,13 +1347,21 @@ components:
         - sortFields
         - sortOrders
       type: object
-    SexCohort:
-      description: Sex Cohort
-      enum:
-        - Females
-        - Females & Males
-        - Males
-      type: string
+    NamedLink:
+      description: Link with required display text
+      example:
+        link_url: link_url
+        link_text: link_text
+      properties:
+        link_text:
+          description: Link text
+          type: string
+        link_url:
+          description: URL for the related resource
+          type: string
+      required:
+        - link_text
+      type: object
     FoldChangeResult:
       description: Fold Change result
       example:
@@ -1376,18 +1383,18 @@ components:
       example:
         model_group: model_group
         gene_symbol: Gnai3
+        sex: Female
         model_type: Familial AD
         tissue: Hemibrain
         '4 months':
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
         matched_control: C57BL/6J
-        composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+        composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
         ensembl_gene_id: ensembl_gene_id
         name:
           link_url: link_url
           link_text: link_text
-        sex_cohort: Females
         '12 months':
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
@@ -1399,8 +1406,8 @@ components:
           - biodomains
       properties:
         composite_id:
-          description: Unique identifier for the transcriptomics object
-          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+          description: Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)
+          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
           type: string
         ensembl_gene_id:
           description: Ensembl Gene ID
@@ -1415,7 +1422,7 @@ components:
             type: string
           type: array
         name:
-          $ref: '#/components/schemas/Link'
+          $ref: '#/components/schemas/NamedLink'
         matched_control:
           description: Matched control for the model
           example: C57BL/6J
@@ -1432,8 +1439,8 @@ components:
           description: Tissue type
           example: Hemibrain
           type: string
-        sex_cohort:
-          $ref: '#/components/schemas/SexCohort'
+        sex:
+          $ref: '#/components/schemas/Sex'
         '4 months':
           $ref: '#/components/schemas/FoldChangeResult'
         '12 months':
@@ -1449,7 +1456,7 @@ components:
         - model_group
         - model_type
         - name
-        - sex_cohort
+        - sex
         - tissue
       type: object
     TranscriptomicsPage:
@@ -1459,18 +1466,18 @@ components:
         transcriptomics:
           - model_group: model_group
             gene_symbol: Gnai3
+            sex: Female
             model_type: Familial AD
             tissue: Hemibrain
             '4 months':
               log2_fc: 0.8008281904610115
               adj_p_val: 6.027456183070403
             matched_control: C57BL/6J
-            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
             ensembl_gene_id: ensembl_gene_id
             name:
               link_url: link_url
               link_text: link_text
-            sex_cohort: Females
             '12 months':
               log2_fc: 0.8008281904610115
               adj_p_val: 6.027456183070403
@@ -1482,18 +1489,18 @@ components:
               - biodomains
           - model_group: model_group
             gene_symbol: Gnai3
+            sex: Female
             model_type: Familial AD
             tissue: Hemibrain
             '4 months':
               log2_fc: 0.8008281904610115
               adj_p_val: 6.027456183070403
             matched_control: C57BL/6J
-            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
             ensembl_gene_id: ensembl_gene_id
             name:
               link_url: link_url
               link_text: link_text
-            sex_cohort: Females
             '12 months':
               log2_fc: 0.8008281904610115
               adj_p_val: 6.027456183070403
@@ -1741,7 +1748,6 @@ components:
         - data
         - evidence_type
         - name
-        - tissue
         - units
         - y_axis_max
       type: object

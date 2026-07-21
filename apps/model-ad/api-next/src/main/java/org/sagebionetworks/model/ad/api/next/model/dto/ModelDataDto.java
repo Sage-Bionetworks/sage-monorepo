@@ -33,7 +33,7 @@ public class ModelDataDto {
 
   private String evidenceType;
 
-  private String tissue;
+  private @Nullable String tissue;
 
   private String age;
 
@@ -51,10 +51,9 @@ public class ModelDataDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelDataDto(String name, String evidenceType, String tissue, String age, String units, BigDecimal yAxisMax, List<@Valid IndividualDataDto> data) {
+  public ModelDataDto(String name, String evidenceType, String age, String units, BigDecimal yAxisMax, List<@Valid IndividualDataDto> data) {
     this.name = name;
     this.evidenceType = evidenceType;
-    this.tissue = tissue;
     this.age = age;
     this.units = units;
     this.yAxisMax = yAxisMax;
@@ -101,7 +100,7 @@ public class ModelDataDto {
     this.evidenceType = evidenceType;
   }
 
-  public ModelDataDto tissue(String tissue) {
+  public ModelDataDto tissue(@Nullable String tissue) {
     this.tissue = tissue;
     return this;
   }
@@ -110,14 +109,14 @@ public class ModelDataDto {
    * Tissue collected
    * @return tissue
    */
-  @NotNull 
-  @Schema(name = "tissue", description = "Tissue collected", requiredMode = Schema.RequiredMode.REQUIRED)
+  
+  @Schema(name = "tissue", description = "Tissue collected", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("tissue")
-  public String getTissue() {
+  public @Nullable String getTissue() {
     return tissue;
   }
 
-  public void setTissue(String tissue) {
+  public void setTissue(@Nullable String tissue) {
     this.tissue = tissue;
   }
 

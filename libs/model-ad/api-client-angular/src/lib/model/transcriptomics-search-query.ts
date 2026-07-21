@@ -22,11 +22,11 @@ export interface TranscriptomicsSearchQuery {
    */
   pageSize?: number;
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory]
+   * Array of category values from the dropdown selections. The API will parse these to extract the tissue information. Expected format: [mainCategory, tissueCategory]
    */
   categories: Array<string>;
   /**
-   * List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations.
+   * List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name~sex\" where each identifier represents one complete combination of ensembl gene ID, gene name, and sex.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female\" filters for documents matching that exact gene ID, name, and sex. Multiple items can be provided to filter for multiple specific combinations.
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;

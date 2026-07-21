@@ -14,10 +14,10 @@ import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelService } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { ModelDetailsBoxplotsSelectorComponent } from './components/model-details-boxplots-selector/model-details-boxplots-selector.component';
 import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
 import { ModelDetailsResourcesComponent } from './components/model-details-resources/model-details-resources.component';
+import { MouseModelDetailsBoxplotsSelectorComponent } from './components/mouse-model-details-boxplots-selector/mouse-model-details-boxplots-selector.component';
 
 @Component({
   selector: 'model-ad-model-details',
@@ -27,7 +27,7 @@ import { ModelDetailsResourcesComponent } from './components/model-details-resou
     ModelDetailsOmicsComponent,
     ModelDetailsResourcesComponent,
     ModelDetailsHeroComponent,
-    ModelDetailsBoxplotsSelectorComponent,
+    MouseModelDetailsBoxplotsSelectorComponent,
   ],
   templateUrl: './model-details.component.html',
   styleUrls: ['./model-details.component.scss'],

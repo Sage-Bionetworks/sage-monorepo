@@ -1,6 +1,6 @@
-import { Model } from '@sagebionetworks/model-ad/api-client';
+import { Model, ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 
-export const modelMock: Model = {
+export const mouseModelMock: Model = {
   name: '3xTg-AD',
   matched_controls: ['B6129'],
   model_type: 'Familial AD',
@@ -2147,3 +2147,110 @@ export const modelMock: Model = {
     },
   ],
 };
+
+export const marmosetModelDataMock: ModelData[] = [
+  {
+    name: 'PSEN1',
+    evidence_type: 'Soluble Aβ40',
+    age: '0-1 year',
+    units: 'pg/ml',
+    y_axis_max: 1000,
+    data: [
+      { sex: Sex.Female, individual_id: '1', value: 80, genotype: 'Control' },
+      { sex: Sex.Male, individual_id: '2', value: 95, genotype: 'Control' },
+      { sex: Sex.Female, individual_id: '3', value: 110, genotype: 'PSEN1' },
+      { sex: Sex.Male, individual_id: '4', value: 130, genotype: 'PSEN1' },
+    ],
+  },
+  {
+    name: 'PSEN1',
+    evidence_type: 'Soluble Aβ40',
+    age: '1-2 years',
+    units: 'pg/ml',
+    y_axis_max: 1000,
+    data: [
+      { sex: Sex.Female, individual_id: '5', value: 140, genotype: 'Control' },
+      { sex: Sex.Male, individual_id: '6', value: 160, genotype: 'Control' },
+      { sex: Sex.Female, individual_id: '7', value: 240, genotype: 'PSEN1' },
+      { sex: Sex.Male, individual_id: '8', value: 270, genotype: 'PSEN1' },
+    ],
+  },
+  {
+    name: 'PSEN1',
+    evidence_type: 'Soluble Aβ40',
+    age: '2-3 years',
+    units: 'pg/ml',
+    y_axis_max: 1000,
+    data: [
+      { sex: Sex.Female, individual_id: '9', value: 200, genotype: 'Control' },
+      { sex: Sex.Male, individual_id: '10', value: 220, genotype: 'Control' },
+      { sex: Sex.Female, individual_id: '11', value: 390, genotype: 'PSEN1' },
+      { sex: Sex.Male, individual_id: '12', value: 430, genotype: 'PSEN1' },
+    ],
+  },
+  {
+    name: 'PSEN1',
+    evidence_type: 'Soluble Aβ40',
+    age: '3-4 years',
+    units: 'pg/ml',
+    y_axis_max: 1000,
+    data: [
+      { sex: Sex.Female, individual_id: '17', value: 270, genotype: 'Control' },
+      { sex: Sex.Male, individual_id: '18', value: 310, genotype: 'Control' },
+      { sex: Sex.Female, individual_id: '19', value: 560, genotype: 'PSEN1' },
+      { sex: Sex.Male, individual_id: '20', value: 610, genotype: 'PSEN1' },
+    ],
+  },
+  {
+    name: 'PSEN1',
+    evidence_type: 'Soluble Aβ40',
+    age: '4-5 years',
+    units: 'pg/ml',
+    y_axis_max: 1000,
+    data: [
+      { sex: Sex.Female, individual_id: '21', value: 350, genotype: 'Control' },
+      { sex: Sex.Male, individual_id: '22', value: 380, genotype: 'Control' },
+      { sex: Sex.Female, individual_id: '23', value: 690, genotype: 'PSEN1' },
+      { sex: Sex.Male, individual_id: '24', value: 740, genotype: 'PSEN1' },
+    ],
+  },
+  {
+    name: 'PSEN1',
+    evidence_type: 'Soluble Aβ40',
+    age: '5-6 years',
+    units: 'pg/ml',
+    y_axis_max: 1000,
+    data: [
+      { sex: Sex.Female, individual_id: '25', value: 420, genotype: 'Control' },
+      { sex: Sex.Male, individual_id: '26', value: 460, genotype: 'Control' },
+      { sex: Sex.Female, individual_id: '27', value: 800, genotype: 'PSEN1' },
+      { sex: Sex.Male, individual_id: '28', value: 850, genotype: 'PSEN1' },
+    ],
+  },
+  {
+    name: 'PSEN1',
+    evidence_type: 'Soluble Aβ40',
+    age: '6-7 years',
+    units: 'pg/ml',
+    y_axis_max: 1000,
+    data: [
+      { sex: Sex.Female, individual_id: '29', value: 510, genotype: 'Control' },
+      { sex: Sex.Male, individual_id: '30', value: 540, genotype: 'Control' },
+      { sex: Sex.Female, individual_id: '31', value: 920, genotype: 'PSEN1' },
+      { sex: Sex.Male, individual_id: '32', value: 960, genotype: 'PSEN1' },
+    ],
+  },
+  {
+    name: 'PSEN1',
+    evidence_type: 'Insoluble Aβ40',
+    age: '0-1 year',
+    units: 'pg/ml',
+    y_axis_max: 500,
+    data: [
+      { sex: Sex.Female, individual_id: '13', value: 120, genotype: 'Control' },
+      { sex: Sex.Male, individual_id: '14', value: 140, genotype: 'Control' },
+      { sex: Sex.Female, individual_id: '15', value: 260, genotype: 'PSEN1' },
+      { sex: Sex.Male, individual_id: '16', value: 310, genotype: 'PSEN1' },
+    ],
+  },
+];

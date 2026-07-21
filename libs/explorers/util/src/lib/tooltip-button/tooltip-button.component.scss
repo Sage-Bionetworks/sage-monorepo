@@ -1,5 +1,9 @@
 @use 'explorers/styles/src/mixins' as mixins;
 
+p-button {
+  display: flex;
+}
+
 button {
   @include mixins.reset-button;
 

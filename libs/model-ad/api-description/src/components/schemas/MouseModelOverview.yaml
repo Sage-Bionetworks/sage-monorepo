@@ -1,0 +1,62 @@
+type: object
+description: Mouse Model Overview object for comparison tools
+properties:
+  _id:
+    type: string
+    description: Unique identifier for the mouse model overview object
+  name:
+    type: string
+    description: Model name
+  model_type:
+    type: string
+    description: Model type (e.g., Late Onset AD, Familial AD)
+  matched_controls:
+    type: array
+    items:
+      type: string
+    description: List of matched control models
+  transcriptomics:
+    $ref: ./Link.yaml
+    nullable: true
+  disease_correlation:
+    $ref: ./Link.yaml
+    nullable: true
+  biomarkers:
+    $ref: ./Link.yaml
+    nullable: true
+  pathology:
+    $ref: ./Link.yaml
+    nullable: true
+  study_data:
+    $ref: ./Link.yaml
+    nullable: true
+  jax_strain:
+    $ref: ./Link.yaml
+    nullable: true
+  center:
+    type: string
+    nullable: true
+  modified_genes:
+    type: array
+    items:
+      type: string
+    description: List of modified genes in the model
+  available_data:
+    type: array
+    items:
+      type: string
+      enum:
+        - Transcriptomics
+        - Pathology
+        - Biomarkers
+        - Disease Correlation
+required:
+  - _id
+  - name
+  - model_type
+  - matched_controls
+  - study_data
+  - jax_strain
+  - center
+  - modified_genes
+  - available_data

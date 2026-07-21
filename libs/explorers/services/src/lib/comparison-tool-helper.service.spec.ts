@@ -21,7 +21,7 @@ describe('Service: ComparisonToolHelper', () => {
     const config: ComparisonToolConfig = {
       ...mockComparisonToolDataConfig[0],
       page: 'Differential Expression',
-      dropdowns: ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain', 'Sex - Females & Males'],
+      dropdowns: ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain'],
     };
     const filename = ctHelperService.getComparisonToolDataFilename(config);
     expect(filename).toBe('differential_expression_rna_differential_expression');

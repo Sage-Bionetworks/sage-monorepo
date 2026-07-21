@@ -240,7 +240,7 @@ CtFilterConfig.<MyQueryDto>builder()
 
 ## Base criteria injection
 
-When the collection is always scoped by a request parameter (cluster, tissue, sex_cohort), pass the mandatory `Criteria` objects as varargs at the end of `buildCtMatchCriteria()`:
+When the collection is always scoped by a request parameter (cluster, tissue), pass the mandatory `Criteria` objects as varargs at the end of `buildCtMatchCriteria()`:
 
 ```java
 Criteria matchCriteria = buildCtMatchCriteria(
@@ -249,8 +249,7 @@ Criteria matchCriteria = buildCtMatchCriteria(
   isInclude,
   query.getSearch(),
   getFilterConfig(),
-  Criteria.where("tissue").is(tissue),
-  Criteria.where("sex_cohort").is(sexCohort)
+  Criteria.where("tissue").is(tissue)
 );
 
 ```
@@ -259,12 +258,12 @@ Criteria matchCriteria = buildCtMatchCriteria(
 
 ## Existing implementations (reference)
 
-| App      | Class                                    | Collection            | Notable                                                                                                          |
-| -------- | ---------------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Agora    | `CustomNominatedTargetRepositoryImpl`    | `nominatedtargets`    | 4 array columns, simple item filter                                                                              |
-| Agora    | `CustomNominatedDrugRepositoryImpl`      | `nominateddrugs`      | 2 array columns, composite item filter                                                                           |
-| Model-AD | `CustomModelOverviewRepositoryImpl`      | `model_overview`      | 1 array column                                                                                                   |
-| Model-AD | `CustomDiseaseCorrelationRepositoryImpl` | `disease_correlation` | Nested object columns (brain regions), companion numeric field, base criteria (cluster)                          |
-| Model-AD | `CustomTranscriptomicsRepositoryImpl`    | `rna_de_aggregate`    | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue + sex_cohort) |
+| App      | Class                                    | Collection            | Notable                                                                                             |
+| -------- | ---------------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------- |
+| Agora    | `CustomNominatedTargetRepositoryImpl`    | `nominatedtargets`    | 4 array columns, simple item filter                                                                 |
+| Agora    | `CustomNominatedDrugRepositoryImpl`      | `nominateddrugs`      | 2 array columns, composite item filter                                                              |
+| Model-AD | `CustomModelOverviewRepositoryImpl`      | `model_overview`      | 1 array column                                                                                      |
+| Model-AD | `CustomDiseaseCorrelationRepositoryImpl` | `disease_correlation` | Nested object columns (brain regions), companion numeric field, base criteria (cluster)             |
+| Model-AD | `CustomTranscriptomicsRepositoryImpl`    | `rna_de_aggregate`    | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue) |
 
 All implementations are under `apps/<product>/api-next/src/main/java/.../model/repository/`.

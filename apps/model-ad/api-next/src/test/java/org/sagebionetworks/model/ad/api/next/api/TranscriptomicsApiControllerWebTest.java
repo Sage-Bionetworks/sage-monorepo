@@ -68,7 +68,6 @@ class TranscriptomicsApiControllerWebTest {
         get("/v1/comparison-tools/transcriptomics")
           .param("categories", "RNA - DIFFERENTIAL EXPRESSION")
           .param("categories", "InvalidTissue")
-          .param("categories", "Sex - Females & Males")
           .param("sortFields", "gene_symbol")
           .param("sortOrders", "1")
       )
@@ -77,30 +76,6 @@ class TranscriptomicsApiControllerWebTest {
       .andExpect(jsonPath("$.title").value("Invalid Category"))
       .andExpect(jsonPath("$.status").value(400))
       .andExpect(jsonPath("$.detail").value("Tissue category must start with 'Tissue - ' prefix"))
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/transcriptomics"));
-  }
-
-  @Test
-  @DisplayName("should return bad request problem when category has invalid sex cohort format")
-  void shouldReturnBadRequestProblemWhenCategoryHasInvalidSexCohortFormat() throws Exception {
-    when(delegate.getTranscriptomics(any())).thenThrow(
-      new InvalidCategoryException("Sex cohort category must start with 'Sex - ' prefix")
-    );
-
-    mockMvc
-      .perform(
-        get("/v1/comparison-tools/transcriptomics")
-          .param("categories", "RNA - DIFFERENTIAL EXPRESSION")
-          .param("categories", "Tissue - Hemibrain")
-          .param("categories", "InvalidSexCohort")
-          .param("sortFields", "gene_symbol")
-          .param("sortOrders", "1")
-      )
-      .andExpect(status().isBadRequest())
-      .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-      .andExpect(jsonPath("$.title").value("Invalid Category"))
-      .andExpect(jsonPath("$.status").value(400))
-      .andExpect(jsonPath("$.detail").value("Sex cohort category must start with 'Sex - ' prefix"))
       .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/transcriptomics"));
   }
 
@@ -116,7 +91,6 @@ class TranscriptomicsApiControllerWebTest {
         get("/v1/comparison-tools/transcriptomics")
           .param("categories", "OTHER")
           .param("categories", "Tissue - Hemibrain")
-          .param("categories", "Sex - Females & Males")
           .param("sortFields", "gene_symbol")
           .param("sortOrders", "1")
       )
@@ -142,7 +116,6 @@ class TranscriptomicsApiControllerWebTest {
         get("/v1/comparison-tools/transcriptomics")
           .param("categories", "RNA - DIFFERENTIAL EXPRESSION")
           .param("categories", "Tissue - Hemibrain")
-          .param("categories", "Sex - Females & Males")
           .param("items", "not-an-id")
           .param("sortFields", "gene_symbol")
           .param("sortOrders", "1")
@@ -171,7 +144,6 @@ class TranscriptomicsApiControllerWebTest {
         get("/v1/comparison-tools/transcriptomics")
           .param("categories", "RNA - DIFFERENTIAL EXPRESSION")
           .param("categories", "Tissue - Hemibrain")
-          .param("categories", "Sex - Females & Males")
           .param("items", transcriptomicsId)
           .param("sortFields", "gene_symbol")
           .param("sortOrders", "1")

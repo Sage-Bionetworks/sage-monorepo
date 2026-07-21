@@ -1,5 +1,5 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Location } from '@angular/common';
+import { Location, NgTemplateOutlet } from '@angular/common';
 import {
   afterNextRender,
   Component,
@@ -11,6 +11,7 @@ import {
   OnDestroy,
   OnInit,
   signal,
+  TemplateRef,
   viewChild,
   viewChildren,
 } from '@angular/core';
@@ -24,15 +25,33 @@ import {
 } from '@sagebionetworks/explorers/ui';
 import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
-import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
+import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
+import { generateAnchorId } from '../../utils';
+
+export interface FilterConfig {
+  label: string;
+  queryParamKey: string;
+  dataField: keyof ModelData;
+}
+
+export interface SectionContext<T = ModelData[]> {
+  data: T;
+  sexFilter: Sex[];
+  copyLinkFn: (anchorId: string) => () => void;
+  tooltipTextFn: (anchorId: string) => string;
+  setActiveShareLink: (id: string) => void;
+  clearActiveShareLink: () => void;
+  isShareLinkActive: (anchorId: string) => boolean;
+}
 
 @Component({
   selector: 'model-ad-model-details-boxplots-selector',
   imports: [
     FormsModule,
     SelectModule,
-    BoxplotsGridComponent,
+    ButtonModule,
+    NgTemplateOutlet,
     ModalLinkComponent,
     DecodeGreekEntityPipe,
     DownloadDomImageComponent,
@@ -50,14 +69,28 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
   readonly BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX = 20;
 
+  readonly generateAnchorId = generateAnchorId;
+
+  tableOfContentsContainer = viewChild('tableOfContentsContainer', { read: ElementRef });
   boxplotsContainer = viewChild('boxplotsContainer', { read: ElementRef });
-  boxplotGrids = viewChildren(BoxplotsGridComponent, { read: ElementRef });
+  sectionBodies = viewChildren('sectionBody', { read: ElementRef });
 
   title = input.required<string>();
   modelName = input.required<string>();
-  modelControls = input.required<string[]>();
   modelDataList = input.required<ModelData[]>();
   wikiParams = input.required<SynapseWikiParams>();
+  description = input.required<string>();
+  filterConfig = input.required<FilterConfig>();
+  anchorDataField = input.required<keyof ModelData>();
+  sectionTemplate = input.required<TemplateRef<SectionContext>>();
+  /**
+   * Optional function to transform section data before passing to the template.
+   * Called once per evidence type when data changes.
+   * Must return an array that can be iterated in the template.
+   */
+  transformSectionData = input<(data: ModelData[]) => unknown[]>();
+  showSectionShareLink = input<boolean>(true);
+  showRowDownloadButton = input<boolean>(true);
 
   sexOptions: { label: string; value: Sex[] }[] = [
     { label: 'Female & Male', value: ['Female', 'Male'] },
@@ -67,12 +100,17 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   defaultSexOption = this.sexOptions[0];
   selectedSexOption = signal(this.defaultSexOption);
 
-  tissueOptions = computed(() => {
-    return Array.from(new Set(this.modelDataList().map((item) => item.tissue)));
+  filterOptions = computed(() => {
+    return Array.from(
+      new Set(
+        this.modelDataList()
+          .map((item) => item[this.filterConfig().dataField] as string)
+          .filter((v) => v != null),
+      ),
+    );
   });
-  selectedTissueOption = signal('');
+  selectedFilterOption = signal('');
 
-  private readonly TISSUE_QUERY_KEY = 'tissue';
   private readonly SEX_QUERY_KEY = 'sex';
 
   private readonly SCROLL_PADDING = 15;
@@ -82,15 +120,18 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   activeShareLink = signal('');
   lastShareLinkCopied = signal('');
 
+  isTocCollapsed = signal(true);
+
   constructor() {
     effect(() => {
       const sexOption = this.selectedSexOption();
-      const tissueOption = this.selectedTissueOption();
+      const filterOption = this.selectedFilterOption();
 
       // Keep URL query parameters in sync with filter selections, but avoid updating
       // during initialization to prevent circular updates when reading from URL params
       if (this.hasInitializedOptions) {
-        this.updateQueryParams(sexOption.label, tissueOption);
+        this.updateQueryParams(sexOption.label, filterOption);
+        this.lastShareLinkCopied.set('');
       }
     });
 
@@ -132,32 +173,19 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
   selectedModelDataList = computed(() => {
     return this.modelDataList().filter(
-      (modelData) => modelData.tissue === this.selectedTissueOption(),
+      (modelData) =>
+        (modelData[this.filterConfig().dataField] as string) === this.selectedFilterOption(),
     );
-  });
-
-  genotypeOrder = computed(() => {
-    // MG-331: ensure that model name aligns with genotype values
-    // to prevent adding additional boxplot x-axis labels
-    // For example, model name "5xFAD (UCI)" should match genotype values "5xFAD",
-    // so boxplot only shows "5xFAD" x-axis label rather than "5xFAD" and "5xFAD (UCI)" labels
-    const modelNameWithoutParentheticalQualifier = this.modelName().replace(/\s\([^)]*\)$/, '');
-    const baseGenotypes = new Set([
-      ...this.modelControls(),
-      modelNameWithoutParentheticalQualifier,
-    ]);
-    const extraGenotypes = [
-      ...new Set(
-        this.selectedModelDataList().flatMap((modelData) =>
-          modelData.data.map((item) => item.genotype),
-        ),
-      ),
-    ].filter((genotype) => !baseGenotypes.has(genotype));
-    return [...baseGenotypes, ...extraGenotypes];
   });
 
   evidenceTypes = computed(() => {
     return Array.from(new Set(this.selectedModelDataList().map((item) => item.evidence_type)));
+  });
+
+  tocItems = computed(() => {
+    return Array.from(
+      new Set(this.selectedModelDataList().map((item) => item[this.anchorDataField()] as string)),
+    );
   });
 
   boxplotSections = computed(() => {
@@ -165,7 +193,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
       evidenceType,
       filename: this.generateBoxplotsFilename(
         evidenceType,
-        this.selectedTissueOption(),
+        this.selectedFilterOption(),
         this.selectedSexOption().value,
         this.modelName(),
       ),
@@ -173,36 +201,45 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     }));
   });
 
+  sectionDataByEvidenceType = computed(() => {
+    const transform = this.transformSectionData();
+    return new Map(
+      this.evidenceTypes().map((evidenceType) => {
+        const rawData = this.selectedModelDataList().filter(
+          (modelData) => modelData.evidence_type === evidenceType,
+        );
+        const transformedData = transform ? transform(rawData) : rawData;
+        return [evidenceType, { rawData, transformedData }];
+      }),
+    );
+  });
+
   domFiles = computed(() => {
     if (
-      this.boxplotGrids().length === 0 ||
-      this.boxplotGrids().length !== this.evidenceTypes().length
+      this.sectionBodies().length === 0 ||
+      this.sectionBodies().length !== this.evidenceTypes().length
     ) {
       return [];
     }
 
     return this.boxplotSections().map((section, index) => ({
-      target: this.boxplotGrids()[index].nativeElement,
+      target: this.sectionBodies()[index].nativeElement,
       filename: section.filename,
     }));
   });
 
-  getBoxplotsGridTargetByEvidenceType(evidenceType: string) {
+  getSectionBodyTargetByEvidenceType(evidenceType: string) {
     const index = this.evidenceTypes().indexOf(evidenceType);
-    return this.domFiles()[index].target;
-  }
-
-  getSelectedModelDataForEvidenceType(evidenceType: string) {
-    return this.selectedModelDataList().filter(
-      (modelData) => modelData.evidence_type === evidenceType,
-    );
+    return this.domFiles()[index]?.target;
   }
 
   generateBoxplotsCsvData(evidenceType: string): string[][] {
+    const sectionData = this.sectionDataByEvidenceType().get(evidenceType)?.rawData ?? [];
+    const hasTissue = sectionData.some((item) => item.tissue != null);
     const header = [
       'name',
       'evidence_type',
-      'tissue',
+      ...(hasTissue ? ['tissue'] : []),
       'age',
       'sex',
       'genotype',
@@ -212,13 +249,13 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     ];
     const sexes = this.selectedSexOption().value;
     const rows: string[][] = [header];
-    for (const modelData of this.getSelectedModelDataForEvidenceType(evidenceType)) {
+    for (const modelData of sectionData) {
       for (const item of modelData.data) {
         if (!sexes.includes(item.sex as Sex)) continue;
         rows.push([
           modelData.name,
           modelData.evidence_type,
-          modelData.tissue,
+          ...(hasTissue ? [modelData.tissue ?? ''] : []),
           modelData.age,
           item.sex,
           item.genotype,
@@ -231,27 +268,25 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     return rows;
   }
 
-  getDefaultTissue() {
-    return this.tissueOptions()[0] || '';
+  getDefaultFilterOption() {
+    return this.filterOptions()[0] || '';
   }
 
   initializeOptionsFromUrlParams() {
     const sexParam = this.helperService.getUrlParam(this.SEX_QUERY_KEY);
-    const tissueParam = this.helperService.getUrlParam(this.TISSUE_QUERY_KEY);
+    const filterParam = this.helperService.getUrlParam(this.filterConfig().queryParamKey);
 
     const matchingSexOption = this.sexOptions.find((option) => option.label === sexParam);
     if (matchingSexOption !== undefined) this.selectedSexOption.set(matchingSexOption);
 
-    const matchingTissueOption = this.tissueOptions().find((option) => option === tissueParam);
-    this.selectedTissueOption.set(matchingTissueOption || this.getDefaultTissue());
+    const matchingFilterOption = this.filterOptions().find((option) => option === filterParam);
+    this.selectedFilterOption.set(matchingFilterOption || this.getDefaultFilterOption());
 
     this.hasInitializedOptions = true;
   }
 
   isValidHashFragment(hashFragment: string): boolean {
-    return this.evidenceTypes().some(
-      (evidenceType) => this.generateAnchorId(evidenceType) === hashFragment,
-    );
+    return this.tocItems().some((item) => this.generateAnchorId(item) === hashFragment);
   }
 
   scrollToSectionOnFirstRender() {
@@ -266,14 +301,6 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     }
   }
 
-  generateAnchorId(evidenceType: string): string {
-    return evidenceType
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-');
-  }
-
   getUpdatedUrlFragment(fragment: string | undefined): string {
     const fragmentPart = fragment ? `#${fragment}` : '';
     return `${window.location.pathname}${window.location.search}${fragmentPart}`;
@@ -283,7 +310,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     this.location.replaceState(this.getUpdatedUrlFragment(fragment));
   }
 
-  updateQueryParams(sex: string, tissue: string) {
+  updateQueryParams(sex: string, filterValue: string) {
     const params = new URLSearchParams(window.location.search);
 
     if (sex !== this.defaultSexOption.label) {
@@ -293,11 +320,12 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
       params.delete(this.SEX_QUERY_KEY);
     }
 
-    if (tissue !== this.getDefaultTissue()) {
-      params.set(this.TISSUE_QUERY_KEY, tissue);
+    const filterQueryKey = this.filterConfig().queryParamKey;
+    if (filterValue !== this.getDefaultFilterOption()) {
+      params.set(filterQueryKey, filterValue);
     } else {
       // Don't set query param for default value
-      params.delete(this.TISSUE_QUERY_KEY);
+      params.delete(filterQueryKey);
     }
 
     const queryString = params.toString();
@@ -313,14 +341,17 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   scrollToSection(anchorId: string, updateUrl = true): boolean {
     const container = this.boxplotsContainer();
     if (typeof document !== 'undefined' && typeof window !== 'undefined' && container) {
-      const element = container.nativeElement.querySelector(`#${anchorId}`) as HTMLElement;
+      const element = container.nativeElement.querySelector(`[id="${anchorId}"]`) as HTMLElement;
 
       if (element) {
+        const tocElement = this.tableOfContentsContainer()?.nativeElement;
+        const tocHeight = tocElement ? tocElement.getBoundingClientRect().height : 0;
+
         const panelNavHeight = this.helperService.getNumberFromCSSValue(
           getComputedStyle(document.documentElement).getPropertyValue('--panel-nav-height'),
         );
 
-        const yOffset = -(panelNavHeight + this.SCROLL_PADDING);
+        const yOffset = -(tocHeight + panelNavHeight + this.SCROLL_PADDING);
         const elementOffset = this.helperService.getOffset(element);
         const y = elementOffset.top + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
@@ -333,34 +364,63 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     return false;
   }
 
-  getShareLinkTooltipText(evidenceType: string): string {
-    return this.lastShareLinkCopied() === evidenceType
+  getShareLinkTooltipText = (label: string): string => {
+    return this.lastShareLinkCopied() === label
       ? 'URL copied to clipboard'
       : 'Copy the URL to this section';
-  }
+  };
 
-  copyShareLink(evidenceType: string): void {
-    const urlFragment = this.getUpdatedUrlFragment(this.generateAnchorId(evidenceType));
+  copyShareLink(label: string): void {
+    const urlFragment = this.getUpdatedUrlFragment(this.generateAnchorId(label));
     this.clipboard.copy(`${window.location.origin}${urlFragment}`);
-    this.lastShareLinkCopied.set(evidenceType);
+    this.lastShareLinkCopied.set(label);
   }
 
-  copyShareLinkCallbackFn(evidenceType: string): () => void {
-    return () => this.copyShareLink(evidenceType);
-  }
+  copyShareLinkCallbackFn = (label: string): (() => void) => {
+    return () => this.copyShareLink(label);
+  };
+
+  setActiveShareLinkFn = (id: string): void => {
+    this.activeShareLink.set(id);
+  };
+
+  clearActiveShareLinkFn = (): void => {
+    this.activeShareLink.set('');
+  };
+
+  isShareLinkActiveFn = (anchorId: string): boolean => {
+    return this.activeShareLink() === anchorId;
+  };
 
   decodeHtmlEntities(text: string): string {
     const htmlEntityRegex = /&([^;]+);/g;
     return text.replaceAll(htmlEntityRegex, '$1');
   }
 
-  generateBoxplotsZipFilename(tissue: string, sex: string[], modelName: string, title: string) {
-    const filename = `${modelName}_${tissue}_${sex.join('_')}_${title}`;
+  generateBoxplotsZipFilename(
+    filterValue: string,
+    sex: string[],
+    modelName: string,
+    title: string,
+  ) {
+    const filename = `${modelName}_${filterValue}_${sex.join('_')}_${title}`;
     return this.helperService.cleanFilename(filename);
   }
 
-  generateBoxplotsFilename(evidenceType: string, tissue: string, sex: string[], modelName: string) {
-    const filename = `${modelName}_${this.decodeHtmlEntities(evidenceType)}_${tissue}_${sex.join('_')}`;
+  generateBoxplotsFilename(
+    evidenceType: string,
+    filterValue: string,
+    sex: string[],
+    modelName: string,
+  ) {
+    const decodedEvidenceType = this.decodeHtmlEntities(evidenceType);
+    // Only include filterValue if it differs from evidenceType to avoid duplication
+    const filterPart = filterValue !== evidenceType ? `_${filterValue}` : '';
+    const filename = `${modelName}_${decodedEvidenceType}${filterPart}_${sex.join('_')}`;
     return this.helperService.cleanFilename(filename);
+  }
+
+  toggleToc(): void {
+    this.isTocCollapsed.set(!this.isTocCollapsed());
   }
 }

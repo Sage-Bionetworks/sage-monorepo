@@ -24,7 +24,7 @@ export interface ModelData {
   /**
    * Tissue collected
    */
-  tissue: string;
+  tissue?: string;
   /**
    * Age at collection
    */

@@ -1,10 +1,7 @@
 <section>
   <div class="title-container">
     <h2>{{ title() }}</h2>
-    <p>
-      The results shown on this page are derived from the analysis of post-mortem brains from
-      {{ modelName() }} mice and matched control animals.
-    </p>
+    <p>{{ description() }}</p>
     <explorers-modal-link
       text="Data and Methods for this study"
       title="About the Study"
@@ -17,12 +14,12 @@
 
     <div class="filters">
       <div class="filter">
-        <label for="tissue">Tissue</label>
+        <label [for]="filterConfig().queryParamKey">{{ filterConfig().label }}</label>
         <p-select
-          inputId="tissue"
-          [options]="tissueOptions()"
-          [(ngModel)]="selectedTissueOption"
-          placeholder="Select Tissue"
+          [inputId]="filterConfig().queryParamKey"
+          [options]="filterOptions()"
+          [(ngModel)]="selectedFilterOption"
+          [placeholder]="'Select ' + filterConfig().label"
         ></p-select>
       </div>
 
@@ -39,34 +36,49 @@
     </div>
   </div>
 
-  <div class="table-of-contents-container full-width-container">
+  <div class="table-of-contents-container full-width-container" #tableOfContentsContainer>
     <div class="table-of-contents-title-bar">
       <h2>Table of Contents</h2>
-      <explorers-download-dom-images-zip
-        [domFiles]="domFiles()"
-        [csvFiles]="boxplotSections()"
-        [hasCsvDownload]="true"
-        [hasImageDownload]="true"
-        [filename]="
-          generateBoxplotsZipFilename(
-            selectedTissueOption(),
-            selectedSexOption().value,
-            modelName(),
-            title()
-          )
-        "
-        [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
-      />
+      <div class="title-bar-actions">
+        <explorers-download-dom-images-zip
+          [domFiles]="domFiles()"
+          [csvFiles]="boxplotSections()"
+          [hasCsvDownload]="true"
+          [hasImageDownload]="true"
+          [filename]="
+            generateBoxplotsZipFilename(
+              selectedFilterOption(),
+              selectedSexOption().value,
+              modelName(),
+              title()
+            )
+          "
+          [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
+        />
+        <p-button
+          (click)="toggleToc()"
+          [label]="isTocCollapsed() ? 'Expand' : 'Collapse'"
+          [icon]="isTocCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"
+          iconPos="left"
+          type="button"
+          rounded="true"
+          size="small"
+          variant="text"
+          [style]="{ 'min-width': '120px' }"
+        />
+      </div>
     </div>
-    <ul class="table-of-contents">
-      @for (evidenceType of evidenceTypes(); track evidenceType) {
-        <li>
-          <button (click)="scrollToSection(generateAnchorId(evidenceType))">
-            {{ evidenceType | decodeGreekEntity }}
-          </button>
-        </li>
-      }
-    </ul>
+    @if (!isTocCollapsed()) {
+      <ul class="table-of-contents" id="toc-list">
+        @for (item of tocItems(); track item) {
+          <li>
+            <button (click)="scrollToSection(generateAnchorId(item))" data-testid="toc-item-link">
+              {{ item | decodeGreekEntity }}
+            </button>
+          </li>
+        }
+      </ul>
+    }
   </div>
 
   <div class="boxplots-container" #boxplotsContainer>
@@ -81,7 +93,7 @@
         <div class="boxplots-evidence-type-title-bar">
           <div class="boxplots-evidence-type-title">
             <h2>{{ evidenceType | decodeGreekEntity }}</h2>
-            @if (activeShareLink() === evidenceType) {
+            @if (showSectionShareLink() && activeShareLink() === evidenceType) {
               <explorers-copy-link-button
                 [onClick]="copyShareLinkCallbackFn(evidenceType)"
                 [anchorId]="generateAnchorId(evidenceType)"
@@ -90,24 +102,35 @@
               />
             }
           </div>
-          <explorers-download-dom-image
-            [target]="getBoxplotsGridTargetByEvidenceType(evidenceType)"
-            buttonLabel="Download"
-            [filename]="section.filename"
-            [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
-            [hasCsvDownload]="true"
-            [data]="section.data"
-          />
+          @if (showRowDownloadButton()) {
+            <explorers-download-dom-image
+              [target]="getSectionBodyTargetByEvidenceType(evidenceType)"
+              buttonLabel="Download"
+              [filename]="section.filename"
+              [downloadImagePaddingPx]="BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX"
+              [hasCsvDownload]="true"
+              [data]="section.data"
+            />
+          }
         </div>
 
-        <!-- Wrapper handles full-width positioning while keeping grid in normal document flow
-         so the full grid is captured in the download image -->
-        <div class="boxplots-grid-wrapper">
-          <model-ad-boxplots-grid
-            [boxplotDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
-            [xAxisOrder]="genotypeOrder()"
-            [sexFilter]="selectedSexOption().value"
-          />
+        <!-- Wrapper handles full-width positioning; inner div is the download capture
+             target so html-to-image doesn't re-apply the wrapper's pixel offsets -->
+        <div class="boxplots-full-width-wrapper">
+          <div #sectionBody>
+            <ng-container
+              [ngTemplateOutlet]="sectionTemplate()"
+              [ngTemplateOutletContext]="{
+                data: sectionDataByEvidenceType().get(evidenceType)?.transformedData,
+                sexFilter: selectedSexOption().value,
+                copyLinkFn: copyShareLinkCallbackFn,
+                tooltipTextFn: getShareLinkTooltipText,
+                setActiveShareLink: setActiveShareLinkFn,
+                clearActiveShareLink: clearActiveShareLinkFn,
+                isShareLinkActive: isShareLinkActiveFn,
+              }"
+            />
+          </div>
         </div>
         @if (!last) {
           <hr class="boxplots-separator" />

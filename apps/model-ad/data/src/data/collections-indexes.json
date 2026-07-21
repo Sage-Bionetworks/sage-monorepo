@@ -1,26 +1,31 @@
 [
   {
-    "name": "model_details",
+    "name": "disease_correlation",
+    "indexes": [{ "name": 1 }, { "cluster": 1, "name": 1, "age": 1, "sex": 1 }]
+  },
+  {
+    "name": "marmo_details",
     "indexes": [{ "name": 1 }]
   },
   {
-    "name": "ui_config",
-    "indexes": [{ "page": 1 }]
+    "name": "marmo_overview",
+    "indexes": [{ "name": 1 }]
+  },
+  {
+    "name": "model_details",
+    "indexes": [{ "name": 1 }]
   },
   {
     "name": "model_overview",
     "indexes": [{ "name": 1 }]
   },
   {
-    "name": "disease_correlation",
-    "indexes": [{ "name": 1 }, { "cluster": 1, "name": 1, "age": 1, "sex": 1 }]
+    "name": "protein_de_aggregate",
+    "indexes": [{ "unique_id": 1 }]
   },
   {
     "name": "rna_de_aggregate",
-    "indexes": [
-      { "ensembl_gene_id": 1 },
-      { "tissue": 1, "sex_cohort": 1, "ensembl_gene_id": 1, "name": 1 }
-    ]
+    "indexes": [{ "ensembl_gene_id": 1 }, { "tissue": 1, "ensembl_gene_id": 1, "name": 1 }]
   },
   {
     "name": "rna_de_individual",
@@ -28,5 +33,9 @@
       { "ensembl_gene_id": 1 },
       { "ensembl_gene_id": 1, "tissue": 1, "name": 1, "model_group": 1 }
     ]
+  },
+  {
+    "name": "ui_config",
+    "indexes": [{ "page": 1 }]
   }
 ]

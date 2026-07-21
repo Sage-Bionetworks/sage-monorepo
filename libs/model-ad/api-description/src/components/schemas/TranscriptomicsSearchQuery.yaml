@@ -19,26 +19,26 @@ properties:
   categories:
     description: |
       Array of category values from the dropdown selections.
-      The API will parse these to extract the tissue and sex_cohort information.
-      Expected format: [mainCategory, tissueCategory, sexCohortCategory]
+      The API will parse these to extract the tissue information.
+      Expected format: [mainCategory, tissueCategory]
     type: array
     items:
       type: string
-    minItems: 3
-    maxItems: 3
-    example: ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain', 'Sex - Females & Males']
+    minItems: 2
+    maxItems: 2
+    example: ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain']
   items:
     description: |
-      List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
-      where each identifier represents one complete combination of ensembl gene ID and gene name.
+      List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name~sex"
+      where each identifier represents one complete combination of ensembl gene ID, gene name, and sex.
 
-      Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)" filters for documents matching that exact gene ID and name.
+      Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female" filters for documents matching that exact gene ID, name, and sex.
       Multiple items can be provided to filter for multiple specific combinations.
     type: array
     items:
       type: string
     nullable: true
-    example: ['ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)', 'ENSMUSG00000000028~APOE4']
+    example: ['ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female', 'ENSMUSG00000000028~APOE4~Male']
   itemFilterType:
     $ref: ItemFilterTypeQuery.yaml
     nullable: true

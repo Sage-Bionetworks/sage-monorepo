@@ -3,8 +3,8 @@ description: Transcriptomics
 properties:
   composite_id:
     type: string
-    description: Unique identifier for the transcriptomics object
-    example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+    description: Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)
+    example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
   ensembl_gene_id:
     type: string
     description: Ensembl Gene ID
@@ -18,7 +18,7 @@ properties:
     items:
       type: string
   name:
-    $ref: ./Link.yaml
+    $ref: ./NamedLink.yaml
     description: Model name and link to model details page
   matched_control:
     type: string
@@ -36,8 +36,8 @@ properties:
     type: string
     description: Tissue type
     example: Hemibrain
-  sex_cohort:
-    $ref: ./SexCohort.yaml
+  sex:
+    $ref: ./Sex.yaml
   4 months:
     $ref: ./FoldChangeResult.yaml
   12 months:
@@ -54,4 +54,4 @@ required:
   - model_group
   - model_type
   - tissue
-  - sex_cohort
+  - sex

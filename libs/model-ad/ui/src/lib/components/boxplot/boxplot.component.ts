@@ -44,6 +44,7 @@ export class BoxplotComponent {
   sexFilter = input<Sex[] | undefined>();
   xAxisOrder = input<string[] | undefined>();
   showLegend = input<boolean>(false);
+  showTitle = input<boolean>(true);
 
   points = computed<CategoryPoint[]>(() => {
     let data = this.boxplotData().data;

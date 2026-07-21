@@ -4,14 +4,14 @@ import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { ModelService } from '@sagebionetworks/model-ad/api-client';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
-import { modelMock } from '@sagebionetworks/model-ad/testing';
+import { mouseModelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { ModelDetailsComponent } from './model-details.component';
 
 async function setup(
-  model = modelMock,
+  model = mouseModelMock,
   tab = 'omics',
   subtab = null,
   platformService: Partial<PlatformService> | null = null,
@@ -52,7 +52,7 @@ describe('ModelDetailsComponent', () => {
 
   it('should display the model name', async () => {
     await setup();
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(modelMock.name);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(mouseModelMock.name);
   });
 
   it('should display all tabs for which the model has data', async () => {
@@ -64,7 +64,7 @@ describe('ModelDetailsComponent', () => {
   });
 
   it('should hide tabs for which the model does not have data', async () => {
-    const modelWithoutOmics = { ...modelMock, biomarkers: [], pathology: [] };
+    const modelWithoutOmics = { ...mouseModelMock, biomarkers: [], pathology: [] };
     await setup(modelWithoutOmics);
     expect(screen.getByText('Omics')).toBeInTheDocument();
     expect(screen.queryByText('Biomarkers')).not.toBeInTheDocument();
@@ -78,7 +78,7 @@ describe('ModelDetailsComponent', () => {
       isServer: true,
     };
 
-    const { component } = await setup(modelMock, 'omics', null, mockPlatformService);
+    const { component } = await setup(mouseModelMock, 'omics', null, mockPlatformService);
     expect(component.container.querySelector('.loading-icon')).toBeVisible();
     expect(screen.queryByText(/This page isn't available/i)).not.toBeInTheDocument();
   });

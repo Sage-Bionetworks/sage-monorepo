@@ -12,7 +12,7 @@ import {
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import {
   ComparisonToolConfigService,
-  SexCohort,
+  Sex,
   Transcriptomics,
   TranscriptomicsPage,
   TranscriptomicsService,
@@ -25,7 +25,7 @@ import { DifferentialExpressionComparisonToolComponent } from './differential-ex
 import { DifferentialExpressionComparisonToolService } from './services/differential-expression-comparison-tool.service';
 
 const baseMockRow: Transcriptomics = {
-  composite_id: 'test-id',
+  composite_id: 'ENSG00000001~Abca7*V1599M.5xFAD~Female',
   ensembl_gene_id: 'ENSG00000001',
   gene_symbol: 'ABCA7',
   biodomains: [],
@@ -34,7 +34,7 @@ const baseMockRow: Transcriptomics = {
   model_group: 'Abca7*V1599M',
   model_type: 'Familial AD',
   tissue: 'Hippocampus',
-  sex_cohort: SexCohort.FemalesMales,
+  sex: Sex.Female,
 };
 
 function mockPage(rows: Transcriptomics[]): TranscriptomicsPage {

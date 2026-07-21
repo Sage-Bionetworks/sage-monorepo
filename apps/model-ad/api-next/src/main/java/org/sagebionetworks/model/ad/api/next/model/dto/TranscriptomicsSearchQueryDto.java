@@ -163,11 +163,11 @@ public class TranscriptomicsSearchQueryDto {
   }
 
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory] 
+   * Array of category values from the dropdown selections. The API will parse these to extract the tissue information. Expected format: [mainCategory, tissueCategory] 
    * @return categories
    */
-  @NotNull @Size(min = 3, max = 3) 
-  @Schema(name = "categories", example = "[\"RNA - DIFFERENTIAL EXPRESSION\",\"Tissue - Hemibrain\",\"Sex - Females & Males\"]", description = "Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory] ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Size(min = 2, max = 2) 
+  @Schema(name = "categories", example = "[\"RNA - DIFFERENTIAL EXPRESSION\",\"Tissue - Hemibrain\"]", description = "Array of category values from the dropdown selections. The API will parse these to extract the tissue information. Expected format: [mainCategory, tissueCategory] ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
   public List<String> getCategories() {
     return categories;
@@ -191,11 +191,11 @@ public class TranscriptomicsSearchQueryDto {
   }
 
   /**
-   * List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations. 
+   * List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name~sex\" where each identifier represents one complete combination of ensembl gene ID, gene name, and sex.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female\" filters for documents matching that exact gene ID, name, and sex. Multiple items can be provided to filter for multiple specific combinations. 
    * @return items
    */
   
-  @Schema(name = "items", example = "[\"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)\",\"ENSMUSG00000000028~APOE4\"]", description = "List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "items", example = "[\"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female\",\"ENSMUSG00000000028~APOE4~Male\"]", description = "List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name~sex\" where each identifier represents one complete combination of ensembl gene ID, gene name, and sex.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female\" filters for documents matching that exact gene ID, name, and sex. Multiple items can be provided to filter for multiple specific combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
   public @Nullable List<String> getItems() {
     return items;

@@ -1,4 +1,4 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, Locator, Page, test } from '@playwright/test';
 
 /**
  * Runs a suite of filter panel tests for a comparison tool page.
@@ -51,18 +51,24 @@ export const runFilterPanelTests = (navigateFn: (page: Page) => Promise<void>) =
 };
 
 /**
+ * Returns a locator for visible heatmap circle buttons.
+ * Some buttons may be hidden due to no data or significance filter,
+ * so we filter to only those with a visible circle (display: block).
+ */
+export const getVisibleHeatmapCircleButtons = (root: Page | Locator) =>
+  root.locator('button.heatmap-circle-button').filter({ visible: true });
+
+/**
+ * Returns a locator for the sub-heading rows of the heatmap details panel.
+ */
+export const getHeatmapDetailsPanelSubHeadings = (page: Page) =>
+  page.locator('.heatmap-details-panel-sub-headings');
+
+/**
  * Runs a suite of heatmap details panel tests for a comparison tool page.
  * @param navigateFn - Function that navigates to the comparison tool page
  */
 export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<void>) => {
-  /**
-   * Returns a locator for visible heatmap circle buttons.
-   * Some buttons may be hidden due to no data or significance filter,
-   * so we filter to only those with a visible circle (display: block).
-   */
-  const getVisibleHeatmapCircleButtons = (page: Page) =>
-    page.locator('button.heatmap-circle-button').filter({ visible: true });
-
   test.describe('heatmap details panel', () => {
     test('clicking a heatmap circle opens the details panel', async ({ page }) => {
       await navigateFn(page);

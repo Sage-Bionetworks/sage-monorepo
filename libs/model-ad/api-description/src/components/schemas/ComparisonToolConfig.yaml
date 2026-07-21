@@ -7,7 +7,7 @@ properties:
     description: List of dropdown options
     items:
       type: string
-      example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
+      example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus
   row_count:
     type: string
     description: Deprecated field that is always null. Previously contained relative description of the total number of rows in the data

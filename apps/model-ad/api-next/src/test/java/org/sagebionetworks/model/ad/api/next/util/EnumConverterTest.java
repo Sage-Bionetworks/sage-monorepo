@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.DataIntegrityException;
-import org.sagebionetworks.model.ad.api.next.model.dto.SexCohortDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
 
 class EnumConverterTest {
@@ -60,14 +59,6 @@ class EnumConverterTest {
     SexDto result = EnumConverter.toSexDto("Male", "test record");
 
     assertThat(result).isEqualTo(SexDto.MALE);
-  }
-
-  @Test
-  @DisplayName("should convert to SexCohortDto using convenience method")
-  void shouldConvertToSexCohortDtoUsingConvenienceMethod() {
-    SexCohortDto result = EnumConverter.toSexCohortDto("Females & Males", "test record");
-
-    assertThat(result).isEqualTo(SexCohortDto.FEMALES_MALES);
   }
 
   @Test

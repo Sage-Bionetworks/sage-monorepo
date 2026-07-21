@@ -46,9 +46,6 @@ class TranscriptomicsApiDelegateImplTest {
 
   private static final String TISSUE_HEMIBRAIN = "Hemibrain";
   private static final String TISSUE_CORTEX = "Cortex";
-  private static final String SEX_COHORT_FEMALES = "Females";
-  private static final String SEX_COHORT_MALES = "Males";
-  private static final String SEX_COHORT_FEMALES_AND_MALES = "Females & Males";
 
   @Mock
   private TranscriptomicsRepository repository;
@@ -75,15 +72,15 @@ class TranscriptomicsApiDelegateImplTest {
   }
 
   @Test
-  @DisplayName("should throw bad request when categories array has less than 3 values")
-  void shouldThrowBadRequestWhenCategoriesStringHasLessThan3Values() {
+  @DisplayName("should throw bad request when categories array has less than 2 values")
+  void shouldThrowBadRequestWhenCategoriesStringHasLessThan2Values() {
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION"))
       .build();
 
     assertThatThrownBy(() -> delegate.getTranscriptomics(query))
       .isInstanceOf(InvalidCategoryException.class)
-      .hasMessageContaining("Expected at least 3 category values");
+      .hasMessageContaining("Expected at least 2 category values");
 
     verifyNoInteractions(repository);
   }
@@ -92,7 +89,7 @@ class TranscriptomicsApiDelegateImplTest {
   @DisplayName("should throw bad request when main category unsupported")
   void shouldThrowBadRequestWhenMainCategoryUnsupported() {
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("OTHER", "Tissue - Hemibrain", "Sex - Females"))
+      .categories(List.of("OTHER", "Tissue - Hemibrain"))
       .build();
 
     assertThatThrownBy(() -> delegate.getTranscriptomics(query))
@@ -106,26 +103,12 @@ class TranscriptomicsApiDelegateImplTest {
   @DisplayName("should throw bad request when tissue format invalid")
   void shouldThrowBadRequestWhenTissueFormatInvalid() {
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "InvalidFormat", "Sex - Females"))
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "InvalidFormat"))
       .build();
 
     assertThatThrownBy(() -> delegate.getTranscriptomics(query))
       .isInstanceOf(InvalidCategoryException.class)
       .hasMessageContaining("Invalid tissue format");
-
-    verifyNoInteractions(repository);
-  }
-
-  @Test
-  @DisplayName("should throw bad request when sex cohort format invalid")
-  void shouldThrowBadRequestWhenSexFormatInvalid() {
-    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "InvalidFormat"))
-      .build();
-
-    assertThatThrownBy(() -> delegate.getTranscriptomics(query))
-      .isInstanceOf(InvalidCategoryException.class)
-      .hasMessageContaining("Invalid sex_cohort format");
 
     verifyNoInteractions(repository);
   }
@@ -139,13 +122,12 @@ class TranscriptomicsApiDelegateImplTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of()),
-        eq(TISSUE_HEMIBRAIN),
-        eq(SEX_COHORT_FEMALES)
+        eq(TISSUE_HEMIBRAIN)
       )
     ).thenReturn(page);
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
       .items(List.of())
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
@@ -165,8 +147,7 @@ class TranscriptomicsApiDelegateImplTest {
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of()),
-      eq(TISSUE_HEMIBRAIN),
-      eq(SEX_COHORT_FEMALES)
+      eq(TISSUE_HEMIBRAIN)
     );
   }
 
@@ -182,14 +163,13 @@ class TranscriptomicsApiDelegateImplTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         anyList(),
-        eq(TISSUE_HEMIBRAIN),
-        eq(SEX_COHORT_FEMALES)
+        eq(TISSUE_HEMIBRAIN)
       )
     ).thenReturn(page);
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
-      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
+      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -212,19 +192,18 @@ class TranscriptomicsApiDelegateImplTest {
     assertThat(dto.getTissue()).isEqualTo("Hemibrain");
     assertThat(dto.get4months()).isNotNull();
     assertThat(dto.get4months().getLog2Fc()).isEqualTo(BigDecimal.valueOf(0.01167d));
-    assertThat(dto.getSexCohort().getValue()).isEqualTo("Females");
+    assertThat(dto.getSex().getValue()).isEqualTo("Female");
 
     verify(repository).findAll(
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       anyList(),
-      eq(TISSUE_HEMIBRAIN),
-      eq(SEX_COHORT_FEMALES)
+      eq(TISSUE_HEMIBRAIN)
     );
   }
 
   @Test
-  @DisplayName("should include tissue and sex cohort filter when exclude filter has no items")
+  @DisplayName("should include tissue filter when exclude filter has no items")
   void shouldIncludeTissueAndSexFilterWhenExcludeFilterHasNoItems() {
     Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(buildDocument(new ObjectId())));
     when(
@@ -232,13 +211,12 @@ class TranscriptomicsApiDelegateImplTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         eq(List.of()),
-        eq(TISSUE_CORTEX),
-        eq(SEX_COHORT_MALES)
+        eq(TISSUE_CORTEX)
       )
     ).thenReturn(page);
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Cortex", "Sex - Males"))
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Cortex"))
       .items(List.of())
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
@@ -255,8 +233,7 @@ class TranscriptomicsApiDelegateImplTest {
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       eq(List.of()),
-      eq(TISSUE_CORTEX),
-      eq(SEX_COHORT_MALES)
+      eq(TISSUE_CORTEX)
     );
   }
 
@@ -273,14 +250,13 @@ class TranscriptomicsApiDelegateImplTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         anyList(),
-        eq(TISSUE_HEMIBRAIN),
-        eq(SEX_COHORT_FEMALES)
+        eq(TISSUE_HEMIBRAIN)
       )
     ).thenReturn(page);
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
-      .items(List.of("ENSMUSG00000000002~APOE4"))
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
+      .items(List.of("ENSMUSG00000000002~APOE4~Female"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -305,14 +281,13 @@ class TranscriptomicsApiDelegateImplTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         anyList(),
-        eq(TISSUE_HEMIBRAIN),
-        eq(SEX_COHORT_FEMALES)
+        eq(TISSUE_HEMIBRAIN)
       )
     ).thenReturn(page);
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
-      .items(List.of("ENSMUSG00000099999~ExcludedModel"))
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
+      .items(List.of("ENSMUSG00000099999~ExcludedModel~Female"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -330,8 +305,7 @@ class TranscriptomicsApiDelegateImplTest {
       any(Pageable.class),
       any(TranscriptomicsSearchQueryDto.class),
       anyList(),
-      eq(TISSUE_HEMIBRAIN),
-      eq(SEX_COHORT_FEMALES)
+      eq(TISSUE_HEMIBRAIN)
     );
   }
 
@@ -346,14 +320,13 @@ class TranscriptomicsApiDelegateImplTest {
         any(Pageable.class),
         any(TranscriptomicsSearchQueryDto.class),
         anyList(),
-        eq(TISSUE_HEMIBRAIN),
-        eq(SEX_COHORT_FEMALES)
+        eq(TISSUE_HEMIBRAIN)
       )
     ).thenReturn(page);
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
-      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
+      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -370,46 +343,6 @@ class TranscriptomicsApiDelegateImplTest {
   }
 
   @Test
-  @DisplayName("should handle compound sex cohort values like Females & Males")
-  void shouldHandleCompoundSexValues() {
-    ObjectId objectId = new ObjectId();
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(buildDocument(objectId)));
-
-    when(
-      repository.findAll(
-        any(Pageable.class),
-        any(TranscriptomicsSearchQueryDto.class),
-        anyList(),
-        eq(TISSUE_HEMIBRAIN),
-        eq(SEX_COHORT_FEMALES_AND_MALES)
-      )
-    ).thenReturn(page);
-
-    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(
-        List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females & Males")
-      )
-      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
-      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
-      .pageNumber(0)
-      .pageSize(10)
-      .build();
-
-    ResponseEntity<TranscriptomicsPageDto> response = delegate.getTranscriptomics(query);
-
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getBody()).isNotNull();
-
-    verify(repository).findAll(
-      any(Pageable.class),
-      any(TranscriptomicsSearchQueryDto.class),
-      anyList(),
-      eq(TISSUE_HEMIBRAIN),
-      eq(SEX_COHORT_FEMALES_AND_MALES)
-    );
-  }
-
-  @Test
   @DisplayName("should throw IllegalArgumentException when invalid query parameter provided")
   void shouldThrowExceptionWhenInvalidQueryParameterProvided() {
     // Setup request with invalid parameter
@@ -419,7 +352,7 @@ class TranscriptomicsApiDelegateImplTest {
     RequestContextHolder.setRequestAttributes(attributes);
 
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
       .pageNumber(0)
       .pageSize(100)
       .build();
@@ -455,7 +388,7 @@ class TranscriptomicsApiDelegateImplTest {
     document.setModelGroup(null);
     document.setModelType("Familial AD");
     document.setTissue("Hemibrain");
-    document.setSexCohort("Females");
+    document.setSex("Female");
     document.setFourMonths(foldChange);
     return document;
   }
@@ -473,7 +406,7 @@ class TranscriptomicsApiDelegateImplTest {
     document.setModelGroup(null);
     document.setModelType("Familial AD");
     document.setTissue("Hemibrain");
-    document.setSexCohort("Females");
+    document.setSex("Female");
     document.setFourMonths(foldChange);
     return document;
   }

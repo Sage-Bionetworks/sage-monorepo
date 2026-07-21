@@ -2,3 +2,11 @@ html,
 body {
   color: var(--color-text);
 }
+
+button.p-button-text {
+  color: var(--color-gray-1000);
+
+  &:hover {
+    color: var(--color-action-primary);
+  }
+}

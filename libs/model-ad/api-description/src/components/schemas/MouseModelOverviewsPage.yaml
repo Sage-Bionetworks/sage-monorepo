@@ -1,0 +1,13 @@
+type: object
+description: A page of mouse model overview objects.
+properties:
+  mouseModelOverviews:
+    type: array
+    description: List of mouse model overviews in this page.
+    items:
+      $ref: ./MouseModelOverview.yaml
+  page:
+    $ref: ./PageMetadata.yaml
+required:
+  - mouseModelOverviews
+  - page

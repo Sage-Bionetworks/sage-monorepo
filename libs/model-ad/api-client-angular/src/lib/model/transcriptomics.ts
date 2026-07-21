@@ -7,16 +7,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { NamedLink } from './named-link';
 import { FoldChangeResult } from './fold-change-result';
-import { Link } from './link';
-import { SexCohort } from './sex-cohort';
+import { Sex } from './sex';
 
 /**
  * Transcriptomics
  */
 export interface Transcriptomics {
   /**
-   * Unique identifier for the transcriptomics object
+   * Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)
    */
   composite_id: string;
   /**
@@ -31,7 +31,7 @@ export interface Transcriptomics {
    * List of biodomains associated with the gene
    */
   biodomains: Array<string>;
-  name: Link;
+  name: NamedLink;
   /**
    * Matched control for the model
    */
@@ -48,7 +48,7 @@ export interface Transcriptomics {
    * Tissue type
    */
   tissue: string;
-  sex_cohort: SexCohort;
+  sex: Sex;
   '4 months'?: FoldChangeResult;
   '12 months'?: FoldChangeResult;
   '18 months'?: FoldChangeResult;

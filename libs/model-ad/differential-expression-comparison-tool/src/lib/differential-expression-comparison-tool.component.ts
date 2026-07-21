@@ -96,6 +96,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     defaultSort: [
       { field: 'gene_symbol', order: 1 },
       { field: 'name', order: 1 },
+      { field: 'sex', order: 1 },
     ],
     heatmapCircleClickTransformFn: ({
       rowData,
@@ -110,7 +111,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
           : { left: row.ensembl_gene_id },
         heading: `Differential RNA Expression (${row.tissue})`,
         subHeadings: [
-          `${row.name} (${columnKey}, ${row.sex_cohort})`,
+          `${row.name.link_text} (${columnKey}, ${row.sex})`,
           `Matched Control: ${row.matched_control}`,
         ],
         value: cell.log2_fc,

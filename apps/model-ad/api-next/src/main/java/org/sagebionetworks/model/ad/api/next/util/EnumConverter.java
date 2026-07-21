@@ -2,7 +2,6 @@ package org.sagebionetworks.model.ad.api.next.util;
 
 import java.util.function.Function;
 import org.sagebionetworks.model.ad.api.next.exception.DataIntegrityException;
-import org.sagebionetworks.model.ad.api.next.model.dto.SexCohortDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
 import org.springframework.lang.Nullable;
 
@@ -57,18 +56,5 @@ public final class EnumConverter {
    */
   public static SexDto toSexDto(@Nullable String value, String recordType) {
     return toEnum(value, SexDto::fromValue, "sex", recordType);
-  }
-
-  /**
-   * Converts a nullable string value to SexCohortDto enum.
-   * Convenience method for sex cohort field conversions.
-   *
-   * @param value the string value to convert (can be null)
-   * @param recordType the type of record for error messages (e.g., "transcriptomics record")
-   * @return the converted SexCohortDto value
-   * @throws DataIntegrityException if value is null or conversion fails
-   */
-  public static SexCohortDto toSexCohortDto(@Nullable String value, String recordType) {
-    return toEnum(value, SexCohortDto::fromValue, "sexCohort", recordType);
   }
 }

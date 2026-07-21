@@ -1,0 +1,60 @@
+<ng-template
+  #marmosetSection
+  let-data="data"
+  let-sexFilter="sexFilter"
+  let-copyLinkFn="copyLinkFn"
+  let-tooltipTextFn="tooltipTextFn"
+  let-setActiveShareLink="setActiveShareLink"
+  let-clearActiveShareLink="clearActiveShareLink"
+  let-isShareLinkActive="isShareLinkActive"
+>
+  <div
+    class="marmoset-legend"
+    sageLegend
+    [pointStyles]="getPointStyles(sexFilter)"
+    [chartStyle]="'grayGrid'"
+  ></div>
+  <div class="marmoset-grid">
+    @for (ageGroup of data; track ageGroup.age) {
+      @let anchorId = generateAnchorId(ageGroup.age);
+      <div
+        [id]="anchorId"
+        class="marmoset-grid-item"
+        (mouseenter)="setActiveShareLink(anchorId)"
+        (mouseleave)="clearActiveShareLink()"
+      >
+        <div class="age-group-title">
+          <h3>{{ ageGroup.age }}</h3>
+          @if (isShareLinkActive(anchorId)) {
+            <explorers-copy-link-button
+              [onClick]="copyLinkFn(anchorId)"
+              [anchorId]="anchorId"
+              [ariaLabel]="'Copy link to ' + ageGroup.age"
+              [tooltipText]="tooltipTextFn(anchorId)"
+            />
+          }
+        </div>
+        <model-ad-boxplot
+          [boxplotData]="ageGroup.data[0]"
+          [sexFilter]="sexFilter"
+          [showLegend]="false"
+          [showTitle]="false"
+        />
+      </div>
+    }
+  </div>
+</ng-template>
+
+<model-ad-model-details-boxplots-selector
+  [title]="title()"
+  [description]="description()"
+  [modelName]="modelName()"
+  [modelDataList]="modelDataList()"
+  [wikiParams]="wikiParams()"
+  [filterConfig]="filterConfig"
+  [anchorDataField]="'age'"
+  [transformSectionData]="transformSectionData"
+  [showSectionShareLink]="false"
+  [showRowDownloadButton]="false"
+  [sectionTemplate]="marmosetSection"
+/>

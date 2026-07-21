@@ -70,19 +70,12 @@ class CustomTranscriptomicsRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .build();
 
-    repository.findAll(
-      PageRequest.of(0, 10),
-      query,
-      Collections.emptyList(),
-      "test-tissue",
-      "test-cohort"
-    );
+    repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), "test-tissue");
 
     Document criteriaDoc = captureCountQuery().getQueryObject();
     assertThat(criteriaDoc).containsKey("$and");
     List<Document> andConditions = (List<Document>) criteriaDoc.get("$and");
     assertThat(andConditions).anySatisfy(doc -> assertThat(doc).containsKey("tissue"));
-    assertThat(andConditions).anySatisfy(doc -> assertThat(doc).containsKey("sex_cohort"));
     assertThat(andConditions).anySatisfy(doc -> assertThat(doc).containsKey("biodomains"));
   }
 
@@ -95,19 +88,13 @@ class CustomTranscriptomicsRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .build();
 
-    repository.findAll(
-      PageRequest.of(0, 10),
-      query,
-      Collections.emptyList(),
-      "test-tissue",
-      "test-cohort"
-    );
+    repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), "test-tissue");
 
     Document criteriaDoc = captureCountQuery().getQueryObject();
     assertThat(criteriaDoc).containsKey("$and");
     List<Document> andConditions = (List<Document>) criteriaDoc.get("$and");
-    // tissue, sex_cohort, biodomains, model_type
-    assertThat(andConditions.size()).isGreaterThanOrEqualTo(4);
+    // tissue, biodomains, model_type
+    assertThat(andConditions.size()).isGreaterThanOrEqualTo(3);
   }
 
   @Test
@@ -118,13 +105,7 @@ class CustomTranscriptomicsRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .build();
 
-    repository.findAll(
-      PageRequest.of(0, 10),
-      query,
-      Collections.emptyList(),
-      "test-tissue",
-      "test-cohort"
-    );
+    repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), "test-tissue");
 
     Document criteriaDoc = captureCountQuery().getQueryObject();
     assertThat(criteriaDoc).containsKey("$and");
@@ -142,13 +123,7 @@ class CustomTranscriptomicsRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .build();
 
-    repository.findAll(
-      PageRequest.of(0, 10),
-      query,
-      Collections.emptyList(),
-      "test-tissue",
-      "test-cohort"
-    );
+    repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), "test-tissue");
 
     Document criteriaDoc = captureCountQuery().getQueryObject();
     assertThat(criteriaDoc).containsKey("$and");
@@ -167,9 +142,8 @@ class CustomTranscriptomicsRepositoryImplTest {
     repository.findAll(
       PageRequest.of(0, 10),
       query,
-      Arrays.asList("ENSG00000130203~5xFAD"),
-      "test-tissue",
-      "test-cohort"
+      Arrays.asList("ENSG00000130203~5xFAD~Female"),
+      "test-tissue"
     );
 
     assertThat(captureCountQuery().getQueryObject().toJson()).doesNotContain("\"$regex\"");
@@ -183,13 +157,7 @@ class CustomTranscriptomicsRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .build();
 
-    repository.findAll(
-      PageRequest.of(0, 10),
-      query,
-      Collections.emptyList(),
-      "test-tissue",
-      "test-cohort"
-    );
+    repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), "test-tissue");
 
     assertThat(captureCountQuery().getQueryObject().toJson()).doesNotContain("\"$regex\"");
   }
@@ -207,8 +175,7 @@ class CustomTranscriptomicsRepositoryImplTest {
       PageRequest.of(0, 10, Sort.by(Sort.Order.asc("gene_symbol"))),
       query,
       Collections.emptyList(),
-      "test-tissue",
-      "test-cohort"
+      "test-tissue"
     );
 
     String pipeline = captureAggregation().toString();
@@ -234,8 +201,7 @@ class CustomTranscriptomicsRepositoryImplTest {
       PageRequest.of(0, 10, Sort.by(Sort.Order.asc("4 months"))),
       query,
       Collections.emptyList(),
-      "Hippocampus",
-      "Females & Males"
+      "Hippocampus"
     );
 
     String pipeline = captureAggregation().toString();

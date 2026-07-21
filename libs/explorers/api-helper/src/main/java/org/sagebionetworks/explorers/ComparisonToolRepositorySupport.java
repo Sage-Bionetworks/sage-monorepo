@@ -201,7 +201,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * <p>Applies in order:
    *
    * <ol>
-   *   <li><strong>Base criteria</strong> — required filters (cluster, tissue, sex_cohort, etc.)
+   *   <li><strong>Base criteria</strong> — required filters (cluster, tissue, etc.)
    *   <li><strong>Data filters</strong> — field-level filters (age, model_type, etc.) with
    *       {@code $in} matching
    *   <li><strong>Item filter</strong> — row-level identifier matching (INCLUDE/EXCLUDE):

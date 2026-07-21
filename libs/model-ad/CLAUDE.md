@@ -43,7 +43,7 @@ Mock data and test fixtures come from `@sagebionetworks/model-ad/testing`.
 | `model-ad-model-details`                           | `model-details/`                           | Model details page with omics, biomarkers, pathology panels                                      |
 | `model-ad-differential-expression-comparison-tool` | `differential-expression-comparison-tool/` | Differential expression heatmap comparison tool                                                  |
 | `model-ad-disease-correlation-comparison-tool`     | `disease-correlation-comparison-tool/`     | Disease correlation heatmap comparison tool                                                      |
-| `model-ad-model-overview-comparison-tool`          | `model-overview-comparison-tool/`          | Model overview comparison tool                                                                   |
+| `model-ad-mouse-model-overview-comparison-tool`    | `mouse-model-overview-comparison-tool/`    | Mouse model overview comparison tool                                                             |
 | `model-ad-services`                                | `services/`                                | Angular services (currently minimal)                                                             |
 | `model-ad-styles`                                  | `styles/`                                  | Shared SCSS variables and mixins                                                                 |
 | `model-ad-testing`                                 | `testing/`                                 | Mock data and test fixtures                                                                      |

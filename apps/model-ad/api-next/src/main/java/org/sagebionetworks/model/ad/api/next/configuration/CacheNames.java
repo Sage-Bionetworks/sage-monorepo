@@ -18,17 +18,17 @@ public final class CacheNames {
   public static final String DISEASE_CORRELATION = "diseaseCorrelation";
 
   /**
-   * Cache for model overview queries.
-   * Stores results from model overview comparison queries filtered by items and filter type.
+   * Cache for mouse model overview queries.
+   * Stores results from mouse model overview comparison queries filtered by items and filter type.
    * Key format: Dynamic based on query parameters (items, filterType)
    */
-  public static final String MODEL_OVERVIEW = "modelOverview";
+  public static final String MOUSE_MODEL_OVERVIEW = "mouseModelOverview";
 
   /**
    * Cache for transcriptomics queries.
-   * Stores results from transcriptomics comparison queries filtered by tissue, sex_cohort, items,
+   * Stores results from transcriptomics comparison queries filtered by tissue, items,
    * and filter type.
-   * Key format: Dynamic based on query parameters (tissue, sex_cohort, items, filterType)
+   * Key format: Dynamic based on query parameters (tissue, items, filterType)
    */
   public static final String TRANSCRIPTOMICS = "transcriptomics";
 

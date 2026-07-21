@@ -23,9 +23,9 @@ tags:
   - name: Model
     description: Operations about models.
     x-displayName: Model
-  - name: Model Overview
-    description: Operations about Model Overview.
-    x-displayName: Model Overview
+  - name: Mouse Model Overview
+    description: Operations about Mouse Model Overview.
+    x-displayName: Mouse Model Overview
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
     x-displayName: Disease Correlation
@@ -85,22 +85,22 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /comparison-tools/model-overview:
+  /comparison-tools/mouse-model-overview:
     get:
       tags:
-        - Model Overview
-      summary: Get model overview for comparison tools
-      description: Returns a paginated list of model overview objects for use in comparison tools.
-      operationId: getModelOverviews
+        - Mouse Model Overview
+      summary: Get mouse model overview for comparison tools
+      description: Returns a paginated list of mouse model overview objects for use in comparison tools.
+      operationId: getMouseModelOverviews
       parameters:
-        - $ref: '#/components/parameters/modelOverviewSearchQuery'
+        - $ref: '#/components/parameters/mouseModelOverviewSearchQuery'
       responses:
         '200':
-          description: A paginated list of model overview objects
+          description: A paginated list of mouse model overview objects
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ModelOverviewsPage'
+                $ref: '#/components/schemas/MouseModelOverviewsPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -360,7 +360,7 @@ components:
           description: List of dropdown options
           items:
             type: string
-            example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
+            example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus
         row_count:
           type: string
           description: Deprecated field that is always null. Previously contained relative description of the total number of rows in the data
@@ -390,9 +390,9 @@ components:
         - include: Include only the specified items.
         - exclude: Exclude the specified items.
       default: include
-    ModelOverviewSearchQuery:
+    MouseModelOverviewSearchQuery:
       type: object
-      description: Model overview search query with pagination and filtering options.
+      description: Mouse model overview search query with pagination and filtering options.
       properties:
         pageNumber:
           description: The page number to return (index starts from 0).
@@ -506,13 +506,13 @@ components:
         link_url:
           type: string
           description: URL for the related resource
-    ModelOverview:
+    MouseModelOverview:
       type: object
-      description: Model Overview object for comparison tools
+      description: Mouse Model Overview object for comparison tools
       properties:
         _id:
           type: string
-          description: Unique identifier for the model overview object
+          description: Unique identifier for the mouse model overview object
         name:
           type: string
           description: Model name
@@ -605,19 +605,19 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
-    ModelOverviewsPage:
+    MouseModelOverviewsPage:
       type: object
-      description: A page of model overview objects.
+      description: A page of mouse model overview objects.
       properties:
-        modelOverviews:
+        mouseModelOverviews:
           type: array
-          description: List of model overviews in this page.
+          description: List of mouse model overviews in this page.
           items:
-            $ref: '#/components/schemas/ModelOverview'
+            $ref: '#/components/schemas/MouseModelOverview'
         page:
           $ref: '#/components/schemas/PageMetadata'
       required:
-        - modelOverviews
+        - mouseModelOverviews
         - page
     DiseaseCorrelationSearchQuery:
       type: object
@@ -867,31 +867,30 @@ components:
         categories:
           description: |
             Array of category values from the dropdown selections.
-            The API will parse these to extract the tissue and sex_cohort information.
-            Expected format: [mainCategory, tissueCategory, sexCohortCategory]
+            The API will parse these to extract the tissue information.
+            Expected format: [mainCategory, tissueCategory]
           type: array
           items:
             type: string
-          minItems: 3
-          maxItems: 3
+          minItems: 2
+          maxItems: 2
           example:
             - RNA - DIFFERENTIAL EXPRESSION
             - Tissue - Hemibrain
-            - Sex - Females & Males
         items:
           description: |
-            List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
-            where each identifier represents one complete combination of ensembl gene ID and gene name.
+            List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name~sex"
+            where each identifier represents one complete combination of ensembl gene ID, gene name, and sex.
 
-            Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)" filters for documents matching that exact gene ID and name.
+            Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female" filters for documents matching that exact gene ID, name, and sex.
             Multiple items can be provided to filter for multiple specific combinations.
           type: array
           items:
             type: string
           nullable: true
           example:
-            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
-            - ENSMUSG00000000028~APOE4
+            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
+            - ENSMUSG00000000028~APOE4~Male
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
@@ -961,13 +960,18 @@ components:
         - categories
         - sortFields
         - sortOrders
-    SexCohort:
-      type: string
-      description: Sex Cohort
-      enum:
-        - Females
-        - Females & Males
-        - Males
+    NamedLink:
+      type: object
+      description: Link with required display text
+      properties:
+        link_text:
+          type: string
+          description: Link text
+        link_url:
+          type: string
+          description: URL for the related resource
+      required:
+        - link_text
     FoldChangeResult:
       type: object
       description: Fold Change result
@@ -987,8 +991,8 @@ components:
       properties:
         composite_id:
           type: string
-          description: Unique identifier for the transcriptomics object
-          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+          description: Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)
+          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
         ensembl_gene_id:
           type: string
           description: Ensembl Gene ID
@@ -1002,7 +1006,7 @@ components:
           items:
             type: string
         name:
-          $ref: '#/components/schemas/Link'
+          $ref: '#/components/schemas/NamedLink'
           description: Model name and link to model details page
         matched_control:
           type: string
@@ -1020,8 +1024,8 @@ components:
           type: string
           description: Tissue type
           example: Hemibrain
-        sex_cohort:
-          $ref: '#/components/schemas/SexCohort'
+        sex:
+          $ref: '#/components/schemas/Sex'
         4 months:
           $ref: '#/components/schemas/FoldChangeResult'
         12 months:
@@ -1038,7 +1042,7 @@ components:
         - model_group
         - model_type
         - tissue
-        - sex_cohort
+        - sex
     TranscriptomicsPage:
       type: object
       description: A paginated response containing transcriptomics objects and pagination metadata.
@@ -1223,7 +1227,6 @@ components:
       required:
         - name
         - evidence_type
-        - tissue
         - age
         - units
         - y_axis_max
@@ -1347,14 +1350,14 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
   parameters:
-    modelOverviewSearchQuery:
-      name: modelOverviewSearchQuery
-      description: The search query used to find and filter model overviews.
+    mouseModelOverviewSearchQuery:
+      name: mouseModelOverviewSearchQuery
+      description: The search query used to find and filter mouse model overviews.
       in: query
       style: deepObject
       explode: true
       schema:
-        $ref: '#/components/schemas/ModelOverviewSearchQuery'
+        $ref: '#/components/schemas/MouseModelOverviewSearchQuery'
     diseaseCorrelationSearchQuery:
       name: diseaseCorrelationSearchQuery
       description: The search query used to find and filter disease correlations.

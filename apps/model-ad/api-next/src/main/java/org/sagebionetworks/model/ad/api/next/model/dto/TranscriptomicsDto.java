@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.model.ad.api.next.model.dto.FoldChangeResultDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.LinkDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.SexCohortDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.NamedLinkDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -40,7 +40,7 @@ public class TranscriptomicsDto {
   @Valid
   private List<String> biodomains = new ArrayList<>();
 
-  private LinkDto name;
+  private NamedLinkDto name;
 
   private String matchedControl;
 
@@ -50,7 +50,7 @@ public class TranscriptomicsDto {
 
   private String tissue;
 
-  private SexCohortDto sexCohort;
+  private SexDto sex;
 
   private @Nullable FoldChangeResultDto _4months;
 
@@ -65,7 +65,7 @@ public class TranscriptomicsDto {
   /**
    * Constructor with only required parameters
    */
-  public TranscriptomicsDto(String compositeId, String ensemblGeneId, String geneSymbol, List<String> biodomains, LinkDto name, String matchedControl, String modelGroup, String modelType, String tissue, SexCohortDto sexCohort) {
+  public TranscriptomicsDto(String compositeId, String ensemblGeneId, String geneSymbol, List<String> biodomains, NamedLinkDto name, String matchedControl, String modelGroup, String modelType, String tissue, SexDto sex) {
     this.compositeId = compositeId;
     this.ensemblGeneId = ensemblGeneId;
     this.geneSymbol = geneSymbol;
@@ -75,7 +75,7 @@ public class TranscriptomicsDto {
     this.modelGroup = modelGroup;
     this.modelType = modelType;
     this.tissue = tissue;
-    this.sexCohort = sexCohort;
+    this.sex = sex;
   }
 
   public TranscriptomicsDto compositeId(String compositeId) {
@@ -84,11 +84,11 @@ public class TranscriptomicsDto {
   }
 
   /**
-   * Unique identifier for the transcriptomics object
+   * Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)
    * @return compositeId
    */
   @NotNull 
-  @Schema(name = "composite_id", example = "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)", description = "Unique identifier for the transcriptomics object", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "composite_id", example = "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female", description = "Unique identifier for the transcriptomics object (ensembl_gene_id~model_name~sex)", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("composite_id")
   public String getCompositeId() {
     return compositeId;
@@ -166,7 +166,7 @@ public class TranscriptomicsDto {
     this.biodomains = biodomains;
   }
 
-  public TranscriptomicsDto name(LinkDto name) {
+  public TranscriptomicsDto name(NamedLinkDto name) {
     this.name = name;
     return this;
   }
@@ -178,11 +178,11 @@ public class TranscriptomicsDto {
   @NotNull @Valid 
   @Schema(name = "name", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
-  public LinkDto getName() {
+  public NamedLinkDto getName() {
     return name;
   }
 
-  public void setName(LinkDto name) {
+  public void setName(NamedLinkDto name) {
     this.name = name;
   }
 
@@ -266,24 +266,24 @@ public class TranscriptomicsDto {
     this.tissue = tissue;
   }
 
-  public TranscriptomicsDto sexCohort(SexCohortDto sexCohort) {
-    this.sexCohort = sexCohort;
+  public TranscriptomicsDto sex(SexDto sex) {
+    this.sex = sex;
     return this;
   }
 
   /**
-   * Get sexCohort
-   * @return sexCohort
+   * Get sex
+   * @return sex
    */
   @NotNull @Valid 
-  @Schema(name = "sex_cohort", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("sex_cohort")
-  public SexCohortDto getSexCohort() {
-    return sexCohort;
+  @Schema(name = "sex", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("sex")
+  public SexDto getSex() {
+    return sex;
   }
 
-  public void setSexCohort(SexCohortDto sexCohort) {
-    this.sexCohort = sexCohort;
+  public void setSex(SexDto sex) {
+    this.sex = sex;
   }
 
   public TranscriptomicsDto _4months(@Nullable FoldChangeResultDto _4months) {
@@ -364,7 +364,7 @@ public class TranscriptomicsDto {
         Objects.equals(this.modelGroup, transcriptomics.modelGroup) &&
         Objects.equals(this.modelType, transcriptomics.modelType) &&
         Objects.equals(this.tissue, transcriptomics.tissue) &&
-        Objects.equals(this.sexCohort, transcriptomics.sexCohort) &&
+        Objects.equals(this.sex, transcriptomics.sex) &&
         Objects.equals(this._4months, transcriptomics._4months) &&
         Objects.equals(this._12months, transcriptomics._12months) &&
         Objects.equals(this._18months, transcriptomics._18months);
@@ -372,7 +372,7 @@ public class TranscriptomicsDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(compositeId, ensemblGeneId, geneSymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sexCohort, _4months, _12months, _18months);
+    return Objects.hash(compositeId, ensemblGeneId, geneSymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sex, _4months, _12months, _18months);
   }
 
   @Override
@@ -388,7 +388,7 @@ public class TranscriptomicsDto {
     sb.append("    modelGroup: ").append(toIndentedString(modelGroup)).append("\n");
     sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
     sb.append("    tissue: ").append(toIndentedString(tissue)).append("\n");
-    sb.append("    sexCohort: ").append(toIndentedString(sexCohort)).append("\n");
+    sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
     sb.append("    _4months: ").append(toIndentedString(_4months)).append("\n");
     sb.append("    _12months: ").append(toIndentedString(_12months)).append("\n");
     sb.append("    _18months: ").append(toIndentedString(_18months)).append("\n");
@@ -429,7 +429,7 @@ public class TranscriptomicsDto {
       this.instance.setModelGroup(value.modelGroup);
       this.instance.setModelType(value.modelType);
       this.instance.setTissue(value.tissue);
-      this.instance.setSexCohort(value.sexCohort);
+      this.instance.setSex(value.sex);
       this.instance.set4months(value._4months);
       this.instance.set12months(value._12months);
       this.instance.set18months(value._18months);
@@ -456,7 +456,7 @@ public class TranscriptomicsDto {
       return this;
     }
     
-    public TranscriptomicsDto.Builder name(LinkDto name) {
+    public TranscriptomicsDto.Builder name(NamedLinkDto name) {
       this.instance.name(name);
       return this;
     }
@@ -481,8 +481,8 @@ public class TranscriptomicsDto {
       return this;
     }
     
-    public TranscriptomicsDto.Builder sexCohort(SexCohortDto sexCohort) {
-      this.instance.sexCohort(sexCohort);
+    public TranscriptomicsDto.Builder sex(SexDto sex) {
+      this.instance.sex(sex);
       return this;
     }
     
