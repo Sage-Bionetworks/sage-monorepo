@@ -20,7 +20,7 @@ concurrency:
 # Parent products with storybooks (space-separated)
 # Update this list when adding new storybooks to composite storybook
 env:
-  STORYBOOK_PRODUCTS: 'agora explorers'
+  STORYBOOK_PRODUCTS: 'agora explorers model-ad qtl'
 
 jobs:
   check-affected:
