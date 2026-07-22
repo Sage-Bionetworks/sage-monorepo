@@ -47,11 +47,13 @@ import { OrgSagebionetworksRepoModelSearchSearchQueryResults } from './org-sageb
 import { OrgSagebionetworksRepoModelDoiV2Doi } from './org-sagebionetworks-repo-model-doi-v2-doi';
 import { OrgSagebionetworksRepoModelDownloadDownloadListQueryResponse } from './org-sagebionetworks-repo-model-download-download-list-query-response';
 import { OrgSagebionetworksRepoModelFileFileDownloadSummary } from './org-sagebionetworks-repo-model-file-file-download-summary';
+import { OrgSagebionetworksRepoModelCurationExecutionExecutableTaskExecutionDetails } from './org-sagebionetworks-repo-model-curation-execution-executable-task-execution-details';
 import { OrgSagebionetworksRepoModelGridCreateGridResponse } from './org-sagebionetworks-repo-model-grid-create-grid-response';
 import { OrgSagebionetworksRepoModelTableTableSchemaChangeResponse } from './org-sagebionetworks-repo-model-table-table-schema-change-response';
 import { OrgSagebionetworksRepoModelGridGridQueryJobResponse } from './org-sagebionetworks-repo-model-grid-grid-query-job-response';
 import { OrgSagebionetworksRepoModelTableQueryResult } from './org-sagebionetworks-repo-model-table-query-result';
 import { OrgSagebionetworksRepoModelMigrationAdminResponse } from './org-sagebionetworks-repo-model-migration-admin-response';
+import { OrgSagebionetworksRepoModelCurationComputeTaskExecutionResponse } from './org-sagebionetworks-repo-model-curation-compute-task-execution-response';
 import { OrgSagebionetworksRepoModelFileAddFileToDownloadListResponse } from './org-sagebionetworks-repo-model-file-add-file-to-download-list-response';
 import { OrgSagebionetworksRepoModelSchemaCreateSchemaResponse } from './org-sagebionetworks-repo-model-schema-create-schema-response';
 import { OrgSagebionetworksRepoModelTableUploadToTablePreviewResult } from './org-sagebionetworks-repo-model-table-upload-to-table-preview-result';
@@ -75,6 +77,7 @@ import { OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse } fro
  */
 export type OrgSagebionetworksRepoModelAsynchAsynchronousResponseBody =
   | OrgSagebionetworksRepoModelAgentAgentChatResponse
+  | OrgSagebionetworksRepoModelCurationComputeTaskExecutionResponse
   | OrgSagebionetworksRepoModelDoiV2DoiResponse
   | OrgSagebionetworksRepoModelDownloadAddToDownloadListResponse
   | OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse

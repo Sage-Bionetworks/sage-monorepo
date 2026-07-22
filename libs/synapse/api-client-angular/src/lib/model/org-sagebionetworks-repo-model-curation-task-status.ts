@@ -31,15 +31,27 @@ export interface OrgSagebionetworksRepoModelCurationTaskStatus {
    */
   lastUpdatedOn?: string;
   /**
+   * Timestamp by which the task should be completed. Null if no due date has been set.
+   */
+  dueDate?: string;
+  /**
    * Optimistic concurrency control token for the task status.
    */
   etag?: string;
 }
 export namespace OrgSagebionetworksRepoModelCurationTaskStatus {
-  export type StateEnum = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
+  export type StateEnum =
+    | 'NOT_STARTED'
+    | 'IN_PROGRESS'
+    | 'EXECUTING'
+    | 'IN_REVIEW'
+    | 'COMPLETED'
+    | 'CANCELED';
   export const StateEnum = {
     NotStarted: 'NOT_STARTED' as StateEnum,
     InProgress: 'IN_PROGRESS' as StateEnum,
+    Executing: 'EXECUTING' as StateEnum,
+    InReview: 'IN_REVIEW' as StateEnum,
     Completed: 'COMPLETED' as StateEnum,
     Canceled: 'CANCELED' as StateEnum,
   };

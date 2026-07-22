@@ -11,12 +11,16 @@
 export type OrgSagebionetworksRepoModelCurationTaskState =
   | 'NOT_STARTED'
   | 'IN_PROGRESS'
+  | 'EXECUTING'
+  | 'IN_REVIEW'
   | 'COMPLETED'
   | 'CANCELED';
 
 export const OrgSagebionetworksRepoModelCurationTaskState = {
   NotStarted: 'NOT_STARTED' as OrgSagebionetworksRepoModelCurationTaskState,
   InProgress: 'IN_PROGRESS' as OrgSagebionetworksRepoModelCurationTaskState,
+  Executing: 'EXECUTING' as OrgSagebionetworksRepoModelCurationTaskState,
+  InReview: 'IN_REVIEW' as OrgSagebionetworksRepoModelCurationTaskState,
   Completed: 'COMPLETED' as OrgSagebionetworksRepoModelCurationTaskState,
   Canceled: 'CANCELED' as OrgSagebionetworksRepoModelCurationTaskState,
 };

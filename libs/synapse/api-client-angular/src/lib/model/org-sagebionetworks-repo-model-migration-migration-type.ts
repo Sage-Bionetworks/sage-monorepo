@@ -146,6 +146,8 @@ export type OrgSagebionetworksRepoModelMigrationMigrationType =
   | 'SYNONYM_SET'
   | 'SEARCH_CONFIGURATION'
   | 'SEARCH_CONFIG_OBJECT_BINDING'
+  | 'EDUC_QUOTA'
+  | 'DATA_ACCESS_REQUEST_USER'
   | 'CHANGE';
 
 export const OrgSagebionetworksRepoModelMigrationMigrationType = {
@@ -316,5 +318,8 @@ export const OrgSagebionetworksRepoModelMigrationMigrationType = {
   SearchConfiguration: 'SEARCH_CONFIGURATION' as OrgSagebionetworksRepoModelMigrationMigrationType,
   SearchConfigObjectBinding:
     'SEARCH_CONFIG_OBJECT_BINDING' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  EducQuota: 'EDUC_QUOTA' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  DataAccessRequestUser:
+    'DATA_ACCESS_REQUEST_USER' as OrgSagebionetworksRepoModelMigrationMigrationType,
   Change: 'CHANGE' as OrgSagebionetworksRepoModelMigrationMigrationType,
 };

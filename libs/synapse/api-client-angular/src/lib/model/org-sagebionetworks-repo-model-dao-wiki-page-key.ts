@@ -75,7 +75,9 @@ export namespace OrgSagebionetworksRepoModelDaoWikiPageKey {
     | 'PORTAL'
     | 'OAUTH_CLIENT'
     | 'GRID_SESSION'
-    | 'RECORDSET';
+    | 'RECORDSET'
+    | 'SEARCH_INDEX'
+    | 'SOURCE_DEPENDENCY_EVENT';
   export const OwnerObjectTypeEnum = {
     Entity: 'ENTITY' as OwnerObjectTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as OwnerObjectTypeEnum,
@@ -126,5 +128,7 @@ export namespace OrgSagebionetworksRepoModelDaoWikiPageKey {
     OauthClient: 'OAUTH_CLIENT' as OwnerObjectTypeEnum,
     GridSession: 'GRID_SESSION' as OwnerObjectTypeEnum,
     Recordset: 'RECORDSET' as OwnerObjectTypeEnum,
+    SearchIndex: 'SEARCH_INDEX' as OwnerObjectTypeEnum,
+    SourceDependencyEvent: 'SOURCE_DEPENDENCY_EVENT' as OwnerObjectTypeEnum,
   };
 }

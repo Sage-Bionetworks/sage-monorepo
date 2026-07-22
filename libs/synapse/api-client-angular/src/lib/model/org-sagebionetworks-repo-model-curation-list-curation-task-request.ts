@@ -29,15 +29,27 @@ export interface OrgSagebionetworksRepoModelCurationListCurationTaskRequest {
    */
   stateFilter?: Array<OrgSagebionetworksRepoModelCurationListCurationTaskRequest.StateFilterEnum>;
   /**
+   * Optional. Filter tasks by their task IDs.
+   */
+  taskIds?: Array<number>;
+  /**
    * Forward the returned \'nextPageToken\' to get the next page of results.
    */
   nextPageToken?: string;
 }
 export namespace OrgSagebionetworksRepoModelCurationListCurationTaskRequest {
-  export type StateFilterEnum = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
+  export type StateFilterEnum =
+    | 'NOT_STARTED'
+    | 'IN_PROGRESS'
+    | 'EXECUTING'
+    | 'IN_REVIEW'
+    | 'COMPLETED'
+    | 'CANCELED';
   export const StateFilterEnum = {
     NotStarted: 'NOT_STARTED' as StateFilterEnum,
     InProgress: 'IN_PROGRESS' as StateFilterEnum,
+    Executing: 'EXECUTING' as StateFilterEnum,
+    InReview: 'IN_REVIEW' as StateFilterEnum,
     Completed: 'COMPLETED' as StateFilterEnum,
     Canceled: 'CANCELED' as StateFilterEnum,
   };

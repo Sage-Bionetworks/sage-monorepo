@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelTableQueryBundleRequest } from './org-sagebionetworks-repo-model-table-query-bundle-request';
+import { OrgSagebionetworksRepoModelCurationComputeTaskExecutionRequest } from './org-sagebionetworks-repo-model-curation-compute-task-execution-request';
 import { OrgSagebionetworksRepoModelTableViewColumnModelRequest } from './org-sagebionetworks-repo-model-table-view-column-model-request';
 import { OrgSagebionetworksRepoModelTableViewScope } from './org-sagebionetworks-repo-model-table-view-scope';
 import { OrgSagebionetworksRepoModelTableQueryNextPageToken } from './org-sagebionetworks-repo-model-table-query-next-page-token';
@@ -69,6 +70,7 @@ import { OrgSagebionetworksRepoModelGridDownloadFromGridRequest } from './org-sa
  */
 export type OrgSagebionetworksRepoModelAsynchAsynchronousRequestBody =
   | OrgSagebionetworksRepoModelAgentAgentChatRequest
+  | OrgSagebionetworksRepoModelCurationComputeTaskExecutionRequest
   | OrgSagebionetworksRepoModelDoiV2DoiRequest
   | OrgSagebionetworksRepoModelDownloadAddToDownloadListRequest
   | OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest

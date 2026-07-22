@@ -350,6 +350,7 @@ export class GridServicesService {
    * @param asyncToken
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
+   * @deprecated
    */
   public getRepoV1GridExportRecordsetAsyncGetAsyncToken(
     asyncToken: string,
@@ -1335,6 +1336,7 @@ export class GridServicesService {
    * @param orgSagebionetworksRepoModelGridGridRecordSetExportRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
+   * @deprecated
    */
   public postRepoV1GridExportRecordsetAsyncStart(
     orgSagebionetworksRepoModelGridGridRecordSetExportRequest: OrgSagebionetworksRepoModelGridGridRecordSetExportRequest,

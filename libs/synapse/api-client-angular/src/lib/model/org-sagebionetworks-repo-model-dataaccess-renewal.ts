@@ -74,6 +74,10 @@ export interface OrgSagebionetworksRepoModelDataaccessRenewal {
   principalInvestigator?: OrgSagebionetworksRepoModelDataaccessPrincipalInvestigator;
   signingOfficial?: OrgSagebionetworksRepoModelDataaccessSigningOfficial;
   /**
+   * The envelope ID for the routed eDUC signature document.
+   */
+  eDucSignatureEnvelopeId?: string;
+  /**
    * Link(s) to publication that used the controlled data.
    */
   publication?: string;

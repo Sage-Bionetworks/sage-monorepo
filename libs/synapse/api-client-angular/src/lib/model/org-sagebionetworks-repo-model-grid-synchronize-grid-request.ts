@@ -17,11 +17,20 @@ export interface OrgSagebionetworksRepoModelGridSynchronizeGridRequest {
    * The ID of the grid session to synchronize.
    */
   gridSessionId?: string;
+  /**
+   * The type of synchronization to perform on a grid session.
+   */
+  syncType?: OrgSagebionetworksRepoModelGridSynchronizeGridRequest.SyncTypeEnum;
 }
 export namespace OrgSagebionetworksRepoModelGridSynchronizeGridRequest {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.grid.SynchronizeGridRequest';
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelGridSynchronizeGridRequest:
       'org.sagebionetworks.repo.model.grid.SynchronizeGridRequest' as ConcreteTypeEnum,
+  };
+  export type SyncTypeEnum = 'PULL' | 'PULL_PUSH';
+  export const SyncTypeEnum = {
+    Pull: 'PULL' as SyncTypeEnum,
+    PullPush: 'PULL_PUSH' as SyncTypeEnum,
   };
 }

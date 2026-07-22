@@ -30,10 +30,11 @@ export interface OrgSagebionetworksRepoModelSearchTableSearchIndexStatus {
   errorMessage?: string;
 }
 export namespace OrgSagebionetworksRepoModelSearchTableSearchIndexStatus {
-  export type StateEnum = 'CREATING' | 'ACTIVE' | 'FAILED';
+  export type StateEnum = 'CREATING' | 'ACTIVE' | 'FAILED' | 'WAITING_FOR_SOURCE';
   export const StateEnum = {
     Creating: 'CREATING' as StateEnum,
     Active: 'ACTIVE' as StateEnum,
     Failed: 'FAILED' as StateEnum,
+    WaitingForSource: 'WAITING_FOR_SOURCE' as StateEnum,
   };
 }

@@ -11,10 +11,12 @@
 export type OrgSagebionetworksRepoModelSearchTableSearchIndexState =
   | 'CREATING'
   | 'ACTIVE'
-  | 'FAILED';
+  | 'FAILED'
+  | 'WAITING_FOR_SOURCE';
 
 export const OrgSagebionetworksRepoModelSearchTableSearchIndexState = {
   Creating: 'CREATING' as OrgSagebionetworksRepoModelSearchTableSearchIndexState,
   Active: 'ACTIVE' as OrgSagebionetworksRepoModelSearchTableSearchIndexState,
   Failed: 'FAILED' as OrgSagebionetworksRepoModelSearchTableSearchIndexState,
+  WaitingForSource: 'WAITING_FOR_SOURCE' as OrgSagebionetworksRepoModelSearchTableSearchIndexState,
 };

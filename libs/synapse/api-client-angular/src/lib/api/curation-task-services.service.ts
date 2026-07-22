@@ -23,6 +23,10 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
+import { OrgSagebionetworksRepoModelAsynchAsyncJobId } from '../model/org-sagebionetworks-repo-model-asynch-async-job-id';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelCurationComputeTaskExecutionResponse } from '../model/org-sagebionetworks-repo-model-curation-compute-task-execution-response';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelCurationCurationTask } from '../model/org-sagebionetworks-repo-model-curation-curation-task';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelCurationListCurationTaskRequest } from '../model/org-sagebionetworks-repo-model-curation-list-curation-task-request';
@@ -290,6 +294,123 @@ export class CurationTaskServicesService {
 
     let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}`;
     return this.httpClient.request<OrgSagebionetworksRepoModelCurationCurationTask>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param taskId the ID of the CurationTask
+   * @param asyncToken the token returned by startTaskExecution
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRepoV1CurationTaskTaskIdExecuteAsyncGetAsyncToken(
+    taskId: number,
+    asyncToken: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelCurationComputeTaskExecutionResponse>;
+  public getRepoV1CurationTaskTaskIdExecuteAsyncGetAsyncToken(
+    taskId: number,
+    asyncToken: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelCurationComputeTaskExecutionResponse>>;
+  public getRepoV1CurationTaskTaskIdExecuteAsyncGetAsyncToken(
+    taskId: number,
+    asyncToken: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelCurationComputeTaskExecutionResponse>>;
+  public getRepoV1CurationTaskTaskIdExecuteAsyncGetAsyncToken(
+    taskId: number,
+    asyncToken: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (taskId === null || taskId === undefined) {
+      throw new Error(
+        'Required parameter taskId was null or undefined when calling getRepoV1CurationTaskTaskIdExecuteAsyncGetAsyncToken.',
+      );
+    }
+    if (asyncToken === null || asyncToken === undefined) {
+      throw new Error(
+        'Required parameter asyncToken was null or undefined when calling getRepoV1CurationTaskTaskIdExecuteAsyncGetAsyncToken.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}/execute/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelCurationComputeTaskExecutionResponse>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -639,6 +760,113 @@ export class CurationTaskServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelCurationListCurationTaskRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param taskId the ID of the CurationTask to execute
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1CurationTaskTaskIdExecuteAsyncStart(
+    taskId: number,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelAsynchAsyncJobId>;
+  public postRepoV1CurationTaskTaskIdExecuteAsyncStart(
+    taskId: number,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
+  public postRepoV1CurationTaskTaskIdExecuteAsyncStart(
+    taskId: number,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
+  public postRepoV1CurationTaskTaskIdExecuteAsyncStart(
+    taskId: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (taskId === null || taskId === undefined) {
+      throw new Error(
+        'Required parameter taskId was null or undefined when calling postRepoV1CurationTaskTaskIdExecuteAsyncStart.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/curation/task/${this.configuration.encodeParam({ name: 'taskId', value: taskId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}/execute/async/start`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelAsynchAsyncJobId>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

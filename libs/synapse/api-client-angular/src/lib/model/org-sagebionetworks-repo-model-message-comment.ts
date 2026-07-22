@@ -87,7 +87,9 @@ export namespace OrgSagebionetworksRepoModelMessageComment {
     | 'PORTAL'
     | 'OAUTH_CLIENT'
     | 'GRID_SESSION'
-    | 'RECORDSET';
+    | 'RECORDSET'
+    | 'SEARCH_INDEX'
+    | 'SOURCE_DEPENDENCY_EVENT';
   export const TargetTypeEnum = {
     Entity: 'ENTITY' as TargetTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as TargetTypeEnum,
@@ -138,5 +140,7 @@ export namespace OrgSagebionetworksRepoModelMessageComment {
     OauthClient: 'OAUTH_CLIENT' as TargetTypeEnum,
     GridSession: 'GRID_SESSION' as TargetTypeEnum,
     Recordset: 'RECORDSET' as TargetTypeEnum,
+    SearchIndex: 'SEARCH_INDEX' as TargetTypeEnum,
+    SourceDependencyEvent: 'SOURCE_DEPENDENCY_EVENT' as TargetTypeEnum,
   };
 }

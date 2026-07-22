@@ -21,6 +21,10 @@ export interface OrgSagebionetworksRepoModelDataaccessPrincipalInvestigator {
    */
   name?: string;
   /**
+   * The title of the principal investigator.
+   */
+  title?: string;
+  /**
    * The institutional email address of the principal investigator.
    */
   institutionalEmail?: string;

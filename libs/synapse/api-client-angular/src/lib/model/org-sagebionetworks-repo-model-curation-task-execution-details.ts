@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelCurationExecutionGridExecutionDetails } from './org-sagebionetworks-repo-model-curation-execution-grid-execution-details';
+import { OrgSagebionetworksRepoModelCurationExecutionSampleSheetGenerationExecutionDetails } from './org-sagebionetworks-repo-model-curation-execution-sample-sheet-generation-execution-details';
 
 /**
  * An interface for task-specific execution details. The concrete type determines which task-type-specific properties are available.
@@ -18,4 +19,5 @@ import { OrgSagebionetworksRepoModelCurationExecutionGridExecutionDetails } from
  * @export
  */
 export type OrgSagebionetworksRepoModelCurationTaskExecutionDetails =
-  OrgSagebionetworksRepoModelCurationExecutionGridExecutionDetails;
+  | OrgSagebionetworksRepoModelCurationExecutionGridExecutionDetails
+  | OrgSagebionetworksRepoModelCurationExecutionSampleSheetGenerationExecutionDetails;

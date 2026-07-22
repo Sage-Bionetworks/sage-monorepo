@@ -153,6 +153,8 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     | 'SYNONYM_SET'
     | 'SEARCH_CONFIGURATION'
     | 'SEARCH_CONFIG_OBJECT_BINDING'
+    | 'EDUC_QUOTA'
+    | 'DATA_ACCESS_REQUEST_USER'
     | 'CHANGE';
   export const ListEnum = {
     Realm: 'REALM' as ListEnum,
@@ -292,6 +294,8 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     SynonymSet: 'SYNONYM_SET' as ListEnum,
     SearchConfiguration: 'SEARCH_CONFIGURATION' as ListEnum,
     SearchConfigObjectBinding: 'SEARCH_CONFIG_OBJECT_BINDING' as ListEnum,
+    EducQuota: 'EDUC_QUOTA' as ListEnum,
+    DataAccessRequestUser: 'DATA_ACCESS_REQUEST_USER' as ListEnum,
     Change: 'CHANGE' as ListEnum,
   };
 }

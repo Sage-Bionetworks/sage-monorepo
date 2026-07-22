@@ -73,6 +73,10 @@ export interface OrgSagebionetworksRepoModelDataaccessRequest {
   institution?: string;
   principalInvestigator?: OrgSagebionetworksRepoModelDataaccessPrincipalInvestigator;
   signingOfficial?: OrgSagebionetworksRepoModelDataaccessSigningOfficial;
+  /**
+   * The envelope ID for the routed eDUC signature document.
+   */
+  eDucSignatureEnvelopeId?: string;
 }
 export namespace OrgSagebionetworksRepoModelDataaccessRequest {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.dataaccess.Request';
