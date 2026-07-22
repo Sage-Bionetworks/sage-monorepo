@@ -3,7 +3,7 @@ description: Mouse model details
 properties:
   type:
     type: string
-    description: Organism discriminator (always "mouse" for this schema)
+    description: Model organism discriminator (always "mouse" for this schema)
   name:
     type: string
     description: Name of the model

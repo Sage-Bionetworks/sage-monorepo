@@ -9,11 +9,11 @@
  */
 
 /**
- * Organism
+ * Model organism
  */
-export type Organism = 'marmoset' | 'mouse';
+export type ModelOrganism = 'marmoset' | 'mouse';
 
-export const Organism = {
-  Marmoset: 'marmoset' as Organism,
-  Mouse: 'mouse' as Organism,
+export const ModelOrganism = {
+  Marmoset: 'marmoset' as ModelOrganism,
+  Mouse: 'mouse' as ModelOrganism,
 };

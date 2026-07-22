@@ -16,11 +16,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Organism
+ * Model organism
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public enum OrganismDto {
+public enum ModelOrganismDto {
   
   MARMOSET("marmoset"),
   
@@ -28,7 +28,7 @@ public enum OrganismDto {
 
   private final String value;
 
-  OrganismDto(String value) {
+  ModelOrganismDto(String value) {
     this.value = value;
   }
 
@@ -43,8 +43,8 @@ public enum OrganismDto {
   }
 
   @JsonCreator
-  public static OrganismDto fromValue(String value) {
-    for (OrganismDto b : OrganismDto.values()) {
+  public static ModelOrganismDto fromValue(String value) {
+    for (ModelOrganismDto b : ModelOrganismDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }

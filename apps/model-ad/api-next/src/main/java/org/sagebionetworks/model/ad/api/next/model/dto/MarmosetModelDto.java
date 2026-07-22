@@ -65,11 +65,11 @@ public class MarmosetModelDto implements ModelDto {
   }
 
   /**
-   * Organism discriminator (always \"marmoset\" for this schema)
+   * Model organism discriminator (always \"marmoset\" for this schema)
    * @return type
    */
   @NotNull 
-  @Schema(name = "type", description = "Organism discriminator (always \"marmoset\" for this schema)", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "type", description = "Model organism discriminator (always \"marmoset\" for this schema)", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("type")
   public String getType() {
     return type;

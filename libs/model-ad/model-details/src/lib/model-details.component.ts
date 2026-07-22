@@ -12,7 +12,12 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { Model, ModelService, MouseModel, Organism } from '@sagebionetworks/model-ad/api-client';
+import {
+  Model,
+  ModelOrganism,
+  ModelService,
+  MouseModel,
+} from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
@@ -100,13 +105,13 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     const modelName = params.get('name');
     if (modelName) {
       this.modelService
-        .getModelByName(Organism.Mouse, modelName, 'body', false, {
+        .getModelByName(ModelOrganism.Mouse, modelName, 'body', false, {
           context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
         })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           // TODO(MG-929): this page serves mouse models only, so the request hardcodes
-          // Organism.Mouse and the response is always a MouseModel. When the marmoset details
+          // ModelOrganism.Mouse and the response is always a MouseModel. When the marmoset details
           // page is built, replace this cast with a real model.type switch that delegates to
           // the mouse- or marmoset-specific component.
           next: (model: Model) => {

@@ -45,5 +45,5 @@ paths:
     $ref: paths/comparison-tools/transcriptomics.yaml
   /transcriptomics-individual:
     $ref: paths/transcriptomics-individual.yaml
-  /models/{organism}/{name}:
+  /models/{modelOrganism}/{name}:
     $ref: paths/model.yaml

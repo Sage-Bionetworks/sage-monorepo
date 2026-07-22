@@ -15,7 +15,7 @@ import { GeneticInfo } from './genetic-info';
  */
 export interface MouseModel {
   /**
-   * Organism discriminator (always \"mouse\" for this schema)
+   * Model organism discriminator (always \"mouse\" for this schema)
    */
   type: string;
   /**
