@@ -243,8 +243,17 @@ body {
   color: var(--color-text);
 }
 
+button.p-button-text {
+  color: var(--color-gray-1000);
+}
+button.p-button-text:hover {
+  color: var(--color-action-primary);
+}
+
 :root {
   --color-secondary: #4f33a3;
+  --color-secondary-dark: #3d2879;
+  --color-toggle-card-divider: #cbe4ef;
 }
 
 h1,
