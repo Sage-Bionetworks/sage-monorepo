@@ -274,11 +274,20 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Transcriptomics Individual
-  /models/{name}:
+  /models/{organism}/{name}:
     get:
       description: Retrieve detailed information for a specific model by its name
+        and organism type.
       operationId: getModelByName
       parameters:
+        - description: 'The type of organism (e.g., mouse, marmoset)'
+          explode: false
+          in: path
+          name: organism
+          required: true
+          schema:
+            $ref: '#/components/schemas/Organism'
+          style: simple
         - description: Name of the model to retrieve
           explode: false
           in: path
@@ -1915,6 +1924,12 @@ components:
         - tissue
         - units
       type: object
+    Organism:
+      description: Organism
+      enum:
+        - marmoset
+        - mouse
+      type: string
     GeneticInfo:
       description: Genetic information about a model
       example:
@@ -1940,10 +1955,8 @@ components:
           description: MGI allele ID
           type: number
       required:
-        - allele
         - allele_type
         - ensembl_gene_id
-        - mgi_allele_id
         - modified_gene
       type: object
     ModelData:
@@ -1996,8 +2009,8 @@ components:
         - units
         - y_axis_max
       type: object
-    Model:
-      description: Model details
+    MouseModel:
+      description: Mouse model details
       example:
         genetic_info:
           - modified_gene: modified_gene
@@ -2082,6 +2095,7 @@ components:
           - matched_controls
         model_type: model_type
         jax_id: jax_id
+        type: type
         rrid: rrid
         genotype: genotype
         spatial_transcriptomics: spatial_transcriptomics
@@ -2090,6 +2104,9 @@ components:
         name: name
         transcriptomics: transcriptomics
       properties:
+        type:
+          description: Organism discriminator (always "mouse" for this schema)
+          type: string
         name:
           description: Name of the model
           type: string
@@ -2168,4 +2185,44 @@ components:
         - spatial_transcriptomics
         - study_synid
         - transcriptomics
+        - type
       type: object
+    MarmosetModel:
+      description: Marmoset model details
+      properties:
+        type:
+          description: Organism discriminator (always "marmoset" for this schema)
+          type: string
+        name:
+          description: Name of the model
+          type: string
+        model_type:
+          description: Type of the model
+          type: string
+        study_synid:
+          description: Synapse ID of the study
+          type: string
+        genetic_info:
+          description: Genetic information related to the Model
+          items:
+            $ref: '#/components/schemas/GeneticInfo'
+          type: array
+        biomarkers:
+          description: List of biomarker data associated with the model
+          items:
+            $ref: '#/components/schemas/ModelData'
+          type: array
+      required:
+        - biomarkers
+        - genetic_info
+        - model_type
+        - name
+        - study_synid
+        - type
+      type: object
+    Model:
+      description: Model details for a given organism
+      oneOf:
+        - $ref: '#/components/schemas/MouseModel'
+        - $ref: '#/components/schemas/MarmosetModel'
+      x-one-of-name: ModelDto

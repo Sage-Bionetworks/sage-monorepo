@@ -23,7 +23,7 @@ export interface GeneticInfo {
   /**
    * Allele symbol
    */
-  allele: string;
+  allele?: string;
   /**
    * Type of allele
    */
@@ -31,5 +31,5 @@ export interface GeneticInfo {
   /**
    * MGI allele ID
    */
-  mgi_allele_id: number;
+  mgi_allele_id?: number;
 }

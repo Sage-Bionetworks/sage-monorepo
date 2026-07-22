@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
-import { Model } from '@sagebionetworks/model-ad/api-client';
+import { MouseModel } from '@sagebionetworks/model-ad/api-client';
 import sanitizeHtml from 'sanitize-html';
 
 @Component({
@@ -20,7 +20,7 @@ export class ModelDetailsHeroComponent {
     'C57BL/6J': `${this.JAX_STRAIN_URL}/000664`,
   };
 
-  model = input.required<Model>();
+  model = input.required<MouseModel>();
 
   sanitizeHtml = sanitizeHtml;
 

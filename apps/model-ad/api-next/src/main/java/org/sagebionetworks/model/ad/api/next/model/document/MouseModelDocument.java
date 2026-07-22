@@ -1,8 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.model.document;
 
-import java.math.BigDecimal;
 import java.util.List;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +14,7 @@ import org.springframework.lang.Nullable;
 @Setter
 @NoArgsConstructor
 @Document(collection = "model_details")
-public class ModelDocument {
+public class MouseModelDocument {
 
   @Id
   private ObjectId id;
@@ -61,46 +59,4 @@ public class ModelDocument {
   private List<ModelData> biomarkers;
 
   private List<ModelData> pathology;
-
-  @Builder
-  @Getter
-  @Setter
-  public static class GeneticInfo {
-
-    @Field("modified_gene")
-    private String modifiedGene;
-
-    @Field("ensembl_gene_id")
-    private String ensemblGeneId;
-
-    private String allele;
-
-    @Field("allele_type")
-    private String alleleType;
-
-    @Field("mgi_allele_id")
-    private BigDecimal mgiAlleleId;
-  }
-
-  @Builder
-  @Getter
-  @Setter
-  public static class ModelData {
-
-    private String name;
-
-    @Field("evidence_type")
-    private String evidenceType;
-
-    private String tissue;
-
-    private String age;
-
-    private String units;
-
-    @Field("y_axis_max")
-    private BigDecimal yAxisMax;
-
-    private List<IndividualData> data;
-  }
 }

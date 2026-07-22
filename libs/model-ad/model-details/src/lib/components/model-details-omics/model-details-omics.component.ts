@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
-import { Model } from '@sagebionetworks/model-ad/api-client';
+import { MouseModel } from '@sagebionetworks/model-ad/api-client';
 
 @Component({
   selector: 'model-ad-model-details-omics',
@@ -9,7 +9,7 @@ import { Model } from '@sagebionetworks/model-ad/api-client';
   styleUrls: ['./model-details-omics.component.scss'],
 })
 export class ModelDetailsOmicsComponent {
-  model = input.required<Model>();
+  model = input.required<MouseModel>();
 
   cards = computed(() => {
     const cards = [];

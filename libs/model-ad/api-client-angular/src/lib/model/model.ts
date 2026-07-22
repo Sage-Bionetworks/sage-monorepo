@@ -8,74 +8,16 @@
  * Do not edit the class manually.
  */
 import { ModelData } from './model-data';
+import { MarmosetModel } from './marmoset-model';
+import { MouseModel } from './mouse-model';
 import { GeneticInfo } from './genetic-info';
 
 /**
- * Model details
+ * Model details for a given organism
  */
-export interface Model {
-  /**
-   * Name of the model
-   */
-  name: string;
-  /**
-   * List of matched controls
-   */
-  matched_controls: Array<string>;
-  /**
-   * Type of the model
-   */
-  model_type: string;
-  /**
-   * Group contributing the model
-   */
-  contributing_group: string;
-  /**
-   * Synapse ID of the study
-   */
-  study_synid: string;
-  /**
-   * RRID of the model
-   */
-  rrid: string;
-  /**
-   * JAX ID of the model
-   */
-  jax_id: string;
-  /**
-   * AlzForum ID of the model
-   */
-  alzforum_id: string;
-  /**
-   * Genotype of the model
-   */
-  genotype: string;
-  /**
-   * List of aliases for the model
-   */
-  aliases: Array<string>;
-  /**
-   * Link to transcriptomics comparison tool data
-   */
-  transcriptomics: string | null;
-  /**
-   * Link to disease correlation comparison tool data
-   */
-  disease_correlation: string | null;
-  /**
-   * Deprecated field for link to spatial transcriptomics data
-   */
-  spatial_transcriptomics: string | null;
-  /**
-   * Genetic information related to the Model
-   */
-  genetic_info: Array<GeneticInfo>;
-  /**
-   * List of biomarker data associated with the model
-   */
-  biomarkers: Array<ModelData>;
-  /**
-   * List of pathology data associated with the model
-   */
-  pathology: Array<ModelData>;
-}
+/**
+ * @type Model
+ * Model details for a given organism
+ * @export
+ */
+export type Model = MarmosetModel | MouseModel;

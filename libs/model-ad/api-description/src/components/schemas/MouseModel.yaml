@@ -1,0 +1,85 @@
+type: object
+description: Mouse model details
+properties:
+  type:
+    type: string
+    description: Organism discriminator (always "mouse" for this schema)
+  name:
+    type: string
+    description: Name of the model
+  matched_controls:
+    type: array
+    description: List of matched controls
+    items:
+      type: string
+  model_type:
+    type: string
+    description: Type of the model
+  contributing_group:
+    type: string
+    description: Group contributing the model
+  study_synid:
+    type: string
+    description: Synapse ID of the study
+  rrid:
+    type: string
+    description: RRID of the model
+  jax_id:
+    type: string
+    description: JAX ID of the model
+  alzforum_id:
+    type: string
+    description: AlzForum ID of the model
+  genotype:
+    type: string
+    description: Genotype of the model
+  aliases:
+    type: array
+    description: List of aliases for the model
+    items:
+      type: string
+  transcriptomics:
+    type: string
+    description: Link to transcriptomics comparison tool data
+    nullable: true
+  disease_correlation:
+    type: string
+    description: Link to disease correlation comparison tool data
+    nullable: true
+  spatial_transcriptomics:
+    type: string
+    description: Deprecated field for link to spatial transcriptomics data
+    nullable: true
+  genetic_info:
+    type: array
+    description: Genetic information related to the Model
+    items:
+      $ref: GeneticInfo.yaml
+  biomarkers:
+    type: array
+    description: List of biomarker data associated with the model
+    items:
+      $ref: ModelData.yaml
+  pathology:
+    type: array
+    description: List of pathology data associated with the model
+    items:
+      $ref: ModelData.yaml
+required:
+  - type
+  - name
+  - matched_controls
+  - model_type
+  - contributing_group
+  - study_synid
+  - rrid
+  - jax_id
+  - alzforum_id
+  - genotype
+  - aliases
+  - transcriptomics
+  - disease_correlation
+  - spatial_transcriptomics
+  - genetic_info
+  - biomarkers
+  - pathology

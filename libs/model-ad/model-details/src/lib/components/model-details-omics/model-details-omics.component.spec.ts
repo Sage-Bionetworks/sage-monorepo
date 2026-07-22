@@ -1,10 +1,10 @@
 import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
-import { Model } from '@sagebionetworks/model-ad/api-client';
+import { MouseModel } from '@sagebionetworks/model-ad/api-client';
 import { mouseModelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import { ModelDetailsOmicsComponent } from './model-details-omics.component';
 
-async function setup(model: Model = mouseModelMock) {
+async function setup(model: MouseModel = mouseModelMock) {
   return render(ModelDetailsOmicsComponent, {
     imports: [ResourceCardsComponent],
     componentInputs: {

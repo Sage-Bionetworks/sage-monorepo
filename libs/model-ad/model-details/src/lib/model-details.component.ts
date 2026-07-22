@@ -12,7 +12,7 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { Model, ModelService } from '@sagebionetworks/model-ad/api-client';
+import { Model, ModelService, MouseModel, Organism } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
@@ -44,7 +44,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
 
   isLoading = true;
 
-  model: Model | undefined;
+  model: MouseModel | undefined;
 
   biomarkersWikiParams: SynapseWikiParams = { ownerId: 'syn66271427', wikiId: '632871' };
   pathologyWikiParams: SynapseWikiParams = { ownerId: 'syn66271427', wikiId: '632872' };
@@ -100,13 +100,17 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     const modelName = params.get('name');
     if (modelName) {
       this.modelService
-        .getModelByName(modelName, 'body', false, {
+        .getModelByName(Organism.Mouse, modelName, 'body', false, {
           context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
         })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
+          // TODO(MG-929): this page serves mouse models only, so the request hardcodes
+          // Organism.Mouse and the response is always a MouseModel. When the marmoset details
+          // page is built, replace this cast with a real model.type switch that delegates to
+          // the mouse- or marmoset-specific component.
           next: (model: Model) => {
-            this.model = model;
+            this.model = model as MouseModel;
             this.setActivePanelAndParentFromUrl(params);
             this.updatePanelDisabledState();
             this.changePanelAndUrlIfInitialActivePanelIsInvalid();
