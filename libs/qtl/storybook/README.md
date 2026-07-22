@@ -1,3 +1,3 @@
 # qtl-storybook
 
-This library was generated with [Nx](https://nx.dev).
+Storybook host for the QTL scope. This library was generated with [Nx](https://nx.dev).
