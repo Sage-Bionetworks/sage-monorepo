@@ -1,4 +1,10 @@
-import { ModelData, ModelOrganism, MouseModel, Sex } from '@sagebionetworks/model-ad/api-client';
+import {
+  MarmosetModel,
+  ModelData,
+  ModelOrganism,
+  MouseModel,
+  Sex,
+} from '@sagebionetworks/model-ad/api-client';
 
 export const mouseModelMock: MouseModel = {
   type: ModelOrganism.Mouse,
@@ -2255,3 +2261,18 @@ export const marmosetModelDataMock: ModelData[] = [
     ],
   },
 ];
+
+export const marmosetModelMock: MarmosetModel = {
+  type: ModelOrganism.Marmoset,
+  name: 'Presenilin 1',
+  model_type: 'Familial AD',
+  study_synid: 'syn61849889',
+  genetic_info: [
+    {
+      modified_gene: 'PSEN1',
+      ensembl_gene_id: 'ENSCJAG00000014387',
+      allele_type: 'Endonuclease-mediated',
+    },
+  ],
+  biomarkers: marmosetModelDataMock,
+};
