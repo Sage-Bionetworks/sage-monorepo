@@ -7,8 +7,10 @@ import {
   ToggleCardComponent,
   ToggleCardOption,
 } from '@sagebionetworks/explorers/ui';
-import { isModelOrganism, ModelOrganism, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { ModelOrganism } from '@sagebionetworks/model-ad/api-client';
+import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SearchInputComponent } from '@sagebionetworks/model-ad/ui';
+import { isModelOrganism } from '@sagebionetworks/model-ad/util';
 
 interface Stat {
   label: string;
