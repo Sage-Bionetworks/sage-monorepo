@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - 'agora/**'
-      - 'iatlas/**'
       - 'sage-monorepo/**'
       - 'sage/**'
   pull_request:
