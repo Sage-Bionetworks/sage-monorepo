@@ -100,26 +100,14 @@ describe('ModelDetailsComponent', () => {
   });
 
   describe('mouse model', () => {
-    it('should display the model name', async () => {
-      await setup();
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(mouseModelMock.name);
-    });
-
-    it('should display all tabs for which the model has data', async () => {
-      await setup();
-      const tabs = ['Omics', 'Biomarkers', 'Pathology', 'Resources'];
-      for (const tab of tabs) {
-        expect(screen.getByText(tab)).toBeInTheDocument();
-      }
-    });
-
-    it('should hide tabs for which the model does not have data', async () => {
-      const modelWithoutOmics = { ...mouseModelMock, biomarkers: [], pathology: [] };
-      await setup(modelWithoutOmics);
-      expect(screen.getByText('Omics')).toBeInTheDocument();
-      expect(screen.queryByText('Biomarkers')).not.toBeInTheDocument();
-      expect(screen.queryByText('Pathology')).not.toBeInTheDocument();
-      expect(screen.getByText('Resources')).toBeInTheDocument();
+    it('should delegate rendering to the mouse content component', async () => {
+      const { component } = await setup();
+      expect(
+        component.container.querySelector('model-ad-mouse-model-details-content'),
+      ).toBeInTheDocument();
+      expect(
+        component.container.querySelector('model-ad-marmoset-model-details-content'),
+      ).not.toBeInTheDocument();
     });
 
     it('should show loading icon on server', async () => {
@@ -135,13 +123,14 @@ describe('ModelDetailsComponent', () => {
   });
 
   describe('marmoset model', () => {
-    it('should render only the model name and no mouse panels for a marmoset model', async () => {
-      await setup(marmosetModelMock, 'omics', null, null, 'marmoset');
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(marmosetModelMock.name);
-      expect(screen.queryByText('Omics')).not.toBeInTheDocument();
-      expect(screen.queryByText('Biomarkers')).not.toBeInTheDocument();
-      expect(screen.queryByText('Pathology')).not.toBeInTheDocument();
-      expect(screen.queryByText('Resources')).not.toBeInTheDocument();
+    it('should delegate rendering to the marmoset content component', async () => {
+      const { component } = await setup(marmosetModelMock, 'biomarkers', null, null, 'marmoset');
+      expect(
+        component.container.querySelector('model-ad-marmoset-model-details-content'),
+      ).toBeInTheDocument();
+      expect(
+        component.container.querySelector('model-ad-mouse-model-details-content'),
+      ).not.toBeInTheDocument();
     });
   });
 });
