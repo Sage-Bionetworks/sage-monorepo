@@ -13,7 +13,7 @@ authors = [
     {name = "Jon Ryser", email = "jon.ryser@genui.com"},
     {name = "Thomas Schaffter", email = "thomas.schaffter@sagebionetworks.org"},
 ]
-requires-python = "==3.8.20"
+requires-python = "==3.11.10"
 dependencies = [
     "ariadne==0.13.0",
     "click==7.1.2",
@@ -25,7 +25,6 @@ dependencies = [
     "markupsafe==1.1.1",
     "psycopg2-binary==2.8.5",
     "sqlalchemy==1.3.17",
-    "starlette==0.13.4",
     "typing-extensions==3.7.4.2",
     "werkzeug==1.0.1",
 ]
@@ -43,7 +42,7 @@ dev = [
     "pytest-cov==2.10.1",
     "pytest-flask-sqlalchemy==1.0.2",
     "pytest-xdist==2.1.0",
-    "snakeviz==2.1.0",
+    "snakeviz==2.1.2",
 ]
 prod = [
     "uWSGI==2.0.28",
