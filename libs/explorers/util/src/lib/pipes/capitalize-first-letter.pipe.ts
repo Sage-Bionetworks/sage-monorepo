@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { capitalizeFirstLetter } from '../string/capitalize-first-letter';
+import { capitalizeFirstLetter } from '@sagebionetworks/shared/util';
 
 @Pipe({
   name: 'capitalizeFirstLetter',

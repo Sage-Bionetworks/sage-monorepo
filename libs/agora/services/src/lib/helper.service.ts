@@ -122,9 +122,4 @@ export class HelperService {
     const param = new HttpParams().set(paramName, paramValue);
     return `${url.split('?')[0]}?${param.toString()}`;
   }
-
-  capitalizeFirstLetterOfString(s: string) {
-    if (s.length === 0) return '';
-    return s[0].toUpperCase() + s.slice(1);
-  }
 }

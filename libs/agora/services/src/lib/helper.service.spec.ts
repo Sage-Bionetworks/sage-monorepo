@@ -107,24 +107,6 @@ describe('Service: Helper', () => {
     expect(res).toEqual('#3c4a63');
   });
 
-  it('should capitalize first letter of string', () => {
-    const testString = 'nike just do it';
-    const result = helperService.capitalizeFirstLetterOfString(testString);
-    expect(result).toEqual('Nike just do it');
-  });
-
-  it('should capitalize the only letter of a string having a length of 1', () => {
-    const testString = 'n';
-    const result = helperService.capitalizeFirstLetterOfString(testString);
-    expect(result).toEqual('N');
-  });
-
-  it('should return an empty string if attempting to capitalize an empty string', () => {
-    const testString = '';
-    const result = helperService.capitalizeFirstLetterOfString(testString);
-    expect(result).toEqual('');
-  });
-
   it('should return a url with parameters', () => {
     const url = '/genes/ENSG123';
     const expected = '/genes/ENSG123?model=abc';

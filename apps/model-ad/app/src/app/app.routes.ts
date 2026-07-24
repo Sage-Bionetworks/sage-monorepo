@@ -1,8 +1,8 @@
 import { ActivatedRouteSnapshot, Route } from '@angular/router';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { capitalizeFirstLetter } from '@sagebionetworks/explorers/util';
 import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/model-ad/config';
 import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
+import { capitalizeFirstLetter } from '@sagebionetworks/shared/util';
 import { modelOrganismGuard } from './model-organism.guard';
 
 const modelDetailsData = {
@@ -120,6 +120,7 @@ export const routes: Route[] = [
   // ensure that all models match a route, so the custom url serializer can encode special characters
   {
     path: `${ROUTE_PATHS.MODELS}/**`,
+    canActivate: [modelOrganismGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
   },

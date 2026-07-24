@@ -1,7 +1,7 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BioDomain, Gene } from '@sagebionetworks/agora/api-client';
 import { BiodomainsChartComponent } from '@sagebionetworks/agora/charts';
-import { HelperService } from '@sagebionetworks/agora/services';
+import { capitalizeFirstLetter } from '@sagebionetworks/shared/util';
 
 @Component({
   selector: 'agora-gene-biodomains',
@@ -10,8 +10,6 @@ import { HelperService } from '@sagebionetworks/agora/services';
   styleUrls: ['./gene-biodomains.component.scss'],
 })
 export class GeneBioDomainsComponent implements OnInit {
-  helperService = inject(HelperService);
-
   @Input() gene: Gene | undefined;
 
   selectedBioDomain: BioDomain | undefined;
@@ -103,6 +101,6 @@ export class GeneBioDomainsComponent implements OnInit {
   }
 
   capitalizeGoTerm(goTerm: string) {
-    return this.helperService.capitalizeFirstLetterOfString(goTerm);
+    return capitalizeFirstLetter(goTerm);
   }
 }

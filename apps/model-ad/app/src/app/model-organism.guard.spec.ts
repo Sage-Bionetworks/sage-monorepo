@@ -58,6 +58,16 @@ describe('modelOrganismGuard', () => {
     );
   });
 
+  it('should preserve other query params and a hash fragment together when redirecting', () => {
+    const result = runGuard('/models/3xTg-AD/biomarkers?tissue=Hippocampus#insoluble-abeta42', {
+      tissue: 'Hippocampus',
+    });
+    expect(result).toBeInstanceOf(UrlTree);
+    expect(router.serializeUrl(result as UrlTree)).toBe(
+      `/models/3xTg-AD/biomarkers?tissue=Hippocampus&modelOrganism=${ModelOrganism.Mouse}#insoluble-abeta42`,
+    );
+  });
+
   it('should preserve other query params and the tab path when redirecting', () => {
     const result = runGuard('/models/APOE4/biomarkers?tissue=Hippocampus&sex=Male', {
       tissue: 'Hippocampus',
