@@ -25,7 +25,7 @@ test.describe('model details', () => {
   });
 
   test('valid model displays model name', async ({ page }) => {
-    await page.goto('/models/APOE4');
+    await page.goto('/models/APOE4?modelOrganism=mouse');
     await expect(page.getByRole('heading', { level: 1, name: 'APOE4' })).toBeVisible();
   });
 
@@ -33,6 +33,7 @@ test.describe('model details', () => {
     page,
   }) => {
     await page.goto('/models/APOE4');
+    await page.waitForURL('/models/APOE4?modelOrganism=mouse');
     await expect(page).toHaveTitle('Mouse Model Details | APOE4 AD model');
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       'content',
@@ -63,39 +64,39 @@ test.describe('model details', () => {
   });
 
   test('default tab is omics for model with omics data', async ({ page }) => {
-    await page.goto('/models/APOE4');
+    await page.goto('/models/APOE4?modelOrganism=mouse');
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
 
   test('correct tab is loaded from url', async ({ page }) => {
-    await page.goto('/models/3xTg-AD/biomarkers');
+    await page.goto('/models/3xTg-AD/biomarkers?modelOrganism=mouse');
     await expect(page.getByRole('heading', { level: 2, name: 'Biomarkers' })).toBeVisible();
   });
 
   test('clicking on a tab updates url and displays correct content', async ({ page }) => {
     const modelPath = '/models/3xTg-AD';
-    await page.goto(modelPath);
+    await page.goto(`${modelPath}?modelOrganism=mouse`);
 
     const biomarkersTab = page.getByRole('button', { name: 'Biomarkers' });
     await biomarkersTab.click();
-    await page.waitForURL(`${modelPath}/biomarkers`);
+    await page.waitForURL(`${modelPath}/biomarkers?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 2, name: 'Biomarkers' })).toBeVisible();
 
     const pathologyTab = page.getByRole('button', { name: 'Pathology' });
     await pathologyTab.click();
-    await page.waitForURL(`${modelPath}/pathology`);
+    await page.waitForURL(`${modelPath}/pathology?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 2, name: 'Pathology' })).toBeVisible();
 
     const resourcesTab = page.getByRole('button', { name: 'Resources' });
     await resourcesTab.click();
-    await page.waitForURL(`${modelPath}/resources`);
+    await page.waitForURL(`${modelPath}/resources?modelOrganism=mouse`);
     await expect(
       page.getByRole('heading', { level: 2, name: 'Model-Specific Resources' }),
     ).toBeVisible();
 
     const omicsTab = page.getByRole('button', { name: 'Omics' });
     await omicsTab.click();
-    await page.waitForURL(`${modelPath}/omics`);
+    await page.waitForURL(`${modelPath}/omics?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
 
@@ -103,18 +104,18 @@ test.describe('model details', () => {
     const initialModelPath = '/models/3xTg-AD';
     const nextModel = 'LOAD1';
 
-    await page.goto('/models/3xTg-AD');
+    await page.goto(`${initialModelPath}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
 
     const pathologyTab = page.getByRole('button', { name: 'Pathology' });
     await pathologyTab.click();
-    await page.waitForURL(`${initialModelPath}/pathology`);
+    await page.waitForURL(`${initialModelPath}/pathology?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 2, name: 'Pathology' })).toBeVisible();
 
     const { searchListItems } = await searchAndGetSearchListItems(nextModel, page);
     await searchListItems.first().click();
 
-    await page.waitForURL(`/models/${nextModel}`);
+    await page.waitForURL(`/models/${nextModel}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1, name: nextModel })).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
@@ -123,7 +124,7 @@ test.describe('model details', () => {
     page,
   }) => {
     const model = '3xTg-AD';
-    await page.goto(`/models/${model}/omics`);
+    await page.goto(`/models/${model}/omics?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeInViewport();
     await expect(page.getByRole('heading', { level: 1, name: model })).not.toBeInViewport();
     await expectPageNotAtTop(page);
@@ -134,7 +135,7 @@ test.describe('model details', () => {
   }) => {
     await page.setViewportSize({ width: 1280, height: 720 });
     const model = '3xTg-AD';
-    await page.goto(`/models/${model}`);
+    await page.goto(`/models/${model}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
     await expect(
       page.getByRole('heading', { level: 2, name: 'Available Data' }),
@@ -146,10 +147,10 @@ test.describe('model details', () => {
     page,
   }) => {
     const model = 'LOAD1';
-    await page.goto(`/models/${model}/pathology`);
+    await page.goto(`/models/${model}/pathology?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
     await expectPageAtTop(page);
-    await page.waitForURL(`/models/${model}`);
+    await page.waitForURL(`/models/${model}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
 
@@ -157,10 +158,10 @@ test.describe('model details', () => {
     page,
   }) => {
     const model = '3xTg-AD';
-    await page.goto(`/models/${model}/does-not-exist`);
+    await page.goto(`/models/${model}/does-not-exist?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
     await expectPageAtTop(page);
-    await page.waitForURL(`/models/${model}`);
+    await page.waitForURL(`/models/${model}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
 
@@ -174,7 +175,7 @@ test.describe('model details', () => {
     },
     async ({ page }) => {
       const modelWithoutOmics = 'APOECh';
-      await page.goto(`/models/${modelWithoutOmics}`);
+      await page.goto(`/models/${modelWithoutOmics}?modelOrganism=mouse`);
       await expect(page.getByRole('heading', { level: 1, name: modelWithoutOmics })).toBeVisible();
       await expect(page.getByRole('button', { name: 'Omics' })).toHaveCount(0);
       await expect(
@@ -186,7 +187,7 @@ test.describe('model details', () => {
 
 test.describe('model details - omics', () => {
   test('transcriptomics card links to differential expression CT in new tab', async ({ page }) => {
-    await page.goto('/models/APOE4');
+    await page.goto('/models/APOE4?modelOrganism=mouse');
     const card = page.getByRole('link', {
       name: /view rna differential expression results.*comparison tool/i,
     });
@@ -202,7 +203,7 @@ test.describe('model details - omics', () => {
   });
 
   test('disease correlation card links to disease correlation CT in new tab', async ({ page }) => {
-    await page.goto('/models/APOE4');
+    await page.goto('/models/APOE4?modelOrganism=mouse');
     const card = page.getByRole('link', {
       name: /view disease correlation results.*comparison tool/i,
     });
@@ -219,7 +220,7 @@ test.describe('model details - omics', () => {
 });
 
 test.describe('model details - resources', () => {
-  const resourcesUrl = '/models/3xTg-AD/resources';
+  const resourcesUrl = '/models/3xTg-AD/resources?modelOrganism=mouse';
 
   test('AD knowledge portal card links to ADKP study page for this model', async ({ page }) => {
     await page.goto(resourcesUrl);
@@ -271,18 +272,18 @@ test.describe('model details - model with special characters', () => {
   const specialModelEncoded = '5xFAD%20%28IU%2FJax%2FPitt%29';
 
   test('valid model with special characters displays model name', async ({ page }) => {
-    await page.goto(`/models/${specialModel}`);
-    await page.waitForURL(`/models/${specialModelEncoded}`);
+    await page.goto(`/models/${specialModel}?modelOrganism=mouse`);
+    await page.waitForURL(`/models/${specialModelEncoded}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
   });
 
   test('url is encoded when changing tabs for model with special characters', async ({ page }) => {
-    await page.goto(`/models/${specialModel}`);
+    await page.goto(`/models/${specialModel}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
 
     const resourcesTab = page.getByRole('button', { name: 'Resources' });
     await resourcesTab.click();
-    await page.waitForURL(`/models/${specialModelEncoded}/resources`);
+    await page.waitForURL(`/models/${specialModelEncoded}/resources?modelOrganism=mouse`);
 
     await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
     await expect(
@@ -291,8 +292,8 @@ test.describe('model details - model with special characters', () => {
   });
 
   test('correct tab is loaded from url for model with special characters', async ({ page }) => {
-    await page.goto(`/models/${specialModel}/resources`);
-    await page.waitForURL(`/models/${specialModelEncoded}/resources`);
+    await page.goto(`/models/${specialModel}/resources?modelOrganism=mouse`);
+    await page.waitForURL(`/models/${specialModelEncoded}/resources?modelOrganism=mouse`);
 
     await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
     await expect(
@@ -301,17 +302,17 @@ test.describe('model details - model with special characters', () => {
   });
 
   test('can reload page for model with special characters', async ({ page }) => {
-    await page.goto(`/models/${specialModel}/resources`);
-    await page.waitForURL(`/models/${specialModelEncoded}/resources`);
+    await page.goto(`/models/${specialModel}/resources?modelOrganism=mouse`);
+    await page.waitForURL(`/models/${specialModelEncoded}/resources?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
 
     await page.reload();
-    await page.waitForURL(`/models/${specialModelEncoded}/resources`);
+    await page.waitForURL(`/models/${specialModelEncoded}/resources?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
   });
 
   test('invalid model with special characters results in a 404 redirect', async ({ page }) => {
-    await page.goto('/models/does (not/exist)');
+    await page.goto('/models/does (not/exist)?modelOrganism=mouse');
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(
       ` This page isn't available right now. `,
     );
@@ -320,11 +321,11 @@ test.describe('model details - model with special characters', () => {
 
 test.describe('model details - boxplots selector - table of contents', () => {
   const testModel = 'Abca7*V1599M';
-  const biomarkersPath = `/models/${testModel}/biomarkers`;
+  const biomarkersPath = `/models/${testModel}/biomarkers?modelOrganism=mouse`;
 
   test('clicking on table of contents link scrolls to appropriate section', async ({ page }) => {
     const model = '3xTg-AD';
-    await page.goto(`/models/${model}/biomarkers`);
+    await page.goto(`/models/${model}/biomarkers?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: 'Table of Contents' })).toBeVisible();
 
@@ -451,7 +452,7 @@ test.describe('model details - boxplots selector - table of contents', () => {
 });
 
 test.describe('model details - boxplots selector - share links - initial load', () => {
-  const basePath = '/models/Abca7*V1599M/biomarkers';
+  const basePath = '/models/Abca7*V1599M/biomarkers?modelOrganism=mouse';
   const tissueDefault = 'Cerebral Cortex';
   const sexDefault = 'Female & Male';
 
@@ -463,14 +464,14 @@ test.describe('model details - boxplots selector - share links - initial load', 
 
   test('sex filter can be set from query parameter', async ({ page }) => {
     const sexFilter = 'Male';
-    await page.goto(`${basePath}?sex=${sexFilter}`);
+    await page.goto(`${basePath}&sex=${sexFilter}`);
     await expect(page.getByRole('combobox', { name: tissueDefault })).toBeVisible();
     await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
   });
 
   test('tissue filter can be set from query parameter', async ({ page }) => {
     const tissueFilter = 'Hippocampus';
-    await page.goto(`${basePath}?tissue=${tissueFilter}`);
+    await page.goto(`${basePath}&tissue=${tissueFilter}`);
     await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
     await expect(page.getByRole('combobox', { name: sexDefault })).toBeVisible();
   });
@@ -478,7 +479,7 @@ test.describe('model details - boxplots selector - share links - initial load', 
   test('sex and tissue filters can be set from query parameters', async ({ page }) => {
     const tissueFilter = 'Hippocampus';
     const sexFilter = 'Male';
-    await page.goto(`${basePath}?tissue=${tissueFilter}&sex=${sexFilter}`);
+    await page.goto(`${basePath}&tissue=${tissueFilter}&sex=${sexFilter}`);
     await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
     await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
   });
@@ -488,7 +489,7 @@ test.describe('model details - boxplots selector - share links - initial load', 
   }) => {
     const tissueFilter = 'Hippocampus';
     const sexFilter = 'Male';
-    await page.goto(`${basePath}?tissue=${tissueFilter}&sex=${sexFilter}#soluble-abeta42`);
+    await page.goto(`${basePath}&tissue=${tissueFilter}&sex=${sexFilter}#soluble-abeta42`);
     await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
     await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
     await expect(
@@ -500,7 +501,7 @@ test.describe('model details - boxplots selector - share links - initial load', 
     const invalidTissue = 'InvalidTissue';
     const invalidSex = 'InvalidSex';
     const fragment = '#soluble-abeta42';
-    await page.goto(`${basePath}?tissue=${invalidTissue}&sex=${invalidSex}${fragment}`);
+    await page.goto(`${basePath}&tissue=${invalidTissue}&sex=${invalidSex}${fragment}`);
     await expect(page.getByRole('combobox', { name: tissueDefault })).toBeVisible();
     await expect(page.getByRole('combobox', { name: sexDefault })).toBeVisible();
     await page.waitForURL(`${basePath}${fragment}`);
@@ -508,7 +509,7 @@ test.describe('model details - boxplots selector - share links - initial load', 
 
   test('does not scroll and removes invalid fragment from url', async ({ page }) => {
     const invalidFragment = 'invalid-section';
-    const queryParam = '?sex=Male';
+    const queryParam = '&sex=Male';
     await page.goto(`${basePath}${queryParam}#${invalidFragment}`);
     await expect(page.getByRole('heading', { level: 1, name: 'Abca7*V1599M' })).toBeInViewport();
     await page.waitForURL(`${basePath}${queryParam}`);
@@ -517,7 +518,7 @@ test.describe('model details - boxplots selector - share links - initial load', 
 
 test.describe('model details - boxplots selector - share links - same-document navigation', () => {
   const modelName = 'Abca7*V1599M';
-  const basePath = `/models/${modelName}/biomarkers?sex=Male`;
+  const basePath = `/models/${modelName}/biomarkers?modelOrganism=mouse&sex=Male`;
   const validFragment = 'nfl';
 
   test('scrolls to section during same-document navigation with same fragment', async ({
@@ -570,7 +571,7 @@ test.describe('model details - boxplots selector - share links - same-document n
 });
 
 test.describe('model details - boxplots selector - share links - updates', () => {
-  const basePath = '/models/Abca7*V1599M/biomarkers';
+  const basePath = '/models/Abca7*V1599M/biomarkers?modelOrganism=mouse';
   const tissueDefault = 'Cerebral Cortex';
 
   test('query parameters are updated when filters change', async ({ page }) => {
@@ -578,21 +579,21 @@ test.describe('model details - boxplots selector - share links - updates', () =>
     const tissueChosen = 'Plasma';
     const sexInitial = 'Male';
     const sexChosen = 'Female';
-    await page.goto(`${basePath}?tissue=${tissueInitial}&sex=${sexInitial}`);
+    await page.goto(`${basePath}&tissue=${tissueInitial}&sex=${sexInitial}`);
 
     await page.getByRole('combobox', { name: tissueInitial }).click();
     await page.getByRole('option', { name: tissueChosen }).click();
 
-    await page.waitForURL(`${basePath}?tissue=${tissueChosen}&sex=${sexInitial}`);
+    await page.waitForURL(`${basePath}&tissue=${tissueChosen}&sex=${sexInitial}`);
 
     await page.getByRole('combobox', { name: sexInitial }).click();
     await page.getByRole('option', { name: sexChosen, exact: true }).click();
 
-    await page.waitForURL(`${basePath}?tissue=${tissueChosen}&sex=${sexChosen}`);
+    await page.waitForURL(`${basePath}&tissue=${tissueChosen}&sex=${sexChosen}`);
   });
 
   test('query parameters are maintained when fragment is updated', async ({ page }) => {
-    const pathWithParams = `${basePath}?tissue=Hippocampus&sex=Male`;
+    const pathWithParams = `${basePath}&tissue=Hippocampus&sex=Male`;
     await page.goto(pathWithParams);
 
     await getTocExpandButton(page).click();
@@ -609,7 +610,7 @@ test.describe('model details - boxplots selector - share links - updates', () =>
     await page.goto(`${basePath}${fragment}`);
     await page.getByRole('combobox', { name: tissueDefault }).click();
     await page.getByRole('option', { name: tissueChosen }).click();
-    await page.waitForURL(`${basePath}?tissue=${tissueChosen}${fragment}`);
+    await page.waitForURL(`${basePath}&tissue=${tissueChosen}${fragment}`);
   });
 
   test('removes fragment that becomes invalid when query parameters are updated', async ({
@@ -620,12 +621,12 @@ test.describe('model details - boxplots selector - share links - updates', () =>
     await page.goto(`${basePath}${fragment}`);
     await page.getByRole('combobox', { name: tissueDefault }).click();
     await page.getByRole('option', { name: tissueChosen }).click();
-    await page.waitForURL(`${basePath}?tissue=${tissueChosen}`);
+    await page.waitForURL(`${basePath}&tissue=${tissueChosen}`);
   });
 });
 
 test.describe('model details - boxplots selector - share links - link button', () => {
-  const basePath = '/models/Abca7*V1599M/biomarkers';
+  const basePath = '/models/Abca7*V1599M/biomarkers?modelOrganism=mouse';
   test('clicking share link button copies link to clipboard and does not update fragment in URL', async ({
     page,
     context,

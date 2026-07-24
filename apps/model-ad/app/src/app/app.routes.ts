@@ -3,6 +3,7 @@ import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { capitalizeFirstLetter } from '@sagebionetworks/explorers/util';
 import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/model-ad/config';
 import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
+import { modelOrganismGuard } from './model-organism.guard';
 
 const modelDetailsData = {
   title: (route: ActivatedRouteSnapshot) => {
@@ -97,18 +98,21 @@ export const routes: Route[] = [
   },
   {
     path: `${ROUTE_PATHS.MODELS}/:name`,
+    canActivate: [modelOrganismGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: modelDetailsData,
   },
   {
     path: `${ROUTE_PATHS.MODELS}/:name/:tab`,
+    canActivate: [modelOrganismGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: modelDetailsData,
   },
   {
     path: `${ROUTE_PATHS.MODELS}/:name/:tab/:subtab`,
+    canActivate: [modelOrganismGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: modelDetailsData,

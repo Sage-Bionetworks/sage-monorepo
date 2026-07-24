@@ -52,6 +52,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   isLoading = true;
 
   model: Model | undefined;
+  modelOrganism: ModelOrganism = ModelOrganism.Mouse;
 
   get mouseModel(): MouseModel | undefined {
     return this.model?.type === 'mouse' ? (this.model as MouseModel) : undefined;
@@ -91,6 +92,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
 
   reset() {
     this.model = undefined;
+    this.modelOrganism = ModelOrganism.Mouse;
     this.activePanel = '';
     this.activeParent = '';
     this.isLoading = true;
@@ -120,6 +122,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   }
 
   private loadPanelData(params: ParamMap, modelOrganism: ModelOrganism) {
+    this.modelOrganism = modelOrganism;
     const modelName = params.get('name');
     if (modelName) {
       this.modelService
@@ -181,7 +184,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     if (fallback) {
       this.activePanel = fallback.activePanel;
       this.activeParent = fallback.activeParent;
-      this.location.replaceState(this.getUrlBasePath());
+      this.location.replaceState(this.appendModelOrganism(this.getUrlBasePath()));
       this.maybeScrollToPanelNavElementOnInitialLoad = false;
     }
   }
@@ -199,12 +202,17 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     return `/${ROUTE_PATHS.MODELS}/${encodedModel}`;
   }
 
+  private appendModelOrganism(url: string) {
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}modelOrganism=${this.modelOrganism}`;
+  }
+
   onPanelChange(event: Panel) {
     const result = this.helperService.handlePanelChange(this.panels, event, this.getUrlBasePath());
     if (result) {
       this.activePanel = result.activePanel;
       this.activeParent = result.activeParent;
-      this.location.replaceState(result.url);
+      this.location.replaceState(this.appendModelOrganism(result.url));
     }
   }
 }
