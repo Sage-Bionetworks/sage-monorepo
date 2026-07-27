@@ -18,7 +18,7 @@ import {
   getProteomicsTMT,
   getRnaDifferentialExpression,
 } from '.';
-import { altCache, cache, setHeaders } from '../helpers';
+import { altCache, cache, CASE_INSENSITIVE_COLLATION, setHeaders } from '../helpers';
 import { Gene, GeneCollection } from '../models';
 import { getSimilarGenesNetwork } from './similar-genes-network';
 
@@ -33,7 +33,11 @@ export async function getAllGenes() {
     return result;
   }
 
-  result = await GeneCollection.find().lean().sort({ hgnc_symbol: 1, ensembl_gene_id: 1 }).exec();
+  result = await GeneCollection.find()
+    .lean()
+    .sort({ hgnc_symbol: 1, ensembl_gene_id: 1 })
+    .collation(CASE_INSENSITIVE_COLLATION)
+    .exec();
 
   altCache.set(cacheKey, result);
   return result;
@@ -119,6 +123,7 @@ export async function getNominatedGenes() {
     )
     .lean()
     .sort({ nominations: -1, hgnc_symbol: 1 })
+    .collation(CASE_INSENSITIVE_COLLATION)
     .exec();
 
   cache.set(cacheKey, result);

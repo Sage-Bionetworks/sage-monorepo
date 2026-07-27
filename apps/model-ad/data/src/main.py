@@ -4,6 +4,7 @@ import logging
 import logging.config as logging_config
 from os import getenv, getcwd, makedirs, path
 from pymongo import MongoClient, database
+from pymongo.collation import Collation
 import subprocess
 import synapseclient
 
@@ -140,9 +141,14 @@ def create_collections_indexes(
             collection = db.get_collection(collection_name)
             for index in indexes:
                 collection.create_index(list(index.items()))
+            for index in collection_index_data.get("collatedIndexes", []):
+                key = list(index.items())
+                name = "_".join(f"{k}_{v}" for k, v in key) + "_collated"
+                collection.create_index(
+                    key, name=name, collation=Collation("en", strength=2)
+                )
             logger.debug(
-                "Created %d indexes for collection '%s' successfully",
-                len(indexes),
+                "Created indexes for collection '%s' successfully",
                 collection_name,
             )
     logger.debug("All indexes created successfully")
