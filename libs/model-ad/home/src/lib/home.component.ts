@@ -15,6 +15,11 @@ interface Stat {
   value: string;
 }
 
+interface OrganismContent {
+  methodologyDescription: string;
+  stats: Stat[];
+}
+
 @Component({
   selector: 'model-ad-home',
   imports: [ToggleCardComponent, HomeCardComponent, SvgImageComponent, SearchInputComponent],
@@ -69,20 +74,48 @@ export class HomeComponent {
     }
   }
 
-  stats: Stat[] = [
-    {
-      label: 'Institutions',
-      value: '5+',
+  private readonly organismContentByModelOrganism: Record<ModelOrganism, OrganismContent> = {
+    mouse: {
+      methodologyDescription:
+        "MODEL-AD comprises two research centers with complementary approaches to generating new mouse models that more faithfully recapitulate features of Alzheimer's disease in humans. Mouse models are phenotyped using standardized neuropathology, 'omics, and behavioral measures.",
+      stats: [
+        {
+          label: 'Institutions',
+          value: '5+',
+        },
+        {
+          label: 'Genes',
+          value: '20K+',
+        },
+        {
+          label: 'Models',
+          value: '15+',
+        },
+      ],
     },
-    {
-      label: 'Genes',
-      value: '20K+',
+    marmoset: {
+      methodologyDescription:
+        "MARMO-AD is establishing marmoset models of Alzheimer's disease to identify emerging phenotypes and illuminate mechanisms underlying pathogenesis. Marmoset models are assessed for genetic, molecular, functional, behavioral, and pathological phenotypes to reveal the earliest cellular and molecular events of primate-specific aging and dementia.",
+      stats: [
+        {
+          label: 'Institutions',
+          value: '5+',
+        },
+        {
+          label: 'Genes',
+          value: '30K+',
+        },
+        {
+          label: 'Models',
+          value: '1+',
+        },
+      ],
     },
-    {
-      label: 'Models',
-      value: '15+',
-    },
-  ];
+  };
+
+  readonly organismContent = computed(
+    () => this.organismContentByModelOrganism[this.selectedModelOrganism()],
+  );
 
   constructor() {
     this.breakpointObserver

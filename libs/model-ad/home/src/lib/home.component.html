@@ -6,8 +6,8 @@
           <h1 class="home-heading">Find the right model for your research</h1>
         </div>
         <p class="description">
-          Explore next-generation mouse models of Alzheimer's Disease (AD) generated, characterized,
-          and validated by the MODEL-AD consortium.
+          Explore the phenotypic characterization of next-generation models of Alzheimer's Disease
+          (AD) developed by the MODEL-AD consortium and MARMO-AD.
         </p>
       </div>
       <div class="models-panel">
@@ -81,7 +81,7 @@
       </div>
       <div class="stats-container">
         <div class="stats-arc-bg" [style.background-image]="'url(' + lowerArcImage() + ')'"></div>
-        @for (stat of stats; track stat) {
+        @for (stat of organismContent().stats; track stat.label) {
           <div class="stat">
             <h3 class="stat-label">{{ stat.label }}</h3>
             <p class="stat-value">{{ stat.value }}</p>
@@ -92,12 +92,7 @@
         <div class="methodology-text">
           <h3>How it Works</h3>
           <h1 class="home-heading">Our Methodology</h1>
-          <p class="description mb-lg">
-            MODEL-AD comprises two research centers with complementary approaches to generating new
-            mouse models that more faithfully recapitulate features of Alzheimer's disease in
-            humans. Mouse models are phenotyped using standardized neuropathology, 'omics, and
-            behavioral measures.
-          </p>
+          <p class="description mb-lg">{{ organismContent().methodologyDescription }}</p>
         </div>
         <div class="methodology-image">
           <explorers-svg-image

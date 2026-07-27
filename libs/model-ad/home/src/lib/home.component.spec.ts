@@ -67,6 +67,30 @@ describe('HomeComponent', () => {
     });
   });
 
+  describe('organism-specific content', () => {
+    it('should show the mouse methodology description and stats by default', async () => {
+      await setup();
+      expect(screen.getByText(/MODEL-AD comprises two research centers/i)).toBeInTheDocument();
+      expect(screen.getByText('20K+')).toBeInTheDocument();
+      expect(screen.getByText('15+')).toBeInTheDocument();
+    });
+
+    it('should show the marmoset methodology description and stats when marmoset is selected', async () => {
+      const user = userEvent.setup();
+      await setup();
+
+      await user.click(screen.getByText('Marmoset Models'));
+
+      expect(
+        screen.getByText(/MARMO-AD is establishing marmoset models of Alzheimer's disease/i),
+      ).toBeInTheDocument();
+      expect(screen.getByText('30K+')).toBeInTheDocument();
+      expect(screen.getByText('1+')).toBeInTheDocument();
+      expect(screen.queryByText('20K+')).not.toBeInTheDocument();
+      expect(screen.queryByText(/MODEL-AD comprises/i)).not.toBeInTheDocument();
+    });
+  });
+
   describe('hero arc images', () => {
     it('should use the desktop upper arc when the viewport is wide', async () => {
       const { fixture } = await setup(false);
