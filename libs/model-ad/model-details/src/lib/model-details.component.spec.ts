@@ -86,6 +86,17 @@ describe('ModelDetailsComponent', () => {
         expect.anything(),
       );
     });
+
+    it('should fetch the marmoset model when modelOrganism is marmoset with wrong casing', async () => {
+      const { getModelByName } = await setup(marmosetModelMock, 'omics', null, null, 'Marmoset');
+      expect(getModelByName).toHaveBeenCalledWith(
+        ModelOrganism.Marmoset,
+        marmosetModelMock.name,
+        'body',
+        false,
+        expect.anything(),
+      );
+    });
   });
 
   describe('mouse model', () => {

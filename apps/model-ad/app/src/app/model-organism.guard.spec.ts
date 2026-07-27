@@ -42,8 +42,16 @@ describe('modelOrganismGuard', () => {
     );
   });
 
-  it('should redirect and normalize a wrong-case organism to mouse', () => {
+  it('should redirect and lowercase a wrong-case organism', () => {
     const result = runGuard('/models/APOE4?modelOrganism=Marmoset', { modelOrganism: 'Marmoset' });
+    expect(result).toBeInstanceOf(UrlTree);
+    expect(router.serializeUrl(result as UrlTree)).toBe(
+      `/models/APOE4?modelOrganism=${ModelOrganism.Marmoset}`,
+    );
+  });
+
+  it('should redirect and lowercase a wrong-case mouse value', () => {
+    const result = runGuard('/models/APOE4?modelOrganism=MOUSE', { modelOrganism: 'MOUSE' });
     expect(result).toBeInstanceOf(UrlTree);
     expect(router.serializeUrl(result as UrlTree)).toBe(
       `/models/APOE4?modelOrganism=${ModelOrganism.Mouse}`,

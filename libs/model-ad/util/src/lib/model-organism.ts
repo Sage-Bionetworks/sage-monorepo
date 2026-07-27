@@ -7,5 +7,6 @@ export function isModelOrganism(value: unknown): value is ModelOrganism {
 }
 
 export function resolveModelOrganism(raw: unknown): ModelOrganism {
-  return isModelOrganism(raw) ? raw : ModelOrganism.Mouse;
+  const normalized = typeof raw === 'string' ? raw.toLowerCase() : raw;
+  return isModelOrganism(normalized) ? normalized : ModelOrganism.Mouse;
 }

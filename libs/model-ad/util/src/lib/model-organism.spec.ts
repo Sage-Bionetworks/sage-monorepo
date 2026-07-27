@@ -32,12 +32,17 @@ describe('model-organism', () => {
       expect(resolveModelOrganism('marmoset')).toBe(ModelOrganism.Marmoset);
     });
 
-    it('should fall back to mouse for absent, empty, unknown, or wrong-case values', () => {
+    it('should match case-insensitively', () => {
+      expect(resolveModelOrganism('Mouse')).toBe(ModelOrganism.Mouse);
+      expect(resolveModelOrganism('Marmoset')).toBe(ModelOrganism.Marmoset);
+      expect(resolveModelOrganism('MARMOSET')).toBe(ModelOrganism.Marmoset);
+    });
+
+    it('should fall back to mouse for absent, empty, or unknown values', () => {
       expect(resolveModelOrganism(null)).toBe(ModelOrganism.Mouse);
       expect(resolveModelOrganism(undefined)).toBe(ModelOrganism.Mouse);
       expect(resolveModelOrganism('')).toBe(ModelOrganism.Mouse);
       expect(resolveModelOrganism('rat')).toBe(ModelOrganism.Mouse);
-      expect(resolveModelOrganism('Marmoset')).toBe(ModelOrganism.Mouse);
     });
   });
 });

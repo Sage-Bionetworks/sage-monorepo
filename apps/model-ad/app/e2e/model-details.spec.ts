@@ -63,6 +63,15 @@ test.describe('model details', () => {
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
   });
 
+  test('loads marmoset data when modelOrganism query param has wrong casing', async ({ page }) => {
+    const model = 'Presenilin 1';
+    const modelPath = `/models/${encodeURIComponent(model)}`;
+    await page.goto(`${modelPath}?modelOrganism=Marmoset`);
+    await page.waitForURL(`${modelPath}?modelOrganism=marmoset`);
+    await expect(page).toHaveTitle(`Marmoset Model Details | ${model} AD model`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+  });
+
   test('default tab is omics for model with omics data', async ({ page }) => {
     await page.goto('/models/APOE4?modelOrganism=mouse');
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();

@@ -8,8 +8,8 @@ import {
 import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
 
 // Ensures every model-details URL carries a valid modelOrganism query param.
-// Missing, invalid, or wrong-case values are normalized (defaulting to mouse) via a redirect,
-// so legacy URLs land on the canonical form and the param survives reloads and sharing.
+// Wrong-case values are lowercased and missing or unknown values default to mouse, both via a
+// redirect, so legacy URLs land on the canonical form and the param survives reloads and sharing.
 export const modelOrganismGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
