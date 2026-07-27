@@ -296,7 +296,7 @@ class ComparisonToolRepositorySupportTest {
 
     @Override
     protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
-      return Map.of("name", ComputedSortField.of(toLowerExpr("name")));
+      return Map.of("name", ComputedSortField.of(new Document("$toLower", "$name")));
     }
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
@@ -339,7 +339,7 @@ class ComparisonToolRepositorySupportTest {
 
       return Map.of(
         "gene_symbol",
-        ComputedSortField.of(toLowerExpr("display_gene_symbol")).withPrerequisite(prereq)
+        ComputedSortField.of(new Document("$toLower", "$display_gene_symbol")).withPrerequisite(prereq)
       );
     }
 

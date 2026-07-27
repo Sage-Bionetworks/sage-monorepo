@@ -50,9 +50,9 @@ public class CustomMarmosetModelOverviewRepositoryImpl
   protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
     return Map.of(
       "modified_genes",
-      ComputedSortField.of(arrayToLoweredStringExpr("modified_genes")),
+      ComputedSortField.of(arrayToStringExpr("modified_genes")),
       "available_data",
-      ComputedSortField.of(arrayToLoweredStringExpr("available_data"))
+      ComputedSortField.of(arrayToStringExpr("available_data"))
     );
   }
 

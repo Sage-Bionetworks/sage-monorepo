@@ -96,7 +96,7 @@ $sort           ← field names resolved via aliases and computed fields
 $skip / $limit
 ```
 
-Stages in brackets are omitted when not needed (e.g. no computed sort field requested, or sort is unsorted). The `allowDiskUse: true` option is set on every CT aggregation.
+Stages in brackets are omitted when not needed (e.g. no computed sort field requested, or sort is unsorted). The `allowDiskUse: true` option and `collation: {locale: "en", strength: 2}` (case-insensitive) are set on every CT aggregation.
 
 ## Hooks to override
 
@@ -110,10 +110,10 @@ Stages in brackets are omitted when not needed (e.g. no computed sort field requ
 
 ### Sort configuration
 
-| Method                              | What it returns                            | When to override                                                           |
-| ----------------------------------- | ------------------------------------------ | -------------------------------------------------------------------------- |
-| `getComputedSortFieldExpressions()` | `Map<String, ComputedSortField>`           | String columns (case-insensitive), array columns, computed/fallback fields |
-| `getSortFieldAliases()`             | `Map<String, String>` field → aliased path | Nested object columns, companion numeric fields                            |
+| Method                              | What it returns                            | When to override                                                      |
+| ----------------------------------- | ------------------------------------------ | --------------------------------------------------------------------- |
+| `getComputedSortFieldExpressions()` | `Map<String, ComputedSortField>`           | Array columns, computed/fallback fields                               |
+| `getSortFieldAliases()`             | `Map<String, String>` field → aliased path | Nested string fields, nested object columns, companion numeric fields |
 
 ### Optional
 
@@ -129,19 +129,19 @@ Choose the right hook for each column type. Using the wrong hook produces silent
 
 ### 1. Plain scalar string column
 
-Use `getComputedSortFieldExpressions()` with `toLowerExpr()` for case-insensitive sort. Dot-path notation works for nested fields:
+No hook needed -- pipeline-level collation (`strength: 2`) makes all string sorts case-insensitive automatically. For nested fields (e.g. `name.link_text`), use `getSortFieldAliases()` to redirect to the child path:
 
 ```java
-"model_type", ComputedSortField.of(toLowerExpr("model_type")),
-"name",       ComputedSortField.of(toLowerExpr("name.link_text"))  // nested child field
+// In getSortFieldAliases():
+"name", "name.link_text"
 ```
 
 ### 2. Array column
 
-Use `getComputedSortFieldExpressions()` with `arrayToLoweredStringExpr()`. This reduces the array to a NUL-separated lowercase string so `$sort` produces a stable, human-readable order. Do NOT use `getSortFieldAliases()` for array fields.
+Use `getComputedSortFieldExpressions()` with `arrayToStringExpr()`. This reduces the array to a NUL-separated string so `$sort` produces a stable, human-readable order. Case-insensitive comparison is handled by pipeline-level collation. Do NOT use `getSortFieldAliases()` for array fields.
 
 ```java
-"nominating_teams", ComputedSortField.of(arrayToLoweredStringExpr("nominating_teams"))
+"nominating_teams", ComputedSortField.of(arrayToStringExpr("nominating_teams"))
 ```
 
 ### 3. Nested object column (heatmap cell, time-point bucket)
@@ -178,7 +178,7 @@ Also add the field to `getSortFieldAliases()` so the isEmpty flag checks the com
 ```java
 // In getComputedSortFieldExpressions():
 GENE_SYMBOL_FIELD,
-ComputedSortField.of(toLowerExpr(DISPLAY_GENE_SYMBOL_FIELD))
+ComputedSortField.of("$" + DISPLAY_GENE_SYMBOL_FIELD)
   .withPrerequisite(buildDisplayGeneSymbolField())
 
 // In getSortFieldAliases():

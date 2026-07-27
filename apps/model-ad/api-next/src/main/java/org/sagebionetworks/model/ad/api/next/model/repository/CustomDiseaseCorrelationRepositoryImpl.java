@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
-import org.sagebionetworks.explorers.ComputedSortField;
 import org.sagebionetworks.explorers.CtFilterConfig;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationIdentifier;
@@ -45,26 +44,6 @@ public class CustomDiseaseCorrelationRepositoryImpl
   @Override
   protected Class<DiseaseCorrelationDocument> getDocumentClass() {
     return DiseaseCorrelationDocument.class;
-  }
-
-  /**
-   * Case-insensitive sort: each string field gets a lowercase {@code _sort} alias
-   * (DocumentDB-compatible).
-   */
-  @Override
-  protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
-    return Map.of(
-      "name",
-      ComputedSortField.of(toLowerExpr("name")),
-      "sex",
-      ComputedSortField.of(toLowerExpr("sex")),
-      "model_type",
-      ComputedSortField.of(toLowerExpr("model_type")),
-      "matched_control",
-      ComputedSortField.of(toLowerExpr("matched_control")),
-      "cluster",
-      ComputedSortField.of(toLowerExpr("cluster"))
-    );
   }
 
   /**
