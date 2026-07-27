@@ -17,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app")
 public record AppProperties(
   @NotBlank(message = "Welcome message must not be blank") String welcomeMessage,
-  /** Base URL of UI (Gradio) used for post-login redirect */
+  /** Base URL of UI used for post-login redirect */
   @NotBlank(message = "UI base URL must not be blank") String uiBaseUrl,
   @Valid @NotNull Auth auth,
   @Valid @NotNull SessionCookie sessionCookie,

@@ -54,7 +54,7 @@ public class SessionToJwtFilter implements WebFilter {
     boolean anonymousAllowed = routeConfigRegistry.isAnonymousAccessAllowed(method, path);
 
     // Step 1: Check if request already has a Bearer token
-    // (e.g., from server-side clients like Gradio app)
+    // (e.g., from server-side clients)
     String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
       log.debug("Request already has Bearer token, passing through: {} {}", method, path);
