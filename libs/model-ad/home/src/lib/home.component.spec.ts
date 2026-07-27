@@ -8,8 +8,10 @@ import userEvent from '@testing-library/user-event';
 import { BehaviorSubject } from 'rxjs';
 import { HomeComponent } from './home.component';
 
-const mobileBgImage = 'model-ad-assets/images/home-arc-bg-mobile.svg';
-const desktopBgImage = 'model-ad-assets/images/home-arc-bg.svg';
+const upperArcDesktop = 'model-ad-assets/images/home-arc-bg-upper.svg';
+const upperArcMobile = 'model-ad-assets/images/home-arc-bg-upper-mobile.svg';
+const lowerArcDesktop = 'model-ad-assets/images/home-arc-bg-lower.svg';
+const lowerArcMobile = 'model-ad-assets/images/home-arc-bg-lower-mobile.svg';
 
 function createMockBreakpointObserver(matches: boolean) {
   const breakpointSubject = new BehaviorSubject<BreakpointState>({
@@ -65,28 +67,55 @@ describe('HomeComponent', () => {
     });
   });
 
-  describe('background image breakpoint logic', () => {
-    it('should initialize with desktop background image when viewport is wide', async () => {
+  describe('organism-specific content', () => {
+    it('should show the mouse methodology description and stats by default', async () => {
+      await setup();
+      expect(screen.getByText(/MODEL-AD comprises two research centers/i)).toBeInTheDocument();
+      expect(screen.getByText('20K+')).toBeInTheDocument();
+      expect(screen.getByText('15+')).toBeInTheDocument();
+    });
+
+    it('should show the marmoset methodology description and stats when marmoset is selected', async () => {
+      const user = userEvent.setup();
+      await setup();
+
+      await user.click(screen.getByText('Marmoset Models'));
+
+      expect(
+        screen.getByText(/MARMO-AD is establishing marmoset models of Alzheimer's disease/i),
+      ).toBeInTheDocument();
+      expect(screen.getByText('30K+')).toBeInTheDocument();
+      expect(screen.getByText('1+')).toBeInTheDocument();
+      expect(screen.queryByText('20K+')).not.toBeInTheDocument();
+      expect(screen.queryByText(/MODEL-AD comprises/i)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('hero arc images', () => {
+    it('should use the desktop upper arc when the viewport is wide', async () => {
       const { fixture } = await setup(false);
-      expect(fixture.componentInstance.backgroundImage()).toBe(desktopBgImage);
+      expect(fixture.componentInstance.upperArcImage()).toBe(upperArcDesktop);
     });
 
-    it('should initialize with mobile background image when viewport is narrow', async () => {
+    it('should use the mobile arcs when the viewport is narrow', async () => {
       const { fixture } = await setup(true);
-      expect(fixture.componentInstance.backgroundImage()).toBe(mobileBgImage);
+      expect(fixture.componentInstance.upperArcImage()).toBe(upperArcMobile);
+      expect(fixture.componentInstance.lowerArcImage()).toBe(lowerArcMobile);
     });
 
-    it('should update background image when breakpoint changes', async () => {
+    it('should swap both arcs when the breakpoint changes', async () => {
       const { fixture, mockBreakpointObserver } = await setup(false);
 
-      expect(fixture.componentInstance.backgroundImage()).toBe(desktopBgImage);
+      expect(fixture.componentInstance.upperArcImage()).toBe(upperArcDesktop);
+      expect(fixture.componentInstance.lowerArcImage()).toBe(lowerArcDesktop);
 
       mockBreakpointObserver.subject.next({
         matches: true,
         breakpoints: { '(width < 850px)': true },
       });
 
-      expect(fixture.componentInstance.backgroundImage()).toBe(mobileBgImage);
+      expect(fixture.componentInstance.upperArcImage()).toBe(upperArcMobile);
+      expect(fixture.componentInstance.lowerArcImage()).toBe(lowerArcMobile);
     });
   });
 });
