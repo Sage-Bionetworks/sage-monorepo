@@ -94,11 +94,8 @@ explorers-home-card {
   justify-content: center;
   padding: 70px 0 40px;
 
-  // Full-bleed lower arc that sits behind the stats. Anchored to this element (not a fixed
-  // page offset) so it tracks the stats regardless of the content height above. The arc is a
-  // thin curved ribbon with transparent space below it, so the layer is taller than the stats
-  // row to reveal the ribbon's full curved bottom (it dips lower toward the viewport edges, so
-  // the height scales with width). The overflow is transparent and sits behind later sections.
+  // Anchored to the stats so it tracks them as the content height above changes. The ribbon dips
+  // lower toward the viewport edges, so the layer runs taller than the stats row to reveal it.
   .stats-arc-bg {
     position: absolute;
     top: 0;
@@ -152,13 +149,8 @@ explorers-home-card {
 }
 
 @media (width < $home-mobile-md-max-width) {
-  // Mobile uses its own 6-loop arc split (home-arc-bg-upper-mobile / -lower-mobile). The upper arc
-  // is scaled up (background-size wider than the 1280px artwork) so only a small, gentle slice of
-  // each loop is shown -- at intrinsic size the visible curve is too steep on a phone. It is
-  // anchored with a fixed offset (not `center`) so the framing is identical at every viewport
-  // width -- centering slides the crop window as the width changes, which cut off the second arc's
-  // left edge at some widths. The vertical offset drops the first band to the first card (the
-  // model-organism toggle), not behind the heading, per the Figma design.
+  // Scaled past the artwork's 1280px width to show a gentler slice of the arc, and offset by a
+  // fixed amount rather than centered so the crop stays put as the viewport width changes.
   #home-page {
     background-size: 1800px auto;
     background-position: -600px 0;

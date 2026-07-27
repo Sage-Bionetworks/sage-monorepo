@@ -32,9 +32,8 @@ export class HomeComponent {
   // Must match $home-mobile-md-max-width in home.component.scss
   private readonly MOBILE_BREAKPOINT = 850;
 
-  // The hero arc is split into an upper decorative arc (anchored to the top of the page) and a
-  // lower arc that sits behind the stats, tracking them regardless of the content height above
-  // (which changes with the selected model organism). Each breakpoint uses its own artwork.
+  // Split so the lower arc can be anchored to the stats, whose offset shifts with the selected
+  // model organism.
   private readonly upperArcImageDesktop = 'model-ad-assets/images/home-arc-bg-upper.svg';
   private readonly upperArcImageMobile = 'model-ad-assets/images/home-arc-bg-upper-mobile.svg';
   private readonly lowerArcImageDesktop = 'model-ad-assets/images/home-arc-bg-lower.svg';
