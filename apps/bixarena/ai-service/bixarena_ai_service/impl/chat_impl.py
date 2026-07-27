@@ -3,7 +3,7 @@
 Proxies chat messages to an OpenAI-compatible LLM provider
 and returns the response as an SSE stream of ModelChatCompletionChunk events.
 
-Key behaviours ported from the Gradio frontend:
+Key behaviours:
 - System prompt injection (identity guard)
 - System-role guardrail: reject caller-supplied system messages
 - System message retry for models that don't support the system role
