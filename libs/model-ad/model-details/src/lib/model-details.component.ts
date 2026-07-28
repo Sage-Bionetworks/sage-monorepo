@@ -3,16 +3,16 @@ import { HttpContext } from '@angular/common/http';
 import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Panel, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { Panel } from '@sagebionetworks/explorers/models';
 import {
   HelperService,
   LoggerService,
   PlatformService,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
-import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import {
+  MarmosetModel,
   Model,
   ModelOrganism,
   ModelService,
@@ -21,20 +21,23 @@ import {
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
-import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
-import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
-import { ModelDetailsResourcesComponent } from './components/model-details-resources/model-details-resources.component';
-import { MouseModelDetailsBoxplotsSelectorComponent } from './components/mouse-model-details-boxplots-selector/mouse-model-details-boxplots-selector.component';
+import { MarmosetModelDetailsContentComponent } from './components/marmoset-model-details-content/marmoset-model-details-content.component';
+import {
+  getPanels as getMarmosetPanels,
+  getPanelsWithDisabledState as getMarmosetPanelsWithDisabledState,
+} from './components/marmoset-model-details-content/marmoset-model-details-panels';
+import { MouseModelDetailsContentComponent } from './components/mouse-model-details-content/mouse-model-details-content.component';
+import {
+  getPanels as getMousePanels,
+  getPanelsWithDisabledState as getMousePanelsWithDisabledState,
+} from './components/mouse-model-details-content/mouse-model-details-panels';
 
 @Component({
   selector: 'model-ad-model-details',
   imports: [
-    PanelNavigationComponent,
     LoadingIconComponent,
-    ModelDetailsOmicsComponent,
-    ModelDetailsResourcesComponent,
-    ModelDetailsHeroComponent,
-    MouseModelDetailsBoxplotsSelectorComponent,
+    MouseModelDetailsContentComponent,
+    MarmosetModelDetailsContentComponent,
   ],
   templateUrl: './model-details.component.html',
   styleUrls: ['./model-details.component.scss'],
@@ -47,7 +50,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   modelService = inject(ModelService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
-  private logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService);
 
   isLoading = true;
 
@@ -58,31 +61,11 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     return this.model?.type === 'mouse' ? (this.model as MouseModel) : undefined;
   }
 
-  biomarkersWikiParams: SynapseWikiParams = { ownerId: 'syn66271427', wikiId: '632871' };
-  pathologyWikiParams: SynapseWikiParams = { ownerId: 'syn66271427', wikiId: '632872' };
+  get marmosetModel(): MarmosetModel | undefined {
+    return this.model?.type === 'marmoset' ? (this.model as MarmosetModel) : undefined;
+  }
 
-  panels: Panel[] = [
-    {
-      name: 'omics',
-      label: 'Omics',
-      disabled: false,
-    },
-    {
-      name: 'biomarkers',
-      label: 'Biomarkers',
-      disabled: false,
-    },
-    {
-      name: 'pathology',
-      label: 'Pathology',
-      disabled: false,
-    },
-    {
-      name: 'resources',
-      label: 'Resources',
-      disabled: false,
-    },
-  ];
+  panels: Panel[] = getMousePanels();
 
   activePanel = '';
   activeParent = '';
@@ -133,8 +116,8 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
         .subscribe({
           next: (model: Model) => {
             this.model = model;
+            this.panels = this.buildPanels(model);
             this.setActivePanelAndParentFromUrl(params);
-            this.updatePanelDisabledState();
             this.changePanelAndUrlIfInitialActivePanelIsInvalid();
             this.scrollToPanelNavElementOnInitialLoad =
               this.maybeScrollToPanelNavElementOnInitialLoad;
@@ -151,23 +134,14 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private updatePanelDisabledState() {
-    const mouseModel = this.mouseModel;
-    this.panels.forEach((p: Panel) => {
-      if (p.name === 'biomarkers' && mouseModel?.biomarkers.length === 0) {
-        p.disabled = true;
-      } else if (p.name === 'pathology' && mouseModel?.pathology.length === 0) {
-        p.disabled = true;
-      } else if (
-        p.name === 'omics' &&
-        mouseModel?.transcriptomics === null &&
-        mouseModel?.disease_correlation === null
-      ) {
-        p.disabled = true;
-      } else {
-        p.disabled = false;
-      }
-    });
+  private buildPanels(model: Model): Panel[] {
+    switch (model.type) {
+      case 'marmoset':
+        return getMarmosetPanelsWithDisabledState(model as MarmosetModel, getMarmosetPanels());
+      case 'mouse':
+      default:
+        return getMousePanelsWithDisabledState(model as MouseModel, getMousePanels());
+    }
   }
 
   private setActivePanelAndParentFromUrl(params: ParamMap) {

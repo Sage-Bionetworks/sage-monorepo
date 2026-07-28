@@ -1,0 +1,36 @@
+<model-ad-model-details-hero [model]="model()" />
+<explorers-panel-navigation
+  [panels]="panels()"
+  (panelChange)="panelChange.emit($event)"
+  [activePanel]="activePanel()"
+  [activeParent]="activeParent()"
+  [scrollToPanelNavElementOnInitialLoad]="scrollToPanelNavElementOnInitialLoad()"
+/>
+<div class="panel-content">
+  @switch (activePanel()) {
+    @case ('omics') {
+      <model-ad-model-details-omics [model]="model()" />
+    }
+    @case ('biomarkers') {
+      <model-ad-mouse-model-details-boxplots-selector
+        [title]="'Biomarkers'"
+        [modelName]="model().name"
+        [modelControls]="model().matched_controls"
+        [modelDataList]="model().biomarkers"
+        [wikiParams]="biomarkersWikiParams"
+      />
+    }
+    @case ('pathology') {
+      <model-ad-mouse-model-details-boxplots-selector
+        [title]="'Pathology'"
+        [modelName]="model().name"
+        [modelControls]="model().matched_controls"
+        [modelDataList]="model().pathology"
+        [wikiParams]="pathologyWikiParams"
+      />
+    }
+    @case ('resources') {
+      <model-ad-model-details-resources [model]="model()" />
+    }
+  }
+</div>

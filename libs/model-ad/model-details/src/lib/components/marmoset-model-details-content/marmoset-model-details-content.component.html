@@ -1,0 +1,20 @@
+<h1>{{ model().name }}</h1>
+<explorers-panel-navigation
+  [panels]="panels()"
+  (panelChange)="panelChange.emit($event)"
+  [activePanel]="activePanel()"
+  [activeParent]="activeParent()"
+  [scrollToPanelNavElementOnInitialLoad]="scrollToPanelNavElementOnInitialLoad()"
+/>
+<div class="panel-content">
+  @switch (activePanel()) {
+    @case ('biomarkers') {
+      <model-ad-marmoset-model-details-boxplots-selector
+        [title]="'Plasma Biomarkers'"
+        [modelName]="model().name"
+        [modelDataList]="model().biomarkers"
+        [wikiParams]="plasmaBiomarkersWikiParams"
+      />
+    }
+  }
+</div>
