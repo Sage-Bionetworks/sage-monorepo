@@ -6,8 +6,8 @@ import org.sagebionetworks.model.ad.api.next.model.document.MouseModelDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneticInfoDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDataDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +44,7 @@ public class MouseModelMapper {
       : document.getPathology().stream().map(modelDataMapper::toDto).toList();
 
     return new MouseModelDto(
-      OrganismDto.MOUSE.getValue(),
+      ModelOrganismDto.MOUSE.getValue(),
       document.getName(),
       matchedControls,
       document.getModelType(),

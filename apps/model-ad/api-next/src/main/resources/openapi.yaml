@@ -274,19 +274,19 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Transcriptomics Individual
-  /models/{organism}/{name}:
+  /models/{modelOrganism}/{name}:
     get:
       description: Retrieve detailed information for a specific model by its name
-        and organism type.
+        and model organism type.
       operationId: getModelByName
       parameters:
-        - description: 'The type of organism (e.g., mouse, marmoset)'
+        - description: 'The type of model organism (e.g., mouse, marmoset)'
           explode: false
           in: path
-          name: organism
+          name: modelOrganism
           required: true
           schema:
-            $ref: '#/components/schemas/Organism'
+            $ref: '#/components/schemas/ModelOrganism'
           style: simple
         - description: Name of the model to retrieve
           explode: false
@@ -1924,8 +1924,8 @@ components:
         - tissue
         - units
       type: object
-    Organism:
-      description: Organism
+    ModelOrganism:
+      description: Model organism
       enum:
         - marmoset
         - mouse
@@ -2105,7 +2105,7 @@ components:
         transcriptomics: transcriptomics
       properties:
         type:
-          description: Organism discriminator (always "mouse" for this schema)
+          description: Model organism discriminator (always "mouse" for this schema)
           type: string
         name:
           description: Name of the model
@@ -2191,7 +2191,7 @@ components:
       description: Marmoset model details
       properties:
         type:
-          description: Organism discriminator (always "marmoset" for this schema)
+          description: Model organism discriminator (always "marmoset" for this schema)
           type: string
         name:
           description: Name of the model

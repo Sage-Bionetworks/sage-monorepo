@@ -3,7 +3,7 @@ package org.sagebionetworks.model.ad.api.next.configuration;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelIdentifierTypeDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
 
 import org.springframework.context.annotation.Bean;
@@ -40,12 +40,12 @@ public class EnumConverterConfiguration {
             }
         };
     }
-    @Bean(name = "org.sagebionetworks.model.ad.api.next.configuration.EnumConverterConfiguration.organismConverter")
-    Converter<String, OrganismDto> organismConverter() {
-        return new Converter<String, OrganismDto>() {
+    @Bean(name = "org.sagebionetworks.model.ad.api.next.configuration.EnumConverterConfiguration.modelOrganismConverter")
+    Converter<String, ModelOrganismDto> modelOrganismConverter() {
+        return new Converter<String, ModelOrganismDto>() {
             @Override
-            public OrganismDto convert(String source) {
-                return OrganismDto.fromValue(source);
+            public ModelOrganismDto convert(String source) {
+                return ModelOrganismDto.fromValue(source);
             }
         };
     }

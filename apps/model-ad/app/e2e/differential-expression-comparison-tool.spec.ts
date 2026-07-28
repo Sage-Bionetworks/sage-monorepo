@@ -334,7 +334,9 @@ test.describe('differential expression', () => {
     await link.click();
     const popup = await popupPromise;
 
-    await popup.waitForURL((url) => url.toString().endsWith(`/models/${specialModelEncoded}`));
+    await popup.waitForURL((url) =>
+      url.toString().endsWith(`/models/${specialModelEncoded}?modelOrganism=mouse`),
+    );
     await expect(popup.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
   });
 

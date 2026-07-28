@@ -27,7 +27,7 @@ import { BasicError } from '../model/basic-error';
 // @ts-ignore
 import { Model } from '../model/model';
 // @ts-ignore
-import { Organism } from '../model/organism';
+import { ModelOrganism } from '../model/model-organism';
 // @ts-ignore
 import { SearchResult } from '../model/search-result';
 
@@ -112,14 +112,14 @@ export class ModelService {
 
   /**
    * Get details for a specific model
-   * Retrieve detailed information for a specific model by its name and organism type.
-   * @param organism The type of organism (e.g., mouse, marmoset)
+   * Retrieve detailed information for a specific model by its name and model organism type.
+   * @param modelOrganism The type of model organism (e.g., mouse, marmoset)
    * @param name Name of the model to retrieve
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getModelByName(
-    organism: Organism,
+    modelOrganism: ModelOrganism,
     name: string,
     observe?: 'body',
     reportProgress?: boolean,
@@ -130,7 +130,7 @@ export class ModelService {
     },
   ): Observable<Model>;
   public getModelByName(
-    organism: Organism,
+    modelOrganism: ModelOrganism,
     name: string,
     observe?: 'response',
     reportProgress?: boolean,
@@ -141,7 +141,7 @@ export class ModelService {
     },
   ): Observable<HttpResponse<Model>>;
   public getModelByName(
-    organism: Organism,
+    modelOrganism: ModelOrganism,
     name: string,
     observe?: 'events',
     reportProgress?: boolean,
@@ -152,7 +152,7 @@ export class ModelService {
     },
   ): Observable<HttpEvent<Model>>;
   public getModelByName(
-    organism: Organism,
+    modelOrganism: ModelOrganism,
     name: string,
     observe: any = 'body',
     reportProgress: boolean = false,
@@ -162,9 +162,9 @@ export class ModelService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (organism === null || organism === undefined) {
+    if (modelOrganism === null || modelOrganism === undefined) {
       throw new Error(
-        'Required parameter organism was null or undefined when calling getModelByName.',
+        'Required parameter modelOrganism was null or undefined when calling getModelByName.',
       );
     }
     if (name === null || name === undefined) {
@@ -204,7 +204,7 @@ export class ModelService {
       }
     }
 
-    let localVarPath = `/models/${this.configuration.encodeParam({ name: 'organism', value: organism, in: 'path', style: 'simple', explode: false, dataType: 'Organism', dataFormat: undefined })}/${this.configuration.encodeParam({ name: 'name', value: name, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    let localVarPath = `/models/${this.configuration.encodeParam({ name: 'modelOrganism', value: modelOrganism, in: 'path', style: 'simple', explode: false, dataType: 'ModelOrganism', dataFormat: undefined })}/${this.configuration.encodeParam({ name: 'name', value: name, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
     return this.httpClient.request<Model>('get', `${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
       responseType: <any>responseType_,

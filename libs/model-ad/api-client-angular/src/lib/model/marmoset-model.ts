@@ -15,7 +15,7 @@ import { GeneticInfo } from './genetic-info';
  */
 export interface MarmosetModel {
   /**
-   * Organism discriminator (always \"marmoset\" for this schema)
+   * Model organism discriminator (always \"marmoset\" for this schema)
    */
   type: string;
   /**

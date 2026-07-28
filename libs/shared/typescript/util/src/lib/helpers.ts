@@ -52,3 +52,13 @@ export function removeParentheses(s: string): string {
 export function toKebabCase(s: string): string {
   return s.toLowerCase().replace(/\s+/g, '-');
 }
+
+/**
+ * Capitalizes the first letter of a string, leaving the rest unchanged
+ * @param value - The string to capitalize
+ * @returns The string with its first letter uppercased, or an empty string for nullish/empty input
+ */
+export function capitalizeFirstLetter(value: string | null | undefined): string {
+  if (!value) return '';
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}

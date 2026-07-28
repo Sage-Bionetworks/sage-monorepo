@@ -200,20 +200,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /models/{organism}/{name}:
+  /models/{modelOrganism}/{name}:
     get:
       tags:
         - Model
       summary: Get details for a specific model
-      description: Retrieve detailed information for a specific model by its name and organism type.
+      description: Retrieve detailed information for a specific model by its name and model organism type.
       operationId: getModelByName
       parameters:
-        - name: organism
+        - name: modelOrganism
           in: path
-          description: The type of organism (e.g., mouse, marmoset)
+          description: The type of model organism (e.g., mouse, marmoset)
           required: true
           schema:
-            $ref: '#/components/schemas/Organism'
+            $ref: '#/components/schemas/ModelOrganism'
         - name: name
           in: path
           description: Name of the model to retrieve
@@ -1348,9 +1348,9 @@ components:
         - age_numeric
         - result_order
         - data
-    Organism:
+    ModelOrganism:
       type: string
-      description: Organism
+      description: Model organism
       enum:
         - marmoset
         - mouse
@@ -1417,7 +1417,7 @@ components:
       properties:
         type:
           type: string
-          description: Organism discriminator (always "mouse" for this schema)
+          description: Model organism discriminator (always "mouse" for this schema)
         name:
           type: string
           description: Name of the model
@@ -1503,7 +1503,7 @@ components:
       properties:
         type:
           type: string
-          description: Organism discriminator (always "marmoset" for this schema)
+          description: Model organism discriminator (always "marmoset" for this schema)
         name:
           type: string
           description: Name of the model

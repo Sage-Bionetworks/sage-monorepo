@@ -13,8 +13,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.model.ad.api.next.exception.ModelNotFoundException;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +32,10 @@ class ModelApiControllerWebTest {
     var controller = new ModelApiController(delegate);
     var conversionService = new FormattingConversionService();
     conversionService.addConverter(
-      new Converter<String, OrganismDto>() {
+      new Converter<String, ModelOrganismDto>() {
         @Override
-        public OrganismDto convert(String source) {
-          return OrganismDto.fromValue(source);
+        public ModelOrganismDto convert(String source) {
+          return ModelOrganismDto.fromValue(source);
         }
       }
     );
@@ -48,8 +48,10 @@ class ModelApiControllerWebTest {
   @Test
   @DisplayName("should delegate and return ok when organism and name are valid")
   void shouldDelegateAndReturnOkWhenOrganismAndNameAreValid() throws Exception {
-    MouseModelDto model = new MouseModelDto().type(OrganismDto.MOUSE.getValue()).name("3xTg-AD");
-    when(delegate.getModelByName(eq(OrganismDto.MOUSE), any())).thenReturn(
+    MouseModelDto model = new MouseModelDto()
+      .type(ModelOrganismDto.MOUSE.getValue())
+      .name("3xTg-AD");
+    when(delegate.getModelByName(eq(ModelOrganismDto.MOUSE), any())).thenReturn(
       ResponseEntity.ok(model)
     );
 
@@ -68,8 +70,8 @@ class ModelApiControllerWebTest {
   @Test
   @DisplayName("should return not found when model name does not exist")
   void shouldReturnNotFoundWhenModelNameDoesNotExist() throws Exception {
-    when(delegate.getModelByName(eq(OrganismDto.MOUSE), any())).thenThrow(
-      new ModelNotFoundException(OrganismDto.MOUSE, "missing")
+    when(delegate.getModelByName(eq(ModelOrganismDto.MOUSE), any())).thenThrow(
+      new ModelNotFoundException(ModelOrganismDto.MOUSE, "missing")
     );
 
     mockMvc.perform(get("/v1/models/mouse/missing")).andExpect(status().isNotFound());

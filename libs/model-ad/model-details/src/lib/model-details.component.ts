@@ -12,8 +12,15 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { Model, ModelService, MouseModel, Organism } from '@sagebionetworks/model-ad/api-client';
+import {
+  Model,
+  ModelOrganism,
+  ModelService,
+  MouseModel,
+} from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
+import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
 import { ModelDetailsResourcesComponent } from './components/model-details-resources/model-details-resources.component';
@@ -44,7 +51,12 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
 
   isLoading = true;
 
-  model: MouseModel | undefined;
+  model: Model | undefined;
+  modelOrganism: ModelOrganism = ModelOrganism.Mouse;
+
+  get mouseModel(): MouseModel | undefined {
+    return this.model?.type === 'mouse' ? (this.model as MouseModel) : undefined;
+  }
 
   biomarkersWikiParams: SynapseWikiParams = { ownerId: 'syn66271427', wikiId: '632871' };
   pathologyWikiParams: SynapseWikiParams = { ownerId: 'syn66271427', wikiId: '632872' };
@@ -80,37 +92,47 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
 
   reset() {
     this.model = undefined;
+    this.modelOrganism = ModelOrganism.Mouse;
     this.activePanel = '';
     this.activeParent = '';
     this.isLoading = true;
   }
 
   ngOnInit() {
-    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: ParamMap) => {
-      this.reset();
+    combineLatest([this.route.paramMap, this.route.queryParamMap])
+      .pipe(
+        map(([params, queryParams]): [ParamMap, ModelOrganism] => [
+          params,
+          resolveModelOrganism(queryParams.get('modelOrganism')),
+        ]),
+        distinctUntilChanged(
+          ([prevParams, prevModelOrganism], [params, modelOrganism]) =>
+            prevParams.get('name') === params.get('name') && prevModelOrganism === modelOrganism,
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(([params, modelOrganism]) => {
+        this.reset();
 
-      // only fetch data during client hydration
-      if (this.platformService.isBrowser) {
-        this.loadPanelData(params);
-      }
-    });
+        // only fetch data during client hydration
+        if (this.platformService.isBrowser) {
+          this.loadPanelData(params, modelOrganism);
+        }
+      });
   }
 
-  private loadPanelData(params: ParamMap) {
+  private loadPanelData(params: ParamMap, modelOrganism: ModelOrganism) {
+    this.modelOrganism = modelOrganism;
     const modelName = params.get('name');
     if (modelName) {
       this.modelService
-        .getModelByName(Organism.Mouse, modelName, 'body', false, {
+        .getModelByName(modelOrganism, modelName, 'body', false, {
           context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
         })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          // TODO(MG-929): this page serves mouse models only, so the request hardcodes
-          // Organism.Mouse and the response is always a MouseModel. When the marmoset details
-          // page is built, replace this cast with a real model.type switch that delegates to
-          // the mouse- or marmoset-specific component.
           next: (model: Model) => {
-            this.model = model as MouseModel;
+            this.model = model;
             this.setActivePanelAndParentFromUrl(params);
             this.updatePanelDisabledState();
             this.changePanelAndUrlIfInitialActivePanelIsInvalid();
@@ -121,7 +143,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
           error: () => {
             this.isLoading = false;
             this.logger.log(
-              `ModelDetailsComponent: loadPanelData: Model ${modelName} not found, redirecting`,
+              `ModelDetailsComponent: loadPanelData: Model ${modelName} (modelOrganism: ${modelOrganism}) not found, redirecting`,
             );
             this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
@@ -130,15 +152,16 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   }
 
   private updatePanelDisabledState() {
+    const mouseModel = this.mouseModel;
     this.panels.forEach((p: Panel) => {
-      if (p.name === 'biomarkers' && this.model?.biomarkers.length === 0) {
+      if (p.name === 'biomarkers' && mouseModel?.biomarkers.length === 0) {
         p.disabled = true;
-      } else if (p.name === 'pathology' && this.model?.pathology.length === 0) {
+      } else if (p.name === 'pathology' && mouseModel?.pathology.length === 0) {
         p.disabled = true;
       } else if (
         p.name === 'omics' &&
-        this.model?.transcriptomics === null &&
-        this.model?.disease_correlation === null
+        mouseModel?.transcriptomics === null &&
+        mouseModel?.disease_correlation === null
       ) {
         p.disabled = true;
       } else {
@@ -161,7 +184,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     if (fallback) {
       this.activePanel = fallback.activePanel;
       this.activeParent = fallback.activeParent;
-      this.location.replaceState(this.getUrlBasePath());
+      this.location.replaceState(this.appendModelOrganism(this.getUrlBasePath()));
       this.maybeScrollToPanelNavElementOnInitialLoad = false;
     }
   }
@@ -179,12 +202,17 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     return `/${ROUTE_PATHS.MODELS}/${encodedModel}`;
   }
 
+  private appendModelOrganism(url: string) {
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}modelOrganism=${this.modelOrganism}`;
+  }
+
   onPanelChange(event: Panel) {
     const result = this.helperService.handlePanelChange(this.panels, event, this.getUrlBasePath());
     if (result) {
       this.activePanel = result.activePanel;
       this.activeParent = result.activeParent;
-      this.location.replaceState(result.url);
+      this.location.replaceState(this.appendModelOrganism(result.url));
     }
   }
 }

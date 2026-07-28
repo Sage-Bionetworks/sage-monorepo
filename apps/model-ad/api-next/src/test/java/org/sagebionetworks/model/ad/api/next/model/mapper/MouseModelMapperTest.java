@@ -13,8 +13,8 @@ import org.sagebionetworks.model.ad.api.next.model.document.IndividualData;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelData;
 import org.sagebionetworks.model.ad.api.next.model.document.MouseModelDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
 
 class MouseModelMapperTest {
 
@@ -40,7 +40,7 @@ class MouseModelMapperTest {
     // then
     assertThat(dto).isInstanceOf(MouseModelDto.class);
     MouseModelDto mouseModel = (MouseModelDto) dto;
-    assertThat(mouseModel.getType()).isEqualTo(OrganismDto.MOUSE.getValue());
+    assertThat(mouseModel.getType()).isEqualTo(ModelOrganismDto.MOUSE.getValue());
     assertThat(mouseModel.getName()).isEqualTo("3xTg-AD");
     assertThat(mouseModel.getModelType()).isEqualTo("Early Onset AD");
     assertThat(mouseModel.getMatchedControls()).containsExactly("Control1");

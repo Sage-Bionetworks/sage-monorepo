@@ -2,7 +2,7 @@ package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +29,10 @@ public interface ModelApiDelegate {
     }
 
     /**
-     * GET /models/{organism}/{name} : Get details for a specific model
-     * Retrieve detailed information for a specific model by its name and organism type.
+     * GET /models/{modelOrganism}/{name} : Get details for a specific model
+     * Retrieve detailed information for a specific model by its name and model organism type.
      *
-     * @param organism The type of organism (e.g., mouse, marmoset) (required)
+     * @param modelOrganism The type of model organism (e.g., mouse, marmoset) (required)
      * @param name Name of the model to retrieve (required)
      * @return Successfully retrieved model details (status code 200)
      *         or Invalid request (status code 400)
@@ -40,7 +40,7 @@ public interface ModelApiDelegate {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see ModelApi#getModelByName
      */
-    default ResponseEntity<ModelDto> getModelByName(OrganismDto organism,
+    default ResponseEntity<ModelDto> getModelByName(ModelOrganismDto modelOrganism,
         String name) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {

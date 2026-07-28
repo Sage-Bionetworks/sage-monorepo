@@ -7,7 +7,7 @@ import org.sagebionetworks.model.ad.api.next.model.dto.GeneticInfoDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.MarmosetModelDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDataDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +32,7 @@ public class MarmosetModelMapper {
       : document.getBiomarkers().stream().map(modelDataMapper::toDto).toList();
 
     return new MarmosetModelDto(
-      OrganismDto.MARMOSET.getValue(),
+      ModelOrganismDto.MARMOSET.getValue(),
       document.getName(),
       document.getModelType(),
       document.getStudySynid(),

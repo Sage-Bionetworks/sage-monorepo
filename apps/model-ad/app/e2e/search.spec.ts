@@ -18,7 +18,7 @@ test.describe('search', () => {
 
     await searchListItem.click();
 
-    await page.waitForURL(`/models/${modelName}`);
+    await page.waitForURL(`/models/${modelName}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(modelName);
   });
 
@@ -26,7 +26,7 @@ test.describe('search', () => {
     const initialModel = '3xTg-AD';
     const nextModel = 'APOE4';
 
-    await page.goto(`/models/${initialModel}`);
+    await page.goto(`/models/${initialModel}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(initialModel);
 
     const { searchListItems } = await searchAndGetSearchListItems(nextModel, page);
@@ -34,7 +34,7 @@ test.describe('search', () => {
     await expect(firstResult).toHaveText(nextModel);
     await firstResult.click();
 
-    await page.waitForURL(`/models/${nextModel}`);
+    await page.waitForURL(`/models/${nextModel}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(nextModel);
   });
 
@@ -210,7 +210,7 @@ test.describe('search', () => {
 
     await searchListItem.click();
 
-    await page.waitForURL(`/models/${modelName}`);
+    await page.waitForURL(`/models/${modelName}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(modelName);
   });
 });

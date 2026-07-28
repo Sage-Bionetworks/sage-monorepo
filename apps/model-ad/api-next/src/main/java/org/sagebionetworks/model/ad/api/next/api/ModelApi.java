@@ -7,7 +7,7 @@ package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,10 +42,10 @@ public interface ModelApi {
     }
 
     /**
-     * GET /models/{organism}/{name} : Get details for a specific model
-     * Retrieve detailed information for a specific model by its name and organism type.
+     * GET /models/{modelOrganism}/{name} : Get details for a specific model
+     * Retrieve detailed information for a specific model by its name and model organism type.
      *
-     * @param organism The type of organism (e.g., mouse, marmoset) (required)
+     * @param modelOrganism The type of model organism (e.g., mouse, marmoset) (required)
      * @param name Name of the model to retrieve (required)
      * @return Successfully retrieved model details (status code 200)
      *         or Invalid request (status code 400)
@@ -55,7 +55,7 @@ public interface ModelApi {
     @Operation(
         operationId = "getModelByName",
         summary = "Get details for a specific model",
-        description = "Retrieve detailed information for a specific model by its name and organism type.",
+        description = "Retrieve detailed information for a specific model by its name and model organism type.",
         tags = { "Model" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved model details", content = {
@@ -78,15 +78,15 @@ public interface ModelApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/models/{organism}/{name}",
+        value = "/models/{modelOrganism}/{name}",
         produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<ModelDto> getModelByName(
-        @Parameter(name = "organism", description = "The type of organism (e.g., mouse, marmoset)", required = true, in = ParameterIn.PATH) @PathVariable("organism") OrganismDto organism,
+        @Parameter(name = "modelOrganism", description = "The type of model organism (e.g., mouse, marmoset)", required = true, in = ParameterIn.PATH) @PathVariable("modelOrganism") ModelOrganismDto modelOrganism,
         @Parameter(name = "name", description = "Name of the model to retrieve", required = true, in = ParameterIn.PATH) @PathVariable("name") String name
     ) {
-        return getDelegate().getModelByName(organism, name);
+        return getDelegate().getModelByName(modelOrganism, name);
     }
 
 }

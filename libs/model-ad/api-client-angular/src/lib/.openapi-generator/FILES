@@ -35,6 +35,7 @@ model/marmoset-model-overviews-page.ts
 model/marmoset-model.ts
 model/model-data.ts
 model/model-identifier-type.ts
+model/model-organism.ts
 model/model.ts
 model/models.ts
 model/mouse-model-overview-search-query.ts
@@ -42,7 +43,6 @@ model/mouse-model-overview.ts
 model/mouse-model-overviews-page.ts
 model/mouse-model.ts
 model/named-link.ts
-model/organism.ts
 model/page-metadata.ts
 model/search-result.ts
 model/sex.ts

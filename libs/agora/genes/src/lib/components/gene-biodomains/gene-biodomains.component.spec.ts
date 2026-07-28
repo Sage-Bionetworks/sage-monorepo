@@ -7,7 +7,6 @@ import { provideRouter } from '@angular/router';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { HelperService } from '@sagebionetworks/agora/services';
 import { emptyBioDomainMock, geneMock1 } from '@sagebionetworks/agora/testing';
 import { GeneBioDomainsComponent } from './gene-biodomains.component';
 
@@ -20,7 +19,7 @@ describe('Component: Gene Biodomains', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [HelperService, provideRouter([])],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 

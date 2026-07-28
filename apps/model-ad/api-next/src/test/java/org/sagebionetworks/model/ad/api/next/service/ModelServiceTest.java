@@ -17,8 +17,8 @@ import org.sagebionetworks.model.ad.api.next.model.document.MarmosetModelDocumen
 import org.sagebionetworks.model.ad.api.next.model.document.MouseModelDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.MarmosetModelDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.GeneticInfoMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.IndividualDataMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.MarmosetModelMapper;
@@ -57,10 +57,10 @@ class ModelServiceTest {
     document.setName("3xTg-AD");
     when(mouseModelRepository.findByName("3xTg-AD")).thenReturn(Optional.of(document));
 
-    ModelDto result = service.getModelByName(OrganismDto.MOUSE, "3xTg-AD");
+    ModelDto result = service.getModelByName(ModelOrganismDto.MOUSE, "3xTg-AD");
 
     assertThat(result).isInstanceOf(MouseModelDto.class);
-    assertThat(((MouseModelDto) result).getType()).isEqualTo(OrganismDto.MOUSE.getValue());
+    assertThat(((MouseModelDto) result).getType()).isEqualTo(ModelOrganismDto.MOUSE.getValue());
     verifyNoInteractions(marmosetModelRepository);
   }
 
@@ -71,10 +71,12 @@ class ModelServiceTest {
     document.setName("Marmoset1");
     when(marmosetModelRepository.findByName("Marmoset1")).thenReturn(Optional.of(document));
 
-    ModelDto result = service.getModelByName(OrganismDto.MARMOSET, "Marmoset1");
+    ModelDto result = service.getModelByName(ModelOrganismDto.MARMOSET, "Marmoset1");
 
     assertThat(result).isInstanceOf(MarmosetModelDto.class);
-    assertThat(((MarmosetModelDto) result).getType()).isEqualTo(OrganismDto.MARMOSET.getValue());
+    assertThat(((MarmosetModelDto) result).getType()).isEqualTo(
+      ModelOrganismDto.MARMOSET.getValue()
+    );
     verifyNoInteractions(mouseModelRepository);
   }
 
@@ -83,7 +85,7 @@ class ModelServiceTest {
   void shouldThrowModelNotFoundExceptionWhenMouseModelIsAbsent() {
     when(mouseModelRepository.findByName("missing")).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> service.getModelByName(OrganismDto.MOUSE, "missing"))
+    assertThatThrownBy(() -> service.getModelByName(ModelOrganismDto.MOUSE, "missing"))
       .isInstanceOf(ModelNotFoundException.class)
       .hasMessageContaining("mouse")
       .hasMessageContaining("missing");
@@ -94,7 +96,7 @@ class ModelServiceTest {
   void shouldThrowModelNotFoundExceptionWhenMarmosetModelIsAbsent() {
     when(marmosetModelRepository.findByName("missing")).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> service.getModelByName(OrganismDto.MARMOSET, "missing"))
+    assertThatThrownBy(() -> service.getModelByName(ModelOrganismDto.MARMOSET, "missing"))
       .isInstanceOf(ModelNotFoundException.class)
       .hasMessageContaining("marmoset")
       .hasMessageContaining("missing");

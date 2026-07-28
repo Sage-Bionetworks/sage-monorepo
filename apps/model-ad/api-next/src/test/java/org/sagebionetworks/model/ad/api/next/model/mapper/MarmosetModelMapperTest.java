@@ -14,7 +14,7 @@ import org.sagebionetworks.model.ad.api.next.model.document.MarmosetModelDocumen
 import org.sagebionetworks.model.ad.api.next.model.document.ModelData;
 import org.sagebionetworks.model.ad.api.next.model.dto.MarmosetModelDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.OrganismDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 
 class MarmosetModelMapperTest {
 
@@ -40,7 +40,7 @@ class MarmosetModelMapperTest {
     // then
     assertThat(dto).isInstanceOf(MarmosetModelDto.class);
     MarmosetModelDto marmosetModel = (MarmosetModelDto) dto;
-    assertThat(marmosetModel.getType()).isEqualTo(OrganismDto.MARMOSET.getValue());
+    assertThat(marmosetModel.getType()).isEqualTo(ModelOrganismDto.MARMOSET.getValue());
     assertThat(marmosetModel.getName()).isEqualTo("Marmoset1");
     assertThat(marmosetModel.getModelType()).isEqualTo("Marmoset AD");
     assertThat(marmosetModel.getStudySynid()).isEqualTo("syn999");
