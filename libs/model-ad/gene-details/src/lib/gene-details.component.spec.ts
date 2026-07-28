@@ -88,9 +88,7 @@ describe('GeneDetailsComponent', () => {
 
   it('should display model name', async () => {
     await setup();
-    expect(
-      screen.getByText(`${transcriptomicsIndividualMocks[0].name} (Females & Males)`),
-    ).toBeInTheDocument();
+    expect(screen.getByText(`${transcriptomicsIndividualMocks[0].name}`)).toBeInTheDocument();
   });
 
   it('should convert data to CSV and set filename correctly', async () => {
