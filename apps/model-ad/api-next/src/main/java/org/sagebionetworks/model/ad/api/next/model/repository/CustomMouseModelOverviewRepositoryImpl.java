@@ -50,7 +50,7 @@ public class CustomMouseModelOverviewRepositoryImpl
   protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
     return Map.of(
       "matched_controls",
-      ComputedSortField.of(arrayToLoweredStringExpr("matched_controls"))
+      ComputedSortField.of(arrayToStringExpr("matched_controls"))
     );
   }
 

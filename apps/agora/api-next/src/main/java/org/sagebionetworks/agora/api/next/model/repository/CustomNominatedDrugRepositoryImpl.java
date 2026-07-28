@@ -56,9 +56,9 @@ public class CustomNominatedDrugRepositoryImpl
   protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
     return Map.of(
       "principal_investigators",
-      ComputedSortField.of(arrayToLoweredStringExpr("principal_investigators")),
+      ComputedSortField.of(arrayToStringExpr("principal_investigators")),
       "programs",
-      ComputedSortField.of(arrayToLoweredStringExpr("programs"))
+      ComputedSortField.of(arrayToStringExpr("programs"))
     );
   }
 
