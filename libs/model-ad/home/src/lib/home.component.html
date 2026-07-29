@@ -62,18 +62,21 @@
             />
           </div>
         } @else if (selectedModelOrganism() === 'marmoset') {
-          <!-- TODO(MG-932): intentional placeholder cards until marmoset data lands; replace with real tiles. -->
           <div class="card-container">
             <explorers-home-card
-              [title]="'Coming soon'"
+              [title]="'Marmoset Model Overview'"
               [description]="
-                'Marmoset model data is on the way. Check back later to explore marmoset models.'
+                'See an overview of the marmoset models and currently available results, and <strong>quickly navigate</strong> to detailed model-specific information, source data, and visualizations.'
               "
+              [routerLink]="ROUTE_PATHS.MARMOSET_MODEL_OVERVIEW"
+              [imagePath]="'model-ad-assets/images/marmoset-model.svg'"
+              [imageAltText]="'marmoset icon'"
             />
+            <!-- TODO(MG-937): add the marmoset search input once the marmoset search API is available. -->
             <explorers-home-card
-              [title]="'Coming soon'"
+              [title]="'Marmoset Model Search'"
               [description]="
-                'Marmoset model data is on the way. Check back later to explore marmoset models.'
+                'Search marmoset models to explore <strong>Plasma Biomarker</strong> results and detailed model information.'
               "
             />
           </div>

@@ -17,6 +17,7 @@ export const ROUTE_PATHS = {
   ABOUT: 'about',
   NEWS: 'news',
   MOUSE_MODEL_OVERVIEW: 'comparison/model',
+  MARMOSET_MODEL_OVERVIEW: 'comparison/model/marmoset',
   DIFFERENTIAL_EXPRESSION: 'comparison/expression',
   GENES: 'genes',
   DISEASE_CORRELATION: 'comparison/correlation',
