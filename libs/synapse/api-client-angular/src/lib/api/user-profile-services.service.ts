@@ -827,7 +827,7 @@ export class UserProfileServicesService {
   }
 
   /**
-   * @param mask integer flag defining which components to include in the bundle    ,&lt;p&gt;, This integer is used as a bit-string of flags to specify which parts to include    in the UserBundle. The mask is defined as follows:  ,&lt;ul&gt;,  ,&lt;li&gt;, UserProfile  &#x3D; 0x1 ,&lt;/li&gt;,  ,&lt;li&gt;, ORCID  &#x3D; 0x2 ,&lt;/li&gt;,  ,&lt;li&gt;, VerificationSubmission  &#x3D; 0x4 ,&lt;/li&gt;,  ,&lt;li&gt;, IsCertified &#x3D; 0x8 ,&lt;/li&gt;,  ,&lt;li&gt;, Is Verified  &#x3D; 0x10 ,&lt;/li&gt;,  ,&lt;li&gt;, Is ACT Member &#x3D; 0x20 ,&lt;/li&gt;,  ,&lt;li&gt;, Is AR Reviewer &#x3D; 0x40 ,&lt;/li&gt;,  ,&lt;/ul&gt;,  ,&lt;/p&gt;
+   * @param mask integer flag defining which components to include in the bundle    ,&lt;p&gt;, This integer is used as a bit-string of flags to specify which parts to include    in the UserBundle. The mask is defined as follows:  ,&lt;ul&gt;,  ,&lt;li&gt;, UserProfile  &#x3D; 0x1 ,&lt;/li&gt;,  ,&lt;li&gt;, ORCID  &#x3D; 0x2 ,&lt;/li&gt;,  ,&lt;li&gt;, VerificationSubmission  &#x3D; 0x4 ,&lt;/li&gt;,  ,&lt;li&gt;, IsCertified &#x3D; 0x8 ,&lt;/li&gt;,  ,&lt;li&gt;, Is Verified  &#x3D; 0x10 ,&lt;/li&gt;,  ,&lt;li&gt;, Is ACT Member &#x3D; 0x20 ,&lt;/li&gt;,  ,&lt;li&gt;, Is AR Reviewer &#x3D; 0x40 ,&lt;/li&gt;,  ,&lt;li&gt;, Identity Providers &#x3D; 0x80 ,&lt;/li&gt;,  ,&lt;/ul&gt;,  ,&lt;/p&gt;
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
@@ -1196,7 +1196,7 @@ export class UserProfileServicesService {
   }
 
   /**
-   * @param mask integer flag defining which components to include in the bundle    ,&lt;p&gt;, This integer is used as a bit-string of flags to specify which parts to include    in the UserBundle. The mask is defined as follows:  ,&lt;ul&gt;,  ,&lt;li&gt;, UserProfile  &#x3D; 0x1 ,&lt;/li&gt;,  ,&lt;li&gt;, ORCID  &#x3D; 0x2 ,&lt;/li&gt;,  ,&lt;li&gt;, VerificationSubmission  &#x3D; 0x4 ,&lt;/li&gt;,  ,&lt;li&gt;, IsCertified &#x3D; 0x8 ,&lt;/li&gt;,  ,&lt;li&gt;, Is Verified  &#x3D; 0x10 ,&lt;/li&gt;,  ,&lt;li&gt;, Is ACT Member &#x3D; 0x20 ,&lt;/li&gt;,  ,&lt;li&gt;, Is AR Reviewer &#x3D; 0x40 ,&lt;/li&gt;,  ,&lt;/ul&gt;,  ,&lt;/p&gt;
+   * @param mask integer flag defining which components to include in the bundle    ,&lt;p&gt;, This integer is used as a bit-string of flags to specify which parts to include    in the UserBundle. The mask is defined as follows:  ,&lt;ul&gt;,  ,&lt;li&gt;, UserProfile  &#x3D; 0x1 ,&lt;/li&gt;,  ,&lt;li&gt;, ORCID  &#x3D; 0x2 ,&lt;/li&gt;,  ,&lt;li&gt;, VerificationSubmission  &#x3D; 0x4 ,&lt;/li&gt;,  ,&lt;li&gt;, IsCertified &#x3D; 0x8 ,&lt;/li&gt;,  ,&lt;li&gt;, Is Verified  &#x3D; 0x10 ,&lt;/li&gt;,  ,&lt;li&gt;, Is ACT Member &#x3D; 0x20 ,&lt;/li&gt;,  ,&lt;li&gt;, Is AR Reviewer &#x3D; 0x40 ,&lt;/li&gt;,  ,&lt;li&gt;, Identity Providers &#x3D; 0x80 ,&lt;/li&gt;,  ,&lt;/ul&gt;,  ,&lt;/p&gt;
    * @param id
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.

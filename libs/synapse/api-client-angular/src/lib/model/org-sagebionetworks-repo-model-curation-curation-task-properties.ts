@@ -10,6 +10,7 @@
 import { OrgSagebionetworksRepoModelCurationMetadataFileBasedMetadataTaskProperties } from './org-sagebionetworks-repo-model-curation-metadata-file-based-metadata-task-properties';
 import { OrgSagebionetworksRepoModelCurationExecutionSampleSheetGenerationExecutionProperties } from './org-sagebionetworks-repo-model-curation-execution-sample-sheet-generation-execution-properties';
 import { OrgSagebionetworksRepoModelCurationMetadataRecordBasedMetadataTaskProperties } from './org-sagebionetworks-repo-model-curation-metadata-record-based-metadata-task-properties';
+import { OrgSagebionetworksRepoModelCurationExecutionRecordSetGenerationExecutionProperties } from './org-sagebionetworks-repo-model-curation-execution-record-set-generation-execution-properties';
 
 /**
  * The properties of a CurationTask
@@ -20,6 +21,7 @@ import { OrgSagebionetworksRepoModelCurationMetadataRecordBasedMetadataTaskPrope
  * @export
  */
 export type OrgSagebionetworksRepoModelCurationCurationTaskProperties =
+  | OrgSagebionetworksRepoModelCurationExecutionRecordSetGenerationExecutionProperties
   | OrgSagebionetworksRepoModelCurationExecutionSampleSheetGenerationExecutionProperties
   | OrgSagebionetworksRepoModelCurationMetadataFileBasedMetadataTaskProperties
   | OrgSagebionetworksRepoModelCurationMetadataRecordBasedMetadataTaskProperties;

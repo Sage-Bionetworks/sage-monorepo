@@ -21,11 +21,7 @@ export interface OrgSagebionetworksRepoModelCurationExecutionSampleSheetGenerati
    */
   inputTaskId?: number;
   /**
-   * The $id of the JSON Schema defining the target sample sheet format.
-   */
-  targetSchemaId?: string;
-  /**
-   * The ID of the record-based CurationTask whose RecordSet will receive the generated sample sheet.
+   * The ID of the record-based CurationTask whose RecordSet will receive the generated sample sheet as a new version. The JSON Schema bound to that RecordSet defines the target sample sheet format.
    */
   destinationTaskId?: number;
 }
