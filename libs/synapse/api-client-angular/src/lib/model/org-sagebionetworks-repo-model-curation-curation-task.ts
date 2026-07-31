@@ -42,4 +42,8 @@ export interface OrgSagebionetworksRepoModelCurationCurationTask {
    */
   assigneePrincipalId?: string;
   taskProperties?: OrgSagebionetworksRepoModelCurationCurationTaskProperties;
+  /**
+   * Timestamp by which the task should be completed. Null if no due date has been set.
+   */
+  dueDate?: string;
 }

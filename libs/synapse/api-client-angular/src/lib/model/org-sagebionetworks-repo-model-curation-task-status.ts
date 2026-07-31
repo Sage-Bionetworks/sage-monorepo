@@ -31,10 +31,6 @@ export interface OrgSagebionetworksRepoModelCurationTaskStatus {
    */
   lastUpdatedOn?: string;
   /**
-   * Timestamp by which the task should be completed. Null if no due date has been set.
-   */
-  dueDate?: string;
-  /**
    * Optimistic concurrency control token for the task status.
    */
   etag?: string;
