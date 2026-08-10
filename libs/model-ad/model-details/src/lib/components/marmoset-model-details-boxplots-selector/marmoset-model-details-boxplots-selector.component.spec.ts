@@ -15,7 +15,7 @@ async function setup() {
     imports: [MockWikiComponent],
     componentInputs: {
       title: 'Plasma Biomarkers',
-      modelName: 'PSEN1',
+      modelName: 'Presenilin 1',
       modelDataList: marmosetModelDataMock,
       wikiParams: validWikiParams,
     },
@@ -32,7 +32,7 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
 
   it('should render description with model name', async () => {
     await setup();
-    expect(screen.getByText(/PSEN1 marmosets/, { exact: false })).toBeVisible();
+    expect(screen.getByText(/Presenilin 1 marmosets/, { exact: false })).toBeVisible();
   });
 
   it('should render measurement dropdown', async () => {
@@ -70,7 +70,7 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
       imports: [MockWikiComponent],
       componentInputs: {
         title: 'Plasma Biomarkers',
-        modelName: 'PSEN1',
+        modelName: 'Presenilin 1',
         modelDataList: duplicateAgeData,
         wikiParams: validWikiParams,
       },

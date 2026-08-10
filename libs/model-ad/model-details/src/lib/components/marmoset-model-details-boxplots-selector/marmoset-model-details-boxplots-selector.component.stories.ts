@@ -24,7 +24,7 @@ type Story = StoryObj<MarmosetModelDetailsBoxplotsSelectorComponent>;
 export const PlasmaMarmoset: Story = {
   args: {
     title: 'Plasma Biomarkers',
-    modelName: 'PSEN1',
+    modelName: 'Presenilin 1',
     modelDataList: marmosetModelDataMock,
     wikiParams: { ownerId: 'syn66271427', wikiId: '641870' },
   },
