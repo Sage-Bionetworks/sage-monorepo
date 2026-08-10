@@ -3,6 +3,7 @@ import { Panel, ResourceCardData, SynapseWikiParams } from '@sagebionetworks/exp
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { MarmosetModel } from '@sagebionetworks/model-ad/api-client';
 import { MarmosetModelDetailsBoxplotsSelectorComponent } from '../marmoset-model-details-boxplots-selector/marmoset-model-details-boxplots-selector.component';
+import { MarmosetModelDetailsHeroComponent } from '../marmoset-model-details-hero/marmoset-model-details-hero.component';
 import { ModelDetailsResourcesComponent } from '../model-details-resources/model-details-resources.component';
 
 @Component({
@@ -10,6 +11,7 @@ import { ModelDetailsResourcesComponent } from '../model-details-resources/model
   imports: [
     PanelNavigationComponent,
     MarmosetModelDetailsBoxplotsSelectorComponent,
+    MarmosetModelDetailsHeroComponent,
     ModelDetailsResourcesComponent,
   ],
   templateUrl: './marmoset-model-details-content.component.html',

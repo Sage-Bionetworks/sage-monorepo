@@ -1,0 +1,5 @@
+@use 'model-ad/styles/src/mixins' as mixins;
+
+.model-details-hero {
+  @include mixins.model-details-hero;
+}

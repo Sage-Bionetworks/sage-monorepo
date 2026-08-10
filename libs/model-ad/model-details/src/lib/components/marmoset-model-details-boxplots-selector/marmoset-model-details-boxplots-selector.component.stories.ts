@@ -7,7 +7,7 @@ import { MarmosetModelDetailsBoxplotsSelectorComponent } from './marmoset-model-
 
 const meta: Meta<MarmosetModelDetailsBoxplotsSelectorComponent> = {
   component: MarmosetModelDetailsBoxplotsSelectorComponent,
-  title: 'Model Details/MarmosetModelDetailsBoxplotsSelectorComponent',
+  title: 'Model Details/Marmoset/MarmosetModelDetailsBoxplotsSelectorComponent',
   decorators: [
     applicationConfig({
       providers: [

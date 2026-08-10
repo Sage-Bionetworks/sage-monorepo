@@ -34,7 +34,7 @@ class MarmosetModelDetailsContentStoryWrapperComponent {
 
 const meta: Meta<MarmosetModelDetailsContentStoryWrapperComponent> = {
   component: MarmosetModelDetailsContentStoryWrapperComponent,
-  title: 'Model Details/MarmosetModelDetailsContentComponent',
+  title: 'Model Details/Marmoset/MarmosetModelDetailsContentComponent',
   decorators: [
     applicationConfig({
       providers: [

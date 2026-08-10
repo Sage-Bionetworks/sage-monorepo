@@ -19,6 +19,38 @@
   }
 }
 
+// Hero content sits on a dark background image, so headings and links that
+// default to dark tokens have to be inverted. Applied by the hero components and
+// by any component rendered inside them (view encapsulation stops the hero's own
+// rules from reaching into a child's template).
+@mixin model-details-hero-text {
+  color: #fff;
+
+  h1,
+  h4,
+  a {
+    color: #fff;
+  }
+
+  h4 {
+    font-weight: 700;
+  }
+}
+
+// Shell shared by the per-organism model details heroes.
+@mixin model-details-hero {
+  background-size: cover !important;
+
+  section {
+    @include model-details-hero-text;
+
+    hr {
+      margin-top: var(--section-padding);
+      margin-bottom: var(--section-padding);
+    }
+  }
+}
+
 @mixin boxplots-legend {
   display: flex;
   margin-bottom: 30px;
