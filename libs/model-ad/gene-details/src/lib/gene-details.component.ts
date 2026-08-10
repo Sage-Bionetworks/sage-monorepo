@@ -60,7 +60,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
   });
 
   subtitle = computed(() => {
-    return this.modelIdentifier ? `${this.modelIdentifier} (Females & Males)` : '';
+    return this.modelIdentifier ? `${this.modelIdentifier}` : '';
   });
 
   xAxisOrder = computed(() => this.primaryGene()?.result_order);
