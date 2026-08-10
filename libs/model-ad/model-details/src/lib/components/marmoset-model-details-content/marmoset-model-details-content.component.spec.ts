@@ -58,7 +58,7 @@ describe('MarmosetModelDetailsContentComponent', () => {
     expect(screen.getByText(/marmo-ad tissue biobank/i)).toBeVisible();
     expect(screen.getByText(/marmoset resources and events/i)).toBeVisible();
     expect(screen.getByText(/marmosets in neuroscience research/i)).toBeVisible();
-    expect(screen.getByText(/ucsc genome browser/i)).toBeVisible();
+    expect(screen.getByText(/primate aging database/i)).toBeVisible();
   });
 
   it('should not display a model-specific resources section on the resources panel', async () => {

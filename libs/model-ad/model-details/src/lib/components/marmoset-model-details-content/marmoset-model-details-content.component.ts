@@ -54,7 +54,7 @@ export class MarmosetModelDetailsContentComponent {
     },
     {
       imagePath: 'model-ad-assets/images/marmo-hub-logo.svg',
-      description: 'Visit Marmohub for to find marmoset resources and events.',
+      description: 'Visit Marmohub to find marmoset resources and events.',
       link: 'https://www.marmohub.org/',
     },
     {
@@ -64,7 +64,8 @@ export class MarmosetModelDetailsContentComponent {
     },
     {
       imagePath: 'model-ad-assets/images/pad-logo.svg',
-      description: 'Explore the marmoset genome using the UCSC genome browser.',
+      description:
+        'Find information about biological variables in aging in the primate aging database.',
       link: 'https://primatedatabase.org/',
     },
   ];
