@@ -2,7 +2,10 @@ import { Panel } from '@sagebionetworks/explorers/models';
 import { MarmosetModel } from '@sagebionetworks/model-ad/api-client';
 
 export function getPanels(): Panel[] {
-  return [{ name: 'biomarkers', label: 'Plasma Biomarkers', disabled: false }];
+  return [
+    { name: 'biomarkers', label: 'Plasma Biomarkers', disabled: false },
+    { name: 'resources', label: 'Resources', disabled: false },
+  ];
 }
 
 export function getPanelsWithDisabledState(model: MarmosetModel, panels: Panel[]): Panel[] {

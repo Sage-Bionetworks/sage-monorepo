@@ -5,12 +5,12 @@ import { render, screen } from '@testing-library/angular';
 import { MouseModelDetailsContentComponent } from './mouse-model-details-content.component';
 import { getPanels, getPanelsWithDisabledState } from './mouse-model-details-panels';
 
-async function setup(model: MouseModel = mouseModelMock) {
+async function setup(model: MouseModel = mouseModelMock, activePanel = 'omics') {
   return render(MouseModelDetailsContentComponent, {
     componentInputs: {
       model,
       panels: getPanelsWithDisabledState(model, getPanels()),
-      activePanel: 'omics',
+      activePanel,
       activeParent: '',
       scrollToPanelNavElementOnInitialLoad: false,
     },
@@ -38,5 +38,30 @@ describe('MouseModelDetailsContentComponent', () => {
     expect(screen.queryByText('Biomarkers')).not.toBeInTheDocument();
     expect(screen.queryByText('Pathology')).not.toBeInTheDocument();
     expect(screen.getByText('Resources')).toBeInTheDocument();
+  });
+
+  it('should display all model-specific resource cards on the resources panel', async () => {
+    await setup(mouseModelMock, 'resources');
+
+    expect(screen.getByText('Model-Specific Resources')).toBeInTheDocument();
+    expect(screen.getByText(/available for this model in the ad knowledge portal/i)).toBeVisible();
+    expect(screen.getByText(/visit alzforum to find more information/i)).toBeVisible();
+    expect(screen.getByText(/detailed information about this ad model on jax/i)).toBeVisible();
+  });
+
+  it('should display all additional resource cards on the resources panel', async () => {
+    await setup(mouseModelMock, 'resources');
+
+    expect(screen.getByText('Additional Resources')).toBeInTheDocument();
+    expect(screen.getByText(/human genes in ad/i)).toBeInTheDocument();
+    expect(screen.getByText(/allen brain atlas/i)).toBeInTheDocument();
+    expect(screen.getByText(/model-ad program/i)).toBeInTheDocument();
+    expect(screen.getByText(/mouse genome informatics/i)).toBeInTheDocument();
+    expect(screen.getByText(/model-ad preclinical testing core/i)).toBeInTheDocument();
+  });
+
+  it('should not display alzforum card when alzforum_id is missing', async () => {
+    await setup({ ...mouseModelMock, alzforum_id: '' }, 'resources');
+    expect(screen.queryByText(/visit alzforum to find more information/i)).not.toBeInTheDocument();
   });
 });

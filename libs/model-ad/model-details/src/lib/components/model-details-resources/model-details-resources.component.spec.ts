@@ -1,44 +1,68 @@
+import { ResourceCardData } from '@sagebionetworks/explorers/models';
 import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
-import { mouseModelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import { ModelDetailsResourcesComponent } from './model-details-resources.component';
 
-async function setup(model = mouseModelMock) {
+const modelSpecificCards: ResourceCardData[] = [
+  {
+    imagePath: 'model-ad-assets/images/jax-logo.svg',
+    description: 'View detailed information about this AD model on JAX.',
+    link: 'https://www.jax.org/strain/12345',
+  },
+];
+
+const additionalCards: ResourceCardData[] = [
+  {
+    imagePath: 'model-ad-assets/images/agora-logo.svg',
+    description: 'View evidence about the role of human genes in AD.',
+    link: 'https://agora.adknowledgeportal.org/',
+  },
+];
+
+async function setup(
+  componentInputs: {
+    modelSpecificResourceCards?: ResourceCardData[];
+    additionalResourceCards?: ResourceCardData[];
+  } = {},
+) {
   return render(ModelDetailsResourcesComponent, {
     imports: [ResourceCardsComponent],
-    componentInputs: {
-      model: model,
-    },
+    componentInputs,
   });
 }
 
 describe('ModelDetailsResourcesComponent', () => {
-  it('should display all model-specific resource cards', async () => {
-    await setup();
+  it('should display both sections when both card lists are provided', async () => {
+    await setup({
+      modelSpecificResourceCards: modelSpecificCards,
+      additionalResourceCards: additionalCards,
+    });
 
-    const sectionTitle = screen.getByText('Model-Specific Resources');
-    expect(sectionTitle).toBeInTheDocument();
-
-    expect(screen.getByText(/ad knowledge portal/i)).toBeInTheDocument();
-    expect(screen.getByText(/alzforum/i)).toBeInTheDocument();
+    expect(screen.getByText('Model-Specific Resources')).toBeInTheDocument();
     expect(screen.getByText(/jax/i)).toBeInTheDocument();
+
+    expect(screen.getByText('Additional Resources')).toBeInTheDocument();
+    expect(screen.getByText(/human genes in ad/i)).toBeInTheDocument();
   });
 
-  it('should display all additional resource cards', async () => {
+  it('should not display the model-specific section when no model-specific cards are provided', async () => {
+    await setup({ additionalResourceCards: additionalCards });
+
+    expect(screen.queryByText('Model-Specific Resources')).not.toBeInTheDocument();
+    expect(screen.getByText('Additional Resources')).toBeInTheDocument();
+  });
+
+  it('should not display the additional section when no additional cards are provided', async () => {
+    await setup({ modelSpecificResourceCards: modelSpecificCards });
+
+    expect(screen.queryByText('Additional Resources')).not.toBeInTheDocument();
+    expect(screen.getByText('Model-Specific Resources')).toBeInTheDocument();
+  });
+
+  it('should not display any section when no cards are provided', async () => {
     await setup();
 
-    const sectionTitle = screen.getByText('Additional Resources');
-    expect(sectionTitle).toBeInTheDocument();
-
-    expect(screen.getByText(/human genes in ad/i)).toBeInTheDocument();
-    expect(screen.getByText(/allen brain atlas/i)).toBeInTheDocument();
-    expect(screen.getByText(/model-ad program/i)).toBeInTheDocument();
-    expect(screen.getByText(/mouse genome informatics/i)).toBeInTheDocument();
-    expect(screen.getByText(/model-ad preclinical testing core/i)).toBeInTheDocument();
-  });
-
-  it('should not display alzforum card when alzforum_id is missing', async () => {
-    await setup({ ...mouseModelMock, alzforum_id: '' });
-    expect(screen.queryByText(/alzforum/i)).not.toBeInTheDocument();
+    expect(screen.queryByText('Model-Specific Resources')).not.toBeInTheDocument();
+    expect(screen.queryByText('Additional Resources')).not.toBeInTheDocument();
   });
 });
