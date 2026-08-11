@@ -55,13 +55,13 @@ public class CustomNominatedTargetRepositoryImpl
   protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
     return Map.of(
       "nominating_teams",
-      ComputedSortField.of(arrayToLoweredStringExpr("nominating_teams")),
+      ComputedSortField.of(arrayToStringExpr("nominating_teams")),
       "cohort_studies",
-      ComputedSortField.of(arrayToLoweredStringExpr("cohort_studies")),
+      ComputedSortField.of(arrayToStringExpr("cohort_studies")),
       "input_data",
-      ComputedSortField.of(arrayToLoweredStringExpr("input_data")),
+      ComputedSortField.of(arrayToStringExpr("input_data")),
       "programs",
-      ComputedSortField.of(arrayToLoweredStringExpr("programs"))
+      ComputedSortField.of(arrayToStringExpr("programs"))
     );
   }
 
