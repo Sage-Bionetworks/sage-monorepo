@@ -1,31 +1,8 @@
-<section>
-  <div [class]="{ 'gene-details': true, loading: isLoading }">
-    @if (isLoading) {
-      <div id="loading">
-        <explorers-loading-icon />
-      </div>
-    } @else if (transcriptomicsIndividualData) {
-      <div class="gene-details-header">
-        <explorers-details-label [left]="label().left" [right]="label().right" />
-        <h2>Individual RNA Expression {{ tissue ? `(${tissue})` : '' }}</h2>
-        <div class="gene-details-subtitle">{{ subtitle() }}</div>
-      </div>
-      <div class="gene-details-boxplots-download">
-        <explorers-download-dom-image
-          [target]="boxplotGrid"
-          [filename]="filename()"
-          [buttonLabel]="'Download'"
-          [heading]="'Download these results as:'"
-          [hasCsvDownload]="true"
-          [data]="csvData()"
-        />
-      </div>
-      <div #boxplotGrid class="boxplots-grid-wrapper">
-        <model-ad-boxplots-grid
-          [boxplotDataList]="transcriptomicsIndividualData"
-          [xAxisOrder]="xAxisOrder()"
-        />
-      </div>
-    }
-  </div>
-</section>
+<model-ad-individual-expression-details
+  [isLoading]="isLoading()"
+  [data]="transcriptomicsIndividualData()"
+  [title]="title"
+  [tissue]="tissue()"
+  [modelIdentifier]="modelIdentifier()"
+  [downloadFilenamePrefix]="downloadFilenamePrefix"
+/>
