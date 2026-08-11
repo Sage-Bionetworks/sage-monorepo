@@ -190,9 +190,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
   }
 
   /**
-   * Reduces an array field into a single NUL-separated string, producing a stable lexicographic
-   * sort key. Avoids MongoDB's "parallel arrays" limitation. Case-insensitive comparison is
-   * handled by pipeline-level collation.
+   * Reduces an array field into a NUL-separated string for sorting. Avoids MongoDB's "parallel
+   * arrays" limitation. Case-insensitive comparison is handled by pipeline-level collation.
    */
   protected static Object arrayToStringExpr(String arrayField) {
     Document reduce = new Document(
