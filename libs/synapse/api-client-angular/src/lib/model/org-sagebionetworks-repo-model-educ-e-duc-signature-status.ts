@@ -40,6 +40,7 @@ export interface OrgSagebionetworksRepoModelEducEDucSignatureStatus {
 }
 export namespace OrgSagebionetworksRepoModelEducEDucSignatureStatus {
   export type DucStatusEnum =
+    | 'draft'
     | 'sent'
     | 'delivered'
     | 'completed'
@@ -47,6 +48,7 @@ export namespace OrgSagebionetworksRepoModelEducEDucSignatureStatus {
     | 'voided'
     | 'correct';
   export const DucStatusEnum = {
+    Draft: 'draft' as DucStatusEnum,
     Sent: 'sent' as DucStatusEnum,
     Delivered: 'delivered' as DucStatusEnum,
     Completed: 'completed' as DucStatusEnum,
