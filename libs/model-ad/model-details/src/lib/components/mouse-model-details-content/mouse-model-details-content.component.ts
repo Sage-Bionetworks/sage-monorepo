@@ -68,7 +68,7 @@ export class MouseModelDetailsContentComponent {
     {
       imagePath: 'model-ad-assets/images/allen-institute-logo.svg',
       description: 'Explore mouse brain resources in the Allen Brain Atlas.',
-      link: 'https://mouse.brain-map.org/ ',
+      link: 'https://mouse.brain-map.org/',
     },
     {
       imagePath: 'model-ad-assets/images/model-ad-logo.svg',
