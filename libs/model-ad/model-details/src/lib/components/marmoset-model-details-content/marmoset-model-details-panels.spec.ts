@@ -8,9 +8,12 @@ function disabledByName(model: MarmosetModel): Record<string, boolean> {
 }
 
 describe('marmoset-model-details-panels', () => {
-  it('returns a single Plasma Biomarkers panel', () => {
+  it('returns the Plasma Biomarkers and Resources panels', () => {
     const panels = getPanels();
-    expect(panels).toEqual([{ name: 'biomarkers', label: 'Plasma Biomarkers', disabled: false }]);
+    expect(panels).toEqual([
+      { name: 'biomarkers', label: 'Plasma Biomarkers', disabled: false },
+      { name: 'resources', label: 'Resources', disabled: false },
+    ]);
   });
 
   it('returns a fresh array of fresh panel objects each call', () => {
@@ -33,5 +36,10 @@ describe('marmoset-model-details-panels', () => {
 
   it('disables the biomarkers panel when there is no biomarker data', () => {
     expect(disabledByName({ ...marmosetModelMock, biomarkers: [] })['biomarkers']).toBe(true);
+  });
+
+  it('keeps the resources panel enabled regardless of model data', () => {
+    expect(disabledByName(marmosetModelMock)['resources']).toBe(false);
+    expect(disabledByName({ ...marmosetModelMock, biomarkers: [] })['resources']).toBe(false);
   });
 });
