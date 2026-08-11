@@ -1,0 +1,14 @@
+:host {
+  display: block;
+}
+
+.details-label {
+  font-size: 14px;
+  color: var(--color-gray-600);
+
+  .details-label-separator {
+    font-size: 12px;
+    color: var(--color-gray-300);
+    font-weight: 500;
+  }
+}

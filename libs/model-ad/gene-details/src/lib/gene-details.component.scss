@@ -14,16 +14,8 @@
   }
 
   .gene-details-header {
-    .gene-details-label {
-      font-size: 14px;
-      color: var(--color-gray-600);
+    explorers-details-label {
       margin-bottom: 13px;
-
-      .gene-details-label-separator {
-        font-size: 12px;
-        color: var(--color-gray-300);
-        font-weight: 500;
-      }
     }
 
     h2 {

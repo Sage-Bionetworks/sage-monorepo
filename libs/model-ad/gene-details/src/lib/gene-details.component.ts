@@ -9,7 +9,7 @@ import {
   PlatformService,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
-import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
+import { DetailsLabelComponent, DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import {
   IndividualData,
@@ -24,7 +24,12 @@ import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'model-ad-gene-details',
-  imports: [LoadingIconComponent, BoxplotsGridComponent, DownloadDomImageComponent],
+  imports: [
+    LoadingIconComponent,
+    BoxplotsGridComponent,
+    DownloadDomImageComponent,
+    DetailsLabelComponent,
+  ],
   templateUrl: './gene-details.component.html',
   styleUrls: ['./gene-details.component.scss'],
 })
