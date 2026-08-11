@@ -52,6 +52,7 @@ export interface OrgSagebionetworksRepoModelDataaccessAccessRequestSummary {
 export namespace OrgSagebionetworksRepoModelDataaccessAccessRequestSummary {
   export type StatusEnum =
     | 'created'
+    | 'draft'
     | 'sent'
     | 'delivered'
     | 'completed'
@@ -64,6 +65,7 @@ export namespace OrgSagebionetworksRepoModelDataaccessAccessRequestSummary {
     | 'cancelled';
   export const StatusEnum = {
     Created: 'created' as StatusEnum,
+    Draft: 'draft' as StatusEnum,
     Sent: 'sent' as StatusEnum,
     Delivered: 'delivered' as StatusEnum,
     Completed: 'completed' as StatusEnum,

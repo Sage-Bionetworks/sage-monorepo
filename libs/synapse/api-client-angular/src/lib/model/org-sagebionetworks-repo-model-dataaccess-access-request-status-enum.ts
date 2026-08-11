@@ -10,6 +10,7 @@
 
 export type OrgSagebionetworksRepoModelDataaccessAccessRequestStatusEnum =
   | 'created'
+  | 'draft'
   | 'sent'
   | 'delivered'
   | 'completed'
@@ -23,6 +24,7 @@ export type OrgSagebionetworksRepoModelDataaccessAccessRequestStatusEnum =
 
 export const OrgSagebionetworksRepoModelDataaccessAccessRequestStatusEnum = {
   Created: 'created' as OrgSagebionetworksRepoModelDataaccessAccessRequestStatusEnum,
+  Draft: 'draft' as OrgSagebionetworksRepoModelDataaccessAccessRequestStatusEnum,
   Sent: 'sent' as OrgSagebionetworksRepoModelDataaccessAccessRequestStatusEnum,
   Delivered: 'delivered' as OrgSagebionetworksRepoModelDataaccessAccessRequestStatusEnum,
   Completed: 'completed' as OrgSagebionetworksRepoModelDataaccessAccessRequestStatusEnum,

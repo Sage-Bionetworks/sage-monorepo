@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelCurationExecutionRecordSetGenerationExecutionDetails } from './org-sagebionetworks-repo-model-curation-execution-record-set-generation-execution-details';
 import { OrgSagebionetworksRepoModelCurationExecutionSampleSheetGenerationExecutionDetails } from './org-sagebionetworks-repo-model-curation-execution-sample-sheet-generation-execution-details';
 
 /**
@@ -18,4 +19,5 @@ import { OrgSagebionetworksRepoModelCurationExecutionSampleSheetGenerationExecut
  * @export
  */
 export type OrgSagebionetworksRepoModelCurationExecutionExecutableTaskExecutionDetails =
-  OrgSagebionetworksRepoModelCurationExecutionSampleSheetGenerationExecutionDetails;
+  | OrgSagebionetworksRepoModelCurationExecutionRecordSetGenerationExecutionDetails
+  | OrgSagebionetworksRepoModelCurationExecutionSampleSheetGenerationExecutionDetails;
