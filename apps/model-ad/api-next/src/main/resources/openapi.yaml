@@ -1570,6 +1570,15 @@ components:
             type: string
           nullable: true
           type: array
+        sex:
+          description: Filter by sex.
+          example:
+            - Female
+            - Male
+          items:
+            type: string
+          nullable: true
+          type: array
         sortFields:
           description: |
             List of field names to sort by (e.g., "gene_symbol,name").

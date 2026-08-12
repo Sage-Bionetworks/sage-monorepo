@@ -47,6 +47,10 @@ export interface TranscriptomicsSearchQuery {
    */
   name?: Array<string> | null;
   /**
+   * Filter by sex.
+   */
+  sex?: Array<string> | null;
+  /**
    * List of field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders.
    */
   sortFields: Array<string>;
