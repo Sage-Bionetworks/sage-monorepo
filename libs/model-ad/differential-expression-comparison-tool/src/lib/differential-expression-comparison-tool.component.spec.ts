@@ -150,6 +150,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
   it('should send the selected sex filter in the unpinned query', async () => {
     const { component, comparisonToolService, transcriptomicsService } = await setup();
     const selectedSexes = ['Female'];
+    // TODO(MG-1036): mocked value becomes `{ sexes: selectedSexes }`
     jest.spyOn(comparisonToolService, 'selectedFilters').mockReturnValue({ sex: selectedSexes });
     const getTranscriptomicsSpy = jest
       .spyOn(transcriptomicsService, 'getTranscriptomics')
