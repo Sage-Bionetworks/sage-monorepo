@@ -101,6 +101,7 @@ export interface ComparisonToolConfigFilter {
 }
 
 export type ComparisonToolPage =
+  | 'Marmoset Model Overview'
   | 'Model Overview'
   | 'Differential Expression'
   | 'Disease Correlation'
