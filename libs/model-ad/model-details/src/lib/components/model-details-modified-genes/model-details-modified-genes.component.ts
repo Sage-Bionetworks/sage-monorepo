@@ -1,6 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import { GeneticInfo } from '@sagebionetworks/model-ad/api-client';
+import { pluralize } from '@sagebionetworks/shared/util';
 
 const ENSEMBL_GENE_ID_PREFIX_TO_SPECIES: Record<string, string> = {
   ENSMUSG: 'Mus_musculus',
@@ -16,7 +17,7 @@ const ENSEMBL_GENE_ID_PREFIX_TO_SPECIES: Record<string, string> = {
 export class ModelDetailsModifiedGenesComponent {
   geneticInfo = input.required<GeneticInfo[]>();
 
-  heading = computed(() => `Modified Gene${this.geneticInfo().length > 1 ? 's' : ''}`);
+  heading = computed(() => `Modified ${pluralize('Gene', this.geneticInfo().length)}`);
 
   getGeneUrl(gene: string) {
     const prefix = Object.keys(ENSEMBL_GENE_ID_PREFIX_TO_SPECIES).find((p) => gene.startsWith(p));

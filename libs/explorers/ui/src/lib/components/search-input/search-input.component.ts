@@ -19,6 +19,7 @@ import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
 import { SearchResult } from '@sagebionetworks/explorers/models';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
+import { pluralize } from '@sagebionetworks/shared/util';
 import {
   catchError,
   debounceTime,
@@ -139,7 +140,7 @@ export class SearchInputComponent implements AfterViewInit {
 
   getNotValidSearchMessage(minimumSearchLength: number): string {
     const numWords = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-    return `Please enter at least ${numWords[minimumSearchLength - 1]} character${minimumSearchLength > 1 ? 's' : ''}.`;
+    return `Please enter at least ${numWords[minimumSearchLength - 1]} ${pluralize('character', minimumSearchLength)}.`;
   }
 
   search(query: string): Observable<SearchResult[]> {

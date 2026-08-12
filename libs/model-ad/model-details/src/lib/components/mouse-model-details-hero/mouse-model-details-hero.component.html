@@ -8,7 +8,7 @@
 
     <model-ad-model-details-modified-genes [geneticInfo]="model().genetic_info" />
 
-    <h4>Matched Controls</h4>
+    <h4>{{ matchedControlsHeading() }}</h4>
     <p>
       @for (matched_control of model().matched_controls; track matched_control; let last = $last) {
         <a [href]="this.MATCHED_CONTROLS_URLS[matched_control]" target="_blank">{{
