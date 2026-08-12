@@ -39,9 +39,19 @@ describe('MouseModelDetailsHeroComponent', () => {
     });
   });
 
-  it('should display matched controls', async () => {
-    await setup();
-    expect(screen.getByText(mouseModelMock.matched_controls.join(', '))).toBeInTheDocument();
+  it('should display a singular heading for one matched control', async () => {
+    await setup({ ...mouseModelMock, matched_controls: ['B6129'] });
+    expect(screen.getByText('Matched Control')).toBeVisible();
+    expect(screen.getByRole('link', { name: 'B6129' })).toBeInTheDocument();
+  });
+
+  it('should display a plural heading for multiple matched controls', async () => {
+    const matchedControls = ['B6129', 'C57BL/6J'];
+    await setup({ ...mouseModelMock, matched_controls: matchedControls });
+    expect(screen.getByText('Matched Controls')).toBeVisible();
+    matchedControls.forEach((matchedControl) => {
+      expect(screen.getByRole('link', { name: matchedControl })).toBeInTheDocument();
+    });
   });
 
   it('should display JAX stock number as link', async () => {

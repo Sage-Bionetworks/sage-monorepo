@@ -39,7 +39,7 @@ describe('MarmosetModelDetailsHeroComponent', () => {
 
   it('should not display mouse-only sections', async () => {
     await setup();
-    expect(screen.queryByText('Matched Controls')).not.toBeInTheDocument();
+    expect(screen.queryByText(/Matched Control/)).not.toBeInTheDocument();
     expect(screen.queryByText('ALSO KNOWN AS')).not.toBeInTheDocument();
     expect(screen.queryByText('JAX Stock Number:', { exact: false })).not.toBeInTheDocument();
     expect(screen.queryByText('RRID:', { exact: false })).not.toBeInTheDocument();

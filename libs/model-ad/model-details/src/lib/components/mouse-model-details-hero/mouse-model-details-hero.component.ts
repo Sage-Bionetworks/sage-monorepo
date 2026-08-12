@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import { MouseModel } from '@sagebionetworks/model-ad/api-client';
 import { ModelDetailsModifiedGenesComponent } from '../model-details-modified-genes/model-details-modified-genes.component';
@@ -20,4 +20,8 @@ export class MouseModelDetailsHeroComponent {
   };
 
   model = input.required<MouseModel>();
+
+  matchedControlsHeading = computed(
+    () => `Matched Control${this.model().matched_controls.length > 1 ? 's' : ''}`,
+  );
 }
