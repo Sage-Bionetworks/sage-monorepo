@@ -1,0 +1,11 @@
+<div class="model-details-hero" [style.background-image]="'url(' + backgroundImagePath + ')'">
+  <section>
+    <h1>{{ model().name }}</h1>
+    <p>Marmoset model of {{ model().model_type }}</p>
+    <p>Developed by the MARMO-AD Consortium</p>
+
+    <hr />
+
+    <model-ad-model-details-modified-genes [geneticInfo]="model().genetic_info" />
+  </section>
+</div>

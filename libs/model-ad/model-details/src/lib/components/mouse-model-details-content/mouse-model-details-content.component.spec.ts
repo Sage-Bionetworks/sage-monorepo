@@ -24,6 +24,11 @@ describe('MouseModelDetailsContentComponent', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(mouseModelMock.name);
   });
 
+  it('should display the hero', async () => {
+    await setup();
+    expect(screen.getByText(`Mouse model of ${mouseModelMock.model_type}`)).toBeInTheDocument();
+  });
+
   it('should display all tabs for which the model has data', async () => {
     await setup();
     const tabs = ['Omics', 'Biomarkers', 'Pathology', 'Resources'];

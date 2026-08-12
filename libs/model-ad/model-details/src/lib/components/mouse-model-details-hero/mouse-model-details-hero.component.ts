@@ -1,16 +1,15 @@
-import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import { MouseModel } from '@sagebionetworks/model-ad/api-client';
-import sanitizeHtml from 'sanitize-html';
+import { ModelDetailsModifiedGenesComponent } from '../model-details-modified-genes/model-details-modified-genes.component';
 
 @Component({
-  selector: 'model-ad-model-details-hero',
-  imports: [CommonModule, SanitizeHtmlPipe],
-  templateUrl: './model-details-hero.component.html',
-  styleUrls: ['./model-details-hero.component.scss'],
+  selector: 'model-ad-mouse-model-details-hero',
+  imports: [SanitizeHtmlPipe, ModelDetailsModifiedGenesComponent],
+  templateUrl: './mouse-model-details-hero.component.html',
+  styleUrls: ['./mouse-model-details-hero.component.scss'],
 })
-export class ModelDetailsHeroComponent {
+export class MouseModelDetailsHeroComponent {
   readonly backgroundImagePath = 'explorers-assets/images/background.svg';
   readonly JAX_STRAIN_URL = 'https://www.jax.org/strain';
 
@@ -21,11 +20,4 @@ export class ModelDetailsHeroComponent {
   };
 
   model = input.required<MouseModel>();
-
-  sanitizeHtml = sanitizeHtml;
-
-  getGeneUrl(gene: string) {
-    const species = gene.startsWith('ENSMUSG') ? 'Mus_musculus' : 'Homo_sapiens';
-    return `https://sep2025.archive.ensembl.org/${species}/Gene/Summary?db=core;g=${gene}`;
-  }
 }

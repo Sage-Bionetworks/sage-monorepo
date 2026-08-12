@@ -26,6 +26,13 @@ describe('MarmosetModelDetailsContentComponent', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(marmosetModelMock.name);
   });
 
+  it('should display the hero', async () => {
+    await setup();
+    expect(
+      screen.getByText(`Marmoset model of ${marmosetModelMock.model_type}`),
+    ).toBeInTheDocument();
+  });
+
   it('should display the Plasma Biomarkers tab', async () => {
     await setup();
     expect(screen.getByRole('button', { name: 'Plasma Biomarkers' })).toBeInTheDocument();

@@ -2,19 +2,19 @@ import { Component, computed, input, output } from '@angular/core';
 import { Panel, ResourceCardData, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { MouseModel } from '@sagebionetworks/model-ad/api-client';
-import { ModelDetailsHeroComponent } from '../model-details-hero/model-details-hero.component';
 import { ModelDetailsOmicsComponent } from '../model-details-omics/model-details-omics.component';
 import { ModelDetailsResourcesComponent } from '../model-details-resources/model-details-resources.component';
 import { MouseModelDetailsBoxplotsSelectorComponent } from '../mouse-model-details-boxplots-selector/mouse-model-details-boxplots-selector.component';
+import { MouseModelDetailsHeroComponent } from '../mouse-model-details-hero/mouse-model-details-hero.component';
 
 @Component({
   selector: 'model-ad-mouse-model-details-content',
   imports: [
     PanelNavigationComponent,
-    ModelDetailsHeroComponent,
     ModelDetailsOmicsComponent,
     ModelDetailsResourcesComponent,
     MouseModelDetailsBoxplotsSelectorComponent,
+    MouseModelDetailsHeroComponent,
   ],
   templateUrl: './mouse-model-details-content.component.html',
   styleUrls: ['./mouse-model-details-content.component.scss'],

@@ -34,7 +34,7 @@ class MouseModelDetailsContentStoryWrapperComponent {
 
 const meta: Meta<MouseModelDetailsContentStoryWrapperComponent> = {
   component: MouseModelDetailsContentStoryWrapperComponent,
-  title: 'Model Details/MouseModelDetailsContentComponent',
+  title: 'Model Details/Mouse/MouseModelDetailsContentComponent',
   decorators: [
     applicationConfig({
       providers: [
