@@ -34,7 +34,7 @@ public class TranscriptomicsService {
   @Cacheable(
     key = "T(org.sagebionetworks.explorers.ApiHelper)" +
     ".buildCacheKey('transcriptomics', #query.itemFilterType, #query.items, " +
-    "#query.search, #query.biodomains, #query.modelType, #query.name, " +
+    "#query.search, #query.biodomains, #query.modelType, #query.name, #query.sex, " +
     "#tissue, #query.pageNumber, #query.pageSize, " +
     "#query.sortFields, #query.sortOrders)"
   )

@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -75,9 +76,31 @@ public class CustomTranscriptomicsRepositoryImpl
     .dataFilter("biodomains", TranscriptomicsSearchQueryDto::getBiodomains)
     .dataFilter("model_type", TranscriptomicsSearchQueryDto::getModelType)
     .dataFilter("name.link_text", TranscriptomicsSearchQueryDto::getName)
+    // TODO(MG-1004): replace with TranscriptomicsSearchQueryDto::getSex
+    // once rna_de_aggregate stores singular Female/Male
+    .dataFilter("sex", query -> expandSexMatchValues(query.getSex()))
     .compositeItemFilter(item -> TranscriptomicsIdentifier.parse(item).toCriteria())
     .searchFilter(GENE_SYMBOL_FIELD)
     .build();
+
+  /**
+   * Expands each requested sex to every form stored in the source data, so a singular query value
+   * still matches the plural values in {@code rna_de_aggregate}. Returns an empty list for a null
+   * query value, which {@link ComparisonToolRepositorySupport} skips.
+   *
+   * <p>See {@link TranscriptomicsIdentifier#sexMatchValues(String)}, which owns the plural fallback
+   * shared with the composite item filter.
+   */
+  private static List<String> expandSexMatchValues(@Nullable List<String> sexes) {
+    if (sexes == null) {
+      return List.of();
+    }
+    return sexes
+      .stream()
+      .map(TranscriptomicsIdentifier::sexMatchValues)
+      .flatMap(List::stream)
+      .toList();
+  }
 
   /**
    * Maps each heatmap time-point column to its nested {@code log2_fc} value
