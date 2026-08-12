@@ -3,6 +3,7 @@ import {
   escapeRegexChars,
   getRandomInt,
   isExternalLink,
+  pluralize,
   removeParentheses,
   toKebabCase,
 } from './helpers';
@@ -31,6 +32,25 @@ describe('capitalizeFirstLetter', () => {
 
   it('should handle a single character', () => {
     expect(capitalizeFirstLetter('a')).toBe('A');
+  });
+});
+
+describe('pluralize', () => {
+  it('should return the singular form when count is 1', () => {
+    expect(pluralize('Control', 1)).toBe('Control');
+  });
+
+  it('should return the plural form when count is greater than 1', () => {
+    expect(pluralize('Control', 2)).toBe('Controls');
+  });
+
+  it('should return the plural form when count is 0', () => {
+    expect(pluralize('Control', 0)).toBe('Controls');
+  });
+
+  it('should use the provided plural form for irregular words', () => {
+    expect(pluralize('mouse', 1, 'mice')).toBe('mouse');
+    expect(pluralize('mouse', 3, 'mice')).toBe('mice');
   });
 });
 

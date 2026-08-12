@@ -1,6 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import { MouseModel } from '@sagebionetworks/model-ad/api-client';
+import { pluralize } from '@sagebionetworks/shared/util';
 import { ModelDetailsModifiedGenesComponent } from '../model-details-modified-genes/model-details-modified-genes.component';
 
 @Component({
@@ -22,6 +23,6 @@ export class MouseModelDetailsHeroComponent {
   model = input.required<MouseModel>();
 
   matchedControlsHeading = computed(
-    () => `Matched Control${this.model().matched_controls.length > 1 ? 's' : ''}`,
+    () => `Matched ${pluralize('Control', this.model().matched_controls.length)}`,
   );
 }
