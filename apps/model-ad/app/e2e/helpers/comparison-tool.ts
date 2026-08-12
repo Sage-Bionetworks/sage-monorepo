@@ -44,11 +44,18 @@ export const fetchComparisonToolData = async <T>(
   page: Page,
   name: string,
   categories: string[] = [],
+  filterParams: Record<string, string[]> = {},
 ): Promise<T> => {
   const params = new URLSearchParams();
   params.append('itemFilterType', 'exclude');
   for (const category of categories) {
     params.append('categories', category);
+  }
+
+  for (const [key, values] of Object.entries(filterParams)) {
+    for (const value of values) {
+      params.append(key, value);
+    }
   }
 
   // sortFields and sortOrders are required by the API
@@ -85,12 +92,14 @@ export const fetchDiseaseCorrelations = async (
 
 export const fetchTranscriptomics = async (
   page: Page,
-  categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Cortex', 'female'],
+  categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Cerebral Cortex'],
+  filterParams: Record<string, string[]> = {},
 ): Promise<Transcriptomics[]> => {
   const data = await fetchComparisonToolData<TranscriptomicsPage>(
     page,
-    'Transcriptomics',
+    'Differential Expression',
     categories,
+    filterParams,
   );
   return data.transcriptomics;
 };

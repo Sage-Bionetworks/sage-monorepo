@@ -9,7 +9,10 @@ import {
   provideComparisonToolService,
   provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
-import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import {
+  mockEmptyComparisonToolQuery,
+  provideLoadingIconColors,
+} from '@sagebionetworks/explorers/testing';
 import {
   ComparisonToolConfigService,
   Sex,
@@ -142,5 +145,20 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
         name: expect.objectContaining({ link_url: 'models/5xFAD (UCI)' }),
       }),
     ]);
+  });
+
+  it('should send the selected sex filter in the unpinned query', async () => {
+    const { component, comparisonToolService, transcriptomicsService } = await setup();
+    const selectedSexes = ['Female'];
+    jest.spyOn(comparisonToolService, 'selectedFilters').mockReturnValue({ sex: selectedSexes });
+    const getTranscriptomicsSpy = jest
+      .spyOn(transcriptomicsService, 'getTranscriptomics')
+      .mockReturnValue(of(mockPage([])) as any);
+
+    component.getUnpinnedData(mockEmptyComparisonToolQuery);
+
+    expect(getTranscriptomicsSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ sex: selectedSexes }),
+    );
   });
 });
