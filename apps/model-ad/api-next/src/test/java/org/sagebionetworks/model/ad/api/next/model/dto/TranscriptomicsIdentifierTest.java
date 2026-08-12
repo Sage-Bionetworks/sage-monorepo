@@ -175,30 +175,7 @@ class TranscriptomicsIdentifierTest {
     assertThat(andClauses).hasSize(3);
     assertThat(andClauses.get(0)).isEqualTo(new Document("ensembl_gene_id", "ENSMUSG00000000001"));
     assertThat(andClauses.get(1)).isEqualTo(new Document("name.link_text", "5xFAD"));
-    // MG-1004: sex matches singular or plural source data (Female / Females)
-    assertThat(andClauses.get(2)).isEqualTo(
-      new Document("sex", new Document("$in", List.of("Female", "Females")))
-    );
-  }
-
-  // TODO(MG-1004): remove this test once rna_de_aggregate stores singular Female/Male
-  @Test
-  @DisplayName("should match plural source sex values for male identifier")
-  void shouldMatchPluralSourceSexValuesForMale() {
-    TranscriptomicsIdentifier identifier = TranscriptomicsIdentifier.builder()
-      .ensemblGeneId("ENSMUSG00000000001")
-      .name("5xFAD")
-      .sex("Male")
-      .build();
-
-    List<Document> andClauses = identifier
-      .toCriteria()
-      .getCriteriaObject()
-      .getList("$and", Document.class);
-
-    assertThat(andClauses.get(2)).isEqualTo(
-      new Document("sex", new Document("$in", List.of("Male", "Males")))
-    );
+    assertThat(andClauses.get(2)).isEqualTo(new Document("sex", "Female"));
   }
 
   @Test

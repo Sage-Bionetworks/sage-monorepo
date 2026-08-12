@@ -1,6 +1,5 @@
 package org.sagebionetworks.model.ad.api.next.model.dto;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -87,17 +86,7 @@ public class TranscriptomicsIdentifier {
       .andOperator(
         Criteria.where("ensembl_gene_id").is(ensemblGeneId),
         Criteria.where("name.link_text").is(name),
-        Criteria.where("sex").in(sexMatchValues())
+        Criteria.where("sex").is(sex)
       );
-  }
-
-  // TODO(MG-1004): drop the plural fallback once rna_de_aggregate stores singular Female/Male.
-  // composite_id sex is normalized to singular (see TranscriptomicsMapper), but the source data
-  // still stores plural Females/Males, so the round-trip filter must match either form.
-  private List<String> sexMatchValues() {
-    if ("Female".equals(sex) || "Male".equals(sex)) {
-      return List.of(sex, sex + "s");
-    }
-    return List.of(sex);
   }
 }
