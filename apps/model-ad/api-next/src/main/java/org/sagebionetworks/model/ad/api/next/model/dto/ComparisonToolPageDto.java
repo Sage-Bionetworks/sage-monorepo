@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public enum ComparisonToolPageDto {
   
+  MARMOSET_MODEL_OVERVIEW("Marmoset Model Overview"),
+  
   MODEL_OVERVIEW("Model Overview"),
   
   DIFFERENTIAL_EXPRESSION("Differential Expression"),
