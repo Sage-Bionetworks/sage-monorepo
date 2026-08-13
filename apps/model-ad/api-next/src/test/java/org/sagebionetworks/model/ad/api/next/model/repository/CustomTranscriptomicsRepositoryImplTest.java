@@ -97,11 +97,9 @@ class CustomTranscriptomicsRepositoryImplTest {
     assertThat(andConditions.size()).isGreaterThanOrEqualTo(3);
   }
 
-  // TODO(MG-1004): assert a plain $in of the requested values once rna_de_aggregate stores
-  // singular Female/Male
   @Test
-  @DisplayName("should match singular and plural source sex values when filtering by sex")
-  void shouldMatchSingularAndPluralSourceSexValuesWhenFilteringBySex() {
+  @DisplayName("should match the requested sex values when filtering by sex")
+  void shouldMatchRequestedSexValuesWhenFilteringBySex() {
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
       .sex(Arrays.asList("Female", "Male"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
@@ -112,7 +110,7 @@ class CustomTranscriptomicsRepositoryImplTest {
     Document criteriaDoc = captureCountQuery().getQueryObject();
     List<Document> andConditions = (List<Document>) criteriaDoc.get("$and");
     assertThat(andConditions).contains(
-      new Document("sex", new Document("$in", List.of("Female", "Females", "Male", "Males")))
+      new Document("sex", new Document("$in", List.of("Female", "Male")))
     );
   }
 

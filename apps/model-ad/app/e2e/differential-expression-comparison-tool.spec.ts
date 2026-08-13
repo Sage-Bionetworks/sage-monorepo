@@ -421,16 +421,14 @@ test.describe('differential expression', () => {
       page,
     }) => {
       await navigateToComparison(page, CT_PAGE, true);
-      // TODO(MG-1036): first arg becomes `'sexes'`
-      await testFilterSelectionUpdatesUrl(page, 'sex', 'Sex', 'Female');
+      await testFilterSelectionUpdatesUrl(page, 'sexes', 'Sex', 'Female');
     });
 
     test('filter selections are restored from URL on page load', async ({ page }) => {
       const expectedFilterParams = {
         biodomains: ['Apoptosis', 'Epigenetic', 'Myelination'],
         models: ['APOE4'],
-        // TODO(MG-1036): becomes `sexes: ['Female']`
-        sex: ['Female'],
+        sexes: ['Female'],
       };
       const expectedSelectedFilters = {
         'Biological Domain': ['Apoptosis', 'Epigenetic', 'Myelination'],
@@ -452,8 +450,7 @@ test.describe('differential expression', () => {
       const expectedInitialFilterParams = {
         modelTypes: ['Familial AD'],
         biodomains: ['Apoptosis', 'Epigenetic', 'Myelination'],
-        // TODO(MG-1036): becomes `sexes: ['Female']`
-        sex: ['Female'],
+        sexes: ['Female'],
       };
 
       await navigateToComparison(

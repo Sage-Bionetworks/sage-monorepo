@@ -177,8 +177,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       biodomains: selectedFilters['biodomains'],
       modelType: selectedFilters['modelTypes'],
       name: selectedFilters['models'],
-      // TODO(MG-1036): becomes `sex: selectedFilters['sexes']`
-      sex: selectedFilters['sex'],
+      sex: selectedFilters['sexes'],
       sortFields,
       sortOrders,
     };
