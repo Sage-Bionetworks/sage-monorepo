@@ -83,6 +83,21 @@ export const routes: Route[] = [
     path: `${ROUTE_PATHS.GENES}/:ensemblGeneId`,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/gene-details').then((routes) => routes.routes),
+    data: {
+      title: 'Individual RNA Expression',
+      description:
+        "View individual-level RNA expression results for next-generation mouse models of Alzheimer's Disease.",
+    },
+  },
+  {
+    path: `${ROUTE_PATHS.PROTEINS}/:uniqueId`,
+    loadChildren: () =>
+      import('@sagebionetworks/model-ad/protein-details').then((routes) => routes.routes),
+    data: {
+      title: 'Individual Protein Expression',
+      description:
+        "View individual-level protein expression results for next-generation mouse models of Alzheimer's Disease.",
+    },
   },
   {
     path: ROUTE_PATHS.DISEASE_CORRELATION,
