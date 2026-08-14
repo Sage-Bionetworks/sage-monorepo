@@ -8,7 +8,7 @@
       @if (records.length > 0) {
         <div class="individual-expression-details-header">
           <explorers-details-label [left]="label().left" [right]="label().right" />
-          <h2>{{ title() }} {{ tissue() ? '(' + tissue() + ')' : '' }}</h2>
+          <h2>{{ heading() }}</h2>
           <div class="individual-expression-details-subtitle">{{ subtitle() }}</div>
         </div>
         <div class="individual-expression-details-boxplots-download">

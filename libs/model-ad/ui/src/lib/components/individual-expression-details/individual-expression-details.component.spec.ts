@@ -32,7 +32,7 @@ const mockRecordWithUniprotid: IndividualExpressionDetailsData = {
   display_symbol: 'TestGene (B9EKJ1)',
 };
 
-const mockTitle = 'Individual Expression';
+const mockModality = 'RNA';
 const mockTissue = 'Hippocampus';
 const mockModelIdentifier = 'TestModel';
 
@@ -46,7 +46,7 @@ async function setup({
       isLoading,
       data,
       tissue,
-      title: mockTitle,
+      modality: mockModality,
       modelIdentifier: mockModelIdentifier,
       downloadFilenamePrefix: 'expression_individual',
     },
@@ -66,16 +66,18 @@ describe('IndividualExpressionDetailsComponent', () => {
     expect(container.querySelector('model-ad-boxplots-grid')).toBeNull();
   });
 
-  it('should display the title and tissue in the heading', async () => {
+  it('should build the heading from the modality and tissue', async () => {
     await setup();
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      `${mockTitle} (${mockTissue})`,
+      'Individual RNA Expression (Hippocampus)',
     );
   });
 
   it('should omit the parentheses in the heading when there is no tissue', async () => {
     await setup({ tissue: null });
-    expect(screen.getByRole('heading', { level: 2 }).textContent?.trim()).toBe(mockTitle);
+    expect(screen.getByRole('heading', { level: 2 }).textContent?.trim()).toBe(
+      'Individual RNA Expression',
+    );
   });
 
   it('should display the model identifier as the subtitle', async () => {

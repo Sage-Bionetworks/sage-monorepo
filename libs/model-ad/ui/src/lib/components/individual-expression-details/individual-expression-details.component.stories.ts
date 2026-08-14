@@ -31,7 +31,7 @@ export const IndividualRnaExpression: Story = {
   args: {
     isLoading: false,
     data: transcriptomicsIndividualMocks,
-    title: 'Individual RNA Expression',
+    modality: 'RNA',
     tissue: transcriptomicsIndividualMocks[0].tissue,
     modelIdentifier: transcriptomicsIndividualMocks[0].name,
     downloadFilenamePrefix: 'transcriptomics_individual',
@@ -42,7 +42,7 @@ export const IndividualProteinExpression: Story = {
   args: {
     isLoading: false,
     data: proteomicsIndividualMocks,
-    title: 'Individual Protein Expression',
+    modality: 'Protein',
     tissue: proteomicsIndividualMocks[0].tissue,
     modelIdentifier: proteomicsIndividualMocks[0].name,
     downloadFilenamePrefix: 'protein_expression_individual',

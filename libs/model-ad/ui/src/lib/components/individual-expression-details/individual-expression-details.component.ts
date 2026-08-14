@@ -50,7 +50,7 @@ export class IndividualExpressionDetailsComponent {
 
   isLoading = input.required<boolean>();
   data = input<IndividualExpressionDetailsData[] | undefined>();
-  title = input.required<string>();
+  modality = input.required<string>();
   tissue = input<string | null>(null);
   modelIdentifier = input<string | null>(null);
   downloadFilenamePrefix = input.required<string>();
@@ -67,6 +67,11 @@ export class IndividualExpressionDetailsComponent {
       left,
       right: left === ensemblGeneId ? '' : ensemblGeneId,
     };
+  });
+
+  heading = computed(() => {
+    const tissue = this.tissue();
+    return `Individual ${this.modality()} Expression${tissue ? ` (${tissue})` : ''}`;
   });
 
   subtitle = computed(() => this.modelIdentifier() ?? '');

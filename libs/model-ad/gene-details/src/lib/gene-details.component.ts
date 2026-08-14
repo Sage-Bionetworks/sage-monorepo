@@ -31,7 +31,7 @@ export class GeneDetailsComponent implements OnInit {
   platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
 
-  readonly title = 'Individual RNA Expression';
+  readonly modality = 'RNA';
   readonly downloadFilenamePrefix = 'transcriptomics_individual';
 
   isLoading = signal(true);
