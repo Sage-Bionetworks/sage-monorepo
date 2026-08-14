@@ -1,0 +1,24 @@
+<h4>{{ heading() }}</h4>
+<div class="modified-genes">
+  @for (gene of geneticInfo(); track gene.modified_gene + gene.ensembl_gene_id) {
+    <div class="modified-gene">
+      <p>
+        {{ gene.modified_gene }} |
+        <a [href]="getGeneUrl(gene.ensembl_gene_id)" target="_blank">{{ gene.ensembl_gene_id }}</a>
+      </p>
+      @if (gene.allele && gene.mgi_allele_id) {
+        <p>
+          Allele:
+          <a
+            [href]="`https://www.informatics.jax.org/allele/MGI:${gene.mgi_allele_id}`"
+            target="_blank"
+          >
+            <span [innerHtml]="gene.allele | sanitizeHtml"></span>
+          </a>
+        </p>
+      }
+      <p>Type: {{ gene.allele_type }}</p>
+      <br />
+    </div>
+  }
+</div>

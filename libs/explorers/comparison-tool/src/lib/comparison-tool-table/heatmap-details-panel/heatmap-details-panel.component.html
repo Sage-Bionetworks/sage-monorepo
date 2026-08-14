@@ -1,13 +1,7 @@
 <ng-template #panelTemplate let-data>
   @if (data) {
     @if (data.label) {
-      <div class="heatmap-details-panel-label">
-        {{ data.label.left }}
-        @if (data.label.right) {
-          <span class="heatmap-details-panel-label-separator">|</span>
-          {{ data.label.right }}
-        }
-      </div>
+      <explorers-details-label [left]="data.label.left" [right]="data.label.right" />
     }
 
     <div class="heatmap-details-panel-heading">

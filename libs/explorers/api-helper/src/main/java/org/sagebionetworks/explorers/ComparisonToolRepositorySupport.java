@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Collation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -48,6 +49,9 @@ import org.springframework.data.mongodb.core.query.Query;
 @Slf4j
 public abstract class ComparisonToolRepositorySupport<T> {
 
+  private static final Collation CASE_INSENSITIVE =
+    Collation.of("en").strength(2);
+
   protected final MongoTemplate mongoTemplate;
 
   protected ComparisonToolRepositorySupport(MongoTemplate mongoTemplate) {
@@ -78,10 +82,13 @@ public abstract class ComparisonToolRepositorySupport<T> {
    *
    * <p>When a user sorts by a key in this map, the prerequisites (if any) are injected first,
    * then an {@code $addFields: {<field>_sort: <expr>}} stage is injected, and the {@code $sort}
-   * uses {@code <field>_sort} instead of the raw field. Use this for case-insensitive string sort
-   * (via {@link #toLowerExpr(String)}), array-to-string reduction (via
-   * {@link #arrayToLoweredStringExpr(String)}), nested-field unwrapping, or any case where the raw
-   * field isn't directly sortable.
+   * uses {@code <field>_sort} instead of the raw field. Use this for array-to-string reduction
+   * (via {@link #arrayToStringExpr(String)}), computed fallback fields, or any case where
+   * the raw field isn't directly sortable.
+   *
+   * <p>Case-insensitive string sorting is handled by pipeline-level collation and does not require
+   * a computed sort field. For nested fields or companion numeric fields, use
+   * {@link #getSortFieldAliases()} instead.
    *
    * <p>For expressions that reference computed fields, bundle the prerequisite stages via
    * {@link ComputedSortField#withPrerequisite(AggregationOperation)}.
@@ -158,7 +165,10 @@ public abstract class ComparisonToolRepositorySupport<T> {
       // Permits disk spillover when the $sort working set exceeds 100MB; only activates
       // when needed -- required for deep pagination on large collections
       Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(
-        AggregationOptions.builder().allowDiskUse(true).build()
+        AggregationOptions.builder()
+          .allowDiskUse(true)
+          .collation(CASE_INSENSITIVE)
+          .build()
       );
       log.debug("Executing aggregation on collection {}: {}", getCollectionName(), aggregation);
       AggregationResults<T> results = mongoTemplate.aggregate(
@@ -167,7 +177,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
         getDocumentClass()
       );
 
-      long total = mongoTemplate.count(new Query(matchCriteria), getCollectionName());
+      long total = mongoTemplate.count(
+        new Query(matchCriteria)
+          .collation(CASE_INSENSITIVE),
+        getCollectionName()
+      );
       return new PageImpl<>(results.getMappedResults(), pageable, total);
     } catch (Exception e) {
       log.error("Error executing aggregation on collection {}", getCollectionName(), e);
@@ -175,16 +189,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
     }
   }
 
-  /** Convenience: {@code $toLower("$" + fieldPath)} as a MongoDB expression Document. */
-  protected static Object toLowerExpr(String fieldPath) {
-    return new Document("$toLower", "$" + fieldPath);
-  }
-
   /**
-   * Convenience: reduces an array field into a single lowercased string with a NUL separator,
-   * producing a stable lexicographic sort key. Avoids MongoDB's "parallel arrays" limitation.
+   * Reduces an array field into a NUL-separated string for sorting. Avoids MongoDB's "parallel
+   * arrays" limitation. Case-insensitive comparison is handled by pipeline-level collation.
    */
-  protected static Object arrayToLoweredStringExpr(String arrayField) {
+  protected static Object arrayToStringExpr(String arrayField) {
     Document reduce = new Document(
       "$reduce",
       new Document()
@@ -192,7 +201,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
         .append("initialValue", "")
         .append("in", new Document("$concat", List.of("$$value", "\u0000", "$$this")))
     );
-    return new Document("$toLower", reduce);
+    return reduce;
   }
 
   /**

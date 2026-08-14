@@ -1,0 +1,9 @@
+@if (left()) {
+  <div class="details-label">
+    {{ left() }}
+    @if (right()) {
+      <span class="details-label-separator">|</span>
+      {{ right() }}
+    }
+  </div>
+}

@@ -1,0 +1,30 @@
+<section>
+  <div [class]="{ 'individual-expression-details': true, loading: isLoading() }">
+    @if (isLoading()) {
+      <div id="loading">
+        <explorers-loading-icon />
+      </div>
+    } @else if (data(); as records) {
+      @if (records.length > 0) {
+        <div class="individual-expression-details-header">
+          <explorers-details-label [left]="label().left" [right]="label().right" />
+          <h2>{{ heading() }}</h2>
+          <div class="individual-expression-details-subtitle">{{ subtitle() }}</div>
+        </div>
+        <div class="individual-expression-details-boxplots-download">
+          <explorers-download-dom-image
+            [target]="boxplotGrid"
+            [filename]="filename()"
+            [buttonLabel]="'Download'"
+            [heading]="'Download these results as:'"
+            [hasCsvDownload]="true"
+            [data]="csvData()"
+          />
+        </div>
+        <div #boxplotGrid class="boxplots-grid-wrapper">
+          <model-ad-boxplots-grid [boxplotDataList]="records" [xAxisOrder]="xAxisOrder()" />
+        </div>
+      }
+    }
+  </div>
+</section>

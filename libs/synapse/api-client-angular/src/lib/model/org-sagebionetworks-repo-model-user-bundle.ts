@@ -9,6 +9,7 @@
  */
 import { OrgSagebionetworksRepoModelUserProfile } from './org-sagebionetworks-repo-model-user-profile';
 import { OrgSagebionetworksRepoModelVerificationVerificationSubmission } from './org-sagebionetworks-repo-model-verification-verification-submission';
+import { OrgSagebionetworksRepoModelAuthIdentityProvider } from './org-sagebionetworks-repo-model-auth-identity-provider';
 
 /**
  * JSON schema for UserProfile POJO
@@ -40,4 +41,8 @@ export interface OrgSagebionetworksRepoModelUserBundle {
    * true iff the user has permissions to review data access submissions on at least one access requirement (This is always true for an ACT member)
    */
   isARReviewer?: boolean;
+  /**
+   * The identity providers linked to this user\'s account
+   */
+  identityProviders?: Array<OrgSagebionetworksRepoModelAuthIdentityProvider>;
 }

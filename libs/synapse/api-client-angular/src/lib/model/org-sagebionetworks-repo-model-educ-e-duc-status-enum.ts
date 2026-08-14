@@ -9,6 +9,7 @@
  */
 
 export type OrgSagebionetworksRepoModelEducEDucStatusEnum =
+  | 'draft'
   | 'sent'
   | 'delivered'
   | 'completed'
@@ -17,6 +18,7 @@ export type OrgSagebionetworksRepoModelEducEDucStatusEnum =
   | 'correct';
 
 export const OrgSagebionetworksRepoModelEducEDucStatusEnum = {
+  Draft: 'draft' as OrgSagebionetworksRepoModelEducEDucStatusEnum,
   Sent: 'sent' as OrgSagebionetworksRepoModelEducEDucStatusEnum,
   Delivered: 'delivered' as OrgSagebionetworksRepoModelEducEDucStatusEnum,
   Completed: 'completed' as OrgSagebionetworksRepoModelEducEDucStatusEnum,

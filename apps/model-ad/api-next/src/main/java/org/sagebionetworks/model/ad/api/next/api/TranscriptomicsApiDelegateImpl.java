@@ -28,6 +28,7 @@ public class TranscriptomicsApiDelegateImpl implements TranscriptomicsApiDelegat
     "biodomains",
     "modelType",
     "name",
+    "sex",
     "sortFields",
     "sortOrders"
   );

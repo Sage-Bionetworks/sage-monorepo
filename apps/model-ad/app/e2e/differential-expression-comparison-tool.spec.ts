@@ -33,7 +33,11 @@ import {
   testTableReturnsToFirstPageWhenSortChanged,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
-import { fetchComparisonToolConfig, navigateToComparison } from './helpers/comparison-tool';
+import {
+  fetchComparisonToolConfig,
+  fetchTranscriptomics,
+  navigateToComparison,
+} from './helpers/comparison-tool';
 
 const CT_PAGE = 'Differential Expression';
 const categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
@@ -340,6 +344,13 @@ test.describe('differential expression', () => {
     await expect(popup.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
   });
 
+  test('sex filter returns only results for the selected sex', async ({ page }) => {
+    const results = await fetchTranscriptomics(page, categories, { sex: ['Female'] });
+
+    expect(results.length).toBeGreaterThan(0);
+    expect(results.every((result) => result.sex === 'Female')).toBe(true);
+  });
+
   test.describe('sort URL sync', () => {
     // Columns: 0=Gene (gene_symbol), 1=Model (name), 2=Control, 3=4 months, 4=12 months
     // Default sort: gene_symbol ASC, name ASC
@@ -406,14 +417,23 @@ test.describe('differential expression', () => {
       await testFilterSelectionUpdatesUrl(page, 'modelTypes', 'Model Type', 'Familial AD');
     });
 
+    test('sex filter selections are added to URL when selected and removed when cleared', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testFilterSelectionUpdatesUrl(page, 'sexes', 'Sex', 'Female');
+    });
+
     test('filter selections are restored from URL on page load', async ({ page }) => {
       const expectedFilterParams = {
         biodomains: ['Apoptosis', 'Epigenetic', 'Myelination'],
         models: ['APOE4'],
+        sexes: ['Female'],
       };
       const expectedSelectedFilters = {
         'Biological Domain': ['Apoptosis', 'Epigenetic', 'Myelination'],
         'Mouse Model': ['APOE4'],
+        Sex: ['Female'],
       };
 
       await navigateToComparison(
@@ -430,6 +450,7 @@ test.describe('differential expression', () => {
       const expectedInitialFilterParams = {
         modelTypes: ['Familial AD'],
         biodomains: ['Apoptosis', 'Epigenetic', 'Myelination'],
+        sexes: ['Female'],
       };
 
       await navigateToComparison(

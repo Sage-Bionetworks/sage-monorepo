@@ -7,7 +7,7 @@ import { MouseModelDetailsBoxplotsSelectorComponent } from './mouse-model-detail
 
 const meta: Meta<MouseModelDetailsBoxplotsSelectorComponent> = {
   component: MouseModelDetailsBoxplotsSelectorComponent,
-  title: 'Model Details/MouseModelDetailsBoxplotsSelectorComponent',
+  title: 'Model Details/Mouse/MouseModelDetailsBoxplotsSelectorComponent',
   decorators: [
     applicationConfig({
       providers: [

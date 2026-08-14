@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { HeatmapDetailsPanelData } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService, HelperService } from '@sagebionetworks/explorers/services';
+import { DetailsLabelComponent } from '@sagebionetworks/explorers/ui';
 import { Popover, PopoverModule } from 'primeng/popover';
 
 const defaultPanelData: HeatmapDetailsPanelData = {
@@ -21,7 +22,7 @@ const defaultPanelData: HeatmapDetailsPanelData = {
 
 @Component({
   selector: 'explorers-heatmap-details-panel',
-  imports: [CommonModule, PopoverModule],
+  imports: [CommonModule, DetailsLabelComponent, PopoverModule],
   templateUrl: './heatmap-details-panel.component.html',
   styleUrls: ['./heatmap-details-panel.component.scss'],
   encapsulation: ViewEncapsulation.None,

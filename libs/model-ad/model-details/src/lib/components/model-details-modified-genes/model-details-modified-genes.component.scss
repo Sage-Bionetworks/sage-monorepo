@@ -1,0 +1,15 @@
+@use 'model-ad/styles/src/mixins' as mixins;
+
+:host {
+  @include mixins.model-details-hero-text;
+}
+
+.modified-genes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+
+  @include mixins.respond-to('medium') {
+    grid-template-columns: 1fr 1fr;
+  }
+}

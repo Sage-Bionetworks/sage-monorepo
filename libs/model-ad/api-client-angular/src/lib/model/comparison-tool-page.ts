@@ -12,11 +12,13 @@
  * The type of comparison tool page
  */
 export type ComparisonToolPage =
+  | 'Marmoset Model Overview'
   | 'Model Overview'
   | 'Differential Expression'
   | 'Disease Correlation';
 
 export const ComparisonToolPage = {
+  MarmosetModelOverview: 'Marmoset Model Overview' as ComparisonToolPage,
   ModelOverview: 'Model Overview' as ComparisonToolPage,
   DifferentialExpression: 'Differential Expression' as ComparisonToolPage,
   DiseaseCorrelation: 'Disease Correlation' as ComparisonToolPage,

@@ -54,6 +54,17 @@ export function toKebabCase(s: string): string {
 }
 
 /**
+ * Selects the singular or plural form of a word based on a count
+ * @param singular - The singular form of the word
+ * @param count - The number of items being described
+ * @param plural - The plural form, defaulting to the singular with an appended "s"
+ * @returns The singular form when count is exactly 1, otherwise the plural form
+ */
+export function pluralize(singular: string, count: number, plural = `${singular}s`): string {
+  return count === 1 ? singular : plural;
+}
+
+/**
  * Capitalizes the first letter of a string, leaving the rest unchanged
  * @param value - The string to capitalize
  * @returns The string with its first letter uppercased, or an empty string for nullish/empty input

@@ -92,6 +92,7 @@ model/org-sagebionetworks-repo-model-acquisition-tracking-data.ts
 model/org-sagebionetworks-repo-model-act-access-requirement-interface.ts
 model/org-sagebionetworks-repo-model-act-access-requirement.ts
 model/org-sagebionetworks-repo-model-admin-expire-quarantined-email-request.ts
+model/org-sagebionetworks-repo-model-agent-add-files-to-session-request.ts
 model/org-sagebionetworks-repo-model-agent-agent-access-level.ts
 model/org-sagebionetworks-repo-model-agent-agent-chat-request.ts
 model/org-sagebionetworks-repo-model-agent-agent-chat-response.ts
@@ -100,11 +101,16 @@ model/org-sagebionetworks-repo-model-agent-agent-registration.ts
 model/org-sagebionetworks-repo-model-agent-agent-session.ts
 model/org-sagebionetworks-repo-model-agent-agent-type.ts
 model/org-sagebionetworks-repo-model-agent-create-agent-session-request.ts
+model/org-sagebionetworks-repo-model-agent-get-files-metadata-request.ts
 model/org-sagebionetworks-repo-model-agent-grid-agent-session-context.ts
 model/org-sagebionetworks-repo-model-agent-interaction.ts
 model/org-sagebionetworks-repo-model-agent-list-agent-sessions-request.ts
 model/org-sagebionetworks-repo-model-agent-list-agent-sessions-response.ts
+model/org-sagebionetworks-repo-model-agent-run-python-request.ts
 model/org-sagebionetworks-repo-model-agent-session-context.ts
+model/org-sagebionetworks-repo-model-agent-session-file-metadata-batch.ts
+model/org-sagebionetworks-repo-model-agent-session-file-metadata.ts
+model/org-sagebionetworks-repo-model-agent-session-file-to-add.ts
 model/org-sagebionetworks-repo-model-agent-session-history-request.ts
 model/org-sagebionetworks-repo-model-agent-session-history-response.ts
 model/org-sagebionetworks-repo-model-agent-table-description.ts
@@ -205,6 +211,8 @@ model/org-sagebionetworks-repo-model-curation-curation-task-properties.ts
 model/org-sagebionetworks-repo-model-curation-curation-task.ts
 model/org-sagebionetworks-repo-model-curation-execution-executable-task-execution-details.ts
 model/org-sagebionetworks-repo-model-curation-execution-grid-execution-details.ts
+model/org-sagebionetworks-repo-model-curation-execution-record-set-generation-execution-details.ts
+model/org-sagebionetworks-repo-model-curation-execution-record-set-generation-execution-properties.ts
 model/org-sagebionetworks-repo-model-curation-execution-sample-sheet-generation-execution-details.ts
 model/org-sagebionetworks-repo-model-curation-execution-sample-sheet-generation-execution-properties.ts
 model/org-sagebionetworks-repo-model-curation-list-curation-task-request.ts
@@ -547,6 +555,7 @@ model/org-sagebionetworks-repo-model-grid-synchronize-grid-request.ts
 model/org-sagebionetworks-repo-model-grid-synchronize-grid-response.ts
 model/org-sagebionetworks-repo-model-grid-update-grid-request.ts
 model/org-sagebionetworks-repo-model-grid-update-grid-response.ts
+model/org-sagebionetworks-repo-model-grid-update-grid-update-preview-response.ts
 model/org-sagebionetworks-repo-model-grid-update-grid-update-request.ts
 model/org-sagebionetworks-repo-model-grid-update-grid-update-response.ts
 model/org-sagebionetworks-repo-model-grid-update-literal-set-value.ts
