@@ -57,6 +57,18 @@ export const routes: Route[] = [
     },
   },
   {
+    path: ROUTE_PATHS.MARMOSET_MODEL_OVERVIEW,
+    loadChildren: () =>
+      import('@sagebionetworks/model-ad/marmoset-model-overview-comparison-tool').then(
+        (routes) => routes.routes,
+      ),
+    data: {
+      title: "Marmoset Model Overview | Overview of marmoset models of Alzheimer's Disease",
+      description:
+        "Explore emerging marmoset models of Alzheimer's Disease developed by the Marmo-AD consortium.",
+    },
+  },
+  {
     path: ROUTE_PATHS.MOUSE_MODEL_OVERVIEW,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/mouse-model-overview-comparison-tool').then(

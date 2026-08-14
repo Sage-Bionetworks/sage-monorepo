@@ -14,6 +14,10 @@ export const headerLinks: NavigationLink[] = [
         label: 'Mouse Models',
         routerLink: [ROUTE_PATHS.MOUSE_MODEL_OVERVIEW],
       },
+      {
+        label: 'Marmoset Models',
+        routerLink: [ROUTE_PATHS.MARMOSET_MODEL_OVERVIEW],
+      },
     ],
   },
   {
