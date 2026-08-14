@@ -77,6 +77,9 @@
       ],
       "@sagebionetworks/model-ad/gene-details": ["libs/model-ad/gene-details/src/index.ts"],
       "@sagebionetworks/model-ad/home": ["libs/model-ad/home/src/index.ts"],
+      "@sagebionetworks/model-ad/marmoset-model-overview-comparison-tool": [
+        "libs/model-ad/marmoset-model-overview-comparison-tool/src/index.ts"
+      ],
       "@sagebionetworks/model-ad/model-details": ["libs/model-ad/model-details/src/index.ts"],
       "@sagebionetworks/model-ad/mouse-model-overview-comparison-tool": [
         "libs/model-ad/mouse-model-overview-comparison-tool/src/index.ts"
