@@ -1,91 +1,50 @@
-import { Location } from '@angular/common';
 import { HttpContext } from '@angular/common/http';
-import { AfterViewInit, Component, computed, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
-  HelperService,
   LoggerService,
   PlatformService,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
-import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
-import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import {
-  IndividualData,
   ModelIdentifierType,
   TranscriptomicsIndividual,
   TranscriptomicsIndividualFilterQuery,
   TranscriptomicsIndividualService,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
+import { IndividualExpressionDetailsComponent } from '@sagebionetworks/model-ad/ui';
 import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'model-ad-gene-details',
-  imports: [LoadingIconComponent, BoxplotsGridComponent, DownloadDomImageComponent],
+  imports: [IndividualExpressionDetailsComponent],
   templateUrl: './gene-details.component.html',
   styleUrls: ['./gene-details.component.scss'],
 })
-export class GeneDetailsComponent implements OnInit, AfterViewInit {
+export class GeneDetailsComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
-  location = inject(Location);
-  helperService = inject(HelperService);
   transcriptomicsIndividualService = inject(TranscriptomicsIndividualService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
 
-  isLoading = true;
+  readonly modality = 'RNA';
+  readonly downloadFilenamePrefix = 'transcriptomics_individual';
 
-  transcriptomicsIndividualData: TranscriptomicsIndividual[] | undefined;
-  tissue: string | null = null;
-  modelIdentifier: string | null = null;
-  modelIdentifierType: ModelIdentifierType | null = null;
+  isLoading = signal(true);
 
-  primaryGene = computed(() => this.transcriptomicsIndividualData?.[0]);
-
-  label = computed(() => {
-    const gene = this.primaryGene();
-    if (!gene) return { left: '', right: '' };
-
-    const geneSymbol = gene.gene_symbol;
-    const ensemblGeneId = gene.ensembl_gene_id;
-    return {
-      left: geneSymbol || ensemblGeneId,
-      right: ensemblGeneId && geneSymbol ? ensemblGeneId : '',
-    };
-  });
-
-  subtitle = computed(() => {
-    return this.modelIdentifier ? `${this.modelIdentifier}` : '';
-  });
-
-  xAxisOrder = computed(() => this.primaryGene()?.result_order);
-
-  csvData = computed(() => {
-    if (!this.transcriptomicsIndividualData) return [];
-    return this.convertToCsvData(this.transcriptomicsIndividualData);
-  });
-
-  filename = computed(() => {
-    const gene = this.primaryGene();
-    if (!gene) return '';
-
-    const geneSymbol = gene.gene_symbol;
-    const ensemblGeneId = gene.ensembl_gene_id;
-    const filename = `transcriptomics-individual-${geneSymbol || ensemblGeneId}-${this.modelIdentifier}-${(this.tissue || '').toLowerCase()}`;
-    return this.helperService.cleanFilename(filename);
-  });
+  transcriptomicsIndividualData = signal<TranscriptomicsIndividual[] | undefined>(undefined);
+  tissue = signal<string | null>(null);
+  modelIdentifier = signal<string | null>(null);
 
   reset() {
-    this.transcriptomicsIndividualData = undefined;
-    this.tissue = null;
-    this.modelIdentifier = null;
-    this.modelIdentifierType = null;
-    this.isLoading = true;
+    this.transcriptomicsIndividualData.set(undefined);
+    this.tissue.set(null);
+    this.modelIdentifier.set(null);
+    this.isLoading.set(true);
   }
 
   ngOnInit() {
@@ -106,19 +65,20 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     const modelName = queryParams.get('model');
     const modelGroup = queryParams.get('modelGroup');
     const tissue = queryParams.get('tissue');
-    this.tissue = tissue;
+    this.tissue.set(tissue);
 
-    this.modelIdentifierType = modelGroup
+    const modelIdentifierType = modelGroup
       ? ModelIdentifierType.ModelGroup
       : ModelIdentifierType.Name;
-    this.modelIdentifier = modelGroup || modelName;
+    const modelIdentifier = modelGroup || modelName;
+    this.modelIdentifier.set(modelIdentifier);
 
-    if (ensemblGeneId && tissue && this.modelIdentifierType && this.modelIdentifier) {
+    if (ensemblGeneId && tissue && modelIdentifierType && modelIdentifier) {
       const query: TranscriptomicsIndividualFilterQuery = {
         ensemblGeneId,
         tissue,
-        modelIdentifierType: this.modelIdentifierType,
-        modelIdentifier: this.modelIdentifier,
+        modelIdentifierType,
+        modelIdentifier,
       };
 
       this.transcriptomicsIndividualService
@@ -128,11 +88,11 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (transcriptomicsIndividualData: TranscriptomicsIndividual[]) => {
-            this.transcriptomicsIndividualData = transcriptomicsIndividualData;
-            this.isLoading = false;
+            this.transcriptomicsIndividualData.set(transcriptomicsIndividualData);
+            this.isLoading.set(false);
           },
           error: () => {
-            this.isLoading = false;
+            this.isLoading.set(false);
             this.logger.log(
               `GeneDetailsComponent: loadTranscriptomicsIndividualData: query: ${JSON.stringify(query)}, redirecting`,
             );
@@ -140,46 +100,11 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
           },
         });
     } else {
-      this.isLoading = false;
+      this.isLoading.set(false);
       this.logger.log(
-        `GeneDetailsComponent: loadTranscriptomicsIndividualData: ensemblGeneId: ${ensemblGeneId} modelIdentifierType: ${this.modelIdentifierType} modelIdentifier: ${this.modelIdentifier}, redirecting`,
+        `GeneDetailsComponent: loadTranscriptomicsIndividualData: ensemblGeneId: ${ensemblGeneId} modelIdentifierType: ${modelIdentifierType} modelIdentifier: ${modelIdentifier}, redirecting`,
       );
       this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
     }
-  }
-
-  ngAfterViewInit() {
-    if (this.transcriptomicsIndividualData?.length === 0) {
-      this.isLoading = true;
-    }
-  }
-
-  convertToCsvData(data: TranscriptomicsIndividual[]): string[][] {
-    const columnHeaders = [
-      'ensembl_gene_id',
-      'gene_symbol',
-      'age',
-      'genotype',
-      'sex',
-      'individual_id',
-      'log2_cpm',
-    ];
-    const csvRows: string[][] = [];
-    csvRows.push(columnHeaders);
-
-    data.forEach((g: TranscriptomicsIndividual) => {
-      const baseRow = [g.ensembl_gene_id, g.gene_symbol, g.age];
-      g.data.forEach((point: IndividualData) => {
-        csvRows.push([
-          ...baseRow,
-          point.genotype,
-          point.sex,
-          point.individual_id,
-          String(point.value || ''),
-        ]);
-      });
-    });
-
-    return csvRows;
   }
 }

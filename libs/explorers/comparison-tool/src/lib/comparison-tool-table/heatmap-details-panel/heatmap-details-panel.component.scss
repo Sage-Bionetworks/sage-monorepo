@@ -15,16 +15,8 @@ $heatmap-details-panel-content-padding: 12px;
     padding: 20px;
   }
 
-  .heatmap-details-panel-label {
-    font-size: 14px;
-    color: var(--color-gray-600);
+  explorers-details-label {
     margin-bottom: $heatmap-details-panel-content-padding;
-
-    .heatmap-details-panel-label-separator {
-      font-size: 12px;
-      color: var(--color-gray-300);
-      font-weight: 500;
-    }
   }
 
   .heatmap-details-panel-heading {
