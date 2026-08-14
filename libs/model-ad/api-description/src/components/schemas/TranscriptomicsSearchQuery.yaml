@@ -71,6 +71,13 @@ properties:
       type: string
     nullable: true
     example: ['3xTg-AD', '5xFAD (IU/Jax/Pitt)']
+  sex:
+    description: Filter by sex.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Female', 'Male']
   sortFields:
     description: |
       List of field names to sort by (e.g., "gene_symbol,name").

@@ -53,6 +53,9 @@ public class TranscriptomicsSearchQueryDto {
   private @Nullable List<String> name;
 
   @Valid
+  private @Nullable List<String> sex;
+
+  @Valid
   private List<String> sortFields = new ArrayList<>();
 
   /**
@@ -329,6 +332,34 @@ public class TranscriptomicsSearchQueryDto {
     this.name = name;
   }
 
+  public TranscriptomicsSearchQueryDto sex(@Nullable List<String> sex) {
+    this.sex = sex;
+    return this;
+  }
+
+  public TranscriptomicsSearchQueryDto addSexItem(String sexItem) {
+    if (this.sex == null) {
+      this.sex = new ArrayList<>();
+    }
+    this.sex.add(sexItem);
+    return this;
+  }
+
+  /**
+   * Filter by sex.
+   * @return sex
+   */
+  
+  @Schema(name = "sex", example = "[\"Female\",\"Male\"]", description = "Filter by sex.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("sex")
+  public @Nullable List<String> getSex() {
+    return sex;
+  }
+
+  public void setSex(@Nullable List<String> sex) {
+    this.sex = sex;
+  }
+
   public TranscriptomicsSearchQueryDto sortFields(List<String> sortFields) {
     this.sortFields = sortFields;
     return this;
@@ -403,13 +434,14 @@ public class TranscriptomicsSearchQueryDto {
         Objects.equals(this.biodomains, transcriptomicsSearchQuery.biodomains) &&
         Objects.equals(this.modelType, transcriptomicsSearchQuery.modelType) &&
         Objects.equals(this.name, transcriptomicsSearchQuery.name) &&
+        Objects.equals(this.sex, transcriptomicsSearchQuery.sex) &&
         Objects.equals(this.sortFields, transcriptomicsSearchQuery.sortFields) &&
         Objects.equals(this.sortOrders, transcriptomicsSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search, biodomains, modelType, name, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search, biodomains, modelType, name, sex, sortFields, sortOrders);
   }
 
   @Override
@@ -425,6 +457,7 @@ public class TranscriptomicsSearchQueryDto {
     sb.append("    biodomains: ").append(toIndentedString(biodomains)).append("\n");
     sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
     sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
     sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
@@ -464,6 +497,7 @@ public class TranscriptomicsSearchQueryDto {
       this.instance.setBiodomains(value.biodomains);
       this.instance.setModelType(value.modelType);
       this.instance.setName(value.name);
+      this.instance.setSex(value.sex);
       this.instance.setSortFields(value.sortFields);
       this.instance.setSortOrders(value.sortOrders);
       return this;
@@ -511,6 +545,11 @@ public class TranscriptomicsSearchQueryDto {
     
     public TranscriptomicsSearchQueryDto.Builder name(List<String> name) {
       this.instance.name(name);
+      return this;
+    }
+    
+    public TranscriptomicsSearchQueryDto.Builder sex(List<String> sex) {
+      this.instance.sex(sex);
       return this;
     }
     

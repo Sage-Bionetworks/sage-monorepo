@@ -75,6 +75,7 @@ public class CustomTranscriptomicsRepositoryImpl
     .dataFilter("biodomains", TranscriptomicsSearchQueryDto::getBiodomains)
     .dataFilter("model_type", TranscriptomicsSearchQueryDto::getModelType)
     .dataFilter("name.link_text", TranscriptomicsSearchQueryDto::getName)
+    .dataFilter("sex", TranscriptomicsSearchQueryDto::getSex)
     .compositeItemFilter(item -> TranscriptomicsIdentifier.parse(item).toCriteria())
     .searchFilter(GENE_SYMBOL_FIELD)
     .build();

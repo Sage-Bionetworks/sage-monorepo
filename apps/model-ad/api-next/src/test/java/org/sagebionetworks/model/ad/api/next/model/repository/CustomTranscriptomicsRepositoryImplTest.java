@@ -98,6 +98,23 @@ class CustomTranscriptomicsRepositoryImplTest {
   }
 
   @Test
+  @DisplayName("should match the requested sex values when filtering by sex")
+  void shouldMatchRequestedSexValuesWhenFilteringBySex() {
+    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
+      .sex(Arrays.asList("Female", "Male"))
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .build();
+
+    repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), "test-tissue");
+
+    Document criteriaDoc = captureCountQuery().getQueryObject();
+    List<Document> andConditions = (List<Document>) criteriaDoc.get("$and");
+    assertThat(andConditions).contains(
+      new Document("sex", new Document("$in", List.of("Female", "Male")))
+    );
+  }
+
+  @Test
   @DisplayName("should search on gene_symbol with fallback to ensembl_gene_id for single term")
   void shouldSearchOnDisplayGeneSymbolWithSingleTerm() {
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
