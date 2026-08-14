@@ -4,6 +4,8 @@ import {
   ComparisonToolConfig,
   DiseaseCorrelation,
   DiseaseCorrelationsPage,
+  MarmosetModelOverview,
+  MarmosetModelOverviewsPage,
   MouseModelOverview,
   MouseModelOverviewsPage,
   Transcriptomics,
@@ -87,6 +89,14 @@ export const fetchComparisonToolData = async <T>(
 export const fetchMouseModelOverviews = async (page: Page): Promise<MouseModelOverview[]> => {
   const data = await fetchComparisonToolData<MouseModelOverviewsPage>(page, 'Model Overview');
   return data.mouseModelOverviews;
+};
+
+export const fetchMarmosetModelOverviews = async (page: Page): Promise<MarmosetModelOverview[]> => {
+  const data = await fetchComparisonToolData<MarmosetModelOverviewsPage>(
+    page,
+    'Marmoset Model Overview',
+  );
+  return data.marmosetModelOverviews;
 };
 
 export const fetchDiseaseCorrelations = async (
