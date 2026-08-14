@@ -113,7 +113,7 @@ export class IndividualExpressionDetailsComponent {
           point.genotype,
           point.sex,
           point.individual_id,
-          String(point.value || ''),
+          String(point.value),
         ]);
       });
     });

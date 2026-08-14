@@ -26,6 +26,11 @@ const mockOlderRecord: IndividualExpressionDetailsData = {
   data: [{ genotype: 'ControlModel', sex: 'Male', individual_id: '003', value: 7.89 }],
 };
 
+const mockRecordWithZeroValue: IndividualExpressionDetailsData = {
+  ...mockRecord,
+  data: [{ genotype: 'ControlModel', sex: 'Female', individual_id: '001', value: 0 }],
+};
+
 const mockRecordWithUniprotid: IndividualExpressionDetailsData = {
   ...mockRecord,
   uniprotid: 'B9EKJ1',
@@ -128,6 +133,14 @@ describe('IndividualExpressionDetailsComponent', () => {
         ['ENSMUSG00000001', 'TestGene', '6 months', 'ControlModel', 'Female', '001', '1.23'],
         ['ENSMUSG00000001', 'TestGene', '6 months', 'TestModel', 'Male', '002', '4.56'],
         ['ENSMUSG00000001', 'TestGene', '12 months', 'ControlModel', 'Male', '003', '7.89'],
+      ]);
+    });
+
+    it('should keep a value of zero instead of emitting an empty cell', async () => {
+      const { fixture } = await setup({ data: [mockRecordWithZeroValue] });
+      expect(fixture.componentInstance.csvData()).toEqual([
+        CSV_COLUMN_HEADERS,
+        ['ENSMUSG00000001', 'TestGene', '6 months', 'ControlModel', 'Female', '001', '0'],
       ]);
     });
 
