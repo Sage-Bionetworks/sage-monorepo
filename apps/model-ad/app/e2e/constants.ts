@@ -10,6 +10,13 @@ export const COMPARISON_TOOL_API_PATHS: Record<string, string> = {
   'Disease Correlation': '/comparison-tools/disease-correlation',
 };
 
+// Header navigation path to each comparison tool, from the top-level nav item to the link itself
+export const COMPARISON_TOOL_NAV_TRAILS: Record<string, string[]> = {
+  'Model Overview': ['Model Overview', 'Mouse Models'],
+  'Differential Expression': ['Differential Expression'],
+  'Disease Correlation': ['Disease Correlation'],
+};
+
 export const COMPARISON_TOOL_CONFIG_PATH = 'comparison-tools/config';
 
 // Default sort configurations for each comparison tool (required by API)

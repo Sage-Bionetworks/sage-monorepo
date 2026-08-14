@@ -14,6 +14,7 @@ import {
   COMPARISON_TOOL_API_PATHS,
   COMPARISON_TOOL_CONFIG_PATH,
   COMPARISON_TOOL_DEFAULT_SORTS,
+  COMPARISON_TOOL_NAV_TRAILS,
   COMPARISON_TOOL_PATHS,
 } from '../constants';
 
@@ -34,7 +35,17 @@ export const navigateToComparison = async (
     if (await menuButton.isVisible().catch(() => false)) {
       await menuButton.click();
     }
-    await page.getByRole('link', { name: name }).click();
+
+    const navTrail = COMPARISON_TOOL_NAV_TRAILS[name];
+    if (navTrail.length > 1) {
+      // Desktop renders the parent nav item as a dropdown trigger that must be opened first;
+      // mobile renders the children directly, so there is no trigger to click.
+      const dropdownTrigger = page.getByRole('button', { name: navTrail[0] });
+      if (await dropdownTrigger.isVisible().catch(() => false)) {
+        await dropdownTrigger.click();
+      }
+    }
+    await page.getByRole('link', { name: navTrail[navTrail.length - 1] }).click();
   }
 
   await expectComparisonToolTableLoaded(page, name, shouldCloseVisualizationOverviewDialog);

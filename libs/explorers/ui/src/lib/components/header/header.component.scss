@@ -74,7 +74,12 @@
     margin: 0;
   }
 
-  a {
+  .dropdown-trigger {
+    @include mixins.reset-button;
+  }
+
+  a,
+  .dropdown-trigger {
     font-size: var(--font-size-lg);
     font-weight: 700;
     color: var(--color-text);
@@ -120,7 +125,8 @@
       padding: 0 20px;
     }
 
-    a {
+    a,
+    .dropdown-trigger {
       position: relative;
       display: flex;
       padding: 8px 0;
