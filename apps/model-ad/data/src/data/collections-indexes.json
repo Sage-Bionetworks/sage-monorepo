@@ -18,7 +18,6 @@
   },
   {
     "name": "model_overview",
-    "indexes": [{ "name": 1 }],
     "collatedIndexes": [{ "name": 1 }]
   },
   {
