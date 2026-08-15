@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelFileFileHandleAssociation } from './org-sagebionetworks-repo-model-file-file-handle-association';
 
 /**
  * Send a chat message to the Synapse chat agent
@@ -25,6 +26,10 @@ export interface OrgSagebionetworksRepoModelAgentAgentChatRequest {
    * Optional. When trace is enabled, the agent will include information about its decision process and the functions/tools it will use to process this request. Default value is false.
    */
   enableTrace?: boolean;
+  /**
+   * Optional. Existing Synapse files to attach to this message; each is a FileHandleAssociation the user must be authorized to download. Attached files are staged into the agent\'s code interpreter session and remain available for the rest of the conversation. Limits: a session may hold at most 20 attached files in total across all of its messages; each file must be <= 100 MB and one of the approved content types (text/plain, application/pdf, text/csv, application/json). Only honored for experimental grid (Curie) sessions; sending attachments to any other session type is rejected.
+   */
+  attachments?: Array<OrgSagebionetworksRepoModelFileFileHandleAssociation>;
 }
 export namespace OrgSagebionetworksRepoModelAgentAgentChatRequest {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.agent.AgentChatRequest';

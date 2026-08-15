@@ -9,7 +9,7 @@
  */
 
 /**
- * A filter using a single value against a column. Values within the values list have an OR relationship
+ * A filter using a single value against a column. The number of values depends on the operator: IS_NULL and IS_NOT_NULL take no values; BETWEEN takes exactly two values (lower and upper bound); the relational comparison operators (EQUAL when a single value, NOT_EQUAL, GREATER_THAN, LESS_THAN, GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL) take exactly one value; LIKE, EQUAL, and IN accept one or more values that are combined in an OR relationship.
  */
 export interface OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter {
   concreteType: OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter.ConcreteTypeEnum;
@@ -37,10 +37,29 @@ export namespace OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter {
     OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter:
       'org.sagebionetworks.repo.model.table.ColumnSingleValueQueryFilter' as ConcreteTypeEnum,
   };
-  export type OperatorEnum = 'LIKE' | 'EQUAL' | 'IN';
+  export type OperatorEnum =
+    | 'LIKE'
+    | 'EQUAL'
+    | 'IN'
+    | 'GREATER_THAN'
+    | 'LESS_THAN'
+    | 'GREATER_THAN_OR_EQUAL'
+    | 'LESS_THAN_OR_EQUAL'
+    | 'NOT_EQUAL'
+    | 'IS_NULL'
+    | 'IS_NOT_NULL'
+    | 'BETWEEN';
   export const OperatorEnum = {
     Like: 'LIKE' as OperatorEnum,
     Equal: 'EQUAL' as OperatorEnum,
     In: 'IN' as OperatorEnum,
+    GreaterThan: 'GREATER_THAN' as OperatorEnum,
+    LessThan: 'LESS_THAN' as OperatorEnum,
+    GreaterThanOrEqual: 'GREATER_THAN_OR_EQUAL' as OperatorEnum,
+    LessThanOrEqual: 'LESS_THAN_OR_EQUAL' as OperatorEnum,
+    NotEqual: 'NOT_EQUAL' as OperatorEnum,
+    IsNull: 'IS_NULL' as OperatorEnum,
+    IsNotNull: 'IS_NOT_NULL' as OperatorEnum,
+    Between: 'BETWEEN' as OperatorEnum,
   };
 }

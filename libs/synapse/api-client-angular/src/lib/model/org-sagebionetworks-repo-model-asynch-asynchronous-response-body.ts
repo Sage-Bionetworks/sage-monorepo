@@ -39,6 +39,7 @@ import { OrgSagebionetworksRepoModelFileFileHandleRestoreResponse } from './org-
 import { OrgSagebionetworksRepoModelTableQueryResultBundle } from './org-sagebionetworks-repo-model-table-query-result-bundle';
 import { OrgSagebionetworksRepoModelReportDownloadStorageReportResponse } from './org-sagebionetworks-repo-model-report-download-storage-report-response';
 import { OrgSagebionetworksRepoModelTableRowReferenceSet } from './org-sagebionetworks-repo-model-table-row-reference-set';
+import { OrgSagebionetworksRepoModelAgentAgentChatAttachmentStatus } from './org-sagebionetworks-repo-model-agent-agent-chat-attachment-status';
 import { OrgSagebionetworksRepoModelAgentAgentChatResponse } from './org-sagebionetworks-repo-model-agent-agent-chat-response';
 import { OrgSagebionetworksRepoModelTableColumnModel } from './org-sagebionetworks-repo-model-table-column-model';
 import { OrgSagebionetworksRepoModelDownloadDownloadListManifestResponse } from './org-sagebionetworks-repo-model-download-download-list-manifest-response';

@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelCurationDueDateFilter } from './org-sagebionetworks-repo-model-curation-due-date-filter';
 
 /**
  * Request for a single page of CurationTasks with optional filtering.
@@ -32,6 +33,7 @@ export interface OrgSagebionetworksRepoModelCurationListCurationTaskRequest {
    * Optional. Filter tasks by their task IDs.
    */
   taskIds?: Array<number>;
+  dueDate?: OrgSagebionetworksRepoModelCurationDueDateFilter;
   /**
    * Forward the returned \'nextPageToken\' to get the next page of results.
    */

@@ -11,10 +11,28 @@
 export type OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator =
   | 'LIKE'
   | 'EQUAL'
-  | 'IN';
+  | 'IN'
+  | 'GREATER_THAN'
+  | 'LESS_THAN'
+  | 'GREATER_THAN_OR_EQUAL'
+  | 'LESS_THAN_OR_EQUAL'
+  | 'NOT_EQUAL'
+  | 'IS_NULL'
+  | 'IS_NOT_NULL'
+  | 'BETWEEN';
 
 export const OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator = {
   Like: 'LIKE' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
   Equal: 'EQUAL' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
   In: 'IN' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
+  GreaterThan: 'GREATER_THAN' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
+  LessThan: 'LESS_THAN' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
+  GreaterThanOrEqual:
+    'GREATER_THAN_OR_EQUAL' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
+  LessThanOrEqual:
+    'LESS_THAN_OR_EQUAL' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
+  NotEqual: 'NOT_EQUAL' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
+  IsNull: 'IS_NULL' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
+  IsNotNull: 'IS_NOT_NULL' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
+  Between: 'BETWEEN' as OrgSagebionetworksRepoModelTableColumnSingleValueFilterOperator,
 };

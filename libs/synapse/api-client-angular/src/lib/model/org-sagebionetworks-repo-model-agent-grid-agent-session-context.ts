@@ -25,6 +25,10 @@ export interface OrgSagebionetworksRepoModelAgentGridAgentSessionContext {
    * The replica ID issued to the user\'s agent.
    */
   agentsReplicaId?: number;
+  /**
+   * Optional. When true, this grid session is processed by the experimental Curie multi-agent supervisor instead of the default agent. Default value is false.
+   */
+  experimental?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelAgentGridAgentSessionContext {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.agent.GridAgentSessionContext';

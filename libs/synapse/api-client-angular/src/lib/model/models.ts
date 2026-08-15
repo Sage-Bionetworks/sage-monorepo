@@ -36,6 +36,9 @@ export * from './org-sagebionetworks-repo-model-acquisition-tracking-data';
 export * from './org-sagebionetworks-repo-model-admin-expire-quarantined-email-request';
 export * from './org-sagebionetworks-repo-model-agent-add-files-to-session-request';
 export * from './org-sagebionetworks-repo-model-agent-agent-access-level';
+export * from './org-sagebionetworks-repo-model-agent-agent-chat-attachment-failure-code';
+export * from './org-sagebionetworks-repo-model-agent-agent-chat-attachment-state';
+export * from './org-sagebionetworks-repo-model-agent-agent-chat-attachment-status';
 export * from './org-sagebionetworks-repo-model-agent-agent-chat-request';
 export * from './org-sagebionetworks-repo-model-agent-agent-chat-response';
 export * from './org-sagebionetworks-repo-model-agent-agent-registration';
@@ -151,6 +154,7 @@ export * from './org-sagebionetworks-repo-model-curation-compute-task-execution-
 export * from './org-sagebionetworks-repo-model-curation-compute-task-execution-response';
 export * from './org-sagebionetworks-repo-model-curation-curation-task';
 export * from './org-sagebionetworks-repo-model-curation-curation-task-properties';
+export * from './org-sagebionetworks-repo-model-curation-due-date-filter';
 export * from './org-sagebionetworks-repo-model-curation-execution-executable-task-execution-details';
 export * from './org-sagebionetworks-repo-model-curation-execution-grid-execution-details';
 export * from './org-sagebionetworks-repo-model-curation-execution-record-set-generation-execution-details';
@@ -873,6 +877,7 @@ export * from './org-sagebionetworks-repo-model-subscription-subscription-reques
 export * from './org-sagebionetworks-repo-model-subscription-topic';
 export * from './org-sagebionetworks-repo-model-table-appendable-row-set';
 export * from './org-sagebionetworks-repo-model-table-appendable-row-set-request';
+export * from './org-sagebionetworks-repo-model-table-boolean-operator';
 export * from './org-sagebionetworks-repo-model-table-column-change';
 export * from './org-sagebionetworks-repo-model-table-column-model';
 export * from './org-sagebionetworks-repo-model-table-column-model-interface';
@@ -906,6 +911,7 @@ export * from './org-sagebionetworks-repo-model-table-facet-column-sort-directio
 export * from './org-sagebionetworks-repo-model-table-facet-column-sort-property';
 export * from './org-sagebionetworks-repo-model-table-facet-column-values-request';
 export * from './org-sagebionetworks-repo-model-table-facet-type';
+export * from './org-sagebionetworks-repo-model-table-filter-group';
 export * from './org-sagebionetworks-repo-model-table-has-defining-sql';
 export * from './org-sagebionetworks-repo-model-table-has-entity-id';
 export * from './org-sagebionetworks-repo-model-table-has-values';
