@@ -56,13 +56,15 @@ describe('HomeComponent', () => {
       expect(screen.getByText('Disease Correlation')).toBeInTheDocument();
     });
 
-    it('should swap to the marmoset placeholder when marmoset is selected', async () => {
+    it('should swap to the marmoset tiles when marmoset is selected', async () => {
       const user = userEvent.setup();
       await setup();
 
       await user.click(screen.getByText('Marmoset Models'));
 
-      expect(screen.getAllByText('Coming soon')).toHaveLength(2);
+      expect(screen.getByText('Marmoset Model Overview')).toBeInTheDocument();
+      expect(screen.getByText('Marmoset Model Search')).toBeInTheDocument();
+      expect(screen.getByAltText('marmoset icon')).toBeInTheDocument();
       expect(screen.queryByText('Model Overview')).not.toBeInTheDocument();
     });
   });
