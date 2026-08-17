@@ -9,6 +9,7 @@
  */
 import { OrgSagebionetworksRepoModelTableTextMatchesQueryFilter } from './org-sagebionetworks-repo-model-table-text-matches-query-filter';
 import { OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter } from './org-sagebionetworks-repo-model-table-column-single-value-query-filter';
+import { OrgSagebionetworksRepoModelTableFilterGroup } from './org-sagebionetworks-repo-model-table-filter-group';
 import { OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter } from './org-sagebionetworks-repo-model-table-column-multi-value-function-query-filter';
 
 /**
@@ -18,4 +19,5 @@ import { OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter } f
 export type OrgSagebionetworksRepoModelTableQueryFilter =
   | OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter
   | OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter
+  | OrgSagebionetworksRepoModelTableFilterGroup
   | OrgSagebionetworksRepoModelTableTextMatchesQueryFilter;

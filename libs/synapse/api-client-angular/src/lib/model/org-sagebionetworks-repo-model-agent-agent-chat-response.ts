@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelAgentAgentChatAttachmentStatus } from './org-sagebionetworks-repo-model-agent-agent-chat-attachment-status';
 
 /**
  * The response to an agent chat request.
@@ -21,6 +22,10 @@ export interface OrgSagebionetworksRepoModelAgentAgentChatResponse {
    * The agent\'s text response to the user\'s request
    */
   responseText?: string;
+  /**
+   * Per-attachment processing results, in the same order as the request\'s attachments. Present only when the request included attachments.
+   */
+  attachmentStatuses?: Array<OrgSagebionetworksRepoModelAgentAgentChatAttachmentStatus>;
 }
 export namespace OrgSagebionetworksRepoModelAgentAgentChatResponse {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.agent.AgentChatResponse';

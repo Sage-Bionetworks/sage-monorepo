@@ -94,6 +94,9 @@ model/org-sagebionetworks-repo-model-act-access-requirement.ts
 model/org-sagebionetworks-repo-model-admin-expire-quarantined-email-request.ts
 model/org-sagebionetworks-repo-model-agent-add-files-to-session-request.ts
 model/org-sagebionetworks-repo-model-agent-agent-access-level.ts
+model/org-sagebionetworks-repo-model-agent-agent-chat-attachment-failure-code.ts
+model/org-sagebionetworks-repo-model-agent-agent-chat-attachment-state.ts
+model/org-sagebionetworks-repo-model-agent-agent-chat-attachment-status.ts
 model/org-sagebionetworks-repo-model-agent-agent-chat-request.ts
 model/org-sagebionetworks-repo-model-agent-agent-chat-response.ts
 model/org-sagebionetworks-repo-model-agent-agent-registration-request.ts
@@ -209,6 +212,7 @@ model/org-sagebionetworks-repo-model-curation-compute-task-execution-request.ts
 model/org-sagebionetworks-repo-model-curation-compute-task-execution-response.ts
 model/org-sagebionetworks-repo-model-curation-curation-task-properties.ts
 model/org-sagebionetworks-repo-model-curation-curation-task.ts
+model/org-sagebionetworks-repo-model-curation-due-date-filter.ts
 model/org-sagebionetworks-repo-model-curation-execution-executable-task-execution-details.ts
 model/org-sagebionetworks-repo-model-curation-execution-grid-execution-details.ts
 model/org-sagebionetworks-repo-model-curation-execution-record-set-generation-execution-details.ts
@@ -931,6 +935,7 @@ model/org-sagebionetworks-repo-model-subscription-subscription.ts
 model/org-sagebionetworks-repo-model-subscription-topic.ts
 model/org-sagebionetworks-repo-model-table-appendable-row-set-request.ts
 model/org-sagebionetworks-repo-model-table-appendable-row-set.ts
+model/org-sagebionetworks-repo-model-table-boolean-operator.ts
 model/org-sagebionetworks-repo-model-table-column-change.ts
 model/org-sagebionetworks-repo-model-table-column-model-interface.ts
 model/org-sagebionetworks-repo-model-table-column-model-page.ts
@@ -964,6 +969,7 @@ model/org-sagebionetworks-repo-model-table-facet-column-sort-direction.ts
 model/org-sagebionetworks-repo-model-table-facet-column-sort-property.ts
 model/org-sagebionetworks-repo-model-table-facet-column-values-request.ts
 model/org-sagebionetworks-repo-model-table-facet-type.ts
+model/org-sagebionetworks-repo-model-table-filter-group.ts
 model/org-sagebionetworks-repo-model-table-has-defining-sql.ts
 model/org-sagebionetworks-repo-model-table-has-entity-id.ts
 model/org-sagebionetworks-repo-model-table-has-values.ts
