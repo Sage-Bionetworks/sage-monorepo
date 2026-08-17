@@ -4,7 +4,6 @@ import {
   ColumnConfig,
   expectPinnedParams,
   getPinnedTable,
-  getQueryParamFromValues,
   getQueryParamsFromRecords,
   getRowByName,
   getUnpinnedTable,
