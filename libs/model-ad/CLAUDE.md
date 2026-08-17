@@ -43,6 +43,7 @@ Mock data and test fixtures come from `@sagebionetworks/model-ad/testing`.
 | `model-ad-model-details`                           | `model-details/`                           | Model details page with omics, biomarkers, pathology panels                                                                            |
 | `model-ad-differential-expression-comparison-tool` | `differential-expression-comparison-tool/` | Differential expression heatmap comparison tool                                                                                        |
 | `model-ad-disease-correlation-comparison-tool`     | `disease-correlation-comparison-tool/`     | Disease correlation heatmap comparison tool                                                                                            |
+| `model-ad-marmoset-model-overview-comparison-tool` | `marmoset-model-overview-comparison-tool/` | Marmoset model overview comparison tool                                                                                                |
 | `model-ad-mouse-model-overview-comparison-tool`    | `mouse-model-overview-comparison-tool/`    | Mouse model overview comparison tool                                                                                                   |
 | `model-ad-services`                                | `services/`                                | Angular services (currently minimal)                                                                                                   |
 | `model-ad-styles`                                  | `styles/`                                  | Shared SCSS variables and mixins                                                                                                       |
@@ -86,4 +87,4 @@ nx build model-ad-api-description
 
 ## Comparison Tool Pattern
 
-The three `*-comparison-tool` libraries all follow the same pattern: they wrap `ComparisonToolComponent` from `@sagebionetworks/explorers/comparison-tool` and provide it with a `ComparisonToolConfig` and `ComparisonToolViewConfig`. Each has its own service that fetches data via the generated API client and transforms it into the config the explorers component expects.
+The `*-comparison-tool` libraries all follow the same pattern: they wrap `ComparisonToolComponent` from `@sagebionetworks/explorers/comparison-tool` and provide it with a `ComparisonToolConfig` and `ComparisonToolViewConfig`. Each has its own service that fetches data via the generated API client and transforms it into the config the explorers component expects.

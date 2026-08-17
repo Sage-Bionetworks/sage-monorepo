@@ -77,6 +77,14 @@ export const getRowByName = (table: Locator, page: Page, name: string): Locator 
     has: page.getByRole('cell', { name, exact: true }),
   });
 
+export const clickViewDetailsButtonByName = async (table: Locator, page: Page, name: string) => {
+  const row = getRowByName(table, page, name);
+  await expect(row).toHaveCount(1);
+  const viewDetailsButton = row.getByRole('button', { name: 'View Details' });
+  await viewDetailsButton.focus();
+  await viewDetailsButton.press('Enter');
+};
+
 export const togglePinByName = async (
   table: Locator,
   page: Page,

@@ -22,17 +22,22 @@
               @for (link of links; track link.label) {
                 <li [class.mobile-dropdown-item]="link.children && isMobile">
                   @if (link.children && !isMobile) {
-                    <a
+                    <button
+                      type="button"
                       class="dropdown-trigger"
+                      aria-haspopup="menu"
+                      [attr.aria-expanded]="menu.visible ?? false"
+                      [attr.aria-controls]="menu.visible ? menu.id + '_list' : null"
                       [class.active]="isDropdownActive(link)"
                       (click)="menu.toggle($event)"
                     >
                       <span>{{ link.label }}</span>
-                    </a>
+                    </button>
                     <p-menu
                       #menu
                       [model]="getDropdownItems(link)"
                       [popup]="true"
+                      [ariaLabel]="link.label"
                       styleClass="header-dropdown-menu"
                       [pt]="{ root: { style: 'transform: translateY(1.25rem)' } }"
                     />

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { Router, provideRouter } from '@angular/router';
 import { footerLinks, headerLinks } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
@@ -31,6 +32,7 @@ async function setup() {
     },
     imports: [CommonModule, SvgImageComponent],
     providers: [
+      provideNoopAnimations(),
       provideRouter([
         { path: 'header-link-1', component: DummyComponent },
         { path: 'header-link-2', component: DummyComponent },
@@ -93,12 +95,43 @@ describe('HeaderComponent', () => {
     expect(screen.queryByRole('link', { name: 'FooterLinkInternal2' })).not.toBeInTheDocument();
   });
 
-  it('should show dropdown trigger for link with children in desktop mode', async () => {
+  it('should render a collapsed menu button for a link with children in desktop mode', async () => {
     changeWindowSize(DESKTOP_WIDTH);
     await setup();
 
-    // The dropdown trigger should be visible with the parent label
-    expect(screen.getByText('DropdownLink')).toBeInTheDocument();
+    const trigger = screen.getByRole('button', { name: 'DropdownLink' });
+    expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByRole('menu', { name: 'DropdownLink' })).not.toBeInTheDocument();
+  });
+
+  it('should open the dropdown when the trigger is clicked', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { user } = await setup();
+
+    const trigger = screen.getByRole('button', { name: 'DropdownLink' });
+    await user.click(trigger);
+
+    const menu = screen.getByRole('menu', { name: 'DropdownLink' });
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(trigger).toHaveAttribute('aria-controls', menu.id);
+    expect(screen.getByRole('link', { name: 'ChildLink1' })).toBeInTheDocument();
+  });
+
+  it('should focus the dropdown trigger and open it with the keyboard in desktop mode', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { user } = await setup();
+
+    const trigger = screen.getByRole('button', { name: 'DropdownLink' });
+    trigger.focus();
+    expect(trigger).toHaveFocus();
+
+    await user.keyboard('{Enter}');
+
+    const menu = screen.getByRole('menu', { name: 'DropdownLink' });
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(trigger).toHaveAttribute('aria-controls', menu.id);
+    expect(screen.getByRole('link', { name: 'ChildLink1' })).toBeInTheDocument();
   });
 
   it('should show dropdown label and children in mobile mode', async () => {
