@@ -413,6 +413,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
       sortDoc.append(ApiHelper.isEmptyFlagKey(field), 1);
       sortDoc.append(resolved, order.isAscending() ? 1 : -1);
     }
+    sortDoc.append("_id", 1);
 
     return context -> new Document("$sort", sortDoc);
   }
