@@ -52,6 +52,7 @@ export class SearchInputComponent<T extends SearchResult> implements AfterViewIn
   searchImagePath = input<string | undefined>();
   searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
+  hasLightResultHighlight = input<boolean>(false);
 
   private readonly MINIMUM_SEARCH_LENGTH_DEFAULT = 3;
   minimumSearchLength = input<number, number>(this.MINIMUM_SEARCH_LENGTH_DEFAULT, {

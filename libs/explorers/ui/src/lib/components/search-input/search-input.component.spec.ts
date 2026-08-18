@@ -43,6 +43,7 @@ async function setup(
     formatResultSubtextForDisplay?: (result: SearchResult) => string | undefined;
     getNoSearchResultsMessage?: (query: string) => string;
     getResultIcon?: (result: SearchResult) => SearchResultIcon;
+    hasLightResultHighlight?: boolean;
   } = {},
 ) {
   const optionalInputs: Record<string, any> = {};
@@ -57,6 +58,10 @@ async function setup(
 
   if (options.getResultIcon) {
     optionalInputs['getResultIcon'] = options.getResultIcon;
+  }
+
+  if (options.hasLightResultHighlight) {
+    optionalInputs['hasLightResultHighlight'] = options.hasLightResultHighlight;
   }
 
   const user = userEvent.setup();
@@ -440,6 +445,28 @@ describe('SearchInputComponent', () => {
     const icons = container.querySelectorAll<HTMLImageElement>('.result-icon img');
     expect(icons).toHaveLength(2);
     icons.forEach((icon) => expect(icon).toHaveAttribute('src', mockMouseResultIcon.imagePath));
+  });
+
+  it('should use the default selected result highlight when not opted in', async () => {
+    const { container, user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    expect(container.querySelector('.search-results-list')).not.toHaveClass(
+      'light-result-highlight',
+    );
+  });
+
+  it('should use the light selected result highlight when opted in', async () => {
+    const { container, user } = await setup({ hasLightResultHighlight: true });
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    expect(container.querySelector('.search-results-list')).toHaveClass('light-result-highlight');
   });
 
   it('should include the icon label in the accessible name of a result', async () => {

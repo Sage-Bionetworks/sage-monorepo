@@ -36,6 +36,9 @@ $extra-colors: (
 $comparison-tool-colors: (
   row-highlight: #ebf2fa,
 );
+$search-input-colors: (
+  result-highlight: map.get($main-colors, 'gray-200'),
+);
 
 // -------------------------------------------------------------------------- //
 // Fonts

@@ -163,6 +163,16 @@
         display: grid;
         grid-template-columns: auto 1fr;
 
+        --search-input-selected-background: var(--color-action-primary);
+        --search-input-selected-color: #fff;
+
+        // Optionally tint the row instead of inverting it, so icon art
+        // and text keep their own colors while hovered or keyboard-selected
+        &.light-result-highlight {
+          --search-input-selected-background: var(--color-search-input-result-highlight);
+          --search-input-selected-color: inherit;
+        }
+
         li {
           cursor: pointer;
 
@@ -174,8 +184,8 @@
           grid-column: 1 / -1;
 
           &.selected {
-            background-color: var(--color-action-primary);
-            color: white;
+            background-color: var(--search-input-selected-background);
+            color: var(--search-input-selected-color);
           }
 
           .result-button {

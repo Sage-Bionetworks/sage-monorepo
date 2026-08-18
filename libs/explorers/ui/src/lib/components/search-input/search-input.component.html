@@ -46,7 +46,10 @@
         }
 
         @if (!error && results.length) {
-          <ul class="search-results-list">
+          <ul
+            class="search-results-list"
+            [class.light-result-highlight]="hasLightResultHighlight()"
+          >
             @for (result of results; track result; let i = $index) {
               <li
                 [class.selected]="selectedResultIndex === i"

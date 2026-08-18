@@ -72,6 +72,7 @@ export const ResultsWithMixedResultIcons: Story = {
     getSearchResults: mockGetSearchResults,
     checkQueryForErrors: mockCheckQueryForErrors,
     getResultIcon: mockGetMixedResultIcons,
+    hasLightResultHighlight: true,
   },
 };
 
@@ -83,5 +84,6 @@ export const ResultsWithIconsAndSubtext: Story = {
     checkQueryForErrors: mockCheckQueryForErrors,
     getResultIcon: mockGetMixedResultIcons,
     formatResultSubtextForDisplay: mockFormatResultSubtextForDisplay,
+    hasLightResultHighlight: true,
   },
 };
