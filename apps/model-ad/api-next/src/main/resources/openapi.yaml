@@ -26,11 +26,60 @@ tags:
     name: Mouse Model Overview
   - description: Operations about Disease Correlation results.
     name: Disease Correlation
+  - description: Operations about searching models.
+    name: Search
   - description: Operations about Transcriptomics results.
     name: Transcriptomics
   - description: Operations about Individual Transcriptomics results.
     name: Transcriptomics Individual
 paths:
+  /search/models:
+    get:
+      description: "Search for models across all organisms or filtered by specific\
+        \ organisms. When modelOrganisms is omitted, all organisms are searched and\
+        \ results are merged."
+      operationId: searchModels
+      parameters:
+        - description: Search query
+          explode: true
+          in: query
+          name: q
+          required: true
+          schema:
+            type: string
+          style: form
+        - description: "Filter results to specific model organisms. When omitted, all\
+            \ organisms are searched."
+          explode: true
+          in: query
+          name: modelOrganisms
+          required: false
+          schema:
+            items:
+              $ref: '#/components/schemas/ModelOrganism'
+            type: array
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+                type: array
+          description: Successfully retrieved search results
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Search Models
+      tags:
+        - Search
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Search
   /data-version:
     get:
       description: Get data version
@@ -372,32 +421,49 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Invalid request
-    NotFound:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: The specified resource was not found
     InternalServerError:
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
   schemas:
-    DataVersion:
-      description: Synapse data version
+    ModelOrganism:
+      description: Model organism
+      enum:
+        - marmoset
+        - mouse
+      type: string
+    SearchResult:
+      description: Search result
       example:
-        data_file: data_file
-        data_version: data_version
+        id: id
+        match_value: match_value
+        match_field: match_field
+        model_organism: marmoset
       properties:
-        data_file:
+        id:
+          description: ID of result
           type: string
-        data_version:
+        match_field:
+          description: Field that matched the query
           type: string
+        match_value:
+          description: Value that matched the query
+          type: string
+        model_organism:
+          $ref: '#/components/schemas/ModelOrganism'
       required:
-        - data_file
-        - data_version
+        - id
+        - match_field
+        - match_value
+        - model_organism
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -422,6 +488,20 @@ components:
       required:
         - status
         - title
+      type: object
+    DataVersion:
+      description: Synapse data version
+      example:
+        data_file: data_file
+        data_version: data_version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+      required:
+        - data_file
+        - data_version
       type: object
     ComparisonToolPage:
       description: The type of comparison tool page
@@ -1934,12 +2014,6 @@ components:
         - tissue
         - units
       type: object
-    ModelOrganism:
-      description: Model organism
-      enum:
-        - marmoset
-        - mouse
-      type: string
     GeneticInfo:
       description: Genetic information about a model
       example:
