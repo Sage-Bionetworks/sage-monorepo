@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.explorers.ApiHelper;
@@ -21,9 +22,11 @@ public class SearchApiDelegateImpl implements SearchApiDelegate {
   @Override
   public ResponseEntity<List<SearchResultDto>> searchModels(String q,
       List<ModelOrganismDto> modelOrganisms) {
-    log.debug("Searching models with query: '{}', organisms: {}", q, modelOrganisms);
+    List<ModelOrganismDto> sortedOrganisms = modelOrganisms == null ? null
+        : modelOrganisms.stream().sorted().collect(Collectors.toList());
+    log.debug("Searching models with query: '{}', organisms: {}", q, sortedOrganisms);
 
-    List<SearchResultDto> results = modelSearchService.searchModels(q, modelOrganisms);
+    List<SearchResultDto> results = modelSearchService.searchModels(q, sortedOrganisms);
 
     log.debug("Search returned {} results", results.size());
     return ResponseEntity.ok()
