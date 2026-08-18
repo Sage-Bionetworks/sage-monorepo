@@ -6,20 +6,28 @@
       { "hgnc_symbol": 1 },
       { "alias": 1 },
       { "total_nominations": -1, "hgnc_symbol": 1 }
-    ]
+    ],
+    "collatedIndexes": [{ "hgnc_symbol": 1, "ensembl_gene_id": 1 }]
   },
   {
     "name": "genes",
-    "indexes": [
-      { "ensembl_gene_id": 1, "tissue": 1, "model": 1 },
-      { "ensembl_gene_id": 1, "model": 1 },
-      { "hgnc_symbol": 1, "tissue": 1, "model": 1 }
-    ],
+    "indexes": [{ "ensembl_gene_id": 1, "tissue": 1, "model": 1 }],
     "collatedIndexes": [{ "hgnc_symbol": 1, "tissue": 1, "model": 1 }]
   },
   {
     "name": "geneslinks",
-    "indexes": [{ "geneA_ensembl_gene_id": 1 }, { "geneB_ensembl_gene_id": 1 }]
+    "indexes": [
+      { "geneA_ensembl_gene_id": 1, "geneB_ensembl_gene_id": 1 },
+      { "geneB_ensembl_gene_id": 1 }
+    ]
+  },
+  {
+    "name": "genesneuropathcorr",
+    "indexes": [{ "ensg": 1 }]
+  },
+  {
+    "name": "genesoverallscores",
+    "indexes": [{ "ensembl_gene_id": 1 }]
   },
   {
     "name": "genesmetabolomics",
@@ -42,16 +50,12 @@
     "indexes": [{ "ensembl_gene_id": 1 }]
   },
   {
-    "name": "biodomaininfo",
-    "indexes": [{ "name": 1 }]
-  },
-  {
     "name": "nominateddrugs",
     "indexes": [{ "common_name": 1 }, { "chembl_id": 1, "combined_with": 1 }]
   },
   {
     "name": "nominatedtargets",
-    "indexes": [{ "ensembl_gene_id": 1 }]
+    "indexes": [{ "ensembl_gene_id": 1 }, { "hgnc_symbol": 1 }]
   },
   {
     "name": "uiconfig",

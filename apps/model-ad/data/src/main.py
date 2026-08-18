@@ -137,16 +137,13 @@ def create_collections_indexes(
         for collection_index_data in collections_indexes_data:
             collection_name = collection_index_data["name"]
             logger.debug("Creating indexes for collection '%s'", collection_name)
-            indexes = collection_index_data["indexes"]
+            indexes = collection_index_data.get("indexes", [])
             collection = db.get_collection(collection_name)
             for index in indexes:
                 collection.create_index(list(index.items()))
             for index in collection_index_data.get("collatedIndexes", []):
                 key = list(index.items())
-                name = "_".join(f"{k}_{v}" for k, v in key) + "_collated"
-                collection.create_index(
-                    key, name=name, collation=Collation("en", strength=2)
-                )
+                collection.create_index(key, collation=Collation("en", strength=2))
             logger.debug(
                 "Created indexes for collection '%s' successfully",
                 collection_name,
