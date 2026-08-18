@@ -7,7 +7,7 @@ export const searchAndGetSearchListItems = async (
   page: Page,
   searchPlaceholder = headerSearchPlaceholder,
 ) => {
-  const responsePromise = page.waitForResponse(`**/models/search?q=${query}`);
+  const responsePromise = page.waitForResponse(`**/search/models?q=${query}`);
   const input = page.getByPlaceholder(searchPlaceholder);
   await input.pressSequentially(query);
   await responsePromise;
