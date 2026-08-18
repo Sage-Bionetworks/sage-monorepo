@@ -16,8 +16,8 @@ const dummySearchResults: SearchResult[] = [
 
 const dummyEmptySearchResults: SearchResult[] = [];
 
-export function mockNavigateToResult(id: string): void {
-  alert(`Navigating to ${id}`);
+export function mockNavigateToResult(result: SearchResult): void {
+  alert(`Navigating to ${result.id}`);
 }
 
 export function mockGetSearchResults(query: string): Observable<SearchResult[]> {

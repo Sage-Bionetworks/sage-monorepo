@@ -1,6 +1,7 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
+import { SearchResult } from '@sagebionetworks/explorers/models';
 import {
   mockCheckQueryForErrors,
   mockFormatResultSubtextForDisplay,
@@ -13,7 +14,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
 import { SearchInputComponent } from './search-input.component';
 
-const meta: Meta<SearchInputComponent> = {
+const meta: Meta<SearchInputComponent<SearchResult>> = {
   component: SearchInputComponent,
   title: 'UI/SearchInputComponent',
   decorators: [
@@ -35,7 +36,7 @@ const meta: Meta<SearchInputComponent> = {
   },
 };
 export default meta;
-type Story = StoryObj<SearchInputComponent>;
+type Story = StoryObj<SearchInputComponent<SearchResult>>;
 
 export const HeaderSearchInput: Story = {
   args: {

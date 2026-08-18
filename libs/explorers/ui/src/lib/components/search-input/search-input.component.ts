@@ -40,7 +40,7 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
   styleUrls: ['./search-input.component.scss'],
   standalone: true,
 })
-export class SearchInputComponent implements AfterViewInit {
+export class SearchInputComponent<T extends SearchResult> implements AfterViewInit {
   private readonly platformService = inject(PlatformService);
   router = inject(Router);
   elementRef = inject(ElementRef);
@@ -66,18 +66,16 @@ export class SearchInputComponent implements AfterViewInit {
     },
   });
 
-  navigateToResult = input.required<(id: string) => void>();
-  getSearchResults = input.required<(query: string) => Observable<SearchResult[]>>();
+  navigateToResult = input.required<(result: T) => void>();
+  getSearchResults = input.required<(query: string) => Observable<T[]>>();
   getNoSearchResultsMessage = input<(query: string) => string>(
     (query: string) => 'No results match your search term.',
   );
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
   sanitizeQuery = input<(query: string) => string>((query: string) => query); // default is no-op
-  formatResultForDisplay = input<(result: SearchResult) => string>(
-    (result: SearchResult) => result.id,
-  );
-  formatResultSubtextForDisplay = input<(result: SearchResult) => string | undefined>(
-    (result: SearchResult) => undefined,
+  formatResultForDisplay = input<(result: T) => string>((result: T) => result.id);
+  formatResultSubtextForDisplay = input<(result: T) => string | undefined>(
+    (result: T) => undefined,
   );
 
   faMagnifyingGlass = faMagnifyingGlass;
@@ -87,7 +85,7 @@ export class SearchInputComponent implements AfterViewInit {
   isLoading = false;
   query = '';
   error = '';
-  results: SearchResult[] = [];
+  results: T[] = [];
   selectedResultIndex = -1; // -1 means no result is selected
 
   showResults = false;
@@ -126,7 +124,7 @@ export class SearchInputComponent implements AfterViewInit {
           );
         }),
       )
-      .subscribe((response: SearchResult[]) => {
+      .subscribe((response: T[]) => {
         this.showResults = true;
         this.setResults(response);
       });
@@ -143,7 +141,7 @@ export class SearchInputComponent implements AfterViewInit {
     return `Please enter at least ${numWords[minimumSearchLength - 1]} ${pluralize('character', minimumSearchLength)}.`;
   }
 
-  search(query: string): Observable<SearchResult[]> {
+  search(query: string): Observable<T[]> {
     this.results = [];
     this.error = '';
     this.selectedResultIndex = -1;
@@ -172,7 +170,7 @@ export class SearchInputComponent implements AfterViewInit {
     return this.isLoading ? this.getSearchResults()(sanitizedQuery) : EMPTY;
   }
 
-  setResults(results: SearchResult[]) {
+  setResults(results: T[]) {
     if (results.length < 1 && !this.error) {
       this.error = this.getNoSearchResultsMessage()(this.query);
     }
@@ -203,7 +201,7 @@ export class SearchInputComponent implements AfterViewInit {
         event.preventDefault();
         if (this.selectedResultIndex >= 0 && this.selectedResultIndex < this.results.length) {
           const selectedResult = this.results[this.selectedResultIndex];
-          this.goToResult(selectedResult.id);
+          this.goToResult(selectedResult);
         }
         break;
 
@@ -214,14 +212,14 @@ export class SearchInputComponent implements AfterViewInit {
     }
   }
 
-  goToResult(id: string) {
+  goToResult(result: T) {
     this.input().nativeElement.blur();
     this.query = '';
     this.results = [];
     this.selectedResultIndex = -1;
     this.showResults = false;
     this.searchNavigated.emit();
-    this.navigateToResult()(id);
+    this.navigateToResult()(result);
   }
 
   onFocus() {
@@ -258,12 +256,12 @@ export class SearchInputComponent implements AfterViewInit {
     return sanitizeHtml(text).replace(regex, '<mark>$1</mark>');
   }
 
-  formatAndHighlightResultsForDisplay(result: SearchResult): string {
+  formatAndHighlightResultsForDisplay(result: T): string {
     const formattedText = this.formatResultForDisplay()(result);
     return this.highlightMatches(formattedText, this.query);
   }
 
-  formatAndHighlightResultsSubtextForDisplay(result: SearchResult): string | undefined {
+  formatAndHighlightResultsSubtextForDisplay(result: T): string | undefined {
     const subtext = this.formatResultSubtextForDisplay()(result);
     return subtext ? this.highlightMatches(subtext, this.query) : undefined;
   }

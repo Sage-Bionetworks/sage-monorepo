@@ -21,8 +21,8 @@ export class SearchInputComponent {
   searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
 
-  navigateToResult = (id: string): void => {
-    this.router.navigate([ROUTE_PATHS.MODELS, id]);
+  navigateToResult = (result: SearchResult): void => {
+    this.router.navigate([ROUTE_PATHS.MODELS, result.id]);
   };
 
   getSearchResults = (query: string): Observable<SearchResult[]> => {

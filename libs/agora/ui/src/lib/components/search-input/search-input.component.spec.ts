@@ -163,7 +163,7 @@ describe('SearchInputComponent', () => {
     it('should navigate to correct route when navigateToResult is called', async () => {
       const { component } = await setup();
       const navigateSpy = jest.spyOn(component.router, 'navigate');
-      component.navigateToResult('ENSG00000000010');
+      component.navigateToResult(mockSearchResults[0]);
       expect(navigateSpy).toHaveBeenCalledWith(['genes', 'ENSG00000000010']);
     });
   });

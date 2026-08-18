@@ -37,8 +37,8 @@ export class SearchInputComponent {
     return 'No results found. Try searching by the Ensembl Gene ID.';
   }
 
-  navigateToResult = (id: string): void => {
-    this.router.navigate([ROUTE_PATHS.DETAILS, id]);
+  navigateToResult = (result: SearchResult): void => {
+    this.router.navigate([ROUTE_PATHS.DETAILS, result.id]);
   };
 
   getHgncSymbolCounts(results: SearchResult[]): void {

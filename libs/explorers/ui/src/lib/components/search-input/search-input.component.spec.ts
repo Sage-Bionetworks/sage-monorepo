@@ -148,7 +148,9 @@ describe('SearchInputComponent', () => {
     await waitForSpinner();
 
     await user.click(screen.getByLabelText('dummy_id'));
-    expect(mockNavigateToResult).toHaveBeenCalledWith('dummy_id');
+    expect(mockNavigateToResult).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'dummy_id', match_field: 'id' }),
+    );
 
     expect(input).toHaveValue('');
   });
@@ -210,7 +212,9 @@ describe('SearchInputComponent', () => {
     await user.keyboard('[ArrowDown]');
     await user.keyboard('[Enter]');
 
-    expect(mockNavigateToResult).toHaveBeenCalledWith('dummy_id');
+    expect(mockNavigateToResult).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'dummy_id', match_field: 'id' }),
+    );
     expect(input).toHaveValue('');
   });
 
