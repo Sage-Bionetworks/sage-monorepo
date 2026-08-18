@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
-import { SearchResult } from '@sagebionetworks/explorers/models';
+import { SearchResult, SearchResultIcon } from '@sagebionetworks/explorers/models';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import { pluralize } from '@sagebionetworks/shared/util';
@@ -77,6 +77,7 @@ export class SearchInputComponent<T extends SearchResult> implements AfterViewIn
   formatResultSubtextForDisplay = input<(result: T) => string | undefined>(
     (result: T) => undefined,
   );
+  getResultIcon = input<(result: T) => SearchResultIcon | undefined>((result: T) => undefined);
 
   faMagnifyingGlass = faMagnifyingGlass;
   faSpinner = faSpinner;
@@ -254,6 +255,12 @@ export class SearchInputComponent<T extends SearchResult> implements AfterViewIn
     const regex = new RegExp(`(${escapedQuery})`, 'gi');
 
     return sanitizeHtml(text).replace(regex, '<mark>$1</mark>');
+  }
+
+  getResultAriaLabel(result: T): string {
+    const label = this.formatResultForDisplay()(result);
+    const icon = this.getResultIcon()(result);
+    return icon ? `${label}, ${icon.label}` : label;
   }
 
   formatAndHighlightResultsForDisplay(result: T): string {

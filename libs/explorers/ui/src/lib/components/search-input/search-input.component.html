@@ -58,19 +58,23 @@
                   (click)="goToResult(result)"
                   class="result-button"
                   [attr.aria-selected]="selectedResultIndex === i"
-                  [attr.aria-label]="formatResultForDisplay()(result)"
+                  [attr.aria-label]="getResultAriaLabel(result)"
                 >
-                  <span
-                    class="result-name"
-                    [innerHtml]="formatAndHighlightResultsForDisplay(result) | sanitizeHtml"
-                  ></span>
-                  @if (formatResultSubtextForDisplay()(result)) {
-                    <br />
-                    <span
-                      class="result-subtext"
-                      [innerHtml]="`${formatAndHighlightResultsSubtextForDisplay(result)}` | sanitizeHtml"
-                    ></span>
+                  @if (getResultIcon()(result); as icon) {
+                    <explorers-svg-image class="result-icon" [imagePath]="icon.imagePath" />
                   }
+                  <span class="result-text">
+                    <span
+                      class="result-name"
+                      [innerHtml]="formatAndHighlightResultsForDisplay(result) | sanitizeHtml"
+                    ></span>
+                    @if (formatResultSubtextForDisplay()(result)) {
+                      <span
+                        class="result-subtext"
+                        [innerHtml]="`${formatAndHighlightResultsSubtextForDisplay(result)}` | sanitizeHtml"
+                      ></span>
+                    }
+                  </span>
                 </button>
               </li>
             }

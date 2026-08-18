@@ -5,6 +5,7 @@ import { SearchResult } from '@sagebionetworks/explorers/models';
 import {
   mockCheckQueryForErrors,
   mockFormatResultSubtextForDisplay,
+  mockGetMixedResultIcons,
   mockGetNoSearchResultsMessage,
   mockGetSearchResults,
   mockNavigateToResult,
@@ -33,6 +34,7 @@ const meta: Meta<SearchInputComponent<SearchResult>> = {
     checkQueryForErrors: { control: false },
     sanitizeQuery: { control: false },
     formatResultSubtextForDisplay: { control: false },
+    getResultIcon: { control: false },
   },
 };
 export default meta;
@@ -60,5 +62,26 @@ export const HomeSearchInput: Story = {
     checkQueryForErrors: mockCheckQueryForErrors,
     sanitizeQuery: mockSanitizeQuery,
     minimumSearchLength: 2,
+  },
+};
+
+export const ResultsWithMixedResultIcons: Story = {
+  args: {
+    searchPlaceholder: 'Find model by name or ID...',
+    navigateToResult: mockNavigateToResult,
+    getSearchResults: mockGetSearchResults,
+    checkQueryForErrors: mockCheckQueryForErrors,
+    getResultIcon: mockGetMixedResultIcons,
+  },
+};
+
+export const ResultsWithIconsAndSubtext: Story = {
+  args: {
+    searchPlaceholder: 'Find model by name or ID...',
+    navigateToResult: mockNavigateToResult,
+    getSearchResults: mockGetSearchResults,
+    checkQueryForErrors: mockCheckQueryForErrors,
+    getResultIcon: mockGetMixedResultIcons,
+    formatResultSubtextForDisplay: mockFormatResultSubtextForDisplay,
   },
 };

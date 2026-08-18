@@ -21,6 +21,9 @@ export class SearchInputComponent {
   searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
 
+  // TODO(MG-938): define getResultIcon and bind it in the template once search
+  // results identify the model's organism
+
   navigateToResult = (result: SearchResult): void => {
     this.router.navigate([ROUTE_PATHS.MODELS, result.id]);
   };
