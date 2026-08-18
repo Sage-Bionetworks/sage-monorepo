@@ -2,7 +2,8 @@ import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { SearchResult } from '@sagebionetworks/explorers/models';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
-import { ModelService } from '@sagebionetworks/model-ad/api-client';
+import { ModelOrganism, SearchService } from '@sagebionetworks/model-ad/api-client';
+import { SearchResult as ModelAdSearchResult } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { Observable } from 'rxjs';
 
@@ -14,27 +15,32 @@ import { Observable } from 'rxjs';
 })
 export class SearchInputComponent {
   router = inject(Router);
-  modelService = inject(ModelService);
+  searchService = inject(SearchService);
 
   searchPlaceholder = input<string>('Find model by name or ID...');
   searchImagePath = input<string | undefined>();
   searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
+  modelOrganisms = input<ModelOrganism[] | undefined>();
 
   // TODO(MG-938): define getResultIcon and bind it in the template once search
   // results identify the model's organism
 
   navigateToResult = (result: SearchResult): void => {
-    this.router.navigate([ROUTE_PATHS.MODELS, result.id]);
+    const modelOrganism =
+      (result as ModelAdSearchResult).model_organism ?? ModelOrganism.Mouse;
+    this.router.navigate([ROUTE_PATHS.MODELS, result.id], {
+      queryParams: { modelOrganism },
+    });
   };
 
   getSearchResults = (query: string): Observable<SearchResult[]> => {
-    return this.modelService.searchModels(query);
+    return this.searchService.searchModels(query, this.modelOrganisms());
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   checkQueryForErrors = (query: string): string => {
-    return ''; // empty string if no error
+    return '';
   };
 
   formatResultForDisplay = (result: SearchResult): string => {

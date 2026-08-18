@@ -40,6 +40,7 @@
                 [searchImagePath]="'model-ad-assets/images/mouse-head.svg'"
                 [searchImageAltText]="'mouse head icon'"
                 [hasThickBorder]="true"
+                [modelOrganisms]="['mouse']"
               />
             </explorers-home-card>
             <explorers-home-card
@@ -72,13 +73,20 @@
               [imagePath]="'model-ad-assets/images/marmoset-model.svg'"
               [imageAltText]="'marmoset icon'"
             />
-            <!-- TODO(MG-937): add the marmoset search input once the marmoset search API is available. -->
             <explorers-home-card
               [title]="'Marmoset Model Search'"
               [description]="
                 'Search marmoset models to explore <strong>Plasma Biomarker</strong> results and detailed model information.'
               "
-            />
+            >
+              <model-ad-search-input
+                [searchPlaceholder]="'Find marmoset model by name...'"
+                [searchImagePath]="'model-ad-assets/images/marmoset-model.svg'"
+                [searchImageAltText]="'marmoset icon'"
+                [hasThickBorder]="true"
+                [modelOrganisms]="['marmoset']"
+              />
+            </explorers-home-card>
           </div>
         }
       </div>
