@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SearchResultDto;
+import org.sagebionetworks.model.ad.api.next.model.mapper.SearchResultMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ModelSearchRepository;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,6 +22,7 @@ public class ModelSearchService {
   private static final int MAX_QUERY_LENGTH = 100;
 
   private final ModelSearchRepository modelSearchRepository;
+  private final SearchResultMapper searchResultMapper;
 
   @Cacheable(key = "#query + '-' + #modelOrganisms")
   public List<SearchResultDto> searchModels(String query, List<ModelOrganismDto> modelOrganisms) {
@@ -35,6 +37,8 @@ public class ModelSearchService {
         : modelOrganisms;
 
     log.debug("Searching models with query '{}' for organisms {}", query, organisms);
-    return modelSearchRepository.searchModels(query, organisms);
+    return modelSearchRepository.searchModels(query, organisms).stream()
+        .map(searchResultMapper::toDto)
+        .toList();
   }
 }

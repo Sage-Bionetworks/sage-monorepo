@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
+import org.sagebionetworks.model.ad.api.next.model.document.SearchResultDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.SearchResultDto;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -27,7 +27,7 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
   private final MongoTemplate mongoTemplate;
 
   @Override
-  public List<SearchResultDto> searchModels(String query, List<ModelOrganismDto> organisms) {
+  public List<SearchResultDocument> searchModels(String query, List<ModelOrganismDto> organisms) {
     String escapedQuery = Pattern.quote(query);
     boolean includeMouse = organisms.contains(ModelOrganismDto.MOUSE);
     boolean includeMarmoset = organisms.contains(ModelOrganismDto.MARMOSET);
@@ -44,7 +44,7 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
     return List.of();
   }
 
-  private List<SearchResultDto> searchBothOrganisms(String escapedQuery) {
+  private List<SearchResultDocument> searchBothOrganisms(String escapedQuery) {
     List<AggregationOperation> operations = new ArrayList<>();
     operations.add(
         addFieldsStage(mouseMatchBranches(escapedQuery), escapedQuery, ModelOrganismDto.MOUSE));
@@ -58,12 +58,12 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
 
     log.debug("Executing search aggregation on {} with $unionWith {}", MOUSE_COLLECTION,
         MARMOSET_COLLECTION);
-    AggregationResults<SearchResultDto> results =
-        mongoTemplate.aggregate(aggregation, MOUSE_COLLECTION, SearchResultDto.class);
+    AggregationResults<SearchResultDocument> results =
+        mongoTemplate.aggregate(aggregation, MOUSE_COLLECTION, SearchResultDocument.class);
     return results.getMappedResults();
   }
 
-  private List<SearchResultDto> searchSingleOrganism(String escapedQuery, String collection,
+  private List<SearchResultDocument> searchSingleOrganism(String escapedQuery, String collection,
       List<Document> matchBranches, ModelOrganismDto organism) {
     List<AggregationOperation> operations = new ArrayList<>();
     operations.add(addFieldsStage(matchBranches, escapedQuery, organism));
@@ -75,8 +75,8 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
         AggregationOptions.builder().allowDiskUse(true).build());
 
     log.debug("Executing search aggregation on {}", collection);
-    AggregationResults<SearchResultDto> results =
-        mongoTemplate.aggregate(aggregation, collection, SearchResultDto.class);
+    AggregationResults<SearchResultDocument> results =
+        mongoTemplate.aggregate(aggregation, collection, SearchResultDocument.class);
     return results.getMappedResults();
   }
 
@@ -121,11 +121,10 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
 
   private AggregationOperation projectStage() {
     return context -> new Document("$project", new Document()
-        .append("_id", 0)
-        .append("id", "$name")
+        .append("_id", "$name")
         .append("match_field", "$match_info.match_field")
         .append("match_value", "$match_info.match_value")
-        .append("model_organism", 1));
+        .append("model_organism", "$model_organism"));
   }
 
   private Document buildVars(String escapedQuery) {
