@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <div class="table-of-contents-container full-width-container" #tableOfContentsContainer>
+  <div class="table-of-contents-container plots-width-bleed" #tableOfContentsContainer>
     <div class="table-of-contents-title-bar">
       <h2>Table of Contents</h2>
       <div class="title-bar-actions">
@@ -85,7 +85,7 @@
     @for (section of boxplotSections(); track section.evidenceType; let last = $last) {
       @let evidenceType = section.evidenceType;
       <div
-        class="boxplots-evidence-type"
+        class="boxplots-evidence-type plots-width-bleed"
         [id]="generateAnchorId(evidenceType)"
         (mouseenter)="activeShareLink.set(evidenceType)"
         (mouseleave)="activeShareLink.set('')"
@@ -114,24 +114,23 @@
           }
         </div>
 
-        <!-- Wrapper handles full-width positioning; inner div is the download capture
-             target so html-to-image doesn't re-apply the wrapper's pixel offsets -->
-        <div class="boxplots-full-width-wrapper">
-          <div #sectionBody>
-            <ng-container
-              [ngTemplateOutlet]="sectionTemplate()"
-              [ngTemplateOutletContext]="{
-                data: sectionDataByEvidenceType().get(evidenceType)?.transformedData,
-                sexFilter: selectedSexOption().value,
-                copyLinkFn: copyShareLinkCallbackFn,
-                tooltipTextFn: getShareLinkTooltipText,
-                setActiveShareLink: setActiveShareLinkFn,
-                clearActiveShareLink: clearActiveShareLinkFn,
-                isShareLinkActive: isShareLinkActiveFn,
-              }"
-            />
-          </div>
+        <!-- Download capture target: the capture is sized from this element's own width
+             and offsets, so the viewport bleed has to live on the wrapper above -->
+        <div #sectionBody>
+          <ng-container
+            [ngTemplateOutlet]="sectionTemplate()"
+            [ngTemplateOutletContext]="{
+              data: sectionDataByEvidenceType().get(evidenceType)?.transformedData,
+              sexFilter: selectedSexOption().value,
+              copyLinkFn: copyShareLinkCallbackFn,
+              tooltipTextFn: getShareLinkTooltipText,
+              setActiveShareLink: setActiveShareLinkFn,
+              clearActiveShareLink: clearActiveShareLinkFn,
+              isShareLinkActive: isShareLinkActiveFn,
+            }"
+          />
         </div>
+
         @if (!last) {
           <hr class="boxplots-separator" />
         }
