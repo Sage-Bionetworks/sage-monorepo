@@ -66,6 +66,7 @@ ol {
   --color-shadow: #c7c5c5;
   --color-tooltip: #63676c;
   --color-comparison-tool-row-highlight: #ebf2fa;
+  --color-search-input-result-highlight: #f1f3f5;
   --font-size-h1: 28px;
   --font-weight-h1: 700;
   --line-height-h1: 32px;
@@ -254,6 +255,7 @@ button.p-button-text:hover {
   --color-secondary: #4f33a3;
   --color-secondary-dark: #3d2879;
   --color-toggle-card-divider: #cbe4ef;
+  --color-search-input-result-highlight: #e5e0f1;
 }
 
 h1,
