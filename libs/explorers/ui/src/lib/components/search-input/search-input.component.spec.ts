@@ -1,12 +1,14 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { SearchResult } from '@sagebionetworks/explorers/models';
+import { SearchResult, SearchResultIcon } from '@sagebionetworks/explorers/models';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import {
   mockCheckQueryForErrors,
   mockFormatResultSubtextForDisplay,
   mockGetNoSearchResultsMessage,
+  mockGetResultIcon,
   mockGetSearchResults,
+  mockMouseResultIcon,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
@@ -37,17 +39,29 @@ async function waitForSpinner() {
 }
 
 async function setup(
-  formatResultSubtextForDisplay?: (result: SearchResult) => string | undefined,
-  getNoSearchResultsMessage?: (query: string) => string,
+  options: {
+    formatResultSubtextForDisplay?: (result: SearchResult) => string | undefined;
+    getNoSearchResultsMessage?: (query: string) => string;
+    getResultIcon?: (result: SearchResult) => SearchResultIcon;
+    hasLightResultHighlight?: boolean;
+  } = {},
 ) {
   const optionalInputs: Record<string, any> = {};
 
-  if (formatResultSubtextForDisplay) {
-    optionalInputs['formatResultSubtextForDisplay'] = formatResultSubtextForDisplay;
+  if (options.formatResultSubtextForDisplay) {
+    optionalInputs['formatResultSubtextForDisplay'] = options.formatResultSubtextForDisplay;
   }
 
-  if (getNoSearchResultsMessage) {
-    optionalInputs['getNoSearchResultsMessage'] = getNoSearchResultsMessage;
+  if (options.getNoSearchResultsMessage) {
+    optionalInputs['getNoSearchResultsMessage'] = options.getNoSearchResultsMessage;
+  }
+
+  if (options.getResultIcon) {
+    optionalInputs['getResultIcon'] = options.getResultIcon;
+  }
+
+  if (options.hasLightResultHighlight) {
+    optionalInputs['hasLightResultHighlight'] = options.hasLightResultHighlight;
   }
 
   const user = userEvent.setup();
@@ -148,7 +162,9 @@ describe('SearchInputComponent', () => {
     await waitForSpinner();
 
     await user.click(screen.getByLabelText('dummy_id'));
-    expect(mockNavigateToResult).toHaveBeenCalledWith('dummy_id');
+    expect(mockNavigateToResult).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'dummy_id', match_field: 'id' }),
+    );
 
     expect(input).toHaveValue('');
   });
@@ -210,7 +226,9 @@ describe('SearchInputComponent', () => {
     await user.keyboard('[ArrowDown]');
     await user.keyboard('[Enter]');
 
-    expect(mockNavigateToResult).toHaveBeenCalledWith('dummy_id');
+    expect(mockNavigateToResult).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'dummy_id', match_field: 'id' }),
+    );
     expect(input).toHaveValue('');
   });
 
@@ -359,7 +377,10 @@ describe('SearchInputComponent', () => {
   });
 
   it('should display custom no results message when provided', async () => {
-    const { user } = await setup(mockFormatResultSubtextForDisplay, mockGetNoSearchResultsMessage);
+    const { user } = await setup({
+      formatResultSubtextForDisplay: mockFormatResultSubtextForDisplay,
+      getNoSearchResultsMessage: mockGetNoSearchResultsMessage,
+    });
 
     const input = getInput();
     await user.type(input, 'ensg00000000000');
@@ -404,8 +425,65 @@ describe('SearchInputComponent', () => {
     expect(firstResult).not.toHaveTextContent(/dummy name/i);
   });
 
+  it('should not display result icons when icon function is not provided', async () => {
+    const { container, user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    expect(container.querySelectorAll('.result-icon')).toHaveLength(0);
+  });
+
+  it('should display a result icon for every result when icon function is provided', async () => {
+    const { container, user } = await setup({ getResultIcon: mockGetResultIcon });
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    const icons = container.querySelectorAll<HTMLImageElement>('.result-icon img');
+    expect(icons).toHaveLength(2);
+    icons.forEach((icon) => expect(icon).toHaveAttribute('src', mockMouseResultIcon.imagePath));
+  });
+
+  it('should use the default selected result highlight when not opted in', async () => {
+    const { container, user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    expect(container.querySelector('.search-results-list')).not.toHaveClass(
+      'light-result-highlight',
+    );
+  });
+
+  it('should use the light selected result highlight when opted in', async () => {
+    const { container, user } = await setup({ hasLightResultHighlight: true });
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    expect(container.querySelector('.search-results-list')).toHaveClass('light-result-highlight');
+  });
+
+  it('should include the icon label in the accessible name of a result', async () => {
+    const { user } = await setup({ getResultIcon: mockGetResultIcon });
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    expect(screen.getByLabelText(`dummy_id, ${mockMouseResultIcon.label}`)).toBeInTheDocument();
+    expect(screen.getByLabelText(`dummy_id_2, ${mockMouseResultIcon.label}`)).toBeInTheDocument();
+  });
+
   it('should display results text and subtext when subtext format function is provided', async () => {
-    const { user } = await setup(mockFormatResultSubtextForDisplay);
+    const { user } = await setup({
+      formatResultSubtextForDisplay: mockFormatResultSubtextForDisplay,
+    });
     const input = getInput();
 
     await user.type(input, '123');

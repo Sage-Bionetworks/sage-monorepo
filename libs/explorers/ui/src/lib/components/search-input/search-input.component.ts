@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
-import { SearchResult } from '@sagebionetworks/explorers/models';
+import { SearchResult, SearchResultIcon } from '@sagebionetworks/explorers/models';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import { pluralize } from '@sagebionetworks/shared/util';
@@ -40,7 +40,7 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
   styleUrls: ['./search-input.component.scss'],
   standalone: true,
 })
-export class SearchInputComponent implements AfterViewInit {
+export class SearchInputComponent<T extends SearchResult> implements AfterViewInit {
   private readonly platformService = inject(PlatformService);
   router = inject(Router);
   elementRef = inject(ElementRef);
@@ -52,6 +52,7 @@ export class SearchInputComponent implements AfterViewInit {
   searchImagePath = input<string | undefined>();
   searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
+  hasLightResultHighlight = input<boolean>(false);
 
   private readonly MINIMUM_SEARCH_LENGTH_DEFAULT = 3;
   minimumSearchLength = input<number, number>(this.MINIMUM_SEARCH_LENGTH_DEFAULT, {
@@ -66,19 +67,18 @@ export class SearchInputComponent implements AfterViewInit {
     },
   });
 
-  navigateToResult = input.required<(id: string) => void>();
-  getSearchResults = input.required<(query: string) => Observable<SearchResult[]>>();
+  navigateToResult = input.required<(result: T) => void>();
+  getSearchResults = input.required<(query: string) => Observable<T[]>>();
   getNoSearchResultsMessage = input<(query: string) => string>(
     (query: string) => 'No results match your search term.',
   );
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
   sanitizeQuery = input<(query: string) => string>((query: string) => query); // default is no-op
-  formatResultForDisplay = input<(result: SearchResult) => string>(
-    (result: SearchResult) => result.id,
+  formatResultForDisplay = input<(result: T) => string>((result: T) => result.id);
+  formatResultSubtextForDisplay = input<(result: T) => string | undefined>(
+    (result: T) => undefined,
   );
-  formatResultSubtextForDisplay = input<(result: SearchResult) => string | undefined>(
-    (result: SearchResult) => undefined,
-  );
+  getResultIcon = input<(result: T) => SearchResultIcon | undefined>((result: T) => undefined);
 
   faMagnifyingGlass = faMagnifyingGlass;
   faSpinner = faSpinner;
@@ -87,7 +87,7 @@ export class SearchInputComponent implements AfterViewInit {
   isLoading = false;
   query = '';
   error = '';
-  results: SearchResult[] = [];
+  results: T[] = [];
   selectedResultIndex = -1; // -1 means no result is selected
 
   showResults = false;
@@ -126,7 +126,7 @@ export class SearchInputComponent implements AfterViewInit {
           );
         }),
       )
-      .subscribe((response: SearchResult[]) => {
+      .subscribe((response: T[]) => {
         this.showResults = true;
         this.setResults(response);
       });
@@ -143,7 +143,7 @@ export class SearchInputComponent implements AfterViewInit {
     return `Please enter at least ${numWords[minimumSearchLength - 1]} ${pluralize('character', minimumSearchLength)}.`;
   }
 
-  search(query: string): Observable<SearchResult[]> {
+  search(query: string): Observable<T[]> {
     this.results = [];
     this.error = '';
     this.selectedResultIndex = -1;
@@ -172,7 +172,7 @@ export class SearchInputComponent implements AfterViewInit {
     return this.isLoading ? this.getSearchResults()(sanitizedQuery) : EMPTY;
   }
 
-  setResults(results: SearchResult[]) {
+  setResults(results: T[]) {
     if (results.length < 1 && !this.error) {
       this.error = this.getNoSearchResultsMessage()(this.query);
     }
@@ -203,7 +203,7 @@ export class SearchInputComponent implements AfterViewInit {
         event.preventDefault();
         if (this.selectedResultIndex >= 0 && this.selectedResultIndex < this.results.length) {
           const selectedResult = this.results[this.selectedResultIndex];
-          this.goToResult(selectedResult.id);
+          this.goToResult(selectedResult);
         }
         break;
 
@@ -214,14 +214,14 @@ export class SearchInputComponent implements AfterViewInit {
     }
   }
 
-  goToResult(id: string) {
+  goToResult(result: T) {
     this.input().nativeElement.blur();
     this.query = '';
     this.results = [];
     this.selectedResultIndex = -1;
     this.showResults = false;
     this.searchNavigated.emit();
-    this.navigateToResult()(id);
+    this.navigateToResult()(result);
   }
 
   onFocus() {
@@ -258,12 +258,18 @@ export class SearchInputComponent implements AfterViewInit {
     return sanitizeHtml(text).replace(regex, '<mark>$1</mark>');
   }
 
-  formatAndHighlightResultsForDisplay(result: SearchResult): string {
+  getResultAriaLabel(result: T): string {
+    const label = this.formatResultForDisplay()(result);
+    const icon = this.getResultIcon()(result);
+    return icon ? `${label}, ${icon.label}` : label;
+  }
+
+  formatAndHighlightResultsForDisplay(result: T): string {
     const formattedText = this.formatResultForDisplay()(result);
     return this.highlightMatches(formattedText, this.query);
   }
 
-  formatAndHighlightResultsSubtextForDisplay(result: SearchResult): string | undefined {
+  formatAndHighlightResultsSubtextForDisplay(result: T): string | undefined {
     const subtext = this.formatResultSubtextForDisplay()(result);
     return subtext ? this.highlightMatches(subtext, this.query) : undefined;
   }

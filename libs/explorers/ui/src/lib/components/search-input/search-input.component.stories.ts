@@ -1,9 +1,11 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
+import { SearchResult } from '@sagebionetworks/explorers/models';
 import {
   mockCheckQueryForErrors,
   mockFormatResultSubtextForDisplay,
+  mockGetMixedResultIcons,
   mockGetNoSearchResultsMessage,
   mockGetSearchResults,
   mockNavigateToResult,
@@ -13,7 +15,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
 import { SearchInputComponent } from './search-input.component';
 
-const meta: Meta<SearchInputComponent> = {
+const meta: Meta<SearchInputComponent<SearchResult>> = {
   component: SearchInputComponent,
   title: 'UI/SearchInputComponent',
   decorators: [
@@ -32,10 +34,11 @@ const meta: Meta<SearchInputComponent> = {
     checkQueryForErrors: { control: false },
     sanitizeQuery: { control: false },
     formatResultSubtextForDisplay: { control: false },
+    getResultIcon: { control: false },
   },
 };
 export default meta;
-type Story = StoryObj<SearchInputComponent>;
+type Story = StoryObj<SearchInputComponent<SearchResult>>;
 
 export const HeaderSearchInput: Story = {
   args: {
@@ -59,5 +62,28 @@ export const HomeSearchInput: Story = {
     checkQueryForErrors: mockCheckQueryForErrors,
     sanitizeQuery: mockSanitizeQuery,
     minimumSearchLength: 2,
+  },
+};
+
+export const ResultsWithMixedResultIcons: Story = {
+  args: {
+    searchPlaceholder: 'Find model by name or ID...',
+    navigateToResult: mockNavigateToResult,
+    getSearchResults: mockGetSearchResults,
+    checkQueryForErrors: mockCheckQueryForErrors,
+    getResultIcon: mockGetMixedResultIcons,
+    hasLightResultHighlight: true,
+  },
+};
+
+export const ResultsWithIconsAndSubtext: Story = {
+  args: {
+    searchPlaceholder: 'Find model by name or ID...',
+    navigateToResult: mockNavigateToResult,
+    getSearchResults: mockGetSearchResults,
+    checkQueryForErrors: mockCheckQueryForErrors,
+    getResultIcon: mockGetMixedResultIcons,
+    formatResultSubtextForDisplay: mockFormatResultSubtextForDisplay,
+    hasLightResultHighlight: true,
   },
 };
