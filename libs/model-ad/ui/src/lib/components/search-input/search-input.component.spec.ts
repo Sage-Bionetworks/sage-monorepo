@@ -89,4 +89,43 @@ describe('SearchInputComponent', () => {
       queryParams: { modelOrganism: 'mouse' },
     });
   });
+
+  it('should navigate with marmoset modelOrganism for marmoset results', async () => {
+    const { component } = await setup();
+    const navigateSpy = jest.spyOn(component.router, 'navigate');
+    const marmosetResult: SearchResult = {
+      id: 'Presenilin 1',
+      match_field: 'name',
+      match_value: 'Presenilin 1',
+      model_organism: 'marmoset',
+    };
+    component.navigateToResult(marmosetResult);
+    expect(navigateSpy).toHaveBeenCalledWith(['models', 'Presenilin 1'], {
+      queryParams: { modelOrganism: 'marmoset' },
+    });
+  });
+
+  it('should return mouse icon for mouse results', async () => {
+    const { component } = await setup();
+    const icon = component.getResultIcon(mockSearchResults[0]);
+    expect(icon).toEqual({
+      imagePath: 'model-ad-assets/images/mouse-head.svg',
+      label: 'mouse',
+    });
+  });
+
+  it('should return marmoset icon for marmoset results', async () => {
+    const { component } = await setup();
+    const marmosetResult: SearchResult = {
+      id: 'Presenilin 1',
+      match_field: 'name',
+      match_value: 'Presenilin 1',
+      model_organism: 'marmoset',
+    };
+    const icon = component.getResultIcon(marmosetResult);
+    expect(icon).toEqual({
+      imagePath: 'model-ad-assets/images/marmoset-head.svg',
+      label: 'marmoset',
+    });
+  });
 });
