@@ -9,4 +9,5 @@ export * from './lib/popover-link/popover-link.component';
 export * from './lib/prefetch-config';
 export * from './lib/svg-icon/svg-icon.component';
 export * from './lib/tooltip-button/tooltip-button.component';
+export * from './lib/widest-line-width/widest-line-width.directive';
 export * from './lib/wiki/wiki.component';
