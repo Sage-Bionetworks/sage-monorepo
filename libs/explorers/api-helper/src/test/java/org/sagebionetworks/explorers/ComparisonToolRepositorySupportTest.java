@@ -411,4 +411,33 @@ class ComparisonToolRepositorySupportTest {
       assertThat(pipeline).contains("\"name_sort\" : 1");
     }
   }
+
+  @Test
+  @DisplayName("should append _id as final tiebreaker in sort document for deterministic pagination")
+  void shouldAppendIdTiebreakerInSortDocument() {
+    BareRepo repo = new BareRepo(mongoTemplate);
+    stubMongoTemplate(0L);
+
+    Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("name")));
+    repo.run(new Criteria(), pageable);
+
+    String pipeline = capturePipeline().toString();
+    assertThat(pipeline).contains("\"_id\" : 1");
+    int nameIdx = pipeline.indexOf("\"name\" : 1");
+    int idIdx = pipeline.indexOf("\"_id\" : 1");
+    assertThat(idIdx).as("_id should appear after the user-requested sort field").isGreaterThan(nameIdx);
+  }
+
+  @Test
+  @DisplayName("should not include _id tiebreaker when sort is unsorted")
+  void shouldNotIncludeIdTiebreakerWhenUnsorted() {
+    BareRepo repo = new BareRepo(mongoTemplate);
+    stubMongoTemplate(0L);
+
+    Pageable pageable = PageRequest.of(0, 10);
+    repo.run(new Criteria(), pageable);
+
+    String pipeline = capturePipeline().toString();
+    assertThat(pipeline).doesNotContain("\"_id\" : 1");
+  }
 }
