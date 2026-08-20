@@ -283,7 +283,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
    *
    * <ul>
    *   <li>Comma-separated search → exact match (case-insensitive) via
-   *       {@link ApiHelper#createCaseInsensitiveFullMatchPatterns}
+   *       {@link ApiHelper#createCaseInsensitiveFullMatchPatterns(String)}
    *   <li>Single term → partial match (case-insensitive regex)
    * </ul>
    *

@@ -7,6 +7,7 @@ import {
   expectFiltersParams,
   expectPinnedParams,
   expectPinnedRows,
+  expectSearchResults,
   expectSortFieldsParams,
   expectSortOrdersParams,
   getPinnedTable,
@@ -26,7 +27,6 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
-  testPartialCaseInsensitiveSearch,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
@@ -298,7 +298,7 @@ test.describe('disease correlation', () => {
       getQueryParamFromValues(categories, 'categories'),
     );
 
-    await testPartialCaseInsensitiveSearch(page, 'apo', [
+    await expectSearchResults(page, 'apo', [
       'APOE4~4 months~Female',
       'APOE4~4 months~Male',
       'APOE4~8 months~Female',
@@ -373,7 +373,7 @@ test.describe('disease correlation', () => {
       getQueryParamFromValues(categories, 'categories'),
     );
 
-    await testPartialCaseInsensitiveSearch(page, '(iu', [
+    await expectSearchResults(page, '(iu', [
       '5xFAD (IU/Jax/Pitt)~4 months~Female',
       '5xFAD (IU/Jax/Pitt)~4 months~Male',
       '5xFAD (IU/Jax/Pitt)~12 months~Female',

@@ -4,6 +4,7 @@ import {
   expectFiltersParams,
   expectPinnedParams,
   expectPinnedRows,
+  expectSearchResults,
   expectUnpinnedTableOnly,
   getFiltersQueryParams,
   getPinnedTable,
@@ -22,7 +23,6 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
-  testPartialCaseInsensitiveSearch,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
@@ -170,7 +170,7 @@ test.describe('mouse model overview', () => {
     page,
   }) => {
     await navigateToComparison(page, CT_PAGE, true);
-    await testPartialCaseInsensitiveSearch(page, 'tg-', ['3xTg-AD']);
+    await expectSearchResults(page, 'tg-', ['3xTg-AD']);
   });
 
   test('filterbox search excludes pinned items from results', async ({ page }) => {
@@ -192,7 +192,7 @@ test.describe('mouse model overview', () => {
     page,
   }) => {
     await navigateToComparison(page, CT_PAGE, true);
-    await testPartialCaseInsensitiveSearch(page, '(uc', ['5xFAD (UCI)']);
+    await expectSearchResults(page, '(uc', ['5xFAD (UCI)']);
   });
 
   test('table loads previous page when last item on last page is pinned', async ({ page }) => {

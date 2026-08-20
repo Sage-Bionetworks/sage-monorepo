@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +40,13 @@ import org.springframework.data.mongodb.core.query.Query;
 class CustomTranscriptomicsRepositoryImplTest {
 
   private static final String COLLECTION_NAME = "rna_de_aggregate";
+  private static final String ENSEMBL_GENE_ID_FIELD = "ensembl_gene_id";
+  private static final String GENE_SYMBOL_FIELD = "gene_symbol";
+  private static final String TISSUE_FIELD = "tissue";
+
+  private static final String ENSA_ENSEMBL_GENE_ID = "ENSMUSG00000038619";
+  private static final String OTHER_ENSEMBL_GENE_ID = "ENSMUSG00000000001";
+  private static final String PLEC_GENE_SYMBOL = "plec";
 
   private CustomTranscriptomicsRepositoryImpl repository;
 
@@ -75,7 +83,7 @@ class CustomTranscriptomicsRepositoryImplTest {
     Document criteriaDoc = captureCountQuery().getQueryObject();
     assertThat(criteriaDoc).containsKey("$and");
     List<Document> andConditions = (List<Document>) criteriaDoc.get("$and");
-    assertThat(andConditions).anySatisfy(doc -> assertThat(doc).containsKey("tissue"));
+    assertThat(andConditions).anySatisfy(doc -> assertThat(doc).containsKey(TISSUE_FIELD));
     assertThat(andConditions).anySatisfy(doc -> assertThat(doc).containsKey("biodomains"));
   }
 
@@ -163,7 +171,7 @@ class CustomTranscriptomicsRepositoryImplTest {
       "test-tissue"
     );
 
-    assertThat(captureCountQuery().getQueryObject().toJson()).doesNotContain("\"$regex\"");
+    assertThat(captureCountQuery().getQueryObject().toString()).doesNotContain(GENE_SYMBOL_FIELD);
   }
 
   @Test
@@ -176,7 +184,131 @@ class CustomTranscriptomicsRepositoryImplTest {
 
     repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), "test-tissue");
 
-    assertThat(captureCountQuery().getQueryObject().toJson()).doesNotContain("\"$regex\"");
+    assertThat(captureCountQuery().getQueryObject().toString())
+      .doesNotContain(GENE_SYMBOL_FIELD)
+      .doesNotContain(ENSEMBL_GENE_ID_FIELD);
+  }
+
+  @Test
+  @DisplayName("should search ensembl_gene_id only when search is a full ensembl gene id")
+  void shouldSearchEnsemblGeneIdOnlyWhenSearchIsFullEnsemblGeneId() {
+    Document searchCondition = searchConditionFor(ENSA_ENSEMBL_GENE_ID);
+
+    assertThat(searchCondition.keySet())
+      .as("a full ensembl gene id routes to ensembl_gene_id with no gene_symbol branch")
+      .containsExactly(ENSEMBL_GENE_ID_FIELD);
+    assertThat(inPatterns(searchCondition, ENSEMBL_GENE_ID_FIELD))
+      .extracting(Pattern::pattern)
+      .containsExactly(fullMatch(ENSA_ENSEMBL_GENE_ID));
+  }
+
+  @Test
+  @DisplayName("should match case-insensitively when search is a lowercase full ensembl gene id")
+  void shouldMatchCaseInsensitivelyWhenSearchIsLowercaseFullEnsemblGeneId() {
+    Document searchCondition = searchConditionFor(ENSA_ENSEMBL_GENE_ID.toLowerCase());
+
+    assertThat(searchCondition.keySet()).containsExactly(ENSEMBL_GENE_ID_FIELD);
+    assertThat(inPatterns(searchCondition, ENSEMBL_GENE_ID_FIELD)).allSatisfy(pattern ->
+      assertThat(pattern.flags() & Pattern.CASE_INSENSITIVE).isNotZero()
+    );
+  }
+
+  @Test
+  @DisplayName(
+    "should route terms independently when search mixes a full ensembl gene id and a gene symbol"
+  )
+  void shouldRouteTermsIndependentlyWhenSearchMixesFullEnsemblGeneIdAndGeneSymbol() {
+    List<Document> branches = searchBranchesFor(ENSA_ENSEMBL_GENE_ID + "," + PLEC_GENE_SYMBOL);
+
+    assertThat(branches)
+      .as("ensembl_gene_id branch, gene_symbol branch, and blank-guarded fallback branch")
+      .hasSize(3);
+    assertThat(inPatterns(branchFor(branches, ENSEMBL_GENE_ID_FIELD), ENSEMBL_GENE_ID_FIELD))
+      .extracting(Pattern::pattern)
+      .containsExactly(fullMatch(ENSA_ENSEMBL_GENE_ID));
+    assertThat(inPatterns(branchFor(branches, GENE_SYMBOL_FIELD), GENE_SYMBOL_FIELD))
+      .as("the ensembl gene id term must not leak into the gene_symbol partition")
+      .extracting(Pattern::pattern)
+      .containsExactly(fullMatch(PLEC_GENE_SYMBOL));
+  }
+
+  @Test
+  @DisplayName(
+    "should route all terms to ensembl_gene_id when every comma term is a full ensembl gene id"
+  )
+  void shouldRouteAllTermsToEnsemblGeneIdWhenEveryCommaTermIsFullEnsemblGeneId() {
+    Document searchCondition = searchConditionFor(
+      ENSA_ENSEMBL_GENE_ID + "," + OTHER_ENSEMBL_GENE_ID
+    );
+
+    assertThat(searchCondition.keySet()).containsExactly(ENSEMBL_GENE_ID_FIELD);
+    assertThat(inPatterns(searchCondition, ENSEMBL_GENE_ID_FIELD))
+      .extracting(Pattern::pattern)
+      .containsExactly(fullMatch(ENSA_ENSEMBL_GENE_ID), fullMatch(OTHER_ENSEMBL_GENE_ID));
+  }
+
+  @Test
+  @DisplayName("should trim terms when comma-separated terms have surrounding whitespace")
+  void shouldTrimTermsWhenCommaSeparatedTermsHaveSurroundingWhitespace() {
+    List<Document> branches = searchBranchesFor(
+      "  " + ENSA_ENSEMBL_GENE_ID + " , " + PLEC_GENE_SYMBOL + "  "
+    );
+
+    assertThat(branches).hasSize(3);
+    assertThat(inPatterns(branchFor(branches, ENSEMBL_GENE_ID_FIELD), ENSEMBL_GENE_ID_FIELD))
+      .extracting(Pattern::pattern)
+      .containsExactly(fullMatch(ENSA_ENSEMBL_GENE_ID));
+    assertThat(inPatterns(branchFor(branches, GENE_SYMBOL_FIELD), GENE_SYMBOL_FIELD))
+      .extracting(Pattern::pattern)
+      .containsExactly(fullMatch(PLEC_GENE_SYMBOL));
+  }
+
+  @Test
+  @DisplayName("should fall back to gene_symbol when search is a partial ensembl gene id")
+  void shouldFallBackToGeneSymbolWhenSearchIsPartialEnsemblGeneId() {
+    String partialEnsemblGeneId = ENSA_ENSEMBL_GENE_ID.substring(
+      0,
+      ENSA_ENSEMBL_GENE_ID.length() - 1
+    );
+    List<Document> branches = searchBranchesFor(partialEnsemblGeneId);
+
+    assertThat(branches)
+      .as("gene_symbol partial match plus blank-guarded ensembl_gene_id fallback")
+      .hasSize(2);
+    Pattern geneSymbolPattern = (Pattern) branchFor(branches, GENE_SYMBOL_FIELD)
+      .get(GENE_SYMBOL_FIELD);
+    assertThat(geneSymbolPattern.pattern())
+      .as("a partial term stays an unanchored partial match")
+      .isEqualTo(Pattern.quote(partialEnsemblGeneId));
+  }
+
+  @Test
+  @DisplayName("should fall back to gene_symbol when an ensembl gene id has a version suffix")
+  void shouldFallBackToGeneSymbolWhenEnsemblGeneIdHasVersionSuffix() {
+    String versionedEnsemblGeneId = ENSA_ENSEMBL_GENE_ID + ".5";
+    List<Document> branches = searchBranchesFor(versionedEnsemblGeneId);
+
+    assertThat(branches).hasSize(2);
+    Pattern geneSymbolPattern = (Pattern) branchFor(branches, GENE_SYMBOL_FIELD)
+      .get(GENE_SYMBOL_FIELD);
+    assertThat(geneSymbolPattern.pattern()).isEqualTo(Pattern.quote(versionedEnsemblGeneId));
+  }
+
+  @Test
+  @DisplayName("should match nothing when search contains only commas")
+  void shouldMatchNothingWhenSearchContainsOnlyCommas() {
+    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
+      .search(",,")
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .build();
+
+    repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), "test-tissue");
+
+    Document criteriaDoc = captureCountQuery().getQueryObject();
+    assertThat(searchCondition(criteriaDoc)).isEqualTo(new Document("_id", null));
+    assertThat(criteriaDoc.toString())
+      .doesNotContain(GENE_SYMBOL_FIELD)
+      .doesNotContain(ENSEMBL_GENE_ID_FIELD);
   }
 
   @Test
@@ -228,6 +360,48 @@ class CustomTranscriptomicsRepositoryImplTest {
     assertThat(pipeline)
       .as("$sort should not reference the raw '4 months' object directly as a sort key")
       .doesNotContain("\"4 months\" :");
+  }
+
+  /** Runs a search-only query (EXCLUDE mode, no items) and returns its search condition. */
+  private Document searchConditionFor(String search) {
+    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
+      .search(search)
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .build();
+
+    repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), "test-tissue");
+
+    return searchCondition(captureCountQuery().getQueryObject());
+  }
+
+  private List<Document> searchBranchesFor(String search) {
+    return (List<Document>) searchConditionFor(search).get("$or");
+  }
+
+  /** The one $and condition that isn't the mandatory tissue scoping. */
+  private static Document searchCondition(Document criteriaDoc) {
+    List<Document> andConditions = (List<Document>) criteriaDoc.get("$and");
+    return andConditions
+      .stream()
+      .filter(condition -> !condition.containsKey(TISSUE_FIELD))
+      .findFirst()
+      .orElseThrow(() -> new AssertionError("no search condition in " + criteriaDoc));
+  }
+
+  private static Document branchFor(List<Document> branches, String field) {
+    return branches
+      .stream()
+      .filter(branch -> branch.containsKey(field))
+      .findFirst()
+      .orElseThrow(() -> new AssertionError("no " + field + " branch in " + branches));
+  }
+
+  private static List<Pattern> inPatterns(Document condition, String field) {
+    return (List<Pattern>) condition.get(field, Document.class).get("$in");
+  }
+
+  private static String fullMatch(String term) {
+    return "^" + Pattern.quote(term) + "$";
   }
 
   private Query captureCountQuery() {

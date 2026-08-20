@@ -3,6 +3,7 @@ import {
   clickViewDetailsButtonByName,
   ColumnConfig,
   expectPinnedParams,
+  expectSearchResults,
   getPinnedTable,
   getQueryParamsFromRecords,
   getRowByName,
@@ -18,7 +19,6 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
-  testPartialCaseInsensitiveSearch,
   testSortRestoredFromUrl,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
@@ -73,7 +73,7 @@ test.describe('marmoset model overview', () => {
     page,
   }) => {
     await navigateToComparison(page, CT_PAGE, true);
-    await testPartialCaseInsensitiveSearch(page, 'presenilin', [MODEL]);
+    await expectSearchResults(page, 'presenilin', [MODEL]);
   });
 
   test.describe('sort URL sync', () => {

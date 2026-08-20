@@ -9,7 +9,7 @@ import {
   searchViaFilterbox,
 } from './comparison-tool';
 
-export async function testPartialCaseInsensitiveSearch(
+export async function expectSearchResults(
   page: Page,
   searchTerm: string,
   expectedMatchNames: string[],
