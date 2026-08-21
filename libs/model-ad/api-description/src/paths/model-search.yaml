@@ -1,8 +1,9 @@
 get:
   tags:
-    - Model
+    - Search
   summary: Search Models
-  description: Search for a particular model
+  description: Search for models across all organisms or filtered by specific organisms.
+    When modelOrganisms is omitted, all organisms are searched and results are merged.
   operationId: searchModels
   parameters:
     - name: q
@@ -11,6 +12,14 @@ get:
       required: true
       schema:
         type: string
+    - name: modelOrganisms
+      in: query
+      description: Filter results to specific model organisms. When omitted, all organisms are searched.
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: ../components/schemas/ModelOrganism.yaml
   responses:
     '200':
       content:
