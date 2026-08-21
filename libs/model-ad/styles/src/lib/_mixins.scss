@@ -1,12 +1,12 @@
 @forward 'explorers/styles/src/mixins';
 
 // Auto-fit grid for boxplot items. Items wrap to fill available width, with a
-// minimum of 495px per item. The negative margin offsets the per-item margin so
-// that item content aligns with surrounding headers when captured in screenshots.
+// minimum of 495px per item, or a single full-width column when the grid is
+// narrower than that. The negative margin offsets the per-item margin so that
+// item content aligns with surrounding headers when captured in screenshots.
 @mixin boxplots-auto-grid($item-selector) {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(495px, 1fr));
-  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(min(495px, 100%), 1fr));
   margin: -15px -25px;
 
   #{$item-selector} {
