@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
   ColumnConfig,
+  clickViewDetailsButtonByName,
   expectFiltersParams,
   expectPinnedParams,
   expectPinnedRows,
@@ -32,7 +33,7 @@ import {
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
-import { COMPARISON_TOOL_PATHS } from './constants';
+import { COMPARISON_TOOL_PATHS, LEGACY_MOUSE_MODEL_OVERVIEW_PATH } from './constants';
 import {
   fetchComparisonToolConfig,
   fetchDiseaseCorrelations,
@@ -343,5 +344,47 @@ test.describe('mouse model overview', () => {
 
     await popup.waitForURL(linkHref || '');
     await expectFiltersParams(popup, filtersQueryParams);
+  });
+
+  test('view details button opens the mouse model details page in a new tab', async ({ page }) => {
+    const [firstModel] = await fetchMouseModelOverviews(page);
+
+    await navigateToComparison(page, CT_PAGE, true);
+
+    const popupPromise = page.waitForEvent('popup');
+    await clickViewDetailsButtonByName(getUnpinnedTable(page), page, firstModel.name);
+    const popup = await popupPromise;
+
+    await popup.waitForURL((url) => url.searchParams.get('modelOrganism') === 'mouse');
+    await expect(popup.getByRole('heading', { level: 1, name: firstModel.name })).toBeVisible();
+  });
+
+  test.describe('legacy url redirects', () => {
+    test('redirects to the mouse model overview', async ({ page }) => {
+      await page.goto(LEGACY_MOUSE_MODEL_OVERVIEW_PATH);
+
+      await expect(page).toHaveURL(`${baseURL}${MODEL_OVERVIEW_PATH}`);
+      await expect(page).toHaveTitle(
+        "Mouse Model Overview | Overview of mouse models of Alzheimer's Disease",
+      );
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+        'content',
+        "Explore next-generation mouse models of Alzheimer's Disease.",
+      );
+    });
+
+    test('preserves comparison tool query params when redirecting', async ({ page }) => {
+      const filterParams = {
+        availableData: ['Biomarkers', 'Pathology'],
+        centers: ['UCI'],
+      };
+
+      await page.goto(
+        `${LEGACY_MOUSE_MODEL_OVERVIEW_PATH}?${getQueryParamsFromRecords(filterParams)}`,
+      );
+
+      await page.waitForURL((url) => url.pathname === MODEL_OVERVIEW_PATH);
+      await expectFiltersParams(page, filterParams);
+    });
   });
 });

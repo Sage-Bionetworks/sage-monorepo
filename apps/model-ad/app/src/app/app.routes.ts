@@ -1,9 +1,12 @@
-import { ActivatedRouteSnapshot, Route } from '@angular/router';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, Route, Router } from '@angular/router';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/model-ad/config';
 import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
 import { capitalizeFirstLetter } from '@sagebionetworks/shared/util';
 import { modelOrganismGuard } from './model-organism.guard';
+
+const LEGACY_MOUSE_MODEL_OVERVIEW_PATH = 'comparison/model';
 
 const modelDetailsData = {
   title: (route: ActivatedRouteSnapshot) => {
@@ -75,9 +78,20 @@ export const routes: Route[] = [
         (routes) => routes.routes,
       ),
     data: {
-      title: "Model Overview | Overview of mouse models of Alzheimer's Disease",
+      title: "Mouse Model Overview | Overview of mouse models of Alzheimer's Disease",
       description: "Explore next-generation mouse models of Alzheimer's Disease.",
     },
+  },
+  {
+    path: LEGACY_MOUSE_MODEL_OVERVIEW_PATH,
+    pathMatch: 'full',
+    // A string redirectTo would drop the original query params, silently stripping the filters off
+    // shared comparison tool links, so build the target UrlTree instead.
+    redirectTo: ({ queryParams, fragment }) =>
+      inject(Router).createUrlTree([ROUTE_PATHS.MOUSE_MODEL_OVERVIEW], {
+        queryParams,
+        fragment: fragment ?? undefined,
+      }),
   },
   {
     path: ROUTE_PATHS.DIFFERENTIAL_EXPRESSION,

@@ -16,6 +16,7 @@ import {
   COMPARISON_TOOL_API_PATHS,
   COMPARISON_TOOL_CONFIG_PATH,
   COMPARISON_TOOL_DEFAULT_SORTS,
+  COMPARISON_TOOL_HEADER_TITLES,
   COMPARISON_TOOL_NAV_TRAILS,
   COMPARISON_TOOL_PATHS,
 } from '../constants';
@@ -50,7 +51,11 @@ export const navigateToComparison = async (
     await page.getByRole('link', { name: navTrail[navTrail.length - 1] }).click();
   }
 
-  await expectComparisonToolTableLoaded(page, name, shouldCloseVisualizationOverviewDialog);
+  await expectComparisonToolTableLoaded(
+    page,
+    COMPARISON_TOOL_HEADER_TITLES[name] ?? name,
+    shouldCloseVisualizationOverviewDialog,
+  );
 };
 
 export const fetchComparisonToolData = async <T>(

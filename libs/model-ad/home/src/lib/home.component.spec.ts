@@ -51,7 +51,7 @@ describe('HomeComponent', () => {
   describe('species toggle', () => {
     it('should show mouse tiles by default', async () => {
       await setup();
-      expect(screen.getByText('Model Overview')).toBeInTheDocument();
+      expect(screen.getByText('Mouse Model Overview')).toBeInTheDocument();
       expect(screen.getByText('Differential Expression')).toBeInTheDocument();
       expect(screen.getByText('Disease Correlation')).toBeInTheDocument();
     });
@@ -65,7 +65,7 @@ describe('HomeComponent', () => {
       expect(screen.getByText('Marmoset Model Overview')).toBeInTheDocument();
       expect(screen.getByText('Marmoset Model Search')).toBeInTheDocument();
       expect(screen.getByAltText('marmoset icon')).toBeInTheDocument();
-      expect(screen.queryByText('Model Overview')).not.toBeInTheDocument();
+      expect(screen.queryByText('Mouse Model Overview')).not.toBeInTheDocument();
     });
   });
 
