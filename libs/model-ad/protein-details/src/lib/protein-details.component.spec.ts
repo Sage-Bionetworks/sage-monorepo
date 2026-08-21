@@ -64,10 +64,10 @@ describe('ProteinDetailsComponent', () => {
   });
 
   it('should display label', async () => {
-    const gene = proteomicsIndividualMocks[0];
-    const label = `${gene.display_symbol} | ${gene.ensembl_gene_id}`;
+    const protein = proteomicsIndividualMocks[0];
+    const label = `${protein.display_symbol} | ${protein.ensembl_gene_id}`;
     await setup();
-    expect(screen.getByText(gene.ensembl_gene_id, { exact: false })).toHaveTextContent(label);
+    expect(screen.getByText(protein.ensembl_gene_id, { exact: false })).toHaveTextContent(label);
   });
 
   it('should display tissue in header', async () => {

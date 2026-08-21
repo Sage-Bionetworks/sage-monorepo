@@ -4,6 +4,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
 import { ModelIdentifierType } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+// TODO(MG-1022): drop testing import when real data lands
 import {
   ProteomicsIndividualMock,
   proteomicsIndividualMocks,
@@ -67,7 +68,7 @@ export class ProteinDetailsComponent implements OnInit {
     const modelIdentifier = modelGroup || modelName;
     this.modelIdentifier.set(modelIdentifier);
 
-    if (uniqueId && tissue && modelIdentifierType && modelIdentifier) {
+    if (uniqueId && tissue && modelIdentifier) {
       // TODO(MG-1022): fetch real data from the API
       this.proteomicsIndividualData.set(proteomicsIndividualMocks);
       this.isLoading.set(false);

@@ -81,7 +81,6 @@
       "@sagebionetworks/model-ad/mouse-model-overview-comparison-tool": [
         "libs/model-ad/mouse-model-overview-comparison-tool/src/index.ts"
       ],
-      "@sagebionetworks/model-ad/not-found": ["libs/model-ad/not-found/src/index.ts"],
       "@sagebionetworks/model-ad/protein-details": ["libs/model-ad/protein-details/src/index.ts"],
       "@sagebionetworks/model-ad/services": ["libs/model-ad/services/src/index.ts"],
       "@sagebionetworks/model-ad/testing": ["libs/model-ad/testing/src/index.ts"],
