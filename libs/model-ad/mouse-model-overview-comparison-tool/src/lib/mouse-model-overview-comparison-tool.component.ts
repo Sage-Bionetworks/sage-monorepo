@@ -12,6 +12,7 @@ import {
   ComparisonToolConfigService,
   ComparisonToolPage,
   ItemFilterTypeQuery,
+  ModelOrganism,
   MouseModelOverview,
   MouseModelOverviewSearchQuery,
   MouseModelOverviewService,
@@ -41,6 +42,8 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
 
+  // TODO(MG-1057): ui_config still names this page 'Model Overview'. Once it explicitly uses
+  // 'Mouse Model Overview', request the config with ComparisonToolPage.MouseModelOverview.
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
     .pipe(
@@ -52,14 +55,19 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
     );
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
-    headerTitle: ComparisonToolPage.ModelOverview,
+    // TODO(MG-1057): hardcoded because ui_config still names this page 'Model Overview'. Once it
+    // explicitly uses 'Mouse Model Overview', take this from ComparisonToolPage like the other
+    // comparison tools do.
+    headerTitle: 'Mouse Model Overview',
     filterResultsButtonTooltip: 'Filter results by Model Type, Modified Gene, and more',
     showSignificanceControls: false,
     viewDetailsTooltip: 'Open model details page',
     viewDetailsClick: (rowData: unknown) => {
       const data = rowData as MouseModelOverview;
       const url = this.router.serializeUrl(
-        this.router.createUrlTree([ROUTE_PATHS.MODELS, data.name]),
+        this.router.createUrlTree([ROUTE_PATHS.MODELS, data.name], {
+          queryParams: { modelOrganism: ModelOrganism.Mouse },
+        }),
       );
       window.open(url, '_blank');
     },
