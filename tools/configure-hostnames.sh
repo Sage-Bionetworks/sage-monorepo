@@ -17,6 +17,7 @@ declare -a hostnames=(
   "127.0.0.1 bixarena-valkey"
   "127.0.0.1 iatlas-api"
   "127.0.0.1 iatlas-postgres"
+  "127.0.0.1 model-ad-api-next"
   "127.0.0.1 model-ad-app"
   "127.0.0.1 model-ad-mongo"
   "127.0.0.1 observability-apex"
