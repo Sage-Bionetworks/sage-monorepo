@@ -8,4 +8,8 @@
   @each $key, $color in vars.$toggle-card-colors {
     --color-#{$key}: #{$color};
   }
+
+  @each $key, $color in vars.$search-input-colors {
+    --color-search-input-#{$key}: #{$color};
+  }
 }
