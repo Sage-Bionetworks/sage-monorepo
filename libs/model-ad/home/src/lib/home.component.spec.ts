@@ -52,7 +52,8 @@ describe('HomeComponent', () => {
     it('should show mouse tiles by default', async () => {
       await setup();
       expect(screen.getByText('Mouse Model Overview')).toBeInTheDocument();
-      expect(screen.getByText('Differential Expression')).toBeInTheDocument();
+      expect(screen.getByText('Mouse Model Search')).toBeInTheDocument();
+      expect(screen.getByText('Mouse Differential Expression')).toBeInTheDocument();
       expect(screen.getByText('Disease Correlation')).toBeInTheDocument();
     });
 

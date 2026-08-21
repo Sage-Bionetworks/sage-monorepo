@@ -6,8 +6,6 @@ import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
 import { capitalizeFirstLetter } from '@sagebionetworks/shared/util';
 import { modelOrganismGuard } from './model-organism.guard';
 
-const LEGACY_MOUSE_MODEL_OVERVIEW_PATH = 'comparison/model';
-
 const modelDetailsData = {
   title: (route: ActivatedRouteSnapshot) => {
     const organism = resolveModelOrganism(route.queryParams['modelOrganism']);
@@ -83,7 +81,9 @@ export const routes: Route[] = [
     },
   },
   {
-    path: LEGACY_MOUSE_MODEL_OVERVIEW_PATH,
+    // Legacy path for the mouse model overview, when mouse was the only model organism
+    // This route is kept to support legacy links, and will redirect to the new mouse model overview path
+    path: 'comparison/model',
     pathMatch: 'full',
     // A string redirectTo would drop the original query params, silently stripping the filters off
     // shared comparison tool links, so build the target UrlTree instead.

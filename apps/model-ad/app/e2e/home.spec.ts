@@ -20,9 +20,9 @@ test.describe('home', () => {
   test('differential expression card links to differential expression CT', async ({ page }) => {
     await page.goto('');
 
-    const differentialExpressionCard = page
-      .getByRole('button')
-      .filter({ has: page.getByRole('heading', { level: 2, name: 'Differential Expression' }) });
+    const differentialExpressionCard = page.getByRole('button').filter({
+      has: page.getByRole('heading', { level: 2, name: 'Mouse Differential Expression' }),
+    });
     await expect(differentialExpressionCard).toBeVisible();
 
     await differentialExpressionCard.click();
