@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -334,6 +335,96 @@ class ApiHelperTest {
         .contains("missing")
         .contains("$isArray")
         .contains("$size");
+    }
+  }
+
+  @Nested
+  @DisplayName("splitSearchTerms")
+  class SplitSearchTerms {
+
+    @Test
+    @DisplayName("should return the single term when search has no comma")
+    void shouldReturnSingleTermWhenSearchHasNoComma() {
+      assertThat(ApiHelper.splitSearchTerms("APOE")).containsExactly("APOE");
+    }
+
+    @Test
+    @DisplayName("should trim each term when terms have surrounding whitespace")
+    void shouldTrimEachTermWhenTermsHaveSurroundingWhitespace() {
+      assertThat(ApiHelper.splitSearchTerms(" APOE , TREM2 ")).containsExactly("APOE", "TREM2");
+    }
+
+    @Test
+    @DisplayName("should drop blank terms when search has empty segments")
+    void shouldDropBlankTermsWhenSearchHasEmptySegments() {
+      assertThat(ApiHelper.splitSearchTerms("APOE,, ,TREM2")).containsExactly("APOE", "TREM2");
+    }
+
+    @Test
+    @DisplayName("should return empty list when search contains only commas")
+    void shouldReturnEmptyListWhenSearchContainsOnlyCommas() {
+      assertThat(ApiHelper.splitSearchTerms(",,")).isEmpty();
+    }
+  }
+
+  @Nested
+  @DisplayName("createCaseInsensitiveFullMatchPatterns")
+  class CreateCaseInsensitiveFullMatchPatterns {
+
+    @Test
+    @DisplayName("should anchor and quote each term when given a comma-separated string")
+    void shouldAnchorAndQuoteEachTermWhenGivenCommaSeparatedString() {
+      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns("APOE, TREM2");
+
+      assertThat(patterns)
+        .extracting(Pattern::pattern)
+        .containsExactly("^\\QAPOE\\E$", "^\\QTREM2\\E$");
+      assertThat(patterns).allSatisfy(pattern ->
+        assertThat(pattern.flags() & Pattern.CASE_INSENSITIVE).isNotZero()
+      );
+    }
+
+    @Test
+    @DisplayName("should match the full term regardless of case when the pattern is applied")
+    void shouldMatchFullTermRegardlessOfCaseWhenPatternIsApplied() {
+      Pattern pattern = ApiHelper.createCaseInsensitiveFullMatchPatterns(List.of("APOE")).get(0);
+
+      assertThat(pattern.matcher("apoe").matches()).isTrue();
+      assertThat(pattern.matcher("APOE4").matches()).isFalse();
+    }
+
+    @Test
+    @DisplayName("should quote regex metacharacters when a term contains them")
+    void shouldQuoteRegexMetacharactersWhenTermContainsThem() {
+      Pattern pattern = ApiHelper.createCaseInsensitiveFullMatchPatterns(
+        List.of("Abca7*V1599M")
+      ).get(0);
+
+      assertThat(pattern.matcher("Abca7*V1599M").matches()).isTrue();
+      assertThat(pattern.matcher("Abca77V1599M").matches()).isFalse();
+    }
+
+    @Test
+    @DisplayName("should produce the same patterns for both overloads when terms are equivalent")
+    void shouldProduceSamePatternsForBothOverloadsWhenTermsAreEquivalent() {
+      List<String> fromString = ApiHelper.createCaseInsensitiveFullMatchPatterns(" APOE , TREM2 ")
+        .stream()
+        .map(Pattern::pattern)
+        .toList();
+      List<String> fromList = ApiHelper.createCaseInsensitiveFullMatchPatterns(
+        List.of("APOE", "TREM2")
+      )
+        .stream()
+        .map(Pattern::pattern)
+        .toList();
+
+      assertThat(fromString).isEqualTo(fromList);
+    }
+
+    @Test
+    @DisplayName("should return empty list when the string contains only commas")
+    void shouldReturnEmptyListWhenStringContainsOnlyCommas() {
+      assertThat(ApiHelper.createCaseInsensitiveFullMatchPatterns(",,")).isEmpty();
     }
   }
 }

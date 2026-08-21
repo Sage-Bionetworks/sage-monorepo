@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
   ColumnConfig,
+  expectSearchResults,
   getQueryParamFromValues,
   getQueryParamsFromRecords,
   runFilterPanelTests,
@@ -14,7 +15,6 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
-  testPartialCaseInsensitiveSearch,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
@@ -56,7 +56,7 @@ test.describe('nominated drugs - comparison tool', () => {
       page,
     }) => {
       await navigateToComparison(page, CT_PAGE, true, 'url');
-      await testPartialCaseInsensitiveSearch(page, 'raz', pinnedItems);
+      await expectSearchResults(page, 'raz', pinnedItems);
     });
 
     test('filterbox search excludes pinned items from results', async ({ page }) => {
