@@ -413,7 +413,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
       sortDoc.append(ApiHelper.isEmptyFlagKey(field), 1);
       sortDoc.append(resolved, order.isAscending() ? 1 : -1);
     }
-    sortDoc.append("_id", 1);
+    // Break ties on _id so equal sort values keep a stable order across pages. Skip when the
+    // caller already sorts by _id -- re-appending would overwrite their direction.
+    if (!sortDoc.containsKey("_id")) {
+      sortDoc.append("_id", 1);
+    }
 
     return context -> new Document("$sort", sortDoc);
   }

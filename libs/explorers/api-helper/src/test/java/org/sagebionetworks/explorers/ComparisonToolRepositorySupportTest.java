@@ -429,7 +429,7 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Test
-  @DisplayName("should append _id once after every sort key when multiple sort orders are requested")
+  @DisplayName("should append _id once, after all sort keys, when multiple sort orders are requested")
   void shouldAppendIdTiebreakerOnceAfterAllSortKeysForMultiSort() {
     ComputedRepo repo = new ComputedRepo(mongoTemplate);
     stubMongoTemplate(0L);
@@ -450,7 +450,7 @@ class ComparisonToolRepositorySupportTest {
     int plainIdx = pipeline.indexOf("\"hgnc_symbol\" : -1");
     int idIdx = pipeline.indexOf("\"_id\" : 1");
     assertThat(idIdx)
-      .as("_id must rank below the computed first sort key, not between the sort keys")
+      .as("_id must rank below the computed first sort key")
       .isGreaterThan(computedIdx);
     assertThat(idIdx)
       .as("_id must rank below the second sort key so it only breaks full ties")
@@ -458,7 +458,27 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Test
-  @DisplayName("should not include _id tiebreaker when sort is unsorted")
+  @DisplayName("should preserve the caller's descending _id direction when sorting by _id")
+  void shouldPreserveCallerIdSortWhenSortingById() {
+    BareRepo repo = new BareRepo(mongoTemplate);
+    stubMongoTemplate(0L);
+
+    Pageable pageable = PageRequest.of(
+      0,
+      10,
+      Sort.by(Sort.Order.desc("_id"), Sort.Order.asc("name"))
+    );
+    repo.run(new Criteria(), pageable);
+
+    String pipeline = capturePipeline().toString();
+    assertThat(pipeline)
+      .as("the caller's descending _id direction must not be overwritten by the tiebreaker")
+      .contains("\"_id\" : -1")
+      .doesNotContain("\"_id\" : 1");
+  }
+
+  @Test
+  @DisplayName("should not include _id tiebreaker when no sort is requested")
   void shouldNotIncludeIdTiebreakerWhenUnsorted() {
     BareRepo repo = new BareRepo(mongoTemplate);
     stubMongoTemplate(0L);
