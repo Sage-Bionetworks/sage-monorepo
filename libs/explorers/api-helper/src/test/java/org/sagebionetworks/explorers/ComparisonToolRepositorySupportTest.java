@@ -429,6 +429,35 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Test
+  @DisplayName("should append _id once after every sort key when multiple sort orders are requested")
+  void shouldAppendIdTiebreakerOnceAfterAllSortKeysForMultiSort() {
+    ComputedRepo repo = new ComputedRepo(mongoTemplate);
+    stubMongoTemplate(0L);
+
+    Pageable pageable = PageRequest.of(
+      0,
+      10,
+      Sort.by(Sort.Order.asc("name"), Sort.Order.desc("hgnc_symbol"))
+    );
+    repo.run(new Criteria(), pageable);
+
+    String pipeline = capturePipeline().toString();
+    assertThat(pipeline)
+      .as("_id must be appended exactly once, not per sort order")
+      .containsOnlyOnce("\"_id\" : 1");
+
+    int computedIdx = pipeline.indexOf("\"name_sort\" : 1");
+    int plainIdx = pipeline.indexOf("\"hgnc_symbol\" : -1");
+    int idIdx = pipeline.indexOf("\"_id\" : 1");
+    assertThat(idIdx)
+      .as("_id must rank below the computed first sort key, not between the sort keys")
+      .isGreaterThan(computedIdx);
+    assertThat(idIdx)
+      .as("_id must rank below the second sort key so it only breaks full ties")
+      .isGreaterThan(plainIdx);
+  }
+
+  @Test
   @DisplayName("should not include _id tiebreaker when sort is unsorted")
   void shouldNotIncludeIdTiebreakerWhenUnsorted() {
     BareRepo repo = new BareRepo(mongoTemplate);
