@@ -8,6 +8,7 @@ api/disease-correlation.service.ts
 api/marmoset-model-overview.service.ts
 api/model.service.ts
 api/mouse-model-overview.service.ts
+api/search.service.ts
 api/transcriptomics-individual.service.ts
 api/transcriptomics.service.ts
 configuration.ts

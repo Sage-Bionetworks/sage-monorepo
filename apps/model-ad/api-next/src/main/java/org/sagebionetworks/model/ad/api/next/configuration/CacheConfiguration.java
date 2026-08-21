@@ -40,6 +40,7 @@ public class CacheConfiguration {
         CacheNames.TRANSCRIPTOMICS,
         CacheNames.TRANSCRIPTOMICS_INDIVIDUAL,
         CacheNames.MODEL,
+        CacheNames.MODEL_SEARCH,
         CacheNames.COMPARISON_TOOL_CONFIG
       )
     );
