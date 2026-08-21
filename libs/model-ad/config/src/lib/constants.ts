@@ -20,6 +20,7 @@ export const ROUTE_PATHS = {
   MOUSE_MODEL_OVERVIEW: 'comparison/model',
   DIFFERENTIAL_EXPRESSION: 'comparison/expression',
   GENES: 'genes',
+  PROTEINS: 'proteins',
   DISEASE_CORRELATION: 'comparison/correlation',
   MODELS: 'models',
   TERMS_OF_SERVICE: 'terms-of-service',
