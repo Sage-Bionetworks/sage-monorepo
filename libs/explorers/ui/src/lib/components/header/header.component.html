@@ -25,6 +25,7 @@
                     <button
                       type="button"
                       class="dropdown-trigger"
+                      explorersWidestLineWidth
                       aria-haspopup="menu"
                       [attr.aria-expanded]="menu.visible ?? false"
                       [attr.aria-controls]="menu.visible ? menu.id + '_list' : null"
@@ -80,12 +81,18 @@
                       [routerLink]="link.routerLink"
                       routerLinkActive="active"
                       [routerLinkActiveOptions]="link.activeOptions || { exact: false }"
+                      explorersWidestLineWidth
                       (click)="toggleNav()"
                     >
                       <span>{{ link.label }}</span>
                     </a>
                   } @else if (link.url) {
-                    <a [attr.href]="link.url" [attr.target]="link.target" (click)="toggleNav()">
+                    <a
+                      [attr.href]="link.url"
+                      [attr.target]="link.target"
+                      explorersWidestLineWidth
+                      (click)="toggleNav()"
+                    >
                       <span>{{ link.label }}</span>
                     </a>
                   } @else {

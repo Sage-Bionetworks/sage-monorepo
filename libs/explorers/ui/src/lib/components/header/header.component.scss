@@ -76,6 +76,8 @@
 
   .dropdown-trigger {
     @include mixins.reset-button;
+
+    text-align: left;
   }
 
   a,
@@ -145,7 +147,7 @@
         display: block;
         bottom: 0;
         left: 0;
-        right: 0;
+        width: var(--widest-line-width, 100%);
         height: 4px;
         background-color: var(--header-link-color, var(--color-action-primary));
         border-radius: 2px;
