@@ -65,3 +65,10 @@
     margin-bottom: 0;
   }
 }
+
+@mixin anchor-highlight {
+  color: var(--color-action-primary);
+  font-weight: 900;
+  text-decoration-line: underline;
+  text-decoration-thickness: 10.5%;
+}

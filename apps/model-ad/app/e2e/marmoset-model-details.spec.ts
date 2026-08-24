@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { baseURL } from '../playwright.config';
 import {
+  expectHighlightClears,
   expectTocLinksScrollToSections,
   getTocExpandButton,
   getTocLinks,
@@ -35,6 +36,14 @@ test.describe('marmoset model details - boxplots selector', () => {
 
     await expect(page.getByRole('heading', { level: 3, name: ageSection })).toBeInViewport();
     await page.waitForURL(`${biomarkersPath}#${ageFragment}`);
+  });
+
+  test('loading a page with an age fragment highlights the age group heading', async ({ page }) => {
+    await page.goto(`${biomarkersPath}#${ageFragment}`);
+
+    await expectHighlightClears(
+      page.getByRole('heading', { level: 3, name: ageSection, exact: true }),
+    );
   });
 
   test('default measurement filter is set when there is no query parameter', async ({ page }) => {

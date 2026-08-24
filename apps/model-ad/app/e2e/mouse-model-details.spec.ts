@@ -9,6 +9,7 @@ import {
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
 import {
+  expectHighlightClears,
   expectTocLinksScrollToSections,
   getTocCollapseButton,
   getTocExpandButton,
@@ -361,6 +362,32 @@ test.describe('mouse model details - boxplots selector - table of contents', () 
       page.getByRole('heading', { level: 2, name: section, exact: true }),
     ).toBeInViewport();
     await expect(page).toHaveURL(`${biomarkersPath}#${fragment}`);
+  });
+
+  test('loading a page with an anchor fragment highlights the section heading', async ({
+    page,
+  }) => {
+    const section = 'NfL';
+    await page.goto(`${biomarkersPath}#nfl`);
+
+    await expectHighlightClears(
+      page.getByRole('heading', { level: 2, name: section, exact: true }),
+    );
+  });
+
+  test('clicking a TOC link highlights the link and its section heading', async ({ page }) => {
+    const section = 'NfL';
+
+    await page.goto(biomarkersPath);
+    await getTocExpandButton(page).click();
+
+    const tocLink = getTocLinks(page).filter({ hasText: section });
+    await tocLink.click();
+
+    await expectHighlightClears(
+      tocLink,
+      page.getByRole('heading', { level: 2, name: section, exact: true }),
+    );
   });
 
   test('TOC stays expanded after clicking a link', async ({ page }) => {

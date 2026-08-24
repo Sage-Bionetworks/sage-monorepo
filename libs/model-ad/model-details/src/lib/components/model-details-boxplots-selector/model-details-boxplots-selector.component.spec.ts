@@ -12,6 +12,7 @@ import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
 import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import {
+  ANCHOR_HIGHLIGHT_HOLD_MS,
   FilterConfig,
   ModelDetailsBoxplotsSelectorComponent,
 } from './model-details-boxplots-selector.component';
@@ -53,7 +54,7 @@ class TestHostComponent {
   description = mockDescription;
   modelName = mouseModelMock.name;
   modelDataList: ModelData[] = mouseModelMock.pathology;
-  wikiParams = validWikiParams;
+  wikiParams = validWikiParams[0];
   filterConfig: FilterConfig = mouseFilterConfig;
   anchorDataField: keyof ModelData = 'evidence_type';
 }
@@ -356,6 +357,99 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
         const tocList = screen.queryByRole('list');
         expect(tocList).not.toBeInTheDocument();
       });
+    });
+  });
+
+  describe('anchor highlight', () => {
+    async function setupWithExpandedToc() {
+      const { fixture } = await setupHost();
+      const base = fixture.debugElement.children[0]
+        .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+      base.isTocCollapsed.set(false);
+      fixture.detectChanges();
+
+      jest.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+      // PrimeNG rendering needs real timers, so switch to fake timers only after render()
+      jest.useFakeTimers();
+
+      return { fixture, base };
+    }
+
+    function getTocLink(name: string) {
+      return screen
+        .getAllByTestId('toc-item-link')
+        .find((link) => link.textContent?.trim() === name) as HTMLElement;
+    }
+
+    function getSectionHeading(name: string) {
+      return screen.getByRole('heading', { level: 2, name });
+    }
+
+    afterEach(() => {
+      jest.useRealTimers();
+      jest.restoreAllMocks();
+    });
+
+    it('should highlight the TOC link and section heading of the scrolled-to anchor', async () => {
+      const { fixture, base } = await setupWithExpandedToc();
+      const evidenceType = base.evidenceTypes()[0];
+
+      base.scrollToSection(base.generateAnchorId(evidenceType));
+      fixture.detectChanges();
+
+      expect(base.highlightedAnchorId()).toBe(base.generateAnchorId(evidenceType));
+      expect(getTocLink(evidenceType)).toHaveClass('highlighted');
+      expect(getSectionHeading(evidenceType)).toHaveClass('highlighted');
+    });
+
+    it('should clear the highlight after the hold duration', async () => {
+      const { fixture, base } = await setupWithExpandedToc();
+      const evidenceType = base.evidenceTypes()[0];
+
+      base.scrollToSection(base.generateAnchorId(evidenceType));
+      fixture.detectChanges();
+
+      jest.advanceTimersByTime(ANCHOR_HIGHLIGHT_HOLD_MS);
+      fixture.detectChanges();
+
+      expect(base.highlightedAnchorId()).toBe('');
+      expect(getTocLink(evidenceType)).not.toHaveClass('highlighted');
+      expect(getSectionHeading(evidenceType)).not.toHaveClass('highlighted');
+    });
+
+    it('should move the highlight to the newly scrolled-to anchor', async () => {
+      const { fixture, base } = await setupWithExpandedToc();
+      const [firstEvidenceType, secondEvidenceType] = base.evidenceTypes();
+
+      base.scrollToSection(base.generateAnchorId(firstEvidenceType));
+      fixture.detectChanges();
+
+      base.scrollToSection(base.generateAnchorId(secondEvidenceType));
+      fixture.detectChanges();
+
+      expect(getSectionHeading(firstEvidenceType)).not.toHaveClass('highlighted');
+      expect(getSectionHeading(secondEvidenceType)).toHaveClass('highlighted');
+    });
+
+    it('should restart the hold on the newly scrolled-to anchor rather than inheriting the previous deadline', async () => {
+      const partialHoldMs = ANCHOR_HIGHLIGHT_HOLD_MS / 2;
+      const { fixture, base } = await setupWithExpandedToc();
+      const [firstEvidenceType, secondEvidenceType] = base.evidenceTypes();
+
+      base.scrollToSection(base.generateAnchorId(firstEvidenceType));
+      fixture.detectChanges();
+
+      jest.advanceTimersByTime(partialHoldMs);
+      base.scrollToSection(base.generateAnchorId(secondEvidenceType));
+      fixture.detectChanges();
+
+      jest.advanceTimersByTime(partialHoldMs);
+      fixture.detectChanges();
+      expect(getSectionHeading(secondEvidenceType)).toHaveClass('highlighted');
+
+      jest.advanceTimersByTime(partialHoldMs);
+      fixture.detectChanges();
+      expect(getSectionHeading(secondEvidenceType)).not.toHaveClass('highlighted');
     });
   });
 });
