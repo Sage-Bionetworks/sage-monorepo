@@ -5,6 +5,9 @@ import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
 import { capitalizeFirstLetter } from '@sagebionetworks/shared/util';
 import { modelOrganismGuard } from './model-organism.guard';
 
+const DEFAULT_META_DESCRIPTION =
+  "Discover next-generation models of Alzheimer's Disease developed by the MODEL-AD consortium and MARMO-AD.";
+
 const modelDetailsData = {
   title: (route: ActivatedRouteSnapshot) => {
     const organism = resolveModelOrganism(route.queryParams['modelOrganism']);
@@ -22,8 +25,7 @@ export const routes: Route[] = [
     loadChildren: () => import('@sagebionetworks/model-ad/home').then((routes) => routes.routes),
     data: {
       title: 'Model AD Explorer',
-      description:
-        "Discover next-generation mouse models of Alzheimer's Disease from the MODEL-AD Consortium.",
+      description: DEFAULT_META_DESCRIPTION,
     },
   },
   {
@@ -65,7 +67,7 @@ export const routes: Route[] = [
     data: {
       title: "Marmoset Model Overview | Overview of marmoset models of Alzheimer's Disease",
       description:
-        "Explore emerging marmoset models of Alzheimer's Disease developed by the Marmo-AD consortium.",
+        "Explore emerging marmoset models of Alzheimer's Disease developed by the MARMO-AD consortium.",
     },
   },
   {
@@ -152,8 +154,7 @@ export const routes: Route[] = [
       import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
     data: {
       title: 'Model AD Explorer | Page Not Found',
-      description:
-        "Discover next-generation mouse models of Alzheimer's Disease from the MODEL-AD Consortium.",
+      description: DEFAULT_META_DESCRIPTION,
       supportEmail: SUPPORT_EMAIL,
     },
   },
