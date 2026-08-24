@@ -1185,6 +1185,8 @@ components:
           $ref: '#/components/schemas/FoldChangeResult'
         18 months:
           $ref: '#/components/schemas/FoldChangeResult'
+        24 months:
+          $ref: '#/components/schemas/FoldChangeResult'
       required:
         - composite_id
         - ensembl_gene_id

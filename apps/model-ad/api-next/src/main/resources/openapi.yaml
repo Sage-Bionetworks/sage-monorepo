@@ -1646,6 +1646,9 @@ components:
       description: Transcriptomics
       example:
         model_group: model_group
+        '24 months':
+          log2_fc: 0.8008281904610115
+          adj_p_val: 6.027456183070403
         gene_symbol: Gnai3
         sex: Female
         model_type: Familial AD
@@ -1711,6 +1714,8 @@ components:
           $ref: '#/components/schemas/FoldChangeResult'
         '18 months':
           $ref: '#/components/schemas/FoldChangeResult'
+        '24 months':
+          $ref: '#/components/schemas/FoldChangeResult'
       required:
         - biodomains
         - composite_id
@@ -1729,6 +1734,9 @@ components:
       example:
         transcriptomics:
           - model_group: model_group
+            '24 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
             gene_symbol: Gnai3
             sex: Female
             model_type: Familial AD
@@ -1752,6 +1760,9 @@ components:
               - biodomains
               - biodomains
           - model_group: model_group
+            '24 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
             gene_symbol: Gnai3
             sex: Female
             model_type: Familial AD

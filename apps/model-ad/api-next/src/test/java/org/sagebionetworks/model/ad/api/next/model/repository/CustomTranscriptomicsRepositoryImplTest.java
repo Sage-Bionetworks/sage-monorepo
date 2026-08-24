@@ -14,6 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -207,15 +209,16 @@ class CustomTranscriptomicsRepositoryImplTest {
     assertThat(pipeline).contains("\"gene_symbol_sort\" : 1");
   }
 
-  @Test
+  @ParameterizedTest
+  @ValueSource(strings = { "4 months", "12 months", "18 months", "24 months" })
   @DisplayName("should sort by log2_fc sub-field when sorting by a heatmap month column")
-  void shouldSortByLog2FcWhenSortingByMonthColumn() {
+  void shouldSortByLog2FcWhenSortingByMonthColumn(String monthColumn) {
     TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .build();
 
     repository.findAll(
-      PageRequest.of(0, 10, Sort.by(Sort.Order.asc("4 months"))),
+      PageRequest.of(0, 10, Sort.by(Sort.Order.asc(monthColumn))),
       query,
       Collections.emptyList(),
       "Hippocampus"
@@ -224,10 +227,10 @@ class CustomTranscriptomicsRepositoryImplTest {
     String pipeline = captureAggregation().toString();
     assertThat(pipeline)
       .as("$sort should use the nested log2_fc path, not the raw object")
-      .contains("4 months.log2_fc");
+      .contains(monthColumn + ".log2_fc");
     assertThat(pipeline)
-      .as("$sort should not reference the raw '4 months' object directly as a sort key")
-      .doesNotContain("\"4 months\" :");
+      .as("$sort should not reference the raw '%s' object directly as a sort key", monthColumn)
+      .doesNotContain("\"" + monthColumn + "\" :");
   }
 
   private Query captureCountQuery() {

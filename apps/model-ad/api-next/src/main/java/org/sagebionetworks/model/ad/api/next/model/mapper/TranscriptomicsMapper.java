@@ -42,6 +42,7 @@ public class TranscriptomicsMapper {
     dto.set4months(toFoldChangeDto(document.getFourMonths()));
     dto.set12months(toFoldChangeDto(document.getTwelveMonths()));
     dto.set18months(toFoldChangeDto(document.getEighteenMonths()));
+    dto.set24months(toFoldChangeDto(document.getTwentyFourMonths()));
 
     return dto;
   }

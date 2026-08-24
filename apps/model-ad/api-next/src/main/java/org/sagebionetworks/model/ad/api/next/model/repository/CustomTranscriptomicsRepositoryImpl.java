@@ -102,7 +102,9 @@ public class CustomTranscriptomicsRepositoryImpl
       "12 months",
       "12 months.log2_fc",
       "18 months",
-      "18 months.log2_fc"
+      "18 months.log2_fc",
+      "24 months",
+      "24 months.log2_fc"
     );
   }
 

@@ -46,6 +46,8 @@ class TranscriptomicsApiDelegateImplTest {
 
   private static final String TISSUE_HEMIBRAIN = "Hemibrain";
   private static final String TISSUE_CORTEX = "Cortex";
+  private static final double FOUR_MONTHS_LOG2_FC = 0.01167d;
+  private static final double TWENTY_FOUR_MONTHS_LOG2_FC = 1.4382d;
 
   @Mock
   private TranscriptomicsRepository repository;
@@ -191,7 +193,11 @@ class TranscriptomicsApiDelegateImplTest {
     assertThat(dto.getName().getLinkText()).isEqualTo("5xFAD (Jax/IU/Pitt)");
     assertThat(dto.getTissue()).isEqualTo("Hemibrain");
     assertThat(dto.get4months()).isNotNull();
-    assertThat(dto.get4months().getLog2Fc()).isEqualTo(BigDecimal.valueOf(0.01167d));
+    assertThat(dto.get4months().getLog2Fc()).isEqualTo(BigDecimal.valueOf(FOUR_MONTHS_LOG2_FC));
+    assertThat(dto.get24months()).isNotNull();
+    assertThat(dto.get24months().getLog2Fc()).isEqualTo(
+      BigDecimal.valueOf(TWENTY_FOUR_MONTHS_LOG2_FC)
+    );
     assertThat(dto.getSex().getValue()).isEqualTo("Female");
 
     verify(repository).findAll(
@@ -372,8 +378,12 @@ class TranscriptomicsApiDelegateImplTest {
 
   private TranscriptomicsDocument buildDocument(ObjectId objectId) {
     FoldChangeResult foldChange = FoldChangeResult.builder()
-      .log2Fc(0.01167d)
+      .log2Fc(FOUR_MONTHS_LOG2_FC)
       .adjPVal(0.7812d)
+      .build();
+    FoldChangeResult twentyFourMonthsFoldChange = FoldChangeResult.builder()
+      .log2Fc(TWENTY_FOUR_MONTHS_LOG2_FC)
+      .adjPVal(0.0431d)
       .build();
 
     TranscriptomicsDocument document = new TranscriptomicsDocument();
@@ -390,6 +400,7 @@ class TranscriptomicsApiDelegateImplTest {
     document.setTissue("Hemibrain");
     document.setSex("Female");
     document.setFourMonths(foldChange);
+    document.setTwentyFourMonths(twentyFourMonthsFoldChange);
     return document;
   }
 
