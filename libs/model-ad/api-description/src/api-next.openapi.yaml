@@ -34,7 +34,7 @@ tags:
     description: Operations about Individual Transcriptomics results.
 paths:
   /search/models:
-    $ref: paths/model-search.yaml
+    $ref: paths/search/models.yaml
   /data-version:
     $ref: paths/data-version.yaml
   /comparison-tools/config:

@@ -19,7 +19,7 @@ get:
       schema:
         type: array
         items:
-          $ref: ../components/schemas/ModelOrganism.yaml
+          $ref: ../../components/schemas/ModelOrganism.yaml
   responses:
     '200':
       content:
@@ -27,9 +27,9 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/SearchResult.yaml
+              $ref: ../../components/schemas/SearchResult.yaml
       description: Successfully retrieved search results
     '400':
-      $ref: ../components/responses/BadRequest.yaml
+      $ref: ../../components/responses/BadRequest.yaml
     '500':
-      $ref: ../components/responses/InternalServerError.yaml
+      $ref: ../../components/responses/InternalServerError.yaml
