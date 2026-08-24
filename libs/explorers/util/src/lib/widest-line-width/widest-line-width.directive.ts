@@ -1,5 +1,7 @@
 import { afterNextRender, Directive, ElementRef, inject, OnDestroy } from '@angular/core';
 
+// Components using this directive must read var(--widest-line-width) in their styles, with a
+// fallback for before the first measurement.
 export const WIDEST_LINE_WIDTH_PROPERTY = '--widest-line-width';
 
 /**

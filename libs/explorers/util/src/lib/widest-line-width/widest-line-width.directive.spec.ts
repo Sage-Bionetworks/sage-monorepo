@@ -31,7 +31,15 @@ async function setup() {
   const { fixture } = await render(TestHostComponent);
   // afterNextRender callbacks, which install the resize observer, only run on tick
   TestBed.inject(ApplicationRef).tick();
-  return { fixture, link: screen.getByTestId('link') };
+
+  const resizeCallback = notifyResize;
+  if (!resizeCallback) throw new Error('The directive never constructed a ResizeObserver');
+
+  return {
+    fixture,
+    link: screen.getByTestId('link'),
+    triggerResize: () => resizeCallback([], {} as ResizeObserver),
+  };
 }
 
 describe('WidestLineWidthDirective', () => {
@@ -45,18 +53,18 @@ describe('WidestLineWidthDirective', () => {
   });
 
   it('should set the widest line width as a custom property when the host resizes', async () => {
-    const { link } = await setup();
+    const { link, triggerResize } = await setup();
 
-    notifyResize?.([], {} as ResizeObserver);
+    triggerResize();
 
     expect(link.style.getPropertyValue(WIDEST_LINE_WIDTH_PROPERTY)).toBe(WIDEST_LINE_WIDTH);
   });
 
   it('should leave the custom property unset when the host renders no text lines', async () => {
     Range.prototype.getClientRects = jest.fn(() => [] as unknown as DOMRectList);
-    const { link } = await setup();
+    const { link, triggerResize } = await setup();
 
-    notifyResize?.([], {} as ResizeObserver);
+    triggerResize();
 
     expect(link.style.getPropertyValue(WIDEST_LINE_WIDTH_PROPERTY)).toBe('');
   });
