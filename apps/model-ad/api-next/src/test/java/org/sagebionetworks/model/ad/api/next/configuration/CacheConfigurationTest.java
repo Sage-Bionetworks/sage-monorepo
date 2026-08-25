@@ -24,6 +24,7 @@ class CacheConfigurationTest {
       CacheNames.TRANSCRIPTOMICS,
       CacheNames.TRANSCRIPTOMICS_INDIVIDUAL,
       CacheNames.MODEL,
+      CacheNames.MODEL_SEARCH,
       CacheNames.COMPARISON_TOOL_CONFIG,
     }) {
       CaffeineCache springCache = (CaffeineCache) cacheManager.getCache(name);
