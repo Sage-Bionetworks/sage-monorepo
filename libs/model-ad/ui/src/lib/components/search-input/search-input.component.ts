@@ -1,9 +1,8 @@
 import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
-import { SearchResult, SearchResultIcon } from '@sagebionetworks/explorers/models';
+import { SearchResultIcon } from '@sagebionetworks/explorers/models';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
-import { ModelOrganism, SearchService } from '@sagebionetworks/model-ad/api-client';
-import { SearchResult as ModelAdSearchResult } from '@sagebionetworks/model-ad/api-client';
+import { ModelOrganism, SearchResult, SearchService } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { Observable } from 'rxjs';
 
@@ -28,14 +27,13 @@ export class SearchInputComponent {
     marmoset: { imagePath: 'model-ad-assets/images/marmoset-head.svg', label: 'marmoset' },
   };
 
-  getResultIcon = (result: SearchResult): SearchResultIcon | undefined => {
-    return this.resultIconByOrganism[(result as ModelAdSearchResult).model_organism];
+  getResultIcon = (result: SearchResult): SearchResultIcon => {
+    return this.resultIconByOrganism[result.model_organism];
   };
 
   navigateToResult = (result: SearchResult): void => {
-    const modelOrganism = (result as ModelAdSearchResult).model_organism ?? ModelOrganism.Mouse;
     this.router.navigate([ROUTE_PATHS.MODELS, result.id], {
-      queryParams: { modelOrganism },
+      queryParams: { modelOrganism: result.model_organism },
     });
   };
 
@@ -45,7 +43,7 @@ export class SearchInputComponent {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   checkQueryForErrors = (query: string): string => {
-    return '';
+    return ''; // empty string if no error
   };
 
   formatResultForDisplay = (result: SearchResult): string => {
