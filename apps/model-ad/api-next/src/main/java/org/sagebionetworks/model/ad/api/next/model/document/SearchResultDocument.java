@@ -22,4 +22,6 @@ public class SearchResultDocument {
 
   @Field("model_organism")
   private String modelOrganism;
+
+  private Integer precedence;
 }

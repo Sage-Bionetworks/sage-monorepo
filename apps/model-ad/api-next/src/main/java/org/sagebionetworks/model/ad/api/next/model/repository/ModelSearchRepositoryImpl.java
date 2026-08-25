@@ -2,6 +2,7 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -29,52 +30,32 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
   @Override
   public List<SearchResultDocument> searchModels(String query, List<ModelOrganismDto> organisms) {
     String escapedQuery = Pattern.quote(query);
-    boolean includeMouse = organisms.contains(ModelOrganismDto.MOUSE);
-    boolean includeMarmoset = organisms.contains(ModelOrganismDto.MARMOSET);
+    List<SearchResultDocument> results = new ArrayList<>();
 
-    if (includeMouse && includeMarmoset) {
-      return searchBothOrganisms(escapedQuery);
-    } else if (includeMouse) {
-      return searchSingleOrganism(escapedQuery, MOUSE_COLLECTION,
-          mouseMatchBranches(escapedQuery), ModelOrganismDto.MOUSE);
-    } else if (includeMarmoset) {
-      return searchSingleOrganism(escapedQuery, MARMOSET_COLLECTION,
-          marmosetMatchBranches(escapedQuery), ModelOrganismDto.MARMOSET);
+    if (organisms.contains(ModelOrganismDto.MOUSE)) {
+      results.addAll(searchCollection(escapedQuery, MOUSE_COLLECTION,
+          mouseMatchBranches(escapedQuery), ModelOrganismDto.MOUSE));
     }
-    return List.of();
+    if (organisms.contains(ModelOrganismDto.MARMOSET)) {
+      results.addAll(searchCollection(escapedQuery, MARMOSET_COLLECTION,
+          marmosetMatchBranches(escapedQuery), ModelOrganismDto.MARMOSET));
+    }
+
+    results.sort(Comparator.comparingInt(SearchResultDocument::getPrecedence)
+        .thenComparing(SearchResultDocument::getId));
+    return results;
   }
 
-  private List<SearchResultDocument> searchBothOrganisms(String escapedQuery) {
-    List<AggregationOperation> operations = new ArrayList<>();
-    operations.add(
-        addFieldsStage(mouseMatchBranches(escapedQuery), escapedQuery, ModelOrganismDto.MOUSE));
-    operations.add(matchNonNull());
-    operations.add(unionWithStage(escapedQuery));
-    operations.add(sortStage());
-    operations.add(projectStage());
-
-    Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(
-        AggregationOptions.builder().allowDiskUse(true).build());
-
-    log.debug("Executing search aggregation on {} with $unionWith {}", MOUSE_COLLECTION,
-        MARMOSET_COLLECTION);
-    AggregationResults<SearchResultDocument> results =
-        mongoTemplate.aggregate(aggregation, MOUSE_COLLECTION, SearchResultDocument.class);
-    return results.getMappedResults();
-  }
-
-  private List<SearchResultDocument> searchSingleOrganism(String escapedQuery, String collection,
+  private List<SearchResultDocument> searchCollection(String escapedQuery, String collection,
       List<Document> matchBranches, ModelOrganismDto organism) {
     List<AggregationOperation> operations = new ArrayList<>();
     operations.add(addFieldsStage(matchBranches, escapedQuery, organism));
     operations.add(matchNonNull());
-    operations.add(sortStage());
     operations.add(projectStage());
 
     Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(
         AggregationOptions.builder().allowDiskUse(true).build());
 
-    log.debug("Executing search aggregation on {}", collection);
     AggregationResults<SearchResultDocument> results =
         mongoTemplate.aggregate(aggregation, collection, SearchResultDocument.class);
     return results.getMappedResults();
@@ -96,35 +77,13 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
         new Document("match_info", new Document("$ne", null)));
   }
 
-  private AggregationOperation unionWithStage(String escapedQuery) {
-    List<Document> marmosetPipeline = Arrays.asList(
-        new Document("$addFields", new Document()
-            .append("match_info", new Document("$let", new Document()
-                .append("vars", buildVars(escapedQuery))
-                .append("in", new Document("$switch", new Document()
-                    .append("branches", marmosetMatchBranches(escapedQuery))
-                    .append("default", null)))))
-            .append("model_organism", ModelOrganismDto.MARMOSET.getValue())),
-        new Document("$match",
-            new Document("match_info", new Document("$ne", null))));
-
-    return context -> new Document("$unionWith", new Document()
-        .append("coll", MARMOSET_COLLECTION)
-        .append("pipeline", marmosetPipeline));
-  }
-
-  private AggregationOperation sortStage() {
-    return context -> new Document("$sort", new Document()
-        .append("match_info.precedence", 1)
-        .append("name", 1));
-  }
-
   private AggregationOperation projectStage() {
     return context -> new Document("$project", new Document()
         .append("_id", "$name")
         .append("match_field", "$match_info.match_field")
         .append("match_value", "$match_info.match_value")
-        .append("model_organism", "$model_organism"));
+        .append("model_organism", "$model_organism")
+        .append("precedence", "$match_info.precedence"));
   }
 
   private Document buildVars(String escapedQuery) {
