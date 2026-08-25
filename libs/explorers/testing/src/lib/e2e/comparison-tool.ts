@@ -1,5 +1,7 @@
 import { expect, Locator, Page, test } from '@playwright/test';
 import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
+import { ComparisonToolConfigColumnTypeEnum } from '@sagebionetworks/explorers/models';
+import { escapeRegexChars } from '@sagebionetworks/shared/util/helpers';
 
 export const getQueryParamFromValues = (values: string[], key: string): string => {
   // Query parameter values are encoded once by CT URL service and again by Angular router
@@ -72,9 +74,11 @@ export const expectUnpinnedTableOnly = async (page: Page): Promise<void> => {
   await expect(getUnpinnedTable(page).locator('tbody tr').first()).toBeVisible();
 };
 
+const PRIMARY_CELL_SELECTOR = `td.${ComparisonToolConfigColumnTypeEnum.Primary}`;
+
 export const getRowByName = (table: Locator, page: Page, name: string): Locator =>
   table.locator('tbody tr').filter({
-    has: page.getByRole('cell', { name, exact: true }),
+    has: page.getByRole('cell', { name, exact: true }).and(page.locator(PRIMARY_CELL_SELECTOR)),
   });
 
 export const clickViewDetailsButtonByName = async (table: Locator, page: Page, name: string) => {
@@ -362,6 +366,15 @@ export async function testTableReturnsToFirstPageWhenSortChanged(page: Page) {
 }
 
 /**
+ * Builds a regex matching a column header's accessible name, which is the column name optionally
+ * followed by PrimeNG's multi-sort position badge (e.g. "4 months 1"). Anchoring both ends keeps
+ * columns whose names overlap distinct ("4 months" does not match "24 months").
+ * @param columnName - The column name as displayed in the header
+ */
+const getColumnHeaderNameRegex = (columnName: string): RegExp =>
+  new RegExp(String.raw`^${escapeRegexChars(columnName)}(\s\d+)?$`, 'i');
+
+/**
  * Clicks a column header to sort by that column.
  * @param page - Playwright Page object
  * @param columnName - The accessible name of the column header to click
@@ -369,7 +382,10 @@ export async function testTableReturnsToFirstPageWhenSortChanged(page: Page) {
  *                    If false (default), performs a regular click to replace the current sort.
  */
 export async function sortColumn(page: Page, columnName: string, multiSort = false): Promise<void> {
-  const columnHeader = page.getByRole('columnheader', { name: columnName });
+  const columnHeader = page.getByRole('columnheader', {
+    name: getColumnHeaderNameRegex(columnName),
+  });
+
   if (multiSort) {
     await columnHeader.click({ modifiers: ['Meta'] });
   } else {
