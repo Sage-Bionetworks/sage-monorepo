@@ -34,6 +34,8 @@ public class SearchResultDto {
 
   private ModelOrganismDto modelOrganism;
 
+  private Integer precedence;
+
   public SearchResultDto() {
     super();
   }
@@ -41,11 +43,12 @@ public class SearchResultDto {
   /**
    * Constructor with only required parameters
    */
-  public SearchResultDto(String id, String matchField, String matchValue, ModelOrganismDto modelOrganism) {
+  public SearchResultDto(String id, String matchField, String matchValue, ModelOrganismDto modelOrganism, Integer precedence) {
     this.id = id;
     this.matchField = matchField;
     this.matchValue = matchValue;
     this.modelOrganism = modelOrganism;
+    this.precedence = precedence;
   }
 
   public SearchResultDto id(String id) {
@@ -128,6 +131,26 @@ public class SearchResultDto {
     this.modelOrganism = modelOrganism;
   }
 
+  public SearchResultDto precedence(Integer precedence) {
+    this.precedence = precedence;
+    return this;
+  }
+
+  /**
+   * Rank of the field that matched, used to order results (lower first)
+   * @return precedence
+   */
+  @NotNull 
+  @Schema(name = "precedence", description = "Rank of the field that matched, used to order results (lower first)", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("precedence")
+  public Integer getPrecedence() {
+    return precedence;
+  }
+
+  public void setPrecedence(Integer precedence) {
+    this.precedence = precedence;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -140,12 +163,13 @@ public class SearchResultDto {
     return Objects.equals(this.id, searchResult.id) &&
         Objects.equals(this.matchField, searchResult.matchField) &&
         Objects.equals(this.matchValue, searchResult.matchValue) &&
-        Objects.equals(this.modelOrganism, searchResult.modelOrganism);
+        Objects.equals(this.modelOrganism, searchResult.modelOrganism) &&
+        Objects.equals(this.precedence, searchResult.precedence);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, matchField, matchValue, modelOrganism);
+    return Objects.hash(id, matchField, matchValue, modelOrganism, precedence);
   }
 
   @Override
@@ -156,6 +180,7 @@ public class SearchResultDto {
     sb.append("    matchField: ").append(toIndentedString(matchField)).append("\n");
     sb.append("    matchValue: ").append(toIndentedString(matchValue)).append("\n");
     sb.append("    modelOrganism: ").append(toIndentedString(modelOrganism)).append("\n");
+    sb.append("    precedence: ").append(toIndentedString(precedence)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -188,6 +213,7 @@ public class SearchResultDto {
       this.instance.setMatchField(value.matchField);
       this.instance.setMatchValue(value.matchValue);
       this.instance.setModelOrganism(value.modelOrganism);
+      this.instance.setPrecedence(value.precedence);
       return this;
     }
 
@@ -208,6 +234,11 @@ public class SearchResultDto {
     
     public SearchResultDto.Builder modelOrganism(ModelOrganismDto modelOrganism) {
       this.instance.modelOrganism(modelOrganism);
+      return this;
+    }
+    
+    public SearchResultDto.Builder precedence(Integer precedence) {
+      this.instance.precedence(precedence);
       return this;
     }
     
