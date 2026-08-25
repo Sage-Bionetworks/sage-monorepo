@@ -44,7 +44,7 @@ public interface SearchApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"id\" : \"id\", \"match_value\" : \"match_value\", \"match_field\" : \"match_field\", \"model_organism\" : \"marmoset\", \"precedence\" : 0 }, { \"id\" : \"id\", \"match_value\" : \"match_value\", \"match_field\" : \"match_field\", \"model_organism\" : \"marmoset\", \"precedence\" : 0 } ]";
+                    String exampleString = "[ { \"id\" : \"id\", \"match_value\" : \"match_value\", \"match_field\" : \"match_field\", \"model_organism\" : \"marmoset\" }, { \"id\" : \"id\", \"match_value\" : \"match_value\", \"match_field\" : \"match_field\", \"model_organism\" : \"marmoset\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

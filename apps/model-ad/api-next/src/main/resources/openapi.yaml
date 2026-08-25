@@ -447,7 +447,6 @@ components:
         match_value: match_value
         match_field: match_field
         model_organism: marmoset
-        precedence: 0
       properties:
         id:
           description: ID of result
@@ -460,16 +459,11 @@ components:
           type: string
         model_organism:
           $ref: '#/components/schemas/ModelOrganism'
-        precedence:
-          description: "Rank of the field that matched, used to order results (lower\
-            \ first)"
-          type: integer
       required:
         - id
         - match_field
         - match_value
         - model_organism
-        - precedence
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)

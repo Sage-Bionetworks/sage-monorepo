@@ -26,9 +26,5 @@ export interface SearchResult {
    */
   match_value: string;
   model_organism: ModelOrganism;
-  /**
-   * Rank of the field that matched, used to order results (lower first)
-   */
-  precedence: number;
 }
 export namespace SearchResult {}
