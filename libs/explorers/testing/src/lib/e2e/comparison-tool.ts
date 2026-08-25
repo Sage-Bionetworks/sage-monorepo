@@ -1,5 +1,6 @@
 import { expect, Locator, Page, test } from '@playwright/test';
 import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
+import { ComparisonToolConfigColumnTypeEnum } from '@sagebionetworks/explorers/models';
 import { escapeRegexChars } from './regex-helpers';
 
 export const getQueryParamFromValues = (values: string[], key: string): string => {
@@ -73,9 +74,11 @@ export const expectUnpinnedTableOnly = async (page: Page): Promise<void> => {
   await expect(getUnpinnedTable(page).locator('tbody tr').first()).toBeVisible();
 };
 
+const PRIMARY_CELL_SELECTOR = `td.${ComparisonToolConfigColumnTypeEnum.Primary}`;
+
 export const getRowByName = (table: Locator, page: Page, name: string): Locator =>
   table.locator('tbody tr').filter({
-    has: page.getByRole('cell', { name, exact: true }),
+    has: page.getByRole('cell', { name, exact: true }).and(page.locator(PRIMARY_CELL_SELECTOR)),
   });
 
 export const clickViewDetailsButtonByName = async (table: Locator, page: Page, name: string) => {
