@@ -12,8 +12,12 @@ properties:
     description: Value that matched the query
   model_organism:
     $ref: ./ModelOrganism.yaml
+  precedence:
+    type: integer
+    description: Rank of the field that matched, used to order results (lower first)
 required:
   - id
   - match_field
   - match_value
   - model_organism
+  - precedence
