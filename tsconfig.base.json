@@ -107,6 +107,7 @@
         "libs/shared/typescript/google-tag-manager/src/index.ts"
       ],
       "@sagebionetworks/shared/util": ["libs/shared/typescript/util/src/index.ts"],
+      "@sagebionetworks/shared/util/helpers": ["libs/shared/typescript/util/src/helpers.ts"],
       "@sagebionetworks/shared/web-components": [
         "libs/shared/typescript/web-components/src/index.ts"
       ],

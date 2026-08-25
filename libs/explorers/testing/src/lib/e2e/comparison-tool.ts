@@ -1,7 +1,7 @@
 import { expect, Locator, Page, test } from '@playwright/test';
 import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolConfigColumnTypeEnum } from '@sagebionetworks/explorers/models';
-import { escapeRegexChars } from './regex-helpers';
+import { escapeRegexChars } from '@sagebionetworks/shared/util/helpers';
 
 export const getQueryParamFromValues = (values: string[], key: string): string => {
   // Query parameter values are encoded once by CT URL service and again by Angular router
@@ -372,7 +372,7 @@ export async function testTableReturnsToFirstPageWhenSortChanged(page: Page) {
  * @param columnName - The column name as displayed in the header
  */
 const getColumnHeaderNameRegex = (columnName: string): RegExp =>
-  new RegExp(String.raw`^${escapeRegexChars(columnName)}\s*\d*$`, 'i');
+  new RegExp(String.raw`^${escapeRegexChars(columnName)}(\s\d+)?$`, 'i');
 
 /**
  * Clicks a column header to sort by that column.
