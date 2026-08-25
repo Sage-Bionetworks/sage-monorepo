@@ -97,6 +97,21 @@ test.describe('search', () => {
     await expect(searchListItems.first()).toHaveText(model);
   });
 
+  test('can search across organisms and navigate to marmoset model', async ({ page }) => {
+    const modelName = 'Presenilin 1';
+
+    await page.goto('/');
+
+    const { searchListItems } = await searchAndGetSearchListItems('presenilin', page);
+    await expect(searchListItems).toHaveCount(1);
+    await expect(searchListItems.first()).toHaveText(modelName);
+
+    await searchListItems.first().click();
+
+    await page.waitForURL(/modelOrganism=marmoset/);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(modelName);
+  });
+
   test('can search and navigate to model with special characters', async ({ page }) => {
     const modelQuery = '(iu';
     const modelName = '5xFAD (IU/Jax/Pitt)';
