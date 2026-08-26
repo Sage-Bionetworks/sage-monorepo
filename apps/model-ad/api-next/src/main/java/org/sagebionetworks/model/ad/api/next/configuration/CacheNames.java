@@ -33,6 +33,14 @@ public final class CacheNames {
   public static final String MOUSE_MODEL_OVERVIEW = "mouseModelOverview";
 
   /**
+   * Cache for proteomics queries.
+   * Stores results from proteomics comparison queries filtered by tissue, items,
+   * and filter type.
+   * Key format: Dynamic based on query parameters (tissue, items, filterType)
+   */
+  public static final String PROTEOMICS = "proteomics";
+
+  /**
    * Cache for transcriptomics queries.
    * Stores results from transcriptomics comparison queries filtered by tissue, items,
    * and filter type.
