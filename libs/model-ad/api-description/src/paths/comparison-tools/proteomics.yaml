@@ -1,0 +1,21 @@
+get:
+  tags:
+    - Proteomics
+  summary: Get proteomics comparison data
+  description: Returns a paginated list of proteomics objects for use in comparison tools.
+  operationId: getProteomics
+  parameters:
+    - $ref: ../query/proteomicsSearchQuery.yaml
+  responses:
+    '200':
+      description: A paginated response containing proteomics objects
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ProteomicsPage.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

@@ -1,0 +1,105 @@
+type: object
+description: Proteomics search query with pagination and filtering options.
+properties:
+  pageNumber:
+    description: The page number.
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+    maximum: 100
+    example: 100
+  categories:
+    description: |
+      Array of category values from the dropdown selections.
+      The API will parse these to extract the tissue information.
+      Expected format: [mainCategory, tissueCategory]
+    type: array
+    items:
+      type: string
+    minItems: 2
+    maxItems: 2
+    example: ['PROTEIN - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain']
+  items:
+    description: |
+      List of composite identifiers to filter by. Each identifier uses the format "unique_id~name~sex"
+      where each identifier represents one complete combination of unique ID, gene name, and sex.
+
+      Example: "ENSMUSG11111111110P11110~LOAD2~Female" filters for documents matching that exact unique ID, name, and sex.
+      Multiple items can be provided to filter for multiple specific combinations.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['ENSMUSG11111111110P11110~LOAD2~Female', 'ENSMUSG11111111111P11111~LOAD1~Male']
+  itemFilterType:
+    $ref: ItemFilterTypeQuery.yaml
+    nullable: true
+  search:
+    description: |
+      Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches).
+      Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when
+      itemFilterType is 'exclude'.
+    type: string
+    nullable: true
+    example: 'gnai,cdc45'
+  biodomains:
+    description: Filter by biological domains.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Apoptosis', 'Cell Cycle']
+  modelType:
+    description: Filter by model type.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Familial AD', 'Late Onset AD']
+  name:
+    description: Filter by mouse model name.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['3xTg-AD', '5xFAD (IU/Jax/Pitt)']
+  sex:
+    description: Filter by sex.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Female', 'Male']
+  sortFields:
+    description: |
+      List of field names to sort by (e.g., "display_symbol,name").
+      Each field in sortFields must have a corresponding order in sortOrders.
+    type: array
+    items:
+      type: string
+    minItems: 1
+    example: [display_symbol, name]
+  sortOrders:
+    description: |
+      List of sort directions corresponding to sortFields.
+      Values: 1 (ascending) or -1 (descending).
+      Must have the same length as sortFields.
+    type: array
+    items:
+      type: integer
+      format: int32
+      enum: [1, -1]
+    minItems: 1
+    example: [1, -1]
+required:
+  - categories
+  - sortFields
+  - sortOrders
