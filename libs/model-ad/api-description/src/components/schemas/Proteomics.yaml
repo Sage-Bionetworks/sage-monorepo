@@ -1,0 +1,74 @@
+type: object
+description: Proteomics
+properties:
+  composite_id:
+    type: string
+    description: Unique identifier for the proteomics object (unique_id~model_name~sex)
+    example: ENSMUSG00000000001P27144~LOAD2~Female
+  ensembl_gene_id:
+    type: string
+    description: Ensembl Gene ID
+  gene_symbol:
+    type: string
+    description: Gene Symbol
+    example: Gnai3
+  uniprotid:
+    type: string
+    description: UniProt ID
+    example: P27144
+  unique_id:
+    type: string
+    description: Concatenation of the Ensembl Gene ID and the UniProt ID
+    example: ENSMUSG00000000001P27144
+  display_symbol:
+    type: string
+    description: Gene symbol and UniProt ID, falling back to the Ensembl Gene ID when the gene symbol is unavailable
+    example: Gnai3 (P27144)
+  biodomains:
+    type: array
+    description: List of biodomains associated with the gene
+    items:
+      type: string
+  name:
+    $ref: ./NamedLink.yaml
+    description: Model name and link to model details page
+  matched_control:
+    type: string
+    description: Matched control for the model
+    example: C57BL/6J
+  model_group:
+    type: string
+    description: Model group
+    nullable: true
+  model_type:
+    type: string
+    description: Type of model
+    example: Late Onset AD
+  tissue:
+    type: string
+    description: Tissue type
+    example: Hemibrain
+  sex:
+    $ref: ./Sex.yaml
+  4 months:
+    $ref: ./FoldChangeResult.yaml
+  12 months:
+    $ref: ./FoldChangeResult.yaml
+  18 months:
+    $ref: ./FoldChangeResult.yaml
+  24 months:
+    $ref: ./FoldChangeResult.yaml
+required:
+  - composite_id
+  - ensembl_gene_id
+  - gene_symbol
+  - uniprotid
+  - unique_id
+  - display_symbol
+  - biodomains
+  - name
+  - matched_control
+  - model_group
+  - model_type
+  - tissue
+  - sex
