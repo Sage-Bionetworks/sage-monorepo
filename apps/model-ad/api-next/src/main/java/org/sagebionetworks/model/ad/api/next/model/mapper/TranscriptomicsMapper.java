@@ -1,12 +1,10 @@
 package org.sagebionetworks.model.ad.api.next.model.mapper;
 
-import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
-import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument.FoldChangeResult;
-import org.sagebionetworks.model.ad.api.next.model.dto.FoldChangeResultDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsIdentifier;
 import org.sagebionetworks.model.ad.api.next.util.EnumConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class TranscriptomicsMapper {
 
   private final LinkMapper linkMapper;
+  private final FoldChangeMapper foldChangeMapper;
 
   public TranscriptomicsDto toDto(@Nullable TranscriptomicsDocument document) {
     if (document == null) {
@@ -39,20 +38,21 @@ public class TranscriptomicsMapper {
       EnumConverter.toSexDto(document.getSex(), "transcriptomics record")
     );
 
-    dto.set4months(toFoldChangeDto(document.getFourMonths()));
-    dto.set12months(toFoldChangeDto(document.getTwelveMonths()));
-    dto.set18months(toFoldChangeDto(document.getEighteenMonths()));
-    dto.set24months(toFoldChangeDto(document.getTwentyFourMonths()));
+    dto.set4months(foldChangeMapper.toNullableDto(document.getFourMonths()));
+    dto.set12months(foldChangeMapper.toNullableDto(document.getTwelveMonths()));
+    dto.set18months(foldChangeMapper.toNullableDto(document.getEighteenMonths()));
+    dto.set24months(foldChangeMapper.toNullableDto(document.getTwentyFourMonths()));
 
     return dto;
   }
 
   private String getCompositeId(TranscriptomicsDocument document) {
-    String ensemblGeneId = document.getEnsemblGeneId();
-    String name = document.getName().getLinkText();
-    String sex = document.getSex();
-
-    return String.format("%s~%s~%s", ensemblGeneId, name, sex);
+    return TranscriptomicsIdentifier.builder()
+      .ensemblGeneId(document.getEnsemblGeneId())
+      .name(document.getName().getLinkText())
+      .sex(document.getSex())
+      .build()
+      .toCompositeId();
   }
 
   private String getGeneSymbolWithFallback(TranscriptomicsDocument document) {
@@ -62,17 +62,5 @@ public class TranscriptomicsMapper {
       return document.getEnsemblGeneId();
     }
     return geneSymbol;
-  }
-
-  private @Nullable FoldChangeResultDto toFoldChangeDto(@Nullable FoldChangeResult document) {
-    if (document == null) {
-      return null;
-    }
-    Double log2Fc = document.getLog2Fc();
-    Double adjPVal = document.getAdjPVal();
-    if (log2Fc == null || adjPVal == null) {
-      return null;
-    }
-    return new FoldChangeResultDto(BigDecimal.valueOf(log2Fc), BigDecimal.valueOf(adjPVal));
   }
 }
