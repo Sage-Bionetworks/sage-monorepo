@@ -4,9 +4,9 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.explorers.ApiHelper;
-import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsPageDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
-import org.sagebionetworks.model.ad.api.next.service.TranscriptomicsService;
+import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.service.ProteomicsService;
 import org.sagebionetworks.model.ad.api.next.util.DifferentialExpressionCategoryParser;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TranscriptomicsApiDelegateImpl implements TranscriptomicsApiDelegate {
+public class ProteomicsApiDelegateImpl implements ProteomicsApiDelegate {
 
   private static final Set<String> VALID_QUERY_PARAMS = Set.of(
     "pageNumber",
@@ -32,15 +32,13 @@ public class TranscriptomicsApiDelegateImpl implements TranscriptomicsApiDelegat
     "sortOrders"
   );
 
-  private static final String MODALITY_TOKEN = "RNA";
+  private static final String MODALITY_TOKEN = "PROTEIN";
 
-  private final TranscriptomicsService transcriptomicsService;
+  private final ProteomicsService proteomicsService;
 
   @Override
-  public ResponseEntity<TranscriptomicsPageDto> getTranscriptomics(
-    TranscriptomicsSearchQueryDto query
-  ) {
-    log.debug("Fetching transcriptomics data with query: {}", query);
+  public ResponseEntity<ProteomicsPageDto> getProteomics(ProteomicsSearchQueryDto query) {
+    log.debug("Fetching proteomics data with query: {}", query);
 
     // Validate query parameters
     ApiHelper.validateQueryParameters(VALID_QUERY_PARAMS);
@@ -50,12 +48,9 @@ public class TranscriptomicsApiDelegateImpl implements TranscriptomicsApiDelegat
       MODALITY_TOKEN
     );
 
-    TranscriptomicsPageDto results = transcriptomicsService.loadTranscriptomics(query, tissue);
+    ProteomicsPageDto results = proteomicsService.loadProteomics(query, tissue);
 
-    log.debug(
-      "Successfully retrieved {} transcriptomics data",
-      results.getTranscriptomics().size()
-    );
+    log.debug("Successfully retrieved {} proteomics data", results.getProteomics().size());
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
