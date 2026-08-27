@@ -7,7 +7,7 @@ package org.sagebionetworks.explorers;
  *
  * <ul>
  *   <li>Comma-separated search terms → exact match (case-insensitive) via
- *       {@link ApiHelper#createCaseInsensitiveFullMatchPatterns}
+ *       {@link ApiHelper#createCaseInsensitiveFullMatchPatterns(String)}
  *   <li>Single search term → partial match (case-insensitive regex)
  * </ul>
  *

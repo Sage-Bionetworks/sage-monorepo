@@ -38,7 +38,18 @@ public class CustomTranscriptomicsRepositoryImpl
 
   private static final String COLLECTION_NAME = "rna_de_aggregate";
   private static final String DISPLAY_GENE_SYMBOL_FIELD = "display_gene_symbol";
+  private static final String ENSEMBL_GENE_ID_FIELD = "ensembl_gene_id";
   private static final String GENE_SYMBOL_FIELD = "gene_symbol";
+
+  /**
+   * A complete Ensembl mouse gene ID. Matched case-insensitively because every other matcher in
+   * this filterbox is case-insensitive; without it a lower-cased ID would fall through to the
+   * gene_symbol path and return nothing.
+   */
+  private static final Pattern FULL_MOUSE_ENSEMBL_GENE_ID = Pattern.compile(
+    "^ENSMUSG\\d{11}$",
+    Pattern.CASE_INSENSITIVE
+  );
 
   public CustomTranscriptomicsRepositoryImpl(MongoTemplate mongoTemplate) {
     super(mongoTemplate);
@@ -143,17 +154,17 @@ public class CustomTranscriptomicsRepositoryImpl
   private AggregationOperation buildDisplayGeneSymbolField() {
     // Check if gene_symbol is null
     List<Object> eqNull = new ArrayList<>();
-    eqNull.add("$gene_symbol");
+    eqNull.add("$" + GENE_SYMBOL_FIELD);
     eqNull.add(null);
 
     // Check if gene_symbol is empty string
     List<Object> eqEmpty = new ArrayList<>();
-    eqEmpty.add("$gene_symbol");
+    eqEmpty.add("$" + GENE_SYMBOL_FIELD);
     eqEmpty.add("");
 
     // Check if gene_symbol is only whitespace
     List<Object> eqTrimmed = new ArrayList<>();
-    eqTrimmed.add(new Document("$trim", new Document("input", "$gene_symbol")));
+    eqTrimmed.add(new Document("$trim", new Document("input", "$" + GENE_SYMBOL_FIELD)));
     eqTrimmed.add("");
 
     // Combine all null/empty/whitespace checks with $or
@@ -165,8 +176,8 @@ public class CustomTranscriptomicsRepositoryImpl
     // $cond: if (gene_symbol is null/empty/whitespace) then ensembl_gene_id else gene_symbol
     List<Object> condArgs = new ArrayList<>();
     condArgs.add(new Document("$or", orConditions));
-    condArgs.add("$ensembl_gene_id");
-    condArgs.add("$gene_symbol");
+    condArgs.add("$" + ENSEMBL_GENE_ID_FIELD);
+    condArgs.add("$" + GENE_SYMBOL_FIELD);
 
     Document addFieldsDoc = new Document(
       "$addFields",
@@ -177,10 +188,13 @@ public class CustomTranscriptomicsRepositoryImpl
   }
 
   /**
-   * Override search to add gene_symbol/ensembl_gene_id fallback logic.
+   * Override search to route each term to the field it identifies.
    *
-   * <p>Since {@code display_gene_symbol = gene_symbol ?? ensembl_gene_id}, the search matches:
-   * (gene_symbol matches) OR (gene_symbol is null/empty AND ensembl_gene_id matches)
+   * <p>A term that is a complete Ensembl gene ID matches {@code ensembl_gene_id} only. Every other
+   * term matches {@code gene_symbol}, falling back to {@code ensembl_gene_id} when
+   * {@code gene_symbol} is null/empty, mirroring
+   * {@code display_gene_symbol = gene_symbol ?? ensembl_gene_id}. Terms in a comma-separated list
+   * are routed independently.
    *
    * <p><strong>NOTE:</strong> We cannot use {@code DISPLAY_GENE_SYMBOL_FIELD} here because it's a
    * computed field created by {@code $addFields} in the aggregation pipeline. The count query uses
@@ -190,29 +204,73 @@ public class CustomTranscriptomicsRepositoryImpl
    */
   @Override
   protected Criteria buildSearchCriteria(String field, String trimmedSearch) {
-    Criteria geneSymbolIsNullOrEmpty = new Criteria()
+    if (trimmedSearch.contains(",")) {
+      return buildCommaSeparatedSearchCriteria(trimmedSearch);
+    }
+    return buildSingleTermSearchCriteria(trimmedSearch);
+  }
+
+  /** Single term: case-insensitive exact match for a full Ensembl gene ID,
+   * partial match otherwise. */
+  private Criteria buildSingleTermSearchCriteria(String term) {
+    if (isFullEnsemblGeneId(term)) {
+      return equalsAnyIgnoringCase(ENSEMBL_GENE_ID_FIELD, List.of(term));
+    }
+
+    String regex = Pattern.quote(term);
+    return new Criteria()
+      .orOperator(
+        Criteria.where(GENE_SYMBOL_FIELD).regex(regex, "i"),
+        whenGeneSymbolIsBlank(Criteria.where(ENSEMBL_GENE_ID_FIELD).regex(regex, "i"))
+      );
+  }
+
+  /** Comma-separated list: case-insensitive exact match, each term routed independently. */
+  private Criteria buildCommaSeparatedSearchCriteria(String trimmedSearch) {
+    List<String> fullEnsemblGeneIdTerms = new ArrayList<>();
+    List<String> otherTerms = new ArrayList<>();
+    for (String term : ApiHelper.splitSearchTerms(trimmedSearch)) {
+      (isFullEnsemblGeneId(term) ? fullEnsemblGeneIdTerms : otherTerms).add(term);
+    }
+
+    List<Criteria> branches = new ArrayList<>();
+    if (!fullEnsemblGeneIdTerms.isEmpty()) {
+      branches.add(equalsAnyIgnoringCase(ENSEMBL_GENE_ID_FIELD, fullEnsemblGeneIdTerms));
+    }
+    if (!otherTerms.isEmpty()) {
+      branches.add(equalsAnyIgnoringCase(GENE_SYMBOL_FIELD, otherTerms));
+      // Only reachable for an off-pattern ensembl_gene_id (versioned, non-mouse, malformed), which
+      // the single-term path also matches. Without it, searching "A" finds such a row but "A,B"
+      // would not.
+      Criteria ensemblGeneIdFallback = equalsAnyIgnoringCase(ENSEMBL_GENE_ID_FIELD, otherTerms);
+      branches.add(whenGeneSymbolIsBlank(ensemblGeneIdFallback));
+    }
+
+    if (branches.isEmpty()) {
+      // Search was only commas: match nothing, as an empty $in would.
+      return Criteria.where("_id").is(null);
+    }
+    if (branches.size() == 1) {
+      return branches.get(0);
+    }
+    return new Criteria().orOperator(branches);
+  }
+
+  private static boolean isFullEnsemblGeneId(String term) {
+    return FULL_MOUSE_ENSEMBL_GENE_ID.matcher(term).matches();
+  }
+
+  private static Criteria equalsAnyIgnoringCase(String field, List<String> terms) {
+    return Criteria.where(field).in(ApiHelper.createCaseInsensitiveFullMatchPatterns(terms));
+  }
+
+  private static Criteria whenGeneSymbolIsBlank(Criteria fallbackMatch) {
+    Criteria geneSymbolIsBlank = new Criteria()
       .orOperator(
         Criteria.where(GENE_SYMBOL_FIELD).is(null),
         Criteria.where(GENE_SYMBOL_FIELD).is(""),
         Criteria.where(GENE_SYMBOL_FIELD).regex("^\\s*$")
       );
-
-    if (trimmedSearch.contains(",")) {
-      // Comma-separated list: exact match (case-insensitive)
-      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
-      Criteria geneSymbolMatches = Criteria.where(GENE_SYMBOL_FIELD).in(patterns);
-      Criteria ensemblFallbackMatches = new Criteria()
-        .andOperator(geneSymbolIsNullOrEmpty, Criteria.where("ensembl_gene_id").in(patterns));
-
-      return new Criteria().orOperator(geneSymbolMatches, ensemblFallbackMatches);
-    } else {
-      // Single term: partial match (case-insensitive)
-      String regex = Pattern.quote(trimmedSearch);
-      Criteria geneSymbolMatches = Criteria.where(GENE_SYMBOL_FIELD).regex(regex, "i");
-      Criteria ensemblFallbackMatches = new Criteria()
-        .andOperator(geneSymbolIsNullOrEmpty, Criteria.where("ensembl_gene_id").regex(regex, "i"));
-
-      return new Criteria().orOperator(geneSymbolMatches, ensemblFallbackMatches);
-    }
+    return new Criteria().andOperator(geneSymbolIsBlank, fallbackMatch);
   }
 }
