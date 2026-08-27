@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { expectPageNotAtTop } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
 import {
   expectHighlightClears,
@@ -10,6 +11,7 @@ import {
 test.describe('marmoset model details - boxplots selector', () => {
   const model = 'Presenilin 1';
   const biomarkersPath = '/models/Presenilin%201/biomarkers?modelOrganism=marmoset';
+  const noTabPath = '/models/Presenilin%201?modelOrganism=marmoset';
   const measurementDefault = 'Soluble Aβ40';
   const measurementOther = 'Insoluble Aβ42';
   const ageSection = '0-1 year';
@@ -25,6 +27,27 @@ test.describe('marmoset model details - boxplots selector', () => {
     await expect(
       page.getByRole('heading', { level: 3, name: ageSection, exact: true }),
     ).toBeInViewport();
+    await expectPageNotAtTop(page);
+  });
+
+  test('age group section is shown when a url with no tab segment includes an age fragment', async ({
+    page,
+  }) => {
+    await page.goto(`${noTabPath}#${ageFragment}`);
+    await expect(
+      page.getByRole('heading', { level: 3, name: ageSection, exact: true }),
+    ).toBeInViewport();
+    await expectPageNotAtTop(page);
+    await page.waitForURL(`${noTabPath}#${ageFragment}`);
+  });
+
+  test('filters are set from query parameters when the url has no tab segment', async ({
+    page,
+  }) => {
+    const sexFilter = 'Female';
+    await page.goto(`${noTabPath}&sex=${sexFilter}`);
+    await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
+    await page.waitForURL(`${noTabPath}&sex=${sexFilter}`);
   });
 
   test('clicking on an age group adds fragment to url', async ({ page }) => {
