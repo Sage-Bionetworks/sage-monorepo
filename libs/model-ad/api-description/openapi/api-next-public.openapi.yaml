@@ -47,6 +47,8 @@ paths:
           required: true
           schema:
             type: string
+            minLength: 1
+            maxLength: 100
         - name: modelOrganisms
           in: query
           description: Filter results to specific model organisms. When omitted, all organisms are searched.

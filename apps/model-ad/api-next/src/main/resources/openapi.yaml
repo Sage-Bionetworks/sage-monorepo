@@ -46,6 +46,8 @@ paths:
           name: q
           required: true
           schema:
+            maxLength: 100
+            minLength: 1
             type: string
           style: form
         - description: "Filter results to specific model organisms. When omitted, all\

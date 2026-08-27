@@ -78,7 +78,7 @@ public interface SearchApi {
     )
     
     default ResponseEntity<List<SearchResultDto>> searchModels(
-        @NotNull @Parameter(name = "q", description = "Search query", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "q", required = true) String q,
+        @NotNull @Size(min = 1, max = 100) @Parameter(name = "q", description = "Search query", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "q", required = true) String q,
         @Parameter(name = "modelOrganisms", description = "Filter results to specific model organisms. When omitted, all organisms are searched.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "modelOrganisms", required = false) @Nullable List<ModelOrganismDto> modelOrganisms
     ) {
         return getDelegate().searchModels(q, modelOrganisms);
