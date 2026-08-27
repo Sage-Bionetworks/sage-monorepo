@@ -16,20 +16,11 @@ import org.springframework.stereotype.Service;
 @CacheConfig(cacheNames = CacheNames.MODEL_SEARCH)
 public class ModelSearchService {
 
-  private static final int MIN_QUERY_LENGTH = 1;
-  private static final int MAX_QUERY_LENGTH = 100;
-
   private final ModelSearchRepository modelSearchRepository;
   private final SearchResultMapper searchResultMapper;
 
   @Cacheable(key = "#query + '-' + #modelOrganisms")
   public List<SearchResultDto> searchModels(String query, List<ModelOrganismDto> modelOrganisms) {
-    if (query.length() < MIN_QUERY_LENGTH || query.length() > MAX_QUERY_LENGTH) {
-      throw new IllegalArgumentException(
-          "Query must be between " + MIN_QUERY_LENGTH + " and " + MAX_QUERY_LENGTH
-              + " characters");
-    }
-
     return modelSearchRepository.searchModels(query, modelOrganisms).stream()
         .map(searchResultMapper::toDto)
         .toList();

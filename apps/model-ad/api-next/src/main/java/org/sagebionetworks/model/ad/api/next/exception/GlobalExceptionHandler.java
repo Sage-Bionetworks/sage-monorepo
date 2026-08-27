@@ -1,6 +1,8 @@
 package org.sagebionetworks.model.ad.api.next.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.constraints.Size;
 import java.util.Locale;
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.springframework.http.HttpHeaders;
@@ -136,6 +138,45 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
           .instance(resolveInstance(request))
           .build()
       );
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  protected ResponseEntity<BasicErrorDto> handleConstraintViolation(
+    ConstraintViolationException ex,
+    NativeWebRequest request,
+    Locale locale
+  ) {
+    String detail = ex
+      .getConstraintViolations()
+      .stream()
+      .findFirst()
+      .map(violation -> {
+        String propertyPath = violation.getPropertyPath().toString();
+        String parameter = propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
+        if (violation.getConstraintDescriptor().getAnnotation() instanceof Size size) {
+          return String.format(
+            "Query parameter %s must be between %d and %d characters",
+            parameter,
+            size.min(),
+            size.max()
+          );
+        }
+        return String.format(
+          "Query parameter %s is invalid: %s",
+          parameter,
+          violation.getMessage()
+        );
+      })
+      .orElse(ex.getMessage());
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.BAD_REQUEST.getTitle())
+      .status(ErrorConstants.BAD_REQUEST.getStatus().value())
+      .detail(detail)
+      .instance(resolveInstance(request))
+      .build();
+    return ResponseEntity.status(ErrorConstants.BAD_REQUEST.getStatus())
+      .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+      .body(errorDto);
   }
 
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)

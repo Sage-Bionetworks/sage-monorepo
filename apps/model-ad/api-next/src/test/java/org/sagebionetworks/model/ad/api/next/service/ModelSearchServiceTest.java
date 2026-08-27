@@ -1,8 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -21,7 +19,6 @@ import org.sagebionetworks.model.ad.api.next.model.repository.ModelSearchReposit
 @ExtendWith(MockitoExtension.class)
 class ModelSearchServiceTest {
 
-  private static final int MAX_QUERY_LENGTH = 100;
   private static final String QUERY = "apoe";
   private static final List<ModelOrganismDto> ALL_ORGANISMS = List.of(ModelOrganismDto.values());
 
@@ -47,37 +44,6 @@ class ModelSearchServiceTest {
     assertThat(results).hasSize(1);
     assertThat(results.get(0).getId()).isEqualTo("APOE4");
     assertThat(results.get(0).getModelOrganism()).isEqualTo(ModelOrganismDto.MOUSE);
-  }
-
-  @Test
-  @DisplayName("should accept query at max length")
-  void shouldAcceptQueryAtMaxLength() {
-    String query = "a".repeat(MAX_QUERY_LENGTH);
-    when(modelSearchRepository.searchModels(query, ALL_ORGANISMS)).thenReturn(List.of());
-
-    assertThat(service.searchModels(query, ALL_ORGANISMS)).isEmpty();
-  }
-
-  @Test
-  @DisplayName("should throw IllegalArgumentException when query is empty")
-  void shouldThrowIllegalArgumentExceptionWhenQueryIsEmpty() {
-    assertThatThrownBy(() -> service.searchModels("", ALL_ORGANISMS))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("characters");
-
-    verifyNoInteractions(modelSearchRepository);
-  }
-
-  @Test
-  @DisplayName("should throw IllegalArgumentException when query exceeds max length")
-  void shouldThrowIllegalArgumentExceptionWhenQueryExceedsMaxLength() {
-    String query = "a".repeat(MAX_QUERY_LENGTH + 1);
-
-    assertThatThrownBy(() -> service.searchModels(query, ALL_ORGANISMS))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining(String.valueOf(MAX_QUERY_LENGTH));
-
-    verifyNoInteractions(modelSearchRepository);
   }
 
   private SearchResultDocument buildDocument(String id, ModelOrganismDto organism) {

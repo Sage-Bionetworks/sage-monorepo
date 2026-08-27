@@ -8,7 +8,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,12 +31,13 @@ class SearchApiControllerWebTest {
   private static final String SEARCH_MODELS_PATH = "/v1/search/models";
 
   private SearchApiDelegate delegate;
+  private SearchApiController controller;
   private MockMvc mockMvc;
 
   @BeforeEach
   void setUp() {
     delegate = mock(SearchApiDelegate.class);
-    var controller = new SearchApiController(delegate);
+    controller = new SearchApiController(delegate);
     var conversionService = new FormattingConversionService();
     conversionService.addConverter(
       new Converter<String, ModelOrganismDto>() {
@@ -80,12 +86,37 @@ class SearchApiControllerWebTest {
   }
 
   @Test
-  @DisplayName("should return bad request when delegate rejects the query length")
-  void shouldReturnBadRequestWhenDelegateRejectsQueryLength() throws Exception {
-    when(delegate.searchModels(eq(""), any())).thenThrow(
-      new IllegalArgumentException("Query must be between 1 and 100 characters")
+  @DisplayName("should return bad request when delegate throws illegal argument")
+  void shouldReturnBadRequestWhenDelegateThrowsIllegalArgument() throws Exception {
+    when(delegate.searchModels(eq("apoe"), any())).thenThrow(
+      new IllegalArgumentException("invalid search request")
     );
 
-    mockMvc.perform(get(SEARCH_MODELS_PATH).param("q", "")).andExpect(status().isBadRequest());
+    mockMvc.perform(get(SEARCH_MODELS_PATH).param("q", "apoe")).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @DisplayName("should return bad request when query violates the schema length constraint")
+  void shouldReturnBadRequestWhenQueryViolatesLengthConstraint() throws Exception {
+    when(delegate.searchModels(eq("apoe"), any())).thenThrow(buildEmptyQueryViolation());
+
+    mockMvc
+      .perform(get(SEARCH_MODELS_PATH).param("q", "apoe"))
+      .andExpect(status().isBadRequest())
+      .andExpect(jsonPath("$.title").value("Bad Request"))
+      .andExpect(
+        jsonPath("$.detail").value("Query parameter q must be between 1 and 100 characters")
+      );
+  }
+
+  /** Validates the generated {@code searchModels} signature so the constraint isn't restated here. */
+  private ConstraintViolationException buildEmptyQueryViolation() throws NoSuchMethodException {
+    Method searchModels = SearchApi.class.getMethod("searchModels", String.class, List.class);
+    Set<ConstraintViolation<SearchApiController>> violations =
+      Validation.buildDefaultValidatorFactory()
+        .getValidator()
+        .forExecutables()
+        .validateParameters(controller, searchModels, new Object[] { "", null });
+    return new ConstraintViolationException(violations);
   }
 }
