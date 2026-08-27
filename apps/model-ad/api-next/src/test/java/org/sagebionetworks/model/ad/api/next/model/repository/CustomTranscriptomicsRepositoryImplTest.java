@@ -44,8 +44,9 @@ class CustomTranscriptomicsRepositoryImplTest {
   private static final String GENE_SYMBOL_FIELD = "gene_symbol";
   private static final String TISSUE_FIELD = "tissue";
 
-  private static final String ENSA_ENSEMBL_GENE_ID = "ENSMUSG00000038619";
-  private static final String OTHER_ENSEMBL_GENE_ID = "ENSMUSG00000000001";
+  private static final String ENSA_MOUSE_ENSEMBL_GENE_ID = "ENSMUSG00000038619";
+  private static final String OTHER_MOUSE_ENSEMBL_GENE_ID = "ENSMUSG00000000001";
+  private static final String MARMOSET_ENSEMBL_GENE_ID = "ENSCJAG00000003645";
   private static final String PLEC_GENE_SYMBOL = "plec";
 
   private CustomTranscriptomicsRepositoryImpl repository;
@@ -192,20 +193,20 @@ class CustomTranscriptomicsRepositoryImplTest {
   @Test
   @DisplayName("should search ensembl_gene_id only when search is a full ensembl gene id")
   void shouldSearchEnsemblGeneIdOnlyWhenSearchIsFullEnsemblGeneId() {
-    Document searchCondition = searchConditionFor(ENSA_ENSEMBL_GENE_ID);
+    Document searchCondition = searchConditionFor(ENSA_MOUSE_ENSEMBL_GENE_ID);
 
     assertThat(searchCondition.keySet())
       .as("a full ensembl gene id routes to ensembl_gene_id with no gene_symbol branch")
       .containsExactly(ENSEMBL_GENE_ID_FIELD);
     assertThat(inPatterns(searchCondition, ENSEMBL_GENE_ID_FIELD))
       .extracting(Pattern::pattern)
-      .containsExactly(fullMatch(ENSA_ENSEMBL_GENE_ID));
+      .containsExactly(fullMatch(ENSA_MOUSE_ENSEMBL_GENE_ID));
   }
 
   @Test
   @DisplayName("should match case-insensitively when search is a lowercase full ensembl gene id")
   void shouldMatchCaseInsensitivelyWhenSearchIsLowercaseFullEnsemblGeneId() {
-    Document searchCondition = searchConditionFor(ENSA_ENSEMBL_GENE_ID.toLowerCase());
+    Document searchCondition = searchConditionFor(ENSA_MOUSE_ENSEMBL_GENE_ID.toLowerCase());
 
     assertThat(searchCondition.keySet()).containsExactly(ENSEMBL_GENE_ID_FIELD);
     assertThat(inPatterns(searchCondition, ENSEMBL_GENE_ID_FIELD)).allSatisfy(pattern ->
@@ -218,14 +219,16 @@ class CustomTranscriptomicsRepositoryImplTest {
     "should route terms independently when search mixes a full ensembl gene id and a gene symbol"
   )
   void shouldRouteTermsIndependentlyWhenSearchMixesFullEnsemblGeneIdAndGeneSymbol() {
-    List<Document> branches = searchBranchesFor(ENSA_ENSEMBL_GENE_ID + "," + PLEC_GENE_SYMBOL);
+    List<Document> branches = searchBranchesFor(
+      ENSA_MOUSE_ENSEMBL_GENE_ID + "," + PLEC_GENE_SYMBOL
+    );
 
     assertThat(branches)
       .as("ensembl_gene_id branch, gene_symbol branch, and blank-guarded fallback branch")
       .hasSize(3);
     assertThat(inPatterns(branchFor(branches, ENSEMBL_GENE_ID_FIELD), ENSEMBL_GENE_ID_FIELD))
       .extracting(Pattern::pattern)
-      .containsExactly(fullMatch(ENSA_ENSEMBL_GENE_ID));
+      .containsExactly(fullMatch(ENSA_MOUSE_ENSEMBL_GENE_ID));
     assertThat(inPatterns(branchFor(branches, GENE_SYMBOL_FIELD), GENE_SYMBOL_FIELD))
       .as("the ensembl gene id term must not leak into the gene_symbol partition")
       .extracting(Pattern::pattern)
@@ -238,26 +241,29 @@ class CustomTranscriptomicsRepositoryImplTest {
   )
   void shouldRouteAllTermsToEnsemblGeneIdWhenEveryCommaTermIsFullEnsemblGeneId() {
     Document searchCondition = searchConditionFor(
-      ENSA_ENSEMBL_GENE_ID + "," + OTHER_ENSEMBL_GENE_ID
+      ENSA_MOUSE_ENSEMBL_GENE_ID + "," + OTHER_MOUSE_ENSEMBL_GENE_ID
     );
 
     assertThat(searchCondition.keySet()).containsExactly(ENSEMBL_GENE_ID_FIELD);
     assertThat(inPatterns(searchCondition, ENSEMBL_GENE_ID_FIELD))
       .extracting(Pattern::pattern)
-      .containsExactly(fullMatch(ENSA_ENSEMBL_GENE_ID), fullMatch(OTHER_ENSEMBL_GENE_ID));
+      .containsExactly(
+        fullMatch(ENSA_MOUSE_ENSEMBL_GENE_ID),
+        fullMatch(OTHER_MOUSE_ENSEMBL_GENE_ID)
+      );
   }
 
   @Test
   @DisplayName("should trim terms when comma-separated terms have surrounding whitespace")
   void shouldTrimTermsWhenCommaSeparatedTermsHaveSurroundingWhitespace() {
     List<Document> branches = searchBranchesFor(
-      "  " + ENSA_ENSEMBL_GENE_ID + " , " + PLEC_GENE_SYMBOL + "  "
+      "  " + ENSA_MOUSE_ENSEMBL_GENE_ID + " , " + PLEC_GENE_SYMBOL + "  "
     );
 
     assertThat(branches).hasSize(3);
     assertThat(inPatterns(branchFor(branches, ENSEMBL_GENE_ID_FIELD), ENSEMBL_GENE_ID_FIELD))
       .extracting(Pattern::pattern)
-      .containsExactly(fullMatch(ENSA_ENSEMBL_GENE_ID));
+      .containsExactly(fullMatch(ENSA_MOUSE_ENSEMBL_GENE_ID));
     assertThat(inPatterns(branchFor(branches, GENE_SYMBOL_FIELD), GENE_SYMBOL_FIELD))
       .extracting(Pattern::pattern)
       .containsExactly(fullMatch(PLEC_GENE_SYMBOL));
@@ -266,17 +272,18 @@ class CustomTranscriptomicsRepositoryImplTest {
   @Test
   @DisplayName("should fall back to gene_symbol when search is a partial ensembl gene id")
   void shouldFallBackToGeneSymbolWhenSearchIsPartialEnsemblGeneId() {
-    String partialEnsemblGeneId = ENSA_ENSEMBL_GENE_ID.substring(
+    String partialEnsemblGeneId = ENSA_MOUSE_ENSEMBL_GENE_ID.substring(
       0,
-      ENSA_ENSEMBL_GENE_ID.length() - 1
+      ENSA_MOUSE_ENSEMBL_GENE_ID.length() - 1
     );
     List<Document> branches = searchBranchesFor(partialEnsemblGeneId);
 
     assertThat(branches)
       .as("gene_symbol partial match plus blank-guarded ensembl_gene_id fallback")
       .hasSize(2);
-    Pattern geneSymbolPattern = (Pattern) branchFor(branches, GENE_SYMBOL_FIELD)
-      .get(GENE_SYMBOL_FIELD);
+    Pattern geneSymbolPattern = (Pattern) branchFor(branches, GENE_SYMBOL_FIELD).get(
+      GENE_SYMBOL_FIELD
+    );
     assertThat(geneSymbolPattern.pattern())
       .as("a partial term stays an unanchored partial match")
       .isEqualTo(Pattern.quote(partialEnsemblGeneId));
@@ -285,13 +292,28 @@ class CustomTranscriptomicsRepositoryImplTest {
   @Test
   @DisplayName("should fall back to gene_symbol when an ensembl gene id has a version suffix")
   void shouldFallBackToGeneSymbolWhenEnsemblGeneIdHasVersionSuffix() {
-    String versionedEnsemblGeneId = ENSA_ENSEMBL_GENE_ID + ".5";
+    String versionedEnsemblGeneId = ENSA_MOUSE_ENSEMBL_GENE_ID + ".5";
     List<Document> branches = searchBranchesFor(versionedEnsemblGeneId);
 
     assertThat(branches).hasSize(2);
-    Pattern geneSymbolPattern = (Pattern) branchFor(branches, GENE_SYMBOL_FIELD)
-      .get(GENE_SYMBOL_FIELD);
+    Pattern geneSymbolPattern = (Pattern) branchFor(branches, GENE_SYMBOL_FIELD).get(
+      GENE_SYMBOL_FIELD
+    );
     assertThat(geneSymbolPattern.pattern()).isEqualTo(Pattern.quote(versionedEnsemblGeneId));
+  }
+
+  @Test
+  @DisplayName("should fall back to gene_symbol when search is a marmoset ensembl gene id")
+  void shouldFallBackToGeneSymbolWhenSearchIsMarmosetEnsemblGeneId() {
+    List<Document> branches = searchBranchesFor(MARMOSET_ENSEMBL_GENE_ID);
+
+    assertThat(branches)
+      .as("a non-mouse ensembl gene id is not a full ensembl gene id for this collection")
+      .hasSize(2);
+    Pattern geneSymbolPattern = (Pattern) branchFor(branches, GENE_SYMBOL_FIELD).get(
+      GENE_SYMBOL_FIELD
+    );
+    assertThat(geneSymbolPattern.pattern()).isEqualTo(Pattern.quote(MARMOSET_ENSEMBL_GENE_ID));
   }
 
   @Test

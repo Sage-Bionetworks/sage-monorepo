@@ -46,7 +46,7 @@ public class CustomTranscriptomicsRepositoryImpl
    * this filterbox is case-insensitive; without it a lower-cased ID would fall through to the
    * gene_symbol path and return nothing.
    */
-  private static final Pattern FULL_ENSEMBL_GENE_ID = Pattern.compile(
+  private static final Pattern FULL_MOUSE_ENSEMBL_GENE_ID = Pattern.compile(
     "^ENSMUSG\\d{11}$",
     Pattern.CASE_INSENSITIVE
   );
@@ -257,7 +257,7 @@ public class CustomTranscriptomicsRepositoryImpl
   }
 
   private static boolean isFullEnsemblGeneId(String term) {
-    return FULL_ENSEMBL_GENE_ID.matcher(term).matches();
+    return FULL_MOUSE_ENSEMBL_GENE_ID.matcher(term).matches();
   }
 
   private static Criteria equalsAnyIgnoringCase(String field, List<String> terms) {
