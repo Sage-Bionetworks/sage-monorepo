@@ -410,7 +410,7 @@ test.describe('mouse model details - boxplots selector - table of contents', () 
     await expect(
       newTab.getByRole('heading', { level: 2, name: section, exact: true }),
     ).toBeInViewport();
-    await expectPageNotAtTop(page);
+    await expectPageNotAtTop(newTab);
   });
 
   test('clicking a TOC link moves focus to its section heading', async ({ page }) => {

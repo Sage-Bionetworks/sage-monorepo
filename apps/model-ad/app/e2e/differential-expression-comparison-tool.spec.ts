@@ -399,7 +399,7 @@ test.describe('differential expression', () => {
 
   test('link for model with special characters opens model details page', async ({ page }) => {
     const specialModel = '5xFAD (IU/Jax/Pitt)';
-    const specialModelEncoded = '5xFAD%20%28IU%2FJax%2FPitt%29';
+    const specialModelEncoded = '5xFAD%20%2528IU%252FJax%252FPitt%2529';
 
     await navigateToComparison(page, CT_PAGE, true);
 

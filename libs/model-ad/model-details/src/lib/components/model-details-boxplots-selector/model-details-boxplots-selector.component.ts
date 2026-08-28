@@ -314,7 +314,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
   getUpdatedUrlFragment(fragment: string | undefined): string {
     const fragmentPart = fragment ? `#${fragment}` : '';
-    return `${window.location.pathname}${window.location.search}${fragmentPart}`;
+    return `${this.location.path()}${fragmentPart}`;
   }
 
   updateUrlFragment(fragment: string | undefined): void {
@@ -387,13 +387,14 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     // A bare `#fragment` href resolves against `<base href="/">` and lands on the home page, and
     // routerLink can't supply the current URL because the panel segment is set with replaceState
     return this.location.prepareExternalUrl(
-      `${this.location.path()}#${this.generateAnchorId(item)}`,
+      this.getUpdatedUrlFragment(this.generateAnchorId(item)),
     );
   }
 
   onTocLinkClick(event: MouseEvent, anchorId: string): void {
-    // Let the browser handle modified clicks so the link can still be opened in a new tab
-    if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+    // Let the browser handle modified clicks so the link can still be opened in a new tab,
+    // window, or download
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
     event.preventDefault();
     this.scrollToSection(anchorId);

@@ -79,7 +79,7 @@ test.describe('marmoset model details - boxplots selector', () => {
     await expect(
       newTab.getByRole('heading', { level: 3, name: ageSection, exact: true }),
     ).toBeInViewport();
-    await expectPageNotAtTop(page);
+    await expectPageNotAtTop(newTab);
   });
 
   test('loading a page with an age fragment highlights the age group heading', async ({ page }) => {

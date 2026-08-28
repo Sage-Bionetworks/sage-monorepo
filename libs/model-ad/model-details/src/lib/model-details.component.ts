@@ -158,8 +158,9 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   /**
    * Specifies the active panel when either no panel is specified in the path or when the specified
    * panel is disabled or doesn't exist.
-   * If no panel is specified, then use the default panel and retain all query parameters and hash
-   * fragments.
+   * If no panel is specified, then use the default panel and leave the URL untouched, retaining all
+   * query parameters and hash fragments. modelOrganism does not need appending here because
+   * modelOrganismGuard has already redirected the URL to carry it.
    * If a disabled or invalid panel is specified, then drop the query parameters and hash fragment
    * (other than the required modelOrganism query parameter).
    */
@@ -170,7 +171,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     this.activePanel = fallback.activePanel;
     this.activeParent = fallback.activeParent;
 
-    if (params.get('tab') ?? params.get('subtab')) {
+    if (params.has('tab')) {
       this.location.replaceState(this.appendModelOrganism(this.getUrlBasePath()));
       this.maybeScrollToPanelNavElementOnInitialLoad = false;
     }
