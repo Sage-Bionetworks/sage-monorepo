@@ -284,15 +284,37 @@ public final class ApiHelper {
   }
 
   /**
+   * Splits a comma-separated search string into trimmed, non-empty terms.
+   *
+   * @param commaSeparatedNames comma-separated list of names
+   * @return list of trimmed terms, excluding blank ones
+   */
+  public static List<String> splitSearchTerms(String commaSeparatedNames) {
+    return Arrays.stream(commaSeparatedNames.split(","))
+      .map(String::trim)
+      .filter(s -> !s.isEmpty())
+      .toList();
+  }
+
+  /**
    * Creates case-insensitive full match regex patterns from comma-separated names.
    *
    * @param commaSeparatedNames comma-separated list of names
    * @return list of compiled regex patterns for case-insensitive exact matching
    */
   public static List<Pattern> createCaseInsensitiveFullMatchPatterns(String commaSeparatedNames) {
-    return Arrays.stream(commaSeparatedNames.split(","))
-      .map(String::trim)
-      .filter(s -> !s.isEmpty())
+    return createCaseInsensitiveFullMatchPatterns(splitSearchTerms(commaSeparatedNames));
+  }
+
+  /**
+   * Creates case-insensitive full match regex patterns from already-split names.
+   *
+   * @param names list of names, expected to be trimmed and non-empty
+   * @return list of compiled regex patterns for case-insensitive exact matching
+   */
+  public static List<Pattern> createCaseInsensitiveFullMatchPatterns(List<String> names) {
+    return names
+      .stream()
       .map(name -> Pattern.compile("^" + Pattern.quote(name) + "$", Pattern.CASE_INSENSITIVE))
       .toList();
   }

@@ -73,7 +73,7 @@ export class GeneDetailsComponent implements OnInit {
     const modelIdentifier = modelGroup || modelName;
     this.modelIdentifier.set(modelIdentifier);
 
-    if (ensemblGeneId && tissue && modelIdentifierType && modelIdentifier) {
+    if (ensemblGeneId && tissue && modelIdentifier) {
       const query: TranscriptomicsIndividualFilterQuery = {
         ensemblGeneId,
         tissue,

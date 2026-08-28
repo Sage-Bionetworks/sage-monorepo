@@ -1,4 +1,4 @@
-import { SearchResult } from '@sagebionetworks/explorers/models';
+import { SearchResult, SearchResultIcon } from '@sagebionetworks/explorers/models';
 import { delay, Observable, of } from 'rxjs';
 
 const dummySearchResults: SearchResult[] = [
@@ -16,8 +16,8 @@ const dummySearchResults: SearchResult[] = [
 
 const dummyEmptySearchResults: SearchResult[] = [];
 
-export function mockNavigateToResult(id: string): void {
-  alert(`Navigating to ${id}`);
+export function mockNavigateToResult(result: SearchResult): void {
+  alert(`Navigating to ${result.id}`);
 }
 
 export function mockGetSearchResults(query: string): Observable<SearchResult[]> {
@@ -54,4 +54,22 @@ export function mockSanitizeQuery(query: string): string {
 
 export function mockFormatResultSubtextForDisplay(result: SearchResult): string | undefined {
   return result.match_value;
+}
+
+export const mockMouseResultIcon: SearchResultIcon = {
+  imagePath: 'model-ad-assets/images/mouse-head.svg',
+  label: 'mouse model',
+};
+
+export const mockMarmosetResultIcon: SearchResultIcon = {
+  imagePath: 'model-ad-assets/images/marmoset-head.svg',
+  label: 'marmoset model',
+};
+
+export function mockGetResultIcon(): SearchResultIcon {
+  return mockMouseResultIcon;
+}
+
+export function mockGetMixedResultIcons(result: SearchResult): SearchResultIcon {
+  return result.match_field === 'aliases' ? mockMarmosetResultIcon : mockMouseResultIcon;
 }

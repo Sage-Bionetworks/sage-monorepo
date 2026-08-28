@@ -4,10 +4,12 @@ import {
   expectCategoriesParams,
   expectPinnedParams,
   expectPinnedRows,
+  expectSearchResults,
   getHeatmapDetailsPanelSubHeadings,
   getPinnedTable,
   getQueryParamFromValues,
   getQueryParamsFromRecords,
+  getRowByName,
   getUnpinnedTable,
   getVisibleHeatmapCircleButtons,
   pinByName,
@@ -24,7 +26,6 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
-  testPartialCaseInsensitiveSearch,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
@@ -50,6 +51,25 @@ const cacul1Matches = [
   'ENSMUSG00000033417~3xTg-AD~Male',
   'ENSMUSG00000033417~Abca7*V1599M~Female',
   'ENSMUSG00000033417~Abca7*V1599M~Male',
+];
+const ensaEnsemblGeneId = 'ENSMUSG00000038619';
+const ensaMatches = [
+  `${ensaEnsemblGeneId}~3xTg-AD~Female`,
+  `${ensaEnsemblGeneId}~3xTg-AD~Male`,
+  `${ensaEnsemblGeneId}~Abca7*V1599M~Female`,
+  `${ensaEnsemblGeneId}~Abca7*V1599M~Male`,
+]; // Ensa
+const plecGeneSymbol = 'plec';
+const plecMatches = [
+  'ENSMUSG00000022565~3xTg-AD~Female',
+  'ENSMUSG00000022565~3xTg-AD~Male',
+  'ENSMUSG00000022565~Abca7*V1599M~Female',
+  'ENSMUSG00000022565~Abca7*V1599M~Male',
+]; // Plec
+const noGeneSymbolEnsemblGeneId = 'ENSMUSG00000037982';
+const noGeneSymbolMatches = [
+  `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Female`,
+  `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Male`,
 ];
 
 test.describe('differential expression', () => {
@@ -126,7 +146,7 @@ test.describe('differential expression', () => {
     page,
   }) => {
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
-    await testPartialCaseInsensitiveSearch(page, 'acul', cacul1Matches);
+    await expectSearchResults(page, 'acul', cacul1Matches);
   });
 
   test('filterbox search excludes pinned items from results', async ({ page }) => {
@@ -157,12 +177,62 @@ test.describe('differential expression', () => {
     page,
   }) => {
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
-    await testPartialCaseInsensitiveSearch(page, '(r', [
+    await expectSearchResults(page, '(r', [
       'ENSMUSG00000086429~3xTg-AD~Female',
       'ENSMUSG00000086429~3xTg-AD~Male',
       'ENSMUSG00000086429~Abca7*V1599M~Female',
       'ENSMUSG00000086429~Abca7*V1599M~Male',
     ]); // Gt(ROSA)26Sor
+  });
+
+  test('filterbox search with full ensembl gene id returns rows for that gene', async ({
+    page,
+  }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
+    await expectSearchResults(page, ensaEnsemblGeneId, ensaMatches);
+  });
+
+  test('filterbox search with lowercase full ensembl gene id returns rows for that gene', async ({
+    page,
+  }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
+    await expectSearchResults(page, ensaEnsemblGeneId.toLowerCase(), ensaMatches);
+  });
+
+  test('filterbox search with comma-separated ensembl gene id and gene symbol returns both genes', async ({
+    page,
+  }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
+    await expectSearchResults(page, `${ensaEnsemblGeneId},${plecGeneSymbol}`, [
+      ...ensaMatches,
+      ...plecMatches,
+    ]);
+  });
+
+  test('filterbox search with full ensembl gene id returns rows for a gene without a gene symbol', async ({
+    page,
+  }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
+    await expectSearchResults(page, noGeneSymbolEnsemblGeneId, noGeneSymbolMatches);
+  });
+
+  test('filterbox search with partial ensembl gene id matches rows without a gene symbol', async ({
+    page,
+  }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
+    await expectSearchResults(page, noGeneSymbolEnsemblGeneId.slice(0, -1), noGeneSymbolMatches);
+  });
+
+  test('filterbox search with partial ensembl gene id matches gene symbols and ensembl gene ids', async ({
+    page,
+  }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
+    await searchViaFilterbox(page, 'ens');
+
+    const unpinnedTable = getUnpinnedTable(page);
+    for (const rowName of [...ensaMatches, ...noGeneSymbolMatches]) {
+      await expect(getRowByName(unpinnedTable, page, rowName)).toBeVisible();
+    }
   });
 
   test('pinned items are cached when switching between categories', async ({ page }) => {

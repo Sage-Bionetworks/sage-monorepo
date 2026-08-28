@@ -13,6 +13,10 @@
     --color-comparison-tool-#{$key}: #{$color};
   }
 
+  @each $key, $color in vars.$search-input-colors {
+    --color-search-input-#{$key}: #{$color};
+  }
+
   @each $size, $properties in vars.$headings {
     @each $property, $value in $properties {
       --#{$property}-#{$size}: #{$value};

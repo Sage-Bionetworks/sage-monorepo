@@ -1,26 +1,28 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('home', () => {
-  test('model overview card links to model overview CT', async ({ page }) => {
+  test('mouse model overview card links to mouse model overview CT', async ({ page }) => {
     await page.goto('');
 
-    const modelOverviewCard = page
+    const mouseModelOverviewCard = page
       .getByRole('button')
-      .filter({ has: page.getByRole('heading', { level: 2, name: 'Model Overview' }) });
-    await expect(modelOverviewCard).toBeVisible();
+      .filter({ has: page.getByRole('heading', { level: 2, name: 'Mouse Model Overview' }) });
+    await expect(mouseModelOverviewCard).toBeVisible();
 
-    await modelOverviewCard.click();
+    await mouseModelOverviewCard.click();
 
-    await page.waitForURL('/comparison/model');
-    await expect(page.getByRole('heading', { level: 1, name: 'Model Overview' })).toBeVisible();
+    await page.waitForURL('/comparison/model/mouse');
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Mouse Model Overview' }),
+    ).toBeVisible();
   });
 
   test('differential expression card links to differential expression CT', async ({ page }) => {
     await page.goto('');
 
-    const differentialExpressionCard = page
-      .getByRole('button')
-      .filter({ has: page.getByRole('heading', { level: 2, name: 'Differential Expression' }) });
+    const differentialExpressionCard = page.getByRole('button').filter({
+      has: page.getByRole('heading', { level: 2, name: 'Mouse Differential Expression' }),
+    });
     await expect(differentialExpressionCard).toBeVisible();
 
     await differentialExpressionCard.click();

@@ -411,4 +411,82 @@ class ComparisonToolRepositorySupportTest {
       assertThat(pipeline).contains("\"name_sort\" : 1");
     }
   }
+
+  @Test
+  @DisplayName("should append _id as final tiebreaker in sort document for deterministic pagination")
+  void shouldAppendIdTiebreakerInSortDocument() {
+    BareRepo repo = new BareRepo(mongoTemplate);
+    stubMongoTemplate(0L);
+
+    Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("name")));
+    repo.run(new Criteria(), pageable);
+
+    String pipeline = capturePipeline().toString();
+    assertThat(pipeline).contains("\"_id\" : 1");
+    int nameIdx = pipeline.indexOf("\"name\" : 1");
+    int idIdx = pipeline.indexOf("\"_id\" : 1");
+    assertThat(idIdx).as("_id should appear after the user-requested sort field").isGreaterThan(nameIdx);
+  }
+
+  @Test
+  @DisplayName("should append _id once, after all sort keys, when multiple sort orders are requested")
+  void shouldAppendIdTiebreakerOnceAfterAllSortKeysForMultiSort() {
+    ComputedRepo repo = new ComputedRepo(mongoTemplate);
+    stubMongoTemplate(0L);
+
+    Pageable pageable = PageRequest.of(
+      0,
+      10,
+      Sort.by(Sort.Order.asc("name"), Sort.Order.desc("hgnc_symbol"))
+    );
+    repo.run(new Criteria(), pageable);
+
+    String pipeline = capturePipeline().toString();
+    assertThat(pipeline)
+      .as("_id must be appended exactly once, not per sort order")
+      .containsOnlyOnce("\"_id\" : 1");
+
+    int computedIdx = pipeline.indexOf("\"name_sort\" : 1");
+    int plainIdx = pipeline.indexOf("\"hgnc_symbol\" : -1");
+    int idIdx = pipeline.indexOf("\"_id\" : 1");
+    assertThat(idIdx)
+      .as("_id must rank below the computed first sort key")
+      .isGreaterThan(computedIdx);
+    assertThat(idIdx)
+      .as("_id must rank below the second sort key so it only breaks full ties")
+      .isGreaterThan(plainIdx);
+  }
+
+  @Test
+  @DisplayName("should preserve the caller's descending _id direction when sorting by _id")
+  void shouldPreserveCallerIdSortWhenSortingById() {
+    BareRepo repo = new BareRepo(mongoTemplate);
+    stubMongoTemplate(0L);
+
+    Pageable pageable = PageRequest.of(
+      0,
+      10,
+      Sort.by(Sort.Order.desc("_id"), Sort.Order.asc("name"))
+    );
+    repo.run(new Criteria(), pageable);
+
+    String pipeline = capturePipeline().toString();
+    assertThat(pipeline)
+      .as("the caller's descending _id direction must not be overwritten by the tiebreaker")
+      .contains("\"_id\" : -1")
+      .doesNotContain("\"_id\" : 1");
+  }
+
+  @Test
+  @DisplayName("should not include _id tiebreaker when no sort is requested")
+  void shouldNotIncludeIdTiebreakerWhenUnsorted() {
+    BareRepo repo = new BareRepo(mongoTemplate);
+    stubMongoTemplate(0L);
+
+    Pageable pageable = PageRequest.of(0, 10);
+    repo.run(new Criteria(), pageable);
+
+    String pipeline = capturePipeline().toString();
+    assertThat(pipeline).doesNotContain("\"_id\" : 1");
+  }
 }

@@ -283,7 +283,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
    *
    * <ul>
    *   <li>Comma-separated search → exact match (case-insensitive) via
-   *       {@link ApiHelper#createCaseInsensitiveFullMatchPatterns}
+   *       {@link ApiHelper#createCaseInsensitiveFullMatchPatterns(String)}
    *   <li>Single term → partial match (case-insensitive regex)
    * </ul>
    *
@@ -412,6 +412,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
       }
       sortDoc.append(ApiHelper.isEmptyFlagKey(field), 1);
       sortDoc.append(resolved, order.isAscending() ? 1 : -1);
+    }
+    // Break ties on _id so equal sort values keep a stable order across pages. Skip when the
+    // caller already sorts by _id -- re-appending would overwrite their direction.
+    if (!sortDoc.containsKey("_id")) {
+      sortDoc.append("_id", 1);
     }
 
     return context -> new Document("$sort", sortDoc);

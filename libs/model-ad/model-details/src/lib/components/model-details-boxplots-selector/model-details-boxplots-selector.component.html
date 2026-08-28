@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <div class="table-of-contents-container full-width-container" #tableOfContentsContainer>
+  <div class="table-of-contents-container plots-width-bleed" #tableOfContentsContainer>
     <div class="table-of-contents-title-bar">
       <h2>Table of Contents</h2>
       <div class="title-bar-actions">
@@ -72,7 +72,11 @@
       <ul class="table-of-contents" id="toc-list">
         @for (item of tocItems(); track item) {
           <li>
-            <button (click)="scrollToSection(generateAnchorId(item))" data-testid="toc-item-link">
+            <button
+              (click)="scrollToSection(generateAnchorId(item))"
+              [class.highlighted]="isHighlightedFn(generateAnchorId(item))"
+              data-testid="toc-item-link"
+            >
               {{ item | decodeGreekEntity }}
             </button>
           </li>
@@ -85,14 +89,16 @@
     @for (section of boxplotSections(); track section.evidenceType; let last = $last) {
       @let evidenceType = section.evidenceType;
       <div
-        class="boxplots-evidence-type"
+        class="boxplots-evidence-type plots-width-bleed"
         [id]="generateAnchorId(evidenceType)"
         (mouseenter)="activeShareLink.set(evidenceType)"
         (mouseleave)="activeShareLink.set('')"
       >
         <div class="boxplots-evidence-type-title-bar">
           <div class="boxplots-evidence-type-title">
-            <h2>{{ evidenceType | decodeGreekEntity }}</h2>
+            <h2 [class.highlighted]="isHighlightedFn(generateAnchorId(evidenceType))">
+              {{ evidenceType | decodeGreekEntity }}
+            </h2>
             @if (showSectionShareLink() && activeShareLink() === evidenceType) {
               <explorers-copy-link-button
                 [onClick]="copyShareLinkCallbackFn(evidenceType)"
@@ -114,24 +120,24 @@
           }
         </div>
 
-        <!-- Wrapper handles full-width positioning; inner div is the download capture
-             target so html-to-image doesn't re-apply the wrapper's pixel offsets -->
-        <div class="boxplots-full-width-wrapper">
-          <div #sectionBody>
-            <ng-container
-              [ngTemplateOutlet]="sectionTemplate()"
-              [ngTemplateOutletContext]="{
-                data: sectionDataByEvidenceType().get(evidenceType)?.transformedData,
-                sexFilter: selectedSexOption().value,
-                copyLinkFn: copyShareLinkCallbackFn,
-                tooltipTextFn: getShareLinkTooltipText,
-                setActiveShareLink: setActiveShareLinkFn,
-                clearActiveShareLink: clearActiveShareLinkFn,
-                isShareLinkActive: isShareLinkActiveFn,
-              }"
-            />
-          </div>
+        <!-- Download capture target: the capture is sized from this element's own width
+             and offsets, so the viewport bleed has to live on the wrapper above -->
+        <div #sectionBody>
+          <ng-container
+            [ngTemplateOutlet]="sectionTemplate()"
+            [ngTemplateOutletContext]="{
+              data: sectionDataByEvidenceType().get(evidenceType)?.transformedData,
+              sexFilter: selectedSexOption().value,
+              copyLinkFn: copyShareLinkCallbackFn,
+              tooltipTextFn: getShareLinkTooltipText,
+              setActiveShareLink: setActiveShareLinkFn,
+              clearActiveShareLink: clearActiveShareLinkFn,
+              isShareLinkActive: isShareLinkActiveFn,
+              isHighlighted: isHighlightedFn,
+            }"
+          />
         </div>
+
         @if (!last) {
           <hr class="boxplots-separator" />
         }

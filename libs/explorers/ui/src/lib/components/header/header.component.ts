@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, input, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
+import { WidestLineWidthDirective } from '@sagebionetworks/explorers/util';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
   selector: 'explorers-header',
-  imports: [CommonModule, SvgImageComponent, RouterModule, MenuModule],
+  imports: [CommonModule, SvgImageComponent, RouterModule, MenuModule, WidestLineWidthDirective],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })

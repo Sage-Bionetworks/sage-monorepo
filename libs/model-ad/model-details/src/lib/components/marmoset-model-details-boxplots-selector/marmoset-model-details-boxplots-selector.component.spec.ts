@@ -1,4 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
+import { By } from '@angular/platform-browser';
 import { LoggerService, SvgIconService } from '@sagebionetworks/explorers/services';
 import {
   MockWikiComponent,
@@ -8,7 +9,13 @@ import {
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { marmosetModelDataMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
+import {
+  ANCHOR_HIGHLIGHT_HOLD_MS,
+  ModelDetailsBoxplotsSelectorComponent,
+} from '../model-details-boxplots-selector/model-details-boxplots-selector.component';
 import { MarmosetModelDetailsBoxplotsSelectorComponent } from './marmoset-model-details-boxplots-selector.component';
+
+const ageGroup = '0-1 year';
 
 async function setup() {
   const { fixture } = await render(MarmosetModelDetailsBoxplotsSelectorComponent, {
@@ -17,11 +24,11 @@ async function setup() {
       title: 'Plasma Biomarkers',
       modelName: 'Presenilin 1',
       modelDataList: marmosetModelDataMock,
-      wikiParams: validWikiParams,
+      wikiParams: validWikiParams[0],
     },
     providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
   });
-  return { component: fixture.componentInstance };
+  return { fixture, component: fixture.componentInstance };
 }
 
 describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
@@ -72,7 +79,7 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
         title: 'Plasma Biomarkers',
         modelName: 'Presenilin 1',
         modelDataList: duplicateAgeData,
-        wikiParams: validWikiParams,
+        wikiParams: validWikiParams[0],
       },
       providers: [
         provideHttpClient(),
@@ -87,5 +94,26 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining('expected 1 ModelData per age group but got 2'),
     );
+  });
+
+  it('should highlight the age group heading of the highlighted anchor until the hold elapses', async () => {
+    const { fixture, component } = await setup();
+    const base = fixture.debugElement.query(By.directive(ModelDetailsBoxplotsSelectorComponent))
+      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+
+    const heading = screen.getByRole('heading', { level: 3, name: ageGroup });
+    const anchorId = component.generateAnchorId(ageGroup);
+
+    jest.useFakeTimers();
+
+    base.highlightAnchor(anchorId);
+    fixture.detectChanges();
+    expect(heading).toHaveClass('highlighted');
+
+    jest.advanceTimersByTime(ANCHOR_HIGHLIGHT_HOLD_MS);
+    fixture.detectChanges();
+    expect(heading).not.toHaveClass('highlighted');
+
+    jest.useRealTimers();
   });
 });

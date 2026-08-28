@@ -3,9 +3,18 @@ import type { ComparisonToolPage } from '@sagebionetworks/model-ad/api-client';
 
 export const COMPARISON_TOOL_PATHS: Record<ComparisonToolPage, string> = {
   'Marmoset Model Overview': '/comparison/model/marmoset',
-  'Model Overview': '/comparison/model',
+  'Model Overview': '/comparison/model/mouse',
   'Differential Expression': '/comparison/expression',
   'Disease Correlation': '/comparison/correlation',
+};
+
+export const LEGACY_MOUSE_MODEL_OVERVIEW_PATH = '/comparison/model';
+
+// Comparison tools whose displayed header title differs from their ui_config page name.
+// TODO(MG-1057): drop this map once ui_config explicitly names the mouse page 'Mouse Model
+// Overview', since the keys above will then match the displayed titles.
+export const COMPARISON_TOOL_HEADER_TITLES: Record<string, string> = {
+  'Model Overview': 'Mouse Model Overview',
 };
 
 export const COMPARISON_TOOL_API_PATHS: Record<ComparisonToolPage, string> = {

@@ -160,13 +160,32 @@
 
       &.search-results-list {
         padding: 0;
+        display: grid;
+        grid-template-columns: auto 1fr;
+
+        --search-input-selected-background: var(--color-action-primary);
+        --search-input-selected-color: #fff;
+
+        // Optionally tint the row instead of inverting it, so icon art
+        // and text keep their own colors while hovered or keyboard-selected
+        &.light-result-highlight {
+          --search-input-selected-background: var(--color-search-input-result-highlight);
+          --search-input-selected-color: inherit;
+        }
 
         li {
           cursor: pointer;
 
+          // Each row subgrids the list's columns. That sizes the icon column to
+          // the widest icon in the list, so result text stays aligned across
+          // rows even when their icons have different intrinsic sizes
+          display: grid;
+          grid-template-columns: subgrid;
+          grid-column: 1 / -1;
+
           &.selected {
-            background-color: var(--color-action-primary);
-            color: white;
+            background-color: var(--search-input-selected-background);
+            color: var(--search-input-selected-color);
           }
 
           .result-button {
@@ -174,9 +193,28 @@
 
             text-align: left;
             width: 100%;
+            display: grid;
+            grid-template-columns: subgrid;
+            grid-column: 1 / -1;
+            align-items: center;
 
             &:hover {
               cursor: pointer;
+            }
+
+            .result-icon {
+              grid-column: 1;
+
+              // Spacing belongs to the icon rather than a column gap, so rows
+              // without icons keep their text flush against the row padding
+              margin-right: 10px;
+            }
+
+            .result-text {
+              grid-column: 2;
+              display: flex;
+              flex-direction: column;
+              min-width: 0;
             }
 
             .result-subtext {

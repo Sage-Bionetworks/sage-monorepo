@@ -1,4 +1,4 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, Locator, Page, test } from '@playwright/test';
 
 export function getTocContainer(page: Page) {
   return page.locator('.table-of-contents-container');
@@ -18,6 +18,22 @@ export function getTocList(page: Page) {
 
 export function getTocLinks(page: Page) {
   return getTocContainer(page).getByTestId('toc-item-link');
+}
+
+// The highlight is applied after hydration and first paint, which can lag on a cold CI worker.
+const HIGHLIGHT_APPEAR_TIMEOUT_MS = 10000;
+
+// Must exceed ANCHOR_HIGHLIGHT_HOLD_MS in model-details-boxplots-selector.component.ts.
+const HIGHLIGHT_CLEAR_TIMEOUT_MS = 10000;
+
+// All the highlights are asserted before any is waited out, since they share a single hold timer.
+export async function expectHighlightClears(...locators: Locator[]) {
+  for (const locator of locators) {
+    await expect(locator).toHaveClass(/highlighted/, { timeout: HIGHLIGHT_APPEAR_TIMEOUT_MS });
+  }
+  for (const locator of locators) {
+    await expect(locator).not.toHaveClass(/highlighted/, { timeout: HIGHLIGHT_CLEAR_TIMEOUT_MS });
+  }
 }
 
 // Expands the table of contents, then clicks every link and asserts it scrolls to its section.

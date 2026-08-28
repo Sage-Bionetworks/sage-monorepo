@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
   ColumnConfig,
+  expectSearchResults,
   getQueryParamFromValues,
   getQueryParamsFromRecords,
   runFilterPanelTests,
@@ -14,7 +15,6 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
-  testPartialCaseInsensitiveSearch,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
@@ -67,7 +67,7 @@ test.describe('nominated targets - comparison tool', () => {
       page,
     }) => {
       await navigateToComparison(page, CT_PAGE, true, 'url');
-      await testPartialCaseInsensitiveSearch(page, 'od', ['APOD', 'LMOD3', 'NEUROD6']);
+      await expectSearchResults(page, 'od', ['APOD', 'LMOD3', 'NEUROD6']);
     });
 
     test('filterbox search excludes pinned items from results', async ({ page }) => {

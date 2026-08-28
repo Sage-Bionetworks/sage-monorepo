@@ -40,7 +40,7 @@ test.describe('search', () => {
 
   test('can search for jax id', async ({ page }) => {
     const expectedResultsCount = 1;
-    const modelQuery = '306';
+    const modelQuery = '673';
 
     await page.goto('/');
     const { searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
@@ -48,7 +48,7 @@ test.describe('search', () => {
     await expect(searchListItems).toHaveCount(expectedResultsCount);
 
     for (let i = 0; i < expectedResultsCount; i++) {
-      await expect(searchListItems.nth(i)).toHaveText(/Jax ID: 0306/i);
+      await expect(searchListItems.nth(i)).toHaveText(/Jax ID: 030673/i);
     }
   });
 
@@ -71,7 +71,7 @@ test.describe('search', () => {
     await expect(searchListItems.first()).toHaveText(/trem2-r47h_nss/i);
     await expect(searchListItems.nth(1)).toHaveText(/trem2r47h/i);
     await expect(searchListItems.nth(2)).toHaveText(/load1 \(alias apoe4\/trem2\*r47h\)/i);
-    await expect(searchListItems.last()).toHaveText(/load1.snx1d465n/i);
+    await expect(searchListItems.last()).toHaveText(/load2/i);
   });
 
   test('can search using home card input', async ({ page }) => {

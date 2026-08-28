@@ -29,6 +29,8 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { generateAnchorId } from '../../utils';
 
+export const ANCHOR_HIGHLIGHT_HOLD_MS = 3000;
+
 export interface FilterConfig {
   label: string;
   queryParamKey: string;
@@ -43,6 +45,7 @@ export interface SectionContext<T = ModelData[]> {
   setActiveShareLink: (id: string) => void;
   clearActiveShareLink: () => void;
   isShareLinkActive: (anchorId: string) => boolean;
+  isHighlighted: (anchorId: string) => boolean;
 }
 
 @Component({
@@ -120,6 +123,9 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   activeShareLink = signal('');
   lastShareLinkCopied = signal('');
 
+  highlightedAnchorId = signal('');
+  private highlightTimeoutId?: ReturnType<typeof setTimeout>;
+
   isTocCollapsed = signal(true);
 
   constructor() {
@@ -168,6 +174,9 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   ngOnDestroy(): void {
     if (this.platformService.isBrowser) {
       window.removeEventListener('popstate', this.onPopState);
+    }
+    if (this.highlightTimeoutId) {
+      clearTimeout(this.highlightTimeoutId);
     }
   }
 
@@ -358,10 +367,24 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
         if (updateUrl) this.updateUrlFragment(anchorId);
 
+        this.highlightAnchor(anchorId);
+
         return true;
       }
     }
     return false;
+  }
+
+  highlightAnchor(anchorId: string): void {
+    if (this.highlightTimeoutId) {
+      clearTimeout(this.highlightTimeoutId);
+    }
+
+    this.highlightedAnchorId.set(anchorId);
+
+    this.highlightTimeoutId = setTimeout(() => {
+      this.highlightedAnchorId.set('');
+    }, ANCHOR_HIGHLIGHT_HOLD_MS);
   }
 
   getShareLinkTooltipText = (label: string): string => {
@@ -390,6 +413,10 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
   isShareLinkActiveFn = (anchorId: string): boolean => {
     return this.activeShareLink() === anchorId;
+  };
+
+  isHighlightedFn = (anchorId: string): boolean => {
+    return this.highlightedAnchorId() === anchorId;
   };
 
   decodeHtmlEntities(text: string): string {
