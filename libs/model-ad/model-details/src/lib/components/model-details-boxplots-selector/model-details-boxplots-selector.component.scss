@@ -116,9 +116,15 @@
         cursor: pointer;
         text-decoration: underline;
 
+        // focus-visible rather than focus: a mouse click leaves the button focused, which
+        // would hold the emphasis color past the end of the highlight
         &:hover,
-        &:focus {
+        &:focus-visible {
           color: var(--color-action-primary);
+        }
+
+        &.highlighted {
+          @include mixins.anchor-highlight;
         }
       }
     }
@@ -133,6 +139,10 @@
 
     .boxplots-evidence-type-title {
       @include mixins.boxplots-section-title;
+
+      h2.highlighted {
+        @include mixins.anchor-highlight;
+      }
     }
   }
 

@@ -18,7 +18,7 @@ async function setup() {
       modelName: mouseModelMock.name,
       modelControls: mouseModelMock.matched_controls,
       modelDataList: mouseModelMock.pathology,
-      wikiParams: validWikiParams,
+      wikiParams: validWikiParams[0],
     },
     providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
   });
@@ -90,7 +90,7 @@ describe('MouseModelDetailsBoxplotsSelectorComponent', () => {
         modelName: 'ModelName (Some Qualifier)',
         modelControls: ['Control1', 'Control2'],
         modelDataList: mockModelDataList,
-        wikiParams: validWikiParams,
+        wikiParams: validWikiParams[0],
       },
       providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
     });

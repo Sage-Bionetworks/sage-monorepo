@@ -72,7 +72,11 @@
       <ul class="table-of-contents" id="toc-list">
         @for (item of tocItems(); track item) {
           <li>
-            <button (click)="scrollToSection(generateAnchorId(item))" data-testid="toc-item-link">
+            <button
+              (click)="scrollToSection(generateAnchorId(item))"
+              [class.highlighted]="isHighlightedFn(generateAnchorId(item))"
+              data-testid="toc-item-link"
+            >
               {{ item | decodeGreekEntity }}
             </button>
           </li>
@@ -92,7 +96,9 @@
       >
         <div class="boxplots-evidence-type-title-bar">
           <div class="boxplots-evidence-type-title">
-            <h2>{{ evidenceType | decodeGreekEntity }}</h2>
+            <h2 [class.highlighted]="isHighlightedFn(generateAnchorId(evidenceType))">
+              {{ evidenceType | decodeGreekEntity }}
+            </h2>
             @if (showSectionShareLink() && activeShareLink() === evidenceType) {
               <explorers-copy-link-button
                 [onClick]="copyShareLinkCallbackFn(evidenceType)"
@@ -127,6 +133,7 @@
               setActiveShareLink: setActiveShareLinkFn,
               clearActiveShareLink: clearActiveShareLinkFn,
               isShareLinkActive: isShareLinkActiveFn,
+              isHighlighted: isHighlightedFn,
             }"
           />
         </div>
