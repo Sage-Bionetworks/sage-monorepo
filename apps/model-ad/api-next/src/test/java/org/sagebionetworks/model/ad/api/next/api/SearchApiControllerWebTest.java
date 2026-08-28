@@ -96,8 +96,8 @@ class SearchApiControllerWebTest {
   }
 
   @Test
-  @DisplayName("should return bad request when query violates the schema length constraint")
-  void shouldReturnBadRequestWhenQueryViolatesLengthConstraint() throws Exception {
+  @DisplayName("should return bad request problem when length constraint is violated")
+  void shouldReturnBadRequestProblemWhenLengthConstraintIsViolated() throws Exception {
     when(delegate.searchModels(eq("apoe"), any())).thenThrow(buildEmptyQueryViolation());
 
     mockMvc

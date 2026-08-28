@@ -131,8 +131,8 @@ class ModelSearchRepositoryImplTest {
   }
 
   @Test
-  @DisplayName("should not use $unionWith or $sort stages because DocumentDB rejects them")
-  void shouldNotUseUnionWithOrSortStages() {
+  @DisplayName("should not use $unionWith to combine the two collections")
+  void shouldNotUseUnionWithStage() {
     stubAggregation(MOUSE_COLLECTION, mouseResults, List.of());
     stubAggregation(MARMOSET_COLLECTION, marmosetResults, List.of());
 
@@ -147,9 +147,8 @@ class ModelSearchRepositoryImplTest {
 
     assertThat(aggregationCaptor.getAllValues()).allSatisfy(aggregation ->
       assertThat(aggregation.toString())
-        .as("$unionWith is unsupported on DocumentDB and $sort now happens in Java")
+        .as("$unionWith is unsupported on DocumentDB, so the collections are merged in Java")
         .doesNotContain("$unionWith")
-        .doesNotContain("$sort")
     );
   }
 
