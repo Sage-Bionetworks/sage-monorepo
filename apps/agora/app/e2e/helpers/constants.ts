@@ -1,3 +1,6 @@
+import type { ComparisonToolConfigPage } from '@sagebionetworks/agora/api-client';
+import type { ComparisonToolSort, HeaderNavTrail } from '@sagebionetworks/explorers/testing/e2e';
+
 // --------- GCT -----------------------------------------------------------------------------------
 export const GCT_CATEGORIES = {
   RNA: 'RNA - Differential Expression',
@@ -22,26 +25,38 @@ export const URL_GCT_PROTEIN = `${URL_GCT}?category=${GCT_CATEGORIES.PROTEIN}`;
 export const URL_GCT_PROTEIN_TMT = `${URL_GCT_PROTEIN}&subCategory=TMT`;
 
 // --------- explorers-based CTs -------------------------------------------------------------------
-export const COMPARISON_TOOL_PATHS: Record<string, string> = {
+export const COMPARISON_TOOL_PATHS: Record<ComparisonToolConfigPage, string> = {
   'Nominated Targets': '/comparison/targets',
   'Nominated Drugs': '/comparison/drugs',
 };
 
-export const COMPARISON_TOOL_API_PATHS: Record<string, string> = {
+export const COMPARISON_TOOL_API_PATHS: Record<ComparisonToolConfigPage, string> = {
   'Nominated Targets': '/comparison-tools/targets',
   'Nominated Drugs': '/comparison-tools/drugs',
+};
+
+export const COMPARISON_TOOL_NAV_TRAILS: Record<ComparisonToolConfigPage, HeaderNavTrail> = {
+  'Nominated Targets': {
+    dropdown: 'Nominations',
+    link: 'Nominated Targets',
+  },
+  'Nominated Drugs': {
+    dropdown: 'Nominations',
+    link: 'Nominated Drugs',
+  },
 };
 
 export const COMPARISON_TOOL_CONFIG_PATH = 'comparison-tools/config';
 
 // Default sort configurations for each comparison tool (required by API)
-export const COMPARISON_TOOL_DEFAULT_SORTS: Record<string, { field: string; order: 1 | -1 }[]> = {
-  'Nominated Targets': [
-    { field: 'total_nominations', order: -1 },
-    { field: 'hgnc_symbol', order: 1 },
-  ],
-  'Nominated Drugs': [
-    { field: 'total_nominations', order: -1 },
-    { field: 'common_name', order: 1 },
-  ],
-};
+export const COMPARISON_TOOL_DEFAULT_SORTS: Record<ComparisonToolConfigPage, ComparisonToolSort[]> =
+  {
+    'Nominated Targets': [
+      { field: 'total_nominations', order: -1 },
+      { field: 'hgnc_symbol', order: 1 },
+    ],
+    'Nominated Drugs': [
+      { field: 'total_nominations', order: -1 },
+      { field: 'common_name', order: 1 },
+    ],
+  };

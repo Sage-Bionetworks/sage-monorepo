@@ -115,13 +115,18 @@ export class HeaderComponent implements OnInit {
             items: child.children.map((grandchild) => ({
               label: grandchild.label,
               routerLink: grandchild.routerLink,
+              queryParams: grandchild.queryParams,
               styleClass: 'header-dropdown-subheader-child',
             })),
           });
         }
         // isSubheader with no children is a no-op
       } else {
-        items.push({ label: child.label, routerLink: child.routerLink });
+        items.push({
+          label: child.label,
+          routerLink: child.routerLink,
+          queryParams: child.queryParams,
+        });
       }
     }
     return items;
