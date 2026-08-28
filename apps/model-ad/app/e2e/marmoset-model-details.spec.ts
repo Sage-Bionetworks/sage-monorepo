@@ -5,7 +5,7 @@ import {
   expectHighlightClears,
   expectTocLinksScrollToSections,
   getTocExpandButton,
-  getTocLinks,
+  getTocLink,
 } from './helpers/model-details';
 
 test.describe('marmoset model details - boxplots selector', () => {
@@ -55,10 +55,31 @@ test.describe('marmoset model details - boxplots selector', () => {
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
 
     await getTocExpandButton(page).click();
-    await getTocLinks(page).filter({ hasText: ageSection }).click();
+    await getTocLink(page, ageSection).click();
 
     await expect(page.getByRole('heading', { level: 3, name: ageSection })).toBeInViewport();
     await page.waitForURL(`${biomarkersPath}#${ageFragment}`);
+  });
+
+  test('TOC link on a url with no tab segment opens the age group in a new tab', async ({
+    page,
+    context,
+  }) => {
+    await page.goto(noTabPath);
+    await getTocExpandButton(page).click();
+
+    const tocLink = getTocLink(page, ageSection);
+    await expect(tocLink).toHaveAttribute('href', `${noTabPath}#${ageFragment}`);
+
+    const newTabPromise = context.waitForEvent('page');
+    await tocLink.click({ modifiers: ['ControlOrMeta'] });
+    const newTab = await newTabPromise;
+
+    await expect(newTab).toHaveURL(`${noTabPath}#${ageFragment}`);
+    await expect(
+      newTab.getByRole('heading', { level: 3, name: ageSection, exact: true }),
+    ).toBeInViewport();
+    await expectPageNotAtTop(page);
   });
 
   test('loading a page with an age fragment highlights the age group heading', async ({ page }) => {

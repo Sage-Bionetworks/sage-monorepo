@@ -31,6 +31,8 @@ import { generateAnchorId } from '../../utils';
 
 export const ANCHOR_HIGHLIGHT_HOLD_MS = 3000;
 
+const SECTION_HEADING_SELECTOR = 'h1, h2, h3, h4, h5, h6';
+
 export interface FilterConfig {
   label: string;
   queryParamKey: string;
@@ -367,12 +369,34 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
         if (updateUrl) this.updateUrlFragment(anchorId);
 
+        // Focus the section's title heading rather than the section wrapper, which has no
+        // accessible name to announce. preventScroll keeps focus from cancelling the smooth
+        // scroll started above
+        const focusTarget = element.querySelector<HTMLElement>(SECTION_HEADING_SELECTOR) ?? element;
+        focusTarget.tabIndex = -1;
+        focusTarget.focus({ preventScroll: true });
         this.highlightAnchor(anchorId);
 
         return true;
       }
     }
     return false;
+  }
+
+  tocLinkHref(item: string): string {
+    // A bare `#fragment` href resolves against `<base href="/">` and lands on the home page, and
+    // routerLink can't supply the current URL because the panel segment is set with replaceState
+    return this.location.prepareExternalUrl(
+      `${this.location.path()}#${this.generateAnchorId(item)}`,
+    );
+  }
+
+  onTocLinkClick(event: MouseEvent, anchorId: string): void {
+    // Let the browser handle modified clicks so the link can still be opened in a new tab
+    if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+
+    event.preventDefault();
+    this.scrollToSection(anchorId);
   }
 
   highlightAnchor(anchorId: string): void {

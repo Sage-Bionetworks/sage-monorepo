@@ -17,7 +17,11 @@ export function getTocList(page: Page) {
 }
 
 export function getTocLinks(page: Page) {
-  return getTocContainer(page).getByTestId('toc-item-link');
+  return getTocContainer(page).getByRole('link');
+}
+
+export function getTocLink(page: Page, name: string) {
+  return getTocContainer(page).getByRole('link', { name, exact: true });
 }
 
 // The highlight is applied after hydration and first paint, which can lag on a cold CI worker.
