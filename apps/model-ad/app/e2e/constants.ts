@@ -13,7 +13,7 @@ export const LEGACY_MOUSE_MODEL_OVERVIEW_PATH = '/comparison/model';
 // Comparison tools whose displayed header title differs from their ui_config page name.
 // TODO(MG-1057): drop this map once ui_config explicitly names the mouse page 'Mouse Model
 // Overview', since the keys above will then match the displayed titles.
-export const COMPARISON_TOOL_HEADER_TITLES: Record<string, string> = {
+export const COMPARISON_TOOL_HEADER_TITLES: Partial<Record<ComparisonToolPage, string>> = {
   'Model Overview': 'Mouse Model Overview',
 };
 
