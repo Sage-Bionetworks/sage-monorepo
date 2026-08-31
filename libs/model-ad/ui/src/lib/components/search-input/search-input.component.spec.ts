@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { SearchResult, SearchService } from '@sagebionetworks/model-ad/api-client';
+import { ModelOrganism, SearchResult, SearchService } from '@sagebionetworks/model-ad/api-client';
 import { mockSearchResults } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';
@@ -65,7 +65,7 @@ describe('SearchInputComponent', () => {
       id: 'model5',
       match_field: 'unknown_field',
       match_value: 'some value',
-      model_organism: 'mouse',
+      model_organism: ModelOrganism.Mouse,
     };
     expect(component.formatResultForDisplay(unknownResult)).toBe('model5');
   });
@@ -80,7 +80,7 @@ describe('SearchInputComponent', () => {
     const navigateSpy = jest.spyOn(component.router, 'navigate');
     component.navigateToResult(mockSearchResults[0]);
     expect(navigateSpy).toHaveBeenCalledWith(['models', 'model1'], {
-      queryParams: { modelOrganism: 'mouse' },
+      queryParams: { modelOrganism: ModelOrganism.Mouse },
     });
   });
 
@@ -91,11 +91,11 @@ describe('SearchInputComponent', () => {
       id: 'Presenilin 1',
       match_field: 'name',
       match_value: 'Presenilin 1',
-      model_organism: 'marmoset',
+      model_organism: ModelOrganism.Marmoset,
     };
     component.navigateToResult(marmosetResult);
     expect(navigateSpy).toHaveBeenCalledWith(['models', 'Presenilin 1'], {
-      queryParams: { modelOrganism: 'marmoset' },
+      queryParams: { modelOrganism: ModelOrganism.Marmoset },
     });
   });
 
@@ -114,7 +114,7 @@ describe('SearchInputComponent', () => {
       id: 'Presenilin 1',
       match_field: 'name',
       match_value: 'Presenilin 1',
-      model_organism: 'marmoset',
+      model_organism: ModelOrganism.Marmoset,
     };
     const icon = component.getResultIcon(marmosetResult);
     expect(icon).toEqual({
