@@ -7,12 +7,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import org.bson.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 class ApiHelperTest {
 
@@ -425,6 +427,38 @@ class ApiHelperTest {
     @DisplayName("should return empty list when the string contains only commas")
     void shouldReturnEmptyListWhenStringContainsOnlyCommas() {
       assertThat(ApiHelper.createCaseInsensitiveFullMatchPatterns(",,")).isEmpty();
+    }
+  }
+
+  @Nested
+  @DisplayName("equalsAnyIgnoringCase")
+  class EqualsAnyIgnoringCase {
+
+    @Test
+    @DisplayName("should match the field against a full-match pattern for every term")
+    void shouldMatchFieldAgainstFullMatchPatternForEveryTerm() {
+      Criteria criteria = ApiHelper.equalsAnyIgnoringCase("gene_symbol", List.of("APOE", "TREM2"));
+
+      List<Pattern> patterns = (List<Pattern>) criteria
+        .getCriteriaObject()
+        .get("gene_symbol", Document.class)
+        .get("$in");
+      assertThat(patterns)
+        .extracting(Pattern::pattern)
+        .containsExactly("^\\QAPOE\\E$", "^\\QTREM2\\E$");
+      assertThat(patterns).allSatisfy(pattern ->
+        assertThat(pattern.flags() & Pattern.CASE_INSENSITIVE).isNotZero()
+      );
+    }
+
+    @Test
+    @DisplayName("should match nothing when the term list is empty")
+    void shouldMatchNothingWhenTermListIsEmpty() {
+      Criteria criteria = ApiHelper.equalsAnyIgnoringCase("gene_symbol", List.of());
+
+      assertThat(criteria.getCriteriaObject()).isEqualTo(
+        new Document("gene_symbol", new Document("$in", List.of()))
+      );
     }
   }
 }
