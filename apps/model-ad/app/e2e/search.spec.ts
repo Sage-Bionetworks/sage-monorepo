@@ -98,18 +98,24 @@ test.describe('search', () => {
   });
 
   test('can search across organisms and navigate to marmoset model', async ({ page }) => {
-    const modelName = 'Presenilin 1';
+    const modelQuery = 'il';
+    const mouseModelName = 'LOAD1.Il1rapExon2KO';
+    const marmosetModelName = 'Presenilin 1';
+    const marmosetModelPath = '/models/Presenilin%201?modelOrganism=marmoset';
 
     await page.goto('/');
 
-    const { searchListItems } = await searchAndGetSearchListItems('presenilin', page);
-    await expect(searchListItems).toHaveCount(1);
-    await expect(searchListItems.first()).toHaveText(modelName);
+    const { searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
+    await expect(searchListItems).toHaveCount(2);
+    await expect(searchListItems.first()).toHaveText(mouseModelName);
 
-    await searchListItems.first().click();
+    const marmosetResult = searchListItems.nth(1);
+    await expect(marmosetResult).toHaveText(marmosetModelName);
 
-    await page.waitForURL(/modelOrganism=marmoset/);
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(modelName);
+    await marmosetResult.click();
+
+    await page.waitForURL(marmosetModelPath);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(marmosetModelName);
   });
 
   test('can search and navigate to model with special characters', async ({ page }) => {
