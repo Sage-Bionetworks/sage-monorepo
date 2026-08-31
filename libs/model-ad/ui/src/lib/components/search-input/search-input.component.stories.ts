@@ -52,8 +52,8 @@ export const MouseHomeSearchInput: Story = {
 export const MarmosetHomeSearchInput: Story = {
   args: {
     searchPlaceholder: 'Find marmoset model by name...',
-    searchImagePath: 'model-ad-assets/images/marmoset-model.svg',
-    searchImageAltText: 'marmoset search icon',
+    searchImagePath: 'model-ad-assets/images/marmoset-head.svg',
+    searchImageAltText: 'marmoset head icon',
     hasThickBorder: true,
     modelOrganisms: [ModelOrganism.Marmoset],
   },
