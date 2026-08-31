@@ -72,13 +72,13 @@
       <ul class="table-of-contents" id="toc-list">
         @for (item of tocItems(); track item) {
           <li>
-            <button
-              (click)="scrollToSection(generateAnchorId(item))"
+            <a
+              [href]="tocLinkHref(item)"
+              (click)="onTocLinkClick($event, generateAnchorId(item))"
               [class.highlighted]="isHighlightedFn(generateAnchorId(item))"
-              data-testid="toc-item-link"
             >
               {{ item | decodeGreekEntity }}
-            </button>
+            </a>
           </li>
         }
       </ul>

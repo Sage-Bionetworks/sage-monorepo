@@ -13,6 +13,7 @@ import {
   expectTocLinksScrollToSections,
   getTocCollapseButton,
   getTocExpandButton,
+  getTocLink,
   getTocLinks,
   getTocList,
 } from './helpers/model-details';
@@ -296,8 +297,7 @@ test.describe('mouse model details - boxplots selector - table of contents', () 
     await expect(page.getByRole('heading', { level: 1, name: testModel })).toBeVisible();
 
     await getTocExpandButton(page).click();
-    const nflButton = getTocLinks(page).filter({ hasText: section });
-    await nflButton.click();
+    await getTocLink(page, section).click();
 
     await expect(page.getByRole('heading', { level: 2, name: section })).toBeInViewport();
     await page.waitForURL(`${biomarkersPath}#${fragment}`);
@@ -311,8 +311,7 @@ test.describe('mouse model details - boxplots selector - table of contents', () 
     await expect(page.getByRole('heading', { level: 1, name: testModel })).toBeVisible();
 
     await getTocExpandButton(page).click();
-    const nflButton = getTocLinks(page).filter({ hasText: section });
-    await nflButton.click();
+    await getTocLink(page, section).click();
 
     await expect(page.getByRole('heading', { level: 2, name: section })).toBeInViewport();
     await page.waitForURL(`${biomarkersPath}#${fragment}`);
@@ -381,13 +380,48 @@ test.describe('mouse model details - boxplots selector - table of contents', () 
     await page.goto(biomarkersPath);
     await getTocExpandButton(page).click();
 
-    const tocLink = getTocLinks(page).filter({ hasText: section });
+    const tocLink = getTocLink(page, section);
     await tocLink.click();
 
     await expectHighlightClears(
       tocLink,
       page.getByRole('heading', { level: 2, name: section, exact: true }),
     );
+  });
+
+  test('TOC link href points at the current panel URL and opens it in a new tab', async ({
+    page,
+    context,
+  }) => {
+    const section = 'NfL';
+    const fragment = 'nfl';
+
+    await page.goto(biomarkersPath);
+    await getTocExpandButton(page).click();
+
+    const tocLink = getTocLink(page, section);
+    await expect(tocLink).toHaveAttribute('href', `${biomarkersPath}#${fragment}`);
+
+    const newTabPromise = context.waitForEvent('page');
+    await tocLink.click({ modifiers: ['ControlOrMeta'] });
+    const newTab = await newTabPromise;
+
+    await expect(newTab).toHaveURL(`${biomarkersPath}#${fragment}`);
+    await expect(
+      newTab.getByRole('heading', { level: 2, name: section, exact: true }),
+    ).toBeInViewport();
+    await expectPageNotAtTop(newTab);
+  });
+
+  test('clicking a TOC link moves focus to its section heading', async ({ page }) => {
+    const section = 'NfL';
+
+    await page.goto(biomarkersPath);
+    await getTocExpandButton(page).click();
+
+    await getTocLink(page, section).click();
+
+    await expect(page.getByRole('heading', { level: 2, name: section, exact: true })).toBeFocused();
   });
 
   test('TOC stays expanded after clicking a link', async ({ page }) => {
@@ -555,7 +589,7 @@ test.describe('mouse model details - boxplots selector - share links - updates',
 
     await getTocExpandButton(page).click();
 
-    await page.getByRole('button', { name: 'Soluble Aβ42', exact: true }).click();
+    await getTocLink(page, 'Soluble Aβ42').click();
     await page.waitForURL(`${pathWithParams}#soluble-abeta42`);
   });
 
