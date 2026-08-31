@@ -301,12 +301,6 @@ This project provides a containerized PostgreSQL database for the iAtlas applica
 - **Location**: `apps/model-ad/apex`
 - **Available Tasks**: create-config, serve-detach, scan-image
 
-#### model-ad-api
-
-- **Language**: typescript
-- **Location**: `apps/model-ad/api`
-- **Available Tasks**: create-config, build, serve, serve-detach, lint, lint-fix, scan-image, test
-
 #### model-ad-api-docs
 
 - **Language**: unknown

@@ -16,9 +16,4 @@ servers:
 tags:
   - name: Model
     description: Operations about models.
-    # x-sage-internal: true # Now defined in the new API service; making this node internal does not
-    # prevent merging conflicts because it just centralize the tag description and does not prevent
-    # its creation if at least one endpoint references it, so commenting it out for now.
-paths:
-  /models/search:
-    $ref: paths/model-search.yaml
+paths: {}

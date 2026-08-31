@@ -74,13 +74,25 @@ test.describe('search', () => {
     await expect(searchListItems.last()).toHaveText(/load2/i);
   });
 
-  test('can search using home card input', async ({ page }) => {
+  test('can search using mouse home card input', async ({ page }) => {
     const model = 'APOE4';
     await page.goto('/');
     const { searchListItems } = await searchAndGetSearchListItems(
       model,
       page,
       'Find mouse model by name or ID...',
+    );
+    await expect(searchListItems.first()).toHaveText(model);
+  });
+
+  test('can search using marmoset home card input', async ({ page }) => {
+    const model = 'Presenilin 1';
+    await page.goto('/');
+    await page.getByText('Marmoset Models').click();
+    const { searchListItems } = await searchAndGetSearchListItems(
+      'presenilin',
+      page,
+      'Find marmoset model by name...',
     );
     await expect(searchListItems.first()).toHaveText(model);
   });

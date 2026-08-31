@@ -1,19 +1,18 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { SearchResult } from '@sagebionetworks/explorers/models';
-import { ModelService } from '@sagebionetworks/model-ad/api-client';
+import { SearchResult, SearchService } from '@sagebionetworks/model-ad/api-client';
 import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';
 import { SearchInputComponent } from './search-input.component';
 
 const mockSearchResults: SearchResult[] = [
-  { id: 'model1', match_field: 'name', match_value: 'model1' },
-  { id: 'model2', match_field: 'aliases', match_value: 'Alias Model' },
-  { id: 'model3', match_field: 'jax_id', match_value: 'JAX123' },
-  { id: 'model4', match_field: 'rrid', match_value: 'RRID123' },
+  { id: 'model1', match_field: 'name', match_value: 'model1', model_organism: 'mouse' },
+  { id: 'model2', match_field: 'aliases', match_value: 'Alias Model', model_organism: 'mouse' },
+  { id: 'model3', match_field: 'jax_id', match_value: 'JAX123', model_organism: 'mouse' },
+  { id: 'model4', match_field: 'rrid', match_value: 'RRID123', model_organism: 'mouse' },
 ];
 
-const mockModelService = {
+const mockSearchService = {
   searchModels: jest.fn(),
 };
 
@@ -22,7 +21,7 @@ async function setup(inputs?: { searchPlaceholder?: string }) {
     providers: [
       provideHttpClient(),
       provideRouter([]),
-      { provide: ModelService, useValue: mockModelService },
+      { provide: SearchService, useValue: mockSearchService },
     ],
     componentInputs: inputs,
   });
@@ -33,7 +32,7 @@ async function setup(inputs?: { searchPlaceholder?: string }) {
 describe('SearchInputComponent', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockModelService.searchModels.mockReturnValue(of(mockSearchResults));
+    mockSearchService.searchModels.mockReturnValue(of(mockSearchResults));
   });
   afterAll(() => jest.restoreAllMocks());
 
@@ -52,7 +51,7 @@ describe('SearchInputComponent', () => {
   it('should call searchModels when getSearchResults is invoked', async () => {
     const { component } = await setup();
     const result = component.getSearchResults('test query');
-    expect(mockModelService.searchModels).toHaveBeenCalledWith('test query');
+    expect(mockSearchService.searchModels).toHaveBeenCalledWith('test query', undefined);
     expect(result).toBeDefined();
   });
 
@@ -72,6 +71,7 @@ describe('SearchInputComponent', () => {
       id: 'model5',
       match_field: 'unknown_field',
       match_value: 'some value',
+      model_organism: 'mouse',
     };
     expect(component.formatResultForDisplay(unknownResult)).toBe('model5');
   });
@@ -81,10 +81,51 @@ describe('SearchInputComponent', () => {
     expect(component.checkQueryForErrors('any query')).toBe('');
   });
 
-  it('should navigate to correct route when navigateToResult is called', async () => {
+  it('should navigate with modelOrganism query param', async () => {
     const { component } = await setup();
     const navigateSpy = jest.spyOn(component.router, 'navigate');
     component.navigateToResult(mockSearchResults[0]);
-    expect(navigateSpy).toHaveBeenCalledWith(['models', 'model1']);
+    expect(navigateSpy).toHaveBeenCalledWith(['models', 'model1'], {
+      queryParams: { modelOrganism: 'mouse' },
+    });
+  });
+
+  it('should navigate with marmoset modelOrganism for marmoset results', async () => {
+    const { component } = await setup();
+    const navigateSpy = jest.spyOn(component.router, 'navigate');
+    const marmosetResult: SearchResult = {
+      id: 'Presenilin 1',
+      match_field: 'name',
+      match_value: 'Presenilin 1',
+      model_organism: 'marmoset',
+    };
+    component.navigateToResult(marmosetResult);
+    expect(navigateSpy).toHaveBeenCalledWith(['models', 'Presenilin 1'], {
+      queryParams: { modelOrganism: 'marmoset' },
+    });
+  });
+
+  it('should return mouse icon for mouse results', async () => {
+    const { component } = await setup();
+    const icon = component.getResultIcon(mockSearchResults[0]);
+    expect(icon).toEqual({
+      imagePath: 'model-ad-assets/images/mouse-head.svg',
+      label: 'mouse',
+    });
+  });
+
+  it('should return marmoset icon for marmoset results', async () => {
+    const { component } = await setup();
+    const marmosetResult: SearchResult = {
+      id: 'Presenilin 1',
+      match_field: 'name',
+      match_value: 'Presenilin 1',
+      model_organism: 'marmoset',
+    };
+    const icon = component.getResultIcon(marmosetResult);
+    expect(icon).toEqual({
+      imagePath: 'model-ad-assets/images/marmoset-head.svg',
+      label: 'marmoset',
+    });
   });
 });

@@ -18,6 +18,9 @@ src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/MouseModelOverviewApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/MouseModelOverviewApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/MouseModelOverviewApiDelegate.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/SearchApi.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/SearchApiController.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/SearchApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/TranscriptomicsApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/TranscriptomicsApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/TranscriptomicsApiDelegate.java
@@ -56,6 +59,7 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/MouseModelOverview
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/MouseModelOverviewsPageDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/NamedLinkDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/PageMetadataDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/SearchResultDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/SexDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/TranscriptomicsDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/TranscriptomicsIndividualDto.java
