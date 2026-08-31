@@ -153,7 +153,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .map(violation -> {
         String propertyPath = violation.getPropertyPath().toString();
         String parameter = propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
-        if (violation.getConstraintDescriptor().getAnnotation() instanceof Size size) {
+        if (
+          violation.getConstraintDescriptor().getAnnotation() instanceof Size size &&
+          violation.getInvalidValue() instanceof CharSequence
+        ) {
           return String.format(
             "Query parameter %s must be between %d and %d characters",
             parameter,
