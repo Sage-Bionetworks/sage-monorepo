@@ -135,9 +135,11 @@ public class CustomProteomicsRepositoryImpl
    * fields ({@code ensembl_gene_id}, {@code gene_symbol}, {@code uniprotid}), so each term matches
    * wherever it belongs without the caller having to say which field it came from.
    *
-   * <p>A lone term that is a complete Ensembl gene ID full-matches {@code ensembl_gene_id}. Any
-   * other single term stays a partial match on {@code display_symbol}, which already covers gene
-   * symbols and UniProt IDs because it embeds both.
+   * <p>A single term stays a partial match on {@code display_symbol}, which embeds the gene symbol
+   * and UniProt ID, falling back to the Ensembl gene ID and UniProt ID when the gene symbol is
+   * unavailable. A lone term that is a complete Ensembl gene ID instead full-matches
+   * {@code ensembl_gene_id}, because rows that do have a gene symbol show no Ensembl ID in
+   * {@code display_symbol} and the partial match would miss them.
    *
    * <p><strong>NOTE:</strong> the comma-separated path cannot use {@code display_symbol}. It is a
    * composite label ({@code "Ensa (P11934870)"}), so a full match against a bare identifier could
