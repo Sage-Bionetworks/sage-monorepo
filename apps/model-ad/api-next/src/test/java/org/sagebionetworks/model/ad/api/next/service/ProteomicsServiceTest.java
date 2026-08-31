@@ -71,11 +71,13 @@ class ProteomicsServiceTest {
 
     ProteomicsPageDto result = service.loadProteomics(buildQuery().build(), TISSUE);
 
-    assertThat(result.getProteomics()).singleElement().satisfies(dto -> {
-      assertThat(dto.getCompositeId()).isEqualTo(UNIQUE_ID + "~" + MODEL_NAME + "~" + SEX);
-      assertThat(dto.getDisplaySymbol()).isEqualTo("Gnai3 (P27144)");
-      assertThat(dto.getTissue()).isEqualTo(TISSUE);
-    });
+    assertThat(result.getProteomics())
+      .singleElement()
+      .satisfies(dto -> {
+        assertThat(dto.getCompositeId()).isEqualTo(UNIQUE_ID + "~" + MODEL_NAME + "~" + SEX);
+        assertThat(dto.getDisplaySymbol()).isEqualTo("Gnai3 (P27144)");
+        assertThat(dto.getTissue()).isEqualTo(TISSUE);
+      });
   }
 
   @Test
