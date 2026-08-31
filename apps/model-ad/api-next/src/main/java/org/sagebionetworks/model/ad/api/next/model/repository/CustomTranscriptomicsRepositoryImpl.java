@@ -15,6 +15,7 @@ import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocum
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsIdentifier;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.util.MouseEnsemblGeneId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -40,16 +41,6 @@ public class CustomTranscriptomicsRepositoryImpl
   private static final String DISPLAY_GENE_SYMBOL_FIELD = "display_gene_symbol";
   private static final String ENSEMBL_GENE_ID_FIELD = "ensembl_gene_id";
   private static final String GENE_SYMBOL_FIELD = "gene_symbol";
-
-  /**
-   * A complete Ensembl mouse gene ID. Matched case-insensitively because every other matcher in
-   * this filterbox is case-insensitive; without it a lower-cased ID would fall through to the
-   * gene_symbol path and return nothing.
-   */
-  private static final Pattern FULL_MOUSE_ENSEMBL_GENE_ID = Pattern.compile(
-    "^ENSMUSG\\d{11}$",
-    Pattern.CASE_INSENSITIVE
-  );
 
   public CustomTranscriptomicsRepositoryImpl(MongoTemplate mongoTemplate) {
     super(mongoTemplate);
@@ -215,7 +206,7 @@ public class CustomTranscriptomicsRepositoryImpl
   /** Single term: case-insensitive exact match for a full Ensembl gene ID,
    * partial match otherwise. */
   private Criteria buildSingleTermSearchCriteria(String term) {
-    if (isFullEnsemblGeneId(term)) {
+    if (MouseEnsemblGeneId.isFullId(term)) {
       return equalsAnyIgnoringCase(ENSEMBL_GENE_ID_FIELD, List.of(term));
     }
 
@@ -232,7 +223,7 @@ public class CustomTranscriptomicsRepositoryImpl
     List<String> fullEnsemblGeneIdTerms = new ArrayList<>();
     List<String> otherTerms = new ArrayList<>();
     for (String term : ApiHelper.splitSearchTerms(trimmedSearch)) {
-      (isFullEnsemblGeneId(term) ? fullEnsemblGeneIdTerms : otherTerms).add(term);
+      (MouseEnsemblGeneId.isFullId(term) ? fullEnsemblGeneIdTerms : otherTerms).add(term);
     }
 
     List<Criteria> branches = new ArrayList<>();
@@ -256,10 +247,6 @@ public class CustomTranscriptomicsRepositoryImpl
       return branches.get(0);
     }
     return new Criteria().orOperator(branches);
-  }
-
-  private static boolean isFullEnsemblGeneId(String term) {
-    return FULL_MOUSE_ENSEMBL_GENE_ID.matcher(term).matches();
   }
 
   private static Criteria equalsAnyIgnoringCase(String field, List<String> terms) {
