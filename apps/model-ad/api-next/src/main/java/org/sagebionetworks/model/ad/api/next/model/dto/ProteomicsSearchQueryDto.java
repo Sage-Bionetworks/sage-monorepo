@@ -234,11 +234,11 @@ public class ProteomicsSearchQueryDto {
   }
 
   /**
-   * Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches). Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when itemFilterType is 'exclude'. 
+   * Search by identifier. A single term is a case-insensitive partial match on the displayed symbol, which embeds the gene symbol and UniProt ID, or the Ensembl gene ID and UniProt ID when the gene symbol is unavailable. A single term that is a complete Ensembl gene ID is instead a case-insensitive full match on the Ensembl gene ID, so it also reaches rows whose displayed symbol shows a gene symbol. A comma separated list full-matches each term, case-insensitively, against the Ensembl gene ID, gene symbol, or UniProt ID. Examples: 'ensa,P27144,ENSMUSG00000000001' (comma-separated list), 'ENSMUSG00000000001' (complete Ensembl gene ID) or 'gna' (partial match). Only applied when itemFilterType is 'exclude'. 
    * @return search
    */
   
-  @Schema(name = "search", example = "gnai,cdc45", description = "Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches). Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "search", example = "ensa,P27144,ENSMUSG00000000001", description = "Search by identifier. A single term is a case-insensitive partial match on the displayed symbol, which embeds the gene symbol and UniProt ID, or the Ensembl gene ID and UniProt ID when the gene symbol is unavailable. A single term that is a complete Ensembl gene ID is instead a case-insensitive full match on the Ensembl gene ID, so it also reaches rows whose displayed symbol shows a gene symbol. A comma separated list full-matches each term, case-insensitively, against the Ensembl gene ID, gene symbol, or UniProt ID. Examples: 'ensa,P27144,ENSMUSG00000000001' (comma-separated list), 'ENSMUSG00000000001' (complete Ensembl gene ID) or 'gna' (partial match). Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("search")
   public @Nullable String getSearch() {
     return search;
