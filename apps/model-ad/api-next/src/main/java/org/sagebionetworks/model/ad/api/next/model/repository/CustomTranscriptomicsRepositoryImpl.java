@@ -207,7 +207,7 @@ public class CustomTranscriptomicsRepositoryImpl
    * partial match otherwise. */
   private Criteria buildSingleTermSearchCriteria(String term) {
     if (MouseEnsemblGeneId.isFullId(term)) {
-      return equalsAnyIgnoringCase(ENSEMBL_GENE_ID_FIELD, List.of(term));
+      return ApiHelper.equalsAnyIgnoringCase(ENSEMBL_GENE_ID_FIELD, List.of(term));
     }
 
     String regex = Pattern.quote(term);
@@ -228,14 +228,17 @@ public class CustomTranscriptomicsRepositoryImpl
 
     List<Criteria> branches = new ArrayList<>();
     if (!fullEnsemblGeneIdTerms.isEmpty()) {
-      branches.add(equalsAnyIgnoringCase(ENSEMBL_GENE_ID_FIELD, fullEnsemblGeneIdTerms));
+      branches.add(ApiHelper.equalsAnyIgnoringCase(ENSEMBL_GENE_ID_FIELD, fullEnsemblGeneIdTerms));
     }
     if (!otherTerms.isEmpty()) {
-      branches.add(equalsAnyIgnoringCase(GENE_SYMBOL_FIELD, otherTerms));
+      branches.add(ApiHelper.equalsAnyIgnoringCase(GENE_SYMBOL_FIELD, otherTerms));
       // Only reachable for an off-pattern ensembl_gene_id (versioned, non-mouse, malformed), which
       // the single-term path also matches. Without it, searching "A" finds such a row but "A,B"
       // would not.
-      Criteria ensemblGeneIdFallback = equalsAnyIgnoringCase(ENSEMBL_GENE_ID_FIELD, otherTerms);
+      Criteria ensemblGeneIdFallback = ApiHelper.equalsAnyIgnoringCase(
+        ENSEMBL_GENE_ID_FIELD,
+        otherTerms
+      );
       branches.add(whenGeneSymbolIsBlank(ensemblGeneIdFallback));
     }
 
@@ -247,10 +250,6 @@ public class CustomTranscriptomicsRepositoryImpl
       return branches.get(0);
     }
     return new Criteria().orOperator(branches);
-  }
-
-  private static Criteria equalsAnyIgnoringCase(String field, List<String> terms) {
-    return Criteria.where(field).in(ApiHelper.createCaseInsensitiveFullMatchPatterns(terms));
   }
 
   private static Criteria whenGeneSymbolIsBlank(Criteria fallbackMatch) {
