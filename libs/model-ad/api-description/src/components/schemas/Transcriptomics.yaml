@@ -44,6 +44,8 @@ properties:
     $ref: ./FoldChangeResult.yaml
   18 months:
     $ref: ./FoldChangeResult.yaml
+  24 months:
+    $ref: ./FoldChangeResult.yaml
 required:
   - composite_id
   - ensembl_gene_id

@@ -53,6 +53,9 @@ public class TranscriptomicsDocument {
   @Field("18 months")
   private @Nullable FoldChangeResult eighteenMonths;
 
+  @Field("24 months")
+  private @Nullable FoldChangeResult twentyFourMonths;
+
   @Builder
   @Getter
   @Setter

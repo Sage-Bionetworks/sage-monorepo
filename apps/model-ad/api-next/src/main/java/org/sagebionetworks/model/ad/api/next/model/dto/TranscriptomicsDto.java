@@ -58,6 +58,8 @@ public class TranscriptomicsDto {
 
   private @Nullable FoldChangeResultDto _18months;
 
+  private @Nullable FoldChangeResultDto _24months;
+
   public TranscriptomicsDto() {
     super();
   }
@@ -346,6 +348,26 @@ public class TranscriptomicsDto {
     this._18months = _18months;
   }
 
+  public TranscriptomicsDto _24months(@Nullable FoldChangeResultDto _24months) {
+    this._24months = _24months;
+    return this;
+  }
+
+  /**
+   * Get _24months
+   * @return _24months
+   */
+  @Valid 
+  @Schema(name = "24 months", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("24 months")
+  public @Nullable FoldChangeResultDto get24months() {
+    return _24months;
+  }
+
+  public void set24months(@Nullable FoldChangeResultDto _24months) {
+    this._24months = _24months;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -367,12 +389,13 @@ public class TranscriptomicsDto {
         Objects.equals(this.sex, transcriptomics.sex) &&
         Objects.equals(this._4months, transcriptomics._4months) &&
         Objects.equals(this._12months, transcriptomics._12months) &&
-        Objects.equals(this._18months, transcriptomics._18months);
+        Objects.equals(this._18months, transcriptomics._18months) &&
+        Objects.equals(this._24months, transcriptomics._24months);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(compositeId, ensemblGeneId, geneSymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sex, _4months, _12months, _18months);
+    return Objects.hash(compositeId, ensemblGeneId, geneSymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sex, _4months, _12months, _18months, _24months);
   }
 
   @Override
@@ -392,6 +415,7 @@ public class TranscriptomicsDto {
     sb.append("    _4months: ").append(toIndentedString(_4months)).append("\n");
     sb.append("    _12months: ").append(toIndentedString(_12months)).append("\n");
     sb.append("    _18months: ").append(toIndentedString(_18months)).append("\n");
+    sb.append("    _24months: ").append(toIndentedString(_24months)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -433,6 +457,7 @@ public class TranscriptomicsDto {
       this.instance.set4months(value._4months);
       this.instance.set12months(value._12months);
       this.instance.set18months(value._18months);
+      this.instance.set24months(value._24months);
       return this;
     }
 
@@ -498,6 +523,11 @@ public class TranscriptomicsDto {
     
     public TranscriptomicsDto.Builder _18months(FoldChangeResultDto _18months) {
       this.instance._18months(_18months);
+      return this;
+    }
+    
+    public TranscriptomicsDto.Builder _24months(FoldChangeResultDto _24months) {
+      this.instance._24months(_24months);
       return this;
     }
     
