@@ -3,13 +3,16 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.sagebionetworks.explorers.CtFilterConfig;
 import org.sagebionetworks.model.ad.api.next.model.document.ProteomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsIdentifier;
 import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.util.MouseEnsemblGeneId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -22,6 +25,9 @@ import org.springframework.stereotype.Repository;
  * <p>No computed sort fields are needed: {@code display_symbol} is stored on the document, and
  * case-insensitive ordering comes from pipeline-level collation. The pipeline scaffold (count,
  * $match, $addFields, $sort, $skip, $limit) lives in {@link ComparisonToolRepositorySupport}.
+ *
+ * <p>Search is customized so that a pasted list of identifiers matches whichever field each
+ * identifier belongs to; see {@link #buildSearchCriteria(String, String)}.
  */
 @Repository
 @Slf4j
@@ -31,6 +37,21 @@ public class CustomProteomicsRepositoryImpl
 
   private static final String COLLECTION_NAME = "protein_de_aggregate";
   private static final String DISPLAY_SYMBOL_FIELD = "display_symbol";
+  private static final String ENSEMBL_GENE_ID_FIELD = "ensembl_gene_id";
+  private static final String GENE_SYMBOL_FIELD = "gene_symbol";
+  private static final String UNIPROTID_FIELD = "uniprotid";
+
+  /**
+   * The identifier fields a comma-separated search term is full-matched against. These are raw
+   * Mongo field names, which is what the count query needs: {@code executePagedAggregation} counts
+   * via {@code mongoTemplate.count(query, collectionName)}, which performs no {@code @Field} name
+   * translation.
+   */
+  private static final List<String> FULL_MATCH_SEARCH_FIELDS = List.of(
+    ENSEMBL_GENE_ID_FIELD,
+    GENE_SYMBOL_FIELD,
+    UNIPROTID_FIELD
+  );
 
   public CustomProteomicsRepositoryImpl(MongoTemplate mongoTemplate) {
     super(mongoTemplate);
@@ -105,5 +126,45 @@ public class CustomProteomicsRepositoryImpl
     );
 
     return executePagedAggregation(matchCriteria, pageable);
+  }
+
+  /**
+   * Override search so that every identifier a row carries is reachable.
+   *
+   * <p>Comma-separated terms are full, case-insensitive matches routed across all three identifier
+   * fields ({@code ensembl_gene_id}, {@code gene_symbol}, {@code uniprotid}), so each term matches
+   * wherever it belongs without the caller having to say which field it came from.
+   *
+   * <p>A lone term that is a complete Ensembl gene ID full-matches {@code ensembl_gene_id}. Any
+   * other single term stays a partial match on {@code display_symbol}, which already covers gene
+   * symbols and UniProt IDs because it embeds both.
+   *
+   * <p><strong>NOTE:</strong> the comma-separated path cannot use {@code display_symbol}. It is a
+   * composite label ({@code "Ensa (P11934870)"}), so a full match against a bare identifier could
+   * never succeed.
+   */
+  @Override
+  protected Criteria buildSearchCriteria(String field, String trimmedSearch) {
+    if (trimmedSearch.contains(",")) {
+      return buildCommaSeparatedSearchCriteria(trimmedSearch);
+    }
+    if (MouseEnsemblGeneId.isFullId(trimmedSearch)) {
+      return ApiHelper.equalsAnyIgnoringCase(ENSEMBL_GENE_ID_FIELD, List.of(trimmedSearch));
+    }
+    return Criteria.where(field).regex(Pattern.quote(trimmedSearch), "i");
+  }
+
+  private Criteria buildCommaSeparatedSearchCriteria(String trimmedSearch) {
+    List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
+    if (patterns.isEmpty()) {
+      // Search was only commas: match nothing, as an empty $in would.
+      return Criteria.where("_id").is(null);
+    }
+    return new Criteria()
+      .orOperator(
+        FULL_MATCH_SEARCH_FIELDS.stream()
+          .map(searchField -> Criteria.where(searchField).in(patterns))
+          .toList()
+      );
   }
 }

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +40,20 @@ class CustomProteomicsRepositoryImplTest {
 
   private static final String COLLECTION_NAME = "protein_de_aggregate";
   private static final String DISPLAY_SYMBOL_FIELD = "display_symbol";
+  private static final String ENSEMBL_GENE_ID_FIELD = "ensembl_gene_id";
+  private static final String GENE_SYMBOL_FIELD = "gene_symbol";
+  private static final String UNIPROTID_FIELD = "uniprotid";
+  private static final List<String> FULL_MATCH_SEARCH_FIELDS = List.of(
+    ENSEMBL_GENE_ID_FIELD,
+    GENE_SYMBOL_FIELD,
+    UNIPROTID_FIELD
+  );
+  private static final String TISSUE_FIELD = "tissue";
   private static final String TISSUE = "Hemibrain";
+
+  private static final String ENSA_GENE_SYMBOL = "ensa";
+  private static final String ENSA_UNIPROT_ID = "p11934870";
+  private static final String ENSA_MOUSE_ENSEMBL_GENE_ID = "ENSMUSG00000038619";
   private static final List<String> MONTH_COLUMNS = List.of(
     "4 months",
     "12 months",
@@ -123,13 +137,15 @@ class CustomProteomicsRepositoryImplTest {
       .findFirst()
       .map(doc -> (List<Document>) doc.get("$or"))
       .orElseThrow();
-    assertThat(orConditions).singleElement().satisfies(doc ->
-      assertThat((List<Document>) doc.get("$and")).containsExactly(
-        new Document("unique_id", "ENSMUSG00000000001P27144"),
-        new Document("name.link_text", "LOAD2"),
-        new Document("sex", "Female")
-      )
-    );
+    assertThat(orConditions)
+      .singleElement()
+      .satisfies(doc ->
+        assertThat((List<Document>) doc.get("$and")).containsExactly(
+          new Document("unique_id", "ENSMUSG00000000001P27144"),
+          new Document("name.link_text", "LOAD2"),
+          new Document("sex", "Female")
+        )
+      );
   }
 
   @Test
@@ -166,19 +182,55 @@ class CustomProteomicsRepositoryImplTest {
   }
 
   @Test
-  @DisplayName("should search on display_symbol for comma-separated terms")
-  void shouldSearchOnDisplaySymbolForCommaSeparatedTerms() {
-    ProteomicsSearchQueryDto query = ProteomicsSearchQueryDto.builder()
-      .search("p11,Apoe")
-      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
-      .build();
+  @DisplayName("should full match every identifier field for comma-separated terms")
+  void shouldFullMatchEveryIdentifierFieldForCommaSeparatedTerms() {
+    List<Document> branches = searchBranchesFor(
+      ENSA_GENE_SYMBOL + "," + ENSA_UNIPROT_ID + "," + ENSA_MOUSE_ENSEMBL_GENE_ID
+    );
 
-    repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), TISSUE);
+    assertThat(branches)
+      .as("one branch per identifier field, so each term matches wherever it belongs")
+      .hasSize(FULL_MATCH_SEARCH_FIELDS.size());
+    for (String field : FULL_MATCH_SEARCH_FIELDS) {
+      assertThat(inPatterns(branchFor(branches, field), field))
+        .as("every term is full-matched against %s", field)
+        .extracting(Pattern::pattern)
+        .containsExactly(
+          fullMatch(ENSA_GENE_SYMBOL),
+          fullMatch(ENSA_UNIPROT_ID),
+          fullMatch(ENSA_MOUSE_ENSEMBL_GENE_ID)
+        );
+    }
+  }
 
-    assertThat(captureAndConditions()).anySatisfy(doc -> {
-      assertThat(doc).containsOnlyKeys(DISPLAY_SYMBOL_FIELD);
-      assertThat((Document) doc.get(DISPLAY_SYMBOL_FIELD)).containsKey("$in");
-    });
+  @Test
+  @DisplayName("should full match ensembl_gene_id when the single term is a full ensembl gene id")
+  void shouldFullMatchEnsemblGeneIdForSingleFullIdTerm() {
+    Document searchCondition = searchConditionFor(ENSA_MOUSE_ENSEMBL_GENE_ID);
+
+    assertThat(searchCondition.keySet())
+      .as("a full ensembl gene id routes to ensembl_gene_id with no display_symbol branch")
+      .containsExactly(ENSEMBL_GENE_ID_FIELD);
+    assertThat(inPatterns(searchCondition, ENSEMBL_GENE_ID_FIELD))
+      .extracting(Pattern::pattern)
+      .containsExactly(fullMatch(ENSA_MOUSE_ENSEMBL_GENE_ID));
+  }
+
+  @Test
+  @DisplayName("should match case-insensitively when the term is a lowercase ensembl gene id")
+  void shouldMatchCaseInsensitivelyForLowercaseSingleFullIdTerm() {
+    Document searchCondition = searchConditionFor(ENSA_MOUSE_ENSEMBL_GENE_ID.toLowerCase());
+
+    assertThat(searchCondition.keySet()).containsExactly(ENSEMBL_GENE_ID_FIELD);
+    assertThat(inPatterns(searchCondition, ENSEMBL_GENE_ID_FIELD)).allSatisfy(pattern ->
+      assertThat(pattern.flags() & Pattern.CASE_INSENSITIVE).isNotZero()
+    );
+  }
+
+  @Test
+  @DisplayName("should match nothing when search contains only commas")
+  void shouldMatchNothingWhenSearchContainsOnlyCommas() {
+    assertThat(searchConditionFor(",,")).isEqualTo(new Document("_id", null));
   }
 
   @Test
@@ -286,6 +338,47 @@ class CustomProteomicsRepositoryImplTest {
     assertThat(captureAggregation().toString())
       .contains("\"" + DISPLAY_SYMBOL_FIELD + "\" : 1")
       .doesNotContain(DISPLAY_SYMBOL_FIELD + "_sort");
+  }
+
+  /** Runs a search-only query (EXCLUDE mode, no items) and returns its search condition. */
+  private Document searchConditionFor(String search) {
+    ProteomicsSearchQueryDto query = ProteomicsSearchQueryDto.builder()
+      .search(search)
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .build();
+
+    repository.findAll(PageRequest.of(0, 10), query, Collections.emptyList(), TISSUE);
+
+    return searchCondition(captureAndConditions());
+  }
+
+  private List<Document> searchBranchesFor(String search) {
+    return (List<Document>) searchConditionFor(search).get("$or");
+  }
+
+  /** The one $and condition that isn't the mandatory tissue scoping. */
+  private static Document searchCondition(List<Document> andConditions) {
+    return andConditions
+      .stream()
+      .filter(condition -> !condition.containsKey(TISSUE_FIELD))
+      .findFirst()
+      .orElseThrow(() -> new AssertionError("no search condition in " + andConditions));
+  }
+
+  private static Document branchFor(List<Document> branches, String field) {
+    return branches
+      .stream()
+      .filter(branch -> branch.containsKey(field))
+      .findFirst()
+      .orElseThrow(() -> new AssertionError("no " + field + " branch in " + branches));
+  }
+
+  private static List<Pattern> inPatterns(Document condition, String field) {
+    return (List<Pattern>) condition.get(field, Document.class).get("$in");
+  }
+
+  private static String fullMatch(String term) {
+    return "^" + Pattern.quote(term) + "$";
   }
 
   private List<Document> captureAndConditions() {
