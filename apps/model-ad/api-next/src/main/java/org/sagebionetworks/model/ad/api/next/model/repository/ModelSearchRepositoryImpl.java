@@ -92,7 +92,7 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
 
   private Document buildVars(String escapedQuery) {
     return new Document("filtered_aliases", new Document("$filter", new Document()
-        .append("input", new Document("$ifNull", List.of("$aliases", List.of())))
+        .append("input", "$aliases")
         .append("cond", new Document("$regexMatch", new Document()
             .append("input", "$$this")
             .append("regex", escapedQuery)
@@ -115,7 +115,7 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
     String fieldPath = "$" + matchField.getField();
     return new Document()
         .append("case", new Document("$regexMatch", new Document()
-            .append("input", new Document("$ifNull", List.of(fieldPath, "")))
+            .append("input", fieldPath)
             .append("regex", escapedQuery)
             .append("options", "i")))
         .append("then", thenDocument(matchField, fieldPath));
