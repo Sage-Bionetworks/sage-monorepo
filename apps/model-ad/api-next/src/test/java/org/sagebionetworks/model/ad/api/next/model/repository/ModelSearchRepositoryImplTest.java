@@ -29,6 +29,10 @@ class ModelSearchRepositoryImplTest {
   private static final String MOUSE_COLLECTION = "model_details";
   private static final String MARMOSET_COLLECTION = "marmo_details";
   private static final String QUERY = "apoe";
+  private static final int NAME_PRECEDENCE =
+    ModelSearchRepositoryImpl.MatchField.NAME.getPrecedence();
+  private static final int JAX_ID_PRECEDENCE =
+    ModelSearchRepositoryImpl.MatchField.JAX_ID.getPrecedence();
 
   @Mock
   private MongoTemplate mongoTemplate;
@@ -107,16 +111,15 @@ class ModelSearchRepositoryImplTest {
   @Test
   @DisplayName("should sort merged results by precedence then id")
   void shouldSortMergedResultsByPrecedenceThenId() {
-    // Abca7 matched on jax_id (precedence 3), Trem2R47H matched on name (precedence 1)
     stubAggregation(
       MOUSE_COLLECTION,
       mouseResults,
-      List.of(document("Abca7", 3), document("Trem2R47H", 1))
+      List.of(document("Abca7", JAX_ID_PRECEDENCE), document("Trem2R47H", NAME_PRECEDENCE))
     );
     stubAggregation(
       MARMOSET_COLLECTION,
       marmosetResults,
-      List.of(document("Marmoset2", 1), document("Marmoset1", 1))
+      List.of(document("Marmoset2", NAME_PRECEDENCE), document("Marmoset1", NAME_PRECEDENCE))
     );
 
     List<SearchResultDocument> results = repository.searchModels(

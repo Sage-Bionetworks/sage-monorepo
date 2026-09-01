@@ -1,7 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -93,7 +92,7 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
 
   private Document buildVars(String escapedQuery) {
     return new Document("filtered_aliases", new Document("$filter", new Document()
-        .append("input", new Document("$ifNull", Arrays.asList("$aliases", List.of())))
+        .append("input", new Document("$ifNull", List.of("$aliases", List.of())))
         .append("cond", new Document("$regexMatch", new Document()
             .append("input", "$$this")
             .append("regex", escapedQuery)
@@ -101,49 +100,62 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
   }
 
   private List<Document> mouseMatchBranches(String escapedQuery) {
-    return Arrays.asList(
-        new Document()
-            .append("case", new Document("$regexMatch", new Document()
-                .append("input", "$name").append("regex", escapedQuery)
-                .append("options", "i")))
-            .append("then", new Document()
-                .append("precedence", 1)
-                .append("match_field", "name")
-                .append("match_value", "$name")),
-        new Document()
-            .append("case", new Document("$gt",
-                Arrays.asList(new Document("$size", "$$filtered_aliases"), 0)))
-            .append("then", new Document()
-                .append("precedence", 2)
-                .append("match_field", "aliases")
-                .append("match_value",
-                    new Document("$arrayElemAt", Arrays.asList("$$filtered_aliases", 0)))),
-        new Document()
-            .append("case", new Document("$regexMatch", new Document()
-                .append("input", new Document("$ifNull", Arrays.asList("$jax_id", "")))
-                .append("regex", escapedQuery).append("options", "i")))
-            .append("then", new Document()
-                .append("precedence", 3)
-                .append("match_field", "jax_id")
-                .append("match_value", "$jax_id")),
-        new Document()
-            .append("case", new Document("$regexMatch", new Document()
-                .append("input", new Document("$ifNull", Arrays.asList("$rrid", "")))
-                .append("regex", escapedQuery).append("options", "i")))
-            .append("then", new Document()
-                .append("precedence", 4)
-                .append("match_field", "rrid")
-                .append("match_value", "$rrid")));
+    return List.of(
+        regexBranch(MatchField.NAME, escapedQuery),
+        aliasesBranch(),
+        regexBranch(MatchField.JAX_ID, escapedQuery),
+        regexBranch(MatchField.RRID, escapedQuery));
   }
 
   private List<Document> marmosetMatchBranches(String escapedQuery) {
-    return Arrays.asList(new Document()
+    return List.of(regexBranch(MatchField.NAME, escapedQuery));
+  }
+
+  private Document regexBranch(MatchField matchField, String escapedQuery) {
+    String fieldPath = "$" + matchField.getField();
+    return new Document()
         .append("case", new Document("$regexMatch", new Document()
-            .append("input", "$name").append("regex", escapedQuery)
+            .append("input", new Document("$ifNull", List.of(fieldPath, "")))
+            .append("regex", escapedQuery)
             .append("options", "i")))
-        .append("then", new Document()
-            .append("precedence", 1)
-            .append("match_field", "name")
-            .append("match_value", "$name")));
+        .append("then", thenDocument(matchField, fieldPath));
+  }
+
+  private Document aliasesBranch() {
+    return new Document()
+        .append("case", new Document("$gt",
+            List.of(new Document("$size", "$$filtered_aliases"), 0)))
+        .append("then", thenDocument(MatchField.ALIASES,
+            new Document("$arrayElemAt", List.of("$$filtered_aliases", 0))));
+  }
+
+  private Document thenDocument(MatchField matchField, Object matchValue) {
+    return new Document()
+        .append("precedence", matchField.getPrecedence())
+        .append("match_field", matchField.getField())
+        .append("match_value", matchValue);
+  }
+
+  enum MatchField {
+    NAME("name", 1),
+    ALIASES("aliases", 2),
+    JAX_ID("jax_id", 3),
+    RRID("rrid", 4);
+
+    private final String field;
+    private final int precedence;
+
+    MatchField(String field, int precedence) {
+      this.field = field;
+      this.precedence = precedence;
+    }
+
+    String getField() {
+      return field;
+    }
+
+    int getPrecedence() {
+      return precedence;
+    }
   }
 }
