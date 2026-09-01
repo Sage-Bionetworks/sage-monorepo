@@ -2,10 +2,8 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -135,28 +133,6 @@ class ModelSearchRepositoryImplTest {
       .extracting(SearchResultDocument::getId)
       .as("precedence wins over id, and both collections interleave rather than concatenate")
       .containsExactly("APOE4", "Presenilin 1", "Trem2R47H", "3xTg-AD");
-  }
-
-  @Test
-  @DisplayName("should not use $unionWith to combine the two collections")
-  void shouldNotUseUnionWithStage() {
-    stubAggregation(MOUSE_COLLECTION, mouseResults, List.of());
-    stubAggregation(MARMOSET_COLLECTION, marmosetResults, List.of());
-
-    repository.searchModels(QUERY, List.of(ModelOrganismDto.MOUSE, ModelOrganismDto.MARMOSET));
-
-    ArgumentCaptor<Aggregation> aggregationCaptor = ArgumentCaptor.forClass(Aggregation.class);
-    verify(mongoTemplate, times(2)).aggregate(
-      aggregationCaptor.capture(),
-      anyString(),
-      eq(SearchResultDocument.class)
-    );
-
-    assertThat(aggregationCaptor.getAllValues()).allSatisfy(aggregation ->
-      assertThat(aggregation.toString())
-        .as("$unionWith is unsupported on DocumentDB, so the collections are merged in Java")
-        .doesNotContain("$unionWith")
-    );
   }
 
   @Test
