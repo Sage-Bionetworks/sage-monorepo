@@ -14,15 +14,9 @@ img {
   margin: 10px 0;
 }
 
-#color-chart-labels {
-  margin: 0 0 40px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-}
-
+#color-chart-labels,
 #size-chart-labels {
-  margin: 0 0 10px;
+  margin: 0 0 40px;
   display: flex;
   justify-content: space-between;
   font-size: 12px;
