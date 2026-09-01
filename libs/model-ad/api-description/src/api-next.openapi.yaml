@@ -26,6 +26,8 @@ tags:
     description: Operations about Mouse Model Overview.
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
+  - name: Proteomics
+    description: Operations about Proteomics results.
   - name: Transcriptomics
     description: Operations about Transcriptomics results.
   - name: Transcriptomics Individual
@@ -41,6 +43,8 @@ paths:
     $ref: paths/comparison-tools/marmoset-model-overview.yaml
   /comparison-tools/disease-correlation:
     $ref: paths/comparison-tools/disease-correlation.yaml
+  /comparison-tools/proteomics:
+    $ref: paths/comparison-tools/proteomics.yaml
   /comparison-tools/transcriptomics:
     $ref: paths/comparison-tools/transcriptomics.yaml
   /transcriptomics-individual:

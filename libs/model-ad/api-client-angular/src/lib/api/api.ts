@@ -10,6 +10,8 @@ export * from './model.service';
 import { ModelService } from './model.service';
 export * from './mouse-model-overview.service';
 import { MouseModelOverviewService } from './mouse-model-overview.service';
+export * from './proteomics.service';
+import { ProteomicsService } from './proteomics.service';
 export * from './transcriptomics.service';
 import { TranscriptomicsService } from './transcriptomics.service';
 export * from './transcriptomics-individual.service';
@@ -21,6 +23,7 @@ export const APIS = [
   MarmosetModelOverviewService,
   ModelService,
   MouseModelOverviewService,
+  ProteomicsService,
   TranscriptomicsService,
   TranscriptomicsIndividualService,
 ];

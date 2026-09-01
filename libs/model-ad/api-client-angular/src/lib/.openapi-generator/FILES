@@ -8,6 +8,7 @@ api/disease-correlation.service.ts
 api/marmoset-model-overview.service.ts
 api/model.service.ts
 api/mouse-model-overview.service.ts
+api/proteomics.service.ts
 api/transcriptomics-individual.service.ts
 api/transcriptomics.service.ts
 configuration.ts
@@ -44,6 +45,9 @@ model/mouse-model-overviews-page.ts
 model/mouse-model.ts
 model/named-link.ts
 model/page-metadata.ts
+model/proteomics-page.ts
+model/proteomics-search-query.ts
+model/proteomics.ts
 model/search-result.ts
 model/sex.ts
 model/transcriptomics-individual-filter-query.ts

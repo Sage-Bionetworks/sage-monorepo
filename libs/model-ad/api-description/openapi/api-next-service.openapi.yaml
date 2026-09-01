@@ -26,6 +26,8 @@ tags:
     description: Operations about Mouse Model Overview.
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
+  - name: Proteomics
+    description: Operations about Proteomics results.
   - name: Transcriptomics
     description: Operations about Transcriptomics results.
   - name: Transcriptomics Individual
@@ -142,6 +144,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DiseaseCorrelationsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/proteomics:
+    get:
+      tags:
+        - Proteomics
+      summary: Get proteomics comparison data
+      description: Returns a paginated list of proteomics objects for use in comparison tools.
+      operationId: getProteomics
+      parameters:
+        - $ref: '#/components/parameters/proteomicsSearchQuery'
+      responses:
+        '200':
+          description: A paginated response containing proteomics objects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProteomicsPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -989,6 +1013,249 @@ components:
       required:
         - diseaseCorrelations
         - page
+    ProteomicsSearchQuery:
+      type: object
+      description: Proteomics search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+          example: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+          maximum: 100
+          example: 100
+        categories:
+          description: |
+            Array of category values from the dropdown selections.
+            The API will parse these to extract the tissue information.
+            Expected format: [mainCategory, tissueCategory]
+          type: array
+          items:
+            type: string
+          minItems: 2
+          maxItems: 2
+          example:
+            - PROTEIN - DIFFERENTIAL EXPRESSION
+            - Tissue - Hemibrain
+        items:
+          description: |
+            List of composite identifiers to filter by. Each identifier uses the format "unique_id~name~sex"
+            where each identifier represents one complete combination of unique ID, gene name, and sex.
+
+            Example: "ENSMUSG11111111110P11110~LOAD2~Female" filters for documents matching that exact unique ID, name, and sex.
+            Multiple items can be provided to filter for multiple specific combinations.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - ENSMUSG11111111110P11110~LOAD2~Female
+            - ENSMUSG11111111111P11111~LOAD1~Male
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          nullable: true
+        search:
+          description: |
+            Search by identifier. A single term is a case-insensitive partial match on the displayed symbol,
+            which embeds the gene symbol and UniProt ID, or the Ensembl gene ID and UniProt ID when the gene
+            symbol is unavailable. A single term that is a complete Ensembl gene ID is instead a case-insensitive
+            full match on the Ensembl gene ID, so it also reaches rows whose displayed symbol shows a gene symbol.
+            A comma separated list full-matches each term, case-insensitively, against the Ensembl gene ID,
+            gene symbol, or UniProt ID.
+            Examples: 'ensa,P27144,ENSMUSG00000000001' (comma-separated list), 'ENSMUSG00000000001'
+            (complete Ensembl gene ID) or 'gna' (partial match). Only applied when itemFilterType is 'exclude'.
+          type: string
+          nullable: true
+          example: ensa,P27144,ENSMUSG00000000001
+        biodomains:
+          description: Filter by biological domains.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Apoptosis
+            - Cell Cycle
+        modelType:
+          description: Filter by model type.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Familial AD
+            - Late Onset AD
+        name:
+          description: Filter by mouse model name.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - 3xTg-AD
+            - 5xFAD (IU/Jax/Pitt)
+        sex:
+          description: Filter by sex.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Female
+            - Male
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., "display_symbol,name").
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+            - display_symbol
+            - name
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: array
+          items:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - -1
+          minItems: 1
+          example:
+            - 1
+            - -1
+      required:
+        - categories
+        - sortFields
+        - sortOrders
+    NamedLink:
+      type: object
+      description: Link with required display text
+      properties:
+        link_text:
+          type: string
+          description: Link text
+        link_url:
+          type: string
+          description: URL for the related resource
+      required:
+        - link_text
+    FoldChangeResult:
+      type: object
+      description: Fold Change result
+      properties:
+        log2_fc:
+          type: number
+          description: Log2 fold change
+        adj_p_val:
+          type: number
+          description: Adjusted p-value
+      required:
+        - log2_fc
+        - adj_p_val
+    Proteomics:
+      type: object
+      description: Proteomics
+      properties:
+        composite_id:
+          type: string
+          description: Unique identifier for the proteomics object (unique_id~model_name~sex)
+          example: ENSMUSG00000000001P27144~LOAD2~Female
+        ensembl_gene_id:
+          type: string
+          description: Ensembl Gene ID
+        gene_symbol:
+          type: string
+          description: Gene Symbol
+          example: Gnai3
+        uniprotid:
+          type: string
+          description: UniProt ID
+          example: P27144
+        unique_id:
+          type: string
+          description: Concatenation of the Ensembl Gene ID and the UniProt ID
+          example: ENSMUSG00000000001P27144
+        display_symbol:
+          type: string
+          description: Gene symbol and UniProt ID, falling back to the Ensembl Gene ID when the gene symbol is unavailable
+          example: Gnai3 (P27144)
+        biodomains:
+          type: array
+          description: List of biodomains associated with the gene
+          items:
+            type: string
+        name:
+          $ref: '#/components/schemas/NamedLink'
+          description: Model name and link to model details page
+        matched_control:
+          type: string
+          description: Matched control for the model
+          example: C57BL/6J
+        model_group:
+          type: string
+          description: Model group
+          nullable: true
+        model_type:
+          type: string
+          description: Type of model
+          example: Late Onset AD
+        tissue:
+          type: string
+          description: Tissue type
+          example: Hemibrain
+        sex:
+          $ref: '#/components/schemas/Sex'
+        4 months:
+          $ref: '#/components/schemas/FoldChangeResult'
+        12 months:
+          $ref: '#/components/schemas/FoldChangeResult'
+        18 months:
+          $ref: '#/components/schemas/FoldChangeResult'
+        24 months:
+          $ref: '#/components/schemas/FoldChangeResult'
+      required:
+        - composite_id
+        - ensembl_gene_id
+        - gene_symbol
+        - uniprotid
+        - unique_id
+        - display_symbol
+        - biodomains
+        - name
+        - matched_control
+        - model_group
+        - model_type
+        - tissue
+        - sex
+    ProteomicsPage:
+      type: object
+      description: A paginated response containing proteomics objects and pagination metadata.
+      properties:
+        proteomics:
+          type: array
+          description: The list of proteomics objects for the current page
+          items:
+            $ref: '#/components/schemas/Proteomics'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - proteomics
+        - page
     TranscriptomicsSearchQuery:
       type: object
       description: Transcriptomics search query with pagination and filtering options.
@@ -1113,31 +1380,6 @@ components:
         - categories
         - sortFields
         - sortOrders
-    NamedLink:
-      type: object
-      description: Link with required display text
-      properties:
-        link_text:
-          type: string
-          description: Link text
-        link_url:
-          type: string
-          description: URL for the related resource
-      required:
-        - link_text
-    FoldChangeResult:
-      type: object
-      description: Fold Change result
-      properties:
-        log2_fc:
-          type: number
-          description: Log2 fold change
-        adj_p_val:
-          type: number
-          description: Adjusted p-value
-      required:
-        - log2_fc
-        - adj_p_val
     Transcriptomics:
       type: object
       description: Transcriptomics
@@ -1558,6 +1800,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
+    proteomicsSearchQuery:
+      name: proteomicsSearchQuery
+      description: The search query used to find and filter proteomics data.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ProteomicsSearchQuery'
     transcriptomicsSearchQuery:
       name: transcriptomicsSearchQuery
       description: The search query used to find and filter transcriptomics data.

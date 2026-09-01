@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
@@ -215,10 +216,10 @@ public final class ApiHelper {
         String child = resolvedField.substring(dotIndex + 1);
         if (child.contains(".")) {
           throw new IllegalArgumentException(
-            "Spaced field paths support only one level of nesting via $getField; '"
-              + resolvedField
-              + "' contains more than one dot."
-              + " Add an explicit sort-field alias to a single-dot path instead."
+            "Spaced field paths support only one level of nesting via $getField; '" +
+            resolvedField +
+            "' contains more than one dot." +
+            " Add an explicit sort-field alias to a single-dot path instead."
           );
         }
         fieldAccess = new Document(
@@ -232,7 +233,8 @@ public final class ApiHelper {
       // null/missing: $type returns "null" or "missing" for absent/null; $eq null fails for
       // $$REMOVE so $type is required here
       Document isNullOrMissing = new Document(
-        "$in", List.of(new Document("$type", "$$val"), List.of("null", "missing"))
+        "$in",
+        List.of(new Document("$type", "$$val"), List.of("null", "missing"))
       );
       // empty string
       Document isEmptyString = new Document("$eq", List.of("$$val", ""));
@@ -240,18 +242,19 @@ public final class ApiHelper {
       Document isEmptyArray = new Document(
         "$eq",
         List.of(
-          new Document("$cond", List.of(
-            new Document("$isArray", "$$val"),
-            new Document("$size", "$$val"),
-            -1
-          )),
+          new Document(
+            "$cond",
+            List.of(new Document("$isArray", "$$val"), new Document("$size", "$$val"), -1)
+          ),
           0
         )
       );
 
-      return new Document("$let", new Document()
-        .append("vars", new Document("val", fieldAccess))
-        .append("in", new Document("$or", List.of(isNullOrMissing, isEmptyString, isEmptyArray)))
+      return new Document(
+        "$let",
+        new Document()
+          .append("vars", new Document("val", fieldAccess))
+          .append("in", new Document("$or", List.of(isNullOrMissing, isEmptyString, isEmptyArray)))
       );
     }
 
@@ -267,20 +270,26 @@ public final class ApiHelper {
     Document isEmptyArrayExpr = new Document(
       "$eq",
       List.of(
-        new Document("$cond", List.of(
-          new Document("$isArray", "$" + resolvedField),
-          new Document("$size", "$" + resolvedField),
-          -1
-        )),
+        new Document(
+          "$cond",
+          List.of(
+            new Document("$isArray", "$" + resolvedField),
+            new Document("$size", "$" + resolvedField),
+            -1
+          )
+        ),
         0
       )
     );
 
-    return new Document("$or", List.of(
-      new Document("$eq", isNullArgs),
-      new Document("$eq", isEmptyStringArgs),
-      isEmptyArrayExpr
-    ));
+    return new Document(
+      "$or",
+      List.of(
+        new Document("$eq", isNullArgs),
+        new Document("$eq", isEmptyStringArgs),
+        isEmptyArrayExpr
+      )
+    );
   }
 
   /**
@@ -317,6 +326,18 @@ public final class ApiHelper {
       .stream()
       .map(name -> Pattern.compile("^" + Pattern.quote(name) + "$", Pattern.CASE_INSENSITIVE))
       .toList();
+  }
+
+  /**
+   * Builds criteria matching a field against any of the given terms as a full, case-insensitive
+   * match.
+   *
+   * @param field the MongoDB field to match against
+   * @param terms list of terms, expected to be trimmed and non-empty
+   * @return criteria matching the field against any of the terms
+   */
+  public static Criteria equalsAnyIgnoringCase(String field, List<String> terms) {
+    return Criteria.where(field).in(createCaseInsensitiveFullMatchPatterns(terms));
   }
 
   /**

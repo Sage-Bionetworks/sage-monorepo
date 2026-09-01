@@ -2,21 +2,21 @@ package org.sagebionetworks.model.ad.api.next.model.mapper;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
-import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsIdentifier;
+import org.sagebionetworks.model.ad.api.next.model.document.ProteomicsDocument;
+import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsIdentifier;
 import org.sagebionetworks.model.ad.api.next.util.EnumConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TranscriptomicsMapper {
+public class ProteomicsMapper {
 
   private final LinkMapper linkMapper;
   private final FoldChangeMapper foldChangeMapper;
 
-  public TranscriptomicsDto toDto(@Nullable TranscriptomicsDocument document) {
+  public ProteomicsDto toDto(@Nullable ProteomicsDocument document) {
     if (document == null) {
       return null;
     }
@@ -25,17 +25,20 @@ public class TranscriptomicsMapper {
       ? List.of()
       : List.copyOf(document.getBiodomains());
 
-    TranscriptomicsDto dto = new TranscriptomicsDto(
+    ProteomicsDto dto = new ProteomicsDto(
       getCompositeId(document),
       document.getEnsemblGeneId(),
-      getGeneSymbolWithFallback(document),
+      document.getGeneSymbol(),
+      document.getUniprotid(),
+      document.getUniqueId(),
+      document.getDisplaySymbol(),
       biodomains,
       linkMapper.toNamedLinkDto(document.getName()),
       document.getMatchedControl(),
       document.getModelGroup(),
       document.getModelType(),
       document.getTissue(),
-      EnumConverter.toSexDto(document.getSex(), "transcriptomics record")
+      EnumConverter.toSexDto(document.getSex(), "proteomics record")
     );
 
     dto.set4months(foldChangeMapper.toNullableDto(document.getFourMonths()));
@@ -46,21 +49,12 @@ public class TranscriptomicsMapper {
     return dto;
   }
 
-  private String getCompositeId(TranscriptomicsDocument document) {
-    return TranscriptomicsIdentifier.builder()
-      .ensemblGeneId(document.getEnsemblGeneId())
+  private String getCompositeId(ProteomicsDocument document) {
+    return ProteomicsIdentifier.builder()
+      .uniqueId(document.getUniqueId())
       .name(document.getName().getLinkText())
       .sex(document.getSex())
       .build()
       .toCompositeId();
-  }
-
-  private String getGeneSymbolWithFallback(TranscriptomicsDocument document) {
-    String geneSymbol = document.getGeneSymbol();
-    if (geneSymbol == null || geneSymbol.isBlank()) {
-      // Fallback to ensembl_gene_id if gene_symbol is null or blank
-      return document.getEnsemblGeneId();
-    }
-    return geneSymbol;
   }
 }

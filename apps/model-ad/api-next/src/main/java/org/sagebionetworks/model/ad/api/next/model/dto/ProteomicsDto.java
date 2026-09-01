@@ -1,0 +1,663 @@
+package org.sagebionetworks.model.ad.api.next.model.dto;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.sagebionetworks.model.ad.api.next.model.dto.FoldChangeResultDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.NamedLinkDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
+import org.springframework.lang.Nullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * Proteomics
+ */
+
+@Schema(name = "Proteomics", description = "Proteomics")
+@JsonTypeName("Proteomics")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
+public class ProteomicsDto {
+
+  private String compositeId;
+
+  private String ensemblGeneId;
+
+  private String geneSymbol;
+
+  private String uniprotid;
+
+  private String uniqueId;
+
+  private String displaySymbol;
+
+  @Valid
+  private List<String> biodomains = new ArrayList<>();
+
+  private NamedLinkDto name;
+
+  private String matchedControl;
+
+  private String modelGroup = null;
+
+  private String modelType;
+
+  private String tissue;
+
+  private SexDto sex;
+
+  private @Nullable FoldChangeResultDto _4months;
+
+  private @Nullable FoldChangeResultDto _12months;
+
+  private @Nullable FoldChangeResultDto _18months;
+
+  private @Nullable FoldChangeResultDto _24months;
+
+  public ProteomicsDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ProteomicsDto(String compositeId, String ensemblGeneId, String geneSymbol, String uniprotid, String uniqueId, String displaySymbol, List<String> biodomains, NamedLinkDto name, String matchedControl, String modelGroup, String modelType, String tissue, SexDto sex) {
+    this.compositeId = compositeId;
+    this.ensemblGeneId = ensemblGeneId;
+    this.geneSymbol = geneSymbol;
+    this.uniprotid = uniprotid;
+    this.uniqueId = uniqueId;
+    this.displaySymbol = displaySymbol;
+    this.biodomains = biodomains;
+    this.name = name;
+    this.matchedControl = matchedControl;
+    this.modelGroup = modelGroup;
+    this.modelType = modelType;
+    this.tissue = tissue;
+    this.sex = sex;
+  }
+
+  public ProteomicsDto compositeId(String compositeId) {
+    this.compositeId = compositeId;
+    return this;
+  }
+
+  /**
+   * Unique identifier for the proteomics object (unique_id~model_name~sex)
+   * @return compositeId
+   */
+  @NotNull 
+  @Schema(name = "composite_id", example = "ENSMUSG00000000001P27144~LOAD2~Female", description = "Unique identifier for the proteomics object (unique_id~model_name~sex)", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("composite_id")
+  public String getCompositeId() {
+    return compositeId;
+  }
+
+  public void setCompositeId(String compositeId) {
+    this.compositeId = compositeId;
+  }
+
+  public ProteomicsDto ensemblGeneId(String ensemblGeneId) {
+    this.ensemblGeneId = ensemblGeneId;
+    return this;
+  }
+
+  /**
+   * Ensembl Gene ID
+   * @return ensemblGeneId
+   */
+  @NotNull 
+  @Schema(name = "ensembl_gene_id", description = "Ensembl Gene ID", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("ensembl_gene_id")
+  public String getEnsemblGeneId() {
+    return ensemblGeneId;
+  }
+
+  public void setEnsemblGeneId(String ensemblGeneId) {
+    this.ensemblGeneId = ensemblGeneId;
+  }
+
+  public ProteomicsDto geneSymbol(String geneSymbol) {
+    this.geneSymbol = geneSymbol;
+    return this;
+  }
+
+  /**
+   * Gene Symbol
+   * @return geneSymbol
+   */
+  @NotNull 
+  @Schema(name = "gene_symbol", example = "Gnai3", description = "Gene Symbol", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("gene_symbol")
+  public String getGeneSymbol() {
+    return geneSymbol;
+  }
+
+  public void setGeneSymbol(String geneSymbol) {
+    this.geneSymbol = geneSymbol;
+  }
+
+  public ProteomicsDto uniprotid(String uniprotid) {
+    this.uniprotid = uniprotid;
+    return this;
+  }
+
+  /**
+   * UniProt ID
+   * @return uniprotid
+   */
+  @NotNull 
+  @Schema(name = "uniprotid", example = "P27144", description = "UniProt ID", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("uniprotid")
+  public String getUniprotid() {
+    return uniprotid;
+  }
+
+  public void setUniprotid(String uniprotid) {
+    this.uniprotid = uniprotid;
+  }
+
+  public ProteomicsDto uniqueId(String uniqueId) {
+    this.uniqueId = uniqueId;
+    return this;
+  }
+
+  /**
+   * Concatenation of the Ensembl Gene ID and the UniProt ID
+   * @return uniqueId
+   */
+  @NotNull 
+  @Schema(name = "unique_id", example = "ENSMUSG00000000001P27144", description = "Concatenation of the Ensembl Gene ID and the UniProt ID", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("unique_id")
+  public String getUniqueId() {
+    return uniqueId;
+  }
+
+  public void setUniqueId(String uniqueId) {
+    this.uniqueId = uniqueId;
+  }
+
+  public ProteomicsDto displaySymbol(String displaySymbol) {
+    this.displaySymbol = displaySymbol;
+    return this;
+  }
+
+  /**
+   * Gene symbol and UniProt ID, falling back to the Ensembl Gene ID when the gene symbol is unavailable
+   * @return displaySymbol
+   */
+  @NotNull 
+  @Schema(name = "display_symbol", example = "Gnai3 (P27144)", description = "Gene symbol and UniProt ID, falling back to the Ensembl Gene ID when the gene symbol is unavailable", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("display_symbol")
+  public String getDisplaySymbol() {
+    return displaySymbol;
+  }
+
+  public void setDisplaySymbol(String displaySymbol) {
+    this.displaySymbol = displaySymbol;
+  }
+
+  public ProteomicsDto biodomains(List<String> biodomains) {
+    this.biodomains = biodomains;
+    return this;
+  }
+
+  public ProteomicsDto addBiodomainsItem(String biodomainsItem) {
+    if (this.biodomains == null) {
+      this.biodomains = new ArrayList<>();
+    }
+    this.biodomains.add(biodomainsItem);
+    return this;
+  }
+
+  /**
+   * List of biodomains associated with the gene
+   * @return biodomains
+   */
+  @NotNull 
+  @Schema(name = "biodomains", description = "List of biodomains associated with the gene", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("biodomains")
+  public List<String> getBiodomains() {
+    return biodomains;
+  }
+
+  public void setBiodomains(List<String> biodomains) {
+    this.biodomains = biodomains;
+  }
+
+  public ProteomicsDto name(NamedLinkDto name) {
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * Get name
+   * @return name
+   */
+  @NotNull @Valid 
+  @Schema(name = "name", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("name")
+  public NamedLinkDto getName() {
+    return name;
+  }
+
+  public void setName(NamedLinkDto name) {
+    this.name = name;
+  }
+
+  public ProteomicsDto matchedControl(String matchedControl) {
+    this.matchedControl = matchedControl;
+    return this;
+  }
+
+  /**
+   * Matched control for the model
+   * @return matchedControl
+   */
+  @NotNull 
+  @Schema(name = "matched_control", example = "C57BL/6J", description = "Matched control for the model", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("matched_control")
+  public String getMatchedControl() {
+    return matchedControl;
+  }
+
+  public void setMatchedControl(String matchedControl) {
+    this.matchedControl = matchedControl;
+  }
+
+  public ProteomicsDto modelGroup(String modelGroup) {
+    this.modelGroup = modelGroup;
+    return this;
+  }
+
+  /**
+   * Model group
+   * @return modelGroup
+   */
+  @NotNull 
+  @Schema(name = "model_group", description = "Model group", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("model_group")
+  public String getModelGroup() {
+    return modelGroup;
+  }
+
+  public void setModelGroup(String modelGroup) {
+    this.modelGroup = modelGroup;
+  }
+
+  public ProteomicsDto modelType(String modelType) {
+    this.modelType = modelType;
+    return this;
+  }
+
+  /**
+   * Type of model
+   * @return modelType
+   */
+  @NotNull 
+  @Schema(name = "model_type", example = "Late Onset AD", description = "Type of model", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("model_type")
+  public String getModelType() {
+    return modelType;
+  }
+
+  public void setModelType(String modelType) {
+    this.modelType = modelType;
+  }
+
+  public ProteomicsDto tissue(String tissue) {
+    this.tissue = tissue;
+    return this;
+  }
+
+  /**
+   * Tissue type
+   * @return tissue
+   */
+  @NotNull 
+  @Schema(name = "tissue", example = "Hemibrain", description = "Tissue type", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("tissue")
+  public String getTissue() {
+    return tissue;
+  }
+
+  public void setTissue(String tissue) {
+    this.tissue = tissue;
+  }
+
+  public ProteomicsDto sex(SexDto sex) {
+    this.sex = sex;
+    return this;
+  }
+
+  /**
+   * Get sex
+   * @return sex
+   */
+  @NotNull @Valid 
+  @Schema(name = "sex", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("sex")
+  public SexDto getSex() {
+    return sex;
+  }
+
+  public void setSex(SexDto sex) {
+    this.sex = sex;
+  }
+
+  public ProteomicsDto _4months(@Nullable FoldChangeResultDto _4months) {
+    this._4months = _4months;
+    return this;
+  }
+
+  /**
+   * Get _4months
+   * @return _4months
+   */
+  @Valid 
+  @Schema(name = "4 months", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("4 months")
+  public @Nullable FoldChangeResultDto get4months() {
+    return _4months;
+  }
+
+  public void set4months(@Nullable FoldChangeResultDto _4months) {
+    this._4months = _4months;
+  }
+
+  public ProteomicsDto _12months(@Nullable FoldChangeResultDto _12months) {
+    this._12months = _12months;
+    return this;
+  }
+
+  /**
+   * Get _12months
+   * @return _12months
+   */
+  @Valid 
+  @Schema(name = "12 months", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("12 months")
+  public @Nullable FoldChangeResultDto get12months() {
+    return _12months;
+  }
+
+  public void set12months(@Nullable FoldChangeResultDto _12months) {
+    this._12months = _12months;
+  }
+
+  public ProteomicsDto _18months(@Nullable FoldChangeResultDto _18months) {
+    this._18months = _18months;
+    return this;
+  }
+
+  /**
+   * Get _18months
+   * @return _18months
+   */
+  @Valid 
+  @Schema(name = "18 months", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("18 months")
+  public @Nullable FoldChangeResultDto get18months() {
+    return _18months;
+  }
+
+  public void set18months(@Nullable FoldChangeResultDto _18months) {
+    this._18months = _18months;
+  }
+
+  public ProteomicsDto _24months(@Nullable FoldChangeResultDto _24months) {
+    this._24months = _24months;
+    return this;
+  }
+
+  /**
+   * Get _24months
+   * @return _24months
+   */
+  @Valid 
+  @Schema(name = "24 months", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("24 months")
+  public @Nullable FoldChangeResultDto get24months() {
+    return _24months;
+  }
+
+  public void set24months(@Nullable FoldChangeResultDto _24months) {
+    this._24months = _24months;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ProteomicsDto proteomics = (ProteomicsDto) o;
+    return Objects.equals(this.compositeId, proteomics.compositeId) &&
+        Objects.equals(this.ensemblGeneId, proteomics.ensemblGeneId) &&
+        Objects.equals(this.geneSymbol, proteomics.geneSymbol) &&
+        Objects.equals(this.uniprotid, proteomics.uniprotid) &&
+        Objects.equals(this.uniqueId, proteomics.uniqueId) &&
+        Objects.equals(this.displaySymbol, proteomics.displaySymbol) &&
+        Objects.equals(this.biodomains, proteomics.biodomains) &&
+        Objects.equals(this.name, proteomics.name) &&
+        Objects.equals(this.matchedControl, proteomics.matchedControl) &&
+        Objects.equals(this.modelGroup, proteomics.modelGroup) &&
+        Objects.equals(this.modelType, proteomics.modelType) &&
+        Objects.equals(this.tissue, proteomics.tissue) &&
+        Objects.equals(this.sex, proteomics.sex) &&
+        Objects.equals(this._4months, proteomics._4months) &&
+        Objects.equals(this._12months, proteomics._12months) &&
+        Objects.equals(this._18months, proteomics._18months) &&
+        Objects.equals(this._24months, proteomics._24months);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(compositeId, ensemblGeneId, geneSymbol, uniprotid, uniqueId, displaySymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sex, _4months, _12months, _18months, _24months);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class ProteomicsDto {\n");
+    sb.append("    compositeId: ").append(toIndentedString(compositeId)).append("\n");
+    sb.append("    ensemblGeneId: ").append(toIndentedString(ensemblGeneId)).append("\n");
+    sb.append("    geneSymbol: ").append(toIndentedString(geneSymbol)).append("\n");
+    sb.append("    uniprotid: ").append(toIndentedString(uniprotid)).append("\n");
+    sb.append("    uniqueId: ").append(toIndentedString(uniqueId)).append("\n");
+    sb.append("    displaySymbol: ").append(toIndentedString(displaySymbol)).append("\n");
+    sb.append("    biodomains: ").append(toIndentedString(biodomains)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    matchedControl: ").append(toIndentedString(matchedControl)).append("\n");
+    sb.append("    modelGroup: ").append(toIndentedString(modelGroup)).append("\n");
+    sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
+    sb.append("    tissue: ").append(toIndentedString(tissue)).append("\n");
+    sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
+    sb.append("    _4months: ").append(toIndentedString(_4months)).append("\n");
+    sb.append("    _12months: ").append(toIndentedString(_12months)).append("\n");
+    sb.append("    _18months: ").append(toIndentedString(_18months)).append("\n");
+    sb.append("    _24months: ").append(toIndentedString(_24months)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+  
+  public static class Builder {
+
+    private ProteomicsDto instance;
+
+    public Builder() {
+      this(new ProteomicsDto());
+    }
+
+    protected Builder(ProteomicsDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(ProteomicsDto value) { 
+      this.instance.setCompositeId(value.compositeId);
+      this.instance.setEnsemblGeneId(value.ensemblGeneId);
+      this.instance.setGeneSymbol(value.geneSymbol);
+      this.instance.setUniprotid(value.uniprotid);
+      this.instance.setUniqueId(value.uniqueId);
+      this.instance.setDisplaySymbol(value.displaySymbol);
+      this.instance.setBiodomains(value.biodomains);
+      this.instance.setName(value.name);
+      this.instance.setMatchedControl(value.matchedControl);
+      this.instance.setModelGroup(value.modelGroup);
+      this.instance.setModelType(value.modelType);
+      this.instance.setTissue(value.tissue);
+      this.instance.setSex(value.sex);
+      this.instance.set4months(value._4months);
+      this.instance.set12months(value._12months);
+      this.instance.set18months(value._18months);
+      this.instance.set24months(value._24months);
+      return this;
+    }
+
+    public ProteomicsDto.Builder compositeId(String compositeId) {
+      this.instance.compositeId(compositeId);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder ensemblGeneId(String ensemblGeneId) {
+      this.instance.ensemblGeneId(ensemblGeneId);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder geneSymbol(String geneSymbol) {
+      this.instance.geneSymbol(geneSymbol);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder uniprotid(String uniprotid) {
+      this.instance.uniprotid(uniprotid);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder uniqueId(String uniqueId) {
+      this.instance.uniqueId(uniqueId);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder displaySymbol(String displaySymbol) {
+      this.instance.displaySymbol(displaySymbol);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder biodomains(List<String> biodomains) {
+      this.instance.biodomains(biodomains);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder name(NamedLinkDto name) {
+      this.instance.name(name);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder matchedControl(String matchedControl) {
+      this.instance.matchedControl(matchedControl);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder modelGroup(String modelGroup) {
+      this.instance.modelGroup(modelGroup);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder modelType(String modelType) {
+      this.instance.modelType(modelType);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder tissue(String tissue) {
+      this.instance.tissue(tissue);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder sex(SexDto sex) {
+      this.instance.sex(sex);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder _4months(FoldChangeResultDto _4months) {
+      this.instance._4months(_4months);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder _12months(FoldChangeResultDto _12months) {
+      this.instance._12months(_12months);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder _18months(FoldChangeResultDto _18months) {
+      this.instance._18months(_18months);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder _24months(FoldChangeResultDto _24months) {
+      this.instance._24months(_24months);
+      return this;
+    }
+    
+    /**
+    * returns a built ProteomicsDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public ProteomicsDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static ProteomicsDto.Builder builder() {
+    return new ProteomicsDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public ProteomicsDto.Builder toBuilder() {
+    ProteomicsDto.Builder builder = new ProteomicsDto.Builder();
+    return builder.copyOf(this);
+  }
+
+}
+
