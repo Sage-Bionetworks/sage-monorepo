@@ -114,12 +114,16 @@ class ModelSearchRepositoryImplTest {
     stubAggregation(
       MOUSE_COLLECTION,
       mouseResults,
-      List.of(document("Abca7", JAX_ID_PRECEDENCE), document("Trem2R47H", NAME_PRECEDENCE))
+      List.of(
+        document("3xTg-AD", JAX_ID_PRECEDENCE),
+        document("Trem2R47H", NAME_PRECEDENCE),
+        document("APOE4", NAME_PRECEDENCE)
+      )
     );
     stubAggregation(
       MARMOSET_COLLECTION,
       marmosetResults,
-      List.of(document("Marmoset2", NAME_PRECEDENCE), document("Marmoset1", NAME_PRECEDENCE))
+      List.of(document("Presenilin 1", NAME_PRECEDENCE))
     );
 
     List<SearchResultDocument> results = repository.searchModels(
@@ -130,7 +134,7 @@ class ModelSearchRepositoryImplTest {
     assertThat(results)
       .extracting(SearchResultDocument::getId)
       .as("precedence wins over id, and both collections interleave rather than concatenate")
-      .containsExactly("Marmoset1", "Marmoset2", "Trem2R47H", "Abca7");
+      .containsExactly("APOE4", "Presenilin 1", "Trem2R47H", "3xTg-AD");
   }
 
   @Test
