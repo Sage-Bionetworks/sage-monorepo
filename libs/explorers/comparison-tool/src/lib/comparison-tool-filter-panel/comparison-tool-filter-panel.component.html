@@ -9,7 +9,7 @@
         />
         <div class="filter-panel-main-menu">
           <ul>
-            @for (filter of filters(); track filter; let i = $index) {
+            @for (filter of filters(); track $index; let i = $index) {
               <li
                 class="filter-panel-main-menu-item-{{ filter.name }}"
                 [class.active]="activePane() === i"
@@ -26,7 +26,7 @@
     </div>
 
     <div class="filter-panel-panes">
-      @for (filter of filters(); track filter; let i = $index) {
+      @for (filter of filters(); track $index; let i = $index) {
         <div
           class="filter-panel-pane filter-panel-pane-{{ filter.name }}"
           [class.open]="activePane() === i"
@@ -38,7 +38,7 @@
               (closeClick)="close()"
             />
             <ul>
-              @for (option of filter.options; track option; let j = $index) {
+              @for (option of filter.options; track $index; let j = $index) {
                 @let filterOptionId = filter.name + '-' + option.label;
                 <li>
                   <div class="checkbox">
