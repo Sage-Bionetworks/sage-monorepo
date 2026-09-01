@@ -1,7 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.model.document;
 
 import java.util.List;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -55,16 +54,4 @@ public class TranscriptomicsDocument {
 
   @Field("24 months")
   private @Nullable FoldChangeResult twentyFourMonths;
-
-  @Builder
-  @Getter
-  @Setter
-  public static class FoldChangeResult {
-
-    @Field("log2_fc")
-    private Double log2Fc;
-
-    @Field("adj_p_val")
-    private Double adjPVal;
-  }
 }

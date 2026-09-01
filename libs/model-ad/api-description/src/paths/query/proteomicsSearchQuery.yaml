@@ -1,0 +1,7 @@
+name: proteomicsSearchQuery
+description: The search query used to find and filter proteomics data.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/ProteomicsSearchQuery.yaml
