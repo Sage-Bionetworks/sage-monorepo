@@ -64,7 +64,7 @@ describe('ModelDetailsModifiedGenesComponent', () => {
       await setup();
       const gene = mouseModelMock.genetic_info[0];
       const ensemblLink = screen.getByRole('link', { name: gene.ensembl_gene_id });
-      expect(ensemblLink.getAttribute('href')).toContain('sep2025');
+      expect(ensemblLink.getAttribute('href')).toContain('jun2026');
     });
   });
 
