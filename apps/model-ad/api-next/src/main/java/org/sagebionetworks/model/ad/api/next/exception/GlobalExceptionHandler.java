@@ -1,7 +1,12 @@
 package org.sagebionetworks.model.ad.api.next.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.constraints.Size;
+import java.util.Comparator;
 import java.util.Locale;
+import java.util.stream.Collectors;
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -138,6 +143,29 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       );
   }
 
+  @ExceptionHandler(ConstraintViolationException.class)
+  protected ResponseEntity<BasicErrorDto> handleConstraintViolation(
+    ConstraintViolationException ex,
+    NativeWebRequest request,
+    Locale locale
+  ) {
+    String detail = ex
+      .getConstraintViolations()
+      .stream()
+      .sorted(Comparator.comparing(violation -> violation.getPropertyPath().toString()))
+      .map(this::describeConstraintViolation)
+      .collect(Collectors.joining("; "));
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.BAD_REQUEST.getTitle())
+      .status(ErrorConstants.BAD_REQUEST.getStatus().value())
+      .detail(detail.isEmpty() ? ex.getMessage() : detail)
+      .instance(resolveInstance(request))
+      .build();
+    return ResponseEntity.status(ErrorConstants.BAD_REQUEST.getStatus())
+      .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+      .body(errorDto);
+  }
+
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
   protected ResponseEntity<BasicErrorDto> handleMethodArgumentTypeMismatch(
     MethodArgumentTypeMismatchException ex,
@@ -210,6 +238,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
       .body(errorDto);
+  }
+
+  private String describeConstraintViolation(ConstraintViolation<?> violation) {
+    String propertyPath = violation.getPropertyPath().toString();
+    String parameter = propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
+    if (
+      violation.getConstraintDescriptor().getAnnotation() instanceof Size size &&
+      violation.getInvalidValue() instanceof CharSequence
+    ) {
+      return String.format(
+        "Query parameter %s must be between %d and %d characters",
+        parameter,
+        size.min(),
+        size.max()
+      );
+    }
+    return String.format("Query parameter %s is invalid: %s", parameter, violation.getMessage());
   }
 
   private String resolveInstance(NativeWebRequest request) {

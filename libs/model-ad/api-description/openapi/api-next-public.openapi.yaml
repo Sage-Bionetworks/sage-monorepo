@@ -26,11 +26,50 @@ tags:
     description: Operations about Mouse Model Overview.
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
+  - name: Search
+    description: Operations about searching models.
   - name: Transcriptomics
     description: Operations about Transcriptomics results.
   - name: Transcriptomics Individual
     description: Operations about Individual Transcriptomics results.
 paths:
+  /search/models:
+    get:
+      tags:
+        - Search
+      summary: Search Models
+      description: Search for models across all organisms or filtered by specific organisms. When modelOrganisms is omitted, all organisms are searched and results are merged.
+      operationId: searchModels
+      parameters:
+        - name: q
+          in: query
+          description: Search query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+        - name: modelOrganisms
+          in: query
+          description: Filter results to specific model organisms. When omitted, all organisms are searched.
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ModelOrganism'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+          description: Successfully retrieved search results
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /data-version:
     x-audience:
       - public
@@ -229,17 +268,32 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    DataVersion:
+    ModelOrganism:
+      type: string
+      description: Model organism
+      enum:
+        - marmoset
+        - mouse
+    SearchResult:
       type: object
-      description: Synapse data version
+      description: Search result
       properties:
-        data_file:
+        id:
           type: string
-        data_version:
+          description: ID of result
+        match_field:
           type: string
+          description: Field that matched the query
+        match_value:
+          type: string
+          description: Value that matched the query
+        model_organism:
+          $ref: '#/components/schemas/ModelOrganism'
       required:
-        - data_file
-        - data_version
+        - id
+        - match_field
+        - match_value
+        - model_organism
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -262,6 +316,17 @@ components:
       required:
         - title
         - status
+    DataVersion:
+      type: object
+      description: Synapse data version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+      required:
+        - data_file
+        - data_version
     ComparisonToolPage:
       type: string
       description: The type of comparison tool page
@@ -1327,12 +1392,6 @@ components:
         - age_numeric
         - result_order
         - data
-    ModelOrganism:
-      type: string
-      description: Model organism
-      enum:
-        - marmoset
-        - mouse
     GeneticInfo:
       type: object
       description: Genetic information about a model
@@ -1521,14 +1580,14 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
+    NotFound:
+      description: The specified resource was not found
       content:
         application/problem+json:
           schema:

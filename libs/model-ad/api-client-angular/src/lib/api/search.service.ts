@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { Model } from '../model/model';
-// @ts-ignore
 import { ModelOrganism } from '../model/model-organism';
+// @ts-ignore
+import { SearchResult } from '../model/search-result';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -36,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class ModelService {
+export class SearchService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -109,16 +109,16 @@ export class ModelService {
   }
 
   /**
-   * Get details for a specific model
-   * Retrieve detailed information for a specific model by its name and model organism type.
-   * @param modelOrganism The type of model organism (e.g., mouse, marmoset)
-   * @param name Name of the model to retrieve
+   * Search Models
+   * Search for models across all organisms or filtered by specific organisms. When modelOrganisms is omitted, all organisms are searched and results are merged.
+   * @param q Search query
+   * @param modelOrganisms Filter results to specific model organisms. When omitted, all organisms are searched.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getModelByName(
-    modelOrganism: ModelOrganism,
-    name: string,
+  public searchModels(
+    q: string,
+    modelOrganisms?: Array<ModelOrganism>,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -126,10 +126,10 @@ export class ModelService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Model>;
-  public getModelByName(
-    modelOrganism: ModelOrganism,
-    name: string,
+  ): Observable<Array<SearchResult>>;
+  public searchModels(
+    q: string,
+    modelOrganisms?: Array<ModelOrganism>,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -137,10 +137,10 @@ export class ModelService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Model>>;
-  public getModelByName(
-    modelOrganism: ModelOrganism,
-    name: string,
+  ): Observable<HttpResponse<Array<SearchResult>>>;
+  public searchModels(
+    q: string,
+    modelOrganisms?: Array<ModelOrganism>,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -148,10 +148,10 @@ export class ModelService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Model>>;
-  public getModelByName(
-    modelOrganism: ModelOrganism,
-    name: string,
+  ): Observable<HttpEvent<Array<SearchResult>>>;
+  public searchModels(
+    q: string,
+    modelOrganisms?: Array<ModelOrganism>,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -160,13 +160,22 @@ export class ModelService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (modelOrganism === null || modelOrganism === undefined) {
-      throw new Error(
-        'Required parameter modelOrganism was null or undefined when calling getModelByName.',
-      );
+    if (q === null || q === undefined) {
+      throw new Error('Required parameter q was null or undefined when calling searchModels.');
     }
-    if (name === null || name === undefined) {
-      throw new Error('Required parameter name was null or undefined when calling getModelByName.');
+
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (q !== undefined && q !== null) {
+      localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>q, 'q');
+    }
+    if (modelOrganisms) {
+      modelOrganisms.forEach((element) => {
+        localVarQueryParameters = this.addToHttpParams(
+          localVarQueryParameters,
+          <any>element,
+          'modelOrganisms',
+        );
+      });
     }
 
     let localVarHeaders = this.defaultHeaders;
@@ -202,15 +211,20 @@ export class ModelService {
       }
     }
 
-    let localVarPath = `/models/${this.configuration.encodeParam({ name: 'modelOrganism', value: modelOrganism, in: 'path', style: 'simple', explode: false, dataType: 'ModelOrganism', dataFormat: undefined })}/${this.configuration.encodeParam({ name: 'name', value: name, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<Model>('get', `${this.configuration.basePath}${localVarPath}`, {
-      context: localVarHttpContext,
-      responseType: <any>responseType_,
-      withCredentials: this.configuration.withCredentials,
-      headers: localVarHeaders,
-      observe: observe,
-      transferCache: localVarTransferCache,
-      reportProgress: reportProgress,
-    });
+    let localVarPath = `/search/models`;
+    return this.httpClient.request<Array<SearchResult>>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        params: localVarQueryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
   }
 }

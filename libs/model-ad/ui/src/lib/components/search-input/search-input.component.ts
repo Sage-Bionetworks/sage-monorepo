@@ -1,8 +1,8 @@
 import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
-import { SearchResult } from '@sagebionetworks/explorers/models';
+import { SearchResultIcon } from '@sagebionetworks/explorers/models';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
-import { ModelService } from '@sagebionetworks/model-ad/api-client';
+import { ModelOrganism, SearchResult, SearchService } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { Observable } from 'rxjs';
 
@@ -14,22 +14,31 @@ import { Observable } from 'rxjs';
 })
 export class SearchInputComponent {
   router = inject(Router);
-  modelService = inject(ModelService);
+  searchService = inject(SearchService);
 
   searchPlaceholder = input<string>('Find model by name or ID...');
   searchImagePath = input<string | undefined>();
   searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
+  modelOrganisms = input<ModelOrganism[] | undefined>();
 
-  // TODO(MG-938): define getResultIcon and bind it in the template once search
-  // results identify the model's organism
+  private readonly resultIconByOrganism: Record<ModelOrganism, SearchResultIcon> = {
+    mouse: { imagePath: 'model-ad-assets/images/mouse-head.svg', label: 'mouse' },
+    marmoset: { imagePath: 'model-ad-assets/images/marmoset-head.svg', label: 'marmoset' },
+  };
+
+  getResultIcon = (result: SearchResult): SearchResultIcon => {
+    return this.resultIconByOrganism[result.model_organism];
+  };
 
   navigateToResult = (result: SearchResult): void => {
-    this.router.navigate([ROUTE_PATHS.MODELS, result.id]);
+    this.router.navigate([ROUTE_PATHS.MODELS, result.id], {
+      queryParams: { modelOrganism: result.model_organism },
+    });
   };
 
   getSearchResults = (query: string): Observable<SearchResult[]> => {
-    return this.modelService.searchModels(query);
+    return this.searchService.searchModels(query, this.modelOrganisms());
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -26,11 +26,15 @@ tags:
     description: Operations about Mouse Model Overview.
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
+  - name: Search
+    description: Operations about searching models.
   - name: Transcriptomics
     description: Operations about Transcriptomics results.
   - name: Transcriptomics Individual
     description: Operations about Individual Transcriptomics results.
 paths:
+  /search/models:
+    $ref: paths/search/models.yaml
   /data-version:
     $ref: paths/data-version.yaml
   /comparison-tools/config:
