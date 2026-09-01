@@ -28,9 +28,11 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
 
   @Override
   public List<SearchResultDocument> searchModels(String query, List<ModelOrganismDto> organisms) {
+    // organisms is normalized by SearchApiDelegateImpl, so it is never null or empty
     String escapedQuery = Pattern.quote(query);
     List<SearchResultDocument> results = new ArrayList<>();
 
+    // no DocumentDB version supports $unionWith as of 2026-09-01, so we merge the results in Java
     if (organisms.contains(ModelOrganismDto.MOUSE)) {
       results.addAll(searchCollection(escapedQuery, MOUSE_COLLECTION,
           mouseMatchBranches(escapedQuery), ModelOrganismDto.MOUSE));
