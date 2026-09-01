@@ -63,12 +63,17 @@ public class ModelSearchRepositoryImpl implements ModelSearchRepository {
 
   private AggregationOperation addFieldsStage(List<Document> matchBranches, String escapedQuery,
       ModelOrganismDto organism) {
-    return context -> new Document("$addFields", new Document()
-        .append("match_info", new Document("$let", new Document()
+    Document switchExpression = new Document("$switch", new Document()
+        .append("branches", matchBranches)
+        .append("default", null));
+    // only mouse branches read $$filtered_aliases; add the $let back if marmoset gains aliases
+    Document matchExpression = organism == ModelOrganismDto.MOUSE
+        ? new Document("$let", new Document()
             .append("vars", buildVars(escapedQuery))
-            .append("in", new Document("$switch", new Document()
-                .append("branches", matchBranches)
-                .append("default", null)))))
+            .append("in", switchExpression))
+        : switchExpression;
+    return context -> new Document("$addFields", new Document()
+        .append("match_info", matchExpression)
         .append("model_organism", organism.getValue()));
   }
 
