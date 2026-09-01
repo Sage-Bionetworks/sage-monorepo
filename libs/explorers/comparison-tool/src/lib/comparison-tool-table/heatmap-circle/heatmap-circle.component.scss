@@ -18,6 +18,10 @@
     --heatmap-circle-ring-color: #d72247;
   }
 
+  &.zero {
+    --heatmap-circle-ring-color: var(--color-gray-600);
+  }
+
   &:hover {
     box-shadow:
       inset 0 0 0 2px var(--heatmap-circle-ring-color),
