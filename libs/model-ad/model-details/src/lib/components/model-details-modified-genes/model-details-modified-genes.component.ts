@@ -22,6 +22,6 @@ export class ModelDetailsModifiedGenesComponent {
   getGeneUrl(gene: string) {
     const prefix = Object.keys(ENSEMBL_GENE_ID_PREFIX_TO_SPECIES).find((p) => gene.startsWith(p));
     const species = prefix ? ENSEMBL_GENE_ID_PREFIX_TO_SPECIES[prefix] : 'Homo_sapiens';
-    return `https://sep2025.archive.ensembl.org/${species}/Gene/Summary?db=core;g=${gene}`;
+    return `https://jun2026.archive.ensembl.org/${species}/Gene/Summary?db=core;g=${gene}`;
   }
 }
