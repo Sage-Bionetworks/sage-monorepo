@@ -31,6 +31,8 @@ import { OrgSagebionetworksRepoModelAnnotationV2Keys } from '../model/org-sagebi
 // @ts-ignore
 import { OrgSagebionetworksRepoModelAuthUserEntityPermissions } from '../model/org-sagebionetworks-repo-model-auth-user-entity-permissions';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelChangeDataTypeRequest } from '../model/org-sagebionetworks-repo-model-change-data-type-request';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelDataType } from '../model/org-sagebionetworks-repo-model-data-type';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelDataTypeResponse } from '../model/org-sagebionetworks-repo-model-data-type-response';
@@ -5461,12 +5463,14 @@ export class EntityServicesService {
   /**
    * @param id
    * @param type
+   * @param orgSagebionetworksRepoModelChangeDataTypeRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public putRepoV1EntityIdDatatype(
     id: string,
-    type: OrgSagebionetworksRepoModelDataType,
+    type?: OrgSagebionetworksRepoModelDataType,
+    orgSagebionetworksRepoModelChangeDataTypeRequest?: OrgSagebionetworksRepoModelChangeDataTypeRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -5477,7 +5481,8 @@ export class EntityServicesService {
   ): Observable<OrgSagebionetworksRepoModelDataTypeResponse>;
   public putRepoV1EntityIdDatatype(
     id: string,
-    type: OrgSagebionetworksRepoModelDataType,
+    type?: OrgSagebionetworksRepoModelDataType,
+    orgSagebionetworksRepoModelChangeDataTypeRequest?: OrgSagebionetworksRepoModelChangeDataTypeRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -5488,7 +5493,8 @@ export class EntityServicesService {
   ): Observable<HttpResponse<OrgSagebionetworksRepoModelDataTypeResponse>>;
   public putRepoV1EntityIdDatatype(
     id: string,
-    type: OrgSagebionetworksRepoModelDataType,
+    type?: OrgSagebionetworksRepoModelDataType,
+    orgSagebionetworksRepoModelChangeDataTypeRequest?: OrgSagebionetworksRepoModelChangeDataTypeRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -5499,7 +5505,8 @@ export class EntityServicesService {
   ): Observable<HttpEvent<OrgSagebionetworksRepoModelDataTypeResponse>>;
   public putRepoV1EntityIdDatatype(
     id: string,
-    type: OrgSagebionetworksRepoModelDataType,
+    type?: OrgSagebionetworksRepoModelDataType,
+    orgSagebionetworksRepoModelChangeDataTypeRequest?: OrgSagebionetworksRepoModelChangeDataTypeRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -5511,11 +5518,6 @@ export class EntityServicesService {
     if (id === null || id === undefined) {
       throw new Error(
         'Required parameter id was null or undefined when calling putRepoV1EntityIdDatatype.',
-      );
-    }
-    if (type === null || type === undefined) {
-      throw new Error(
-        'Required parameter type was null or undefined when calling putRepoV1EntityIdDatatype.',
       );
     }
 
@@ -5553,6 +5555,14 @@ export class EntityServicesService {
       localVarTransferCache = true;
     }
 
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
     let responseType_: 'text' | 'json' | 'blob' = 'json';
     if (localVarHttpHeaderAcceptSelected) {
       if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -5570,6 +5580,7 @@ export class EntityServicesService {
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelChangeDataTypeRequest,
         params: localVarQueryParameters,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

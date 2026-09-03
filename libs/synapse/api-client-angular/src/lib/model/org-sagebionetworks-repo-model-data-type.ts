@@ -8,9 +8,10 @@
  * Do not edit the class manually.
  */
 
-export type OrgSagebionetworksRepoModelDataType = 'SENSITIVE_DATA' | 'OPEN_DATA';
+export type OrgSagebionetworksRepoModelDataType = 'SENSITIVE_DATA' | 'OPEN_DATA' | 'AGGREGATE_DATA';
 
 export const OrgSagebionetworksRepoModelDataType = {
   SensitiveData: 'SENSITIVE_DATA' as OrgSagebionetworksRepoModelDataType,
   OpenData: 'OPEN_DATA' as OrgSagebionetworksRepoModelDataType,
+  AggregateData: 'AGGREGATE_DATA' as OrgSagebionetworksRepoModelDataType,
 };

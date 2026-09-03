@@ -874,6 +874,113 @@ export class DataAccessServicesService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
+  public getRepoV1DataAccessRequestRequestIdSignatureQuota(
+    requestId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelEducEDucSignatureQuota>;
+  public getRepoV1DataAccessRequestRequestIdSignatureQuota(
+    requestId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelEducEDucSignatureQuota>>;
+  public getRepoV1DataAccessRequestRequestIdSignatureQuota(
+    requestId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelEducEDucSignatureQuota>>;
+  public getRepoV1DataAccessRequestRequestIdSignatureQuota(
+    requestId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (requestId === null || requestId === undefined) {
+      throw new Error(
+        'Required parameter requestId was null or undefined when calling getRepoV1DataAccessRequestRequestIdSignatureQuota.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/dataAccessRequest/${this.configuration.encodeParam({ name: 'requestId', value: requestId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/signature/quota`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelEducEDucSignatureQuota>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param requestId - The ID of the data access request.
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
   public getRepoV1DataAccessRequestRequestIdSignatureStatus(
     requestId: string,
     observe?: 'body',

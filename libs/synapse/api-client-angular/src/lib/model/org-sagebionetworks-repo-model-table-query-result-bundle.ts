@@ -53,6 +53,10 @@ export interface OrgSagebionetworksRepoModelTableQueryResultBundle {
    * The first 50 actions required to download the files that are part of the query. Use mask = 0x200 to include them in the bundle.
    */
   actionsRequired?: Array<OrgSagebionetworksRepoModelDownloadActionRequiredCount>;
+  /**
+   * True when a facet post-processing algorithm (e.g. rounding or noise) was applied to the returned facets, indicating the facet counts are approximate. Absent or false when the facet counts are exact.
+   */
+  facetPostProcessingApplied?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelTableQueryResultBundle {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.table.QueryResultBundle';

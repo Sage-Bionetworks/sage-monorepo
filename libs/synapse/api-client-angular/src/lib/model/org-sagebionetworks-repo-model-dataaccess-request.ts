@@ -77,6 +77,10 @@ export interface OrgSagebionetworksRepoModelDataaccessRequest {
    * The envelope ID for the routed eDUC signature document.
    */
   eDucSignatureEnvelopeId?: string;
+  /**
+   * Request data that was provided using the associated JSON Schema. Unvalidated while the request is a draft; validated against the schema referenced by the Access Requirement when a Submission is created.
+   */
+  schemaData?: any | null;
 }
 export namespace OrgSagebionetworksRepoModelDataaccessRequest {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.dataaccess.Request';

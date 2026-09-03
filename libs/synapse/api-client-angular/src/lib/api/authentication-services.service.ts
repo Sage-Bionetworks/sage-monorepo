@@ -251,6 +251,103 @@ export class AuthenticationServicesService {
   }
 
   /**
+   * @param provider the OAuth provider whose linked identity should be removed
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public deleteAuthV1Oauth2Identity(
+    provider: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
+  ): Observable<any>;
+  public deleteAuthV1Oauth2Identity(
+    provider: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
+  ): Observable<HttpResponse<any>>;
+  public deleteAuthV1Oauth2Identity(
+    provider: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
+  ): Observable<HttpEvent<any>>;
+  public deleteAuthV1Oauth2Identity(
+    provider: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: undefined; context?: HttpContext; transferCache?: boolean },
+  ): Observable<any> {
+    if (provider === null || provider === undefined) {
+      throw new Error(
+        'Required parameter provider was null or undefined when calling deleteAuthV1Oauth2Identity.',
+      );
+    }
+
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (provider !== undefined && provider !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>provider,
+        'provider',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = [];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/auth/v1/oauth2/identity`;
+    return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      params: localVarQueryParameters,
+      responseType: <any>responseType_,
+      withCredentials: this.configuration.withCredentials,
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
    * @param id The unique ID of the token, which is the unique ID (the \&quot;jti\&quot; claim) contained in the JWT
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
