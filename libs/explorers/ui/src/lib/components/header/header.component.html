@@ -54,6 +54,7 @@
                                 <li>
                                   <a
                                     [routerLink]="grandchild.routerLink"
+                                    [queryParams]="grandchild.queryParams"
                                     routerLinkActive="active"
                                     (click)="toggleNav()"
                                   >
@@ -67,6 +68,7 @@
                           <li>
                             <a
                               [routerLink]="child.routerLink"
+                              [queryParams]="child.queryParams"
                               routerLinkActive="active"
                               (click)="toggleNav()"
                             >
@@ -79,6 +81,7 @@
                   } @else if (link.routerLink) {
                     <a
                       [routerLink]="link.routerLink"
+                      [queryParams]="link.queryParams"
                       routerLinkActive="active"
                       [routerLinkActiveOptions]="link.activeOptions || { exact: false }"
                       explorersWidestLineWidth

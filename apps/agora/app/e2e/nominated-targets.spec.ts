@@ -55,6 +55,13 @@ test.describe('nominated targets - comparison tool', () => {
 
   runFilterPanelTests(async (page) => navigateToComparison(page, CT_PAGE, true, 'url'));
 
+  // The header nests both comparison tools under a "Nominations" dropdown, which renders as a
+  // lazily-populated popup on desktop, so the link is only reachable once the trigger is opened.
+  test('comparison tool is reachable from the header navigation', async ({ page }) => {
+    await page.goto('/');
+    await navigateToComparison(page, CT_PAGE, true, 'link');
+  });
+
   test.describe('filterbox search', () => {
     test('filterbox search without comma returns partial case-insensitive matches', async ({
       page,

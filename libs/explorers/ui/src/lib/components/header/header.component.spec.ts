@@ -248,6 +248,34 @@ describe('HeaderComponent', () => {
     expect(subheaderItem?.items?.[1].label).toBe('SubChildLink2');
   });
 
+  it('should forward routerLink and queryParams to dropdown MenuItems', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { component } = await setup();
+
+    const flatItems = component.dropdownMenuItems.get('DropdownLink');
+    expect(flatItems?.[1].routerLink).toEqual(['/child-link-2']);
+    expect(flatItems?.[1].queryParams).toEqual({ tab: 'overview' });
+
+    const grandchildren = component.dropdownMenuItems.get('DropdownWithSubheader')?.[0].items;
+    expect(grandchildren?.[1].routerLink).toEqual(['/sub-child-link-2']);
+    expect(grandchildren?.[1].queryParams).toEqual({ tab: 'details' });
+  });
+
+  it('should include queryParams in dropdown link hrefs in mobile mode', async () => {
+    changeWindowSize(MOBILE_WIDTH);
+    const { user } = await setup();
+    await user.click(screen.getByRole('button', { name: 'Toggle navigation' }));
+
+    expect(screen.getByRole('link', { name: 'ChildLink2' })).toHaveAttribute(
+      'href',
+      '/child-link-2?tab=overview',
+    );
+    expect(screen.getByRole('link', { name: 'SubChildLink2' })).toHaveAttribute(
+      'href',
+      '/sub-child-link-2?tab=details',
+    );
+  });
+
   it('should mark dropdown as active when a subheader grandchild route is active', async () => {
     changeWindowSize(DESKTOP_WIDTH);
     const { component, fixture } = await setup();
