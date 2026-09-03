@@ -44,7 +44,8 @@ export namespace OrgSagebionetworksRepoModelAuthTwoFactorAuthErrorResponse {
     | 'TWO_FA_REQUIRED'
     | 'UNSUPPORTED_WEBHOOK_DOMAIN'
     | 'PROJECT_STORAGE_LIMIT_EXCEEDED'
-    | 'TWO_FA_ENABLED_REQUIRED';
+    | 'TWO_FA_ENABLED_REQUIRED'
+    | 'BELOW_THRESHOLD';
   export const ErrorCodeEnum = {
     PasswordResetViaEmailRequired: 'PASSWORD_RESET_VIA_EMAIL_REQUIRED' as ErrorCodeEnum,
     UserCertificationRequired: 'USER_CERTIFICATION_REQUIRED' as ErrorCodeEnum,
@@ -55,5 +56,6 @@ export namespace OrgSagebionetworksRepoModelAuthTwoFactorAuthErrorResponse {
     UnsupportedWebhookDomain: 'UNSUPPORTED_WEBHOOK_DOMAIN' as ErrorCodeEnum,
     ProjectStorageLimitExceeded: 'PROJECT_STORAGE_LIMIT_EXCEEDED' as ErrorCodeEnum,
     TwoFaEnabledRequired: 'TWO_FA_ENABLED_REQUIRED' as ErrorCodeEnum,
+    BelowThreshold: 'BELOW_THRESHOLD' as ErrorCodeEnum,
   };
 }
