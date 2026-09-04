@@ -2,6 +2,7 @@
   "name": "Sage Monorepo Dev Container",
   "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-a31e971a462a676420ba42e7335ea92994239041",
   "containerEnv": {
+    "AWS_CONFIG_FILE": "${containerWorkspaceFolder}/.aws/config",
     "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}",
     "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
     "NX_BASE": "${localEnv:NX_BASE}",
