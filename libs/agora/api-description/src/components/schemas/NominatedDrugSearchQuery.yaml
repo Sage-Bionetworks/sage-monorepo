@@ -16,6 +16,17 @@ properties:
     minimum: 1
     maximum: 100
     example: 100
+  remainingBudget:
+    description: |
+      Maximum number of rows to return, letting a client retrieve matching rows from beyond the
+      current page in a single request. When set, pageNumber and pageSize are ignored. Only
+      applied when itemFilterType is 'exclude'.
+    type: integer
+    format: int32
+    minimum: 1
+    maximum: 50 # this CT's pin limit -- keep in sync with the frontend's MAX_PINNED_ITEMS
+    nullable: true
+    example: 50
   items:
     description: |
       List of composite_id values to filter by (format: chembl_id~combined_with).

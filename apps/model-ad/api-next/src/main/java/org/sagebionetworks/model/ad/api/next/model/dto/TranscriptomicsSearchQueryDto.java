@@ -33,6 +33,8 @@ public class TranscriptomicsSearchQueryDto {
 
   private Integer pageSize = 100;
 
+  private @Nullable Integer remainingBudget = null;
+
   @Valid
   private List<String> categories = new ArrayList<>();
 
@@ -150,6 +152,28 @@ public class TranscriptomicsSearchQueryDto {
 
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  public TranscriptomicsSearchQueryDto remainingBudget(@Nullable Integer remainingBudget) {
+    this.remainingBudget = remainingBudget;
+    return this;
+  }
+
+  /**
+   * Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. 
+   * minimum: 1
+   * maximum: 50
+   * @return remainingBudget
+   */
+  @Min(1) @Max(50) 
+  @Schema(name = "remainingBudget", example = "50", description = "Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("remainingBudget")
+  public @Nullable Integer getRemainingBudget() {
+    return remainingBudget;
+  }
+
+  public void setRemainingBudget(@Nullable Integer remainingBudget) {
+    this.remainingBudget = remainingBudget;
   }
 
   public TranscriptomicsSearchQueryDto categories(List<String> categories) {
@@ -427,6 +451,7 @@ public class TranscriptomicsSearchQueryDto {
     TranscriptomicsSearchQueryDto transcriptomicsSearchQuery = (TranscriptomicsSearchQueryDto) o;
     return Objects.equals(this.pageNumber, transcriptomicsSearchQuery.pageNumber) &&
         Objects.equals(this.pageSize, transcriptomicsSearchQuery.pageSize) &&
+        Objects.equals(this.remainingBudget, transcriptomicsSearchQuery.remainingBudget) &&
         Objects.equals(this.categories, transcriptomicsSearchQuery.categories) &&
         Objects.equals(this.items, transcriptomicsSearchQuery.items) &&
         Objects.equals(this.itemFilterType, transcriptomicsSearchQuery.itemFilterType) &&
@@ -441,7 +466,7 @@ public class TranscriptomicsSearchQueryDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search, biodomains, modelType, name, sex, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, remainingBudget, categories, items, itemFilterType, search, biodomains, modelType, name, sex, sortFields, sortOrders);
   }
 
   @Override
@@ -450,6 +475,7 @@ public class TranscriptomicsSearchQueryDto {
     sb.append("class TranscriptomicsSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+    sb.append("    remainingBudget: ").append(toIndentedString(remainingBudget)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
@@ -490,6 +516,7 @@ public class TranscriptomicsSearchQueryDto {
     protected Builder copyOf(TranscriptomicsSearchQueryDto value) { 
       this.instance.setPageNumber(value.pageNumber);
       this.instance.setPageSize(value.pageSize);
+      this.instance.setRemainingBudget(value.remainingBudget);
       this.instance.setCategories(value.categories);
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
@@ -510,6 +537,11 @@ public class TranscriptomicsSearchQueryDto {
     
     public TranscriptomicsSearchQueryDto.Builder pageSize(Integer pageSize) {
       this.instance.pageSize(pageSize);
+      return this;
+    }
+    
+    public TranscriptomicsSearchQueryDto.Builder remainingBudget(Integer remainingBudget) {
+      this.instance.remainingBudget(remainingBudget);
       return this;
     }
     

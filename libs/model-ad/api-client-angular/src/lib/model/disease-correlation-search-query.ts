@@ -22,6 +22,10 @@ export interface DiseaseCorrelationSearchQuery {
    */
   pageSize?: number;
   /**
+   * Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is \'exclude\'.
+   */
+  remainingBudget?: number | null;
+  /**
    * Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory]
    */
   categories: Array<string>;

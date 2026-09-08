@@ -22,6 +22,10 @@ export interface NominatedTargetSearchQuery {
    */
   pageSize?: number;
   /**
+   * Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is \'exclude\'.
+   */
+  remainingBudget?: number | null;
+  /**
    * List of hgnc_symbol values to filter by.
    */
   items?: Array<string> | null;

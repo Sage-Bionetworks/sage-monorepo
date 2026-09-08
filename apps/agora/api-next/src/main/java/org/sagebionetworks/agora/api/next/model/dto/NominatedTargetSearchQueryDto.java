@@ -33,6 +33,8 @@ public class NominatedTargetSearchQueryDto {
 
   private Integer pageSize = 100;
 
+  private @Nullable Integer remainingBudget = null;
+
   @Valid
   private @Nullable List<String> items;
 
@@ -155,6 +157,28 @@ public class NominatedTargetSearchQueryDto {
 
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  public NominatedTargetSearchQueryDto remainingBudget(@Nullable Integer remainingBudget) {
+    this.remainingBudget = remainingBudget;
+    return this;
+  }
+
+  /**
+   * Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. 
+   * minimum: 1
+   * maximum: 50
+   * @return remainingBudget
+   */
+  @Min(1) @Max(50) 
+  @Schema(name = "remainingBudget", example = "50", description = "Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("remainingBudget")
+  public @Nullable Integer getRemainingBudget() {
+    return remainingBudget;
+  }
+
+  public void setRemainingBudget(@Nullable Integer remainingBudget) {
+    this.remainingBudget = remainingBudget;
   }
 
   public NominatedTargetSearchQueryDto items(@Nullable List<String> items) {
@@ -488,6 +512,7 @@ public class NominatedTargetSearchQueryDto {
     NominatedTargetSearchQueryDto nominatedTargetSearchQuery = (NominatedTargetSearchQueryDto) o;
     return Objects.equals(this.pageNumber, nominatedTargetSearchQuery.pageNumber) &&
         Objects.equals(this.pageSize, nominatedTargetSearchQuery.pageSize) &&
+        Objects.equals(this.remainingBudget, nominatedTargetSearchQuery.remainingBudget) &&
         Objects.equals(this.items, nominatedTargetSearchQuery.items) &&
         Objects.equals(this.itemFilterType, nominatedTargetSearchQuery.itemFilterType) &&
         Objects.equals(this.search, nominatedTargetSearchQuery.search) &&
@@ -504,7 +529,7 @@ public class NominatedTargetSearchQueryDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, cohortStudies, inputData, initialNomination, nominatingTeams, pharosClass, programs, totalNominations, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, remainingBudget, items, itemFilterType, search, cohortStudies, inputData, initialNomination, nominatingTeams, pharosClass, programs, totalNominations, sortFields, sortOrders);
   }
 
   @Override
@@ -513,6 +538,7 @@ public class NominatedTargetSearchQueryDto {
     sb.append("class NominatedTargetSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+    sb.append("    remainingBudget: ").append(toIndentedString(remainingBudget)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
@@ -555,6 +581,7 @@ public class NominatedTargetSearchQueryDto {
     protected Builder copyOf(NominatedTargetSearchQueryDto value) { 
       this.instance.setPageNumber(value.pageNumber);
       this.instance.setPageSize(value.pageSize);
+      this.instance.setRemainingBudget(value.remainingBudget);
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
       this.instance.setSearch(value.search);
@@ -577,6 +604,11 @@ public class NominatedTargetSearchQueryDto {
     
     public NominatedTargetSearchQueryDto.Builder pageSize(Integer pageSize) {
       this.instance.pageSize(pageSize);
+      return this;
+    }
+    
+    public NominatedTargetSearchQueryDto.Builder remainingBudget(Integer remainingBudget) {
+      this.instance.remainingBudget(remainingBudget);
       return this;
     }
     
