@@ -1,2 +1,5 @@
 # Prevent sourcemaps from being included in Docker images.
 **/*.map
+
+# Prevent the persisted AWS configuration from being included in Docker images.
+.aws/
