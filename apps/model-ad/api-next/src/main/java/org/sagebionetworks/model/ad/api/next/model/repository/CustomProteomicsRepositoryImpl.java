@@ -159,8 +159,8 @@ public class CustomProteomicsRepositoryImpl
   private Criteria buildCommaSeparatedSearchCriteria(String trimmedSearch) {
     List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
     if (patterns.isEmpty()) {
-      // Search was only commas: match nothing, as an empty $in would.
-      return Criteria.where("_id").is(null);
+      // Search was only commas: match nothing
+      return ApiHelper.matchNothing();
     }
     return new Criteria()
       .orOperator(

@@ -341,6 +341,21 @@ public final class ApiHelper {
   }
 
   /**
+   * Returns criteria that match no documents. {@code _id} is always present on a stored document,
+   * so {@code _id: null} can never be satisfied.
+   *
+   * <p>Use this wherever a filter resolves to "no candidates" and the surrounding expression cannot
+   * express that on its own. A single {@code field $in []} already matches nothing, so criteria
+   * built that way need no guard; an empty {@code $or}/{@code $nor} is instead rejected by MongoDB
+   * as a non-empty-array violation, so branch-building code must return this explicitly.
+   *
+   * @return criteria matching zero documents
+   */
+  public static Criteria matchNothing() {
+    return Criteria.where("_id").is(null);
+  }
+
+  /**
    * Validates that all query parameters in the current HTTP request are in the allowed set.
    * This method retrieves the current request from RequestContextHolder and checks each
    * query parameter against the provided set of valid parameter names.

@@ -243,8 +243,8 @@ public class CustomTranscriptomicsRepositoryImpl
     }
 
     if (branches.isEmpty()) {
-      // Search was only commas: match nothing, as an empty $in would.
-      return Criteria.where("_id").is(null);
+      // Search was only commas: match nothing
+      return ApiHelper.matchNothing();
     }
     if (branches.size() == 1) {
       return branches.get(0);
