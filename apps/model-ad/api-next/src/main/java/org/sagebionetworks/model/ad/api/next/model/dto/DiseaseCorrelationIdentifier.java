@@ -63,11 +63,11 @@ public class DiseaseCorrelationIdentifier {
   }
 
   /**
-   * Converts this identifier to a composite string.
+   * Returns the composite identifier as a string.
    *
    * @return the composite identifier string (e.g., "APOE4~4 months~Female")
    */
-  public String toCompositeString() {
+  public String toCompositeId() {
     return name + DELIMITER + age + DELIMITER + sex;
   }
 

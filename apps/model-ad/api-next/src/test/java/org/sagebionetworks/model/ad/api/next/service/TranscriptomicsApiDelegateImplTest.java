@@ -21,12 +21,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.api.TranscriptomicsApiDelegateImpl;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
+import org.sagebionetworks.model.ad.api.next.model.document.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
-import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.mapper.FoldChangeMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.TranscriptomicsMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.TranscriptomicsRepository;
@@ -63,7 +64,7 @@ class TranscriptomicsApiDelegateImplTest {
 
     TranscriptomicsService queryService = new TranscriptomicsService(
       repository,
-      new TranscriptomicsMapper(new LinkMapper())
+      new TranscriptomicsMapper(new LinkMapper(), new FoldChangeMapper())
     );
     delegate = new TranscriptomicsApiDelegateImpl(queryService);
   }

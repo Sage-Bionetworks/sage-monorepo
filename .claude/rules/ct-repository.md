@@ -258,12 +258,13 @@ Criteria matchCriteria = buildCtMatchCriteria(
 
 ## Existing implementations (reference)
 
-| App      | Class                                    | Collection            | Notable                                                                                             |
-| -------- | ---------------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------- |
-| Agora    | `CustomNominatedTargetRepositoryImpl`    | `nominatedtargets`    | 4 array columns, simple item filter                                                                 |
-| Agora    | `CustomNominatedDrugRepositoryImpl`      | `nominateddrugs`      | 2 array columns, composite item filter                                                              |
-| Model-AD | `CustomModelOverviewRepositoryImpl`      | `model_overview`      | 1 array column                                                                                      |
-| Model-AD | `CustomDiseaseCorrelationRepositoryImpl` | `disease_correlation` | Nested object columns (brain regions), companion numeric field, base criteria (cluster)             |
-| Model-AD | `CustomTranscriptomicsRepositoryImpl`    | `rna_de_aggregate`    | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue) |
+| App      | Class                                    | Collection             | Notable                                                                                                       |
+| -------- | ---------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Agora    | `CustomNominatedTargetRepositoryImpl`    | `nominatedtargets`     | 4 array columns, simple item filter                                                                           |
+| Agora    | `CustomNominatedDrugRepositoryImpl`      | `nominateddrugs`       | 2 array columns, composite item filter                                                                        |
+| Model-AD | `CustomModelOverviewRepositoryImpl`      | `model_overview`       | 1 array column                                                                                                |
+| Model-AD | `CustomDiseaseCorrelationRepositoryImpl` | `disease_correlation`  | Nested object columns (brain regions), companion numeric field, base criteria (cluster)                       |
+| Model-AD | `CustomTranscriptomicsRepositoryImpl`    | `rna_de_aggregate`     | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue)           |
+| Model-AD | `CustomProteomicsRepositoryImpl`         | `protein_de_aggregate` | Nested object columns (time-points), composite item filter, custom multi-field search, base criteria (tissue) |
 
 All implementations are under `apps/<product>/api-next/src/main/java/.../model/repository/`.

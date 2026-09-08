@@ -15,11 +15,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.model.ad.api.next.model.document.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.mapper.FoldChangeMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.TranscriptomicsMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.TranscriptomicsRepository;
@@ -40,7 +42,7 @@ class TranscriptomicsServiceTest {
 
   @BeforeEach
   void setUp() {
-    mapper = new TranscriptomicsMapper(new LinkMapper());
+    mapper = new TranscriptomicsMapper(new LinkMapper(), new FoldChangeMapper());
     service = new TranscriptomicsService(repository, mapper);
   }
 
@@ -458,8 +460,7 @@ class TranscriptomicsServiceTest {
     String name,
     String geneSymbol
   ) {
-    TranscriptomicsDocument.FoldChangeResult result =
-      TranscriptomicsDocument.FoldChangeResult.builder().log2Fc(1.5).adjPVal(0.01).build();
+    FoldChangeResult result = FoldChangeResult.builder().log2Fc(1.5).adjPVal(0.01).build();
 
     TranscriptomicsDocument document = new TranscriptomicsDocument();
     document.setId(new ObjectId());

@@ -6,7 +6,7 @@ import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDo
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument.CorrelationResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.CorrelationResultDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationIdentifier;
 import org.sagebionetworks.model.ad.api.next.util.EnumConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -46,11 +46,12 @@ public class DiseaseCorrelationMapper {
   }
 
   private String getCompositeId(DiseaseCorrelationDocument document) {
-    String name = document.getName();
-    String age = document.getAge();
-    String sex = document.getSex();
-
-    return String.format("%s~%s~%s", name, age, sex);
+    return DiseaseCorrelationIdentifier.builder()
+      .name(document.getName())
+      .age(document.getAge())
+      .sex(document.getSex())
+      .build()
+      .toCompositeId();
   }
 
   private @Nullable CorrelationResultDto toCorrelationDto(@Nullable CorrelationResult document) {

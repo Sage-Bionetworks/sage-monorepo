@@ -4,6 +4,7 @@ import org.sagebionetworks.explorers.SortOrdersConverterFactory;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.MarmosetModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.MouseModelOverviewSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,6 +48,11 @@ public class IntegerEnumConverterConfiguration {
     return SortOrdersConverterFactory.from(
       DiseaseCorrelationSearchQueryDto.SortOrdersEnum::fromValue
     );
+  }
+
+  @Bean
+  Converter<String, ProteomicsSearchQueryDto.SortOrdersEnum> proteomicsSortOrdersConverter() {
+    return SortOrdersConverterFactory.from(ProteomicsSearchQueryDto.SortOrdersEnum::fromValue);
   }
 
   @Bean
