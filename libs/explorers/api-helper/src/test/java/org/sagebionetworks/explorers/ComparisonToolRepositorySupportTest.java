@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 import org.bson.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -175,11 +176,19 @@ class ComparisonToolRepositorySupportTest {
   }
 
   private void stubMongoTemplate(long total) {
+    stubMongoTemplate(total, List.of());
+  }
+
+  private void stubMongoTemplate(long total, List<TestDocument> rows) {
     when(mongoTemplate.count(any(Query.class), eq(COLLECTION))).thenReturn(total);
     when(
       mongoTemplate.aggregate(any(Aggregation.class), eq(COLLECTION), eq(TestDocument.class))
     ).thenReturn(aggregationResults);
-    when(aggregationResults.getMappedResults()).thenReturn(List.of());
+    when(aggregationResults.getMappedResults()).thenReturn(rows);
+  }
+
+  private static List<TestDocument> documents(int count) {
+    return Stream.generate(TestDocument::new).limit(count).toList();
   }
 
   private Aggregation capturePipeline() {
@@ -213,7 +222,16 @@ class ComparisonToolRepositorySupportTest {
     }
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
-      return executePagedAggregation(criteria, pageable);
+      return executePagedAggregation(criteria, pageable, false, null);
+    }
+
+    Page<TestDocument> run(
+      Criteria criteria,
+      Pageable pageable,
+      boolean isInclude,
+      Integer remainingBudget
+    ) {
+      return executePagedAggregation(criteria, pageable, isInclude, remainingBudget);
     }
 
     // expose for testing
@@ -246,7 +264,7 @@ class ComparisonToolRepositorySupportTest {
     }
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
-      return executePagedAggregation(criteria, pageable);
+      return executePagedAggregation(criteria, pageable, false, null);
     }
   }
 
@@ -273,7 +291,7 @@ class ComparisonToolRepositorySupportTest {
     }
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
-      return executePagedAggregation(criteria, pageable);
+      return executePagedAggregation(criteria, pageable, false, null);
     }
   }
 
@@ -300,7 +318,7 @@ class ComparisonToolRepositorySupportTest {
     }
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
-      return executePagedAggregation(criteria, pageable);
+      return executePagedAggregation(criteria, pageable, false, null);
     }
   }
 
@@ -344,7 +362,7 @@ class ComparisonToolRepositorySupportTest {
     }
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
-      return executePagedAggregation(criteria, pageable);
+      return executePagedAggregation(criteria, pageable, false, null);
     }
   }
 
@@ -488,5 +506,118 @@ class ComparisonToolRepositorySupportTest {
 
     String pipeline = capturePipeline().toString();
     assertThat(pipeline).doesNotContain("\"_id\" : 1");
+  }
+
+  @Nested
+  @DisplayName("remaining row budget")
+  class RemainingRowBudget {
+
+    private static final int PAGE_SIZE = 10;
+    private static final int REMAINING_BUDGET = 25;
+
+    @Test
+    @DisplayName("should emit a single $limit of the budget and no $skip on an exclude query")
+    void shouldLimitToBudgetWithoutSkipWhenExcluding() {
+      BareRepo repo = new BareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      Pageable pageable = PageRequest.of(2, PAGE_SIZE, Sort.by(Sort.Order.asc("name")));
+      repo.run(new Criteria(), pageable, false, REMAINING_BUDGET);
+
+      String pipeline = capturePipeline().toString();
+      assertThat(pipeline).doesNotContain("$skip");
+      assertThat(pipeline).containsOnlyOnce("$limit").contains(String.valueOf(REMAINING_BUDGET));
+    }
+
+    @Test
+    @DisplayName("should keep the full match count so callers can detect truncation")
+    void shouldKeepFullCountWhenBudgetApplies() {
+      BareRepo repo = new BareRepo(mongoTemplate);
+      stubMongoTemplate(400L);
+
+      Page<TestDocument> page = repo.run(
+        new Criteria(),
+        PageRequest.of(0, PAGE_SIZE),
+        false,
+        REMAINING_BUDGET
+      );
+
+      assertThat(page.getTotalElements()).isEqualTo(400L);
+    }
+
+    @Test
+    @DisplayName("should keep the full match count when a budgeted query targets a later page")
+    void shouldKeepFullCountWhenBudgetAppliesBeyondFirstPage() {
+      BareRepo repo = new BareRepo(mongoTemplate);
+      stubMongoTemplate(REMAINING_BUDGET, documents(REMAINING_BUDGET));
+
+      Page<TestDocument> page = repo.run(
+        new Criteria(),
+        PageRequest.of(2, PAGE_SIZE),
+        false,
+        REMAINING_BUDGET
+      );
+
+      assertThat(page.getTotalElements()).isEqualTo(REMAINING_BUDGET);
+    }
+
+    @Test
+    @DisplayName("should report the returned row count as the page size when the budget applies")
+    void shouldReportReturnedRowCountAsPageSizeWhenBudgetApplies() {
+      BareRepo repo = new BareRepo(mongoTemplate);
+      // More rows than a page holds: the budget spans pages, and a future budget counted in
+      // parent entities could return several rows per unit of budget.
+      int returnedRows = PAGE_SIZE + 2;
+      stubMongoTemplate(400L, documents(returnedRows));
+
+      Page<TestDocument> page = repo.run(
+        new Criteria(),
+        PageRequest.of(2, PAGE_SIZE),
+        false,
+        REMAINING_BUDGET
+      );
+
+      assertThat(page.getNumber()).isZero();
+      assertThat(page.getSize()).isEqualTo(returnedRows);
+    }
+
+    @Test
+    @DisplayName("should report the requested page number and size when the budget does not apply")
+    void shouldReportRequestedPageShapeWhenBudgetDoesNotApply() {
+      BareRepo repo = new BareRepo(mongoTemplate);
+      stubMongoTemplate(400L, documents(PAGE_SIZE));
+
+      Page<TestDocument> page = repo.run(new Criteria(), PageRequest.of(2, PAGE_SIZE), false, null);
+
+      assertThat(page.getNumber()).isEqualTo(2);
+      assertThat(page.getSize()).isEqualTo(PAGE_SIZE);
+    }
+
+    @Test
+    @DisplayName("should ignore the budget and paginate normally on an include query")
+    void shouldIgnoreBudgetWhenIncluding() {
+      BareRepo repo = new BareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      Pageable pageable = PageRequest.of(2, PAGE_SIZE, Sort.by(Sort.Order.asc("name")));
+      repo.run(new Criteria(), pageable, true, REMAINING_BUDGET);
+
+      String pipeline = capturePipeline().toString();
+      assertThat(pipeline).contains("$skip").contains("$limit");
+      assertThat(pipeline).doesNotContain(String.valueOf(REMAINING_BUDGET));
+    }
+
+    @Test
+    @DisplayName("should paginate normally when the budget is null")
+    void shouldPaginateNormallyWhenBudgetIsNull() {
+      BareRepo repo = new BareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      Pageable pageable = PageRequest.of(2, PAGE_SIZE, Sort.by(Sort.Order.asc("name")));
+      repo.run(new Criteria(), pageable, false, null);
+
+      String pipeline = capturePipeline().toString();
+      assertThat(pipeline).contains("$skip").contains("$limit");
+    }
   }
 }

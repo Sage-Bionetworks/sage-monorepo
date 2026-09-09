@@ -37,7 +37,8 @@ public class NominatedDrugService {
     + "#query.items, #query.search, #query.principalInvestigators, #query.programs, "
     + "#query.totalNominations, #query.initialNomination, #query.modality, "
     + "#query.maximumClinicalTrialPhase, "
-    + "#query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
+    + "#query.pageNumber, #query.pageSize, #query.remainingBudget, "
+    + "#query.sortFields, #query.sortOrders)"
   )
   public NominatedDrugsPageDto loadNominatedDrugs(NominatedDrugSearchQueryDto query) {
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
