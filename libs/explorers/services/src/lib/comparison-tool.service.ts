@@ -285,8 +285,19 @@ export class ComparisonToolService<T> {
     return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
   });
 
+  /**
+   * MAX_PINNED_ITEMS is the largest budget the CT search query schemas accept, so a configured limit
+   * above it could not be filled by "pin all" without the API rejecting the request. Clamping here
+   * keeps it a true ceiling, which is what lets the pin limit be quoted to the user as the maximum.
+   */
   setMaxPinnedItems(count: number) {
-    this.maxPinnedItemsSignal.set(count);
+    if (count > MAX_PINNED_ITEMS) {
+      this.logger.warn(
+        `Requested max pinned items (${count}) exceeds MAX_PINNED_ITEMS; using ${MAX_PINNED_ITEMS}.`,
+        { requested: count, max: MAX_PINNED_ITEMS },
+      );
+    }
+    this.maxPinnedItemsSignal.set(Math.min(count, MAX_PINNED_ITEMS));
   }
 
   private initializeFromConfig(
@@ -584,12 +595,7 @@ export class ComparisonToolService<T> {
     if (this.isLoadingTableData() || this.hasMaxPinnedItems()) return;
 
     const currentPinIds = this.visiblePinIds();
-    // MAX_PINNED_ITEMS is the largest budget the search query schemas accept, and
-    // setMaxPinnedItems() takes any value, so cap the request rather than have the API reject it.
-    const remainingBudget = Math.min(
-      this.maxPinnedItems() - currentPinIds.length,
-      MAX_PINNED_ITEMS,
-    );
+    const remainingBudget = this.maxPinnedItems() - currentPinIds.length;
 
     this.startFetch();
     fetch(this.query(), remainingBudget)
@@ -598,18 +604,38 @@ export class ComparisonToolService<T> {
         next: ({ rows, totalElements }) => {
           this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows as T[])]);
           if (totalElements > rows.length) {
-            this.toastNotificationService.showWarning(
-              `Only ${rows.length} rows were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
-            );
+            this.showMaxPinnedItemsWarning(rows.length);
           }
           this.completeFetch();
         },
-        error: () => this.completeFetch(),
+        error: () => {
+          this.toastNotificationService.showError(
+            'Something went wrong while pinning all matching rows. Please try again.',
+          );
+          this.completeFetch();
+        },
       });
   }
 
+  private showMaxPinnedItemsWarning(pinnedCount: number) {
+    const rows = pinnedCount === 1 ? 'row was' : 'rows were';
+    this.toastNotificationService.showWarning(
+      `Only ${pinnedCount} ${rows} pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
+    );
+  }
+
+  /**
+   * Skips the query update when the deduplicated items match the current pins. Every update
+   * publishes a new array, which re-triggers the pinned and unpinned fetches, so writing back an
+   * unchanged pin set would refetch for nothing -- and, where `setPinnedData` derives the ids it
+   * writes back from data it just received, could refetch indefinitely.
+   */
   setPinnedItems(items: string[] | null) {
     const deduplicatedItems = items ? Array.from(new Set(items)) : [];
+    if (isEqual(deduplicatedItems, this.pinnedItems())) {
+      return;
+    }
+
     this.updateQuery({
       pinnedItems: deduplicatedItems,
     });
@@ -652,8 +678,29 @@ export class ComparisonToolService<T> {
     this.completeFetch();
   }
 
+  /**
+   * Caps pinned data at `maxPinnedItems`, which makes the limit an invariant of `pinnedData` no
+   * matter where the pins came from -- a hand-edited or shared URL can carry more ids than the user
+   * is allowed to pin. Capping here rather than at URL parse time keeps the first N rows *by the
+   * user's current sort*, since the ids have already been round-tripped through the fetch.
+   *
+   * Rewriting the pinned items is what converges the pin cache and the URL on the trimmed set. It
+   * re-triggers the fetches, which is correct rather than wasteful: the excluded items really did
+   * change, so the unpinned table has to refetch. Normally the follow-up pinned data is within the
+   * limit, so the cap does not apply again. It stays terminating even when the row id is not unique
+   * in the collection -- where trimming can never bring the row count down to the id count -- because
+   * `setPinnedItems` ignores a write that matches the current pins.
+   */
   setPinnedData(pinnedData: T[]) {
-    this.pinnedDataSignal.set(pinnedData);
+    const maxPinnedItems = this.maxPinnedItems();
+    if (pinnedData.length > maxPinnedItems) {
+      const trimmedData = pinnedData.slice(0, maxPinnedItems);
+      this.pinnedDataSignal.set(trimmedData);
+      this.showMaxPinnedItemsWarning(trimmedData.length);
+      this.setPinnedItems(this.extractRowIds(trimmedData));
+    } else {
+      this.pinnedDataSignal.set(pinnedData);
+    }
     this.completeFetch();
   }
 

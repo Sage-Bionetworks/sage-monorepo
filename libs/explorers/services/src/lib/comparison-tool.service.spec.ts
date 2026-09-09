@@ -327,6 +327,14 @@ describe('ComparisonToolService', () => {
       expect(service.isPinned('id3')).toBe(false);
     });
 
+    it('should clamp the configured max pinned items to MAX_PINNED_ITEMS', () => {
+      connectService();
+
+      service.setMaxPinnedItems(MAX_PINNED_ITEMS + 10);
+
+      expect(service.maxPinnedItems()).toBe(MAX_PINNED_ITEMS);
+    });
+
     it('should not add duplicate items when pinItem is called multiple times with same id', () => {
       connectService();
 
@@ -378,6 +386,75 @@ describe('ComparisonToolService', () => {
     });
   });
 
+  describe('setPinnedData', () => {
+    const rows = (...ids: string[]) => ids.map((id) => ({ _id: id }));
+
+    it('should trim pinned data down to the max pinned items and warn', () => {
+      connectService();
+      const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
+      service.setMaxPinnedItems(2);
+
+      service.setPinnedData(rows('id1', 'id2', 'id3'));
+
+      expect(service.pinnedData()).toEqual(rows('id1', 'id2'));
+      expect(service.pinnedItems()).toEqual(['id1', 'id2']);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(warnSpy).toHaveBeenCalledWith(
+        'Only 2 rows were pinned, because you reached the maximum of 2 pinned items.',
+      );
+    });
+
+    it('should use singular wording when only one item could be pinned', () => {
+      connectService();
+      const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
+      service.setMaxPinnedItems(1);
+
+      service.setPinnedData(rows('id1', 'id2'));
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        'Only 1 row was pinned, because you reached the maximum of 1 pinned items.',
+      );
+    });
+
+    it('should leave pinned data at the max pinned items untouched', () => {
+      connectService();
+      const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
+      service.setMaxPinnedItems(2);
+      service.setPinnedItems(['id1', 'id2']);
+
+      service.setPinnedData(rows('id1', 'id2'));
+
+      expect(service.pinnedData()).toEqual(rows('id1', 'id2'));
+      expect(service.pinnedItems()).toEqual(['id1', 'id2']);
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not republish the pins when the row id is not unique in the data', () => {
+      connectService();
+      service.setMaxPinnedItems(2);
+      service.setPinnedItems(['id1', 'id2']);
+      const pinsBeforeTrim = service.pinnedItems();
+
+      // A duplicated row id means trimming can never bring the row count down to the id count, so
+      // republishing the trimmed ids here would refetch the same over-limit data indefinitely
+      service.setPinnedData(rows('id1', 'id2', 'id2'));
+
+      expect(service.pinnedItems()).toBe(pinsBeforeTrim);
+    });
+
+    it('should cap pins restored from the URL', () => {
+      connectService(mockComparisonToolDataConfig, {
+        initialParams: { pinnedItems: ['id1', 'id2', 'id3'] },
+      });
+      service.setMaxPinnedItems(2);
+      expect(service.pinnedItems()).toEqual(['id1', 'id2', 'id3']);
+
+      service.setPinnedData(rows('id1', 'id2', 'id3'));
+
+      expect(service.pinnedItems()).toEqual(['id1', 'id2']);
+    });
+  });
+
   describe('pinAll', () => {
     const rows = (...ids: string[]) => ids.map((id) => ({ _id: id }));
 
@@ -410,7 +487,7 @@ describe('ComparisonToolService', () => {
       expect(pinAllFetch).toHaveBeenCalledWith(service.query(), 2);
     });
 
-    it('should clamp the requested budget to MAX_PINNED_ITEMS', () => {
+    it('should never request more than MAX_PINNED_ITEMS', () => {
       const pinAllFetch = stubFetch({ rows: [], totalElements: 0 });
       connectService(mockComparisonToolDataConfig, { pinAllFetch });
       service.setMaxPinnedItems(MAX_PINNED_ITEMS + 10);
@@ -418,6 +495,20 @@ describe('ComparisonToolService', () => {
       service.pinAll();
 
       expect(pinAllFetch).toHaveBeenCalledWith(service.query(), MAX_PINNED_ITEMS);
+    });
+
+    it('should show an error when the fetch fails', () => {
+      const pinAllFetch = jest.fn<ReturnType<PinAllFetch>, Parameters<PinAllFetch>>(() =>
+        throwError(() => new Error('boom')),
+      );
+      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      const errorSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showError');
+
+      service.pinAll();
+
+      expect(errorSpy).toHaveBeenCalledWith(
+        'Something went wrong while pinning all matching rows. Please try again.',
+      );
     });
 
     it('should warn when there were more matching rows than could be pinned', () => {
