@@ -1,5 +1,6 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
@@ -82,7 +83,7 @@ export class ComparisonToolService<T> {
   private readonly isVisualizationOverviewVisibleSignal = signal(
     !this.appStorageService.isVisualizationOverviewHidden(),
   );
-  private readonly maxPinnedItemsSignal = signal<number>(50);
+  private readonly maxPinnedItemsSignal = signal<number>(MAX_PINNED_ITEMS);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
   );
@@ -260,7 +261,7 @@ export class ComparisonToolService<T> {
 
   loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
   totalResultsCount = signal<number>(0);
-  pinnedResultsCount = signal<number>(0);
+  pinnedResultsCount = computed(() => this.pinnedData().length);
 
   hasMaxPinnedItems = computed(() => {
     return this.pinnedResultsCount() >= this.maxPinnedItems();

@@ -177,11 +177,9 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
         next: (response: MouseModelOverviewsPage) => {
           const data = response.mouseModelOverviews;
           this.comparisonToolService.setPinnedData(data);
-          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
           this.comparisonToolService.setPinnedData([]);
-          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

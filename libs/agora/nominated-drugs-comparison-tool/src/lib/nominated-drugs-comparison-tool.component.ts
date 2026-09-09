@@ -174,11 +174,9 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
         next: (response: NominatedDrugsPage) => {
           const data = response.nominatedDrugs;
           this.comparisonToolService.setPinnedData(data);
-          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
           this.comparisonToolService.setPinnedData([]);
-          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

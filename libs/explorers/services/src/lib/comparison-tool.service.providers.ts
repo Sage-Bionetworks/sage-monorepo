@@ -98,7 +98,6 @@ export const provideComparisonToolService = (
 
       if (options.pinnedItems !== undefined) {
         service.setPinnedItems(options.pinnedItems);
-        service.pinnedResultsCount.set(options.pinnedItems.length);
       }
 
       if (options.unpinnedData !== undefined) {

@@ -168,11 +168,9 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
         next: (response: MarmosetModelOverviewsPage) => {
           const data = response.marmosetModelOverviews;
           this.comparisonToolService.setPinnedData(data);
-          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
           this.comparisonToolService.setPinnedData([]);
-          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

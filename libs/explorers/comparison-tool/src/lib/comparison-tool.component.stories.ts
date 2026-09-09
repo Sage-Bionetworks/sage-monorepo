@@ -180,7 +180,6 @@ class ComparisonToolInnerComponent {
       this.comparisonToolService.setPinnedData(pinnedData);
       this.comparisonToolService.setUnpinnedData(unpinnedData);
       this.comparisonToolService.setPinnedItems(pinnedItems);
-      this.comparisonToolService.pinnedResultsCount.set(pinnedData.length);
       this.comparisonToolService.totalResultsCount.set(unpinnedData.length);
     });
 

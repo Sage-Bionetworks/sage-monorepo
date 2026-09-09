@@ -234,11 +234,9 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
               : row,
           );
           this.comparisonToolService.setPinnedData(data);
-          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
           this.comparisonToolService.setPinnedData([]);
-          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

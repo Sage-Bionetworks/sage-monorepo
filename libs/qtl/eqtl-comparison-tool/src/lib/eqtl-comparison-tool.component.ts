@@ -88,11 +88,9 @@ export class EqtlComparisonToolComponent {
   //     .subscribe({
   //       next: (response) => {
   //         this.comparisonToolService.setPinnedData(response.data);
-  //         this.comparisonToolService.pinnedResultsCount.set(response.data.length);
   //       },
   //       error: () => {
   //         this.comparisonToolService.setPinnedData([]);
-  //         this.comparisonToolService.pinnedResultsCount.set(0);
   //       },
   //     });
   // }

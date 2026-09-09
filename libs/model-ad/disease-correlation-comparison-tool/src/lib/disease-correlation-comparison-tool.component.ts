@@ -216,11 +216,9 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
         next: (response: DiseaseCorrelationsPage) => {
           const data = response.diseaseCorrelations;
           this.comparisonToolService.setPinnedData(data);
-          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
           this.comparisonToolService.setPinnedData([]);
-          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

@@ -182,11 +182,9 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
         next: (response: NominatedTargetsPage) => {
           const data = response.nominatedTargets;
           this.comparisonToolService.setPinnedData(data);
-          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
           this.comparisonToolService.setPinnedData([]);
-          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }
