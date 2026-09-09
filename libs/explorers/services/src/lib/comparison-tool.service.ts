@@ -32,6 +32,17 @@ import { ToastNotificationService } from './toast-notification.service';
  */
 export const DEFAULT_COLUMN_WIDTH_PX = 300;
 
+/**
+ * Fetches the rows matching the current query across all pages, capped at `remainingBudget`, so
+ * "pin all" can pin matches the browser is not currently holding. `totalElements` is the full match
+ * count, which is what makes truncation detectable: `totalElements > rows.length` means the budget
+ * ran out before every match was returned.
+ */
+export type PinAllFetch = (
+  query: ComparisonToolQuery,
+  remainingBudget: number,
+) => Observable<{ rows: unknown[]; totalElements: number }>;
+
 /** Core state management service for comparison tool pages. */
 @Injectable()
 export class ComparisonToolService<T> {
@@ -108,9 +119,12 @@ export class ComparisonToolService<T> {
   private readonly selectedRowIdSignal = signal<string | null>(null);
   private readonly hoveredRowIdSignal = signal<string | null>(null);
 
+  // Connect-Time Dependencies
+  private pinAllFetch?: PinAllFetch;
+  private initialSelection: string[] | undefined;
+
   // URL Sync State
   private lastSyncedUrlParamsState: ComparisonToolUrlParams | null = null;
-  private initialSelection: string[] | undefined;
 
   // Public Readonly Signals
   readonly viewConfig = this.viewConfigSignal.asReadonly();
@@ -146,14 +160,12 @@ export class ComparisonToolService<T> {
 
   // pinnedItems cache may include more pins than are currently visible
   // Used for the URL serialization
-  readonly visiblePinIds = computed(() => {
-    const visiblePinnedData = this.pinnedData();
+  readonly visiblePinIds = computed(() => this.extractRowIds(this.pinnedData()));
+
+  private extractRowIds(rows: T[]): string[] {
     const rowIdKey = this.viewConfig().rowIdDataKey;
-    return visiblePinnedData.map((item: T) => {
-      const id = (item as Record<string, unknown>)[rowIdKey];
-      return String(id);
-    });
-  });
+    return rows.map((row: T) => String((row as Record<string, unknown>)[rowIdKey]));
+  }
 
   constructor() {
     effect(() => {
@@ -199,9 +211,11 @@ export class ComparisonToolService<T> {
   connect(options: {
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
+    pinAllFetch: PinAllFetch;
     initialSelection?: string[];
   }): void {
     this.coordinatorService.setActive(this);
+    this.pinAllFetch = options.pinAllFetch;
 
     if (this.isInitialized()) {
       // Re-entering an already-initialized service (navigating back to this CT)
@@ -556,25 +570,42 @@ export class ComparisonToolService<T> {
     this.setPinnedItems(this.visiblePinIds().filter((item) => item !== id));
   }
 
-  pinList(ids: string[]) {
-    const visiblePins = new Set(this.visiblePinIds());
-    let itemsAdded = 0;
+  /**
+   * Pins every row matching the current query, not just the rows on the current page. The matching
+   * ids are discovered server-side, capped at the pins the user has left.
+   *
+   * Only starts when no fetch is in flight: mid-fetch, the pinned data on hand is not yet the
+   * server-confirmed pin set, so the remaining budget could not be computed against it. The
+   * `startFetch()` below therefore also serves as the re-entry guard.
+   */
+  pinAll() {
+    const fetch = this.pinAllFetch;
+    if (!fetch) return;
+    if (this.isLoadingTableData() || this.hasMaxPinnedItems()) return;
 
-    for (const id of ids) {
-      if (visiblePins.size >= this.maxPinnedItems()) {
-        const messagePrefix = itemsAdded === 0 ? 'No rows' : `Only ${itemsAdded} rows`;
-        this.toastNotificationService.showWarning(
-          `${messagePrefix} were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
-        );
-        break;
-      }
-      if (!visiblePins.has(id)) {
-        visiblePins.add(id);
-        itemsAdded++;
-      }
-    }
+    const currentPinIds = this.visiblePinIds();
+    // MAX_PINNED_ITEMS is the largest budget the search query schemas accept, and
+    // setMaxPinnedItems() takes any value, so cap the request rather than have the API reject it.
+    const remainingBudget = Math.min(
+      this.maxPinnedItems() - currentPinIds.length,
+      MAX_PINNED_ITEMS,
+    );
 
-    this.setPinnedItems(Array.from(visiblePins));
+    this.startFetch();
+    fetch(this.query(), remainingBudget)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ rows, totalElements }) => {
+          this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows as T[])]);
+          if (totalElements > rows.length) {
+            this.toastNotificationService.showWarning(
+              `Only ${rows.length} rows were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
+            );
+          }
+          this.completeFetch();
+        },
+        error: () => this.completeFetch(),
+      });
   }
 
   setPinnedItems(items: string[] | null) {

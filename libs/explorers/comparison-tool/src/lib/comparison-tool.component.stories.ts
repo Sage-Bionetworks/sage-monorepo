@@ -163,6 +163,10 @@ class ComparisonToolInnerComponent {
       this.comparisonToolService.connect({
         config$: of(configs),
         queryParams$: of({}),
+        pinAllFetch: () => {
+          const rows = this.unpinnedData();
+          return of({ rows, totalElements: rows.length });
+        },
       });
 
       // Cleanup when effect re-runs or component is destroyed

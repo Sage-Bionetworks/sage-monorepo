@@ -23,7 +23,7 @@ import {
   PlatformService,
 } from '@sagebionetworks/explorers/services';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, shareReplay } from 'rxjs';
+import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { NominatedDrugsComparisonToolService } from './services/nominated-drugs-comparison-tool.service';
 
 @Component({
@@ -105,6 +105,15 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
+      pinAllFetch: (query, remainingBudget) =>
+        this.nominatedDrugsService
+          .getNominatedDrugs(this.buildUnpinnedQuery(query, { remainingBudget }))
+          .pipe(
+            map((response) => ({
+              rows: response.nominatedDrugs,
+              totalElements: response.page.totalElements,
+            })),
+          ),
     });
   }
 
@@ -112,18 +121,24 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+  private buildUnpinnedQuery(
+    currentQuery: ComparisonToolQuery,
+    options?: { remainingBudget?: number },
+  ): NominatedDrugSearchQuery {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
       currentQuery.multiSortMeta,
     );
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
+    const remainingBudget = options?.remainingBudget;
 
-    const query: NominatedDrugSearchQuery = {
+    return {
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: currentQuery.pageNumber,
-      pageSize: currentQuery.pageSize,
+      // The server ignores pagination when a budget is set, so send one or the other
+      ...(remainingBudget === undefined
+        ? { pageNumber: currentQuery.pageNumber, pageSize: currentQuery.pageSize }
+        : { remainingBudget }),
       search: currentQuery.searchTerm,
       principalInvestigators: selectedFilters['nominatingPis'],
       totalNominations: selectedFilters['nominations']?.map(Number) ?? [],
@@ -132,6 +147,10 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
       sortFields,
       sortOrders,
     };
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const query = this.buildUnpinnedQuery(currentQuery);
 
     this.comparisonToolService.startFetch();
     this.logger.log(

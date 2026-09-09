@@ -26,7 +26,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, shareReplay } from 'rxjs';
+import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { DifferentialExpressionComparisonToolService } from './services/differential-expression-comparison-tool.service';
 
 @Component({
@@ -153,6 +153,15 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
+      pinAllFetch: (query, remainingBudget) =>
+        this.transcriptomicsService
+          .getTranscriptomics(this.buildUnpinnedQuery(query, { remainingBudget }))
+          .pipe(
+            map((response) => ({
+              rows: response.transcriptomics,
+              totalElements: response.page.totalElements,
+            })),
+          ),
     });
   }
 
@@ -160,19 +169,25 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+  private buildUnpinnedQuery(
+    currentQuery: ComparisonToolQuery,
+    options?: { remainingBudget?: number },
+  ): TranscriptomicsSearchQuery {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
       currentQuery.multiSortMeta,
     );
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
+    const remainingBudget = options?.remainingBudget;
 
-    const query: TranscriptomicsSearchQuery = {
+    return {
       categories: currentQuery.categories,
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: currentQuery.pageNumber,
-      pageSize: currentQuery.pageSize,
+      // The server ignores pagination when a budget is set, so send one or the other
+      ...(remainingBudget === undefined
+        ? { pageNumber: currentQuery.pageNumber, pageSize: currentQuery.pageSize }
+        : { remainingBudget }),
       search: currentQuery.searchTerm,
       biodomains: selectedFilters['biodomains'],
       modelType: selectedFilters['modelTypes'],
@@ -181,6 +196,10 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       sortFields,
       sortOrders,
     };
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const query = this.buildUnpinnedQuery(currentQuery);
 
     this.comparisonToolService.startFetch();
     this.logger.log(
