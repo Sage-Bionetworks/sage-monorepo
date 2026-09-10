@@ -55,7 +55,7 @@
                                   <a
                                     [routerLink]="grandchild.routerLink"
                                     [queryParams]="grandchild.queryParams"
-                                    routerLinkActive="active"
+                                    [class.active]="isLinkActive(grandchild)"
                                     (click)="toggleNav()"
                                   >
                                     <span>{{ grandchild.label }}</span>
@@ -69,7 +69,7 @@
                             <a
                               [routerLink]="child.routerLink"
                               [queryParams]="child.queryParams"
-                              routerLinkActive="active"
+                              [class.active]="isLinkActive(child)"
                               (click)="toggleNav()"
                             >
                               <span>{{ child.label }}</span>

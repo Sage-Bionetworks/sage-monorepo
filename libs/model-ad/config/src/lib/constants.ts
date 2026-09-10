@@ -39,10 +39,6 @@ export const DIFFERENTIAL_EXPRESSION_CATEGORIES = {
 export type DifferentialExpressionCategory =
   (typeof DIFFERENTIAL_EXPRESSION_CATEGORIES)[keyof typeof DIFFERENTIAL_EXPRESSION_CATEGORIES];
 
-// Available tissues differ per category; Hemibrain is the only one offered for both, so the header
-// nav pins it regardless of which category is linked. Switching tissue is done from the CT itself.
-export const DIFFERENTIAL_EXPRESSION_DEFAULT_TISSUE = 'Tissue - Hemibrain';
-
 export const BOXPLOT_POINT_STYLES: PointStyle[] = [
   {
     label: 'Female',

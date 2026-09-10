@@ -1,11 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { IsActiveMatchOptions, Router, RouterModule } from '@angular/router';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 import { WidestLineWidthDirective } from '@sagebionetworks/explorers/util';
+import { parseCommaSeparatedQueryParam } from '@sagebionetworks/shared/util';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
+
+const PATH_MATCH_OPTIONS: IsActiveMatchOptions = {
+  paths: 'subset',
+  queryParams: 'ignored',
+  fragment: 'ignored',
+  matrixParams: 'ignored',
+};
 
 @Component({
   selector: 'explorers-header',
@@ -70,16 +78,35 @@ export class HeaderComponent implements OnInit {
     return link.children.some((child) => {
       const candidates = child.isSubheader && child.children ? child.children : [child];
       return candidates.some((c) =>
-        c.routerLink
-          ? this.router.isActive(c.routerLink.join('/'), {
-              paths: 'subset',
-              queryParams: 'ignored',
-              fragment: 'ignored',
-              matrixParams: 'ignored',
-            })
-          : false,
+        c.routerLink ? this.router.isActive(c.routerLink.join('/'), PATH_MATCH_OPTIONS) : false,
       );
     });
+  }
+
+  /**
+   * A link is active when its path matches and every query param it declares is a leading subset of
+   * the same param in the URL. `routerLinkActive` can't express this: it compares whole raw param
+   * strings, so a link declaring one value never matches a URL carrying that value plus the ones
+   * the page filled in, and its comparison is also blind to percent-encoding differences.
+   */
+  isLinkActive(link: NavigationLink): boolean {
+    if (!link.routerLink) return false;
+    if (!this.router.isActive(link.routerLink.join('/'), PATH_MATCH_OPTIONS)) return false;
+
+    const linkParams = link.queryParams;
+    if (!linkParams) return true;
+
+    const urlParams = this.router.parseUrl(this.router.url).queryParams;
+    return Object.keys(linkParams).every((key) =>
+      this.isValuePrefix(
+        parseCommaSeparatedQueryParam(linkParams[key]),
+        parseCommaSeparatedQueryParam(urlParams[key]),
+      ),
+    );
+  }
+
+  private isValuePrefix(linkValues: string[], urlValues: string[]): boolean {
+    return linkValues.length <= urlValues.length && linkValues.every((v, i) => urlValues[i] === v);
   }
 
   private validateHeaderLinks(links: NavigationLink[]) {

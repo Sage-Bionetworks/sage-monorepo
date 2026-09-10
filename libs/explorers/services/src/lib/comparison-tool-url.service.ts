@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolUrlParams, SortOrder } from '@sagebionetworks/explorers/models';
+import { parseCommaSeparatedQueryParam } from '@sagebionetworks/shared/util';
 import { isEqual } from 'lodash';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
@@ -77,12 +78,16 @@ export class ComparisonToolUrlService {
     value: string[] | null | undefined,
   ): void {
     if (value && value.length > 0) {
-      // Encode each value to preserve commas within individual values
-      // Then join with commas as the delimiter
-      params[key] = value.map((v) => encodeURIComponent(v)).join(',');
+      params[key] = this.toCommaSeparatedQueryParam(value);
     } else if (value !== undefined) {
       params[key] = null;
     }
+  }
+
+  /** Inverse of `parseCommaSeparatedQueryParam`. Encoding each value before joining on commas is
+   * what preserves commas within individual values. */
+  private toCommaSeparatedQueryParam(values: string[]): string {
+    return values.map((value) => encodeURIComponent(value)).join(',');
   }
 
   private serializeFilterSelections(
@@ -104,7 +109,7 @@ export class ComparisonToolUrlService {
     if (filterSelections) {
       for (const [queryParamKey, values] of Object.entries(filterSelections)) {
         if (values && values.length > 0) {
-          params[queryParamKey] = values.map((v) => encodeURIComponent(v)).join(',');
+          params[queryParamKey] = this.toCommaSeparatedQueryParam(values);
         }
       }
     }
@@ -114,21 +119,21 @@ export class ComparisonToolUrlService {
     const result: ComparisonToolUrlParams = {};
 
     if (params['pinned']) {
-      const pinnedItems = this.parseCommaSeparatedParam(params['pinned']);
+      const pinnedItems = parseCommaSeparatedQueryParam(params['pinned']);
       if (pinnedItems.length > 0) {
         result.pinnedItems = pinnedItems;
       }
     }
 
     if (params['categories']) {
-      const categories = this.parseCommaSeparatedParam(params['categories']);
+      const categories = parseCommaSeparatedQueryParam(params['categories']);
       if (categories.length > 0) {
         result.categories = categories;
       }
     }
 
     if (params['sortFields']) {
-      const sortFields = this.parseCommaSeparatedParam(params['sortFields']);
+      const sortFields = parseCommaSeparatedQueryParam(params['sortFields']);
       if (sortFields.length > 0) {
         result.sortFields = sortFields;
       }
@@ -157,32 +162,13 @@ export class ComparisonToolUrlService {
         continue;
       }
 
-      const values = this.parseCommaSeparatedParam(value);
+      const values = parseCommaSeparatedQueryParam(value);
       if (values.length > 0) {
         filterSelections[key] = values;
       }
     }
 
     return filterSelections;
-  }
-
-  private parseCommaSeparatedParam(value: string | string[] | null | undefined): string[] {
-    if (value == null) {
-      return [];
-    }
-
-    const values = Array.isArray(value) ? value : [value];
-
-    return values
-      .flatMap((entry) => `${entry}`.split(','))
-      .map((entry) => {
-        try {
-          return decodeURIComponent(entry);
-        } catch {
-          return entry;
-        }
-      })
-      .filter((entry) => entry.length > 0);
   }
 
   private serializeNumberArrayParam(

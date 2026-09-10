@@ -1,7 +1,10 @@
 import { expect, Locator, Page, test } from '@playwright/test';
 import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolConfigColumnTypeEnum } from '@sagebionetworks/explorers/models';
-import { escapeRegexChars } from '@sagebionetworks/shared/util/helpers';
+import {
+  escapeRegexChars,
+  parseCommaSeparatedQueryParam,
+} from '@sagebionetworks/shared/util/helpers';
 
 export const getQueryParamFromValues = (values: string[], key: string): string => {
   // Query parameter values are encoded once by CT URL service and again by Angular router
@@ -16,30 +19,8 @@ export const getQueryParamsFromRecords = (records: Record<string, string[]>): st
   return queryParams.join('&');
 };
 
-const getQueryParamValues = (url: string, key: string): string[] => {
-  const searchParams = new URL(url).searchParams;
-  const paramValues = searchParams.getAll(key);
-
-  if (!paramValues.length) {
-    return [];
-  }
-
-  return paramValues
-    .flatMap((value) => value.split(','))
-    .map((value) => value.trim())
-    .map((value) => {
-      if (!value) {
-        return '';
-      }
-
-      try {
-        return decodeURIComponent(value);
-      } catch {
-        return value;
-      }
-    })
-    .filter((value) => value.length > 0);
-};
+const getQueryParamValues = (url: string, key: string): string[] =>
+  parseCommaSeparatedQueryParam(new URL(url).searchParams.getAll(key));
 
 export const getPinnedQueryParams = (url: string): string[] => getQueryParamValues(url, 'pinned');
 
@@ -443,39 +424,6 @@ export const closeVisualizationOverviewDialog = async (page: Page) => {
 
     await expect(dialog).toBeHidden();
   });
-};
-
-/**
- * How to reach a page through the header navigation.
- * - `dropdown` — top-level trigger that must be opened before the link is clickable. Desktop
- *   renders it as a lazily-populated popup menu; mobile renders the children inline, so there is
- *   no trigger to click.
- * - `link` — the link that performs the navigation.
- */
-export type HeaderNavTrail = {
-  dropdown?: string;
-  link: string;
-};
-
-/**
- * Clicks through the header navigation to reach a page, opening the hamburger menu and any
- * dropdown trigger along the way. Safe at both mobile and desktop breakpoints.
- */
-export const navigateViaHeaderNav = async (page: Page, trail: HeaderNavTrail) => {
-  // Open the hamburger menu if the button is visible (mobile breakpoint)
-  const menuButton = page.getByRole('button', { name: 'Toggle navigation' });
-  if (await menuButton.isVisible().catch(() => false)) {
-    await menuButton.click();
-  }
-
-  if (trail.dropdown) {
-    const dropdownTrigger = page.getByRole('button', { name: trail.dropdown, exact: true });
-    if (await dropdownTrigger.isVisible().catch(() => false)) {
-      await dropdownTrigger.click();
-    }
-  }
-
-  await page.getByRole('link', { name: trail.link, exact: true }).click();
 };
 
 export const expectComparisonToolTableLoaded = async (

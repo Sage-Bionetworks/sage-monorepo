@@ -73,3 +73,37 @@ export function capitalizeFirstLetter(value: string | null | undefined): string 
   if (!value) return '';
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
+
+/**
+ * Parses a multi-value query param written as a comma-separated list of individually
+ * percent-encoded values, the inverse of `values.map(encodeURIComponent).join(',')`. Encoding each
+ * value before joining is what lets a value contain a comma of its own, so splitting on commas
+ * without decoding each entry is always wrong.
+ *
+ * Compare parsed arrays rather than raw param strings: the string the app writes for a set of values
+ * is not the string another producer writes for the same values.
+ * @param value - The param value as delivered by a URL parser (Angular's `parseUrl` or
+ * `URL.searchParams`), which has already percent-decoded it once
+ * @returns The decoded values in order, with blank entries dropped
+ */
+export function parseCommaSeparatedQueryParam(
+  value: string | string[] | null | undefined,
+): string[] {
+  if (value == null) {
+    return [];
+  }
+
+  const values = Array.isArray(value) ? value : [value];
+
+  return values
+    .flatMap((entry) => `${entry}`.split(','))
+    .map((entry) => entry.trim())
+    .map((entry) => {
+      try {
+        return decodeURIComponent(entry);
+      } catch {
+        return entry;
+      }
+    })
+    .filter((entry) => entry.length > 0);
+}

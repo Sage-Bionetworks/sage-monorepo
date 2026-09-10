@@ -24,6 +24,7 @@ export const COMPARISON_TOOL_API_PATHS: Record<ComparisonToolPage, string> = {
   'Disease Correlation': '/comparison-tools/disease-correlation',
 };
 
+// TODO: add Protein DE entry for MG-1042
 export const COMPARISON_TOOL_NAV_TRAILS: Record<ComparisonToolPage, HeaderNavTrail> = {
   'Marmoset Model Overview': {
     dropdown: 'Model Overview',
