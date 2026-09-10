@@ -56,7 +56,7 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
       `${displayName || key}: ` +
       this.formatNumericValue(value) +
       '\n' +
-      'P-value: ' +
+      'Adjusted p-value: ' +
       this.formatNumericValue(data.adj_p_val)
     );
   }

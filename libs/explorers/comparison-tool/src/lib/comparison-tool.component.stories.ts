@@ -448,7 +448,7 @@ export const Demo: Story = {
       sizeChartLowerLabel: 'Significant',
       sizeChartUpperLabel: 'Insignificant',
       sizeChartText:
-        'Circle diameter indicates P-value. Larger circles indicate higher statistical significance.',
+        'Circle diameter indicates adjusted p-value. Larger circles indicate higher statistical significance.',
     },
     // Table
     rowIdDataKey: 'name',
