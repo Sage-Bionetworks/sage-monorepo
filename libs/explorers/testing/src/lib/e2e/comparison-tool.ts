@@ -7,6 +7,11 @@ import {
 } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolConfigColumnTypeEnum } from '@sagebionetworks/explorers/models';
 import { escapeRegexChars } from '@sagebionetworks/shared/util/helpers';
+import {
+  CATEGORY_DROPDOWN_INDEX,
+  CATEGORY_OPTION_INDEX,
+  selectCategoryOption,
+} from './comparison-tool-dropdown';
 
 export type ComparisonToolFetchOptions = {
   search?: string;
@@ -448,22 +453,7 @@ export async function testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared
 export async function testTableReturnsToFirstPageWhenCategoriesChanged(page: Page) {
   await goToLastPage(page);
 
-  const categorySelectors = page.locator('.comparison-tool-category-selectors');
-  const dropdown = categorySelectors.getByRole('combobox').last();
-  const listbox = page.getByRole('listbox');
-
-  // Click dropdown to open
-  await dropdown.click();
-  await expect(listbox).toBeVisible();
-
-  // Select the second option
-  const options = page.getByRole('option');
-  const secondOption = options.nth(1);
-  await expect(secondOption).toBeVisible();
-  await secondOption.click();
-
-  // Wait for listbox to close (dropdown selection complete)
-  await expect(listbox).toBeHidden();
+  await selectCategoryOption(page, CATEGORY_DROPDOWN_INDEX.last, CATEGORY_OPTION_INDEX.second);
 
   await expectFirstPage(page);
 }

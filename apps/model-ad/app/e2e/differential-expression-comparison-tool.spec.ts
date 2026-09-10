@@ -5,6 +5,7 @@ import {
   expectPinnedParams,
   expectPinnedRows,
   expectSearchResults,
+  getCategoriesQueryParams,
   getHeatmapDetailsPanelSubHeadings,
   getPinnedTable,
   getQueryParamFromValues,
@@ -16,6 +17,7 @@ import {
   runFilterPanelTests,
   runHeatmapDetailsPanelTests,
   searchViaFilterbox,
+  selectCategoryOption,
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
   testClickDifferentColumnsReplacesSingleSort,
@@ -40,11 +42,15 @@ import {
 } from '@sagebionetworks/explorers/testing/e2e';
 import {
   fetchComparisonToolConfig,
+  fetchProteomics,
   fetchTranscriptomics,
   navigateToComparison,
 } from './helpers/comparison-tool';
 
 const CT_PAGE = 'Differential Expression';
+const PROTEIN_MAIN_CATEGORY = 'PROTEIN - DIFFERENTIAL EXPRESSION';
+const MAIN_CATEGORY_DROPDOWN_INDEX = 0;
+const TISSUE_DROPDOWN_INDEX = 1;
 const categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
 const categoriesQueryParams = getQueryParamFromValues(categories, 'categories');
 const models = ['3xTg-AD', 'Abca7*V1599M'];
@@ -212,6 +218,32 @@ test.describe('differential expression', () => {
     );
   });
 
+  test('Pin All pins every matching row for the protein main category', async ({ page }) => {
+    const proteinSearchTerm = 't';
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await selectCategoryOption(page, MAIN_CATEGORY_DROPDOWN_INDEX, PROTEIN_MAIN_CATEGORY);
+
+    // The tissue dropdown re-populates for the protein modality, so query the categories the app
+    // actually selected rather than assuming a tissue
+    await expect.poll(() => getCategoriesQueryParams(page.url())[0]).toBe(PROTEIN_MAIN_CATEGORY);
+    const proteinCategories = getCategoriesQueryParams(page.url());
+    expect(proteinCategories.length).toBeGreaterThan(1);
+
+    const proteomics = await fetchProteomics(
+      page,
+      proteinCategories,
+      {},
+      { search: proteinSearchTerm },
+    );
+
+    await testPinAllAcrossPages(
+      page,
+      proteinSearchTerm,
+      proteomics.map((row) => row.composite_id),
+    );
+  });
+
   test('Pin All stops at the maximum number of pinned items', async ({ page }) => {
     const searchTerm = 'a';
     const transcriptomics = await fetchTranscriptomics(page, categories, modelsFilterParams, {
@@ -263,23 +295,12 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
 
-    const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox').nth(1);
-    const listbox = page.getByRole('listbox');
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const cerebralCortexOption = page.getByRole('option', { name: /tissue - cerebral cortex/i });
-    await cerebralCortexOption.click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Cerebral Cortex');
 
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
 
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const hippocampusOption = page.getByRole('option', { name: /tissue - hippocampus/i });
-    await hippocampusOption.click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Hippocampus');
 
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
@@ -302,14 +323,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
 
-    const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox').nth(1);
-    const listbox = page.getByRole('listbox');
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const cerebralCortexOption = page.getByRole('option', { name: /tissue - cerebral cortex/i });
-    await cerebralCortexOption.click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Cerebral Cortex');
 
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
@@ -319,11 +333,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, afterPinPinned);
     await expectPinnedParams(page, afterPinPinned);
 
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const hippocampusOption = page.getByRole('option', { name: /tissue - hippocampus/i });
-    await hippocampusOption.click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Hippocampus');
 
     await expectPinnedRows(page, afterPinPinned);
     await expectPinnedParams(page, afterPinPinned);
@@ -346,14 +356,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
 
-    const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox').nth(1);
-    const listbox = page.getByRole('listbox');
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const cerebralCortexOption = page.getByRole('option', { name: /tissue - cerebral cortex/i });
-    await cerebralCortexOption.click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Cerebral Cortex');
 
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
@@ -362,11 +365,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, afterUnpinPinned);
     await expectPinnedParams(page, afterUnpinPinned);
 
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const hippocampusOption = page.getByRole('option', { name: /tissue - hippocampus/i });
-    await hippocampusOption.click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Hippocampus');
 
     await expectPinnedRows(page, afterUnpinPinned);
     await expectPinnedParams(page, afterUnpinPinned);
@@ -391,23 +390,12 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, firstPinned);
     await expectPinnedParams(page, firstPinned);
 
-    const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox').nth(1);
-    const listbox = page.getByRole('listbox');
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const cerebralCortexOption = page.getByRole('option', { name: /tissue - cerebral cortex/i });
-    await cerebralCortexOption.click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Cerebral Cortex');
 
     await expectPinnedRows(page, expectedSecondPinned);
     await expectPinnedParams(page, expectedSecondPinned);
 
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const hippocampusOption = page.getByRole('option', { name: /tissue - hippocampus/i });
-    await hippocampusOption.click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Hippocampus');
 
     await expectPinnedRows(page, firstPinned);
     await expectPinnedParams(page, firstPinned);

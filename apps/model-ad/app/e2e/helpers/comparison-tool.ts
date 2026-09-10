@@ -12,6 +12,8 @@ import {
   MarmosetModelOverviewsPage,
   MouseModelOverview,
   MouseModelOverviewsPage,
+  Proteomics,
+  ProteomicsPage,
   Transcriptomics,
   TranscriptomicsPage,
 } from '@sagebionetworks/model-ad/api-client';
@@ -23,6 +25,7 @@ import {
   COMPARISON_TOOL_HEADER_TITLES,
   COMPARISON_TOOL_NAV_TRAILS,
   COMPARISON_TOOL_PATHS,
+  PROTEOMICS_API_PATH,
 } from '../constants';
 
 export const navigateToComparison = async (
@@ -68,6 +71,7 @@ export const fetchComparisonToolData = async <T>(
   categories: string[] = [],
   filterParams: Record<string, string[]> = {},
   options: ComparisonToolFetchOptions = {},
+  apiPath = COMPARISON_TOOL_API_PATHS[name],
 ): Promise<T> => {
   const params = new URLSearchParams();
   params.append('itemFilterType', 'exclude');
@@ -90,7 +94,7 @@ export const fetchComparisonToolData = async <T>(
     params.append('sortOrders', sort.order.toString());
   }
 
-  const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_API_PATHS[name]}`, {
+  const response = await page.request.get(`${baseURL}/api/v1/${apiPath}`, {
     params,
   });
   expect(response.ok()).toBeTruthy();
@@ -151,6 +155,26 @@ export const fetchTranscriptomics = async (
     options,
   );
   return data.transcriptomics;
+};
+
+// Proteomics rows share the Differential Expression page's default sort, but come from their own
+// endpoint. Categories are required: the tissues offered for the protein modality are not the same
+// as the RNA ones, so callers pass the categories the app has actually selected.
+export const fetchProteomics = async (
+  page: Page,
+  categories: string[],
+  filterParams: Record<string, string[]> = {},
+  options: ComparisonToolFetchOptions = {},
+): Promise<Proteomics[]> => {
+  const data = await fetchComparisonToolData<ProteomicsPage>(
+    page,
+    'Differential Expression',
+    categories,
+    filterParams,
+    options,
+    PROTEOMICS_API_PATH,
+  );
+  return data.proteomics;
 };
 
 export const fetchComparisonToolConfig = async (
