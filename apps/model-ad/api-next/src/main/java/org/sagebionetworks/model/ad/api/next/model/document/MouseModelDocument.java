@@ -53,6 +53,8 @@ public class MouseModelDocument {
   @Field("spatial_transcriptomics")
   private @Nullable String spatialTranscriptomics;
 
+  private @Nullable String proteomics;
+
   @Field("genetic_info")
   private List<GeneticInfo> geneticInfo;
 

@@ -30,6 +30,15 @@ export class ModelDetailsOmicsComponent {
         link: `/${this.model().disease_correlation}`,
       });
     }
+    if (this.model().proteomics) {
+      cards.push({
+        imagePath: 'model-ad-assets/images/proteomics.svg',
+        description:
+          'View Protein differential expression results for this model in the comparison tool.',
+        title: 'Proteomics',
+        link: `/${this.model().proteomics}`,
+      });
+    }
     return cards;
   });
 }
