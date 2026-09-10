@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
   ColumnConfig,
   expectPinnedParams,
@@ -25,6 +26,8 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
+  testPinAllAcrossPages,
+  testPinAllExceedsLimit,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
@@ -32,6 +35,7 @@ import {
   testTableReturnsToFirstPageWhenFilterSelectedAndRemoved,
   testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared,
   testTableReturnsToFirstPageWhenSortChanged,
+  testUrlPinsExceedingLimitAreCapped,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
 import {
@@ -43,8 +47,10 @@ import {
 const CT_PAGE = 'Differential Expression';
 const categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
 const categoriesQueryParams = getQueryParamFromValues(categories, 'categories');
-const modelsQueryParams = getQueryParamFromValues(['3xTg-AD', 'Abca7*V1599M'], 'models');
+const models = ['3xTg-AD', 'Abca7*V1599M'];
+const modelsQueryParams = getQueryParamFromValues(models, 'models');
 const categoriesAndModelsQueryParameters = [categoriesQueryParams, modelsQueryParams].join('&');
+const modelsFilterParams = { name: models };
 const cacul1Matches = [
   'ENSMUSG00000033417~3xTg-AD~Female',
   'ENSMUSG00000033417~3xTg-AD~Male',
@@ -188,6 +194,58 @@ test.describe('differential expression', () => {
     for (const rowName of [...ensaMatches, ...noGeneSymbolMatches]) {
       await expect(getRowByName(unpinnedTable, page, rowName)).toBeVisible();
     }
+  });
+
+  test('Pin All pins every matching row, including rows on later pages', async ({ page }) => {
+    // Three full gene matches across both models and both sexes: more rows than one page holds,
+    // but still under the pin limit
+    const searchTerm = 'cacul1,ensa,plec';
+    const transcriptomics = await fetchTranscriptomics(page, categories, modelsFilterParams, {
+      search: searchTerm,
+    });
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
+    await testPinAllAcrossPages(
+      page,
+      searchTerm,
+      transcriptomics.map((row) => row.composite_id),
+    );
+  });
+
+  test('Pin All stops at the maximum number of pinned items', async ({ page }) => {
+    const searchTerm = 'a';
+    const transcriptomics = await fetchTranscriptomics(page, categories, modelsFilterParams, {
+      search: searchTerm,
+      remainingBudget: MAX_PINNED_ITEMS,
+    });
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
+    await testPinAllExceedsLimit(
+      page,
+      searchTerm,
+      transcriptomics.map((row) => row.composite_id),
+    );
+  });
+
+  test('pinned items in the URL are capped at the maximum number of pinned items', async ({
+    page,
+  }) => {
+    const searchTerm = 'a';
+    const transcriptomics = await fetchTranscriptomics(page, categories, modelsFilterParams, {
+      search: searchTerm,
+    });
+    // More pins than the limit allows, while staying within the 100 rows a single request returns
+    const urlPinnedCount = MAX_PINNED_ITEMS + 10;
+    const pinnedItems = transcriptomics.slice(0, urlPinnedCount).map((row) => row.composite_id);
+    expect(pinnedItems).toHaveLength(urlPinnedCount);
+
+    const queryParameters = [
+      categoriesAndModelsQueryParameters,
+      getQueryParamFromValues(pinnedItems, 'pinned'),
+    ].join('&');
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await testUrlPinsExceedingLimitAreCapped(page, pinnedItems, searchTerm);
   });
 
   test('pinned items are cached when switching between categories', async ({ page }) => {

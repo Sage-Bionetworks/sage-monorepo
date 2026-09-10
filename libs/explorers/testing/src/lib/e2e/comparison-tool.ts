@@ -1,5 +1,10 @@
 import { expect, Locator, Page, test } from '@playwright/test';
-import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
+import {
+  DEFAULT_PAGE_SIZE,
+  getMaxPinnedItemsWarning,
+  MAX_PINNED_ITEMS,
+  RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS,
+} from '@sagebionetworks/explorers/constants';
 import { ComparisonToolConfigColumnTypeEnum } from '@sagebionetworks/explorers/models';
 import { escapeRegexChars } from '@sagebionetworks/shared/util/helpers';
 
@@ -68,6 +73,12 @@ export const getPinnedTable = (page: Page): Locator => page.locator('explorers-b
 
 export const getUnpinnedTable = (page: Page): Locator =>
   page.locator('explorers-base-table').last();
+
+const getPaginatorRange = (page: Page): Locator => page.locator('.p-paginator-current');
+
+export const expectPaginatorRange = async (page: Page, range: string): Promise<void> => {
+  await expect(getPaginatorRange(page)).toHaveText(range);
+};
 
 export const expectUnpinnedTableOnly = async (page: Page): Promise<void> => {
   await expect(page.locator('explorers-base-table').filter({ visible: true })).toHaveCount(1);
@@ -147,6 +158,20 @@ export const expectPinnedRows = async (page: Page, rowNames: string[]): Promise<
   }
 };
 
+export const expectToastDetail = async (page: Page, detail: string): Promise<void> => {
+  await expect(page.getByRole('alert')).toContainText(detail);
+};
+
+export const expectPinnedResultsCount = async (page: Page, pinnedCount: number): Promise<void> => {
+  await expect(page.getByText(`Pinned Results (${pinnedCount}/${MAX_PINNED_ITEMS})`)).toBeVisible();
+  await expect(getPinnedTable(page).getByRole('row')).toHaveCount(pinnedCount);
+};
+
+// The button only renders alongside matching results, so search or filter before asserting on it
+export const expectPinAllDisabled = async (page: Page): Promise<void> => {
+  await expect(page.getByRole('button', { name: 'Pin All' })).toBeDisabled();
+};
+
 export const expectCategories = async (page: Page, categories: string[]): Promise<void> => {
   for (const category of categories) {
     await expect(page.getByText(category)).toBeVisible();
@@ -190,7 +215,7 @@ export const searchViaFilterbox = async (page: Page, searchTerm: string): Promis
 };
 
 export const expectNoResultsFound = async (page: Page): Promise<void> => {
-  await expect(page.getByText('0-0 of 0')).toBeVisible();
+  await expectPaginatorRange(page, '0-0 of 0');
   await expect(page.getByText('No results found')).toBeVisible();
 };
 
@@ -202,7 +227,7 @@ export async function goToLastPage(page: Page) {
   await expect(lastPageBtn).toHaveClass(/p-disabled/);
 
   // Wait for the paginator to show a non-first page (text should NOT start with "1-")
-  await expect(page.locator('.p-paginator-current')).not.toContainText(/^1-/);
+  await expect(getPaginatorRange(page)).not.toContainText(/^1-/);
 }
 
 export const toggleFilterPanel = async (page: Page): Promise<Locator> => {
@@ -257,7 +282,7 @@ export async function expectFirstPage(page: Page) {
   await expect(firstPageBtn).toHaveClass(/p-disabled/);
   await expect(page.getByRole('button', { name: /previous page/i })).toHaveClass(/p-disabled/);
   // Wait for paginator to show first page range (e.g., "1-10 of X")
-  await expect(page.locator('.p-paginator-current')).toContainText(/^1-/);
+  await expect(getPaginatorRange(page)).toContainText(/^1-/);
 }
 
 export async function openFilterMenuAndClickCheckbox(
@@ -295,6 +320,73 @@ export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
 
   await expect(unpinnedTable.getByRole('row')).toHaveCount(10); // previous full page loaded
   await expect(lastPageBtn).toHaveClass(/p-disabled/);
+}
+
+// Tests that "Pin All" pins every row matching the search, not just the rows on the current page
+// searchTerm - a term whose matches span more than one page but stay within the pin limit
+// expectedPinnedIds - every matching row id, in the table's sort order. Derive these from the
+//                     same query Pin All sends, so rows the browser never held are covered
+export async function testPinAllAcrossPages(
+  page: Page,
+  searchTerm: string,
+  expectedPinnedIds: string[],
+) {
+  expect(expectedPinnedIds.length).toBeGreaterThan(DEFAULT_PAGE_SIZE);
+  expect(expectedPinnedIds.length).toBeLessThanOrEqual(MAX_PINNED_ITEMS);
+
+  await searchViaFilterbox(page, searchTerm);
+  await expectPaginatorRange(page, `1-${DEFAULT_PAGE_SIZE} of ${expectedPinnedIds.length}`);
+
+  await pinAll(page);
+
+  await expectPinnedParams(page, expectedPinnedIds);
+  await expectPinnedResultsCount(page, expectedPinnedIds.length);
+  await expectPinnedRows(page, expectedPinnedIds);
+  // Every match is pinned, so nothing is left for the matching results table
+  await expectNoResultsFound(page);
+}
+
+// Tests that "Pin All" stops at the pin limit and says so
+// searchTerm - term matching more rows than the pin limit allows
+// expectedPinnedIds - the MAX_PINNED_ITEMS row ids the server returns for the search, in the
+//                      table's sort order
+export async function testPinAllExceedsLimit(
+  page: Page,
+  searchTerm: string,
+  expectedPinnedIds: string[],
+) {
+  expect(expectedPinnedIds).toHaveLength(MAX_PINNED_ITEMS);
+
+  await searchViaFilterbox(page, searchTerm);
+  await pinAll(page);
+
+  await expectToastDetail(page, getMaxPinnedItemsWarning(MAX_PINNED_ITEMS, MAX_PINNED_ITEMS));
+  await expectPinnedParams(page, expectedPinnedIds);
+  await expectPinnedResultsCount(page, MAX_PINNED_ITEMS);
+  await expectPinAllDisabled(page);
+  await expectPinnedRows(page, expectedPinnedIds);
+}
+
+// Tests that pinned items restored from the URL are capped at the pin limit. Expects a page already
+// navigated to with more pinned query params than the limit allows.
+// pinnedIds - the ids the URL carries, in the table's sort order, more than
+//             MAX_PINNED_ITEMS of them. The first MAX_PINNED_ITEMS survive the cap.
+// searchTerm - a term leaving unpinned matches behind, so the Pin All button renders
+export async function testUrlPinsExceedingLimitAreCapped(
+  page: Page,
+  pinnedIds: string[],
+  searchTerm: string,
+) {
+  expect(pinnedIds.length).toBeGreaterThan(MAX_PINNED_ITEMS);
+  const expectedPinnedIds = pinnedIds.slice(0, MAX_PINNED_ITEMS);
+
+  await expectToastDetail(page, getMaxPinnedItemsWarning(MAX_PINNED_ITEMS, MAX_PINNED_ITEMS));
+  await expectPinnedParams(page, expectedPinnedIds);
+  await expectPinnedResultsCount(page, MAX_PINNED_ITEMS);
+  await expectPinnedRows(page, expectedPinnedIds);
+
+  await searchViaFilterbox(page, searchTerm);
+  await expectPinAllDisabled(page);
 }
 
 export async function testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(

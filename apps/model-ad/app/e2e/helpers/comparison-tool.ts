@@ -58,11 +58,17 @@ export const navigateToComparison = async (
   );
 };
 
+export type ComparisonToolFetchOptions = {
+  search?: string;
+  remainingBudget?: number;
+};
+
 export const fetchComparisonToolData = async <T>(
   page: Page,
   name: string,
   categories: string[] = [],
   filterParams: Record<string, string[]> = {},
+  options: ComparisonToolFetchOptions = {},
 ): Promise<T> => {
   const params = new URLSearchParams();
   params.append('itemFilterType', 'exclude');
@@ -74,6 +80,14 @@ export const fetchComparisonToolData = async <T>(
     for (const value of values) {
       params.append(key, value);
     }
+  }
+
+  if (options.search) {
+    params.append('search', options.search);
+  }
+
+  if (options.remainingBudget !== undefined) {
+    params.append('remainingBudget', options.remainingBudget.toString());
   }
 
   // sortFields and sortOrders are required by the API
@@ -91,8 +105,17 @@ export const fetchComparisonToolData = async <T>(
   return data;
 };
 
-export const fetchMouseModelOverviews = async (page: Page): Promise<MouseModelOverview[]> => {
-  const data = await fetchComparisonToolData<MouseModelOverviewsPage>(page, 'Model Overview');
+export const fetchMouseModelOverviews = async (
+  page: Page,
+  options: ComparisonToolFetchOptions = {},
+): Promise<MouseModelOverview[]> => {
+  const data = await fetchComparisonToolData<MouseModelOverviewsPage>(
+    page,
+    'Model Overview',
+    [],
+    {},
+    options,
+  );
   return data.mouseModelOverviews;
 };
 
@@ -116,16 +139,23 @@ export const fetchDiseaseCorrelations = async (
   return data.diseaseCorrelations;
 };
 
+const DEFAULT_TRANSCRIPTOMICS_CATEGORIES = [
+  'RNA - DIFFERENTIAL EXPRESSION',
+  'Tissue - Cerebral Cortex',
+];
+
 export const fetchTranscriptomics = async (
   page: Page,
-  categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Cerebral Cortex'],
+  categories = DEFAULT_TRANSCRIPTOMICS_CATEGORIES,
   filterParams: Record<string, string[]> = {},
+  options: ComparisonToolFetchOptions = {},
 ): Promise<Transcriptomics[]> => {
   const data = await fetchComparisonToolData<TranscriptomicsPage>(
     page,
     'Differential Expression',
     categories,
     filterParams,
+    options,
   );
   return data.transcriptomics;
 };

@@ -1,6 +1,6 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
+import { getMaxPinnedItemsWarning, MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
@@ -618,9 +618,8 @@ export class ComparisonToolService<T> {
   }
 
   private showMaxPinnedItemsWarning(pinnedCount: number) {
-    const rows = pinnedCount === 1 ? 'row was' : 'rows were';
     this.toastNotificationService.showWarning(
-      `Only ${pinnedCount} ${rows} pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
+      getMaxPinnedItemsWarning(pinnedCount, this.maxPinnedItems()),
     );
   }
 
