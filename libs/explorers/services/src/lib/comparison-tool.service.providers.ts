@@ -11,7 +11,8 @@ import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { ComparisonToolService, PinAllFetch } from './comparison-tool.service';
 import { ToastNotificationService } from './toast-notification.service';
 
-const noMatchingRows: PinAllFetch = () => of({ rows: [], totalElements: 0 });
+const noMatchingRows: PinAllFetch<Record<string, unknown>> = () =>
+  of({ rows: [], totalElements: 0 });
 
 export type ComparisonToolServiceOptions = {
   configs?: ComparisonToolConfig[];
@@ -21,7 +22,7 @@ export type ComparisonToolServiceOptions = {
   visualizationOverviewVisibility?: boolean;
   viewConfig?: Partial<ComparisonToolViewConfig>;
   maxPinnedItems?: number;
-  pinAllFetch?: PinAllFetch;
+  pinAllFetch?: PinAllFetch<Record<string, unknown>>;
   pinnedItems?: string[];
   unpinnedData?: Record<string, unknown>[];
   pinnedData?: Record<string, unknown>[];
@@ -64,7 +65,7 @@ export const provideComparisonToolService = (
   providers.push({
     provide: ComparisonToolService,
     useFactory: () => {
-      const service = new ComparisonToolService();
+      const service = new ComparisonToolService<Record<string, unknown>>();
       const urlService = inject(ComparisonToolUrlService);
 
       if (!options) return service;

@@ -38,10 +38,10 @@ export const DEFAULT_COLUMN_WIDTH_PX = 300;
  * count, which is what makes truncation detectable: `totalElements > rows.length` means the budget
  * ran out before every match was returned.
  */
-export type PinAllFetch = (
+export type PinAllFetch<T> = (
   query: ComparisonToolQuery,
   remainingBudget: number,
-) => Observable<{ rows: unknown[]; totalElements: number }>;
+) => Observable<{ rows: T[]; totalElements: number }>;
 
 /** Core state management service for comparison tool pages. */
 @Injectable()
@@ -120,7 +120,7 @@ export class ComparisonToolService<T> {
   private readonly hoveredRowIdSignal = signal<string | null>(null);
 
   // Connect-Time Dependencies
-  private pinAllFetch?: PinAllFetch;
+  private pinAllFetch?: PinAllFetch<T>;
   private initialSelection: string[] | undefined;
 
   // URL Sync State
@@ -211,7 +211,7 @@ export class ComparisonToolService<T> {
   connect(options: {
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
-    pinAllFetch: PinAllFetch;
+    pinAllFetch: PinAllFetch<T>;
     initialSelection?: string[];
   }): void {
     this.coordinatorService.setActive(this);
@@ -605,7 +605,7 @@ export class ComparisonToolService<T> {
       )
       .subscribe({
         next: ({ rows, totalElements }) => {
-          this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows as T[])]);
+          this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows)]);
           if (totalElements > rows.length) {
             this.showMaxPinnedItemsWarning(rows.length);
           }

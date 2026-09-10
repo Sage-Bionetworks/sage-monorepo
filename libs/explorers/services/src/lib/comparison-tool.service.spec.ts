@@ -19,8 +19,10 @@ import { provideComparisonToolService } from './comparison-tool.service.provider
 import { LoggerService } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
 
+type Row = Record<string, unknown>;
+
 describe('ComparisonToolService', () => {
-  let service: ComparisonToolService<Record<string, unknown>>;
+  let service: ComparisonToolService<Row>;
   let mockRouter: Partial<Router>;
   let mockActivatedRoute: Partial<ActivatedRoute>;
   let queryParamsSubject: BehaviorSubject<any>;
@@ -64,14 +66,14 @@ describe('ComparisonToolService', () => {
     return service;
   };
 
-  const noMatchingRows: PinAllFetch = () => of({ rows: [], totalElements: 0 });
+  const noMatchingRows: PinAllFetch<Row> = () => of({ rows: [], totalElements: 0 });
 
   const connectService = (
     configs: ComparisonToolConfig[] = mockComparisonToolDataConfig,
     options: {
       selection?: string[];
       initialParams?: ComparisonToolUrlParams;
-      pinAllFetch?: PinAllFetch;
+      pinAllFetch?: PinAllFetch<Row>;
     } = {},
   ) => {
     paramsSubject = new BehaviorSubject<ComparisonToolUrlParams>(options.initialParams ?? {});
@@ -464,8 +466,8 @@ describe('ComparisonToolService', () => {
       service.setPinnedData(rows(...ids));
     };
 
-    const stubFetch = (result: { rows: Record<string, string>[]; totalElements: number }) =>
-      jest.fn<ReturnType<PinAllFetch>, Parameters<PinAllFetch>>(() => of(result));
+    const stubFetch = (result: { rows: Row[]; totalElements: number }) =>
+      jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() => of(result));
 
     it('should union the returned rows with the existing pins', () => {
       const pinAllFetch = stubFetch({ rows: rows('id2', 'id3'), totalElements: 2 });
@@ -499,7 +501,7 @@ describe('ComparisonToolService', () => {
     });
 
     it('should show an error when the fetch fails', () => {
-      const pinAllFetch = jest.fn<ReturnType<PinAllFetch>, Parameters<PinAllFetch>>(() =>
+      const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() =>
         throwError(() => new Error('boom')),
       );
       connectService(mockComparisonToolDataConfig, { pinAllFetch });
@@ -559,7 +561,7 @@ describe('ComparisonToolService', () => {
     });
 
     it('should clear the loading state when the fetch fails', () => {
-      const pinAllFetch = jest.fn<ReturnType<PinAllFetch>, Parameters<PinAllFetch>>(() =>
+      const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() =>
         throwError(() => new Error('boom')),
       );
       connectService(mockComparisonToolDataConfig, { pinAllFetch });
@@ -572,7 +574,9 @@ describe('ComparisonToolService', () => {
     });
 
     it('should clear the loading state when the fetch completes without emitting', () => {
-      const pinAllFetch = jest.fn<ReturnType<PinAllFetch>, Parameters<PinAllFetch>>(() => EMPTY);
+      const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(
+        () => EMPTY,
+      );
       connectService(mockComparisonToolDataConfig, { pinAllFetch });
 
       service.pinAll();
