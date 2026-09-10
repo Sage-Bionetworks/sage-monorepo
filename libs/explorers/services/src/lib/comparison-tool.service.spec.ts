@@ -4,6 +4,7 @@ import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
+  ComparisonToolQuery,
   ComparisonToolUrlParams,
 } from '@sagebionetworks/explorers/models';
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
@@ -1348,6 +1349,30 @@ describe('ComparisonToolService', () => {
 
       service.setUnpinnedData([]);
       expect(service.pendingFetches()).toBe(0);
+    });
+  });
+
+  describe('buildPaginationOrBudget', () => {
+    const query: ComparisonToolQuery = {
+      categories: [],
+      pinnedItems: [],
+      pageNumber: 3,
+      pageSize: 25,
+      multiSortMeta: [],
+      searchTerm: null,
+      filters: [],
+    };
+
+    it('should send the current page when no budget is given', () => {
+      injectService();
+
+      expect(service.buildPaginationOrBudget(query)).toEqual({ pageNumber: 3, pageSize: 25 });
+    });
+
+    it('should send only the budget when a budget is given', () => {
+      injectService();
+
+      expect(service.buildPaginationOrBudget(query, 10)).toEqual({ remainingBudget: 10 });
     });
   });
 });

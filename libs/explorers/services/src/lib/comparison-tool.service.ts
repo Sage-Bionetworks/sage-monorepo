@@ -1116,6 +1116,19 @@ export class ComparisonToolService<T> {
     return { sortFields, sortOrders };
   }
 
+  /**
+   * Pagination or budget, never both: the server ignores pageNumber/pageSize once remainingBudget
+   * is set, so a query sends whichever one applies.
+   */
+  buildPaginationOrBudget(
+    currentQuery: ComparisonToolQuery,
+    remainingBudget?: number,
+  ): { pageNumber?: number; pageSize?: number; remainingBudget?: number } {
+    return remainingBudget === undefined
+      ? { pageNumber: currentQuery.pageNumber, pageSize: currentQuery.pageSize }
+      : { remainingBudget };
+  }
+
   private convertArraysToSortMeta(sortFields: string[], sortOrders: SortOrder[]): SortMeta[] {
     return sortFields.map((field, index) => ({
       field,

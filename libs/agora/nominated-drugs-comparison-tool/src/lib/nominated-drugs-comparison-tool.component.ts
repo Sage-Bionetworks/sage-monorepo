@@ -130,15 +130,11 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     );
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
-    const remainingBudget = options?.remainingBudget;
 
     return {
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      // The server ignores pagination when a budget is set, so send one or the other
-      ...(remainingBudget === undefined
-        ? { pageNumber: currentQuery.pageNumber, pageSize: currentQuery.pageSize }
-        : { remainingBudget }),
+      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
       search: currentQuery.searchTerm,
       principalInvestigators: selectedFilters['nominatingPis'],
       totalNominations: selectedFilters['nominations']?.map(Number) ?? [],
