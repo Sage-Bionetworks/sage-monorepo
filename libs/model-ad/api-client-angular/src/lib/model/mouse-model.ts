@@ -71,6 +71,10 @@ export interface MouseModel {
    */
   spatial_transcriptomics: string | null;
   /**
+   * Link to proteomics differential expression comparison tool data
+   */
+  proteomics: string | null;
+  /**
    * Genetic information related to the Model
    */
   genetic_info: Array<GeneticInfo>;

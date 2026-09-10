@@ -20,6 +20,7 @@ export const mouseModelMock: MouseModel = {
   transcriptomics: 'comparison/expression?models=3xTg-AD',
   disease_correlation: null,
   spatial_transcriptomics: null,
+  proteomics: null,
   aliases: ['3xTg'],
   genetic_info: [
     {

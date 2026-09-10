@@ -50,6 +50,10 @@ class MouseModelMapperTest {
     assertThat(mouseModel.getAlzforumId()).isEqualTo("ALZ:1");
     assertThat(mouseModel.getGenotype()).isEqualTo("homozygous");
     assertThat(mouseModel.getAliases()).containsExactly("alias1");
+    assertThat(mouseModel.getTranscriptomics()).isEqualTo("transcriptomics-link");
+    assertThat(mouseModel.getDiseaseCorrelation()).isEqualTo("disease-correlation-link");
+    assertThat(mouseModel.getSpatialTranscriptomics()).isEqualTo("spatial-link");
+    assertThat(mouseModel.getProteomics()).isEqualTo("proteomics-link");
     assertThat(mouseModel.getGeneticInfo()).hasSize(1);
     assertThat(mouseModel.getGeneticInfo().get(0).getAllele()).isEqualTo("allele1");
     assertThat(mouseModel.getGeneticInfo().get(0).getMgiAlleleId()).isEqualByComparingTo("1.0");
@@ -140,6 +144,7 @@ class MouseModelMapperTest {
     document.setTranscriptomics("transcriptomics-link");
     document.setDiseaseCorrelation("disease-correlation-link");
     document.setSpatialTranscriptomics("spatial-link");
+    document.setProteomics("proteomics-link");
     document.setGeneticInfo(List.of(geneticInfo));
     document.setBiomarkers(List.of(biomarker));
     document.setPathology(List.of(pathology));
