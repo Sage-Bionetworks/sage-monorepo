@@ -9,8 +9,10 @@ import { MODEL_AD_LOADING_ICON_COLORS, ROUTE_PATHS } from '@sagebionetworks/mode
 import { marmosetModelMock, mouseModelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { of, throwError } from 'rxjs';
+import { of, switchMap, throwError, timer } from 'rxjs';
 import { ModelDetailsComponent } from './model-details.component';
+
+const NOT_FOUND_DELAY_MS = 10;
 
 @Component({
   selector: 'model-ad-not-found-stub',
@@ -136,14 +138,15 @@ describe('ModelDetailsComponent', () => {
     const load1Mock = { ...mouseModelMock, name: 'LOAD1' };
     const load1Route = `/models/${load1Mock.name}?modelOrganism=mouse`;
 
-    async function setupWithRouter() {
+    async function setupWithRouter(notFoundDelayMs = 0) {
       const getModelByName = jest.fn((modelOrganism: ModelOrganism, name: string) => {
         const model = [marmosetModelMock, load1Mock].find(
           (candidate) => candidate.type === modelOrganism && candidate.name === name,
         );
-        return model
-          ? of(model)
-          : throwError(() => new Error(`${modelOrganism}/${name} not found`));
+        if (model) return of(model);
+
+        const notFound = throwError(() => new Error(`${modelOrganism}/${name} not found`));
+        return notFoundDelayMs ? timer(notFoundDelayMs).pipe(switchMap(() => notFound)) : notFound;
       });
 
       const { navigate } = await render('<router-outlet></router-outlet>', {
@@ -180,6 +183,17 @@ describe('ModelDetailsComponent', () => {
       const { navigate, router } = await setupWithRouter();
 
       await navigate(load1Route);
+
+      expect(router.url).toBe(load1Route);
+      expect(screen.queryByText('Not found')).not.toBeInTheDocument();
+    });
+
+    it('should ignore a failed request that a newer navigation has superseded', async () => {
+      const { navigate, router } = await setupWithRouter(NOT_FOUND_DELAY_MS);
+
+      await navigate('/models/Unknown?modelOrganism=mouse');
+      await navigate(load1Route);
+      await new Promise((resolve) => setTimeout(resolve, NOT_FOUND_DELAY_MS * 2));
 
       expect(router.url).toBe(load1Route);
       expect(screen.queryByText('Not found')).not.toBeInTheDocument();
