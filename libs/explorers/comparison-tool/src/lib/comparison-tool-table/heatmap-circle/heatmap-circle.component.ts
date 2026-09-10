@@ -4,6 +4,9 @@ import { ComparisonToolFilterService, HelperService } from '@sagebionetworks/exp
 import { TooltipModule } from 'primeng/tooltip';
 import { knownColorMetricToDisplayName } from '../../comparison-tool.variables';
 
+// Used as the circle's CSS class, so manually keep in sync with the stylesheet's selectors
+type CircleValueSign = 'none' | 'zero' | 'plus' | 'minus';
+
 @Component({
   selector: 'explorers-heatmap-circle',
   imports: [TooltipModule],
@@ -108,11 +111,20 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
     }
   }
 
+  private getCircleValueSign(colorValue: number | null | undefined): CircleValueSign {
+    if (colorValue === null || colorValue === undefined) return 'none';
+    if (colorValue === 0) return 'zero';
+    return colorValue > 0 ? 'plus' : 'minus';
+  }
+
   getCircleColor(colorValue: number | undefined | null) {
     if (colorValue === undefined || colorValue === null) return '#F0F0F0';
 
+    const sign = this.getCircleValueSign(colorValue);
+    if (sign === 'zero') return 'var(--color-gray-400)';
+
     const rounded = this.helperService.getSignificantFigures(colorValue, 3);
-    if (rounded > 0) {
+    if (sign === 'plus') {
       if (rounded < 0.1) {
         return '#B5CBEF';
       } else if (rounded < 0.2) {
@@ -175,9 +187,7 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
 
   getCircleClass(colorValue: number | null | undefined) {
     const baseClass = 'heatmap-circle';
-    if (colorValue === null || colorValue === undefined) {
-      return baseClass;
-    }
-    return `${baseClass} ${colorValue >= 0 ? 'plus' : 'minus'}`;
+    const sign = this.getCircleValueSign(colorValue);
+    return sign === 'none' ? baseClass : `${baseClass} ${sign}`;
   }
 }

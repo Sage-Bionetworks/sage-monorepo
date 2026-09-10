@@ -51,6 +51,16 @@ describe('HeatmapCircleComponent', () => {
     expect(element.style.backgroundColor).toBe('rgb(241, 102, 129)');
   });
 
+  it('should render a zero class for a value of zero', async () => {
+    const { element } = await setup({ log2_fc: 0, adj_p_val: 0.01 });
+
+    expect(element.className).toContain('heatmap-circle');
+    expect(element.className).toContain('zero');
+    expect(element.className).not.toContain('plus');
+    expect(element.className).not.toContain('minus');
+    expect(element.style.backgroundColor).toBe('var(--color-gray-400)');
+  });
+
   it('should hide the circle when significance threshold is active and exceeded', async () => {
     const { element, fixture, service } = await setup({ log2_fc: 0.2, adj_p_val: 0.2 });
 
