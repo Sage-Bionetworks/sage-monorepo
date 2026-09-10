@@ -8,6 +8,26 @@ import {
 import { ComparisonToolConfigColumnTypeEnum } from '@sagebionetworks/explorers/models';
 import { escapeRegexChars } from '@sagebionetworks/shared/util/helpers';
 
+export type ComparisonToolFetchOptions = {
+  search?: string;
+  remainingBudget?: number;
+};
+
+export const buildComparisonToolFetchParams = (
+  options: ComparisonToolFetchOptions,
+  params = new URLSearchParams(),
+): URLSearchParams => {
+  if (options.search) {
+    params.append('search', options.search);
+  }
+
+  if (options.remainingBudget !== undefined) {
+    params.append('remainingBudget', options.remainingBudget.toString());
+  }
+
+  return params;
+};
+
 export const getQueryParamFromValues = (values: string[], key: string): string => {
   // Query parameter values are encoded once by CT URL service and again by Angular router
   return `${key}=${values.map((value) => encodeURIComponent(encodeURIComponent(value))).join(',')}`;

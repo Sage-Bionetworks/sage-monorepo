@@ -1,5 +1,9 @@
 import { Page, expect } from '@playwright/test';
-import { expectComparisonToolTableLoaded } from '@sagebionetworks/explorers/testing/e2e';
+import {
+  buildComparisonToolFetchParams,
+  ComparisonToolFetchOptions,
+  expectComparisonToolTableLoaded,
+} from '@sagebionetworks/explorers/testing/e2e';
 import {
   ComparisonToolConfig,
   DiseaseCorrelation,
@@ -58,11 +62,6 @@ export const navigateToComparison = async (
   );
 };
 
-export type ComparisonToolFetchOptions = {
-  search?: string;
-  remainingBudget?: number;
-};
-
 export const fetchComparisonToolData = async <T>(
   page: Page,
   name: string,
@@ -82,13 +81,7 @@ export const fetchComparisonToolData = async <T>(
     }
   }
 
-  if (options.search) {
-    params.append('search', options.search);
-  }
-
-  if (options.remainingBudget !== undefined) {
-    params.append('remainingBudget', options.remainingBudget.toString());
-  }
+  buildComparisonToolFetchParams(options, params);
 
   // sortFields and sortOrders are required by the API
   const defaultSort = COMPARISON_TOOL_DEFAULT_SORTS[name];
