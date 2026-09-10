@@ -45,6 +45,7 @@ class CustomTranscriptomicsRepositoryImplTest {
   private static final String ENSEMBL_GENE_ID_FIELD = "ensembl_gene_id";
   private static final String GENE_SYMBOL_FIELD = "gene_symbol";
   private static final String TISSUE_FIELD = "tissue";
+  private static final int REMAINING_BUDGET = 25;
 
   private static final String ENSA_MOUSE_ENSEMBL_GENE_ID = "ENSMUSG00000038619";
   private static final String OTHER_MOUSE_ENSEMBL_GENE_ID = "ENSMUSG00000000001";
@@ -385,6 +386,24 @@ class CustomTranscriptomicsRepositoryImplTest {
     assertThat(pipeline)
       .as("$sort should not reference the raw '%s' object directly as a sort key", monthColumn)
       .doesNotContain("\"" + monthColumn + "\" :");
+  }
+
+  @Test
+  @DisplayName("should forward the remaining budget instead of paginating when excluding")
+  void shouldForwardRemainingBudgetWhenExcluding() {
+    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .remainingBudget(REMAINING_BUDGET)
+      .build();
+
+    // A later page, so a budget that never reached the base class would show up as a $skip.
+    repository.findAll(PageRequest.of(2, 10), query, Collections.emptyList(), "test-tissue");
+
+    String pipeline = captureAggregation().toString();
+    assertThat(pipeline)
+      .doesNotContain("$skip")
+      .containsOnlyOnce("$limit")
+      .contains(String.valueOf(REMAINING_BUDGET));
   }
 
   /** Runs a search-only query (EXCLUDE mode, no items) and returns its search condition. */
