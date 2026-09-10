@@ -8,7 +8,7 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, of, throwError } from 'rxjs';
+import { BehaviorSubject, EMPTY, of, throwError } from 'rxjs';
 import {
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
@@ -568,6 +568,16 @@ describe('ComparisonToolService', () => {
       expect(pinAllFetch).toHaveBeenCalled();
       expect(service.isLoadingTableData()).toBe(false);
       expect(service.pinnedItems()).toEqual([]);
+    });
+
+    it('should clear the loading state when the fetch completes without emitting', () => {
+      const pinAllFetch = jest.fn<ReturnType<PinAllFetch>, Parameters<PinAllFetch>>(() => EMPTY);
+      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+
+      service.pinAll();
+
+      expect(pinAllFetch).toHaveBeenCalled();
+      expect(service.isLoadingTableData()).toBe(false);
     });
   });
 

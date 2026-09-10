@@ -17,7 +17,7 @@ import { isEqual } from 'lodash';
 import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
-import { combineLatest } from 'rxjs';
+import { combineLatest, finalize } from 'rxjs';
 import { VALID_PAGE_SIZES } from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
@@ -599,20 +599,21 @@ export class ComparisonToolService<T> {
 
     this.startFetch();
     fetch(this.query(), remainingBudget)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.completeFetch()),
+      )
       .subscribe({
         next: ({ rows, totalElements }) => {
           this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows as T[])]);
           if (totalElements > rows.length) {
             this.showMaxPinnedItemsWarning(rows.length);
           }
-          this.completeFetch();
         },
         error: () => {
           this.toastNotificationService.showError(
             'Something went wrong while pinning all matching rows. Please try again.',
           );
-          this.completeFetch();
         },
       });
   }
