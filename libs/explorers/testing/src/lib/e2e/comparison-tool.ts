@@ -188,7 +188,8 @@ export const expectPinnedResultsCount = async (page: Page, pinnedCount: number):
 };
 
 // The button only renders alongside matching results, so search or filter before asserting on it
-export const expectPinAllDisabled = async (page: Page): Promise<void> => {
+export const expectPinAllDisabledAtPinLimit = async (page: Page): Promise<void> => {
+  await expectPinnedResultsCount(page, MAX_PINNED_ITEMS);
   await expect(page.getByRole('button', { name: 'Pin All' })).toBeDisabled();
 };
 
@@ -382,8 +383,7 @@ export async function testPinAllExceedsLimit(
 
   await expectToastDetail(page, getMaxPinnedItemsWarning(MAX_PINNED_ITEMS, MAX_PINNED_ITEMS));
   await expectPinnedParams(page, expectedPinnedIds);
-  await expectPinnedResultsCount(page, MAX_PINNED_ITEMS);
-  await expectPinAllDisabled(page);
+  await expectPinAllDisabledAtPinLimit(page);
   await expectPinnedRows(page, expectedPinnedIds);
 }
 
@@ -406,7 +406,7 @@ export async function testUrlPinsExceedingLimitAreCapped(
   await expectPinnedRows(page, expectedPinnedIds);
 
   await searchViaFilterbox(page, searchTerm);
-  await expectPinAllDisabled(page);
+  await expectPinAllDisabledAtPinLimit(page);
 }
 
 export async function testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
