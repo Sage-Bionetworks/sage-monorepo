@@ -10,7 +10,7 @@ import {
   PlatformService,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
-import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
+import { LoadingIconComponent, routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import {
   MarmosetModel,
   Model,
@@ -20,7 +20,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
-import { combineLatest, distinctUntilChanged, map } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs';
 import { MarmosetModelDetailsContentComponent } from './components/marmoset-model-details-content/marmoset-model-details-content.component';
 import {
   getPanels as getMarmosetPanels,
@@ -84,11 +84,11 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    combineLatest([this.route.paramMap, this.route.queryParamMap])
+    routeSnapshotChanges(this.route)
       .pipe(
-        map(([params, queryParams]): [ParamMap, ModelOrganism] => [
-          params,
-          resolveModelOrganism(queryParams.get(MODEL_ORGANISM_QUERY_KEY)),
+        map((snapshot): [ParamMap, ModelOrganism] => [
+          snapshot.paramMap,
+          resolveModelOrganism(snapshot.queryParamMap.get(MODEL_ORGANISM_QUERY_KEY)),
         ]),
         distinctUntilChanged(
           ([prevParams, prevModelOrganism], [params, modelOrganism]) =>
