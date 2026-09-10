@@ -1,0 +1,13 @@
+type: object
+description: A paginated response containing proteomics objects and pagination metadata.
+properties:
+  proteomics:
+    type: array
+    description: The list of proteomics objects for the current page
+    items:
+      $ref: ./Proteomics.yaml
+  page:
+    $ref: ./PageMetadata.yaml
+required:
+  - proteomics
+  - page

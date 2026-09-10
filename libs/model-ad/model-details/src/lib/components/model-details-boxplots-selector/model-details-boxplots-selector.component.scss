@@ -105,19 +105,13 @@
     li {
       padding-bottom: 10px;
 
-      button {
-        background: none;
-        border: none;
-        padding: 0;
+      a {
         color: var(--color-text);
         font-weight: 700;
         font-size: 18px;
         line-height: 20px;
-        cursor: pointer;
         text-decoration: underline;
 
-        // focus-visible rather than focus: a mouse click leaves the button focused, which
-        // would hold the emphasis color past the end of the highlight
         &:hover,
         &:focus-visible {
           color: var(--color-action-primary);

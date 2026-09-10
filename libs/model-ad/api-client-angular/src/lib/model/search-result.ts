@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ModelOrganism } from './model-organism';
 
 /**
  * Search result
@@ -24,4 +25,6 @@ export interface SearchResult {
    * Value that matched the query
    */
   match_value: string;
+  model_organism: ModelOrganism;
 }
+export namespace SearchResult {}

@@ -32,6 +32,8 @@ import {
   getPanelsWithDisabledState as getMousePanelsWithDisabledState,
 } from './components/mouse-model-details-content/mouse-model-details-panels';
 
+const MODEL_ORGANISM_QUERY_KEY = 'modelOrganism';
+
 @Component({
   selector: 'model-ad-model-details',
   imports: [
@@ -86,7 +88,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
       .pipe(
         map(([params, queryParams]): [ParamMap, ModelOrganism] => [
           params,
-          resolveModelOrganism(queryParams.get('modelOrganism')),
+          resolveModelOrganism(queryParams.get(MODEL_ORGANISM_QUERY_KEY)),
         ]),
         distinctUntilChanged(
           ([prevParams, prevModelOrganism], [params, modelOrganism]) =>
@@ -118,7 +120,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
             this.model = model;
             this.panels = this.buildPanels(model);
             this.setActivePanelAndParentFromUrl(params);
-            this.changePanelAndUrlIfInitialActivePanelIsInvalid();
+            this.applyFallbackPanelIfNeeded(params);
             this.scrollToPanelNavElementOnInitialLoad =
               this.maybeScrollToPanelNavElementOnInitialLoad;
             this.isLoading = false;
@@ -153,11 +155,23 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private changePanelAndUrlIfInitialActivePanelIsInvalid() {
+  /**
+   * Specifies the active panel when either no panel is specified in the path or when the specified
+   * panel is disabled or doesn't exist.
+   * If no panel is specified, then use the default panel and leave the URL untouched, retaining all
+   * query parameters and hash fragments. modelOrganism does not need appending here because
+   * modelOrganismGuard has already redirected the URL to carry it.
+   * If a disabled or invalid panel is specified, then drop the query parameters and hash fragment
+   * (other than the required modelOrganism query parameter).
+   */
+  private applyFallbackPanelIfNeeded(params: ParamMap) {
     const fallback = this.helperService.getFallbackPanelIfInvalid(this.panels, this.activePanel);
-    if (fallback) {
-      this.activePanel = fallback.activePanel;
-      this.activeParent = fallback.activeParent;
+    if (!fallback) return;
+
+    this.activePanel = fallback.activePanel;
+    this.activeParent = fallback.activeParent;
+
+    if (params.has('tab')) {
       this.location.replaceState(this.appendModelOrganism(this.getUrlBasePath()));
       this.maybeScrollToPanelNavElementOnInitialLoad = false;
     }
@@ -178,7 +192,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
 
   private appendModelOrganism(url: string) {
     const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}modelOrganism=${this.modelOrganism}`;
+    return `${url}${separator}${MODEL_ORGANISM_QUERY_KEY}=${this.modelOrganism}`;
   }
 
   onPanelChange(event: Panel) {

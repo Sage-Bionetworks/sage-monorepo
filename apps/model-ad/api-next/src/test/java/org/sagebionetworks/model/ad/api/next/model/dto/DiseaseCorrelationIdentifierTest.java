@@ -90,7 +90,7 @@ class DiseaseCorrelationIdentifierTest {
       .sex("Female")
       .build();
 
-    String result = identifier.toCompositeString();
+    String result = identifier.toCompositeId();
 
     assertThat(result).isEqualTo("APOE4~4 months~Female");
   }

@@ -1,5 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { ComponentFixture } from '@angular/core/testing';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import {
   MockWikiComponent,
@@ -9,7 +10,7 @@ import {
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { mouseModelMock } from '@sagebionetworks/model-ad/testing';
 import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import {
   ANCHOR_HIGHLIGHT_HOLD_MS,
@@ -69,7 +70,35 @@ async function setupHost(overrides: Partial<TestHostComponent> = {}) {
   return { fixture, host: fixture.componentInstance, user };
 }
 
+function getBaseComponent(fixture: ComponentFixture<TestHostComponent>) {
+  return fixture.debugElement.children[0]
+    .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+}
+
+async function setupWithExpandedToc(overrides: Partial<TestHostComponent> = {}) {
+  const { fixture, user } = await setupHost(overrides);
+  const base = getBaseComponent(fixture);
+  base.isTocCollapsed.set(false);
+  fixture.detectChanges();
+
+  const scrollToSpy = jest.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+
+  return { fixture, base, user, scrollToSpy };
+}
+
+function getTocLink(name: string) {
+  return screen.getByRole('link', { name });
+}
+
+function getSectionHeading(name: string) {
+  return screen.getByRole('heading', { level: 2, name });
+}
+
 describe('ModelDetailsBoxplotsSelectorComponent', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should render title', async () => {
     await setupHost();
     expect(screen.getByRole('heading', { level: 2, name: mockTitle })).toBeVisible();
@@ -107,9 +136,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
 
   it('should convert label to anchor id', async () => {
     const { fixture } = await setupHost();
-    // Access the base component instance through the host's child
-    const base = fixture.debugElement.children[0]
-      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+    const base = getBaseComponent(fixture);
     expect(base.generateAnchorId('Amyloid Beta')).toBe('amyloid-beta');
     expect(base.generateAnchorId('Insoluble A&beta;42')).toBe('insoluble-abeta42');
     expect(base.generateAnchorId('Tau-pS396')).toBe('tau-ps396');
@@ -120,8 +147,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
 
   it('should decode HTML entities correctly', async () => {
     const { fixture } = await setupHost();
-    const base = fixture.debugElement.children[0]
-      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+    const base = getBaseComponent(fixture);
     expect(base.decodeHtmlEntities('A&beta;42')).toBe('Abeta42');
     expect(base.decodeHtmlEntities('&alpha;-&gamma; test')).toBe('alpha-gamma test');
     expect(base.decodeHtmlEntities('no entities here')).toBe('no entities here');
@@ -130,8 +156,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
 
   it('should generate boxplots filename correctly', async () => {
     const { fixture } = await setupHost();
-    const base = fixture.debugElement.children[0]
-      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+    const base = getBaseComponent(fixture);
     expect(
       base.generateBoxplotsFilename(
         'Insoluble A&beta;40',
@@ -160,8 +185,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
 
   it('should not duplicate evidenceType in filename when it matches filterValue', async () => {
     const { fixture } = await setupHost();
-    const base = fixture.debugElement.children[0]
-      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+    const base = getBaseComponent(fixture);
     expect(
       base.generateBoxplotsFilename(
         'Soluble A&beta;40',
@@ -193,8 +217,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
       componentProperties: { modelDataList: mockModelDataList },
       providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
     });
-    const base = fixture.debugElement.children[0]
-      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+    const base = getBaseComponent(fixture);
 
     await waitFor(() => expect(base.selectedFilterOption()).toBe('Brain'));
 
@@ -259,8 +282,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
       },
       providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
     });
-    const base = fixture.debugElement.children[0]
-      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+    const base = getBaseComponent(fixture);
 
     await waitFor(() => expect(base.selectedFilterOption()).toBe('Soluble A40'));
 
@@ -280,8 +302,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
 
   it('should generate boxplots zip filename correctly', async () => {
     const { fixture } = await setupHost();
-    const base = fixture.debugElement.children[0]
-      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+    const base = getBaseComponent(fixture);
     expect(
       base.generateBoxplotsZipFilename(
         'Cerebral Cortex',
@@ -360,38 +381,52 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     });
   });
 
-  describe('anchor highlight', () => {
-    async function setupWithExpandedToc() {
-      const { fixture } = await setupHost();
-      const base = fixture.debugElement.children[0]
-        .componentInstance as ModelDetailsBoxplotsSelectorComponent;
-      base.isTocCollapsed.set(false);
-      fixture.detectChanges();
+  describe('TOC link navigation', () => {
+    it('should render TOC items as links to the current page plus their section anchor', async () => {
+      const { base } = await setupWithExpandedToc();
+      const evidenceType = base.evidenceTypes()[0];
 
-      jest.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+      expect(getTocLink(evidenceType)).toHaveAttribute(
+        'href',
+        `${window.location.pathname}#${base.generateAnchorId(evidenceType)}`,
+      );
+    });
+
+    it('should move focus to the section heading when a TOC link is clicked', async () => {
+      const { base, user } = await setupWithExpandedToc();
+      const evidenceType = base.evidenceTypes()[0];
+
+      await user.click(getTocLink(evidenceType));
+
+      expect(getSectionHeading(evidenceType)).toHaveFocus();
+    });
+
+    it('should leave a modified click to the browser so the link can open in a new tab', async () => {
+      const { base, scrollToSpy } = await setupWithExpandedToc();
+      const evidenceType = base.evidenceTypes()[0];
+      scrollToSpy.mockClear();
+
+      fireEvent.click(getTocLink(evidenceType), { metaKey: true });
+
+      expect(scrollToSpy).not.toHaveBeenCalled();
+      expect(getSectionHeading(evidenceType)).not.toHaveFocus();
+    });
+  });
+
+  describe('anchor highlight', () => {
+    async function setupWithFakeTimers() {
+      const setup = await setupWithExpandedToc();
       // PrimeNG rendering needs real timers, so switch to fake timers only after render()
       jest.useFakeTimers();
-
-      return { fixture, base };
-    }
-
-    function getTocLink(name: string) {
-      return screen
-        .getAllByTestId('toc-item-link')
-        .find((link) => link.textContent?.trim() === name) as HTMLElement;
-    }
-
-    function getSectionHeading(name: string) {
-      return screen.getByRole('heading', { level: 2, name });
+      return setup;
     }
 
     afterEach(() => {
       jest.useRealTimers();
-      jest.restoreAllMocks();
     });
 
     it('should highlight the TOC link and section heading of the scrolled-to anchor', async () => {
-      const { fixture, base } = await setupWithExpandedToc();
+      const { fixture, base } = await setupWithFakeTimers();
       const evidenceType = base.evidenceTypes()[0];
 
       base.scrollToSection(base.generateAnchorId(evidenceType));
@@ -403,7 +438,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     });
 
     it('should clear the highlight after the hold duration', async () => {
-      const { fixture, base } = await setupWithExpandedToc();
+      const { fixture, base } = await setupWithFakeTimers();
       const evidenceType = base.evidenceTypes()[0];
 
       base.scrollToSection(base.generateAnchorId(evidenceType));
@@ -418,7 +453,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     });
 
     it('should move the highlight to the newly scrolled-to anchor', async () => {
-      const { fixture, base } = await setupWithExpandedToc();
+      const { fixture, base } = await setupWithFakeTimers();
       const [firstEvidenceType, secondEvidenceType] = base.evidenceTypes();
 
       base.scrollToSection(base.generateAnchorId(firstEvidenceType));
@@ -433,7 +468,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
 
     it('should restart the hold on the newly scrolled-to anchor rather than inheriting the previous deadline', async () => {
       const partialHoldMs = ANCHOR_HIGHLIGHT_HOLD_MS / 2;
-      const { fixture, base } = await setupWithExpandedToc();
+      const { fixture, base } = await setupWithFakeTimers();
       const [firstEvidenceType, secondEvidenceType] = base.evidenceTypes();
 
       base.scrollToSection(base.generateAnchorId(firstEvidenceType));

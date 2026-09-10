@@ -21,9 +21,11 @@ class CacheConfigurationTest {
       CacheNames.DISEASE_CORRELATION,
       CacheNames.MARMOSET_MODEL_OVERVIEW,
       CacheNames.MOUSE_MODEL_OVERVIEW,
+      CacheNames.PROTEOMICS,
       CacheNames.TRANSCRIPTOMICS,
       CacheNames.TRANSCRIPTOMICS_INDIVIDUAL,
       CacheNames.MODEL,
+      CacheNames.MODEL_SEARCH,
       CacheNames.COMPARISON_TOOL_CONFIG,
     }) {
       CaffeineCache springCache = (CaffeineCache) cacheManager.getCache(name);

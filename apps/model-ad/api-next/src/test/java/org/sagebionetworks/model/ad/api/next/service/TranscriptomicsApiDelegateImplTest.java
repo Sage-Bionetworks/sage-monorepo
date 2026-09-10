@@ -21,12 +21,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.api.TranscriptomicsApiDelegateImpl;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
+import org.sagebionetworks.model.ad.api.next.model.document.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
-import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.mapper.FoldChangeMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.TranscriptomicsMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.TranscriptomicsRepository;
@@ -46,6 +47,8 @@ class TranscriptomicsApiDelegateImplTest {
 
   private static final String TISSUE_HEMIBRAIN = "Hemibrain";
   private static final String TISSUE_CORTEX = "Cortex";
+  private static final double FOUR_MONTHS_LOG2_FC = 0.01167d;
+  private static final double TWENTY_FOUR_MONTHS_LOG2_FC = 1.4382d;
 
   @Mock
   private TranscriptomicsRepository repository;
@@ -61,7 +64,7 @@ class TranscriptomicsApiDelegateImplTest {
 
     TranscriptomicsService queryService = new TranscriptomicsService(
       repository,
-      new TranscriptomicsMapper(new LinkMapper())
+      new TranscriptomicsMapper(new LinkMapper(), new FoldChangeMapper())
     );
     delegate = new TranscriptomicsApiDelegateImpl(queryService);
   }
@@ -191,7 +194,11 @@ class TranscriptomicsApiDelegateImplTest {
     assertThat(dto.getName().getLinkText()).isEqualTo("5xFAD (Jax/IU/Pitt)");
     assertThat(dto.getTissue()).isEqualTo("Hemibrain");
     assertThat(dto.get4months()).isNotNull();
-    assertThat(dto.get4months().getLog2Fc()).isEqualTo(BigDecimal.valueOf(0.01167d));
+    assertThat(dto.get4months().getLog2Fc()).isEqualTo(BigDecimal.valueOf(FOUR_MONTHS_LOG2_FC));
+    assertThat(dto.get24months()).isNotNull();
+    assertThat(dto.get24months().getLog2Fc()).isEqualTo(
+      BigDecimal.valueOf(TWENTY_FOUR_MONTHS_LOG2_FC)
+    );
     assertThat(dto.getSex().getValue()).isEqualTo("Female");
 
     verify(repository).findAll(
@@ -372,8 +379,12 @@ class TranscriptomicsApiDelegateImplTest {
 
   private TranscriptomicsDocument buildDocument(ObjectId objectId) {
     FoldChangeResult foldChange = FoldChangeResult.builder()
-      .log2Fc(0.01167d)
+      .log2Fc(FOUR_MONTHS_LOG2_FC)
       .adjPVal(0.7812d)
+      .build();
+    FoldChangeResult twentyFourMonthsFoldChange = FoldChangeResult.builder()
+      .log2Fc(TWENTY_FOUR_MONTHS_LOG2_FC)
+      .adjPVal(0.0431d)
       .build();
 
     TranscriptomicsDocument document = new TranscriptomicsDocument();
@@ -390,6 +401,7 @@ class TranscriptomicsApiDelegateImplTest {
     document.setTissue("Hemibrain");
     document.setSex("Female");
     document.setFourMonths(foldChange);
+    document.setTwentyFourMonths(twentyFourMonthsFoldChange);
     return document;
   }
 

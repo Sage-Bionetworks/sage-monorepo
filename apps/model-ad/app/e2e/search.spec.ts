@@ -74,7 +74,7 @@ test.describe('search', () => {
     await expect(searchListItems.last()).toHaveText(/load2/i);
   });
 
-  test('can search using home card input', async ({ page }) => {
+  test('can search using mouse home card input', async ({ page }) => {
     const model = 'APOE4';
     await page.goto('/');
     const { searchListItems } = await searchAndGetSearchListItems(
@@ -83,6 +83,39 @@ test.describe('search', () => {
       'Find mouse model by name or ID...',
     );
     await expect(searchListItems.first()).toHaveText(model);
+  });
+
+  test('can search using marmoset home card input', async ({ page }) => {
+    const model = 'Presenilin 1';
+    await page.goto('/');
+    await page.getByText('Marmoset Models').click();
+    const { searchListItems } = await searchAndGetSearchListItems(
+      'presenilin',
+      page,
+      'Find marmoset model by name...',
+    );
+    await expect(searchListItems.first()).toHaveText(model);
+  });
+
+  test('can search across organisms and navigate to marmoset model', async ({ page }) => {
+    const modelQuery = 'il';
+    const mouseModelName = 'LOAD1.Il1rapExon2KO';
+    const marmosetModelName = 'Presenilin 1';
+    const marmosetModelPath = '/models/Presenilin%201?modelOrganism=marmoset';
+
+    await page.goto('/');
+
+    const { searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
+    await expect(searchListItems).toHaveCount(2);
+    await expect(searchListItems.first()).toHaveText(mouseModelName);
+
+    const marmosetResult = searchListItems.nth(1);
+    await expect(marmosetResult).toHaveText(marmosetModelName);
+
+    await marmosetResult.click();
+
+    await page.waitForURL(marmosetModelPath);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(marmosetModelName);
   });
 
   test('can search and navigate to model with special characters', async ({ page }) => {

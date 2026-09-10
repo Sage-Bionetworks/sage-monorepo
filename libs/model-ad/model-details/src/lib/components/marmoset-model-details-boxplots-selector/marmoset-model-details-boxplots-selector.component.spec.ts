@@ -1,4 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
+import { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { LoggerService, SvgIconService } from '@sagebionetworks/explorers/services';
 import {
@@ -31,7 +32,18 @@ async function setup() {
   return { fixture, component: fixture.componentInstance };
 }
 
+function getBaseComponent(
+  fixture: ComponentFixture<MarmosetModelDetailsBoxplotsSelectorComponent>,
+) {
+  return fixture.debugElement.query(By.directive(ModelDetailsBoxplotsSelectorComponent))
+    .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+}
+
 describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should render title', async () => {
     await setup();
     expect(screen.getByRole('heading', { level: 2, name: 'Plasma Biomarkers' })).toBeVisible();
@@ -96,10 +108,19 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
     );
   });
 
+  it('should move focus to the age group heading when scrolling to its anchor', async () => {
+    const { fixture, component } = await setup();
+    const base = getBaseComponent(fixture);
+    jest.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+
+    base.scrollToSection(component.generateAnchorId(ageGroup));
+
+    expect(screen.getByRole('heading', { level: 3, name: ageGroup })).toHaveFocus();
+  });
+
   it('should highlight the age group heading of the highlighted anchor until the hold elapses', async () => {
     const { fixture, component } = await setup();
-    const base = fixture.debugElement.query(By.directive(ModelDetailsBoxplotsSelectorComponent))
-      .componentInstance as ModelDetailsBoxplotsSelectorComponent;
+    const base = getBaseComponent(fixture);
 
     const heading = screen.getByRole('heading', { level: 3, name: ageGroup });
     const anchorId = component.generateAnchorId(ageGroup);

@@ -1,0 +1,65 @@
+package org.sagebionetworks.model.ad.api.next.model.document;
+
+import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.lang.Nullable;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Document(collection = "protein_de_aggregate")
+public class ProteomicsDocument {
+
+  @Id
+  private ObjectId id;
+
+  @Field("ensembl_gene_id")
+  private String ensemblGeneId;
+
+  @Field("gene_symbol")
+  private String geneSymbol;
+
+  private String uniprotid;
+
+  @Field("unique_id")
+  private String uniqueId;
+
+  @Field("display_symbol")
+  private String displaySymbol;
+
+  private List<String> biodomains;
+
+  private Link name;
+
+  @Field("matched_control")
+  private String matchedControl;
+
+  @Field("model_group")
+  private @Nullable String modelGroup;
+
+  @Field("model_type")
+  private String modelType;
+
+  private String tissue;
+
+  @Field("sex")
+  private String sex;
+
+  @Field("4 months")
+  private @Nullable FoldChangeResult fourMonths;
+
+  @Field("12 months")
+  private @Nullable FoldChangeResult twelveMonths;
+
+  @Field("18 months")
+  private @Nullable FoldChangeResult eighteenMonths;
+
+  @Field("24 months")
+  private @Nullable FoldChangeResult twentyFourMonths;
+}

@@ -10,7 +10,10 @@ properties:
   match_value:
     type: string
     description: Value that matched the query
+  model_organism:
+    $ref: ./ModelOrganism.yaml
 required:
   - id
   - match_field
   - match_value
+  - model_organism

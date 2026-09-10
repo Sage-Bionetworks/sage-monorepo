@@ -72,7 +72,7 @@ public class TranscriptomicsIdentifier {
    * @return the composite identifier string
    */
   public String toCompositeId() {
-    return String.format("%s~%s~%s", ensemblGeneId, name, sex);
+    return ensemblGeneId + DELIMITER + name + DELIMITER + sex;
   }
 
   /**

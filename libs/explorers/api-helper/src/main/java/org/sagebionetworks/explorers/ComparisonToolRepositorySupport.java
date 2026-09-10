@@ -49,8 +49,7 @@ import org.springframework.data.mongodb.core.query.Query;
 @Slf4j
 public abstract class ComparisonToolRepositorySupport<T> {
 
-  private static final Collation CASE_INSENSITIVE =
-    Collation.of("en").strength(2);
+  private static final Collation CASE_INSENSITIVE = Collation.of("en").strength(2);
 
   protected final MongoTemplate mongoTemplate;
 
@@ -165,10 +164,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
       // Permits disk spillover when the $sort working set exceeds 100MB; only activates
       // when needed -- required for deep pagination on large collections
       Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(
-        AggregationOptions.builder()
-          .allowDiskUse(true)
-          .collation(CASE_INSENSITIVE)
-          .build()
+        AggregationOptions.builder().allowDiskUse(true).collation(CASE_INSENSITIVE).build()
       );
       log.debug("Executing aggregation on collection {}: {}", getCollectionName(), aggregation);
       AggregationResults<T> results = mongoTemplate.aggregate(
@@ -178,8 +174,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
       );
 
       long total = mongoTemplate.count(
-        new Query(matchCriteria)
-          .collation(CASE_INSENSITIVE),
+        new Query(matchCriteria).collation(CASE_INSENSITIVE),
         getCollectionName()
       );
       return new PageImpl<>(results.getMappedResults(), pageable, total);
@@ -314,9 +309,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
     List<Criteria> allCriteria
   ) {
     if (items.isEmpty()) {
-      // For INCLUDE mode with empty items, add impossible condition (return empty)
+      // For INCLUDE mode with empty items, match nothing (return empty)
       if (isInclude) {
-        allCriteria.add(Criteria.where("_id").is(null));
+        allCriteria.add(ApiHelper.matchNothing());
       }
       // For EXCLUDE mode with empty items, no filtering needed (return all)
       return;

@@ -52,5 +52,6 @@ export interface Transcriptomics {
   '4 months'?: FoldChangeResult;
   '12 months'?: FoldChangeResult;
   '18 months'?: FoldChangeResult;
+  '24 months'?: FoldChangeResult;
 }
 export namespace Transcriptomics {}
