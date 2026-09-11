@@ -90,6 +90,6 @@ public class CustomMarmosetModelOverviewRepositoryImpl
       getFilterConfig()
     );
 
-    return executePagedAggregation(matchCriteria, pageable);
+    return executePagedAggregation(matchCriteria, pageable, isInclude, query.getRemainingBudget());
   }
 }

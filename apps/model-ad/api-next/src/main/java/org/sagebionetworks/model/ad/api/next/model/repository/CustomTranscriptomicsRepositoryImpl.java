@@ -136,7 +136,7 @@ public class CustomTranscriptomicsRepositoryImpl
       Criteria.where("tissue").is(tissue)
     );
 
-    return executePagedAggregation(matchCriteria, pageable);
+    return executePagedAggregation(matchCriteria, pageable, isInclude, query.getRemainingBudget());
   }
 
   /**

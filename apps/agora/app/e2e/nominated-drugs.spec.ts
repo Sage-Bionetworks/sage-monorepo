@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
   ColumnConfig,
   expectSearchResults,
@@ -15,6 +16,8 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
+  testPinAllAcrossPages,
+  testPinAllExceedsLimit,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
@@ -24,6 +27,7 @@ import {
 } from '@sagebionetworks/explorers/testing/e2e';
 import {
   fetchComparisonToolConfig,
+  fetchNominatedDrugs,
   findFilterValueSpanningMultiplePages,
   navigateToComparison,
 } from './helpers/comparison-tool';
@@ -84,6 +88,36 @@ test.describe('nominated drugs - comparison tool', () => {
         'ibudilast,gemfibrozil,piribedil',
         pinnedItems,
         'CHEMBL545437~null', // Amibegron
+      );
+    });
+  });
+
+  test.describe('pin all', () => {
+    test('Pin All pins every matching row, including rows on later pages', async ({ page }) => {
+      // Matches more rows than one page holds, but still under the pin limit
+      const searchTerm = 'ib';
+      const drugs = await fetchNominatedDrugs(page, { search: searchTerm });
+
+      await navigateToComparison(page, CT_PAGE, true, 'url');
+      await testPinAllAcrossPages(
+        page,
+        searchTerm,
+        drugs.map((drug) => drug.composite_id),
+      );
+    });
+
+    test('Pin All stops at the maximum number of pinned items', async ({ page }) => {
+      const searchTerm = 'i';
+      const drugs = await fetchNominatedDrugs(page, {
+        search: searchTerm,
+        remainingBudget: MAX_PINNED_ITEMS,
+      });
+
+      await navigateToComparison(page, CT_PAGE, true, 'url');
+      await testPinAllExceedsLimit(
+        page,
+        searchTerm,
+        drugs.map((drug) => drug.composite_id),
       );
     });
   });

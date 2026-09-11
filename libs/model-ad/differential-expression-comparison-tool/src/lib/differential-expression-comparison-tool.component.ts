@@ -192,26 +192,46 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
+      pinAllFetch: (query, remainingBudget) => this.fetchAllMatchingRows(query, remainingBudget),
     });
+  }
+
+  private fetchAllMatchingRows(
+    query: ComparisonToolQuery,
+    remainingBudget: number,
+  ): Observable<{ rows: DifferentialExpressionRow[]; totalElements: number }> {
+    const mainCategory = query.categories[0];
+    const page$ = this.fetchDifferentialExpressionPage(
+      mainCategory,
+      this.buildUnpinnedQuery(query, { remainingBudget }),
+    );
+    if (page$ === null) {
+      this.logUnrecognizedMainCategory(mainCategory);
+      return EMPTY;
+    }
+
+    return page$.pipe(map(({ rows, page }) => ({ rows, totalElements: page.totalElements })));
   }
 
   ngOnDestroy() {
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+  private buildUnpinnedQuery(
+    currentQuery: ComparisonToolQuery,
+    options?: { remainingBudget?: number },
+  ): DifferentialExpressionSearchQuery {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
       currentQuery.multiSortMeta,
     );
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
 
-    const query: DifferentialExpressionSearchQuery = {
+    return {
       categories: currentQuery.categories,
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: currentQuery.pageNumber,
-      pageSize: currentQuery.pageSize,
+      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
       search: currentQuery.searchTerm,
       biodomains: selectedFilters['biodomains'],
       modelType: selectedFilters['modelTypes'],
@@ -220,6 +240,10 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       sortFields,
       sortOrders,
     };
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const query = this.buildUnpinnedQuery(currentQuery);
 
     this.comparisonToolService.startFetch();
     this.logger.log(
@@ -268,19 +292,15 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     if (page$ === null) {
       this.logUnrecognizedMainCategory(mainCategory);
       this.comparisonToolService.setPinnedData([]);
-      this.comparisonToolService.pinnedResultsCount.set(0);
       return;
     }
 
     page$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: ({ rows }: DifferentialExpressionPage) => {
-        const data = this.applyModelGroupLink(rows);
-        this.comparisonToolService.setPinnedData(data);
-        this.comparisonToolService.pinnedResultsCount.set(data.length);
+        this.comparisonToolService.setPinnedData(this.applyModelGroupLink(rows));
       },
       error: () => {
         this.comparisonToolService.setPinnedData([]);
-        this.comparisonToolService.pinnedResultsCount.set(0);
       },
     });
   }

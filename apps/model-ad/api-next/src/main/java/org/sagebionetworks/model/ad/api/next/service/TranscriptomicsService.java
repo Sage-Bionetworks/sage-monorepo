@@ -36,7 +36,7 @@ public class TranscriptomicsService {
     ".buildCacheKey('transcriptomics', #query.itemFilterType, #query.items, " +
     "#query.search, #query.biodomains, #query.modelType, #query.name, #query.sex, " +
     "#tissue, #query.pageNumber, #query.pageSize, " +
-    "#query.sortFields, #query.sortOrders)"
+    "#query.remainingBudget, #query.sortFields, #query.sortOrders)"
   )
   public TranscriptomicsPageDto loadTranscriptomics(
     TranscriptomicsSearchQueryDto query,

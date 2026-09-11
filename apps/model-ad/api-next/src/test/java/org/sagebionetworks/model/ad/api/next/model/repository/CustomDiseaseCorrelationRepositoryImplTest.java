@@ -26,6 +26,8 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 @ExtendWith(MockitoExtension.class)
 class CustomDiseaseCorrelationRepositoryImplTest {
 
+  private static final int REMAINING_BUDGET = 25;
+
   @Mock
   private MongoTemplate mongoTemplate;
 
@@ -237,5 +239,37 @@ class CustomDiseaseCorrelationRepositoryImplTest {
     assertThat(pipeline)
       .as("$sort should not reference the raw CBE object directly as a sort key")
       .doesNotContain("\"CBE\" :");
+  }
+
+  @Test
+  @DisplayName("should forward the remaining budget instead of paginating when excluding")
+  void shouldForwardRemainingBudgetWhenExcluding() {
+    DiseaseCorrelationSearchQueryDto query = new DiseaseCorrelationSearchQueryDto();
+    query.setItemFilterType(ItemFilterTypeQueryDto.EXCLUDE);
+    query.setRemainingBudget(REMAINING_BUDGET);
+
+    when(
+      mongoTemplate.aggregate(
+        any(Aggregation.class),
+        eq("disease_correlation"),
+        eq(DiseaseCorrelationDocument.class)
+      )
+    ).thenReturn(aggregationResults);
+
+    // A later page, so a budget that never reached the base class would show up as a $skip.
+    repository.findAll(PageRequest.of(2, 10), query, List.of(), "Cluster A");
+
+    ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(
+      captor.capture(),
+      eq("disease_correlation"),
+      eq(DiseaseCorrelationDocument.class)
+    );
+
+    String pipeline = captor.getValue().toString();
+    assertThat(pipeline)
+      .doesNotContain("$skip")
+      .containsOnlyOnce("$limit")
+      .contains(String.valueOf(REMAINING_BUDGET));
   }
 }

@@ -29,6 +29,7 @@ import org.springframework.data.mongodb.core.query.Query;
 class CustomMouseModelOverviewRepositoryImplTest {
 
   private static final String COLLECTION_NAME = "model_overview";
+  private static final int REMAINING_BUDGET = 25;
 
   @Mock
   private MongoTemplate mongoTemplate;
@@ -151,5 +152,29 @@ class CustomMouseModelOverviewRepositoryImplTest {
 
     // Count is via mongoTemplate.count(Query, collection), not via aggregation
     verify(mongoTemplate).count(any(Query.class), eq(COLLECTION_NAME));
+  }
+
+  @Test
+  @DisplayName("should forward the remaining budget instead of paginating when excluding")
+  void shouldForwardRemainingBudgetWhenExcluding() {
+    MouseModelOverviewSearchQueryDto query = new MouseModelOverviewSearchQueryDto();
+    query.setItemFilterType(ItemFilterTypeQueryDto.EXCLUDE);
+    query.setRemainingBudget(REMAINING_BUDGET);
+
+    // A later page, so a budget that never reached the base class would show up as a $skip.
+    repository.findAll(PageRequest.of(2, 10), query, List.of());
+
+    ArgumentCaptor<Aggregation> aggregationCaptor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(
+      aggregationCaptor.capture(),
+      eq(COLLECTION_NAME),
+      eq(MouseModelOverviewDocument.class)
+    );
+
+    String pipelineString = aggregationCaptor.getValue().toString();
+    assertThat(pipelineString)
+      .doesNotContain("$skip")
+      .containsOnlyOnce("$limit")
+      .contains(String.valueOf(REMAINING_BUDGET));
   }
 }

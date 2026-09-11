@@ -36,7 +36,7 @@ public class MarmosetModelOverviewService {
     ".buildCacheKey('marmosetModelOverview', #query.itemFilterType, " +
     "#query.items, #query.search, #query.availableData, #query.modelTypes, " +
     "#query.modifiedGenes, #query.pageNumber, #query.pageSize, " +
-    "#query.sortFields, #query.sortOrders)"
+    "#query.remainingBudget, #query.sortFields, #query.sortOrders)"
   )
   public MarmosetModelOverviewsPageDto loadMarmosetModelOverviews(
     MarmosetModelOverviewSearchQueryDto query

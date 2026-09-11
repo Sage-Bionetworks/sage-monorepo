@@ -1,5 +1,9 @@
 import { Page, expect } from '@playwright/test';
-import { expectComparisonToolTableLoaded } from '@sagebionetworks/explorers/testing/e2e';
+import {
+  buildComparisonToolFetchParams,
+  ComparisonToolFetchOptions,
+  expectComparisonToolTableLoaded,
+} from '@sagebionetworks/explorers/testing/e2e';
 import {
   ComparisonToolConfig,
   DiseaseCorrelation,
@@ -8,6 +12,8 @@ import {
   MarmosetModelOverviewsPage,
   MouseModelOverview,
   MouseModelOverviewsPage,
+  Proteomics,
+  ProteomicsPage,
   Transcriptomics,
   TranscriptomicsPage,
 } from '@sagebionetworks/model-ad/api-client';
@@ -19,6 +25,7 @@ import {
   COMPARISON_TOOL_HEADER_TITLES,
   COMPARISON_TOOL_NAV_TRAILS,
   COMPARISON_TOOL_PATHS,
+  PROTEOMICS_API_PATH,
 } from '../constants';
 
 export const navigateToComparison = async (
@@ -63,6 +70,8 @@ export const fetchComparisonToolData = async <T>(
   name: string,
   categories: string[] = [],
   filterParams: Record<string, string[]> = {},
+  options: ComparisonToolFetchOptions = {},
+  apiPath = COMPARISON_TOOL_API_PATHS[name],
 ): Promise<T> => {
   const params = new URLSearchParams();
   params.append('itemFilterType', 'exclude');
@@ -76,6 +85,8 @@ export const fetchComparisonToolData = async <T>(
     }
   }
 
+  buildComparisonToolFetchParams(options, params);
+
   // sortFields and sortOrders are required by the API
   const defaultSort = COMPARISON_TOOL_DEFAULT_SORTS[name];
   for (const sort of defaultSort) {
@@ -83,7 +94,7 @@ export const fetchComparisonToolData = async <T>(
     params.append('sortOrders', sort.order.toString());
   }
 
-  const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_API_PATHS[name]}`, {
+  const response = await page.request.get(`${baseURL}/api/v1/${apiPath}`, {
     params,
   });
   expect(response.ok()).toBeTruthy();
@@ -91,8 +102,17 @@ export const fetchComparisonToolData = async <T>(
   return data;
 };
 
-export const fetchMouseModelOverviews = async (page: Page): Promise<MouseModelOverview[]> => {
-  const data = await fetchComparisonToolData<MouseModelOverviewsPage>(page, 'Model Overview');
+export const fetchMouseModelOverviews = async (
+  page: Page,
+  options: ComparisonToolFetchOptions = {},
+): Promise<MouseModelOverview[]> => {
+  const data = await fetchComparisonToolData<MouseModelOverviewsPage>(
+    page,
+    'Model Overview',
+    [],
+    {},
+    options,
+  );
   return data.mouseModelOverviews;
 };
 
@@ -116,18 +136,45 @@ export const fetchDiseaseCorrelations = async (
   return data.diseaseCorrelations;
 };
 
+const DEFAULT_TRANSCRIPTOMICS_CATEGORIES = [
+  'RNA - DIFFERENTIAL EXPRESSION',
+  'Tissue - Cerebral Cortex',
+];
+
 export const fetchTranscriptomics = async (
   page: Page,
-  categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Cerebral Cortex'],
+  categories = DEFAULT_TRANSCRIPTOMICS_CATEGORIES,
   filterParams: Record<string, string[]> = {},
+  options: ComparisonToolFetchOptions = {},
 ): Promise<Transcriptomics[]> => {
   const data = await fetchComparisonToolData<TranscriptomicsPage>(
     page,
     'Differential Expression',
     categories,
     filterParams,
+    options,
   );
   return data.transcriptomics;
+};
+
+// Proteomics rows share the Differential Expression page's default sort, but come from their own
+// endpoint. Categories are required: the tissues offered for the protein modality are not the same
+// as the RNA ones, so callers pass the categories the app has actually selected.
+export const fetchProteomics = async (
+  page: Page,
+  categories: string[],
+  filterParams: Record<string, string[]> = {},
+  options: ComparisonToolFetchOptions = {},
+): Promise<Proteomics[]> => {
+  const data = await fetchComparisonToolData<ProteomicsPage>(
+    page,
+    'Differential Expression',
+    categories,
+    filterParams,
+    options,
+    PROTEOMICS_API_PATH,
+  );
+  return data.proteomics;
 };
 
 export const fetchComparisonToolConfig = async (

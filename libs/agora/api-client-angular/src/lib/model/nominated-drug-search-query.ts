@@ -22,6 +22,10 @@ export interface NominatedDrugSearchQuery {
    */
   pageSize?: number;
   /**
+   * Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is \'exclude\'.
+   */
+  remainingBudget?: number | null;
+  /**
    * List of composite_id values to filter by (format: chembl_id~combined_with).
    */
   items?: Array<string> | null;

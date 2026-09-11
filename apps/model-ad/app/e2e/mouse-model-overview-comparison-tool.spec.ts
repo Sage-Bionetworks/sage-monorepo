@@ -24,6 +24,7 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
+  testPinAllAcrossPages,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
@@ -194,6 +195,20 @@ test.describe('mouse model overview', () => {
   }) => {
     await navigateToComparison(page, CT_PAGE, true);
     await expectSearchResults(page, '(uc', ['5xFAD (UCI)']);
+  });
+
+  test('Pin All pins every matching model, including models on later pages', async ({ page }) => {
+    // Broad enough that matches spill past the first page,
+    // narrow enough to stay under the pin limit
+    const searchTerm = 'a';
+    const models = await fetchMouseModelOverviews(page, { search: searchTerm });
+
+    await navigateToComparison(page, CT_PAGE, true);
+    await testPinAllAcrossPages(
+      page,
+      searchTerm,
+      models.map((model) => model.name),
+    );
   });
 
   test('table loads previous page when last item on last page is pinned', async ({ page }) => {

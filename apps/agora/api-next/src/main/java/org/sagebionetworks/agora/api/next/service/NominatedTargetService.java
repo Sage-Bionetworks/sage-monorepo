@@ -37,7 +37,7 @@ public class NominatedTargetService {
     "#query.items, #query.search, #query.cohortStudies, #query.inputData, " +
     "#query.initialNomination, #query.nominatingTeams, #query.pharosClass, " +
     "#query.programs, #query.totalNominations, #query.pageNumber, " +
-    "#query.pageSize, #query.sortFields, #query.sortOrders)"
+    "#query.pageSize, #query.remainingBudget, #query.sortFields, #query.sortOrders)"
   )
   public NominatedTargetsPageDto loadNominatedTargets(NominatedTargetSearchQueryDto query) {
     List<String> items = ApiHelper.sanitizeItems(query.getItems());

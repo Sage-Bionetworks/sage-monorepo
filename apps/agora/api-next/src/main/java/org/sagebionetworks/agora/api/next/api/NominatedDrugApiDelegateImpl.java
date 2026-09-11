@@ -19,6 +19,7 @@ public class NominatedDrugApiDelegateImpl implements NominatedDrugApiDelegate {
   private static final Set<String> VALID_QUERY_PARAMS = Set.of(
     "pageNumber",
     "pageSize",
+    "remainingBudget",
     "items",
     "itemFilterType",
     "search",

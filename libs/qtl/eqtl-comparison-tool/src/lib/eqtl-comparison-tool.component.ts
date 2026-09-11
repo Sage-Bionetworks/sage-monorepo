@@ -37,6 +37,8 @@ export class EqtlComparisonToolComponent {
     this.comparisonToolService.connect({
       config$: of([]),
       queryParams$: of({}),
+      // TODO(QTL-113): fetch the matching rows once CT data fetching is implemented
+      pinAllFetch: () => of({ rows: [], totalElements: 0 }),
     });
   }
 
@@ -88,11 +90,9 @@ export class EqtlComparisonToolComponent {
   //     .subscribe({
   //       next: (response) => {
   //         this.comparisonToolService.setPinnedData(response.data);
-  //         this.comparisonToolService.pinnedResultsCount.set(response.data.length);
   //       },
   //       error: () => {
   //         this.comparisonToolService.setPinnedData([]);
-  //         this.comparisonToolService.pinnedResultsCount.set(0);
   //       },
   //     });
   // }

@@ -163,6 +163,10 @@ class ComparisonToolInnerComponent {
       this.comparisonToolService.connect({
         config$: of(configs),
         queryParams$: of({}),
+        pinAllFetch: () => {
+          const rows = this.unpinnedData();
+          return of({ rows, totalElements: rows.length });
+        },
       });
 
       // Cleanup when effect re-runs or component is destroyed
@@ -180,7 +184,6 @@ class ComparisonToolInnerComponent {
       this.comparisonToolService.setPinnedData(pinnedData);
       this.comparisonToolService.setUnpinnedData(unpinnedData);
       this.comparisonToolService.setPinnedItems(pinnedItems);
-      this.comparisonToolService.pinnedResultsCount.set(pinnedData.length);
       this.comparisonToolService.totalResultsCount.set(unpinnedData.length);
     });
 

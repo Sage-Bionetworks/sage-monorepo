@@ -101,6 +101,6 @@ public class CustomNominatedDrugRepositoryImpl
       getFilterConfig()
     );
 
-    return executePagedAggregation(matchCriteria, pageable);
+    return executePagedAggregation(matchCriteria, pageable, isInclude, query.getRemainingBudget());
   }
 }

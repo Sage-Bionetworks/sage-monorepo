@@ -23,6 +23,7 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   private static final Set<String> VALID_QUERY_PARAMS = Set.of(
     "pageNumber",
     "pageSize",
+    "remainingBudget",
     "categories",
     "items",
     "itemFilterType",

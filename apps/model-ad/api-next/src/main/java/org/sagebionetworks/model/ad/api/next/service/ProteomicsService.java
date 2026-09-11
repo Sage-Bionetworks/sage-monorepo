@@ -36,7 +36,7 @@ public class ProteomicsService {
     ".buildCacheKey('proteomics', #query.itemFilterType, #query.items, " +
     "#query.search, #query.biodomains, #query.modelType, #query.name, #query.sex, " +
     "#tissue, #query.pageNumber, #query.pageSize, " +
-    "#query.sortFields, #query.sortOrders)"
+    "#query.remainingBudget, #query.sortFields, #query.sortOrders)"
   )
   public ProteomicsPageDto loadProteomics(ProteomicsSearchQueryDto query, String tissue) {
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
