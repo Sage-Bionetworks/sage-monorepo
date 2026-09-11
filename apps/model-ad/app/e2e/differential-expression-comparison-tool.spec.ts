@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import {
   ColumnConfig,
   expectCategoriesParams,
+  expectComparisonToolTableLoaded,
   expectPinnedParams,
   expectPinnedRows,
   expectSearchResults,
@@ -12,6 +13,7 @@ import {
   getRowByName,
   getUnpinnedTable,
   getVisibleHeatmapCircleButtons,
+  navigateViaHeaderNav,
   pinByName,
   runFilterPanelTests,
   runHeatmapDetailsPanelTests,
@@ -35,6 +37,7 @@ import {
   testTableReturnsToFirstPageWhenSortChanged,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
+import { DIFFERENTIAL_EXPRESSION_PROTEIN_NAV_TRAIL } from './constants';
 import {
   fetchComparisonToolConfig,
   fetchTranscriptomics,
@@ -105,18 +108,18 @@ test.describe('differential expression', () => {
     }
   });
 
-  // The Protein link cannot go through navigateToComparison: the transcriptomics endpoint rejects
-  // the protein category until MG-1046 lands, so the table never loads. Assert the navigation
-  // itself, which is what the header link is responsible for.
+  // The Protein sub-link isn't in COMPARISON_TOOL_NAV_TRAILS (that map keys 'Differential
+  // Expression' to the default RNA link), so navigate through its dedicated trail rather than
+  // navigateToComparison.
   test('header dropdown navigates to the Protein view', async ({ page }) => {
     const proteinCategory = 'PROTEIN - DIFFERENTIAL EXPRESSION';
 
+    // The visualization overview dialog is only shown on the first visit to a comparison tool
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await expectCategoriesParams(page, categories);
 
-    await page.getByRole('button', { name: CT_PAGE, exact: true }).click();
-    await page
-      .getByRole('link', { name: 'Protein - Differential Expression', exact: true })
-      .click();
+    await navigateViaHeaderNav(page, DIFFERENTIAL_EXPRESSION_PROTEIN_NAV_TRAIL);
+    await expectComparisonToolTableLoaded(page, CT_PAGE, false);
 
     await expectCategoriesParams(page, [proteinCategory]);
     // Only the category selector is asserted here. Protein offers a single tissue, and the

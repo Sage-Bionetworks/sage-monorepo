@@ -39,7 +39,6 @@ export const headerLinks: NavigationLink[] = [
           {
             label: 'Protein - Differential Expression',
             routerLink: [ROUTE_PATHS.DIFFERENTIAL_EXPRESSION],
-            // TODO(MG-1042): this route will error until MG-1042 is implemented.
             queryParams: { categories: DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN },
           },
         ],

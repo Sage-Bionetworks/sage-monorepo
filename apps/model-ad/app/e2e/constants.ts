@@ -24,7 +24,6 @@ export const COMPARISON_TOOL_API_PATHS: Record<ComparisonToolPage, string> = {
   'Disease Correlation': '/comparison-tools/disease-correlation',
 };
 
-// TODO: add Protein DE entry for MG-1042
 export const COMPARISON_TOOL_NAV_TRAILS: Record<ComparisonToolPage, HeaderNavTrail> = {
   'Marmoset Model Overview': {
     dropdown: 'Model Overview',
@@ -41,6 +40,13 @@ export const COMPARISON_TOOL_NAV_TRAILS: Record<ComparisonToolPage, HeaderNavTra
   'Disease Correlation': {
     link: 'Disease Correlation',
   },
+};
+
+// 'Differential Expression' exposes two header sub-links; the map above uses RNA as the default.
+// This trail reaches the Protein sub-link.
+export const DIFFERENTIAL_EXPRESSION_PROTEIN_NAV_TRAIL: HeaderNavTrail = {
+  dropdown: 'Differential Expression',
+  link: 'Protein - Differential Expression',
 };
 
 export const COMPARISON_TOOL_CONFIG_PATH = 'comparison-tools/config';
