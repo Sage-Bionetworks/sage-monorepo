@@ -154,6 +154,12 @@ section h2 {
 .p-tooltip .p-tooltip-arrow {
   display: none !important;
 }
+.p-tooltip.tooltip-fit-content {
+  max-width: none;
+}
+.p-tooltip.tooltip-fit-content .p-tooltip-text {
+  white-space: pre;
+}
 
 .p-radiobutton {
   display: inline-flex !important;
