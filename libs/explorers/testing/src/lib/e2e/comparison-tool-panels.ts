@@ -162,7 +162,7 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
       await expect(page.locator('.heatmap-details-panel-heading')).toHaveCount(0);
     });
 
-    test('panel displays data values and p-value', async ({ page }) => {
+    test('panel displays data values and adjusted p-value', async ({ page }) => {
       await navigateFn(page);
 
       const heatmapButton = getVisibleHeatmapCircleButtons(page).first();
@@ -171,7 +171,7 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
       // Verify the panel contains the expected data sections
       const panelData = page.locator('.heatmap-details-panel-data').first();
       await expect(panelData).toBeVisible();
-      await expect(panelData).toContainText('P-value');
+      await expect(panelData).toContainText('Adjusted p-value');
     });
 
     test('clicking the same heatmap circle again closes the details panel', async ({ page }) => {
