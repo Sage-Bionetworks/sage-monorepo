@@ -1,5 +1,9 @@
 import { NavigationLink } from '@sagebionetworks/explorers/models';
-import { HELP_URL, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import {
+  DIFFERENTIAL_EXPRESSION_CATEGORIES,
+  HELP_URL,
+  ROUTE_PATHS,
+} from '@sagebionetworks/model-ad/config';
 
 export const headerLinks: NavigationLink[] = [
   {
@@ -22,7 +26,24 @@ export const headerLinks: NavigationLink[] = [
   },
   {
     label: 'Differential Expression',
-    routerLink: [ROUTE_PATHS.DIFFERENTIAL_EXPRESSION],
+    children: [
+      {
+        label: 'Mouse Models',
+        isSubheader: true,
+        children: [
+          {
+            label: 'RNA - Differential Expression',
+            routerLink: [ROUTE_PATHS.DIFFERENTIAL_EXPRESSION],
+            queryParams: { categories: DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA },
+          },
+          {
+            label: 'Protein - Differential Expression',
+            routerLink: [ROUTE_PATHS.DIFFERENTIAL_EXPRESSION],
+            queryParams: { categories: DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN },
+          },
+        ],
+      },
+    ],
   },
   {
     label: 'Disease Correlation',

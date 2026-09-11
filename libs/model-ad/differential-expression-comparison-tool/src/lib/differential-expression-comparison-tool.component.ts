@@ -29,10 +29,9 @@ import {
   TranscriptomicsSearchQuery,
   TranscriptomicsService,
 } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { DIFFERENTIAL_EXPRESSION_CATEGORIES, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, Observable, shareReplay } from 'rxjs';
-import { PROTEIN_MAIN_CATEGORY, RNA_MAIN_CATEGORY } from './differential-expression-categories';
 import {
   DifferentialExpressionComparisonToolService,
   DifferentialExpressionRow,
@@ -80,11 +79,11 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     );
 
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
-    [RNA_MAIN_CATEGORY]: {
+    [DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA]: {
       ownerId: 'syn66271427',
       wikiId: '632873',
     },
-    [PROTEIN_MAIN_CATEGORY]: {
+    [DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN]: {
       ownerId: 'syn66271427',
       wikiId: '643119',
     },
@@ -107,12 +106,12 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     viewDetailsClick: (rowData: unknown) => {
       const mainCategory = this.mainCategory();
       switch (mainCategory) {
-        case RNA_MAIN_CATEGORY: {
+        case DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA: {
           const row = rowData as Transcriptomics;
           this.openDetails([ROUTE_PATHS.GENES, row.ensembl_gene_id], row);
           break;
         }
-        case PROTEIN_MAIN_CATEGORY: {
+        case DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN: {
           const row = rowData as Proteomics;
           this.openDetails([ROUTE_PATHS.PROTEINS, row.unique_id], row);
           break;
@@ -136,7 +135,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       const cell = cellData as FoldChangeResult;
       const mainCategory = this.mainCategory();
       switch (mainCategory) {
-        case RNA_MAIN_CATEGORY: {
+        case DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA: {
           const row = rowData as Transcriptomics;
           return this.buildHeatmapDetailsPanelData(row, cell, columnKey, {
             label: row.gene_symbol
@@ -145,7 +144,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
             heading: `Differential RNA Expression (${row.tissue})`,
           });
         }
-        case PROTEIN_MAIN_CATEGORY: {
+        case DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN: {
           const row = rowData as Proteomics;
           return this.buildHeatmapDetailsPanelData(row, cell, columnKey, {
             label: row.gene_symbol
@@ -290,11 +289,11 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     query: DifferentialExpressionSearchQuery,
   ): Observable<DifferentialExpressionPage> | null {
     switch (mainCategory) {
-      case RNA_MAIN_CATEGORY:
+      case DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA:
         return this.transcriptomicsService
           .getTranscriptomics(query)
           .pipe(map((response) => ({ rows: response.transcriptomics, page: response.page })));
-      case PROTEIN_MAIN_CATEGORY:
+      case DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN:
         return this.proteomicsService
           .getProteomics(query)
           .pipe(map((response) => ({ rows: response.proteomics, page: response.page })));

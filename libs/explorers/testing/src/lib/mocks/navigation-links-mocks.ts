@@ -10,7 +10,7 @@ export const headerLinks: NavigationLink[] = [
     label: 'DropdownLink',
     children: [
       { label: 'ChildLink1', routerLink: ['/child-link-1'] },
-      { label: 'ChildLink2', routerLink: ['/child-link-2'] },
+      { label: 'ChildLink2', routerLink: ['/child-link-2'], queryParams: { tab: 'overview' } },
     ],
   },
   {
@@ -21,7 +21,11 @@ export const headerLinks: NavigationLink[] = [
         isSubheader: true,
         children: [
           { label: 'SubChildLink1', routerLink: ['/sub-child-link-1'] },
-          { label: 'SubChildLink2', routerLink: ['/sub-child-link-2'] },
+          {
+            label: 'SubChildLink2',
+            routerLink: ['/sub-child-link-2'],
+            queryParams: { tab: 'details' },
+          },
         ],
       },
     ],

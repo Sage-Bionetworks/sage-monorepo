@@ -28,6 +28,17 @@ export const ROUTE_PATHS = {
   ERROR: 'error',
 } as const;
 
+// Dropdown values served by the comparison tool config endpoint for the Differential Expression
+// page. A `categories` selection is one value per level, ordered outermost first: category, then
+// tissue.
+export const DIFFERENTIAL_EXPRESSION_CATEGORIES = {
+  RNA: 'RNA - DIFFERENTIAL EXPRESSION',
+  PROTEIN: 'PROTEIN - DIFFERENTIAL EXPRESSION',
+} as const;
+
+export type DifferentialExpressionCategory =
+  (typeof DIFFERENTIAL_EXPRESSION_CATEGORIES)[keyof typeof DIFFERENTIAL_EXPRESSION_CATEGORIES];
+
 export const BOXPLOT_POINT_STYLES: PointStyle[] = [
   {
     label: 'Female',

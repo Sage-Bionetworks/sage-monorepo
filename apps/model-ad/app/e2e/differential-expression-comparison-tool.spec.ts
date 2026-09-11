@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 import {
   ColumnConfig,
+  expectCategoriesParams,
+  expectComparisonToolTableLoaded,
   expectPinnedParams,
   expectPinnedRows,
   expectSearchResults,
@@ -11,6 +13,7 @@ import {
   getRowByName,
   getUnpinnedTable,
   getVisibleHeatmapCircleButtons,
+  navigateViaHeaderNav,
   pinByName,
   runFilterPanelTests,
   runHeatmapDetailsPanelTests,
@@ -34,6 +37,7 @@ import {
   testTableReturnsToFirstPageWhenSortChanged,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
+import { DIFFERENTIAL_EXPRESSION_PROTEIN_NAV_TRAIL } from './constants';
 import {
   fetchComparisonToolConfig,
   fetchTranscriptomics,
@@ -78,6 +82,50 @@ test.describe('differential expression', () => {
   runHeatmapDetailsPanelTests(async (page) =>
     navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams),
   );
+
+  // The header links set only the category (see DIFFERENTIAL_EXPRESSION_CATEGORIES in
+  // @sagebionetworks/model-ad/config, which cannot be imported here because its barrel pulls in
+  // the Angular config chain), so the URL keeps that single value while the CT resolves the
+  // remaining levels from ui_config. The two tests below assert both halves: the category in the
+  // URL, and the resolved tissue in the selectors.
+  test('header dropdown navigates to the RNA view', async ({ page }) => {
+    const rnaCategory = 'RNA - DIFFERENTIAL EXPRESSION';
+    const rnaDefaultTissue = 'Tissue - Hemibrain';
+
+    // Start on a non-default tissue so the assertions below can only pass if the header link
+    // resolved the selection, rather than the CT keeping the tissue already in the URL.
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await expectCategoriesParams(page, categories);
+
+    // The visualization overview dialog is only shown on the first visit to a comparison tool
+    await navigateToComparison(page, CT_PAGE, false, 'link');
+
+    await expectCategoriesParams(page, [rnaCategory]);
+    // Asserted via the category selectors rather than expectCategories, whose getByText matching
+    // also picks up the near-identically named header menu items.
+    for (const category of [rnaCategory, rnaDefaultTissue]) {
+      await expect(page.getByRole('combobox', { name: category, exact: true })).toBeVisible();
+    }
+  });
+
+  // The Protein sub-link isn't in COMPARISON_TOOL_NAV_TRAILS (that map keys 'Differential
+  // Expression' to the default RNA link), so navigate through its dedicated trail rather than
+  // navigateToComparison.
+  test('header dropdown navigates to the Protein view', async ({ page }) => {
+    const proteinCategory = 'PROTEIN - DIFFERENTIAL EXPRESSION';
+
+    // The visualization overview dialog is only shown on the first visit to a comparison tool
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await expectCategoriesParams(page, categories);
+
+    await navigateViaHeaderNav(page, DIFFERENTIAL_EXPRESSION_PROTEIN_NAV_TRAIL);
+    await expectComparisonToolTableLoaded(page, CT_PAGE, false);
+
+    await expectCategoriesParams(page, [proteinCategory]);
+    // Only the category selector is asserted here. Protein offers a single tissue, and the
+    // selectors component renders a one-option level as static text rather than a combobox.
+    await expect(page.getByRole('combobox', { name: proteinCategory, exact: true })).toBeVisible();
+  });
 
   test('heatmap details panel sub-heading includes the model name', async ({ page }) => {
     const modelName = '3xTg-AD';

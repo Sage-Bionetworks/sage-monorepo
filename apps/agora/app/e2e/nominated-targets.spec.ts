@@ -55,6 +55,11 @@ test.describe('nominated targets - comparison tool', () => {
 
   runFilterPanelTests(async (page) => navigateToComparison(page, CT_PAGE, true, 'url'));
 
+  test('comparison tool is reachable from the header navigation', async ({ page }) => {
+    await page.goto('/');
+    await navigateToComparison(page, CT_PAGE, true, 'link');
+  });
+
   test.describe('filterbox search', () => {
     test('filterbox search without comma returns partial case-insensitive matches', async ({
       page,
