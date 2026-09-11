@@ -1,3 +1,4 @@
+.aws/
 .claude-user/
 .claude/worktrees/
 .nx-container/
