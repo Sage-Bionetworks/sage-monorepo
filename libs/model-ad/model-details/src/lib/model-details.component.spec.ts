@@ -198,6 +198,14 @@ describe('ModelDetailsComponent', () => {
       expect(router.url).toBe(load1Route);
       expect(screen.queryByText('Not found')).not.toBeInTheDocument();
     });
+
+    it('should redirect to the not found page when the model does not exist', async () => {
+      const { navigate } = await setupWithRouter();
+
+      await navigate('/models/Unknown?modelOrganism=mouse');
+
+      expect(screen.getByText('Not found')).toBeInTheDocument();
+    });
   });
 
   describe('marmoset model', () => {
