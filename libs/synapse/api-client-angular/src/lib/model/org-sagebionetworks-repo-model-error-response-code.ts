@@ -16,7 +16,8 @@ export type OrgSagebionetworksRepoModelErrorResponseCode =
   | 'TWO_FA_REQUIRED'
   | 'UNSUPPORTED_WEBHOOK_DOMAIN'
   | 'PROJECT_STORAGE_LIMIT_EXCEEDED'
-  | 'TWO_FA_ENABLED_REQUIRED';
+  | 'TWO_FA_ENABLED_REQUIRED'
+  | 'BELOW_THRESHOLD';
 
 export const OrgSagebionetworksRepoModelErrorResponseCode = {
   PasswordResetViaEmailRequired:
@@ -33,4 +34,5 @@ export const OrgSagebionetworksRepoModelErrorResponseCode = {
   ProjectStorageLimitExceeded:
     'PROJECT_STORAGE_LIMIT_EXCEEDED' as OrgSagebionetworksRepoModelErrorResponseCode,
   TwoFaEnabledRequired: 'TWO_FA_ENABLED_REQUIRED' as OrgSagebionetworksRepoModelErrorResponseCode,
+  BelowThreshold: 'BELOW_THRESHOLD' as OrgSagebionetworksRepoModelErrorResponseCode,
 };
