@@ -11,11 +11,14 @@ import { OrgSagebionetworksRepoModelTableDatasetCollection } from './org-sagebio
 import { OrgSagebionetworksRepoModelTableEntityView } from './org-sagebionetworks-repo-model-table-entity-view';
 import { OrgSagebionetworksRepoModelTableMaterializedView } from './org-sagebionetworks-repo-model-table-materialized-view';
 import { OrgSagebionetworksRepoModelTableVirtualTable } from './org-sagebionetworks-repo-model-table-virtual-table';
+import { OrgSagebionetworksRepoModelJsonSchemaAccessRequirement } from './org-sagebionetworks-repo-model-json-schema-access-requirement';
 import { OrgSagebionetworksRepoModelSelfSignAccessRequirement } from './org-sagebionetworks-repo-model-self-sign-access-requirement';
 import { OrgSagebionetworksRepoModelTableTableEntity } from './org-sagebionetworks-repo-model-table-table-entity';
 import { OrgSagebionetworksRepoModelLockAccessRequirement } from './org-sagebionetworks-repo-model-lock-access-requirement';
 import { OrgSagebionetworksRepoModelTableDataset } from './org-sagebionetworks-repo-model-table-dataset';
 import { OrgSagebionetworksRepoModelTableSubmissionView } from './org-sagebionetworks-repo-model-table-submission-view';
+import { OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateReference } from './org-sagebionetworks-repo-model-dataaccess-schema-form-template-reference';
+import { OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateStep } from './org-sagebionetworks-repo-model-dataaccess-schema-form-template-step';
 import { OrgSagebionetworksRepoModelFileEntity } from './org-sagebionetworks-repo-model-file-entity';
 import { OrgSagebionetworksRepoModelEntityRef } from './org-sagebionetworks-repo-model-entity-ref';
 import { OrgSagebionetworksRepoModelManagedACTAccessRequirement } from './org-sagebionetworks-repo-model-managed-act-access-requirement';
@@ -26,6 +29,7 @@ import { OrgSagebionetworksRepoModelRestrictableObjectDescriptor } from './org-s
 import { OrgSagebionetworksRepoModelTermsOfUseAccessRequirement } from './org-sagebionetworks-repo-model-terms-of-use-access-requirement';
 import { OrgSagebionetworksRepoModelSchemaValidationSummaryStatistics } from './org-sagebionetworks-repo-model-schema-validation-summary-statistics';
 import { OrgSagebionetworksRepoModelPostMessageContentAccessRequirement } from './org-sagebionetworks-repo-model-post-message-content-access-requirement';
+import { OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate } from './org-sagebionetworks-repo-model-dataaccess-schema-form-template';
 
 /**
  * JSON schema for Versionable interface
@@ -37,7 +41,9 @@ import { OrgSagebionetworksRepoModelPostMessageContentAccessRequirement } from '
  */
 export type OrgSagebionetworksRepoModelVersionable =
   | OrgSagebionetworksRepoModelACTAccessRequirement
+  | OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate
   | OrgSagebionetworksRepoModelFileEntity
+  | OrgSagebionetworksRepoModelJsonSchemaAccessRequirement
   | OrgSagebionetworksRepoModelLockAccessRequirement
   | OrgSagebionetworksRepoModelManagedACTAccessRequirement
   | OrgSagebionetworksRepoModelPostMessageContentAccessRequirement

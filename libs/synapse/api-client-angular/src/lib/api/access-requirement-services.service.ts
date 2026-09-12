@@ -35,6 +35,8 @@ import { OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchRequest } f
 // @ts-ignore
 import { OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchResponse } from '../model/org-sagebionetworks-repo-model-dataaccess-access-requirement-search-response';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelEducEDucSignatureQuota } from '../model/org-sagebionetworks-repo-model-educ-e-duc-signature-quota';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelRestrictableObjectDescriptorResponse } from '../model/org-sagebionetworks-repo-model-restrictable-object-descriptor-response';
 // @ts-ignore
 import { PaginatedResultsOfAccessRequirement } from '../model/paginated-results-of-access-requirement';
@@ -1331,6 +1333,133 @@ export class AccessRequirementServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelDataaccessAccessRequirementSearchRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param requirementId - The ID of the access requirement the quota is scoped to.
+   * @param targetUserId - The ID of the user whose quota should be reset.
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset(
+    requirementId: string,
+    targetUserId: number,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelEducEDucSignatureQuota>;
+  public postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset(
+    requirementId: string,
+    targetUserId: number,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelEducEDucSignatureQuota>>;
+  public postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset(
+    requirementId: string,
+    targetUserId: number,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelEducEDucSignatureQuota>>;
+  public postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset(
+    requirementId: string,
+    targetUserId: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (requirementId === null || requirementId === undefined) {
+      throw new Error(
+        'Required parameter requirementId was null or undefined when calling postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset.',
+      );
+    }
+    if (targetUserId === null || targetUserId === undefined) {
+      throw new Error(
+        'Required parameter targetUserId was null or undefined when calling postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset.',
+      );
+    }
+
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (targetUserId !== undefined && targetUserId !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>targetUserId,
+        'targetUserId',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/admin/accessRequirement/${this.configuration.encodeParam({ name: 'requirementId', value: requirementId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/eDucQuota/reset`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelEducEDucSignatureQuota>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        params: localVarQueryParameters,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

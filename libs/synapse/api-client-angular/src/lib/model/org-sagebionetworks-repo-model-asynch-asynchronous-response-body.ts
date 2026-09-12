@@ -59,12 +59,14 @@ import { OrgSagebionetworksRepoModelFileAddFileToDownloadListResponse } from './
 import { OrgSagebionetworksRepoModelSchemaCreateSchemaResponse } from './org-sagebionetworks-repo-model-schema-create-schema-response';
 import { OrgSagebionetworksRepoModelTableUploadToTablePreviewResult } from './org-sagebionetworks-repo-model-table-upload-to-table-preview-result';
 import { OrgSagebionetworksRepoModelDownloadDownloadListPackageResponse } from './org-sagebionetworks-repo-model-download-download-list-package-response';
+import { OrgSagebionetworksRepoModelDataaccessSchemaGeneratedFormStep } from './org-sagebionetworks-repo-model-dataaccess-schema-generated-form-step';
 import { OrgSagebionetworksRepoModelDownloadQueryResponseDetails } from './org-sagebionetworks-repo-model-download-query-response-details';
 import { OrgSagebionetworksRepoModelTableUploadToTableResult } from './org-sagebionetworks-repo-model-table-upload-to-table-result';
 import { OrgSagebionetworksRepoModelMigrationAsyncMigrationResponse } from './org-sagebionetworks-repo-model-migration-async-migration-response';
 import { OrgSagebionetworksRepoModelTableSelectColumn } from './org-sagebionetworks-repo-model-table-select-column';
 import { OrgSagebionetworksRepoModelTableTableSearchChangeResponse } from './org-sagebionetworks-repo-model-table-table-search-change-response';
 import { OrgSagebionetworksRepoModelGridGridSession } from './org-sagebionetworks-repo-model-grid-grid-session';
+import { OrgSagebionetworksRepoModelDataaccessSchemaGenerateDataAccessSchemaResponse } from './org-sagebionetworks-repo-model-dataaccess-schema-generate-data-access-schema-response';
 import { OrgSagebionetworksRepoModelTableRowReferenceSetResults } from './org-sagebionetworks-repo-model-table-row-reference-set-results';
 import { OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse } from './org-sagebionetworks-repo-model-download-add-to-download-list-stats-response';
 
@@ -79,6 +81,7 @@ import { OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse } fro
 export type OrgSagebionetworksRepoModelAsynchAsynchronousResponseBody =
   | OrgSagebionetworksRepoModelAgentAgentChatResponse
   | OrgSagebionetworksRepoModelCurationComputeTaskExecutionResponse
+  | OrgSagebionetworksRepoModelDataaccessSchemaGenerateDataAccessSchemaResponse
   | OrgSagebionetworksRepoModelDoiV2DoiResponse
   | OrgSagebionetworksRepoModelDownloadAddToDownloadListResponse
   | OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse
