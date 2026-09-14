@@ -18,11 +18,12 @@ TODO
 
 #### 1. Configure AWS SSO
 
-Create the AWS config file `~/.aws/config` (the `~/.aws` directory may not exist yet):
+Create the AWS config file `$AWS_CONFIG_FILE` (`<workspace>/.aws/config`; the directory may not
+exist yet):
 
 ```bash
-mkdir -p ~/.aws
-cat > ~/.aws/config << 'EOF'
+mkdir -p "$(dirname "$AWS_CONFIG_FILE")"
+cat > "$AWS_CONFIG_FILE" << 'EOF'
 [sso-session org-sagebase]
 sso_start_url = https://d-906769aa66.awsapps.com/start
 sso_region = us-east-1
