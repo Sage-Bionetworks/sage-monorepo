@@ -1,14 +1,24 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { HeatmapCircleColorKey, HeatmapCircleData } from '@sagebionetworks/explorers/models';
+import { HeatmapCircleData } from '@sagebionetworks/explorers/models';
 import { ComparisonToolFilterService, HelperService } from '@sagebionetworks/explorers/services';
 import { TooltipModule } from 'primeng/tooltip';
 import {
   ADJUSTED_P_VALUE_LABEL,
   knownColorMetricToDisplayName,
 } from '../../comparison-tool.variables';
+import { resolveHeatmapCircleMetrics } from './heatmap-circle.utils';
 
 // Used as the circle's CSS class, so manually keep in sync with the stylesheet's selectors
-type CircleValueSign = 'none' | 'zero' | 'plus' | 'minus';
+type CircleValueSign = 'zero' | 'plus' | 'minus';
+
+const CIRCLE_CLASS = 'heatmap-circle';
+
+const HIDDEN_CIRCLE_STYLE = {
+  display: 'none',
+  width: '0px',
+  height: '0px',
+  backgroundColor: 'transparent',
+};
 
 @Component({
   selector: 'explorers-heatmap-circle',
@@ -28,73 +38,53 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
   significanceThresholdActive = this.comparisonToolFilterService.significanceThresholdActive;
   significanceThreshold = this.comparisonToolFilterService.significanceThreshold;
 
-  colorValue = computed(() => {
-    const data = this.data();
-    const { value } = this.resolveColorMetric(data);
-    return value;
-  });
-  adjustedPValue = computed(() => {
-    const data = this.data();
-    return data?.adj_p_val ?? null;
-  });
+  private metrics = computed(() => resolveHeatmapCircleMetrics(this.data()));
 
   circleClass = computed(() => {
-    const colorValue = this.colorValue();
-    return this.getCircleClass(colorValue);
+    const metrics = this.metrics();
+    return metrics.isDrawable
+      ? `${CIRCLE_CLASS} ${this.getCircleValueSign(metrics.colorValue)}`
+      : CIRCLE_CLASS;
   });
+
   circleStyle = computed(() => {
-    const adjustedPValue = this.adjustedPValue();
-    const colorValue = this.colorValue();
-    return this.getCircleStyle(adjustedPValue, colorValue);
+    const metrics = this.metrics();
+    if (!metrics.isDrawable) {
+      return HIDDEN_CIRCLE_STYLE;
+    }
+
+    const size = this.getCircleSize(metrics.adjustedPValue);
+    const color = this.getCircleColor(metrics.colorValue);
+    return {
+      display: size > 0 ? 'block' : 'none',
+      width: size + 'px',
+      height: size + 'px',
+      backgroundColor: color,
+    };
   });
 
   private getDefaultTooltip(data: T | null | undefined): string {
-    if (!data) {
+    const metrics = resolveHeatmapCircleMetrics(data);
+    if (!metrics.isDrawable) {
       return 'No data available';
     }
 
-    const { value, key } = this.resolveColorMetric(data);
+    const { colorKey, colorValue, adjustedPValue } = metrics;
     const displayName = knownColorMetricToDisplayName.find(
-      (item) => item.field === key,
+      (item) => item.field === colorKey,
     )?.displayName;
 
     return (
-      `${displayName || key}: ` +
-      this.formatNumericValue(value) +
+      `${displayName || colorKey}: ` +
+      this.formatNumericValue(colorValue) +
       '\n' +
       `${ADJUSTED_P_VALUE_LABEL}: ` +
-      this.formatNumericValue(data.adj_p_val)
+      this.formatNumericValue(adjustedPValue)
     );
   }
 
-  private resolveColorMetric(data: T | null | undefined): {
-    key: string | null;
-    value: number | null;
-  } {
-    if (!data) {
-      return { key: null, value: null };
-    }
-
-    const colorKey = (Object.keys(data) as Array<keyof T>).find(
-      (field): field is HeatmapCircleColorKey<T> => field !== 'adj_p_val',
-    );
-
-    if (!colorKey) {
-      return { key: null, value: null };
-    }
-
-    const result = data[colorKey];
-
-    return {
-      key: colorKey,
-      value: result ?? null,
-    };
-  }
-
-  private formatNumericValue(val: number | null | undefined) {
-    return val === null || val === undefined
-      ? 'N/A'
-      : this.helperService.getSignificantFigures(val, 3);
+  private formatNumericValue(val: number) {
+    return this.helperService.getSignificantFigures(val, 3);
   }
 
   nRoot(x: number, n: number) {
@@ -114,15 +104,12 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
     }
   }
 
-  private getCircleValueSign(colorValue: number | null | undefined): CircleValueSign {
-    if (colorValue === null || colorValue === undefined) return 'none';
+  private getCircleValueSign(colorValue: number): CircleValueSign {
     if (colorValue === 0) return 'zero';
     return colorValue > 0 ? 'plus' : 'minus';
   }
 
-  getCircleColor(colorValue: number | undefined | null) {
-    if (colorValue === undefined || colorValue === null) return '#F0F0F0';
-
+  private getCircleColor(colorValue: number) {
     const sign = this.getCircleValueSign(colorValue);
     if (sign === 'zero') return 'var(--color-gray-400)';
 
@@ -154,14 +141,10 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
     }
   }
 
-  getCircleSize(adjustedPValue: number | null | undefined) {
+  private getCircleSize(adjustedPValue: number) {
     // define min and max size of possible circles in pixels
     const MIN_SIZE = 6;
     const MAX_SIZE = 50;
-
-    // adjustedPValue shouldn't be undefined but if it is, don't show a circle
-    // null means there is no data in which case, also don't show a circle
-    if (adjustedPValue === null || adjustedPValue === undefined) return 0;
 
     // if significance cutoff radio button selected and
     // adjustedPValue > significance threshhold, don't show
@@ -174,23 +157,5 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
 
     // ensure the smallest circles have a min size to be easily hoverable/clickable
     return size < MIN_SIZE ? MIN_SIZE : size;
-  }
-
-  getCircleStyle(adjustedPValue: number | null | undefined, colorValue: number | null | undefined) {
-    const size = this.getCircleSize(adjustedPValue);
-    const color = this.getCircleColor(colorValue);
-
-    return {
-      display: size > 0 ? 'block' : 'none',
-      width: size + 'px',
-      height: size + 'px',
-      backgroundColor: color,
-    };
-  }
-
-  getCircleClass(colorValue: number | null | undefined) {
-    const baseClass = 'heatmap-circle';
-    const sign = this.getCircleValueSign(colorValue);
-    return sign === 'none' ? baseClass : `${baseClass} ${sign}`;
   }
 }

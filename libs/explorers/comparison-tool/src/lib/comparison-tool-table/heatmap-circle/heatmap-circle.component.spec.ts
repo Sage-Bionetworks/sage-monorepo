@@ -9,7 +9,9 @@ import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { HeatmapCircleComponent } from './heatmap-circle.component';
 
-async function setup<T extends HeatmapCircleData>(data: T) {
+type ExampleCellData = Partial<HeatmapCircleData<'log2_fc'>>;
+
+async function setup(data: ExampleCellData) {
   const component = await render(HeatmapCircleComponent, {
     imports: [RouterModule],
     providers: [
@@ -18,7 +20,7 @@ async function setup<T extends HeatmapCircleData>(data: T) {
       ...provideComparisonToolFilterService(),
     ],
     componentInputs: {
-      data,
+      data: data as HeatmapCircleData,
     },
   });
   const fixture = component.fixture;
@@ -69,5 +71,23 @@ describe('HeatmapCircleComponent', () => {
     fixture.detectChanges();
 
     expect(element.style.display).toBe('none');
+  });
+
+  describe('unusable cell data', () => {
+    const unusableCells: Record<string, ExampleCellData> = {
+      'a null color value': { log2_fc: null, adj_p_val: 0.03 },
+      'a null adjusted p-value': { log2_fc: 1.5, adj_p_val: null },
+      'a missing color value': { adj_p_val: 0.03 },
+      'a missing adjusted p-value': { log2_fc: 1.5 },
+      'no values at all': {},
+      'a NaN adjusted p-value': { log2_fc: 1.5, adj_p_val: NaN },
+    };
+
+    it.each(Object.entries(unusableCells))('should not draw a circle for %s', async (_, data) => {
+      const { element } = await setup(data);
+
+      expect(element.style.display).toBe('none');
+      expect(element.className).toBe('heatmap-circle');
+    });
   });
 });

@@ -49,7 +49,7 @@
                 [rowData]="rowData"
               />
             }
-            @if (columnType === 'heat_map') {
+            @if (columnType === 'heat_map' && canDrawHeatmapCircle(cellData)) {
               @if (isHeatmapCircleClickable()) {
                 <button
                   type="button"
