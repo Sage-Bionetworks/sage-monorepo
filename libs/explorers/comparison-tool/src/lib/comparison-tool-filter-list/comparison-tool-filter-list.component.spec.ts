@@ -1,5 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import {
+  ComparisonToolFilterService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
   SvgIconService,
@@ -61,6 +62,28 @@ describe('Component: Comparison Tool - Filter List', () => {
     await user.click(screen.getByRole('button', { name: `Clear ${filterLabel}` }));
 
     expect(filter).not.toBeVisible();
+  });
+
+  it('should keep filter state in sync when multiple filters are removed rapidly', async () => {
+    const { component } = await setup();
+    const filterService = component.fixture.debugElement.injector.get(ComparisonToolFilterService);
+
+    // Capture references up front to mimic the template handing the handler
+    // option refs from the change-detection pass that occurred before the rapid
+    // clicks. The handler must key off data_key/label against the latest signal
+    // value, so both removals stick even though these refs go stale after the
+    // first update replaces the filter array.
+    const staleFilter = filterService.filters()[0];
+    const firstOption = staleFilter.options[0];
+    const secondOption = staleFilter.options[1];
+
+    const instance = component.fixture.componentInstance;
+    instance.clearSelectedFilter(staleFilter, firstOption);
+    instance.clearSelectedFilter(staleFilter, secondOption);
+
+    const updatedOptions = filterService.filters()[0].options;
+    expect(updatedOptions.find((o) => o.label === firstOption.label)?.selected).toBe(false);
+    expect(updatedOptions.find((o) => o.label === secondOption.label)?.selected).toBe(false);
   });
 
   it('should remove all filters', async () => {

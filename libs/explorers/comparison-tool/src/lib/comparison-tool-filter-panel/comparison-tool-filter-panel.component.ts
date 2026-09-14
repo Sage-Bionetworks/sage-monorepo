@@ -2,6 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
+  ComparisonToolFilter,
+  ComparisonToolFilterOption,
+} from '@sagebionetworks/explorers/models';
+import {
   ComparisonToolFilterService,
   ComparisonToolService,
 } from '@sagebionetworks/explorers/services';
@@ -33,8 +37,16 @@ export class ComparisonToolFilterPanelComponent {
   activePane = signal(-1);
   hasActivePane = computed(() => this.activePane() !== -1);
 
-  handleChange() {
-    this.comparisonToolFilterService.setFilters(this.filters());
+  handleFilterChange(
+    filter: ComparisonToolFilter,
+    option: ComparisonToolFilterOption,
+    selected: boolean,
+  ) {
+    this.comparisonToolFilterService.setFilterOptionSelected(
+      filter.data_key,
+      option.label,
+      selected,
+    );
   }
 
   openPane(index: number) {

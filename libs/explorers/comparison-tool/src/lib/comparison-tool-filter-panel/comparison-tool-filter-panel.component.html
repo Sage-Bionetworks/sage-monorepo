@@ -43,9 +43,9 @@
                 <li>
                   <div class="checkbox">
                     <p-checkbox
-                      [(ngModel)]="option.selected"
+                      [ngModel]="option.selected"
                       [binary]="true"
-                      (ngModelChange)="handleChange()"
+                      (ngModelChange)="handleFilterChange(filter, option, $event)"
                       [inputId]="filterOptionId"
                       size="small"
                     />
