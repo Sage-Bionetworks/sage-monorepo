@@ -215,7 +215,7 @@ test.describe('disease correlation', () => {
     await expectCategoriesParams(page, categories);
     await expectCategories(page, categories);
 
-    await navigateToComparison(page, 'Model Overview', true, 'link');
+    await navigateToComparison(page, 'Mouse Model Overview', true, 'link');
     await expectCategoriesParams(page, []);
 
     await navigateToComparison(page, CT_PAGE, true, 'link');

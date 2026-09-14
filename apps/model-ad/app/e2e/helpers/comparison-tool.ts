@@ -81,7 +81,7 @@ export const fetchComparisonToolData = async <T>(
 };
 
 export const fetchMouseModelOverviews = async (page: Page): Promise<MouseModelOverview[]> => {
-  const data = await fetchComparisonToolData<MouseModelOverviewsPage>(page, 'Model Overview');
+  const data = await fetchComparisonToolData<MouseModelOverviewsPage>(page, 'Mouse Model Overview');
   return data.mouseModelOverviews;
 };
 
