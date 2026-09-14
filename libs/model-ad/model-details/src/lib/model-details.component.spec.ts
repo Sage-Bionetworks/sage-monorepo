@@ -136,7 +136,8 @@ describe('ModelDetailsComponent', () => {
 
   describe('navigation between organisms', () => {
     const load1Mock = { ...mouseModelMock, name: 'LOAD1' };
-    const load1Route = `/models/${load1Mock.name}?modelOrganism=mouse`;
+    const load1Route = `/${ROUTE_PATHS.MODELS}/${load1Mock.name}?modelOrganism=mouse`;
+    const unknownModelRoute = `/${ROUTE_PATHS.MODELS}/Unknown?modelOrganism=mouse`;
 
     async function setupWithRouter(notFoundDelayMs = 0) {
       const getModelByName = jest.fn((modelOrganism: ModelOrganism, name: string) => {
@@ -152,10 +153,10 @@ describe('ModelDetailsComponent', () => {
       const { navigate } = await render('<router-outlet></router-outlet>', {
         imports: [RouterOutlet, LoadingIconComponent],
         routes: [
-          { path: 'models/:name', component: ModelDetailsComponent },
+          { path: `${ROUTE_PATHS.MODELS}/:name`, component: ModelDetailsComponent },
           { path: ROUTE_PATHS.NOT_FOUND, component: NotFoundStubComponent },
         ],
-        initialRoute: `/models/${marmosetModelMock.name}?modelOrganism=marmoset`,
+        initialRoute: `/${ROUTE_PATHS.MODELS}/${marmosetModelMock.name}?modelOrganism=marmoset`,
         providers: [
           { provide: ModelService, useValue: { getModelByName } },
           { provide: PlatformService, useValue: { isBrowser: true, isServer: false } },
@@ -191,7 +192,7 @@ describe('ModelDetailsComponent', () => {
     it('should ignore a failed request that a newer navigation has superseded', async () => {
       const { navigate, router } = await setupWithRouter(NOT_FOUND_DELAY_MS);
 
-      await navigate('/models/Unknown?modelOrganism=mouse');
+      await navigate(unknownModelRoute);
       await navigate(load1Route);
       await new Promise((resolve) => setTimeout(resolve, NOT_FOUND_DELAY_MS * 2));
 
@@ -202,7 +203,7 @@ describe('ModelDetailsComponent', () => {
     it('should redirect to the not found page when the model does not exist', async () => {
       const { navigate } = await setupWithRouter();
 
-      await navigate('/models/Unknown?modelOrganism=mouse');
+      await navigate(unknownModelRoute);
 
       expect(screen.getByText('Not found')).toBeInTheDocument();
     });
