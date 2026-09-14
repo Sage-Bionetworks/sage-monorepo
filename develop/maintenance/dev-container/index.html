@@ -4786,6 +4786,11 @@ multiple branches before the whole team is switched over.</p>
 <td>Edit in Step 2 only. Single-line diff (image tag) ideally. Keep clean—should not contain build-time Feature composition once image is published.</td>
 </tr>
 <tr>
+<td><code>.aws/config</code></td>
+<td>Developer AWS SSO profiles. <code>AWS_CONFIG_FILE</code> points here instead of the default <code>~/.aws/config</code>, so they survive a rebuild.</td>
+<td>Git- and Docker-ignored. Persist <code>config</code> only, never credentials or the SSO token cache.</td>
+</tr>
+<tr>
 <td><code>dev-env.sh</code></td>
 <td>Workspace initialization (env vars, helper functions, wrappers).</td>
 <td>Review after major tool/runtime bumps. Sync deprecated tool names or paths.</td>
@@ -5419,6 +5424,12 @@ until they rebuild, which can explain version skew in support questions.</p>
 <td>Container starts but VS Code can't connect</td>
 <td>Rebuild container with "Rebuild and Reopen in Container"</td>
 <td>Verify VS Code Dev Containers extension is updated</td>
+</tr>
+<tr>
+<td>AWS profile not found</td>
+<td>Profiles written to <code>~/.aws/config</code>, not <code>$AWS_CONFIG_FILE</code></td>
+<td>Move them to <code>$AWS_CONFIG_FILE</code></td>
+<td>Check with <code>aws configure list-profiles</code>; SSO tokens still need <code>aws sso login</code></td>
 </tr>
 </tbody>
 </table>
