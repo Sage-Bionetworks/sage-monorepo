@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
   ColumnConfig,
+  expectCategories,
   expectCategoriesParams,
   expectComparisonToolTableLoaded,
   expectPinnedParams,
@@ -37,7 +38,7 @@ import {
   testTableReturnsToFirstPageWhenSortChanged,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
-import { DIFFERENTIAL_EXPRESSION_PROTEIN_NAV_TRAIL } from './constants';
+import { DIFFERENTIAL_EXPRESSION_NAV_TRAILS } from './constants';
 import {
   fetchComparisonToolConfig,
   fetchTranscriptomics,
@@ -101,30 +102,24 @@ test.describe('differential expression', () => {
     await navigateToComparison(page, CT_PAGE, false, 'link');
 
     await expectCategoriesParams(page, [rnaCategory]);
-    // Asserted via the category selectors rather than expectCategories, whose getByText matching
-    // also picks up the near-identically named header menu items.
-    for (const category of [rnaCategory, rnaDefaultTissue]) {
-      await expect(page.getByRole('combobox', { name: category, exact: true })).toBeVisible();
-    }
+    await expectCategories(page, [rnaCategory, rnaDefaultTissue]);
   });
 
-  // The Protein sub-link isn't in COMPARISON_TOOL_NAV_TRAILS (that map keys 'Differential
-  // Expression' to the default RNA link), so navigate through its dedicated trail rather than
-  // navigateToComparison.
+  // COMPARISON_TOOL_NAV_TRAILS keys 'Differential Expression' to the default RNA sub-link, so
+  // navigate through the Protein trail explicitly rather than via navigateToComparison.
   test('header dropdown navigates to the Protein view', async ({ page }) => {
     const proteinCategory = 'PROTEIN - DIFFERENTIAL EXPRESSION';
+    const proteinTissue = 'Tissue - Hemibrain';
 
     // The visualization overview dialog is only shown on the first visit to a comparison tool
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
     await expectCategoriesParams(page, categories);
 
-    await navigateViaHeaderNav(page, DIFFERENTIAL_EXPRESSION_PROTEIN_NAV_TRAIL);
+    await navigateViaHeaderNav(page, DIFFERENTIAL_EXPRESSION_NAV_TRAILS.PROTEIN);
     await expectComparisonToolTableLoaded(page, CT_PAGE, false);
 
     await expectCategoriesParams(page, [proteinCategory]);
-    // Only the category selector is asserted here. Protein offers a single tissue, and the
-    // selectors component renders a one-option level as static text rather than a combobox.
-    await expect(page.getByRole('combobox', { name: proteinCategory, exact: true })).toBeVisible();
+    await expectCategories(page, [proteinCategory, proteinTissue]);
   });
 
   test('heatmap details panel sub-heading includes the model name', async ({ page }) => {

@@ -15,6 +15,11 @@ const PATH_MATCH_OPTIONS: IsActiveMatchOptions = {
   matrixParams: 'ignored',
 };
 
+const EXACT_PATH_MATCH_OPTIONS: IsActiveMatchOptions = {
+  ...PATH_MATCH_OPTIONS,
+  paths: 'exact',
+};
+
 @Component({
   selector: 'explorers-header',
   imports: [CommonModule, SvgImageComponent, RouterModule, MenuModule, WidestLineWidthDirective],
@@ -84,29 +89,66 @@ export class HeaderComponent implements OnInit {
   }
 
   /**
-   * A link is active when its path matches and every query param it declares is a leading subset of
-   * the same param in the URL. `routerLinkActive` can't express this: it compares whole raw param
-   * strings, so a link declaring one value never matches a URL carrying that value plus the ones
-   * the page filled in, and its comparison is also blind to percent-encoding differences.
+   * A link is active when its route path matches and, for every query param the link declares, the
+   * URL's values for that param begin with the link's values. This keeps a link active when the page
+   * appends extra values -- e.g. link `categories=RNA` matches URL `categories=RNA,Tissue`, but not
+   * `categories=Protein`.
+   *
+   * A link with no query params is intentionally active whenever its path matches, ignoring the URL's
+   * query string -- e.g. the param-less Home link highlights on the home route regardless of any
+   * query string. A consequence: if two `navigation-links.ts` entries share the same `routerLink` and
+   * one declares query params while the other does not, then whenever the param-bearing entry matches,
+   * the param-less entry matches too -- so this method returns true for both, and both are
+   * highlighted. No two entries share a routerLink this way today, but keep it in mind if a param-less
+   * entry is ever added next to a param-bearing one.
    */
   isLinkActive(link: NavigationLink): boolean {
     if (!link.routerLink) return false;
-    if (!this.router.isActive(link.routerLink.join('/'), PATH_MATCH_OPTIONS)) return false;
+    if (!this.router.isActive(link.routerLink.join('/'), this.resolvePathMatchOptions(link)))
+      return false;
 
+    // What the link declares, e.g. { categories: 'RNA - DIFFERENTIAL EXPRESSION' }.
     const linkParams = link.queryParams;
     if (!linkParams) return true;
 
+    // What the current URL carries, e.g. { categories: 'RNA%20-%20DIFFERENTIAL%20EXPRESSION,Tissue%20-%20Hemibrain' }.
     const urlParams = this.router.parseUrl(this.router.url).queryParams;
     return Object.keys(linkParams).every((key) =>
-      this.isValuePrefix(
-        parseCommaSeparatedQueryParam(linkParams[key]),
-        parseCommaSeparatedQueryParam(urlParams[key]),
-      ),
+      this.urlValuesStartWith(urlParams[key], linkParams[key]),
     );
   }
 
-  private isValuePrefix(linkValues: string[], urlValues: string[]): boolean {
-    return linkValues.length <= urlValues.length && linkValues.every((v, i) => urlValues[i] === v);
+  /**
+   * Whether the URL's values for a query param begin with the values a link declares. The link stays
+   * active when the page adds more values than the link lists (e.g. link ['RNA'] matches URL
+   * ['RNA', 'Tissue']), but not when they differ or the link lists more values than the URL has.
+   *
+   * The link value is raw literal text, so we only wrap it in an array -- never split or decode it.
+   * The URL value is comma-joined and percent-encoded, so we parse it back into its list of values.
+   */
+  private urlValuesStartWith(urlValue: unknown, linkValue: unknown): boolean {
+    const linkValues = Array.isArray(linkValue) ? linkValue.map(String) : [String(linkValue)];
+    const urlValues = parseCommaSeparatedQueryParam(
+      urlValue as string | string[] | null | undefined,
+    );
+
+    // Every value the link declares must equal the URL value at the same position:
+    //   link ['RNA']          vs url ['RNA', 'Tissue'] -> true  (matches, extra url value ignored)
+    //   link ['RNA']          vs url ['Protein']       -> false (position 0 differs)
+    //   link ['RNA', 'Tissue'] vs url ['RNA']          -> false (url[1] is undefined, so it fails)
+    return linkValues.every((value, index) => value === urlValues[index]);
+  }
+
+  // Query params are matched manually via the prefix logic below, so path matching always ignores
+  // them. `activeOptions: { exact: true }` (e.g. the Home link at path '') must match exactly,
+  // otherwise a subset match treats '' as a prefix of every route and keeps the link always active.
+  private resolvePathMatchOptions(link: NavigationLink): IsActiveMatchOptions {
+    const activeOptions = link.activeOptions;
+    if (!activeOptions) return PATH_MATCH_OPTIONS;
+    if ('exact' in activeOptions) {
+      return activeOptions.exact ? EXACT_PATH_MATCH_OPTIONS : PATH_MATCH_OPTIONS;
+    }
+    return { ...activeOptions, queryParams: 'ignored' };
   }
 
   private validateHeaderLinks(links: NavigationLink[]) {

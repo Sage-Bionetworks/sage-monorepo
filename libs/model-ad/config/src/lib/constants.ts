@@ -28,9 +28,9 @@ export const ROUTE_PATHS = {
   ERROR: 'error',
 } as const;
 
-// Dropdown values served by the comparison tool config endpoint for the Differential Expression
-// page. A `categories` selection is one value per level, ordered outermost first: category, then
-// tissue.
+// First-level category values only. The URL's `categories` is a comma-separated, outermost-first
+// list; each value here must stay its first entry so the header keeps the link active as the page
+// appends deeper levels (tissue, ...). See header isLinkActive.
 export const DIFFERENTIAL_EXPRESSION_CATEGORIES = {
   RNA: 'RNA - DIFFERENTIAL EXPRESSION',
   PROTEIN: 'PROTEIN - DIFFERENTIAL EXPRESSION',

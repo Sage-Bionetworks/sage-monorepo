@@ -129,8 +129,9 @@ export const expectPinnedRows = async (page: Page, rowNames: string[]): Promise<
 };
 
 export const expectCategories = async (page: Page, categories: string[]): Promise<void> => {
+  const categorySelectors = page.locator('explorers-comparison-tool-category-selectors');
   for (const category of categories) {
-    await expect(page.getByText(category)).toBeVisible();
+    await expect(categorySelectors.getByText(category)).toBeVisible();
   }
 };
 

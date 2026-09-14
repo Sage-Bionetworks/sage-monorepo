@@ -3,7 +3,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolUrlParams, SortOrder } from '@sagebionetworks/explorers/models';
-import { parseCommaSeparatedQueryParam } from '@sagebionetworks/shared/util';
+import {
+  parseCommaSeparatedQueryParam,
+  stringifyCommaSeparatedQueryParam,
+} from '@sagebionetworks/shared/util';
 import { isEqual } from 'lodash';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
@@ -78,16 +81,10 @@ export class ComparisonToolUrlService {
     value: string[] | null | undefined,
   ): void {
     if (value && value.length > 0) {
-      params[key] = this.toCommaSeparatedQueryParam(value);
+      params[key] = stringifyCommaSeparatedQueryParam(value);
     } else if (value !== undefined) {
       params[key] = null;
     }
-  }
-
-  /** Inverse of `parseCommaSeparatedQueryParam`. Encoding each value before joining on commas is
-   * what preserves commas within individual values. */
-  private toCommaSeparatedQueryParam(values: string[]): string {
-    return values.map((value) => encodeURIComponent(value)).join(',');
   }
 
   private serializeFilterSelections(
@@ -109,7 +106,7 @@ export class ComparisonToolUrlService {
     if (filterSelections) {
       for (const [queryParamKey, values] of Object.entries(filterSelections)) {
         if (values && values.length > 0) {
-          params[queryParamKey] = this.toCommaSeparatedQueryParam(values);
+          params[queryParamKey] = stringifyCommaSeparatedQueryParam(values);
         }
       }
     }

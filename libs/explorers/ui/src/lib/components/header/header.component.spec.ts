@@ -4,10 +4,16 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { Router, provideRouter } from '@angular/router';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 import { footerLinks, headerLinks } from '@sagebionetworks/explorers/testing';
+import { stringifyCommaSeparatedQueryParam } from '@sagebionetworks/shared/util';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 import { HeaderComponent } from './header.component';
+
+const RNA_CATEGORY = 'RNA - DIFFERENTIAL EXPRESSION';
+const PROTEIN_CATEGORY = 'PROTEIN - DIFFERENTIAL EXPRESSION';
+const TISSUE = 'Tissue - Hemibrain';
+const CATEGORY_WITH_COMMA = 'Cell Cluster, NMD Consensus Cluster D';
 
 function changeWindowSize(width: number) {
   Object.defineProperty(window, 'innerWidth', {
@@ -303,12 +309,126 @@ describe('HeaderComponent', () => {
     );
   });
 
+  it('should mark a top-level exact link as active only on its exact route', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { fixture } = await render(HeaderComponent, {
+      componentInputs: {
+        headerLogoPath: 'path/to/logo.svg',
+        headerLinks: [
+          { label: 'Home', routerLink: [''], activeOptions: { exact: true } },
+          { label: 'Other', routerLink: ['/header-link-1'] },
+        ],
+      },
+      imports: [CommonModule, SvgImageComponent],
+      providers: [
+        provideNoopAnimations(),
+        provideRouter([
+          { path: '', component: DummyComponent },
+          { path: 'header-link-1', component: DummyComponent },
+        ]),
+      ],
+    });
+
+    const router = fixture.debugElement.injector.get(Router);
+
+    await router.navigate(['/']);
+    fixture.detectChanges();
+    expect(screen.getByRole('link', { name: 'Home' })).toHaveClass('active');
+
+    await router.navigate(['/header-link-1']);
+    fixture.detectChanges();
+    expect(screen.getByRole('link', { name: 'Home' })).not.toHaveClass('active');
+  });
+
+  it('should keep a top-level link active on nested routes by default', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { fixture } = await render(HeaderComponent, {
+      componentInputs: {
+        headerLogoPath: 'path/to/logo.svg',
+        headerLinks: [{ label: 'Section', routerLink: ['/header-link-1'] }],
+      },
+      imports: [CommonModule, SvgImageComponent],
+      providers: [
+        provideNoopAnimations(),
+        provideRouter([
+          {
+            path: 'header-link-1',
+            component: DummyComponent,
+            children: [{ path: 'sub', component: DummyComponent }],
+          },
+        ]),
+      ],
+    });
+
+    const router = fixture.debugElement.injector.get(Router);
+
+    await router.navigate(['/header-link-1/sub']);
+    fixture.detectChanges();
+    expect(screen.getByRole('link', { name: 'Section' })).toHaveClass('active');
+  });
+
+  it('should mark a top-level link with query params active via prefix matching', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { fixture } = await render(HeaderComponent, {
+      componentInputs: {
+        headerLogoPath: 'path/to/logo.svg',
+        headerLinks: [
+          {
+            label: 'RNA',
+            routerLink: ['/differential-expression'],
+            queryParams: { categories: RNA_CATEGORY },
+          },
+        ],
+      },
+      imports: [CommonModule, SvgImageComponent],
+      providers: [
+        provideNoopAnimations(),
+        provideRouter([{ path: 'differential-expression', component: DummyComponent }]),
+      ],
+    });
+
+    const router = fixture.debugElement.injector.get(Router);
+
+    await router.navigate(['/differential-expression'], {
+      queryParams: { categories: RNA_CATEGORY },
+    });
+    fixture.detectChanges();
+    expect(screen.getByRole('link', { name: 'RNA' })).toHaveClass('active');
+
+    // The page appends a deeper category level; the link's value is still a prefix, so it stays active.
+    await router.navigate(['/differential-expression'], {
+      queryParams: { categories: stringifyCommaSeparatedQueryParam([RNA_CATEGORY, TISSUE]) },
+    });
+    fixture.detectChanges();
+    expect(screen.getByRole('link', { name: 'RNA' })).toHaveClass('active');
+
+    await router.navigate(['/differential-expression'], {
+      queryParams: { categories: PROTEIN_CATEGORY },
+    });
+    fixture.detectChanges();
+    expect(screen.getByRole('link', { name: 'RNA' })).not.toHaveClass('active');
+  });
+
   it('should mark dropdown as active when a subheader grandchild route is active', async () => {
     changeWindowSize(DESKTOP_WIDTH);
     const { component, fixture } = await setup();
 
     const router = fixture.debugElement.injector.get(Router);
     await router.navigate(['/sub-child-link-1']);
+
+    const subheaderLink = headerLinks.find((l) => l.label === 'DropdownWithSubheader');
+    expect(subheaderLink).toBeDefined();
+    expect(component.isDropdownActive(subheaderLink ?? { label: '' })).toBe(true);
+  });
+
+  it('should keep the dropdown active regardless of query params on the active route', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { component, fixture } = await setup();
+
+    const router = fixture.debugElement.injector.get(Router);
+    // A query param the dropdown's children don't declare: the trigger matches on path only
+    // (PATH_MATCH_OPTIONS ignores query params), so it must stay active.
+    await router.navigate(['/sub-child-link-1'], { queryParams: { tab: 'anything' } });
 
     const subheaderLink = headerLinks.find((l) => l.label === 'DropdownWithSubheader');
     expect(subheaderLink).toBeDefined();
@@ -341,9 +461,6 @@ describe('HeaderComponent', () => {
 describe('HeaderComponent active dropdown links in mobile mode', () => {
   const COMPARISON_ROUTE = '/comparison-tool';
   const ROUTE_WITHOUT_LINKS = '/other-page';
-  const RNA_CATEGORY = 'RNA - DIFFERENTIAL EXPRESSION';
-  const PROTEIN_CATEGORY = 'PROTEIN - DIFFERENTIAL EXPRESSION';
-  const TISSUE = 'Tissue - Hemibrain';
 
   // Every link shares one route, mirroring the RNA and Protein differential expression header links:
   // query params are the only thing that distinguishes them. The two dropdowns are separate because
@@ -367,6 +484,11 @@ describe('HeaderComponent active dropdown links in mobile mode', () => {
               routerLink: [COMPARISON_ROUTE],
               queryParams: { categories: PROTEIN_CATEGORY },
             },
+            {
+              label: 'CommaCategory',
+              routerLink: [COMPARISON_ROUTE],
+              queryParams: { categories: CATEGORY_WITH_COMMA },
+            },
           ],
         },
       ],
@@ -379,11 +501,6 @@ describe('HeaderComponent active dropdown links in mobile mode', () => {
       ],
     },
   ];
-
-  /** Mirrors how the comparison tool writes multi-value params: encode each value, join with commas. */
-  function serializeCategories(...categories: string[]) {
-    return categories.map((category) => encodeURIComponent(category)).join(',');
-  }
 
   async function setupMobile() {
     changeWindowSize(MOBILE_WIDTH);
@@ -423,15 +540,29 @@ describe('HeaderComponent active dropdown links in mobile mode', () => {
   it('should mark a link as active when its categories are a prefix of the encoded URL value', async () => {
     const { navigate } = await setupMobile();
 
-    await navigate(COMPARISON_ROUTE, { categories: serializeCategories(RNA_CATEGORY, TISSUE) });
+    await navigate(COMPARISON_ROUTE, {
+      categories: stringifyCommaSeparatedQueryParam([RNA_CATEGORY, TISSUE]),
+    });
 
     expect(link('RNA')).toHaveClass('active');
+  });
+
+  it('should keep a link active when its declared value contains a comma', async () => {
+    const { navigate } = await setupMobile();
+
+    await navigate(COMPARISON_ROUTE, {
+      categories: stringifyCommaSeparatedQueryParam([CATEGORY_WITH_COMMA, TISSUE]),
+    });
+
+    expect(link('CommaCategory')).toHaveClass('active');
   });
 
   it('should not mark a sibling category link as active', async () => {
     const { navigate } = await setupMobile();
 
-    await navigate(COMPARISON_ROUTE, { categories: serializeCategories(RNA_CATEGORY, TISSUE) });
+    await navigate(COMPARISON_ROUTE, {
+      categories: stringifyCommaSeparatedQueryParam([RNA_CATEGORY, TISSUE]),
+    });
 
     expect(link('Protein')).not.toHaveClass('active');
   });
@@ -439,10 +570,14 @@ describe('HeaderComponent active dropdown links in mobile mode', () => {
   it('should keep the link active after the page appends more category levels', async () => {
     const { navigate } = await setupMobile();
 
-    await navigate(COMPARISON_ROUTE, { categories: serializeCategories(PROTEIN_CATEGORY) });
+    await navigate(COMPARISON_ROUTE, {
+      categories: stringifyCommaSeparatedQueryParam([PROTEIN_CATEGORY]),
+    });
     expect(link('Protein')).toHaveClass('active');
 
-    await navigate(COMPARISON_ROUTE, { categories: serializeCategories(PROTEIN_CATEGORY, TISSUE) });
+    await navigate(COMPARISON_ROUTE, {
+      categories: stringifyCommaSeparatedQueryParam([PROTEIN_CATEGORY, TISSUE]),
+    });
     expect(link('Protein')).toHaveClass('active');
   });
 
@@ -467,7 +602,9 @@ describe('HeaderComponent active dropdown links in mobile mode', () => {
   it('should not mark any link as active when a different route is active', async () => {
     const { navigate } = await setupMobile();
 
-    await navigate(ROUTE_WITHOUT_LINKS, { categories: serializeCategories(RNA_CATEGORY) });
+    await navigate(ROUTE_WITHOUT_LINKS, {
+      categories: stringifyCommaSeparatedQueryParam([RNA_CATEGORY]),
+    });
 
     expect(link('RNA')).not.toHaveClass('active');
     expect(link('Protein')).not.toHaveClass('active');

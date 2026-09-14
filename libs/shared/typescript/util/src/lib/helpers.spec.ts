@@ -6,6 +6,7 @@ import {
   parseCommaSeparatedQueryParam,
   pluralize,
   removeParentheses,
+  stringifyCommaSeparatedQueryParam,
   toKebabCase,
 } from './helpers';
 
@@ -252,6 +253,29 @@ describe('escapeRegexChars', () => {
     const redosPattern3 = '(a|a)*';
     const result3 = escapeRegexChars(redosPattern3);
     expect(result3).toBe('\\(a\\|a\\)\\*');
+  });
+});
+
+describe('stringifyCommaSeparatedQueryParam', () => {
+  it('should join values with commas', () => {
+    expect(stringifyCommaSeparatedQueryParam(['APOE', 'TREM2', 'MAPT'])).toBe('APOE,TREM2,MAPT');
+  });
+
+  it('should percent-encode each value', () => {
+    expect(stringifyCommaSeparatedQueryParam(['RNA - DIFFERENTIAL EXPRESSION'])).toBe(
+      'RNA%20-%20DIFFERENTIAL%20EXPRESSION',
+    );
+  });
+
+  it('should encode a comma inside a value so it survives a round trip', () => {
+    const values = ['Cortex, Left', 'Hippocampus'];
+    expect(parseCommaSeparatedQueryParam(stringifyCommaSeparatedQueryParam(values))).toEqual(
+      values,
+    );
+  });
+
+  it('should return an empty string for an empty array', () => {
+    expect(stringifyCommaSeparatedQueryParam([])).toBe('');
   });
 });
 

@@ -75,10 +75,21 @@ export function capitalizeFirstLetter(value: string | null | undefined): string 
 }
 
 /**
+ * Stringifies a multi-value query param as a comma-separated list of individually percent-encoded
+ * values, the inverse of `parseCommaSeparatedQueryParam`. Encoding each value before joining is what
+ * lets a value contain a comma of its own.
+ * @param values - The values to encode, in order
+ * @returns The comma-separated, per-value-encoded param string
+ */
+export function stringifyCommaSeparatedQueryParam(values: string[]): string {
+  return values.map((value) => encodeURIComponent(value)).join(',');
+}
+
+/**
  * Parses a multi-value query param written as a comma-separated list of individually
- * percent-encoded values, the inverse of `values.map(encodeURIComponent).join(',')`. Encoding each
- * value before joining is what lets a value contain a comma of its own, so splitting on commas
- * without decoding each entry is always wrong.
+ * percent-encoded values, the inverse of `stringifyCommaSeparatedQueryParam`. Encoding each value
+ * before joining is what lets a value contain a comma of its own, so splitting on commas without
+ * decoding each entry is always wrong.
  *
  * Compare parsed arrays rather than raw param strings: the string the app writes for a set of values
  * is not the string another producer writes for the same values.

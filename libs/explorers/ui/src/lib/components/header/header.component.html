@@ -82,8 +82,7 @@
                     <a
                       [routerLink]="link.routerLink"
                       [queryParams]="link.queryParams"
-                      routerLinkActive="active"
-                      [routerLinkActiveOptions]="link.activeOptions || { exact: false }"
+                      [class.active]="isLinkActive(link)"
                       explorersWidestLineWidth
                       (click)="toggleNav()"
                     >
