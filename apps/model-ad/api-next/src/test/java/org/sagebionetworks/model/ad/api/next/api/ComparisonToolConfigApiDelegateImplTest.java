@@ -48,7 +48,7 @@ class ComparisonToolConfigApiDelegateImplTest {
   @DisplayName("should return configs when service returns data")
   void shouldReturnConfigsWhenServiceReturnsData() {
     // given
-    ComparisonToolPageDto page = ComparisonToolPageDto.MODEL_OVERVIEW;
+    ComparisonToolPageDto page = ComparisonToolPageDto.MOUSE_MODEL_OVERVIEW;
     ComparisonToolConfigDto config1 = new ComparisonToolConfigDto();
     config1.setPage(page);
     ComparisonToolConfigDto config2 = new ComparisonToolConfigDto();

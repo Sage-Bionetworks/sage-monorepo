@@ -69,7 +69,7 @@ class ComparisonToolConfigMapperTest {
         .build();
 
     ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
-    document.setPage("Model Overview");
+    document.setPage("Mouse Model Overview");
     document.setColumns(List.of(column));
     document.setFilters(List.of());
 
@@ -136,7 +136,7 @@ class ComparisonToolConfigMapperTest {
         .build();
 
     ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
-    document.setPage("Model Overview");
+    document.setPage("Mouse Model Overview");
     document.setColumns(List.of(column));
     document.setFilters(List.of());
 
@@ -191,7 +191,7 @@ class ComparisonToolConfigMapperTest {
         .build();
 
     ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
-    document.setPage("Model Overview");
+    document.setPage("Mouse Model Overview");
     document.setColumns(List.of());
     document.setFilters(List.of(filter));
 
@@ -224,7 +224,7 @@ class ComparisonToolConfigMapperTest {
   void shouldHandleNullFiltersList() {
     // given
     ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
-    document.setPage("Model Overview");
+    document.setPage("Mouse Model Overview");
     document.setColumns(List.of());
     document.setFilters(null);
 
@@ -289,7 +289,7 @@ class ComparisonToolConfigMapperTest {
   void shouldConvertPageStringToEnumCorrectly() {
     // given
     ComparisonToolConfigDocument doc1 = new ComparisonToolConfigDocument();
-    doc1.setPage("Model Overview");
+    doc1.setPage("Mouse Model Overview");
     doc1.setColumns(List.of());
     doc1.setFilters(List.of());
 
@@ -309,7 +309,7 @@ class ComparisonToolConfigMapperTest {
     ComparisonToolConfigDto result3 = mapper.toDto(doc3);
 
     // then
-    assertThat(result1.getPage()).isEqualTo(ComparisonToolPageDto.MODEL_OVERVIEW);
+    assertThat(result1.getPage()).isEqualTo(ComparisonToolPageDto.MOUSE_MODEL_OVERVIEW);
     assertThat(result2.getPage()).isEqualTo(ComparisonToolPageDto.DIFFERENTIAL_EXPRESSION);
     assertThat(result3.getPage()).isEqualTo(ComparisonToolPageDto.DISEASE_CORRELATION);
   }

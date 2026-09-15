@@ -18,6 +18,8 @@
         <p-select
           [inputId]="filterConfig().queryParamKey"
           [options]="filterOptions()"
+          optionLabel="label"
+          optionValue="value"
           [(ngModel)]="selectedFilterOption"
           [placeholder]="'Select ' + filterConfig().label"
         ></p-select>

@@ -94,7 +94,7 @@ describe('ComparisonToolService', () => {
   describe('column_width sanitization', () => {
     const configWithWidths: ComparisonToolConfig[] = [
       {
-        page: 'Model Overview',
+        page: 'Mouse Model Overview',
         dropdowns: [],
         row_count: null,
         columns: [

@@ -12,6 +12,7 @@ import { HeatmapDetailsPanelData } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService, HelperService } from '@sagebionetworks/explorers/services';
 import { DetailsLabelComponent } from '@sagebionetworks/explorers/ui';
 import { Popover, PopoverModule } from 'primeng/popover';
+import { ADJUSTED_P_VALUE_LABEL } from '../../comparison-tool.variables';
 
 const defaultPanelData: HeatmapDetailsPanelData = {
   heading: '',
@@ -29,6 +30,7 @@ const defaultPanelData: HeatmapDetailsPanelData = {
 })
 export class HeatmapDetailsPanelComponent {
   private readonly EMDASH = '\u2014'; //Shift+Option+Hyphen
+  readonly adjustedPValueLabel = ADJUSTED_P_VALUE_LABEL;
 
   private readonly comparisonToolService = inject(ComparisonToolService);
   private readonly helperService = inject(HelperService);

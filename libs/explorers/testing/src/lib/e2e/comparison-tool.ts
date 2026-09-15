@@ -1,7 +1,10 @@
 import { expect, Locator, Page, test } from '@playwright/test';
 import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolConfigColumnTypeEnum } from '@sagebionetworks/explorers/models';
-import { escapeRegexChars } from '@sagebionetworks/shared/util/helpers';
+import {
+  escapeRegexChars,
+  parseCommaSeparatedQueryParam,
+} from '@sagebionetworks/shared/util/helpers';
 
 export const getQueryParamFromValues = (values: string[], key: string): string => {
   // Query parameter values are encoded once by CT URL service and again by Angular router
@@ -16,30 +19,8 @@ export const getQueryParamsFromRecords = (records: Record<string, string[]>): st
   return queryParams.join('&');
 };
 
-const getQueryParamValues = (url: string, key: string): string[] => {
-  const searchParams = new URL(url).searchParams;
-  const paramValues = searchParams.getAll(key);
-
-  if (!paramValues.length) {
-    return [];
-  }
-
-  return paramValues
-    .flatMap((value) => value.split(','))
-    .map((value) => value.trim())
-    .map((value) => {
-      if (!value) {
-        return '';
-      }
-
-      try {
-        return decodeURIComponent(value);
-      } catch {
-        return value;
-      }
-    })
-    .filter((value) => value.length > 0);
-};
+const getQueryParamValues = (url: string, key: string): string[] =>
+  parseCommaSeparatedQueryParam(new URL(url).searchParams.getAll(key));
 
 export const getPinnedQueryParams = (url: string): string[] => getQueryParamValues(url, 'pinned');
 
@@ -148,8 +129,9 @@ export const expectPinnedRows = async (page: Page, rowNames: string[]): Promise<
 };
 
 export const expectCategories = async (page: Page, categories: string[]): Promise<void> => {
+  const categorySelectors = page.locator('explorers-comparison-tool-category-selectors');
   for (const category of categories) {
-    await expect(page.getByText(category)).toBeVisible();
+    await expect(categorySelectors.getByText(category)).toBeVisible();
   }
 };
 

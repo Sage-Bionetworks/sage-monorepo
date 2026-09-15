@@ -38,6 +38,32 @@ test.describe('search', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(nextModel);
   });
 
+  test('can navigate to a marmoset model from a mouse model details page', async ({ page }) => {
+    const mouseModel = 'LOAD1';
+    const marmosetModel = 'Presenilin 1';
+    const marmosetModelPath = '/models/Presenilin%201?modelOrganism=marmoset';
+
+    // A mismatched request 404s and redirects to the not-found page without changing the URL, and
+    // the correct model can still win the race and render, so the requests are what prove the fix.
+    const requestedModels: string[] = [];
+    page.on('request', (request) => {
+      const model = new URL(request.url()).pathname.match(/\/models\/(mouse|marmoset)\/(.+)$/);
+      if (model) requestedModels.push(`${model[1]}/${decodeURIComponent(model[2])}`);
+    });
+
+    await page.goto(`/models/${mouseModel}?modelOrganism=mouse`);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(mouseModel);
+
+    const { searchListItems } = await searchAndGetSearchListItems('presenilin', page);
+    await expect(searchListItems.first()).toHaveText(marmosetModel);
+    await searchListItems.first().click();
+
+    await page.waitForURL(marmosetModelPath);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(marmosetModel);
+
+    expect(requestedModels).toEqual([`mouse/${mouseModel}`, `marmoset/${marmosetModel}`]);
+  });
+
   test('can search for jax id', async ({ page }) => {
     const expectedResultsCount = 1;
     const modelQuery = '673';

@@ -13,7 +13,7 @@ import { MessageService } from 'primeng/api';
 import { ComparisonToolHeaderComponent } from './comparison-tool-header.component';
 
 const configWithFilters = {
-  page: 'Model Overview' as const,
+  page: 'Mouse Model Overview' as const,
   dropdowns: ['Option A'],
   row_count: null,
   columns: [],
@@ -21,7 +21,7 @@ const configWithFilters = {
 };
 
 const configWithNoFilters = {
-  page: 'Model Overview' as const,
+  page: 'Mouse Model Overview' as const,
   dropdowns: ['Option B'],
   row_count: null,
   columns: [],
