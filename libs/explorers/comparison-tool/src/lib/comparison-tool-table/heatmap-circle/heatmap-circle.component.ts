@@ -13,6 +13,11 @@ type CircleValueSign = 'zero' | 'plus' | 'minus';
 
 const CIRCLE_CLASS = 'heatmap-circle';
 
+// Circle diameter bounds in pixels; the minimum keeps the smallest circles easily
+// hoverable/clickable
+export const MIN_CIRCLE_SIZE = 6;
+export const MAX_CIRCLE_SIZE = 50;
+
 const HIDDEN_CIRCLE_STYLE = {
   display: 'none',
   width: '0px',
@@ -140,10 +145,6 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
   }
 
   private getCircleSize(adjustedPValue: number) {
-    // define min and max size of possible circles in pixels
-    const MIN_SIZE = 6;
-    const MAX_SIZE = 50;
-
     // if significance cutoff radio button selected and
     // adjustedPValue > significance threshhold, don't show
     if (this.significanceThresholdActive() && adjustedPValue > this.significanceThreshold()) {
@@ -151,9 +152,8 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
     }
 
     const pValue = 1 - (this.nRoot(adjustedPValue, 3) || 0);
-    const size = Math.round(pValue * MAX_SIZE);
+    const size = Math.round(pValue * MAX_CIRCLE_SIZE);
 
-    // ensure the smallest circles have a min size to be easily hoverable/clickable
-    return size < MIN_SIZE ? MIN_SIZE : size;
+    return Math.min(MAX_CIRCLE_SIZE, Math.max(MIN_CIRCLE_SIZE, size));
   }
 }
