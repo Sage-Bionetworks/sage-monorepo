@@ -46,6 +46,11 @@ test.describe('nominated drugs - comparison tool', () => {
 
   runFilterPanelTests(async (page) => navigateToComparison(page, CT_PAGE, true, 'url'));
 
+  test('comparison tool is reachable from the header navigation', async ({ page }) => {
+    await page.goto('/');
+    await navigateToComparison(page, CT_PAGE, true, 'link');
+  });
+
   test.describe('filterbox search', () => {
     const pinnedItems = [
       'CHEMBL611~null', // Terazosin

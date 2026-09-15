@@ -3,8 +3,10 @@ import {
   escapeRegexChars,
   getRandomInt,
   isExternalLink,
+  parseCommaSeparatedQueryParam,
   pluralize,
   removeParentheses,
+  stringifyCommaSeparatedQueryParam,
   toKebabCase,
 } from './helpers';
 
@@ -251,5 +253,77 @@ describe('escapeRegexChars', () => {
     const redosPattern3 = '(a|a)*';
     const result3 = escapeRegexChars(redosPattern3);
     expect(result3).toBe('\\(a\\|a\\)\\*');
+  });
+});
+
+describe('stringifyCommaSeparatedQueryParam', () => {
+  it('should join values with commas', () => {
+    expect(stringifyCommaSeparatedQueryParam(['APOE', 'TREM2', 'MAPT'])).toBe('APOE,TREM2,MAPT');
+  });
+
+  it('should percent-encode each value', () => {
+    expect(stringifyCommaSeparatedQueryParam(['RNA - DIFFERENTIAL EXPRESSION'])).toBe(
+      'RNA%20-%20DIFFERENTIAL%20EXPRESSION',
+    );
+  });
+
+  it('should encode a comma inside a value so it survives a round trip', () => {
+    const values = ['Cortex, Left', 'Hippocampus'];
+    expect(parseCommaSeparatedQueryParam(stringifyCommaSeparatedQueryParam(values))).toEqual(
+      values,
+    );
+  });
+
+  it('should return an empty string for an empty array', () => {
+    expect(stringifyCommaSeparatedQueryParam([])).toBe('');
+  });
+});
+
+describe('parseCommaSeparatedQueryParam', () => {
+  it('should return an empty array when the param is absent', () => {
+    expect(parseCommaSeparatedQueryParam(null)).toEqual([]);
+    expect(parseCommaSeparatedQueryParam(undefined)).toEqual([]);
+  });
+
+  it('should return a single value unchanged', () => {
+    expect(parseCommaSeparatedQueryParam('APOE')).toEqual(['APOE']);
+  });
+
+  it('should split a comma-joined list into its values', () => {
+    expect(parseCommaSeparatedQueryParam('APOE,TREM2,MAPT')).toEqual(['APOE', 'TREM2', 'MAPT']);
+  });
+
+  it('should decode percent-encoded values', () => {
+    expect(
+      parseCommaSeparatedQueryParam('RNA%20-%20DIFFERENTIAL%20EXPRESSION,Tissue%20-%20Hemibrain'),
+    ).toEqual(['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain']);
+  });
+
+  it('should keep a value containing an encoded comma as one entry', () => {
+    expect(parseCommaSeparatedQueryParam('Cortex%2C%20Left,Hippocampus')).toEqual([
+      'Cortex, Left',
+      'Hippocampus',
+    ]);
+  });
+
+  it('should fall back to the raw entry when it is not decodable', () => {
+    expect(parseCommaSeparatedQueryParam('%E0%A4%A,APOE')).toEqual(['%E0%A4%A', 'APOE']);
+  });
+
+  it('should flatten a repeated param delivered as an array', () => {
+    expect(parseCommaSeparatedQueryParam(['APOE,TREM2', 'MAPT'])).toEqual([
+      'APOE',
+      'TREM2',
+      'MAPT',
+    ]);
+  });
+
+  it('should trim whitespace around values', () => {
+    expect(parseCommaSeparatedQueryParam('APOE , TREM2')).toEqual(['APOE', 'TREM2']);
+  });
+
+  it('should drop empty entries', () => {
+    expect(parseCommaSeparatedQueryParam('APOE,,TREM2,')).toEqual(['APOE', 'TREM2']);
+    expect(parseCommaSeparatedQueryParam('')).toEqual([]);
   });
 });

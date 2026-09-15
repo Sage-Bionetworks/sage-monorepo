@@ -1,10 +1,11 @@
-import { IsActiveMatchOptions } from '@angular/router';
+import { IsActiveMatchOptions, Params } from '@angular/router';
 
 export type NavigationLink = {
   label: string;
   url?: string;
   target?: '_blank' | '_self' | '_parent' | '_top';
   routerLink?: string[];
+  queryParams?: Params;
   activeOptions?: { exact: boolean } | IsActiveMatchOptions;
   isSubheader?: boolean;
   // Mixing subheader and flat children in the same dropdown is not supported.

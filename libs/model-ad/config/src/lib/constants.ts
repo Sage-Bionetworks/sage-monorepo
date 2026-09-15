@@ -28,6 +28,17 @@ export const ROUTE_PATHS = {
   ERROR: 'error',
 } as const;
 
+// First-level category values only. The URL's `categories` is a comma-separated, outermost-first
+// list; each value here must stay its first entry so the header keeps the link active as the page
+// appends deeper levels (tissue, ...). See header isLinkActive.
+export const DIFFERENTIAL_EXPRESSION_CATEGORIES = {
+  RNA: 'RNA - DIFFERENTIAL EXPRESSION',
+  PROTEIN: 'PROTEIN - DIFFERENTIAL EXPRESSION',
+} as const;
+
+export type DifferentialExpressionCategory =
+  (typeof DIFFERENTIAL_EXPRESSION_CATEGORIES)[keyof typeof DIFFERENTIAL_EXPRESSION_CATEGORIES];
+
 export const BOXPLOT_POINT_STYLES: PointStyle[] = [
   {
     label: 'Female',

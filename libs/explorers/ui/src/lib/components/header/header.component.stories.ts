@@ -77,8 +77,9 @@ export const Header: Story = {
             label: 'Group One',
             isSubheader: true,
             children: [
-              { label: 'Item A', routerLink: ['/grouped/one/a'] },
-              { label: 'Item B', routerLink: ['/grouped/one/b'] },
+              // Same route, distinguished only by query params
+              { label: 'Item A', routerLink: ['/grouped/one'], queryParams: { view: 'a' } },
+              { label: 'Item B', routerLink: ['/grouped/one'], queryParams: { view: 'b' } },
             ],
           },
           {

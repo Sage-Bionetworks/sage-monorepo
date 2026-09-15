@@ -1,7 +1,11 @@
 import { Page, expect } from '@playwright/test';
-import { expectComparisonToolTableLoaded } from '@sagebionetworks/explorers/testing/e2e';
+import {
+  expectComparisonToolTableLoaded,
+  navigateViaHeaderNav,
+} from '@sagebionetworks/explorers/testing/e2e';
 import {
   ComparisonToolConfig,
+  ComparisonToolPage,
   DiseaseCorrelation,
   DiseaseCorrelationsPage,
   MarmosetModelOverview,
@@ -23,7 +27,7 @@ import {
 
 export const navigateToComparison = async (
   page: Page,
-  name: string,
+  name: ComparisonToolPage,
   shouldCloseVisualizationOverviewDialog = false,
   navigateBy: 'url' | 'link' = 'url',
   queryParameters?: string,
@@ -33,22 +37,7 @@ export const navigateToComparison = async (
     const urlPath = queryParameters ? `${path}?${queryParameters}` : path;
     await page.goto(urlPath);
   } else {
-    // Open the hamburger menu if the button is visible (mobile breakpoint)
-    const menuButton = page.locator('.hamburger-menu-button');
-    if (await menuButton.isVisible().catch(() => false)) {
-      await menuButton.click();
-    }
-
-    const navTrail = COMPARISON_TOOL_NAV_TRAILS[name];
-    if (navTrail.length > 1) {
-      // Desktop renders the parent nav item as a dropdown trigger that must be opened first;
-      // mobile renders the children directly, so there is no trigger to click.
-      const dropdownTrigger = page.getByRole('button', { name: navTrail[0] });
-      if (await dropdownTrigger.isVisible().catch(() => false)) {
-        await dropdownTrigger.click();
-      }
-    }
-    await page.getByRole('link', { name: navTrail[navTrail.length - 1] }).click();
+    await navigateViaHeaderNav(page, COMPARISON_TOOL_NAV_TRAILS[name]);
   }
 
   await expectComparisonToolTableLoaded(
@@ -60,7 +49,7 @@ export const navigateToComparison = async (
 
 export const fetchComparisonToolData = async <T>(
   page: Page,
-  name: string,
+  name: ComparisonToolPage,
   categories: string[] = [],
   filterParams: Record<string, string[]> = {},
 ): Promise<T> => {
@@ -132,7 +121,7 @@ export const fetchTranscriptomics = async (
 
 export const fetchComparisonToolConfig = async (
   page: Page,
-  name: string,
+  name: ComparisonToolPage,
 ): Promise<ComparisonToolConfig[]> => {
   const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_CONFIG_PATH}`, {
     params: { page: name },
