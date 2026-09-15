@@ -2,7 +2,10 @@ import { Component, computed, inject, input } from '@angular/core';
 import { HeatmapCircleColorKey, HeatmapCircleData } from '@sagebionetworks/explorers/models';
 import { ComparisonToolFilterService, HelperService } from '@sagebionetworks/explorers/services';
 import { TooltipModule } from 'primeng/tooltip';
-import { knownColorMetricToDisplayName } from '../../comparison-tool.variables';
+import {
+  ADJUSTED_P_VALUE_LABEL,
+  knownColorMetricToDisplayName,
+} from '../../comparison-tool.variables';
 
 // Used as the circle's CSS class, so manually keep in sync with the stylesheet's selectors
 type CircleValueSign = 'none' | 'zero' | 'plus' | 'minus';
@@ -59,7 +62,7 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
       `${displayName || key}: ` +
       this.formatNumericValue(value) +
       '\n' +
-      'P-value: ' +
+      `${ADJUSTED_P_VALUE_LABEL}: ` +
       this.formatNumericValue(data.adj_p_val)
     );
   }

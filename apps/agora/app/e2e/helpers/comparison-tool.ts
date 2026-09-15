@@ -1,7 +1,8 @@
-import { Page, expect } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigFilter,
+  ComparisonToolConfigPage,
   NominatedDrug,
   NominatedDrugsPage,
   NominatedTarget,
@@ -12,6 +13,7 @@ import {
   buildComparisonToolFetchParams,
   ComparisonToolFetchOptions,
   expectComparisonToolTableLoaded,
+  navigateViaHeaderNav,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { camelCase } from 'lodash';
 import { baseURL } from '../../playwright.config';
@@ -19,12 +21,13 @@ import {
   COMPARISON_TOOL_API_PATHS,
   COMPARISON_TOOL_CONFIG_PATH,
   COMPARISON_TOOL_DEFAULT_SORTS,
+  COMPARISON_TOOL_NAV_TRAILS,
   COMPARISON_TOOL_PATHS,
 } from './constants';
 
 export const navigateToComparison = async (
   page: Page,
-  name: string,
+  name: ComparisonToolConfigPage,
   shouldCloseVisualizationOverviewDialog = false,
   navigateBy: 'url' | 'link' = 'url',
   queryParameters?: string,
@@ -34,12 +37,7 @@ export const navigateToComparison = async (
     const urlPath = queryParameters ? `${path}?${queryParameters}` : path;
     await page.goto(urlPath);
   } else {
-    // Open the hamburger menu if the button is visible (mobile breakpoint)
-    const menuButton = page.locator('.hamburger-menu-button');
-    if (await menuButton.isVisible().catch(() => false)) {
-      await menuButton.click();
-    }
-    await page.getByRole('link', { name: name }).click();
+    await navigateViaHeaderNav(page, COMPARISON_TOOL_NAV_TRAILS[name]);
   }
 
   await expectComparisonToolTableLoaded(page, name, shouldCloseVisualizationOverviewDialog);
@@ -47,7 +45,7 @@ export const navigateToComparison = async (
 
 export const fetchComparisonToolData = async <T>(
   page: Page,
-  name: string,
+  name: ComparisonToolConfigPage,
   categories: string[] = [],
   extraParams?: URLSearchParams,
 ): Promise<T> => {
@@ -106,7 +104,7 @@ export const fetchNominatedDrugs = async (
 
 export const fetchComparisonToolConfig = async (
   page: Page,
-  name: string,
+  name: ComparisonToolConfigPage,
 ): Promise<ComparisonToolConfig[]> => {
   const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_CONFIG_PATH}`, {
     params: { page: name },
@@ -118,7 +116,7 @@ export const fetchComparisonToolConfig = async (
 
 const fetchFilteredPageCount = async (
   page: Page,
-  name: string,
+  name: ComparisonToolConfigPage,
   filter: ComparisonToolConfigFilter,
   value: string,
 ): Promise<number> => {
@@ -145,7 +143,7 @@ const fetchFilteredPageCount = async (
  */
 export const findFilterValueSpanningMultiplePages = async (
   page: Page,
-  name: string,
+  name: ComparisonToolConfigPage,
   filters: ComparisonToolConfigFilter[],
 ): Promise<{ name: string; value: string }> => {
   for (const filter of filters) {

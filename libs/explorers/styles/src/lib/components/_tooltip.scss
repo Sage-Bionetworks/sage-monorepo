@@ -7,4 +7,12 @@
   .p-tooltip-arrow {
     display: none !important;
   }
+
+  &.tooltip-fit-content {
+    max-width: none;
+
+    .p-tooltip-text {
+      white-space: pre;
+    }
+  }
 }

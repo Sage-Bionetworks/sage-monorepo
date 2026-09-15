@@ -71,7 +71,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     colorChartText: `Circle color indicates the correlation between changes in expression of gene modules in the mouse model versus in humans with AD. Red shades indicate a negative correlation, while blue shades indicate a positive correlation.`,
     sizeChartLowerLabel: 'Significant',
     sizeChartUpperLabel: 'Insignificant',
-    sizeChartText: `Circle diameter indicates P-value. Larger circles indicate higher statistical significance, while smaller circles indicate lower statistical significance.`,
+    sizeChartText: `Circle diameter indicates adjusted p-value. Larger circles indicate higher statistical significance, while smaller circles indicate lower statistical significance.`,
   };
 
   viewConfig: Partial<ComparisonToolViewConfig> = {

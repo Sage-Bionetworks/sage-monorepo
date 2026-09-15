@@ -62,7 +62,7 @@ export const DifferentialExpression: Story = {
       label: { left: 'Trem2', right: 'ENSMUSG00000023992' },
       heading: 'Differential RNA Expression (Hippocampus)',
       subHeadings: ['Trem2-R47H_NSS (12 months, Female & Male)', 'Matched Control: C57BL6J'],
-      valueLabel: 'Log 2 Fold Change',
+      valueLabel: 'Log2 Fold Change',
       value: 0.29,
       pValue: 0.048,
       footer: 'Significance is considered to be an adjusted p-value < 0.05',

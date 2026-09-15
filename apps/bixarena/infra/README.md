@@ -2,7 +2,7 @@
 
 ## Configure an AWS SSO Profile
 
-Add the following profiles to `~/.aws/config`:
+Add the following profiles to `$AWS_CONFIG_FILE` (`<workspace>/.aws/config`):
 
 ```ini
 [profile bixarena-Administrator]
@@ -20,8 +20,7 @@ sso_registration_scopes = sso:account:access
 ```
 
 > [!TIP]
-> Add `cli_pager =` to your profile in `~/.aws/config` to disable the use of
-> `less`.
+> Add `cli_pager =` to your profile in `$AWS_CONFIG_FILE` to disable the use of `less`.
 
 ## Login with AWS SSO
 
