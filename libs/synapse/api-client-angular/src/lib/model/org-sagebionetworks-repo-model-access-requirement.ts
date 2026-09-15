@@ -7,10 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateReference } from './org-sagebionetworks-repo-model-dataaccess-schema-form-template-reference';
 import { OrgSagebionetworksRepoModelManagedACTAccessRequirement } from './org-sagebionetworks-repo-model-managed-act-access-requirement';
 import { OrgSagebionetworksRepoModelACTAccessRequirement } from './org-sagebionetworks-repo-model-act-access-requirement';
 import { OrgSagebionetworksRepoModelRestrictableObjectDescriptor } from './org-sagebionetworks-repo-model-restrictable-object-descriptor';
 import { OrgSagebionetworksRepoModelTermsOfUseAccessRequirement } from './org-sagebionetworks-repo-model-terms-of-use-access-requirement';
+import { OrgSagebionetworksRepoModelJsonSchemaAccessRequirement } from './org-sagebionetworks-repo-model-json-schema-access-requirement';
 import { OrgSagebionetworksRepoModelSelfSignAccessRequirement } from './org-sagebionetworks-repo-model-self-sign-access-requirement';
 import { OrgSagebionetworksRepoModelPostMessageContentAccessRequirement } from './org-sagebionetworks-repo-model-post-message-content-access-requirement';
 import { OrgSagebionetworksRepoModelLockAccessRequirement } from './org-sagebionetworks-repo-model-lock-access-requirement';
@@ -25,6 +27,7 @@ import { OrgSagebionetworksRepoModelLockAccessRequirement } from './org-sagebion
  */
 export type OrgSagebionetworksRepoModelAccessRequirement =
   | OrgSagebionetworksRepoModelACTAccessRequirement
+  | OrgSagebionetworksRepoModelJsonSchemaAccessRequirement
   | OrgSagebionetworksRepoModelLockAccessRequirement
   | OrgSagebionetworksRepoModelManagedACTAccessRequirement
   | OrgSagebionetworksRepoModelPostMessageContentAccessRequirement

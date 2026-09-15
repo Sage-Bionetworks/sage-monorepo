@@ -17,6 +17,10 @@ export interface OrgSagebionetworksRepoModelDataaccessAccessRequestSummary {
    */
   requestId?: string;
   /**
+   * Id of the related access requirement
+   */
+  accessRequirementId?: string;
+  /**
    * Name of the related access requirement
    */
   accessRequirementName?: string;

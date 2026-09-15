@@ -2545,6 +2545,22 @@ paths:
       responses:
         '204':
           description: Void
+    delete:
+      tags:
+        - Authentication Services
+      operationId: delete-/auth/v1/oauth2/identity
+      parameters:
+        - name: provider
+          in: query
+          required: true
+          description: the OAuth provider whose linked identity should be removed
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Void
   /auth/v1/oauth2/account2:
     post:
       tags:
@@ -3864,6 +3880,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.AccessRequirementPermissions'
+  /repo/v1/admin/accessRequirement/{requirementId}/eDucQuota/reset:
+    post:
+      tags:
+        - Access Requirement Services
+      operationId: post-/repo/v1/admin/accessRequirement/{requirementId}/eDucQuota/reset
+      parameters:
+        - name: requirementId
+          in: path
+          required: true
+          description: '- The ID of the access requirement the quota is scoped to.'
+          schema:
+            type: string
+        - name: targetUserId
+          in: query
+          required: true
+          description: '- The ID of the user whose quota should be reset.'
+          schema:
+            type: number
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The resulting signature quota for the target user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.educ.EDucSignatureQuota'
   /repo/v1/activity:
     post:
       tags:
@@ -5435,6 +5478,27 @@ paths:
       responses:
         '204':
           description: Void
+  /repo/v1/dataAccessRequest/{requestId}/signature/quota:
+    get:
+      tags:
+        - Data Access Services
+      operationId: get-/repo/v1/dataAccessRequest/{requestId}/signature/quota
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          description: '- The ID of the data access request.'
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The signature quota information including remaining routings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.educ.EDucSignatureQuota'
   /repo/v1/dataAccessRequest/{requestId}/signature/status:
     get:
       tags:
@@ -7764,9 +7828,15 @@ paths:
             type: string
         - name: type
           in: query
-          required: true
+          required: false
           schema:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.DataType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.ChangeDataTypeRequest'
+        required: false
       security:
         - bearerAuth: []
       responses:
@@ -16370,6 +16440,31 @@ components:
       description: Signed token containing the the information necessary to create a new account or add an email address to an existing account.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.dataaccess.schema.FormTemplateField:
+      type: object
+      properties:
+        schemaPath:
+          type: string
+          description: "JSON pointer (RFC 6901) into the template's referenced schema, identifying the leaf property this slot renders. Example: '/institution'. The pointer is resolved against the schema with '$ref's expanded."
+        uiDefinition:
+          description: Defines the appearance of this slot in the form UI. Defined by <a href="https://rjsf-team.github.io/react-jsonschema-form/docs/api-reference/uiSchema">react-jsonschema-form</a>.
+        submissionContext:
+          type: string
+          description: Controls whether this slot appears (and the underlying schema property is collected) for an initial REQUEST, a RENEWAL, or both. Default is 'ALWAYS'. The schema's 'required' declaration only binds for contexts in which the property is included; if a required property is excluded for the active context, it is treated as not required.
+          enum:
+            - ALWAYS
+            - REQUEST_ONLY
+            - RENEWAL_ONLY
+        templateFileHandleId:
+          type: string
+          description: A Synapse FileHandle ID used to download a template file for this slot. Intended only for slots whose target schema property uses the 'synapse-filehandle-id' format. The file can be downloaded using FileHandleAssociateType.AccessRequirementAttachment.
+        isPublic:
+          type: boolean
+          description: When true, responses to this field will be publicly viewable after approval. Default is false.
+      description: A single field slot in a form template step. Maps a JSON pointer in the referenced schema to a UI definition. Validation that the slot resolves to a real leaf property in the schema, that the slot's UI definition is compatible with the property's type/format, and that no two slots in the template share a schemaPath, is performed when the template is created or updated.
+      required:
+        - schemaPath
+        - uiDefinition
     org.sagebionetworks.repo.model.table.QueryResultBundle:
       type: object
       properties:
@@ -16421,6 +16516,9 @@ components:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.ActionRequiredCount'
             description: Represents a single action that the user will need to take in order to download one or more files.
           description: The first 50 actions required to download the files that are part of the query. Use mask = 0x200 to include them in the bundle.
+        facetPostProcessingApplied:
+          type: boolean
+          description: True when a facet post-processing algorithm (e.g. rounding or noise) was applied to the returned facets, indicating the facet counts are approximate. Absent or false when the facet counts are exact.
       description: A bundle of information about a query result.
       required:
         - concreteType
@@ -16443,9 +16541,6 @@ components:
         name:
           type: string
           description: The name of the signing official.
-        title:
-          type: string
-          description: The title of the signing official.
         institutionalEmail:
           type: string
           description: The institutional email address of the signing official.
@@ -16647,6 +16742,27 @@ components:
         - concreteType
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaFromAccessRequirement:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: Indicates which implementation this object represents.
+          enum:
+            - org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaFromAccessRequirement
+        requestType:
+          type: string
+          description: The type of request being made. May affect the final set of included form fields.
+          enum:
+            - REQUEST
+            - RENEWAL
+        accessRequirement:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.AccessRequirementReference'
+          description: Used to reference a specific access requirement and version.
+      description: Request body to generate the JSON Schema and UI Schema for a form. Intended to support data requesters in the data access request flow.
+      required:
+        - concreteType
+        - requestType
     org.sagebionetworks.evaluation.model.SubmissionStatusEnum:
       type: string
       enum:
@@ -16944,6 +17060,39 @@ components:
         - USER
         - AGENT
         - SERVICE
+    org.sagebionetworks.repo.model.dataaccess.schema.FormTemplate:
+      type: object
+      properties:
+        versionNumber:
+          type: integer
+          description: The version number issued to this version on the object.
+          format: int32
+        id:
+          type: string
+          description: The unique identifier of this template. Stable across versions.
+        name:
+          type: string
+          description: The internal name of this template. Used by ACT to identify and find the template; not displayed to requesters.
+        etag:
+          type: string
+          description: Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time a resource is updated it is used to detect when a client's current representation of a resource is out-of-date.
+        schema$id:
+          type: string
+          description: Reference to the registered JSON Schema and version that this template renders. The reference MUST be pinned to a specific version. The schema is the source of truth for property types, validation rules, and which properties are required.
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.FormTemplateStep'
+            description: A logical grouping of fields rendered as a single page or section in a multi-step form. Steps are part of the FormTemplate version; changes to a step's title, description, or contained fields produce a new template version.
+          description: Ordered list of steps in the form. Each step renders as a page or section. Order is determined by array position.
+        deprecated:
+          type: boolean
+          description: Marking a template as deprecated will hide it from search results by default. It does not affect Access Requirements that already reference this template. Default is 'false'.
+      description: Defines how a referenced JSON Schema is rendered to a requester as a multi-step form. A template is pinned to a single JSON Schema version. Updating a template creates a new version; the schema reference and the steps/fields it contains are immutable per version. Multiple Access Requirements may reference the same template version (N:1).
+      required:
+        - name
+        - schema$id
+        - steps
     org.sagebionetworks.repo.model.table.SumFileSizes:
       type: object
       properties:
@@ -17530,11 +17679,13 @@ components:
       description: JSON schema for Versionable interface
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.DatasetCollection'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.JsonSchemaAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.EntityView'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.VirtualTable'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.RecordSet'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.SelfSignAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.ACTAccessRequirement'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.FormTemplate'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.FileEntity'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.TableEntity'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.PostMessageContentAccessRequirement'
@@ -17672,12 +17823,16 @@ components:
           enum:
             - SENSITIVE_DATA
             - OPEN_DATA
+            - AGGREGATE_DATA
         updatedBy:
           type: string
           description: The user that last updated this object's DataType.
         updatedOn:
           type: string
           description: The date this object's DataType was last updated.
+        aggregateDataConfiguration:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.AggregateDataConfiguration'
+          description: The configuration the ACT binds to a source when its DataType is AGGREGATE_DATA. It controls the minimum number of matching rows required before an aggregate result is returned and how facet counts are post-processed.
       description: Response for an Object's DataType.
     org.sagebionetworks.repo.model.auth.TermsOfServiceAgreement:
       type: object
@@ -18242,6 +18397,36 @@ components:
             format: int32
           uniqueItems: true
       description: The response to a multiple choice question
+      required:
+        - concreteType
+    org.sagebionetworks.repo.model.table.BelowThresholdErrorResponse:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.table.BelowThresholdErrorResponse
+        suppressionThreshold:
+          type: integer
+          description: The suppression threshold that the matching row count fell below.
+          format: int32
+        reason:
+          type: string
+          description: The reason for the error
+        errorCode:
+          type: string
+          description: A code to be used by clients to handle the error.
+          enum:
+            - PASSWORD_RESET_VIA_EMAIL_REQUIRED
+            - USER_CERTIFICATION_REQUIRED
+            - INVALID_TABLE_QUERY_FACET_COLUMN_REQUEST
+            - OAUTH_CLIENT_NOT_VERIFIED
+            - TWO_FA_REQUIRED
+            - UNSUPPORTED_WEBHOOK_DOMAIN
+            - PROJECT_STORAGE_LIMIT_EXCEEDED
+            - TWO_FA_ENABLED_REQUIRED
+            - BELOW_THRESHOLD
+      description: Error returned when an aggregate query against a restricted source matches a non-zero number of rows below the configured suppression threshold. The result is suppressed to protect individual-level data.
       required:
         - concreteType
     org.sagebionetworks.repo.model.query.QueryTableResults:
@@ -20557,6 +20742,20 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.UserGroup'
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.dataaccess.schema.FormTemplateReference:
+      type: object
+      properties:
+        templateId:
+          type: string
+          description: The unique identifier of the form template.
+        templateVersionNumber:
+          type: integer
+          description: The version number of the form template.
+          format: int32
+      description: Used to reference a specific FormTemplate id and version.
+      required:
+        - templateId
+        - templateVersionNumber
     org.sagebionetworks.repo.model.grid.AgentFeatureRequest:
       type: object
       properties:
@@ -20845,6 +21044,8 @@ components:
         eDucSignatureEnvelopeId:
           type: string
           description: The envelope ID for the routed eDUC signature document.
+        schemaData:
+          description: Request data that was provided using the associated JSON Schema. Unvalidated while the request is a draft; validated against the schema referenced by the Access Requirement when a Submission is created.
       description: A Request contains information required by an AccessRequirement.
       required:
         - concreteType
@@ -21119,6 +21320,24 @@ components:
           type: boolean
           description: true if team/individual has reached the submission quota (for the given submission round)
       description: Describes the eligibility of a to submit to an Evaluation queue, reflecting the queue's submission quotas and current submissions.
+    org.sagebionetworks.repo.model.HasDataUseCertificate:
+      type: object
+      properties:
+        isDUCRequired:
+          type: boolean
+          description: If true, then accessor needs to fill, sign, and submit a Data Use Certificate (DUC) to gain access to the data.
+        ducTemplateFileHandleId:
+          type: string
+          description: If the Data Use Certificate (DUC) is required, creator of this requirement needs to upload a Data Use Certificate (DUC) template. Users have to download this template, fill out, sign and submit it.
+        eDucTemplateId:
+          type: string
+          description: The ID of the electronic Data Use Certificate (eDUC) template to fill out for data access requests.
+      description: Describes an Access Requirement that may utilize a Data Use Certificate requirement.
+      oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.ManagedACTAccessRequirement'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.JsonSchemaAccessRequirement'
+      discriminator:
+        propertyName: concreteType
     org.sagebionetworks.repo.model.registry.EntityTypeMetadata:
       type: object
       properties:
@@ -21196,6 +21415,7 @@ components:
           description: 'When present, these results represent a sub-column identified by its jsonPath.  Note: The ColumnName will be the name of the root JSON column.'
       description: Resulting information about a faceted column
       oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.FacetColumnResultBinnedValues'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.FacetColumnResultValues'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.FacetColumnResultRange'
       required:
@@ -21468,6 +21688,7 @@ components:
       enum:
         - SENSITIVE_DATA
         - OPEN_DATA
+        - AGGREGATE_DATA
     org.sagebionetworks.repo.model.message.MessageContent:
       type: object
       properties:
@@ -21735,6 +21956,20 @@ components:
           type: string
           description: The optional ID of the select column, if this is a direct column selected
       description: A column model contains the metadata of a single column of a TableEntity
+    org.sagebionetworks.repo.model.ChangeDataTypeRequest:
+      type: object
+      properties:
+        dataType:
+          type: string
+          description: Enumeration of data types the describe the contents of objects like Tables and Files.
+          enum:
+            - SENSITIVE_DATA
+            - OPEN_DATA
+            - AGGREGATE_DATA
+        aggregateDataConfiguration:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.AggregateDataConfiguration'
+          description: The configuration the ACT binds to a source when its DataType is AGGREGATE_DATA. It controls the minimum number of matching rows required before an aggregate result is returned and how facet counts are post-processed.
+      description: Request to change the DataType of an object.
     org.sagebionetworks.repo.model.ACTAccessRequirement:
       type: object
       properties:
@@ -22161,6 +22396,19 @@ components:
       description: A SelectItem that will result in the selection of all columns.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.HasExpiration:
+      type: object
+      properties:
+        expirationPeriod:
+          type: integer
+          description: After an AccessApproval is granted for this AccessRequirement, it will be expired after expirationPeriod milliseconds. Set this value to 0 to indicate that AccessApproval will never be expired.
+          format: int32
+      description: Used to describe an access requirement for which AccessApprovals will expire after some duration.
+      oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.ManagedACTAccessRequirement'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.JsonSchemaAccessRequirement'
+      discriminator:
+        propertyName: concreteType
     PaginatedResultsOfUserProfile:
       type: object
       properties:
@@ -22467,6 +22715,19 @@ components:
       enum:
         - FAILED
         - SUCCESS
+    org.sagebionetworks.repo.model.FacetPostProcessingConfig:
+      type: object
+      properties:
+        algorithm:
+          type: string
+          description: The algorithm applied to facet counts before they are returned for an aggregate-only query. The runtime application of these algorithms is defined by PLFM-9757.
+          enum:
+            - ROUNDING
+            - NOISE
+        parameters:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.FacetPostProcessingParameters'
+          description: Base interface for the parameters that tune a FacetPostProcessingAlgorithm. The concrete type carries the algorithm-specific parameters (e.g. FacetRoundingParameters for ROUNDING, FacetNoiseParameters for NOISE).
+      description: Configuration describing how facet counts are post-processed for an aggregate-only query.
     org.sagebionetworks.repo.model.dataaccess.SubmissionReviewerFilterType:
       type: string
       enum:
@@ -22543,6 +22804,9 @@ components:
           type: integer
           description: Optional, default all. The 'partsMask' is an integer mask that can be combined into to request any desired part. The mask is defined as follows:<ul><li>Query Results <i>(queryResults)</i> = 0x1</li><li>Query Count <i>(queryCount)</i> = 0x2</li><li>Select Columns <i>(selectColumns)</i> = 0x4</li><li>Max Rows Per Page <i>(maxRowsPerPage)</i> = 0x8</li><li>The Table Columns <i>(columnModels)</i> = 0x10</li><li>Facet statistics for each faceted column <i>(facetStatistics)</i> = 0x20</li><li>The sum of the file sizes <i>(sumFileSizesBytes)</i> = 0x40</li><li>The last updated on date <i>(lastUpdatedOn)</i> = 0x80</li><li>The combined SQL query including additional filters <i>(combinedSql)</i> = 0x100</li><li>The list of actions required for any file in the query<i>(actionsRequired)</i> = 0x200 (The query.selectFileColumn needs to be specified)</li></ul>
           format: int32
+        aggregateDataPreview:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.AggregateDataConfiguration'
+          description: The configuration the ACT binds to a source when its DataType is AGGREGATE_DATA. It controls the minimum number of matching rows required before an aggregate result is returned and how facet counts are post-processed.
       required:
         - concreteType
     org.sagebionetworks.repo.model.dataaccess.AccessApprovalSearchSort:
@@ -22701,6 +22965,7 @@ components:
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.SynchronizeGridRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListRequest'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaFromTemplateDraft'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridQueryJobRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.DownloadFromTableRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListPackageRequest'
@@ -22729,6 +22994,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleArchivalRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.BulkFileDownloadRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationRequest'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaFromAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.AppendableRowSetRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.CreateSchemaRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.GetValidationSchemaRequest'
@@ -22738,6 +23004,25 @@ components:
         - concreteType
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.dataaccess.schema.FormTemplateStep:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Display title shown to the user (e.g., 'Institutional Information').
+        description:
+          type: string
+          description: Instructions shown at the top of the page/section.
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.FormTemplateField'
+            description: A single field slot in a form template step. Maps a JSON pointer in the referenced schema to a UI definition. Validation that the slot resolves to a real leaf property in the schema, that the slot's UI definition is compatible with the property's type/format, and that no two slots in the template share a schemaPath, is performed when the template is created or updated.
+          description: Ordered list of field slots within this step. Each slot binds a JSON pointer in the schema to a UI definition.
+      description: A logical grouping of fields rendered as a single page or section in a multi-step form. Steps are part of the FormTemplate version; changes to a step's title, description, or contained fields produce a new template version.
+      required:
+        - title
+        - fields
     org.sagebionetworks.repo.model.agent.ListAgentSessionsResponse:
       type: object
       properties:
@@ -23102,6 +23387,8 @@ components:
         eDucSignatureEnvelopeId:
           type: string
           description: The envelope ID for the routed eDUC signature document.
+        schemaData:
+          description: Request data that was provided using the associated JSON Schema. Unvalidated while the request is a draft; validated against the schema referenced by the Access Requirement when a Submission is created.
         publication:
           type: string
           description: Link(s) to publication that used the controlled data.
@@ -23174,6 +23461,20 @@ components:
           type: boolean
           description: True when published successfully.
       description: JSON schema for a change message
+    org.sagebionetworks.repo.model.FacetPostProcessingParameters:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: The full class name that identifies the concrete parameters type.
+      description: Base interface for the parameters that tune a FacetPostProcessingAlgorithm. The concrete type carries the algorithm-specific parameters (e.g. FacetRoundingParameters for ROUNDING, FacetNoiseParameters for NOISE).
+      oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.FacetNoiseParameters'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.FacetRoundingParameters'
+      required:
+        - concreteType
+      discriminator:
+        propertyName: concreteType
     org.sagebionetworks.repo.model.table.SnapshotResponse:
       type: object
       properties:
@@ -23277,6 +23578,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.PostMessageContentAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.TermsOfUseAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.ManagedACTAccessRequirement'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.JsonSchemaAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.SelfSignAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.ACTAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.LockAccessRequirement'
@@ -23815,6 +24117,27 @@ components:
           type: string
           description: The timestamp when this subscription was created
       description: The model object represents a single Subscription.
+    org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaRequestInterface:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: Indicates which implementation this object represents.
+        requestType:
+          type: string
+          description: The type of request being made. May affect the final set of included form fields.
+          enum:
+            - REQUEST
+            - RENEWAL
+      description: Request body to generate the JSON Schema and UI Schema for a form.
+      oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaFromTemplateDraft'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaFromAccessRequirement'
+      required:
+        - concreteType
+        - requestType
+      discriminator:
+        propertyName: concreteType
     org.sagebionetworks.repo.model.search.dsl.BoostingQuery:
       type: object
       properties:
@@ -24063,6 +24386,23 @@ components:
           description: A list of types of access granted to the given principal
           uniqueItems: true
       description: JSON schema for a ResourceAccess POJO
+    org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaResponse:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaResponse
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.GeneratedFormStep'
+            description: The schema information used to render a single step of a form. The jsonSchema validates the slice of submission data corresponding to that step's fields.
+          description: An ordered list of schema information used to render the form, one element per step in the source template.
+      description: Response body for a Generate Data Access Schema request. Returns one (jsonSchema, uiSchema) pair per step in the source FormTemplate.
+      required:
+        - steps
+        - concreteType
     org.sagebionetworks.repo.model.table.VirtualTable:
       type: object
       properties:
@@ -24376,6 +24716,16 @@ components:
       description: A list of EntityUpdateResults
       required:
         - concreteType
+    org.sagebionetworks.repo.model.dataaccess.schema.PublicSubmissionTemplateBundle:
+      type: object
+      properties:
+        templateRef:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.FormTemplateReference'
+          description: Used to reference a specific FormTemplate id and version.
+        generatedSchema:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaResponse'
+          description: Response body for a Generate Data Access Schema request. Returns one (jsonSchema, uiSchema) pair per step in the source FormTemplate.
+      description: The rendered form schema and UI Schema for a single FormTemplate version, reused across all result rows that were submitted against that version. Reuses the same GenerateDataAccessSchemaResponse shape returned by the schema generation service so clients can render public submission info through the identical path as the live form. Includes definitions for all fields (both public and private); privacy is enforced solely by which values appear in each row's publicValues.
     org.sagebionetworks.repo.model.principal.PrincipalAliasResponse:
       type: object
       properties:
@@ -24384,6 +24734,20 @@ components:
           description: The ID of the principal to bind the alias too.
           format: int32
       description: The response of a principal alias lookup request
+    org.sagebionetworks.repo.model.table.FacetColumnResultBinnedValueCount:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The value that is in the column
+        binMin:
+          type: integer
+          description: 'The inclusive lower bound of the bin that contains the exact count: floor(count / binSize) * binSize. The exact count lies within [binMin, binMin + binSize - 1].'
+          format: int32
+        isSelected:
+          type: boolean
+          description: whether this facet was selected by the user
+      description: A binned facet value count produced by the ROUNDING post-processing algorithm. The exact count is obscured by reporting only the inclusive lower bound of the bin that contains it.
     org.sagebionetworks.repo.model.search.table.ListColumnAnalyzerOverridesResponse:
       type: object
       properties:
@@ -24432,6 +24796,9 @@ components:
         requestId:
           type: string
           description: Id of the data access request
+        accessRequirementId:
+          type: string
+          description: Id of the related access requirement
         accessRequirementName:
           type: string
           description: Name of the related access requirement
@@ -24493,6 +24860,21 @@ components:
           type: string
           description: Optional. Format applied to the bucket key in the response.
       description: A <a href="https://docs.opensearch.org/latest/aggregations/bucket/range/"><code>range</code></a> bucket aggregation &mdash; one bucket per caller-defined numeric range.
+    org.sagebionetworks.repo.model.FacetRoundingParameters:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: The full class name that identifies the concrete parameters type.
+          enum:
+            - org.sagebionetworks.repo.model.FacetRoundingParameters
+        roundTo:
+          type: integer
+          description: The bin width. Each facet count is floored to the nearest lower multiple of this value. Must be a positive value.
+          format: int32
+      description: Parameters for the ROUNDING facet post-processing algorithm.
+      required:
+        - concreteType
     PaginatedResultsOfMembershipInvitation:
       type: object
       properties:
@@ -25242,6 +25624,7 @@ components:
             - UNSUPPORTED_WEBHOOK_DOMAIN
             - PROJECT_STORAGE_LIMIT_EXCEEDED
             - TWO_FA_ENABLED_REQUIRED
+            - BELOW_THRESHOLD
       description: JSON schema for an error
       required:
         - concreteType
@@ -26039,6 +26422,17 @@ components:
           type: string
           description: Set when state is FAILED. Captures the diagnostic from the failed build — pre-flight validation errors (e.g. 'TextAnalyzer X does not resolve'), AOSS rejection messages from index creation, or sample per-document failures from bulk indexing. Capped at 3000 characters; the most-recent failure replaces any earlier message.
       description: Build status of a SearchIndex's OpenSearch index. Read it to find out whether the index is ready, still being built, or in a failed state — and, if FAILED, what went wrong.
+    org.sagebionetworks.repo.model.dataaccess.schema.GeneratedFormStep:
+      type: object
+      properties:
+        jsonSchema:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.JsonSchema'
+          description: 'The JSON schema is defined by: <a href="https://json-schema.org/">json-schema.org</a>, specifically draft-07.  Only features listed here are currently supported.'
+        uiSchema:
+          description: The UI Schema describing how this step's properties are rendered. Defined by <a href="https://rjsf-team.github.io/react-jsonschema-form/docs/api-reference/uiSchema">react-jsonschema-form</a>.
+      description: The schema information used to render a single step of a form. The jsonSchema validates the slice of submission data corresponding to that step's fields.
+      required:
+        - uiSchema
     org.sagebionetworks.repo.model.migration.BackupManifest:
       type: object
       properties:
@@ -26151,6 +26545,8 @@ components:
             - ENTITY
             - EVALUATION
             - TEAM
+        schemaData:
+          description: Additional data provided by the submitter, validated against the JSON Schema referenced by the AR version recorded on this submission. Property keys correspond to top-level property names defined in that schema.
       description: A submission to request access to controlled data.
     org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter:
       type: object
@@ -26184,6 +26580,11 @@ components:
         - CREATED
         - READY
         - ERROR
+    org.sagebionetworks.repo.model.FacetPostProcessingAlgorithm:
+      type: string
+      enum:
+        - ROUNDING
+        - NOISE
     org.sagebionetworks.repo.model.LogEntry:
       type: object
       properties:
@@ -26750,6 +27151,19 @@ components:
           type: string
           description: The minimum semantic version of the ToS that all users must agree to by the provided date.  Any user that has agreed to this version, or higher, will be required to agree to the latest version of the ToS after the provided date.
       description: Information about the global ToS Synapse requirements that all users must agree to.
+    org.sagebionetworks.repo.model.dataaccess.schema.FormTemplateSearchRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Filter by the internal name of the FormTemplate using case-insensitive substring matching.
+        includeDeprecated:
+          type: boolean
+          description: Whether to include deprecated templates in the results. Default is 'false'.
+        nextPageToken:
+          type: string
+          description: A token used to get the next page of a request.
+      description: A request body to search form templates. Only the latest versions of form templates can be retrieved.
     org.sagebionetworks.repo.model.message.MessageToUser:
       type: object
       properties:
@@ -27662,6 +28076,20 @@ components:
       description: Additional context provided for grid agent chat sessions.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.FacetNoiseParameters:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: The full class name that identifies the concrete parameters type.
+          enum:
+            - org.sagebionetworks.repo.model.FacetNoiseParameters
+        epsilon:
+          type: number
+          description: The differential-privacy budget used to derive the Laplace scale (1/epsilon). Lower values add more noise. Must be a positive value.
+      description: Parameters for the NOISE facet post-processing algorithm.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.docker.DockerCommit:
       type: object
       properties:
@@ -27729,9 +28157,6 @@ components:
         name:
           type: string
           description: The name of the principal investigator.
-        title:
-          type: string
-          description: The title of the principal investigator.
         institutionalEmail:
           type: string
           description: The institutional email address of the principal investigator.
@@ -27778,6 +28203,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListPackageResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.ViewColumnModelResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.QueryResult'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridRecordSetExportResponse'
       required:
         - concreteType
@@ -28521,6 +28947,19 @@ components:
         - concreteType
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.AggregateDataConfiguration:
+      type: object
+      properties:
+        suppressionThreshold:
+          type: integer
+          description: The minimum number of matching rows required before an aggregate result is returned. An aggregate query that matches a non-zero row count below this threshold is suppressed. Must be a positive value.
+          format: int32
+        facetPostProcessingConfig:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.FacetPostProcessingConfig'
+          description: Configuration describing how facet counts are post-processed for an aggregate-only query.
+      description: The configuration the ACT binds to a source when its DataType is AGGREGATE_DATA. It controls the minimum number of matching rows required before an aggregate result is returned and how facet counts are post-processed.
+      required:
+        - suppressionThreshold
     org.sagebionetworks.repo.model.oauth.OIDCClaimName:
       type: string
       enum:
@@ -30019,6 +30458,20 @@ components:
             description: Rename datat
           description: The full path of the entity schema.
       description: Metadata about migrating entities
+    org.sagebionetworks.repo.model.AccessRequirementReference:
+      type: object
+      properties:
+        accessRequirementId:
+          type: string
+          description: The unique identifier of this access requirement.
+        accessRequirementVersionNumber:
+          type: integer
+          description: The version number of this access requirement.
+          format: int32
+      description: Used to reference a specific access requirement and version.
+      required:
+        - accessRequirementId
+        - accessRequirementVersionNumber
     org.sagebionetworks.repo.model.curation.ComputeTaskExecutionRequest:
       type: object
       properties:
@@ -30103,6 +30556,12 @@ components:
         - concreteType
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.dataaccess.schema.SubmissionContext:
+      type: string
+      enum:
+        - ALWAYS
+        - REQUEST_ONLY
+        - RENEWAL_ONLY
     org.sagebionetworks.repo.model.dataaccess.SubmissionInfoPage:
       type: object
       properties:
@@ -30431,6 +30890,23 @@ components:
           type: boolean
           description: True if userId has an AccessApproval for the specified accessRequirementId; false otherwise.
       description: Information about whether or not a user has an AccessApproval for an AccessRequirement.
+    org.sagebionetworks.repo.model.dataaccess.schema.PublicSubmissionInfo:
+      type: object
+      properties:
+        templateRef:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.FormTemplateReference'
+          description: Used to reference a specific FormTemplate id and version.
+        publicValues:
+          description: A sparse map of the submission's public answers. Keys are top-level property names (schema paths) that were marked isPublic; values are the submitter's answers for those properties. Non-public properties are omitted entirely.
+        submittedBy:
+          type: string
+          description: The ID of the user that submitted this submission.
+        modifiedOn:
+          type: string
+          description: The date the submission was last modified.
+      description: "Publicly-disclosable information from a single approved submission. Contains only values whose FormTemplateField was marked isPublic as of the FormTemplate version this submission was made against (snapshot semantics: later changes to a template's isPublic flags do not retroactively affect this submission). Sensitive information such as accessorChanges is never included."
+      required:
+        - publicValues
     org.sagebionetworks.repo.model.table.ValidateDefiningSqlResponse:
       type: object
       properties:
@@ -30987,9 +31463,42 @@ components:
       description: Include requirements that may or may not require from an accessor.
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.ManagedACTAccessRequirement'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.JsonSchemaAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.SelfSignAccessRequirement'
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.table.FacetColumnResultBinnedValues:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.table.FacetColumnResultBinnedValues
+        columnName:
+          type: string
+          description: The name of the faceted column
+        facetType:
+          type: string
+          description: Set to one of the enumerated values to indicate a column should be treated as a facet
+          enum:
+            - enumeration
+            - range
+        jsonPath:
+          type: string
+          description: 'When present, these results represent a sub-column identified by its jsonPath.  Note: The ColumnName will be the name of the root JSON column.'
+        binSize:
+          type: integer
+          description: The bin width applied to every count. A value's exact count lies within [binMin, binMin + binSize - 1].
+          format: int32
+        binnedValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.FacetColumnResultBinnedValueCount'
+            description: A binned facet value count produced by the ROUNDING post-processing algorithm. The exact count is obscured by reporting only the inclusive lower bound of the bin that contains it.
+          description: The list of binned frequency counts for the most frequent values
+      description: Contains the name and type of a faceted column and its most frequent values, where each exact value count has been binned by the ROUNDING post-processing algorithm to obscure the exact value.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.oauth.OAuthUrlRequest:
       type: object
       properties:
@@ -31248,6 +31757,27 @@ components:
       enum:
         - FAVORITED_ON
         - NAME
+    org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaFromTemplateDraft:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: Indicates which implementation this object represents.
+          enum:
+            - org.sagebionetworks.repo.model.dataaccess.schema.GenerateDataAccessSchemaFromTemplateDraft
+        requestType:
+          type: string
+          description: The type of request being made. May affect the final set of included form fields.
+          enum:
+            - REQUEST
+            - RENEWAL
+        templateDraft:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.FormTemplate'
+          description: Defines how a referenced JSON Schema is rendered to a requester as a multi-step form. A template is pinned to a single JSON Schema version. Updating a template creates a new version; the schema reference and the steps/fields it contains are immutable per version. Multiple Access Requirements may reference the same template version (N:1).
+      description: Request body to generate the JSON Schema and UI Schema from a draft FormTemplate body. Intended to support previewing the rendered form during template authoring.
+      required:
+        - concreteType
+        - requestType
     org.sagebionetworks.repo.model.statistics.ProjectFilesStatisticsRequest:
       type: object
       properties:
@@ -33666,6 +34196,7 @@ components:
       description: JSON schema for 'Access Control Team' controlled Access Requirement, a 'tier 3' Access Requirement
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.ManagedACTAccessRequirement'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.JsonSchemaAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.ACTAccessRequirement'
       required:
         - concreteType
@@ -34978,34 +35509,34 @@ components:
         isValidatedProfileRequired:
           type: boolean
           description: If true, then accessor needs to have their Synapse Profile validated to gain access.
+        expirationPeriod:
+          type: integer
+          description: After an AccessApproval is granted for this AccessRequirement, it will be expired after expirationPeriod milliseconds. Set this value to 0 to indicate that AccessApproval will never be expired.
+          format: int32
         isDUCRequired:
           type: boolean
           description: If true, then accessor needs to fill, sign, and submit a Data Use Certificate (DUC) to gain access to the data.
         ducTemplateFileHandleId:
           type: string
           description: If the Data Use Certificate (DUC) is required, creator of this requirement needs to upload a Data Use Certificate (DUC) template. Users have to download this template, fill out, sign and submit it.
+        eDucTemplateId:
+          type: string
+          description: The ID of the electronic Data Use Certificate (eDUC) template to fill out for data access requests.
+        isTwoFaRequired:
+          type: boolean
+          description: If true, then accessor needs to enable two factor authentication before gaining access to the data.
         isIRBApprovalRequired:
           type: boolean
           description: If true, then accessor needs to submit an Institutional Review Board (IRB) Approval document to gain access to the data.
         areOtherAttachmentsRequired:
           type: boolean
           description: If true, then accessor needs to upload attachment(s) other than Data Use Certificate (DUC) and Institutional Review Board (IRB) Approval document to gain access to the data.
-        expirationPeriod:
-          type: integer
-          description: After an AccessApproval is granted for this AccessRequirement, it will be expired after expirationPeriod miliseconds. Set this value to 0 to indicate that AccessApproval will never be expired.
-          format: int32
         isIDUPublic:
           type: boolean
           description: If true, the Intended Data Use Statements submitted to gain access to the data will be presented to public.
         isIDURequired:
           type: boolean
           description: If true (default), the Intended Data Use Statement for a research project is required.
-        isTwoFaRequired:
-          type: boolean
-          description: If true, then accessor needs to enable two factor authentication before gaining access to the data.
-        eDucTemplateId:
-          type: string
-          description: The ID of the electronic Data Use Certificate (eDUC) template to fill out for data access requests.
       description: JSON schema for in-Synapse 'Access Control Team' controlled Access Requirement, a 'tier 3' Access Requirement. This access requirement allows the ACT managing the detail requirements, and submissions within Synapse.
       required:
         - concreteType
@@ -35569,6 +36100,7 @@ components:
         - UNSUPPORTED_WEBHOOK_DOMAIN
         - PROJECT_STORAGE_LIMIT_EXCEEDED
         - TWO_FA_ENABLED_REQUIRED
+        - BELOW_THRESHOLD
     org.sagebionetworks.repo.model.curation.TaskStatus:
       type: object
       properties:
@@ -37135,6 +37667,11 @@ components:
       description: Request to get statistics about the files currently on the user's download list.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.dataaccess.schema.DataAccessRequestType:
+      type: string
+      enum:
+        - REQUEST
+        - RENEWAL
     org.sagebionetworks.repo.model.curation.metadata.RecordBasedMetadataTaskProperties:
       type: object
       properties:
@@ -37870,6 +38407,12 @@ components:
             - done
             - declined
             - bounced
+        declinedReason:
+          type: string
+          description: The reason the signer gave for declining to sign, if they declined; otherwise null
+        declinedOn:
+          type: string
+          description: The date/time the signer declined to sign, if they declined; otherwise null
       description: Status of a signature within a DUC
     org.sagebionetworks.repo.model.portals.ListPortalsRequest:
       type: object
@@ -38618,6 +39161,18 @@ components:
           type: string
           description: The user's password
       description: Used to login via username and password
+    org.sagebionetworks.repo.model.HasTwoFactorAuthRequirement:
+      type: object
+      properties:
+        isTwoFaRequired:
+          type: boolean
+          description: If true, then accessor needs to enable two factor authentication before gaining access to the data.
+      description: Describes an Access Requirement that may require an accessor to enable two factor authentication.
+      oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.ManagedACTAccessRequirement'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.JsonSchemaAccessRequirement'
+      discriminator:
+        propertyName: concreteType
     org.sagebionetworks.repo.model.table.ColumnSingleValueQueryFilter:
       type: object
       properties:
@@ -39163,6 +39718,18 @@ components:
       description: A token returned to the client when two factor authentication is required.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.dataaccess.schema.PublicSubmissionInfoPageRequest:
+      type: object
+      properties:
+        accessRequirementId:
+          type: string
+          description: The ID of the JsonSchemaAccessRequirement whose approved submissions should be listed.
+        nextPageToken:
+          type: string
+          description: A token used to get the next page of a particular list request.
+      description: A request body to list publicly-disclosable information from approved submissions for a JsonSchemaAccessRequirement. Only fields whose FormTemplateField is marked isPublic (as of the FormTemplate version each submission was made against) are returned.
+      required:
+        - accessRequirementId
     org.sagebionetworks.repo.model.form.StateEnum:
       type: string
       enum:
@@ -40249,6 +40816,7 @@ components:
             - UNSUPPORTED_WEBHOOK_DOMAIN
             - PROJECT_STORAGE_LIMIT_EXCEEDED
             - TWO_FA_ENABLED_REQUIRED
+            - BELOW_THRESHOLD
       description: JSON schema for an errors related to two factor authentication
       required:
         - concreteType
@@ -40602,6 +41170,8 @@ components:
         eDucSignatureEnvelopeId:
           type: string
           description: The envelope ID for the routed eDUC signature document.
+        schemaData:
+          description: Request data that was provided using the associated JSON Schema. Unvalidated while the request is a draft; validated against the schema referenced by the Access Requirement when a Submission is created.
       description: This is the base interface that all Request implements.
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.Request'
@@ -40684,6 +41254,7 @@ components:
             - UNSUPPORTED_WEBHOOK_DOMAIN
             - PROJECT_STORAGE_LIMIT_EXCEEDED
             - TWO_FA_ENABLED_REQUIRED
+            - BELOW_THRESHOLD
         reason:
           type: string
           description: The reason for the error
@@ -41016,6 +41587,28 @@ components:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleAssociation'
             description: Describes an association of a FileHandle with another object.
       description: List of FileHandleAssociation.
+    org.sagebionetworks.repo.model.dataaccess.schema.PublicSubmissionInfoPage:
+      type: object
+      properties:
+        templateBundles:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.PublicSubmissionTemplateBundle'
+            description: The rendered form schema and UI Schema for a single FormTemplate version, reused across all result rows that were submitted against that version. Reuses the same GenerateDataAccessSchemaResponse shape returned by the schema generation service so clients can render public submission info through the identical path as the live form. Includes definitions for all fields (both public and private); privacy is enforced solely by which values appear in each row's publicValues.
+          description: The form schema/UI bundles for each distinct FormTemplate version referenced by the results on this page. One entry per distinct template version. A result row is joined to its bundle by matching templateRef.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.PublicSubmissionInfo'
+            description: "Publicly-disclosable information from a single approved submission. Contains only values whose FormTemplateField was marked isPublic as of the FormTemplate version this submission was made against (snapshot semantics: later changes to a template's isPublic flags do not retroactively affect this submission). Sensitive information such as accessorChanges is never included."
+          description: The public submission info rows for this page.
+        nextPageToken:
+          type: string
+          description: A token used to get the next page of a particular list request.
+      description: A single page of publicly-disclosable information from approved submissions. Field definitions are deduplicated by FormTemplate version (templateBundles) since many submissions typically share few template versions; each result row carries only its public values plus a reference to the applicable bundle.
+      required:
+        - templateBundles
+        - results
     org.sagebionetworks.repo.model.file.PartPresignedUrl:
       type: object
       properties:
@@ -41311,6 +41904,19 @@ components:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.principal.EmailQuarantineStatus'
           description: Information about the quarantine status of a notification email
       description: Information about the notification email of the user, including its quarantined status if the email address is currently in quarantine
+    org.sagebionetworks.repo.model.dataaccess.schema.FormTemplateSearchResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.FormTemplate'
+            description: Defines how a referenced JSON Schema is rendered to a requester as a multi-step form. A template is pinned to a single JSON Schema version. Updating a template creates a new version; the schema reference and the steps/fields it contains are immutable per version. Multiple Access Requirements may reference the same template version (N:1).
+          description: The matching Form Templates corresponding to the search parameters.
+        nextPageToken:
+          type: string
+          description: A token used to get the next page of a particular search query.
+      description: A response body containing form template search results.
     org.sagebionetworks.repo.model.search.dsl.MatchPhrasePrefixFieldOptions:
       type: object
       properties:
@@ -41422,6 +42028,101 @@ components:
             - TOTP
             - RECOVERY_CODE
       description: Used to change the user password when two factor authentication is enabled. The twoFaToken is generated by the server and included in the 401 response the user tries to update the password with either the old password or a token. Only TOTP and RECOVERY_CODE otp codes can be used for this operation.
+      required:
+        - concreteType
+    org.sagebionetworks.repo.model.JsonSchemaAccessRequirement:
+      type: object
+      properties:
+        versionNumber:
+          type: integer
+          description: The version number issued to this version on the object.
+          format: int32
+        id:
+          type: integer
+          description: The unique immutable ID.  Provided by the system, the user may not set this field.
+          format: int32
+        description:
+          type: string
+          description: Depricated. Replaced by name.
+        name:
+          type: string
+          description: Name of the AR. Limited to 50 characters and must be unique. Required.
+        etag:
+          type: string
+          description: Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an object is out-of-date.
+        createdOn:
+          type: string
+          description: The date this object was created. Provided by the system, the user may not set this field.
+        modifiedOn:
+          type: string
+          description: The date this object was last modified. Provided by the system, the user may not set this field.
+        createdBy:
+          type: string
+          description: The user that created this object.  Provided by the system, the user may not set this field.
+        modifiedBy:
+          type: string
+          description: The user that last modified this object.  Provided by the system, the user may not set this field.
+        subjectsDefinedByAnnotations:
+          type: boolean
+          description: Defaults to 'false'.  When 'true', the subjects controlled by this AR are defined by the the'_accessRequirementIds' annotations on individual entities.  This property is mutually exclusive with 'subjectIds'.  If this is set to 'true' then 'subjectIds' must be excluded or empty.
+        subjectIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.RestrictableObjectDescriptor'
+          description: The IDs of the items controlled by this Access Requirement when 'subjectsDefinedByAnnotations=false'. This property is mutually exclusive with 'subjectsDefinedByAnnotations'.  When 'subjectsDefinedByAnnotations=true' then this property must be empty or excluded.  Required when creating or updating and 'subjectsDefinedByAnnotations=false' or 'subjectsDefinedByAnnotations' is excluded.
+        accessType:
+          type: string
+          description: The enumeration of possible permission.
+          enum:
+            - CREATE
+            - READ
+            - UPDATE
+            - DELETE
+            - CHANGE_PERMISSIONS
+            - DOWNLOAD
+            - UPLOAD
+            - PARTICIPATE
+            - SUBMIT
+            - READ_PRIVATE_SUBMISSION
+            - UPDATE_SUBMISSION
+            - DELETE_SUBMISSION
+            - TEAM_MEMBERSHIP_UPDATE
+            - SEND_MESSAGE
+            - CHANGE_SETTINGS
+            - MODERATE
+            - REVIEW_SUBMISSIONS
+            - EXEMPTION_ELIGIBLE
+        concreteType:
+          type: string
+          description: Indicates which type of AccessRequirement this object represents.  Provided by the system, the user may not set this field.
+          enum:
+            - org.sagebionetworks.repo.model.JsonSchemaAccessRequirement
+        isCertifiedUserRequired:
+          type: boolean
+          description: If true, then accessor needs to be a Synapse Certified User to gain access.
+        isValidatedProfileRequired:
+          type: boolean
+          description: If true, then accessor needs to have their Synapse Profile validated to gain access.
+        expirationPeriod:
+          type: integer
+          description: After an AccessApproval is granted for this AccessRequirement, it will be expired after expirationPeriod milliseconds. Set this value to 0 to indicate that AccessApproval will never be expired.
+          format: int32
+        isDUCRequired:
+          type: boolean
+          description: If true, then accessor needs to fill, sign, and submit a Data Use Certificate (DUC) to gain access to the data.
+        ducTemplateFileHandleId:
+          type: string
+          description: If the Data Use Certificate (DUC) is required, creator of this requirement needs to upload a Data Use Certificate (DUC) template. Users have to download this template, fill out, sign and submit it.
+        eDucTemplateId:
+          type: string
+          description: The ID of the electronic Data Use Certificate (eDUC) template to fill out for data access requests.
+        isTwoFaRequired:
+          type: boolean
+          description: If true, then accessor needs to enable two factor authentication before gaining access to the data.
+        formTemplateRef:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.dataaccess.schema.FormTemplateReference'
+          description: Used to reference a specific FormTemplate id and version.
+      description: A Synapse 'Access Control Team' controlled Access Requirement, a 'tier 3' Access Requirement. In addition to the functionality provided by the Managed ACT Access Requirement, this Access Requirement type also supports collecting information described by a JSON Schema and rendered using a FormTemplate. The data contract (JSON Schema) is resolved transitively through the referenced FormTemplate.
       required:
         - concreteType
     org.sagebionetworks.repo.model.download.AddBatchOfFilesToDownloadListRequest:
