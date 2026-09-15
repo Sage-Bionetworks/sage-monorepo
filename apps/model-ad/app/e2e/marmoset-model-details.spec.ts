@@ -12,10 +12,11 @@ test.describe('marmoset model details - boxplots selector', () => {
   const model = 'Presenilin 1';
   const biomarkersPath = '/models/Presenilin%201/biomarkers?modelOrganism=marmoset';
   const noTabPath = '/models/Presenilin%201?modelOrganism=marmoset';
-  const measurementDefault = 'Soluble Aβ40';
-  const measurementOther = 'Insoluble Aβ42';
-  const ageSection = '0-1 year';
-  const ageFragment = '0-1-year';
+  const measurementDefault = 'Aβ40';
+  const measurementOtherRaw = 'A&beta;42/A&beta;40';
+  const measurementOther = 'Aβ42/Aβ40';
+  const ageSection = '0-1 years';
+  const ageFragment = '0-1-years';
 
   test('clicking on table of contents link scrolls to appropriate age group', async ({ page }) => {
     await expectTocLinksScrollToSections(page, biomarkersPath, 3);
@@ -97,7 +98,7 @@ test.describe('marmoset model details - boxplots selector', () => {
   });
 
   test('measurement filter can be set from query parameter', async ({ page }) => {
-    await page.goto(`${biomarkersPath}&measurement=${encodeURIComponent(measurementOther)}`);
+    await page.goto(`${biomarkersPath}&measurement=${encodeURIComponent(measurementOtherRaw)}`);
     await expect(page.getByRole('combobox', { name: measurementOther })).toBeVisible();
   });
 
@@ -107,7 +108,7 @@ test.describe('marmoset model details - boxplots selector', () => {
     await page.getByRole('combobox', { name: measurementDefault }).click();
     await page.getByRole('option', { name: measurementOther }).click();
 
-    await page.waitForURL((url) => url.searchParams.get('measurement') === measurementOther);
+    await page.waitForURL((url) => url.searchParams.get('measurement') === measurementOtherRaw);
   });
 
   test('evidence type heading has no share link or download button', async ({ page }) => {

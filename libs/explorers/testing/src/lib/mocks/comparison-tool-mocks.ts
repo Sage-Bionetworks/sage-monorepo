@@ -27,7 +27,7 @@ export const mockComparisonToolSelectorsWikiParams: { [key: string]: SynapseWiki
 };
 
 const baseConfig: ComparisonToolConfig = {
-  page: 'Model Overview',
+  page: 'Mouse Model Overview',
   dropdowns: [],
   row_count: 'over 200000',
   columns: [

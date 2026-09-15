@@ -134,6 +134,27 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     expect(tissueFilter).toBeVisible();
   });
 
+  it('should display Greek entities in filter options as symbols while selecting the raw value', async () => {
+    const { fixture } = await render(TestHostComponent, {
+      imports: [MockWikiComponent],
+      componentProperties: {
+        modelDataList: mouseModelMock.biomarkers,
+        filterConfig: {
+          label: 'Measurement',
+          queryParamKey: 'measurement',
+          dataField: 'evidence_type',
+        } as FilterConfig,
+      },
+      providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+    });
+    const base = getBaseComponent(fixture);
+
+    await waitFor(() => expect(base.selectedFilterOption()).toBe('Insoluble A&beta;40'));
+    expect(
+      await screen.findByRole('combobox', { name: 'Insoluble Aβ40' }, { timeout: 10000 }),
+    ).toBeVisible();
+  });
+
   it('should convert label to anchor id', async () => {
     const { fixture } = await setupHost();
     const base = getBaseComponent(fixture);

@@ -153,7 +153,9 @@ test.describe('mouse model details - omics', () => {
     await card.click();
     const popup = await popupPromise;
 
-    await popup.waitForURL('/comparison/expression?models=APOE4');
+    await popup.waitForURL(
+      '/comparison/expression?categories=RNA%2520-%2520DIFFERENTIAL%2520EXPRESSION,Tissue%2520-%2520Hemibrain&models=APOE4',
+    );
     await expectComparisonToolTableLoaded(popup, 'Differential Expression', true);
     await expectFiltersParams(popup, { models: ['APOE4'] });
     await expectFilters(popup, { 'Mouse Model': ['APOE4'] });

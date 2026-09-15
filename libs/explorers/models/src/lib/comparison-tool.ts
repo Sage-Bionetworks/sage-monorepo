@@ -102,7 +102,7 @@ export interface ComparisonToolConfigFilter {
 
 export type ComparisonToolPage =
   | 'Marmoset Model Overview'
-  | 'Model Overview'
+  | 'Mouse Model Overview'
   | 'Differential Expression'
   | 'Disease Correlation'
   | 'Nominated Targets'
