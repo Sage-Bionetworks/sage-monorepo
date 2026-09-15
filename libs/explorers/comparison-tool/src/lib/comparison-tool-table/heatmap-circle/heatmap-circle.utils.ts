@@ -1,7 +1,8 @@
 import { HeatmapCircleColorKey, HeatmapCircleData } from '@sagebionetworks/explorers/models';
-import { knownColorMetricToDisplayName } from '../../comparison-tool.variables';
-
-export const ADJUSTED_P_VALUE_KEY = 'adj_p_val';
+import {
+  ADJUSTED_P_VALUE_KEY,
+  knownColorMetricToDisplayName,
+} from '../../comparison-tool.variables';
 
 export type HeatmapCircleMetrics<T extends HeatmapCircleData = HeatmapCircleData> =
   | {

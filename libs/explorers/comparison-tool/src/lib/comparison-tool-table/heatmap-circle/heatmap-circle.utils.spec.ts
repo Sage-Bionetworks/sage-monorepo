@@ -1,5 +1,5 @@
+import { ADJUSTED_P_VALUE_KEY } from '../../comparison-tool.variables';
 import {
-  ADJUSTED_P_VALUE_KEY,
   canDrawHeatmapCircle,
   isUsableMetricValue,
   resolveHeatmapCircleMetrics,

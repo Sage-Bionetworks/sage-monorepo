@@ -4,3 +4,4 @@ export const knownColorMetricToDisplayName: Record<string, string> = {
 };
 
 export const ADJUSTED_P_VALUE_LABEL = 'Adjusted p-value';
+export const ADJUSTED_P_VALUE_KEY = 'adj_p_val';
