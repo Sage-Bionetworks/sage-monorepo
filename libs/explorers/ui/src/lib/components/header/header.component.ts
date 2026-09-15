@@ -139,9 +139,7 @@ export class HeaderComponent implements OnInit {
     return linkValues.every((value, index) => value === urlValues[index]);
   }
 
-  // Query params are matched manually via the prefix logic below, so path matching always ignores
-  // them. `activeOptions: { exact: true }` (e.g. the Home link at path '') must match exactly,
-  // otherwise a subset match treats '' as a prefix of every route and keeps the link always active.
+  // Query params are matched manually via urlValuesStartWith, so path matching always ignores them
   private resolvePathMatchOptions(link: NavigationLink): IsActiveMatchOptions {
     const activeOptions = link.activeOptions;
     if (!activeOptions) return PATH_MATCH_OPTIONS;
