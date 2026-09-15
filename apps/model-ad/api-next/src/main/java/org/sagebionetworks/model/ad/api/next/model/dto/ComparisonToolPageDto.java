@@ -24,7 +24,7 @@ public enum ComparisonToolPageDto {
   
   MARMOSET_MODEL_OVERVIEW("Marmoset Model Overview"),
   
-  MODEL_OVERVIEW("Model Overview"),
+  MOUSE_MODEL_OVERVIEW("Mouse Model Overview"),
   
   DIFFERENTIAL_EXPRESSION("Differential Expression"),
   

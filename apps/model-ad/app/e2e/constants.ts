@@ -3,7 +3,7 @@ import type { ComparisonToolPage } from '@sagebionetworks/model-ad/api-client';
 
 export const COMPARISON_TOOL_PATHS: Record<ComparisonToolPage, string> = {
   'Marmoset Model Overview': '/comparison/model/marmoset',
-  'Model Overview': '/comparison/model/mouse',
+  'Mouse Model Overview': '/comparison/model/mouse',
   'Differential Expression': '/comparison/expression',
   'Disease Correlation': '/comparison/correlation',
 };
@@ -11,15 +11,15 @@ export const COMPARISON_TOOL_PATHS: Record<ComparisonToolPage, string> = {
 export const LEGACY_MOUSE_MODEL_OVERVIEW_PATH = '/comparison/model';
 
 // Comparison tools whose displayed header title differs from their ui_config page name.
-// TODO(MG-1057): drop this map once ui_config explicitly names the mouse page 'Mouse Model
-// Overview', since the keys above will then match the displayed titles.
-export const COMPARISON_TOOL_HEADER_TITLES: Partial<Record<ComparisonToolPage, string>> = {
-  'Model Overview': 'Mouse Model Overview',
-};
+// Keys are ui_config page names, values are the titles rendered in the header.
+// TODO(MG-1107): add the other comparison tools whose ui_config page name won't match their
+// updated displayed header titles.
+// Drop this map once ui_config page names match the CT displayed titles.
+export const COMPARISON_TOOL_HEADER_TITLES: Partial<Record<ComparisonToolPage, string>> = {};
 
 export const COMPARISON_TOOL_API_PATHS: Record<ComparisonToolPage, string> = {
   'Marmoset Model Overview': '/comparison-tools/marmoset-model-overview',
-  'Model Overview': '/comparison-tools/mouse-model-overview',
+  'Mouse Model Overview': '/comparison-tools/mouse-model-overview',
   'Differential Expression': '/comparison-tools/transcriptomics',
   'Disease Correlation': '/comparison-tools/disease-correlation',
 };
@@ -44,7 +44,7 @@ export const COMPARISON_TOOL_NAV_TRAILS: Record<ComparisonToolPage, HeaderNavTra
     dropdown: 'Model Overview',
     link: 'Marmoset Models',
   },
-  'Model Overview': {
+  'Mouse Model Overview': {
     dropdown: 'Model Overview',
     link: 'Mouse Models',
   },
@@ -60,7 +60,7 @@ export const COMPARISON_TOOL_CONFIG_PATH = 'comparison-tools/config';
 // Default sort configurations for each comparison tool (required by API)
 export const COMPARISON_TOOL_DEFAULT_SORTS: Record<ComparisonToolPage, ComparisonToolSort[]> = {
   'Marmoset Model Overview': [{ field: 'name', order: 1 }],
-  'Model Overview': [
+  'Mouse Model Overview': [
     { field: 'model_type', order: -1 },
     { field: 'name', order: 1 },
   ],

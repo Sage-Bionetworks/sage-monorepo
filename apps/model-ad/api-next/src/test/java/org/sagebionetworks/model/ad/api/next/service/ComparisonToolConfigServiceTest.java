@@ -55,15 +55,15 @@ class ComparisonToolConfigServiceTest {
   @DisplayName("should throw exception when repository returns empty list")
   void shouldThrowExceptionWhenRepositoryReturnsEmptyList() {
     // given
-    ComparisonToolPageDto page = ComparisonToolPageDto.MODEL_OVERVIEW;
+    ComparisonToolPageDto page = ComparisonToolPageDto.MOUSE_MODEL_OVERVIEW;
     when(repository.findByPage(page.getValue())).thenReturn(List.of());
 
     // when & then
     assertThatThrownBy(() -> service.getConfigsByPage(page))
       .isInstanceOf(ComparisonToolConfigNotFoundException.class)
-      .hasMessage("Comparison Tool config not found for page: Model Overview");
+      .hasMessage("Comparison Tool config not found for page: Mouse Model Overview");
 
-    verify(repository).findByPage("Model Overview");
+    verify(repository).findByPage("Mouse Model Overview");
   }
 
   @Test

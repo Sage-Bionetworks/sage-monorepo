@@ -63,10 +63,12 @@ export interface SectionContext<T = ModelData[]> {
     DownloadDomImagesZipComponent,
     CopyLinkButtonComponent,
   ],
+  providers: [DecodeGreekEntityPipe],
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
 })
 export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy {
+  private readonly decodeGreekEntityPipe = inject(DecodeGreekEntityPipe);
   private readonly helperService = inject(HelperService);
   private readonly location = inject(Location);
   private readonly clipboard = inject(Clipboard);
@@ -112,7 +114,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
           .map((item) => item[this.filterConfig().dataField] as string)
           .filter((v) => v != null),
       ),
-    );
+    ).map((value) => ({ label: this.decodeGreekEntityPipe.transform(value), value }));
   });
   selectedFilterOption = signal('');
 
@@ -280,7 +282,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   }
 
   getDefaultFilterOption() {
-    return this.filterOptions()[0] || '';
+    return this.filterOptions()[0]?.value || '';
   }
 
   initializeOptionsFromUrlParams() {
@@ -290,8 +292,10 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
     const matchingSexOption = this.sexOptions.find((option) => option.label === sexParam);
     if (matchingSexOption !== undefined) this.selectedSexOption.set(matchingSexOption);
 
-    const matchingFilterOption = this.filterOptions().find((option) => option === filterParam);
-    this.selectedFilterOption.set(matchingFilterOption || this.getDefaultFilterOption());
+    const matchingFilterOption = this.filterOptions().find(
+      (option) => option.value === filterParam,
+    );
+    this.selectedFilterOption.set(matchingFilterOption?.value || this.getDefaultFilterOption());
 
     this.hasInitializedOptions = true;
   }

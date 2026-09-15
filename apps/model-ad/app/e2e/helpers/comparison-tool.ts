@@ -95,7 +95,7 @@ export const fetchMouseModelOverviews = async (
 ): Promise<MouseModelOverview[]> => {
   const data = await fetchComparisonToolData<MouseModelOverviewsPage>(
     page,
-    'Model Overview',
+    'Mouse Model Overview',
     [],
     {},
     options,

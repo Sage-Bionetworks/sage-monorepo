@@ -14,7 +14,7 @@ describe('Service: ComparisonToolHelper', () => {
 
   it('should create filename for ct without any dropdowns', () => {
     const filename = ctHelperService.getComparisonToolDataFilename(mockComparisonToolDataConfig[0]);
-    expect(filename).toBe('model_overview');
+    expect(filename).toBe('mouse_model_overview');
   });
 
   it('should create filename for ct with primary dropdown', () => {
@@ -109,7 +109,7 @@ describe('Service: ComparisonToolHelper', () => {
     ];
 
     const config: ComparisonToolConfig = {
-      page: 'Model Overview',
+      page: 'Mouse Model Overview',
       dropdowns: [],
       row_count: 'over 200000',
       columns: [

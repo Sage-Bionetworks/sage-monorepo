@@ -42,8 +42,8 @@ import {
   navigateToComparison,
 } from './helpers/comparison-tool';
 
-const CT_PAGE = 'Model Overview';
-const MODEL_OVERVIEW_PATH = COMPARISON_TOOL_PATHS[CT_PAGE];
+const CT_PAGE = 'Mouse Model Overview';
+const MOUSE_MODEL_OVERVIEW_PATH = COMPARISON_TOOL_PATHS[CT_PAGE];
 
 test.describe('mouse model overview', () => {
   runFilterPanelTests(async (page) => navigateToComparison(page, CT_PAGE, true));
@@ -56,12 +56,12 @@ test.describe('mouse model overview', () => {
     const shareUrlButton = page.getByRole('button', { name: 'Share URL' });
     await expect(shareUrlButton).toBeVisible();
 
-    await page.waitForURL(MODEL_OVERVIEW_PATH);
+    await page.waitForURL(MOUSE_MODEL_OVERVIEW_PATH);
 
     await shareUrlButton.click();
 
     const clipboardContent = await page.evaluate(() => navigator.clipboard.readText());
-    expect(clipboardContent).toEqual(`${baseURL}${MODEL_OVERVIEW_PATH}`);
+    expect(clipboardContent).toEqual(`${baseURL}${MOUSE_MODEL_OVERVIEW_PATH}`);
   });
 
   test('pinning and unpinning items updates the pinned query param', async ({ page }) => {
@@ -378,7 +378,7 @@ test.describe('mouse model overview', () => {
     test('redirects to the mouse model overview', async ({ page }) => {
       await page.goto(LEGACY_MOUSE_MODEL_OVERVIEW_PATH);
 
-      await expect(page).toHaveURL(`${baseURL}${MODEL_OVERVIEW_PATH}`);
+      await expect(page).toHaveURL(`${baseURL}${MOUSE_MODEL_OVERVIEW_PATH}`);
       await expect(page).toHaveTitle(
         "Mouse Model Overview | Overview of mouse models of Alzheimer's Disease",
       );
@@ -398,7 +398,7 @@ test.describe('mouse model overview', () => {
         `${LEGACY_MOUSE_MODEL_OVERVIEW_PATH}?${getQueryParamsFromRecords(filterParams)}`,
       );
 
-      await page.waitForURL((url) => url.pathname === MODEL_OVERVIEW_PATH);
+      await page.waitForURL((url) => url.pathname === MOUSE_MODEL_OVERVIEW_PATH);
       await expectFiltersParams(page, filterParams);
     });
   });
