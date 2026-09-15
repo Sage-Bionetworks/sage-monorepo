@@ -1,6 +1,7 @@
-export const knownColorMetricToDisplayName = [
-  { field: 'log2_fc', displayName: 'Log2 Fold Change' },
-  { field: 'correlation', displayName: 'Correlation' },
-];
+export const knownColorMetricToDisplayName: Record<string, string> = {
+  log2_fc: 'Log2 Fold Change',
+  correlation: 'Correlation',
+};
 
 export const ADJUSTED_P_VALUE_LABEL = 'Adjusted p-value';
+export const ADJUSTED_P_VALUE_KEY = 'adj_p_val';
