@@ -1,7 +1,9 @@
 import { provideHttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 import { provideRouter, RouterModule } from '@angular/router';
 import { ComparisonToolColumn, ComparisonToolFilter } from '@sagebionetworks/explorers/models';
 import {
+  ComparisonToolService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
   SvgIconService,
@@ -126,6 +128,24 @@ describe('ComparisonToolTableComponent', () => {
     );
     const pinAll = screen.getByRole('button', { name: /pin all/i });
     expect(pinAll).toBeDisabled();
+  });
+
+  it('should disable Pin All while table data is loading', async () => {
+    const { component } = await setup(undefined, { searchTerm: '5xFAD' });
+
+    TestBed.inject(ComparisonToolService).startFetch();
+    component.detectChanges();
+
+    expect(screen.getByRole('button', { name: /pin all/i })).toBeDisabled();
+  });
+
+  it('should delegate Pin All to the comparison tool service', async () => {
+    const { user } = await setup(undefined, { searchTerm: '5xFAD' });
+    const pinAllSpy = jest.spyOn(TestBed.inject(ComparisonToolService), 'pinAll');
+
+    await user.click(screen.getByRole('button', { name: /pin all/i }));
+
+    expect(pinAllSpy).toHaveBeenCalled();
   });
 
   it('should show All Results divider when not searching/filtering and pinned exist', async () => {

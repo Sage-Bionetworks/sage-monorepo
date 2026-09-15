@@ -25,15 +25,16 @@ import org.springframework.data.mongodb.core.query.Query;
  * Base class for comparison-tool repository implementations backed by MongoDB aggregation.
  *
  * <p>Subclasses build per-CT {@link Criteria} (filters, search, identifier matching) and delegate
- * pipeline assembly + execution to {@link #executePagedAggregation(Criteria, Pageable)}. The
- * pipeline shape is uniform across CTs:
+ * pipeline assembly + execution to
+ * {@link #executePagedAggregation(Criteria, Pageable, boolean, Integer)}. The pipeline shape is
+ * uniform across CTs:
  *
  * <pre>
  *   $match
  *   $addFields (prerequisites bundled with requested computed sort fields)
  *   $addFields (computed sort fields, from {@link #getComputedSortFieldExpressions()})
  *   $sort       (field names resolved via {@link #getSortFieldAliases()} and the computed map)
- *   $skip / $limit
+ *   $limit (row budget) or $skip / $limit
  * </pre>
  *
  * <p><strong>Field-name convention:</strong> sort field names ({@link Pageable#getSort()} order
@@ -120,8 +121,36 @@ public abstract class ComparisonToolRepositorySupport<T> {
   /**
    * Assembles and executes the standard CT pipeline. Subclasses build {@code matchCriteria} and
    * pass it in along with the {@link Pageable}.
+   *
+   * <p>When {@code remainingBudget} is non-null and {@code isInclude} is false, the pipeline emits
+   * a single {@code $limit} derived from the budget and no {@code $skip} -- the caller gets
+   * matching rows in sort order from across all pages rather than only the page it is displaying.
+   * The budget is ignored on INCLUDE queries, which already ask for a known set of items, and when
+   * it is null.
+   *
+   * <p>A budgeted result is deliberately <strong>not</strong> shaped like a page: it is returned
+   * over {@link Pageable#unpaged(Sort)}, so {@link Page#getNumber()} is 0 and
+   * {@link Page#getSize()} is the number of rows actually returned. Reporting the requested page
+   * number and size instead would misstate the result, and would make {@link PageImpl} rewrite the
+   * total whenever the requested offset exceeded the true match count.
+   *
+   * <p>The total element count is unaffected by the budget, so callers can detect truncation by
+   * comparing {@link Page#getTotalElements()} against the number of returned rows. Callers must not
+   * assume the number of returned rows equals the budget: the budget caps rows today, but it is
+   * defined as "how much the caller can still accept", and a future revision may count something
+   * else (e.g. distinct parent entities, each of which can contribute several rows).
+   *
+   * @param matchCriteria the assembled match criteria
+   * @param pageable pagination and sort; pagination is ignored when the budget applies
+   * @param isInclude true if itemFilterType is INCLUDE, false if EXCLUDE
+   * @param remainingBudget how many more rows the caller can accept, or null for normal pagination
    */
-  protected final Page<T> executePagedAggregation(Criteria matchCriteria, Pageable pageable) {
+  protected final Page<T> executePagedAggregation(
+    Criteria matchCriteria,
+    Pageable pageable,
+    boolean isInclude,
+    Integer remainingBudget
+  ) {
     try {
       List<AggregationOperation> operations = new ArrayList<>();
       operations.add(Aggregation.match(matchCriteria));
@@ -157,9 +186,14 @@ public abstract class ComparisonToolRepositorySupport<T> {
         operations.add(sort);
       }
 
-      long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
-      operations.add(Aggregation.skip(skipCount));
-      operations.add(Aggregation.limit(pageable.getPageSize()));
+      boolean budgetApplies = !isInclude && remainingBudget != null;
+      if (budgetApplies) {
+        operations.add(Aggregation.limit(remainingBudget));
+      } else {
+        long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
+        operations.add(Aggregation.skip(skipCount));
+        operations.add(Aggregation.limit(pageable.getPageSize()));
+      }
 
       // Permits disk spillover when the $sort working set exceeds 100MB; only activates
       // when needed -- required for deep pagination on large collections
@@ -177,7 +211,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
         new Query(matchCriteria).collation(CASE_INSENSITIVE),
         getCollectionName()
       );
-      return new PageImpl<>(results.getMappedResults(), pageable, total);
+      Pageable resultPageable = budgetApplies ? Pageable.unpaged(pageable.getSort()) : pageable;
+      return new PageImpl<>(results.getMappedResults(), resultPageable, total);
     } catch (Exception e) {
       log.error("Error executing aggregation on collection {}", getCollectionName(), e);
       throw e;

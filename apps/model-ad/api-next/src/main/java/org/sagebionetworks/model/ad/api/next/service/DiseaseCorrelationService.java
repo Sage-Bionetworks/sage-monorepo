@@ -36,7 +36,7 @@ public class DiseaseCorrelationService {
     ".buildCacheKey('diseaseCorrelation', #query.itemFilterType, #query.items, " +
     "#query.search, #query.age, #query.modelType, #query.modifiedGenes, " +
     "#query.name, #query.sex, #cluster, #query.pageNumber, #query.pageSize, " +
-    "#query.sortFields, #query.sortOrders)"
+    "#query.remainingBudget, #query.sortFields, #query.sortOrders)"
   )
   public DiseaseCorrelationsPageDto loadDiseaseCorrelations(
     DiseaseCorrelationSearchQueryDto query,

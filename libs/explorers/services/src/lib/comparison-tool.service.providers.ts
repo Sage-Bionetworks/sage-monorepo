@@ -8,8 +8,11 @@ import {
 import { SortMeta } from 'primeng/api';
 import { BehaviorSubject, of } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
-import { ComparisonToolService } from './comparison-tool.service';
+import { ComparisonToolService, PinAllFetch } from './comparison-tool.service';
 import { ToastNotificationService } from './toast-notification.service';
+
+const noMatchingRows: PinAllFetch<Record<string, unknown>> = () =>
+  of({ rows: [], totalElements: 0 });
 
 export type ComparisonToolServiceOptions = {
   configs?: ComparisonToolConfig[];
@@ -19,6 +22,7 @@ export type ComparisonToolServiceOptions = {
   visualizationOverviewVisibility?: boolean;
   viewConfig?: Partial<ComparisonToolViewConfig>;
   maxPinnedItems?: number;
+  pinAllFetch?: PinAllFetch<Record<string, unknown>>;
   pinnedItems?: string[];
   unpinnedData?: Record<string, unknown>[];
   pinnedData?: Record<string, unknown>[];
@@ -61,7 +65,7 @@ export const provideComparisonToolService = (
   providers.push({
     provide: ComparisonToolService,
     useFactory: () => {
-      const service = new ComparisonToolService();
+      const service = new ComparisonToolService<Record<string, unknown>>();
       const urlService = inject(ComparisonToolUrlService);
 
       if (!options) return service;
@@ -70,6 +74,7 @@ export const provideComparisonToolService = (
         service.connect({
           config$: of(options.configs),
           queryParams$: urlService.params$,
+          pinAllFetch: options.pinAllFetch ?? noMatchingRows,
           initialSelection: options.selection,
         });
       } else if (options.selection) {
@@ -98,7 +103,6 @@ export const provideComparisonToolService = (
 
       if (options.pinnedItems !== undefined) {
         service.setPinnedItems(options.pinnedItems);
-        service.pinnedResultsCount.set(options.pinnedItems.length);
       }
 
       if (options.unpinnedData !== undefined) {

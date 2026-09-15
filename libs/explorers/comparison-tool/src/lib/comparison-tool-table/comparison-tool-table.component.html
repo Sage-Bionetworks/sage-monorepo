@@ -40,7 +40,7 @@
           <div class="table-divider-controls">
             <button
               class="pin-all-button"
-              [disabled]="hasMaxPinnedItems()"
+              [disabled]="hasMaxPinnedItems() || isLoadingTableData()"
               (click)="pinAll()"
               [pTooltip]="
                 hasMaxPinnedItems() ? disabledPinTooltip() : 'Pin all matching rows to the top.'

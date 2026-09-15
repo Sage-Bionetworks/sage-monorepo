@@ -28,6 +28,7 @@ import org.springframework.data.mongodb.core.query.Query;
 class CustomNominatedTargetRepositoryImplTest {
 
   private static final String COLLECTION_NAME = "nominatedtargets";
+  private static final int REMAINING_BUDGET = 25;
 
   @Mock
   private MongoTemplate mongoTemplate;
@@ -248,5 +249,40 @@ class CustomNominatedTargetRepositoryImplTest {
     assertThat(pipelineString)
       .as("Integer fields should not have _sort suffix")
       .doesNotContain("total_nominations_sort");
+  }
+
+  @Test
+  @DisplayName("should forward the remaining budget instead of paginating when excluding")
+  void shouldForwardRemainingBudgetWhenExcluding() {
+    when(mongoTemplate.count(any(Query.class), eq(COLLECTION_NAME))).thenReturn(0L);
+    when(
+      mongoTemplate.aggregate(
+        any(Aggregation.class),
+        eq(COLLECTION_NAME),
+        eq(NominatedTargetDocument.class)
+      )
+    ).thenReturn(aggregationResults);
+    when(aggregationResults.getMappedResults()).thenReturn(List.of());
+
+    NominatedTargetSearchQueryDto query = NominatedTargetSearchQueryDto.builder()
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .remainingBudget(REMAINING_BUDGET)
+      .build();
+
+    // A later page, so a budget that never reached the base class would show up as a $skip.
+    repository.findAll(PageRequest.of(2, 10), query, List.of());
+
+    ArgumentCaptor<Aggregation> aggregationCaptor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(
+      aggregationCaptor.capture(),
+      eq(COLLECTION_NAME),
+      eq(NominatedTargetDocument.class)
+    );
+
+    String pipelineString = aggregationCaptor.getValue().toString();
+    assertThat(pipelineString)
+      .doesNotContain("$skip")
+      .containsOnlyOnce("$limit")
+      .contains(String.valueOf(REMAINING_BUDGET));
   }
 }

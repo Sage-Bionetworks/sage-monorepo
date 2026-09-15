@@ -102,6 +102,6 @@ public class CustomNominatedTargetRepositoryImpl
       getFilterConfig()
     );
 
-    return executePagedAggregation(matchCriteria, pageable);
+    return executePagedAggregation(matchCriteria, pageable, isInclude, query.getRemainingBudget());
   }
 }

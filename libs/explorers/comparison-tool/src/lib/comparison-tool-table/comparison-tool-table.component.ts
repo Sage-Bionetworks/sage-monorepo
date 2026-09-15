@@ -55,6 +55,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   maxPinnedItems = this.comparisonToolService.maxPinnedItems;
   hasMaxPinnedItems = this.comparisonToolService.hasMaxPinnedItems;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
+  isLoadingTableData = this.comparisonToolService.isLoadingTableData;
   totalResultsCount = this.comparisonToolService.totalResultsCount;
   viewConfig = this.comparisonToolService.viewConfig;
 
@@ -133,9 +134,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   }
 
   pinAll() {
-    // TODO: handle pagination (i.e. unpinnedData only contains the first page of data, rather than all unpinned data)
-    const rowIdDataKey = this.viewConfig().rowIdDataKey;
-    this.comparisonToolService.pinList(this.unpinnedData().map((item) => item[rowIdDataKey]));
+    this.comparisonToolService.pinAll();
   }
 
   clearAllPinned() {

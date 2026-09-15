@@ -71,7 +71,7 @@ public class CustomMyThingRepositoryImpl
       getFilterConfig()
       // add Criteria.where(...).is(...) varargs here if the collection needs base scoping
     );
-    return executePagedAggregation(matchCriteria, pageable);
+    return executePagedAggregation(matchCriteria, pageable, isInclude, query.getRemainingBudget());
   }
 }
 
@@ -83,6 +83,14 @@ Key points:
 - Always `Objects.requireNonNullElse(query.getItemFilterType(), ItemFilterTypeQueryDto.INCLUDE)` -- the frontend may send null and the base class does not default it.
 - `findAll` signature is defined by the custom interface, not the base class -- add product-specific parameters (tissue, cluster, etc.) there and pass them as base criteria varargs.
 
+## Query parameter wiring
+
+Every field the repository reads off the search query DTO has to be declared in three places outside the repository. Each one fails at runtime rather than at compile time, so none of them is caught by simply getting `findAll` to build:
+
+- **The search query schema** (`libs/<product>/api-description/src/components/schemas/*SearchQuery.yaml`), then `nx run-many -t=generate -p=<product>-*` to regenerate the DTO and clients.
+- **The delegate's `VALID_QUERY_PARAMS`** (`apps/<product>/api-next/.../api/*ApiDelegateImpl.java`) -- `ApiHelper.validateQueryParameters` rejects any request carrying an unlisted parameter with a 400. These sets mirror the schema's property order, not alphabetical order.
+- **The service's `@Cacheable` key**, built via `ApiHelper.buildCacheKey(...)` -- a field missing from the key makes two requests that differ only by that field collide on one cache entry.
+
 ## Pipeline shape
 
 The base class assembles this pipeline on every paged request:
@@ -93,10 +101,10 @@ $match          ← assembled from getFilterConfig() + optional base criteria
 [$addFields]    ← computed sort fields from getComputedSortFieldExpressions()
 [$addFields]    ← isEmpty flags (null/empty rows → tail), always present when sorted
 $sort           ← field names resolved via aliases and computed fields
-$skip / $limit
+$skip / $limit  ← or a bare $limit when the request caps rows
 ```
 
-Stages in brackets are omitted when not needed (e.g. no computed sort field requested, or sort is unsorted). The `allowDiskUse: true` option and `collation: {locale: "en", strength: 2}` (case-insensitive) are set on every CT aggregation.
+Stages in brackets are omitted when not needed (e.g. no computed sort field requested, or sort is unsorted). The `allowDiskUse: true` option and `collation: {locale: "en", strength: 2}` (case-insensitive) are set on every CT aggregation. The tail is a bare `$limit` instead of `$skip` / `$limit` when the request caps returned rows via `remainingBudget` -- subclasses just forward it, so see the `executePagedAggregation` javadoc for when it applies.
 
 ## Hooks to override
 
