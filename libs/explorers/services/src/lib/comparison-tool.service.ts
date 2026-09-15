@@ -1,4 +1,13 @@
-import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
+import {
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  Injectable,
+  signal,
+  Signal,
+  WritableSignal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   ComparisonToolColumn,
@@ -16,7 +25,7 @@ import { isEqual } from 'lodash';
 import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest, finalize, of, Subject, switchMap } from 'rxjs';
 import { VALID_PAGE_SIZES } from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
@@ -30,6 +39,16 @@ import { ToastNotificationService } from './toast-notification.service';
  * OpenAPI contract declares column_width as `minimum: 1`, so any value <= 0 is treated as bad config.
  */
 export const DEFAULT_COLUMN_WIDTH_PX = 300;
+
+/**
+ * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
+ * the corresponding results-count signal should be set to (unpinned: total matching rows across
+ * pages; pinned: the number of pinned rows returned).
+ */
+export interface ComparisonToolFetchResult<T> {
+  data: T[];
+  totalCount: number;
+}
 
 /** Core state management service for comparison tool pages. */
 @Injectable()
@@ -107,6 +126,17 @@ export class ComparisonToolService<T> {
   private readonly selectedRowIdSignal = signal<string | null>(null);
   private readonly hoveredRowIdSignal = signal<string | null>(null);
 
+  // Fetch streams: each fetch pushes a result observable onto these subjects, and switchMap keeps
+  // only the latest in flight. A newer query cancels (unsubscribes) the prior request, so responses
+  // can never be applied out of order. Unpinned and pinned are independent streams.
+  //
+  // Typed with `unknown` rather than `T` so the service stays covariant in `T` (a Subject field
+  // carrying `T` would make ComparisonToolService<T> invariant, breaking the coordinator's
+  // ComparisonToolService<unknown> registry). The public fetch methods stay strongly typed and the
+  // stream subscription casts the result rows back to `T[]`.
+  private readonly unpinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
+  private readonly pinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
+
   // URL Sync State
   private lastSyncedUrlParamsState: ComparisonToolUrlParams | null = null;
   private initialSelection: string[] | undefined;
@@ -155,6 +185,13 @@ export class ComparisonToolService<T> {
   });
 
   constructor() {
+    this.subscribeToFetchStream(
+      this.unpinnedFetch$,
+      this.unpinnedDataSignal,
+      this.totalResultsCount,
+    );
+    this.subscribeToFetchStream(this.pinnedFetch$, this.pinnedDataSignal, this.pinnedResultsCount);
+
     effect(() => {
       if (this.isLoadingTableData()) return;
       if (!this.viewConfig().rowSelectionEnabled) return;
@@ -665,6 +702,53 @@ export class ComparisonToolService<T> {
 
     this.selectedRowIdSignal.set(null);
     this.autoSelectFirstRow();
+  }
+
+  /**
+   * Subscribes a fetch stream once for the lifetime of the service. `switchMap` unsubscribes the
+   * previous result observable whenever a newer one arrives, which aborts the superseded HTTP
+   * request so responses are always applied latest-wins. `finalize` runs on completion, error, or
+   * switchMap cancellation, keeping the pending-fetch counter balanced; `catchError` maps a failed
+   * request to an empty result and keeps the outer stream alive for the next fetch. Error logging
+   * and user notification are handled centrally by `httpErrorInterceptor`, so this is cleanup only.
+   */
+  private subscribeToFetchStream(
+    fetch$: Subject<Observable<ComparisonToolFetchResult<unknown>>>,
+    dataSignal: WritableSignal<T[]>,
+    countSignal: WritableSignal<number>,
+  ): void {
+    fetch$
+      .pipe(
+        switchMap((source$) =>
+          source$.pipe(
+            finalize(() => this.completeFetch()),
+            catchError(() => of<ComparisonToolFetchResult<unknown>>({ data: [], totalCount: 0 })),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(({ data, totalCount }) => {
+        dataSignal.set(data as T[]);
+        countSignal.set(totalCount);
+      });
+  }
+
+  /**
+   * Fetches unpinned rows from the given result observable. A new call cancels any prior in-flight
+   * unpinned fetch, guaranteeing the table reflects the most recent query.
+   */
+  fetchUnpinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
+    this.startFetch();
+    this.unpinnedFetch$.next(source$);
+  }
+
+  /**
+   * Fetches pinned rows from the given result observable. Independent of the unpinned stream, so a
+   * new pinned fetch does not cancel an in-flight unpinned fetch (and vice versa).
+   */
+  fetchPinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
+    this.startFetch();
+    this.pinnedFetch$.next(source$);
   }
 
   /** Call before starting a data fetch to increment loading counter */

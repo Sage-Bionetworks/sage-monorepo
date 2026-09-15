@@ -1,5 +1,4 @@
-import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
@@ -20,7 +19,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, shareReplay } from 'rxjs';
+import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { MarmosetModelOverviewComparisonToolService } from './services/marmoset-model-overview-comparison-tool.service';
 
 @Component({
@@ -32,7 +31,6 @@ import { MarmosetModelOverviewComparisonToolService } from './services/marmoset-
 export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly marmosetModelOverviewService = inject(MarmosetModelOverviewService);
   private readonly comparisonToolService = inject(MarmosetModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
@@ -125,25 +123,18 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
       modelTypes: selectedFilters['modelTypes'],
       modifiedGenes: selectedFilters['modifiedGenes'],
     };
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `MarmosetModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
     );
 
-    this.marmosetModelOverviewService
-      .getMarmosetModelOverviews(query)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: MarmosetModelOverviewsPage) => {
-          const data = response.marmosetModelOverviews;
-          this.comparisonToolService.setUnpinnedData(data);
-          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
-        },
-        error: () => {
-          this.comparisonToolService.setUnpinnedData([]);
-          this.comparisonToolService.totalResultsCount.set(0);
-        },
-      });
+    this.comparisonToolService.fetchUnpinned(
+      this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
+        map((response: MarmosetModelOverviewsPage) => ({
+          data: response.marmosetModelOverviews,
+          totalCount: response.page.totalElements,
+        })),
+      ),
+    );
   }
 
   getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
@@ -156,24 +147,17 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
       sortOrders,
     };
 
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `MarmosetModelOverviewComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
     );
 
-    this.marmosetModelOverviewService
-      .getMarmosetModelOverviews(query)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: MarmosetModelOverviewsPage) => {
+    this.comparisonToolService.fetchPinned(
+      this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
+        map((response: MarmosetModelOverviewsPage) => {
           const data = response.marmosetModelOverviews;
-          this.comparisonToolService.setPinnedData(data);
-          this.comparisonToolService.pinnedResultsCount.set(data.length);
-        },
-        error: () => {
-          this.comparisonToolService.setPinnedData([]);
-          this.comparisonToolService.pinnedResultsCount.set(0);
-        },
-      });
+          return { data, totalCount: data.length };
+        }),
+      ),
+    );
   }
 }

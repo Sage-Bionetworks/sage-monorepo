@@ -1,5 +1,4 @@
-import { Component, DestroyRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnDestroy, OnInit, effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
@@ -26,7 +25,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, shareReplay } from 'rxjs';
+import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 @Component({
@@ -39,7 +38,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
@@ -172,25 +170,18 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       sortOrders,
     };
 
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `DiseaseCorrelationComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
     );
 
-    this.diseaseCorrelationService
-      .getDiseaseCorrelations(query)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: DiseaseCorrelationsPage) => {
-          const data = response.diseaseCorrelations;
-          this.comparisonToolService.setUnpinnedData(data);
-          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
-        },
-        error: () => {
-          this.comparisonToolService.setUnpinnedData([]);
-          this.comparisonToolService.totalResultsCount.set(0);
-        },
-      });
+    this.comparisonToolService.fetchUnpinned(
+      this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(
+        map((response: DiseaseCorrelationsPage) => ({
+          data: response.diseaseCorrelations,
+          totalCount: response.page.totalElements,
+        })),
+      ),
+    );
   }
 
   getPinnedData(categories: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
@@ -204,24 +195,17 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       sortOrders,
     };
 
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `DiseaseCorrelationComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
     );
 
-    this.diseaseCorrelationService
-      .getDiseaseCorrelations(query)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: DiseaseCorrelationsPage) => {
+    this.comparisonToolService.fetchPinned(
+      this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(
+        map((response: DiseaseCorrelationsPage) => {
           const data = response.diseaseCorrelations;
-          this.comparisonToolService.setPinnedData(data);
-          this.comparisonToolService.pinnedResultsCount.set(data.length);
-        },
-        error: () => {
-          this.comparisonToolService.setPinnedData([]);
-          this.comparisonToolService.pinnedResultsCount.set(0);
-        },
-      });
+          return { data, totalCount: data.length };
+        }),
+      ),
+    );
   }
 }

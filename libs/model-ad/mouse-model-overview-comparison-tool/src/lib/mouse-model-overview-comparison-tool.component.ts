@@ -1,5 +1,4 @@
-import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
@@ -20,7 +19,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, shareReplay } from 'rxjs';
+import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { MouseModelOverviewComparisonToolService } from './services/mouse-model-overview-comparison-tool.service';
 
 @Component({
@@ -32,7 +31,6 @@ import { MouseModelOverviewComparisonToolService } from './services/mouse-model-
 export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly mouseModelOverviewService = inject(MouseModelOverviewService);
   private readonly comparisonToolService = inject(MouseModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
@@ -134,25 +132,18 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
       modelType: selectedFilters['modelTypes'],
       modifiedGenes: selectedFilters['modifiedGenes'],
     };
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `MouseModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
     );
 
-    this.mouseModelOverviewService
-      .getMouseModelOverviews(query)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: MouseModelOverviewsPage) => {
-          const data = response.mouseModelOverviews;
-          this.comparisonToolService.setUnpinnedData(data);
-          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
-        },
-        error: () => {
-          this.comparisonToolService.setUnpinnedData([]);
-          this.comparisonToolService.totalResultsCount.set(0);
-        },
-      });
+    this.comparisonToolService.fetchUnpinned(
+      this.mouseModelOverviewService.getMouseModelOverviews(query).pipe(
+        map((response: MouseModelOverviewsPage) => ({
+          data: response.mouseModelOverviews,
+          totalCount: response.page.totalElements,
+        })),
+      ),
+    );
   }
 
   getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
@@ -165,24 +156,17 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
       sortOrders,
     };
 
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `MouseModelOverviewComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
     );
 
-    this.mouseModelOverviewService
-      .getMouseModelOverviews(query)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: MouseModelOverviewsPage) => {
+    this.comparisonToolService.fetchPinned(
+      this.mouseModelOverviewService.getMouseModelOverviews(query).pipe(
+        map((response: MouseModelOverviewsPage) => {
           const data = response.mouseModelOverviews;
-          this.comparisonToolService.setPinnedData(data);
-          this.comparisonToolService.pinnedResultsCount.set(data.length);
-        },
-        error: () => {
-          this.comparisonToolService.setPinnedData([]);
-          this.comparisonToolService.pinnedResultsCount.set(0);
-        },
-      });
+          return { data, totalCount: data.length };
+        }),
+      ),
+    );
   }
 }
