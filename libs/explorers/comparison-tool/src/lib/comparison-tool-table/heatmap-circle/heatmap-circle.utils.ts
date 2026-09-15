@@ -1,4 +1,5 @@
 import { HeatmapCircleColorKey, HeatmapCircleData } from '@sagebionetworks/explorers/models';
+import { knownColorMetricToDisplayName } from '../../comparison-tool.variables';
 
 export const ADJUSTED_P_VALUE_KEY = 'adj_p_val';
 
@@ -25,11 +26,16 @@ export function resolveHeatmapCircleMetrics<T extends HeatmapCircleData = Heatma
   }
 
   const cell = data as Record<string, unknown>;
-  // A cell holds exactly one color metric alongside adj_p_val, so the first other key is it
-  const colorKey = Object.keys(cell).find((key) => key !== ADJUSTED_P_VALUE_KEY);
-  if (colorKey === undefined) {
+  // A cell holds one color metric alongside adj_p_val. Prefer a known metric so an extra field
+  // can't stand in for it, but fall back to any other key so a new metric still renders
+  const colorKeyCandidates = Object.keys(cell).filter((key) => key !== ADJUSTED_P_VALUE_KEY);
+  if (colorKeyCandidates.length === 0) {
     return UNDRAWABLE;
   }
+
+  const colorKey =
+    colorKeyCandidates.find((key) => Object.hasOwn(knownColorMetricToDisplayName, key)) ??
+    colorKeyCandidates[0];
 
   const colorValue = cell[colorKey];
   const adjustedPValue = cell[ADJUSTED_P_VALUE_KEY];

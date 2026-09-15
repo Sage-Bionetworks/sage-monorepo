@@ -70,12 +70,10 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
     }
 
     const { colorKey, colorValue, adjustedPValue } = metrics;
-    const displayName = knownColorMetricToDisplayName.find(
-      (item) => item.field === colorKey,
-    )?.displayName;
+    const displayName = knownColorMetricToDisplayName[colorKey] ?? colorKey;
 
     return (
-      `${displayName || colorKey}: ` +
+      `${displayName}: ` +
       this.formatNumericValue(colorValue) +
       '\n' +
       `${ADJUSTED_P_VALUE_LABEL}: ` +

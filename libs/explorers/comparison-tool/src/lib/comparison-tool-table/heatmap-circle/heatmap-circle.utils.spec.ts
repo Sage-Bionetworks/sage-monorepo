@@ -19,14 +19,20 @@ describe('resolveHeatmapCircleMetrics', () => {
     expect(resolveHeatmapCircleMetrics(data)).toEqual({ isDrawable: false });
   });
 
-  it('does not let an unrelated key stand in for the color metric', () => {
-    const metrics = resolveHeatmapCircleMetrics({
-      correlation: null,
-      sample_count: 12,
-      [ADJUSTED_P_VALUE_KEY]: 0.01,
-    });
+  it.each([
+    { correlation: null, sample_count: 12, [ADJUSTED_P_VALUE_KEY]: 0.01 },
+    { sample_count: 12, correlation: null, [ADJUSTED_P_VALUE_KEY]: 0.01 },
+  ])('does not let an unrelated key stand in for the color metric (%p)', (data) => {
+    expect(resolveHeatmapCircleMetrics(data).isDrawable).toBe(false);
+  });
 
-    expect(metrics.isDrawable).toBe(false);
+  it('falls back to an unrecognized key when the cell has no known color metric', () => {
+    expect(resolveHeatmapCircleMetrics({ new_metric: 0.5, [ADJUSTED_P_VALUE_KEY]: 0.01 })).toEqual({
+      colorKey: 'new_metric',
+      colorValue: 0.5,
+      adjustedPValue: 0.01,
+      isDrawable: true,
+    });
   });
 
   it.each([null, undefined, NaN, Infinity])(
