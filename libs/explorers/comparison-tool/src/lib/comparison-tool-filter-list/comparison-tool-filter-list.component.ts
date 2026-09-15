@@ -1,5 +1,8 @@
 import { Component, inject, ViewEncapsulation } from '@angular/core';
-import { ComparisonToolFilterOption } from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolFilter,
+  ComparisonToolFilterOption,
+} from '@sagebionetworks/explorers/models';
 import { ComparisonToolFilterService } from '@sagebionetworks/explorers/services';
 import { FilterChicletComponent } from '@sagebionetworks/explorers/ui';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
@@ -25,20 +28,11 @@ export class ComparisonToolFilterListComponent {
 
   clearList() {
     this.removeSignificanceThresholdFilter();
-    this.clearSelectedFilters();
+    this.comparisonToolFilterService.clearAllFilters();
   }
 
-  clearSelectedFilters(option?: ComparisonToolFilterOption) {
-    if (option) {
-      option.selected = false;
-    } else {
-      for (const filter of this.filters()) {
-        for (const o of filter.options) {
-          o.selected = false;
-        }
-      }
-    }
-    this.comparisonToolFilterService.setFilters(this.filters());
+  clearSelectedFilter(filter: ComparisonToolFilter, option: ComparisonToolFilterOption) {
+    this.comparisonToolFilterService.setFilterOptionSelected(filter.data_key, option.label, false);
   }
 
   removeSignificanceThresholdFilter(): void {

@@ -28,6 +28,34 @@ export class ComparisonToolFilterService {
     });
   }
 
+  setFilterOptionSelected(filterDataKey: string, optionLabel: string, selected: boolean) {
+    const updatedFilters = this.filters().map((filter) =>
+      filter.data_key === filterDataKey
+        ? {
+            ...filter,
+            options: filter.options.map((option) =>
+              option.label === optionLabel ? { ...option, selected } : option,
+            ),
+          }
+        : filter,
+    );
+    this.comparisonToolService.updateQuery({
+      filters: updatedFilters,
+      pageNumber: this.comparisonToolService.FIRST_PAGE_NUMBER,
+    });
+  }
+
+  clearAllFilters() {
+    const updatedFilters = this.filters().map((filter) => ({
+      ...filter,
+      options: filter.options.map((option) => ({ ...option, selected: false })),
+    }));
+    this.comparisonToolService.updateQuery({
+      filters: updatedFilters,
+      pageNumber: this.comparisonToolService.FIRST_PAGE_NUMBER,
+    });
+  }
+
   updateSearchTerm(term: string) {
     this.comparisonToolService.updateQuery({
       searchTerm: term,
