@@ -22,33 +22,88 @@ describe('ComparisonToolFilterService', () => {
     comparisonToolService = TestBed.inject(ComparisonToolService);
   });
 
-  it('should set filters', () => {
-    const filters: ComparisonToolFilter[] = [
-      { name: 'Filter 1', data_key: 'f1', query_param_key: 'f1', options: [] },
-      { name: 'Filter 2', data_key: 'f2', query_param_key: 'f2', options: [] },
-    ];
-    service.setFilters(filters);
-    expect(service.filters()).toEqual(filters);
-  });
-
-  it('should reset page to 0 when filters are changed', () => {
-    comparisonToolService.updateQuery({ pageNumber: 5 });
-    expect(comparisonToolService.pageNumber()).toBe(5);
-
+  it('should update the targeted option and reset page to 0 when a filter option is toggled', () => {
     const filters: ComparisonToolFilter[] = [
       {
         name: 'Test Filter',
-        data_key: 'testField',
         query_param_key: 'testField',
         options: [
-          { label: 'Option 1', selected: true },
+          { label: 'Option 1', selected: false },
           { label: 'Option 2', selected: false },
         ],
       },
     ];
-    service.setFilters(filters);
+    comparisonToolService.updateQuery({ filters, pageNumber: 5 });
+    expect(comparisonToolService.pageNumber()).toBe(5);
 
+    service.setFilterOptionSelected('testField', 'Option 1', true);
+
+    const options = service.filters()[0].options;
+    expect(options.find((option) => option.label === 'Option 1')?.selected).toBe(true);
+    expect(options.find((option) => option.label === 'Option 2')?.selected).toBe(false);
     expect(comparisonToolService.pageNumber()).toBe(0);
+  });
+
+  it('should deselect every option and reset page to 0 when all filters are cleared', () => {
+    const filters: ComparisonToolFilter[] = [
+      {
+        name: 'Test Filter',
+        query_param_key: 'testField',
+        options: [
+          { label: 'Option 1', selected: true },
+          { label: 'Option 2', selected: true },
+        ],
+      },
+    ];
+    comparisonToolService.updateQuery({ filters, pageNumber: 5 });
+    expect(comparisonToolService.pageNumber()).toBe(5);
+
+    service.clearAllFilters();
+
+    expect(service.filters()[0].options.every((option) => !option.selected)).toBe(true);
+    expect(comparisonToolService.pageNumber()).toBe(0);
+  });
+
+  it('should not reset page when clearing filters that are already all deselected', () => {
+    const filters: ComparisonToolFilter[] = [
+      {
+        name: 'Test Filter',
+        query_param_key: 'testField',
+        options: [
+          { label: 'Option 1', selected: false },
+          { label: 'Option 2', selected: false },
+        ],
+      },
+    ];
+    comparisonToolService.updateQuery({ filters, pageNumber: 5 });
+    expect(comparisonToolService.pageNumber()).toBe(5);
+
+    service.clearAllFilters();
+
+    expect(comparisonToolService.pageNumber()).toBe(5);
+    expect(service.filters()[0].options.every((option) => !option.selected)).toBe(true);
+  });
+
+  it('should not reset page when toggling an option to its current state', () => {
+    const filters: ComparisonToolFilter[] = [
+      {
+        name: 'Test Filter',
+        query_param_key: 'testField',
+        options: [
+          { label: 'Option 1', selected: false },
+          { label: 'Option 2', selected: false },
+        ],
+      },
+    ];
+    comparisonToolService.updateQuery({ filters, pageNumber: 5 });
+    expect(comparisonToolService.pageNumber()).toBe(5);
+
+    service.setFilterOptionSelected('testField', 'Option 1', false);
+
+    expect(comparisonToolService.pageNumber()).toBe(5);
+    expect(
+      service.filters()[0].options.find((option) => option.label === 'Option 1')?.selected,
+    ).toBe(false);
   });
 
   it('should reset page to 0 when search term is updated', () => {

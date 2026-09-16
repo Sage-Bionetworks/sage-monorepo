@@ -384,7 +384,6 @@ export class ComparisonToolService<T> {
 
     return filterConfigs.map((config) => ({
       name: config.name,
-      data_key: config.data_key,
       short_name: config.short_name,
       query_param_key: config.query_param_key,
       options: config.values.map((value) => ({

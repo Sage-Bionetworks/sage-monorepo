@@ -1,5 +1,4 @@
 import { computed, inject, signal } from '@angular/core';
-import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService } from './comparison-tool.service';
 
 export class ComparisonToolFilterService {
@@ -19,11 +18,41 @@ export class ComparisonToolFilterService {
     return this.filters().some((filter) => filter.options.some((option) => option.selected));
   });
 
-  setFilters(filters: ComparisonToolFilter[]) {
-    // Use structuredClone to ensure a new reference is created
-    const clonedFilters = structuredClone(filters);
+  setFilterOptionSelected(filterQueryParamKey: string, optionLabel: string, selected: boolean) {
+    const existingOption = this.filters()
+      .find((filter) => filter.query_param_key === filterQueryParamKey)
+      ?.options.find((option) => option.label === optionLabel);
+    if (!existingOption || existingOption.selected === selected) {
+      return;
+    }
+
+    const updatedFilters = this.filters().map((filter) =>
+      filter.query_param_key === filterQueryParamKey
+        ? {
+            ...filter,
+            options: filter.options.map((option) =>
+              option.label === optionLabel ? { ...option, selected } : option,
+            ),
+          }
+        : filter,
+    );
     this.comparisonToolService.updateQuery({
-      filters: clonedFilters,
+      filters: updatedFilters,
+      pageNumber: this.comparisonToolService.FIRST_PAGE_NUMBER,
+    });
+  }
+
+  clearAllFilters() {
+    if (!this.hasSelectedFilters()) {
+      return;
+    }
+
+    const updatedFilters = this.filters().map((filter) => ({
+      ...filter,
+      options: filter.options.map((option) => ({ ...option, selected: false })),
+    }));
+    this.comparisonToolService.updateQuery({
+      filters: updatedFilters,
       pageNumber: this.comparisonToolService.FIRST_PAGE_NUMBER,
     });
   }
