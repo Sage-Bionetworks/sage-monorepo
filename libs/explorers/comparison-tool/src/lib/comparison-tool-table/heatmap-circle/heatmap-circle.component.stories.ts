@@ -87,3 +87,12 @@ export const Demo: Story = {
     },
   },
 };
+
+export const NoCircleDrawn: Story = {
+  args: {
+    data: {
+      log2_fc: null,
+      adj_p_val: 0.03,
+    },
+  },
+};

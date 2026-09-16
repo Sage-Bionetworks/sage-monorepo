@@ -50,7 +50,7 @@ Key interfaces from `@sagebionetworks/explorers/models`:
 
 - `ComparisonToolConfig` — column definitions, filter options, dropdown config
 - `ComparisonToolViewConfig` — title, tooltips, legend config, action buttons
-- `HeatmapCircleData` — `{ value: number, adj_p_val: number }` for heatmap cells
+- `HeatmapCircleData` — a heatmap cell: nullable `adj_p_val` (circle size) plus a product-specific color key (`log2_fc`, `correlation`)
 - `ComparisonToolFilterOption` — filter option with `selected` boolean state
 
 ### Testing Conventions

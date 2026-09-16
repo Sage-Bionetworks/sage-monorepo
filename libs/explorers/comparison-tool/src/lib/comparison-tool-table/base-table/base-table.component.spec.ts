@@ -15,7 +15,7 @@ import {
   mockComparisonToolDataConfig,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
-import { render, screen } from '@testing-library/angular';
+import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
 import { BaseTableComponent } from './base-table.component';
@@ -153,6 +153,22 @@ describe('BaseTableComponent', () => {
         expect.any(String),
         expect.any(MouseEvent),
       );
+    });
+
+    it('should render neither a circle nor a button for an unusable heat map cell', async () => {
+      const [firstRow] = mockComparisonToolData;
+      const { nativeElement } = await setup(
+        { heatmapCircleClickTransformFn: () => heatmapDetailsPanelData },
+        [{ ...firstRow, IFG: { correlation: null, adj_p_val: 0.03 } }],
+      );
+
+      const unusableCell = nativeElement.querySelector('td[data-column-key="IFG"]') as HTMLElement;
+      expect(unusableCell.querySelector('explorers-heatmap-circle')).toBeNull();
+      expect(within(unusableCell).queryByRole('button')).toBeNull();
+
+      const usableCell = nativeElement.querySelector('td[data-column-key="PHG"]') as HTMLElement;
+      expect(usableCell.querySelector('explorers-heatmap-circle')).not.toBeNull();
+      expect(within(usableCell).queryByRole('button')).not.toBeNull();
     });
   });
 
