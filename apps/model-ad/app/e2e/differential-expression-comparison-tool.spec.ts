@@ -262,6 +262,9 @@ test.describe('differential expression', () => {
   });
 
   test('Pin All pins every matching row for the protein main category', async ({ page }) => {
+    // TODO(MG-931): the proteomics collection is currently mock data, so this search may not stay
+    // accurate once the real data lands. Replace it with a more specific term, chosen so the match
+    // count stays under MAX_PINNED_ITEMS as the collection grows
     const proteinSearchTerm = 't';
 
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);

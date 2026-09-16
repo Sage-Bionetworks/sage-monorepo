@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  computed,
   effect,
   ElementRef,
   HostListener,
@@ -20,7 +21,11 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
-import { COMPARISON_TOOL_BODY_CLASS } from './comparison-tool-table.constants';
+import {
+  COMPARISON_TOOL_BODY_CLASS,
+  PIN_ALL_LOADING_TOOLTIP,
+  PIN_ALL_TOOLTIP,
+} from './comparison-tool-table.constants';
 import {
   clampAndFormatWidths,
   getCellsByColumn,
@@ -68,6 +73,11 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   unpinnedData = this.comparisonToolService.unpinnedData;
 
   columnWidths = signal<Record<string, string>>({});
+
+  pinAllTooltip = computed(() => {
+    if (this.hasMaxPinnedItems()) return this.disabledPinTooltip();
+    return this.isLoadingTableData() ? PIN_ALL_LOADING_TOOLTIP : PIN_ALL_TOOLTIP;
+  });
 
   constructor() {
     if (this.platformService.isBrowser) {

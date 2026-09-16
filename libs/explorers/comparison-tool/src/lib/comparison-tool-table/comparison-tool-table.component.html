@@ -42,9 +42,7 @@
               class="pin-all-button"
               [disabled]="hasMaxPinnedItems() || isLoadingTableData()"
               (click)="pinAll()"
-              [pTooltip]="
-                hasMaxPinnedItems() ? disabledPinTooltip() : 'Pin all matching rows to the top.'
-              "
+              [pTooltip]="pinAllTooltip()"
               tooltipPosition="left"
             >
               <explorers-svg-icon imagePath="explorers-assets/icons/pin.svg" altText="pin" />
