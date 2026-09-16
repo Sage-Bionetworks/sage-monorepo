@@ -24,7 +24,11 @@ function isPanelDisabled(model: MouseModel, panelName: string): boolean {
     case 'pathology':
       return model.pathology.length === 0;
     case 'omics':
-      return model.transcriptomics === null && model.disease_correlation === null;
+      return (
+        model.transcriptomics === null &&
+        model.disease_correlation === null &&
+        model.proteomics === null
+      );
     default:
       return false;
   }

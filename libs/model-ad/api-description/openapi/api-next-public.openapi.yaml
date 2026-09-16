@@ -1744,6 +1744,10 @@ components:
           type: string
           description: Deprecated field for link to spatial transcriptomics data
           nullable: true
+        proteomics:
+          type: string
+          description: Link to proteomics differential expression comparison tool data
+          nullable: true
         genetic_info:
           type: array
           description: Genetic information related to the Model
@@ -1774,6 +1778,7 @@ components:
         - transcriptomics
         - disease_correlation
         - spatial_transcriptomics
+        - proteomics
         - genetic_info
         - biomarkers
         - pathology

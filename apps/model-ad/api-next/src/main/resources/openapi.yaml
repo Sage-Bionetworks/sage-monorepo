@@ -2515,6 +2515,7 @@ components:
             units: units
             y_axis_max: 6.027456183070403
             age: age
+        proteomics: proteomics
         contributing_group: contributing_group
         biomarkers:
           - evidence_type: evidence_type
@@ -2611,6 +2612,11 @@ components:
           description: Deprecated field for link to spatial transcriptomics data
           nullable: true
           type: string
+        proteomics:
+          description: Link to proteomics differential expression comparison tool
+            data
+          nullable: true
+          type: string
         genetic_info:
           description: Genetic information related to the Model
           items:
@@ -2639,6 +2645,7 @@ components:
         - model_type
         - name
         - pathology
+        - proteomics
         - rrid
         - spatial_transcriptomics
         - study_synid
