@@ -43,7 +43,7 @@ export class ComparisonToolFilterPanelComponent {
     selected: boolean,
   ) {
     this.comparisonToolFilterService.setFilterOptionSelected(
-      filter.data_key,
+      filter.query_param_key,
       option.label,
       selected,
     );

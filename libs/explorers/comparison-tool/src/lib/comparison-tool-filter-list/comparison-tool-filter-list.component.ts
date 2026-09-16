@@ -32,7 +32,11 @@ export class ComparisonToolFilterListComponent {
   }
 
   clearSelectedFilter(filter: ComparisonToolFilter, option: ComparisonToolFilterOption) {
-    this.comparisonToolFilterService.setFilterOptionSelected(filter.data_key, option.label, false);
+    this.comparisonToolFilterService.setFilterOptionSelected(
+      filter.query_param_key,
+      option.label,
+      false,
+    );
   }
 
   removeSignificanceThresholdFilter(): void {

@@ -719,7 +719,6 @@ describe('ComparisonToolService', () => {
       const filters = [
         {
           name: 'Test Filter',
-          data_key: 'testField',
           query_param_key: 'testField',
           options: [
             { label: 'Option 1', selected: true },

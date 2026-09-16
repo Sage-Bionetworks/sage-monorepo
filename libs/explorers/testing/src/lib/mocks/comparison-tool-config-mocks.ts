@@ -30,7 +30,6 @@ export const mockComparisonToolConfigFilters: ComparisonToolConfigFilter[] = [
 export const mockComparisonToolFilters: ComparisonToolFilter[] = [
   {
     name: 'Age',
-    data_key: 'age',
     query_param_key: 'age',
     options: [
       { label: '4 months', selected: false },
@@ -40,7 +39,6 @@ export const mockComparisonToolFilters: ComparisonToolFilter[] = [
   },
   {
     name: 'Model Type',
-    data_key: 'model_type',
     short_name: 'Type',
     query_param_key: 'modelType',
     options: [
@@ -50,7 +48,6 @@ export const mockComparisonToolFilters: ComparisonToolFilter[] = [
   },
   {
     name: 'Sex',
-    data_key: 'sex',
     query_param_key: 'sex',
     options: [
       { label: 'Female', selected: false },
@@ -62,7 +59,6 @@ export const mockComparisonToolFilters: ComparisonToolFilter[] = [
 export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
   {
     name: 'Available Data',
-    data_key: 'available_data',
     short_name: 'Data',
     query_param_key: 'availableData',
     options: [
@@ -74,7 +70,6 @@ export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
   },
   {
     name: 'Contributing Center',
-    data_key: 'center',
     short_name: 'Center',
     query_param_key: 'center',
     options: [
@@ -84,7 +79,6 @@ export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
   },
   {
     name: 'Model Type',
-    data_key: 'model_type',
     short_name: 'Type',
     query_param_key: 'modelType',
     options: [
@@ -94,7 +88,6 @@ export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
   },
   {
     name: 'Sex',
-    data_key: 'sex',
     query_param_key: 'sex',
     options: [
       { label: 'Female', selected: true },

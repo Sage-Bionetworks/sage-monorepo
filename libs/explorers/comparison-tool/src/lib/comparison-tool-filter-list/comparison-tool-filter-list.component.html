@@ -20,7 +20,7 @@
             (cleared)="removeSignificanceThresholdFilter()"
           />
         }
-        @for (filter of filters(); track filter.data_key) {
+        @for (filter of filters(); track filter.query_param_key) {
           @for (option of filter.options; track option.label) {
             @if (option.selected) {
               <explorers-filter-chiclet

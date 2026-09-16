@@ -86,7 +86,6 @@ export interface ComparisonToolFilterOption {
 
 export interface ComparisonToolFilter {
   name: string;
-  data_key: string;
   short_name?: string;
   query_param_key: string;
   options: ComparisonToolFilterOption[];

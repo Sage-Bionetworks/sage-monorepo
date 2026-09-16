@@ -1,6 +1,7 @@
-import { Provider } from '@angular/core';
+import { inject, Provider } from '@angular/core';
 import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
 import { ComparisonToolFilterService } from './comparison-tool-filter.service';
+import { ComparisonToolService } from './comparison-tool.service';
 
 export type ComparisonToolFilterServiceOptions = {
   filters?: ComparisonToolFilter[];
@@ -21,9 +22,13 @@ export const provideComparisonToolFilterService = (
       provide: ComparisonToolFilterService,
       useFactory: () => {
         const service = new ComparisonToolFilterService();
+        const comparisonToolService = inject(ComparisonToolService);
 
         if (options.filters !== undefined) {
-          service.setFilters(options.filters);
+          comparisonToolService.updateQuery({
+            filters: options.filters,
+            pageNumber: comparisonToolService.FIRST_PAGE_NUMBER,
+          });
         }
 
         if (options.searchTerm !== undefined && options.searchTerm !== null) {

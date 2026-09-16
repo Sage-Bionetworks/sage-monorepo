@@ -70,7 +70,7 @@ describe('Component: Comparison Tool - Filter List', () => {
 
     // Capture references up front to mimic the template handing the handler
     // option refs from the change-detection pass that occurred before the rapid
-    // clicks. The handler must key off data_key/label against the latest signal
+    // clicks. The handler must key off query_param_key/label against the latest signal
     // value, so both removals stick even though these refs go stale after the
     // first update replaces the filter array.
     const staleFilter = filterService.filters()[0];
