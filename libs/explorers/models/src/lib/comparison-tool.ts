@@ -86,7 +86,6 @@ export interface ComparisonToolFilterOption {
 
 export interface ComparisonToolFilter {
   name: string;
-  data_key: string;
   short_name?: string;
   query_param_key: string;
   options: ComparisonToolFilterOption[];
@@ -102,7 +101,7 @@ export interface ComparisonToolConfigFilter {
 
 export type ComparisonToolPage =
   | 'Marmoset Model Overview'
-  | 'Model Overview'
+  | 'Mouse Model Overview'
   | 'Differential Expression'
   | 'Disease Correlation'
   | 'Nominated Targets'

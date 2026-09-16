@@ -40,10 +40,8 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
 
-  // TODO(MG-1057): ui_config still names this page 'Model Overview'. Once it explicitly uses
-  // 'Mouse Model Overview', request the config with ComparisonToolPage.MouseModelOverview.
   readonly config$ = this.comparisonToolConfigService
-    .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
+    .getComparisonToolConfig(ComparisonToolPage.MouseModelOverview)
     .pipe(
       catchError((error) => {
         this.logger.error('Error retrieving comparison tool config', error);
@@ -53,10 +51,7 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
     );
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
-    // TODO(MG-1057): hardcoded because ui_config still names this page 'Model Overview'. Once it
-    // explicitly uses 'Mouse Model Overview', take this from ComparisonToolPage like the other
-    // comparison tools do.
-    headerTitle: 'Mouse Model Overview',
+    headerTitle: ComparisonToolPage.MouseModelOverview,
     filterResultsButtonTooltip: 'Filter results by Model Type, Modified Gene, and more',
     showSignificanceControls: false,
     viewDetailsTooltip: 'Open model details page',

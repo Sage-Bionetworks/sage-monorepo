@@ -9,7 +9,7 @@
         />
         <div class="filter-panel-main-menu">
           <ul>
-            @for (filter of filters(); track filter.name; let i = $index) {
+            @for (filter of filters(); track filter.query_param_key; let i = $index) {
               <li
                 class="filter-panel-main-menu-item-{{ filter.name }}"
                 [class.active]="activePane() === i"
@@ -26,7 +26,7 @@
     </div>
 
     <div class="filter-panel-panes">
-      @for (filter of filters(); track filter.name; let i = $index) {
+      @for (filter of filters(); track filter.query_param_key; let i = $index) {
         <div
           class="filter-panel-pane filter-panel-pane-{{ filter.name }}"
           [class.open]="activePane() === i"
@@ -43,9 +43,9 @@
                 <li>
                   <div class="checkbox">
                     <p-checkbox
-                      [(ngModel)]="option.selected"
+                      [ngModel]="option.selected"
                       [binary]="true"
-                      (ngModelChange)="handleChange()"
+                      (ngModelChange)="handleFilterChange(filter, option, $event)"
                       [inputId]="filterOptionId"
                       size="small"
                     />

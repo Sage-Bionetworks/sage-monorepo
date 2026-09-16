@@ -5,6 +5,7 @@ marmo_overview,marmo_overview.json
 model_details,model_details.json
 model_overview,model_overview.json
 protein_de_aggregate,protein_de_aggregate.json
+protein_de_individual,protein_de_individual.json
 rna_de_aggregate,rna_de_aggregate.json
 rna_de_individual,rna_de_individual.json
 ui_config,ui_config.json

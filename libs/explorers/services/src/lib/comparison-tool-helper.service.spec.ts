@@ -14,7 +14,7 @@ describe('Service: ComparisonToolHelper', () => {
 
   it('should create filename for ct without any dropdowns', () => {
     const filename = ctHelperService.getComparisonToolDataFilename(mockComparisonToolDataConfig[0]);
-    expect(filename).toBe('model_overview');
+    expect(filename).toBe('mouse_model_overview');
   });
 
   it('should create filename for ct with primary dropdown', () => {
@@ -109,7 +109,7 @@ describe('Service: ComparisonToolHelper', () => {
     ];
 
     const config: ComparisonToolConfig = {
-      page: 'Model Overview',
+      page: 'Mouse Model Overview',
       dropdowns: [],
       row_count: 'over 200000',
       columns: [
@@ -142,7 +142,6 @@ describe('Service: ComparisonToolHelper', () => {
       const filters: ComparisonToolFilter[] = [
         {
           name: 'Filter 1',
-          data_key: 'field1',
           query_param_key: 'field1',
           options: [
             { label: 'Option A', selected: false },
@@ -151,7 +150,6 @@ describe('Service: ComparisonToolHelper', () => {
         },
         {
           name: 'Filter 2',
-          data_key: 'field2',
           query_param_key: 'field2',
           options: [{ label: 'Option C', selected: false }],
         },
@@ -164,7 +162,6 @@ describe('Service: ComparisonToolHelper', () => {
       const filters: ComparisonToolFilter[] = [
         {
           name: 'Species',
-          data_key: 'species',
           query_param_key: 'species',
           options: [
             { label: 'Mouse', selected: true },
@@ -174,7 +171,6 @@ describe('Service: ComparisonToolHelper', () => {
         },
         {
           name: 'Status',
-          data_key: 'status',
           query_param_key: 'statuses',
           options: [
             { label: 'Active', selected: true },
@@ -193,13 +189,11 @@ describe('Service: ComparisonToolHelper', () => {
       const filters: ComparisonToolFilter[] = [
         {
           name: 'Filter With Selection',
-          data_key: 'withSelection',
           query_param_key: 'withSelection',
           options: [{ label: 'Selected', selected: true }],
         },
         {
           name: 'Filter Without Selection',
-          data_key: 'withoutSelection',
           query_param_key: 'withoutSelection',
           options: [{ label: 'Not Selected', selected: false }],
         },

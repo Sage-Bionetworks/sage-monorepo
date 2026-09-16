@@ -2,7 +2,7 @@ type: string
 description: The type of comparison tool page
 enum:
   - Marmoset Model Overview
-  - Model Overview
+  - Mouse Model Overview
   - Differential Expression
   - Disease Correlation
 example: Differential Expression

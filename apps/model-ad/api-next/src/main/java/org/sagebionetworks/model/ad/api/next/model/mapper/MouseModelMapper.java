@@ -58,6 +58,7 @@ public class MouseModelMapper {
       document.getTranscriptomics(),
       document.getDiseaseCorrelation(),
       document.getSpatialTranscriptomics(),
+      document.getProteomics(),
       geneticInfo,
       biomarkers,
       pathology

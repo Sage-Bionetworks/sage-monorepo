@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test';
+import type { SortOrder } from '@sagebionetworks/explorers/models';
 import {
   expectSortFieldsParams,
   expectSortOrdersParams,
@@ -6,6 +7,16 @@ import {
   getSortOrdersQueryParams,
   sortColumn,
 } from './comparison-tool';
+
+/**
+ * One level of a comparison tool sort, mirroring a `sortFields`/`sortOrders` pair.
+ * `field` is a column's `data_key` as served by the comparison tool config endpoint, so it cannot
+ * be narrowed beyond `string`.
+ */
+export type ComparisonToolSort = {
+  field: string;
+  order: SortOrder;
+};
 
 /**
  * Tests that clicking a column header updates the URL with sortFields and sortOrders.

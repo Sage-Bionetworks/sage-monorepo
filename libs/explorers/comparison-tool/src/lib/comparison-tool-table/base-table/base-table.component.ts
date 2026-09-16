@@ -5,6 +5,7 @@ import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { ComparisonToolTableLinkComponent } from '../comparison-tool-table-link/comparison-tool-table-link.component';
 import { HeatmapCircleComponent } from '../heatmap-circle/heatmap-circle.component';
+import { canDrawHeatmapCircle } from '../heatmap-circle/heatmap-circle.utils';
 import { PrimaryIdentifierControlsComponent } from '../primary-identifier-controls/primary-identifier-controls.component';
 
 @Component({
@@ -24,6 +25,7 @@ import { PrimaryIdentifierControlsComponent } from '../primary-identifier-contro
 export class BaseTableComponent {
   protected readonly comparisonToolService = inject(ComparisonToolService);
   protected readonly String = String;
+  protected readonly canDrawHeatmapCircle = canDrawHeatmapCircle;
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   viewConfig = this.comparisonToolService.viewConfig;

@@ -94,7 +94,7 @@ describe('ComparisonToolService', () => {
   describe('column_width sanitization', () => {
     const configWithWidths: ComparisonToolConfig[] = [
       {
-        page: 'Model Overview',
+        page: 'Mouse Model Overview',
         dropdowns: [],
         row_count: null,
         columns: [
@@ -719,7 +719,6 @@ describe('ComparisonToolService', () => {
       const filters = [
         {
           name: 'Test Filter',
-          data_key: 'testField',
           query_param_key: 'testField',
           options: [
             { label: 'Option 1', selected: true },

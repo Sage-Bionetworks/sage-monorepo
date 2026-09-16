@@ -59,6 +59,8 @@ public class MouseModelDto implements ModelDto {
 
   private String spatialTranscriptomics = null;
 
+  private String proteomics = null;
+
   @Valid
   private List<@Valid GeneticInfoDto> geneticInfo = new ArrayList<>();
 
@@ -75,7 +77,7 @@ public class MouseModelDto implements ModelDto {
   /**
    * Constructor with only required parameters
    */
-  public MouseModelDto(String type, String name, List<String> matchedControls, String modelType, String contributingGroup, String studySynid, String rrid, String jaxId, String alzforumId, String genotype, List<String> aliases, String transcriptomics, String diseaseCorrelation, String spatialTranscriptomics, List<@Valid GeneticInfoDto> geneticInfo, List<@Valid ModelDataDto> biomarkers, List<@Valid ModelDataDto> pathology) {
+  public MouseModelDto(String type, String name, List<String> matchedControls, String modelType, String contributingGroup, String studySynid, String rrid, String jaxId, String alzforumId, String genotype, List<String> aliases, String transcriptomics, String diseaseCorrelation, String spatialTranscriptomics, String proteomics, List<@Valid GeneticInfoDto> geneticInfo, List<@Valid ModelDataDto> biomarkers, List<@Valid ModelDataDto> pathology) {
     this.type = type;
     this.name = name;
     this.matchedControls = matchedControls;
@@ -90,6 +92,7 @@ public class MouseModelDto implements ModelDto {
     this.transcriptomics = transcriptomics;
     this.diseaseCorrelation = diseaseCorrelation;
     this.spatialTranscriptomics = spatialTranscriptomics;
+    this.proteomics = proteomics;
     this.geneticInfo = geneticInfo;
     this.biomarkers = biomarkers;
     this.pathology = pathology;
@@ -391,6 +394,26 @@ public class MouseModelDto implements ModelDto {
     this.spatialTranscriptomics = spatialTranscriptomics;
   }
 
+  public MouseModelDto proteomics(String proteomics) {
+    this.proteomics = proteomics;
+    return this;
+  }
+
+  /**
+   * Link to proteomics differential expression comparison tool data
+   * @return proteomics
+   */
+  @NotNull 
+  @Schema(name = "proteomics", description = "Link to proteomics differential expression comparison tool data", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("proteomics")
+  public String getProteomics() {
+    return proteomics;
+  }
+
+  public void setProteomics(String proteomics) {
+    this.proteomics = proteomics;
+  }
+
   public MouseModelDto geneticInfo(List<@Valid GeneticInfoDto> geneticInfo) {
     this.geneticInfo = geneticInfo;
     return this;
@@ -498,6 +521,7 @@ public class MouseModelDto implements ModelDto {
         Objects.equals(this.transcriptomics, mouseModel.transcriptomics) &&
         Objects.equals(this.diseaseCorrelation, mouseModel.diseaseCorrelation) &&
         Objects.equals(this.spatialTranscriptomics, mouseModel.spatialTranscriptomics) &&
+        Objects.equals(this.proteomics, mouseModel.proteomics) &&
         Objects.equals(this.geneticInfo, mouseModel.geneticInfo) &&
         Objects.equals(this.biomarkers, mouseModel.biomarkers) &&
         Objects.equals(this.pathology, mouseModel.pathology);
@@ -505,7 +529,7 @@ public class MouseModelDto implements ModelDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, name, matchedControls, modelType, contributingGroup, studySynid, rrid, jaxId, alzforumId, genotype, aliases, transcriptomics, diseaseCorrelation, spatialTranscriptomics, geneticInfo, biomarkers, pathology);
+    return Objects.hash(type, name, matchedControls, modelType, contributingGroup, studySynid, rrid, jaxId, alzforumId, genotype, aliases, transcriptomics, diseaseCorrelation, spatialTranscriptomics, proteomics, geneticInfo, biomarkers, pathology);
   }
 
   @Override
@@ -526,6 +550,7 @@ public class MouseModelDto implements ModelDto {
     sb.append("    transcriptomics: ").append(toIndentedString(transcriptomics)).append("\n");
     sb.append("    diseaseCorrelation: ").append(toIndentedString(diseaseCorrelation)).append("\n");
     sb.append("    spatialTranscriptomics: ").append(toIndentedString(spatialTranscriptomics)).append("\n");
+    sb.append("    proteomics: ").append(toIndentedString(proteomics)).append("\n");
     sb.append("    geneticInfo: ").append(toIndentedString(geneticInfo)).append("\n");
     sb.append("    biomarkers: ").append(toIndentedString(biomarkers)).append("\n");
     sb.append("    pathology: ").append(toIndentedString(pathology)).append("\n");
@@ -571,6 +596,7 @@ public class MouseModelDto implements ModelDto {
       this.instance.setTranscriptomics(value.transcriptomics);
       this.instance.setDiseaseCorrelation(value.diseaseCorrelation);
       this.instance.setSpatialTranscriptomics(value.spatialTranscriptomics);
+      this.instance.setProteomics(value.proteomics);
       this.instance.setGeneticInfo(value.geneticInfo);
       this.instance.setBiomarkers(value.biomarkers);
       this.instance.setPathology(value.pathology);
@@ -644,6 +670,11 @@ public class MouseModelDto implements ModelDto {
     
     public MouseModelDto.Builder spatialTranscriptomics(String spatialTranscriptomics) {
       this.instance.spatialTranscriptomics(spatialTranscriptomics);
+      return this;
+    }
+    
+    public MouseModelDto.Builder proteomics(String proteomics) {
+      this.instance.proteomics(proteomics);
       return this;
     }
     

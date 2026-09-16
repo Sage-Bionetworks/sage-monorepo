@@ -28,11 +28,13 @@ import {
   TranscriptomicsPage,
   TranscriptomicsService,
 } from '@sagebionetworks/model-ad/api-client';
-import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
+import {
+  DIFFERENTIAL_EXPRESSION_CATEGORIES,
+  MODEL_AD_LOADING_ICON_COLORS,
+} from '@sagebionetworks/model-ad/config';
 import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
-import { PROTEIN_MAIN_CATEGORY, RNA_MAIN_CATEGORY } from './differential-expression-categories';
 import { DifferentialExpressionComparisonToolComponent } from './differential-expression-comparison-tool.component';
 import { DifferentialExpressionComparisonToolService } from './services/differential-expression-comparison-tool.service';
 
@@ -167,8 +169,10 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
     it('should call the transcriptomics API for the RNA main category', async () => {
       const { component, getTranscriptomicsSpy, getProteomicsSpy } = await setup();
 
-      component.getUnpinnedData(mockQuery([RNA_MAIN_CATEGORY, TISSUE_CATEGORY]));
-      component.getPinnedData([RNA_MAIN_CATEGORY, TISSUE_CATEGORY], [], []);
+      component.getUnpinnedData(
+        mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY]),
+      );
+      component.getPinnedData([DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY], [], []);
 
       expect(getTranscriptomicsSpy).toHaveBeenCalledTimes(2);
       expect(getProteomicsSpy).not.toHaveBeenCalled();
@@ -177,8 +181,14 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
     it('should call the proteomics API for the protein main category', async () => {
       const { component, getTranscriptomicsSpy, getProteomicsSpy } = await setup();
 
-      component.getUnpinnedData(mockQuery([PROTEIN_MAIN_CATEGORY, TISSUE_CATEGORY]));
-      component.getPinnedData([PROTEIN_MAIN_CATEGORY, TISSUE_CATEGORY], [], []);
+      component.getUnpinnedData(
+        mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, TISSUE_CATEGORY]),
+      );
+      component.getPinnedData(
+        [DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, TISSUE_CATEGORY],
+        [],
+        [],
+      );
 
       expect(getProteomicsSpy).toHaveBeenCalledTimes(2);
       expect(getTranscriptomicsSpy).not.toHaveBeenCalled();
@@ -223,7 +233,9 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
     it('should override link_url with model_group when non-null', async () => {
       const { component, comparisonToolService } = await setup();
 
-      component.getUnpinnedData(mockQuery([RNA_MAIN_CATEGORY, TISSUE_CATEGORY]));
+      component.getUnpinnedData(
+        mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY]),
+      );
 
       expect(comparisonToolService.unpinnedData()).toEqual([
         expect.objectContaining({
@@ -235,7 +247,9 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
     it('should override link_url with model_group for proteomics rows', async () => {
       const { component, comparisonToolService } = await setup();
 
-      component.getUnpinnedData(mockQuery([PROTEIN_MAIN_CATEGORY, TISSUE_CATEGORY]));
+      component.getUnpinnedData(
+        mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, TISSUE_CATEGORY]),
+      );
 
       expect(comparisonToolService.unpinnedData()).toEqual([
         expect.objectContaining({
@@ -253,7 +267,9 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
       };
       getTranscriptomicsSpy.mockReturnValue(of(mockPage([row])) as any);
 
-      component.getUnpinnedData(mockQuery([RNA_MAIN_CATEGORY, TISSUE_CATEGORY]));
+      component.getUnpinnedData(
+        mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY]),
+      );
 
       expect(comparisonToolService.unpinnedData()).toEqual([
         expect.objectContaining({
@@ -269,7 +285,9 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
         .spyOn(comparisonToolService, 'selectedFilters')
         .mockReturnValue({ sexes: selectedSexes });
 
-      component.getUnpinnedData(mockQuery([RNA_MAIN_CATEGORY, TISSUE_CATEGORY]));
+      component.getUnpinnedData(
+        mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY]),
+      );
 
       expect(getTranscriptomicsSpy).toHaveBeenCalledWith(
         expect.objectContaining({ sex: selectedSexes }),
@@ -282,8 +300,8 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
       const { component } = await setup();
 
       expect(Object.keys(component.selectorsWikiParams)).toEqual([
-        RNA_MAIN_CATEGORY,
-        PROTEIN_MAIN_CATEGORY,
+        DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA,
+        DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN,
       ]);
     });
   });
@@ -301,7 +319,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
     it('should open the gene details page for the RNA main category', async () => {
       const { component, setMainCategory } = await setup();
-      setMainCategory(RNA_MAIN_CATEGORY);
+      setMainCategory(DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA);
 
       component.viewConfig.viewDetailsClick?.(baseMockRow);
 
@@ -313,7 +331,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
     it('should open the protein details page for the protein main category', async () => {
       const { component, setMainCategory } = await setup();
-      setMainCategory(PROTEIN_MAIN_CATEGORY);
+      setMainCategory(DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN);
 
       component.viewConfig.viewDetailsClick?.(baseMockProteomicsRow);
 
@@ -325,7 +343,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
     it('should send the model name when model_group is null', async () => {
       const { component, setMainCategory } = await setup();
-      setMainCategory(PROTEIN_MAIN_CATEGORY);
+      setMainCategory(DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN);
 
       component.viewConfig.viewDetailsClick?.({
         ...baseMockProteomicsRow,
@@ -355,7 +373,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
     it('should build the RNA panel data', async () => {
       const { component, setMainCategory } = await setup();
-      setMainCategory(RNA_MAIN_CATEGORY);
+      setMainCategory(DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA);
 
       const panelData = component.viewConfig.heatmapCircleClickTransformFn?.(
         clickContext(baseMockRow),
@@ -374,7 +392,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
     it('should build the proteomics panel data', async () => {
       const { component, setMainCategory } = await setup();
-      setMainCategory(PROTEIN_MAIN_CATEGORY);
+      setMainCategory(DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN);
 
       const panelData = component.viewConfig.heatmapCircleClickTransformFn?.(
         clickContext(baseMockProteomicsRow),
@@ -393,7 +411,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
     it('should omit the right label when a proteomics row has no gene symbol', async () => {
       const { component, setMainCategory } = await setup();
-      setMainCategory(PROTEIN_MAIN_CATEGORY);
+      setMainCategory(DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN);
 
       const panelData = component.viewConfig.heatmapCircleClickTransformFn?.(
         clickContext({
