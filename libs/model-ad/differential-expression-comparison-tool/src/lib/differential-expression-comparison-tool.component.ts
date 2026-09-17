@@ -29,7 +29,11 @@ import {
   TranscriptomicsSearchQuery,
   TranscriptomicsService,
 } from '@sagebionetworks/model-ad/api-client';
-import { DIFFERENTIAL_EXPRESSION_CATEGORIES, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import {
+  DIFFERENTIAL_EXPRESSION_CATEGORIES,
+  DOWNLOAD_PINS_NOTE,
+  ROUTE_PATHS,
+} from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, Observable, shareReplay } from 'rxjs';
 import {
@@ -122,6 +126,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     },
     legendPanelConfig: this.legendPanelConfig,
     rowIdDataKey: 'composite_id',
+    downloadPinsNote: DOWNLOAD_PINS_NOTE,
     defaultSort: [
       { field: 'gene_symbol', order: 1 },
       { field: 'name', order: 1 },

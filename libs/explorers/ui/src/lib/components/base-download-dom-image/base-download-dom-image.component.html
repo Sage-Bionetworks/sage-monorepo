@@ -5,6 +5,8 @@
   size="small"
   (click)="op.toggle($event)"
   [variant]="buttonLabel() ? 'text' : undefined"
+  [pTooltip]="buttonTooltip()"
+  tooltipPosition="top"
 >
   <fa-icon [icon]="downloadIcon"></fa-icon>
   {{ buttonLabel() }}
@@ -39,5 +41,14 @@
         <div class="base-download-dom-image-error">{{ error() }}</div>
       }
     </div>
+    @if (note(); as downloadNote) {
+      <div class="base-download-dom-image-note">
+        {{ downloadNote.textBefore
+        }}<a [href]="downloadNote.linkUrl" target="_blank" rel="noopener noreferrer">{{
+          downloadNote.linkText
+        }}</a
+        >{{ downloadNote.textAfter }}
+      </div>
+    }
   </div>
 </p-popover>

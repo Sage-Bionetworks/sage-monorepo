@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { DownloadNote } from '@sagebionetworks/explorers/models';
 import { Meta, StoryObj } from '@storybook/angular';
 import { DownloadDomImageComponent } from './download-dom-image.component';
 
@@ -11,6 +12,8 @@ import { DownloadDomImageComponent } from './download-dom-image.component';
         [filename]="filename"
         [heading]="heading"
         [buttonLabel]="buttonLabel"
+        [buttonTooltip]="buttonTooltip"
+        [note]="note"
         [hasCsvDownload]="hasCsvDownload"
         [data]="data"
       />
@@ -30,6 +33,8 @@ class StorybookDownloadDomImageWrapper {
   filename = 'my-plot';
   heading = 'Download this plot as:';
   buttonLabel = '';
+  buttonTooltip = '';
+  note?: DownloadNote;
   hasCsvDownload = false;
   data: string[][] = [
     ['Column 1', 'Column 2'],
@@ -74,5 +79,21 @@ export const CsvData: Story = {
       ['1', '2'],
       ['3', '4'],
     ],
+  },
+};
+
+export const WithTooltipAndNote: Story = {
+  args: {
+    buttonLabel: 'Download Pins',
+    buttonTooltip: 'Download pinned results',
+    heading: 'Download pinned results as:',
+    hasCsvDownload: true,
+    note: {
+      textBefore: 'See the ',
+      linkText: 'Model AD Explorer documentation',
+      linkUrl: 'https://help.adknowledgeportal.org/',
+      textAfter:
+        ' for links to the study-specific data files, metadata files, and methods documentation.',
+    },
   },
 };

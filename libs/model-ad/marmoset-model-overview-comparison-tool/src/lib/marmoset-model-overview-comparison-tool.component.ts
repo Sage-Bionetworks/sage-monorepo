@@ -18,7 +18,7 @@ import {
   MarmosetModelOverviewsPage,
   ModelOrganism,
 } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { DOWNLOAD_PINS_NOTE, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { MarmosetModelOverviewComparisonToolService } from './services/marmoset-model-overview-comparison-tool.service';
@@ -69,6 +69,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     legendEnabled: false,
     rowIdDataKey: 'name',
     allowPinnedImageDownload: false,
+    downloadPinsNote: DOWNLOAD_PINS_NOTE,
     defaultSort: [{ field: 'name', order: 1 }],
   };
 

@@ -10,9 +10,11 @@ import {
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { DownloadNote } from '@sagebionetworks/explorers/models';
 import { ButtonModule } from 'primeng/button';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { TooltipModule } from 'primeng/tooltip';
 import { FILE_TYPE_CSV, FILE_TYPE_JPEG, FILE_TYPE_PNG } from './file-types';
 
 interface Type {
@@ -22,7 +24,14 @@ interface Type {
 
 @Component({
   selector: 'explorers-base-download-dom-image',
-  imports: [FormsModule, PopoverModule, RadioButtonModule, ButtonModule, FontAwesomeModule],
+  imports: [
+    FormsModule,
+    PopoverModule,
+    RadioButtonModule,
+    ButtonModule,
+    FontAwesomeModule,
+    TooltipModule,
+  ],
   templateUrl: './base-download-dom-image.component.html',
   styleUrls: ['./base-download-dom-image.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -31,6 +40,8 @@ export class BaseDownloadDomImageComponent {
   heading = input('Download this plot as:');
   modalButtonLabel = input('Download');
   buttonLabel = input('Download');
+  buttonTooltip = input('');
+  note = input<DownloadNote>();
   filename = input.required();
   performDownload = input.required<(fileType: string) => Promise<void>>();
   hasCsvDownload = input<boolean>(false);

@@ -20,6 +20,13 @@ export const COMPARISON_TOOL_BODY_CLASS = 'comparison-tool-body';
 export const PIN_ALL_TOOLTIP = 'Pin all matching rows to the top.';
 export const PIN_ALL_LOADING_TOOLTIP = 'Waiting for data to load...';
 
+// Pinned results download control
+export const DOWNLOAD_PINS_LABEL = 'Download Pins';
+export const DOWNLOAD_PINS_TOOLTIP = 'Download pinned results';
+export const DOWNLOAD_PINS_HEADING = 'Download pinned results as:';
+export const CLEAR_ALL_PINS_LABEL = 'Clear All Pins';
+export const CLEAR_ALL_PINS_TOOLTIP = 'Clear all pinned results';
+
 // Keep in sync with the corresponding $comparison-tool-* variables in
 // libs/explorers/styles/src/lib/_variables.scss.
 export const COLUMN_HEADER_MARGIN_LEFT_PX = 10;

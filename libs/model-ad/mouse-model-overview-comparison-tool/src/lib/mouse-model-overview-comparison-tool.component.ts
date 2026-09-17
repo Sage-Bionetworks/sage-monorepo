@@ -18,7 +18,7 @@ import {
   MouseModelOverviewService,
   MouseModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { DOWNLOAD_PINS_NOTE, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { MouseModelOverviewComparisonToolService } from './services/mouse-model-overview-comparison-tool.service';
@@ -69,6 +69,7 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
     legendEnabled: false,
     rowIdDataKey: 'name',
     allowPinnedImageDownload: false,
+    downloadPinsNote: DOWNLOAD_PINS_NOTE,
     defaultSort: [
       { field: 'model_type', order: -1 },
       { field: 'name', order: 1 },
