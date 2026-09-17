@@ -142,12 +142,26 @@ export interface ComparisonToolColumn extends ComparisonToolConfigColumn {
   selected: boolean;
 }
 
+export interface ComparisonToolNoun {
+  singular: string;
+  plural: string;
+}
+
+/**
+ * The hierarchy fields below are absent from Agora's generated config and explicitly null on
+ * Model-AD configs that declare no hierarchy, so consumers must test falsiness rather than
+ * comparing against undefined.
+ */
 export interface ComparisonToolConfig {
   page: ComparisonToolPage;
   dropdowns: string[];
   row_count: string | null;
   columns: ComparisonToolConfigColumn[];
   filters: ComparisonToolConfigFilter[];
+  row_id_data_key?: string | null;
+  parent_id_data_key?: string | null;
+  parent_noun?: ComparisonToolNoun | null;
+  view_noun?: ComparisonToolNoun | null;
 }
 
 export type HeatmapCircleData<ColorKey extends string = string> = {

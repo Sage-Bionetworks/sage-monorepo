@@ -57,6 +57,60 @@ class ComparisonToolConfigMapperTest {
   }
 
   @Test
+  @DisplayName("should map hierarchy fields to dto")
+  void shouldMapHierarchyFieldsToDto() {
+    // given
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("Differential Expression");
+    document.setColumns(List.of());
+    document.setFilters(List.of());
+    document.setRowIdDataKey("composite_id");
+    document.setParentIdDataKey("rna_composite_id");
+    document.setParentNoun(
+      ComparisonToolConfigDocument.ComparisonToolNoun.builder()
+        .singular("gene")
+        .plural("genes")
+        .build()
+    );
+    document.setViewNoun(
+      ComparisonToolConfigDocument.ComparisonToolNoun.builder()
+        .singular("protein")
+        .plural("proteins")
+        .build()
+    );
+
+    // when
+    ComparisonToolConfigDto result = mapper.toDto(document);
+
+    // then
+    assertThat(result.getRowIdDataKey()).isEqualTo("composite_id");
+    assertThat(result.getParentIdDataKey()).isEqualTo("rna_composite_id");
+    assertThat(result.getParentNoun().getSingular()).isEqualTo("gene");
+    assertThat(result.getParentNoun().getPlural()).isEqualTo("genes");
+    assertThat(result.getViewNoun().getSingular()).isEqualTo("protein");
+    assertThat(result.getViewNoun().getPlural()).isEqualTo("proteins");
+  }
+
+  @Test
+  @DisplayName("should leave hierarchy fields null when document declares no hierarchy")
+  void shouldLeaveHierarchyFieldsNullWhenDocumentDeclaresNoHierarchy() {
+    // given
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("Mouse Model Overview");
+    document.setColumns(List.of());
+    document.setFilters(List.of());
+
+    // when
+    ComparisonToolConfigDto result = mapper.toDto(document);
+
+    // then
+    assertThat(result.getRowIdDataKey()).isNull();
+    assertThat(result.getParentIdDataKey()).isNull();
+    assertThat(result.getParentNoun()).isNull();
+    assertThat(result.getViewNoun()).isNull();
+  }
+
+  @Test
   @DisplayName("should map columns with all required fields")
   void shouldMapColumnsWithAllRequiredFields() {
     // given
