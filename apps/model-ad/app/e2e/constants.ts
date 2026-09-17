@@ -24,6 +24,10 @@ export const COMPARISON_TOOL_API_PATHS: Record<ComparisonToolPage, string> = {
   'Disease Correlation': '/comparison-tools/disease-correlation',
 };
 
+// The Differential Expression page serves two modalities from two endpoints, selected by its main
+// category dropdown. The map above holds the RNA endpoint, the default for that page.
+export const PROTEOMICS_API_PATH = '/comparison-tools/proteomics';
+
 export const DIFFERENTIAL_EXPRESSION_NAV_TRAILS: Record<'RNA' | 'PROTEIN', HeaderNavTrail> = {
   RNA: {
     dropdown: 'Differential Expression',

@@ -1,7 +1,9 @@
 import { provideHttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 import { provideRouter, RouterModule } from '@angular/router';
 import { ComparisonToolColumn, ComparisonToolFilter } from '@sagebionetworks/explorers/models';
 import {
+  ComparisonToolService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
   SvgIconService,
@@ -24,6 +26,8 @@ import {
   COLUMN_HEADER_TEXT_CLASS,
   MAX_COLUMN_WIDTH_PX,
   MIN_COLUMN_WIDTH_PX,
+  PIN_ALL_LOADING_TOOLTIP,
+  PIN_ALL_TOOLTIP,
   SORT_BADGE_SPACING_PX,
   SORT_BADGE_WIDTH_PX,
   SORT_ICON_WIDTH_PX,
@@ -126,6 +130,61 @@ describe('ComparisonToolTableComponent', () => {
     );
     const pinAll = screen.getByRole('button', { name: /pin all/i });
     expect(pinAll).toBeDisabled();
+  });
+
+  it('should disable Pin All while table data is loading', async () => {
+    const { component } = await setup(undefined, { searchTerm: '5xFAD' });
+
+    TestBed.inject(ComparisonToolService).startFetch();
+    component.detectChanges();
+
+    expect(screen.getByRole('button', { name: /pin all/i })).toBeDisabled();
+  });
+
+  it('should explain what Pin All does when no fetch is in flight', async () => {
+    const { user } = await setup(undefined, { searchTerm: '5xFAD' });
+
+    await user.hover(screen.getByRole('button', { name: /pin all/i }));
+
+    expect(screen.getByRole('tooltip', { name: PIN_ALL_TOOLTIP })).toBeVisible();
+  });
+
+  it('should explain that Pin All is waiting on table data while a fetch is in flight', async () => {
+    const { component, user } = await setup(undefined, { searchTerm: '5xFAD' });
+
+    TestBed.inject(ComparisonToolService).startFetch();
+    component.detectChanges();
+    await user.hover(screen.getByRole('button', { name: /pin all/i }));
+
+    expect(screen.getByRole('tooltip', { name: PIN_ALL_LOADING_TOOLTIP })).toBeVisible();
+  });
+
+  it('should explain the pin limit rather than the loading state when both apply', async () => {
+    const pinnedItemData = mockComparisonToolData[0];
+    const { component, user } = await setup(
+      {
+        pinnedItems: [pinnedItemData['_id']],
+        pinnedData: [pinnedItemData],
+        maxPinnedItems: 1,
+      },
+      { searchTerm: '5xFAD' },
+    );
+    const service = TestBed.inject(ComparisonToolService);
+
+    service.startFetch();
+    component.detectChanges();
+    await user.hover(screen.getByRole('button', { name: /pin all/i }));
+
+    expect(screen.getByRole('tooltip', { name: service.disabledPinTooltip() })).toBeVisible();
+  });
+
+  it('should delegate Pin All to the comparison tool service', async () => {
+    const { user } = await setup(undefined, { searchTerm: '5xFAD' });
+    const pinAllSpy = jest.spyOn(TestBed.inject(ComparisonToolService), 'pinAll');
+
+    await user.click(screen.getByRole('button', { name: /pin all/i }));
+
+    expect(pinAllSpy).toHaveBeenCalled();
   });
 
   it('should show All Results divider when not searching/filtering and pinned exist', async () => {

@@ -102,6 +102,6 @@ public class CustomDiseaseCorrelationRepositoryImpl
       Criteria.where("cluster").is(cluster)
     );
 
-    return executePagedAggregation(matchCriteria, pageable);
+    return executePagedAggregation(matchCriteria, pageable, isInclude, query.getRemainingBudget());
   }
 }

@@ -1,11 +1,17 @@
-import { Page, expect } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigFilter,
   ComparisonToolConfigPage,
+  NominatedDrug,
+  NominatedDrugsPage,
+  NominatedTarget,
+  NominatedTargetsPage,
 } from '@sagebionetworks/agora/api-client';
 import { DEFAULT_PAGE_SIZE } from '@sagebionetworks/explorers/constants';
 import {
+  buildComparisonToolFetchParams,
+  ComparisonToolFetchOptions,
   expectComparisonToolTableLoaded,
   navigateViaHeaderNav,
 } from '@sagebionetworks/explorers/testing/e2e';
@@ -68,6 +74,32 @@ export const fetchComparisonToolData = async <T>(
   expect(response.ok()).toBeTruthy();
   const data = (await response.json()) as T;
   return data;
+};
+
+export const fetchNominatedTargets = async (
+  page: Page,
+  options: ComparisonToolFetchOptions = {},
+): Promise<NominatedTarget[]> => {
+  const data = await fetchComparisonToolData<NominatedTargetsPage>(
+    page,
+    'Nominated Targets',
+    [],
+    buildComparisonToolFetchParams(options),
+  );
+  return data.nominatedTargets;
+};
+
+export const fetchNominatedDrugs = async (
+  page: Page,
+  options: ComparisonToolFetchOptions = {},
+): Promise<NominatedDrug[]> => {
+  const data = await fetchComparisonToolData<NominatedDrugsPage>(
+    page,
+    'Nominated Drugs',
+    [],
+    buildComparisonToolFetchParams(options),
+  );
+  return data.nominatedDrugs;
 };
 
 export const fetchComparisonToolConfig = async (
