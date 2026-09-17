@@ -9,6 +9,7 @@
  */
 import { ComparisonToolPage } from './comparison-tool-page';
 import { ComparisonToolConfigColumn } from './comparison-tool-config-column';
+import { ComparisonToolNoun } from './comparison-tool-noun';
 import { ComparisonToolConfigFilter } from './comparison-tool-config-filter';
 
 export interface ComparisonToolConfig {
@@ -29,5 +30,15 @@ export interface ComparisonToolConfig {
    * List of filter configurations
    */
   filters: Array<ComparisonToolConfigFilter>;
+  /**
+   * The data key holding this view\'s row UID, overriding the comparison tool\'s default row id key for this view. Null when the view declares no hierarchy.
+   */
+  row_id_data_key?: string | null;
+  /**
+   * The data key holding the id of the row\'s parent. It must map to the same values in every view of the comparison tool, though not necessarily through the same field, since different views can read different collections. Equal to row_id_data_key means the view\'s rows are their own parents; a different key means the view\'s rows are children. Null when the view declares no hierarchy.
+   */
+  parent_id_data_key?: string | null;
+  parent_noun?: ComparisonToolNoun;
+  view_noun?: ComparisonToolNoun;
 }
 export namespace ComparisonToolConfig {}

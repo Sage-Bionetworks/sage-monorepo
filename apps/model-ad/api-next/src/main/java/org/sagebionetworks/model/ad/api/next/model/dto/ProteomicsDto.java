@@ -33,6 +33,8 @@ public class ProteomicsDto {
 
   private String compositeId;
 
+  private String rnaCompositeId;
+
   private String ensemblGeneId;
 
   private String geneSymbol;
@@ -73,8 +75,9 @@ public class ProteomicsDto {
   /**
    * Constructor with only required parameters
    */
-  public ProteomicsDto(String compositeId, String ensemblGeneId, String geneSymbol, String uniprotid, String uniqueId, String displaySymbol, List<String> biodomains, NamedLinkDto name, String matchedControl, String modelGroup, String modelType, String tissue, SexDto sex) {
+  public ProteomicsDto(String compositeId, String rnaCompositeId, String ensemblGeneId, String geneSymbol, String uniprotid, String uniqueId, String displaySymbol, List<String> biodomains, NamedLinkDto name, String matchedControl, String modelGroup, String modelType, String tissue, SexDto sex) {
     this.compositeId = compositeId;
+    this.rnaCompositeId = rnaCompositeId;
     this.ensemblGeneId = ensemblGeneId;
     this.geneSymbol = geneSymbol;
     this.uniprotid = uniprotid;
@@ -107,6 +110,26 @@ public class ProteomicsDto {
 
   public void setCompositeId(String compositeId) {
     this.compositeId = compositeId;
+  }
+
+  public ProteomicsDto rnaCompositeId(String rnaCompositeId) {
+    this.rnaCompositeId = rnaCompositeId;
+    return this;
+  }
+
+  /**
+   * Identifier of the gene this proteomics object rolls up to (ensembl_gene_id~model_name~sex), equal to the composite_id of the transcriptomics row for the same gene, model, and sex 
+   * @return rnaCompositeId
+   */
+  @NotNull 
+  @Schema(name = "rna_composite_id", example = "ENSMUSG00000000001~LOAD2~Female", description = "Identifier of the gene this proteomics object rolls up to (ensembl_gene_id~model_name~sex), equal to the composite_id of the transcriptomics row for the same gene, model, and sex ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("rna_composite_id")
+  public String getRnaCompositeId() {
+    return rnaCompositeId;
+  }
+
+  public void setRnaCompositeId(String rnaCompositeId) {
+    this.rnaCompositeId = rnaCompositeId;
   }
 
   public ProteomicsDto ensemblGeneId(String ensemblGeneId) {
@@ -447,6 +470,7 @@ public class ProteomicsDto {
     }
     ProteomicsDto proteomics = (ProteomicsDto) o;
     return Objects.equals(this.compositeId, proteomics.compositeId) &&
+        Objects.equals(this.rnaCompositeId, proteomics.rnaCompositeId) &&
         Objects.equals(this.ensemblGeneId, proteomics.ensemblGeneId) &&
         Objects.equals(this.geneSymbol, proteomics.geneSymbol) &&
         Objects.equals(this.uniprotid, proteomics.uniprotid) &&
@@ -467,7 +491,7 @@ public class ProteomicsDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(compositeId, ensemblGeneId, geneSymbol, uniprotid, uniqueId, displaySymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sex, _4months, _12months, _18months, _24months);
+    return Objects.hash(compositeId, rnaCompositeId, ensemblGeneId, geneSymbol, uniprotid, uniqueId, displaySymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sex, _4months, _12months, _18months, _24months);
   }
 
   @Override
@@ -475,6 +499,7 @@ public class ProteomicsDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class ProteomicsDto {\n");
     sb.append("    compositeId: ").append(toIndentedString(compositeId)).append("\n");
+    sb.append("    rnaCompositeId: ").append(toIndentedString(rnaCompositeId)).append("\n");
     sb.append("    ensemblGeneId: ").append(toIndentedString(ensemblGeneId)).append("\n");
     sb.append("    geneSymbol: ").append(toIndentedString(geneSymbol)).append("\n");
     sb.append("    uniprotid: ").append(toIndentedString(uniprotid)).append("\n");
@@ -520,6 +545,7 @@ public class ProteomicsDto {
 
     protected Builder copyOf(ProteomicsDto value) { 
       this.instance.setCompositeId(value.compositeId);
+      this.instance.setRnaCompositeId(value.rnaCompositeId);
       this.instance.setEnsemblGeneId(value.ensemblGeneId);
       this.instance.setGeneSymbol(value.geneSymbol);
       this.instance.setUniprotid(value.uniprotid);
@@ -541,6 +567,11 @@ public class ProteomicsDto {
 
     public ProteomicsDto.Builder compositeId(String compositeId) {
       this.instance.compositeId(compositeId);
+      return this;
+    }
+    
+    public ProteomicsDto.Builder rnaCompositeId(String rnaCompositeId) {
+      this.instance.rnaCompositeId(rnaCompositeId);
       return this;
     }
     

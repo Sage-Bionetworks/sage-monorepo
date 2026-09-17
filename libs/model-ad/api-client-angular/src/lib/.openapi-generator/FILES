@@ -21,6 +21,7 @@ model/basic-error.ts
 model/comparison-tool-config-column.ts
 model/comparison-tool-config-filter.ts
 model/comparison-tool-config.ts
+model/comparison-tool-noun.ts
 model/comparison-tool-page.ts
 model/correlation-result.ts
 model/data-version.ts
@@ -31,6 +32,7 @@ model/fold-change-result.ts
 model/genetic-info.ts
 model/individual-data.ts
 model/item-filter-type-query.ts
+model/item-id-space-query.ts
 model/link.ts
 model/marmoset-model-overview-search-query.ts
 model/marmoset-model-overview.ts

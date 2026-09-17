@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ItemIdSpaceQuery } from './item-id-space-query';
 import { ItemFilterTypeQuery } from './item-filter-type-query';
 
 /**
@@ -22,7 +23,7 @@ export interface TranscriptomicsSearchQuery {
    */
   pageSize?: number;
   /**
-   * Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is \'exclude\'.
+   * Maximum number of new matching results to admit, letting a client retrieve matching rows from beyond the current page in a single request. It counts unique parents for a parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is \'exclude\'.
    */
   remainingBudget?: number | null;
   /**
@@ -34,6 +35,11 @@ export interface TranscriptomicsSearchQuery {
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
+  itemIdSpace?: ItemIdSpaceQuery;
+  /**
+   * Parent IDs that are already accounted for. On a budgeted request the rows of these parents are always returned, outside the budget, and remainingBudget is spent only on parents not in this set. On any request the set also drives hasRowsForPrebudgetedParents in the response, so send it on a paginated request once the budget is exhausted to learn whether any further rows could still be admitted through parents already accounted for. Always matched against the parent ID field, independently of itemIdSpace, which governs only the items array. Only applied when itemFilterType is \'exclude\'.
+   */
+  prebudgetedParentIds?: Array<string> | null;
   /**
    * Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches). Examples: \'gnai,cdc45\' (comma-separated list) or \'gna\' (partial match). Only applied when itemFilterType is \'exclude\'.
    */

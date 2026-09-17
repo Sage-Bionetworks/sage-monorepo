@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ItemIdSpaceQuery } from './item-id-space-query';
 import { ItemFilterTypeQuery } from './item-filter-type-query';
 
 /**
@@ -22,7 +23,7 @@ export interface ProteomicsSearchQuery {
    */
   pageSize?: number;
   /**
-   * Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is \'exclude\'.
+   * Maximum number of new matching results to admit, letting a client retrieve matching rows from beyond the current page in a single request. It counts unique parents for a parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is \'exclude\'.
    */
   remainingBudget?: number | null;
   /**
@@ -34,6 +35,11 @@ export interface ProteomicsSearchQuery {
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
+  itemIdSpace?: ItemIdSpaceQuery;
+  /**
+   * Parent IDs that are already accounted for, each using the format \"ensembl_gene_id~name~sex\". On a budgeted request the rows of these parents are always returned, outside the budget, and remainingBudget is spent only on parents not in this set. On any request the set also drives hasRowsForPrebudgetedParents in the response, so send it on a paginated request once the budget is exhausted to learn whether any further rows could still be admitted through parents already accounted for. Always matched against the parent ID field, independently of itemIdSpace, which governs only the items array. Only applied when itemFilterType is \'exclude\'.
+   */
+  prebudgetedParentIds?: Array<string> | null;
   /**
    * Search by identifier. A single term is a case-insensitive partial match on the displayed symbol, which embeds the gene symbol and UniProt ID, or the Ensembl gene ID and UniProt ID when the gene symbol is unavailable. A single term that is a complete Ensembl gene ID is instead a case-insensitive full match on the Ensembl gene ID, so it also reaches rows whose displayed symbol shows a gene symbol. A comma separated list full-matches each term, case-insensitively, against the Ensembl gene ID, gene symbol, or UniProt ID. Examples: \'ensa,P27144,ENSMUSG00000000001\' (comma-separated list), \'ENSMUSG00000000001\' (complete Ensembl gene ID) or \'gna\' (partial match). Only applied when itemFilterType is \'exclude\'.
    */

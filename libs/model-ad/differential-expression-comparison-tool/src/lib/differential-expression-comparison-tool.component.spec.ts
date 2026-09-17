@@ -56,6 +56,7 @@ const baseMockRow: Transcriptomics = {
 
 const baseMockProteomicsRow: Proteomics = {
   composite_id: 'ENSG00000001P27144~Abca7*V1599M.5xFAD~Female',
+  rna_composite_id: baseMockRow.composite_id,
   ensembl_gene_id: 'ENSG00000001',
   gene_symbol: 'Sptan1',
   uniprotid: 'B9EKJ1',
