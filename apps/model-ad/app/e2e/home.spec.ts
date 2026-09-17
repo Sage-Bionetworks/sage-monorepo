@@ -36,9 +36,9 @@ test.describe('home', () => {
   test('disease correlation card links to disease correlation CT', async ({ page }) => {
     await page.goto('');
 
-    const diseaseCorrelationCard = page
-      .getByRole('button')
-      .filter({ has: page.getByRole('heading', { level: 2, name: 'Disease Correlation' }) });
+    const diseaseCorrelationCard = page.getByRole('button').filter({
+      has: page.getByRole('heading', { level: 2, name: 'Mouse-Human Disease Correlation' }),
+    });
     await expect(diseaseCorrelationCard).toBeVisible();
 
     await diseaseCorrelationCard.click();
