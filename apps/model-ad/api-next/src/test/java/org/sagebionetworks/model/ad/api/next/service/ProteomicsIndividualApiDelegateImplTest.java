@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -236,6 +237,25 @@ class ProteomicsIndividualApiDelegateImplTest {
     HttpHeaders headers = response.getHeaders();
     assertThat(headers.getCacheControl()).contains("no-cache");
     assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
+  }
+
+  @Test
+  @DisplayName("should throw IllegalArgumentException when invalid query parameter provided")
+  void shouldThrowExceptionWhenInvalidQueryParameterProvided() {
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.addParameter("invalidField", "someValue");
+    RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+    ProteomicsIndividualFilterQueryDto query = ProteomicsIndividualFilterQueryDto.builder()
+      .uniqueId(UNIQUE_ID)
+      .modelIdentifier(MODEL_NAME)
+      .modelIdentifierType(ModelIdentifierTypeDto.NAME)
+      .tissue(TISSUE)
+      .build();
+
+    assertThatThrownBy(() -> delegate.getProteomicsIndividual(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Unknown query parameter: invalidField");
   }
 
   private ProteomicsIndividualDocument createProteomicsIndividualDocument(
