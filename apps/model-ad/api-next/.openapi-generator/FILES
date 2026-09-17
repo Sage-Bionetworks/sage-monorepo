@@ -21,6 +21,9 @@ src/main/java/org/sagebionetworks/model/ad/api/next/api/MouseModelOverviewApiDel
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ProteomicsApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ProteomicsApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ProteomicsApiDelegate.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/ProteomicsIndividualApi.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/ProteomicsIndividualApiController.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/ProteomicsIndividualApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/SearchApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/SearchApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/SearchApiDelegate.java
@@ -63,6 +66,8 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/MouseModelOverview
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/NamedLinkDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/PageMetadataDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ProteomicsDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ProteomicsIndividualDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ProteomicsIndividualFilterQueryDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ProteomicsPageDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ProteomicsSearchQueryDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/SearchResultDto.java
