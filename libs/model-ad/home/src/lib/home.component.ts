@@ -104,7 +104,7 @@ export class HomeComponent {
         },
         {
           label: 'Genes',
-          value: '30K+',
+          value: '20K+',
         },
         {
           label: 'Models',
