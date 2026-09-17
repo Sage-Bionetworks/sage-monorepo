@@ -76,7 +76,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
-    headerTitle: ComparisonToolPage.DiseaseCorrelation,
+    headerTitle: 'Mouse-Human Disease Correlation',
     filterResultsButtonTooltip: 'Filter results by Age, Sex, Modified Gene, and more',
     viewDetailsTooltip: 'Open model details page',
     viewDetailsClick: (rowData: unknown) => {

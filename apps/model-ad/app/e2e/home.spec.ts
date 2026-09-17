@@ -29,7 +29,7 @@ test.describe('home', () => {
 
     await page.waitForURL('/comparison/expression');
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Differential Expression' }),
+      page.getByRole('heading', { level: 1, name: 'Mouse Differential Expression' }),
     ).toBeVisible();
   });
 
@@ -45,7 +45,7 @@ test.describe('home', () => {
 
     await page.waitForURL('/comparison/correlation');
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Disease Correlation' }),
+      page.getByRole('heading', { level: 1, name: 'Mouse-Human Disease Correlation' }),
     ).toBeVisible();
   });
 });

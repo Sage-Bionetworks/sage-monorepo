@@ -100,7 +100,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
-    headerTitle: ComparisonToolPage.DifferentialExpression,
+    headerTitle: 'Mouse Differential Expression',
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
     viewDetailsTooltip: 'View individual results',
     viewDetailsClick: (rowData: unknown) => {
