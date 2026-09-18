@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Collation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.lang.Nullable;
 
 /**
  * Base class for comparison-tool repository implementations backed by MongoDB aggregation.
@@ -119,6 +121,42 @@ public abstract class ComparisonToolRepositorySupport<T> {
   }
 
   /**
+   * The identity space this CT's rows are identified in — the space {@code items} values are
+   * matched against unless the request asks for the parent space.
+   *
+   * <p>Defaults to the space implied by the item filter in {@link #getFilterConfig()}, so no
+   * subclass needs to override it: a {@link ItemFilterDef.Simple} item filter identifies rows by
+   * its field, a {@link ItemFilterDef.Composite} one by its parser.
+   */
+  protected ItemIdSpaceDef getRowIdSpace() {
+    return ItemIdSpaceDef.fromItemFilter(getFilterConfig().itemFilter());
+  }
+
+  /**
+   * The identity space this CT's row <em>parents</em> are identified in, or {@code null} when rows
+   * are their own parents.
+   *
+   * <p>Overriding this is what makes a CT <strong>parent-aware</strong>: several rows then roll up
+   * to one parent, so {@code itemIdSpace: parent} matches {@code items} against the parent token
+   * and a budget caps distinct parents rather than rows. Leaving it {@code null} keeps a CT
+   * <strong>self-parented</strong> — the parent space resolves back to {@link #getRowIdSpace()}
+   * and every path behaves exactly as it did before parent-awareness existed. A budget still caps
+   * rows there, precisely because each row is its own parent.
+   *
+   * <p>{@code null} rather than {@code return getRowIdSpace()} because parent-awareness has to be
+   * testable, and {@link #getRowIdSpace()} derives a fresh value on each call — a comparison
+   * against it would report every CT as parent-aware.
+   */
+  @Nullable
+  protected ItemIdSpaceDef getParentIdSpace() {
+    return null;
+  }
+
+  private ItemIdSpaceDef resolveParentIdSpace() {
+    return Objects.requireNonNullElseGet(getParentIdSpace(), this::getRowIdSpace);
+  }
+
+  /**
    * Assembles and executes the standard CT pipeline. Subclasses build {@code matchCriteria} and
    * pass it in along with the {@link Pageable}.
    *
@@ -145,11 +183,33 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * @param isInclude true if itemFilterType is INCLUDE, false if EXCLUDE
    * @param remainingBudget how many more rows the caller can accept, or null for normal pagination
    */
-  protected final Page<T> executePagedAggregation(
+  protected final CtPage<T> executePagedAggregation(
     Criteria matchCriteria,
     Pageable pageable,
     boolean isInclude,
     Integer remainingBudget
+  ) {
+    return executePagedAggregation(
+      matchCriteria,
+      pageable,
+      CtQueryOptions.rowSpace(isInclude, remainingBudget)
+    );
+  }
+
+  /**
+   * Assembles and executes the standard CT pipeline for a request carrying
+   * {@link CtQueryOptions}. Budgeting and paging behave exactly as documented on
+   * {@link #executePagedAggregation(Criteria, Pageable, boolean, Integer)}; this overload
+   * additionally answers {@code hasRowsForPrebudgetedParents} on the returned {@link CtPage}.
+   *
+   * @param matchCriteria the assembled match criteria
+   * @param pageable pagination and sort; pagination is ignored when the budget applies
+   * @param options the request's include/exclude, budget, prebudgeted parents, and identity space
+   */
+  protected final CtPage<T> executePagedAggregation(
+    Criteria matchCriteria,
+    Pageable pageable,
+    CtQueryOptions options
   ) {
     try {
       List<AggregationOperation> operations = new ArrayList<>();
@@ -186,9 +246,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
         operations.add(sort);
       }
 
-      boolean budgetApplies = !isInclude && remainingBudget != null;
+      boolean budgetApplies = !options.isInclude() && options.remainingBudget() != null;
       if (budgetApplies) {
-        operations.add(Aggregation.limit(remainingBudget));
+        operations.add(Aggregation.limit(options.remainingBudget()));
       } else {
         long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
         operations.add(Aggregation.skip(skipCount));
@@ -212,11 +272,47 @@ public abstract class ComparisonToolRepositorySupport<T> {
         getCollectionName()
       );
       Pageable resultPageable = budgetApplies ? Pageable.unpaged(pageable.getSort()) : pageable;
-      return new PageImpl<>(results.getMappedResults(), resultPageable, total);
+      return new CtPage<>(
+        results.getMappedResults(),
+        resultPageable,
+        total,
+        findRowsForPrebudgetedParents(matchCriteria, options)
+      );
     } catch (Exception e) {
       log.error("Error executing aggregation on collection {}", getCollectionName(), e);
       throw e;
     }
+  }
+
+  /**
+   * Answers whether any row in the match set belongs to one of {@code prebudgetedParentIds} — that
+   * is, whether an unpinned child of an already-budgeted parent still exists somewhere in the
+   * match set. Only the whole match set can answer that, so no single page can.
+   *
+   * <p>Returns {@code null} when the question was not asked: no prebudgeted parents, or an INCLUDE
+   * request. An INCLUDE already names the items the caller holds, so a prebudgeted parent list
+   * cannot tell it anything it does not know.
+   *
+   * <p>Deliberately a third Mongo call rather than part of the existing two. The aggregation sees
+   * one page, {@code count(matchCriteria)} carries no parent clause and is needed as-is for
+   * {@code totalElements}, and folding the answer into the pipeline would want {@code $facet},
+   * which DocumentDB does not support. Being a plain query, it reads <strong>stored fields
+   * only</strong> — the same constraint that shapes {@link #buildSearchCriteria} overrides, since
+   * computed {@code $addFields} values do not exist outside the aggregation.
+   */
+  @Nullable
+  private Boolean findRowsForPrebudgetedParents(Criteria matchCriteria, CtQueryOptions options) {
+    List<String> prebudgetedParentIds = options.prebudgetedParentIds();
+    if (options.isInclude() || prebudgetedParentIds.isEmpty()) {
+      return null;
+    }
+
+    Criteria criteria = new Criteria()
+      .andOperator(matchCriteria, resolveParentIdSpace().criteriaForAny(prebudgetedParentIds));
+    return mongoTemplate.exists(
+      new Query(criteria).collation(CASE_INSENSITIVE),
+      getCollectionName()
+    );
   }
 
   /**
@@ -276,6 +372,43 @@ public abstract class ComparisonToolRepositorySupport<T> {
     CtFilterConfig<Q> config,
     Criteria... baseCriteria
   ) {
+    return buildCtMatchCriteria(
+      query,
+      items,
+      CtQueryOptions.rowSpace(isInclude, null),
+      search,
+      config,
+      baseCriteria
+    );
+  }
+
+  /**
+   * Builds {@link Criteria} for comparison-tool filtering, honoring the identity space the request
+   * asked for. Filtering is otherwise identical to
+   * {@link #buildCtMatchCriteria(Object, List, boolean, String, CtFilterConfig, Criteria...)}.
+   *
+   * <p>{@code items} are matched against <strong>exactly one</strong> identity space, never an
+   * {@code OR} of both: the parent space ({@link #getParentIdSpace()}, falling back to the row
+   * space on a self-parented CT) when {@link CtQueryOptions#matchParentIdSpace()} is set, and
+   * {@link #getRowIdSpace()} otherwise.
+   *
+   * @param query the query DTO
+   * @param items the list of item identifiers
+   * @param options the request's include/exclude and identity space
+   * @param search the search string
+   * @param config the filter configuration
+   * @param baseCriteria required base filters (e.g., cluster, tissue)
+   * @param <Q> the query DTO type
+   * @return the combined match criteria
+   */
+  protected <Q> Criteria buildCtMatchCriteria(
+    Q query,
+    List<String> items,
+    CtQueryOptions options,
+    String search,
+    CtFilterConfig<Q> config,
+    Criteria... baseCriteria
+  ) {
     List<Criteria> allCriteria = new ArrayList<>();
 
     // 1. Add base criteria (required filters)
@@ -290,10 +423,10 @@ public abstract class ComparisonToolRepositorySupport<T> {
     }
 
     // 3. Add item filter
-    addItemFilterCriteria(items, isInclude, config.itemFilter(), allCriteria);
+    addItemFilterCriteria(items, options, allCriteria);
 
     // 4. Add search filter (only in EXCLUDE mode)
-    if (!isInclude && search != null && !search.trim().isEmpty()) {
+    if (!options.isInclude() && search != null && !search.trim().isEmpty()) {
       String trimmedSearch = search.trim();
       Criteria searchCriteria = buildSearchCriteria(config.searchFilter().field(), trimmedSearch);
       allCriteria.add(searchCriteria);
@@ -337,46 +470,26 @@ public abstract class ComparisonToolRepositorySupport<T> {
     }
   }
 
-  private static void addItemFilterCriteria(
+  private void addItemFilterCriteria(
     List<String> items,
-    boolean isInclude,
-    ItemFilterDef itemFilter,
+    CtQueryOptions options,
     List<Criteria> allCriteria
   ) {
     if (items.isEmpty()) {
       // For INCLUDE mode with empty items, match nothing (return empty)
-      if (isInclude) {
+      if (options.isInclude()) {
         allCriteria.add(ApiHelper.matchNothing());
       }
       // For EXCLUDE mode with empty items, no filtering needed (return all)
       return;
     }
 
-    switch (itemFilter) {
-      case ItemFilterDef.Simple simple -> {
-        if (isInclude) {
-          allCriteria.add(Criteria.where(simple.field()).in(items));
-        } else {
-          allCriteria.add(Criteria.where(simple.field()).nin(items));
-        }
-      }
-      case ItemFilterDef.Composite composite -> {
-        // Parse each item into a Criteria
-        List<Criteria> itemCriteriaList = new ArrayList<>();
-        for (String item : items) {
-          itemCriteriaList.add(composite.parser().apply(item));
-        }
-
-        // Combine with $or (INCLUDE) or $nor (EXCLUDE)
-        if (isInclude) {
-          // Match ANY of the composite identifiers ($or)
-          allCriteria.add(new Criteria().orOperator(itemCriteriaList.toArray(new Criteria[0])));
-        } else {
-          // Exclude ALL of the composite identifiers ($nor)
-          allCriteria.add(new Criteria().norOperator(itemCriteriaList.toArray(new Criteria[0])));
-        }
-      }
-    }
+    ItemIdSpaceDef idSpace = options.matchParentIdSpace()
+      ? resolveParentIdSpace()
+      : getRowIdSpace();
+    allCriteria.add(
+      options.isInclude() ? idSpace.criteriaForAny(items) : idSpace.criteriaForNone(items)
+    );
   }
 
   private List<AggregationOperation> buildPrerequisites(

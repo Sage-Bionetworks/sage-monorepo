@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.lang.Nullable;
 
 /**
  * Tests for {@link ComparisonToolRepositorySupport#buildCtMatchCriteria}.
@@ -357,6 +358,148 @@ class BuildCtMatchCriteriaTest {
     }
   }
 
+  @Nested
+  @DisplayName("Item identity space")
+  class ItemIdSpace {
+
+    private static final String ROW_FIELD = "unique_id";
+    private static final String PARENT_FIELD = "rna_composite_id";
+
+    private CtFilterConfig<TestQuery> config() {
+      return CtFilterConfig.<TestQuery>builder()
+        .simpleItemFilter(ROW_FIELD)
+        .searchFilter("name")
+        .build();
+    }
+
+    private CtQueryOptions options(boolean isInclude, boolean matchParentIdSpace) {
+      return new CtQueryOptions(isInclude, null, List.of(), matchParentIdSpace);
+    }
+
+    @Test
+    @DisplayName("should match items against the parent space only when that space is asked for")
+    void shouldMatchParentSpaceOnlyWhenParentSpaceIsAskedFor() {
+      TestRepo repo = new TestRepo(ItemIdSpaceDef.stored(PARENT_FIELD));
+      TestQuery query = new TestQuery(List.of(), List.of());
+
+      Criteria result = repo.buildCtMatchCriteria(
+        query,
+        List.of("ENSG1~5xFAD~Female"),
+        options(true, true),
+        null,
+        config()
+      );
+
+      String criteriaStr = result.getCriteriaObject().toString();
+      assertThat(criteriaStr).contains(PARENT_FIELD).doesNotContain(ROW_FIELD);
+    }
+
+    @Test
+    @DisplayName("should match items against the row space only when the row space is asked for")
+    void shouldMatchRowSpaceOnlyWhenRowSpaceIsAskedFor() {
+      TestRepo repo = new TestRepo(ItemIdSpaceDef.stored(PARENT_FIELD));
+      TestQuery query = new TestQuery(List.of(), List.of());
+
+      Criteria result = repo.buildCtMatchCriteria(
+        query,
+        List.of("ENSG1~5xFAD~Female~Q9Z0X1"),
+        options(true, false),
+        null,
+        config()
+      );
+
+      String criteriaStr = result.getCriteriaObject().toString();
+      assertThat(criteriaStr).contains(ROW_FIELD).doesNotContain(PARENT_FIELD);
+    }
+
+    @Test
+    @DisplayName("should use $nin on the parent space for EXCLUDE mode")
+    void shouldUseNinOnParentSpaceForExcludeMode() {
+      TestRepo repo = new TestRepo(ItemIdSpaceDef.stored(PARENT_FIELD));
+      TestQuery query = new TestQuery(List.of(), List.of());
+
+      Criteria result = repo.buildCtMatchCriteria(
+        query,
+        List.of("ENSG1~5xFAD~Female"),
+        options(false, true),
+        null,
+        config()
+      );
+
+      String criteriaStr = result.getCriteriaObject().toString();
+      assertThat(criteriaStr).contains(PARENT_FIELD).contains("$nin").doesNotContain(ROW_FIELD);
+    }
+
+    @Test
+    @DisplayName("should fall back to the row space when the comparison tool is self-parented")
+    void shouldFallBackToRowSpaceWhenSelfParented() {
+      TestRepo repo = new TestRepo();
+      TestQuery query = new TestQuery(List.of(), List.of());
+
+      Criteria result = repo.buildCtMatchCriteria(
+        query,
+        List.of("APOE"),
+        options(true, true),
+        null,
+        config()
+      );
+
+      String criteriaStr = result.getCriteriaObject().toString();
+      assertThat(criteriaStr).contains(ROW_FIELD).contains("APOE");
+    }
+
+    @Test
+    @DisplayName("should add impossible condition for empty INCLUDE items under the parent space")
+    void shouldAddImpossibleConditionForEmptyIncludeUnderParentSpace() {
+      TestRepo repo = new TestRepo(ItemIdSpaceDef.stored(PARENT_FIELD));
+      TestQuery query = new TestQuery(List.of(), List.of());
+
+      Criteria result = repo.buildCtMatchCriteria(
+        query,
+        List.of(),
+        options(true, true),
+        null,
+        config()
+      );
+
+      String criteriaStr = result.getCriteriaObject().toString();
+      assertThat(criteriaStr).contains("_id").doesNotContain(PARENT_FIELD);
+    }
+
+    @Test
+    @DisplayName("should match parent items against a composite parent space")
+    void shouldMatchParentItemsAgainstCompositeParentSpace() {
+      ItemIdSpaceDef parentSpace = ItemIdSpaceDef.composite(
+        List.of("ensembl_gene_id", "sex"),
+        item -> {
+          String[] parts = item.split(ItemIdSpaceDef.DELIMITER);
+          return new Criteria()
+            .andOperator(
+              Criteria.where("ensembl_gene_id").is(parts[0]),
+              Criteria.where("sex").is(parts[1])
+            );
+        }
+      );
+      TestRepo repo = new TestRepo(parentSpace);
+      TestQuery query = new TestQuery(List.of(), List.of());
+
+      Criteria result = repo.buildCtMatchCriteria(
+        query,
+        List.of("ENSG1~Female", "ENSG2~Male"),
+        options(true, true),
+        null,
+        config()
+      );
+
+      String criteriaStr = result.getCriteriaObject().toString();
+      assertThat(criteriaStr)
+        .contains("$or")
+        .contains("ensembl_gene_id")
+        .contains("ENSG2")
+        .doesNotContain(ROW_FIELD);
+    }
+  }
+
   /** Test query DTO. */
   @Data
   @AllArgsConstructor
@@ -369,8 +512,18 @@ class BuildCtMatchCriteriaTest {
   /** Minimal test repository. */
   private static class TestRepo extends ComparisonToolRepositorySupport<Object> {
 
+    @Nullable
+    private final ItemIdSpaceDef parentIdSpace;
+
+    private CtFilterConfig<?> capturedConfig;
+
     TestRepo() {
+      this(null);
+    }
+
+    TestRepo(@Nullable ItemIdSpaceDef parentIdSpace) {
       super(null);
+      this.parentIdSpace = parentIdSpace;
     }
 
     @Override
@@ -383,6 +536,23 @@ class BuildCtMatchCriteriaTest {
       return Object.class;
     }
 
+    @Override
+    @Nullable
+    protected ItemIdSpaceDef getParentIdSpace() {
+      return parentIdSpace;
+    }
+
+    /**
+     * The default {@code getRowIdSpace()} reads the item filter off {@code getFilterConfig()}, but
+     * these tests pass a config per call. Production repositories always pass their own
+     * {@code getFilterConfig()}, so replaying the captured one keeps the two in sync.
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <Q> CtFilterConfig<Q> getFilterConfig() {
+      return (CtFilterConfig<Q>) capturedConfig;
+    }
+
     // Expose protected method for testing
     @Override
     public <Q> Criteria buildCtMatchCriteria(
@@ -393,7 +563,22 @@ class BuildCtMatchCriteriaTest {
       CtFilterConfig<Q> config,
       Criteria... baseCriteria
     ) {
+      capturedConfig = config;
       return super.buildCtMatchCriteria(query, items, isInclude, search, config, baseCriteria);
+    }
+
+    // Expose protected method for testing
+    @Override
+    public <Q> Criteria buildCtMatchCriteria(
+      Q query,
+      List<String> items,
+      CtQueryOptions options,
+      String search,
+      CtFilterConfig<Q> config,
+      Criteria... baseCriteria
+    ) {
+      capturedConfig = config;
+      return super.buildCtMatchCriteria(query, items, options, search, config, baseCriteria);
     }
   }
 }

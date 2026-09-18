@@ -3,7 +3,10 @@ package org.sagebionetworks.explorers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -32,6 +35,8 @@ import org.springframework.data.mongodb.core.query.Query;
 class ComparisonToolRepositorySupportTest {
 
   private static final String COLLECTION = "test_collection";
+  private static final String ROW_ID_FIELD = "unique_id";
+  private static final String PARENT_ID_FIELD = "rna_composite_id";
 
   @Mock
   private MongoTemplate mongoTemplate;
@@ -191,9 +196,18 @@ class ComparisonToolRepositorySupportTest {
     return Stream.generate(TestDocument::new).limit(count).toList();
   }
 
+  /** The row identity space every parent-aware fixture below declares. */
+  @SuppressWarnings("unchecked")
+  private static <Q> CtFilterConfig<Q> rowIdFilterConfig() {
+    return (CtFilterConfig<Q>) CtFilterConfig.<Object>builder()
+      .simpleItemFilter(ROW_ID_FIELD)
+      .searchFilter(ROW_ID_FIELD)
+      .build();
+  }
+
   private Aggregation capturePipeline() {
     ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
-    org.mockito.Mockito.verify(mongoTemplate).aggregate(
+    verify(mongoTemplate).aggregate(
       captor.capture(),
       eq(COLLECTION),
       eq(TestDocument.class)
@@ -363,6 +377,71 @@ class ComparisonToolRepositorySupportTest {
 
     Page<TestDocument> run(Criteria criteria, Pageable pageable) {
       return executePagedAggregation(criteria, pageable, false, null);
+    }
+  }
+
+  /** Subclass whose rows are their own parents — the default for every existing CT. */
+  private static final class SelfParentedRepo
+    extends ComparisonToolRepositorySupport<TestDocument> {
+
+    SelfParentedRepo(MongoTemplate mongoTemplate) {
+      super(mongoTemplate);
+    }
+
+    @Override
+    protected String getCollectionName() {
+      return COLLECTION;
+    }
+
+    @Override
+    protected Class<TestDocument> getDocumentClass() {
+      return TestDocument.class;
+    }
+
+    @Override
+    protected <Q> CtFilterConfig<Q> getFilterConfig() {
+      return rowIdFilterConfig();
+    }
+
+    CtPage<TestDocument> run(Criteria criteria, Pageable pageable, CtQueryOptions options) {
+      return executePagedAggregation(criteria, pageable, options);
+    }
+  }
+
+  /** Subclass whose rows roll up to parents identified in a separate space. */
+  private static final class ParentAwareRepo extends ComparisonToolRepositorySupport<TestDocument> {
+
+    ParentAwareRepo(MongoTemplate mongoTemplate) {
+      super(mongoTemplate);
+    }
+
+    @Override
+    protected String getCollectionName() {
+      return COLLECTION;
+    }
+
+    @Override
+    protected Class<TestDocument> getDocumentClass() {
+      return TestDocument.class;
+    }
+
+    @Override
+    protected <Q> CtFilterConfig<Q> getFilterConfig() {
+      return rowIdFilterConfig();
+    }
+
+    @Override
+    protected ItemIdSpaceDef getParentIdSpace() {
+      return ItemIdSpaceDef.stored(PARENT_ID_FIELD);
+    }
+
+    @Override
+    protected Map<String, ComputedSortField> getComputedSortFieldExpressions() {
+      return Map.of("name", ComputedSortField.of(new Document("$toLower", "$name")));
+    }
+
+    CtPage<TestDocument> run(Criteria criteria, Pageable pageable, CtQueryOptions options) {
+      return executePagedAggregation(criteria, pageable, options);
     }
   }
 
@@ -618,6 +697,140 @@ class ComparisonToolRepositorySupportTest {
 
       String pipeline = capturePipeline().toString();
       assertThat(pipeline).contains("$skip").contains("$limit");
+    }
+  }
+
+  @Nested
+  @DisplayName("prebudgeted parents")
+  class PrebudgetedParents {
+
+    private static final int PAGE_SIZE = 10;
+    private static final List<String> PARENT_IDS = List.of("ENSG1~5xFAD~Female");
+
+    private final Pageable pageable = PageRequest.of(
+      0,
+      PAGE_SIZE,
+      Sort.by(Sort.Order.asc("name"))
+    );
+
+    private CtQueryOptions options(boolean isInclude, List<String> prebudgetedParentIds) {
+      return new CtQueryOptions(isInclude, null, prebudgetedParentIds, false);
+    }
+
+    @Test
+    @DisplayName("should leave the flag unset when no prebudgeted parents are given")
+    void shouldLeaveFlagUnsetWhenNoPrebudgetedParentsAreGiven() {
+      ParentAwareRepo repo = new ParentAwareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      CtPage<TestDocument> page = repo.run(new Criteria(), pageable, options(false, List.of()));
+
+      assertThat(page.getHasRowsForPrebudgetedParents()).isNull();
+      verify(mongoTemplate, never()).exists(any(Query.class), anyString());
+    }
+
+    @Test
+    @DisplayName("should leave the flag unset on an include query even with prebudgeted parents")
+    void shouldLeaveFlagUnsetWhenIncluding() {
+      ParentAwareRepo repo = new ParentAwareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      CtPage<TestDocument> page = repo.run(new Criteria(), pageable, options(true, PARENT_IDS));
+
+      assertThat(page.getHasRowsForPrebudgetedParents()).isNull();
+      verify(mongoTemplate, never()).exists(any(Query.class), anyString());
+    }
+
+    @Test
+    @DisplayName("should report true when a matching row belongs to a prebudgeted parent")
+    void shouldReportTrueWhenMatchingRowBelongsToPrebudgetedParent() {
+      ParentAwareRepo repo = new ParentAwareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(true);
+
+      CtPage<TestDocument> page = repo.run(new Criteria(), pageable, options(false, PARENT_IDS));
+
+      assertThat(page.getHasRowsForPrebudgetedParents()).isTrue();
+    }
+
+    @Test
+    @DisplayName("should report false when no matching row belongs to a prebudgeted parent")
+    void shouldReportFalseWhenNoMatchingRowBelongsToPrebudgetedParent() {
+      ParentAwareRepo repo = new ParentAwareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(false);
+
+      CtPage<TestDocument> page = repo.run(new Criteria(), pageable, options(false, PARENT_IDS));
+
+      assertThat(page.getHasRowsForPrebudgetedParents()).isFalse();
+    }
+
+    @Test
+    @DisplayName("should probe the parent identity space alongside the request's match criteria")
+    void shouldProbeParentIdentitySpaceAlongsideMatchCriteria() {
+      ParentAwareRepo repo = new ParentAwareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(true);
+
+      Criteria matchCriteria = Criteria.where("tissue").is("brain");
+      repo.run(matchCriteria, pageable, options(false, PARENT_IDS));
+
+      String queryStr = captureExistsQuery().getQueryObject().toString();
+      assertThat(queryStr)
+        .contains(PARENT_ID_FIELD)
+        .contains("$in")
+        .contains(PARENT_IDS.get(0))
+        .contains("tissue")
+        .doesNotContain(ROW_ID_FIELD);
+    }
+
+    @Test
+    @DisplayName("should probe stored fields only, as the probe bypasses the aggregation pipeline")
+    void shouldProbeStoredFieldsOnly() {
+      ParentAwareRepo repo = new ParentAwareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(true);
+
+      repo.run(new Criteria(), pageable, options(false, PARENT_IDS));
+
+      // The sorted pipeline computes name_sort and name_isEmpty; neither exists as a stored field,
+      // so a probe referencing them would silently match nothing.
+      assertThat(capturePipeline().toString()).contains("name_sort").contains("name_isEmpty");
+      assertThat(captureExistsQuery().getQueryObject().toString())
+        .doesNotContain("_sort")
+        .doesNotContain("_isEmpty");
+    }
+
+    @Test
+    @DisplayName("should probe case-insensitively so parent tokens match regardless of casing")
+    void shouldProbeCaseInsensitively() {
+      ParentAwareRepo repo = new ParentAwareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(true);
+
+      repo.run(new Criteria(), pageable, options(false, PARENT_IDS));
+
+      assertThat(captureExistsQuery().getCollation()).isPresent();
+    }
+
+    @Test
+    @DisplayName("should probe the row identity space when the comparison tool is self-parented")
+    void shouldProbeRowIdentitySpaceWhenSelfParented() {
+      SelfParentedRepo repo = new SelfParentedRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(true);
+
+      repo.run(new Criteria(), pageable, options(false, PARENT_IDS));
+
+      assertThat(captureExistsQuery().getQueryObject().toString())
+        .contains(ROW_ID_FIELD)
+        .doesNotContain(PARENT_ID_FIELD);
+    }
+
+    private Query captureExistsQuery() {
+      ArgumentCaptor<Query> captor = ArgumentCaptor.forClass(Query.class);
+      verify(mongoTemplate).exists(captor.capture(), eq(COLLECTION));
+      return captor.getValue();
     }
   }
 }
