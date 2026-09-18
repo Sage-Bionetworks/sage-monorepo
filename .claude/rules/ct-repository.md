@@ -1,6 +1,6 @@
 # Comparison Tool Repository Pattern
 
-This rule covers every task that touches a `ComparisonToolRepositorySupport` subclass: creating a new CT repository, adding or debugging a sort column, reviewing an implementation, or understanding why rows are ordered unexpectedly.
+This rule covers every task that touches a `ComparisonToolRepositorySupport` subclass: creating a new CT repository, adding or debugging a sort column, declaring a parent/child hierarchy, reviewing an implementation, or understanding why rows are ordered or truncated unexpectedly.
 
 ## What is a CT repository?
 
@@ -82,6 +82,7 @@ Key points:
 - `@Repository @Slf4j` on the class; constructor takes only `MongoTemplate`.
 - Always `Objects.requireNonNullElse(query.getItemFilterType(), ItemFilterTypeQueryDto.INCLUDE)` -- the frontend may send null and the base class does not default it.
 - `findAll` signature is defined by the custom interface, not the base class -- add product-specific parameters (tissue, cluster, etc.) there and pass them as base criteria varargs.
+- A parent-aware CT, or one whose caller needs `hasRowsForPrebudgetedParents`, builds a `CtQueryOptions` instead of the bare `isInclude` / `remainingBudget` pair and passes it to both `buildCtMatchCriteria` and `executePagedAggregation`. See **Parent/child CTs**.
 
 ## Query parameter wiring
 
@@ -90,6 +91,10 @@ Every field the repository reads off the search query DTO has to be declared in 
 - **The search query schema** (`libs/<product>/api-description/src/components/schemas/*SearchQuery.yaml`), then `nx run-many -t=generate -p=<product>-*` to regenerate the DTO and clients.
 - **The delegate's `VALID_QUERY_PARAMS`** (`apps/<product>/api-next/.../api/*ApiDelegateImpl.java`) -- `ApiHelper.validateQueryParameters` rejects any request carrying an unlisted parameter with a 400. These sets mirror the schema's property order, not alphabetical order.
 - **The service's `@Cacheable` key**, built via `ApiHelper.buildCacheKey(...)` -- a field missing from the key makes two requests that differ only by that field collide on one cache entry.
+
+The parent/child fields are no exception: `itemIdSpace` and `prebudgetedParentIds` each need all three declarations, and their `$ref`ed enum (`ItemIdSpaceQuery.yaml`) needs a converter entry in `EnumConverterConfiguration`. The response half, `hasRowsForPrebudgetedParents`, is a nullable property on the `*Page.yaml` schema that the service copies off the returned `CtPage`; a repository whose custom interface still declares `Page<T>` compiles fine and silently loses the flag, so narrow the interface to `CtPage<T>` when a caller needs it. What these fields do is covered under **Parent/child CTs**.
+
+One constraint carries over from search. The existence query behind `hasRowsForPrebudgetedParents` uses `mongoTemplate.exists`, which -- like the `count()` documented under **Overriding search** -- bypasses the aggregation pipeline and therefore reads **stored fields only**. A parent identity space that depends on a computed `$addFields` value cannot answer it.
 
 ## Pipeline shape
 
@@ -101,10 +106,12 @@ $match          ← assembled from getFilterConfig() + optional base criteria
 [$addFields]    ← computed sort fields from getComputedSortFieldExpressions()
 [$addFields]    ← isEmpty flags (null/empty rows → tail), always present when sorted
 $sort           ← field names resolved via aliases and computed fields
-$skip / $limit  ← or a bare $limit when the request caps rows
+[$skip / $limit] ← a bare $limit when the request caps rows; neither when it caps parents
 ```
 
 Stages in brackets are omitted when not needed (e.g. no computed sort field requested, or sort is unsorted). The `allowDiskUse: true` option and `collation: {locale: "en", strength: 2}` (case-insensitive) are set on every CT aggregation. The tail is a bare `$limit` instead of `$skip` / `$limit` when the request caps returned rows via `remainingBudget` -- subclasses just forward it, so see the `executePagedAggregation` javadoc for when it applies.
+
+A budgeted request on a parent-aware CT spends its budget on parents rather than rows, which changes both ends of the shape: the `$match` is narrowed to the admitted parents' rows, and the tail carries no `$skip` and no `$limit`, since every row of an admitted parent is wanted. A subclass forwards its `CtQueryOptions` and implements none of it -- see **Parent/child CTs**.
 
 ## Hooks to override
 
@@ -125,9 +132,11 @@ Stages in brackets are omitted when not needed (e.g. no computed sort field requ
 
 ### Optional
 
-| Method                                      | When to override                                          |
-| ------------------------------------------- | --------------------------------------------------------- |
-| `buildSearchCriteria(field, trimmedSearch)` | Custom search logic (e.g. fallback field, multi-field OR) |
+| Method                                      | When to override                                                |
+| ------------------------------------------- | --------------------------------------------------------------- |
+| `buildSearchCriteria(field, trimmedSearch)` | Custom search logic (e.g. fallback field, multi-field OR)       |
+| `getParentIdSpace()`                        | Several rows roll up to one parent -- makes the CT parent-aware |
+| `getRowIdSpace()`                           | Rarely; the default derives row identity from the item filter   |
 
 ---
 
@@ -246,6 +255,53 @@ CtFilterConfig.<MyQueryDto>builder()
 
 ---
 
+## Parent/child CTs
+
+Overriding `getParentIdSpace()` is what makes a CT **parent-aware**: several rows roll up to one parent, so a request can match `items` against the parent token instead of the row token, and an EXCLUDE budget caps distinct parents rather than rows. Leave it null and the CT stays **self-parented** -- the parent space resolves back to `getRowIdSpace()`, every row is its own parent, and no other behaviour changes. Most CTs need no override.
+
+### Declaring an identity space
+
+An `ItemIdSpaceDef` (`libs/explorers/api-helper/`) does two things: it turns a client-supplied item token back into `Criteria` over stored fields, and it rebuilds that same token inside the aggregation, which is what lets rows be grouped by parent. No token is stored in MongoDB, so both directions are derived per request.
+
+| Factory                                                                           | Use when                                               | Must declare                                             |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------- |
+| `ItemIdSpaceDef.stored("ensembl_gene_id")`                                        | The token _is_ one stored field's value                | --                                                       |
+| `ItemIdSpaceDef.composite(FIELDS, item -> MyIdentifier.parse(item).toCriteria())` | The token encodes several stored fields, joined by `~` | `FIELDS`, even though the parser alone would match items |
+
+- A parent space must be able to emit its token, so it needs the field names. A space derived from `compositeItemFilter` carries a parser and no field names, and `tokenExpression()` throws `IllegalStateException` on it -- harmless for a self-parented CT, which never emits a token, fatal for a parent space, which is grouped on.
+- An absent part renders as the literal `"null"` on both sides of the token, so an identifier DTO has to render it identically or the two emitters disagree about the same row. It does not round-trip: a DTO parses it back as a literal string rather than an absent field (MG-586).
+- Keep the delimiter and missing-part constants private to the identifier DTO rather than importing `ItemIdSpaceDef` into app code, and assert the two renderings agree in the DTO's **test** (`TranscriptomicsIdentifierTest`) -- api-helper cannot see the DTO and neither side runs Mongo, so that test is the only place a mismatch surfaces.
+
+### The request knobs
+
+The three query fields below reach the repository as one `CtQueryOptions`. Build it in `findAll` and pass the same instance to both `buildCtMatchCriteria` and `executePagedAggregation`, so the two cannot disagree about the request. A CT with no parent-awareness keeps using the `boolean isInclude` / `Integer remainingBudget` overloads.
+
+| Query field            | Effect                                                                                                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `itemIdSpace`          | `row` (default) or `parent` -- which space `items` is matched against. Exactly one space is matched, never an `OR` of both                                    |
+| `prebudgetedParentIds` | Parents the caller has already accounted for, whose further children are free. Always matched against the parent space, independently of `itemIdSpace`        |
+| `remainingBudget`      | How much the caller can still accept: distinct new parents on a parent-aware CT, rows otherwise. EXCLUDE only, and `pageNumber` / `pageSize` are then ignored |
+
+### Budgeting parents
+
+A budget caps parents only on an EXCLUDE request against a parent-aware CT: it admits the prebudgeted parents plus up to `remainingBudget` more in the request's own sort order, and every row of each comes back unpaged, however many pages it spans. A budget of zero admits no new parent; an exhausted one with no prebudgeted parents matches nothing rather than everything; a null one with prebudgeted parents selects no parents at all, and only drives `hasRowsForPrebudgetedParents`. The total count still reflects the **unnarrowed** match set, so a caller detects truncation exactly as in the row-capped case.
+
+### Frontend contract
+
+A hierarchy is declared per view rather than computed: the keys below are stored on the view's config document, read by the product's `ComparisonToolConfigDocument`, and served by the comparison-tool-config endpoint onto the frontend's `ComparisonToolConfig` (`libs/explorers/models/`).
+
+| Config key                 | Meaning                                                                                                                                             |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `row_id_data_key`          | The data key holding this view's row UID, overriding the comparison tool's default row id key for the view                                          |
+| `parent_id_data_key`       | The data key holding the id of a row's parent. Equal to `row_id_data_key` means rows are their own parents; a different key means rows are children |
+| `parent_noun`, `view_noun` | Singular/plural nouns labelling parent counts and row counts. A child view sets both, since it displays both counts                                 |
+
+All four are nullable, and a view that declares no hierarchy leaves them unset. `parent_id_data_key` must resolve to the same parent values in every view of a comparison tool, though not necessarily through the same field, since different views read different collections.
+
+**TODO (MG-1095):** the component wiring belongs here -- how pinned-item state turns these config keys into `itemIdSpace` and `prebudgetedParentIds` on a request, and how the comparison table consumes `hasRowsForPrebudgetedParents`. Extend this subsection rather than starting a second account of the mechanism elsewhere.
+
+---
+
 ## Base criteria injection
 
 When the collection is always scoped by a request parameter (cluster, tissue), pass the mandatory `Criteria` objects as varargs at the end of `buildCtMatchCriteria()`:
@@ -266,13 +322,15 @@ Criteria matchCriteria = buildCtMatchCriteria(
 
 ## Existing implementations (reference)
 
-| App      | Class                                    | Collection             | Notable                                                                                                       |
-| -------- | ---------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Agora    | `CustomNominatedTargetRepositoryImpl`    | `nominatedtargets`     | 4 array columns, simple item filter                                                                           |
-| Agora    | `CustomNominatedDrugRepositoryImpl`      | `nominateddrugs`       | 2 array columns, composite item filter                                                                        |
-| Model-AD | `CustomModelOverviewRepositoryImpl`      | `model_overview`       | 1 array column                                                                                                |
-| Model-AD | `CustomDiseaseCorrelationRepositoryImpl` | `disease_correlation`  | Nested object columns (brain regions), companion numeric field, base criteria (cluster)                       |
-| Model-AD | `CustomTranscriptomicsRepositoryImpl`    | `rna_de_aggregate`     | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue)           |
-| Model-AD | `CustomProteomicsRepositoryImpl`         | `protein_de_aggregate` | Nested object columns (time-points), composite item filter, custom multi-field search, base criteria (tissue) |
+| App      | Class                                    | Collection             | Notable                                                                                                                     |
+| -------- | ---------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Agora    | `CustomNominatedTargetRepositoryImpl`    | `nominatedtargets`     | 4 array columns, simple item filter                                                                                         |
+| Agora    | `CustomNominatedDrugRepositoryImpl`      | `nominateddrugs`       | 2 array columns, composite item filter                                                                                      |
+| Model-AD | `CustomModelOverviewRepositoryImpl`      | `model_overview`       | 1 array column                                                                                                              |
+| Model-AD | `CustomDiseaseCorrelationRepositoryImpl` | `disease_correlation`  | Nested object columns (brain regions), companion numeric field, base criteria (cluster)                                     |
+| Model-AD | `CustomTranscriptomicsRepositoryImpl`    | `rna_de_aggregate`     | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue), self-parented          |
+| Model-AD | `CustomProteomicsRepositoryImpl`         | `protein_de_aggregate` | Nested object columns (time-points), composite item filter, custom multi-field search, base criteria (tissue), parent-aware |
 
 All implementations are under `apps/<product>/api-next/src/main/java/.../model/repository/`.
+
+For a worked parent-aware example, read Proteomics: its protein isoform rows roll up to the gene their transcriptomics counterpart is keyed by, so it declares its parent space from `TranscriptomicsIdentifier.FIELDS` -- the token the RNA view identifies its own rows with. Every other CT is self-parented, which takes no override.
