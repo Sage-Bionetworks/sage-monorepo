@@ -9,7 +9,7 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, EMPTY, of, throwError } from 'rxjs';
+import { BehaviorSubject, EMPTY, of, Subject, throwError } from 'rxjs';
 import {
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
@@ -1352,6 +1352,87 @@ describe('ComparisonToolService', () => {
 
       service.setUnpinnedData([]);
       expect(service.pendingFetches()).toBe(0);
+    });
+  });
+
+  describe('fetch streams (latest-wins)', () => {
+    type Result = { data: Record<string, unknown>[]; totalCount: number };
+
+    it('applies the latest unpinned fetch and ignores a superseded response', () => {
+      connectService();
+
+      const first$ = new Subject<Result>();
+      const second$ = new Subject<Result>();
+
+      service.fetchUnpinned(first$);
+      service.fetchUnpinned(second$);
+
+      // Newer request resolves first...
+      second$.next({ data: [{ _id: 'newest' }], totalCount: 1 });
+      second$.complete();
+      // ...then the superseded older request resolves late and must be ignored.
+      first$.next({ data: [{ _id: 'stale' }], totalCount: 99 });
+      first$.complete();
+
+      expect(service.unpinnedData()).toEqual([{ _id: 'newest' }]);
+      expect(service.totalResultsCount()).toBe(1);
+    });
+
+    it('keeps the pending-fetch counter balanced when a request is superseded before it emits', () => {
+      connectService();
+
+      const first$ = new Subject<Result>();
+      const second$ = new Subject<Result>();
+
+      service.fetchUnpinned(first$);
+      // Superseding the first fetch cancels it, so the counter drops back to a single pending fetch.
+      service.fetchUnpinned(second$);
+      expect(service.pendingFetches()).toBe(1);
+
+      second$.next({ data: [], totalCount: 0 });
+      second$.complete();
+
+      expect(service.pendingFetches()).toBe(0);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('does not cancel an in-flight pinned fetch when an unpinned fetch starts', () => {
+      connectService();
+
+      const pinned$ = new Subject<Result>();
+      const unpinned$ = new Subject<Result>();
+
+      service.fetchPinned(pinned$);
+      service.fetchUnpinned(unpinned$);
+
+      unpinned$.next({ data: [{ _id: 'unpinned' }], totalCount: 5 });
+      unpinned$.complete();
+      pinned$.next({ data: [{ _id: 'pinned' }], totalCount: 1 });
+      pinned$.complete();
+
+      expect(service.unpinnedData()).toEqual([{ _id: 'unpinned' }]);
+      expect(service.pinnedData()).toEqual([{ _id: 'pinned' }]);
+      expect(service.pinnedResultsCount()).toBe(1);
+    });
+
+    it('maps a failed fetch to an empty result and stays alive for the next fetch', () => {
+      connectService();
+
+      const failing$ = new Subject<Result>();
+      service.fetchUnpinned(failing$);
+      failing$.error(new Error('request failed'));
+
+      expect(service.unpinnedData()).toEqual([]);
+      expect(service.totalResultsCount()).toBe(0);
+      expect(service.isLoadingTableData()).toBe(false);
+
+      const recovered$ = new Subject<Result>();
+      service.fetchUnpinned(recovered$);
+      recovered$.next({ data: [{ _id: 'recovered' }], totalCount: 1 });
+      recovered$.complete();
+
+      expect(service.unpinnedData()).toEqual([{ _id: 'recovered' }]);
+      expect(service.totalResultsCount()).toBe(1);
     });
   });
 

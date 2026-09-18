@@ -1,4 +1,13 @@
-import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
+import {
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  Injectable,
+  signal,
+  Signal,
+  WritableSignal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { getMaxPinnedItemsWarning, MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
@@ -17,7 +26,7 @@ import { isEqual } from 'lodash';
 import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
-import { combineLatest, finalize } from 'rxjs';
+import { catchError, combineLatest, finalize, of, Subject, switchMap } from 'rxjs';
 import { VALID_PAGE_SIZES } from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
@@ -31,6 +40,16 @@ import { ToastNotificationService } from './toast-notification.service';
  * OpenAPI contract declares column_width as `minimum: 1`, so any value <= 0 is treated as bad config.
  */
 export const DEFAULT_COLUMN_WIDTH_PX = 300;
+
+/**
+ * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
+ * the corresponding results-count signal should be set to (unpinned: total matching rows across
+ * pages; pinned: the number of pinned rows returned).
+ */
+export interface ComparisonToolFetchResult<T> {
+  data: T[];
+  totalCount: number;
+}
 
 /**
  * Fetches the rows matching the current query across all pages, capped at `remainingBudget`, so
@@ -117,6 +136,17 @@ export class ComparisonToolService<T> {
   private readonly selectedRowIdSignal = signal<string | null>(null);
   private readonly hoveredRowIdSignal = signal<string | null>(null);
 
+  // Fetch streams: each fetch pushes a result observable onto these subjects, and switchMap keeps
+  // only the latest in flight. A newer query cancels (unsubscribes) the prior request, so responses
+  // can never be applied out of order. Unpinned and pinned are independent streams.
+  //
+  // Typed with `unknown` rather than `T` so the service stays covariant in `T` (a Subject field
+  // carrying `T` would make ComparisonToolService<T> invariant, breaking the coordinator's
+  // ComparisonToolService<unknown> registry). The public fetch methods stay strongly typed and the
+  // stream subscription casts the result rows back to `T[]`.
+  private readonly unpinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
+  private readonly pinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
+
   // Connect-Time Dependencies
   private pinAllFetch?: PinAllFetch<T>;
   private initialSelection: string[] | undefined;
@@ -160,12 +190,52 @@ export class ComparisonToolService<T> {
   // Used for the URL serialization
   readonly visiblePinIds = computed(() => this.extractRowIds(this.pinnedData()));
 
-  private extractRowIds(rows: T[]): string[] {
-    const rowIdKey = this.viewConfig().rowIdDataKey;
-    return rows.map((row: T) => String((row as Record<string, unknown>)[rowIdKey]));
-  }
+  // Config-Driven Signals
+  readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
+    return this.findConfigForSelection(this.configsSignal(), this.dropdownSelection());
+  });
+
+  readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
+    const config = this.currentConfig();
+    if (!config) return [];
+
+    const configColumns = config.columns;
+    if (!configColumns || configColumns.length === 0) return [];
+
+    const savedColumns = this.columnsForDropdownsSignal().get(this.dropdownKey(config.dropdowns));
+    return this.applyColumnPreferences(configColumns, savedColumns);
+  });
+
+  selectedColumns = computed(() => {
+    return this.columns().filter((col) => col.selected);
+  });
+
+  // Results & Pin State Signals
+  loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
+
+  totalResultsCount = signal<number>(0);
+
+  pinnedResultsCount = computed(() => this.pinnedData().length);
+
+  hasMaxPinnedItems = computed(() => {
+    return this.pinnedResultsCount() >= this.maxPinnedItems();
+  });
+
+  disabledPinTooltip = computed(() => {
+    return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
+  });
 
   constructor() {
+    // Unpinned tracks totalResultsCount (cross-page total)
+    this.subscribeToFetchStream(
+      this.unpinnedFetch$,
+      this.unpinnedDataSignal,
+      this.totalResultsCount,
+    );
+
+    // Pinned count derives from pinnedData() so a third param is unnecessary
+    this.subscribeToFetchStream(this.pinnedFetch$, this.pinnedDataSignal);
+
     effect(() => {
       if (this.isLoadingTableData()) return;
       if (!this.viewConfig().rowSelectionEnabled) return;
@@ -206,6 +276,7 @@ export class ComparisonToolService<T> {
     });
   }
 
+  // Lifecycle
   connect(options: {
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
@@ -248,40 +319,10 @@ export class ComparisonToolService<T> {
     }
   }
 
-  readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
-    return this.findConfigForSelection(this.configsSignal(), this.dropdownSelection());
-  });
-
-  readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
-    const config = this.currentConfig();
-    if (!config) return [];
-
-    const configColumns = config.columns;
-    if (!configColumns || configColumns.length === 0) return [];
-
-    const savedColumns = this.columnsForDropdownsSignal().get(this.dropdownKey(config.dropdowns));
-    return this.applyColumnPreferences(configColumns, savedColumns);
-  });
-
-  selectedColumns = computed(() => {
-    return this.columns().filter((col) => col.selected);
-  });
-
+  // Config & columns
   hasUnselectedColumns(): boolean {
     return this.columns().some((col) => !col.selected);
   }
-
-  loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
-  totalResultsCount = signal<number>(0);
-  pinnedResultsCount = computed(() => this.pinnedData().length);
-
-  hasMaxPinnedItems = computed(() => {
-    return this.pinnedResultsCount() >= this.maxPinnedItems();
-  });
-
-  disabledPinTooltip = computed(() => {
-    return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
-  });
 
   /**
    * MAX_PINNED_ITEMS is the largest budget the CT search query schemas accept, so a configured limit
@@ -511,10 +552,7 @@ export class ComparisonToolService<T> {
     this.heatmapDetailsPanelDataSignal.set(null);
   }
 
-  /* ----------------------- *
-   *    Filter Panel
-   * ----------------------- */
-
+  // Filter panel
   toggleFilterPanel(): void {
     this.isFilterPanelOpenSignal.update((isOpen) => !isOpen);
   }
@@ -527,6 +565,7 @@ export class ComparisonToolService<T> {
     this.isFilterPanelOpenSignal.set(false);
   }
 
+  // View config & tutorial
   setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {
     this.viewConfigSignal.set({ ...this.DEFAULT_VIEW_CONFIG, ...viewConfig });
     this.setLegendVisibility(false);
@@ -550,6 +589,7 @@ export class ComparisonToolService<T> {
     this.appStorageService.setTutorialHidden(hidden);
   }
 
+  // Pinning
   isPinned(id: string): boolean {
     return this.pinnedItemsSet().has(id);
   }
@@ -670,6 +710,7 @@ export class ComparisonToolService<T> {
     });
   }
 
+  // Table data
   setUnpinnedData(unpinnedData: T[]) {
     this.unpinnedDataSignal.set(unpinnedData);
     this.completeFetch();
@@ -701,6 +742,7 @@ export class ComparisonToolService<T> {
     this.completeFetch();
   }
 
+  // Row selection
   private autoSelectFirstRow(): void {
     const unpinned = this.unpinnedDataSignal();
     const pinned = this.pinnedDataSignal();
@@ -743,6 +785,54 @@ export class ComparisonToolService<T> {
     this.autoSelectFirstRow();
   }
 
+  // Fetch streams
+  /**
+   * Subscribes a fetch stream once for the lifetime of the service. `switchMap` unsubscribes the
+   * previous result observable whenever a newer one arrives, which aborts the superseded HTTP
+   * request so responses are always applied latest-wins. `finalize` runs on completion, error, or
+   * switchMap cancellation, keeping the pending-fetch counter balanced; `catchError` maps a failed
+   * request to an empty result and keeps the outer stream alive for the next fetch. Error logging
+   * and user notification are handled centrally by `httpErrorInterceptor`, so this is cleanup only.
+   */
+  private subscribeToFetchStream(
+    fetch$: Subject<Observable<ComparisonToolFetchResult<unknown>>>,
+    dataSignal: WritableSignal<T[]>,
+    countSignal?: WritableSignal<number>,
+  ): void {
+    fetch$
+      .pipe(
+        switchMap((source$) =>
+          source$.pipe(
+            finalize(() => this.completeFetch()),
+            catchError(() => of<ComparisonToolFetchResult<unknown>>({ data: [], totalCount: 0 })),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(({ data, totalCount }) => {
+        dataSignal.set(data as T[]);
+        countSignal?.set(totalCount);
+      });
+  }
+
+  /**
+   * Fetches unpinned rows from the given result observable. A new call cancels any prior in-flight
+   * unpinned fetch, guaranteeing the table reflects the most recent query.
+   */
+  fetchUnpinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
+    this.startFetch();
+    this.unpinnedFetch$.next(source$);
+  }
+
+  /**
+   * Fetches pinned rows from the given result observable. Independent of the unpinned stream, so a
+   * new pinned fetch does not cancel an in-flight unpinned fetch (and vice versa).
+   */
+  fetchPinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
+    this.startFetch();
+    this.pinnedFetch$.next(source$);
+  }
+
   /** Call before starting a data fetch to increment loading counter */
   startFetch() {
     this.pendingFetchesSignal.update((count) => count + 1);
@@ -753,6 +843,7 @@ export class ComparisonToolService<T> {
     this.pendingFetchesSignal.update((count) => Math.max(0, count - 1));
   }
 
+  // Query & pagination
   updateQuery(query: Partial<ComparisonToolQuery>) {
     this.querySignal.update((current) => ({
       ...current,
@@ -882,6 +973,7 @@ export class ComparisonToolService<T> {
     return JSON.stringify(normalized.slice(0, this.COLUMN_CACHE_DEPTH));
   }
 
+  // Sort
   setSort(multiSortMeta: SortMeta[]) {
     const newSort = multiSortMeta || this.DEFAULT_MULTI_SORT_META;
     const currentSort = this.querySignal().multiSortMeta;
@@ -914,6 +1006,7 @@ export class ComparisonToolService<T> {
     });
   }
 
+  // URL sync
   private resolveUrlState(
     params: ComparisonToolUrlParams,
     options: { isFirstLoad: boolean },
@@ -1090,6 +1183,11 @@ export class ComparisonToolService<T> {
         selectedFilters: this.selectedFilters(),
       }),
     );
+  }
+
+  private extractRowIds(rows: T[]): string[] {
+    const rowIdKey = this.viewConfig().rowIdDataKey;
+    return rows.map((row: T) => String((row as Record<string, unknown>)[rowIdKey]));
   }
 
   convertSortMetaToArrays(multiSortMeta: SortMeta[]): {
