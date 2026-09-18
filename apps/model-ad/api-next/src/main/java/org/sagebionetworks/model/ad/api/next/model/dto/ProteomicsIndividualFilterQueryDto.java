@@ -58,7 +58,7 @@ public class ProteomicsIndividualFilterQueryDto {
    * @return tissue
    */
   @NotNull 
-  @Schema(name = "tissue", example = "Hippocampus", description = "Tissue type to filter by", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "tissue", example = "Hemibrain", description = "Tissue type to filter by", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("tissue")
   public String getTissue() {
     return tissue;
@@ -78,7 +78,7 @@ public class ProteomicsIndividualFilterQueryDto {
    * @return modelIdentifier
    */
   @NotNull 
-  @Schema(name = "modelIdentifier", example = "5xFAD (Jax/IU/Pitt)", description = "The model name or model group to filter by", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "modelIdentifier", example = "LOAD2", description = "The model name or model group to filter by", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("modelIdentifier")
   public String getModelIdentifier() {
     return modelIdentifier;
@@ -118,7 +118,7 @@ public class ProteomicsIndividualFilterQueryDto {
    * @return uniqueId
    */
   @NotNull 
-  @Schema(name = "uniqueId", example = "ENSMUSG00000000001P27144", description = "Unique ID to filter by", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "uniqueId", example = "ENSMUSG00000029781Q9Z247", description = "Unique ID to filter by", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("uniqueId")
   public String getUniqueId() {
     return uniqueId;

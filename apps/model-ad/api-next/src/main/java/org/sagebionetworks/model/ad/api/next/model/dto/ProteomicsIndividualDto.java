@@ -111,7 +111,7 @@ public class ProteomicsIndividualDto {
    * @return geneSymbol
    */
   @NotNull 
-  @Schema(name = "gene_symbol", example = "Gnai3", description = "Gene Symbol", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "gene_symbol", example = "Fkbp9", description = "Gene Symbol", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("gene_symbol")
   public String getGeneSymbol() {
     return geneSymbol;
@@ -131,7 +131,7 @@ public class ProteomicsIndividualDto {
    * @return uniprotid
    */
   @NotNull 
-  @Schema(name = "uniprotid", example = "P27144", description = "UniProt ID", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "uniprotid", example = "Q9Z247", description = "UniProt ID", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("uniprotid")
   public String getUniprotid() {
     return uniprotid;
@@ -151,7 +151,7 @@ public class ProteomicsIndividualDto {
    * @return uniqueId
    */
   @NotNull 
-  @Schema(name = "unique_id", example = "ENSMUSG00000000001P27144", description = "Concatenation of the Ensembl Gene ID and the UniProt ID", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "unique_id", example = "ENSMUSG00000029781Q9Z247", description = "Concatenation of the Ensembl Gene ID and the UniProt ID", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("unique_id")
   public String getUniqueId() {
     return uniqueId;
@@ -171,7 +171,7 @@ public class ProteomicsIndividualDto {
    * @return displaySymbol
    */
   @NotNull 
-  @Schema(name = "display_symbol", example = "Gnai3 (P27144)", description = "Gene symbol and UniProt ID, falling back to the Ensembl Gene ID when the gene symbol is unavailable", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "display_symbol", example = "Fkbp9 (Q9Z247)", description = "Gene symbol and UniProt ID, falling back to the Ensembl Gene ID when the gene symbol is unavailable", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("display_symbol")
   public String getDisplaySymbol() {
     return displaySymbol;
@@ -251,7 +251,7 @@ public class ProteomicsIndividualDto {
    * @return matchedControl
    */
   @NotNull 
-  @Schema(name = "matched_control", example = "C57BL/6J", description = "Matched control for the model", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "matched_control", example = "LOAD1", description = "Matched control for the model", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("matched_control")
   public String getMatchedControl() {
     return matchedControl;
@@ -339,7 +339,7 @@ public class ProteomicsIndividualDto {
    * @return resultOrder
    */
   @NotNull 
-  @Schema(name = "result_order", example = "[\"C57BL6J\",\"Trem2\"]", description = "List of genotypes in the order to display results", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "result_order", example = "[\"LOAD1\",\"LOAD2\"]", description = "List of genotypes in the order to display results", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("result_order")
   public List<String> getResultOrder() {
     return resultOrder;

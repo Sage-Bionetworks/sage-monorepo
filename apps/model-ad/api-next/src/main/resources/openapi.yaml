@@ -2310,17 +2310,17 @@ components:
       properties:
         tissue:
           description: Tissue type to filter by
-          example: Hippocampus
+          example: Hemibrain
           type: string
         modelIdentifier:
           description: The model name or model group to filter by
-          example: 5xFAD (Jax/IU/Pitt)
+          example: LOAD2
           type: string
         modelIdentifierType:
           $ref: '#/components/schemas/ModelIdentifierType'
         uniqueId:
           description: Unique ID to filter by
-          example: ENSMUSG00000000001P27144
+          example: ENSMUSG00000029781Q9Z247
           type: string
       required:
         - modelIdentifier
@@ -2357,7 +2357,7 @@ components:
       description: Proteomics Individual
       example:
         model_group: model_group
-        unique_id: ENSMUSG00000000001P27144
+        unique_id: ENSMUSG00000029781Q9Z247
         data:
           - sex: Female
             value: 0.8008281904610115
@@ -2367,18 +2367,18 @@ components:
             value: 0.8008281904610115
             genotype: genotype
             individual_id: individual_id
-        gene_symbol: Gnai3
-        display_symbol: Gnai3 (P27144)
+        gene_symbol: Fkbp9
+        display_symbol: Fkbp9 (Q9Z247)
         tissue: Hemibrain
         age_numeric: 4
         units: Log2 Counts per Million
-        matched_control: C57BL/6J
+        matched_control: LOAD1
         ensembl_gene_id: ensembl_gene_id
         result_order:
-          - C57BL6J
-          - Trem2
+          - LOAD1
+          - LOAD2
         name: name
-        uniprotid: P27144
+        uniprotid: Q9Z247
         age: 4 months
       properties:
         ensembl_gene_id:
@@ -2386,20 +2386,20 @@ components:
           type: string
         gene_symbol:
           description: Gene Symbol
-          example: Gnai3
+          example: Fkbp9
           type: string
         uniprotid:
           description: UniProt ID
-          example: P27144
+          example: Q9Z247
           type: string
         unique_id:
           description: Concatenation of the Ensembl Gene ID and the UniProt ID
-          example: ENSMUSG00000000001P27144
+          example: ENSMUSG00000029781Q9Z247
           type: string
         display_symbol:
           description: "Gene symbol and UniProt ID, falling back to the Ensembl Gene\
             \ ID when the gene symbol is unavailable"
-          example: Gnai3 (P27144)
+          example: Fkbp9 (Q9Z247)
           type: string
         tissue:
           description: Tissue type
@@ -2414,7 +2414,7 @@ components:
           type: string
         matched_control:
           description: Matched control for the model
-          example: C57BL/6J
+          example: LOAD1
           type: string
         units:
           description: Units of measurement for proteomics data
@@ -2431,8 +2431,8 @@ components:
         result_order:
           description: List of genotypes in the order to display results
           example:
-            - C57BL6J
-            - Trem2
+            - LOAD1
+            - LOAD2
           items:
             type: string
           type: array
