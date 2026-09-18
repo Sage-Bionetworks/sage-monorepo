@@ -7,19 +7,19 @@ properties:
   gene_symbol:
     type: string
     description: Gene Symbol
-    example: Gnai3
+    example: Fkbp9
   uniprotid:
     type: string
     description: UniProt ID
-    example: P27144
+    example: Q9Z247
   unique_id:
     type: string
     description: Concatenation of the Ensembl Gene ID and the UniProt ID
-    example: ENSMUSG00000000001P27144
+    example: ENSMUSG00000029781Q9Z247
   display_symbol:
     type: string
     description: Gene symbol and UniProt ID, falling back to the Ensembl Gene ID when the gene symbol is unavailable
-    example: Gnai3 (P27144)
+    example: Fkbp9 (Q9Z247)
   tissue:
     type: string
     description: Tissue type
@@ -34,7 +34,7 @@ properties:
   matched_control:
     type: string
     description: Matched control for the model
-    example: C57BL/6J
+    example: LOAD1
   units:
     type: string
     description: Units of measurement for proteomics data
@@ -52,7 +52,7 @@ properties:
     items:
       type: string
     description: List of genotypes in the order to display results
-    example: ['C57BL6J', 'Trem2']
+    example: ['LOAD1', 'LOAD2']
   data:
     type: array
     description: List of individual proteomics data points

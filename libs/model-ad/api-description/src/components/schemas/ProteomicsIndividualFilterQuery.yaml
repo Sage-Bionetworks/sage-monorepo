@@ -4,18 +4,18 @@ properties:
   tissue:
     description: Tissue type to filter by
     type: string
-    example: 'Hippocampus'
+    example: 'Hemibrain'
   modelIdentifier:
     description: The model name or model group to filter by
     type: string
-    example: '5xFAD (Jax/IU/Pitt)'
+    example: 'LOAD2'
   modelIdentifierType:
     description: Specifies whether modelIdentifier is a name or modelGroup
     $ref: ./ModelIdentifierType.yaml
   uniqueId:
     description: Unique ID to filter by
     type: string
-    example: 'ENSMUSG00000000001P27144'
+    example: 'ENSMUSG00000029781Q9Z247'
 required:
   - tissue
   - uniqueId
