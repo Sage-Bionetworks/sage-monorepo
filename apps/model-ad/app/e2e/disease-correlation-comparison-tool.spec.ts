@@ -121,7 +121,7 @@ test.describe('disease correlation', () => {
     const defaultCategories = configs[0]?.dropdowns;
     expect(defaultCategories.length).toBeGreaterThan(1); // disease correlation has dropdown selections
 
-    await navigateToComparison(page, 'Disease Correlation', true);
+    await navigateToComparison(page, CT_PAGE, true);
 
     const shareUrlButton = page.getByRole('button', { name: 'Share URL' });
     await expect(shareUrlButton).toBeVisible();

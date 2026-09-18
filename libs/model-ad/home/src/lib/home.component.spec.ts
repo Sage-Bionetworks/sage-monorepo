@@ -54,7 +54,7 @@ describe('HomeComponent', () => {
       expect(screen.getByText('Mouse Model Overview')).toBeInTheDocument();
       expect(screen.getByText('Mouse Model Search')).toBeInTheDocument();
       expect(screen.getByText('Mouse Differential Expression')).toBeInTheDocument();
-      expect(screen.getByText('Disease Correlation')).toBeInTheDocument();
+      expect(screen.getByText('Mouse-Human Disease Correlation')).toBeInTheDocument();
     });
 
     it('should swap to the marmoset tiles when marmoset is selected', async () => {

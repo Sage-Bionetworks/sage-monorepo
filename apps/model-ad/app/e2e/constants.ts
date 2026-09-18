@@ -12,10 +12,11 @@ export const LEGACY_MOUSE_MODEL_OVERVIEW_PATH = '/comparison/model';
 
 // Comparison tools whose displayed header title differs from their ui_config page name.
 // Keys are ui_config page names, values are the titles rendered in the header.
-// TODO(MG-1107): add the other comparison tools whose ui_config page name won't match their
-// updated displayed header titles.
-// Drop this map once ui_config page names match the CT displayed titles.
-export const COMPARISON_TOOL_HEADER_TITLES: Partial<Record<ComparisonToolPage, string>> = {};
+// TODO(MG-1054): Drop this map once ui_config page names match the CT displayed titles.
+export const COMPARISON_TOOL_HEADER_TITLES: Partial<Record<ComparisonToolPage, string>> = {
+  'Differential Expression': 'Mouse Differential Expression',
+  'Disease Correlation': 'Mouse-Human Disease Correlation',
+};
 
 export const COMPARISON_TOOL_API_PATHS: Record<ComparisonToolPage, string> = {
   'Marmoset Model Overview': '/comparison-tools/marmoset-model-overview',

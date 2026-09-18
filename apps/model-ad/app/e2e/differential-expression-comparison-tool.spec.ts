@@ -44,7 +44,7 @@ import {
   testUrlPinsExceedingLimitAreCapped,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
-import { DIFFERENTIAL_EXPRESSION_NAV_TRAILS } from './constants';
+import { COMPARISON_TOOL_HEADER_TITLES, DIFFERENTIAL_EXPRESSION_NAV_TRAILS } from './constants';
 import {
   fetchComparisonToolConfig,
   fetchProteomics,
@@ -128,7 +128,11 @@ test.describe('differential expression', () => {
     await expectCategoriesParams(page, categories);
 
     await navigateViaHeaderNav(page, DIFFERENTIAL_EXPRESSION_NAV_TRAILS.PROTEIN);
-    await expectComparisonToolTableLoaded(page, CT_PAGE, false);
+    await expectComparisonToolTableLoaded(
+      page,
+      COMPARISON_TOOL_HEADER_TITLES[CT_PAGE] ?? CT_PAGE,
+      false,
+    );
 
     await expectCategoriesParams(page, [proteinCategory]);
     await expectCategories(page, [proteinCategory, proteinTissue]);
