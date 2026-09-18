@@ -1,5 +1,4 @@
-import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   ComparisonToolConfigPage,
@@ -36,7 +35,6 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly nominatedDrugsService = inject(NominatedDrugService);
   private readonly comparisonToolService = inject(NominatedDrugsComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
@@ -148,25 +146,18 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `NominatedDrugsComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
     );
 
-    this.nominatedDrugsService
-      .getNominatedDrugs(query)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: NominatedDrugsPage) => {
-          const data = response.nominatedDrugs;
-          this.comparisonToolService.setUnpinnedData(data);
-          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
-        },
-        error: () => {
-          this.comparisonToolService.setUnpinnedData([]);
-          this.comparisonToolService.totalResultsCount.set(0);
-        },
-      });
+    this.comparisonToolService.fetchUnpinned(
+      this.nominatedDrugsService.getNominatedDrugs(query).pipe(
+        map((response: NominatedDrugsPage) => ({
+          data: response.nominatedDrugs,
+          totalCount: response.page.totalElements,
+        })),
+      ),
+    );
   }
 
   getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
@@ -179,20 +170,15 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
       sortOrders,
     };
 
-    this.comparisonToolService.startFetch();
     this.logger.log(`NominatedDrugsComparisonToolComponent: pinned query ${JSON.stringify(query)}`);
 
-    this.nominatedDrugsService
-      .getNominatedDrugs(query)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: NominatedDrugsPage) => {
+    this.comparisonToolService.fetchPinned(
+      this.nominatedDrugsService.getNominatedDrugs(query).pipe(
+        map((response: NominatedDrugsPage) => {
           const data = response.nominatedDrugs;
-          this.comparisonToolService.setPinnedData(data);
-        },
-        error: () => {
-          this.comparisonToolService.setPinnedData([]);
-        },
-      });
+          return { data, totalCount: data.length };
+        }),
+      ),
+    );
   }
 }

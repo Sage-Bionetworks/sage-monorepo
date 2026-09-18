@@ -190,18 +190,51 @@ export class ComparisonToolService<T> {
   // Used for the URL serialization
   readonly visiblePinIds = computed(() => this.extractRowIds(this.pinnedData()));
 
-  private extractRowIds(rows: T[]): string[] {
-    const rowIdKey = this.viewConfig().rowIdDataKey;
-    return rows.map((row: T) => String((row as Record<string, unknown>)[rowIdKey]));
-  }
+  // Config-Driven Signals
+  readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
+    return this.findConfigForSelection(this.configsSignal(), this.dropdownSelection());
+  });
+
+  readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
+    const config = this.currentConfig();
+    if (!config) return [];
+
+    const configColumns = config.columns;
+    if (!configColumns || configColumns.length === 0) return [];
+
+    const savedColumns = this.columnsForDropdownsSignal().get(this.dropdownKey(config.dropdowns));
+    return this.applyColumnPreferences(configColumns, savedColumns);
+  });
+
+  selectedColumns = computed(() => {
+    return this.columns().filter((col) => col.selected);
+  });
+
+  // Results & Pin State Signals
+  loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
+
+  totalResultsCount = signal<number>(0);
+
+  pinnedResultsCount = computed(() => this.pinnedData().length);
+
+  hasMaxPinnedItems = computed(() => {
+    return this.pinnedResultsCount() >= this.maxPinnedItems();
+  });
+
+  disabledPinTooltip = computed(() => {
+    return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
+  });
 
   constructor() {
+    // Unpinned tracks totalResultsCount (cross-page total)
     this.subscribeToFetchStream(
       this.unpinnedFetch$,
       this.unpinnedDataSignal,
       this.totalResultsCount,
     );
-    this.subscribeToFetchStream(this.pinnedFetch$, this.pinnedDataSignal, this.pinnedResultsCount);
+
+    // Pinned count derives from pinnedData() so a third param is unnecessary
+    this.subscribeToFetchStream(this.pinnedFetch$, this.pinnedDataSignal);
 
     effect(() => {
       if (this.isLoadingTableData()) return;
@@ -243,6 +276,7 @@ export class ComparisonToolService<T> {
     });
   }
 
+  // Lifecycle
   connect(options: {
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
@@ -285,40 +319,10 @@ export class ComparisonToolService<T> {
     }
   }
 
-  readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
-    return this.findConfigForSelection(this.configsSignal(), this.dropdownSelection());
-  });
-
-  readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
-    const config = this.currentConfig();
-    if (!config) return [];
-
-    const configColumns = config.columns;
-    if (!configColumns || configColumns.length === 0) return [];
-
-    const savedColumns = this.columnsForDropdownsSignal().get(this.dropdownKey(config.dropdowns));
-    return this.applyColumnPreferences(configColumns, savedColumns);
-  });
-
-  selectedColumns = computed(() => {
-    return this.columns().filter((col) => col.selected);
-  });
-
+  // Config & columns
   hasUnselectedColumns(): boolean {
     return this.columns().some((col) => !col.selected);
   }
-
-  loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
-  totalResultsCount = signal<number>(0);
-  pinnedResultsCount = computed(() => this.pinnedData().length);
-
-  hasMaxPinnedItems = computed(() => {
-    return this.pinnedResultsCount() >= this.maxPinnedItems();
-  });
-
-  disabledPinTooltip = computed(() => {
-    return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
-  });
 
   /**
    * MAX_PINNED_ITEMS is the largest budget the CT search query schemas accept, so a configured limit
@@ -548,10 +552,7 @@ export class ComparisonToolService<T> {
     this.heatmapDetailsPanelDataSignal.set(null);
   }
 
-  /* ----------------------- *
-   *    Filter Panel
-   * ----------------------- */
-
+  // Filter panel
   toggleFilterPanel(): void {
     this.isFilterPanelOpenSignal.update((isOpen) => !isOpen);
   }
@@ -564,6 +565,7 @@ export class ComparisonToolService<T> {
     this.isFilterPanelOpenSignal.set(false);
   }
 
+  // View config & tutorial
   setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {
     this.viewConfigSignal.set({ ...this.DEFAULT_VIEW_CONFIG, ...viewConfig });
     this.setLegendVisibility(false);
@@ -587,6 +589,7 @@ export class ComparisonToolService<T> {
     this.appStorageService.setTutorialHidden(hidden);
   }
 
+  // Pinning
   isPinned(id: string): boolean {
     return this.pinnedItemsSet().has(id);
   }
@@ -707,6 +710,7 @@ export class ComparisonToolService<T> {
     });
   }
 
+  // Table data
   setUnpinnedData(unpinnedData: T[]) {
     this.unpinnedDataSignal.set(unpinnedData);
     this.completeFetch();
@@ -738,6 +742,7 @@ export class ComparisonToolService<T> {
     this.completeFetch();
   }
 
+  // Row selection
   private autoSelectFirstRow(): void {
     const unpinned = this.unpinnedDataSignal();
     const pinned = this.pinnedDataSignal();
@@ -780,6 +785,7 @@ export class ComparisonToolService<T> {
     this.autoSelectFirstRow();
   }
 
+  // Fetch streams
   /**
    * Subscribes a fetch stream once for the lifetime of the service. `switchMap` unsubscribes the
    * previous result observable whenever a newer one arrives, which aborts the superseded HTTP
@@ -791,7 +797,7 @@ export class ComparisonToolService<T> {
   private subscribeToFetchStream(
     fetch$: Subject<Observable<ComparisonToolFetchResult<unknown>>>,
     dataSignal: WritableSignal<T[]>,
-    countSignal: WritableSignal<number>,
+    countSignal?: WritableSignal<number>,
   ): void {
     fetch$
       .pipe(
@@ -805,7 +811,7 @@ export class ComparisonToolService<T> {
       )
       .subscribe(({ data, totalCount }) => {
         dataSignal.set(data as T[]);
-        countSignal.set(totalCount);
+        countSignal?.set(totalCount);
       });
   }
 
@@ -837,6 +843,7 @@ export class ComparisonToolService<T> {
     this.pendingFetchesSignal.update((count) => Math.max(0, count - 1));
   }
 
+  // Query & pagination
   updateQuery(query: Partial<ComparisonToolQuery>) {
     this.querySignal.update((current) => ({
       ...current,
@@ -966,6 +973,7 @@ export class ComparisonToolService<T> {
     return JSON.stringify(normalized.slice(0, this.COLUMN_CACHE_DEPTH));
   }
 
+  // Sort
   setSort(multiSortMeta: SortMeta[]) {
     const newSort = multiSortMeta || this.DEFAULT_MULTI_SORT_META;
     const currentSort = this.querySignal().multiSortMeta;
@@ -998,6 +1006,7 @@ export class ComparisonToolService<T> {
     });
   }
 
+  // URL sync
   private resolveUrlState(
     params: ComparisonToolUrlParams,
     options: { isFirstLoad: boolean },
@@ -1174,6 +1183,11 @@ export class ComparisonToolService<T> {
         selectedFilters: this.selectedFilters(),
       }),
     );
+  }
+
+  private extractRowIds(rows: T[]): string[] {
+    const rowIdKey = this.viewConfig().rowIdDataKey;
+    return rows.map((row: T) => String((row as Record<string, unknown>)[rowIdKey]));
   }
 
   convertSortMetaToArrays(multiSortMeta: SortMeta[]): {
