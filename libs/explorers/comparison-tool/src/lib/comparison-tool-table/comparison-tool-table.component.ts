@@ -22,14 +22,10 @@ import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
 import {
-  CLEAR_ALL_PINS_LABEL,
-  CLEAR_ALL_PINS_TOOLTIP,
   COMPARISON_TOOL_BODY_CLASS,
-  DOWNLOAD_PINS_HEADING,
-  DOWNLOAD_PINS_LABEL,
-  DOWNLOAD_PINS_TOOLTIP,
   PIN_ALL_LOADING_TOOLTIP,
   PIN_ALL_TOOLTIP,
+  PINNED_RESULTS_CONTROLS,
 } from './comparison-tool-table.constants';
 import {
   clampAndFormatWidths,
@@ -79,11 +75,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   columnWidths = signal<Record<string, string>>({});
 
-  readonly downloadPinsLabel = DOWNLOAD_PINS_LABEL;
-  readonly downloadPinsTooltip = DOWNLOAD_PINS_TOOLTIP;
-  readonly downloadPinsHeading = DOWNLOAD_PINS_HEADING;
-  readonly clearAllPinsLabel = CLEAR_ALL_PINS_LABEL;
-  readonly clearAllPinsTooltip = CLEAR_ALL_PINS_TOOLTIP;
+  readonly pinnedResultsControls = PINNED_RESULTS_CONTROLS;
 
   pinAllTooltip = computed(() => {
     if (this.hasMaxPinnedItems()) return this.disabledPinTooltip();

@@ -1,16 +1,14 @@
 import { PointStyle } from '@sagebionetworks/explorers/charts';
 import { DownloadNote, LoadingIconColors } from '@sagebionetworks/explorers/models';
 
-export const HELP_URL =
-  'https://help.adknowledgeportal.org/apd/Model-AD+Explorer+Resources.4077682781.html';
+export const HELP_URL = 'https://help.adknowledgeportal.org/apd/model-ad-explorer-resources';
 
 export const SUPPORT_EMAIL = 'modeladexplorer@sagebionetworks.org';
 
 export const DOWNLOAD_PINS_NOTE: DownloadNote = {
   textBefore: 'See the ',
   linkText: 'Model AD Explorer documentation',
-  linkUrl:
-    'https://help.adknowledgeportal.org/apd/Model-AD-Explorer-Resources-Resources.4077682781.html#ModelADExplorerResources-GeneExpressionAnalysis',
+  linkUrl: HELP_URL,
   textAfter:
     ' for links to the study-specific data files, metadata files, and methods documentation.',
 };

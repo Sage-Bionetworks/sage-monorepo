@@ -19,6 +19,7 @@ import {
   testPinAllAcrossPages,
   testPinAllExceedsLimit,
   testPinLastItemLastPageGoesToPreviousPage,
+  testPinsRemovedFromUrlOnClearAllPins,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
   testTableReturnsToFirstPageWhenFilterSelectedAndRemoved,
@@ -125,6 +126,22 @@ test.describe('nominated drugs - comparison tool', () => {
         drugs.map((drug) => drug.composite_id),
       );
     });
+  });
+
+  test('pinned items are removed from URL when Clear All Pins is clicked', async ({ page }) => {
+    const pinnedItems = [
+      'CHEMBL611~null', // Terazosin
+      'CHEMBL621~null', // Trazodone
+    ];
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(pinnedItems, 'pinned'),
+    );
+    await testPinsRemovedFromUrlOnClearAllPins(page, pinnedItems);
   });
 
   test.describe('pagination', () => {

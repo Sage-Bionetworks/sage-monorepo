@@ -35,6 +35,7 @@ import {
   testPinAllAcrossPages,
   testPinAllExceedsLimit,
   testPinLastItemLastPageGoesToPreviousPage,
+  testPinsRemovedFromUrlOnClearAllPins,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
   testTableReturnsToFirstPageWhenCategoriesChanged,
@@ -445,6 +446,17 @@ test.describe('differential expression', () => {
 
     await expectPinnedRows(page, firstPinned);
     await expectPinnedParams(page, firstPinned);
+  });
+
+  test('pinned items are removed from URL when Clear All Pins is clicked', async ({ page }) => {
+    const queryParameters = [
+      categoriesQueryParams,
+      getQueryParamFromValues(cacul1Matches, 'pinned'),
+    ].join('&');
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await expectPinnedRows(page, cacul1Matches);
+    await testPinsRemovedFromUrlOnClearAllPins(page, cacul1Matches);
   });
 
   test('table loads previous page when last item on last page is pinned', async ({ page }) => {

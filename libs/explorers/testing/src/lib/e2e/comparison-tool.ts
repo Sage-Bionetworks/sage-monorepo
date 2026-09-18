@@ -396,6 +396,20 @@ export async function testUrlPinsExceedingLimitAreCapped(
   await expectPinAllDisabledAtPinLimit(page);
 }
 
+// Tests that "Clear All Pins" clears every pinned item and its pinned query params
+// expectedInitialPinnedIds - the pinned row ids the page is navigated to, in the table's sort order
+export async function testPinsRemovedFromUrlOnClearAllPins(
+  page: Page,
+  expectedInitialPinnedIds: string[],
+): Promise<void> {
+  await expectPinnedParams(page, expectedInitialPinnedIds);
+
+  await page.getByRole('button', { name: 'Clear All Pins' }).click();
+
+  await expectPinnedParams(page, []);
+  await expectUnpinnedTableOnly(page);
+}
+
 export async function testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
   page: Page,
   filterName: string,
