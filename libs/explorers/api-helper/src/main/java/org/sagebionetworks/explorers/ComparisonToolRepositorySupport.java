@@ -1,6 +1,7 @@
 package org.sagebionetworks.explorers;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,13 @@ import org.springframework.lang.Nullable;
  *   $limit (row budget) or $skip / $limit
  * </pre>
  *
+ * <p>A budgeted request on a <strong>parent-aware</strong> CT — one overriding
+ * {@link #getParentIdSpace()} — spends its budget on parents rather than rows, which takes a
+ * second query. That query, the <em>parent selection</em>, picks the parents in the request's own
+ * sort order; the shape above then runs with its {@code $match} narrowed to those parents' rows
+ * and neither {@code $skip} nor {@code $limit}. See
+ * {@link #executePagedAggregation(Criteria, Pageable, CtQueryOptions)} and {@link #selectParents}.
+ *
  * <p><strong>Field-name convention:</strong> sort field names ({@link Pageable#getSort()} order
  * properties, and the keys of {@link #getComputedSortFieldExpressions()} /
  * {@link #getSortFieldAliases()}) must be the names stored in MongoDB, NOT the Java POJO
@@ -53,6 +61,23 @@ import org.springframework.lang.Nullable;
 public abstract class ComparisonToolRepositorySupport<T> {
 
   private static final Collation CASE_INSENSITIVE = Collation.of("en").strength(2);
+
+  /**
+   * The document id: the trailing tiebreaker of every CT sort, and the {@code $group} key the
+   * parent selection substitutes the parent token into.
+   */
+  private static final String ID_FIELD = "_id";
+
+  /**
+   * Field the parent selection materialises the parent token into before its {@code $group}.
+   */
+  private static final String PARENT_TOKEN_FIELD = "__ctparent";
+
+  /**
+   * Prefix of the safe alias each resolved sort path is read into for the parent selection's
+   * {@code $group}.
+   */
+  private static final String SORT_KEY_ALIAS_PREFIX = "__ctsk";
 
   protected final MongoTemplate mongoTemplate;
 
@@ -202,6 +227,13 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * {@link #executePagedAggregation(Criteria, Pageable, boolean, Integer)}; this overload
    * additionally answers {@code hasRowsForPrebudgetedParents} on the returned {@link CtPage}.
    *
+   * <p>On a <strong>parent-aware</strong> CT a budget caps distinct parents instead of rows, so a
+   * budgeted request first selects the parents it admits (see
+   * {@link #buildAdmittedParentsCriteria}) and then runs the row pipeline over their rows alone,
+   * unpaged: every row of an admitted parent is wanted. The total count still comes from the
+   * caller's unnarrowed criteria, so a caller's skip count stays
+   * {@code totalElements - rows.length} exactly as in the row-capped case.
+   *
    * @param matchCriteria the assembled match criteria
    * @param pageable pagination and sort; pagination is ignored when the budget applies
    * @param options the request's include/exclude, budget, prebudgeted parents, and identity space
@@ -212,43 +244,31 @@ public abstract class ComparisonToolRepositorySupport<T> {
     CtQueryOptions options
   ) {
     try {
-      List<AggregationOperation> operations = new ArrayList<>();
-      operations.add(Aggregation.match(matchCriteria));
-
-      Map<String, ComputedSortField> computedFields = getComputedSortFieldExpressions();
-      Map<String, String> aliases = getSortFieldAliases();
-
-      // Inject prerequisites for requested sort fields
-      List<AggregationOperation> prerequisites = buildPrerequisites(
+      CtSortPlan sortPlan = buildSortPlan(
         pageable.getSort(),
-        computedFields
+        getComputedSortFieldExpressions(),
+        getSortFieldAliases()
       );
-      operations.addAll(prerequisites);
-
-      // Inject computed sort fields
-      AggregationOperation computedSort = buildComputedSortFields(
-        pageable.getSort(),
-        computedFields
-      );
-      if (computedSort != null) {
-        operations.add(computedSort);
-      }
-
-      // Inject empty-flag fields so null/empty values always sort last regardless of direction
-      AggregationOperation emptyFlags = ApiHelper.buildEmptyFlagFields(pageable.getSort(), aliases);
-      if (emptyFlags != null) {
-        operations.add(emptyFlags);
-      }
-
-      // Build and add sort operation
-      AggregationOperation sort = buildSortOperation(pageable.getSort(), computedFields, aliases);
-      if (sort != null) {
-        operations.add(sort);
-      }
 
       boolean budgetApplies = !options.isInclude() && options.remainingBudget() != null;
+      boolean capsParents = budgetApplies && getParentIdSpace() != null;
+      Criteria rowCriteria = capsParents
+        ? buildAdmittedParentsCriteria(matchCriteria, sortPlan, options)
+        : matchCriteria;
+
+      List<AggregationOperation> operations = new ArrayList<>();
+      operations.add(Aggregation.match(rowCriteria));
+      operations.addAll(sortPlan.prepStages());
+      if (sortPlan.sortDoc() != null) {
+        operations.add(sortStage(sortPlan.sortDoc()));
+      }
+
       if (budgetApplies) {
-        operations.add(Aggregation.limit(options.remainingBudget()));
+        // A parent-capped request is already bounded by its match criteria, which names the
+        // admitted parents, so it takes no $limit of its own.
+        if (!capsParents) {
+          operations.add(Aggregation.limit(options.remainingBudget()));
+        }
       } else {
         long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
         operations.add(Aggregation.skip(skipCount));
@@ -313,6 +333,148 @@ public abstract class ComparisonToolRepositorySupport<T> {
       new Query(criteria).collation(CASE_INSENSITIVE),
       getCollectionName()
     );
+  }
+
+  /**
+   * Narrows {@code matchCriteria} to the rows of the parents a budgeted request admits: the ones
+   * the caller has already budgeted for, plus up to {@code remainingBudget} more, selected in the
+   * request's own sort order by {@link #selectParents}.
+   *
+   * <p>A budget of zero admits no new parent — there is nothing to select, and {@code $limit: 0}
+   * is illegal — so it skips the selection and matches the prebudgeted parents alone. With
+   * no prebudgeted parents either, the criteria match nothing rather than everything, which is what
+   * an exhausted budget means:
+   * {@link ItemIdSpaceDef#criteriaForAny(java.util.Collection) criteriaForAny} of no parents
+   * matches no rows in either identity-space variant.
+   */
+  private Criteria buildAdmittedParentsCriteria(
+    Criteria matchCriteria,
+    CtSortPlan sortPlan,
+    CtQueryOptions options
+  ) {
+    Set<String> admitted = new LinkedHashSet<>(options.prebudgetedParentIds());
+    if (options.remainingBudget() > 0) {
+      admitted.addAll(selectParents(matchCriteria, sortPlan, options));
+    }
+    return new Criteria()
+      .andOperator(matchCriteria, resolveParentIdSpace().criteriaForAny(admitted));
+  }
+
+  /**
+   * Selects the first {@code remainingBudget} parents in the request's sort order, among those the
+   * caller has not already budgeted for.
+   *
+   * <p>Excluding the prebudgeted parents is what makes the budget mean "new parents". Without it a
+   * prebudgeted parent high in the sort order would consume part of the budget, even though its
+   * children are already returned.
+   *
+   * <p>The pipeline replays the row pipeline's sort stages, materialises the parent token plus a
+   * safe alias per resolved sort path, sorts rows, collapses them to one document per parent
+   * keeping its leading row's sort values, and re-applies the same order to the parents. It is a
+   * query of its own because DocumentDB has no {@code $setWindowFields}, so per-parent admission
+   * cannot be expressed inside the row pipeline.
+   */
+  private List<String> selectParents(
+    Criteria matchCriteria,
+    CtSortPlan sortPlan,
+    CtQueryOptions options
+  ) {
+    ItemIdSpaceDef parentIdSpace = resolveParentIdSpace();
+    List<String> prebudgeted = options.prebudgetedParentIds();
+    Criteria selectionCriteria = prebudgeted.isEmpty()
+      ? matchCriteria
+      : new Criteria().andOperator(matchCriteria, parentIdSpace.criteriaForNone(prebudgeted));
+
+    List<AggregationOperation> operations = new ArrayList<>();
+    operations.add(Aggregation.match(selectionCriteria));
+    operations.addAll(sortPlan.prepStages());
+
+    Document tokenFields = buildParentTokenFields(sortPlan, parentIdSpace);
+    operations.add(context -> new Document("$addFields", tokenFields));
+    if (sortPlan.sortDoc() != null) {
+      operations.add(sortStage(sortPlan.sortDoc()));
+    }
+
+    Document parentSortDoc = buildParentSortDoc(sortPlan);
+    Document groupDoc = buildParentGroupDoc(parentSortDoc);
+    operations.add(context -> new Document("$group", groupDoc));
+    operations.add(sortStage(parentSortDoc));
+    operations.add(Aggregation.limit(options.remainingBudget()));
+
+    Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(
+      AggregationOptions.builder().allowDiskUse(true).collation(CASE_INSENSITIVE).build()
+    );
+    log.debug("Selecting parents on collection {}: {}", getCollectionName(), aggregation);
+    return mongoTemplate
+      .aggregate(aggregation, getCollectionName(), Document.class)
+      .getMappedResults()
+      .stream()
+      .map(parent -> parent.getString(ID_FIELD))
+      // A null token names no parent a caller could have asked for. A composite token is never
+      // null, since every part is guarded by ItemIdSpaceDef.MISSING_PART.
+      .filter(Objects::nonNull)
+      .toList();
+  }
+
+  /**
+   * The {@code $addFields} stage the parent selection groups and sorts on: the parent token, plus
+   * each resolved sort path read into its alias. The paths need aliasing because they contain dots
+   * and spaces ({@code 4 months.log2_fc}), neither of which a {@code $group} output key nor
+   * {@code $first: "$<path>"} can express.
+   */
+  private static Document buildParentTokenFields(
+    CtSortPlan sortPlan,
+    ItemIdSpaceDef parentIdSpace
+  ) {
+    Document fields = new Document(PARENT_TOKEN_FIELD, parentIdSpace.tokenExpression());
+    sortPlan
+      .pathAliases()
+      .forEach((path, alias) -> fields.append(alias, ApiHelper.buildPathReadExpr(path)));
+    return fields;
+  }
+
+  /**
+   * The parent selection's post-{@code $group} sort: the row sort document with every key replaced
+   * by the key it was captured under, so parents come out ordered exactly as their leading rows
+   * are.
+   *
+   * <p>The isEmpty flags are part of that. Reproduce only the resolved paths and a parent whose
+   * sort value is null or empty floats to the head of the selection while its rows sit at the tail
+   * of the result, so the admitted parents are not the ones the user sees.
+   *
+   * <p>An unsorted request has no row order to reproduce, so parents are ordered by their token,
+   * which still makes the admitted set deterministic.
+   */
+  private static Document buildParentSortDoc(CtSortPlan sortPlan) {
+    Document rowSortDoc = sortPlan.sortDoc();
+    if (rowSortDoc == null) {
+      return new Document(ID_FIELD, 1);
+    }
+
+    Document parentSortDoc = new Document();
+    rowSortDoc.forEach((key, direction) ->
+      parentSortDoc.append(sortPlan.pathAliases().getOrDefault(key, key), direction)
+    );
+    return parentSortDoc;
+  }
+
+  /**
+   * The parent selection's {@code $group}: one document per parent, keyed by the parent token and
+   * carrying its leading row's value for every key {@code parentSortDoc} names.
+   *
+   * <p>The key is deliberately the bare token rather than a tuple of the constituent fields, so the
+   * {@code _id} tiebreaker inherited from the row sort still compares strings. A tie on every real
+   * sort key therefore breaks by parent token here and by row id in the result, which no caller can
+   * observe but a test asserting one specific admitted set can.
+   */
+  private static Document buildParentGroupDoc(Document parentSortDoc) {
+    Document group = new Document(ID_FIELD, "$" + PARENT_TOKEN_FIELD);
+    parentSortDoc.forEach((key, direction) -> {
+      if (!ID_FIELD.equals(key)) {
+        group.append(key, new Document("$first", "$" + key));
+      }
+    });
+    return group;
   }
 
   /**
@@ -532,16 +694,33 @@ public abstract class ComparisonToolRepositorySupport<T> {
     return context -> new Document("$addFields", fields);
   }
 
-  private AggregationOperation buildSortOperation(
+  /**
+   * Plans how a request's sort is realised in a pipeline, so that the row pipeline and the parent
+   * selection cannot order their results differently.
+   */
+  private CtSortPlan buildSortPlan(
     Sort sort,
     Map<String, ComputedSortField> computed,
     Map<String, String> aliases
   ) {
     if (sort.isUnsorted()) {
-      return null;
+      return new CtSortPlan(List.of(), null, Map.of());
+    }
+
+    // Prerequisites for the requested computed sort fields, then the computed fields themselves
+    List<AggregationOperation> prepStages = new ArrayList<>(buildPrerequisites(sort, computed));
+    AggregationOperation computedSort = buildComputedSortFields(sort, computed);
+    if (computedSort != null) {
+      prepStages.add(computedSort);
+    }
+    // Empty-flag fields so null/empty values always sort last regardless of direction
+    AggregationOperation emptyFlags = ApiHelper.buildEmptyFlagFields(sort, aliases);
+    if (emptyFlags != null) {
+      prepStages.add(emptyFlags);
     }
 
     Document sortDoc = new Document();
+    Map<String, String> pathAliases = new LinkedHashMap<>();
     for (Sort.Order order : sort) {
       String field = order.getProperty();
       String resolved;
@@ -555,13 +734,38 @@ public abstract class ComparisonToolRepositorySupport<T> {
       }
       sortDoc.append(ApiHelper.isEmptyFlagKey(field), 1);
       sortDoc.append(resolved, order.isAscending() ? 1 : -1);
+      if (!pathAliases.containsKey(resolved)) {
+        pathAliases.put(resolved, SORT_KEY_ALIAS_PREFIX + pathAliases.size());
+      }
     }
     // Break ties on _id so equal sort values keep a stable order across pages. Skip when the
     // caller already sorts by _id -- re-appending would overwrite their direction.
-    if (!sortDoc.containsKey("_id")) {
-      sortDoc.append("_id", 1);
+    if (!sortDoc.containsKey(ID_FIELD)) {
+      sortDoc.append(ID_FIELD, 1);
     }
 
+    return new CtSortPlan(prepStages, sortDoc, pathAliases);
+  }
+
+  private static AggregationOperation sortStage(Document sortDoc) {
     return context -> new Document("$sort", sortDoc);
   }
+
+  /**
+   * How a request's sort is realised in a pipeline.
+   *
+   * <p>The isEmpty flag keys are absent from {@code pathAliases} on purpose: they are already
+   * space- and dot-normalised by {@link ApiHelper#isEmptyFlagKey}, so a {@code $group} can capture
+   * them under their own names.
+   *
+   * @param prepStages the {@code $addFields} stages that must precede {@code $sort}, in order
+   * @param sortDoc the {@code $sort} document, or null when the request is unsorted
+   * @param pathAliases resolved sort path → the alias it is read into when the same order has to
+   *     be reproduced after a {@code $group}
+   */
+  private record CtSortPlan(
+    List<AggregationOperation> prepStages,
+    @Nullable Document sortDoc,
+    Map<String, String> pathAliases
+  ) {}
 }
