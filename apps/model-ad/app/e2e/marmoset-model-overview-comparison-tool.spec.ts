@@ -19,6 +19,7 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
+  testPinsRemovedFromUrlOnClearAllPins,
   testSortRestoredFromUrl,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
@@ -67,6 +68,16 @@ test.describe('marmoset model overview', () => {
     const pinnedRow = await unPinByName(pinnedTable, page, firstModel.name);
     await expect(pinnedRow).toHaveCount(0);
     await expectPinnedParams(page, []);
+  });
+
+  test('pinned items are removed from URL when Clear All Pins is clicked', async ({ page }) => {
+    const [firstModel] = await fetchMarmosetModelOverviews(page);
+    expect(firstModel).toBeDefined();
+
+    await navigateToComparison(page, CT_PAGE, true);
+    await pinByName(getUnpinnedTable(page), page, firstModel.name);
+
+    await testPinsRemovedFromUrlOnClearAllPins(page, [firstModel.name]);
   });
 
   test('filterbox search without comma returns partial case-insensitive matches', async ({

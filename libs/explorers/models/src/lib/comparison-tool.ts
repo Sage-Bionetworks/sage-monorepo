@@ -1,3 +1,4 @@
+import { DownloadNote } from './download-note';
 import { SynapseWikiParams } from './synapse-wiki';
 
 export interface HeatmapDetailsPanelData {
@@ -66,6 +67,7 @@ export interface ComparisonToolViewConfig {
   legendPanelConfig: LegendPanelConfig;
   rowIdDataKey: string;
   allowPinnedImageDownload: boolean;
+  downloadPinsNote?: DownloadNote;
   defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
   heatmapCircleClickTransformFn?: heatmapCircleClickTransformFn;
   linkExportField: 'link_url' | 'link_text';

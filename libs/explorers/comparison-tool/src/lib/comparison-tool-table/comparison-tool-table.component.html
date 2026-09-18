@@ -15,10 +15,19 @@
               [hasCsvDownload]="true"
               [hasImageDownload]="viewConfig().allowPinnedImageDownload"
               [data]="getPinnedDataForCsv()"
-              [buttonLabel]="'Download'"
-              [heading]="'Download all results as:'"
+              [buttonLabel]="pinnedResultsControls.downloadButtonLabel"
+              [buttonTooltip]="pinnedResultsControls.downloadButtonTooltip"
+              [heading]="pinnedResultsControls.downloadPanelHeading"
+              [note]="viewConfig().downloadPinsNote"
             />
-            <button (click)="clearAllPinned()" class="clear-all-button">Clear All</button>
+            <button
+              (click)="clearAllPinned()"
+              class="clear-all-button"
+              [pTooltip]="pinnedResultsControls.clearButtonTooltip"
+              tooltipPosition="top"
+            >
+              {{ pinnedResultsControls.clearButtonLabel }}
+            </button>
           </div>
         </div>
       </div>

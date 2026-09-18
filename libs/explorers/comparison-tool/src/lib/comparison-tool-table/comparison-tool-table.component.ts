@@ -25,6 +25,7 @@ import {
   COMPARISON_TOOL_BODY_CLASS,
   PIN_ALL_LOADING_TOOLTIP,
   PIN_ALL_TOOLTIP,
+  PINNED_RESULTS_CONTROLS,
 } from './comparison-tool-table.constants';
 import {
   clampAndFormatWidths,
@@ -73,6 +74,8 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   unpinnedData = this.comparisonToolService.unpinnedData;
 
   columnWidths = signal<Record<string, string>>({});
+
+  readonly pinnedResultsControls = PINNED_RESULTS_CONTROLS;
 
   pinAllTooltip = computed(() => {
     if (this.hasMaxPinnedItems()) return this.disabledPinTooltip();

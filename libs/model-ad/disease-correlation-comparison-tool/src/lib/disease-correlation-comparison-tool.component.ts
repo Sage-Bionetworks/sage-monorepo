@@ -24,7 +24,7 @@ import {
   DiseaseCorrelationsPage,
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { DOWNLOAD_PINS_NOTE, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
@@ -88,6 +88,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     },
     legendPanelConfig: this.legendPanelConfig,
     rowIdDataKey: 'composite_id',
+    downloadPinsNote: DOWNLOAD_PINS_NOTE,
     defaultSort: [
       { field: 'name', order: 1 },
       { field: 'age', order: 1 },

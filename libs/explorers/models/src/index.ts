@@ -1,5 +1,6 @@
 export * from './lib/chiclet';
 export * from './lib/comparison-tool';
+export * from './lib/download-note';
 export * from './lib/loading-icon-colors';
 export * from './lib/navigation-link';
 export * from './lib/panel';

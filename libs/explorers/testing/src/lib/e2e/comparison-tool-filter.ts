@@ -46,7 +46,7 @@ export async function testFiltersRemovedFromUrlOnClearAll(
 ): Promise<void> {
   await expectFiltersParams(page, expectedInitialFilterParams);
 
-  const clearAllButton = page.getByRole('button', { name: 'Clear All' });
+  const clearAllButton = page.locator('.filter-list').getByRole('button', { name: 'Clear all' });
   await clearAllButton.click();
 
   await expectFiltersParams(page, {});

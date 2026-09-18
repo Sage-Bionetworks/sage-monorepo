@@ -31,6 +31,7 @@ import {
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
   testPinLastItemLastPageGoesToPreviousPage,
+  testPinsRemovedFromUrlOnClearAllPins,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
   testTableReturnsToFirstPageWhenCategoriesChanged,
@@ -355,6 +356,22 @@ test.describe('disease correlation', () => {
       '5xFAD (IU/Jax/Pitt)~12 months~Female',
       '5xFAD (IU/Jax/Pitt)~12 months~Male',
     ]);
+  });
+
+  test('pinned items are removed from URL when Clear All Pins is clicked', async ({ page }) => {
+    const correlations = await fetchDiseaseCorrelations(page);
+    const pinnedItems = correlations.slice(0, 3).map((correlation) => correlation.composite_id);
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(pinnedItems, 'pinned'),
+    );
+
+    await expectPinnedRows(page, pinnedItems);
+    await testPinsRemovedFromUrlOnClearAllPins(page, pinnedItems);
   });
 
   test('table loads previous page when last item on last page is pinned', async ({ page }) => {
