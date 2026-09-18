@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewChecked, Component, ElementRef, ViewEncapsulation, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
+import { TutorialPane } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolService,
   EXPLORERS_CONFIG,
@@ -13,37 +13,36 @@ import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
-  selector: 'explorers-visualization-overview-panel',
+  selector: 'explorers-tutorial-panel',
   imports: [CommonModule, ButtonModule, CheckboxModule, DialogModule, FormsModule, TooltipModule],
-  templateUrl: './visualization-overview-panel.component.html',
-  styleUrls: ['./visualization-overview-panel.component.scss'],
+  templateUrl: './tutorial-panel.component.html',
+  styleUrls: ['./tutorial-panel.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class VisualizationOverviewPanelComponent implements AfterViewChecked {
+export class TutorialPanelComponent implements AfterViewChecked {
   comparisonToolService = inject(ComparisonToolService);
   platformService = inject(PlatformService);
   private elementRef = inject(ElementRef);
   private explorerConfig = inject(EXPLORERS_CONFIG);
 
   get willHide(): boolean {
-    return this.comparisonToolService.isVisualizationOverviewHiddenByUser();
+    return this.comparisonToolService.isTutorialHiddenByUser();
   }
 
   setWillHide(value: boolean) {
-    this.comparisonToolService.setVisualizationOverviewHiddenByUser(value);
+    this.comparisonToolService.setTutorialHiddenByUser(value);
   }
 
   activePane = 0;
   private lastPlayedPane = -1;
 
   /**
-   * Gets the panes to display in the visualization overview dialog. A per-CT override on the
+   * Gets the panes to display in the tutorial dialog. A per-CT override on the
    * view config takes precedence; otherwise the app-level `EXPLORERS_CONFIG` panes are used.
    */
-  get panes(): VisualizationOverviewPane[] {
+  get panes(): TutorialPane[] {
     return (
-      this.comparisonToolService.viewConfig().visualizationOverviewPanes ??
-      this.explorerConfig.visualizationOverviewPanes
+      this.comparisonToolService.viewConfig().tutorialPanes ?? this.explorerConfig.tutorialPanes
     );
   }
 
@@ -61,7 +60,7 @@ export class VisualizationOverviewPanelComponent implements AfterViewChecked {
   ngAfterViewChecked() {
     if (
       this.platformService.isBrowser &&
-      this.comparisonToolService.isVisualizationOverviewVisible() &&
+      this.comparisonToolService.isTutorialVisible() &&
       this.activePane !== this.lastPlayedPane
     ) {
       this.initializeMediaInActivePane();
@@ -70,9 +69,7 @@ export class VisualizationOverviewPanelComponent implements AfterViewChecked {
   }
 
   private initializeMediaInActivePane() {
-    const activePane = this.elementRef.nativeElement.querySelector(
-      '.visualization-overview-panel-pane.active',
-    );
+    const activePane = this.elementRef.nativeElement.querySelector('.tutorial-panel-pane.active');
     if (!activePane) return;
 
     // Handle videos
@@ -128,6 +125,6 @@ export class VisualizationOverviewPanelComponent implements AfterViewChecked {
   }
 
   close() {
-    this.comparisonToolService.setVisualizationOverviewVisibility(false);
+    this.comparisonToolService.setTutorialVisibility(false);
   }
 }

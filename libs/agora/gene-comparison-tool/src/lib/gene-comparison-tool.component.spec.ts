@@ -36,7 +36,7 @@ describe('GeneComparisonToolComponent', () => {
         MessageService,
         { provide: SvgIconService, useClass: SvgIconServiceStub },
         ...provideLoadingIconColors(AGORA_LOADING_ICON_COLORS),
-        provideExplorersConfig({ visualizationOverviewPanes: [] }),
+        provideExplorersConfig({ tutorialPanes: [] }),
       ],
     }).compileComponents();
 

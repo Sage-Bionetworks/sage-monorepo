@@ -110,7 +110,7 @@ test.describe('differential expression', () => {
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
     await expectCategoriesParams(page, categories);
 
-    // The visualization overview dialog is only shown on the first visit to a comparison tool
+    // The tutorial dialog is only shown on the first visit to a comparison tool
     await navigateToComparison(page, CT_PAGE, false, 'link');
 
     await expectCategoriesParams(page, [rnaCategory]);
@@ -123,7 +123,7 @@ test.describe('differential expression', () => {
     const proteinCategory = 'PROTEIN - DIFFERENTIAL EXPRESSION';
     const proteinTissue = 'Tissue - Hemibrain';
 
-    // The visualization overview dialog is only shown on the first visit to a comparison tool
+    // The tutorial dialog is only shown on the first visit to a comparison tool
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
     await expectCategoriesParams(page, categories);
 

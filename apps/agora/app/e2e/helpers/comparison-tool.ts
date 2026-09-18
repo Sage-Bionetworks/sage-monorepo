@@ -28,7 +28,7 @@ import {
 export const navigateToComparison = async (
   page: Page,
   name: ComparisonToolConfigPage,
-  shouldCloseVisualizationOverviewDialog = false,
+  shouldCloseTutorialDialog = false,
   navigateBy: 'url' | 'link' = 'url',
   queryParameters?: string,
 ) => {
@@ -40,7 +40,7 @@ export const navigateToComparison = async (
     await navigateViaHeaderNav(page, COMPARISON_TOOL_NAV_TRAILS[name]);
   }
 
-  await expectComparisonToolTableLoaded(page, name, shouldCloseVisualizationOverviewDialog);
+  await expectComparisonToolTableLoaded(page, name, shouldCloseTutorialDialog);
 };
 
 export const fetchComparisonToolData = async <T>(

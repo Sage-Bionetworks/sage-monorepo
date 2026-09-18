@@ -19,7 +19,7 @@ export type ComparisonToolServiceOptions = {
   selection?: string[];
   totalResultsCount?: number;
   legendVisible?: boolean;
-  visualizationOverviewVisibility?: boolean;
+  tutorialVisibility?: boolean;
   viewConfig?: Partial<ComparisonToolViewConfig>;
   maxPinnedItems?: number;
   pinAllFetch?: PinAllFetch<Record<string, unknown>>;
@@ -93,8 +93,8 @@ export const provideComparisonToolService = (
         service.setLegendVisibility(options.legendVisible);
       }
 
-      if (options.visualizationOverviewVisibility !== undefined) {
-        service.setVisualizationOverviewVisibility(options.visualizationOverviewVisibility);
+      if (options.tutorialVisibility !== undefined) {
+        service.setTutorialVisibility(options.tutorialVisibility);
       }
 
       if (options.maxPinnedItems !== undefined) {

@@ -91,9 +91,7 @@ export class ComparisonToolService<T> {
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
-  private readonly isVisualizationOverviewVisibleSignal = signal(
-    !this.appStorageService.isVisualizationOverviewHidden(),
-  );
+  private readonly isTutorialVisibleSignal = signal(!this.appStorageService.isTutorialHidden());
   private readonly maxPinnedItemsSignal = signal<number>(MAX_PINNED_ITEMS);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
@@ -130,7 +128,7 @@ export class ComparisonToolService<T> {
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
-  readonly isVisualizationOverviewVisible = this.isVisualizationOverviewVisibleSignal.asReadonly();
+  readonly isTutorialVisible = this.isTutorialVisibleSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
@@ -477,12 +475,12 @@ export class ComparisonToolService<T> {
     this.isLegendVisibleSignal.update((visible) => !visible);
   }
 
-  setVisualizationOverviewVisibility(visible: boolean) {
-    this.isVisualizationOverviewVisibleSignal.set(visible);
+  setTutorialVisibility(visible: boolean) {
+    this.isTutorialVisibleSignal.set(visible);
   }
 
-  toggleVisualizationOverview() {
-    this.isVisualizationOverviewVisibleSignal.update((visible) => !visible);
+  toggleTutorial() {
+    this.isTutorialVisibleSignal.update((visible) => !visible);
   }
 
   showHeatmapDetailsPanel(rowData: T, cellData: unknown, columnKey: string, event: Event): void {
@@ -534,22 +532,22 @@ export class ComparisonToolService<T> {
     this.setLegendVisibility(false);
 
     // If the user checked the option to hide the overview, do not auto-show it
-    const isHiddenByUser = this.isVisualizationOverviewHiddenByUser();
+    const isHiddenByUser = this.isTutorialHiddenByUser();
     if (!isHiddenByUser) {
-      this.setVisualizationOverviewVisibility(true);
+      this.setTutorialVisibility(true);
     }
   }
 
   /**
    * Checks localStorage to determine if the user has chosen to hide
-   * the visualization overview panel across all comparison tools.
+   * the tutorial panel across all comparison tools.
    */
-  isVisualizationOverviewHiddenByUser(): boolean {
-    return this.appStorageService.isVisualizationOverviewHidden();
+  isTutorialHiddenByUser(): boolean {
+    return this.appStorageService.isTutorialHidden();
   }
 
-  setVisualizationOverviewHiddenByUser(hidden: boolean): void {
-    this.appStorageService.setVisualizationOverviewHidden(hidden);
+  setTutorialHiddenByUser(hidden: boolean): void {
+    this.appStorageService.setTutorialHidden(hidden);
   }
 
   isPinned(id: string): boolean {

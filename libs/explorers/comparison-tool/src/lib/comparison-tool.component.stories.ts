@@ -36,7 +36,7 @@ type StoryArgs = Omit<
   pinnedItems: readonly string[];
   // Panel visibility
   legendVisible?: boolean;
-  visualizationOverviewVisible?: boolean;
+  tutorialVisible?: boolean;
   // Sidebar
   hasSidebar?: boolean;
   // Row interaction
@@ -90,7 +90,7 @@ class ComparisonToolInnerComponent {
   pinnedItems = input<string[]>();
   // Panel visibility inputs
   legendVisible = input<boolean>();
-  visualizationOverviewVisible = input<boolean>();
+  tutorialVisible = input<boolean>();
   // Sidebar input
   hasSidebar = input<boolean>();
   // Row interaction inputs
@@ -194,9 +194,9 @@ class ComparisonToolInnerComponent {
         this.comparisonToolService.setLegendVisibility(legendVisible);
       }
 
-      const visualizationOverviewVisible = this.visualizationOverviewVisible();
-      if (visualizationOverviewVisible !== undefined) {
-        this.comparisonToolService.setVisualizationOverviewVisibility(visualizationOverviewVisible);
+      const tutorialVisible = this.tutorialVisible();
+      if (tutorialVisible !== undefined) {
+        this.comparisonToolService.setTutorialVisibility(tutorialVisible);
       }
     });
   }
@@ -227,7 +227,7 @@ class ComparisonToolInnerComponent {
         [data]="data()"
         [pinnedItems]="pinnedItems()"
         [legendVisible]="legendVisible()"
-        [visualizationOverviewVisible]="visualizationOverviewVisible()"
+        [tutorialVisible]="tutorialVisible()"
         [hasSidebar]="hasSidebar()"
         [rowSelectionEnabled]="rowSelectionEnabled()"
         [rowHoverEnabled]="rowHoverEnabled()"
@@ -254,7 +254,7 @@ class ComparisonToolStoryWrapperComponent {
   data = input<Record<string, unknown>[]>();
   pinnedItems = input<string[]>();
   legendVisible = input<boolean>();
-  visualizationOverviewVisible = input<boolean>();
+  tutorialVisible = input<boolean>();
   hasSidebar = input<boolean>();
   rowSelectionEnabled = input<boolean>();
   rowHoverEnabled = input<boolean>();
@@ -383,10 +383,10 @@ const meta: Meta<StoryArgs> = {
       description: 'Array of row IDs (matching `rowIdDataKey`) to pin to the top of the table',
       table: { category: 'Data' },
     },
-    visualizationOverviewVisible: {
+    tutorialVisible: {
       control: 'boolean',
       description:
-        'Whether the visualization overview help panel is initially visible when the page loads. ' +
+        'Whether the tutorial help panel is initially visible when the page loads. ' +
         'User can toggle visibility afterward.',
       table: { category: 'Controls' },
     },
@@ -469,7 +469,7 @@ export const Demo: Story = {
     pinnedItems: ['3xTg-AD', '5xFAD (UCI)', '5xFAD (IU/Jax/Pitt)'],
     // Panel visibility
     legendVisible: false,
-    visualizationOverviewVisible: false,
+    tutorialVisible: false,
     // Row interaction
     rowSelectionEnabled: true,
     rowHoverEnabled: true,

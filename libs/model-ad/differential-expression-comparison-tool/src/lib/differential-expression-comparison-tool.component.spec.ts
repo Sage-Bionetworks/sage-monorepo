@@ -110,7 +110,7 @@ async function setup() {
     providers: [
       MessageService,
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
-      provideExplorersConfig({ visualizationOverviewPanes: [] }),
+      provideExplorersConfig({ tutorialPanes: [] }),
       provideHttpClient(),
       provideNoopAnimations(),
       provideRouter([]),

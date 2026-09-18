@@ -16,11 +16,7 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client';
-import {
-  configFactory,
-  ConfigService,
-  GCT_VISUALIZATION_OVERVIEW_PANES,
-} from '@sagebionetworks/agora/config';
+import { configFactory, ConfigService, GCT_TUTORIAL_PANES } from '@sagebionetworks/agora/config';
 import { initSentry } from '@sagebionetworks/explorers/sentry';
 import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
@@ -55,7 +51,7 @@ export const appConfig: ApplicationConfig = {
       });
     }),
     provideExplorersConfig({
-      visualizationOverviewPanes: GCT_VISUALIZATION_OVERVIEW_PANES,
+      tutorialPanes: GCT_TUTORIAL_PANES,
     }),
     {
       provide: API_CLIENT_BASE_PATH,

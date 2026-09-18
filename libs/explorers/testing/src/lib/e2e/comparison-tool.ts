@@ -518,8 +518,8 @@ export async function testLoadingIndicatorAppearsDuringDataFetch(page: Page): Pr
   await waitForTableLoadingComplete(page);
 }
 
-export const closeVisualizationOverviewDialog = async (page: Page) => {
-  await test.step('close visualization overview dialog', async () => {
+export const closeTutorialDialog = async (page: Page) => {
+  await test.step('close tutorial dialog', async () => {
     const dialog = page.getByRole('dialog');
 
     const closeBtn = dialog.getByRole('button').first();
@@ -532,10 +532,10 @@ export const closeVisualizationOverviewDialog = async (page: Page) => {
 export const expectComparisonToolTableLoaded = async (
   page: Page,
   name: string,
-  shouldCloseVisualizationOverviewDialog: boolean,
+  shouldCloseTutorialDialog: boolean,
 ) => {
-  if (shouldCloseVisualizationOverviewDialog) {
-    await closeVisualizationOverviewDialog(page);
+  if (shouldCloseTutorialDialog) {
+    await closeTutorialDialog(page);
   }
 
   await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();
