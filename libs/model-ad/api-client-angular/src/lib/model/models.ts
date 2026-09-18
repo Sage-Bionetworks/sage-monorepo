@@ -28,6 +28,8 @@ export * from './mouse-model-overviews-page';
 export * from './named-link';
 export * from './page-metadata';
 export * from './proteomics';
+export * from './proteomics-individual';
+export * from './proteomics-individual-filter-query';
 export * from './proteomics-page';
 export * from './proteomics-search-query';
 export * from './search-result';

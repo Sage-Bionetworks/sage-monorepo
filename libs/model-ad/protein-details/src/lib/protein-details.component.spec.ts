@@ -2,6 +2,7 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
+import { ProteomicsIndividualService } from '@sagebionetworks/model-ad/api-client';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { proteomicsIndividualMocks } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
@@ -29,6 +30,10 @@ async function setup(
     ),
   };
 
+  const mockProteomicsIndividualService = {
+    getProteomicsIndividual: jest.fn(() => of(proteinDetails)),
+  };
+
   const mockPlatformService = platformService || {
     isBrowser: true,
     isServer: false,
@@ -37,6 +42,7 @@ async function setup(
   const component = await render(ProteinDetailsComponent, {
     imports: [LoadingIconComponent],
     providers: [
+      { provide: ProteomicsIndividualService, useValue: mockProteomicsIndividualService },
       { provide: PlatformService, useValue: mockPlatformService },
       {
         provide: ActivatedRoute,

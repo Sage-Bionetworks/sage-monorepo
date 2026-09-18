@@ -1,0 +1,23 @@
+get:
+  tags:
+    - Proteomics Individual
+  summary: Get proteomics individual data
+  description: Retrieve proteomics individual data based on specified filter criteria.
+  operationId: getProteomicsIndividual
+  parameters:
+    - $ref: ./query/proteomicsIndividualFilterQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/ProteomicsIndividual.yaml
+      description: Successfully retrieved individual proteomics data
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
