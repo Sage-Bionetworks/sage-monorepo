@@ -12,9 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.model.ad.api.next.model.document.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
@@ -25,8 +29,6 @@ import org.sagebionetworks.model.ad.api.next.model.mapper.FoldChangeMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.TranscriptomicsMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.TranscriptomicsRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +51,7 @@ class TranscriptomicsServiceTest {
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of());
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of());
 
     when(
       repository.findAll(
@@ -83,7 +85,7 @@ class TranscriptomicsServiceTest {
   @DisplayName("should return all tissue items when exclude filter has no items")
   void shouldReturnAllTissueItemsWhenExcludeFilterHasNoItems() {
     TranscriptomicsDocument doc = createTranscriptomicsDocument("ENSG00000001", "GENE1", "Symbol1");
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(doc));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(doc));
 
     when(
       repository.findAll(
@@ -117,7 +119,7 @@ class TranscriptomicsServiceTest {
   @DisplayName("should respect search term when exclude filter has no items")
   void shouldRespectSearchTermWhenExcludeFilterHasNoItems() {
     TranscriptomicsDocument doc = createTranscriptomicsDocument("ENSG00000001", "GENE1", "Symbol1");
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(doc));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(doc));
 
     when(
       repository.findAll(
@@ -161,7 +163,7 @@ class TranscriptomicsServiceTest {
       "GENE2",
       "Symbol2"
     );
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(doc1, doc2));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(doc1, doc2));
 
     when(
       repository.findAll(
@@ -195,7 +197,7 @@ class TranscriptomicsServiceTest {
   @DisplayName("should return matching composite identifiers when include filter has items")
   void shouldReturnMatchingCompositeIdentifiersWhenIncludeFilterHasItems() {
     TranscriptomicsDocument doc = createTranscriptomicsDocument("ENSG00000001", "GENE1", "Symbol1");
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(doc));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(doc));
 
     when(
       repository.findAll(
@@ -229,7 +231,7 @@ class TranscriptomicsServiceTest {
   @DisplayName("should return non-matching composite identifiers when exclude filter has items")
   void shouldReturnNonMatchingCompositeIdentifiersWhenExcludeFilterHasItems() {
     TranscriptomicsDocument doc = createTranscriptomicsDocument("ENSG00000002", "GENE2", "Symbol2");
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(doc));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(doc));
 
     when(
       repository.findAll(
@@ -267,7 +269,7 @@ class TranscriptomicsServiceTest {
       "TestGene",
       "TestSymbol"
     );
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(doc));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(doc));
 
     when(
       repository.findAll(
@@ -314,7 +316,7 @@ class TranscriptomicsServiceTest {
       "GENE2",
       "Symbol2"
     );
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(doc1, doc2));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(doc1, doc2));
 
     when(
       repository.findAll(
@@ -348,7 +350,7 @@ class TranscriptomicsServiceTest {
   @DisplayName("should not use search when include filter is specified")
   void shouldNotUseSearchWhenIncludeFilterIsSpecified() {
     TranscriptomicsDocument doc = createTranscriptomicsDocument("ENSG00000001", "GENE1", "Symbol1");
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(doc));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(doc));
 
     when(
       repository.findAll(
@@ -391,7 +393,7 @@ class TranscriptomicsServiceTest {
       "GENE2",
       "Symbol2"
     );
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(doc1, doc2));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(doc1, doc2));
 
     when(
       repository.findAll(
@@ -423,7 +425,7 @@ class TranscriptomicsServiceTest {
   @Test
   @DisplayName("should use default page size when not specified")
   void shouldUseDefaultPageSizeWhenNotSpecified() {
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of());
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of());
 
     when(
       repository.findAll(
@@ -453,6 +455,40 @@ class TranscriptomicsServiceTest {
     Pageable pageable = pageableCaptor.getValue();
     assertThat(pageable.getPageNumber()).isZero();
     assertThat(pageable.getPageSize()).isEqualTo(100);
+  }
+
+  @ParameterizedTest
+  @NullSource
+  @ValueSource(booleans = { true, false })
+  @DisplayName("should surface hasRowsForPrebudgetedParents from the repository page")
+  void shouldSurfaceHasRowsForPrebudgetedParentsFromRepositoryPage(Boolean hasRows) {
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(TranscriptomicsSearchQueryDto.class),
+        eq(List.of()),
+        eq(TISSUE)
+      )
+    ).thenReturn(ctPage(List.of(), hasRows));
+
+    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .build();
+
+    TranscriptomicsPageDto result = service.loadTranscriptomics(query, TISSUE);
+
+    assertThat(result.getHasRowsForPrebudgetedParents()).isEqualTo(hasRows);
+  }
+
+  private static CtPage<TranscriptomicsDocument> ctPage(List<TranscriptomicsDocument> content) {
+    return ctPage(content, null);
+  }
+
+  private static CtPage<TranscriptomicsDocument> ctPage(
+    List<TranscriptomicsDocument> content,
+    Boolean hasRowsForPrebudgetedParents
+  ) {
+    return new CtPage<>(content, Pageable.unpaged(), content.size(), hasRowsForPrebudgetedParents);
   }
 
   private TranscriptomicsDocument createTranscriptomicsDocument(

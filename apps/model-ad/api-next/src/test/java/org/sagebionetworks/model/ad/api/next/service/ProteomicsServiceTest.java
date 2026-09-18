@@ -13,9 +13,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.document.ProteomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -25,8 +29,6 @@ import org.sagebionetworks.model.ad.api.next.model.mapper.FoldChangeMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ProteomicsMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ProteomicsRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -56,7 +58,7 @@ class ProteomicsServiceTest {
   @Test
   @DisplayName("should return empty page when repository has no matches")
   void shouldReturnEmptyPageWhenRepositoryHasNoMatches() {
-    stubRepository(new PageImpl<>(List.of()), List.of());
+    stubRepository(ctPage(List.of()), List.of());
 
     ProteomicsPageDto result = service.loadProteomics(buildQuery().build(), TISSUE);
 
@@ -67,7 +69,7 @@ class ProteomicsServiceTest {
   @Test
   @DisplayName("should map every returned document")
   void shouldMapEveryReturnedDocument() {
-    stubRepository(new PageImpl<>(List.of(buildDocument())), List.of());
+    stubRepository(ctPage(List.of(buildDocument())), List.of());
 
     ProteomicsPageDto result = service.loadProteomics(buildQuery().build(), TISSUE);
 
@@ -84,7 +86,7 @@ class ProteomicsServiceTest {
   @DisplayName("should drop null items before querying the repository")
   void shouldDropNullItemsBeforeQueryingRepository() {
     String compositeId = UNIQUE_ID + "~" + MODEL_NAME + "~" + SEX;
-    stubRepository(new PageImpl<>(List.of(buildDocument())), List.of(compositeId));
+    stubRepository(ctPage(List.of(buildDocument())), List.of(compositeId));
 
     ProteomicsSearchQueryDto query = buildQuery().items(Arrays.asList(compositeId, null)).build();
 
@@ -101,7 +103,7 @@ class ProteomicsServiceTest {
   @Test
   @DisplayName("should use default paging when page number and size are not specified")
   void shouldUseDefaultPagingWhenPageNumberAndSizeAreNotSpecified() {
-    stubRepository(new PageImpl<>(List.of()), List.of());
+    stubRepository(ctPage(List.of()), List.of());
 
     ProteomicsSearchQueryDto query = buildQuery().pageNumber(null).pageSize(null).build();
 
@@ -115,7 +117,7 @@ class ProteomicsServiceTest {
   @Test
   @DisplayName("should translate sort fields and orders into a sort")
   void shouldTranslateSortFieldsAndOrdersIntoSort() {
-    stubRepository(new PageImpl<>(List.of()), List.of());
+    stubRepository(ctPage(List.of()), List.of());
 
     ProteomicsSearchQueryDto query = buildQuery()
       .sortFields(List.of("24 months", "display_symbol"))
@@ -138,10 +140,11 @@ class ProteomicsServiceTest {
   @Test
   @DisplayName("should report page metadata from the repository page")
   void shouldReportPageMetadataFromRepositoryPage() {
-    Page<ProteomicsDocument> page = new PageImpl<>(
+    CtPage<ProteomicsDocument> page = new CtPage<>(
       List.of(buildDocument()),
       PageRequest.of(1, 10),
-      25
+      25,
+      null
     );
     stubRepository(page, List.of());
 
@@ -158,7 +161,30 @@ class ProteomicsServiceTest {
     assertThat(result.getPage().getHasPrevious()).isTrue();
   }
 
-  private void stubRepository(Page<ProteomicsDocument> page, List<String> items) {
+  @ParameterizedTest
+  @NullSource
+  @ValueSource(booleans = { true, false })
+  @DisplayName("should surface hasRowsForPrebudgetedParents from the repository page")
+  void shouldSurfaceHasRowsForPrebudgetedParentsFromRepositoryPage(Boolean hasRows) {
+    stubRepository(ctPage(List.of(), hasRows), List.of());
+
+    ProteomicsPageDto result = service.loadProteomics(buildQuery().build(), TISSUE);
+
+    assertThat(result.getHasRowsForPrebudgetedParents()).isEqualTo(hasRows);
+  }
+
+  private static CtPage<ProteomicsDocument> ctPage(List<ProteomicsDocument> content) {
+    return ctPage(content, null);
+  }
+
+  private static CtPage<ProteomicsDocument> ctPage(
+    List<ProteomicsDocument> content,
+    Boolean hasRowsForPrebudgetedParents
+  ) {
+    return new CtPage<>(content, Pageable.unpaged(), content.size(), hasRowsForPrebudgetedParents);
+  }
+
+  private void stubRepository(CtPage<ProteomicsDocument> page, List<String> items) {
     when(
       repository.findAll(
         any(Pageable.class),

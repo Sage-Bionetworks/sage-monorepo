@@ -24,6 +24,8 @@ public class TranscriptomicsApiDelegateImpl implements TranscriptomicsApiDelegat
     "categories",
     "items",
     "itemFilterType",
+    "itemIdSpace",
+    "prebudgetedParentIds",
     "search",
     "biodomains",
     "modelType",

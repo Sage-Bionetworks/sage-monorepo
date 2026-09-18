@@ -7,6 +7,7 @@ import java.util.List;
 import org.bson.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.sagebionetworks.explorers.ItemIdSpaceDef;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
 import org.springframework.data.mongodb.core.query.Criteria;
 
@@ -146,6 +147,39 @@ class TranscriptomicsIdentifierTest {
     String result = identifier.toCompositeId();
 
     assertThat(result).isEqualTo(original);
+  }
+
+  @Test
+  @DisplayName("should render a missing part the way the aggregation pipeline renders it")
+  void shouldRenderMissingPartTheWayAggregationPipelineRendersIt() {
+    TranscriptomicsIdentifier identifier = TranscriptomicsIdentifier.builder()
+      .ensemblGeneId("ENSMUSG00000000001")
+      .sex("Female")
+      .build();
+
+    String result = identifier.toCompositeId();
+
+    // ItemIdSpaceDef builds the same token in Mongo from the same fields, so a row with no name has
+    // to read back as the same string on both sides. Nothing else checks the two against each
+    // other.
+    assertThat(result).isEqualTo(
+      String.join(
+        ItemIdSpaceDef.DELIMITER,
+        "ENSMUSG00000000001",
+        ItemIdSpaceDef.MISSING_PART,
+        "Female"
+      )
+    );
+  }
+
+  @Test
+  @DisplayName("should expose the token's fields in token order")
+  void shouldExposeTokenFieldsInTokenOrder() {
+    assertThat(TranscriptomicsIdentifier.FIELDS).containsExactly(
+      "ensembl_gene_id",
+      "name.link_text",
+      "sex"
+    );
   }
 
   @Test

@@ -19,20 +19,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.model.ad.api.next.api.ProteomicsApiDelegateImpl;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.document.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.document.ProteomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemIdSpaceQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.FoldChangeMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ProteomicsMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ProteomicsRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,6 +50,7 @@ class ProteomicsApiDelegateImplTest {
   private static final String TISSUE_CORTEX = "Cortex";
   private static final String UNIQUE_ID = "ENSMUSG00000000001P27144";
   private static final String COMPOSITE_ID = UNIQUE_ID + "~LOAD2~Female";
+  private static final String PARENT_COMPOSITE_ID = "ENSMUSG00000000001~LOAD2~Female";
 
   @Mock
   private ProteomicsRepository repository;
@@ -120,7 +121,7 @@ class ProteomicsApiDelegateImplTest {
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
-    stubRepository(new PageImpl<>(List.of()), TISSUE_HEMIBRAIN);
+    stubRepository(ctPage(List.of()), TISSUE_HEMIBRAIN);
 
     ProteomicsSearchQueryDto query = ProteomicsSearchQueryDto.builder()
       .categories(List.of(PROTEOMICS_CATEGORY, "Tissue - Hemibrain"))
@@ -144,7 +145,7 @@ class ProteomicsApiDelegateImplTest {
   @Test
   @DisplayName("should return mapped results when items provided")
   void shouldReturnMappedResultsWhenItemsProvided() {
-    stubRepository(new PageImpl<>(List.of(buildDocument())), TISSUE_HEMIBRAIN);
+    stubRepository(ctPage(List.of(buildDocument())), TISSUE_HEMIBRAIN);
 
     ProteomicsSearchQueryDto query = ProteomicsSearchQueryDto.builder()
       .categories(List.of(PROTEOMICS_CATEGORY, "Tissue - Hemibrain"))
@@ -185,7 +186,7 @@ class ProteomicsApiDelegateImplTest {
   @Test
   @DisplayName("should pass the requested tissue through to the repository")
   void shouldPassRequestedTissueThroughToRepository() {
-    stubRepository(new PageImpl<>(List.of(buildDocument())), TISSUE_CORTEX);
+    stubRepository(ctPage(List.of(buildDocument())), TISSUE_CORTEX);
 
     ProteomicsSearchQueryDto query = ProteomicsSearchQueryDto.builder()
       .categories(List.of(PROTEOMICS_CATEGORY, "Tissue - Cortex"))
@@ -224,7 +225,32 @@ class ProteomicsApiDelegateImplTest {
       .hasMessage("Unknown query parameter: invalidField");
   }
 
-  private void stubRepository(Page<ProteomicsDocument> page, String tissue) {
+  @Test
+  @DisplayName("should accept the parent-aware query parameters")
+  void shouldAcceptParentAwareQueryParameters() {
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.addParameter("itemIdSpace", "parent");
+    request.addParameter("prebudgetedParentIds", PARENT_COMPOSITE_ID);
+    RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+    stubRepository(ctPage(List.of()), TISSUE_HEMIBRAIN);
+
+    ProteomicsSearchQueryDto query = ProteomicsSearchQueryDto.builder()
+      .categories(List.of(PROTEOMICS_CATEGORY, "Tissue - Hemibrain"))
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .itemIdSpace(ItemIdSpaceQueryDto.PARENT)
+      .prebudgetedParentIds(List.of(PARENT_COMPOSITE_ID))
+      .build();
+
+    ResponseEntity<ProteomicsPageDto> response = delegate.getProteomics(query);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+  }
+
+  private static CtPage<ProteomicsDocument> ctPage(List<ProteomicsDocument> content) {
+    return new CtPage<>(content, Pageable.unpaged(), content.size(), null);
+  }
+
+  private void stubRepository(CtPage<ProteomicsDocument> page, String tissue) {
     when(
       repository.findAll(
         any(Pageable.class),
