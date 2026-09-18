@@ -12,7 +12,7 @@ import {
 } from '@sagebionetworks/agora/api-client';
 import {
   DEFAULT_SYNAPSE_WIKI_OWNER_ID,
-  NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
+  NOMINATED_CTS_TUTORIAL_PANES,
   ROUTE_PATHS,
 } from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -23,7 +23,7 @@ import {
   PlatformService,
 } from '@sagebionetworks/explorers/services';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, shareReplay } from 'rxjs';
+import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { NominatedTargetsComparisonToolService } from './services/nominated-targets-comparison-tool.service';
 
 @Component({
@@ -72,7 +72,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     legendEnabled: false,
     rowIdDataKey: 'hgnc_symbol',
     allowPinnedImageDownload: false,
-    visualizationOverviewPanes: NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
+    tutorialPanes: NOMINATED_CTS_TUTORIAL_PANES,
     defaultSort: [
       { field: 'total_nominations', order: -1 },
       { field: 'hgnc_symbol', order: 1 },
@@ -108,6 +108,15 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
+      pinAllFetch: (query, remainingBudget) =>
+        this.nominatedTargetsService
+          .getNominatedTargets(this.buildUnpinnedQuery(query, { remainingBudget }))
+          .pipe(
+            map((response) => ({
+              rows: response.nominatedTargets,
+              totalElements: response.page.totalElements,
+            })),
+          ),
     });
   }
 
@@ -115,18 +124,20 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+  private buildUnpinnedQuery(
+    currentQuery: ComparisonToolQuery,
+    options?: { remainingBudget?: number },
+  ): NominatedTargetSearchQuery {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
       currentQuery.multiSortMeta,
     );
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
 
-    const query: NominatedTargetSearchQuery = {
+    return {
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: currentQuery.pageNumber,
-      pageSize: currentQuery.pageSize,
+      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
       search: currentQuery.searchTerm,
       cohortStudies: selectedFilters['cohorts'],
       inputData: selectedFilters['data'],
@@ -138,6 +149,10 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
       sortFields,
       sortOrders,
     };
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const query = this.buildUnpinnedQuery(currentQuery);
 
     this.comparisonToolService.startFetch();
     this.logger.log(
@@ -182,11 +197,9 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
         next: (response: NominatedTargetsPage) => {
           const data = response.nominatedTargets;
           this.comparisonToolService.setPinnedData(data);
-          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
           this.comparisonToolService.setPinnedData([]);
-          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

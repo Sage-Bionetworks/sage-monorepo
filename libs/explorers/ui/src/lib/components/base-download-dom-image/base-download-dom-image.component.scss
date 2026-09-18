@@ -41,6 +41,14 @@
     font-size: 14px;
     text-align: center;
   }
+
+  .base-download-dom-image-note {
+    font-size: 14px;
+
+    a {
+      color: var(--color-link);
+    }
+  }
 }
 
 .base-download-dom-image-spinner {

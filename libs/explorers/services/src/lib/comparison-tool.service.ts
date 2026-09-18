@@ -9,6 +9,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getMaxPinnedItemsWarning, MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
@@ -49,6 +50,17 @@ export interface ComparisonToolFetchResult<T> {
   data: T[];
   totalCount: number;
 }
+
+/**
+ * Fetches the rows matching the current query across all pages, capped at `remainingBudget`, so
+ * "pin all" can pin matches the browser is not currently holding. `totalElements` is the full match
+ * count, which is what makes truncation detectable: `totalElements > rows.length` means the budget
+ * ran out before every match was returned.
+ */
+export type PinAllFetch<T> = (
+  query: ComparisonToolQuery,
+  remainingBudget: number,
+) => Observable<{ rows: T[]; totalElements: number }>;
 
 /** Core state management service for comparison tool pages. */
 @Injectable()
@@ -98,10 +110,8 @@ export class ComparisonToolService<T> {
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
-  private readonly isVisualizationOverviewVisibleSignal = signal(
-    !this.appStorageService.isVisualizationOverviewHidden(),
-  );
-  private readonly maxPinnedItemsSignal = signal<number>(50);
+  private readonly isTutorialVisibleSignal = signal(!this.appStorageService.isTutorialHidden());
+  private readonly maxPinnedItemsSignal = signal<number>(MAX_PINNED_ITEMS);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
   );
@@ -137,15 +147,18 @@ export class ComparisonToolService<T> {
   private readonly unpinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
   private readonly pinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
 
+  // Connect-Time Dependencies
+  private pinAllFetch?: PinAllFetch<T>;
+  private initialSelection: string[] | undefined;
+
   // URL Sync State
   private lastSyncedUrlParamsState: ComparisonToolUrlParams | null = null;
-  private initialSelection: string[] | undefined;
 
   // Public Readonly Signals
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
-  readonly isVisualizationOverviewVisible = this.isVisualizationOverviewVisibleSignal.asReadonly();
+  readonly isTutorialVisible = this.isTutorialVisibleSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
@@ -175,14 +188,12 @@ export class ComparisonToolService<T> {
 
   // pinnedItems cache may include more pins than are currently visible
   // Used for the URL serialization
-  readonly visiblePinIds = computed(() => {
-    const visiblePinnedData = this.pinnedData();
+  readonly visiblePinIds = computed(() => this.extractRowIds(this.pinnedData()));
+
+  private extractRowIds(rows: T[]): string[] {
     const rowIdKey = this.viewConfig().rowIdDataKey;
-    return visiblePinnedData.map((item: T) => {
-      const id = (item as Record<string, unknown>)[rowIdKey];
-      return String(id);
-    });
-  });
+    return rows.map((row: T) => String((row as Record<string, unknown>)[rowIdKey]));
+  }
 
   constructor() {
     this.subscribeToFetchStream(
@@ -235,9 +246,11 @@ export class ComparisonToolService<T> {
   connect(options: {
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
+    pinAllFetch: PinAllFetch<T>;
     initialSelection?: string[];
   }): void {
     this.coordinatorService.setActive(this);
+    this.pinAllFetch = options.pinAllFetch;
 
     if (this.isInitialized()) {
       // Re-entering an already-initialized service (navigating back to this CT)
@@ -297,7 +310,7 @@ export class ComparisonToolService<T> {
 
   loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
   totalResultsCount = signal<number>(0);
-  pinnedResultsCount = signal<number>(0);
+  pinnedResultsCount = computed(() => this.pinnedData().length);
 
   hasMaxPinnedItems = computed(() => {
     return this.pinnedResultsCount() >= this.maxPinnedItems();
@@ -307,8 +320,19 @@ export class ComparisonToolService<T> {
     return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
   });
 
+  /**
+   * MAX_PINNED_ITEMS is the largest budget the CT search query schemas accept, so a configured limit
+   * above it could not be filled by "pin all" without the API rejecting the request. Clamping here
+   * keeps it a true ceiling, which is what lets the pin limit be quoted to the user as the maximum.
+   */
   setMaxPinnedItems(count: number) {
-    this.maxPinnedItemsSignal.set(count);
+    if (count > MAX_PINNED_ITEMS) {
+      this.logger.warn(
+        `Requested max pinned items (${count}) exceeds MAX_PINNED_ITEMS; using ${MAX_PINNED_ITEMS}.`,
+        { requested: count, max: MAX_PINNED_ITEMS },
+      );
+    }
+    this.maxPinnedItemsSignal.set(Math.min(count, MAX_PINNED_ITEMS));
   }
 
   private initializeFromConfig(
@@ -488,12 +512,12 @@ export class ComparisonToolService<T> {
     this.isLegendVisibleSignal.update((visible) => !visible);
   }
 
-  setVisualizationOverviewVisibility(visible: boolean) {
-    this.isVisualizationOverviewVisibleSignal.set(visible);
+  setTutorialVisibility(visible: boolean) {
+    this.isTutorialVisibleSignal.set(visible);
   }
 
-  toggleVisualizationOverview() {
-    this.isVisualizationOverviewVisibleSignal.update((visible) => !visible);
+  toggleTutorial() {
+    this.isTutorialVisibleSignal.update((visible) => !visible);
   }
 
   showHeatmapDetailsPanel(rowData: T, cellData: unknown, columnKey: string, event: Event): void {
@@ -545,22 +569,22 @@ export class ComparisonToolService<T> {
     this.setLegendVisibility(false);
 
     // If the user checked the option to hide the overview, do not auto-show it
-    const isHiddenByUser = this.isVisualizationOverviewHiddenByUser();
+    const isHiddenByUser = this.isTutorialHiddenByUser();
     if (!isHiddenByUser) {
-      this.setVisualizationOverviewVisibility(true);
+      this.setTutorialVisibility(true);
     }
   }
 
   /**
    * Checks localStorage to determine if the user has chosen to hide
-   * the visualization overview panel across all comparison tools.
+   * the tutorial panel across all comparison tools.
    */
-  isVisualizationOverviewHiddenByUser(): boolean {
-    return this.appStorageService.isVisualizationOverviewHidden();
+  isTutorialHiddenByUser(): boolean {
+    return this.appStorageService.isTutorialHidden();
   }
 
-  setVisualizationOverviewHiddenByUser(hidden: boolean): void {
-    this.appStorageService.setVisualizationOverviewHidden(hidden);
+  setTutorialHiddenByUser(hidden: boolean): void {
+    this.appStorageService.setTutorialHidden(hidden);
   }
 
   isPinned(id: string): boolean {
@@ -591,29 +615,61 @@ export class ComparisonToolService<T> {
     this.setPinnedItems(this.visiblePinIds().filter((item) => item !== id));
   }
 
-  pinList(ids: string[]) {
-    const visiblePins = new Set(this.visiblePinIds());
-    let itemsAdded = 0;
+  /**
+   * Pins every row matching the current query, not just the rows on the current page. The matching
+   * ids are discovered server-side, capped at the pins the user has left.
+   *
+   * Only starts when no fetch is in flight: mid-fetch, the pinned data on hand is not yet the
+   * server-confirmed pin set, so the remaining budget could not be computed against it. The
+   * `startFetch()` below therefore also serves as the re-entry guard.
+   */
+  pinAll() {
+    const fetch = this.pinAllFetch;
+    if (!fetch) return;
+    if (this.isLoadingTableData() || this.hasMaxPinnedItems()) return;
 
-    for (const id of ids) {
-      if (visiblePins.size >= this.maxPinnedItems()) {
-        const messagePrefix = itemsAdded === 0 ? 'No rows' : `Only ${itemsAdded} rows`;
-        this.toastNotificationService.showWarning(
-          `${messagePrefix} were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
-        );
-        break;
-      }
-      if (!visiblePins.has(id)) {
-        visiblePins.add(id);
-        itemsAdded++;
-      }
-    }
+    const currentPinIds = this.visiblePinIds();
+    const remainingBudget = this.maxPinnedItems() - currentPinIds.length;
 
-    this.setPinnedItems(Array.from(visiblePins));
+    this.startFetch();
+    fetch(this.query(), remainingBudget)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.completeFetch()),
+      )
+      .subscribe({
+        next: ({ rows, totalElements }) => {
+          this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows)]);
+          if (totalElements > rows.length) {
+            this.showMaxPinnedItemsWarning(rows.length);
+          }
+        },
+        error: () => {
+          this.toastNotificationService.showError(
+            'Something went wrong while pinning all matching rows. Please try again.',
+          );
+        },
+      });
   }
 
+  private showMaxPinnedItemsWarning(pinnedCount: number) {
+    this.toastNotificationService.showWarning(
+      getMaxPinnedItemsWarning(pinnedCount, this.maxPinnedItems()),
+    );
+  }
+
+  /**
+   * Skips the query update when the deduplicated items match the current pins. Every update
+   * publishes a new array, which re-triggers the pinned and unpinned fetches, so writing back an
+   * unchanged pin set would refetch for nothing -- and, where `setPinnedData` derives the ids it
+   * writes back from data it just received, could refetch indefinitely.
+   */
   setPinnedItems(items: string[] | null) {
     const deduplicatedItems = items ? Array.from(new Set(items)) : [];
+    if (isEqual(deduplicatedItems, this.pinnedItems())) {
+      return;
+    }
+
     this.updateQuery({
       pinnedItems: deduplicatedItems,
     });
@@ -656,8 +712,29 @@ export class ComparisonToolService<T> {
     this.completeFetch();
   }
 
+  /**
+   * Caps pinned data at `maxPinnedItems`, which makes the limit an invariant of `pinnedData` no
+   * matter where the pins came from -- a hand-edited or shared URL can carry more ids than the user
+   * is allowed to pin. Capping here rather than at URL parse time keeps the first N rows *by the
+   * user's current sort*, since the ids have already been round-tripped through the fetch.
+   *
+   * Rewriting the pinned items is what converges the pin cache and the URL on the trimmed set. It
+   * re-triggers the fetches, which is correct rather than wasteful: the excluded items really did
+   * change, so the unpinned table has to refetch. Normally the follow-up pinned data is within the
+   * limit, so the cap does not apply again. It stays terminating even when the row id is not unique
+   * in the collection -- where trimming can never bring the row count down to the id count -- because
+   * `setPinnedItems` ignores a write that matches the current pins.
+   */
   setPinnedData(pinnedData: T[]) {
-    this.pinnedDataSignal.set(pinnedData);
+    const maxPinnedItems = this.maxPinnedItems();
+    if (pinnedData.length > maxPinnedItems) {
+      const trimmedData = pinnedData.slice(0, maxPinnedItems);
+      this.pinnedDataSignal.set(trimmedData);
+      this.showMaxPinnedItemsWarning(trimmedData.length);
+      this.setPinnedItems(this.extractRowIds(trimmedData));
+    } else {
+      this.pinnedDataSignal.set(pinnedData);
+    }
     this.completeFetch();
   }
 
@@ -1118,6 +1195,19 @@ export class ComparisonToolService<T> {
     }
 
     return { sortFields, sortOrders };
+  }
+
+  /**
+   * Pagination or budget, never both: the server ignores pageNumber/pageSize once remainingBudget
+   * is set, so a query sends whichever one applies.
+   */
+  buildPaginationOrBudget(
+    currentQuery: ComparisonToolQuery,
+    remainingBudget?: number,
+  ): { pageNumber?: number; pageSize?: number; remainingBudget?: number } {
+    return remainingBudget === undefined
+      ? { pageNumber: currentQuery.pageNumber, pageSize: currentQuery.pageSize }
+      : { remainingBudget };
   }
 
   private convertArraysToSortMeta(sortFields: string[], sortOrders: SortOrder[]): SortMeta[] {

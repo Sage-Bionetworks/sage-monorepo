@@ -17,7 +17,7 @@ import {
   MarmosetModelOverviewsPage,
   ModelOrganism,
 } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { DOWNLOAD_PINS_NOTE, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { MarmosetModelOverviewComparisonToolService } from './services/marmoset-model-overview-comparison-tool.service';
@@ -67,6 +67,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     legendEnabled: false,
     rowIdDataKey: 'name',
     allowPinnedImageDownload: false,
+    downloadPinsNote: DOWNLOAD_PINS_NOTE,
     defaultSort: [{ field: 'name', order: 1 }],
   };
 
@@ -97,6 +98,15 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
+      pinAllFetch: (query, remainingBudget) =>
+        this.marmosetModelOverviewService
+          .getMarmosetModelOverviews(this.buildUnpinnedQuery(query, { remainingBudget }))
+          .pipe(
+            map((response) => ({
+              rows: response.marmosetModelOverviews,
+              totalElements: response.page.totalElements,
+            })),
+          ),
     });
   }
 
@@ -104,18 +114,20 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+  private buildUnpinnedQuery(
+    currentQuery: ComparisonToolQuery,
+    options?: { remainingBudget?: number },
+  ): MarmosetModelOverviewSearchQuery {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
       currentQuery.multiSortMeta,
     );
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
 
-    const query: MarmosetModelOverviewSearchQuery = {
+    return {
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: currentQuery.pageNumber,
-      pageSize: currentQuery.pageSize,
+      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
       search: currentQuery.searchTerm,
       sortFields,
       sortOrders,
@@ -123,6 +135,11 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
       modelTypes: selectedFilters['modelTypes'],
       modifiedGenes: selectedFilters['modifiedGenes'],
     };
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const query = this.buildUnpinnedQuery(currentQuery);
+
     this.logger.log(
       `MarmosetModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
     );

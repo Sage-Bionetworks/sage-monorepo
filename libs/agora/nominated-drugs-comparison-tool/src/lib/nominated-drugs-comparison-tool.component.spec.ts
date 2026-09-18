@@ -7,7 +7,7 @@ import {
 } from '@sagebionetworks/agora/api-client';
 import {
   AGORA_LOADING_ICON_COLORS,
-  NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
+  NOMINATED_CTS_TUTORIAL_PANES,
 } from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
@@ -32,7 +32,7 @@ async function setup() {
     providers: [
       MessageService,
       provideLoadingIconColors(AGORA_LOADING_ICON_COLORS),
-      provideExplorersConfig({ visualizationOverviewPanes: [] }),
+      provideExplorersConfig({ tutorialPanes: [] }),
       provideHttpClient(),
       provideNoopAnimations(),
       provideRouter([]),
@@ -66,11 +66,9 @@ describe('NominatedDrugsComparisonToolComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should configure the shared nominated CTs visualization overview content', async () => {
+  it('should configure the shared nominated CTs tutorial content', async () => {
     const { comparisonToolService } = await setup();
-    expect(comparisonToolService.viewConfig().visualizationOverviewPanes).toBe(
-      NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
-    );
+    expect(comparisonToolService.viewConfig().tutorialPanes).toBe(NOMINATED_CTS_TUTORIAL_PANES);
   });
 
   it('should send the selected clinical trial phase filter in the unpinned query', async () => {

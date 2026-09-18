@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
   ColumnConfig,
   expectSearchResults,
@@ -15,7 +16,10 @@ import {
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
+  testPinAllAcrossPages,
+  testPinAllExceedsLimit,
   testPinLastItemLastPageGoesToPreviousPage,
+  testPinsRemovedFromUrlOnClearAllPins,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
   testTableReturnsToFirstPageWhenFilterSelectedAndRemoved,
@@ -23,7 +27,11 @@ import {
   testTableReturnsToFirstPageWhenSortChanged,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
-import { fetchComparisonToolConfig, navigateToComparison } from './helpers/comparison-tool';
+import {
+  fetchComparisonToolConfig,
+  fetchNominatedTargets,
+  navigateToComparison,
+} from './helpers/comparison-tool';
 
 test.describe('specific viewport block', () => {
   test.use({ viewport: { width: 1600, height: 1200 } });
@@ -91,6 +99,49 @@ test.describe('nominated targets - comparison tool', () => {
         'PLEKHG1',
       );
     });
+  });
+
+  test.describe('pin all', () => {
+    test('Pin All pins every matching row, including rows on later pages', async ({ page }) => {
+      // Matches more rows than one page holds, but still under the pin limit
+      const searchTerm = 'in';
+      const targets = await fetchNominatedTargets(page, { search: searchTerm });
+
+      await navigateToComparison(page, CT_PAGE, true, 'url');
+      await testPinAllAcrossPages(
+        page,
+        searchTerm,
+        targets.map((target) => target.hgnc_symbol),
+      );
+    });
+
+    test('Pin All stops at the maximum number of pinned items', async ({ page }) => {
+      const searchTerm = 'a';
+      const targets = await fetchNominatedTargets(page, {
+        search: searchTerm,
+        remainingBudget: MAX_PINNED_ITEMS,
+      });
+
+      await navigateToComparison(page, CT_PAGE, true, 'url');
+      await testPinAllExceedsLimit(
+        page,
+        searchTerm,
+        targets.map((target) => target.hgnc_symbol),
+      );
+    });
+  });
+
+  test('pinned items are removed from URL when Clear All Pins is clicked', async ({ page }) => {
+    const pinnedItems = ['APOD', 'LMOD3', 'NEUROD6'];
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(pinnedItems, 'pinned'),
+    );
+    await testPinsRemovedFromUrlOnClearAllPins(page, pinnedItems);
   });
 
   test.describe('pagination', () => {

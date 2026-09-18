@@ -29,23 +29,23 @@ test.describe('home', () => {
 
     await page.waitForURL('/comparison/expression');
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Differential Expression' }),
+      page.getByRole('heading', { level: 1, name: 'Mouse Differential Expression' }),
     ).toBeVisible();
   });
 
   test('disease correlation card links to disease correlation CT', async ({ page }) => {
     await page.goto('');
 
-    const diseaseCorrelationCard = page
-      .getByRole('button')
-      .filter({ has: page.getByRole('heading', { level: 2, name: 'Disease Correlation' }) });
+    const diseaseCorrelationCard = page.getByRole('button').filter({
+      has: page.getByRole('heading', { level: 2, name: 'Mouse-Human Disease Correlation' }),
+    });
     await expect(diseaseCorrelationCard).toBeVisible();
 
     await diseaseCorrelationCard.click();
 
     await page.waitForURL('/comparison/correlation');
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Disease Correlation' }),
+      page.getByRole('heading', { level: 1, name: 'Mouse-Human Disease Correlation' }),
     ).toBeVisible();
   });
 });

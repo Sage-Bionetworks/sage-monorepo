@@ -1,3 +1,4 @@
+import { DownloadNote } from './download-note';
 import { SynapseWikiParams } from './synapse-wiki';
 
 export interface HeatmapDetailsPanelData {
@@ -37,7 +38,7 @@ export interface LegendPanelConfig {
   sizeChartText: string;
 }
 
-export interface VisualizationOverviewPane {
+export interface TutorialPane {
   heading: string;
   content: string;
 }
@@ -66,6 +67,7 @@ export interface ComparisonToolViewConfig {
   legendPanelConfig: LegendPanelConfig;
   rowIdDataKey: string;
   allowPinnedImageDownload: boolean;
+  downloadPinsNote?: DownloadNote;
   defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
   heatmapCircleClickTransformFn?: heatmapCircleClickTransformFn;
   linkExportField: 'link_url' | 'link_text';
@@ -73,10 +75,10 @@ export interface ComparisonToolViewConfig {
   rowHoverEnabled?: boolean;
   showTableSearch?: boolean;
   /**
-   * Per-CT visualization overview content. When set, it takes precedence over the app-level
-   * `EXPLORERS_CONFIG.visualizationOverviewPanes`; when unset, the app-level panes are used.
+   * Per-CT tutorial content. When set, it takes precedence over the app-level
+   * `EXPLORERS_CONFIG.tutorialPanes`; when unset, the app-level panes are used.
    */
-  visualizationOverviewPanes?: VisualizationOverviewPane[];
+  tutorialPanes?: TutorialPane[];
 }
 
 export interface ComparisonToolFilterOption {

@@ -1,11 +1,11 @@
 import { EnvironmentProviders, InjectionToken, makeEnvironmentProviders } from '@angular/core';
-import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
+import { TutorialPane } from '@sagebionetworks/explorers/models';
 
 /**
  * App-level configuration for explorer applications.
  */
 export interface ExplorersConfig {
-  visualizationOverviewPanes: VisualizationOverviewPane[];
+  tutorialPanes: TutorialPane[];
 }
 
 export const EXPLORERS_CONFIG = new InjectionToken<ExplorersConfig>('EXPLORERS_CONFIG');

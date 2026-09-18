@@ -102,7 +102,8 @@ export const routes: Route[] = [
         (routes) => routes.routes,
       ),
     data: {
-      title: 'Differential Expression | Visual comparison tool for differential expression results',
+      title:
+        'Mouse Differential Expression | Visual comparison tool for differential expression results',
       description:
         "Explore high-dimensional omics data for next-generation mouse models of Alzheimer's Disease.",
     },
@@ -134,7 +135,7 @@ export const routes: Route[] = [
         (routes) => routes.routes,
       ),
     data: {
-      title: 'Disease Correlation | Visual comparison tool for correlation results',
+      title: 'Mouse-Human Disease Correlation | Visual comparison tool for correlation results',
       description:
         "Explore whether changes in gene expression in next-generation Alzheimer's Disease mouse models correlate with changes in gene expression in humans with the disease.",
     },

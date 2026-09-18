@@ -54,4 +54,38 @@ describe('BaseDownloadDomImageComponent', () => {
       component.types().length,
     );
   });
+
+  it('should not render a note by default', () => {
+    const button = element.querySelector('button') as HTMLElement;
+    button.click();
+    fixture.detectChanges();
+
+    expect(document.querySelector('.base-download-dom-image-note')).toBeFalsy();
+  });
+
+  it('should render the note with a link when provided', () => {
+    fixture.componentRef.setInput('note', {
+      textBefore: 'See the ',
+      linkText: 'Model AD Explorer documentation',
+      linkUrl: 'https://help.adknowledgeportal.org/',
+      textAfter: ' for links to the study-specific data files.',
+    });
+    fixture.detectChanges();
+
+    const button = element.querySelector('button') as HTMLElement;
+    button.click();
+    fixture.detectChanges();
+
+    const note = document.querySelector('.base-download-dom-image-note') as HTMLElement;
+    expect(note).toBeTruthy();
+    expect(note.textContent).toContain(
+      'See the Model AD Explorer documentation for links to the study-specific data files.',
+    );
+
+    const link = note.querySelector('a') as HTMLAnchorElement;
+    expect(link).toBeTruthy();
+    expect(link.textContent).toBe('Model AD Explorer documentation');
+    expect(link.getAttribute('href')).toBe('https://help.adknowledgeportal.org/');
+    expect(link.getAttribute('target')).toBe('_blank');
+  });
 });

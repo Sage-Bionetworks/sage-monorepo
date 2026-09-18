@@ -11,7 +11,7 @@ async function setup() {
       provideHttpClient(),
       provideNoopAnimations(),
       provideLoadingIconColors(),
-      provideExplorersConfig({ visualizationOverviewPanes: [] }),
+      provideExplorersConfig({ tutorialPanes: [] }),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
   });

@@ -17,7 +17,7 @@ import {
   MouseModelOverviewService,
   MouseModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { DOWNLOAD_PINS_NOTE, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { MouseModelOverviewComparisonToolService } from './services/mouse-model-overview-comparison-tool.service';
@@ -67,6 +67,7 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
     legendEnabled: false,
     rowIdDataKey: 'name',
     allowPinnedImageDownload: false,
+    downloadPinsNote: DOWNLOAD_PINS_NOTE,
     defaultSort: [
       { field: 'model_type', order: -1 },
       { field: 'name', order: 1 },
@@ -100,6 +101,15 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
+      pinAllFetch: (query, remainingBudget) =>
+        this.mouseModelOverviewService
+          .getMouseModelOverviews(this.buildUnpinnedQuery(query, { remainingBudget }))
+          .pipe(
+            map((response) => ({
+              rows: response.mouseModelOverviews,
+              totalElements: response.page.totalElements,
+            })),
+          ),
     });
   }
 
@@ -107,18 +117,20 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+  private buildUnpinnedQuery(
+    currentQuery: ComparisonToolQuery,
+    options?: { remainingBudget?: number },
+  ): MouseModelOverviewSearchQuery {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
       currentQuery.multiSortMeta,
     );
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
 
-    const query: MouseModelOverviewSearchQuery = {
+    return {
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: currentQuery.pageNumber,
-      pageSize: currentQuery.pageSize,
+      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
       search: currentQuery.searchTerm,
       sortFields,
       sortOrders,
@@ -127,6 +139,11 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
       modelType: selectedFilters['modelTypes'],
       modifiedGenes: selectedFilters['modifiedGenes'],
     };
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const query = this.buildUnpinnedQuery(currentQuery);
+
     this.logger.log(
       `MouseModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
     );

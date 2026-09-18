@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
+  CATEGORY_DROPDOWN_INDEX,
+  CATEGORY_OPTION_INDEX,
   ColumnConfig,
   expectCategories,
   expectCategoriesParams,
@@ -16,6 +18,7 @@ import {
   getRowByName,
   runFilterPanelTests,
   runHeatmapDetailsPanelTests,
+  selectCategoryOption,
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
   testClickDifferentColumnsReplacesSingleSort,
@@ -28,6 +31,7 @@ import {
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
   testPinLastItemLastPageGoesToPreviousPage,
+  testPinsRemovedFromUrlOnClearAllPins,
   testSearchExcludesPinnedItems,
   testSortRestoredFromUrl,
   testTableReturnsToFirstPageWhenCategoriesChanged,
@@ -66,23 +70,12 @@ test.describe('disease correlation', () => {
     await expectPinnedParams(page, pinnedItems);
     await expectPinnedRows(page, pinnedItems);
 
-    const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox');
-    const listbox = page.getByRole('listbox');
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const options = page.getByRole('option');
-    const secondOption = options.nth(1);
-    await secondOption.click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, CATEGORY_DROPDOWN_INDEX.first, CATEGORY_OPTION_INDEX.second);
 
     await expectPinnedParams(page, pinnedItems);
     await expectPinnedRows(page, pinnedItems);
 
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    await options.first().click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, CATEGORY_DROPDOWN_INDEX.first, CATEGORY_OPTION_INDEX.first);
 
     await expectPinnedParams(page, pinnedItems);
     await expectPinnedRows(page, pinnedItems);
@@ -113,23 +106,12 @@ test.describe('disease correlation', () => {
     await expectFiltersParams(page, expectedFilterParams);
     await expectFilterChiclets(page, expectedSelectedFilters);
 
-    const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox');
-    const listbox = page.getByRole('listbox');
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const options = page.getByRole('option');
-    const secondOption = options.nth(1);
-    await secondOption.click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, CATEGORY_DROPDOWN_INDEX.first, CATEGORY_OPTION_INDEX.second);
 
     await expectFiltersParams(page, expectedFilterParams);
     await expectFilterChiclets(page, expectedSelectedFilters);
 
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    await options.first().click();
-    await expect(listbox).toBeHidden();
+    await selectCategoryOption(page, CATEGORY_DROPDOWN_INDEX.first, CATEGORY_OPTION_INDEX.first);
 
     await expectFiltersParams(page, expectedFilterParams);
     await expectFilterChiclets(page, expectedSelectedFilters);
@@ -140,7 +122,7 @@ test.describe('disease correlation', () => {
     const defaultCategories = configs[0]?.dropdowns;
     expect(defaultCategories.length).toBeGreaterThan(1); // disease correlation has dropdown selections
 
-    await navigateToComparison(page, 'Disease Correlation', true);
+    await navigateToComparison(page, CT_PAGE, true);
 
     const shareUrlButton = page.getByRole('button', { name: 'Share URL' });
     await expect(shareUrlButton).toBeVisible();
@@ -183,18 +165,13 @@ test.describe('disease correlation', () => {
 
     await expectCategoriesParams(page, defaultCategories);
 
-    const categorySelectors = page.locator('.comparison-tool-category-selectors');
-    const dropdown = categorySelectors.getByRole('combobox').last();
-    const listbox = page.getByRole('listbox');
-    await dropdown.click();
-    await expect(listbox).toBeVisible();
-    const options = page.getByRole('option');
-    const secondOption = options.nth(1);
-    const secondOptionText = await secondOption.textContent();
-    await secondOption.click();
-    await expect(listbox).toBeHidden();
+    const secondOptionText = await selectCategoryOption(
+      page,
+      CATEGORY_DROPDOWN_INDEX.last,
+      CATEGORY_OPTION_INDEX.second,
+    );
 
-    const newCategories = [...defaultCategories.slice(0, -1), secondOptionText ?? ''];
+    const newCategories = [...defaultCategories.slice(0, -1), secondOptionText];
     await expectCategoriesParams(page, newCategories);
     await expectCategories(page, newCategories);
   });
@@ -379,6 +356,22 @@ test.describe('disease correlation', () => {
       '5xFAD (IU/Jax/Pitt)~12 months~Female',
       '5xFAD (IU/Jax/Pitt)~12 months~Male',
     ]);
+  });
+
+  test('pinned items are removed from URL when Clear All Pins is clicked', async ({ page }) => {
+    const correlations = await fetchDiseaseCorrelations(page);
+    const pinnedItems = correlations.slice(0, 3).map((correlation) => correlation.composite_id);
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(pinnedItems, 'pinned'),
+    );
+
+    await expectPinnedRows(page, pinnedItems);
+    await testPinsRemovedFromUrlOnClearAllPins(page, pinnedItems);
   });
 
   test('table loads previous page when last item on last page is pinned', async ({ page }) => {

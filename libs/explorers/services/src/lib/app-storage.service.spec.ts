@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { LocalStorageService } from '@sagebionetworks/web-shared/angular/storage';
 import {
-  HIDE_VISUALIZATION_OVERVIEW_KEY,
+  HIDE_TUTORIAL_KEY,
   PAGE_SIZE_KEY,
   VALID_PAGE_SIZES,
   DEFAULT_PAGE_SIZE,
@@ -29,48 +29,45 @@ describe('AppStorageService', () => {
     return TestBed.inject(AppStorageService);
   }
 
-  describe('isVisualizationOverviewHidden', () => {
+  describe('isTutorialHidden', () => {
     it('returns false when nothing stored', () => {
       const service = setup();
-      expect(service.isVisualizationOverviewHidden()).toBe(false);
-      expect(storageServiceMock.getItem).toHaveBeenCalledWith(HIDE_VISUALIZATION_OVERVIEW_KEY);
+      expect(service.isTutorialHidden()).toBe(false);
+      expect(storageServiceMock.getItem).toHaveBeenCalledWith(HIDE_TUTORIAL_KEY);
     });
 
     it('returns true when value is "true"', () => {
       const service = setup();
       storageServiceMock.getItem.mockReturnValue('true');
-      expect(service.isVisualizationOverviewHidden()).toBe(true);
+      expect(service.isTutorialHidden()).toBe(true);
     });
 
     it('returns false and cleans up legacy "1" value', () => {
       const service = setup();
       storageServiceMock.getItem.mockReturnValue('1');
-      expect(service.isVisualizationOverviewHidden()).toBe(false);
-      expect(storageServiceMock.removeItem).toHaveBeenCalledWith(HIDE_VISUALIZATION_OVERVIEW_KEY);
+      expect(service.isTutorialHidden()).toBe(false);
+      expect(storageServiceMock.removeItem).toHaveBeenCalledWith(HIDE_TUTORIAL_KEY);
     });
 
     it('returns false and cleans up any other invalid value', () => {
       const service = setup();
       storageServiceMock.getItem.mockReturnValue('abc');
-      expect(service.isVisualizationOverviewHidden()).toBe(false);
-      expect(storageServiceMock.removeItem).toHaveBeenCalledWith(HIDE_VISUALIZATION_OVERVIEW_KEY);
+      expect(service.isTutorialHidden()).toBe(false);
+      expect(storageServiceMock.removeItem).toHaveBeenCalledWith(HIDE_TUTORIAL_KEY);
     });
   });
 
-  describe('setVisualizationOverviewHidden', () => {
+  describe('setTutorialHidden', () => {
     it('stores "true" when hiding', () => {
       const service = setup();
-      service.setVisualizationOverviewHidden(true);
-      expect(storageServiceMock.setItem).toHaveBeenCalledWith(
-        HIDE_VISUALIZATION_OVERVIEW_KEY,
-        'true',
-      );
+      service.setTutorialHidden(true);
+      expect(storageServiceMock.setItem).toHaveBeenCalledWith(HIDE_TUTORIAL_KEY, 'true');
     });
 
     it('removes key when showing', () => {
       const service = setup();
-      service.setVisualizationOverviewHidden(false);
-      expect(storageServiceMock.removeItem).toHaveBeenCalledWith(HIDE_VISUALIZATION_OVERVIEW_KEY);
+      service.setTutorialHidden(false);
+      expect(storageServiceMock.removeItem).toHaveBeenCalledWith(HIDE_TUTORIAL_KEY);
       expect(storageServiceMock.setItem).not.toHaveBeenCalled();
     });
   });

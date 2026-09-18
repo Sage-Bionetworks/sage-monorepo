@@ -54,7 +54,7 @@ describe('HomeComponent', () => {
       expect(screen.getByText('Mouse Model Overview')).toBeInTheDocument();
       expect(screen.getByText('Mouse Model Search')).toBeInTheDocument();
       expect(screen.getByText('Mouse Differential Expression')).toBeInTheDocument();
-      expect(screen.getByText('Disease Correlation')).toBeInTheDocument();
+      expect(screen.getByText('Mouse-Human Disease Correlation')).toBeInTheDocument();
     });
 
     it('should swap to the marmoset tiles when marmoset is selected', async () => {
@@ -87,9 +87,9 @@ describe('HomeComponent', () => {
       expect(
         screen.getByText(/MARMO-AD is establishing marmoset models of Alzheimer's disease/i),
       ).toBeInTheDocument();
-      expect(screen.getByText('30K+')).toBeInTheDocument();
+      expect(screen.getByText('20K+')).toBeInTheDocument();
       expect(screen.getByText('1+')).toBeInTheDocument();
-      expect(screen.queryByText('20K+')).not.toBeInTheDocument();
+      expect(screen.queryByText('15+')).not.toBeInTheDocument();
       expect(screen.queryByText(/MODEL-AD comprises/i)).not.toBeInTheDocument();
     });
   });

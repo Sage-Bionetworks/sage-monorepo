@@ -8,6 +8,7 @@ import {
   waitForScrollToStop,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
+import { COMPARISON_TOOL_HEADER_TITLES } from './constants';
 import {
   expectHighlightClears,
   expectTocLinksScrollToSections,
@@ -156,7 +157,11 @@ test.describe('mouse model details - omics', () => {
     await popup.waitForURL(
       '/comparison/expression?categories=RNA%2520-%2520DIFFERENTIAL%2520EXPRESSION,Tissue%2520-%2520Hemibrain&models=APOE4',
     );
-    await expectComparisonToolTableLoaded(popup, 'Differential Expression', true);
+    await expectComparisonToolTableLoaded(
+      popup,
+      COMPARISON_TOOL_HEADER_TITLES['Differential Expression'] ?? 'Differential Expression',
+      true,
+    );
     await expectFiltersParams(popup, { models: ['APOE4'] });
     await expectFilters(popup, { 'Mouse Model': ['APOE4'] });
   });
@@ -172,7 +177,11 @@ test.describe('mouse model details - omics', () => {
     const popup = await popupPromise;
 
     await popup.waitForURL('/comparison/correlation?models=APOE4');
-    await expectComparisonToolTableLoaded(popup, 'Disease Correlation', true);
+    await expectComparisonToolTableLoaded(
+      popup,
+      COMPARISON_TOOL_HEADER_TITLES['Disease Correlation'] ?? 'Disease Correlation',
+      true,
+    );
     await expectFiltersParams(popup, { models: ['APOE4'] });
     await expectFilters(popup, { 'Mouse Model': ['APOE4'] });
   });

@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { DownloadNote } from '@sagebionetworks/explorers/models';
 import { saveAs } from 'file-saver';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
 import { captureDomToBlob, csvDataToString } from '@sagebionetworks/explorers/util';
@@ -19,6 +20,8 @@ export class DownloadDomImageComponent {
   heading = input('Download this plot as:');
   filename = input.required();
   buttonLabel = input('');
+  buttonTooltip = input('');
+  note = input<DownloadNote>();
   hasCsvDownload = input<boolean>(false);
   hasImageDownload = input<boolean>(true);
   data = input<string[][]>([]);

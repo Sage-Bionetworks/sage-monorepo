@@ -36,7 +36,7 @@ public class MouseModelOverviewService {
     ".buildCacheKey('mouseModelOverview', #query.itemFilterType, " +
     "#query.items, #query.search, #query.availableData, #query.center, " +
     "#query.modelType, #query.modifiedGenes, #query.pageNumber, #query.pageSize, " +
-    "#query.sortFields, #query.sortOrders)"
+    "#query.remainingBudget, #query.sortFields, #query.sortOrders)"
   )
   public MouseModelOverviewsPageDto loadMouseModelOverviews(
     MouseModelOverviewSearchQueryDto query

@@ -23,7 +23,7 @@ import {
   DiseaseCorrelationsPage,
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { DOWNLOAD_PINS_NOTE, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
@@ -74,7 +74,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
-    headerTitle: ComparisonToolPage.DiseaseCorrelation,
+    headerTitle: 'Mouse-Human Disease Correlation',
     filterResultsButtonTooltip: 'Filter results by Age, Sex, Modified Gene, and more',
     viewDetailsTooltip: 'Open model details page',
     viewDetailsClick: (rowData: unknown) => {
@@ -86,6 +86,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     },
     legendPanelConfig: this.legendPanelConfig,
     rowIdDataKey: 'composite_id',
+    downloadPinsNote: DOWNLOAD_PINS_NOTE,
     defaultSort: [
       { field: 'name', order: 1 },
       { field: 'age', order: 1 },
@@ -140,6 +141,15 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
+      pinAllFetch: (query, remainingBudget) =>
+        this.diseaseCorrelationService
+          .getDiseaseCorrelations(this.buildUnpinnedQuery(query, { remainingBudget }))
+          .pipe(
+            map((response) => ({
+              rows: response.diseaseCorrelations,
+              totalElements: response.page.totalElements,
+            })),
+          ),
     });
   }
 
@@ -147,19 +157,21 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+  private buildUnpinnedQuery(
+    currentQuery: ComparisonToolQuery,
+    options?: { remainingBudget?: number },
+  ): DiseaseCorrelationSearchQuery {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
       currentQuery.multiSortMeta,
     );
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
 
-    const query: DiseaseCorrelationSearchQuery = {
+    return {
       categories: currentQuery.categories,
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: currentQuery.pageNumber,
-      pageSize: currentQuery.pageSize,
+      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
       search: currentQuery.searchTerm,
       age: selectedFilters['ages'],
       modelType: selectedFilters['modelTypes'],
@@ -169,6 +181,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       sortFields,
       sortOrders,
     };
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const query = this.buildUnpinnedQuery(currentQuery);
 
     this.logger.log(
       `DiseaseCorrelationComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,

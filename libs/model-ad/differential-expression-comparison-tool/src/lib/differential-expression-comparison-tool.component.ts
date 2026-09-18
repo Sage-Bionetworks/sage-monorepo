@@ -28,7 +28,11 @@ import {
   TranscriptomicsSearchQuery,
   TranscriptomicsService,
 } from '@sagebionetworks/model-ad/api-client';
-import { DIFFERENTIAL_EXPRESSION_CATEGORIES, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import {
+  DIFFERENTIAL_EXPRESSION_CATEGORIES,
+  DOWNLOAD_PINS_NOTE,
+  ROUTE_PATHS,
+} from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, Observable, of, shareReplay } from 'rxjs';
 import {
@@ -98,7 +102,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
-    headerTitle: ComparisonToolPage.DifferentialExpression,
+    headerTitle: 'Mouse Differential Expression',
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
     viewDetailsTooltip: 'View individual results',
     viewDetailsClick: (rowData: unknown) => {
@@ -120,6 +124,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     },
     legendPanelConfig: this.legendPanelConfig,
     rowIdDataKey: 'composite_id',
+    downloadPinsNote: DOWNLOAD_PINS_NOTE,
     defaultSort: [
       { field: 'gene_symbol', order: 1 },
       { field: 'name', order: 1 },
@@ -189,26 +194,46 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
+      pinAllFetch: (query, remainingBudget) => this.fetchAllMatchingRows(query, remainingBudget),
     });
+  }
+
+  private fetchAllMatchingRows(
+    query: ComparisonToolQuery,
+    remainingBudget: number,
+  ): Observable<{ rows: DifferentialExpressionRow[]; totalElements: number }> {
+    const mainCategory = query.categories[0];
+    const page$ = this.fetchDifferentialExpressionPage(
+      mainCategory,
+      this.buildUnpinnedQuery(query, { remainingBudget }),
+    );
+    if (page$ === null) {
+      this.logUnrecognizedMainCategory(mainCategory);
+      return EMPTY;
+    }
+
+    return page$.pipe(map(({ rows, page }) => ({ rows, totalElements: page.totalElements })));
   }
 
   ngOnDestroy() {
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+  private buildUnpinnedQuery(
+    currentQuery: ComparisonToolQuery,
+    options?: { remainingBudget?: number },
+  ): DifferentialExpressionSearchQuery {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
       currentQuery.multiSortMeta,
     );
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
 
-    const query: DifferentialExpressionSearchQuery = {
+    return {
       categories: currentQuery.categories,
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: currentQuery.pageNumber,
-      pageSize: currentQuery.pageSize,
+      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
       search: currentQuery.searchTerm,
       biodomains: selectedFilters['biodomains'],
       modelType: selectedFilters['modelTypes'],
@@ -217,6 +242,10 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       sortFields,
       sortOrders,
     };
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const query = this.buildUnpinnedQuery(currentQuery);
 
     this.logger.log(
       `DifferentialExpressionComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,

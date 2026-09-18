@@ -1,5 +1,5 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
+import { TutorialPane } from '@sagebionetworks/explorers/models';
 import {
   AppStorageService,
   ComparisonToolService,
@@ -9,17 +9,17 @@ import {
 } from '@sagebionetworks/explorers/services';
 import {
   mockComparisonToolDataConfig,
-  mockVisualizationOverviewPanes,
+  mockTutorialPanes,
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
-import { VisualizationOverviewPanelComponent } from './visualization-overview-panel.component';
+import { TutorialPanelComponent } from './tutorial-panel.component';
 
-describe('VisualizationOverviewPanelComponent', () => {
+describe('TutorialPanelComponent', () => {
   const createMockStorageService = (isHidden = false) => ({
-    isVisualizationOverviewHidden: jest.fn().mockReturnValue(isHidden),
-    setVisualizationOverviewHidden: jest.fn(),
+    isTutorialHidden: jest.fn().mockReturnValue(isHidden),
+    setTutorialHidden: jest.fn(),
     getPageSize: jest.fn().mockReturnValue(DEFAULT_PAGE_SIZE),
     setPageSize: jest.fn(),
   });
@@ -27,19 +27,19 @@ describe('VisualizationOverviewPanelComponent', () => {
   async function setup(options?: {
     isVisible?: boolean;
     isHidden?: boolean;
-    visualizationOverviewPanes?: VisualizationOverviewPane[];
-    viewConfigOverviewPanes?: VisualizationOverviewPane[];
+    tutorialPanes?: TutorialPane[];
+    viewConfigOverviewPanes?: TutorialPane[];
   }) {
     const user = userEvent.setup();
     const mockStorageService = createMockStorageService(options?.isHidden);
-    const panes = options?.visualizationOverviewPanes ?? mockVisualizationOverviewPanes;
+    const panes = options?.tutorialPanes ?? mockTutorialPanes;
 
-    const { fixture } = await render(VisualizationOverviewPanelComponent, {
+    const { fixture } = await render(TutorialPanelComponent, {
       providers: [
         provideNoopAnimations(),
         MessageService,
         { provide: AppStorageService, useValue: mockStorageService },
-        provideExplorersConfig({ visualizationOverviewPanes: panes }),
+        provideExplorersConfig({ tutorialPanes: panes }),
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
         }),
@@ -52,22 +52,19 @@ describe('VisualizationOverviewPanelComponent', () => {
     // Set a per-CT view config override if provided
     if (options?.viewConfigOverviewPanes !== undefined) {
       comparisonToolService.setViewConfig({
-        visualizationOverviewPanes: options.viewConfigOverviewPanes,
+        tutorialPanes: options.viewConfigOverviewPanes,
       });
       fixture.detectChanges();
     }
 
     // Set initial visibility states if provided
     if (options?.isVisible !== undefined) {
-      comparisonToolService.setVisualizationOverviewVisibility(options.isVisible);
+      comparisonToolService.setTutorialVisibility(options.isVisible);
       fixture.detectChanges();
     }
 
     // Spy on service methods
-    const setVisualizationOverviewVisibilitySpy = jest.spyOn(
-      comparisonToolService,
-      'setVisualizationOverviewVisibility',
-    );
+    const setTutorialVisibilitySpy = jest.spyOn(comparisonToolService, 'setTutorialVisibility');
 
     return {
       component,
@@ -75,7 +72,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       user,
       comparisonToolService,
       mockStorageService,
-      setVisualizationOverviewVisibilitySpy,
+      setTutorialVisibilitySpy,
     };
   }
 
@@ -91,41 +88,41 @@ describe('VisualizationOverviewPanelComponent', () => {
   });
 
   it('should return empty array when empty panes are configured', async () => {
-    const { component } = await setup({ visualizationOverviewPanes: [] });
+    const { component } = await setup({ tutorialPanes: [] });
     expect(component.panes).toHaveLength(0);
   });
 
   it('should use panes from provideExplorersConfig', async () => {
-    const appConfigPanes: VisualizationOverviewPane[] = [
+    const appConfigPanes: TutorialPane[] = [
       { heading: 'App Config Pane', content: '<p>From app config</p>' },
     ];
-    const { component } = await setup({ visualizationOverviewPanes: appConfigPanes });
+    const { component } = await setup({ tutorialPanes: appConfigPanes });
     expect(component.panes).toHaveLength(1);
     expect(component.panes[0].heading).toBe('App Config Pane');
   });
 
   it('should prefer view config panes over app config panes when both are set', async () => {
-    const appConfigPanes: VisualizationOverviewPane[] = [
+    const appConfigPanes: TutorialPane[] = [
       { heading: 'App Config Pane', content: '<p>From app config</p>' },
     ];
-    const viewConfigPanes: VisualizationOverviewPane[] = [
+    const viewConfigPanes: TutorialPane[] = [
       { heading: 'View Config Pane A', content: '<p>From view config A</p>' },
       { heading: 'View Config Pane B', content: '<p>From view config B</p>' },
     ];
     const { component } = await setup({
-      visualizationOverviewPanes: appConfigPanes,
+      tutorialPanes: appConfigPanes,
       viewConfigOverviewPanes: viewConfigPanes,
     });
     expect(component.panes).toHaveLength(2);
     expect(component.panes[0].heading).toBe('View Config Pane A');
   });
 
-  it('should display dialog when isVisualizationOverviewVisible is true', async () => {
+  it('should display dialog when isTutorialVisible is true', async () => {
     await setup({ isVisible: true });
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
-  it('should not display dialog when isVisualizationOverviewVisible is false', async () => {
+  it('should not display dialog when isTutorialVisible is false', async () => {
     await setup({ isVisible: false });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
@@ -254,7 +251,7 @@ describe('VisualizationOverviewPanelComponent', () => {
 
       await user.click(checkbox);
 
-      expect(mockStorageService.setVisualizationOverviewHidden).toHaveBeenCalledWith(true);
+      expect(mockStorageService.setTutorialHidden).toHaveBeenCalledWith(true);
     });
 
     it('should clear preference when unchecking checkbox', async () => {
@@ -263,13 +260,13 @@ describe('VisualizationOverviewPanelComponent', () => {
 
       await user.click(checkbox);
 
-      expect(mockStorageService.setVisualizationOverviewHidden).toHaveBeenCalledWith(false);
+      expect(mockStorageService.setTutorialHidden).toHaveBeenCalledWith(false);
     });
   });
 
   describe('Dialog Close', () => {
-    it('should call setVisualizationOverviewVisibility with false when Close button is clicked', async () => {
-      const { user, setVisualizationOverviewVisibilitySpy } = await setup();
+    it('should call setTutorialVisibility with false when Close button is clicked', async () => {
+      const { user, setTutorialVisibilitySpy } = await setup();
 
       // Navigate to last pane where Close button is shown (4 panes, need 3 clicks)
       await user.click(screen.getByRole('button', { name: /next/i }));
@@ -279,7 +276,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       const closeButton = screen.getByRole('button', { name: /close/i });
       await user.click(closeButton);
 
-      expect(setVisualizationOverviewVisibilitySpy).toHaveBeenCalledWith(false);
+      expect(setTutorialVisibilitySpy).toHaveBeenCalledWith(false);
     });
 
     it('should reset activePane to 0 when dialog is hidden', async () => {
@@ -302,7 +299,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       });
 
       expect(component.willHide).toBe(true);
-      expect(comparisonToolService.isVisualizationOverviewVisible()).toBe(false);
+      expect(comparisonToolService.isTutorialVisible()).toBe(false);
     });
 
     it('should show dialog when stored value is empty', async () => {
@@ -310,9 +307,9 @@ describe('VisualizationOverviewPanelComponent', () => {
         isHidden: false,
       });
 
-      expect(mockStorageService.isVisualizationOverviewHidden).toHaveBeenCalled();
+      expect(mockStorageService.isTutorialHidden).toHaveBeenCalled();
       expect(component.willHide).toBe(false);
-      expect(comparisonToolService.isVisualizationOverviewVisible()).toBe(true);
+      expect(comparisonToolService.isTutorialVisible()).toBe(true);
     });
 
     it('should show dialog when stored value is "0"', async () => {
@@ -321,7 +318,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       });
 
       expect(component.willHide).toBe(false);
-      expect(comparisonToolService.isVisualizationOverviewVisible()).toBe(true);
+      expect(comparisonToolService.isTutorialVisible()).toBe(true);
     });
   });
 });
