@@ -35,6 +35,7 @@ properties:
     type: string
     description: Matched control for the model
     example: LOAD1
+  # TODO(MG-985): update the units example when the confirmed value lands
   units:
     type: string
     description: Units of measurement for proteomics data
