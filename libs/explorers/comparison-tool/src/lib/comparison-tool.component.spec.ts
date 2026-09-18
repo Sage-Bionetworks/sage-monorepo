@@ -22,7 +22,7 @@ function getTestProviders() {
     provideNoopAnimations(),
     provideLoadingIconColors(),
     MessageService,
-    provideExplorersConfig({ visualizationOverviewPanes: [] }),
+    provideExplorersConfig({ tutorialPanes: [] }),
     ...provideComparisonToolService({
       configs: mockComparisonToolConfigs,
     }),

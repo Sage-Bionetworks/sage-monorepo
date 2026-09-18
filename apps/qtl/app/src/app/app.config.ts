@@ -14,11 +14,7 @@ import { initSentry } from '@sagebionetworks/explorers/sentry';
 import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/qtl/api-client';
-import {
-  configFactory,
-  ConfigService,
-  VISUALIZATION_OVERVIEW_PANES,
-} from '@sagebionetworks/qtl/config';
+import { configFactory, ConfigService, TUTORIAL_PANES } from '@sagebionetworks/qtl/config';
 import { QtlPreset } from '@sagebionetworks/qtl/themes';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
@@ -43,7 +39,7 @@ export const appConfig: ApplicationConfig = {
       });
     }),
     provideExplorersConfig({
-      visualizationOverviewPanes: VISUALIZATION_OVERVIEW_PANES,
+      tutorialPanes: TUTORIAL_PANES,
     }),
     {
       provide: API_CLIENT_BASE_PATH,

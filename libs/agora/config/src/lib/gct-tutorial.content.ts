@@ -1,14 +1,14 @@
-import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
+import { TutorialPane } from '@sagebionetworks/explorers/models';
 
 /**
- * Visualization overview content for Agora's legacy Gene Comparison Tool (GCT). Provided at the
+ * Tutorial content for Agora's legacy Gene Comparison Tool (GCT). Provided at the
  * app level via `EXPLORERS_CONFIG` and used as the default; the Nominated Targets/Drugs CTs
- * override it per-CT through their view config (`visualizationOverviewPanes`).
+ * override it per-CT through their view config (`tutorialPanes`).
  */
-export const GCT_VISUALIZATION_OVERVIEW_PANES: VisualizationOverviewPane[] = [
+export const GCT_TUTORIAL_PANES: TutorialPane[] = [
   {
     heading: 'Gene Comparison Overview',
-    content: `<p>Welcome to Agora's Gene Comparison Tool. This overview demonstrates how to use the tool to explore results about genes related to AD. You can revisit this walkthrough by clicking the Visualization Overview link at the bottom of the page.</p>
+    content: `<p>Welcome to Agora's Gene Comparison Tool. This overview demonstrates how to use the tool to explore results about genes related to AD. You can revisit this walkthrough by clicking the Tutorial link at the bottom of the page.</p>
       <p>Click on the Legend link at the bottom of the page to view the legend for the current visualization.</p>
       <div class="image-container"><img src="agora-assets/images/gct-how-to-0.svg" /></div>`,
   },

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { LocalStorageService } from '@sagebionetworks/web-shared/angular/storage';
 
 import {
-  HIDE_VISUALIZATION_OVERVIEW_KEY,
+  HIDE_TUTORIAL_KEY,
   PAGE_SIZE_KEY,
   VALID_PAGE_SIZES,
   DEFAULT_PAGE_SIZE,
@@ -14,22 +14,22 @@ import {
 export class AppStorageService {
   private readonly localStorageService = inject(LocalStorageService);
 
-  isVisualizationOverviewHidden(): boolean {
-    const value = this.localStorageService.getItem(HIDE_VISUALIZATION_OVERVIEW_KEY);
+  isTutorialHidden(): boolean {
+    const value = this.localStorageService.getItem(HIDE_TUTORIAL_KEY);
     if (value === 'true') {
       return true;
     }
     if (value !== null) {
-      this.localStorageService.removeItem(HIDE_VISUALIZATION_OVERVIEW_KEY);
+      this.localStorageService.removeItem(HIDE_TUTORIAL_KEY);
     }
     return false;
   }
 
-  setVisualizationOverviewHidden(hidden: boolean): void {
+  setTutorialHidden(hidden: boolean): void {
     if (hidden) {
-      this.localStorageService.setItem(HIDE_VISUALIZATION_OVERVIEW_KEY, 'true');
+      this.localStorageService.setItem(HIDE_TUTORIAL_KEY, 'true');
     } else {
-      this.localStorageService.removeItem(HIDE_VISUALIZATION_OVERVIEW_KEY);
+      this.localStorageService.removeItem(HIDE_TUTORIAL_KEY);
     }
   }
 

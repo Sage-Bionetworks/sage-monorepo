@@ -12,7 +12,7 @@ import {
 } from '@sagebionetworks/agora/api-client';
 import {
   DEFAULT_SYNAPSE_WIKI_OWNER_ID,
-  NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
+  NOMINATED_CTS_TUTORIAL_PANES,
   ROUTE_PATHS,
 } from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -72,7 +72,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     legendEnabled: false,
     rowIdDataKey: 'hgnc_symbol',
     allowPinnedImageDownload: false,
-    visualizationOverviewPanes: NOMINATED_CTS_VISUALIZATION_OVERVIEW_PANES,
+    tutorialPanes: NOMINATED_CTS_TUTORIAL_PANES,
     defaultSort: [
       { field: 'total_nominations', order: -1 },
       { field: 'hgnc_symbol', order: 1 },

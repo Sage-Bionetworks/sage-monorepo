@@ -22,9 +22,9 @@ function getMockService(
     pageSizeOptions: VALID_PAGE_SIZES,
     updateQuery: jest.fn(),
     isLegendVisible: signal(false),
-    isVisualizationOverviewVisible: signal(false),
+    isTutorialVisible: signal(false),
     setLegendVisibility: jest.fn(),
-    setVisualizationOverviewVisibility: jest.fn(),
+    setTutorialVisibility: jest.fn(),
     currentConfig: signal(null),
     viewConfig: signal({
       helpLinks: [],
@@ -52,7 +52,7 @@ async function setup(
   const { fixture } = await render(ComparisonToolFooterComponent, {
     providers: [
       provideNoopAnimations(),
-      provideExplorersConfig({ visualizationOverviewPanes: [] }),
+      provideExplorersConfig({ tutorialPanes: [] }),
       { provide: ComparisonToolService, useValue: mockService },
     ],
   });

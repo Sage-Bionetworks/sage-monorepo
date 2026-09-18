@@ -33,7 +33,7 @@ import {
 export const navigateToComparison = async (
   page: Page,
   name: ComparisonToolPage,
-  shouldCloseVisualizationOverviewDialog = false,
+  shouldCloseTutorialDialog = false,
   navigateBy: 'url' | 'link' = 'url',
   queryParameters?: string,
 ) => {
@@ -48,7 +48,7 @@ export const navigateToComparison = async (
   await expectComparisonToolTableLoaded(
     page,
     COMPARISON_TOOL_HEADER_TITLES[name] ?? name,
-    shouldCloseVisualizationOverviewDialog,
+    shouldCloseTutorialDialog,
   );
 };
 

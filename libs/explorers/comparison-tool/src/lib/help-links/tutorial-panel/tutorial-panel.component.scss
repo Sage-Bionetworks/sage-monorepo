@@ -1,4 +1,4 @@
-.visualization-overview-panel {
+.tutorial-panel {
   color: var(--color-text);
   max-width: 580px;
   width: 100%;
@@ -53,7 +53,7 @@
       }
     }
 
-    .visualization-overview-panel-previous {
+    .tutorial-panel-previous {
       margin-right: 12px;
     }
   }
@@ -82,8 +82,8 @@
   }
 }
 
-.visualization-overview-panel-panes {
-  .visualization-overview-panel-pane {
+.tutorial-panel-panes {
+  .tutorial-panel-pane {
     display: none;
 
     &.active {

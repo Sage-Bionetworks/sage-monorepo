@@ -30,7 +30,7 @@ Coverage is output to `coverage/libs/explorers/comparison-tool`.
 - `ComparisonToolFilterListComponent` — active filter chips/badges (each chip is rendered via the shared `FilterChicletComponent` from `@sagebionetworks/explorers/ui`)
 - `HeatmapDetailsPanelComponent` — modal showing detailed heatmap cell info
 - `ComparisonToolFooterComponent` — paginator and help links
-  - `HelpLinksComponent` — legend panel and visualization overview panel (also a public export)
+  - `HelpLinksComponent` — legend panel and tutorial panel (also a public export)
 
 ### State Management
 
