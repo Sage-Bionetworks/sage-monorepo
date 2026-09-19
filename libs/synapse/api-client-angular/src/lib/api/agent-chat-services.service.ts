@@ -29,6 +29,10 @@ import { OrgSagebionetworksRepoModelAgentAgentChatResponse } from '../model/org-
 // @ts-ignore
 import { OrgSagebionetworksRepoModelAgentAgentRegistration } from '../model/org-sagebionetworks-repo-model-agent-agent-registration';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsBundle } from '../model/org-sagebionetworks-repo-model-agent-agent-registration-act-settings-bundle';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest } from '../model/org-sagebionetworks-repo-model-agent-agent-registration-act-settings-request';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelAgentAgentRegistrationRequest } from '../model/org-sagebionetworks-repo-model-agent-agent-registration-request';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelAgentAgentSession } from '../model/org-sagebionetworks-repo-model-agent-agent-session';
@@ -322,6 +326,113 @@ export class AgentChatServicesService {
 
     let localVarPath = `/repo/v1/agent/registration/${this.configuration.encodeParam({ name: 'agentRegistrationId', value: agentRegistrationId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
     return this.httpClient.request<OrgSagebionetworksRepoModelAgentAgentRegistration>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param agentRegistrationId The Synapse issued agent registration id.
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRepoV1AgentRegistrationAgentRegistrationIdActSettings(
+    agentRegistrationId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsBundle>;
+  public getRepoV1AgentRegistrationAgentRegistrationIdActSettings(
+    agentRegistrationId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsBundle>>;
+  public getRepoV1AgentRegistrationAgentRegistrationIdActSettings(
+    agentRegistrationId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsBundle>>;
+  public getRepoV1AgentRegistrationAgentRegistrationIdActSettings(
+    agentRegistrationId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (agentRegistrationId === null || agentRegistrationId === undefined) {
+      throw new Error(
+        'Required parameter agentRegistrationId was null or undefined when calling getRepoV1AgentRegistrationAgentRegistrationIdActSettings.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/agent/registration/${this.configuration.encodeParam({ name: 'agentRegistrationId', value: agentRegistrationId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/actSettings`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsBundle>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -919,6 +1030,135 @@ export class AgentChatServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelAgentAgentRegistrationRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param agentRegistrationId The Synapse issued agent registration id.
+   * @param orgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public putRepoV1AgentRegistrationAgentRegistrationIdActSettings(
+    agentRegistrationId: string,
+    orgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest: OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsBundle>;
+  public putRepoV1AgentRegistrationAgentRegistrationIdActSettings(
+    agentRegistrationId: string,
+    orgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest: OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsBundle>>;
+  public putRepoV1AgentRegistrationAgentRegistrationIdActSettings(
+    agentRegistrationId: string,
+    orgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest: OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsBundle>>;
+  public putRepoV1AgentRegistrationAgentRegistrationIdActSettings(
+    agentRegistrationId: string,
+    orgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest: OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (agentRegistrationId === null || agentRegistrationId === undefined) {
+      throw new Error(
+        'Required parameter agentRegistrationId was null or undefined when calling putRepoV1AgentRegistrationAgentRegistrationIdActSettings.',
+      );
+    }
+    if (
+      orgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest === null ||
+      orgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest was null or undefined when calling putRepoV1AgentRegistrationAgentRegistrationIdActSettings.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/agent/registration/${this.configuration.encodeParam({ name: 'agentRegistrationId', value: agentRegistrationId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/actSettings`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelAgentAgentRegistrationActSettingsBundle>(
+      'put',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelAgentAgentRegistrationActSettingsRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

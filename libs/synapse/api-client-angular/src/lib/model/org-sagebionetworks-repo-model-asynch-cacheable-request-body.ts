@@ -12,6 +12,7 @@ import { OrgSagebionetworksRepoModelTableQueryBundleRequest } from './org-sagebi
 import { OrgSagebionetworksRepoModelTableSortItem } from './org-sagebionetworks-repo-model-table-sort-item';
 import { OrgSagebionetworksRepoModelTableDownloadFromTableRequest } from './org-sagebionetworks-repo-model-table-download-from-table-request';
 import { OrgSagebionetworksRepoModelTableFacetColumnRequest } from './org-sagebionetworks-repo-model-table-facet-column-request';
+import { OrgSagebionetworksRepoModelAggregateDataConfiguration } from './org-sagebionetworks-repo-model-aggregate-data-configuration';
 import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebionetworks-repo-model-table-csv-table-descriptor';
 import { OrgSagebionetworksRepoModelTableQuery } from './org-sagebionetworks-repo-model-table-query';
 import { OrgSagebionetworksRepoModelTableQueryFilter } from './org-sagebionetworks-repo-model-table-query-filter';
