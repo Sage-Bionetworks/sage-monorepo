@@ -95,6 +95,10 @@ export interface OrgSagebionetworksRepoModelDataaccessSubmission {
    * JSON enum for the types of objects which can be restricted by an AccessRequirement.
    */
   subjectType?: OrgSagebionetworksRepoModelDataaccessSubmission.SubjectTypeEnum;
+  /**
+   * Additional data provided by the submitter, validated against the JSON Schema referenced by the AR version recorded on this submission. Property keys correspond to top-level property names defined in that schema.
+   */
+  schemaData?: any | null;
 }
 export namespace OrgSagebionetworksRepoModelDataaccessSubmission {
   export type StateEnum = 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED';

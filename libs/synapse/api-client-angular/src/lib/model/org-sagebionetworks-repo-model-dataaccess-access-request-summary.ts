@@ -17,6 +17,10 @@ export interface OrgSagebionetworksRepoModelDataaccessAccessRequestSummary {
    */
   requestId?: string;
   /**
+   * Id of the related access requirement
+   */
+  accessRequirementId?: string;
+  /**
    * Name of the related access requirement
    */
   accessRequirementName?: string;
@@ -41,7 +45,7 @@ export interface OrgSagebionetworksRepoModelDataaccessAccessRequestSummary {
    */
   submittedOn?: string;
   /**
-   * Date/time the request was last modified
+   * Date/time the submission was last modified, or null if there is no submission
    */
   modifiedOn?: string;
   /**
