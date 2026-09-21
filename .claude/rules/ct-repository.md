@@ -284,7 +284,7 @@ The three query fields below reach the repository as one `CtQueryOptions`. Build
 
 ### Budgeting parents
 
-A budget caps parents only on an EXCLUDE request against a parent-aware CT: it admits the prebudgeted parents plus up to `remainingBudget` more in the request's own sort order, and every row of each comes back unpaged, however many pages it spans. A budget of zero admits no new parent; an exhausted one with no prebudgeted parents matches nothing rather than everything; a null one with prebudgeted parents selects no parents at all, and only drives `hasRowsForPrebudgetedParents`. The total count still reflects the **unnarrowed** match set, so a caller detects truncation exactly as in the row-capped case.
+A budget caps parents only on an EXCLUDE request against a parent-aware CT: it admits the prebudgeted parents plus up to `remainingBudget` more in the request's own sort order, and every row of each comes back unpaged, however many pages it spans. A budget of zero admits no new parent, on a self-parented CT as much as on a parent-aware one -- nothing is selected at zero, so both kinds admit the prebudgeted parents alone; an exhausted budget with no prebudgeted parents matches nothing rather than everything; a null one with prebudgeted parents selects no parents at all, and only drives `hasRowsForPrebudgetedParents`. The total count still reflects the **unnarrowed** match set, so a caller detects truncation exactly as in the row-capped case.
 
 ### Frontend contract
 

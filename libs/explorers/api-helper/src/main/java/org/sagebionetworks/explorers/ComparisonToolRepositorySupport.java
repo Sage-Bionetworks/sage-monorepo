@@ -189,7 +189,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * a single {@code $limit} derived from the budget and no {@code $skip} -- the caller gets
    * matching rows in sort order from across all pages rather than only the page it is displaying.
    * The budget is ignored on INCLUDE queries, which already ask for a known set of items, and when
-   * it is null.
+   * it is null. A budget of zero returns no row through this overload, which names no prebudgeted
+   * parents whose rows would be free.
    *
    * <p>A budgeted result is deliberately <strong>not</strong> shaped like a page: it is returned
    * over {@link Pageable#unpaged(Sort)}, so {@link Page#getNumber()} is 0 and
@@ -234,6 +235,12 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * caller's unnarrowed criteria, so a caller's skip count stays
    * {@code totalElements - rows.length} exactly as in the row-capped case.
    *
+   * <p>A budget of zero takes that same parent-admitting path on <em>every</em> CT, self-parented
+   * ones included: with no parent to select there is no parent token to build, so nothing stops a
+   * self-parented CT from returning the free rows of the parents the caller already accounted for.
+   * A self-parented CT usually has none to return, since its parents are its rows and a pin-all
+   * excludes those same rows through {@code items}.
+   *
    * @param matchCriteria the assembled match criteria
    * @param pageable pagination and sort; pagination is ignored when the budget applies
    * @param options the request's include/exclude, budget, prebudgeted parents, and identity space
@@ -251,8 +258,13 @@ public abstract class ComparisonToolRepositorySupport<T> {
       );
 
       boolean budgetApplies = !options.isInclude() && options.remainingBudget() != null;
-      boolean capsParents = budgetApplies && getParentIdSpace() != null;
-      Criteria rowCriteria = capsParents
+      // Above zero a budget caps rows unless the CT is parent-aware, since selecting parents needs a
+      // parent token and a self-parented CT identified by a composite item filter has none. At zero
+      // there is nothing to select, so every CT follows the same rule: admit the parents the caller
+      // has already accounted for, and no others.
+      boolean capsRows =
+        budgetApplies && options.remainingBudget() > 0 && getParentIdSpace() == null;
+      Criteria rowCriteria = budgetApplies && !capsRows
         ? buildAdmittedParentsCriteria(matchCriteria, sortPlan, options)
         : matchCriteria;
 
@@ -264,9 +276,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
       }
 
       if (budgetApplies) {
-        // A parent-capped request is already bounded by its match criteria, which names the
-        // admitted parents, so it takes no $limit of its own.
-        if (!capsParents) {
+        // A budget spent on parents needs no $limit of its own: the match criteria already name the
+        // admitted parents, and every row of one is wanted.
+        if (capsRows) {
           operations.add(Aggregation.limit(options.remainingBudget()));
         }
       } else {

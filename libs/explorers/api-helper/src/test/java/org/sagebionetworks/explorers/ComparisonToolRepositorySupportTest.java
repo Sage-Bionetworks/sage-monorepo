@@ -9,6 +9,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -443,6 +444,15 @@ class ComparisonToolRepositorySupportTest {
     CtPage<TestDocument> run(Criteria criteria, Pageable pageable, CtQueryOptions options) {
       return executePagedAggregation(criteria, pageable, options);
     }
+
+    CtPage<TestDocument> run(
+      Criteria criteria,
+      Pageable pageable,
+      boolean isInclude,
+      Integer remainingBudget
+    ) {
+      return executePagedAggregation(criteria, pageable, isInclude, remainingBudget);
+    }
   }
 
   /** Subclass whose rows roll up to parents identified in a separate space. */
@@ -767,6 +777,33 @@ class ComparisonToolRepositorySupportTest {
       String pipeline = capturePipeline().toString();
       assertThat(pipeline).contains("$skip").contains("$limit");
       assertThat(pipeline).doesNotContain(String.valueOf(REMAINING_BUDGET));
+    }
+
+    @Test
+    @DisplayName("should emit no $limit at all when the budget is exhausted")
+    void shouldEmitNoLimitWhenBudgetIsExhausted() {
+      SelfParentedRepo repo = new SelfParentedRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      repo.run(new Criteria(), PageRequest.of(0, PAGE_SIZE), false, 0);
+
+      assertThat(capturePipeline().toString())
+        .as("{$limit: 0} is rejected by the server, and there is no row to cap anyway")
+        .doesNotContain("$limit")
+        .doesNotContain("$skip");
+    }
+
+    @Test
+    @DisplayName("should keep the full match count when the budget is exhausted")
+    void shouldKeepFullCountWhenBudgetIsExhausted() {
+      SelfParentedRepo repo = new SelfParentedRepo(mongoTemplate);
+      stubMongoTemplate(400L);
+
+      Page<TestDocument> page = repo.run(new Criteria(), PageRequest.of(0, PAGE_SIZE), false, 0);
+
+      assertThat(page.getTotalElements())
+        .as("an exhausted budget still reports how much the caller is missing")
+        .isEqualTo(400L);
     }
 
     @Test
@@ -1160,6 +1197,27 @@ class ComparisonToolRepositorySupportTest {
     }
 
     @Test
+    @DisplayName("should return the prebudgeted parents' rows unpaged when the budget is zero")
+    void shouldReturnPrebudgetedParentsRowsUnpagedWhenBudgetIsZero() {
+      CompositeParentRepo repo = new CompositeParentRepo(mongoTemplate);
+      int freeRows = PAGE_SIZE + 2;
+      stubMongoTemplate(400L, documents(freeRows));
+
+      CtPage<TestDocument> page = repo.run(
+        matchCriteria,
+        PageRequest.of(2, PAGE_SIZE, pageable.getSort()),
+        options(0, PREBUDGETED)
+      );
+
+      assertThat(rowStages())
+        .as("a child of a parent already accounted for costs no budget, so none is skipped or cut")
+        .noneMatch(stage -> stage.containsKey("$skip") || stage.containsKey("$limit"));
+      assertThat(page.getContent())
+        .as("an exhausted budget still returns free children, beyond the page the caller asked for")
+        .hasSize(freeRows);
+    }
+
+    @Test
     @DisplayName("should match nothing when the budget is zero and no parents are prebudgeted")
     void shouldMatchNothingWhenBudgetIsZeroAndNoParentsArePrebudgeted() {
       CompositeParentRepo repo = new CompositeParentRepo(mongoTemplate);
@@ -1209,6 +1267,28 @@ class ComparisonToolRepositorySupportTest {
         .isEqualTo(matchCriteria.getCriteriaObject());
       assertThat(lastStage(stages)).isEqualTo(new Document("$limit", (long) BUDGET));
       assertThat(stages).noneMatch(stage -> stage.containsKey("$skip"));
+    }
+
+    @Test
+    @DisplayName("should admit the prebudgeted parents when a self-parented budget is exhausted")
+    void shouldAdmitPrebudgetedParentsWhenSelfParentedBudgetIsExhausted() {
+      SelfParentedRepo repo = new SelfParentedRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      repo.run(matchCriteria, pageable, options(0, PREBUDGETED));
+
+      verifyNoParentSelection();
+      List<Document> stages = rowStages();
+      Document rowIdClause = admittedParentsClause(stages).get(ROW_ID_FIELD, Document.class);
+      @SuppressWarnings("unchecked")
+      Collection<Object> admittedIds = (Collection<Object>) rowIdClause.get("$in");
+      assertThat(admittedIds)
+        .as("an exhausted budget frees children of accounted-for parents whether or not the CT has"
+          + " a parent space of its own")
+        .containsExactly(PREBUDGETED.toArray());
+      assertThat(stages)
+        .as("{$limit: 0} is rejected by the server, and free children are unpaged besides")
+        .noneMatch(stage -> stage.containsKey("$limit") || stage.containsKey("$skip"));
     }
 
     private void stubParentSelection(List<String> parentTokens) {
