@@ -55,12 +55,7 @@ public class TranscriptomicsIndividualService {
 
     return documents
       .stream()
-      .sorted(
-        Comparator.comparing(
-          TranscriptomicsIndividualDocument::getAgeNumeric,
-          Comparator.nullsLast(Comparator.naturalOrder())
-        )
-      )
+      .sorted(Comparator.comparing(TranscriptomicsIndividualDocument::getAgeNumeric))
       .map(transcriptomicsIndividualMapper::toDto)
       .toList();
   }

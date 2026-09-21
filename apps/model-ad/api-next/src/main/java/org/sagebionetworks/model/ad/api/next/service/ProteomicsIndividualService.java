@@ -51,12 +51,7 @@ public class ProteomicsIndividualService {
 
     return documents
       .stream()
-      .sorted(
-        Comparator.comparing(
-          ProteomicsIndividualDocument::getAgeNumeric,
-          Comparator.nullsLast(Comparator.naturalOrder())
-        )
-      )
+      .sorted(Comparator.comparing(ProteomicsIndividualDocument::getAgeNumeric))
       .map(proteomicsIndividualMapper::toDto)
       .toList();
   }
