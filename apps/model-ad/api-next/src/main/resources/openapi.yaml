@@ -716,8 +716,8 @@ components:
         A noun used to label a set of records in the comparison tool UI, in both its singular and
         plural forms.
       example:
-        plural: proteins
         singular: protein
+        plural: proteins
       properties:
         singular:
           description: The singular form of the noun.
@@ -777,11 +777,11 @@ components:
             query_param_key: modelType
         row_count: row_count
         parent_noun:
-          plural: proteins
-          singular: protein
+          singular: gene
+          plural: genes
         view_noun:
-          plural: proteins
           singular: protein
+          plural: proteins
       properties:
         page:
           $ref: '#/components/schemas/ComparisonToolPage'
@@ -824,9 +824,27 @@ components:
           nullable: true
           type: string
         parent_noun:
-          $ref: '#/components/schemas/ComparisonToolNoun'
+          allOf:
+            - $ref: '#/components/schemas/ComparisonToolNoun'
+          description: |
+            The noun for this view's parent records, used to label parent counts. Set by a child view,
+            which displays both counts. Null otherwise.
+          example:
+            singular: gene
+            plural: genes
+          nullable: true
+          type: object
         view_noun:
-          $ref: '#/components/schemas/ComparisonToolNoun'
+          allOf:
+            - $ref: '#/components/schemas/ComparisonToolNoun'
+          description: |
+            The noun for this view's own records, used to label row counts. Any view can set it to
+            override the generic nouns in the comparison table. Null otherwise.
+          example:
+            singular: protein
+            plural: proteins
+          nullable: true
+          type: object
       required:
         - columns
         - dropdowns

@@ -48,9 +48,9 @@ public class ComparisonToolConfigDto {
 
   private @Nullable String parentIdDataKey = null;
 
-  private @Nullable ComparisonToolNounDto parentNoun;
+  private @Nullable ComparisonToolNounDto parentNoun = null;
 
-  private @Nullable ComparisonToolNounDto viewNoun;
+  private @Nullable ComparisonToolNounDto viewNoun = null;
 
   public ComparisonToolConfigDto() {
     super();
@@ -237,11 +237,11 @@ public class ComparisonToolConfigDto {
   }
 
   /**
-   * Get parentNoun
+   * The noun for this view's parent records, used to label parent counts. Set by a child view, which displays both counts. Null otherwise. 
    * @return parentNoun
    */
   @Valid 
-  @Schema(name = "parent_noun", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "parent_noun", description = "The noun for this view's parent records, used to label parent counts. Set by a child view, which displays both counts. Null otherwise. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("parent_noun")
   public @Nullable ComparisonToolNounDto getParentNoun() {
     return parentNoun;
@@ -257,11 +257,11 @@ public class ComparisonToolConfigDto {
   }
 
   /**
-   * Get viewNoun
+   * The noun for this view's own records, used to label row counts. Any view can set it to override the generic nouns in the comparison table. Null otherwise. 
    * @return viewNoun
    */
   @Valid 
-  @Schema(name = "view_noun", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "view_noun", description = "The noun for this view's own records, used to label row counts. Any view can set it to override the generic nouns in the comparison table. Null otherwise. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("view_noun")
   public @Nullable ComparisonToolNounDto getViewNoun() {
     return viewNoun;

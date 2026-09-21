@@ -38,7 +38,13 @@ export interface ComparisonToolConfig {
    * The data key holding the id of the row\'s parent. It must map to the same values in every view of the comparison tool, though not necessarily through the same field, since different views can read different collections. Equal to row_id_data_key means the view\'s rows are their own parents; a different key means the view\'s rows are children. Null when the view declares no hierarchy.
    */
   parent_id_data_key?: string | null;
-  parent_noun?: ComparisonToolNoun;
-  view_noun?: ComparisonToolNoun;
+  /**
+   * The noun for this view\'s parent records, used to label parent counts. Set by a child view, which displays both counts. Null otherwise.
+   */
+  parent_noun?: ComparisonToolNoun | null;
+  /**
+   * The noun for this view\'s own records, used to label row counts. Any view can set it to override the generic nouns in the comparison table. Null otherwise.
+   */
+  view_noun?: ComparisonToolNoun | null;
 }
 export namespace ComparisonToolConfig {}

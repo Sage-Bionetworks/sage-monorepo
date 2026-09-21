@@ -481,6 +481,9 @@ components:
       required:
         - singular
         - plural
+      example:
+        singular: protein
+        plural: proteins
     ComparisonToolConfig:
       type: object
       properties:
@@ -524,17 +527,27 @@ components:
           nullable: true
           example: rna_composite_id
         parent_noun:
-          $ref: '#/components/schemas/ComparisonToolNoun'
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/ComparisonToolNoun'
           description: |
             The noun for this view's parent records, used to label parent counts. Set by a child view,
             which displays both counts. Null otherwise.
           nullable: true
+          example:
+            singular: gene
+            plural: genes
         view_noun:
-          $ref: '#/components/schemas/ComparisonToolNoun'
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/ComparisonToolNoun'
           description: |
             The noun for this view's own records, used to label row counts. Any view can set it to
             override the generic nouns in the comparison table. Null otherwise.
           nullable: true
+          example:
+            singular: protein
+            plural: proteins
       required:
         - page
         - dropdowns
