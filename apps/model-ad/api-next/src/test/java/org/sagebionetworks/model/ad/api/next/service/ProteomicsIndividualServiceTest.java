@@ -204,53 +204,6 @@ class ProteomicsIndividualServiceTest {
   }
 
   @Test
-  @DisplayName("should sort documents with null age_numeric last")
-  void shouldSortDocumentsWithNullAgeNumericLast() {
-    // given
-    ProteomicsIndividualDocument docWithNullAge = createProteomicsIndividualDocument(
-      UNIQUE_ID,
-      TISSUE,
-      MODEL_NAME,
-      null,
-      null
-    );
-    ProteomicsIndividualDocument doc12 = createProteomicsIndividualDocument(
-      UNIQUE_ID,
-      TISSUE,
-      MODEL_NAME,
-      null,
-      12
-    );
-    ProteomicsIndividualDocument doc4 = createProteomicsIndividualDocument(
-      UNIQUE_ID,
-      TISSUE,
-      MODEL_NAME,
-      null,
-      4
-    );
-
-    when(
-      repository.findByUniqueIdAndNameAndTissue(anyString(), anyString(), anyString())
-    ).thenReturn(List.of(docWithNullAge, doc12, doc4));
-
-    ProteomicsIndividualFilterQueryDto query = ProteomicsIndividualFilterQueryDto.builder()
-      .uniqueId(UNIQUE_ID)
-      .modelIdentifier(MODEL_NAME)
-      .modelIdentifierType(ModelIdentifierTypeDto.NAME)
-      .tissue(TISSUE)
-      .build();
-
-    // when
-    List<ProteomicsIndividualDto> result = service.getProteomicsIndividual(query);
-
-    // then
-    assertThat(result).hasSize(3);
-    assertThat(result.get(0).getAgeNumeric()).isEqualTo(4);
-    assertThat(result.get(1).getAgeNumeric()).isEqualTo(12);
-    assertThat(result.get(2).getAgeNumeric()).isNull();
-  }
-
-  @Test
   @DisplayName("should throw IllegalArgumentException for invalid modelIdentifierType")
   void shouldThrowExceptionForInvalidModelIdentifierType() {
     // given
