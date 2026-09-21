@@ -23,7 +23,7 @@ public class TranscriptomicsIndividualDocument {
   private String ensemblGeneId;
 
   @Field("gene_symbol")
-  private @Nullable String geneSymbol;
+  private String geneSymbol;
 
   private String tissue;
 

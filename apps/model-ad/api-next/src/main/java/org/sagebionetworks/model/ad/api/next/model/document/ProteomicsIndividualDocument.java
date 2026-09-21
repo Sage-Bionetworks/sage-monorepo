@@ -23,7 +23,7 @@ public class ProteomicsIndividualDocument {
   private String ensemblGeneId;
 
   @Field("gene_symbol")
-  private @Nullable String geneSymbol;
+  private String geneSymbol;
 
   private String uniprotid;
 
