@@ -232,10 +232,14 @@ class ComparisonToolRepositorySupportTest {
 
   /**
    * Stands in for an identifier DTO's {@code toCriteria()}: splits a parent token back across the
-   * fields it was built from.
+   * fields it was built from, rejecting a token whose part count does not match, exactly as the
+   * product DTOs' {@code parse} does.
    */
   private static Criteria parseParentToken(String token) {
-    String[] parts = token.split(Pattern.quote(ItemIdSpaceDef.DELIMITER));
+    String[] parts = token.split(Pattern.quote(ItemIdSpaceDef.DELIMITER), -1);
+    if (parts.length != PARENT_ID_FIELDS.size()) {
+      throw new IllegalArgumentException("Invalid parent token: '" + token + "'");
+    }
     Criteria[] clauses = new Criteria[PARENT_ID_FIELDS.size()];
     for (int i = 0; i < clauses.length; i++) {
       clauses[i] = Criteria.where(PARENT_ID_FIELDS.get(i)).is(parts[i]);
@@ -975,6 +979,9 @@ class ComparisonToolRepositorySupportTest {
     /** A budget exactly spent by {@link #SELECTED}, so a short selection cannot pass unnoticed. */
     private static final int BUDGET = SELECTED.size();
 
+    /** What a row whose model name contains the delimiter emits: one part too many. */
+    private static final String UNPARSEABLE_TOKEN = "ENSG6~Trem~2~Male";
+
     /** The pipeline stages DocumentDB supports, which the deployed stack runs on. */
     private static final Set<String> DOCUMENT_DB_STAGES = Set.of(
       "$addFields",
@@ -1289,6 +1296,19 @@ class ComparisonToolRepositorySupportTest {
       assertThat(stages)
         .as("{$limit: 0} is rejected by the server, and free children are unpaged besides")
         .noneMatch(stage -> stage.containsKey("$limit") || stage.containsKey("$skip"));
+    }
+
+    @Test
+    @DisplayName("should fail the request when a selected parent's token cannot be parsed back")
+    void shouldFailRequestWhenSelectedParentTokenCannotBeParsedBack() {
+      CompositeParentRepo repo = new CompositeParentRepo(mongoTemplate);
+      stubParentSelection(List.of(UNPARSEABLE_TOKEN));
+
+      assertThatThrownBy(() -> repo.run(matchCriteria, pageable, options(BUDGET, List.of())))
+        .as("a row whose token cannot round-trip is unaddressable by every feature keyed by that"
+          + " token, so the request says so rather than dropping the parent silently")
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining(UNPARSEABLE_TOKEN);
     }
 
     private void stubParentSelection(List<String> parentTokens) {

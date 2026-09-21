@@ -34,17 +34,24 @@ public sealed interface ItemIdSpaceDef {
   String DELIMITER = "~";
 
   /**
-   * Rendered in place of a null or missing constituent field when building a composite token.
+   * Rendered in place of a blank constituent field — null, missing, empty, or whitespace only —
+   * when building a composite token.
    *
-   * <p>{@code $concat} yields {@code null} when any argument is null, which would collapse every row
-   * with an absent field into one group, so {@link Composite#tokenExpression()} guards each part
-   * with {@code $ifNull} and this fallback. The value is what Java renders for a null field, so a
-   * token emitted here agrees with the one an identifier DTO builds for the same row.
+   * <p>{@code $concat} yields {@code null} when any argument is null, which would collapse every
+   * row with an absent field into one group, so {@link Composite#tokenExpression()} guards each part
+   * with this fallback. The value is what Java renders for a null field, so a token emitted here
+   * agrees with the one an identifier DTO builds for the same row.
+   *
+   * <p>An empty or whitespace-only part is guarded for a second reason: an identifier DTO rejects a
+   * blank part outright, so emitting one verbatim would build a token the DTO throws on, failing an
+   * entire request over one malformed document.
    *
    * <p>The guard contains the failure; it does not make the token round-trip. An identifier DTO
    * parses this value as a literal string, so the criteria it yields look for the string
    * {@code "null"} rather than an absent field, and rows grouped under the fallback are silently
    * absent from a parent-scoped fetch instead of collapsing into one group and failing to parse.
+   * Such a row has no usable composite identity to begin with, so every feature keyed by that
+   * identity — an item filter, a pin, a parent-scoped fetch — already cannot address it.
    */
   // TODO: MG-586 - make the fallback round-trip: parse() should map it back to null and
   // toCriteria() should emit is(null), which matches null and missing alike.
@@ -178,8 +185,9 @@ public sealed interface ItemIdSpaceDef {
      * {@link ItemFilterDef.Composite} carries a parser but no field list, because the parser alone
      * cannot say which fields it reads.
      *
-     * <p>Every part is guarded by {@code $ifNull} with {@link #MISSING_PART}, since a single null
-     * field would otherwise make {@code $concat} yield {@code null} for the whole token.
+     * <p>Every part is guarded with {@link #MISSING_PART}, since a single null field would
+     * otherwise make {@code $concat} yield {@code null} for the whole token, and a blank one would
+     * build a token no identifier DTO accepts.
      */
     @Override
     public Object tokenExpression() {
@@ -195,11 +203,27 @@ public sealed interface ItemIdSpaceDef {
         if (!parts.isEmpty()) {
           parts.add(DELIMITER);
         }
-        parts.add(
-          new Document("$ifNull", List.of(ApiHelper.buildPathReadExpr(field), MISSING_PART))
-        );
+        parts.add(guardBlank(ApiHelper.buildPathReadExpr(field)));
       }
       return new Document("$concat", parts);
+    }
+
+    /**
+     * Substitutes {@link #MISSING_PART} for a blank value of {@code fieldRead}, matching the
+     * emptiness rule an identifier DTO applies when it parses a part: trimmed and non-empty.
+     *
+     * <p>The {@code $ifNull} is what lets {@code $trim} run: it rejects a non-string input, so an
+     * absent field has to become {@code ""} before it reaches the trim.
+     */
+    private static Document guardBlank(Object fieldRead) {
+      Document trimmed = new Document(
+        "$trim",
+        new Document("input", new Document("$ifNull", List.of(fieldRead, "")))
+      );
+      return new Document(
+        "$cond",
+        List.of(new Document("$eq", List.of(trimmed, "")), MISSING_PART, fieldRead)
+      );
     }
 
     private Criteria[] parseAll(Collection<String> items) {

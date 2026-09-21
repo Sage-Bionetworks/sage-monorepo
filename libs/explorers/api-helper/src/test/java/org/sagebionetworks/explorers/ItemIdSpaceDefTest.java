@@ -161,8 +161,8 @@ class ItemIdSpaceDefTest {
     }
 
     @Test
-    @DisplayName("should guard every $concat part against a null field")
-    void shouldGuardEveryConcatPartAgainstNullField() {
+    @DisplayName("should guard every $concat part against a blank field")
+    void shouldGuardEveryConcatPartAgainstBlankField() {
       // One unguarded part is enough for $concat to yield null, which would collapse every row with
       // an absent field into a single group.
       Document token = (Document) ItemIdSpaceDef.composite(
@@ -178,14 +178,51 @@ class ItemIdSpaceDefTest {
         .toList();
 
       assertThat(guards).hasSize(COMPOSITE_FIELDS.size()).allSatisfy(guard ->
-        assertThat(guard.getList("$ifNull", Object.class))
+        assertThat(guard.getList("$cond", Object.class))
           .element(1)
           .isEqualTo(ItemIdSpaceDef.MISSING_PART)
       );
     }
 
+    @Test
+    @DisplayName("should substitute the sentinel for a null, empty, or whitespace-only part")
+    void shouldSubstituteSentinelForBlankPart() {
+      // "null" is spelled out rather than read from MISSING_PART because its value is the contract:
+      // it has to match what an identifier DTO renders for a null part, so changing the constant
+      // has to fail a test.
+      Document token = (Document) ItemIdSpaceDef.composite(
+        COMPOSITE_FIELDS,
+        PARSER
+      ).tokenExpression();
+
+      assertThat(token.getList("$concat", Object.class).get(0))
+        .as("$ifNull absorbs a null or absent field and $trim empties a whitespace-only one, so all"
+          + " three reach the sentinel branch -- the emptiness rule an identifier DTO applies")
+        .isEqualTo(
+          Document.parse(
+            """
+            { "$cond": [
+                { "$eq": [
+                    { "$trim": { "input": { "$ifNull": ["$ensembl_gene_id", ""] } } },
+                    ""
+                ] },
+                "null",
+                "$ensembl_gene_id"
+            ] }
+            """
+          )
+        );
+    }
+
     private Document guarded(Object fieldRead) {
-      return new Document("$ifNull", List.of(fieldRead, ItemIdSpaceDef.MISSING_PART));
+      Document trimmed = new Document(
+        "$trim",
+        new Document("input", new Document("$ifNull", List.of(fieldRead, "")))
+      );
+      return new Document(
+        "$cond",
+        List.of(new Document("$eq", List.of(trimmed, "")), ItemIdSpaceDef.MISSING_PART, fieldRead)
+      );
     }
 
     @Test
