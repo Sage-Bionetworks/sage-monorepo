@@ -1415,6 +1415,25 @@ describe('ComparisonToolService', () => {
       expect(service.pinnedResultsCount()).toBe(1);
     });
 
+    it('caps pinned data from the fetch stream at the max pinned items and warns', () => {
+      connectService();
+      const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
+      service.setMaxPinnedItems(2);
+
+      const pinned$ = new Subject<Result>();
+      service.fetchPinned(pinned$);
+      pinned$.next({
+        data: [{ _id: 'id1' }, { _id: 'id2' }, { _id: 'id3' }],
+        totalCount: 3,
+      });
+      pinned$.complete();
+
+      expect(service.pinnedData()).toEqual([{ _id: 'id1' }, { _id: 'id2' }]);
+      expect(service.pinnedItems()).toEqual(['id1', 'id2']);
+      expect(service.pinnedResultsCount()).toBe(2);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    });
+
     it('maps a failed fetch to an empty result and stays alive for the next fetch', () => {
       connectService();
 
