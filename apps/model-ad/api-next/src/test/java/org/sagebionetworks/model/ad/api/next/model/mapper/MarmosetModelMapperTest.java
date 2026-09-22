@@ -50,7 +50,23 @@ class MarmosetModelMapperTest {
     assertThat(marmosetModel.getGeneticInfo().get(0).getMgiAlleleId()).isNull();
     assertThat(marmosetModel.getBiomarkers()).hasSize(1);
     assertThat(marmosetModel.getBiomarkers().get(0).getTissue()).isNull();
+    assertThat(marmosetModel.getBiomarkers().get(0).getResultOrder())
+      .containsExactly("Matched Control", "MUT");
     assertThat(marmosetModel.getBiomarkers().get(0).getData()).hasSize(1);
+  }
+
+  @Test
+  @DisplayName("should map absent result_order to null so the boxplot falls back to data order")
+  void shouldMapAbsentResultOrderToNull() {
+    // given
+    MarmosetModelDocument document = buildDocument();
+    document.getBiomarkers().get(0).setResultOrder(null);
+
+    // when
+    MarmosetModelDto marmosetModel = (MarmosetModelDto) mapper.toDto(document);
+
+    // then
+    assertThat(marmosetModel.getBiomarkers().get(0).getResultOrder()).isNull();
   }
 
   @Test
@@ -99,6 +115,7 @@ class MarmosetModelMapperTest {
       .age("12mo")
       .units("pg/mL")
       .yAxisMax(BigDecimal.valueOf(20))
+      .resultOrder(List.of("Matched Control", "MUT"))
       .data(List.of(individual))
       .build();
 

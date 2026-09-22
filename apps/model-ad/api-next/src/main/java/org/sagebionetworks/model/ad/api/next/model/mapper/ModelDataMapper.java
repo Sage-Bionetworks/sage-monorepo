@@ -30,6 +30,8 @@ public class ModelDataMapper {
       modelData.getUnits(),
       modelData.getYAxisMax(),
       data
-    ).tissue(modelData.getTissue());
+    )
+      .tissue(modelData.getTissue())
+      .resultOrder(modelData.getResultOrder());
   }
 }

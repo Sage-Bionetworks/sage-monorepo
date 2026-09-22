@@ -26,5 +26,8 @@ public class ModelData {
   @Field("y_axis_max")
   private BigDecimal yAxisMax;
 
+  @Field("result_order")
+  private List<String> resultOrder;
+
   private List<IndividualData> data;
 }
