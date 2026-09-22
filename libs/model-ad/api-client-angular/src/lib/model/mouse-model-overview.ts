@@ -30,6 +30,7 @@ export interface MouseModelOverview {
    */
   matched_controls: Array<string>;
   transcriptomics?: Link;
+  proteomics?: Link;
   disease_correlation?: Link;
   biomarkers?: Link;
   pathology?: Link;
@@ -45,11 +46,13 @@ export interface MouseModelOverview {
 export namespace MouseModelOverview {
   export type AvailableDataEnum =
     | 'Transcriptomics'
+    | 'Proteomics'
     | 'Pathology'
     | 'Biomarkers'
     | 'Disease Correlation';
   export const AvailableDataEnum = {
     Transcriptomics: 'Transcriptomics' as AvailableDataEnum,
+    Proteomics: 'Proteomics' as AvailableDataEnum,
     Pathology: 'Pathology' as AvailableDataEnum,
     Biomarkers: 'Biomarkers' as AvailableDataEnum,
     DiseaseCorrelation: 'Disease Correlation' as AvailableDataEnum,

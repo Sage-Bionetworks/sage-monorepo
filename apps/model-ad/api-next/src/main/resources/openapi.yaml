@@ -930,6 +930,9 @@ components:
         pathology:
           link_url: link_url
           link_text: link_text
+        proteomics:
+          link_url: link_url
+          link_text: link_text
         biomarkers:
           link_url: link_url
           link_text: link_text
@@ -975,6 +978,8 @@ components:
           type: array
         transcriptomics:
           $ref: '#/components/schemas/Link'
+        proteomics:
+          $ref: '#/components/schemas/Link'
         disease_correlation:
           $ref: '#/components/schemas/Link'
         biomarkers:
@@ -997,6 +1002,7 @@ components:
           items:
             enum:
               - Transcriptomics
+              - Proteomics
               - Pathology
               - Biomarkers
               - Disease Correlation
@@ -1063,6 +1069,9 @@ components:
           - pathology:
               link_url: link_url
               link_text: link_text
+            proteomics:
+              link_url: link_url
+              link_text: link_text
             biomarkers:
               link_url: link_url
               link_text: link_text
@@ -1092,6 +1101,9 @@ components:
               link_url: link_url
               link_text: link_text
           - pathology:
+              link_url: link_url
+              link_text: link_text
+            proteomics:
               link_url: link_url
               link_text: link_text
             biomarkers:
