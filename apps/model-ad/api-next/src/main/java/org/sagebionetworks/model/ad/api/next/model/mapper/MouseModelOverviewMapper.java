@@ -46,6 +46,7 @@ public class MouseModelOverviewMapper {
     );
 
     dto.setTranscriptomics(linkMapper.toNullableDto(document.getTranscriptomics()));
+    dto.setProteomics(linkMapper.toNullableDto(document.getProteomics()));
     dto.setDiseaseCorrelation(linkMapper.toNullableDto(document.getDiseaseCorrelation()));
     dto.setBiomarkers(linkMapper.toNullableDto(document.getBiomarkers()));
     dto.setPathology(linkMapper.toNullableDto(document.getPathology()));
