@@ -42,6 +42,9 @@ public class ModelDataDto {
   private BigDecimal yAxisMax;
 
   @Valid
+  private List<String> resultOrder = new ArrayList<>();
+
+  @Valid
   private List<@Valid IndividualDataDto> data = new ArrayList<>();
 
   public ModelDataDto() {
@@ -180,6 +183,34 @@ public class ModelDataDto {
     this.yAxisMax = yAxisMax;
   }
 
+  public ModelDataDto resultOrder(List<String> resultOrder) {
+    this.resultOrder = resultOrder;
+    return this;
+  }
+
+  public ModelDataDto addResultOrderItem(String resultOrderItem) {
+    if (this.resultOrder == null) {
+      this.resultOrder = new ArrayList<>();
+    }
+    this.resultOrder.add(resultOrderItem);
+    return this;
+  }
+
+  /**
+   * List of genotypes in the order to display results
+   * @return resultOrder
+   */
+  
+  @Schema(name = "result_order", description = "List of genotypes in the order to display results", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("result_order")
+  public List<String> getResultOrder() {
+    return resultOrder;
+  }
+
+  public void setResultOrder(List<String> resultOrder) {
+    this.resultOrder = resultOrder;
+  }
+
   public ModelDataDto data(List<@Valid IndividualDataDto> data) {
     this.data = data;
     return this;
@@ -223,12 +254,13 @@ public class ModelDataDto {
         Objects.equals(this.age, modelData.age) &&
         Objects.equals(this.units, modelData.units) &&
         Objects.equals(this.yAxisMax, modelData.yAxisMax) &&
+        Objects.equals(this.resultOrder, modelData.resultOrder) &&
         Objects.equals(this.data, modelData.data);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, evidenceType, tissue, age, units, yAxisMax, data);
+    return Objects.hash(name, evidenceType, tissue, age, units, yAxisMax, resultOrder, data);
   }
 
   @Override
@@ -241,6 +273,7 @@ public class ModelDataDto {
     sb.append("    age: ").append(toIndentedString(age)).append("\n");
     sb.append("    units: ").append(toIndentedString(units)).append("\n");
     sb.append("    yAxisMax: ").append(toIndentedString(yAxisMax)).append("\n");
+    sb.append("    resultOrder: ").append(toIndentedString(resultOrder)).append("\n");
     sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -276,6 +309,7 @@ public class ModelDataDto {
       this.instance.setAge(value.age);
       this.instance.setUnits(value.units);
       this.instance.setyAxisMax(value.yAxisMax);
+      this.instance.setResultOrder(value.resultOrder);
       this.instance.setData(value.data);
       return this;
     }
@@ -307,6 +341,11 @@ public class ModelDataDto {
     
     public ModelDataDto.Builder yAxisMax(BigDecimal yAxisMax) {
       this.instance.yAxisMax(yAxisMax);
+      return this;
+    }
+    
+    public ModelDataDto.Builder resultOrder(List<String> resultOrder) {
+      this.instance.resultOrder(resultOrder);
       return this;
     }
     
