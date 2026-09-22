@@ -131,10 +131,10 @@ export class ComparisonToolService<T> {
   // only the latest in flight. A newer query cancels (unsubscribes) the prior request, so responses
   // can never be applied out of order. Unpinned and pinned are independent streams.
   //
-  // Typed with `unknown` rather than `T`: the coordinator keeps every CT service in one
-  // ComparisonToolService<unknown> list, and a `Subject<...T...>` field would make that assignment
+  // Typed with `unknown` rather than `T`: the coordinator tracks the active CT service as
+  // ComparisonToolService<unknown>, and a `Subject<...T...>` field would make that assignment
   // a compile error. The public fetch methods stay strongly typed, and the stream subscription
-  // casts the result rows back to `T[]`.
+  // casts the result object back to `T[]`.
   private readonly unpinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
   private readonly pinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
 
@@ -615,7 +615,9 @@ export class ComparisonToolService<T> {
    *
    * The guard below keeps this from running while the table is still being populated: the cap sent to
    * the server is how many more pins the user may add, counted from the pins on screen, and those are
-   * not final until the in-flight fetch lands.
+   * not final until the in-flight fetch lands. The `startFetch()` call also serves as a re-entry
+   * guard: once it increments the counter, the `isLoadingTableData()` check at the top blocks any
+   * concurrent call until the fetch completes.
    */
   pinAll() {
     const fetch = this.pinAllFetch;
@@ -661,6 +663,8 @@ export class ComparisonToolService<T> {
    */
   setPinnedItems(items: string[] | null) {
     const deduplicatedItems = items ? Array.from(new Set(items)) : [];
+    // applyPinnedData can re-send the same ids in a new array, so compare by value to avoid
+    // triggering unnecessary refetches when the pin set hasn't actually changed.
     if (isEqual(deduplicatedItems, this.pinnedItems())) {
       return;
     }
@@ -703,11 +707,6 @@ export class ComparisonToolService<T> {
   }
 
   // Table data
-  setUnpinnedData(unpinnedData: T[]) {
-    this.unpinnedDataSignal.set(unpinnedData);
-    this.completeFetch();
-  }
-
   /**
    * Caps pinned data at `maxPinnedItems`. Every pinned result flows through here, so the cap holds
    * no matter where the pins came from -- a hand-edited or shared URL can list more ids than the
@@ -742,16 +741,6 @@ export class ComparisonToolService<T> {
     } else {
       this.pinnedDataSignal.set(pinnedData);
     }
-  }
-
-  /**
-   * Imperatively sets pinned data outside a fetch stream (test/story setup). Runtime fetches go
-   * through the pinned stream, which applies the same cap via `applyPinnedData`. The
-   * `completeFetch()` balances a `startFetch()` a caller may have paired with this write.
-   */
-  setPinnedData(pinnedData: T[]) {
-    this.applyPinnedData(pinnedData);
-    this.completeFetch();
   }
 
   // Row selection
@@ -842,7 +831,7 @@ export class ComparisonToolService<T> {
   }
 
   /** Call before starting a data fetch to increment loading counter */
-  startFetch() {
+  private startFetch() {
     this.pendingFetchesSignal.update((count) => count + 1);
   }
 
