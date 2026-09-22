@@ -120,7 +120,7 @@ public class CustomTranscriptomicsRepositoryImpl
   /**
    * No {@code getParentIdSpace()} override: a gene row is its own parent, so this CT is
    * self-parented. {@code itemIdSpace: parent} therefore resolves back to the row space and a
-   * budget above zero caps rows, exactly as it did before parent-awareness existed.
+   * budget above zero caps rows.
    */
   @Override
   public CtPage<TranscriptomicsDocument> findAll(

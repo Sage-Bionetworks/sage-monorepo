@@ -35,8 +35,8 @@ public record CtQueryOptions(
 
   /**
    * Options for a request with no parent-awareness: {@code items} matched against the row identity
-   * space, no prebudgeted parents. This is every CT request predating parent/child views, and what
-   * the {@code boolean isInclude} overloads on {@link ComparisonToolRepositorySupport} build.
+   * space, no prebudgeted parents. This is what the {@code boolean isInclude} overloads on
+   * {@link ComparisonToolRepositorySupport} build.
    */
   public static CtQueryOptions rowSpace(boolean isInclude, @Nullable Integer remainingBudget) {
     return new CtQueryOptions(isInclude, remainingBudget, List.of(), false);

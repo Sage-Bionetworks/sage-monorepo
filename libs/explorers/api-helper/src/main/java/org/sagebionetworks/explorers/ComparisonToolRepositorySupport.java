@@ -62,22 +62,18 @@ public abstract class ComparisonToolRepositorySupport<T> {
 
   private static final Collation CASE_INSENSITIVE = Collation.of("en").strength(2);
 
-  /**
-   * The document id: the trailing tiebreaker of every CT sort, and the {@code $group} key the
-   * parent selection substitutes the parent token into.
-   */
   private static final String ID_FIELD = "_id";
 
   /**
    * Field the parent selection materialises the parent token into before its {@code $group}.
    */
-  private static final String PARENT_TOKEN_FIELD = "__ctparent";
+  private static final String PARENT_TOKEN_FIELD = "__ct_parent_token";
 
   /**
    * Prefix of the safe alias each resolved sort path is read into for the parent selection's
    * {@code $group}.
    */
-  private static final String SORT_KEY_ALIAS_PREFIX = "__ctsk";
+  private static final String SORT_KEY_ALIAS_PREFIX = "__ct_sort_key_";
 
   protected final MongoTemplate mongoTemplate;
 
@@ -165,13 +161,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * <p>Overriding this is what makes a CT <strong>parent-aware</strong>: several rows then roll up
    * to one parent, so {@code itemIdSpace: parent} matches {@code items} against the parent token
    * and a budget caps distinct parents rather than rows. Leaving it {@code null} keeps a CT
-   * <strong>self-parented</strong> — the parent space resolves back to {@link #getRowIdSpace()}
-   * and every path behaves exactly as it did before parent-awareness existed. A budget still caps
-   * rows there, precisely because each row is its own parent.
+   * <strong>self-parented</strong> — the parent space resolves back to the row space implied by
+   * the item filter, and a budget caps rows, since each row is its own parent.
    *
-   * <p>{@code null} rather than {@code return getRowIdSpace()} because parent-awareness has to be
-   * testable, and {@link #getRowIdSpace()} derives a fresh value on each call — a comparison
-   * against it would report every CT as parent-aware.
+   * <p>The default is {@code null} rather than the row space so that a {@code null} check can tell
+   * a parent-aware CT from a self-parented one.
    */
   @Nullable
   protected ItemIdSpaceDef getParentIdSpace() {
@@ -236,11 +230,10 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * caller's unnarrowed criteria, so a caller's skip count stays
    * {@code totalElements - rows.length} exactly as in the row-capped case.
    *
-   * <p>A budget of zero takes that same parent-admitting path on <em>every</em> CT, self-parented
-   * ones included: with no parent to select there is no parent token to build, so nothing stops a
-   * self-parented CT from returning the free rows of the parents the caller already accounted for.
-   * A self-parented CT usually has none to return, since its parents are its rows and an exclude
-   * request already removes the rows the caller holds through {@code items}.
+   * <p>A budget of zero admits only the prebudgeted parents on <em>every</em> CT, since there is
+   * nothing to select and so no parent token is needed. On a self-parented CT that is usually no
+   * rows, since an exclude request already removes the rows the caller holds through
+   * {@code items}.
    *
    * @param matchCriteria the assembled match criteria
    * @param pageable pagination and sort; pagination is ignored when the budget applies
@@ -258,14 +251,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
         getSortFieldAliases()
       );
 
-      boolean budgetApplies = !options.isInclude() && options.remainingBudget() != null;
-      // Above zero a budget caps rows unless the CT is parent-aware, since selecting parents needs a
-      // parent token and a self-parented CT identified by a composite item filter has none. At zero
-      // there is nothing to select, so every CT follows the same rule: admit the parents the caller
-      // has already accounted for, and no others.
-      boolean capsRows =
-        budgetApplies && options.remainingBudget() > 0 && getParentIdSpace() == null;
-      Criteria rowCriteria = budgetApplies && !capsRows
+      BudgetMode budgetMode = resolveBudgetMode(options);
+      Criteria rowCriteria = budgetMode == BudgetMode.CAPS_PARENTS
         ? buildAdmittedParentsCriteria(matchCriteria, sortPlan, options)
         : matchCriteria;
 
@@ -275,17 +262,17 @@ public abstract class ComparisonToolRepositorySupport<T> {
       if (sortPlan.sortDoc() != null) {
         operations.add(sortStage(sortPlan.sortDoc()));
       }
-
-      if (budgetApplies) {
-        // A budget spent on parents needs no $limit of its own: the match criteria already name the
-        // admitted parents, and every row of one is wanted.
-        if (capsRows) {
-          operations.add(Aggregation.limit(options.remainingBudget()));
+      switch (budgetMode) {
+        case NONE -> {
+          long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
+          operations.add(Aggregation.skip(skipCount));
+          operations.add(Aggregation.limit(pageable.getPageSize()));
         }
-      } else {
-        long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
-        operations.add(Aggregation.skip(skipCount));
-        operations.add(Aggregation.limit(pageable.getPageSize()));
+        case CAPS_ROWS -> operations.add(Aggregation.limit(options.remainingBudget()));
+        case CAPS_PARENTS -> {
+          // No $skip or $limit: the $match already names the admitted parents, and every row of
+          // each is wanted
+        }
       }
 
       // Permits disk spillover when the $sort working set exceeds 100MB; only activates
@@ -304,7 +291,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
         new Query(matchCriteria).collation(CASE_INSENSITIVE),
         getCollectionName()
       );
-      Pageable resultPageable = budgetApplies ? Pageable.unpaged(pageable.getSort()) : pageable;
+      Pageable resultPageable = budgetMode == BudgetMode.NONE
+        ? pageable
+        : Pageable.unpaged(pageable.getSort());
       return new CtPage<>(
         results.getMappedResults(),
         resultPageable,
@@ -315,6 +304,35 @@ public abstract class ComparisonToolRepositorySupport<T> {
       log.error("Error executing aggregation on collection {}", getCollectionName(), e);
       throw e;
     }
+  }
+
+  /** What a request's budget caps, which decides how its row pipeline ends. */
+  private enum BudgetMode {
+    /** No budget applies: the requested page, by {@code $skip} / {@code $limit}. */
+    NONE,
+    /** The budget caps rows with a bare {@code $limit}, from across all pages. */
+    CAPS_ROWS,
+    /**
+     * The budget caps distinct parents: the {@code $match} names the admitted ones, and every row
+     * of each is returned, so there is no {@code $skip} and no {@code $limit}.
+     */
+    CAPS_PARENTS,
+  }
+
+  /**
+   * A budget applies only to an EXCLUDE request that sets one. Above zero it caps rows unless the
+   * CT is parent-aware, since selecting parents needs a parent token and a self-parented CT
+   * identified by a composite item filter has none. At zero there is nothing to select, so every
+   * CT admits the prebudgeted parents alone.
+   */
+  private BudgetMode resolveBudgetMode(CtQueryOptions options) {
+    if (options.isInclude() || options.remainingBudget() == null) {
+      return BudgetMode.NONE;
+    }
+    if (options.remainingBudget() > 0 && getParentIdSpace() == null) {
+      return BudgetMode.CAPS_ROWS;
+    }
+    return BudgetMode.CAPS_PARENTS;
   }
 
   /**
@@ -479,8 +497,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
    *
    * <p>The key is deliberately the bare token rather than a tuple of the constituent fields, so the
    * {@code _id} tiebreaker inherited from the row sort still compares strings. A tie on every real
-   * sort key therefore breaks by parent token here and by row id in the result, which no caller can
-   * observe but a test asserting one specific admitted set can.
+   * sort key therefore breaks by parent token here and by row id in the result.
    */
   private static Document buildParentGroupDoc(Document parentSortDoc) {
     Document group = new Document(ID_FIELD, "$" + PARENT_TOKEN_FIELD);
@@ -566,8 +583,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
    *
    * <p>{@code items} are matched against <strong>exactly one</strong> identity space, never an
    * {@code OR} of both: the parent space ({@link #getParentIdSpace()}, falling back to the row
-   * space on a self-parented CT) when {@link CtQueryOptions#matchParentIdSpace()} is set, and
-   * {@link #getRowIdSpace()} otherwise.
+   * space on a self-parented CT) when {@link CtQueryOptions#matchParentIdSpace()} is set, and the
+   * row space implied by the item filter otherwise.
    *
    * @param query the query DTO
    * @param items the list of item identifiers

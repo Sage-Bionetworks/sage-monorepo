@@ -57,8 +57,8 @@ class ComparisonToolRepositorySupportTest {
   /**
    * The parent selection's internal keys, mirrored from {@link ComparisonToolRepositorySupport}.
    */
-  private static final String PARENT_TOKEN_FIELD = "__ctparent";
-  private static final String SORT_KEY_ALIAS = "__ctsk0";
+  private static final String PARENT_TOKEN_FIELD = "__ct_parent_token";
+  private static final String SORT_KEY_ALIAS = "__ct_sort_key_0";
 
   @Mock
   private MongoTemplate mongoTemplate;
