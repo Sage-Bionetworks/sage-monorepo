@@ -63,11 +63,12 @@ const models = ['3xTg-AD', 'Abca7*V1599M'];
 const modelsQueryParams = getQueryParamFromValues(models, 'models');
 const categoriesAndModelsQueryParameters = [categoriesQueryParams, modelsQueryParams].join('&');
 const modelsFilterParams = { name: models };
+const cacul1EnsemblGeneId = 'ENSMUSG00000033417';
 const cacul1Matches = [
-  'ENSMUSG00000033417~3xTg-AD~Female',
-  'ENSMUSG00000033417~3xTg-AD~Male',
-  'ENSMUSG00000033417~Abca7*V1599M~Female',
-  'ENSMUSG00000033417~Abca7*V1599M~Male',
+  `${cacul1EnsemblGeneId}~3xTg-AD~Female`,
+  `${cacul1EnsemblGeneId}~3xTg-AD~Male`,
+  `${cacul1EnsemblGeneId}~Abca7*V1599M~Female`,
+  `${cacul1EnsemblGeneId}~Abca7*V1599M~Male`,
 ];
 const ensaEnsemblGeneId = 'ENSMUSG00000038619';
 const ensaMatches = [
@@ -640,5 +641,28 @@ test.describe('differential expression', () => {
       );
       await testFiltersRemovedFromUrlOnClearAll(page, expectedInitialFilterParams);
     });
+  });
+
+  // Share URLs created before sex moved from a category dropdown to a table column carry a trailing
+  // `Sex - <cohort>` category and pinned ids without a sex segment, which the route guard rewrites
+  // before the tool loads. The full redirect matrix is covered by the guard's unit spec; this test
+  // is what proves the guard is wired to the route and that its output resolves against real data.
+  // Legacy category values are literals here for the same reason as the header tests above:
+  // @sagebionetworks/model-ad/config cannot be imported from e2e.
+  test('legacy share URL expands every pin into both sexes', async ({ page }) => {
+    const legacyCategories = [...categories, 'Sex - Females & Males'];
+    const legacyCacul1Pins = models.map((model) => `${cacul1EnsemblGeneId}~${model}`);
+    const queryParameters = [
+      getQueryParamFromValues(legacyCategories, 'categories'),
+      getQueryParamFromValues(legacyCacul1Pins, 'pinned'),
+      modelsQueryParams,
+    ].join('&');
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+
+    await expectCategoriesParams(page, categories);
+    await expectCategories(page, categories);
+    await expectPinnedParams(page, cacul1Matches);
+    await expectPinnedRows(page, cacul1Matches);
   });
 });

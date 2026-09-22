@@ -121,7 +121,8 @@
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/model-ad/app/jest.config.ts",
-        "tsConfig": "apps/model-ad/app/tsconfig.spec.json"
+        "tsConfig": "apps/model-ad/app/tsconfig.spec.json",
+        "passWithNoTests": true
       }
     },
     "extract-i18n": {

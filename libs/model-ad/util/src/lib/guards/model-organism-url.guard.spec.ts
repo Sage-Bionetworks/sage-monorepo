@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { ModelOrganism } from '@sagebionetworks/model-ad/api-client';
-import { modelOrganismGuard } from './model-organism.guard';
+import { modelOrganismUrlGuard } from './model-organism-url.guard';
 
 function runGuard(url: string, queryParams: Record<string, string>) {
   const route = { queryParams } as unknown as ActivatedRouteSnapshot;
   const state = { url } as RouterStateSnapshot;
-  return TestBed.runInInjectionContext(() => modelOrganismGuard(route, state));
+  return TestBed.runInInjectionContext(() => modelOrganismUrlGuard(route, state));
 }
 
-describe('modelOrganismGuard', () => {
+describe('modelOrganismUrlGuard', () => {
   let router: Router;
 
   beforeEach(() => {
