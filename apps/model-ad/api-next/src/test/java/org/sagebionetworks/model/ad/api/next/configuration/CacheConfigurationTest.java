@@ -22,6 +22,7 @@ class CacheConfigurationTest {
       CacheNames.MARMOSET_MODEL_OVERVIEW,
       CacheNames.MOUSE_MODEL_OVERVIEW,
       CacheNames.PROTEOMICS,
+      CacheNames.PROTEOMICS_INDIVIDUAL,
       CacheNames.TRANSCRIPTOMICS,
       CacheNames.TRANSCRIPTOMICS_INDIVIDUAL,
       CacheNames.MODEL,

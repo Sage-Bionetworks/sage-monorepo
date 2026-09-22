@@ -32,6 +32,8 @@ tags:
     description: Operations about Proteomics results.
   - name: Transcriptomics
     description: Operations about Transcriptomics results.
+  - name: Proteomics Individual
+    description: Operations about Individual Proteomics results.
   - name: Transcriptomics Individual
     description: Operations about Individual Transcriptomics results.
 paths:
@@ -51,6 +53,8 @@ paths:
     $ref: paths/comparison-tools/proteomics.yaml
   /comparison-tools/transcriptomics:
     $ref: paths/comparison-tools/transcriptomics.yaml
+  /proteomics-individual:
+    $ref: paths/proteomics-individual.yaml
   /transcriptomics-individual:
     $ref: paths/transcriptomics-individual.yaml
   /models/{modelOrganism}/{name}:

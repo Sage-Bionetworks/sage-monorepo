@@ -13,8 +13,8 @@ import org.springframework.lang.Nullable;
 @Getter
 @Setter
 @NoArgsConstructor
-@Document(collection = "rna_de_individual")
-public class TranscriptomicsIndividualDocument {
+@Document(collection = "protein_de_individual")
+public class ProteomicsIndividualDocument {
 
   @Id
   private ObjectId id;
@@ -24,6 +24,14 @@ public class TranscriptomicsIndividualDocument {
 
   @Field("gene_symbol")
   private String geneSymbol;
+
+  private String uniprotid;
+
+  @Field("unique_id")
+  private String uniqueId;
+
+  @Field("display_symbol")
+  private String displaySymbol;
 
   private String tissue;
 

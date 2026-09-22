@@ -1,0 +1,8 @@
+name: proteomicsIndividualFilterQuery
+description: The filter query used to retrieve a specific set of proteomics individual data.
+in: query
+required: true
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/ProteomicsIndividualFilterQuery.yaml

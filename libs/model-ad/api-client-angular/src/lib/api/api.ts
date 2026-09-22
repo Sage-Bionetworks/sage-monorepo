@@ -12,6 +12,8 @@ export * from './mouse-model-overview.service';
 import { MouseModelOverviewService } from './mouse-model-overview.service';
 export * from './proteomics.service';
 import { ProteomicsService } from './proteomics.service';
+export * from './proteomics-individual.service';
+import { ProteomicsIndividualService } from './proteomics-individual.service';
 export * from './search.service';
 import { SearchService } from './search.service';
 export * from './transcriptomics.service';
@@ -26,6 +28,7 @@ export const APIS = [
   ModelService,
   MouseModelOverviewService,
   ProteomicsService,
+  ProteomicsIndividualService,
   SearchService,
   TranscriptomicsService,
   TranscriptomicsIndividualService,

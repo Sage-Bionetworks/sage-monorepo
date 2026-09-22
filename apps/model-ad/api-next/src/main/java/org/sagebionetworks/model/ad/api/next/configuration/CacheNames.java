@@ -41,6 +41,15 @@ public final class CacheNames {
   public static final String PROTEOMICS = "proteomics";
 
   /**
+   * Cache for proteomics individual queries.
+   * Stores results from proteomics individual queries filtered by tissue,
+   * modelIdentifier, modelIdentifierType, and uniqueId.
+   * Key format: Dynamic based on query parameters (tissue, modelIdentifier,
+   * modelIdentifierType, uniqueId)
+   */
+  public static final String PROTEOMICS_INDIVIDUAL = "proteomicsIndividual";
+
+  /**
    * Cache for transcriptomics queries.
    * Stores results from transcriptomics comparison queries filtered by tissue, items,
    * and filter type.
