@@ -2163,11 +2163,13 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '0-1 year',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
+    // data lists the model genotype first so result_order has something to reorder
     data: [
-      { sex: Sex.Female, individual_id: '1', value: 80, genotype: 'Control' },
-      { sex: Sex.Male, individual_id: '2', value: 95, genotype: 'Control' },
       { sex: Sex.Female, individual_id: '3', value: 110, genotype: 'PSEN1' },
       { sex: Sex.Male, individual_id: '4', value: 130, genotype: 'PSEN1' },
+      { sex: Sex.Female, individual_id: '1', value: 80, genotype: 'Control' },
+      { sex: Sex.Male, individual_id: '2', value: 95, genotype: 'Control' },
     ],
   },
   {
@@ -2176,6 +2178,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '1-2 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '5', value: 140, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '6', value: 160, genotype: 'Control' },
@@ -2189,6 +2192,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '2-3 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '9', value: 200, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '10', value: 220, genotype: 'Control' },
@@ -2202,6 +2206,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '3-4 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '17', value: 270, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '18', value: 310, genotype: 'Control' },
@@ -2215,6 +2220,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '4-5 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '21', value: 350, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '22', value: 380, genotype: 'Control' },
@@ -2228,6 +2234,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '5-6 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '25', value: 420, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '26', value: 460, genotype: 'Control' },
@@ -2241,6 +2248,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '6-7 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '29', value: 510, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '30', value: 540, genotype: 'Control' },
@@ -2254,6 +2262,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '0-1 year',
     units: 'pg/ml',
     y_axis_max: 500,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '13', value: 120, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '14', value: 140, genotype: 'Control' },

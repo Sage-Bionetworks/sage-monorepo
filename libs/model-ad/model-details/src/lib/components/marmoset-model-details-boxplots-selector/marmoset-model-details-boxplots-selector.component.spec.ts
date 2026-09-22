@@ -9,6 +9,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { marmosetModelDataMock } from '@sagebionetworks/model-ad/testing';
+import { BoxplotComponent } from '@sagebionetworks/model-ad/ui';
 import { render, screen } from '@testing-library/angular';
 import {
   ANCHOR_HIGHLIGHT_HOLD_MS,
@@ -106,6 +107,19 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining('expected 1 ModelData per age group but got 2'),
     );
+  });
+
+  it('should order boxplot lanes by the result_order of the age group', async () => {
+    const { fixture } = await setup();
+
+    const boxplots = fixture.debugElement
+      .queryAll(By.directive(BoxplotComponent))
+      .map((el) => el.componentInstance as BoxplotComponent);
+
+    expect(boxplots.length).toBeGreaterThan(0);
+    boxplots.forEach((boxplot) => {
+      expect(boxplot.xAxisOrder()).toEqual(['Control', 'PSEN1']);
+    });
   });
 
   it('should move focus to the age group heading when scrolling to its anchor', async () => {

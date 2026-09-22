@@ -35,8 +35,10 @@
             />
           }
         </div>
+        @let boxplotData = ageGroup.data[0];
         <model-ad-boxplot
-          [boxplotData]="ageGroup.data[0]"
+          [boxplotData]="boxplotData"
+          [xAxisOrder]="boxplotData.result_order"
           [sexFilter]="sexFilter"
           [showLegend]="false"
           [showTitle]="false"
