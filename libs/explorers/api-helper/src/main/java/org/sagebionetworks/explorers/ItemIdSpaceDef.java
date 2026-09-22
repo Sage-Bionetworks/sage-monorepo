@@ -56,6 +56,10 @@ public sealed interface ItemIdSpaceDef {
   /**
    * An identity space whose token is the value of one stored field.
    *
+   * <p>Unlike a composite token, the field is not guarded with {@link #MISSING_PART}, so a row whose
+   * field is null or missing has a null token and no item names it. As a parent space, such a row
+   * has no parent.
+   *
    * @param field the MongoDB field holding the identity (e.g. {@code "ensembl_gene_id"})
    */
   static ItemIdSpaceDef stored(String field) {

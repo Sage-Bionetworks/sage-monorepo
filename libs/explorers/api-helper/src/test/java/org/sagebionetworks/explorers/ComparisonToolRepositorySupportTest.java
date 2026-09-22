@@ -1061,6 +1061,26 @@ class ComparisonToolRepositorySupportTest {
     }
 
     @Test
+    @DisplayName("should drop rows with no parent token before grouping")
+    void shouldDropRowsWithNoParentTokenBeforeGrouping() {
+      CompositeParentRepo repo = new CompositeParentRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      stubParentSelection(SELECTED);
+
+      repo.run(matchCriteria, pageable, options(BUDGET, List.of()));
+
+      List<Document> stages = parentSelectionStages();
+      Document tokenGuard = new Document(
+        "$match",
+        new Document(PARENT_TOKEN_FIELD, new Document("$ne", null))
+      );
+      assertThat(stages.indexOf(tokenGuard))
+        .as("a null parent group would otherwise take one of the budget's slots")
+        .isGreaterThan(-1)
+        .isLessThan(indexOfStage(stages, "$group"));
+    }
+
+    @Test
     @DisplayName("should read each spaced sort path into a safe alias before grouping")
     void shouldReadSpacedSortPathIntoSafeAliasBeforeGrouping() {
       CompositeParentRepo repo = new CompositeParentRepo(mongoTemplate);

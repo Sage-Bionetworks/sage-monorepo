@@ -358,6 +358,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * an exhausted budget means:
    * {@link ItemIdSpaceDef#criteriaForAny(java.util.Collection) criteriaForAny} of no parents
    * matches no rows in either identity-space variant.
+   *
+   * <p>A row with no parent token is never admitted, yet still counts towards
+   * {@code totalElements}, so the caller sees it as truncated however large the budget.
    */
   private Criteria buildAdmittedParentsCriteria(
     Criteria matchCriteria,
@@ -381,9 +384,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * children are already returned.
    *
    * <p>The pipeline replays the row pipeline's sort stages, materialises the parent token plus a
-   * safe alias per resolved sort path, sorts rows, collapses them to one document per parent
-   * keeping its leading row's sort values, and re-applies the same order to the parents. It is a
-   * query of its own because DocumentDB has no {@code $setWindowFields}, so per-parent admission
+   * safe alias per resolved sort path, drops rows with no parent token, sorts rows, collapses them
+   * to one document per parent keeping its leading row's sort values, and re-applies the same order
+   * to the parents. It is a query of its own because DocumentDB has no {@code $setWindowFields}, so per-parent admission
    * cannot be expressed inside the row pipeline.
    */
   private List<String> selectParents(
@@ -403,6 +406,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
 
     Document tokenFields = buildParentTokenFields(sortPlan, parentIdSpace);
     operations.add(context -> new Document("$addFields", tokenFields));
+    // A null token names no parent a caller could ask for, so it must not take a budget slot.
+    // Only a stored space can emit one: a composite token guards every part with MISSING_PART.
+    operations.add(Aggregation.match(Criteria.where(PARENT_TOKEN_FIELD).ne(null)));
     if (sortPlan.sortDoc() != null) {
       operations.add(sortStage(sortPlan.sortDoc()));
     }
@@ -422,9 +428,6 @@ public abstract class ComparisonToolRepositorySupport<T> {
       .getMappedResults()
       .stream()
       .map(parent -> parent.getString(ID_FIELD))
-      // A null token names no parent a caller could have asked for. A composite token is never
-      // null, since every part is guarded by ItemIdSpaceDef.MISSING_PART.
-      .filter(Objects::nonNull)
       .toList();
   }
 
