@@ -149,11 +149,12 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * The identity space this CT's rows are identified in — the space {@code items} values are
    * matched against unless the request asks for the parent space.
    *
-   * <p>Defaults to the space implied by the item filter in {@link #getFilterConfig()}, so no
-   * subclass needs to override it: a {@link ItemFilterDef.Simple} item filter identifies rows by
-   * its field, a {@link ItemFilterDef.Composite} one by its parser.
+   * <p>Always the space implied by the item filter in {@link #getFilterConfig()}: a
+   * {@link ItemFilterDef.Simple} item filter identifies rows by its field, a
+   * {@link ItemFilterDef.Composite} one by its parser. Private because any other space would make
+   * row-space matching disagree with the item filter about what an item is.
    */
-  protected ItemIdSpaceDef getRowIdSpace() {
+  private ItemIdSpaceDef getRowIdSpace() {
     return ItemIdSpaceDef.fromItemFilter(getFilterConfig().itemFilter());
   }
 
@@ -238,8 +239,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * <p>A budget of zero takes that same parent-admitting path on <em>every</em> CT, self-parented
    * ones included: with no parent to select there is no parent token to build, so nothing stops a
    * self-parented CT from returning the free rows of the parents the caller already accounted for.
-   * A self-parented CT usually has none to return, since its parents are its rows and a pin-all
-   * excludes those same rows through {@code items}.
+   * A self-parented CT usually has none to return, since its parents are its rows and an exclude
+   * request already removes the rows the caller holds through {@code items}.
    *
    * @param matchCriteria the assembled match criteria
    * @param pageable pagination and sort; pagination is ignored when the budget applies
@@ -317,9 +318,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
   }
 
   /**
-   * Answers whether any row in the match set belongs to one of {@code prebudgetedParentIds} — that
-   * is, whether an unpinned child of an already-budgeted parent still exists somewhere in the
-   * match set. Only the whole match set can answer that, so no single page can.
+   * Answers whether any row in the match set belongs to one of {@code prebudgetedParentIds}.
+   * Only the whole match set can answer that, so no single page can.
    *
    * <p>Returns {@code null} when the question was not asked: no prebudgeted parents, or an INCLUDE
    * request. An INCLUDE already names the items the caller holds, so a prebudgeted parent list

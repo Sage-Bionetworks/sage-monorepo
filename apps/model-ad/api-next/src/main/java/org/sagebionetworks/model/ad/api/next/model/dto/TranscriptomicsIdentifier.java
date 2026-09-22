@@ -1,12 +1,12 @@
 package org.sagebionetworks.model.ad.api.next.model.dto;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
 import org.springframework.data.mongodb.core.query.Criteria;
 
@@ -30,11 +30,13 @@ public class TranscriptomicsIdentifier {
   private static final String DELIMITER = "~";
 
   /**
-   * Rendered in place of a null part by {@link #toCompositeId()}, and the literal
-   * {@link #parse(String)} therefore reads back for that part.
+   * Rendered in place of a blank part (null, empty, or whitespace only) by
+   * {@link #toCompositeId()}. {@link #parse(String)} reads it back as a null part, which
+   * {@link #toCriteria()} matches against a blank field, so a row with a blank part stays
+   * addressable by its own token.
    *
    * <p>Must agree with the fallback the aggregation pipeline emits when it builds this same token
-   * from a document with a missing field ({@code ItemIdSpaceDef.MISSING_PART}), or a parent-scoped
+   * from a document with a blank field ({@code ItemIdSpaceDef.MISSING_PART}), or a parent-scoped
    * fetch would look for a token no row can produce. {@code TranscriptomicsIdentifierTest} is where
    * the two are checked against each other.
    */
@@ -104,26 +106,36 @@ public class TranscriptomicsIdentifier {
     }
 
     return TranscriptomicsIdentifier.builder()
-      .ensemblGeneId(ensemblGeneId)
-      .name(name)
-      .sex(sex)
+      .ensemblGeneId(parsePart(ensemblGeneId))
+      .name(parsePart(name))
+      .sex(parsePart(sex))
       .build();
   }
 
+  private static String parsePart(String part) {
+    return MISSING_PART.equals(part) ? null : part;
+  }
+
   /**
-   * Returns the composite identifier as a string. A null part renders as {@link #MISSING_PART}.
+   * Returns the composite identifier as a string. A blank part renders as {@link #MISSING_PART}.
    *
    * @return the composite identifier string
    */
   public String toCompositeId() {
     return COMPOSITE_FIELDS.stream()
-      .map(field -> Objects.requireNonNullElse(field.value().apply(this), MISSING_PART))
+      .map(field -> renderPart(field.value().apply(this)))
       .collect(Collectors.joining(DELIMITER));
+  }
+
+  private static String renderPart(String value) {
+    return value == null || value.isBlank() ? MISSING_PART : value;
   }
 
   /**
    * Converts this identifier to a MongoDB {@link Criteria}
-   * that matches documents with this exact ensembl_gene_id, name.link_text, and sex.
+   * that matches documents with this exact ensembl_gene_id, name.link_text, and sex. A null part
+   * matches a blank field -- null, missing, empty, or whitespace only -- the same set of values
+   * {@link #toCompositeId()} renders as {@link #MISSING_PART}.
    *
    * @return a Criteria requiring all fields to match
    */
@@ -131,8 +143,12 @@ public class TranscriptomicsIdentifier {
     return new Criteria()
       .andOperator(
         COMPOSITE_FIELDS.stream()
-          .map(field -> Criteria.where(field.path()).is(field.value().apply(this)))
+          .map(field -> partCriteria(field.path(), field.value().apply(this)))
           .toList()
       );
+  }
+
+  private static Criteria partCriteria(String path, String value) {
+    return value != null ? Criteria.where(path).is(value) : ApiHelper.blankFieldCriteria(path);
   }
 }

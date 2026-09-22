@@ -265,12 +265,7 @@ public class CustomTranscriptomicsRepositoryImpl
   }
 
   private static Criteria whenGeneSymbolIsBlank(Criteria fallbackMatch) {
-    Criteria geneSymbolIsBlank = new Criteria()
-      .orOperator(
-        Criteria.where(GENE_SYMBOL_FIELD).is(null),
-        Criteria.where(GENE_SYMBOL_FIELD).is(""),
-        Criteria.where(GENE_SYMBOL_FIELD).regex("^\\s*$")
-      );
-    return new Criteria().andOperator(geneSymbolIsBlank, fallbackMatch);
+    return new Criteria()
+      .andOperator(ApiHelper.blankFieldCriteria(GENE_SYMBOL_FIELD), fallbackMatch);
   }
 }

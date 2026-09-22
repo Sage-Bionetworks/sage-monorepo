@@ -24,6 +24,8 @@ public final class ApiHelper {
 
   private static final String CACHE_CONTROL_VALUE = "no-cache, no-store, must-revalidate";
 
+  private static final String BLANK_VALUE_PATTERN = "^\\s*$";
+
   private ApiHelper() {}
 
   /**
@@ -373,6 +375,19 @@ public final class ApiHelper {
    */
   public static Criteria matchNothing() {
     return Criteria.where("_id").is(null);
+  }
+
+  /**
+   * Returns criteria matching documents whose {@code field} is blank: null, missing, empty, or
+   * whitespace only. {@code is(null)} covers null and missing; the regex covers empty and
+   * whitespace-only strings.
+   *
+   * @param field the MongoDB field to test
+   * @return criteria matching a blank {@code field}
+   */
+  public static Criteria blankFieldCriteria(String field) {
+    return new Criteria()
+      .orOperator(Criteria.where(field).is(null), Criteria.where(field).regex(BLANK_VALUE_PATTERN));
   }
 
   /**

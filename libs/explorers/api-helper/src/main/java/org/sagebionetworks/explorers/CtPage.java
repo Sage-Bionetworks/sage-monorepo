@@ -33,9 +33,8 @@ public final class CtPage<T> extends PageImpl<T> {
   }
 
   /**
-   * Whether any row in this request's match set belongs to one of the parents the caller has
-   * already budgeted for — that is, whether an unpinned child of an already-pinned parent still
-   * exists somewhere outside the returned page.
+   * Whether any row in this request's whole match set, not just the returned page, belongs to one
+   * of the parents the caller has already budgeted for.
    *
    * <p>{@code null} when the question was not asked: see
    * {@link ComparisonToolRepositorySupport#executePagedAggregation(

@@ -136,7 +136,6 @@ A budgeted request on a parent-aware CT spends its budget on parents rather than
 | ------------------------------------------- | --------------------------------------------------------------- |
 | `buildSearchCriteria(field, trimmedSearch)` | Custom search logic (e.g. fallback field, multi-field OR)       |
 | `getParentIdSpace()`                        | Several rows roll up to one parent -- makes the CT parent-aware |
-| `getRowIdSpace()`                           | Rarely; the default derives row identity from the item filter   |
 
 ---
 
@@ -257,7 +256,7 @@ CtFilterConfig.<MyQueryDto>builder()
 
 ## Parent/child CTs
 
-Overriding `getParentIdSpace()` is what makes a CT **parent-aware**: several rows roll up to one parent, so a request can match `items` against the parent token instead of the row token, and an EXCLUDE budget caps distinct parents rather than rows. Leave it null and the CT stays **self-parented** -- the parent space resolves back to `getRowIdSpace()`, every row is its own parent, and no other behaviour changes. Most CTs need no override.
+Overriding `getParentIdSpace()` is what makes a CT **parent-aware**: several rows roll up to one parent, so a request can match `items` against the parent token instead of the row token, and an EXCLUDE budget caps distinct parents rather than rows. Leave it null and the CT stays **self-parented** -- the parent space resolves back to the row space implied by the item filter, every row is its own parent, and no other behaviour changes. Most CTs need no override.
 
 ### Declaring an identity space
 
@@ -269,7 +268,7 @@ An `ItemIdSpaceDef` (`libs/explorers/api-helper/`) does two things: it turns a c
 | `ItemIdSpaceDef.composite(FIELDS, item -> MyIdentifier.parse(item).toCriteria())` | The token encodes several stored fields, joined by `~` | `FIELDS`, even though the parser alone would match items |
 
 - A parent space must be able to emit its token, so it needs the field names. A space derived from `compositeItemFilter` carries a parser and no field names, and `tokenExpression()` throws `IllegalStateException` on it -- harmless for a self-parented CT, which never emits a token, fatal for a parent space, which is grouped on.
-- A blank part -- absent, null, empty, or whitespace only -- renders as the literal `"null"` on both sides of the token, so an identifier DTO has to render it identically or the two emitters disagree about the same row. It does not round-trip: a DTO parses it back as a literal string rather than an absent field (MG-586). A token that is malformed rather than blank, such as one whose value contains the delimiter, fails the request through the DTO's own parse rather than being skipped, since such a row is unaddressable by every feature keyed by that token.
+- A blank part -- absent, null, empty, or whitespace only -- renders as the literal `"null"` on both sides of the token, so an identifier DTO has to render it identically or the two emitters disagree about the same row. It must also round-trip: the DTO's `parse()` reads `"null"` back as a null part and its `toCriteria()` matches a blank field for it (`TranscriptomicsIdentifier` is the reference), or rows with a blank part are silently absent from every fetch keyed by their token. A token that is malformed rather than blank, such as one whose value contains the delimiter, fails the request through the DTO's own parse rather than being skipped, since such a row is unaddressable by every feature keyed by that token.
 - Keep the delimiter and missing-part constants private to the identifier DTO rather than importing `ItemIdSpaceDef` into app code, and assert the two renderings agree in the DTO's **test** (`TranscriptomicsIdentifierTest`) -- api-helper cannot see the DTO and neither side runs Mongo, so that test is the only place a mismatch surfaces.
 
 ### The request knobs

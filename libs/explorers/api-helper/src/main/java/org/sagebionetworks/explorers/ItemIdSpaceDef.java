@@ -8,9 +8,9 @@ import org.bson.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 /**
- * One of a comparison tool's identity spaces — the space its rows are identified in
- * ({@link ComparisonToolRepositorySupport#getRowIdSpace()}), or the space their parents are
- * identified in ({@link ComparisonToolRepositorySupport#getParentIdSpace()}).
+ * One of a comparison tool's identity spaces — the space its rows are identified in (derived from
+ * its item filter via {@link #fromItemFilter}), or the space their parents are identified in
+ * ({@link ComparisonToolRepositorySupport#getParentIdSpace()}).
  *
  * <p>An identity space knows two things: how to turn a client-supplied item token back into
  * {@link Criteria} over stored fields, and how to build the token itself as an aggregation
@@ -26,10 +26,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
  */
 public sealed interface ItemIdSpaceDef {
   /**
-   * Separator joining the parts of a composite item token. Every composite identifier DTO in this
-   * repo (transcriptomics, proteomics, disease correlation, nominated drug) encodes its parts with
-   * this same character, so {@link #tokenExpression()} can reproduce their tokens from the
-   * constituent field names alone.
+   * Separator joining the parts of a composite item token. An identifier DTO backing a composite
+   * space must join its parts with this same character, or {@link #tokenExpression()} will build
+   * tokens that disagree with the ones the DTO renders and parses.
    */
   String DELIMITER = "~";
 
@@ -38,23 +37,20 @@ public sealed interface ItemIdSpaceDef {
    * when building a composite token.
    *
    * <p>{@code $concat} yields {@code null} when any argument is null, which would collapse every
-   * row with an absent field into one group, so {@link Composite#tokenExpression()} guards each part
-   * with this fallback. The value is what Java renders for a null field, so a token emitted here
-   * agrees with the one an identifier DTO builds for the same row.
+   * row with an absent field into one group, so {@link Composite#tokenExpression()} guards each
+   * part with this fallback. The value is what Java renders for a null field, so a token emitted
+   * here agrees with the one an identifier DTO builds for the same row.
    *
    * <p>An empty or whitespace-only part is guarded for a second reason: an identifier DTO rejects a
    * blank part outright, so emitting one verbatim would build a token the DTO throws on, failing an
    * entire request over one malformed document.
    *
-   * <p>The guard contains the failure; it does not make the token round-trip. An identifier DTO
-   * parses this value as a literal string, so the criteria it yields look for the string
-   * {@code "null"} rather than an absent field, and rows grouped under the fallback are silently
-   * absent from a parent-scoped fetch instead of collapsing into one group and failing to parse.
-   * Such a row has no usable composite identity to begin with, so every feature keyed by that
-   * identity — an item filter, a pin, a parent-scoped fetch — already cannot address it.
+   * <p>The guard only makes the token well-formed; round-tripping it is the identifier DTO's job.
+   * Its {@code parse()} must read this value back as a null part, and its {@code toCriteria()} must
+   * match a blank field for that part. An identifier DTO that parses it as a literal string instead
+   * looks for the string {@code "null"}, and rows grouped under the fallback are silently absent
+   * from a parent-scoped fetch.
    */
-  // TODO: MG-586 - make the fallback round-trip: parse() should map it back to null and
-  // toCriteria() should emit is(null), which matches null and missing alike.
   String MISSING_PART = "null";
 
   /**
@@ -79,9 +75,9 @@ public sealed interface ItemIdSpaceDef {
   }
 
   /**
-   * Derives the identity space an {@link ItemFilterDef} matches items in. This is what makes
-   * {@link ComparisonToolRepositorySupport#getRowIdSpace()} need no subclass override: a CT's row
-   * identity is already declared by the item filter in its {@link CtFilterConfig}.
+   * Derives the identity space an {@link ItemFilterDef} matches items in. This is a CT's row space:
+   * its row identity is already declared by the item filter in its {@link CtFilterConfig}, so no
+   * subclass declares a row space of its own.
    */
   static ItemIdSpaceDef fromItemFilter(ItemFilterDef itemFilter) {
     return switch (itemFilter) {
@@ -193,8 +189,8 @@ public sealed interface ItemIdSpaceDef {
     public Object tokenExpression() {
       if (fields.isEmpty()) {
         throw new IllegalStateException(
-          "Cannot build a token expression for a composite identity space with no declared fields."
-          + " Declare the constituent field names via ItemIdSpaceDef.composite(fields, parser)."
+          "Cannot build a token expression for a composite identity space with no declared fields." +
+          " Declare the constituent field names via ItemIdSpaceDef.composite(fields, parser)."
         );
       }
 
