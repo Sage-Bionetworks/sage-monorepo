@@ -12,9 +12,10 @@ import { TooltipModule } from 'primeng/tooltip';
 export class PrimaryIdentifierControlsComponent {
   comparisonToolService = inject(ComparisonToolService);
 
-  id = input.required<string>();
   label = input.required<string>();
-  rowData = input<unknown>();
+  rowData = input.required<unknown>();
+
+  id = computed(() => this.comparisonToolService.rowId(this.rowData()));
 
   @HostBinding('attr.role')
   protected readonly hostRole = 'group';

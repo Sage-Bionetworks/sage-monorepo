@@ -24,7 +24,6 @@ import { PrimaryIdentifierControlsComponent } from '../primary-identifier-contro
 })
 export class BaseTableComponent {
   protected readonly comparisonToolService = inject(ComparisonToolService);
-  protected readonly String = String;
   protected readonly canDrawHeatmapCircle = canDrawHeatmapCircle;
 
   selectedColumns = this.comparisonToolService.selectedColumns;

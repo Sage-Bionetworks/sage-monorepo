@@ -186,6 +186,11 @@ export class ComparisonToolService<T> {
     return this.findConfigForSelection(this.configsSignal(), this.dropdownSelection());
   });
 
+  readonly rowIdDataKey = computed(
+    () => this.currentConfig()?.row_id_data_key || this.viewConfig().rowIdDataKey,
+  );
+  readonly parentIdDataKey = computed(() => this.currentConfig()?.parent_id_data_key || null);
+
   readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
     const config = this.currentConfig();
     if (!config) return [];
@@ -521,8 +526,7 @@ export class ComparisonToolService<T> {
 
     // PrimeNG Popover.show() calls stopPropagation, so the click never reaches the <tr>.
     // Select the row here so heatmap circle clicks still update the selection.
-    const rowIdKey = this.viewConfig().rowIdDataKey;
-    this.selectRow(String((rowData as Record<string, unknown>)[rowIdKey]));
+    this.selectRow(this.rowId(rowData));
 
     const data = transform({
       rowData,
@@ -743,12 +747,11 @@ export class ComparisonToolService<T> {
   private autoSelectFirstRow(): void {
     const unpinned = this.unpinnedDataSignal();
     const pinned = this.pinnedDataSignal();
-    const rowIdKey = this.viewConfig().rowIdDataKey;
 
     if (unpinned.length > 0) {
-      this.selectedRowIdSignal.set(String((unpinned[0] as Record<string, unknown>)[rowIdKey]));
+      this.selectedRowIdSignal.set(this.rowId(unpinned[0]));
     } else if (pinned.length > 0) {
-      this.selectedRowIdSignal.set(String((pinned[0] as Record<string, unknown>)[rowIdKey]));
+      this.selectedRowIdSignal.set(this.rowId(pinned[0]));
     }
   }
 
@@ -771,10 +774,7 @@ export class ComparisonToolService<T> {
 
     const selectedId = this.selectedRowIdSignal();
     if (selectedId !== null) {
-      const rowIdKey = this.viewConfig().rowIdDataKey;
-      const isInPinned = this.pinnedDataSignal().some(
-        (row) => String((row as Record<string, unknown>)[rowIdKey]) === selectedId,
-      );
+      const isInPinned = this.pinnedDataSignal().some((row) => this.rowId(row) === selectedId);
       if (isInPinned) return;
     }
 
@@ -1179,8 +1179,15 @@ export class ComparisonToolService<T> {
   }
 
   private extractRowIds(rows: T[]): string[] {
-    const rowIdKey = this.viewConfig().rowIdDataKey;
-    return rows.map((row: T) => String((row as Record<string, unknown>)[rowIdKey]));
+    return rows.map((row) => this.rowId(row));
+  }
+
+  rowId(row: T): string {
+    return this.readDataKey(row, this.rowIdDataKey());
+  }
+
+  private readDataKey(row: T, key: string): string {
+    return String((row as Record<string, unknown>)[key]);
   }
 
   convertSortMetaToArrays(multiSortMeta: SortMeta[]): {

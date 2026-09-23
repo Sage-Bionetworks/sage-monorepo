@@ -30,7 +30,6 @@ async function setup(options?: { pinnedItems?: string[]; pinLimit?: number }) {
     ],
     componentInputs: {
       label: '3xTg-AD',
-      id: '68fff1aaeb12b9674515fd58',
       rowData: { _id: '68fff1aaeb12b9674515fd58', name: '3xTg-AD' },
     },
   });

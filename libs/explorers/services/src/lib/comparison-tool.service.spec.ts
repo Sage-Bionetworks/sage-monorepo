@@ -164,6 +164,58 @@ describe('ComparisonToolService', () => {
     });
   });
 
+  describe('row and parent id keys', () => {
+    const VIEW_CONFIG_ROW_ID_DATA_KEY = '_id';
+    const UI_CONFIG_ROW_ID_DATA_KEY = 'composite_id';
+    const UI_CONFIG_PARENT_ID_DATA_KEY = 'rna_composite_id';
+
+    const connectWithDataKeys = (keys: Partial<ComparisonToolConfig>) => {
+      connectService([{ ...mockComparisonToolDataConfig[0], ...keys }]);
+      service.setViewConfig({ rowIdDataKey: VIEW_CONFIG_ROW_ID_DATA_KEY });
+    };
+
+    it.each([
+      ['no keys', {}],
+      ['null keys', { row_id_data_key: null, parent_id_data_key: null }],
+      ['undefined keys', { row_id_data_key: undefined, parent_id_data_key: undefined }],
+    ])(
+      'falls back to the view config row key and no parent key when the ui config has %s',
+      (_, keys) => {
+        connectWithDataKeys(keys);
+
+        expect(service.rowIdDataKey()).toBe(VIEW_CONFIG_ROW_ID_DATA_KEY);
+        expect(service.parentIdDataKey()).toBeNull();
+      },
+    );
+
+    it('prefers the ui config keys over the view config when set', () => {
+      expect(UI_CONFIG_ROW_ID_DATA_KEY).not.toBe(VIEW_CONFIG_ROW_ID_DATA_KEY);
+
+      connectWithDataKeys({
+        row_id_data_key: UI_CONFIG_ROW_ID_DATA_KEY,
+        parent_id_data_key: UI_CONFIG_PARENT_ID_DATA_KEY,
+      });
+
+      expect(service.rowIdDataKey()).toBe(UI_CONFIG_ROW_ID_DATA_KEY);
+      expect(service.parentIdDataKey()).toBe(UI_CONFIG_PARENT_ID_DATA_KEY);
+    });
+
+    const row = {
+      [VIEW_CONFIG_ROW_ID_DATA_KEY]: 'view-config-id',
+      [UI_CONFIG_ROW_ID_DATA_KEY]: 'ui-config-id',
+    };
+
+    it('reads rowId from the view config row key when the ui config has none', () => {
+      connectWithDataKeys({});
+      expect(service.rowId(row)).toBe('view-config-id');
+    });
+
+    it('reads rowId from the ui config row key when set', () => {
+      connectWithDataKeys({ row_id_data_key: UI_CONFIG_ROW_ID_DATA_KEY });
+      expect(service.rowId(row)).toBe('ui-config-id');
+    });
+  });
+
   describe('global pinned items cache', () => {
     const mockConfigs: ComparisonToolConfig[] = [
       {

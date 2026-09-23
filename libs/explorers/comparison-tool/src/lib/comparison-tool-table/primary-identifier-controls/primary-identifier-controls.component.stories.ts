@@ -30,7 +30,6 @@ type Story = StoryObj<PrimaryIdentifierControlsComponent>;
 export const Unpinned: Story = {
   args: {
     label: '3xTg-AD',
-    id: '68fff1aaeb12b9674515fd58',
     rowData: { _id: '68fff1aaeb12b9674515fd58', name: '3xTg-AD' },
   },
 };
@@ -38,7 +37,6 @@ export const Unpinned: Story = {
 export const Pinned: Story = {
   args: {
     label: '3xTg-AD',
-    id: '68fff1aaeb12b9674515fd58',
     rowData: { _id: '68fff1aaeb12b9674515fd58', name: '3xTg-AD' },
   },
   decorators: [
@@ -64,7 +62,6 @@ export const Pinned: Story = {
 export const PinLimitReached: Story = {
   args: {
     label: '3xTg-AD',
-    id: '68fff1aaeb12b9674515fd58',
     rowData: { _id: '68fff1aaeb12b9674515fd58', name: '3xTg-AD' },
   },
   decorators: [
