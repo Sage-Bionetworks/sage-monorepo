@@ -1,7 +1,8 @@
 import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
-import { map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
+import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
 
 export interface VersionConfig {
@@ -28,15 +29,20 @@ export interface DataVersionService {
 })
 export class VersionService {
   private readonly platformService = inject(PlatformService);
+  private readonly logger = inject(LoggerService);
 
   getDataVersion$(dataVersionService: DataVersionService): Observable<string> {
     if (this.platformService.isServer) {
       return of('loading...');
     }
     const context = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
-    return dataVersionService
-      .getDataVersion('body', false, { context })
-      .pipe(map((data) => this.formatDataVersion(data)));
+    return dataVersionService.getDataVersion('body', false, { context }).pipe(
+      map((data) => this.formatDataVersion(data)),
+      catchError((error) => {
+        this.logger.error('Failed to fetch data version', error);
+        return of('unknown');
+      }),
+    );
   }
 
   formatDataVersion(dataVersion: DataVersion): string {

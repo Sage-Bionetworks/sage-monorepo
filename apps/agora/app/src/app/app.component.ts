@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
-import { catchError, of } from 'rxjs';
 import { DataVersionService } from '@sagebionetworks/agora/api-client';
 import { AGORA_LOADING_ICON_COLORS, ConfigService } from '@sagebionetworks/agora/config';
 import { SearchInputComponent } from '@sagebionetworks/agora/ui';
@@ -44,12 +43,9 @@ export class AppComponent {
 
   readonly useGoogleTagManager = this.configService.config.googleTagManagerEnabled;
 
-  dataVersion = toSignal(
-    this.versionService
-      .getDataVersion$(this.dataVersionService)
-      .pipe(catchError(() => of('unknown'))),
-    { initialValue: 'loading...' },
-  );
+  dataVersion = toSignal(this.versionService.getDataVersion$(this.dataVersionService), {
+    initialValue: 'loading...',
+  });
 
   siteVersion = this.versionService.getSiteVersion(this.configService.config);
 

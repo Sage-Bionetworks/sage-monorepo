@@ -13,7 +13,6 @@ import { ConfigService, QTL_LOADING_ICON_COLORS } from '@sagebionetworks/qtl/con
 import { footerLinks, headerLinks } from '@sagebionetworks/qtl/util';
 import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { ToastModule } from 'primeng/toast';
-import { catchError, of } from 'rxjs';
 
 @Component({
   imports: [
@@ -42,12 +41,9 @@ export class AppComponent {
 
   readonly useGoogleTagManager = this.configService.config.googleTagManagerEnabled;
 
-  dataVersion = toSignal(
-    this.versionService
-      .getDataVersion$(this.dataVersionService)
-      .pipe(catchError(() => of('unknown'))),
-    { initialValue: 'loading...' },
-  );
+  dataVersion = toSignal(this.versionService.getDataVersion$(this.dataVersionService), {
+    initialValue: 'loading...',
+  });
 
   siteVersion = this.versionService.getSiteVersion(this.configService.config);
 
