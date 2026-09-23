@@ -246,6 +246,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
   ) {
     try {
       BudgetMode budgetMode = resolveBudgetMode(options);
+      // When the budget caps parents, first run a separate query to pick the admitted parents, then
+      // narrow the match to their rows. Otherwise use the match criteria as-is.
       Criteria rowCriteria = budgetMode == BudgetMode.CAPS_PARENTS
         ? buildAdmittedParentsCriteria(matchCriteria, pageable.getSort(), options)
         : matchCriteria;
@@ -410,33 +412,42 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * so per-parent admission cannot be expressed inside the row pipeline.
    */
   private List<String> selectParents(Criteria matchCriteria, Sort sort, CtQueryOptions options) {
+    // Exclude the rows of prebudgeted parents
     ItemIdSpaceDef parentIdSpace = resolveParentIdSpace();
     List<String> prebudgeted = options.prebudgetedParentIds();
     Criteria selectionCriteria = prebudgeted.isEmpty()
       ? matchCriteria
       : new Criteria().andOperator(matchCriteria, parentIdSpace.criteriaForNone(prebudgeted));
 
+    // Build the row pipeline's sort, plus a safe alias for each sort path
     Map<String, ComputedSortField> computedFields = getComputedSortFieldExpressions();
     Map<String, String> aliases = getSortFieldAliases();
     Document rowSortDoc = buildSortDoc(sort, computedFields, aliases);
     Map<String, String> sortKeyAliases = buildSortKeyAliases(sort, rowSortDoc);
 
+    // Match rows and add the same sort prep fields as the row pipeline
     List<AggregationOperation> operations = new ArrayList<>();
     operations.add(Aggregation.match(selectionCriteria));
     operations.addAll(buildSortPrepStages(sort, computedFields, aliases));
 
+    // Add each row's parent token and aliased sort values
     Document tokenFields = buildParentTokenFields(sortKeyAliases, parentIdSpace);
     operations.add(context -> new Document("$addFields", tokenFields));
     // A null token names no parent a caller could ask for, so it must not take a budget slot.
     // Only a stored space can emit one: a composite token guards every part with MISSING_PART.
     operations.add(Aggregation.match(Criteria.where(PARENT_TOKEN_FIELD).ne(null)));
+
+    // Sort rows so each parent's first row is its leading row
     if (rowSortDoc != null) {
       operations.add(sortStage(rowSortDoc));
     }
 
+    // Collapse to one document per parent, keeping its leading row's sort values
     Document parentSortDoc = buildParentSortDoc(rowSortDoc, sortKeyAliases);
     Document groupDoc = buildParentGroupDoc(parentSortDoc);
     operations.add(context -> new Document("$group", groupDoc));
+
+    // Rank parents in the same order and take the budget
     operations.add(sortStage(parentSortDoc));
     operations.add(Aggregation.limit(options.remainingBudget()));
 
