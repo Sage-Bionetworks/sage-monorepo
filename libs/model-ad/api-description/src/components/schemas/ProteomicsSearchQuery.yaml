@@ -27,7 +27,7 @@ properties:
     type: integer
     format: int32
     minimum: 0 # 0 admits only the free children of prebudgetedParentIds
-    maximum: 50 # this CT's pin limit -- keep in sync with the frontend's MAX_PINNED_ITEMS
+    maximum: 50 # this CT's pin limit -- keep in sync with the frontend's MAX_PIN_LIMIT
     nullable: true
     example: 50
   categories:
@@ -72,7 +72,7 @@ properties:
     type: array
     items:
       type: string
-    maxItems: 50 # this CT's pin limit -- keep in sync with the frontend's MAX_PINNED_ITEMS
+    maxItems: 50 # this CT's pin limit -- keep in sync with the frontend's MAX_PIN_LIMIT
     nullable: true
     example: ['ENSMUSG00000000001~LOAD2~Female']
   search:

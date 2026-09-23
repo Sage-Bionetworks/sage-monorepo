@@ -1,6 +1,6 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { getMaxPinnedItemsWarning, MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
+import { getPinLimitWarning, MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
@@ -102,7 +102,7 @@ export class ComparisonToolService<T> {
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly isTutorialVisibleSignal = signal(!this.appStorageService.isTutorialHidden());
-  private readonly maxPinnedItemsSignal = signal<number>(MAX_PINNED_ITEMS);
+  private readonly pinLimitSignal = signal<number>(MAX_PIN_LIMIT);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
   );
@@ -150,7 +150,7 @@ export class ComparisonToolService<T> {
   readonly configs = this.configsSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly isTutorialVisible = this.isTutorialVisibleSignal.asReadonly();
-  readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
+  readonly pinLimit = this.pinLimitSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
@@ -202,25 +202,23 @@ export class ComparisonToolService<T> {
   });
 
   // Results & Pin State Signals
-  loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
+  loadingRowCount = computed(() => this.currentConfig()?.row_count ?? '');
+  unpinnedRowCount = signal<number>(0);
+  pinnedRowCount = computed(() => this.pinnedData().length);
 
-  totalResultsCount = signal<number>(0);
-
-  pinnedResultsCount = computed(() => this.pinnedData().length);
-
-  hasMaxPinnedItems = computed(() => {
-    return this.pinnedResultsCount() >= this.maxPinnedItems();
+  hasReachedPinLimit = computed(() => {
+    return this.pinnedRowCount() >= this.pinLimit();
   });
 
   disabledPinTooltip = computed(() => {
-    return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
+    return `You have already pinned the maximum number of items (${this.pinLimit()}). You must unpin some items before you can pin more.`;
   });
 
   constructor() {
     // Unpinned rows are paged, so totalCount is the cross-page total used for pagination.
     this.subscribeToFetchStream(this.unpinnedFetch$, ({ data, totalCount }) => {
       this.unpinnedDataSignal.set(data);
-      this.totalResultsCount.set(totalCount);
+      this.unpinnedRowCount.set(totalCount);
     });
 
     // Pinned rows are never paged: applyPinnedData enforces the pin cap and the count comes from
@@ -316,18 +314,18 @@ export class ComparisonToolService<T> {
   }
 
   /**
-   * MAX_PINNED_ITEMS is the largest budget the CT search query schemas accept, so a configured limit
+   * MAX_PIN_LIMIT is the largest budget the CT search query schemas accept, so a configured limit
    * above it could not be filled by "pin all" without the API rejecting the request. Clamping here
    * keeps it a true ceiling, which is what lets the pin limit be quoted to the user as the maximum.
    */
-  setMaxPinnedItems(count: number) {
-    if (count > MAX_PINNED_ITEMS) {
-      this.logger.warn(
-        `Requested max pinned items exceeds MAX_PINNED_ITEMS; using ${MAX_PINNED_ITEMS}.`,
-        { requested: count, max: MAX_PINNED_ITEMS },
-      );
+  setPinLimit(count: number) {
+    if (count > MAX_PIN_LIMIT) {
+      this.logger.warn(`Requested pin limit exceeds MAX_PIN_LIMIT; using ${MAX_PIN_LIMIT}.`, {
+        requested: count,
+        max: MAX_PIN_LIMIT,
+      });
     }
-    this.maxPinnedItemsSignal.set(Math.min(count, MAX_PINNED_ITEMS));
+    this.pinLimitSignal.set(Math.min(count, MAX_PIN_LIMIT));
   }
 
   private initializeFromConfig(
@@ -594,9 +592,9 @@ export class ComparisonToolService<T> {
   }
 
   pinItem(id: string) {
-    if (this.hasMaxPinnedItems()) {
+    if (this.hasReachedPinLimit()) {
       this.toastNotificationService.showWarning(
-        `You have reached the maximum number of pinned items (${this.maxPinnedItems()}). Please unpin an item before pinning a new one.`,
+        `You have reached the maximum number of pinned items (${this.pinLimit()}). Please unpin an item before pinning a new one.`,
       );
       return;
     }
@@ -622,10 +620,10 @@ export class ComparisonToolService<T> {
   pinAll() {
     const fetch = this.pinAllFetch;
     if (!fetch) return;
-    if (this.isLoadingTableData() || this.hasMaxPinnedItems()) return;
+    if (this.isLoadingTableData() || this.hasReachedPinLimit()) return;
 
     const currentPinIds = this.visiblePinIds();
-    const remainingBudget = this.maxPinnedItems() - currentPinIds.length;
+    const remainingBudget = this.pinLimit() - currentPinIds.length;
 
     this.startFetch();
     fetch(this.query(), remainingBudget)
@@ -637,7 +635,7 @@ export class ComparisonToolService<T> {
         next: ({ rows, totalElements }) => {
           this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows)]);
           if (totalElements > rows.length) {
-            this.showMaxPinnedItemsWarning(rows.length);
+            this.showPinLimitWarning(rows.length);
           }
         },
         error: (error) => {
@@ -649,10 +647,8 @@ export class ComparisonToolService<T> {
       });
   }
 
-  private showMaxPinnedItemsWarning(pinnedCount: number) {
-    this.toastNotificationService.showWarning(
-      getMaxPinnedItemsWarning(pinnedCount, this.maxPinnedItems()),
-    );
+  private showPinLimitWarning(pinnedCount: number) {
+    this.toastNotificationService.showWarning(getPinLimitWarning(pinnedCount, this.pinLimit()));
   }
 
   /**
@@ -708,7 +704,7 @@ export class ComparisonToolService<T> {
 
   // Table data
   /**
-   * Caps pinned data at `maxPinnedItems`. Every pinned result flows through here, so the cap holds
+   * Caps pinned data at `pinLimit`. Every pinned result flows through here, so the cap holds
    * no matter where the pins came from -- a hand-edited or shared URL can list more ids than the
    * user is allowed to pin.
    *
@@ -732,11 +728,11 @@ export class ComparisonToolService<T> {
    * equals the current pins -- which it does on the second pass -- so the cycle stops.
    */
   private applyPinnedData(pinnedData: T[]) {
-    const maxPinnedItems = this.maxPinnedItems();
-    if (pinnedData.length > maxPinnedItems) {
-      const trimmedData = pinnedData.slice(0, maxPinnedItems);
+    const pinLimit = this.pinLimit();
+    if (pinnedData.length > pinLimit) {
+      const trimmedData = pinnedData.slice(0, pinLimit);
       this.pinnedDataSignal.set(trimmedData);
-      this.showMaxPinnedItemsWarning(trimmedData.length);
+      this.showPinLimitWarning(trimmedData.length);
       this.setPinnedItems(this.extractRowIds(trimmedData));
     } else {
       this.pinnedDataSignal.set(pinnedData);

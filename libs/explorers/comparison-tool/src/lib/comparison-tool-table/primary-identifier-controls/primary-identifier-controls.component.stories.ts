@@ -61,7 +61,7 @@ export const Pinned: Story = {
   ],
 };
 
-export const MaxPinnedReached: Story = {
+export const PinLimitReached: Story = {
   args: {
     label: '3xTg-AD',
     id: '68fff1aaeb12b9674515fd58',
@@ -75,7 +75,7 @@ export const MaxPinnedReached: Story = {
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
         ...provideComparisonToolService({
-          maxPinnedItems: 3,
+          pinLimit: 3,
           pinnedItems: [
             '68fff1aaeb12b9674515fd59',
             '68fff1aaeb12b9674515fd5a',

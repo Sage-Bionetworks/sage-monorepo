@@ -50,7 +50,7 @@ describe('Comparison Tool Component', () => {
   it('should have loading results count while loading', async () => {
     const { component } = await setup();
     expect(component.isLoading()).toBe(true);
-    expect(component.loadingResultsCount()).toBe(mockComparisonToolConfigs[0].row_count);
+    expect(component.loadingRowCount()).toBe(mockComparisonToolConfigs[0].row_count);
   });
 
   it('does not render the sidebar by default', async () => {

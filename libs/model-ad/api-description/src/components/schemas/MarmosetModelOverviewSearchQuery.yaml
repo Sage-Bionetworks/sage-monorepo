@@ -24,7 +24,7 @@ properties:
     type: integer
     format: int32
     minimum: 1
-    maximum: 50 # this CT's pin limit -- keep in sync with the frontend's MAX_PINNED_ITEMS
+    maximum: 50 # this CT's pin limit -- keep in sync with the frontend's MAX_PIN_LIMIT
     nullable: true
     example: 50
   items:

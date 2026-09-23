@@ -47,7 +47,7 @@ async function setup(
     pinnedItems?: string[];
     unpinnedData?: Record<string, unknown>[];
     pinnedData?: Record<string, unknown>[];
-    maxPinnedItems?: number;
+    pinLimit?: number;
   },
   ctFilterServiceOptions?: { searchTerm?: string | null; filters?: ComparisonToolFilter[] },
 ) {
@@ -90,7 +90,7 @@ describe('ComparisonToolTableComponent', () => {
     await setup({
       pinnedItems: [pinnedItemData['_id']],
       pinnedData: [pinnedItemData],
-      maxPinnedItems: 5,
+      pinLimit: 5,
     });
     expect(screen.getByText(/Pinned Results/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /download/i })).toBeInTheDocument();
@@ -169,13 +169,13 @@ describe('ComparisonToolTableComponent', () => {
     expect(screen.getByRole('button', { name: /pin all/i })).toBeInTheDocument();
   });
 
-  it('should disable Pin All when max pinned items reached', async () => {
+  it('should disable Pin All when the pin limit is reached', async () => {
     const pinnedItemData = mockComparisonToolData[0];
     await setup(
       {
         pinnedItems: [pinnedItemData['_id']],
         pinnedData: [pinnedItemData],
-        maxPinnedItems: 1,
+        pinLimit: 1,
       },
       {
         searchTerm: '5xFAD',
@@ -218,7 +218,7 @@ describe('ComparisonToolTableComponent', () => {
       {
         pinnedItems: [pinnedItemData['_id']],
         pinnedData: [pinnedItemData],
-        maxPinnedItems: 1,
+        pinLimit: 1,
       },
       { searchTerm: '5xFAD' },
     );

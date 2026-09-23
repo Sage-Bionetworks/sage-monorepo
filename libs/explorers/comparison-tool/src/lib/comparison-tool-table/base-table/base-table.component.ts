@@ -29,7 +29,7 @@ export class BaseTableComponent {
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   viewConfig = this.comparisonToolService.viewConfig;
-  totalRecords = this.comparisonToolService.totalResultsCount;
+  totalRecords = this.comparisonToolService.unpinnedRowCount;
   first = this.comparisonToolService.first;
   isHeatmapCircleClickable = computed(
     () => !!this.comparisonToolService.viewConfig().heatmapCircleClickTransformFn,

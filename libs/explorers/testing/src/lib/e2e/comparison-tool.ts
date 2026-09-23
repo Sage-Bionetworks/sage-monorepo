@@ -1,8 +1,8 @@
 import { expect, Locator, Page, test } from '@playwright/test';
 import {
   DEFAULT_PAGE_SIZE,
-  getMaxPinnedItemsWarning,
-  MAX_PINNED_ITEMS,
+  getPinLimitWarning,
+  MAX_PIN_LIMIT,
   RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS,
 } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolConfigColumnTypeEnum } from '@sagebionetworks/explorers/models';
@@ -169,13 +169,13 @@ export const expectToastDetail = async (page: Page, detail: string): Promise<voi
 };
 
 export const expectPinnedResultsCount = async (page: Page, pinnedCount: number): Promise<void> => {
-  await expect(page.getByText(`Pinned Results (${pinnedCount}/${MAX_PINNED_ITEMS})`)).toBeVisible();
+  await expect(page.getByText(`Pinned Results (${pinnedCount}/${MAX_PIN_LIMIT})`)).toBeVisible();
   await expect(getPinnedTable(page).getByRole('row')).toHaveCount(pinnedCount);
 };
 
 // The button only renders alongside matching results, so search or filter before asserting on it
 export const expectPinAllDisabledAtPinLimit = async (page: Page): Promise<void> => {
-  await expectPinnedResultsCount(page, MAX_PINNED_ITEMS);
+  await expectPinnedResultsCount(page, MAX_PIN_LIMIT);
   await expect(page.getByRole('button', { name: 'Pin All' })).toBeDisabled();
 };
 
@@ -340,7 +340,7 @@ export async function testPinAllAcrossPages(
   expectedPinnedIds: string[],
 ) {
   expect(expectedPinnedIds.length).toBeGreaterThan(DEFAULT_PAGE_SIZE);
-  expect(expectedPinnedIds.length).toBeLessThanOrEqual(MAX_PINNED_ITEMS);
+  expect(expectedPinnedIds.length).toBeLessThanOrEqual(MAX_PIN_LIMIT);
 
   await searchViaFilterbox(page, searchTerm);
   await expectPaginatorRange(page, `1-${DEFAULT_PAGE_SIZE} of ${expectedPinnedIds.length}`);
@@ -356,19 +356,19 @@ export async function testPinAllAcrossPages(
 
 // Tests that "Pin All" stops at the pin limit and says so
 // searchTerm - term matching more rows than the pin limit allows
-// expectedPinnedIds - the MAX_PINNED_ITEMS row ids the server returns for the search, in the
+// expectedPinnedIds - the MAX_PIN_LIMIT row ids the server returns for the search, in the
 //                      table's sort order
 export async function testPinAllExceedsLimit(
   page: Page,
   searchTerm: string,
   expectedPinnedIds: string[],
 ) {
-  expect(expectedPinnedIds).toHaveLength(MAX_PINNED_ITEMS);
+  expect(expectedPinnedIds).toHaveLength(MAX_PIN_LIMIT);
 
   await searchViaFilterbox(page, searchTerm);
   await pinAll(page);
 
-  await expectToastDetail(page, getMaxPinnedItemsWarning(MAX_PINNED_ITEMS, MAX_PINNED_ITEMS));
+  await expectToastDetail(page, getPinLimitWarning(MAX_PIN_LIMIT, MAX_PIN_LIMIT));
   await expectPinnedParams(page, expectedPinnedIds);
   await expectPinAllDisabledAtPinLimit(page);
   await expectPinnedRows(page, expectedPinnedIds);
@@ -377,19 +377,19 @@ export async function testPinAllExceedsLimit(
 // Tests that pinned items restored from the URL are capped at the pin limit. Expects a page already
 // navigated to with more pinned query params than the limit allows.
 // pinnedIds - the ids the URL carries, in the table's sort order, more than
-//             MAX_PINNED_ITEMS of them. The first MAX_PINNED_ITEMS survive the cap.
+//             MAX_PIN_LIMIT of them. The first MAX_PIN_LIMIT survive the cap.
 // searchTerm - a term leaving unpinned matches behind, so the Pin All button renders
 export async function testUrlPinsExceedingLimitAreCapped(
   page: Page,
   pinnedIds: string[],
   searchTerm: string,
 ) {
-  expect(pinnedIds.length).toBeGreaterThan(MAX_PINNED_ITEMS);
-  const expectedPinnedIds = pinnedIds.slice(0, MAX_PINNED_ITEMS);
+  expect(pinnedIds.length).toBeGreaterThan(MAX_PIN_LIMIT);
+  const expectedPinnedIds = pinnedIds.slice(0, MAX_PIN_LIMIT);
 
-  await expectToastDetail(page, getMaxPinnedItemsWarning(MAX_PINNED_ITEMS, MAX_PINNED_ITEMS));
+  await expectToastDetail(page, getPinLimitWarning(MAX_PIN_LIMIT, MAX_PIN_LIMIT));
   await expectPinnedParams(page, expectedPinnedIds);
-  await expectPinnedResultsCount(page, MAX_PINNED_ITEMS);
+  await expectPinnedResultsCount(page, MAX_PIN_LIMIT);
   await expectPinnedRows(page, expectedPinnedIds);
 
   await searchViaFilterbox(page, searchTerm);

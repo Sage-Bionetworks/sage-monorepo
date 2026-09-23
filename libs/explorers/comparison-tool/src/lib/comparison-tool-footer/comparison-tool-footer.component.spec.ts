@@ -16,7 +16,7 @@ function getMockService(
   isInitialized = true,
 ) {
   return {
-    totalResultsCount: signal(totalResults),
+    unpinnedRowCount: signal(totalResults),
     pageSize: signal(pageSize),
     first: signal(pageNumber * pageSize),
     pageSizeOptions: VALID_PAGE_SIZES,

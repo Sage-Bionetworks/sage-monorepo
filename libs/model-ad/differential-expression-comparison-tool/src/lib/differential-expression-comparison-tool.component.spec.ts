@@ -209,7 +209,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
       expect(getProteomicsSpy).not.toHaveBeenCalled();
       expect(fetchUnpinnedSpy).toHaveBeenCalled();
       expect(comparisonToolService.unpinnedData()).toEqual([]);
-      expect(comparisonToolService.totalResultsCount()).toBe(0);
+      expect(comparisonToolService.unpinnedRowCount()).toBe(0);
       expect(comparisonToolService.isLoadingTableData()).toBe(false);
     });
 
@@ -227,7 +227,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
       expect(getProteomicsSpy).not.toHaveBeenCalled();
       expect(fetchPinnedSpy).toHaveBeenCalled();
       expect(comparisonToolService.pinnedData()).toEqual([]);
-      expect(comparisonToolService.pinnedResultsCount()).toBe(0);
+      expect(comparisonToolService.pinnedRowCount()).toBe(0);
       expect(comparisonToolService.isLoadingTableData()).toBe(false);
     });
 

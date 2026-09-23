@@ -23,9 +23,9 @@ import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
 import {
   COMPARISON_TOOL_BODY_CLASS,
-  TABLE_DATA_LOADING_TOOLTIP,
   PIN_ALL_TOOLTIP,
   PINNED_RESULTS_CONTROLS,
+  TABLE_DATA_LOADING_TOOLTIP,
 } from './comparison-tool-table.constants';
 import {
   clampAndFormatWidths,
@@ -57,12 +57,12 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   tableElement = viewChild<ElementRef>('table');
 
-  pinnedResultsCount = this.comparisonToolService.pinnedResultsCount;
-  maxPinnedItems = this.comparisonToolService.maxPinnedItems;
-  hasMaxPinnedItems = this.comparisonToolService.hasMaxPinnedItems;
+  pinnedRowCount = this.comparisonToolService.pinnedRowCount;
+  pinLimit = this.comparisonToolService.pinLimit;
+  hasReachedPinLimit = this.comparisonToolService.hasReachedPinLimit;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
   isLoadingTableData = this.comparisonToolService.isLoadingTableData;
-  totalResultsCount = this.comparisonToolService.totalResultsCount;
+  unpinnedRowCount = this.comparisonToolService.unpinnedRowCount;
   viewConfig = this.comparisonToolService.viewConfig;
 
   searchTerm = this.comparisonToolFilterService.searchTerm;
@@ -78,7 +78,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   readonly pinnedResultsControls = PINNED_RESULTS_CONTROLS;
 
   pinAllTooltip = computed(() => {
-    if (this.hasMaxPinnedItems()) return this.disabledPinTooltip();
+    if (this.hasReachedPinLimit()) return this.disabledPinTooltip();
     return this.isLoadingTableData() ? TABLE_DATA_LOADING_TOOLTIP : PIN_ALL_TOOLTIP;
   });
 

@@ -11,7 +11,7 @@ import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
 import { PrimaryIdentifierControlsComponent } from './primary-identifier-controls.component';
 
-async function setup(options?: { pinnedItems?: string[]; maxPinnedItems?: number }) {
+async function setup(options?: { pinnedItems?: string[]; pinLimit?: number }) {
   const user = userEvent.setup();
   const viewDetailsClickSpy = jest.fn();
 
@@ -23,7 +23,7 @@ async function setup(options?: { pinnedItems?: string[]; maxPinnedItems?: number
       MessageService,
       ...provideComparisonToolService({
         pinnedItems: options?.pinnedItems,
-        maxPinnedItems: options?.maxPinnedItems,
+        pinLimit: options?.pinLimit,
         viewConfig: { viewDetailsClick: viewDetailsClickSpy },
       }),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
@@ -92,17 +92,17 @@ describe('PrimaryIdentifierControlsComponent', () => {
     expect(service.pinnedItemsSet().size).toBe(2);
   });
 
-  it('should disable pin button when max pinned items is reached and not currently pinned', async () => {
+  it('should disable pin button when the pin limit is reached and not currently pinned', async () => {
     const { pinButton } = await setup({
-      maxPinnedItems: 2,
+      pinLimit: 2,
       pinnedItems: ['68fff1aaeb12b9674515fd5a', '68fff1aaeb12b9674515fd59'],
     });
     expect(pinButton).toBeDisabled();
   });
 
-  it('should allow unpinning when max pinned items is reached and item is pinned', async () => {
+  it('should allow unpinning when the pin limit is reached and item is pinned', async () => {
     const { pinButton, user, service } = await setup({
-      maxPinnedItems: 2,
+      pinLimit: 2,
       pinnedItems: ['68fff1aaeb12b9674515fd58', '68fff1aaeb12b9674515fd59'],
     });
     expect(pinButton).not.toBeDisabled();
@@ -144,9 +144,9 @@ describe('PrimaryIdentifierControlsComponent', () => {
     expect(tooltip).toHaveTextContent('Unpin this row');
   });
 
-  it('should display correct tooltip when max pinned items reached and not currently pinned', async () => {
+  it('should display correct tooltip when the pin limit is reached and not currently pinned', async () => {
     const { pinButton, user } = await setup({
-      maxPinnedItems: 2,
+      pinLimit: 2,
       pinnedItems: ['68fff1aaeb12b9674515fd5a', '68fff1aaeb12b9674515fd59'],
     });
     await user.hover(pinButton);

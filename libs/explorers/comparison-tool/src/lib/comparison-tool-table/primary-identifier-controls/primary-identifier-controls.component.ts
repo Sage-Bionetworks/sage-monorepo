@@ -24,8 +24,8 @@ export class PrimaryIdentifierControlsComponent {
     return this.id();
   }
 
-  maxPinnedItems = this.comparisonToolService.maxPinnedItems;
-  hasMaxPinnedItems = this.comparisonToolService.hasMaxPinnedItems;
+  pinLimit = this.comparisonToolService.pinLimit;
+  hasReachedPinLimit = this.comparisonToolService.hasReachedPinLimit;
   viewConfig = this.comparisonToolService.viewConfig;
 
   isPinned = computed(() => {
@@ -33,7 +33,7 @@ export class PrimaryIdentifierControlsComponent {
   });
 
   isPinDisabled = computed(() => {
-    return !this.isPinned() && this.hasMaxPinnedItems();
+    return !this.isPinned() && this.hasReachedPinLimit();
   });
 
   pinTooltip = computed(() => {

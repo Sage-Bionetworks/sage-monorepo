@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
+import { MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
 import {
   ColumnConfig,
   expectCategories,
@@ -298,7 +298,7 @@ test.describe('differential expression', () => {
     const searchTerm = 'a';
     const transcriptomics = await fetchTranscriptomics(page, categories, modelsFilterParams, {
       search: searchTerm,
-      remainingBudget: MAX_PINNED_ITEMS,
+      remainingBudget: MAX_PIN_LIMIT,
     });
 
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
@@ -317,7 +317,7 @@ test.describe('differential expression', () => {
       search: searchTerm,
     });
     // More pins than the limit allows, while staying within the 100 rows a single request returns
-    const urlPinnedCount = MAX_PINNED_ITEMS + 10;
+    const urlPinnedCount = MAX_PIN_LIMIT + 10;
     const pinnedItems = transcriptomics.slice(0, urlPinnedCount).map((row) => row.composite_id);
     expect(pinnedItems).toHaveLength(urlPinnedCount);
 
