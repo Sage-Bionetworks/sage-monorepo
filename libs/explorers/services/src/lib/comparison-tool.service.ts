@@ -11,13 +11,14 @@ import {
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
   HeatmapDetailsPanelData,
+  PinnedItemsQuery,
   SortOrder,
 } from '@sagebionetworks/explorers/models';
-import { isEqual } from 'lodash';
+import { isEqual, xor } from 'lodash';
 import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
-import { catchError, combineLatest, finalize, of, Subject, switchMap } from 'rxjs';
+import { catchError, combineLatest, finalize, map, of, Subject, switchMap } from 'rxjs';
 import { VALID_PAGE_SIZES } from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
@@ -40,6 +41,21 @@ export const DEFAULT_COLUMN_WIDTH_PX = 300;
 export interface ComparisonToolFetchResult<T> {
   data: T[];
   totalCount: number;
+}
+
+/** A pinned fetch result tagged with the parent id data key that was active when it was requested. */
+interface PinnedFetchResult<T> extends ComparisonToolFetchResult<T> {
+  parentIdDataKey: string | null;
+}
+
+/**
+ * The pair of data keys that identifies a view's id space. Views that share a row key can still
+ * differ by parent key (e.g. RNA and Protein both key rows by `composite_id`), so only the pair
+ * tells them apart.
+ */
+interface ViewIdentity {
+  rowIdDataKey: string;
+  parentIdDataKey: string | null;
 }
 
 /**
@@ -117,6 +133,11 @@ export class ComparisonToolService<T> {
     searchTerm: null,
     filters: [],
   });
+  private readonly pinnedItemsIdentitySignal = signal<ViewIdentity | null>(null);
+  // Compared as a set: the same parents in any order, with or without duplicates, are unchanged.
+  private readonly pinnedParentsSignal = signal<string[]>([], {
+    equal: (a, b) => xor(a, b).length === 0,
+  });
   private readonly isInitializedSignal = signal(false);
   private readonly heatmapDetailsPanelDataSignal = signal<{
     data: HeatmapDetailsPanelData;
@@ -133,10 +154,10 @@ export class ComparisonToolService<T> {
   //
   // Typed with `unknown` rather than `T`: the coordinator tracks the active CT service as
   // ComparisonToolService<unknown>, and a `Subject<...T...>` field would make that assignment
-  // a compile error. The public fetch methods stay strongly typed, and the stream subscription
-  // casts the result object back to `T[]`.
+  // a compile error. The public fetch methods stay strongly typed, and each stream's apply callback
+  // casts the result data back to `T[]`.
   private readonly unpinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
-  private readonly pinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
+  private readonly pinnedFetch$ = new Subject<Observable<PinnedFetchResult<unknown>>>();
 
   // Connect-Time Dependencies
   private pinAllFetch?: PinAllFetch<T>;
@@ -153,6 +174,8 @@ export class ComparisonToolService<T> {
   readonly pinLimit = this.pinLimitSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
+  // Unique parent ids of the pinned rows, in row order. Empty if their view has no parent key.
+  readonly pinnedParents = this.pinnedParentsSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
   readonly isFilterPanelOpen = this.isFilterPanelOpenSignal.asReadonly();
@@ -191,6 +214,11 @@ export class ComparisonToolService<T> {
   );
   readonly parentIdDataKey = computed(() => this.currentConfig()?.parent_id_data_key || null);
 
+  private readonly activeIdentity = computed<ViewIdentity>(
+    () => ({ rowIdDataKey: this.rowIdDataKey(), parentIdDataKey: this.parentIdDataKey() }),
+    { equal: isEqual },
+  );
+
   readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
     const config = this.currentConfig();
     if (!config) return [];
@@ -210,6 +238,29 @@ export class ComparisonToolService<T> {
   loadingRowCount = computed(() => this.currentConfig()?.row_count ?? '');
   unpinnedRowCount = signal<number>(0);
   pinnedRowCount = computed(() => this.pinnedData().length);
+  readonly pinnedParentsSet = computed(() => new Set(this.pinnedParents()));
+  readonly pinnedParentCount = computed(() => this.pinnedParents().length);
+
+  /**
+   * The pins to send with a query, and the id space they are in. By default this is the pinned items
+   * cache, sent as row ids. The exception is a view whose identity differs from the one the cache
+   * was recorded under, such as Protein after pinning in RNA. The cache holds the other view's row
+   * ids, so the pinned parents are sent instead, matched against the active view's parent key.
+   *
+   * The pinned parents are read from the latest pinned rows. So if a pinned parent has no rows in
+   * the active view, it is no longer sent once that view's pinned rows arrive. The pinned items
+   * cache still holds its row ids, so switching back to the view it was pinned in restores it.
+   */
+  readonly pinnedItemsQuery = computed<PinnedItemsQuery>(
+    () => {
+      const identity = this.pinnedItemsIdentitySignal();
+      if (identity === null || isEqual(identity, this.activeIdentity())) {
+        return { items: this.pinnedItems(), itemIdSpace: 'row' };
+      }
+      return { items: this.pinnedParents(), itemIdSpace: 'parent' };
+    },
+    { equal: isEqual },
+  );
 
   hasReachedPinLimit = computed(() => {
     return this.pinnedRowCount() >= this.pinLimit();
@@ -221,14 +272,22 @@ export class ComparisonToolService<T> {
 
   constructor() {
     // Unpinned rows are paged, so totalCount is the cross-page total used for pagination.
-    this.subscribeToFetchStream(this.unpinnedFetch$, ({ data, totalCount }) => {
-      this.unpinnedDataSignal.set(data);
-      this.unpinnedRowCount.set(totalCount);
-    });
+    this.subscribeToFetchStream(
+      this.unpinnedFetch$,
+      { data: [], totalCount: 0 },
+      ({ data, totalCount }) => {
+        this.unpinnedDataSignal.set(data as T[]);
+        this.unpinnedRowCount.set(totalCount);
+      },
+    );
 
     // Pinned rows are never paged: applyPinnedData enforces the pin cap and the count comes from
     // pinnedData(), so totalCount from the response is unused and therefore is omitted intentionally.
-    this.subscribeToFetchStream(this.pinnedFetch$, ({ data }) => this.applyPinnedData(data));
+    this.subscribeToFetchStream(
+      this.pinnedFetch$,
+      { data: [], totalCount: 0, parentIdDataKey: null },
+      ({ data, parentIdDataKey }) => this.applyPinnedData(data as T[], parentIdDataKey),
+    );
 
     effect(() => {
       if (this.isLoadingTableData()) return;
@@ -669,9 +728,18 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    this.updateQuery({
-      pinnedItems: deduplicatedItems,
-    });
+    this.writePinnedItems(deduplicatedItems);
+  }
+
+  /**
+   * The only writer of the pinned items cache and of the view identity it is recorded under. Both
+   * are always written together, and the identity is always the active view's, because pins are
+   * always made against the active view's rows. That is what lets `pinnedItemsQuery` trust that the
+   * cached ids are row ids of the recorded view.
+   */
+  private writePinnedItems(items: string[]) {
+    this.querySignal.update((current) => ({ ...current, pinnedItems: items }));
+    this.pinnedItemsIdentitySignal.set(this.activeIdentity());
   }
 
   resetPinnedItems() {
@@ -731,16 +799,23 @@ export class ComparisonToolService<T> {
    * count. That would loop forever, except `setPinnedItems` skips the rewrite when the new id list
    * equals the current pins -- which it does on the second pass -- so the cycle stops.
    */
-  private applyPinnedData(pinnedData: T[]) {
+  private applyPinnedData(pinnedData: T[], parentIdDataKey: string | null) {
     const pinLimit = this.pinLimit();
     if (pinnedData.length > pinLimit) {
       const trimmedData = pinnedData.slice(0, pinLimit);
-      this.pinnedDataSignal.set(trimmedData);
+      this.setPinnedData(trimmedData, parentIdDataKey);
       this.showPinLimitWarning(trimmedData.length);
       this.setPinnedItems(this.extractRowIds(trimmedData));
     } else {
-      this.pinnedDataSignal.set(pinnedData);
+      this.setPinnedData(pinnedData, parentIdDataKey);
     }
+  }
+
+  private setPinnedData(pinnedData: T[], parentIdDataKey: string | null) {
+    this.pinnedDataSignal.set(pinnedData);
+    this.pinnedParentsSignal.set(
+      parentIdDataKey ? this.extractUniqueDataKeyValues(pinnedData, parentIdDataKey) : [],
+    );
   }
 
   // Row selection
@@ -791,21 +866,22 @@ export class ComparisonToolService<T> {
    * request to an empty result and keeps the outer stream alive for the next fetch. Error logging
    * and user notification are handled centrally by `httpErrorInterceptor`, so this is cleanup only.
    */
-  private subscribeToFetchStream(
-    fetch$: Subject<Observable<ComparisonToolFetchResult<unknown>>>,
-    applyResult: (result: ComparisonToolFetchResult<T>) => void,
+  private subscribeToFetchStream<R extends ComparisonToolFetchResult<unknown>>(
+    fetch$: Subject<Observable<R>>,
+    emptyResult: R,
+    applyResult: (result: R) => void,
   ): void {
     fetch$
       .pipe(
         switchMap((source$) =>
           source$.pipe(
             finalize(() => this.completeFetch()),
-            catchError(() => of<ComparisonToolFetchResult<unknown>>({ data: [], totalCount: 0 })),
+            catchError(() => of(emptyResult)),
           ),
         ),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe((result) => applyResult(result as ComparisonToolFetchResult<T>));
+      .subscribe(applyResult);
   }
 
   /**
@@ -820,10 +896,16 @@ export class ComparisonToolService<T> {
   /**
    * Fetches pinned rows from the given result observable. Independent of the unpinned stream, so a
    * new pinned fetch does not cancel an in-flight unpinned fetch (and vice versa).
+   *
+   * The parent key is snapshotted now, when the request is made, and travels with its result, so
+   * `pinnedParents` is always read with the key the rows were fetched under. `switchMap` only
+   * applies the latest request's response, and that request was made under the latest config, so
+   * the snapshot and the rows always agree.
    */
   fetchPinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
+    const parentIdDataKey = this.parentIdDataKey();
     this.startFetch();
-    this.pinnedFetch$.next(source$);
+    this.pinnedFetch$.next(source$.pipe(map((result) => ({ ...result, parentIdDataKey }))));
   }
 
   /** Call before starting a data fetch to increment loading counter */
@@ -837,7 +919,7 @@ export class ComparisonToolService<T> {
   }
 
   // Query & pagination
-  updateQuery(query: Partial<ComparisonToolQuery>) {
+  updateQuery(query: Partial<Omit<ComparisonToolQuery, 'pinnedItems'>>) {
     this.querySignal.update((current) => ({
       ...current,
       ...query,
@@ -870,8 +952,7 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    // Preserve current pins and filters when changing dropdown selection
-    const currentPins = this.pinnedItems();
+    // Preserve current filters when changing dropdown selection
     const selectedFilters = this.selectedFilters();
 
     // Load filters from the new config and attempt to apply any previous selections
@@ -881,7 +962,6 @@ export class ComparisonToolService<T> {
     this.updateQuery({
       categories: selection,
       filters: newFiltersWithSelections,
-      pinnedItems: currentPins,
       pageNumber: this.FIRST_PAGE_NUMBER,
     });
   }
@@ -1010,7 +1090,7 @@ export class ComparisonToolService<T> {
     }
 
     // Batch all query changes to avoid multiple updateQuery() calls
-    const queryUpdates: Partial<ComparisonToolQuery> = {};
+    const queryUpdates: Partial<Omit<ComparisonToolQuery, 'pinnedItems'>> = {};
 
     // On first load, categories/sort/filters are already initialized in initializeFromConfig.
     // Only pinned items need to be resolved here. For subsequent navigations, all values
@@ -1041,15 +1121,16 @@ export class ComparisonToolService<T> {
       }
     }
 
-    // Pinned items
-    const resolvedPinnedItems = this.resolvePinnedItemsFromUrl(params.pinnedItems);
-    if (resolvedPinnedItems !== null) {
-      queryUpdates.pinnedItems = resolvedPinnedItems;
-    }
-
     // Apply all batched changes in a single update
     if (Object.keys(queryUpdates).length > 0) {
       this.updateQuery(queryUpdates);
+    }
+
+    // Written after the category update, so URL pins are recorded in the row space of the view the
+    // URL selects. Tokens from another view's space then match nothing and drop out.
+    const resolvedPinnedItems = this.resolvePinnedItemsFromUrl(params.pinnedItems);
+    if (resolvedPinnedItems !== null) {
+      this.writePinnedItems(resolvedPinnedItems);
     }
 
     if (!options.isFirstLoad) {
@@ -1180,6 +1261,10 @@ export class ComparisonToolService<T> {
 
   private extractRowIds(rows: T[]): string[] {
     return rows.map((row) => this.rowId(row));
+  }
+
+  private extractUniqueDataKeyValues(rows: T[], key: string): string[] {
+    return Array.from(new Set(rows.map((row) => this.readDataKey(row, key))));
   }
 
   rowId(row: T): string {

@@ -216,6 +216,259 @@ describe('ComparisonToolService', () => {
     });
   });
 
+  describe('pinned items cache identity and pinned parents', () => {
+    // Mirrors the Model-AD DE CT: the parent view is RNA and the child view is Protein.
+    const UI_CONFIG_ROW_ID_DATA_KEY = 'id';
+    const UI_CONFIG_PARENT_VIEW_PARENT_ID_DATA_KEY = 'id';
+    const UI_CONFIG_CHILD_VIEW_PARENT_ID_DATA_KEY = 'parent_id';
+
+    const PARENT_VIEW = ['Parent', 'A'];
+    const OTHER_PARENT_VIEW = ['Parent', 'B'];
+    const CHILD_VIEW = ['Child', 'A'];
+
+    const PARENT_VIEW_IDENTITY = {
+      rowIdDataKey: UI_CONFIG_ROW_ID_DATA_KEY,
+      parentIdDataKey: UI_CONFIG_PARENT_VIEW_PARENT_ID_DATA_KEY,
+    };
+    const CHILD_VIEW_IDENTITY = {
+      rowIdDataKey: UI_CONFIG_ROW_ID_DATA_KEY,
+      parentIdDataKey: UI_CONFIG_CHILD_VIEW_PARENT_ID_DATA_KEY,
+    };
+
+    const parentViewConfig = (dropdowns: string[]): ComparisonToolConfig => ({
+      ...mockComparisonToolDataConfig[0],
+      dropdowns,
+      row_id_data_key: UI_CONFIG_ROW_ID_DATA_KEY,
+      parent_id_data_key: UI_CONFIG_PARENT_VIEW_PARENT_ID_DATA_KEY,
+    });
+    const viewConfigs: ComparisonToolConfig[] = [
+      parentViewConfig(PARENT_VIEW),
+      parentViewConfig(OTHER_PARENT_VIEW),
+      {
+        ...mockComparisonToolDataConfig[0],
+        dropdowns: CHILD_VIEW,
+        row_id_data_key: UI_CONFIG_ROW_ID_DATA_KEY,
+        parent_id_data_key: UI_CONFIG_CHILD_VIEW_PARENT_ID_DATA_KEY,
+      },
+    ];
+
+    const parentRow = (id: string): Row => ({ [UI_CONFIG_ROW_ID_DATA_KEY]: id });
+    const childRow = (id: string, parentId: string): Row => ({
+      [UI_CONFIG_ROW_ID_DATA_KEY]: id,
+      [UI_CONFIG_CHILD_VIEW_PARENT_ID_DATA_KEY]: parentId,
+    });
+    const landPinned = (...rows: Row[]) =>
+      service.fetchPinned(of({ data: rows, totalCount: rows.length }));
+    const recordedIdentity = () => (service as any).pinnedItemsIdentitySignal();
+
+    const pinInParentView = (...ids: string[]) => {
+      service.setPinnedItems(ids);
+      landPinned(...ids.map(parentRow));
+    };
+
+    it('tells the parent and child views apart only by the parent key', () => {
+      expect(PARENT_VIEW_IDENTITY.rowIdDataKey).toBe(CHILD_VIEW_IDENTITY.rowIdDataKey);
+      expect(PARENT_VIEW_IDENTITY.parentIdDataKey).not.toBe(CHILD_VIEW_IDENTITY.parentIdDataKey);
+    });
+
+    describe('identity', () => {
+      it('records the active pair on a pin edit', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+
+        service.pinItem('child1a');
+
+        expect(recordedIdentity()).toEqual(CHILD_VIEW_IDENTITY);
+      });
+
+      it('records the pair of the view a URL change selects', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+
+        paramsSubject.next({ categories: CHILD_VIEW, pinnedItems: ['child1a'] });
+
+        expect(service.dropdownSelection()).toEqual(CHILD_VIEW);
+        expect(recordedIdentity()).toEqual(CHILD_VIEW_IDENTITY);
+      });
+
+      it('records the active pair on a pin-all', () => {
+        const pinAllFetch: PinAllFetch<Row> = () =>
+          of({ rows: [childRow('child1a', 'parent1')], totalElements: 1 });
+        connectService(viewConfigs, { selection: CHILD_VIEW, pinAllFetch });
+
+        service.pinAll();
+
+        expect(service.pinnedItems()).toEqual(['child1a']);
+        expect(recordedIdentity()).toEqual(CHILD_VIEW_IDENTITY);
+      });
+
+      it('leaves the recorded pair alone on a dropdown change', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+
+        service.setDropdownSelection(CHILD_VIEW);
+
+        expect(recordedIdentity()).toEqual(PARENT_VIEW_IDENTITY);
+      });
+
+      it('records the URL view pair before initialization completes', () => {
+        const isInitializedSignal = (injectService() as any).isInitializedSignal;
+        const setInitialized = isInitializedSignal.set.bind(isInitializedSignal);
+        let identityWhenInitialized: unknown;
+        jest.spyOn(isInitializedSignal, 'set').mockImplementation((value) => {
+          identityWhenInitialized = recordedIdentity();
+          setInitialized(value);
+        });
+
+        connectService(viewConfigs, {
+          initialParams: { categories: CHILD_VIEW, pinnedItems: ['child1a'] },
+        });
+
+        expect(identityWhenInitialized).toEqual(CHILD_VIEW_IDENTITY);
+      });
+    });
+
+    describe('pinnedItemsQuery', () => {
+      it('sends empty items in row space with no pins and no URL', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+
+        expect(recordedIdentity()).toBeNull();
+        expect(service.pinnedItemsQuery()).toEqual({ items: [], itemIdSpace: 'row' });
+      });
+
+      it('keeps the cache in row space while the recorded view is active', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'row',
+        });
+      });
+
+      it('keeps the cache in row space across a dropdown change to another view with the same identity', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+
+        service.setDropdownSelection(OTHER_PARENT_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'row',
+        });
+      });
+
+      it('sends the pinned parents in parent space after switching from the parent view to the child view', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+
+        service.setDropdownSelection(CHILD_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'parent',
+        });
+      });
+
+      it('does not change when the child rows land with the same parents in another order', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+        service.setDropdownSelection(CHILD_VIEW);
+        const queryBeforeLanding = service.pinnedItemsQuery();
+
+        landPinned(
+          childRow('child2a', 'parent2'),
+          childRow('child1a', 'parent1'),
+          childRow('child1b', 'parent1'),
+        );
+
+        expect(service.pinnedItemsQuery()).toBe(queryBeforeLanding);
+      });
+
+      it('re-records the child view pair on a pin edit in the child view', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+        service.setDropdownSelection(CHILD_VIEW);
+        landPinned(
+          childRow('child1a', 'parent1'),
+          childRow('child1b', 'parent1'),
+          childRow('child2a', 'parent2'),
+        );
+
+        service.unpinItem('child1b');
+
+        expect(recordedIdentity()).toEqual(CHILD_VIEW_IDENTITY);
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['child1a', 'child2a'],
+          itemIdSpace: 'row',
+        });
+      });
+
+      it('sends URL pins in the row space of the active view', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        service.setDropdownSelection(CHILD_VIEW);
+
+        paramsSubject.next({ categories: CHILD_VIEW, pinnedItems: ['child2a'] });
+
+        expect(service.pinnedItemsQuery()).toEqual({ items: ['child2a'], itemIdSpace: 'row' });
+      });
+
+      it('settles after one refetch when a parent has no rows in the child view, and restores it in the parent view', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+        service.setDropdownSelection(CHILD_VIEW);
+
+        landPinned(childRow('child1a', 'parent1'));
+        const queryAfterFanOut = service.pinnedItemsQuery();
+        expect(queryAfterFanOut).toEqual({ items: ['parent1'], itemIdSpace: 'parent' });
+
+        landPinned(childRow('child1a', 'parent1'));
+        expect(service.pinnedItemsQuery()).toBe(queryAfterFanOut);
+
+        service.setDropdownSelection(PARENT_VIEW);
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'row',
+        });
+      });
+    });
+
+    describe('pinnedParents', () => {
+      it('reads unique parents in row order with the parent key of the fetched view', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+
+        landPinned(
+          childRow('child2a', 'parent2'),
+          childRow('child1a', 'parent1'),
+          childRow('child2b', 'parent2'),
+        );
+
+        expect(service.pinnedParents()).toEqual(['parent2', 'parent1']);
+        expect(service.pinnedParentCount()).toBe(2);
+        expect(service.pinnedParentsSet().has('parent1')).toBe(true);
+      });
+
+      it('reads the parent key active when the fetch was requested, not when it lands', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        const pinnedResponse$ = new Subject<{ data: Row[]; totalCount: number }>();
+        service.fetchPinned(pinnedResponse$);
+
+        service.setDropdownSelection(CHILD_VIEW);
+        pinnedResponse$.next({ data: [parentRow('parent1')], totalCount: 1 });
+
+        expect(service.pinnedParents()).toEqual(['parent1']);
+      });
+
+      it('is empty when the view has no parent key', () => {
+        connectService(mockComparisonToolDataConfig);
+
+        landPinned({ _id: 'id1' }, { _id: 'id2' });
+
+        expect(service.parentIdDataKey()).toBeNull();
+        expect(service.pinnedParents()).toEqual([]);
+      });
+    });
+  });
+
   describe('global pinned items cache', () => {
     const mockConfigs: ComparisonToolConfig[] = [
       {

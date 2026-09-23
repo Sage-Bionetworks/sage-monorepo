@@ -55,6 +55,13 @@ export interface ComparisonToolQuery {
   filters: ComparisonToolFilter[];
 }
 
+export type ItemIdSpace = 'row' | 'parent';
+
+export interface PinnedItemsQuery {
+  items: string[];
+  itemIdSpace: ItemIdSpace;
+}
+
 export interface ComparisonToolViewConfig {
   selectorsWikiParams: Record<string, SynapseWikiParams>;
   headerTitle: string;
