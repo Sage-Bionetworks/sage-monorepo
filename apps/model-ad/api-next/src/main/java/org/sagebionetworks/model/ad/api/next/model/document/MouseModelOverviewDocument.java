@@ -29,6 +29,8 @@ public class MouseModelOverviewDocument {
 
   private @Nullable Link transcriptomics;
 
+  private @Nullable Link proteomics;
+
   @Field("disease_correlation")
   private @Nullable Link diseaseCorrelation;
 
