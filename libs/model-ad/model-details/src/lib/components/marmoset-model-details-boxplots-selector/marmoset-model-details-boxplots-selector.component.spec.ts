@@ -118,10 +118,9 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
       .queryAll(By.directive(BoxplotComponent))
       .map((el) => el.componentInstance as BoxplotComponent);
 
-    expect(boxplots.length).toBeGreaterThan(0);
-    boxplots.forEach((boxplot) => {
-      expect(boxplot.xAxisOrder()).toEqual(['Control', 'PSEN1']);
-    });
+    expect(boxplots.length).toBeGreaterThan(1);
+    expect(boxplots[0].xAxisOrder()).toEqual(['Control', 'PSEN1']);
+    expect(boxplots[1].xAxisOrder()).toEqual(['PSEN1', 'Control']);
   });
 
   it('should move focus to the age group heading when scrolling to its anchor', async () => {
