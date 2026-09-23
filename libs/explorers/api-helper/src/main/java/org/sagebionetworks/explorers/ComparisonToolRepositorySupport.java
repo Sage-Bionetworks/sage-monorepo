@@ -245,35 +245,37 @@ public abstract class ComparisonToolRepositorySupport<T> {
     CtQueryOptions options
   ) {
     try {
-      CtSortPlan sortPlan = buildSortPlan(
-        pageable.getSort(),
-        getComputedSortFieldExpressions(),
-        getSortFieldAliases()
-      );
-
       BudgetMode budgetMode = resolveBudgetMode(options);
       Criteria rowCriteria = budgetMode == BudgetMode.CAPS_PARENTS
-        ? buildAdmittedParentsCriteria(matchCriteria, sortPlan, options)
+        ? buildAdmittedParentsCriteria(matchCriteria, pageable.getSort(), options)
         : matchCriteria;
 
       List<AggregationOperation> operations = new ArrayList<>();
       operations.add(Aggregation.match(rowCriteria));
-      operations.addAll(sortPlan.prepStages());
-      if (sortPlan.sortDoc() != null) {
-        operations.add(sortStage(sortPlan.sortDoc()));
+
+      Map<String, ComputedSortField> computedFields = getComputedSortFieldExpressions();
+      Map<String, String> aliases = getSortFieldAliases();
+
+      operations.addAll(buildSortPrepStages(pageable.getSort(), computedFields, aliases));
+
+      // Build and add sort operation
+      AggregationOperation sort = buildSortOperation(pageable.getSort(), computedFields, aliases);
+      if (sort != null) {
+        operations.add(sort);
       }
-      switch (budgetMode) {
-        case NONE -> {
-          long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
-          operations.add(Aggregation.skip(skipCount));
-          operations.add(Aggregation.limit(pageable.getPageSize()));
-        }
-        case CAPS_ROWS -> operations.add(Aggregation.limit(options.remainingBudget()));
-        case CAPS_PARENTS -> {
+
+      operations.addAll(
+        switch (budgetMode) {
+          case NONE -> List.of(
+            Aggregation.skip((long) pageable.getPageNumber() * pageable.getPageSize()),
+            Aggregation.limit(pageable.getPageSize())
+          );
+          case CAPS_ROWS -> List.of(Aggregation.limit(options.remainingBudget()));
           // No $skip or $limit: the $match already names the admitted parents, and every row of
           // each is wanted
+          case CAPS_PARENTS -> List.of();
         }
-      }
+      );
 
       // Permits disk spillover when the $sort working set exceeds 100MB; only activates
       // when needed -- required for deep pagination on large collections
@@ -382,12 +384,12 @@ public abstract class ComparisonToolRepositorySupport<T> {
    */
   private Criteria buildAdmittedParentsCriteria(
     Criteria matchCriteria,
-    CtSortPlan sortPlan,
+    Sort sort,
     CtQueryOptions options
   ) {
     Set<String> admitted = new LinkedHashSet<>(options.prebudgetedParentIds());
     if (options.remainingBudget() > 0) {
-      admitted.addAll(selectParents(matchCriteria, sortPlan, options));
+      admitted.addAll(selectParents(matchCriteria, sort, options));
     }
     return new Criteria()
       .andOperator(matchCriteria, resolveParentIdSpace().criteriaForAny(admitted));
@@ -404,34 +406,35 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * <p>The pipeline replays the row pipeline's sort stages, materialises the parent token plus a
    * safe alias per resolved sort path, drops rows with no parent token, sorts rows, collapses them
    * to one document per parent keeping its leading row's sort values, and re-applies the same order
-   * to the parents. It is a query of its own because DocumentDB has no {@code $setWindowFields}, so per-parent admission
-   * cannot be expressed inside the row pipeline.
+   * to the parents. It is a query of its own because DocumentDB has no {@code $setWindowFields},
+   * so per-parent admission cannot be expressed inside the row pipeline.
    */
-  private List<String> selectParents(
-    Criteria matchCriteria,
-    CtSortPlan sortPlan,
-    CtQueryOptions options
-  ) {
+  private List<String> selectParents(Criteria matchCriteria, Sort sort, CtQueryOptions options) {
     ItemIdSpaceDef parentIdSpace = resolveParentIdSpace();
     List<String> prebudgeted = options.prebudgetedParentIds();
     Criteria selectionCriteria = prebudgeted.isEmpty()
       ? matchCriteria
       : new Criteria().andOperator(matchCriteria, parentIdSpace.criteriaForNone(prebudgeted));
 
+    Map<String, ComputedSortField> computedFields = getComputedSortFieldExpressions();
+    Map<String, String> aliases = getSortFieldAliases();
+    Document rowSortDoc = buildSortDoc(sort, computedFields, aliases);
+    Map<String, String> sortKeyAliases = buildSortKeyAliases(sort, rowSortDoc);
+
     List<AggregationOperation> operations = new ArrayList<>();
     operations.add(Aggregation.match(selectionCriteria));
-    operations.addAll(sortPlan.prepStages());
+    operations.addAll(buildSortPrepStages(sort, computedFields, aliases));
 
-    Document tokenFields = buildParentTokenFields(sortPlan, parentIdSpace);
+    Document tokenFields = buildParentTokenFields(sortKeyAliases, parentIdSpace);
     operations.add(context -> new Document("$addFields", tokenFields));
     // A null token names no parent a caller could ask for, so it must not take a budget slot.
     // Only a stored space can emit one: a composite token guards every part with MISSING_PART.
     operations.add(Aggregation.match(Criteria.where(PARENT_TOKEN_FIELD).ne(null)));
-    if (sortPlan.sortDoc() != null) {
-      operations.add(sortStage(sortPlan.sortDoc()));
+    if (rowSortDoc != null) {
+      operations.add(sortStage(rowSortDoc));
     }
 
-    Document parentSortDoc = buildParentSortDoc(sortPlan);
+    Document parentSortDoc = buildParentSortDoc(rowSortDoc, sortKeyAliases);
     Document groupDoc = buildParentGroupDoc(parentSortDoc);
     operations.add(context -> new Document("$group", groupDoc));
     operations.add(sortStage(parentSortDoc));
@@ -456,14 +459,36 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * {@code $first: "$<path>"} can express.
    */
   private static Document buildParentTokenFields(
-    CtSortPlan sortPlan,
+    Map<String, String> sortKeyAliases,
     ItemIdSpaceDef parentIdSpace
   ) {
     Document fields = new Document(PARENT_TOKEN_FIELD, parentIdSpace.tokenExpression());
-    sortPlan
-      .pathAliases()
-      .forEach((path, alias) -> fields.append(alias, ApiHelper.buildPathReadExpr(path)));
+    sortKeyAliases.forEach((path, alias) -> fields.append(alias, ApiHelper.buildPathReadExpr(path))
+    );
     return fields;
+  }
+
+  /**
+   * Maps each resolved sort path in {@code rowSortDoc} to the alias the parent selection reads it
+   * into. The isEmpty flag keys and {@code _id} are left out on purpose: the flags are already
+   * space- and dot-normalised by {@link ApiHelper#isEmptyFlagKey}, and {@code _id} is the
+   * {@code $group} key, so both can be captured under their own names.
+   */
+  private static Map<String, String> buildSortKeyAliases(Sort sort, @Nullable Document rowSortDoc) {
+    if (rowSortDoc == null) {
+      return Map.of();
+    }
+
+    Set<String> flagKeys = new LinkedHashSet<>();
+    sort.forEach(order -> flagKeys.add(ApiHelper.isEmptyFlagKey(order.getProperty())));
+
+    Map<String, String> sortKeyAliases = new LinkedHashMap<>();
+    for (String key : rowSortDoc.keySet()) {
+      if (!ID_FIELD.equals(key) && !flagKeys.contains(key)) {
+        sortKeyAliases.put(key, SORT_KEY_ALIAS_PREFIX + sortKeyAliases.size());
+      }
+    }
+    return sortKeyAliases;
   }
 
   /**
@@ -478,15 +503,17 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * <p>An unsorted request has no row order to reproduce, so parents are ordered by their token,
    * which still makes the admitted set deterministic.
    */
-  private static Document buildParentSortDoc(CtSortPlan sortPlan) {
-    Document rowSortDoc = sortPlan.sortDoc();
+  private static Document buildParentSortDoc(
+    @Nullable Document rowSortDoc,
+    Map<String, String> sortKeyAliases
+  ) {
     if (rowSortDoc == null) {
       return new Document(ID_FIELD, 1);
     }
 
     Document parentSortDoc = new Document();
     rowSortDoc.forEach((key, direction) ->
-      parentSortDoc.append(sortPlan.pathAliases().getOrDefault(key, key), direction)
+      parentSortDoc.append(sortKeyAliases.getOrDefault(key, key), direction)
     );
     return parentSortDoc;
   }
@@ -727,32 +754,55 @@ public abstract class ComparisonToolRepositorySupport<T> {
   }
 
   /**
-   * Plans how a request's sort is realised in a pipeline, so that the row pipeline and the parent
-   * selection cannot order their results differently.
+   * The {@code $addFields} stages that must precede {@code $sort}, in order. Shared by the row
+   * pipeline and the parent selection so the two cannot order their results differently.
    */
-  private CtSortPlan buildSortPlan(
+  private List<AggregationOperation> buildSortPrepStages(
+    Sort sort,
+    Map<String, ComputedSortField> computedFields,
+    Map<String, String> aliases
+  ) {
+    List<AggregationOperation> operations = new ArrayList<>();
+
+    // Inject prerequisites for requested sort fields
+    List<AggregationOperation> prerequisites = buildPrerequisites(sort, computedFields);
+    operations.addAll(prerequisites);
+
+    // Inject computed sort fields
+    AggregationOperation computedSort = buildComputedSortFields(sort, computedFields);
+    if (computedSort != null) {
+      operations.add(computedSort);
+    }
+
+    // Inject empty-flag fields so null/empty values always sort last regardless of direction
+    AggregationOperation emptyFlags = ApiHelper.buildEmptyFlagFields(sort, aliases);
+    if (emptyFlags != null) {
+      operations.add(emptyFlags);
+    }
+
+    return operations;
+  }
+
+  private AggregationOperation buildSortOperation(
+    Sort sort,
+    Map<String, ComputedSortField> computed,
+    Map<String, String> aliases
+  ) {
+    Document sortDoc = buildSortDoc(sort, computed, aliases);
+    return sortDoc == null ? null : sortStage(sortDoc);
+  }
+
+  @Nullable
+  private Document buildSortDoc(
     Sort sort,
     Map<String, ComputedSortField> computed,
     Map<String, String> aliases
   ) {
     if (sort.isUnsorted()) {
-      return new CtSortPlan(List.of(), null, Map.of());
-    }
-
-    // Prerequisites for the requested computed sort fields, then the computed fields themselves
-    List<AggregationOperation> prepStages = new ArrayList<>(buildPrerequisites(sort, computed));
-    AggregationOperation computedSort = buildComputedSortFields(sort, computed);
-    if (computedSort != null) {
-      prepStages.add(computedSort);
-    }
-    // Empty-flag fields so null/empty values always sort last regardless of direction
-    AggregationOperation emptyFlags = ApiHelper.buildEmptyFlagFields(sort, aliases);
-    if (emptyFlags != null) {
-      prepStages.add(emptyFlags);
+      return null;
     }
 
     Document sortDoc = new Document();
-    Map<String, String> pathAliases = new LinkedHashMap<>();
     for (Sort.Order order : sort) {
       String field = order.getProperty();
       String resolved;
@@ -766,9 +816,6 @@ public abstract class ComparisonToolRepositorySupport<T> {
       }
       sortDoc.append(ApiHelper.isEmptyFlagKey(field), 1);
       sortDoc.append(resolved, order.isAscending() ? 1 : -1);
-      if (!pathAliases.containsKey(resolved)) {
-        pathAliases.put(resolved, SORT_KEY_ALIAS_PREFIX + pathAliases.size());
-      }
     }
     // Break ties on _id so equal sort values keep a stable order across pages. Skip when the
     // caller already sorts by _id -- re-appending would overwrite their direction.
@@ -776,28 +823,10 @@ public abstract class ComparisonToolRepositorySupport<T> {
       sortDoc.append(ID_FIELD, 1);
     }
 
-    return new CtSortPlan(prepStages, sortDoc, pathAliases);
+    return sortDoc;
   }
 
   private static AggregationOperation sortStage(Document sortDoc) {
     return context -> new Document("$sort", sortDoc);
   }
-
-  /**
-   * How a request's sort is realised in a pipeline.
-   *
-   * <p>The isEmpty flag keys are absent from {@code pathAliases} on purpose: they are already
-   * space- and dot-normalised by {@link ApiHelper#isEmptyFlagKey}, so a {@code $group} can capture
-   * them under their own names.
-   *
-   * @param prepStages the {@code $addFields} stages that must precede {@code $sort}, in order
-   * @param sortDoc the {@code $sort} document, or null when the request is unsorted
-   * @param pathAliases resolved sort path → the alias it is read into when the same order has to
-   *     be reproduced after a {@code $group}
-   */
-  private record CtSortPlan(
-    List<AggregationOperation> prepStages,
-    @Nullable Document sortDoc,
-    Map<String, String> pathAliases
-  ) {}
 }
