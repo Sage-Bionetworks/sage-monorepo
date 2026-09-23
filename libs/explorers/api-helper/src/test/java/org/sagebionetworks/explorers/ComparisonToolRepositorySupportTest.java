@@ -221,7 +221,7 @@ class ComparisonToolRepositorySupportTest {
     return Stream.generate(TestDocument::new).limit(count).toList();
   }
 
-  /** The row identity space every parent-aware fixture below declares. */
+  /** The row item filter every parent-aware fixture below declares. */
   @SuppressWarnings("unchecked")
   private static <Q> CtFilterConfig<Q> rowIdFilterConfig() {
     return (CtFilterConfig<Q>) CtFilterConfig.<Object>builder()
@@ -236,7 +236,7 @@ class ComparisonToolRepositorySupportTest {
    * product DTOs' {@code parse} does.
    */
   private static Criteria parseParentToken(String token) {
-    String[] parts = token.split(Pattern.quote(ItemIdSpaceDef.DELIMITER), -1);
+    String[] parts = token.split(Pattern.quote(ItemFilterDef.DELIMITER), -1);
     if (parts.length != PARENT_ID_FIELDS.size()) {
       throw new IllegalArgumentException("Invalid parent token: '" + token + "'");
     }
@@ -482,8 +482,8 @@ class ComparisonToolRepositorySupportTest {
     }
 
     @Override
-    protected ItemIdSpaceDef getParentIdSpace() {
-      return ItemIdSpaceDef.stored(PARENT_ID_FIELD);
+    protected ItemFilterDef getParentItemFilter() {
+      return new ItemFilterDef.Simple(PARENT_ID_FIELD);
     }
 
     @Override
@@ -525,8 +525,8 @@ class ComparisonToolRepositorySupportTest {
     }
 
     @Override
-    protected ItemIdSpaceDef getParentIdSpace() {
-      return ItemIdSpaceDef.composite(
+    protected ItemFilterDef getParentItemFilter() {
+      return new ItemFilterDef.Composite(
         PARENT_ID_FIELDS,
         ComparisonToolRepositorySupportTest::parseParentToken
       );
@@ -890,7 +890,7 @@ class ComparisonToolRepositorySupportTest {
     }
 
     @Test
-    @DisplayName("should probe the parent identity space alongside the request's match criteria")
+    @DisplayName("should probe the parent item filter alongside the request's match criteria")
     void shouldProbeParentIdentitySpaceAlongsideMatchCriteria() {
       ParentAwareRepo repo = new ParentAwareRepo(mongoTemplate);
       stubMongoTemplate(0L);
@@ -938,7 +938,7 @@ class ComparisonToolRepositorySupportTest {
     }
 
     @Test
-    @DisplayName("should probe the row identity space when the comparison tool is self-parented")
+    @DisplayName("should probe the row item filter when the comparison tool is self-parented")
     void shouldProbeRowIdentitySpaceWhenSelfParented() {
       SelfParentedRepo repo = new SelfParentedRepo(mongoTemplate);
       stubMongoTemplate(0L);
@@ -1311,7 +1311,7 @@ class ComparisonToolRepositorySupportTest {
       Collection<Object> admittedIds = (Collection<Object>) rowIdClause.get("$in");
       assertThat(admittedIds)
         .as("an exhausted budget frees children of accounted-for parents whether or not the CT has"
-          + " a parent space of its own")
+          + " a parent item filter of its own")
         .containsExactly(PREBUDGETED.toArray());
       assertThat(stages)
         .as("{$limit: 0} is rejected by the server, and free children are unpaged besides")
@@ -1364,7 +1364,7 @@ class ComparisonToolRepositorySupportTest {
       return captor.getValue();
     }
 
-    /** The criteria an identity space builds for {@code tokens}. */
+    /** The criteria an item filter builds for {@code tokens}. */
     private Criteria parentsCriteria(
       List<String> tokens,
       BiFunction<Criteria, Criteria[], Criteria> combine

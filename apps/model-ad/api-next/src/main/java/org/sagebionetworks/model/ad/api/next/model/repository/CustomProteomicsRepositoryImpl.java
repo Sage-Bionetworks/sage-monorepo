@@ -10,7 +10,7 @@ import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.sagebionetworks.explorers.CtFilterConfig;
 import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.explorers.CtQueryOptions;
-import org.sagebionetworks.explorers.ItemIdSpaceDef;
+import org.sagebionetworks.explorers.ItemFilterDef;
 import org.sagebionetworks.model.ad.api.next.model.document.ProteomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemIdSpaceQueryDto;
@@ -114,8 +114,8 @@ public class CustomProteomicsRepositoryImpl
    * {@code ensembl_gene_id~name~sex}, which is what {@code rna_composite_id} carries on the DTO.
    */
   @Override
-  protected ItemIdSpaceDef getParentIdSpace() {
-    return ItemIdSpaceDef.composite(
+  protected ItemFilterDef getParentItemFilter() {
+    return new ItemFilterDef.Composite(
       TranscriptomicsIdentifier.FIELDS,
       item -> TranscriptomicsIdentifier.parse(item).toCriteria()
     );

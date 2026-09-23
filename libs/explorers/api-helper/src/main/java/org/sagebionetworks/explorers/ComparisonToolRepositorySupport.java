@@ -41,7 +41,7 @@ import org.springframework.lang.Nullable;
  * </pre>
  *
  * <p>A budgeted request on a <strong>parent-aware</strong> CT — one overriding
- * {@link #getParentIdSpace()} — spends its budget on parents rather than rows, which takes a
+ * {@link #getParentItemFilter()} — spends its budget on parents rather than rows, which takes a
  * second query. That query, the <em>parent selection</em>, picks the parents in the request's own
  * sort order; the shape above then runs with its {@code $match} narrowed to those parents' rows
  * and neither {@code $skip} nor {@code $limit}. See
@@ -142,21 +142,17 @@ public abstract class ComparisonToolRepositorySupport<T> {
   }
 
   /**
-   * The identity space this CT's rows are identified in — the space {@code items} values are
-   * matched against unless the request asks for the parent space.
-   *
-   * <p>Always the space implied by the item filter in {@link #getFilterConfig()}: a
-   * {@link ItemFilterDef.Simple} item filter identifies rows by its field, a
-   * {@link ItemFilterDef.Composite} one by its parser. Private because any other space would make
-   * row-space matching disagree with the item filter about what an item is.
+   * The item filter this CT's rows are identified by — the one {@code items} values are matched
+   * against unless the request asks for the parent space. Always the item filter in
+   * {@link #getFilterConfig()}.
    */
-  private ItemIdSpaceDef getRowIdSpace() {
-    return ItemIdSpaceDef.fromItemFilter(getFilterConfig().itemFilter());
+  private ItemFilterDef getRowItemFilter() {
+    return getFilterConfig().itemFilter();
   }
 
   /**
-   * The identity space this CT's row <em>parents</em> are identified in, or {@code null} when rows
-   * are their own parents.
+   * The item filter this CT's row <em>parents</em> are identified by, or {@code null} when rows are
+   * their own parents.
    *
    * <p>Overriding this is what makes a CT <strong>parent-aware</strong>: several rows then roll up
    * to one parent, so {@code itemIdSpace: parent} matches {@code items} against the parent token
@@ -168,12 +164,12 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * a parent-aware CT from a self-parented one.
    */
   @Nullable
-  protected ItemIdSpaceDef getParentIdSpace() {
+  protected ItemFilterDef getParentItemFilter() {
     return null;
   }
 
-  private ItemIdSpaceDef resolveParentIdSpace() {
-    return Objects.requireNonNullElseGet(getParentIdSpace(), this::getRowIdSpace);
+  private ItemFilterDef resolveParentItemFilter() {
+    return Objects.requireNonNullElseGet(getParentItemFilter(), this::getRowItemFilter);
   }
 
   /**
@@ -237,7 +233,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
    *
    * @param matchCriteria the assembled match criteria
    * @param pageable pagination and sort; pagination is ignored when the budget applies
-   * @param options the request's include/exclude, budget, prebudgeted parents, and identity space
+   * @param options the request's include/exclude, budget, prebudgeted parents, and item id space
    */
   protected final CtPage<T> executePagedAggregation(
     Criteria matchCriteria,
@@ -333,7 +329,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
     if (options.isInclude() || options.remainingBudget() == null) {
       return BudgetMode.NONE;
     }
-    if (options.remainingBudget() > 0 && getParentIdSpace() == null) {
+    if (options.remainingBudget() > 0 && getParentItemFilter() == null) {
       return BudgetMode.CAPS_ROWS;
     }
     return BudgetMode.CAPS_PARENTS;
@@ -362,7 +358,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
     }
 
     Criteria criteria = new Criteria()
-      .andOperator(matchCriteria, resolveParentIdSpace().criteriaForAny(prebudgetedParentIds));
+      .andOperator(matchCriteria, resolveParentItemFilter().criteriaForAny(prebudgetedParentIds));
     return mongoTemplate.exists(
       new Query(criteria).collation(CASE_INSENSITIVE),
       getCollectionName()
@@ -378,8 +374,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * is illegal — so it skips the selection and matches the prebudgeted parents alone. With
    * no prebudgeted parents either, the criteria match nothing rather than everything, which is what
    * an exhausted budget means:
-   * {@link ItemIdSpaceDef#criteriaForAny(java.util.Collection) criteriaForAny} of no parents
-   * matches no rows in either identity-space variant.
+   * {@link ItemFilterDef#criteriaForAny(java.util.Collection) criteriaForAny} of no parents
+   * matches no rows under either item filter variant.
    *
    * <p>A row with no parent token is never admitted, yet still counts towards
    * {@code totalElements}, so the caller sees it as truncated however large the budget.
@@ -394,7 +390,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
       admitted.addAll(selectParents(matchCriteria, sort, options));
     }
     return new Criteria()
-      .andOperator(matchCriteria, resolveParentIdSpace().criteriaForAny(admitted));
+      .andOperator(matchCriteria, resolveParentItemFilter().criteriaForAny(admitted));
   }
 
   /**
@@ -413,11 +409,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
    */
   private List<String> selectParents(Criteria matchCriteria, Sort sort, CtQueryOptions options) {
     // Exclude the rows of prebudgeted parents
-    ItemIdSpaceDef parentIdSpace = resolveParentIdSpace();
+    ItemFilterDef parentItemFilter = resolveParentItemFilter();
     List<String> prebudgeted = options.prebudgetedParentIds();
     Criteria selectionCriteria = prebudgeted.isEmpty()
       ? matchCriteria
-      : new Criteria().andOperator(matchCriteria, parentIdSpace.criteriaForNone(prebudgeted));
+      : new Criteria().andOperator(matchCriteria, parentItemFilter.criteriaForNone(prebudgeted));
 
     // Build the row pipeline's sort, plus a safe alias for each sort path
     Map<String, ComputedSortField> computedFields = getComputedSortFieldExpressions();
@@ -431,7 +427,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
     operations.addAll(buildSortPrepStages(sort, computedFields, aliases));
 
     // Add each row's parent token and aliased sort values
-    Document tokenFields = buildParentTokenFields(sortKeyAliases, parentIdSpace);
+    Document tokenFields = buildParentTokenFields(sortKeyAliases, parentItemFilter);
     operations.add(context -> new Document("$addFields", tokenFields));
     // A null token names no parent a caller could ask for, so it must not take a budget slot.
     // Only a stored space can emit one: a composite token guards every part with MISSING_PART.
@@ -471,9 +467,9 @@ public abstract class ComparisonToolRepositorySupport<T> {
    */
   private static Document buildParentTokenFields(
     Map<String, String> sortKeyAliases,
-    ItemIdSpaceDef parentIdSpace
+    ItemFilterDef parentItemFilter
   ) {
-    Document fields = new Document(PARENT_TOKEN_FIELD, parentIdSpace.tokenExpression());
+    Document fields = new Document(PARENT_TOKEN_FIELD, parentItemFilter.tokenExpression());
     sortKeyAliases.forEach((path, alias) -> fields.append(alias, ApiHelper.buildPathReadExpr(path))
     );
     return fields;
@@ -615,18 +611,18 @@ public abstract class ComparisonToolRepositorySupport<T> {
   }
 
   /**
-   * Builds {@link Criteria} for comparison-tool filtering, honoring the identity space the request
+   * Builds {@link Criteria} for comparison-tool filtering, honoring the item id space the request
    * asked for. Filtering is otherwise identical to
    * {@link #buildCtMatchCriteria(Object, List, boolean, String, CtFilterConfig, Criteria...)}.
    *
-   * <p>{@code items} are matched against <strong>exactly one</strong> identity space, never an
-   * {@code OR} of both: the parent space ({@link #getParentIdSpace()}, falling back to the row
-   * space on a self-parented CT) when {@link CtQueryOptions#matchParentIdSpace()} is set, and the
-   * row space implied by the item filter otherwise.
+   * <p>{@code items} are matched against <strong>exactly one</strong> item filter, never an
+   * {@code OR} of both: the parent item filter ({@link #getParentItemFilter()}, falling back to the
+   * row item filter on a self-parented CT) when {@link CtQueryOptions#matchParentIdSpace()} is set,
+   * and the row item filter otherwise.
    *
    * @param query the query DTO
    * @param items the list of item identifiers
-   * @param options the request's include/exclude and identity space
+   * @param options the request's include/exclude and item id space
    * @param search the search string
    * @param config the filter configuration
    * @param baseCriteria required base filters (e.g., cluster, tissue)
@@ -716,11 +712,11 @@ public abstract class ComparisonToolRepositorySupport<T> {
       return;
     }
 
-    ItemIdSpaceDef idSpace = options.matchParentIdSpace()
-      ? resolveParentIdSpace()
-      : getRowIdSpace();
+    ItemFilterDef itemFilter = options.matchParentIdSpace()
+      ? resolveParentItemFilter()
+      : getRowItemFilter();
     allCriteria.add(
-      options.isInclude() ? idSpace.criteriaForAny(items) : idSpace.criteriaForNone(items)
+      options.isInclude() ? itemFilter.criteriaForAny(items) : itemFilter.criteriaForNone(items)
     );
   }
 

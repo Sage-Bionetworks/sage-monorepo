@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
  * Format: ensembl_gene_id~name~sex (e.g., "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female")
  *
  * <p>This is also the parent identity of a proteomics row, since several protein isoforms roll up
- * to one gene. {@link #FIELDS} is what lets a repository declare that parent identity space.
+ * to one gene. {@link #FIELDS} is what lets a repository declare that parent item filter.
  */
 @Value
 @Builder
@@ -36,7 +36,7 @@ public class TranscriptomicsIdentifier {
    * addressable by its own token.
    *
    * <p>Must agree with the fallback the aggregation pipeline emits when it builds this same token
-   * from a document with a blank field ({@code ItemIdSpaceDef.MISSING_PART}), or a parent-scoped
+   * from a document with a blank field ({@code ItemFilterDef.MISSING_PART}), or a parent-scoped
    * fetch would look for a token no row can produce. {@code TranscriptomicsIdentifierTest} is where
    * the two are checked against each other.
    */
@@ -55,7 +55,7 @@ public class TranscriptomicsIdentifier {
 
   /**
    * The MongoDB paths this token's parts match, in token order — what a repository hands to
-   * {@code ItemIdSpaceDef.composite} so the pipeline can rebuild the token from a document.
+   * {@code ItemFilterDef.Composite} so the pipeline can rebuild the token from a document.
    */
   public static final List<String> FIELDS = COMPOSITE_FIELDS.stream()
     .map(CompositeField::path)

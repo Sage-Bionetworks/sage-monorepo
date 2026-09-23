@@ -11,7 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.sagebionetworks.explorers.ApiHelper;
-import org.sagebionetworks.explorers.ItemIdSpaceDef;
+import org.sagebionetworks.explorers.ItemFilterDef;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
 import org.springframework.data.mongodb.core.query.Criteria;
 
@@ -166,14 +166,14 @@ class TranscriptomicsIdentifierTest {
 
     String result = identifier.toCompositeId();
 
-    // ItemIdSpaceDef builds the same token in Mongo from the same fields, so a row with a blank
+    // ItemFilterDef builds the same token in Mongo from the same fields, so a row with a blank
     // name has to read back as the same string on both sides. Nothing else checks the two against
     // each other.
     assertThat(result).isEqualTo(
       String.join(
-        ItemIdSpaceDef.DELIMITER,
+        ItemFilterDef.DELIMITER,
         "ENSMUSG00000000001",
-        ItemIdSpaceDef.MISSING_PART,
+        ItemFilterDef.MISSING_PART,
         "Female"
       )
     );
@@ -183,9 +183,9 @@ class TranscriptomicsIdentifierTest {
   @DisplayName("should parse a missing part placeholder back to a null part")
   void shouldParseMissingPartPlaceholderBackToNullPart() {
     String compositeId = String.join(
-      ItemIdSpaceDef.DELIMITER,
+      ItemFilterDef.DELIMITER,
       "ENSMUSG00000000001",
-      ItemIdSpaceDef.MISSING_PART,
+      ItemFilterDef.MISSING_PART,
       "Female"
     );
 

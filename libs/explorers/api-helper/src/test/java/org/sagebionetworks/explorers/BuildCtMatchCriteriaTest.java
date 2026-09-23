@@ -8,7 +8,6 @@ import lombok.Data;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.lang.Nullable;
 
@@ -185,13 +184,7 @@ class BuildCtMatchCriteriaTest {
         .searchFilter("name")
         .build();
 
-      Criteria result = repo.buildCtMatchCriteria(
-        query,
-        List.of("a~b", "c~d"),
-        true,
-        null,
-        config
-      );
+      Criteria result = repo.buildCtMatchCriteria(query, List.of("a~b", "c~d"), true, null, config);
 
       String criteriaStr = result.getCriteriaObject().toString();
       assertThat(criteriaStr).contains("$or").contains("field1").contains("field2");
@@ -354,7 +347,11 @@ class BuildCtMatchCriteriaTest {
       );
 
       String criteriaStr = result.getCriteriaObject().toString();
-      assertThat(criteriaStr).contains("cluster").contains("c1").contains("tissue").contains("brain");
+      assertThat(criteriaStr)
+        .contains("cluster")
+        .contains("c1")
+        .contains("tissue")
+        .contains("brain");
     }
   }
 
@@ -379,7 +376,7 @@ class BuildCtMatchCriteriaTest {
     @Test
     @DisplayName("should match items against the parent space only when that space is asked for")
     void shouldMatchParentSpaceOnlyWhenParentSpaceIsAskedFor() {
-      TestRepo repo = new TestRepo(ItemIdSpaceDef.stored(PARENT_FIELD));
+      TestRepo repo = new TestRepo(new ItemFilterDef.Simple(PARENT_FIELD));
       TestQuery query = new TestQuery(List.of(), List.of());
 
       Criteria result = repo.buildCtMatchCriteria(
@@ -397,7 +394,7 @@ class BuildCtMatchCriteriaTest {
     @Test
     @DisplayName("should match items against the row space only when the row space is asked for")
     void shouldMatchRowSpaceOnlyWhenRowSpaceIsAskedFor() {
-      TestRepo repo = new TestRepo(ItemIdSpaceDef.stored(PARENT_FIELD));
+      TestRepo repo = new TestRepo(new ItemFilterDef.Simple(PARENT_FIELD));
       TestQuery query = new TestQuery(List.of(), List.of());
 
       Criteria result = repo.buildCtMatchCriteria(
@@ -415,7 +412,7 @@ class BuildCtMatchCriteriaTest {
     @Test
     @DisplayName("should use $nin on the parent space for EXCLUDE mode")
     void shouldUseNinOnParentSpaceForExcludeMode() {
-      TestRepo repo = new TestRepo(ItemIdSpaceDef.stored(PARENT_FIELD));
+      TestRepo repo = new TestRepo(new ItemFilterDef.Simple(PARENT_FIELD));
       TestQuery query = new TestQuery(List.of(), List.of());
 
       Criteria result = repo.buildCtMatchCriteria(
@@ -451,7 +448,7 @@ class BuildCtMatchCriteriaTest {
     @Test
     @DisplayName("should add impossible condition for empty INCLUDE items under the parent space")
     void shouldAddImpossibleConditionForEmptyIncludeUnderParentSpace() {
-      TestRepo repo = new TestRepo(ItemIdSpaceDef.stored(PARENT_FIELD));
+      TestRepo repo = new TestRepo(new ItemFilterDef.Simple(PARENT_FIELD));
       TestQuery query = new TestQuery(List.of(), List.of());
 
       Criteria result = repo.buildCtMatchCriteria(
@@ -467,12 +464,12 @@ class BuildCtMatchCriteriaTest {
     }
 
     @Test
-    @DisplayName("should match parent items against a composite parent space")
-    void shouldMatchParentItemsAgainstCompositeParentSpace() {
-      ItemIdSpaceDef parentSpace = ItemIdSpaceDef.composite(
+    @DisplayName("should match parent items against a composite parent item filter")
+    void shouldMatchParentItemsAgainstCompositeParentItemFilter() {
+      ItemFilterDef parentItemFilter = new ItemFilterDef.Composite(
         List.of("ensembl_gene_id", "sex"),
         item -> {
-          String[] parts = item.split(ItemIdSpaceDef.DELIMITER);
+          String[] parts = item.split(ItemFilterDef.DELIMITER);
           return new Criteria()
             .andOperator(
               Criteria.where("ensembl_gene_id").is(parts[0]),
@@ -480,7 +477,7 @@ class BuildCtMatchCriteriaTest {
             );
         }
       );
-      TestRepo repo = new TestRepo(parentSpace);
+      TestRepo repo = new TestRepo(parentItemFilter);
       TestQuery query = new TestQuery(List.of(), List.of());
 
       Criteria result = repo.buildCtMatchCriteria(
@@ -513,7 +510,7 @@ class BuildCtMatchCriteriaTest {
   private static class TestRepo extends ComparisonToolRepositorySupport<Object> {
 
     @Nullable
-    private final ItemIdSpaceDef parentIdSpace;
+    private final ItemFilterDef parentItemFilter;
 
     private CtFilterConfig<?> capturedConfig;
 
@@ -521,9 +518,9 @@ class BuildCtMatchCriteriaTest {
       this(null);
     }
 
-    TestRepo(@Nullable ItemIdSpaceDef parentIdSpace) {
+    TestRepo(@Nullable ItemFilterDef parentItemFilter) {
       super(null);
-      this.parentIdSpace = parentIdSpace;
+      this.parentItemFilter = parentItemFilter;
     }
 
     @Override
@@ -538,13 +535,13 @@ class BuildCtMatchCriteriaTest {
 
     @Override
     @Nullable
-    protected ItemIdSpaceDef getParentIdSpace() {
-      return parentIdSpace;
+    protected ItemFilterDef getParentItemFilter() {
+      return parentItemFilter;
     }
 
     /**
-     * The default {@code getRowIdSpace()} reads the item filter off {@code getFilterConfig()}, but
-     * these tests pass a config per call. Production repositories always pass their own
+     * The default {@code getRowItemFilter()} reads the item filter off {@code getFilterConfig()},
+     * but these tests pass a config per call. Production repositories always pass their own
      * {@code getFilterConfig()}, so replaying the captured one keeps the two in sync.
      */
     @Override

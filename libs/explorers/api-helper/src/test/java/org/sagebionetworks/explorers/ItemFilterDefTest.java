@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-class ItemIdSpaceDefTest {
+class ItemFilterDefTest {
 
   private static final String STORED_FIELD = "unique_id";
   private static final String SPACED_FIELD = "4 months.log2_fc";
@@ -23,7 +23,7 @@ class ItemIdSpaceDefTest {
 
   /** Parses "a~b~c" the way the product identifier DTOs do, so tokens round-trip. */
   private static final Function<String, Criteria> PARSER = item -> {
-    String[] parts = item.split(ItemIdSpaceDef.DELIMITER, -1);
+    String[] parts = item.split(ItemFilterDef.DELIMITER, -1);
     return new Criteria()
       .andOperator(
         Criteria.where(COMPOSITE_FIELDS.get(0)).is(parts[0]),
@@ -33,13 +33,13 @@ class ItemIdSpaceDefTest {
   };
 
   @Nested
-  @DisplayName("Stored space")
-  class StoredSpace {
+  @DisplayName("Simple item filter")
+  class SimpleItemFilter {
 
     @Test
     @DisplayName("should match a single item by equality on the stored field")
     void shouldMatchSingleItemByEquality() {
-      Criteria criteria = ItemIdSpaceDef.stored(STORED_FIELD).toCriteria("P1");
+      Criteria criteria = new ItemFilterDef.Simple(STORED_FIELD).toCriteria("P1");
 
       assertThat(criteria.getCriteriaObject().toString()).contains(STORED_FIELD).contains("P1");
     }
@@ -47,7 +47,7 @@ class ItemIdSpaceDefTest {
     @Test
     @DisplayName("should use $in for the include direction")
     void shouldUseInForIncludeDirection() {
-      Criteria criteria = ItemIdSpaceDef.stored(STORED_FIELD).criteriaForAny(List.of("P1", "P2"));
+      Criteria criteria = new ItemFilterDef.Simple(STORED_FIELD).criteriaForAny(List.of("P1", "P2"));
 
       assertThat(criteria.getCriteriaObject().toString())
         .contains(STORED_FIELD)
@@ -58,7 +58,7 @@ class ItemIdSpaceDefTest {
     @Test
     @DisplayName("should use $nin for the exclude direction")
     void shouldUseNinForExcludeDirection() {
-      Criteria criteria = ItemIdSpaceDef.stored(STORED_FIELD).criteriaForNone(List.of("P1", "P2"));
+      Criteria criteria = new ItemFilterDef.Simple(STORED_FIELD).criteriaForNone(List.of("P1", "P2"));
 
       assertThat(criteria.getCriteriaObject().toString())
         .contains(STORED_FIELD)
@@ -69,27 +69,27 @@ class ItemIdSpaceDefTest {
     @Test
     @DisplayName("should build the token as a plain field read")
     void shouldBuildTokenAsPlainFieldRead() {
-      assertThat(ItemIdSpaceDef.stored(STORED_FIELD).tokenExpression())
+      assertThat(new ItemFilterDef.Simple(STORED_FIELD).tokenExpression())
         .isEqualTo("$" + STORED_FIELD);
     }
 
     @Test
     @DisplayName("should build the token via $getField when the field name contains a space")
     void shouldBuildTokenViaGetFieldWhenFieldNameContainsSpace() {
-      assertThat(ItemIdSpaceDef.stored(SPACED_FIELD).tokenExpression().toString())
+      assertThat(new ItemFilterDef.Simple(SPACED_FIELD).tokenExpression().toString())
         .contains("$getField")
         .contains("log2_fc");
     }
   }
 
   @Nested
-  @DisplayName("Composite space")
-  class CompositeSpace {
+  @DisplayName("Composite item filter")
+  class CompositeItemFilter {
 
     @Test
     @DisplayName("should delegate a single item to the configured parser")
     void shouldDelegateSingleItemToParser() {
-      Criteria criteria = ItemIdSpaceDef.composite(COMPOSITE_FIELDS, PARSER).toCriteria(
+      Criteria criteria = new ItemFilterDef.Composite(COMPOSITE_FIELDS, PARSER).toCriteria(
         "ENSG1~5xFAD~Female"
       );
 
@@ -100,7 +100,7 @@ class ItemIdSpaceDefTest {
     @Test
     @DisplayName("should combine parsed items with $or for the include direction")
     void shouldUseOrForIncludeDirection() {
-      Criteria criteria = ItemIdSpaceDef.composite(COMPOSITE_FIELDS, PARSER).criteriaForAny(
+      Criteria criteria = new ItemFilterDef.Composite(COMPOSITE_FIELDS, PARSER).criteriaForAny(
         List.of("ENSG1~5xFAD~Female", "ENSG2~5xFAD~Male")
       );
 
@@ -113,7 +113,7 @@ class ItemIdSpaceDefTest {
     @Test
     @DisplayName("should combine parsed items with $nor for the exclude direction")
     void shouldUseNorForExcludeDirection() {
-      Criteria criteria = ItemIdSpaceDef.composite(COMPOSITE_FIELDS, PARSER).criteriaForNone(
+      Criteria criteria = new ItemFilterDef.Composite(COMPOSITE_FIELDS, PARSER).criteriaForNone(
         List.of("ENSG1~5xFAD~Female")
       );
 
@@ -123,7 +123,7 @@ class ItemIdSpaceDefTest {
     @Test
     @DisplayName("should match nothing rather than emit an empty $or when items are empty")
     void shouldMatchNothingWhenIncludingEmptyItems() {
-      Criteria criteria = ItemIdSpaceDef.composite(COMPOSITE_FIELDS, PARSER).criteriaForAny(
+      Criteria criteria = new ItemFilterDef.Composite(COMPOSITE_FIELDS, PARSER).criteriaForAny(
         List.of()
       );
 
@@ -134,7 +134,7 @@ class ItemIdSpaceDefTest {
     @Test
     @DisplayName("should match everything rather than emit an empty $nor when items are empty")
     void shouldMatchEverythingWhenExcludingEmptyItems() {
-      Criteria criteria = ItemIdSpaceDef.composite(COMPOSITE_FIELDS, PARSER).criteriaForNone(
+      Criteria criteria = new ItemFilterDef.Composite(COMPOSITE_FIELDS, PARSER).criteriaForNone(
         List.of()
       );
 
@@ -144,16 +144,16 @@ class ItemIdSpaceDefTest {
     @Test
     @DisplayName("should build the token as a delimiter-separated $concat over its fields")
     void shouldBuildTokenAsDelimitedConcat() {
-      Object token = ItemIdSpaceDef.composite(COMPOSITE_FIELDS, PARSER).tokenExpression();
+      Object token = new ItemFilterDef.Composite(COMPOSITE_FIELDS, PARSER).tokenExpression();
 
       assertThat(token).isEqualTo(
         new Document(
           "$concat",
           List.of(
             guarded("$ensembl_gene_id"),
-            ItemIdSpaceDef.DELIMITER,
+            ItemFilterDef.DELIMITER,
             guarded("$name.link_text"),
-            ItemIdSpaceDef.DELIMITER,
+            ItemFilterDef.DELIMITER,
             guarded("$sex")
           )
         )
@@ -165,7 +165,7 @@ class ItemIdSpaceDefTest {
     void shouldGuardEveryConcatPartAgainstBlankField() {
       // One unguarded part is enough for $concat to yield null, which would collapse every row with
       // an absent field into a single group.
-      Document token = (Document) ItemIdSpaceDef.composite(
+      Document token = (Document) new ItemFilterDef.Composite(
         COMPOSITE_FIELDS,
         PARSER
       ).tokenExpression();
@@ -180,7 +180,7 @@ class ItemIdSpaceDefTest {
       assertThat(guards).hasSize(COMPOSITE_FIELDS.size()).allSatisfy(guard ->
         assertThat(guard.getList("$cond", Object.class))
           .element(1)
-          .isEqualTo(ItemIdSpaceDef.MISSING_PART)
+          .isEqualTo(ItemFilterDef.MISSING_PART)
       );
     }
 
@@ -190,7 +190,7 @@ class ItemIdSpaceDefTest {
       // "null" is spelled out rather than read from MISSING_PART because its value is the contract:
       // it has to match what an identifier DTO renders for a null part, so changing the constant
       // has to fail a test.
-      Document token = (Document) ItemIdSpaceDef.composite(
+      Document token = (Document) new ItemFilterDef.Composite(
         COMPOSITE_FIELDS,
         PARSER
       ).tokenExpression();
@@ -221,52 +221,20 @@ class ItemIdSpaceDefTest {
       );
       return new Document(
         "$cond",
-        List.of(new Document("$eq", List.of(trimmed, "")), ItemIdSpaceDef.MISSING_PART, fieldRead)
+        List.of(new Document("$eq", List.of(trimmed, "")), ItemFilterDef.MISSING_PART, fieldRead)
       );
     }
 
     @Test
     @DisplayName("should reject a token expression when no constituent fields were declared")
     void shouldRejectTokenExpressionWhenFieldsAreUndeclared() {
-      ItemIdSpaceDef space = ItemIdSpaceDef.composite(List.of(), PARSER);
+      // A parser cannot say which fields it reads, so a CT that needs parent tokens has to declare
+      // them explicitly via new ItemFilterDef.Composite(fields, parser).
+      ItemFilterDef filter = new ItemFilterDef.Composite(PARSER);
 
-      assertThatThrownBy(space::tokenExpression)
+      assertThatThrownBy(filter::tokenExpression)
         .isInstanceOf(IllegalStateException.class)
         .hasMessageContaining("no declared fields");
-    }
-  }
-
-  @Nested
-  @DisplayName("Derivation from an item filter")
-  class FromItemFilter {
-
-    @Test
-    @DisplayName("should derive a stored space from a simple item filter")
-    void shouldDeriveStoredSpaceFromSimpleItemFilter() {
-      ItemIdSpaceDef space = ItemIdSpaceDef.fromItemFilter(
-        new ItemFilterDef.Simple(STORED_FIELD)
-      );
-
-      assertThat(space).isEqualTo(ItemIdSpaceDef.stored(STORED_FIELD));
-    }
-
-    @Test
-    @DisplayName("should derive a composite space carrying the parser from a composite item filter")
-    void shouldDeriveCompositeSpaceFromCompositeItemFilter() {
-      ItemIdSpaceDef space = ItemIdSpaceDef.fromItemFilter(new ItemFilterDef.Composite(PARSER));
-
-      assertThat(space.toCriteria("ENSG1~5xFAD~Female").getCriteriaObject().toString())
-        .contains("ENSG1");
-    }
-
-    @Test
-    @DisplayName("should leave a derived composite space without a token expression")
-    void shouldLeaveDerivedCompositeSpaceWithoutTokenExpression() {
-      // A parser cannot say which fields it reads, so a CT that needs parent tokens has to declare
-      // them explicitly via ItemIdSpaceDef.composite(fields, parser).
-      ItemIdSpaceDef space = ItemIdSpaceDef.fromItemFilter(new ItemFilterDef.Composite(PARSER));
-
-      assertThatThrownBy(space::tokenExpression).isInstanceOf(IllegalStateException.class);
     }
   }
 }

@@ -118,7 +118,7 @@ public class CustomTranscriptomicsRepositoryImpl
   }
 
   /**
-   * No {@code getParentIdSpace()} override: a gene row is its own parent, so this CT is
+   * No {@code getParentItemFilter()} override: a gene row is its own parent, so this CT is
    * self-parented. {@code itemIdSpace: parent} therefore resolves back to the row space and a
    * budget above zero caps rows.
    */

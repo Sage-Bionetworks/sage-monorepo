@@ -94,7 +94,7 @@ Every field the repository reads off the search query DTO has to be declared in 
 
 The parent/child fields are no exception: `itemIdSpace` and `prebudgetedParentIds` each need all three declarations, and their `$ref`ed enum (`ItemIdSpaceQuery.yaml`) needs a converter entry in `EnumConverterConfiguration`. The response half, `hasRowsForPrebudgetedParents`, is a nullable property on the `*Page.yaml` schema that the service copies off the returned `CtPage`; a repository whose custom interface still declares `Page<T>` compiles fine and silently loses the flag, so narrow the interface to `CtPage<T>` when a caller needs it. What these fields do is covered under **Parent/child CTs**.
 
-One constraint carries over from search. The existence query behind `hasRowsForPrebudgetedParents` uses `mongoTemplate.exists`, which -- like the `count()` documented under **Overriding search** -- bypasses the aggregation pipeline and therefore reads **stored fields only**. A parent identity space that depends on a computed `$addFields` value cannot answer it.
+One constraint carries over from search. The existence query behind `hasRowsForPrebudgetedParents` uses `mongoTemplate.exists`, which -- like the `count()` documented under **Overriding search** -- bypasses the aggregation pipeline and therefore reads **stored fields only**. A parent item filter that depends on a computed `$addFields` value cannot answer it.
 
 ## Pipeline shape
 
@@ -135,7 +135,7 @@ A budgeted request on a parent-aware CT spends its budget on parents rather than
 | Method                                      | When to override                                                |
 | ------------------------------------------- | --------------------------------------------------------------- |
 | `buildSearchCriteria(field, trimmedSearch)` | Custom search logic (e.g. fallback field, multi-field OR)       |
-| `getParentIdSpace()`                        | Several rows roll up to one parent -- makes the CT parent-aware |
+| `getParentItemFilter()`                     | Several rows roll up to one parent -- makes the CT parent-aware |
 
 ---
 
@@ -256,20 +256,20 @@ CtFilterConfig.<MyQueryDto>builder()
 
 ## Parent/child CTs
 
-Overriding `getParentIdSpace()` is what makes a CT **parent-aware**: several rows roll up to one parent, so a request can match `items` against the parent token instead of the row token, and an EXCLUDE budget caps distinct parents rather than rows. Leave it null and the CT stays **self-parented** -- the parent space resolves back to the row space implied by the item filter, every row is its own parent, and no other behavior changes. Most CTs need no override.
+Overriding `getParentItemFilter()` is what makes a CT **parent-aware**: several rows roll up to one parent, so a request can match `items` against the parent token instead of the row token, and an EXCLUDE budget caps distinct parents rather than rows. Leave it null and the CT stays **self-parented** -- the parent space resolves back to the row space implied by the item filter, every row is its own parent, and no other behavior changes. Most CTs need no override.
 
-### Declaring an identity space
+### Declaring a parent item filter
 
-An `ItemIdSpaceDef` (`libs/explorers/api-helper/`) does two things: it turns a client-supplied item token back into `Criteria` over stored fields, and it rebuilds that same token inside the aggregation, which is what lets rows be grouped by parent. No token is stored in MongoDB, so both directions are derived per request.
+An `ItemFilterDef` (`libs/explorers/api-helper/`) does two things: it turns a client-supplied item token back into `Criteria` over stored fields, and it rebuilds that same token inside the aggregation, which is what lets rows be grouped by parent. No token is stored in MongoDB, so both directions are derived per request.
 
-| Factory                                                                           | Use when                                               | Must declare                                             |
-| --------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------- |
-| `ItemIdSpaceDef.stored("ensembl_gene_id")`                                        | The token _is_ one stored field's value                | --                                                       |
-| `ItemIdSpaceDef.composite(FIELDS, item -> MyIdentifier.parse(item).toCriteria())` | The token encodes several stored fields, joined by `~` | `FIELDS`, even though the parser alone would match items |
+| Variant                                                                              | Use when                                               | Must declare                                             |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------ | -------------------------------------------------------- |
+| `new ItemFilterDef.Simple("ensembl_gene_id")`                                        | The token _is_ one stored field's value                | --                                                       |
+| `new ItemFilterDef.Composite(FIELDS, item -> MyIdentifier.parse(item).toCriteria())` | The token encodes several stored fields, joined by `~` | `FIELDS`, even though the parser alone would match items |
 
-- A parent space must be able to emit its token, so it needs the field names. A space derived from `compositeItemFilter` carries a parser and no field names, and `tokenExpression()` throws `IllegalStateException` on it -- harmless for a self-parented CT, which never emits a token, fatal for a parent space, which is grouped on.
+- A parent item filter must be able to emit its token, so it needs the field names. The filter built by `compositeItemFilter` carries a parser and no field names, and `tokenExpression()` throws `IllegalStateException` on it -- harmless for a self-parented CT, which never emits a token, fatal for a parent item filter, which is grouped on.
 - A blank part -- absent, null, empty, or whitespace only -- renders as the literal `"null"` on both sides of the token, so an identifier DTO has to render it identically or the two emitters disagree about the same row. It must also round-trip: the DTO's `parse()` reads `"null"` back as a null part and its `toCriteria()` matches a blank field for it (`TranscriptomicsIdentifier` is the reference), or rows with a blank part are silently absent from every fetch keyed by their token. A token that is malformed rather than blank, such as one whose value contains the delimiter, fails the request through the DTO's own parse rather than being skipped, since such a row is unaddressable by every feature keyed by that token.
-- Keep the delimiter and missing-part constants private to the identifier DTO rather than importing `ItemIdSpaceDef` into app code, and assert the two renderings agree in the DTO's **test** (`TranscriptomicsIdentifierTest`) -- api-helper cannot see the DTO and neither side runs Mongo, so that test is the only place a mismatch surfaces.
+- Keep the delimiter and missing-part constants private to the identifier DTO rather than importing `ItemFilterDef` into app code, and assert the two renderings agree in the DTO's **test** (`TranscriptomicsIdentifierTest`) -- api-helper cannot see the DTO and neither side runs Mongo, so that test is the only place a mismatch surfaces.
 
 ### The request knobs
 
@@ -332,4 +332,4 @@ Criteria matchCriteria = buildCtMatchCriteria(
 
 All implementations are under `apps/<product>/api-next/src/main/java/.../model/repository/`.
 
-For a worked parent-aware example, read Proteomics: its protein isoform rows roll up to the gene their transcriptomics counterpart is keyed by, so it declares its parent space from `TranscriptomicsIdentifier.FIELDS` -- the token the RNA view identifies its own rows with. Every other CT is self-parented, which takes no override.
+For a worked parent-aware example, read Proteomics: its protein isoform rows roll up to the gene their transcriptomics counterpart is keyed by, so it declares its parent item filter from `TranscriptomicsIdentifier.FIELDS` -- the token the RNA view identifies its own rows with. Every other CT is self-parented, which takes no override.
