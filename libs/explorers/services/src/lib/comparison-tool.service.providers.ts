@@ -106,17 +106,19 @@ export const provideComparisonToolService = (
       }
 
       if (options.unpinnedData !== undefined) {
-        service.setUnpinnedData(options.unpinnedData);
+        const unpinnedData = options.unpinnedData;
+        service.fetchUnpinned(of({ data: unpinnedData, totalCount: unpinnedData.length }));
       }
 
       if (options.pinnedData !== undefined) {
-        service.setPinnedData(options.pinnedData);
+        const pinnedData = options.pinnedData;
+        service.fetchPinned(of({ data: pinnedData, totalCount: pinnedData.length }));
       }
 
       if (options.pinnedData === undefined && options.pinnedItems !== undefined) {
         // If only pinned IDs are provided, initialize pinned data with provided ids
         const pinnedData = options.pinnedItems.map((item) => ({ _id: item }));
-        service.setPinnedData(pinnedData);
+        service.fetchPinned(of({ data: pinnedData, totalCount: pinnedData.length }));
       }
 
       if (options.multiSortMeta !== undefined) {

@@ -17,7 +17,7 @@ import { isEqual } from 'lodash';
 import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
-import { combineLatest, finalize } from 'rxjs';
+import { catchError, combineLatest, finalize, of, Subject, switchMap } from 'rxjs';
 import { VALID_PAGE_SIZES } from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
@@ -31,6 +31,16 @@ import { ToastNotificationService } from './toast-notification.service';
  * OpenAPI contract declares column_width as `minimum: 1`, so any value <= 0 is treated as bad config.
  */
 export const DEFAULT_COLUMN_WIDTH_PX = 300;
+
+/**
+ * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
+ * the corresponding results-count signal should be set to (unpinned: total matching rows across
+ * pages; pinned: the number of pinned rows returned).
+ */
+export interface ComparisonToolFetchResult<T> {
+  data: T[];
+  totalCount: number;
+}
 
 /**
  * Fetches the rows matching the current query across all pages, capped at `remainingBudget`, so
@@ -117,6 +127,17 @@ export class ComparisonToolService<T> {
   private readonly selectedRowIdSignal = signal<string | null>(null);
   private readonly hoveredRowIdSignal = signal<string | null>(null);
 
+  // Fetch streams: each fetch pushes a result observable onto these subjects, and switchMap keeps
+  // only the latest in flight. A newer query cancels (unsubscribes) the prior request, so responses
+  // can never be applied out of order. Unpinned and pinned are independent streams.
+  //
+  // Typed with `unknown` rather than `T`: the coordinator tracks the active CT service as
+  // ComparisonToolService<unknown>, and a `Subject<...T...>` field would make that assignment
+  // a compile error. The public fetch methods stay strongly typed, and the stream subscription
+  // casts the result object back to `T[]`.
+  private readonly unpinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
+  private readonly pinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
+
   // Connect-Time Dependencies
   private pinAllFetch?: PinAllFetch<T>;
   private initialSelection: string[] | undefined;
@@ -160,12 +181,52 @@ export class ComparisonToolService<T> {
   // Used for the URL serialization
   readonly visiblePinIds = computed(() => this.extractRowIds(this.pinnedData()));
 
-  private extractRowIds(rows: T[]): string[] {
-    const rowIdKey = this.viewConfig().rowIdDataKey;
-    return rows.map((row: T) => String((row as Record<string, unknown>)[rowIdKey]));
-  }
+  // Config-Driven Signals
+  readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
+    return this.findConfigForSelection(this.configsSignal(), this.dropdownSelection());
+  });
+
+  readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
+    const config = this.currentConfig();
+    if (!config) return [];
+
+    const configColumns = config.columns;
+    if (!configColumns || configColumns.length === 0) return [];
+
+    const savedColumns = this.columnsForDropdownsSignal().get(this.dropdownKey(config.dropdowns));
+    return this.applyColumnPreferences(configColumns, savedColumns);
+  });
+
+  selectedColumns = computed(() => {
+    return this.columns().filter((col) => col.selected);
+  });
+
+  // Results & Pin State Signals
+  loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
+
+  totalResultsCount = signal<number>(0);
+
+  pinnedResultsCount = computed(() => this.pinnedData().length);
+
+  hasMaxPinnedItems = computed(() => {
+    return this.pinnedResultsCount() >= this.maxPinnedItems();
+  });
+
+  disabledPinTooltip = computed(() => {
+    return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
+  });
 
   constructor() {
+    // Unpinned rows are paged, so totalCount is the cross-page total used for pagination.
+    this.subscribeToFetchStream(this.unpinnedFetch$, ({ data, totalCount }) => {
+      this.unpinnedDataSignal.set(data);
+      this.totalResultsCount.set(totalCount);
+    });
+
+    // Pinned rows are never paged: applyPinnedData enforces the pin cap and the count comes from
+    // pinnedData(), so totalCount from the response is unused and therefore is omitted intentionally.
+    this.subscribeToFetchStream(this.pinnedFetch$, ({ data }) => this.applyPinnedData(data));
+
     effect(() => {
       if (this.isLoadingTableData()) return;
       if (!this.viewConfig().rowSelectionEnabled) return;
@@ -206,6 +267,7 @@ export class ComparisonToolService<T> {
     });
   }
 
+  // Lifecycle
   connect(options: {
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
@@ -248,40 +310,10 @@ export class ComparisonToolService<T> {
     }
   }
 
-  readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
-    return this.findConfigForSelection(this.configsSignal(), this.dropdownSelection());
-  });
-
-  readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
-    const config = this.currentConfig();
-    if (!config) return [];
-
-    const configColumns = config.columns;
-    if (!configColumns || configColumns.length === 0) return [];
-
-    const savedColumns = this.columnsForDropdownsSignal().get(this.dropdownKey(config.dropdowns));
-    return this.applyColumnPreferences(configColumns, savedColumns);
-  });
-
-  selectedColumns = computed(() => {
-    return this.columns().filter((col) => col.selected);
-  });
-
+  // Config & columns
   hasUnselectedColumns(): boolean {
     return this.columns().some((col) => !col.selected);
   }
-
-  loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
-  totalResultsCount = signal<number>(0);
-  pinnedResultsCount = computed(() => this.pinnedData().length);
-
-  hasMaxPinnedItems = computed(() => {
-    return this.pinnedResultsCount() >= this.maxPinnedItems();
-  });
-
-  disabledPinTooltip = computed(() => {
-    return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
-  });
 
   /**
    * MAX_PINNED_ITEMS is the largest budget the CT search query schemas accept, so a configured limit
@@ -511,10 +543,7 @@ export class ComparisonToolService<T> {
     this.heatmapDetailsPanelDataSignal.set(null);
   }
 
-  /* ----------------------- *
-   *    Filter Panel
-   * ----------------------- */
-
+  // Filter panel
   toggleFilterPanel(): void {
     this.isFilterPanelOpenSignal.update((isOpen) => !isOpen);
   }
@@ -527,6 +556,7 @@ export class ComparisonToolService<T> {
     this.isFilterPanelOpenSignal.set(false);
   }
 
+  // View config & tutorial
   setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {
     this.viewConfigSignal.set({ ...this.DEFAULT_VIEW_CONFIG, ...viewConfig });
     this.setLegendVisibility(false);
@@ -550,6 +580,7 @@ export class ComparisonToolService<T> {
     this.appStorageService.setTutorialHidden(hidden);
   }
 
+  // Pinning
   isPinned(id: string): boolean {
     return this.pinnedItemsSet().has(id);
   }
@@ -582,9 +613,11 @@ export class ComparisonToolService<T> {
    * Pins every row matching the current query, not just the rows on the current page. The matching
    * ids are discovered server-side, capped at the pins the user has left.
    *
-   * Only starts when no fetch is in flight: mid-fetch, the pinned data on hand is not yet the
-   * server-confirmed pin set, so the remaining budget could not be computed against it. The
-   * `startFetch()` below therefore also serves as the re-entry guard.
+   * The guard below keeps this from running while the table is still being populated: the cap sent to
+   * the server is how many more pins the user may add, counted from the pins on screen, and those are
+   * not final until the in-flight fetch lands. The `startFetch()` call also serves as a re-entry
+   * guard: once it increments the counter, the `isLoadingTableData()` check at the top blocks any
+   * concurrent call until the fetch completes.
    */
   pinAll() {
     const fetch = this.pinAllFetch;
@@ -607,7 +640,8 @@ export class ComparisonToolService<T> {
             this.showMaxPinnedItemsWarning(rows.length);
           }
         },
-        error: () => {
+        error: (error) => {
+          this.logger.error('Error pinning all matching rows', error);
           this.toastNotificationService.showError(
             'Something went wrong while pinning all matching rows. Please try again.',
           );
@@ -622,13 +656,15 @@ export class ComparisonToolService<T> {
   }
 
   /**
-   * Skips the query update when the deduplicated items match the current pins. Every update
-   * publishes a new array, which re-triggers the pinned and unpinned fetches, so writing back an
-   * unchanged pin set would refetch for nothing -- and, where `setPinnedData` derives the ids it
-   * writes back from data it just received, could refetch indefinitely.
+   * Updates the pinned ids, ignoring a write that matches what is already pinned.
+   *
+   * Changing this list makes both tables re-fetch: the pinned table asks for these ids, the unpinned
+   * table asks for everything else. Ignoring an unchanged list avoids those two requests.
    */
   setPinnedItems(items: string[] | null) {
     const deduplicatedItems = items ? Array.from(new Set(items)) : [];
+    // applyPinnedData can re-send the same ids in a new array, so compare by value to avoid
+    // triggering unnecessary refetches when the pin set hasn't actually changed.
     if (isEqual(deduplicatedItems, this.pinnedItems())) {
       return;
     }
@@ -670,25 +706,32 @@ export class ComparisonToolService<T> {
     });
   }
 
-  setUnpinnedData(unpinnedData: T[]) {
-    this.unpinnedDataSignal.set(unpinnedData);
-    this.completeFetch();
-  }
-
+  // Table data
   /**
-   * Caps pinned data at `maxPinnedItems`, which makes the limit an invariant of `pinnedData` no
-   * matter where the pins came from -- a hand-edited or shared URL can carry more ids than the user
-   * is allowed to pin. Capping here rather than at URL parse time keeps the first N rows *by the
-   * user's current sort*, since the ids have already been round-tripped through the fetch.
+   * Caps pinned data at `maxPinnedItems`. Every pinned result flows through here, so the cap holds
+   * no matter where the pins came from -- a hand-edited or shared URL can list more ids than the
+   * user is allowed to pin.
    *
-   * Rewriting the pinned items is what converges the pin cache and the URL on the trimmed set. It
-   * re-triggers the fetches, which is correct rather than wasteful: the excluded items really did
-   * change, so the unpinned table has to refetch. Normally the follow-up pinned data is within the
-   * limit, so the cap does not apply again. It stays terminating even when the row id is not unique
-   * in the collection -- where trimming can never bring the row count down to the id count -- because
-   * `setPinnedItems` ignores a write that matches the current pins.
+   * Why cap here, after the fetch, instead of when parsing the URL: the pinned fetch sends the raw
+   * ids to the API and gets back the matching rows already ordered by the user's current sort.
+   * Keeping the first N of those rows drops the pins the user would care about least. Trimming the
+   * URL ids before the fetch would instead drop an arbitrary N, since the URL order is meaningless.
+   *
+   * When the cap trims the set, we rewrite the pinned ids via `setPinnedItems` so the pin cache and
+   * the URL agree on the trimmed list. That rewrite re-triggers BOTH data fetches, because the
+   * pinned id list feeds both queries: the pinned fetch asks for those ids, and the unpinned fetch
+   * asks for everything EXCEPT those ids (see the components' `itemFilterType: Exclude` query). So
+   * dropping a pin genuinely changes what the unpinned table should show, and both must refetch --
+   * this is correct, not wasteful. The follow-up pinned fetch is normally within the limit, so the
+   * cap does not fire again.
+   *
+   * The one exception is a collection where a row id is not unique -- one id can match several rows.
+   * There, trimming to N rows can yield fewer than N unique ids (the dedup in `setPinnedItems`), and
+   * refetching those ids returns more than N rows again, so the row count never settles at the id
+   * count. That would loop forever, except `setPinnedItems` skips the rewrite when the new id list
+   * equals the current pins -- which it does on the second pass -- so the cycle stops.
    */
-  setPinnedData(pinnedData: T[]) {
+  private applyPinnedData(pinnedData: T[]) {
     const maxPinnedItems = this.maxPinnedItems();
     if (pinnedData.length > maxPinnedItems) {
       const trimmedData = pinnedData.slice(0, maxPinnedItems);
@@ -698,9 +741,9 @@ export class ComparisonToolService<T> {
     } else {
       this.pinnedDataSignal.set(pinnedData);
     }
-    this.completeFetch();
   }
 
+  // Row selection
   private autoSelectFirstRow(): void {
     const unpinned = this.unpinnedDataSignal();
     const pinned = this.pinnedDataSignal();
@@ -743,8 +786,52 @@ export class ComparisonToolService<T> {
     this.autoSelectFirstRow();
   }
 
+  // Fetch streams
+  /**
+   * Subscribes a fetch stream once for the lifetime of the service. `switchMap` unsubscribes the
+   * previous result observable whenever a newer one arrives, which aborts the superseded HTTP
+   * request so responses are always applied latest-wins. `finalize` runs on completion, error, or
+   * switchMap cancellation, keeping the pending-fetch counter balanced; `catchError` maps a failed
+   * request to an empty result and keeps the outer stream alive for the next fetch. Error logging
+   * and user notification are handled centrally by `httpErrorInterceptor`, so this is cleanup only.
+   */
+  private subscribeToFetchStream(
+    fetch$: Subject<Observable<ComparisonToolFetchResult<unknown>>>,
+    applyResult: (result: ComparisonToolFetchResult<T>) => void,
+  ): void {
+    fetch$
+      .pipe(
+        switchMap((source$) =>
+          source$.pipe(
+            finalize(() => this.completeFetch()),
+            catchError(() => of<ComparisonToolFetchResult<unknown>>({ data: [], totalCount: 0 })),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((result) => applyResult(result as ComparisonToolFetchResult<T>));
+  }
+
+  /**
+   * Fetches unpinned rows from the given result observable. A new call cancels any prior in-flight
+   * unpinned fetch, guaranteeing the table reflects the most recent query.
+   */
+  fetchUnpinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
+    this.startFetch();
+    this.unpinnedFetch$.next(source$);
+  }
+
+  /**
+   * Fetches pinned rows from the given result observable. Independent of the unpinned stream, so a
+   * new pinned fetch does not cancel an in-flight unpinned fetch (and vice versa).
+   */
+  fetchPinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
+    this.startFetch();
+    this.pinnedFetch$.next(source$);
+  }
+
   /** Call before starting a data fetch to increment loading counter */
-  startFetch() {
+  private startFetch() {
     this.pendingFetchesSignal.update((count) => count + 1);
   }
 
@@ -753,6 +840,7 @@ export class ComparisonToolService<T> {
     this.pendingFetchesSignal.update((count) => Math.max(0, count - 1));
   }
 
+  // Query & pagination
   updateQuery(query: Partial<ComparisonToolQuery>) {
     this.querySignal.update((current) => ({
       ...current,
@@ -882,6 +970,7 @@ export class ComparisonToolService<T> {
     return JSON.stringify(normalized.slice(0, this.COLUMN_CACHE_DEPTH));
   }
 
+  // Sort
   setSort(multiSortMeta: SortMeta[]) {
     const newSort = multiSortMeta || this.DEFAULT_MULTI_SORT_META;
     const currentSort = this.querySignal().multiSortMeta;
@@ -914,6 +1003,7 @@ export class ComparisonToolService<T> {
     });
   }
 
+  // URL sync
   private resolveUrlState(
     params: ComparisonToolUrlParams,
     options: { isFirstLoad: boolean },
@@ -1090,6 +1180,11 @@ export class ComparisonToolService<T> {
         selectedFilters: this.selectedFilters(),
       }),
     );
+  }
+
+  private extractRowIds(rows: T[]): string[] {
+    const rowIdKey = this.viewConfig().rowIdDataKey;
+    return rows.map((row: T) => String((row as Record<string, unknown>)[rowIdKey]));
   }
 
   convertSortMetaToArrays(multiSortMeta: SortMeta[]): {

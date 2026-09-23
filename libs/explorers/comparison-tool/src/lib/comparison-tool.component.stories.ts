@@ -181,10 +181,13 @@ class ComparisonToolInnerComponent {
       const unpinnedData = this.unpinnedData();
       const pinnedItems = this.pinnedItems() || [];
 
-      this.comparisonToolService.setPinnedData(pinnedData);
-      this.comparisonToolService.setUnpinnedData(unpinnedData);
+      this.comparisonToolService.fetchPinned(
+        of({ data: pinnedData, totalCount: pinnedData.length }),
+      );
+      this.comparisonToolService.fetchUnpinned(
+        of({ data: unpinnedData, totalCount: unpinnedData.length }),
+      );
       this.comparisonToolService.setPinnedItems(pinnedItems);
-      this.comparisonToolService.totalResultsCount.set(unpinnedData.length);
     });
 
     // Effect to update panel visibility
