@@ -35,4 +35,5 @@ required:
   - age
   - units
   - y_axis_max
+  - result_order
   - data
