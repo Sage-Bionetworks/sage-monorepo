@@ -233,7 +233,7 @@ MongoDB's `"$field"` expression syntax silently fails for field names that conta
 
 - **Spaced path, one dot** (`"4 months.log2_fc"`) -- supported.
 - **Spaced path, two or more dots** -- throws `IllegalArgumentException` at runtime. Use an alias to a single-dot path instead.
-- **Space in `$addFields` key** -- unreliable in DocumentDB. `isEmptyFlagKey()` normalises spaces to underscores automatically.
+- **Space in `$addFields` key** -- unreliable in DocumentDB. `isEmptyFlagKey()` normalizes spaces to underscores automatically.
 
 ---
 
@@ -256,7 +256,7 @@ CtFilterConfig.<MyQueryDto>builder()
 
 ## Parent/child CTs
 
-Overriding `getParentIdSpace()` is what makes a CT **parent-aware**: several rows roll up to one parent, so a request can match `items` against the parent token instead of the row token, and an EXCLUDE budget caps distinct parents rather than rows. Leave it null and the CT stays **self-parented** -- the parent space resolves back to the row space implied by the item filter, every row is its own parent, and no other behaviour changes. Most CTs need no override.
+Overriding `getParentIdSpace()` is what makes a CT **parent-aware**: several rows roll up to one parent, so a request can match `items` against the parent token instead of the row token, and an EXCLUDE budget caps distinct parents rather than rows. Leave it null and the CT stays **self-parented** -- the parent space resolves back to the row space implied by the item filter, every row is its own parent, and no other behavior changes. Most CTs need no override.
 
 ### Declaring an identity space
 
@@ -293,7 +293,7 @@ A hierarchy is declared per view rather than computed: the keys below are stored
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `row_id_data_key`          | The data key holding this view's row UID, overriding the comparison tool's default row id key for the view                                          |
 | `parent_id_data_key`       | The data key holding the id of a row's parent. Equal to `row_id_data_key` means rows are their own parents; a different key means rows are children |
-| `parent_noun`, `view_noun` | Singular/plural nouns labelling parent counts and row counts. A child view sets both, since it displays both counts                                 |
+| `parent_noun`, `view_noun` | Singular/plural nouns labeling parent counts and row counts. A child view sets both, since it displays both counts                                  |
 
 All four are nullable, and a view that declares no hierarchy leaves them unset. `parent_id_data_key` must resolve to the same parent values in every view of a comparison tool, though not necessarily through the same field, since different views read different collections.
 

@@ -1400,7 +1400,7 @@ class ComparisonToolRepositorySupportTest {
         .filter(fields -> fields != null && fields.containsKey(PARENT_TOKEN_FIELD))
         .findFirst()
         .orElseThrow(() ->
-          new AssertionError("no $addFields stage materialises " + PARENT_TOKEN_FIELD)
+          new AssertionError("no $addFields stage materializes " + PARENT_TOKEN_FIELD)
         );
     }
 

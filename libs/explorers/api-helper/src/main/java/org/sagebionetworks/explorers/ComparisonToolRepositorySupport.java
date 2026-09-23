@@ -65,7 +65,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
   private static final String ID_FIELD = "_id";
 
   /**
-   * Field the parent selection materialises the parent token into before its {@code $group}.
+   * Field the parent selection materializes the parent token into before its {@code $group}.
    */
   private static final String PARENT_TOKEN_FIELD = "__ct_parent_token";
 
@@ -403,7 +403,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * prebudgeted parent high in the sort order would consume part of the budget, even though its
    * children are already returned.
    *
-   * <p>The pipeline replays the row pipeline's sort stages, materialises the parent token plus a
+   * <p>The pipeline replays the row pipeline's sort stages, materializes the parent token plus a
    * safe alias per resolved sort path, drops rows with no parent token, sorts rows, collapses them
    * to one document per parent keeping its leading row's sort values, and re-applies the same order
    * to the parents. It is a query of its own because DocumentDB has no {@code $setWindowFields},
@@ -471,7 +471,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
   /**
    * Maps each resolved sort path in {@code rowSortDoc} to the alias the parent selection reads it
    * into. The isEmpty flag keys and {@code _id} are left out on purpose: the flags are already
-   * space- and dot-normalised by {@link ApiHelper#isEmptyFlagKey}, and {@code _id} is the
+   * space- and dot-normalized by {@link ApiHelper#isEmptyFlagKey}, and {@code _id} is the
    * {@code $group} key, so both can be captured under their own names.
    */
   private static Map<String, String> buildSortKeyAliases(Sort sort, @Nullable Document rowSortDoc) {

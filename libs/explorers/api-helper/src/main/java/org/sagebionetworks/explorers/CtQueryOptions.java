@@ -19,7 +19,7 @@ import org.springframework.lang.Nullable;
  * @param isInclude true when {@code itemFilterType} is INCLUDE, false when EXCLUDE
  * @param remainingBudget how much the caller can still accept, or null for normal pagination
  * @param prebudgetedParentIds parent tokens the caller has already budgeted for, whose further
- *     children are therefore free; never null (an absent value is normalised to an empty list)
+ *     children are therefore free; never null (an absent value is normalized to an empty list)
  * @param matchParentIdSpace true when {@code items} are matched against the parent identity space
  *     rather than the row identity space. Exactly one space is matched, never both
  */
