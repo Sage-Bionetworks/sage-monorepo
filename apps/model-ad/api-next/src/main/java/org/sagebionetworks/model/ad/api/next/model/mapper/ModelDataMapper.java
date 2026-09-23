@@ -19,6 +19,10 @@ public class ModelDataMapper {
       return null;
     }
 
+    List<String> resultOrder = modelData.getResultOrder() == null
+      ? List.of()
+      : List.copyOf(modelData.getResultOrder());
+
     List<IndividualDataDto> data = modelData.getData() == null
       ? List.of()
       : modelData.getData().stream().map(individualDataMapper::toIndividualDataDto).toList();
@@ -29,9 +33,8 @@ public class ModelDataMapper {
       modelData.getAge(),
       modelData.getUnits(),
       modelData.getYAxisMax(),
+      resultOrder,
       data
-    )
-      .tissue(modelData.getTissue())
-      .resultOrder(modelData.getResultOrder());
+    ).tissue(modelData.getTissue());
   }
 }

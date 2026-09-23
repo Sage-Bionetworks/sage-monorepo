@@ -56,8 +56,8 @@ class MarmosetModelMapperTest {
   }
 
   @Test
-  @DisplayName("should map absent result_order to null so the boxplot falls back to data order")
-  void shouldMapAbsentResultOrderToNull() {
+  @DisplayName("should map absent result_order to an empty list")
+  void shouldMapAbsentResultOrderToAnEmptyList() {
     // given
     MarmosetModelDocument document = buildDocument();
     document.getBiomarkers().get(0).setResultOrder(null);
@@ -66,7 +66,7 @@ class MarmosetModelMapperTest {
     MarmosetModelDto marmosetModel = (MarmosetModelDto) mapper.toDto(document);
 
     // then
-    assertThat(marmosetModel.getBiomarkers().get(0).getResultOrder()).isNull();
+    assertThat(marmosetModel.getBiomarkers().get(0).getResultOrder()).isEmpty();
   }
 
   @Test
