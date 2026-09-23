@@ -65,16 +65,15 @@ export class EqtlComparisonToolComponent {
   //   this.comparisonToolService.fetchUnpinned(
   //     this.eqtlService.getEqtlData({ ...query, selectedRowId }).pipe(
   //       map((response) => ({ data: response.data, totalCount: response.page.totalElements })),
-  //       // NOTE: selectedRowId and notifySelectedRowValidity only apply when rowSelectionEnabled
-  //       // is true (other CTs don't use them). If QTL uses row selection:
-  //       //   1. The backend must accept selectedRowId and check whether it appears anywhere in the
-  //       //      full filtered result set (not just the current page), then return
-  //       //      selectedRowInResults: boolean in the response.
-  //       //   2. After fetching, call comparisonToolService.notifySelectedRowValidity(
-  //       //      response.selectedRowInResults) so the service knows whether the selected row is
-  //       //      still valid. The right place to add this call is inside the applyResult callback
-  //       //      passed to subscribeToFetchStream for unpinnedFetch$ in ComparisonToolService
-  //       //      (see the call at comparison-tool.service.ts:221).
+  //       // NOTE: selectedRowId and notifySelectedRowValidity are specific to the
+  //       // selected row feature (rowSelectionEnabled) -- other CTs do not use them.
+  //       // Two things are needed:
+  //       //   1. Backend: accept selectedRowId and return selectedRowInResults: boolean — true if
+  //       //      that row exists anywhere in the full filtered set, not just the current page.
+  //       //   2. Frontend: after the fetch resolves, call
+  //       //      comparisonToolService.notifySelectedRowValidity(response.selectedRowInResults).
+  //       //      Add this inside the unpinnedFetch$ result callback in ComparisonToolService
+  //       //      (comparison-tool.service.ts:221).
   //     ),
   //   );
   // }
