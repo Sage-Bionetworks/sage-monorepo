@@ -226,6 +226,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
         age: '4 months',
         units: 'pg/mg',
         y_axis_max: 1000,
+        result_order: [],
         data: [
           { sex: Sex.Female, individual_id: '100', value: 42.5, genotype: 'TestModel' },
           { sex: Sex.Male, individual_id: '101', value: 55.1, genotype: 'Control' },
@@ -286,6 +287,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
         age: '0-1 year',
         units: 'pg/ml',
         y_axis_max: 1000,
+        result_order: [],
         data: [{ sex: Sex.Female, individual_id: '1', value: 10.0, genotype: 'PSEN1' }],
       },
     ];

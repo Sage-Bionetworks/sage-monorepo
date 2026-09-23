@@ -73,6 +73,7 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
         age: '0-1 year',
         units: 'pg/ml',
         y_axis_max: 1000,
+        result_order: [],
         data: [{ sex: Sex.Female, individual_id: '1', value: 350, genotype: 'Control' }],
       },
       {
@@ -81,6 +82,7 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
         age: '0-1 year',
         units: 'pg/ml',
         y_axis_max: 1000,
+        result_order: [],
         data: [{ sex: Sex.Male, individual_id: '2', value: 420, genotype: 'PSEN1' }],
       },
     ];
