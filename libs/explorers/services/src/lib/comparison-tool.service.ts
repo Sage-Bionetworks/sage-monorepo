@@ -224,7 +224,7 @@ export class ComparisonToolService<T> {
     });
 
     // Pinned rows are never paged: applyPinnedData enforces the pin cap and the count comes from
-    // pinnedData(), so totalCount from the response is unused and therefore is ommitted intentionally.
+    // pinnedData(), so totalCount from the response is unused and therefore is omitted intentionally.
     this.subscribeToFetchStream(this.pinnedFetch$, ({ data }) => this.applyPinnedData(data));
 
     effect(() => {

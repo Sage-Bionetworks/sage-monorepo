@@ -65,11 +65,6 @@ export class EqtlComparisonToolComponent {
   //   this.comparisonToolService.fetchUnpinned(
   //     this.eqtlService.getEqtlData({ ...query, selectedRowId }).pipe(
   //       map((response) => ({ data: response.data, totalCount: response.page.totalElements })),
-  //       // NOTE: selectedRowId and notifySelectedRowValidity are specific to the selected row
-  //       // feature (rowSelectionEnabled) -- other CTs do not use them. The backend must check
-  //       // whether selectedRowId exists anywhere in the full filtered result set (not just the
-  //       // current page) and return selectedRowInResults: boolean in the response. Call
-  //       // notifySelectedRowValidity in the subscribe below if needed.
   //     ),
   //   );
   // }
