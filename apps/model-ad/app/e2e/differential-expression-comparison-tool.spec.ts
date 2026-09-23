@@ -267,10 +267,9 @@ test.describe('differential expression', () => {
   });
 
   test('Pin All pins every matching row for the protein main category', async ({ page }) => {
-    // TODO(MG-931): the proteomics collection is currently mock data, so this search may not stay
-    // accurate once the real data lands. Replace it with a more specific term, chosen so the match
-    // count stays under MAX_PINNED_ITEMS as the collection grows
-    const proteinSearchTerm = 't';
+    // Eight ABCA-family genes across both sexes: more rows than one page holds, but still under
+    // the pin limit
+    const proteinSearchTerm = 'abca';
 
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
     await selectCategoryOption(page, MAIN_CATEGORY_DROPDOWN_INDEX, PROTEIN_MAIN_CATEGORY);

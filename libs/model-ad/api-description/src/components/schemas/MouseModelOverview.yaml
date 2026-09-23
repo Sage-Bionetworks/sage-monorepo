@@ -18,6 +18,9 @@ properties:
   transcriptomics:
     $ref: ./Link.yaml
     nullable: true
+  proteomics:
+    $ref: ./Link.yaml
+    nullable: true
   disease_correlation:
     $ref: ./Link.yaml
     nullable: true
@@ -47,6 +50,7 @@ properties:
       type: string
       enum:
         - Transcriptomics
+        - Proteomics
         - Pathology
         - Biomarkers
         - Disease Correlation

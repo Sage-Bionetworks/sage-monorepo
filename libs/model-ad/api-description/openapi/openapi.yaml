@@ -661,6 +661,9 @@ components:
         transcriptomics:
           $ref: '#/components/schemas/Link'
           nullable: true
+        proteomics:
+          $ref: '#/components/schemas/Link'
+          nullable: true
         disease_correlation:
           $ref: '#/components/schemas/Link'
           nullable: true
@@ -690,6 +693,7 @@ components:
             type: string
             enum:
               - Transcriptomics
+              - Proteomics
               - Pathology
               - Biomarkers
               - Disease Correlation
