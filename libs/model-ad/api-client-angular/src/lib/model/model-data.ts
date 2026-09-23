@@ -40,7 +40,7 @@ export interface ModelData {
   /**
    * List of genotypes in the order to display results
    */
-  result_order?: Array<string>;
+  result_order: Array<string>;
   /**
    * Values for each individual
    */

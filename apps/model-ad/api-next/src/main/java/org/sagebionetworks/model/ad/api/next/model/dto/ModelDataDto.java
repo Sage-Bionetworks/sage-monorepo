@@ -54,12 +54,13 @@ public class ModelDataDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelDataDto(String name, String evidenceType, String age, String units, BigDecimal yAxisMax, List<@Valid IndividualDataDto> data) {
+  public ModelDataDto(String name, String evidenceType, String age, String units, BigDecimal yAxisMax, List<String> resultOrder, List<@Valid IndividualDataDto> data) {
     this.name = name;
     this.evidenceType = evidenceType;
     this.age = age;
     this.units = units;
     this.yAxisMax = yAxisMax;
+    this.resultOrder = resultOrder;
     this.data = data;
   }
 
@@ -200,8 +201,8 @@ public class ModelDataDto {
    * List of genotypes in the order to display results
    * @return resultOrder
    */
-  
-  @Schema(name = "result_order", description = "List of genotypes in the order to display results", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "result_order", description = "List of genotypes in the order to display results", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("result_order")
   public List<String> getResultOrder() {
     return resultOrder;

@@ -2702,6 +2702,7 @@ components:
         - data
         - evidence_type
         - name
+        - result_order
         - units
         - y_axis_max
       type: object

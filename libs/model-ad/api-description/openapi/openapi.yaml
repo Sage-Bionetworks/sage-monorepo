@@ -1886,6 +1886,7 @@ components:
         - age
         - units
         - y_axis_max
+        - result_order
         - data
     MouseModel:
       type: object
