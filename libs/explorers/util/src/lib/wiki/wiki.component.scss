@@ -46,6 +46,15 @@ explorers-wiki {
         background-color: var(--color-gray-200);
       }
     }
+
+    blockquote {
+      margin: 16px 0;
+      padding: 16px 20px;
+      background-color: var(--color-gray-300);
+
+      // wiki authors end the quote with a newline, which pre-wrap would render as a blank line
+      white-space: normal;
+    }
   }
 
   .loading-icon {
