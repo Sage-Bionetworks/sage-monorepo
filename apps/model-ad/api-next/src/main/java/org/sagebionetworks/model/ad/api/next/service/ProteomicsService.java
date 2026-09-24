@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.explorers.ApiHelper;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.model.document.ProteomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
@@ -16,7 +17,6 @@ import org.sagebionetworks.model.ad.api.next.model.mapper.ProteomicsMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ProteomicsRepository;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -34,9 +34,10 @@ public class ProteomicsService {
   @Cacheable(
     key = "T(org.sagebionetworks.explorers.ApiHelper)" +
     ".buildCacheKey('proteomics', #query.itemFilterType, #query.items, " +
-    "#query.search, #query.biodomains, #query.modelType, #query.name, #query.sex, " +
-    "#tissue, #query.pageNumber, #query.pageSize, " +
-    "#query.remainingBudget, #query.sortFields, #query.sortOrders)"
+    "#query.itemIdSpace, #query.search, #query.biodomains, #query.modelType, #query.name, " +
+    "#query.sex, #tissue, #query.pageNumber, #query.pageSize, " +
+    "#query.remainingBudget, #query.prebudgetedParentIds, " +
+    "#query.sortFields, #query.sortOrders)"
   )
   public ProteomicsPageDto loadProteomics(ProteomicsSearchQueryDto query, String tissue) {
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
@@ -53,7 +54,7 @@ public class ProteomicsService {
     Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize, sort);
 
     // Use custom repository for all queries
-    Page<ProteomicsDocument> page = repository.findAll(pageable, query, items, tissue);
+    CtPage<ProteomicsDocument> page = repository.findAll(pageable, query, items, tissue);
 
     List<ProteomicsDto> proteomics = page
       .getContent()
@@ -70,6 +71,10 @@ public class ProteomicsService {
       .hasPrevious(page.hasPrevious())
       .build();
 
-    return ProteomicsPageDto.builder().proteomics(proteomics).page(pageMetadata).build();
+    return ProteomicsPageDto.builder()
+      .proteomics(proteomics)
+      .page(pageMetadata)
+      .hasRowsForPrebudgetedParents(page.getHasRowsForPrebudgetedParents())
+      .build();
   }
 }

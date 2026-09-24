@@ -19,20 +19,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.model.ad.api.next.api.TranscriptomicsApiDelegateImpl;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.document.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemIdSpaceQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.FoldChangeMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.TranscriptomicsMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.TranscriptomicsRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -49,6 +49,7 @@ class TranscriptomicsApiDelegateImplTest {
   private static final String TISSUE_CORTEX = "Cortex";
   private static final double FOUR_MONTHS_LOG2_FC = 0.01167d;
   private static final double TWENTY_FOUR_MONTHS_LOG2_FC = 1.4382d;
+  private static final String PARENT_COMPOSITE_ID = "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female";
 
   @Mock
   private TranscriptomicsRepository repository;
@@ -119,7 +120,7 @@ class TranscriptomicsApiDelegateImplTest {
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of());
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of());
     when(
       repository.findAll(
         any(Pageable.class),
@@ -159,7 +160,7 @@ class TranscriptomicsApiDelegateImplTest {
   void shouldReturnMappedResultsWhenItemsProvided() {
     ObjectId objectId = new ObjectId();
     TranscriptomicsDocument document = buildDocument(objectId);
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(document));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(document));
 
     when(
       repository.findAll(
@@ -212,7 +213,7 @@ class TranscriptomicsApiDelegateImplTest {
   @Test
   @DisplayName("should include tissue filter when exclude filter has no items")
   void shouldIncludeTissueAndSexFilterWhenExcludeFilterHasNoItems() {
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(buildDocument(new ObjectId())));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(buildDocument(new ObjectId())));
     when(
       repository.findAll(
         any(Pageable.class),
@@ -248,7 +249,7 @@ class TranscriptomicsApiDelegateImplTest {
   @DisplayName("should omit fold change data when values incomplete")
   void shouldOmitFoldChangeDataWhenValuesIncomplete() {
     ObjectId objectId = new ObjectId();
-    Page<TranscriptomicsDocument> page = new PageImpl<>(
+    CtPage<TranscriptomicsDocument> page = ctPage(
       List.of(buildDocumentWithPartialFoldChange(objectId))
     );
 
@@ -281,7 +282,7 @@ class TranscriptomicsApiDelegateImplTest {
   @DisplayName("should exclude specified items when exclude filter has items")
   void shouldExcludeSpecifiedItemsWhenExcludeFilterHasItems() {
     ObjectId includedId = new ObjectId();
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(buildDocument(includedId)));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(buildDocument(includedId)));
 
     when(
       repository.findAll(
@@ -320,7 +321,7 @@ class TranscriptomicsApiDelegateImplTest {
   @DisplayName("should handle multiple biodomains")
   void shouldHandleMultipleBiodomains() {
     ObjectId objectId = new ObjectId();
-    Page<TranscriptomicsDocument> page = new PageImpl<>(List.of(buildDocument(objectId)));
+    CtPage<TranscriptomicsDocument> page = ctPage(List.of(buildDocument(objectId)));
 
     when(
       repository.findAll(
@@ -368,6 +369,39 @@ class TranscriptomicsApiDelegateImplTest {
     assertThatThrownBy(() -> delegate.getTranscriptomics(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Unknown query parameter: invalidField");
+  }
+
+  @Test
+  @DisplayName("should accept the parent-aware query parameters")
+  void shouldAcceptParentAwareQueryParameters() {
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.addParameter("itemIdSpace", "parent");
+    request.addParameter("prebudgetedParentIds", PARENT_COMPOSITE_ID);
+    RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(TranscriptomicsSearchQueryDto.class),
+        anyList(),
+        eq(TISSUE_HEMIBRAIN)
+      )
+    ).thenReturn(ctPage(List.of()));
+
+    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .itemIdSpace(ItemIdSpaceQueryDto.PARENT)
+      .prebudgetedParentIds(List.of(PARENT_COMPOSITE_ID))
+      .build();
+
+    ResponseEntity<TranscriptomicsPageDto> response = delegate.getTranscriptomics(query);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+  }
+
+  private static CtPage<TranscriptomicsDocument> ctPage(List<TranscriptomicsDocument> content) {
+    return new CtPage<>(content, Pageable.unpaged(), content.size(), null);
   }
 
   private void assertResponseHeaders(HttpHeaders headers) {

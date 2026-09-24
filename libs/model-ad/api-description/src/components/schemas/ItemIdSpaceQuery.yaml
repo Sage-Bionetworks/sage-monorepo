@@ -1,0 +1,11 @@
+type: string
+enum:
+  - row
+  - parent
+description: |
+  Which field the `items` values are matched against.
+  - row: Match items against this view's row UID field.
+  - parent: Match items against this view's parent ID field.
+
+  Absent matches the view's default id field, which is the legacy behavior. Exactly one space is
+  matched, never both.

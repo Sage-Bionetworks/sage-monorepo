@@ -473,6 +473,26 @@ components:
         - data_key
         - query_param_key
         - values
+    ComparisonToolNoun:
+      type: object
+      description: |
+        A noun used to label a set of records in the comparison tool UI, in both its singular and
+        plural forms.
+      properties:
+        singular:
+          type: string
+          description: The singular form of the noun.
+          example: protein
+        plural:
+          type: string
+          description: The plural form of the noun.
+          example: proteins
+      required:
+        - singular
+        - plural
+      example:
+        singular: protein
+        plural: proteins
     ComparisonToolConfig:
       type: object
       properties:
@@ -498,6 +518,45 @@ components:
           description: List of filter configurations
           items:
             $ref: '#/components/schemas/ComparisonToolConfigFilter'
+        row_id_data_key:
+          type: string
+          description: |
+            The data key holding this view's row UID, overriding the comparison tool's default row id
+            key for this view. Null when the view declares no hierarchy.
+          nullable: true
+          example: composite_id
+        parent_id_data_key:
+          type: string
+          description: |
+            The data key holding the id of the row's parent. It must map to the same values in every
+            view of the comparison tool, though not necessarily through the same field, since different
+            views can read different collections. Equal to row_id_data_key means the view's rows are
+            their own parents; a different key means the view's rows are children. Null when the view
+            declares no hierarchy.
+          nullable: true
+          example: rna_composite_id
+        parent_noun:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/ComparisonToolNoun'
+          description: |
+            The noun for this view's parent records, used to label parent counts. Set by a child view,
+            which displays both counts. Null otherwise.
+          nullable: true
+          example:
+            singular: gene
+            plural: genes
+        view_noun:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/ComparisonToolNoun'
+          description: |
+            The noun for this view's own records, used to label row counts. Any view can set it to
+            override the generic nouns in the comparison table. Null otherwise.
+          nullable: true
+          example:
+            singular: protein
+            plural: proteins
       required:
         - page
         - dropdowns
@@ -661,6 +720,9 @@ components:
         transcriptomics:
           $ref: '#/components/schemas/Link'
           nullable: true
+        proteomics:
+          $ref: '#/components/schemas/Link'
+          nullable: true
         disease_correlation:
           $ref: '#/components/schemas/Link'
           nullable: true
@@ -690,6 +752,7 @@ components:
             type: string
             enum:
               - Transcriptomics
+              - Proteomics
               - Pathology
               - Biomarkers
               - Disease Correlation
@@ -1146,6 +1209,18 @@ components:
       required:
         - diseaseCorrelations
         - page
+    ItemIdSpaceQuery:
+      type: string
+      enum:
+        - row
+        - parent
+      description: |
+        Which field the `items` values are matched against.
+        - row: Match items against this view's row UID field.
+        - parent: Match items against this view's parent ID field.
+
+        Absent matches the view's default id field, which is the legacy behavior. Exactly one space is
+        matched, never both.
     ProteomicsSearchQuery:
       type: object
       description: Proteomics search query with pagination and filtering options.
@@ -1163,16 +1238,17 @@ components:
           format: int32
           default: 100
           minimum: 1
-          maximum: 100
+          maximum: 300
           example: 100
         remainingBudget:
           description: |
-            Maximum number of rows to return, letting a client retrieve matching rows from beyond the
-            current page in a single request. When set, pageNumber and pageSize are ignored. Only
-            applied when itemFilterType is 'exclude'.
+            Maximum number of new matching results to admit, letting a client retrieve matching rows
+            from beyond the current page in a single request. It counts unique parents for a
+            parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are
+            ignored. Only applied when itemFilterType is 'exclude'.
           type: integer
           format: int32
-          minimum: 1
+          minimum: 0
           maximum: 50
           nullable: true
           example: 50
@@ -1206,6 +1282,26 @@ components:
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
+        itemIdSpace:
+          $ref: '#/components/schemas/ItemIdSpaceQuery'
+          nullable: true
+        prebudgetedParentIds:
+          description: |
+            Parent IDs that are already accounted for, each using the format "ensembl_gene_id~name~sex".
+            On a budgeted request the rows of these parents are always returned, outside the budget, and
+            remainingBudget is spent only on parents not in this set. On any request the set also drives
+            hasRowsForPrebudgetedParents in the response, so send it on a paginated request once the
+            budget is exhausted to learn whether any further rows could still be admitted through parents
+            already accounted for. Always matched against the parent ID field, independently of
+            itemIdSpace, which governs only the items array. Only applied when itemFilterType is
+            'exclude'.
+          type: array
+          items:
+            type: string
+          maxItems: 50
+          nullable: true
+          example:
+            - ENSMUSG00000000001~LOAD2~Female
         search:
           description: |
             Search by identifier. A single term is a case-insensitive partial match on the displayed symbol,
@@ -1319,6 +1415,12 @@ components:
           type: string
           description: Unique identifier for the proteomics object (unique_id~model_name~sex)
           example: ENSMUSG00000000001P27144~LOAD2~Female
+        rna_composite_id:
+          type: string
+          description: |
+            Identifier of the gene this proteomics object rolls up to (ensembl_gene_id~model_name~sex),
+            equal to the composite_id of the transcriptomics row for the same gene, model, and sex
+          example: ENSMUSG00000000001~LOAD2~Female
         ensembl_gene_id:
           type: string
           description: Ensembl Gene ID
@@ -1374,6 +1476,7 @@ components:
           $ref: '#/components/schemas/FoldChangeResult'
       required:
         - composite_id
+        - rna_composite_id
         - ensembl_gene_id
         - gene_symbol
         - uniprotid
@@ -1397,6 +1500,15 @@ components:
             $ref: '#/components/schemas/Proteomics'
         page:
           $ref: '#/components/schemas/PageMetadata'
+        hasRowsForPrebudgetedParents:
+          description: |
+            Over the full match set, whether at least one row's parent ID is in the request's
+            prebudgetedParentIds. Null when the request carries none. A pure predicate over the match set,
+            so it answers the one question a consumer holding a single page cannot answer for itself:
+            whether a further budgeted request could still admit rows of parents it has already accounted
+            for.
+          type: boolean
+          nullable: true
       required:
         - proteomics
         - page
@@ -1421,12 +1533,13 @@ components:
           example: 100
         remainingBudget:
           description: |
-            Maximum number of rows to return, letting a client retrieve matching rows from beyond the
-            current page in a single request. When set, pageNumber and pageSize are ignored. Only
-            applied when itemFilterType is 'exclude'.
+            Maximum number of new matching results to admit, letting a client retrieve matching rows
+            from beyond the current page in a single request. It counts unique parents for a
+            parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are
+            ignored. Only applied when itemFilterType is 'exclude'.
           type: integer
           format: int32
-          minimum: 1
+          minimum: 0
           maximum: 50
           nullable: true
           example: 50
@@ -1460,6 +1573,25 @@ components:
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
+        itemIdSpace:
+          $ref: '#/components/schemas/ItemIdSpaceQuery'
+          nullable: true
+        prebudgetedParentIds:
+          description: |
+            Parent IDs that are already accounted for. On a budgeted request the rows of these parents
+            are always returned, outside the budget, and remainingBudget is spent only on parents not in
+            this set. On any request the set also drives hasRowsForPrebudgetedParents in the response, so
+            send it on a paginated request once the budget is exhausted to learn whether any further rows
+            could still be admitted through parents already accounted for. Always matched against the
+            parent ID field, independently of itemIdSpace, which governs only the items array. Only
+            applied when itemFilterType is 'exclude'.
+          type: array
+          items:
+            type: string
+          maxItems: 50
+          nullable: true
+          example:
+            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
         search:
           description: |
             Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches).
@@ -1606,6 +1738,15 @@ components:
             $ref: '#/components/schemas/Transcriptomics'
         page:
           $ref: '#/components/schemas/PageMetadata'
+        hasRowsForPrebudgetedParents:
+          description: |
+            Over the full match set, whether at least one row's parent ID is in the request's
+            prebudgetedParentIds. Null when the request carries none. A pure predicate over the match set,
+            so it answers the one question a consumer holding a single page cannot answer for itself:
+            whether a further budgeted request could still admit rows of parents it has already accounted
+            for.
+          type: boolean
+          nullable: true
       required:
         - transcriptomics
         - page

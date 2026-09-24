@@ -7,6 +7,11 @@ import java.util.List;
 import org.bson.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.sagebionetworks.explorers.ApiHelper;
+import org.sagebionetworks.explorers.ItemFilterDef;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
 import org.springframework.data.mongodb.core.query.Criteria;
 
@@ -146,6 +151,77 @@ class TranscriptomicsIdentifierTest {
     String result = identifier.toCompositeId();
 
     assertThat(result).isEqualTo(original);
+  }
+
+  @ParameterizedTest
+  @NullSource
+  @ValueSource(strings = { "", "   " })
+  @DisplayName("should render a blank part the way the aggregation pipeline renders it")
+  void shouldRenderBlankPartTheWayAggregationPipelineRendersIt(String blankName) {
+    TranscriptomicsIdentifier identifier = TranscriptomicsIdentifier.builder()
+      .ensemblGeneId("ENSMUSG00000000001")
+      .name(blankName)
+      .sex("Female")
+      .build();
+
+    String result = identifier.toCompositeId();
+
+    // ItemFilterDef builds the same token in Mongo from the same fields, so a row with a blank
+    // name has to read back as the same string on both sides. Nothing else checks the two against
+    // each other.
+    assertThat(result).isEqualTo(
+      String.join(
+        ItemFilterDef.DELIMITER,
+        "ENSMUSG00000000001",
+        ItemFilterDef.MISSING_PART,
+        "Female"
+      )
+    );
+  }
+
+  @Test
+  @DisplayName("should parse a missing part placeholder back to a null part")
+  void shouldParseMissingPartPlaceholderBackToNullPart() {
+    String compositeId = String.join(
+      ItemFilterDef.DELIMITER,
+      "ENSMUSG00000000001",
+      ItemFilterDef.MISSING_PART,
+      "Female"
+    );
+
+    TranscriptomicsIdentifier result = TranscriptomicsIdentifier.parse(compositeId);
+
+    assertThat(result.getName()).isNull();
+    assertThat(result.toCompositeId()).isEqualTo(compositeId);
+  }
+
+  @Test
+  @DisplayName("should build criteria matching a blank field for a null part")
+  void shouldBuildCriteriaMatchingBlankFieldForNullPart() {
+    TranscriptomicsIdentifier identifier = TranscriptomicsIdentifier.builder()
+      .ensemblGeneId("ENSMUSG00000000001")
+      .sex("Female")
+      .build();
+
+    Criteria result = identifier.toCriteria();
+
+    List<Document> andClauses = result.getCriteriaObject().getList("$and", Document.class);
+    // java.util.regex.Pattern has no value equality, so compare the rendered criteria
+    assertThat(andClauses.get(1)).hasToString(
+      ApiHelper.blankFieldCriteria("name.link_text").getCriteriaObject().toString()
+    );
+    assertThat(andClauses.get(0)).isEqualTo(new Document("ensembl_gene_id", "ENSMUSG00000000001"));
+    assertThat(andClauses.get(2)).isEqualTo(new Document("sex", "Female"));
+  }
+
+  @Test
+  @DisplayName("should expose the token's fields in token order")
+  void shouldExposeTokenFieldsInTokenOrder() {
+    assertThat(TranscriptomicsIdentifier.FIELDS).containsExactly(
+      "ensembl_gene_id",
+      "name.link_text",
+      "sex"
+    );
   }
 
   @Test

@@ -40,6 +40,24 @@ describe('BaseDownloadDomImageComponent', () => {
     expect(document.querySelector('.base-download-dom-image-panel')).toBeTruthy();
   });
 
+  it('should disable the download button when disabled', () => {
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
+
+    expect(element.querySelector('button')).toBeDisabled();
+  });
+
+  it('should not perform a download when disabled', async () => {
+    const performDownload = jest.fn().mockResolvedValue(undefined);
+    fixture.componentRef.setInput('performDownload', performDownload);
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
+
+    await component.download();
+
+    expect(performDownload).not.toHaveBeenCalled();
+  });
+
   it('should have a radiobox for each types', () => {
     const button = element.querySelector('button') as HTMLElement;
 

@@ -56,6 +56,7 @@ const baseMockRow: Transcriptomics = {
 
 const baseMockProteomicsRow: Proteomics = {
   composite_id: 'ENSG00000001P27144~Abca7*V1599M.5xFAD~Female',
+  rna_composite_id: baseMockRow.composite_id,
   ensembl_gene_id: 'ENSG00000001',
   gene_symbol: 'Sptan1',
   uniprotid: 'B9EKJ1',
@@ -200,13 +201,14 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
     ])('should not fetch unpinned data for %s', async (_label, categories) => {
       const { component, comparisonToolService, getTranscriptomicsSpy, getProteomicsSpy } =
         await setup();
-      const setUnpinnedDataSpy = jest.spyOn(comparisonToolService, 'setUnpinnedData');
+      const fetchUnpinnedSpy = jest.spyOn(comparisonToolService, 'fetchUnpinned');
 
       component.getUnpinnedData(mockQuery(categories));
 
       expect(getTranscriptomicsSpy).not.toHaveBeenCalled();
       expect(getProteomicsSpy).not.toHaveBeenCalled();
-      expect(setUnpinnedDataSpy).toHaveBeenCalledWith([]);
+      expect(fetchUnpinnedSpy).toHaveBeenCalled();
+      expect(comparisonToolService.unpinnedData()).toEqual([]);
       expect(comparisonToolService.totalResultsCount()).toBe(0);
       expect(comparisonToolService.isLoadingTableData()).toBe(false);
     });
@@ -217,26 +219,26 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
     ])('should not fetch pinned data for %s', async (_label, categories) => {
       const { component, comparisonToolService, getTranscriptomicsSpy, getProteomicsSpy } =
         await setup();
-      const setPinnedDataSpy = jest.spyOn(comparisonToolService, 'setPinnedData');
+      const fetchPinnedSpy = jest.spyOn(comparisonToolService, 'fetchPinned');
 
       component.getPinnedData(categories, [], []);
 
       expect(getTranscriptomicsSpy).not.toHaveBeenCalled();
       expect(getProteomicsSpy).not.toHaveBeenCalled();
-      expect(setPinnedDataSpy).toHaveBeenCalledWith([]);
+      expect(fetchPinnedSpy).toHaveBeenCalled();
+      expect(comparisonToolService.pinnedData()).toEqual([]);
       expect(comparisonToolService.pinnedResultsCount()).toBe(0);
       expect(comparisonToolService.isLoadingTableData()).toBe(false);
     });
 
     it('should override link_url with model_group when non-null', async () => {
       const { component, comparisonToolService } = await setup();
-      const spy = jest.spyOn(comparisonToolService, 'setUnpinnedData');
 
       component.getUnpinnedData(
         mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY]),
       );
 
-      expect(spy).toHaveBeenCalledWith([
+      expect(comparisonToolService.unpinnedData()).toEqual([
         expect.objectContaining({
           name: expect.objectContaining({ link_url: 'models/Abca7*V1599M' }),
         }),
@@ -245,13 +247,12 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
     it('should override link_url with model_group for proteomics rows', async () => {
       const { component, comparisonToolService } = await setup();
-      const spy = jest.spyOn(comparisonToolService, 'setUnpinnedData');
 
       component.getUnpinnedData(
         mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, TISSUE_CATEGORY]),
       );
 
-      expect(spy).toHaveBeenCalledWith([
+      expect(comparisonToolService.unpinnedData()).toEqual([
         expect.objectContaining({
           name: expect.objectContaining({ link_url: 'models/Abca7*V1599M' }),
         }),
@@ -266,13 +267,12 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
         name: { link_text: '5xFAD (UCI)', link_url: 'models/5xFAD (UCI)' },
       };
       getTranscriptomicsSpy.mockReturnValue(of(mockPage([row])) as any);
-      const spy = jest.spyOn(comparisonToolService, 'setUnpinnedData');
 
       component.getUnpinnedData(
         mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY]),
       );
 
-      expect(spy).toHaveBeenCalledWith([
+      expect(comparisonToolService.unpinnedData()).toEqual([
         expect.objectContaining({
           name: expect.objectContaining({ link_url: 'models/5xFAD (UCI)' }),
         }),

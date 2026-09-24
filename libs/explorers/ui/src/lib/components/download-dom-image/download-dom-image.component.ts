@@ -26,6 +26,7 @@ export class DownloadDomImageComponent {
   hasImageDownload = input<boolean>(true);
   data = input<string[][]>([]);
   downloadImagePaddingPx = input<number>();
+  disabled = input<boolean>(false);
 
   performDownload = async (fileType: string): Promise<void> => {
     if (fileType === FILE_TYPE_JPEG || fileType === FILE_TYPE_PNG) {

@@ -5,6 +5,12 @@ properties:
     type: string
     description: Unique identifier for the proteomics object (unique_id~model_name~sex)
     example: ENSMUSG00000000001P27144~LOAD2~Female
+  rna_composite_id:
+    type: string
+    description: |
+      Identifier of the gene this proteomics object rolls up to (ensembl_gene_id~model_name~sex),
+      equal to the composite_id of the transcriptomics row for the same gene, model, and sex
+    example: ENSMUSG00000000001~LOAD2~Female
   ensembl_gene_id:
     type: string
     description: Ensembl Gene ID
@@ -60,6 +66,7 @@ properties:
     $ref: ./FoldChangeResult.yaml
 required:
   - composite_id
+  - rna_composite_id
   - ensembl_gene_id
   - gene_symbol
   - uniprotid

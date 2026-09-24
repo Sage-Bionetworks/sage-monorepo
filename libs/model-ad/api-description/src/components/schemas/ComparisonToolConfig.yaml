@@ -22,6 +22,45 @@ properties:
     description: List of filter configurations
     items:
       $ref: './ComparisonToolConfigFilter.yaml'
+  row_id_data_key:
+    type: string
+    description: |
+      The data key holding this view's row UID, overriding the comparison tool's default row id
+      key for this view. Null when the view declares no hierarchy.
+    nullable: true
+    example: composite_id
+  parent_id_data_key:
+    type: string
+    description: |
+      The data key holding the id of the row's parent. It must map to the same values in every
+      view of the comparison tool, though not necessarily through the same field, since different
+      views can read different collections. Equal to row_id_data_key means the view's rows are
+      their own parents; a different key means the view's rows are children. Null when the view
+      declares no hierarchy.
+    nullable: true
+    example: rna_composite_id
+  parent_noun:
+    type: object
+    allOf:
+      - $ref: './ComparisonToolNoun.yaml'
+    description: |
+      The noun for this view's parent records, used to label parent counts. Set by a child view,
+      which displays both counts. Null otherwise.
+    nullable: true
+    example:
+      singular: gene
+      plural: genes
+  view_noun:
+    type: object
+    allOf:
+      - $ref: './ComparisonToolNoun.yaml'
+    description: |
+      The noun for this view's own records, used to label row counts. Any view can set it to
+      override the generic nouns in the comparison table. Null otherwise.
+    nullable: true
+    example:
+      singular: protein
+      plural: proteins
 required:
   - page
   - dropdowns

@@ -18,8 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.model.ad.api.next.model.document.ProteomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemIdSpaceQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsSearchQueryDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -48,13 +50,22 @@ class CustomProteomicsRepositoryImplTest {
     GENE_SYMBOL_FIELD,
     UNIPROTID_FIELD
   );
+  private static final String NAME_FIELD = "name.link_text";
+  private static final String SEX_FIELD = "sex";
   private static final String TISSUE_FIELD = "tissue";
+  private static final String UNIQUE_ID_FIELD = "unique_id";
   private static final String TISSUE = "Hemibrain";
   private static final int REMAINING_BUDGET = 25;
 
   private static final String ENSA_GENE_SYMBOL = "ensa";
   private static final String ENSA_UNIPROT_ID = "p11934870";
   private static final String ENSA_MOUSE_ENSEMBL_GENE_ID = "ENSMUSG00000038619";
+  private static final String MODEL_NAME = "LOAD2";
+  private static final String SEX = "Female";
+  private static final String ROW_COMPOSITE_ID =
+    "ENSMUSG00000000001P27144~" + MODEL_NAME + "~" + SEX;
+  private static final String PARENT_COMPOSITE_ID =
+    ENSA_MOUSE_ENSEMBL_GENE_ID + "~" + MODEL_NAME + "~" + SEX;
   private static final List<String> MONTH_COLUMNS = List.of(
     "4 months",
     "12 months",
@@ -69,6 +80,9 @@ class CustomProteomicsRepositoryImplTest {
 
   @Mock
   private AggregationResults<ProteomicsDocument> aggregationResults;
+
+  @Mock
+  private AggregationResults<Document> parentSelectionResults;
 
   @BeforeEach
   void setUp() {
@@ -125,26 +139,15 @@ class CustomProteomicsRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
-    repository.findAll(
-      PageRequest.of(0, 10),
-      query,
-      List.of("ENSMUSG00000000001P27144~LOAD2~Female"),
-      TISSUE
-    );
+    repository.findAll(PageRequest.of(0, 10), query, List.of(ROW_COMPOSITE_ID), TISSUE);
 
-    List<Document> orConditions = captureAndConditions()
-      .stream()
-      .filter(doc -> doc.containsKey("$or"))
-      .findFirst()
-      .map(doc -> (List<Document>) doc.get("$or"))
-      .orElseThrow();
-    assertThat(orConditions)
+    assertThat(orBranches(captureAndConditions()))
       .singleElement()
       .satisfies(doc ->
         assertThat((List<Document>) doc.get("$and")).containsExactly(
-          new Document("unique_id", "ENSMUSG00000000001P27144"),
-          new Document("name.link_text", "LOAD2"),
-          new Document("sex", "Female")
+          new Document(UNIQUE_ID_FIELD, "ENSMUSG00000000001P27144"),
+          new Document(NAME_FIELD, MODEL_NAME),
+          new Document(SEX_FIELD, SEX)
         )
       );
   }
@@ -156,12 +159,7 @@ class CustomProteomicsRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .build();
 
-    repository.findAll(
-      PageRequest.of(0, 10),
-      query,
-      List.of("ENSMUSG00000000001P27144~LOAD2~Female"),
-      TISSUE
-    );
+    repository.findAll(PageRequest.of(0, 10), query, List.of(ROW_COMPOSITE_ID), TISSUE);
 
     assertThat(captureAndConditions()).anySatisfy(doc -> assertThat(doc).containsKey("$nor"));
   }
@@ -242,12 +240,7 @@ class CustomProteomicsRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
-    repository.findAll(
-      PageRequest.of(0, 10),
-      query,
-      List.of("ENSMUSG00000000001P27144~LOAD2~Female"),
-      TISSUE
-    );
+    repository.findAll(PageRequest.of(0, 10), query, List.of(ROW_COMPOSITE_ID), TISSUE);
 
     assertThat(captureAndConditions()).noneSatisfy(doc ->
       assertThat(doc).containsKey(DISPLAY_SYMBOL_FIELD)
@@ -342,8 +335,34 @@ class CustomProteomicsRepositoryImplTest {
   }
 
   @Test
-  @DisplayName("should forward the remaining budget instead of paginating when excluding")
-  void shouldForwardRemainingBudgetWhenExcluding() {
+  @DisplayName("should match items against the parent gene fields when the parent space is used")
+  void shouldMatchItemsAgainstParentGeneFieldsWhenParentSpaceIsAskedFor() {
+    ProteomicsSearchQueryDto query = ProteomicsSearchQueryDto.builder()
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .itemIdSpace(ItemIdSpaceQueryDto.PARENT)
+      .build();
+
+    repository.findAll(PageRequest.of(0, 10), query, List.of(PARENT_COMPOSITE_ID), TISSUE);
+
+    List<Document> andConditions = captureAndConditions();
+    assertThat(orBranches(andConditions))
+      .singleElement()
+      .satisfies(doc ->
+        assertThat((List<Document>) doc.get("$and")).containsExactly(
+          new Document(ENSEMBL_GENE_ID_FIELD, ENSA_MOUSE_ENSEMBL_GENE_ID),
+          new Document(NAME_FIELD, MODEL_NAME),
+          new Document(SEX_FIELD, SEX)
+        )
+      );
+    assertThat(andConditions.toString())
+      .as("an isoform's own unique_id has no part in a gene-level match")
+      .doesNotContain(UNIQUE_ID_FIELD);
+  }
+
+  @Test
+  @DisplayName("should spend the remaining budget on parent genes rather than on rows")
+  void shouldSpendRemainingBudgetOnParentGenesRatherThanRows() {
+    stubParentSelection(List.of(PARENT_COMPOSITE_ID));
     ProteomicsSearchQueryDto query = ProteomicsSearchQueryDto.builder()
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .remainingBudget(REMAINING_BUDGET)
@@ -352,11 +371,57 @@ class CustomProteomicsRepositoryImplTest {
     // A later page, so a budget that never reached the base class would show up as a $skip.
     repository.findAll(PageRequest.of(2, 10), query, Collections.emptyList(), TISSUE);
 
-    String pipeline = captureAggregation().toString();
-    assertThat(pipeline)
-      .doesNotContain("$skip")
-      .containsOnlyOnce("$limit")
+    assertThat(captureParentSelection().toString())
+      .as("the budget buys whole genes, so it is the gene selection that is limited")
+      .contains("$group")
       .contains(String.valueOf(REMAINING_BUDGET));
+    assertThat(captureAggregation().toString())
+      .as("every protein isoform of an admitted gene is wanted, so the rows take no limit")
+      .doesNotContain("$skip")
+      .doesNotContain("$limit")
+      .contains(ENSA_MOUSE_ENSEMBL_GENE_ID);
+  }
+
+  @Test
+  @DisplayName("should answer hasRowsForPrebudgetedParents against the parent gene fields")
+  void shouldAnswerHasRowsForPrebudgetedParentsAgainstParentGeneFields() {
+    when(mongoTemplate.exists(any(Query.class), eq(COLLECTION_NAME))).thenReturn(true);
+    ProteomicsSearchQueryDto query = ProteomicsSearchQueryDto.builder()
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .prebudgetedParentIds(List.of(PARENT_COMPOSITE_ID))
+      .build();
+
+    CtPage<ProteomicsDocument> page = repository.findAll(
+      PageRequest.of(0, 10),
+      query,
+      Collections.emptyList(),
+      TISSUE
+    );
+
+    assertThat(page.getHasRowsForPrebudgetedParents()).isTrue();
+    assertThat(captureExistsQuery().getQueryObject().toString())
+      .as("an unpinned isoform is looked for by its gene, not by its own id")
+      .contains(ENSEMBL_GENE_ID_FIELD)
+      .doesNotContain(UNIQUE_ID_FIELD);
+  }
+
+  private void stubParentSelection(List<String> parentTokens) {
+    when(
+      mongoTemplate.aggregate(any(Aggregation.class), eq(COLLECTION_NAME), eq(Document.class))
+    ).thenReturn(parentSelectionResults);
+    when(parentSelectionResults.getMappedResults()).thenReturn(
+      parentTokens.stream().map(token -> new Document("_id", token)).toList()
+    );
+  }
+
+  /** The $or branches of the one $and condition that carries the item filter. */
+  private static List<Document> orBranches(List<Document> andConditions) {
+    return andConditions
+      .stream()
+      .filter(doc -> doc.containsKey("$or"))
+      .findFirst()
+      .map(doc -> (List<Document>) doc.get("$or"))
+      .orElseThrow(() -> new AssertionError("no item filter in " + andConditions));
   }
 
   /** Runs a search-only query (EXCLUDE mode, no items) and returns its search condition. */
@@ -419,6 +484,18 @@ class CustomProteomicsRepositoryImplTest {
       eq(COLLECTION_NAME),
       eq(ProteomicsDocument.class)
     );
+    return captor.getValue();
+  }
+
+  private Aggregation captureParentSelection() {
+    ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(captor.capture(), eq(COLLECTION_NAME), eq(Document.class));
+    return captor.getValue();
+  }
+
+  private Query captureExistsQuery() {
+    ArgumentCaptor<Query> captor = ArgumentCaptor.forClass(Query.class);
+    verify(mongoTemplate).exists(captor.capture(), eq(COLLECTION_NAME));
     return captor.getValue();
   }
 }

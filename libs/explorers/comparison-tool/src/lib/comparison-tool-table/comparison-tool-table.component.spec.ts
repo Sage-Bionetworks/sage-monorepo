@@ -17,6 +17,7 @@ import {
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
+import { Subject } from 'rxjs';
 import { ComparisonToolTableComponent } from './comparison-tool-table.component';
 import {
   COLUMN_HEADER_BORDER_WIDTH_PX,
@@ -26,7 +27,7 @@ import {
   COLUMN_HEADER_TEXT_CLASS,
   MAX_COLUMN_WIDTH_PX,
   MIN_COLUMN_WIDTH_PX,
-  PIN_ALL_LOADING_TOOLTIP,
+  TABLE_DATA_LOADING_TOOLTIP,
   PIN_ALL_TOOLTIP,
   SORT_BADGE_SPACING_PX,
   SORT_BADGE_WIDTH_PX,
@@ -96,6 +97,58 @@ describe('ComparisonToolTableComponent', () => {
     expect(screen.getByRole('button', { name: /clear all/i })).toBeInTheDocument();
   });
 
+  it('should enable Download Pins and Clear All Pins when no fetch is in flight', async () => {
+    const pinnedItemData = mockComparisonToolData[0];
+    await setup({ pinnedItems: [pinnedItemData['_id']], pinnedData: [pinnedItemData] });
+
+    expect(screen.getByRole('button', { name: /download/i })).toBeEnabled();
+    expect(screen.getByRole('button', { name: /clear all/i })).toBeEnabled();
+  });
+
+  it('should disable Download Pins and Clear All Pins while table data is loading', async () => {
+    const pinnedItemData = mockComparisonToolData[0];
+    const { component } = await setup({
+      pinnedItems: [pinnedItemData['_id']],
+      pinnedData: [pinnedItemData],
+    });
+
+    TestBed.inject(ComparisonToolService).fetchUnpinned(new Subject<never>());
+    component.detectChanges();
+
+    expect(screen.getByRole('button', { name: /download/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /clear all/i })).toBeDisabled();
+  });
+
+  it('should not clear pins when Clear All Pins is clicked while table data is loading', async () => {
+    const pinnedItemData = mockComparisonToolData[0];
+    const { component, user } = await setup({
+      pinnedItems: [pinnedItemData['_id']],
+      pinnedData: [pinnedItemData],
+    });
+    const service = TestBed.inject(ComparisonToolService);
+    const resetPinnedItemsSpy = jest.spyOn(service, 'resetPinnedItems');
+
+    service.fetchUnpinned(new Subject<never>());
+    component.detectChanges();
+    await user.click(screen.getByRole('button', { name: /clear all/i }));
+
+    expect(resetPinnedItemsSpy).not.toHaveBeenCalled();
+  });
+
+  it('should explain that Clear All Pins is waiting on table data while a fetch is in flight', async () => {
+    const pinnedItemData = mockComparisonToolData[0];
+    const { component, user } = await setup({
+      pinnedItems: [pinnedItemData['_id']],
+      pinnedData: [pinnedItemData],
+    });
+
+    TestBed.inject(ComparisonToolService).fetchUnpinned(new Subject<never>());
+    component.detectChanges();
+    await user.hover(screen.getByRole('button', { name: /clear all/i }));
+
+    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_TOOLTIP })).toBeVisible();
+  });
+
   it('should not show pinned section when there are no pinned items', async () => {
     await setup();
     expect(screen.queryByText(/Pinned Results/i)).toBeNull();
@@ -135,7 +188,7 @@ describe('ComparisonToolTableComponent', () => {
   it('should disable Pin All while table data is loading', async () => {
     const { component } = await setup(undefined, { searchTerm: '5xFAD' });
 
-    TestBed.inject(ComparisonToolService).startFetch();
+    TestBed.inject(ComparisonToolService).fetchUnpinned(new Subject<never>());
     component.detectChanges();
 
     expect(screen.getByRole('button', { name: /pin all/i })).toBeDisabled();
@@ -152,11 +205,11 @@ describe('ComparisonToolTableComponent', () => {
   it('should explain that Pin All is waiting on table data while a fetch is in flight', async () => {
     const { component, user } = await setup(undefined, { searchTerm: '5xFAD' });
 
-    TestBed.inject(ComparisonToolService).startFetch();
+    TestBed.inject(ComparisonToolService).fetchUnpinned(new Subject<never>());
     component.detectChanges();
     await user.hover(screen.getByRole('button', { name: /pin all/i }));
 
-    expect(screen.getByRole('tooltip', { name: PIN_ALL_LOADING_TOOLTIP })).toBeVisible();
+    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_TOOLTIP })).toBeVisible();
   });
 
   it('should explain the pin limit rather than the loading state when both apply', async () => {
@@ -171,7 +224,7 @@ describe('ComparisonToolTableComponent', () => {
     );
     const service = TestBed.inject(ComparisonToolService);
 
-    service.startFetch();
+    service.fetchUnpinned(new Subject<never>());
     component.detectChanges();
     await user.hover(screen.getByRole('button', { name: /pin all/i }));
 

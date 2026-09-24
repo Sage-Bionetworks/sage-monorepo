@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemIdSpaceQueryDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -42,6 +43,11 @@ public class TranscriptomicsSearchQueryDto {
   private @Nullable List<String> items;
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
+
+  private @Nullable ItemIdSpaceQueryDto itemIdSpace;
+
+  @Valid
+  private @Nullable List<String> prebudgetedParentIds;
 
   private @Nullable String search = null;
 
@@ -160,13 +166,13 @@ public class TranscriptomicsSearchQueryDto {
   }
 
   /**
-   * Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. 
-   * minimum: 1
+   * Maximum number of new matching results to admit, letting a client retrieve matching rows from beyond the current page in a single request. It counts unique parents for a parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. 
+   * minimum: 0
    * maximum: 50
    * @return remainingBudget
    */
-  @Min(1) @Max(50) 
-  @Schema(name = "remainingBudget", example = "50", description = "Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Min(0) @Max(50) 
+  @Schema(name = "remainingBudget", example = "50", description = "Maximum number of new matching results to admit, letting a client retrieve matching rows from beyond the current page in a single request. It counts unique parents for a parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("remainingBudget")
   public @Nullable Integer getRemainingBudget() {
     return remainingBudget;
@@ -250,6 +256,54 @@ public class TranscriptomicsSearchQueryDto {
 
   public void setItemFilterType(ItemFilterTypeQueryDto itemFilterType) {
     this.itemFilterType = itemFilterType;
+  }
+
+  public TranscriptomicsSearchQueryDto itemIdSpace(@Nullable ItemIdSpaceQueryDto itemIdSpace) {
+    this.itemIdSpace = itemIdSpace;
+    return this;
+  }
+
+  /**
+   * Get itemIdSpace
+   * @return itemIdSpace
+   */
+  @Valid 
+  @Schema(name = "itemIdSpace", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("itemIdSpace")
+  public @Nullable ItemIdSpaceQueryDto getItemIdSpace() {
+    return itemIdSpace;
+  }
+
+  public void setItemIdSpace(@Nullable ItemIdSpaceQueryDto itemIdSpace) {
+    this.itemIdSpace = itemIdSpace;
+  }
+
+  public TranscriptomicsSearchQueryDto prebudgetedParentIds(@Nullable List<String> prebudgetedParentIds) {
+    this.prebudgetedParentIds = prebudgetedParentIds;
+    return this;
+  }
+
+  public TranscriptomicsSearchQueryDto addPrebudgetedParentIdsItem(String prebudgetedParentIdsItem) {
+    if (this.prebudgetedParentIds == null) {
+      this.prebudgetedParentIds = new ArrayList<>();
+    }
+    this.prebudgetedParentIds.add(prebudgetedParentIdsItem);
+    return this;
+  }
+
+  /**
+   * Parent IDs that are already accounted for. On a budgeted request the rows of these parents are always returned, outside the budget, and remainingBudget is spent only on parents not in this set. On any request the set also drives hasRowsForPrebudgetedParents in the response, so send it on a paginated request once the budget is exhausted to learn whether any further rows could still be admitted through parents already accounted for. Always matched against the parent ID field, independently of itemIdSpace, which governs only the items array. Only applied when itemFilterType is 'exclude'. 
+   * @return prebudgetedParentIds
+   */
+  @Size(max = 50) 
+  @Schema(name = "prebudgetedParentIds", example = "[\"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female\"]", description = "Parent IDs that are already accounted for. On a budgeted request the rows of these parents are always returned, outside the budget, and remainingBudget is spent only on parents not in this set. On any request the set also drives hasRowsForPrebudgetedParents in the response, so send it on a paginated request once the budget is exhausted to learn whether any further rows could still be admitted through parents already accounted for. Always matched against the parent ID field, independently of itemIdSpace, which governs only the items array. Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("prebudgetedParentIds")
+  public @Nullable List<String> getPrebudgetedParentIds() {
+    return prebudgetedParentIds;
+  }
+
+  public void setPrebudgetedParentIds(@Nullable List<String> prebudgetedParentIds) {
+    this.prebudgetedParentIds = prebudgetedParentIds;
   }
 
   public TranscriptomicsSearchQueryDto search(@Nullable String search) {
@@ -455,6 +509,8 @@ public class TranscriptomicsSearchQueryDto {
         Objects.equals(this.categories, transcriptomicsSearchQuery.categories) &&
         Objects.equals(this.items, transcriptomicsSearchQuery.items) &&
         Objects.equals(this.itemFilterType, transcriptomicsSearchQuery.itemFilterType) &&
+        Objects.equals(this.itemIdSpace, transcriptomicsSearchQuery.itemIdSpace) &&
+        Objects.equals(this.prebudgetedParentIds, transcriptomicsSearchQuery.prebudgetedParentIds) &&
         Objects.equals(this.search, transcriptomicsSearchQuery.search) &&
         Objects.equals(this.biodomains, transcriptomicsSearchQuery.biodomains) &&
         Objects.equals(this.modelType, transcriptomicsSearchQuery.modelType) &&
@@ -466,7 +522,7 @@ public class TranscriptomicsSearchQueryDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, remainingBudget, categories, items, itemFilterType, search, biodomains, modelType, name, sex, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, remainingBudget, categories, items, itemFilterType, itemIdSpace, prebudgetedParentIds, search, biodomains, modelType, name, sex, sortFields, sortOrders);
   }
 
   @Override
@@ -479,6 +535,8 @@ public class TranscriptomicsSearchQueryDto {
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
+    sb.append("    itemIdSpace: ").append(toIndentedString(itemIdSpace)).append("\n");
+    sb.append("    prebudgetedParentIds: ").append(toIndentedString(prebudgetedParentIds)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("    biodomains: ").append(toIndentedString(biodomains)).append("\n");
     sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
@@ -520,6 +578,8 @@ public class TranscriptomicsSearchQueryDto {
       this.instance.setCategories(value.categories);
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
+      this.instance.setItemIdSpace(value.itemIdSpace);
+      this.instance.setPrebudgetedParentIds(value.prebudgetedParentIds);
       this.instance.setSearch(value.search);
       this.instance.setBiodomains(value.biodomains);
       this.instance.setModelType(value.modelType);
@@ -557,6 +617,16 @@ public class TranscriptomicsSearchQueryDto {
     
     public TranscriptomicsSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
       this.instance.itemFilterType(itemFilterType);
+      return this;
+    }
+    
+    public TranscriptomicsSearchQueryDto.Builder itemIdSpace(ItemIdSpaceQueryDto itemIdSpace) {
+      this.instance.itemIdSpace(itemIdSpace);
+      return this;
+    }
+    
+    public TranscriptomicsSearchQueryDto.Builder prebudgetedParentIds(List<String> prebudgetedParentIds) {
+      this.instance.prebudgetedParentIds(prebudgetedParentIds);
       return this;
     }
     

@@ -3,6 +3,7 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,8 +21,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemIdSpaceQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -44,6 +47,8 @@ class CustomTranscriptomicsRepositoryImplTest {
   private static final String COLLECTION_NAME = "rna_de_aggregate";
   private static final String ENSEMBL_GENE_ID_FIELD = "ensembl_gene_id";
   private static final String GENE_SYMBOL_FIELD = "gene_symbol";
+  private static final String NAME_FIELD = "name.link_text";
+  private static final String SEX_FIELD = "sex";
   private static final String TISSUE_FIELD = "tissue";
   private static final int REMAINING_BUDGET = 25;
 
@@ -51,6 +56,10 @@ class CustomTranscriptomicsRepositoryImplTest {
   private static final String OTHER_MOUSE_ENSEMBL_GENE_ID = "ENSMUSG00000000001";
   private static final String MARMOSET_ENSEMBL_GENE_ID = "ENSCJAG00000003645";
   private static final String PLEC_GENE_SYMBOL = "plec";
+  private static final String MODEL_NAME = "LOAD2";
+  private static final String SEX = "Female";
+  private static final String COMPOSITE_ID =
+    ENSA_MOUSE_ENSEMBL_GENE_ID + "~" + MODEL_NAME + "~" + SEX;
 
   private CustomTranscriptomicsRepositoryImpl repository;
 
@@ -399,11 +408,70 @@ class CustomTranscriptomicsRepositoryImplTest {
     // A later page, so a budget that never reached the base class would show up as a $skip.
     repository.findAll(PageRequest.of(2, 10), query, Collections.emptyList(), "test-tissue");
 
+    verify(mongoTemplate, never()).aggregate(
+      any(Aggregation.class),
+      eq(COLLECTION_NAME),
+      eq(Document.class)
+    );
     String pipeline = captureAggregation().toString();
     assertThat(pipeline)
+      .as("a gene is its own parent, so the budget caps rows directly")
       .doesNotContain("$skip")
       .containsOnlyOnce("$limit")
       .contains(String.valueOf(REMAINING_BUDGET));
+  }
+
+  @Test
+  @DisplayName("should match items against the gene fields when the parent space is used")
+  void shouldMatchItemsAgainstGeneFieldsWhenParentSpaceIsUsed() {
+    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .itemIdSpace(ItemIdSpaceQueryDto.PARENT)
+      .build();
+
+    repository.findAll(PageRequest.of(0, 10), query, List.of(COMPOSITE_ID), "test-tissue");
+
+    List<Document> andConditions = (List<Document>) captureCountQuery()
+      .getQueryObject()
+      .get("$and");
+    List<Document> orBranches = andConditions
+      .stream()
+      .filter(doc -> doc.containsKey("$or"))
+      .findFirst()
+      .map(doc -> (List<Document>) doc.get("$or"))
+      .orElseThrow(() -> new AssertionError("no item filter in " + andConditions));
+    assertThat(orBranches)
+      .as("a gene is its own parent, so the parent space resolves back to the row space")
+      .singleElement()
+      .satisfies(doc ->
+        assertThat((List<Document>) doc.get("$and")).containsExactly(
+          new Document(ENSEMBL_GENE_ID_FIELD, ENSA_MOUSE_ENSEMBL_GENE_ID),
+          new Document(NAME_FIELD, MODEL_NAME),
+          new Document(SEX_FIELD, SEX)
+        )
+      );
+  }
+
+  @Test
+  @DisplayName("should answer hasRowsForPrebudgetedParents against the gene fields")
+  void shouldAnswerHasRowsForPrebudgetedParentsAgainstGeneFields() {
+    when(mongoTemplate.exists(any(Query.class), eq(COLLECTION_NAME))).thenReturn(false);
+    TranscriptomicsSearchQueryDto query = TranscriptomicsSearchQueryDto.builder()
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .prebudgetedParentIds(List.of(COMPOSITE_ID))
+      .build();
+
+    CtPage<TranscriptomicsDocument> page = repository.findAll(
+      PageRequest.of(0, 10),
+      query,
+      Collections.emptyList(),
+      "test-tissue"
+    );
+
+    assertThat(page.getHasRowsForPrebudgetedParents()).isFalse();
+    ArgumentCaptor<Query> captor = ArgumentCaptor.forClass(Query.class);
+    verify(mongoTemplate).exists(captor.capture(), eq(COLLECTION_NAME));
+    assertThat(captor.getValue().getQueryObject().toString()).contains(ENSEMBL_GENE_ID_FIELD);
   }
 
   /** Runs a search-only query (EXCLUDE mode, no items) and returns its search condition. */

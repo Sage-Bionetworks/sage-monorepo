@@ -1,5 +1,4 @@
-import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   ComparisonToolConfigPage,
@@ -36,7 +35,6 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly nominatedTargetsService = inject(NominatedTargetService);
   private readonly comparisonToolService = inject(NominatedTargetsComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
@@ -154,25 +152,18 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `NominatedTargetsComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
     );
 
-    this.nominatedTargetsService
-      .getNominatedTargets(query)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: NominatedTargetsPage) => {
-          const data = response.nominatedTargets;
-          this.comparisonToolService.setUnpinnedData(data);
-          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
-        },
-        error: () => {
-          this.comparisonToolService.setUnpinnedData([]);
-          this.comparisonToolService.totalResultsCount.set(0);
-        },
-      });
+    this.comparisonToolService.fetchUnpinned(
+      this.nominatedTargetsService.getNominatedTargets(query).pipe(
+        map((response: NominatedTargetsPage) => ({
+          data: response.nominatedTargets,
+          totalCount: response.page.totalElements,
+        })),
+      ),
+    );
   }
 
   getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
@@ -185,22 +176,17 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
       sortOrders,
     };
 
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `NominatedTargetsComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
     );
 
-    this.nominatedTargetsService
-      .getNominatedTargets(query)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: NominatedTargetsPage) => {
+    this.comparisonToolService.fetchPinned(
+      this.nominatedTargetsService.getNominatedTargets(query).pipe(
+        map((response: NominatedTargetsPage) => {
           const data = response.nominatedTargets;
-          this.comparisonToolService.setPinnedData(data);
-        },
-        error: () => {
-          this.comparisonToolService.setPinnedData([]);
-        },
-      });
+          return { data, totalCount: data.length };
+        }),
+      ),
+    );
   }
 }

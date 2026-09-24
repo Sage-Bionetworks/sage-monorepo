@@ -24,6 +24,8 @@ public class ProteomicsApiDelegateImpl implements ProteomicsApiDelegate {
     "categories",
     "items",
     "itemFilterType",
+    "itemIdSpace",
+    "prebudgetedParentIds",
     "search",
     "biodomains",
     "modelType",
