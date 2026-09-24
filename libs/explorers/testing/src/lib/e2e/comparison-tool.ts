@@ -106,6 +106,17 @@ export const clickViewDetailsButtonByName = async (table: Locator, page: Page, n
   await viewDetailsButton.press('Enter');
 };
 
+export const getPinToggleButtonByName = (
+  table: Locator,
+  page: Page,
+  name: string,
+  toggle: 'pin' | 'unpin',
+): Locator =>
+  getRowByName(table, page, name).getByRole('button', {
+    name: toggle === 'pin' ? 'Pin' : 'Unpin',
+    exact: true,
+  });
+
 export const togglePinByName = async (
   table: Locator,
   page: Page,
@@ -114,7 +125,7 @@ export const togglePinByName = async (
 ) => {
   const row = getRowByName(table, page, name);
   await expect(row).toHaveCount(1);
-  const pinButton = row.getByRole('button', { name: toggle === 'pin' ? 'Pin' : 'Unpin' });
+  const pinButton = getPinToggleButtonByName(table, page, name, toggle);
   await pinButton.focus();
   await pinButton.press('Enter');
   return row;
@@ -128,8 +139,11 @@ export const unPinByName = async (table: Locator, page: Page, name: string) => {
   return await togglePinByName(table, page, name, 'unpin');
 };
 
+export const getPinAllButton = (page: Page): Locator =>
+  page.getByRole('button', { name: 'Pin All' });
+
 export const pinAll = async (page: Page) => {
-  await page.getByRole('button', { name: 'Pin All' }).click();
+  await getPinAllButton(page).click();
 };
 
 export const expectPinnedParams = async (page: Page, expected: string[]): Promise<void> => {
@@ -176,7 +190,7 @@ export const expectPinnedResultsCount = async (page: Page, pinnedCount: number):
 // The button only renders alongside matching results, so search or filter before asserting on it
 export const expectPinAllDisabledAtPinLimit = async (page: Page): Promise<void> => {
   await expectPinnedResultsCount(page, MAX_PIN_LIMIT);
-  await expect(page.getByRole('button', { name: 'Pin All' })).toBeDisabled();
+  await expect(getPinAllButton(page)).toBeDisabled();
 };
 
 export const expectCategories = async (page: Page, categories: string[]): Promise<void> => {

@@ -45,7 +45,13 @@ import {
   testUrlPinsExceedingLimitAreCapped,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
-import { COMPARISON_TOOL_HEADER_TITLES, DIFFERENTIAL_EXPRESSION_NAV_TRAILS } from './constants';
+import {
+  COMPARISON_TOOL_HEADER_TITLES,
+  DIFFERENTIAL_EXPRESSION_CT_PAGE as CT_PAGE,
+  DIFFERENTIAL_EXPRESSION_NAV_TRAILS,
+  DIFFERENTIAL_EXPRESSION_DROPDOWN_INDEX as DROPDOWN_INDEX,
+  DIFFERENTIAL_EXPRESSION_PROTEIN_CATEGORY as PROTEIN_MAIN_CATEGORY,
+} from './constants';
 import {
   fetchComparisonToolConfig,
   fetchProteomics,
@@ -53,10 +59,6 @@ import {
   navigateToComparison,
 } from './helpers/comparison-tool';
 
-const CT_PAGE = 'Differential Expression';
-const PROTEIN_MAIN_CATEGORY = 'PROTEIN - DIFFERENTIAL EXPRESSION';
-const MAIN_CATEGORY_DROPDOWN_INDEX = 0;
-const TISSUE_DROPDOWN_INDEX = 1;
 const categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
 const categoriesQueryParams = getQueryParamFromValues(categories, 'categories');
 const models = ['3xTg-AD', 'Abca7*V1599M'];
@@ -272,7 +274,7 @@ test.describe('differential expression', () => {
     const proteinSearchTerm = 'abca';
 
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
-    await selectCategoryOption(page, MAIN_CATEGORY_DROPDOWN_INDEX, PROTEIN_MAIN_CATEGORY);
+    await selectCategoryOption(page, DROPDOWN_INDEX.MAIN_CATEGORY, PROTEIN_MAIN_CATEGORY);
 
     // The tissue dropdown re-populates for the protein modality, so query the categories the app
     // actually selected rather than assuming a tissue
@@ -345,12 +347,12 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
 
-    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Cerebral Cortex');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Cerebral Cortex');
 
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
 
-    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Hippocampus');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Hippocampus');
 
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
@@ -373,7 +375,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
 
-    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Cerebral Cortex');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Cerebral Cortex');
 
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
@@ -383,7 +385,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, afterPinPinned);
     await expectPinnedParams(page, afterPinPinned);
 
-    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Hippocampus');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Hippocampus');
 
     await expectPinnedRows(page, afterPinPinned);
     await expectPinnedParams(page, afterPinPinned);
@@ -406,7 +408,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
 
-    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Cerebral Cortex');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Cerebral Cortex');
 
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
@@ -415,7 +417,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, afterUnpinPinned);
     await expectPinnedParams(page, afterUnpinPinned);
 
-    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Hippocampus');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Hippocampus');
 
     await expectPinnedRows(page, afterUnpinPinned);
     await expectPinnedParams(page, afterUnpinPinned);
@@ -440,12 +442,12 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, firstPinned);
     await expectPinnedParams(page, firstPinned);
 
-    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Cerebral Cortex');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Cerebral Cortex');
 
     await expectPinnedRows(page, expectedSecondPinned);
     await expectPinnedParams(page, expectedSecondPinned);
 
-    await selectCategoryOption(page, TISSUE_DROPDOWN_INDEX, 'Tissue - Hippocampus');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Hippocampus');
 
     await expectPinnedRows(page, firstPinned);
     await expectPinnedParams(page, firstPinned);
