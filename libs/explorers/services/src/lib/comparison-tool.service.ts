@@ -240,6 +240,9 @@ export class ComparisonToolService<T> {
   pinnedRowCount = computed(() => this.pinnedData().length);
   readonly pinnedParentsSet = computed(() => new Set(this.pinnedParents()));
   readonly pinnedParentCount = computed(() => this.pinnedParents().length);
+  readonly pinCount = computed(() =>
+    this.parentIdDataKey() ? this.pinnedParentCount() : this.pinnedRowCount(),
+  );
 
   /**
    * The pins to send with a query, and the id space they are in. By default this is the pinned items
@@ -263,7 +266,7 @@ export class ComparisonToolService<T> {
   );
 
   hasReachedPinLimit = computed(() => {
-    return this.pinnedRowCount() >= this.pinLimit();
+    return this.pinCount() >= this.pinLimit();
   });
 
   disabledPinTooltip = computed(() => {
@@ -646,21 +649,40 @@ export class ComparisonToolService<T> {
     return this.pinnedItemsSet().has(id);
   }
 
-  togglePin(id: string) {
+  /**
+   * At the pin limit, a row can still be pinned when its parent is already pinned, since pinning it
+   * adds no parent to the count.
+   */
+  canPin(row: T): boolean {
+    if (!this.hasReachedPinLimit()) return true;
+    const parentIdDataKey = this.parentIdDataKey();
+    return (
+      parentIdDataKey !== null &&
+      this.pinnedParentsSet().has(this.readDataKey(row, parentIdDataKey))
+    );
+  }
+
+  isPinToggleEnabled(row: T): boolean {
+    return this.isPinned(this.rowId(row)) || this.canPin(row);
+  }
+
+  togglePin(row: T) {
+    const id = this.rowId(row);
     if (this.isPinned(id)) {
       this.unpinItem(id);
       return;
     }
-    this.pinItem(id);
+    this.pinItem(row);
   }
 
-  pinItem(id: string) {
-    if (this.hasReachedPinLimit()) {
+  pinItem(row: T) {
+    if (!this.canPin(row)) {
       this.toastNotificationService.showWarning(
         `You have reached the maximum number of pinned items (${this.pinLimit()}). Please unpin an item before pinning a new one.`,
       );
       return;
     }
+    const id = this.rowId(row);
     if (!this.isPinned(id)) {
       this.setPinnedItems([...this.visiblePinIds(), id]);
     }
@@ -776,14 +798,16 @@ export class ComparisonToolService<T> {
 
   // Table data
   /**
-   * Caps pinned data at `pinLimit`. Every pinned result flows through here, so the cap holds
-   * no matter where the pins came from -- a hand-edited or shared URL can list more ids than the
-   * user is allowed to pin.
+   * Caps pinned data at `pinLimit` rows. When `parentIdDataKey` is set, the cap counts parents
+   * instead. Every pinned result flows through here, so the cap holds no matter where the pins came
+   * from -- a hand-edited or shared URL can list more ids than the user is allowed to pin.
    *
    * Why cap here, after the fetch, instead of when parsing the URL: the pinned fetch sends the raw
    * ids to the API and gets back the matching rows already ordered by the user's current sort.
-   * Keeping the first N of those rows drops the pins the user would care about least. Trimming the
-   * URL ids before the fetch would instead drop an arbitrary N, since the URL order is meaningless.
+   * Keeping the first N of those rows (or the rows of the first N parents) drops the pins the user
+   * would care about least. Trimming the URL ids before the fetch would instead drop an arbitrary
+   * N, since the URL order is meaningless. The parent cap keeps every row of a kept parent, so a
+   * parent is never split, and N parents fanned out into more than N rows are not trimmed.
    *
    * When the cap trims the set, we rewrite the pinned ids via `setPinnedItems` so the pin cache and
    * the URL agree on the trimmed list. That rewrite re-triggers BOTH data fetches, because the
@@ -793,22 +817,33 @@ export class ComparisonToolService<T> {
    * this is correct, not wasteful. The follow-up pinned fetch is normally within the limit, so the
    * cap does not fire again.
    *
-   * The one exception is a collection where a row id is not unique -- one id can match several rows.
-   * There, trimming to N rows can yield fewer than N unique ids (the dedup in `setPinnedItems`), and
-   * refetching those ids returns more than N rows again, so the row count never settles at the id
-   * count. That would loop forever, except `setPinnedItems` skips the rewrite when the new id list
-   * equals the current pins -- which it does on the second pass -- so the cycle stops.
+   * The one exception is a row cap over a collection where a row id is not unique -- one id can
+   * match several rows. There, trimming to N rows can yield fewer than N unique ids (the dedup in
+   * `setPinnedItems`), and refetching those ids returns more than N rows again, so the row count
+   * never settles at the id count. That would loop forever, except `setPinnedItems` skips the
+   * rewrite when the new id list equals the current pins -- which it does on the second pass -- so
+   * the cycle stops.
    */
   private applyPinnedData(pinnedData: T[], parentIdDataKey: string | null) {
     const pinLimit = this.pinLimit();
-    if (pinnedData.length > pinLimit) {
-      const trimmedData = pinnedData.slice(0, pinLimit);
-      this.setPinnedData(trimmedData, parentIdDataKey);
-      this.showPinLimitWarning(trimmedData.length);
-      this.setPinnedItems(this.extractRowIds(trimmedData));
-    } else {
-      this.setPinnedData(pinnedData, parentIdDataKey);
+    const cappedData = parentIdDataKey
+      ? this.keepRowsOfFirstParents(pinnedData, parentIdDataKey, pinLimit)
+      : pinnedData.slice(0, pinLimit);
+    this.setPinnedData(cappedData, parentIdDataKey);
+    if (cappedData.length < pinnedData.length) {
+      // TODO(MG-1084): when capping by parent, this passes rows kept (e.g. 180) while
+      // the limit counts parents (50), so the toast reads "Only 180 rows were pinned ... maximum
+      // of 50". Reword in parent terms.
+      this.showPinLimitWarning(cappedData.length);
+      this.setPinnedItems(this.extractRowIds(cappedData));
     }
+  }
+
+  private keepRowsOfFirstParents(rows: T[], parentIdDataKey: string, parentLimit: number): T[] {
+    const keptParents = new Set(
+      this.extractUniqueDataKeyValues(rows, parentIdDataKey).slice(0, parentLimit),
+    );
+    return rows.filter((row) => keptParents.has(this.readDataKey(row, parentIdDataKey)));
   }
 
   private setPinnedData(pinnedData: T[], parentIdDataKey: string | null) {

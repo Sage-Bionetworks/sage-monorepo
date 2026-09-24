@@ -26,7 +26,6 @@ export class PrimaryIdentifierControlsComponent {
   }
 
   pinLimit = this.comparisonToolService.pinLimit;
-  hasReachedPinLimit = this.comparisonToolService.hasReachedPinLimit;
   viewConfig = this.comparisonToolService.viewConfig;
 
   isPinned = computed(() => {
@@ -34,7 +33,7 @@ export class PrimaryIdentifierControlsComponent {
   });
 
   isPinDisabled = computed(() => {
-    return !this.isPinned() && this.hasReachedPinLimit();
+    return !this.comparisonToolService.isPinToggleEnabled(this.rowData());
   });
 
   pinTooltip = computed(() => {
@@ -57,6 +56,6 @@ export class PrimaryIdentifierControlsComponent {
   }
 
   pinToggle() {
-    this.comparisonToolService.togglePin(this.id());
+    this.comparisonToolService.togglePin(this.rowData());
   }
 }

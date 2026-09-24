@@ -6,6 +6,8 @@
       <div class="table-divider table-divider-1">
         <div class="table-divider-inner">
           <div id="pinned-genes-header" class="table-divider-label">
+            <!-- TODO(MG-1084): in a parent/child view this numerator counts rows 
+             while the limit counts parents, so a full fan-out reads e.g. (180/50) -->
             <span> Pinned Results ({{ pinnedRowCount() }}/{{ pinLimit() }}) </span>
           </div>
           <div class="table-divider-controls pinned-items-controls">
