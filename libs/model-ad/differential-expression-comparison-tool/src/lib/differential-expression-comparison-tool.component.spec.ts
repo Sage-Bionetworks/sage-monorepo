@@ -5,9 +5,11 @@ import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-t
 import {
   ComparisonToolQuery,
   HeatmapCircleClickTransformFnContext,
+  PinnedItemsQuery,
 } from '@sagebionetworks/explorers/models';
 import {
   DEFAULT_PAGE_SIZE,
+  LoggerService,
   PlatformService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
@@ -35,11 +37,23 @@ import {
 import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
-import { DifferentialExpressionComparisonToolComponent } from './differential-expression-comparison-tool.component';
+import {
+  DifferentialExpressionComparisonToolComponent,
+  PINNED_PAGE_SIZE_PROTEIN,
+  PINNED_PAGE_SIZE_RNA,
+} from './differential-expression-comparison-tool.component';
 import { DifferentialExpressionComparisonToolService } from './services/differential-expression-comparison-tool.service';
 
 const UNRECOGNIZED_MAIN_CATEGORY = 'DNA - DIFFERENTIAL EXPRESSION';
 const TISSUE_CATEGORY = 'Tissue - Hemibrain';
+const MAIN_CATEGORIES = [
+  DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA,
+  DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN,
+];
+const NO_PINS: PinnedItemsQuery = { items: [], itemIdSpace: 'row' };
+const PINNED_ROWS_QUERY: PinnedItemsQuery = { items: ['row1', 'row2'], itemIdSpace: 'row' };
+const PINNED_PARENTS_QUERY: PinnedItemsQuery = { items: ['parent1'], itemIdSpace: 'parent' };
+const PREBUDGETED_PARENT_IDS = ['parent1', 'parent2'];
 
 const baseMockRow: Transcriptomics = {
   composite_id: 'ENSG00000001~Abca7*V1599M.5xFAD~Female',
@@ -73,13 +87,13 @@ const baseMockProteomicsRow: Proteomics = {
 
 const mockCell: FoldChangeResult = { log2_fc: 1.5, adj_p_val: 0.01 };
 
-function mockPage(rows: Transcriptomics[]): TranscriptomicsPage {
+function mockPage(rows: Transcriptomics[], totalElements = rows.length): TranscriptomicsPage {
   return {
     transcriptomics: rows,
     page: {
       number: 0,
       size: DEFAULT_PAGE_SIZE,
-      totalElements: rows.length,
+      totalElements,
       totalPages: 1,
       hasNext: false,
       hasPrevious: false,
@@ -87,13 +101,13 @@ function mockPage(rows: Transcriptomics[]): TranscriptomicsPage {
   };
 }
 
-function mockProteomicsPage(rows: Proteomics[]): ProteomicsPage {
+function mockProteomicsPage(rows: Proteomics[], totalElements = rows.length): ProteomicsPage {
   return {
     proteomics: rows,
     page: {
       number: 0,
       size: DEFAULT_PAGE_SIZE,
-      totalElements: rows.length,
+      totalElements,
       totalPages: 1,
       hasNext: false,
       hasPrevious: false,
@@ -145,10 +159,34 @@ async function setup() {
     .spyOn(proteomicsService, 'getProteomics')
     .mockReturnValue(of(mockProteomicsPage([baseMockProteomicsRow])) as any);
 
+  const loggerErrorSpy = jest.spyOn(fixture.debugElement.injector.get(LoggerService), 'error');
+
   function setMainCategory(mainCategory: string) {
     jest
       .spyOn(comparisonToolService, 'dropdownSelection')
       .mockReturnValue([mainCategory, TISSUE_CATEGORY]);
+  }
+
+  function mockPageFor(
+    mainCategory: string,
+    {
+      totalElements,
+      hasRowsForPrebudgetedParents,
+    }: { totalElements?: number; hasRowsForPrebudgetedParents?: boolean | null } = {},
+  ) {
+    if (mainCategory === DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA) {
+      const page = mockPage([baseMockRow], totalElements);
+      getTranscriptomicsSpy.mockReturnValue(of({ ...page, hasRowsForPrebudgetedParents }) as any);
+    } else {
+      const page = mockProteomicsPage([baseMockProteomicsRow], totalElements);
+      getProteomicsSpy.mockReturnValue(of({ ...page, hasRowsForPrebudgetedParents }) as any);
+    }
+  }
+
+  function apiSpyFor(mainCategory: string) {
+    return mainCategory === DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA
+      ? getTranscriptomicsSpy
+      : getProteomicsSpy;
   }
 
   return {
@@ -156,7 +194,10 @@ async function setup() {
     comparisonToolService,
     getTranscriptomicsSpy,
     getProteomicsSpy,
+    loggerErrorSpy,
     setMainCategory,
+    mockPageFor,
+    apiSpyFor,
   };
 }
 
@@ -173,7 +214,11 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
       component.getUnpinnedData(
         mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY]),
       );
-      component.getPinnedData([DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY], [], []);
+      component.getPinnedData(
+        [DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY],
+        NO_PINS,
+        [],
+      );
 
       expect(getTranscriptomicsSpy).toHaveBeenCalledTimes(2);
       expect(getProteomicsSpy).not.toHaveBeenCalled();
@@ -187,7 +232,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
       );
       component.getPinnedData(
         [DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, TISSUE_CATEGORY],
-        [],
+        NO_PINS,
         [],
       );
 
@@ -221,7 +266,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
         await setup();
       const fetchPinnedSpy = jest.spyOn(comparisonToolService, 'fetchPinned');
 
-      component.getPinnedData(categories, [], []);
+      component.getPinnedData(categories, NO_PINS, []);
 
       expect(getTranscriptomicsSpy).not.toHaveBeenCalled();
       expect(getProteomicsSpy).not.toHaveBeenCalled();
@@ -293,6 +338,143 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
       expect(getTranscriptomicsSpy).toHaveBeenCalledWith(
         expect.objectContaining({ sex: selectedSexes }),
       );
+    });
+  });
+
+  describe('parent/child pin queries', () => {
+    it.each(MAIN_CATEGORIES)(
+      'should send the pinned items query in the unpinned query for %s',
+      async (mainCategory) => {
+        const { component, comparisonToolService, apiSpyFor } = await setup();
+
+        for (const pinnedItemsQuery of [PINNED_ROWS_QUERY, PINNED_PARENTS_QUERY]) {
+          jest.spyOn(comparisonToolService, 'pinnedItemsQuery').mockReturnValue(pinnedItemsQuery);
+
+          component.getUnpinnedData(mockQuery([mainCategory, TISSUE_CATEGORY]));
+
+          expect(apiSpyFor(mainCategory)).toHaveBeenLastCalledWith(
+            expect.objectContaining({ ...pinnedItemsQuery, itemFilterType: 'exclude' }),
+          );
+        }
+      },
+    );
+
+    it.each(MAIN_CATEGORIES)(
+      'should send the pinned items query in the pinned query for %s',
+      async (mainCategory) => {
+        const { component, apiSpyFor } = await setup();
+
+        for (const pinnedItemsQuery of [PINNED_ROWS_QUERY, PINNED_PARENTS_QUERY]) {
+          component.getPinnedData([mainCategory, TISSUE_CATEGORY], pinnedItemsQuery, []);
+
+          expect(apiSpyFor(mainCategory)).toHaveBeenLastCalledWith(
+            expect.objectContaining({ ...pinnedItemsQuery, itemFilterType: 'include' }),
+          );
+        }
+      },
+    );
+
+    it.each([
+      [DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, PINNED_PAGE_SIZE_RNA],
+      [DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, PINNED_PAGE_SIZE_PROTEIN],
+    ])('should send the pinned page size for %s', async (mainCategory, pageSize) => {
+      const { component, apiSpyFor } = await setup();
+
+      component.getPinnedData([mainCategory, TISSUE_CATEGORY], PINNED_ROWS_QUERY, []);
+
+      expect(apiSpyFor(mainCategory)).toHaveBeenCalledWith(expect.objectContaining({ pageSize }));
+    });
+
+    it.each(MAIN_CATEGORIES)(
+      'should send the prebudgeted parent ids in the unpinned query for %s',
+      async (mainCategory) => {
+        const { component, comparisonToolService, apiSpyFor } = await setup();
+        jest
+          .spyOn(comparisonToolService, 'prebudgetedParentIdsForUnpinnedFetch')
+          .mockReturnValue(PREBUDGETED_PARENT_IDS);
+
+        component.getUnpinnedData(mockQuery([mainCategory, TISSUE_CATEGORY]));
+
+        expect(apiSpyFor(mainCategory)).toHaveBeenCalledWith(
+          expect.objectContaining({ prebudgetedParentIds: PREBUDGETED_PARENT_IDS }),
+        );
+      },
+    );
+
+    it('should not send prebudgeted parent ids in the unpinned query when there are none', async () => {
+      const { component, comparisonToolService, getProteomicsSpy } = await setup();
+      expect(comparisonToolService.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+
+      component.getUnpinnedData(
+        mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, TISSUE_CATEGORY]),
+      );
+
+      expect(getProteomicsSpy).toHaveBeenLastCalledWith(
+        expect.not.objectContaining({ prebudgetedParentIds: expect.anything() }),
+      );
+    });
+
+    it.each(MAIN_CATEGORIES)(
+      'should forward hasRowsForPrebudgetedParents from the unpinned response for %s',
+      async (mainCategory) => {
+        const { component, comparisonToolService, mockPageFor } = await setup();
+        mockPageFor(mainCategory, { hasRowsForPrebudgetedParents: true });
+
+        component.getUnpinnedData(mockQuery([mainCategory, TISSUE_CATEGORY]));
+
+        expect(comparisonToolService.hasRowsForPrebudgetedParents()).toBe(true);
+      },
+    );
+
+    it('should send the remaining budget and prebudgeted parent ids in the pin-all query', async () => {
+      const { comparisonToolService, getProteomicsSpy } = await setup();
+      jest
+        .spyOn(comparisonToolService, 'dropdownSelection')
+        .mockReturnValue([DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, TISSUE_CATEGORY]);
+      jest
+        .spyOn(comparisonToolService, 'query')
+        .mockReturnValue(mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, TISSUE_CATEGORY]));
+      jest.spyOn(comparisonToolService, 'canPinAll').mockReturnValue(true);
+      jest.spyOn(comparisonToolService, 'isChildView').mockReturnValue(true);
+      jest.spyOn(comparisonToolService, 'pinnedParents').mockReturnValue(PREBUDGETED_PARENT_IDS);
+      const remainingBudget = comparisonToolService.pinLimit() - comparisonToolService.pinCount();
+
+      comparisonToolService.pinAll();
+
+      expect(getProteomicsSpy).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          itemFilterType: 'exclude',
+          remainingBudget,
+          prebudgetedParentIds: PREBUDGETED_PARENT_IDS,
+        }),
+      );
+    });
+
+    it.each(MAIN_CATEGORIES)(
+      'should log an error when the pinned response for %s is truncated',
+      async (mainCategory) => {
+        const { component, loggerErrorSpy, mockPageFor } = await setup();
+        mockPageFor(mainCategory, { totalElements: 2 });
+
+        component.getPinnedData([mainCategory, TISSUE_CATEGORY], PINNED_ROWS_QUERY, []);
+
+        expect(loggerErrorSpy).toHaveBeenCalledWith(
+          `DifferentialExpressionComparisonToolComponent: pinned ${mainCategory} fetch truncated: 2 matching rows, 1 returned`,
+        );
+      },
+    );
+
+    it('should not log an error when the pinned response is complete', async () => {
+      const { component, loggerErrorSpy, mockPageFor } = await setup();
+      mockPageFor(DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, { totalElements: 1 });
+
+      component.getPinnedData(
+        [DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, TISSUE_CATEGORY],
+        PINNED_ROWS_QUERY,
+        [],
+      );
+
+      expect(loggerErrorSpy).not.toHaveBeenCalled();
     });
   });
 

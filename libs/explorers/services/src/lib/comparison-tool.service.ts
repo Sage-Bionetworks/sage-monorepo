@@ -266,6 +266,8 @@ export class ComparisonToolService<T> {
    * The pinned parents are read from the latest pinned rows. So if a pinned parent has no rows in
    * the active view, it is no longer sent once that view's pinned rows arrive. The pinned items
    * cache still holds its row ids, so switching back to the view it was pinned in restores it.
+   * Every fetch that sends this query reruns once when that happens. The rerun returns rows for the
+   * same parents, and `pinnedParents` compares as a set, so this query does not change again.
    */
   readonly pinnedItemsQuery = computed<PinnedItemsQuery>(
     () => {

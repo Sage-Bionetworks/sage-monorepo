@@ -7,6 +7,7 @@ import {
   HeatmapCircleClickTransformFnContext,
   HeatmapDetailsPanelData,
   LegendPanelConfig,
+  PinnedItemsQuery,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 import {
@@ -40,11 +41,20 @@ import {
   DifferentialExpressionRow,
 } from './services/differential-expression-comparison-tool.service';
 
+// The pinned fetch returns every pinned row in one page, so these mirror the pageSize maxima in
+// TranscriptomicsSearchQuery.yaml and ProteomicsSearchQuery.yaml.
+// TODO(MG-1121): 300 is the worst-case gene-to-protein fan-out for the current data, a stopgap that
+// nobody recomputes when the data changes. If a data release outgrows it, the pinned response is
+// truncated and pins disappear on a view switch.
+export const PINNED_PAGE_SIZE_RNA = 100;
+export const PINNED_PAGE_SIZE_PROTEIN = 300;
+
 type DifferentialExpressionSearchQuery = TranscriptomicsSearchQuery & ProteomicsSearchQuery;
 
 interface DifferentialExpressionPage {
   rows: DifferentialExpressionRow[];
   page: PageMetadata;
+  hasRowsForPrebudgetedParents?: boolean | null;
 }
 
 @Component({
@@ -89,6 +99,11 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       ownerId: 'syn66271427',
       wikiId: '643119',
     },
+  };
+
+  private readonly pinnedPageSizes: { [key: string]: number } = {
+    [DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA]: PINNED_PAGE_SIZE_RNA,
+    [DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN]: PINNED_PAGE_SIZE_PROTEIN,
   };
 
   legendPanelConfig: LegendPanelConfig = {
@@ -168,13 +183,13 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
 
-  // Effect for pinned data - only re-fetch when pinnedItems, categories, or sort change
+  // Effect for pinned data - only re-fetch when pinnedItemsQuery, categories, or sort change
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
       const categories = this.comparisonToolService.dropdownSelection();
-      const pinnedItems = this.comparisonToolService.pinnedItems();
+      const pinnedItemsQuery = this.comparisonToolService.pinnedItemsQuery();
       const sortMeta = this.comparisonToolService.multiSortMeta();
-      this.getPinnedData(categories, pinnedItems, sortMeta);
+      this.getPinnedData(categories, pinnedItemsQuery, sortMeta);
     }
   });
 
@@ -194,18 +209,20 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
-      pinAllFetch: (query, remainingBudget) => this.fetchAllMatchingRows(query, remainingBudget),
+      pinAllFetch: (query, remainingBudget, prebudgetedParentIds) =>
+        this.fetchAllMatchingRows(query, remainingBudget, prebudgetedParentIds),
     });
   }
 
   private fetchAllMatchingRows(
     query: ComparisonToolQuery,
     remainingBudget: number,
+    prebudgetedParentIds?: string[],
   ): Observable<{ rows: DifferentialExpressionRow[]; totalElements: number }> {
     const mainCategory = query.categories[0];
     const page$ = this.fetchDifferentialExpressionPage(
       mainCategory,
-      this.buildUnpinnedQuery(query, { remainingBudget }),
+      this.buildUnpinnedQuery(query, { remainingBudget, prebudgetedParentIds }),
     );
     if (page$ === null) {
       this.logUnrecognizedMainCategory(mainCategory);
@@ -221,7 +238,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
 
   private buildUnpinnedQuery(
     currentQuery: ComparisonToolQuery,
-    options?: { remainingBudget?: number },
+    options?: { remainingBudget?: number; prebudgetedParentIds?: string[] },
   ): DifferentialExpressionSearchQuery {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
       currentQuery.multiSortMeta,
@@ -231,8 +248,9 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
 
     return {
       categories: currentQuery.categories,
-      items: currentQuery.pinnedItems,
+      ...this.comparisonToolService.pinnedItemsQuery(),
       itemFilterType: ItemFilterTypeQuery.Exclude,
+      prebudgetedParentIds: options?.prebudgetedParentIds,
       ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
       search: currentQuery.searchTerm,
       biodomains: selectedFilters['biodomains'],
@@ -245,7 +263,9 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
   }
 
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
-    const query = this.buildUnpinnedQuery(currentQuery);
+    const query = this.buildUnpinnedQuery(currentQuery, {
+      prebudgetedParentIds: this.comparisonToolService.prebudgetedParentIdsForUnpinnedFetch(),
+    });
 
     this.logger.log(
       `DifferentialExpressionComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
@@ -261,21 +281,24 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
 
     this.comparisonToolService.fetchUnpinned(
       page$.pipe(
-        map(({ rows, page }: DifferentialExpressionPage) => ({
+        map(({ rows, page, hasRowsForPrebudgetedParents }: DifferentialExpressionPage) => ({
           data: this.applyModelGroupLink(rows),
           totalCount: page.totalElements,
+          hasRowsForPrebudgetedParents,
         })),
       ),
     );
   }
 
-  getPinnedData(categories: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
+  getPinnedData(categories: string[], pinnedItemsQuery: PinnedItemsQuery, sortMeta: SortMeta[]) {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+    const mainCategory = categories[0];
 
     const query: DifferentialExpressionSearchQuery = {
       categories,
-      items: pinnedItems,
+      ...pinnedItemsQuery,
       itemFilterType: ItemFilterTypeQuery.Include,
+      pageSize: this.pinnedPageSizes[mainCategory],
       sortFields,
       sortOrders,
     };
@@ -284,7 +307,6 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       `DifferentialExpressionComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
     );
 
-    const mainCategory = categories[0];
     const page$ = this.fetchDifferentialExpressionPage(mainCategory, query);
     if (page$ === null) {
       this.logUnrecognizedMainCategory(mainCategory);
@@ -294,7 +316,13 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
 
     this.comparisonToolService.fetchPinned(
       page$.pipe(
-        map(({ rows }: DifferentialExpressionPage) => {
+        map(({ rows, page }: DifferentialExpressionPage) => {
+          if (page.totalElements > rows.length) {
+            this.logger.error(
+              `DifferentialExpressionComparisonToolComponent: pinned ${mainCategory} ` +
+                `fetch truncated: ${page.totalElements} matching rows, ${rows.length} returned`,
+            );
+          }
           const data = this.applyModelGroupLink(rows);
           return { data, totalCount: data.length };
         }),
@@ -308,13 +336,21 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
   ): Observable<DifferentialExpressionPage> | null {
     switch (mainCategory) {
       case DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA:
-        return this.transcriptomicsService
-          .getTranscriptomics(query)
-          .pipe(map((response) => ({ rows: response.transcriptomics, page: response.page })));
+        return this.transcriptomicsService.getTranscriptomics(query).pipe(
+          map((response) => ({
+            rows: response.transcriptomics,
+            page: response.page,
+            hasRowsForPrebudgetedParents: response.hasRowsForPrebudgetedParents,
+          })),
+        );
       case DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN:
-        return this.proteomicsService
-          .getProteomics(query)
-          .pipe(map((response) => ({ rows: response.proteomics, page: response.page })));
+        return this.proteomicsService.getProteomics(query).pipe(
+          map((response) => ({
+            rows: response.proteomics,
+            page: response.page,
+            hasRowsForPrebudgetedParents: response.hasRowsForPrebudgetedParents,
+          })),
+        );
       default:
         return null;
     }
