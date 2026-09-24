@@ -75,6 +75,12 @@ public abstract class ComparisonToolRepositorySupport<T> {
    */
   private static final String SORT_KEY_ALIAS_PREFIX = "__ct_sort_key_";
 
+  /**
+   * Field the parent selection's {@code $group} captures each parent's leading row {@code _id}
+   * under, since the group's own {@code _id} is the parent token.
+   */
+  private static final String LEADING_ROW_ID_FIELD = "__ct_leading_row_id";
+
   protected final MongoTemplate mongoTemplate;
 
   protected ComparisonToolRepositorySupport(MongoTemplate mongoTemplate) {
@@ -478,8 +484,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
   /**
    * Maps each resolved sort path in {@code rowSortDoc} to the alias the parent selection reads it
    * into. The isEmpty flag keys and {@code _id} are left out on purpose: the flags are already
-   * space- and dot-normalized by {@link ApiHelper#isEmptyFlagKey}, and {@code _id} is the
-   * {@code $group} key, so both can be captured under their own names.
+   * space- and dot-normalized by {@link ApiHelper#isEmptyFlagKey}, so they can be captured under
+   * their own names, and {@code _id} needs no read since {@code $first} can take it directly.
    */
   private static Map<String, String> buildSortKeyAliases(Sort sort, @Nullable Document rowSortDoc) {
     if (rowSortDoc == null) {
@@ -507,6 +513,12 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * sort value is null or empty floats to the head of the selection while its rows sit at the tail
    * of the result, so the admitted parents are not the ones the user sees.
    *
+   * <p>So is the row sort's {@code _id} tiebreaker. After the {@code $group}, {@code _id} holds the
+   * parent token, so sorting on it would break a tie on every real sort key by token while rows
+   * break it by row id. A tie straddling the budget would then admit a different parent than the
+   * row order puts first. The leading row's {@code _id} is sorted on instead, and since it is
+   * unique per parent, no tie is left for the token to break.
+   *
    * <p>An unsorted request has no row order to reproduce, so parents are ordered by their token,
    * which still makes the admitted set deterministic.
    */
@@ -519,9 +531,12 @@ public abstract class ComparisonToolRepositorySupport<T> {
     }
 
     Document parentSortDoc = new Document();
-    rowSortDoc.forEach((key, direction) ->
-      parentSortDoc.append(sortKeyAliases.getOrDefault(key, key), direction)
-    );
+    rowSortDoc.forEach((key, direction) -> {
+      String parentKey = ID_FIELD.equals(key)
+        ? LEADING_ROW_ID_FIELD
+        : sortKeyAliases.getOrDefault(key, key);
+      parentSortDoc.append(parentKey, direction);
+    });
     return parentSortDoc;
   }
 
@@ -529,14 +544,16 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * The parent selection's {@code $group}: one document per parent, keyed by the parent token and
    * carrying its leading row's value for every key {@code parentSortDoc} names.
    *
-   * <p>The key is deliberately the bare token rather than a tuple of the constituent fields, so the
-   * {@code _id} tiebreaker inherited from the row sort still compares strings. A tie on every real
-   * sort key therefore breaks by parent token here and by row id in the result.
+   * <p>The key is deliberately the bare token rather than a tuple of the constituent fields, so an
+   * unsorted selection orders parents by comparing strings, and each selected parent reads back as
+   * the token a caller would send.
    */
   private static Document buildParentGroupDoc(Document parentSortDoc) {
     Document group = new Document(ID_FIELD, "$" + PARENT_TOKEN_FIELD);
     parentSortDoc.forEach((key, direction) -> {
-      if (!ID_FIELD.equals(key)) {
+      if (LEADING_ROW_ID_FIELD.equals(key)) {
+        group.append(key, new Document("$first", "$" + ID_FIELD));
+      } else if (!ID_FIELD.equals(key)) {
         group.append(key, new Document("$first", "$" + key));
       }
     });

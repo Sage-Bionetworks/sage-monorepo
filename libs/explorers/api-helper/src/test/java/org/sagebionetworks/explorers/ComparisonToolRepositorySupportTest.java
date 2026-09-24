@@ -59,6 +59,7 @@ class ComparisonToolRepositorySupportTest {
    */
   private static final String PARENT_TOKEN_FIELD = "__ct_parent_token";
   private static final String SORT_KEY_ALIAS = "__ct_sort_key_0";
+  private static final String LEADING_ROW_ID_FIELD = "__ct_leading_row_id";
 
   @Mock
   private MongoTemplate mongoTemplate;
@@ -1048,7 +1049,7 @@ class ComparisonToolRepositorySupportTest {
 
       List<Document> stages = parentSelectionStages();
       assertThat(stageNamed(stages, "$group"))
-        .as("a tuple key would leave the inherited _id tiebreaker sorting an object")
+        .as("a tuple key would read back as an object rather than the token a caller sends")
         .containsEntry("_id", "$" + PARENT_TOKEN_FIELD);
 
       Document tokenExpression = parentTokenFields(stages).get(PARENT_TOKEN_FIELD, Document.class);
@@ -1113,7 +1114,48 @@ class ComparisonToolRepositorySupportTest {
         .containsExactly(SPACED_SORT_FLAG, SPACED_SORT_PATH, "_id");
       assertThat(sortAfterGroup(stages).keySet())
         .as("each row sort key maps to the key it was captured under, in the same order")
-        .containsExactly(SPACED_SORT_FLAG, SORT_KEY_ALIAS, "_id");
+        .containsExactly(SPACED_SORT_FLAG, SORT_KEY_ALIAS, LEADING_ROW_ID_FIELD);
+    }
+
+    @Test
+    @DisplayName("should break a full tie between parents by leading row id, as rows break it")
+    void shouldBreakFullTieBetweenParentsByLeadingRowId() {
+      CompositeParentRepo repo = new CompositeParentRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      stubParentSelection(SELECTED);
+
+      repo.run(matchCriteria, pageable, options(BUDGET, PREBUDGETED));
+
+      List<Document> stages = parentSelectionStages();
+      assertThat(sortBeforeGroup(stages)).containsEntry("_id", 1);
+      assertThat(stageNamed(stages, "$group"))
+        .as("the group's own _id is the token, so the leading row's id is kept under another key")
+        .containsEntry(LEADING_ROW_ID_FIELD, new Document("$first", "$_id"));
+      assertThat(sortAfterGroup(stages))
+        .as("sorting on the token would admit a different parent than the row order puts first")
+        .containsEntry(LEADING_ROW_ID_FIELD, 1)
+        .doesNotContainKey("_id");
+    }
+
+    @Test
+    @DisplayName("should rank parents by leading row id in the direction the caller sorts _id")
+    void shouldRankParentsByLeadingRowIdInCallerIdDirection() {
+      CompositeParentRepo repo = new CompositeParentRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      stubParentSelection(SELECTED);
+      Pageable byIdDescending = PageRequest.of(
+        0,
+        PAGE_SIZE,
+        Sort.by(Sort.Order.asc(SPACED_SORT_FIELD), Sort.Order.desc("_id"))
+      );
+
+      repo.run(matchCriteria, byIdDescending, options(BUDGET, PREBUDGETED));
+
+      List<Document> stages = parentSelectionStages();
+      assertThat(sortBeforeGroup(stages)).containsEntry("_id", -1);
+      assertThat(sortAfterGroup(stages))
+        .as("the caller's descending _id must order parents the way it orders their rows")
+        .containsEntry(LEADING_ROW_ID_FIELD, -1);
     }
 
     @Test
