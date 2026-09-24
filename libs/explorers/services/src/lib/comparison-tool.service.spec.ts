@@ -69,6 +69,12 @@ describe('ComparisonToolService', () => {
   const row = (id: string): Row => ({ _id: id });
   const rows = (...ids: string[]) => ids.map(row);
 
+  const landUnpinned = ({
+    totalCount = 1,
+    hasRowsForPrebudgetedParents,
+  }: { totalCount?: number; hasRowsForPrebudgetedParents?: boolean | null } = {}) =>
+    service.fetchUnpinned(of({ data: [], totalCount, hasRowsForPrebudgetedParents }));
+
   const noMatchingRows: PinAllFetch<Row> = () => of({ rows: [], totalElements: 0 });
 
   const connectService = (
@@ -296,6 +302,7 @@ describe('ComparisonToolService', () => {
         const pinAllFetch: PinAllFetch<Row> = () =>
           of({ rows: [childRow('child1a', 'parent1')], totalElements: 1 });
         connectService(viewConfigs, { selection: CHILD_VIEW, pinAllFetch });
+        landUnpinned();
 
         service.pinAll();
 
@@ -489,26 +496,42 @@ describe('ComparisonToolService', () => {
       const pinLimitFor = (hasReachedPinLimit: boolean) =>
         hasReachedPinLimit ? PINNED_PARENT_COUNT : PINNED_PARENT_COUNT + 1;
 
-      const pinTwoParentsInChildView = ({ hasReachedPinLimit = true } = {}) => {
-        connectService(viewConfigs, { selection: CHILD_VIEW });
+      type PinSetupOptions = { hasReachedPinLimit?: boolean; pinAllFetch?: PinAllFetch<Row> };
+
+      const pinTwoParentsInChildView = ({
+        hasReachedPinLimit = true,
+        pinAllFetch,
+      }: PinSetupOptions = {}) => {
+        connectService(viewConfigs, { selection: CHILD_VIEW, pinAllFetch });
         service.setPinLimit(pinLimitFor(hasReachedPinLimit));
         pinInChildView(...childrenOf(1, 2), ...childrenOf(2, 1));
         expect(service.hasReachedPinLimit()).toBe(hasReachedPinLimit);
       };
 
+      const pinTwoParentsInParentView = ({
+        hasReachedPinLimit = true,
+        pinAllFetch,
+      }: PinSetupOptions = {}) => {
+        connectService(viewConfigs, { selection: PARENT_VIEW, pinAllFetch });
+        service.setPinLimit(pinLimitFor(hasReachedPinLimit));
+        pinInParentView('parent1', 'parent2');
+        expect(service.hasReachedPinLimit()).toBe(hasReachedPinLimit);
+      };
+
+      const pinTwoRowsInViewWithNoParentKey = ({
+        hasReachedPinLimit = true,
+        pinAllFetch,
+      }: PinSetupOptions = {}) => {
+        connectService(mockComparisonToolDataConfig, { pinAllFetch });
+        service.setPinLimit(pinLimitFor(hasReachedPinLimit));
+        service.setPinnedItems(['id1', 'id2']);
+        landPinned(...rows('id1', 'id2'));
+        expect(service.parentIdDataKey()).toBeNull();
+        expect(service.hasReachedPinLimit()).toBe(hasReachedPinLimit);
+      };
+
       describe('canPin', () => {
         describe('in the parent view', () => {
-          const pinTwoParentsInParentView = ({
-            hasReachedPinLimit,
-          }: {
-            hasReachedPinLimit: boolean;
-          }) => {
-            connectService(viewConfigs, { selection: PARENT_VIEW });
-            service.setPinLimit(pinLimitFor(hasReachedPinLimit));
-            pinInParentView('parent1', 'parent2');
-            expect(service.hasReachedPinLimit()).toBe(hasReachedPinLimit);
-          };
-
           it('lets a new parent be pinned below the limit', () => {
             pinTwoParentsInParentView({ hasReachedPinLimit: false });
             expect(service.canPin(parentRow('parent3'))).toBe(true);
@@ -543,23 +566,223 @@ describe('ComparisonToolService', () => {
         });
 
         describe('in a view with no parent key', () => {
-          const pinTwoRows = ({ hasReachedPinLimit }: { hasReachedPinLimit: boolean }) => {
-            connectService(mockComparisonToolDataConfig);
-            service.setPinLimit(pinLimitFor(hasReachedPinLimit));
-            service.setPinnedItems(['id1', 'id2']);
-            landPinned(...rows('id1', 'id2'));
-            expect(service.parentIdDataKey()).toBeNull();
-            expect(service.hasReachedPinLimit()).toBe(hasReachedPinLimit);
-          };
-
           it('lets a new row be pinned below the limit', () => {
-            pinTwoRows({ hasReachedPinLimit: false });
+            pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: false });
             expect(service.canPin(row('id3'))).toBe(true);
           });
 
           it('does not let a new row be pinned at the limit', () => {
-            pinTwoRows({ hasReachedPinLimit: true });
+            pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: true });
             expect(service.canPin(row('id3'))).toBe(false);
+          });
+        });
+      });
+
+      describe('prebudgetedParentIdsForUnpinnedFetch', () => {
+        it('is unset below the limit in the parent view', () => {
+          pinTwoParentsInParentView({ hasReachedPinLimit: false });
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+        });
+
+        it('is unset at the limit in the parent view', () => {
+          pinTwoParentsInParentView({ hasReachedPinLimit: true });
+          expect(service.isChildView()).toBe(false);
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+        });
+
+        it('is unset below the limit in the child view', () => {
+          pinTwoParentsInChildView({ hasReachedPinLimit: false });
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+        });
+
+        it('holds the pinned parents at the limit in the child view', () => {
+          pinTwoParentsInChildView({ hasReachedPinLimit: true });
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toEqual(['parent1', 'parent2']);
+        });
+
+        it('is unset below the limit in a view with no parent key', () => {
+          pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: false });
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+        });
+
+        it('is unset at the limit in a view with no parent key', () => {
+          pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: true });
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+        });
+      });
+
+      describe('canPinAll', () => {
+        describe('in the parent view', () => {
+          it('follows the unpinned row count below the limit', () => {
+            pinTwoParentsInParentView({ hasReachedPinLimit: false });
+
+            landUnpinned({ totalCount: 1 });
+            expect(service.canPinAll()).toBe(true);
+
+            landUnpinned({ totalCount: 0 });
+            expect(service.canPinAll()).toBe(false);
+          });
+
+          it('is false at the limit', () => {
+            pinTwoParentsInParentView({ hasReachedPinLimit: true });
+            landUnpinned({ totalCount: 1 });
+            expect(service.canPinAll()).toBe(false);
+          });
+        });
+
+        describe('in the child view', () => {
+          it('follows the unpinned row count below the limit', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: false });
+
+            landUnpinned({ totalCount: 1, hasRowsForPrebudgetedParents: false });
+            expect(service.canPinAll()).toBe(true);
+
+            landUnpinned({ totalCount: 0, hasRowsForPrebudgetedParents: true });
+            expect(service.canPinAll()).toBe(false);
+          });
+
+          it('is true at the limit when a child of a pinned parent is unpinned', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: true });
+            landUnpinned({ totalCount: 1, hasRowsForPrebudgetedParents: true });
+            expect(service.canPinAll()).toBe(true);
+          });
+
+          it('is false at the limit when no child of a pinned parent is unpinned', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: true });
+            landUnpinned({ totalCount: 1, hasRowsForPrebudgetedParents: false });
+            expect(service.canPinAll()).toBe(false);
+          });
+
+          it('is false at the limit when the unpinned result has no answer', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: true });
+            landUnpinned({ totalCount: 1, hasRowsForPrebudgetedParents: null });
+            expect(service.hasRowsForPrebudgetedParents()).toBeNull();
+            expect(service.canPinAll()).toBe(false);
+          });
+        });
+
+        describe('in a view with no parent key', () => {
+          it('follows the unpinned row count below the limit', () => {
+            pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: false });
+
+            landUnpinned({ totalCount: 1 });
+            expect(service.canPinAll()).toBe(true);
+
+            landUnpinned({ totalCount: 0 });
+            expect(service.canPinAll()).toBe(false);
+          });
+
+          it('is false at the limit', () => {
+            pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: true });
+            landUnpinned({ totalCount: 1 });
+            expect(service.canPinAll()).toBe(false);
+          });
+        });
+      });
+
+      describe('pinAll', () => {
+        const stubFetch = () =>
+          jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() =>
+            of({ rows: [], totalElements: 0 }),
+          );
+
+        it('counts the budget by parent and sends the pinned parents below the limit in the child view', () => {
+          const pinAllFetch = stubFetch();
+          pinTwoParentsInChildView({ hasReachedPinLimit: false, pinAllFetch });
+          expect(service.pinnedRowCount()).toBeGreaterThan(service.pinCount());
+          landUnpinned();
+
+          service.pinAll();
+
+          expect(pinAllFetch).toHaveBeenCalledWith(
+            service.query(),
+            service.pinLimit() - PINNED_PARENT_COUNT,
+            ['parent1', 'parent2'],
+          );
+        });
+
+        it('runs at a budget of 0 and sends the pinned parents at the limit in the child view', () => {
+          const pinAllFetch = stubFetch();
+          pinTwoParentsInChildView({ hasReachedPinLimit: true, pinAllFetch });
+          landUnpinned({ hasRowsForPrebudgetedParents: true });
+
+          service.pinAll();
+
+          expect(pinAllFetch).toHaveBeenCalledWith(service.query(), 0, ['parent1', 'parent2']);
+        });
+
+        it('pins the children of pinned parents at the limit in the child view', () => {
+          const pinAllFetch: PinAllFetch<Row> = () =>
+            of({ rows: [childRow('child1c', 'parent1')], totalElements: 1 });
+          pinTwoParentsInChildView({ hasReachedPinLimit: true, pinAllFetch });
+          landUnpinned({ hasRowsForPrebudgetedParents: true });
+
+          service.pinAll();
+
+          expect(service.pinnedItems()).toEqual(['child1a', 'child1b', 'child2a', 'child1c']);
+        });
+
+        it('does nothing at the limit in the child view when no child of a pinned parent is unpinned', () => {
+          const pinAllFetch = stubFetch();
+          pinTwoParentsInChildView({ hasReachedPinLimit: true, pinAllFetch });
+          landUnpinned({ hasRowsForPrebudgetedParents: false });
+
+          service.pinAll();
+
+          expect(pinAllFetch).not.toHaveBeenCalled();
+        });
+
+        it('never sends the pinned parents in the parent view', () => {
+          const pinAllFetch = stubFetch();
+          pinTwoParentsInParentView({ hasReachedPinLimit: false, pinAllFetch });
+          landUnpinned();
+
+          service.pinAll();
+
+          expect(pinAllFetch).toHaveBeenCalledWith(
+            service.query(),
+            service.pinLimit() - PINNED_PARENT_COUNT,
+            undefined,
+          );
+        });
+
+        describe('when the view changes while the fetch is in flight', () => {
+          const pinAllInParentView = () => {
+            const pinAllResponse$ = new Subject<{ rows: Row[]; totalElements: number }>();
+            pinTwoParentsInParentView({
+              hasReachedPinLimit: false,
+              pinAllFetch: () => pinAllResponse$,
+            });
+            landUnpinned();
+            service.pinAll();
+            return pinAllResponse$;
+          };
+
+          it('discards the result when the view identity changes', () => {
+            const pinAllResponse$ = pinAllInParentView();
+            const pinsBeforeSwitch = service.pinnedItems();
+            const loggerWarnSpy = jest.spyOn(TestBed.inject(LoggerService), 'warn');
+            const toastWarnSpy = jest.spyOn(
+              TestBed.inject(ToastNotificationService),
+              'showWarning',
+            );
+
+            service.setDropdownSelection(CHILD_VIEW);
+            pinAllResponse$.next({ rows: [parentRow('parent3')], totalElements: 2 });
+
+            expect(service.pinnedItems()).toBe(pinsBeforeSwitch);
+            expect(recordedIdentity()).toEqual(PARENT_VIEW_IDENTITY);
+            expect(toastWarnSpy).not.toHaveBeenCalled();
+            expect(loggerWarnSpy).toHaveBeenCalledTimes(1);
+          });
+
+          it('writes the result when the new view has the same identity', () => {
+            const pinAllResponse$ = pinAllInParentView();
+
+            service.setDropdownSelection(OTHER_PARENT_VIEW);
+            pinAllResponse$.next({ rows: [parentRow('parent3')], totalElements: 1 });
+
+            expect(service.pinnedItems()).toEqual(['parent1', 'parent2', 'parent3']);
           });
         });
       });
@@ -951,9 +1174,14 @@ describe('ComparisonToolService', () => {
     const stubFetch = (result: { rows: Row[]; totalElements: number }) =>
       jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() => of(result));
 
+    const connectWithMatchingRows = (pinAllFetch: PinAllFetch<Row>) => {
+      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      landUnpinned();
+    };
+
     it('should union the returned rows with the existing pins', () => {
       const pinAllFetch = stubFetch({ rows: rows('id2', 'id3'), totalElements: 2 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       pinnedRows('id1');
 
       service.pinAll();
@@ -963,30 +1191,30 @@ describe('ComparisonToolService', () => {
 
     it('should request only the pins the user has left', () => {
       const pinAllFetch = stubFetch({ rows: [], totalElements: 0 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       service.setPinLimit(3);
       pinnedRows('id1');
 
       service.pinAll();
 
-      expect(pinAllFetch).toHaveBeenCalledWith(service.query(), 2);
+      expect(pinAllFetch).toHaveBeenCalledWith(service.query(), 2, undefined);
     });
 
     it('should never request more than MAX_PIN_LIMIT', () => {
       const pinAllFetch = stubFetch({ rows: [], totalElements: 0 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       service.setPinLimit(MAX_PIN_LIMIT + 10);
 
       service.pinAll();
 
-      expect(pinAllFetch).toHaveBeenCalledWith(service.query(), MAX_PIN_LIMIT);
+      expect(pinAllFetch).toHaveBeenCalledWith(service.query(), MAX_PIN_LIMIT, undefined);
     });
 
     it('should show an error when the fetch fails', () => {
       const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() =>
         throwError(() => new Error('boom')),
       );
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       const errorSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showError');
 
       service.pinAll();
@@ -998,7 +1226,7 @@ describe('ComparisonToolService', () => {
 
     it('should warn when there were more matching rows than could be pinned', () => {
       const pinAllFetch = stubFetch({ rows: rows('id1', 'id2'), totalElements: 5 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
       service.setPinLimit(2);
 
@@ -1011,7 +1239,7 @@ describe('ComparisonToolService', () => {
 
     it('should not warn when every matching row was pinned', () => {
       const pinAllFetch = stubFetch({ rows: rows('id1', 'id2'), totalElements: 2 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
 
       service.pinAll();
@@ -1022,7 +1250,7 @@ describe('ComparisonToolService', () => {
 
     it('should do nothing when already at the pin limit', () => {
       const pinAllFetch = stubFetch({ rows: rows('id2'), totalElements: 1 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       service.setPinLimit(1);
       pinnedRows('id1');
 
@@ -1032,10 +1260,21 @@ describe('ComparisonToolService', () => {
       expect(service.pinnedItems()).toEqual(['id1']);
     });
 
+    it('should do nothing when no rows match the query', () => {
+      const pinAllFetch = stubFetch({ rows: [], totalElements: 0 });
+      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      landUnpinned({ totalCount: 0 });
+
+      service.pinAll();
+
+      expect(pinAllFetch).not.toHaveBeenCalled();
+    });
+
     it('should do nothing while table data is loading', () => {
       const pinAllFetch = stubFetch({ rows: rows('id1'), totalElements: 1 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       service.fetchUnpinned(new Subject<never>());
+      expect(service.canPinAll()).toBe(true);
 
       service.pinAll();
 
@@ -1046,7 +1285,7 @@ describe('ComparisonToolService', () => {
       const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() =>
         throwError(() => new Error('boom')),
       );
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
 
       service.pinAll();
 
@@ -1059,7 +1298,7 @@ describe('ComparisonToolService', () => {
       const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(
         () => EMPTY,
       );
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
 
       service.pinAll();
 

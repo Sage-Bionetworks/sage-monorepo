@@ -59,7 +59,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   pinnedRowCount = this.comparisonToolService.pinnedRowCount;
   pinLimit = this.comparisonToolService.pinLimit;
-  hasReachedPinLimit = this.comparisonToolService.hasReachedPinLimit;
+  canPinAll = this.comparisonToolService.canPinAll;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
   isLoadingTableData = this.comparisonToolService.isLoadingTableData;
   unpinnedRowCount = this.comparisonToolService.unpinnedRowCount;
@@ -78,7 +78,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   readonly pinnedResultsControls = PINNED_RESULTS_CONTROLS;
 
   pinAllTooltip = computed(() => {
-    if (this.hasReachedPinLimit()) return this.disabledPinTooltip();
+    if (!this.canPinAll()) return this.disabledPinTooltip();
     return this.isLoadingTableData() ? TABLE_DATA_LOADING_TOOLTIP : PIN_ALL_TOOLTIP;
   });
 

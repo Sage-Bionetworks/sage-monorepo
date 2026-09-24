@@ -36,11 +36,14 @@ export const DEFAULT_COLUMN_WIDTH_PX = 300;
 /**
  * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
  * the corresponding results-count signal should be set to (unpinned: total matching rows across
- * pages; pinned: the number of pinned rows returned).
+ * pages; pinned: the number of pinned rows returned). `hasRowsForPrebudgetedParents` is read from
+ * unpinned results only: whether any row of the pinned parents is still unpinned, or null when the
+ * request sent no prebudgeted parents.
  */
 export interface ComparisonToolFetchResult<T> {
   data: T[];
   totalCount: number;
+  hasRowsForPrebudgetedParents?: boolean | null;
 }
 
 /** A pinned fetch result tagged with the parent id data key that was active when it was requested. */
@@ -63,10 +66,14 @@ interface ViewIdentity {
  * "pin all" can pin matches the browser is not currently holding. `totalElements` is the full match
  * count, which is what makes truncation detectable: `totalElements > rows.length` means the budget
  * ran out before every match was returned.
+ *
+ * In a child view the budget counts new parents instead of rows, and `prebudgetedParentIds`
+ * holds the pinned parents, whose children come back without spending it.
  */
 export type PinAllFetch<T> = (
   query: ComparisonToolQuery,
   remainingBudget: number,
+  prebudgetedParentIds?: string[],
 ) => Observable<{ rows: T[]; totalElements: number }>;
 
 /** Core state management service for comparison tool pages. */
@@ -213,6 +220,11 @@ export class ComparisonToolService<T> {
     () => this.currentConfig()?.row_id_data_key || this.viewConfig().rowIdDataKey,
   );
   readonly parentIdDataKey = computed(() => this.currentConfig()?.parent_id_data_key || null);
+  // A view whose parent key equals its row key is self-parented, not a child view: its rows are
+  // their own parents.
+  readonly isChildView = computed(
+    () => !!this.parentIdDataKey() && this.parentIdDataKey() !== this.rowIdDataKey(),
+  );
 
   private readonly activeIdentity = computed<ViewIdentity>(
     () => ({ rowIdDataKey: this.rowIdDataKey(), parentIdDataKey: this.parentIdDataKey() }),
@@ -237,6 +249,7 @@ export class ComparisonToolService<T> {
   // Results & Pin State Signals
   loadingRowCount = computed(() => this.currentConfig()?.row_count ?? '');
   unpinnedRowCount = signal<number>(0);
+  hasRowsForPrebudgetedParents = signal<boolean | null>(null);
   pinnedRowCount = computed(() => this.pinnedData().length);
   readonly pinnedParentsSet = computed(() => new Set(this.pinnedParents()));
   readonly pinnedParentCount = computed(() => this.pinnedParents().length);
@@ -273,14 +286,39 @@ export class ComparisonToolService<T> {
     return `You have already pinned the maximum number of items (${this.pinLimit()}). You must unpin some items before you can pin more.`;
   });
 
+  /**
+   * The pinned parents to send with the unpinned fetch as `prebudgetedParentIds`, so its
+   * `hasRowsForPrebudgetedParents` tells whether pin-all still has children of pinned parents to
+   * pin. Only set at the pin limit in a child view, since that is the only time pin-all
+   * depends on it.
+   *
+   * It reads the pinned parents from the pinned rows, not from the pinned items cache. So a pin edit
+   * that moves the parent count across the limit fires the unpinned fetch once with the old parents,
+   * and again when the pinned rows arrive (`switchMap` cancels the first if it is still in flight).
+   * The unpinned fetch reruns on every pin edit anyway, and deriving the parents from the edit would
+   * add a second writer to `pinnedParents`.
+   */
+  readonly prebudgetedParentIdsForUnpinnedFetch = computed(
+    () => (this.hasReachedPinLimit() && this.isChildView() ? this.pinnedParents() : undefined),
+    { equal: isEqual },
+  );
+
+  readonly canPinAll = computed(() =>
+    this.hasReachedPinLimit()
+      ? // At the pin limit, pin-all can only pin children of pinned parents, so one must still be unpinned.
+        this.hasRowsForPrebudgetedParents() === true
+      : this.unpinnedRowCount() > 0,
+  );
+
   constructor() {
     // Unpinned rows are paged, so totalCount is the cross-page total used for pagination.
     this.subscribeToFetchStream(
       this.unpinnedFetch$,
       { data: [], totalCount: 0 },
-      ({ data, totalCount }) => {
+      ({ data, totalCount, hasRowsForPrebudgetedParents }) => {
         this.unpinnedDataSignal.set(data as T[]);
         this.unpinnedRowCount.set(totalCount);
+        this.hasRowsForPrebudgetedParents.set(hasRowsForPrebudgetedParents ?? null);
       },
     );
 
@@ -694,32 +732,46 @@ export class ComparisonToolService<T> {
 
   /**
    * Pins every row matching the current query, not just the rows on the current page. The matching
-   * ids are discovered server-side, capped at the pins the user has left.
+   * ids are discovered server-side, capped at the pins the user has left. In a child view the
+   * cap counts parents, and the pinned parents are sent along so their children can still be pinned
+   * at the limit.
    *
    * The guard below keeps this from running while the table is still being populated: the cap sent to
    * the server is how many more pins the user may add, counted from the pins on screen, and those are
    * not final until the in-flight fetch lands. The `startFetch()` call also serves as a re-entry
    * guard: once it increments the counter, the `isLoadingTableData()` check at the top blocks any
    * concurrent call until the fetch completes.
+   *
+   * A view switch while the fetch is in flight discards its result, because the returned ids are row
+   * ids of the view it was requested in. The check lives here rather than in the dropdowns, since
+   * back/forward navigation can switch the view too.
    */
   pinAll() {
     const fetch = this.pinAllFetch;
     if (!fetch) return;
-    if (this.isLoadingTableData() || this.hasReachedPinLimit()) return;
+    if (this.isLoadingTableData() || !this.canPinAll()) return;
 
+    const identity = this.activeIdentity();
     const currentPinIds = this.visiblePinIds();
-    const remainingBudget = this.pinLimit() - currentPinIds.length;
+    const remainingBudget = this.pinLimit() - this.pinCount();
+    const prebudgetedParentIds = this.isChildView() ? this.pinnedParents() : undefined;
 
     this.startFetch();
-    fetch(this.query(), remainingBudget)
+    fetch(this.query(), remainingBudget, prebudgetedParentIds)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.completeFetch()),
       )
       .subscribe({
         next: ({ rows, totalElements }) => {
+          if (!isEqual(identity, this.activeIdentity())) {
+            this.logger.warn('Discarded pin-all result after a view switch');
+            return;
+          }
           this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows)]);
           if (totalElements > rows.length) {
+            // TODO(MG-1084): in a child view the budget counts parents but this passes rows
+            // pinned, so the count and the limit in the toast are different units.
             this.showPinLimitWarning(rows.length);
           }
         },
