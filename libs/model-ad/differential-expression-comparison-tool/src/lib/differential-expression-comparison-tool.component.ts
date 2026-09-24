@@ -1,5 +1,4 @@
-import { Component, computed, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
@@ -35,7 +34,7 @@ import {
   ROUTE_PATHS,
 } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, map, Observable, shareReplay } from 'rxjs';
+import { catchError, EMPTY, map, Observable, of, shareReplay } from 'rxjs';
 import {
   DifferentialExpressionComparisonToolService,
   DifferentialExpressionRow,
@@ -58,7 +57,6 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly transcriptomicsService = inject(TranscriptomicsService);
   private readonly proteomicsService = inject(ProteomicsService);
   private readonly comparisonToolService = inject(DifferentialExpressionComparisonToolService);
@@ -249,7 +247,6 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `DifferentialExpressionComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
     );
@@ -258,21 +255,18 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     const page$ = this.fetchDifferentialExpressionPage(mainCategory, query);
     if (page$ === null) {
       this.logUnrecognizedMainCategory(mainCategory);
-      this.comparisonToolService.setUnpinnedData([]);
-      this.comparisonToolService.totalResultsCount.set(0);
+      this.comparisonToolService.fetchUnpinned(of({ data: [], totalCount: 0 }));
       return;
     }
 
-    page$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: ({ rows, page }: DifferentialExpressionPage) => {
-        this.comparisonToolService.setUnpinnedData(this.applyModelGroupLink(rows));
-        this.comparisonToolService.totalResultsCount.set(page.totalElements);
-      },
-      error: () => {
-        this.comparisonToolService.setUnpinnedData([]);
-        this.comparisonToolService.totalResultsCount.set(0);
-      },
-    });
+    this.comparisonToolService.fetchUnpinned(
+      page$.pipe(
+        map(({ rows, page }: DifferentialExpressionPage) => ({
+          data: this.applyModelGroupLink(rows),
+          totalCount: page.totalElements,
+        })),
+      ),
+    );
   }
 
   getPinnedData(categories: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
@@ -286,7 +280,6 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       sortOrders,
     };
 
-    this.comparisonToolService.startFetch();
     this.logger.log(
       `DifferentialExpressionComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
     );
@@ -295,18 +288,18 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     const page$ = this.fetchDifferentialExpressionPage(mainCategory, query);
     if (page$ === null) {
       this.logUnrecognizedMainCategory(mainCategory);
-      this.comparisonToolService.setPinnedData([]);
+      this.comparisonToolService.fetchPinned(of({ data: [], totalCount: 0 }));
       return;
     }
 
-    page$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: ({ rows }: DifferentialExpressionPage) => {
-        this.comparisonToolService.setPinnedData(this.applyModelGroupLink(rows));
-      },
-      error: () => {
-        this.comparisonToolService.setPinnedData([]);
-      },
-    });
+    this.comparisonToolService.fetchPinned(
+      page$.pipe(
+        map(({ rows }: DifferentialExpressionPage) => {
+          const data = this.applyModelGroupLink(rows);
+          return { data, totalCount: data.length };
+        }),
+      ),
+    );
   }
 
   private fetchDifferentialExpressionPage(

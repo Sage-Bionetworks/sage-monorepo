@@ -17,6 +17,7 @@ import {
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
+import { Subject } from 'rxjs';
 import { ComparisonToolTableComponent } from './comparison-tool-table.component';
 import {
   COLUMN_HEADER_BORDER_WIDTH_PX,
@@ -135,7 +136,7 @@ describe('ComparisonToolTableComponent', () => {
   it('should disable Pin All while table data is loading', async () => {
     const { component } = await setup(undefined, { searchTerm: '5xFAD' });
 
-    TestBed.inject(ComparisonToolService).startFetch();
+    TestBed.inject(ComparisonToolService).fetchUnpinned(new Subject<never>());
     component.detectChanges();
 
     expect(screen.getByRole('button', { name: /pin all/i })).toBeDisabled();
@@ -152,7 +153,7 @@ describe('ComparisonToolTableComponent', () => {
   it('should explain that Pin All is waiting on table data while a fetch is in flight', async () => {
     const { component, user } = await setup(undefined, { searchTerm: '5xFAD' });
 
-    TestBed.inject(ComparisonToolService).startFetch();
+    TestBed.inject(ComparisonToolService).fetchUnpinned(new Subject<never>());
     component.detectChanges();
     await user.hover(screen.getByRole('button', { name: /pin all/i }));
 
@@ -171,7 +172,7 @@ describe('ComparisonToolTableComponent', () => {
     );
     const service = TestBed.inject(ComparisonToolService);
 
-    service.startFetch();
+    service.fetchUnpinned(new Subject<never>());
     component.detectChanges();
     await user.hover(screen.getByRole('button', { name: /pin all/i }));
 

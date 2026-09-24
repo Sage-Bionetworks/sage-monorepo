@@ -1,22 +1,4 @@
-import { IndividualData } from '@sagebionetworks/model-ad/api-client';
-
-// TODO(MG-1022): replace with the generated ProteomicsIndividual type once the OpenAPI schema lands.
-export interface ProteomicsIndividualMock {
-  ensembl_gene_id: string;
-  gene_symbol: string;
-  uniprotid: string;
-  unique_id: string;
-  display_symbol: string;
-  tissue: string;
-  name: string;
-  model_group?: string | null;
-  matched_control: string;
-  units: string;
-  age: string;
-  age_numeric: number;
-  result_order: string[];
-  data: IndividualData[];
-}
+import { IndividualData, ProteomicsIndividual } from '@sagebionetworks/model-ad/api-client';
 
 const data: IndividualData[] = [
   {
@@ -59,7 +41,7 @@ const baseMock = {
   result_order: ['LOAD1', 'LOAD2'],
 };
 
-export const proteomicsIndividualMocks: ProteomicsIndividualMock[] = [
+export const proteomicsIndividualMocks: ProteomicsIndividual[] = [
   {
     ...baseMock,
     age: '4 months',

@@ -9,7 +9,7 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, EMPTY, of, throwError } from 'rxjs';
+import { BehaviorSubject, EMPTY, of, Subject, throwError } from 'rxjs';
 import {
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
@@ -183,9 +183,9 @@ describe('ComparisonToolService', () => {
 
     it('should carry over pinned items when switching dropdown selections', () => {
       service.pinItem('item1');
-      service.setPinnedData([{ _id: 'item1' }] as any[]);
+      service.fetchPinned(of({ data: [{ _id: 'item1' }], totalCount: 1 }));
       service.pinItem('item2');
-      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }] as any[]);
+      service.fetchPinned(of({ data: [{ _id: 'item1' }, { _id: 'item2' }], totalCount: 2 }));
       expect(service.pinnedItemsSet().size).toBe(2);
 
       service.setDropdownSelection(['category1', 'option2']);
@@ -196,10 +196,10 @@ describe('ComparisonToolService', () => {
 
     it('should preserve cache when switching selections without modifying pins', () => {
       service.pinItem('item1');
-      service.setPinnedData([{ _id: 'item1' }] as any[]);
+      service.fetchPinned(of({ data: [{ _id: 'item1' }], totalCount: 1 }));
 
       service.pinItem('item2');
-      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }] as any[]);
+      service.fetchPinned(of({ data: [{ _id: 'item1' }, { _id: 'item2' }], totalCount: 2 }));
       const initialPins = (service as any).querySignal().pinnedItems;
 
       service.setDropdownSelection(['category1', 'option2']);
@@ -216,16 +216,18 @@ describe('ComparisonToolService', () => {
 
     it('should handle pinning/unpinning across different selections', () => {
       service.pinItem('item1');
-      service.setPinnedData([{ _id: 'item1' }] as any[]);
+      service.fetchPinned(of({ data: [{ _id: 'item1' }], totalCount: 1 }));
       service.pinItem('item2');
-      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }] as any[]);
+      service.fetchPinned(of({ data: [{ _id: 'item1' }, { _id: 'item2' }], totalCount: 2 }));
       expect(service.pinnedItemsSet().size).toBe(2);
 
       service.setDropdownSelection(['category1', 'option2']);
       expect(service.pinnedItemsSet().size).toBe(2);
 
       service.pinItem('item3');
-      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }, { _id: 'item3' }] as any[]);
+      service.fetchPinned(
+        of({ data: [{ _id: 'item1' }, { _id: 'item2' }, { _id: 'item3' }], totalCount: 3 }),
+      );
       expect(service.pinnedItemsSet().size).toBe(3);
       expect(service.isPinned('item1')).toBe(true);
       expect(service.isPinned('item2')).toBe(true);
@@ -240,14 +242,16 @@ describe('ComparisonToolService', () => {
 
     it('should handle unpinning items and carry over changes', () => {
       service.pinItem('item1');
-      service.setPinnedData([{ _id: 'item1' }] as any[]);
+      service.fetchPinned(of({ data: [{ _id: 'item1' }], totalCount: 1 }));
       service.pinItem('item2');
-      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }] as any[]);
+      service.fetchPinned(of({ data: [{ _id: 'item1' }, { _id: 'item2' }], totalCount: 2 }));
       service.pinItem('item3');
-      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }, { _id: 'item3' }] as any[]);
+      service.fetchPinned(
+        of({ data: [{ _id: 'item1' }, { _id: 'item2' }, { _id: 'item3' }], totalCount: 3 }),
+      );
 
       service.unpinItem('item1');
-      service.setPinnedData([{ _id: 'item2' }, { _id: 'item3' }] as any[]);
+      service.fetchPinned(of({ data: [{ _id: 'item2' }, { _id: 'item3' }], totalCount: 2 }));
       expect(service.pinnedItemsSet().size).toBe(2);
       expect(service.isPinned('item1')).toBe(false);
 
@@ -320,7 +324,7 @@ describe('ComparisonToolService', () => {
     it('should not pin beyond the max pinned items', () => {
       connectService();
       service.setMaxPinnedItems(2);
-      service.setPinnedData([{ _id: 'id1' }, { _id: 'id2' }]);
+      service.fetchPinned(of({ data: [{ _id: 'id1' }, { _id: 'id2' }], totalCount: 2 }));
       service.setPinnedItems(['id1', 'id2']);
 
       service.pinItem('id3');
@@ -389,7 +393,7 @@ describe('ComparisonToolService', () => {
     });
   });
 
-  describe('setPinnedData', () => {
+  describe('pinned data capping', () => {
     const rows = (...ids: string[]) => ids.map((id) => ({ _id: id }));
 
     it('should trim pinned data down to the max pinned items and warn', () => {
@@ -397,7 +401,7 @@ describe('ComparisonToolService', () => {
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
       service.setMaxPinnedItems(2);
 
-      service.setPinnedData(rows('id1', 'id2', 'id3'));
+      service.fetchPinned(of({ data: rows('id1', 'id2', 'id3'), totalCount: 3 }));
 
       expect(service.pinnedData()).toEqual(rows('id1', 'id2'));
       expect(service.pinnedItems()).toEqual(['id1', 'id2']);
@@ -412,7 +416,7 @@ describe('ComparisonToolService', () => {
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
       service.setMaxPinnedItems(1);
 
-      service.setPinnedData(rows('id1', 'id2'));
+      service.fetchPinned(of({ data: rows('id1', 'id2'), totalCount: 2 }));
 
       expect(warnSpy).toHaveBeenCalledWith(
         'Only 1 row was pinned, because you reached the maximum of 1 pinned items.',
@@ -425,7 +429,7 @@ describe('ComparisonToolService', () => {
       service.setMaxPinnedItems(2);
       service.setPinnedItems(['id1', 'id2']);
 
-      service.setPinnedData(rows('id1', 'id2'));
+      service.fetchPinned(of({ data: rows('id1', 'id2'), totalCount: 2 }));
 
       expect(service.pinnedData()).toEqual(rows('id1', 'id2'));
       expect(service.pinnedItems()).toEqual(['id1', 'id2']);
@@ -440,7 +444,7 @@ describe('ComparisonToolService', () => {
 
       // A duplicated row id means trimming can never bring the row count down to the id count, so
       // republishing the trimmed ids here would refetch the same over-limit data indefinitely
-      service.setPinnedData(rows('id1', 'id2', 'id2'));
+      service.fetchPinned(of({ data: rows('id1', 'id2', 'id2'), totalCount: 3 }));
 
       expect(service.pinnedItems()).toBe(pinsBeforeTrim);
     });
@@ -452,7 +456,7 @@ describe('ComparisonToolService', () => {
       service.setMaxPinnedItems(2);
       expect(service.pinnedItems()).toEqual(['id1', 'id2', 'id3']);
 
-      service.setPinnedData(rows('id1', 'id2', 'id3'));
+      service.fetchPinned(of({ data: rows('id1', 'id2', 'id3'), totalCount: 3 }));
 
       expect(service.pinnedItems()).toEqual(['id1', 'id2']);
     });
@@ -463,7 +467,7 @@ describe('ComparisonToolService', () => {
 
     const pinnedRows = (...ids: string[]) => {
       service.setPinnedItems(ids);
-      service.setPinnedData(rows(...ids));
+      service.fetchPinned(of({ data: rows(...ids), totalCount: ids.length }));
     };
 
     const stubFetch = (result: { rows: Row[]; totalElements: number }) =>
@@ -553,7 +557,7 @@ describe('ComparisonToolService', () => {
     it('should do nothing while table data is loading', () => {
       const pinAllFetch = stubFetch({ rows: rows('id1'), totalElements: 1 });
       connectService(mockComparisonToolDataConfig, { pinAllFetch });
-      service.startFetch();
+      service.fetchUnpinned(new Subject<never>());
 
       service.pinAll();
 
@@ -599,7 +603,7 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id1');
-        service.setPinnedData([{ _id: 'id1' }] as any);
+        service.fetchPinned(of({ data: [{ _id: 'id1' }], totalCount: 1 }));
         tick();
 
         expect(mockRouter.navigate).toHaveBeenCalledWith(
@@ -617,11 +621,13 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id3');
-        service.setPinnedData([{ _id: 'id3' }] as any);
+        service.fetchPinned(of({ data: [{ _id: 'id3' }], totalCount: 1 }));
         service.pinItem('id1');
-        service.setPinnedData([{ _id: 'id3' }, { _id: 'id1' }] as any);
+        service.fetchPinned(of({ data: [{ _id: 'id3' }, { _id: 'id1' }], totalCount: 2 }));
         service.pinItem('id2');
-        service.setPinnedData([{ _id: 'id3' }, { _id: 'id1' }, { _id: 'id2' }] as any);
+        service.fetchPinned(
+          of({ data: [{ _id: 'id3' }, { _id: 'id1' }, { _id: 'id2' }], totalCount: 3 }),
+        );
         tick();
 
         const lastCall = getLastNavigateCall();
@@ -643,11 +649,11 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id1');
-        service.setPinnedData([{ _id: 'id1' }] as any);
+        service.fetchPinned(of({ data: [{ _id: 'id1' }], totalCount: 1 }));
         service.pinItem('id2');
-        service.setPinnedData([{ _id: 'id1' }, { _id: 'id2' }] as any);
+        service.fetchPinned(of({ data: [{ _id: 'id1' }, { _id: 'id2' }], totalCount: 2 }));
         service.unpinItem('id1');
-        service.setPinnedData([{ _id: 'id2' }] as any);
+        service.fetchPinned(of({ data: [{ _id: 'id2' }], totalCount: 1 }));
         tick();
 
         const lastCall = getLastNavigateCall();
@@ -659,7 +665,9 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.setPinnedItems(['id1', 'id2', 'id3']);
-        service.setPinnedData([{ _id: 'id1' }, { _id: 'id2' }, { _id: 'id3' }] as any);
+        service.fetchPinned(
+          of({ data: [{ _id: 'id1' }, { _id: 'id2' }, { _id: 'id3' }], totalCount: 3 }),
+        );
         tick();
 
         const lastCall = getLastNavigateCall();
@@ -671,12 +679,12 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id1');
-        service.setPinnedData([{ _id: 'id1' }] as any);
+        service.fetchPinned(of({ data: [{ _id: 'id1' }], totalCount: 1 }));
         tick();
         expect(getLastNavigateCall()?.[1]?.queryParams?.pinned).toEqual('id1');
 
         service.resetPinnedItems();
-        service.setPinnedData([] as any);
+        service.fetchPinned(of({ data: [], totalCount: 0 }));
         tick();
 
         expect(getLastNavigateCall()?.[1]?.queryParams?.pinned).toBeNull();
@@ -794,7 +802,7 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id1');
-        service.setPinnedData([{ _id: 'id1' }] as any);
+        service.fetchPinned(of({ data: [{ _id: 'id1' }], totalCount: 1 }));
         tick();
 
         const lastCall = getLastNavigateCall();
@@ -820,7 +828,7 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id1');
-        service.setPinnedData([{ _id: 'id1' }] as any);
+        service.fetchPinned(of({ data: [{ _id: 'id1' }], totalCount: 1 }));
         tick();
 
         service.setDropdownSelection(['Category A', 'Option 2']);
@@ -829,7 +837,7 @@ describe('ComparisonToolService', () => {
         expect(service.pinnedItems()).toEqual(['id1']);
 
         service.pinItem('id2');
-        service.setPinnedData([{ _id: 'id1' }, { _id: 'id2' }] as any);
+        service.fetchPinned(of({ data: [{ _id: 'id1' }, { _id: 'id2' }], totalCount: 2 }));
         tick();
 
         service.setDropdownSelection(['Category A', 'Option 1']);
@@ -1186,8 +1194,7 @@ describe('ComparisonToolService', () => {
     it('auto-selects first unpinned row when fetches complete and rowSelectionEnabled=true', fakeAsync(() => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.startFetch();
-      service.setUnpinnedData([{ _id: 'row-1' }, { _id: 'row-2' }]);
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }, { _id: 'row-2' }], totalCount: 2 }));
       tick();
       expect(service.selectedRowId()).toBe('row-1');
     }));
@@ -1195,10 +1202,8 @@ describe('ComparisonToolService', () => {
     it('falls back to first pinned row when unpinned is empty and fetches complete', fakeAsync(() => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.startFetch();
-      service.startFetch();
-      service.setPinnedData([{ _id: 'pinned-1' }]);
-      service.setUnpinnedData([]);
+      service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
+      service.fetchUnpinned(of({ data: [], totalCount: 0 }));
       tick();
       expect(service.selectedRowId()).toBe('pinned-1');
     }));
@@ -1206,12 +1211,14 @@ describe('ComparisonToolService', () => {
     it('auto-selects regardless of which fetch completes first', fakeAsync(() => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.startFetch();
-      service.startFetch();
-      service.setUnpinnedData([{ _id: 'row-1' }]);
+      // Keep pinned in flight while unpinned completes
+      const pendingPinned$ = new Subject<{ data: Row[]; totalCount: number }>();
+      service.fetchPinned(pendingPinned$);
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
       tick();
       expect(service.selectedRowId()).toBeNull();
-      service.setPinnedData([]);
+      pendingPinned$.next({ data: [], totalCount: 0 });
+      pendingPinned$.complete();
       tick();
       expect(service.selectedRowId()).toBe('row-1');
     }));
@@ -1220,18 +1227,15 @@ describe('ComparisonToolService', () => {
       // pinned arrives first
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.startFetch();
-      service.startFetch();
-      service.setPinnedData([{ _id: 'pinned-1' }]);
-      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
       tick();
       expect(service.selectedRowId()).toBe('row-1');
     }));
 
     it('does not auto-select when rowSelectionEnabled is false', fakeAsync(() => {
       connectService();
-      service.startFetch();
-      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
       tick();
       expect(service.selectedRowId()).toBeNull();
     }));
@@ -1239,13 +1243,11 @@ describe('ComparisonToolService', () => {
     it('does not overwrite an existing selection when new data arrives', fakeAsync(() => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.startFetch();
-      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
       tick();
       expect(service.selectedRowId()).toBe('row-1');
       service.selectRow('row-2');
-      service.startFetch();
-      service.setUnpinnedData([{ _id: 'row-1' }, { _id: 'row-2' }]);
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }, { _id: 'row-2' }], totalCount: 2 }));
       tick();
       expect(service.selectedRowId()).toBe('row-2');
     }));
@@ -1253,7 +1255,7 @@ describe('ComparisonToolService', () => {
     it('notifySelectedRowValidity(false) resets and re-selects first row', () => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.setUnpinnedData([{ _id: 'row-1' }, { _id: 'row-2' }]);
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }, { _id: 'row-2' }], totalCount: 2 }));
       service.selectRow('row-2');
       service.notifySelectedRowValidity(false);
       expect(service.selectedRowId()).toBe('row-1');
@@ -1262,8 +1264,8 @@ describe('ComparisonToolService', () => {
     it('notifySelectedRowValidity(false) is a no-op when selected row is in pinned data', () => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.setPinnedData([{ _id: 'pinned-1' }]);
-      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
       service.selectRow('pinned-1');
       service.notifySelectedRowValidity(false);
       expect(service.selectedRowId()).toBe('pinned-1');
@@ -1272,7 +1274,7 @@ describe('ComparisonToolService', () => {
     it('notifySelectedRowValidity(true) is a no-op', () => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
-      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
       service.selectRow('row-1');
       service.notifySelectedRowValidity(true);
       expect(service.selectedRowId()).toBe('row-1');
@@ -1280,78 +1282,180 @@ describe('ComparisonToolService', () => {
 
     it('notifySelectedRowValidity() is a no-op when rowSelectionEnabled is false', () => {
       connectService();
-      service.setUnpinnedData([{ _id: 'row-1' }]);
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
       service.notifySelectedRowValidity(false);
       expect(service.selectedRowId()).toBeNull();
     });
   });
 
   describe('loading state', () => {
+    type FetchResult = { data: Row[]; totalCount: number };
+
     it('should have isLoading false initially', () => {
       connectService();
       expect(service.isLoadingTableData()).toBe(false);
     });
 
-    it('should set isLoading to true when startFetch is called', () => {
+    it('should set isLoading to true when an unpinned fetch is in flight', () => {
       connectService();
-      service.startFetch();
+      service.fetchUnpinned(new Subject<FetchResult>());
       expect(service.isLoadingTableData()).toBe(true);
     });
 
-    it('should set isLoading to false when setUnpinnedData is called', () => {
+    it('should set isLoading to false when the unpinned fetch completes', () => {
       connectService();
-      service.startFetch();
+      const pending$ = new Subject<FetchResult>();
+      service.fetchUnpinned(pending$);
       expect(service.isLoadingTableData()).toBe(true);
 
-      service.setUnpinnedData([]);
+      pending$.next({ data: [], totalCount: 0 });
+      pending$.complete();
       expect(service.isLoadingTableData()).toBe(false);
     });
 
-    it('should set isLoading to false when setPinnedData is called', () => {
+    it('should set isLoading to false when the pinned fetch completes', () => {
       connectService();
-      service.startFetch();
+      const pending$ = new Subject<FetchResult>();
+      service.fetchPinned(pending$);
       expect(service.isLoadingTableData()).toBe(true);
 
-      service.setPinnedData([]);
+      pending$.next({ data: [], totalCount: 0 });
+      pending$.complete();
       expect(service.isLoadingTableData()).toBe(false);
     });
 
     it('should track multiple concurrent fetches', () => {
       connectService();
+      const unpinned$ = new Subject<FetchResult>();
+      const pinned$ = new Subject<FetchResult>();
 
       // Start two fetches (simulating parallel pinned and unpinned data fetches)
-      service.startFetch();
-      service.startFetch();
+      service.fetchUnpinned(unpinned$);
+      service.fetchPinned(pinned$);
       expect(service.isLoadingTableData()).toBe(true);
 
       // Complete first fetch - should still be loading
-      service.setUnpinnedData([]);
+      unpinned$.next({ data: [], totalCount: 0 });
+      unpinned$.complete();
       expect(service.isLoadingTableData()).toBe(true);
 
       // Complete second fetch - should no longer be loading
-      service.setPinnedData([]);
+      pinned$.next({ data: [], totalCount: 0 });
+      pinned$.complete();
       expect(service.isLoadingTableData()).toBe(false);
     });
 
-    it('should not go below zero pending fetches', () => {
+    it('should balance the pending fetch counter across start and complete', () => {
       connectService();
       expect(service.pendingFetches()).toBe(0);
 
-      // Call setUnpinnedData without startFetch - should stay at 0
-      service.setUnpinnedData([]);
-      expect(service.pendingFetches()).toBe(0);
-
-      // Multiple unmatched complete calls - should stay at 0
-      service.setUnpinnedData([]);
-      service.setPinnedData([]);
-      expect(service.pendingFetches()).toBe(0);
-
-      // Should still work correctly after
-      service.startFetch();
+      const pending$ = new Subject<FetchResult>();
+      service.fetchUnpinned(pending$);
       expect(service.pendingFetches()).toBe(1);
 
-      service.setUnpinnedData([]);
+      pending$.next({ data: [], totalCount: 0 });
+      pending$.complete();
       expect(service.pendingFetches()).toBe(0);
+    });
+  });
+
+  describe('fetch streams (latest-wins)', () => {
+    type Result = { data: Record<string, unknown>[]; totalCount: number };
+
+    it('applies the latest unpinned fetch and ignores a superseded response', () => {
+      connectService();
+
+      const first$ = new Subject<Result>();
+      const second$ = new Subject<Result>();
+
+      service.fetchUnpinned(first$);
+      service.fetchUnpinned(second$);
+
+      // Newer request resolves first...
+      second$.next({ data: [{ _id: 'newest' }], totalCount: 1 });
+      second$.complete();
+      // ...then the superseded older request resolves late and must be ignored.
+      first$.next({ data: [{ _id: 'stale' }], totalCount: 99 });
+      first$.complete();
+
+      expect(service.unpinnedData()).toEqual([{ _id: 'newest' }]);
+      expect(service.totalResultsCount()).toBe(1);
+    });
+
+    it('keeps the pending-fetch counter balanced when a request is superseded before it emits', () => {
+      connectService();
+
+      const first$ = new Subject<Result>();
+      const second$ = new Subject<Result>();
+
+      service.fetchUnpinned(first$);
+      // Superseding the first fetch cancels it, so the counter drops back to a single pending fetch.
+      service.fetchUnpinned(second$);
+      expect(service.pendingFetches()).toBe(1);
+
+      second$.next({ data: [], totalCount: 0 });
+      second$.complete();
+
+      expect(service.pendingFetches()).toBe(0);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('does not cancel an in-flight pinned fetch when an unpinned fetch starts', () => {
+      connectService();
+
+      const pinned$ = new Subject<Result>();
+      const unpinned$ = new Subject<Result>();
+
+      service.fetchPinned(pinned$);
+      service.fetchUnpinned(unpinned$);
+
+      unpinned$.next({ data: [{ _id: 'unpinned' }], totalCount: 5 });
+      unpinned$.complete();
+      pinned$.next({ data: [{ _id: 'pinned' }], totalCount: 1 });
+      pinned$.complete();
+
+      expect(service.unpinnedData()).toEqual([{ _id: 'unpinned' }]);
+      expect(service.pinnedData()).toEqual([{ _id: 'pinned' }]);
+      expect(service.pinnedResultsCount()).toBe(1);
+    });
+
+    it('caps pinned data from the fetch stream at the max pinned items and warns', () => {
+      connectService();
+      const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
+      service.setMaxPinnedItems(2);
+
+      const pinned$ = new Subject<Result>();
+      service.fetchPinned(pinned$);
+      pinned$.next({
+        data: [{ _id: 'id1' }, { _id: 'id2' }, { _id: 'id3' }],
+        totalCount: 3,
+      });
+      pinned$.complete();
+
+      expect(service.pinnedData()).toEqual([{ _id: 'id1' }, { _id: 'id2' }]);
+      expect(service.pinnedItems()).toEqual(['id1', 'id2']);
+      expect(service.pinnedResultsCount()).toBe(2);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('maps a failed fetch to an empty result and stays alive for the next fetch', () => {
+      connectService();
+
+      const failing$ = new Subject<Result>();
+      service.fetchUnpinned(failing$);
+      failing$.error(new Error('request failed'));
+
+      expect(service.unpinnedData()).toEqual([]);
+      expect(service.totalResultsCount()).toBe(0);
+      expect(service.isLoadingTableData()).toBe(false);
+
+      const recovered$ = new Subject<Result>();
+      service.fetchUnpinned(recovered$);
+      recovered$.next({ data: [{ _id: 'recovered' }], totalCount: 1 });
+      recovered$.complete();
+
+      expect(service.unpinnedData()).toEqual([{ _id: 'recovered' }]);
+      expect(service.totalResultsCount()).toBe(1);
     });
   });
 

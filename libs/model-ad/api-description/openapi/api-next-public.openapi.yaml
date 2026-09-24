@@ -32,6 +32,8 @@ tags:
     description: Operations about Proteomics results.
   - name: Transcriptomics
     description: Operations about Transcriptomics results.
+  - name: Proteomics Individual
+    description: Operations about Individual Proteomics results.
   - name: Transcriptomics Individual
     description: Operations about Individual Transcriptomics results.
 paths:
@@ -227,6 +229,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TranscriptomicsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /proteomics-individual:
+    get:
+      tags:
+        - Proteomics Individual
+      summary: Get proteomics individual data
+      description: Retrieve proteomics individual data based on specified filter criteria.
+      operationId: getProteomicsIndividual
+      parameters:
+        - $ref: '#/components/parameters/proteomicsIndividualFilterQuery'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProteomicsIndividual'
+          description: Successfully retrieved individual proteomics data
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -626,6 +652,9 @@ components:
         transcriptomics:
           $ref: '#/components/schemas/Link'
           nullable: true
+        proteomics:
+          $ref: '#/components/schemas/Link'
+          nullable: true
         disease_correlation:
           $ref: '#/components/schemas/Link'
           nullable: true
@@ -655,6 +684,7 @@ components:
             type: string
             enum:
               - Transcriptomics
+              - Proteomics
               - Pathology
               - Biomarkers
               - Disease Correlation
@@ -1583,6 +1613,127 @@ components:
         Specifies whether a model identifier refers to a name or modelGroup.
         - name: The identifier is a model name.
         - modelGroup: The identifier is a model group.
+    ProteomicsIndividualFilterQuery:
+      type: object
+      description: Proteomics individual filter query options
+      properties:
+        tissue:
+          description: Tissue type to filter by
+          type: string
+          example: Hemibrain
+        modelIdentifier:
+          description: The model name or model group to filter by
+          type: string
+          example: LOAD2
+        modelIdentifierType:
+          description: Specifies whether modelIdentifier is a name or modelGroup
+          $ref: '#/components/schemas/ModelIdentifierType'
+        uniqueId:
+          description: Unique ID to filter by
+          type: string
+          example: ENSMUSG00000029781Q9Z247
+      required:
+        - tissue
+        - uniqueId
+        - modelIdentifier
+        - modelIdentifierType
+    IndividualData:
+      type: object
+      description: Data for an individual
+      properties:
+        genotype:
+          type: string
+          description: Genotype of the individual
+        sex:
+          $ref: '#/components/schemas/Sex'
+        individual_id:
+          type: string
+          description: Unique identifier for the individual
+        value:
+          type: number
+          description: Value for the individual
+      required:
+        - genotype
+        - sex
+        - individual_id
+        - value
+    ProteomicsIndividual:
+      type: object
+      description: Proteomics Individual
+      properties:
+        ensembl_gene_id:
+          type: string
+          description: Ensembl Gene ID
+        gene_symbol:
+          type: string
+          description: Gene Symbol
+          example: Fkbp9
+        uniprotid:
+          type: string
+          description: UniProt ID
+          example: Q9Z247
+        unique_id:
+          type: string
+          description: Concatenation of the Ensembl Gene ID and the UniProt ID
+          example: ENSMUSG00000029781Q9Z247
+        display_symbol:
+          type: string
+          description: Gene symbol and UniProt ID, falling back to the Ensembl Gene ID when the gene symbol is unavailable
+          example: Fkbp9 (Q9Z247)
+        tissue:
+          type: string
+          description: Tissue type
+          example: Hemibrain
+        name:
+          type: string
+          description: Model name
+        model_group:
+          type: string
+          description: Model group
+          nullable: true
+        matched_control:
+          type: string
+          description: Matched control for the model
+          example: LOAD1
+        units:
+          type: string
+          description: Units of measurement for proteomics data
+          example: Log2 Counts per Million
+        age:
+          type: string
+          description: Age of the model
+          example: 4 months
+        age_numeric:
+          type: integer
+          description: Numeric representation of the age
+          example: 4
+        result_order:
+          type: array
+          items:
+            type: string
+          description: List of genotypes in the order to display results
+          example:
+            - LOAD1
+            - LOAD2
+        data:
+          type: array
+          description: List of individual proteomics data points
+          items:
+            $ref: '#/components/schemas/IndividualData'
+      required:
+        - ensembl_gene_id
+        - gene_symbol
+        - uniprotid
+        - unique_id
+        - display_symbol
+        - tissue
+        - name
+        - matched_control
+        - units
+        - age
+        - age_numeric
+        - result_order
+        - data
     TranscriptomicsIndividualFilterQuery:
       type: object
       description: Transcriptomics individual filter query options
@@ -1607,26 +1758,6 @@ components:
         - ensemblGeneId
         - modelIdentifier
         - modelIdentifierType
-    IndividualData:
-      type: object
-      description: Data for an individual
-      properties:
-        genotype:
-          type: string
-          description: Genotype of the individual
-        sex:
-          $ref: '#/components/schemas/Sex'
-        individual_id:
-          type: string
-          description: Unique identifier for the individual
-        value:
-          type: number
-          description: Value for the individual
-      required:
-        - genotype
-        - sex
-        - individual_id
-        - value
     TranscriptomicsIndividual:
       type: object
       description: Transcriptomics Individual
@@ -1935,6 +2066,15 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/TranscriptomicsSearchQuery'
+    proteomicsIndividualFilterQuery:
+      name: proteomicsIndividualFilterQuery
+      description: The filter query used to retrieve a specific set of proteomics individual data.
+      in: query
+      required: true
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ProteomicsIndividualFilterQuery'
     transcriptomicsIndividualFilterQuery:
       name: transcriptomicsIndividualFilterQuery
       description: The filter query used to retrieve a specific set of transcriptomics individual data.

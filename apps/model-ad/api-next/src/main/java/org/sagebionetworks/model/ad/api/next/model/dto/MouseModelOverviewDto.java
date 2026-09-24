@@ -40,6 +40,8 @@ public class MouseModelOverviewDto {
 
   private @Nullable LinkDto transcriptomics;
 
+  private @Nullable LinkDto proteomics;
+
   private @Nullable LinkDto diseaseCorrelation;
 
   private @Nullable LinkDto biomarkers;
@@ -60,6 +62,8 @@ public class MouseModelOverviewDto {
    */
   public enum AvailableDataEnum {
     TRANSCRIPTOMICS("Transcriptomics"),
+    
+    PROTEOMICS("Proteomics"),
     
     PATHOLOGY("Pathology"),
     
@@ -222,6 +226,26 @@ public class MouseModelOverviewDto {
 
   public void setTranscriptomics(@Nullable LinkDto transcriptomics) {
     this.transcriptomics = transcriptomics;
+  }
+
+  public MouseModelOverviewDto proteomics(@Nullable LinkDto proteomics) {
+    this.proteomics = proteomics;
+    return this;
+  }
+
+  /**
+   * Get proteomics
+   * @return proteomics
+   */
+  @Valid 
+  @Schema(name = "proteomics", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("proteomics")
+  public @Nullable LinkDto getProteomics() {
+    return proteomics;
+  }
+
+  public void setProteomics(@Nullable LinkDto proteomics) {
+    this.proteomics = proteomics;
   }
 
   public MouseModelOverviewDto diseaseCorrelation(@Nullable LinkDto diseaseCorrelation) {
@@ -414,6 +438,7 @@ public class MouseModelOverviewDto {
         Objects.equals(this.modelType, mouseModelOverview.modelType) &&
         Objects.equals(this.matchedControls, mouseModelOverview.matchedControls) &&
         Objects.equals(this.transcriptomics, mouseModelOverview.transcriptomics) &&
+        Objects.equals(this.proteomics, mouseModelOverview.proteomics) &&
         Objects.equals(this.diseaseCorrelation, mouseModelOverview.diseaseCorrelation) &&
         Objects.equals(this.biomarkers, mouseModelOverview.biomarkers) &&
         Objects.equals(this.pathology, mouseModelOverview.pathology) &&
@@ -426,7 +451,7 @@ public class MouseModelOverviewDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, modelType, matchedControls, transcriptomics, diseaseCorrelation, biomarkers, pathology, studyData, jaxStrain, center, modifiedGenes, availableData);
+    return Objects.hash(id, name, modelType, matchedControls, transcriptomics, proteomics, diseaseCorrelation, biomarkers, pathology, studyData, jaxStrain, center, modifiedGenes, availableData);
   }
 
   @Override
@@ -438,6 +463,7 @@ public class MouseModelOverviewDto {
     sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
     sb.append("    matchedControls: ").append(toIndentedString(matchedControls)).append("\n");
     sb.append("    transcriptomics: ").append(toIndentedString(transcriptomics)).append("\n");
+    sb.append("    proteomics: ").append(toIndentedString(proteomics)).append("\n");
     sb.append("    diseaseCorrelation: ").append(toIndentedString(diseaseCorrelation)).append("\n");
     sb.append("    biomarkers: ").append(toIndentedString(biomarkers)).append("\n");
     sb.append("    pathology: ").append(toIndentedString(pathology)).append("\n");
@@ -479,6 +505,7 @@ public class MouseModelOverviewDto {
       this.instance.setModelType(value.modelType);
       this.instance.setMatchedControls(value.matchedControls);
       this.instance.setTranscriptomics(value.transcriptomics);
+      this.instance.setProteomics(value.proteomics);
       this.instance.setDiseaseCorrelation(value.diseaseCorrelation);
       this.instance.setBiomarkers(value.biomarkers);
       this.instance.setPathology(value.pathology);
@@ -512,6 +539,11 @@ public class MouseModelOverviewDto {
     
     public MouseModelOverviewDto.Builder transcriptomics(LinkDto transcriptomics) {
       this.instance.transcriptomics(transcriptomics);
+      return this;
+    }
+    
+    public MouseModelOverviewDto.Builder proteomics(LinkDto proteomics) {
+      this.instance.proteomics(proteomics);
       return this;
     }
     

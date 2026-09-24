@@ -1,14 +1,19 @@
+import { HttpContext } from '@angular/common/http';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
-import { ModelIdentifierType } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-// TODO(MG-1022): drop testing import when real data lands
 import {
-  ProteomicsIndividualMock,
-  proteomicsIndividualMocks,
-} from '@sagebionetworks/model-ad/testing';
+  LoggerService,
+  PlatformService,
+  SUPPRESS_ERROR_OVERLAY,
+} from '@sagebionetworks/explorers/services';
+import {
+  ModelIdentifierType,
+  ProteomicsIndividual,
+  ProteomicsIndividualFilterQuery,
+  ProteomicsIndividualService,
+} from '@sagebionetworks/model-ad/api-client';
+import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { IndividualExpressionDetailsComponent } from '@sagebionetworks/model-ad/ui';
 import { combineLatest } from 'rxjs';
 
@@ -21,6 +26,7 @@ import { combineLatest } from 'rxjs';
 export class ProteinDetailsComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
+  proteomicsIndividualService = inject(ProteomicsIndividualService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
@@ -30,8 +36,7 @@ export class ProteinDetailsComponent implements OnInit {
 
   isLoading = signal(true);
 
-  // TODO(MG-1022): replace with the generated ProteomicsIndividual type once the OpenAPI schema lands
-  proteomicsIndividualData = signal<ProteomicsIndividualMock[] | undefined>(undefined);
+  proteomicsIndividualData = signal<ProteomicsIndividual[] | undefined>(undefined);
   tissue = signal<string | null>(null);
   modelIdentifier = signal<string | null>(null);
 
@@ -69,9 +74,31 @@ export class ProteinDetailsComponent implements OnInit {
     this.modelIdentifier.set(modelIdentifier);
 
     if (uniqueId && tissue && modelIdentifier) {
-      // TODO(MG-1022): fetch real data from the API
-      this.proteomicsIndividualData.set(proteomicsIndividualMocks);
-      this.isLoading.set(false);
+      const query: ProteomicsIndividualFilterQuery = {
+        uniqueId,
+        tissue,
+        modelIdentifierType,
+        modelIdentifier,
+      };
+
+      this.proteomicsIndividualService
+        .getProteomicsIndividual(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (proteomicsIndividualData: ProteomicsIndividual[]) => {
+            this.proteomicsIndividualData.set(proteomicsIndividualData);
+            this.isLoading.set(false);
+          },
+          error: () => {
+            this.isLoading.set(false);
+            this.logger.log(
+              `ProteinDetailsComponent: loadProteomicsIndividualData: query: ${JSON.stringify(query)}, redirecting`,
+            );
+            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+          },
+        });
     } else {
       this.isLoading.set(false);
       this.logger.log(
