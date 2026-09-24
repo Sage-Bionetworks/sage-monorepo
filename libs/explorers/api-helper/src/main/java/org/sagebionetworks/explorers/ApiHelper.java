@@ -24,6 +24,8 @@ public final class ApiHelper {
 
   private static final String CACHE_CONTROL_VALUE = "no-cache, no-store, must-revalidate";
 
+  private static final String BLANK_VALUE_PATTERN = "^\\s*$";
+
   private ApiHelper() {}
 
   /**
@@ -193,42 +195,62 @@ public final class ApiHelper {
   }
 
   /**
-   * Builds an isEmpty expression for the given resolved field path. The flag is {@code true} when
-   * the field is null, missing, an empty string, or an empty array.
+   * Builds an aggregation expression that reads {@code path}, tolerating names that contain spaces.
    *
-   * <p>For field paths containing no spaces, uses {@code "$field"} expression syntax directly.
-   * For field paths containing spaces (e.g. {@code "4 months.log2_fc"}), {@code "$field"}
-   * expression syntax silently fails to resolve the name, so {@code $getField} is used instead,
-   * and the field access expression is bound to {@code $$val} via {@code $let} so all three
-   * isEmpty checks can reference it uniformly. The null/missing branch uses {@code $type} rather
-   * than {@code $eq null} because {@code $getField} returns {@code $$REMOVE} (not {@code null})
-   * when the parent field is absent, and {@code $eq [$$REMOVE, null]} evaluates to {@code false}.
+   * <p>For paths with no space, {@code "$path"} expression syntax resolves the name and is returned
+   * as-is. For a path containing a space (e.g. {@code "4 months.log2_fc"}), {@code "$path"}
+   * silently fails to resolve, so {@code $getField} is used instead — chained once through the
+   * parent when the path is nested.
    *
    * <p>Spaced paths support one level of nesting by splitting on the first dot. Deeper nesting
    * would require additional chained {@code $getField} calls.
+   *
+   * @param path the resolved document path to read
+   * @return a {@code String} field reference, or a {@code $getField} {@link Document} for a spaced
+   *     path
+   * @throws IllegalArgumentException if a spaced path contains more than one dot
+   */
+  static Object buildPathReadExpr(String path) {
+    if (!path.contains(" ")) {
+      return "$" + path;
+    }
+
+    int dotIndex = path.indexOf('.');
+    if (dotIndex < 0) {
+      return new Document("$getField", path);
+    }
+
+    String parent = path.substring(0, dotIndex);
+    String child = path.substring(dotIndex + 1);
+    if (child.contains(".")) {
+      throw new IllegalArgumentException(
+        "Spaced field paths support only one level of nesting via $getField; '" +
+        path +
+        "' contains more than one dot." +
+        " Add an explicit sort-field alias to a single-dot path instead."
+      );
+    }
+    return new Document(
+      "$getField",
+      new Document("field", child).append("input", new Document("$getField", parent))
+    );
+  }
+
+  /**
+   * Builds an isEmpty expression for the given resolved field path. The flag is {@code true} when
+   * the field is null, missing, an empty string, or an empty array.
+   *
+   * <p>For field paths containing no spaces, uses {@code "$field"} expression syntax directly. For
+   * field paths containing spaces (e.g. {@code "4 months.log2_fc"}), the field is read via
+   * {@link #buildPathReadExpr(String)} and that expression is bound to {@code $$val} via
+   * {@code $let} so all three isEmpty checks can reference it uniformly. The null/missing branch
+   * uses {@code $type} rather than {@code $eq null} because {@code $getField} returns
+   * {@code $$REMOVE} (not {@code null}) when the parent field is absent, and
+   * {@code $eq [$$REMOVE, null]} evaluates to {@code false}.
    */
   private static Document buildIsEmptyExpr(String resolvedField) {
     if (resolvedField.contains(" ")) {
-      int dotIndex = resolvedField.indexOf('.');
-      Object fieldAccess;
-      if (dotIndex >= 0) {
-        String parent = resolvedField.substring(0, dotIndex);
-        String child = resolvedField.substring(dotIndex + 1);
-        if (child.contains(".")) {
-          throw new IllegalArgumentException(
-            "Spaced field paths support only one level of nesting via $getField; '" +
-            resolvedField +
-            "' contains more than one dot." +
-            " Add an explicit sort-field alias to a single-dot path instead."
-          );
-        }
-        fieldAccess = new Document(
-          "$getField",
-          new Document("field", child).append("input", new Document("$getField", parent))
-        );
-      } else {
-        fieldAccess = new Document("$getField", resolvedField);
-      }
+      Object fieldAccess = buildPathReadExpr(resolvedField);
 
       // null/missing: $type returns "null" or "missing" for absent/null; $eq null fails for
       // $$REMOVE so $type is required here
@@ -353,6 +375,19 @@ public final class ApiHelper {
    */
   public static Criteria matchNothing() {
     return Criteria.where("_id").is(null);
+  }
+
+  /**
+   * Returns criteria matching documents whose {@code field} is blank: null, missing, empty, or
+   * whitespace only. {@code is(null)} covers null and missing; the regex covers empty and
+   * whitespace-only strings.
+   *
+   * @param field the MongoDB field to test
+   * @return criteria matching a blank {@code field}
+   */
+  public static Criteria blankFieldCriteria(String field) {
+    return new Criteria()
+      .orOperator(Criteria.where(field).is(null), Criteria.where(field).regex(BLANK_VALUE_PATTERN));
   }
 
   /**

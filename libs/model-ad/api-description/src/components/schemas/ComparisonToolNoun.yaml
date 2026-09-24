@@ -1,0 +1,19 @@
+type: object
+description: |
+  A noun used to label a set of records in the comparison tool UI, in both its singular and
+  plural forms.
+properties:
+  singular:
+    type: string
+    description: The singular form of the noun.
+    example: protein
+  plural:
+    type: string
+    description: The plural form of the noun.
+    example: proteins
+required:
+  - singular
+  - plural
+example:
+  singular: protein
+  plural: proteins

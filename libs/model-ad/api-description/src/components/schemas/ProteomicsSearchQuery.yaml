@@ -14,16 +14,19 @@ properties:
     format: int32
     default: 100
     minimum: 1
-    maximum: 100
+    # Worst-case gene-to-protein fan-out for the current data, so a full pin set of genes survives
+    # a fan-out into this view within a single page. A stopgap; see MG-1121.
+    maximum: 300
     example: 100
   remainingBudget:
     description: |
-      Maximum number of rows to return, letting a client retrieve matching rows from beyond the
-      current page in a single request. When set, pageNumber and pageSize are ignored. Only
-      applied when itemFilterType is 'exclude'.
+      Maximum number of new matching results to admit, letting a client retrieve matching rows
+      from beyond the current page in a single request. It counts unique parents for a
+      parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are
+      ignored. Only applied when itemFilterType is 'exclude'.
     type: integer
     format: int32
-    minimum: 1
+    minimum: 0 # 0 admits only the free children of prebudgetedParentIds
     maximum: 50 # this CT's pin limit -- keep in sync with the frontend's MAX_PINNED_ITEMS
     nullable: true
     example: 50
@@ -53,6 +56,25 @@ properties:
   itemFilterType:
     $ref: ItemFilterTypeQuery.yaml
     nullable: true
+  itemIdSpace:
+    $ref: ItemIdSpaceQuery.yaml
+    nullable: true
+  prebudgetedParentIds:
+    description: |
+      Parent IDs that are already accounted for, each using the format "ensembl_gene_id~name~sex".
+      On a budgeted request the rows of these parents are always returned, outside the budget, and
+      remainingBudget is spent only on parents not in this set. On any request the set also drives
+      hasRowsForPrebudgetedParents in the response, so send it on a paginated request once the
+      budget is exhausted to learn whether any further rows could still be admitted through parents
+      already accounted for. Always matched against the parent ID field, independently of
+      itemIdSpace, which governs only the items array. Only applied when itemFilterType is
+      'exclude'.
+    type: array
+    items:
+      type: string
+    maxItems: 50 # this CT's pin limit -- keep in sync with the frontend's MAX_PINNED_ITEMS
+    nullable: true
+    example: ['ENSMUSG00000000001~LOAD2~Female']
   search:
     description: |
       Search by identifier. A single term is a case-insensitive partial match on the displayed symbol,

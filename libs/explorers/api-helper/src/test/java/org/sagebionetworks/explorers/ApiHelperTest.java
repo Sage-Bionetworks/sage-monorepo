@@ -461,4 +461,34 @@ class ApiHelperTest {
       );
     }
   }
+
+  @Nested
+  @DisplayName("blankFieldCriteria")
+  class BlankFieldCriteria {
+
+    @Test
+    @DisplayName("should match a null or missing field")
+    void shouldMatchNullOrMissingField() {
+      List<Document> branches = branchesOf(ApiHelper.blankFieldCriteria("gene_symbol"));
+
+      assertThat(branches).hasSize(2);
+      assertThat(branches.get(0)).isEqualTo(new Document("gene_symbol", null));
+    }
+
+    @Test
+    @DisplayName("should match an empty or whitespace-only field but not a populated one")
+    void shouldMatchEmptyOrWhitespaceOnlyFieldButNotPopulatedOne() {
+      List<Document> branches = branchesOf(ApiHelper.blankFieldCriteria("gene_symbol"));
+
+      Pattern pattern = (Pattern) branches.get(1).get("gene_symbol");
+      assertThat(pattern.matcher("").matches()).isTrue();
+      assertThat(pattern.matcher("   ").matches()).isTrue();
+      assertThat(pattern.matcher("APOE").matches()).isFalse();
+      assertThat(pattern.matcher(" APOE ").matches()).isFalse();
+    }
+
+    private List<Document> branchesOf(Criteria criteria) {
+      return criteria.getCriteriaObject().getList("$or", Document.class);
+    }
+  }
 }

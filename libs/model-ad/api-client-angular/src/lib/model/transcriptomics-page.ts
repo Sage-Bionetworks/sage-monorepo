@@ -19,4 +19,8 @@ export interface TranscriptomicsPage {
    */
   transcriptomics: Array<Transcriptomics>;
   page: PageMetadata;
+  /**
+   * Over the full match set, whether at least one row\'s parent ID is in the request\'s prebudgetedParentIds. Null when the request carries none. A pure predicate over the match set, so it answers the one question a consumer holding a single page cannot answer for itself: whether a further budgeted request could still admit rows of parents it has already accounted for.
+   */
+  hasRowsForPrebudgetedParents?: boolean | null;
 }

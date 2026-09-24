@@ -5,6 +5,7 @@ import org.sagebionetworks.model.ad.api.next.model.document.ComparisonToolConfig
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolConfigColumnDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolConfigDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolConfigFilterDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolNounDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolPageDto;
 import org.springframework.stereotype.Component;
 
@@ -26,13 +27,20 @@ public class ComparisonToolConfigMapper {
       ? List.of()
       : document.getFilters().stream().map(this::toComparisonToolConfigFilterDto).toList();
 
-    return new ComparisonToolConfigDto(
+    ComparisonToolConfigDto dto = new ComparisonToolConfigDto(
       page,
       document.getDropdowns(),
       document.getRowCount(),
       columns,
       filters
     );
+
+    dto.setRowIdDataKey(document.getRowIdDataKey());
+    dto.setParentIdDataKey(document.getParentIdDataKey());
+    dto.setParentNoun(toComparisonToolNounDto(document.getParentNoun()));
+    dto.setViewNoun(toComparisonToolNounDto(document.getViewNoun()));
+
+    return dto;
   }
 
   private ComparisonToolConfigColumnDto toComparisonToolConfigDto(
@@ -74,5 +82,15 @@ public class ComparisonToolConfigMapper {
     );
     dto.setShortName(filter.getShortName());
     return dto;
+  }
+
+  private ComparisonToolNounDto toComparisonToolNounDto(
+    ComparisonToolConfigDocument.ComparisonToolNoun noun
+  ) {
+    if (noun == null) {
+      return null;
+    }
+
+    return new ComparisonToolNounDto(noun.getSingular(), noun.getPlural());
   }
 }

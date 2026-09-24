@@ -16,6 +16,7 @@ import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsDto;
 
 class ProteomicsMapperTest {
 
+  private static final String ENSEMBL_GENE_ID = "ENSMUSG00000000001";
   private static final String UNIQUE_ID = "ENSMUSG00000000001P27144";
   private static final String MODEL_NAME = "LOAD2";
   private static final String SEX = "Female";
@@ -42,11 +43,19 @@ class ProteomicsMapperTest {
   }
 
   @Test
+  @DisplayName("should build rna composite id from ensembl gene id, name, and sex")
+  void shouldBuildRnaCompositeIdFromEnsemblGeneIdNameAndSex() {
+    ProteomicsDto dto = mapper.toDto(buildDocument());
+
+    assertThat(dto.getRnaCompositeId()).isEqualTo(ENSEMBL_GENE_ID + "~" + MODEL_NAME + "~" + SEX);
+  }
+
+  @Test
   @DisplayName("should map identifying and model fields")
   void shouldMapIdentifyingAndModelFields() {
     ProteomicsDto dto = mapper.toDto(buildDocument());
 
-    assertThat(dto.getEnsemblGeneId()).isEqualTo("ENSMUSG00000000001");
+    assertThat(dto.getEnsemblGeneId()).isEqualTo(ENSEMBL_GENE_ID);
     assertThat(dto.getGeneSymbol()).isEqualTo("Gnai3");
     assertThat(dto.getUniprotid()).isEqualTo("P27144");
     assertThat(dto.getUniqueId()).isEqualTo(UNIQUE_ID);
@@ -143,7 +152,7 @@ class ProteomicsMapperTest {
 
   private ProteomicsDocument buildDocument() {
     ProteomicsDocument document = new ProteomicsDocument();
-    document.setEnsemblGeneId("ENSMUSG00000000001");
+    document.setEnsemblGeneId(ENSEMBL_GENE_ID);
     document.setGeneSymbol("Gnai3");
     document.setUniprotid("P27144");
     document.setUniqueId(UNIQUE_ID);
