@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { LoggerService, SvgIconService } from '@sagebionetworks/explorers/services';
 import {
   MockWikiComponent,
@@ -9,7 +10,6 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { marmosetModelDataMock } from '@sagebionetworks/model-ad/testing';
-import { BoxplotComponent } from '@sagebionetworks/model-ad/ui';
 import { render, screen } from '@testing-library/angular';
 import {
   ANCHOR_HIGHLIGHT_HOLD_MS,
@@ -114,13 +114,15 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
   it('should order boxplot lanes by the result_order of the age group', async () => {
     const { fixture } = await setup();
 
-    const boxplots = fixture.debugElement
-      .queryAll(By.directive(BoxplotComponent))
-      .map((el) => el.componentInstance as BoxplotComponent);
+    // assert on the directive rather than the component input, so the test fails if
+    // BoxplotComponent ever stops forwarding xAxisOrder to the chart
+    const orders = fixture.debugElement
+      .queryAll(By.directive(BoxplotDirective))
+      .map((el) => el.injector.get(BoxplotDirective).xAxisCategories);
 
-    expect(boxplots.length).toBeGreaterThan(1);
-    expect(boxplots[0].xAxisOrder()).toEqual(['Control', 'PSEN1']);
-    expect(boxplots[1].xAxisOrder()).toEqual(['PSEN1', 'Control']);
+    expect(orders.length).toBeGreaterThan(1);
+    expect(orders[0]).toEqual(['Control', 'PSEN1']);
+    expect(orders[1]).toEqual(['PSEN1', 'Control']);
   });
 
   it('should move focus to the age group heading when scrolling to its anchor', async () => {
