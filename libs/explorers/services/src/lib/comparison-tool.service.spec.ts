@@ -478,6 +478,44 @@ describe('ComparisonToolService', () => {
       });
     });
 
+    describe('isPinned after a view switch', () => {
+      const fanOutParentToChildView = () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        service.setDropdownSelection(CHILD_VIEW);
+        landPinned(childRow('child1a', 'parent1'), childRow('child1b', 'parent1'));
+        expect(service.pinnedItemsQuery().itemIdSpace).toBe('parent');
+      };
+
+      it('is true for the child rows a pinned parent fans out to', () => {
+        fanOutParentToChildView();
+
+        expect(service.isPinned('child1a')).toBe(true);
+        expect(service.isPinned('child1b')).toBe(true);
+        expect(service.isPinned('parent1')).toBe(false);
+      });
+
+      it('is true for the parent row pinned children collapse to', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        service.setPinnedItems(['child1a', 'child1b']);
+        landPinned(childRow('child1a', 'parent1'), childRow('child1b', 'parent1'));
+        service.setDropdownSelection(PARENT_VIEW);
+        landPinned(parentRow('parent1'));
+        expect(service.pinnedItemsQuery().itemIdSpace).toBe('parent');
+
+        expect(service.isPinned('parent1')).toBe(true);
+        expect(service.isPinned('child1a')).toBe(false);
+      });
+
+      it('unpins a fanned-out child row in one toggle', () => {
+        fanOutParentToChildView();
+
+        service.togglePin(childRow('child1a', 'parent1'));
+
+        expect(service.pinnedItems()).toEqual(['child1b']);
+      });
+    });
+
     describe('pin limit by parent', () => {
       const childrenOf = (parentNumber: number, count: number): Row[] =>
         Array.from({ length: count }, (_, index) =>

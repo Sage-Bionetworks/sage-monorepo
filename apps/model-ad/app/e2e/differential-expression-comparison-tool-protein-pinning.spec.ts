@@ -18,6 +18,7 @@ import {
   searchViaFilterbox,
   selectCategoryOption,
   testPinsRemovedFromUrlOnClearAllPins,
+  unPinByName,
   waitForTableLoadingComplete,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { Proteomics } from '@sagebionetworks/model-ad/api-client';
@@ -141,6 +142,43 @@ test.describe('differential expression protein pinning', () => {
     await expectPinnedParams(page, [fourProteinGene]);
     await expectPinnedResultsCount(page, 1);
     await expectPinnedRows(page, [fourProteinGene]);
+  });
+
+  test('a protein fanned out from an RNA pin can be unpinned in the Protein view', async ({
+    page,
+  }) => {
+    const proteinIds = getProteinIds(
+      await fetchProteinRows(page, [fourProteinGene]),
+      fourProteinGene,
+    );
+    expect(proteinIds).toHaveLength(4);
+    const [proteinIdToUnpin, ...remainingProteinIds] = proteinIds;
+
+    await navigateByUrlWithPins(page, rnaHemibrainCategories, [fourProteinGene]);
+    await expectPinnedRows(page, [fourProteinGene]);
+
+    await switchToProteinView(page);
+    await expectPinnedParams(page, proteinIds);
+    await unPinByName(getPinnedTable(page), page, proteinIdToUnpin);
+    await expectPinnedParams(page, remainingProteinIds);
+    await expectPinnedResultsCount(page, remainingProteinIds.length);
+  });
+
+  test('a gene collapsed from Protein pins can be unpinned in the RNA view', async ({ page }) => {
+    const proteinIds = getProteinIds(
+      await fetchProteinRows(page, [fourProteinGene]),
+      fourProteinGene,
+    );
+    expect(proteinIds).toHaveLength(4);
+
+    await navigateByUrlWithPins(page, proteinCategories, proteinIds);
+    await expectPinnedParams(page, proteinIds);
+
+    await switchToRnaView(page);
+    await expectPinnedRows(page, [fourProteinGene]);
+    await unPinByName(getPinnedTable(page), page, fourProteinGene);
+    await expectPinnedParams(page, []);
+    await expectUnpinnedTableOnly(page);
   });
 
   test('Protein pins return unchanged after a round trip through the RNA view', async ({

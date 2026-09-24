@@ -207,9 +207,11 @@ export class ComparisonToolService<T> {
   readonly selectedFilters = computed(() => this.helperService.getSelectedFilters(this.filters()));
   readonly first = computed(() => this.pageNumber() * this.pageSize());
 
-  // pinnedItems cache may include more pins than are currently visible
-  // Used for the URL serialization
+  // Row ids of the pinned rows on screen, which are what the URL records. They are the current
+  // view's row ids once its pinned rows arrive. Usually a subset of the pinned items cache, but after
+  // a switch to a view with different id keys, the cache holds a different view's row ids
   readonly visiblePinIds = computed(() => this.extractRowIds(this.pinnedData()));
+  private readonly visiblePinIdsSet = computed(() => new Set(this.visiblePinIds()));
 
   // Config-Driven Signals
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
@@ -685,8 +687,15 @@ export class ComparisonToolService<T> {
   }
 
   // Pinning
+  /**
+   * By default the pinned items cache holds the active view's row ids. When it was recorded under
+   * another view, the pinned rows were fetched by parent, so only those rows hold active view ids.
+   */
   isPinned(id: string): boolean {
-    return this.pinnedItemsSet().has(id);
+    if (this.pinnedItemsQuery().itemIdSpace === 'row') {
+      return this.pinnedItemsSet().has(id);
+    }
+    return this.visiblePinIdsSet().has(id);
   }
 
   /**
