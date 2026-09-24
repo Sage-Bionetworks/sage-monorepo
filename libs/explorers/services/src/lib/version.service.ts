@@ -1,6 +1,7 @@
 import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
+import { DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN } from '@sagebionetworks/explorers/constants';
+import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import { catchError, map, Observable, of } from 'rxjs';
 import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
@@ -33,14 +34,16 @@ export class VersionService {
 
   getDataVersion$(dataVersionService: DataVersionService): Observable<string> {
     if (this.platformService.isServer) {
-      return of('loading...');
+      return of(DATA_VERSION_LOADING);
     }
-    const context = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
+    const context = new HttpContext()
+      .set(SUPPRESS_ERROR_OVERLAY, true)
+      .set(SKIP_ERROR_REPORTING, true);
     return dataVersionService.getDataVersion('body', false, { context }).pipe(
       map((data) => this.formatDataVersion(data)),
       catchError((error) => {
-        this.logger.error('Failed to fetch data version', error);
-        return of('unknown');
+        this.logger.warn('Failed to fetch data version', { error });
+        return of(DATA_VERSION_UNKNOWN);
       }),
     );
   }

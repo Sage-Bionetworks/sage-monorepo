@@ -43,14 +43,19 @@ export class MarmosetModelDetailsBoxplotsSelectorComponent {
 
   transformSectionData = (data: ModelData[]) => {
     const ages = Array.from(new Set(data.map((item) => item.age)));
-    return ages.map((age) => {
-      const items = data.filter((item) => item.age === age);
-      if (items.length > 1) {
-        this.logger.warn(
-          `MarmosetModelDetailsBoxplotsSelectorComponent: expected 1 ModelData per age group but got ${items.length} for age "${age}". Only the first item will be rendered.`,
-        );
-      }
-      return { age, data: items };
-    });
+    const sectionData = ages.map((age) => ({
+      age,
+      data: data.filter((item) => item.age === age),
+    }));
+    const duplicateAgeGroups = sectionData
+      .filter((section) => section.data.length > 1)
+      .map((section) => ({ age: section.age, count: section.data.length }));
+    if (duplicateAgeGroups.length > 0) {
+      this.logger.warn(
+        'MarmosetModelDetailsBoxplotsSelectorComponent: expected 1 ModelData per age group. Only the first item will be rendered.',
+        { evidenceType: data[0].evidence_type, duplicateAgeGroups },
+      );
+    }
+    return sectionData;
   };
 }

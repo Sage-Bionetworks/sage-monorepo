@@ -19,17 +19,18 @@ export class LoggerService implements Logger {
     });
   }
 
+  /**
+   * Log a warning and send it to Sentry as a warning-level event, with `data`
+   * attached as extra context. Use for unexpected conditions the caller
+   * recovers from but that should still be investigated.
+   */
   warn(message: string, data?: Record<string, unknown>) {
     if (data) {
       console.warn('[WARN]', message, data);
     } else {
       console.warn('[WARN]', message);
     }
-    Sentry.addBreadcrumb({
-      message,
-      level: 'warning',
-      data,
-    });
+    Sentry.captureMessage(message, { level: 'warning', extra: data });
   }
 
   /**
