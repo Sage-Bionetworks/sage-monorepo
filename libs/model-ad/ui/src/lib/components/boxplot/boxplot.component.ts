@@ -42,7 +42,10 @@ export class BoxplotComponent {
 
   boxplotData = input.required<BoxplotData>();
   sexFilter = input<Sex[] | undefined>();
-  xAxisOrder = input<string[] | undefined>();
+  xAxisOrder = input<string[] | undefined, string[] | undefined>(undefined, {
+    // guard an empty order, so the chart derives it from the data instead of drawing a blank plot
+    transform: (order) => (order?.length ? order : undefined),
+  });
   showLegend = input<boolean>(false);
   showTitle = input<boolean>(true);
 

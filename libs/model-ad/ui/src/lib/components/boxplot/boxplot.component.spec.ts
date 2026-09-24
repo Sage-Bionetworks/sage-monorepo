@@ -1,3 +1,5 @@
+import { By } from '@angular/platform-browser';
+import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { Sex } from '@sagebionetworks/model-ad/api-client';
 import { render, screen } from '@testing-library/angular';
 import { BoxplotComponent, BoxplotData } from './boxplot.component';
@@ -14,12 +16,13 @@ const mockBoxplotData: BoxplotData = {
   ],
 };
 
-async function setup(boxplotData = mockBoxplotData, sexFilter?: Sex[]) {
+async function setup(boxplotData = mockBoxplotData, sexFilter?: Sex[], xAxisOrder?: string[]) {
   const { fixture } = await render(BoxplotComponent, {
     imports: [],
     componentInputs: {
       boxplotData,
       sexFilter,
+      xAxisOrder,
     },
   });
   const component = fixture.componentInstance;
@@ -66,6 +69,27 @@ describe('BoxplotComponent', () => {
   it('should compute yAxisMax from data when present', async () => {
     const { component } = await setup(mockBoxplotData);
     expect(component.yAxisMax()).toBe(10.0);
+  });
+
+  it('should pass a populated xAxisOrder through to the chart', async () => {
+    const order = ['C57BL/6J', '3xTg-AD'];
+    const { fixture } = await setup(mockBoxplotData, undefined, order);
+
+    const directive = fixture.debugElement
+      .query(By.directive(BoxplotDirective))
+      .injector.get(BoxplotDirective);
+
+    expect(directive.xAxisCategories).toEqual(order);
+  });
+
+  it('should treat an empty xAxisOrder as unspecified so the chart derives the order', async () => {
+    const { fixture } = await setup(mockBoxplotData, undefined, []);
+
+    const directive = fixture.debugElement
+      .query(By.directive(BoxplotDirective))
+      .injector.get(BoxplotDirective);
+
+    expect(directive.xAxisCategories).toBeUndefined();
   });
 
   it('should return undefined yAxisMax when not present in data', async () => {
