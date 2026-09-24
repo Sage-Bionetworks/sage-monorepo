@@ -5,6 +5,7 @@
   size="small"
   (click)="op.toggle($event)"
   [variant]="buttonLabel() ? 'text' : undefined"
+  [disabled]="disabled()"
   [pTooltip]="buttonTooltip()"
   tooltipPosition="top"
 >
@@ -32,7 +33,13 @@
       </div>
     }
     <div>
-      <p-button [label]="modalButtonLabel()" rounded="true" size="small" (click)="download()">
+      <p-button
+        [label]="modalButtonLabel()"
+        rounded="true"
+        size="small"
+        [disabled]="disabled()"
+        (click)="download()"
+      >
         @if (isLoading()) {
           <fa-icon class="base-download-dom-image-spinner" [icon]="spinnerIcon"></fa-icon>
         }
