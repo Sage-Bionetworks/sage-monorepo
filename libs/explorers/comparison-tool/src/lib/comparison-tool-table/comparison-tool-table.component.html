@@ -16,14 +16,16 @@
               [hasImageDownload]="viewConfig().allowPinnedImageDownload"
               [data]="getPinnedDataForCsv()"
               [buttonLabel]="pinnedResultsControls.downloadButtonLabel"
-              [buttonTooltip]="pinnedResultsControls.downloadButtonTooltip"
+              [buttonTooltip]="downloadPinsTooltip()"
               [heading]="pinnedResultsControls.downloadPanelHeading"
               [note]="viewConfig().downloadPinsNote"
+              [disabled]="isLoadingTableData()"
             />
             <button
               (click)="clearAllPinned()"
               class="clear-all-button"
-              [pTooltip]="pinnedResultsControls.clearButtonTooltip"
+              [disabled]="isLoadingTableData()"
+              [pTooltip]="clearAllPinsTooltip()"
               tooltipPosition="top"
             >
               {{ pinnedResultsControls.clearButtonLabel }}

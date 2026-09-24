@@ -63,6 +63,7 @@ $divider-margin: 30px;
     }
 
     .pin-all-button,
+    .clear-all-button,
     .csv-download-button {
       display: flex;
       align-items: center;
@@ -89,12 +90,6 @@ $divider-margin: 30px;
       explorers-svg-icon {
         height: 14px;
         margin-right: 8px;
-      }
-    }
-
-    .clear-all-button {
-      &:hover {
-        @include mixins.link-hover;
       }
     }
   }

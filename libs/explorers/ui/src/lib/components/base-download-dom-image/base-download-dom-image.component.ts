@@ -46,6 +46,7 @@ export class BaseDownloadDomImageComponent {
   performDownload = input.required<(fileType: string) => Promise<void>>();
   hasCsvDownload = input<boolean>(false);
   hasImageDownload = input<boolean>(true);
+  disabled = input<boolean>(false);
 
   downloadIcon = faDownload;
   spinnerIcon = faSpinner;
@@ -85,7 +86,7 @@ export class BaseDownloadDomImageComponent {
   @ViewChild('op', { static: true }) popover: Popover = {} as Popover;
 
   async download() {
-    if (this.isLoading()) return;
+    if (this.isLoading() || this.disabled()) return;
 
     this.error.set('');
     this.isLoading.set(true);
