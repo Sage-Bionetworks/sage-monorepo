@@ -41,11 +41,18 @@ $divider-margin: 30px;
     }
 
     button {
-      cursor: pointer;
+      &:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
 
-      &:hover {
-        color: var(--color-primary);
-        transition: vars.$transition-duration;
+      &:not(:disabled) {
+        cursor: pointer;
+
+        &:hover {
+          color: var(--color-primary);
+          transition: vars.$transition-duration;
+        }
       }
     }
 
@@ -55,7 +62,7 @@ $divider-margin: 30px;
     }
 
     .base-download-dom-image-action-button {
-      button:hover {
+      button:not(:disabled):hover {
         @include mixins.link-hover;
 
         background: none;
@@ -68,22 +75,15 @@ $divider-margin: 30px;
       display: flex;
       align-items: center;
 
-      &:not(:disabled) {
-        &:hover {
-          @include mixins.link-hover;
-        }
+      &:not(:disabled):hover {
+        @include mixins.link-hover;
       }
 
-      &:disabled {
-        opacity: 0.5;
-        cursor: default;
+      &:disabled .svg-icon {
+        color: inherit;
 
-        .svg-icon {
-          color: inherit;
-
-          .svg-icon-bg {
-            display: none;
-          }
+        .svg-icon-bg {
+          display: none;
         }
       }
 

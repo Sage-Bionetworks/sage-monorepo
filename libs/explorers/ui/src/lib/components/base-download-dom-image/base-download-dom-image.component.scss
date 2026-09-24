@@ -2,7 +2,7 @@
   button.p-button-text {
     color: var(--color-gray-1000);
 
-    &:hover {
+    &:not(:disabled):hover {
       color: var(--color-action-primary);
     }
   }
