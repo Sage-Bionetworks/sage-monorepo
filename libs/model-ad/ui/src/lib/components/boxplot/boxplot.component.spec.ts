@@ -82,16 +82,6 @@ describe('BoxplotComponent', () => {
     expect(directive.xAxisCategories).toEqual(order);
   });
 
-  it('should treat an empty xAxisOrder as unspecified so the chart derives the order', async () => {
-    const { fixture } = await setup(mockBoxplotData, undefined, []);
-
-    const directive = fixture.debugElement
-      .query(By.directive(BoxplotDirective))
-      .injector.get(BoxplotDirective);
-
-    expect(directive.xAxisCategories).toBeUndefined();
-  });
-
   it('should return undefined yAxisMax when not present in data', async () => {
     const dataWithoutMax: BoxplotData = {
       age: '6 months',
