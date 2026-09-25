@@ -104,7 +104,8 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
     component.transformSectionData(duplicateAgeData);
 
     expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('expected 1 ModelData per age group but got 2'),
+      expect.stringContaining('expected 1 ModelData per age group'),
+      { evidenceType: 'Soluble Aβ40', duplicateAgeGroups: [{ age: ageGroup, count: 2 }] },
     );
   });
 

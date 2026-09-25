@@ -141,7 +141,7 @@ describe('ComparisonToolService', () => {
         DEFAULT_COLUMN_WIDTH_PX,
       );
       expect(warnSpy).toHaveBeenCalledTimes(1);
-      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('bad'), {
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('Invalid column_width'), {
         dataKey: 'bad',
         columnWidth: -50,
       });
@@ -157,7 +157,10 @@ describe('ComparisonToolService', () => {
       expect(service.columns().find((column) => column.data_key === 'good')?.column_width).toBe(
         200,
       );
-      expect(warnSpy).not.toHaveBeenCalledWith(expect.stringContaining('good'), expect.anything());
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({ dataKey: 'good' }),
+      );
     });
   });
 

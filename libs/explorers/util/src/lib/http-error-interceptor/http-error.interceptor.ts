@@ -11,8 +11,11 @@ import { retry, catchError } from 'rxjs/operators';
 import {
   ErrorOverlayService,
   LoggerService,
+  SKIP_ERROR_REPORTING,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
+
+export const RETRY_DELAY_MS = 1000;
 
 /**
  * HTTP interceptor that handles errors from HTTP requests.
@@ -20,13 +23,10 @@ import {
  * This interceptor:
  * - Retries failed requests once for transient errors (network issues, 5xx)
  * - Does NOT retry client errors (4xx) as they won't succeed
- * - Shows error overlay for all errors so users are informed when requests fail
- * - Logs all errors for debugging
- * - Re-throws errors for consistent error handling
- *
- * Errors are handled centrally here to provide a consistent user experience.
- * Components should catch errors for cleanup but don't need to show their own
- * error messages.
+ * - Shows the error overlay, unless the request sets SUPPRESS_ERROR_OVERLAY
+ * - Reports errors to Sentry, unless the request sets SKIP_ERROR_REPORTING
+ *   because the caller reports its own failures
+ * - Re-throws errors so callers can recover (fallback values, redirects)
  */
 export const httpErrorInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
@@ -41,7 +41,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
       delay: (error: HttpErrorResponse) => {
         // Only retry on network errors or server errors (5xx)
         if (error.status === 0 || (error.status >= 500 && error.status < 600)) {
-          return timer(1000); // Wait 1 second before retry
+          return timer(RETRY_DELAY_MS);
         }
         // Don't retry client errors (4xx) - they won't succeed
         throw error;
@@ -51,22 +51,24 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
       const errorMessage = buildErrorMessage(error);
       const urlPath = extractUrlPath(error.url);
 
-      // Log error with Sentry context for proper grouping by endpoint + status
-      Sentry.withScope((scope) => {
-        scope.setFingerprint(['http-error', String(error.status), urlPath]);
-        scope.setTag('http.method', req.method);
-        scope.setTag('http.status_code', String(error.status));
-        scope.setTag('http.url', urlPath);
-        scope.setExtra('errorResponse', {
-          url: error.url,
-          status: error.status,
-          statusText: error.statusText,
-        });
+      if (!req.context.get(SKIP_ERROR_REPORTING)) {
+        // Log error with Sentry context for proper grouping by endpoint + status
+        Sentry.withScope((scope) => {
+          scope.setFingerprint(['http-error', String(error.status), urlPath]);
+          scope.setTag('http.method', req.method);
+          scope.setTag('http.status_code', String(error.status));
+          scope.setTag('http.url', urlPath);
+          scope.setExtra('errorResponse', {
+            url: error.url,
+            status: error.status,
+            statusText: error.statusText,
+          });
 
-        // grouping by status + method + urlPath
-        const sentryError = new Error(`HTTP ${error.status} ${req.method} ${urlPath}`);
-        logger.error(`HTTP Error: ${errorMessage}`, sentryError);
-      });
+          // grouping by status + method + urlPath
+          const sentryError = new Error(`HTTP ${error.status} ${req.method} ${urlPath}`);
+          logger.error(`HTTP Error: ${errorMessage}`, sentryError);
+        });
+      }
 
       // Show error overlay so users know when requests fail, unless the request
       // explicitly opts out (e.g., non-critical requests like version checks).
