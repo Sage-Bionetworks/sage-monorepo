@@ -9,6 +9,7 @@
           [id]="'selector-level-' + levelIndex"
           [options]="dropdownOptions"
           [ngModel]="selectedValue"
+          [disabled]="isPinningAll()"
           (onChange)="onDropdownChange(levelIndex, $event.value)"
         />
       }

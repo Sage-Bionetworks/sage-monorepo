@@ -1319,6 +1319,22 @@ describe('ComparisonToolService', () => {
       expect(pinAllFetch).not.toHaveBeenCalled();
     });
 
+    it('should report pinning all only while the fetch is in flight', () => {
+      const response$ = new Subject<{ rows: Row[]; totalElements: number }>();
+      const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(
+        () => response$,
+      );
+      connectWithMatchingRows(pinAllFetch);
+      expect(service.isPinningAll()).toBe(false);
+
+      service.pinAll();
+      expect(service.isPinningAll()).toBe(true);
+
+      response$.next({ rows: rows('id1'), totalElements: 1 });
+      response$.complete();
+      expect(service.isPinningAll()).toBe(false);
+    });
+
     it('should clear the loading state when the fetch fails', () => {
       const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() =>
         throwError(() => new Error('boom')),
@@ -1329,6 +1345,7 @@ describe('ComparisonToolService', () => {
 
       expect(pinAllFetch).toHaveBeenCalled();
       expect(service.isLoadingTableData()).toBe(false);
+      expect(service.isPinningAll()).toBe(false);
       expect(service.pinnedItems()).toEqual([]);
     });
 

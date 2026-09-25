@@ -154,6 +154,7 @@ export class ComparisonToolService<T> {
   private readonly pendingFetchesSignal = signal(0);
   private readonly selectedRowIdSignal = signal<string | null>(null);
   private readonly hoveredRowIdSignal = signal<string | null>(null);
+  private readonly isPinningAllSignal = signal(false);
 
   // Fetch streams: each fetch pushes a result observable onto these subjects, and switchMap keeps
   // only the latest in flight. A newer query cancels (unsubscribes) the prior request, so responses
@@ -189,6 +190,7 @@ export class ComparisonToolService<T> {
   readonly pendingFetches = this.pendingFetchesSignal.asReadonly();
   readonly selectedRowId = this.selectedRowIdSignal.asReadonly();
   readonly hoveredRowId = this.hoveredRowIdSignal.asReadonly();
+  readonly isPinningAll = this.isPinningAllSignal.asReadonly();
   readonly isLoadingTableData = computed(() => this.pendingFetches() > 0);
 
   // Computed Query Accessors
@@ -759,9 +761,9 @@ export class ComparisonToolService<T> {
    * guard: once it increments the counter, the `isLoadingTableData()` check at the top blocks any
    * concurrent call until the fetch completes.
    *
-   * A view switch while the fetch is in flight discards its result, because the returned ids are row
-   * ids of the view it was requested in. The check lives here rather than in the dropdowns, since
-   * back/forward navigation can switch the view too.
+   * The category dropdowns are disabled while `isPinningAll()` is set, so the view cannot switch
+   * while the fetch is in flight. A view switch that happens anyway still discards the result,
+   * because the returned ids are row ids of the view it was requested in.
    */
   pinAll() {
     const fetch = this.pinAllFetch;
@@ -774,10 +776,14 @@ export class ComparisonToolService<T> {
     const prebudgetedParentIds = this.isChildView() ? this.pinnedParents() : undefined;
 
     this.startFetch();
+    this.isPinningAllSignal.set(true);
     fetch(this.query(), remainingBudget, prebudgetedParentIds)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.completeFetch()),
+        finalize(() => {
+          this.isPinningAllSignal.set(false);
+          this.completeFetch();
+        }),
       )
       .subscribe({
         next: ({ rows, totalElements }) => {

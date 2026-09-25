@@ -100,7 +100,17 @@ explorers-comparison-tool-category-selectors {
       }
     }
 
-    &:hover {
+    &.p-disabled {
+      opacity: 0.5;
+      cursor: default;
+      background-color: transparent;
+
+      .p-select-label {
+        color: var(--color-text);
+      }
+    }
+
+    &:not(.p-disabled):hover {
       .p-select-dropdown-icon {
         color: var(--color-action-primary);
       }

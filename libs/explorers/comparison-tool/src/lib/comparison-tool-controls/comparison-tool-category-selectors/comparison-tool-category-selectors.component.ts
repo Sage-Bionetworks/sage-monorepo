@@ -22,6 +22,7 @@ export class ComparisonToolCategorySelectorsComponent {
 
   pageConfigs = computed(() => this.comparisonToolService.configs());
   selectorsWikiParams = computed(() => this.comparisonToolService.viewConfig().selectorsWikiParams);
+  isPinningAll = this.comparisonToolService.isPinningAll;
 
   dropdownTree = computed(() => {
     const configs = this.pageConfigs();
