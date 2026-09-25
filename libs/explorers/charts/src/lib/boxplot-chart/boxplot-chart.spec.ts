@@ -32,7 +32,6 @@ describe('BoxplotChart', () => {
     return mockSetOption.mock.calls[0][0] as EChartsOption;
   }
 
-  // the boxplot stacks a value axis and a category axis; only the latter carries the labels
   function getXAxisCategories(): string[] {
     const axes = getOption().xAxis as { id: string; data?: string[] }[];
     return axes.find((axis) => axis.id === 'category-x-axis')?.data ?? [];

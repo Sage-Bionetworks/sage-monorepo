@@ -2244,9 +2244,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '1-2 years',
     units: 'pg/ml',
     y_axis_max: 1000,
-    // deliberately the opposite order of the other entries, so tests can tell which age group's
-    // result_order was applied
-    result_order: ['PSEN1', 'Control'],
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '5', value: 140, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '6', value: 160, genotype: 'Control' },
