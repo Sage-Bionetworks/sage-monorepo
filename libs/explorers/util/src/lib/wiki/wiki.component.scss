@@ -46,6 +46,12 @@ explorers-wiki {
         background-color: var(--color-gray-200);
       }
     }
+
+    blockquote {
+      margin: 16px 0;
+      padding: 16px 20px;
+      background-color: var(--color-gray-200);
+    }
   }
 
   .loading-icon {
