@@ -2,6 +2,7 @@ package org.sagebionetworks.model.ad.api.next.configuration;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemIdSpaceQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelIdentifierTypeDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOrganismDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
@@ -28,6 +29,15 @@ public class EnumConverterConfiguration {
             @Override
             public ItemFilterTypeQueryDto convert(String source) {
                 return ItemFilterTypeQueryDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.model.ad.api.next.configuration.EnumConverterConfiguration.itemIdSpaceQueryConverter")
+    Converter<String, ItemIdSpaceQueryDto> itemIdSpaceQueryConverter() {
+        return new Converter<String, ItemIdSpaceQueryDto>() {
+            @Override
+            public ItemIdSpaceQueryDto convert(String source) {
+                return ItemIdSpaceQueryDto.fromValue(source);
             }
         };
     }

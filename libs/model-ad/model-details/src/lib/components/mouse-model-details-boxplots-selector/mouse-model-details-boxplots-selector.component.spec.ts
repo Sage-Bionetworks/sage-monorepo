@@ -61,6 +61,7 @@ describe('MouseModelDetailsBoxplotsSelectorComponent', () => {
         age: '4 months',
         units: 'test',
         y_axis_max: 2000.0,
+        result_order: [],
         data: [
           { ...basePt, genotype: 'ModelName' },
           { ...basePt, genotype: 'NewGenotype1' },
@@ -76,6 +77,7 @@ describe('MouseModelDetailsBoxplotsSelectorComponent', () => {
         age: '4 months',
         units: 'test',
         y_axis_max: 2000.0,
+        result_order: [],
         data: [
           { ...basePt, genotype: 'NewGenotype3' },
           { ...basePt, genotype: 'ModelName' },

@@ -23,7 +23,7 @@ import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
 import {
   COMPARISON_TOOL_BODY_CLASS,
-  PIN_ALL_LOADING_TOOLTIP,
+  TABLE_DATA_LOADING_TOOLTIP,
   PIN_ALL_TOOLTIP,
   PINNED_RESULTS_CONTROLS,
 } from './comparison-tool-table.constants';
@@ -79,8 +79,20 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   pinAllTooltip = computed(() => {
     if (this.hasMaxPinnedItems()) return this.disabledPinTooltip();
-    return this.isLoadingTableData() ? PIN_ALL_LOADING_TOOLTIP : PIN_ALL_TOOLTIP;
+    return this.isLoadingTableData() ? TABLE_DATA_LOADING_TOOLTIP : PIN_ALL_TOOLTIP;
   });
+
+  downloadPinsTooltip = computed(() =>
+    this.isLoadingTableData()
+      ? TABLE_DATA_LOADING_TOOLTIP
+      : this.pinnedResultsControls.downloadButtonTooltip,
+  );
+
+  clearAllPinsTooltip = computed(() =>
+    this.isLoadingTableData()
+      ? TABLE_DATA_LOADING_TOOLTIP
+      : this.pinnedResultsControls.clearButtonTooltip,
+  );
 
   constructor() {
     if (this.platformService.isBrowser) {

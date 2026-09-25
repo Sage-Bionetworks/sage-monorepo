@@ -1,9 +1,9 @@
 package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.List;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.model.ad.api.next.model.document.ProteomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsSearchQueryDto;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -20,9 +20,10 @@ public interface CustomProteomicsRepository {
    * @param query the search query containing all filter criteria
    * @param items the sanitized list of composite identifiers (from query.items)
    * @param tissue the tissue filter value extracted from categories
-   * @return page of proteomics documents matching all criteria
+   * @return page of proteomics documents matching all criteria, carrying
+   *     {@code hasRowsForPrebudgetedParents} for the service to surface on the response
    */
-  Page<ProteomicsDocument> findAll(
+  CtPage<ProteomicsDocument> findAll(
     Pageable pageable,
     ProteomicsSearchQueryDto query,
     List<String> items,

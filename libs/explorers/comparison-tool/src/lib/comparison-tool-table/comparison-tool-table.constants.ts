@@ -16,9 +16,10 @@ export const COLUMN_HEADER_TEXT_CLASS = 'column-header-text';
 // CSS class(es) — bound in comparison-tool.component.html
 export const COMPARISON_TOOL_BODY_CLASS = 'comparison-tool-body';
 
-// Pin All tooltips
+// Shown on Pin All, Download Pins, and Clear All Pins while table data is loading
+export const TABLE_DATA_LOADING_TOOLTIP = 'Waiting for data to load...';
+
 export const PIN_ALL_TOOLTIP = 'Pin all matching rows to the top.';
-export const PIN_ALL_LOADING_TOOLTIP = 'Waiting for data to load...';
 
 // Pinned results controls
 export const PINNED_RESULTS_CONTROLS = {

@@ -9,6 +9,7 @@
  */
 import { ComparisonToolPage } from './comparison-tool-page';
 import { ComparisonToolConfigColumn } from './comparison-tool-config-column';
+import { ComparisonToolNoun } from './comparison-tool-noun';
 import { ComparisonToolConfigFilter } from './comparison-tool-config-filter';
 
 export interface ComparisonToolConfig {
@@ -29,5 +30,21 @@ export interface ComparisonToolConfig {
    * List of filter configurations
    */
   filters: Array<ComparisonToolConfigFilter>;
+  /**
+   * The data key holding this view\'s row UID, overriding the comparison tool\'s default row id key for this view. Null when the view declares no hierarchy.
+   */
+  row_id_data_key?: string | null;
+  /**
+   * The data key holding the id of the row\'s parent. It must map to the same values in every view of the comparison tool, though not necessarily through the same field, since different views can read different collections. Equal to row_id_data_key means the view\'s rows are their own parents; a different key means the view\'s rows are children. Null when the view declares no hierarchy.
+   */
+  parent_id_data_key?: string | null;
+  /**
+   * The noun for this view\'s parent records, used to label parent counts. Set by a child view, which displays both counts. Null otherwise.
+   */
+  parent_noun?: ComparisonToolNoun | null;
+  /**
+   * The noun for this view\'s own records, used to label row counts. Any view can set it to override the generic nouns in the comparison table. Null otherwise.
+   */
+  view_noun?: ComparisonToolNoun | null;
 }
 export namespace ComparisonToolConfig {}

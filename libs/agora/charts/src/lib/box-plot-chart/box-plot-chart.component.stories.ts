@@ -24,7 +24,7 @@ export const Primary: Story = {
     heading: 'AD Diagnosis (males and females)',
     data: boxPlotChartItemsMock,
     xAxisLabel: 'Brain Region',
-    yAxisLabel: 'LOG 2 FOLD CHANGE',
+    yAxisLabel: 'LOG2 FOLD CHANGE',
     yAxisMin: -1,
     yAxisMax: 1,
   },
@@ -34,7 +34,7 @@ export const NoData: Story = {
   args: {
     heading: 'AD Diagnosis (males and females)',
     xAxisLabel: 'Brain Region',
-    yAxisLabel: 'LOG 2 FOLD CHANGE',
+    yAxisLabel: 'LOG2 FOLD CHANGE',
     yAxisMin: -1,
     yAxisMax: 1,
   },

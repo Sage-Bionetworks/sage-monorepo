@@ -34,6 +34,8 @@ public class ProteomicsPageDto {
 
   private PageMetadataDto page;
 
+  private @Nullable Boolean hasRowsForPrebudgetedParents = null;
+
   public ProteomicsPageDto() {
     super();
   }
@@ -94,6 +96,26 @@ public class ProteomicsPageDto {
     this.page = page;
   }
 
+  public ProteomicsPageDto hasRowsForPrebudgetedParents(@Nullable Boolean hasRowsForPrebudgetedParents) {
+    this.hasRowsForPrebudgetedParents = hasRowsForPrebudgetedParents;
+    return this;
+  }
+
+  /**
+   * Over the full match set, whether at least one row's parent ID is in the request's prebudgetedParentIds. Null when the request carries none. A pure predicate over the match set, so it answers the one question a consumer holding a single page cannot answer for itself: whether a further budgeted request could still admit rows of parents it has already accounted for. 
+   * @return hasRowsForPrebudgetedParents
+   */
+  
+  @Schema(name = "hasRowsForPrebudgetedParents", description = "Over the full match set, whether at least one row's parent ID is in the request's prebudgetedParentIds. Null when the request carries none. A pure predicate over the match set, so it answers the one question a consumer holding a single page cannot answer for itself: whether a further budgeted request could still admit rows of parents it has already accounted for. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("hasRowsForPrebudgetedParents")
+  public @Nullable Boolean getHasRowsForPrebudgetedParents() {
+    return hasRowsForPrebudgetedParents;
+  }
+
+  public void setHasRowsForPrebudgetedParents(@Nullable Boolean hasRowsForPrebudgetedParents) {
+    this.hasRowsForPrebudgetedParents = hasRowsForPrebudgetedParents;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -104,12 +126,13 @@ public class ProteomicsPageDto {
     }
     ProteomicsPageDto proteomicsPage = (ProteomicsPageDto) o;
     return Objects.equals(this.proteomics, proteomicsPage.proteomics) &&
-        Objects.equals(this.page, proteomicsPage.page);
+        Objects.equals(this.page, proteomicsPage.page) &&
+        Objects.equals(this.hasRowsForPrebudgetedParents, proteomicsPage.hasRowsForPrebudgetedParents);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(proteomics, page);
+    return Objects.hash(proteomics, page, hasRowsForPrebudgetedParents);
   }
 
   @Override
@@ -118,6 +141,7 @@ public class ProteomicsPageDto {
     sb.append("class ProteomicsPageDto {\n");
     sb.append("    proteomics: ").append(toIndentedString(proteomics)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
+    sb.append("    hasRowsForPrebudgetedParents: ").append(toIndentedString(hasRowsForPrebudgetedParents)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -148,6 +172,7 @@ public class ProteomicsPageDto {
     protected Builder copyOf(ProteomicsPageDto value) { 
       this.instance.setProteomics(value.proteomics);
       this.instance.setPage(value.page);
+      this.instance.setHasRowsForPrebudgetedParents(value.hasRowsForPrebudgetedParents);
       return this;
     }
 
@@ -158,6 +183,11 @@ public class ProteomicsPageDto {
     
     public ProteomicsPageDto.Builder page(PageMetadataDto page) {
       this.instance.page(page);
+      return this;
+    }
+    
+    public ProteomicsPageDto.Builder hasRowsForPrebudgetedParents(Boolean hasRowsForPrebudgetedParents) {
+      this.instance.hasRowsForPrebudgetedParents(hasRowsForPrebudgetedParents);
       return this;
     }
     

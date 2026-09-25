@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolConfigColumnDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolConfigFilterDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolNounDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolPageDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -42,6 +43,14 @@ public class ComparisonToolConfigDto {
 
   @Valid
   private List<@Valid ComparisonToolConfigFilterDto> filters = new ArrayList<>();
+
+  private @Nullable String rowIdDataKey = null;
+
+  private @Nullable String parentIdDataKey = null;
+
+  private @Nullable ComparisonToolNounDto parentNoun = null;
+
+  private @Nullable ComparisonToolNounDto viewNoun = null;
 
   public ComparisonToolConfigDto() {
     super();
@@ -182,6 +191,86 @@ public class ComparisonToolConfigDto {
     this.filters = filters;
   }
 
+  public ComparisonToolConfigDto rowIdDataKey(@Nullable String rowIdDataKey) {
+    this.rowIdDataKey = rowIdDataKey;
+    return this;
+  }
+
+  /**
+   * The data key holding this view's row UID, overriding the comparison tool's default row id key for this view. Null when the view declares no hierarchy. 
+   * @return rowIdDataKey
+   */
+  
+  @Schema(name = "row_id_data_key", example = "composite_id", description = "The data key holding this view's row UID, overriding the comparison tool's default row id key for this view. Null when the view declares no hierarchy. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("row_id_data_key")
+  public @Nullable String getRowIdDataKey() {
+    return rowIdDataKey;
+  }
+
+  public void setRowIdDataKey(@Nullable String rowIdDataKey) {
+    this.rowIdDataKey = rowIdDataKey;
+  }
+
+  public ComparisonToolConfigDto parentIdDataKey(@Nullable String parentIdDataKey) {
+    this.parentIdDataKey = parentIdDataKey;
+    return this;
+  }
+
+  /**
+   * The data key holding the id of the row's parent. It must map to the same values in every view of the comparison tool, though not necessarily through the same field, since different views can read different collections. Equal to row_id_data_key means the view's rows are their own parents; a different key means the view's rows are children. Null when the view declares no hierarchy. 
+   * @return parentIdDataKey
+   */
+  
+  @Schema(name = "parent_id_data_key", example = "rna_composite_id", description = "The data key holding the id of the row's parent. It must map to the same values in every view of the comparison tool, though not necessarily through the same field, since different views can read different collections. Equal to row_id_data_key means the view's rows are their own parents; a different key means the view's rows are children. Null when the view declares no hierarchy. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("parent_id_data_key")
+  public @Nullable String getParentIdDataKey() {
+    return parentIdDataKey;
+  }
+
+  public void setParentIdDataKey(@Nullable String parentIdDataKey) {
+    this.parentIdDataKey = parentIdDataKey;
+  }
+
+  public ComparisonToolConfigDto parentNoun(@Nullable ComparisonToolNounDto parentNoun) {
+    this.parentNoun = parentNoun;
+    return this;
+  }
+
+  /**
+   * The noun for this view's parent records, used to label parent counts. Set by a child view, which displays both counts. Null otherwise. 
+   * @return parentNoun
+   */
+  @Valid 
+  @Schema(name = "parent_noun", description = "The noun for this view's parent records, used to label parent counts. Set by a child view, which displays both counts. Null otherwise. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("parent_noun")
+  public @Nullable ComparisonToolNounDto getParentNoun() {
+    return parentNoun;
+  }
+
+  public void setParentNoun(@Nullable ComparisonToolNounDto parentNoun) {
+    this.parentNoun = parentNoun;
+  }
+
+  public ComparisonToolConfigDto viewNoun(@Nullable ComparisonToolNounDto viewNoun) {
+    this.viewNoun = viewNoun;
+    return this;
+  }
+
+  /**
+   * The noun for this view's own records, used to label row counts. Any view can set it to override the generic nouns in the comparison table. Null otherwise. 
+   * @return viewNoun
+   */
+  @Valid 
+  @Schema(name = "view_noun", description = "The noun for this view's own records, used to label row counts. Any view can set it to override the generic nouns in the comparison table. Null otherwise. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("view_noun")
+  public @Nullable ComparisonToolNounDto getViewNoun() {
+    return viewNoun;
+  }
+
+  public void setViewNoun(@Nullable ComparisonToolNounDto viewNoun) {
+    this.viewNoun = viewNoun;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -195,12 +284,16 @@ public class ComparisonToolConfigDto {
         Objects.equals(this.dropdowns, comparisonToolConfig.dropdowns) &&
         Objects.equals(this.rowCount, comparisonToolConfig.rowCount) &&
         Objects.equals(this.columns, comparisonToolConfig.columns) &&
-        Objects.equals(this.filters, comparisonToolConfig.filters);
+        Objects.equals(this.filters, comparisonToolConfig.filters) &&
+        Objects.equals(this.rowIdDataKey, comparisonToolConfig.rowIdDataKey) &&
+        Objects.equals(this.parentIdDataKey, comparisonToolConfig.parentIdDataKey) &&
+        Objects.equals(this.parentNoun, comparisonToolConfig.parentNoun) &&
+        Objects.equals(this.viewNoun, comparisonToolConfig.viewNoun);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(page, dropdowns, rowCount, columns, filters);
+    return Objects.hash(page, dropdowns, rowCount, columns, filters, rowIdDataKey, parentIdDataKey, parentNoun, viewNoun);
   }
 
   @Override
@@ -212,6 +305,10 @@ public class ComparisonToolConfigDto {
     sb.append("    rowCount: ").append(toIndentedString(rowCount)).append("\n");
     sb.append("    columns: ").append(toIndentedString(columns)).append("\n");
     sb.append("    filters: ").append(toIndentedString(filters)).append("\n");
+    sb.append("    rowIdDataKey: ").append(toIndentedString(rowIdDataKey)).append("\n");
+    sb.append("    parentIdDataKey: ").append(toIndentedString(parentIdDataKey)).append("\n");
+    sb.append("    parentNoun: ").append(toIndentedString(parentNoun)).append("\n");
+    sb.append("    viewNoun: ").append(toIndentedString(viewNoun)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -245,6 +342,10 @@ public class ComparisonToolConfigDto {
       this.instance.setRowCount(value.rowCount);
       this.instance.setColumns(value.columns);
       this.instance.setFilters(value.filters);
+      this.instance.setRowIdDataKey(value.rowIdDataKey);
+      this.instance.setParentIdDataKey(value.parentIdDataKey);
+      this.instance.setParentNoun(value.parentNoun);
+      this.instance.setViewNoun(value.viewNoun);
       return this;
     }
 
@@ -270,6 +371,26 @@ public class ComparisonToolConfigDto {
     
     public ComparisonToolConfigDto.Builder filters(List<ComparisonToolConfigFilterDto> filters) {
       this.instance.filters(filters);
+      return this;
+    }
+    
+    public ComparisonToolConfigDto.Builder rowIdDataKey(String rowIdDataKey) {
+      this.instance.rowIdDataKey(rowIdDataKey);
+      return this;
+    }
+    
+    public ComparisonToolConfigDto.Builder parentIdDataKey(String parentIdDataKey) {
+      this.instance.parentIdDataKey(parentIdDataKey);
+      return this;
+    }
+    
+    public ComparisonToolConfigDto.Builder parentNoun(ComparisonToolNounDto parentNoun) {
+      this.instance.parentNoun(parentNoun);
+      return this;
+    }
+    
+    public ComparisonToolConfigDto.Builder viewNoun(ComparisonToolNounDto viewNoun) {
+      this.instance.viewNoun(viewNoun);
       return this;
     }
     

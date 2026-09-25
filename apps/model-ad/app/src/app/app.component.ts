@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
-import { catchError, of } from 'rxjs';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
 import { MetaTagService, VersionService } from '@sagebionetworks/explorers/services';
 import {
@@ -44,12 +43,9 @@ export class AppComponent {
 
   readonly useGoogleTagManager = this.configService.config.googleTagManagerEnabled;
 
-  dataVersion = toSignal(
-    this.versionService
-      .getDataVersion$(this.dataVersionService)
-      .pipe(catchError(() => of('unknown'))),
-    { initialValue: 'loading...' },
-  );
+  dataVersion = toSignal(this.versionService.getDataVersion$(this.dataVersionService), {
+    requireSync: true,
+  });
 
   siteVersion = this.versionService.getSiteVersion(this.configService.config);
 

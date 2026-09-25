@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.model.ad.api.next.model.document.ProteomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ProteomicsIdentifier;
+import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsIdentifier;
 import org.sagebionetworks.model.ad.api.next.util.EnumConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,7 @@ public class ProteomicsMapper {
 
     ProteomicsDto dto = new ProteomicsDto(
       getCompositeId(document),
+      getRnaCompositeId(document),
       document.getEnsemblGeneId(),
       document.getGeneSymbol(),
       document.getUniprotid(),
@@ -52,6 +54,15 @@ public class ProteomicsMapper {
   private String getCompositeId(ProteomicsDocument document) {
     return ProteomicsIdentifier.builder()
       .uniqueId(document.getUniqueId())
+      .name(document.getName().getLinkText())
+      .sex(document.getSex())
+      .build()
+      .toCompositeId();
+  }
+
+  private String getRnaCompositeId(ProteomicsDocument document) {
+    return TranscriptomicsIdentifier.builder()
+      .ensemblGeneId(document.getEnsemblGeneId())
       .name(document.getName().getLinkText())
       .sex(document.getSex())
       .build()

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemIdSpaceQueryDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -42,6 +43,11 @@ public class ProteomicsSearchQueryDto {
   private @Nullable List<String> items;
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
+
+  private @Nullable ItemIdSpaceQueryDto itemIdSpace;
+
+  @Valid
+  private @Nullable List<String> prebudgetedParentIds;
 
   private @Nullable String search = null;
 
@@ -140,10 +146,10 @@ public class ProteomicsSearchQueryDto {
   /**
    * The number of items in a single page.
    * minimum: 1
-   * maximum: 100
+   * maximum: 300
    * @return pageSize
    */
-  @Min(1) @Max(100) 
+  @Min(1) @Max(300) 
   @Schema(name = "pageSize", example = "100", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("pageSize")
   public Integer getPageSize() {
@@ -160,13 +166,13 @@ public class ProteomicsSearchQueryDto {
   }
 
   /**
-   * Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. 
-   * minimum: 1
+   * Maximum number of new matching results to admit, letting a client retrieve matching rows from beyond the current page in a single request. It counts unique parents for a parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. 
+   * minimum: 0
    * maximum: 50
    * @return remainingBudget
    */
-  @Min(1) @Max(50) 
-  @Schema(name = "remainingBudget", example = "50", description = "Maximum number of rows to return, letting a client retrieve matching rows from beyond the current page in a single request. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Min(0) @Max(50) 
+  @Schema(name = "remainingBudget", example = "50", description = "Maximum number of new matching results to admit, letting a client retrieve matching rows from beyond the current page in a single request. It counts unique parents for a parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are ignored. Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("remainingBudget")
   public @Nullable Integer getRemainingBudget() {
     return remainingBudget;
@@ -250,6 +256,54 @@ public class ProteomicsSearchQueryDto {
 
   public void setItemFilterType(ItemFilterTypeQueryDto itemFilterType) {
     this.itemFilterType = itemFilterType;
+  }
+
+  public ProteomicsSearchQueryDto itemIdSpace(@Nullable ItemIdSpaceQueryDto itemIdSpace) {
+    this.itemIdSpace = itemIdSpace;
+    return this;
+  }
+
+  /**
+   * Get itemIdSpace
+   * @return itemIdSpace
+   */
+  @Valid 
+  @Schema(name = "itemIdSpace", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("itemIdSpace")
+  public @Nullable ItemIdSpaceQueryDto getItemIdSpace() {
+    return itemIdSpace;
+  }
+
+  public void setItemIdSpace(@Nullable ItemIdSpaceQueryDto itemIdSpace) {
+    this.itemIdSpace = itemIdSpace;
+  }
+
+  public ProteomicsSearchQueryDto prebudgetedParentIds(@Nullable List<String> prebudgetedParentIds) {
+    this.prebudgetedParentIds = prebudgetedParentIds;
+    return this;
+  }
+
+  public ProteomicsSearchQueryDto addPrebudgetedParentIdsItem(String prebudgetedParentIdsItem) {
+    if (this.prebudgetedParentIds == null) {
+      this.prebudgetedParentIds = new ArrayList<>();
+    }
+    this.prebudgetedParentIds.add(prebudgetedParentIdsItem);
+    return this;
+  }
+
+  /**
+   * Parent IDs that are already accounted for, each using the format \"ensembl_gene_id~name~sex\". On a budgeted request the rows of these parents are always returned, outside the budget, and remainingBudget is spent only on parents not in this set. On any request the set also drives hasRowsForPrebudgetedParents in the response, so send it on a paginated request once the budget is exhausted to learn whether any further rows could still be admitted through parents already accounted for. Always matched against the parent ID field, independently of itemIdSpace, which governs only the items array. Only applied when itemFilterType is 'exclude'. 
+   * @return prebudgetedParentIds
+   */
+  @Size(max = 50) 
+  @Schema(name = "prebudgetedParentIds", example = "[\"ENSMUSG00000000001~LOAD2~Female\"]", description = "Parent IDs that are already accounted for, each using the format \"ensembl_gene_id~name~sex\". On a budgeted request the rows of these parents are always returned, outside the budget, and remainingBudget is spent only on parents not in this set. On any request the set also drives hasRowsForPrebudgetedParents in the response, so send it on a paginated request once the budget is exhausted to learn whether any further rows could still be admitted through parents already accounted for. Always matched against the parent ID field, independently of itemIdSpace, which governs only the items array. Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("prebudgetedParentIds")
+  public @Nullable List<String> getPrebudgetedParentIds() {
+    return prebudgetedParentIds;
+  }
+
+  public void setPrebudgetedParentIds(@Nullable List<String> prebudgetedParentIds) {
+    this.prebudgetedParentIds = prebudgetedParentIds;
   }
 
   public ProteomicsSearchQueryDto search(@Nullable String search) {
@@ -455,6 +509,8 @@ public class ProteomicsSearchQueryDto {
         Objects.equals(this.categories, proteomicsSearchQuery.categories) &&
         Objects.equals(this.items, proteomicsSearchQuery.items) &&
         Objects.equals(this.itemFilterType, proteomicsSearchQuery.itemFilterType) &&
+        Objects.equals(this.itemIdSpace, proteomicsSearchQuery.itemIdSpace) &&
+        Objects.equals(this.prebudgetedParentIds, proteomicsSearchQuery.prebudgetedParentIds) &&
         Objects.equals(this.search, proteomicsSearchQuery.search) &&
         Objects.equals(this.biodomains, proteomicsSearchQuery.biodomains) &&
         Objects.equals(this.modelType, proteomicsSearchQuery.modelType) &&
@@ -466,7 +522,7 @@ public class ProteomicsSearchQueryDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, remainingBudget, categories, items, itemFilterType, search, biodomains, modelType, name, sex, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, remainingBudget, categories, items, itemFilterType, itemIdSpace, prebudgetedParentIds, search, biodomains, modelType, name, sex, sortFields, sortOrders);
   }
 
   @Override
@@ -479,6 +535,8 @@ public class ProteomicsSearchQueryDto {
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
+    sb.append("    itemIdSpace: ").append(toIndentedString(itemIdSpace)).append("\n");
+    sb.append("    prebudgetedParentIds: ").append(toIndentedString(prebudgetedParentIds)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("    biodomains: ").append(toIndentedString(biodomains)).append("\n");
     sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
@@ -520,6 +578,8 @@ public class ProteomicsSearchQueryDto {
       this.instance.setCategories(value.categories);
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
+      this.instance.setItemIdSpace(value.itemIdSpace);
+      this.instance.setPrebudgetedParentIds(value.prebudgetedParentIds);
       this.instance.setSearch(value.search);
       this.instance.setBiodomains(value.biodomains);
       this.instance.setModelType(value.modelType);
@@ -557,6 +617,16 @@ public class ProteomicsSearchQueryDto {
     
     public ProteomicsSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
       this.instance.itemFilterType(itemFilterType);
+      return this;
+    }
+    
+    public ProteomicsSearchQueryDto.Builder itemIdSpace(ItemIdSpaceQueryDto itemIdSpace) {
+      this.instance.itemIdSpace(itemIdSpace);
+      return this;
+    }
+    
+    public ProteomicsSearchQueryDto.Builder prebudgetedParentIds(List<String> prebudgetedParentIds) {
+      this.instance.prebudgetedParentIds(prebudgetedParentIds);
       return this;
     }
     

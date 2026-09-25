@@ -31,6 +31,18 @@ public class ComparisonToolConfigDocument {
 
   private List<ComparisonToolConfigFilter> filters;
 
+  @Field("row_id_data_key")
+  private @Nullable String rowIdDataKey;
+
+  @Field("parent_id_data_key")
+  private @Nullable String parentIdDataKey;
+
+  @Field("parent_noun")
+  private @Nullable ComparisonToolNoun parentNoun;
+
+  @Field("view_noun")
+  private @Nullable ComparisonToolNoun viewNoun;
+
   @Builder
   @Getter
   @Setter
@@ -81,5 +93,15 @@ public class ComparisonToolConfigDocument {
     private String queryParamKey;
 
     private List<String> values;
+  }
+
+  @Builder
+  @Getter
+  @Setter
+  public static class ComparisonToolNoun {
+
+    private String singular;
+
+    private String plural;
   }
 }

@@ -63,6 +63,57 @@ class ComparisonToolConfigDocumentTest {
     assertThat(filterValuesOf(result)).containsExactly("Familial AD", "Late Onset AD");
   }
 
+  @Test
+  @DisplayName("should read hierarchy fields including nested nouns")
+  void shouldReadHierarchyFieldsIncludingNestedNouns() {
+    // given
+    Document source = new Document()
+      .append("page", "Differential Expression")
+      .append("dropdowns", List.of())
+      .append("columns", List.of())
+      .append("filters", List.of())
+      .append("row_id_data_key", "composite_id")
+      .append("parent_id_data_key", "rna_composite_id")
+      .append("parent_noun", new Document().append("singular", "gene").append("plural", "genes"))
+      .append(
+        "view_noun",
+        new Document().append("singular", "protein").append("plural", "proteins")
+      );
+
+    // when
+    ComparisonToolConfigDocument result = converter.read(
+      ComparisonToolConfigDocument.class,
+      source
+    );
+
+    // then
+    assertThat(result.getRowIdDataKey()).isEqualTo("composite_id");
+    assertThat(result.getParentIdDataKey()).isEqualTo("rna_composite_id");
+    assertThat(result.getParentNoun().getSingular()).isEqualTo("gene");
+    assertThat(result.getParentNoun().getPlural()).isEqualTo("genes");
+    assertThat(result.getViewNoun().getSingular()).isEqualTo("protein");
+    assertThat(result.getViewNoun().getPlural()).isEqualTo("proteins");
+  }
+
+  @Test
+  @DisplayName("should read hierarchy fields as null when the config omits them")
+  void shouldReadHierarchyFieldsAsNullWhenConfigOmitsThem() {
+    // given
+    Document source = configWithFilterValues(List.of("Familial AD"));
+
+    // when
+    ComparisonToolConfigDocument result = converter.read(
+      ComparisonToolConfigDocument.class,
+      source
+    );
+
+    // then
+    assertThat(result.getRowIdDataKey()).isNull();
+    assertThat(result.getParentIdDataKey()).isNull();
+    assertThat(result.getParentNoun()).isNull();
+    assertThat(result.getViewNoun()).isNull();
+  }
+
   private static Document configWithFilterValues(Object values) {
     Document filter = new Document()
       .append("name", "Modified Gene")

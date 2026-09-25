@@ -1,5 +1,5 @@
 {
-  "extends": ["plugin:playwright/recommended", "../../../.eslintrc.json"],
+  "extends": ["../../../.eslintrc.json"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
@@ -32,6 +32,7 @@
     },
     {
       "files": ["e2e/**/*.{ts,js,tsx,jsx}", "e2e/**/*.spec.{ts,js,tsx,jsx}"],
+      "extends": ["plugin:playwright/recommended"],
       "plugins": ["@typescript-eslint"],
       "parserOptions": {
         "project": "./apps/agora/app/tsconfig.*?.json"

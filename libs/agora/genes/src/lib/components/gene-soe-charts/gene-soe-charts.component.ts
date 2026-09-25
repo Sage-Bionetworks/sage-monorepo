@@ -8,7 +8,7 @@ import {
   OverallScoresDistribution,
 } from '@sagebionetworks/agora/api-client';
 import { ScoreBarChartComponent } from '@sagebionetworks/agora/charts';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import { LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
 import { PopoverLinkComponent } from '@sagebionetworks/explorers/util';
 
 export interface SOEChartProps {
@@ -30,6 +30,7 @@ export interface SOEChartProps {
 export class GeneSoeChartsComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
+  readonly platformService = inject(PlatformService);
 
   distributionService = inject(DistributionService);
 

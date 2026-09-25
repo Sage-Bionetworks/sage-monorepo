@@ -145,16 +145,15 @@ export class CandlestickChart {
       return;
     }
 
-    const xAxisCategories = props.xAxisCategories ?? [
-      ...new Set(props.items.map((item) => item.xAxisCategory)),
-    ];
+    const xAxisCategories = props.xAxisCategories?.length
+      ? props.xAxisCategories
+      : [...new Set(props.items.map((item) => item.xAxisCategory))];
     const [yMin, yMax] = computeYBounds(props);
     const xAxisLabelTooltipFormatter = props.xAxisLabelTooltipFormatter;
 
     const series: (CustomSeriesOption | ScatterSeriesOption)[] = [];
     if (props.referenceLineValue !== undefined) {
-      // Anchor on the first item's category so it is always defined, even if a caller
-      // passes an explicit empty xAxisCategories array alongside non-empty items.
+      // Anchor on the first item's category so it is always defined.
       series.push(
         referenceLineSeries(
           props.items[0].xAxisCategory,

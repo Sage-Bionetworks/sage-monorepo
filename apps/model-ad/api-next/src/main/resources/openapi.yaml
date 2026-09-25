@@ -711,8 +711,29 @@ components:
         - query_param_key
         - values
       type: object
+    ComparisonToolNoun:
+      description: |
+        A noun used to label a set of records in the comparison tool UI, in both its singular and
+        plural forms.
+      example:
+        singular: protein
+        plural: proteins
+      properties:
+        singular:
+          description: The singular form of the noun.
+          example: protein
+          type: string
+        plural:
+          description: The plural form of the noun.
+          example: proteins
+          type: string
+      required:
+        - plural
+        - singular
+      type: object
     ComparisonToolConfig:
       example:
+        parent_id_data_key: rna_composite_id
         columns:
           - name: name
             tooltip: tooltip
@@ -734,6 +755,7 @@ components:
             type: text
             data_key: data_key
             link_text: link_text
+        row_id_data_key: composite_id
         page: Differential Expression
         dropdowns:
           - 'RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus'
@@ -754,6 +776,12 @@ components:
             data_key: model_type
             query_param_key: modelType
         row_count: row_count
+        parent_noun:
+          singular: gene
+          plural: genes
+        view_noun:
+          singular: protein
+          plural: proteins
       properties:
         page:
           $ref: '#/components/schemas/ComparisonToolPage'
@@ -778,6 +806,45 @@ components:
           items:
             $ref: '#/components/schemas/ComparisonToolConfigFilter'
           type: array
+        row_id_data_key:
+          description: |
+            The data key holding this view's row UID, overriding the comparison tool's default row id
+            key for this view. Null when the view declares no hierarchy.
+          example: composite_id
+          nullable: true
+          type: string
+        parent_id_data_key:
+          description: |
+            The data key holding the id of the row's parent. It must map to the same values in every
+            view of the comparison tool, though not necessarily through the same field, since different
+            views can read different collections. Equal to row_id_data_key means the view's rows are
+            their own parents; a different key means the view's rows are children. Null when the view
+            declares no hierarchy.
+          example: rna_composite_id
+          nullable: true
+          type: string
+        parent_noun:
+          allOf:
+            - $ref: '#/components/schemas/ComparisonToolNoun'
+          description: |
+            The noun for this view's parent records, used to label parent counts. Set by a child view,
+            which displays both counts. Null otherwise.
+          example:
+            singular: gene
+            plural: genes
+          nullable: true
+          type: object
+        view_noun:
+          allOf:
+            - $ref: '#/components/schemas/ComparisonToolNoun'
+          description: |
+            The noun for this view's own records, used to label row counts. Any view can set it to
+            override the generic nouns in the comparison table. Null otherwise.
+          example:
+            singular: protein
+            plural: proteins
+          nullable: true
+          type: object
       required:
         - columns
         - dropdowns
@@ -1710,6 +1777,18 @@ components:
         - diseaseCorrelations
         - page
       type: object
+    ItemIdSpaceQuery:
+      description: |
+        Which field the `items` values are matched against.
+        - row: Match items against this view's row UID field.
+        - parent: Match items against this view's parent ID field.
+
+        Absent matches the view's default id field, which is the legacy behavior. Exactly one space is
+        matched, never both.
+      enum:
+        - row
+        - parent
+      type: string
     ProteomicsSearchQuery:
       description: Proteomics search query with pagination and filtering options.
       properties:
@@ -1725,18 +1804,19 @@ components:
           description: The number of items in a single page.
           example: 100
           format: int32
-          maximum: 100
+          maximum: 300
           minimum: 1
           type: integer
         remainingBudget:
           description: |
-            Maximum number of rows to return, letting a client retrieve matching rows from beyond the
-            current page in a single request. When set, pageNumber and pageSize are ignored. Only
-            applied when itemFilterType is 'exclude'.
+            Maximum number of new matching results to admit, letting a client retrieve matching rows
+            from beyond the current page in a single request. It counts unique parents for a
+            parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are
+            ignored. Only applied when itemFilterType is 'exclude'.
           example: 50
           format: int32
           maximum: 50
-          minimum: 1
+          minimum: 0
           nullable: true
           type: integer
         categories:
@@ -1768,6 +1848,25 @@ components:
           type: array
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
+        itemIdSpace:
+          $ref: '#/components/schemas/ItemIdSpaceQuery'
+        prebudgetedParentIds:
+          description: |
+            Parent IDs that are already accounted for, each using the format "ensembl_gene_id~name~sex".
+            On a budgeted request the rows of these parents are always returned, outside the budget, and
+            remainingBudget is spent only on parents not in this set. On any request the set also drives
+            hasRowsForPrebudgetedParents in the response, so send it on a paginated request once the
+            budget is exhausted to learn whether any further rows could still be admitted through parents
+            already accounted for. Always matched against the parent ID field, independently of
+            itemIdSpace, which governs only the items array. Only applied when itemFilterType is
+            'exclude'.
+          example:
+            - ENSMUSG00000000001~LOAD2~Female
+          items:
+            type: string
+          maxItems: 50
+          nullable: true
+          type: array
         search:
           description: |
             Search by identifier. A single term is a case-insensitive partial match on the displayed symbol,
@@ -1890,6 +1989,7 @@ components:
           adj_p_val: 6.027456183070403
         gene_symbol: Gnai3
         sex: Female
+        rna_composite_id: ENSMUSG00000000001~LOAD2~Female
         display_symbol: Gnai3 (P27144)
         model_type: Late Onset AD
         tissue: Hemibrain
@@ -1916,6 +2016,12 @@ components:
         composite_id:
           description: Unique identifier for the proteomics object (unique_id~model_name~sex)
           example: ENSMUSG00000000001P27144~LOAD2~Female
+          type: string
+        rna_composite_id:
+          description: |
+            Identifier of the gene this proteomics object rolls up to (ensembl_gene_id~model_name~sex),
+            equal to the composite_id of the transcriptomics row for the same gene, model, and sex
+          example: ENSMUSG00000000001~LOAD2~Female
           type: string
         ensembl_gene_id:
           description: Ensembl Gene ID
@@ -1980,6 +2086,7 @@ components:
         - model_group
         - model_type
         - name
+        - rna_composite_id
         - sex
         - tissue
         - uniprotid
@@ -1989,6 +2096,7 @@ components:
       description: A paginated response containing proteomics objects and pagination
         metadata.
       example:
+        hasRowsForPrebudgetedParents: true
         proteomics:
           - model_group: model_group
             unique_id: ENSMUSG00000000001P27144
@@ -1997,6 +2105,7 @@ components:
               adj_p_val: 6.027456183070403
             gene_symbol: Gnai3
             sex: Female
+            rna_composite_id: ENSMUSG00000000001~LOAD2~Female
             display_symbol: Gnai3 (P27144)
             model_type: Late Onset AD
             tissue: Hemibrain
@@ -2026,6 +2135,7 @@ components:
               adj_p_val: 6.027456183070403
             gene_symbol: Gnai3
             sex: Female
+            rna_composite_id: ENSMUSG00000000001~LOAD2~Female
             display_symbol: Gnai3 (P27144)
             model_type: Late Onset AD
             tissue: Hemibrain
@@ -2063,6 +2173,15 @@ components:
           type: array
         page:
           $ref: '#/components/schemas/PageMetadata'
+        hasRowsForPrebudgetedParents:
+          description: |
+            Over the full match set, whether at least one row's parent ID is in the request's
+            prebudgetedParentIds. Null when the request carries none. A pure predicate over the match set,
+            so it answers the one question a consumer holding a single page cannot answer for itself:
+            whether a further budgeted request could still admit rows of parents it has already accounted
+            for.
+          nullable: true
+          type: boolean
       required:
         - page
         - proteomics
@@ -2087,13 +2206,14 @@ components:
           type: integer
         remainingBudget:
           description: |
-            Maximum number of rows to return, letting a client retrieve matching rows from beyond the
-            current page in a single request. When set, pageNumber and pageSize are ignored. Only
-            applied when itemFilterType is 'exclude'.
+            Maximum number of new matching results to admit, letting a client retrieve matching rows
+            from beyond the current page in a single request. It counts unique parents for a
+            parent/child comparison tool and rows otherwise. When set, pageNumber and pageSize are
+            ignored. Only applied when itemFilterType is 'exclude'.
           example: 50
           format: int32
           maximum: 50
-          minimum: 1
+          minimum: 0
           nullable: true
           type: integer
         categories:
@@ -2125,6 +2245,24 @@ components:
           type: array
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
+        itemIdSpace:
+          $ref: '#/components/schemas/ItemIdSpaceQuery'
+        prebudgetedParentIds:
+          description: |
+            Parent IDs that are already accounted for. On a budgeted request the rows of these parents
+            are always returned, outside the budget, and remainingBudget is spent only on parents not in
+            this set. On any request the set also drives hasRowsForPrebudgetedParents in the response, so
+            send it on a paginated request once the budget is exhausted to learn whether any further rows
+            could still be admitted through parents already accounted for. Always matched against the
+            parent ID field, independently of itemIdSpace, which governs only the items array. Only
+            applied when itemFilterType is 'exclude'.
+          example:
+            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Female
+          items:
+            type: string
+          maxItems: 50
+          nullable: true
+          type: array
         search:
           description: |
             Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches).
@@ -2291,6 +2429,7 @@ components:
       description: A paginated response containing transcriptomics objects and pagination
         metadata.
       example:
+        hasRowsForPrebudgetedParents: true
         transcriptomics:
           - model_group: model_group
             '24 months':
@@ -2359,6 +2498,15 @@ components:
           type: array
         page:
           $ref: '#/components/schemas/PageMetadata'
+        hasRowsForPrebudgetedParents:
+          description: |
+            Over the full match set, whether at least one row's parent ID is in the request's
+            prebudgetedParentIds. Null when the request carries none. A pure predicate over the match set,
+            so it answers the one question a consumer holding a single page cannot answer for itself:
+            whether a further budgeted request could still admit rows of parents it has already accounted
+            for.
+          nullable: true
+          type: boolean
       required:
         - page
         - transcriptomics
@@ -2672,6 +2820,9 @@ components:
             value: 0.8008281904610115
             genotype: genotype
             individual_id: individual_id
+        result_order:
+          - result_order
+          - result_order
         name: name
         tissue: tissue
         units: units
@@ -2696,6 +2847,11 @@ components:
         y_axis_max:
           description: Maximum value for y-axis in visualizations
           type: number
+        result_order:
+          description: List of genotypes in the order to display results
+          items:
+            type: string
+          type: array
         data:
           description: Values for each individual
           items:
@@ -2706,6 +2862,7 @@ components:
         - data
         - evidence_type
         - name
+        - result_order
         - units
         - y_axis_max
       type: object
@@ -2737,6 +2894,9 @@ components:
                 value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
+            result_order:
+              - result_order
+              - result_order
             name: name
             tissue: tissue
             units: units
@@ -2752,6 +2912,9 @@ components:
                 value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
+            result_order:
+              - result_order
+              - result_order
             name: name
             tissue: tissue
             units: units
@@ -2770,6 +2933,9 @@ components:
                 value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
+            result_order:
+              - result_order
+              - result_order
             name: name
             tissue: tissue
             units: units
@@ -2785,6 +2951,9 @@ components:
                 value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
+            result_order:
+              - result_order
+              - result_order
             name: name
             tissue: tissue
             units: units

@@ -20,6 +20,10 @@ export interface Proteomics {
    */
   composite_id: string;
   /**
+   * Identifier of the gene this proteomics object rolls up to (ensembl_gene_id~model_name~sex), equal to the composite_id of the transcriptomics row for the same gene, model, and sex
+   */
+  rna_composite_id: string;
+  /**
    * Ensembl Gene ID
    */
   ensembl_gene_id: string;

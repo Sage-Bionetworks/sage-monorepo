@@ -1,0 +1,57 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { DATA_VERSION_LOADING } from '@sagebionetworks/explorers/constants';
+import {
+  MetaTagService,
+  PlatformService,
+  SvgIconService,
+  VersionService,
+} from '@sagebionetworks/explorers/services';
+import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
+import { DataVersion, DataVersionService } from '@sagebionetworks/qtl/api-client';
+import { ConfigService } from '@sagebionetworks/qtl/config';
+import { configMock, dataVersionMock } from '@sagebionetworks/qtl/testing';
+import { render, screen } from '@testing-library/angular';
+import { MessageService } from 'primeng/api';
+import { NEVER, Observable, of } from 'rxjs';
+import { AppComponent } from './app.component';
+
+const PAGE_TITLE = 'QTL';
+
+async function setup(getDataVersion: () => Observable<DataVersion> = () => of(dataVersionMock)) {
+  const metaTagService = { initialize: jest.fn() };
+  await render(AppComponent, {
+    providers: [
+      provideRouter([]),
+      provideHttpClient(),
+      provideHttpClientTesting(),
+      MessageService,
+      { provide: ConfigService, useValue: { config: configMock } },
+      { provide: PlatformService, useValue: { isServer: false, isBrowser: true } },
+      { provide: DataVersionService, useValue: { getDataVersion } },
+      { provide: MetaTagService, useValue: metaTagService },
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
+    ],
+  });
+  return { metaTagService };
+}
+
+describe('AppComponent', () => {
+  it('should initialize page meta tags for QTL', async () => {
+    const { metaTagService } = await setup();
+    expect(metaTagService.initialize).toHaveBeenCalledWith(PAGE_TITLE);
+  });
+
+  it('should show the data version in the footer', async () => {
+    await setup();
+    const formattedDataVersion = TestBed.inject(VersionService).formatDataVersion(dataVersionMock);
+    expect(screen.getByText(`Data Version ${formattedDataVersion}`)).toBeVisible();
+  });
+
+  it('should show the loading data version in the footer until the request resolves', async () => {
+    await setup(() => NEVER);
+    expect(screen.getByText(`Data Version ${DATA_VERSION_LOADING}`)).toBeVisible();
+  });
+});

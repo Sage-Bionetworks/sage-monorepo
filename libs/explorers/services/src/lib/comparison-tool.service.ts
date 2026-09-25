@@ -323,7 +323,7 @@ export class ComparisonToolService<T> {
   setMaxPinnedItems(count: number) {
     if (count > MAX_PINNED_ITEMS) {
       this.logger.warn(
-        `Requested max pinned items (${count}) exceeds MAX_PINNED_ITEMS; using ${MAX_PINNED_ITEMS}.`,
+        `Requested max pinned items exceeds MAX_PINNED_ITEMS; using ${MAX_PINNED_ITEMS}.`,
         { requested: count, max: MAX_PINNED_ITEMS },
       );
     }
@@ -953,10 +953,10 @@ export class ComparisonToolService<T> {
    */
   private sanitizeColumnWidth(column: ComparisonToolConfigColumn): ComparisonToolConfigColumn {
     if (column.column_width != null && column.column_width <= 0) {
-      this.logger.warn(
-        `Invalid column_width for column "${column.data_key}"; falling back to ${DEFAULT_COLUMN_WIDTH_PX}px.`,
-        { dataKey: column.data_key, columnWidth: column.column_width },
-      );
+      this.logger.warn(`Invalid column_width; falling back to ${DEFAULT_COLUMN_WIDTH_PX}px.`, {
+        dataKey: column.data_key,
+        columnWidth: column.column_width,
+      });
       return { ...column, column_width: DEFAULT_COLUMN_WIDTH_PX };
     }
     return column;

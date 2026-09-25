@@ -355,7 +355,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
         `Matched Control: ${row.matched_control}`,
       ],
       value: cell.log2_fc,
-      valueLabel: 'Log 2 Fold Change',
+      valueLabel: 'Log2 Fold Change',
       pValue: cell.adj_p_val,
       footer: 'Significance is considered to be an adjusted p-value < 0.05',
     };

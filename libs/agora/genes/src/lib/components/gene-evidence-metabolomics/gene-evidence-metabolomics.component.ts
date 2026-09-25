@@ -3,7 +3,10 @@ import { Gene } from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
-import { HelperService as ExplorersHelperService } from '@sagebionetworks/explorers/services';
+import {
+  HelperService as ExplorersHelperService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 
@@ -15,6 +18,7 @@ import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 })
 export class GeneEvidenceMetabolomicsComponent {
   explorersHelperService = inject(ExplorersHelperService);
+  readonly platformService = inject(PlatformService);
 
   readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
 

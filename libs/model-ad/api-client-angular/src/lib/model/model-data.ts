@@ -38,6 +38,10 @@ export interface ModelData {
    */
   y_axis_max: number;
   /**
+   * List of genotypes in the order to display results
+   */
+  result_order: Array<string>;
+  /**
    * Values for each individual
    */
   data: Array<IndividualData>;

@@ -1,6 +1,11 @@
 server:
   port: 3333
   forward-headers-strategy: native
+  # Comparison tool requests carry one `items` parameter per row, so URLs run to several
+  # kilobytes. Kept high so Tomcat never decides how long a URL may be; the upstream proxy or
+  # load balancer does. This counts the request line and headers together, unlike an edge cap on
+  # the request line alone, so check the deployed limits before changing it.
+  max-http-request-header-size: 64KB
 
 spring:
   application:

@@ -17,7 +17,7 @@ import {
   NetworkChartLink,
   NetworkChartNode,
 } from '@sagebionetworks/agora/models';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import { LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
 import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
@@ -30,6 +30,7 @@ import { TooltipModule } from 'primeng/tooltip';
 export class GeneNetworkComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
+  readonly platformService = inject(PlatformService);
 
   router = inject(Router);
   geneService = inject(GeneService);

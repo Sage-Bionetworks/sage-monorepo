@@ -11,12 +11,14 @@ import org.sagebionetworks.explorers.ApiHelper;
 import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.sagebionetworks.explorers.ComputedSortField;
 import org.sagebionetworks.explorers.CtFilterConfig;
+import org.sagebionetworks.explorers.CtPage;
+import org.sagebionetworks.explorers.CtQueryOptions;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemIdSpaceQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsIdentifier;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.util.MouseEnsemblGeneId;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -115,8 +117,13 @@ public class CustomTranscriptomicsRepositoryImpl
     return filterConfig;
   }
 
+  /**
+   * No {@code getParentItemFilter()} override: a gene row is its own parent, so this CT is
+   * self-parented. {@code itemIdSpace: parent} therefore resolves back to the row space and a
+   * budget above zero caps rows.
+   */
   @Override
-  public Page<TranscriptomicsDocument> findAll(
+  public CtPage<TranscriptomicsDocument> findAll(
     Pageable pageable,
     TranscriptomicsSearchQueryDto query,
     List<String> items,
@@ -126,17 +133,22 @@ public class CustomTranscriptomicsRepositoryImpl
       query.getItemFilterType(),
       ItemFilterTypeQueryDto.INCLUDE
     );
-    boolean isInclude = filterType == ItemFilterTypeQueryDto.INCLUDE;
+    CtQueryOptions options = new CtQueryOptions(
+      filterType == ItemFilterTypeQueryDto.INCLUDE,
+      query.getRemainingBudget(),
+      query.getPrebudgetedParentIds(),
+      query.getItemIdSpace() == ItemIdSpaceQueryDto.PARENT
+    );
     Criteria matchCriteria = buildCtMatchCriteria(
       query,
       items,
-      isInclude,
+      options,
       query.getSearch(),
       getFilterConfig(),
       Criteria.where("tissue").is(tissue)
     );
 
-    return executePagedAggregation(matchCriteria, pageable, isInclude, query.getRemainingBudget());
+    return executePagedAggregation(matchCriteria, pageable, options);
   }
 
   /**
@@ -253,12 +265,7 @@ public class CustomTranscriptomicsRepositoryImpl
   }
 
   private static Criteria whenGeneSymbolIsBlank(Criteria fallbackMatch) {
-    Criteria geneSymbolIsBlank = new Criteria()
-      .orOperator(
-        Criteria.where(GENE_SYMBOL_FIELD).is(null),
-        Criteria.where(GENE_SYMBOL_FIELD).is(""),
-        Criteria.where(GENE_SYMBOL_FIELD).regex("^\\s*$")
-      );
-    return new Criteria().andOperator(geneSymbolIsBlank, fallbackMatch);
+    return new Criteria()
+      .andOperator(ApiHelper.blankFieldCriteria(GENE_SYMBOL_FIELD), fallbackMatch);
   }
 }

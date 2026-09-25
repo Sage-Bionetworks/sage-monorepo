@@ -1,0 +1,26 @@
+{
+  "name": "qtl-testing",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/qtl/testing/src",
+  "prefix": "qtl",
+  "tags": ["type:feature", "scope:qtl", "language:typescript"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/qtl/testing"],
+      "options": {
+        "jestConfig": "libs/qtl/testing/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  }
+}

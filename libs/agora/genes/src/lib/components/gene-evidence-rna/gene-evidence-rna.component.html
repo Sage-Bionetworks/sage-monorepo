@@ -41,7 +41,7 @@
       <div class="section-inner">
         <div class="container-lg">
           <div #rnaOEChart>
-            @defer {
+            @if (platformService.isBrowser) {
               <agora-median-barchart
                 [data]="medianExpression"
                 xAxisLabel="Brain region"
@@ -101,7 +101,7 @@
       <div class="section-inner">
         <div class="container-lg">
           <div #rnaDEChart>
-            @defer {
+            @if (platformService.isBrowser) {
               <agora-box-plot-chart
                 xAxisLabel="BRAIN REGION"
                 [yAxisMin]="differentialExpressionYAxisMin"
@@ -141,14 +141,14 @@
       <div class="section-inner">
         <div class="container-lg">
           <div #rnaCCChart>
-            @defer {
+            @if (platformService.isBrowser) {
               @if (selectedStatisticalModel) {
                 <h4 class="chart-heading">{{ selectedStatisticalModel }}</h4>
               }
               <div
                 sageForestPlot
                 [items]="consistencyOfChangeChartData"
-                xAxisTitle="LOG 2 FOLD CHANGE"
+                xAxisTitle="LOG2 FOLD CHANGE"
                 [showCILabels]="true"
                 [yAxisLabelTooltipFormatter]="yAxisLabelTooltipFormatter"
                 [pointTooltipFormatter]="pointTooltipFormatter"
@@ -194,7 +194,7 @@
       <div class="section-inner">
         <div class="container-lg">
           <div #rnaCorrChart>
-            @defer {
+            @if (platformService.isBrowser) {
               <div
                 sageCandlestick
                 [items]="neuropathologicCorrelationsChartData"
@@ -232,7 +232,7 @@
     <div class="section section-gray-100">
       <div class="section-inner p-0">
         <div class="container-lg">
-          @defer {
+          @if (platformService.isBrowser) {
             <agora-gene-network [gene]="gene"></agora-gene-network>
           }
         </div>

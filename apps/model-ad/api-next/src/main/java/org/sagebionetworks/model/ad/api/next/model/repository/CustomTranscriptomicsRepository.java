@@ -1,9 +1,9 @@
 package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.List;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.model.ad.api.next.model.document.TranscriptomicsDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.TranscriptomicsSearchQueryDto;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -20,9 +20,10 @@ public interface CustomTranscriptomicsRepository {
    * @param query the search query containing all filter criteria
    * @param items the sanitized list of composite identifiers (from query.items)
    * @param tissue the tissue filter value extracted from categories
-   * @return page of transcriptomics documents matching all criteria
+   * @return page of transcriptomics documents matching all criteria, carrying
+   *     {@code hasRowsForPrebudgetedParents} for the service to surface on the response
    */
-  Page<TranscriptomicsDocument> findAll(
+  CtPage<TranscriptomicsDocument> findAll(
     Pageable pageable,
     TranscriptomicsSearchQueryDto query,
     List<String> items,
