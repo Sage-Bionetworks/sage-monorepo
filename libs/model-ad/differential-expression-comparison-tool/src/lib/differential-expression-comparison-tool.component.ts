@@ -101,7 +101,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     },
   };
 
-  private readonly pinnedPageSizes: { [key: string]: number } = {
+  private readonly pinnedPageSizes: Record<string, number> = {
     [DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA]: PINNED_PAGE_SIZE_RNA,
     [DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN]: PINNED_PAGE_SIZE_PROTEIN,
   };

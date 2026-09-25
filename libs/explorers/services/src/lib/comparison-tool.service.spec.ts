@@ -453,8 +453,6 @@ describe('ComparisonToolService', () => {
         );
 
         expect(service.pinnedParents()).toEqual(['parent2', 'parent1']);
-        expect(service.pinnedParentCount()).toBe(2);
-        expect(service.pinnedParentsSet().has('parent1')).toBe(true);
       });
 
       it('reads the parent key active when the fetch was requested, not when it lands', () => {

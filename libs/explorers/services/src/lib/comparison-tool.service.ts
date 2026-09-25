@@ -255,8 +255,8 @@ export class ComparisonToolService<T> {
   unpinnedRowCount = signal<number>(0);
   hasRowsForPrebudgetedParents = signal<boolean | null>(null);
   pinnedRowCount = computed(() => this.pinnedData().length);
-  readonly pinnedParentsSet = computed(() => new Set(this.pinnedParents()));
-  readonly pinnedParentCount = computed(() => this.pinnedParents().length);
+  private readonly pinnedParentsSet = computed(() => new Set(this.pinnedParents()));
+  private readonly pinnedParentCount = computed(() => this.pinnedParents().length);
   // Count parents in any view with a parent key, not just child views.
   // Counting rows in the parent view would be wrong right after a switch from a child view:
   // until the parent rows land, pinnedData() still holds the child rows, so the row count could
