@@ -32,6 +32,12 @@ export class VersionService {
   private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
 
+  /**
+   * Emits DATA_VERSION_LOADING synchronously on subscribe, then the formatted data version, or
+   * DATA_VERSION_UNKNOWN if the request fails. During SSR it emits only DATA_VERSION_LOADING.
+   * The synchronous first emission supports `toSignal(..., { requireSync: true })`; callers that
+   * need the resolved value must read the last emission, not the first.
+   */
   getDataVersion$(dataVersionService: DataVersionService): Observable<string> {
     if (this.platformService.isServer) {
       return of(DATA_VERSION_LOADING);
