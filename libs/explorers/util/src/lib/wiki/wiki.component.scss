@@ -48,7 +48,9 @@ explorers-wiki {
     }
 
     blockquote {
-      margin: 16px 0 16px 40px;
+      margin: 16px 0;
+      padding: 16px 20px;
+      background-color: var(--color-gray-300);
 
       // wiki authors end the quote with a newline, which pre-wrap would render as a blank line
       white-space: normal;
