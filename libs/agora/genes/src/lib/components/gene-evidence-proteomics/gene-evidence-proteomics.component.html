@@ -53,7 +53,7 @@
     <div class="section-inner">
       <div class="container-lg">
         <div #srmChart>
-          @defer {
+          @if (platformService.isBrowser) {
             <agora-box-plot-chart
               xAxisLabel="BRAIN TISSUE"
               [yAxisMin]="SRMRange?.Min"
@@ -126,7 +126,7 @@
     <div class="section-inner">
       <div class="container-lg">
         <div #tmtChart>
-          @defer {
+          @if (platformService.isBrowser) {
             <agora-box-plot-chart
               xAxisLabel="BRAIN TISSUE"
               [yAxisMin]="TMTRange?.Min"
@@ -168,7 +168,7 @@
     <div class="section-inner">
       <div class="container-lg">
         <div #lfqChart>
-          @defer {
+          @if (platformService.isBrowser) {
             <agora-box-plot-chart
               xAxisLabel="BRAIN TISSUE"
               [yAxisMin]="LFQRange?.Min"

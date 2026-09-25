@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Gene } from '@sagebionetworks/agora/api-client';
+import { PlatformService } from '@sagebionetworks/explorers/services';
 import { GeneBioDomainsComponent } from '../gene-biodomains/gene-biodomains.component';
 import { GeneSoeChartsComponent } from '../gene-soe-charts/gene-soe-charts.component';
 import { GeneSoeListComponent } from '../gene-soe-list/gene-soe-list.component';
@@ -11,5 +12,7 @@ import { GeneSoeListComponent } from '../gene-soe-list/gene-soe-list.component';
   styleUrls: ['./gene-soe.component.scss'],
 })
 export class GeneSoeComponent {
+  readonly platformService = inject(PlatformService);
+
   @Input() gene: Gene | undefined;
 }
