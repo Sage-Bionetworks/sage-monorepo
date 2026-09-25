@@ -72,7 +72,7 @@ export const Default: Story = {
   args: {
     items: forestPlotItems,
     showCILabels: true,
-    xAxisTitle: 'LOG 2 FOLD CHANGE',
+    xAxisTitle: 'LOG2 FOLD CHANGE',
     yAxisLabelTooltipFormatter: (category: string) => TISSUE_NAMES[category] ?? category,
     pointTooltipFormatter: (item) => `Log Fold Change: ${item.value.toPrecision(3)}`,
   },
