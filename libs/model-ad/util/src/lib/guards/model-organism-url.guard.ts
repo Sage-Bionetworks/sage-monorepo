@@ -5,17 +5,17 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
+import { MODEL_ORGANISM_QUERY_KEY, resolveModelOrganism } from '../model-organism';
 
 // Ensures every model-details URL carries a valid modelOrganism query param.
 // Wrong-case values are lowercased and missing or unknown values default to mouse, both via a
 // redirect, so legacy URLs land on the canonical form and the param survives reloads and sharing.
-export const modelOrganismGuard: CanActivateFn = (
+export const modelOrganismUrlGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
 ) => {
   const router = inject(Router);
-  const rawModelOrganism = route.queryParams['modelOrganism'];
+  const rawModelOrganism = route.queryParams[MODEL_ORGANISM_QUERY_KEY];
   const modelOrganism = resolveModelOrganism(rawModelOrganism);
 
   if (rawModelOrganism === modelOrganism) {
@@ -23,6 +23,6 @@ export const modelOrganismGuard: CanActivateFn = (
   }
 
   const urlTree = router.parseUrl(state.url);
-  urlTree.queryParams = { ...urlTree.queryParams, modelOrganism };
+  urlTree.queryParams = { ...urlTree.queryParams, [MODEL_ORGANISM_QUERY_KEY]: modelOrganism };
   return urlTree;
 };

@@ -190,3 +190,16 @@ export interface PaginationParams {
   pageNumber: number;
   pageSize: number;
 }
+
+export interface LegacyComparisonToolUrlRedirect extends ComparisonToolUrlParams {
+  warning?: string;
+}
+
+/**
+ * Translates the comparison tool params of a legacy share URL into their current shape. Return null
+ * when the params are already current, which leaves the URL untouched. A returned param replaces that
+ * URL param, an omitted one leaves it alone, and null or an empty list removes it.
+ */
+export type LegacyComparisonToolUrlRedirectFn = (
+  params: ComparisonToolUrlParams,
+) => LegacyComparisonToolUrlRedirect | null;
