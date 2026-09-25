@@ -143,6 +143,12 @@ describe('CandlestickChart', () => {
       expect(xAxis.data).toEqual(['Z', 'Y', 'X']);
     });
 
+    it('derives x-axis categories from items when xAxisCategories is empty', () => {
+      makeChart({ xAxisCategories: [] });
+      const xAxis = getOption().xAxis as { data: string[] };
+      expect(xAxis.data).toEqual(['BRAAK', 'CERAD', 'COGDX']);
+    });
+
     it('uses smaller grid top when no chart title', () => {
       makeChart();
       expect((getOption().grid as { top: number }).top).toBe(20);
