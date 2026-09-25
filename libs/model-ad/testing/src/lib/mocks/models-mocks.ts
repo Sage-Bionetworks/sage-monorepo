@@ -53,6 +53,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'pg/mg',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '3754', value: 1.887403509, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '3755', value: 2.507680422, sex: 'Male', genotype: '3xTg-AD' },
@@ -82,6 +83,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'pg/mg',
       y_axis_max: 25000.0,
+      result_order: [],
       data: [
         { individual_id: '3754', value: 4.853281065, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '3755', value: 37.12325, sex: 'Male', genotype: '3xTg-AD' },
@@ -111,6 +113,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'pg/mg',
       y_axis_max: 2000.0,
+      result_order: [],
       data: [
         { individual_id: '3754', value: 0.719792632, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '3755', value: 1.158890595, sex: 'Male', genotype: '3xTg-AD' },
@@ -140,6 +143,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'pg/mg',
       y_axis_max: 20000.0,
+      result_order: [],
       data: [
         { individual_id: '3754', value: 2.28235858, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '3755', value: 28.60823, sex: 'Male', genotype: '3xTg-AD' },
@@ -169,6 +173,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'pg/mg',
       y_axis_max: 15.0,
+      result_order: [],
       data: [
         { individual_id: '3754', value: 0.0, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '3755', value: 0.0, sex: 'Male', genotype: '3xTg-AD' },
@@ -198,6 +203,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'pg/mg',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '3754', value: 1.084458705, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '3755', value: 1.249287518, sex: 'Male', genotype: '3xTg-AD' },
@@ -227,6 +233,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'pg/mg',
       y_axis_max: 20.0,
+      result_order: [],
       data: [
         { individual_id: '3754', value: 0.118021546, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '3755', value: 0.149428476, sex: 'Male', genotype: '3xTg-AD' },
@@ -256,6 +263,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'pg/mg',
       y_axis_max: 2500.0,
+      result_order: [],
       data: [
         { individual_id: '3754', value: 0.843285714, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '3755', value: 1.039565265, sex: 'Male', genotype: '3xTg-AD' },
@@ -285,6 +293,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'pg/mg',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '4139', value: 2.08814808, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '4130', value: 2.217332553, sex: 'Male', genotype: '3xTg-AD' },
@@ -313,6 +322,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'pg/mg',
       y_axis_max: 25000.0,
+      result_order: [],
       data: [
         { individual_id: '4139', value: 38.90528342, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '4130', value: 80.0417, sex: 'Male', genotype: '3xTg-AD' },
@@ -341,6 +351,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'pg/mg',
       y_axis_max: 2000.0,
+      result_order: [],
       data: [
         { individual_id: '4139', value: 1.325965265, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '4130', value: 2.607418423, sex: 'Male', genotype: '3xTg-AD' },
@@ -369,6 +380,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'pg/mg',
       y_axis_max: 20000.0,
+      result_order: [],
       data: [
         { individual_id: '4139', value: 406.0958824, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '4130', value: 475.0145, sex: 'Male', genotype: '3xTg-AD' },
@@ -397,6 +409,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'pg/mg',
       y_axis_max: 15.0,
+      result_order: [],
       data: [
         { individual_id: '4139', value: 0.0, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '4130', value: 0.0, sex: 'Male', genotype: '3xTg-AD' },
@@ -426,6 +439,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'pg/mg',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '4130', value: 2.601798278, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '4129', value: 25.28337511, sex: 'Male', genotype: '3xTg-AD' },
@@ -453,6 +467,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'pg/mg',
       y_axis_max: 20.0,
+      result_order: [],
       data: [
         { individual_id: '4139', value: 0.035946205, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '4130', value: 0.12228053, sex: 'Male', genotype: '3xTg-AD' },
@@ -482,6 +497,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'pg/mg',
       y_axis_max: 2500.0,
+      result_order: [],
       data: [
         { individual_id: '4130', value: 16.89097786, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '4129', value: 182.1709937, sex: 'Male', genotype: '3xTg-AD' },
@@ -509,6 +525,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'pg/mg',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '2413', value: 0.0, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '2411', value: 15.86892327, sex: 'Male', genotype: '3xTg-AD' },
@@ -537,6 +554,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'pg/mg',
       y_axis_max: 25000.0,
+      result_order: [],
       data: [
         { individual_id: '2413', value: 576.6502674, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '2411', value: 315.4794949, sex: 'Male', genotype: '3xTg-AD' },
@@ -565,6 +583,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'pg/mg',
       y_axis_max: 2000.0,
+      result_order: [],
       data: [
         { individual_id: '2413', value: 0.0, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '2411', value: 13.89264109, sex: 'Male', genotype: '3xTg-AD' },
@@ -592,6 +611,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'pg/mg',
       y_axis_max: 20000.0,
+      result_order: [],
       data: [
         { individual_id: '2413', value: 8978.475936, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '2411', value: 4869.059596, sex: 'Male', genotype: '3xTg-AD' },
@@ -620,6 +640,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'pg/mg',
       y_axis_max: 15.0,
+      result_order: [],
       data: [
         { individual_id: '2413', value: 4.60487922, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '2411', value: 1.522397609, sex: 'Male', genotype: '3xTg-AD' },
@@ -648,6 +669,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'pg/mg',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '2413', value: 10.94472073, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '2411', value: 34.63737208, sex: 'Male', genotype: '3xTg-AD' },
@@ -676,6 +698,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'pg/mg',
       y_axis_max: 20.0,
+      result_order: [],
       data: [
         { individual_id: '2413', value: 1.247868511, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '2411', value: 1.244933207, sex: 'Male', genotype: '3xTg-AD' },
@@ -704,6 +727,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'pg/mg',
       y_axis_max: 2500.0,
+      result_order: [],
       data: [
         { individual_id: '2413', value: 60.35644292, sex: 'Male', genotype: '3xTg-AD' },
         { individual_id: '2411', value: 135.9496526, sex: 'Male', genotype: '3xTg-AD' },
@@ -734,6 +758,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: '# objects / square mm',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 485.9504132, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 218.1818182, sex: 'Female', genotype: 'B6129' },
@@ -768,6 +793,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: '# objects / square mm',
       y_axis_max: 1000.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 489.2561983, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 42.97520661, sex: 'Female', genotype: 'B6129' },
@@ -802,6 +828,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: '# objects / square mm',
       y_axis_max: 900.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 879.338843, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 862.8099174, sex: 'Female', genotype: 'B6129' },
@@ -836,6 +863,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: '# objects / square mm',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 1021.487603, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 998.3471074, sex: 'Female', genotype: 'B6129' },
@@ -870,6 +898,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 1500000.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 1245746.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 855425.6, sex: 'Female', genotype: 'B6129' },
@@ -904,6 +933,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 650000.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -938,6 +968,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: '# objects / square mm',
       y_axis_max: 550.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 330.5785124, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 317.3553719, sex: 'Female', genotype: 'B6129' },
@@ -972,6 +1003,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: '# objects / square mm',
       y_axis_max: 800.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 297.5206612, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 314.0495868, sex: 'Female', genotype: 'B6129' },
@@ -1006,6 +1038,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 300000.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1040,6 +1073,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: '# objects / square mm',
       y_axis_max: 10.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1074,6 +1108,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: '# objects / square mm',
       y_axis_max: 200.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1108,6 +1143,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'mean object volume (cubic mm)',
       y_axis_max: 10.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1142,6 +1178,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'mean object volume (cubic mm)',
       y_axis_max: 85000.0,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1176,6 +1213,7 @@ export const mouseModelMock: MouseModel = {
       age: '4 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 0.002,
+      result_order: [],
       data: [
         { individual_id: '3736', value: 9.19e-6, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3736', value: 2.01e-6, sex: 'Female', genotype: 'B6129' },
@@ -1210,6 +1248,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: '# objects / square mm',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 479.338843, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 320.661157, sex: 'Female', genotype: 'B6129' },
@@ -1244,6 +1283,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: '# objects / square mm',
       y_axis_max: 1000.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 522.3140496, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 433.0578512, sex: 'Female', genotype: 'B6129' },
@@ -1278,6 +1318,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: '# objects / square mm',
       y_axis_max: 900.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 763.6363636, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 690.9090909, sex: 'Female', genotype: 'B6129' },
@@ -1312,6 +1353,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: '# objects / square mm',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 819.8347107, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 796.6942149, sex: 'Female', genotype: 'B6129' },
@@ -1346,6 +1388,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 1500000.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 954873.3, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 1050761.0, sex: 'Female', genotype: 'B6129' },
@@ -1380,6 +1423,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 650000.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1414,6 +1458,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: '# objects / square mm',
       y_axis_max: 550.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 274.3801653, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 323.9669421, sex: 'Female', genotype: 'B6129' },
@@ -1448,6 +1493,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: '# objects / square mm',
       y_axis_max: 800.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 261.1570248, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 320.661157, sex: 'Female', genotype: 'B6129' },
@@ -1482,6 +1528,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 300000.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1516,6 +1563,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: '# objects / square mm',
       y_axis_max: 10.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1550,6 +1598,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: '# objects / square mm',
       y_axis_max: 200.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1584,6 +1633,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'mean object volume (cubic mm)',
       y_axis_max: 10.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1618,6 +1668,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'mean object volume (cubic mm)',
       y_axis_max: 85000.0,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1652,6 +1703,7 @@ export const mouseModelMock: MouseModel = {
       age: '12 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 0.002,
+      result_order: [],
       data: [
         { individual_id: '3740', value: 2.22e-5, sex: 'Female', genotype: 'B6129' },
         { individual_id: '3740', value: 1.11e-5, sex: 'Female', genotype: 'B6129' },
@@ -1686,6 +1738,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: '# objects / square mm',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 545.4545455, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 816.5289256, sex: 'Female', genotype: 'B6129' },
@@ -1720,6 +1773,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: '# objects / square mm',
       y_axis_max: 1000.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 542.1487603, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 469.4214876, sex: 'Female', genotype: 'B6129' },
@@ -1754,6 +1808,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: '# objects / square mm',
       y_axis_max: 900.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 611.5702479, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 601.6528926, sex: 'Female', genotype: 'B6129' },
@@ -1788,6 +1843,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: '# objects / square mm',
       y_axis_max: 1500.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 753.7190083, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 552.0661157, sex: 'Female', genotype: 'B6129' },
@@ -1822,6 +1878,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 1500000.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 715604.6, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 869007.7, sex: 'Female', genotype: 'B6129' },
@@ -1855,6 +1912,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 650000.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1888,6 +1946,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: '# objects / square mm',
       y_axis_max: 550.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 310.7438017, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 310.7438017, sex: 'Female', genotype: 'B6129' },
@@ -1922,6 +1981,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: '# objects / square mm',
       y_axis_max: 800.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 231.4049587, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 234.7107438, sex: 'Female', genotype: 'B6129' },
@@ -1956,6 +2016,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 300000.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -1990,6 +2051,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: '# objects / square mm',
       y_axis_max: 10.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -2024,6 +2086,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: '# objects / square mm',
       y_axis_max: 200.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -2058,6 +2121,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'mean object volume (cubic mm)',
       y_axis_max: 10.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -2092,6 +2156,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'mean object volume (cubic mm)',
       y_axis_max: 85000.0,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 0.0, sex: 'Female', genotype: 'B6129' },
@@ -2126,6 +2191,7 @@ export const mouseModelMock: MouseModel = {
       age: '18 months',
       units: 'total object volume (cubic mm)',
       y_axis_max: 0.002,
+      result_order: [],
       data: [
         { individual_id: '2319', value: 4.77e-6, sex: 'Female', genotype: 'B6129' },
         { individual_id: '2319', value: 6.09e-6, sex: 'Female', genotype: 'B6129' },
@@ -2163,11 +2229,13 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '0-1 year',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
+    // data lists the model genotype first so result_order has something to reorder
     data: [
-      { sex: Sex.Female, individual_id: '1', value: 80, genotype: 'Control' },
-      { sex: Sex.Male, individual_id: '2', value: 95, genotype: 'Control' },
       { sex: Sex.Female, individual_id: '3', value: 110, genotype: 'PSEN1' },
       { sex: Sex.Male, individual_id: '4', value: 130, genotype: 'PSEN1' },
+      { sex: Sex.Female, individual_id: '1', value: 80, genotype: 'Control' },
+      { sex: Sex.Male, individual_id: '2', value: 95, genotype: 'Control' },
     ],
   },
   {
@@ -2176,6 +2244,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '1-2 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '5', value: 140, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '6', value: 160, genotype: 'Control' },
@@ -2189,6 +2258,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '2-3 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '9', value: 200, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '10', value: 220, genotype: 'Control' },
@@ -2202,6 +2272,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '3-4 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '17', value: 270, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '18', value: 310, genotype: 'Control' },
@@ -2215,6 +2286,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '4-5 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '21', value: 350, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '22', value: 380, genotype: 'Control' },
@@ -2228,6 +2300,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '5-6 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '25', value: 420, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '26', value: 460, genotype: 'Control' },
@@ -2241,6 +2314,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '6-7 years',
     units: 'pg/ml',
     y_axis_max: 1000,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '29', value: 510, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '30', value: 540, genotype: 'Control' },
@@ -2254,6 +2328,7 @@ export const marmosetModelDataMock: ModelData[] = [
     age: '0-1 year',
     units: 'pg/ml',
     y_axis_max: 500,
+    result_order: ['Control', 'PSEN1'],
     data: [
       { sex: Sex.Female, individual_id: '13', value: 120, genotype: 'Control' },
       { sex: Sex.Male, individual_id: '14', value: 140, genotype: 'Control' },

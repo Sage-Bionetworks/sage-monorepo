@@ -2820,6 +2820,9 @@ components:
             value: 0.8008281904610115
             genotype: genotype
             individual_id: individual_id
+        result_order:
+          - result_order
+          - result_order
         name: name
         tissue: tissue
         units: units
@@ -2844,6 +2847,11 @@ components:
         y_axis_max:
           description: Maximum value for y-axis in visualizations
           type: number
+        result_order:
+          description: List of genotypes in the order to display results
+          items:
+            type: string
+          type: array
         data:
           description: Values for each individual
           items:
@@ -2854,6 +2862,7 @@ components:
         - data
         - evidence_type
         - name
+        - result_order
         - units
         - y_axis_max
       type: object
@@ -2885,6 +2894,9 @@ components:
                 value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
+            result_order:
+              - result_order
+              - result_order
             name: name
             tissue: tissue
             units: units
@@ -2900,6 +2912,9 @@ components:
                 value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
+            result_order:
+              - result_order
+              - result_order
             name: name
             tissue: tissue
             units: units
@@ -2918,6 +2933,9 @@ components:
                 value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
+            result_order:
+              - result_order
+              - result_order
             name: name
             tissue: tissue
             units: units
@@ -2933,6 +2951,9 @@ components:
                 value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
+            result_order:
+              - result_order
+              - result_order
             name: name
             tissue: tissue
             units: units

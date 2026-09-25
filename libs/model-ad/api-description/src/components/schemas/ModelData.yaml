@@ -19,6 +19,11 @@ properties:
   y_axis_max:
     type: number
     description: Maximum value for y-axis in visualizations
+  result_order:
+    type: array
+    items:
+      type: string
+    description: List of genotypes in the order to display results
   data:
     type: array
     description: Values for each individual
@@ -30,4 +35,5 @@ required:
   - age
   - units
   - y_axis_max
+  - result_order
   - data
