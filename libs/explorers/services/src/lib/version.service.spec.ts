@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN } from '@sagebionetworks/explorers/constants';
-import { firstValueFrom, of, throwError } from 'rxjs';
+import { firstValueFrom, lastValueFrom, Observable, of, throwError, toArray } from 'rxjs';
 import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
@@ -44,6 +44,10 @@ describe('VersionService', () => {
       return { getDataVersion };
     }
 
+    function collectEmissions(dataVersion$: Observable<string>): Promise<string[]> {
+      return firstValueFrom(dataVersion$.pipe(toArray()));
+    }
+
     function createServiceOnServer(): VersionService {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
@@ -55,22 +59,22 @@ describe('VersionService', () => {
       return TestBed.inject(VersionService);
     }
 
-    it('should emit loading while rendering on the server', async () => {
+    it('should emit only loading while rendering on the server', async () => {
       const serverService = createServiceOnServer();
       const dataVersionService = mockDataVersionService(jest.fn());
 
-      const result = await firstValueFrom(serverService.getDataVersion$(dataVersionService));
+      const emissions = await collectEmissions(serverService.getDataVersion$(dataVersionService));
 
-      expect(result).toBe(DATA_VERSION_LOADING);
+      expect(emissions).toEqual([DATA_VERSION_LOADING]);
       expect(dataVersionService.getDataVersion).not.toHaveBeenCalled();
     });
 
-    it('should emit the formatted data version on success', async () => {
+    it('should emit loading, then the formatted data version on success', async () => {
       const dataVersionService = mockDataVersionService(() => of(mockDataVersion));
 
-      const result = await firstValueFrom(service.getDataVersion$(dataVersionService));
+      const emissions = await collectEmissions(service.getDataVersion$(dataVersionService));
 
-      expect(result).toBe(service.formatDataVersion(mockDataVersion));
+      expect(emissions).toEqual([DATA_VERSION_LOADING, service.formatDataVersion(mockDataVersion)]);
     });
 
     it('should request without the error overlay and with caller-owned error reporting', async () => {
@@ -78,21 +82,21 @@ describe('VersionService', () => {
         .fn()
         .mockReturnValue(of(mockDataVersion));
 
-      await firstValueFrom(service.getDataVersion$(mockDataVersionService(getDataVersion)));
+      await lastValueFrom(service.getDataVersion$(mockDataVersionService(getDataVersion)));
 
       const context = getDataVersion.mock.calls[0][2]?.context;
       expect(context?.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
       expect(context?.get(SKIP_ERROR_REPORTING)).toBe(true);
     });
 
-    it('should emit unknown and report a Sentry warning when the request errors', async () => {
+    it('should emit loading, then unknown and report a Sentry warning when the request errors', async () => {
       const error = new Error('Unable to connect to the server. Please check your connection.');
       const warnSpy = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
       const dataVersionService = mockDataVersionService(() => throwError(() => error));
 
-      const result = await firstValueFrom(service.getDataVersion$(dataVersionService));
+      const emissions = await collectEmissions(service.getDataVersion$(dataVersionService));
 
-      expect(result).toBe(DATA_VERSION_UNKNOWN);
+      expect(emissions).toEqual([DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN]);
       expect(warnSpy).toHaveBeenCalledWith('Failed to fetch data version', { error });
     });
   });

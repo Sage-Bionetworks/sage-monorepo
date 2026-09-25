@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { DATA_VERSION_LOADING } from '@sagebionetworks/explorers/constants';
 import {
   MetaTagService,
   PlatformService,
@@ -9,17 +10,17 @@ import {
   VersionService,
 } from '@sagebionetworks/explorers/services';
 import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
-import { DataVersionService } from '@sagebionetworks/model-ad/api-client';
+import { DataVersion, DataVersionService } from '@sagebionetworks/model-ad/api-client';
 import { ConfigService } from '@sagebionetworks/model-ad/config';
 import { configMock, dataVersionMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
-import { of } from 'rxjs';
+import { NEVER, Observable, of } from 'rxjs';
 import { AppComponent } from './app.component';
 
 const PAGE_TITLE = 'Model AD';
 
-async function setup() {
+async function setup(getDataVersion: () => Observable<DataVersion> = () => of(dataVersionMock)) {
   const metaTagService = { initialize: jest.fn() };
   await render(AppComponent, {
     providers: [
@@ -29,7 +30,7 @@ async function setup() {
       MessageService,
       { provide: ConfigService, useValue: { config: configMock } },
       { provide: PlatformService, useValue: { isServer: false, isBrowser: true } },
-      { provide: DataVersionService, useValue: { getDataVersion: () => of(dataVersionMock) } },
+      { provide: DataVersionService, useValue: { getDataVersion } },
       { provide: MetaTagService, useValue: metaTagService },
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
@@ -47,5 +48,10 @@ describe('AppComponent', () => {
     await setup();
     const formattedDataVersion = TestBed.inject(VersionService).formatDataVersion(dataVersionMock);
     expect(screen.getByText(`Data Version ${formattedDataVersion}`)).toBeVisible();
+  });
+
+  it('should show the loading data version in the footer until the request resolves', async () => {
+    await setup(() => NEVER);
+    expect(screen.getByText(`Data Version ${DATA_VERSION_LOADING}`)).toBeVisible();
   });
 });

@@ -42,7 +42,7 @@ export class AppComponent {
   readonly useGoogleTagManager = this.configService.config.googleTagManagerEnabled;
 
   dataVersion = toSignal(this.versionService.getDataVersion$(this.dataVersionService), {
-    initialValue: 'loading...',
+    requireSync: true,
   });
 
   siteVersion = this.versionService.getSiteVersion(this.configService.config);

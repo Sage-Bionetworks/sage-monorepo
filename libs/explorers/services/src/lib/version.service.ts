@@ -2,7 +2,7 @@ import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN } from '@sagebionetworks/explorers/constants';
 import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, startWith } from 'rxjs';
 import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
 
@@ -45,6 +45,7 @@ export class VersionService {
         this.logger.warn('Failed to fetch data version', { error });
         return of(DATA_VERSION_UNKNOWN);
       }),
+      startWith(DATA_VERSION_LOADING),
     );
   }
 
