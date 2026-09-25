@@ -44,7 +44,7 @@ import { GeneNetworkComponent } from '../gene-network/gene-network.component';
 })
 export class GeneEvidenceRnaComponent implements AfterViewChecked {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly platformService = inject(PlatformService);
+  readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
   private readonly helperService = inject(HelperService);
 

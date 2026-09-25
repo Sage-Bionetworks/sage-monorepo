@@ -22,7 +22,7 @@
               </div>
             </div>
           }
-          @defer {
+          @if (platformService.isBrowser) {
             <agora-network-chart
               [data]="data"
               [selectedFilter]="selectedFilter"

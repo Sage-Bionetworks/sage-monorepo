@@ -13,6 +13,7 @@ import { BoxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
 import {
   HelperService as ExplorersHelperService,
   LoggerService,
+  PlatformService,
 } from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
@@ -32,6 +33,7 @@ import { GeneProteinSelectorComponent } from '../gene-protein-selector/gene-prot
 export class GeneEvidenceProteomicsComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
+  readonly platformService = inject(PlatformService);
 
   explorersHelperService = inject(ExplorersHelperService);
   distributionService = inject(DistributionService);

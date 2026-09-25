@@ -14,7 +14,7 @@
             />
           </div>
         </div>
-        @defer {
+        @if (platformService.isBrowser) {
           <agora-score-barchart
             [score]="getGeneOverallScores(chart.name)"
             [barColor]="getBarColor(chart.name)"
