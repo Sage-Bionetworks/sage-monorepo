@@ -297,7 +297,14 @@ A hierarchy is declared per view rather than computed: the keys below are stored
 
 All four are nullable, and a view that declares no hierarchy leaves them unset. `parent_id_data_key` must resolve to the same parent values in every view of a comparison tool, though not necessarily through the same field, since different views read different collections.
 
-**TODO (MG-1095):** the component wiring belongs here -- how pinned-item state turns these config keys into `itemIdSpace` and `prebudgetedParentIds` on a request, and how the comparison table consumes `hasRowsForPrebudgetedParents`. Extend this subsection rather than starting a second account of the mechanism elsewhere.
+`ComparisonToolService` reads these keys and does the pin bookkeeping: it translates pins across views, counts the pin limit by parent, and gates Pin All. The CT component builds each request, so it has to forward what the service derives. For a new parent/child CT:
+
+- Spread `comparisonToolService.pinnedItemsQuery()` into the pinned, unpinned, and pin-all queries in place of `items: pinnedItems`, and read it in the pinned fetch's effect. It sends the pins as parents when they were made in another view
+- Send `prebudgetedParentIdsForUnpinnedFetch()` as `prebudgetedParentIds` on the unpinned fetch, and forward the third `PinAllFetch` argument as `prebudgetedParentIds` on the pin-all fetch
+- Map `hasRowsForPrebudgetedParents` off the `*Page` response into the unpinned `ComparisonToolFetchResult`. Without it, the Pin All button stays disabled at the pin limit
+- Size the pinned fetch's `pageSize` for the worst-case rows of `pinLimit()` parents, within the schema's `pageSize` maximum, and call `logger.error` when a pinned response has `totalElements > rows.length`. The pinned fetch is not paged, and a truncated response silently loses pins on a view switch
+
+Differential Expression (`libs/model-ad/differential-expression-comparison-tool/`) is the worked example, including its per-view `PINNED_PAGE_SIZE_*` constants. After a view switch, the fetches can rerun once when some parents have no rows in the new view. That is expected and settles; `pinnedItemsQuery`'s doc comment explains why.
 
 ---
 

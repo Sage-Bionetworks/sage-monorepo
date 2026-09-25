@@ -24,12 +24,11 @@ import { PrimaryIdentifierControlsComponent } from '../primary-identifier-contro
 })
 export class BaseTableComponent {
   protected readonly comparisonToolService = inject(ComparisonToolService);
-  protected readonly String = String;
   protected readonly canDrawHeatmapCircle = canDrawHeatmapCircle;
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   viewConfig = this.comparisonToolService.viewConfig;
-  totalRecords = this.comparisonToolService.totalResultsCount;
+  totalRecords = this.comparisonToolService.unpinnedRowCount;
   first = this.comparisonToolService.first;
   isHeatmapCircleClickable = computed(
     () => !!this.comparisonToolService.viewConfig().heatmapCircleClickTransformFn,

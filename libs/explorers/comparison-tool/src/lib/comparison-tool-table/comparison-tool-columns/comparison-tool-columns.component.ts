@@ -22,7 +22,6 @@ export class ComparisonToolColumnsComponent {
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   currentConfig = this.comparisonToolService.currentConfig;
-  resultsCount = this.comparisonToolService.totalResultsCount;
   /**
    * Clone multiSortMeta for PrimeNG binding to prevent it from mutating the service state.
    * PrimeNG's Table component directly mutates the multiSortMeta array when users interact

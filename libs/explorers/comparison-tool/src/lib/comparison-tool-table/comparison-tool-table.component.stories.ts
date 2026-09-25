@@ -41,7 +41,7 @@ export const NoPinned: Story = {
         MessageService,
         ...provideComparisonToolService({
           pinnedItems: [],
-          maxPinnedItems: 5,
+          pinLimit: 5,
           pinnedData: [],
           unpinnedData: mockComparisonToolData,
           configs: mockComparisonToolDataConfig,
@@ -59,7 +59,7 @@ export const PinnedWithoutSearchTerm: Story = {
         MessageService,
         ...provideComparisonToolService({
           pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
-          maxPinnedItems: 5,
+          pinLimit: 5,
           pinnedData: mockComparisonToolData.slice(0, 3),
           unpinnedData: mockComparisonToolData.slice(3),
           configs: mockComparisonToolDataConfig,
@@ -77,7 +77,7 @@ export const SearchTermActive: Story = {
         MessageService,
         ...provideComparisonToolService({
           pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
-          maxPinnedItems: 5,
+          pinLimit: 5,
           pinnedData: mockComparisonToolData.slice(0, 3),
           unpinnedData: mockComparisonToolData.slice(3),
           configs: mockComparisonToolDataConfig,
@@ -90,14 +90,14 @@ export const SearchTermActive: Story = {
   ],
 };
 
-export const FiltersActiveMaxPinned: Story = {
+export const FiltersActivePinLimitReached: Story = {
   args: {},
   decorators: [
     applicationConfig({
       providers: [
         ...provideComparisonToolService({
           pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
-          maxPinnedItems: 3,
+          pinLimit: 3,
           pinnedData: mockComparisonToolData.slice(0, 3),
           unpinnedData: mockComparisonToolData.slice(3),
           configs: mockComparisonToolDataConfig,
@@ -118,7 +118,7 @@ export const RowSelectionAndHover: Story = {
         MessageService,
         ...provideComparisonToolService({
           pinnedItems: [],
-          maxPinnedItems: 5,
+          pinLimit: 5,
           pinnedData: [],
           unpinnedData: mockComparisonToolData,
           configs: mockComparisonToolDataConfig,

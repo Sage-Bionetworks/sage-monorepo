@@ -3,7 +3,7 @@
   @if (shouldPaginate()) {
     <p-paginator
       [rows]="pageSize()"
-      [totalRecords]="totalResultsCount()"
+      [totalRecords]="unpinnedRowCount()"
       [first]="first()"
       [rowsPerPageOptions]="pageSizeOptions"
       [showCurrentPageReport]="true"

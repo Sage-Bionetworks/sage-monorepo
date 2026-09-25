@@ -8,7 +8,7 @@ import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 })
 export class DisplayedResultsComponent {
   service = inject(ComparisonToolService);
-  totalResultsCount = this.service.totalResultsCount;
-  pinnedResultsCount = this.service.pinnedResultsCount;
-  displayedResultsCount = computed(() => this.totalResultsCount() + this.pinnedResultsCount());
+  unpinnedRowCount = this.service.unpinnedRowCount;
+  pinnedRowCount = this.service.pinnedRowCount;
+  displayedResultsCount = computed(() => this.unpinnedRowCount() + this.pinnedRowCount());
 }
