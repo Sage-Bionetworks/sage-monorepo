@@ -45,7 +45,7 @@ export const StaticSummary: Story = {
       return catMap[params.name] || 'Label not found';
     },
     xAxisTitle: 'BRAIN REGION',
-    yAxisTitle: 'LOG 2 FOLD CHANGE',
+    yAxisTitle: 'LOG2 FOLD CHANGE',
     yAxisMax: 100,
     yAxisMin: -100,
     title: 'AD Diagnosis (males and females)',

@@ -127,7 +127,7 @@ export const getDetailsPanelData = function (
     label: '',
     heading: '',
     subHeading: subCategory,
-    valueLabel: 'Log 2 Fold Change',
+    valueLabel: 'Log2 Fold Change',
     value: tissue?.logfc,
     pValue: tissue?.adj_p_val,
     min: max * -1,
