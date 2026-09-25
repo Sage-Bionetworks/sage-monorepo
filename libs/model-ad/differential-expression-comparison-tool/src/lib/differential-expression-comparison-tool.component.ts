@@ -319,8 +319,10 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
         map(({ rows, page }: DifferentialExpressionPage) => {
           if (page.totalElements > rows.length) {
             this.logger.error(
-              `DifferentialExpressionComparisonToolComponent: pinned ${mainCategory} ` +
-                `fetch truncated: ${page.totalElements} matching rows, ${rows.length} returned`,
+              'DifferentialExpressionComparisonToolComponent: pinned fetch truncated',
+              new Error(
+                `${mainCategory}: ${page.totalElements} matching rows, ${rows.length} returned`,
+              ),
             );
           }
           const data = this.applyModelGroupLink(rows);
@@ -399,7 +401,8 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
 
   private logUnrecognizedMainCategory(mainCategory: string | undefined) {
     this.logger.error(
-      `DifferentialExpressionComparisonToolComponent: unrecognized main category '${mainCategory}'`,
+      'DifferentialExpressionComparisonToolComponent: unrecognized main category',
+      new Error(`'${mainCategory}'`),
     );
   }
 }

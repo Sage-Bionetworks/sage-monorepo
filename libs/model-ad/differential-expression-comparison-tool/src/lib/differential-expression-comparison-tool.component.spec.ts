@@ -459,7 +459,8 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
         component.getPinnedData([mainCategory, TISSUE_CATEGORY], PINNED_ROWS_QUERY, []);
 
         expect(loggerErrorSpy).toHaveBeenCalledWith(
-          `DifferentialExpressionComparisonToolComponent: pinned ${mainCategory} fetch truncated: 2 matching rows, 1 returned`,
+          'DifferentialExpressionComparisonToolComponent: pinned fetch truncated',
+          new Error(`${mainCategory}: 2 matching rows, 1 returned`),
         );
       },
     );
