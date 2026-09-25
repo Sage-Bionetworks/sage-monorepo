@@ -255,6 +255,10 @@ export class ComparisonToolService<T> {
   pinnedRowCount = computed(() => this.pinnedData().length);
   readonly pinnedParentsSet = computed(() => new Set(this.pinnedParents()));
   readonly pinnedParentCount = computed(() => this.pinnedParents().length);
+  // Count parents in any view with a parent key, not just child views.
+  // Counting rows in the parent view would be wrong right after a switch from a child view:
+  // until the parent rows land, pinnedData() still holds the child rows, so the row count could
+  // exceed the pin limit
   readonly pinCount = computed(() =>
     this.parentIdDataKey() ? this.pinnedParentCount() : this.pinnedRowCount(),
   );
@@ -286,6 +290,7 @@ export class ComparisonToolService<T> {
     return this.pinCount() >= this.pinLimit();
   });
 
+  // TODO(MG-1084): reword to handle parent/child case
   disabledPinTooltip = computed(() => {
     return `You have already pinned the maximum number of items (${this.pinLimit()}). You must unpin some items before you can pin more.`;
   });
@@ -726,6 +731,7 @@ export class ComparisonToolService<T> {
 
   pinItem(row: T) {
     if (!this.canPin(row)) {
+      // TODO(MG-1084): reword to handle parent/child case
       this.toastNotificationService.showWarning(
         `You have reached the maximum number of pinned items (${this.pinLimit()}). Please unpin an item before pinning a new one.`,
       );

@@ -25,7 +25,6 @@ export class PrimaryIdentifierControlsComponent {
     return this.id();
   }
 
-  pinLimit = this.comparisonToolService.pinLimit;
   viewConfig = this.comparisonToolService.viewConfig;
 
   isPinned = computed(() => {
