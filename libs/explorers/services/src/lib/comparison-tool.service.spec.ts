@@ -1146,7 +1146,7 @@ describe('ComparisonToolService', () => {
       expect(service.pinnedItems()).toEqual(['id1', 'id2']);
       expect(warnSpy).toHaveBeenCalledTimes(1);
       expect(warnSpy).toHaveBeenCalledWith(
-        'Only 2 rows were pinned, because you reached the maximum of 2 pinned items.',
+        'Only 2 results were pinned, because you reached the maximum of 2 pinned results.',
       );
     });
 
@@ -1158,7 +1158,7 @@ describe('ComparisonToolService', () => {
       service.fetchPinned(of({ data: rows('id1', 'id2'), totalCount: 2 }));
 
       expect(warnSpy).toHaveBeenCalledWith(
-        'Only 1 row was pinned, because you reached the maximum of 1 pinned items.',
+        'Only 1 result was pinned, because you reached the maximum of 1 pinned result.',
       );
     });
 
@@ -1269,7 +1269,7 @@ describe('ComparisonToolService', () => {
       service.pinAll();
 
       expect(warnSpy).toHaveBeenCalledWith(
-        'Only 2 rows were pinned, because you reached the maximum of 2 pinned items.',
+        'Only 2 results were pinned, because you reached the maximum of 2 pinned results.',
       );
     });
 

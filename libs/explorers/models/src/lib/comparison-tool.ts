@@ -155,6 +155,26 @@ export interface ComparisonToolNoun {
 }
 
 /**
+ * The nouns a view's copy is worded by. A null `viewNoun` means the view declares none, so the
+ * standard copy applies. `parentNoun` is non-null only in a child view.
+ */
+export interface ComparisonToolNouns {
+  viewNoun: ComparisonToolNoun | null;
+  parentNoun: ComparisonToolNoun | null;
+}
+
+export interface PinnedResultsLabels {
+  heading: string;
+  sublabels: string[];
+}
+
+export interface PinnedResultsControlsCopy {
+  downloadButtonTooltip: string;
+  downloadPanelHeading: string;
+  clearButtonTooltip: string;
+}
+
+/**
  * The hierarchy fields below are absent from Agora's generated config and explicitly null on
  * Model-AD configs that declare no hierarchy, so consumers must test falsiness rather than
  * comparing against undefined.
