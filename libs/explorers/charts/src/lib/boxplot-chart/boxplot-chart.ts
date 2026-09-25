@@ -230,11 +230,11 @@ export class BoxplotChart {
       return;
     }
 
-    const xAxisCategories =
-      boxplotProps.xAxisCategories ??
-      (noPoints && summaries
+    const xAxisCategories = boxplotProps.xAxisCategories?.length
+      ? boxplotProps.xAxisCategories
+      : noPoints && summaries
         ? (getUniqueValues(summaries, 'xAxisCategory') as string[])
-        : (getUniqueValues(points, 'xAxisCategory') as string[]));
+        : (getUniqueValues(points, 'xAxisCategory') as string[]);
     const pointCategories = getUniqueValues(points, 'pointCategory') as string[];
     const hasPointCategories = pointCategories.length > 0;
 
