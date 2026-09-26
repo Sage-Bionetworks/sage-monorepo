@@ -8,7 +8,10 @@ import {
 } from '@angular/router';
 import { LegacyComparisonToolUrlRedirectFn } from '@sagebionetworks/explorers/models';
 import { parseCommaSeparatedQueryParam } from '@sagebionetworks/shared/util';
-import { createLegacyComparisonToolUrlGuard } from './legacy-comparison-tool-url.guard';
+import {
+  createLegacyComparisonToolUrlGuard,
+  LEGACY_URL_TRANSLATION_FAILED_MESSAGE,
+} from './legacy-comparison-tool-url.guard';
 import { LoggerService } from './logger.service';
 
 const CT_URL = '/comparison/expression';
@@ -178,24 +181,62 @@ describe('createLegacyComparisonToolUrlGuard', () => {
     expect(readQueryParams(result)).toEqual({ categories: 'RNA', sex: 'Female' });
   });
 
-  it('should log the redirect warning when one is reported', () => {
-    const warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
-    const warning = 'Dropped 2 pinned items that could not be translated';
+  describe('logging', () => {
+    const legacyQueryParams = { categories: 'RNA,Sex%20-%20Females' };
+    let logger: LoggerService;
+    let warn: jest.SpyInstance;
+    let error: jest.SpyInstance;
 
-    runGuard(() => ({ categories: ['RNA'], pinnedItems: [], warning }), {
-      categories: 'RNA,Sex%20-%20Females',
+    beforeEach(() => {
+      logger = TestBed.inject(LoggerService);
+      warn = jest.spyOn(logger, 'warn').mockImplementation();
+      error = jest.spyOn(logger, 'error').mockImplementation();
     });
 
-    expect(warn).toHaveBeenCalledWith(warning);
-  });
+    it('should log each redirect warning with its data and the legacy URL', () => {
+      const droppedPinsWarning = {
+        message: 'Dropped pinned items that could not be translated',
+        data: { droppedPinnedItems: ['ENSG1'] },
+      };
+      const unrecognizedCohortWarning = { message: 'Unrecognized legacy sex cohort' };
 
-  it('should not log when the redirect reports no warning', () => {
-    const warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+      runGuard(
+        () => ({
+          categories: ['RNA'],
+          pinnedItems: [],
+          warnings: [droppedPinsWarning, unrecognizedCohortWarning],
+        }),
+        legacyQueryParams,
+      );
 
-    runGuard(() => ({ categories: ['RNA'], pinnedItems: [] }), {
-      categories: 'RNA,Sex%20-%20Females',
+      const url = buildUrl(legacyQueryParams, '');
+      expect(warn).toHaveBeenCalledTimes(2);
+      expect(warn).toHaveBeenCalledWith(droppedPinsWarning.message, {
+        ...droppedPinsWarning.data,
+        url,
+      });
+      expect(warn).toHaveBeenCalledWith(unrecognizedCohortWarning.message, { url });
     });
 
-    expect(warn).not.toHaveBeenCalled();
+    it('should not log when the redirect reports no warnings', () => {
+      runGuard(() => ({ categories: ['RNA'], pinnedItems: [] }), legacyQueryParams);
+
+      expect(warn).not.toHaveBeenCalled();
+      expect(error).not.toHaveBeenCalled();
+    });
+
+    it('should log an error and allow activation when the redirect rules throw', () => {
+      const cause = new Error('unexpected legacy param shape');
+
+      const result = runGuard(() => {
+        throw cause;
+      }, legacyQueryParams);
+
+      expect(result).toBe(true);
+      expect(error).toHaveBeenCalledWith(LEGACY_URL_TRANSLATION_FAILED_MESSAGE, expect.any(Error));
+      const reportedError = error.mock.calls[0][1] as Error;
+      expect(reportedError.message).toContain(buildUrl(legacyQueryParams, ''));
+      expect(reportedError.cause).toBe(cause);
+    });
   });
 });

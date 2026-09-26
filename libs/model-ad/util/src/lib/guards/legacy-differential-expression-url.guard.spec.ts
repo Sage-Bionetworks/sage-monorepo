@@ -14,9 +14,12 @@ import {
 } from '@sagebionetworks/shared/util';
 import { legacyDifferentialExpressionUrlGuard } from './legacy-differential-expression-url.guard';
 import {
+  DROPPED_LEGACY_PINS_MESSAGE,
+  LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
   LEGACY_SEX_CATEGORY_PREFIX,
   MAX_LEGACY_PINS_FOR_BOTH_SEXES,
   PIN_SEGMENT_DELIMITER,
+  UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE,
 } from './legacy-differential-expression-url.redirect';
 
 const CT_URL = `/${ROUTE_PATHS.DIFFERENTIAL_EXPRESSION}`;
@@ -223,13 +226,37 @@ describe('legacyDifferentialExpressionUrlGuard', () => {
   });
 
   describe('warnings', () => {
-    it('should log a warning when a pin cannot be translated', () => {
+    it('should log each dropped pin along with the legacy URL', () => {
+      const untranslatablePin = `${legacyPin('3xTg-AD')}${PIN_SEGMENT_DELIMITER}Female${PIN_SEGMENT_DELIMITER}x`;
+
+      runGuard({ categories: legacyCategories('Females'), pinned: [untranslatablePin] });
+
+      expect(warn).toHaveBeenCalledWith(DROPPED_LEGACY_PINS_MESSAGE, {
+        cohort: 'Females',
+        droppedPinnedItems: [untranslatablePin],
+        url: expect.stringContaining(CT_URL),
+      });
+    });
+
+    it('should log an unrecognized cohort', () => {
+      runGuard({ categories: legacyCategories('Unknown') });
+
+      expect(warn).toHaveBeenCalledWith(
+        UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE,
+        expect.objectContaining({ cohort: 'Unknown' }),
+      );
+    });
+
+    it('should log a both-sexes cohort narrowed to females', () => {
       runGuard({
-        categories: legacyCategories('Females'),
-        pinned: [`${legacyPin('3xTg-AD')}${PIN_SEGMENT_DELIMITER}Female${PIN_SEGMENT_DELIMITER}x`],
+        categories: legacyCategories('Females & Males'),
+        pinned: legacyPins(MAX_LEGACY_PINS_FOR_BOTH_SEXES + 1),
       });
 
-      expect(warn).toHaveBeenCalledWith(expect.stringContaining('1'));
+      expect(warn).toHaveBeenCalledWith(
+        LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
+        expect.objectContaining({ cohort: 'Females & Males' }),
+      );
     });
 
     it('should not log a warning when every pin translates', () => {

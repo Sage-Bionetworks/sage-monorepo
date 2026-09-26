@@ -14,6 +14,7 @@ import {
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
   PinAllFetch,
+  UNMATCHED_URL_CATEGORIES_MESSAGE,
 } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
 import { LoggerService } from './logger.service';
@@ -779,6 +780,7 @@ describe('ComparisonToolService', () => {
       }));
 
       it('should fall back to default when categories are invalid', fakeAsync(() => {
+        jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
         connectService(mockConfigsWithDropdowns, {
           initialParams: { categories: ['Invalid', 'Category'] },
         });
@@ -786,6 +788,70 @@ describe('ComparisonToolService', () => {
 
         expect(service.dropdownSelection()).toEqual(['Category A', 'Option 1']);
       }));
+
+      describe('unmatched URL categories warning', () => {
+        const unmatchedCategories = ['Category C', 'Option 1'];
+        let warn: jest.SpyInstance;
+
+        beforeEach(() => {
+          warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+        });
+
+        it('should warn once when URL categories match no config on first load', fakeAsync(() => {
+          connectService(mockConfigsWithDropdowns, {
+            initialParams: { categories: unmatchedCategories },
+          });
+          flushInitialUrlSync();
+
+          expect(warn).toHaveBeenCalledTimes(1);
+          expect(warn).toHaveBeenCalledWith(UNMATCHED_URL_CATEGORIES_MESSAGE, {
+            urlCategories: unmatchedCategories,
+            fallbackSelection: ['Category A', 'Option 1'],
+          });
+        }));
+
+        it('should warn when URL categories change to ones that match no config', fakeAsync(() => {
+          connectService(mockConfigsWithDropdowns);
+          flushInitialUrlSync();
+
+          paramsSubject.next({ categories: unmatchedCategories });
+          tick();
+
+          expect(warn).toHaveBeenCalledWith(
+            UNMATCHED_URL_CATEGORIES_MESSAGE,
+            expect.objectContaining({ urlCategories: unmatchedCategories }),
+          );
+        }));
+
+        it('should not warn for URL categories that exactly match a config', fakeAsync(() => {
+          connectService(mockConfigsWithDropdowns, {
+            initialParams: { categories: ['Category B', 'Option 1'] },
+          });
+          flushInitialUrlSync();
+
+          expect(warn).not.toHaveBeenCalled();
+        }));
+
+        it('should not warn for URL categories that prefix a config', fakeAsync(() => {
+          connectService(mockConfigsWithDropdowns, {
+            initialParams: { categories: ['Category B'] },
+          });
+          flushInitialUrlSync();
+
+          expect(service.dropdownSelection()).toEqual(['Category B', 'Option 1']);
+          expect(warn).not.toHaveBeenCalled();
+        }));
+
+        it('should not warn for an unmatched selection made outside the URL', fakeAsync(() => {
+          connectService(mockConfigsWithDropdowns);
+          flushInitialUrlSync();
+
+          service.setDropdownSelection(unmatchedCategories);
+          tick();
+
+          expect(warn).not.toHaveBeenCalled();
+        }));
+      });
     });
 
     describe('combined pinned items and categories', () => {

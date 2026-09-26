@@ -1,10 +1,13 @@
 import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import { Sex } from '@sagebionetworks/model-ad/api-client';
 import {
+  DROPPED_LEGACY_PINS_MESSAGE,
+  LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
   LEGACY_SEX_CATEGORY_PREFIX,
   MAX_LEGACY_PINS_FOR_BOTH_SEXES,
   legacyDifferentialExpressionUrlRedirect,
   PIN_SEGMENT_DELIMITER,
+  UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE,
 } from './legacy-differential-expression-url.redirect';
 
 const RNA_CATEGORY = 'RNA - DIFFERENTIAL EXPRESSION';
@@ -74,10 +77,10 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
       expect(result?.pinnedItems).toEqual(['ENSG1~APOE4~Male', 'ENSG2~3xTg-AD~Male']);
     });
 
-    it('should report no warning', () => {
-      expect(
-        resolveRedirect(legacyCategories('Females'), ['ENSG1~APOE4'])?.warning,
-      ).toBeUndefined();
+    it('should report no warnings', () => {
+      expect(resolveRedirect(legacyCategories('Females'), ['ENSG1~APOE4'])).not.toHaveProperty(
+        'warnings',
+      );
     });
   });
 
@@ -110,6 +113,14 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
         MAX_LEGACY_PINS_FOR_BOTH_SEXES,
       );
     });
+
+    it('should report no warnings at the threshold', () => {
+      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_BOTH_SEXES);
+
+      expect(resolveRedirect(legacyCategories('Females & Males'), pinnedItems)).not.toHaveProperty(
+        'warnings',
+      );
+    });
   });
 
   describe('a both-sexes cohort over the pin budget', () => {
@@ -121,6 +132,21 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
 
       expect(currentPinnedItems).toHaveLength(pinnedItems.length);
       expect(currentPinnedItems.every((pin) => pin.endsWith(Sex.Female))).toBe(true);
+    });
+
+    it('should warn that the cohort was narrowed to females', () => {
+      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_BOTH_SEXES + 1);
+
+      expect(resolveRedirect(legacyCategories('Females & Males'), pinnedItems)?.warnings).toEqual([
+        {
+          message: LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
+          data: {
+            cohort: 'Females & Males',
+            legacyPinCount: pinnedItems.length,
+            maxLegacyPinsForBothSexes: MAX_LEGACY_PINS_FOR_BOTH_SEXES,
+          },
+        },
+      ]);
     });
   });
 
@@ -142,26 +168,61 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
   });
 
   describe('pins that cannot be translated', () => {
-    it('should drop a pin with no delimiter and warn', () => {
+    it('should drop a pin with no delimiter and warn with the dropped pin', () => {
       const result = resolveRedirect(legacyCategories('Females'), ['ENSG1~APOE4', 'ENSG2']);
 
       expect(result?.pinnedItems).toEqual(['ENSG1~APOE4~Female']);
-      expect(result?.warning).toContain('1');
+      expect(result?.warnings).toEqual([
+        {
+          message: DROPPED_LEGACY_PINS_MESSAGE,
+          data: { cohort: 'Females', droppedPinnedItems: ['ENSG2'] },
+        },
+      ]);
     });
 
-    it('should drop a pin with too many segments and warn', () => {
+    it('should drop a pin with too many segments and warn with the dropped pin', () => {
       const result = resolveRedirect(legacyCategories('Females'), ['ENSG1~APOE4~Female~extra']);
 
       expect(result?.pinnedItems).toEqual([]);
-      expect(result?.warning).toContain('1');
+      expect(result?.warnings).toEqual([
+        {
+          message: DROPPED_LEGACY_PINS_MESSAGE,
+          data: { cohort: 'Females', droppedPinnedItems: ['ENSG1~APOE4~Female~extra'] },
+        },
+      ]);
     });
+  });
 
-    it('should drop every legacy pin for an unrecognized cohort while still fixing categories', () => {
-      const result = resolveRedirect(legacyCategories('Unknown'), ['ENSG1~APOE4', 'ENSG2~3xTg-AD']);
+  describe('an unrecognized cohort', () => {
+    const legacyPinnedItems = ['ENSG1~APOE4', 'ENSG2~3xTg-AD'];
+
+    it('should drop every legacy pin while still fixing categories', () => {
+      const result = resolveRedirect(legacyCategories('Unknown'), legacyPinnedItems);
 
       expect(result?.categories).toEqual([RNA_CATEGORY, TISSUE_CATEGORY]);
       expect(result?.pinnedItems).toEqual([]);
-      expect(result?.warning).toContain('2');
+    });
+
+    it('should warn about the cohort and the pins it dropped', () => {
+      const result = resolveRedirect(legacyCategories('Unknown'), legacyPinnedItems);
+
+      expect(result?.warnings).toEqual([
+        {
+          message: UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE,
+          data: { cohort: 'Unknown', legacyPinCount: legacyPinnedItems.length },
+        },
+        {
+          message: DROPPED_LEGACY_PINS_MESSAGE,
+          data: { cohort: 'Unknown', droppedPinnedItems: legacyPinnedItems },
+        },
+      ]);
+    });
+
+    it('should treat an inherited object key as unrecognized rather than throwing', () => {
+      const result = resolveRedirect(legacyCategories('constructor'), legacyPinnedItems);
+
+      expect(result?.pinnedItems).toEqual([]);
+      expect(result?.warnings?.[0]?.message).toBe(UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE);
     });
   });
 

@@ -191,8 +191,17 @@ export interface PaginationParams {
   pageSize: number;
 }
 
+/**
+ * A legacy URL translation that failed or degraded. Each distinct failure mode should use its own
+ * fixed message, with the URL-specific details in `data`, so reports group by failure mode.
+ */
+export interface LegacyComparisonToolUrlWarning {
+  message: string;
+  data?: Record<string, unknown>;
+}
+
 export interface LegacyComparisonToolUrlRedirect extends ComparisonToolUrlParams {
-  warning?: string;
+  warnings?: LegacyComparisonToolUrlWarning[];
 }
 
 /**
