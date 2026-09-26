@@ -35,6 +35,14 @@ import { OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchRequest } f
 // @ts-ignore
 import { OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchResponse } from '../model/org-sagebionetworks-repo-model-dataaccess-access-requirement-search-response';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate } from '../model/org-sagebionetworks-repo-model-dataaccess-schema-form-template';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest } from '../model/org-sagebionetworks-repo-model-dataaccess-schema-form-template-search-request';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchResponse } from '../model/org-sagebionetworks-repo-model-dataaccess-schema-form-template-search-response';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelEducEDucSignatureQuota } from '../model/org-sagebionetworks-repo-model-educ-e-duc-signature-quota';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelRestrictableObjectDescriptorResponse } from '../model/org-sagebionetworks-repo-model-restrictable-object-descriptor-response';
 // @ts-ignore
 import { PaginatedResultsOfAccessRequirement } from '../model/paginated-results-of-access-requirement';
@@ -290,6 +298,216 @@ export class AccessRequirementServicesService {
       transferCache: localVarTransferCache,
       reportProgress: reportProgress,
     });
+  }
+
+  /**
+   * @param templateId - The ID of the template.
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRepoV1AccessRequirementFormTemplateTemplateId(
+    templateId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>;
+  public getRepoV1AccessRequirementFormTemplateTemplateId(
+    templateId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>>;
+  public getRepoV1AccessRequirementFormTemplateTemplateId(
+    templateId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>>;
+  public getRepoV1AccessRequirementFormTemplateTemplateId(
+    templateId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (templateId === null || templateId === undefined) {
+      throw new Error(
+        'Required parameter templateId was null or undefined when calling getRepoV1AccessRequirementFormTemplateTemplateId.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/accessRequirement/formTemplate/${this.configuration.encodeParam({ name: 'templateId', value: templateId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param templateId - The ID of the template.
+   * @param versionNumber - The number of the version to get.
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRepoV1AccessRequirementFormTemplateTemplateIdVersionVersionNumber(
+    templateId: string,
+    versionNumber: number,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>;
+  public getRepoV1AccessRequirementFormTemplateTemplateIdVersionVersionNumber(
+    templateId: string,
+    versionNumber: number,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>>;
+  public getRepoV1AccessRequirementFormTemplateTemplateIdVersionVersionNumber(
+    templateId: string,
+    versionNumber: number,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>>;
+  public getRepoV1AccessRequirementFormTemplateTemplateIdVersionVersionNumber(
+    templateId: string,
+    versionNumber: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (templateId === null || templateId === undefined) {
+      throw new Error(
+        'Required parameter templateId was null or undefined when calling getRepoV1AccessRequirementFormTemplateTemplateIdVersionVersionNumber.',
+      );
+    }
+    if (versionNumber === null || versionNumber === undefined) {
+      throw new Error(
+        'Required parameter versionNumber was null or undefined when calling getRepoV1AccessRequirementFormTemplateTemplateIdVersionVersionNumber.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/accessRequirement/formTemplate/${this.configuration.encodeParam({ name: 'templateId', value: templateId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/version/${this.configuration.encodeParam({ name: 'versionNumber', value: versionNumber, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
   }
 
   /**
@@ -1101,6 +1319,368 @@ export class AccessRequirementServicesService {
   }
 
   /**
+   * @param orgSagebionetworksRepoModelDataaccessSchemaFormTemplate
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1AccessRequirementFormTemplate(
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplate: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>;
+  public postRepoV1AccessRequirementFormTemplate(
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplate: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>>;
+  public postRepoV1AccessRequirementFormTemplate(
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplate: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>>;
+  public postRepoV1AccessRequirementFormTemplate(
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplate: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (
+      orgSagebionetworksRepoModelDataaccessSchemaFormTemplate === null ||
+      orgSagebionetworksRepoModelDataaccessSchemaFormTemplate === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelDataaccessSchemaFormTemplate was null or undefined when calling postRepoV1AccessRequirementFormTemplate.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/accessRequirement/formTemplate`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelDataaccessSchemaFormTemplate,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param orgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1AccessRequirementFormTemplateSearch(
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchResponse>;
+  public postRepoV1AccessRequirementFormTemplateSearch(
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<
+    HttpResponse<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchResponse>
+  >;
+  public postRepoV1AccessRequirementFormTemplateSearch(
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchResponse>>;
+  public postRepoV1AccessRequirementFormTemplateSearch(
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (
+      orgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest === null ||
+      orgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest was null or undefined when calling postRepoV1AccessRequirementFormTemplateSearch.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/accessRequirement/formTemplate/search`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchResponse>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelDataaccessSchemaFormTemplateSearchRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param templateId - The ID of the template to add a version to.
+   * @param orgSagebionetworksRepoModelDataaccessSchemaFormTemplate
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1AccessRequirementFormTemplateTemplateId(
+    templateId: string,
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplate: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>;
+  public postRepoV1AccessRequirementFormTemplateTemplateId(
+    templateId: string,
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplate: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>>;
+  public postRepoV1AccessRequirementFormTemplateTemplateId(
+    templateId: string,
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplate: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>>;
+  public postRepoV1AccessRequirementFormTemplateTemplateId(
+    templateId: string,
+    orgSagebionetworksRepoModelDataaccessSchemaFormTemplate: OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (templateId === null || templateId === undefined) {
+      throw new Error(
+        'Required parameter templateId was null or undefined when calling postRepoV1AccessRequirementFormTemplateTemplateId.',
+      );
+    }
+    if (
+      orgSagebionetworksRepoModelDataaccessSchemaFormTemplate === null ||
+      orgSagebionetworksRepoModelDataaccessSchemaFormTemplate === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelDataaccessSchemaFormTemplate was null or undefined when calling postRepoV1AccessRequirementFormTemplateTemplateId.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/accessRequirement/formTemplate/${this.configuration.encodeParam({ name: 'templateId', value: templateId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelDataaccessSchemaFormTemplate,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
    * @param requirementId
    * @param orgSagebionetworksRepoModelAccessControlList
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1331,6 +1911,133 @@ export class AccessRequirementServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelDataaccessAccessRequirementSearchRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param requirementId - The ID of the access requirement the quota is scoped to.
+   * @param targetUserId - The ID of the user whose quota should be reset.
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset(
+    requirementId: string,
+    targetUserId: number,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelEducEDucSignatureQuota>;
+  public postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset(
+    requirementId: string,
+    targetUserId: number,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelEducEDucSignatureQuota>>;
+  public postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset(
+    requirementId: string,
+    targetUserId: number,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelEducEDucSignatureQuota>>;
+  public postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset(
+    requirementId: string,
+    targetUserId: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (requirementId === null || requirementId === undefined) {
+      throw new Error(
+        'Required parameter requirementId was null or undefined when calling postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset.',
+      );
+    }
+    if (targetUserId === null || targetUserId === undefined) {
+      throw new Error(
+        'Required parameter targetUserId was null or undefined when calling postRepoV1AdminAccessRequirementRequirementIdEDucQuotaReset.',
+      );
+    }
+
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (targetUserId !== undefined && targetUserId !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>targetUserId,
+        'targetUserId',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/admin/accessRequirement/${this.configuration.encodeParam({ name: 'requirementId', value: requirementId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/eDucQuota/reset`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelEducEDucSignatureQuota>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        params: localVarQueryParameters,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

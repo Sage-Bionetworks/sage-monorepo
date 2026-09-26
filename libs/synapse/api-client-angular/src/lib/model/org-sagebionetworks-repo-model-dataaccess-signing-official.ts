@@ -17,10 +17,6 @@ export interface OrgSagebionetworksRepoModelDataaccessSigningOfficial {
    */
   name?: string;
   /**
-   * The title of the signing official.
-   */
-  title?: string;
-  /**
    * The institutional email address of the signing official.
    */
   institutionalEmail?: string;

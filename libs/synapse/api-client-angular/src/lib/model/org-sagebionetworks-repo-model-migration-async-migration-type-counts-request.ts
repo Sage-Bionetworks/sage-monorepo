@@ -142,6 +142,7 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     | 'WEBHOOK_VERIFICATION'
     | 'WEBHOOK_ALLOWED_DOMAIN'
     | 'AGENT_REGISTRATION'
+    | 'AGENT_REGISTRATION_ACT_SETTINGS'
     | 'AGENT_SESSION'
     | 'TOS_REQUIREMENTS'
     | 'TOS_AGREEMENT'
@@ -162,6 +163,8 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     | 'SEARCH_CONFIG_OBJECT_BINDING'
     | 'EDUC_QUOTA'
     | 'DATA_ACCESS_REQUEST_USER'
+    | 'FORM_TEMPLATE'
+    | 'FORM_TEMPLATE_REVISION'
     | 'CHANGE';
   export const TypesEnum = {
     Realm: 'REALM' as TypesEnum,
@@ -283,6 +286,7 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     WebhookVerification: 'WEBHOOK_VERIFICATION' as TypesEnum,
     WebhookAllowedDomain: 'WEBHOOK_ALLOWED_DOMAIN' as TypesEnum,
     AgentRegistration: 'AGENT_REGISTRATION' as TypesEnum,
+    AgentRegistrationActSettings: 'AGENT_REGISTRATION_ACT_SETTINGS' as TypesEnum,
     AgentSession: 'AGENT_SESSION' as TypesEnum,
     TosRequirements: 'TOS_REQUIREMENTS' as TypesEnum,
     TosAgreement: 'TOS_AGREEMENT' as TypesEnum,
@@ -303,6 +307,8 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     SearchConfigObjectBinding: 'SEARCH_CONFIG_OBJECT_BINDING' as TypesEnum,
     EducQuota: 'EDUC_QUOTA' as TypesEnum,
     DataAccessRequestUser: 'DATA_ACCESS_REQUEST_USER' as TypesEnum,
+    FormTemplate: 'FORM_TEMPLATE' as TypesEnum,
+    FormTemplateRevision: 'FORM_TEMPLATE_REVISION' as TypesEnum,
     Change: 'CHANGE' as TypesEnum,
   };
 }

@@ -78,6 +78,10 @@ export interface OrgSagebionetworksRepoModelDataaccessRenewal {
    */
   eDucSignatureEnvelopeId?: string;
   /**
+   * Request data that was provided using the associated JSON Schema. Unvalidated while the request is a draft; validated against the schema referenced by the Access Requirement when a Submission is created.
+   */
+  schemaData?: any | null;
+  /**
    * Link(s) to publication that used the controlled data.
    */
   publication?: string;
