@@ -135,6 +135,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     | 'WEBHOOK_VERIFICATION'
     | 'WEBHOOK_ALLOWED_DOMAIN'
     | 'AGENT_REGISTRATION'
+    | 'AGENT_REGISTRATION_ACT_SETTINGS'
     | 'AGENT_SESSION'
     | 'TOS_REQUIREMENTS'
     | 'TOS_AGREEMENT'
@@ -155,6 +156,8 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     | 'SEARCH_CONFIG_OBJECT_BINDING'
     | 'EDUC_QUOTA'
     | 'DATA_ACCESS_REQUEST_USER'
+    | 'FORM_TEMPLATE'
+    | 'FORM_TEMPLATE_REVISION'
     | 'CHANGE';
   export const ListEnum = {
     Realm: 'REALM' as ListEnum,
@@ -276,6 +279,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     WebhookVerification: 'WEBHOOK_VERIFICATION' as ListEnum,
     WebhookAllowedDomain: 'WEBHOOK_ALLOWED_DOMAIN' as ListEnum,
     AgentRegistration: 'AGENT_REGISTRATION' as ListEnum,
+    AgentRegistrationActSettings: 'AGENT_REGISTRATION_ACT_SETTINGS' as ListEnum,
     AgentSession: 'AGENT_SESSION' as ListEnum,
     TosRequirements: 'TOS_REQUIREMENTS' as ListEnum,
     TosAgreement: 'TOS_AGREEMENT' as ListEnum,
@@ -296,6 +300,8 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     SearchConfigObjectBinding: 'SEARCH_CONFIG_OBJECT_BINDING' as ListEnum,
     EducQuota: 'EDUC_QUOTA' as ListEnum,
     DataAccessRequestUser: 'DATA_ACCESS_REQUEST_USER' as ListEnum,
+    FormTemplate: 'FORM_TEMPLATE' as ListEnum,
+    FormTemplateRevision: 'FORM_TEMPLATE_REVISION' as ListEnum,
     Change: 'CHANGE' as ListEnum,
   };
 }

@@ -7,9 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelDataaccessSchemaFormTemplateReference } from './org-sagebionetworks-repo-model-dataaccess-schema-form-template-reference';
 import { OrgSagebionetworksRepoModelManagedACTAccessRequirement } from './org-sagebionetworks-repo-model-managed-act-access-requirement';
 import { OrgSagebionetworksRepoModelACTAccessRequirement } from './org-sagebionetworks-repo-model-act-access-requirement';
 import { OrgSagebionetworksRepoModelRestrictableObjectDescriptor } from './org-sagebionetworks-repo-model-restrictable-object-descriptor';
+import { OrgSagebionetworksRepoModelJsonSchemaAccessRequirement } from './org-sagebionetworks-repo-model-json-schema-access-requirement';
 
 /**
  * JSON schema for \'Access Control Team\' controlled Access Requirement, a \'tier 3\' Access Requirement
@@ -21,4 +23,5 @@ import { OrgSagebionetworksRepoModelRestrictableObjectDescriptor } from './org-s
  */
 export type OrgSagebionetworksRepoModelACTAccessRequirementInterface =
   | OrgSagebionetworksRepoModelACTAccessRequirement
+  | OrgSagebionetworksRepoModelJsonSchemaAccessRequirement
   | OrgSagebionetworksRepoModelManagedACTAccessRequirement;
