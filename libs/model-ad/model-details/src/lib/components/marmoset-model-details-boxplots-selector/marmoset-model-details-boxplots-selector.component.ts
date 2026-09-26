@@ -20,7 +20,9 @@ import { ModelDetailsBoxplotsSelectorComponent } from '../model-details-boxplots
   styleUrls: ['./marmoset-model-details-boxplots-selector.component.scss'],
 })
 export class MarmosetModelDetailsBoxplotsSelectorComponent {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource(
+    'MarmosetModelDetailsBoxplotsSelectorComponent',
+  );
 
   readonly getPointStyles = getPointStylesBySex;
   readonly generateAnchorId = generateAnchorId;
@@ -52,7 +54,7 @@ export class MarmosetModelDetailsBoxplotsSelectorComponent {
       .map((section) => ({ age: section.age, count: section.data.length }));
     if (duplicateAgeGroups.length > 0) {
       this.logger.warn(
-        'MarmosetModelDetailsBoxplotsSelectorComponent: expected 1 ModelData per age group. Only the first item will be rendered.',
+        'expected 1 ModelData per age group. Only the first item will be rendered.',
         { evidenceType: data[0].evidence_type, duplicateAgeGroups },
       );
     }

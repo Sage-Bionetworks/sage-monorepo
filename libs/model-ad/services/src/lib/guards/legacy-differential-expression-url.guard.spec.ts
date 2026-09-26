@@ -6,7 +6,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import { SourceLogger } from '@sagebionetworks/explorers/services';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import {
   parseCommaSeparatedQueryParam,
@@ -73,9 +73,12 @@ describe('legacyDifferentialExpressionUrlGuard', () => {
   let log: jest.SpyInstance;
 
   beforeEach(() => {
-    const logger = TestBed.inject(LoggerService);
-    warn = jest.spyOn(logger, 'warn').mockImplementation();
-    log = jest.spyOn(logger, 'log').mockImplementation();
+    warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+    log = jest.spyOn(SourceLogger.prototype, 'log').mockImplementation();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   describe('when the URL has no Sex category', () => {

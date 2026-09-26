@@ -17,7 +17,7 @@ import { TeamListComponent } from './team-list/team-list.component';
 export class TeamsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('TeamsComponent');
 
   helperService = inject(HelperService);
   teamService = inject(TeamService);
@@ -33,7 +33,7 @@ export class TeamsComponent implements OnInit {
   loadTeams() {
     if (this.platformService.isBrowser) {
       this.helperService.setLoading(true);
-      this.logger.log('TeamsComponent: Loading teams');
+      this.logger.log('Loading teams');
 
       this.teams$ = this.teamService.listTeams().pipe(
         takeUntilDestroyed(this.destroyRef),

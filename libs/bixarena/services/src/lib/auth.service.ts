@@ -20,7 +20,7 @@ export class AuthService {
   private readonly storage = inject(LocalStorageService);
   private readonly configService = inject(ConfigService);
   private readonly analytics = inject(AnalyticsService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('AuthService');
 
   readonly user = signal<UserInfo | null>(null);
   readonly isAuthenticated = computed(() => this.user() !== null);
@@ -33,30 +33,30 @@ export class AuthService {
   async init(): Promise<void> {
     if (!this.isBrowser) return;
     const wasAuthenticated = this.cachedUser() !== null;
-    this.logger.debug('auth: checking session');
+    this.logger.debug('checking session');
     try {
       const res = await fetch('/userinfo');
       if (res.ok) {
         const user: UserInfo = await res.json();
         this.user.set(user);
         this.saveCache({ username: user.preferred_username ?? '', avatarUrl: user.avatar_url });
-        this.logger.debug('auth: session active');
+        this.logger.debug('session active');
         if (!wasAuthenticated) {
           this.analytics.trackLogin();
         }
       } else {
-        this.logger.debug('auth: no active session', { status: res.status });
+        this.logger.debug('no active session', { status: res.status });
         this.clearCache();
       }
     } catch (err) {
-      this.logger.warn('auth: session check failed', { error: String(err) });
+      this.logger.warn('session check failed', { error: String(err) });
       this.clearCache();
     }
   }
 
   login(returnTo?: string): void {
     if (!this.isBrowser) return;
-    this.logger.debug('auth: redirecting to login', { returnTo });
+    this.logger.debug('redirecting to login', { returnTo });
     const base = `${this.authUrl}/auth/login`;
     window.location.href = returnTo ? `${base}?return_to=${encodeURIComponent(returnTo)}` : base;
   }
@@ -65,22 +65,22 @@ export class AuthService {
   // On failure, user stays logged in and can retry.
   async logout(): Promise<void> {
     if (!this.isBrowser) return;
-    this.logger.debug('auth: logout requested');
+    this.logger.debug('logout requested');
     try {
       const res = await fetch('/auth/logout', { method: 'POST' });
       if (!res.ok) {
-        this.logger.warn('auth: logout request failed', { status: res.status });
+        this.logger.warn('logout request failed', { status: res.status });
         return;
       }
     } catch (err) {
-      this.logger.warn('auth: logout request failed', { error: String(err) });
+      this.logger.warn('logout request failed', { error: String(err) });
       return;
     }
     this.user.set(null);
     this.clearCache();
     clearPendingPromptStorage();
     this.analytics.trackLogout();
-    this.logger.debug('auth: logout complete');
+    this.logger.debug('logout complete');
     window.location.href = '/';
   }
 

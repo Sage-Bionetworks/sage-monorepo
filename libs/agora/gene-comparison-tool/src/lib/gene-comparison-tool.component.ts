@@ -89,7 +89,7 @@ import { GeneComparisonToolFilterListComponent } from './components/gene-compari
 })
 export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('GeneComparisonToolComponent');
   comparisonToolService = inject(ComparisonToolService);
 
   router = inject(Router);
@@ -288,9 +288,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.resetPinnedItemsState();
     this.paginatorFirst = 0;
 
-    this.logger.log(
-      `GeneComparisonToolComponent: Loading genes for ${this.category} / ${this.subCategory}`,
-    );
+    this.logger.log(`Loading genes for ${this.category} / ${this.subCategory}`);
 
     const genesApi$ = this.geneService.getComparisonGenes(this.category, this.subCategory);
     const distributionApi$ = this.distributionService.getDistribution();

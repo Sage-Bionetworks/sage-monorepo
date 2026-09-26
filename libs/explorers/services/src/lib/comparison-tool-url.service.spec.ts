@@ -4,7 +4,7 @@ import { DEFAULT_SORT_ORDER } from '@sagebionetworks/explorers/constants';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { INVALID_SORT_ORDERS_MESSAGE } from './comparison-tool-url-params';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
-import { LoggerService } from './logger.service';
+import { SourceLogger } from './logger.service';
 
 describe('ComparisonToolUrlService', () => {
   let service: ComparisonToolUrlService;
@@ -311,7 +311,11 @@ describe('ComparisonToolUrlService', () => {
       let warn: jest.SpyInstance;
 
       beforeEach(() => {
-        warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+        warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+      });
+
+      afterEach(() => {
+        jest.restoreAllMocks();
       });
 
       it('should replace the invalid sort order with the default and warn when the URL changes', async () => {
@@ -323,6 +327,7 @@ describe('ComparisonToolUrlService', () => {
         const params = await firstValueFrom(service.params$);
         expect(params.sortOrders).toEqual(EXPECTED_SORT_ORDERS);
         expect(warn).toHaveBeenCalledWith(INVALID_SORT_ORDERS_MESSAGE, urlWithInvalidSortOrder);
+        expect(warn.mock.contexts[0]).toMatchObject({ source: 'ComparisonToolUrlService' });
       });
 
       it('should not warn when the app writes its sort state while the URL has an invalid sort order', () => {

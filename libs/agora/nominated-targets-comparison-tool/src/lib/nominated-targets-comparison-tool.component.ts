@@ -38,7 +38,9 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
   private readonly nominatedTargetsService = inject(NominatedTargetService);
   private readonly comparisonToolService = inject(NominatedTargetsComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource(
+    'NominatedTargetsComparisonToolComponent',
+  );
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -47,7 +49,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     .getComparisonToolsConfig(ComparisonToolConfigPage.NominatedTargets)
     .pipe(
       catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', error);
+        this.logger.error('Error retrieving comparison tool config', { error });
         return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true }),
@@ -152,9 +154,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log(
-      `NominatedTargetsComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log(`unpinned query ${JSON.stringify(query)}`);
 
     this.comparisonToolService.fetchUnpinned(
       this.nominatedTargetsService.getNominatedTargets(query).pipe(
@@ -176,9 +176,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
       sortOrders,
     };
 
-    this.logger.log(
-      `NominatedTargetsComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log(`pinned query ${JSON.stringify(query)}`);
 
     this.comparisonToolService.fetchPinned(
       this.nominatedTargetsService.getNominatedTargets(query).pipe(

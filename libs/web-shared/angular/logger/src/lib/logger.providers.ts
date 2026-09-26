@@ -1,6 +1,6 @@
 import { Provider, Type } from '@angular/core';
-import { Logger, LOGGER } from './logger.token';
+import { LOGGER, LoggerFactory } from './logger.token';
 
-export function provideLogger(implementation: Type<Logger>): Provider {
+export function provideLogger(implementation: Type<LoggerFactory>): Provider {
   return { provide: LOGGER, useExisting: implementation };
 }
