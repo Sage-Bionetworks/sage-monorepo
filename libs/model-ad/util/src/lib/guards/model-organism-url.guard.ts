@@ -9,7 +9,7 @@ import { LoggerService } from '@sagebionetworks/explorers/services';
 import { isModelOrganism, MODEL_ORGANISM_QUERY_KEY, resolveModelOrganism } from '../model-organism';
 
 export const UNKNOWN_MODEL_ORGANISM_MESSAGE =
-  'modelOrganismUrlGuard: unknown modelOrganism query param; falling back to the default';
+  'unknown modelOrganism query param; falling back to the default';
 
 // Ensures every model-details URL carries a valid modelOrganism query param.
 // Wrong-case values are lowercased and missing or unknown values default to mouse, both via a
@@ -20,7 +20,7 @@ export const modelOrganismUrlGuard: CanActivateFn = (
   state: RouterStateSnapshot,
 ) => {
   const router = inject(Router);
-  const logger = inject(LoggerService);
+  const logger = inject(LoggerService).forSource('modelOrganismUrlGuard');
   const rawModelOrganism = route.queryParams[MODEL_ORGANISM_QUERY_KEY];
   const modelOrganism = resolveModelOrganism(rawModelOrganism);
 

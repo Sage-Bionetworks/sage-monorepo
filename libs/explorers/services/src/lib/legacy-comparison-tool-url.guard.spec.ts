@@ -12,9 +12,10 @@ import {
   createLegacyComparisonToolUrlGuard,
   LEGACY_URL_TRANSLATION_FAILED_MESSAGE,
 } from './legacy-comparison-tool-url.guard';
-import { LoggerService } from './logger.service';
+import { SourceLogger } from './logger.service';
 
 const CT_URL = '/comparison/expression';
+const GUARD_SOURCE = 'legacyExpressionUrlGuard';
 
 // The guard reads the params off the route snapshot but rebuilds the URL it redirects to from
 // `state.url`, so both are derived from one set of params here rather than spelled out twice.
@@ -23,7 +24,7 @@ function runGuard(
   queryParams: Record<string, string>,
   fragment = '',
 ) {
-  const guard = createLegacyComparisonToolUrlGuard(resolveRedirect);
+  const guard = createLegacyComparisonToolUrlGuard(GUARD_SOURCE, resolveRedirect);
   const route = { queryParams } as unknown as ActivatedRouteSnapshot;
   const state = { url: buildUrl(queryParams, fragment) } as RouterStateSnapshot;
   return TestBed.runInInjectionContext(() => guard(route, state));
@@ -183,14 +184,24 @@ describe('createLegacyComparisonToolUrlGuard', () => {
 
   describe('logging', () => {
     const legacyQueryParams = { categories: 'RNA,Sex%20-%20Females' };
-    let logger: LoggerService;
     let warn: jest.SpyInstance;
     let error: jest.SpyInstance;
 
     beforeEach(() => {
-      logger = TestBed.inject(LoggerService);
-      warn = jest.spyOn(logger, 'warn').mockImplementation();
-      error = jest.spyOn(logger, 'error').mockImplementation();
+      warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+      error = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should report under the source it was built with', () => {
+      runGuard(() => {
+        throw new Error('unexpected legacy param shape');
+      }, legacyQueryParams);
+
+      expect(error.mock.contexts[0]).toMatchObject({ source: GUARD_SOURCE });
     });
 
     it('should log each redirect warning with its data and the legacy URL', () => {
@@ -233,10 +244,10 @@ describe('createLegacyComparisonToolUrlGuard', () => {
       }, legacyQueryParams);
 
       expect(result).toBe(true);
-      expect(error).toHaveBeenCalledWith(LEGACY_URL_TRANSLATION_FAILED_MESSAGE, expect.any(Error));
-      const reportedError = error.mock.calls[0][1] as Error;
-      expect(reportedError.message).toContain(buildUrl(legacyQueryParams, ''));
-      expect(reportedError.cause).toBe(cause);
+      expect(error).toHaveBeenCalledWith(LEGACY_URL_TRANSLATION_FAILED_MESSAGE, {
+        error: cause,
+        data: { url: buildUrl(legacyQueryParams, '') },
+      });
     });
   });
 });

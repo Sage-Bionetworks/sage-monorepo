@@ -65,7 +65,7 @@ export class ComparisonToolService<T> {
   private readonly helperService = inject(ComparisonToolHelperService);
   private readonly coordinatorService = inject(ComparisonToolCoordinatorService);
   private readonly appStorageService = inject(AppStorageService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('ComparisonToolService');
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Differential Expression has 3 dropdowns, but we only want to cache selections
@@ -652,7 +652,7 @@ export class ComparisonToolService<T> {
           }
         },
         error: (error) => {
-          this.logger.error('Error pinning all matching rows', error);
+          this.logger.error('Error pinning all matching rows', { error });
           this.toastNotificationService.showError(
             'Something went wrong while pinning all matching rows. Please try again.',
           );

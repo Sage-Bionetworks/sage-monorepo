@@ -29,7 +29,7 @@ export class ProteinDetailsComponent implements OnInit {
   proteomicsIndividualService = inject(ProteomicsIndividualService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('ProteinDetailsComponent');
 
   readonly modality = 'Protein';
   readonly downloadFilenamePrefix = 'protein_expression_individual';
@@ -94,7 +94,7 @@ export class ProteinDetailsComponent implements OnInit {
           error: () => {
             this.isLoading.set(false);
             this.logger.log(
-              `ProteinDetailsComponent: loadProteomicsIndividualData: query: ${JSON.stringify(query)}, redirecting`,
+              `loadProteomicsIndividualData: query: ${JSON.stringify(query)}, redirecting`,
             );
             this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
@@ -102,7 +102,7 @@ export class ProteinDetailsComponent implements OnInit {
     } else {
       this.isLoading.set(false);
       this.logger.log(
-        `ProteinDetailsComponent: loadProteomicsIndividualData: uniqueId: ${uniqueId} modelIdentifierType: ${modelIdentifierType} modelIdentifier: ${modelIdentifier}, redirecting`,
+        `loadProteomicsIndividualData: uniqueId: ${uniqueId} modelIdentifierType: ${modelIdentifierType} modelIdentifier: ${modelIdentifier}, redirecting`,
       );
       this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
     }

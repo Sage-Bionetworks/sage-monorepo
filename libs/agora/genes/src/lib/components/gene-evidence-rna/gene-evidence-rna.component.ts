@@ -45,7 +45,7 @@ import { GeneNetworkComponent } from '../gene-network/gene-network.component';
 export class GeneEvidenceRnaComponent implements AfterViewChecked {
   private readonly destroyRef = inject(DestroyRef);
   readonly platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('GeneEvidenceRnaComponent');
   private readonly helperService = inject(HelperService);
 
   explorersHelperService = inject(ExplorersHelperService);
@@ -198,9 +198,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
       return g.model === this.selectedStatisticalModel;
     });
 
-    this.logger.log(
-      `GeneEvidenceRnaComponent: Loading distribution for model ${this.selectedStatisticalModel}`,
-    );
+    this.logger.log(`Loading distribution for model ${this.selectedStatisticalModel}`);
 
     this.distributionService
       .getDistribution()

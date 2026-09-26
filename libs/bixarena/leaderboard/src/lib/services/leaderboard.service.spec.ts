@@ -6,6 +6,7 @@ import {
   LeaderboardEntryPage,
   LeaderboardService as LeaderboardApiService,
 } from '@sagebionetworks/bixarena/api-client';
+import { DEFAULT_CATEGORY_SLUG, LOOKBACK_DAYS } from '../leaderboard.constants';
 import { LeaderboardFacadeService } from './leaderboard.service';
 
 const samplePage: LeaderboardEntryPage = {
@@ -126,10 +127,20 @@ describe('LeaderboardFacadeService', () => {
   });
 
   it('exposes an error message and resets state on failure', async () => {
-    api.getLeaderboard.mockReturnValueOnce(throwError(() => new Error('boom')));
+    const failure = new Error('boom');
+    api.getLeaderboard.mockReturnValueOnce(throwError(() => failure));
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(noop);
 
     await service.load();
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      'LeaderboardFacadeService: Failed to fetch leaderboard data',
+      failure,
+      {
+        leaderboardId: DEFAULT_CATEGORY_SLUG,
+        query: { lookback: LOOKBACK_DAYS },
+      },
+    );
 
     expect(service.error()).toBe('Could not load leaderboard');
     expect(service.entries()).toEqual([]);

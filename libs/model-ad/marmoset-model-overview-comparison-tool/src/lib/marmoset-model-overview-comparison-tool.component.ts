@@ -35,7 +35,9 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
   private readonly comparisonToolService = inject(MarmosetModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource(
+    'MarmosetModelOverviewComparisonToolComponent',
+  );
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -44,7 +46,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     .getComparisonToolConfig(ComparisonToolPage.MarmosetModelOverview)
     .pipe(
       catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', error);
+        this.logger.error('Error retrieving comparison tool config', { error });
         return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true }),
@@ -140,9 +142,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log(
-      `MarmosetModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log(`unpinned query ${JSON.stringify(query)}`);
 
     this.comparisonToolService.fetchUnpinned(
       this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
@@ -164,9 +164,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
       sortOrders,
     };
 
-    this.logger.log(
-      `MarmosetModelOverviewComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log(`pinned query ${JSON.stringify(query)}`);
 
     this.comparisonToolService.fetchPinned(
       this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(

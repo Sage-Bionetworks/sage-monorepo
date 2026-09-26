@@ -13,7 +13,7 @@ import { TargetNominationWithTeamData } from '../../models/TargetNominationWithT
 })
 export class GeneNominationsComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('GeneNominationsComponent');
 
   teamService = inject(TeamService);
 
@@ -40,7 +40,7 @@ export class GeneNominationsComponent {
       return;
     }
 
-    this.logger.log('GeneNominationsComponent: Loading teams for nominations');
+    this.logger.log('Loading teams for nominations');
 
     this.teamService
       .listTeams()

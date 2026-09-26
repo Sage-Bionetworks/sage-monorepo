@@ -50,7 +50,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   modelService = inject(ModelService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('ModelDetailsComponent');
 
   isLoading = true;
 
@@ -117,7 +117,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
         catchError(() => {
           this.isLoading = false;
           this.logger.log(
-            `ModelDetailsComponent: loadPanelData: Model ${modelName} (modelOrganism: ${modelOrganism}) not found, redirecting`,
+            `loadPanelData: Model ${modelName} (modelOrganism: ${modelOrganism}) not found, redirecting`,
           );
           this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           return EMPTY;

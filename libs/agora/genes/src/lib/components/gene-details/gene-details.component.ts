@@ -57,7 +57,7 @@ interface Panel {
 export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('GeneDetailsComponent');
 
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -174,7 +174,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
 
       if (params.get('id')) {
         const geneId = params.get('id') as string;
-        this.logger.log(`GeneDetailsComponent: Loading gene ${geneId}`);
+        this.logger.log(`Loading gene ${geneId}`);
 
         this.geneService
           .getGene(geneId)
@@ -183,7 +183,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
             next: (gene) => {
               if (!gene) {
                 this.helperService.setLoading(false);
-                this.logger.log(`GeneDetailsComponent: Gene ${geneId} not found, redirecting`);
+                this.logger.log(`Gene ${geneId} not found, redirecting`);
                 this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
               } else {
                 this.gene = gene;

@@ -14,18 +14,19 @@ import {
 } from './comparison-tool-url-params';
 import { LoggerService } from './logger.service';
 
-export const LEGACY_URL_TRANSLATION_FAILED_MESSAGE =
-  'createLegacyComparisonToolUrlGuard: failed to translate legacy URL';
+export const LEGACY_URL_TRANSLATION_FAILED_MESSAGE = 'failed to translate legacy URL';
 
 // Builds a guard that rewrites a legacy comparison tool share URL into its current shape before the
 // tool loads. The resolveRedirect function supplies the product-specific translation rules; this
 // factory owns the redirect semantics and shares its encoding with ComparisonToolUrlService.
+// `source` is the name of the guard being built, which its log events are reported under.
 export function createLegacyComparisonToolUrlGuard(
+  source: string,
   resolveRedirect: LegacyComparisonToolUrlRedirectFn,
 ): CanActivateFn {
   return (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     const router = inject(Router);
-    const logger = inject(LoggerService);
+    const logger = inject(LoggerService).forSource(source);
 
     try {
       const redirect = resolveRedirect(deserializeComparisonToolUrlParams(route.queryParams));
@@ -51,13 +52,7 @@ export function createLegacyComparisonToolUrlGuard(
       // Don't rethrow: a guard that throws cancels the navigation and breaks the page. Returning true
       // loads the original URL instead, and the comparison tool falls back to its defaults for
       // anything it doesn't recognize.
-      //
-      // LoggerService.error sends only the error object to Sentry, not the message, so the URL goes
-      // in a new Error's message and the original error is kept as its cause.
-      logger.error(
-        LEGACY_URL_TRANSLATION_FAILED_MESSAGE,
-        new Error(`${LEGACY_URL_TRANSLATION_FAILED_MESSAGE}: ${state.url}`, { cause: error }),
-      );
+      logger.error(LEGACY_URL_TRANSLATION_FAILED_MESSAGE, { error, data: { url: state.url } });
       return true;
     }
   };

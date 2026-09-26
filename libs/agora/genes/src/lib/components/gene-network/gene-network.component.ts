@@ -29,7 +29,7 @@ import { TooltipModule } from 'primeng/tooltip';
 })
 export class GeneNetworkComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('GeneNetworkComponent');
   readonly platformService = inject(PlatformService);
 
   router = inject(Router);
@@ -96,7 +96,7 @@ export class GeneNetworkComponent {
   }
 
   onNodeClick(node: NetworkChartNode) {
-    this.logger.log(`GeneNetworkComponent: Loading gene ${node.id}`);
+    this.logger.log(`Loading gene ${node.id}`);
 
     this.geneService
       .getGene(node.id)

@@ -6,7 +6,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import { SourceLogger } from '@sagebionetworks/explorers/services';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import {
   parseCommaSeparatedQueryParam,
@@ -82,7 +82,11 @@ describe('legacyDifferentialExpressionUrlGuard', () => {
   let warn: jest.SpyInstance;
 
   beforeEach(() => {
-    warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+    warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   describe('a URL that is already current', () => {

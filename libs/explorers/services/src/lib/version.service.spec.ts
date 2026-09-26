@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN } from '@sagebionetworks/explorers/constants';
 import { firstValueFrom, lastValueFrom, Observable, of, throwError, toArray } from 'rxjs';
 import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
-import { LoggerService } from './logger.service';
+import { SourceLogger } from './logger.service';
 import { PlatformService } from './platform.service';
 import { DataVersion, DataVersionService, VersionService } from './version.service';
 
@@ -91,7 +91,7 @@ describe('VersionService', () => {
 
     it('should emit loading, then unknown and report a Sentry warning when the request errors', async () => {
       const error = new Error('Unable to connect to the server. Please check your connection.');
-      const warnSpy = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+      const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
       const dataVersionService = mockDataVersionService(() => throwError(() => error));
 
       const emissions = await collectEmissions(service.getDataVersion$(dataVersionService));
