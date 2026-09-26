@@ -41,7 +41,9 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource(
+    'DiseaseCorrelationComparisonToolComponent',
+  );
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -50,7 +52,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
     .pipe(
       catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', error);
+        this.logger.error('Error retrieving comparison tool config', { error });
         return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true }),
@@ -186,9 +188,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log(
-      `DiseaseCorrelationComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log(`unpinned query ${JSON.stringify(query)}`);
 
     this.comparisonToolService.fetchUnpinned(
       this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(
@@ -211,9 +211,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       sortOrders,
     };
 
-    this.logger.log(
-      `DiseaseCorrelationComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log(`pinned query ${JSON.stringify(query)}`);
 
     this.comparisonToolService.fetchPinned(
       this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(

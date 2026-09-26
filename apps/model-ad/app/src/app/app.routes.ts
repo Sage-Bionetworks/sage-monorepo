@@ -2,20 +2,24 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Route, Router } from '@angular/router';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/model-ad/config';
-import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
+import {
+  legacyDifferentialExpressionUrlGuard,
+  MODEL_ORGANISM_QUERY_KEY,
+  modelOrganismUrlGuard,
+  resolveModelOrganism,
+} from '@sagebionetworks/model-ad/util';
 import { capitalizeFirstLetter } from '@sagebionetworks/shared/util';
-import { modelOrganismGuard } from './model-organism.guard';
 
 const DEFAULT_META_DESCRIPTION =
   "Discover next-generation models of Alzheimer's Disease developed by the MODEL-AD consortium and MARMO-AD.";
 
 const modelDetailsData = {
   title: (route: ActivatedRouteSnapshot) => {
-    const organism = resolveModelOrganism(route.queryParams['modelOrganism']);
+    const organism = resolveModelOrganism(route.queryParams[MODEL_ORGANISM_QUERY_KEY]);
     return `${capitalizeFirstLetter(organism)} Model Details | ${route.params['name']} AD model`;
   },
   description: (route: ActivatedRouteSnapshot) => {
-    const organism = resolveModelOrganism(route.queryParams['modelOrganism']);
+    const organism = resolveModelOrganism(route.queryParams[MODEL_ORGANISM_QUERY_KEY]);
     return `Explore information and results for the ${route.params['name']} Alzheimer's Disease ${organism} model.`;
   },
 };
@@ -97,6 +101,7 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.DIFFERENTIAL_EXPRESSION,
+    canActivate: [legacyDifferentialExpressionUrlGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/differential-expression-comparison-tool').then(
         (routes) => routes.routes,
@@ -142,21 +147,21 @@ export const routes: Route[] = [
   },
   {
     path: `${ROUTE_PATHS.MODELS}/:name`,
-    canActivate: [modelOrganismGuard],
+    canActivate: [modelOrganismUrlGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: modelDetailsData,
   },
   {
     path: `${ROUTE_PATHS.MODELS}/:name/:tab`,
-    canActivate: [modelOrganismGuard],
+    canActivate: [modelOrganismUrlGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: modelDetailsData,
   },
   {
     path: `${ROUTE_PATHS.MODELS}/:name/:tab/:subtab`,
-    canActivate: [modelOrganismGuard],
+    canActivate: [modelOrganismUrlGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: modelDetailsData,
@@ -164,7 +169,7 @@ export const routes: Route[] = [
   // ensure that all models match a route, so the custom url serializer can encode special characters
   {
     path: `${ROUTE_PATHS.MODELS}/**`,
-    canActivate: [modelOrganismGuard],
+    canActivate: [modelOrganismUrlGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
   },

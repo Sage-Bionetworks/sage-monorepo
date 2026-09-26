@@ -19,7 +19,7 @@ import {
   MouseModel,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
+import { MODEL_ORGANISM_QUERY_KEY, resolveModelOrganism } from '@sagebionetworks/model-ad/util';
 import { catchError, distinctUntilChanged, EMPTY, map, Observable, switchMap, tap } from 'rxjs';
 import { MarmosetModelDetailsContentComponent } from './components/marmoset-model-details-content/marmoset-model-details-content.component';
 import {
@@ -31,8 +31,6 @@ import {
   getPanels as getMousePanels,
   getPanelsWithDisabledState as getMousePanelsWithDisabledState,
 } from './components/mouse-model-details-content/mouse-model-details-panels';
-
-const MODEL_ORGANISM_QUERY_KEY = 'modelOrganism';
 
 @Component({
   selector: 'model-ad-model-details',
@@ -52,7 +50,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   modelService = inject(ModelService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('ModelDetailsComponent');
 
   isLoading = true;
 
@@ -119,7 +117,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
         catchError(() => {
           this.isLoading = false;
           this.logger.log(
-            `ModelDetailsComponent: loadPanelData: Model ${modelName} (modelOrganism: ${modelOrganism}) not found, redirecting`,
+            `loadPanelData: Model ${modelName} (modelOrganism: ${modelOrganism}) not found, redirecting`,
           );
           this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           return EMPTY;
@@ -160,7 +158,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
    * panel is disabled or doesn't exist.
    * If no panel is specified, then use the default panel and leave the URL untouched, retaining all
    * query parameters and hash fragments. modelOrganism does not need appending here because
-   * modelOrganismGuard has already redirected the URL to carry it.
+   * modelOrganismUrlGuard has already redirected the URL to carry it.
    * If a disabled or invalid panel is specified, then drop the query parameters and hash fragment
    * (other than the required modelOrganism query parameter).
    */

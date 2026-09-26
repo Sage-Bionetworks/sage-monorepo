@@ -190,3 +190,25 @@ export interface PaginationParams {
   pageNumber: number;
   pageSize: number;
 }
+
+/**
+ * A legacy URL translation that failed or degraded. Each distinct failure mode should use its own
+ * fixed message, with the URL-specific details in `data`, so reports group by failure mode.
+ */
+export interface LegacyComparisonToolUrlWarning {
+  message: string;
+  data?: Record<string, unknown>;
+}
+
+export interface LegacyComparisonToolUrlRedirect extends ComparisonToolUrlParams {
+  warnings?: LegacyComparisonToolUrlWarning[];
+}
+
+/**
+ * Translates the comparison tool params of a legacy share URL into their current shape. Return null
+ * when the params are already current, which leaves the URL untouched. A returned param replaces that
+ * URL param, an omitted one leaves it alone, and null or an empty list removes it.
+ */
+export type LegacyComparisonToolUrlRedirectFn = (
+  params: ComparisonToolUrlParams,
+) => LegacyComparisonToolUrlRedirect | null;

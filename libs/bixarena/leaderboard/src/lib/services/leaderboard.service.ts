@@ -12,7 +12,7 @@ import { DEFAULT_CATEGORY_SLUG, LOOKBACK_DAYS } from '../leaderboard.constants';
 @Injectable()
 export class LeaderboardFacadeService {
   private readonly api = inject(LeaderboardApiService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('LeaderboardFacadeService');
 
   readonly leaderboards = signal<LeaderboardListInner[]>([]);
   readonly entries = signal<LeaderboardEntry[]>([]);
@@ -33,7 +33,7 @@ export class LeaderboardFacadeService {
       ).length;
       this.logger.debug('✅ Fetched leaderboard categories', { total, withEntries });
     } catch (err) {
-      this.logger.error('Failed to fetch leaderboard categories', err);
+      this.logger.error('Failed to fetch leaderboard categories', { error: err });
       this.leaderboards.set([]);
     }
   }
@@ -63,9 +63,8 @@ export class LeaderboardFacadeService {
       });
     } catch (err) {
       this.logger.error('Failed to fetch leaderboard data', {
-        leaderboardId,
-        query: finalQuery,
-        err,
+        error: err,
+        data: { leaderboardId, query: finalQuery },
       });
       this.error.set('Could not load leaderboard');
       this.entries.set([]);

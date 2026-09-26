@@ -29,7 +29,7 @@ export class GeneDetailsComponent implements OnInit {
   transcriptomicsIndividualService = inject(TranscriptomicsIndividualService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('GeneDetailsComponent');
 
   readonly modality = 'RNA';
   readonly downloadFilenamePrefix = 'transcriptomics_individual';
@@ -94,7 +94,7 @@ export class GeneDetailsComponent implements OnInit {
           error: () => {
             this.isLoading.set(false);
             this.logger.log(
-              `GeneDetailsComponent: loadTranscriptomicsIndividualData: query: ${JSON.stringify(query)}, redirecting`,
+              `loadTranscriptomicsIndividualData: query: ${JSON.stringify(query)}, redirecting`,
             );
             this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
@@ -102,7 +102,7 @@ export class GeneDetailsComponent implements OnInit {
     } else {
       this.isLoading.set(false);
       this.logger.log(
-        `GeneDetailsComponent: loadTranscriptomicsIndividualData: ensemblGeneId: ${ensemblGeneId} modelIdentifierType: ${modelIdentifierType} modelIdentifier: ${modelIdentifier}, redirecting`,
+        `loadTranscriptomicsIndividualData: ensemblGeneId: ${ensemblGeneId} modelIdentifierType: ${modelIdentifierType} modelIdentifier: ${modelIdentifier}, redirecting`,
       );
       this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
     }

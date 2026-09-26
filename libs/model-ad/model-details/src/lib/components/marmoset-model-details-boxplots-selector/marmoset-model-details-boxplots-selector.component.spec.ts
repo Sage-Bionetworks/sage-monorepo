@@ -99,7 +99,10 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
       providers: [
         provideHttpClient(),
         { provide: SvgIconService, useClass: SvgIconServiceStub },
-        { provide: LoggerService, useValue: { warn: warnSpy, log: jest.fn() } },
+        {
+          provide: LoggerService,
+          useValue: { forSource: () => ({ warn: warnSpy, log: jest.fn(), error: jest.fn() }) },
+        },
       ],
     });
     const component = fixture.componentInstance;

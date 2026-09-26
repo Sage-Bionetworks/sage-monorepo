@@ -58,7 +58,7 @@ export class LeaderboardSectionComponent implements OnInit {
   private readonly leaderboardApi = inject(LeaderboardService);
   private readonly orgLogo = inject(ModelOrgLogoService);
   private readonly analytics = inject(AnalyticsService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('LeaderboardSectionComponent');
   private readonly destroyRef = inject(DestroyRef);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
@@ -78,7 +78,7 @@ export class LeaderboardSectionComponent implements OnInit {
       .pipe(
         tap((all) => this.logger.debug('✅ Fetched leaderboard list', { count: all.length })),
         catchError((err) => {
-          this.logger.error('Failed to fetch leaderboard list', err);
+          this.logger.error('Failed to fetch leaderboard list', { error: err });
           return of<LeaderboardListInner[]>([]);
         }),
         takeUntilDestroyed(this.destroyRef),
@@ -101,7 +101,7 @@ export class LeaderboardSectionComponent implements OnInit {
               ),
               map((page) => this.toColumn(l, page)),
               catchError((err) => {
-                this.logger.error('Failed to fetch leaderboard column', err);
+                this.logger.error('Failed to fetch leaderboard column', { error: err });
                 return of<LeaderboardColumn | null>(null);
               }),
             );

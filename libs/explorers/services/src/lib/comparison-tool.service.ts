@@ -32,6 +32,9 @@ import { ToastNotificationService } from './toast-notification.service';
  */
 export const DEFAULT_COLUMN_WIDTH_PX = 300;
 
+export const UNMATCHED_URL_CATEGORIES_MESSAGE =
+  'URL categories match no comparison tool config; falling back to the default selection.';
+
 /**
  * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
  * the corresponding results-count signal should be set to (unpinned: total matching rows across
@@ -62,7 +65,7 @@ export class ComparisonToolService<T> {
   private readonly helperService = inject(ComparisonToolHelperService);
   private readonly coordinatorService = inject(ComparisonToolCoordinatorService);
   private readonly appStorageService = inject(AppStorageService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('ComparisonToolService');
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Differential Expression has 3 dropdowns, but we only want to cache selections
@@ -374,8 +377,10 @@ export class ComparisonToolService<T> {
     configs: ComparisonToolConfig[],
   ): string[] {
     const urlCategories = params.categories ?? undefined;
-    const selectionSource = urlCategories ?? this.initialSelection ?? [];
-    return this.normalizeSelection(selectionSource, configs);
+    if (urlCategories) {
+      return this.normalizeUrlSelection(urlCategories, configs);
+    }
+    return this.normalizeSelection(this.initialSelection ?? [], configs);
   }
 
   private resolveInitialSortMeta(params: ComparisonToolUrlParams): SortMeta[] {
@@ -413,13 +418,19 @@ export class ComparisonToolService<T> {
       return configs[0];
     }
 
+    return this.findMatchingConfig(selection, configs) ?? configs[0];
+  }
+
+  private findMatchingConfig(
+    selection: string[],
+    configs: ComparisonToolConfig[],
+  ): ComparisonToolConfig | null {
     const exactMatch = configs.find((config) => isEqual(config.dropdowns ?? [], selection));
     if (exactMatch) {
       return exactMatch;
     }
 
-    const prefixMatch = configs.find((config) => this.isPrefix(selection, config.dropdowns));
-    return prefixMatch ?? configs[0];
+    return configs.find((config) => this.isPrefix(selection, config.dropdowns)) ?? null;
   }
 
   /**
@@ -641,7 +652,7 @@ export class ComparisonToolService<T> {
           }
         },
         error: (error) => {
-          this.logger.error('Error pinning all matching rows', error);
+          this.logger.error('Error pinning all matching rows', { error });
           this.toastNotificationService.showError(
             'Something went wrong while pinning all matching rows. Please try again.',
           );
@@ -901,17 +912,34 @@ export class ComparisonToolService<T> {
       return defaultSelection;
     }
 
-    const exactMatch = configs.find((config) => isEqual(config.dropdowns ?? [], selection));
-    if (exactMatch) {
-      return [...exactMatch.dropdowns];
+    const matchingConfig = this.findMatchingConfig(selection, configs);
+    return matchingConfig ? [...matchingConfig.dropdowns] : defaultSelection;
+  }
+
+  /**
+   * Normalizes categories read from the URL, reporting ones that match no config. A share link or
+   * legacy URL translation whose categories no longer exist would otherwise silently land on the
+   * default view.
+   */
+  private normalizeUrlSelection(
+    urlCategories: string[],
+    configs: ComparisonToolConfig[],
+  ): string[] {
+    const normalizedSelection = this.normalizeSelection(urlCategories, configs);
+
+    const isUnmatched =
+      urlCategories.length > 0 &&
+      configs.length > 0 &&
+      !this.findMatchingConfig(urlCategories, configs);
+
+    if (isUnmatched) {
+      this.logger.warn(UNMATCHED_URL_CATEGORIES_MESSAGE, {
+        urlCategories,
+        fallbackSelection: normalizedSelection,
+      });
     }
 
-    const prefixMatch = configs.find((config) => this.isPrefix(selection, config.dropdowns));
-    if (prefixMatch) {
-      return [...prefixMatch.dropdowns];
-    }
-
-    return defaultSelection;
+    return normalizedSelection;
   }
 
   private isPrefix(prefix: string[], target: string[] | undefined): boolean {
@@ -1104,7 +1132,7 @@ export class ComparisonToolService<T> {
       return null;
     }
 
-    const normalizedSelection = this.normalizeSelection(urlCategories, this.configsSignal());
+    const normalizedSelection = this.normalizeUrlSelection(urlCategories, this.configsSignal());
     const categoriesMatchLastSync = isEqual(
       normalizedSelection,
       this.lastSyncedUrlParamsState?.categories ?? [],
