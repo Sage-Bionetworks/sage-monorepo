@@ -259,7 +259,7 @@ export const searchViaFilterbox = async (page: Page, searchTerm: string): Promis
   await searchInput.clear();
   await searchInput.fill(searchTerm);
   // Waits out the search debounce, so the table reflects the new term
-  const matchingLabel = page.getByText(/^Matching /);
+  const matchingLabel = page.getByText(/^\s*Matching /);
   if (searchTerm) {
     await expect(matchingLabel).toBeVisible();
   } else {
