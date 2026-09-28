@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit, effect, inject } from '@angular/core';
+import { HttpContext } from '@angular/common/http';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
@@ -12,6 +13,7 @@ import {
   ComparisonToolUrlService,
   LoggerService,
   PlatformService,
+  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
@@ -216,12 +218,16 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     );
 
     this.comparisonToolService.fetchPinned(
-      this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(
-        map((response: DiseaseCorrelationsPage) => {
-          const data = response.diseaseCorrelations;
-          return { data, totalCount: data.length };
-        }),
-      ),
+      this.diseaseCorrelationService
+        .getDiseaseCorrelations(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
+        .pipe(
+          map((response: DiseaseCorrelationsPage) => {
+            const data = response.diseaseCorrelations;
+            return { data, totalCount: data.length };
+          }),
+        ),
     );
   }
 }

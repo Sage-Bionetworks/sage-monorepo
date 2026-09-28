@@ -1,3 +1,4 @@
+import { HttpContext } from '@angular/common/http';
 import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -6,6 +7,7 @@ import {
   ComparisonToolUrlService,
   LoggerService,
   PlatformService,
+  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
@@ -173,12 +175,16 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
     );
 
     this.comparisonToolService.fetchPinned(
-      this.mouseModelOverviewService.getMouseModelOverviews(query).pipe(
-        map((response: MouseModelOverviewsPage) => {
-          const data = response.mouseModelOverviews;
-          return { data, totalCount: data.length };
-        }),
-      ),
+      this.mouseModelOverviewService
+        .getMouseModelOverviews(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
+        .pipe(
+          map((response: MouseModelOverviewsPage) => {
+            const data = response.mouseModelOverviews;
+            return { data, totalCount: data.length };
+          }),
+        ),
     );
   }
 }

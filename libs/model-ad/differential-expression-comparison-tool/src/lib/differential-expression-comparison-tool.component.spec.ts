@@ -14,6 +14,7 @@ import {
   provideComparisonToolFilterService,
   provideComparisonToolService,
   provideExplorersConfig,
+  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   mockEmptyComparisonToolQuery,
@@ -113,6 +114,10 @@ function mockProteomicsPage(rows: Proteomics[], totalElements = rows.length): Pr
       hasPrevious: false,
     },
   };
+}
+
+function queriesSentTo(apiSpy: jest.SpyInstance): unknown[] {
+  return apiSpy.mock.calls.map(([query]) => query);
 }
 
 function mockQuery(categories: string[]): ComparisonToolQuery {
@@ -335,7 +340,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
         mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA, TISSUE_CATEGORY]),
       );
 
-      expect(getTranscriptomicsSpy).toHaveBeenCalledWith(
+      expect(queriesSentTo(getTranscriptomicsSpy)).toContainEqual(
         expect.objectContaining({ sex: selectedSexes }),
       );
     });
@@ -352,7 +357,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
           component.getUnpinnedData(mockQuery([mainCategory, TISSUE_CATEGORY]));
 
-          expect(apiSpyFor(mainCategory)).toHaveBeenLastCalledWith(
+          expect(queriesSentTo(apiSpyFor(mainCategory)).at(-1)).toEqual(
             expect.objectContaining({ ...pinnedItemsQuery, itemFilterType: 'exclude' }),
           );
         }
@@ -367,7 +372,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
         for (const pinnedItemsQuery of [PINNED_ROWS_QUERY, PINNED_PARENTS_QUERY]) {
           component.getPinnedData([mainCategory, TISSUE_CATEGORY], pinnedItemsQuery, []);
 
-          expect(apiSpyFor(mainCategory)).toHaveBeenLastCalledWith(
+          expect(queriesSentTo(apiSpyFor(mainCategory)).at(-1)).toEqual(
             expect.objectContaining({ ...pinnedItemsQuery, itemFilterType: 'include' }),
           );
         }
@@ -382,8 +387,34 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
       component.getPinnedData([mainCategory, TISSUE_CATEGORY], PINNED_ROWS_QUERY, []);
 
-      expect(apiSpyFor(mainCategory)).toHaveBeenCalledWith(expect.objectContaining({ pageSize }));
+      expect(queriesSentTo(apiSpyFor(mainCategory))).toContainEqual(
+        expect.objectContaining({ pageSize }),
+      );
     });
+
+    it.each(MAIN_CATEGORIES)(
+      'should suppress the error overlay on the pinned request for %s',
+      async (mainCategory) => {
+        const { component, apiSpyFor } = await setup();
+
+        component.getPinnedData([mainCategory, TISSUE_CATEGORY], PINNED_ROWS_QUERY, []);
+
+        const context = apiSpyFor(mainCategory).mock.lastCall?.[3]?.context;
+        expect(context?.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
+      },
+    );
+
+    it.each(MAIN_CATEGORIES)(
+      'should keep the error overlay on the unpinned request for %s',
+      async (mainCategory) => {
+        const { component, apiSpyFor } = await setup();
+
+        component.getUnpinnedData(mockQuery([mainCategory, TISSUE_CATEGORY]));
+
+        const context = apiSpyFor(mainCategory).mock.lastCall?.[3]?.context;
+        expect(context?.get(SUPPRESS_ERROR_OVERLAY)).not.toBe(true);
+      },
+    );
 
     it.each(MAIN_CATEGORIES)(
       'should send the prebudgeted parent ids in the unpinned query for %s',
@@ -395,7 +426,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
         component.getUnpinnedData(mockQuery([mainCategory, TISSUE_CATEGORY]));
 
-        expect(apiSpyFor(mainCategory)).toHaveBeenCalledWith(
+        expect(queriesSentTo(apiSpyFor(mainCategory))).toContainEqual(
           expect.objectContaining({ prebudgetedParentIds: PREBUDGETED_PARENT_IDS }),
         );
       },
@@ -409,7 +440,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
         mockQuery([DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, TISSUE_CATEGORY]),
       );
 
-      expect(getProteomicsSpy).toHaveBeenLastCalledWith(
+      expect(queriesSentTo(getProteomicsSpy).at(-1)).toEqual(
         expect.not.objectContaining({ prebudgetedParentIds: expect.anything() }),
       );
     });
@@ -441,7 +472,7 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
       comparisonToolService.pinAll();
 
-      expect(getProteomicsSpy).toHaveBeenLastCalledWith(
+      expect(queriesSentTo(getProteomicsSpy).at(-1)).toEqual(
         expect.objectContaining({
           itemFilterType: 'exclude',
           remainingBudget,
