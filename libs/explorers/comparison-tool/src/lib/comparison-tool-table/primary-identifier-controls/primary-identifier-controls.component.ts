@@ -12,9 +12,10 @@ import { TooltipModule } from 'primeng/tooltip';
 export class PrimaryIdentifierControlsComponent {
   comparisonToolService = inject(ComparisonToolService);
 
-  id = input.required<string>();
   label = input.required<string>();
-  rowData = input<unknown>();
+  rowData = input.required<unknown>();
+
+  id = computed(() => this.comparisonToolService.rowId(this.rowData()));
 
   @HostBinding('attr.role')
   protected readonly hostRole = 'group';
@@ -24,8 +25,6 @@ export class PrimaryIdentifierControlsComponent {
     return this.id();
   }
 
-  maxPinnedItems = this.comparisonToolService.maxPinnedItems;
-  hasMaxPinnedItems = this.comparisonToolService.hasMaxPinnedItems;
   viewConfig = this.comparisonToolService.viewConfig;
 
   isPinned = computed(() => {
@@ -33,7 +32,7 @@ export class PrimaryIdentifierControlsComponent {
   });
 
   isPinDisabled = computed(() => {
-    return !this.isPinned() && this.hasMaxPinnedItems();
+    return !this.comparisonToolService.isPinToggleEnabled(this.rowData());
   });
 
   pinTooltip = computed(() => {
@@ -56,6 +55,6 @@ export class PrimaryIdentifierControlsComponent {
   }
 
   pinToggle() {
-    this.comparisonToolService.togglePin(this.id());
+    this.comparisonToolService.togglePin(this.rowData());
   }
 }

@@ -3,16 +3,19 @@ import { provideRouter } from '@angular/router';
 import { ComparisonToolConfig } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolService,
+  ComparisonToolServiceOptions,
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import { mockComparisonToolConfigs } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
+import { NEVER } from 'rxjs';
 import { ComparisonToolCategorySelectorsComponent } from './comparison-tool-category-selectors.component';
 
 async function setup(
   pageConfigs: ComparisonToolConfig[] = mockComparisonToolConfigs,
   initialSelection?: string[],
+  serviceOptions: ComparisonToolServiceOptions = {},
 ) {
   const component = await render(ComparisonToolCategorySelectorsComponent, {
     providers: [
@@ -22,6 +25,7 @@ async function setup(
       ...provideComparisonToolService({
         configs: pageConfigs,
         selection: initialSelection,
+        ...serviceOptions,
       }),
     ],
   });
@@ -160,6 +164,23 @@ describe('ComparisonToolSelectorsComponent', () => {
     expect(instance.getSelectedValueForLevel(0)).toBe('Blue');
     expect(instance.getSelectedValueForLevel(1)).toBe('Dark Blue');
     expect(instance.getSelectedValueForLevel(2)).toBe('Navy Blue');
+  });
+
+  it('should disable the dropdowns while pinning all', async () => {
+    const { component, service } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson'], {
+      pinAllFetch: () => NEVER,
+      unpinnedData: [{ _id: 'id1' }],
+    });
+    for (const dropdown of getAllDropdowns()) {
+      expect(dropdown).not.toHaveAttribute('aria-disabled', 'true');
+    }
+
+    service.pinAll();
+    component.fixture.detectChanges();
+
+    for (const dropdown of getAllDropdowns()) {
+      expect(dropdown).toHaveAttribute('aria-disabled', 'true');
+    }
   });
 
   it('should not set selection when no configs provided', async () => {

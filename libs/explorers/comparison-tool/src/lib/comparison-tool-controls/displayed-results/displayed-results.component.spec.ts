@@ -5,8 +5,8 @@ import { signal } from '@angular/core';
 
 function getMockService(total = 5, pinned = 2) {
   return {
-    totalResultsCount: signal(total),
-    pinnedResultsCount: signal(pinned),
+    unpinnedRowCount: signal(total),
+    pinnedRowCount: signal(pinned),
   };
 }
 
@@ -33,8 +33,8 @@ describe('DisplayedResultsComponent', () => {
   it('should update displayedResultsCount when service values change', async () => {
     const { fixture, mockService } = await setup(1, 1);
     expect(fixture.componentInstance.displayedResultsCount()).toBe(2);
-    mockService.totalResultsCount.set(4);
-    mockService.pinnedResultsCount.set(5);
+    mockService.unpinnedRowCount.set(4);
+    mockService.pinnedRowCount.set(5);
     expect(fixture.componentInstance.displayedResultsCount()).toBe(9);
   });
 });

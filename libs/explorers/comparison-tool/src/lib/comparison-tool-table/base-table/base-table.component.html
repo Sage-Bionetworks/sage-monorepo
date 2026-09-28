@@ -22,7 +22,7 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-rowData>
-      @let rowId = String(rowData[viewConfig().rowIdDataKey]);
+      @let rowId = comparisonToolService.rowId(rowData);
       <tr
         (click)="onRowClick(rowId)"
         (mouseenter)="onRowMouseEnter(rowId)"
@@ -43,11 +43,7 @@
             [attr.data-column-key]="column.data_key"
           >
             @if (columnType === 'primary') {
-              <explorers-primary-identifier-controls
-                [label]="cellData"
-                [id]="rowId"
-                [rowData]="rowData"
-              />
+              <explorers-primary-identifier-controls [label]="cellData" [rowData]="rowData" />
             }
             @if (columnType === 'heat_map' && canDrawHeatmapCircle(cellData)) {
               @if (isHeatmapCircleClickable()) {

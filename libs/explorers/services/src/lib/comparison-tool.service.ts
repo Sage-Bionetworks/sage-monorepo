@@ -1,6 +1,6 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { getMaxPinnedItemsWarning, MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
+import { getPinLimitWarning, MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
@@ -11,13 +11,14 @@ import {
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
   HeatmapDetailsPanelData,
+  PinnedItemsQuery,
   SortOrder,
 } from '@sagebionetworks/explorers/models';
-import { isEqual } from 'lodash';
+import { isEqual, xor } from 'lodash';
 import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
-import { catchError, combineLatest, finalize, of, Subject, switchMap } from 'rxjs';
+import { catchError, combineLatest, finalize, map, of, Subject, switchMap } from 'rxjs';
 import { VALID_PAGE_SIZES } from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
@@ -35,11 +36,29 @@ export const DEFAULT_COLUMN_WIDTH_PX = 300;
 /**
  * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
  * the corresponding results-count signal should be set to (unpinned: total matching rows across
- * pages; pinned: the number of pinned rows returned).
+ * pages; pinned: the number of pinned rows returned). `hasRowsForPrebudgetedParents` is read from
+ * unpinned results only: whether any row of the pinned parents is still unpinned, or null when the
+ * request sent no prebudgeted parents.
  */
 export interface ComparisonToolFetchResult<T> {
   data: T[];
   totalCount: number;
+  hasRowsForPrebudgetedParents?: boolean | null;
+}
+
+/** A pinned fetch result tagged with the parent id data key that was active when it was requested. */
+interface PinnedFetchResult<T> extends ComparisonToolFetchResult<T> {
+  parentIdDataKey: string | null;
+}
+
+/**
+ * The pair of data keys that identifies a view's id space. Views that share a row key can still
+ * differ by parent key (e.g. RNA and Protein both key rows by `composite_id`), so only the pair
+ * tells them apart.
+ */
+interface ViewIdentity {
+  rowIdDataKey: string;
+  parentIdDataKey: string | null;
 }
 
 /**
@@ -47,10 +66,14 @@ export interface ComparisonToolFetchResult<T> {
  * "pin all" can pin matches the browser is not currently holding. `totalElements` is the full match
  * count, which is what makes truncation detectable: `totalElements > rows.length` means the budget
  * ran out before every match was returned.
+ *
+ * In a child view the budget counts new parents instead of rows, and `prebudgetedParentIds`
+ * holds the pinned parents, whose children come back without spending it.
  */
 export type PinAllFetch<T> = (
   query: ComparisonToolQuery,
   remainingBudget: number,
+  prebudgetedParentIds?: string[],
 ) => Observable<{ rows: T[]; totalElements: number }>;
 
 /** Core state management service for comparison tool pages. */
@@ -102,7 +125,7 @@ export class ComparisonToolService<T> {
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly isTutorialVisibleSignal = signal(!this.appStorageService.isTutorialHidden());
-  private readonly maxPinnedItemsSignal = signal<number>(MAX_PINNED_ITEMS);
+  private readonly pinLimitSignal = signal<number>(MAX_PIN_LIMIT);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
   );
@@ -117,6 +140,11 @@ export class ComparisonToolService<T> {
     searchTerm: null,
     filters: [],
   });
+  private readonly pinnedItemsIdentitySignal = signal<ViewIdentity | null>(null);
+  // Compared as a set: the same parents in any order, with or without duplicates, are unchanged.
+  private readonly pinnedParentsSignal = signal<string[]>([], {
+    equal: (a, b) => xor(a, b).length === 0,
+  });
   private readonly isInitializedSignal = signal(false);
   private readonly heatmapDetailsPanelDataSignal = signal<{
     data: HeatmapDetailsPanelData;
@@ -126,6 +154,7 @@ export class ComparisonToolService<T> {
   private readonly pendingFetchesSignal = signal(0);
   private readonly selectedRowIdSignal = signal<string | null>(null);
   private readonly hoveredRowIdSignal = signal<string | null>(null);
+  private readonly isPinningAllSignal = signal(false);
 
   // Fetch streams: each fetch pushes a result observable onto these subjects, and switchMap keeps
   // only the latest in flight. A newer query cancels (unsubscribes) the prior request, so responses
@@ -133,10 +162,10 @@ export class ComparisonToolService<T> {
   //
   // Typed with `unknown` rather than `T`: the coordinator tracks the active CT service as
   // ComparisonToolService<unknown>, and a `Subject<...T...>` field would make that assignment
-  // a compile error. The public fetch methods stay strongly typed, and the stream subscription
-  // casts the result object back to `T[]`.
+  // a compile error. The public fetch methods stay strongly typed, and each stream's apply callback
+  // casts the result data back to `T[]`.
   private readonly unpinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
-  private readonly pinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
+  private readonly pinnedFetch$ = new Subject<Observable<PinnedFetchResult<unknown>>>();
 
   // Connect-Time Dependencies
   private pinAllFetch?: PinAllFetch<T>;
@@ -150,15 +179,18 @@ export class ComparisonToolService<T> {
   readonly configs = this.configsSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly isTutorialVisible = this.isTutorialVisibleSignal.asReadonly();
-  readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
+  readonly pinLimit = this.pinLimitSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
+  // Unique parent ids of the pinned rows, in row order. Empty if their view has no parent key.
+  readonly pinnedParents = this.pinnedParentsSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
   readonly isFilterPanelOpen = this.isFilterPanelOpenSignal.asReadonly();
   readonly pendingFetches = this.pendingFetchesSignal.asReadonly();
   readonly selectedRowId = this.selectedRowIdSignal.asReadonly();
   readonly hoveredRowId = this.hoveredRowIdSignal.asReadonly();
+  readonly isPinningAll = this.isPinningAllSignal.asReadonly();
   readonly isLoadingTableData = computed(() => this.pendingFetches() > 0);
 
   // Computed Query Accessors
@@ -177,14 +209,31 @@ export class ComparisonToolService<T> {
   readonly selectedFilters = computed(() => this.helperService.getSelectedFilters(this.filters()));
   readonly first = computed(() => this.pageNumber() * this.pageSize());
 
-  // pinnedItems cache may include more pins than are currently visible
-  // Used for the URL serialization
+  // Row ids of the pinned rows on screen, which are what the URL records. They are the current
+  // view's row ids once its pinned rows arrive. Usually a subset of the pinned items cache, but after
+  // a switch to a view with different id keys, the cache holds a different view's row ids
   readonly visiblePinIds = computed(() => this.extractRowIds(this.pinnedData()));
+  private readonly visiblePinIdsSet = computed(() => new Set(this.visiblePinIds()));
 
   // Config-Driven Signals
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     return this.findConfigForSelection(this.configsSignal(), this.dropdownSelection());
   });
+
+  readonly rowIdDataKey = computed(
+    () => this.currentConfig()?.row_id_data_key || this.viewConfig().rowIdDataKey,
+  );
+  readonly parentIdDataKey = computed(() => this.currentConfig()?.parent_id_data_key || null);
+  // A view whose parent key equals its row key is self-parented, not a child view: its rows are
+  // their own parents.
+  readonly isChildView = computed(
+    () => !!this.parentIdDataKey() && this.parentIdDataKey() !== this.rowIdDataKey(),
+  );
+
+  private readonly activeIdentity = computed<ViewIdentity>(
+    () => ({ rowIdDataKey: this.rowIdDataKey(), parentIdDataKey: this.parentIdDataKey() }),
+    { equal: isEqual },
+  );
 
   readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
     const config = this.currentConfig();
@@ -202,30 +251,95 @@ export class ComparisonToolService<T> {
   });
 
   // Results & Pin State Signals
-  loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
+  loadingRowCount = computed(() => this.currentConfig()?.row_count ?? '');
+  unpinnedRowCount = signal<number>(0);
+  hasRowsForPrebudgetedParents = signal<boolean | null>(null);
+  pinnedRowCount = computed(() => this.pinnedData().length);
+  private readonly pinnedParentsSet = computed(() => new Set(this.pinnedParents()));
+  private readonly pinnedParentCount = computed(() => this.pinnedParents().length);
+  // Count parents in any view with a parent key, not just child views.
+  // Counting rows in the parent view would be wrong right after a switch from a child view:
+  // until the parent rows land, pinnedData() still holds the child rows, so the row count could
+  // exceed the pin limit
+  readonly pinCount = computed(() =>
+    this.parentIdDataKey() ? this.pinnedParentCount() : this.pinnedRowCount(),
+  );
 
-  totalResultsCount = signal<number>(0);
+  /**
+   * The pins to send with a query, and the id space they are in. By default this is the pinned items
+   * cache, sent as row ids. The exception is a view whose identity differs from the one the cache
+   * was recorded under, such as Protein after pinning in RNA. The cache holds the other view's row
+   * ids, so the pinned parents are sent instead, matched against the active view's parent key.
+   *
+   * The pinned parents are read from the latest pinned rows. So if a pinned parent has no rows in
+   * the active view, it is no longer sent once that view's pinned rows arrive. The pinned items
+   * cache still holds its row ids, so switching back to the view it was pinned in restores it.
+   * Every fetch that sends this query reruns once when that happens. The rerun returns rows for the
+   * same parents, and `pinnedParents` compares as a set, so this query does not change again.
+   */
+  readonly pinnedItemsQuery = computed<PinnedItemsQuery>(
+    () => {
+      const identity = this.pinnedItemsIdentitySignal();
+      if (identity === null || isEqual(identity, this.activeIdentity())) {
+        return { items: this.pinnedItems(), itemIdSpace: 'row' };
+      }
+      return { items: this.pinnedParents(), itemIdSpace: 'parent' };
+    },
+    { equal: isEqual },
+  );
 
-  pinnedResultsCount = computed(() => this.pinnedData().length);
-
-  hasMaxPinnedItems = computed(() => {
-    return this.pinnedResultsCount() >= this.maxPinnedItems();
+  hasReachedPinLimit = computed(() => {
+    return this.pinCount() >= this.pinLimit();
   });
 
+  // TODO(MG-1084): reword to handle parent/child case
   disabledPinTooltip = computed(() => {
-    return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
+    return `You have already pinned the maximum number of items (${this.pinLimit()}). You must unpin some items before you can pin more.`;
   });
+
+  /**
+   * The pinned parents to send with the unpinned fetch as `prebudgetedParentIds`, so its
+   * `hasRowsForPrebudgetedParents` tells whether pin-all still has children of pinned parents to
+   * pin. Only set at the pin limit in a child view, since that is the only time pin-all
+   * depends on it.
+   *
+   * It reads the pinned parents from the pinned rows, not from the pinned items cache. So a pin edit
+   * that moves the parent count across the limit fires the unpinned fetch once with the old parents,
+   * and again when the pinned rows arrive (`switchMap` cancels the first if it is still in flight).
+   * The unpinned fetch reruns on every pin edit anyway, and deriving the parents from the edit would
+   * add a second writer to `pinnedParents`.
+   */
+  readonly prebudgetedParentIdsForUnpinnedFetch = computed(
+    () => (this.hasReachedPinLimit() && this.isChildView() ? this.pinnedParents() : undefined),
+    { equal: isEqual },
+  );
+
+  readonly canPinAll = computed(() =>
+    this.hasReachedPinLimit()
+      ? // At the pin limit, pin-all can only pin children of pinned parents, so one must still be unpinned.
+        this.hasRowsForPrebudgetedParents() === true
+      : this.unpinnedRowCount() > 0,
+  );
 
   constructor() {
     // Unpinned rows are paged, so totalCount is the cross-page total used for pagination.
-    this.subscribeToFetchStream(this.unpinnedFetch$, ({ data, totalCount }) => {
-      this.unpinnedDataSignal.set(data);
-      this.totalResultsCount.set(totalCount);
-    });
+    this.subscribeToFetchStream(
+      this.unpinnedFetch$,
+      { data: [], totalCount: 0 },
+      ({ data, totalCount, hasRowsForPrebudgetedParents }) => {
+        this.unpinnedDataSignal.set(data as T[]);
+        this.unpinnedRowCount.set(totalCount);
+        this.hasRowsForPrebudgetedParents.set(hasRowsForPrebudgetedParents ?? null);
+      },
+    );
 
     // Pinned rows are never paged: applyPinnedData enforces the pin cap and the count comes from
     // pinnedData(), so totalCount from the response is unused and therefore is omitted intentionally.
-    this.subscribeToFetchStream(this.pinnedFetch$, ({ data }) => this.applyPinnedData(data));
+    this.subscribeToFetchStream(
+      this.pinnedFetch$,
+      { data: [], totalCount: 0, parentIdDataKey: null },
+      ({ data, parentIdDataKey }) => this.applyPinnedData(data as T[], parentIdDataKey),
+    );
 
     effect(() => {
       if (this.isLoadingTableData()) return;
@@ -316,18 +430,18 @@ export class ComparisonToolService<T> {
   }
 
   /**
-   * MAX_PINNED_ITEMS is the largest budget the CT search query schemas accept, so a configured limit
+   * MAX_PIN_LIMIT is the largest budget the CT search query schemas accept, so a configured limit
    * above it could not be filled by "pin all" without the API rejecting the request. Clamping here
    * keeps it a true ceiling, which is what lets the pin limit be quoted to the user as the maximum.
    */
-  setMaxPinnedItems(count: number) {
-    if (count > MAX_PINNED_ITEMS) {
-      this.logger.warn(
-        `Requested max pinned items exceeds MAX_PINNED_ITEMS; using ${MAX_PINNED_ITEMS}.`,
-        { requested: count, max: MAX_PINNED_ITEMS },
-      );
+  setPinLimit(count: number) {
+    if (count > MAX_PIN_LIMIT) {
+      this.logger.warn(`Requested pin limit exceeds MAX_PIN_LIMIT; using ${MAX_PIN_LIMIT}.`, {
+        requested: count,
+        max: MAX_PIN_LIMIT,
+      });
     }
-    this.maxPinnedItemsSignal.set(Math.min(count, MAX_PINNED_ITEMS));
+    this.pinLimitSignal.set(Math.min(count, MAX_PIN_LIMIT));
   }
 
   private initializeFromConfig(
@@ -523,8 +637,7 @@ export class ComparisonToolService<T> {
 
     // PrimeNG Popover.show() calls stopPropagation, so the click never reaches the <tr>.
     // Select the row here so heatmap circle clicks still update the selection.
-    const rowIdKey = this.viewConfig().rowIdDataKey;
-    this.selectRow(String((rowData as Record<string, unknown>)[rowIdKey]));
+    this.selectRow(this.rowId(rowData));
 
     const data = transform({
       rowData,
@@ -581,25 +694,52 @@ export class ComparisonToolService<T> {
   }
 
   // Pinning
+  /**
+   * By default the pinned items cache holds the active view's row ids. When it was recorded under
+   * another view, the pinned rows were fetched by parent, so only those rows hold active view ids.
+   */
   isPinned(id: string): boolean {
-    return this.pinnedItemsSet().has(id);
+    if (this.pinnedItemsQuery().itemIdSpace === 'row') {
+      return this.pinnedItemsSet().has(id);
+    }
+    return this.visiblePinIdsSet().has(id);
   }
 
-  togglePin(id: string) {
+  /**
+   * At the pin limit, a row can still be pinned when its parent is already pinned, since pinning it
+   * adds no parent to the count.
+   */
+  canPin(row: T): boolean {
+    if (!this.hasReachedPinLimit()) return true;
+    const parentIdDataKey = this.parentIdDataKey();
+    return (
+      parentIdDataKey !== null &&
+      this.pinnedParentsSet().has(this.readDataKey(row, parentIdDataKey))
+    );
+  }
+
+  isPinToggleEnabled(row: T): boolean {
+    return this.isPinned(this.rowId(row)) || this.canPin(row);
+  }
+
+  togglePin(row: T) {
+    const id = this.rowId(row);
     if (this.isPinned(id)) {
       this.unpinItem(id);
       return;
     }
-    this.pinItem(id);
+    this.pinItem(row);
   }
 
-  pinItem(id: string) {
-    if (this.hasMaxPinnedItems()) {
+  pinItem(row: T) {
+    if (!this.canPin(row)) {
+      // TODO(MG-1084): reword to handle parent/child case
       this.toastNotificationService.showWarning(
-        `You have reached the maximum number of pinned items (${this.maxPinnedItems()}). Please unpin an item before pinning a new one.`,
+        `You have reached the maximum number of pinned items (${this.pinLimit()}). Please unpin an item before pinning a new one.`,
       );
       return;
     }
+    const id = this.rowId(row);
     if (!this.isPinned(id)) {
       this.setPinnedItems([...this.visiblePinIds(), id]);
     }
@@ -611,33 +751,51 @@ export class ComparisonToolService<T> {
 
   /**
    * Pins every row matching the current query, not just the rows on the current page. The matching
-   * ids are discovered server-side, capped at the pins the user has left.
+   * ids are discovered server-side, capped at the pins the user has left. In a child view the
+   * cap counts parents, and the pinned parents are sent along so their children can still be pinned
+   * at the limit.
    *
    * The guard below keeps this from running while the table is still being populated: the cap sent to
    * the server is how many more pins the user may add, counted from the pins on screen, and those are
    * not final until the in-flight fetch lands. The `startFetch()` call also serves as a re-entry
    * guard: once it increments the counter, the `isLoadingTableData()` check at the top blocks any
    * concurrent call until the fetch completes.
+   *
+   * The category dropdowns are disabled while `isPinningAll()` is set, so the view cannot switch
+   * while the fetch is in flight. A view switch that happens anyway still discards the result,
+   * because the returned ids are row ids of the view it was requested in.
    */
   pinAll() {
     const fetch = this.pinAllFetch;
     if (!fetch) return;
-    if (this.isLoadingTableData() || this.hasMaxPinnedItems()) return;
+    if (this.isLoadingTableData() || !this.canPinAll()) return;
 
+    const identity = this.activeIdentity();
     const currentPinIds = this.visiblePinIds();
-    const remainingBudget = this.maxPinnedItems() - currentPinIds.length;
+    const remainingBudget = this.pinLimit() - this.pinCount();
+    const prebudgetedParentIds = this.isChildView() ? this.pinnedParents() : undefined;
 
     this.startFetch();
-    fetch(this.query(), remainingBudget)
+    this.isPinningAllSignal.set(true);
+    fetch(this.query(), remainingBudget, prebudgetedParentIds)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.completeFetch()),
+        finalize(() => {
+          this.isPinningAllSignal.set(false);
+          this.completeFetch();
+        }),
       )
       .subscribe({
         next: ({ rows, totalElements }) => {
+          if (!isEqual(identity, this.activeIdentity())) {
+            this.logger.warn('Discarded pin-all result after a view switch');
+            return;
+          }
           this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows)]);
           if (totalElements > rows.length) {
-            this.showMaxPinnedItemsWarning(rows.length);
+            // TODO(MG-1084): in a child view the budget counts parents but this passes rows
+            // pinned, so the count and the limit in the toast are different units.
+            this.showPinLimitWarning(rows.length);
           }
         },
         error: (error) => {
@@ -649,10 +807,8 @@ export class ComparisonToolService<T> {
       });
   }
 
-  private showMaxPinnedItemsWarning(pinnedCount: number) {
-    this.toastNotificationService.showWarning(
-      getMaxPinnedItemsWarning(pinnedCount, this.maxPinnedItems()),
-    );
+  private showPinLimitWarning(pinnedCount: number) {
+    this.toastNotificationService.showWarning(getPinLimitWarning(pinnedCount, this.pinLimit()));
   }
 
   /**
@@ -669,9 +825,18 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    this.updateQuery({
-      pinnedItems: deduplicatedItems,
-    });
+    this.writePinnedItems(deduplicatedItems);
+  }
+
+  /**
+   * The only writer of the pinned items cache and of the view identity it is recorded under. Both
+   * are always written together, and the identity is always the active view's, because pins are
+   * always made against the active view's rows. That is what lets `pinnedItemsQuery` trust that the
+   * cached ids are row ids of the recorded view.
+   */
+  private writePinnedItems(items: string[]) {
+    this.querySignal.update((current) => ({ ...current, pinnedItems: items }));
+    this.pinnedItemsIdentitySignal.set(this.activeIdentity());
   }
 
   resetPinnedItems() {
@@ -708,14 +873,16 @@ export class ComparisonToolService<T> {
 
   // Table data
   /**
-   * Caps pinned data at `maxPinnedItems`. Every pinned result flows through here, so the cap holds
-   * no matter where the pins came from -- a hand-edited or shared URL can list more ids than the
-   * user is allowed to pin.
+   * Caps pinned data at `pinLimit` rows. When `parentIdDataKey` is set, the cap counts parents
+   * instead. Every pinned result flows through here, so the cap holds no matter where the pins came
+   * from -- a hand-edited or shared URL can list more ids than the user is allowed to pin.
    *
    * Why cap here, after the fetch, instead of when parsing the URL: the pinned fetch sends the raw
    * ids to the API and gets back the matching rows already ordered by the user's current sort.
-   * Keeping the first N of those rows drops the pins the user would care about least. Trimming the
-   * URL ids before the fetch would instead drop an arbitrary N, since the URL order is meaningless.
+   * Keeping the first N of those rows (or the rows of the first N parents) drops the pins the user
+   * would care about least. Trimming the URL ids before the fetch would instead drop an arbitrary
+   * N, since the URL order is meaningless. The parent cap keeps every row of a kept parent, so a
+   * parent is never split, and N parents fanned out into more than N rows are not trimmed.
    *
    * When the cap trims the set, we rewrite the pinned ids via `setPinnedItems` so the pin cache and
    * the URL agree on the trimmed list. That rewrite re-triggers BOTH data fetches, because the
@@ -725,34 +892,51 @@ export class ComparisonToolService<T> {
    * this is correct, not wasteful. The follow-up pinned fetch is normally within the limit, so the
    * cap does not fire again.
    *
-   * The one exception is a collection where a row id is not unique -- one id can match several rows.
-   * There, trimming to N rows can yield fewer than N unique ids (the dedup in `setPinnedItems`), and
-   * refetching those ids returns more than N rows again, so the row count never settles at the id
-   * count. That would loop forever, except `setPinnedItems` skips the rewrite when the new id list
-   * equals the current pins -- which it does on the second pass -- so the cycle stops.
+   * The one exception is a row cap over a collection where a row id is not unique -- one id can
+   * match several rows. There, trimming to N rows can yield fewer than N unique ids (the dedup in
+   * `setPinnedItems`), and refetching those ids returns more than N rows again, so the row count
+   * never settles at the id count. That would loop forever, except `setPinnedItems` skips the
+   * rewrite when the new id list equals the current pins -- which it does on the second pass -- so
+   * the cycle stops.
    */
-  private applyPinnedData(pinnedData: T[]) {
-    const maxPinnedItems = this.maxPinnedItems();
-    if (pinnedData.length > maxPinnedItems) {
-      const trimmedData = pinnedData.slice(0, maxPinnedItems);
-      this.pinnedDataSignal.set(trimmedData);
-      this.showMaxPinnedItemsWarning(trimmedData.length);
-      this.setPinnedItems(this.extractRowIds(trimmedData));
-    } else {
-      this.pinnedDataSignal.set(pinnedData);
+  private applyPinnedData(pinnedData: T[], parentIdDataKey: string | null) {
+    const pinLimit = this.pinLimit();
+    const cappedData = parentIdDataKey
+      ? this.keepRowsOfFirstParents(pinnedData, parentIdDataKey, pinLimit)
+      : pinnedData.slice(0, pinLimit);
+    this.setPinnedData(cappedData, parentIdDataKey);
+    if (cappedData.length < pinnedData.length) {
+      // TODO(MG-1084): when capping by parent, this passes rows kept (e.g. 180) while
+      // the limit counts parents (50), so the toast reads "Only 180 rows were pinned ... maximum
+      // of 50". Reword in parent terms.
+      this.showPinLimitWarning(cappedData.length);
+      this.setPinnedItems(this.extractRowIds(cappedData));
     }
+  }
+
+  private keepRowsOfFirstParents(rows: T[], parentIdDataKey: string, parentLimit: number): T[] {
+    const keptParents = new Set(
+      this.extractUniqueDataKeyValues(rows, parentIdDataKey).slice(0, parentLimit),
+    );
+    return rows.filter((row) => keptParents.has(this.readDataKey(row, parentIdDataKey)));
+  }
+
+  private setPinnedData(pinnedData: T[], parentIdDataKey: string | null) {
+    this.pinnedDataSignal.set(pinnedData);
+    this.pinnedParentsSignal.set(
+      parentIdDataKey ? this.extractUniqueDataKeyValues(pinnedData, parentIdDataKey) : [],
+    );
   }
 
   // Row selection
   private autoSelectFirstRow(): void {
     const unpinned = this.unpinnedDataSignal();
     const pinned = this.pinnedDataSignal();
-    const rowIdKey = this.viewConfig().rowIdDataKey;
 
     if (unpinned.length > 0) {
-      this.selectedRowIdSignal.set(String((unpinned[0] as Record<string, unknown>)[rowIdKey]));
+      this.selectedRowIdSignal.set(this.rowId(unpinned[0]));
     } else if (pinned.length > 0) {
-      this.selectedRowIdSignal.set(String((pinned[0] as Record<string, unknown>)[rowIdKey]));
+      this.selectedRowIdSignal.set(this.rowId(pinned[0]));
     }
   }
 
@@ -775,10 +959,7 @@ export class ComparisonToolService<T> {
 
     const selectedId = this.selectedRowIdSignal();
     if (selectedId !== null) {
-      const rowIdKey = this.viewConfig().rowIdDataKey;
-      const isInPinned = this.pinnedDataSignal().some(
-        (row) => String((row as Record<string, unknown>)[rowIdKey]) === selectedId,
-      );
+      const isInPinned = this.pinnedDataSignal().some((row) => this.rowId(row) === selectedId);
       if (isInPinned) return;
     }
 
@@ -795,21 +976,22 @@ export class ComparisonToolService<T> {
    * request to an empty result and keeps the outer stream alive for the next fetch. Error logging
    * and user notification are handled centrally by `httpErrorInterceptor`, so this is cleanup only.
    */
-  private subscribeToFetchStream(
-    fetch$: Subject<Observable<ComparisonToolFetchResult<unknown>>>,
-    applyResult: (result: ComparisonToolFetchResult<T>) => void,
+  private subscribeToFetchStream<R extends ComparisonToolFetchResult<unknown>>(
+    fetch$: Subject<Observable<R>>,
+    emptyResult: R,
+    applyResult: (result: R) => void,
   ): void {
     fetch$
       .pipe(
         switchMap((source$) =>
           source$.pipe(
             finalize(() => this.completeFetch()),
-            catchError(() => of<ComparisonToolFetchResult<unknown>>({ data: [], totalCount: 0 })),
+            catchError(() => of(emptyResult)),
           ),
         ),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe((result) => applyResult(result as ComparisonToolFetchResult<T>));
+      .subscribe(applyResult);
   }
 
   /**
@@ -824,10 +1006,16 @@ export class ComparisonToolService<T> {
   /**
    * Fetches pinned rows from the given result observable. Independent of the unpinned stream, so a
    * new pinned fetch does not cancel an in-flight unpinned fetch (and vice versa).
+   *
+   * The parent key is snapshotted now, when the request is made, and travels with its result, so
+   * `pinnedParents` is always read with the key the rows were fetched under. `switchMap` only
+   * applies the latest request's response, and that request was made under the latest config, so
+   * the snapshot and the rows always agree.
    */
   fetchPinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
+    const parentIdDataKey = this.parentIdDataKey();
     this.startFetch();
-    this.pinnedFetch$.next(source$);
+    this.pinnedFetch$.next(source$.pipe(map((result) => ({ ...result, parentIdDataKey }))));
   }
 
   /** Call before starting a data fetch to increment loading counter */
@@ -841,7 +1029,7 @@ export class ComparisonToolService<T> {
   }
 
   // Query & pagination
-  updateQuery(query: Partial<ComparisonToolQuery>) {
+  updateQuery(query: Partial<Omit<ComparisonToolQuery, 'pinnedItems'>>) {
     this.querySignal.update((current) => ({
       ...current,
       ...query,
@@ -874,8 +1062,7 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    // Preserve current pins and filters when changing dropdown selection
-    const currentPins = this.pinnedItems();
+    // Preserve current filters when changing dropdown selection
     const selectedFilters = this.selectedFilters();
 
     // Load filters from the new config and attempt to apply any previous selections
@@ -885,7 +1072,6 @@ export class ComparisonToolService<T> {
     this.updateQuery({
       categories: selection,
       filters: newFiltersWithSelections,
-      pinnedItems: currentPins,
       pageNumber: this.FIRST_PAGE_NUMBER,
     });
   }
@@ -1014,7 +1200,7 @@ export class ComparisonToolService<T> {
     }
 
     // Batch all query changes to avoid multiple updateQuery() calls
-    const queryUpdates: Partial<ComparisonToolQuery> = {};
+    const queryUpdates: Partial<Omit<ComparisonToolQuery, 'pinnedItems'>> = {};
 
     // On first load, categories/sort/filters are already initialized in initializeFromConfig.
     // Only pinned items need to be resolved here. For subsequent navigations, all values
@@ -1045,15 +1231,16 @@ export class ComparisonToolService<T> {
       }
     }
 
-    // Pinned items
-    const resolvedPinnedItems = this.resolvePinnedItemsFromUrl(params.pinnedItems);
-    if (resolvedPinnedItems !== null) {
-      queryUpdates.pinnedItems = resolvedPinnedItems;
-    }
-
     // Apply all batched changes in a single update
     if (Object.keys(queryUpdates).length > 0) {
       this.updateQuery(queryUpdates);
+    }
+
+    // Written after the category update, so URL pins are recorded in the row space of the view the
+    // URL selects. Tokens from another view's space then match nothing and drop out.
+    const resolvedPinnedItems = this.resolvePinnedItemsFromUrl(params.pinnedItems);
+    if (resolvedPinnedItems !== null) {
+      this.writePinnedItems(resolvedPinnedItems);
     }
 
     if (!options.isFirstLoad) {
@@ -1183,8 +1370,19 @@ export class ComparisonToolService<T> {
   }
 
   private extractRowIds(rows: T[]): string[] {
-    const rowIdKey = this.viewConfig().rowIdDataKey;
-    return rows.map((row: T) => String((row as Record<string, unknown>)[rowIdKey]));
+    return rows.map((row) => this.rowId(row));
+  }
+
+  private extractUniqueDataKeyValues(rows: T[], key: string): string[] {
+    return Array.from(new Set(rows.map((row) => this.readDataKey(row, key))));
+  }
+
+  rowId(row: T): string {
+    return this.readDataKey(row, this.rowIdDataKey());
+  }
+
+  private readDataKey(row: T, key: string): string {
+    return String((row as Record<string, unknown>)[key]);
   }
 
   convertSortMetaToArrays(multiSortMeta: SortMeta[]): {

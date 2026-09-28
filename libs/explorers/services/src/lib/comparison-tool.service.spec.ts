@@ -1,6 +1,6 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
+import { MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
@@ -65,6 +65,15 @@ describe('ComparisonToolService', () => {
     service = TestBed.inject(ComparisonToolService);
     return service;
   };
+
+  const row = (id: string): Row => ({ _id: id });
+  const rows = (...ids: string[]) => ids.map(row);
+
+  const landUnpinned = ({
+    totalCount = 1,
+    hasRowsForPrebudgetedParents,
+  }: { totalCount?: number; hasRowsForPrebudgetedParents?: boolean | null } = {}) =>
+    service.fetchUnpinned(of({ data: [], totalCount, hasRowsForPrebudgetedParents }));
 
   const noMatchingRows: PinAllFetch<Row> = () => of({ rows: [], totalElements: 0 });
 
@@ -164,6 +173,735 @@ describe('ComparisonToolService', () => {
     });
   });
 
+  describe('row and parent id keys', () => {
+    const VIEW_CONFIG_ROW_ID_DATA_KEY = '_id';
+    const UI_CONFIG_ROW_ID_DATA_KEY = 'composite_id';
+    const UI_CONFIG_PARENT_ID_DATA_KEY = 'rna_composite_id';
+
+    const connectWithDataKeys = (keys: Partial<ComparisonToolConfig>) => {
+      connectService([{ ...mockComparisonToolDataConfig[0], ...keys }]);
+      service.setViewConfig({ rowIdDataKey: VIEW_CONFIG_ROW_ID_DATA_KEY });
+    };
+
+    it.each([
+      ['no keys', {}],
+      ['null keys', { row_id_data_key: null, parent_id_data_key: null }],
+      ['undefined keys', { row_id_data_key: undefined, parent_id_data_key: undefined }],
+    ])(
+      'falls back to the view config row key and no parent key when the ui config has %s',
+      (_, keys) => {
+        connectWithDataKeys(keys);
+
+        expect(service.rowIdDataKey()).toBe(VIEW_CONFIG_ROW_ID_DATA_KEY);
+        expect(service.parentIdDataKey()).toBeNull();
+      },
+    );
+
+    it('prefers the ui config keys over the view config when set', () => {
+      expect(UI_CONFIG_ROW_ID_DATA_KEY).not.toBe(VIEW_CONFIG_ROW_ID_DATA_KEY);
+
+      connectWithDataKeys({
+        row_id_data_key: UI_CONFIG_ROW_ID_DATA_KEY,
+        parent_id_data_key: UI_CONFIG_PARENT_ID_DATA_KEY,
+      });
+
+      expect(service.rowIdDataKey()).toBe(UI_CONFIG_ROW_ID_DATA_KEY);
+      expect(service.parentIdDataKey()).toBe(UI_CONFIG_PARENT_ID_DATA_KEY);
+    });
+
+    const rowWithBothIdKeys = {
+      [VIEW_CONFIG_ROW_ID_DATA_KEY]: 'view-config-id',
+      [UI_CONFIG_ROW_ID_DATA_KEY]: 'ui-config-id',
+    };
+
+    it('reads rowId from the view config row key when the ui config has none', () => {
+      connectWithDataKeys({});
+      expect(service.rowId(rowWithBothIdKeys)).toBe('view-config-id');
+    });
+
+    it('reads rowId from the ui config row key when set', () => {
+      connectWithDataKeys({ row_id_data_key: UI_CONFIG_ROW_ID_DATA_KEY });
+      expect(service.rowId(rowWithBothIdKeys)).toBe('ui-config-id');
+    });
+  });
+
+  describe('pinned items cache identity and pinned parents', () => {
+    // Mirrors the Model-AD DE CT: the parent view is RNA and the child view is Protein.
+    const UI_CONFIG_ROW_ID_DATA_KEY = 'id';
+    const UI_CONFIG_PARENT_VIEW_PARENT_ID_DATA_KEY = 'id';
+    const UI_CONFIG_CHILD_VIEW_PARENT_ID_DATA_KEY = 'parent_id';
+
+    const PARENT_VIEW = ['Parent', 'A'];
+    const OTHER_PARENT_VIEW = ['Parent', 'B'];
+    const CHILD_VIEW = ['Child', 'A'];
+
+    const PARENT_VIEW_IDENTITY = {
+      rowIdDataKey: UI_CONFIG_ROW_ID_DATA_KEY,
+      parentIdDataKey: UI_CONFIG_PARENT_VIEW_PARENT_ID_DATA_KEY,
+    };
+    const CHILD_VIEW_IDENTITY = {
+      rowIdDataKey: UI_CONFIG_ROW_ID_DATA_KEY,
+      parentIdDataKey: UI_CONFIG_CHILD_VIEW_PARENT_ID_DATA_KEY,
+    };
+
+    const parentViewConfig = (dropdowns: string[]): ComparisonToolConfig => ({
+      ...mockComparisonToolDataConfig[0],
+      dropdowns,
+      row_id_data_key: UI_CONFIG_ROW_ID_DATA_KEY,
+      parent_id_data_key: UI_CONFIG_PARENT_VIEW_PARENT_ID_DATA_KEY,
+    });
+    const viewConfigs: ComparisonToolConfig[] = [
+      parentViewConfig(PARENT_VIEW),
+      parentViewConfig(OTHER_PARENT_VIEW),
+      {
+        ...mockComparisonToolDataConfig[0],
+        dropdowns: CHILD_VIEW,
+        row_id_data_key: UI_CONFIG_ROW_ID_DATA_KEY,
+        parent_id_data_key: UI_CONFIG_CHILD_VIEW_PARENT_ID_DATA_KEY,
+      },
+    ];
+
+    const parentRow = (id: string): Row => ({ [UI_CONFIG_ROW_ID_DATA_KEY]: id });
+    const childRow = (id: string, parentId: string): Row => ({
+      [UI_CONFIG_ROW_ID_DATA_KEY]: id,
+      [UI_CONFIG_CHILD_VIEW_PARENT_ID_DATA_KEY]: parentId,
+    });
+    const landPinned = (...rows: Row[]) =>
+      service.fetchPinned(of({ data: rows, totalCount: rows.length }));
+    const recordedIdentity = () => (service as any).pinnedItemsIdentitySignal();
+
+    const pinInParentView = (...ids: string[]) => {
+      service.setPinnedItems(ids);
+      landPinned(...ids.map(parentRow));
+    };
+
+    it('tells the parent and child views apart only by the parent key', () => {
+      expect(PARENT_VIEW_IDENTITY.rowIdDataKey).toBe(CHILD_VIEW_IDENTITY.rowIdDataKey);
+      expect(PARENT_VIEW_IDENTITY.parentIdDataKey).not.toBe(CHILD_VIEW_IDENTITY.parentIdDataKey);
+    });
+
+    describe('identity', () => {
+      it('records the active pair on a pin edit', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+
+        service.pinItem(childRow('child1a', 'parent1'));
+
+        expect(recordedIdentity()).toEqual(CHILD_VIEW_IDENTITY);
+      });
+
+      it('records the pair of the view a URL change selects', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+
+        paramsSubject.next({ categories: CHILD_VIEW, pinnedItems: ['child1a'] });
+
+        expect(service.dropdownSelection()).toEqual(CHILD_VIEW);
+        expect(recordedIdentity()).toEqual(CHILD_VIEW_IDENTITY);
+      });
+
+      it('records the active pair on a pin-all', () => {
+        const pinAllFetch: PinAllFetch<Row> = () =>
+          of({ rows: [childRow('child1a', 'parent1')], totalElements: 1 });
+        connectService(viewConfigs, { selection: CHILD_VIEW, pinAllFetch });
+        landUnpinned();
+
+        service.pinAll();
+
+        expect(service.pinnedItems()).toEqual(['child1a']);
+        expect(recordedIdentity()).toEqual(CHILD_VIEW_IDENTITY);
+      });
+
+      it('leaves the recorded pair alone on a dropdown change', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+
+        service.setDropdownSelection(CHILD_VIEW);
+
+        expect(recordedIdentity()).toEqual(PARENT_VIEW_IDENTITY);
+      });
+
+      it('records the URL view pair before initialization completes', () => {
+        const isInitializedSignal = (injectService() as any).isInitializedSignal;
+        const setInitialized = isInitializedSignal.set.bind(isInitializedSignal);
+        let identityWhenInitialized: unknown;
+        jest.spyOn(isInitializedSignal, 'set').mockImplementation((value) => {
+          identityWhenInitialized = recordedIdentity();
+          setInitialized(value);
+        });
+
+        connectService(viewConfigs, {
+          initialParams: { categories: CHILD_VIEW, pinnedItems: ['child1a'] },
+        });
+
+        expect(identityWhenInitialized).toEqual(CHILD_VIEW_IDENTITY);
+      });
+    });
+
+    describe('pinnedItemsQuery', () => {
+      it('sends empty items in row space with no pins and no URL', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+
+        expect(recordedIdentity()).toBeNull();
+        expect(service.pinnedItemsQuery()).toEqual({ items: [], itemIdSpace: 'row' });
+      });
+
+      it('keeps the cache in row space while the recorded view is active', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'row',
+        });
+      });
+
+      it('keeps the cache in row space across a dropdown change to another view with the same identity', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+
+        service.setDropdownSelection(OTHER_PARENT_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'row',
+        });
+      });
+
+      it('sends the pinned parents in parent space after switching from the parent view to the child view', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+
+        service.setDropdownSelection(CHILD_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'parent',
+        });
+      });
+
+      it('does not change when the child rows land with the same parents in another order', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+        service.setDropdownSelection(CHILD_VIEW);
+        const queryBeforeLanding = service.pinnedItemsQuery();
+
+        landPinned(
+          childRow('child2a', 'parent2'),
+          childRow('child1a', 'parent1'),
+          childRow('child1b', 'parent1'),
+        );
+
+        expect(service.pinnedItemsQuery()).toBe(queryBeforeLanding);
+      });
+
+      it('re-records the child view pair on a pin edit in the child view', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+        service.setDropdownSelection(CHILD_VIEW);
+        landPinned(
+          childRow('child1a', 'parent1'),
+          childRow('child1b', 'parent1'),
+          childRow('child2a', 'parent2'),
+        );
+
+        service.unpinItem('child1b');
+
+        expect(recordedIdentity()).toEqual(CHILD_VIEW_IDENTITY);
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['child1a', 'child2a'],
+          itemIdSpace: 'row',
+        });
+      });
+
+      it('sends URL pins in the row space of the active view', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        service.setDropdownSelection(CHILD_VIEW);
+
+        paramsSubject.next({ categories: CHILD_VIEW, pinnedItems: ['child2a'] });
+
+        expect(service.pinnedItemsQuery()).toEqual({ items: ['child2a'], itemIdSpace: 'row' });
+      });
+
+      it('settles after one refetch when a parent has no rows in the child view, and restores it in the parent view', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+        service.setDropdownSelection(CHILD_VIEW);
+
+        landPinned(childRow('child1a', 'parent1'));
+        const queryAfterFanOut = service.pinnedItemsQuery();
+        expect(queryAfterFanOut).toEqual({ items: ['parent1'], itemIdSpace: 'parent' });
+
+        landPinned(childRow('child1a', 'parent1'));
+        expect(service.pinnedItemsQuery()).toBe(queryAfterFanOut);
+
+        service.setDropdownSelection(PARENT_VIEW);
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'row',
+        });
+      });
+    });
+
+    describe('pinnedParents', () => {
+      it('reads unique parents in row order with the parent key of the fetched view', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+
+        landPinned(
+          childRow('child2a', 'parent2'),
+          childRow('child1a', 'parent1'),
+          childRow('child2b', 'parent2'),
+        );
+
+        expect(service.pinnedParents()).toEqual(['parent2', 'parent1']);
+      });
+
+      it('reads the parent key active when the fetch was requested, not when it lands', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        const pinnedResponse$ = new Subject<{ data: Row[]; totalCount: number }>();
+        service.fetchPinned(pinnedResponse$);
+
+        service.setDropdownSelection(CHILD_VIEW);
+        pinnedResponse$.next({ data: [parentRow('parent1')], totalCount: 1 });
+
+        expect(service.pinnedParents()).toEqual(['parent1']);
+      });
+
+      it('is empty when the view has no parent key', () => {
+        connectService(mockComparisonToolDataConfig);
+
+        landPinned({ _id: 'id1' }, { _id: 'id2' });
+
+        expect(service.parentIdDataKey()).toBeNull();
+        expect(service.pinnedParents()).toEqual([]);
+      });
+    });
+
+    describe('isPinned after a view switch', () => {
+      const fanOutParentToChildView = () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        service.setDropdownSelection(CHILD_VIEW);
+        landPinned(childRow('child1a', 'parent1'), childRow('child1b', 'parent1'));
+        expect(service.pinnedItemsQuery().itemIdSpace).toBe('parent');
+      };
+
+      it('is true for the child rows a pinned parent fans out to', () => {
+        fanOutParentToChildView();
+
+        expect(service.isPinned('child1a')).toBe(true);
+        expect(service.isPinned('child1b')).toBe(true);
+        expect(service.isPinned('parent1')).toBe(false);
+      });
+
+      it('is true for the parent row pinned children collapse to', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        service.setPinnedItems(['child1a', 'child1b']);
+        landPinned(childRow('child1a', 'parent1'), childRow('child1b', 'parent1'));
+        service.setDropdownSelection(PARENT_VIEW);
+        landPinned(parentRow('parent1'));
+        expect(service.pinnedItemsQuery().itemIdSpace).toBe('parent');
+
+        expect(service.isPinned('parent1')).toBe(true);
+        expect(service.isPinned('child1a')).toBe(false);
+      });
+
+      it('unpins a fanned-out child row in one toggle', () => {
+        fanOutParentToChildView();
+
+        service.togglePin(childRow('child1a', 'parent1'));
+
+        expect(service.pinnedItems()).toEqual(['child1b']);
+      });
+    });
+
+    describe('pin limit by parent', () => {
+      const childrenOf = (parentNumber: number, count: number): Row[] =>
+        Array.from({ length: count }, (_, index) =>
+          childRow(
+            `child${parentNumber}${String.fromCharCode(97 + index)}`,
+            `parent${parentNumber}`,
+          ),
+        );
+
+      const pinInChildView = (...rows: Row[]) => {
+        service.setPinnedItems(rows.map((pinnedRow) => service.rowId(pinnedRow)));
+        landPinned(...rows);
+      };
+
+      const PINNED_PARENT_COUNT = 2;
+      const pinLimitFor = (hasReachedPinLimit: boolean) =>
+        hasReachedPinLimit ? PINNED_PARENT_COUNT : PINNED_PARENT_COUNT + 1;
+
+      type PinSetupOptions = { hasReachedPinLimit?: boolean; pinAllFetch?: PinAllFetch<Row> };
+
+      const pinTwoParentsInChildView = ({
+        hasReachedPinLimit = true,
+        pinAllFetch,
+      }: PinSetupOptions = {}) => {
+        connectService(viewConfigs, { selection: CHILD_VIEW, pinAllFetch });
+        service.setPinLimit(pinLimitFor(hasReachedPinLimit));
+        pinInChildView(...childrenOf(1, 2), ...childrenOf(2, 1));
+        expect(service.hasReachedPinLimit()).toBe(hasReachedPinLimit);
+      };
+
+      const pinTwoParentsInParentView = ({
+        hasReachedPinLimit = true,
+        pinAllFetch,
+      }: PinSetupOptions = {}) => {
+        connectService(viewConfigs, { selection: PARENT_VIEW, pinAllFetch });
+        service.setPinLimit(pinLimitFor(hasReachedPinLimit));
+        pinInParentView('parent1', 'parent2');
+        expect(service.hasReachedPinLimit()).toBe(hasReachedPinLimit);
+      };
+
+      const pinTwoRowsInViewWithNoParentKey = ({
+        hasReachedPinLimit = true,
+        pinAllFetch,
+      }: PinSetupOptions = {}) => {
+        connectService(mockComparisonToolDataConfig, { pinAllFetch });
+        service.setPinLimit(pinLimitFor(hasReachedPinLimit));
+        service.setPinnedItems(['id1', 'id2']);
+        landPinned(...rows('id1', 'id2'));
+        expect(service.parentIdDataKey()).toBeNull();
+        expect(service.hasReachedPinLimit()).toBe(hasReachedPinLimit);
+      };
+
+      describe('canPin', () => {
+        describe('in the parent view', () => {
+          it('lets a new parent be pinned below the limit', () => {
+            pinTwoParentsInParentView({ hasReachedPinLimit: false });
+            expect(service.canPin(parentRow('parent3'))).toBe(true);
+          });
+
+          it('does not let a new parent be pinned at the limit', () => {
+            pinTwoParentsInParentView({ hasReachedPinLimit: true });
+            expect(service.canPin(parentRow('parent3'))).toBe(false);
+          });
+        });
+
+        describe('in the child view', () => {
+          it('lets a child of a pinned parent be pinned below the limit', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: false });
+            expect(service.canPin(childRow('child1c', 'parent1'))).toBe(true);
+          });
+
+          it('lets a child of a new parent be pinned below the limit', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: false });
+            expect(service.canPin(childRow('child3a', 'parent3'))).toBe(true);
+          });
+
+          it('lets a child of a pinned parent be pinned at the limit', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: true });
+            expect(service.canPin(childRow('child1c', 'parent1'))).toBe(true);
+          });
+
+          it('does not let a child of a new parent be pinned at the limit', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: true });
+            expect(service.canPin(childRow('child3a', 'parent3'))).toBe(false);
+          });
+        });
+
+        describe('in a view with no parent key', () => {
+          it('lets a new row be pinned below the limit', () => {
+            pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: false });
+            expect(service.canPin(row('id3'))).toBe(true);
+          });
+
+          it('does not let a new row be pinned at the limit', () => {
+            pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: true });
+            expect(service.canPin(row('id3'))).toBe(false);
+          });
+        });
+      });
+
+      describe('prebudgetedParentIdsForUnpinnedFetch', () => {
+        it('is unset below the limit in the parent view', () => {
+          pinTwoParentsInParentView({ hasReachedPinLimit: false });
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+        });
+
+        it('is unset at the limit in the parent view', () => {
+          pinTwoParentsInParentView({ hasReachedPinLimit: true });
+          expect(service.isChildView()).toBe(false);
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+        });
+
+        it('is unset below the limit in the child view', () => {
+          pinTwoParentsInChildView({ hasReachedPinLimit: false });
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+        });
+
+        it('holds the pinned parents at the limit in the child view', () => {
+          pinTwoParentsInChildView({ hasReachedPinLimit: true });
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toEqual(['parent1', 'parent2']);
+        });
+
+        it('is unset below the limit in a view with no parent key', () => {
+          pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: false });
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+        });
+
+        it('is unset at the limit in a view with no parent key', () => {
+          pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: true });
+          expect(service.prebudgetedParentIdsForUnpinnedFetch()).toBeUndefined();
+        });
+      });
+
+      describe('canPinAll', () => {
+        describe('in the parent view', () => {
+          it('follows the unpinned row count below the limit', () => {
+            pinTwoParentsInParentView({ hasReachedPinLimit: false });
+
+            landUnpinned({ totalCount: 1 });
+            expect(service.canPinAll()).toBe(true);
+
+            landUnpinned({ totalCount: 0 });
+            expect(service.canPinAll()).toBe(false);
+          });
+
+          it('is false at the limit', () => {
+            pinTwoParentsInParentView({ hasReachedPinLimit: true });
+            landUnpinned({ totalCount: 1 });
+            expect(service.canPinAll()).toBe(false);
+          });
+        });
+
+        describe('in the child view', () => {
+          it('follows the unpinned row count below the limit', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: false });
+
+            landUnpinned({ totalCount: 1, hasRowsForPrebudgetedParents: false });
+            expect(service.canPinAll()).toBe(true);
+
+            landUnpinned({ totalCount: 0, hasRowsForPrebudgetedParents: true });
+            expect(service.canPinAll()).toBe(false);
+          });
+
+          it('is true at the limit when a child of a pinned parent is unpinned', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: true });
+            landUnpinned({ totalCount: 1, hasRowsForPrebudgetedParents: true });
+            expect(service.canPinAll()).toBe(true);
+          });
+
+          it('is false at the limit when no child of a pinned parent is unpinned', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: true });
+            landUnpinned({ totalCount: 1, hasRowsForPrebudgetedParents: false });
+            expect(service.canPinAll()).toBe(false);
+          });
+
+          it('is false at the limit when the unpinned result has no answer', () => {
+            pinTwoParentsInChildView({ hasReachedPinLimit: true });
+            landUnpinned({ totalCount: 1, hasRowsForPrebudgetedParents: null });
+            expect(service.hasRowsForPrebudgetedParents()).toBeNull();
+            expect(service.canPinAll()).toBe(false);
+          });
+        });
+
+        describe('in a view with no parent key', () => {
+          it('follows the unpinned row count below the limit', () => {
+            pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: false });
+
+            landUnpinned({ totalCount: 1 });
+            expect(service.canPinAll()).toBe(true);
+
+            landUnpinned({ totalCount: 0 });
+            expect(service.canPinAll()).toBe(false);
+          });
+
+          it('is false at the limit', () => {
+            pinTwoRowsInViewWithNoParentKey({ hasReachedPinLimit: true });
+            landUnpinned({ totalCount: 1 });
+            expect(service.canPinAll()).toBe(false);
+          });
+        });
+      });
+
+      describe('pinAll', () => {
+        const stubFetch = () =>
+          jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() =>
+            of({ rows: [], totalElements: 0 }),
+          );
+
+        it('counts the budget by parent and sends the pinned parents below the limit in the child view', () => {
+          const pinAllFetch = stubFetch();
+          pinTwoParentsInChildView({ hasReachedPinLimit: false, pinAllFetch });
+          expect(service.pinnedRowCount()).toBeGreaterThan(service.pinCount());
+          landUnpinned();
+
+          service.pinAll();
+
+          expect(pinAllFetch).toHaveBeenCalledWith(
+            service.query(),
+            service.pinLimit() - PINNED_PARENT_COUNT,
+            ['parent1', 'parent2'],
+          );
+        });
+
+        it('runs at a budget of 0 and sends the pinned parents at the limit in the child view', () => {
+          const pinAllFetch = stubFetch();
+          pinTwoParentsInChildView({ hasReachedPinLimit: true, pinAllFetch });
+          landUnpinned({ hasRowsForPrebudgetedParents: true });
+
+          service.pinAll();
+
+          expect(pinAllFetch).toHaveBeenCalledWith(service.query(), 0, ['parent1', 'parent2']);
+        });
+
+        it('pins the children of pinned parents at the limit in the child view', () => {
+          const pinAllFetch: PinAllFetch<Row> = () =>
+            of({ rows: [childRow('child1c', 'parent1')], totalElements: 1 });
+          pinTwoParentsInChildView({ hasReachedPinLimit: true, pinAllFetch });
+          landUnpinned({ hasRowsForPrebudgetedParents: true });
+
+          service.pinAll();
+
+          expect(service.pinnedItems()).toEqual(['child1a', 'child1b', 'child2a', 'child1c']);
+        });
+
+        it('does nothing at the limit in the child view when no child of a pinned parent is unpinned', () => {
+          const pinAllFetch = stubFetch();
+          pinTwoParentsInChildView({ hasReachedPinLimit: true, pinAllFetch });
+          landUnpinned({ hasRowsForPrebudgetedParents: false });
+
+          service.pinAll();
+
+          expect(pinAllFetch).not.toHaveBeenCalled();
+        });
+
+        it('never sends the pinned parents in the parent view', () => {
+          const pinAllFetch = stubFetch();
+          pinTwoParentsInParentView({ hasReachedPinLimit: false, pinAllFetch });
+          landUnpinned();
+
+          service.pinAll();
+
+          expect(pinAllFetch).toHaveBeenCalledWith(
+            service.query(),
+            service.pinLimit() - PINNED_PARENT_COUNT,
+            undefined,
+          );
+        });
+
+        describe('when the view changes while the fetch is in flight', () => {
+          const pinAllInParentView = () => {
+            const pinAllResponse$ = new Subject<{ rows: Row[]; totalElements: number }>();
+            pinTwoParentsInParentView({
+              hasReachedPinLimit: false,
+              pinAllFetch: () => pinAllResponse$,
+            });
+            landUnpinned();
+            service.pinAll();
+            return pinAllResponse$;
+          };
+
+          it('discards the result when the view identity changes', () => {
+            const pinAllResponse$ = pinAllInParentView();
+            const pinsBeforeSwitch = service.pinnedItems();
+            const loggerWarnSpy = jest.spyOn(TestBed.inject(LoggerService), 'warn');
+            const toastWarnSpy = jest.spyOn(
+              TestBed.inject(ToastNotificationService),
+              'showWarning',
+            );
+
+            service.setDropdownSelection(CHILD_VIEW);
+            pinAllResponse$.next({ rows: [parentRow('parent3')], totalElements: 2 });
+
+            expect(service.pinnedItems()).toBe(pinsBeforeSwitch);
+            expect(recordedIdentity()).toEqual(PARENT_VIEW_IDENTITY);
+            expect(toastWarnSpy).not.toHaveBeenCalled();
+            expect(loggerWarnSpy).toHaveBeenCalledTimes(1);
+          });
+
+          it('writes the result when the new view has the same identity', () => {
+            const pinAllResponse$ = pinAllInParentView();
+
+            service.setDropdownSelection(OTHER_PARENT_VIEW);
+            pinAllResponse$.next({ rows: [parentRow('parent3')], totalElements: 1 });
+
+            expect(service.pinnedItems()).toEqual(['parent1', 'parent2', 'parent3']);
+          });
+        });
+      });
+
+      it('counts pins by parent in a view with a parent key', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+
+        pinInChildView(...childrenOf(1, 4), ...childrenOf(2, 4), ...childrenOf(3, 4));
+
+        expect(service.pinnedRowCount()).toBe(12);
+        expect(service.pinCount()).toBe(3);
+      });
+
+      it('lets a child of a pinned parent be pinned at the limit', () => {
+        pinTwoParentsInChildView();
+        const childOfPinnedParent = childRow('child1c', 'parent1');
+
+        service.pinItem(childOfPinnedParent);
+
+        expect(service.isPinned('child1c')).toBe(true);
+      });
+
+      it('does not let a row of a new parent be pinned at the limit', () => {
+        pinTwoParentsInChildView();
+        const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
+        const childOfNewParent = childRow('child3a', 'parent3');
+
+        expect(service.isPinToggleEnabled(childOfNewParent)).toBe(false);
+        service.pinItem(childOfNewParent);
+
+        expect(service.isPinned('child3a')).toBe(false);
+        expect(warnSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it('always lets a pinned row be unpinned', () => {
+        pinTwoParentsInChildView();
+        const pinnedChild = childRow('child2a', 'parent2');
+
+        expect(service.isPinToggleEnabled(pinnedChild)).toBe(true);
+        service.togglePin(pinnedChild);
+
+        expect(service.isPinned('child2a')).toBe(false);
+      });
+
+      it('keeps every row of a fan-out whose parents are within the limit', () => {
+        const PIN_LIMIT = 50;
+        const CHILDREN_PER_PARENT = 3;
+        const parentNumbers = Array.from({ length: PIN_LIMIT }, (_, index) => index + 1);
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        service.setPinLimit(PIN_LIMIT);
+        pinInParentView(...parentNumbers.map((parentNumber) => `parent${parentNumber}`));
+        service.setDropdownSelection(CHILD_VIEW);
+        const pinsBeforeFanOut = service.pinnedItems();
+        const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
+
+        landPinned(
+          ...parentNumbers.flatMap((parentNumber) => childrenOf(parentNumber, CHILDREN_PER_PARENT)),
+        );
+
+        expect(service.pinnedData()).toHaveLength(PIN_LIMIT * CHILDREN_PER_PARENT);
+        expect(service.pinnedItems()).toBe(pinsBeforeFanOut);
+        expect(warnSpy).not.toHaveBeenCalled();
+      });
+
+      it('caps by parent in response order without splitting a parent', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        service.setPinLimit(2);
+        const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
+
+        landPinned(
+          childRow('child2a', 'parent2'),
+          childRow('child1a', 'parent1'),
+          childRow('child3a', 'parent3'),
+          childRow('child1b', 'parent1'),
+        );
+
+        expect(service.pinnedItems()).toEqual(['child2a', 'child1a', 'child1b']);
+        expect(service.pinnedParents()).toEqual(['parent2', 'parent1']);
+        expect(warnSpy).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
   describe('global pinned items cache', () => {
     const mockConfigs: ComparisonToolConfig[] = [
       {
@@ -185,9 +923,9 @@ describe('ComparisonToolService', () => {
     });
 
     it('should carry over pinned items when switching dropdown selections', () => {
-      service.pinItem('item1');
+      service.pinItem(row('item1'));
       service.fetchPinned(of({ data: [{ _id: 'item1' }], totalCount: 1 }));
-      service.pinItem('item2');
+      service.pinItem(row('item2'));
       service.fetchPinned(of({ data: [{ _id: 'item1' }, { _id: 'item2' }], totalCount: 2 }));
       expect(service.pinnedItemsSet().size).toBe(2);
 
@@ -198,10 +936,10 @@ describe('ComparisonToolService', () => {
     });
 
     it('should preserve cache when switching selections without modifying pins', () => {
-      service.pinItem('item1');
+      service.pinItem(row('item1'));
       service.fetchPinned(of({ data: [{ _id: 'item1' }], totalCount: 1 }));
 
-      service.pinItem('item2');
+      service.pinItem(row('item2'));
       service.fetchPinned(of({ data: [{ _id: 'item1' }, { _id: 'item2' }], totalCount: 2 }));
       const initialPins = (service as any).querySignal().pinnedItems;
 
@@ -218,16 +956,16 @@ describe('ComparisonToolService', () => {
     });
 
     it('should handle pinning/unpinning across different selections', () => {
-      service.pinItem('item1');
+      service.pinItem(row('item1'));
       service.fetchPinned(of({ data: [{ _id: 'item1' }], totalCount: 1 }));
-      service.pinItem('item2');
+      service.pinItem(row('item2'));
       service.fetchPinned(of({ data: [{ _id: 'item1' }, { _id: 'item2' }], totalCount: 2 }));
       expect(service.pinnedItemsSet().size).toBe(2);
 
       service.setDropdownSelection(['category1', 'option2']);
       expect(service.pinnedItemsSet().size).toBe(2);
 
-      service.pinItem('item3');
+      service.pinItem(row('item3'));
       service.fetchPinned(
         of({ data: [{ _id: 'item1' }, { _id: 'item2' }, { _id: 'item3' }], totalCount: 3 }),
       );
@@ -244,11 +982,11 @@ describe('ComparisonToolService', () => {
     });
 
     it('should handle unpinning items and carry over changes', () => {
-      service.pinItem('item1');
+      service.pinItem(row('item1'));
       service.fetchPinned(of({ data: [{ _id: 'item1' }], totalCount: 1 }));
-      service.pinItem('item2');
+      service.pinItem(row('item2'));
       service.fetchPinned(of({ data: [{ _id: 'item1' }, { _id: 'item2' }], totalCount: 2 }));
-      service.pinItem('item3');
+      service.pinItem(row('item3'));
       service.fetchPinned(
         of({ data: [{ _id: 'item1' }, { _id: 'item2' }, { _id: 'item3' }], totalCount: 3 }),
       );
@@ -266,13 +1004,13 @@ describe('ComparisonToolService', () => {
     });
 
     it('should handle toggling pins correctly across selections', () => {
-      service.togglePin('item1');
+      service.togglePin(row('item1'));
       expect(service.isPinned('item1')).toBe(true);
 
-      service.togglePin('item1');
+      service.togglePin(row('item1'));
       expect(service.isPinned('item1')).toBe(false);
 
-      service.togglePin('item1');
+      service.togglePin(row('item1'));
       expect(service.isPinned('item1')).toBe(true);
 
       service.setDropdownSelection(['category1', 'option2']);
@@ -307,7 +1045,7 @@ describe('ComparisonToolService', () => {
   describe('pin/unpin functionality', () => {
     it('should track pinned items correctly', () => {
       connectService();
-      service.pinItem('id1');
+      service.pinItem(row('id1'));
 
       expect(service.isPinned('id1')).toBe(true);
       expect(service.isPinned('id2')).toBe(false);
@@ -315,42 +1053,42 @@ describe('ComparisonToolService', () => {
 
     it('should toggle pin state', () => {
       connectService();
-      service.togglePin('id1');
+      service.togglePin(row('id1'));
 
       expect(service.isPinned('id1')).toBe(true);
 
-      service.togglePin('id1');
+      service.togglePin(row('id1'));
 
       expect(service.isPinned('id1')).toBe(false);
     });
 
-    it('should not pin beyond the max pinned items', () => {
+    it('should not pin beyond the pin limit', () => {
       connectService();
-      service.setMaxPinnedItems(2);
+      service.setPinLimit(2);
       service.fetchPinned(of({ data: [{ _id: 'id1' }, { _id: 'id2' }], totalCount: 2 }));
       service.setPinnedItems(['id1', 'id2']);
 
-      service.pinItem('id3');
+      service.pinItem(row('id3'));
 
       expect(service.isPinned('id1')).toBe(true);
       expect(service.isPinned('id2')).toBe(true);
       expect(service.isPinned('id3')).toBe(false);
     });
 
-    it('should clamp the configured max pinned items to MAX_PINNED_ITEMS', () => {
+    it('should clamp the configured pin limit to MAX_PIN_LIMIT', () => {
       connectService();
 
-      service.setMaxPinnedItems(MAX_PINNED_ITEMS + 10);
+      service.setPinLimit(MAX_PIN_LIMIT + 10);
 
-      expect(service.maxPinnedItems()).toBe(MAX_PINNED_ITEMS);
+      expect(service.pinLimit()).toBe(MAX_PIN_LIMIT);
     });
 
     it('should not add duplicate items when pinItem is called multiple times with same id', () => {
       connectService();
 
-      service.pinItem('id1');
-      service.pinItem('id1');
-      service.pinItem('id1');
+      service.pinItem(row('id1'));
+      service.pinItem(row('id1'));
+      service.pinItem(row('id1'));
 
       expect(service.pinnedItems()).toEqual(['id1']);
       expect(service.isPinned('id1')).toBe(true);
@@ -371,7 +1109,7 @@ describe('ComparisonToolService', () => {
     it('should handle setPinnedItems with null and return empty array', () => {
       connectService();
 
-      service.pinItem('id1');
+      service.pinItem(row('id1'));
       expect(service.isPinned('id1')).toBe(true);
 
       service.setPinnedItems(null);
@@ -383,13 +1121,13 @@ describe('ComparisonToolService', () => {
     it('should maintain data integrity when pinning, unpinning, and re-pinning same item', () => {
       connectService();
 
-      service.pinItem('id1');
+      service.pinItem(row('id1'));
       expect(service.isPinned('id1')).toBe(true);
 
       service.unpinItem('id1');
       expect(service.isPinned('id1')).toBe(false);
 
-      service.pinItem('id1');
+      service.pinItem(row('id1'));
       expect(service.isPinned('id1')).toBe(true);
 
       expect(service.pinnedItems()).toEqual(['id1']);
@@ -397,12 +1135,10 @@ describe('ComparisonToolService', () => {
   });
 
   describe('pinned data capping', () => {
-    const rows = (...ids: string[]) => ids.map((id) => ({ _id: id }));
-
-    it('should trim pinned data down to the max pinned items and warn', () => {
+    it('should trim pinned data down to the pin limit and warn', () => {
       connectService();
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
-      service.setMaxPinnedItems(2);
+      service.setPinLimit(2);
 
       service.fetchPinned(of({ data: rows('id1', 'id2', 'id3'), totalCount: 3 }));
 
@@ -417,7 +1153,7 @@ describe('ComparisonToolService', () => {
     it('should use singular wording when only one item could be pinned', () => {
       connectService();
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
-      service.setMaxPinnedItems(1);
+      service.setPinLimit(1);
 
       service.fetchPinned(of({ data: rows('id1', 'id2'), totalCount: 2 }));
 
@@ -426,10 +1162,10 @@ describe('ComparisonToolService', () => {
       );
     });
 
-    it('should leave pinned data at the max pinned items untouched', () => {
+    it('should leave pinned data at the pin limit untouched', () => {
       connectService();
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
-      service.setMaxPinnedItems(2);
+      service.setPinLimit(2);
       service.setPinnedItems(['id1', 'id2']);
 
       service.fetchPinned(of({ data: rows('id1', 'id2'), totalCount: 2 }));
@@ -441,7 +1177,7 @@ describe('ComparisonToolService', () => {
 
     it('should not republish the pins when the row id is not unique in the data', () => {
       connectService();
-      service.setMaxPinnedItems(2);
+      service.setPinLimit(2);
       service.setPinnedItems(['id1', 'id2']);
       const pinsBeforeTrim = service.pinnedItems();
 
@@ -456,7 +1192,7 @@ describe('ComparisonToolService', () => {
       connectService(mockComparisonToolDataConfig, {
         initialParams: { pinnedItems: ['id1', 'id2', 'id3'] },
       });
-      service.setMaxPinnedItems(2);
+      service.setPinLimit(2);
       expect(service.pinnedItems()).toEqual(['id1', 'id2', 'id3']);
 
       service.fetchPinned(of({ data: rows('id1', 'id2', 'id3'), totalCount: 3 }));
@@ -466,8 +1202,6 @@ describe('ComparisonToolService', () => {
   });
 
   describe('pinAll', () => {
-    const rows = (...ids: string[]) => ids.map((id) => ({ _id: id }));
-
     const pinnedRows = (...ids: string[]) => {
       service.setPinnedItems(ids);
       service.fetchPinned(of({ data: rows(...ids), totalCount: ids.length }));
@@ -476,9 +1210,14 @@ describe('ComparisonToolService', () => {
     const stubFetch = (result: { rows: Row[]; totalElements: number }) =>
       jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() => of(result));
 
+    const connectWithMatchingRows = (pinAllFetch: PinAllFetch<Row>) => {
+      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      landUnpinned();
+    };
+
     it('should union the returned rows with the existing pins', () => {
       const pinAllFetch = stubFetch({ rows: rows('id2', 'id3'), totalElements: 2 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       pinnedRows('id1');
 
       service.pinAll();
@@ -488,30 +1227,30 @@ describe('ComparisonToolService', () => {
 
     it('should request only the pins the user has left', () => {
       const pinAllFetch = stubFetch({ rows: [], totalElements: 0 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
-      service.setMaxPinnedItems(3);
+      connectWithMatchingRows(pinAllFetch);
+      service.setPinLimit(3);
       pinnedRows('id1');
 
       service.pinAll();
 
-      expect(pinAllFetch).toHaveBeenCalledWith(service.query(), 2);
+      expect(pinAllFetch).toHaveBeenCalledWith(service.query(), 2, undefined);
     });
 
-    it('should never request more than MAX_PINNED_ITEMS', () => {
+    it('should never request more than MAX_PIN_LIMIT', () => {
       const pinAllFetch = stubFetch({ rows: [], totalElements: 0 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
-      service.setMaxPinnedItems(MAX_PINNED_ITEMS + 10);
+      connectWithMatchingRows(pinAllFetch);
+      service.setPinLimit(MAX_PIN_LIMIT + 10);
 
       service.pinAll();
 
-      expect(pinAllFetch).toHaveBeenCalledWith(service.query(), MAX_PINNED_ITEMS);
+      expect(pinAllFetch).toHaveBeenCalledWith(service.query(), MAX_PIN_LIMIT, undefined);
     });
 
     it('should show an error when the fetch fails', () => {
       const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() =>
         throwError(() => new Error('boom')),
       );
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       const errorSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showError');
 
       service.pinAll();
@@ -523,9 +1262,9 @@ describe('ComparisonToolService', () => {
 
     it('should warn when there were more matching rows than could be pinned', () => {
       const pinAllFetch = stubFetch({ rows: rows('id1', 'id2'), totalElements: 5 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
-      service.setMaxPinnedItems(2);
+      service.setPinLimit(2);
 
       service.pinAll();
 
@@ -536,7 +1275,7 @@ describe('ComparisonToolService', () => {
 
     it('should not warn when every matching row was pinned', () => {
       const pinAllFetch = stubFetch({ rows: rows('id1', 'id2'), totalElements: 2 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
 
       service.pinAll();
@@ -545,10 +1284,10 @@ describe('ComparisonToolService', () => {
       expect(warnSpy).not.toHaveBeenCalled();
     });
 
-    it('should do nothing when already at the max pinned items', () => {
+    it('should do nothing when already at the pin limit', () => {
       const pinAllFetch = stubFetch({ rows: rows('id2'), totalElements: 1 });
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
-      service.setMaxPinnedItems(1);
+      connectWithMatchingRows(pinAllFetch);
+      service.setPinLimit(1);
       pinnedRows('id1');
 
       service.pinAll();
@@ -557,26 +1296,54 @@ describe('ComparisonToolService', () => {
       expect(service.pinnedItems()).toEqual(['id1']);
     });
 
-    it('should do nothing while table data is loading', () => {
-      const pinAllFetch = stubFetch({ rows: rows('id1'), totalElements: 1 });
+    it('should do nothing when no rows match the query', () => {
+      const pinAllFetch = stubFetch({ rows: [], totalElements: 0 });
       connectService(mockComparisonToolDataConfig, { pinAllFetch });
-      service.fetchUnpinned(new Subject<never>());
+      landUnpinned({ totalCount: 0 });
 
       service.pinAll();
 
       expect(pinAllFetch).not.toHaveBeenCalled();
     });
 
+    it('should do nothing while table data is loading', () => {
+      const pinAllFetch = stubFetch({ rows: rows('id1'), totalElements: 1 });
+      connectWithMatchingRows(pinAllFetch);
+      service.fetchUnpinned(new Subject<never>());
+      expect(service.canPinAll()).toBe(true);
+
+      service.pinAll();
+
+      expect(pinAllFetch).not.toHaveBeenCalled();
+    });
+
+    it('should report pinning all only while the fetch is in flight', () => {
+      const response$ = new Subject<{ rows: Row[]; totalElements: number }>();
+      const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(
+        () => response$,
+      );
+      connectWithMatchingRows(pinAllFetch);
+      expect(service.isPinningAll()).toBe(false);
+
+      service.pinAll();
+      expect(service.isPinningAll()).toBe(true);
+
+      response$.next({ rows: rows('id1'), totalElements: 1 });
+      response$.complete();
+      expect(service.isPinningAll()).toBe(false);
+    });
+
     it('should clear the loading state when the fetch fails', () => {
       const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(() =>
         throwError(() => new Error('boom')),
       );
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
 
       service.pinAll();
 
       expect(pinAllFetch).toHaveBeenCalled();
       expect(service.isLoadingTableData()).toBe(false);
+      expect(service.isPinningAll()).toBe(false);
       expect(service.pinnedItems()).toEqual([]);
     });
 
@@ -584,7 +1351,7 @@ describe('ComparisonToolService', () => {
       const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(
         () => EMPTY,
       );
-      connectService(mockComparisonToolDataConfig, { pinAllFetch });
+      connectWithMatchingRows(pinAllFetch);
 
       service.pinAll();
 
@@ -605,7 +1372,7 @@ describe('ComparisonToolService', () => {
         connectService();
         flushInitialUrlSync();
 
-        service.pinItem('id1');
+        service.pinItem(row('id1'));
         service.fetchPinned(of({ data: [{ _id: 'id1' }], totalCount: 1 }));
         tick();
 
@@ -623,11 +1390,11 @@ describe('ComparisonToolService', () => {
         connectService();
         flushInitialUrlSync();
 
-        service.pinItem('id3');
+        service.pinItem(row('id3'));
         service.fetchPinned(of({ data: [{ _id: 'id3' }], totalCount: 1 }));
-        service.pinItem('id1');
+        service.pinItem(row('id1'));
         service.fetchPinned(of({ data: [{ _id: 'id3' }, { _id: 'id1' }], totalCount: 2 }));
-        service.pinItem('id2');
+        service.pinItem(row('id2'));
         service.fetchPinned(
           of({ data: [{ _id: 'id3' }, { _id: 'id1' }, { _id: 'id2' }], totalCount: 3 }),
         );
@@ -651,9 +1418,9 @@ describe('ComparisonToolService', () => {
         connectService();
         flushInitialUrlSync();
 
-        service.pinItem('id1');
+        service.pinItem(row('id1'));
         service.fetchPinned(of({ data: [{ _id: 'id1' }], totalCount: 1 }));
-        service.pinItem('id2');
+        service.pinItem(row('id2'));
         service.fetchPinned(of({ data: [{ _id: 'id1' }, { _id: 'id2' }], totalCount: 2 }));
         service.unpinItem('id1');
         service.fetchPinned(of({ data: [{ _id: 'id2' }], totalCount: 1 }));
@@ -681,7 +1448,7 @@ describe('ComparisonToolService', () => {
         connectService();
         flushInitialUrlSync();
 
-        service.pinItem('id1');
+        service.pinItem(row('id1'));
         service.fetchPinned(of({ data: [{ _id: 'id1' }], totalCount: 1 }));
         tick();
         expect(getLastNavigateCall()?.[1]?.queryParams?.pinned).toEqual('id1');
@@ -804,7 +1571,7 @@ describe('ComparisonToolService', () => {
         connectService(mockConfigsWithDropdowns, { selection: ['Category A', 'Option 1'] });
         flushInitialUrlSync();
 
-        service.pinItem('id1');
+        service.pinItem(row('id1'));
         service.fetchPinned(of({ data: [{ _id: 'id1' }], totalCount: 1 }));
         tick();
 
@@ -830,7 +1597,7 @@ describe('ComparisonToolService', () => {
         connectService(mockConfigsWithDropdowns, { selection: ['Category A', 'Option 1'] });
         flushInitialUrlSync();
 
-        service.pinItem('id1');
+        service.pinItem(row('id1'));
         service.fetchPinned(of({ data: [{ _id: 'id1' }], totalCount: 1 }));
         tick();
 
@@ -839,7 +1606,7 @@ describe('ComparisonToolService', () => {
         expect(service.pinnedItems().length).toBe(1);
         expect(service.pinnedItems()).toEqual(['id1']);
 
-        service.pinItem('id2');
+        service.pinItem(row('id2'));
         service.fetchPinned(of({ data: [{ _id: 'id1' }, { _id: 'id2' }], totalCount: 2 }));
         tick();
 
@@ -1020,7 +1787,7 @@ describe('ComparisonToolService', () => {
       service.updateQuery({ pageNumber: 6 });
       expect(service.pageNumber()).toBe(6);
 
-      service.pinItem('id1');
+      service.pinItem(row('id1'));
 
       expect(service.pageNumber()).toBe(6);
     });
@@ -1028,7 +1795,7 @@ describe('ComparisonToolService', () => {
     it('should not reset page when item is unpinned', () => {
       connectService();
 
-      service.pinItem('id1');
+      service.pinItem(row('id1'));
 
       service.updateQuery({ pageNumber: 7 });
       expect(service.pageNumber()).toBe(7);
@@ -1382,7 +2149,7 @@ describe('ComparisonToolService', () => {
       first$.complete();
 
       expect(service.unpinnedData()).toEqual([{ _id: 'newest' }]);
-      expect(service.totalResultsCount()).toBe(1);
+      expect(service.unpinnedRowCount()).toBe(1);
     });
 
     it('keeps the pending-fetch counter balanced when a request is superseded before it emits', () => {
@@ -1419,13 +2186,13 @@ describe('ComparisonToolService', () => {
 
       expect(service.unpinnedData()).toEqual([{ _id: 'unpinned' }]);
       expect(service.pinnedData()).toEqual([{ _id: 'pinned' }]);
-      expect(service.pinnedResultsCount()).toBe(1);
+      expect(service.pinnedRowCount()).toBe(1);
     });
 
-    it('caps pinned data from the fetch stream at the max pinned items and warns', () => {
+    it('caps pinned data from the fetch stream at the pin limit and warns', () => {
       connectService();
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
-      service.setMaxPinnedItems(2);
+      service.setPinLimit(2);
 
       const pinned$ = new Subject<Result>();
       service.fetchPinned(pinned$);
@@ -1437,7 +2204,7 @@ describe('ComparisonToolService', () => {
 
       expect(service.pinnedData()).toEqual([{ _id: 'id1' }, { _id: 'id2' }]);
       expect(service.pinnedItems()).toEqual(['id1', 'id2']);
-      expect(service.pinnedResultsCount()).toBe(2);
+      expect(service.pinnedRowCount()).toBe(2);
       expect(warnSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -1449,7 +2216,7 @@ describe('ComparisonToolService', () => {
       failing$.error(new Error('request failed'));
 
       expect(service.unpinnedData()).toEqual([]);
-      expect(service.totalResultsCount()).toBe(0);
+      expect(service.unpinnedRowCount()).toBe(0);
       expect(service.isLoadingTableData()).toBe(false);
 
       const recovered$ = new Subject<Result>();
@@ -1458,7 +2225,7 @@ describe('ComparisonToolService', () => {
       recovered$.complete();
 
       expect(service.unpinnedData()).toEqual([{ _id: 'recovered' }]);
-      expect(service.totalResultsCount()).toBe(1);
+      expect(service.unpinnedRowCount()).toBe(1);
     });
   });
 

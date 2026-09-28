@@ -29,6 +29,10 @@ export const COMPARISON_TOOL_API_PATHS: Record<ComparisonToolPage, string> = {
 // category dropdown. The map above holds the RNA endpoint, the default for that page.
 export const PROTEOMICS_API_PATH = '/comparison-tools/proteomics';
 
+export const DIFFERENTIAL_EXPRESSION_CT_PAGE: ComparisonToolPage = 'Differential Expression';
+export const DIFFERENTIAL_EXPRESSION_PROTEIN_CATEGORY = 'PROTEIN - DIFFERENTIAL EXPRESSION';
+export const DIFFERENTIAL_EXPRESSION_DROPDOWN_INDEX = { MAIN_CATEGORY: 0, TISSUE: 1 } as const;
+
 export const DIFFERENTIAL_EXPRESSION_NAV_TRAILS: Record<'RNA' | 'PROTEIN', HeaderNavTrail> = {
   RNA: {
     dropdown: 'Differential Expression',
