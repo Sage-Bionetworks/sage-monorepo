@@ -10,6 +10,7 @@ import { LegacyComparisonToolUrlRedirectFn } from '@sagebionetworks/explorers/mo
 import { parseCommaSeparatedQueryParam } from '@sagebionetworks/shared/util';
 import {
   createLegacyComparisonToolUrlGuard,
+  LEGACY_URL_IN_APP_NAVIGATION_MESSAGE,
   LEGACY_URL_REDIRECTED_MESSAGE,
   LEGACY_URL_TRANSLATION_FAILED_MESSAGE,
 } from './legacy-comparison-tool-url.guard';
@@ -200,13 +201,26 @@ describe('createLegacyComparisonToolUrlGuard', () => {
       error = jest.spyOn(logger, 'error').mockImplementation();
     });
 
-    it('should record every redirect as a breadcrumb with the legacy and rewritten URLs', () => {
+    it('should record a redirect on page load as a breadcrumb with both URLs', () => {
       const result = runGuard(() => ({ categories: ['RNA'], pinnedItems: [] }), legacyQueryParams);
 
       expect(log).toHaveBeenCalledWith(LEGACY_URL_REDIRECTED_MESSAGE, {
         from: buildUrl(legacyQueryParams, ''),
         to: serialize(result),
       });
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    it('should warn with both URLs when a legacy URL is reached by in-app navigation', () => {
+      TestBed.inject(Router).navigated = true;
+
+      const result = runGuard(() => ({ categories: ['RNA'], pinnedItems: [] }), legacyQueryParams);
+
+      expect(warn).toHaveBeenCalledWith(LEGACY_URL_IN_APP_NAVIGATION_MESSAGE, {
+        from: buildUrl(legacyQueryParams, ''),
+        to: serialize(result),
+      });
+      expect(log).not.toHaveBeenCalledWith(LEGACY_URL_REDIRECTED_MESSAGE, expect.anything());
     });
 
     it('should record each redirect note as a breadcrumb rather than a warning', () => {

@@ -5,8 +5,24 @@ import {
   parseCommaSeparatedQueryParam,
   stringifyCommaSeparatedQueryParam,
 } from '@sagebionetworks/shared/util';
+import { Logger } from '@sagebionetworks/web-shared/angular/logger';
 
-export function deserializeComparisonToolUrlParams(params: Params): ComparisonToolUrlParams {
+export const INVALID_SORT_ORDERS_MESSAGE =
+  'deserializeComparisonToolUrlParams: sort orders do not match sort fields';
+
+// The order the comparison tool gives a sort field that has none, so an unreadable order falls back
+// to what the tool would have applied anyway.
+const FALLBACK_SORT_ORDER: SortOrder = 1;
+
+/**
+ * Pass `logger` to report URL params the comparison tool never writes itself, such as sort orders
+ * that don't pair up with their sort fields. Callers that only read the params leave it out, so one
+ * URL is reported once.
+ */
+export function deserializeComparisonToolUrlParams(
+  params: Params,
+  logger?: Pick<Logger, 'warn'>,
+): ComparisonToolUrlParams {
   const result: ComparisonToolUrlParams = {};
 
   const pinnedItems = parseCommaSeparatedQueryParam(params['pinned']);
@@ -24,9 +40,18 @@ export function deserializeComparisonToolUrlParams(params: Params): ComparisonTo
     result.sortFields = sortFields;
   }
 
-  const sortOrders = parseSortOrdersParam(params['sortOrders']);
+  const { sortOrders, hasInvalidSortOrder } = parseSortOrdersParam(params['sortOrders']);
   if (sortOrders.length > 0) {
     result.sortOrders = sortOrders;
+  }
+
+  // The tool writes one order per sort field, so an unreadable order or a count mismatch means the
+  // URL was edited or built elsewhere, and the sort it shows may not be the one intended.
+  if (hasInvalidSortOrder || sortOrders.length !== sortFields.length) {
+    logger?.warn(INVALID_SORT_ORDERS_MESSAGE, {
+      sortFields: params['sortFields'] ?? null,
+      sortOrders: params['sortOrders'] ?? null,
+    });
   }
 
   const filterSelections = deserializeFilterSelections(params);
@@ -125,14 +150,26 @@ function deserializeFilterSelections(params: Params): Record<string, string[]> {
   return filterSelections;
 }
 
-function parseSortOrdersParam(value: string | string[] | null | undefined): SortOrder[] {
-  if (value == null) {
-    return [];
+// An unreadable entry keeps its position, with the fallback order, so every later order still lines
+// up with its own sort field.
+function parseSortOrdersParam(value: string | string[] | null | undefined): {
+  sortOrders: SortOrder[];
+  hasInvalidSortOrder: boolean;
+} {
+  const stringValue = Array.isArray(value) ? value.join(',') : (value ?? '');
+  if (stringValue.trim() === '') {
+    return { sortOrders: [], hasInvalidSortOrder: false };
   }
 
-  const stringValue = Array.isArray(value) ? value.join(',') : value;
-  return stringValue
-    .split(',')
-    .map((order) => parseInt(order.trim(), 10))
-    .filter((order): order is SortOrder => order === 1 || order === -1);
+  let hasInvalidSortOrder = false;
+  const sortOrders = stringValue.split(',').map((entry): SortOrder => {
+    const order = Number(entry.trim());
+    if (order === 1 || order === -1) {
+      return order;
+    }
+    hasInvalidSortOrder = true;
+    return FALLBACK_SORT_ORDER;
+  });
+
+  return { sortOrders, hasInvalidSortOrder };
 }

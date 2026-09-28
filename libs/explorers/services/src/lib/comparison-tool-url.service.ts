@@ -9,6 +9,7 @@ import {
   deserializeComparisonToolUrlParams,
   serializeComparisonToolUrlParams,
 } from './comparison-tool-url-params';
+import { LoggerService } from './logger.service';
 
 export const COMPARISON_TOOL_URL_SYNC_DEBOUNCE_MS = 50;
 
@@ -17,10 +18,13 @@ export class ComparisonToolUrlService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
 
+  // Only this stream reports malformed params: it sees each URL change once, whereas syncToUrl
+  // re-reads the same URL on every state write.
   readonly params$: Observable<ComparisonToolUrlParams> = this.route.queryParams.pipe(
     debounceTime(COMPARISON_TOOL_URL_SYNC_DEBOUNCE_MS),
-    map((params) => this.deserialize(params)),
+    map((params) => deserializeComparisonToolUrlParams(params, this.logger)),
     distinctUntilChanged((prev, curr) => isEqual(prev, curr)),
     shareReplay({ bufferSize: 1, refCount: true }),
     takeUntilDestroyed(this.destroyRef),

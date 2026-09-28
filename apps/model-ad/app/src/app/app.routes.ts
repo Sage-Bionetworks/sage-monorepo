@@ -102,6 +102,7 @@ export const routes: Route[] = [
   {
     path: ROUTE_PATHS.DIFFERENTIAL_EXPRESSION,
     canActivate: [legacyDifferentialExpressionUrlGuard],
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadChildren: () =>
       import('@sagebionetworks/model-ad/differential-expression-comparison-tool').then(
         (routes) => routes.routes,

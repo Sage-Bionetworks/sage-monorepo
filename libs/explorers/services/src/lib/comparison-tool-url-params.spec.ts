@@ -2,6 +2,7 @@ import { Params } from '@angular/router';
 import { ComparisonToolUrlParams } from '@sagebionetworks/explorers/models';
 import {
   deserializeComparisonToolUrlParams,
+  INVALID_SORT_ORDERS_MESSAGE,
   serializeComparisonToolUrlParams,
 } from './comparison-tool-url-params';
 
@@ -57,17 +58,55 @@ describe('deserializeComparisonToolUrlParams', () => {
     expect(filterSelections).toEqual({ models: ['APOE4', '3xTg-AD'], sex: ['Female'] });
   });
 
-  it('should drop sort orders outside the supported values while keeping their sort fields', () => {
-    expect(
-      deserializeComparisonToolUrlParams({
-        sortFields: 'gene_symbol,model',
-        sortOrders: '5,-1',
-      }),
-    ).toEqual({ sortFields: ['gene_symbol', 'model'], sortOrders: [-1] });
-  });
+  describe('sort orders', () => {
+    const sortFields = 'gene_symbol,model';
+    let logger: { warn: jest.Mock };
 
-  it('should omit sort orders when none are supported', () => {
-    expect(deserializeComparisonToolUrlParams({ sortOrders: 'ascending' })).toEqual({});
+    beforeEach(() => {
+      logger = { warn: jest.fn() };
+    });
+
+    it('should keep an unreadable order in place so later orders stay with their fields', () => {
+      const result = deserializeComparisonToolUrlParams({ sortFields, sortOrders: '5,-1' }, logger);
+
+      expect(result).toEqual({ sortFields: ['gene_symbol', 'model'], sortOrders: [1, -1] });
+    });
+
+    it('should warn with the raw params when an order is unreadable', () => {
+      deserializeComparisonToolUrlParams({ sortFields, sortOrders: 'ascending,-1' }, logger);
+
+      expect(logger.warn).toHaveBeenCalledWith(INVALID_SORT_ORDERS_MESSAGE, {
+        sortFields,
+        sortOrders: 'ascending,-1',
+      });
+    });
+
+    it('should warn once when there are fewer orders than fields', () => {
+      deserializeComparisonToolUrlParams({ sortFields, sortOrders: '-1' }, logger);
+
+      expect(logger.warn).toHaveBeenCalledTimes(1);
+    });
+
+    it('should warn when there are sort orders but no sort fields', () => {
+      deserializeComparisonToolUrlParams({ sortOrders: '-1' }, logger);
+
+      expect(logger.warn).toHaveBeenCalledWith(INVALID_SORT_ORDERS_MESSAGE, {
+        sortFields: null,
+        sortOrders: '-1',
+      });
+    });
+
+    it('should not warn when every field has a readable order', () => {
+      deserializeComparisonToolUrlParams({ sortFields, sortOrders: '1,-1' }, logger);
+
+      expect(logger.warn).not.toHaveBeenCalled();
+    });
+
+    it('should not warn when the URL carries no sort', () => {
+      deserializeComparisonToolUrlParams({ categories: ENCODED_CATEGORY }, logger);
+
+      expect(logger.warn).not.toHaveBeenCalled();
+    });
   });
 
   it('should round-trip a serialized state', () => {

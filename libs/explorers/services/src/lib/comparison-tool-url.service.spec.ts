@@ -1,7 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { INVALID_SORT_ORDERS_MESSAGE } from './comparison-tool-url-params';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
+import { LoggerService } from './logger.service';
 
 describe('ComparisonToolUrlService', () => {
   let service: ComparisonToolUrlService;
@@ -298,6 +300,32 @@ describe('ComparisonToolUrlService', () => {
       });
 
       expect(mockRouter.navigate).not.toHaveBeenCalled();
+    });
+
+    describe('malformed sort orders', () => {
+      const malformedSortParams = { sortFields: 'name,score', sortOrders: '0,-1' };
+      let warn: jest.SpyInstance;
+
+      beforeEach(() => {
+        warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+      });
+
+      it('should report them from the URL stream', async () => {
+        queryParamsSubject.next(malformedSortParams);
+
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const params = await firstValueFrom(service.params$);
+        expect(params.sortOrders).toEqual([1, -1]);
+        expect(warn).toHaveBeenCalledWith(INVALID_SORT_ORDERS_MESSAGE, malformedSortParams);
+      });
+
+      it('should not report them again when syncing state against the same URL', () => {
+        mockActivatedRoute.snapshot = { queryParams: malformedSortParams } as any;
+
+        service.syncToUrl({ sortFields: ['name', 'score'], sortOrders: [1, -1] });
+
+        expect(warn).not.toHaveBeenCalled();
+      });
     });
   });
 });

@@ -17,7 +17,6 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "target": "es2024",
     "esModuleInterop": true
   },
   "angularCompilerOptions": {

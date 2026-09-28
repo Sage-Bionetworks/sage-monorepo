@@ -1,6 +1,7 @@
 import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import { Sex } from '@sagebionetworks/model-ad/api-client';
 import {
+  CURRENT_PINS_IN_LEGACY_URL_MESSAGE,
   DROPPED_LEGACY_PINS_MESSAGE,
   LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
   LEGACY_SEX_CATEGORY_PREFIX,
@@ -165,11 +166,36 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
     });
   });
 
-  describe('pins that need no translation', () => {
-    it('should pass through pins that already carry a sex', () => {
+  describe('pins that already carry a sex', () => {
+    it('should pass them through', () => {
       const result = resolveRedirect(legacyCategories('Females'), ['ENSG1~APOE4~Male']);
 
       expect(result?.pinnedItems).toEqual(['ENSG1~APOE4~Male']);
+    });
+
+    it('should warn, since no release pairs them with the legacy sex category', () => {
+      const result = resolveRedirect(legacyCategories('Females'), [
+        'ENSG1~APOE4',
+        'ENSG2~3xTg-AD~Male',
+      ]);
+
+      expect(result?.warnings).toEqual([
+        {
+          message: CURRENT_PINS_IN_LEGACY_URL_MESSAGE,
+          data: { cohort: 'Females', currentPinnedItems: ['ENSG2~3xTg-AD~Male'] },
+        },
+      ]);
+    });
+
+    it('should not count toward the both-sexes pin limit', () => {
+      const pinnedItems = [...legacyPins(MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE), 'ENSG1~3xTg-AD~Male'];
+
+      const result = resolveRedirect(legacyCategories('Females & Males'), pinnedItems);
+
+      expect(result?.pinnedItems?.filter((pin) => pin.endsWith(Sex.Male))).toHaveLength(
+        MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE + 1,
+      );
+      expect(result).not.toHaveProperty('notes');
     });
 
     it('should deduplicate pins that translate to the same id', () => {

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
   ColumnConfig,
@@ -650,23 +650,50 @@ test.describe('differential expression', () => {
   // model whose parentheses and slash go through the app's CustomUrlSerializer, which the unit spec
   // does not use. Legacy category values are literals here for the same reason as the header tests
   // above: @sagebionetworks/model-ad/config cannot be imported from e2e.
-  test('legacy share URL expands every pin into both sexes', async ({ page }) => {
+  test.describe('legacy share URLs', () => {
     const hemibrainCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain'];
     const legacyCategories = [...hemibrainCategories, 'Sex - Females & Males'];
     const hemibrainModels = ['5xFAD (IU/Jax/Pitt)', 'APOE4'];
     const legacyCacul1Pins = hemibrainModels.map((model) => `${cacul1EnsemblGeneId}~${model}`);
     const expectedCacul1Pins = legacyCacul1Pins.flatMap((pin) => [`${pin}~Female`, `${pin}~Male`]);
-    const queryParameters = [
+    const legacyQueryParameters = [
       getQueryParamFromValues(legacyCategories, 'categories'),
       getQueryParamFromValues(legacyCacul1Pins, 'pinned'),
       getQueryParamFromValues(hemibrainModels, 'models'),
     ].join('&');
 
-    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    const expectRewrittenLegacyUrl = async (page: Page) => {
+      await expectCategoriesParams(page, hemibrainCategories);
+      await expectCategories(page, hemibrainCategories);
+      await expectPinnedParams(page, expectedCacul1Pins);
+      await expectPinnedRows(page, expectedCacul1Pins);
+    };
 
-    await expectCategoriesParams(page, hemibrainCategories);
-    await expectCategories(page, hemibrainCategories);
-    await expectPinnedParams(page, expectedCacul1Pins);
-    await expectPinnedRows(page, expectedCacul1Pins);
+    test('legacy share URL expands every pin into both sexes', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true, 'url', legacyQueryParameters);
+
+      await expectRewrittenLegacyUrl(page);
+    });
+
+    // The tool's URL is all query params, so reaching a legacy URL from the open tool is a query-only
+    // navigation, which skips canActivate unless the route opts in. Back and Forward into history
+    // from before the release take this path, and are simulated here with pushState and popstate.
+    test('legacy URL reached from within the tool is rewritten too', async ({ page }) => {
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        getQueryParamFromValues(hemibrainCategories, 'categories'),
+      );
+
+      const legacyUrl = `${new URL(page.url()).pathname}?${legacyQueryParameters}`;
+      await page.evaluate((url) => {
+        history.pushState(null, '', url);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      }, legacyUrl);
+
+      await expectRewrittenLegacyUrl(page);
+    });
   });
 });

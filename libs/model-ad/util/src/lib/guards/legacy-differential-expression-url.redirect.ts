@@ -31,6 +31,8 @@ export const LEGACY_BOTH_SEXES_NARROWED_MESSAGE =
   'legacyDifferentialExpressionUrlRedirect: narrowed a both-sexes cohort to females to fit the pin budget';
 export const DROPPED_LEGACY_PINS_MESSAGE =
   'legacyDifferentialExpressionUrlRedirect: dropped pinned items that could not be translated';
+export const CURRENT_PINS_IN_LEGACY_URL_MESSAGE =
+  'legacyDifferentialExpressionUrlRedirect: legacy URL carried pinned items that already have a sex';
 
 export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRedirectFn = (
   params,
@@ -52,20 +54,25 @@ export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRed
   const cohortSexes = Object.hasOwn(LEGACY_SEX_COHORT_SEXES, legacyCohort)
     ? LEGACY_SEX_COHORT_SEXES[legacyCohort]
     : undefined;
+  const legacyPinCount = legacyPinnedItems.filter(
+    (pinnedItem) => countPinSegments(pinnedItem) === LEGACY_PIN_SEGMENT_COUNT,
+  ).length;
   const isNarrowedToFemales =
     cohortSexes !== undefined &&
     cohortSexes.length > 1 &&
-    legacyPinnedItems.length > MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE;
+    legacyPinCount > MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE;
   const sexes = isNarrowedToFemales ? [Sex.Female] : (cohortSexes ?? []);
 
   const currentPinnedItems = new Set<string>();
+  const passedThroughPinnedItems: string[] = [];
   const droppedPinnedItems: string[] = [];
 
   for (const pinnedItem of legacyPinnedItems) {
-    const segmentCount = pinnedItem.split(PIN_SEGMENT_DELIMITER).length;
+    const segmentCount = countPinSegments(pinnedItem);
 
     if (segmentCount === CURRENT_PIN_SEGMENT_COUNT) {
       currentPinnedItems.add(pinnedItem);
+      passedThroughPinnedItems.push(pinnedItem);
     } else if (segmentCount === LEGACY_PIN_SEGMENT_COUNT && sexes.length > 0) {
       // One row per sex, kept adjacent per pin so the pin budget can't trim the sexes unevenly.
       for (const sex of sexes) {
@@ -97,12 +104,22 @@ export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRed
     });
   }
 
+  // Web releases ship with a compatible data release, so no share URL should pair the legacy sex
+  // category with pins that already carry a sex. They are kept as they are, but one arriving means
+  // a URL was built by something other than either release of the app.
+  if (passedThroughPinnedItems.length > 0) {
+    warnings.push({
+      message: CURRENT_PINS_IN_LEGACY_URL_MESSAGE,
+      data: { cohort: legacyCohort, currentPinnedItems: passedThroughPinnedItems },
+    });
+  }
+
   if (isNarrowedToFemales) {
     notes.push({
       message: LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
       data: {
         cohort: legacyCohort,
-        legacyPinCount: legacyPinnedItems.length,
+        legacyPinCount,
         maxLegacyPinsForMaleOrFemale: MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE,
       },
     });
@@ -115,3 +132,7 @@ export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRed
     ...(notes.length > 0 && { notes }),
   };
 };
+
+function countPinSegments(pinnedItem: string): number {
+  return pinnedItem.split(PIN_SEGMENT_DELIMITER).length;
+}

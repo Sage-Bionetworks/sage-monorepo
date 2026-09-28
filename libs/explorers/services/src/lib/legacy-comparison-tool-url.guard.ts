@@ -18,10 +18,16 @@ export const LEGACY_URL_TRANSLATION_FAILED_MESSAGE =
   'createLegacyComparisonToolUrlGuard: failed to translate legacy URL';
 export const LEGACY_URL_REDIRECTED_MESSAGE =
   'createLegacyComparisonToolUrlGuard: redirected legacy URL';
+export const LEGACY_URL_IN_APP_NAVIGATION_MESSAGE =
+  'createLegacyComparisonToolUrlGuard: redirected legacy URL reached by in-app navigation';
 
 // Builds a guard that rewrites a legacy comparison tool share URL into its current shape before the
 // tool loads. The resolveRedirect function supplies the product-specific translation rules; this
 // factory owns the redirect semantics and shares its encoding with ComparisonToolUrlService.
+//
+// Register it with `runGuardsAndResolvers: 'paramsOrQueryParamsChange'`. The tool's URL is all query
+// params, and by default a query-only navigation skips canActivate, so a legacy URL reached from
+// within the tool's own page would otherwise bypass the guard.
 export function createLegacyComparisonToolUrlGuard(
   resolveRedirect: LegacyComparisonToolUrlRedirectFn,
 ): CanActivateFn {
@@ -50,12 +56,17 @@ export function createLegacyComparisonToolUrlGuard(
         serializeComparisonToolUrlParams(redirect, route.queryParams),
       );
 
-      // Marks the rewrite in the breadcrumb trail, so a later error on the page shows which legacy
-      // URL the comparison tool was actually loaded from.
-      logger.log(LEGACY_URL_REDIRECTED_MESSAGE, {
-        from: state.url,
-        to: router.serializeUrl(urlTree),
-      });
+      const redirectData = { from: state.url, to: router.serializeUrl(urlTree) };
+
+      // Opening a legacy share link is the expected path, so it only marks the breadcrumb trail for
+      // any later error on the page. A legacy URL reached after the app has already navigated came
+      // from inside the session instead (a stale in-app link, or history from before the release),
+      // which is worth tracking down.
+      if (router.navigated) {
+        logger.warn(LEGACY_URL_IN_APP_NAVIGATION_MESSAGE, redirectData);
+      } else {
+        logger.log(LEGACY_URL_REDIRECTED_MESSAGE, redirectData);
+      }
 
       // Replace rather than push, so the back button returns to wherever the legacy link was opened
       // from instead of the legacy URL this guard just redirected away from.
