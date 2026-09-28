@@ -1,5 +1,5 @@
 import { ComparisonToolNoun } from '@sagebionetworks/explorers/models';
-import { capitalizeFirstLetter, pluralize } from '@sagebionetworks/shared/util';
+import { capitalizeFirstLetter, pluralize } from '@sagebionetworks/shared/util/helpers';
 
 export const labelCase = (word: string): string => capitalizeFirstLetter(word.toLowerCase());
 
