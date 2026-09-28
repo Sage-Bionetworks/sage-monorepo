@@ -1,4 +1,5 @@
 import { Component, HostBinding, computed, inject, input } from '@angular/core';
+import { getPinToggleTooltip } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
@@ -26,6 +27,7 @@ export class PrimaryIdentifierControlsComponent {
   }
 
   viewConfig = this.comparisonToolService.viewConfig;
+  nouns = this.comparisonToolService.nouns;
 
   isPinned = computed(() => {
     return this.comparisonToolService.isPinned(this.id());
@@ -43,7 +45,7 @@ export class PrimaryIdentifierControlsComponent {
       return this.comparisonToolService.disabledPinTooltip();
     }
 
-    return isPinned ? 'Unpin this row' : 'Pin this row to the top of the list';
+    return getPinToggleTooltip(isPinned, this.nouns());
   });
 
   viewDetailsWasClicked(event: MouseEvent) {

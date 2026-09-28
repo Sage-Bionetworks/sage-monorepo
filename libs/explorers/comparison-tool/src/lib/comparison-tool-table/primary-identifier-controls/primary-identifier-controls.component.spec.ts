@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, RouterModule } from '@angular/router';
-import { ComparisonToolConfig } from '@sagebionetworks/explorers/models';
+import { ComparisonToolConfig, ComparisonToolNoun } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolService,
   provideComparisonToolService,
@@ -16,6 +16,22 @@ import { MessageService } from 'primeng/api';
 import { PrimaryIdentifierControlsComponent } from './primary-identifier-controls.component';
 
 const MODEL_ROW = { _id: '68fff1aaeb12b9674515fd58', name: '3xTg-AD' };
+
+const PARENT_NOUN: ComparisonToolNoun = { singular: 'Parent', plural: 'Parents' };
+const CHILD_NOUN: ComparisonToolNoun = { singular: 'Child', plural: 'Children' };
+
+const viewNounConfigs: ComparisonToolConfig[] = [
+  { ...mockComparisonToolDataConfig[0], view_noun: PARENT_NOUN },
+];
+const childViewConfigs: ComparisonToolConfig[] = [
+  {
+    ...mockComparisonToolDataConfig[0],
+    row_id_data_key: '_id',
+    parent_id_data_key: 'model_type',
+    view_noun: CHILD_NOUN,
+    parent_noun: PARENT_NOUN,
+  },
+];
 
 async function setup(options?: {
   configs?: ComparisonToolConfig[];
@@ -152,6 +168,33 @@ describe('PrimaryIdentifierControlsComponent', () => {
     await user.hover(pinButton);
     const tooltip = screen.getByRole('tooltip');
     expect(tooltip).toHaveTextContent('Unpin this row');
+  });
+
+  describe('pin toggle tooltip', () => {
+    it('should use the view noun', async () => {
+      const { pinButton, user } = await setup({ configs: viewNounConfigs });
+      await user.hover(pinButton);
+      expect(screen.getByRole('tooltip')).toHaveTextContent(
+        'Pin this parent to the top of the list',
+      );
+    });
+
+    it('should use the view noun to unpin', async () => {
+      const { pinButton, user } = await setup({
+        configs: viewNounConfigs,
+        pinnedItems: [MODEL_ROW._id],
+      });
+      await user.hover(pinButton);
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Unpin this parent');
+    });
+
+    it('should use the view noun rather than the parent noun in a child view', async () => {
+      const { pinButton, user } = await setup({ configs: childViewConfigs });
+      await user.hover(pinButton);
+      expect(screen.getByRole('tooltip')).toHaveTextContent(
+        'Pin this child to the top of the list',
+      );
+    });
   });
 
   it('should display correct tooltip when the pin limit is reached and not currently pinned', async () => {

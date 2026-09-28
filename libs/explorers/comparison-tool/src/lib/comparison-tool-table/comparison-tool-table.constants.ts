@@ -19,15 +19,10 @@ export const COMPARISON_TOOL_BODY_CLASS = 'comparison-tool-body';
 // Shown on Pin All, Download Pins, and Clear All Pins while table data is loading
 export const TABLE_DATA_LOADING_TOOLTIP = 'Waiting for data to load...';
 
-export const PIN_ALL_TOOLTIP = 'Pin all matching rows to the top.';
-
 // Pinned results controls
 export const PINNED_RESULTS_CONTROLS = {
   downloadButtonLabel: 'Download Pins',
-  downloadButtonTooltip: 'Download pinned results',
-  downloadPanelHeading: 'Download pinned results as:',
   clearButtonLabel: 'Clear All Pins',
-  clearButtonTooltip: 'Clear all pinned results',
 } as const;
 
 // Keep in sync with the corresponding $comparison-tool-* variables in

@@ -1,5 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, RouterModule } from '@angular/router';
 import { PINNED_RESULTS_HEADING } from '@sagebionetworks/explorers/constants';
 import {
@@ -33,7 +34,6 @@ import {
   COLUMN_HEADER_TEXT_CLASS,
   MAX_COLUMN_WIDTH_PX,
   MIN_COLUMN_WIDTH_PX,
-  PIN_ALL_TOOLTIP,
   SORT_BADGE_SPACING_PX,
   SORT_BADGE_WIDTH_PX,
   SORT_ICON_WIDTH_PX,
@@ -101,6 +101,7 @@ async function setup(
     providers: [
       provideHttpClient(),
       provideRouter([]),
+      provideNoopAnimations(),
       MessageService,
       ...provideComparisonToolService({
         ...defaultCtOptions,
@@ -237,7 +238,9 @@ describe('ComparisonToolTableComponent', () => {
 
     await user.hover(screen.getByRole('button', { name: /pin all/i }));
 
-    expect(screen.getByRole('tooltip', { name: PIN_ALL_TOOLTIP })).toBeVisible();
+    expect(
+      screen.getByRole('tooltip', { name: 'Pin all matching rows to the top.' }),
+    ).toBeVisible();
   });
 
   it('should explain that Pin All is waiting on table data while a fetch is in flight', async () => {
@@ -351,6 +354,74 @@ describe('ComparisonToolTableComponent', () => {
       await setup({ configs: childViewConfigs, ...pinnedOptions(childViewPinnedData) });
 
       expect(screen.getByText('All Children')).toBeInTheDocument();
+    });
+  });
+  describe('Pin All tooltip', () => {
+    it('should use the view noun', async () => {
+      const { user } = await setup({ configs: viewNounConfigs }, { searchTerm: '5xFAD' });
+
+      await user.hover(screen.getByRole('button', { name: /pin all/i }));
+
+      expect(
+        screen.getByRole('tooltip', { name: 'Pin all matching parents to the top.' }),
+      ).toBeVisible();
+    });
+
+    it('should use the view noun rather than the parent noun in a child view', async () => {
+      const { user } = await setup({ configs: childViewConfigs }, { searchTerm: '5xFAD' });
+
+      await user.hover(screen.getByRole('button', { name: /pin all/i }));
+
+      expect(
+        screen.getByRole('tooltip', { name: 'Pin all matching children to the top.' }),
+      ).toBeVisible();
+    });
+  });
+
+  describe('pinned results controls', () => {
+    it('should fall back to results', async () => {
+      const { user } = await setup(pinnedOptions(mockComparisonToolData.slice(0, 1)));
+
+      await user.hover(screen.getByRole('button', { name: /download/i }));
+      expect(screen.getByRole('tooltip', { name: 'Download pinned results' })).toBeVisible();
+
+      await user.hover(screen.getByRole('button', { name: /clear all/i }));
+      expect(screen.getByRole('tooltip', { name: 'Clear all pinned results' })).toBeVisible();
+
+      await user.click(screen.getByRole('button', { name: /download/i }));
+      expect(screen.getByText('Download pinned results as:')).toBeVisible();
+    });
+
+    it('should use the view noun', async () => {
+      const { user } = await setup({
+        configs: viewNounConfigs,
+        ...pinnedOptions(mockComparisonToolData.slice(0, 1)),
+      });
+
+      await user.hover(screen.getByRole('button', { name: /download/i }));
+      expect(screen.getByRole('tooltip', { name: 'Download pinned parents' })).toBeVisible();
+
+      await user.hover(screen.getByRole('button', { name: /clear all/i }));
+      expect(screen.getByRole('tooltip', { name: 'Clear all pinned parents' })).toBeVisible();
+
+      await user.click(screen.getByRole('button', { name: /download/i }));
+      expect(screen.getByText('Download pinned parents as:')).toBeVisible();
+    });
+
+    it('should use the view noun rather than the parent noun in a child view', async () => {
+      const { user } = await setup({
+        configs: childViewConfigs,
+        ...pinnedOptions(childViewPinnedData),
+      });
+
+      await user.hover(screen.getByRole('button', { name: /download/i }));
+      expect(screen.getByRole('tooltip', { name: 'Download pinned children' })).toBeVisible();
+
+      await user.hover(screen.getByRole('button', { name: /clear all/i }));
+      expect(screen.getByRole('tooltip', { name: 'Clear all pinned children' })).toBeVisible();
+
+      await user.click(screen.getByRole('button', { name: /download/i }));
+      expect(screen.getByText('Download pinned children as:')).toBeVisible();
     });
   });
 });
