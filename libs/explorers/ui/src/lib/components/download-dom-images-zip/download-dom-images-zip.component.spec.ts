@@ -1,5 +1,5 @@
 import { captureDomToBlob } from '@sagebionetworks/explorers/util';
-import { render } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { saveAs } from 'file-saver';
 import { DownloadDomImagesZipComponent } from './download-dom-images-zip.component';
 
@@ -92,6 +92,19 @@ describe('DownloadDomImagesZipComponent', () => {
     await fixture.componentInstance.performDownload('.csv');
 
     expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'data-1.csv');
+  });
+
+  it('should disable the download button when disabled is true', async () => {
+    const mockElement = { offsetWidth: 100, offsetHeight: 100 } as HTMLElement;
+    await render(DownloadDomImagesZipComponent, {
+      componentInputs: {
+        domFiles: [{ target: mockElement, filename: 'img-1' }],
+        filename: 'test-file',
+        disabled: true,
+      },
+    });
+
+    expect(screen.getByRole('button', { name: /download all/i })).toBeDisabled();
   });
 
   it('should save a single image under its own name instead of zipping it', async () => {
