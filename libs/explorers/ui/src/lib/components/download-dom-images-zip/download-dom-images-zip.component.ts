@@ -15,6 +15,12 @@ type CsvFile = {
   data: string[][];
 };
 
+type DownloadFile = {
+  name: string;
+  // csv content stays a string, which is what JSZip expects for text
+  content: Blob | string;
+};
+
 @Component({
   selector: 'explorers-download-dom-images-zip',
   imports: [BaseDownloadDomImageComponent],
@@ -30,20 +36,35 @@ export class DownloadDomImagesZipComponent {
   hasImageDownload = input<boolean>(true);
 
   performDownload = async (fileType: string): Promise<void> => {
-    const zip = new JSZip();
+    const files: DownloadFile[] = [];
 
     if (fileType === FILE_TYPE_CSV) {
       for (const csvFile of this.csvFiles()) {
-        zip.file(csvFile.filename + fileType, csvDataToString(csvFile.data));
+        files.push({
+          name: csvFile.filename + fileType,
+          content: csvDataToString(csvFile.data),
+        });
       }
     } else {
       const paddingPx = this.downloadImagePaddingPx() ?? 0;
       for (const domFile of this.domFiles()) {
         const blob = await captureDomToBlob(domFile.target, paddingPx);
         if (blob) {
-          zip.file(domFile.filename + fileType, blob);
+          files.push({ name: domFile.filename + fileType, content: blob });
         }
       }
+    }
+
+    if (files.length === 1) {
+      const { name, content } = files[0];
+      // saveAs treats a bare string as a URL, so string content has to be wrapped
+      saveAs(content instanceof Blob ? content : new Blob([content], { type: 'text/csv' }), name);
+      return;
+    }
+
+    const zip = new JSZip();
+    for (const file of files) {
+      zip.file(file.name, file.content);
     }
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
