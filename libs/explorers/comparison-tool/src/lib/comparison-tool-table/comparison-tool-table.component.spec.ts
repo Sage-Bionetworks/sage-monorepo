@@ -379,48 +379,82 @@ describe('ComparisonToolTableComponent', () => {
   });
 
   describe('pinned results controls', () => {
-    it('should fall back to results', async () => {
-      const { user } = await setup(pinnedOptions(mockComparisonToolData.slice(0, 1)));
+    const fallbackOptions = pinnedOptions(mockComparisonToolData.slice(0, 1));
+    const viewNounOptions = {
+      configs: viewNounConfigs,
+      ...pinnedOptions(mockComparisonToolData.slice(0, 1)),
+    };
+    const childViewOptions = { configs: childViewConfigs, ...pinnedOptions(childViewPinnedData) };
+
+    it('should fall back to results in the Download tooltip', async () => {
+      const { user } = await setup(fallbackOptions);
 
       await user.hover(screen.getByRole('button', { name: /download/i }));
+
       expect(screen.getByRole('tooltip', { name: 'Download pinned results' })).toBeVisible();
+    });
+
+    it('should fall back to results in the Clear All tooltip', async () => {
+      const { user } = await setup(fallbackOptions);
 
       await user.hover(screen.getByRole('button', { name: /clear all/i }));
+
       expect(screen.getByRole('tooltip', { name: 'Clear all pinned results' })).toBeVisible();
+    });
+
+    it('should fall back to results in the download menu', async () => {
+      const { user } = await setup(fallbackOptions);
 
       await user.click(screen.getByRole('button', { name: /download/i }));
+
       expect(screen.getByText('Download pinned results as:')).toBeVisible();
     });
 
-    it('should use the view noun', async () => {
-      const { user } = await setup({
-        configs: viewNounConfigs,
-        ...pinnedOptions(mockComparisonToolData.slice(0, 1)),
-      });
+    it('should use the view noun in the Download tooltip', async () => {
+      const { user } = await setup(viewNounOptions);
 
       await user.hover(screen.getByRole('button', { name: /download/i }));
+
       expect(screen.getByRole('tooltip', { name: 'Download pinned parents' })).toBeVisible();
+    });
+
+    it('should use the view noun in the Clear All tooltip', async () => {
+      const { user } = await setup(viewNounOptions);
 
       await user.hover(screen.getByRole('button', { name: /clear all/i }));
+
       expect(screen.getByRole('tooltip', { name: 'Clear all pinned parents' })).toBeVisible();
+    });
+
+    it('should use the view noun in the download menu', async () => {
+      const { user } = await setup(viewNounOptions);
 
       await user.click(screen.getByRole('button', { name: /download/i }));
+
       expect(screen.getByText('Download pinned parents as:')).toBeVisible();
     });
 
-    it('should use the view noun rather than the parent noun in a child view', async () => {
-      const { user } = await setup({
-        configs: childViewConfigs,
-        ...pinnedOptions(childViewPinnedData),
-      });
+    it('should use the view noun rather than the parent noun in the Download tooltip in a child view', async () => {
+      const { user } = await setup(childViewOptions);
 
       await user.hover(screen.getByRole('button', { name: /download/i }));
+
       expect(screen.getByRole('tooltip', { name: 'Download pinned children' })).toBeVisible();
+    });
+
+    it('should use the view noun rather than the parent noun in the Clear All tooltip in a child view', async () => {
+      const { user } = await setup(childViewOptions);
 
       await user.hover(screen.getByRole('button', { name: /clear all/i }));
+
       expect(screen.getByRole('tooltip', { name: 'Clear all pinned children' })).toBeVisible();
+    });
+
+    it('should use the view noun rather than the parent noun in the download menu in a child view', async () => {
+      const { user } = await setup(childViewOptions);
 
       await user.click(screen.getByRole('button', { name: /download/i }));
+
       expect(screen.getByText('Download pinned children as:')).toBeVisible();
     });
   });
