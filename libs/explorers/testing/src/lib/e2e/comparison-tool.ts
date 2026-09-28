@@ -268,7 +268,6 @@ export const searchViaFilterbox = async (page: Page, searchTerm: string): Promis
 };
 
 // Expects at least one pinned row and no search or filters. Leaves searchTerm applied.
-// searchTerm - a term leaving unpinned matches behind
 export const expectViewNounLabels = async (
   page: Page,
   pluralLabel: string,
