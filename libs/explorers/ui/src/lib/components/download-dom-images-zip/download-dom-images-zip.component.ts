@@ -34,7 +34,6 @@ export class DownloadDomImagesZipComponent {
   downloadImagePaddingPx = input<number>();
   hasCsvDownload = input<boolean>(false);
   hasImageDownload = input<boolean>(true);
-  disabled = input<boolean>(false);
 
   performDownload = async (fileType: string): Promise<void> => {
     const files: DownloadFile[] = [];
