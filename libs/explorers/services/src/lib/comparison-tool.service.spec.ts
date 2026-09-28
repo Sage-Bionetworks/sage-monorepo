@@ -1,9 +1,11 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
+import { MAX_PIN_LIMIT, NO_NOUNS } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
+  ComparisonToolNoun,
+  ComparisonToolNouns,
   ComparisonToolQuery,
   ComparisonToolUrlParams,
 } from '@sagebionetworks/explorers/models';
@@ -850,7 +852,7 @@ describe('ComparisonToolService', () => {
         service.pinItem(childOfNewParent);
 
         expect(service.isPinned('child3a')).toBe(false);
-        expect(warnSpy).toHaveBeenCalledTimes(1);
+        expect(warnSpy).not.toHaveBeenCalled();
       });
 
       it('always lets a pinned row be unpinned', () => {
@@ -898,6 +900,61 @@ describe('ComparisonToolService', () => {
         expect(service.pinnedItems()).toEqual(['child2a', 'child1a', 'child1b']);
         expect(service.pinnedParents()).toEqual(['parent2', 'parent1']);
         expect(warnSpy).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('nouns', () => {
+      const PARENT_NOUN: ComparisonToolNoun = { singular: 'Parent', plural: 'Parents' };
+      const CHILD_NOUN: ComparisonToolNoun = { singular: 'Child', plural: 'Children' };
+      const CHILD_NOUNS: ComparisonToolNouns = { viewNoun: CHILD_NOUN, parentNoun: PARENT_NOUN };
+
+      const configsWithNouns: ComparisonToolConfig[] = viewConfigs.map((config) => ({
+        ...config,
+        view_noun: config.dropdowns === CHILD_VIEW ? CHILD_NOUN : PARENT_NOUN,
+        parent_noun: PARENT_NOUN,
+      }));
+
+      it('should fall back to no nouns when the config sets none', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+
+        expect(service.nouns()).toEqual(NO_NOUNS);
+      });
+
+      it('should use the view noun and drop the parent noun outside a child view', () => {
+        connectService(configsWithNouns, { selection: PARENT_VIEW });
+
+        expect(service.nouns()).toEqual({ viewNoun: PARENT_NOUN, parentNoun: null });
+      });
+
+      it('should use the config nouns as stored in a child view', () => {
+        connectService(configsWithNouns, { selection: CHILD_VIEW });
+
+        expect(service.nouns()).toEqual(CHILD_NOUNS);
+      });
+
+      it('should word the pin limit tooltip by parent in a child view', () => {
+        connectService(configsWithNouns, { selection: CHILD_VIEW });
+        service.setPinLimit(2);
+
+        expect(service.disabledPinTooltip()).toBe(
+          'You have already pinned the maximum number of results (children for 2 parents). You must unpin all children for a parent before you can pin children for a new parent.',
+        );
+      });
+
+      it('should word the pin limit toast by parent in a child view', () => {
+        connectService(configsWithNouns, { selection: CHILD_VIEW });
+        service.setPinLimit(1);
+        const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
+
+        landPinned(
+          childRow('child1a', 'parent1'),
+          childRow('child1b', 'parent1'),
+          childRow('child2a', 'parent2'),
+        );
+
+        expect(warnSpy).toHaveBeenCalledWith(
+          'Only 2 children were pinned, because you reached the maximum of 1 pinned parent. Some children were skipped because they belong to a parent not already in your pinned list.',
+        );
       });
     });
   });

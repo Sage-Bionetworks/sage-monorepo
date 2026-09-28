@@ -162,7 +162,7 @@ describe('PrimaryIdentifierControlsComponent', () => {
     await user.hover(pinButton);
     const tooltip = screen.getByRole('tooltip');
     expect(tooltip).toHaveTextContent(
-      'You have already pinned the maximum number of items (2). You must unpin some items before you can pin more.',
+      'You have already pinned the maximum number of results (2). You must unpin some results before you can pin more.',
     );
   });
 
