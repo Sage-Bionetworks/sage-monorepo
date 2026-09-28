@@ -1,9 +1,9 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
+  DEFAULT_SORT_ORDER,
   getPinLimitTooltip,
   getPinLimitWarning,
-  DEFAULT_SORT_ORDER,
   MAX_PIN_LIMIT,
   RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS,
 } from '@sagebionetworks/explorers/constants';
@@ -25,7 +25,7 @@ import { isEqual, xor } from 'lodash';
 import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
-import { catchError, combineLatest, finalize, map, of, Subject, switchMap } from 'rxjs';
+import { catchError, combineLatest, EMPTY, finalize, map, Subject, switchMap } from 'rxjs';
 import { VALID_PAGE_SIZES } from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
@@ -169,6 +169,7 @@ export class ComparisonToolService<T> {
   private readonly selectedRowIdSignal = signal<string | null>(null);
   private readonly hoveredRowIdSignal = signal<string | null>(null);
   private readonly isPinningAllSignal = signal(false);
+  private readonly pinnedFetchFailedSignal = signal(false);
 
   // Fetch streams: each fetch pushes a result observable onto these subjects, and switchMap keeps
   // only the latest in flight. A newer query cancels (unsubscribes) the prior request, so responses
@@ -180,6 +181,7 @@ export class ComparisonToolService<T> {
   // casts the result data back to `T[]`.
   private readonly unpinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
   private readonly pinnedFetch$ = new Subject<Observable<PinnedFetchResult<unknown>>>();
+  private lastPinnedSource$: Observable<PinnedFetchResult<unknown>> | null = null;
 
   // Connect-Time Dependencies
   private pinAllFetch?: PinAllFetch<T>;
@@ -206,6 +208,9 @@ export class ComparisonToolService<T> {
   readonly selectedRowId = this.selectedRowIdSignal.asReadonly();
   readonly hoveredRowId = this.hoveredRowIdSignal.asReadonly();
   readonly isPinningAll = this.isPinningAllSignal.asReadonly();
+  // Set when the latest pinned fetch failed, until a pinned fetch succeeds or the pins are rewritten.
+  // The pins stay cached, so `retryPinnedFetch` can still load them.
+  readonly pinnedFetchFailed = this.pinnedFetchFailedSignal.asReadonly();
   readonly isLoadingTableData = computed(() => this.pendingFetches() > 0);
 
   // Computed Query Accessors
@@ -282,10 +287,13 @@ export class ComparisonToolService<T> {
   // Count parents in any view with a parent key, not just child views.
   // Counting rows in the parent view would be wrong right after a switch from a child view:
   // until the parent rows land, pinnedData() still holds the child rows, so the row count could
-  // exceed the pin limit
-  readonly pinCount = computed(() =>
-    this.parentIdDataKey() ? this.pinnedParentCount() : this.pinnedRowCount(),
-  );
+  // exceed the pin limit.
+  // After a failed pinned fetch no rows are shown, but the pins are still cached and count toward
+  // the limit: a failure keeps the pinned parents, and a view without a parent key counts the cache
+  readonly pinCount = computed(() => {
+    if (this.parentIdDataKey()) return this.pinnedParentCount();
+    return this.pinnedFetchFailed() ? this.pinnedItems().length : this.pinnedRowCount();
+  });
 
   /**
    * The pins to send with a query, and the id space they are in. By default this is the pinned items
@@ -295,7 +303,8 @@ export class ComparisonToolService<T> {
    *
    * The pinned parents are read from the latest pinned rows. So if a pinned parent has no rows in
    * the active view, it is no longer sent once that view's pinned rows arrive. The pinned items
-   * cache still holds its row ids, so switching back to the view it was pinned in restores it.
+   * cache still holds its row ids, so switching back to the view it was pinned in restores it. A
+   * failed pinned fetch leaves the pinned parents as they were, so later fetches still send them.
    * Every fetch that sends this query reruns once when that happens. The rerun returns rows for the
    * same parents, and `pinnedParents` compares as a set, so this query does not change again.
    */
@@ -344,21 +353,16 @@ export class ComparisonToolService<T> {
     // Unpinned rows are paged, so totalCount is the cross-page total used for pagination.
     this.subscribeToFetchStream(
       this.unpinnedFetch$,
-      { data: [], totalCount: 0 },
-      ({ data, totalCount, hasRowsForPrebudgetedParents }) => {
-        this.unpinnedDataSignal.set(data as T[]);
-        this.unpinnedRowCount.set(totalCount);
-        this.hasRowsForPrebudgetedParents.set(hasRowsForPrebudgetedParents ?? null);
-        this.hasCompletedUnpinnedFetchSignal.set(true);
-      },
+      (result) => this.applyUnpinnedData(result),
+      () => this.applyUnpinnedData({ data: [], totalCount: 0 }),
     );
 
     // Pinned rows are never paged: applyPinnedData enforces the pin cap and the count comes from
     // pinnedData(), so totalCount from the response is unused and therefore is omitted intentionally.
     this.subscribeToFetchStream(
       this.pinnedFetch$,
-      { data: [], totalCount: 0, parentIdDataKey: null },
       ({ data, parentIdDataKey }) => this.applyPinnedData(data as T[], parentIdDataKey),
+      () => this.applyPinnedFetchFailure(),
     );
 
     effect(() => {
@@ -873,10 +877,13 @@ export class ComparisonToolService<T> {
    * are always written together, and the identity is always the active view's, because pins are
    * always made against the active view's rows. That is what lets `pinnedItemsQuery` trust that the
    * cached ids are row ids of the recorded view.
+   *
+   * A write replaces any pins a failed pinned fetch left unloaded, so it also clears the failure.
    */
   private writePinnedItems(items: string[]) {
     this.querySignal.update((current) => ({ ...current, pinnedItems: items }));
     this.pinnedItemsIdentitySignal.set(this.activeIdentity());
+    this.pinnedFetchFailedSignal.set(false);
   }
 
   resetPinnedItems() {
@@ -940,6 +947,7 @@ export class ComparisonToolService<T> {
    * the cycle stops.
    */
   private applyPinnedData(pinnedData: T[], parentIdDataKey: string | null) {
+    this.pinnedFetchFailedSignal.set(false);
     const pinLimit = this.pinLimit();
     const cappedData = parentIdDataKey
       ? this.keepRowsOfFirstParents(pinnedData, parentIdDataKey, pinLimit)
@@ -956,6 +964,27 @@ export class ComparisonToolService<T> {
       this.extractUniqueDataKeyValues(rows, parentIdDataKey).slice(0, parentLimit),
     );
     return rows.filter((row) => keptParents.has(this.readDataKey(row, parentIdDataKey)));
+  }
+
+  /**
+   * Clears the pinned rows but keeps the pinned parents and the pinned items cache. After a view
+   * switch the next pinned fetch is keyed by those parents, so emptying them would make every later
+   * fetch in this view ask for no pins, even once requests succeed again.
+   */
+  private applyPinnedFetchFailure() {
+    this.pinnedDataSignal.set([]);
+    this.pinnedFetchFailedSignal.set(true);
+  }
+
+  private applyUnpinnedData({
+    data,
+    totalCount,
+    hasRowsForPrebudgetedParents,
+  }: ComparisonToolFetchResult<unknown>) {
+    this.unpinnedDataSignal.set(data as T[]);
+    this.unpinnedRowCount.set(totalCount);
+    this.hasRowsForPrebudgetedParents.set(hasRowsForPrebudgetedParents ?? null);
+    this.hasCompletedUnpinnedFetchSignal.set(true);
   }
 
   private setPinnedData(pinnedData: T[], parentIdDataKey: string | null) {
@@ -1009,21 +1038,24 @@ export class ComparisonToolService<T> {
    * Subscribes a fetch stream once for the lifetime of the service. `switchMap` unsubscribes the
    * previous result observable whenever a newer one arrives, which aborts the superseded HTTP
    * request so responses are always applied latest-wins. `finalize` runs on completion, error, or
-   * switchMap cancellation, keeping the pending-fetch counter balanced; `catchError` maps a failed
-   * request to an empty result and keeps the outer stream alive for the next fetch. Error logging
-   * and user notification are handled centrally by `httpErrorInterceptor`, so this is cleanup only.
+   * switchMap cancellation, keeping the pending-fetch counter balanced; `catchError` hands a failed
+   * request to `applyFailure` and keeps the outer stream alive for the next fetch. Error logging is
+   * handled centrally by `httpErrorInterceptor`, so `applyFailure` only updates state.
    */
   private subscribeToFetchStream<R extends ComparisonToolFetchResult<unknown>>(
     fetch$: Subject<Observable<R>>,
-    emptyResult: R,
     applyResult: (result: R) => void,
+    applyFailure: () => void,
   ): void {
     fetch$
       .pipe(
         switchMap((source$) =>
           source$.pipe(
             finalize(() => this.completeFetch()),
-            catchError(() => of(emptyResult)),
+            catchError(() => {
+              applyFailure();
+              return EMPTY;
+            }),
           ),
         ),
         takeUntilDestroyed(this.destroyRef),
@@ -1051,8 +1083,21 @@ export class ComparisonToolService<T> {
    */
   fetchPinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
     const parentIdDataKey = this.parentIdDataKey();
+    this.lastPinnedSource$ = source$.pipe(map((result) => ({ ...result, parentIdDataKey })));
     this.startFetch();
-    this.pinnedFetch$.next(source$.pipe(map((result) => ({ ...result, parentIdDataKey }))));
+    this.pinnedFetch$.next(this.lastPinnedSource$);
+  }
+
+  /**
+   * Re-sends the pinned fetch that failed. HTTP observables are cold, so subscribing again makes the
+   * same request, with the parent key snapshot it was made under. A pinned fetch for a newer query
+   * supersedes it through `switchMap`, as with any other pinned fetch.
+   */
+  retryPinnedFetch(): void {
+    const source$ = this.lastPinnedSource$;
+    if (!this.pinnedFetchFailed() || source$ === null) return;
+    this.startFetch();
+    this.pinnedFetch$.next(source$);
   }
 
   /** Call before starting a data fetch to increment loading counter */

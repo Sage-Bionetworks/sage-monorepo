@@ -11,7 +11,7 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, EMPTY, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, defer, EMPTY, Observable, of, Subject, throwError } from 'rxjs';
 import {
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
@@ -80,6 +80,16 @@ describe('ComparisonToolService', () => {
     service.fetchUnpinned(of({ data: [], totalCount, hasRowsForPrebudgetedParents }));
 
   const noMatchingRows: PinAllFetch<Row> = () => of({ rows: [], totalElements: 0 });
+
+  const failedRequest = () => throwError(() => new Error('request failed'));
+
+  // A cold source like an HTTP request: the first subscription fails, and each later one (a retry)
+  // gets `retried()`
+  const failsOnce = <R>(retried: () => Observable<R>) => {
+    let subscriptions = 0;
+    const source$ = defer(() => (subscriptions++ === 0 ? failedRequest() : retried()));
+    return { source$, subscriptions: () => subscriptions };
+  };
 
   const connectService = (
     configs: ComparisonToolConfig[] = mockComparisonToolDataConfig,
@@ -515,6 +525,82 @@ describe('ComparisonToolService', () => {
         service.togglePin(childRow('child1a', 'parent1'));
 
         expect(service.pinnedItems()).toEqual(['child1b']);
+      });
+    });
+
+    describe('after a failed pinned fetch in a view reached by a switch', () => {
+      const PINNED_CHILD_ROWS = [childRow('child1a', 'parent1'), childRow('child2a', 'parent2')];
+
+      const failPinnedFetchInChildView = (
+        source$: Observable<{ data: Row[]; totalCount: number }> = failedRequest(),
+      ) => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+        service.setDropdownSelection(CHILD_VIEW);
+        service.fetchPinned(source$);
+      };
+
+      it('empties the pinned rows but keeps the pinned parents in the query', () => {
+        failPinnedFetchInChildView();
+
+        expect(service.pinnedFetchFailed()).toBe(true);
+        expect(service.pinnedData()).toEqual([]);
+        expect(service.pinnedParents()).toEqual(['parent1', 'parent2']);
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'parent',
+        });
+      });
+
+      it('shows the pins again when the next pinned fetch succeeds', () => {
+        failPinnedFetchInChildView();
+
+        landPinned(...PINNED_CHILD_ROWS);
+
+        expect(service.pinnedFetchFailed()).toBe(false);
+        expect(service.pinnedData()).toEqual(PINNED_CHILD_ROWS);
+      });
+
+      it('shows the pins again when a retry succeeds', () => {
+        const { source$, subscriptions } = failsOnce(() =>
+          of({ data: PINNED_CHILD_ROWS, totalCount: PINNED_CHILD_ROWS.length }),
+        );
+        failPinnedFetchInChildView(source$);
+
+        service.retryPinnedFetch();
+
+        expect(subscriptions()).toBe(2);
+        expect(service.pinnedFetchFailed()).toBe(false);
+        expect(service.pinnedData()).toEqual(PINNED_CHILD_ROWS);
+        expect(service.isLoadingTableData()).toBe(false);
+      });
+
+      it('keeps counting the unloaded parents toward the pin limit', () => {
+        failPinnedFetchInChildView();
+
+        service.setPinLimit(2);
+
+        expect(service.pinCount()).toBe(2);
+        expect(service.hasReachedPinLimit()).toBe(true);
+        expect(service.canPin(childRow('child3a', 'parent3'))).toBe(false);
+      });
+
+      it('replaces the unloaded pins and clears the failure on a pin edit', () => {
+        failPinnedFetchInChildView();
+
+        service.pinItem(childRow('child3a', 'parent3'));
+
+        expect(service.pinnedFetchFailed()).toBe(false);
+        expect(service.pinnedItemsQuery()).toEqual({ items: ['child3a'], itemIdSpace: 'row' });
+      });
+
+      it('drops every pin and clears the failure on clear all pins', () => {
+        failPinnedFetchInChildView();
+
+        service.resetPinnedItems();
+
+        expect(service.pinnedFetchFailed()).toBe(false);
+        expect(service.pinnedItems()).toEqual([]);
       });
     });
 
@@ -2394,7 +2480,7 @@ describe('ComparisonToolService', () => {
       expect(warnSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('maps a failed fetch to an empty result and stays alive for the next fetch', () => {
+    it('maps a failed unpinned fetch to an empty result and stays alive for the next fetch', () => {
       connectService();
 
       const failing$ = new Subject<Result>();
@@ -2412,6 +2498,50 @@ describe('ComparisonToolService', () => {
 
       expect(service.unpinnedData()).toEqual([{ _id: 'recovered' }]);
       expect(service.unpinnedRowCount()).toBe(1);
+    });
+
+    it('keeps the pins cached and counted toward the limit after a failed pinned fetch', () => {
+      connectService();
+      service.setPinLimit(2);
+      service.setPinnedItems(['id1', 'id2']);
+      service.fetchPinned(of({ data: rows('id1', 'id2'), totalCount: 2 }));
+
+      service.fetchPinned(failedRequest());
+
+      expect(service.pinnedFetchFailed()).toBe(true);
+      expect(service.pinnedData()).toEqual([]);
+      expect(service.pinnedItems()).toEqual(['id1', 'id2']);
+      expect(service.pinCount()).toBe(2);
+      expect(service.hasReachedPinLimit()).toBe(true);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('does not retry once a pinned fetch has succeeded', () => {
+      connectService();
+      const { source$, subscriptions } = failsOnce(() => of({ data: [], totalCount: 0 }));
+      service.fetchPinned(source$);
+      service.retryPinnedFetch();
+      expect(subscriptions()).toBe(2);
+
+      service.retryPinnedFetch();
+
+      expect(subscriptions()).toBe(2);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('lets a newer pinned fetch supersede an in-flight retry', () => {
+      connectService();
+      const retried$ = new Subject<Result>();
+      const { source$ } = failsOnce(() => retried$);
+      service.fetchPinned(source$);
+      service.retryPinnedFetch();
+
+      service.fetchPinned(of({ data: [{ _id: 'newest' }], totalCount: 1 }));
+      retried$.next({ data: [{ _id: 'stale' }], totalCount: 1 });
+
+      expect(service.pinnedData()).toEqual([{ _id: 'newest' }]);
+      expect(service.pinnedFetchFailed()).toBe(false);
+      expect(service.isLoadingTableData()).toBe(false);
     });
   });
 
