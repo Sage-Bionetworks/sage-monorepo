@@ -1,7 +1,6 @@
 import { expect, Locator, Page, test } from '@playwright/test';
 import {
   DEFAULT_PAGE_SIZE,
-  getPinLimitWarning,
   MAX_PIN_LIMIT,
   RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS,
 } from '@sagebionetworks/explorers/constants';
@@ -15,6 +14,20 @@ import {
   CATEGORY_OPTION_INDEX,
   selectCategoryOption,
 } from './comparison-tool-dropdown';
+
+export type PinLimitCopy = {
+  pinnedLabels: string[];
+  toast: string;
+  tooltip: string;
+};
+
+export const STANDARD_PIN_LIMIT_COPY: PinLimitCopy = {
+  pinnedLabels: [`${MAX_PIN_LIMIT} Pinned Results`],
+  toast: `Only ${MAX_PIN_LIMIT} results were pinned, because you reached the maximum of ${MAX_PIN_LIMIT} pinned results.`,
+  tooltip: `You have already pinned the maximum number of results (${MAX_PIN_LIMIT}). You must unpin some results before you can pin more.`,
+};
+
+export const STANDARD_NO_RESULTS_MESSAGE = 'No results found...';
 
 export type ComparisonToolFetchOptions = {
   search?: string;
@@ -182,15 +195,27 @@ export const expectToastDetail = async (page: Page, detail: string): Promise<voi
   await expect(page.getByRole('alert')).toContainText(detail);
 };
 
-export const expectPinnedResultsCount = async (page: Page, pinnedCount: number): Promise<void> => {
-  await expect(page.getByText(`Pinned Results (${pinnedCount}/${MAX_PIN_LIMIT})`)).toBeVisible();
-  await expect(getPinnedTable(page).getByRole('row')).toHaveCount(pinnedCount);
+// expectedLabels - the pinned header's heading then its sublabels, e.g. ['2 Pinned Results'] or
+//                  ['Pinned Results', '2 Genes', '9 Proteins']
+export const expectPinnedResultsCount = async (
+  page: Page,
+  pinnedRowCount: number,
+  expectedLabels: string[],
+): Promise<void> => {
+  await expect(page.locator('#pinned-genes-header span')).toHaveText(expectedLabels);
+  await expect(getPinnedTable(page).getByRole('row')).toHaveCount(pinnedRowCount);
 };
 
 // The button only renders alongside matching results, so search or filter before asserting on it
-export const expectPinAllDisabledAtPinLimit = async (page: Page): Promise<void> => {
-  await expectPinnedResultsCount(page, MAX_PIN_LIMIT);
-  await expect(getPinAllButton(page)).toBeDisabled();
+export const expectPinAllDisabledAtPinLimit = async (
+  page: Page,
+  copy: PinLimitCopy,
+): Promise<void> => {
+  await expectPinnedResultsCount(page, MAX_PIN_LIMIT, copy.pinnedLabels);
+  const pinAllButton = getPinAllButton(page);
+  await expect(pinAllButton).toBeDisabled();
+  await pinAllButton.hover();
+  await expect(page.getByRole('tooltip')).toHaveText(copy.tooltip);
 };
 
 export const expectCategories = async (page: Page, categories: string[]): Promise<void> => {
@@ -233,12 +258,35 @@ export const searchViaFilterbox = async (page: Page, searchTerm: string): Promis
   const searchInput = page.getByPlaceholder('Value1, Value2', { exact: true });
   await searchInput.clear();
   await searchInput.fill(searchTerm);
-  await expect(page.getByText('Matching Results')).toBeVisible();
+  // Waits out the search debounce, so the table reflects the new term
+  const matchingLabel = page.getByText(/^Matching /);
+  if (searchTerm) {
+    await expect(matchingLabel).toBeVisible();
+  } else {
+    await expect(matchingLabel).toBeHidden();
+  }
 };
 
-export const expectNoResultsFound = async (page: Page): Promise<void> => {
+// Expects at least one pinned row and no search or filters. Leaves searchTerm applied.
+// searchTerm - a term leaving unpinned matches behind
+export const expectViewNounLabels = async (
+  page: Page,
+  pluralLabel: string,
+  searchTerm: string,
+): Promise<void> => {
+  await expect(page.getByText(`Displayed ${pluralLabel}`, { exact: true })).toBeVisible();
+  await expect(page.getByText(`All ${pluralLabel}`, { exact: true })).toBeVisible();
+
+  await searchViaFilterbox(page, searchTerm);
+  await expect(page.getByText(`Matching ${pluralLabel}`, { exact: true })).toBeVisible();
+};
+
+export const expectNoResultsFound = async (
+  page: Page,
+  message = STANDARD_NO_RESULTS_MESSAGE,
+): Promise<void> => {
   await expectPaginatorRange(page, '0-0 of 0');
-  await expect(page.getByText('No results found')).toBeVisible();
+  await expect(page.getByText(message, { exact: true })).toBeVisible();
 };
 
 export async function goToLastPage(page: Page) {
@@ -348,10 +396,14 @@ export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
 // searchTerm - a term whose matches span more than one page but stay within the pin limit
 // expectedPinnedIds - every matching row id, in the table's sort order. Derive these from the
 //                     same query Pin All sends, so rows the browser never held are covered
+// expectedPinnedLabels - the pinned header labels once every match is pinned
+// noResultsMessage - the view's empty table message
 export async function testPinAllAcrossPages(
   page: Page,
   searchTerm: string,
   expectedPinnedIds: string[],
+  expectedPinnedLabels: string[],
+  noResultsMessage = STANDARD_NO_RESULTS_MESSAGE,
 ) {
   expect(expectedPinnedIds.length).toBeGreaterThan(DEFAULT_PAGE_SIZE);
   expect(expectedPinnedIds.length).toBeLessThanOrEqual(MAX_PIN_LIMIT);
@@ -362,10 +414,10 @@ export async function testPinAllAcrossPages(
   await pinAll(page);
 
   await expectPinnedParams(page, expectedPinnedIds);
-  await expectPinnedResultsCount(page, expectedPinnedIds.length);
+  await expectPinnedResultsCount(page, expectedPinnedIds.length, expectedPinnedLabels);
   await expectPinnedRows(page, expectedPinnedIds);
   // Every match is pinned, so nothing is left for the matching results table
-  await expectNoResultsFound(page);
+  await expectNoResultsFound(page, noResultsMessage);
 }
 
 // Tests that "Pin All" stops at the pin limit and says so
@@ -376,15 +428,16 @@ export async function testPinAllExceedsLimit(
   page: Page,
   searchTerm: string,
   expectedPinnedIds: string[],
+  copy: PinLimitCopy,
 ) {
   expect(expectedPinnedIds).toHaveLength(MAX_PIN_LIMIT);
 
   await searchViaFilterbox(page, searchTerm);
   await pinAll(page);
 
-  await expectToastDetail(page, getPinLimitWarning(MAX_PIN_LIMIT, MAX_PIN_LIMIT));
+  await expectToastDetail(page, copy.toast);
   await expectPinnedParams(page, expectedPinnedIds);
-  await expectPinAllDisabledAtPinLimit(page);
+  await expectPinAllDisabledAtPinLimit(page, copy);
   await expectPinnedRows(page, expectedPinnedIds);
 }
 
@@ -397,17 +450,18 @@ export async function testUrlPinsExceedingLimitAreCapped(
   page: Page,
   pinnedIds: string[],
   searchTerm: string,
+  copy: PinLimitCopy,
 ) {
   expect(pinnedIds.length).toBeGreaterThan(MAX_PIN_LIMIT);
   const expectedPinnedIds = pinnedIds.slice(0, MAX_PIN_LIMIT);
 
-  await expectToastDetail(page, getPinLimitWarning(MAX_PIN_LIMIT, MAX_PIN_LIMIT));
+  await expectToastDetail(page, copy.toast);
   await expectPinnedParams(page, expectedPinnedIds);
-  await expectPinnedResultsCount(page, MAX_PIN_LIMIT);
+  await expectPinnedResultsCount(page, MAX_PIN_LIMIT, copy.pinnedLabels);
   await expectPinnedRows(page, expectedPinnedIds);
 
   await searchViaFilterbox(page, searchTerm);
-  await expectPinAllDisabledAtPinLimit(page);
+  await expectPinAllDisabledAtPinLimit(page, copy);
 }
 
 // Tests that "Clear All Pins" clears every pinned item and its pinned query params

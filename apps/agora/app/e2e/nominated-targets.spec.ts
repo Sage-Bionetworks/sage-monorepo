@@ -6,6 +6,7 @@ import {
   getQueryParamFromValues,
   getQueryParamsFromRecords,
   runFilterPanelTests,
+  STANDARD_PIN_LIMIT_COPY,
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
   testClickDifferentColumnsReplacesSingleSort,
@@ -108,11 +109,10 @@ test.describe('nominated targets - comparison tool', () => {
       const targets = await fetchNominatedTargets(page, { search: searchTerm });
 
       await navigateToComparison(page, CT_PAGE, true, 'url');
-      await testPinAllAcrossPages(
-        page,
-        searchTerm,
-        targets.map((target) => target.hgnc_symbol),
-      );
+      const pinnedIds = targets.map((target) => target.hgnc_symbol);
+      await testPinAllAcrossPages(page, searchTerm, pinnedIds, [
+        `${pinnedIds.length} Pinned Results`,
+      ]);
     });
 
     test('Pin All stops at the maximum number of pinned items', async ({ page }) => {
@@ -127,6 +127,7 @@ test.describe('nominated targets - comparison tool', () => {
         page,
         searchTerm,
         targets.map((target) => target.hgnc_symbol),
+        STANDARD_PIN_LIMIT_COPY,
       );
     });
   });
