@@ -1,7 +1,13 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, RouterModule } from '@angular/router';
-import { ComparisonToolColumn, ComparisonToolFilter } from '@sagebionetworks/explorers/models';
+import { PINNED_RESULTS_HEADING } from '@sagebionetworks/explorers/constants';
+import {
+  ComparisonToolColumn,
+  ComparisonToolConfig,
+  ComparisonToolFilter,
+  ComparisonToolNoun,
+} from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolService,
   provideComparisonToolFilterService,
@@ -27,11 +33,11 @@ import {
   COLUMN_HEADER_TEXT_CLASS,
   MAX_COLUMN_WIDTH_PX,
   MIN_COLUMN_WIDTH_PX,
-  TABLE_DATA_LOADING_TOOLTIP,
   PIN_ALL_TOOLTIP,
   SORT_BADGE_SPACING_PX,
   SORT_BADGE_WIDTH_PX,
   SORT_ICON_WIDTH_PX,
+  TABLE_DATA_LOADING_TOOLTIP,
 } from './comparison-tool-table.constants';
 import {
   clampAndFormatWidths,
@@ -42,8 +48,40 @@ import {
   restoreCellStyles,
 } from './comparison-tool-table.helpers';
 
+const PARENT_NOUN: ComparisonToolNoun = { singular: 'Parent', plural: 'Parents' };
+const CHILD_NOUN: ComparisonToolNoun = { singular: 'Child', plural: 'Children' };
+
+const viewNounConfigs: ComparisonToolConfig[] = [
+  { ...mockComparisonToolDataConfig[0], view_noun: PARENT_NOUN },
+];
+const childViewConfigs: ComparisonToolConfig[] = [
+  {
+    ...mockComparisonToolDataConfig[0],
+    row_id_data_key: '_id',
+    parent_id_data_key: 'model_type',
+    view_noun: CHILD_NOUN,
+    parent_noun: PARENT_NOUN,
+  },
+];
+// Three rows under two distinct model_type parents
+const childViewPinnedData = [
+  mockComparisonToolData[0],
+  mockComparisonToolData[1],
+  mockComparisonToolData[4],
+];
+
+function pinnedOptions(pinnedData: Record<string, unknown>[]) {
+  return { pinnedItems: pinnedData.map((row) => row['_id'] as string), pinnedData };
+}
+
+function getPinnedResultsHeaderLines(container: Element): (string | undefined)[] {
+  const header = container.querySelector('#pinned-genes-header');
+  return Array.from(header?.querySelectorAll('span') ?? []).map((span) => span.textContent?.trim());
+}
+
 async function setup(
   ctServiceOptions?: {
+    configs?: ComparisonToolConfig[];
     pinnedItems?: string[];
     unpinnedData?: Record<string, unknown>[];
     pinnedData?: Record<string, unknown>[];
@@ -92,7 +130,7 @@ describe('ComparisonToolTableComponent', () => {
       pinnedData: [pinnedItemData],
       pinLimit: 5,
     });
-    expect(screen.getByText(/Pinned Results/i)).toBeInTheDocument();
+    expect(screen.getByText('1 Pinned Result')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /download/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /clear all/i })).toBeInTheDocument();
   });
@@ -243,6 +281,77 @@ describe('ComparisonToolTableComponent', () => {
   it('should show All Results divider when not searching/filtering and pinned exist', async () => {
     await setup({ pinnedItems: ['68fff1aaeb12b9674515fd58'] });
     expect(screen.getByText(/All Results/i)).toBeInTheDocument();
+  });
+
+  describe('pinned results header', () => {
+    it('should fall back to results', async () => {
+      const { component } = await setup(pinnedOptions(mockComparisonToolData.slice(0, 2)));
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual(['2 Pinned Results']);
+    });
+
+    it('should use the view noun', async () => {
+      const { component } = await setup({
+        configs: viewNounConfigs,
+        ...pinnedOptions(mockComparisonToolData.slice(0, 2)),
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        '2 Parents',
+      ]);
+    });
+
+    it('should count parents and rows separately in a child view', async () => {
+      const { component } = await setup({
+        configs: childViewConfigs,
+        ...pinnedOptions(childViewPinnedData),
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        '2 Parents',
+        '3 Children',
+      ]);
+    });
+  });
+
+  describe('divider labels', () => {
+    it('should fall back to results', async () => {
+      await setup(pinnedOptions(mockComparisonToolData.slice(0, 1)));
+
+      expect(screen.getByText('All Results')).toBeInTheDocument();
+    });
+
+    it('should use the view noun in the Matching divider', async () => {
+      await setup({ configs: viewNounConfigs }, { searchTerm: '5xFAD' });
+
+      expect(screen.getByText('Matching Parents')).toBeInTheDocument();
+    });
+
+    it('should use the view noun in the Filtered divider', async () => {
+      await setup(
+        { configs: viewNounConfigs },
+        { filters: mockComparisonToolFiltersWithSelections },
+      );
+
+      expect(screen.getByText('Filtered Parents')).toBeInTheDocument();
+    });
+
+    it('should use the view noun in the All divider', async () => {
+      await setup({
+        configs: viewNounConfigs,
+        ...pinnedOptions(mockComparisonToolData.slice(0, 1)),
+      });
+
+      expect(screen.getByText('All Parents')).toBeInTheDocument();
+    });
+
+    it('should use the view noun rather than the parent noun in a child view', async () => {
+      await setup({ configs: childViewConfigs, ...pinnedOptions(childViewPinnedData) });
+
+      expect(screen.getByText('All Children')).toBeInTheDocument();
+    });
   });
 });
 

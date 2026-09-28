@@ -10,6 +10,7 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { getPinnedResultsLabels, getViewNounLabel } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolFilterService,
   ComparisonToolHelperService,
@@ -58,7 +59,8 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   tableElement = viewChild<ElementRef>('table');
 
   pinnedRowCount = this.comparisonToolService.pinnedRowCount;
-  pinLimit = this.comparisonToolService.pinLimit;
+  pinCount = this.comparisonToolService.pinCount;
+  nouns = this.comparisonToolService.nouns;
   canPinAll = this.comparisonToolService.canPinAll;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
   isLoadingTableData = this.comparisonToolService.isLoadingTableData;
@@ -76,6 +78,19 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   columnWidths = signal<Record<string, string>>({});
 
   readonly pinnedResultsControls = PINNED_RESULTS_CONTROLS;
+
+  pinnedResultsLabels = computed(() =>
+    getPinnedResultsLabels(
+      { pinCount: this.pinCount(), pinnedRowCount: this.pinnedRowCount() },
+      this.nouns(),
+    ),
+  );
+
+  unpinnedResultsLabel = computed(() =>
+    getViewNounLabel(this.searchTerm() ? 'Matching' : 'Filtered', this.nouns()),
+  );
+
+  allResultsLabel = computed(() => getViewNounLabel('All', this.nouns()));
 
   pinAllTooltip = computed(() => {
     if (!this.canPinAll()) return this.disabledPinTooltip();
