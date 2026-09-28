@@ -17,7 +17,7 @@ import {
   DROPPED_LEGACY_PINS_MESSAGE,
   LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
   LEGACY_SEX_CATEGORY_PREFIX,
-  MAX_LEGACY_PINS_FOR_BOTH_SEXES,
+  MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE,
   PIN_SEGMENT_DELIMITER,
   UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE,
 } from './legacy-differential-expression-url.redirect';
@@ -80,9 +80,12 @@ function readParam(result: unknown, key: string): string[] {
 
 describe('legacyDifferentialExpressionUrlGuard', () => {
   let warn: jest.SpyInstance;
+  let log: jest.SpyInstance;
 
   beforeEach(() => {
-    warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+    const logger = TestBed.inject(LoggerService);
+    warn = jest.spyOn(logger, 'warn').mockImplementation();
+    log = jest.spyOn(logger, 'log').mockImplementation();
   });
 
   describe('a URL that is already current', () => {
@@ -153,7 +156,7 @@ describe('legacyDifferentialExpressionUrlGuard', () => {
     });
 
     it('should keep one female row per pin for a both-sexes cohort over the pin budget', () => {
-      const pinned = legacyPins(MAX_LEGACY_PINS_FOR_BOTH_SEXES + 1);
+      const pinned = legacyPins(MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE + 1);
 
       const result = runGuard({ categories: legacyCategories('Females & Males'), pinned });
 
@@ -238,25 +241,27 @@ describe('legacyDifferentialExpressionUrlGuard', () => {
       });
     });
 
-    it('should log an unrecognized cohort', () => {
-      runGuard({ categories: legacyCategories('Unknown') });
+    it('should log an unrecognized cohort as a single warning that includes its dropped pins', () => {
+      runGuard({ categories: legacyCategories('Unknown'), pinned: [legacyPin('3xTg-AD')] });
 
+      expect(warn).toHaveBeenCalledTimes(1);
       expect(warn).toHaveBeenCalledWith(
         UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE,
-        expect.objectContaining({ cohort: 'Unknown' }),
+        expect.objectContaining({ cohort: 'Unknown', droppedPinnedItems: [legacyPin('3xTg-AD')] }),
       );
     });
 
-    it('should log a both-sexes cohort narrowed to females', () => {
+    it('should record a both-sexes cohort narrowed to females as a breadcrumb, not a warning', () => {
       runGuard({
         categories: legacyCategories('Females & Males'),
-        pinned: legacyPins(MAX_LEGACY_PINS_FOR_BOTH_SEXES + 1),
+        pinned: legacyPins(MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE + 1),
       });
 
-      expect(warn).toHaveBeenCalledWith(
+      expect(log).toHaveBeenCalledWith(
         LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
         expect.objectContaining({ cohort: 'Females & Males' }),
       );
+      expect(warn).not.toHaveBeenCalled();
     });
 
     it('should not log a warning when every pin translates', () => {

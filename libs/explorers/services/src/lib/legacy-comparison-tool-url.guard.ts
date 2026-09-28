@@ -16,6 +16,8 @@ import { LoggerService } from './logger.service';
 
 export const LEGACY_URL_TRANSLATION_FAILED_MESSAGE =
   'createLegacyComparisonToolUrlGuard: failed to translate legacy URL';
+export const LEGACY_URL_REDIRECTED_MESSAGE =
+  'createLegacyComparisonToolUrlGuard: redirected legacy URL';
 
 // Builds a guard that rewrites a legacy comparison tool share URL into its current shape before the
 // tool loads. The resolveRedirect function supplies the product-specific translation rules; this
@@ -38,11 +40,22 @@ export function createLegacyComparisonToolUrlGuard(
         logger.warn(warning.message, { ...warning.data, url: state.url });
       }
 
+      for (const note of redirect.notes ?? []) {
+        logger.log(note.message, { ...note.data, url: state.url });
+      }
+
       const urlTree = router.parseUrl(state.url);
       urlTree.queryParams = applyParams(
         urlTree.queryParams,
         serializeComparisonToolUrlParams(redirect, route.queryParams),
       );
+
+      // Marks the rewrite in the breadcrumb trail, so a later error on the page shows which legacy
+      // URL the comparison tool was actually loaded from.
+      logger.log(LEGACY_URL_REDIRECTED_MESSAGE, {
+        from: state.url,
+        to: router.serializeUrl(urlTree),
+      });
 
       // Replace rather than push, so the back button returns to wherever the legacy link was opened
       // from instead of the legacy URL this guard just redirected away from.

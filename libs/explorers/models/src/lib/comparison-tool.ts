@@ -195,13 +195,19 @@ export interface PaginationParams {
  * A legacy URL translation that failed or degraded. Each distinct failure mode should use its own
  * fixed message, with the URL-specific details in `data`, so reports group by failure mode.
  */
-export interface LegacyComparisonToolUrlWarning {
+export interface LegacyComparisonToolUrlLogEntry {
   message: string;
   data?: Record<string, unknown>;
 }
 
+/**
+ * `warnings` report translation problems worth investigating and each becomes a Sentry event, so
+ * report one per root cause. `notes` record expected but lossy translations as breadcrumbs only,
+ * which reach Sentry solely as context on a later event from the same page.
+ */
 export interface LegacyComparisonToolUrlRedirect extends ComparisonToolUrlParams {
-  warnings?: LegacyComparisonToolUrlWarning[];
+  warnings?: LegacyComparisonToolUrlLogEntry[];
+  notes?: LegacyComparisonToolUrlLogEntry[];
 }
 
 /**

@@ -646,22 +646,27 @@ test.describe('differential expression', () => {
   // `Sex - <cohort>` category and pinned ids without a sex segment, which the route guard rewrites
   // before the tool loads. The full redirect matrix is covered by the guard's unit spec; this test
   // is what proves the guard is wired to the route and that its output resolves against real data.
-  // Legacy category values are literals here for the same reason as the header tests above:
-  // @sagebionetworks/model-ad/config cannot be imported from e2e.
+  // Its values are chosen to be the hardest to encode: the `&` in the both-sexes cohort, and a
+  // model whose parentheses and slash go through the app's CustomUrlSerializer, which the unit spec
+  // does not use. Legacy category values are literals here for the same reason as the header tests
+  // above: @sagebionetworks/model-ad/config cannot be imported from e2e.
   test('legacy share URL expands every pin into both sexes', async ({ page }) => {
-    const legacyCategories = [...categories, 'Sex - Females & Males'];
-    const legacyCacul1Pins = models.map((model) => `${cacul1EnsemblGeneId}~${model}`);
+    const hemibrainCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain'];
+    const legacyCategories = [...hemibrainCategories, 'Sex - Females & Males'];
+    const hemibrainModels = ['5xFAD (IU/Jax/Pitt)', 'APOE4'];
+    const legacyCacul1Pins = hemibrainModels.map((model) => `${cacul1EnsemblGeneId}~${model}`);
+    const expectedCacul1Pins = legacyCacul1Pins.flatMap((pin) => [`${pin}~Female`, `${pin}~Male`]);
     const queryParameters = [
       getQueryParamFromValues(legacyCategories, 'categories'),
       getQueryParamFromValues(legacyCacul1Pins, 'pinned'),
-      modelsQueryParams,
+      getQueryParamFromValues(hemibrainModels, 'models'),
     ].join('&');
 
     await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
 
-    await expectCategoriesParams(page, categories);
-    await expectCategories(page, categories);
-    await expectPinnedParams(page, cacul1Matches);
-    await expectPinnedRows(page, cacul1Matches);
+    await expectCategoriesParams(page, hemibrainCategories);
+    await expectCategories(page, hemibrainCategories);
+    await expectPinnedParams(page, expectedCacul1Pins);
+    await expectPinnedRows(page, expectedCacul1Pins);
   });
 });

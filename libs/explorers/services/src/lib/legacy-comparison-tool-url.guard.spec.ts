@@ -10,6 +10,7 @@ import { LegacyComparisonToolUrlRedirectFn } from '@sagebionetworks/explorers/mo
 import { parseCommaSeparatedQueryParam } from '@sagebionetworks/shared/util';
 import {
   createLegacyComparisonToolUrlGuard,
+  LEGACY_URL_REDIRECTED_MESSAGE,
   LEGACY_URL_TRANSLATION_FAILED_MESSAGE,
 } from './legacy-comparison-tool-url.guard';
 import { LoggerService } from './logger.service';
@@ -55,6 +56,10 @@ function readParam(result: unknown, key: string): string[] {
 }
 
 describe('createLegacyComparisonToolUrlGuard', () => {
+  beforeEach(() => {
+    jest.spyOn(TestBed.inject(LoggerService), 'log').mockImplementation();
+  });
+
   it('should allow activation when there is nothing to redirect', () => {
     expect(runGuard(() => null, { categories: 'RNA' })).toBe(true);
   });
@@ -184,13 +189,50 @@ describe('createLegacyComparisonToolUrlGuard', () => {
   describe('logging', () => {
     const legacyQueryParams = { categories: 'RNA,Sex%20-%20Females' };
     let logger: LoggerService;
+    let log: jest.SpyInstance;
     let warn: jest.SpyInstance;
     let error: jest.SpyInstance;
 
     beforeEach(() => {
       logger = TestBed.inject(LoggerService);
+      log = jest.spyOn(logger, 'log').mockImplementation();
       warn = jest.spyOn(logger, 'warn').mockImplementation();
       error = jest.spyOn(logger, 'error').mockImplementation();
+    });
+
+    it('should record every redirect as a breadcrumb with the legacy and rewritten URLs', () => {
+      const result = runGuard(() => ({ categories: ['RNA'], pinnedItems: [] }), legacyQueryParams);
+
+      expect(log).toHaveBeenCalledWith(LEGACY_URL_REDIRECTED_MESSAGE, {
+        from: buildUrl(legacyQueryParams, ''),
+        to: serialize(result),
+      });
+    });
+
+    it('should record each redirect note as a breadcrumb rather than a warning', () => {
+      const narrowedNote = {
+        message: 'Narrowed a both-sexes cohort to females',
+        data: { legacyPinCount: 26 },
+      };
+
+      runGuard(
+        () => ({ categories: ['RNA'], pinnedItems: [], notes: [narrowedNote] }),
+        legacyQueryParams,
+      );
+
+      expect(log).toHaveBeenCalledWith(narrowedNote.message, {
+        ...narrowedNote.data,
+        url: buildUrl(legacyQueryParams, ''),
+      });
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    it('should log nothing when there is nothing to redirect', () => {
+      runGuard(() => null, legacyQueryParams);
+
+      expect(log).not.toHaveBeenCalled();
+      expect(warn).not.toHaveBeenCalled();
+      expect(error).not.toHaveBeenCalled();
     });
 
     it('should log each redirect warning with its data and the legacy URL', () => {
@@ -218,7 +260,7 @@ describe('createLegacyComparisonToolUrlGuard', () => {
       expect(warn).toHaveBeenCalledWith(unrecognizedCohortWarning.message, { url });
     });
 
-    it('should not log when the redirect reports no warnings', () => {
+    it('should not warn or error when the redirect reports no warnings', () => {
       runGuard(() => ({ categories: ['RNA'], pinnedItems: [] }), legacyQueryParams);
 
       expect(warn).not.toHaveBeenCalled();

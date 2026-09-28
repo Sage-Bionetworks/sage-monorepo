@@ -4,7 +4,7 @@ import {
   DROPPED_LEGACY_PINS_MESSAGE,
   LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
   LEGACY_SEX_CATEGORY_PREFIX,
-  MAX_LEGACY_PINS_FOR_BOTH_SEXES,
+  MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE,
   legacyDifferentialExpressionUrlRedirect,
   PIN_SEGMENT_DELIMITER,
   UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE,
@@ -82,6 +82,17 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
         'warnings',
       );
     });
+
+    it('should add the sex to every pin regardless of count, leaving the pin limit to the comparison tool', () => {
+      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE + 1);
+
+      const result = resolveRedirect(legacyCategories('Males'), pinnedItems);
+
+      expect(result?.pinnedItems).toEqual(
+        pinnedItems.map((pin) => `${pin}${PIN_SEGMENT_DELIMITER}${Sex.Male}`),
+      );
+      expect(result).not.toHaveProperty('warnings');
+    });
   });
 
   describe('a both-sexes cohort within the pin budget', () => {
@@ -100,32 +111,33 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
     });
 
     it('should fill the pin budget exactly at the threshold', () => {
-      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_BOTH_SEXES);
+      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE);
 
       const currentPinnedItems =
         resolveRedirect(legacyCategories('Females & Males'), pinnedItems)?.pinnedItems ?? [];
 
       expect(currentPinnedItems).toHaveLength(MAX_PINNED_ITEMS);
       expect(currentPinnedItems.filter((pin) => pin.endsWith(Sex.Female))).toHaveLength(
-        MAX_LEGACY_PINS_FOR_BOTH_SEXES,
+        MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE,
       );
       expect(currentPinnedItems.filter((pin) => pin.endsWith(Sex.Male))).toHaveLength(
-        MAX_LEGACY_PINS_FOR_BOTH_SEXES,
+        MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE,
       );
     });
 
-    it('should report no warnings at the threshold', () => {
-      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_BOTH_SEXES);
+    it('should report no warnings or notes at the threshold', () => {
+      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE);
 
-      expect(resolveRedirect(legacyCategories('Females & Males'), pinnedItems)).not.toHaveProperty(
-        'warnings',
-      );
+      const result = resolveRedirect(legacyCategories('Females & Males'), pinnedItems);
+
+      expect(result).not.toHaveProperty('warnings');
+      expect(result).not.toHaveProperty('notes');
     });
   });
 
   describe('a both-sexes cohort over the pin budget', () => {
     it('should keep one female row per pin rather than doubling', () => {
-      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_BOTH_SEXES + 1);
+      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE + 1);
 
       const currentPinnedItems =
         resolveRedirect(legacyCategories('Females & Males'), pinnedItems)?.pinnedItems ?? [];
@@ -134,19 +146,22 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
       expect(currentPinnedItems.every((pin) => pin.endsWith(Sex.Female))).toBe(true);
     });
 
-    it('should warn that the cohort was narrowed to females', () => {
-      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_BOTH_SEXES + 1);
+    it('should note the narrowing to females rather than warn, since it is expected', () => {
+      const pinnedItems = legacyPins(MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE + 1);
 
-      expect(resolveRedirect(legacyCategories('Females & Males'), pinnedItems)?.warnings).toEqual([
+      const result = resolveRedirect(legacyCategories('Females & Males'), pinnedItems);
+
+      expect(result?.notes).toEqual([
         {
           message: LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
           data: {
             cohort: 'Females & Males',
             legacyPinCount: pinnedItems.length,
-            maxLegacyPinsForBothSexes: MAX_LEGACY_PINS_FOR_BOTH_SEXES,
+            maxLegacyPinsForMaleOrFemale: MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE,
           },
         },
       ]);
+      expect(result).not.toHaveProperty('warnings');
     });
   });
 
@@ -203,18 +218,33 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
       expect(result?.pinnedItems).toEqual([]);
     });
 
-    it('should warn about the cohort and the pins it dropped', () => {
+    it('should report the pins it dropped in a single cohort warning', () => {
       const result = resolveRedirect(legacyCategories('Unknown'), legacyPinnedItems);
 
       expect(result?.warnings).toEqual([
         {
           message: UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE,
-          data: { cohort: 'Unknown', legacyPinCount: legacyPinnedItems.length },
+          data: {
+            cohort: 'Unknown',
+            legacyPinCount: legacyPinnedItems.length,
+            droppedPinnedItems: legacyPinnedItems,
+          },
         },
-        {
-          message: DROPPED_LEGACY_PINS_MESSAGE,
-          data: { cohort: 'Unknown', droppedPinnedItems: legacyPinnedItems },
-        },
+      ]);
+    });
+
+    it('should fold malformed pins into the same cohort warning', () => {
+      const malformedPin = 'ENSG1~APOE4~Female~extra';
+
+      const result = resolveRedirect(legacyCategories('Unknown'), [
+        ...legacyPinnedItems,
+        malformedPin,
+      ]);
+
+      expect(result?.warnings).toHaveLength(1);
+      expect(result?.warnings?.[0]?.data?.['droppedPinnedItems']).toEqual([
+        ...legacyPinnedItems,
+        malformedPin,
       ]);
     });
 

@@ -1,7 +1,7 @@
 import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
+  LegacyComparisonToolUrlLogEntry,
   LegacyComparisonToolUrlRedirectFn,
-  LegacyComparisonToolUrlWarning,
 } from '@sagebionetworks/explorers/models';
 import { Sex } from '@sagebionetworks/model-ad/api-client';
 
@@ -20,9 +20,10 @@ export const PIN_SEGMENT_DELIMITER = '~';
 export const LEGACY_PIN_SEGMENT_COUNT = 2;
 export const CURRENT_PIN_SEGMENT_COUNT = 3;
 
-// Above this many legacy pins, expanding a both-sexes cohort into one row per sex would exceed the
-// pin budget, so those URLs keep a single row per pin instead.
-export const MAX_LEGACY_PINS_FOR_BOTH_SEXES = MAX_PINNED_ITEMS / 2;
+// The most legacy pins a `Females & Males` URL can carry and still give each pin both a Male and a
+// Female row within the pin budget; above it, each pin gets a Female row only. Single-sex URLs are
+// never limited here, since the comparison tool caps the pins it restores from the URL.
+export const MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE = MAX_PINNED_ITEMS / 2;
 
 export const UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE =
   'legacyDifferentialExpressionUrlRedirect: unrecognized legacy sex cohort';
@@ -54,7 +55,7 @@ export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRed
   const isNarrowedToFemales =
     cohortSexes !== undefined &&
     cohortSexes.length > 1 &&
-    legacyPinnedItems.length > MAX_LEGACY_PINS_FOR_BOTH_SEXES;
+    legacyPinnedItems.length > MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE;
   const sexes = isNarrowedToFemales ? [Sex.Female] : (cohortSexes ?? []);
 
   const currentPinnedItems = new Set<string>();
@@ -75,30 +76,35 @@ export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRed
     }
   }
 
-  const warnings: LegacyComparisonToolUrlWarning[] = [];
+  const warnings: LegacyComparisonToolUrlLogEntry[] = [];
+  const notes: LegacyComparisonToolUrlLogEntry[] = [];
 
+  // An unrecognized cohort is the root cause of every legacy pin it drops, so it reports those pins
+  // itself rather than raising a second warning for the same URL.
   if (cohortSexes === undefined) {
     warnings.push({
       message: UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE,
-      data: { cohort: legacyCohort, legacyPinCount: legacyPinnedItems.length },
+      data: {
+        cohort: legacyCohort,
+        legacyPinCount: legacyPinnedItems.length,
+        droppedPinnedItems,
+      },
+    });
+  } else if (droppedPinnedItems.length > 0) {
+    warnings.push({
+      message: DROPPED_LEGACY_PINS_MESSAGE,
+      data: { cohort: legacyCohort, droppedPinnedItems },
     });
   }
 
   if (isNarrowedToFemales) {
-    warnings.push({
+    notes.push({
       message: LEGACY_BOTH_SEXES_NARROWED_MESSAGE,
       data: {
         cohort: legacyCohort,
         legacyPinCount: legacyPinnedItems.length,
-        maxLegacyPinsForBothSexes: MAX_LEGACY_PINS_FOR_BOTH_SEXES,
+        maxLegacyPinsForMaleOrFemale: MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE,
       },
-    });
-  }
-
-  if (droppedPinnedItems.length > 0) {
-    warnings.push({
-      message: DROPPED_LEGACY_PINS_MESSAGE,
-      data: { cohort: legacyCohort, droppedPinnedItems },
     });
   }
 
@@ -106,5 +112,6 @@ export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRed
     categories: legacyCategories.slice(0, legacySexCategoryIndex),
     pinnedItems: [...currentPinnedItems],
     ...(warnings.length > 0 && { warnings }),
+    ...(notes.length > 0 && { notes }),
   };
 };
