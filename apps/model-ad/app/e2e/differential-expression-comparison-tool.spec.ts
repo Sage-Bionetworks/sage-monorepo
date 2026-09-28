@@ -695,5 +695,46 @@ test.describe('differential expression', () => {
 
       await expectRewrittenLegacyUrl(page);
     });
+
+    // The rewrite replaces the legacy history entry rather than adding one, so Back leaves the tool
+    // for the page before the legacy link, and Forward returns to the rewritten URL. Neither can land
+    // on the legacy URL again.
+    test('back and forward skip a legacy share URL opened directly', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+      await navigateToComparison(page, CT_PAGE, false, 'url', legacyQueryParameters);
+      await expectRewrittenLegacyUrl(page);
+
+      await page.goBack();
+      await expectCategoriesParams(page, categories);
+
+      await page.goForward();
+      await expectCategoriesParams(page, hemibrainCategories);
+      await expectPinnedParams(page, expectedCacul1Pins);
+    });
+
+    test('back and forward skip a legacy URL reached from within the tool', async ({ page }) => {
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        getQueryParamFromValues(hemibrainCategories, 'categories'),
+      );
+
+      const legacyUrl = `${new URL(page.url()).pathname}?${legacyQueryParameters}`;
+      await page.evaluate((url) => {
+        history.pushState(null, '', url);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      }, legacyUrl);
+      await expectRewrittenLegacyUrl(page);
+
+      await page.goBack();
+      await expectCategoriesParams(page, hemibrainCategories);
+      await expectPinnedParams(page, []);
+
+      await page.goForward();
+      await expectCategoriesParams(page, hemibrainCategories);
+      await expectPinnedParams(page, expectedCacul1Pins);
+    });
   });
 });

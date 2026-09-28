@@ -187,6 +187,20 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
       ]);
     });
 
+    it('should drop and report one whose sex segment is not a known sex', () => {
+      const unknownSexPin = 'ENSG1~APOE4~Unknown';
+
+      const result = resolveRedirect(legacyCategories('Females'), [unknownSexPin]);
+
+      expect(result?.pinnedItems).toEqual([]);
+      expect(result?.warnings).toEqual([
+        {
+          message: DROPPED_LEGACY_PINS_MESSAGE,
+          data: { cohort: 'Females', droppedPinnedItems: [unknownSexPin] },
+        },
+      ]);
+    });
+
     it('should not count toward the both-sexes pin limit', () => {
       const pinnedItems = [...legacyPins(MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE), 'ENSG1~3xTg-AD~Male'];
 

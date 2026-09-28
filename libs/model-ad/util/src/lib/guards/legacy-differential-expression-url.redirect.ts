@@ -17,6 +17,8 @@ export const LEGACY_SEX_COHORT_SEXES: Record<string, Sex[]> = {
 };
 
 export const PIN_SEGMENT_DELIMITER = '~';
+const KNOWN_SEXES: ReadonlySet<Sex> = new Set(Object.values(Sex));
+
 export const LEGACY_PIN_SEGMENT_COUNT = 2;
 export const CURRENT_PIN_SEGMENT_COUNT = 3;
 
@@ -70,7 +72,7 @@ export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRed
   for (const pinnedItem of legacyPinnedItems) {
     const segmentCount = countPinSegments(pinnedItem);
 
-    if (segmentCount === CURRENT_PIN_SEGMENT_COUNT) {
+    if (segmentCount === CURRENT_PIN_SEGMENT_COUNT && hasKnownSex(pinnedItem)) {
       currentPinnedItems.add(pinnedItem);
       passedThroughPinnedItems.push(pinnedItem);
     } else if (segmentCount === LEGACY_PIN_SEGMENT_COUNT && sexes.length > 0) {
@@ -135,4 +137,10 @@ export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRed
 
 function countPinSegments(pinnedItem: string): number {
   return pinnedItem.split(PIN_SEGMENT_DELIMITER).length;
+}
+
+// A current pin's last segment must be a sex a row can have, or the pin can never match a row.
+function hasKnownSex(pinnedItem: string): boolean {
+  const sex = pinnedItem.split(PIN_SEGMENT_DELIMITER).at(-1);
+  return KNOWN_SEXES.has(sex as Sex);
 }
