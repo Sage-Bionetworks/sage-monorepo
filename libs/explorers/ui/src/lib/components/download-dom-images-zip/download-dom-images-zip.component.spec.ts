@@ -1,3 +1,4 @@
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { captureDomToBlob } from '@sagebionetworks/explorers/util';
 import { render } from '@testing-library/angular';
 import { saveAs } from 'file-saver';
@@ -111,6 +112,31 @@ describe('DownloadDomImagesZipComponent', () => {
 
     expect(fileSpy).toHaveBeenCalledTimes(2);
     expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'test-file.zip');
+  });
+
+  it('should log a warning when a plot capture fails and nothing is left to download', async () => {
+    (captureDomToBlob as jest.Mock).mockResolvedValue(null);
+    const warn = jest.fn();
+    const mockElement = { offsetWidth: 100, offsetHeight: 100 } as HTMLElement;
+    const { fixture } = await render(DownloadDomImagesZipComponent, {
+      componentInputs: {
+        domFiles: [{ target: mockElement, filename: 'img-1' }],
+        filename: 'test-file',
+      },
+      providers: [{ provide: LoggerService, useValue: { warn } }],
+    });
+
+    await fixture.componentInstance.performDownload('.png');
+
+    expect(warn).toHaveBeenCalledWith(
+      'Failed to capture a plot image; omitting it from the download',
+      {
+        filename: 'img-1',
+      },
+    );
+    expect(warn).toHaveBeenCalledWith('No files were available for download', {
+      fileType: '.png',
+    });
   });
 
   it('should save a single image under its own name instead of zipping it', async () => {
