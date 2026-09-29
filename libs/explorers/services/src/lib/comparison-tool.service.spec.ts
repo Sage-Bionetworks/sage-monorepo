@@ -604,6 +604,39 @@ describe('ComparisonToolService', () => {
       });
     });
 
+    describe('after a failed first pinned fetch', () => {
+      const failFirstPinnedFetch = (selection: string[], pinnedItems: string[]) => {
+        connectService(viewConfigs, { selection });
+        service.setPinnedItems(pinnedItems);
+        service.fetchPinned(failedRequest());
+      };
+
+      it('counts the cached pins in the parent view', () => {
+        failFirstPinnedFetch(PARENT_VIEW, ['parent1', 'parent2']);
+
+        expect(service.pinnedParents()).toEqual([]);
+        expect(service.pinCount()).toBe(2);
+      });
+
+      it('counts the cached pins toward the pin limit in the child view', () => {
+        failFirstPinnedFetch(CHILD_VIEW, ['child1a', 'child1b']);
+
+        service.setPinLimit(2);
+
+        expect(service.pinnedParents()).toEqual([]);
+        expect(service.pinCount()).toBe(2);
+        expect(service.hasReachedPinLimit()).toBe(true);
+      });
+
+      it('counts the pinned parents again when the next pinned fetch succeeds', () => {
+        failFirstPinnedFetch(CHILD_VIEW, ['child1a', 'child1b']);
+
+        landPinned(childRow('child1a', 'parent1'), childRow('child1b', 'parent1'));
+
+        expect(service.pinCount()).toBe(1);
+      });
+    });
+
     describe('pin limit by parent', () => {
       const childrenOf = (parentNumber: number, count: number): Row[] =>
         Array.from({ length: count }, (_, index) =>
@@ -1018,6 +1051,33 @@ describe('ComparisonToolService', () => {
         connectService(configsWithNouns, { selection: CHILD_VIEW });
 
         expect(service.nouns()).toEqual(CHILD_NOUNS);
+      });
+
+      it('should count pins in the view nouns while the pinned rows are loaded', () => {
+        connectService(configsWithNouns, { selection: CHILD_VIEW });
+
+        landPinned(childRow('child1a', 'parent1'));
+
+        expect(service.nounsForPinCount()).toEqual(CHILD_NOUNS);
+      });
+
+      it('should keep counting pins by parent after a failed fetch that kept the parents', () => {
+        connectService(configsWithNouns, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        service.setDropdownSelection(CHILD_VIEW);
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.nounsForPinCount()).toEqual(CHILD_NOUNS);
+      });
+
+      it('should count pins by row after a failed first fetch in a child view', () => {
+        connectService(configsWithNouns, { selection: CHILD_VIEW });
+        service.setPinnedItems(['child1a']);
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.nounsForPinCount()).toEqual({ viewNoun: CHILD_NOUN, parentNoun: null });
       });
 
       it('should word the pin limit tooltip by parent in a child view', () => {

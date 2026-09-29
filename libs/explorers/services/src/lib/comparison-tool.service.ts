@@ -289,11 +289,22 @@ export class ComparisonToolService<T> {
   // until the parent rows land, pinnedData() still holds the child rows, so the row count could
   // exceed the pin limit.
   // After a failed pinned fetch no rows are shown, but the pins are still cached and count toward
-  // the limit: a failure keeps the pinned parents, and a view without a parent key counts the cache
+  // the limit. A failure keeps the pinned parents, so they are still counted when known. They are
+  // unknown in a view without a parent key, or when the first pinned fetch failed, so the cache is
+  // counted instead. In a child view that overcounts, since several cached rows can share a parent
+  private readonly isCountingCachedPins = computed(
+    () => this.pinnedFetchFailed() && (!this.parentIdDataKey() || this.pinnedParentCount() === 0),
+  );
   readonly pinCount = computed(() => {
-    if (this.parentIdDataKey()) return this.pinnedParentCount();
-    return this.pinnedFetchFailed() ? this.pinnedItems().length : this.pinnedRowCount();
+    if (this.isCountingCachedPins()) return this.pinnedItems().length;
+    return this.parentIdDataKey() ? this.pinnedParentCount() : this.pinnedRowCount();
   });
+  // The nouns to word `pinCount` with. They match `nouns`, but drop the parent noun while `pinCount`
+  // counts cached rows. Pin limit copy keeps `nouns`, since the limit is always counted by parent
+  readonly nounsForPinCount = computed<ComparisonToolNouns>(
+    () => (this.isCountingCachedPins() ? { ...this.nouns(), parentNoun: null } : this.nouns()),
+    { equal: isEqual },
+  );
 
   /**
    * The pins to send with a query, and the id space they are in. By default this is the pinned items
