@@ -23,6 +23,7 @@ export const TABLE_DATA_LOADING_TOOLTIP = 'Waiting for data to load...';
 export const PINNED_RESULTS_CONTROLS = {
   downloadButtonLabel: 'Download Pins',
   clearButtonLabel: 'Clear All Pins',
+  retryButtonLabel: 'Retry Loading Pins',
 } as const;
 
 // Keep in sync with the corresponding $comparison-tool-* variables in

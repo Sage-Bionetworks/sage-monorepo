@@ -3,6 +3,7 @@ import {
   getNoResultsMessage,
   getPinAllTooltip,
   getPinLimitTooltip,
+  getPinnedFetchFailedMessage,
   getPinnedResultsControlsCopy,
   getPinnedResultsLabels,
   getPinToggleTooltip,
@@ -190,6 +191,32 @@ describe('comparison tool copy', () => {
 
     it('should use the view noun', () => {
       expect(getNoResultsMessage(VIEW_NOUNS)).toBe('No parents found...');
+    });
+  });
+
+  describe('getPinnedFetchFailedMessage', () => {
+    it('should fall back to results', () => {
+      expect(getPinnedFetchFailedMessage(3, NO_NOUNS)).toBe(
+        "Your 3 pinned results couldn't be loaded. Pinning other results or clearing all pins will remove them.",
+      );
+    });
+
+    it('should use the view noun', () => {
+      expect(getPinnedFetchFailedMessage(3, VIEW_NOUNS)).toBe(
+        "Your 3 pinned parents couldn't be loaded. Pinning other parents or clearing all pins will remove them.",
+      );
+    });
+
+    it('should count parents and name the rows to pin in a child view', () => {
+      expect(getPinnedFetchFailedMessage(3, CHILD_NOUNS)).toBe(
+        "Your 3 pinned parents couldn't be loaded. Pinning other children or clearing all pins will remove them.",
+      );
+    });
+
+    it('should use the singular for one pin', () => {
+      expect(getPinnedFetchFailedMessage(1, VIEW_NOUNS)).toBe(
+        "Your 1 pinned parent couldn't be loaded. Pinning other parents or clearing all pins will remove it.",
+      );
     });
   });
 
