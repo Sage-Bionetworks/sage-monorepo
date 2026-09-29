@@ -202,7 +202,7 @@ export const expectPinnedResultsCount = async (
   pinnedRowCount: number,
   expectedLabels: string[],
 ): Promise<void> => {
-  await expect(page.locator('#pinned-genes-header span')).toHaveText(expectedLabels);
+  await expect(page.locator('#pinned-results-header span')).toHaveText(expectedLabels);
   await expect(getPinnedTable(page).getByRole('row')).toHaveCount(pinnedRowCount);
 };
 

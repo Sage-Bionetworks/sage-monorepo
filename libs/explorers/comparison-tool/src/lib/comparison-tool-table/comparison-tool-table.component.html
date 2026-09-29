@@ -5,7 +5,7 @@
     @if (pinnedRowCount() > 0) {
       <div class="table-divider table-divider-1">
         <div class="table-divider-inner">
-          <div id="pinned-genes-header" class="table-divider-label">
+          <div id="pinned-results-header" class="table-divider-label">
             <span>{{ pinnedResultsLabels().heading }}</span>
             @for (sublabel of pinnedResultsLabels().sublabels; track $index) {
               <span class="table-divider-sublabel">{{ sublabel }}</span>

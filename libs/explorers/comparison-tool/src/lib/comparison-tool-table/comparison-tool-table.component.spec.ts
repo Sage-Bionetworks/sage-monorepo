@@ -75,7 +75,7 @@ function pinnedOptions(pinnedData: Record<string, unknown>[]) {
 }
 
 function getPinnedResultsHeaderLines(container: Element): (string | undefined)[] {
-  const header = container.querySelector('#pinned-genes-header');
+  const header = container.querySelector('#pinned-results-header');
   return Array.from(header?.querySelectorAll('span') ?? []).map((span) => span.textContent?.trim());
 }
 
