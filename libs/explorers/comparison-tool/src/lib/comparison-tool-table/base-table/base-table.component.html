@@ -24,7 +24,7 @@
   >
     <ng-template pTemplate="emptymessage">
       @if (noResultsMessageEnabled()) {
-        <div class="no-results">No results found...</div>
+        <div class="no-results">{{ noResultsMessage() }}</div>
       }
     </ng-template>
 

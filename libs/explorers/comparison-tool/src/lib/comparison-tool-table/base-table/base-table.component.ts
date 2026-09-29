@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
-import { DEFAULT_PAGE_SIZE } from '@sagebionetworks/explorers/constants';
+import { DEFAULT_PAGE_SIZE, getNoResultsMessage } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
@@ -33,6 +33,7 @@ export class BaseTableComponent {
   totalRecords = this.comparisonToolService.unpinnedRowCount;
   first = this.comparisonToolService.first;
   pageSize = this.comparisonToolService.pageSize;
+  noResultsMessage = computed(() => getNoResultsMessage(this.comparisonToolService.nouns()));
   isHeatmapCircleClickable = computed(
     () => !!this.comparisonToolService.viewConfig().heatmapCircleClickTransformFn,
   );

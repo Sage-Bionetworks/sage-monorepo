@@ -11,6 +11,12 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {
+  getPinAllTooltip,
+  getPinnedResultsControlsCopy,
+  getPinnedResultsLabels,
+  getViewNounLabel,
+} from '@sagebionetworks/explorers/constants';
+import {
   ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolService,
@@ -23,7 +29,6 @@ import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
 import {
   COMPARISON_TOOL_BODY_CLASS,
-  PIN_ALL_TOOLTIP,
   PINNED_RESULTS_CONTROLS,
   TABLE_DATA_LOADING_TOOLTIP,
 } from './comparison-tool-table.constants';
@@ -58,7 +63,8 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   tableElement = viewChild<ElementRef>('table');
 
   pinnedRowCount = this.comparisonToolService.pinnedRowCount;
-  pinLimit = this.comparisonToolService.pinLimit;
+  pinCount = this.comparisonToolService.pinCount;
+  nouns = this.comparisonToolService.nouns;
   canPinAll = this.comparisonToolService.canPinAll;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
   isLoadingTableData = this.comparisonToolService.isLoadingTableData;
@@ -76,22 +82,36 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   columnWidths = signal<Record<string, string>>({});
 
   readonly pinnedResultsControls = PINNED_RESULTS_CONTROLS;
+  pinnedResultsControlsCopy = computed(() => getPinnedResultsControlsCopy(this.nouns()));
+
+  pinnedResultsLabels = computed(() =>
+    getPinnedResultsLabels(
+      { pinCount: this.pinCount(), pinnedRowCount: this.pinnedRowCount() },
+      this.nouns(),
+    ),
+  );
+
+  unpinnedResultsLabel = computed(() =>
+    getViewNounLabel(this.searchTerm() ? 'Matching' : 'Filtered', this.nouns()),
+  );
+
+  allResultsLabel = computed(() => getViewNounLabel('All', this.nouns()));
 
   pinAllTooltip = computed(() => {
     if (!this.canPinAll()) return this.disabledPinTooltip();
-    return this.isLoadingTableData() ? TABLE_DATA_LOADING_TOOLTIP : PIN_ALL_TOOLTIP;
+    return this.isLoadingTableData() ? TABLE_DATA_LOADING_TOOLTIP : getPinAllTooltip(this.nouns());
   });
 
   downloadPinsTooltip = computed(() =>
     this.isLoadingTableData()
       ? TABLE_DATA_LOADING_TOOLTIP
-      : this.pinnedResultsControls.downloadButtonTooltip,
+      : this.pinnedResultsControlsCopy().downloadButtonTooltip,
   );
 
   clearAllPinsTooltip = computed(() =>
     this.isLoadingTableData()
       ? TABLE_DATA_LOADING_TOOLTIP
-      : this.pinnedResultsControls.clearButtonTooltip,
+      : this.pinnedResultsControlsCopy().clearButtonTooltip,
   );
 
   constructor() {

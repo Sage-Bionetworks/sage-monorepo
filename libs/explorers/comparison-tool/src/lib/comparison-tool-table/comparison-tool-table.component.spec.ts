@@ -1,7 +1,14 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, RouterModule } from '@angular/router';
-import { ComparisonToolColumn, ComparisonToolFilter } from '@sagebionetworks/explorers/models';
+import { PINNED_RESULTS_HEADING } from '@sagebionetworks/explorers/constants';
+import {
+  ComparisonToolColumn,
+  ComparisonToolConfig,
+  ComparisonToolFilter,
+  ComparisonToolNoun,
+} from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolService,
   provideComparisonToolFilterService,
@@ -27,11 +34,10 @@ import {
   COLUMN_HEADER_TEXT_CLASS,
   MAX_COLUMN_WIDTH_PX,
   MIN_COLUMN_WIDTH_PX,
-  TABLE_DATA_LOADING_TOOLTIP,
-  PIN_ALL_TOOLTIP,
   SORT_BADGE_SPACING_PX,
   SORT_BADGE_WIDTH_PX,
   SORT_ICON_WIDTH_PX,
+  TABLE_DATA_LOADING_TOOLTIP,
 } from './comparison-tool-table.constants';
 import {
   clampAndFormatWidths,
@@ -42,8 +48,40 @@ import {
   restoreCellStyles,
 } from './comparison-tool-table.helpers';
 
+const PARENT_NOUN: ComparisonToolNoun = { singular: 'Parent', plural: 'Parents' };
+const CHILD_NOUN: ComparisonToolNoun = { singular: 'Child', plural: 'Children' };
+
+const viewNounConfigs: ComparisonToolConfig[] = [
+  { ...mockComparisonToolDataConfig[0], view_noun: PARENT_NOUN },
+];
+const childViewConfigs: ComparisonToolConfig[] = [
+  {
+    ...mockComparisonToolDataConfig[0],
+    row_id_data_key: '_id',
+    parent_id_data_key: 'model_type',
+    view_noun: CHILD_NOUN,
+    parent_noun: PARENT_NOUN,
+  },
+];
+// Three rows under two distinct model_type parents
+const childViewPinnedData = [
+  mockComparisonToolData[0],
+  mockComparisonToolData[1],
+  mockComparisonToolData[4],
+];
+
+function pinnedOptions(pinnedData: Record<string, unknown>[]) {
+  return { pinnedItems: pinnedData.map((row) => row['_id'] as string), pinnedData };
+}
+
+function getPinnedResultsHeaderLines(container: Element): (string | undefined)[] {
+  const header = container.querySelector('#pinned-results-header');
+  return Array.from(header?.querySelectorAll('span') ?? []).map((span) => span.textContent?.trim());
+}
+
 async function setup(
   ctServiceOptions?: {
+    configs?: ComparisonToolConfig[];
     pinnedItems?: string[];
     unpinnedData?: Record<string, unknown>[];
     pinnedData?: Record<string, unknown>[];
@@ -63,6 +101,7 @@ async function setup(
     providers: [
       provideHttpClient(),
       provideRouter([]),
+      provideNoopAnimations(),
       MessageService,
       ...provideComparisonToolService({
         ...defaultCtOptions,
@@ -92,7 +131,7 @@ describe('ComparisonToolTableComponent', () => {
       pinnedData: [pinnedItemData],
       pinLimit: 5,
     });
-    expect(screen.getByText(/Pinned Results/i)).toBeInTheDocument();
+    expect(screen.getByText('1 Pinned Result')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /download/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /clear all/i })).toBeInTheDocument();
   });
@@ -199,7 +238,9 @@ describe('ComparisonToolTableComponent', () => {
 
     await user.hover(screen.getByRole('button', { name: /pin all/i }));
 
-    expect(screen.getByRole('tooltip', { name: PIN_ALL_TOOLTIP })).toBeVisible();
+    expect(
+      screen.getByRole('tooltip', { name: 'Pin all matching rows to the top.' }),
+    ).toBeVisible();
   });
 
   it('should explain that Pin All is waiting on table data while a fetch is in flight', async () => {
@@ -243,6 +284,179 @@ describe('ComparisonToolTableComponent', () => {
   it('should show All Results divider when not searching/filtering and pinned exist', async () => {
     await setup({ pinnedItems: ['68fff1aaeb12b9674515fd58'] });
     expect(screen.getByText(/All Results/i)).toBeInTheDocument();
+  });
+
+  describe('pinned results header', () => {
+    it('should fall back to results', async () => {
+      const { component } = await setup(pinnedOptions(mockComparisonToolData.slice(0, 2)));
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual(['2 Pinned Results']);
+    });
+
+    it('should use the view noun', async () => {
+      const { component } = await setup({
+        configs: viewNounConfigs,
+        ...pinnedOptions(mockComparisonToolData.slice(0, 2)),
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        '2 Parents',
+      ]);
+    });
+
+    it('should count parents and rows separately in a child view', async () => {
+      const { component } = await setup({
+        configs: childViewConfigs,
+        ...pinnedOptions(childViewPinnedData),
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        '2 Parents',
+        '3 Children',
+      ]);
+    });
+  });
+
+  describe('divider labels', () => {
+    it('should fall back to results', async () => {
+      await setup(pinnedOptions(mockComparisonToolData.slice(0, 1)));
+
+      expect(screen.getByText('All Results')).toBeInTheDocument();
+    });
+
+    it('should use the view noun in the Matching divider', async () => {
+      await setup({ configs: viewNounConfigs }, { searchTerm: '5xFAD' });
+
+      expect(screen.getByText('Matching Parents')).toBeInTheDocument();
+    });
+
+    it('should use the view noun in the Filtered divider', async () => {
+      await setup(
+        { configs: viewNounConfigs },
+        { filters: mockComparisonToolFiltersWithSelections },
+      );
+
+      expect(screen.getByText('Filtered Parents')).toBeInTheDocument();
+    });
+
+    it('should use the view noun in the All divider', async () => {
+      await setup({
+        configs: viewNounConfigs,
+        ...pinnedOptions(mockComparisonToolData.slice(0, 1)),
+      });
+
+      expect(screen.getByText('All Parents')).toBeInTheDocument();
+    });
+
+    it('should use the view noun rather than the parent noun in a child view', async () => {
+      await setup({ configs: childViewConfigs, ...pinnedOptions(childViewPinnedData) });
+
+      expect(screen.getByText('All Children')).toBeInTheDocument();
+    });
+  });
+  describe('Pin All tooltip', () => {
+    it('should use the view noun', async () => {
+      const { user } = await setup({ configs: viewNounConfigs }, { searchTerm: '5xFAD' });
+
+      await user.hover(screen.getByRole('button', { name: /pin all/i }));
+
+      expect(
+        screen.getByRole('tooltip', { name: 'Pin all matching parents to the top.' }),
+      ).toBeVisible();
+    });
+
+    it('should use the view noun rather than the parent noun in a child view', async () => {
+      const { user } = await setup({ configs: childViewConfigs }, { searchTerm: '5xFAD' });
+
+      await user.hover(screen.getByRole('button', { name: /pin all/i }));
+
+      expect(
+        screen.getByRole('tooltip', { name: 'Pin all matching children to the top.' }),
+      ).toBeVisible();
+    });
+  });
+
+  describe('pinned results controls', () => {
+    const fallbackOptions = pinnedOptions(mockComparisonToolData.slice(0, 1));
+    const viewNounOptions = {
+      configs: viewNounConfigs,
+      ...pinnedOptions(mockComparisonToolData.slice(0, 1)),
+    };
+    const childViewOptions = { configs: childViewConfigs, ...pinnedOptions(childViewPinnedData) };
+
+    it('should fall back to results in the Download tooltip', async () => {
+      const { user } = await setup(fallbackOptions);
+
+      await user.hover(screen.getByRole('button', { name: /download/i }));
+
+      expect(screen.getByRole('tooltip', { name: 'Download pinned results' })).toBeVisible();
+    });
+
+    it('should fall back to results in the Clear All tooltip', async () => {
+      const { user } = await setup(fallbackOptions);
+
+      await user.hover(screen.getByRole('button', { name: /clear all/i }));
+
+      expect(screen.getByRole('tooltip', { name: 'Clear all pinned results' })).toBeVisible();
+    });
+
+    it('should fall back to results in the download menu', async () => {
+      const { user } = await setup(fallbackOptions);
+
+      await user.click(screen.getByRole('button', { name: /download/i }));
+
+      expect(screen.getByText('Download pinned results as:')).toBeVisible();
+    });
+
+    it('should use the view noun in the Download tooltip', async () => {
+      const { user } = await setup(viewNounOptions);
+
+      await user.hover(screen.getByRole('button', { name: /download/i }));
+
+      expect(screen.getByRole('tooltip', { name: 'Download pinned parents' })).toBeVisible();
+    });
+
+    it('should use the view noun in the Clear All tooltip', async () => {
+      const { user } = await setup(viewNounOptions);
+
+      await user.hover(screen.getByRole('button', { name: /clear all/i }));
+
+      expect(screen.getByRole('tooltip', { name: 'Clear all pinned parents' })).toBeVisible();
+    });
+
+    it('should use the view noun in the download menu', async () => {
+      const { user } = await setup(viewNounOptions);
+
+      await user.click(screen.getByRole('button', { name: /download/i }));
+
+      expect(screen.getByText('Download pinned parents as:')).toBeVisible();
+    });
+
+    it('should use the view noun rather than the parent noun in the Download tooltip in a child view', async () => {
+      const { user } = await setup(childViewOptions);
+
+      await user.hover(screen.getByRole('button', { name: /download/i }));
+
+      expect(screen.getByRole('tooltip', { name: 'Download pinned children' })).toBeVisible();
+    });
+
+    it('should use the view noun rather than the parent noun in the Clear All tooltip in a child view', async () => {
+      const { user } = await setup(childViewOptions);
+
+      await user.hover(screen.getByRole('button', { name: /clear all/i }));
+
+      expect(screen.getByRole('tooltip', { name: 'Clear all pinned children' })).toBeVisible();
+    });
+
+    it('should use the view noun rather than the parent noun in the download menu in a child view', async () => {
+      const { user } = await setup(childViewOptions);
+
+      await user.click(screen.getByRole('button', { name: /download/i }));
+
+      expect(screen.getByText('Download pinned children as:')).toBeVisible();
+    });
   });
 });
 

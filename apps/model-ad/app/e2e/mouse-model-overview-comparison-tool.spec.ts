@@ -4,9 +4,11 @@ import {
   clickViewDetailsButtonByName,
   expectFiltersParams,
   expectPinnedParams,
+  expectPinnedResultsCount,
   expectPinnedRows,
   expectSearchResults,
   expectUnpinnedTableOnly,
+  expectViewNounLabels,
   getFiltersQueryParams,
   getPinnedTable,
   getQueryParamsFromRecords,
@@ -35,7 +37,11 @@ import {
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
-import { COMPARISON_TOOL_PATHS, LEGACY_MOUSE_MODEL_OVERVIEW_PATH } from './constants';
+import {
+  COMPARISON_TOOL_PATHS,
+  LEGACY_MOUSE_MODEL_OVERVIEW_PATH,
+  NO_MODELS_FOUND_MESSAGE,
+} from './constants';
 import {
   fetchComparisonToolConfig,
   fetchDiseaseCorrelations,
@@ -91,6 +97,25 @@ test.describe('mouse model overview', () => {
     const secondPinnedRow = await unPinByName(pinnedTable, page, secondModel.name);
     await expect(secondPinnedRow).toHaveCount(0);
     await expectPinnedParams(page, []);
+  });
+
+  test('pinned header and result labels use the model noun', async ({ page }) => {
+    const models = await fetchMouseModelOverviews(page);
+    expect(models.length).toBeGreaterThan(1);
+
+    const [firstModel, secondModel] = models;
+
+    await navigateToComparison(page, CT_PAGE, true);
+
+    const unpinnedTable = getUnpinnedTable(page);
+
+    await pinByName(unpinnedTable, page, firstModel.name);
+    await expectPinnedResultsCount(page, 1, ['Pinned Results', '1 Model']);
+
+    await pinByName(unpinnedTable, page, secondModel.name);
+    await expectPinnedResultsCount(page, 2, ['Pinned Results', '2 Models']);
+
+    await expectViewNounLabels(page, 'Models', firstModel.name);
   });
 
   test('pinned items in the URL are restored in the UI', async ({ page }) => {
@@ -186,7 +211,13 @@ test.describe('mouse model overview', () => {
 
   test('filterbox search excludes pinned items from results', async ({ page }) => {
     await navigateToComparison(page, CT_PAGE, true, 'url', `pinned=3xTg-AD,LOAD1`);
-    await testSearchExcludesPinnedItems(page, ['LOAD1', '3xTg-AD'], 'tg-', '3xtg-ad,load1');
+    await testSearchExcludesPinnedItems(
+      page,
+      ['LOAD1', '3xTg-AD'],
+      'tg-',
+      '3xtg-ad,load1',
+      NO_MODELS_FOUND_MESSAGE,
+    );
   });
 
   test('filterbox search with commas returns full, case-insensitive matches', async ({ page }) => {
@@ -213,10 +244,13 @@ test.describe('mouse model overview', () => {
     const models = await fetchMouseModelOverviews(page, { search: searchTerm });
 
     await navigateToComparison(page, CT_PAGE, true);
+    const pinnedIds = models.map((model) => model.name);
     await testPinAllAcrossPages(
       page,
       searchTerm,
-      models.map((model) => model.name),
+      pinnedIds,
+      ['Pinned Results', `${pinnedIds.length} Models`],
+      NO_MODELS_FOUND_MESSAGE,
     );
   });
 
