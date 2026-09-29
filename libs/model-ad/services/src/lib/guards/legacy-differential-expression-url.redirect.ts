@@ -104,7 +104,7 @@ export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRed
       message: UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE,
       data: {
         cohort: legacyCohort,
-        legacyPinCount: legacyPinnedItems.length,
+        pinnedItemCount: legacyPinnedItems.length,
         droppedPinnedItems,
       },
     });
@@ -148,7 +148,9 @@ function countPinSegments(pinnedItem: string): number {
   return pinnedItem.split(PIN_SEGMENT_DELIMITER).length;
 }
 
-// A current pin's last segment must be a sex a row can have, or the pin can never match a row.
+// A current pin's last segment must be a sex a row can have, or the pin can never match a row. That
+// includes the literal "null" a composite id renders for a blank sex: sex is a required Female or
+// Male enum on every differential expression row, so a "null" sex identifies no row.
 function hasKnownSex(pinnedItem: string): boolean {
   const sex = pinnedItem.split(PIN_SEGMENT_DELIMITER).at(-1);
   return sex !== undefined && KNOWN_SEXES.has(sex);

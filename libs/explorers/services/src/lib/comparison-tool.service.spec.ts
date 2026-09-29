@@ -1557,66 +1557,72 @@ describe('ComparisonToolService', () => {
         expect(service.dropdownSelection()).toEqual(['Category A', 'Option 1']);
       }));
 
-      describe('unmatched URL categories warning', () => {
-        const unmatchedCategories = ['Category C', 'Option 1'];
+      describe('warning for URL categories that match no config', () => {
+        const UNMATCHED_URL_CATEGORIES = ['Category C', 'Option 1']; // no config has 'Category C'
+        const MATCHING_URL_CATEGORIES = ['Category B', 'Option 1'];
+        const DEFAULT_DROPDOWN_SELECTION = ['Category A', 'Option 1']; // the first config
         let warn: jest.SpyInstance;
 
         beforeEach(() => {
           warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
         });
 
-        it('should warn once when URL categories match no config on first load', fakeAsync(() => {
+        it('should warn once with the default selection used instead when the page loads with URL categories that match no config', fakeAsync(() => {
           connectService(mockConfigsWithDropdowns, {
-            initialParams: { categories: unmatchedCategories },
+            initialParams: { categories: UNMATCHED_URL_CATEGORIES },
           });
           flushInitialUrlSync();
 
           expect(warn).toHaveBeenCalledTimes(1);
           expect(warn).toHaveBeenCalledWith(UNMATCHED_URL_CATEGORIES_MESSAGE, {
-            urlCategories: unmatchedCategories,
-            fallbackSelection: ['Category A', 'Option 1'],
+            urlCategories: UNMATCHED_URL_CATEGORIES,
+            fallbackSelection: DEFAULT_DROPDOWN_SELECTION,
           });
         }));
 
-        it('should warn when URL categories change to ones that match no config', fakeAsync(() => {
+        it('should warn when the URL categories change to ones that match no config', fakeAsync(() => {
           connectService(mockConfigsWithDropdowns);
           flushInitialUrlSync();
 
-          paramsSubject.next({ categories: unmatchedCategories });
+          paramsSubject.next({ categories: UNMATCHED_URL_CATEGORIES });
           tick();
 
           expect(warn).toHaveBeenCalledWith(
             UNMATCHED_URL_CATEGORIES_MESSAGE,
-            expect.objectContaining({ urlCategories: unmatchedCategories }),
+            expect.objectContaining({ urlCategories: UNMATCHED_URL_CATEGORIES }),
           );
         }));
 
-        it('should not warn for URL categories that exactly match a config', fakeAsync(() => {
+        it('should not warn when the URL categories match a config', fakeAsync(() => {
           connectService(mockConfigsWithDropdowns, {
-            initialParams: { categories: ['Category B', 'Option 1'] },
+            initialParams: { categories: MATCHING_URL_CATEGORIES },
           });
           flushInitialUrlSync();
 
           expect(warn).not.toHaveBeenCalled();
         }));
 
-        it('should not warn for URL categories that prefix a config', fakeAsync(() => {
+        it('should select the matching config without warning when the URL has only its first category', fakeAsync(() => {
+          const FIRST_CATEGORY_ONLY = ['Category B'];
+          const EXPECTED_SELECTION = ['Category B', 'Option 1']; // the only 'Category B' config
+
           connectService(mockConfigsWithDropdowns, {
-            initialParams: { categories: ['Category B'] },
+            initialParams: { categories: FIRST_CATEGORY_ONLY },
           });
           flushInitialUrlSync();
 
-          expect(service.dropdownSelection()).toEqual(['Category B', 'Option 1']);
+          expect(service.dropdownSelection()).toEqual(EXPECTED_SELECTION);
           expect(warn).not.toHaveBeenCalled();
         }));
 
-        it('should not warn for an unmatched selection made outside the URL', fakeAsync(() => {
+        it('should not warn when the app, rather than the URL, sets categories that match no config', fakeAsync(() => {
           connectService(mockConfigsWithDropdowns);
           flushInitialUrlSync();
 
-          service.setDropdownSelection(unmatchedCategories);
+          service.setDropdownSelection(UNMATCHED_URL_CATEGORIES);
           tick();
 
+          // Only URL categories can come from outside the app, so only those are reported.
           expect(warn).not.toHaveBeenCalled();
         }));
       });
@@ -1628,21 +1634,25 @@ describe('ComparisonToolService', () => {
           warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
         });
 
-        it('should warn when a filter is keyed like a reserved URL param', fakeAsync(() => {
+        it('should warn when a filter uses a query param key the comparison tool already uses for other state', fakeAsync(() => {
+          const RESERVED_QUERY_PARAM_KEY = 'pinned'; // the URL param that holds pinned items
           const [config] = mockComparisonToolDataConfig;
           const [filter, ...otherFilters] = config.filters;
 
           connectService([
-            { ...config, filters: [{ ...filter, query_param_key: 'pinned' }, ...otherFilters] },
+            {
+              ...config,
+              filters: [{ ...filter, query_param_key: RESERVED_QUERY_PARAM_KEY }, ...otherFilters],
+            },
           ]);
           flushInitialUrlSync();
 
           expect(warn).toHaveBeenCalledWith(RESERVED_FILTER_KEY_MESSAGE, {
-            queryParamKey: 'pinned',
+            queryParamKey: RESERVED_QUERY_PARAM_KEY,
           });
         }));
 
-        it('should not warn when no filter is keyed like a reserved URL param', fakeAsync(() => {
+        it('should not warn when no filter uses a query param key the comparison tool already uses', fakeAsync(() => {
           connectService(mockComparisonToolDataConfig);
           flushInitialUrlSync();
 

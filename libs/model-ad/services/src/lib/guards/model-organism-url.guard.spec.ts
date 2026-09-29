@@ -93,48 +93,49 @@ describe('modelOrganismUrlGuard', () => {
   });
 
   describe('logging', () => {
-    it('should warn when modelOrganism is an unknown value', () => {
-      const url = '/models/APOE4?modelOrganism=rat';
-
-      runGuard(url, { modelOrganism: 'rat' });
+    it('should warn with the unknown value, the mouse fallback and the URL when modelOrganism is not a known organism', () => {
+      runGuard('/models/APOE4?modelOrganism=rat', { modelOrganism: 'rat' });
 
       expect(warn).toHaveBeenCalledWith(UNKNOWN_MODEL_ORGANISM_MESSAGE, {
         rawModelOrganism: 'rat',
-        fallback: ModelOrganism.Mouse,
-        url,
+        fallback: 'mouse',
+        url: '/models/APOE4?modelOrganism=rat',
       });
     });
 
-    it('should warn when modelOrganism is repeated', () => {
+    it('should warn with every value when modelOrganism appears more than once in the URL', () => {
       runGuard('/models/APOE4?modelOrganism=mouse&modelOrganism=marmoset', {
         modelOrganism: ['mouse', 'marmoset'],
       });
 
+      // Each value is valid on its own, but the router hands the guard an array, which cannot be resolved.
       expect(warn).toHaveBeenCalledWith(
         UNKNOWN_MODEL_ORGANISM_MESSAGE,
         expect.objectContaining({ rawModelOrganism: ['mouse', 'marmoset'] }),
       );
     });
 
-    it('should not warn when modelOrganism is missing', () => {
+    it('should not warn when the URL has no modelOrganism', () => {
       runGuard('/models/APOE4', {});
 
+      // Model URLs shared before modelOrganism existed have none, so this is expected, not an error.
       expect(warn).not.toHaveBeenCalled();
     });
 
-    it('should not warn when modelOrganism is empty', () => {
+    it('should not warn when modelOrganism has no value', () => {
       runGuard('/models/APOE4?modelOrganism=', { modelOrganism: '' });
 
       expect(warn).not.toHaveBeenCalled();
     });
 
-    it('should not warn when modelOrganism is a wrong-case valid value', () => {
+    it('should not warn when modelOrganism is a known organism in the wrong case', () => {
       runGuard('/models/APOE4?modelOrganism=MOUSE', { modelOrganism: 'MOUSE' });
 
+      // The guard only lowercases it, so nothing needs reporting.
       expect(warn).not.toHaveBeenCalled();
     });
 
-    it('should not warn when modelOrganism is valid', () => {
+    it('should not warn when modelOrganism is a known organism', () => {
       runGuard('/models/APOE4?modelOrganism=marmoset', { modelOrganism: 'marmoset' });
 
       expect(warn).not.toHaveBeenCalled();

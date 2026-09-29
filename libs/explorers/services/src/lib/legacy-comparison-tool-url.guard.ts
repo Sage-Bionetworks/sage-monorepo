@@ -72,9 +72,10 @@ export function createLegacyComparisonToolUrlGuard(
         logger.log(LEGACY_URL_REDIRECTED_MESSAGE, redirectData);
       }
 
-      // Replace rather than push, so the back button returns to wherever the legacy link was opened
-      // from instead of the legacy URL this guard just redirected away from.
-      return new RedirectCommand(urlTree, { replaceUrl: true });
+      // No replaceUrl: the router already replaces the legacy entry when the browser put it in history
+      // (initial load, Back/Forward), and forcing it on an in-app navigation, whose URL is only
+      // committed after the guards, would overwrite the referring page's entry instead.
+      return new RedirectCommand(urlTree);
     } catch (error) {
       // Don't rethrow: a guard that throws cancels the navigation and breaks the page.
       //
@@ -93,7 +94,7 @@ export function createLegacyComparisonToolUrlGuard(
         return true;
       }
       urlTree.queryParams = {};
-      return new RedirectCommand(urlTree, { replaceUrl: true });
+      return new RedirectCommand(urlTree);
     }
   };
 }

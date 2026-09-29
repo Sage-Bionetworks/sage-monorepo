@@ -645,98 +645,118 @@ test.describe('differential expression', () => {
   });
 
   // Share URLs created before sex moved from a category dropdown to a table column carry a trailing
-  // `Sex - <cohort>` category and pinned ids without a sex segment, which the route guard rewrites
-  // before the tool loads. The full redirect matrix is covered by the guard's unit spec; this test
-  // is what proves the guard is wired to the route and that its output resolves against real data.
-  // Its values are chosen to be the hardest to encode: the `&` in the both-sexes cohort, and a
-  // model whose parentheses and slash go through the app's CustomUrlSerializer, which the unit spec
-  // does not use. Legacy category values are literals here for the same reason as the header tests
-  // above: @sagebionetworks/model-ad/config cannot be imported from e2e.
-  test.describe('legacy share URLs', () => {
+  // `Sex - <cohort>` category and pinned ids without a sex segment, which the route guard replaces
+  // with the current URL format before the tool loads. The full redirect matrix is covered by the
+  // guard's unit spec; these tests are what prove the guard is wired to the route and that its
+  // output resolves against real data. Their values are chosen to be the hardest to encode: the `&`
+  // in the both-sexes cohort, and a model whose parentheses and slash go through the app's
+  // CustomUrlSerializer, which the unit spec does not use. Category values are literals here for the
+  // same reason as the header tests above: @sagebionetworks/model-ad/config cannot be imported from
+  // e2e.
+  test.describe('share URLs created before sex became a table column', () => {
     const hemibrainCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain'];
-    const legacyCategories = [...hemibrainCategories, 'Sex - Females & Males'];
+    const hemibrainCategoriesQueryParams = getQueryParamFromValues(
+      hemibrainCategories,
+      'categories',
+    );
+    // The last category is an option of the removed Sex dropdown.
+    const oldShareUrlCategories = [
+      'RNA - DIFFERENTIAL EXPRESSION',
+      'Tissue - Hemibrain',
+      'Sex - Females & Males',
+    ];
     const hemibrainModels = ['5xFAD (IU/Jax/Pitt)', 'APOE4'];
-    const legacyCacul1Pins = hemibrainModels.map((model) => `${cacul1EnsemblGeneId}~${model}`);
-    const expectedCacul1Pins = legacyCacul1Pins.flatMap((pin) => [`${pin}~Female`, `${pin}~Male`]);
-    const legacyQueryParameters = [
-      getQueryParamFromValues(legacyCategories, 'categories'),
-      getQueryParamFromValues(legacyCacul1Pins, 'pinned'),
+    const cacul1PinsWithoutSex = [
+      'ENSMUSG00000033417~5xFAD (IU/Jax/Pitt)',
+      'ENSMUSG00000033417~APOE4',
+    ];
+    // Each old pin stood for its gene and model in the selected cohort, which here is both sexes,
+    // so it becomes a Female pin and a Male pin.
+    const expectedCacul1PinsForBothSexes = [
+      'ENSMUSG00000033417~5xFAD (IU/Jax/Pitt)~Female',
+      'ENSMUSG00000033417~5xFAD (IU/Jax/Pitt)~Male',
+      'ENSMUSG00000033417~APOE4~Female',
+      'ENSMUSG00000033417~APOE4~Male',
+    ];
+    const noPins: string[] = [];
+    const oldShareUrlQueryParams = [
+      getQueryParamFromValues(oldShareUrlCategories, 'categories'),
+      getQueryParamFromValues(cacul1PinsWithoutSex, 'pinned'),
       getQueryParamFromValues(hemibrainModels, 'models'),
     ].join('&');
 
-    const expectRewrittenLegacyUrl = async (page: Page) => {
+    const expectSexCategoryDroppedAndPinsShownForBothSexes = async (page: Page) => {
       await expectCategoriesParams(page, hemibrainCategories);
       await expectCategories(page, hemibrainCategories);
-      await expectPinnedParams(page, expectedCacul1Pins);
-      await expectPinnedRows(page, expectedCacul1Pins);
+      await expectPinnedParams(page, expectedCacul1PinsForBothSexes);
+      await expectPinnedRows(page, expectedCacul1PinsForBothSexes);
     };
 
-    test('legacy share URL expands every pin into both sexes', async ({ page }) => {
-      await navigateToComparison(page, CT_PAGE, true, 'url', legacyQueryParameters);
-
-      await expectRewrittenLegacyUrl(page);
-    });
-
-    // The tool's URL is all query params, so reaching a legacy URL from the open tool is a query-only
-    // navigation, which skips canActivate unless the route opts in. Back and Forward into history
-    // from before the release take this path, and are simulated here with pushState and popstate.
-    test('legacy URL reached from within the tool is rewritten too', async ({ page }) => {
-      await navigateToComparison(
-        page,
-        CT_PAGE,
-        true,
-        'url',
-        getQueryParamFromValues(hemibrainCategories, 'categories'),
-      );
-
-      const legacyUrl = `${new URL(page.url()).pathname}?${legacyQueryParameters}`;
+    // Simulates Back or Forward to a history entry from the open tool, which reaches the guard as a
+    // query-only navigation.
+    const navigateWithinToolToOldShareUrl = async (page: Page) => {
+      const oldShareUrl = `${new URL(page.url()).pathname}?${oldShareUrlQueryParams}`;
       await page.evaluate((url) => {
         history.pushState(null, '', url);
         window.dispatchEvent(new PopStateEvent('popstate'));
-      }, legacyUrl);
+      }, oldShareUrl);
+    };
 
-      await expectRewrittenLegacyUrl(page);
+    test('opening an old share URL drops its Sex category and pins each gene and model for both sexes', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true, 'url', oldShareUrlQueryParams);
+
+      await expectSexCategoryDroppedAndPinsShownForBothSexes(page);
     });
 
-    // The rewrite replaces the legacy history entry rather than adding one, so Back leaves the tool
-    // for the page before the legacy link, and Forward returns to the rewritten URL. Neither can land
-    // on the legacy URL again.
-    test('back and forward skip a legacy share URL opened directly', async ({ page }) => {
+    // The tool's URL is all query params, so reaching an old share URL from the open tool is a
+    // query-only navigation, which skips canActivate unless the route opts in. Back and Forward into
+    // history from before the release take this path, and are simulated here with pushState and
+    // popstate.
+    test('reaching an old share URL from within the open tool drops its Sex category and pins each gene and model for both sexes', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true, 'url', hemibrainCategoriesQueryParams);
+
+      await navigateWithinToolToOldShareUrl(page);
+
+      await expectSexCategoryDroppedAndPinsShownForBothSexes(page);
+    });
+
+    // The router replaces the old share URL's history entry rather than adding one, so Back leaves
+    // for the page before the old link, and Forward returns to the updated URL. Neither can land on
+    // the old share URL again.
+    test('after opening an old share URL, back returns to the previous page and forward returns to the updated URL', async ({
+      page,
+    }) => {
       await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
-      await navigateToComparison(page, CT_PAGE, false, 'url', legacyQueryParameters);
-      await expectRewrittenLegacyUrl(page);
+      await navigateToComparison(page, CT_PAGE, false, 'url', oldShareUrlQueryParams);
+      await expectSexCategoryDroppedAndPinsShownForBothSexes(page);
 
       await page.goBack();
       await expectCategoriesParams(page, categories);
 
       await page.goForward();
       await expectCategoriesParams(page, hemibrainCategories);
-      await expectPinnedParams(page, expectedCacul1Pins);
+      await expectPinnedParams(page, expectedCacul1PinsForBothSexes);
     });
 
-    test('back and forward skip a legacy URL reached from within the tool', async ({ page }) => {
-      await navigateToComparison(
-        page,
-        CT_PAGE,
-        true,
-        'url',
-        getQueryParamFromValues(hemibrainCategories, 'categories'),
-      );
+    test('after reaching an old share URL from within the tool, back returns to the tool without pins and forward returns to the updated URL', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true, 'url', hemibrainCategoriesQueryParams);
 
-      const legacyUrl = `${new URL(page.url()).pathname}?${legacyQueryParameters}`;
-      await page.evaluate((url) => {
-        history.pushState(null, '', url);
-        window.dispatchEvent(new PopStateEvent('popstate'));
-      }, legacyUrl);
-      await expectRewrittenLegacyUrl(page);
+      await navigateWithinToolToOldShareUrl(page);
+      await expectSexCategoryDroppedAndPinsShownForBothSexes(page);
 
       await page.goBack();
       await expectCategoriesParams(page, hemibrainCategories);
-      await expectPinnedParams(page, []);
+      await expectPinnedParams(page, noPins);
 
       await page.goForward();
       await expectCategoriesParams(page, hemibrainCategories);
-      await expectPinnedParams(page, expectedCacul1Pins);
+      await expectPinnedParams(page, expectedCacul1PinsForBothSexes);
     });
   });
 });

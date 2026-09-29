@@ -6,7 +6,11 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { LoggerService } from '@sagebionetworks/explorers/services';
-import { isModelOrganism, MODEL_ORGANISM_QUERY_KEY, resolveModelOrganism } from '../model-organism';
+import {
+  isModelOrganism,
+  MODEL_ORGANISM_QUERY_KEY,
+  resolveModelOrganism,
+} from '@sagebionetworks/model-ad/util';
 
 export const UNKNOWN_MODEL_ORGANISM_MESSAGE =
   'modelOrganismUrlGuard: unknown modelOrganism query param; falling back to the default';

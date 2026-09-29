@@ -4,10 +4,9 @@ import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/model-ad/config';
 import {
   legacyDifferentialExpressionUrlGuard,
-  MODEL_ORGANISM_QUERY_KEY,
   modelOrganismUrlGuard,
-  resolveModelOrganism,
-} from '@sagebionetworks/model-ad/util';
+} from '@sagebionetworks/model-ad/services';
+import { MODEL_ORGANISM_QUERY_KEY, resolveModelOrganism } from '@sagebionetworks/model-ad/util';
 import { capitalizeFirstLetter } from '@sagebionetworks/shared/util';
 
 const DEFAULT_META_DESCRIPTION =
