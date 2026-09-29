@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
-import { captureDomToBlob, csvDataToString } from '@sagebionetworks/explorers/util';
+import { captureDomToBlob, csvDataToString, CSV_MIME_TYPE } from '@sagebionetworks/explorers/util';
 import { FILE_TYPE_CSV } from '../base-download-dom-image/file-types';
 
 type DomFile = {
@@ -58,7 +58,10 @@ export class DownloadDomImagesZipComponent {
     if (files.length === 1) {
       const { name, content } = files[0];
       // saveAs treats a bare string as a URL, so string content has to be wrapped
-      saveAs(content instanceof Blob ? content : new Blob([content], { type: 'text/csv' }), name);
+      saveAs(
+        content instanceof Blob ? content : new Blob([content], { type: CSV_MIME_TYPE }),
+        name,
+      );
       return;
     }
 

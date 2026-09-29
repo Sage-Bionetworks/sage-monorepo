@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 import { DownloadNote } from '@sagebionetworks/explorers/models';
 import { saveAs } from 'file-saver';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
-import { captureDomToBlob, csvDataToString } from '@sagebionetworks/explorers/util';
+import { captureDomToBlob, csvDataToBlob, CSV_MIME_TYPE } from '@sagebionetworks/explorers/util';
 import {
   FILE_TYPE_CSV,
   FILE_TYPE_JPEG,
@@ -45,16 +45,14 @@ export class DownloadDomImageComponent {
   };
 
   downloadCsvData = async (fileType: string): Promise<void> => {
-    const csvType = 'text/csv;charset=utf-8;';
     const data = this.data();
 
     if (!data || data.length === 0) {
-      const emptyBlob = new Blob([], { type: csvType });
+      const emptyBlob = new Blob([], { type: CSV_MIME_TYPE });
       saveAs(emptyBlob, this.filename() + fileType);
       return;
     }
 
-    const blob = new Blob([csvDataToString(data)], { type: csvType });
-    saveAs(blob, this.filename() + fileType);
+    saveAs(csvDataToBlob(data), this.filename() + fileType);
   };
 }
