@@ -1,11 +1,18 @@
 @use 'explorers/styles/src/variables' as vars;
 @use 'explorers/styles/src/mixins' as mixins;
 
+$empty-state-min-height: 300px;
+$row-min-height: 56px;
+
 .base-table-container {
+  &.loading-without-rows .p-datatable {
+    min-height: calc(var(--base-table-loading-row-count) * #{$row-min-height});
+  }
+
   .no-results {
     color: #a6a6a6;
     text-align: center;
-    min-height: 300px;
+    min-height: $empty-state-min-height;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,7 +21,7 @@
 
   .p-datatable-tbody {
     td {
-      min-height: 56px !important;
+      min-height: $row-min-height !important;
       padding-top: 4px !important;
       padding-bottom: 4px !important;
       vertical-align: middle;

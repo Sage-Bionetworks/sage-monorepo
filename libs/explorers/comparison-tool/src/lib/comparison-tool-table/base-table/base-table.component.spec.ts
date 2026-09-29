@@ -18,6 +18,7 @@ import {
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
+import { NEVER } from 'rxjs';
 import { BaseTableComponent } from './base-table.component';
 
 async function setup(
@@ -284,6 +285,58 @@ describe('BaseTableComponent', () => {
 
       const rows = nativeElement.querySelectorAll('tr.hovered');
       expect(rows.length).toBe(1);
+    });
+  });
+
+  describe('no results message', () => {
+    const NO_RESULTS_MESSAGE = 'No results found...';
+
+    it('shows the no results message when a completed fetch returned no rows', async () => {
+      await setup(undefined, []);
+
+      expect(screen.getByText(NO_RESULTS_MESSAGE)).toBeInTheDocument();
+    });
+
+    it('hides the no results message while table data is loading', async () => {
+      const { fixture, service } = await setup(undefined, []);
+
+      service.fetchUnpinned(NEVER);
+      fixture.detectChanges();
+
+      expect(screen.queryByText(NO_RESULTS_MESSAGE)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('loading overlay', () => {
+    const LOADING_MASK_SELECTOR = '.p-datatable-mask';
+
+    it('shows the loading overlay over an empty table while table data is loading', async () => {
+      const { fixture, service, nativeElement } = await setup(undefined, []);
+
+      service.fetchUnpinned(NEVER);
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector(LOADING_MASK_SELECTOR)).toBeInTheDocument();
+    });
+
+    it('hides the loading overlay over an empty table without a no results message', async () => {
+      const { fixture, service, nativeElement } = await setup(undefined, []);
+      fixture.componentRef.setInput('noResultsMessageEnabled', false);
+
+      service.fetchUnpinned(NEVER);
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector(LOADING_MASK_SELECTOR)).not.toBeInTheDocument();
+    });
+
+    it('shows the loading overlay over a table with rows while table data is loading', async () => {
+      const { fixture, service, nativeElement } = await setup();
+      fixture.componentRef.setInput('noResultsMessageEnabled', false);
+
+      service.fetchUnpinned(NEVER);
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector(LOADING_MASK_SELECTOR)).toBeInTheDocument();
     });
   });
 });

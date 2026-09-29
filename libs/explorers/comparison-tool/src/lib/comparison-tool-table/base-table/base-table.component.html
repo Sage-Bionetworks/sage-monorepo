@@ -1,4 +1,8 @@
-<div class="base-table-container">
+<div
+  class="base-table-container"
+  [class.loading-without-rows]="isLoadingWithoutRows()"
+  [style.--base-table-loading-row-count]="pageSize()"
+>
   <p-table
     ngSkipHydration
     #table
@@ -6,7 +10,8 @@
     [totalRecords]="totalRecords()"
     [first]="first()"
     [lazy]="true"
-    [loading]="data().length > 0 && comparisonToolService.isLoadingTableData()"
+    [loading]="comparisonToolService.isLoadingTableData()"
+    [showLoader]="data().length > 0 || noResultsMessageEnabled()"
     (onLazyLoad)="onLazyLoad($event)"
     sortMode="multiple"
     [multiSortMeta]="comparisonToolService.multiSortMeta()"
@@ -16,7 +21,7 @@
     showGridlines
   >
     <ng-template pTemplate="emptymessage">
-      @if (shouldShowNoDataMessage()) {
+      @if (noResultsMessageEnabled()) {
         <div class="no-results">No results found...</div>
       }
     </ng-template>

@@ -30,13 +30,25 @@ export class BaseTableComponent {
   viewConfig = this.comparisonToolService.viewConfig;
   totalRecords = this.comparisonToolService.unpinnedRowCount;
   first = this.comparisonToolService.first;
+  pageSize = this.comparisonToolService.pageSize;
   isHeatmapCircleClickable = computed(
     () => !!this.comparisonToolService.viewConfig().heatmapCircleClickTransformFn,
   );
 
   data = input.required<Record<string, any>[]>();
-  shouldShowNoDataMessage = input<boolean>(true);
+  /**
+   * This flag controls whether this table may show the "No results found..." empty state.
+   * Disable it for tables where having no rows is expected, such as the pinned table.
+   */
+  noResultsMessageEnabled = input<boolean>(true);
   columnWidths = input<Record<string, string>>({});
+
+  isLoadingWithoutRows = computed(
+    () =>
+      this.noResultsMessageEnabled() &&
+      this.data().length === 0 &&
+      this.comparisonToolService.isLoadingTableData(),
+  );
 
   onLazyLoad(event: TableLazyLoadEvent) {
     this.comparisonToolService.handleLazyLoad(event);
