@@ -1,6 +1,7 @@
 import { captureDomToBlob } from '@sagebionetworks/explorers/util';
 import { render } from '@testing-library/angular';
 import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
 import { DownloadDomImagesZipComponent } from './download-dom-images-zip.component';
 
 jest.mock('file-saver', () => ({ saveAs: jest.fn() }));
@@ -92,6 +93,24 @@ describe('DownloadDomImagesZipComponent', () => {
     await fixture.componentInstance.performDownload('.csv');
 
     expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'data-1.csv');
+  });
+
+  it('should create a zip of images when there are multiple images', async () => {
+    (captureDomToBlob as jest.Mock).mockResolvedValue(new Blob(['image'], { type: 'image/png' }));
+    const fileSpy = jest.spyOn(JSZip.prototype, 'file');
+    // jest-fixed-jsdom's global Blob is not jsdom's, so real zip generation cannot read it
+    const generateSpy = jest
+      .spyOn(JSZip.prototype, 'generateAsync')
+      .mockResolvedValue(new Blob(['zip']) as never);
+    const { component } = await setup();
+
+    await component.fixture.componentInstance.performDownload('.png');
+
+    expect(fileSpy).toHaveBeenCalledTimes(2);
+    expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'test-file.zip');
+
+    fileSpy.mockRestore();
+    generateSpy.mockRestore();
   });
 
   it('should save a single image under its own name instead of zipping it', async () => {
