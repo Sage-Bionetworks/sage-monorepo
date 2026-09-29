@@ -12,6 +12,8 @@ jest.mock('@sagebionetworks/explorers/util', () => ({
 }));
 
 describe('DownloadDomImagesZipComponent', () => {
+  beforeEach(() => jest.clearAllMocks());
+
   async function setup(inputs?: Partial<DownloadDomImagesZipComponent>) {
     const mockElement1 = {
       offsetWidth: 100,
