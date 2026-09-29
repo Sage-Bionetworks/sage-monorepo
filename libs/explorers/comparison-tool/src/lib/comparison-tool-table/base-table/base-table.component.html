@@ -1,7 +1,9 @@
 <div
   class="base-table-container"
   [class.loading-without-rows]="isLoadingWithoutRows()"
+  [class.loading-first-page]="isLoadingFirstPage()"
   [style.--base-table-loading-row-count]="pageSize()"
+  [style.--base-table-empty-state-row-count]="emptyStateRowCount"
 >
   <p-table
     ngSkipHydration

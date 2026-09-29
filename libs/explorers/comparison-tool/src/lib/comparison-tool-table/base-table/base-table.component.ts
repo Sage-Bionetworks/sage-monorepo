@@ -1,4 +1,5 @@
 import { Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import { DEFAULT_PAGE_SIZE } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
@@ -25,6 +26,7 @@ import { PrimaryIdentifierControlsComponent } from '../primary-identifier-contro
 export class BaseTableComponent {
   protected readonly comparisonToolService = inject(ComparisonToolService);
   protected readonly canDrawHeatmapCircle = canDrawHeatmapCircle;
+  protected readonly emptyStateRowCount = DEFAULT_PAGE_SIZE;
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   viewConfig = this.comparisonToolService.viewConfig;
@@ -48,6 +50,9 @@ export class BaseTableComponent {
       this.noResultsMessageEnabled() &&
       this.data().length === 0 &&
       this.comparisonToolService.isLoadingTableData(),
+  );
+  isLoadingFirstPage = computed(
+    () => this.isLoadingWithoutRows() && !this.comparisonToolService.hasCompletedUnpinnedFetch(),
   );
 
   onLazyLoad(event: TableLazyLoadEvent) {
