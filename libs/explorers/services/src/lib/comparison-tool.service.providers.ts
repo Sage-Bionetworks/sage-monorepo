@@ -17,11 +17,11 @@ const noMatchingRows: PinAllFetch<Record<string, unknown>> = () =>
 export type ComparisonToolServiceOptions = {
   configs?: ComparisonToolConfig[];
   selection?: string[];
-  totalResultsCount?: number;
+  unpinnedRowCount?: number;
   legendVisible?: boolean;
   tutorialVisibility?: boolean;
   viewConfig?: Partial<ComparisonToolViewConfig>;
-  maxPinnedItems?: number;
+  pinLimit?: number;
   pinAllFetch?: PinAllFetch<Record<string, unknown>>;
   pinnedItems?: string[];
   unpinnedData?: Record<string, unknown>[];
@@ -85,8 +85,8 @@ export const provideComparisonToolService = (
         service.setViewConfig(options.viewConfig);
       }
 
-      if (options.totalResultsCount !== undefined) {
-        service.totalResultsCount.set(options.totalResultsCount);
+      if (options.unpinnedRowCount !== undefined) {
+        service.unpinnedRowCount.set(options.unpinnedRowCount);
       }
 
       if (options.legendVisible !== undefined) {
@@ -97,8 +97,8 @@ export const provideComparisonToolService = (
         service.setTutorialVisibility(options.tutorialVisibility);
       }
 
-      if (options.maxPinnedItems !== undefined) {
-        service.setMaxPinnedItems(options.maxPinnedItems);
+      if (options.pinLimit !== undefined) {
+        service.setPinLimit(options.pinLimit);
       }
 
       if (options.pinnedItems !== undefined) {

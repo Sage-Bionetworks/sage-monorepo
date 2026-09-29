@@ -13,4 +13,4 @@ export const DEFAULT_SORT_ORDER: SortOrder = 1;
 export const VALID_PAGE_SIZES: readonly number[] = [10, 25, 50];
 export const DEFAULT_PAGE_SIZE = VALID_PAGE_SIZES[0];
 
-export const MAX_PINNED_ITEMS = 50;
+export const MAX_PIN_LIMIT = 50;

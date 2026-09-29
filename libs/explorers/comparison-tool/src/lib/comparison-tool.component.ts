@@ -31,5 +31,5 @@ export class ComparisonToolComponent {
   hasSidebar = input(false);
 
   currentConfig = this.comparisonToolService.currentConfig;
-  loadingResultsCount = this.comparisonToolService.loadingResultsCount;
+  loadingRowCount = this.comparisonToolService.loadingRowCount;
 }

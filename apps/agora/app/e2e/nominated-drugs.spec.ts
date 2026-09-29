@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
+import { MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
 import {
   ColumnConfig,
   expectSearchResults,
@@ -116,7 +116,7 @@ test.describe('nominated drugs - comparison tool', () => {
       const searchTerm = 'i';
       const drugs = await fetchNominatedDrugs(page, {
         search: searchTerm,
-        remainingBudget: MAX_PINNED_ITEMS,
+        remainingBudget: MAX_PIN_LIMIT,
       });
 
       await navigateToComparison(page, CT_PAGE, true, 'url');
