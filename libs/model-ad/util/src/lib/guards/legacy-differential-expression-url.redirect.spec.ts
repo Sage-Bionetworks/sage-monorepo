@@ -1,4 +1,3 @@
-import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import { Sex } from '@sagebionetworks/model-ad/api-client';
 import {
   CURRENT_PINS_IN_LEGACY_URL_MESSAGE,
@@ -117,7 +116,7 @@ describe('legacyDifferentialExpressionUrlRedirect', () => {
       const currentPinnedItems =
         resolveRedirect(legacyCategories('Females & Males'), pinnedItems)?.pinnedItems ?? [];
 
-      expect(currentPinnedItems).toHaveLength(MAX_PINNED_ITEMS);
+      expect(currentPinnedItems).toHaveLength(2 * MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE);
       expect(currentPinnedItems.filter((pin) => pin.endsWith(Sex.Female))).toHaveLength(
         MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE,
       );

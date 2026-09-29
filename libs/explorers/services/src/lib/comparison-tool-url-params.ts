@@ -1,5 +1,8 @@
 import { Params } from '@angular/router';
-import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
+import {
+  DEFAULT_SORT_ORDER,
+  RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS,
+} from '@sagebionetworks/explorers/constants';
 import { ComparisonToolUrlParams, SortOrder } from '@sagebionetworks/explorers/models';
 import {
   parseCommaSeparatedQueryParam,
@@ -9,10 +12,6 @@ import { Logger } from '@sagebionetworks/web-shared/angular/logger';
 
 export const INVALID_SORT_ORDERS_MESSAGE =
   'deserializeComparisonToolUrlParams: sort orders do not match sort fields';
-
-// The order the comparison tool gives a sort field that has none, so an unreadable order falls back
-// to what the tool would have applied anyway.
-const FALLBACK_SORT_ORDER: SortOrder = 1;
 
 /**
  * Pass `logger` to report URL params the comparison tool never writes itself, such as sort orders
@@ -150,7 +149,7 @@ function deserializeFilterSelections(params: Params): Record<string, string[]> {
   return filterSelections;
 }
 
-// An unreadable entry keeps its position, with the fallback order, so every later order still lines
+// An unreadable entry keeps its position, with the default order, so every later order still lines
 // up with its own sort field.
 function parseSortOrdersParam(value: string | string[] | null | undefined): {
   sortOrders: SortOrder[];
@@ -168,7 +167,7 @@ function parseSortOrdersParam(value: string | string[] | null | undefined): {
       return order;
     }
     hasInvalidSortOrder = true;
-    return FALLBACK_SORT_ORDER;
+    return DEFAULT_SORT_ORDER;
   });
 
   return { sortOrders, hasInvalidSortOrder };

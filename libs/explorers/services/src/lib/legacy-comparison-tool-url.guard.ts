@@ -25,6 +25,10 @@ export const LEGACY_URL_IN_APP_NAVIGATION_MESSAGE =
 // tool loads. The resolveRedirect function supplies the product-specific translation rules; this
 // factory owns the redirect semantics and shares its encoding with ComparisonToolUrlService.
 //
+// Share URLs carry no version, so resolveRedirect recognizes a legacy URL by its shape. That holds
+// only while the legacy shape can't occur in a current URL; a URL change whose old and new shapes
+// could be confused has to introduce an explicit URL version instead.
+//
 // Register it with `runGuardsAndResolvers: 'paramsOrQueryParamsChange'`. The tool's URL is all query
 // params, and by default a query-only navigation skips canActivate, so a legacy URL reached from
 // within the tool's own page would otherwise bypass the guard.
@@ -72,9 +76,7 @@ export function createLegacyComparisonToolUrlGuard(
       // from instead of the legacy URL this guard just redirected away from.
       return new RedirectCommand(urlTree, { replaceUrl: true });
     } catch (error) {
-      // Don't rethrow: a guard that throws cancels the navigation and breaks the page. Returning true
-      // loads the original URL instead, and the comparison tool falls back to its defaults for
-      // anything it doesn't recognize.
+      // Don't rethrow: a guard that throws cancels the navigation and breaks the page.
       //
       // LoggerService.error sends only the error object to Sentry, not the message, so the URL goes
       // in a new Error's message and the original error is kept as its cause.
@@ -82,7 +84,16 @@ export function createLegacyComparisonToolUrlGuard(
         LEGACY_URL_TRANSLATION_FAILED_MESSAGE,
         new Error(`${LEGACY_URL_TRANSLATION_FAILED_MESSAGE}: ${state.url}`, { cause: error }),
       );
-      return true;
+
+      // Loading the untranslated URL would hand the tool params it can't read, such as pins in a
+      // format the API rejects, so reset to the tool's default view instead. A URL that is already
+      // bare has nothing left to reset, and redirecting it again would loop.
+      const urlTree = router.parseUrl(state.url);
+      if (Object.keys(urlTree.queryParams).length === 0) {
+        return true;
+      }
+      urlTree.queryParams = {};
+      return new RedirectCommand(urlTree, { replaceUrl: true });
     }
   };
 }

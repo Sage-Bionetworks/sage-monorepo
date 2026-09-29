@@ -14,6 +14,7 @@ import {
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
   PinAllFetch,
+  RESERVED_FILTER_KEY_MESSAGE,
   UNMATCHED_URL_CATEGORIES_MESSAGE,
 } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
@@ -850,6 +851,35 @@ describe('ComparisonToolService', () => {
           tick();
 
           expect(warn).not.toHaveBeenCalled();
+        }));
+      });
+
+      describe('reserved filter key warning', () => {
+        let warn: jest.SpyInstance;
+
+        beforeEach(() => {
+          warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+        });
+
+        it('should warn when a filter is keyed like a reserved URL param', fakeAsync(() => {
+          const [config] = mockComparisonToolDataConfig;
+          const [filter, ...otherFilters] = config.filters;
+
+          connectService([
+            { ...config, filters: [{ ...filter, query_param_key: 'pinned' }, ...otherFilters] },
+          ]);
+          flushInitialUrlSync();
+
+          expect(warn).toHaveBeenCalledWith(RESERVED_FILTER_KEY_MESSAGE, {
+            queryParamKey: 'pinned',
+          });
+        }));
+
+        it('should not warn when no filter is keyed like a reserved URL param', fakeAsync(() => {
+          connectService(mockComparisonToolDataConfig);
+          flushInitialUrlSync();
+
+          expect(warn).not.toHaveBeenCalledWith(RESERVED_FILTER_KEY_MESSAGE, expect.anything());
         }));
       });
     });

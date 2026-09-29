@@ -1,6 +1,11 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { getMaxPinnedItemsWarning, MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
+import {
+  DEFAULT_SORT_ORDER,
+  getMaxPinnedItemsWarning,
+  MAX_PINNED_ITEMS,
+  RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS,
+} from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
@@ -31,6 +36,9 @@ import { ToastNotificationService } from './toast-notification.service';
  * OpenAPI contract declares column_width as `minimum: 1`, so any value <= 0 is treated as bad config.
  */
 export const DEFAULT_COLUMN_WIDTH_PX = 300;
+
+export const RESERVED_FILTER_KEY_MESSAGE =
+  'Filter query_param_key collides with a reserved comparison tool URL param; the filter cannot round-trip through the URL.';
 
 export const UNMATCHED_URL_CATEGORIES_MESSAGE =
   'URL categories match no comparison tool config; falling back to the default selection.';
@@ -344,6 +352,7 @@ export class ComparisonToolService<T> {
       columns: config.columns.map((column) => this.sanitizeColumnWidth(column)),
     }));
     this.configsSignal.set(sanitizedConfigs);
+    this.warnOnReservedFilterKeys(sanitizedConfigs);
 
     const selection = this.resolveInitialDropdownSelection(params, sanitizedConfigs);
     const initialSort = this.resolveInitialSortMeta(params);
@@ -431,6 +440,23 @@ export class ComparisonToolService<T> {
     }
 
     return configs.find((config) => this.isPrefix(selection, config.dropdowns)) ?? null;
+  }
+
+  /**
+   * Filter keys are open-ended data keys that share the URL with the tool's reserved params, so a
+   * filter keyed like one of them would be read back as that param instead.
+   */
+  private warnOnReservedFilterKeys(configs: ComparisonToolConfig[]): void {
+    const reservedKeys = new Set(
+      configs
+        .flatMap((config) => config.filters ?? [])
+        .map((filter) => filter.query_param_key)
+        .filter((queryParamKey) => RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS.has(queryParamKey)),
+    );
+
+    for (const queryParamKey of reservedKeys) {
+      this.logger.warn(RESERVED_FILTER_KEY_MESSAGE, { queryParamKey });
+    }
   }
 
   /**
@@ -1229,7 +1255,7 @@ export class ComparisonToolService<T> {
     for (const meta of multiSortMeta) {
       if (meta.field) {
         sortFields.push(meta.field);
-        sortOrders.push((meta.order ?? 1) as SortOrder);
+        sortOrders.push((meta.order ?? DEFAULT_SORT_ORDER) as SortOrder);
       }
     }
 
@@ -1252,7 +1278,7 @@ export class ComparisonToolService<T> {
   private convertArraysToSortMeta(sortFields: string[], sortOrders: SortOrder[]): SortMeta[] {
     return sortFields.map((field, index) => ({
       field,
-      order: sortOrders[index] ?? 1,
+      order: sortOrders[index] ?? DEFAULT_SORT_ORDER,
     }));
   }
 

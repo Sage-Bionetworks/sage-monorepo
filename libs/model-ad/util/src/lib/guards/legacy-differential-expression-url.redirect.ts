@@ -1,31 +1,40 @@
-import { MAX_PINNED_ITEMS } from '@sagebionetworks/explorers/constants';
 import {
   LegacyComparisonToolUrlLogEntry,
   LegacyComparisonToolUrlRedirectFn,
 } from '@sagebionetworks/explorers/models';
-import { Sex } from '@sagebionetworks/model-ad/api-client';
 
 // Sex used to be the deepest differential expression category; it is now a table column. A share
 // URL created before that change carries a trailing `Sex - <cohort>` category and pinned ids that
 // predate the sex segment, so the presence of the category is what marks a URL as legacy.
+//
+// That shape check is only reliable while no current URL can carry a `Sex - ` category or a
+// two-segment pin. The next change that breaks existing share URLs must therefore introduce an
+// explicit URL version rather than another shape check, with this translation as its first step.
+//
+// Everything below is a literal rather than a live constant or generated enum, so legacy links
+// keep resolving the same way however the current app changes.
 export const LEGACY_SEX_CATEGORY_PREFIX = 'Sex - ';
 
-export const LEGACY_SEX_COHORT_SEXES: Record<string, Sex[]> = {
-  Females: [Sex.Female],
-  Males: [Sex.Male],
-  'Females & Males': [Sex.Female, Sex.Male],
+const FEMALE = 'Female';
+const MALE = 'Male';
+
+export const LEGACY_SEX_COHORT_SEXES: Record<string, readonly string[]> = {
+  Females: [FEMALE],
+  Males: [MALE],
+  'Females & Males': [FEMALE, MALE],
 };
 
 export const PIN_SEGMENT_DELIMITER = '~';
-const KNOWN_SEXES: ReadonlySet<Sex> = new Set(Object.values(Sex));
+const KNOWN_SEXES: ReadonlySet<string> = new Set([FEMALE, MALE]);
 
 export const LEGACY_PIN_SEGMENT_COUNT = 2;
 export const CURRENT_PIN_SEGMENT_COUNT = 3;
 
 // The most legacy pins a `Females & Males` URL can carry and still give each pin both a Male and a
-// Female row within the pin budget; above it, each pin gets a Female row only. Single-sex URLs are
-// never limited here, since the comparison tool caps the pins it restores from the URL.
-export const MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE = MAX_PINNED_ITEMS / 2;
+// Female row within the pin budget of 50 that the remodel shipped with; above it, each pin gets a
+// Female row only. Single-sex URLs are never limited here, since the comparison tool caps the pins
+// it restores from the URL.
+export const MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE = 25;
 
 export const UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE =
   'legacyDifferentialExpressionUrlRedirect: unrecognized legacy sex cohort';
@@ -63,7 +72,7 @@ export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRed
     cohortSexes !== undefined &&
     cohortSexes.length > 1 &&
     legacyPinCount > MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE;
-  const sexes = isNarrowedToFemales ? [Sex.Female] : (cohortSexes ?? []);
+  const sexes = isNarrowedToFemales ? [FEMALE] : (cohortSexes ?? []);
 
   const currentPinnedItems = new Set<string>();
   const passedThroughPinnedItems: string[] = [];
@@ -142,5 +151,5 @@ function countPinSegments(pinnedItem: string): number {
 // A current pin's last segment must be a sex a row can have, or the pin can never match a row.
 function hasKnownSex(pinnedItem: string): boolean {
   const sex = pinnedItem.split(PIN_SEGMENT_DELIMITER).at(-1);
-  return KNOWN_SEXES.has(sex as Sex);
+  return sex !== undefined && KNOWN_SEXES.has(sex);
 }

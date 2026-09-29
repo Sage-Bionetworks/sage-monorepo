@@ -281,18 +281,32 @@ describe('createLegacyComparisonToolUrlGuard', () => {
       expect(error).not.toHaveBeenCalled();
     });
 
-    it('should log an error and allow activation when the redirect rules throw', () => {
+    it('should log an error and reset to the default view when the redirect rules throw', () => {
       const cause = new Error('unexpected legacy param shape');
 
-      const result = runGuard(() => {
-        throw cause;
-      }, legacyQueryParams);
+      const result = runGuard(
+        () => {
+          throw cause;
+        },
+        legacyQueryParams,
+        '#legend',
+      );
 
-      expect(result).toBe(true);
       expect(error).toHaveBeenCalledWith(LEGACY_URL_TRANSLATION_FAILED_MESSAGE, expect.any(Error));
       const reportedError = error.mock.calls[0][1] as Error;
-      expect(reportedError.message).toContain(buildUrl(legacyQueryParams, ''));
+      expect(reportedError.message).toContain(buildUrl(legacyQueryParams, '#legend'));
       expect(reportedError.cause).toBe(cause);
+      expect(serialize(result)).toBe(`${CT_URL}#legend`);
+      expect(expectRedirect(result).navigationBehaviorOptions).toEqual({ replaceUrl: true });
+    });
+
+    it('should allow activation rather than redirect again when a bare URL fails to translate', () => {
+      const result = runGuard(() => {
+        throw new Error('unexpected legacy param shape');
+      }, {});
+
+      expect(result).toBe(true);
+      expect(error).toHaveBeenCalledTimes(1);
     });
   });
 });
