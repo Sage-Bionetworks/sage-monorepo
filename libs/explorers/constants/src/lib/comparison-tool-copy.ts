@@ -69,6 +69,9 @@ export const getPinToggleTooltip = (
 export const getNoResultsMessage = ({ viewNoun }: ComparisonToolNouns): string =>
   `No ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)} found...`;
 
+export const getShareUrlTooltip = ({ viewNoun }: ComparisonToolNouns): string =>
+  `Copy the URL to capture the table's current filtering, sorting, and pinned ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)}`;
+
 export const getPinnedResultsControlsCopy = ({
   viewNoun,
 }: ComparisonToolNouns): PinnedResultsControlsCopy => {

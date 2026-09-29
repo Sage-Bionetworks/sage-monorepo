@@ -6,6 +6,7 @@ import {
   getPinnedResultsControlsCopy,
   getPinnedResultsLabels,
   getPinToggleTooltip,
+  getShareUrlTooltip,
   getViewNounLabel,
   NO_NOUNS,
   PINNED_RESULTS_HEADING,
@@ -189,6 +190,26 @@ describe('comparison tool copy', () => {
 
     it('should use the view noun', () => {
       expect(getNoResultsMessage(VIEW_NOUNS)).toBe('No parents found...');
+    });
+  });
+
+  describe('getShareUrlTooltip', () => {
+    it('should fall back to results', () => {
+      expect(getShareUrlTooltip(NO_NOUNS)).toBe(
+        "Copy the URL to capture the table's current filtering, sorting, and pinned results",
+      );
+    });
+
+    it('should use the view noun', () => {
+      expect(getShareUrlTooltip(VIEW_NOUNS)).toBe(
+        "Copy the URL to capture the table's current filtering, sorting, and pinned parents",
+      );
+    });
+
+    it('should use the view noun in a child view', () => {
+      expect(getShareUrlTooltip(CHILD_NOUNS)).toBe(
+        "Copy the URL to capture the table's current filtering, sorting, and pinned children",
+      );
     });
   });
 
