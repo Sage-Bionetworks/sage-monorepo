@@ -7,6 +7,7 @@ import {
   getUnpinnedTable,
   pinAll,
   searchViaFilterbox,
+  STANDARD_NO_RESULTS_MESSAGE,
 } from './comparison-tool';
 
 export async function expectSearchResults(
@@ -32,15 +33,16 @@ export async function testSearchExcludesPinnedItems(
   pinnedItems: string[],
   partialSearchTerm: string,
   fullMatchSearchTerms: string,
+  noResultsMessage = STANDARD_NO_RESULTS_MESSAGE,
 ) {
   await expectPinnedParams(page, pinnedItems);
   await expectPinnedRows(page, pinnedItems);
 
   await searchViaFilterbox(page, partialSearchTerm);
-  await expectNoResultsFound(page);
+  await expectNoResultsFound(page, noResultsMessage);
 
   await searchViaFilterbox(page, fullMatchSearchTerms);
-  await expectNoResultsFound(page);
+  await expectNoResultsFound(page, noResultsMessage);
 }
 
 export async function testFullCaseInsensitiveMatch(

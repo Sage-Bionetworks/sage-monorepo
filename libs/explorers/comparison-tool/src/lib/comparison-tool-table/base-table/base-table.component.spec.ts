@@ -1,6 +1,8 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter, RouterModule } from '@angular/router';
 import {
+  ComparisonToolConfig,
+  ComparisonToolNoun,
   ComparisonToolViewConfig,
   HeatmapDetailsPanelData,
 } from '@sagebionetworks/explorers/models';
@@ -20,9 +22,13 @@ import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
 import { BaseTableComponent } from './base-table.component';
 
+const PARENT_NOUN: ComparisonToolNoun = { singular: 'Parent', plural: 'Parents' };
+const CHILD_NOUN: ComparisonToolNoun = { singular: 'Child', plural: 'Children' };
+
 async function setup(
   viewConfig?: Partial<ComparisonToolViewConfig>,
   data: Record<string, unknown>[] = mockComparisonToolData,
+  configs: ComparisonToolConfig[] = mockComparisonToolDataConfig,
 ) {
   const user = userEvent.setup();
   const component = await render(BaseTableComponent, {
@@ -32,7 +38,7 @@ async function setup(
       provideHttpClient(withInterceptorsFromDi()),
       MessageService,
       ...provideComparisonToolService({
-        configs: mockComparisonToolDataConfig,
+        configs,
         viewConfig,
       }),
       ...provideComparisonToolFilterService({ significanceThresholdActive: false }),
@@ -88,6 +94,35 @@ describe('BaseTableComponent', () => {
     const { nativeElement } = await setup();
     const heatmapCircles = nativeElement.querySelectorAll('explorers-heatmap-circle');
     expect(heatmapCircles.length).toBeGreaterThan(0);
+  });
+
+  describe('no results message', () => {
+    it('should fall back to results', async () => {
+      await setup(undefined, []);
+      expect(screen.getByText('No results found...')).toBeInTheDocument();
+    });
+
+    it('should use the view noun', async () => {
+      await setup(undefined, [], [{ ...mockComparisonToolDataConfig[0], view_noun: PARENT_NOUN }]);
+      expect(screen.getByText('No parents found...')).toBeInTheDocument();
+    });
+
+    it('should use the view noun rather than the parent noun in a child view', async () => {
+      await setup(
+        undefined,
+        [],
+        [
+          {
+            ...mockComparisonToolDataConfig[0],
+            row_id_data_key: '_id',
+            parent_id_data_key: 'model_type',
+            view_noun: CHILD_NOUN,
+            parent_noun: PARENT_NOUN,
+          },
+        ],
+      );
+      expect(screen.getByText('No children found...')).toBeInTheDocument();
+    });
   });
 
   describe('heatmap details panel', () => {

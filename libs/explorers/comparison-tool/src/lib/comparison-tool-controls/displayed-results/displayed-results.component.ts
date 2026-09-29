@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { getViewNounLabel } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 
 @Component({
@@ -11,4 +12,5 @@ export class DisplayedResultsComponent {
   unpinnedRowCount = this.service.unpinnedRowCount;
   pinnedRowCount = this.service.pinnedRowCount;
   displayedResultsCount = computed(() => this.unpinnedRowCount() + this.pinnedRowCount());
+  displayedResultsLabel = computed(() => getViewNounLabel('Displayed', this.service.nouns()));
 }

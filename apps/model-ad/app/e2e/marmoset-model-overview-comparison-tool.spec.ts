@@ -2,8 +2,11 @@ import { expect, test } from '@playwright/test';
 import {
   clickViewDetailsButtonByName,
   ColumnConfig,
+  expectNoResultsFound,
   expectPinnedParams,
+  expectPinnedResultsCount,
   expectSearchResults,
+  expectViewNounLabels,
   getPinnedTable,
   getQueryParamsFromRecords,
   getRowByName,
@@ -24,7 +27,7 @@ import {
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
-import { COMPARISON_TOOL_PATHS } from './constants';
+import { COMPARISON_TOOL_PATHS, NO_MODELS_FOUND_MESSAGE } from './constants';
 import { fetchMarmosetModelOverviews, navigateToComparison } from './helpers/comparison-tool';
 
 const CT_PAGE = 'Marmoset Model Overview';
@@ -68,6 +71,16 @@ test.describe('marmoset model overview', () => {
     const pinnedRow = await unPinByName(pinnedTable, page, firstModel.name);
     await expect(pinnedRow).toHaveCount(0);
     await expectPinnedParams(page, []);
+  });
+
+  test('pinned header and result labels use the model noun', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+    await pinByName(getUnpinnedTable(page), page, MODEL);
+    await expectPinnedResultsCount(page, 1, ['Pinned Results', '1 Model']);
+
+    await expectViewNounLabels(page, 'Models', MODEL);
+    // The only marmoset model is pinned, so the search leaves the unpinned table empty
+    await expectNoResultsFound(page, NO_MODELS_FOUND_MESSAGE);
   });
 
   test('pinned items are removed from URL when Clear All Pins is clicked', async ({ page }) => {

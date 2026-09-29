@@ -6,8 +6,10 @@ import {
   expectCategoriesParams,
   expectComparisonToolTableLoaded,
   expectPinnedParams,
+  expectPinnedResultsCount,
   expectPinnedRows,
   expectSearchResults,
+  expectViewNounLabels,
   getCategoriesQueryParams,
   getHeatmapDetailsPanelSubHeadings,
   getPinnedTable,
@@ -18,6 +20,7 @@ import {
   getVisibleHeatmapCircleButtons,
   navigateViaHeaderNav,
   pinByName,
+  PinLimitCopy,
   runFilterPanelTests,
   runHeatmapDetailsPanelTests,
   searchViaFilterbox,
@@ -91,6 +94,13 @@ const noGeneSymbolMatches = [
   `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Female`,
   `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Male`,
 ];
+const NO_GENES_FOUND_MESSAGE = 'No genes found...';
+const NO_PROTEINS_FOUND_MESSAGE = 'No proteins found...';
+const RNA_PIN_LIMIT_COPY: PinLimitCopy = {
+  pinnedLabels: ['Pinned Results', `${MAX_PIN_LIMIT} Genes`],
+  toast: `Only ${MAX_PIN_LIMIT} genes were pinned, because you reached the maximum of ${MAX_PIN_LIMIT} pinned genes.`,
+  tooltip: `You have already pinned the maximum number of results (${MAX_PIN_LIMIT} genes). You must unpin some results before you can pin more.`,
+};
 
 test.describe('differential expression', () => {
   runFilterPanelTests(async (page) =>
@@ -173,7 +183,23 @@ test.describe('differential expression', () => {
       getQueryParamFromValues(cacul1Matches, 'pinned'),
     ].join('&');
     await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
-    await testSearchExcludesPinnedItems(page, cacul1Matches, 'acul', 'cacul1,');
+    await testSearchExcludesPinnedItems(
+      page,
+      cacul1Matches,
+      'acul',
+      'cacul1,',
+      NO_GENES_FOUND_MESSAGE,
+    );
+  });
+
+  test('pinned header and result labels use the gene noun', async ({ page }) => {
+    const queryParameters = [
+      categoriesQueryParams,
+      getQueryParamFromValues(cacul1Matches, 'pinned'),
+    ].join('&');
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await expectPinnedResultsCount(page, cacul1Matches.length, ['Pinned Results', '4 Genes']);
+    await expectViewNounLabels(page, 'Genes', plecGeneSymbol);
   });
 
   test('filterbox search with commas returns full, case-insensitive matches', async ({ page }) => {
@@ -262,10 +288,13 @@ test.describe('differential expression', () => {
     });
 
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
+    const pinnedIds = transcriptomics.map((row) => row.composite_id);
     await testPinAllAcrossPages(
       page,
       searchTerm,
-      transcriptomics.map((row) => row.composite_id),
+      pinnedIds,
+      ['Pinned Results', `${pinnedIds.length} Genes`],
+      NO_GENES_FOUND_MESSAGE,
     );
   });
 
@@ -290,10 +319,14 @@ test.describe('differential expression', () => {
       { search: proteinSearchTerm },
     );
 
+    const pinnedIds = proteomics.map((row) => row.composite_id);
+    const pinnedGeneCount = new Set(proteomics.map((row) => row.rna_composite_id)).size;
     await testPinAllAcrossPages(
       page,
       proteinSearchTerm,
-      proteomics.map((row) => row.composite_id),
+      pinnedIds,
+      ['Pinned Results', `${pinnedGeneCount} Genes`, `${pinnedIds.length} Proteins`],
+      NO_PROTEINS_FOUND_MESSAGE,
     );
   });
 
@@ -309,6 +342,7 @@ test.describe('differential expression', () => {
       page,
       searchTerm,
       transcriptomics.map((row) => row.composite_id),
+      RNA_PIN_LIMIT_COPY,
     );
   });
 
@@ -330,7 +364,7 @@ test.describe('differential expression', () => {
     ].join('&');
 
     await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
-    await testUrlPinsExceedingLimitAreCapped(page, pinnedItems, searchTerm);
+    await testUrlPinsExceedingLimitAreCapped(page, pinnedItems, searchTerm, RNA_PIN_LIMIT_COPY);
   });
 
   test('pinned items are cached when switching between categories', async ({ page }) => {
