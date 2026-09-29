@@ -1,5 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, inject } from '@angular/core';
+import { getShareUrlTooltip } from '@sagebionetworks/explorers/constants';
+import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { TooltipButtonComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
@@ -10,6 +12,7 @@ import { TooltipButtonComponent } from '@sagebionetworks/explorers/util';
 })
 export class ComparisonToolShareURLButtonComponent {
   private readonly clipboard = inject(Clipboard);
+  private readonly comparisonToolService = inject(ComparisonToolService);
 
   private hasCopied = false;
   private timeoutId?: ReturnType<typeof setTimeout>;
@@ -30,6 +33,6 @@ export class ComparisonToolShareURLButtonComponent {
   getTooltipText(): string {
     return this.hasCopied
       ? 'URL copied to clipboard'
-      : "Copy the URL to capture the table's current filtering, sorting, and pinned results";
+      : getShareUrlTooltip(this.comparisonToolService.nouns());
   }
 }

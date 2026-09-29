@@ -5,10 +5,11 @@
     @if (pinnedRowCount() > 0) {
       <div class="table-divider table-divider-1">
         <div class="table-divider-inner">
-          <div id="pinned-genes-header" class="table-divider-label">
-            <!-- TODO(MG-1084): in a child view this numerator counts rows 
-             while the limit counts parents, so a full fan-out reads e.g. (180/50) -->
-            <span> Pinned Results ({{ pinnedRowCount() }}/{{ pinLimit() }}) </span>
+          <div id="pinned-results-header" class="table-divider-label">
+            <span>{{ pinnedResultsLabels().heading }}</span>
+            @for (sublabel of pinnedResultsLabels().sublabels; track $index) {
+              <span class="table-divider-sublabel">{{ sublabel }}</span>
+            }
           </div>
           <div class="table-divider-controls pinned-items-controls">
             <explorers-download-dom-image
@@ -19,7 +20,7 @@
               [data]="getPinnedDataForCsv()"
               [buttonLabel]="pinnedResultsControls.downloadButtonLabel"
               [buttonTooltip]="downloadPinsTooltip()"
-              [heading]="pinnedResultsControls.downloadPanelHeading"
+              [heading]="pinnedResultsControlsCopy().downloadPanelHeading"
               [note]="viewConfig().downloadPinsNote"
               [disabled]="isLoadingTableData()"
             />
@@ -47,7 +48,7 @@
     <div class="table-divider">
       <div class="table-divider-inner">
         <div class="table-divider-label">
-          {{ `${searchTerm() ? 'Matching' : 'Filtered'} Results` }}
+          {{ unpinnedResultsLabel() }}
         </div>
         @if (unpinnedData().length) {
           <div class="table-divider-controls">
@@ -69,7 +70,7 @@
   @if (!searchTerm() && !hasSelectedFilters() && pinnedRowCount() > 0) {
     <div class="table-divider">
       <div class="table-divider-inner">
-        <div class="table-divider-label">All Results</div>
+        <div class="table-divider-label">{{ allResultsLabel() }}</div>
       </div>
     </div>
   }

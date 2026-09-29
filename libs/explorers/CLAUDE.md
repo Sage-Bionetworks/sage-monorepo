@@ -8,23 +8,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Library Map
 
-| Nx Project                  | Path               | Purpose                                                                                      |
-| --------------------------- | ------------------ | -------------------------------------------------------------------------------------------- |
-| `explorers-comparison-tool` | `comparison-tool/` | Root feature component — see its own `CLAUDE.md`                                             |
-| `explorers-charts`          | `charts/`          | Core chart utilities and models (framework-agnostic)                                         |
-| `explorers-charts-angular`  | `charts-angular/`  | Angular wrappers for charts; has Storybook (port 4400)                                       |
-| `explorers-ui`              | `ui/`              | Shared presentational components (header, footer, hero, search input, download utils)        |
-| `explorers-util`            | `util/`            | Lower-level utilities (loading containers, tooltips, modals, SVG icons, wiki component)      |
-| `explorers-shared`          | `shared/`          | Route definitions and shared page components (error, not-found, terms-of-service, wiki-hero) |
-| `explorers-models`          | `models/`          | Pure TypeScript interfaces — no runtime dependencies                                         |
-| `explorers-services`        | `services/`        | Angular services for state management                                                        |
-| `explorers-constants`       | `constants/`       | App-wide constants, injection tokens, debounce durations, toast messages                     |
-| `explorers-testing`         | `testing/`         | Test utilities: mock data, MSW handlers, provider factories                                  |
-| `explorers-config`          | `config/`          | Runtime configuration management                                                             |
-| `explorers-sentry`          | `sentry/`          | Sentry error tracking integration                                                            |
-| `explorers-themes`          | `themes/`          | SCSS theme variables (no public TS API)                                                      |
-| `explorers-styles`          | `styles/`          | Shared SCSS styles                                                                           |
-| `explorers-storybook`       | `storybook/`       | Storybook host (port 4402)                                                                   |
+| Nx Project                  | Path               | Purpose                                                                                                                                     |
+| --------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `explorers-comparison-tool` | `comparison-tool/` | Root feature component — see its own `CLAUDE.md`                                                                                            |
+| `explorers-charts`          | `charts/`          | Core chart utilities and models (framework-agnostic)                                                                                        |
+| `explorers-charts-angular`  | `charts-angular/`  | Angular wrappers for charts; has Storybook (port 4400)                                                                                      |
+| `explorers-ui`              | `ui/`              | Shared presentational components (header, footer, hero, search input, download utils)                                                       |
+| `explorers-util`            | `util/`            | Lower-level utilities (loading containers, tooltips, modals, SVG icons, wiki component)                                                     |
+| `explorers-shared`          | `shared/`          | Route definitions and shared page components (error, not-found, terms-of-service, wiki-hero)                                                |
+| `explorers-models`          | `models/`          | Pure TypeScript interfaces — no runtime dependencies                                                                                        |
+| `explorers-services`        | `services/`        | Angular services for state management                                                                                                       |
+| `explorers-constants`       | `constants/`       | App-wide constants, injection tokens, debounce durations, and user-facing copy (toast messages, comparison tool label and tooltip builders) |
+| `explorers-testing`         | `testing/`         | Test utilities: mock data, MSW handlers, provider factories                                                                                 |
+| `explorers-config`          | `config/`          | Runtime configuration management                                                                                                            |
+| `explorers-sentry`          | `sentry/`          | Sentry error tracking integration                                                                                                           |
+| `explorers-themes`          | `themes/`          | SCSS theme variables (no public TS API)                                                                                                     |
+| `explorers-styles`          | `styles/`          | Shared SCSS styles                                                                                                                          |
+| `explorers-storybook`       | `storybook/`       | Storybook host (port 4402)                                                                                                                  |
 
 ## Commands
 

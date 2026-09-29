@@ -10,6 +10,8 @@ export const COMPARISON_TOOL_PATHS: Record<ComparisonToolPage, string> = {
 
 export const LEGACY_MOUSE_MODEL_OVERVIEW_PATH = '/comparison/model';
 
+export const NO_MODELS_FOUND_MESSAGE = 'No models found...';
+
 // Comparison tools whose displayed header title differs from their ui_config page name.
 // Keys are ui_config page names, values are the titles rendered in the header.
 // TODO(MG-1054): Drop this map once ui_config page names match the CT displayed titles.

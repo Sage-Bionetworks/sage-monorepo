@@ -6,6 +6,7 @@ import {
   getQueryParamFromValues,
   getQueryParamsFromRecords,
   runFilterPanelTests,
+  STANDARD_PIN_LIMIT_COPY,
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
   testClickDifferentColumnsReplacesSingleSort,
@@ -105,11 +106,10 @@ test.describe('nominated drugs - comparison tool', () => {
       const drugs = await fetchNominatedDrugs(page, { search: searchTerm });
 
       await navigateToComparison(page, CT_PAGE, true, 'url');
-      await testPinAllAcrossPages(
-        page,
-        searchTerm,
-        drugs.map((drug) => drug.composite_id),
-      );
+      const pinnedIds = drugs.map((drug) => drug.composite_id);
+      await testPinAllAcrossPages(page, searchTerm, pinnedIds, [
+        `${pinnedIds.length} Pinned Results`,
+      ]);
     });
 
     test('Pin All stops at the maximum number of pinned items', async ({ page }) => {
@@ -124,6 +124,7 @@ test.describe('nominated drugs - comparison tool', () => {
         page,
         searchTerm,
         drugs.map((drug) => drug.composite_id),
+        STANDARD_PIN_LIMIT_COPY,
       );
     });
   });
