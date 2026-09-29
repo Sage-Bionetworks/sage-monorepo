@@ -13,6 +13,7 @@ jest.mock('@sagebionetworks/explorers/util', () => ({
 
 describe('DownloadDomImagesZipComponent', () => {
   beforeEach(() => jest.clearAllMocks());
+  afterEach(() => jest.restoreAllMocks());
 
   async function setup(inputs?: Partial<DownloadDomImagesZipComponent>) {
     const mockElement1 = {
@@ -110,9 +111,6 @@ describe('DownloadDomImagesZipComponent', () => {
 
     expect(fileSpy).toHaveBeenCalledTimes(2);
     expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'test-file.zip');
-
-    fileSpy.mockRestore();
-    generateSpy.mockRestore();
   });
 
   it('should save a single image under its own name instead of zipping it', async () => {
