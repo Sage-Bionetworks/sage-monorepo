@@ -107,7 +107,7 @@ export class BaseDownloadDomImageComponent {
       this.toastNotificationService.showError(
         'Something went wrong while preparing the download. Please try again.',
       );
-      this.logger.error('Error downloading plot images', err);
+      this.logger.error(`Error preparing ${this.selectedType()} download`, err);
     } finally {
       this.isLoading.set(false);
     }

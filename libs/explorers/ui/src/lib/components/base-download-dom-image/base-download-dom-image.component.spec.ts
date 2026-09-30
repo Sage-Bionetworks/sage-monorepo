@@ -3,6 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { LoggerService } from '@sagebionetworks/explorers/services';
 import { BaseDownloadDomImageComponent } from './base-download-dom-image.component';
+import { FILE_TYPE_PNG } from './file-types';
 import { MessageService } from 'primeng/api';
 
 describe('BaseDownloadDomImageComponent', () => {
@@ -132,7 +133,7 @@ describe('BaseDownloadDomImageComponent', () => {
 
     expect(f.componentInstance.error()).toBe('Oops, something went wrong!');
     expect(hide).not.toHaveBeenCalled();
-    expect(error).toHaveBeenCalledWith('Error downloading plot images', failure);
+    expect(error).toHaveBeenCalledWith(`Error preparing ${FILE_TYPE_PNG} download`, failure);
     expect(f.componentInstance.isLoading()).toBe(false);
   });
 });
