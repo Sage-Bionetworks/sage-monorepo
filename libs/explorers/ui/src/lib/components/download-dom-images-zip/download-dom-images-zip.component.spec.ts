@@ -114,7 +114,7 @@ describe('DownloadDomImagesZipComponent', () => {
     expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'test-file.zip');
   });
 
-  it('should log a warning when a plot capture fails and nothing is left to download', async () => {
+  it('should warn when a plot capture fails and when nothing is left to download', async () => {
     (captureDomToBlob as jest.Mock).mockResolvedValue(null);
     const warn = jest.fn();
     const mockElement = { offsetWidth: 100, offsetHeight: 100 } as HTMLElement;

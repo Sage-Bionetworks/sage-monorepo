@@ -55,6 +55,7 @@ export class DownloadDomImagesZipComponent {
         if (blob) {
           files.push({ name: domFile.filename + fileType, content: blob });
         } else {
+          // the other plots still download, so warn and carry on
           this.logger.warn('Failed to capture a plot image; omitting it from the download', {
             filename: domFile.filename,
           });

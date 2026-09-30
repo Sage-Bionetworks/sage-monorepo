@@ -2,6 +2,7 @@ import {
   Component,
   computed,
   effect,
+  inject,
   input,
   signal,
   ViewChild,
@@ -11,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { DownloadNote } from '@sagebionetworks/explorers/models';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { ButtonModule } from 'primeng/button';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -79,6 +81,8 @@ export class BaseDownloadDomImageComponent {
     });
   }
 
+  private readonly logger = inject(LoggerService);
+
   error = signal('');
   isLoading = signal(false);
   resizeTimer: ReturnType<typeof setTimeout> | number = 0;
@@ -98,7 +102,7 @@ export class BaseDownloadDomImageComponent {
       this.hide();
     } catch (err) {
       this.error.set('Oops, something went wrong!');
-      console.error(err);
+      this.logger.error('Error downloading plot images', err);
     } finally {
       this.isLoading.set(false);
     }

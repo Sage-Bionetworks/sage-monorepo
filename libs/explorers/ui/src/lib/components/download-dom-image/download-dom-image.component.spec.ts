@@ -1,4 +1,3 @@
-import { LoggerService } from '@sagebionetworks/explorers/services';
 import { captureDomToBlob } from '@sagebionetworks/explorers/util';
 import { render } from '@testing-library/angular';
 import { DownloadDomImageComponent } from './download-dom-image.component';
@@ -32,19 +31,15 @@ describe('DownloadDomImageComponent', () => {
     expect(instance).toBeTruthy();
   });
 
-  it('should log a warning when the plot capture fails', async () => {
+  it('should throw when the plot capture fails, so the popover stays open', async () => {
     (captureDomToBlob as jest.Mock).mockResolvedValue(null);
-    const warn = jest.fn();
     const mockElement = { offsetWidth: 100, offsetHeight: 100 } as HTMLElement;
     const { fixture } = await render(DownloadDomImageComponent, {
       componentInputs: { target: mockElement, filename: 'test-file' },
-      providers: [{ provide: LoggerService, useValue: { warn } }],
     });
 
-    await fixture.componentInstance.performDownload('.png');
-
-    expect(warn).toHaveBeenCalledWith('Failed to capture a plot image; no image was downloaded', {
-      filename: 'test-file',
-    });
+    await expect(fixture.componentInstance.performDownload('.png')).rejects.toThrow(
+      'Failed to capture the plot image for download: test-file',
+    );
   });
 });

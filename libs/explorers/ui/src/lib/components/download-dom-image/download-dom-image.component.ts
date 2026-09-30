@@ -1,6 +1,5 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { DownloadNote } from '@sagebionetworks/explorers/models';
-import { LoggerService } from '@sagebionetworks/explorers/services';
 import { saveAs } from 'file-saver';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
 import { captureDomToBlob, csvDataToBlob, CSV_MIME_TYPE } from '@sagebionetworks/explorers/util';
@@ -17,8 +16,6 @@ import {
   styleUrls: ['./download-dom-image.component.scss'],
 })
 export class DownloadDomImageComponent {
-  private readonly logger = inject(LoggerService);
-
   target = input.required<HTMLElement>();
   heading = input('Download this plot as:');
   filename = input.required();
@@ -44,13 +41,11 @@ export class DownloadDomImageComponent {
     const target = this.target();
     const paddingPx = this.downloadImagePaddingPx() ?? 0;
     const blob = await captureDomToBlob(target, paddingPx);
-    if (blob) {
-      saveAs(blob, this.filename() + fileType);
-    } else {
-      this.logger.warn('Failed to capture a plot image; no image was downloaded', {
-        filename: this.filename(),
-      });
+    if (!blob) {
+      // throwing keeps the popover open and surfaces the base component's error message
+      throw new Error(`Failed to capture the plot image for download: ${this.filename()}`);
     }
+    saveAs(blob, this.filename() + fileType);
   };
 
   downloadCsvData = async (fileType: string): Promise<void> => {
