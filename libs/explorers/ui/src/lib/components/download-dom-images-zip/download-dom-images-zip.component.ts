@@ -1,5 +1,4 @@
-import { Component, inject, input } from '@angular/core';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import { Component, input } from '@angular/core';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
@@ -29,8 +28,6 @@ type DownloadFile = {
   styleUrls: ['./download-dom-images-zip.component.scss'],
 })
 export class DownloadDomImagesZipComponent {
-  private readonly logger = inject(LoggerService);
-
   domFiles = input.required<DomFile[]>();
   csvFiles = input<CsvFile[]>([]);
   filename = input.required();
@@ -52,19 +49,16 @@ export class DownloadDomImagesZipComponent {
       const paddingPx = this.downloadImagePaddingPx() ?? 0;
       for (const domFile of this.domFiles()) {
         const blob = await captureDomToBlob(domFile.target, paddingPx);
-        if (blob) {
-          files.push({ name: domFile.filename + fileType, content: blob });
-        } else {
-          // the other plots still download, so warn and carry on
-          this.logger.warn('Failed to capture a plot image; omitting it from the download', {
-            filename: domFile.filename,
-          });
+        if (!blob) {
+          // fail the whole download rather than hand over a zip with a plot silently missing
+          throw new Error(`Failed to capture a plot image for download: ${domFile.filename}`);
         }
+        files.push({ name: domFile.filename + fileType, content: blob });
       }
     }
 
     if (files.length === 0) {
-      this.logger.warn('No files were available for download', { fileType });
+      throw new Error(`No files were available for download: ${fileType}`);
     }
 
     if (files.length === 1) {

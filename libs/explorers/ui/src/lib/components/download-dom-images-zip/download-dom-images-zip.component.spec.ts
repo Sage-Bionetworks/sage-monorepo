@@ -1,4 +1,3 @@
-import { LoggerService } from '@sagebionetworks/explorers/services';
 import { captureDomToBlob } from '@sagebionetworks/explorers/util';
 import { render } from '@testing-library/angular';
 import { saveAs } from 'file-saver';
@@ -118,29 +117,36 @@ describe('DownloadDomImagesZipComponent', () => {
     expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'test-file.zip');
   });
 
-  it('should warn when a plot capture fails and when nothing is left to download', async () => {
+  it('should throw when a plot capture fails rather than zip an incomplete set', async () => {
     (captureDomToBlob as jest.Mock).mockResolvedValue(null);
-    const warn = jest.fn();
     const mockElement = { offsetWidth: 100, offsetHeight: 100 } as HTMLElement;
     const { fixture } = await render(DownloadDomImagesZipComponent, {
       componentInputs: {
-        domFiles: [{ target: mockElement, filename: 'img-1' }],
+        domFiles: [
+          { target: mockElement, filename: 'img-1' },
+          { target: mockElement, filename: 'img-2' },
+        ],
         filename: 'test-file',
       },
-      providers: [{ provide: LoggerService, useValue: { warn } }, MessageService],
+      providers: [MessageService],
     });
 
-    await fixture.componentInstance.performDownload('.png');
-
-    expect(warn).toHaveBeenCalledWith(
-      'Failed to capture a plot image; omitting it from the download',
-      {
-        filename: 'img-1',
-      },
+    await expect(fixture.componentInstance.performDownload('.png')).rejects.toThrow(
+      'Failed to capture a plot image for download: img-1',
     );
-    expect(warn).toHaveBeenCalledWith('No files were available for download', {
-      fileType: '.png',
+    expect(saveAs).not.toHaveBeenCalled();
+  });
+
+  it('should throw when there is nothing to download rather than save an empty zip', async () => {
+    const { fixture } = await render(DownloadDomImagesZipComponent, {
+      componentInputs: { domFiles: [], filename: 'test-file' },
+      providers: [MessageService],
     });
+
+    await expect(fixture.componentInstance.performDownload('.png')).rejects.toThrow(
+      'No files were available for download: .png',
+    );
+    expect(saveAs).not.toHaveBeenCalled();
   });
 
   it('should save a single image under its own name instead of zipping it', async () => {
