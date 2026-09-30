@@ -7,11 +7,11 @@ FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
 # Builder stage (compile native deps like ujson)
 FROM mirror.gcr.io/python:${PYTHON_VERSION}-slim AS builder
 
-ARG USERNAME=app
+ARG USER_NAME=app
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ENV APP_DIR=/app \
-    APP_USERNAME=${USERNAME}
+    APP_USER_NAME=${USER_NAME}
 
 # Copy uv binary into builder
 COPY --from=uv /uv /bin/uv
@@ -41,18 +41,18 @@ EOF
 # Runtime stage (no build-essential)
 FROM mirror.gcr.io/python:${PYTHON_VERSION}-slim AS runtime
 
-ARG USERNAME=app
+ARG USER_NAME=app
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ENV APP_DIR=/app \
-    APP_USERNAME=${USERNAME}
+    APP_USER_NAME=${USER_NAME}
 
 # Copy uv binary into runtime
 COPY --from=uv /uv /bin/uv
 
 # Create user & minimal runtime deps only
-RUN groupadd --gid "$USER_GID" "$USERNAME" \
-  && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
+RUN groupadd --gid "$USER_GID" "$USER_NAME" \
+  && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USER_NAME" \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
     gosu \
@@ -79,7 +79,7 @@ COPY --from=builder /usr/local/bin/bixarena-ai-service /usr/local/bin/bixarena-a
 # Copy runtime configuration / entrypoint script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
-RUN chown -R ${APP_USERNAME}:${APP_USERNAME} ${APP_DIR} /docker-entrypoint.sh \
+RUN chown -R ${APP_USER_NAME}:${APP_USER_NAME} ${APP_DIR} /docker-entrypoint.sh \
   && chmod +x /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
