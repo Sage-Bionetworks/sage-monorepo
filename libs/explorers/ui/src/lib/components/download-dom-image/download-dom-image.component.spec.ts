@@ -1,6 +1,7 @@
 import { captureDomToBlob } from '@sagebionetworks/explorers/util';
 import { render } from '@testing-library/angular';
 import { DownloadDomImageComponent } from './download-dom-image.component';
+import { MessageService } from 'primeng/api';
 
 jest.mock('@sagebionetworks/explorers/util', () => ({
   ...jest.requireActual('@sagebionetworks/explorers/util'),
@@ -20,6 +21,7 @@ describe('DownloadDomImageComponent', () => {
         filename: 'test-file',
         ...inputs,
       },
+      providers: [MessageService],
     });
 
     const instance = component.fixture.componentInstance;
@@ -36,6 +38,7 @@ describe('DownloadDomImageComponent', () => {
     const mockElement = { offsetWidth: 100, offsetHeight: 100 } as HTMLElement;
     const { fixture } = await render(DownloadDomImageComponent, {
       componentInputs: { target: mockElement, filename: 'test-file' },
+      providers: [MessageService],
     });
 
     await expect(fixture.componentInstance.performDownload('.png')).rejects.toThrow(

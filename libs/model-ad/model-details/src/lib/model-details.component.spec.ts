@@ -11,6 +11,7 @@ import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { of, switchMap, throwError, timer } from 'rxjs';
 import { ModelDetailsComponent } from './model-details.component';
+import { MessageService } from 'primeng/api';
 
 const NOT_FOUND_DELAY_MS = 10;
 
@@ -56,6 +57,7 @@ async function setup(
         useValue: mockActivatedRoute,
       },
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
+      MessageService,
     ],
   });
 
@@ -161,6 +163,7 @@ describe('ModelDetailsComponent', () => {
           { provide: ModelService, useValue: { getModelByName } },
           { provide: PlatformService, useValue: { isBrowser: true, isServer: false } },
           provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
+          MessageService,
         ],
       });
 

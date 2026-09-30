@@ -16,6 +16,7 @@ import {
   ModelDetailsBoxplotsSelectorComponent,
 } from '../model-details-boxplots-selector/model-details-boxplots-selector.component';
 import { MarmosetModelDetailsBoxplotsSelectorComponent } from './marmoset-model-details-boxplots-selector.component';
+import { MessageService } from 'primeng/api';
 
 const ageGroup = '0-1 year';
 
@@ -28,7 +29,11 @@ async function setup() {
       modelDataList: marmosetModelDataMock,
       wikiParams: validWikiParams[0],
     },
-    providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+    providers: [
+      provideHttpClient(),
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
+      MessageService,
+    ],
   });
   return { fixture, component: fixture.componentInstance };
 }
@@ -100,6 +105,7 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
         provideHttpClient(),
         { provide: SvgIconService, useClass: SvgIconServiceStub },
         { provide: LoggerService, useValue: { warn: warnSpy, log: jest.fn() } },
+        MessageService,
       ],
     });
     const component = fixture.componentInstance;

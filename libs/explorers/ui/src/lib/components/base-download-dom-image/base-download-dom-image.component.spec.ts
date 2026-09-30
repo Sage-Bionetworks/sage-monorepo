@@ -3,6 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { LoggerService } from '@sagebionetworks/explorers/services';
 import { BaseDownloadDomImageComponent } from './base-download-dom-image.component';
+import { MessageService } from 'primeng/api';
 
 describe('BaseDownloadDomImageComponent', () => {
   let fixture: ComponentFixture<BaseDownloadDomImageComponent>;
@@ -12,7 +13,7 @@ describe('BaseDownloadDomImageComponent', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), MessageService],
     }).compileComponents();
   });
 
@@ -113,7 +114,11 @@ describe('BaseDownloadDomImageComponent', () => {
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule],
-      providers: [provideRouter([]), { provide: LoggerService, useValue: { error } }],
+      providers: [
+        provideRouter([]),
+        { provide: LoggerService, useValue: { error } },
+        MessageService,
+      ],
     });
     const f = TestBed.createComponent(BaseDownloadDomImageComponent);
     const failure = new Error('capture failed');

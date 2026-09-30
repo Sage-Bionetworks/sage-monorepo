@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { DownloadNote } from '@sagebionetworks/explorers/models';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import { LoggerService, ToastNotificationService } from '@sagebionetworks/explorers/services';
 import { ButtonModule } from 'primeng/button';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -82,6 +82,7 @@ export class BaseDownloadDomImageComponent {
   }
 
   private readonly logger = inject(LoggerService);
+  private readonly toastNotificationService = inject(ToastNotificationService);
 
   error = signal('');
   isLoading = signal(false);
@@ -101,7 +102,11 @@ export class BaseDownloadDomImageComponent {
       await this.performDownload()(this.selectedType());
       this.hide();
     } catch (err) {
+      // the popover stays open with its own message; the toast makes the failure hard to miss
       this.error.set('Oops, something went wrong!');
+      this.toastNotificationService.showError(
+        'Something went wrong while preparing the download. Please try again.',
+      );
       this.logger.error('Error downloading plot images', err);
     } finally {
       this.isLoading.set(false);

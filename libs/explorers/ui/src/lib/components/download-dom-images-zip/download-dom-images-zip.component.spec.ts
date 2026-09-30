@@ -4,6 +4,7 @@ import { render } from '@testing-library/angular';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { DownloadDomImagesZipComponent } from './download-dom-images-zip.component';
+import { MessageService } from 'primeng/api';
 
 jest.mock('file-saver', () => ({ saveAs: jest.fn() }));
 
@@ -35,6 +36,7 @@ describe('DownloadDomImagesZipComponent', () => {
         filename: 'test-file',
         ...inputs,
       },
+      providers: [MessageService],
     });
     return { component };
   }
@@ -68,6 +70,7 @@ describe('DownloadDomImagesZipComponent', () => {
         ],
         hasCsvDownload: true,
       },
+      providers: [MessageService],
     });
 
     await fixture.componentInstance.performDownload('.csv');
@@ -92,6 +95,7 @@ describe('DownloadDomImagesZipComponent', () => {
         ],
         hasCsvDownload: true,
       },
+      providers: [MessageService],
     });
 
     await fixture.componentInstance.performDownload('.csv');
@@ -123,7 +127,7 @@ describe('DownloadDomImagesZipComponent', () => {
         domFiles: [{ target: mockElement, filename: 'img-1' }],
         filename: 'test-file',
       },
-      providers: [{ provide: LoggerService, useValue: { warn } }],
+      providers: [{ provide: LoggerService, useValue: { warn } }, MessageService],
     });
 
     await fixture.componentInstance.performDownload('.png');
@@ -149,6 +153,7 @@ describe('DownloadDomImagesZipComponent', () => {
         domFiles: [{ target: mockElement, filename: 'img-1' }],
         filename: 'test-file',
       },
+      providers: [MessageService],
     });
 
     await fixture.componentInstance.performDownload('.png');

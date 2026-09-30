@@ -5,6 +5,7 @@ import { marmosetModelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import { MarmosetModelDetailsContentComponent } from './marmoset-model-details-content.component';
 import { getPanels, getPanelsWithDisabledState } from './marmoset-model-details-panels';
+import { MessageService } from 'primeng/api';
 
 async function setup(model: MarmosetModel = marmosetModelMock, activePanel = 'biomarkers') {
   return render(MarmosetModelDetailsContentComponent, {
@@ -16,7 +17,10 @@ async function setup(model: MarmosetModel = marmosetModelMock, activePanel = 'bi
       activeParent: '',
       scrollToPanelNavElementOnInitialLoad: false,
     },
-    providers: [{ provide: PlatformService, useValue: { isBrowser: true, isServer: false } }],
+    providers: [
+      { provide: PlatformService, useValue: { isBrowser: true, isServer: false } },
+      MessageService,
+    ],
   });
 }
 

@@ -12,6 +12,7 @@ import { mouseModelMock } from '@sagebionetworks/model-ad/testing';
 import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
 import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { MessageService } from 'primeng/api';
 import {
   ANCHOR_HIGHLIGHT_HOLD_MS,
   FilterConfig,
@@ -65,7 +66,11 @@ async function setupHost(overrides: Partial<TestHostComponent> = {}) {
   const { fixture } = await render(TestHostComponent, {
     imports: [MockWikiComponent],
     componentInputs: overrides,
-    providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+    providers: [
+      provideHttpClient(),
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
+      MessageService,
+    ],
   });
   return { fixture, host: fixture.componentInstance, user };
 }
@@ -145,7 +150,11 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
           dataField: 'evidence_type',
         } as FilterConfig,
       },
-      providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+      providers: [
+        provideHttpClient(),
+        { provide: SvgIconService, useClass: SvgIconServiceStub },
+        MessageService,
+      ],
     });
     const base = getBaseComponent(fixture);
 
@@ -237,7 +246,11 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     const { fixture } = await render(TestHostComponent, {
       imports: [MockWikiComponent],
       componentProperties: { modelDataList: mockModelDataList },
-      providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+      providers: [
+        provideHttpClient(),
+        { provide: SvgIconService, useClass: SvgIconServiceStub },
+        MessageService,
+      ],
     });
     const base = getBaseComponent(fixture);
 
@@ -303,7 +316,11 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
         } as FilterConfig,
         anchorDataField: 'age' as keyof ModelData,
       },
-      providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+      providers: [
+        provideHttpClient(),
+        { provide: SvgIconService, useClass: SvgIconServiceStub },
+        MessageService,
+      ],
     });
     const base = getBaseComponent(fixture);
 
