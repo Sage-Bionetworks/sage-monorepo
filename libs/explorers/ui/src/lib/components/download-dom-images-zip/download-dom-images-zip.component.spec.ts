@@ -106,9 +106,7 @@ describe('DownloadDomImagesZipComponent', () => {
     (captureDomToBlob as jest.Mock).mockResolvedValue(new Blob(['image'], { type: 'image/png' }));
     const fileSpy = jest.spyOn(JSZip.prototype, 'file');
     // jest-fixed-jsdom's global Blob is not jsdom's, so real zip generation cannot read it
-    const generateSpy = jest
-      .spyOn(JSZip.prototype, 'generateAsync')
-      .mockResolvedValue(new Blob(['zip']) as never);
+    jest.spyOn(JSZip.prototype, 'generateAsync').mockResolvedValue(new Blob(['zip']) as never);
     const { component } = await setup();
 
     await component.fixture.componentInstance.performDownload('.png');
