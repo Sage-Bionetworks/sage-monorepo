@@ -25,7 +25,7 @@ import { isEqual, xor } from 'lodash';
 import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
-import { catchError, combineLatest, EMPTY, finalize, map, Subject, switchMap } from 'rxjs';
+import { catchError, combineLatest, EMPTY, finalize, map, of, Subject, switchMap } from 'rxjs';
 import { VALID_PAGE_SIZES } from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
@@ -1091,10 +1091,16 @@ export class ComparisonToolService<T> {
    * `pinnedParents` is always read with the key the rows were fetched under. `switchMap` only
    * applies the latest request's response, and that request was made under the latest config, so
    * the snapshot and the rows always agree.
+   *
+   * With no pins to ask for, the request is skipped, but an empty result still goes through the
+   * stream rather than returning early. That way it supersedes any pinned fetch still in flight and
+   * clears a previous failure.
    */
   fetchPinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
     const parentIdDataKey = this.parentIdDataKey();
-    this.lastPinnedSource$ = source$.pipe(map((result) => ({ ...result, parentIdDataKey })));
+    const request$: Observable<ComparisonToolFetchResult<unknown>> =
+      this.pinnedItemsQuery().items.length > 0 ? source$ : of({ data: [], totalCount: 0 });
+    this.lastPinnedSource$ = request$.pipe(map((result) => ({ ...result, parentIdDataKey })));
     this.startFetch();
     this.pinnedFetch$.next(this.lastPinnedSource$);
   }

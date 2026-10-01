@@ -484,7 +484,8 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
     it.each(MAIN_CATEGORIES)(
       'should log an error when the pinned response for %s is truncated',
       async (mainCategory) => {
-        const { component, loggerErrorSpy, mockPageFor } = await setup();
+        const { component, comparisonToolService, loggerErrorSpy, mockPageFor } = await setup();
+        jest.spyOn(comparisonToolService, 'pinnedItemsQuery').mockReturnValue(PINNED_ROWS_QUERY);
         mockPageFor(mainCategory, { totalElements: 2 });
 
         component.getPinnedData([mainCategory, TISSUE_CATEGORY], PINNED_ROWS_QUERY, []);
@@ -497,7 +498,8 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
     );
 
     it('should not log an error when the pinned response is complete', async () => {
-      const { component, loggerErrorSpy, mockPageFor } = await setup();
+      const { component, comparisonToolService, loggerErrorSpy, mockPageFor } = await setup();
+      jest.spyOn(comparisonToolService, 'pinnedItemsQuery').mockReturnValue(PINNED_ROWS_QUERY);
       mockPageFor(DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN, { totalElements: 1 });
 
       component.getPinnedData(
