@@ -240,7 +240,8 @@ export interface LegacyComparisonToolUrlRedirect extends ComparisonToolUrlParams
 /**
  * Translates the comparison tool params of a legacy share URL into their current shape. Return null
  * when the params are already current, which leaves the URL untouched. A returned param replaces that
- * URL param, an omitted one leaves it alone, and null or an empty list removes it.
+ * URL param, an omitted one leaves it alone, and null or an empty list removes it. A non-null result
+ * must change the URL; one that doesn't is reported as a rules bug and the URL loads as it is.
  */
 export type LegacyComparisonToolUrlRedirectFn = (
   params: ComparisonToolUrlParams,

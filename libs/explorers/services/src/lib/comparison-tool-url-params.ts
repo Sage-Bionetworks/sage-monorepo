@@ -46,10 +46,13 @@ export function deserializeComparisonToolUrlParams(
 
   // The tool writes one order per sort field, so an unreadable order or a count mismatch means the
   // URL was edited or built elsewhere, and the sort it shows may not be the one intended.
-  if (hasInvalidSortOrder || sortOrders.length !== sortFields.length) {
+  const hasSortOrderCountMismatch = sortOrders.length !== sortFields.length;
+  if (hasInvalidSortOrder || hasSortOrderCountMismatch) {
     logger?.warn(INVALID_SORT_ORDERS_MESSAGE, {
       sortFields: params['sortFields'] ?? null,
       sortOrders: params['sortOrders'] ?? null,
+      hasInvalidSortOrder,
+      hasSortOrderCountMismatch,
     });
   }
 

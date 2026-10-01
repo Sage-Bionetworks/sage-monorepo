@@ -15,6 +15,7 @@ import { parseCommaSeparatedQueryParam } from '@sagebionetworks/shared/util';
 import {
   createLegacyComparisonToolUrlGuard,
   LEGACY_URL_IN_APP_NAVIGATION_MESSAGE,
+  LEGACY_URL_REDIRECT_UNCHANGED_MESSAGE,
   LEGACY_URL_REDIRECTED_MESSAGE,
   LEGACY_URL_TRANSLATION_FAILED_MESSAGE,
 } from './legacy-comparison-tool-url.guard';
@@ -318,6 +319,22 @@ describe('createLegacyComparisonToolUrlGuard', () => {
       expect(warn).toHaveBeenCalledWith(unrecognizedCohortWarning.message, { url: LEGACY_URL });
     });
 
+    it('should load the URL as it is and warn when the redirect rules return a patch that changes nothing', () => {
+      const CURRENT_SORT_FIELD = 'gene_symbol';
+      const UNCHANGED_URL = `${CT_URL}?sortFields=${CURRENT_SORT_FIELD}`;
+
+      const result = runGuard(() => ({ sortFields: [CURRENT_SORT_FIELD] }), {
+        sortFields: CURRENT_SORT_FIELD,
+      });
+
+      expect(result).toBe(true);
+      expect(warn).toHaveBeenCalledWith(LEGACY_URL_REDIRECT_UNCHANGED_MESSAGE, {
+        from: UNCHANGED_URL,
+        to: UNCHANGED_URL,
+      });
+      expect(log).not.toHaveBeenCalledWith(LEGACY_URL_REDIRECTED_MESSAGE, expect.anything());
+    });
+
     it('should log no warnings or errors when the redirect rules report no warnings', () => {
       runGuard(translateToRnaOnly, legacyQueryParams);
 
@@ -401,5 +418,48 @@ describe('createLegacyComparisonToolUrlGuard browser history', () => {
 
     location.back();
     expect(location.path()).toBe(REFERRING_PAGE_URL);
+  });
+});
+
+describe('createLegacyComparisonToolUrlGuard with redirect rules that leave the URL unchanged', () => {
+  @Component({ template: '' })
+  class EmptyPageComponent {}
+
+  // A guard redirect that never settles would hang the test, so the rules stop returning their
+  // patch after this many runs; any run past the first means the guard redirected to itself.
+  const MAX_GUARD_RUNS = 5;
+  const CURRENT_URL = `${CT_URL}?sortFields=gene_symbol`;
+  let resolveRedirect: jest.Mock;
+
+  beforeEach(() => {
+    resolveRedirect = jest.fn(() =>
+      resolveRedirect.mock.calls.length <= MAX_GUARD_RUNS ? { sortFields: ['gene_symbol'] } : null,
+    );
+
+    TestBed.configureTestingModule({
+      providers: [
+        provideLocationMocks(),
+        provideRouter([
+          {
+            path: CT_URL.slice(1),
+            component: EmptyPageComponent,
+            canActivate: [createLegacyComparisonToolUrlGuard(resolveRedirect)],
+            runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+          },
+        ]),
+      ],
+    });
+    jest.spyOn(TestBed.inject(LoggerService), 'log').mockImplementation();
+    jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+  });
+
+  it('should load the URL after running the redirect rules once instead of redirecting to it again', async () => {
+    const router = TestBed.inject(Router);
+    const location = TestBed.inject(Location);
+
+    await router.navigateByUrl(CURRENT_URL);
+
+    expect(resolveRedirect).toHaveBeenCalledTimes(1);
+    expect(location.path()).toBe(CURRENT_URL);
   });
 });

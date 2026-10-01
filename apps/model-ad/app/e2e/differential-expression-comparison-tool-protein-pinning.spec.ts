@@ -26,7 +26,9 @@ import { Proteomics } from '@sagebionetworks/model-ad/api-client';
 import {
   DIFFERENTIAL_EXPRESSION_CT_PAGE as CT_PAGE,
   DIFFERENTIAL_EXPRESSION_DROPDOWN_INDEX as DROPDOWN_INDEX,
+  DIFFERENTIAL_EXPRESSION_HEMIBRAIN_TISSUE as HEMIBRAIN_TISSUE,
   DIFFERENTIAL_EXPRESSION_PROTEIN_CATEGORY as PROTEIN_MAIN_CATEGORY,
+  DIFFERENTIAL_EXPRESSION_RNA_CATEGORY as RNA_MAIN_CATEGORY,
 } from './constants';
 import {
   fetchProteomics,
@@ -35,9 +37,7 @@ import {
 } from './helpers/comparison-tool';
 
 // Protein rows are children of the RNA row keyed by their rna_composite_id, so each gene below is
-// an RNA composite_id. Protein only offers the Hemibrain tissue.
-const RNA_MAIN_CATEGORY = 'RNA - DIFFERENTIAL EXPRESSION';
-const HEMIBRAIN_TISSUE = 'Tissue - Hemibrain';
+// an RNA composite_id.
 const rnaHemibrainCategories = [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
 const proteinCategories = [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
 const fourProteinGene = 'ENSMUSG00000019961~LOAD2~Male'; // Tmpo

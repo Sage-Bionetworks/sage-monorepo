@@ -152,7 +152,7 @@ describe('legacyDifferentialExpressionUrlGuard', () => {
         pinned,
       });
 
-      // A Female and a Male pin for each would exceed the comparison tool's pin budget.
+      // A Female and a Male pin for each would exceed the comparison tool's pin budget so only map each pin to Female
       expect(readParam(result, 'pinned')).toEqual(pinned.map((pin) => `${pin}~Female`));
     });
 
@@ -162,13 +162,14 @@ describe('legacyDifferentialExpressionUrlGuard', () => {
       expect(readQueryParams(result)).not.toHaveProperty('pinned');
     });
 
-    it('should redirect to a URL without a pinned param when every pin is removed', () => {
+    it('should redirect to a URL without a pinned param when none of the legacy pins can be translated', () => {
       const result = runGuard({
         categories: [RNA_CATEGORY, TISSUE_CATEGORY, 'Sex - Unknown'],
         pinned: ['ENSMUSG00000033417~3xTg-AD'],
       });
 
-      // With an unrecognized cohort there is no sex to add, so every pin without a sex is removed.
+      // An unrecognized cohort gives no sex to add to a legacy pin, so the pin can't be translated and
+      // is removed. With no pins left, the 'pinned' param is removed rather than left empty.
       expect(readQueryParams(result)).not.toHaveProperty('pinned');
     });
 
