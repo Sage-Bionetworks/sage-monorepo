@@ -1,4 +1,13 @@
-import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
+import {
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  Injectable,
+  signal,
+  Signal,
+  WritableSignal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   DEFAULT_SORT_ORDER,
@@ -19,6 +28,7 @@ import {
   ComparisonToolViewConfig,
   HeatmapDetailsPanelData,
   PinnedItemsQuery,
+  PinnedResultsCounts,
   SortOrder,
 } from '@sagebionetworks/explorers/models';
 import { isEqual, xor } from 'lodash';
@@ -165,7 +175,10 @@ export class ComparisonToolService<T> {
     event: Event;
   } | null>(null);
   private readonly isFilterPanelOpenSignal = signal(false);
-  private readonly pendingFetchesSignal = signal(0);
+  // Counters, not flags: `switchMap` runs a superseded fetch's `finalize` after the fetch that
+  // superseded it has already started, so a stream briefly has two fetches pending.
+  private readonly pendingUnpinnedFetchesSignal = signal(0);
+  private readonly pendingPinnedFetchesSignal = signal(0);
   private readonly selectedRowIdSignal = signal<string | null>(null);
   private readonly hoveredRowIdSignal = signal<string | null>(null);
   private readonly isPinningAllSignal = signal(false);
@@ -204,14 +217,20 @@ export class ComparisonToolService<T> {
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
   readonly isFilterPanelOpen = this.isFilterPanelOpenSignal.asReadonly();
-  readonly pendingFetches = this.pendingFetchesSignal.asReadonly();
   readonly selectedRowId = this.selectedRowIdSignal.asReadonly();
   readonly hoveredRowId = this.hoveredRowIdSignal.asReadonly();
   readonly isPinningAll = this.isPinningAllSignal.asReadonly();
   // Set when the latest pinned fetch failed, until a pinned fetch succeeds or the pins are rewritten.
   // The pins stay cached, so `retryPinnedFetch` can still load them.
   readonly pinnedFetchFailed = this.pinnedFetchFailedSignal.asReadonly();
+  readonly pendingFetches = computed(
+    () =>
+      this.pendingUnpinnedFetchesSignal() +
+      this.pendingPinnedFetchesSignal() +
+      (this.isPinningAllSignal() ? 1 : 0),
+  );
   readonly isLoadingTableData = computed(() => this.pendingFetches() > 0);
+  readonly isLoadingPinnedData = computed(() => this.pendingPinnedFetchesSignal() > 0);
 
   // Computed Query Accessors
   readonly query = this.querySignal.asReadonly();
@@ -305,6 +324,17 @@ export class ComparisonToolService<T> {
     () => (this.isCountingCachedPins() ? { ...this.nouns(), parentNoun: null } : this.nouns()),
     { equal: isEqual },
   );
+  // The counts to show in the pinned results header, unknown while any pinned fetch is in flight.
+  // Both are read from `pinnedData()` (`pinCount` through the pinned parents), which still holds the
+  // previous fetch's rows until the new ones land, e.g. RNA rows right after a switch to Protein.
+  // `pinCount` itself stays numeric, since the pin limit and pin-all need a value while rows load
+  readonly pinnedResultsCounts = computed<PinnedResultsCounts>(
+    () =>
+      this.isLoadingPinnedData()
+        ? { pinCount: null, pinnedRowCount: null }
+        : { pinCount: this.pinCount(), pinnedRowCount: this.pinnedRowCount() },
+    { equal: isEqual },
+  );
 
   /**
    * The pins to send with a query, and the id space they are in. By default this is the pinned items
@@ -364,6 +394,7 @@ export class ComparisonToolService<T> {
     // Unpinned rows are paged, so totalCount is the cross-page total used for pagination.
     this.subscribeToFetchStream(
       this.unpinnedFetch$,
+      this.pendingUnpinnedFetchesSignal,
       (result) => this.applyUnpinnedData(result),
       () => this.applyUnpinnedData({ data: [], totalCount: 0 }),
     );
@@ -372,6 +403,7 @@ export class ComparisonToolService<T> {
     // pinnedData(), so totalCount from the response is unused and therefore is omitted intentionally.
     this.subscribeToFetchStream(
       this.pinnedFetch$,
+      this.pendingPinnedFetchesSignal,
       ({ data, parentIdDataKey }) => this.applyPinnedData(data as T[], parentIdDataKey),
       () => this.applyPinnedFetchFailure(),
     );
@@ -812,8 +844,8 @@ export class ComparisonToolService<T> {
    *
    * The guard below keeps this from running while the table is still being populated: the cap sent to
    * the server is how many more pins the user may add, counted from the pins on screen, and those are
-   * not final until the in-flight fetch lands. The `startFetch()` call also serves as a re-entry
-   * guard: once it increments the counter, the `isLoadingTableData()` check at the top blocks any
+   * not final until the in-flight fetch lands. Setting `isPinningAll` also serves as a re-entry
+   * guard: `pendingFetches` counts it, so the `isLoadingTableData()` check at the top blocks any
    * concurrent call until the fetch completes.
    *
    * The category dropdowns are disabled while `isPinningAll()` is set, so the view cannot switch
@@ -830,15 +862,11 @@ export class ComparisonToolService<T> {
     const remainingBudget = this.pinLimit() - this.pinCount();
     const prebudgetedParentIds = this.isChildView() ? this.pinnedParents() : undefined;
 
-    this.startFetch();
     this.isPinningAllSignal.set(true);
     fetch(this.query(), remainingBudget, prebudgetedParentIds)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => {
-          this.isPinningAllSignal.set(false);
-          this.completeFetch();
-        }),
+        finalize(() => this.isPinningAllSignal.set(false)),
       )
       .subscribe({
         next: ({ rows, totalElements }) => {
@@ -1049,12 +1077,13 @@ export class ComparisonToolService<T> {
    * Subscribes a fetch stream once for the lifetime of the service. `switchMap` unsubscribes the
    * previous result observable whenever a newer one arrives, which aborts the superseded HTTP
    * request so responses are always applied latest-wins. `finalize` runs on completion, error, or
-   * switchMap cancellation, keeping the pending-fetch counter balanced; `catchError` hands a failed
+   * switchMap cancellation, keeping `pendingCounter` balanced; `catchError` hands a failed
    * request to `applyFailure` and keeps the outer stream alive for the next fetch. Error logging is
    * handled centrally by `httpErrorInterceptor`, so `applyFailure` only updates state.
    */
   private subscribeToFetchStream<R extends ComparisonToolFetchResult<unknown>>(
     fetch$: Subject<Observable<R>>,
+    pendingCounter: WritableSignal<number>,
     applyResult: (result: R) => void,
     applyFailure: () => void,
   ): void {
@@ -1062,7 +1091,7 @@ export class ComparisonToolService<T> {
       .pipe(
         switchMap((source$) =>
           source$.pipe(
-            finalize(() => this.completeFetch()),
+            finalize(() => this.completeFetch(pendingCounter)),
             catchError(() => {
               applyFailure();
               return EMPTY;
@@ -1079,7 +1108,7 @@ export class ComparisonToolService<T> {
    * unpinned fetch, guaranteeing the table reflects the most recent query.
    */
   fetchUnpinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
-    this.startFetch();
+    this.startFetch(this.pendingUnpinnedFetchesSignal);
     this.unpinnedFetch$.next(source$);
   }
 
@@ -1101,7 +1130,7 @@ export class ComparisonToolService<T> {
     const request$: Observable<ComparisonToolFetchResult<unknown>> =
       this.pinnedItemsQuery().items.length > 0 ? source$ : of({ data: [], totalCount: 0 });
     this.lastPinnedSource$ = request$.pipe(map((result) => ({ ...result, parentIdDataKey })));
-    this.startFetch();
+    this.startFetch(this.pendingPinnedFetchesSignal);
     this.pinnedFetch$.next(this.lastPinnedSource$);
   }
 
@@ -1113,18 +1142,18 @@ export class ComparisonToolService<T> {
   retryPinnedFetch(): void {
     const source$ = this.lastPinnedSource$;
     if (!this.pinnedFetchFailed() || source$ === null) return;
-    this.startFetch();
+    this.startFetch(this.pendingPinnedFetchesSignal);
     this.pinnedFetch$.next(source$);
   }
 
-  /** Call before starting a data fetch to increment loading counter */
-  private startFetch() {
-    this.pendingFetchesSignal.update((count) => count + 1);
+  /** Call before starting a data fetch to increment its loading counter */
+  private startFetch(pendingCounter: WritableSignal<number>) {
+    pendingCounter.update((count) => count + 1);
   }
 
-  /** Call when a data fetch completes (success or error) to decrement loading counter */
-  private completeFetch() {
-    this.pendingFetchesSignal.update((count) => Math.max(0, count - 1));
+  /** Call when a data fetch completes (success or error) to decrement its loading counter */
+  private completeFetch(pendingCounter: WritableSignal<number>) {
+    pendingCounter.update((count) => Math.max(0, count - 1));
   }
 
   // Query & pagination

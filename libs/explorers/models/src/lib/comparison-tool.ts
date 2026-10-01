@@ -163,6 +163,12 @@ export interface ComparisonToolNouns {
   parentNoun: ComparisonToolNoun | null;
 }
 
+/** The counts shown in the pinned results header. A null count is unknown. */
+export interface PinnedResultsCounts {
+  pinCount: number | null;
+  pinnedRowCount: number | null;
+}
+
 export interface PinnedResultsLabels {
   heading: string;
   sublabels: string[];
