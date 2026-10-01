@@ -16,6 +16,7 @@ import {
   getPinnedResultsControlsCopy,
   getPinnedResultsLabels,
   getViewNounLabel,
+  TABLE_DATA_LOADING_MESSAGE,
 } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolFilterService,
@@ -32,7 +33,6 @@ import { ComparisonToolColumnsComponent } from './comparison-tool-columns/compar
 import {
   COMPARISON_TOOL_BODY_CLASS,
   PINNED_RESULTS_CONTROLS,
-  TABLE_DATA_LOADING_TOOLTIP,
 } from './comparison-tool-table.constants';
 import {
   clampAndFormatWidths,
@@ -110,18 +110,18 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   pinAllTooltip = computed(() => {
     if (!this.canPinAll()) return this.disabledPinTooltip();
-    return this.isLoadingTableData() ? TABLE_DATA_LOADING_TOOLTIP : getPinAllTooltip(this.nouns());
+    return this.isLoadingTableData() ? TABLE_DATA_LOADING_MESSAGE : getPinAllTooltip(this.nouns());
   });
 
   downloadPinsTooltip = computed(() =>
     this.isLoadingTableData()
-      ? TABLE_DATA_LOADING_TOOLTIP
+      ? TABLE_DATA_LOADING_MESSAGE
       : this.pinnedResultsControlsCopy().downloadButtonTooltip,
   );
 
   clearAllPinsTooltip = computed(() =>
     this.isLoadingTableData()
-      ? TABLE_DATA_LOADING_TOOLTIP
+      ? TABLE_DATA_LOADING_MESSAGE
       : this.pinnedResultsControlsCopy().clearButtonTooltip,
   );
 

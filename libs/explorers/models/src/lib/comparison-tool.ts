@@ -169,9 +169,15 @@ export interface PinnedResultsCounts {
   pinnedRowCount: number | null;
 }
 
+/** One line of the pinned results header. `note` is shown inline after `text`, set off from it. */
+export interface PinnedResultsLabel {
+  text: string;
+  note: string | null;
+}
+
 export interface PinnedResultsLabels {
-  heading: string;
-  sublabels: string[];
+  heading: PinnedResultsLabel;
+  sublabels: PinnedResultsLabel[];
 }
 
 export interface PinnedResultsControlsCopy {

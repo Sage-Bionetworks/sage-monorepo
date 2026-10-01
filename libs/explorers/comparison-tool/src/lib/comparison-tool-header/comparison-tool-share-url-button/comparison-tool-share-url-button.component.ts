@@ -1,9 +1,11 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, computed, inject } from '@angular/core';
-import { getShareUrlTooltip } from '@sagebionetworks/explorers/constants';
+import {
+  getShareUrlTooltip,
+  TABLE_DATA_LOADING_MESSAGE,
+} from '@sagebionetworks/explorers/constants';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { TooltipButtonComponent } from '@sagebionetworks/explorers/util';
-import { TABLE_DATA_LOADING_TOOLTIP } from '../../comparison-tool-table/comparison-tool-table.constants';
 
 @Component({
   selector: 'explorers-comparison-tool-share-url-button',
@@ -40,7 +42,7 @@ export class ComparisonToolShareURLButtonComponent {
   getTooltipText(): string {
     if (this.hasCopied) return 'URL copied to clipboard';
     return this.comparisonToolService.isLoadingTableData()
-      ? TABLE_DATA_LOADING_TOOLTIP
+      ? TABLE_DATA_LOADING_MESSAGE
       : getShareUrlTooltip(this.comparisonToolService.nouns());
   }
 }

@@ -2,7 +2,10 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, RouterModule } from '@angular/router';
-import { PINNED_RESULTS_HEADING } from '@sagebionetworks/explorers/constants';
+import {
+  PINNED_RESULTS_HEADING,
+  TABLE_DATA_LOADING_MESSAGE,
+} from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
@@ -38,7 +41,6 @@ import {
   SORT_BADGE_SPACING_PX,
   SORT_BADGE_WIDTH_PX,
   SORT_ICON_WIDTH_PX,
-  TABLE_DATA_LOADING_TOOLTIP,
 } from './comparison-tool-table.constants';
 import {
   clampAndFormatWidths,
@@ -187,7 +189,7 @@ describe('ComparisonToolTableComponent', () => {
     component.detectChanges();
     await user.hover(screen.getByRole('button', { name: /clear all/i }));
 
-    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_TOOLTIP })).toBeVisible();
+    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_MESSAGE })).toBeVisible();
   });
 
   it('should not show pinned section when there are no pinned items', async () => {
@@ -252,7 +254,7 @@ describe('ComparisonToolTableComponent', () => {
     component.detectChanges();
     await user.hover(screen.getByRole('button', { name: /pin all/i }));
 
-    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_TOOLTIP })).toBeVisible();
+    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_MESSAGE })).toBeVisible();
   });
 
   it('should explain the pin limit rather than the loading state when both apply', async () => {
