@@ -6,7 +6,7 @@ import {
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { SortMeta } from 'primeng/api';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { ComparisonToolService, PinAllFetch } from './comparison-tool.service';
 import { ToastNotificationService } from './toast-notification.service';
@@ -26,6 +26,8 @@ export type ComparisonToolServiceOptions = {
   pinnedItems?: string[];
   unpinnedData?: Record<string, unknown>[];
   pinnedData?: Record<string, unknown>[];
+  // Fails the initial pinned fetch, so `pinnedData` is ignored and `pinnedItems` stay unloaded
+  pinnedFetchFails?: boolean;
   multiSortMeta?: SortMeta[];
   router?: Router;
   activatedRoute?: ActivatedRoute;
@@ -110,12 +112,12 @@ export const provideComparisonToolService = (
         service.fetchUnpinned(of({ data: unpinnedData, totalCount: unpinnedData.length }));
       }
 
-      if (options.pinnedData !== undefined) {
+      if (options.pinnedFetchFails) {
+        service.fetchPinned(throwError(() => new Error('pinned fetch failed')));
+      } else if (options.pinnedData !== undefined) {
         const pinnedData = options.pinnedData;
         service.fetchPinned(of({ data: pinnedData, totalCount: pinnedData.length }));
-      }
-
-      if (options.pinnedData === undefined && options.pinnedItems !== undefined) {
+      } else if (options.pinnedItems !== undefined) {
         // If only pinned IDs are provided, initialize pinned data with provided ids
         const pinnedData = options.pinnedItems.map((item) => ({ _id: item }));
         service.fetchPinned(of({ data: pinnedData, totalCount: pinnedData.length }));

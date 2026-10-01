@@ -2,7 +2,7 @@
   <div class="table-header-and-pinned" #tableHeaderAndPinned>
     <explorers-comparison-tool-columns [columnWidths]="columnWidths()" />
 
-    @if (pinnedRowCount() > 0) {
+    @if (hasPinnedSection()) {
       <div class="table-divider table-divider-1">
         <div class="table-divider-inner">
           <div id="pinned-results-header" class="table-divider-label">
@@ -22,7 +22,7 @@
               [buttonTooltip]="downloadPinsTooltip()"
               [heading]="pinnedResultsControlsCopy().downloadPanelHeading"
               [note]="viewConfig().downloadPinsNote"
-              [disabled]="isLoadingTableData()"
+              [disabled]="isLoadingTableData() || pinnedFetchFailed()"
             />
             <button
               (click)="clearAllPinned()"
@@ -36,6 +36,20 @@
           </div>
         </div>
       </div>
+      @if (pinnedFetchFailed()) {
+        <!-- TODO(MG-1102): replace with the shared info banner with action once Design specifies it -->
+        <div class="pinned-fetch-failed" role="alert">
+          <i class="pi pi-exclamation-circle pinned-fetch-failed-icon" aria-hidden="true"></i>
+          <span>{{ pinnedFetchFailedMessage() }}</span>
+          <p-button
+            [label]="pinnedResultsControls.retryButtonLabel"
+            [rounded]="true"
+            size="small"
+            [loading]="isLoadingTableData()"
+            (onClick)="retryPinnedFetch()"
+          />
+        </div>
+      }
     }
     <explorers-base-table
       [data]="pinnedData()"
@@ -67,7 +81,7 @@
       </div>
     </div>
   }
-  @if (!searchTerm() && !hasSelectedFilters() && pinnedRowCount() > 0) {
+  @if (!searchTerm() && !hasSelectedFilters() && hasPinnedSection()) {
     <div class="table-divider">
       <div class="table-divider-inner">
         <div class="table-divider-label">{{ allResultsLabel() }}</div>

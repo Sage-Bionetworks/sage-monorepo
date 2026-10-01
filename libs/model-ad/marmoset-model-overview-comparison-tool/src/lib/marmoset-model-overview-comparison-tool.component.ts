@@ -1,3 +1,4 @@
+import { HttpContext } from '@angular/common/http';
 import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -6,6 +7,7 @@ import {
   ComparisonToolUrlService,
   LoggerService,
   PlatformService,
+  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
@@ -140,9 +142,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log(
-      `MarmosetModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('MarmosetModelOverviewComparisonToolComponent: unpinned query', { ...query });
 
     this.comparisonToolService.fetchUnpinned(
       this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
@@ -164,17 +164,19 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
       sortOrders,
     };
 
-    this.logger.log(
-      `MarmosetModelOverviewComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('MarmosetModelOverviewComparisonToolComponent: pinned query', { ...query });
 
     this.comparisonToolService.fetchPinned(
-      this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
-        map((response: MarmosetModelOverviewsPage) => {
-          const data = response.marmosetModelOverviews;
-          return { data, totalCount: data.length };
-        }),
-      ),
+      this.marmosetModelOverviewService
+        .getMarmosetModelOverviews(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
+        .pipe(
+          map((response: MarmosetModelOverviewsPage) => {
+            const data = response.marmosetModelOverviews;
+            return { data, totalCount: data.length };
+          }),
+        ),
     );
   }
 }

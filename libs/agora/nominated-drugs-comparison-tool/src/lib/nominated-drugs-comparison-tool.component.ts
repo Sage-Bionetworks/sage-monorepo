@@ -1,3 +1,4 @@
+import { HttpContext } from '@angular/common/http';
 import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -20,6 +21,7 @@ import {
   ComparisonToolUrlService,
   LoggerService,
   PlatformService,
+  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, shareReplay } from 'rxjs';
@@ -146,9 +148,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log(
-      `NominatedDrugsComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('NominatedDrugsComparisonToolComponent: unpinned query', { ...query });
 
     this.comparisonToolService.fetchUnpinned(
       this.nominatedDrugsService.getNominatedDrugs(query).pipe(
@@ -170,15 +170,19 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
       sortOrders,
     };
 
-    this.logger.log(`NominatedDrugsComparisonToolComponent: pinned query ${JSON.stringify(query)}`);
+    this.logger.log('NominatedDrugsComparisonToolComponent: pinned query', { ...query });
 
     this.comparisonToolService.fetchPinned(
-      this.nominatedDrugsService.getNominatedDrugs(query).pipe(
-        map((response: NominatedDrugsPage) => {
-          const data = response.nominatedDrugs;
-          return { data, totalCount: data.length };
-        }),
-      ),
+      this.nominatedDrugsService
+        .getNominatedDrugs(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
+        .pipe(
+          map((response: NominatedDrugsPage) => {
+            const data = response.nominatedDrugs;
+            return { data, totalCount: data.length };
+          }),
+        ),
     );
   }
 }

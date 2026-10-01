@@ -11,7 +11,7 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, EMPTY, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, defer, EMPTY, Observable, of, Subject, throwError } from 'rxjs';
 import {
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
@@ -80,6 +80,16 @@ describe('ComparisonToolService', () => {
     service.fetchUnpinned(of({ data: [], totalCount, hasRowsForPrebudgetedParents }));
 
   const noMatchingRows: PinAllFetch<Row> = () => of({ rows: [], totalElements: 0 });
+
+  const failedRequest = () => throwError(() => new Error('request failed'));
+
+  // A cold source like an HTTP request: the first subscription fails, and each later one (a retry)
+  // gets `retried()`
+  const failsOnce = <R>(retried: () => Observable<R>) => {
+    let subscriptions = 0;
+    const source$ = defer(() => (subscriptions++ === 0 ? failedRequest() : retried()));
+    return { source$, subscriptions: () => subscriptions };
+  };
 
   const connectService = (
     configs: ComparisonToolConfig[] = mockComparisonToolDataConfig,
@@ -449,6 +459,7 @@ describe('ComparisonToolService', () => {
     describe('pinnedParents', () => {
       it('reads unique parents in row order with the parent key of the fetched view', () => {
         connectService(viewConfigs, { selection: CHILD_VIEW });
+        service.setPinnedItems(['child2a', 'child1a', 'child2b']);
 
         landPinned(
           childRow('child2a', 'parent2'),
@@ -461,6 +472,7 @@ describe('ComparisonToolService', () => {
 
       it('reads the parent key active when the fetch was requested, not when it lands', () => {
         connectService(viewConfigs, { selection: PARENT_VIEW });
+        service.setPinnedItems(['parent1']);
         const pinnedResponse$ = new Subject<{ data: Row[]; totalCount: number }>();
         service.fetchPinned(pinnedResponse$);
 
@@ -515,6 +527,115 @@ describe('ComparisonToolService', () => {
         service.togglePin(childRow('child1a', 'parent1'));
 
         expect(service.pinnedItems()).toEqual(['child1b']);
+      });
+    });
+
+    describe('after a failed pinned fetch in a view reached by a switch', () => {
+      const PINNED_CHILD_ROWS = [childRow('child1a', 'parent1'), childRow('child2a', 'parent2')];
+
+      const failPinnedFetchInChildView = (
+        source$: Observable<{ data: Row[]; totalCount: number }> = failedRequest(),
+      ) => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+        service.setDropdownSelection(CHILD_VIEW);
+        service.fetchPinned(source$);
+      };
+
+      it('empties the pinned rows but keeps the pinned parents in the query', () => {
+        failPinnedFetchInChildView();
+
+        expect(service.pinnedFetchFailed()).toBe(true);
+        expect(service.pinnedData()).toEqual([]);
+        expect(service.pinnedParents()).toEqual(['parent1', 'parent2']);
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'parent',
+        });
+      });
+
+      it('shows the pins again when the next pinned fetch succeeds', () => {
+        failPinnedFetchInChildView();
+
+        landPinned(...PINNED_CHILD_ROWS);
+
+        expect(service.pinnedFetchFailed()).toBe(false);
+        expect(service.pinnedData()).toEqual(PINNED_CHILD_ROWS);
+      });
+
+      it('shows the pins again when a retry succeeds', () => {
+        const { source$, subscriptions } = failsOnce(() =>
+          of({ data: PINNED_CHILD_ROWS, totalCount: PINNED_CHILD_ROWS.length }),
+        );
+        failPinnedFetchInChildView(source$);
+
+        service.retryPinnedFetch();
+
+        expect(subscriptions()).toBe(2);
+        expect(service.pinnedFetchFailed()).toBe(false);
+        expect(service.pinnedData()).toEqual(PINNED_CHILD_ROWS);
+        expect(service.isLoadingTableData()).toBe(false);
+      });
+
+      it('keeps counting the unloaded parents toward the pin limit', () => {
+        failPinnedFetchInChildView();
+
+        service.setPinLimit(2);
+
+        expect(service.pinCount()).toBe(2);
+        expect(service.hasReachedPinLimit()).toBe(true);
+        expect(service.canPin(childRow('child3a', 'parent3'))).toBe(false);
+      });
+
+      it('replaces the unloaded pins and clears the failure on a pin edit', () => {
+        failPinnedFetchInChildView();
+
+        service.pinItem(childRow('child3a', 'parent3'));
+
+        expect(service.pinnedFetchFailed()).toBe(false);
+        expect(service.pinnedItemsQuery()).toEqual({ items: ['child3a'], itemIdSpace: 'row' });
+      });
+
+      it('drops every pin and clears the failure on clear all pins', () => {
+        failPinnedFetchInChildView();
+
+        service.resetPinnedItems();
+
+        expect(service.pinnedFetchFailed()).toBe(false);
+        expect(service.pinnedItems()).toEqual([]);
+      });
+    });
+
+    describe('after a failed first pinned fetch', () => {
+      const failFirstPinnedFetch = (selection: string[], pinnedItems: string[]) => {
+        connectService(viewConfigs, { selection });
+        service.setPinnedItems(pinnedItems);
+        service.fetchPinned(failedRequest());
+      };
+
+      it('counts the cached pins in the parent view', () => {
+        failFirstPinnedFetch(PARENT_VIEW, ['parent1', 'parent2']);
+
+        expect(service.pinnedParents()).toEqual([]);
+        expect(service.pinCount()).toBe(2);
+      });
+
+      it('counts the cached pins toward the pin limit in the child view', () => {
+        failFirstPinnedFetch(CHILD_VIEW, ['child1a', 'child1b']);
+
+        service.setPinLimit(2);
+
+        expect(service.pinnedParents()).toEqual([]);
+        expect(service.pinCount()).toBe(2);
+        expect(service.hasReachedPinLimit()).toBe(true);
+      });
+
+      it('counts the pinned parents again when the next pinned fetch succeeds', () => {
+        failFirstPinnedFetch(CHILD_VIEW, ['child1a', 'child1b']);
+
+        landPinned(childRow('child1a', 'parent1'), childRow('child1b', 'parent1'));
+
+        expect(service.pinCount()).toBe(1);
       });
     });
 
@@ -890,6 +1011,7 @@ describe('ComparisonToolService', () => {
       it('caps by parent in response order without splitting a parent', () => {
         connectService(viewConfigs, { selection: CHILD_VIEW });
         service.setPinLimit(2);
+        service.setPinnedItems(['child2a', 'child1a', 'child3a', 'child1b']);
         const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
 
         landPinned(
@@ -934,6 +1056,33 @@ describe('ComparisonToolService', () => {
         expect(service.nouns()).toEqual(CHILD_NOUNS);
       });
 
+      it('should count pins in the view nouns while the pinned rows are loaded', () => {
+        connectService(configsWithNouns, { selection: CHILD_VIEW });
+
+        landPinned(childRow('child1a', 'parent1'));
+
+        expect(service.nounsForPinCount()).toEqual(CHILD_NOUNS);
+      });
+
+      it('should keep counting pins by parent after a failed fetch that kept the parents', () => {
+        connectService(configsWithNouns, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        service.setDropdownSelection(CHILD_VIEW);
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.nounsForPinCount()).toEqual(CHILD_NOUNS);
+      });
+
+      it('should count pins by row after a failed first fetch in a child view', () => {
+        connectService(configsWithNouns, { selection: CHILD_VIEW });
+        service.setPinnedItems(['child1a']);
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.nounsForPinCount()).toEqual({ viewNoun: CHILD_NOUN, parentNoun: null });
+      });
+
       it('should word the pin limit tooltip by parent in a child view', () => {
         connectService(configsWithNouns, { selection: CHILD_VIEW });
         service.setPinLimit(2);
@@ -946,6 +1095,7 @@ describe('ComparisonToolService', () => {
       it('should word the pin limit toast by parent in a child view', () => {
         connectService(configsWithNouns, { selection: CHILD_VIEW });
         service.setPinLimit(1);
+        service.setPinnedItems(['child1a', 'child1b', 'child2a']);
         const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
 
         landPinned(
@@ -1124,8 +1274,8 @@ describe('ComparisonToolService', () => {
     it('should not pin beyond the pin limit', () => {
       connectService();
       service.setPinLimit(2);
-      service.fetchPinned(of({ data: [{ _id: 'id1' }, { _id: 'id2' }], totalCount: 2 }));
       service.setPinnedItems(['id1', 'id2']);
+      service.fetchPinned(of({ data: [{ _id: 'id1' }, { _id: 'id2' }], totalCount: 2 }));
 
       service.pinItem(row('id3'));
 
@@ -1198,6 +1348,7 @@ describe('ComparisonToolService', () => {
       connectService();
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
       service.setPinLimit(2);
+      service.setPinnedItems(['id1', 'id2', 'id3']);
 
       service.fetchPinned(of({ data: rows('id1', 'id2', 'id3'), totalCount: 3 }));
 
@@ -1213,6 +1364,7 @@ describe('ComparisonToolService', () => {
       connectService();
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
       service.setPinLimit(1);
+      service.setPinnedItems(['id1', 'id2']);
 
       service.fetchPinned(of({ data: rows('id1', 'id2'), totalCount: 2 }));
 
@@ -2135,6 +2287,7 @@ describe('ComparisonToolService', () => {
     it('falls back to first pinned row when unpinned is empty and fetches complete', fakeAsync(() => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setPinnedItems(['pinned-1']);
       service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
       service.fetchUnpinned(of({ data: [], totalCount: 0 }));
       tick();
@@ -2144,6 +2297,7 @@ describe('ComparisonToolService', () => {
     it('auto-selects regardless of which fetch completes first', fakeAsync(() => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setPinnedItems(['pinned-1']);
       // Keep pinned in flight while unpinned completes
       const pendingPinned$ = new Subject<{ data: Row[]; totalCount: number }>();
       service.fetchPinned(pendingPinned$);
@@ -2160,6 +2314,7 @@ describe('ComparisonToolService', () => {
       // pinned arrives first
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setPinnedItems(['pinned-1']);
       service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
       service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
       tick();
@@ -2197,6 +2352,7 @@ describe('ComparisonToolService', () => {
     it('notifySelectedRowValidity(false) is a no-op when selected row is in pinned data', () => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setPinnedItems(['pinned-1']);
       service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
       service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
       service.selectRow('pinned-1');
@@ -2248,6 +2404,7 @@ describe('ComparisonToolService', () => {
 
     it('should set isLoading to false when the pinned fetch completes', () => {
       connectService();
+      service.setPinnedItems(['id1']);
       const pending$ = new Subject<FetchResult>();
       service.fetchPinned(pending$);
       expect(service.isLoadingTableData()).toBe(true);
@@ -2259,6 +2416,7 @@ describe('ComparisonToolService', () => {
 
     it('should track multiple concurrent fetches', () => {
       connectService();
+      service.setPinnedItems(['id1']);
       const unpinned$ = new Subject<FetchResult>();
       const pinned$ = new Subject<FetchResult>();
 
@@ -2358,6 +2516,7 @@ describe('ComparisonToolService', () => {
 
     it('does not cancel an in-flight pinned fetch when an unpinned fetch starts', () => {
       connectService();
+      service.setPinnedItems(['pinned']);
 
       const pinned$ = new Subject<Result>();
       const unpinned$ = new Subject<Result>();
@@ -2379,6 +2538,7 @@ describe('ComparisonToolService', () => {
       connectService();
       const warnSpy = jest.spyOn(TestBed.inject(ToastNotificationService), 'showWarning');
       service.setPinLimit(2);
+      service.setPinnedItems(['id1', 'id2', 'id3']);
 
       const pinned$ = new Subject<Result>();
       service.fetchPinned(pinned$);
@@ -2394,7 +2554,7 @@ describe('ComparisonToolService', () => {
       expect(warnSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('maps a failed fetch to an empty result and stays alive for the next fetch', () => {
+    it('maps a failed unpinned fetch to an empty result and stays alive for the next fetch', () => {
       connectService();
 
       const failing$ = new Subject<Result>();
@@ -2412,6 +2572,81 @@ describe('ComparisonToolService', () => {
 
       expect(service.unpinnedData()).toEqual([{ _id: 'recovered' }]);
       expect(service.unpinnedRowCount()).toBe(1);
+    });
+
+    it('keeps the pins cached and counted toward the limit after a failed pinned fetch', () => {
+      connectService();
+      service.setPinLimit(2);
+      service.setPinnedItems(['id1', 'id2']);
+      service.fetchPinned(of({ data: rows('id1', 'id2'), totalCount: 2 }));
+
+      service.fetchPinned(failedRequest());
+
+      expect(service.pinnedFetchFailed()).toBe(true);
+      expect(service.pinnedData()).toEqual([]);
+      expect(service.pinnedItems()).toEqual(['id1', 'id2']);
+      expect(service.pinCount()).toBe(2);
+      expect(service.hasReachedPinLimit()).toBe(true);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('does not retry once a pinned fetch has succeeded', () => {
+      connectService();
+      service.setPinnedItems(['id1']);
+      const { source$, subscriptions } = failsOnce(() => of({ data: [], totalCount: 0 }));
+      service.fetchPinned(source$);
+      service.retryPinnedFetch();
+      expect(subscriptions()).toBe(2);
+
+      service.retryPinnedFetch();
+
+      expect(subscriptions()).toBe(2);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('lets a newer pinned fetch supersede an in-flight retry', () => {
+      connectService();
+      service.setPinnedItems(['id1']);
+      const retried$ = new Subject<Result>();
+      const { source$ } = failsOnce(() => retried$);
+      service.fetchPinned(source$);
+      service.retryPinnedFetch();
+
+      service.fetchPinned(of({ data: [{ _id: 'newest' }], totalCount: 1 }));
+      retried$.next({ data: [{ _id: 'stale' }], totalCount: 1 });
+
+      expect(service.pinnedData()).toEqual([{ _id: 'newest' }]);
+      expect(service.pinnedFetchFailed()).toBe(false);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('skips the pinned request when there are no pins, so it cannot fail', () => {
+      connectService();
+      service.setPinnedItems(['id1']);
+      service.fetchPinned(failedRequest());
+      service.unpinItem('id1');
+      const { source$, subscriptions } = failsOnce(() => of({ data: [], totalCount: 0 }));
+
+      service.fetchPinned(source$);
+
+      expect(subscriptions()).toBe(0);
+      expect(service.pinnedFetchFailed()).toBe(false);
+      expect(service.pinnedData()).toEqual([]);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('lets a skipped pinned request supersede an in-flight pinned fetch', () => {
+      connectService();
+      service.setPinnedItems(['id1']);
+      const inFlight$ = new Subject<Result>();
+      service.fetchPinned(inFlight$);
+      service.unpinItem('id1');
+
+      service.fetchPinned(failedRequest());
+      inFlight$.next({ data: rows('id1'), totalCount: 1 });
+
+      expect(service.pinnedData()).toEqual([]);
+      expect(service.isLoadingTableData()).toBe(false);
     });
   });
 

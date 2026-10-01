@@ -34,6 +34,7 @@ import {
   COLUMN_HEADER_TEXT_CLASS,
   MAX_COLUMN_WIDTH_PX,
   MIN_COLUMN_WIDTH_PX,
+  PINNED_RESULTS_CONTROLS,
   SORT_BADGE_SPACING_PX,
   SORT_BADGE_WIDTH_PX,
   SORT_ICON_WIDTH_PX,
@@ -86,6 +87,7 @@ async function setup(
     unpinnedData?: Record<string, unknown>[];
     pinnedData?: Record<string, unknown>[];
     pinLimit?: number;
+    pinnedFetchFails?: boolean;
   },
   ctFilterServiceOptions?: { searchTerm?: string | null; filters?: ComparisonToolFilter[] },
 ) {
@@ -316,6 +318,84 @@ describe('ComparisonToolTableComponent', () => {
         '2 Parents',
         '3 Children',
       ]);
+    });
+  });
+
+  describe('pinned fetch failure', () => {
+    const failedPinnedItems = mockComparisonToolData.slice(0, 3).map((row) => row['_id']);
+    const failedOptions = { pinnedItems: failedPinnedItems, pinnedFetchFails: true };
+    const retryButtonName = PINNED_RESULTS_CONTROLS.retryButtonLabel;
+
+    it('should tell the user their pins could not be loaded', async () => {
+      await setup(failedOptions);
+
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        "Your 3 pinned results couldn't be loaded. Pinning other results or clearing all pins will remove them.",
+      );
+    });
+
+    it('should keep counting the unloaded pins in the pinned results header', async () => {
+      const { component } = await setup(failedOptions);
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual(['3 Pinned Results']);
+    });
+
+    it('should count the unloaded pins by row in a child view whose parents never loaded', async () => {
+      await setup({ ...failedOptions, configs: childViewConfigs });
+
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        "Your 3 pinned children couldn't be loaded. Pinning other children or clearing all pins will remove them.",
+      );
+    });
+
+    it('should count the unloaded pins by row in the header of a child view whose parents never loaded', async () => {
+      const { component } = await setup({ ...failedOptions, configs: childViewConfigs });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        '3 Children',
+      ]);
+    });
+
+    it('should retry the pinned fetch when Retry is clicked', async () => {
+      const { user } = await setup(failedOptions);
+      const retryPinnedFetchSpy = jest.spyOn(
+        TestBed.inject(ComparisonToolService),
+        'retryPinnedFetch',
+      );
+
+      await user.click(screen.getByRole('button', { name: retryButtonName }));
+
+      expect(retryPinnedFetchSpy).toHaveBeenCalled();
+    });
+
+    it('should disable Download Pins but keep Clear All Pins enabled', async () => {
+      await setup(failedOptions);
+
+      expect(screen.getByRole('button', { name: /download/i })).toBeDisabled();
+      expect(screen.getByRole('button', { name: /clear all/i })).toBeEnabled();
+    });
+
+    it('should remove the pinned section when Clear All Pins is clicked', async () => {
+      const { user } = await setup(failedOptions);
+
+      await user.click(screen.getByRole('button', { name: /clear all/i }));
+
+      expect(screen.queryByRole('alert')).toBeNull();
+      expect(screen.queryByRole('button', { name: /clear all/i })).toBeNull();
+    });
+
+    it('should keep the All Results divider', async () => {
+      await setup(failedOptions);
+
+      expect(screen.getByText('All Results')).toBeInTheDocument();
+    });
+
+    it('should not show the failure message when the pinned fetch succeeds', async () => {
+      await setup(pinnedOptions(mockComparisonToolData.slice(0, 3)));
+
+      expect(screen.queryByRole('alert')).toBeNull();
+      expect(screen.queryByRole('button', { name: retryButtonName })).toBeNull();
     });
   });
 

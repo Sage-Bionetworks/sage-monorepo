@@ -1,3 +1,4 @@
+import { HttpContext } from '@angular/common/http';
 import { Component, computed, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -14,6 +15,7 @@ import {
   ComparisonToolUrlService,
   LoggerService,
   PlatformService,
+  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
@@ -267,9 +269,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       prebudgetedParentIds: this.comparisonToolService.prebudgetedParentIdsForUnpinnedFetch(),
     });
 
-    this.logger.log(
-      `DifferentialExpressionComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('DifferentialExpressionComparisonToolComponent: unpinned query', { ...query });
 
     const mainCategory = currentQuery.categories[0];
     const page$ = this.fetchDifferentialExpressionPage(mainCategory, query);
@@ -303,11 +303,11 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       sortOrders,
     };
 
-    this.logger.log(
-      `DifferentialExpressionComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('DifferentialExpressionComparisonToolComponent: pinned query', { ...query });
 
-    const page$ = this.fetchDifferentialExpressionPage(mainCategory, query);
+    const page$ = this.fetchDifferentialExpressionPage(mainCategory, query, {
+      context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+    });
     if (page$ === null) {
       this.logUnrecognizedMainCategory(mainCategory);
       this.comparisonToolService.fetchPinned(of({ data: [], totalCount: 0 }));
@@ -335,10 +335,11 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
   private fetchDifferentialExpressionPage(
     mainCategory: string | undefined,
     query: DifferentialExpressionSearchQuery,
+    options?: { context?: HttpContext },
   ): Observable<DifferentialExpressionPage> | null {
     switch (mainCategory) {
       case DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA:
-        return this.transcriptomicsService.getTranscriptomics(query).pipe(
+        return this.transcriptomicsService.getTranscriptomics(query, 'body', false, options).pipe(
           map((response) => ({
             rows: response.transcriptomics,
             page: response.page,
@@ -346,7 +347,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
           })),
         );
       case DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN:
-        return this.proteomicsService.getProteomics(query).pipe(
+        return this.proteomicsService.getProteomics(query, 'body', false, options).pipe(
           map((response) => ({
             rows: response.proteomics,
             page: response.page,
