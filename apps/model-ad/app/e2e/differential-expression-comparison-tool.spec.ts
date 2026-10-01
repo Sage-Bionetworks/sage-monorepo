@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
 import {
   ColumnConfig,
@@ -53,7 +53,9 @@ import {
   DIFFERENTIAL_EXPRESSION_CT_PAGE as CT_PAGE,
   DIFFERENTIAL_EXPRESSION_NAV_TRAILS,
   DIFFERENTIAL_EXPRESSION_DROPDOWN_INDEX as DROPDOWN_INDEX,
+  DIFFERENTIAL_EXPRESSION_HEMIBRAIN_TISSUE as HEMIBRAIN_TISSUE,
   DIFFERENTIAL_EXPRESSION_PROTEIN_CATEGORY as PROTEIN_MAIN_CATEGORY,
+  DIFFERENTIAL_EXPRESSION_RNA_CATEGORY as RNA_MAIN_CATEGORY,
 } from './constants';
 import {
   fetchComparisonToolConfig,
@@ -62,17 +64,18 @@ import {
   navigateToComparison,
 } from './helpers/comparison-tool';
 
-const categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+const categories = [RNA_MAIN_CATEGORY, 'Tissue - Hippocampus'];
 const categoriesQueryParams = getQueryParamFromValues(categories, 'categories');
 const models = ['3xTg-AD', 'Abca7*V1599M'];
 const modelsQueryParams = getQueryParamFromValues(models, 'models');
 const categoriesAndModelsQueryParameters = [categoriesQueryParams, modelsQueryParams].join('&');
 const modelsFilterParams = { name: models };
+const cacul1EnsemblGeneId = 'ENSMUSG00000033417';
 const cacul1Matches = [
-  'ENSMUSG00000033417~3xTg-AD~Female',
-  'ENSMUSG00000033417~3xTg-AD~Male',
-  'ENSMUSG00000033417~Abca7*V1599M~Female',
-  'ENSMUSG00000033417~Abca7*V1599M~Male',
+  `${cacul1EnsemblGeneId}~3xTg-AD~Female`,
+  `${cacul1EnsemblGeneId}~3xTg-AD~Male`,
+  `${cacul1EnsemblGeneId}~Abca7*V1599M~Female`,
+  `${cacul1EnsemblGeneId}~Abca7*V1599M~Male`,
 ];
 const ensaEnsemblGeneId = 'ENSMUSG00000038619';
 const ensaMatches = [
@@ -109,14 +112,11 @@ test.describe('differential expression', () => {
     navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams),
   );
 
-  // The header links set only the category (see DIFFERENTIAL_EXPRESSION_CATEGORIES in
-  // @sagebionetworks/model-ad/config, which cannot be imported here because its barrel pulls in
-  // the Angular config chain), so the URL keeps that single value while the CT resolves the
-  // remaining levels from ui_config. The two tests below assert both halves: the category in the
+  // The header links set only the category, so the URL keeps that single value while the CT
+  // resolves the remaining levels from ui_config. The two tests below assert both halves: the category in the
   // URL, and the resolved tissue in the selectors.
   test('header dropdown navigates to the RNA view', async ({ page }) => {
-    const rnaCategory = 'RNA - DIFFERENTIAL EXPRESSION';
-    const rnaDefaultTissue = 'Tissue - Hemibrain';
+    const rnaDefaultTissue = HEMIBRAIN_TISSUE;
 
     // Start on a non-default tissue so the assertions below can only pass if the header link
     // resolved the selection, rather than the CT keeping the tissue already in the URL.
@@ -126,16 +126,13 @@ test.describe('differential expression', () => {
     // The tutorial dialog is only shown on the first visit to a comparison tool
     await navigateToComparison(page, CT_PAGE, false, 'link');
 
-    await expectCategoriesParams(page, [rnaCategory]);
-    await expectCategories(page, [rnaCategory, rnaDefaultTissue]);
+    await expectCategoriesParams(page, [RNA_MAIN_CATEGORY]);
+    await expectCategories(page, [RNA_MAIN_CATEGORY, rnaDefaultTissue]);
   });
 
   // COMPARISON_TOOL_NAV_TRAILS keys 'Differential Expression' to the default RNA sub-link, so
   // navigate through the Protein trail explicitly rather than via navigateToComparison.
   test('header dropdown navigates to the Protein view', async ({ page }) => {
-    const proteinCategory = 'PROTEIN - DIFFERENTIAL EXPRESSION';
-    const proteinTissue = 'Tissue - Hemibrain';
-
     // The tutorial dialog is only shown on the first visit to a comparison tool
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
     await expectCategoriesParams(page, categories);
@@ -147,8 +144,8 @@ test.describe('differential expression', () => {
       false,
     );
 
-    await expectCategoriesParams(page, [proteinCategory]);
-    await expectCategories(page, [proteinCategory, proteinTissue]);
+    await expectCategoriesParams(page, [PROTEIN_MAIN_CATEGORY]);
+    await expectCategories(page, [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE]);
   });
 
   test('heatmap details panel sub-heading includes the model name', async ({ page }) => {
@@ -367,7 +364,7 @@ test.describe('differential expression', () => {
   });
 
   test('pinned items are cached when switching between categories', async ({ page }) => {
-    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const firstCategories = [RNA_MAIN_CATEGORY, 'Tissue - Hippocampus'];
     const pinnedItems = [
       'ENSMUSG00000000001~5xFAD (UCI)~Female',
       'ENSMUSG00000000001~5xFAD (UCI)~Male',
@@ -393,7 +390,7 @@ test.describe('differential expression', () => {
   });
 
   test('pinned items cache is reset when new item is pinned', async ({ page }) => {
-    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const firstCategories = [RNA_MAIN_CATEGORY, 'Tissue - Hippocampus'];
     const initialPinned = ['ENSMUSG00000000001~5xFAD (UCI)~Female']; // Gnai3
     const afterPinPinned = [
       'ENSMUSG00000000001~5xFAD (UCI)~Female',
@@ -426,7 +423,7 @@ test.describe('differential expression', () => {
   });
 
   test('pinned items cache is reset when new item is unpinned', async ({ page }) => {
-    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const firstCategories = [RNA_MAIN_CATEGORY, 'Tissue - Hippocampus'];
     const initialPinned = [
       'ENSMUSG00000000001~5xFAD (UCI)~Female',
       'ENSMUSG00000000001~5xFAD (UCI)~Male',
@@ -460,7 +457,7 @@ test.describe('differential expression', () => {
   test('pinned table and URL should only include currently visible pinned items from cache', async ({
     page,
   }) => {
-    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const firstCategories = [RNA_MAIN_CATEGORY, 'Tissue - Hippocampus'];
     const firstPinned = [
       'ENSMUSG00000000001~3xTg-AD~Female',
       'ENSMUSG00000000001~5xFAD (UCI)~Female',
@@ -674,6 +671,116 @@ test.describe('differential expression', () => {
         getQueryParamsFromRecords(expectedInitialFilterParams),
       );
       await testFiltersRemovedFromUrlOnClearAll(page, expectedInitialFilterParams);
+    });
+  });
+
+  // Share URLs created before sex moved from a category dropdown to a table column carry a trailing
+  // `Sex - <cohort>` category and pinned ids without a sex segment, which the route guard replaces
+  // with the current URL format before the tool loads. The full redirect matrix is covered by the
+  // guard's unit spec; these tests are what prove the guard is wired to the route and that its
+  // output resolves against real data. Their values are chosen to be the hardest to encode: the `&`
+  // in the both-sexes cohort, and a model whose parentheses and slash go through the app's
+  // CustomUrlSerializer, which the unit spec does not use.
+  test.describe('share URLs created before sex became a table column', () => {
+    const hemibrainCategories = [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
+    const hemibrainCategoriesQueryParams = getQueryParamFromValues(
+      hemibrainCategories,
+      'categories',
+    );
+    // The last category is an option of the removed Sex dropdown.
+    const oldShareUrlCategories = [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE, 'Sex - Females & Males'];
+    const hemibrainModels = ['5xFAD (IU/Jax/Pitt)', 'APOE4'];
+    const cacul1PinsWithoutSex = [
+      `${cacul1EnsemblGeneId}~5xFAD (IU/Jax/Pitt)`,
+      `${cacul1EnsemblGeneId}~APOE4`,
+    ];
+    // Each old pin stood for its gene and model in the selected cohort, which here is both sexes,
+    // so it becomes a Female pin and a Male pin.
+    const expectedCacul1PinsForBothSexes = [
+      `${cacul1EnsemblGeneId}~5xFAD (IU/Jax/Pitt)~Female`,
+      `${cacul1EnsemblGeneId}~5xFAD (IU/Jax/Pitt)~Male`,
+      `${cacul1EnsemblGeneId}~APOE4~Female`,
+      `${cacul1EnsemblGeneId}~APOE4~Male`,
+    ];
+    const noPins: string[] = [];
+    const oldShareUrlQueryParams = [
+      getQueryParamFromValues(oldShareUrlCategories, 'categories'),
+      getQueryParamFromValues(cacul1PinsWithoutSex, 'pinned'),
+      getQueryParamFromValues(hemibrainModels, 'models'),
+    ].join('&');
+
+    const expectSexCategoryDroppedAndPinsShownForBothSexes = async (page: Page) => {
+      await expectCategoriesParams(page, hemibrainCategories);
+      await expectCategories(page, hemibrainCategories);
+      await expectPinnedParams(page, expectedCacul1PinsForBothSexes);
+      await expectPinnedRows(page, expectedCacul1PinsForBothSexes);
+    };
+
+    // Simulates Back or Forward to a history entry from the open tool, which reaches the guard as a
+    // query-only navigation.
+    const navigateWithinToolToOldShareUrl = async (page: Page) => {
+      const oldShareUrl = `${new URL(page.url()).pathname}?${oldShareUrlQueryParams}`;
+      await page.evaluate((url) => {
+        history.pushState(null, '', url);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      }, oldShareUrl);
+    };
+
+    test('opening an old share URL drops its Sex category and pins each gene and model for both sexes', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true, 'url', oldShareUrlQueryParams);
+
+      await expectSexCategoryDroppedAndPinsShownForBothSexes(page);
+    });
+
+    // The tool's URL is all query params, so reaching an old share URL from the open tool is a
+    // query-only navigation, which skips canActivate unless the route opts in. Back and Forward into
+    // history from before the release take this path, and are simulated here with pushState and
+    // popstate.
+    test('reaching an old share URL from within the open tool drops its Sex category and pins each gene and model for both sexes', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true, 'url', hemibrainCategoriesQueryParams);
+
+      await navigateWithinToolToOldShareUrl(page);
+
+      await expectSexCategoryDroppedAndPinsShownForBothSexes(page);
+    });
+
+    // The router replaces the old share URL's history entry rather than adding one, so Back leaves
+    // for the page before the old link, and Forward returns to the updated URL. Neither can land on
+    // the old share URL again.
+    test('after opening an old share URL, back returns to the previous page and forward returns to the updated URL', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+      await navigateToComparison(page, CT_PAGE, false, 'url', oldShareUrlQueryParams);
+      await expectSexCategoryDroppedAndPinsShownForBothSexes(page);
+
+      await page.goBack();
+      await expectCategoriesParams(page, categories);
+
+      await page.goForward();
+      await expectCategoriesParams(page, hemibrainCategories);
+      await expectPinnedParams(page, expectedCacul1PinsForBothSexes);
+    });
+
+    test('after reaching an old share URL from within the tool, back returns to the tool without pins and forward returns to the updated URL', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true, 'url', hemibrainCategoriesQueryParams);
+
+      await navigateWithinToolToOldShareUrl(page);
+      await expectSexCategoryDroppedAndPinsShownForBothSexes(page);
+
+      await page.goBack();
+      await expectCategoriesParams(page, hemibrainCategories);
+      await expectPinnedParams(page, noPins);
+
+      await page.goForward();
+      await expectCategoriesParams(page, hemibrainCategories);
+      await expectPinnedParams(page, expectedCacul1PinsForBothSexes);
     });
   });
 });

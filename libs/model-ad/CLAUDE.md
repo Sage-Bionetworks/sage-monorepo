@@ -46,7 +46,7 @@ Mock data and test fixtures come from `@sagebionetworks/model-ad/testing`.
 | `model-ad-disease-correlation-comparison-tool`     | `disease-correlation-comparison-tool/`     | Disease correlation heatmap comparison tool                                                                                            |
 | `model-ad-marmoset-model-overview-comparison-tool` | `marmoset-model-overview-comparison-tool/` | Marmoset model overview comparison tool                                                                                                |
 | `model-ad-mouse-model-overview-comparison-tool`    | `mouse-model-overview-comparison-tool/`    | Mouse model overview comparison tool                                                                                                   |
-| `model-ad-services`                                | `services/`                                | Angular services (currently minimal)                                                                                                   |
+| `model-ad-services`                                | `services/`                                | Route guards (`guards/`), including legacy URL redirects                                                                               |
 | `model-ad-styles`                                  | `styles/`                                  | Shared SCSS variables and mixins                                                                                                       |
 | `model-ad-testing`                                 | `testing/`                                 | Mock data and test fixtures                                                                                                            |
 | `model-ad-themes`                                  | `themes/`                                  | PrimeNG preset (`ModelAdPreset`) consumed by the app and Storybook                                                                     |
@@ -59,13 +59,15 @@ Libraries depend only downward:
 ```
 Feature/route components (home, gene-details, model-details, *-comparison-tool)
          ↓
-      ui / util
+      ui / services
+         ↓
+        util
          ↓
         config
          ↓
   api-client-angular  (generated from api-description)
          ↓
-  testing / styles / services  (infrastructure)
+  testing / styles  (infrastructure)
 ```
 
 All imports use `@sagebionetworks/model-ad/<lib-name>` path aliases. Feature components also import heavily from `@sagebionetworks/explorers/*` for shared comparison tool infrastructure.

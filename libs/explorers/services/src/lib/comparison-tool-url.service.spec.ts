@@ -1,7 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { DEFAULT_SORT_ORDER } from '@sagebionetworks/explorers/constants';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { INVALID_SORT_ORDERS_MESSAGE } from './comparison-tool-url-params';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
+import { LoggerService } from './logger.service';
 
 describe('ComparisonToolUrlService', () => {
   let service: ComparisonToolUrlService;
@@ -298,6 +301,45 @@ describe('ComparisonToolUrlService', () => {
       });
 
       expect(mockRouter.navigate).not.toHaveBeenCalled();
+    });
+
+    describe('invalid sort orders in the URL', () => {
+      const urlWithInvalidSortOrder = {
+        sortFields: 'gene_symbol,model',
+        sortOrders: '0,-1', // 0 is not a valid sort order; only 1 (ascending) and -1 (descending) are
+      };
+      let warn: jest.SpyInstance;
+
+      beforeEach(() => {
+        warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+      });
+
+      it('should replace the invalid sort order with the default and warn when the URL changes', async () => {
+        const EXPECTED_SORT_ORDERS = [DEFAULT_SORT_ORDER, -1];
+
+        queryParamsSubject.next(urlWithInvalidSortOrder);
+
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const params = await firstValueFrom(service.params$);
+        expect(params.sortOrders).toEqual(EXPECTED_SORT_ORDERS);
+        expect(warn).toHaveBeenCalledWith(INVALID_SORT_ORDERS_MESSAGE, {
+          ...urlWithInvalidSortOrder,
+          hasInvalidSortOrder: true,
+          hasSortOrderCountMismatch: false,
+        });
+      });
+
+      it('should not warn when the app writes its sort state while the URL has an invalid sort order', () => {
+        mockActivatedRoute.snapshot = { queryParams: urlWithInvalidSortOrder } as any;
+
+        service.syncToUrl({
+          sortFields: ['gene_symbol', 'model'],
+          sortOrders: [DEFAULT_SORT_ORDER, -1],
+        });
+
+        // The warning is raised once, when the URL changes, not again on every state write.
+        expect(warn).not.toHaveBeenCalled();
+      });
     });
   });
 });

@@ -217,3 +217,32 @@ export interface PaginationParams {
   pageNumber: number;
   pageSize: number;
 }
+
+/**
+ * A legacy URL translation that failed or degraded. Each distinct failure mode should use its own
+ * fixed message, with the URL-specific details in `data`, so reports group by failure mode.
+ */
+export interface LegacyComparisonToolUrlLogEntry {
+  message: string;
+  data?: Record<string, unknown>;
+}
+
+/**
+ * `warnings` report translation problems worth investigating and each becomes a Sentry event, so
+ * report one per root cause. `notes` record expected but lossy translations as breadcrumbs only,
+ * which reach Sentry solely as context on a later event from the same page.
+ */
+export interface LegacyComparisonToolUrlRedirect extends ComparisonToolUrlParams {
+  warnings?: LegacyComparisonToolUrlLogEntry[];
+  notes?: LegacyComparisonToolUrlLogEntry[];
+}
+
+/**
+ * Translates the comparison tool params of a legacy share URL into their current shape. Return null
+ * when the params are already current, which leaves the URL untouched. A returned param replaces that
+ * URL param, an omitted one leaves it alone, and null or an empty list removes it. A non-null result
+ * must change the URL; one that doesn't is reported as a rules bug and the URL loads as it is.
+ */
+export type LegacyComparisonToolUrlRedirectFn = (
+  params: ComparisonToolUrlParams,
+) => LegacyComparisonToolUrlRedirect | null;

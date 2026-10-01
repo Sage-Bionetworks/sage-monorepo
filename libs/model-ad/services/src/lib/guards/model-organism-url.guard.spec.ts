@@ -1,19 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { ModelOrganism } from '@sagebionetworks/model-ad/api-client';
-import { modelOrganismGuard } from './model-organism.guard';
+import { modelOrganismUrlGuard, UNKNOWN_MODEL_ORGANISM_MESSAGE } from './model-organism-url.guard';
 
-function runGuard(url: string, queryParams: Record<string, string>) {
+function runGuard(url: string, queryParams: Record<string, string | string[]>) {
   const route = { queryParams } as unknown as ActivatedRouteSnapshot;
   const state = { url } as RouterStateSnapshot;
-  return TestBed.runInInjectionContext(() => modelOrganismGuard(route, state));
+  return TestBed.runInInjectionContext(() => modelOrganismUrlGuard(route, state));
 }
 
-describe('modelOrganismGuard', () => {
+describe('modelOrganismUrlGuard', () => {
   let router: Router;
+  let warn: jest.SpyInstance;
 
   beforeEach(() => {
     router = TestBed.inject(Router);
+    warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
   });
 
   it('should allow activation when modelOrganism is a valid mouse value', () => {
@@ -87,5 +90,55 @@ describe('modelOrganismGuard', () => {
     expect(serialized).toContain('tissue=Hippocampus');
     expect(serialized).toContain('sex=Male');
     expect(serialized).toContain(`modelOrganism=${ModelOrganism.Mouse}`);
+  });
+
+  describe('logging', () => {
+    it('should warn with the unknown value, the mouse fallback and the URL when modelOrganism is not a known organism', () => {
+      runGuard('/models/APOE4?modelOrganism=rat', { modelOrganism: 'rat' });
+
+      expect(warn).toHaveBeenCalledWith(UNKNOWN_MODEL_ORGANISM_MESSAGE, {
+        rawModelOrganism: 'rat',
+        fallback: 'mouse',
+        url: '/models/APOE4?modelOrganism=rat',
+      });
+    });
+
+    it('should warn with every value when modelOrganism appears more than once in the URL', () => {
+      runGuard('/models/APOE4?modelOrganism=mouse&modelOrganism=marmoset', {
+        modelOrganism: ['mouse', 'marmoset'],
+      });
+
+      // Each value is valid on its own, but the router hands the guard an array, which cannot be resolved.
+      expect(warn).toHaveBeenCalledWith(
+        UNKNOWN_MODEL_ORGANISM_MESSAGE,
+        expect.objectContaining({ rawModelOrganism: ['mouse', 'marmoset'] }),
+      );
+    });
+
+    it('should not warn when the URL has no modelOrganism', () => {
+      runGuard('/models/APOE4', {});
+
+      // Model URLs shared before modelOrganism existed have none, so this is expected, not an error.
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    it('should not warn when modelOrganism has no value', () => {
+      runGuard('/models/APOE4?modelOrganism=', { modelOrganism: '' });
+
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    it('should not warn when modelOrganism is a known organism in the wrong case', () => {
+      runGuard('/models/APOE4?modelOrganism=MOUSE', { modelOrganism: 'MOUSE' });
+
+      // The guard only lowercases it, so nothing needs reporting.
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    it('should not warn when modelOrganism is a known organism', () => {
+      runGuard('/models/APOE4?modelOrganism=marmoset', { modelOrganism: 'marmoset' });
+
+      expect(warn).not.toHaveBeenCalled();
+    });
   });
 });

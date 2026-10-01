@@ -3,7 +3,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   getPinLimitTooltip,
   getPinLimitWarning,
+  DEFAULT_SORT_ORDER,
   MAX_PIN_LIMIT,
+  RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS,
 } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
@@ -37,6 +39,12 @@ import { ToastNotificationService } from './toast-notification.service';
  * OpenAPI contract declares column_width as `minimum: 1`, so any value <= 0 is treated as bad config.
  */
 export const DEFAULT_COLUMN_WIDTH_PX = 300;
+
+export const RESERVED_FILTER_KEY_MESSAGE =
+  'Filter query_param_key collides with a reserved comparison tool URL param; the filter cannot round-trip through the URL.';
+
+export const UNMATCHED_URL_CATEGORIES_MESSAGE =
+  'URL categories match no comparison tool config; falling back to the default selection.';
 
 /**
  * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
@@ -467,6 +475,7 @@ export class ComparisonToolService<T> {
       columns: config.columns.map((column) => this.sanitizeColumnWidth(column)),
     }));
     this.configsSignal.set(sanitizedConfigs);
+    this.warnOnReservedFilterKeys(sanitizedConfigs);
 
     const selection = this.resolveInitialDropdownSelection(params, sanitizedConfigs);
     const initialSort = this.resolveInitialSortMeta(params);
@@ -500,8 +509,10 @@ export class ComparisonToolService<T> {
     configs: ComparisonToolConfig[],
   ): string[] {
     const urlCategories = params.categories ?? undefined;
-    const selectionSource = urlCategories ?? this.initialSelection ?? [];
-    return this.normalizeSelection(selectionSource, configs);
+    if (urlCategories) {
+      return this.normalizeUrlSelection(urlCategories, configs);
+    }
+    return this.normalizeSelection(this.initialSelection ?? [], configs);
   }
 
   private resolveInitialSortMeta(params: ComparisonToolUrlParams): SortMeta[] {
@@ -539,13 +550,36 @@ export class ComparisonToolService<T> {
       return configs[0];
     }
 
+    return this.findMatchingConfig(selection, configs) ?? configs[0];
+  }
+
+  private findMatchingConfig(
+    selection: string[],
+    configs: ComparisonToolConfig[],
+  ): ComparisonToolConfig | null {
     const exactMatch = configs.find((config) => isEqual(config.dropdowns ?? [], selection));
     if (exactMatch) {
       return exactMatch;
     }
 
-    const prefixMatch = configs.find((config) => this.isPrefix(selection, config.dropdowns));
-    return prefixMatch ?? configs[0];
+    return configs.find((config) => this.isPrefix(selection, config.dropdowns)) ?? null;
+  }
+
+  /**
+   * Filter keys are open-ended data keys that share the URL with the tool's reserved params, so a
+   * filter keyed like one of them would be read back as that param instead.
+   */
+  private warnOnReservedFilterKeys(configs: ComparisonToolConfig[]): void {
+    const reservedKeys = new Set(
+      configs
+        .flatMap((config) => config.filters ?? [])
+        .map((filter) => filter.query_param_key)
+        .filter((queryParamKey) => RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS.has(queryParamKey)),
+    );
+
+    for (const queryParamKey of reservedKeys) {
+      this.logger.warn(RESERVED_FILTER_KEY_MESSAGE, { queryParamKey });
+    }
   }
 
   /**
@@ -1090,17 +1124,34 @@ export class ComparisonToolService<T> {
       return defaultSelection;
     }
 
-    const exactMatch = configs.find((config) => isEqual(config.dropdowns ?? [], selection));
-    if (exactMatch) {
-      return [...exactMatch.dropdowns];
+    const matchingConfig = this.findMatchingConfig(selection, configs);
+    return matchingConfig ? [...matchingConfig.dropdowns] : defaultSelection;
+  }
+
+  /**
+   * Normalizes categories read from the URL, reporting ones that match no config. A share link or
+   * legacy URL translation whose categories no longer exist would otherwise silently land on the
+   * default view.
+   */
+  private normalizeUrlSelection(
+    urlCategories: string[],
+    configs: ComparisonToolConfig[],
+  ): string[] {
+    const normalizedSelection = this.normalizeSelection(urlCategories, configs);
+
+    const isUnmatched =
+      urlCategories.length > 0 &&
+      configs.length > 0 &&
+      !this.findMatchingConfig(urlCategories, configs);
+
+    if (isUnmatched) {
+      this.logger.warn(UNMATCHED_URL_CATEGORIES_MESSAGE, {
+        urlCategories,
+        fallbackSelection: normalizedSelection,
+      });
     }
 
-    const prefixMatch = configs.find((config) => this.isPrefix(selection, config.dropdowns));
-    if (prefixMatch) {
-      return [...prefixMatch.dropdowns];
-    }
-
-    return defaultSelection;
+    return normalizedSelection;
   }
 
   private isPrefix(prefix: string[], target: string[] | undefined): boolean {
@@ -1294,7 +1345,7 @@ export class ComparisonToolService<T> {
       return null;
     }
 
-    const normalizedSelection = this.normalizeSelection(urlCategories, this.configsSignal());
+    const normalizedSelection = this.normalizeUrlSelection(urlCategories, this.configsSignal());
     const categoriesMatchLastSync = isEqual(
       normalizedSelection,
       this.lastSyncedUrlParamsState?.categories ?? [],
@@ -1402,7 +1453,7 @@ export class ComparisonToolService<T> {
     for (const meta of multiSortMeta) {
       if (meta.field) {
         sortFields.push(meta.field);
-        sortOrders.push((meta.order ?? 1) as SortOrder);
+        sortOrders.push((meta.order ?? DEFAULT_SORT_ORDER) as SortOrder);
       }
     }
 
@@ -1425,7 +1476,7 @@ export class ComparisonToolService<T> {
   private convertArraysToSortMeta(sortFields: string[], sortOrders: SortOrder[]): SortMeta[] {
     return sortFields.map((field, index) => ({
       field,
-      order: sortOrders[index] ?? 1,
+      order: sortOrders[index] ?? DEFAULT_SORT_ORDER,
     }));
   }
 
