@@ -8,7 +8,7 @@ import {
   SvgIconService,
 } from '@sagebionetworks/explorers/services';
 import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
 import { NEVER } from 'rxjs';
@@ -54,7 +54,9 @@ describe('ComparisonToolShareURLButtonComponent', () => {
     startLoadingTableData();
     await user.hover(getShareUrlButton());
 
-    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_TOOLTIP })).toBeVisible();
+    await waitFor(() => {
+      expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_TOOLTIP })).toBeVisible();
+    });
   });
 
   it('should be disabled when the pinned rows failed to load, so it cannot share a URL missing the pins', async () => {
