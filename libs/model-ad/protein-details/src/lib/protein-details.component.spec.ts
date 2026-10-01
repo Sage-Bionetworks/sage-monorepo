@@ -8,6 +8,7 @@ import { proteomicsIndividualMocks } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
+import { MessageService } from 'primeng/api';
 import { ProteinDetailsComponent } from './protein-details.component';
 
 async function setup(
@@ -49,6 +50,7 @@ async function setup(
         useValue: mockActivatedRoute,
       },
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
+      MessageService,
     ],
   });
 

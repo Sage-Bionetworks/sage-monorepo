@@ -1,4 +1,4 @@
-import { csvDataToString } from './csv';
+import { CSV_MIME_TYPE, csvDataToBlob, csvDataToString } from './csv';
 
 describe('csvDataToString', () => {
   it('should double quote and escape values', () => {
@@ -34,5 +34,18 @@ describe('csvDataToString', () => {
 
   it('should handle empty string', () => {
     expect(csvDataToString([['']])).toBe('""\n');
+  });
+});
+
+describe('csvDataToBlob', () => {
+  it('should wrap the formatted csv in a blob with the csv mime type', async () => {
+    const blob = csvDataToBlob([['a', 'b']]);
+    expect(blob.type).toBe(CSV_MIME_TYPE);
+    expect(await blob.text()).toBe('"a","b"\n');
+  });
+
+  it('should produce an empty blob for empty data', async () => {
+    const blob = csvDataToBlob([]);
+    expect(blob.size).toBe(0);
   });
 });

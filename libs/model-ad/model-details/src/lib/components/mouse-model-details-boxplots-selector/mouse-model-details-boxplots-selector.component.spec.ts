@@ -9,6 +9,7 @@ import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { mouseModelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { MouseModelDetailsBoxplotsSelectorComponent } from './mouse-model-details-boxplots-selector.component';
+import { MessageService } from 'primeng/api';
 
 async function setup() {
   const { fixture } = await render(MouseModelDetailsBoxplotsSelectorComponent, {
@@ -20,7 +21,11 @@ async function setup() {
       modelDataList: mouseModelMock.pathology,
       wikiParams: validWikiParams[0],
     },
-    providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+    providers: [
+      provideHttpClient(),
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
+      MessageService,
+    ],
   });
   const component = fixture.componentInstance;
   return { component, fixture };
@@ -94,7 +99,11 @@ describe('MouseModelDetailsBoxplotsSelectorComponent', () => {
         modelDataList: mockModelDataList,
         wikiParams: validWikiParams[0],
       },
-      providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+      providers: [
+        provideHttpClient(),
+        { provide: SvgIconService, useClass: SvgIconServiceStub },
+        MessageService,
+      ],
     });
     const component = fixture.componentInstance;
 

@@ -51,6 +51,7 @@ import { GeneComparisonToolScorePanelComponent } from './components/gene-compari
 
 import { FormsModule } from '@angular/forms';
 import {
+  CSV_MIME_TYPE,
   LoadingIconComponent,
   PopoverLinkComponent,
   SvgIconComponent,
@@ -1238,7 +1239,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       csv += this.arrayToCSVString(row);
     });
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: CSV_MIME_TYPE });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     const filename = (this.category + '-' + this.subCategory)
@@ -1254,6 +1255,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     return val === null ? '' : val;
   }
 
+  // TODO(AG-2205): replace with csvDataToString from explorers/util, which escapes internal quotes
   arrayToCSVString(values: string[]): string {
     return values.map((value) => `"${value}"`).join(',') + '\n';
   }
