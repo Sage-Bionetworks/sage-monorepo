@@ -33,6 +33,8 @@ ARG devcontainerVersion=""
 # The username of the non-root user.
 # The user `ubuntu` is available since Ubuntu 24.04.
 ENV user="ubuntu"
+# The UID of the non-root user in the base image.
+ARG userUid="1000"
 
 # Set environment variables.
 ENV DEVCONTAINER_VERSION=${devcontainerVersion}
@@ -158,16 +160,16 @@ RUN echo "$user:$user" | chpasswd \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Build zlib with musl from source
+WORKDIR /tmp/zlib
 RUN curl -O "https://zlib.net/fossils/zlib-${zlibVersion}.tar.gz" && \
-  tar -xzf "zlib-${zlibVersion}.tar.gz" && \
-  pushd "zlib-${zlibVersion}" && \
+  tar -xzf "zlib-${zlibVersion}.tar.gz" --strip-components=1 && \
   CC=musl-gcc ./configure --static && \
   make && cp libz.a /usr/lib/x86_64-linux-musl/. && \
-  popd && \
-  rm -rf "zlib-${zlibVersion}" "zlib-${zlibVersion}.tar.gz"
+  rm -rf /tmp/zlib
+WORKDIR /
 
 # Switch to the non-root user.
-USER $user
+USER ${userUid}
 
 # Install pnpm.
 RUN corepack install --global pnpm@"${pnpmVersion}"

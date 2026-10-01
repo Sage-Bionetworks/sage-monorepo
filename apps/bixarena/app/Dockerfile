@@ -13,7 +13,7 @@ COPY dist/apps/bixarena/app/server ./server
 COPY dist/apps/bixarena/app/browser ./browser
 
 HEALTHCHECK --interval=2s --timeout=3s --retries=20 --start-period=15s \
-  CMD curl --fail --silent "localhost:4200/health" | jq '.status' | grep UP || exit 1
+  CMD ["/bin/sh", "-c", "curl --fail --silent localhost:4200/health | jq .status | grep UP || exit 1"]
 
 EXPOSE 4200
 
