@@ -6,8 +6,10 @@ import {
   expectCategoriesParams,
   expectComparisonToolTableLoaded,
   expectPinnedParams,
+  expectPinnedResultsCount,
   expectPinnedRows,
   expectSearchResults,
+  expectViewNounLabels,
   getCategoriesQueryParams,
   getHeatmapDetailsPanelSubHeadings,
   getPinnedTable,
@@ -18,6 +20,7 @@ import {
   getVisibleHeatmapCircleButtons,
   navigateViaHeaderNav,
   pinByName,
+  PinLimitCopy,
   runFilterPanelTests,
   runHeatmapDetailsPanelTests,
   searchViaFilterbox,
@@ -50,7 +53,9 @@ import {
   DIFFERENTIAL_EXPRESSION_CT_PAGE as CT_PAGE,
   DIFFERENTIAL_EXPRESSION_NAV_TRAILS,
   DIFFERENTIAL_EXPRESSION_DROPDOWN_INDEX as DROPDOWN_INDEX,
+  DIFFERENTIAL_EXPRESSION_HEMIBRAIN_TISSUE as HEMIBRAIN_TISSUE,
   DIFFERENTIAL_EXPRESSION_PROTEIN_CATEGORY as PROTEIN_MAIN_CATEGORY,
+  DIFFERENTIAL_EXPRESSION_RNA_CATEGORY as RNA_MAIN_CATEGORY,
 } from './constants';
 import {
   fetchComparisonToolConfig,
@@ -59,7 +64,7 @@ import {
   navigateToComparison,
 } from './helpers/comparison-tool';
 
-const categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+const categories = [RNA_MAIN_CATEGORY, 'Tissue - Hippocampus'];
 const categoriesQueryParams = getQueryParamFromValues(categories, 'categories');
 const models = ['3xTg-AD', 'Abca7*V1599M'];
 const modelsQueryParams = getQueryParamFromValues(models, 'models');
@@ -91,6 +96,13 @@ const noGeneSymbolMatches = [
   `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Female`,
   `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Male`,
 ];
+const NO_GENES_FOUND_MESSAGE = 'No genes found...';
+const NO_PROTEINS_FOUND_MESSAGE = 'No proteins found...';
+const RNA_PIN_LIMIT_COPY: PinLimitCopy = {
+  pinnedLabels: ['Pinned Results', `${MAX_PIN_LIMIT} Genes`],
+  toast: `Only ${MAX_PIN_LIMIT} genes were pinned, because you reached the maximum of ${MAX_PIN_LIMIT} pinned genes.`,
+  tooltip: `You have already pinned the maximum number of results (${MAX_PIN_LIMIT} genes). You must unpin some results before you can pin more.`,
+};
 
 test.describe('differential expression', () => {
   runFilterPanelTests(async (page) =>
@@ -100,14 +112,11 @@ test.describe('differential expression', () => {
     navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams),
   );
 
-  // The header links set only the category (see DIFFERENTIAL_EXPRESSION_CATEGORIES in
-  // @sagebionetworks/model-ad/config, which cannot be imported here because its barrel pulls in
-  // the Angular config chain), so the URL keeps that single value while the CT resolves the
-  // remaining levels from ui_config. The two tests below assert both halves: the category in the
+  // The header links set only the category, so the URL keeps that single value while the CT
+  // resolves the remaining levels from ui_config. The two tests below assert both halves: the category in the
   // URL, and the resolved tissue in the selectors.
   test('header dropdown navigates to the RNA view', async ({ page }) => {
-    const rnaCategory = 'RNA - DIFFERENTIAL EXPRESSION';
-    const rnaDefaultTissue = 'Tissue - Hemibrain';
+    const rnaDefaultTissue = HEMIBRAIN_TISSUE;
 
     // Start on a non-default tissue so the assertions below can only pass if the header link
     // resolved the selection, rather than the CT keeping the tissue already in the URL.
@@ -117,16 +126,13 @@ test.describe('differential expression', () => {
     // The tutorial dialog is only shown on the first visit to a comparison tool
     await navigateToComparison(page, CT_PAGE, false, 'link');
 
-    await expectCategoriesParams(page, [rnaCategory]);
-    await expectCategories(page, [rnaCategory, rnaDefaultTissue]);
+    await expectCategoriesParams(page, [RNA_MAIN_CATEGORY]);
+    await expectCategories(page, [RNA_MAIN_CATEGORY, rnaDefaultTissue]);
   });
 
   // COMPARISON_TOOL_NAV_TRAILS keys 'Differential Expression' to the default RNA sub-link, so
   // navigate through the Protein trail explicitly rather than via navigateToComparison.
   test('header dropdown navigates to the Protein view', async ({ page }) => {
-    const proteinCategory = 'PROTEIN - DIFFERENTIAL EXPRESSION';
-    const proteinTissue = 'Tissue - Hemibrain';
-
     // The tutorial dialog is only shown on the first visit to a comparison tool
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
     await expectCategoriesParams(page, categories);
@@ -138,8 +144,8 @@ test.describe('differential expression', () => {
       false,
     );
 
-    await expectCategoriesParams(page, [proteinCategory]);
-    await expectCategories(page, [proteinCategory, proteinTissue]);
+    await expectCategoriesParams(page, [PROTEIN_MAIN_CATEGORY]);
+    await expectCategories(page, [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE]);
   });
 
   test('heatmap details panel sub-heading includes the model name', async ({ page }) => {
@@ -173,7 +179,23 @@ test.describe('differential expression', () => {
       getQueryParamFromValues(cacul1Matches, 'pinned'),
     ].join('&');
     await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
-    await testSearchExcludesPinnedItems(page, cacul1Matches, 'acul', 'cacul1,');
+    await testSearchExcludesPinnedItems(
+      page,
+      cacul1Matches,
+      'acul',
+      'cacul1,',
+      NO_GENES_FOUND_MESSAGE,
+    );
+  });
+
+  test('pinned header and result labels use the gene noun', async ({ page }) => {
+    const queryParameters = [
+      categoriesQueryParams,
+      getQueryParamFromValues(cacul1Matches, 'pinned'),
+    ].join('&');
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await expectPinnedResultsCount(page, cacul1Matches.length, ['Pinned Results', '4 Genes']);
+    await expectViewNounLabels(page, 'Genes', plecGeneSymbol);
   });
 
   test('filterbox search with commas returns full, case-insensitive matches', async ({ page }) => {
@@ -262,10 +284,13 @@ test.describe('differential expression', () => {
     });
 
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesAndModelsQueryParameters);
+    const pinnedIds = transcriptomics.map((row) => row.composite_id);
     await testPinAllAcrossPages(
       page,
       searchTerm,
-      transcriptomics.map((row) => row.composite_id),
+      pinnedIds,
+      ['Pinned Results', `${pinnedIds.length} Genes`],
+      NO_GENES_FOUND_MESSAGE,
     );
   });
 
@@ -290,10 +315,14 @@ test.describe('differential expression', () => {
       { search: proteinSearchTerm },
     );
 
+    const pinnedIds = proteomics.map((row) => row.composite_id);
+    const pinnedGeneCount = new Set(proteomics.map((row) => row.rna_composite_id)).size;
     await testPinAllAcrossPages(
       page,
       proteinSearchTerm,
-      proteomics.map((row) => row.composite_id),
+      pinnedIds,
+      ['Pinned Results', `${pinnedGeneCount} Genes`, `${pinnedIds.length} Proteins`],
+      NO_PROTEINS_FOUND_MESSAGE,
     );
   });
 
@@ -309,6 +338,7 @@ test.describe('differential expression', () => {
       page,
       searchTerm,
       transcriptomics.map((row) => row.composite_id),
+      RNA_PIN_LIMIT_COPY,
     );
   });
 
@@ -330,11 +360,11 @@ test.describe('differential expression', () => {
     ].join('&');
 
     await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
-    await testUrlPinsExceedingLimitAreCapped(page, pinnedItems, searchTerm);
+    await testUrlPinsExceedingLimitAreCapped(page, pinnedItems, searchTerm, RNA_PIN_LIMIT_COPY);
   });
 
   test('pinned items are cached when switching between categories', async ({ page }) => {
-    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const firstCategories = [RNA_MAIN_CATEGORY, 'Tissue - Hippocampus'];
     const pinnedItems = [
       'ENSMUSG00000000001~5xFAD (UCI)~Female',
       'ENSMUSG00000000001~5xFAD (UCI)~Male',
@@ -360,7 +390,7 @@ test.describe('differential expression', () => {
   });
 
   test('pinned items cache is reset when new item is pinned', async ({ page }) => {
-    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const firstCategories = [RNA_MAIN_CATEGORY, 'Tissue - Hippocampus'];
     const initialPinned = ['ENSMUSG00000000001~5xFAD (UCI)~Female']; // Gnai3
     const afterPinPinned = [
       'ENSMUSG00000000001~5xFAD (UCI)~Female',
@@ -393,7 +423,7 @@ test.describe('differential expression', () => {
   });
 
   test('pinned items cache is reset when new item is unpinned', async ({ page }) => {
-    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const firstCategories = [RNA_MAIN_CATEGORY, 'Tissue - Hippocampus'];
     const initialPinned = [
       'ENSMUSG00000000001~5xFAD (UCI)~Female',
       'ENSMUSG00000000001~5xFAD (UCI)~Male',
@@ -427,7 +457,7 @@ test.describe('differential expression', () => {
   test('pinned table and URL should only include currently visible pinned items from cache', async ({
     page,
   }) => {
-    const firstCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hippocampus'];
+    const firstCategories = [RNA_MAIN_CATEGORY, 'Tissue - Hippocampus'];
     const firstPinned = [
       'ENSMUSG00000000001~3xTg-AD~Female',
       'ENSMUSG00000000001~5xFAD (UCI)~Female',
@@ -650,33 +680,27 @@ test.describe('differential expression', () => {
   // guard's unit spec; these tests are what prove the guard is wired to the route and that its
   // output resolves against real data. Their values are chosen to be the hardest to encode: the `&`
   // in the both-sexes cohort, and a model whose parentheses and slash go through the app's
-  // CustomUrlSerializer, which the unit spec does not use. Category values are literals here for the
-  // same reason as the header tests above: @sagebionetworks/model-ad/config cannot be imported from
-  // e2e.
+  // CustomUrlSerializer, which the unit spec does not use.
   test.describe('share URLs created before sex became a table column', () => {
-    const hemibrainCategories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain'];
+    const hemibrainCategories = [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
     const hemibrainCategoriesQueryParams = getQueryParamFromValues(
       hemibrainCategories,
       'categories',
     );
     // The last category is an option of the removed Sex dropdown.
-    const oldShareUrlCategories = [
-      'RNA - DIFFERENTIAL EXPRESSION',
-      'Tissue - Hemibrain',
-      'Sex - Females & Males',
-    ];
+    const oldShareUrlCategories = [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE, 'Sex - Females & Males'];
     const hemibrainModels = ['5xFAD (IU/Jax/Pitt)', 'APOE4'];
     const cacul1PinsWithoutSex = [
-      'ENSMUSG00000033417~5xFAD (IU/Jax/Pitt)',
-      'ENSMUSG00000033417~APOE4',
+      `${cacul1EnsemblGeneId}~5xFAD (IU/Jax/Pitt)`,
+      `${cacul1EnsemblGeneId}~APOE4`,
     ];
     // Each old pin stood for its gene and model in the selected cohort, which here is both sexes,
     // so it becomes a Female pin and a Male pin.
     const expectedCacul1PinsForBothSexes = [
-      'ENSMUSG00000033417~5xFAD (IU/Jax/Pitt)~Female',
-      'ENSMUSG00000033417~5xFAD (IU/Jax/Pitt)~Male',
-      'ENSMUSG00000033417~APOE4~Female',
-      'ENSMUSG00000033417~APOE4~Male',
+      `${cacul1EnsemblGeneId}~5xFAD (IU/Jax/Pitt)~Female`,
+      `${cacul1EnsemblGeneId}~5xFAD (IU/Jax/Pitt)~Male`,
+      `${cacul1EnsemblGeneId}~APOE4~Female`,
+      `${cacul1EnsemblGeneId}~APOE4~Male`,
     ];
     const noPins: string[] = [];
     const oldShareUrlQueryParams = [

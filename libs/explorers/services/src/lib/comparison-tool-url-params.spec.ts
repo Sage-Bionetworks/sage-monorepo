@@ -103,6 +103,8 @@ describe('deserializeComparisonToolUrlParams', () => {
       expect(logger.warn).toHaveBeenCalledWith(INVALID_SORT_ORDERS_MESSAGE, {
         sortFields: SORT_FIELDS_PARAM,
         sortOrders: SORT_ORDERS_WITH_NON_NUMERIC_VALUE,
+        hasInvalidSortOrder: true,
+        hasSortOrderCountMismatch: false,
       });
     });
 
@@ -115,6 +117,12 @@ describe('deserializeComparisonToolUrlParams', () => {
       );
 
       expect(logger.warn).toHaveBeenCalledTimes(1);
+      expect(logger.warn).toHaveBeenCalledWith(INVALID_SORT_ORDERS_MESSAGE, {
+        sortFields: SORT_FIELDS_PARAM,
+        sortOrders: SORT_ORDERS_FOR_FIRST_FIELD_ONLY,
+        hasInvalidSortOrder: false,
+        hasSortOrderCountMismatch: true,
+      });
     });
 
     it('should warn when the URL has sort orders but no sort fields', () => {
@@ -123,6 +131,8 @@ describe('deserializeComparisonToolUrlParams', () => {
       expect(logger.warn).toHaveBeenCalledWith(INVALID_SORT_ORDERS_MESSAGE, {
         sortFields: null,
         sortOrders: '-1',
+        hasInvalidSortOrder: false,
+        hasSortOrderCountMismatch: true,
       });
     });
 

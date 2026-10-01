@@ -1,5 +1,5 @@
 import { expect, Page, test } from '@playwright/test';
-import { getPinLimitWarning, MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
+import { MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
 import {
   expectCategoriesParams,
   expectPinnedParams,
@@ -7,6 +7,7 @@ import {
   expectPinnedRows,
   expectToastDetail,
   expectUnpinnedTableOnly,
+  expectViewNounLabels,
   getPinAllButton,
   getPinnedTable,
   getPinToggleButtonByName,
@@ -25,7 +26,9 @@ import { Proteomics } from '@sagebionetworks/model-ad/api-client';
 import {
   DIFFERENTIAL_EXPRESSION_CT_PAGE as CT_PAGE,
   DIFFERENTIAL_EXPRESSION_DROPDOWN_INDEX as DROPDOWN_INDEX,
+  DIFFERENTIAL_EXPRESSION_HEMIBRAIN_TISSUE as HEMIBRAIN_TISSUE,
   DIFFERENTIAL_EXPRESSION_PROTEIN_CATEGORY as PROTEIN_MAIN_CATEGORY,
+  DIFFERENTIAL_EXPRESSION_RNA_CATEGORY as RNA_MAIN_CATEGORY,
 } from './constants';
 import {
   fetchProteomics,
@@ -34,15 +37,19 @@ import {
 } from './helpers/comparison-tool';
 
 // Protein rows are children of the RNA row keyed by their rna_composite_id, so each gene below is
-// an RNA composite_id. Protein only offers the Hemibrain tissue.
-const RNA_MAIN_CATEGORY = 'RNA - DIFFERENTIAL EXPRESSION';
-const HEMIBRAIN_TISSUE = 'Tissue - Hemibrain';
+// an RNA composite_id.
 const rnaHemibrainCategories = [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
 const proteinCategories = [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
 const fourProteinGene = 'ENSMUSG00000019961~LOAD2~Male'; // Tmpo
 const fiveProteinMaleGene = 'ENSMUSG00000032826~LOAD2~Male'; // Ank2
 const fiveProteinFemaleGene = 'ENSMUSG00000032826~LOAD2~Female'; // Ank2
 const proteinOnlyGene = 'ENSMUSG00000005681~LOAD2~Female'; // Apoa2
+const PINNED_RESULTS_HEADING = 'Pinned Results';
+const PROTEIN_PIN_LIMIT_TOOLTIP = `You have already pinned the maximum number of results (proteins for ${MAX_PIN_LIMIT} genes). You must unpin all proteins for a gene before you can pin proteins for a new gene.`;
+
+// pinnedProteins - the count and verb the toast opens with, e.g. '1 protein was' or '9 proteins were'
+const getProteinPinLimitToast = (pinnedProteins: string) =>
+  `Only ${pinnedProteins} pinned, because you reached the maximum of ${MAX_PIN_LIMIT} pinned genes. Some proteins were skipped because they belong to a gene not already in your pinned list.`;
 
 const getEnsemblGeneId = (gene: string) => gene.split('~')[0];
 
@@ -118,12 +125,15 @@ test.describe('differential expression protein pinning', () => {
 
     await navigateByUrlWithPins(page, rnaHemibrainCategories, pinnedGenes);
     await expectPinnedRows(page, pinnedGenes);
-    await expectPinnedResultsCount(page, pinnedGenes.length);
+    await expectPinnedResultsCount(page, pinnedGenes.length, [PINNED_RESULTS_HEADING, '2 Genes']);
 
     await switchToProteinView(page);
     await expectPinnedParams(page, proteinIds);
-    // TODO(MG-1084): the header counts rows, so it reads the protein count, not the gene count
-    await expectPinnedResultsCount(page, proteinIds.length);
+    await expectPinnedResultsCount(page, proteinIds.length, [
+      PINNED_RESULTS_HEADING,
+      '2 Genes',
+      '9 Proteins',
+    ]);
     await expectPinnedRows(page, proteinIds);
   });
 
@@ -136,12 +146,34 @@ test.describe('differential expression protein pinning', () => {
 
     await navigateByUrlWithPins(page, proteinCategories, proteinIds);
     await expectPinnedParams(page, proteinIds);
-    await expectPinnedResultsCount(page, proteinIds.length);
+    await expectPinnedResultsCount(page, proteinIds.length, [
+      PINNED_RESULTS_HEADING,
+      '1 Gene',
+      '4 Proteins',
+    ]);
 
     await switchToRnaView(page);
     await expectPinnedParams(page, [fourProteinGene]);
-    await expectPinnedResultsCount(page, 1);
+    await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene']);
     await expectPinnedRows(page, [fourProteinGene]);
+  });
+
+  test('pinned header and result labels use the gene and protein nouns in the Protein view', async ({
+    page,
+  }) => {
+    const proteinIds = getProteinIds(
+      await fetchProteinRows(page, [fourProteinGene]),
+      fourProteinGene,
+    );
+    expect(proteinIds).toHaveLength(4);
+
+    await navigateByUrlWithPins(page, proteinCategories, proteinIds);
+    await expectPinnedResultsCount(page, proteinIds.length, [
+      PINNED_RESULTS_HEADING,
+      '1 Gene',
+      '4 Proteins',
+    ]);
+    await expectViewNounLabels(page, 'Proteins', getEnsemblGeneId(fiveProteinMaleGene));
   });
 
   test('a protein fanned out from an RNA pin can be unpinned in the Protein view', async ({
@@ -161,7 +193,11 @@ test.describe('differential expression protein pinning', () => {
     await expectPinnedParams(page, proteinIds);
     await unPinByName(getPinnedTable(page), page, proteinIdToUnpin);
     await expectPinnedParams(page, remainingProteinIds);
-    await expectPinnedResultsCount(page, remainingProteinIds.length);
+    await expectPinnedResultsCount(page, remainingProteinIds.length, [
+      PINNED_RESULTS_HEADING,
+      '1 Gene',
+      '3 Proteins',
+    ]);
   });
 
   test('a gene collapsed from Protein pins can be unpinned in the RNA view', async ({ page }) => {
@@ -199,7 +235,11 @@ test.describe('differential expression protein pinning', () => {
 
     await switchToProteinView(page);
     await expectPinnedParams(page, pinnedProteinIds);
-    await expectPinnedResultsCount(page, pinnedProteinIds.length);
+    await expectPinnedResultsCount(page, pinnedProteinIds.length, [
+      PINNED_RESULTS_HEADING,
+      '1 Gene',
+      '2 Proteins',
+    ]);
   });
 
   test('an RNA pin edit replaces the Protein pins with every protein of the genes', async ({
@@ -222,7 +262,11 @@ test.describe('differential expression protein pinning', () => {
 
     await switchToProteinView(page);
     await expectPinnedParams(page, getRowIds(proteinRows));
-    await expectPinnedResultsCount(page, proteinRows.length);
+    await expectPinnedResultsCount(page, proteinRows.length, [
+      PINNED_RESULTS_HEADING,
+      '2 Genes',
+      '9 Proteins',
+    ]);
   });
 
   test('Protein pins return unchanged after a tissue change in the RNA view', async ({ page }) => {
@@ -245,7 +289,11 @@ test.describe('differential expression protein pinning', () => {
 
     await switchToProteinView(page);
     await expectPinnedParams(page, pinnedProteinIds);
-    await expectPinnedResultsCount(page, pinnedProteinIds.length);
+    await expectPinnedResultsCount(page, pinnedProteinIds.length, [
+      PINNED_RESULTS_HEADING,
+      '1 Gene',
+      '2 Proteins',
+    ]);
   });
 
   test('a Protein pin with no RNA gene row is hidden in RNA and returns in Protein', async ({
@@ -270,11 +318,15 @@ test.describe('differential expression protein pinning', () => {
 
     await switchToRnaView(page);
     await expectPinnedParams(page, [fourProteinGene]);
-    await expectPinnedResultsCount(page, 1);
+    await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene']);
 
     await switchToProteinView(page);
     await expectPinnedParams(page, proteinIds);
-    await expectPinnedResultsCount(page, proteinIds.length);
+    await expectPinnedResultsCount(page, proteinIds.length, [
+      PINNED_RESULTS_HEADING,
+      '2 Genes',
+      `${proteinIds.length} Proteins`,
+    ]);
   });
 
   test('Clear All Pins in the Protein view also clears the RNA pins', async ({ page }) => {
@@ -308,7 +360,7 @@ test.describe('differential expression protein pinning', () => {
 
     await navigateByUrlWithPins(page, proteinCategories, [pinnedProteinId, fourProteinGene]);
     await expectPinnedParams(page, [pinnedProteinId]);
-    await expectPinnedResultsCount(page, 1);
+    await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene', '1 Protein']);
   });
 
   test('protein ids pinned in the RNA view URL pin nothing', async ({ page }) => {
@@ -321,7 +373,7 @@ test.describe('differential expression protein pinning', () => {
     // The gene pinned alongside the protein ids shows when the pinned rows have arrived
     await navigateByUrlWithPins(page, rnaHemibrainCategories, [fourProteinGene, ...proteinIds]);
     await expectPinnedParams(page, [fourProteinGene]);
-    await expectPinnedResultsCount(page, 1);
+    await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene']);
   });
 
   test('Protein Pin All pins every row of new genes up to the gene limit', async ({ page }) => {
@@ -345,12 +397,20 @@ test.describe('differential expression protein pinning', () => {
     const newRowIds = getRowIds(newRows);
 
     await navigateByUrlWithPins(page, proteinCategories, pinnedProteinIds);
-    await expectPinnedResultsCount(page, pinnedProteinIds.length);
+    await expectPinnedResultsCount(page, pinnedProteinIds.length, [
+      PINNED_RESULTS_HEADING,
+      '1 Gene',
+      '5 Proteins',
+    ]);
     await searchViaFilterbox(page, searchTerm);
     await pinAll(page);
 
-    await expectToastDetail(page, getPinLimitWarning(newRowIds.length, MAX_PIN_LIMIT));
-    await expectPinnedResultsCount(page, pinnedProteinIds.length + newRowIds.length);
+    await expectToastDetail(page, getProteinPinLimitToast(`${newRowIds.length} proteins were`));
+    await expectPinnedResultsCount(page, pinnedProteinIds.length + newRowIds.length, [
+      PINNED_RESULTS_HEADING,
+      `${MAX_PIN_LIMIT} Genes`,
+      `${pinnedProteinIds.length + newRowIds.length} Proteins`,
+    ]);
     await expectPinnedRows(page, [...pinnedProteinIds, ...newRowIds]);
     await expect(getPinAllButton(page)).toBeDisabled();
   });
@@ -363,7 +423,11 @@ test.describe('differential expression protein pinning', () => {
       expect(pinnedIds.length).toBeGreaterThan(MAX_PIN_LIMIT);
 
       await navigateByUrlWithPins(page, proteinCategories, pinnedIds);
-      await expectPinnedResultsCount(page, pinnedIds.length);
+      await expectPinnedResultsCount(page, pinnedIds.length, [
+        PINNED_RESULTS_HEADING,
+        `${MAX_PIN_LIMIT} Genes`,
+        `${pinnedIds.length} Proteins`,
+      ]);
       await expectPinnedParams(page, pinnedIds);
       await expect(page.getByRole('alert')).toBeHidden();
     });
@@ -378,10 +442,16 @@ test.describe('differential expression protein pinning', () => {
         ...leadingRowIds,
         ...getRowIds(maleProteins),
       ]);
-      // TODO(MG-1084): the warning reports the rows kept against a limit that counts genes
-      await expectToastDetail(page, getPinLimitWarning(leadingRowIds.length, MAX_PIN_LIMIT));
+      await expectToastDetail(
+        page,
+        getProteinPinLimitToast(`${leadingRowIds.length} proteins were`),
+      );
       await expectPinnedParams(page, leadingRowIds);
-      await expectPinnedResultsCount(page, leadingRowIds.length);
+      await expectPinnedResultsCount(page, leadingRowIds.length, [
+        PINNED_RESULTS_HEADING,
+        `${MAX_PIN_LIMIT} Genes`,
+        `${leadingRowIds.length} Proteins`,
+      ]);
     });
 
     test.describe('with one protein of a pinned gene unpinned', () => {
@@ -394,7 +464,11 @@ test.describe('differential expression protein pinning', () => {
         const pinnedIds = [...leadingRowIds, ...getRowIds(pinnedMaleProteins)];
 
         await navigateByUrlWithPins(page, proteinCategories, pinnedIds);
-        await expectPinnedResultsCount(page, pinnedIds.length);
+        await expectPinnedResultsCount(page, pinnedIds.length, [
+          PINNED_RESULTS_HEADING,
+          `${MAX_PIN_LIMIT} Genes`,
+          `${pinnedIds.length} Proteins`,
+        ]);
         await expectPinnedParams(page, pinnedIds);
 
         return { unpinnedProtein, newGeneProteinIds: femaleProteinIds, pinnedIds };
@@ -427,7 +501,11 @@ test.describe('differential expression protein pinning', () => {
         await expect(getPinAllButton(page)).toBeEnabled();
 
         await pinByName(unpinnedTable, page, unpinnedProtein.composite_id);
-        await expectPinnedResultsCount(page, pinnedIds.length + 1);
+        await expectPinnedResultsCount(page, pinnedIds.length + 1, [
+          PINNED_RESULTS_HEADING,
+          `${MAX_PIN_LIMIT} Genes`,
+          `${pinnedIds.length + 1} Proteins`,
+        ]);
       });
 
       test('Pin All pins the unpinned proteins of pinned genes from any page', async ({ page }) => {
@@ -442,8 +520,12 @@ test.describe('differential expression protein pinning', () => {
         await expect(pinAllButton).toBeEnabled();
 
         await pinAll(page);
-        await expectToastDetail(page, getPinLimitWarning(1, MAX_PIN_LIMIT));
-        await expectPinnedResultsCount(page, pinnedIds.length + 1);
+        await expectToastDetail(page, getProteinPinLimitToast('1 protein was'));
+        await expectPinnedResultsCount(page, pinnedIds.length + 1, [
+          PINNED_RESULTS_HEADING,
+          `${MAX_PIN_LIMIT} Genes`,
+          `${pinnedIds.length + 1} Proteins`,
+        ]);
         await expectPinnedRows(page, [unpinnedProtein.composite_id]);
         await expect(pinAllButton).toBeDisabled();
       });
@@ -456,11 +538,18 @@ test.describe('differential expression protein pinning', () => {
       const { maleProteins, femaleProteinIds } = await fetchFiveProteinGeneRows(page);
 
       await navigateByUrlWithPins(page, rnaHemibrainCategories, genes);
-      await expectPinnedResultsCount(page, MAX_PIN_LIMIT);
+      await expectPinnedResultsCount(page, MAX_PIN_LIMIT, [
+        PINNED_RESULTS_HEADING,
+        `${MAX_PIN_LIMIT} Genes`,
+      ]);
 
       await switchToProteinView(page);
       await expectPinnedParams(page, leadingRowIds);
-      await expectPinnedResultsCount(page, leadingRowIds.length);
+      await expectPinnedResultsCount(page, leadingRowIds.length, [
+        PINNED_RESULTS_HEADING,
+        `${MAX_PIN_LIMIT} Genes`,
+        `${leadingRowIds.length} Proteins`,
+      ]);
 
       // The search matches rows of genes outside the pinned ones only
       await searchViaFilterbox(page, getEnsemblGeneId(fiveProteinMaleGene));
@@ -468,7 +557,10 @@ test.describe('differential expression protein pinning', () => {
       for (const id of [...getRowIds(maleProteins), ...femaleProteinIds]) {
         await expect(getPinToggleButtonByName(unpinnedTable, page, id, 'pin')).toBeDisabled();
       }
-      await expect(getPinAllButton(page)).toBeDisabled();
+      const pinAllButton = getPinAllButton(page);
+      await expect(pinAllButton).toBeDisabled();
+      await pinAllButton.hover();
+      await expect(page.getByRole('tooltip')).toHaveText(PROTEIN_PIN_LIMIT_TOOLTIP);
     });
 
     test('Protein pins collapsed into RNA leave only pinned genes pinnable', async ({ page }) => {
@@ -478,7 +570,10 @@ test.describe('differential expression protein pinning', () => {
       await expectPinnedParams(page, leadingRowIds);
 
       await switchToRnaView(page);
-      await expectPinnedResultsCount(page, MAX_PIN_LIMIT);
+      await expectPinnedResultsCount(page, MAX_PIN_LIMIT, [
+        PINNED_RESULTS_HEADING,
+        `${MAX_PIN_LIMIT} Genes`,
+      ]);
       await expectPinnedRows(page, genes);
 
       // RNA is self-parented, so no RNA row outside the pinned ones can be pinned

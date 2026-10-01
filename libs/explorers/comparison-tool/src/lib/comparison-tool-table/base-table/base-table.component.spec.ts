@@ -1,6 +1,8 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter, RouterModule } from '@angular/router';
 import {
+  ComparisonToolConfig,
+  ComparisonToolNoun,
   ComparisonToolViewConfig,
   HeatmapDetailsPanelData,
 } from '@sagebionetworks/explorers/models';
@@ -18,11 +20,16 @@ import {
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
+import { NEVER } from 'rxjs';
 import { BaseTableComponent } from './base-table.component';
+
+const PARENT_NOUN: ComparisonToolNoun = { singular: 'Parent', plural: 'Parents' };
+const CHILD_NOUN: ComparisonToolNoun = { singular: 'Child', plural: 'Children' };
 
 async function setup(
   viewConfig?: Partial<ComparisonToolViewConfig>,
   data: Record<string, unknown>[] = mockComparisonToolData,
+  configs: ComparisonToolConfig[] = mockComparisonToolDataConfig,
 ) {
   const user = userEvent.setup();
   const component = await render(BaseTableComponent, {
@@ -32,7 +39,7 @@ async function setup(
       provideHttpClient(withInterceptorsFromDi()),
       MessageService,
       ...provideComparisonToolService({
-        configs: mockComparisonToolDataConfig,
+        configs,
         viewConfig,
       }),
       ...provideComparisonToolFilterService({ significanceThresholdActive: false }),
@@ -88,6 +95,44 @@ describe('BaseTableComponent', () => {
     const { nativeElement } = await setup();
     const heatmapCircles = nativeElement.querySelectorAll('explorers-heatmap-circle');
     expect(heatmapCircles.length).toBeGreaterThan(0);
+  });
+
+  describe('no results message', () => {
+    it('should fall back to results', async () => {
+      await setup(undefined, []);
+      expect(screen.getByText('No results found...')).toBeInTheDocument();
+    });
+
+    it('should hide the message while table data is loading', async () => {
+      const { fixture, service } = await setup(undefined, []);
+
+      service.fetchUnpinned(NEVER);
+      fixture.detectChanges();
+
+      expect(screen.queryByText('No results found...')).not.toBeInTheDocument();
+    });
+
+    it('should use the view noun', async () => {
+      await setup(undefined, [], [{ ...mockComparisonToolDataConfig[0], view_noun: PARENT_NOUN }]);
+      expect(screen.getByText('No parents found...')).toBeInTheDocument();
+    });
+
+    it('should use the view noun rather than the parent noun in a child view', async () => {
+      await setup(
+        undefined,
+        [],
+        [
+          {
+            ...mockComparisonToolDataConfig[0],
+            row_id_data_key: '_id',
+            parent_id_data_key: 'model_type',
+            view_noun: CHILD_NOUN,
+            parent_noun: PARENT_NOUN,
+          },
+        ],
+      );
+      expect(screen.getByText('No children found...')).toBeInTheDocument();
+    });
   });
 
   describe('heatmap details panel', () => {
@@ -284,6 +329,39 @@ describe('BaseTableComponent', () => {
 
       const rows = nativeElement.querySelectorAll('tr.hovered');
       expect(rows.length).toBe(1);
+    });
+  });
+
+  describe('loading overlay', () => {
+    const LOADING_MASK_SELECTOR = '.p-datatable-mask';
+
+    it('shows the loading overlay over an empty table while table data is loading', async () => {
+      const { fixture, service, nativeElement } = await setup(undefined, []);
+
+      service.fetchUnpinned(NEVER);
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector(LOADING_MASK_SELECTOR)).toBeInTheDocument();
+    });
+
+    it('hides the loading overlay over an empty table without a no results message', async () => {
+      const { fixture, service, nativeElement } = await setup(undefined, []);
+      fixture.componentRef.setInput('noResultsMessageEnabled', false);
+
+      service.fetchUnpinned(NEVER);
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector(LOADING_MASK_SELECTOR)).not.toBeInTheDocument();
+    });
+
+    it('shows the loading overlay over a table with rows while table data is loading', async () => {
+      const { fixture, service, nativeElement } = await setup();
+      fixture.componentRef.setInput('noResultsMessageEnabled', false);
+
+      service.fetchUnpinned(NEVER);
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector(LOADING_MASK_SELECTOR)).toBeInTheDocument();
     });
   });
 });

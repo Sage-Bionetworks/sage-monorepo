@@ -18,6 +18,8 @@ export const LEGACY_URL_TRANSLATION_FAILED_MESSAGE = 'failed to translate legacy
 export const LEGACY_URL_REDIRECTED_MESSAGE = 'redirected legacy URL';
 export const LEGACY_URL_IN_APP_NAVIGATION_MESSAGE =
   'redirected legacy URL reached by in-app navigation';
+export const LEGACY_URL_REDIRECT_UNCHANGED_MESSAGE =
+  'redirect rules returned a patch that leaves the URL unchanged';
 
 // Builds a guard that rewrites a legacy comparison tool share URL into its current shape before the
 // tool loads. The resolveRedirect function supplies the product-specific translation rules; this
@@ -61,6 +63,13 @@ export function createLegacyComparisonToolUrlGuard(
       );
 
       const redirectData = { from: state.url, to: router.serializeUrl(urlTree) };
+
+      // A redirect to the URL being guarded runs this guard again with the same params, so it would
+      // never settle. Rules that return a patch they don't need have a bug, but the URL can load.
+      if (redirectData.to === redirectData.from) {
+        logger.warn(LEGACY_URL_REDIRECT_UNCHANGED_MESSAGE, redirectData);
+        return true;
+      }
 
       // Opening a legacy share link is the expected path, so it only marks the breadcrumb trail for
       // any later error on the page. A legacy URL reached after the app has already navigated came

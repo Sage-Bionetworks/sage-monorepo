@@ -155,6 +155,26 @@ export interface ComparisonToolNoun {
 }
 
 /**
+ * The nouns a view's copy is worded by. A null `viewNoun` means the view declares none, so the
+ * standard copy applies. `parentNoun` is non-null only in a child view.
+ */
+export interface ComparisonToolNouns {
+  viewNoun: ComparisonToolNoun | null;
+  parentNoun: ComparisonToolNoun | null;
+}
+
+export interface PinnedResultsLabels {
+  heading: string;
+  sublabels: string[];
+}
+
+export interface PinnedResultsControlsCopy {
+  downloadButtonTooltip: string;
+  downloadPanelHeading: string;
+  clearButtonTooltip: string;
+}
+
+/**
  * The hierarchy fields below are absent from Agora's generated config and explicitly null on
  * Model-AD configs that declare no hierarchy, so consumers must test falsiness rather than
  * comparing against undefined.
@@ -220,7 +240,8 @@ export interface LegacyComparisonToolUrlRedirect extends ComparisonToolUrlParams
 /**
  * Translates the comparison tool params of a legacy share URL into their current shape. Return null
  * when the params are already current, which leaves the URL untouched. A returned param replaces that
- * URL param, an omitted one leaves it alone, and null or an empty list removes it.
+ * URL param, an omitted one leaves it alone, and null or an empty list removes it. A non-null result
+ * must change the URL; one that doesn't is reported as a rules bug and the URL loads as it is.
  */
 export type LegacyComparisonToolUrlRedirectFn = (
   params: ComparisonToolUrlParams,

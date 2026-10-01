@@ -10,6 +10,8 @@ export const COMPARISON_TOOL_PATHS: Record<ComparisonToolPage, string> = {
 
 export const LEGACY_MOUSE_MODEL_OVERVIEW_PATH = '/comparison/model';
 
+export const NO_MODELS_FOUND_MESSAGE = 'No models found...';
+
 // Comparison tools whose displayed header title differs from their ui_config page name.
 // Keys are ui_config page names, values are the titles rendered in the header.
 // TODO(MG-1054): Drop this map once ui_config page names match the CT displayed titles.
@@ -30,7 +32,12 @@ export const COMPARISON_TOOL_API_PATHS: Record<ComparisonToolPage, string> = {
 export const PROTEOMICS_API_PATH = '/comparison-tools/proteomics';
 
 export const DIFFERENTIAL_EXPRESSION_CT_PAGE: ComparisonToolPage = 'Differential Expression';
+// Category values must match DIFFERENTIAL_EXPRESSION_CATEGORIES in @sagebionetworks/model-ad/config,
+// which e2e cannot import because its barrel pulls in the Angular config chain.
+export const DIFFERENTIAL_EXPRESSION_RNA_CATEGORY = 'RNA - DIFFERENTIAL EXPRESSION';
 export const DIFFERENTIAL_EXPRESSION_PROTEIN_CATEGORY = 'PROTEIN - DIFFERENTIAL EXPRESSION';
+// The RNA view's default tissue and the only tissue the Protein view offers.
+export const DIFFERENTIAL_EXPRESSION_HEMIBRAIN_TISSUE = 'Tissue - Hemibrain';
 export const DIFFERENTIAL_EXPRESSION_DROPDOWN_INDEX = { MAIN_CATEGORY: 0, TISSUE: 1 } as const;
 
 export const DIFFERENTIAL_EXPRESSION_NAV_TRAILS: Record<'RNA' | 'PROTEIN', HeaderNavTrail> = {

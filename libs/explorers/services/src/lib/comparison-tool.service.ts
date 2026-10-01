@@ -1,6 +1,7 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
+  getPinLimitTooltip,
   getPinLimitWarning,
   DEFAULT_SORT_ORDER,
   MAX_PIN_LIMIT,
@@ -12,6 +13,7 @@ import {
   ComparisonToolConfigColumn,
   ComparisonToolConfigFilter,
   ComparisonToolFilter,
+  ComparisonToolNouns,
   ComparisonToolQuery,
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
@@ -141,6 +143,7 @@ export class ComparisonToolService<T> {
     new Map(),
   );
   private readonly unpinnedDataSignal = signal<T[]>([]);
+  private readonly hasCompletedUnpinnedFetchSignal = signal(false);
   private readonly pinnedDataSignal = signal<T[]>([]);
   private readonly querySignal = signal<ComparisonToolQuery>({
     categories: [],
@@ -192,6 +195,7 @@ export class ComparisonToolService<T> {
   readonly isTutorialVisible = this.isTutorialVisibleSignal.asReadonly();
   readonly pinLimit = this.pinLimitSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
+  readonly hasCompletedUnpinnedFetch = this.hasCompletedUnpinnedFetchSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
   // Unique parent ids of the pinned rows, in row order. Empty if their view has no parent key.
   readonly pinnedParents = this.pinnedParentsSignal.asReadonly();
@@ -239,6 +243,13 @@ export class ComparisonToolService<T> {
   // their own parents.
   readonly isChildView = computed(
     () => !!this.parentIdDataKey() && this.parentIdDataKey() !== this.rowIdDataKey(),
+  );
+  readonly nouns = computed<ComparisonToolNouns>(
+    () => ({
+      viewNoun: this.currentConfig()?.view_noun ?? null,
+      parentNoun: this.isChildView() ? (this.currentConfig()?.parent_noun ?? null) : null,
+    }),
+    { equal: isEqual },
   );
 
   private readonly activeIdentity = computed<ViewIdentity>(
@@ -303,10 +314,7 @@ export class ComparisonToolService<T> {
     return this.pinCount() >= this.pinLimit();
   });
 
-  // TODO(MG-1084): reword to handle parent/child case
-  disabledPinTooltip = computed(() => {
-    return `You have already pinned the maximum number of items (${this.pinLimit()}). You must unpin some items before you can pin more.`;
-  });
+  disabledPinTooltip = computed(() => getPinLimitTooltip(this.pinLimit(), this.nouns()));
 
   /**
    * The pinned parents to send with the unpinned fetch as `prebudgetedParentIds`, so its
@@ -341,6 +349,7 @@ export class ComparisonToolService<T> {
         this.unpinnedDataSignal.set(data as T[]);
         this.unpinnedRowCount.set(totalCount);
         this.hasRowsForPrebudgetedParents.set(hasRowsForPrebudgetedParents ?? null);
+        this.hasCompletedUnpinnedFetchSignal.set(true);
       },
     );
 
@@ -769,13 +778,7 @@ export class ComparisonToolService<T> {
   }
 
   pinItem(row: T) {
-    if (!this.canPin(row)) {
-      // TODO(MG-1084): reword to handle parent/child case
-      this.toastNotificationService.showWarning(
-        `You have reached the maximum number of pinned items (${this.pinLimit()}). Please unpin an item before pinning a new one.`,
-      );
-      return;
-    }
+    if (!this.canPin(row)) return;
     const id = this.rowId(row);
     if (!this.isPinned(id)) {
       this.setPinnedItems([...this.visiblePinIds(), id]);
@@ -830,8 +833,6 @@ export class ComparisonToolService<T> {
           }
           this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows)]);
           if (totalElements > rows.length) {
-            // TODO(MG-1084): in a child view the budget counts parents but this passes rows
-            // pinned, so the count and the limit in the toast are different units.
             this.showPinLimitWarning(rows.length);
           }
         },
@@ -845,7 +846,9 @@ export class ComparisonToolService<T> {
   }
 
   private showPinLimitWarning(pinnedCount: number) {
-    this.toastNotificationService.showWarning(getPinLimitWarning(pinnedCount, this.pinLimit()));
+    this.toastNotificationService.showWarning(
+      getPinLimitWarning(pinnedCount, this.pinLimit(), this.nouns()),
+    );
   }
 
   /**
@@ -943,9 +946,6 @@ export class ComparisonToolService<T> {
       : pinnedData.slice(0, pinLimit);
     this.setPinnedData(cappedData, parentIdDataKey);
     if (cappedData.length < pinnedData.length) {
-      // TODO(MG-1084): when capping by parent, this passes rows kept (e.g. 180) while
-      // the limit counts parents (50), so the toast reads "Only 180 rows were pinned ... maximum
-      // of 50". Reword in parent terms.
       this.showPinLimitWarning(cappedData.length);
       this.setPinnedItems(this.extractRowIds(cappedData));
     }

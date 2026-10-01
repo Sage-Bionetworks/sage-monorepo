@@ -1,6 +1,7 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
+import { ComparisonToolConfig, ComparisonToolNoun } from '@sagebionetworks/explorers/models';
 import {
   provideComparisonToolFilterService,
   provideComparisonToolService,
@@ -32,6 +33,9 @@ const meta: Meta<ComparisonToolTableComponent> = {
 };
 export default meta;
 type Story = StoryObj<ComparisonToolTableComponent>;
+
+const PARENT_NOUN: ComparisonToolNoun = { singular: 'Parent', plural: 'Parents' };
+const CHILD_NOUN: ComparisonToolNoun = { singular: 'Child', plural: 'Children' };
 
 export const NoPinned: Story = {
   args: {},
@@ -127,6 +131,60 @@ export const RowSelectionAndHover: Story = {
             rowHoverEnabled: true,
             rowIdDataKey: '_id',
           },
+        }),
+      ],
+    }),
+  ],
+};
+
+export const ViewNoun: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
+          pinLimit: 5,
+          pinnedData: mockComparisonToolData.slice(0, 3),
+          unpinnedData: mockComparisonToolData.slice(3),
+          configs: [
+            { ...mockComparisonToolDataConfig[0], view_noun: PARENT_NOUN },
+          ] satisfies ComparisonToolConfig[],
+        }),
+      ],
+    }),
+  ],
+};
+
+const childViewPinnedData = [
+  mockComparisonToolData[0],
+  mockComparisonToolData[1],
+  mockComparisonToolData[4],
+];
+
+export const ChildView: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: childViewPinnedData.map((item) => item['_id']),
+          pinLimit: 5,
+          pinnedData: childViewPinnedData,
+          unpinnedData: mockComparisonToolData.filter(
+            (item) => !childViewPinnedData.includes(item),
+          ),
+          configs: [
+            {
+              ...mockComparisonToolDataConfig[0],
+              row_id_data_key: '_id',
+              parent_id_data_key: 'model_type',
+              view_noun: CHILD_NOUN,
+              parent_noun: PARENT_NOUN,
+            },
+          ] satisfies ComparisonToolConfig[],
         }),
       ],
     }),

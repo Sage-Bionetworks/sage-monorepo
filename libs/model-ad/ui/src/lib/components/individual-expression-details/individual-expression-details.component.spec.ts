@@ -1,6 +1,7 @@
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { render, screen } from '@testing-library/angular';
+import { MessageService } from 'primeng/api';
 import {
   CSV_COLUMN_HEADERS,
   CSV_COLUMN_HEADERS_WITH_UNIPROTID,
@@ -55,7 +56,7 @@ async function setup({
       modelIdentifier: mockModelIdentifier,
       downloadFilenamePrefix: 'expression_individual',
     },
-    providers: [provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS)],
+    providers: [provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS), MessageService],
   });
 }
 

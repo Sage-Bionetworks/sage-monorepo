@@ -7,7 +7,7 @@ import {
 } from '@angular/router';
 import { LoggerService } from '@sagebionetworks/explorers/services';
 import {
-  isModelOrganism,
+  isUnknownModelOrganism,
   MODEL_ORGANISM_QUERY_KEY,
   resolveModelOrganism,
 } from '@sagebionetworks/model-ad/util';
@@ -44,11 +44,3 @@ export const modelOrganismUrlGuard: CanActivateFn = (
   urlTree.queryParams = { ...urlTree.queryParams, [MODEL_ORGANISM_QUERY_KEY]: modelOrganism };
   return urlTree;
 };
-
-function isUnknownModelOrganism(rawModelOrganism: unknown): boolean {
-  if (rawModelOrganism == null || rawModelOrganism === '') {
-    return false;
-  }
-
-  return typeof rawModelOrganism !== 'string' || !isModelOrganism(rawModelOrganism.toLowerCase());
-}

@@ -167,3 +167,13 @@ Before removing a shared dependency, devcontainer port, or workspace package, co
 - Don't leave `console.*`, commented-out code, or other dead code in the diff.
 - Keep list entries in config and workflow files sorted alphabetically when order is otherwise arbitrary.
 - Whenever code is left incomplete or contains a known placeholder, add a TODO comment with the Jira ticket ID tracking the follow-up work.
+
+## Agent Workflow
+
+Unless the developer asks otherwise, agents write every plan as a sequence of commit-sized chunks, then implement one chunk at a time and hand each finished chunk to the developer for review. The developer owns every commit.
+
+- Structure plans as a sequence of commits, split by coherent unit of change (e.g. schema, then regenerated clients, then repository, then UI wiring) and bounded for review readability. Intermediate commits need not build or stand alone, since PRs are squash-merged; don't add throwaway shims just to keep one green.
+- After implementing each chunk, verify it, summarize what changed and any deviations from the plan, suggest a one-line commit message in the repo's `type(scope): summary (TICKET-ID)` format with no body or Claude attribution trailer, and stop so the developer can review and request changes before the next chunk.
+- Never run `git add`, `git commit`, or `git push`, and never open a PR (e.g. `gh pr create`). A plan's "commit N" names a scope of work, not permission to commit it.
+- When creating a branch, base it on the developer's fork, never on `Sage-Bionetworks/sage-monorepo` unless the developer asks. Remote names vary by developer, so check `git remote -v` for the remote pointing at the fork (usually `origin`) rather than assuming. The fork's `main` should be kept in sync with `upstream/main`, so if it's behind, flag it to the developer before branching.
+- If a fix falls outside the current chunk's scope, report it and ask rather than folding it in.

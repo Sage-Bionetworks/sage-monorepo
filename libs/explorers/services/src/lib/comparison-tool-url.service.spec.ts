@@ -326,7 +326,11 @@ describe('ComparisonToolUrlService', () => {
         await new Promise((resolve) => setTimeout(resolve, 100));
         const params = await firstValueFrom(service.params$);
         expect(params.sortOrders).toEqual(EXPECTED_SORT_ORDERS);
-        expect(warn).toHaveBeenCalledWith(INVALID_SORT_ORDERS_MESSAGE, urlWithInvalidSortOrder);
+        expect(warn).toHaveBeenCalledWith(INVALID_SORT_ORDERS_MESSAGE, {
+          ...urlWithInvalidSortOrder,
+          hasInvalidSortOrder: true,
+          hasSortOrderCountMismatch: false,
+        });
         expect(warn.mock.contexts[0]).toMatchObject({ source: 'ComparisonToolUrlService' });
       });
 

@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { BaseDownloadDomImageComponent } from './base-download-dom-image.component';
+import { FILE_TYPE_PNG } from './file-types';
+import { MessageService } from 'primeng/api';
 
 describe('BaseDownloadDomImageComponent', () => {
   let fixture: ComponentFixture<BaseDownloadDomImageComponent>;
@@ -11,7 +14,7 @@ describe('BaseDownloadDomImageComponent', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), MessageService],
     }).compileComponents();
   });
 
@@ -105,5 +108,35 @@ describe('BaseDownloadDomImageComponent', () => {
     expect(link.textContent).toBe('Model AD Explorer documentation');
     expect(link.getAttribute('href')).toBe('https://help.adknowledgeportal.org/');
     expect(link.getAttribute('target')).toBe('_blank');
+  });
+
+  it('should keep the popover open, show the error, and report it when a download throws', async () => {
+    const error = jest.fn();
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      imports: [NoopAnimationsModule],
+      providers: [
+        provideRouter([]),
+        { provide: LoggerService, useValue: { forSource: () => ({ error }) } },
+        MessageService,
+      ],
+    });
+    const f = TestBed.createComponent(BaseDownloadDomImageComponent);
+    const failure = new Error('capture failed');
+    f.componentRef.setInput('filename', 'test-file');
+    f.componentRef.setInput('performDownload', () => Promise.reject(failure));
+    f.detectChanges();
+    const hide = jest.spyOn(f.componentInstance, 'hide');
+
+    await f.componentInstance.download();
+    f.detectChanges();
+
+    expect(f.componentInstance.error()).toBe('Oops, something went wrong!');
+    expect(hide).not.toHaveBeenCalled();
+    expect(error).toHaveBeenCalledWith('Error preparing download', {
+      error: failure,
+      data: { fileType: FILE_TYPE_PNG },
+    });
+    expect(f.componentInstance.isLoading()).toBe(false);
   });
 });
