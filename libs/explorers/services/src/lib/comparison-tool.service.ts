@@ -135,6 +135,7 @@ export class ComparisonToolService<T> {
     new Map(),
   );
   private readonly unpinnedDataSignal = signal<T[]>([]);
+  private readonly hasCompletedUnpinnedFetchSignal = signal(false);
   private readonly pinnedDataSignal = signal<T[]>([]);
   private readonly querySignal = signal<ComparisonToolQuery>({
     categories: [],
@@ -186,6 +187,7 @@ export class ComparisonToolService<T> {
   readonly isTutorialVisible = this.isTutorialVisibleSignal.asReadonly();
   readonly pinLimit = this.pinLimitSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
+  readonly hasCompletedUnpinnedFetch = this.hasCompletedUnpinnedFetchSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
   // Unique parent ids of the pinned rows, in row order. Empty if their view has no parent key.
   readonly pinnedParents = this.pinnedParentsSignal.asReadonly();
@@ -339,6 +341,7 @@ export class ComparisonToolService<T> {
         this.unpinnedDataSignal.set(data as T[]);
         this.unpinnedRowCount.set(totalCount);
         this.hasRowsForPrebudgetedParents.set(hasRowsForPrebudgetedParents ?? null);
+        this.hasCompletedUnpinnedFetchSignal.set(true);
       },
     );
 

@@ -39,7 +39,7 @@
     }
     <explorers-base-table
       [data]="pinnedData()"
-      [shouldShowNoDataMessage]="false"
+      [noResultsMessageEnabled]="false"
       [columnWidths]="columnWidths()"
     />
   </div>
@@ -75,9 +75,5 @@
     </div>
   }
 
-  <explorers-base-table
-    [data]="unpinnedData()"
-    [shouldShowNoDataMessage]="true"
-    [columnWidths]="columnWidths()"
-  />
+  <explorers-base-table [data]="unpinnedData()" [columnWidths]="columnWidths()" />
 </div>

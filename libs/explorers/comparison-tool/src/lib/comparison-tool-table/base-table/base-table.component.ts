@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
-import { getNoResultsMessage } from '@sagebionetworks/explorers/constants';
+import { DEFAULT_PAGE_SIZE, getNoResultsMessage } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
@@ -26,19 +26,35 @@ import { PrimaryIdentifierControlsComponent } from '../primary-identifier-contro
 export class BaseTableComponent {
   protected readonly comparisonToolService = inject(ComparisonToolService);
   protected readonly canDrawHeatmapCircle = canDrawHeatmapCircle;
+  protected readonly emptyStateRowCount = DEFAULT_PAGE_SIZE;
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   viewConfig = this.comparisonToolService.viewConfig;
   totalRecords = this.comparisonToolService.unpinnedRowCount;
   first = this.comparisonToolService.first;
+  pageSize = this.comparisonToolService.pageSize;
   noResultsMessage = computed(() => getNoResultsMessage(this.comparisonToolService.nouns()));
   isHeatmapCircleClickable = computed(
     () => !!this.comparisonToolService.viewConfig().heatmapCircleClickTransformFn,
   );
 
   data = input.required<Record<string, any>[]>();
-  shouldShowNoDataMessage = input<boolean>(true);
+  /**
+   * This flag controls whether this table may show the "No results found..." empty state.
+   * Disable it for tables where having no rows is expected, such as the pinned table.
+   */
+  noResultsMessageEnabled = input<boolean>(true);
   columnWidths = input<Record<string, string>>({});
+
+  isLoadingWithoutRows = computed(
+    () =>
+      this.noResultsMessageEnabled() &&
+      this.data().length === 0 &&
+      this.comparisonToolService.isLoadingTableData(),
+  );
+  isLoadingFirstPage = computed(
+    () => this.isLoadingWithoutRows() && !this.comparisonToolService.hasCompletedUnpinnedFetch(),
+  );
 
   onLazyLoad(event: TableLazyLoadEvent) {
     this.comparisonToolService.handleLazyLoad(event);

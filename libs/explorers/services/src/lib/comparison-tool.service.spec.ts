@@ -2184,6 +2184,29 @@ describe('ComparisonToolService', () => {
       pending$.complete();
       expect(service.pendingFetches()).toBe(0);
     });
+
+    it('has not completed an unpinned fetch until the first one completes', () => {
+      connectService();
+      const pending$ = new Subject<FetchResult>();
+      service.fetchUnpinned(pending$);
+      expect(service.hasCompletedUnpinnedFetch()).toBe(false);
+
+      pending$.next({ data: [], totalCount: 0 });
+      pending$.complete();
+      expect(service.hasCompletedUnpinnedFetch()).toBe(true);
+    });
+
+    it('has completed an unpinned fetch when it fails', () => {
+      connectService();
+      service.fetchUnpinned(throwError(() => new Error('boom')));
+      expect(service.hasCompletedUnpinnedFetch()).toBe(true);
+    });
+
+    it('has not completed an unpinned fetch when only a pinned fetch completes', () => {
+      connectService();
+      service.fetchPinned(of({ data: [], totalCount: 0 }));
+      expect(service.hasCompletedUnpinnedFetch()).toBe(false);
+    });
   });
 
   describe('fetch streams (latest-wins)', () => {

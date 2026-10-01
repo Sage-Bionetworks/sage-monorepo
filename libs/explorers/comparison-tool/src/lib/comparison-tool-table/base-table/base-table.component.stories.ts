@@ -48,6 +48,6 @@ export const Demo: Story = {
 export const NoData: Story = {
   args: {
     data: [],
-    shouldShowNoDataMessage: true,
+    noResultsMessageEnabled: true,
   },
 };
