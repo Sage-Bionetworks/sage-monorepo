@@ -1,9 +1,9 @@
-* @hallieswan
+* @hallieswan @rrchai @sagely1
 
 # Repository administration
-/.devcontainer @hallieswan
-/.github @hallieswan
-/.vscode @hallieswan
+/.devcontainer @hallieswan @rrchai @sagely1
+/.github @hallieswan @rrchai @sagely1
+/.vscode @hallieswan @rrchai @sagely1
 
 # BixArena
 /apps/bixarena/ @rrchai
@@ -11,14 +11,14 @@
 /docker/bixarena/ @rrchai
 
 ## Sage
-/apps/sage/ @hallieswan
-/libs/sage/ @hallieswan
+/apps/sage/ @hallieswan @rrchai @sagely1
+/libs/sage/ @hallieswan @rrchai @sagely1
 
 /apps/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /libs/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /docker/agora/ @Sage-Bionetworks/sage-monorepo-agora
 
-/libs/shared/ @hallieswan
+/libs/shared/ @hallieswan @rrchai @sagely1
 
 /apps/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
 /docker/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
@@ -36,7 +36,7 @@
 /libs/synapse/ @Sage-Bionetworks/sage-monorepo-agora
 
 # Platform
-/libs/platform/config/angular @hallieswan
+/libs/platform/config/angular @hallieswan @rrchai @sagely1
 
 # Web Shared
-/libs/web-shared/angular/analtyics/gtm @hallieswan
+/libs/web-shared/angular/analytics/gtm @hallieswan @rrchai @sagely1
