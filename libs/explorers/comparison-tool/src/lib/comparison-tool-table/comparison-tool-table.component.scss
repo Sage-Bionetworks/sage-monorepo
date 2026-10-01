@@ -36,6 +36,11 @@ $divider-margin: 30px;
             font-size: 14px;
             font-weight: normal;
           }
+
+          .table-divider-label-note {
+            text-transform: none;
+            font-weight: normal;
+          }
         }
 
         &.table-divider-controls {

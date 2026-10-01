@@ -1,5 +1,6 @@
 import { ComparisonToolNouns } from '@sagebionetworks/explorers/models';
 import {
+  BLANK_LABEL_TEXT,
   getNoResultsMessage,
   getPinAllTooltip,
   getPinLimitTooltip,
@@ -11,6 +12,7 @@ import {
   getViewNounLabel,
   NO_NOUNS,
   PINNED_RESULTS_HEADING,
+  TABLE_DATA_LOADING_MESSAGE,
 } from './comparison-tool-copy';
 import { getPinLimitWarning } from './toasts';
 
@@ -36,36 +38,74 @@ describe('comparison tool copy', () => {
   });
 
   describe('getPinnedResultsLabels', () => {
+    const line = (text: string, note: string | null = null) => ({ text, note });
+    const UNKNOWN = { pinCount: null, pinnedRowCount: null };
+
     it('should fall back to results, with the count in the heading', () => {
       expect(getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2 }, NO_NOUNS)).toEqual({
-        heading: '2 Pinned Results',
+        heading: line('2 Pinned Results'),
         sublabels: [],
       });
       expect(getPinnedResultsLabels({ pinCount: 1, pinnedRowCount: 1 }, NO_NOUNS)).toEqual({
-        heading: '1 Pinned Result',
+        heading: line('1 Pinned Result'),
+        sublabels: [],
+      });
+    });
+
+    it('should note the loading message on the heading when the count is unknown', () => {
+      expect(getPinnedResultsLabels(UNKNOWN, NO_NOUNS)).toEqual({
+        heading: line(PINNED_RESULTS_HEADING, TABLE_DATA_LOADING_MESSAGE),
         sublabels: [],
       });
     });
 
     it('should use the view noun, with the count in a sublabel', () => {
       expect(getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2 }, VIEW_NOUNS)).toEqual({
-        heading: PINNED_RESULTS_HEADING,
-        sublabels: ['2 Parents'],
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('2 Parents')],
       });
       expect(getPinnedResultsLabels({ pinCount: 0, pinnedRowCount: 0 }, VIEW_NOUNS)).toEqual({
-        heading: PINNED_RESULTS_HEADING,
-        sublabels: ['0 Parents'],
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('0 Parents')],
+      });
+    });
+
+    it('should show the loading message in the view noun sublabel when the count is unknown', () => {
+      expect(getPinnedResultsLabels(UNKNOWN, VIEW_NOUNS)).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line(TABLE_DATA_LOADING_MESSAGE)],
       });
     });
 
     it('should use the parent noun then the view noun in a child view', () => {
       expect(getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 3 }, CHILD_NOUNS)).toEqual({
-        heading: PINNED_RESULTS_HEADING,
-        sublabels: ['2 Parents', '3 Children'],
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('2 Parents'), line('3 Children')],
       });
       expect(getPinnedResultsLabels({ pinCount: 1, pinnedRowCount: 1 }, CHILD_NOUNS)).toEqual({
-        heading: PINNED_RESULTS_HEADING,
-        sublabels: ['1 Parent', '1 Child'],
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('1 Parent'), line('1 Child')],
+      });
+    });
+
+    it('should show the loading message once, then a blank line, in a child view when the counts are unknown', () => {
+      expect(getPinnedResultsLabels(UNKNOWN, CHILD_NOUNS)).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line(TABLE_DATA_LOADING_MESSAGE), line(BLANK_LABEL_TEXT)],
+      });
+    });
+
+    it('should not show a known row count in a child view when the parent count is unknown', () => {
+      expect(getPinnedResultsLabels({ pinCount: null, pinnedRowCount: 3 }, CHILD_NOUNS)).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line(TABLE_DATA_LOADING_MESSAGE), line(BLANK_LABEL_TEXT)],
+      });
+    });
+
+    it('should show the parent count and the loading message in a child view when only the row count is unknown', () => {
+      expect(getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: null }, CHILD_NOUNS)).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('2 Parents'), line(TABLE_DATA_LOADING_MESSAGE)],
       });
     });
 
@@ -74,9 +114,9 @@ describe('comparison tool copy', () => {
       const allCaps = { viewNoun: { singular: 'PARENT', plural: 'PARENTS' }, parentNoun: null };
       expect(
         getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2 }, lowercase).sublabels,
-      ).toEqual(['2 Parents']);
+      ).toEqual([line('2 Parents')]);
       expect(getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2 }, allCaps).sublabels).toEqual(
-        ['2 Parents'],
+        [line('2 Parents')],
       );
     });
   });

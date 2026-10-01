@@ -2425,10 +2425,13 @@ describe('ComparisonToolService', () => {
       service.fetchPinned(pinned$);
       expect(service.isLoadingTableData()).toBe(true);
 
+      expect(service.pendingFetches()).toBe(2);
+
       // Complete first fetch - should still be loading
       unpinned$.next({ data: [], totalCount: 0 });
       unpinned$.complete();
       expect(service.isLoadingTableData()).toBe(true);
+      expect(service.pendingFetches()).toBe(1);
 
       // Complete second fetch - should no longer be loading
       pinned$.next({ data: [], totalCount: 0 });
@@ -2470,6 +2473,89 @@ describe('ComparisonToolService', () => {
       connectService();
       service.fetchPinned(of({ data: [], totalCount: 0 }));
       expect(service.hasCompletedUnpinnedFetch()).toBe(false);
+    });
+  });
+
+  describe('pinned results counts', () => {
+    type FetchResult = { data: Row[]; totalCount: number };
+    const unknownCounts = { pinCount: null, pinnedRowCount: null };
+
+    const connectWithPinnedRows = (...ids: string[]) => {
+      connectService();
+      service.setPinnedItems(ids);
+      service.fetchPinned(of({ data: rows(...ids), totalCount: ids.length }));
+    };
+
+    it('reports the counts when no pinned fetch is in flight', () => {
+      connectWithPinnedRows('id1', 'id2');
+
+      expect(service.isLoadingPinnedData()).toBe(false);
+      expect(service.pinnedResultsCounts()).toEqual({ pinCount: 2, pinnedRowCount: 2 });
+    });
+
+    it('reports unknown counts while a pinned fetch is in flight, and the new counts once it lands', () => {
+      connectWithPinnedRows('id1', 'id2');
+      const pending$ = new Subject<FetchResult>();
+      service.fetchPinned(pending$);
+
+      expect(service.isLoadingPinnedData()).toBe(true);
+      expect(service.pinnedResultsCounts()).toEqual(unknownCounts);
+
+      pending$.next({ data: rows('id1'), totalCount: 1 });
+      pending$.complete();
+
+      expect(service.pinnedResultsCounts()).toEqual({ pinCount: 1, pinnedRowCount: 1 });
+    });
+
+    it('reports the counts again once a pinned fetch fails', () => {
+      connectWithPinnedRows('id1', 'id2');
+      const pending$ = new Subject<FetchResult>();
+      service.fetchPinned(pending$);
+
+      pending$.error(new Error('request failed'));
+
+      expect(service.pinnedResultsCounts()).toEqual({ pinCount: 2, pinnedRowCount: 0 });
+    });
+
+    it('keeps the counts unknown until the pinned fetch that superseded another lands', () => {
+      connectWithPinnedRows('id1');
+      const first$ = new Subject<FetchResult>();
+      const second$ = new Subject<FetchResult>();
+      service.fetchPinned(first$);
+      service.fetchPinned(second$);
+
+      first$.next({ data: rows('stale'), totalCount: 1 });
+      first$.complete();
+      expect(service.pinnedResultsCounts()).toEqual(unknownCounts);
+
+      second$.next({ data: rows('id1'), totalCount: 1 });
+      second$.complete();
+      expect(service.pinnedResultsCounts()).toEqual({ pinCount: 1, pinnedRowCount: 1 });
+    });
+
+    it('keeps the counts known while only an unpinned fetch is in flight', () => {
+      connectWithPinnedRows('id1');
+      service.fetchUnpinned(new Subject<FetchResult>());
+
+      expect(service.isLoadingTableData()).toBe(true);
+      expect(service.isLoadingPinnedData()).toBe(false);
+      expect(service.pinnedResultsCounts()).toEqual({ pinCount: 1, pinnedRowCount: 1 });
+    });
+
+    it('reports unknown counts while a pinned fetch is retried', () => {
+      connectService();
+      service.setPinnedItems(['id1']);
+      const retried$ = new Subject<FetchResult>();
+      const { source$ } = failsOnce(() => retried$);
+      service.fetchPinned(source$);
+
+      service.retryPinnedFetch();
+
+      expect(service.pinnedResultsCounts()).toEqual(unknownCounts);
+
+      retried$.next({ data: rows('id1'), totalCount: 1 });
+      retried$.complete();
+      expect(service.pinnedResultsCounts()).toEqual({ pinCount: 1, pinnedRowCount: 1 });
     });
   });
 
