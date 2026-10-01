@@ -188,9 +188,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log(
-      `DiseaseCorrelationComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('DiseaseCorrelationComparisonToolComponent: unpinned query', { ...query });
 
     this.comparisonToolService.fetchUnpinned(
       this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(
@@ -213,9 +211,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       sortOrders,
     };
 
-    this.logger.log(
-      `DiseaseCorrelationComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('DiseaseCorrelationComparisonToolComponent: pinned query', { ...query });
 
     this.comparisonToolService.fetchPinned(
       this.diseaseCorrelationService

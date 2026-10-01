@@ -269,9 +269,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       prebudgetedParentIds: this.comparisonToolService.prebudgetedParentIdsForUnpinnedFetch(),
     });
 
-    this.logger.log(
-      `DifferentialExpressionComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('DifferentialExpressionComparisonToolComponent: unpinned query', { ...query });
 
     const mainCategory = currentQuery.categories[0];
     const page$ = this.fetchDifferentialExpressionPage(mainCategory, query);
@@ -305,9 +303,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       sortOrders,
     };
 
-    this.logger.log(
-      `DifferentialExpressionComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('DifferentialExpressionComparisonToolComponent: pinned query', { ...query });
 
     const page$ = this.fetchDifferentialExpressionPage(mainCategory, query, {
       context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),

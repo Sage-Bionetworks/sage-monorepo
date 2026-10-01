@@ -146,9 +146,7 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log(
-      `MouseModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('MouseModelOverviewComparisonToolComponent: unpinned query', { ...query });
 
     this.comparisonToolService.fetchUnpinned(
       this.mouseModelOverviewService.getMouseModelOverviews(query).pipe(
@@ -170,9 +168,7 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
       sortOrders,
     };
 
-    this.logger.log(
-      `MouseModelOverviewComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('MouseModelOverviewComparisonToolComponent: pinned query', { ...query });
 
     this.comparisonToolService.fetchPinned(
       this.mouseModelOverviewService

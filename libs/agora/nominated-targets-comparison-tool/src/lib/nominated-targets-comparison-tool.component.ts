@@ -154,9 +154,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log(
-      `NominatedTargetsComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('NominatedTargetsComparisonToolComponent: unpinned query', { ...query });
 
     this.comparisonToolService.fetchUnpinned(
       this.nominatedTargetsService.getNominatedTargets(query).pipe(
@@ -178,9 +176,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
       sortOrders,
     };
 
-    this.logger.log(
-      `NominatedTargetsComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
-    );
+    this.logger.log('NominatedTargetsComparisonToolComponent: pinned query', { ...query });
 
     this.comparisonToolService.fetchPinned(
       this.nominatedTargetsService
