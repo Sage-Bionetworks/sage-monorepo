@@ -67,6 +67,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   pinnedRowCount = this.comparisonToolService.pinnedRowCount;
   pinCount = this.comparisonToolService.pinCount;
+  pinnedResultsCounts = this.comparisonToolService.pinnedResultsCounts;
   nounsForPinCount = this.comparisonToolService.nounsForPinCount;
   nouns = this.comparisonToolService.nouns;
   canPinAll = this.comparisonToolService.canPinAll;
@@ -90,10 +91,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   pinnedResultsControlsCopy = computed(() => getPinnedResultsControlsCopy(this.nouns()));
 
   pinnedResultsLabels = computed(() =>
-    getPinnedResultsLabels(
-      { pinCount: this.pinCount(), pinnedRowCount: this.pinnedRowCount() },
-      this.nounsForPinCount(),
-    ),
+    getPinnedResultsLabels(this.pinnedResultsCounts(), this.nounsForPinCount()),
   );
 
   hasPinnedSection = computed(() => this.pinnedRowCount() > 0 || this.pinnedFetchFailed());

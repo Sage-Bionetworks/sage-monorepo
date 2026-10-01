@@ -54,10 +54,9 @@ describe('ComparisonToolShareURLButtonComponent', () => {
     startLoadingTableData();
     await user.hover(getShareUrlButton());
 
-    // PrimeNG fades the tooltip in from opacity 0 over animation frames
-    await waitFor(() =>
-      expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_MESSAGE })).toBeVisible(),
-    );
+    await waitFor(() => {
+      expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_MESSAGE })).toBeVisible();
+    });
   });
 
   it('should be disabled when the pinned rows failed to load, so it cannot share a URL missing the pins', async () => {

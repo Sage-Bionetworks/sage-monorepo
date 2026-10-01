@@ -90,6 +90,7 @@ async function setup(
     pinnedData?: Record<string, unknown>[];
     pinLimit?: number;
     pinnedFetchFails?: boolean;
+    pinnedFetchPending?: boolean;
   },
   ctFilterServiceOptions?: { searchTerm?: string | null; filters?: ComparisonToolFilter[] },
 ) {
@@ -319,6 +320,46 @@ describe('ComparisonToolTableComponent', () => {
         PINNED_RESULTS_HEADING,
         '2 Parents',
         '3 Children',
+      ]);
+    });
+  });
+
+  describe('pinned results header while pinned rows load', () => {
+    it('should note that it is waiting for data on the heading', async () => {
+      const { component } = await setup({
+        ...pinnedOptions(mockComparisonToolData.slice(0, 2)),
+        pinnedFetchPending: true,
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        `${PINNED_RESULTS_HEADING} ${TABLE_DATA_LOADING_MESSAGE}`,
+      ]);
+    });
+
+    it('should show that it is waiting for data in place of the view noun count', async () => {
+      const { component } = await setup({
+        configs: viewNounConfigs,
+        ...pinnedOptions(mockComparisonToolData.slice(0, 2)),
+        pinnedFetchPending: true,
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        TABLE_DATA_LOADING_MESSAGE,
+      ]);
+    });
+
+    it('should show that it is waiting for data once, then a blank line, in a child view', async () => {
+      const { component } = await setup({
+        configs: childViewConfigs,
+        ...pinnedOptions(childViewPinnedData),
+        pinnedFetchPending: true,
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        TABLE_DATA_LOADING_MESSAGE,
+        '',
       ]);
     });
   });
