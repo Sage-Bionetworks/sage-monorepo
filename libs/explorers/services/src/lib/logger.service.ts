@@ -1,5 +1,11 @@
 import { Injectable, isDevMode } from '@angular/core';
-import { ErrorLogContext, Logger, LoggerFactory } from '@sagebionetworks/web-shared/angular/logger';
+import {
+  definedValues,
+  ErrorLogContext,
+  Logger,
+  LoggerFactory,
+  sourceTitle,
+} from '@sagebionetworks/web-shared/angular/logger';
 import * as Sentry from '@sentry/angular';
 
 /**
@@ -31,7 +37,7 @@ export class SourceLogger implements Logger {
    */
   log(message: string, data?: Record<string, unknown>) {
     if (isDevMode()) {
-      console.log('[LOG]', this.title(message), ...definedValues(data));
+      console.log('[LOG]', sourceTitle(this.source, message), ...definedValues(data));
     }
     Sentry.addBreadcrumb({ category: this.source, message, level: 'info', data });
   }
@@ -42,8 +48,9 @@ export class SourceLogger implements Logger {
    * investigated.
    */
   warn(message: string, data?: Record<string, unknown>) {
-    console.warn('[WARN]', this.title(message), ...definedValues(data));
-    Sentry.captureMessage(this.title(message), this.captureContext('warning', message, data));
+    const title = sourceTitle(this.source, message);
+    console.warn('[WARN]', title, ...definedValues(data));
+    Sentry.captureMessage(title, this.captureContext('warning', message, data));
   }
 
   /**
@@ -52,18 +59,15 @@ export class SourceLogger implements Logger {
    * trace appear in the event without deciding its grouping.
    */
   error(message: string, { error, data }: ErrorLogContext) {
-    console.error('[ERROR]', this.title(message), ...definedValues(error, data));
+    const title = sourceTitle(this.source, message);
+    console.error('[ERROR]', title, ...definedValues(error, data));
 
     const captureContext = this.captureContext('error', message, data);
     if (error !== undefined) {
-      Sentry.captureException(new Error(this.title(message), { cause: error }), captureContext);
+      Sentry.captureException(new Error(title, { cause: error }), captureContext);
     } else {
-      Sentry.captureMessage(this.title(message), captureContext);
+      Sentry.captureMessage(title, captureContext);
     }
-  }
-
-  private title(message: string): string {
-    return `${this.source}: ${message}`;
   }
 
   private captureContext(
@@ -78,8 +82,4 @@ export class SourceLogger implements Logger {
       extra: data,
     };
   }
-}
-
-function definedValues(...values: unknown[]): unknown[] {
-  return values.filter((value) => value !== undefined);
 }

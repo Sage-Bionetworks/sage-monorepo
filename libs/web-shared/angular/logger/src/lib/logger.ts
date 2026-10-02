@@ -29,16 +29,26 @@ export type LoggerFactory = {
   forSource(source: string): Logger;
 };
 
+/** The title every source logger gives a line or event: `<source>: <message>`. */
+export function sourceTitle(source: string, message: string): string {
+  return `${source}: ${message}`;
+}
+
+/** Drops absent values so optional console arguments are omitted rather than printed as `undefined`. */
+export function definedValues(...values: unknown[]): unknown[] {
+  return values.filter((value) => value !== undefined);
+}
+
 export const LOGGER = new InjectionToken<LoggerFactory>('Logger', {
   providedIn: 'root',
   factory: () => ({
     forSource: (source: string) => ({
       log: (message: string, data?: Record<string, unknown>) =>
-        console.log(`${source}: ${message}`, data),
+        console.log(sourceTitle(source, message), ...definedValues(data)),
       warn: (message: string, data?: Record<string, unknown>) =>
-        console.warn(`${source}: ${message}`, data),
+        console.warn(sourceTitle(source, message), ...definedValues(data)),
       error: (message: string, { error, data }: ErrorLogContext) =>
-        console.error(`${source}: ${message}`, error, data),
+        console.error(sourceTitle(source, message), ...definedValues(error, data)),
     }),
   }),
 });

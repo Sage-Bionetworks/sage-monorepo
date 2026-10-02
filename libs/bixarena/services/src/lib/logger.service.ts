@@ -1,6 +1,10 @@
 import { inject, Injectable, isDevMode } from '@angular/core';
 import { ConfigService } from '@sagebionetworks/bixarena/config';
-import { ErrorLogContext } from '@sagebionetworks/web-shared/angular/logger';
+import {
+  definedValues,
+  ErrorLogContext,
+  sourceTitle,
+} from '@sagebionetworks/web-shared/angular/logger';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
@@ -38,29 +42,21 @@ export class SourceLogger {
   // isDevMode() is a hard floor: debug never outputs in prod builds even if YAML is misconfigured.
   debug(message: string, data?: unknown): void {
     if (!isDevMode() || !this.allows('debug')) return;
-    console.debug(this.title(message), ...definedValues(data));
+    console.debug(sourceTitle(this.source, message), ...definedValues(data));
   }
 
   info(message: string, data?: unknown): void {
     if (!this.allows('info')) return;
-    console.info(this.title(message), ...definedValues(data));
+    console.info(sourceTitle(this.source, message), ...definedValues(data));
   }
 
   warn(message: string, data?: unknown): void {
     if (!this.allows('warn')) return;
-    console.warn(this.title(message), ...definedValues(data));
+    console.warn(sourceTitle(this.source, message), ...definedValues(data));
   }
 
   error(message: string, { error, data }: ErrorLogContext): void {
     if (!this.allows('error')) return;
-    console.error(this.title(message), ...definedValues(error, data));
+    console.error(sourceTitle(this.source, message), ...definedValues(error, data));
   }
-
-  private title(message: string): string {
-    return `${this.source}: ${message}`;
-  }
-}
-
-function definedValues(...values: unknown[]): unknown[] {
-  return values.filter((value) => value !== undefined);
 }
