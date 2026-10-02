@@ -36,14 +36,12 @@ export const CURRENT_PIN_SEGMENT_COUNT = 3;
 // it restores from the URL.
 export const MAX_LEGACY_PINS_FOR_MALE_OR_FEMALE = 25;
 
-export const UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE =
-  'legacyDifferentialExpressionUrlRedirect: unrecognized legacy sex cohort';
+export const UNRECOGNIZED_LEGACY_SEX_COHORT_MESSAGE = 'unrecognized legacy sex cohort';
 export const LEGACY_BOTH_SEXES_NARROWED_MESSAGE =
-  'legacyDifferentialExpressionUrlRedirect: narrowed a both-sexes cohort to females to fit the pin budget';
-export const DROPPED_LEGACY_PINS_MESSAGE =
-  'legacyDifferentialExpressionUrlRedirect: dropped pinned items that could not be translated';
+  'narrowed a both-sexes cohort to females to fit the pin budget';
+export const DROPPED_LEGACY_PINS_MESSAGE = 'dropped pinned items that could not be translated';
 export const CURRENT_PINS_IN_LEGACY_URL_MESSAGE =
-  'legacyDifferentialExpressionUrlRedirect: legacy URL carried pinned items that already have a sex';
+  'legacy URL carried pinned items that already have a sex';
 
 export const legacyDifferentialExpressionUrlRedirect: LegacyComparisonToolUrlRedirectFn = (
   params,

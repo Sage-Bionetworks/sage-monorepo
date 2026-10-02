@@ -81,7 +81,7 @@ export class BaseDownloadDomImageComponent {
     });
   }
 
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('BaseDownloadDomImageComponent');
   private readonly toastNotificationService = inject(ToastNotificationService);
 
   error = signal('');
@@ -107,7 +107,10 @@ export class BaseDownloadDomImageComponent {
       this.toastNotificationService.showError(
         'Something went wrong while preparing the download. Please try again.',
       );
-      this.logger.error(`Error preparing ${this.selectedType()} download`, err);
+      this.logger.error('Error preparing download', {
+        error: err,
+        data: { fileType: this.selectedType() },
+      });
     } finally {
       this.isLoading.set(false);
     }

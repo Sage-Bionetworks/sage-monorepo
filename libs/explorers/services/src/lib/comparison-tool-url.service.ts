@@ -18,7 +18,7 @@ export class ComparisonToolUrlService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('ComparisonToolUrlService');
 
   // Only this stream reports malformed params: it sees each URL change once, whereas syncToUrl
   // re-reads the same URL on every state write.

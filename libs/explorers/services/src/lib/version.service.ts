@@ -30,7 +30,7 @@ export interface DataVersionService {
 })
 export class VersionService {
   private readonly platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('VersionService');
 
   /**
    * Emits DATA_VERSION_LOADING synchronously on subscribe, then the formatted data version, or

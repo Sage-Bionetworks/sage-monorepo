@@ -19,9 +19,10 @@ import {
   LEGACY_URL_REDIRECTED_MESSAGE,
   LEGACY_URL_TRANSLATION_FAILED_MESSAGE,
 } from './legacy-comparison-tool-url.guard';
-import { LoggerService } from './logger.service';
+import { SourceLogger } from './logger.service';
 
 const CT_URL = '/comparison/expression';
+const GUARD_SOURCE = 'legacyExpressionUrlGuard';
 
 // Old-format URLs carried the sex cohort as a category.
 const LEGACY_CATEGORIES_PARAM = 'RNA%20-%20DIFFERENTIAL%20EXPRESSION,Sex%20-%20Females';
@@ -36,7 +37,7 @@ function runGuard(
   queryParams: Record<string, string>,
   fragment = '',
 ) {
-  const guard = createLegacyComparisonToolUrlGuard(resolveRedirect);
+  const guard = createLegacyComparisonToolUrlGuard(GUARD_SOURCE, resolveRedirect);
   const route = { queryParams } as unknown as ActivatedRouteSnapshot;
   const state = { url: buildUrl(queryParams, fragment) } as RouterStateSnapshot;
   return TestBed.runInInjectionContext(() => guard(route, state));
@@ -68,8 +69,14 @@ function readParam(result: unknown, key: string): string[] {
 }
 
 describe('createLegacyComparisonToolUrlGuard', () => {
+  let log: jest.SpyInstance;
+
   beforeEach(() => {
-    jest.spyOn(TestBed.inject(LoggerService), 'log').mockImplementation();
+    log = jest.spyOn(SourceLogger.prototype, 'log').mockImplementation();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should load the URL unchanged when the redirect rules find nothing to translate', () => {
@@ -229,16 +236,26 @@ describe('createLegacyComparisonToolUrlGuard', () => {
       categories: ['RNA - DIFFERENTIAL EXPRESSION'],
       pinnedItems: [],
     });
-    let logger: LoggerService;
-    let log: jest.SpyInstance;
     let warn: jest.SpyInstance;
     let error: jest.SpyInstance;
 
     beforeEach(() => {
-      logger = TestBed.inject(LoggerService);
-      log = jest.spyOn(logger, 'log').mockImplementation();
-      warn = jest.spyOn(logger, 'warn').mockImplementation();
-      error = jest.spyOn(logger, 'error').mockImplementation();
+      warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+      error = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+    });
+
+    it('should report errors under the name of the guard it was built for', () => {
+      runGuard(() => {
+        throw new Error(TRANSLATION_ERROR_MESSAGE);
+      }, legacyQueryParams);
+
+      expect(error.mock.contexts[0]).toMatchObject({ source: GUARD_SOURCE });
+    });
+
+    it('should record breadcrumbs under the name of the guard it was built for', () => {
+      runGuard(translateToRnaOnly, legacyQueryParams);
+
+      expect(log.mock.contexts[0]).toMatchObject({ source: GUARD_SOURCE });
     });
 
     it('should log the old and new URLs as a Sentry breadcrumb, without a warning, when an old share link is opened', () => {
@@ -354,13 +371,12 @@ describe('createLegacyComparisonToolUrlGuard', () => {
         '#legend',
       );
 
-      expect(error).toHaveBeenCalledWith(LEGACY_URL_TRANSLATION_FAILED_MESSAGE, expect.any(Error));
-      // Sentry receives only the error object, so the URL has to be in the error's own message.
-      const reportedError = error.mock.calls[0][1] as Error;
-      expect(reportedError.message).toContain(
-        '/comparison/expression?categories=RNA%20-%20DIFFERENTIAL%20EXPRESSION,Sex%20-%20Females#legend',
-      );
-      expect(reportedError.cause).toBe(cause);
+      expect(error).toHaveBeenCalledWith(LEGACY_URL_TRANSLATION_FAILED_MESSAGE, {
+        error: cause,
+        data: {
+          url: '/comparison/expression?categories=RNA%20-%20DIFFERENTIAL%20EXPRESSION,Sex%20-%20Females#legend',
+        },
+      });
       expect(serialize(result)).toBe(DEFAULT_VIEW_URL);
       expect(expectRedirect(result).navigationBehaviorOptions).toBeUndefined();
     });
@@ -384,7 +400,7 @@ describe('createLegacyComparisonToolUrlGuard browser history', () => {
   const REFERRING_PAGE_URL = '/home';
 
   beforeEach(() => {
-    const guard = createLegacyComparisonToolUrlGuard(({ categories }) =>
+    const guard = createLegacyComparisonToolUrlGuard(GUARD_SOURCE, ({ categories }) =>
       categories?.some((category) => category.startsWith('Sex - '))
         ? { categories: ['RNA - DIFFERENTIAL EXPRESSION'] }
         : null,
@@ -404,8 +420,12 @@ describe('createLegacyComparisonToolUrlGuard browser history', () => {
         ]),
       ],
     });
-    jest.spyOn(TestBed.inject(LoggerService), 'log').mockImplementation();
-    jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+    jest.spyOn(SourceLogger.prototype, 'log').mockImplementation();
+    jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should return to the referring page on Back after an in-app link to an old-format URL', async () => {
@@ -443,14 +463,18 @@ describe('createLegacyComparisonToolUrlGuard with redirect rules that leave the 
           {
             path: CT_URL.slice(1),
             component: EmptyPageComponent,
-            canActivate: [createLegacyComparisonToolUrlGuard(resolveRedirect)],
+            canActivate: [createLegacyComparisonToolUrlGuard(GUARD_SOURCE, resolveRedirect)],
             runGuardsAndResolvers: 'paramsOrQueryParamsChange',
           },
         ]),
       ],
     });
-    jest.spyOn(TestBed.inject(LoggerService), 'log').mockImplementation();
-    jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+    jest.spyOn(SourceLogger.prototype, 'log').mockImplementation();
+    jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should load the URL after running the redirect rules once instead of redirecting to it again', async () => {

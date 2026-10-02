@@ -32,7 +32,7 @@ import { GeneProteinSelectorComponent } from '../gene-protein-selector/gene-prot
 })
 export class GeneEvidenceProteomicsComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('GeneEvidenceProteomicsComponent');
   readonly platformService = inject(PlatformService);
 
   explorersHelperService = inject(ExplorersHelperService);
@@ -145,7 +145,7 @@ export class GeneEvidenceProteomicsComponent {
 
   initSRM() {
     this.resetSRM();
-    this.logger.log('GeneEvidenceProteomicsComponent: Loading SRM distribution');
+    this.logger.log('Loading SRM distribution');
 
     this.distributionService
       .getDistribution()
@@ -172,7 +172,7 @@ export class GeneEvidenceProteomicsComponent {
 
   initLFQ() {
     this.resetLFQ();
-    this.logger.log('GeneEvidenceProteomicsComponent: Loading LFQ distribution');
+    this.logger.log('Loading LFQ distribution');
 
     this.distributionService
       .getDistribution()
@@ -202,7 +202,7 @@ export class GeneEvidenceProteomicsComponent {
 
   initTMT() {
     this.resetTMT();
-    this.logger.log('GeneEvidenceProteomicsComponent: Loading TMT distribution');
+    this.logger.log('Loading TMT distribution');
 
     this.distributionService
       .getDistribution()

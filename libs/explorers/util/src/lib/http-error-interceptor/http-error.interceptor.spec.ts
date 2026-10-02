@@ -1,4 +1,10 @@
-import { HttpClient, HttpContext, provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpContext,
+  HttpErrorResponse,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import {
@@ -27,7 +33,7 @@ describe('httpErrorInterceptor', () => {
       providers: [
         provideHttpClient(withInterceptors([httpErrorInterceptor])),
         provideHttpClientTesting(),
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: { forSource: () => logger } },
         { provide: ErrorOverlayService, useValue: errorOverlayService },
       ],
     });
@@ -50,6 +56,32 @@ describe('httpErrorInterceptor', () => {
 
     expect(logger.error).toHaveBeenCalledTimes(1);
     expect(errorOverlayService.showError).toHaveBeenCalledTimes(1);
+  });
+
+  it('should report the error under a message naming the status, method, and path', () => {
+    requestAndFail();
+
+    expect(logger.error).toHaveBeenCalledWith(`HTTP ${NOT_FOUND.status} GET ${DATA_VERSION_URL}`, {
+      error: expect.any(HttpErrorResponse),
+      data: expect.objectContaining({
+        errorMessage: 'The requested resource was not found.',
+        statusText: NOT_FOUND.statusText,
+      }),
+    });
+  });
+
+  it('should drop the query string from the reported path', () => {
+    http.get(DATA_VERSION_URL, { params: { id: 'ENSG00000130203' } }).subscribe({
+      error: () => undefined,
+    });
+    httpTestingController
+      .expectOne((request) => request.url === DATA_VERSION_URL)
+      .flush(null, NOT_FOUND);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      `HTTP ${NOT_FOUND.status} GET ${DATA_VERSION_URL}`,
+      expect.anything(),
+    );
   });
 
   it('should not report the error when the caller owns error reporting', () => {
