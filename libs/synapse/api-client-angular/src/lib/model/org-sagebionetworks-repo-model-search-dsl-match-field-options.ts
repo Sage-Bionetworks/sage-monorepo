@@ -53,10 +53,6 @@ export interface OrgSagebionetworksRepoModelSearchDslMatchFieldOptions {
    */
   operator?: string;
   /**
-   * Optional. Analyzer used to tokenize the query text. Defaults to the field\'s search analyzer.
-   */
-  analyzer?: string;
-  /**
    * Optional. Maximum number of terms the fuzzy expansion will generate.
    */
   max_expansions?: number;

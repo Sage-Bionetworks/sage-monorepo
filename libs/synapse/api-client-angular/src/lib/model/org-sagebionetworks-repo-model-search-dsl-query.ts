@@ -19,6 +19,7 @@ import { OrgSagebionetworksRepoModelSearchDslMultiMatchQuery } from './org-sageb
 import { OrgSagebionetworksRepoModelSearchDslMatchAllQuery } from './org-sagebionetworks-repo-model-search-dsl-match-all-query';
 import { OrgSagebionetworksRepoModelSearchDslMatchPhraseFieldOptions } from './org-sagebionetworks-repo-model-search-dsl-match-phrase-field-options';
 import { OrgSagebionetworksRepoModelSearchDslMatchFieldOptions } from './org-sagebionetworks-repo-model-search-dsl-match-field-options';
+import { OrgSagebionetworksRepoModelSearchDslQueryStringQuery } from './org-sagebionetworks-repo-model-search-dsl-query-string-query';
 import { OrgSagebionetworksRepoModelSearchDslBoostingQuery } from './org-sagebionetworks-repo-model-search-dsl-boosting-query';
 import { OrgSagebionetworksRepoModelSearchDslConstantScoreQuery } from './org-sagebionetworks-repo-model-search-dsl-constant-score-query';
 import { OrgSagebionetworksRepoModelSearchDslFuzzyFieldOptions } from './org-sagebionetworks-repo-model-search-dsl-fuzzy-field-options';
@@ -76,6 +77,7 @@ export interface OrgSagebionetworksRepoModelSearchDslQuery {
   exists?: OrgSagebionetworksRepoModelSearchDslExistsQuery;
   multi_match?: OrgSagebionetworksRepoModelSearchDslMultiMatchQuery;
   simple_query_string?: OrgSagebionetworksRepoModelSearchDslSimpleQueryStringQuery;
+  query_string?: OrgSagebionetworksRepoModelSearchDslQueryStringQuery;
   match_all?: OrgSagebionetworksRepoModelSearchDslMatchAllQuery;
   bool?: OrgSagebionetworksRepoModelSearchDslBoolQuery;
   dis_max?: OrgSagebionetworksRepoModelSearchDslDisMaxQuery;
