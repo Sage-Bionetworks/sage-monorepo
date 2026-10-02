@@ -1,3 +1,5 @@
+# Hadolint is a Dockerfile linter: it reads each Dockerfile and flags bad practices and common
+# mistakes. Rule exceptions live in .hadolint.yaml at the repo root
 name: Lint Dockerfiles
 
 on:
@@ -22,6 +24,8 @@ jobs:
           fetch-depth: 1
 
       - name: Lint Dockerfiles
-        uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5 # v3.3.0
+        uses: hadolint/hadolint-action@06be81baf89a55ffd0e24b8f04a4185738dd3387 # v3.5.0
         with:
+          # Search the whole repo for Dockerfiles instead of only ./Dockerfile.
+          # Only files named "Dockerfile" are matched; variants like Dockerfile.generated are skipped.
           recursive: true

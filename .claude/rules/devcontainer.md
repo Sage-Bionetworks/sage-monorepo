@@ -26,4 +26,4 @@ There are **two different `devcontainer.json` files** with distinct roles:
 
 - New tools go in `.github/.devcontainer/Dockerfile`, not in `dev-env.sh`
 - `dev-env.sh` is sourced on every terminal session — it is for environment configuration only
-- Tools installed after the `USER $user` switch (as `ubuntu`) install to `~/.local/` — this works because no volume mount shadows `/home/ubuntu` in the devcontainer setup, and `~/.local/bin` is already on PATH (added by `pipx ensurepath`)
+- Tools installed after the `USER ${userUid}` switch (as `ubuntu`) install to `~/.local/` — this works because no volume mount shadows `/home/ubuntu` in the devcontainer setup, and `~/.local/bin` is already on PATH (added by `pipx ensurepath`)

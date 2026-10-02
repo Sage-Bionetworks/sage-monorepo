@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import {
   getPinAllTooltip,
+  getPinnedFetchFailedMessage,
   getPinnedResultsControlsCopy,
   getPinnedResultsLabels,
   getViewNounLabel,
@@ -24,6 +25,7 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
+import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
@@ -44,6 +46,7 @@ import {
 @Component({
   selector: 'explorers-comparison-tool-table',
   imports: [
+    ButtonModule,
     TooltipModule,
     ComparisonToolColumnsComponent,
     SvgIconComponent,
@@ -64,10 +67,12 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   pinnedRowCount = this.comparisonToolService.pinnedRowCount;
   pinCount = this.comparisonToolService.pinCount;
+  nounsForPinCount = this.comparisonToolService.nounsForPinCount;
   nouns = this.comparisonToolService.nouns;
   canPinAll = this.comparisonToolService.canPinAll;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
   isLoadingTableData = this.comparisonToolService.isLoadingTableData;
+  pinnedFetchFailed = this.comparisonToolService.pinnedFetchFailed;
   unpinnedRowCount = this.comparisonToolService.unpinnedRowCount;
   viewConfig = this.comparisonToolService.viewConfig;
 
@@ -87,8 +92,14 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   pinnedResultsLabels = computed(() =>
     getPinnedResultsLabels(
       { pinCount: this.pinCount(), pinnedRowCount: this.pinnedRowCount() },
-      this.nouns(),
+      this.nounsForPinCount(),
     ),
+  );
+
+  hasPinnedSection = computed(() => this.pinnedRowCount() > 0 || this.pinnedFetchFailed());
+
+  pinnedFetchFailedMessage = computed(() =>
+    getPinnedFetchFailedMessage(this.pinCount(), this.nounsForPinCount()),
   );
 
   unpinnedResultsLabel = computed(() =>
@@ -184,6 +195,10 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   clearAllPinned() {
     this.comparisonToolService.resetPinnedItems();
+  }
+
+  retryPinnedFetch() {
+    this.comparisonToolService.retryPinnedFetch();
   }
 
   // Calculate widths for non-primary columns since primary columns have fixed widths in the design

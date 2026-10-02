@@ -163,6 +163,16 @@ const childViewPinnedData = [
   mockComparisonToolData[4],
 ];
 
+const childViewConfigs = [
+  {
+    ...mockComparisonToolDataConfig[0],
+    row_id_data_key: '_id',
+    parent_id_data_key: 'model_type',
+    view_noun: CHILD_NOUN,
+    parent_noun: PARENT_NOUN,
+  },
+] satisfies ComparisonToolConfig[];
+
 export const ChildView: Story = {
   args: {},
   decorators: [
@@ -176,15 +186,27 @@ export const ChildView: Story = {
           unpinnedData: mockComparisonToolData.filter(
             (item) => !childViewPinnedData.includes(item),
           ),
-          configs: [
-            {
-              ...mockComparisonToolDataConfig[0],
-              row_id_data_key: '_id',
-              parent_id_data_key: 'model_type',
-              view_noun: CHILD_NOUN,
-              parent_noun: PARENT_NOUN,
-            },
-          ] satisfies ComparisonToolConfig[],
+          configs: childViewConfigs,
+        }),
+      ],
+    }),
+  ],
+};
+
+export const PinnedFetchFailedChildView: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: childViewPinnedData.map((item) => item['_id']),
+          pinnedFetchFails: true,
+          pinLimit: 5,
+          unpinnedData: mockComparisonToolData.filter(
+            (item) => !childViewPinnedData.includes(item),
+          ),
+          configs: childViewConfigs,
         }),
       ],
     }),

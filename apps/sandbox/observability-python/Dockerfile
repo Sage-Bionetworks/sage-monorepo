@@ -25,15 +25,15 @@ RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirement
 
 FROM mirror.gcr.io/python:3.13.3-slim
 
-ARG USERNAME=app
+ARG USER_NAME=app
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ENV APP_DIR=/app \
-    APP_USERNAME=${USERNAME}
+    APP_USER_NAME=${USER_NAME}
 ENV PYTHONPATH="${APP_DIR}"
 
-RUN groupadd --gid "$USER_GID" "$USERNAME" \
-  && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
+RUN groupadd --gid "$USER_GID" "$USER_NAME" \
+  && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USER_NAME" \
   # Install sudo
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
@@ -47,7 +47,7 @@ COPY --from=builder ${APP_DIR} ${APP_DIR}
 
 # Copy the application code.
 COPY ./src /${APP_DIR}/src
-RUN chown -R ${APP_USERNAME}:${APP_USERNAME} ${APP_DIR}
+RUN chown -R ${APP_USER_NAME}:${APP_USER_NAME} ${APP_DIR}
 
 WORKDIR /
 COPY docker-entrypoint.sh ./

@@ -69,6 +69,22 @@ export const getPinToggleTooltip = (
 export const getNoResultsMessage = ({ viewNoun }: ComparisonToolNouns): string =>
   `No ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)} found...`;
 
+/**
+ * Takes the service's `pinCount` and `nounsForPinCount`, like the pinned results heading, so the
+ * message agrees with it. The count is in the parent noun when one is given, since `pinCount` then
+ * counts parents
+ */
+export const getPinnedFetchFailedMessage = (
+  pinCount: number,
+  { viewNoun, parentNoun }: ComparisonToolNouns,
+): string => {
+  const pinnedNoun = parentNoun ?? viewNoun ?? DEFAULT_VIEW_NOUN;
+  const pins = `${pinCount} pinned ${sentenceCase(nounForCount(pinCount, pinnedNoun))}`;
+  const others = sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural);
+  const pronoun = pinCount === 1 ? 'it' : 'them';
+  return `Your ${pins} couldn't be loaded. Pinning other ${others} or clearing all pins will remove ${pronoun}.`;
+};
+
 export const getShareUrlTooltip = ({ viewNoun }: ComparisonToolNouns): string =>
   `Copy the URL to capture the table's current filtering, sorting, and pinned ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)}`;
 

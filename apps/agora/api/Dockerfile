@@ -12,7 +12,7 @@ WORKDIR ${APP_DIR}
 COPY dist/apps/agora/api ${APP_DIR}
 
 HEALTHCHECK --interval=2s --timeout=3s --retries=20 --start-period=5s \
-  CMD curl --fail --silent "localhost:3333/health" | jq '.status' | grep UP || exit 1
+  CMD ["/bin/sh", "-c", "curl --fail --silent localhost:3333/health | jq .status | grep UP || exit 1"]
 
 EXPOSE 3333
 
