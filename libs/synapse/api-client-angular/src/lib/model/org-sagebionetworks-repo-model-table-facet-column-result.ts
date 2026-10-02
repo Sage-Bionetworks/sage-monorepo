@@ -7,6 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelTableFacetColumnResultBinnedValueCount } from './org-sagebionetworks-repo-model-table-facet-column-result-binned-value-count';
+import { OrgSagebionetworksRepoModelTableFacetColumnResultBinnedValues } from './org-sagebionetworks-repo-model-table-facet-column-result-binned-values';
 import { OrgSagebionetworksRepoModelTableFacetColumnResultRange } from './org-sagebionetworks-repo-model-table-facet-column-result-range';
 import { OrgSagebionetworksRepoModelTableFacetColumnResultValueCount } from './org-sagebionetworks-repo-model-table-facet-column-result-value-count';
 import { OrgSagebionetworksRepoModelTableFacetColumnResultValues } from './org-sagebionetworks-repo-model-table-facet-column-result-values';
@@ -20,5 +22,6 @@ import { OrgSagebionetworksRepoModelTableFacetColumnResultValues } from './org-s
  * @export
  */
 export type OrgSagebionetworksRepoModelTableFacetColumnResult =
+  | OrgSagebionetworksRepoModelTableFacetColumnResultBinnedValues
   | OrgSagebionetworksRepoModelTableFacetColumnResultRange
   | OrgSagebionetworksRepoModelTableFacetColumnResultValues;

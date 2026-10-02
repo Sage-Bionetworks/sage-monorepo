@@ -24,7 +24,11 @@ export interface OrgSagebionetworksRepoModelDataaccessRenewal {
    */
   accessRequirementId?: string;
   /**
-   * The ID of the research project associated with this request.
+   * The version of the Access Requirement that this request was last saved against. Set by the server on each create and update, so that a client resuming a request can compare it against the current version of the Access Requirement to detect that the requirement changed since the last save, and can clear that warning by saving the request against the current form. A client supplied value is ignored.
+   */
+  accessRequirementVersionNumber?: number;
+  /**
+   * The ID of the research project associated with this request. Only a request for a ManagedACTAccessRequirement has a research project; for a JsonSchemaAccessRequirement the equivalent information is collected as part of the schemaData.
    */
   researchProjectId?: string;
   /**
@@ -77,6 +81,10 @@ export interface OrgSagebionetworksRepoModelDataaccessRenewal {
    * The envelope ID for the routed eDUC signature document.
    */
   eDucSignatureEnvelopeId?: string;
+  /**
+   * Request data that was provided using the associated JSON Schema. Unvalidated while the request is a draft; validated against the schema referenced by the Access Requirement when a Submission is created.
+   */
+  schemaData?: any | null;
   /**
    * Link(s) to publication that used the controlled data.
    */

@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelAggregateDataConfiguration } from './org-sagebionetworks-repo-model-aggregate-data-configuration';
 
 /**
  * Response for an Object\'s DataType.
@@ -32,6 +33,7 @@ export interface OrgSagebionetworksRepoModelDataTypeResponse {
    * The date this object\'s DataType was last updated.
    */
   updatedOn?: string;
+  aggregateDataConfiguration?: OrgSagebionetworksRepoModelAggregateDataConfiguration;
 }
 export namespace OrgSagebionetworksRepoModelDataTypeResponse {
   export type ObjectTypeEnum =
@@ -139,9 +141,10 @@ export namespace OrgSagebionetworksRepoModelDataTypeResponse {
     SearchIndex: 'SEARCH_INDEX' as ObjectTypeEnum,
     SourceDependencyEvent: 'SOURCE_DEPENDENCY_EVENT' as ObjectTypeEnum,
   };
-  export type DataTypeEnum = 'SENSITIVE_DATA' | 'OPEN_DATA';
+  export type DataTypeEnum = 'SENSITIVE_DATA' | 'OPEN_DATA' | 'AGGREGATE_DATA';
   export const DataTypeEnum = {
     SensitiveData: 'SENSITIVE_DATA' as DataTypeEnum,
     OpenData: 'OPEN_DATA' as DataTypeEnum,
+    AggregateData: 'AGGREGATE_DATA' as DataTypeEnum,
   };
 }

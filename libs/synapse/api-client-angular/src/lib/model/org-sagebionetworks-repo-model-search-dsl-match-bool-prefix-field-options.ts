@@ -49,10 +49,6 @@ export interface OrgSagebionetworksRepoModelSearchDslMatchBoolPrefixFieldOptions
    */
   operator?: string;
   /**
-   * Optional. Analyzer used to tokenize the query text. Defaults to the field\'s search analyzer.
-   */
-  analyzer?: string;
-  /**
    * Optional. Maximum number of terms the final (prefix) term expands into. Default <code>50</code>.
    */
   max_expansions?: number;

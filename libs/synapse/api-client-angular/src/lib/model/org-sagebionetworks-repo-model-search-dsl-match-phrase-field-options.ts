@@ -29,10 +29,6 @@ export interface OrgSagebionetworksRepoModelSearchDslMatchPhraseFieldOptions {
    */
   query?: any | null;
   /**
-   * Optional. Analyzer used to tokenize the phrase. Defaults to the field\'s search analyzer.
-   */
-  analyzer?: string;
-  /**
    * Optional. Number of positions allowed between matching terms. Default <code>0</code> (exact phrase).
    */
   slop?: number;

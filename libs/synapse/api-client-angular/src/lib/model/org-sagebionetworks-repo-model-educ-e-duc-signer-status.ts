@@ -24,6 +24,14 @@ export interface OrgSagebionetworksRepoModelEducEDucSignerStatus {
    * Status of a signer within a DUC
    */
   status?: OrgSagebionetworksRepoModelEducEDucSignerStatus.StatusEnum;
+  /**
+   * The reason the signer gave for declining to sign, if they declined; otherwise null
+   */
+  declinedReason?: string;
+  /**
+   * The date/time the signer declined to sign, if they declined; otherwise null
+   */
+  declinedOn?: string;
 }
 export namespace OrgSagebionetworksRepoModelEducEDucSignerStatus {
   export type StatusEnum = 'pending' | 'done' | 'declined' | 'bounced';
