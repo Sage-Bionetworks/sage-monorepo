@@ -1,4 +1,4 @@
-FROM mirror.gcr.io/postgres:16.9-bullseye
+FROM mirror.gcr.io/postgres:16.9-bookworm
 
 # Install pgvector from apt.postgresql.org
 RUN apt-get update \
