@@ -465,15 +465,10 @@ export class ComparisonToolService<T> {
       if (cachedPageSize !== this.pageSize()) {
         this.updateQuery({ pageSize: cachedPageSize, pageNumber: this.FIRST_PAGE_NUMBER });
       }
-      // Restore this CT's cached state and sync it to the URL. Incoming categories that match one of
-      // this CT's configs come from an explicit link, so they are applied on top of the cache.
-      const { categories } = this.urlService.currentParams();
-      const matchingConfig = categories
-        ? this.findMatchingConfig(categories, this.configsSignal())
-        : null;
-      if (matchingConfig) {
-        this.setDropdownSelection(matchingConfig.dropdowns);
-        this.updateSyncedStateCache();
+      // Restore this CT's cached state and sync it to the URL. A marked link's categories are applied
+      // on top of the cache.
+      if (this.urlService.isKeepStateNavigation()) {
+        this.applyKeepStateLinkCategories(this.urlService.currentParams().categories);
       }
       this.scheduleUrlSyncFromCurrentState();
       return;
@@ -1353,6 +1348,14 @@ export class ComparisonToolService<T> {
       return;
     }
 
+    // A marked link replaces the whole query string, so its missing pins and filters are not a
+    // request to clear them. It is handled like a dropdown change, then the full state is written back.
+    if (!options.isFirstLoad && this.urlService.isKeepStateNavigation()) {
+      this.applyKeepStateLinkCategories(params.categories);
+      this.scheduleUrlSyncFromCurrentState();
+      return;
+    }
+
     // Batch all query changes to avoid multiple updateQuery() calls
     const queryUpdates: Partial<Omit<ComparisonToolQuery, 'pinnedItems'>> = {};
 
@@ -1398,6 +1401,16 @@ export class ComparisonToolService<T> {
     }
 
     if (!options.isFirstLoad) {
+      this.updateSyncedStateCache();
+    }
+  }
+
+  private applyKeepStateLinkCategories(categories: string[] | null | undefined): void {
+    const matchingConfig = categories
+      ? this.findMatchingConfig(categories, this.configsSignal())
+      : null;
+    if (matchingConfig) {
+      this.setDropdownSelection(matchingConfig.dropdowns);
       this.updateSyncedStateCache();
     }
   }

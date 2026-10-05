@@ -1,6 +1,11 @@
+import { signal, WritableSignal } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MAX_PIN_LIMIT, NO_NOUNS } from '@sagebionetworks/explorers/constants';
+import { ActivatedRoute, Navigation, NavigationExtras, Router } from '@angular/router';
+import {
+  KEEP_COMPARISON_TOOL_STATE,
+  MAX_PIN_LIMIT,
+  NO_NOUNS,
+} from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
@@ -12,6 +17,7 @@ import {
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, defer, EMPTY, Observable, of, Subject, throwError } from 'rxjs';
+import { deserializeComparisonToolUrlParams } from './comparison-tool-url-params';
 import {
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
@@ -31,15 +37,29 @@ describe('ComparisonToolService', () => {
   let mockActivatedRoute: Partial<ActivatedRoute>;
   let queryParamsSubject: BehaviorSubject<any>;
   let paramsSubject: BehaviorSubject<ComparisonToolUrlParams>;
+  let currentNavigation: WritableSignal<Navigation | null>;
+  let lastSuccessfulNavigation: Navigation | null;
+
+  // The URL service reads only a navigation's extras
+  const navigationWithExtras = (extras: NavigationExtras) => ({ extras }) as unknown as Navigation;
+  const keepStateNavigation = navigationWithExtras({ state: KEEP_COMPARISON_TOOL_STATE });
 
   beforeEach(() => {
     queryParamsSubject = new BehaviorSubject<any>({});
+    currentNavigation = signal(null);
+    lastSuccessfulNavigation = null;
 
     mockRouter = {
+      currentNavigation,
+      get lastSuccessfulNavigation() {
+        return lastSuccessfulNavigation;
+      },
       navigate: jest.fn().mockImplementation((_, options) => {
         if (mockActivatedRoute.snapshot && options?.queryParams) {
           Object.assign(mockActivatedRoute.snapshot.queryParams, options.queryParams);
         }
+        currentNavigation.set(null);
+        lastSuccessfulNavigation = navigationWithExtras(options ?? {});
       }),
     };
 
@@ -1873,7 +1893,10 @@ describe('ComparisonToolService', () => {
         const CACHED_SELECTION = ['Category A', 'Option 2'];
         const PINNED_ID = 'id1';
 
-        const reEnterWithQueryParams = (queryParams: Record<string, string>) => {
+        const reEnterWithQueryParams = (
+          queryParams: Record<string, string>,
+          { keepState = true }: { keepState?: boolean } = {},
+        ) => {
           connectService(mockConfigsWithDropdowns);
           flushInitialUrlSync();
           service.setDropdownSelection(CACHED_SELECTION);
@@ -1884,6 +1907,9 @@ describe('ComparisonToolService', () => {
           service.disconnect();
           (mockActivatedRoute.snapshot as { queryParams: Record<string, string> }).queryParams =
             queryParams;
+          if (keepState) {
+            currentNavigation.set(keepStateNavigation);
+          }
           connectService(mockConfigsWithDropdowns);
           tick();
         };
@@ -1927,6 +1953,126 @@ describe('ComparisonToolService', () => {
           expect(getLastNavigateCall()?.[1]?.queryParams?.categories).toEqual(
             'Category%20A,Option%202',
           );
+        }));
+
+        it('should ignore URL categories when the navigation does not keep comparison tool state', fakeAsync(() => {
+          reEnterWithQueryParams({ categories: 'Category%20B,Option%201' }, { keepState: false });
+
+          expect(service.dropdownSelection()).toEqual(CACHED_SELECTION);
+          expect(service.pinnedItems()).toEqual([PINNED_ID]);
+        }));
+      });
+
+      describe('following a link to the open comparison tool', () => {
+        const CACHED_SELECTION = ['Category A', 'Option 2'];
+        const PINNED_IDS = ['id1', 'id2'];
+        const FILTER_SELECTIONS = { age: ['4 months'] };
+
+        const selectFilterOptions = (selections: Record<string, string[]>) =>
+          service.filters().map((filter) => ({
+            ...filter,
+            options: filter.options.map((option) => ({
+              ...option,
+              selected: selections[filter.query_param_key]?.includes(option.label) ?? false,
+            })),
+          }));
+
+        const setUpPinsAndFilters = () => {
+          connectService(mockConfigsWithDropdowns);
+          flushInitialUrlSync();
+          service.setDropdownSelection(CACHED_SELECTION);
+          service.setPinnedItems(PINNED_IDS);
+          service.fetchPinned(of({ data: rows(...PINNED_IDS), totalCount: PINNED_IDS.length }));
+          service.updateQuery({ filters: selectFilterOptions(FILTER_SELECTIONS) });
+          tick();
+        };
+
+        // A link replaces the whole query string, so the URL holds only the link's params
+        const followLink = (
+          queryParams: Record<string, string>,
+          { keepState }: { keepState: boolean },
+        ) => {
+          (mockActivatedRoute.snapshot as { queryParams: Record<string, string> }).queryParams = {
+            ...queryParams,
+          };
+          if (keepState) {
+            lastSuccessfulNavigation = keepStateNavigation;
+          }
+          paramsSubject.next(deserializeComparisonToolUrlParams(queryParams));
+          tick();
+        };
+
+        const currentUrlParams = () =>
+          deserializeComparisonToolUrlParams(mockActivatedRoute.snapshot?.queryParams ?? {});
+
+        it('should apply the link categories and keep pins and filters', fakeAsync(() => {
+          setUpPinsAndFilters();
+
+          followLink({ categories: 'Category%20B,Option%201' }, { keepState: true });
+
+          expect(service.dropdownSelection()).toEqual(['Category B', 'Option 1']);
+          expect(service.pinnedItems()).toEqual(PINNED_IDS);
+          expect(service.selectedFilters()).toEqual(FILTER_SELECTIONS);
+          expect(currentUrlParams()).toEqual(
+            expect.objectContaining({
+              categories: ['Category B', 'Option 1'],
+              filterSelections: FILTER_SELECTIONS,
+            }),
+          );
+        }));
+
+        it('should keep pins the new view cannot show', fakeAsync(() => {
+          setUpPinsAndFilters();
+
+          followLink({ categories: 'Category%20B,Option%201' }, { keepState: true });
+          service.fetchPinned(of({ data: rows(PINNED_IDS[0]), totalCount: 1 }));
+          tick();
+
+          expect(service.pinnedItems()).toEqual(PINNED_IDS);
+          expect(currentUrlParams().pinnedItems).toEqual([PINNED_IDS[0]]);
+        }));
+
+        it('should resolve link categories with only the first category to the first matching config', fakeAsync(() => {
+          setUpPinsAndFilters();
+
+          followLink({ categories: 'Category%20A' }, { keepState: true });
+
+          expect(service.dropdownSelection()).toEqual(['Category A', 'Option 1']);
+          expect(service.pinnedItems()).toEqual(PINNED_IDS);
+        }));
+
+        it('should keep the selection, pins, and filters and rewrite the URL when the link has no params', fakeAsync(() => {
+          setUpPinsAndFilters();
+
+          followLink({}, { keepState: true });
+
+          expect(service.dropdownSelection()).toEqual(CACHED_SELECTION);
+          expect(service.pinnedItems()).toEqual(PINNED_IDS);
+          expect(service.selectedFilters()).toEqual(FILTER_SELECTIONS);
+          expect(currentUrlParams()).toEqual({
+            categories: CACHED_SELECTION,
+            pinnedItems: PINNED_IDS,
+            filterSelections: FILTER_SELECTIONS,
+          });
+        }));
+
+        it('should apply the URL pins and filters when the navigation does not keep comparison tool state', fakeAsync(() => {
+          setUpPinsAndFilters();
+
+          followLink({ categories: 'Category%20B,Option%201' }, { keepState: false });
+
+          expect(service.dropdownSelection()).toEqual(['Category B', 'Option 1']);
+          expect(service.pinnedItems()).toEqual([]);
+          expect(service.selectedFilters()).toEqual({});
+        }));
+
+        it('should apply a later URL change that does not keep comparison tool state', fakeAsync(() => {
+          setUpPinsAndFilters();
+          followLink({}, { keepState: true });
+
+          followLink({ categories: 'Category%20B,Option%201' }, { keepState: false });
+
+          expect(service.pinnedItems()).toEqual([]);
         }));
       });
     });

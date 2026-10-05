@@ -1,3 +1,4 @@
+import { KEEP_COMPARISON_TOOL_STATE } from '@sagebionetworks/explorers/constants';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 import { HELP_URL, ROUTE_PATHS } from '@sagebionetworks/qtl/config';
 
@@ -10,6 +11,7 @@ export const headerLinks: NavigationLink[] = [
   {
     label: 'eQTL Explorer',
     routerLink: [ROUTE_PATHS.EQTL],
+    state: KEEP_COMPARISON_TOOL_STATE,
   },
 ];
 

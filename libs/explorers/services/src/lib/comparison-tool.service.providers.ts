@@ -43,6 +43,9 @@ class ComparisonToolUrlServiceStub {
   currentParams(): ComparisonToolUrlParams {
     return this.params$.value;
   }
+  isKeepStateNavigation(): boolean {
+    return false;
+  }
   syncToUrl(): void {
     return;
   }

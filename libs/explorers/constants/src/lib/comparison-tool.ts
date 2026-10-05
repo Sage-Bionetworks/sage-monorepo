@@ -7,6 +7,14 @@ export const RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS = new Set([
   'sortOrders',
 ]);
 
+/**
+ * Router navigation state for a link into a comparison tool that should keep the tool's pins,
+ * filters, and sort, the way changing the tool's dropdown does. The link's categories, if any, are
+ * still applied.
+ */
+export const KEEP_COMPARISON_TOOL_STATE_KEY = 'keepComparisonToolState';
+export const KEEP_COMPARISON_TOOL_STATE = { [KEEP_COMPARISON_TOOL_STATE_KEY]: true };
+
 // The order the comparison tool gives a sort field that has none.
 export const DEFAULT_SORT_ORDER: SortOrder = 1;
 

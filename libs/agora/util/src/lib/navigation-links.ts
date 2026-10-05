@@ -1,4 +1,5 @@
 import { HELP_URL, ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { KEEP_COMPARISON_TOOL_STATE } from '@sagebionetworks/explorers/constants';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 
 export const headerLinks: NavigationLink[] = [
@@ -17,10 +18,12 @@ export const headerLinks: NavigationLink[] = [
       {
         label: 'Nominated Targets',
         routerLink: [ROUTE_PATHS.NOMINATED_TARGETS],
+        state: KEEP_COMPARISON_TOOL_STATE,
       },
       {
         label: 'Nominated Drugs',
         routerLink: [ROUTE_PATHS.NOMINATED_DRUGS],
+        state: KEEP_COMPARISON_TOOL_STATE,
       },
       {
         label: 'Making Nominations',
