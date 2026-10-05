@@ -184,6 +184,7 @@ export class HeaderComponent implements OnInit {
               label: grandchild.label,
               routerLink: grandchild.routerLink,
               queryParams: grandchild.queryParams,
+              state: grandchild.state,
               styleClass: 'header-dropdown-subheader-child',
             })),
           });
@@ -194,6 +195,7 @@ export class HeaderComponent implements OnInit {
           label: child.label,
           routerLink: child.routerLink,
           queryParams: child.queryParams,
+          state: child.state,
         });
       }
     }

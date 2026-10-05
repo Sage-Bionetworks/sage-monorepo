@@ -6,6 +6,7 @@ export type NavigationLink = {
   target?: '_blank' | '_self' | '_parent' | '_top';
   routerLink?: string[];
   queryParams?: Params;
+  state?: Record<string, unknown>;
   activeOptions?: { exact: boolean } | IsActiveMatchOptions;
   isSubheader?: boolean;
   // Mixing subheader and flat children in the same dropdown is not supported.

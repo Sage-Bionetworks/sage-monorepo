@@ -309,6 +309,96 @@ describe('HeaderComponent', () => {
     );
   });
 
+  describe('link state', () => {
+    const linkState = { fromHeader: true };
+    const linksWithState: NavigationLink[] = [
+      { label: 'TopLevelWithState', routerLink: ['/header-link-1'], state: linkState },
+      {
+        label: 'FlatDropdown',
+        children: [{ label: 'ChildWithState', routerLink: ['/child-link-1'], state: linkState }],
+      },
+      {
+        label: 'SubheaderDropdown',
+        children: [
+          {
+            label: 'SubheaderLabel',
+            isSubheader: true,
+            children: [
+              { label: 'GrandchildWithState', routerLink: ['/sub-child-link-1'], state: linkState },
+            ],
+          },
+        ],
+      },
+    ];
+
+    it.each([
+      {
+        mode: 'desktop',
+        width: DESKTOP_WIDTH,
+        linkName: 'TopLevelWithState',
+        path: '/header-link-1',
+      },
+      {
+        mode: 'desktop',
+        width: DESKTOP_WIDTH,
+        linkName: 'ChildWithState',
+        path: '/child-link-1',
+        dropdown: 'FlatDropdown',
+      },
+      {
+        mode: 'desktop',
+        width: DESKTOP_WIDTH,
+        linkName: 'GrandchildWithState',
+        path: '/sub-child-link-1',
+        dropdown: 'SubheaderDropdown',
+      },
+      {
+        mode: 'mobile',
+        width: MOBILE_WIDTH,
+        linkName: 'TopLevelWithState',
+        path: '/header-link-1',
+      },
+      { mode: 'mobile', width: MOBILE_WIDTH, linkName: 'ChildWithState', path: '/child-link-1' },
+      {
+        mode: 'mobile',
+        width: MOBILE_WIDTH,
+        linkName: 'GrandchildWithState',
+        path: '/sub-child-link-1',
+      },
+    ])(
+      'should pass the state of $linkName to the navigation in $mode mode',
+      async ({ width, linkName, path, dropdown }) => {
+        changeWindowSize(width);
+        const { fixture } = await render(HeaderComponent, {
+          componentInputs: { headerLogoPath: 'path/to/logo.svg', headerLinks: linksWithState },
+          imports: [CommonModule, SvgImageComponent],
+          providers: [
+            provideNoopAnimations(),
+            provideRouter([
+              { path: 'header-link-1', component: DummyComponent },
+              { path: 'child-link-1', component: DummyComponent },
+              { path: 'sub-child-link-1', component: DummyComponent },
+            ]),
+          ],
+        });
+        const user = userEvent.setup();
+        const router = fixture.debugElement.injector.get(Router);
+
+        if (width === MOBILE_WIDTH) {
+          await user.click(screen.getByRole('button', { name: 'Toggle navigation' }));
+        }
+        if (dropdown) {
+          await user.click(screen.getByRole('button', { name: dropdown }));
+        }
+        await user.click(screen.getByRole('link', { name: linkName }));
+        await fixture.whenStable();
+
+        expect(router.url).toBe(path);
+        expect(router.lastSuccessfulNavigation?.extras.state).toEqual(linkState);
+      },
+    );
+  });
+
   it('should mark a top-level exact link as active only on its exact route', async () => {
     changeWindowSize(DESKTOP_WIDTH);
     const { fixture } = await render(HeaderComponent, {

@@ -55,6 +55,7 @@
                                   <a
                                     [routerLink]="grandchild.routerLink"
                                     [queryParams]="grandchild.queryParams"
+                                    [state]="grandchild.state"
                                     [class.active]="isLinkActive(grandchild)"
                                     (click)="toggleNav()"
                                   >
@@ -69,6 +70,7 @@
                             <a
                               [routerLink]="child.routerLink"
                               [queryParams]="child.queryParams"
+                              [state]="child.state"
                               [class.active]="isLinkActive(child)"
                               (click)="toggleNav()"
                             >
@@ -82,6 +84,7 @@
                     <a
                       [routerLink]="link.routerLink"
                       [queryParams]="link.queryParams"
+                      [state]="link.state"
                       [class.active]="isLinkActive(link)"
                       explorersWidestLineWidth
                       (click)="toggleNav()"
