@@ -1,6 +1,8 @@
 import { expect, Page, test } from '@playwright/test';
 import { MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
 import {
+  CATEGORY_DROPDOWN_INDEX,
+  CATEGORY_OPTION_INDEX,
   ColumnConfig,
   expectCategories,
   expectCategoriesParams,
@@ -96,12 +98,22 @@ const noGeneSymbolMatches = [
   `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Female`,
   `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Male`,
 ];
+const tmpoGene = 'ENSMUSG00000019961~LOAD2~Male'; // Tmpo, which has both RNA and Protein rows
 const NO_GENES_FOUND_MESSAGE = 'No genes found...';
 const NO_PROTEINS_FOUND_MESSAGE = 'No proteins found...';
 const RNA_PIN_LIMIT_COPY: PinLimitCopy = {
   pinnedLabels: ['Pinned Results', `${MAX_PIN_LIMIT} Genes`],
   toast: `Only ${MAX_PIN_LIMIT} genes were pinned, because you reached the maximum of ${MAX_PIN_LIMIT} pinned genes.`,
   tooltip: `You have already pinned the maximum number of results (${MAX_PIN_LIMIT} genes). You must unpin some results before you can pin more.`,
+};
+
+const navigateToProteinViaHeaderNav = async (page: Page, shouldCloseTutorialDialog: boolean) => {
+  await navigateViaHeaderNav(page, DIFFERENTIAL_EXPRESSION_NAV_TRAILS.PROTEIN);
+  await expectComparisonToolTableLoaded(
+    page,
+    COMPARISON_TOOL_HEADER_TITLES[CT_PAGE] ?? CT_PAGE,
+    shouldCloseTutorialDialog,
+  );
 };
 
 test.describe('differential expression', () => {
@@ -137,15 +149,68 @@ test.describe('differential expression', () => {
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
     await expectCategoriesParams(page, categories);
 
-    await navigateViaHeaderNav(page, DIFFERENTIAL_EXPRESSION_NAV_TRAILS.PROTEIN);
-    await expectComparisonToolTableLoaded(
-      page,
-      COMPARISON_TOOL_HEADER_TITLES[CT_PAGE] ?? CT_PAGE,
-      false,
-    );
+    await navigateToProteinViaHeaderNav(page, false);
 
     await expectCategoriesParams(page, [PROTEIN_MAIN_CATEGORY]);
     await expectCategories(page, [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE]);
+  });
+
+  // Entering the CT, whether for the first time or re-entering it, writes the full selection to the
+  // URL. Only a header link clicked while already on the CT leaves the link's single category.
+  test('header dropdown navigates to the Protein view after leaving the RNA view', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await navigateToComparison(page, CT_PAGE, true, 'link');
+    await expectCategoriesParams(page, [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE]);
+
+    await page.getByRole('link', { name: 'Home' }).click();
+    await navigateToProteinViaHeaderNav(page, false);
+
+    const proteinCategories = [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
+    await expectCategoriesParams(page, proteinCategories);
+    await expectCategories(page, proteinCategories);
+  });
+
+  test('header dropdown navigates to the RNA view after leaving the Protein view, keeping pins and the other CT state', async ({
+    page,
+  }) => {
+    const otherCtPage = 'Disease Correlation';
+    const proteinCategories = [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
+    const rnaCategories = [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
+    const [tmpoEnsemblGeneId] = tmpoGene.split('~');
+    const [tmpoProteinId] = (
+      await fetchProteomics(page, proteinCategories, {}, { search: tmpoEnsemblGeneId })
+    )
+      .filter((row) => row.rna_composite_id === tmpoGene)
+      .map((row) => row.composite_id);
+    expect(tmpoProteinId).toBeDefined();
+
+    await page.goto('/');
+    await navigateToProteinViaHeaderNav(page, true);
+    await searchViaFilterbox(page, tmpoEnsemblGeneId);
+    await pinByName(getUnpinnedTable(page), page, tmpoProteinId);
+    await expectPinnedParams(page, [tmpoProteinId]);
+
+    // A non-default category, so the final assertions can only pass if that CT kept its cache
+    await navigateToComparison(page, otherCtPage, true, 'link');
+    const otherCtCategory = await selectCategoryOption(
+      page,
+      CATEGORY_DROPDOWN_INDEX.first,
+      CATEGORY_OPTION_INDEX.second,
+    );
+    await expect.poll(() => getCategoriesQueryParams(page.url())).toContain(otherCtCategory);
+    const otherCtCategories = getCategoriesQueryParams(page.url());
+
+    await navigateToComparison(page, CT_PAGE, true, 'link');
+    await expectCategoriesParams(page, rnaCategories);
+    await expectCategories(page, rnaCategories);
+    await expectPinnedParams(page, [tmpoGene]);
+    await expectPinnedRows(page, [tmpoGene]);
+
+    await navigateToComparison(page, otherCtPage, true, 'link');
+    await expectCategoriesParams(page, otherCtCategories);
+    await expectCategories(page, otherCtCategories);
   });
 
   test('heatmap details panel sub-heading includes the model name', async ({ page }) => {
