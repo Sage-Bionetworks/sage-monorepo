@@ -30,6 +30,10 @@ export class ComparisonToolUrlService {
     takeUntilDestroyed(this.destroyRef),
   );
 
+  currentParams(): ComparisonToolUrlParams {
+    return this.deserialize(this.route.snapshot.queryParams);
+  }
+
   syncToUrl(state: ComparisonToolUrlParams): void {
     const currentState = this.deserialize(this.route.snapshot.queryParams);
 

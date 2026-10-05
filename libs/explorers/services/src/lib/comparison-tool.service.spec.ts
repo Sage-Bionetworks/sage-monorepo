@@ -1868,6 +1868,67 @@ describe('ComparisonToolService', () => {
           expect(warn).not.toHaveBeenCalledWith(RESERVED_FILTER_KEY_MESSAGE, expect.anything());
         }));
       });
+
+      describe('re-entering an initialized comparison tool', () => {
+        const CACHED_SELECTION = ['Category A', 'Option 2'];
+        const PINNED_ID = 'id1';
+
+        const reEnterWithQueryParams = (queryParams: Record<string, string>) => {
+          connectService(mockConfigsWithDropdowns);
+          flushInitialUrlSync();
+          service.setDropdownSelection(CACHED_SELECTION);
+          service.pinItem(row(PINNED_ID));
+          service.fetchPinned(of({ data: [row(PINNED_ID)], totalCount: 1 }));
+          tick();
+
+          service.disconnect();
+          (mockActivatedRoute.snapshot as { queryParams: Record<string, string> }).queryParams =
+            queryParams;
+          connectService(mockConfigsWithDropdowns);
+          tick();
+        };
+
+        it('should apply URL categories that match a config while keeping cached pins', fakeAsync(() => {
+          reEnterWithQueryParams({ categories: 'Category%20B,Option%201' });
+
+          expect(service.dropdownSelection()).toEqual(['Category B', 'Option 1']);
+          expect(service.pinnedItems()).toEqual([PINNED_ID]);
+          const queryParams = getLastNavigateCall()?.[1]?.queryParams;
+          expect(queryParams?.categories).toEqual('Category%20B,Option%201');
+          expect(queryParams?.pinned).toEqual(PINNED_ID);
+        }));
+
+        it('should resolve URL categories with only the first category to the first matching config', fakeAsync(() => {
+          reEnterWithQueryParams({ categories: 'Category%20A' });
+
+          expect(service.dropdownSelection()).toEqual(['Category A', 'Option 1']);
+        }));
+
+        it('should restore and sync the cached selection when the URL has no params', fakeAsync(() => {
+          reEnterWithQueryParams({});
+
+          expect(service.dropdownSelection()).toEqual(CACHED_SELECTION);
+          expect(getLastNavigateCall()?.[1]?.queryParams?.categories).toEqual(
+            'Category%20A,Option%202',
+          );
+        }));
+
+        it('should ignore URL params other than categories', fakeAsync(() => {
+          reEnterWithQueryParams({ pinned: 'id9' });
+
+          expect(service.dropdownSelection()).toEqual(CACHED_SELECTION);
+          expect(service.pinnedItems()).toEqual([PINNED_ID]);
+        }));
+
+        it('should keep the cached selection rather than the default when URL categories match no config', fakeAsync(() => {
+          reEnterWithQueryParams({ categories: 'Category%20C,Option%201' });
+
+          expect(service.dropdownSelection()).toEqual(CACHED_SELECTION);
+          expect(getLastNavigateCall()?.[1]?.queryParams?.categories).toEqual(
+            'Category%20A,Option%202',
+          );
+        }));
+      });
     });
 
     describe('combined pinned items and categories', () => {

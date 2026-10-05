@@ -465,7 +465,16 @@ export class ComparisonToolService<T> {
       if (cachedPageSize !== this.pageSize()) {
         this.updateQuery({ pageSize: cachedPageSize, pageNumber: this.FIRST_PAGE_NUMBER });
       }
-      // Restore this CT's cached state and sync to the URL, ignoring URL params from other CTs
+      // Restore this CT's cached state and sync it to the URL. Incoming categories that match one of
+      // this CT's configs come from an explicit link, so they are applied on top of the cache.
+      const { categories } = this.urlService.currentParams();
+      const matchingConfig = categories
+        ? this.findMatchingConfig(categories, this.configsSignal())
+        : null;
+      if (matchingConfig) {
+        this.setDropdownSelection(matchingConfig.dropdowns);
+        this.updateSyncedStateCache();
+      }
       this.scheduleUrlSyncFromCurrentState();
       return;
     }

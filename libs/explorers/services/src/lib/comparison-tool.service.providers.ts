@@ -40,6 +40,9 @@ export type ComparisonToolServiceOptions = {
 
 class ComparisonToolUrlServiceStub {
   params$ = new BehaviorSubject<ComparisonToolUrlParams>({});
+  currentParams(): ComparisonToolUrlParams {
+    return this.params$.value;
+  }
   syncToUrl(): void {
     return;
   }
