@@ -7,6 +7,8 @@ import {
   expectCategories,
   expectCategoriesParams,
   expectComparisonToolTableLoaded,
+  expectFilterChiclets,
+  expectFiltersParams,
   expectPinnedParams,
   expectPinnedResultsCount,
   expectPinnedRows,
@@ -57,12 +59,19 @@ import {
   DIFFERENTIAL_EXPRESSION_DROPDOWN_INDEX as DROPDOWN_INDEX,
   DIFFERENTIAL_EXPRESSION_HEMIBRAIN_TISSUE as HEMIBRAIN_TISSUE,
   DIFFERENTIAL_EXPRESSION_PROTEIN_CATEGORY as PROTEIN_MAIN_CATEGORY,
+  DIFFERENTIAL_EXPRESSION_PROTEIN_HEMIBRAIN_CATEGORIES as proteinCategories,
   DIFFERENTIAL_EXPRESSION_RNA_CATEGORY as RNA_MAIN_CATEGORY,
+  DIFFERENTIAL_EXPRESSION_RNA_HEMIBRAIN_CATEGORIES as rnaHemibrainCategories,
 } from './constants';
 import {
   fetchComparisonToolConfig,
+  fetchProteinRows,
   fetchProteomics,
+  fetchRnaRows,
   fetchTranscriptomics,
+  getEnsemblGeneId,
+  getProteinIds,
+  getRowIds,
   navigateToComparison,
 } from './helpers/comparison-tool';
 
@@ -99,6 +108,11 @@ const noGeneSymbolMatches = [
   `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Male`,
 ];
 const tmpoGene = 'ENSMUSG00000019961~LOAD2~Male'; // Tmpo, which has both RNA and Protein rows
+const rnaOnlyGene = 'ENSMUSG00000086714~LOAD2~Male'; // has RNA rows but no Protein rows
+const proteinOnlyGene = 'ENSMUSG00000005681~LOAD2~Female'; // Apoa2, which has no RNA rows
+// A filter both views offer
+const sexFilterParams = { sexes: ['Male'] };
+const sexFilterChiclets = { Sex: ['Male'] };
 const NO_GENES_FOUND_MESSAGE = 'No genes found...';
 const NO_PROTEINS_FOUND_MESSAGE = 'No proteins found...';
 const RNA_PIN_LIMIT_COPY: PinLimitCopy = {
@@ -116,6 +130,13 @@ const navigateToProteinViaHeaderNav = async (page: Page, shouldCloseTutorialDial
   );
 };
 
+const expectPinsAndSexFilter = async (page: Page, pinnedItems: string[]) => {
+  await expectPinnedParams(page, pinnedItems);
+  await expectPinnedRows(page, pinnedItems);
+  await expectFiltersParams(page, sexFilterParams);
+  await expectFilterChiclets(page, sexFilterChiclets);
+};
+
 test.describe('differential expression', () => {
   runFilterPanelTests(async (page) =>
     navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams),
@@ -124,12 +145,9 @@ test.describe('differential expression', () => {
     navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams),
   );
 
-  // The header links set only the category, so the URL keeps that single value while the CT
-  // resolves the remaining levels from ui_config. The two tests below assert both halves: the category in the
-  // URL, and the resolved tissue in the selectors.
+  // The header links name only the main category, so the CT resolves the default tissue and writes
+  // the full selection to the URL. The two tests below assert that selection in both places.
   test('header dropdown navigates to the RNA view', async ({ page }) => {
-    const rnaDefaultTissue = HEMIBRAIN_TISSUE;
-
     // Start on a non-default tissue so the assertions below can only pass if the header link
     // resolved the selection, rather than the CT keeping the tissue already in the URL.
     await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
@@ -138,8 +156,9 @@ test.describe('differential expression', () => {
     // The tutorial dialog is only shown on the first visit to a comparison tool
     await navigateToComparison(page, CT_PAGE, false, 'link');
 
-    await expectCategoriesParams(page, [RNA_MAIN_CATEGORY]);
-    await expectCategories(page, [RNA_MAIN_CATEGORY, rnaDefaultTissue]);
+    // Goes to default tissue for the RNA main category
+    await expectCategoriesParams(page, rnaHemibrainCategories);
+    await expectCategories(page, rnaHemibrainCategories);
   });
 
   // COMPARISON_TOOL_NAV_TRAILS keys 'Differential Expression' to the default RNA sub-link, so
@@ -151,23 +170,71 @@ test.describe('differential expression', () => {
 
     await navigateToProteinViaHeaderNav(page, false);
 
-    await expectCategoriesParams(page, [PROTEIN_MAIN_CATEGORY]);
-    await expectCategories(page, [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE]);
+    await expectCategoriesParams(page, proteinCategories);
+    await expectCategories(page, proteinCategories);
   });
 
-  // Entering the CT, whether for the first time or re-entering it, writes the full selection to the
-  // URL. Only a header link clicked while already on the CT leaves the link's single category.
+  test('header dropdown switches from the RNA view to the Protein view and back, keeping pins and filters', async ({
+    page,
+  }) => {
+    const rnaPins = getRowIds(await fetchRnaRows(page, [rnaOnlyGene, tmpoGene]));
+    expect(rnaPins).toHaveLength(2);
+    expect(await fetchProteinRows(page, [rnaOnlyGene])).toHaveLength(0);
+    const tmpoProteinIds = getRowIds(await fetchProteinRows(page, [tmpoGene]));
+    expect(tmpoProteinIds.length).toBeGreaterThan(0);
+    const queryParameters = getQueryParamsFromRecords({
+      categories: rnaHemibrainCategories,
+      pinned: rnaPins,
+      ...sexFilterParams,
+    });
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await expectPinsAndSexFilter(page, rnaPins);
+
+    await navigateToProteinViaHeaderNav(page, false);
+    await expectCategoriesParams(page, proteinCategories);
+    await expectPinsAndSexFilter(page, tmpoProteinIds);
+
+    await navigateToComparison(page, CT_PAGE, false, 'link');
+    await expectCategoriesParams(page, rnaHemibrainCategories);
+    await expectPinsAndSexFilter(page, rnaPins);
+  });
+
+  test('header dropdown switches from the Protein view to the RNA view and back, keeping pins and filters', async ({
+    page,
+  }) => {
+    const proteinRows = await fetchProteinRows(page, [proteinOnlyGene, tmpoGene]);
+    expect(getProteinIds(proteinRows, proteinOnlyGene)).not.toHaveLength(0);
+    expect(await fetchRnaRows(page, [proteinOnlyGene])).toHaveLength(0);
+    const proteinPins = getRowIds(proteinRows);
+    const queryParameters = getQueryParamsFromRecords({
+      categories: proteinCategories,
+      pinned: proteinPins,
+      ...sexFilterParams,
+    });
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await expectPinsAndSexFilter(page, proteinPins);
+
+    await navigateToComparison(page, CT_PAGE, false, 'link');
+    await expectCategoriesParams(page, rnaHemibrainCategories);
+    await expectPinsAndSexFilter(page, [tmpoGene]);
+
+    await navigateToProteinViaHeaderNav(page, false);
+    await expectCategoriesParams(page, proteinCategories);
+    await expectPinsAndSexFilter(page, proteinPins);
+  });
+
   test('header dropdown navigates to the Protein view after leaving the RNA view', async ({
     page,
   }) => {
     await page.goto('/');
     await navigateToComparison(page, CT_PAGE, true, 'link');
-    await expectCategoriesParams(page, [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE]);
+    await expectCategoriesParams(page, rnaHemibrainCategories);
 
     await page.getByRole('link', { name: 'Home' }).click();
     await navigateToProteinViaHeaderNav(page, false);
 
-    const proteinCategories = [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
     await expectCategoriesParams(page, proteinCategories);
     await expectCategories(page, proteinCategories);
   });
@@ -176,14 +243,8 @@ test.describe('differential expression', () => {
     page,
   }) => {
     const otherCtPage = 'Disease Correlation';
-    const proteinCategories = [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
-    const rnaCategories = [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
-    const [tmpoEnsemblGeneId] = tmpoGene.split('~');
-    const [tmpoProteinId] = (
-      await fetchProteomics(page, proteinCategories, {}, { search: tmpoEnsemblGeneId })
-    )
-      .filter((row) => row.rna_composite_id === tmpoGene)
-      .map((row) => row.composite_id);
+    const tmpoEnsemblGeneId = getEnsemblGeneId(tmpoGene);
+    const [tmpoProteinId] = getProteinIds(await fetchProteinRows(page, [tmpoGene]), tmpoGene);
     expect(tmpoProteinId).toBeDefined();
 
     await page.goto('/');
@@ -203,8 +264,8 @@ test.describe('differential expression', () => {
     const otherCtCategories = getCategoriesQueryParams(page.url());
 
     await navigateToComparison(page, CT_PAGE, true, 'link');
-    await expectCategoriesParams(page, rnaCategories);
-    await expectCategories(page, rnaCategories);
+    await expectCategoriesParams(page, rnaHemibrainCategories);
+    await expectCategories(page, rnaHemibrainCategories);
     await expectPinnedParams(page, [tmpoGene]);
     await expectPinnedRows(page, [tmpoGene]);
 
@@ -747,9 +808,8 @@ test.describe('differential expression', () => {
   // in the both-sexes cohort, and a model whose parentheses and slash go through the app's
   // CustomUrlSerializer, which the unit spec does not use.
   test.describe('share URLs created before sex became a table column', () => {
-    const hemibrainCategories = [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
-    const hemibrainCategoriesQueryParams = getQueryParamFromValues(
-      hemibrainCategories,
+    const rnaHemibrainCategoriesQueryParams = getQueryParamFromValues(
+      rnaHemibrainCategories,
       'categories',
     );
     // The last category is an option of the removed Sex dropdown.
@@ -775,8 +835,8 @@ test.describe('differential expression', () => {
     ].join('&');
 
     const expectSexCategoryDroppedAndPinsShownForBothSexes = async (page: Page) => {
-      await expectCategoriesParams(page, hemibrainCategories);
-      await expectCategories(page, hemibrainCategories);
+      await expectCategoriesParams(page, rnaHemibrainCategories);
+      await expectCategories(page, rnaHemibrainCategories);
       await expectPinnedParams(page, expectedCacul1PinsForBothSexes);
       await expectPinnedRows(page, expectedCacul1PinsForBothSexes);
     };
@@ -806,7 +866,7 @@ test.describe('differential expression', () => {
     test('reaching an old share URL from within the open tool drops its Sex category and pins each gene and model for both sexes', async ({
       page,
     }) => {
-      await navigateToComparison(page, CT_PAGE, true, 'url', hemibrainCategoriesQueryParams);
+      await navigateToComparison(page, CT_PAGE, true, 'url', rnaHemibrainCategoriesQueryParams);
 
       await navigateWithinToolToOldShareUrl(page);
 
@@ -827,24 +887,24 @@ test.describe('differential expression', () => {
       await expectCategoriesParams(page, categories);
 
       await page.goForward();
-      await expectCategoriesParams(page, hemibrainCategories);
+      await expectCategoriesParams(page, rnaHemibrainCategories);
       await expectPinnedParams(page, expectedCacul1PinsForBothSexes);
     });
 
     test('after reaching an old share URL from within the tool, back returns to the tool without pins and forward returns to the updated URL', async ({
       page,
     }) => {
-      await navigateToComparison(page, CT_PAGE, true, 'url', hemibrainCategoriesQueryParams);
+      await navigateToComparison(page, CT_PAGE, true, 'url', rnaHemibrainCategoriesQueryParams);
 
       await navigateWithinToolToOldShareUrl(page);
       await expectSexCategoryDroppedAndPinsShownForBothSexes(page);
 
       await page.goBack();
-      await expectCategoriesParams(page, hemibrainCategories);
+      await expectCategoriesParams(page, rnaHemibrainCategories);
       await expectPinnedParams(page, noPins);
 
       await page.goForward();
-      await expectCategoriesParams(page, hemibrainCategories);
+      await expectCategoriesParams(page, rnaHemibrainCategories);
       await expectPinnedParams(page, expectedCacul1PinsForBothSexes);
     });
   });

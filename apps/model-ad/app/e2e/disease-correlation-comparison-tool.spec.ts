@@ -117,6 +117,34 @@ test.describe('disease correlation', () => {
     await expectFilterChiclets(page, expectedSelectedFilters);
   });
 
+  test('header link keeps categories, pins, and filters while on the comparison tool', async ({
+    page,
+  }) => {
+    const categories = ['CONSENSUS NETWORK MODULES', 'ECM Organization - Consensus Cluster A'];
+    const pinnedItems = ['LOAD1~8 months~Female'];
+    const filterParams = { ages: ['8 months'] };
+    const selectedFilters = { Age: ['8 months'] };
+    const queryParameters = getQueryParamsFromRecords({
+      categories,
+      pinned: pinnedItems,
+      ...filterParams,
+    });
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await expectCategories(page, categories);
+    await expectPinnedRows(page, pinnedItems);
+    await expectFilterChiclets(page, selectedFilters);
+
+    await navigateToComparison(page, CT_PAGE, false, 'link');
+
+    await expectCategoriesParams(page, categories);
+    await expectCategories(page, categories);
+    await expectPinnedParams(page, pinnedItems);
+    await expectPinnedRows(page, pinnedItems);
+    await expectFiltersParams(page, filterParams);
+    await expectFilterChiclets(page, selectedFilters);
+  });
+
   test('categories are added to URL on load', async ({ page }) => {
     const configs = await fetchComparisonToolConfig(page, CT_PAGE);
     const defaultCategories = configs[0]?.dropdowns;
