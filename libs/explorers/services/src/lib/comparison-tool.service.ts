@@ -56,6 +56,9 @@ export const RESERVED_FILTER_KEY_MESSAGE =
 export const UNMATCHED_URL_CATEGORIES_MESSAGE =
   'URL categories match no comparison tool config; falling back to the default selection.';
 
+export const UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE =
+  'Link categories match no comparison tool config; keeping the current selection.';
+
 /**
  * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
  * the corresponding results-count signal should be set to (unpinned: total matching rows across
@@ -1406,13 +1409,20 @@ export class ComparisonToolService<T> {
   }
 
   private applyKeepStateLinkCategories(categories: string[] | null | undefined): void {
-    const matchingConfig = categories
-      ? this.findMatchingConfig(categories, this.configsSignal())
-      : null;
-    if (matchingConfig) {
-      this.setDropdownSelection(matchingConfig.dropdowns);
-      this.updateSyncedStateCache();
+    if (!categories) {
+      return;
     }
+
+    if (!this.findMatchingConfig(categories, this.configsSignal())) {
+      this.logger.warn(UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE, {
+        linkCategories: categories,
+        keptSelection: this.dropdownSelection(),
+      });
+      return;
+    }
+
+    this.setDropdownSelection(categories);
+    this.updateSyncedStateCache();
   }
 
   private resolveFiltersFromUrl(

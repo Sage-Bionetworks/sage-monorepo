@@ -23,6 +23,7 @@ import {
   DEFAULT_COLUMN_WIDTH_PX,
   PinAllFetch,
   RESERVED_FILTER_KEY_MESSAGE,
+  UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE,
   UNMATCHED_URL_CATEGORIES_MESSAGE,
 } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
@@ -1946,9 +1947,15 @@ describe('ComparisonToolService', () => {
           expect(service.pinnedItems()).toEqual([PINNED_ID]);
         }));
 
-        it('should keep the cached selection rather than the default when URL categories match no config', fakeAsync(() => {
+        it('should keep the cached selection rather than the default and warn when URL categories match no config', fakeAsync(() => {
+          const warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+
           reEnterWithQueryParams({ categories: 'Category%20C,Option%201' });
 
+          expect(warn).toHaveBeenCalledWith(UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE, {
+            linkCategories: ['Category C', 'Option 1'],
+            keptSelection: CACHED_SELECTION,
+          });
           expect(service.dropdownSelection()).toEqual(CACHED_SELECTION);
           expect(getLastNavigateCall()?.[1]?.queryParams?.categories).toEqual(
             'Category%20A,Option%202',
@@ -2054,6 +2061,21 @@ describe('ComparisonToolService', () => {
             pinnedItems: PINNED_IDS,
             filterSelections: FILTER_SELECTIONS,
           });
+        }));
+
+        it('should keep the selection, pins, and filters and warn when the link categories match no config', fakeAsync(() => {
+          const warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          setUpPinsAndFilters();
+
+          followLink({ categories: 'Category%20C,Option%201' }, { keepState: true });
+
+          expect(warn).toHaveBeenCalledWith(UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE, {
+            linkCategories: ['Category C', 'Option 1'],
+            keptSelection: CACHED_SELECTION,
+          });
+          expect(service.dropdownSelection()).toEqual(CACHED_SELECTION);
+          expect(service.pinnedItems()).toEqual(PINNED_IDS);
+          expect(service.selectedFilters()).toEqual(FILTER_SELECTIONS);
         }));
 
         it('should apply the URL pins and filters when the navigation does not keep comparison tool state', fakeAsync(() => {
