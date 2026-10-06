@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
+import { TABLE_DATA_LOADING_MESSAGE } from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolService,
   ComparisonToolServiceOptions,
@@ -12,7 +13,6 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
 import { NEVER } from 'rxjs';
-import { TABLE_DATA_LOADING_TOOLTIP } from '../../comparison-tool-table/comparison-tool-table.constants';
 import { ComparisonToolShareURLButtonComponent } from './comparison-tool-share-url-button.component';
 
 async function setup(ctOptions: ComparisonToolServiceOptions = {}) {
@@ -55,7 +55,7 @@ describe('ComparisonToolShareURLButtonComponent', () => {
     await user.hover(getShareUrlButton());
 
     await waitFor(() => {
-      expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_TOOLTIP })).toBeVisible();
+      expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_MESSAGE })).toBeVisible();
     });
   });
 

@@ -73,6 +73,25 @@ export const PinnedWithoutSearchTerm: Story = {
   ],
 };
 
+export const PinnedRowsLoading: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
+          pinLimit: 5,
+          pinnedData: mockComparisonToolData.slice(0, 3),
+          pinnedFetchPending: true,
+          unpinnedData: mockComparisonToolData.slice(3),
+          configs: mockComparisonToolDataConfig,
+        }),
+      ],
+    }),
+  ],
+};
+
 export const SearchTermActive: Story = {
   args: {},
   decorators: [
@@ -183,6 +202,27 @@ export const ChildView: Story = {
           pinnedItems: childViewPinnedData.map((item) => item['_id']),
           pinLimit: 5,
           pinnedData: childViewPinnedData,
+          unpinnedData: mockComparisonToolData.filter(
+            (item) => !childViewPinnedData.includes(item),
+          ),
+          configs: childViewConfigs,
+        }),
+      ],
+    }),
+  ],
+};
+
+export const PinnedRowsLoadingChildView: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: childViewPinnedData.map((item) => item['_id']),
+          pinLimit: 5,
+          pinnedData: childViewPinnedData,
+          pinnedFetchPending: true,
           unpinnedData: mockComparisonToolData.filter(
             (item) => !childViewPinnedData.includes(item),
           ),
