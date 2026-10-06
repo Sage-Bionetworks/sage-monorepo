@@ -1,6 +1,12 @@
 <div class="displayed-results">
   <div>
     <h5 class="unselectable-text">{{ displayedResultsLabel() }}</h5>
-    <p>{{ displayedResultsCount() }}</p>
+    <p>
+      @if (displayedResultsCount() === null) {
+        <i>{{ loadingMessage }}</i>
+      } @else {
+        {{ displayedResultsCount() }}
+      }
+    </p>
   </div>
 </div>

@@ -1,5 +1,5 @@
 import { signal } from '@angular/core';
-import { NO_NOUNS } from '@sagebionetworks/explorers/constants';
+import { NO_NOUNS, TABLE_DATA_LOADING_MESSAGE_SHORT } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolNoun, ComparisonToolNouns } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { render, screen } from '@testing-library/angular';
@@ -15,6 +15,7 @@ function getMockService(total = 5, pinned = 2, nouns = NO_NOUNS) {
     unpinnedRowCount: signal(total),
     pinnedRowCount: signal(pinned),
     nouns: signal(nouns),
+    isLoadingTableData: signal(false),
   };
 }
 
@@ -44,6 +45,30 @@ describe('DisplayedResultsComponent', () => {
     mockService.unpinnedRowCount.set(4);
     mockService.pinnedRowCount.set(5);
     expect(fixture.componentInstance.displayedResultsCount()).toBe(9);
+  });
+
+  it('should show the loading message in place of the count while table data loads', async () => {
+    const { fixture, mockService } = await setup(10, 3);
+    mockService.isLoadingTableData.set(true);
+    fixture.detectChanges();
+    expect(screen.getByText(TABLE_DATA_LOADING_MESSAGE_SHORT)).toBeInTheDocument();
+    expect(screen.queryByText('13')).not.toBeInTheDocument();
+  });
+
+  it('should show the count once table data has loaded', async () => {
+    const { fixture, mockService } = await setup(10, 3);
+    mockService.isLoadingTableData.set(true);
+    fixture.detectChanges();
+    mockService.isLoadingTableData.set(false);
+    fixture.detectChanges();
+    expect(screen.getByText('13')).toBeInTheDocument();
+    expect(screen.queryByText(TABLE_DATA_LOADING_MESSAGE_SHORT)).not.toBeInTheDocument();
+  });
+
+  it('should show a zero count rather than the loading message', async () => {
+    await setup(0, 0);
+    expect(screen.getByText('0')).toBeInTheDocument();
+    expect(screen.queryByText(TABLE_DATA_LOADING_MESSAGE_SHORT)).not.toBeInTheDocument();
   });
 
   it('should fall back to results', async () => {

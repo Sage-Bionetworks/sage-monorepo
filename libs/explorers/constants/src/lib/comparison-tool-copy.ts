@@ -19,6 +19,8 @@ export const getViewNounLabel = (prefix: string, { viewNoun }: ComparisonToolNou
 // Shown on the pinned results controls and the share URL button while table data loads, and in
 // place of the pinned results counts while the pinned rows load
 export const TABLE_DATA_LOADING_MESSAGE = 'Waiting for data to load...';
+// `TABLE_DATA_LOADING_MESSAGE` for spots too narrow for the full message
+export const TABLE_DATA_LOADING_MESSAGE_SHORT = 'Loading...';
 // A non-breaking space, so a header line with nothing to show still takes up its height
 export const BLANK_LABEL_TEXT = '\u00a0';
 
