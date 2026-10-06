@@ -309,13 +309,16 @@ describe('HeaderComponent', () => {
     );
   });
 
-  describe('link state', () => {
+  describe('link navigation', () => {
     const linkState = { fromHeader: true };
-    const linksWithState: NavigationLink[] = [
-      { label: 'TopLevelWithState', routerLink: ['/header-link-1'], state: linkState },
+    const linkOptions = { state: linkState, replaceUrlWhenPathActive: true };
+    const OTHER_PAGE = '/footer-link-internal-1';
+    const navigationLinks: NavigationLink[] = [
+      { label: 'TopLevelLink', routerLink: ['/header-link-1'], ...linkOptions },
+      { label: 'TopLevelLinkWithoutOptions', routerLink: ['/header-link-2'] },
       {
         label: 'FlatDropdown',
-        children: [{ label: 'ChildWithState', routerLink: ['/child-link-1'], state: linkState }],
+        children: [{ label: 'ChildLink', routerLink: ['/child-link-1'], ...linkOptions }],
       },
       {
         label: 'SubheaderDropdown',
@@ -324,79 +327,115 @@ describe('HeaderComponent', () => {
             label: 'SubheaderLabel',
             isSubheader: true,
             children: [
-              { label: 'GrandchildWithState', routerLink: ['/sub-child-link-1'], state: linkState },
+              { label: 'GrandchildLink', routerLink: ['/sub-child-link-1'], ...linkOptions },
             ],
           },
         ],
       },
     ];
 
-    it.each([
+    type ClickPath = { width: number; linkName: string; path: string; dropdown?: string };
+
+    const clickPaths: (ClickPath & { mode: string })[] = [
+      { mode: 'desktop', width: DESKTOP_WIDTH, linkName: 'TopLevelLink', path: '/header-link-1' },
       {
         mode: 'desktop',
         width: DESKTOP_WIDTH,
-        linkName: 'TopLevelWithState',
-        path: '/header-link-1',
-      },
-      {
-        mode: 'desktop',
-        width: DESKTOP_WIDTH,
-        linkName: 'ChildWithState',
+        linkName: 'ChildLink',
         path: '/child-link-1',
         dropdown: 'FlatDropdown',
       },
       {
         mode: 'desktop',
         width: DESKTOP_WIDTH,
-        linkName: 'GrandchildWithState',
+        linkName: 'GrandchildLink',
         path: '/sub-child-link-1',
         dropdown: 'SubheaderDropdown',
       },
+      { mode: 'mobile', width: MOBILE_WIDTH, linkName: 'TopLevelLink', path: '/header-link-1' },
+      { mode: 'mobile', width: MOBILE_WIDTH, linkName: 'ChildLink', path: '/child-link-1' },
       {
         mode: 'mobile',
         width: MOBILE_WIDTH,
-        linkName: 'TopLevelWithState',
-        path: '/header-link-1',
-      },
-      { mode: 'mobile', width: MOBILE_WIDTH, linkName: 'ChildWithState', path: '/child-link-1' },
-      {
-        mode: 'mobile',
-        width: MOBILE_WIDTH,
-        linkName: 'GrandchildWithState',
+        linkName: 'GrandchildLink',
         path: '/sub-child-link-1',
       },
-    ])(
+    ];
+
+    // Opens the page at startUrl, then clicks the link the way a user would in that mode
+    const clickLinkFrom = async (startUrl: string, { width, linkName, dropdown }: ClickPath) => {
+      changeWindowSize(width);
+      const { fixture } = await render(HeaderComponent, {
+        componentInputs: { headerLogoPath: 'path/to/logo.svg', headerLinks: navigationLinks },
+        imports: [CommonModule, SvgImageComponent],
+        providers: [
+          provideNoopAnimations(),
+          provideRouter([
+            { path: 'header-link-1', component: DummyComponent },
+            { path: 'header-link-2', component: DummyComponent },
+            { path: 'child-link-1', component: DummyComponent },
+            { path: 'sub-child-link-1', component: DummyComponent },
+            { path: 'footer-link-internal-1', component: DummyComponent },
+          ]),
+        ],
+      });
+      const user = userEvent.setup();
+      const router = fixture.debugElement.injector.get(Router);
+      await router.navigateByUrl(startUrl);
+      fixture.detectChanges();
+
+      if (width === MOBILE_WIDTH) {
+        await user.click(screen.getByRole('button', { name: 'Toggle navigation' }));
+      }
+      if (dropdown) {
+        await user.click(screen.getByRole('button', { name: dropdown }));
+      }
+      await user.click(screen.getByRole('link', { name: linkName }));
+      await fixture.whenStable();
+
+      return router;
+    };
+
+    it.each(clickPaths)(
       'should pass the state of $linkName to the navigation in $mode mode',
-      async ({ width, linkName, path, dropdown }) => {
-        changeWindowSize(width);
-        const { fixture } = await render(HeaderComponent, {
-          componentInputs: { headerLogoPath: 'path/to/logo.svg', headerLinks: linksWithState },
-          imports: [CommonModule, SvgImageComponent],
-          providers: [
-            provideNoopAnimations(),
-            provideRouter([
-              { path: 'header-link-1', component: DummyComponent },
-              { path: 'child-link-1', component: DummyComponent },
-              { path: 'sub-child-link-1', component: DummyComponent },
-            ]),
-          ],
-        });
-        const user = userEvent.setup();
-        const router = fixture.debugElement.injector.get(Router);
+      async (clickPath) => {
+        const router = await clickLinkFrom(OTHER_PAGE, clickPath);
 
-        if (width === MOBILE_WIDTH) {
-          await user.click(screen.getByRole('button', { name: 'Toggle navigation' }));
-        }
-        if (dropdown) {
-          await user.click(screen.getByRole('button', { name: dropdown }));
-        }
-        await user.click(screen.getByRole('link', { name: linkName }));
-        await fixture.whenStable();
-
-        expect(router.url).toBe(path);
+        expect(router.url).toBe(clickPath.path);
         expect(router.lastSuccessfulNavigation?.extras.state).toEqual(linkState);
       },
     );
+
+    it.each(clickPaths)(
+      'should replace the history entry when $linkName is clicked on its own path in $mode mode',
+      async (clickPath) => {
+        const router = await clickLinkFrom(`${clickPath.path}?tab=other`, clickPath);
+
+        expect(router.url).toBe(clickPath.path);
+        expect(router.lastSuccessfulNavigation?.extras.replaceUrl).toBe(true);
+      },
+    );
+
+    it.each(clickPaths)(
+      'should add a history entry when $linkName is clicked from another path in $mode mode',
+      async (clickPath) => {
+        const router = await clickLinkFrom(OTHER_PAGE, clickPath);
+
+        expect(router.url).toBe(clickPath.path);
+        expect(router.lastSuccessfulNavigation?.extras.replaceUrl).toBe(false);
+      },
+    );
+
+    it('should add a history entry when a link without replaceUrlWhenPathActive is clicked on its own path', async () => {
+      const router = await clickLinkFrom('/header-link-2?tab=other', {
+        width: DESKTOP_WIDTH,
+        linkName: 'TopLevelLinkWithoutOptions',
+        path: '/header-link-2',
+      });
+
+      expect(router.url).toBe('/header-link-2');
+      expect(router.lastSuccessfulNavigation?.extras.replaceUrl).toBe(false);
+    });
   });
 
   it('should mark a top-level exact link as active only on its exact route', async () => {

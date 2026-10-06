@@ -225,6 +225,19 @@ test.describe('differential expression', () => {
     await expectPinsAndSexFilter(page, proteinPins);
   });
 
+  test('back after switching views from the header dropdown leaves the comparison tool', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await navigateToComparison(page, CT_PAGE, true, 'link');
+    await navigateToProteinViaHeaderNav(page, false);
+    await expectCategoriesParams(page, proteinCategories);
+
+    await page.goBack();
+
+    await expect.poll(() => new URL(page.url()).pathname).toBe('/');
+  });
+
   test('header dropdown navigates to the Protein view after leaving the RNA view', async ({
     page,
   }) => {

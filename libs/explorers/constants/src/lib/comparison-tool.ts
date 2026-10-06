@@ -1,4 +1,4 @@
-import { SortOrder } from '@sagebionetworks/explorers/models';
+import { NavigationLink, SortOrder } from '@sagebionetworks/explorers/models';
 
 export const RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS = new Set([
   'pinned',
@@ -15,6 +15,18 @@ export const RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS = new Set([
  */
 export const KEEP_COMPARISON_TOOL_STATE_KEY = 'keepComparisonToolState';
 export const KEEP_COMPARISON_TOOL_STATE = { [KEEP_COMPARISON_TOOL_STATE_KEY]: true };
+
+/**
+ * Options for a header link into a comparison tool. Clicked on the open tool, the link then acts
+ * like a dropdown change: it keeps the tool's state and adds no history entry.
+ */
+export const COMPARISON_TOOL_HEADER_LINK_OPTIONS: Pick<
+  NavigationLink,
+  'state' | 'replaceUrlWhenPathActive'
+> = {
+  state: KEEP_COMPARISON_TOOL_STATE,
+  replaceUrlWhenPathActive: true,
+};
 
 // The order the comparison tool gives a sort field that has none.
 export const DEFAULT_SORT_ORDER: SortOrder = 1;

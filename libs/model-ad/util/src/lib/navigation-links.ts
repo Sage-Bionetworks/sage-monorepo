@@ -1,4 +1,4 @@
-import { KEEP_COMPARISON_TOOL_STATE } from '@sagebionetworks/explorers/constants';
+import { COMPARISON_TOOL_HEADER_LINK_OPTIONS } from '@sagebionetworks/explorers/constants';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 import {
   DIFFERENTIAL_EXPRESSION_CATEGORIES,
@@ -18,12 +18,12 @@ export const headerLinks: NavigationLink[] = [
       {
         label: 'Mouse Models',
         routerLink: [ROUTE_PATHS.MOUSE_MODEL_OVERVIEW],
-        state: KEEP_COMPARISON_TOOL_STATE,
+        ...COMPARISON_TOOL_HEADER_LINK_OPTIONS,
       },
       {
         label: 'Marmoset Models',
         routerLink: [ROUTE_PATHS.MARMOSET_MODEL_OVERVIEW],
-        state: KEEP_COMPARISON_TOOL_STATE,
+        ...COMPARISON_TOOL_HEADER_LINK_OPTIONS,
       },
     ],
   },
@@ -38,13 +38,13 @@ export const headerLinks: NavigationLink[] = [
             label: 'RNA - Differential Expression',
             routerLink: [ROUTE_PATHS.DIFFERENTIAL_EXPRESSION],
             queryParams: { categories: DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA },
-            state: KEEP_COMPARISON_TOOL_STATE,
+            ...COMPARISON_TOOL_HEADER_LINK_OPTIONS,
           },
           {
             label: 'Protein - Differential Expression',
             routerLink: [ROUTE_PATHS.DIFFERENTIAL_EXPRESSION],
             queryParams: { categories: DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN },
-            state: KEEP_COMPARISON_TOOL_STATE,
+            ...COMPARISON_TOOL_HEADER_LINK_OPTIONS,
           },
         ],
       },
@@ -53,7 +53,7 @@ export const headerLinks: NavigationLink[] = [
   {
     label: 'Disease Correlation',
     routerLink: [ROUTE_PATHS.DISEASE_CORRELATION],
-    state: KEEP_COMPARISON_TOOL_STATE,
+    ...COMPARISON_TOOL_HEADER_LINK_OPTIONS,
   },
 ];
 

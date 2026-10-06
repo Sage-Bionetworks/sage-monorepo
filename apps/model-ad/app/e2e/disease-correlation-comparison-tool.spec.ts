@@ -145,6 +145,18 @@ test.describe('disease correlation', () => {
     await expectFilterChiclets(page, selectedFilters);
   });
 
+  test('back after clicking the header link on the comparison tool leaves the comparison tool', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await navigateToComparison(page, CT_PAGE, true, 'link');
+    await navigateToComparison(page, CT_PAGE, false, 'link');
+
+    await page.goBack();
+
+    await expect.poll(() => new URL(page.url()).pathname).toBe('/');
+  });
+
   test('categories are added to URL on load', async ({ page }) => {
     const configs = await fetchComparisonToolConfig(page, CT_PAGE);
     const defaultCategories = configs[0]?.dropdowns;

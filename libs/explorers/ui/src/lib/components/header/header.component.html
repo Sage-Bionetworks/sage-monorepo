@@ -56,6 +56,7 @@
                                     [routerLink]="grandchild.routerLink"
                                     [queryParams]="grandchild.queryParams"
                                     [state]="grandchild.state"
+                                    [replaceUrl]="shouldReplaceUrl(grandchild)"
                                     [class.active]="isLinkActive(grandchild)"
                                     (click)="toggleNav()"
                                   >
@@ -71,6 +72,7 @@
                               [routerLink]="child.routerLink"
                               [queryParams]="child.queryParams"
                               [state]="child.state"
+                              [replaceUrl]="shouldReplaceUrl(child)"
                               [class.active]="isLinkActive(child)"
                               (click)="toggleNav()"
                             >
@@ -85,6 +87,7 @@
                       [routerLink]="link.routerLink"
                       [queryParams]="link.queryParams"
                       [state]="link.state"
+                      [replaceUrl]="shouldReplaceUrl(link)"
                       [class.active]="isLinkActive(link)"
                       explorersWidestLineWidth
                       (click)="toggleNav()"
