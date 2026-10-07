@@ -1616,7 +1616,9 @@ describe('ComparisonToolService', () => {
   });
 
   describe('URL synchronization', () => {
+    // The URL is first written once a pinned fetch lands, as the CT components' initial one does.
     const flushInitialUrlSync = () => {
+      service.fetchPinned(of({ data: [], totalCount: 0 }));
       tick();
     };
 
