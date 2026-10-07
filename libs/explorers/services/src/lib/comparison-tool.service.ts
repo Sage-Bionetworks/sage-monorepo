@@ -819,11 +819,17 @@ export class ComparisonToolService<T> {
     );
   }
 
+  /**
+   * Disabled while table data loads, since a pin edit builds on the pinned rows on screen, and those
+   * may still be another view's rows.
+   */
   isPinToggleEnabled(row: T): boolean {
+    if (this.isLoadingTableData()) return false;
     return this.isPinned(this.rowId(row)) || this.canPin(row);
   }
 
   togglePin(row: T) {
+    if (this.isLoadingTableData()) return;
     const id = this.rowId(row);
     if (this.isPinned(id)) {
       this.unpinItem(id);

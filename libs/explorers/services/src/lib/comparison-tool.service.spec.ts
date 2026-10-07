@@ -2748,6 +2748,28 @@ describe('ComparisonToolService', () => {
       expect(service.isLoadingTableData()).toBe(false);
     });
 
+    it('should disable the pin toggle while table data loads and enable it once the data lands', () => {
+      connectService();
+      const pending$ = new Subject<FetchResult>();
+      service.fetchUnpinned(pending$);
+      expect(service.isPinToggleEnabled(row('id1'))).toBe(false);
+
+      pending$.next({ data: [], totalCount: 0 });
+      pending$.complete();
+      expect(service.isPinToggleEnabled(row('id1'))).toBe(true);
+    });
+
+    it('should not change the pins on a pin toggle while table data loads', () => {
+      connectService();
+      service.setPinnedItems(['id1']);
+      service.fetchUnpinned(new Subject<FetchResult>());
+
+      service.togglePin(row('id1'));
+      service.togglePin(row('id2'));
+
+      expect(service.pinnedItems()).toEqual(['id1']);
+    });
+
     it('should set isLoading to true when an unpinned fetch is in flight', () => {
       connectService();
       service.fetchUnpinned(new Subject<FetchResult>());

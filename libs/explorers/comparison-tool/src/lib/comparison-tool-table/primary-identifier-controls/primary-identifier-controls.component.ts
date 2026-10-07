@@ -1,5 +1,8 @@
 import { Component, HostBinding, computed, inject, input } from '@angular/core';
-import { getPinToggleTooltip } from '@sagebionetworks/explorers/constants';
+import {
+  getPinToggleTooltip,
+  TABLE_DATA_LOADING_MESSAGE,
+} from '@sagebionetworks/explorers/constants';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
@@ -38,6 +41,10 @@ export class PrimaryIdentifierControlsComponent {
   });
 
   pinTooltip = computed(() => {
+    if (this.comparisonToolService.isLoadingTableData()) {
+      return TABLE_DATA_LOADING_MESSAGE;
+    }
+
     const isPinDisabled = this.isPinDisabled();
     const isPinned = this.isPinned();
 
