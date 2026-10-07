@@ -72,9 +72,9 @@ export interface ComparisonToolFetchResult<T> {
   hasRowsForPrebudgetedParents?: boolean | null;
 }
 
-/** A pinned fetch result tagged with the parent id data key that was active when it was requested. */
+/** A pinned fetch result tagged with the view identity that was active when it was requested. */
 interface PinnedFetchResult<T> extends ComparisonToolFetchResult<T> {
-  parentIdDataKey: string | null;
+  identity: ViewIdentity;
 }
 
 /**
@@ -167,7 +167,14 @@ export class ComparisonToolService<T> {
     searchTerm: null,
     filters: [],
   });
+  // The view the pinned items cache was recorded under. Only a pin write changes it, so after a view
+  // switch it stays on the view the pins were made in, even once the new view's pinned rows land.
+  // That is what tells `pinnedItemsQuery` to send the pinned parents in place of the cached ids.
   private readonly pinnedItemsIdentitySignal = signal<ViewIdentity | null>(null);
+  // The view the pinned rows on screen were fetched under, set when a pinned fetch lands. Null until
+  // then. Unlike the cache's identity, it moves to each new view once that view's pinned rows land,
+  // so it tells whether `visiblePinIds` are ids of the active view.
+  private readonly pinnedDataIdentitySignal = signal<ViewIdentity | null>(null);
   // Compared as a set: the same parents in any order, with or without duplicates, are unchanged.
   private readonly pinnedParentsSignal = signal<string[]>([], {
     equal: (a, b) => xor(a, b).length === 0,
@@ -204,7 +211,12 @@ export class ComparisonToolService<T> {
   private initialSelection: string[] | undefined;
 
   // URL Sync State
+  // What the URL holds as far as this service knows, to tell its own URL changes from external ones.
   private lastSyncedUrlParamsState: ComparisonToolUrlParams | null = null;
+  // The latest state built while the pinned rows on screen matched the active view. After a switch to
+  // a view with different id keys, the URL keeps it until that view's pinned rows land (see
+  // `resolveUrlSyncState`).
+  private lastConsistentUrlState: ComparisonToolUrlParams | null = null;
 
   // Public Readonly Signals
   readonly viewConfig = this.viewConfigSignal.asReadonly();
@@ -407,7 +419,7 @@ export class ComparisonToolService<T> {
     this.subscribeToFetchStream(
       this.pinnedFetch$,
       this.pendingPinnedFetchesSignal,
-      ({ data, parentIdDataKey }) => this.applyPinnedData(data as T[], parentIdDataKey),
+      ({ data, identity }) => this.applyPinnedData(data as T[], identity),
       () => this.applyPinnedFetchFailure(),
     );
 
@@ -981,13 +993,14 @@ export class ComparisonToolService<T> {
    * rewrite when the new id list equals the current pins -- which it does on the second pass -- so
    * the cycle stops.
    */
-  private applyPinnedData(pinnedData: T[], parentIdDataKey: string | null) {
+  private applyPinnedData(pinnedData: T[], identity: ViewIdentity) {
     this.pinnedFetchFailedSignal.set(false);
+    const { parentIdDataKey } = identity;
     const pinLimit = this.pinLimit();
     const cappedData = parentIdDataKey
       ? this.keepRowsOfFirstParents(pinnedData, parentIdDataKey, pinLimit)
       : pinnedData.slice(0, pinLimit);
-    this.setPinnedData(cappedData, parentIdDataKey);
+    this.setPinnedData(cappedData, identity);
     if (cappedData.length < pinnedData.length) {
       this.showPinLimitWarning(cappedData.length);
       this.setPinnedItems(this.extractRowIds(cappedData));
@@ -1005,6 +1018,11 @@ export class ComparisonToolService<T> {
    * Clears the pinned rows but keeps the pinned parents and the pinned items cache. After a view
    * switch the next pinned fetch is keyed by those parents, so emptying them would make every later
    * fetch in this view ask for no pins, even once requests succeed again.
+   *
+   * The pinned rows' view identity is kept too. Within one view, the URL then follows the emptied
+   * rows and drops its pins. Right after a switch to a view with different id keys, the identity is
+   * still the previous view's, so the URL keeps the pins it held before the switch (see
+   * `resolveUrlSyncState`).
    */
   private applyPinnedFetchFailure() {
     this.pinnedDataSignal.set([]);
@@ -1022,11 +1040,13 @@ export class ComparisonToolService<T> {
     this.hasCompletedUnpinnedFetchSignal.set(true);
   }
 
-  private setPinnedData(pinnedData: T[], parentIdDataKey: string | null) {
+  private setPinnedData(pinnedData: T[], identity: ViewIdentity) {
+    const { parentIdDataKey } = identity;
     this.pinnedDataSignal.set(pinnedData);
     this.pinnedParentsSignal.set(
       parentIdDataKey ? this.extractUniqueDataKeyValues(pinnedData, parentIdDataKey) : [],
     );
+    this.pinnedDataIdentitySignal.set(identity);
   }
 
   // Row selection
@@ -1112,20 +1132,20 @@ export class ComparisonToolService<T> {
    * Fetches pinned rows from the given result observable. Independent of the unpinned stream, so a
    * new pinned fetch does not cancel an in-flight unpinned fetch (and vice versa).
    *
-   * The parent key is snapshotted now, when the request is made, and travels with its result, so
-   * `pinnedParents` is always read with the key the rows were fetched under. `switchMap` only
-   * applies the latest request's response, and that request was made under the latest config, so
-   * the snapshot and the rows always agree.
+   * The view identity is snapshotted now, when the request is made, and travels with its result, so
+   * `pinnedParents` is always read with the parent key the rows were fetched under. `switchMap`
+   * only applies the latest request's response, and that request was made under the latest config,
+   * so the snapshot and the rows always agree.
    *
    * With no pins to ask for, the request is skipped, but an empty result still goes through the
    * stream rather than returning early. That way it supersedes any pinned fetch still in flight and
    * clears a previous failure.
    */
   fetchPinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
-    const parentIdDataKey = this.parentIdDataKey();
+    const identity = this.activeIdentity();
     const request$: Observable<ComparisonToolFetchResult<unknown>> =
       this.pinnedItemsQuery().items.length > 0 ? source$ : of({ data: [], totalCount: 0 });
-    this.lastPinnedSource$ = request$.pipe(map((result) => ({ ...result, parentIdDataKey })));
+    this.lastPinnedSource$ = request$.pipe(map((result) => ({ ...result, identity })));
     this.startFetch(this.pendingPinnedFetchesSignal);
     this.pinnedFetch$.next(this.lastPinnedSource$);
   }
@@ -1524,17 +1544,36 @@ export class ComparisonToolService<T> {
     };
   }
 
-  private resolveUrlSyncState(): ComparisonToolUrlParams {
-    return this.serializeSyncState({
+  /**
+   * The state the URL should hold, or null to leave the URL as it is.
+   *
+   * The URL records pins by the row ids on screen, and those are only ids of the active view once
+   * its pinned rows land. Until then, such as right after a switch from a parent view to a child
+   * view (e.g. RNA to Protein), the rows on screen are the previous view's, and a URL pairing them
+   * with the new view would match no pins on reload. So while the rows on screen were fetched under
+   * another view, the URL keeps the last state written while they matched, and catches up when the
+   * rows land. Before any pinned rows have landed, there is no such state, and the URL is left as
+   * loaded.
+   */
+  private resolveUrlSyncState(): ComparisonToolUrlParams | null {
+    if (!isEqual(this.pinnedDataIdentitySignal(), this.activeIdentity())) {
+      return this.lastConsistentUrlState;
+    }
+
+    this.lastConsistentUrlState = this.serializeSyncState({
       dropdownSelection: this.dropdownSelection(),
       visiblePinIds: this.visiblePinIds(),
       multiSortMeta: this.multiSortMeta(),
       selectedFilters: this.selectedFilters(),
     });
+    return this.lastConsistentUrlState;
   }
 
   private syncCurrentStateToUrl(): void {
-    this.syncStateToUrl(this.resolveUrlSyncState());
+    const state = this.resolveUrlSyncState();
+    if (state !== null) {
+      this.syncStateToUrl(state);
+    }
   }
 
   private extractRowIds(rows: T[]): string[] {
@@ -1595,7 +1634,10 @@ export class ComparisonToolService<T> {
   }
 
   private updateSyncedStateCache(): void {
-    this.lastSyncedUrlParamsState = this.resolveUrlSyncState();
+    const state = this.resolveUrlSyncState();
+    if (state !== null) {
+      this.lastSyncedUrlParamsState = state;
+    }
   }
 
   /**
