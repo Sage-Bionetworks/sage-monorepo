@@ -436,18 +436,7 @@ export class ComparisonToolService<T> {
         return;
       }
 
-      const dropdownSelection = this.dropdownSelection();
-      const visiblePinIds = this.visiblePinIds();
-      const multiSortMeta = this.multiSortMeta();
-      const selectedFilters = this.selectedFilters();
-
-      const state = this.serializeSyncState({
-        dropdownSelection,
-        visiblePinIds,
-        multiSortMeta,
-        selectedFilters,
-      });
-      this.syncStateToUrl(state);
+      this.syncCurrentStateToUrl();
     });
   }
 
@@ -1535,15 +1524,17 @@ export class ComparisonToolService<T> {
     };
   }
 
+  private resolveUrlSyncState(): ComparisonToolUrlParams {
+    return this.serializeSyncState({
+      dropdownSelection: this.dropdownSelection(),
+      visiblePinIds: this.visiblePinIds(),
+      multiSortMeta: this.multiSortMeta(),
+      selectedFilters: this.selectedFilters(),
+    });
+  }
+
   private syncCurrentStateToUrl(): void {
-    this.syncStateToUrl(
-      this.serializeSyncState({
-        dropdownSelection: this.dropdownSelection(),
-        visiblePinIds: this.visiblePinIds(),
-        multiSortMeta: this.multiSortMeta(),
-        selectedFilters: this.selectedFilters(),
-      }),
-    );
+    this.syncStateToUrl(this.resolveUrlSyncState());
   }
 
   private extractRowIds(rows: T[]): string[] {
@@ -1604,12 +1595,7 @@ export class ComparisonToolService<T> {
   }
 
   private updateSyncedStateCache(): void {
-    this.lastSyncedUrlParamsState = this.serializeSyncState({
-      visiblePinIds: this.visiblePinIds(),
-      dropdownSelection: this.dropdownSelection(),
-      multiSortMeta: this.multiSortMeta(),
-      selectedFilters: this.selectedFilters(),
-    });
+    this.lastSyncedUrlParamsState = this.resolveUrlSyncState();
   }
 
   /**
