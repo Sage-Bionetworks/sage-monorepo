@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, OnInit } from '@angular/core';
-import { IsActiveMatchOptions, Router, RouterModule } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { IsActiveMatchOptions, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 import { WidestLineWidthDirective } from '@sagebionetworks/explorers/util';
 import { parseCommaSeparatedQueryParam } from '@sagebionetworks/shared/util';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
+import { filter } from 'rxjs';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 const PATH_MATCH_OPTIONS: IsActiveMatchOptions = {
@@ -39,6 +41,17 @@ export class HeaderComponent implements OnInit {
   dropdownMenuItems: Map<string, MenuItem[]> = new Map();
 
   private router = inject(Router);
+
+  constructor() {
+    // Dropdown menu items are plain objects, so each item's replaceUrl is fixed when it is built and
+    // has to be rebuilt once the active route changes
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.refreshNavItems());
+  }
 
   ngOnInit() {
     this.onResize();
@@ -139,6 +152,11 @@ export class HeaderComponent implements OnInit {
     return linkValues.every((value, index) => value === urlValues[index]);
   }
 
+  shouldReplaceUrl(link: NavigationLink): boolean {
+    if (!link.replaceUrlWhenPathActive || !link.routerLink) return false;
+    return this.router.isActive(link.routerLink.join('/'), this.resolvePathMatchOptions(link));
+  }
+
   // Query params are matched manually via urlValuesStartWith, so path matching always ignores them
   private resolvePathMatchOptions(link: NavigationLink): IsActiveMatchOptions {
     const activeOptions = link.activeOptions;
@@ -184,6 +202,8 @@ export class HeaderComponent implements OnInit {
               label: grandchild.label,
               routerLink: grandchild.routerLink,
               queryParams: grandchild.queryParams,
+              state: grandchild.state,
+              replaceUrl: this.shouldReplaceUrl(grandchild),
               styleClass: 'header-dropdown-subheader-child',
             })),
           });
@@ -194,6 +214,8 @@ export class HeaderComponent implements OnInit {
           label: child.label,
           routerLink: child.routerLink,
           queryParams: child.queryParams,
+          state: child.state,
+          replaceUrl: this.shouldReplaceUrl(child),
         });
       }
     }

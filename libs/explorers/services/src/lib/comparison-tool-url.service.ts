@@ -1,6 +1,7 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { KEEP_COMPARISON_TOOL_STATE_KEY } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolUrlParams } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { Observable } from 'rxjs';
@@ -29,6 +30,20 @@ export class ComparisonToolUrlService {
     shareReplay({ bufferSize: 1, refCount: true }),
     takeUntilDestroyed(this.destroyRef),
   );
+
+  currentParams(): ComparisonToolUrlParams {
+    return this.deserialize(this.route.snapshot.queryParams);
+  }
+
+  /**
+   * Whether the navigation that produced the current URL was marked with KEEP_COMPARISON_TOOL_STATE.
+   * Re-entry runs during route activation, before the router records the navigation as the last
+   * successful one, while the debounced on-tool params run after it ends, so both are checked.
+   */
+  isKeepStateNavigation(): boolean {
+    const navigation = this.router.currentNavigation() ?? this.router.lastSuccessfulNavigation;
+    return navigation?.extras.state?.[KEEP_COMPARISON_TOOL_STATE_KEY] === true;
+  }
 
   syncToUrl(state: ComparisonToolUrlParams): void {
     const currentState = this.deserialize(this.route.snapshot.queryParams);
