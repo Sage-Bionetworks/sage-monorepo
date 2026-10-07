@@ -660,6 +660,138 @@ describe('ComparisonToolService', () => {
       });
     });
 
+    describe('URL while the pinned rows on screen are from another view', () => {
+      const PINNED_CHILD_ROW = childRow('child1a', 'parent1');
+      const PARENT_VIEW_URL = { categories: PARENT_VIEW, pinnedItems: ['parent1'] };
+      const CHILD_VIEW_URL = { categories: CHILD_VIEW, pinnedItems: ['child1a'] };
+
+      const setUrl = (queryParams: Record<string, string>) => {
+        (mockActivatedRoute.snapshot as { queryParams: Record<string, string> }).queryParams = {
+          ...queryParams,
+        };
+      };
+      const currentUrlParams = () =>
+        deserializeComparisonToolUrlParams(mockActivatedRoute.snapshot?.queryParams ?? {});
+      const currentUrl = () => {
+        const { categories, pinnedItems } = currentUrlParams();
+        return { categories, pinnedItems };
+      };
+
+      const pinInParentViewAndSync = () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        tick();
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+      };
+
+      const switchToChildView = () => {
+        service.setDropdownSelection(CHILD_VIEW);
+        tick();
+      };
+
+      it('keeps the parent view URL after a switch to the child view until its pinned rows land', fakeAsync(() => {
+        pinInParentViewAndSync();
+
+        switchToChildView();
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+
+        landPinned(PINNED_CHILD_ROW);
+        tick();
+        expect(currentUrl()).toEqual(CHILD_VIEW_URL);
+      }));
+
+      it('keeps the child view URL after a switch to the parent view until its pinned rows land', fakeAsync(() => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        service.setPinnedItems(['child1a']);
+        landPinned(PINNED_CHILD_ROW);
+        tick();
+        expect(currentUrl()).toEqual(CHILD_VIEW_URL);
+
+        service.setDropdownSelection(PARENT_VIEW);
+        tick();
+        expect(currentUrl()).toEqual(CHILD_VIEW_URL);
+
+        landPinned(parentRow('parent1'));
+        tick();
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+      }));
+
+      it('writes a switch between views with the same id keys right away', fakeAsync(() => {
+        pinInParentViewAndSync();
+
+        service.setDropdownSelection(OTHER_PARENT_VIEW);
+        tick();
+
+        expect(currentUrl()).toEqual({ categories: OTHER_PARENT_VIEW, pinnedItems: ['parent1'] });
+      }));
+
+      it('writes a sort made before the child view pinned rows land once they land', fakeAsync(() => {
+        const sort = [{ field: 'name', order: -1 }];
+        pinInParentViewAndSync();
+        switchToChildView();
+
+        service.setSort(sort);
+        tick();
+        expect(currentUrlParams().sortFields).toBeUndefined();
+
+        landPinned(PINNED_CHILD_ROW);
+        tick();
+        expect(currentUrlParams().sortFields).toEqual(['name']);
+      }));
+
+      it('writes the parent view URL back after a link to the child view that keeps comparison tool state', fakeAsync(() => {
+        pinInParentViewAndSync();
+
+        setUrl({ categories: 'Child,A' });
+        lastSuccessfulNavigation = keepStateNavigation;
+        paramsSubject.next({ categories: CHILD_VIEW });
+        tick();
+        expect(service.dropdownSelection()).toEqual(CHILD_VIEW);
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+
+        landPinned(PINNED_CHILD_ROW);
+        tick();
+        expect(currentUrl()).toEqual(CHILD_VIEW_URL);
+      }));
+
+      it('keeps the parent view URL after a failed pinned fetch in the child view until a retry succeeds', fakeAsync(() => {
+        const { source$ } = failsOnce(() => of({ data: [PINNED_CHILD_ROW], totalCount: 1 }));
+        pinInParentViewAndSync();
+        switchToChildView();
+
+        service.fetchPinned(source$);
+        tick();
+        expect(service.pinnedFetchFailed()).toBe(true);
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+
+        service.retryPinnedFetch();
+        tick();
+        expect(currentUrl()).toEqual(CHILD_VIEW_URL);
+      }));
+
+      it('drops the URL pins after a failed pinned fetch in the same view', fakeAsync(() => {
+        pinInParentViewAndSync();
+
+        service.fetchPinned(failedRequest());
+        tick();
+
+        expect(currentUrl()).toEqual({ categories: PARENT_VIEW, pinnedItems: undefined });
+      }));
+
+      it('keeps the URL pins on first load until the pinned rows land', fakeAsync(() => {
+        setUrl({ categories: 'Parent,A', pinned: 'parent1' });
+        connectService(viewConfigs, {
+          initialParams: { categories: PARENT_VIEW, pinnedItems: ['parent1'] },
+        });
+        tick();
+        expect(mockRouter.navigate).not.toHaveBeenCalled();
+
+        landPinned(parentRow('parent1'));
+        tick();
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+      }));
+    });
+
     describe('pin limit by parent', () => {
       const childrenOf = (parentNumber: number, count: number): Row[] =>
         Array.from({ length: count }, (_, index) =>
