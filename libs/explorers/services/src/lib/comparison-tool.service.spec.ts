@@ -2770,6 +2770,17 @@ describe('ComparisonToolService', () => {
       expect(service.pinnedItems()).toEqual(['id1']);
     });
 
+    it('should not change the pins on a pin or unpin while table data loads', () => {
+      connectService();
+      service.setPinnedItems(['id1']);
+      service.fetchUnpinned(new Subject<FetchResult>());
+
+      service.pinItem(row('id2'));
+      service.unpinItem('id1');
+
+      expect(service.pinnedItems()).toEqual(['id1']);
+    });
+
     it('should set isLoading to true when an unpinned fetch is in flight', () => {
       connectService();
       service.fetchUnpinned(new Subject<FetchResult>());

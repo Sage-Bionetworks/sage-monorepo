@@ -829,7 +829,6 @@ export class ComparisonToolService<T> {
   }
 
   togglePin(row: T) {
-    if (this.isLoadingTableData()) return;
     const id = this.rowId(row);
     if (this.isPinned(id)) {
       this.unpinItem(id);
@@ -838,15 +837,18 @@ export class ComparisonToolService<T> {
     this.pinItem(row);
   }
 
+  // Ignored while table data loads, for the reason given on `isPinToggleEnabled`.
   pinItem(row: T) {
-    if (!this.canPin(row)) return;
+    if (this.isLoadingTableData() || !this.canPin(row)) return;
     const id = this.rowId(row);
     if (!this.isPinned(id)) {
       this.setPinnedItems([...this.visiblePinIds(), id]);
     }
   }
 
+  // Ignored while table data loads, for the reason given on `isPinToggleEnabled`.
   unpinItem(id: string) {
+    if (this.isLoadingTableData()) return;
     this.setPinnedItems(this.visiblePinIds().filter((item) => item !== id));
   }
 
@@ -1137,6 +1139,9 @@ export class ComparisonToolService<T> {
   /**
    * Fetches pinned rows from the given result observable. Independent of the unpinned stream, so a
    * new pinned fetch does not cancel an in-flight unpinned fetch (and vice versa).
+   *
+   * A CT that syncs its URL must call this once it connects, even with no pins, since the URL is
+   * not written until a pinned result lands (see `resolveUrlSyncState`).
    *
    * The view identity is snapshotted now, when the request is made, and travels with its result, so
    * `pinnedParents` is always read with the parent key the rows were fetched under. `switchMap`
