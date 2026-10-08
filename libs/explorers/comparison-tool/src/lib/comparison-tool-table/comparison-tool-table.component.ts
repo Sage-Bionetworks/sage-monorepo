@@ -15,6 +15,7 @@ import {
   getPinnedFetchFailedMessage,
   getPinnedResultsControlsCopy,
   getPinnedResultsLabels,
+  getUnpinnedFetchFailedMessage,
   getViewNounLabel,
   TABLE_DATA_LOADING_MESSAGE,
 } from '@sagebionetworks/explorers/constants';
@@ -73,7 +74,9 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
   isLoadingTableData = this.comparisonToolService.isLoadingTableData;
   isLoadingPinnedData = this.comparisonToolService.isLoadingPinnedData;
+  isLoadingUnpinnedData = this.comparisonToolService.isLoadingUnpinnedData;
   pinnedFetchFailed = this.comparisonToolService.pinnedFetchFailed;
+  unpinnedFetchFailed = this.comparisonToolService.unpinnedFetchFailed;
   unpinnedRowCount = this.comparisonToolService.unpinnedRowCount;
   viewConfig = this.comparisonToolService.viewConfig;
 
@@ -97,6 +100,10 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   hasPinnedSection = computed(() => this.pinnedRowCount() > 0 || this.pinnedFetchFailed());
 
   pinnedFetchFailedMessage = computed(() => getPinnedFetchFailedMessage(this.nouns()));
+
+  unpinnedFetchFailedMessage = computed(() => getUnpinnedFetchFailedMessage(this.nouns()));
+
+  unpinnedRetryButtonLabel = computed(() => getViewNounLabel('Retry Loading', this.nouns()));
 
   unpinnedResultsLabel = computed(() =>
     getViewNounLabel(this.searchTerm() ? 'Matching' : 'Filtered', this.nouns()),
@@ -195,6 +202,10 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   retryPinnedFetch() {
     this.comparisonToolService.retryPinnedFetch();
+  }
+
+  retryUnpinnedFetch() {
+    this.comparisonToolService.retryUnpinnedFetch();
   }
 
   // Calculate widths for non-primary columns since primary columns have fixed widths in the design

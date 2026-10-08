@@ -94,5 +94,14 @@
     </div>
   }
 
-  <explorers-base-table [data]="unpinnedData()" [columnWidths]="columnWidths()" />
+  @if (unpinnedFetchFailed()) {
+    <explorers-comparison-tool-fetch-failed-bar
+      [message]="unpinnedFetchFailedMessage()"
+      [buttonLabel]="unpinnedRetryButtonLabel()"
+      [loading]="isLoadingUnpinnedData()"
+      (retry)="retryUnpinnedFetch()"
+    />
+  } @else {
+    <explorers-base-table [data]="unpinnedData()" [columnWidths]="columnWidths()" />
+  }
 </div>

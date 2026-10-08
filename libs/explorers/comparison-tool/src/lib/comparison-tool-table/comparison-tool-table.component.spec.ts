@@ -87,6 +87,7 @@ async function setup(
     configs?: ComparisonToolConfig[];
     pinnedItems?: string[];
     unpinnedData?: Record<string, unknown>[];
+    unpinnedFetchFails?: boolean;
     pinnedData?: Record<string, unknown>[];
     pinLimit?: number;
     pinnedFetchFails?: boolean;
@@ -445,6 +446,70 @@ describe('ComparisonToolTableComponent', () => {
 
       expect(screen.queryByRole('alert')).toBeNull();
       expect(screen.queryByRole('button', { name: retryButtonName })).toBeNull();
+    });
+  });
+
+  describe('unpinned fetch failure', () => {
+    const failedOptions = { unpinnedFetchFails: true };
+
+    it('should tell the user the rows could not be loaded', async () => {
+      await setup(failedOptions);
+
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'We encountered a problem loading the results.',
+      );
+      expect(screen.getByRole('button', { name: 'Retry Loading Results' })).toBeInTheDocument();
+    });
+
+    it('should name the view rows', async () => {
+      await setup({ ...failedOptions, configs: viewNounConfigs });
+
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'We encountered a problem loading the parents.',
+      );
+      expect(screen.getByRole('button', { name: 'Retry Loading Parents' })).toBeInTheDocument();
+    });
+
+    it('should show the failure message in place of the unpinned table', async () => {
+      const { component } = await setup(failedOptions);
+
+      expect(component.container.querySelectorAll('explorers-base-table')).toHaveLength(1);
+      expect(screen.queryByText('No results found...')).toBeNull();
+    });
+
+    it('should retry the unpinned fetch when Retry is clicked', async () => {
+      const { user } = await setup(failedOptions);
+      const retryUnpinnedFetchSpy = jest.spyOn(
+        TestBed.inject(ComparisonToolService),
+        'retryUnpinnedFetch',
+      );
+
+      await user.click(screen.getByRole('button', { name: 'Retry Loading Results' }));
+
+      expect(retryUnpinnedFetchSpy).toHaveBeenCalled();
+    });
+
+    it('should keep the pinned rows', async () => {
+      await setup({ ...failedOptions, ...pinnedOptions(mockComparisonToolData.slice(0, 1)) });
+
+      expect(screen.getByText('1 Pinned Result')).toBeInTheDocument();
+      expect(screen.getAllByRole('alert')).toHaveLength(1);
+    });
+
+    it('should show both failure messages when both fetches fail', async () => {
+      await setup({
+        ...failedOptions,
+        pinnedItems: mockComparisonToolData.slice(0, 1).map((row) => row['_id']),
+        pinnedFetchFails: true,
+      });
+
+      expect(screen.getAllByRole('alert')).toHaveLength(2);
+    });
+
+    it('should not show the failure message when the unpinned fetch succeeds', async () => {
+      await setup();
+
+      expect(screen.queryByRole('alert')).toBeNull();
     });
   });
 
