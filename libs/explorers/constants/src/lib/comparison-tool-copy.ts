@@ -110,7 +110,7 @@ export const getPinnedFetchFailedMessage = ({ viewNoun }: ComparisonToolNouns): 
   `We encountered a problem loading your pinned ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)}.`;
 
 export const getUnpinnedFetchFailedMessage = ({ viewNoun }: ComparisonToolNouns): string =>
-  `We encountered a problem loading the ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)}.`;
+  `We encountered a problem loading ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)}.`;
 
 export const getShareUrlTooltip = ({ viewNoun }: ComparisonToolNouns): string =>
   `Copy the URL to capture the table's current filtering, sorting, and pinned ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)}`;

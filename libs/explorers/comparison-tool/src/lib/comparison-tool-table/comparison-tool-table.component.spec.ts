@@ -456,7 +456,7 @@ describe('ComparisonToolTableComponent', () => {
       await setup(failedOptions);
 
       expect(screen.getByRole('alert')).toHaveTextContent(
-        'We encountered a problem loading the results.',
+        'We encountered a problem loading results.',
       );
       expect(screen.getByRole('button', { name: 'Retry Loading Results' })).toBeInTheDocument();
     });
@@ -465,7 +465,7 @@ describe('ComparisonToolTableComponent', () => {
       await setup({ ...failedOptions, configs: viewNounConfigs });
 
       expect(screen.getByRole('alert')).toHaveTextContent(
-        'We encountered a problem loading the parents.',
+        'We encountered a problem loading parents.',
       );
       expect(screen.getByRole('button', { name: 'Retry Loading Parents' })).toBeInTheDocument();
     });

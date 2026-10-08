@@ -258,19 +258,19 @@ describe('comparison tool copy', () => {
   describe('getUnpinnedFetchFailedMessage', () => {
     it('should fall back to results', () => {
       expect(getUnpinnedFetchFailedMessage(NO_NOUNS)).toBe(
-        'We encountered a problem loading the results.',
+        'We encountered a problem loading results.',
       );
     });
 
     it('should use the view noun', () => {
       expect(getUnpinnedFetchFailedMessage(VIEW_NOUNS)).toBe(
-        'We encountered a problem loading the parents.',
+        'We encountered a problem loading parents.',
       );
     });
 
     it('should name the view rows, not their parents, in a child view', () => {
       expect(getUnpinnedFetchFailedMessage(CHILD_NOUNS)).toBe(
-        'We encountered a problem loading the children.',
+        'We encountered a problem loading children.',
       );
     });
   });
