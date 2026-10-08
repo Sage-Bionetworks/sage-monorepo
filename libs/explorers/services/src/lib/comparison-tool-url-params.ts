@@ -10,8 +10,7 @@ import {
 } from '@sagebionetworks/shared/util';
 import { Logger } from '@sagebionetworks/web-shared/angular/logger';
 
-export const INVALID_SORT_ORDERS_MESSAGE =
-  'deserializeComparisonToolUrlParams: sort orders do not match sort fields';
+export const INVALID_SORT_ORDERS_MESSAGE = 'sort orders do not match sort fields';
 
 /**
  * Pass `logger` to report URL params the comparison tool never writes itself, such as sort orders

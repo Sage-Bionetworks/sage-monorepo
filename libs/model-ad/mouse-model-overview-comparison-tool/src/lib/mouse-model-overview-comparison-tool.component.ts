@@ -37,7 +37,9 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
   private readonly comparisonToolService = inject(MouseModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource(
+    'MouseModelOverviewComparisonToolComponent',
+  );
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -46,7 +48,7 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
     .getComparisonToolConfig(ComparisonToolPage.MouseModelOverview)
     .pipe(
       catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', error);
+        this.logger.error('Error retrieving comparison tool config', { error });
         return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true }),
@@ -146,7 +148,7 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log('MouseModelOverviewComparisonToolComponent: unpinned query', { ...query });
+    this.logger.log(`unpinned query ${JSON.stringify(query)}`);
 
     this.comparisonToolService.fetchUnpinned(
       this.mouseModelOverviewService.getMouseModelOverviews(query).pipe(
@@ -168,7 +170,7 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
       sortOrders,
     };
 
-    this.logger.log('MouseModelOverviewComparisonToolComponent: pinned query', { ...query });
+    this.logger.log(`pinned query ${JSON.stringify(query)}`);
 
     this.comparisonToolService.fetchPinned(
       this.mouseModelOverviewService

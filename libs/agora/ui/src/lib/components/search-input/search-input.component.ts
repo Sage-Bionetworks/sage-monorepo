@@ -15,7 +15,7 @@ import { Observable, tap } from 'rxjs';
   styleUrls: ['./search-input.component.scss'],
 })
 export class SearchInputComponent {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('SearchInputComponent');
 
   router = inject(Router);
   geneService = inject(GeneService);
@@ -55,7 +55,7 @@ export class SearchInputComponent {
   }
 
   getSearchResults = (query: string): Observable<SearchResult[]> => {
-    this.logger.log(`SearchInputComponent: Searching for "${query}"`);
+    this.logger.log(`Searching for "${query}"`);
 
     return this.geneService.searchGeneEnhanced(query).pipe(
       tap((results) => {

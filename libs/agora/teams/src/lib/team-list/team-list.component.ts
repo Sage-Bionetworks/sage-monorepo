@@ -13,7 +13,7 @@ import { TeamCardComponent } from '../team-card/team-card.component';
 })
 export class TeamListComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('TeamListComponent');
   private readonly teamService = inject(TeamService);
 
   teams = input<Team[]>([]);
@@ -26,7 +26,7 @@ export class TeamListComponent {
       teams.forEach((team) => {
         (team.members ?? []).forEach((member: TeamMember) => {
           const name = member.name.toLowerCase().replace(/[- ]/g, '-');
-          this.logger.log(`TeamListComponent: Loading image for ${name}`);
+          this.logger.log(`Loading image for ${name}`);
 
           this.getTeamMemberImageUrl(name)
             .pipe(takeUntilDestroyed(this.destroyRef))

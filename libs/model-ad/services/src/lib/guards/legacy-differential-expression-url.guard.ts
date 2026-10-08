@@ -2,5 +2,6 @@ import { createLegacyComparisonToolUrlGuard } from '@sagebionetworks/explorers/s
 import { legacyDifferentialExpressionUrlRedirect } from './legacy-differential-expression-url.redirect';
 
 export const legacyDifferentialExpressionUrlGuard = createLegacyComparisonToolUrlGuard(
+  'legacyDifferentialExpressionUrlGuard',
   legacyDifferentialExpressionUrlRedirect,
 );

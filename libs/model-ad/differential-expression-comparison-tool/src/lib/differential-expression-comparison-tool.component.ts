@@ -73,7 +73,9 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
   private readonly proteomicsService = inject(ProteomicsService);
   private readonly comparisonToolService = inject(DifferentialExpressionComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource(
+    'DifferentialExpressionComparisonToolComponent',
+  );
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -86,7 +88,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     .getComparisonToolConfig(ComparisonToolPage.DifferentialExpression)
     .pipe(
       catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', error);
+        this.logger.error('Error retrieving comparison tool config', { error });
         return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true }),
@@ -269,7 +271,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       prebudgetedParentIds: this.comparisonToolService.prebudgetedParentIdsForUnpinnedFetch(),
     });
 
-    this.logger.log('DifferentialExpressionComparisonToolComponent: unpinned query', { ...query });
+    this.logger.log(`unpinned query ${JSON.stringify(query)}`);
 
     const mainCategory = currentQuery.categories[0];
     const page$ = this.fetchDifferentialExpressionPage(mainCategory, query);
@@ -303,7 +305,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       sortOrders,
     };
 
-    this.logger.log('DifferentialExpressionComparisonToolComponent: pinned query', { ...query });
+    this.logger.log(`pinned query ${JSON.stringify(query)}`);
 
     const page$ = this.fetchDifferentialExpressionPage(mainCategory, query, {
       context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
@@ -318,12 +320,9 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       page$.pipe(
         map(({ rows, page }: DifferentialExpressionPage) => {
           if (page.totalElements > rows.length) {
-            this.logger.error(
-              'DifferentialExpressionComparisonToolComponent: pinned fetch truncated',
-              new Error(
-                `${mainCategory}: ${page.totalElements} matching rows, ${rows.length} returned`,
-              ),
-            );
+            this.logger.error('pinned fetch truncated', {
+              data: { mainCategory, matchingRows: page.totalElements, returnedRows: rows.length },
+            });
           }
           const data = this.applyModelGroupLink(rows);
           return { data, totalCount: data.length };
@@ -401,9 +400,8 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
   }
 
   private logUnrecognizedMainCategory(mainCategory: string | undefined) {
-    this.logger.error(
-      'DifferentialExpressionComparisonToolComponent: unrecognized main category',
-      new Error(`'${mainCategory}'`),
-    );
+    this.logger.error('unrecognized main category', {
+      data: { mainCategory },
+    });
   }
 }

@@ -40,7 +40,7 @@ export class DrugDetailsComponent implements OnInit, AfterViewInit {
   drugService = inject(DrugService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('DrugDetailsComponent');
 
   isLoading = true;
   drug: Drug | undefined;
@@ -106,9 +106,7 @@ export class DrugDetailsComponent implements OnInit, AfterViewInit {
           },
           error: () => {
             this.isLoading = false;
-            this.logger.log(
-              `DrugDetailsComponent: loadPanelData: Drug ${chemblId} not found, redirecting`,
-            );
+            this.logger.log(`loadPanelData: Drug ${chemblId} not found, redirecting`);
             this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });

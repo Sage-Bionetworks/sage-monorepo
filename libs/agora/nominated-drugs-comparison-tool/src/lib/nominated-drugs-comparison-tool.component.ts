@@ -40,7 +40,9 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
   private readonly nominatedDrugsService = inject(NominatedDrugService);
   private readonly comparisonToolService = inject(NominatedDrugsComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource(
+    'NominatedDrugsComparisonToolComponent',
+  );
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -49,7 +51,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     .getComparisonToolsConfig(ComparisonToolConfigPage.NominatedDrugs)
     .pipe(
       catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', error);
+        this.logger.error('Error retrieving comparison tool config', { error });
         return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true }),
@@ -148,7 +150,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log('NominatedDrugsComparisonToolComponent: unpinned query', { ...query });
+    this.logger.log(`unpinned query ${JSON.stringify(query)}`);
 
     this.comparisonToolService.fetchUnpinned(
       this.nominatedDrugsService.getNominatedDrugs(query).pipe(
@@ -170,7 +172,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
       sortOrders,
     };
 
-    this.logger.log('NominatedDrugsComparisonToolComponent: pinned query', { ...query });
+    this.logger.log(`pinned query ${JSON.stringify(query)}`);
 
     this.comparisonToolService.fetchPinned(
       this.nominatedDrugsService

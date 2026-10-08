@@ -37,7 +37,7 @@ export function clearPendingPromptStorage(): void {
 export class BattleGateService {
   readonly authService = inject(AuthService);
   private readonly analytics = inject(AnalyticsService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('BattleGateService');
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly showLoginModal = signal(false);

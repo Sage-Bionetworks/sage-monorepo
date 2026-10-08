@@ -29,7 +29,7 @@ export interface SOEChartProps {
 })
 export class GeneSoeChartsComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('GeneSoeChartsComponent');
   readonly platformService = inject(PlatformService);
 
   distributionService = inject(DistributionService);
@@ -73,7 +73,7 @@ export class GeneSoeChartsComponent {
   }
 
   init() {
-    this.logger.log('GeneSoeChartsComponent: Loading score distributions');
+    this.logger.log('Loading score distributions');
 
     this.distributionService
       .getDistribution()
