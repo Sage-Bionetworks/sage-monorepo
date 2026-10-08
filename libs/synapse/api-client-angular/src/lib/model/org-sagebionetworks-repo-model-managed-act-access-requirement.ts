@@ -74,6 +74,10 @@ export interface OrgSagebionetworksRepoModelManagedACTAccessRequirement {
    */
   isValidatedProfileRequired?: boolean;
   /**
+   * After an AccessApproval is granted for this AccessRequirement, it will be expired after expirationPeriod milliseconds. Set this value to 0 to indicate that AccessApproval will never be expired.
+   */
+  expirationPeriod?: number;
+  /**
    * If true, then accessor needs to fill, sign, and submit a Data Use Certificate (DUC) to gain access to the data.
    */
   isDUCRequired?: boolean;
@@ -81,6 +85,14 @@ export interface OrgSagebionetworksRepoModelManagedACTAccessRequirement {
    * If the Data Use Certificate (DUC) is required, creator of this requirement needs to upload a Data Use Certificate (DUC) template. Users have to download this template, fill out, sign and submit it.
    */
   ducTemplateFileHandleId?: string;
+  /**
+   * The ID of the electronic Data Use Certificate (eDUC) template to fill out for data access requests.
+   */
+  eDucTemplateId?: string;
+  /**
+   * If true, then accessor needs to enable two factor authentication before gaining access to the data.
+   */
+  isTwoFaRequired?: boolean;
   /**
    * If true, then accessor needs to submit an Institutional Review Board (IRB) Approval document to gain access to the data.
    */
@@ -90,10 +102,6 @@ export interface OrgSagebionetworksRepoModelManagedACTAccessRequirement {
    */
   areOtherAttachmentsRequired?: boolean;
   /**
-   * After an AccessApproval is granted for this AccessRequirement, it will be expired after expirationPeriod miliseconds. Set this value to 0 to indicate that AccessApproval will never be expired.
-   */
-  expirationPeriod?: number;
-  /**
    * If true, the Intended Data Use Statements submitted to gain access to the data will be presented to public.
    */
   isIDUPublic?: boolean;
@@ -101,14 +109,6 @@ export interface OrgSagebionetworksRepoModelManagedACTAccessRequirement {
    * If true (default), the Intended Data Use Statement for a research project is required.
    */
   isIDURequired?: boolean;
-  /**
-   * If true, then accessor needs to enable two factor authentication before gaining access to the data.
-   */
-  isTwoFaRequired?: boolean;
-  /**
-   * The ID of the electronic Data Use Certificate (eDUC) template to fill out for data access requests.
-   */
-  eDucTemplateId?: string;
 }
 export namespace OrgSagebionetworksRepoModelManagedACTAccessRequirement {
   export type AccessTypeEnum =

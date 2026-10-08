@@ -17,6 +17,7 @@ import { OrgSagebionetworksRepoModelSearchDslMultiMatchQuery } from './org-sageb
 import { OrgSagebionetworksRepoModelSearchDslMatchAllQuery } from './org-sagebionetworks-repo-model-search-dsl-match-all-query';
 import { OrgSagebionetworksRepoModelSearchDslMatchPhraseFieldOptions } from './org-sagebionetworks-repo-model-search-dsl-match-phrase-field-options';
 import { OrgSagebionetworksRepoModelSearchDslMatchFieldOptions } from './org-sagebionetworks-repo-model-search-dsl-match-field-options';
+import { OrgSagebionetworksRepoModelSearchDslQueryStringQuery } from './org-sagebionetworks-repo-model-search-dsl-query-string-query';
 import { OrgSagebionetworksRepoModelSearchDslFuzzyFieldOptions } from './org-sagebionetworks-repo-model-search-dsl-fuzzy-field-options';
 import { OrgSagebionetworksRepoModelSearchDslRangeFieldOptions } from './org-sagebionetworks-repo-model-search-dsl-range-field-options';
 import { OrgSagebionetworksRepoModelSearchDslMatchBoolPrefixFieldOptions } from './org-sagebionetworks-repo-model-search-dsl-match-bool-prefix-field-options';
@@ -39,6 +40,7 @@ export type OrgSagebionetworksRepoModelSearchDslClauseScoringOptions =
   | OrgSagebionetworksRepoModelSearchDslMatchPhrasePrefixFieldOptions
   | OrgSagebionetworksRepoModelSearchDslMultiMatchQuery
   | OrgSagebionetworksRepoModelSearchDslPrefixFieldOptions
+  | OrgSagebionetworksRepoModelSearchDslQueryStringQuery
   | OrgSagebionetworksRepoModelSearchDslRangeFieldOptions
   | OrgSagebionetworksRepoModelSearchDslSimpleQueryStringQuery
   | OrgSagebionetworksRepoModelSearchDslTermFieldOptions
