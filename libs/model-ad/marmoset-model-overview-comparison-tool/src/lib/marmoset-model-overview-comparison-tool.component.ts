@@ -145,12 +145,16 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     this.logger.log('MarmosetModelOverviewComparisonToolComponent: unpinned query', { ...query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
-        map((response: MarmosetModelOverviewsPage) => ({
-          data: response.marmosetModelOverviews,
-          totalCount: response.page.totalElements,
-        })),
-      ),
+      this.marmosetModelOverviewService
+        .getMarmosetModelOverviews(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
+        .pipe(
+          map((response: MarmosetModelOverviewsPage) => ({
+            data: response.marmosetModelOverviews,
+            totalCount: response.page.totalElements,
+          })),
+        ),
     );
   }
 
