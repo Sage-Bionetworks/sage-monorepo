@@ -373,8 +373,14 @@ describe('ComparisonToolTableComponent', () => {
       await setup(failedOptions);
 
       expect(screen.getByRole('alert')).toHaveTextContent(
-        "Your 3 pinned results couldn't be loaded. Pinning other results or clearing all pins will remove them.",
+        'We encountered a problem loading your pinned results.',
       );
+    });
+
+    it('should show the failure message in place of the pinned table', async () => {
+      const { component } = await setup(failedOptions);
+
+      expect(component.container.querySelectorAll('explorers-base-table')).toHaveLength(1);
     });
 
     it('should keep counting the unloaded pins in the pinned results header', async () => {
@@ -383,11 +389,11 @@ describe('ComparisonToolTableComponent', () => {
       expect(getPinnedResultsHeaderLines(component.container)).toEqual(['3 Pinned Results']);
     });
 
-    it('should count the unloaded pins by row in a child view whose parents never loaded', async () => {
+    it('should name the view rows in a child view', async () => {
       await setup({ ...failedOptions, configs: childViewConfigs });
 
       expect(screen.getByRole('alert')).toHaveTextContent(
-        "Your 3 pinned children couldn't be loaded. Pinning other children or clearing all pins will remove them.",
+        'We encountered a problem loading your pinned children.',
       );
     });
 

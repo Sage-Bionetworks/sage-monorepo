@@ -47,6 +47,7 @@ main {
     display: flex;
     flex-direction: column;
     overflow-x: auto;
+    container-type: inline-size;
 
     .comparison-tool-body-inner {
       position: relative;

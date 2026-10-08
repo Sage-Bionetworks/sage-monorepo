@@ -26,7 +26,6 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
-import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
@@ -42,16 +41,17 @@ import {
   resolveFixedColumnWidths,
   restoreCellStyles,
 } from './comparison-tool-table.helpers';
+import { FetchFailedBarComponent } from './fetch-failed-bar/fetch-failed-bar.component';
 
 @Component({
   selector: 'explorers-comparison-tool-table',
   imports: [
-    ButtonModule,
     TooltipModule,
     ComparisonToolColumnsComponent,
     SvgIconComponent,
     BaseTableComponent,
     DownloadDomImageComponent,
+    FetchFailedBarComponent,
   ],
   templateUrl: './comparison-tool-table.component.html',
   styleUrls: ['./comparison-tool-table.component.scss'],
@@ -66,13 +66,13 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   tableElement = viewChild<ElementRef>('table');
 
   pinnedRowCount = this.comparisonToolService.pinnedRowCount;
-  pinCount = this.comparisonToolService.pinCount;
   pinnedResultsCounts = this.comparisonToolService.pinnedResultsCounts;
   nounsForPinCount = this.comparisonToolService.nounsForPinCount;
   nouns = this.comparisonToolService.nouns;
   canPinAll = this.comparisonToolService.canPinAll;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
   isLoadingTableData = this.comparisonToolService.isLoadingTableData;
+  isLoadingPinnedData = this.comparisonToolService.isLoadingPinnedData;
   pinnedFetchFailed = this.comparisonToolService.pinnedFetchFailed;
   unpinnedRowCount = this.comparisonToolService.unpinnedRowCount;
   viewConfig = this.comparisonToolService.viewConfig;
@@ -96,9 +96,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   hasPinnedSection = computed(() => this.pinnedRowCount() > 0 || this.pinnedFetchFailed());
 
-  pinnedFetchFailedMessage = computed(() =>
-    getPinnedFetchFailedMessage(this.pinCount(), this.nounsForPinCount()),
-  );
+  pinnedFetchFailedMessage = computed(() => getPinnedFetchFailedMessage(this.nouns()));
 
   unpinnedResultsLabel = computed(() =>
     getViewNounLabel(this.searchTerm() ? 'Matching' : 'Filtered', this.nouns()),

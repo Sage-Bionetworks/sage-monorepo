@@ -1,0 +1,13 @@
+<div class="fetch-failed-bar" role="alert">
+  <div class="fetch-failed-bar-content">
+    <span class="fetch-failed-bar-message">{{ message() }}</span>
+    <p-button
+      [label]="buttonLabel()"
+      [rounded]="true"
+      variant="outlined"
+      size="small"
+      [loading]="loading()"
+      (onClick)="retry.emit()"
+    />
+  </div>
+</div>
