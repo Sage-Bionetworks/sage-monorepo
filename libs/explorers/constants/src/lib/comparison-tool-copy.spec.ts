@@ -9,6 +9,7 @@ import {
   getPinnedResultsLabels,
   getPinToggleTooltip,
   getShareUrlTooltip,
+  getUnpinnedFetchFailedMessage,
   getViewNounLabel,
   NO_NOUNS,
   PINNED_RESULTS_HEADING,
@@ -236,26 +237,40 @@ describe('comparison tool copy', () => {
 
   describe('getPinnedFetchFailedMessage', () => {
     it('should fall back to results', () => {
-      expect(getPinnedFetchFailedMessage(3, NO_NOUNS)).toBe(
-        "Your 3 pinned results couldn't be loaded. Pinning other results or clearing all pins will remove them.",
+      expect(getPinnedFetchFailedMessage(NO_NOUNS)).toBe(
+        'We encountered a problem loading your pinned results.',
       );
     });
 
     it('should use the view noun', () => {
-      expect(getPinnedFetchFailedMessage(3, VIEW_NOUNS)).toBe(
-        "Your 3 pinned parents couldn't be loaded. Pinning other parents or clearing all pins will remove them.",
+      expect(getPinnedFetchFailedMessage(VIEW_NOUNS)).toBe(
+        'We encountered a problem loading your pinned parents.',
       );
     });
 
-    it('should count parents and name the rows to pin in a child view', () => {
-      expect(getPinnedFetchFailedMessage(3, CHILD_NOUNS)).toBe(
-        "Your 3 pinned parents couldn't be loaded. Pinning other children or clearing all pins will remove them.",
+    it('should name the view rows, not their parents, in a child view', () => {
+      expect(getPinnedFetchFailedMessage(CHILD_NOUNS)).toBe(
+        'We encountered a problem loading your pinned children.',
+      );
+    });
+  });
+
+  describe('getUnpinnedFetchFailedMessage', () => {
+    it('should fall back to results', () => {
+      expect(getUnpinnedFetchFailedMessage(NO_NOUNS)).toBe(
+        'We encountered a problem loading results.',
       );
     });
 
-    it('should use the singular for one pin', () => {
-      expect(getPinnedFetchFailedMessage(1, VIEW_NOUNS)).toBe(
-        "Your 1 pinned parent couldn't be loaded. Pinning other parents or clearing all pins will remove it.",
+    it('should use the view noun', () => {
+      expect(getUnpinnedFetchFailedMessage(VIEW_NOUNS)).toBe(
+        'We encountered a problem loading parents.',
+      );
+    });
+
+    it('should name the view rows, not their parents, in a child view', () => {
+      expect(getUnpinnedFetchFailedMessage(CHILD_NOUNS)).toBe(
+        'We encountered a problem loading children.',
       );
     });
   });
