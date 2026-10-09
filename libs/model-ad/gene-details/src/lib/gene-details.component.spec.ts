@@ -169,7 +169,7 @@ describe('GeneDetailsComponent', () => {
       ]);
     });
 
-    it('should issue one request when only the query params change', async () => {
+    it('should issue one more request when only the query params change', async () => {
       const { navigate, getTranscriptomicsIndividual } = await setupWithRouter(
         geneRoute(gene.ensembl_gene_id),
       );

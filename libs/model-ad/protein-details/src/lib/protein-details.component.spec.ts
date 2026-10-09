@@ -164,7 +164,7 @@ describe('ProteinDetailsComponent', () => {
       ]);
     });
 
-    it('should issue one request when only the query params change', async () => {
+    it('should issue one more request when only the query params change', async () => {
       const { navigate, getProteomicsIndividual } = await setupWithRouter(
         proteinRoute(protein.unique_id),
       );
