@@ -7,6 +7,7 @@ import {
   PlatformService,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
+import { routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import {
   ModelIdentifierType,
   ProteomicsIndividual,
@@ -15,7 +16,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { IndividualExpressionDetailsComponent } from '@sagebionetworks/model-ad/ui';
-import { combineLatest } from 'rxjs';
+import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'model-ad-protein-details',
@@ -48,19 +49,27 @@ export class ProteinDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    combineLatest([this.route.paramMap, this.route.queryParamMap])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([params, queryParams]) => {
-        this.reset();
-
-        // only fetch data during client hydration
-        if (this.platformService.isBrowser) {
-          this.loadProteomicsIndividualData(params, queryParams);
-        }
+    routeSnapshotChanges(this.route)
+      .pipe(
+        tap(() => this.reset()),
+        switchMap((snapshot) =>
+          // only fetch data during client hydration
+          this.platformService.isBrowser
+            ? this.loadProteomicsIndividualData(snapshot.paramMap, snapshot.queryParamMap)
+            : EMPTY,
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((proteomicsIndividualData) => {
+        this.proteomicsIndividualData.set(proteomicsIndividualData);
+        this.isLoading.set(false);
       });
   }
 
-  private loadProteomicsIndividualData(params: ParamMap, queryParams: ParamMap) {
+  private loadProteomicsIndividualData(
+    params: ParamMap,
+    queryParams: ParamMap,
+  ): Observable<ProteomicsIndividual[]> {
     const uniqueId = params.get('uniqueId');
     const modelName = queryParams.get('model');
     const modelGroup = queryParams.get('modelGroup');
@@ -73,38 +82,39 @@ export class ProteinDetailsComponent implements OnInit {
     const modelIdentifier = modelGroup || modelName;
     this.modelIdentifier.set(modelIdentifier);
 
-    if (uniqueId && tissue && modelIdentifier) {
-      const query: ProteomicsIndividualFilterQuery = {
+    if (!uniqueId || !tissue || !modelIdentifier) {
+      this.isLoading.set(false);
+      this.logger.log('ProteinDetailsComponent: missing required route info, redirecting', {
         uniqueId,
         tissue,
         modelIdentifierType,
         modelIdentifier,
-      };
-
-      this.proteomicsIndividualService
-        .getProteomicsIndividual(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (proteomicsIndividualData: ProteomicsIndividual[]) => {
-            this.proteomicsIndividualData.set(proteomicsIndividualData);
-            this.isLoading.set(false);
-          },
-          error: () => {
-            this.isLoading.set(false);
-            this.logger.log(
-              `ProteinDetailsComponent: loadProteomicsIndividualData: query: ${JSON.stringify(query)}, redirecting`,
-            );
-            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
-          },
-        });
-    } else {
-      this.isLoading.set(false);
-      this.logger.log(
-        `ProteinDetailsComponent: loadProteomicsIndividualData: uniqueId: ${uniqueId} modelIdentifierType: ${modelIdentifierType} modelIdentifier: ${modelIdentifier}, redirecting`,
-      );
+      });
       this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+      return EMPTY;
     }
+
+    const query: ProteomicsIndividualFilterQuery = {
+      uniqueId,
+      tissue,
+      modelIdentifierType,
+      modelIdentifier,
+    };
+
+    return this.proteomicsIndividualService
+      .getProteomicsIndividual(query, 'body', false, {
+        context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+      })
+      .pipe(
+        catchError(() => {
+          this.isLoading.set(false);
+          this.logger.log(
+            'ProteinDetailsComponent: proteomics individual request failed, redirecting',
+            { ...query },
+          );
+          this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+          return EMPTY;
+        }),
+      );
   }
 }

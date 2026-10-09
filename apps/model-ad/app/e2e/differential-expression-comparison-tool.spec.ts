@@ -1,6 +1,7 @@
 import { expect, Page, test } from '@playwright/test';
 import { MAX_PIN_LIMIT } from '@sagebionetworks/explorers/constants';
 import {
+  clickViewDetailsButtonByName,
   ColumnConfig,
   expectCategories,
   expectCategoriesParams,
@@ -48,6 +49,7 @@ import {
   testUrlPinsExceedingLimitAreCapped,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
+import { Proteomics, Transcriptomics } from '@sagebionetworks/model-ad/api-client';
 import {
   COMPARISON_TOOL_HEADER_TITLES,
   DIFFERENTIAL_EXPRESSION_CT_PAGE as CT_PAGE,
@@ -96,6 +98,30 @@ const noGeneSymbolMatches = [
   `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Female`,
   `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Male`,
 ];
+const hemibrainProteinCategories = [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
+
+const expectIndividualDetailsPopup = async (
+  popup: Page,
+  detailsPath: string,
+  row: Transcriptomics | Proteomics,
+  modality: 'RNA' | 'Protein',
+) => {
+  const modelQueryParam =
+    row.model_group === null ? { model: row.name.link_text } : { modelGroup: row.model_group };
+
+  await popup.waitForURL((url) => url.pathname === detailsPath);
+  expect(Object.fromEntries(new URL(popup.url()).searchParams)).toEqual({
+    ...modelQueryParam,
+    tissue: row.tissue,
+  });
+  await expect(
+    popup.getByRole('heading', {
+      level: 2,
+      name: `Individual ${modality} Expression (${row.tissue})`,
+    }),
+  ).toBeVisible();
+};
+
 const NO_GENES_FOUND_MESSAGE = 'No genes found...';
 const NO_PROTEINS_FOUND_MESSAGE = 'No proteins found...';
 const RNA_PIN_LIMIT_COPY: PinLimitCopy = {
@@ -552,6 +578,46 @@ test.describe('differential expression', () => {
       url.toString().endsWith(`/models/${specialModelEncoded}?modelOrganism=mouse`),
     );
     await expect(popup.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
+  });
+
+  test('view details button opens the gene details page in a new tab', async ({ page }) => {
+    const [firstRow] = await fetchTranscriptomics(page, categories);
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+
+    const popupPromise = page.waitForEvent('popup');
+    await clickViewDetailsButtonByName(getUnpinnedTable(page), page, firstRow.composite_id);
+    const popup = await popupPromise;
+
+    await expectIndividualDetailsPopup(
+      popup,
+      `/genes/${firstRow.ensembl_gene_id}`,
+      firstRow,
+      'RNA',
+    );
+  });
+
+  test('view details button opens the protein details page in a new tab', async ({ page }) => {
+    const [firstRow] = await fetchProteomics(page, hemibrainProteinCategories);
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(hemibrainProteinCategories, 'categories'),
+    );
+
+    const popupPromise = page.waitForEvent('popup');
+    await clickViewDetailsButtonByName(getUnpinnedTable(page), page, firstRow.composite_id);
+    const popup = await popupPromise;
+
+    await expectIndividualDetailsPopup(
+      popup,
+      `/proteins/${firstRow.unique_id}`,
+      firstRow,
+      'Protein',
+    );
   });
 
   test('sex filter returns only results for the selected sex', async ({ page }) => {
