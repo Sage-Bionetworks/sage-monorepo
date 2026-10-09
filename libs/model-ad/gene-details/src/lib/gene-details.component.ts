@@ -7,6 +7,7 @@ import {
   PlatformService,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
+import { routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import {
   ModelIdentifierType,
   TranscriptomicsIndividual,
@@ -15,7 +16,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { IndividualExpressionDetailsComponent } from '@sagebionetworks/model-ad/ui';
-import { combineLatest } from 'rxjs';
+import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'model-ad-gene-details',
@@ -48,19 +49,27 @@ export class GeneDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    combineLatest([this.route.paramMap, this.route.queryParamMap])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([params, queryParams]) => {
-        this.reset();
-
-        // only fetch data during client hydration
-        if (this.platformService.isBrowser) {
-          this.loadTranscriptomicsIndividualData(params, queryParams);
-        }
+    routeSnapshotChanges(this.route)
+      .pipe(
+        tap(() => this.reset()),
+        switchMap((snapshot) =>
+          // only fetch data during client hydration
+          this.platformService.isBrowser
+            ? this.loadTranscriptomicsIndividualData(snapshot.paramMap, snapshot.queryParamMap)
+            : EMPTY,
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((transcriptomicsIndividualData) => {
+        this.transcriptomicsIndividualData.set(transcriptomicsIndividualData);
+        this.isLoading.set(false);
       });
   }
 
-  private loadTranscriptomicsIndividualData(params: ParamMap, queryParams: ParamMap) {
+  private loadTranscriptomicsIndividualData(
+    params: ParamMap,
+    queryParams: ParamMap,
+  ): Observable<TranscriptomicsIndividual[]> {
     const ensemblGeneId = params.get('ensemblGeneId');
     const modelName = queryParams.get('model');
     const modelGroup = queryParams.get('modelGroup');
@@ -73,38 +82,39 @@ export class GeneDetailsComponent implements OnInit {
     const modelIdentifier = modelGroup || modelName;
     this.modelIdentifier.set(modelIdentifier);
 
-    if (ensemblGeneId && tissue && modelIdentifier) {
-      const query: TranscriptomicsIndividualFilterQuery = {
+    if (!ensemblGeneId || !tissue || !modelIdentifier) {
+      this.isLoading.set(false);
+      this.logger.log('GeneDetailsComponent: missing required route info, redirecting', {
         ensemblGeneId,
         tissue,
         modelIdentifierType,
         modelIdentifier,
-      };
-
-      this.transcriptomicsIndividualService
-        .getTranscriptomicsIndividual(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (transcriptomicsIndividualData: TranscriptomicsIndividual[]) => {
-            this.transcriptomicsIndividualData.set(transcriptomicsIndividualData);
-            this.isLoading.set(false);
-          },
-          error: () => {
-            this.isLoading.set(false);
-            this.logger.log(
-              `GeneDetailsComponent: loadTranscriptomicsIndividualData: query: ${JSON.stringify(query)}, redirecting`,
-            );
-            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
-          },
-        });
-    } else {
-      this.isLoading.set(false);
-      this.logger.log(
-        `GeneDetailsComponent: loadTranscriptomicsIndividualData: ensemblGeneId: ${ensemblGeneId} modelIdentifierType: ${modelIdentifierType} modelIdentifier: ${modelIdentifier}, redirecting`,
-      );
+      });
       this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+      return EMPTY;
     }
+
+    const query: TranscriptomicsIndividualFilterQuery = {
+      ensemblGeneId,
+      tissue,
+      modelIdentifierType,
+      modelIdentifier,
+    };
+
+    return this.transcriptomicsIndividualService
+      .getTranscriptomicsIndividual(query, 'body', false, {
+        context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+      })
+      .pipe(
+        catchError(() => {
+          this.isLoading.set(false);
+          this.logger.log(
+            'GeneDetailsComponent: transcriptomics individual request failed, redirecting',
+            { ...query },
+          );
+          this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+          return EMPTY;
+        }),
+      );
   }
 }
