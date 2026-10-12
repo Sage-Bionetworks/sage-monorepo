@@ -7,7 +7,8 @@ export type NavigationLink = {
   routerLink?: string[];
   queryParams?: Params;
   state?: Record<string, unknown>;
-  // Replace the current history entry instead of adding one when the link's path is already open
+  // Replace the current history entry instead of adding one when the link's path is already open,
+  // whatever the current query params
   replaceUrlWhenPathActive?: boolean;
   activeOptions?: { exact: boolean } | IsActiveMatchOptions;
   isSubheader?: boolean;

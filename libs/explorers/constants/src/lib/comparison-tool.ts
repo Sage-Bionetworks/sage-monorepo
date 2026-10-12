@@ -18,7 +18,8 @@ export const KEEP_COMPARISON_TOOL_STATE = { [KEEP_COMPARISON_TOOL_STATE_KEY]: tr
 
 /**
  * Options for a header link into a comparison tool. Clicked on the open tool, the link then acts
- * like a dropdown change: it keeps the tool's state and adds no history entry.
+ * like a dropdown change: it keeps the tool's state and adds no history entry, even when it switches
+ * views, because no change within a comparison tool adds one.
  */
 export const COMPARISON_TOOL_HEADER_LINK_OPTIONS: Pick<
   NavigationLink,

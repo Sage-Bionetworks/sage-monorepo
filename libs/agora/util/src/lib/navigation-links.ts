@@ -11,6 +11,7 @@ export const headerLinks: NavigationLink[] = [
   {
     label: 'Gene Comparison',
     routerLink: [ROUTE_PATHS.GENE_COMPARISON],
+    // TODO(AG-2207): spread COMPARISON_TOOL_HEADER_LINK_OPTIONS once GCT is migrated to the explorers comparison tool
   },
   {
     label: 'Nominations',
