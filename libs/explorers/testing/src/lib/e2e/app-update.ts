@@ -1,6 +1,9 @@
 import { type Page } from '@playwright/test';
 import type { AppVersion } from '@sagebionetworks/explorers/config';
-import { APP_VERSION_PATH } from '@sagebionetworks/explorers/constants';
+import {
+  APP_UPDATE_CONFIRM_DELAY_MS,
+  APP_VERSION_PATH,
+} from '@sagebionetworks/explorers/constants';
 
 /** A version no real deploy reports, so it differs from whatever version the tab loaded with. */
 export const NEWER_DEPLOY_VERSION: AppVersion = {
@@ -41,4 +44,12 @@ export async function returnToTab(page: Page) {
       document.dispatchEvent(new Event('visibilitychange'));
     }
   });
+}
+
+/**
+ * Lets the confirmation delay pass, so the check it schedules confirms a version mismatch. The
+ * test must call `page.clock.install()` before loading the page.
+ */
+export async function waitOutVersionMismatchConfirmation(page: Page) {
+  await page.clock.fastForward(APP_UPDATE_CONFIRM_DELAY_MS);
 }

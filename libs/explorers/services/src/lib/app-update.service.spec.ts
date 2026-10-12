@@ -9,11 +9,13 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router, Routes } from '@angular/router';
 import { AppVersion } from '@sagebionetworks/explorers/config';
 import {
+  APP_UPDATE_CONFIRM_DELAY_MS,
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
   APP_VERSION_PATH,
   getAppUpdateMessage,
   STALE_CLIENT_METRIC,
+  TRANSIENT_VERSION_MISMATCH_METRIC,
   VERSION_CHECK_FAILED_METRIC,
   VERSION_ENDPOINT_MISCONFIGURED_WARNING,
 } from '@sagebionetworks/explorers/constants';
@@ -109,6 +111,16 @@ describe('AppUpdateService', () => {
     httpMock.expectOne(APP_VERSION_PATH).flush(serverVersion);
   }
 
+  function respondWithNetworkFailure() {
+    httpMock.expectOne(APP_VERSION_PATH).error(new ProgressEvent('error'));
+  }
+
+  /** Answers the check scheduled for when the confirmation delay ends with the newer version. */
+  function confirmNewerVersion() {
+    jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
+    respondWithServerVersion(newerVersion);
+  }
+
   beforeEach(() => {
     jest.useFakeTimers();
     visibilityState = 'visible';
@@ -151,13 +163,14 @@ describe('AppUpdateService', () => {
     });
 
     it('polls while the tab stays visible', () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
 
       jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
       respondWithServerVersion(newerVersion);
+      confirmNewerVersion();
 
-      expect(service.isStale()).toBe(true);
+      expect(appUpdateService.isStale()).toBe(true);
     });
 
     it('does not poll while the tab is hidden', () => {
@@ -183,8 +196,8 @@ describe('AppUpdateService', () => {
     });
 
     it('skips checks while offline and checks once the browser reconnects', () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
 
       isBrowserOnline = false;
       returnToTab();
@@ -193,39 +206,42 @@ describe('AppUpdateService', () => {
 
       reconnect();
       respondWithServerVersion(newerVersion);
+      confirmNewerVersion();
 
-      expect(service.isStale()).toBe(true);
+      expect(appUpdateService.isStale()).toBe(true);
     });
   });
 
   describe('when the server responds with a version', () => {
     it('stays current when the server reports the version the tab loaded with', () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
 
       returnToTab();
       respondWithServerVersion(loadedVersion);
 
-      expect(service.isStale()).toBe(false);
+      expect(appUpdateService.isStale()).toBe(false);
       expect(errorOverlayService.isOverlayVisible()).toBe(false);
     });
 
-    it('shows the app update overlay when the tab returns after a newer deploy', () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+    it('shows the app update overlay once a newer deploy outlasts the confirmation delay', () => {
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
 
       returnToTab();
       respondWithServerVersion(newerVersion);
+      confirmNewerVersion();
 
-      expect(service.isStale()).toBe(true);
+      expect(appUpdateService.isStale()).toBe(true);
       expect(errorOverlayService.activeMessage()).toBe(getAppUpdateMessage(siteName));
     });
 
-    it('counts the stale tab in Sentry metrics with both versions and the trigger', () => {
+    it('counts the stale tab in Sentry metrics with both versions and the first trigger', () => {
       setup().start(loadedVersion, siteName);
 
       returnToTab();
       respondWithServerVersion(newerVersion);
+      confirmNewerVersion();
 
       const versionService = TestBed.inject(VersionService);
       expect(Sentry.metrics.count).toHaveBeenCalledTimes(1);
@@ -239,23 +255,24 @@ describe('AppUpdateService', () => {
     });
 
     it('compares app versions when either side has no commit SHA', () => {
-      const service = setup();
-      service.start({ ...loadedVersion, commitSha: '' }, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start({ ...loadedVersion, commitSha: '' }, siteName);
 
       returnToTab();
       respondWithServerVersion(newerVersion);
+      confirmNewerVersion();
 
-      expect(service.isStale()).toBe(true);
+      expect(appUpdateService.isStale()).toBe(true);
     });
 
     it('stays current when the server version is unknown', () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
 
       returnToTab();
       respondWithServerVersion(unknownVersion);
 
-      expect(service.isStale()).toBe(false);
+      expect(appUpdateService.isStale()).toBe(false);
     });
 
     it('stops checking once the tab is known to be stale', () => {
@@ -263,6 +280,7 @@ describe('AppUpdateService', () => {
 
       returnToTab();
       respondWithServerVersion(newerVersion);
+      confirmNewerVersion();
 
       jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
       returnToTab();
@@ -272,9 +290,97 @@ describe('AppUpdateService', () => {
     });
   });
 
+  describe('while a version mismatch is unconfirmed', () => {
+    it('does not show the overlay on the first mismatch', () => {
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+
+      expect(appUpdateService.isStale()).toBe(false);
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
+    });
+
+    it('does not show the overlay when the mismatch recurs before the confirmation delay ends', () => {
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+
+      expect(appUpdateService.isStale()).toBe(false);
+    });
+
+    it('stays current and counts a transient mismatch when the confirmation matches', () => {
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
+      respondWithServerVersion(loadedVersion);
+
+      const versionService = TestBed.inject(VersionService);
+      expect(appUpdateService.isStale()).toBe(false);
+      expect(Sentry.metrics.count).toHaveBeenCalledTimes(1);
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(TRANSIENT_VERSION_MISMATCH_METRIC, 1, {
+        attributes: {
+          clientVersion: versionService.getSiteVersion(loadedVersion),
+          serverVersion: versionService.getSiteVersion(newerVersion),
+          trigger: AppUpdateCheckTriggerEnum.Visibility,
+        },
+      });
+    });
+
+    it('starts the confirmation delay over after a transient mismatch', () => {
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
+      respondWithServerVersion(loadedVersion);
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+
+      expect(appUpdateService.isStale()).toBe(false);
+    });
+
+    it('confirms on the next check when the confirmation check fails', () => {
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
+      respondWithNetworkFailure();
+      expect(appUpdateService.isStale()).toBe(false);
+
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+
+      expect(appUpdateService.isStale()).toBe(true);
+    });
+
+    it('resolves a first mismatch as stale without showing the overlay', async () => {
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
+
+      const isStale = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      respondWithServerVersion(newerVersion);
+
+      await expect(isStale).resolves.toBe(true);
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
+    });
+  });
+
   describe('when the check fails', () => {
-    const respondWithNetworkFailure = () =>
-      httpMock.expectOne(APP_VERSION_PATH).error(new ProgressEvent('error'));
     const respondWithStatus = (status: number, statusText: string) => () =>
       httpMock.expectOne(APP_VERSION_PATH).flush(null, { status, statusText });
     const respondWithUnparsableBody = () =>
@@ -345,8 +451,8 @@ describe('AppUpdateService', () => {
     it.each(failures)(
       'counts the failure and stays current when $scenario',
       ({ respond, reason, status }) => {
-        const service = setup();
-        service.start(loadedVersion, siteName);
+        const appUpdateService = setup();
+        appUpdateService.start(loadedVersion, siteName);
 
         returnToTab();
         respond();
@@ -354,7 +460,7 @@ describe('AppUpdateService', () => {
         expect(Sentry.metrics.count).toHaveBeenCalledWith(VERSION_CHECK_FAILED_METRIC, 1, {
           attributes: { reason, status, trigger: AppUpdateCheckTriggerEnum.Visibility },
         });
-        expect(service.isStale()).toBe(false);
+        expect(appUpdateService.isStale()).toBe(false);
         expect(errorOverlayService.isOverlayVisible()).toBe(false);
       },
     );
@@ -401,29 +507,31 @@ describe('AppUpdateService', () => {
     });
 
     it('keeps checking after a failed check', () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
 
       returnToTab();
       respondWithNetworkFailure();
       jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
       respondWithServerVersion(newerVersion);
+      confirmNewerVersion();
 
-      expect(service.isStale()).toBe(true);
+      expect(appUpdateService.isStale()).toBe(true);
     });
   });
 
   describe('when an error hints the tab may be stale', () => {
     it('checks right away when a route chunk fails to load, even just after another check', async () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
       returnToTab();
       respondWithServerVersion(loadedVersion);
 
       await navigateTo(missingChunkPath);
       respondWithServerVersion(newerVersion);
+      confirmNewerVersion();
 
-      expect(service.isStale()).toBe(true);
+      expect(appUpdateService.isStale()).toBe(true);
       expect(Sentry.metrics.count).toHaveBeenCalledWith(
         STALE_CLIENT_METRIC,
         1,
@@ -444,44 +552,46 @@ describe('AppUpdateService', () => {
     });
 
     it('checks when asked after an HTTP error', () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
 
-      service.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
+      appUpdateService.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
       respondWithServerVersion(newerVersion);
+      confirmNewerVersion();
 
-      expect(service.isStale()).toBe(true);
+      expect(appUpdateService.isStale()).toBe(true);
     });
 
     it('checks at most once per minimum interval when asked repeatedly', () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
 
-      service.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
+      appUpdateService.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
       respondWithServerVersion(loadedVersion);
-      service.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
+      appUpdateService.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
 
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
     });
 
     it('sends one request when checks are asked for while one is in progress', async () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
 
-      const firstCheck = service.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
-      const secondCheck = service.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const firstCheck = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const secondCheck = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
       respondWithServerVersion(newerVersion);
 
       await expect(Promise.all([firstCheck, secondCheck])).resolves.toEqual([true, true]);
     });
 
     it('resolves that the tab is stale without another request once known', async () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
       returnToTab();
       respondWithServerVersion(newerVersion);
+      confirmNewerVersion();
 
-      const isStale = service.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const isStale = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
 
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
       await expect(isStale).resolves.toBe(true);
@@ -495,11 +605,11 @@ describe('AppUpdateService', () => {
     });
 
     it('resolves that the tab is current without a request while offline', async () => {
-      const service = setup();
-      service.start(loadedVersion, siteName);
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
       isBrowserOnline = false;
 
-      const isStale = service.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const isStale = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
 
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
       await expect(isStale).resolves.toBe(false);

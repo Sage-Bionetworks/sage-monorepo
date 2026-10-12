@@ -5,16 +5,16 @@ export interface AppVersion {
   commitSha: string;
 }
 
-type Environment = Record<string, string | undefined>;
+type EnvironmentVariables = Record<string, string | undefined>;
 
 /**
  * Reads the version the infra deploy injects into the app container. Empty strings mean the
  * container was started without them (e.g. local development), so the version is unknown.
  */
-export function getDeployedAppVersion(env: Environment): AppVersion {
+export function getDeployedAppVersion(environmentVariables: EnvironmentVariables): AppVersion {
   return {
-    appVersion: env['APP_VERSION'] ?? '',
-    commitSha: env['COMMIT_SHA'] ?? '',
+    appVersion: environmentVariables['APP_VERSION'] ?? '',
+    commitSha: environmentVariables['COMMIT_SHA'] ?? '',
   };
 }
 
@@ -23,8 +23,8 @@ export function getDeployedAppVersion(env: Environment): AppVersion {
  * earlier deploy. The response must never be cached, or a stale tab would keep reading the
  * version it was loaded with.
  */
-export function createAppVersionHandler(env: Environment) {
-  const deployedAppVersion = getDeployedAppVersion(env);
+export function createAppVersionHandler(environmentVariables: EnvironmentVariables) {
+  const deployedAppVersion = getDeployedAppVersion(environmentVariables);
   return (_req: Request, res: Response) => {
     res.set('Cache-Control', 'no-store').json(deployedAppVersion);
   };

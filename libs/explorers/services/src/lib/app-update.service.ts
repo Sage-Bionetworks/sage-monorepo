@@ -5,10 +5,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationError, Router } from '@angular/router';
 import { AppVersion } from '@sagebionetworks/explorers/config';
 import {
+  APP_UPDATE_CONFIRM_DELAY_MS,
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
   APP_VERSION_PATH,
   STALE_CLIENT_METRIC,
+  TRANSIENT_VERSION_MISMATCH_METRIC,
   VERSION_CHECK_FAILED_METRIC,
   VERSION_ENDPOINT_MISCONFIGURED_WARNING,
 } from '@sagebionetworks/explorers/constants';
@@ -29,6 +31,7 @@ import {
   share,
   Subject,
   Subscription,
+  timer,
 } from 'rxjs';
 import { ErrorOverlayService } from './error-overlay.service';
 import { LoggerService } from './logger.service';
@@ -40,6 +43,7 @@ export const AppUpdateCheckTriggerEnum = {
   HttpError: 'http-error',
   Poll: 'poll',
   Reconnect: 'reconnect',
+  VersionMismatchConfirmation: 'version-mismatch-confirmation',
   Visibility: 'visibility',
 } as const;
 export type AppUpdateCheckTrigger =
@@ -69,10 +73,23 @@ const MISCONFIGURATION_REASONS: ReadonlySet<VersionCheckFailureReason> = new Set
   VersionCheckFailureReasonEnum.NotFound,
 ]);
 
+/** A version mismatch that has not yet outlasted the confirmation delay. */
+interface PendingVersionMismatch {
+  serverVersion: AppVersion;
+  trigger: AppUpdateCheckTrigger;
+  detectedAt: number;
+}
+
 /**
  * Detects that this tab is running code from an earlier deploy by comparing the version it was
  * loaded with against the version the app server currently reports, then blocks the page with an
  * overlay whose only action is to reload.
+ *
+ * A mismatch must persist for `APP_UPDATE_CONFIRM_DELAY_MS` before the overlay is shown. During a
+ * rolling deploy, old and new app tasks both answer the version endpoint, so a single mismatch can
+ * come from a task that is about to be replaced. Staleness is judged by any difference rather than
+ * by which version is newer, because a deploy rollback moves the server back to an earlier version
+ * and tabs loaded from the rolled-back deploy must reload too.
  */
 @Injectable({ providedIn: 'root' })
 export class AppUpdateService {
@@ -95,7 +112,9 @@ export class AppUpdateService {
   private siteName = '';
   private lastCheckedAt = 0;
   private hasReportedMisconfiguration = false;
-  private checkSubscription: Subscription | null = null;
+  private backgroundVersionCheckSubscription: Subscription | null = null;
+  private pendingVersionMismatch: PendingVersionMismatch | null = null;
+  private versionMismatchConfirmationSubscription: Subscription | null = null;
   private inFlightCheck$: Observable<boolean> | null = null;
   private readonly requestedChecks = new Subject<AppUpdateCheckTrigger>();
 
@@ -105,8 +124,8 @@ export class AppUpdateService {
    * lazy-loaded chunk fails to load. Does nothing during SSR or if already started.
    */
   start(clientVersion: AppVersion, siteName: string) {
-    const window = this.document.defaultView;
-    if (this.platformService.isServer || !window || this.clientVersion) {
+    const browserWindow = this.document.defaultView;
+    if (this.platformService.isServer || !browserWindow || this.clientVersion) {
       return;
     }
     this.clientVersion = clientVersion;
@@ -115,7 +134,7 @@ export class AppUpdateService {
     const visibility$ = fromEvent(this.document, 'visibilitychange').pipe(
       map(() => AppUpdateCheckTriggerEnum.Visibility),
     );
-    const reconnect$ = fromEvent(window, 'online').pipe(
+    const reconnect$ = fromEvent(browserWindow, 'online').pipe(
       map(() => AppUpdateCheckTriggerEnum.Reconnect),
     );
     const poll$ = interval(APP_UPDATE_POLL_INTERVAL_MS).pipe(
@@ -125,7 +144,7 @@ export class AppUpdateService {
     // Subscribed outside the Angular zone because a pending interval keeps the app from ever
     // becoming stable, and hydration waits for stability before it finishes. The stale signal
     // still schedules change detection when it is set outside the zone.
-    this.checkSubscription = this.ngZone.runOutsideAngular(() =>
+    this.backgroundVersionCheckSubscription = this.ngZone.runOutsideAngular(() =>
       merge(visibility$, reconnect$, poll$, this.requestedChecks)
         .pipe(
           filter(() => this.isTabVisible() && this.isOnline()),
@@ -154,9 +173,11 @@ export class AppUpdateService {
   }
 
   /**
-   * Checks right away, ignoring the minimum interval, and resolves whether the tab is stale. For
-   * errors that a stale tab explains, such as a chunk that failed to load. Resolves false before
-   * `start` and while offline, since staleness is then unknown.
+   * Checks right away, ignoring the minimum interval, and resolves whether the server reports a
+   * different version than this tab loaded with. Each build gives its lazy-loaded chunk files new
+   * names, so while the server runs a different version, a chunk this tab requests may not exist
+   * there. A true result means a failed chunk load is expected rather than a bug. Resolves false
+   * before `start` and while offline, since the version is then unknown.
    */
   checkNow(trigger: AppUpdateCheckTrigger): Promise<boolean> {
     if (this.stale()) {
@@ -171,7 +192,7 @@ export class AppUpdateService {
   /** Reuses a check already in progress, so concurrent triggers send one request. */
   private check$(trigger: AppUpdateCheckTrigger): Observable<boolean> {
     if (!this.inFlightCheck$) {
-      this.inFlightCheck$ = this.checkForUpdate$(trigger).pipe(
+      this.inFlightCheck$ = this.fetchAndCompareServerVersion$(trigger).pipe(
         finalize(() => {
           this.inFlightCheck$ = null;
         }),
@@ -181,7 +202,12 @@ export class AppUpdateService {
     return this.inFlightCheck$;
   }
 
-  private checkForUpdate$(trigger: AppUpdateCheckTrigger): Observable<boolean> {
+  /**
+   * Fetches the version the server reports, compares it with the version this tab loaded with, and
+   * hands the result to the mismatch, match, or failure handling. Emits whether the server reports
+   * a different version; a failed check emits false, since the server's version is then unknown.
+   */
+  private fetchAndCompareServerVersion$(trigger: AppUpdateCheckTrigger): Observable<boolean> {
     this.lastCheckedAt = Date.now();
     return this.http.get<unknown>(APP_VERSION_PATH).pipe(
       map((body) => {
@@ -193,11 +219,13 @@ export class AppUpdateService {
           );
           return false;
         }
-        const isStale = this.isFromEarlierDeploy(body);
-        if (isStale) {
-          this.handleStaleClient(body, trigger);
+        const isVersionMismatch = this.isVersionMismatch(body);
+        if (isVersionMismatch) {
+          this.handleVersionMismatch(body, trigger);
+        } else {
+          this.handleVersionMatch();
         }
-        return isStale;
+        return isVersionMismatch;
       }),
       catchError((error: HttpErrorResponse) => {
         this.recordCheckFailure(getFailureReason(error), error.status, trigger);
@@ -216,13 +244,13 @@ export class AppUpdateService {
     status: number,
     trigger: AppUpdateCheckTrigger,
   ) {
-    const details = { reason, status, trigger };
-    Sentry.metrics.count(VERSION_CHECK_FAILED_METRIC, 1, { attributes: details });
+    const failureDetails = { reason, status, trigger };
+    Sentry.metrics.count(VERSION_CHECK_FAILED_METRIC, 1, { attributes: failureDetails });
     if (MISCONFIGURATION_REASONS.has(reason) && !this.hasReportedMisconfiguration) {
       this.hasReportedMisconfiguration = true;
-      this.logger.warn(VERSION_ENDPOINT_MISCONFIGURED_WARNING, details);
+      this.logger.warn(VERSION_ENDPOINT_MISCONFIGURED_WARNING, failureDetails);
     } else {
-      this.logger.log('App version check failed', details);
+      this.logger.log('App version check failed', failureDetails);
     }
   }
 
@@ -230,7 +258,7 @@ export class AppUpdateService {
    * A version that is empty on either side is unknown (e.g. local development), so it never
    * counts as a mismatch. Commit SHA identifies the code exactly; app version is the fallback.
    */
-  private isFromEarlierDeploy(serverVersion: AppVersion): boolean {
+  private isVersionMismatch(serverVersion: AppVersion): boolean {
     const clientVersion = this.clientVersion;
     if (!clientVersion) {
       return false;
@@ -244,12 +272,62 @@ export class AppUpdateService {
     return false;
   }
 
+  /**
+   * Shows the overlay once the servers stop serving this tab's version, whether a deploy replaced
+   * it or a rollback removed it. While either is in progress, tasks of both versions answer for a
+   * few minutes, so a single mismatch proves nothing. The first mismatch starts the confirmation
+   * delay, and only a mismatch after the delay shows the overlay. A match before then clears it,
+   * since a task still serves this tab's version. If that version really is going away, a later
+   * mismatch starts the delay again.
+   */
+  private handleVersionMismatch(serverVersion: AppVersion, trigger: AppUpdateCheckTrigger) {
+    if (!this.pendingVersionMismatch) {
+      this.pendingVersionMismatch = { serverVersion, trigger, detectedAt: Date.now() };
+      this.scheduleVersionMismatchConfirmation();
+      return;
+    }
+    if (Date.now() - this.pendingVersionMismatch.detectedAt >= APP_UPDATE_CONFIRM_DELAY_MS) {
+      this.handleStaleClient(serverVersion, this.pendingVersionMismatch.trigger);
+    }
+  }
+
+  private scheduleVersionMismatchConfirmation() {
+    // Subscribed outside the Angular zone for the same reason as the background checks.
+    this.versionMismatchConfirmationSubscription = this.ngZone.runOutsideAngular(() =>
+      timer(APP_UPDATE_CONFIRM_DELAY_MS)
+        .pipe(
+          exhaustMap(() => this.check$(AppUpdateCheckTriggerEnum.VersionMismatchConfirmation)),
+          takeUntilDestroyed(this.destroyRef),
+        )
+        .subscribe(),
+    );
+  }
+
+  private handleVersionMatch() {
+    if (!this.pendingVersionMismatch || !this.clientVersion) {
+      return;
+    }
+    Sentry.metrics.count(TRANSIENT_VERSION_MISMATCH_METRIC, 1, {
+      attributes: {
+        clientVersion: this.versionService.getSiteVersion(this.clientVersion),
+        serverVersion: this.versionService.getSiteVersion(
+          this.pendingVersionMismatch.serverVersion,
+        ),
+        trigger: this.pendingVersionMismatch.trigger,
+      },
+    });
+    this.pendingVersionMismatch = null;
+    this.versionMismatchConfirmationSubscription?.unsubscribe();
+    this.versionMismatchConfirmationSubscription = null;
+  }
+
   private handleStaleClient(serverVersion: AppVersion, trigger: AppUpdateCheckTrigger) {
     if (this.stale() || !this.clientVersion) {
       return;
     }
     this.stale.set(true);
-    this.checkSubscription?.unsubscribe();
+    this.backgroundVersionCheckSubscription?.unsubscribe();
+    this.versionMismatchConfirmationSubscription?.unsubscribe();
     this.errorOverlayService.showUpdateAvailable(this.siteName);
     Sentry.metrics.count(STALE_CLIENT_METRIC, 1, {
       attributes: {
