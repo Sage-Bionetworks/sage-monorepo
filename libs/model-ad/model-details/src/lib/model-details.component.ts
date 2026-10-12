@@ -116,9 +116,10 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
       .pipe(
         catchError(() => {
           this.isLoading = false;
-          this.logger.log(
-            `ModelDetailsComponent: loadPanelData: Model ${modelName} (modelOrganism: ${modelOrganism}) not found, redirecting`,
-          );
+          this.logger.log('ModelDetailsComponent: model not found, redirecting', {
+            modelName,
+            modelOrganism,
+          });
           this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           return EMPTY;
         }),

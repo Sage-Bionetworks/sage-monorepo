@@ -115,7 +115,6 @@ const proteinOnlyGene = 'ENSMUSG00000005681~LOAD2~Female'; // Apoa2, which has n
 // A filter both views offer
 const sexFilterParams = { sexes: ['Male'] };
 const sexFilterChiclets = { Sex: ['Male'] };
-const hemibrainProteinCategories = [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
 
 const expectIndividualDetailsPopup = async (
   popup: Page,
@@ -737,14 +736,14 @@ test.describe('differential expression', () => {
   });
 
   test('view details button opens the protein details page in a new tab', async ({ page }) => {
-    const [firstRow] = await fetchProteomics(page, hemibrainProteinCategories);
+    const [firstRow] = await fetchProteomics(page, proteinCategories);
 
     await navigateToComparison(
       page,
       CT_PAGE,
       true,
       'url',
-      getQueryParamFromValues(hemibrainProteinCategories, 'categories'),
+      getQueryParamFromValues(proteinCategories, 'categories'),
     );
 
     const popupPromise = page.waitForEvent('popup');
