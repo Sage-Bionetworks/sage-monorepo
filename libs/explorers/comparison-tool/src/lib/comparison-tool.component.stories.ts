@@ -22,7 +22,7 @@ import {
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
 import { MessageService } from 'primeng/api';
-import { of } from 'rxjs';
+import { NEVER, of } from 'rxjs';
 import { ComparisonToolComponent } from './comparison-tool.component';
 import DocumentationTemplate from './comparison-tool.component.template.mdx';
 
@@ -34,6 +34,7 @@ type StoryArgs = Omit<
   configs: readonly ComparisonToolConfig[];
   data: readonly Record<string, unknown>[];
   pinnedItems: readonly string[];
+  tableDataPending?: boolean;
   // Panel visibility
   legendVisible?: boolean;
   tutorialVisible?: boolean;
@@ -88,6 +89,7 @@ class ComparisonToolInnerComponent {
   configs = input<ComparisonToolConfig[]>();
   data = input<Record<string, unknown>[]>();
   pinnedItems = input<string[]>();
+  tableDataPending = input<boolean>();
   // Panel visibility inputs
   legendVisible = input<boolean>();
   tutorialVisible = input<boolean>();
@@ -188,6 +190,13 @@ class ComparisonToolInnerComponent {
         of({ data: unpinnedData, totalCount: unpinnedData.length }),
       );
       this.comparisonToolService.setPinnedItems(pinnedItems);
+
+      // Fetches that never land, started after the rows above are applied so they stay on screen.
+      // The pinned one must follow `setPinnedItems`, since a pinned fetch with no pins completes at once
+      if (this.tableDataPending()) {
+        this.comparisonToolService.fetchPinned(NEVER);
+        this.comparisonToolService.fetchUnpinned(NEVER);
+      }
     });
 
     // Effect to update panel visibility
@@ -229,6 +238,7 @@ class ComparisonToolInnerComponent {
         [configs]="configs()"
         [data]="data()"
         [pinnedItems]="pinnedItems()"
+        [tableDataPending]="tableDataPending()"
         [legendVisible]="legendVisible()"
         [tutorialVisible]="tutorialVisible()"
         [hasSidebar]="hasSidebar()"
@@ -256,6 +266,7 @@ class ComparisonToolStoryWrapperComponent {
   configs = input<ComparisonToolConfig[]>();
   data = input<Record<string, unknown>[]>();
   pinnedItems = input<string[]>();
+  tableDataPending = input<boolean>();
   legendVisible = input<boolean>();
   tutorialVisible = input<boolean>();
   hasSidebar = input<boolean>();
@@ -386,6 +397,13 @@ const meta: Meta<StoryArgs> = {
       description: 'Array of row IDs (matching `rowIdDataKey`) to pin to the top of the table',
       table: { category: 'Data' },
     },
+    tableDataPending: {
+      control: 'boolean',
+      description:
+        'Whether a pinned and an unpinned fetch stay in flight after the data loads, ' +
+        'so the comparison tool shows its loading states over the loaded rows',
+      table: { category: 'Data' },
+    },
     tutorialVisible: {
       control: 'boolean',
       description:
@@ -483,5 +501,12 @@ export const WithSidebar: Story = {
   args: {
     ...Demo.args,
     hasSidebar: true,
+  },
+};
+
+export const TableDataLoading: Story = {
+  args: {
+    ...Demo.args,
+    tableDataPending: true,
   },
 };

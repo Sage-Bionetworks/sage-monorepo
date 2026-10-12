@@ -6,7 +6,7 @@ import {
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { SortMeta } from 'primeng/api';
-import { BehaviorSubject, of, throwError } from 'rxjs';
+import { BehaviorSubject, NEVER, of, throwError } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { ComparisonToolService, PinAllFetch } from './comparison-tool.service';
 import { ToastNotificationService } from './toast-notification.service';
@@ -28,6 +28,10 @@ export type ComparisonToolServiceOptions = {
   pinnedData?: Record<string, unknown>[];
   // Fails the initial pinned fetch, so `pinnedData` is ignored and `pinnedItems` stay unloaded
   pinnedFetchFails?: boolean;
+  // Starts a pinned fetch that never lands, after any initial pinned data is applied, so those rows
+  // stay on screen while a newer pinned fetch is pending. Needs `pinnedItems`, since a pinned fetch
+  // with no pins completes at once
+  pinnedFetchPending?: boolean;
   multiSortMeta?: SortMeta[];
   router?: Router;
   activatedRoute?: ActivatedRoute;
@@ -121,6 +125,10 @@ export const provideComparisonToolService = (
         // If only pinned IDs are provided, initialize pinned data with provided ids
         const pinnedData = options.pinnedItems.map((item) => ({ _id: item }));
         service.fetchPinned(of({ data: pinnedData, totalCount: pinnedData.length }));
+      }
+
+      if (options.pinnedFetchPending) {
+        service.fetchPinned(NEVER);
       }
 
       if (options.multiSortMeta !== undefined) {

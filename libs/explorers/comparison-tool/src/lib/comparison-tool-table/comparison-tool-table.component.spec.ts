@@ -2,7 +2,10 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, RouterModule } from '@angular/router';
-import { PINNED_RESULTS_HEADING } from '@sagebionetworks/explorers/constants';
+import {
+  PINNED_RESULTS_HEADING,
+  TABLE_DATA_LOADING_MESSAGE,
+} from '@sagebionetworks/explorers/constants';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
@@ -38,7 +41,6 @@ import {
   SORT_BADGE_SPACING_PX,
   SORT_BADGE_WIDTH_PX,
   SORT_ICON_WIDTH_PX,
-  TABLE_DATA_LOADING_TOOLTIP,
 } from './comparison-tool-table.constants';
 import {
   clampAndFormatWidths,
@@ -88,6 +90,7 @@ async function setup(
     pinnedData?: Record<string, unknown>[];
     pinLimit?: number;
     pinnedFetchFails?: boolean;
+    pinnedFetchPending?: boolean;
   },
   ctFilterServiceOptions?: { searchTerm?: string | null; filters?: ComparisonToolFilter[] },
 ) {
@@ -187,7 +190,7 @@ describe('ComparisonToolTableComponent', () => {
     component.detectChanges();
     await user.hover(screen.getByRole('button', { name: /clear all/i }));
 
-    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_TOOLTIP })).toBeVisible();
+    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_MESSAGE })).toBeVisible();
   });
 
   it('should not show pinned section when there are no pinned items', async () => {
@@ -252,7 +255,7 @@ describe('ComparisonToolTableComponent', () => {
     component.detectChanges();
     await user.hover(screen.getByRole('button', { name: /pin all/i }));
 
-    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_TOOLTIP })).toBeVisible();
+    expect(screen.getByRole('tooltip', { name: TABLE_DATA_LOADING_MESSAGE })).toBeVisible();
   });
 
   it('should explain the pin limit rather than the loading state when both apply', async () => {
@@ -317,6 +320,46 @@ describe('ComparisonToolTableComponent', () => {
         PINNED_RESULTS_HEADING,
         '2 Parents',
         '3 Children',
+      ]);
+    });
+  });
+
+  describe('pinned results header while pinned rows load', () => {
+    it('should note that it is waiting for data on the heading', async () => {
+      const { component } = await setup({
+        ...pinnedOptions(mockComparisonToolData.slice(0, 2)),
+        pinnedFetchPending: true,
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        `${PINNED_RESULTS_HEADING} ${TABLE_DATA_LOADING_MESSAGE}`,
+      ]);
+    });
+
+    it('should show that it is waiting for data in place of the view noun count', async () => {
+      const { component } = await setup({
+        configs: viewNounConfigs,
+        ...pinnedOptions(mockComparisonToolData.slice(0, 2)),
+        pinnedFetchPending: true,
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        TABLE_DATA_LOADING_MESSAGE,
+      ]);
+    });
+
+    it('should show that it is waiting for data once, then a blank line, in a child view', async () => {
+      const { component } = await setup({
+        configs: childViewConfigs,
+        ...pinnedOptions(childViewPinnedData),
+        pinnedFetchPending: true,
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        TABLE_DATA_LOADING_MESSAGE,
+        '',
       ]);
     });
   });

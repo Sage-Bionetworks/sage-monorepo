@@ -6,9 +6,19 @@
       <div class="table-divider table-divider-1">
         <div class="table-divider-inner">
           <div id="pinned-results-header" class="table-divider-label">
-            <span>{{ pinnedResultsLabels().heading }}</span>
+            <span>
+              {{ pinnedResultsLabels().heading.text }}
+              @if (pinnedResultsLabels().heading.note; as note) {
+                <i class="table-divider-label-note">{{ note }}</i>
+              }
+            </span>
             @for (sublabel of pinnedResultsLabels().sublabels; track $index) {
-              <span class="table-divider-sublabel">{{ sublabel }}</span>
+              <span class="table-divider-sublabel">
+                {{ sublabel.text }}
+                @if (sublabel.note; as note) {
+                  <i class="table-divider-label-note">{{ note }}</i>
+                }
+              </span>
             }
           </div>
           <div class="table-divider-controls pinned-items-controls">
