@@ -6,6 +6,7 @@ import {
 } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { provideRouter, Router, Routes } from '@angular/router';
 import { APP_VERSION_PATH, AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
@@ -37,6 +38,24 @@ const loadedVersion: AppVersion = { appVersion: '4.0.0-rc3', commitSha: 'abc1234
 const newerVersion: AppVersion = { appVersion: '4.0.0-rc4', commitSha: 'def5678' };
 const unknownVersion: AppVersion = { appVersion: '', commitSha: '' };
 
+const missingChunkPath = 'genes';
+const brokenRoutePath = 'models';
+const routes: Routes = [
+  {
+    path: missingChunkPath,
+    loadChildren: () =>
+      Promise.reject(
+        new TypeError(
+          'Failed to fetch dynamically imported module: https://modeladexplorer.org/chunk-ABCD1234.js',
+        ),
+      ),
+  },
+  {
+    path: brokenRoutePath,
+    loadChildren: () => Promise.reject(new TypeError('Cannot read properties of undefined')),
+  },
+];
+
 describe('AppUpdateService', () => {
   let visibilityState: DocumentVisibilityState;
   let isBrowserOnline: boolean;
@@ -54,6 +73,7 @@ describe('AppUpdateService', () => {
       providers: [
         provideHttpClient(withInterceptors([appInterceptor])),
         provideHttpClientTesting(),
+        provideRouter(routes),
         { provide: PlatformService, useValue: { isBrowser: !isServer, isServer } },
         { provide: LoggerService, useValue: logger },
       ],
@@ -76,6 +96,12 @@ describe('AppUpdateService', () => {
   function reconnect() {
     isBrowserOnline = true;
     window.dispatchEvent(new Event('online'));
+  }
+
+  async function navigateTo(path: string) {
+    await TestBed.inject(Router)
+      .navigateByUrl(`/${path}`)
+      .catch(() => undefined);
   }
 
   function respondWithServerVersion(serverVersion: AppVersion) {
@@ -383,6 +409,99 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
 
       expect(service.isStale()).toBe(true);
+    });
+  });
+
+  describe('when an error hints the tab may be stale', () => {
+    it('checks right away when a route chunk fails to load, even just after another check', async () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+      returnToTab();
+      respondWithServerVersion(loadedVersion);
+
+      await navigateTo(missingChunkPath);
+      respondWithServerVersion(newerVersion);
+
+      expect(service.isStale()).toBe(true);
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(
+        STALE_CLIENT_METRIC,
+        1,
+        expect.objectContaining({
+          attributes: expect.objectContaining({
+            trigger: AppUpdateCheckTriggerEnum.ChunkLoadError,
+          }),
+        }),
+      );
+    });
+
+    it('does not check when a route fails for another reason', async () => {
+      setup().start(loadedVersion, siteName);
+
+      await navigateTo(brokenRoutePath);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+    });
+
+    it('checks when asked after an HTTP error', () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+
+      service.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
+      respondWithServerVersion(newerVersion);
+
+      expect(service.isStale()).toBe(true);
+    });
+
+    it('checks at most once per minimum interval when asked repeatedly', () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+
+      service.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
+      respondWithServerVersion(loadedVersion);
+      service.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+    });
+
+    it('sends one request when checks are asked for while one is in progress', async () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+
+      const firstCheck = service.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const secondCheck = service.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      respondWithServerVersion(newerVersion);
+
+      await expect(Promise.all([firstCheck, secondCheck])).resolves.toEqual([true, true]);
+    });
+
+    it('resolves that the tab is stale without another request once known', async () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+
+      const isStale = service.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+      await expect(isStale).resolves.toBe(true);
+    });
+
+    it('resolves that the tab is current without a request before it starts', async () => {
+      const isStale = setup().checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+      await expect(isStale).resolves.toBe(false);
+    });
+
+    it('resolves that the tab is current without a request while offline', async () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+      isBrowserOnline = false;
+
+      const isStale = service.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+      await expect(isStale).resolves.toBe(false);
     });
   });
 });

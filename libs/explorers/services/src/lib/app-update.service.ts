@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { HttpBackend, HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationError, Router } from '@angular/router';
 import { APP_VERSION_PATH, AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
@@ -10,17 +11,22 @@ import {
   VERSION_CHECK_FAILED_METRIC,
   VERSION_ENDPOINT_MISCONFIGURED_WARNING,
 } from '@sagebionetworks/explorers/constants';
+import { isChunkLoadError } from '@sagebionetworks/explorers/sentry';
 import * as Sentry from '@sentry/angular';
 import {
   catchError,
   exhaustMap,
   filter,
+  finalize,
+  firstValueFrom,
   fromEvent,
   interval,
   map,
   merge,
   Observable,
   of,
+  share,
+  Subject,
   Subscription,
 } from 'rxjs';
 import { ErrorOverlayService } from './error-overlay.service';
@@ -29,6 +35,8 @@ import { PlatformService } from './platform.service';
 import { VersionService } from './version.service';
 
 export const AppUpdateCheckTriggerEnum = {
+  ChunkLoadError: 'chunk-load-error',
+  HttpError: 'http-error',
   Poll: 'poll',
   Reconnect: 'reconnect',
   Visibility: 'visibility',
@@ -71,6 +79,7 @@ export class AppUpdateService {
   // and lose the status this service classifies failures by.
   private readonly http = new HttpClient(inject(HttpBackend));
   private readonly document = inject(DOCUMENT);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
   private readonly errorOverlayService = inject(ErrorOverlayService);
@@ -85,11 +94,13 @@ export class AppUpdateService {
   private lastCheckedAt = 0;
   private hasReportedMisconfiguration = false;
   private checkSubscription: Subscription | null = null;
+  private inFlightCheck$: Observable<boolean> | null = null;
+  private readonly requestedChecks = new Subject<AppUpdateCheckTrigger>();
 
   /**
    * Starts checking for a newer deploy whenever the tab becomes visible again, whenever the
-   * browser reconnects, and periodically while the tab stays visible. Does nothing during SSR or
-   * if already started.
+   * browser reconnects, periodically while the tab stays visible, and right away when a route's
+   * lazy-loaded chunk fails to load. Does nothing during SSR or if already started.
    */
   start(clientVersion: AppVersion, siteName: string) {
     const window = this.document.defaultView;
@@ -109,14 +120,58 @@ export class AppUpdateService {
       map(() => AppUpdateCheckTriggerEnum.Poll),
     );
 
-    this.checkSubscription = merge(visibility$, reconnect$, poll$)
+    this.checkSubscription = merge(visibility$, reconnect$, poll$, this.requestedChecks)
       .pipe(
         filter(() => this.isTabVisible() && this.isOnline()),
         filter(() => Date.now() - this.lastCheckedAt >= APP_UPDATE_MIN_CHECK_INTERVAL_MS),
-        exhaustMap((trigger) => this.checkForUpdate$(trigger)),
+        exhaustMap((trigger) => this.check$(trigger)),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationError && isChunkLoadError(event.error)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError));
+  }
+
+  /**
+   * Asks for a check when something hints the tab may be stale, such as a failed API request.
+   * Subject to the same minimum interval as the background checks, so a burst of hints sends at
+   * most one request.
+   */
+  requestCheck(trigger: AppUpdateCheckTrigger) {
+    this.requestedChecks.next(trigger);
+  }
+
+  /**
+   * Checks right away, ignoring the minimum interval, and resolves whether the tab is stale. For
+   * errors that a stale tab explains, such as a chunk that failed to load. Resolves false before
+   * `start` and while offline, since staleness is then unknown.
+   */
+  checkNow(trigger: AppUpdateCheckTrigger): Promise<boolean> {
+    if (this.stale()) {
+      return Promise.resolve(true);
+    }
+    if (!this.clientVersion || !this.isOnline()) {
+      return Promise.resolve(false);
+    }
+    return firstValueFrom(this.check$(trigger));
+  }
+
+  /** Reuses a check already in progress, so concurrent triggers send one request. */
+  private check$(trigger: AppUpdateCheckTrigger): Observable<boolean> {
+    if (!this.inFlightCheck$) {
+      this.inFlightCheck$ = this.checkForUpdate$(trigger).pipe(
+        finalize(() => {
+          this.inFlightCheck$ = null;
+        }),
+        share(),
+      );
+    }
+    return this.inFlightCheck$;
   }
 
   private checkForUpdate$(trigger: AppUpdateCheckTrigger): Observable<boolean> {
