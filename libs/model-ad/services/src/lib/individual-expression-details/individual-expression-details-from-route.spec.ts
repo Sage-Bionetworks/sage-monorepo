@@ -7,6 +7,11 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { transcriptomicsIndividualMocks } from '@sagebionetworks/model-ad/testing';
+import {
+  MODEL_GROUP_QUERY_KEY,
+  MODEL_QUERY_KEY,
+  TISSUE_QUERY_KEY,
+} from '@sagebionetworks/model-ad/util';
 import { render, screen } from '@testing-library/angular';
 import { Observable, of, switchMap, throwError, timer } from 'rxjs';
 import {
@@ -19,13 +24,13 @@ const NOT_FOUND_DELAY_MS = 10;
 const PATH_PARAM = 'ensemblGeneId';
 const DETAILS_PATH = 'details';
 
-type Fetch = (
+type FetchData = (
   id: string,
   query: IndividualExpressionDetailsQuery,
   options: IndividualExpressionDetailsFetchOptions,
 ) => Observable<TranscriptomicsIndividual[]>;
 
-let fetch: jest.Mock<ReturnType<Fetch>, Parameters<Fetch>>;
+let fetchMock: jest.Mock<ReturnType<FetchData>, Parameters<FetchData>>;
 
 @Component({
   selector: 'model-ad-details-host',
@@ -43,7 +48,7 @@ class DetailsHostComponent {
   readonly details = individualExpressionDetailsFromRoute({
     pathParam: PATH_PARAM,
     logLabel: 'DetailsHostComponent',
-    fetch: (id, query, options) => fetch(id, query, options),
+    fetchData: (id, query, options) => fetchMock(id, query, options),
   });
 }
 
@@ -62,11 +67,14 @@ describe('individualExpressionDetailsFromRoute', () => {
 
   const detailsRoute = (
     id: string,
-    queryParams: Record<string, string> = { model: gene.name, tissue: gene.tissue },
+    queryParams: Record<string, string> = {
+      [MODEL_QUERY_KEY]: gene.name,
+      [TISSUE_QUERY_KEY]: gene.tissue,
+    },
   ) => `/${DETAILS_PATH}/${id}?${new URLSearchParams(queryParams)}`;
 
   async function setup(initialRoute: string, { notFoundDelayMs = 0, isBrowser = true } = {}) {
-    fetch = jest.fn<ReturnType<Fetch>, Parameters<Fetch>>((id) => {
+    fetchMock = jest.fn<ReturnType<FetchData>, Parameters<FetchData>>((id) => {
       if (id !== unknownEnsemblGeneId) return of(transcriptomicsIndividualMocks);
 
       const notFound = throwError(() => new Error(`${id} not found`));
@@ -86,7 +94,7 @@ describe('individualExpressionDetailsFromRoute', () => {
     return { navigate };
   }
 
-  const requests = () => fetch.mock.calls.map(([id, query]) => ({ id, query }));
+  const requests = () => fetchMock.mock.calls.map(([id, query]) => ({ id, query }));
 
   it('should expose the route info and the fetched data', async () => {
     await setup(detailsRoute(gene.ensembl_gene_id));
@@ -101,7 +109,7 @@ describe('individualExpressionDetailsFromRoute', () => {
   it('should suppress the error overlay on the request', async () => {
     await setup(detailsRoute(gene.ensembl_gene_id));
 
-    const [, , options] = fetch.mock.calls[0];
+    const [, , options] = fetchMock.mock.calls[0];
     expect(options.context.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
   });
 
@@ -109,13 +117,18 @@ describe('individualExpressionDetailsFromRoute', () => {
     await setup(detailsRoute(gene.ensembl_gene_id), { isBrowser: false });
 
     expect(screen.getByText('Loading')).toBeInTheDocument();
-    expect(fetch).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('should issue one request per navigation with the params of that navigation', async () => {
     const { navigate } = await setup(detailsRoute(gene.ensembl_gene_id));
 
-    await navigate(detailsRoute(otherEnsemblGeneId, { model: gene.name, tissue: otherTissue }));
+    await navigate(
+      detailsRoute(otherEnsemblGeneId, {
+        [MODEL_QUERY_KEY]: gene.name,
+        [TISSUE_QUERY_KEY]: otherTissue,
+      }),
+    );
 
     expect(requests()).toEqual([
       {
@@ -140,13 +153,23 @@ describe('individualExpressionDetailsFromRoute', () => {
   it('should issue one more request when only the query params change', async () => {
     const { navigate } = await setup(detailsRoute(gene.ensembl_gene_id));
 
-    await navigate(detailsRoute(gene.ensembl_gene_id, { model: gene.name, tissue: otherTissue }));
+    await navigate(
+      detailsRoute(gene.ensembl_gene_id, {
+        [MODEL_QUERY_KEY]: gene.name,
+        [TISSUE_QUERY_KEY]: otherTissue,
+      }),
+    );
 
     expect(requests().map(({ query }) => query.tissue)).toEqual([gene.tissue, otherTissue]);
   });
 
   it('should request by model group when the url has a model group', async () => {
-    await setup(detailsRoute(gene.ensembl_gene_id, { modelGroup, tissue: gene.tissue }));
+    await setup(
+      detailsRoute(gene.ensembl_gene_id, {
+        [MODEL_GROUP_QUERY_KEY]: modelGroup,
+        [TISSUE_QUERY_KEY]: gene.tissue,
+      }),
+    );
 
     expect(requests()).toEqual([
       {
@@ -161,15 +184,15 @@ describe('individualExpressionDetailsFromRoute', () => {
   });
 
   it.each([
-    ['tissue', { model: gene.name }],
-    ['model and model group', { tissue: gene.tissue }],
+    ['tissue', { [MODEL_QUERY_KEY]: gene.name }],
+    ['model and model group', { [TISSUE_QUERY_KEY]: gene.tissue }],
   ])(
     'should redirect to the not found page without a request when the url is missing %s',
     async (_, queryParams) => {
       await setup(detailsRoute(gene.ensembl_gene_id, queryParams));
 
       expect(await screen.findByText('Not found')).toBeInTheDocument();
-      expect(fetch).not.toHaveBeenCalled();
+      expect(fetchMock).not.toHaveBeenCalled();
     },
   );
 

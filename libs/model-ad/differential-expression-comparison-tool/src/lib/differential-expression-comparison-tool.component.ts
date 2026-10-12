@@ -36,6 +36,11 @@ import {
   DOWNLOAD_PINS_NOTE,
   ROUTE_PATHS,
 } from '@sagebionetworks/model-ad/config';
+import {
+  MODEL_GROUP_QUERY_KEY,
+  MODEL_QUERY_KEY,
+  TISSUE_QUERY_KEY,
+} from '@sagebionetworks/model-ad/util';
 import { SortMeta } from 'primeng/api';
 import { catchError, EMPTY, map, Observable, of, shareReplay } from 'rxjs';
 import {
@@ -375,8 +380,8 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
       this.router.createUrlTree(commands, {
         queryParams:
           row.model_group === null
-            ? { model: row.name.link_text, tissue: row.tissue }
-            : { modelGroup: row.model_group, tissue: row.tissue },
+            ? { [MODEL_QUERY_KEY]: row.name.link_text, [TISSUE_QUERY_KEY]: row.tissue }
+            : { [MODEL_GROUP_QUERY_KEY]: row.model_group, [TISSUE_QUERY_KEY]: row.tissue },
       }),
     );
     window.open(url, '_blank');

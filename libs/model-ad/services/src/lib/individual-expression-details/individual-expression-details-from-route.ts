@@ -10,6 +10,11 @@ import {
 import { routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import { ModelIdentifierType } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import {
+  MODEL_GROUP_QUERY_KEY,
+  MODEL_QUERY_KEY,
+  TISSUE_QUERY_KEY,
+} from '@sagebionetworks/model-ad/util';
 import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
 
 export interface IndividualExpressionDetailsQuery {
@@ -25,7 +30,7 @@ export interface IndividualExpressionDetailsFetchOptions {
 export interface IndividualExpressionDetailsFromRouteOptions<T> {
   pathParam: string;
   logLabel: string;
-  fetch: (
+  fetchData: (
     id: string,
     query: IndividualExpressionDetailsQuery,
     options: IndividualExpressionDetailsFetchOptions,
@@ -42,7 +47,7 @@ export interface IndividualExpressionDetailsState<T> {
 export function individualExpressionDetailsFromRoute<T>({
   pathParam,
   logLabel,
-  fetch,
+  fetchData,
 }: IndividualExpressionDetailsFromRouteOptions<T>): IndividualExpressionDetailsState<T> {
   const route = inject(ActivatedRoute);
   const router = inject(Router);
@@ -74,9 +79,9 @@ export function individualExpressionDetailsFromRoute<T>({
 
   const load = (snapshot: ActivatedRouteSnapshot): Observable<T[]> => {
     const id = snapshot.paramMap.get(pathParam);
-    const modelName = snapshot.queryParamMap.get('model');
-    const modelGroup = snapshot.queryParamMap.get('modelGroup');
-    const tissueParam = snapshot.queryParamMap.get('tissue');
+    const modelName = snapshot.queryParamMap.get(MODEL_QUERY_KEY);
+    const modelGroup = snapshot.queryParamMap.get(MODEL_GROUP_QUERY_KEY);
+    const tissueParam = snapshot.queryParamMap.get(TISSUE_QUERY_KEY);
     tissue.set(tissueParam);
 
     const modelIdentifierType = modelGroup
@@ -100,7 +105,7 @@ export function individualExpressionDetailsFromRoute<T>({
       modelIdentifier: modelIdentifierParam,
     };
 
-    return fetch(id, query, {
+    return fetchData(id, query, {
       context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
     }).pipe(
       catchError(() =>

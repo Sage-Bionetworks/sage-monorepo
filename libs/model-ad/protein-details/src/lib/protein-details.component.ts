@@ -18,7 +18,7 @@ export class ProteinDetailsComponent {
   readonly details = individualExpressionDetailsFromRoute({
     pathParam: 'uniqueId',
     logLabel: 'ProteinDetailsComponent',
-    fetch: (uniqueId, query, options) =>
+    fetchData: (uniqueId, query, options) =>
       this.proteomicsIndividualService.getProteomicsIndividual(
         { uniqueId, ...query },
         'body',

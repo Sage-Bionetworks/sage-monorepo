@@ -18,7 +18,7 @@ export class GeneDetailsComponent {
   readonly details = individualExpressionDetailsFromRoute({
     pathParam: 'ensemblGeneId',
     logLabel: 'GeneDetailsComponent',
-    fetch: (ensemblGeneId, query, options) =>
+    fetchData: (ensemblGeneId, query, options) =>
       this.transcriptomicsIndividualService.getTranscriptomicsIndividual(
         { ensemblGeneId, ...query },
         'body',
