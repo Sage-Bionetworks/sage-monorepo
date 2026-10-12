@@ -1,4 +1,5 @@
 import { HELP_URL, ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { COMPARISON_TOOL_HEADER_LINK_OPTIONS } from '@sagebionetworks/explorers/constants';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 
 export const headerLinks: NavigationLink[] = [
@@ -10,6 +11,7 @@ export const headerLinks: NavigationLink[] = [
   {
     label: 'Gene Comparison',
     routerLink: [ROUTE_PATHS.GENE_COMPARISON],
+    // TODO(AG-2207): spread COMPARISON_TOOL_HEADER_LINK_OPTIONS once GCT is migrated to the explorers comparison tool
   },
   {
     label: 'Nominations',
@@ -17,10 +19,12 @@ export const headerLinks: NavigationLink[] = [
       {
         label: 'Nominated Targets',
         routerLink: [ROUTE_PATHS.NOMINATED_TARGETS],
+        ...COMPARISON_TOOL_HEADER_LINK_OPTIONS,
       },
       {
         label: 'Nominated Drugs',
         routerLink: [ROUTE_PATHS.NOMINATED_DRUGS],
+        ...COMPARISON_TOOL_HEADER_LINK_OPTIONS,
       },
       {
         label: 'Making Nominations',

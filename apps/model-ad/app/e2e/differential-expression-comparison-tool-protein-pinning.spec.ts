@@ -22,24 +22,26 @@ import {
   unPinByName,
   waitForTableLoadingComplete,
 } from '@sagebionetworks/explorers/testing/e2e';
-import { Proteomics } from '@sagebionetworks/model-ad/api-client';
 import {
   DIFFERENTIAL_EXPRESSION_CT_PAGE as CT_PAGE,
   DIFFERENTIAL_EXPRESSION_DROPDOWN_INDEX as DROPDOWN_INDEX,
-  DIFFERENTIAL_EXPRESSION_HEMIBRAIN_TISSUE as HEMIBRAIN_TISSUE,
   DIFFERENTIAL_EXPRESSION_PROTEIN_CATEGORY as PROTEIN_MAIN_CATEGORY,
+  DIFFERENTIAL_EXPRESSION_PROTEIN_HEMIBRAIN_CATEGORIES as proteinCategories,
   DIFFERENTIAL_EXPRESSION_RNA_CATEGORY as RNA_MAIN_CATEGORY,
+  DIFFERENTIAL_EXPRESSION_RNA_HEMIBRAIN_CATEGORIES as rnaHemibrainCategories,
 } from './constants';
 import {
+  fetchProteinRows,
   fetchProteomics,
-  fetchTranscriptomics,
+  fetchRnaRows,
+  getEnsemblGeneId,
+  getProteinIds,
+  getRowIds,
   navigateToComparison,
 } from './helpers/comparison-tool';
 
 // Protein rows are children of the RNA row keyed by their rna_composite_id, so each gene below is
 // an RNA composite_id.
-const rnaHemibrainCategories = [RNA_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
-const proteinCategories = [PROTEIN_MAIN_CATEGORY, HEMIBRAIN_TISSUE];
 const fourProteinGene = 'ENSMUSG00000019961~LOAD2~Male'; // Tmpo
 const fiveProteinMaleGene = 'ENSMUSG00000032826~LOAD2~Male'; // Ank2
 const fiveProteinFemaleGene = 'ENSMUSG00000032826~LOAD2~Female'; // Ank2
@@ -50,27 +52,6 @@ const PROTEIN_PIN_LIMIT_TOOLTIP = `You have already pinned the maximum number of
 // pinnedProteins - the count and verb the toast opens with, e.g. '1 protein was' or '9 proteins were'
 const getProteinPinLimitToast = (pinnedProteins: string) =>
   `Only ${pinnedProteins} pinned, because you reached the maximum of ${MAX_PIN_LIMIT} pinned genes. Some proteins were skipped because they belong to a gene not already in your pinned list.`;
-
-const getEnsemblGeneId = (gene: string) => gene.split('~')[0];
-
-const getProteinIds = (rows: Proteomics[], gene: string) =>
-  rows.filter((row) => row.rna_composite_id === gene).map((row) => row.composite_id);
-
-const getRowIds = (rows: Proteomics[]) => rows.map((row) => row.composite_id);
-
-// The Protein rows of the given genes, in the table's default sort order
-const fetchProteinRows = async (page: Page, genes: string[]): Promise<Proteomics[]> => {
-  const ensemblGeneIds = [...new Set(genes.map(getEnsemblGeneId))];
-  const rows = await fetchProteomics(
-    page,
-    proteinCategories,
-    {},
-    {
-      search: ensemblGeneIds.join(','),
-    },
-  );
-  return rows.filter((row) => genes.includes(row.rna_composite_id));
-};
 
 // Every Protein row of the first geneCount genes in the table's default sort order. The tests
 // assume fiveProteinMaleGene and fiveProteinFemaleGene are outside this set, so this checks neither
@@ -302,15 +283,7 @@ test.describe('differential expression protein pinning', () => {
     const proteinRows = await fetchProteinRows(page, [fourProteinGene, proteinOnlyGene]);
     expect(getProteinIds(proteinRows, fourProteinGene)).toHaveLength(4);
     expect(getProteinIds(proteinRows, proteinOnlyGene).length).toBeGreaterThan(0);
-    const rnaRows = await fetchTranscriptomics(
-      page,
-      rnaHemibrainCategories,
-      {},
-      {
-        search: getEnsemblGeneId(proteinOnlyGene),
-      },
-    );
-    expect(rnaRows.map((row) => row.composite_id)).not.toContain(proteinOnlyGene);
+    expect(await fetchRnaRows(page, [proteinOnlyGene])).toHaveLength(0);
     const proteinIds = getRowIds(proteinRows);
 
     await navigateByUrlWithPins(page, proteinCategories, proteinIds);
