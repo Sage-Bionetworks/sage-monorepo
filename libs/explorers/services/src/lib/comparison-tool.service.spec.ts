@@ -606,6 +606,29 @@ describe('ComparisonToolService', () => {
       });
     });
 
+    describe('after a failed unpinned fetch in a view reached by a switch', () => {
+      it('keeps the pins cached for the previous view through a successful retry', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1', 'parent2');
+        service.setDropdownSelection(CHILD_VIEW);
+        landPinned(childRow('child1a', 'parent1'));
+        const { source$ } = failsOnce(() =>
+          of({ data: [childRow('child2a', 'parent2')], totalCount: 1 }),
+        );
+        service.fetchUnpinned(source$);
+
+        service.retryUnpinnedFetch();
+        service.setDropdownSelection(PARENT_VIEW);
+
+        expect(service.unpinnedFetchFailed()).toBe(false);
+        expect(service.pinnedItems()).toEqual(['parent1', 'parent2']);
+        expect(service.pinnedItemsQuery()).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'row',
+        });
+      });
+    });
+
     describe('after a failed first pinned fetch', () => {
       const failFirstPinnedFetch = (selection: string[], pinnedItems: string[]) => {
         connectService(viewConfigs, { selection });
@@ -2647,6 +2670,7 @@ describe('ComparisonToolService', () => {
       service.fetchUnpinned(failing$);
       failing$.error(new Error('request failed'));
 
+      expect(service.unpinnedFetchFailed()).toBe(true);
       expect(service.unpinnedData()).toEqual([]);
       expect(service.unpinnedRowCount()).toBe(0);
       expect(service.isLoadingTableData()).toBe(false);
@@ -2656,8 +2680,80 @@ describe('ComparisonToolService', () => {
       recovered$.next({ data: [{ _id: 'recovered' }], totalCount: 1 });
       recovered$.complete();
 
+      expect(service.unpinnedFetchFailed()).toBe(false);
       expect(service.unpinnedData()).toEqual([{ _id: 'recovered' }]);
       expect(service.unpinnedRowCount()).toBe(1);
+    });
+
+    it('re-sends the failed unpinned fetch on retry', () => {
+      connectService();
+      const { source$, subscriptions } = failsOnce(() =>
+        of({ data: [{ _id: 'recovered' }], totalCount: 1 }),
+      );
+      service.fetchUnpinned(source$);
+
+      service.retryUnpinnedFetch();
+
+      expect(subscriptions()).toBe(2);
+      expect(service.unpinnedFetchFailed()).toBe(false);
+      expect(service.unpinnedData()).toEqual([{ _id: 'recovered' }]);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('reports the unpinned stream as loading while it is retried', () => {
+      connectService();
+      const retried$ = new Subject<Result>();
+      const { source$ } = failsOnce(() => retried$);
+      service.fetchUnpinned(source$);
+
+      service.retryUnpinnedFetch();
+
+      expect(service.isLoadingUnpinnedData()).toBe(true);
+      expect(service.isLoadingPinnedData()).toBe(false);
+
+      retried$.next({ data: [], totalCount: 0 });
+      retried$.complete();
+      expect(service.isLoadingUnpinnedData()).toBe(false);
+    });
+
+    it('does not retry once an unpinned fetch has succeeded', () => {
+      connectService();
+      const { source$, subscriptions } = failsOnce(() => of({ data: [], totalCount: 0 }));
+      service.fetchUnpinned(source$);
+      service.retryUnpinnedFetch();
+      expect(subscriptions()).toBe(2);
+
+      service.retryUnpinnedFetch();
+
+      expect(subscriptions()).toBe(2);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('lets a newer unpinned fetch supersede an in-flight retry', () => {
+      connectService();
+      const retried$ = new Subject<Result>();
+      const { source$ } = failsOnce(() => retried$);
+      service.fetchUnpinned(source$);
+      service.retryUnpinnedFetch();
+
+      service.fetchUnpinned(of({ data: [{ _id: 'newest' }], totalCount: 1 }));
+      retried$.next({ data: [{ _id: 'stale' }], totalCount: 1 });
+
+      expect(service.unpinnedData()).toEqual([{ _id: 'newest' }]);
+      expect(service.unpinnedFetchFailed()).toBe(false);
+      expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('keeps the pinned rows when an unpinned fetch fails', () => {
+      connectService();
+      service.setPinnedItems(['id1']);
+      service.fetchPinned(of({ data: rows('id1'), totalCount: 1 }));
+
+      service.fetchUnpinned(failedRequest());
+
+      expect(service.unpinnedFetchFailed()).toBe(true);
+      expect(service.pinnedData()).toEqual(rows('id1'));
+      expect(service.pinnedItems()).toEqual(['id1']);
     });
 
     it('keeps the pins cached and counted toward the limit after a failed pinned fetch', () => {

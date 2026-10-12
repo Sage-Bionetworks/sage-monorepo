@@ -25,6 +25,8 @@ export type ComparisonToolServiceOptions = {
   pinAllFetch?: PinAllFetch<Record<string, unknown>>;
   pinnedItems?: string[];
   unpinnedData?: Record<string, unknown>[];
+  // Fails the initial unpinned fetch, so `unpinnedData` is ignored
+  unpinnedFetchFails?: boolean;
   pinnedData?: Record<string, unknown>[];
   // Fails the initial pinned fetch, so `pinnedData` is ignored and `pinnedItems` stay unloaded
   pinnedFetchFails?: boolean;
@@ -111,7 +113,9 @@ export const provideComparisonToolService = (
         service.setPinnedItems(options.pinnedItems);
       }
 
-      if (options.unpinnedData !== undefined) {
+      if (options.unpinnedFetchFails) {
+        service.fetchUnpinned(throwError(() => new Error('unpinned fetch failed')));
+      } else if (options.unpinnedData !== undefined) {
         const unpinnedData = options.unpinnedData;
         service.fetchUnpinned(of({ data: unpinnedData, totalCount: unpinnedData.length }));
       }

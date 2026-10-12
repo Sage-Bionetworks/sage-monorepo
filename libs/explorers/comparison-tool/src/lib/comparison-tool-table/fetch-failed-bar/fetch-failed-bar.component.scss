@@ -1,0 +1,24 @@
+.fetch-failed-bar {
+  background-color: var(--color-citrine-100);
+}
+
+// The table can be wider than the screen, so the content is pinned to the scroll container's
+// visible width (`100cqi` of `.comparison-tool-body`) to stay centered while it scrolls sideways
+.fetch-failed-bar-content {
+  position: sticky;
+  left: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100cqi;
+  min-height: 56px;
+  padding: 8px 30px;
+}
+
+.fetch-failed-bar-message {
+  color: var(--color-text);
+  font-size: 18px;
+  line-height: 20px;
+}

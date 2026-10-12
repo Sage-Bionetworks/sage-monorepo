@@ -272,7 +272,9 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     this.logger.log('DifferentialExpressionComparisonToolComponent: unpinned query', { ...query });
 
     const mainCategory = currentQuery.categories[0];
-    const page$ = this.fetchDifferentialExpressionPage(mainCategory, query);
+    const page$ = this.fetchDifferentialExpressionPage(mainCategory, query, {
+      context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+    });
     if (page$ === null) {
       this.logUnrecognizedMainCategory(mainCategory);
       this.comparisonToolService.fetchUnpinned(of({ data: [], totalCount: 0 }));

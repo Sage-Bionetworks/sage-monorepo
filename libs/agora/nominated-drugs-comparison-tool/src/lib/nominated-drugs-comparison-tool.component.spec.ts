@@ -81,7 +81,7 @@ describe('NominatedDrugsComparisonToolComponent', () => {
 
     component.getUnpinnedData(mockEmptyComparisonToolQuery);
 
-    expect(getNominatedDrugsSpy).toHaveBeenCalledWith(
+    expect(getNominatedDrugsSpy.mock.lastCall?.[0]).toEqual(
       expect.objectContaining({ maximumClinicalTrialPhase: selectedPhases }),
     );
   });

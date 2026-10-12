@@ -233,6 +233,42 @@ export const PinnedRowsLoadingChildView: Story = {
   ],
 };
 
+export const UnpinnedFetchFailed: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
+          pinLimit: 5,
+          pinnedData: mockComparisonToolData.slice(0, 3),
+          unpinnedFetchFails: true,
+          configs: mockComparisonToolDataConfig,
+        }),
+      ],
+    }),
+  ],
+};
+
+export const PinnedAndUnpinnedFetchFailedChildView: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: childViewPinnedData.map((item) => item['_id']),
+          pinnedFetchFails: true,
+          pinLimit: 5,
+          unpinnedFetchFails: true,
+          configs: childViewConfigs,
+        }),
+      ],
+    }),
+  ],
+};
+
 export const PinnedFetchFailedChildView: Story = {
   args: {},
   decorators: [
