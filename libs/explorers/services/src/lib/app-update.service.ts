@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpBackend, HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { DestroyRef, inject, Injectable, NgZone, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationError, Router } from '@angular/router';
 import { AppVersion } from '@sagebionetworks/explorers/config';
@@ -82,6 +82,7 @@ export class AppUpdateService {
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly ngZone = inject(NgZone);
   private readonly platformService = inject(PlatformService);
   private readonly errorOverlayService = inject(ErrorOverlayService);
   private readonly versionService = inject(VersionService);
@@ -121,14 +122,19 @@ export class AppUpdateService {
       map(() => AppUpdateCheckTriggerEnum.Poll),
     );
 
-    this.checkSubscription = merge(visibility$, reconnect$, poll$, this.requestedChecks)
-      .pipe(
-        filter(() => this.isTabVisible() && this.isOnline()),
-        filter(() => Date.now() - this.lastCheckedAt >= APP_UPDATE_MIN_CHECK_INTERVAL_MS),
-        exhaustMap((trigger) => this.check$(trigger)),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe();
+    // Subscribed outside the Angular zone because a pending interval keeps the app from ever
+    // becoming stable, and hydration waits for stability before it finishes. The stale signal
+    // still schedules change detection when it is set outside the zone.
+    this.checkSubscription = this.ngZone.runOutsideAngular(() =>
+      merge(visibility$, reconnect$, poll$, this.requestedChecks)
+        .pipe(
+          filter(() => this.isTabVisible() && this.isOnline()),
+          filter(() => Date.now() - this.lastCheckedAt >= APP_UPDATE_MIN_CHECK_INTERVAL_MS),
+          exhaustMap((trigger) => this.check$(trigger)),
+          takeUntilDestroyed(this.destroyRef),
+        )
+        .subscribe(),
+    );
 
     this.router.events
       .pipe(
