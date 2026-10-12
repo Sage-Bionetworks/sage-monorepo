@@ -1,7 +1,5 @@
 import type { Request, Response } from 'express';
 
-export const APP_VERSION_PATH = '/app-version';
-
 export interface AppVersion {
   appVersion: string;
   commitSha: string;

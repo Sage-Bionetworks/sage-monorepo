@@ -3,10 +3,11 @@ import { HttpBackend, HttpClient, HttpErrorResponse, HttpStatusCode } from '@ang
 import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationError, Router } from '@angular/router';
-import { APP_VERSION_PATH, AppVersion } from '@sagebionetworks/explorers/config';
+import { AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
+  APP_VERSION_PATH,
   STALE_CLIENT_METRIC,
   VERSION_CHECK_FAILED_METRIC,
   VERSION_ENDPOINT_MISCONFIGURED_WARNING,

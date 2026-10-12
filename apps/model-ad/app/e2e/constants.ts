@@ -8,6 +8,8 @@ export const COMPARISON_TOOL_PATHS: Record<ComparisonToolPage, string> = {
   'Disease Correlation': '/comparison/correlation',
 };
 
+export const SITE_NAME = 'Model AD';
+
 export const LEGACY_MOUSE_MODEL_OVERVIEW_PATH = '/comparison/model';
 
 export const NO_MODELS_FOUND_MESSAGE = 'No models found...';

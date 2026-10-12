@@ -5,6 +5,8 @@ export const HELP_URL = 'https://help.adknowledgeportal.org/apd/model-ad-explore
 
 export const SUPPORT_EMAIL = 'modeladexplorer@sagebionetworks.org';
 
+export const SITE_NAME = 'Model AD';
+
 export const DOWNLOAD_PINS_NOTE: DownloadNote = {
   textBefore: 'See the ',
   linkText: 'Model AD Explorer documentation',

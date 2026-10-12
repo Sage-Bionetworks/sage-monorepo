@@ -7,10 +7,11 @@ import {
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router, Routes } from '@angular/router';
-import { APP_VERSION_PATH, AppVersion } from '@sagebionetworks/explorers/config';
+import { AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
+  APP_VERSION_PATH,
   getAppUpdateMessage,
   STALE_CLIENT_METRIC,
   VERSION_CHECK_FAILED_METRIC,
