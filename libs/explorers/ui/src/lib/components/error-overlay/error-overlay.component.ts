@@ -10,8 +10,8 @@ import { ErrorOverlayService } from '@sagebionetworks/explorers/services';
 export class ErrorOverlayComponent {
   private readonly errorOverlayService = inject(ErrorOverlayService);
 
-  hasActiveError = this.errorOverlayService.hasActiveError;
-  activeErrorMessage = this.errorOverlayService.activeErrorMessage;
+  isOverlayVisible = this.errorOverlayService.isOverlayVisible;
+  activeMessage = this.errorOverlayService.activeMessage;
 
   onReload() {
     this.errorOverlayService.reloadPage();

@@ -119,7 +119,7 @@ $divider-margin: 30px;
     margin: 12px $divider-margin;
     padding: 10px 14px;
     border-left: 8px solid var(--color-warning);
-    background-color: color-mix(in srgb, var(--color-warning) 15%, white);
+    background-color: var(--color-warning-background);
     color: var(--color-text);
     font-size: 14px;
   }
