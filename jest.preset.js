@@ -2,7 +2,7 @@ const nxPreset = require('@nx/jest/preset').default;
 
 module.exports = {
   ...nxPreset,
-  runInBand: true,
+  maxWorkers: '50%',
   collectCoverage: true,
   coverageReporters: ['text', 'html', 'json', 'lcov'],
   coverageThreshold: {
