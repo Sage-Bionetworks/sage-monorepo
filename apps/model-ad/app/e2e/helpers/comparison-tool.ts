@@ -27,7 +27,9 @@ import {
   COMPARISON_TOOL_HEADER_TITLES,
   COMPARISON_TOOL_NAV_TRAILS,
   COMPARISON_TOOL_PATHS,
+  DIFFERENTIAL_EXPRESSION_PROTEIN_HEMIBRAIN_CATEGORIES,
   DIFFERENTIAL_EXPRESSION_RNA_CATEGORY,
+  DIFFERENTIAL_EXPRESSION_RNA_HEMIBRAIN_CATEGORIES,
   PROTEOMICS_API_PATH,
 } from '../constants';
 
@@ -163,6 +165,38 @@ export const fetchProteomics = async (
     PROTEOMICS_API_PATH,
   );
   return data.proteomics;
+};
+
+export const getEnsemblGeneId = (gene: string) => gene.split('~')[0];
+
+export const getRowIds = (rows: { composite_id: string }[]) => rows.map((row) => row.composite_id);
+
+// Protein rows are children of the RNA row keyed by their rna_composite_id
+export const getProteinIds = (rows: Proteomics[], gene: string) =>
+  rows.filter((row) => row.rna_composite_id === gene).map((row) => row.composite_id);
+
+const searchGenes = (genes: string[]) => [...new Set(genes.map(getEnsemblGeneId))].join(',');
+
+// The Hemibrain RNA rows of the given genes, in the table's default sort order
+export const fetchRnaRows = async (page: Page, genes: string[]): Promise<Transcriptomics[]> => {
+  const rows = await fetchTranscriptomics(
+    page,
+    DIFFERENTIAL_EXPRESSION_RNA_HEMIBRAIN_CATEGORIES,
+    {},
+    { search: searchGenes(genes) },
+  );
+  return rows.filter((row) => genes.includes(row.composite_id));
+};
+
+// The Hemibrain Protein rows of the given genes, in the table's default sort order
+export const fetchProteinRows = async (page: Page, genes: string[]): Promise<Proteomics[]> => {
+  const rows = await fetchProteomics(
+    page,
+    DIFFERENTIAL_EXPRESSION_PROTEIN_HEMIBRAIN_CATEGORIES,
+    {},
+    { search: searchGenes(genes) },
+  );
+  return rows.filter((row) => genes.includes(row.rna_composite_id));
 };
 
 export const fetchComparisonToolConfig = async (

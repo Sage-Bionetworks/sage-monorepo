@@ -157,12 +157,16 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     this.logger.log('NominatedTargetsComparisonToolComponent: unpinned query', { ...query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.nominatedTargetsService.getNominatedTargets(query).pipe(
-        map((response: NominatedTargetsPage) => ({
-          data: response.nominatedTargets,
-          totalCount: response.page.totalElements,
-        })),
-      ),
+      this.nominatedTargetsService
+        .getNominatedTargets(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
+        .pipe(
+          map((response: NominatedTargetsPage) => ({
+            data: response.nominatedTargets,
+            totalCount: response.page.totalElements,
+          })),
+        ),
     );
   }
 
