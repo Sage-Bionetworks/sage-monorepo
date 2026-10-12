@@ -1,5 +1,6 @@
 export * from './lib/app-storage.constants';
 export * from './lib/app-storage.service';
+export * from './lib/app-update.service';
 export * from './lib/breakpoint-config.service';
 export * from './lib/comparison-tool-filter.service';
 export * from './lib/comparison-tool-filter.service.providers';

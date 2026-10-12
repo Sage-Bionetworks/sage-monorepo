@@ -1,0 +1,388 @@
+import {
+  HttpInterceptorFn,
+  HttpStatusCode,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { APP_VERSION_PATH, AppVersion } from '@sagebionetworks/explorers/config';
+import {
+  APP_UPDATE_MIN_CHECK_INTERVAL_MS,
+  APP_UPDATE_POLL_INTERVAL_MS,
+  getAppUpdateMessage,
+  STALE_CLIENT_METRIC,
+  VERSION_CHECK_FAILED_METRIC,
+  VERSION_ENDPOINT_MISCONFIGURED_WARNING,
+} from '@sagebionetworks/explorers/constants';
+import * as Sentry from '@sentry/angular';
+import {
+  AppUpdateCheckTriggerEnum,
+  AppUpdateService,
+  NO_RESPONSE_STATUS,
+  VersionCheckFailureReason,
+  VersionCheckFailureReasonEnum,
+} from './app-update.service';
+import { ErrorOverlayService } from './error-overlay.service';
+import { LoggerService } from './logger.service';
+import { PlatformService } from './platform.service';
+import { VersionService } from './version.service';
+
+jest.mock('@sentry/angular', () => ({
+  metrics: { count: jest.fn() },
+}));
+
+const siteName = 'Model AD';
+const loadedVersion: AppVersion = { appVersion: '4.0.0-rc3', commitSha: 'abc1234' };
+const newerVersion: AppVersion = { appVersion: '4.0.0-rc4', commitSha: 'def5678' };
+const unknownVersion: AppVersion = { appVersion: '', commitSha: '' };
+
+describe('AppUpdateService', () => {
+  let visibilityState: DocumentVisibilityState;
+  let isBrowserOnline: boolean;
+  let httpMock: HttpTestingController;
+  let errorOverlayService: ErrorOverlayService;
+  let logger: { log: jest.Mock; warn: jest.Mock; error: jest.Mock };
+  let appInterceptor: jest.Mock;
+
+  function setup({ isServer = false } = {}): AppUpdateService {
+    logger = { log: jest.fn(), warn: jest.fn(), error: jest.fn() };
+    appInterceptor = jest.fn<ReturnType<HttpInterceptorFn>, Parameters<HttpInterceptorFn>>(
+      (req, next) => next(req),
+    );
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(withInterceptors([appInterceptor])),
+        provideHttpClientTesting(),
+        { provide: PlatformService, useValue: { isBrowser: !isServer, isServer } },
+        { provide: LoggerService, useValue: logger },
+      ],
+    });
+    httpMock = TestBed.inject(HttpTestingController);
+    errorOverlayService = TestBed.inject(ErrorOverlayService);
+    return TestBed.inject(AppUpdateService);
+  }
+
+  function setTabVisibility(state: DocumentVisibilityState) {
+    visibilityState = state;
+    document.dispatchEvent(new Event('visibilitychange'));
+  }
+
+  function returnToTab() {
+    setTabVisibility('hidden');
+    setTabVisibility('visible');
+  }
+
+  function reconnect() {
+    isBrowserOnline = true;
+    window.dispatchEvent(new Event('online'));
+  }
+
+  function respondWithServerVersion(serverVersion: AppVersion) {
+    httpMock.expectOne(APP_VERSION_PATH).flush(serverVersion);
+  }
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+    visibilityState = 'visible';
+    isBrowserOnline = true;
+    jest.spyOn(document, 'visibilityState', 'get').mockImplementation(() => visibilityState);
+    jest.spyOn(window.navigator, 'onLine', 'get').mockImplementation(() => isBrowserOnline);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+    TestBed.resetTestingModule();
+    jest.useRealTimers();
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
+
+  describe('when it checks', () => {
+    it('does not check right after the page loads', () => {
+      setup().start(loadedVersion, siteName);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+    });
+
+    it('does not check while rendering on the server', () => {
+      setup({ isServer: true }).start(loadedVersion, siteName);
+
+      returnToTab();
+      jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+    });
+
+    it('bypasses the app HTTP interceptors', () => {
+      setup().start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(loadedVersion);
+
+      expect(appInterceptor).not.toHaveBeenCalled();
+    });
+
+    it('polls while the tab stays visible', () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+
+      jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
+      respondWithServerVersion(newerVersion);
+
+      expect(service.isStale()).toBe(true);
+    });
+
+    it('does not poll while the tab is hidden', () => {
+      setup().start(loadedVersion, siteName);
+
+      setTabVisibility('hidden');
+      jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+    });
+
+    it('checks at most once per minimum interval when the tab is revisited repeatedly', () => {
+      setup().start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(loadedVersion);
+      returnToTab();
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+      respondWithServerVersion(loadedVersion);
+    });
+
+    it('skips checks while offline and checks once the browser reconnects', () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+
+      isBrowserOnline = false;
+      returnToTab();
+      jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+
+      reconnect();
+      respondWithServerVersion(newerVersion);
+
+      expect(service.isStale()).toBe(true);
+    });
+  });
+
+  describe('when the server responds with a version', () => {
+    it('stays current when the server reports the version the tab loaded with', () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(loadedVersion);
+
+      expect(service.isStale()).toBe(false);
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
+    });
+
+    it('shows the app update overlay when the tab returns after a newer deploy', () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+
+      expect(service.isStale()).toBe(true);
+      expect(errorOverlayService.activeMessage()).toBe(getAppUpdateMessage(siteName));
+    });
+
+    it('counts the stale tab in Sentry metrics with both versions and the trigger', () => {
+      setup().start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+
+      const versionService = TestBed.inject(VersionService);
+      expect(Sentry.metrics.count).toHaveBeenCalledTimes(1);
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(STALE_CLIENT_METRIC, 1, {
+        attributes: {
+          clientVersion: versionService.getSiteVersion(loadedVersion),
+          serverVersion: versionService.getSiteVersion(newerVersion),
+          trigger: AppUpdateCheckTriggerEnum.Visibility,
+        },
+      });
+    });
+
+    it('compares app versions when either side has no commit SHA', () => {
+      const service = setup();
+      service.start({ ...loadedVersion, commitSha: '' }, siteName);
+
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+
+      expect(service.isStale()).toBe(true);
+    });
+
+    it('stays current when the server version is unknown', () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(unknownVersion);
+
+      expect(service.isStale()).toBe(false);
+    });
+
+    it('stops checking once the tab is known to be stale', () => {
+      setup().start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+
+      jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
+      returnToTab();
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+      expect(Sentry.metrics.count).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('when the check fails', () => {
+    const respondWithNetworkFailure = () =>
+      httpMock.expectOne(APP_VERSION_PATH).error(new ProgressEvent('error'));
+    const respondWithStatus = (status: number, statusText: string) => () =>
+      httpMock.expectOne(APP_VERSION_PATH).flush(null, { status, statusText });
+    const respondWithUnparsableBody = () =>
+      httpMock
+        .expectOne(APP_VERSION_PATH)
+        .error(new ProgressEvent('error'), { status: HttpStatusCode.Ok, statusText: 'OK' });
+    const respondWithBody = (body: string | object) => () =>
+      httpMock.expectOne(APP_VERSION_PATH).flush(body);
+
+    const failures: {
+      scenario: string;
+      respond: () => void;
+      reason: VersionCheckFailureReason;
+      status: number;
+      isMisconfiguration: boolean;
+    }[] = [
+      {
+        scenario: 'no response reaches the browser',
+        respond: respondWithNetworkFailure,
+        reason: VersionCheckFailureReasonEnum.Network,
+        status: NO_RESPONSE_STATUS,
+        isMisconfiguration: false,
+      },
+      {
+        scenario: 'no healthy app task answers',
+        respond: respondWithStatus(HttpStatusCode.ServiceUnavailable, 'Service Unavailable'),
+        reason: VersionCheckFailureReasonEnum.Server,
+        status: HttpStatusCode.ServiceUnavailable,
+        isMisconfiguration: false,
+      },
+      {
+        scenario: 'access is refused',
+        respond: respondWithStatus(HttpStatusCode.Forbidden, 'Forbidden'),
+        reason: VersionCheckFailureReasonEnum.UnexpectedStatus,
+        status: HttpStatusCode.Forbidden,
+        isMisconfiguration: false,
+      },
+      {
+        scenario: 'the server has no version endpoint',
+        respond: respondWithStatus(HttpStatusCode.NotFound, 'Not Found'),
+        reason: VersionCheckFailureReasonEnum.NotFound,
+        status: HttpStatusCode.NotFound,
+        isMisconfiguration: true,
+      },
+      {
+        scenario: 'a misrouted request returns a page instead of a version',
+        respond: respondWithBody('<!doctype html><html></html>'),
+        reason: VersionCheckFailureReasonEnum.InvalidResponse,
+        status: HttpStatusCode.Ok,
+        isMisconfiguration: true,
+      },
+      {
+        scenario: 'the browser cannot parse the response as JSON',
+        respond: respondWithUnparsableBody,
+        reason: VersionCheckFailureReasonEnum.InvalidResponse,
+        status: HttpStatusCode.Ok,
+        isMisconfiguration: true,
+      },
+      {
+        scenario: 'a misrouted request returns another endpoint’s JSON',
+        respond: respondWithBody({ status: 'UP' }),
+        reason: VersionCheckFailureReasonEnum.InvalidResponse,
+        status: HttpStatusCode.Ok,
+        isMisconfiguration: true,
+      },
+    ];
+
+    it.each(failures)(
+      'counts the failure and stays current when $scenario',
+      ({ respond, reason, status }) => {
+        const service = setup();
+        service.start(loadedVersion, siteName);
+
+        returnToTab();
+        respond();
+
+        expect(Sentry.metrics.count).toHaveBeenCalledWith(VERSION_CHECK_FAILED_METRIC, 1, {
+          attributes: { reason, status, trigger: AppUpdateCheckTriggerEnum.Visibility },
+        });
+        expect(service.isStale()).toBe(false);
+        expect(errorOverlayService.isOverlayVisible()).toBe(false);
+      },
+    );
+
+    it.each(failures.filter(({ isMisconfiguration }) => isMisconfiguration))(
+      'raises a Sentry warning when $scenario',
+      ({ respond, reason, status }) => {
+        setup().start(loadedVersion, siteName);
+
+        returnToTab();
+        respond();
+
+        expect(logger.warn).toHaveBeenCalledWith(VERSION_ENDPOINT_MISCONFIGURED_WARNING, {
+          reason,
+          status,
+          trigger: AppUpdateCheckTriggerEnum.Visibility,
+        });
+      },
+    );
+
+    it.each(failures.filter(({ isMisconfiguration }) => !isMisconfiguration))(
+      'raises no Sentry warning when $scenario',
+      ({ respond }) => {
+        setup().start(loadedVersion, siteName);
+
+        returnToTab();
+        respond();
+
+        expect(logger.warn).not.toHaveBeenCalled();
+      },
+    );
+
+    it('raises the misconfiguration warning once per tab', () => {
+      setup().start(loadedVersion, siteName);
+      const respondNotFound = respondWithStatus(HttpStatusCode.NotFound, 'Not Found');
+
+      returnToTab();
+      respondNotFound();
+      jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
+      respondNotFound();
+
+      expect(Sentry.metrics.count).toHaveBeenCalledTimes(2);
+      expect(logger.warn).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps checking after a failed check', () => {
+      const service = setup();
+      service.start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithNetworkFailure();
+      jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
+      respondWithServerVersion(newerVersion);
+
+      expect(service.isStale()).toBe(true);
+    });
+  });
+});

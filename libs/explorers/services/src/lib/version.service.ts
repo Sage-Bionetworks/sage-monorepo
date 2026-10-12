@@ -1,15 +1,11 @@
 import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { AppVersion } from '@sagebionetworks/explorers/config';
 import { DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN } from '@sagebionetworks/explorers/constants';
 import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import { catchError, map, Observable, of, startWith } from 'rxjs';
 import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
-
-export interface VersionConfig {
-  appVersion: string;
-  commitSha: string;
-}
 
 export interface DataVersion {
   data_file: string;
@@ -59,7 +55,7 @@ export class VersionService {
     return `${dataVersion.data_file}-v${dataVersion.data_version}`;
   }
 
-  getSiteVersion(config: VersionConfig): string {
+  getSiteVersion(config: AppVersion): string {
     const appVersion = this.formatAppVersion(config.appVersion);
     if (!appVersion) {
       return config.commitSha;
