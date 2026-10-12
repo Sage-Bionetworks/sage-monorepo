@@ -15,7 +15,7 @@ import {
   MODEL_QUERY_KEY,
   TISSUE_QUERY_KEY,
 } from '@sagebionetworks/model-ad/util';
-import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 
 export interface IndividualExpressionDetailsQuery {
   tissue: string;
@@ -108,6 +108,11 @@ export function individualExpressionDetailsFromRoute<T>({
     return fetchData(id, query, {
       context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
     }).pipe(
+      switchMap((individualData) =>
+        individualData.length
+          ? of(individualData)
+          : redirectToNotFound('no individual expression data', { [pathParam]: id, ...query }),
+      ),
       catchError(() =>
         redirectToNotFound('individual expression request failed', { [pathParam]: id, ...query }),
       ),

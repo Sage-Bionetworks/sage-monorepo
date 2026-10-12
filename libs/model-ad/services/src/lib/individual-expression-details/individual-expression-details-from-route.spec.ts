@@ -64,6 +64,7 @@ describe('individualExpressionDetailsFromRoute', () => {
   const otherTissue = 'Cortex';
   const modelGroup = 'LOAD2';
   const unknownEnsemblGeneId = 'Unknown';
+  const noDataEnsemblGeneId = 'NoData';
 
   const detailsRoute = (
     id: string,
@@ -75,6 +76,7 @@ describe('individualExpressionDetailsFromRoute', () => {
 
   async function setup(initialRoute: string, { notFoundDelayMs = 0, isBrowser = true } = {}) {
     fetchMock = jest.fn<ReturnType<FetchData>, Parameters<FetchData>>((id) => {
+      if (id === noDataEnsemblGeneId) return of([]);
       if (id !== unknownEnsemblGeneId) return of(transcriptomicsIndividualMocks);
 
       const notFound = throwError(() => new Error(`${id} not found`));
@@ -198,6 +200,12 @@ describe('individualExpressionDetailsFromRoute', () => {
 
   it('should redirect to the not found page when the request fails', async () => {
     await setup(detailsRoute(unknownEnsemblGeneId));
+
+    expect(await screen.findByText('Not found')).toBeInTheDocument();
+  });
+
+  it('should redirect to the not found page when the request returns no data', async () => {
+    await setup(detailsRoute(noDataEnsemblGeneId));
 
     expect(await screen.findByText('Not found')).toBeInTheDocument();
   });
