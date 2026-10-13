@@ -392,6 +392,24 @@ test.describe('differential expression protein pinning', () => {
       ]);
     });
 
+    test('leaving the CT with the confirmation open cancels the pin edit', async ({ page }) => {
+      await page.goto('/');
+      const { proteinIds } = await hideProteinOnlyGeneInRna(page);
+      await pinFiveProteinGeneInRna(page);
+      const dialog = getOverwritePinsDialog(page);
+      await expect(dialog).toBeVisible();
+
+      await page.goBack();
+      await expect.poll(() => new URL(page.url()).pathname).toBe('/');
+      await page.goForward();
+
+      await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene 1 hidden']);
+      await expect(dialog).toBeHidden();
+      await expectPinnedParams(page, [fourProteinGene]);
+      await switchToProteinView(page);
+      await expectPinnedParams(page, proteinIds);
+    });
+
     test("Don't ask me this again stops the confirmation for later pin edits", async ({ page }) => {
       await hideProteinOnlyGeneInRna(page);
       await pinFiveProteinGeneInRna(page);
