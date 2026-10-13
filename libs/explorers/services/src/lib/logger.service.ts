@@ -55,18 +55,27 @@ export class SourceLogger implements Logger {
 
   /**
    * Log an error and send it to Sentry as an error-level event, with `data` attached as extra
-   * context. A caught `error` is attached as the event's cause, so its own type, text, and stack
-   * trace appear in the event without deciding its grouping.
+   * context. A caught `Error` is attached as the event's cause, so its own type, text, and stack
+   * trace appear in the event without deciding its grouping. Sentry links only `Error` causes, so
+   * any other caught value, such as an `HttpErrorResponse`, is attached to the extra context as
+   * `cause` instead.
    */
   error(message: string, { error, data }: ErrorLogContext) {
     const title = sourceTitle(this.source, message);
     console.error('[ERROR]', title, ...definedValues(error, data));
 
-    const captureContext = this.captureContext('error', message, data);
-    if (error !== undefined) {
-      Sentry.captureException(new Error(title, { cause: error }), captureContext);
+    if (error === undefined) {
+      Sentry.captureMessage(title, this.captureContext('error', message, data));
+    } else if (error instanceof Error) {
+      Sentry.captureException(
+        new Error(title, { cause: error }),
+        this.captureContext('error', message, data),
+      );
     } else {
-      Sentry.captureMessage(title, captureContext);
+      Sentry.captureException(
+        new Error(title),
+        this.captureContext('error', message, { ...data, cause: error }),
+      );
     }
   }
 

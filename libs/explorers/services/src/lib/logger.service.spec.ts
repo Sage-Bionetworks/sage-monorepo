@@ -102,12 +102,19 @@ describe('LoggerService', () => {
       expect(capturedException().cause).toBe(cause);
     });
 
-    it('should link a non-Error value as the cause', () => {
+    it('should attach a non-Error value to the extra context instead of as the cause', () => {
       const cause = { status: 500, statusText: 'Internal Server Error' };
 
-      logger.error(ERROR_MESSAGE, { error: cause });
+      logger.error(ERROR_MESSAGE, { error: cause, data });
 
-      expect(capturedException().cause).toBe(cause);
+      expect(Sentry.captureException).toHaveBeenCalledWith(expect.any(Error), {
+        level: 'error',
+        fingerprint: [SOURCE, ERROR_MESSAGE],
+        tags: { source: SOURCE },
+        extra: { ...data, cause },
+      });
+      expect(capturedException().message).toBe(title(ERROR_MESSAGE));
+      expect(capturedException().cause).toBeUndefined();
       expect(Sentry.captureMessage).not.toHaveBeenCalled();
     });
 
