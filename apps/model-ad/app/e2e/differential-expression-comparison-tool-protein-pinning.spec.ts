@@ -96,6 +96,35 @@ const switchToRnaView = async (page: Page) => {
   await expectCategoriesParams(page, rnaHemibrainCategories);
 };
 
+const getOverwritePinsDialog = (page: Page) =>
+  page.getByRole('dialog', { name: 'Overwrite hidden pins?' });
+
+// Pins Tmpo's and Apoa2's proteins in Protein, then switches to RNA, where Apoa2 has no gene row,
+// so its proteins are hidden. The tutorial dialog only opens on the first visit to the CT
+const hideProteinOnlyGeneInRna = async (page: Page, shouldCloseTutorialDialog = true) => {
+  const proteinRows = await fetchProteinRows(page, [fourProteinGene, proteinOnlyGene]);
+  const hiddenProteinIds = getProteinIds(proteinRows, proteinOnlyGene);
+  expect(hiddenProteinIds.length).toBeGreaterThan(0);
+  expect(await fetchRnaRows(page, [proteinOnlyGene])).toHaveLength(0);
+  const proteinIds = getRowIds(proteinRows);
+
+  const queryParameters = getQueryParamsFromRecords({
+    categories: proteinCategories,
+    pinned: proteinIds,
+  });
+  await navigateToComparison(page, CT_PAGE, shouldCloseTutorialDialog, 'url', queryParameters);
+  await expectPinnedParams(page, proteinIds);
+  await switchToRnaView(page);
+  await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene 1 hidden']);
+
+  return { proteinIds, hiddenProteinIds };
+};
+
+const pinFiveProteinGeneInRna = async (page: Page) => {
+  await searchViaFilterbox(page, getEnsemblGeneId(fiveProteinMaleGene));
+  await pinByName(getUnpinnedTable(page), page, fiveProteinMaleGene);
+};
+
 test.describe('differential expression protein pinning', () => {
   test('RNA pins fan out to every protein of their genes in the Protein view', async ({ page }) => {
     const pinnedGenes = [fourProteinGene, fiveProteinMaleGene];
@@ -135,7 +164,7 @@ test.describe('differential expression protein pinning', () => {
 
     await switchToRnaView(page);
     await expectPinnedParams(page, [fourProteinGene]);
-    await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene']);
+    await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene 1 hidden']);
     await expectPinnedRows(page, [fourProteinGene]);
   });
 
@@ -300,6 +329,84 @@ test.describe('differential expression protein pinning', () => {
       '2 Genes',
       `${proteinIds.length} Proteins`,
     ]);
+  });
+
+  test('Protein pins with no RNA gene row say that no genes match in the RNA view', async ({
+    page,
+  }) => {
+    const proteinIds = getProteinIds(
+      await fetchProteinRows(page, [proteinOnlyGene]),
+      proteinOnlyGene,
+    );
+    expect(proteinIds.length).toBeGreaterThan(0);
+
+    await navigateByUrlWithPins(page, proteinCategories, proteinIds);
+    await expectPinnedParams(page, proteinIds);
+    await switchToRnaView(page);
+
+    await expectPinnedParams(page, []);
+    await expectPinnedResultsCount(page, 0, [PINNED_RESULTS_HEADING, '0 Genes 1 hidden']);
+    await expect(page.getByText('No matching gene exists in the current view.')).toBeVisible();
+  });
+
+  test.describe('overwriting hidden pins', () => {
+    test('a pin edit with hidden pins asks to confirm, and Cancel keeps the hidden pins', async ({
+      page,
+    }) => {
+      const { proteinIds, hiddenProteinIds } = await hideProteinOnlyGeneInRna(page);
+
+      await pinFiveProteinGeneInRna(page);
+
+      const dialog = getOverwritePinsDialog(page);
+      await expect(dialog).toBeVisible();
+      await expect(dialog).toContainText(
+        `You pinned ${hiddenProteinIds.length} ${hiddenProteinIds.length === 1 ? 'result' : 'results'} for 1 gene that can't be shown in this view.`,
+      );
+      await expect(dialog.locator('i')).toHaveText([
+        'PROTEIN - DIFFERENTIAL EXPRESSION',
+        'Tissue - Hemibrain',
+      ]);
+
+      await dialog.getByRole('button', { name: 'Cancel' }).click();
+
+      await expect(dialog).toBeHidden();
+      await expectPinnedParams(page, [fourProteinGene]);
+      await switchToProteinView(page);
+      await expectPinnedParams(page, proteinIds);
+    });
+
+    test('Overwrite Pins applies the pin edit and drops the hidden pins', async ({ page }) => {
+      await hideProteinOnlyGeneInRna(page);
+      const keptProteinRows = await fetchProteinRows(page, [fourProteinGene, fiveProteinMaleGene]);
+
+      await pinFiveProteinGeneInRna(page);
+      await getOverwritePinsDialog(page).getByRole('button', { name: 'Overwrite Pins' }).click();
+
+      await expect(getOverwritePinsDialog(page)).toBeHidden();
+      await expectPinnedRows(page, [fourProteinGene, fiveProteinMaleGene]);
+      await switchToProteinView(page);
+      await expectPinnedResultsCount(page, keptProteinRows.length, [
+        PINNED_RESULTS_HEADING,
+        '2 Genes',
+        `${keptProteinRows.length} Proteins`,
+      ]);
+    });
+
+    test("Don't ask me this again stops the confirmation for later pin edits", async ({ page }) => {
+      await hideProteinOnlyGeneInRna(page);
+      await pinFiveProteinGeneInRna(page);
+      const dialog = getOverwritePinsDialog(page);
+      await dialog.getByText("Don't ask me this again.").click();
+      await dialog.getByRole('button', { name: 'Overwrite Pins' }).click();
+      await expect(dialog).toBeHidden();
+
+      // The choice is stored in the browser, so it holds after the pins are hidden again
+      await hideProteinOnlyGeneInRna(page, false);
+      await pinFiveProteinGeneInRna(page);
+
+      await expect(dialog).toBeHidden();
+      await expectPinnedRows(page, [fourProteinGene, fiveProteinMaleGene]);
+    });
   });
 
   test('Clear All Pins in the Protein view also clears the RNA pins', async ({ page }) => {
