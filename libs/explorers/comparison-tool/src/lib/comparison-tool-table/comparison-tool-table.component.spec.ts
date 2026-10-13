@@ -398,13 +398,13 @@ describe('ComparisonToolTableComponent', () => {
       );
     });
 
-    it('should count no loaded parents or rows in the header of a child view', async () => {
+    it('should count no loaded parents and show the row count as unknown in a child view', async () => {
       const { component } = await setup({ ...failedOptions, configs: childViewConfigs });
 
       expect(getPinnedResultsHeaderLines(component.container)).toEqual([
         PINNED_RESULTS_HEADING,
         '0 Parents',
-        '0 Children',
+        TABLE_DATA_LOADING_MESSAGE,
       ]);
     });
 
