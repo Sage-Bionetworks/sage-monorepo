@@ -161,6 +161,8 @@ export class ComparisonToolService<T> {
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly isTutorialVisibleSignal = signal(!this.appStorageService.isTutorialHidden());
+  // A pin edit held until the user confirms it may drop hidden pins (see `editPinsConfirmingOverwrite`)
+  private readonly pendingPinEditSignal = signal<(() => void) | null>(null);
   private readonly pinLimitSignal = signal<number>(MAX_PIN_LIMIT);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
@@ -245,6 +247,7 @@ export class ComparisonToolService<T> {
   readonly configs = this.configsSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly isTutorialVisible = this.isTutorialVisibleSignal.asReadonly();
+  readonly isOverwriteConfirmationVisible = computed(() => this.pendingPinEditSignal() !== null);
   readonly pinLimit = this.pinLimitSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly hasCompletedUnpinnedFetch = this.hasCompletedUnpinnedFetchSignal.asReadonly();
@@ -577,6 +580,8 @@ export class ComparisonToolService<T> {
 
   disconnect(): void {
     this.hideHeatmapDetailsPanel();
+    // The service outlives the CT on a navigation, so a held edit would come back stale on return
+    this.cancelPinEdit();
     if (this.coordinatorService.isActive(this)) {
       this.coordinatorService.setActive(null);
     }
@@ -877,6 +882,10 @@ export class ComparisonToolService<T> {
     this.appStorageService.setTutorialHidden(hidden);
   }
 
+  setOverwriteConfirmationHiddenByUser(hidden: boolean): void {
+    this.appStorageService.setOverwritePinsConfirmationHidden(hidden);
+  }
+
   // Pinning
   /**
    * By default the pinned items cache holds the active view's row ids. When it was recorded under
@@ -922,20 +931,55 @@ export class ComparisonToolService<T> {
 
   // Ignored while table data loads, for the reason given on `isPinToggleEnabled`.
   pinItem(row: T) {
-    if (this.isLoadingTableData() || !this.canPin(row)) return;
     const id = this.rowId(row);
-    if (!this.isPinned(id)) {
-      this.setPinnedItems([...this.visiblePinIds(), id], [...this.pinnedData(), row]);
-    }
+    this.editPinsConfirmingOverwrite(
+      () => !this.isLoadingTableData() && this.canPin(row) && !this.isPinned(id),
+      () => this.setPinnedItems([...this.visiblePinIds(), id], [...this.pinnedData(), row]),
+    );
   }
 
   // Ignored while table data loads, for the reason given on `isPinToggleEnabled`.
   unpinItem(id: string) {
-    if (this.isLoadingTableData()) return;
-    this.setPinnedItems(
-      this.visiblePinIds().filter((item) => item !== id),
-      this.pinnedData(),
+    this.editPinsConfirmingOverwrite(
+      () => !this.isLoadingTableData(),
+      () =>
+        this.setPinnedItems(
+          this.visiblePinIds().filter((item) => item !== id),
+          this.pinnedData(),
+        ),
     );
+  }
+
+  /**
+   * Runs a pin edit, or holds it for the overwrite confirmation while cached pins are hidden, since
+   * every pin edit rebuilds the cache from the pins on screen and so drops the hidden ones. Clearing
+   * every pin and passive writes such as a URL load don't come through here, so they never prompt.
+   *
+   * A held edit keeps its intent rather than its result, and checks `canEdit` again when confirmed,
+   * so it applies to the state at that point, or does nothing if it no longer can.
+   */
+  private editPinsConfirmingOverwrite(canEdit: () => boolean, edit: () => void) {
+    if (!canEdit()) return;
+    const isHidingPins = (this.hiddenPinCount() ?? 0) > 0;
+    if (isHidingPins && !this.appStorageService.isOverwritePinsConfirmationHidden()) {
+      this.pendingPinEditSignal.set(() => {
+        if (canEdit()) edit();
+      });
+      return;
+    }
+    edit();
+  }
+
+  // Applies the pin edit held for the overwrite confirmation
+  confirmPinEdit() {
+    const edit = this.pendingPinEditSignal();
+    this.pendingPinEditSignal.set(null);
+    edit?.();
+  }
+
+  // Drops the pin edit held for the overwrite confirmation, leaving the pins as they were
+  cancelPinEdit() {
+    this.pendingPinEditSignal.set(null);
   }
 
   /**
@@ -955,9 +999,16 @@ export class ComparisonToolService<T> {
    * because the returned ids are row ids of the view it was requested in.
    */
   pinAll() {
+    this.editPinsConfirmingOverwrite(
+      () => !!this.pinAllFetch && !this.isLoadingTableData() && this.canPinAll(),
+      () => this.startPinAll(),
+    );
+  }
+
+  // Confirmed before it starts, so the fetch and its result never wait on the user
+  private startPinAll() {
     const fetch = this.pinAllFetch;
     if (!fetch) return;
-    if (this.isLoadingTableData() || !this.canPinAll()) return;
 
     const identity = this.activeIdentity();
     const currentPinIds = this.visiblePinIds();
