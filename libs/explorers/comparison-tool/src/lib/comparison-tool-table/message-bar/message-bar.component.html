@@ -1,0 +1,19 @@
+<div
+  class="message-bar"
+  [class.message-bar-warn]="severity() === 'warn'"
+  [attr.role]="severity() === 'warn' ? 'alert' : null"
+>
+  <div class="message-bar-content">
+    <span class="message-bar-message">{{ message() }}</span>
+    @if (buttonLabel(); as label) {
+      <p-button
+        [label]="label"
+        [rounded]="true"
+        variant="outlined"
+        size="small"
+        [loading]="loading()"
+        (onClick)="buttonClick.emit()"
+      />
+    }
+  </div>
+</div>
