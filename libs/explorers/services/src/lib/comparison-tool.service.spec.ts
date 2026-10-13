@@ -696,12 +696,13 @@ describe('ComparisonToolService', () => {
         service.fetchPinned(source$);
       };
 
-      it('empties the pinned rows but keeps the pinned parents in the query', () => {
+      it('empties the pinned rows and parents but keeps the pinned items cache', () => {
         failPinnedFetchInChildView();
 
         expect(service.pinnedFetchFailed()).toBe(true);
         expect(service.pinnedData()).toEqual([]);
-        expect(service.pinnedParents()).toEqual(['parent1', 'parent2']);
+        expect(service.pinnedParents()).toEqual([]);
+        expect(service.pinnedItems()).toEqual(['parent1', 'parent2']);
         expect(service.pinnedItemsQuery()).toEqual({
           items: ['parent1', 'parent2'],
           itemIdSpace: 'parent',
@@ -731,14 +732,14 @@ describe('ComparisonToolService', () => {
         expect(service.isLoadingTableData()).toBe(false);
       });
 
-      it('keeps counting the unloaded parents toward the pin limit', () => {
+      it('stops counting the unloaded parents toward the pin limit', () => {
         failPinnedFetchInChildView();
 
         service.setPinLimit(2);
 
-        expect(service.pinCount()).toBe(2);
-        expect(service.hasReachedPinLimit()).toBe(true);
-        expect(service.canPin(childRow('child3a', 'parent3'))).toBe(false);
+        expect(service.pinCount()).toBe(0);
+        expect(service.hasReachedPinLimit()).toBe(false);
+        expect(service.canPin(childRow('child3a', 'parent3'))).toBe(true);
       });
 
       it('replaces the unloaded pins and clears the failure on a pin edit', () => {
@@ -790,21 +791,21 @@ describe('ComparisonToolService', () => {
         service.fetchPinned(failedRequest());
       };
 
-      it('counts the cached pins in the parent view', () => {
+      it('counts no pins in the parent view', () => {
         failFirstPinnedFetch(PARENT_VIEW, ['parent1', 'parent2']);
 
-        expect(service.pinnedParents()).toEqual([]);
-        expect(service.pinCount()).toBe(2);
+        expect(service.pinnedItems()).toEqual(['parent1', 'parent2']);
+        expect(service.pinCount()).toBe(0);
       });
 
-      it('counts the cached pins toward the pin limit in the child view', () => {
+      it('counts no pins toward the pin limit in the child view', () => {
         failFirstPinnedFetch(CHILD_VIEW, ['child1a', 'child1b']);
 
         service.setPinLimit(2);
 
-        expect(service.pinnedParents()).toEqual([]);
-        expect(service.pinCount()).toBe(2);
-        expect(service.hasReachedPinLimit()).toBe(true);
+        expect(service.pinnedItems()).toEqual(['child1a', 'child1b']);
+        expect(service.pinCount()).toBe(0);
+        expect(service.hasReachedPinLimit()).toBe(false);
       });
 
       it('counts the pinned parents again when the next pinned fetch succeeds', () => {
@@ -1365,31 +1366,13 @@ describe('ComparisonToolService', () => {
         expect(service.nouns()).toEqual(CHILD_NOUNS);
       });
 
-      it('should count pins in the view nouns while the pinned rows are loaded', () => {
-        connectService(configsWithNouns, { selection: CHILD_VIEW });
-
-        landPinned(childRow('child1a', 'parent1'));
-
-        expect(service.nounsForPinCount()).toEqual(CHILD_NOUNS);
-      });
-
-      it('should keep counting pins by parent after a failed fetch that kept the parents', () => {
-        connectService(configsWithNouns, { selection: PARENT_VIEW });
-        pinInParentView('parent1');
-        service.setDropdownSelection(CHILD_VIEW);
-
-        service.fetchPinned(failedRequest());
-
-        expect(service.nounsForPinCount()).toEqual(CHILD_NOUNS);
-      });
-
-      it('should count pins by row after a failed first fetch in a child view', () => {
+      it('should keep the config nouns after a failed first fetch in a child view', () => {
         connectService(configsWithNouns, { selection: CHILD_VIEW });
         service.setPinnedItems(['child1a']);
 
         service.fetchPinned(failedRequest());
 
-        expect(service.nounsForPinCount()).toEqual({ viewNoun: CHILD_NOUN, parentNoun: null });
+        expect(service.nouns()).toEqual(CHILD_NOUNS);
       });
 
       it('should word the pin limit tooltip by parent in a child view', () => {
@@ -3066,7 +3049,7 @@ describe('ComparisonToolService', () => {
 
       pending$.error(new Error('request failed'));
 
-      expect(service.pinnedResultsCounts()).toEqual({ pinCount: 2, pinnedRowCount: 0 });
+      expect(service.pinnedResultsCounts()).toEqual({ pinCount: 0, pinnedRowCount: 0 });
     });
 
     it('keeps the counts unknown until the pinned fetch that superseded another lands', () => {
@@ -3285,7 +3268,7 @@ describe('ComparisonToolService', () => {
       expect(service.pinnedItems()).toEqual(['id1']);
     });
 
-    it('keeps the pins cached and counted toward the limit after a failed pinned fetch', () => {
+    it('keeps the pins cached but stops counting them toward the limit after a failed pinned fetch', () => {
       connectService();
       service.setPinLimit(2);
       service.setPinnedItems(['id1', 'id2']);
@@ -3296,8 +3279,8 @@ describe('ComparisonToolService', () => {
       expect(service.pinnedFetchFailed()).toBe(true);
       expect(service.pinnedData()).toEqual([]);
       expect(service.pinnedItems()).toEqual(['id1', 'id2']);
-      expect(service.pinCount()).toBe(2);
-      expect(service.hasReachedPinLimit()).toBe(true);
+      expect(service.pinCount()).toBe(0);
+      expect(service.hasReachedPinLimit()).toBe(false);
       expect(service.isLoadingTableData()).toBe(false);
     });
 
