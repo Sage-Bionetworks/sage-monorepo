@@ -405,14 +405,14 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
     );
 
     it.each(MAIN_CATEGORIES)(
-      'should keep the error overlay on the unpinned request for %s',
+      'should suppress the error overlay on the unpinned request for %s',
       async (mainCategory) => {
         const { component, apiSpyFor } = await setup();
 
         component.getUnpinnedData(mockQuery([mainCategory, TISSUE_CATEGORY]));
 
         const context = apiSpyFor(mainCategory).mock.lastCall?.[3]?.context;
-        expect(context?.get(SUPPRESS_ERROR_OVERLAY)).not.toBe(true);
+        expect(context?.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
       },
     );
 

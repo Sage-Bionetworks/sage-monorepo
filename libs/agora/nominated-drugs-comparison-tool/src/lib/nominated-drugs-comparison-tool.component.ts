@@ -153,12 +153,16 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.nominatedDrugsService.getNominatedDrugs(query).pipe(
-        map((response: NominatedDrugsPage) => ({
-          data: response.nominatedDrugs,
-          totalCount: response.page.totalElements,
-        })),
-      ),
+      this.nominatedDrugsService
+        .getNominatedDrugs(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
+        .pipe(
+          map((response: NominatedDrugsPage) => ({
+            data: response.nominatedDrugs,
+            totalCount: response.page.totalElements,
+          })),
+        ),
     );
   }
 

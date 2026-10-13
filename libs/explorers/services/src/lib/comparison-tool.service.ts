@@ -56,6 +56,9 @@ export const RESERVED_FILTER_KEY_MESSAGE =
 export const UNMATCHED_URL_CATEGORIES_MESSAGE =
   'URL categories match no comparison tool config; falling back to the default selection.';
 
+export const UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE =
+  'Link categories match no comparison tool config; keeping the current selection.';
+
 /**
  * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
  * the corresponding results-count signal should be set to (unpinned: total matching rows across
@@ -183,6 +186,7 @@ export class ComparisonToolService<T> {
   private readonly hoveredRowIdSignal = signal<string | null>(null);
   private readonly isPinningAllSignal = signal(false);
   private readonly pinnedFetchFailedSignal = signal(false);
+  private readonly unpinnedFetchFailedSignal = signal(false);
 
   // Fetch streams: each fetch pushes a result observable onto these subjects, and switchMap keeps
   // only the latest in flight. A newer query cancels (unsubscribes) the prior request, so responses
@@ -195,6 +199,7 @@ export class ComparisonToolService<T> {
   private readonly unpinnedFetch$ = new Subject<Observable<ComparisonToolFetchResult<unknown>>>();
   private readonly pinnedFetch$ = new Subject<Observable<PinnedFetchResult<unknown>>>();
   private lastPinnedSource$: Observable<PinnedFetchResult<unknown>> | null = null;
+  private lastUnpinnedSource$: Observable<ComparisonToolFetchResult<unknown>> | null = null;
 
   // Connect-Time Dependencies
   private pinAllFetch?: PinAllFetch<T>;
@@ -223,6 +228,8 @@ export class ComparisonToolService<T> {
   // Set when the latest pinned fetch failed, until a pinned fetch succeeds or the pins are rewritten.
   // The pins stay cached, so `retryPinnedFetch` can still load them.
   readonly pinnedFetchFailed = this.pinnedFetchFailedSignal.asReadonly();
+  // Set when the latest unpinned fetch failed, until an unpinned fetch succeeds
+  readonly unpinnedFetchFailed = this.unpinnedFetchFailedSignal.asReadonly();
   readonly pendingFetches = computed(
     () =>
       this.pendingUnpinnedFetchesSignal() +
@@ -231,6 +238,7 @@ export class ComparisonToolService<T> {
   );
   readonly isLoadingTableData = computed(() => this.pendingFetches() > 0);
   readonly isLoadingPinnedData = computed(() => this.pendingPinnedFetchesSignal() > 0);
+  readonly isLoadingUnpinnedData = computed(() => this.pendingUnpinnedFetchesSignal() > 0);
 
   // Computed Query Accessors
   readonly query = this.querySignal.asReadonly();
@@ -396,7 +404,7 @@ export class ComparisonToolService<T> {
       this.unpinnedFetch$,
       this.pendingUnpinnedFetchesSignal,
       (result) => this.applyUnpinnedData(result),
-      () => this.applyUnpinnedData({ data: [], totalCount: 0 }),
+      () => this.applyUnpinnedFetchFailure(),
     );
 
     // Pinned rows are never paged: applyPinnedData enforces the pin cap and the count comes from
@@ -465,7 +473,11 @@ export class ComparisonToolService<T> {
       if (cachedPageSize !== this.pageSize()) {
         this.updateQuery({ pageSize: cachedPageSize, pageNumber: this.FIRST_PAGE_NUMBER });
       }
-      // Restore this CT's cached state and sync to the URL, ignoring URL params from other CTs
+      // Restore this CT's cached state and sync it to the URL. A marked link's categories are applied
+      // on top of the cache.
+      if (this.urlService.isKeepStateNavigation()) {
+        this.applyKeepStateLinkCategories(this.urlService.currentParams().categories);
+      }
       this.scheduleUrlSyncFromCurrentState();
       return;
     }
@@ -1015,11 +1027,21 @@ export class ComparisonToolService<T> {
     this.pinnedFetchFailedSignal.set(true);
   }
 
+  /**
+   * Clears the unpinned rows but leaves the pinned rows and the pinned items cache alone, so pins
+   * cached for another view survive until a retry or a later fetch loads the rows again.
+   */
+  private applyUnpinnedFetchFailure() {
+    this.applyUnpinnedData({ data: [], totalCount: 0 });
+    this.unpinnedFetchFailedSignal.set(true);
+  }
+
   private applyUnpinnedData({
     data,
     totalCount,
     hasRowsForPrebudgetedParents,
   }: ComparisonToolFetchResult<unknown>) {
+    this.unpinnedFetchFailedSignal.set(false);
     this.unpinnedDataSignal.set(data as T[]);
     this.unpinnedRowCount.set(totalCount);
     this.hasRowsForPrebudgetedParents.set(hasRowsForPrebudgetedParents ?? null);
@@ -1108,6 +1130,7 @@ export class ComparisonToolService<T> {
    * unpinned fetch, guaranteeing the table reflects the most recent query.
    */
   fetchUnpinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
+    this.lastUnpinnedSource$ = source$;
     this.startFetch(this.pendingUnpinnedFetchesSignal);
     this.unpinnedFetch$.next(source$);
   }
@@ -1144,6 +1167,18 @@ export class ComparisonToolService<T> {
     if (!this.pinnedFetchFailed() || source$ === null) return;
     this.startFetch(this.pendingPinnedFetchesSignal);
     this.pinnedFetch$.next(source$);
+  }
+
+  /**
+   * Re-sends the unpinned fetch that failed. HTTP observables are cold, so subscribing again makes
+   * the same request. An unpinned fetch for a newer query supersedes it through `switchMap`, as with
+   * any other unpinned fetch.
+   */
+  retryUnpinnedFetch(): void {
+    const source$ = this.lastUnpinnedSource$;
+    if (!this.unpinnedFetchFailed() || source$ === null) return;
+    this.startFetch(this.pendingUnpinnedFetchesSignal);
+    this.unpinnedFetch$.next(source$);
   }
 
   /** Call before starting a data fetch to increment its loading counter */
@@ -1344,6 +1379,14 @@ export class ComparisonToolService<T> {
       return;
     }
 
+    // A marked link replaces the whole query string, so its missing pins and filters are not a
+    // request to clear them. It is handled like a dropdown change, then the full state is written back.
+    if (!options.isFirstLoad && this.urlService.isKeepStateNavigation()) {
+      this.applyKeepStateLinkCategories(params.categories);
+      this.scheduleUrlSyncFromCurrentState();
+      return;
+    }
+
     // Batch all query changes to avoid multiple updateQuery() calls
     const queryUpdates: Partial<Omit<ComparisonToolQuery, 'pinnedItems'>> = {};
 
@@ -1391,6 +1434,23 @@ export class ComparisonToolService<T> {
     if (!options.isFirstLoad) {
       this.updateSyncedStateCache();
     }
+  }
+
+  private applyKeepStateLinkCategories(categories: string[] | null | undefined): void {
+    if (!categories) {
+      return;
+    }
+
+    if (!this.findMatchingConfig(categories, this.configsSignal())) {
+      this.logger.warn(UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE, {
+        linkCategories: categories,
+        keptSelection: this.dropdownSelection(),
+      });
+      return;
+    }
+
+    this.setDropdownSelection(categories);
+    this.updateSyncedStateCache();
   }
 
   private resolveFiltersFromUrl(

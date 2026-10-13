@@ -151,12 +151,16 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
     this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.mouseModelOverviewService.getMouseModelOverviews(query).pipe(
-        map((response: MouseModelOverviewsPage) => ({
-          data: response.mouseModelOverviews,
-          totalCount: response.page.totalElements,
-        })),
-      ),
+      this.mouseModelOverviewService
+        .getMouseModelOverviews(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
+        .pipe(
+          map((response: MouseModelOverviewsPage) => ({
+            data: response.mouseModelOverviews,
+            totalCount: response.page.totalElements,
+          })),
+        ),
     );
   }
 

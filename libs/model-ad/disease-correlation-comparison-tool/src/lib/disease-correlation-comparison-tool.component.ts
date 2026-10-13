@@ -193,12 +193,16 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(
-        map((response: DiseaseCorrelationsPage) => ({
-          data: response.diseaseCorrelations,
-          totalCount: response.page.totalElements,
-        })),
-      ),
+      this.diseaseCorrelationService
+        .getDiseaseCorrelations(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
+        .pipe(
+          map((response: DiseaseCorrelationsPage) => ({
+            data: response.diseaseCorrelations,
+            totalCount: response.page.totalElements,
+          })),
+        ),
     );
   }
 

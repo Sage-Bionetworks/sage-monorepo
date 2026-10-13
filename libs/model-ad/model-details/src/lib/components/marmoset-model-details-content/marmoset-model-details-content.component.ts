@@ -62,7 +62,7 @@ export class MarmosetModelDetailsContentComponent {
     {
       imagePath: 'model-ad-assets/images/marmoset-coordinating-center-logo.svg',
       description: 'Find information about using marmosets in neuroscience research.',
-      link: 'https://mcc.ohsu.edu/index.html',
+      link: 'https://mcc.ohsu.edu/',
     },
     {
       imagePath: 'model-ad-assets/images/pad-logo.svg',

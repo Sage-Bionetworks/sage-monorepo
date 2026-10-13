@@ -46,26 +46,21 @@
           </div>
         </div>
       </div>
-      @if (pinnedFetchFailed()) {
-        <!-- TODO(MG-1102): replace with the shared info banner with action once Design specifies it -->
-        <div class="pinned-fetch-failed" role="alert">
-          <i class="pi pi-exclamation-circle pinned-fetch-failed-icon" aria-hidden="true"></i>
-          <span>{{ pinnedFetchFailedMessage() }}</span>
-          <p-button
-            [label]="pinnedResultsControls.retryButtonLabel"
-            [rounded]="true"
-            size="small"
-            [loading]="isLoadingTableData()"
-            (onClick)="retryPinnedFetch()"
-          />
-        </div>
-      }
     }
-    <explorers-base-table
-      [data]="pinnedData()"
-      [noResultsMessageEnabled]="false"
-      [columnWidths]="columnWidths()"
-    />
+    @if (pinnedFetchFailed()) {
+      <explorers-comparison-tool-fetch-failed-bar
+        [message]="pinnedFetchFailedMessage()"
+        [buttonLabel]="pinnedResultsControls.retryButtonLabel"
+        [loading]="isLoadingPinnedData()"
+        (retry)="retryPinnedFetch()"
+      />
+    } @else {
+      <explorers-base-table
+        [data]="pinnedData()"
+        [noResultsMessageEnabled]="false"
+        [columnWidths]="columnWidths()"
+      />
+    }
   </div>
 
   @if (searchTerm() || hasSelectedFilters()) {
@@ -99,5 +94,14 @@
     </div>
   }
 
-  <explorers-base-table [data]="unpinnedData()" [columnWidths]="columnWidths()" />
+  @if (unpinnedFetchFailed()) {
+    <explorers-comparison-tool-fetch-failed-bar
+      [message]="unpinnedFetchFailedMessage()"
+      [buttonLabel]="unpinnedRetryButtonLabel()"
+      [loading]="isLoadingUnpinnedData()"
+      (retry)="retryUnpinnedFetch()"
+    />
+  } @else {
+    <explorers-base-table [data]="unpinnedData()" [columnWidths]="columnWidths()" />
+  }
 </div>
