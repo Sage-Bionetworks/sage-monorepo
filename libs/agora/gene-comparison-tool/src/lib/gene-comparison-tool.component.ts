@@ -289,7 +289,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.resetPinnedItemsState();
     this.paginatorFirst = 0;
 
-    this.logger.log(`Loading genes for ${this.category} / ${this.subCategory}`);
+    this.logger.log('Loading genes', { category: this.category, subCategory: this.subCategory });
 
     const genesApi$ = this.geneService.getComparisonGenes(this.category, this.subCategory);
     const distributionApi$ = this.distributionService.getDistribution();

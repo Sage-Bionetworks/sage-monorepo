@@ -106,7 +106,7 @@ export class DrugDetailsComponent implements OnInit, AfterViewInit {
           },
           error: () => {
             this.isLoading = false;
-            this.logger.log(`loadPanelData: Drug ${chemblId} not found, redirecting`);
+            this.logger.log('loadPanelData: Drug not found, redirecting', { chemblId });
             this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });

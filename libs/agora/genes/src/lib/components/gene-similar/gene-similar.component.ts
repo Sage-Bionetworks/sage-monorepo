@@ -72,7 +72,7 @@ export class GeneSimilarComponent implements OnInit {
       if (params.get('id')) {
         const geneId = params.get('id') as string;
         this.helperService.setLoading(true);
-        this.logger.log(`Loading gene ${geneId}`);
+        this.logger.log('Loading gene', { geneId });
 
         this.geneService
           .getGene(geneId)
@@ -81,7 +81,7 @@ export class GeneSimilarComponent implements OnInit {
             next: (gene: Gene | null) => {
               if (!gene) {
                 this.helperService.setLoading(false);
-                this.logger.log(`Gene ${geneId} not found, redirecting`);
+                this.logger.log('Gene not found, redirecting', { geneId });
                 this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
               } else {
                 this.gene = gene;
@@ -106,7 +106,7 @@ export class GeneSimilarComponent implements OnInit {
       ids_array.push(obj.ensembl_gene_id);
     });
 
-    this.logger.log(`Loading ${ids_array.length} similar genes`);
+    this.logger.log('Loading similar genes', { similarGeneCount: ids_array.length });
 
     this.geneService
       .getGenes(ids_array.join(','))

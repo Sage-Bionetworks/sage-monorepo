@@ -93,17 +93,20 @@ export class GeneDetailsComponent implements OnInit {
           },
           error: () => {
             this.isLoading.set(false);
-            this.logger.log(
-              `loadTranscriptomicsIndividualData: query: ${JSON.stringify(query)}, redirecting`,
-            );
+            this.logger.log('loadTranscriptomicsIndividualData: query failed, redirecting', {
+              query,
+            });
             this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });
     } else {
       this.isLoading.set(false);
-      this.logger.log(
-        `loadTranscriptomicsIndividualData: ensemblGeneId: ${ensemblGeneId} modelIdentifierType: ${modelIdentifierType} modelIdentifier: ${modelIdentifier}, redirecting`,
-      );
+      this.logger.log('loadTranscriptomicsIndividualData: missing route params, redirecting', {
+        ensemblGeneId,
+        tissue,
+        modelIdentifierType,
+        modelIdentifier,
+      });
       this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
     }
   }

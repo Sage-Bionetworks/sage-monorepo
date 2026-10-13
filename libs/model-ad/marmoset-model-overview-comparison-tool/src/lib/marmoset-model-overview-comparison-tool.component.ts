@@ -144,7 +144,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log(`unpinned query ${JSON.stringify(query)}`);
+    this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
       this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
@@ -166,7 +166,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
       sortOrders,
     };
 
-    this.logger.log(`pinned query ${JSON.stringify(query)}`);
+    this.logger.log('pinned query', { query });
 
     this.comparisonToolService.fetchPinned(
       this.marmosetModelOverviewService

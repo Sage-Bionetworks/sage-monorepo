@@ -198,7 +198,9 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
       return g.model === this.selectedStatisticalModel;
     });
 
-    this.logger.log(`Loading distribution for model ${this.selectedStatisticalModel}`);
+    this.logger.log('Loading distribution for model', {
+      statisticalModel: this.selectedStatisticalModel,
+    });
 
     this.distributionService
       .getDistribution()

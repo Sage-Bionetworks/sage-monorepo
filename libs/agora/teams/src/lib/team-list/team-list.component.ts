@@ -26,7 +26,7 @@ export class TeamListComponent {
       teams.forEach((team) => {
         (team.members ?? []).forEach((member: TeamMember) => {
           const name = member.name.toLowerCase().replace(/[- ]/g, '-');
-          this.logger.log(`Loading image for ${name}`);
+          this.logger.log('Loading team member image', { name });
 
           this.getTeamMemberImageUrl(name)
             .pipe(takeUntilDestroyed(this.destroyRef))

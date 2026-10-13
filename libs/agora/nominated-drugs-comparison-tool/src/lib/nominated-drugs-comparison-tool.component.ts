@@ -150,7 +150,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
 
-    this.logger.log(`unpinned query ${JSON.stringify(query)}`);
+    this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
       this.nominatedDrugsService.getNominatedDrugs(query).pipe(
@@ -172,7 +172,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
       sortOrders,
     };
 
-    this.logger.log(`pinned query ${JSON.stringify(query)}`);
+    this.logger.log('pinned query', { query });
 
     this.comparisonToolService.fetchPinned(
       this.nominatedDrugsService

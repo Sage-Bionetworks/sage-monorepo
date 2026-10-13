@@ -96,7 +96,7 @@ export class GeneNetworkComponent {
   }
 
   onNodeClick(node: NetworkChartNode) {
-    this.logger.log(`Loading gene ${node.id}`);
+    this.logger.log('Loading selected network gene', { geneId: node.id });
 
     this.geneService
       .getGene(node.id)

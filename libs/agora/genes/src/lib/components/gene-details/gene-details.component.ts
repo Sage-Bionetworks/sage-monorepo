@@ -174,7 +174,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
 
       if (params.get('id')) {
         const geneId = params.get('id') as string;
-        this.logger.log(`Loading gene ${geneId}`);
+        this.logger.log('Loading gene', { geneId });
 
         this.geneService
           .getGene(geneId)
@@ -183,7 +183,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
             next: (gene) => {
               if (!gene) {
                 this.helperService.setLoading(false);
-                this.logger.log(`Gene ${geneId} not found, redirecting`);
+                this.logger.log('Gene not found, redirecting', { geneId });
                 this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
               } else {
                 this.gene = gene;

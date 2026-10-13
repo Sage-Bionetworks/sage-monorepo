@@ -93,17 +93,18 @@ export class ProteinDetailsComponent implements OnInit {
           },
           error: () => {
             this.isLoading.set(false);
-            this.logger.log(
-              `loadProteomicsIndividualData: query: ${JSON.stringify(query)}, redirecting`,
-            );
+            this.logger.log('loadProteomicsIndividualData: query failed, redirecting', { query });
             this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });
     } else {
       this.isLoading.set(false);
-      this.logger.log(
-        `loadProteomicsIndividualData: uniqueId: ${uniqueId} modelIdentifierType: ${modelIdentifierType} modelIdentifier: ${modelIdentifier}, redirecting`,
-      );
+      this.logger.log('loadProteomicsIndividualData: missing route params, redirecting', {
+        uniqueId,
+        tissue,
+        modelIdentifierType,
+        modelIdentifier,
+      });
       this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
     }
   }

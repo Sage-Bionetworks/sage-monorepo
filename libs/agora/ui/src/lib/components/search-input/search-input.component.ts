@@ -55,7 +55,7 @@ export class SearchInputComponent {
   }
 
   getSearchResults = (query: string): Observable<SearchResult[]> => {
-    this.logger.log(`Searching for "${query}"`);
+    this.logger.log('Searching', { query });
 
     return this.geneService.searchGeneEnhanced(query).pipe(
       tap((results) => {
