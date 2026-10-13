@@ -182,6 +182,16 @@ export interface PinnedResultsLabels {
   sublabels: PinnedResultsLabel[];
 }
 
+/**
+ * The overwrite hidden pins message, split around the dropdown selection the pins were made in, so
+ * the selection can be rendered apart from the surrounding text.
+ */
+export interface OverwritePinsMessage {
+  beforeView: string;
+  pinnedView: string[];
+  afterView: string;
+}
+
 export interface PinnedResultsControlsCopy {
   downloadButtonTooltip: string;
   downloadPanelHeading: string;

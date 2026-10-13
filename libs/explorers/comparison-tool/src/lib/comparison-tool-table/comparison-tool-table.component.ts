@@ -98,7 +98,9 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   hasPinnedSection = computed(() => this.pinnedRowCount() > 0 || this.pinnedFetchFailed());
 
-  pinnedFetchFailedMessage = computed(() => getPinnedFetchFailedMessage(this.nouns()));
+  pinnedFetchFailedMessage = computed(() =>
+    getPinnedFetchFailedMessage(this.comparisonToolService.failedPinnedRowCount(), this.nouns()),
+  );
 
   unpinnedFetchFailedMessage = computed(() => getUnpinnedFetchFailedMessage(this.nouns()));
 
