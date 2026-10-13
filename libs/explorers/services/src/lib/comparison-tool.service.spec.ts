@@ -786,6 +786,64 @@ describe('ComparisonToolService', () => {
       });
     });
 
+    describe('URL pins that match no row', () => {
+      const URL_PINS = ['parent1', 'child1a'];
+      const loadUrlPins = () => {
+        connectService(viewConfigs, { selection: OTHER_PARENT_VIEW });
+        paramsSubject.next({ categories: PARENT_VIEW, pinnedItems: URL_PINS });
+      };
+
+      it('are dropped once the rows land in the URL view', () => {
+        loadUrlPins();
+
+        landPinned(parentRow('parent1'));
+
+        expect(service.pinnedItems()).toEqual(['parent1']);
+        expect(service.hiddenPinCount()).toBe(0);
+      });
+
+      it('are kept after a failed pinned fetch, then dropped once a retry lands', () => {
+        loadUrlPins();
+        const { source$ } = failsOnce(() => of({ data: [parentRow('parent1')], totalCount: 1 }));
+        service.fetchPinned(source$);
+        expect(service.pinnedItems()).toEqual(URL_PINS);
+
+        service.retryPinnedFetch();
+
+        expect(service.pinnedItems()).toEqual(['parent1']);
+      });
+
+      it('wait for the URL view rows rather than another view rows', () => {
+        loadUrlPins();
+        service.setDropdownSelection(CHILD_VIEW);
+
+        landPinned(childRow('child1b', 'parent1'));
+        expect(service.pinnedItems()).toEqual(URL_PINS);
+
+        service.setDropdownSelection(PARENT_VIEW);
+        landPinned(parentRow('parent1'));
+        expect(service.pinnedItems()).toEqual(['parent1']);
+      });
+
+      it('are kept as they are when every one matches a row', () => {
+        loadUrlPins();
+        const pinsBeforeLanding = service.pinnedItems();
+
+        landPinned(parentRow('child1a'), parentRow('parent1'));
+
+        expect(service.pinnedItems()).toBe(pinsBeforeLanding);
+      });
+
+      it('leaves pins from a pin edit alone when some have no rows', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        service.setPinnedItems(['parent1', 'parent2']);
+
+        landPinned(parentRow('parent1'));
+
+        expect(service.pinnedItems()).toEqual(['parent1', 'parent2']);
+      });
+    });
+
     describe('pinnedItemsView', () => {
       it('records the dropdown selection on a pin edit', () => {
         connectService(viewConfigs, { selection: CHILD_VIEW });
@@ -2627,7 +2685,8 @@ describe('ComparisonToolService', () => {
             pinnedItems: ['id1', 'id2'],
           },
         });
-        flushInitialUrlSync();
+        service.fetchPinned(of({ data: rows('id1', 'id2'), totalCount: 2 }));
+        tick();
 
         expect(service.dropdownSelection()).toEqual(['Category A', 'Option 2']);
         expect(service.pinnedItems()).toEqual(['id1', 'id2']);
