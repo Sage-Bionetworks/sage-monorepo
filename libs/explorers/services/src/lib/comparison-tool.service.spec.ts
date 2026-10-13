@@ -1972,7 +1972,7 @@ describe('ComparisonToolService', () => {
         }));
 
         it('should keep the cached selection rather than the default and warn when URL categories match no config', fakeAsync(() => {
-          const warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          const warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
 
           reEnterWithQueryParams({ categories: 'Category%20C,Option%201' });
 
@@ -2088,7 +2088,7 @@ describe('ComparisonToolService', () => {
         }));
 
         it('should keep the selection, pins, and filters and warn when the link categories match no config', fakeAsync(() => {
-          const warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          const warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
           setUpPinsAndFilters();
 
           followLink({ categories: 'Category%20C,Option%201' }, { keepState: true });
