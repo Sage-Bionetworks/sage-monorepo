@@ -212,6 +212,43 @@ export const ChildView: Story = {
   ],
 };
 
+// Three pins are cached, but only the first has a row in this view
+export const HiddenPins: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
+          pinnedData: mockComparisonToolData.slice(0, 1),
+          unpinnedData: mockComparisonToolData.slice(3),
+          configs: mockComparisonToolDataConfig,
+        }),
+      ],
+    }),
+  ],
+};
+
+// Pins are cached, but none have rows in this view
+export const NoTranslatedPinsChildView: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: childViewPinnedData.map((item) => item['_id']),
+          pinLimit: 5,
+          pinnedData: [],
+          unpinnedData: mockComparisonToolData,
+          configs: childViewConfigs,
+        }),
+      ],
+    }),
+  ],
+};
+
 export const PinnedRowsLoadingChildView: Story = {
   args: {},
   decorators: [

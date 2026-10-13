@@ -280,7 +280,8 @@ test.describe('differential expression', () => {
     await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, CEREBRAL_CORTEX_TISSUE);
     await expectCategoriesParams(page, rnaCerebralCortexCategories);
     await expectPinnedParams(page, []);
-    await expect(getPinnedTable(page).getByRole('row')).toHaveCount(0);
+    await expectPinnedResultsCount(page, 0, ['Pinned Results', '0 Genes 2 hidden']);
+    await expect(page.getByText('No matching genes exist in the current view.')).toBeVisible();
 
     await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, HEMIBRAIN_TISSUE);
     await expectCategoriesParams(page, rnaHemibrainCategories);
