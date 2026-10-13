@@ -10,6 +10,11 @@ type EnvironmentVariables = Record<string, string | undefined>;
 /**
  * Reads the version the infra deploy injects into the app container. Empty strings mean the
  * container was started without them (e.g. local development), so the version is unknown.
+ *
+ * Must resolve the same values the app config resolves for `appVersion` and `commitSha` from these
+ * environment variables, since the browser compares the two. Config file defaults are deliberately
+ * not applied: without the environment variables the deployed version is unknown, and an unknown
+ * version never counts as a mismatch.
  */
 export function getDeployedAppVersion(environmentVariables: EnvironmentVariables): AppVersion {
   return {

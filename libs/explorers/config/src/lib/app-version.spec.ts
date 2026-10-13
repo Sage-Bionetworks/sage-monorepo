@@ -1,7 +1,12 @@
+import { PLATFORM_ID } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { EnvironmentMapperService } from '@sagebionetworks/platform/config/angular';
 import type { Request, Response } from 'express';
-import { createAppVersionHandler, getDeployedAppVersion } from './app-version';
+import { AppVersion, createAppVersionHandler, getDeployedAppVersion } from './app-version';
 
 const deployedEnvironmentVariables = { APP_VERSION: '4.0.0-rc3', COMMIT_SHA: 'abc1234' };
+/** Mirrors the version keys in the apps' `application.yaml`. */
+const configFileVersion: AppVersion = { appVersion: 'local', commitSha: '' };
 
 describe('getDeployedAppVersion', () => {
   it('returns the version injected by the deploy', () => {
@@ -28,5 +33,17 @@ describe('createAppVersionHandler', () => {
 
     expect(res.set).toHaveBeenCalledWith('Cache-Control', 'no-store');
     expect(res.json).toHaveBeenCalledWith(getDeployedAppVersion(deployedEnvironmentVariables));
+  });
+});
+
+describe('getDeployedAppVersion and the app config', () => {
+  it('resolve the same version from the deploy environment variables', () => {
+    TestBed.configureTestingModule({ providers: [{ provide: PLATFORM_ID, useValue: 'server' }] });
+    jest.replaceProperty(process, 'env', { ...process.env, ...deployedEnvironmentVariables });
+
+    const appConfigVersion =
+      TestBed.inject(EnvironmentMapperService).applyEnvironmentOverrides(configFileVersion);
+
+    expect(appConfigVersion).toEqual(getDeployedAppVersion(process.env));
   });
 });
