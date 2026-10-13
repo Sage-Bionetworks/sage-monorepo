@@ -374,11 +374,15 @@ describe('comparison tool copy', () => {
 
   describe('getOverwritePinsMessage', () => {
     const PINNED_VIEW = ['Category A', 'Option B'];
-    const message = (beforeView: string) => ({
-      beforeView,
-      pinnedView: PINNED_VIEW,
-      afterView: 'view.',
+    const message = (lostPins: string, toView: 'it' | 'them') => ({
+      lostPins,
+      returnToView: {
+        beforeView: `To view ${toView}, go back to the`,
+        pinnedView: PINNED_VIEW,
+        afterView: 'view.',
+      },
     });
+    const failedToLoadMessage = (lostPins: string) => ({ lostPins, returnToView: null });
 
     it('should fall back to results without a parent count', () => {
       expect(
@@ -389,7 +393,8 @@ describe('comparison tool copy', () => {
         ),
       ).toEqual(
         message(
-          "You pinned 5 results that can't be shown in this view. Changing your pins here will unpin those results. To view them, go back to the",
+          "You pinned 5 results that can't be shown in this view. Changing your pins here will unpin those results.",
+          'them',
         ),
       );
     });
@@ -403,7 +408,8 @@ describe('comparison tool copy', () => {
         ),
       ).toEqual(
         message(
-          "You pinned 1 model that can't be shown in this view. Changing your pins here will unpin that model. To view it, go back to the",
+          "You pinned 1 model that can't be shown in this view. Changing your pins here will unpin that model.",
+          'it',
         ),
       );
     });
@@ -417,7 +423,8 @@ describe('comparison tool copy', () => {
         ),
       ).toEqual(
         message(
-          "You pinned 2 results for 2 parents that can't be shown in this view. Changing your pins here will unpin the results for those parents. To view them, go back to the",
+          "You pinned 2 results for 2 parents that can't be shown in this view. Changing your pins here will unpin the results for those parents.",
+          'them',
         ),
       );
     });
@@ -431,7 +438,8 @@ describe('comparison tool copy', () => {
         ),
       ).toEqual(
         message(
-          "You pinned 5 results for 1 parent that can't be shown in this view. Changing your pins here will unpin the results for that parent. To view them, go back to the",
+          "You pinned 5 results for 1 parent that can't be shown in this view. Changing your pins here will unpin the results for that parent.",
+          'them',
         ),
       );
     });
@@ -445,12 +453,36 @@ describe('comparison tool copy', () => {
         ),
       ).toEqual(
         message(
-          "You pinned 1 result for 1 parent that can't be shown in this view. Changing your pins here will unpin the result for that parent. To view it, go back to the",
+          "You pinned 1 result for 1 parent that can't be shown in this view. Changing your pins here will unpin the result for that parent.",
+          'it',
+        ),
+      );
+    });
+
+    it('should say the pins could not be loaded when there is no view to go back to', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 3, hiddenParentPinCount: null },
+          null,
+          STANDARD_NOUNS,
+        ),
+      ).toEqual(
+        failedToLoadMessage(
+          "You pinned 3 models that couldn't be loaded. Changing your pins here will unpin those models.",
+        ),
+      );
+    });
+
+    it('should count the results per parent when the pins could not be loaded', () => {
+      expect(
+        getOverwritePinsMessage({ hiddenPinCount: 5, hiddenParentPinCount: 2 }, null, CHILD_NOUNS),
+      ).toEqual(
+        failedToLoadMessage(
+          "You pinned 5 results for 2 parents that couldn't be loaded. Changing your pins here will unpin the results for those parents.",
         ),
       );
     });
   });
-
   describe('getUnpinnedFetchFailedMessage', () => {
     it('should fall back to results', () => {
       expect(getUnpinnedFetchFailedMessage(NO_NOUNS)).toBe(

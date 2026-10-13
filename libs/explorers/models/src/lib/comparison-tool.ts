@@ -183,13 +183,17 @@ export interface PinnedResultsLabels {
 }
 
 /**
- * The overwrite hidden pins message, split around the dropdown selection the pins were made in, so
- * the selection can be rendered apart from the surrounding text.
+ * The overwrite hidden pins message. `returnToView` is the sentence naming the view to go back to,
+ * split around that view's dropdown selection so the selection can be rendered apart from the
+ * surrounding text. It is null when there is no other view to go back to.
  */
 export interface OverwritePinsMessage {
-  beforeView: string;
-  pinnedView: string[];
-  afterView: string;
+  lostPins: string;
+  returnToView: {
+    beforeView: string;
+    pinnedView: string[];
+    afterView: string;
+  } | null;
 }
 
 export interface PinnedResultsControlsCopy {

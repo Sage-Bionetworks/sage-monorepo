@@ -1012,6 +1012,45 @@ describe('ComparisonToolService', () => {
       });
     });
 
+    describe('hiddenPinsReturnView', () => {
+      it('is the view the pins were made in after a switch', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+
+        service.setDropdownSelection(CHILD_VIEW);
+
+        expect(service.hiddenPinsReturnView()).toEqual(PARENT_VIEW);
+      });
+
+      it('is the view the pins were made in when their fetch fails after a switch', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        service.setDropdownSelection(CHILD_VIEW);
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.hiddenPinsReturnView()).toEqual(PARENT_VIEW);
+      });
+
+      it('is null when the fetch fails in the view the pins were made in', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.hiddenPinsReturnView()).toBeNull();
+      });
+
+      it('is null when the fetch fails in a CT without dropdowns', () => {
+        connectService(mockComparisonToolDataConfig);
+        service.setPinnedItems(['id1']);
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.hiddenPinsReturnView()).toBeNull();
+      });
+    });
+
     describe('pinnedParents', () => {
       it('reads unique parents in row order with the parent key of the fetched view', () => {
         connectService(viewConfigs, { selection: CHILD_VIEW });

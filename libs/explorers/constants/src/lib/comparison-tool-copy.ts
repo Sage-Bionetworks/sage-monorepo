@@ -145,17 +145,20 @@ export const getNoMatchingPinsMessage = (
 };
 
 /**
- * Takes the service's `hiddenPinCount` and `hiddenParentPinCount`, the dropdown selection the pins
- * were made in, and the active view's nouns. A null `hiddenParentPinCount` words the message for a
- * view without a parent key. Otherwise the count of hidden results is given per parent, since the
- * child noun isn't known in a parent view, and users should know how many results they would lose.
+ * Takes the service's `hiddenPinCount`, `hiddenParentPinCount`, and `hiddenPinsReturnView`, and the
+ * active view's nouns. A null `hiddenParentPinCount` words the message for a view without a parent
+ * key. Otherwise the count of hidden results is given per parent, since the child noun isn't known
+ * in a parent view, and users should know how many results they would lose.
+ *
+ * A null `returnView` means the pins failed to load in the view they were made in, so there is no
+ * other view to send the user to. The message then says the pins couldn't be loaded instead.
  */
 export const getOverwritePinsMessage = (
   {
     hiddenPinCount,
     hiddenParentPinCount,
   }: { hiddenPinCount: number; hiddenParentPinCount: number | null },
-  pinnedView: string[],
+  returnView: string[] | null,
   { viewNoun, parentNoun }: ComparisonToolNouns,
 ): OverwritePinsMessage => {
   const thatOrThose = (count: number) => (count === 1 ? 'that' : 'those');
@@ -167,14 +170,21 @@ export const getOverwritePinsMessage = (
     hiddenParentPinCount === null
       ? ''
       : nounsFor(hiddenParentPinCount, parentNoun ?? viewNoun ?? DEFAULT_VIEW_NOUN);
+  const whyHidden = returnView === null ? "couldn't be loaded" : "can't be shown in this view";
   const lostPins =
     hiddenParentPinCount === null
-      ? `You pinned ${hiddenPinCount} ${pins} that can't be shown in this view. Changing your pins here will unpin ${thatOrThose(hiddenPinCount)} ${pins}.`
-      : `You pinned ${hiddenPinCount} ${results} for ${hiddenParentPinCount} ${parents} that can't be shown in this view. Changing your pins here will unpin the ${results} for ${thatOrThose(hiddenParentPinCount)} ${parents}.`;
+      ? `You pinned ${hiddenPinCount} ${pins} that ${whyHidden}. Changing your pins here will unpin ${thatOrThose(hiddenPinCount)} ${pins}.`
+      : `You pinned ${hiddenPinCount} ${results} for ${hiddenParentPinCount} ${parents} that ${whyHidden}. Changing your pins here will unpin the ${results} for ${thatOrThose(hiddenParentPinCount)} ${parents}.`;
   return {
-    beforeView: `${lostPins} To view ${hiddenPinCount === 1 ? 'it' : 'them'}, go back to the`,
-    pinnedView,
-    afterView: 'view.',
+    lostPins,
+    returnToView:
+      returnView === null
+        ? null
+        : {
+            beforeView: `To view ${hiddenPinCount === 1 ? 'it' : 'them'}, go back to the`,
+            pinnedView: returnView,
+            afterView: 'view.',
+          },
   };
 };
 

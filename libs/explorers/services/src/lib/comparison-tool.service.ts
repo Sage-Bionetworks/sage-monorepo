@@ -422,6 +422,21 @@ export class ComparisonToolService<T> {
     return this.isChildView() ? null : this.hiddenParentPinCount();
   });
 
+  /**
+   * The dropdown selection to go back to for the hidden pins, or null when there is none: the pinned
+   * rows failed to load in the view the pins were made in. That includes every CT without dropdowns,
+   * whose selection is always empty. Pins can only be hidden in their own view when their fetch
+   * failed, but the failure is checked too, so this doesn't rely on that.
+   */
+  readonly hiddenPinsReturnView = computed<string[] | null>(
+    () => {
+      const pinnedItemsView = this.pinnedItemsView() ?? [];
+      const isPinnedView = isEqual(pinnedItemsView, this.dropdownSelection());
+      return this.pinnedFetchFailed() && isPinnedView ? null : pinnedItemsView;
+    },
+    { equal: isEqual },
+  );
+
   // The parent of a cached pin, or undefined when it has none or it isn't known yet. If the pins were
   // made in a self-parented view, each cached id is its own parent. If they were made in a child
   // view, the parent comes from `cachedPinParentByIdSignal`, and a pin whose rows haven't landed yet

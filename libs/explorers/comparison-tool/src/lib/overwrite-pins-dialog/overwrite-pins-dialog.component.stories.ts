@@ -19,13 +19,15 @@ const CHILD_NOUN: ComparisonToolNoun = { singular: 'Child', plural: 'Children' }
 const pinnedViewConfig = mockComparisonToolDataConfigWithDropdowns[0];
 
 // Three pins are cached, but only the first has a row on screen, so pinning another row is held
-// for the confirmation
-const holdPinEdit = (configs: ComparisonToolConfig[]) => [
+// for the confirmation. With `pinnedFetchFails`, none load, so all three are hidden in their own view
+const holdPinEdit = (configs: ComparisonToolConfig[], { pinnedFetchFails = false } = {}) => [
   MessageService,
   ...provideComparisonToolService({
     configs,
     pinnedItems: mockComparisonToolData.slice(0, 3).map((row) => row['_id'] as string),
-    pinnedData: mockComparisonToolData.slice(0, 1),
+    ...(pinnedFetchFails
+      ? { pinnedFetchFails }
+      : { pinnedData: mockComparisonToolData.slice(0, 1) }),
     unpinnedData: mockComparisonToolData.slice(3),
   }),
   provideAppInitializer(() => {
@@ -56,6 +58,14 @@ export const ParentChild: Story = {
           parent_noun: PARENT_NOUN,
         },
       ]),
+    }),
+  ],
+};
+
+export const FailedToLoad: Story = {
+  decorators: [
+    applicationConfig({
+      providers: holdPinEdit([pinnedViewConfig], { pinnedFetchFails: true }),
     }),
   ],
 };

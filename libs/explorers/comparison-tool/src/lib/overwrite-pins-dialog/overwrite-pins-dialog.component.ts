@@ -35,7 +35,7 @@ export class OverwritePinsDialogComponent {
           ? (this.comparisonToolService.hiddenParentPinCount() ?? 0)
           : null,
       },
-      this.comparisonToolService.pinnedItemsView() ?? [],
+      this.comparisonToolService.hiddenPinsReturnView(),
       this.comparisonToolService.nouns(),
     ),
   );
