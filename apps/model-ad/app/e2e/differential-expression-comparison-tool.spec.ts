@@ -110,6 +110,10 @@ const noGeneSymbolMatches = [
   `${noGeneSymbolEnsemblGeneId}~Abca7*V1599M~Male`,
 ];
 const tmpoGene = 'ENSMUSG00000019961~LOAD2~Male'; // Tmpo, which has both RNA and Protein rows
+const tmpoFemaleGene = 'ENSMUSG00000019961~LOAD2~Female';
+// Tmpo has no LOAD2 RNA rows in this tissue
+const CEREBRAL_CORTEX_TISSUE = 'Tissue - Cerebral Cortex';
+const rnaCerebralCortexCategories = [RNA_MAIN_CATEGORY, CEREBRAL_CORTEX_TISSUE];
 const rnaOnlyGene = 'ENSMUSG00000086714~LOAD2~Male'; // has RNA rows but no Protein rows
 const proteinOnlyGene = 'ENSMUSG00000005681~LOAD2~Female'; // Apoa2, which has no RNA rows
 // A filter both views offer
@@ -248,6 +252,45 @@ test.describe('differential expression', () => {
     await navigateToProteinViaHeaderNav(page, false);
     await expectCategoriesParams(page, proteinCategories);
     await expectPinsAndSexFilter(page, proteinPins);
+  });
+
+  test('pins made in the Protein view return in RNA after switching through a tissue where they have no rows', async ({
+    page,
+  }) => {
+    const tmpoGenes = [tmpoGene, tmpoFemaleGene];
+    const proteinPins = getRowIds(await fetchProteinRows(page, tmpoGenes));
+    expect(proteinPins).not.toHaveLength(0);
+    const rnaPins = getRowIds(await fetchRnaRows(page, tmpoGenes));
+    expect(rnaPins).toHaveLength(tmpoGenes.length);
+    expect(await fetchRnaRows(page, tmpoGenes, rnaCerebralCortexCategories)).toHaveLength(0);
+    const queryParameters = getQueryParamsFromRecords({
+      categories: proteinCategories,
+      pinned: proteinPins,
+    });
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await expectPinnedParams(page, proteinPins);
+    await expectPinnedRows(page, proteinPins);
+
+    await selectCategoryOption(page, DROPDOWN_INDEX.MAIN_CATEGORY, RNA_MAIN_CATEGORY);
+    await expectCategoriesParams(page, rnaHemibrainCategories);
+    await expectPinnedParams(page, rnaPins);
+    await expectPinnedRows(page, rnaPins);
+
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, CEREBRAL_CORTEX_TISSUE);
+    await expectCategoriesParams(page, rnaCerebralCortexCategories);
+    await expectPinnedParams(page, []);
+    await expect(getPinnedTable(page).getByRole('row')).toHaveCount(0);
+
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, HEMIBRAIN_TISSUE);
+    await expectCategoriesParams(page, rnaHemibrainCategories);
+    await expectPinnedParams(page, rnaPins);
+    await expectPinnedRows(page, rnaPins);
+
+    await selectCategoryOption(page, DROPDOWN_INDEX.MAIN_CATEGORY, PROTEIN_MAIN_CATEGORY);
+    await expectCategoriesParams(page, proteinCategories);
+    await expectPinnedParams(page, proteinPins);
+    await expectPinnedRows(page, proteinPins);
   });
 
   test('back after switching views from the header dropdown leaves the comparison tool', async ({

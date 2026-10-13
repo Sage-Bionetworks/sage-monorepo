@@ -177,14 +177,13 @@ export const getProteinIds = (rows: Proteomics[], gene: string) =>
 
 const searchGenes = (genes: string[]) => [...new Set(genes.map(getEnsemblGeneId))].join(',');
 
-// The Hemibrain RNA rows of the given genes, in the table's default sort order
-export const fetchRnaRows = async (page: Page, genes: string[]): Promise<Transcriptomics[]> => {
-  const rows = await fetchTranscriptomics(
-    page,
-    DIFFERENTIAL_EXPRESSION_RNA_HEMIBRAIN_CATEGORIES,
-    {},
-    { search: searchGenes(genes) },
-  );
+// The RNA rows of the given genes, in the table's default sort order. Defaults to Hemibrain
+export const fetchRnaRows = async (
+  page: Page,
+  genes: string[],
+  categories: string[] = DIFFERENTIAL_EXPRESSION_RNA_HEMIBRAIN_CATEGORIES,
+): Promise<Transcriptomics[]> => {
+  const rows = await fetchTranscriptomics(page, categories, {}, { search: searchGenes(genes) });
   return rows.filter((row) => genes.includes(row.composite_id));
 };
 

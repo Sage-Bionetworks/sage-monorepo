@@ -304,7 +304,7 @@ All four are nullable, and a view that declares no hierarchy leaves them unset. 
 - Map `hasRowsForPrebudgetedParents` off the `*Page` response into the unpinned `ComparisonToolFetchResult`. Without it, the Pin All button stays disabled at the pin limit
 - Size the pinned fetch's `pageSize` for the worst-case rows of `pinLimit()` parents, within the schema's `pageSize` maximum, and call `logger.error` when a pinned response has `totalElements > rows.length`. The pinned fetch is not paged, and a truncated response silently loses pins on a view switch
 
-Differential Expression (`libs/model-ad/differential-expression-comparison-tool/`) is the worked example, including its per-view `PINNED_PAGE_SIZE_*` constants. After a view switch, the fetches can rerun once when some parents have no rows in the new view. That is expected and settles; `pinnedItemsQuery`'s doc comment explains why.
+Differential Expression (`libs/model-ad/differential-expression-comparison-tool/`) is the worked example, including its per-view `PINNED_PAGE_SIZE_*` constants. After a view switch, `pinnedItemsQuery` sends the parents of every cached pin, read from the cache rather than from the rows on screen, so a parent with no rows in one view is still sent in the next.
 
 ---
 
