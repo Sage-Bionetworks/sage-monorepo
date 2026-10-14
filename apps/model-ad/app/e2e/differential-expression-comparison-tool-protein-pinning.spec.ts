@@ -291,7 +291,7 @@ test.describe('differential expression protein pinning', () => {
 
     await switchToRnaView(page);
     await expectPinnedParams(page, [fourProteinGene]);
-    await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene']);
+    await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene 1 hidden']);
 
     await switchToProteinView(page);
     await expectPinnedParams(page, proteinIds);
