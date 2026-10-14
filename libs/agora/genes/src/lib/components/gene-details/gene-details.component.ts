@@ -14,7 +14,9 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
+import { ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
+import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
 import {
   HelperService as ExplorersHelperService,
   LoggerService,
@@ -28,7 +30,6 @@ import { GeneHeroComponent } from '../gene-hero/gene-hero.component';
 import { GeneNominationsComponent } from '../gene-nominations/gene-nominations.component';
 import { GeneResourcesComponent } from '../gene-resources/gene-resources.component';
 import { GeneSoeComponent } from '../gene-soe/gene-soe.component';
-import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
 
 interface Panel {
   name: string;
@@ -172,8 +173,8 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
       this.reset();
       this.helperService.setLoading(true);
 
-      if (params.get('id')) {
-        const geneId = params.get('id') as string;
+      if (params.get(ROUTE_PARAMS.GENE_ID)) {
+        const geneId = params.get(ROUTE_PARAMS.GENE_ID) as string;
         this.logger.log('Loading gene', { geneId });
 
         this.geneService
@@ -224,11 +225,11 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
           });
       }
 
-      if (params.get('subtab')) {
-        this.activePanel = params.get('subtab') as string;
-        this.activeParent = params.get('tab') as string;
-      } else if (params.get('tab')) {
-        const panel = this.panels.find((p: Panel) => p.name === params.get('tab'));
+      if (params.get(PANEL_ROUTE_PARAMS.SUBTAB)) {
+        this.activePanel = params.get(PANEL_ROUTE_PARAMS.SUBTAB) as string;
+        this.activeParent = params.get(PANEL_ROUTE_PARAMS.TAB) as string;
+      } else if (params.get(PANEL_ROUTE_PARAMS.TAB)) {
+        const panel = this.panels.find((p: Panel) => p.name === params.get(PANEL_ROUTE_PARAMS.TAB));
         if (panel?.children) {
           this.activePanel = panel.children[0].name;
           this.activeParent = panel.name;

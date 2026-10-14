@@ -6,11 +6,8 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { LoggerService } from '@sagebionetworks/explorers/services';
-import {
-  isUnknownModelOrganism,
-  MODEL_ORGANISM_QUERY_KEY,
-  resolveModelOrganism,
-} from '@sagebionetworks/model-ad/util';
+import { QUERY_PARAMS } from '@sagebionetworks/model-ad/config';
+import { isUnknownModelOrganism, resolveModelOrganism } from '@sagebionetworks/model-ad/util';
 
 export const UNKNOWN_MODEL_ORGANISM_MESSAGE =
   'unknown modelOrganism query param; falling back to the default';
@@ -25,7 +22,7 @@ export const modelOrganismUrlGuard: CanActivateFn = (
 ) => {
   const router = inject(Router);
   const logger = inject(LoggerService).forSource('modelOrganismUrlGuard');
-  const rawModelOrganism = route.queryParams[MODEL_ORGANISM_QUERY_KEY];
+  const rawModelOrganism = route.queryParams[QUERY_PARAMS.MODEL_ORGANISM];
   const modelOrganism = resolveModelOrganism(rawModelOrganism);
 
   if (rawModelOrganism === modelOrganism) {
@@ -41,6 +38,6 @@ export const modelOrganismUrlGuard: CanActivateFn = (
   }
 
   const urlTree = router.parseUrl(state.url);
-  urlTree.queryParams = { ...urlTree.queryParams, [MODEL_ORGANISM_QUERY_KEY]: modelOrganism };
+  urlTree.queryParams = { ...urlTree.queryParams, [QUERY_PARAMS.MODEL_ORGANISM]: modelOrganism };
   return urlTree;
 };

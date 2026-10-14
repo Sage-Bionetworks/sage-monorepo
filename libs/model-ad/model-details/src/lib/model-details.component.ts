@@ -18,8 +18,8 @@ import {
   ModelService,
   MouseModel,
 } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { MODEL_ORGANISM_QUERY_KEY, resolveModelOrganism } from '@sagebionetworks/model-ad/util';
+import { QUERY_PARAMS, ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
 import { catchError, distinctUntilChanged, EMPTY, map, Observable, switchMap, tap } from 'rxjs';
 import { MarmosetModelDetailsContentComponent } from './components/marmoset-model-details-content/marmoset-model-details-content.component';
 import {
@@ -86,11 +86,12 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
       .pipe(
         map((snapshot): [ParamMap, ModelOrganism] => [
           snapshot.paramMap,
-          resolveModelOrganism(snapshot.queryParamMap.get(MODEL_ORGANISM_QUERY_KEY)),
+          resolveModelOrganism(snapshot.queryParamMap.get(QUERY_PARAMS.MODEL_ORGANISM)),
         ]),
         distinctUntilChanged(
           ([prevParams, prevModelOrganism], [params, modelOrganism]) =>
-            prevParams.get('name') === params.get('name') && prevModelOrganism === modelOrganism,
+            prevParams.get(ROUTE_PARAMS.MODEL_NAME) === params.get(ROUTE_PARAMS.MODEL_NAME) &&
+            prevModelOrganism === modelOrganism,
         ),
         tap(() => this.reset()),
         switchMap(([params, modelOrganism]) =>
@@ -106,7 +107,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
 
   private loadPanelData(params: ParamMap, modelOrganism: ModelOrganism): Observable<Model> {
     this.modelOrganism = modelOrganism;
-    const modelName = params.get('name');
+    const modelName = params.get(ROUTE_PARAMS.MODEL_NAME);
     if (!modelName) return EMPTY;
 
     return this.modelService
@@ -115,7 +116,6 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
       })
       .pipe(
         catchError(() => {
-          this.isLoading = false;
           this.logger.log('model not found, redirecting', {
             modelName,
             modelOrganism,
@@ -191,7 +191,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
 
   private appendModelOrganism(url: string) {
     const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}${MODEL_ORGANISM_QUERY_KEY}=${this.modelOrganism}`;
+    return `${url}${separator}${QUERY_PARAMS.MODEL_ORGANISM}=${this.modelOrganism}`;
   }
 
   onPanelChange(event: Panel) {

@@ -1,12 +1,18 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Route, Router } from '@angular/router';
+import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/model-ad/config';
+import {
+  QUERY_PARAMS,
+  ROUTE_PARAMS,
+  ROUTE_PATHS,
+  SUPPORT_EMAIL,
+} from '@sagebionetworks/model-ad/config';
 import {
   legacyDifferentialExpressionUrlGuard,
   modelOrganismUrlGuard,
 } from '@sagebionetworks/model-ad/services';
-import { MODEL_ORGANISM_QUERY_KEY, resolveModelOrganism } from '@sagebionetworks/model-ad/util';
+import { resolveModelOrganism } from '@sagebionetworks/model-ad/util';
 import { capitalizeFirstLetter } from '@sagebionetworks/shared/util';
 
 const DEFAULT_META_DESCRIPTION =
@@ -14,12 +20,12 @@ const DEFAULT_META_DESCRIPTION =
 
 const modelDetailsData = {
   title: (route: ActivatedRouteSnapshot) => {
-    const organism = resolveModelOrganism(route.queryParams[MODEL_ORGANISM_QUERY_KEY]);
-    return `${capitalizeFirstLetter(organism)} Model Details | ${route.params['name']} AD model`;
+    const organism = resolveModelOrganism(route.queryParams[QUERY_PARAMS.MODEL_ORGANISM]);
+    return `${capitalizeFirstLetter(organism)} Model Details | ${route.params[ROUTE_PARAMS.MODEL_NAME]} AD model`;
   },
   description: (route: ActivatedRouteSnapshot) => {
-    const organism = resolveModelOrganism(route.queryParams[MODEL_ORGANISM_QUERY_KEY]);
-    return `Explore information and results for the ${route.params['name']} Alzheimer's Disease ${organism} model.`;
+    const organism = resolveModelOrganism(route.queryParams[QUERY_PARAMS.MODEL_ORGANISM]);
+    return `Explore information and results for the ${route.params[ROUTE_PARAMS.MODEL_NAME]} Alzheimer's Disease ${organism} model.`;
   },
 };
 
@@ -114,7 +120,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${ROUTE_PATHS.GENES}/:ensemblGeneId`,
+    path: `${ROUTE_PATHS.GENES}/:${ROUTE_PARAMS.ENSEMBL_GENE_ID}`,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/gene-details').then((routes) => routes.routes),
     data: {
@@ -124,7 +130,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${ROUTE_PATHS.PROTEINS}/:uniqueId`,
+    path: `${ROUTE_PATHS.PROTEINS}/:${ROUTE_PARAMS.UNIQUE_ID}`,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/protein-details').then((routes) => routes.routes),
     data: {
@@ -146,21 +152,21 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${ROUTE_PATHS.MODELS}/:name`,
+    path: `${ROUTE_PATHS.MODELS}/:${ROUTE_PARAMS.MODEL_NAME}`,
     canActivate: [modelOrganismUrlGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: modelDetailsData,
   },
   {
-    path: `${ROUTE_PATHS.MODELS}/:name/:tab`,
+    path: `${ROUTE_PATHS.MODELS}/:${ROUTE_PARAMS.MODEL_NAME}/:${PANEL_ROUTE_PARAMS.TAB}`,
     canActivate: [modelOrganismUrlGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: modelDetailsData,
   },
   {
-    path: `${ROUTE_PATHS.MODELS}/:name/:tab/:subtab`,
+    path: `${ROUTE_PATHS.MODELS}/:${ROUTE_PARAMS.MODEL_NAME}/:${PANEL_ROUTE_PARAMS.TAB}/:${PANEL_ROUTE_PARAMS.SUBTAB}`,
     canActivate: [modelOrganismUrlGuard],
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),

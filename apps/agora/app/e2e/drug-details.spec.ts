@@ -12,6 +12,14 @@ test.describe('drug details', () => {
     await expect(page.getByRole('heading', { level: 1, name: drugName })).toBeVisible();
   });
 
+  test('invalid drug results in a 404 redirect', async ({ page }) => {
+    await page.goto('/drugs/CHEMBL0000000');
+    await expect(page).toHaveTitle('Agora | Page Not Found');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      ` This page isn't available right now. `,
+    );
+  });
+
   test('default tab is summary', async ({ page }) => {
     await page.goto(drugPath);
     await expect(page.getByText('Modality')).toBeVisible();

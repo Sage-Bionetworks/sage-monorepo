@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ParamMap } from '@angular/router';
+import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
 import { Panel } from '@sagebionetworks/explorers/models';
 
 @Injectable({
@@ -122,14 +123,14 @@ export class HelperService {
     params: ParamMap,
   ): { activePanel: string; activeParent: string; shouldScrollToPanelNav: boolean } | undefined {
     const noHashFragment = this.getHashFragment() === '';
-    if (params.get('subtab')) {
+    if (params.get(PANEL_ROUTE_PARAMS.SUBTAB)) {
       return {
-        activePanel: params.get('subtab') as string,
-        activeParent: params.get('tab') as string,
+        activePanel: params.get(PANEL_ROUTE_PARAMS.SUBTAB) as string,
+        activeParent: params.get(PANEL_ROUTE_PARAMS.TAB) as string,
         shouldScrollToPanelNav: noHashFragment,
       };
-    } else if (params.get('tab')) {
-      const panel = panels.find((p: Panel) => p.name === params.get('tab'));
+    } else if (params.get(PANEL_ROUTE_PARAMS.TAB)) {
+      const panel = panels.find((p: Panel) => p.name === params.get(PANEL_ROUTE_PARAMS.TAB));
       if (panel) {
         const { activePanel, activeParent } = this.getActivePanelAndParent(panels, panel);
         return {

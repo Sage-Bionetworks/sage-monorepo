@@ -24,6 +24,11 @@ export const ROUTE_PATHS = {
   DRUG_DETAILS: 'drugs',
 } as const;
 
+export const ROUTE_PARAMS = {
+  CHEMBL_ID: 'chemblId',
+  GENE_ID: 'id',
+} as const;
+
 export const AGORA_LOADING_ICON_COLORS: LoadingIconColors = {
   colorInnermost: '#8b8ad1',
   colorCentral: '#8b8ad1',

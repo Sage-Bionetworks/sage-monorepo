@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { SearchResultIcon } from '@sagebionetworks/explorers/models';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
 import { ModelOrganism, SearchResult, SearchService } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { QUERY_PARAMS, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -33,7 +33,7 @@ export class SearchInputComponent {
 
   navigateToResult = (result: SearchResult): void => {
     this.router.navigate([ROUTE_PATHS.MODELS, result.id], {
-      queryParams: { modelOrganism: result.model_organism },
+      queryParams: { [QUERY_PARAMS.MODEL_ORGANISM]: result.model_organism },
     });
   };
 
