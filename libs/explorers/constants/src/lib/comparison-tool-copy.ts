@@ -36,7 +36,7 @@ const pinnedResultsCountLabel = (
   pinnedResultsLabel(count === null ? TABLE_DATA_LOADING_MESSAGE : countLabel(count, noun));
 
 /**
- * Takes the service's `pinnedResultsCounts` and `nounsForPinCount`. Every variant shows `pinCount`;
+ * Takes the service's `pinnedResultsCounts` and `nouns`. Every variant shows `pinCount`;
  * only a child view also shows `pinnedRowCount`, since elsewhere it equals `pinCount` or lags it
  * right after a view switch while the pinned rows still belong to the previous view
  *
