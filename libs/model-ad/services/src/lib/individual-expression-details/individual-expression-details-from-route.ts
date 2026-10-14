@@ -66,7 +66,6 @@ export function individualExpressionDetailsFromRoute<T>({
     message: string,
     logData: Record<string, unknown>,
   ): Observable<never> => {
-    isLoading.set(false);
     logger.log(`${message}, redirecting`, logData);
     router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
     return EMPTY;
