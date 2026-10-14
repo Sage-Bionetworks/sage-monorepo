@@ -59,6 +59,7 @@ import {
   DIFFERENTIAL_EXPRESSION_CT_PAGE as CT_PAGE,
   DIFFERENTIAL_EXPRESSION_NAV_TRAILS,
   DIFFERENTIAL_EXPRESSION_DROPDOWN_INDEX as DROPDOWN_INDEX,
+  DIFFERENTIAL_EXPRESSION_CEREBRAL_CORTEX_TISSUE as CEREBRAL_CORTEX_TISSUE,
   DIFFERENTIAL_EXPRESSION_HEMIBRAIN_TISSUE as HEMIBRAIN_TISSUE,
   DIFFERENTIAL_EXPRESSION_PROTEIN_CATEGORY as PROTEIN_MAIN_CATEGORY,
   DIFFERENTIAL_EXPRESSION_PROTEIN_HEMIBRAIN_CATEGORIES as proteinCategories,
@@ -111,8 +112,7 @@ const noGeneSymbolMatches = [
 ];
 const tmpoGene = 'ENSMUSG00000019961~LOAD2~Male'; // Tmpo, which has both RNA and Protein rows
 const tmpoFemaleGene = 'ENSMUSG00000019961~LOAD2~Female';
-// Tmpo has no LOAD2 RNA rows in this tissue
-const CEREBRAL_CORTEX_TISSUE = 'Tissue - Cerebral Cortex';
+// Tmpo has no LOAD2 RNA rows in Cerebral Cortex
 const rnaCerebralCortexCategories = [RNA_MAIN_CATEGORY, CEREBRAL_CORTEX_TISSUE];
 const rnaOnlyGene = 'ENSMUSG00000086714~LOAD2~Male'; // has RNA rows but no Protein rows
 const proteinOnlyGene = 'ENSMUSG00000005681~LOAD2~Female'; // Apoa2, which has no RNA rows
@@ -585,7 +585,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
 
-    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Cerebral Cortex');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, CEREBRAL_CORTEX_TISSUE);
 
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
@@ -613,7 +613,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
 
-    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Cerebral Cortex');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, CEREBRAL_CORTEX_TISSUE);
 
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
@@ -646,7 +646,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
 
-    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Cerebral Cortex');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, CEREBRAL_CORTEX_TISSUE);
 
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
@@ -680,7 +680,7 @@ test.describe('differential expression', () => {
     await expectPinnedRows(page, firstPinned);
     await expectPinnedParams(page, firstPinned);
 
-    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, 'Tissue - Cerebral Cortex');
+    await selectCategoryOption(page, DROPDOWN_INDEX.TISSUE, CEREBRAL_CORTEX_TISSUE);
 
     await expectPinnedRows(page, expectedSecondPinned);
     await expectPinnedParams(page, expectedSecondPinned);

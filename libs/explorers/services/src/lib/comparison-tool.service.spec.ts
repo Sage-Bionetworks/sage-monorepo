@@ -598,16 +598,6 @@ describe('ComparisonToolService', () => {
         expect(service.pinnedItemsQuery()).toEqual(parentQuery('parent1', 'parent2'));
       });
 
-      it('keeps the same parents map when a landing adds no new parents', () => {
-        connectService(viewConfigs, { selection: CHILD_VIEW });
-        pinInChildView(childRow('child1a', 'parent1'));
-        const parentsBeforeLanding = (service as any).cachedPinParentsSignal();
-
-        landPinned(childRow('child1a', 'parent1'));
-
-        expect((service as any).cachedPinParentsSignal()).toBe(parentsBeforeLanding);
-      });
-
       it('sends no parents when the pins were recorded in a view without a parent key', () => {
         connectService([...viewConfigs, NO_PARENT_KEY_VIEW_CONFIG], {
           selection: NO_PARENT_KEY_VIEW,

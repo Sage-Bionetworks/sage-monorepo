@@ -88,9 +88,9 @@ interface ViewIdentity {
 }
 
 /**
- * A view whose parent key differs from its row key keys its rows as children of a parent. A view
- * whose parent key equals its row key is self-parented, not a child view: its rows are their own
- * parents.
+ * Checks whether the view is a child view, i.e. it has a parent key that differs from its row key.
+ * A view whose parent key equals its row key is self-parented, not a child view, because its rows
+ * are their own parents.
  */
 const isChildIdentity = (
   identity: ViewIdentity,
@@ -179,7 +179,7 @@ export class ComparisonToolService<T> {
   });
   // The view the pinned items cache was recorded under. Only a pin write changes it, so after a view
   // switch it stays on the view the pins were made in, even once the new view's pinned rows land.
-  // That is what tells `pinnedItemsQuery` to send the pinned parents in place of the cached ids.
+  // That is what tells `pinnedItemsQuery` to send the cached pins' parents in place of their ids.
   private readonly pinnedItemsIdentitySignal = signal<ViewIdentity | null>(null);
   // The view the pinned rows on screen were fetched under, set when a pinned fetch lands. Null until
   // then. Unlike the cache's identity, it moves to each new view once that view's pinned rows land,
@@ -189,11 +189,11 @@ export class ComparisonToolService<T> {
   private readonly pinnedParentsSignal = signal<string[]>([], {
     equal: (a, b) => xor(a, b).length === 0,
   });
-  // The parent of each cached pin, when the cache was recorded in a child view. Once another view's
-  // rows land, the cached child rows are no longer on screen, so this is the only place their
-  // parents survive. Replaced on every write of the cache, and filled in as the recorded view's rows
-  // land (see `writePinnedItems`).
-  private readonly cachedPinParentsSignal = signal<ReadonlyMap<string, string>>(new Map());
+  // The parent of each cached pin, when the pins were made in a child view. Once another view's rows
+  // land, the cached child rows are no longer on screen, so this is the only place their parents
+  // survive. Replaced on every write of the cache, and filled in as rows land in the view the pins
+  // were made in (see `writePinnedItems`).
+  private readonly cachedPinParentByIdSignal = signal<ReadonlyMap<string, string>>(new Map());
   private readonly isInitializedSignal = signal(false);
   private readonly heatmapDetailsPanelDataSignal = signal<{
     data: HeatmapDetailsPanelData;
@@ -244,7 +244,8 @@ export class ComparisonToolService<T> {
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly hasCompletedUnpinnedFetch = this.hasCompletedUnpinnedFetchSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
-  // Unique parent ids of the pinned rows, in row order. Empty if their view has no parent key.
+  // Unique parent ids of the pinned rows on screen, in row order. Empty if their view has no parent
+  // key. Unlike `cachedPinParentIds`, it leaves out cached pins with no rows in this view.
   readonly pinnedParents = this.pinnedParentsSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
@@ -367,18 +368,19 @@ export class ComparisonToolService<T> {
     { equal: isEqual },
   );
 
-  // The parents of every cached pin, in cache order, up to the pin limit. A self-parented recorded
-  // view keys its rows by their parent, so the cached ids are the parents. A recorded child view's
-  // parents come from `cachedPinParentsSignal`, and a pin whose rows have not landed yet has no known
-  // parent. A recorded view without a parent key has no parents to translate through.
+  // The parents of every cached pin, in cache order, up to the pin limit. If the pins were made in a
+  // self-parented view, each cached id is its own parent. If they were made in a child view, the
+  // parents come from `cachedPinParentByIdSignal`, and a pin whose rows haven't landed yet has no known
+  // parent. A view without a parent key has no parents to translate through.
   //
   // Capped because URL pins are only trimmed to the limit once their rows land. A switch before
   // then would otherwise ask the other view for more parents than its pinned fetch is sized for.
-  private readonly cachedPinParents = computed<string[]>(() => {
+  private readonly cachedPinParentIds = computed<string[]>(() => {
     const identity = this.pinnedItemsIdentitySignal();
     if (!identity?.parentIdDataKey) return [];
+    const parentById = this.cachedPinParentByIdSignal();
     const parents = isChildIdentity(identity)
-      ? this.pinnedItems().flatMap((id) => this.cachedPinParentsSignal().get(id) ?? [])
+      ? this.pinnedItems().flatMap((id) => parentById.get(id) ?? [])
       : this.pinnedItems();
     return this.firstPinnableParents(parents);
   });
@@ -400,7 +402,7 @@ export class ComparisonToolService<T> {
       if (identity === null || isEqual(identity, this.activeIdentity())) {
         return { items: this.pinnedItems(), itemIdSpace: 'row' };
       }
-      return { items: this.cachedPinParents(), itemIdSpace: 'parent' };
+      return { items: this.cachedPinParentIds(), itemIdSpace: 'parent' };
     },
     { equal: isEqual },
   );
@@ -974,7 +976,7 @@ export class ComparisonToolService<T> {
    *
    * The parents of the cached pins are replaced from `rows`, so a pin edit made in a child view can
    * be translated by a switch that comes before the edit's own rows land. Without rows, e.g. on a URL
-   * load, they stay unknown until those rows land.
+   * load, they stay unknown until those rows land (see `fillInCachedPinParents`).
    *
    * A write replaces any pins a failed pinned fetch left unloaded, so it also clears the failure.
    */
@@ -982,7 +984,7 @@ export class ComparisonToolService<T> {
     const identity = this.activeIdentity();
     this.querySignal.update((current) => ({ ...current, pinnedItems: items }));
     this.pinnedItemsIdentitySignal.set(identity);
-    this.cachedPinParentsSignal.set(new Map(this.cachedPinParentEntries(rows, identity)));
+    this.cachedPinParentByIdSignal.set(new Map(this.cachedPinParentEntries(rows, identity)));
     this.pinnedFetchFailedSignal.set(false);
   }
 
@@ -1133,22 +1135,27 @@ export class ComparisonToolService<T> {
       parentIdDataKey ? this.extractUniqueDataKeyValues(pinnedData, parentIdDataKey) : [],
     );
     this.pinnedDataIdentitySignal.set(identity);
-    this.recordLandedCachedPinParents(pinnedData, identity);
+    this.fillInCachedPinParents(pinnedData, identity);
   }
 
   /**
-   * Adds the parents of the cached pins among rows fetched under the cache's identity. Merged rather
-   * than replaced, since a view sharing that identity, e.g. the same child view on another tissue,
-   * can return rows for only some of the cached pins, and the parents of the rest must survive.
+   * Fills in the parents of cached pins that were written without their rows, such as pins loaded
+   * from a URL, once those rows land in the view the pins were made in. Without it, a switch to
+   * another view couldn't translate them. Pin edits record their parents when written, so for those
+   * this adds nothing.
+   *
+   * Merged rather than replaced, since a view sharing that id space, e.g. the same child view on
+   * another tissue, can return rows for only some of the cached pins, and the parents of the rest
+   * must survive.
    */
-  private recordLandedCachedPinParents(rows: T[], identity: ViewIdentity) {
+  private fillInCachedPinParents(rows: T[], identity: ViewIdentity) {
     if (!isEqual(identity, this.pinnedItemsIdentitySignal())) return;
-    const current = this.cachedPinParentsSignal();
+    const current = this.cachedPinParentByIdSignal();
     const newEntries = this.cachedPinParentEntries(rows, identity).filter(
       ([id, parentId]) => current.get(id) !== parentId,
     );
     if (newEntries.length === 0) return;
-    this.cachedPinParentsSignal.set(new Map([...current, ...newEntries]));
+    this.cachedPinParentByIdSignal.set(new Map([...current, ...newEntries]));
   }
 
   // Row selection
