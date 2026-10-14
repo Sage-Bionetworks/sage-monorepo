@@ -13,7 +13,7 @@ import { ExperimentalValidationWithTeamData } from '../../models';
 })
 export class ExperimentalValidationComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('ExperimentalValidationComponent');
 
   teamService = inject(TeamService);
 
@@ -29,7 +29,7 @@ export class ExperimentalValidationComponent {
   experimentalValidationWithTeamData: ExperimentalValidationWithTeamData[] = [];
 
   init() {
-    this.logger.log('ExperimentalValidationComponent: Loading teams for validation data');
+    this.logger.log('Loading teams for validation data');
 
     this.teamService
       .listTeams()

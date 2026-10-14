@@ -30,7 +30,7 @@ export class ProteinDetailsComponent implements OnInit {
   proteomicsIndividualService = inject(ProteomicsIndividualService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('ProteinDetailsComponent');
 
   readonly modality = 'Protein';
   readonly downloadFilenamePrefix = 'protein_expression_individual';
@@ -84,7 +84,7 @@ export class ProteinDetailsComponent implements OnInit {
 
     if (!uniqueId || !tissue || !modelIdentifier) {
       this.isLoading.set(false);
-      this.logger.log('ProteinDetailsComponent: missing required route info, redirecting', {
+      this.logger.log('missing required route info, redirecting', {
         uniqueId,
         tissue,
         modelIdentifierType,
@@ -108,10 +108,7 @@ export class ProteinDetailsComponent implements OnInit {
       .pipe(
         catchError(() => {
           this.isLoading.set(false);
-          this.logger.log(
-            'ProteinDetailsComponent: proteomics individual request failed, redirecting',
-            { ...query },
-          );
+          this.logger.log('proteomics individual request failed, redirecting', { query });
           this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           return EMPTY;
         }),

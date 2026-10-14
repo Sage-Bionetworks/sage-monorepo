@@ -27,7 +27,7 @@ import {
   UNMATCHED_URL_CATEGORIES_MESSAGE,
 } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
-import { LoggerService } from './logger.service';
+import { SourceLogger } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
 
 type Row = Record<string, unknown>;
@@ -83,6 +83,7 @@ describe('ComparisonToolService', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   // Inject inside each test so fakeAsync zones include the service's timer setup
@@ -174,7 +175,7 @@ describe('ComparisonToolService', () => {
 
     it('normalizes a non-positive column_width to the default and warns once', () => {
       const warnSpy = jest
-        .spyOn(TestBed.inject(LoggerService), 'warn')
+        .spyOn(SourceLogger.prototype, 'warn')
         .mockImplementation(() => undefined);
 
       connectService(configWithWidths);
@@ -193,7 +194,7 @@ describe('ComparisonToolService', () => {
 
     it('leaves a positive column_width untouched without warning', () => {
       const warnSpy = jest
-        .spyOn(TestBed.inject(LoggerService), 'warn')
+        .spyOn(SourceLogger.prototype, 'warn')
         .mockImplementation(() => undefined);
 
       connectService(configWithWidths);
@@ -1098,7 +1099,7 @@ describe('ComparisonToolService', () => {
           it('discards the result when the view identity changes', () => {
             const pinAllResponse$ = pinAllInParentView();
             const pinsBeforeSwitch = service.pinnedItems();
-            const loggerWarnSpy = jest.spyOn(TestBed.inject(LoggerService), 'warn');
+            const loggerWarnSpy = jest.spyOn(SourceLogger.prototype, 'warn');
             const toastWarnSpy = jest.spyOn(
               TestBed.inject(ToastNotificationService),
               'showWarning',
@@ -1935,7 +1936,7 @@ describe('ComparisonToolService', () => {
       }));
 
       it('should fall back to default when categories are invalid', fakeAsync(() => {
-        jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+        jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
         connectService(mockConfigsWithDropdowns, {
           initialParams: { categories: ['Invalid', 'Category'] },
         });
@@ -1951,7 +1952,7 @@ describe('ComparisonToolService', () => {
         let warn: jest.SpyInstance;
 
         beforeEach(() => {
-          warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
         });
 
         it('should warn once with the default selection used instead when the page loads with URL categories that match no config', fakeAsync(() => {
@@ -2018,7 +2019,7 @@ describe('ComparisonToolService', () => {
         let warn: jest.SpyInstance;
 
         beforeEach(() => {
-          warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
         });
 
         it('should warn when a filter uses a query param key the comparison tool already uses for other state', fakeAsync(() => {
@@ -2105,7 +2106,7 @@ describe('ComparisonToolService', () => {
         }));
 
         it('should keep the cached selection rather than the default and warn when URL categories match no config', fakeAsync(() => {
-          const warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          const warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
 
           reEnterWithQueryParams({ categories: 'Category%20C,Option%201' });
 
@@ -2221,7 +2222,7 @@ describe('ComparisonToolService', () => {
         }));
 
         it('should keep the selection, pins, and filters and warn when the link categories match no config', fakeAsync(() => {
-          const warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          const warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
           setUpPinsAndFilters();
 
           followLink({ categories: 'Category%20C,Option%201' }, { keepState: true });

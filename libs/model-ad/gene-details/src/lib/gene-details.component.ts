@@ -30,7 +30,7 @@ export class GeneDetailsComponent implements OnInit {
   transcriptomicsIndividualService = inject(TranscriptomicsIndividualService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('GeneDetailsComponent');
 
   readonly modality = 'RNA';
   readonly downloadFilenamePrefix = 'transcriptomics_individual';
@@ -84,7 +84,7 @@ export class GeneDetailsComponent implements OnInit {
 
     if (!ensemblGeneId || !tissue || !modelIdentifier) {
       this.isLoading.set(false);
-      this.logger.log('GeneDetailsComponent: missing required route info, redirecting', {
+      this.logger.log('missing required route info, redirecting', {
         ensemblGeneId,
         tissue,
         modelIdentifierType,
@@ -108,10 +108,7 @@ export class GeneDetailsComponent implements OnInit {
       .pipe(
         catchError(() => {
           this.isLoading.set(false);
-          this.logger.log(
-            'GeneDetailsComponent: transcriptomics individual request failed, redirecting',
-            { ...query },
-          );
+          this.logger.log('transcriptomics individual request failed, redirecting', { query });
           this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           return EMPTY;
         }),

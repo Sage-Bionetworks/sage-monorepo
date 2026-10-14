@@ -9,11 +9,11 @@ import {
 } from '@sagebionetworks/explorers/models';
 import {
   DEFAULT_PAGE_SIZE,
-  LoggerService,
   PlatformService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
   provideExplorersConfig,
+  SourceLogger,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
@@ -164,7 +164,7 @@ async function setup() {
     .spyOn(proteomicsService, 'getProteomics')
     .mockReturnValue(of(mockProteomicsPage([baseMockProteomicsRow])) as any);
 
-  const loggerErrorSpy = jest.spyOn(fixture.debugElement.injector.get(LoggerService), 'error');
+  const loggerErrorSpy = jest.spyOn(SourceLogger.prototype, 'error').mockClear();
 
   function setMainCategory(mainCategory: string) {
     jest
@@ -490,10 +490,9 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
 
         component.getPinnedData([mainCategory, TISSUE_CATEGORY], PINNED_ROWS_QUERY, []);
 
-        expect(loggerErrorSpy).toHaveBeenCalledWith(
-          'DifferentialExpressionComparisonToolComponent: pinned fetch truncated',
-          new Error(`${mainCategory}: 2 matching rows, 1 returned`),
-        );
+        expect(loggerErrorSpy).toHaveBeenCalledWith('pinned fetch truncated', {
+          data: { mainCategory, matchingRows: 2, returnedRows: 1 },
+        });
       },
     );
 

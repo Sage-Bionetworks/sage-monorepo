@@ -50,7 +50,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   modelService = inject(ModelService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('ModelDetailsComponent');
 
   isLoading = true;
 
@@ -116,7 +116,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
       .pipe(
         catchError(() => {
           this.isLoading = false;
-          this.logger.log('ModelDetailsComponent: model not found, redirecting', {
+          this.logger.log('model not found, redirecting', {
             modelName,
             modelOrganism,
           });

@@ -6,7 +6,7 @@ import { LOGGER } from '@sagebionetworks/web-shared/angular/logger';
 @Injectable({ providedIn: 'root' })
 export class LocalStorageService {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-  private readonly logger = inject(LOGGER);
+  private readonly logger = inject(LOGGER).forSource('LocalStorageService');
 
   getItem(key: string): string | null {
     if (!this.isBrowser) {
@@ -27,7 +27,7 @@ export class LocalStorageService {
     try {
       localStorage.setItem(key, value);
     } catch (e) {
-      this.logger.error('Failed to set item in localStorage', e);
+      this.logger.error('Failed to set item in localStorage', { error: e });
     }
   }
 
@@ -38,7 +38,7 @@ export class LocalStorageService {
     try {
       localStorage.removeItem(key);
     } catch (e) {
-      this.logger.error('Failed to remove item from localStorage', e);
+      this.logger.error('Failed to remove item from localStorage', { error: e });
     }
   }
 }
