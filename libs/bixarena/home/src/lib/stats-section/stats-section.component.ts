@@ -22,7 +22,7 @@ import { AuthService, LoggerService } from '@sagebionetworks/bixarena/services';
 })
 export class StatsSectionComponent {
   private readonly auth = inject(AuthService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('StatsSectionComponent');
   private readonly userStatsService = inject(UserService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -37,7 +37,7 @@ export class StatsSectionComponent {
       .pipe(
         tap((s) => this.logger.debug('✅ Fetched public stats', s)),
         catchError((err) => {
-          this.logger.error('Failed to fetch public stats', err);
+          this.logger.error('Failed to fetch public stats', { error: err });
           return of(null);
         }),
       ),
@@ -63,7 +63,7 @@ export class StatsSectionComponent {
         .pipe(
           tap((s) => this.logger.debug('✅ Fetched user stats', s)),
           catchError((err) => {
-            this.logger.error('Failed to fetch user stats', err);
+            this.logger.error('Failed to fetch user stats', { error: err });
             return of(null);
           }),
           takeUntilDestroyed(this.destroyRef),

@@ -36,7 +36,7 @@ export class OnboardingModalComponent {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly destroyRef = inject(DestroyRef);
   private readonly analytics = inject(AnalyticsService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('OnboardingModalComponent');
   private completedDone = false;
 
   readonly samplePrompt = SAMPLE_PROMPT;
@@ -112,7 +112,7 @@ export class OnboardingModalComponent {
 
   goTo(index: number): void {
     if (index < 0 || index >= this.frames.length) {
-      this.logger.debug('OnboardingModal: invalid frame index', { index });
+      this.logger.debug('invalid frame index', { index });
       return;
     }
     this.currentFrame.set(index);

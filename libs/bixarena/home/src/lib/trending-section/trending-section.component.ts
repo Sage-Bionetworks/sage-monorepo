@@ -39,7 +39,7 @@ function formatCategory(slug: BiomedicalCategory): string {
 export class TrendingSectionComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly gate = inject(BattleGateService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('TrendingSectionComponent');
   private readonly router = inject(Router);
   private readonly examplePrompts = inject(ExamplePromptService);
   private readonly destroyRef = inject(DestroyRef);
@@ -77,7 +77,7 @@ export class TrendingSectionComponent implements OnInit {
           }),
         ),
         catchError((err) => {
-          this.logger.error('Failed to fetch trending prompts', err);
+          this.logger.error('Failed to fetch trending prompts', { error: err });
           return of(null);
         }),
         takeUntilDestroyed(this.destroyRef),

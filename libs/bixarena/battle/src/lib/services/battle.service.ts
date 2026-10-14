@@ -29,7 +29,7 @@ export class BattleStateService {
   private readonly streamService = inject(BattleStreamService);
   private readonly config = inject(ConfigService).config;
   private readonly analytics = inject(AnalyticsService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('BattleStateService');
 
   constructor() {
     inject(DestroyRef).onDestroy(() => {
@@ -120,7 +120,7 @@ export class BattleStateService {
     const userMsg = { role: 'user' as const, content: prompt };
     this.resetStreams([userMsg], [userMsg]);
 
-    this.logger.debug('battle: creating battle');
+    this.logger.debug('creating battle');
     let battle;
     try {
       battle = await firstValueFrom(
@@ -131,14 +131,14 @@ export class BattleStateService {
       );
       if (!battle) throw new Error('Failed to create battle');
     } catch (err) {
-      this.logger.error('battle: failed to create battle', err);
+      this.logger.error('failed to create battle', { error: err });
       this.setStreamError('Something went wrong. Try a new battle', false);
       return;
     }
     this.battleId.set(battle.id);
     this.model1.set(battle.model1);
     this.model2.set(battle.model2);
-    this.logger.debug('battle: created', { battleId: battle.id });
+    this.logger.debug('created', { battleId: battle.id });
     this.analytics.trackBattleStarted(
       battle.id,
       entryPoint ?? 'battle_composer',
@@ -147,7 +147,7 @@ export class BattleStateService {
     try {
       await this.createRoundAndStream(battle.id, battle.model1.id, battle.model2.id, prompt);
     } catch (err) {
-      this.logger.error('battle: failed to start streaming', err);
+      this.logger.error('failed to start streaming', { error: err });
       this.setStreamError('Something went wrong', true);
     }
   }
@@ -181,7 +181,7 @@ export class BattleStateService {
       status: 'waiting',
     });
 
-    this.logger.debug('battle: continuing round', { which });
+    this.logger.debug('continuing round', { which });
     try {
       const round = await firstValueFrom(
         this.battleApi.createBattleRound(battleId, { promptMessage: userMsg }),
@@ -195,7 +195,7 @@ export class BattleStateService {
       else this.model2Sub = sub;
       this.startTimeouts(target, which);
     } catch (err) {
-      this.logger.error('battle: failed to continue round', err);
+      this.logger.error('failed to continue round', { error: err });
       target.update((s) => ({
         ...s,
         status: 'error',
@@ -224,7 +224,7 @@ export class BattleStateService {
       await this.createRoundAndStream(battleId, model1.id, model2.id, prompt);
       this.analytics.trackFollowupQuestionSubmitted(battleId, this.completedRounds + 1);
     } catch (err) {
-      this.logger.error('battle: failed to create follow-up round', err);
+      this.logger.error('failed to create follow-up round', { error: err });
       this.setStreamError('Something went wrong', true);
     }
   }
@@ -254,19 +254,19 @@ export class BattleStateService {
       );
       if (!battle) throw new Error('Failed to create battle');
     } catch (err) {
-      this.logger.error('battle: failed to create matchup', err);
+      this.logger.error('failed to create matchup', { error: err });
       this.setStreamError('Something went wrong. Try a new battle', false);
       return;
     }
     this.battleId.set(battle.id);
     this.model1.set(battle.model1);
     this.model2.set(battle.model2);
-    this.logger.debug('battle: new matchup created', { battleId: battle.id });
+    this.logger.debug('new matchup created', { battleId: battle.id });
     this.analytics.trackBattleStarted(battle.id, 'new_matchup_button', !!this.examplePromptId);
     try {
       await this.createRoundAndStream(battle.id, battle.model1.id, battle.model2.id, prompt);
     } catch (err) {
-      this.logger.error('battle: failed to start streaming', err);
+      this.logger.error('failed to start streaming', { error: err });
       this.setStreamError('Something went wrong', true);
     }
   }
@@ -282,7 +282,7 @@ export class BattleStateService {
     try {
       await this.createRoundAndStream(battleId, model1.id, model2.id, prompt);
     } catch (err) {
-      this.logger.error('battle: failed to retry round', err);
+      this.logger.error('failed to retry round', { error: err });
       this.setStreamError('Something went wrong', true);
     }
   }
@@ -299,7 +299,7 @@ export class BattleStateService {
       return;
     }
 
-    this.logger.debug('battle: vote submitted', { battleId, outcome, round: this.completedRounds });
+    this.logger.debug('vote submitted', { battleId, outcome, round: this.completedRounds });
     this.analytics.trackVoteSubmitted(battleId, outcome, this.completedRounds);
     this.selectedOutcome.set(outcome);
     this.promptUsesRemaining.update((n) => Math.max(0, n - 1));
@@ -479,11 +479,11 @@ export class BattleStateService {
       const s2 = this.model2Stream().status;
       if (s1 === 'error' || s2 === 'error') {
         this.phase.set('error');
-        this.logger.debug('battle: both models complete → error phase');
+        this.logger.debug('both models complete → error phase');
       } else {
         this.completedRounds++;
         this.phase.set('voting');
-        this.logger.debug('battle: both models complete → voting', { round: this.completedRounds });
+        this.logger.debug('both models complete → voting', { round: this.completedRounds });
       }
     }
   }
@@ -502,7 +502,7 @@ export class BattleStateService {
     // Hard cutoff — force error if the model never responds in time
     const hardTimeout = setTimeout(() => {
       if (streamSignal().status === 'waiting' || streamSignal().status === 'streaming') {
-        this.logger.warn('battle: model timed out', { which: key });
+        this.logger.warn('model timed out', { which: key });
         streamSignal.set({
           ...streamSignal(),
           status: 'error',

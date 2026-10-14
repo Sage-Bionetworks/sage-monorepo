@@ -27,7 +27,7 @@ import {
   UNMATCHED_URL_CATEGORIES_MESSAGE,
 } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
-import { LoggerService } from './logger.service';
+import { SourceLogger } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
 
 type Row = Record<string, unknown>;
@@ -83,6 +83,7 @@ describe('ComparisonToolService', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   // Inject inside each test so fakeAsync zones include the service's timer setup
@@ -174,7 +175,7 @@ describe('ComparisonToolService', () => {
 
     it('normalizes a non-positive column_width to the default and warns once', () => {
       const warnSpy = jest
-        .spyOn(TestBed.inject(LoggerService), 'warn')
+        .spyOn(SourceLogger.prototype, 'warn')
         .mockImplementation(() => undefined);
 
       connectService(configWithWidths);
@@ -193,7 +194,7 @@ describe('ComparisonToolService', () => {
 
     it('leaves a positive column_width untouched without warning', () => {
       const warnSpy = jest
-        .spyOn(TestBed.inject(LoggerService), 'warn')
+        .spyOn(SourceLogger.prototype, 'warn')
         .mockImplementation(() => undefined);
 
       connectService(configWithWidths);
@@ -683,6 +684,138 @@ describe('ComparisonToolService', () => {
       });
     });
 
+    describe('URL while the pinned rows on screen are from another view', () => {
+      const PINNED_CHILD_ROW = childRow('child1a', 'parent1');
+      const PARENT_VIEW_URL = { categories: PARENT_VIEW, pinnedItems: ['parent1'] };
+      const CHILD_VIEW_URL = { categories: CHILD_VIEW, pinnedItems: ['child1a'] };
+
+      const setUrl = (queryParams: Record<string, string>) => {
+        (mockActivatedRoute.snapshot as { queryParams: Record<string, string> }).queryParams = {
+          ...queryParams,
+        };
+      };
+      const currentUrlParams = () =>
+        deserializeComparisonToolUrlParams(mockActivatedRoute.snapshot?.queryParams ?? {});
+      const currentUrl = () => {
+        const { categories, pinnedItems } = currentUrlParams();
+        return { categories, pinnedItems };
+      };
+
+      const pinInParentViewAndSync = () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        tick();
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+      };
+
+      const switchToChildView = () => {
+        service.setDropdownSelection(CHILD_VIEW);
+        tick();
+      };
+
+      it('keeps the parent view URL after a switch to the child view until its pinned rows land', fakeAsync(() => {
+        pinInParentViewAndSync();
+
+        switchToChildView();
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+
+        landPinned(PINNED_CHILD_ROW);
+        tick();
+        expect(currentUrl()).toEqual(CHILD_VIEW_URL);
+      }));
+
+      it('keeps the child view URL after a switch to the parent view until its pinned rows land', fakeAsync(() => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        service.setPinnedItems(['child1a']);
+        landPinned(PINNED_CHILD_ROW);
+        tick();
+        expect(currentUrl()).toEqual(CHILD_VIEW_URL);
+
+        service.setDropdownSelection(PARENT_VIEW);
+        tick();
+        expect(currentUrl()).toEqual(CHILD_VIEW_URL);
+
+        landPinned(parentRow('parent1'));
+        tick();
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+      }));
+
+      it('writes a switch between views with the same id keys right away', fakeAsync(() => {
+        pinInParentViewAndSync();
+
+        service.setDropdownSelection(OTHER_PARENT_VIEW);
+        tick();
+
+        expect(currentUrl()).toEqual({ categories: OTHER_PARENT_VIEW, pinnedItems: ['parent1'] });
+      }));
+
+      it('writes a sort made before the child view pinned rows land once they land', fakeAsync(() => {
+        const sort = [{ field: 'name', order: -1 }];
+        pinInParentViewAndSync();
+        switchToChildView();
+
+        service.setSort(sort);
+        tick();
+        expect(currentUrlParams().sortFields).toBeUndefined();
+
+        landPinned(PINNED_CHILD_ROW);
+        tick();
+        expect(currentUrlParams().sortFields).toEqual(['name']);
+      }));
+
+      it('writes the parent view URL back after a link to the child view that keeps comparison tool state', fakeAsync(() => {
+        pinInParentViewAndSync();
+
+        setUrl({ categories: 'Child,A' });
+        lastSuccessfulNavigation = keepStateNavigation;
+        paramsSubject.next({ categories: CHILD_VIEW });
+        tick();
+        expect(service.dropdownSelection()).toEqual(CHILD_VIEW);
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+
+        landPinned(PINNED_CHILD_ROW);
+        tick();
+        expect(currentUrl()).toEqual(CHILD_VIEW_URL);
+      }));
+
+      it('keeps the parent view URL after a failed pinned fetch in the child view until a retry succeeds', fakeAsync(() => {
+        const { source$ } = failsOnce(() => of({ data: [PINNED_CHILD_ROW], totalCount: 1 }));
+        pinInParentViewAndSync();
+        switchToChildView();
+
+        service.fetchPinned(source$);
+        tick();
+        expect(service.pinnedFetchFailed()).toBe(true);
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+
+        service.retryPinnedFetch();
+        tick();
+        expect(currentUrl()).toEqual(CHILD_VIEW_URL);
+      }));
+
+      it('drops the URL pins after a failed pinned fetch in the same view', fakeAsync(() => {
+        pinInParentViewAndSync();
+
+        service.fetchPinned(failedRequest());
+        tick();
+
+        expect(currentUrl()).toEqual({ categories: PARENT_VIEW, pinnedItems: undefined });
+      }));
+
+      it('keeps the URL pins on first load until the pinned rows land', fakeAsync(() => {
+        setUrl({ categories: 'Parent,A', pinned: 'parent1' });
+        connectService(viewConfigs, {
+          initialParams: { categories: PARENT_VIEW, pinnedItems: ['parent1'] },
+        });
+        tick();
+        expect(mockRouter.navigate).not.toHaveBeenCalled();
+
+        landPinned(parentRow('parent1'));
+        tick();
+        expect(currentUrl()).toEqual(PARENT_VIEW_URL);
+      }));
+    });
+
     describe('pin limit by parent', () => {
       const childrenOf = (parentNumber: number, count: number): Row[] =>
         Array.from({ length: count }, (_, index) =>
@@ -966,7 +1099,7 @@ describe('ComparisonToolService', () => {
           it('discards the result when the view identity changes', () => {
             const pinAllResponse$ = pinAllInParentView();
             const pinsBeforeSwitch = service.pinnedItems();
-            const loggerWarnSpy = jest.spyOn(TestBed.inject(LoggerService), 'warn');
+            const loggerWarnSpy = jest.spyOn(SourceLogger.prototype, 'warn');
             const toastWarnSpy = jest.spyOn(
               TestBed.inject(ToastNotificationService),
               'showWarning',
@@ -1616,7 +1749,9 @@ describe('ComparisonToolService', () => {
   });
 
   describe('URL synchronization', () => {
+    // The URL is first written once a pinned fetch lands, as the CT components' initial one does.
     const flushInitialUrlSync = () => {
+      service.fetchPinned(of({ data: [], totalCount: 0 }));
       tick();
     };
 
@@ -1801,7 +1936,7 @@ describe('ComparisonToolService', () => {
       }));
 
       it('should fall back to default when categories are invalid', fakeAsync(() => {
-        jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+        jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
         connectService(mockConfigsWithDropdowns, {
           initialParams: { categories: ['Invalid', 'Category'] },
         });
@@ -1817,7 +1952,7 @@ describe('ComparisonToolService', () => {
         let warn: jest.SpyInstance;
 
         beforeEach(() => {
-          warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
         });
 
         it('should warn once with the default selection used instead when the page loads with URL categories that match no config', fakeAsync(() => {
@@ -1884,7 +2019,7 @@ describe('ComparisonToolService', () => {
         let warn: jest.SpyInstance;
 
         beforeEach(() => {
-          warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
         });
 
         it('should warn when a filter uses a query param key the comparison tool already uses for other state', fakeAsync(() => {
@@ -1971,7 +2106,7 @@ describe('ComparisonToolService', () => {
         }));
 
         it('should keep the cached selection rather than the default and warn when URL categories match no config', fakeAsync(() => {
-          const warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          const warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
 
           reEnterWithQueryParams({ categories: 'Category%20C,Option%201' });
 
@@ -2087,7 +2222,7 @@ describe('ComparisonToolService', () => {
         }));
 
         it('should keep the selection, pins, and filters and warn when the link categories match no config', fakeAsync(() => {
-          const warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+          const warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
           setUpPinsAndFilters();
 
           followLink({ categories: 'Category%20C,Option%201' }, { keepState: true });
@@ -2635,6 +2770,39 @@ describe('ComparisonToolService', () => {
     it('should have isLoading false initially', () => {
       connectService();
       expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    it('should disable the pin toggle while table data loads and enable it once the data lands', () => {
+      connectService();
+      const pending$ = new Subject<FetchResult>();
+      service.fetchUnpinned(pending$);
+      expect(service.isPinToggleEnabled(row('id1'))).toBe(false);
+
+      pending$.next({ data: [], totalCount: 0 });
+      pending$.complete();
+      expect(service.isPinToggleEnabled(row('id1'))).toBe(true);
+    });
+
+    it('should not change the pins on a pin toggle while table data loads', () => {
+      connectService();
+      service.setPinnedItems(['id1']);
+      service.fetchUnpinned(new Subject<FetchResult>());
+
+      service.togglePin(row('id1'));
+      service.togglePin(row('id2'));
+
+      expect(service.pinnedItems()).toEqual(['id1']);
+    });
+
+    it('should not change the pins on a pin or unpin while table data loads', () => {
+      connectService();
+      service.setPinnedItems(['id1']);
+      service.fetchUnpinned(new Subject<FetchResult>());
+
+      service.pinItem(row('id2'));
+      service.unpinItem('id1');
+
+      expect(service.pinnedItems()).toEqual(['id1']);
     });
 
     it('should set isLoading to true when an unpinned fetch is in flight', () => {

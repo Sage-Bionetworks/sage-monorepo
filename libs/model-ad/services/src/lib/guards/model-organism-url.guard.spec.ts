@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import { SourceLogger } from '@sagebionetworks/explorers/services';
 import { ModelOrganism } from '@sagebionetworks/model-ad/api-client';
 import { modelOrganismUrlGuard, UNKNOWN_MODEL_ORGANISM_MESSAGE } from './model-organism-url.guard';
 
@@ -16,7 +16,11 @@ describe('modelOrganismUrlGuard', () => {
 
   beforeEach(() => {
     router = TestBed.inject(Router);
-    warn = jest.spyOn(TestBed.inject(LoggerService), 'warn').mockImplementation();
+    warn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should allow activation when modelOrganism is a valid mouse value', () => {

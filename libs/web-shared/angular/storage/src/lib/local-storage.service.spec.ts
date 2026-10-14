@@ -9,7 +9,7 @@ function setup(platformId: string): { service: LocalStorageService; logger: Logg
   TestBed.configureTestingModule({
     providers: [
       { provide: PLATFORM_ID, useValue: platformId },
-      { provide: LOGGER, useValue: logger },
+      { provide: LOGGER, useValue: { forSource: () => logger } },
     ],
   });
   return { service: TestBed.inject(LocalStorageService), logger };

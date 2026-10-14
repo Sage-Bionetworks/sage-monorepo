@@ -36,7 +36,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn,
 ): Observable<any> => {
-  const logger = inject(LoggerService);
+  const logger = inject(LoggerService).forSource('httpErrorInterceptor');
   const errorOverlayService = inject(ErrorOverlayService);
   const appUpdateService = inject(AppUpdateService);
 
@@ -59,21 +59,17 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
       appUpdateService.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
 
       if (!req.context.get(SKIP_ERROR_REPORTING)) {
-        // Log error with Sentry context for proper grouping by endpoint + status
+        // The message groups Sentry issues, so it carries only the endpoint and status; tags make
+        // those values searchable across issues.
         Sentry.withScope((scope) => {
-          scope.setFingerprint(['http-error', String(error.status), urlPath]);
           scope.setTag('http.method', req.method);
           scope.setTag('http.status_code', String(error.status));
           scope.setTag('http.url', urlPath);
-          scope.setExtra('errorResponse', {
-            url: error.url,
-            status: error.status,
-            statusText: error.statusText,
-          });
 
-          // grouping by status + method + urlPath
-          const sentryError = new Error(`HTTP ${error.status} ${req.method} ${urlPath}`);
-          logger.error(`HTTP Error: ${errorMessage}`, sentryError);
+          logger.error(`HTTP ${error.status} ${req.method} ${urlPath}`, {
+            error,
+            data: { errorMessage, url: error.url, statusText: error.statusText },
+          });
         });
       }
 
@@ -99,7 +95,7 @@ function extractUrlPath(url: string | null): string {
   try {
     return new URL(url).pathname;
   } catch {
-    return url;
+    return url.split('?')[0];
   }
 }
 

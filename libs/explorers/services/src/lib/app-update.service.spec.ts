@@ -78,7 +78,7 @@ describe('AppUpdateService', () => {
         provideHttpClientTesting(),
         provideRouter(routes),
         { provide: PlatformService, useValue: { isBrowser: !isServer, isServer } },
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: { forSource: () => logger } },
       ],
     });
     httpMock = TestBed.inject(HttpTestingController);

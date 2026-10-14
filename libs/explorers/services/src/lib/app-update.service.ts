@@ -103,7 +103,7 @@ export class AppUpdateService {
   private readonly platformService = inject(PlatformService);
   private readonly errorOverlayService = inject(ErrorOverlayService);
   private readonly versionService = inject(VersionService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService).forSource('AppUpdateService');
 
   private readonly stale = signal(false);
   readonly isStale = this.stale.asReadonly();

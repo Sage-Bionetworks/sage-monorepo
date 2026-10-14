@@ -117,7 +117,7 @@ describe('BaseDownloadDomImageComponent', () => {
       imports: [NoopAnimationsModule],
       providers: [
         provideRouter([]),
-        { provide: LoggerService, useValue: { error } },
+        { provide: LoggerService, useValue: { forSource: () => ({ error }) } },
         MessageService,
       ],
     });
@@ -133,7 +133,10 @@ describe('BaseDownloadDomImageComponent', () => {
 
     expect(f.componentInstance.error()).toBe('Oops, something went wrong!');
     expect(hide).not.toHaveBeenCalled();
-    expect(error).toHaveBeenCalledWith(`Error preparing ${FILE_TYPE_PNG} download`, failure);
+    expect(error).toHaveBeenCalledWith('Error preparing download', {
+      error: failure,
+      data: { fileType: FILE_TYPE_PNG },
+    });
     expect(f.componentInstance.isLoading()).toBe(false);
   });
 });

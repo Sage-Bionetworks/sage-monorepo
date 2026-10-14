@@ -15,7 +15,6 @@ export default {
       },
     ],
   },
-  maxWorkers: '50%',
   transformIgnorePatterns: ['node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|until-async))'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
