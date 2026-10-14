@@ -47,7 +47,7 @@ let fetchMock: jest.Mock<ReturnType<FetchData>, Parameters<FetchData>>;
 class DetailsHostComponent {
   readonly details = individualExpressionDetailsFromRoute({
     pathParam: PATH_PARAM,
-    logLabel: 'DetailsHostComponent',
+    source: 'DetailsHostComponent',
     fetchData: (id, query, options) => fetchMock(id, query, options),
   });
 }

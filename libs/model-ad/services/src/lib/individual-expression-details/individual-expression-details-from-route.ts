@@ -29,7 +29,7 @@ export interface IndividualExpressionDetailsFetchOptions {
 
 export interface IndividualExpressionDetailsFromRouteOptions<T> {
   pathParam: string;
-  logLabel: string;
+  source: string;
   fetchData: (
     id: string,
     query: IndividualExpressionDetailsQuery,
@@ -46,12 +46,12 @@ export interface IndividualExpressionDetailsState<T> {
 
 export function individualExpressionDetailsFromRoute<T>({
   pathParam,
-  logLabel,
+  source,
   fetchData,
 }: IndividualExpressionDetailsFromRouteOptions<T>): IndividualExpressionDetailsState<T> {
   const route = inject(ActivatedRoute);
   const router = inject(Router);
-  const logger = inject(LoggerService);
+  const logger = inject(LoggerService).forSource(source);
   const platformService = inject(PlatformService);
   const destroyRef = inject(DestroyRef);
 
@@ -72,7 +72,7 @@ export function individualExpressionDetailsFromRoute<T>({
     logData: Record<string, unknown>,
   ): Observable<never> => {
     isLoading.set(false);
-    logger.log(`${logLabel}: ${message}, redirecting`, logData);
+    logger.log(`${message}, redirecting`, logData);
     router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
     return EMPTY;
   };
@@ -111,10 +111,14 @@ export function individualExpressionDetailsFromRoute<T>({
       switchMap((individualData) =>
         individualData.length
           ? of(individualData)
-          : redirectToNotFound('no individual expression data', { [pathParam]: id, ...query }),
+          : redirectToNotFound('no individual expression data', {
+              query: { [pathParam]: id, ...query },
+            }),
       ),
       catchError(() =>
-        redirectToNotFound('individual expression request failed', { [pathParam]: id, ...query }),
+        redirectToNotFound('individual expression request failed', {
+          query: { [pathParam]: id, ...query },
+        }),
       ),
     );
   };
