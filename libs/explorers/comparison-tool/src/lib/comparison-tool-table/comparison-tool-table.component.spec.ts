@@ -450,6 +450,85 @@ describe('ComparisonToolTableComponent', () => {
     });
   });
 
+  describe('hidden pins', () => {
+    const cachedPinIds = mockComparisonToolData.slice(0, 3).map((row) => row['_id'] as string);
+    const somePinsHidden = { pinnedItems: cachedPinIds, pinnedData: [mockComparisonToolData[0]] };
+    const allPinsHidden = { pinnedItems: cachedPinIds, pinnedData: [] };
+
+    it('should note the hidden pins in the pinned results header', async () => {
+      const { component } = await setup(somePinsHidden);
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        '1 Pinned Result 2 hidden',
+      ]);
+    });
+
+    it('should not show the no matching pins message while some pins are shown', async () => {
+      await setup(somePinsHidden);
+
+      expect(screen.queryByText(/No matching/)).toBeNull();
+    });
+
+    describe('when no pins match the current view', () => {
+      it('should keep the pinned section and note every pin as hidden', async () => {
+        const { component } = await setup(allPinsHidden);
+
+        expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+          '0 Pinned Results 3 hidden',
+        ]);
+      });
+
+      it('should say that no pins match the current view', async () => {
+        await setup(allPinsHidden);
+
+        expect(
+          screen.getByText('No matching results exist in the current view.'),
+        ).toBeInTheDocument();
+      });
+
+      it('should name the view rows in a child view', async () => {
+        const { component } = await setup({ ...allPinsHidden, configs: childViewConfigs });
+
+        expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+          PINNED_RESULTS_HEADING,
+          '0 Parents 3 hidden',
+          '0 Children',
+        ]);
+        expect(
+          screen.getByText('No matching children exist in the current view.'),
+        ).toBeInTheDocument();
+      });
+
+      it('should name the view rows in the plural for one hidden parent in a child view', async () => {
+        await setup({
+          pinnedItems: cachedPinIds.slice(0, 1),
+          pinnedData: [],
+          configs: childViewConfigs,
+        });
+
+        expect(
+          screen.getByText('No matching children exist in the current view.'),
+        ).toBeInTheDocument();
+      });
+
+      it('should disable Download Pins but keep Clear All Pins enabled', async () => {
+        await setup(allPinsHidden);
+
+        expect(screen.getByRole('button', { name: /download/i })).toBeDisabled();
+        expect(screen.getByRole('button', { name: /clear all/i })).toBeEnabled();
+      });
+
+      it('should remove the pinned section when Clear All Pins is clicked', async () => {
+        const { user } = await setup(allPinsHidden);
+
+        await user.click(screen.getByRole('button', { name: /clear all/i }));
+
+        expect(screen.queryByRole('button', { name: /clear all/i })).toBeNull();
+        expect(screen.queryByText(/No matching/)).toBeNull();
+      });
+    });
+  });
+
   describe('pinned fetch failure', () => {
     const failedPinnedItems = mockComparisonToolData.slice(0, 3).map((row) => row['_id']);
     const failedOptions = { pinnedItems: failedPinnedItems, pinnedFetchFails: true };

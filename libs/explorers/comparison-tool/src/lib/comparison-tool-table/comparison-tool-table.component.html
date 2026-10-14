@@ -32,7 +32,7 @@
               [buttonTooltip]="downloadPinsTooltip()"
               [heading]="pinnedResultsControlsCopy().downloadPanelHeading"
               [note]="viewConfig().downloadPinsNote"
-              [disabled]="isLoadingTableData() || pinnedFetchFailed()"
+              [disabled]="isLoadingTableData() || pinnedRowCount() === 0"
             />
             <button
               (click)="clearAllPinned()"
@@ -54,6 +54,8 @@
         [loading]="isLoadingPinnedData()"
         (buttonClick)="retryPinnedFetch()"
       />
+    } @else if (noMatchingPinsMessage(); as message) {
+      <explorers-comparison-tool-message-bar [message]="message" severity="info" />
     } @else {
       <explorers-base-table
         [data]="pinnedData()"

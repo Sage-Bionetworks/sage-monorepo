@@ -11,6 +11,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {
+  getNoMatchingPinsMessage,
   getPinAllTooltip,
   getPinnedFetchFailedMessage,
   getPinnedResultsControlsCopy,
@@ -96,7 +97,21 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     getPinnedResultsLabels(this.pinnedResultsCounts(), this.nouns()),
   );
 
-  hasPinnedSection = computed(() => this.pinnedRowCount() > 0 || this.pinnedFetchFailed());
+  // Also drawn when every cached pin is hidden, so the hidden pins don't look lost
+  hasPinnedSection = computed(
+    () =>
+      this.pinnedRowCount() > 0 ||
+      this.pinnedFetchFailed() ||
+      (this.pinnedResultsCounts().hiddenCount ?? 0) > 0,
+  );
+
+  noMatchingPinsMessage = computed(() => {
+    const { hiddenCount } = this.pinnedResultsCounts();
+    if (this.pinnedRowCount() !== 0 || !hiddenCount) return null;
+    // A child view's hiddenCount counts parents, which can have any number of rows
+    const hiddenRowCount = this.comparisonToolService.isChildView() ? null : hiddenCount;
+    return getNoMatchingPinsMessage(hiddenRowCount, this.nouns());
+  });
 
   pinnedFetchFailedMessage = computed(() =>
     getPinnedFetchFailedMessage(this.comparisonToolService.failedPinnedRowCount(), this.nouns()),

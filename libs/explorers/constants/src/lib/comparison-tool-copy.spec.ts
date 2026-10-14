@@ -1,6 +1,7 @@
 import { ComparisonToolNouns, PinnedResultsCounts } from '@sagebionetworks/explorers/models';
 import {
   BLANK_LABEL_TEXT,
+  getNoMatchingPinsMessage,
   getNoResultsMessage,
   getPinAllTooltip,
   getPinLimitTooltip,
@@ -404,6 +405,32 @@ describe('comparison tool copy', () => {
     it('should use the plural when the row count is unknown', () => {
       expect(getPinnedFetchFailedMessage(null, CHILD_NOUNS)).toBe(
         'We encountered a problem loading your pinned children.',
+      );
+    });
+  });
+
+  describe('getNoMatchingPinsMessage', () => {
+    it('should fall back to results', () => {
+      expect(getNoMatchingPinsMessage(2, NO_NOUNS)).toBe(
+        'No matching results exist in the current view.',
+      );
+    });
+
+    it('should name the view rows in a child view', () => {
+      expect(getNoMatchingPinsMessage(2, CHILD_NOUNS)).toBe(
+        'No matching children exist in the current view.',
+      );
+    });
+
+    it('should use the singular for one hidden row', () => {
+      expect(getNoMatchingPinsMessage(1, STANDARD_NOUNS)).toBe(
+        'No matching model exists in the current view.',
+      );
+    });
+
+    it('should use the plural when the row count is unknown', () => {
+      expect(getNoMatchingPinsMessage(null, CHILD_NOUNS)).toBe(
+        'No matching children exist in the current view.',
       );
     });
   });
