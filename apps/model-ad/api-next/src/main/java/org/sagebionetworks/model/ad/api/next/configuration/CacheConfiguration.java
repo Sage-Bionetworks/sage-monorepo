@@ -2,6 +2,7 @@ package org.sagebionetworks.model.ad.api.next.configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.List;
+import org.sagebionetworks.explorers.cacheinvalidation.DataRelease;
 import org.sagebionetworks.explorers.cacheinvalidation.DataVersionProvider;
 import org.sagebionetworks.model.ad.api.next.model.document.DataVersionDocument;
 import org.sagebionetworks.model.ad.api.next.model.repository.DataVersionRepository;
@@ -52,6 +53,9 @@ public class CacheConfiguration {
 
   @Bean
   public DataVersionProvider dataVersionProvider(DataVersionRepository repository) {
-    return () -> repository.findFirstBy().map(DataVersionDocument::getDataVersion);
+    return () ->
+      repository
+        .findFirstBy()
+        .map(document -> new DataRelease(document.getDataFile(), document.getDataVersion()));
   }
 }

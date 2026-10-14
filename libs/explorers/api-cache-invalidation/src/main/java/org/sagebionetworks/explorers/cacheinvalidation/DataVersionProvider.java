@@ -4,5 +4,5 @@ import java.util.Optional;
 
 @FunctionalInterface
 public interface DataVersionProvider {
-  Optional<String> getCurrentDataVersion();
+  Optional<DataRelease> getCurrentDataRelease();
 }
