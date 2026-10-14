@@ -167,6 +167,8 @@ export interface ComparisonToolNouns {
 export interface PinnedResultsCounts {
   pinCount: number | null;
   pinnedRowCount: number | null;
+  // Cached pins the active view isn't showing, in the unit of `pinCount`
+  hiddenCount: number | null;
 }
 
 /** One line of the pinned results header. `note` is shown inline after `text`, set off from it. */
