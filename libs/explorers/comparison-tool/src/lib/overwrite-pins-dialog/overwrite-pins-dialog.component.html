@@ -10,12 +10,15 @@
     styleClass="overwrite-pins-dialog"
   >
     <p class="overwrite-pins-dialog-message">
-      {{ message().beforeView }}
-      @for (category of message().pinnedView; track $index) {
-        <i>{{ category }}</i
-        >{{ $last ? '' : ', ' }}
+      {{ message().lostPins }}
+      @if (message().returnToView; as returnToView) {
+        {{ returnToView.beforeView }}
+        @for (category of returnToView.pinnedView; track $index) {
+          <i>{{ category }}</i
+          >{{ $last ? '' : ', ' }}
+        }
+        {{ returnToView.afterView }}
       }
-      {{ message().afterView }}
     </p>
     <div class="overwrite-pins-dialog-checkbox">
       <p-checkbox

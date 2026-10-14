@@ -23,7 +23,7 @@ const configs: ComparisonToolConfig[] = [
 const cachedPinIds = mockComparisonToolData.slice(0, 3).map((row) => row['_id'] as string);
 const rowToPin = mockComparisonToolData[3];
 
-async function setup() {
+async function setup({ pinnedFetchFails = false } = {}) {
   const user = userEvent.setup();
   const { fixture } = await render(OverwritePinsDialogComponent, {
     providers: [
@@ -32,7 +32,7 @@ async function setup() {
       ...provideComparisonToolService({
         configs,
         pinnedItems: cachedPinIds,
-        pinnedData: [mockComparisonToolData[0]],
+        ...(pinnedFetchFails ? { pinnedFetchFails } : { pinnedData: [mockComparisonToolData[0]] }),
         unpinnedData: mockComparisonToolData.slice(3),
       }),
     ],
@@ -69,6 +69,19 @@ describe('OverwritePinsDialogComponent', () => {
     expect(dialog).toHaveTextContent("You pinned 2 results that can't be shown in this view.");
     expect(dialog).toHaveTextContent('To view them, go back to the Category A, Option B view.');
     expect(Array.from(dialog.querySelectorAll('i')).map((i) => i.textContent)).toEqual(PINNED_VIEW);
+  });
+
+  it('should say the pins could not be loaded, without a view, when they failed in this view', async () => {
+    const { holdPinEdit } = await setup({ pinnedFetchFails: true });
+
+    holdPinEdit();
+
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveTextContent(
+      "You pinned 3 results that couldn't be loaded. Changing your pins here will unpin those results.",
+    );
+    expect(dialog).not.toHaveTextContent('go back to');
+    expect(dialog.querySelectorAll('i')).toHaveLength(0);
   });
 
   it('should apply the held pin edit on Overwrite Pins', async () => {
