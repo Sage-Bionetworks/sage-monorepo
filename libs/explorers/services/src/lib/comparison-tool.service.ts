@@ -88,6 +88,16 @@ interface ViewIdentity {
 }
 
 /**
+ * Checks whether the view is a child view, i.e. it has a parent key that differs from its row key.
+ * A view whose parent key equals its row key is self-parented, not a child view, because its rows
+ * are their own parents.
+ */
+const isChildIdentity = (
+  identity: ViewIdentity,
+): identity is ViewIdentity & { parentIdDataKey: string } =>
+  !!identity.parentIdDataKey && identity.parentIdDataKey !== identity.rowIdDataKey;
+
+/**
  * Fetches the rows matching the current query across all pages, capped at `remainingBudget`, so
  * "pin all" can pin matches the browser is not currently holding. `totalElements` is the full match
  * count, which is what makes truncation detectable: `totalElements > rows.length` means the budget
@@ -169,7 +179,7 @@ export class ComparisonToolService<T> {
   });
   // The view the pinned items cache was recorded under. Only a pin write changes it, so after a view
   // switch it stays on the view the pins were made in, even once the new view's pinned rows land.
-  // That is what tells `pinnedItemsQuery` to send the pinned parents in place of the cached ids.
+  // That is what tells `pinnedItemsQuery` to send the cached pins' parents in place of their ids.
   private readonly pinnedItemsIdentitySignal = signal<ViewIdentity | null>(null);
   // The view the pinned rows on screen were fetched under, set when a pinned fetch lands. Null until
   // then. Unlike the cache's identity, it moves to each new view once that view's pinned rows land,
@@ -179,6 +189,11 @@ export class ComparisonToolService<T> {
   private readonly pinnedParentsSignal = signal<string[]>([], {
     equal: (a, b) => xor(a, b).length === 0,
   });
+  // The parent of each cached pin, when the pins were made in a child view. Once another view's rows
+  // land, the cached child rows are no longer on screen, so this is the only place their parents
+  // survive. Replaced on every write of the cache, and filled in as rows land in the view the pins
+  // were made in (see `writePinnedItems`).
+  private readonly cachedPinParentByIdSignal = signal<ReadonlyMap<string, string>>(new Map());
   private readonly isInitializedSignal = signal(false);
   private readonly heatmapDetailsPanelDataSignal = signal<{
     data: HeatmapDetailsPanelData;
@@ -229,7 +244,8 @@ export class ComparisonToolService<T> {
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly hasCompletedUnpinnedFetch = this.hasCompletedUnpinnedFetchSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
-  // Unique parent ids of the pinned rows, in row order. Empty if their view has no parent key.
+  // Unique parent ids of the pinned rows on screen, in row order. Empty if their view has no parent
+  // key. Unlike `cachedPinParentIds`, it leaves out cached pins with no rows in this view.
   readonly pinnedParents = this.pinnedParentsSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
@@ -283,11 +299,7 @@ export class ComparisonToolService<T> {
     () => this.currentConfig()?.row_id_data_key || this.viewConfig().rowIdDataKey,
   );
   readonly parentIdDataKey = computed(() => this.currentConfig()?.parent_id_data_key || null);
-  // A view whose parent key equals its row key is self-parented, not a child view: its rows are
-  // their own parents.
-  readonly isChildView = computed(
-    () => !!this.parentIdDataKey() && this.parentIdDataKey() !== this.rowIdDataKey(),
-  );
+  readonly isChildView = computed(() => isChildIdentity(this.activeIdentity()));
   readonly nouns = computed<ComparisonToolNouns>(
     () => ({
       viewNoun: this.currentConfig()?.view_noun ?? null,
@@ -356,18 +368,33 @@ export class ComparisonToolService<T> {
     { equal: isEqual },
   );
 
+  // The parents of every cached pin, in cache order, up to the pin limit. If the pins were made in a
+  // self-parented view, each cached id is its own parent. If they were made in a child view, the
+  // parents come from `cachedPinParentByIdSignal`, and a pin whose rows haven't landed yet has no known
+  // parent. A view without a parent key has no parents to translate through.
+  //
+  // Capped because URL pins are only trimmed to the limit once their rows land. A switch before
+  // then would otherwise ask the other view for more parents than its pinned fetch is sized for.
+  private readonly cachedPinParentIds = computed<string[]>(() => {
+    const identity = this.pinnedItemsIdentitySignal();
+    if (!identity?.parentIdDataKey) return [];
+    const parentById = this.cachedPinParentByIdSignal();
+    const parents = isChildIdentity(identity)
+      ? this.pinnedItems().flatMap((id) => parentById.get(id) ?? [])
+      : this.pinnedItems();
+    return this.firstPinnableParents(parents);
+  });
+
   /**
    * The pins to send with a query, and the id space they are in. By default this is the pinned items
    * cache, sent as row ids. The exception is a view whose identity differs from the one the cache
    * was recorded under, such as Protein after pinning in RNA. The cache holds the other view's row
-   * ids, so the pinned parents are sent instead, matched against the active view's parent key.
+   * ids, so the parents of the cached pins are sent instead, matched against the active view's parent
+   * key.
    *
-   * The pinned parents are read from the latest pinned rows. So if a pinned parent has no rows in
-   * the active view, it is no longer sent once that view's pinned rows arrive. The pinned items
-   * cache still holds its row ids, so switching back to the view it was pinned in restores it. A
-   * failed pinned fetch leaves the pinned parents as they were, so later fetches still send them.
-   * Every fetch that sends this query reruns once when that happens. The rerun returns rows for the
-   * same parents, and `pinnedParents` compares as a set, so this query does not change again.
+   * Those parents are read from the cache, not from the pinned rows on screen. So a parent with no
+   * rows in one view is still sent in the next, e.g. pins made in Protein still return in RNA
+   * Hemibrain after a switch through RNA Cerebral Cortex, where they have no rows.
    */
   readonly pinnedItemsQuery = computed<PinnedItemsQuery>(
     () => {
@@ -375,7 +402,7 @@ export class ComparisonToolService<T> {
       if (identity === null || isEqual(identity, this.activeIdentity())) {
         return { items: this.pinnedItems(), itemIdSpace: 'row' };
       }
-      return { items: this.pinnedParents(), itemIdSpace: 'parent' };
+      return { items: this.cachedPinParentIds(), itemIdSpace: 'parent' };
     },
     { equal: isEqual },
   );
@@ -847,14 +874,17 @@ export class ComparisonToolService<T> {
     if (this.isLoadingTableData() || !this.canPin(row)) return;
     const id = this.rowId(row);
     if (!this.isPinned(id)) {
-      this.setPinnedItems([...this.visiblePinIds(), id]);
+      this.setPinnedItems([...this.visiblePinIds(), id], [...this.pinnedData(), row]);
     }
   }
 
   // Ignored while table data loads, for the reason given on `isPinToggleEnabled`.
   unpinItem(id: string) {
     if (this.isLoadingTableData()) return;
-    this.setPinnedItems(this.visiblePinIds().filter((item) => item !== id));
+    this.setPinnedItems(
+      this.visiblePinIds().filter((item) => item !== id),
+      this.pinnedData(),
+    );
   }
 
   /**
@@ -880,6 +910,7 @@ export class ComparisonToolService<T> {
 
     const identity = this.activeIdentity();
     const currentPinIds = this.visiblePinIds();
+    const currentPinnedRows = this.pinnedData();
     const remainingBudget = this.pinLimit() - this.pinCount();
     const prebudgetedParentIds = this.isChildView() ? this.pinnedParents() : undefined;
 
@@ -895,7 +926,10 @@ export class ComparisonToolService<T> {
             this.logger.warn('Discarded pin-all result after a view switch');
             return;
           }
-          this.setPinnedItems([...currentPinIds, ...this.extractRowIds(rows)]);
+          this.setPinnedItems(
+            [...currentPinIds, ...this.extractRowIds(rows)],
+            [...currentPinnedRows, ...rows],
+          );
           if (totalElements > rows.length) {
             this.showPinLimitWarning(rows.length);
           }
@@ -920,8 +954,10 @@ export class ComparisonToolService<T> {
    *
    * Changing this list makes both tables re-fetch: the pinned table asks for these ids, the unpinned
    * table asks for everything else. Ignoring an unchanged list avoids those two requests.
+   *
+   * `rows` are the rows the ids were taken from, when the caller has them (see `writePinnedItems`).
    */
-  setPinnedItems(items: string[] | null) {
+  setPinnedItems(items: string[] | null, rows: T[] = []) {
     const deduplicatedItems = items ? Array.from(new Set(items)) : [];
     // applyPinnedData can re-send the same ids in a new array, so compare by value to avoid
     // triggering unnecessary refetches when the pin set hasn't actually changed.
@@ -929,7 +965,7 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    this.writePinnedItems(deduplicatedItems);
+    this.writePinnedItems(deduplicatedItems, rows);
   }
 
   /**
@@ -938,12 +974,34 @@ export class ComparisonToolService<T> {
    * always made against the active view's rows. That is what lets `pinnedItemsQuery` trust that the
    * cached ids are row ids of the recorded view.
    *
+   * The parents of the cached pins are replaced from `rows`, so a pin edit made in a child view can
+   * be translated by a switch that comes before the edit's own rows land. Without rows, e.g. on a URL
+   * load, they stay unknown until those rows land (see `fillInCachedPinParents`).
+   *
    * A write replaces any pins a failed pinned fetch left unloaded, so it also clears the failure.
    */
-  private writePinnedItems(items: string[]) {
+  private writePinnedItems(items: string[], rows: T[] = []) {
+    const identity = this.activeIdentity();
     this.querySignal.update((current) => ({ ...current, pinnedItems: items }));
-    this.pinnedItemsIdentitySignal.set(this.activeIdentity());
+    this.pinnedItemsIdentitySignal.set(identity);
+    this.cachedPinParentByIdSignal.set(new Map(this.cachedPinParentEntries(rows, identity)));
     this.pinnedFetchFailedSignal.set(false);
+  }
+
+  /**
+   * The [row id, parent id] pair of each row that is a cached pin, read with the given view's keys.
+   * Empty unless that view is a child view, since only a child view's parents differ from its ids.
+   */
+  private cachedPinParentEntries(rows: T[], identity: ViewIdentity): [string, string][] {
+    if (!isChildIdentity(identity)) return [];
+    const { rowIdDataKey, parentIdDataKey } = identity;
+    const pinnedItemsSet = this.pinnedItemsSet();
+    return rows
+      .map((row): [string, string] => [
+        this.readDataKey(row, rowIdDataKey),
+        this.readDataKey(row, parentIdDataKey),
+      ])
+      .filter(([id]) => pinnedItemsSet.has(id));
   }
 
   resetPinnedItems() {
@@ -1011,26 +1069,33 @@ export class ComparisonToolService<T> {
     const { parentIdDataKey } = identity;
     const pinLimit = this.pinLimit();
     const cappedData = parentIdDataKey
-      ? this.keepRowsOfFirstParents(pinnedData, parentIdDataKey, pinLimit)
+      ? this.keepRowsOfFirstParents(pinnedData, parentIdDataKey)
       : pinnedData.slice(0, pinLimit);
     this.setPinnedData(cappedData, identity);
     if (cappedData.length < pinnedData.length) {
       this.showPinLimitWarning(cappedData.length);
-      this.setPinnedItems(this.extractRowIds(cappedData));
+      this.setPinnedItems(this.extractRowIds(cappedData), cappedData);
     }
   }
 
-  private keepRowsOfFirstParents(rows: T[], parentIdDataKey: string, parentLimit: number): T[] {
+  private keepRowsOfFirstParents(rows: T[], parentIdDataKey: string): T[] {
     const keptParents = new Set(
-      this.extractUniqueDataKeyValues(rows, parentIdDataKey).slice(0, parentLimit),
+      this.firstPinnableParents(rows.map((row) => this.readDataKey(row, parentIdDataKey))),
     );
     return rows.filter((row) => keptParents.has(this.readDataKey(row, parentIdDataKey)));
   }
 
+  // The first distinct parents, up to the pin limit, which counts parents in any view with a parent
+  // key.
+  private firstPinnableParents(parents: string[]): string[] {
+    return Array.from(new Set(parents)).slice(0, this.pinLimit());
+  }
+
   /**
-   * Clears the pinned rows but keeps the pinned parents and the pinned items cache. After a view
-   * switch the next pinned fetch is keyed by those parents, so emptying them would make every later
-   * fetch in this view ask for no pins, even once requests succeed again.
+   * Clears the pinned rows but keeps the pinned parents and the pinned items cache. The cache is what
+   * the next pinned fetch asks for, so later fetches and `retryPinnedFetch` still load the pins once
+   * requests succeed again. The pinned parents keep the unloaded pins counted toward the pin limit
+   * (see `isCountingCachedPins`).
    *
    * The pinned rows' view identity is kept too. Within one view, the URL then follows the emptied
    * rows and drops its pins. Right after a switch to a view with different id keys, the identity is
@@ -1070,6 +1135,27 @@ export class ComparisonToolService<T> {
       parentIdDataKey ? this.extractUniqueDataKeyValues(pinnedData, parentIdDataKey) : [],
     );
     this.pinnedDataIdentitySignal.set(identity);
+    this.fillInCachedPinParents(pinnedData, identity);
+  }
+
+  /**
+   * Fills in the parents of cached pins that were written without their rows, such as pins loaded
+   * from a URL, once those rows land in the view the pins were made in. Without it, a switch to
+   * another view couldn't translate them. Pin edits record their parents when written, so for those
+   * this adds nothing.
+   *
+   * Merged rather than replaced, since a view sharing that id space, e.g. the same child view on
+   * another tissue, can return rows for only some of the cached pins, and the parents of the rest
+   * must survive.
+   */
+  private fillInCachedPinParents(rows: T[], identity: ViewIdentity) {
+    if (!isEqual(identity, this.pinnedItemsIdentitySignal())) return;
+    const current = this.cachedPinParentByIdSignal();
+    const newEntries = this.cachedPinParentEntries(rows, identity).filter(
+      ([id, parentId]) => current.get(id) !== parentId,
+    );
+    if (newEntries.length === 0) return;
+    this.cachedPinParentByIdSignal.set(new Map([...current, ...newEntries]));
   }
 
   // Row selection

@@ -297,6 +297,13 @@ describe('ComparisonToolService', () => {
       },
     ];
 
+    const NO_PARENT_KEY_VIEW = ['None', 'A'];
+    const NO_PARENT_KEY_VIEW_CONFIG: ComparisonToolConfig = {
+      ...mockComparisonToolDataConfig[0],
+      dropdowns: NO_PARENT_KEY_VIEW,
+      row_id_data_key: UI_CONFIG_ROW_ID_DATA_KEY,
+    };
+
     const parentRow = (id: string): Row => ({ [UI_CONFIG_ROW_ID_DATA_KEY]: id });
     const childRow = (id: string, parentId: string): Row => ({
       [UI_CONFIG_ROW_ID_DATA_KEY]: id,
@@ -458,23 +465,149 @@ describe('ComparisonToolService', () => {
         expect(service.pinnedItemsQuery()).toEqual({ items: ['child2a'], itemIdSpace: 'row' });
       });
 
-      it('settles after one refetch when a parent has no rows in the child view, and restores it in the parent view', () => {
+      it('keeps sending a parent with no rows in the child view, and restores it in the parent view', () => {
         connectService(viewConfigs, { selection: PARENT_VIEW });
         pinInParentView('parent1', 'parent2');
         service.setDropdownSelection(CHILD_VIEW);
+        const queryBeforeLanding = service.pinnedItemsQuery();
 
         landPinned(childRow('child1a', 'parent1'));
-        const queryAfterFanOut = service.pinnedItemsQuery();
-        expect(queryAfterFanOut).toEqual({ items: ['parent1'], itemIdSpace: 'parent' });
-
-        landPinned(childRow('child1a', 'parent1'));
-        expect(service.pinnedItemsQuery()).toBe(queryAfterFanOut);
+        expect(service.pinnedItemsQuery()).toBe(queryBeforeLanding);
+        expect(queryBeforeLanding).toEqual({
+          items: ['parent1', 'parent2'],
+          itemIdSpace: 'parent',
+        });
 
         service.setDropdownSelection(PARENT_VIEW);
         expect(service.pinnedItemsQuery()).toEqual({
           items: ['parent1', 'parent2'],
           itemIdSpace: 'row',
         });
+      });
+    });
+
+    describe('parents of the cached pins', () => {
+      const pinInChildView = (...rows: Row[]) => {
+        service.setPinnedItems(rows.map((row) => String(row[UI_CONFIG_ROW_ID_DATA_KEY])));
+        landPinned(...rows);
+      };
+      const parentQuery = (...items: string[]) => ({ items, itemIdSpace: 'parent' });
+
+      it('sends every cached parent after a switch through a parent view where some have no rows', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        pinInChildView(
+          childRow('child1a', 'parent1'),
+          childRow('child1b', 'parent1'),
+          childRow('child2a', 'parent2'),
+        );
+        service.setDropdownSelection(PARENT_VIEW);
+        landPinned(parentRow('parent1'));
+
+        service.setDropdownSelection(OTHER_PARENT_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery('parent1', 'parent2'));
+      });
+
+      it('sends every cached parent after a switch through a parent view where none have rows', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        pinInChildView(childRow('child1a', 'parent1'));
+        service.setDropdownSelection(OTHER_PARENT_VIEW);
+        landPinned();
+
+        service.setDropdownSelection(PARENT_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery('parent1'));
+      });
+
+      it('knows the parent of a child pin before its rows land', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+
+        service.pinItem(childRow('child1a', 'parent1'));
+        service.setDropdownSelection(PARENT_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery('parent1'));
+      });
+
+      it('drops the parent of an unpinned child', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        pinInChildView(childRow('child1a', 'parent1'), childRow('child2a', 'parent2'));
+
+        service.unpinItem('child2a');
+        service.setDropdownSelection(PARENT_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery('parent1'));
+      });
+
+      it('knows the parents of the rows pin-all adds', () => {
+        const pinAllFetch: PinAllFetch<Row> = () =>
+          of({ rows: [childRow('child2a', 'parent2')], totalElements: 1 });
+        connectService(viewConfigs, { selection: CHILD_VIEW, pinAllFetch });
+        pinInChildView(childRow('child1a', 'parent1'));
+        landUnpinned();
+
+        service.pinAll();
+        service.setDropdownSelection(PARENT_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery('parent1', 'parent2'));
+      });
+
+      it('keeps only the parents of the pins a pin-limit trim keeps', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        service.setPinLimit(1);
+        pinInChildView(childRow('child1a', 'parent1'), childRow('child2a', 'parent2'));
+
+        service.setDropdownSelection(PARENT_VIEW);
+
+        expect(service.pinnedItems()).toEqual(['child1a']);
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery('parent1'));
+      });
+
+      it('knows no parents for URL pins until their rows land', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        pinInChildView(childRow('child1a', 'parent1'));
+        paramsSubject.next({ categories: CHILD_VIEW, pinnedItems: ['child2a'] });
+
+        service.setDropdownSelection(PARENT_VIEW);
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery());
+
+        service.setDropdownSelection(CHILD_VIEW);
+        landPinned(childRow('child2a', 'parent2'));
+        service.setDropdownSelection(PARENT_VIEW);
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery('parent2'));
+      });
+
+      it('keeps the parents of cached pins that have no rows in the latest landing', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        pinInChildView(childRow('child1a', 'parent1'), childRow('child2a', 'parent2'));
+
+        landPinned(childRow('child1a', 'parent1'));
+        service.setDropdownSelection(PARENT_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery('parent1', 'parent2'));
+      });
+
+      it('caps the parents at the pin limit when a switch comes before URL pins are trimmed', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        service.setPinLimit(2);
+        paramsSubject.next({
+          categories: PARENT_VIEW,
+          pinnedItems: ['parent1', 'parent2', 'parent3'],
+        });
+
+        service.setDropdownSelection(CHILD_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery('parent1', 'parent2'));
+      });
+
+      it('sends no parents when the pins were recorded in a view without a parent key', () => {
+        connectService([...viewConfigs, NO_PARENT_KEY_VIEW_CONFIG], {
+          selection: NO_PARENT_KEY_VIEW,
+        });
+        service.setPinnedItems(['id1']);
+
+        service.setDropdownSelection(PARENT_VIEW);
+
+        expect(service.pinnedItemsQuery()).toEqual(parentQuery());
       });
     });
 
