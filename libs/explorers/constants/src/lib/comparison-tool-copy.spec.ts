@@ -3,6 +3,7 @@ import {
   BLANK_LABEL_TEXT,
   getNoMatchingPinsMessage,
   getNoResultsMessage,
+  getOverwritePinsMessage,
   getPinAllTooltip,
   getPinLimitTooltip,
   getPinnedFetchFailedMessage,
@@ -20,6 +21,8 @@ import { getPinLimitWarning } from './toasts';
 
 const PARENT = { singular: 'Parent', plural: 'Parents' };
 const CHILD = { singular: 'Child', plural: 'Children' };
+// A self-parented view: its rows are their own parents, so it has no parent noun
+const SELF_PARENTED_NOUNS: ComparisonToolNouns = { viewNoun: PARENT, parentNoun: null };
 // A view noun with no parent/child meaning, for copy that applies to standard CTs
 const STANDARD_NOUNS: ComparisonToolNouns = {
   viewNoun: { singular: 'Model', plural: 'Models' },
@@ -431,6 +434,85 @@ describe('comparison tool copy', () => {
     it('should use the plural when the row count is unknown', () => {
       expect(getNoMatchingPinsMessage(null, CHILD_NOUNS)).toBe(
         'No matching children exist in the current view.',
+      );
+    });
+  });
+
+  describe('getOverwritePinsMessage', () => {
+    const PINNED_VIEW = ['Category A', 'Option B'];
+    const message = (beforeView: string) => ({
+      beforeView,
+      pinnedView: PINNED_VIEW,
+      afterView: 'view.',
+    });
+
+    it('should fall back to results without a parent count', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 5, hiddenParentPinCount: null },
+          PINNED_VIEW,
+          NO_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 5 results that can't be shown in this view. Changing your pins here will unpin those results. To view them, go back to the",
+        ),
+      );
+    });
+
+    it('should use the view noun without a parent count', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 1, hiddenParentPinCount: null },
+          PINNED_VIEW,
+          STANDARD_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 1 model that can't be shown in this view. Changing your pins here will unpin that model. To view it, go back to the",
+        ),
+      );
+    });
+
+    it('should count the results per parent noun in a child view', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 2, hiddenParentPinCount: 2 },
+          PINNED_VIEW,
+          CHILD_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 2 results for 2 parents that can't be shown in this view. Changing your pins here will unpin the results for those parents. To view them, go back to the",
+        ),
+      );
+    });
+
+    it('should count the results per view noun in a self-parented view, whose rows are the parents', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 5, hiddenParentPinCount: 1 },
+          PINNED_VIEW,
+          SELF_PARENTED_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 5 results for 1 parent that can't be shown in this view. Changing your pins here will unpin the results for that parent. To view them, go back to the",
+        ),
+      );
+    });
+
+    it('should word one result for one parent in the singular', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 1, hiddenParentPinCount: 1 },
+          PINNED_VIEW,
+          CHILD_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 1 result for 1 parent that can't be shown in this view. Changing your pins here will unpin the result for that parent. To view it, go back to the",
+        ),
       );
     });
   });

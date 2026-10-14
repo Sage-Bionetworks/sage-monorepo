@@ -1,0 +1,47 @@
+@if (platformService.isBrowser) {
+  <p-dialog
+    [header]="copy.heading"
+    [visible]="isVisible()"
+    (visibleChange)="onVisibleChange($event)"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    styleClass="overwrite-pins-dialog"
+  >
+    <p class="overwrite-pins-dialog-message">
+      {{ message().beforeView }}
+      @for (category of message().pinnedView; track $index) {
+        <i>{{ category }}</i
+        >{{ $last ? '' : ', ' }}
+      }
+      {{ message().afterView }}
+    </p>
+    <div class="overwrite-pins-dialog-checkbox">
+      <p-checkbox
+        [ngModel]="willHideConfirmation()"
+        (ngModelChange)="willHideConfirmation.set($event)"
+        [binary]="true"
+        size="small"
+        inputId="hideOverwritePinsConfirmation"
+      />
+      <label for="hideOverwritePinsConfirmation">{{ copy.hideCheckboxLabel }}</label>
+    </div>
+
+    <ng-template #footer>
+      <p-button
+        [label]="copy.cancelButtonLabel"
+        variant="outlined"
+        [rounded]="true"
+        size="small"
+        (onClick)="cancel()"
+      />
+      <p-button
+        [label]="copy.confirmButtonLabel"
+        [rounded]="true"
+        size="small"
+        (onClick)="confirm()"
+      />
+    </ng-template>
+  </p-dialog>
+}
