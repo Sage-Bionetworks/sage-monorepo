@@ -1,5 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, RouterModule } from '@angular/router';
+import { TABLE_DATA_LOADING_MESSAGE } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolConfig, ComparisonToolNoun } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolService,
@@ -13,6 +14,7 @@ import {
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
+import { Subject } from 'rxjs';
 import { PrimaryIdentifierControlsComponent } from './primary-identifier-controls.component';
 
 const MODEL_ROW = { _id: '68fff1aaeb12b9674515fd58', name: '3xTg-AD' };
@@ -232,6 +234,31 @@ describe('PrimaryIdentifierControlsComponent', () => {
 
     await user.keyboard('[Space]');
     expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(false);
+  });
+
+  describe('while table data loads', () => {
+    const setupWhileLoading = async (options?: { pinnedItems?: string[] }) => {
+      const result = await setup(options);
+      result.service.fetchUnpinned(new Subject<{ data: unknown[]; totalCount: number }>());
+      result.fixture.detectChanges();
+      return result;
+    };
+
+    it('should disable the pin button', async () => {
+      const { pinButton } = await setupWhileLoading();
+      expect(pinButton).toBeDisabled();
+    });
+
+    it('should disable the unpin button', async () => {
+      const { pinButton } = await setupWhileLoading({ pinnedItems: [MODEL_ROW._id] });
+      expect(pinButton).toBeDisabled();
+    });
+
+    it('should show the loading tooltip', async () => {
+      const { pinButton, user } = await setupWhileLoading();
+      await user.hover(pinButton);
+      expect(screen.getByRole('tooltip')).toHaveTextContent(TABLE_DATA_LOADING_MESSAGE);
+    });
   });
 
   describe('in a view with a parent key', () => {
