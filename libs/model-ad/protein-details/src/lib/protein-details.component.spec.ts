@@ -6,7 +6,11 @@ import {
   ModelIdentifierType,
   ProteomicsIndividualService,
 } from '@sagebionetworks/model-ad/api-client';
-import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
+import {
+  MODEL_AD_LOADING_ICON_COLORS,
+  QUERY_PARAMS,
+  ROUTE_PARAMS,
+} from '@sagebionetworks/model-ad/config';
 import { proteomicsIndividualMocks } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
@@ -20,10 +24,10 @@ async function setup(
 ) {
   const user = userEvent.setup();
 
-  const paramMap = convertToParamMap({ uniqueId: proteinDetails[0].unique_id });
+  const paramMap = convertToParamMap({ [ROUTE_PARAMS.UNIQUE_ID]: proteinDetails[0].unique_id });
   const queryParamMap = convertToParamMap({
-    model: proteinDetails[0].name,
-    tissue: proteinDetails[0].tissue,
+    [QUERY_PARAMS.MODEL]: proteinDetails[0].name,
+    [QUERY_PARAMS.TISSUE]: proteinDetails[0].tissue,
   });
   const mockActivatedRoute = {
     paramMap: of(paramMap),

@@ -1,7 +1,5 @@
 import { ModelOrganism } from '@sagebionetworks/model-ad/api-client';
 
-export const MODEL_ORGANISM_QUERY_KEY = 'modelOrganism';
-
 export const MODEL_ORGANISMS = Object.values(ModelOrganism);
 
 export function isModelOrganism(value: unknown): value is ModelOrganism {

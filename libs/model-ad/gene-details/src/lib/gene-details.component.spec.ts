@@ -6,7 +6,11 @@ import {
   ModelIdentifierType,
   TranscriptomicsIndividualService,
 } from '@sagebionetworks/model-ad/api-client';
-import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
+import {
+  MODEL_AD_LOADING_ICON_COLORS,
+  QUERY_PARAMS,
+  ROUTE_PARAMS,
+} from '@sagebionetworks/model-ad/config';
 import { transcriptomicsIndividualMocks } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
@@ -20,10 +24,12 @@ async function setup(
 ) {
   const user = userEvent.setup();
 
-  const paramMap = convertToParamMap({ ensemblGeneId: geneDetails[0].ensembl_gene_id });
+  const paramMap = convertToParamMap({
+    [ROUTE_PARAMS.ENSEMBL_GENE_ID]: geneDetails[0].ensembl_gene_id,
+  });
   const queryParamMap = convertToParamMap({
-    model: geneDetails[0].name,
-    tissue: geneDetails[0].tissue,
+    [QUERY_PARAMS.MODEL]: geneDetails[0].name,
+    [QUERY_PARAMS.TISSUE]: geneDetails[0].tissue,
   });
   const mockActivatedRoute = {
     paramMap: of(paramMap),

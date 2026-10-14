@@ -4,7 +4,7 @@ import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/c
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Drug, DrugService } from '@sagebionetworks/agora/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { Panel } from '@sagebionetworks/explorers/models';
 import {
   HelperService,
@@ -88,7 +88,7 @@ export class DrugDetailsComponent implements OnInit, AfterViewInit {
   }
 
   private loadPanelData(params: ParamMap) {
-    const chemblId = params.get('chemblId');
+    const chemblId = params.get(ROUTE_PARAMS.CHEMBL_ID);
     if (chemblId) {
       this.drugService
         .getDrug(chemblId, 'body', false, {

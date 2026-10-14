@@ -5,13 +5,8 @@ import {
   ModelIdentifierType,
   TranscriptomicsIndividual,
 } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { QUERY_PARAMS, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { transcriptomicsIndividualMocks } from '@sagebionetworks/model-ad/testing';
-import {
-  MODEL_GROUP_QUERY_KEY,
-  MODEL_QUERY_KEY,
-  TISSUE_QUERY_KEY,
-} from '@sagebionetworks/model-ad/util';
 import { render, screen } from '@testing-library/angular';
 import { Observable, of, switchMap, throwError, timer } from 'rxjs';
 import {
@@ -69,8 +64,8 @@ describe('individualExpressionDetailsFromRoute', () => {
   const detailsRoute = (
     id: string,
     queryParams: Record<string, string> = {
-      [MODEL_QUERY_KEY]: gene.name,
-      [TISSUE_QUERY_KEY]: gene.tissue,
+      [QUERY_PARAMS.MODEL]: gene.name,
+      [QUERY_PARAMS.TISSUE]: gene.tissue,
     },
   ) => `/${DETAILS_PATH}/${id}?${new URLSearchParams(queryParams)}`;
 
@@ -127,8 +122,8 @@ describe('individualExpressionDetailsFromRoute', () => {
 
     await navigate(
       detailsRoute(otherEnsemblGeneId, {
-        [MODEL_QUERY_KEY]: gene.name,
-        [TISSUE_QUERY_KEY]: otherTissue,
+        [QUERY_PARAMS.MODEL]: gene.name,
+        [QUERY_PARAMS.TISSUE]: otherTissue,
       }),
     );
 
@@ -157,8 +152,8 @@ describe('individualExpressionDetailsFromRoute', () => {
 
     await navigate(
       detailsRoute(gene.ensembl_gene_id, {
-        [MODEL_QUERY_KEY]: gene.name,
-        [TISSUE_QUERY_KEY]: otherTissue,
+        [QUERY_PARAMS.MODEL]: gene.name,
+        [QUERY_PARAMS.TISSUE]: otherTissue,
       }),
     );
 
@@ -168,8 +163,8 @@ describe('individualExpressionDetailsFromRoute', () => {
   it('should request by model group when the url has a model group', async () => {
     await setup(
       detailsRoute(gene.ensembl_gene_id, {
-        [MODEL_GROUP_QUERY_KEY]: modelGroup,
-        [TISSUE_QUERY_KEY]: gene.tissue,
+        [QUERY_PARAMS.MODEL_GROUP]: modelGroup,
+        [QUERY_PARAMS.TISSUE]: gene.tissue,
       }),
     );
 
@@ -186,8 +181,8 @@ describe('individualExpressionDetailsFromRoute', () => {
   });
 
   it.each([
-    ['tissue', { [MODEL_QUERY_KEY]: gene.name }],
-    ['model and model group', { [TISSUE_QUERY_KEY]: gene.tissue }],
+    ['tissue', { [QUERY_PARAMS.MODEL]: gene.name }],
+    ['model and model group', { [QUERY_PARAMS.TISSUE]: gene.tissue }],
   ])(
     'should redirect to the not found page without a request when the url is missing %s',
     async (_, queryParams) => {

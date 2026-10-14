@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { TranscriptomicsIndividualService } from '@sagebionetworks/model-ad/api-client';
+import { ROUTE_PARAMS } from '@sagebionetworks/model-ad/config';
 import { individualExpressionDetailsFromRoute } from '@sagebionetworks/model-ad/services';
 import { IndividualExpressionDetailsComponent } from '@sagebionetworks/model-ad/ui';
 
@@ -16,7 +17,7 @@ export class GeneDetailsComponent {
   readonly downloadFilenamePrefix = 'transcriptomics_individual';
 
   readonly details = individualExpressionDetailsFromRoute({
-    pathParam: 'ensemblGeneId',
+    pathParam: ROUTE_PARAMS.ENSEMBL_GENE_ID,
     source: 'GeneDetailsComponent',
     fetchData: (ensemblGeneId, query, options) =>
       this.transcriptomicsIndividualService.getTranscriptomicsIndividual(

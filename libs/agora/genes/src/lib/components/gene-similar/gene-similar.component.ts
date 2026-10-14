@@ -5,6 +5,7 @@ import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import {
   DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
   DEFAULT_SYNAPSE_WIKI_OWNER_ID,
+  ROUTE_PARAMS,
   ROUTE_PATHS,
 } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
@@ -69,8 +70,8 @@ export class GeneSimilarComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: ParamMap) => {
-      if (params.get('id')) {
-        const geneId = params.get('id') as string;
+      if (params.get(ROUTE_PARAMS.GENE_ID)) {
+        const geneId = params.get(ROUTE_PARAMS.GENE_ID) as string;
         this.helperService.setLoading(true);
         this.logger.log('Loading gene', { geneId });
 

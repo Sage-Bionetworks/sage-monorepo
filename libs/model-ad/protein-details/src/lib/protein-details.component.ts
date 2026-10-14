@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ProteomicsIndividualService } from '@sagebionetworks/model-ad/api-client';
+import { ROUTE_PARAMS } from '@sagebionetworks/model-ad/config';
 import { individualExpressionDetailsFromRoute } from '@sagebionetworks/model-ad/services';
 import { IndividualExpressionDetailsComponent } from '@sagebionetworks/model-ad/ui';
 
@@ -16,7 +17,7 @@ export class ProteinDetailsComponent {
   readonly downloadFilenamePrefix = 'protein_expression_individual';
 
   readonly details = individualExpressionDetailsFromRoute({
-    pathParam: 'uniqueId',
+    pathParam: ROUTE_PARAMS.UNIQUE_ID,
     source: 'ProteinDetailsComponent',
     fetchData: (uniqueId, query, options) =>
       this.proteomicsIndividualService.getProteomicsIndividual(

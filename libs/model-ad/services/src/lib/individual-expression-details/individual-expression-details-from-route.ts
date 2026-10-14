@@ -9,12 +9,7 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import { ModelIdentifierType } from '@sagebionetworks/model-ad/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import {
-  MODEL_GROUP_QUERY_KEY,
-  MODEL_QUERY_KEY,
-  TISSUE_QUERY_KEY,
-} from '@sagebionetworks/model-ad/util';
+import { QUERY_PARAMS, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { catchError, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 
 export interface IndividualExpressionDetailsQuery {
@@ -79,9 +74,9 @@ export function individualExpressionDetailsFromRoute<T>({
 
   const load = (snapshot: ActivatedRouteSnapshot): Observable<T[]> => {
     const id = snapshot.paramMap.get(pathParam);
-    const modelName = snapshot.queryParamMap.get(MODEL_QUERY_KEY);
-    const modelGroup = snapshot.queryParamMap.get(MODEL_GROUP_QUERY_KEY);
-    const tissueParam = snapshot.queryParamMap.get(TISSUE_QUERY_KEY);
+    const modelName = snapshot.queryParamMap.get(QUERY_PARAMS.MODEL);
+    const modelGroup = snapshot.queryParamMap.get(QUERY_PARAMS.MODEL_GROUP);
+    const tissueParam = snapshot.queryParamMap.get(QUERY_PARAMS.TISSUE);
     tissue.set(tissueParam);
 
     const modelIdentifierType = modelGroup
