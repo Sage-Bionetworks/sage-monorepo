@@ -985,13 +985,13 @@ describe('ComparisonToolService', () => {
       });
     });
 
-    describe('pinnedItemsView', () => {
+    describe('cachedPinsView', () => {
       it('records the dropdown selection on a pin edit', () => {
         connectService(viewConfigs, { selection: CHILD_VIEW });
 
         service.pinItem(childRow('child1a', 'parent1'));
 
-        expect(service.pinnedItemsView()).toEqual(CHILD_VIEW);
+        expect(service.cachedPinsView()).toEqual(CHILD_VIEW);
       });
 
       it('records the view a URL change selects', () => {
@@ -999,16 +999,16 @@ describe('ComparisonToolService', () => {
 
         paramsSubject.next({ categories: CHILD_VIEW, pinnedItems: ['child1a'] });
 
-        expect(service.pinnedItemsView()).toEqual(CHILD_VIEW);
+        expect(service.cachedPinsView()).toEqual(CHILD_VIEW);
       });
 
-      it('leaves the recorded view alone on a dropdown change', () => {
+      it('leaves the cached pins view alone on a dropdown change', () => {
         connectService(viewConfigs, { selection: PARENT_VIEW });
         pinInParentView('parent1');
 
         service.setDropdownSelection(OTHER_PARENT_VIEW);
 
-        expect(service.pinnedItemsView()).toEqual(PARENT_VIEW);
+        expect(service.cachedPinsView()).toEqual(PARENT_VIEW);
       });
     });
 

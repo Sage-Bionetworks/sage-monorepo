@@ -188,7 +188,7 @@ export class ComparisonToolService<T> {
   // so it tells whether `visiblePinIds` are ids of the active view.
   private readonly pinnedDataIdentitySignal = signal<ViewIdentity | null>(null);
   // The dropdown selection the pinned items cache was last written in, written with the cache.
-  private readonly pinnedItemsViewSignal = signal<string[] | null>(null);
+  private readonly cachedPinsViewSignal = signal<string[] | null>(null);
   // Set when URL pins are written, until their rows land in the URL's view and the pins that match
   // no row are dropped (see `applyPinnedData`). Any other write replaces them, so it clears this.
   private hasUnconfirmedUrlPins = false;
@@ -255,7 +255,7 @@ export class ComparisonToolService<T> {
   // Unique parent ids of the pinned rows on screen, in row order. Empty if their view has no parent
   // key. Unlike `cachedPinParentIds`, it leaves out cached pins with no rows in this view.
   readonly pinnedParents = this.pinnedParentsSignal.asReadonly();
-  readonly pinnedItemsView = this.pinnedItemsViewSignal.asReadonly();
+  readonly cachedPinsView = this.cachedPinsViewSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
   readonly isFilterPanelOpen = this.isFilterPanelOpenSignal.asReadonly();
@@ -430,9 +430,9 @@ export class ComparisonToolService<T> {
    */
   readonly hiddenPinsReturnView = computed<string[] | null>(
     () => {
-      const pinnedItemsView = this.pinnedItemsView() ?? [];
-      const isPinnedView = isEqual(pinnedItemsView, this.dropdownSelection());
-      return this.pinnedFetchFailed() && isPinnedView ? null : pinnedItemsView;
+      const cachedPinsView = this.cachedPinsView() ?? [];
+      const isPinnedView = isEqual(cachedPinsView, this.dropdownSelection());
+      return this.pinnedFetchFailed() && isPinnedView ? null : cachedPinsView;
     },
     { equal: isEqual },
   );
@@ -1102,7 +1102,7 @@ export class ComparisonToolService<T> {
     const identity = this.activeIdentity();
     this.querySignal.update((current) => ({ ...current, pinnedItems: items }));
     this.pinnedItemsIdentitySignal.set(identity);
-    this.pinnedItemsViewSignal.set(this.dropdownSelection());
+    this.cachedPinsViewSignal.set(this.dropdownSelection());
     this.hasUnconfirmedUrlPins = false;
     this.cachedPinParentByIdSignal.set(new Map(this.cachedPinParentEntries(rows, identity)));
     this.pinnedFetchFailedSignal.set(false);
