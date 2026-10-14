@@ -48,11 +48,11 @@
       </div>
     }
     @if (pinnedFetchFailed()) {
-      <explorers-comparison-tool-fetch-failed-bar
+      <explorers-comparison-tool-message-bar
         [message]="pinnedFetchFailedMessage()"
         [buttonLabel]="pinnedResultsControls.retryButtonLabel"
         [loading]="isLoadingPinnedData()"
-        (retry)="retryPinnedFetch()"
+        (buttonClick)="retryPinnedFetch()"
       />
     } @else {
       <explorers-base-table
@@ -95,11 +95,11 @@
   }
 
   @if (unpinnedFetchFailed()) {
-    <explorers-comparison-tool-fetch-failed-bar
+    <explorers-comparison-tool-message-bar
       [message]="unpinnedFetchFailedMessage()"
       [buttonLabel]="unpinnedRetryButtonLabel()"
       [loading]="isLoadingUnpinnedData()"
-      (retry)="retryUnpinnedFetch()"
+      (buttonClick)="retryUnpinnedFetch()"
     />
   } @else {
     <explorers-base-table [data]="unpinnedData()" [columnWidths]="columnWidths()" />
