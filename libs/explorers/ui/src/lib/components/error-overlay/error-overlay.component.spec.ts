@@ -11,6 +11,7 @@ function createMockErrorOverlayService(hasError = false, errorMessage = '') {
     isOverlayVisible: signal(hasError),
     showError: jest.fn((message: string) => activeMessage.set(message)),
     showUpdateAvailable: jest.fn(),
+    showDataUpdateAvailable: jest.fn(),
     reloadPage: jest.fn(),
   };
 }

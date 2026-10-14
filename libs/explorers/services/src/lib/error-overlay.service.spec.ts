@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { getAppUpdateMessage } from '@sagebionetworks/explorers/constants';
+import { getAppUpdateMessage, getDataUpdateMessage } from '@sagebionetworks/explorers/constants';
 import { ErrorOverlayService } from './error-overlay.service';
 
 const siteName = 'Model AD';
@@ -50,6 +50,41 @@ describe('ErrorOverlayService', () => {
   it('keeps the app update notice when an error follows', () => {
     service.showUpdateAvailable(siteName);
     service.showError(firstErrorMessage);
+
+    expect(service.activeMessage()).toBe(getAppUpdateMessage(siteName));
+  });
+
+  it('shows the data update notice for the site', () => {
+    service.showDataUpdateAvailable(siteName);
+
+    expect(service.isOverlayVisible()).toBe(true);
+    expect(service.activeMessage()).toBe(getDataUpdateMessage(siteName));
+  });
+
+  it('replaces an active error with the data update notice', () => {
+    service.showError(firstErrorMessage);
+    service.showDataUpdateAvailable(siteName);
+
+    expect(service.activeMessage()).toBe(getDataUpdateMessage(siteName));
+  });
+
+  it('keeps the data update notice when an error follows', () => {
+    service.showDataUpdateAvailable(siteName);
+    service.showError(firstErrorMessage);
+
+    expect(service.activeMessage()).toBe(getDataUpdateMessage(siteName));
+  });
+
+  it('replaces the data update notice with the app update notice', () => {
+    service.showDataUpdateAvailable(siteName);
+    service.showUpdateAvailable(siteName);
+
+    expect(service.activeMessage()).toBe(getAppUpdateMessage(siteName));
+  });
+
+  it('keeps the app update notice when a data update follows', () => {
+    service.showUpdateAvailable(siteName);
+    service.showDataUpdateAvailable(siteName);
 
     expect(service.activeMessage()).toBe(getAppUpdateMessage(siteName));
   });

@@ -29,3 +29,9 @@ export const AppUpdate: Story = {
     showOverlay((errorOverlayService) => errorOverlayService.showUpdateAvailable('Model AD')),
   ],
 };
+
+export const DataUpdate: Story = {
+  decorators: [
+    showOverlay((errorOverlayService) => errorOverlayService.showDataUpdateAvailable('Model AD')),
+  ],
+};
