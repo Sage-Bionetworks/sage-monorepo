@@ -1,6 +1,7 @@
 import {
   ComparisonToolNoun,
   ComparisonToolNouns,
+  OverwritePinsMessage,
   PinnedResultsControlsCopy,
   PinnedResultsCounts,
   PinnedResultsLabel,
@@ -145,6 +146,40 @@ export const getNoMatchingPinsMessage = (
   const isOneRow = hiddenRowCount === 1;
   const noun = viewNoun ?? DEFAULT_VIEW_NOUN;
   return `No matching ${sentenceCase(isOneRow ? noun.singular : noun.plural)} ${isOneRow ? 'exists' : 'exist'} in the current view.`;
+};
+
+/**
+ * Takes the service's `hiddenPinCount` and `hiddenParentPinCount`, the dropdown selection the pins
+ * were made in, and the active view's nouns. A null `hiddenParentPinCount` words the message for a
+ * view without a parent key. Otherwise the count of hidden results is given per parent, since the
+ * child noun isn't known in a parent view, and users should know how many results they would lose.
+ */
+export const getOverwritePinsMessage = (
+  {
+    hiddenPinCount,
+    hiddenParentPinCount,
+  }: { hiddenPinCount: number; hiddenParentPinCount: number | null },
+  pinnedView: string[],
+  { viewNoun, parentNoun }: ComparisonToolNouns,
+): OverwritePinsMessage => {
+  const thatOrThose = (count: number) => (count === 1 ? 'that' : 'those');
+  const nounsFor = (count: number, noun: ComparisonToolNoun) =>
+    sentenceCase(nounForCount(count, noun));
+  const pins = nounsFor(hiddenPinCount, viewNoun ?? DEFAULT_VIEW_NOUN);
+  const results = nounsFor(hiddenPinCount, DEFAULT_VIEW_NOUN);
+  const parents =
+    hiddenParentPinCount === null
+      ? ''
+      : nounsFor(hiddenParentPinCount, parentNoun ?? viewNoun ?? DEFAULT_VIEW_NOUN);
+  const lostPins =
+    hiddenParentPinCount === null
+      ? `You pinned ${hiddenPinCount} ${pins} that can't be shown in this view. Changing your pins here will unpin ${thatOrThose(hiddenPinCount)} ${pins}.`
+      : `You pinned ${hiddenPinCount} ${results} for ${hiddenParentPinCount} ${parents} that can't be shown in this view. Changing your pins here will unpin the ${results} for ${thatOrThose(hiddenParentPinCount)} ${parents}.`;
+  return {
+    beforeView: `${lostPins} To view ${hiddenPinCount === 1 ? 'it' : 'them'}, go back to the`,
+    pinnedView,
+    afterView: 'view.',
+  };
 };
 
 export const getUnpinnedFetchFailedMessage = ({ viewNoun }: ComparisonToolNouns): string =>
