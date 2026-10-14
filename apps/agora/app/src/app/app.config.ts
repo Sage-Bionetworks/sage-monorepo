@@ -16,16 +16,9 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client';
+import { ConfigService, GCT_TUTORIAL_PANES, SITE_NAME } from '@sagebionetworks/agora/config';
 import {
-  configFactory,
-  ConfigService,
-  GCT_TUTORIAL_PANES,
-  SITE_NAME,
-} from '@sagebionetworks/agora/config';
-import { initSentry } from '@sagebionetworks/explorers/sentry';
-import {
-  AppUpdateCheckTriggerEnum,
-  AppUpdateService,
+  initializeExplorersApp,
   LoggerService,
   provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
@@ -49,20 +42,7 @@ export const appConfig: ApplicationConfig = {
       useFactory: () => 'https://repo-prod.prod.sagebase.org',
       deps: [],
     },
-    provideAppInitializer(() => {
-      const configService = inject(ConfigService);
-      const appUpdateService = inject(AppUpdateService);
-      return configFactory(configService)().then(() => {
-        const { sentryDsn, sentryEnvironment, sentryRelease } = configService.config;
-        initSentry({
-          dsn: sentryDsn,
-          environment: sentryEnvironment,
-          release: sentryRelease,
-          isStaleClient: () => appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError),
-        });
-        appUpdateService.start(configService.config, SITE_NAME);
-      });
-    }),
+    provideAppInitializer(() => initializeExplorersApp(SITE_NAME)),
     provideExplorersConfig({
       tutorialPanes: GCT_TUTORIAL_PANES,
     }),

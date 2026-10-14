@@ -11,6 +11,7 @@ export * from './lib/comparison-tool-url.service';
 export * from './lib/comparison-tool.service';
 export * from './lib/comparison-tool.service.providers';
 export * from './lib/explorers-app-config.service';
+export * from './lib/explorers-app-initializer';
 export * from './lib/helper.service';
 export * from './lib/http-context-tokens';
 export * from './lib/legacy-comparison-tool-url.guard';

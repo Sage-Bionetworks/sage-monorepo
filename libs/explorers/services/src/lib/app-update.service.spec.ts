@@ -21,6 +21,7 @@ import {
 } from '@sagebionetworks/explorers/constants';
 import * as Sentry from '@sentry/angular';
 import {
+  APP_UPDATE_CHECKS_ENABLED,
   AppUpdateCheckTriggerEnum,
   AppUpdateService,
   NO_RESPONSE_STATUS,
@@ -67,7 +68,7 @@ describe('AppUpdateService', () => {
   let logger: { log: jest.Mock; warn: jest.Mock; error: jest.Mock };
   let appInterceptor: jest.Mock;
 
-  function setup({ isServer = false } = {}): AppUpdateService {
+  function setup({ isServer = false, checksEnabled = true } = {}): AppUpdateService {
     logger = { log: jest.fn(), warn: jest.fn(), error: jest.fn() };
     appInterceptor = jest.fn<ReturnType<HttpInterceptorFn>, Parameters<HttpInterceptorFn>>(
       (req, next) => next(req),
@@ -79,11 +80,16 @@ describe('AppUpdateService', () => {
         provideRouter(routes),
         { provide: PlatformService, useValue: { isBrowser: !isServer, isServer } },
         { provide: LoggerService, useValue: { forSource: () => logger } },
+        { provide: APP_UPDATE_CHECKS_ENABLED, useValue: checksEnabled },
       ],
     });
     httpMock = TestBed.inject(HttpTestingController);
     errorOverlayService = TestBed.inject(ErrorOverlayService);
     return TestBed.inject(AppUpdateService);
+  }
+
+  function isShowingUpdateNotice(): boolean {
+    return errorOverlayService.activeMessage() === getAppUpdateMessage(siteName);
   }
 
   function setTabVisibility(state: DocumentVisibilityState) {
@@ -144,6 +150,15 @@ describe('AppUpdateService', () => {
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
     });
 
+    it('does not check in a development build, where the dev server has no version endpoint', () => {
+      setup({ checksEnabled: false }).start(loadedVersion, siteName);
+
+      returnToTab();
+      jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+    });
+
     it('does not check while rendering on the server', () => {
       setup({ isServer: true }).start(loadedVersion, siteName);
 
@@ -170,7 +185,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(appUpdateService.isStale()).toBe(true);
+      expect(isShowingUpdateNotice()).toBe(true);
     });
 
     it('does not poll while the tab is hidden', () => {
@@ -208,7 +223,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(appUpdateService.isStale()).toBe(true);
+      expect(isShowingUpdateNotice()).toBe(true);
     });
   });
 
@@ -220,7 +235,7 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondWithServerVersion(loadedVersion);
 
-      expect(appUpdateService.isStale()).toBe(false);
+      expect(isShowingUpdateNotice()).toBe(false);
       expect(errorOverlayService.isOverlayVisible()).toBe(false);
     });
 
@@ -232,7 +247,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(appUpdateService.isStale()).toBe(true);
+      expect(isShowingUpdateNotice()).toBe(true);
       expect(errorOverlayService.activeMessage()).toBe(getAppUpdateMessage(siteName));
     });
 
@@ -262,7 +277,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(appUpdateService.isStale()).toBe(true);
+      expect(isShowingUpdateNotice()).toBe(true);
     });
 
     it('stays current when the server version is unknown', () => {
@@ -272,7 +287,7 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondWithServerVersion(unknownVersion);
 
-      expect(appUpdateService.isStale()).toBe(false);
+      expect(isShowingUpdateNotice()).toBe(false);
     });
 
     it('stops checking once the tab is known to be stale', () => {
@@ -298,7 +313,7 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondWithServerVersion(newerVersion);
 
-      expect(appUpdateService.isStale()).toBe(false);
+      expect(isShowingUpdateNotice()).toBe(false);
       expect(errorOverlayService.isOverlayVisible()).toBe(false);
     });
 
@@ -312,7 +327,7 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondWithServerVersion(newerVersion);
 
-      expect(appUpdateService.isStale()).toBe(false);
+      expect(isShowingUpdateNotice()).toBe(false);
     });
 
     it('stays current and counts a transient mismatch when the confirmation matches', () => {
@@ -325,7 +340,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(loadedVersion);
 
       const versionService = TestBed.inject(VersionService);
-      expect(appUpdateService.isStale()).toBe(false);
+      expect(isShowingUpdateNotice()).toBe(false);
       expect(Sentry.metrics.count).toHaveBeenCalledTimes(1);
       expect(Sentry.metrics.count).toHaveBeenCalledWith(TRANSIENT_VERSION_MISMATCH_METRIC, 1, {
         attributes: {
@@ -348,34 +363,32 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondWithServerVersion(newerVersion);
 
-      expect(appUpdateService.isStale()).toBe(false);
+      expect(isShowingUpdateNotice()).toBe(false);
     });
 
-    it('confirms on the next check when the confirmation check fails', () => {
-      const appUpdateService = setup();
-      appUpdateService.start(loadedVersion, siteName);
+    it('retries a failed confirmation check after the minimum interval', () => {
+      setup().start(loadedVersion, siteName);
 
       returnToTab();
       respondWithServerVersion(newerVersion);
       jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
       respondWithNetworkFailure();
-      expect(appUpdateService.isStale()).toBe(false);
+      expect(isShowingUpdateNotice()).toBe(false);
 
       jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
-      returnToTab();
       respondWithServerVersion(newerVersion);
 
-      expect(appUpdateService.isStale()).toBe(true);
+      expect(isShowingUpdateNotice()).toBe(true);
     });
 
-    it('resolves a first mismatch as stale without showing the overlay', async () => {
+    it('resolves a first mismatch as a mismatch without showing the overlay', async () => {
       const appUpdateService = setup();
       appUpdateService.start(loadedVersion, siteName);
 
-      const isStale = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const isVersionMismatch = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.Visibility);
       respondWithServerVersion(newerVersion);
 
-      await expect(isStale).resolves.toBe(true);
+      await expect(isVersionMismatch).resolves.toBe(true);
       expect(errorOverlayService.isOverlayVisible()).toBe(false);
     });
   });
@@ -460,7 +473,7 @@ describe('AppUpdateService', () => {
         expect(Sentry.metrics.count).toHaveBeenCalledWith(VERSION_CHECK_FAILED_METRIC, 1, {
           attributes: { reason, status, trigger: AppUpdateCheckTriggerEnum.Visibility },
         });
-        expect(appUpdateService.isStale()).toBe(false);
+        expect(isShowingUpdateNotice()).toBe(false);
         expect(errorOverlayService.isOverlayVisible()).toBe(false);
       },
     );
@@ -516,22 +529,20 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(appUpdateService.isStale()).toBe(true);
+      expect(isShowingUpdateNotice()).toBe(true);
     });
   });
 
   describe('when an error hints the tab may be stale', () => {
-    it('checks right away when a route chunk fails to load, even just after another check', async () => {
-      const appUpdateService = setup();
-      appUpdateService.start(loadedVersion, siteName);
+    it('shows the overlay right away when a route chunk fails to load on a mismatched version', async () => {
+      setup().start(loadedVersion, siteName);
       returnToTab();
       respondWithServerVersion(loadedVersion);
 
       await navigateTo(missingChunkPath);
       respondWithServerVersion(newerVersion);
-      confirmNewerVersion();
 
-      expect(appUpdateService.isStale()).toBe(true);
+      expect(isShowingUpdateNotice()).toBe(true);
       expect(Sentry.metrics.count).toHaveBeenCalledWith(
         STALE_CLIENT_METRIC,
         1,
@@ -541,6 +552,15 @@ describe('AppUpdateService', () => {
           }),
         }),
       );
+    });
+
+    it('stays current when a route chunk fails to load but the version matches', async () => {
+      setup().start(loadedVersion, siteName);
+
+      await navigateTo(missingChunkPath);
+      respondWithServerVersion(loadedVersion);
+
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
     });
 
     it('does not check when a route fails for another reason', async () => {
@@ -559,7 +579,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(appUpdateService.isStale()).toBe(true);
+      expect(isShowingUpdateNotice()).toBe(true);
     });
 
     it('checks at most once per minimum interval when asked repeatedly', () => {

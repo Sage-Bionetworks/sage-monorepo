@@ -1,6 +1,14 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpBackend, HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { DestroyRef, inject, Injectable, NgZone, signal } from '@angular/core';
+import {
+  DestroyRef,
+  inject,
+  Injectable,
+  InjectionToken,
+  isDevMode,
+  NgZone,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationError, Router } from '@angular/router';
 import { AppVersion } from '@sagebionetworks/explorers/config';
@@ -31,6 +39,7 @@ import {
   share,
   Subject,
   Subscription,
+  switchMap,
   timer,
 } from 'rxjs';
 import { ErrorOverlayService } from './error-overlay.service';
@@ -73,6 +82,15 @@ const MISCONFIGURATION_REASONS: ReadonlySet<VersionCheckFailureReason> = new Set
   VersionCheckFailureReasonEnum.NotFound,
 ]);
 
+/**
+ * Whether this app checks for newer deploys. Off in development builds, since the dev server does
+ * not run the app server's routes and renders the version endpoint as a page instead.
+ */
+export const APP_UPDATE_CHECKS_ENABLED = new InjectionToken<boolean>('APP_UPDATE_CHECKS_ENABLED', {
+  providedIn: 'root',
+  factory: () => !isDevMode(),
+});
+
 /** A version mismatch that has not yet outlasted the confirmation delay. */
 interface PendingVersionMismatch {
   serverVersion: AppVersion;
@@ -87,7 +105,8 @@ interface PendingVersionMismatch {
  *
  * A mismatch must persist for `APP_UPDATE_CONFIRM_DELAY_MS` before the overlay is shown. During a
  * rolling deploy, old and new app tasks both answer the version endpoint, so a single mismatch can
- * come from a task that is about to be replaced. Staleness is judged by any difference rather than
+ * come from a task that is about to be replaced. A chunk that fails to load is the exception: the
+ * tab's navigation is already broken, and reloading is the only fix whichever task answers. Staleness is judged by any difference rather than
  * by which version is newer, because a deploy rollback moves the server back to an earlier version
  * and tabs loaded from the rolled-back deploy must reload too.
  */
@@ -104,9 +123,9 @@ export class AppUpdateService {
   private readonly errorOverlayService = inject(ErrorOverlayService);
   private readonly versionService = inject(VersionService);
   private readonly logger = inject(LoggerService).forSource('AppUpdateService');
+  private readonly checksEnabled = inject(APP_UPDATE_CHECKS_ENABLED);
 
   private readonly stale = signal(false);
-  readonly isStale = this.stale.asReadonly();
 
   private clientVersion: AppVersion | null = null;
   private siteName = '';
@@ -121,11 +140,17 @@ export class AppUpdateService {
   /**
    * Starts checking for a newer deploy whenever the tab becomes visible again, whenever the
    * browser reconnects, periodically while the tab stays visible, and right away when a route's
-   * lazy-loaded chunk fails to load. Does nothing during SSR or if already started.
+   * lazy-loaded chunk fails to load. Does nothing during SSR, when checks are disabled, or if
+   * already started.
    */
   start(clientVersion: AppVersion, siteName: string) {
     const browserWindow = this.document.defaultView;
-    if (this.platformService.isServer || !browserWindow || this.clientVersion) {
+    if (
+      this.platformService.isServer ||
+      !this.checksEnabled ||
+      !browserWindow ||
+      this.clientVersion
+    ) {
       return;
     }
     this.clientVersion = clientVersion;
@@ -142,8 +167,8 @@ export class AppUpdateService {
     );
 
     // Subscribed outside the Angular zone because a pending interval keeps the app from ever
-    // becoming stable, and hydration waits for stability before it finishes. The stale signal
-    // still schedules change detection when it is set outside the zone.
+    // becoming stable, and hydration waits for stability before it finishes. The overlay's signals
+    // still schedule change detection when they are set outside the zone.
     this.backgroundVersionCheckSubscription = this.ngZone.runOutsideAngular(() =>
       merge(visibility$, reconnect$, poll$, this.requestedChecks)
         .pipe(
@@ -176,8 +201,9 @@ export class AppUpdateService {
    * Checks right away, ignoring the minimum interval, and resolves whether the server reports a
    * different version than this tab loaded with. Each build gives its lazy-loaded chunk files new
    * names, so while the server runs a different version, a chunk this tab requests may not exist
-   * there. A true result means a failed chunk load is expected rather than a bug. Resolves false
-   * before `start` and while offline, since the version is then unknown.
+   * there. A true result means a failed chunk load is expected rather than a bug. With the
+   * `ChunkLoadError` trigger, a mismatch shows the overlay without waiting out the confirmation
+   * delay. Resolves false before `start` and while offline, since the version is then unknown.
    */
   checkNow(trigger: AppUpdateCheckTrigger): Promise<boolean> {
     if (this.stale()) {
@@ -212,7 +238,7 @@ export class AppUpdateService {
     return this.http.get<unknown>(APP_VERSION_PATH).pipe(
       map((body) => {
         if (!isAppVersion(body)) {
-          this.recordCheckFailure(
+          this.handleCheckFailure(
             VersionCheckFailureReasonEnum.InvalidResponse,
             HttpStatusCode.Ok,
             trigger,
@@ -228,10 +254,28 @@ export class AppUpdateService {
         return isVersionMismatch;
       }),
       catchError((error: HttpErrorResponse) => {
-        this.recordCheckFailure(getFailureReason(error), error.status, trigger);
+        this.handleCheckFailure(getFailureReason(error), error.status, trigger);
         return of(false);
       }),
     );
+  }
+
+  /**
+   * A failed confirmation check leaves the mismatch unconfirmed, so it is retried after the minimum
+   * interval rather than waiting for the next background check.
+   */
+  private handleCheckFailure(
+    reason: VersionCheckFailureReason,
+    status: number,
+    trigger: AppUpdateCheckTrigger,
+  ) {
+    this.recordCheckFailure(reason, status, trigger);
+    if (
+      trigger === AppUpdateCheckTriggerEnum.VersionMismatchConfirmation &&
+      this.pendingVersionMismatch
+    ) {
+      this.scheduleVersionMismatchConfirmation(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+    }
   }
 
   /**
@@ -278,12 +322,17 @@ export class AppUpdateService {
    * few minutes, so a single mismatch proves nothing. The first mismatch starts the confirmation
    * delay, and only a mismatch after the delay shows the overlay. A match before then clears it,
    * since a task still serves this tab's version. If that version really is going away, a later
-   * mismatch starts the delay again.
+   * mismatch starts the delay again. A chunk that failed to load skips the delay, since the tab
+   * cannot navigate until it reloads.
    */
   private handleVersionMismatch(serverVersion: AppVersion, trigger: AppUpdateCheckTrigger) {
+    if (trigger === AppUpdateCheckTriggerEnum.ChunkLoadError) {
+      this.handleStaleClient(serverVersion, trigger);
+      return;
+    }
     if (!this.pendingVersionMismatch) {
       this.pendingVersionMismatch = { serverVersion, trigger, detectedAt: Date.now() };
-      this.scheduleVersionMismatchConfirmation();
+      this.scheduleVersionMismatchConfirmation(APP_UPDATE_CONFIRM_DELAY_MS);
       return;
     }
     if (Date.now() - this.pendingVersionMismatch.detectedAt >= APP_UPDATE_CONFIRM_DELAY_MS) {
@@ -291,12 +340,12 @@ export class AppUpdateService {
     }
   }
 
-  private scheduleVersionMismatchConfirmation() {
+  private scheduleVersionMismatchConfirmation(delayMs: number) {
     // Subscribed outside the Angular zone for the same reason as the background checks.
     this.versionMismatchConfirmationSubscription = this.ngZone.runOutsideAngular(() =>
-      timer(APP_UPDATE_CONFIRM_DELAY_MS)
+      timer(delayMs)
         .pipe(
-          exhaustMap(() => this.check$(AppUpdateCheckTriggerEnum.VersionMismatchConfirmation)),
+          switchMap(() => this.check$(AppUpdateCheckTriggerEnum.VersionMismatchConfirmation)),
           takeUntilDestroyed(this.destroyRef),
         )
         .subscribe(),

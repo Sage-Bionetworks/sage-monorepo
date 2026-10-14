@@ -15,21 +15,14 @@ import {
   withComponentInputBinding,
   withInMemoryScrolling,
 } from '@angular/router';
-import { initSentry } from '@sagebionetworks/explorers/sentry';
 import {
-  AppUpdateCheckTriggerEnum,
-  AppUpdateService,
+  initializeExplorersApp,
   LoggerService,
   provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client';
-import {
-  configFactory,
-  ConfigService,
-  SITE_NAME,
-  TUTORIAL_PANES,
-} from '@sagebionetworks/model-ad/config';
+import { ConfigService, SITE_NAME, TUTORIAL_PANES } from '@sagebionetworks/model-ad/config';
 import { ModelAdPreset } from '@sagebionetworks/model-ad/themes';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
@@ -43,20 +36,7 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'model-ad-app' },
-    provideAppInitializer(() => {
-      const configService = inject(ConfigService);
-      const appUpdateService = inject(AppUpdateService);
-      return configFactory(configService)().then(() => {
-        const { sentryDsn, sentryEnvironment, sentryRelease } = configService.config;
-        initSentry({
-          dsn: sentryDsn,
-          environment: sentryEnvironment,
-          release: sentryRelease,
-          isStaleClient: () => appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError),
-        });
-        appUpdateService.start(configService.config, SITE_NAME);
-      });
-    }),
+    provideAppInitializer(() => initializeExplorersApp(SITE_NAME)),
     provideExplorersConfig({
       tutorialPanes: TUTORIAL_PANES,
     }),

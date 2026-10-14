@@ -1,9 +1,13 @@
-import { type Page } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 import type { AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_CONFIRM_DELAY_MS,
   APP_VERSION_PATH,
+  getAppUpdateMessage,
 } from '@sagebionetworks/explorers/constants';
+
+/** How long one fast-forward attempt waits for the update notice before trying again. */
+const UPDATE_NOTICE_RENDER_TIMEOUT_MS = 1000;
 
 /** A version no real deploy reports, so it differs from whatever version the tab loaded with. */
 export const NEWER_DEPLOY_VERSION: AppVersion = {
@@ -48,8 +52,49 @@ export async function returnToTab(page: Page) {
 
 /**
  * Lets the confirmation delay pass, so the check it schedules confirms a version mismatch. The
- * test must call `page.clock.install()` before loading the page.
+ * test must call `page.clock.install()` before loading the page. The confirmation is scheduled
+ * when the check that found the mismatch responds, so a fast-forward before then lets nothing
+ * through.
  */
 export async function waitOutVersionMismatchConfirmation(page: Page) {
   await page.clock.fastForward(APP_UPDATE_CONFIRM_DELAY_MS);
+}
+
+/**
+ * Defines the app update tests every explorer app runs. `siteName` must match the app's
+ * `SITE_NAME`, since the update notice names the site.
+ */
+export function defineAppUpdateTests(siteName: string) {
+  test.describe('app update', () => {
+    test('blocks the page with a reload prompt once a newer deploy is confirmed', async ({
+      page,
+    }) => {
+      await page.clock.install();
+      await gotoAndWaitForBrowserApp(page);
+      await simulateNewerDeploy(page);
+      const firstVersionCheckResponse = waitForVersionCheck(page);
+
+      await returnToTab(page);
+      await firstVersionCheckResponse;
+      // The browser schedules the confirmation just after Playwright sees the response, so the
+      // fast-forward is retried until the confirmation it lets through shows the notice.
+      const updateNotice = page.getByText(getAppUpdateMessage(siteName));
+      await expect(async () => {
+        await waitOutVersionMismatchConfirmation(page);
+        await expect(updateNotice).toBeVisible({ timeout: UPDATE_NOTICE_RENDER_TIMEOUT_MS });
+      }).toPass();
+
+      await expect(page.getByRole('button', { name: 'Reload Page' })).toBeVisible();
+    });
+
+    test('stays usable when the deployed version has not changed', async ({ page }) => {
+      await gotoAndWaitForBrowserApp(page);
+      const versionCheckResponse = waitForVersionCheck(page);
+
+      await returnToTab(page);
+
+      expect((await versionCheckResponse).status()).toBe(200);
+      await expect(page.getByText(getAppUpdateMessage(siteName))).toBeHidden();
+    });
+  });
 }
