@@ -414,6 +414,18 @@ describe('ComparisonToolTableComponent', () => {
         ).toBeInTheDocument();
       });
 
+      it('should name the view rows in the plural for one hidden parent in a child view', async () => {
+        await setup({
+          pinnedItems: cachedPinIds.slice(0, 1),
+          pinnedData: [],
+          configs: childViewConfigs,
+        });
+
+        expect(
+          screen.getByText('No matching children exist in the current view.'),
+        ).toBeInTheDocument();
+      });
+
       it('should disable Download Pins but keep Clear All Pins enabled', async () => {
         await setup(allPinsHidden);
 

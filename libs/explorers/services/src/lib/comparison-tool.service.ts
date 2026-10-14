@@ -72,9 +72,13 @@ export interface ComparisonToolFetchResult<T> {
   hasRowsForPrebudgetedParents?: boolean | null;
 }
 
-/** A pinned fetch result tagged with the view identity that was active when it was requested. */
+/**
+ * A pinned fetch result tagged with the view identity and dropdown selection that were active when
+ * it was requested.
+ */
 interface PinnedFetchResult<T> extends ComparisonToolFetchResult<T> {
   identity: ViewIdentity;
+  dropdownSelection: string[];
 }
 
 /**
@@ -520,7 +524,8 @@ export class ComparisonToolService<T> {
     this.subscribeToFetchStream(
       this.pinnedFetch$,
       this.pendingPinnedFetchesSignal,
-      ({ data, identity }) => this.applyPinnedData(data as T[], identity),
+      ({ data, identity, dropdownSelection }) =>
+        this.applyPinnedData(data as T[], identity, dropdownSelection),
       () => this.applyPinnedFetchFailure(),
     );
 
@@ -1187,9 +1192,11 @@ export class ComparisonToolService<T> {
    * URL pins are rewritten the same way once their rows land in the URL's view, dropping any pin
    * that matched no row, such as a token from another view's space. Otherwise they would stay cached
    * and count as hidden pins the user never made. Rows that land in another view can't confirm them,
-   * since a pin can be missing there for other reasons, so they wait for the URL's view.
+   * since a pin can be missing there for other reasons, so they wait for the URL's view. That
+   * includes another dropdown selection with the same id keys, such as another tissue, whose rows
+   * share the pins' tokens but not their rows.
    */
-  private applyPinnedData(pinnedData: T[], identity: ViewIdentity) {
+  private applyPinnedData(pinnedData: T[], identity: ViewIdentity, dropdownSelection: string[]) {
     this.pinnedFetchFailedSignal.set(false);
     const { parentIdDataKey } = identity;
     const pinLimit = this.pinLimit();
@@ -1202,7 +1209,9 @@ export class ComparisonToolService<T> {
       this.showPinLimitWarning(cappedData.length);
     }
     const confirmsUrlPins =
-      this.hasUnconfirmedUrlPins && isEqual(identity, this.pinnedItemsIdentitySignal());
+      this.hasUnconfirmedUrlPins &&
+      isEqual(identity, this.pinnedItemsIdentitySignal()) &&
+      isEqual(dropdownSelection, this.cachedPinsView());
     if (confirmsUrlPins) {
       this.hasUnconfirmedUrlPins = false;
     }
@@ -1385,8 +1394,9 @@ export class ComparisonToolService<T> {
    * A CT that syncs its URL must call this once it connects, even with no pins, since the URL is
    * not written until a pinned result lands (see `resolveUrlSyncState`).
    *
-   * The view identity is snapshotted now, when the request is made, and travels with its result, so
-   * `pinnedParents` is always read with the parent key the rows were fetched under. `switchMap`
+   * The view identity and dropdown selection are snapshotted now, when the request is made, and
+   * travel with its result, so `pinnedParents` is always read with the parent key the rows were
+   * fetched under, and URL pins are only confirmed by rows of their own view. `switchMap`
    * only applies the latest request's response, and that request was made under the latest config,
    * so the snapshot and the rows always agree.
    *
@@ -1396,9 +1406,12 @@ export class ComparisonToolService<T> {
    */
   fetchPinned(source$: Observable<ComparisonToolFetchResult<T>>): void {
     const identity = this.activeIdentity();
+    const dropdownSelection = this.dropdownSelection();
     const request$: Observable<ComparisonToolFetchResult<unknown>> =
       this.pinnedItemsQuery().items.length > 0 ? source$ : of({ data: [], totalCount: 0 });
-    this.lastPinnedSource$ = request$.pipe(map((result) => ({ ...result, identity })));
+    this.lastPinnedSource$ = request$.pipe(
+      map((result) => ({ ...result, identity, dropdownSelection })),
+    );
     this.startFetch(this.pendingPinnedFetchesSignal);
     this.pinnedFetch$.next(this.lastPinnedSource$);
   }

@@ -20,6 +20,7 @@ import { BehaviorSubject, defer, EMPTY, Observable, of, Subject, throwError } fr
 import { AppStorageService } from './app-storage.service';
 import { deserializeComparisonToolUrlParams } from './comparison-tool-url-params';
 import {
+  ComparisonToolFetchResult,
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
   PinAllFetch,
@@ -964,6 +965,30 @@ describe('ComparisonToolService', () => {
         service.setDropdownSelection(PARENT_VIEW);
         landPinned(parentRow('parent1'));
         expect(service.pinnedItems()).toEqual(['parent1']);
+      });
+
+      it('wait for the URL view rows rather than rows of another selection with the same keys', () => {
+        loadUrlPins();
+        service.setDropdownSelection(OTHER_PARENT_VIEW);
+
+        landPinned(parentRow('parent1'));
+        expect(service.pinnedItems()).toEqual(URL_PINS);
+
+        service.setDropdownSelection(PARENT_VIEW);
+        landPinned(parentRow('parent1'));
+        expect(service.pinnedItems()).toEqual(['parent1']);
+      });
+
+      it('are not confirmed by rows requested in another selection that land after a switch back', () => {
+        loadUrlPins();
+        service.setDropdownSelection(OTHER_PARENT_VIEW);
+        const otherSelectionRows$ = new Subject<ComparisonToolFetchResult<Row>>();
+        service.fetchPinned(otherSelectionRows$);
+        service.setDropdownSelection(PARENT_VIEW);
+
+        otherSelectionRows$.next({ data: [parentRow('parent1')], totalCount: 1 });
+
+        expect(service.pinnedItems()).toEqual(URL_PINS);
       });
 
       it('are kept as they are when every one matches a row', () => {

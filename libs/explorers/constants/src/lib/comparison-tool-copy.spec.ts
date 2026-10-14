@@ -365,9 +365,15 @@ describe('comparison tool copy', () => {
       );
     });
 
-    it('should use the singular for one hidden pin', () => {
+    it('should use the singular for one hidden row', () => {
       expect(getNoMatchingPinsMessage(1, STANDARD_NOUNS)).toBe(
         'No matching model exists in the current view.',
+      );
+    });
+
+    it('should use the plural when the row count is unknown', () => {
+      expect(getNoMatchingPinsMessage(null, CHILD_NOUNS)).toBe(
+        'No matching children exist in the current view.',
       );
     });
   });
@@ -388,7 +394,7 @@ describe('comparison tool copy', () => {
       expect(
         getOverwritePinsMessage(
           { hiddenPinCount: 5, hiddenParentPinCount: null },
-          PINNED_VIEW,
+          { returnView: PINNED_VIEW, pinnedFetchFailed: false },
           NO_NOUNS,
         ),
       ).toEqual(
@@ -403,7 +409,7 @@ describe('comparison tool copy', () => {
       expect(
         getOverwritePinsMessage(
           { hiddenPinCount: 1, hiddenParentPinCount: null },
-          PINNED_VIEW,
+          { returnView: PINNED_VIEW, pinnedFetchFailed: false },
           STANDARD_NOUNS,
         ),
       ).toEqual(
@@ -418,7 +424,7 @@ describe('comparison tool copy', () => {
       expect(
         getOverwritePinsMessage(
           { hiddenPinCount: 2, hiddenParentPinCount: 2 },
-          PINNED_VIEW,
+          { returnView: PINNED_VIEW, pinnedFetchFailed: false },
           CHILD_NOUNS,
         ),
       ).toEqual(
@@ -433,7 +439,7 @@ describe('comparison tool copy', () => {
       expect(
         getOverwritePinsMessage(
           { hiddenPinCount: 5, hiddenParentPinCount: 1 },
-          PINNED_VIEW,
+          { returnView: PINNED_VIEW, pinnedFetchFailed: false },
           SELF_PARENTED_NOUNS,
         ),
       ).toEqual(
@@ -448,7 +454,7 @@ describe('comparison tool copy', () => {
       expect(
         getOverwritePinsMessage(
           { hiddenPinCount: 1, hiddenParentPinCount: 1 },
-          PINNED_VIEW,
+          { returnView: PINNED_VIEW, pinnedFetchFailed: false },
           CHILD_NOUNS,
         ),
       ).toEqual(
@@ -463,7 +469,7 @@ describe('comparison tool copy', () => {
       expect(
         getOverwritePinsMessage(
           { hiddenPinCount: 3, hiddenParentPinCount: null },
-          null,
+          { returnView: null, pinnedFetchFailed: true },
           STANDARD_NOUNS,
         ),
       ).toEqual(
@@ -475,10 +481,29 @@ describe('comparison tool copy', () => {
 
     it('should count the results per parent when the pins could not be loaded', () => {
       expect(
-        getOverwritePinsMessage({ hiddenPinCount: 5, hiddenParentPinCount: 2 }, null, CHILD_NOUNS),
+        getOverwritePinsMessage(
+          { hiddenPinCount: 5, hiddenParentPinCount: 2 },
+          { returnView: null, pinnedFetchFailed: true },
+          CHILD_NOUNS,
+        ),
       ).toEqual(
         failedToLoadMessage(
           "You pinned 5 results for 2 parents that couldn't be loaded. Changing your pins here will unpin the results for those parents.",
+        ),
+      );
+    });
+
+    it('should say the pins could not be loaded and still name their view when they failed in another view', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 3, hiddenParentPinCount: null },
+          { returnView: PINNED_VIEW, pinnedFetchFailed: true },
+          STANDARD_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 3 models that couldn't be loaded. Changing your pins here will unpin those models.",
+          'them',
         ),
       );
     });

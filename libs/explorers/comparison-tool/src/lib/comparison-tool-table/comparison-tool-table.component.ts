@@ -107,9 +107,10 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   noMatchingPinsMessage = computed(() => {
     const { hiddenCount } = this.pinnedResultsCounts();
-    return this.pinnedRowCount() === 0 && hiddenCount
-      ? getNoMatchingPinsMessage(hiddenCount, this.nouns())
-      : null;
+    if (this.pinnedRowCount() !== 0 || !hiddenCount) return null;
+    // A child view's hiddenCount counts parents, which can have any number of rows
+    const hiddenRowCount = this.comparisonToolService.isChildView() ? null : hiddenCount;
+    return getNoMatchingPinsMessage(hiddenRowCount, this.nouns());
   });
 
   pinnedFetchFailedMessage = computed(() =>
