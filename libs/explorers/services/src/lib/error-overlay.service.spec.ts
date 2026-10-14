@@ -34,7 +34,7 @@ describe('ErrorOverlayService', () => {
   });
 
   it('shows the app update notice for the site', () => {
-    service.showUpdateAvailable(siteName);
+    service.showAppUpdateAvailable(siteName);
 
     expect(service.isOverlayVisible()).toBe(true);
     expect(service.activeMessage()).toBe(getAppUpdateMessage(siteName));
@@ -42,13 +42,13 @@ describe('ErrorOverlayService', () => {
 
   it('replaces an active error with the app update notice', () => {
     service.showError(firstErrorMessage);
-    service.showUpdateAvailable(siteName);
+    service.showAppUpdateAvailable(siteName);
 
     expect(service.activeMessage()).toBe(getAppUpdateMessage(siteName));
   });
 
   it('keeps the app update notice when an error follows', () => {
-    service.showUpdateAvailable(siteName);
+    service.showAppUpdateAvailable(siteName);
     service.showError(firstErrorMessage);
 
     expect(service.activeMessage()).toBe(getAppUpdateMessage(siteName));
@@ -77,13 +77,13 @@ describe('ErrorOverlayService', () => {
 
   it('replaces the data update notice with the app update notice', () => {
     service.showDataUpdateAvailable(siteName);
-    service.showUpdateAvailable(siteName);
+    service.showAppUpdateAvailable(siteName);
 
     expect(service.activeMessage()).toBe(getAppUpdateMessage(siteName));
   });
 
   it('keeps the app update notice when a data update follows', () => {
-    service.showUpdateAvailable(siteName);
+    service.showAppUpdateAvailable(siteName);
     service.showDataUpdateAvailable(siteName);
 
     expect(service.activeMessage()).toBe(getAppUpdateMessage(siteName));

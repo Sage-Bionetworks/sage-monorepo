@@ -26,7 +26,7 @@ export const HttpError: Story = {
 
 export const AppUpdate: Story = {
   decorators: [
-    showOverlay((errorOverlayService) => errorOverlayService.showUpdateAvailable('Model AD')),
+    showOverlay((errorOverlayService) => errorOverlayService.showAppUpdateAvailable('Model AD')),
   ],
 };
 

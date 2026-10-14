@@ -13,25 +13,34 @@ import {
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
   APP_VERSION_PATH,
+  DATA_UPDATE_CONFIRM_DELAY_MS,
+  DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
   getAppUpdateMessage,
-  STALE_CLIENT_METRIC,
-  TRANSIENT_VERSION_MISMATCH_METRIC,
+  getDataUpdateMessage,
+  STALE_APP_METRIC,
+  STALE_DATA_METRIC,
+  TRANSIENT_DATA_VERSION_MISMATCH_METRIC,
+  TRANSIENT_APP_VERSION_MISMATCH_METRIC,
   VERSION_CHECK_FAILED_METRIC,
-  VERSION_ENDPOINT_MISCONFIGURED_WARNING,
+  VERSION_CHECK_TIMEOUT_MS,
+  APP_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
 } from '@sagebionetworks/explorers/constants';
 import * as Sentry from '@sentry/angular';
 import {
   APP_UPDATE_CHECKS_ENABLED,
   AppUpdateCheckTriggerEnum,
   AppUpdateService,
+  MismatchedVersionsEnum,
   NO_RESPONSE_STATUS,
+  VersionCheckEndpointEnum,
   VersionCheckFailureReason,
   VersionCheckFailureReasonEnum,
 } from './app-update.service';
 import { ErrorOverlayService } from './error-overlay.service';
 import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
-import { VersionService } from './version.service';
+import { DataVersion, VersionService } from './version.service';
+import { of } from 'rxjs';
 
 jest.mock('@sentry/angular', () => ({
   metrics: { count: jest.fn() },
@@ -41,6 +50,12 @@ const siteName = 'Model AD';
 const loadedVersion: AppVersion = { appVersion: '4.0.0-rc3', commitSha: 'abc1234' };
 const newerVersion: AppVersion = { appVersion: '4.0.0-rc4', commitSha: 'def5678' };
 const unknownVersion: AppVersion = { appVersion: '', commitSha: '' };
+
+const dataVersionUrl = 'https://modeladexplorer.org/api/v1/data-version';
+const loadedDataVersion: DataVersion = { data_file: 'syn73774820', data_version: '191' };
+const newerDataVersion: DataVersion = { data_file: 'syn73774820', data_version: '192' };
+const newerDataFile: DataVersion = { data_file: 'syn74000000', data_version: '191' };
+const unknownDataVersion: DataVersion = { data_file: '', data_version: '' };
 
 const missingChunkPath = 'genes';
 const brokenRoutePath = 'models';
@@ -88,8 +103,33 @@ describe('AppUpdateService', () => {
     return TestBed.inject(AppUpdateService);
   }
 
-  function isShowingUpdateNotice(): boolean {
+  function isShowingAppUpdateNotice(): boolean {
     return errorOverlayService.activeMessage() === getAppUpdateMessage(siteName);
+  }
+
+  function isShowingDataUpdateNotice(): boolean {
+    return errorOverlayService.activeMessage() === getDataUpdateMessage(siteName);
+  }
+
+  /** Loads the footer's data version, which the tab's data version checks compare against. */
+  function loadFooterDataVersion() {
+    TestBed.inject(VersionService)
+      .getDataVersion$({ getDataVersion: () => of(loadedDataVersion) })
+      .subscribe();
+  }
+
+  function startWithDataChecks(appUpdateService: AppUpdateService) {
+    loadFooterDataVersion();
+    appUpdateService.start(loadedVersion, siteName, dataVersionUrl);
+  }
+
+  function respondWithServerDataVersion(serverDataVersion: DataVersion) {
+    httpMock.expectOne(dataVersionUrl).flush(serverDataVersion);
+  }
+
+  function respondToCheck(serverVersion: AppVersion, serverDataVersion: DataVersion) {
+    respondWithServerVersion(serverVersion);
+    respondWithServerDataVersion(serverDataVersion);
   }
 
   function setTabVisibility(state: DocumentVisibilityState) {
@@ -136,7 +176,8 @@ describe('AppUpdateService', () => {
   });
 
   afterEach(() => {
-    httpMock.verify();
+    // A request that timed out is cancelled rather than answered.
+    httpMock.verify({ ignoreCancelled: true });
     TestBed.resetTestingModule();
     jest.useRealTimers();
     jest.clearAllMocks();
@@ -185,7 +226,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(isShowingUpdateNotice()).toBe(true);
+      expect(isShowingAppUpdateNotice()).toBe(true);
     });
 
     it('does not poll while the tab is hidden', () => {
@@ -223,7 +264,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(isShowingUpdateNotice()).toBe(true);
+      expect(isShowingAppUpdateNotice()).toBe(true);
     });
   });
 
@@ -235,7 +276,7 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondWithServerVersion(loadedVersion);
 
-      expect(isShowingUpdateNotice()).toBe(false);
+      expect(isShowingAppUpdateNotice()).toBe(false);
       expect(errorOverlayService.isOverlayVisible()).toBe(false);
     });
 
@@ -247,7 +288,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(isShowingUpdateNotice()).toBe(true);
+      expect(isShowingAppUpdateNotice()).toBe(true);
       expect(errorOverlayService.activeMessage()).toBe(getAppUpdateMessage(siteName));
     });
 
@@ -260,11 +301,12 @@ describe('AppUpdateService', () => {
 
       const versionService = TestBed.inject(VersionService);
       expect(Sentry.metrics.count).toHaveBeenCalledTimes(1);
-      expect(Sentry.metrics.count).toHaveBeenCalledWith(STALE_CLIENT_METRIC, 1, {
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(STALE_APP_METRIC, 1, {
         attributes: {
           clientVersion: versionService.getSiteVersion(loadedVersion),
           serverVersion: versionService.getSiteVersion(newerVersion),
           trigger: AppUpdateCheckTriggerEnum.Visibility,
+          mismatchedVersions: MismatchedVersionsEnum.App,
         },
       });
     });
@@ -277,7 +319,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(isShowingUpdateNotice()).toBe(true);
+      expect(isShowingAppUpdateNotice()).toBe(true);
     });
 
     it('stays current when the server version is unknown', () => {
@@ -287,7 +329,7 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondWithServerVersion(unknownVersion);
 
-      expect(isShowingUpdateNotice()).toBe(false);
+      expect(isShowingAppUpdateNotice()).toBe(false);
     });
 
     it('stops checking once the tab is known to be stale', () => {
@@ -313,7 +355,7 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondWithServerVersion(newerVersion);
 
-      expect(isShowingUpdateNotice()).toBe(false);
+      expect(isShowingAppUpdateNotice()).toBe(false);
       expect(errorOverlayService.isOverlayVisible()).toBe(false);
     });
 
@@ -327,7 +369,7 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondWithServerVersion(newerVersion);
 
-      expect(isShowingUpdateNotice()).toBe(false);
+      expect(isShowingAppUpdateNotice()).toBe(false);
     });
 
     it('stays current and counts a transient mismatch when the confirmation matches', () => {
@@ -340,9 +382,9 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(loadedVersion);
 
       const versionService = TestBed.inject(VersionService);
-      expect(isShowingUpdateNotice()).toBe(false);
+      expect(isShowingAppUpdateNotice()).toBe(false);
       expect(Sentry.metrics.count).toHaveBeenCalledTimes(1);
-      expect(Sentry.metrics.count).toHaveBeenCalledWith(TRANSIENT_VERSION_MISMATCH_METRIC, 1, {
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(TRANSIENT_APP_VERSION_MISMATCH_METRIC, 1, {
         attributes: {
           clientVersion: versionService.getSiteVersion(loadedVersion),
           serverVersion: versionService.getSiteVersion(newerVersion),
@@ -363,7 +405,7 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondWithServerVersion(newerVersion);
 
-      expect(isShowingUpdateNotice()).toBe(false);
+      expect(isShowingAppUpdateNotice()).toBe(false);
     });
 
     it('retries a failed confirmation check after the minimum interval', () => {
@@ -373,12 +415,12 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
       respondWithNetworkFailure();
-      expect(isShowingUpdateNotice()).toBe(false);
+      expect(isShowingAppUpdateNotice()).toBe(false);
 
       jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
       respondWithServerVersion(newerVersion);
 
-      expect(isShowingUpdateNotice()).toBe(true);
+      expect(isShowingAppUpdateNotice()).toBe(true);
     });
 
     it('resolves a first mismatch as a mismatch without showing the overlay', async () => {
@@ -393,135 +435,199 @@ describe('AppUpdateService', () => {
     });
   });
 
-  describe('when the check fails', () => {
-    const respondWithStatus = (status: number, statusText: string) => () =>
-      httpMock.expectOne(APP_VERSION_PATH).flush(null, { status, statusText });
-    const respondWithUnparsableBody = () =>
-      httpMock
-        .expectOne(APP_VERSION_PATH)
-        .error(new ProgressEvent('error'), { status: HttpStatusCode.Ok, statusText: 'OK' });
-    const respondWithBody = (body: string | object) => () =>
-      httpMock.expectOne(APP_VERSION_PATH).flush(body);
+  describe.each([
+    {
+      endpoint: VersionCheckEndpointEnum.AppVersion,
+      url: APP_VERSION_PATH,
+      misconfiguredWarning: APP_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
+      startTab: () => setup().start(loadedVersion, siteName),
+      respondToOtherEndpoint: () => undefined,
+    },
+    {
+      endpoint: VersionCheckEndpointEnum.DataVersion,
+      url: dataVersionUrl,
+      misconfiguredWarning: DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
+      startTab: () => startWithDataChecks(setup()),
+      respondToOtherEndpoint: () => respondWithServerVersion(loadedVersion),
+    },
+  ])(
+    'when the $endpoint check fails',
+    ({ endpoint, url, misconfiguredWarning, startTab, respondToOtherEndpoint }) => {
+      const respondWithStatus = (status: number, statusText: string) => () =>
+        httpMock.expectOne(url).flush(null, { status, statusText });
+      const respondWithNoResponse = () => httpMock.expectOne(url).error(new ProgressEvent('error'));
+      const respondWithUnparsableBody = () =>
+        httpMock
+          .expectOne(url)
+          .error(new ProgressEvent('error'), { status: HttpStatusCode.Ok, statusText: 'OK' });
+      const respondWithBody = (body: string | object) => () => httpMock.expectOne(url).flush(body);
 
-    const failures: {
-      scenario: string;
-      respond: () => void;
-      reason: VersionCheckFailureReason;
-      status: number;
-      isMisconfiguration: boolean;
-    }[] = [
-      {
-        scenario: 'no response reaches the browser',
-        respond: respondWithNetworkFailure,
-        reason: VersionCheckFailureReasonEnum.Network,
-        status: NO_RESPONSE_STATUS,
-        isMisconfiguration: false,
-      },
-      {
-        scenario: 'no healthy app task answers',
-        respond: respondWithStatus(HttpStatusCode.ServiceUnavailable, 'Service Unavailable'),
-        reason: VersionCheckFailureReasonEnum.Server,
-        status: HttpStatusCode.ServiceUnavailable,
-        isMisconfiguration: false,
-      },
-      {
-        scenario: 'access is refused',
-        respond: respondWithStatus(HttpStatusCode.Forbidden, 'Forbidden'),
-        reason: VersionCheckFailureReasonEnum.UnexpectedStatus,
-        status: HttpStatusCode.Forbidden,
-        isMisconfiguration: false,
-      },
-      {
-        scenario: 'the server has no version endpoint',
-        respond: respondWithStatus(HttpStatusCode.NotFound, 'Not Found'),
-        reason: VersionCheckFailureReasonEnum.NotFound,
-        status: HttpStatusCode.NotFound,
-        isMisconfiguration: true,
-      },
-      {
-        scenario: 'a misrouted request returns a page instead of a version',
-        respond: respondWithBody('<!doctype html><html></html>'),
-        reason: VersionCheckFailureReasonEnum.InvalidResponse,
-        status: HttpStatusCode.Ok,
-        isMisconfiguration: true,
-      },
-      {
-        scenario: 'the browser cannot parse the response as JSON',
-        respond: respondWithUnparsableBody,
-        reason: VersionCheckFailureReasonEnum.InvalidResponse,
-        status: HttpStatusCode.Ok,
-        isMisconfiguration: true,
-      },
-      {
-        scenario: 'a misrouted request returns another endpoint’s JSON',
-        respond: respondWithBody({ status: 'UP' }),
-        reason: VersionCheckFailureReasonEnum.InvalidResponse,
-        status: HttpStatusCode.Ok,
-        isMisconfiguration: true,
-      },
-    ];
+      const failures: {
+        scenario: string;
+        respond: () => void;
+        reason: VersionCheckFailureReason;
+        status: number;
+        isMisconfiguration: boolean;
+      }[] = [
+        {
+          scenario: 'no response reaches the browser',
+          respond: respondWithNoResponse,
+          reason: VersionCheckFailureReasonEnum.Network,
+          status: NO_RESPONSE_STATUS,
+          isMisconfiguration: false,
+        },
+        {
+          scenario: 'the server does not answer in time',
+          respond: () => jest.advanceTimersByTime(VERSION_CHECK_TIMEOUT_MS),
+          reason: VersionCheckFailureReasonEnum.Timeout,
+          status: NO_RESPONSE_STATUS,
+          isMisconfiguration: false,
+        },
+        {
+          scenario: 'no healthy task answers',
+          respond: respondWithStatus(HttpStatusCode.ServiceUnavailable, 'Service Unavailable'),
+          reason: VersionCheckFailureReasonEnum.Server,
+          status: HttpStatusCode.ServiceUnavailable,
+          isMisconfiguration: false,
+        },
+        {
+          scenario: 'access is refused',
+          respond: respondWithStatus(HttpStatusCode.Forbidden, 'Forbidden'),
+          reason: VersionCheckFailureReasonEnum.UnexpectedStatus,
+          status: HttpStatusCode.Forbidden,
+          isMisconfiguration: false,
+        },
+        {
+          scenario: 'the server has no version endpoint',
+          respond: respondWithStatus(HttpStatusCode.NotFound, 'Not Found'),
+          reason: VersionCheckFailureReasonEnum.NotFound,
+          status: HttpStatusCode.NotFound,
+          isMisconfiguration: true,
+        },
+        {
+          scenario: 'a misrouted request returns a page instead of a version',
+          respond: respondWithBody('<!doctype html><html></html>'),
+          reason: VersionCheckFailureReasonEnum.InvalidResponse,
+          status: HttpStatusCode.Ok,
+          isMisconfiguration: true,
+        },
+        {
+          scenario: 'the browser cannot parse the response as JSON',
+          respond: respondWithUnparsableBody,
+          reason: VersionCheckFailureReasonEnum.InvalidResponse,
+          status: HttpStatusCode.Ok,
+          isMisconfiguration: true,
+        },
+        {
+          scenario: 'a misrouted request returns another endpoint’s JSON',
+          respond: respondWithBody({ status: 'UP' }),
+          reason: VersionCheckFailureReasonEnum.InvalidResponse,
+          status: HttpStatusCode.Ok,
+          isMisconfiguration: true,
+        },
+      ];
 
-    it.each(failures)(
-      'counts the failure and stays current when $scenario',
-      ({ respond, reason, status }) => {
-        const appUpdateService = setup();
-        appUpdateService.start(loadedVersion, siteName);
+      it.each(failures)(
+        'counts the failure and stays current when $scenario',
+        ({ respond, reason, status }) => {
+          startTab();
+
+          returnToTab();
+          respondToOtherEndpoint();
+          respond();
+
+          expect(Sentry.metrics.count).toHaveBeenCalledWith(VERSION_CHECK_FAILED_METRIC, 1, {
+            attributes: { endpoint, reason, status, trigger: AppUpdateCheckTriggerEnum.Visibility },
+          });
+          expect(errorOverlayService.isOverlayVisible()).toBe(false);
+        },
+      );
+
+      it.each(failures.filter(({ isMisconfiguration }) => isMisconfiguration))(
+        'raises a Sentry warning when $scenario',
+        ({ respond, reason, status }) => {
+          startTab();
+
+          returnToTab();
+          respondToOtherEndpoint();
+          respond();
+
+          expect(logger.warn).toHaveBeenCalledWith(misconfiguredWarning, {
+            endpoint,
+            reason,
+            status,
+            trigger: AppUpdateCheckTriggerEnum.Visibility,
+          });
+        },
+      );
+
+      it.each(failures.filter(({ isMisconfiguration }) => !isMisconfiguration))(
+        'raises no Sentry warning when $scenario',
+        ({ respond }) => {
+          startTab();
+
+          returnToTab();
+          respondToOtherEndpoint();
+          respond();
+
+          expect(logger.warn).not.toHaveBeenCalled();
+        },
+      );
+
+      it('raises the misconfiguration warning once per tab', () => {
+        startTab();
+        const respondNotFound = respondWithStatus(HttpStatusCode.NotFound, 'Not Found');
 
         returnToTab();
-        respond();
+        respondToOtherEndpoint();
+        respondNotFound();
+        jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
+        respondToOtherEndpoint();
+        respondNotFound();
 
-        expect(Sentry.metrics.count).toHaveBeenCalledWith(VERSION_CHECK_FAILED_METRIC, 1, {
-          attributes: { reason, status, trigger: AppUpdateCheckTriggerEnum.Visibility },
-        });
-        expect(isShowingUpdateNotice()).toBe(false);
-        expect(errorOverlayService.isOverlayVisible()).toBe(false);
-      },
-    );
+        expect(Sentry.metrics.count).toHaveBeenCalledTimes(2);
+        expect(logger.warn).toHaveBeenCalledTimes(1);
+      });
+    },
+  );
 
-    it.each(failures.filter(({ isMisconfiguration }) => isMisconfiguration))(
-      'raises a Sentry warning when $scenario',
-      ({ respond, reason, status }) => {
-        setup().start(loadedVersion, siteName);
+  describe('when a version request does not answer in time', () => {
+    it('still handles the other endpoint, so a stalled data request does not hold back a deploy', async () => {
+      startWithDataChecks(setup());
 
-        returnToTab();
-        respond();
+      await navigateTo(missingChunkPath);
+      respondWithServerVersion(newerVersion);
+      jest.advanceTimersByTime(VERSION_CHECK_TIMEOUT_MS);
 
-        expect(logger.warn).toHaveBeenCalledWith(VERSION_ENDPOINT_MISCONFIGURED_WARNING, {
-          reason,
-          status,
-          trigger: AppUpdateCheckTriggerEnum.Visibility,
-        });
-      },
-    );
-
-    it.each(failures.filter(({ isMisconfiguration }) => !isMisconfiguration))(
-      'raises no Sentry warning when $scenario',
-      ({ respond }) => {
-        setup().start(loadedVersion, siteName);
-
-        returnToTab();
-        respond();
-
-        expect(logger.warn).not.toHaveBeenCalled();
-      },
-    );
-
-    it('raises the misconfiguration warning once per tab', () => {
-      setup().start(loadedVersion, siteName);
-      const respondNotFound = respondWithStatus(HttpStatusCode.NotFound, 'Not Found');
-
-      returnToTab();
-      respondNotFound();
-      jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
-      respondNotFound();
-
-      expect(Sentry.metrics.count).toHaveBeenCalledTimes(2);
-      expect(logger.warn).toHaveBeenCalledTimes(1);
+      expect(isShowingAppUpdateNotice()).toBe(true);
     });
 
-    it('keeps checking after a failed check', () => {
+    it('checks again once the stalled request has timed out', () => {
+      setup().start(loadedVersion, siteName);
+
+      returnToTab();
+      jest.advanceTimersByTime(VERSION_CHECK_TIMEOUT_MS);
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+
+      const openRequests = httpMock.match(APP_VERSION_PATH).filter(({ cancelled }) => !cancelled);
+      expect(openRequests).toHaveLength(1);
+    });
+
+    it('resolves an immediate check once the stalled request has timed out', async () => {
       const appUpdateService = setup();
       appUpdateService.start(loadedVersion, siteName);
+
+      const isVersionMismatch = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      jest.advanceTimersByTime(VERSION_CHECK_TIMEOUT_MS);
+
+      await expect(isVersionMismatch).resolves.toBe(false);
+    });
+  });
+
+  describe('after a failed check', () => {
+    it('keeps checking', () => {
+      setup().start(loadedVersion, siteName);
 
       returnToTab();
       respondWithNetworkFailure();
@@ -529,7 +635,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(isShowingUpdateNotice()).toBe(true);
+      expect(isShowingAppUpdateNotice()).toBe(true);
     });
   });
 
@@ -542,9 +648,9 @@ describe('AppUpdateService', () => {
       await navigateTo(missingChunkPath);
       respondWithServerVersion(newerVersion);
 
-      expect(isShowingUpdateNotice()).toBe(true);
+      expect(isShowingAppUpdateNotice()).toBe(true);
       expect(Sentry.metrics.count).toHaveBeenCalledWith(
-        STALE_CLIENT_METRIC,
+        STALE_APP_METRIC,
         1,
         expect.objectContaining({
           attributes: expect.objectContaining({
@@ -579,7 +685,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      expect(isShowingUpdateNotice()).toBe(true);
+      expect(isShowingAppUpdateNotice()).toBe(true);
     });
 
     it('checks at most once per minimum interval when asked repeatedly', () => {
@@ -633,6 +739,272 @@ describe('AppUpdateService', () => {
 
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
       await expect(isStale).resolves.toBe(false);
+    });
+  });
+
+  describe('when the data version is checked', () => {
+    it('does not check the data version without a data version URL', () => {
+      const appUpdateService = setup();
+      loadFooterDataVersion();
+      appUpdateService.start(loadedVersion, siteName);
+
+      returnToTab();
+      respondWithServerVersion(loadedVersion);
+
+      expect(httpMock.match(dataVersionUrl)).toHaveLength(0);
+    });
+
+    it('detects a later data release when the footer did not load a data version', () => {
+      setup().start(loadedVersion, siteName, dataVersionUrl);
+
+      returnToTab();
+      respondToCheck(loadedVersion, loadedDataVersion);
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataVersion);
+
+      expect(isShowingDataUpdateNotice()).toBe(true);
+    });
+
+    it('does not keep an unknown data version as the one the tab loaded with', () => {
+      setup().start(loadedVersion, siteName, dataVersionUrl);
+
+      returnToTab();
+      respondToCheck(loadedVersion, unknownDataVersion);
+
+      expect(TestBed.inject(VersionService).getLoadedDataVersion()).toBeNull();
+    });
+
+    it('checks the data version alongside the app version, bypassing the app HTTP interceptors', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, loadedDataVersion);
+
+      expect(appInterceptor).not.toHaveBeenCalled();
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
+    });
+
+    it('does not show the data update overlay on the first mismatch', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
+    });
+
+    it('shows the data update overlay once a new data release outlasts the confirmation delay', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataVersion);
+
+      expect(isShowingDataUpdateNotice()).toBe(true);
+    });
+
+    it('counts a new data file as a new data release', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataFile);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataFile);
+
+      expect(isShowingDataUpdateNotice()).toBe(true);
+    });
+
+    it('counts the stale data in Sentry metrics with both data versions and the first trigger', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataVersion);
+
+      const versionService = TestBed.inject(VersionService);
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(STALE_DATA_METRIC, 1, {
+        attributes: {
+          clientVersion: versionService.formatDataVersion(loadedDataVersion),
+          serverVersion: versionService.formatDataVersion(newerDataVersion),
+          trigger: AppUpdateCheckTriggerEnum.Visibility,
+          mismatchedVersions: MismatchedVersionsEnum.Data,
+        },
+      });
+    });
+
+    it('stays current when the server data version is unknown', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, unknownDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+
+      expect(httpMock.match(dataVersionUrl)).toHaveLength(0);
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
+    });
+
+    it('stays current and counts a transient data mismatch when the confirmation matches', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, loadedDataVersion);
+
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(
+        TRANSIENT_DATA_VERSION_MISMATCH_METRIC,
+        1,
+        expect.anything(),
+      );
+    });
+
+    it('retries a failed data confirmation check after the minimum interval', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondWithServerVersion(loadedVersion);
+      httpMock.expectOne(dataVersionUrl).error(new ProgressEvent('error'));
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
+
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      respondToCheck(loadedVersion, newerDataVersion);
+
+      expect(isShowingDataUpdateNotice()).toBe(true);
+    });
+
+    it('does not treat a new data release as explaining a failed chunk load', async () => {
+      const appUpdateService = setup();
+      startWithDataChecks(appUpdateService);
+
+      const isVersionMismatch = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      respondToCheck(loadedVersion, newerDataVersion);
+
+      await expect(isVersionMismatch).resolves.toBe(false);
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
+    });
+
+    it('shows the app update notice when both a deploy and a data release are confirmed', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(newerVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(newerVersion, newerDataVersion);
+      expect(isShowingDataUpdateNotice()).toBe(true);
+
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS - DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondWithServerVersion(newerVersion);
+
+      expect(isShowingAppUpdateNotice()).toBe(true);
+    });
+
+    it('stops checking once the data is known to be stale', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataVersion);
+
+      jest.advanceTimersByTime(APP_UPDATE_POLL_INTERVAL_MS);
+      returnToTab();
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+      expect(httpMock.match(dataVersionUrl)).toHaveLength(0);
+    });
+
+    it('checks the data version when asked after an HTTP error', () => {
+      const appUpdateService = setup();
+      startWithDataChecks(appUpdateService);
+
+      appUpdateService.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataVersion);
+
+      expect(isShowingDataUpdateNotice()).toBe(true);
+    });
+  });
+
+  describe('when reporting which versions differed', () => {
+    function staleMetricMismatchedVersions(staleMetric: string) {
+      const staleMetricCall = (Sentry.metrics.count as jest.Mock).mock.calls.find(
+        ([metricName]) => metricName === staleMetric,
+      );
+      return staleMetricCall?.[2].attributes.mismatchedVersions;
+    }
+
+    it('reports only the app version when the data version still matches', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(newerVersion, loadedDataVersion);
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(newerVersion, loadedDataVersion);
+
+      expect(staleMetricMismatchedVersions(STALE_APP_METRIC)).toBe(MismatchedVersionsEnum.App);
+    });
+
+    it('reports only the data version when the app version still matches', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataVersion);
+
+      expect(staleMetricMismatchedVersions(STALE_DATA_METRIC)).toBe(MismatchedVersionsEnum.Data);
+    });
+
+    it('reports both versions on each stale metric when a deploy and a data release are both confirmed', () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(newerVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(newerVersion, newerDataVersion);
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS - DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondWithServerVersion(newerVersion);
+
+      expect(staleMetricMismatchedVersions(STALE_DATA_METRIC)).toBe(
+        MismatchedVersionsEnum.AppAndData,
+      );
+      expect(staleMetricMismatchedVersions(STALE_APP_METRIC)).toBe(
+        MismatchedVersionsEnum.AppAndData,
+      );
+    });
+
+    it('reports both versions when a failed chunk load finds both changed in one check', async () => {
+      startWithDataChecks(setup());
+
+      await navigateTo(missingChunkPath);
+      respondToCheck(newerVersion, newerDataVersion);
+
+      expect(staleMetricMismatchedVersions(STALE_APP_METRIC)).toBe(
+        MismatchedVersionsEnum.AppAndData,
+      );
+    });
+
+    it('reports both versions when a data mismatch is still awaiting confirmation', async () => {
+      startWithDataChecks(setup());
+
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      await navigateTo(missingChunkPath);
+      respondWithServerVersion(newerVersion);
+      httpMock.expectOne(dataVersionUrl).error(new ProgressEvent('error'));
+
+      expect(staleMetricMismatchedVersions(STALE_APP_METRIC)).toBe(
+        MismatchedVersionsEnum.AppAndData,
+      );
     });
   });
 });

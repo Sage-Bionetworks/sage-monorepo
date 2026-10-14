@@ -6,7 +6,6 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   AppUpdateCheckTriggerEnum,
@@ -28,7 +27,6 @@ describe('httpErrorInterceptor', () => {
   let logger: { error: jest.Mock };
   let errorOverlayService: { showError: jest.Mock };
   let appUpdateService: {
-    isStale: ReturnType<typeof signal<boolean>>;
     start: jest.Mock;
     requestCheck: jest.Mock;
     checkNow: jest.Mock;
@@ -38,7 +36,6 @@ describe('httpErrorInterceptor', () => {
     logger = { error: jest.fn() };
     errorOverlayService = { showError: jest.fn() };
     appUpdateService = {
-      isStale: signal(false),
       start: jest.fn(),
       requestCheck: jest.fn(),
       checkNow: jest.fn(() => Promise.resolve(false)),

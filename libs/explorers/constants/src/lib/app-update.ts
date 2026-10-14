@@ -4,16 +4,21 @@ export const APP_UPDATE_POLL_INTERVAL_MS = 10 * 60 * 1000;
 export const APP_UPDATE_MIN_CHECK_INTERVAL_MS = 60 * 1000;
 export const APP_UPDATE_CONFIRM_DELAY_MS = 5 * 60 * 1000;
 /**
+ * How long a version request may take before it counts as failed. Without it, a request the
+ * network never answers would keep the check in progress, which blocks every later check.
+ */
+export const VERSION_CHECK_TIMEOUT_MS = 10 * 1000;
+/**
  * A data release switches the data version in one step, so this only has to outlast the APIs'
  * cache invalidation, which polls every minute and clears again on the following poll.
  */
 export const DATA_UPDATE_CONFIRM_DELAY_MS = 2 * 60 * 1000;
-export const STALE_CLIENT_METRIC = 'app.stale_client_detected';
+export const STALE_APP_METRIC = 'app.stale_app_detected';
 export const STALE_DATA_METRIC = 'app.stale_data_detected';
-export const TRANSIENT_VERSION_MISMATCH_METRIC = 'app.transient_version_mismatch';
+export const TRANSIENT_APP_VERSION_MISMATCH_METRIC = 'app.transient_app_version_mismatch';
 export const TRANSIENT_DATA_VERSION_MISMATCH_METRIC = 'app.transient_data_version_mismatch';
 export const VERSION_CHECK_FAILED_METRIC = 'app.version_check_failed';
-export const VERSION_ENDPOINT_MISCONFIGURED_WARNING = 'App version endpoint is misconfigured';
+export const APP_VERSION_ENDPOINT_MISCONFIGURED_WARNING = 'App version endpoint is misconfigured';
 export const DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING = 'Data version endpoint is misconfigured';
 
 export const getAppUpdateMessage = (siteName: string): string =>

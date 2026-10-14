@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ConfigService } from '@sagebionetworks/explorers/config';
+import { DATA_VERSION_PATH } from '@sagebionetworks/explorers/constants';
 import { initSentry, SentryConfig } from '@sagebionetworks/explorers/sentry';
 import { AppUpdateCheckTriggerEnum, AppUpdateService } from './app-update.service';
 import { initializeExplorersApp } from './explorers-app-initializer';
@@ -10,9 +11,11 @@ jest.mock('@sagebionetworks/explorers/sentry', () => ({
 }));
 
 const siteName = 'Model AD';
+const csrApiUrl = 'https://modeladexplorer.org/api/v1';
 const config = {
   appVersion: '4.0.0-rc3',
   commitSha: 'abc1234',
+  csrApiUrl,
   sentryDsn: 'https://test-dsn@sentry.io/123',
   sentryEnvironment: 'stage',
   sentryRelease: 'model-ad@4.0.0-rc3+abc1234',
@@ -20,10 +23,14 @@ const config = {
 
 describe('initializeExplorersApp', () => {
   let configService: { config: typeof config; loadConfig: jest.Mock };
+  const dataVersionUrl = `${csrApiUrl}${DATA_VERSION_PATH}`;
   let appUpdateService: { start: jest.Mock; requestCheck: jest.Mock; checkNow: jest.Mock };
 
-  async function initialize() {
-    configService = { config, loadConfig: jest.fn(() => Promise.resolve(config)) };
+  async function initialize(loadedConfig: typeof config = config) {
+    configService = {
+      config: loadedConfig,
+      loadConfig: jest.fn(() => Promise.resolve(loadedConfig)),
+    };
     appUpdateService = {
       start: jest.fn(),
       requestCheck: jest.fn(),
@@ -60,10 +67,20 @@ describe('initializeExplorersApp', () => {
     );
   });
 
-  it('starts app update detection with the loaded version and the site name', async () => {
+  it('starts update detection with the loaded version, the site name, and the data version URL', async () => {
     await initialize();
 
-    expect(appUpdateService.start).toHaveBeenCalledWith(config, siteName);
+    expect(appUpdateService.start).toHaveBeenCalledWith(config, siteName, dataVersionUrl);
+  });
+
+  it('builds the data version URL when the API URL ends with a slash', async () => {
+    await initialize({ ...config, csrApiUrl: `${csrApiUrl}/` });
+
+    expect(appUpdateService.start).toHaveBeenCalledWith(
+      expect.anything(),
+      siteName,
+      dataVersionUrl,
+    );
   });
 
   it('lets Sentry ask whether the tab is stale with a chunk-load check', async () => {

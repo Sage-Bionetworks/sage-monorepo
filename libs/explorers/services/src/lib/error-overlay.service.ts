@@ -26,7 +26,7 @@ export class ErrorOverlayService {
     }
   }
 
-  showUpdateAvailable(siteName: string) {
+  showAppUpdateAvailable(siteName: string) {
     this.appUpdateMessage.set(getAppUpdateMessage(siteName));
   }
 
