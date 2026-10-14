@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import { getAgoraDataRelease, startCacheInvalidation } from './cache-invalidation';
 import {
   allBiodomainsRoute,
   biodomainsRoute,
@@ -12,6 +13,7 @@ import {
   teamMemberImageRoute,
   teamsRoute,
 } from './components';
+import { clearAllCaches } from './helpers';
 
 const mongodbUser = process.env.MONGODB_USER;
 const mongodbPass = process.env.MONGODB_PASS;
@@ -65,6 +67,11 @@ mongoose.connection.once('open', async () => {
   router.get('/genes', genesRoute);
   router.get('/teams', teamsRoute);
   router.get('/team-members/:name/image', teamMemberImageRoute);
+
+  startCacheInvalidation({
+    getCurrentDataRelease: getAgoraDataRelease,
+    clearCaches: clearAllCaches,
+  });
 });
 
 export default router;
