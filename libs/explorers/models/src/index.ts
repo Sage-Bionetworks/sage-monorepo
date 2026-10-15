@@ -4,6 +4,7 @@ export * from './lib/download-note';
 export * from './lib/loading-icon-colors';
 export * from './lib/navigation-link';
 export * from './lib/panel';
+export * from './lib/query-params';
 export * from './lib/resource-card-data';
 export * from './lib/search-result';
 export * from './lib/simple-table';

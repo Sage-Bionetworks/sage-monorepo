@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ParamMap } from '@angular/router';
 import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
-import { Panel } from '@sagebionetworks/explorers/models';
+import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
 
 @Injectable({
   providedIn: 'root',
@@ -46,19 +46,38 @@ export class HelperService {
     };
   }
 
-  getPanelUrl(basePath: string, activePanel: string, activeParent: string) {
+  appendQueryParams(url: string, queryParams: QueryParams) {
+    const queryString = Object.entries(queryParams)
+      .filter(([, value]) => value)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
+      .join('&');
+    if (!queryString) return url;
+    const fragmentIndex = url.includes('#') ? url.indexOf('#') : url.length;
+    const pathAndQuery = url.slice(0, fragmentIndex);
+    const fragment = url.slice(fragmentIndex);
+    const separator = pathAndQuery.includes('?') ? '&' : '?';
+    return `${pathAndQuery}${separator}${queryString}${fragment}`;
+  }
+
+  getPanelUrl(
+    basePath: string,
+    activePanel: string,
+    activeParent: string,
+    queryParams: QueryParams = {},
+  ) {
     const panelPath = activeParent === '' ? activePanel : `${activeParent}/${activePanel}`;
-    return `${basePath}/${panelPath}`;
+    return this.appendQueryParams(`${basePath}/${panelPath}`, queryParams);
   }
 
   handlePanelChange(
     panels: Panel[],
     panel: Panel,
     basePath: string,
+    queryParams: QueryParams = {},
   ): { activePanel: string; activeParent: string; url: string } | undefined {
     if (panel.disabled) return undefined;
     const { activePanel, activeParent } = this.getActivePanelAndParent(panels, panel);
-    const url = this.getPanelUrl(basePath, activePanel, activeParent);
+    const url = this.getPanelUrl(basePath, activePanel, activeParent, queryParams);
     return { activePanel, activeParent, url };
   }
 
