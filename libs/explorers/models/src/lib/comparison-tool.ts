@@ -167,8 +167,12 @@ export interface ComparisonToolNouns {
 export interface PinnedResultsCounts {
   pinCount: number | null;
   pinnedRowCount: number | null;
-  // Cached pins the active view isn't showing, in the unit of `pinCount`
+  // Cached pins the active view isn't showing, in `hiddenCountUnit`
   hiddenCount: number | null;
+  // Whether `hiddenCount` counts the active view's rows or their parents, from the id space the
+  // pins are in. Only a child view tells the two apart, so only there does it pick the line the
+  // count is noted on
+  hiddenCountUnit: ItemIdSpace;
 }
 
 /** One line of the pinned results header. `note` is shown inline after `text`, set off from it. */

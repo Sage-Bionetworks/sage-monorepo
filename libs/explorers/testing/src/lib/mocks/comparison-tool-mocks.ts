@@ -1,5 +1,6 @@
 import {
   ComparisonToolConfig,
+  ComparisonToolNoun,
   ComparisonToolQuery,
   HeatmapDetailsPanelData,
   SynapseWikiParams,
@@ -146,6 +147,33 @@ export const mockComparisonToolDataConfigWithDropdowns: ComparisonToolConfig[] =
   { ...baseConfig, dropdowns: ['Protein - Differential Expression', 'SRM'] },
   { ...baseConfig, dropdowns: ['Protein - Differential Expression', 'TMT'] },
   { ...baseConfig, dropdowns: ['Protein - Differential Expression', 'LFQ'] },
+];
+
+export const mockParentNoun: ComparisonToolNoun = { singular: 'Parent', plural: 'Parents' };
+export const mockChildNoun: ComparisonToolNoun = { singular: 'Child', plural: 'Children' };
+export const mockParentViewSelection = ['Parent', 'A'];
+export const mockChildViewSelection = ['Child', 'A'];
+// Keys its rows like `mockChildViewSelection`, so pins made in one stay in row space in the other
+export const mockOtherChildViewSelection = ['Child', 'B'];
+
+// A parent view keyed by `model_type`, and two child views of `_id` rows under those parents.
+// `mockComparisonToolData` rows are children, and in the parent view each `model_type` is a row
+export const mockParentChildComparisonToolConfigs: ComparisonToolConfig[] = [
+  {
+    ...baseConfig,
+    dropdowns: mockParentViewSelection,
+    row_id_data_key: 'model_type',
+    parent_id_data_key: 'model_type',
+    view_noun: mockParentNoun,
+  },
+  ...[mockChildViewSelection, mockOtherChildViewSelection].map((dropdowns) => ({
+    ...baseConfig,
+    dropdowns,
+    row_id_data_key: '_id',
+    parent_id_data_key: 'model_type',
+    view_noun: mockChildNoun,
+    parent_noun: mockParentNoun,
+  })),
 ];
 
 export const mockComparisonToolData: Record<string, any>[] = [

@@ -620,6 +620,7 @@ describe('ComparisonToolService', () => {
         hiddenPinCount: service.hiddenPinCount(),
         hiddenParentPinCount: service.hiddenParentPinCount(),
         hiddenCount: service.pinnedResultsCounts().hiddenCount,
+        hiddenCountUnit: service.pinnedResultsCounts().hiddenCountUnit,
       });
 
       it('hides a parent pin with no rows in the child view', () => {
@@ -633,6 +634,7 @@ describe('ComparisonToolService', () => {
           hiddenPinCount: 1,
           hiddenParentPinCount: 1,
           hiddenCount: 1,
+          hiddenCountUnit: 'parent',
         });
       });
 
@@ -654,10 +656,11 @@ describe('ComparisonToolService', () => {
           hiddenPinCount: 5,
           hiddenParentPinCount: 2,
           hiddenCount: 2,
+          hiddenCountUnit: 'parent',
         });
       });
 
-      it('counts hidden child pins by parent in another child view with the same identity', () => {
+      it('counts hidden child pins by row in another child view with the same identity', () => {
         connectService(viewConfigs, { selection: CHILD_VIEW });
         pinInChildView(
           childRow('child1a', 'parent1'),
@@ -671,7 +674,38 @@ describe('ComparisonToolService', () => {
         expect(hiddenCounts()).toEqual({
           hiddenPinCount: 2,
           hiddenParentPinCount: 1,
+          hiddenCount: 2,
+          hiddenCountUnit: 'row',
+        });
+      });
+
+      it('counts a partly shown parent once as pinned and its missing rows as hidden', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        pinInChildView(childRow('child1a', 'parent1'), childRow('child1b', 'parent1'));
+        service.setDropdownSelection(OTHER_CHILD_VIEW);
+
+        landPinned(childRow('child1a', 'parent1'));
+
+        expect(service.pinnedResultsCounts()).toEqual({
+          pinCount: 1,
+          pinnedRowCount: 1,
           hiddenCount: 1,
+          hiddenCountUnit: 'row',
+        });
+      });
+
+      it('counts no rows and every pin as a hidden row when a pinned fetch fails in the same identity', () => {
+        connectService(viewConfigs, { selection: CHILD_VIEW });
+        pinInChildView(childRow('child1a', 'parent1'), childRow('child1b', 'parent1'));
+        service.setDropdownSelection(OTHER_CHILD_VIEW);
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.pinnedResultsCounts()).toEqual({
+          pinCount: 0,
+          pinnedRowCount: 0,
+          hiddenCount: 2,
+          hiddenCountUnit: 'row',
         });
       });
 
@@ -686,6 +720,7 @@ describe('ComparisonToolService', () => {
           hiddenPinCount: 0,
           hiddenParentPinCount: 0,
           hiddenCount: 0,
+          hiddenCountUnit: 'parent',
         });
       });
 
@@ -699,6 +734,7 @@ describe('ComparisonToolService', () => {
           hiddenPinCount: null,
           hiddenParentPinCount: null,
           hiddenCount: null,
+          hiddenCountUnit: 'parent',
         });
       });
 
@@ -713,6 +749,7 @@ describe('ComparisonToolService', () => {
           hiddenPinCount: null,
           hiddenParentPinCount: null,
           hiddenCount: null,
+          hiddenCountUnit: 'parent',
         });
       });
 
@@ -727,11 +764,13 @@ describe('ComparisonToolService', () => {
           hiddenPinCount: 2,
           hiddenParentPinCount: 2,
           hiddenCount: 2,
+          hiddenCountUnit: 'parent',
         });
         expect(service.pinnedResultsCounts()).toEqual({
           pinCount: 0,
           pinnedRowCount: null,
           hiddenCount: 2,
+          hiddenCountUnit: 'parent',
         });
       });
 
@@ -746,6 +785,7 @@ describe('ComparisonToolService', () => {
           hiddenPinCount: 2,
           hiddenParentPinCount: 2,
           hiddenCount: 2,
+          hiddenCountUnit: 'parent',
         });
       });
 
@@ -1738,6 +1778,7 @@ describe('ComparisonToolService', () => {
           pinCount: 0,
           pinnedRowCount: 0,
           hiddenCount: 2,
+          hiddenCountUnit: 'row',
         });
       });
     });
@@ -3333,7 +3374,12 @@ describe('ComparisonToolService', () => {
 
   describe('pinned results counts', () => {
     type FetchResult = { data: Row[]; totalCount: number };
-    const unknownCounts = { pinCount: null, pinnedRowCount: null, hiddenCount: null };
+    const unknownCounts = {
+      pinCount: null,
+      pinnedRowCount: null,
+      hiddenCount: null,
+      hiddenCountUnit: 'row',
+    };
 
     const connectWithPinnedRows = (...ids: string[]) => {
       connectService();
@@ -3349,6 +3395,7 @@ describe('ComparisonToolService', () => {
         pinCount: 2,
         pinnedRowCount: 2,
         hiddenCount: 0,
+        hiddenCountUnit: 'row',
       });
     });
 
@@ -3367,10 +3414,11 @@ describe('ComparisonToolService', () => {
         pinCount: 1,
         pinnedRowCount: 1,
         hiddenCount: 1,
+        hiddenCountUnit: 'row',
       });
     });
 
-    it('reports every pin as hidden and the row count as unknown once a pinned fetch fails', () => {
+    it('reports every pin as hidden and no rows once a pinned fetch fails', () => {
       connectWithPinnedRows('id1', 'id2');
       const pending$ = new Subject<FetchResult>();
       service.fetchPinned(pending$);
@@ -3379,8 +3427,9 @@ describe('ComparisonToolService', () => {
 
       expect(service.pinnedResultsCounts()).toEqual({
         pinCount: 0,
-        pinnedRowCount: null,
+        pinnedRowCount: 0,
         hiddenCount: 2,
+        hiddenCountUnit: 'row',
       });
     });
 
@@ -3401,6 +3450,7 @@ describe('ComparisonToolService', () => {
         pinCount: 1,
         pinnedRowCount: 1,
         hiddenCount: 0,
+        hiddenCountUnit: 'row',
       });
     });
 
@@ -3414,6 +3464,7 @@ describe('ComparisonToolService', () => {
         pinCount: 1,
         pinnedRowCount: 1,
         hiddenCount: 0,
+        hiddenCountUnit: 'row',
       });
     });
 
@@ -3434,6 +3485,7 @@ describe('ComparisonToolService', () => {
         pinCount: 1,
         pinnedRowCount: 1,
         hiddenCount: 0,
+        hiddenCountUnit: 'row',
       });
     });
   });

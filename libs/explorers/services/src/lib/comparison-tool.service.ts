@@ -391,22 +391,27 @@ export class ComparisonToolService<T> {
    * to Protein. `pinCount` itself stays numeric, since the pin limit and pin-all need a value while
    * rows load.
    *
-   * `hiddenCount` is in the unit of `pinCount`, so the two add up to every pinned parent (or row).
-   * After a failed pinned fetch nothing is shown, and the row count is unknown, since the unloaded
-   * pins could have any number of rows in the active view.
+   * `hiddenCount` is in the unit of the space the pins were made in. Pins made in the active view's
+   * own row space, e.g. under another dropdown selection, count as rows, so a partly shown parent
+   * counts once as pinned and its missing rows count as hidden. Pins made in another view count as
+   * parents, since a hidden parent can have any number of rows in the active view.
+   *
+   * After a failed pinned fetch nothing is shown. The row count is then 0 when the pins are the
+   * active view's own rows, and unknown when they were made in another view, for the same reason.
    */
   readonly pinnedResultsCounts = computed<PinnedResultsCounts>(
     () => {
+      const hiddenCountUnit = this.pinnedItemsQuery().itemIdSpace;
       if (this.isLoadingPinnedData()) {
-        return { pinCount: null, pinnedRowCount: null, hiddenCount: null };
+        return { pinCount: null, pinnedRowCount: null, hiddenCount: null, hiddenCountUnit };
       }
-      const hiddenCount = this.parentIdDataKey()
-        ? this.hiddenParentPinCount()
-        : this.hiddenPinCount();
+      const isRowCountUnknown = this.pinnedFetchFailed() && hiddenCountUnit === 'parent';
       return {
         pinCount: this.pinCount(),
-        pinnedRowCount: this.pinnedFetchFailed() ? null : this.pinnedRowCount(),
-        hiddenCount,
+        pinnedRowCount: isRowCountUnknown ? null : this.pinnedRowCount(),
+        hiddenCount:
+          hiddenCountUnit === 'row' ? this.hiddenPinCount() : this.hiddenParentPinCount(),
+        hiddenCountUnit,
       };
     },
     { equal: isEqual },

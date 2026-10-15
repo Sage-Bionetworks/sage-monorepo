@@ -1,4 +1,4 @@
-import { ComparisonToolNouns } from '@sagebionetworks/explorers/models';
+import { ComparisonToolNouns, PinnedResultsCounts } from '@sagebionetworks/explorers/models';
 import {
   BLANK_LABEL_TEXT,
   getNoResultsMessage,
@@ -44,17 +44,28 @@ describe('comparison tool copy', () => {
 
   describe('getPinnedResultsLabels', () => {
     const line = (text: string, note: string | null = null) => ({ text, note });
-    const UNKNOWN = { pinCount: null, pinnedRowCount: null, hiddenCount: null };
+    const UNKNOWN: PinnedResultsCounts = {
+      pinCount: null,
+      pinnedRowCount: null,
+      hiddenCount: null,
+      hiddenCountUnit: 'row',
+    };
 
     it('should fall back to results, with the count in the heading', () => {
       expect(
-        getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2, hiddenCount: null }, NO_NOUNS),
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: null, hiddenCountUnit: 'row' },
+          NO_NOUNS,
+        ),
       ).toEqual({
         heading: line('2 Pinned Results'),
         sublabels: [],
       });
       expect(
-        getPinnedResultsLabels({ pinCount: 1, pinnedRowCount: 1, hiddenCount: null }, NO_NOUNS),
+        getPinnedResultsLabels(
+          { pinCount: 1, pinnedRowCount: 1, hiddenCount: null, hiddenCountUnit: 'row' },
+          NO_NOUNS,
+        ),
       ).toEqual({
         heading: line('1 Pinned Result'),
         sublabels: [],
@@ -71,7 +82,7 @@ describe('comparison tool copy', () => {
     it('should use the view noun, with the count in a sublabel', () => {
       expect(
         getPinnedResultsLabels(
-          { pinCount: 2, pinnedRowCount: 2, hiddenCount: null },
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: null, hiddenCountUnit: 'row' },
           STANDARD_NOUNS,
         ),
       ).toEqual({
@@ -80,7 +91,7 @@ describe('comparison tool copy', () => {
       });
       expect(
         getPinnedResultsLabels(
-          { pinCount: 0, pinnedRowCount: 0, hiddenCount: null },
+          { pinCount: 0, pinnedRowCount: 0, hiddenCount: null, hiddenCountUnit: 'row' },
           STANDARD_NOUNS,
         ),
       ).toEqual({
@@ -98,13 +109,19 @@ describe('comparison tool copy', () => {
 
     it('should use the parent noun then the view noun in a child view', () => {
       expect(
-        getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 3, hiddenCount: null }, CHILD_NOUNS),
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 3, hiddenCount: null, hiddenCountUnit: 'row' },
+          CHILD_NOUNS,
+        ),
       ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line('2 Parents'), line('3 Children')],
       });
       expect(
-        getPinnedResultsLabels({ pinCount: 1, pinnedRowCount: 1, hiddenCount: null }, CHILD_NOUNS),
+        getPinnedResultsLabels(
+          { pinCount: 1, pinnedRowCount: 1, hiddenCount: null, hiddenCountUnit: 'row' },
+          CHILD_NOUNS,
+        ),
       ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line('1 Parent'), line('1 Child')],
@@ -121,7 +138,7 @@ describe('comparison tool copy', () => {
     it('should not show a known row count in a child view when the parent count is unknown', () => {
       expect(
         getPinnedResultsLabels(
-          { pinCount: null, pinnedRowCount: 3, hiddenCount: null },
+          { pinCount: null, pinnedRowCount: 3, hiddenCount: null, hiddenCountUnit: 'row' },
           CHILD_NOUNS,
         ),
       ).toEqual({
@@ -133,7 +150,7 @@ describe('comparison tool copy', () => {
     it('should show the parent count and the loading message in a child view when only the row count is unknown', () => {
       expect(
         getPinnedResultsLabels(
-          { pinCount: 2, pinnedRowCount: null, hiddenCount: null },
+          { pinCount: 2, pinnedRowCount: null, hiddenCount: null, hiddenCountUnit: 'row' },
           CHILD_NOUNS,
         ),
       ).toEqual({
@@ -144,7 +161,10 @@ describe('comparison tool copy', () => {
 
     it('should note hidden pins on the heading count', () => {
       expect(
-        getPinnedResultsLabels({ pinCount: 3, pinnedRowCount: 3, hiddenCount: 2 }, NO_NOUNS),
+        getPinnedResultsLabels(
+          { pinCount: 3, pinnedRowCount: 3, hiddenCount: 2, hiddenCountUnit: 'row' },
+          NO_NOUNS,
+        ),
       ).toEqual({
         heading: line('3 Pinned Results', '2 hidden'),
         sublabels: [],
@@ -153,34 +173,70 @@ describe('comparison tool copy', () => {
 
     it('should note hidden pins on the view noun sublabel', () => {
       expect(
-        getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2, hiddenCount: 1 }, STANDARD_NOUNS),
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: 1, hiddenCountUnit: 'row' },
+          STANDARD_NOUNS,
+        ),
       ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line('2 Models', '1 hidden')],
       });
     });
 
-    it('should note hidden pins on the parent line in a child view', () => {
+    it('should note hidden parents on the parent line in a child view', () => {
       expect(
-        getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 3, hiddenCount: 1 }, CHILD_NOUNS),
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 3, hiddenCount: 1, hiddenCountUnit: 'parent' },
+          CHILD_NOUNS,
+        ),
       ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line('2 Parents', '1 hidden'), line('3 Children')],
       });
     });
 
-    it('should note hidden pins with the row count unknown after a failed fetch in a child view', () => {
+    it('should note hidden rows on the row line in a child view', () => {
       expect(
-        getPinnedResultsLabels({ pinCount: 0, pinnedRowCount: null, hiddenCount: 3 }, CHILD_NOUNS),
+        getPinnedResultsLabels(
+          { pinCount: 1, pinnedRowCount: 1, hiddenCount: 1, hiddenCountUnit: 'row' },
+          CHILD_NOUNS,
+        ),
+      ).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('1 Parent'), line('1 Child', '1 hidden')],
+      });
+    });
+
+    it('should note hidden parents with the row count unknown after a failed fetch in a child view', () => {
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 0, pinnedRowCount: null, hiddenCount: 3, hiddenCountUnit: 'parent' },
+          CHILD_NOUNS,
+        ),
       ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line('0 Parents', '3 hidden'), line(TABLE_DATA_LOADING_MESSAGE)],
       });
     });
 
+    it('should note hidden rows with no rows after a failed fetch of the view rows in a child view', () => {
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 0, pinnedRowCount: 0, hiddenCount: 3, hiddenCountUnit: 'row' },
+          CHILD_NOUNS,
+        ),
+      ).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('0 Parents'), line('0 Children', '3 hidden')],
+      });
+    });
+
     it('should not note hidden pins when none are hidden', () => {
       expect(
-        getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2, hiddenCount: 0 }, STANDARD_NOUNS),
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: 0, hiddenCountUnit: 'row' },
+          STANDARD_NOUNS,
+        ),
       ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line('2 Models')],
@@ -191,12 +247,16 @@ describe('comparison tool copy', () => {
       const lowercase = { viewNoun: { singular: 'model', plural: 'models' }, parentNoun: null };
       const allCaps = { viewNoun: { singular: 'MODEL', plural: 'MODELS' }, parentNoun: null };
       expect(
-        getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2, hiddenCount: null }, lowercase)
-          .sublabels,
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: null, hiddenCountUnit: 'row' },
+          lowercase,
+        ).sublabels,
       ).toEqual([line('2 Models')]);
       expect(
-        getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2, hiddenCount: null }, allCaps)
-          .sublabels,
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: null, hiddenCountUnit: 'row' },
+          allCaps,
+        ).sublabels,
       ).toEqual([line('2 Models')]);
     });
   });

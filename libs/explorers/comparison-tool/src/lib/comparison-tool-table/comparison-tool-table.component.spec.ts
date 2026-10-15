@@ -14,14 +14,19 @@ import {
 } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolService,
+  ComparisonToolServiceOptions,
   provideComparisonToolFilterService,
   provideComparisonToolService,
   SvgIconService,
 } from '@sagebionetworks/explorers/services';
 import {
+  mockChildViewSelection,
   mockComparisonToolData,
   mockComparisonToolDataConfig,
   mockComparisonToolFiltersWithSelections,
+  mockOtherChildViewSelection,
+  mockParentChildComparisonToolConfigs,
+  mockParentViewSelection,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
@@ -83,16 +88,7 @@ function getPinnedResultsHeaderLines(container: Element): (string | undefined)[]
 }
 
 async function setup(
-  ctServiceOptions?: {
-    configs?: ComparisonToolConfig[];
-    pinnedItems?: string[];
-    unpinnedData?: Record<string, unknown>[];
-    unpinnedFetchFails?: boolean;
-    pinnedData?: Record<string, unknown>[];
-    pinLimit?: number;
-    pinnedFetchFails?: boolean;
-    pinnedFetchPending?: boolean;
-  },
+  ctServiceOptions?: ComparisonToolServiceOptions,
   ctFilterServiceOptions?: { searchTerm?: string | null; filters?: ComparisonToolFilter[] },
 ) {
   const user = userEvent.setup();
@@ -365,6 +361,95 @@ describe('ComparisonToolTableComponent', () => {
     });
   });
 
+  // The pins span two parents, the way protein pins span two genes: rows 0-3 share the parent
+  // 'Familial AD', and row 4 has the parent 'Late Onset AD'
+  describe('hidden pins by where they were made', () => {
+    const [familialChild, otherFamilialChild, , , lateOnsetChild] = mockComparisonToolData;
+    const childPins = [familialChild, otherFamilialChild, lateOnsetChild];
+    const childPinIds = childPins.map((row) => row['_id'] as string);
+    const parentPinIds = ['Familial AD', 'Late Onset AD'];
+    const configs = mockParentChildComparisonToolConfigs;
+
+    it('should count hidden parents in a parent view showing pins made in a child view', async () => {
+      const { component } = await setup({
+        configs,
+        selection: mockParentViewSelection,
+        pinnedItems: childPinIds,
+        pinnedIn: { selection: mockChildViewSelection, data: childPins },
+        pinnedData: [familialChild],
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        '1 Parent 1 hidden',
+      ]);
+    });
+
+    it('should note hidden parents on the parent line in a child view showing pins made in a parent view', async () => {
+      const { component } = await setup({
+        configs,
+        selection: mockChildViewSelection,
+        pinnedItems: parentPinIds,
+        pinnedIn: { selection: mockParentViewSelection },
+        pinnedData: [familialChild, otherFamilialChild],
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        '1 Parent 1 hidden',
+        '2 Children',
+      ]);
+    });
+
+    it('should note hidden rows on the row line in a child view showing pins made under another selection with the same keys', async () => {
+      const { component } = await setup({
+        configs,
+        selection: mockChildViewSelection,
+        pinnedItems: childPinIds,
+        pinnedIn: { selection: mockOtherChildViewSelection, data: childPins },
+        pinnedData: [familialChild],
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        '1 Parent',
+        '1 Child 2 hidden',
+      ]);
+    });
+
+    it('should count no rows and every pin as a hidden row after a failed fetch of pins made under another selection with the same keys', async () => {
+      const { component } = await setup({
+        configs,
+        selection: mockChildViewSelection,
+        pinnedItems: childPinIds,
+        pinnedIn: { selection: mockOtherChildViewSelection, data: childPins },
+        pinnedFetchFails: true,
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        '0 Parents',
+        '0 Children 3 hidden',
+      ]);
+    });
+
+    it('should count every pin as a hidden parent and the rows as unknown after a failed fetch of pins made in a parent view', async () => {
+      const { component } = await setup({
+        configs,
+        selection: mockChildViewSelection,
+        pinnedItems: parentPinIds,
+        pinnedIn: { selection: mockParentViewSelection },
+        pinnedFetchFails: true,
+      });
+
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+        PINNED_RESULTS_HEADING,
+        '0 Parents 2 hidden',
+        TABLE_DATA_LOADING_MESSAGE,
+      ]);
+    });
+  });
+
   describe('pinned fetch failure', () => {
     const failedPinnedItems = mockComparisonToolData.slice(0, 3).map((row) => row['_id']);
     const failedOptions = { pinnedItems: failedPinnedItems, pinnedFetchFails: true };
@@ -400,13 +485,13 @@ describe('ComparisonToolTableComponent', () => {
       );
     });
 
-    it('should note every cached pin as hidden and show the row count as unknown in a child view', async () => {
+    it('should count no rows and note every cached pin as a hidden row in a child view', async () => {
       const { component } = await setup({ ...failedOptions, configs: childViewConfigs });
 
       expect(getPinnedResultsHeaderLines(component.container)).toEqual([
         PINNED_RESULTS_HEADING,
-        '0 Parents 3 hidden',
-        TABLE_DATA_LOADING_MESSAGE,
+        '0 Parents',
+        '0 Children 3 hidden',
       ]);
     });
 

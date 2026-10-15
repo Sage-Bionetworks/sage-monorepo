@@ -51,22 +51,24 @@ const hiddenPinsNote = (hiddenCount: number | null): string | null =>
  * header's line count. The standard heading shows it as a note. A child view with an unknown
  * `pinCount` shows it once, then a blank line, so it doesn't read as repeated
  *
- * `hiddenCount` is noted after `pinCount`, which it shares a unit with
+ * `hiddenCount` is noted after the count it shares a unit with. In a child view that is the row
+ * count or the parent count, per `hiddenCountUnit`. Every other variant shows one count
  */
 export const getPinnedResultsLabels = (
-  { pinCount, pinnedRowCount, hiddenCount }: PinnedResultsCounts,
+  { pinCount, pinnedRowCount, hiddenCount, hiddenCountUnit }: PinnedResultsCounts,
   { viewNoun, parentNoun }: ComparisonToolNouns,
 ): PinnedResultsLabels => {
   const hiddenNote = hiddenPinsNote(hiddenCount);
   if (viewNoun && parentNoun) {
+    const isHiddenInRows = hiddenCountUnit === 'row';
     return {
       heading: pinnedResultsLabel(PINNED_RESULTS_HEADING),
       sublabels:
         pinCount === null
           ? [pinnedResultsLabel(TABLE_DATA_LOADING_MESSAGE), pinnedResultsLabel(BLANK_LABEL_TEXT)]
           : [
-              pinnedResultsCountLabel(pinCount, parentNoun, hiddenNote),
-              pinnedResultsCountLabel(pinnedRowCount, viewNoun),
+              pinnedResultsCountLabel(pinCount, parentNoun, isHiddenInRows ? null : hiddenNote),
+              pinnedResultsCountLabel(pinnedRowCount, viewNoun, isHiddenInRows ? hiddenNote : null),
             ],
     };
   }
