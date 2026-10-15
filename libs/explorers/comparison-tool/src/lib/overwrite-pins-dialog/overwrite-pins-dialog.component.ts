@@ -31,9 +31,10 @@ export class OverwritePinsDialogComponent {
     getOverwritePinsMessage(
       {
         hiddenPinCount: this.comparisonToolService.hiddenPinCount() ?? 0,
-        hiddenParentPinCount: this.comparisonToolService.parentIdDataKey()
-          ? (this.comparisonToolService.hiddenParentPinCount() ?? 0)
-          : null,
+        hiddenParentPinCount:
+          this.comparisonToolService.pinnedResultsCounts().hiddenCountUnit === 'parent'
+            ? (this.comparisonToolService.hiddenParentPinCount() ?? 0)
+            : null,
       },
       {
         returnView: this.comparisonToolService.hiddenPinsReturnView(),

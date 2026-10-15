@@ -3,11 +3,16 @@ import { ComparisonToolConfig } from '@sagebionetworks/explorers/models';
 import {
   AppStorageService,
   ComparisonToolService,
+  ComparisonToolServiceOptions,
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import {
+  mockChildViewSelection,
   mockComparisonToolData,
   mockComparisonToolDataConfig,
+  mockOtherChildViewSelection,
+  mockParentChildComparisonToolConfigs,
+  mockParentViewSelection,
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
@@ -23,18 +28,31 @@ const configs: ComparisonToolConfig[] = [
 const cachedPinIds = mockComparisonToolData.slice(0, 3).map((row) => row['_id'] as string);
 const rowToPin = mockComparisonToolData[3];
 
-async function setup({ pinnedFetchFails = false } = {}) {
+async function setup({
+  pinnedFetchFails = false,
+  serviceOptions,
+  pinnedRow = rowToPin,
+}: {
+  pinnedFetchFails?: boolean;
+  // Replaces the default pins and configs above
+  serviceOptions?: ComparisonToolServiceOptions;
+  pinnedRow?: Record<string, unknown>;
+} = {}) {
   const user = userEvent.setup();
   const { fixture } = await render(OverwritePinsDialogComponent, {
     providers: [
       provideNoopAnimations(),
       MessageService,
-      ...provideComparisonToolService({
-        configs,
-        pinnedItems: cachedPinIds,
-        ...(pinnedFetchFails ? { pinnedFetchFails } : { pinnedData: [mockComparisonToolData[0]] }),
-        unpinnedData: mockComparisonToolData.slice(3),
-      }),
+      ...provideComparisonToolService(
+        serviceOptions ?? {
+          configs,
+          pinnedItems: cachedPinIds,
+          ...(pinnedFetchFails
+            ? { pinnedFetchFails }
+            : { pinnedData: [mockComparisonToolData[0]] }),
+          unpinnedData: mockComparisonToolData.slice(3),
+        },
+      ),
     ],
   });
   const service = fixture.debugElement.injector.get(ComparisonToolService);
@@ -45,7 +63,7 @@ async function setup({ pinnedFetchFails = false } = {}) {
     .mockImplementation(() => undefined);
 
   const holdPinEdit = () => {
-    service.pinItem(rowToPin);
+    service.pinItem(pinnedRow);
     fixture.detectChanges();
   };
 
@@ -82,6 +100,99 @@ describe('OverwritePinsDialogComponent', () => {
     );
     expect(dialog).not.toHaveTextContent('go back to');
     expect(dialog.querySelectorAll('i')).toHaveLength(0);
+  });
+
+  // The pins span two parents, the way protein pins span two genes: rows 0-3 share the parent
+  // 'Familial AD', and row 4 has the parent 'Late Onset AD'
+  describe('by where the pins were made', () => {
+    const [familialChild, otherFamilialChild, unpinnedFamilialChild, , lateOnsetChild] =
+      mockComparisonToolData;
+    const childPins = [familialChild, otherFamilialChild, lateOnsetChild];
+    const childPinIds = childPins.map((row) => row['_id'] as string);
+    const parentPinIds = ['Familial AD', 'Late Onset AD'];
+    const holdPinEditIn = async (
+      serviceOptions: ComparisonToolServiceOptions,
+      pinnedRow = unpinnedFamilialChild,
+    ) => {
+      const { holdPinEdit } = await setup({
+        serviceOptions: { configs: mockParentChildComparisonToolConfigs, ...serviceOptions },
+        pinnedRow,
+      });
+      holdPinEdit();
+      return screen.getByRole('dialog');
+    };
+
+    it('should count the hidden results per parent in a parent view showing pins made in a child view', async () => {
+      // Both parents of the mock rows are pinned, so pinning in the parent view needs a third
+      const dialog = await holdPinEditIn(
+        {
+          selection: mockParentViewSelection,
+          pinnedItems: childPinIds,
+          pinnedIn: { selection: mockChildViewSelection, data: childPins },
+          pinnedData: [familialChild],
+        },
+        { ...unpinnedFamilialChild, model_type: 'Early Onset AD' },
+      );
+
+      expect(dialog).toHaveTextContent(
+        "You pinned 1 result for 1 parent that can't be shown in this view.",
+      );
+    });
+
+    it('should count the hidden results per parent in a child view showing pins made in a parent view', async () => {
+      const dialog = await holdPinEditIn({
+        selection: mockChildViewSelection,
+        pinnedItems: parentPinIds,
+        pinnedIn: { selection: mockParentViewSelection },
+        pinnedData: [familialChild, otherFamilialChild],
+      });
+
+      expect(dialog).toHaveTextContent(
+        "You pinned 1 result for 1 parent that can't be shown in this view.",
+      );
+    });
+
+    it('should name the hidden rows in a child view showing pins made under another selection with the same keys', async () => {
+      const dialog = await holdPinEditIn({
+        selection: mockChildViewSelection,
+        pinnedItems: childPinIds,
+        pinnedIn: { selection: mockOtherChildViewSelection, data: childPins },
+        pinnedData: [familialChild],
+      });
+
+      expect(dialog).toHaveTextContent(
+        "You pinned 2 children that can't be shown in this view. Changing your pins here will unpin those children.",
+      );
+      expect(Array.from(dialog.querySelectorAll('i')).map((i) => i.textContent)).toEqual(
+        mockOtherChildViewSelection,
+      );
+    });
+
+    it('should name the unloaded rows after a failed fetch of pins made under another selection with the same keys', async () => {
+      const dialog = await holdPinEditIn({
+        selection: mockChildViewSelection,
+        pinnedItems: childPinIds,
+        pinnedIn: { selection: mockOtherChildViewSelection, data: childPins },
+        pinnedFetchFails: true,
+      });
+
+      expect(dialog).toHaveTextContent(
+        "You pinned 3 children that couldn't be loaded. Changing your pins here will unpin those children.",
+      );
+    });
+
+    it('should count the unloaded results per parent after a failed fetch of pins made in a parent view', async () => {
+      const dialog = await holdPinEditIn({
+        selection: mockChildViewSelection,
+        pinnedItems: parentPinIds,
+        pinnedIn: { selection: mockParentViewSelection },
+        pinnedFetchFails: true,
+      });
+
+      expect(dialog).toHaveTextContent(
+        "You pinned 2 results for 2 parents that couldn't be loaded. Changing your pins here will unpin the results for those parents.",
+      );
+    });
   });
 
   it('should apply the held pin edit on Overwrite Pins', async () => {

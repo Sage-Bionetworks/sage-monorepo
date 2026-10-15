@@ -151,9 +151,9 @@ export const getNoMatchingPinsMessage = (
 /**
  * Takes the service's `hiddenPinCount`, `hiddenParentPinCount`, `hiddenPinsReturnView`, and
  * `pinnedFetchFailed`, and the active view's nouns. A null `hiddenParentPinCount` words the message
- * for a view without a parent key. Otherwise the count of hidden results is given per parent, since
- * the child noun isn't known in a parent view, and users should know how many results they would
- * lose.
+ * in the active view's rows, for pins made in that view's own row space. Otherwise the pins were made
+ * in another view, and the count of hidden results is given per parent, since the other view's noun
+ * isn't known here, and users should know how many results they would lose.
  *
  * After a failed pinned fetch, the message says the pins couldn't be loaded rather than that the view
  * can't show them. A null `returnView` means they failed in the view they were made in, so there is
