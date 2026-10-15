@@ -1,5 +1,9 @@
 import { expect, Page, test } from '@playwright/test';
-import { waitForScrollToStop } from '@sagebionetworks/explorers/testing/e2e';
+import {
+  expectPageAtTop,
+  expectPageNotAtTop,
+  waitForScrollToStop,
+} from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
 import { GCT_RNA_SUBCATEGORIES } from './helpers/constants';
 import { waitForSpinnerNotVisible } from './helpers/utils';
@@ -223,5 +227,62 @@ test.describe('gene details - tabs', () => {
     await expect(getTab(page, 'Resources')).toBeVisible();
     await expect(getTab(page, 'Nomination Details')).toHaveCount(0);
     await expect(getTab(page, 'Experimental Validation')).toHaveCount(0);
+  });
+});
+
+test.describe('gene details - tab fallback and initial scroll', () => {
+  test.slow();
+
+  const genePath = `/genes/${geneWithAllTabs.id}`;
+
+  test('scrolls to tab navigation on initial load when tab specified in url and no hash fragment is present', async ({
+    page,
+  }) => {
+    await goToGene(page, `${genePath}/resources`);
+    await waitForScrollToStop(page);
+    await expect(getTab(page, 'Resources')).toBeInViewport();
+    await expect(
+      page.getByRole('heading', { level: 1, name: geneWithAllTabs.name }),
+    ).not.toBeInViewport();
+    await expectPageNotAtTop(page);
+  });
+
+  test('does not scroll on initial load when tab not specified in url', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await goToGene(page, genePath);
+    await waitForScrollToStop(page);
+    await expect(
+      page.getByRole('heading', { level: 1, name: geneWithAllTabs.name }),
+    ).toBeInViewport();
+    await expectPageAtTop(page);
+  });
+
+  test('invalid tab in url defaults to first available tab and does not scroll', async ({
+    page,
+  }) => {
+    await goToGene(page, `${genePath}/does-not-exist`);
+    await page.waitForURL(genePath);
+    await expect(
+      page.getByRole('heading', { level: 1, name: geneWithAllTabs.name }),
+    ).toBeInViewport();
+    await expectPageAtTop(page);
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Summary of Evidence' }),
+    ).toBeVisible();
+  });
+
+  test('disabled tab in url defaults to first available tab and does not scroll', async ({
+    page,
+  }) => {
+    const geneWithoutNominationsPath = `/genes/${geneWithoutDataDependentTabs.id}`;
+    await goToGene(page, `${geneWithoutNominationsPath}/nominations`);
+    await page.waitForURL(geneWithoutNominationsPath);
+    await expect(
+      page.getByRole('heading', { level: 1, name: geneWithoutDataDependentTabs.name }),
+    ).toBeInViewport();
+    await expectPageAtTop(page);
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Summary of Evidence' }),
+    ).toBeVisible();
   });
 });

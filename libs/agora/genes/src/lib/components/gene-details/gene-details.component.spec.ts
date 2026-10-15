@@ -1,12 +1,16 @@
 import { provideHttpClient } from '@angular/common/http';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
-import { ROUTE_PARAMS } from '@sagebionetworks/agora/config';
+import {
+  AGORA_LOADING_ICON_COLORS,
+  ROUTE_PARAMS,
+  ROUTE_PATHS,
+} from '@sagebionetworks/agora/config';
 import { geneMock1, geneMock3 } from '@sagebionetworks/agora/testing';
-import { SvgIconService } from '@sagebionetworks/explorers/services';
-import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
+import { PlatformService, SvgIconService } from '@sagebionetworks/explorers/services';
+import { provideLoadingIconColors, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
-import { of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { GeneDetailsComponent } from './gene-details.component';
 
 const ALWAYS_AVAILABLE_TABS = [
@@ -19,28 +23,45 @@ const ALWAYS_AVAILABLE_TABS = [
 ];
 const DATA_DEPENDENT_TABS = ['Nomination Details', 'Experimental Validation'];
 
-async function setup(gene: Gene = geneMock1) {
+const browserPlatform: Partial<PlatformService> = { isBrowser: true, isServer: false };
+const serverPlatform: Partial<PlatformService> = { isBrowser: false, isServer: true };
+
+async function setup({
+  gene = geneMock1,
+  geneResponse = of(gene),
+  platformService = browserPlatform,
+}: {
+  gene?: Gene;
+  geneResponse?: Observable<Gene | null>;
+  platformService?: Partial<PlatformService>;
+} = {}) {
+  const navigateByUrl = jest.spyOn(Router.prototype, 'navigateByUrl').mockResolvedValue(true);
+
   const mockActivatedRoute = {
     paramMap: of(convertToParamMap({ [ROUTE_PARAMS.GENE_ID]: gene.ensembl_gene_id })),
     queryParams: of({}),
   };
 
   const mockGeneService = {
-    getGene: jest.fn(() => of(gene)),
+    getGene: jest.fn(() => geneResponse),
   };
 
-  return render(GeneDetailsComponent, {
+  const component = await render(GeneDetailsComponent, {
     providers: [
       provideHttpClient(),
       { provide: ActivatedRoute, useValue: mockActivatedRoute },
       { provide: GeneService, useValue: mockGeneService },
+      { provide: PlatformService, useValue: platformService },
       { provide: SvgIconService, useClass: SvgIconServiceStub },
+      provideLoadingIconColors(AGORA_LOADING_ICON_COLORS),
     ],
   });
+
+  return { component, navigateByUrl, mockGeneService };
 }
 
 describe('GeneDetailsComponent', () => {
-  afterAll(() => jest.restoreAllMocks());
+  afterEach(() => jest.restoreAllMocks());
 
   it('should display the gene symbol', async () => {
     await setup();
@@ -55,19 +76,40 @@ describe('GeneDetailsComponent', () => {
   });
 
   it('should display all tabs for a gene with nominations and experimental validation', async () => {
-    await setup(geneMock1);
+    await setup({ gene: geneMock1 });
     for (const tab of [...ALWAYS_AVAILABLE_TABS, ...DATA_DEPENDENT_TABS]) {
       expect(screen.getByText(tab, { exact: true })).toBeInTheDocument();
     }
   });
 
   it('should hide data-dependent tabs for a gene without nominations or experimental validation', async () => {
-    await setup(geneMock3);
+    await setup({ gene: geneMock3 });
     for (const tab of ALWAYS_AVAILABLE_TABS) {
       expect(screen.getByText(tab, { exact: true })).toBeInTheDocument();
     }
     for (const tab of DATA_DEPENDENT_TABS) {
       expect(screen.queryByText(tab, { exact: true })).not.toBeInTheDocument();
     }
+  });
+
+  it('should show the loading icon and not fetch the gene on the server', async () => {
+    const { component, mockGeneService } = await setup({ platformService: serverPlatform });
+    expect(component.container.querySelector('.loading-icon')).toBeVisible();
+    expect(mockGeneService.getGene).not.toHaveBeenCalled();
+  });
+
+  it('should redirect to the not found page when the gene does not exist', async () => {
+    const { navigateByUrl } = await setup({ geneResponse: of(null) });
+    expect(navigateByUrl).toHaveBeenCalledWith(ROUTE_PATHS.NOT_FOUND, {
+      skipLocationChange: true,
+    });
+  });
+
+  it('should leave the loading state without redirecting when the request fails', async () => {
+    const { component, navigateByUrl } = await setup({
+      geneResponse: throwError(() => new Error('request failed')),
+    });
+    expect(navigateByUrl).not.toHaveBeenCalled();
+    expect(component.container.querySelector('.loading-icon')).not.toBeInTheDocument();
   });
 });
