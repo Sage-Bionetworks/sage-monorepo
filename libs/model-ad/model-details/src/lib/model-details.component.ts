@@ -3,7 +3,7 @@ import { HttpContext } from '@angular/common/http';
 import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Panel } from '@sagebionetworks/explorers/models';
+import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
 import {
   HelperService,
   LoggerService,
@@ -171,7 +171,12 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     this.activeParent = fallback.activeParent;
 
     if (params.has('tab')) {
-      this.location.replaceState(this.appendModelOrganism(this.getUrlBasePath()));
+      this.location.replaceState(
+        this.helperService.appendQueryParams(
+          this.getUrlBasePath(),
+          this.getModelOrganismQueryParams(),
+        ),
+      );
       this.maybeScrollToPanelNavElementOnInitialLoad = false;
     }
   }
@@ -189,17 +194,21 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     return `/${ROUTE_PATHS.MODELS}/${encodedModel}`;
   }
 
-  private appendModelOrganism(url: string) {
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}${QUERY_PARAMS.MODEL_ORGANISM}=${this.modelOrganism}`;
+  private getModelOrganismQueryParams(): QueryParams {
+    return { [QUERY_PARAMS.MODEL_ORGANISM]: this.modelOrganism };
   }
 
   onPanelChange(event: Panel) {
-    const result = this.helperService.handlePanelChange(this.panels, event, this.getUrlBasePath());
+    const result = this.helperService.handlePanelChange(
+      this.panels,
+      event,
+      this.getUrlBasePath(),
+      this.getModelOrganismQueryParams(),
+    );
     if (result) {
       this.activePanel = result.activePanel;
       this.activeParent = result.activeParent;
-      this.location.replaceState(this.appendModelOrganism(result.url));
+      this.location.replaceState(result.url);
     }
   }
 }
