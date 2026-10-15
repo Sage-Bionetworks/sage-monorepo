@@ -8,10 +8,10 @@ const geneWithAllTabs = { name: 'PLEC', id: 'ENSG00000178209' };
 const geneWithoutDataDependentTabs = { name: 'A2M', id: 'ENSG00000175899' };
 
 function getTab(page: Page, label: string) {
-  return page.locator('.gene-details-nav').getByText(label, { exact: true });
+  return page.getByRole('button', { name: label, exact: true });
 }
 
-// Retries the click because a click on server-rendered tabs before hydration finishes is dropped
+// Retries the click because a tab click before hydration finishes is dropped
 async function clickTab(page: Page, label: string, expectedPathname: string) {
   await expect(async () => {
     await getTab(page, label).click();

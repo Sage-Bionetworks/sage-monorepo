@@ -18,7 +18,7 @@ import {
   GeneService,
   OverallScoresDistribution,
 } from '@sagebionetworks/agora/api-client';
-import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID, QUERY_PARAMS } from '@sagebionetworks/agora/config';
 import {
   GCTColumn,
   GCTDetailsPanelData,
@@ -1316,7 +1316,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       '/genes/' + data.gene.ensembl_gene_id + '/evidence/rna',
     ]);
 
-    const url = `${baseURL.toString()}/?model=${this.subCategory}#consistency-of-change`;
+    const url = `${baseURL.toString()}/?${QUERY_PARAMS.MODEL}=${this.subCategory}#consistency-of-change`;
 
     window.open(url, '_blank');
   }

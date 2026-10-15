@@ -36,8 +36,6 @@
   --transition-duration: #{vars.$transition-duration};
   --header-height: #{vars.$header-height};
   --footer-height: #{vars.$footer-height};
-  --gene-details-nav-height: #{vars.$gene-details-nav-height};
-  --gene-details-subnav-offset: #{vars.$gene-details-subnav-offset};
 
   @each $key, $value in vars.$chart-colors {
     --color-chart-#{$key}: #{$value};

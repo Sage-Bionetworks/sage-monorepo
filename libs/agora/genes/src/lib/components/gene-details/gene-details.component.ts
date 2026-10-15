@@ -1,27 +1,14 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
-import { CommonModule, Location } from '@angular/common';
-import {
-  AfterViewChecked,
-  AfterViewInit,
-  Component,
-  DestroyRef,
-  HostListener,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { Location } from '@angular/common';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
-import { ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
-import { HelperService } from '@sagebionetworks/agora/services';
+import { QUERY_PARAMS, ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
-import {
-  HelperService as ExplorersHelperService,
-  LoggerService,
-  PlatformService,
-} from '@sagebionetworks/explorers/services';
+import { Panel } from '@sagebionetworks/explorers/models';
+import { HelperService, LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
+import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
+import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
 import { GeneEvidenceProteomicsComponent } from '../gene-evidence-proteomics/gene-evidence-proteomics.component';
 import { GeneEvidenceRnaComponent } from '../gene-evidence-rna/gene-evidence-rna.component';
@@ -30,18 +17,13 @@ import { GeneHeroComponent } from '../gene-hero/gene-hero.component';
 import { GeneNominationsComponent } from '../gene-nominations/gene-nominations.component';
 import { GeneResourcesComponent } from '../gene-resources/gene-resources.component';
 import { GeneSoeComponent } from '../gene-soe/gene-soe.component';
-
-interface Panel {
-  name: string;
-  label: string;
-  disabled: boolean;
-  children?: Panel[];
-}
+import { getPanels, getPanelsWithDisabledState } from './gene-details-panels';
 
 @Component({
   selector: 'agora-gene-details',
   imports: [
-    CommonModule,
+    PanelNavigationComponent,
+    LoadingIconComponent,
     GeneHeroComponent,
     GeneSoeComponent,
     GeneEvidenceMetabolomicsComponent,
@@ -50,286 +32,120 @@ interface Panel {
     ExperimentalValidationComponent,
     GeneNominationsComponent,
     GeneResourcesComponent,
-    FontAwesomeModule,
   ],
   templateUrl: './gene-details.component.html',
   styleUrls: ['./gene-details.component.scss'],
 })
-export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class GeneDetailsComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly location = inject(Location);
+  private readonly helperService = inject(HelperService);
+  private readonly geneService = inject(GeneService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService).forSource('GeneDetailsComponent');
 
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  location = inject(Location);
-  helperService = inject(HelperService);
-  explorersHelperService = inject(ExplorersHelperService);
-  geneService = inject(GeneService);
-
-  faAngleRight = faAngleRight;
-  faAngleLeft = faAngleLeft;
-
+  isLoading = true;
   gene: Gene | undefined;
 
-  panels: Panel[] = [
-    {
-      name: 'summary',
-      label: 'Summary',
-      disabled: false,
-    },
-    {
-      name: 'evidence',
-      label: 'Evidence',
-      disabled: false,
-      children: [
-        {
-          name: 'rna',
-          label: 'RNA',
-          disabled: false,
-        },
-        {
-          name: 'protein',
-          label: 'Protein',
-          disabled: false,
-        },
-        {
-          name: 'metabolomics',
-          label: 'Metabolomics',
-          disabled: false,
-        },
-      ],
-    },
-    {
-      name: 'resources',
-      label: 'Resources',
-      disabled: false,
-    },
-    {
-      name: 'nominations',
-      label: 'Nomination Details',
-      disabled: false,
-    },
-    {
-      name: 'experimental-validation',
-      label: 'Experimental Validation',
-      disabled: false,
-    },
-  ];
+  panels: Panel[] = getPanels();
 
-  activePanel = 'summary';
+  activePanel = '';
   activeParent = '';
-  navSlideIndex = 0;
 
-  @HostListener('window:scroll')
-  onWindowScroll() {
-    if (this.platformService.isBrowser) {
-      const nav = document.querySelector<HTMLElement>('.gene-details-nav');
-      const rect = nav?.getBoundingClientRect();
-
-      if (rect && rect.y <= 0) {
-        nav?.classList.add('sticky');
-      } else {
-        nav?.classList.remove('sticky');
-      }
-    }
-  }
-
-  @HostListener('window:resize')
-  onWindowResize() {
-    if (this.platformService.isBrowser) {
-      const nav = document.querySelector<HTMLElement>('.gene-details-nav');
-      const navContainer = nav?.querySelector<HTMLElement>('.gene-details-nav-container');
-      const navList = nav?.querySelector<HTMLElement>('.gene-details-nav-container > ul');
-      const navItems = nav?.querySelectorAll<HTMLElement>('.gene-details-nav-container > ul > li');
-      let navItemsWidth = 0;
-      if (navItems) {
-        for (let i = 0; i < navItems.length; ++i) {
-          navItemsWidth += navItems[i].offsetWidth;
-        }
-      }
-
-      if (navContainer && navList && navItemsWidth) {
-        if (navItemsWidth > navContainer.offsetWidth) {
-          nav?.classList.add('scrollable');
-        } else {
-          nav?.classList.remove('scrollable');
-          this.navSlideIndex = 0;
-          navList.style.marginLeft = '0px';
-        }
-      }
-    }
-  }
+  maybeScrollToPanelNavElementOnInitialLoad = false;
+  scrollToPanelNavElementOnInitialLoad = false;
 
   reset() {
     this.gene = undefined;
-    this.activePanel = 'summary';
+    this.activePanel = '';
     this.activeParent = '';
-    this.navSlideIndex = 0;
+    this.isLoading = true;
   }
 
   ngOnInit() {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: ParamMap) => {
       this.reset();
-      this.helperService.setLoading(true);
 
-      if (params.get(ROUTE_PARAMS.GENE_ID)) {
-        const geneId = params.get(ROUTE_PARAMS.GENE_ID) as string;
-        this.logger.log('Loading gene', { geneId });
-
-        this.geneService
-          .getGene(geneId)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: (gene) => {
-              if (!gene) {
-                this.helperService.setLoading(false);
-                this.logger.log('Gene not found, redirecting', { geneId });
-                this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
-              } else {
-                this.gene = gene;
-
-                this.panels.forEach((p: Panel) => {
-                  if (p.name == 'nominations' && !this.gene?.total_nominations) {
-                    p.disabled = true;
-                  } else if (
-                    p.name == 'experimental-validation' &&
-                    !this.gene?.experimental_validation?.length
-                  ) {
-                    p.disabled = true;
-                  } else {
-                    p.disabled = false;
-                  }
-                });
-
-                const nominationsPanel = this.panels.find((p) => p.name == 'nominations');
-                if (nominationsPanel) {
-                  nominationsPanel.disabled = !this.gene.total_nominations ? true : false;
-                }
-
-                const experimentalValidationPanel = this.panels.find(
-                  (p) => p.name == 'experimental-validation',
-                );
-                if (experimentalValidationPanel) {
-                  experimentalValidationPanel.disabled = !this.gene.experimental_validation?.length
-                    ? true
-                    : false;
-                }
-
-                this.helperService.setLoading(false);
-              }
-            },
-            error: () => {
-              this.helperService.setLoading(false);
-            },
-          });
-      }
-
-      if (params.get(PANEL_ROUTE_PARAMS.SUBTAB)) {
-        this.activePanel = params.get(PANEL_ROUTE_PARAMS.SUBTAB) as string;
-        this.activeParent = params.get(PANEL_ROUTE_PARAMS.TAB) as string;
-      } else if (params.get(PANEL_ROUTE_PARAMS.TAB)) {
-        const panel = this.panels.find((p: Panel) => p.name === params.get(PANEL_ROUTE_PARAMS.TAB));
-        if (panel?.children) {
-          this.activePanel = panel.children[0].name;
-          this.activeParent = panel.name;
-        } else if (panel) {
-          this.activePanel = panel.name;
-          this.activeParent = '';
-        }
+      // only fetch data during client hydration
+      if (this.platformService.isBrowser) {
+        this.loadPanelData(params);
       }
     });
   }
 
-  ngAfterViewInit() {
-    if (!this.gene?.ensembl_gene_id) {
-      this.helperService.setLoading(true);
-    }
-    const self = this;
-    setTimeout(function () {
-      self.onWindowResize();
-    }, 100);
+  private loadPanelData(params: ParamMap) {
+    const geneId = params.get(ROUTE_PARAMS.GENE_ID);
+    if (!geneId) return;
+
+    this.logger.log('Loading gene', { geneId });
+    this.geneService
+      .getGene(geneId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (gene) => {
+          // the API answers an unknown gene with an empty body rather than a 404
+          if (!gene) {
+            this.logger.log('Gene not found, redirecting', { geneId });
+            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+            return;
+          }
+          this.gene = gene;
+          this.panels = getPanelsWithDisabledState(gene, getPanels());
+          this.setActivePanelAndParentFromUrl(params);
+          this.applyFallbackPanelIfNeeded(params);
+          this.scrollToPanelNavElementOnInitialLoad =
+            this.maybeScrollToPanelNavElementOnInitialLoad;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        },
+      });
   }
 
-  ngAfterViewChecked() {
-    this.onWindowResize();
+  private setActivePanelAndParentFromUrl(params: ParamMap) {
+    const result = this.helperService.getActivePanelAndParentFromUrl(this.panels, params);
+    if (result) {
+      this.activePanel = result.activePanel;
+      this.activeParent = result.activeParent;
+      this.maybeScrollToPanelNavElementOnInitialLoad = result.shouldScrollToPanelNav;
+    }
   }
 
-  activatePanel(panel: Panel) {
-    if (panel.disabled) {
-      return;
+  /**
+   * Specifies the active panel when either no panel is specified in the path or when the specified
+   * panel is disabled or doesn't exist.
+   * If no panel is specified, then use the default panel and leave the URL untouched, retaining all
+   * query parameters and hash fragments.
+   * If a disabled or invalid panel is specified, then reset the URL to the gene's base path.
+   */
+  private applyFallbackPanelIfNeeded(params: ParamMap) {
+    const fallback = this.helperService.getFallbackPanelIfInvalid(this.panels, this.activePanel);
+    if (!fallback) return;
+
+    this.activePanel = fallback.activePanel;
+    this.activeParent = fallback.activeParent;
+
+    if (params.has(PANEL_ROUTE_PARAMS.TAB)) {
+      this.location.replaceState(this.getUrlBasePath());
+      this.maybeScrollToPanelNavElementOnInitialLoad = false;
     }
-
-    let url = '/genes/' + this.gene?.ensembl_gene_id + '/';
-
-    if (panel.children) {
-      this.activePanel = panel.children[0].name;
-      this.activeParent = panel.name;
-      url += panel.name + '/' + panel.children[0].name;
-    } else if (!this.panels.find((p: Panel) => p.name === panel.name)) {
-      const parent = this.panels.find((p: Panel) =>
-        p.children?.find((c: Panel) => c.name === panel.name),
-      );
-      this.activePanel = panel.name;
-      this.activeParent = parent?.name || '';
-      url += parent?.name + '/' + panel.name;
-    } else {
-      this.activePanel = panel.name;
-      this.activeParent = '';
-      url += panel.name;
-    }
-
-    // added logic to support dropdown state when page is refreshed
-    const modelUrlParam = this.explorersHelperService.getUrlParam('model');
-    if (modelUrlParam) {
-      url = this.helperService.addSingleUrlParam(url, 'model', modelUrlParam);
-    }
-
-    if (this.platformService.isBrowser) {
-      const nav = document.querySelector('.gene-details-nav');
-      if (nav) {
-        window.scrollTo(0, this.explorersHelperService.getOffset(nav).top);
-      }
-    }
-
-    this.location.replaceState(url);
   }
 
-  getPanelCount() {
-    return this.panels.map((p: Panel) => !p.disabled).length;
+  getUrlBasePath() {
+    return `/${ROUTE_PATHS.DETAILS}/${this.gene?.ensembl_gene_id}`;
   }
 
-  onNavigationItemClick(panel: Panel) {
-    this.activatePanel(panel);
-  }
-
-  slideNavigation(direction: number) {
-    if (this.platformService.isBrowser) {
-      this.navSlideIndex += direction;
-
-      if (this.navSlideIndex < 0) {
-        this.navSlideIndex = 0;
-      } else if (this.navSlideIndex > this.getPanelCount() - 1) {
-        this.navSlideIndex = this.panels.length - 1;
-      }
-
-      const nav = document.querySelector<HTMLElement>('.gene-details-nav');
-      const navList = nav?.querySelector<HTMLElement>('.gene-details-nav-container > ul');
-      const navItems = nav?.querySelectorAll<HTMLElement>('.gene-details-nav-container > ul > li');
-
-      if (navList && navItems) {
-        let navItemsWidth = 0;
-
-        for (let i = 0; i < this.navSlideIndex; ++i) {
-          navItemsWidth += navItems[i].offsetWidth;
-        }
-
-        if (this.navSlideIndex > 0) {
-          navItemsWidth += 20;
-        }
-
-        navList.style.marginLeft = navItemsWidth * -1 + 'px';
-      }
+  onPanelChange(event: Panel) {
+    const result = this.helperService.handlePanelChange(this.panels, event, this.getUrlBasePath(), {
+      [QUERY_PARAMS.MODEL]: this.helperService.getUrlParam(QUERY_PARAMS.MODEL),
+    });
+    if (result) {
+      this.activePanel = result.activePanel;
+      this.activeParent = result.activeParent;
+      this.location.replaceState(result.url);
     }
   }
 }
