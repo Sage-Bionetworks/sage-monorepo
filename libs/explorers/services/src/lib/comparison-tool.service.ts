@@ -339,22 +339,10 @@ export class ComparisonToolService<T> {
   // Counting rows in the parent view would be wrong right after a switch from a child view:
   // until the parent rows land, pinnedData() still holds the child rows, so the row count could
   // exceed the pin limit.
-  // After a failed pinned fetch no rows are shown, but the pins are still cached and count toward
-  // the limit. A failure keeps the pinned parents, so they are still counted when known. They are
-  // unknown in a view without a parent key, or when the first pinned fetch failed, so the cache is
-  // counted instead. In a child view that overcounts, since several cached rows can share a parent
-  private readonly isCountingCachedPins = computed(
-    () => this.pinnedFetchFailed() && (!this.parentIdDataKey() || this.pinnedParentCount() === 0),
-  );
-  readonly pinCount = computed(() => {
-    if (this.isCountingCachedPins()) return this.pinnedItems().length;
-    return this.parentIdDataKey() ? this.pinnedParentCount() : this.pinnedRowCount();
-  });
-  // The nouns to word `pinCount` with. They match `nouns`, but drop the parent noun while `pinCount`
-  // counts cached rows. Pin limit copy keeps `nouns`, since the limit is always counted by parent
-  readonly nounsForPinCount = computed<ComparisonToolNouns>(
-    () => (this.isCountingCachedPins() ? { ...this.nouns(), parentNoun: null } : this.nouns()),
-    { equal: isEqual },
+  // Only the pins on screen count. Cached pins the active view can't show, including every pin
+  // after a failed pinned fetch, don't count toward the limit, since the next pin edit replaces them
+  readonly pinCount = computed(() =>
+    this.parentIdDataKey() ? this.pinnedParentCount() : this.pinnedRowCount(),
   );
   // The counts to show in the pinned results header, unknown while any pinned fetch is in flight.
   // Both are read from `pinnedData()` (`pinCount` through the pinned parents), which still holds the
@@ -1092,10 +1080,9 @@ export class ComparisonToolService<T> {
   }
 
   /**
-   * Clears the pinned rows but keeps the pinned parents and the pinned items cache. The cache is what
-   * the next pinned fetch asks for, so later fetches and `retryPinnedFetch` still load the pins once
-   * requests succeed again. The pinned parents keep the unloaded pins counted toward the pin limit
-   * (see `isCountingCachedPins`).
+   * Clears the pinned rows and their parents, but keeps the pinned items cache. The cache is what the
+   * next pinned fetch asks for, so later fetches and `retryPinnedFetch` still load the pins once
+   * requests succeed again. With no rows shown, nothing counts toward the pin limit (see `pinCount`).
    *
    * The pinned rows' view identity is kept too. Within one view, the URL then follows the emptied
    * rows and drops its pins. Right after a switch to a view with different id keys, the identity is
@@ -1104,6 +1091,7 @@ export class ComparisonToolService<T> {
    */
   private applyPinnedFetchFailure() {
     this.pinnedDataSignal.set([]);
+    this.pinnedParentsSignal.set([]);
     this.pinnedFetchFailedSignal.set(true);
   }
 

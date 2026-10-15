@@ -42,7 +42,7 @@ import {
   resolveFixedColumnWidths,
   restoreCellStyles,
 } from './comparison-tool-table.helpers';
-import { FetchFailedBarComponent } from './fetch-failed-bar/fetch-failed-bar.component';
+import { MessageBarComponent } from './message-bar/message-bar.component';
 
 @Component({
   selector: 'explorers-comparison-tool-table',
@@ -52,7 +52,7 @@ import { FetchFailedBarComponent } from './fetch-failed-bar/fetch-failed-bar.com
     SvgIconComponent,
     BaseTableComponent,
     DownloadDomImageComponent,
-    FetchFailedBarComponent,
+    MessageBarComponent,
   ],
   templateUrl: './comparison-tool-table.component.html',
   styleUrls: ['./comparison-tool-table.component.scss'],
@@ -68,7 +68,6 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   pinnedRowCount = this.comparisonToolService.pinnedRowCount;
   pinnedResultsCounts = this.comparisonToolService.pinnedResultsCounts;
-  nounsForPinCount = this.comparisonToolService.nounsForPinCount;
   nouns = this.comparisonToolService.nouns;
   canPinAll = this.comparisonToolService.canPinAll;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
@@ -94,7 +93,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   pinnedResultsControlsCopy = computed(() => getPinnedResultsControlsCopy(this.nouns()));
 
   pinnedResultsLabels = computed(() =>
-    getPinnedResultsLabels(this.pinnedResultsCounts(), this.nounsForPinCount()),
+    getPinnedResultsLabels(this.pinnedResultsCounts(), this.nouns()),
   );
 
   hasPinnedSection = computed(() => this.pinnedRowCount() > 0 || this.pinnedFetchFailed());

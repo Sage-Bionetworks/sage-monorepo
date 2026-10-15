@@ -384,10 +384,10 @@ describe('ComparisonToolTableComponent', () => {
       expect(component.container.querySelectorAll('explorers-base-table')).toHaveLength(1);
     });
 
-    it('should keep counting the unloaded pins in the pinned results header', async () => {
+    it('should count no loaded pins in the pinned results header', async () => {
       const { component } = await setup(failedOptions);
 
-      expect(getPinnedResultsHeaderLines(component.container)).toEqual(['3 Pinned Results']);
+      expect(getPinnedResultsHeaderLines(component.container)).toEqual(['0 Pinned Results']);
     });
 
     it('should name the view rows in a child view', async () => {
@@ -398,12 +398,13 @@ describe('ComparisonToolTableComponent', () => {
       );
     });
 
-    it('should count the unloaded pins by row in the header of a child view whose parents never loaded', async () => {
+    it('should count no loaded parents or rows in the header of a child view', async () => {
       const { component } = await setup({ ...failedOptions, configs: childViewConfigs });
 
       expect(getPinnedResultsHeaderLines(component.container)).toEqual([
         PINNED_RESULTS_HEADING,
-        '3 Children',
+        '0 Parents',
+        '0 Children',
       ]);
     });
 
