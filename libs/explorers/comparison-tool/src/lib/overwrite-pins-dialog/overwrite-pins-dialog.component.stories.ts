@@ -1,20 +1,23 @@
 import { inject, provideAppInitializer } from '@angular/core';
-import { ComparisonToolConfig, ComparisonToolNoun } from '@sagebionetworks/explorers/models';
+import { ComparisonToolConfig } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolService,
+  ComparisonToolServiceOptions,
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import {
+  mockChildViewSelection,
   mockComparisonToolData,
   mockComparisonToolDataConfigWithDropdowns,
+  mockOtherChildViewSelection,
+  mockParentChildComparisonToolConfigs,
+  mockParentViewSelection,
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
 import { MessageService } from 'primeng/api';
 import { OverwritePinsDialogComponent } from './overwrite-pins-dialog.component';
 
-const PARENT_NOUN: ComparisonToolNoun = { singular: 'Parent', plural: 'Parents' };
-const CHILD_NOUN: ComparisonToolNoun = { singular: 'Child', plural: 'Children' };
 // A view with dropdowns, so the message names the view the pins were made in
 const pinnedViewConfig = mockComparisonToolDataConfigWithDropdowns[0];
 
@@ -35,6 +38,23 @@ const holdPinEdit = (configs: ComparisonToolConfig[], { pinnedFetchFails = false
   }),
 ];
 
+const [familialChild, otherFamilialChild, unpinnedFamilialChild, , lateOnsetChild] =
+  mockComparisonToolData;
+const childPins = [familialChild, otherFamilialChild, lateOnsetChild];
+
+const holdPinEditInChildView = (options: ComparisonToolServiceOptions) => [
+  MessageService,
+  ...provideComparisonToolService({
+    configs: mockParentChildComparisonToolConfigs,
+    selection: mockChildViewSelection,
+    unpinnedData: [unpinnedFamilialChild],
+    ...options,
+  }),
+  provideAppInitializer(() => {
+    inject(ComparisonToolService).pinItem(unpinnedFamilialChild);
+  }),
+];
+
 const meta: Meta<OverwritePinsDialogComponent> = {
   component: OverwritePinsDialogComponent,
   title: 'Comparison Tool/OverwritePinsDialogComponent',
@@ -46,18 +66,26 @@ export const Standard: Story = {
   decorators: [applicationConfig({ providers: holdPinEdit([pinnedViewConfig]) })],
 };
 
-export const ParentChild: Story = {
+export const HiddenParentsChildView: Story = {
   decorators: [
     applicationConfig({
-      providers: holdPinEdit([
-        {
-          ...pinnedViewConfig,
-          row_id_data_key: '_id',
-          parent_id_data_key: 'model_type',
-          view_noun: CHILD_NOUN,
-          parent_noun: PARENT_NOUN,
-        },
-      ]),
+      providers: holdPinEditInChildView({
+        pinnedItems: ['Familial AD', 'Late Onset AD'],
+        pinnedIn: { selection: mockParentViewSelection },
+        pinnedData: [familialChild, otherFamilialChild],
+      }),
+    }),
+  ],
+};
+
+export const HiddenChildrenChildView: Story = {
+  decorators: [
+    applicationConfig({
+      providers: holdPinEditInChildView({
+        pinnedItems: childPins.map((row) => row['_id'] as string),
+        pinnedIn: { selection: mockOtherChildViewSelection, data: childPins },
+        pinnedData: [familialChild],
+      }),
     }),
   ],
 };
