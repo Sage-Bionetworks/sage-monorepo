@@ -97,20 +97,21 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     getPinnedResultsLabels(this.pinnedResultsCounts(), this.nouns()),
   );
 
+  hasPinnedRows = computed(() => this.pinnedRowCount() > 0);
+  hasHiddenPins = computed(() => (this.pinnedResultsCounts().hiddenCount ?? 0) > 0);
+
   // Also drawn when every cached pin is hidden, so the hidden pins don't look lost
   hasPinnedSection = computed(
-    () =>
-      this.pinnedRowCount() > 0 ||
-      this.pinnedFetchFailed() ||
-      (this.pinnedResultsCounts().hiddenCount ?? 0) > 0,
+    () => this.hasPinnedRows() || this.pinnedFetchFailed() || this.hasHiddenPins(),
   );
 
   noMatchingPinsMessage = computed(() => {
-    const { hiddenCount } = this.pinnedResultsCounts();
-    if (this.pinnedRowCount() !== 0 || !hiddenCount) return null;
-    // A child view's hiddenCount counts parents, which can have any number of rows
-    const hiddenRowCount = this.comparisonToolService.isChildView() ? null : hiddenCount;
-    return getNoMatchingPinsMessage(hiddenRowCount, this.nouns());
+    if (this.hasPinnedRows() || !this.hasHiddenPins()) return null;
+    const { hiddenCount, hiddenCountUnit } = this.pinnedResultsCounts();
+    // Hidden parents in a child view can have any number of rows
+    const isRowCountUnknown =
+      hiddenCountUnit === 'parent' && this.comparisonToolService.isChildView();
+    return getNoMatchingPinsMessage(isRowCountUnknown ? null : hiddenCount, this.nouns());
   });
 
   pinnedFetchFailedMessage = computed(() =>

@@ -235,25 +235,6 @@ export const HiddenPins: Story = {
   ],
 };
 
-// Pins are cached, but none have rows in this view
-export const NoTranslatedPinsChildView: Story = {
-  args: {},
-  decorators: [
-    applicationConfig({
-      providers: [
-        MessageService,
-        ...provideComparisonToolService({
-          pinnedItems: childViewPinnedData.map((item) => item['_id']),
-          pinLimit: 5,
-          pinnedData: [],
-          unpinnedData: mockComparisonToolData,
-          configs: childViewConfigs,
-        }),
-      ],
-    }),
-  ],
-};
-
 export const PinnedRowsLoadingChildView: Story = {
   args: {},
   decorators: [
@@ -374,4 +355,18 @@ export const HiddenChildrenChildView = hiddenPinsStory({
   pinnedItems: hiddenPinsChildPinIds,
   pinnedIn: { selection: mockOtherChildViewSelection, data: hiddenPinsChildPins },
   pinnedData: [familialChild],
+});
+
+export const NoMatchingPinsHiddenParentsChildView = hiddenPinsStory({
+  selection: mockChildViewSelection,
+  pinnedItems: ['Late Onset AD'],
+  pinnedIn: { selection: mockParentViewSelection },
+  pinnedData: [],
+});
+
+export const NoMatchingPinsHiddenChildrenChildView = hiddenPinsStory({
+  selection: mockChildViewSelection,
+  pinnedItems: [lateOnsetChild['_id']],
+  pinnedIn: { selection: mockOtherChildViewSelection, data: [lateOnsetChild] },
+  pinnedData: [],
 });

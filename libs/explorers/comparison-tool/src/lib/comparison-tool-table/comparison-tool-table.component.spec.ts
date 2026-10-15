@@ -486,29 +486,64 @@ describe('ComparisonToolTableComponent', () => {
         ).toBeInTheDocument();
       });
 
-      it('should name the view rows in a child view', async () => {
+      it('should note every pin as a hidden row and name the view rows in a child view', async () => {
         const { component } = await setup({ ...allPinsHidden, configs: childViewConfigs });
 
         expect(getPinnedResultsHeaderLines(component.container)).toEqual([
           PINNED_RESULTS_HEADING,
-          '0 Parents 3 hidden',
-          '0 Children',
+          '0 Parents',
+          '0 Children 3 hidden',
         ]);
         expect(
           screen.getByText('No matching children exist in the current view.'),
         ).toBeInTheDocument();
       });
 
-      it('should name the view rows in the plural for one hidden parent in a child view', async () => {
-        await setup({
-          pinnedItems: cachedPinIds.slice(0, 1),
-          pinnedData: [],
-          configs: childViewConfigs,
+      describe('by where the pins were made', () => {
+        const [, , , , lateOnsetChild] = mockComparisonToolData;
+        const configs = mockParentChildComparisonToolConfigs;
+
+        it('should count the hidden parents in a parent view showing pins made in a child view', async () => {
+          await setup({
+            configs,
+            selection: mockParentViewSelection,
+            pinnedItems: [lateOnsetChild['_id']],
+            pinnedIn: { selection: mockChildViewSelection, data: [lateOnsetChild] },
+            pinnedData: [],
+          });
+
+          expect(
+            screen.getByText('No matching parent exists in the current view.'),
+          ).toBeInTheDocument();
         });
 
-        expect(
-          screen.getByText('No matching children exist in the current view.'),
-        ).toBeInTheDocument();
+        it('should name the view rows in the plural for one hidden parent in a child view showing pins made in a parent view', async () => {
+          await setup({
+            configs,
+            selection: mockChildViewSelection,
+            pinnedItems: ['Late Onset AD'],
+            pinnedIn: { selection: mockParentViewSelection },
+            pinnedData: [],
+          });
+
+          expect(
+            screen.getByText('No matching children exist in the current view.'),
+          ).toBeInTheDocument();
+        });
+
+        it('should count the hidden rows in a child view showing pins made under another selection with the same keys', async () => {
+          await setup({
+            configs,
+            selection: mockChildViewSelection,
+            pinnedItems: [lateOnsetChild['_id']],
+            pinnedIn: { selection: mockOtherChildViewSelection, data: [lateOnsetChild] },
+            pinnedData: [],
+          });
+
+          expect(
+            screen.getByText('No matching child exists in the current view.'),
+          ).toBeInTheDocument();
+        });
       });
 
       it('should disable Download Pins but keep Clear All Pins enabled', async () => {
