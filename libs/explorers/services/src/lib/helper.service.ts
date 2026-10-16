@@ -143,9 +143,14 @@ export class HelperService {
   ): { activePanel: string; activeParent: string; shouldScrollToPanelNav: boolean } | undefined {
     const noHashFragment = this.getHashFragment() === '';
     if (params.get(PANEL_ROUTE_PARAMS.SUBTAB)) {
+      const parent = panels.find((p: Panel) => p.name === params.get(PANEL_ROUTE_PARAMS.TAB));
+      const child = parent?.children?.find(
+        (c: Panel) => c.name === params.get(PANEL_ROUTE_PARAMS.SUBTAB),
+      );
+      if (!parent || !child) return undefined;
       return {
-        activePanel: params.get(PANEL_ROUTE_PARAMS.SUBTAB) as string,
-        activeParent: params.get(PANEL_ROUTE_PARAMS.TAB) as string,
+        activePanel: child.name,
+        activeParent: parent.name,
         shouldScrollToPanelNav: noHashFragment,
       };
     } else if (params.get(PANEL_ROUTE_PARAMS.TAB)) {

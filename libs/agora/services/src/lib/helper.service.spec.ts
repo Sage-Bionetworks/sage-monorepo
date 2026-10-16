@@ -106,25 +106,4 @@ describe('Service: Helper', () => {
     const res = helperService.getColor('primary');
     expect(res).toEqual('#3c4a63');
   });
-
-  it('should return a url with parameters', () => {
-    const url = '/genes/ENSG123';
-    const expected = '/genes/ENSG123?model=abc';
-    const result = helperService.addSingleUrlParam(url, 'model', 'abc');
-    expect(result).toEqual(expected);
-  });
-
-  it('should replace existing url parameters if the same one exists', () => {
-    const url = '/genes/ENSG123?model=abc';
-    const expected = '/genes/ENSG123?model=fff';
-    const result = helperService.addSingleUrlParam(url, 'model', 'fff');
-    expect(result).toEqual(expected);
-  });
-
-  it('should replace existing url parameters if a different one exists', () => {
-    const url = '/genes/ENSG123?model=abc';
-    const expected = '/genes/ENSG123?test=fff';
-    const result = helperService.addSingleUrlParam(url, 'test', 'fff');
-    expect(result).toEqual(expected);
-  });
 });

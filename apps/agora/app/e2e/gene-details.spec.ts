@@ -285,4 +285,24 @@ test.describe('gene details - tab fallback and initial scroll', () => {
       page.getByRole('heading', { level: 2, name: 'Summary of Evidence' }),
     ).toBeVisible();
   });
+
+  test('subtab under the wrong parent tab in url defaults to first available tab', async ({
+    page,
+  }) => {
+    await goToGene(page, `${genePath}/resources/rna`);
+    await page.waitForURL(genePath);
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Summary of Evidence' }),
+    ).toBeVisible();
+  });
+
+  test('invalid tab in url keeps the model query parameter', async ({ page }) => {
+    const model = 'AD Diagnosis x Sex females only';
+    await goToGene(page, `${genePath}/evidence/does-not-exist?model=${model}`);
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Summary of Evidence' }),
+    ).toBeVisible();
+    await expect.poll(() => new URL(page.url()).pathname).toBe(genePath);
+    expect(getModelQueryParam(page)).toBe(model);
+  });
 });

@@ -181,6 +181,30 @@ describe('Service: Helper', () => {
       });
     });
 
+    it('should return undefined for a subtab that belongs to a different parent', () => {
+      const params = convertToParamMap({
+        [PANEL_ROUTE_PARAMS.TAB]: 'resources',
+        [PANEL_ROUTE_PARAMS.SUBTAB]: 'rna',
+      });
+      expect(helperService.getActivePanelAndParentFromUrl(panelsMock, params)).toBeUndefined();
+    });
+
+    it('should return undefined for a top-level panel used as a subtab', () => {
+      const params = convertToParamMap({
+        [PANEL_ROUTE_PARAMS.TAB]: 'evidence',
+        [PANEL_ROUTE_PARAMS.SUBTAB]: 'summary',
+      });
+      expect(helperService.getActivePanelAndParentFromUrl(panelsMock, params)).toBeUndefined();
+    });
+
+    it('should return undefined for a subtab under an unknown parent', () => {
+      const params = convertToParamMap({
+        [PANEL_ROUTE_PARAMS.TAB]: 'does-not-exist',
+        [PANEL_ROUTE_PARAMS.SUBTAB]: 'rna',
+      });
+      expect(helperService.getActivePanelAndParentFromUrl(panelsMock, params)).toBeUndefined();
+    });
+
     it('should return undefined for an unknown tab', () => {
       const params = convertToParamMap({ [PANEL_ROUTE_PARAMS.TAB]: 'does-not-exist' });
       expect(helperService.getActivePanelAndParentFromUrl(panelsMock, params)).toBeUndefined();
@@ -287,6 +311,17 @@ describe('Service: Helper', () => {
 
     it('should replace the url for a disabled panel', () => {
       const params = convertToParamMap({ [PANEL_ROUTE_PARAMS.TAB]: 'nominations' });
+      expect(helperService.resolveInitialPanel(panelsMock, params, basePath)).toEqual({
+        ...defaultPanel,
+        replacementUrl: basePath,
+      });
+    });
+
+    it('should replace the url for a subtab that belongs to a different parent', () => {
+      const params = convertToParamMap({
+        [PANEL_ROUTE_PARAMS.TAB]: 'resources',
+        [PANEL_ROUTE_PARAMS.SUBTAB]: 'rna',
+      });
       expect(helperService.resolveInitialPanel(panelsMock, params, basePath)).toEqual({
         ...defaultPanel,
         replacementUrl: basePath,

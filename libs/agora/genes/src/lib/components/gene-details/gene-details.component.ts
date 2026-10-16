@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { QUERY_PARAMS, ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
-import { Panel } from '@sagebionetworks/explorers/models';
+import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
 import { HelperService, LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
@@ -105,6 +105,7 @@ export class GeneDetailsComponent implements OnInit {
       this.panels,
       params,
       this.getUrlBasePath(),
+      this.getModelQueryParams(),
     );
     this.activePanel = initial.activePanel;
     this.activeParent = initial.activeParent;
@@ -118,10 +119,17 @@ export class GeneDetailsComponent implements OnInit {
     return `/${ROUTE_PATHS.DETAILS}/${this.gene?.ensembl_gene_id}`;
   }
 
+  private getModelQueryParams(): QueryParams {
+    return { [QUERY_PARAMS.MODEL]: this.helperService.getUrlParam(QUERY_PARAMS.MODEL) };
+  }
+
   onPanelChange(event: Panel) {
-    const result = this.helperService.handlePanelChange(this.panels, event, this.getUrlBasePath(), {
-      [QUERY_PARAMS.MODEL]: this.helperService.getUrlParam(QUERY_PARAMS.MODEL),
-    });
+    const result = this.helperService.handlePanelChange(
+      this.panels,
+      event,
+      this.getUrlBasePath(),
+      this.getModelQueryParams(),
+    );
     if (result) {
       this.activePanel = result.activePanel;
       this.activeParent = result.activeParent;
