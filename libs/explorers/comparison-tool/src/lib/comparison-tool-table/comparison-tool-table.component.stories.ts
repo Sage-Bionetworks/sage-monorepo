@@ -217,6 +217,24 @@ export const ChildView: Story = {
   ],
 };
 
+// Three pins are cached, but only the first has a row in this view
+export const HiddenPins: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
+          pinnedData: mockComparisonToolData.slice(0, 1),
+          unpinnedData: mockComparisonToolData.slice(3),
+          configs: mockComparisonToolDataConfig,
+        }),
+      ],
+    }),
+  ],
+};
+
 export const PinnedRowsLoadingChildView: Story = {
   args: {},
   decorators: [
@@ -337,4 +355,18 @@ export const HiddenChildrenChildView = hiddenPinsStory({
   pinnedItems: hiddenPinsChildPinIds,
   pinnedIn: { selection: mockOtherChildViewSelection, data: hiddenPinsChildPins },
   pinnedData: [familialChild],
+});
+
+export const NoMatchingPinsHiddenParentsChildView = hiddenPinsStory({
+  selection: mockChildViewSelection,
+  pinnedItems: ['Late Onset AD'],
+  pinnedIn: { selection: mockParentViewSelection },
+  pinnedData: [],
+});
+
+export const NoMatchingPinsHiddenChildrenChildView = hiddenPinsStory({
+  selection: mockChildViewSelection,
+  pinnedItems: [lateOnsetChild['_id']],
+  pinnedIn: { selection: mockOtherChildViewSelection, data: [lateOnsetChild] },
+  pinnedData: [],
 });
