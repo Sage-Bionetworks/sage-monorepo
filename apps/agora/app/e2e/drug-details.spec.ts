@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { baseURL } from '../playwright.config';
 
 const chemblId = 'CHEMBL2105759';
 const drugBankId = 'DB11817';
@@ -34,6 +35,13 @@ test.describe('drug details', () => {
     await page.goto(`${drugPath}/does-not-exist`);
     await page.waitForURL(drugPath);
     await expect(page.getByText('Modality')).toBeVisible();
+  });
+
+  test('url without a tab keeps its query parameters and hash fragment', async ({ page }) => {
+    const urlWithoutTab = `${drugPath}?source=newsletter#summary`;
+    await page.goto(urlWithoutTab);
+    await expect(page.getByText('Modality')).toBeVisible();
+    await expect(page).toHaveURL(`${baseURL}${urlWithoutTab}`);
   });
 });
 
