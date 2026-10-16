@@ -1,10 +1,21 @@
-import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
+import {
+  DatasetComponentOption,
+  ECharts,
+  EChartsOption,
+  ScatterSeriesOption,
+  SeriesOption,
+} from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 import {
   grayGridBoxplotChartTheme,
   minimalBoxplotChartTheme,
 } from '../chart-theme/boxplot-chart-theme';
-import { DEFAULT_COLOR } from '../constants';
+import {
+  CAPPED_POINT_SPACING_PX,
+  CAPPED_POINT_SYMBOL,
+  CAPPED_POINT_SYMBOL_SIZE,
+  DEFAULT_COLOR,
+} from '../constants';
 import { BoxplotProps, CategoryPoint } from '../models';
 import { BoxplotChartTheme } from '../models/boxplot';
 import {
@@ -191,6 +202,28 @@ export class BoxplotChart {
     return yAxisOptions;
   }
 
+  // Capped points skip the jitter and are spread in pixels rather than axis units,
+  // so the spacing stays even however wide the chart renders.
+  private getCappedPoints(
+    points: CategoryPoint[],
+    capAt: number,
+    xAxisCategories: string[],
+    pointCategories: string[],
+  ) {
+    const pointsAboveCap = addXAxisValueToCategoryPoint(
+      points.filter((pt) => pt.value > capAt).sort((a, b) => a.value - b.value),
+      xAxisCategories,
+      pointCategories,
+      defaultPointCategoryOffset,
+      0,
+    );
+    return pointsAboveCap.map((pt) => {
+      const group = pointsAboveCap.filter((other) => other.xAxisValue === pt.xAxisValue);
+      const offsetIndex = group.indexOf(pt) - (group.length - 1) / 2;
+      return { ...pt, cappedValue: capAt, cappedOffsetPx: offsetIndex * CAPPED_POINT_SPACING_PX };
+    });
+  }
+
   setOptions(boxplotProps: BoxplotProps) {
     if (!this.chart) return;
 
@@ -203,6 +236,7 @@ export class BoxplotChart {
       yAxisTitle,
       yAxisMin,
       yAxisMax,
+      capPointsAboveYAxisMax,
       xAxisLabelTooltipFormatter,
       pointTooltipFormatter,
       pointCategoryColors,
@@ -245,6 +279,14 @@ export class BoxplotChart {
       defaultPointCategoryOffset,
       defaultPointCategoryJitterMax,
     );
+    const inRangeScatterPoints = yAxisMax
+      ? dataForScatterPoints.filter((pt) => pt.value <= yAxisMax)
+      : dataForScatterPoints;
+    const capAt = capPointsAboveYAxisMax && yAxisMax ? yAxisMax : undefined;
+    const cappedPoints =
+      capAt === undefined
+        ? []
+        : this.getCappedPoints(points, capAt, xAxisCategories, pointCategories);
     const dataForStaticBoxplotSummaries = summaries
       ? addXAxisValueToBoxplotSummaries(summaries, xAxisCategories)
       : undefined;
@@ -265,7 +307,7 @@ export class BoxplotChart {
       {
         id: basePointsDatasetId,
         dimensions: noPoints ? undefined : Object.keys(dataForScatterPoints[0]),
-        source: dataForScatterPoints,
+        source: inRangeScatterPoints,
       },
       {
         id: 'points-formatted-for-boxplot-transform',
@@ -355,7 +397,7 @@ export class BoxplotChart {
 
     // points series for each points dataset
     pointDatasetIds.forEach((id) => {
-      seriesOpts.push({
+      const pointSeries: ScatterSeriesOption = {
         type: 'scatter',
         datasetId: id,
         name: id,
@@ -399,7 +441,31 @@ export class BoxplotChart {
             return `${pt.value}`;
           },
         },
-      });
+      };
+      seriesOpts.push(pointSeries);
+
+      const cappedSource = cappedPoints.filter(
+        (pt) => id === basePointsDatasetId || pt.pointCategory === id,
+      );
+      if (cappedSource.length > 0) {
+        const cappedDatasetId = `capped-${id}`;
+        datasetOpts.push({
+          id: cappedDatasetId,
+          dimensions: Object.keys(cappedSource[0]),
+          source: cappedSource,
+        });
+        seriesOpts.push({
+          ...pointSeries,
+          datasetId: cappedDatasetId,
+          name: `${id} above y-axis max`,
+          encode: { x: 'xAxisValue', y: 'cappedValue' },
+          symbol: CAPPED_POINT_SYMBOL,
+          symbolSize: CAPPED_POINT_SYMBOL_SIZE,
+          symbolOffset: (pt) => [pt.cappedOffsetPx, 0],
+          itemStyle: { color: pointSeries.itemStyle?.color },
+          z: 3,
+        });
+      }
     });
 
     const option: EChartsOption = {

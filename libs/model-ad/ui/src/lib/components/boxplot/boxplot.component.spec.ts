@@ -82,6 +82,16 @@ describe('BoxplotComponent', () => {
     expect(directive.xAxisCategories).toEqual(order);
   });
 
+  it('should cap points above yAxisMax on the chart', async () => {
+    const { fixture } = await setup();
+
+    const directive = fixture.debugElement
+      .query(By.directive(BoxplotDirective))
+      .injector.get(BoxplotDirective);
+
+    expect(directive.capPointsAboveYAxisMax).toBe(true);
+  });
+
   it('should return undefined yAxisMax when not present in data', async () => {
     const dataWithoutMax: BoxplotData = {
       age: '6 months',
