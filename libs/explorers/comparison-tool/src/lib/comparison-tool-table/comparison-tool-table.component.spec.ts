@@ -553,6 +553,15 @@ describe('ComparisonToolTableComponent', () => {
         expect(screen.getByRole('button', { name: /clear all/i })).toBeEnabled();
       });
 
+      it('should keep the pinned section while a refetch makes the hidden count unknown', async () => {
+        const { component } = await setup({ ...allPinsHidden, pinnedFetchPending: true });
+
+        expect(getPinnedResultsHeaderLines(component.container)).toEqual([
+          `${PINNED_RESULTS_HEADING} ${TABLE_DATA_LOADING_MESSAGE}`,
+        ]);
+        expect(screen.getByRole('button', { name: /clear all/i })).toBeInTheDocument();
+      });
+
       it('should remove the pinned section when Clear All Pins is clicked', async () => {
         const { user } = await setup(allPinsHidden);
 

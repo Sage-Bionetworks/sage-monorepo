@@ -825,6 +825,58 @@ describe('ComparisonToolService', () => {
 
           expect(service.failedPinnedRowCount()).toBeNull();
         });
+
+        it('stays known while a failed fetch of the active view rows is retried', () => {
+          connectService(viewConfigs, { selection: CHILD_VIEW });
+          service.setPinnedItems(['child1a', 'child1b']);
+          const { source$ } = failsOnce(() => new Subject<{ data: Row[]; totalCount: number }>());
+          service.fetchPinned(source$);
+
+          service.retryPinnedFetch();
+
+          expect(service.failedPinnedRowCount()).toBe(2);
+        });
+      });
+
+      describe('hiddenRowCount', () => {
+        it('counts the hidden rows when the pins are the active view rows', () => {
+          connectService(viewConfigs, { selection: CHILD_VIEW });
+          pinInChildView(childRow('child1a', 'parent1'), childRow('child1b', 'parent1'));
+          service.setDropdownSelection(OTHER_CHILD_VIEW);
+
+          landPinned(childRow('child1a', 'parent1'));
+
+          expect(service.hiddenRowCount()).toBe(1);
+        });
+
+        it('counts the hidden parents as rows in a self-parented view', () => {
+          connectService(viewConfigs, { selection: CHILD_VIEW });
+          pinInChildView(childRow('child1a', 'parent1'), childRow('child2a', 'parent2'));
+          service.setDropdownSelection(PARENT_VIEW);
+
+          landPinned(parentRow('parent1'));
+
+          expect(service.hiddenRowCount()).toBe(1);
+        });
+
+        it('is null in a child view showing pins made in a parent view', () => {
+          connectService(viewConfigs, { selection: PARENT_VIEW });
+          pinInParentView('parent1', 'parent2');
+          service.setDropdownSelection(CHILD_VIEW);
+
+          landPinned(childRow('child1a', 'parent1'));
+
+          expect(service.hiddenRowCount()).toBeNull();
+        });
+
+        it('is null while pinned rows load', () => {
+          connectService(viewConfigs, { selection: CHILD_VIEW });
+          pinInChildView(childRow('child1a', 'parent1'));
+
+          service.fetchPinned(new Subject<{ data: Row[]; totalCount: number }>());
+
+          expect(service.hiddenRowCount()).toBeNull();
+        });
       });
     });
 
