@@ -61,6 +61,9 @@ export interface BoxplotProps {
   yAxisTitle?: string;
   yAxisMin?: number;
   yAxisMax?: number;
+  /* if true and yAxisMax is defined, points above yAxisMax are drawn at yAxisMax with a
+  capped symbol instead of being hidden. */
+  capPointsAboveYAxisMax?: boolean;
   /* if defined, will be used to format tooltip for each point. */
   pointTooltipFormatter?: (pt: CategoryPoint, params: CallbackDataParams) => string;
   /* if defined, will be used to set color for each point based on its pointCategory, 
