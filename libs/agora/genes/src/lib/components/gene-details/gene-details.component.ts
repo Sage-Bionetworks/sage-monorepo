@@ -4,7 +4,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { QUERY_PARAMS, ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
-import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
 import { Panel } from '@sagebionetworks/explorers/models';
 import { HelperService, LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
@@ -54,7 +53,6 @@ export class GeneDetailsComponent implements OnInit {
   activePanel = '';
   activeParent = '';
 
-  maybeScrollToPanelNavElementOnInitialLoad = false;
   scrollToPanelNavElementOnInitialLoad = false;
 
   reset() {
@@ -93,10 +91,7 @@ export class GeneDetailsComponent implements OnInit {
           }
           this.gene = gene;
           this.panels = getPanelsWithDisabledState(gene, getPanels());
-          this.setActivePanelAndParentFromUrl(params);
-          this.applyFallbackPanelIfNeeded(params);
-          this.scrollToPanelNavElementOnInitialLoad =
-            this.maybeScrollToPanelNavElementOnInitialLoad;
+          this.setInitialPanel(params);
           this.isLoading = false;
         },
         error: () => {
@@ -105,32 +100,17 @@ export class GeneDetailsComponent implements OnInit {
       });
   }
 
-  private setActivePanelAndParentFromUrl(params: ParamMap) {
-    const result = this.helperService.getActivePanelAndParentFromUrl(this.panels, params);
-    if (result) {
-      this.activePanel = result.activePanel;
-      this.activeParent = result.activeParent;
-      this.maybeScrollToPanelNavElementOnInitialLoad = result.shouldScrollToPanelNav;
-    }
-  }
-
-  /**
-   * Specifies the active panel when either no panel is specified in the path or when the specified
-   * panel is disabled or doesn't exist.
-   * If no panel is specified, then use the default panel and leave the URL untouched, retaining all
-   * query parameters and hash fragments.
-   * If a disabled or invalid panel is specified, then reset the URL to the gene's base path.
-   */
-  private applyFallbackPanelIfNeeded(params: ParamMap) {
-    const fallback = this.helperService.getFallbackPanelIfInvalid(this.panels, this.activePanel);
-    if (!fallback) return;
-
-    this.activePanel = fallback.activePanel;
-    this.activeParent = fallback.activeParent;
-
-    if (params.has(PANEL_ROUTE_PARAMS.TAB)) {
-      this.location.replaceState(this.getUrlBasePath());
-      this.maybeScrollToPanelNavElementOnInitialLoad = false;
+  private setInitialPanel(params: ParamMap) {
+    const initial = this.helperService.resolveInitialPanel(
+      this.panels,
+      params,
+      this.getUrlBasePath(),
+    );
+    this.activePanel = initial.activePanel;
+    this.activeParent = initial.activeParent;
+    this.scrollToPanelNavElementOnInitialLoad = initial.shouldScrollToPanelNav;
+    if (initial.replacementUrl) {
+      this.location.replaceState(initial.replacementUrl);
     }
   }
 

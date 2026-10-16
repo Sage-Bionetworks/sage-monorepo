@@ -233,6 +233,78 @@ describe('Service: Helper', () => {
     });
   });
 
+  describe('resolveInitialPanel', () => {
+    const basePath = '/models/APOE4';
+    const queryParams = { modelOrganism: 'mouse' };
+    const defaultPanel = {
+      activePanel: 'summary',
+      activeParent: '',
+      shouldScrollToPanelNav: false,
+    };
+
+    afterEach(() => jest.restoreAllMocks());
+
+    it('should use the panel from the url and scroll to the nav', () => {
+      const params = convertToParamMap({ [PANEL_ROUTE_PARAMS.TAB]: 'resources' });
+      expect(helperService.resolveInitialPanel(panelsMock, params, basePath, queryParams)).toEqual({
+        activePanel: 'resources',
+        activeParent: '',
+        shouldScrollToPanelNav: true,
+      });
+    });
+
+    it('should open the first child of a parent panel from the url', () => {
+      const params = convertToParamMap({ [PANEL_ROUTE_PARAMS.TAB]: 'evidence' });
+      expect(helperService.resolveInitialPanel(panelsMock, params, basePath, queryParams)).toEqual({
+        activePanel: 'rna',
+        activeParent: 'evidence',
+        shouldScrollToPanelNav: true,
+      });
+    });
+
+    it('should not scroll to the nav when the url has a hash fragment', () => {
+      jest.spyOn(helperService, 'getHashFragment').mockReturnValue('section');
+      const params = convertToParamMap({ [PANEL_ROUTE_PARAMS.TAB]: 'resources' });
+      expect(
+        helperService.resolveInitialPanel(panelsMock, params, basePath, queryParams)
+          .shouldScrollToPanelNav,
+      ).toBe(false);
+    });
+
+    it('should use the default panel without replacing the url when no panel is specified', () => {
+      expect(
+        helperService.resolveInitialPanel(panelsMock, convertToParamMap({}), basePath, queryParams),
+      ).toEqual(defaultPanel);
+    });
+
+    it('should replace the url with the base path and query params for an unknown panel', () => {
+      const params = convertToParamMap({ [PANEL_ROUTE_PARAMS.TAB]: 'does-not-exist' });
+      expect(helperService.resolveInitialPanel(panelsMock, params, basePath, queryParams)).toEqual({
+        ...defaultPanel,
+        replacementUrl: '/models/APOE4?modelOrganism=mouse',
+      });
+    });
+
+    it('should replace the url for a disabled panel', () => {
+      const params = convertToParamMap({ [PANEL_ROUTE_PARAMS.TAB]: 'nominations' });
+      expect(helperService.resolveInitialPanel(panelsMock, params, basePath)).toEqual({
+        ...defaultPanel,
+        replacementUrl: basePath,
+      });
+    });
+
+    it('should replace the url for a disabled child panel', () => {
+      const params = convertToParamMap({
+        [PANEL_ROUTE_PARAMS.TAB]: 'evidence',
+        [PANEL_ROUTE_PARAMS.SUBTAB]: 'protein',
+      });
+      expect(helperService.resolveInitialPanel(panelsMock, params, basePath)).toEqual({
+        ...defaultPanel,
+        replacementUrl: basePath,
+      });
+    });
+  });
+
   it('should encode urls', () => {
     expect(helperService.encodeParenthesesForwardSlashes('/models/5xFAD (UCI)')).toBe(
       '/models/5xFAD %28UCI%29',

@@ -176,6 +176,43 @@ export class HelperService {
     return undefined;
   }
 
+  /**
+   * Resolves the panel to show on a details page's first load.
+   * If no panel is specified in the URL, the default panel is used and the URL is left untouched,
+   * retaining all query parameters and hash fragments.
+   * If a disabled or invalid panel is specified, the default panel is used and `replacementUrl` is
+   * the base path with only `queryParams`, dropping the invalid panel, other query parameters, and
+   * the hash fragment.
+   */
+  resolveInitialPanel(
+    panels: Panel[],
+    params: ParamMap,
+    basePath: string,
+    queryParams: QueryParams = {},
+  ): {
+    activePanel: string;
+    activeParent: string;
+    shouldScrollToPanelNav: boolean;
+    replacementUrl?: string;
+  } {
+    const fromUrl = this.getActivePanelAndParentFromUrl(panels, params) ?? {
+      activePanel: '',
+      activeParent: '',
+      shouldScrollToPanelNav: false,
+    };
+    const fallback = this.getFallbackPanelIfInvalid(panels, fromUrl.activePanel);
+    if (!fallback) return fromUrl;
+
+    if (!params.has(PANEL_ROUTE_PARAMS.TAB)) {
+      return { ...fallback, shouldScrollToPanelNav: false };
+    }
+    return {
+      ...fallback,
+      shouldScrollToPanelNav: false,
+      replacementUrl: this.appendQueryParams(basePath, queryParams),
+    };
+  }
+
   encodeParenthesesForwardSlashes(uri: string) {
     return (
       uri
