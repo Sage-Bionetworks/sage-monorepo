@@ -251,6 +251,9 @@ export class BoxplotChart {
       defaultPointCategoryOffset,
       defaultPointCategoryJitterMax,
     );
+    const inRangeScatterPoints = yAxisMax
+      ? dataForScatterPoints.filter((pt) => pt.value <= yAxisMax)
+      : dataForScatterPoints;
     const dataForStaticBoxplotSummaries = summaries
       ? addXAxisValueToBoxplotSummaries(summaries, xAxisCategories)
       : undefined;
@@ -271,7 +274,7 @@ export class BoxplotChart {
       {
         id: basePointsDatasetId,
         dimensions: noPoints ? undefined : Object.keys(dataForScatterPoints[0]),
-        source: dataForScatterPoints,
+        source: inRangeScatterPoints,
       },
       {
         id: 'points-formatted-for-boxplot-transform',
