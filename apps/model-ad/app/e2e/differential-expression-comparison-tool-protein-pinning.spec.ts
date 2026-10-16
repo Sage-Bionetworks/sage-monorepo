@@ -345,6 +345,26 @@ test.describe('differential expression protein pinning', () => {
     await expect(page.getByText('No matching gene exists in the current view.')).toBeVisible();
   });
 
+  test('RNA pins with no Protein rows say that no proteins match in the Protein view', async ({
+    page,
+  }) => {
+    expect(await fetchRnaRows(page, [rnaOnlyGene])).toHaveLength(1);
+    expect(await fetchProteinRows(page, [rnaOnlyGene])).toHaveLength(0);
+
+    await navigateByUrlWithPins(page, rnaHemibrainCategories, [rnaOnlyGene]);
+    await expectPinnedRows(page, [rnaOnlyGene]);
+    await switchToProteinView(page);
+
+    await expectPinnedParams(page, []);
+    await expectPinnedResultsCount(page, 0, [
+      PINNED_RESULTS_HEADING,
+      '0 Genes 1 hidden',
+      '0 Proteins',
+    ]);
+    // Plural even for one gene, since the number of proteins a hidden gene has here isn't known
+    await expect(page.getByText('No matching proteins exist in the current view.')).toBeVisible();
+  });
+
   test('Clear All Pins in the Protein view also clears the RNA pins', async ({ page }) => {
     const proteinIds = getProteinIds(
       await fetchProteinRows(page, [fourProteinGene]),
