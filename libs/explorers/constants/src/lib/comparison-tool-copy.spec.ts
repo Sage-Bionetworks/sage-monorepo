@@ -1,4 +1,4 @@
-import { ComparisonToolNouns } from '@sagebionetworks/explorers/models';
+import { ComparisonToolNouns, PinnedResultsCounts } from '@sagebionetworks/explorers/models';
 import {
   BLANK_LABEL_TEXT,
   getNoResultsMessage,
@@ -19,7 +19,11 @@ import { getPinLimitWarning } from './toasts';
 
 const PARENT = { singular: 'Parent', plural: 'Parents' };
 const CHILD = { singular: 'Child', plural: 'Children' };
-const VIEW_NOUNS: ComparisonToolNouns = { viewNoun: PARENT, parentNoun: null };
+// A view noun with no parent/child meaning, for copy that applies to standard CTs
+const STANDARD_NOUNS: ComparisonToolNouns = {
+  viewNoun: { singular: 'Model', plural: 'Models' },
+  parentNoun: null,
+};
 const CHILD_NOUNS: ComparisonToolNouns = { viewNoun: CHILD, parentNoun: PARENT };
 const PIN_LIMIT = 50;
 
@@ -30,7 +34,7 @@ describe('comparison tool copy', () => {
     });
 
     it('should use the view noun', () => {
-      expect(getViewNounLabel('Matching', VIEW_NOUNS)).toBe('Matching Parents');
+      expect(getViewNounLabel('Matching', STANDARD_NOUNS)).toBe('Matching Models');
     });
 
     it('should use the view noun in a child view', () => {
@@ -40,14 +44,29 @@ describe('comparison tool copy', () => {
 
   describe('getPinnedResultsLabels', () => {
     const line = (text: string, note: string | null = null) => ({ text, note });
-    const UNKNOWN = { pinCount: null, pinnedRowCount: null };
+    const UNKNOWN: PinnedResultsCounts = {
+      pinCount: null,
+      pinnedRowCount: null,
+      hiddenCount: null,
+      hiddenCountUnit: 'row',
+    };
 
     it('should fall back to results, with the count in the heading', () => {
-      expect(getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2 }, NO_NOUNS)).toEqual({
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: null, hiddenCountUnit: 'row' },
+          NO_NOUNS,
+        ),
+      ).toEqual({
         heading: line('2 Pinned Results'),
         sublabels: [],
       });
-      expect(getPinnedResultsLabels({ pinCount: 1, pinnedRowCount: 1 }, NO_NOUNS)).toEqual({
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 1, pinnedRowCount: 1, hiddenCount: null, hiddenCountUnit: 'row' },
+          NO_NOUNS,
+        ),
+      ).toEqual({
         heading: line('1 Pinned Result'),
         sublabels: [],
       });
@@ -61,29 +80,49 @@ describe('comparison tool copy', () => {
     });
 
     it('should use the view noun, with the count in a sublabel', () => {
-      expect(getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2 }, VIEW_NOUNS)).toEqual({
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: null, hiddenCountUnit: 'row' },
+          STANDARD_NOUNS,
+        ),
+      ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
-        sublabels: [line('2 Parents')],
+        sublabels: [line('2 Models')],
       });
-      expect(getPinnedResultsLabels({ pinCount: 0, pinnedRowCount: 0 }, VIEW_NOUNS)).toEqual({
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 0, pinnedRowCount: 0, hiddenCount: null, hiddenCountUnit: 'row' },
+          STANDARD_NOUNS,
+        ),
+      ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
-        sublabels: [line('0 Parents')],
+        sublabels: [line('0 Models')],
       });
     });
 
     it('should show the loading message in the view noun sublabel when the count is unknown', () => {
-      expect(getPinnedResultsLabels(UNKNOWN, VIEW_NOUNS)).toEqual({
+      expect(getPinnedResultsLabels(UNKNOWN, STANDARD_NOUNS)).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line(TABLE_DATA_LOADING_MESSAGE)],
       });
     });
 
     it('should use the parent noun then the view noun in a child view', () => {
-      expect(getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 3 }, CHILD_NOUNS)).toEqual({
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 3, hiddenCount: null, hiddenCountUnit: 'row' },
+          CHILD_NOUNS,
+        ),
+      ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line('2 Parents'), line('3 Children')],
       });
-      expect(getPinnedResultsLabels({ pinCount: 1, pinnedRowCount: 1 }, CHILD_NOUNS)).toEqual({
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 1, pinnedRowCount: 1, hiddenCount: null, hiddenCountUnit: 'row' },
+          CHILD_NOUNS,
+        ),
+      ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line('1 Parent'), line('1 Child')],
       });
@@ -97,28 +136,128 @@ describe('comparison tool copy', () => {
     });
 
     it('should not show a known row count in a child view when the parent count is unknown', () => {
-      expect(getPinnedResultsLabels({ pinCount: null, pinnedRowCount: 3 }, CHILD_NOUNS)).toEqual({
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: null, pinnedRowCount: 3, hiddenCount: null, hiddenCountUnit: 'row' },
+          CHILD_NOUNS,
+        ),
+      ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line(TABLE_DATA_LOADING_MESSAGE), line(BLANK_LABEL_TEXT)],
       });
     });
 
     it('should show the parent count and the loading message in a child view when only the row count is unknown', () => {
-      expect(getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: null }, CHILD_NOUNS)).toEqual({
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: null, hiddenCount: null, hiddenCountUnit: 'row' },
+          CHILD_NOUNS,
+        ),
+      ).toEqual({
         heading: line(PINNED_RESULTS_HEADING),
         sublabels: [line('2 Parents'), line(TABLE_DATA_LOADING_MESSAGE)],
       });
     });
 
-    it('should normalize lowercase and all-caps nouns to label case', () => {
-      const lowercase = { viewNoun: { singular: 'parent', plural: 'parents' }, parentNoun: null };
-      const allCaps = { viewNoun: { singular: 'PARENT', plural: 'PARENTS' }, parentNoun: null };
+    it('should note hidden pins on the heading count', () => {
       expect(
-        getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2 }, lowercase).sublabels,
-      ).toEqual([line('2 Parents')]);
-      expect(getPinnedResultsLabels({ pinCount: 2, pinnedRowCount: 2 }, allCaps).sublabels).toEqual(
-        [line('2 Parents')],
-      );
+        getPinnedResultsLabels(
+          { pinCount: 3, pinnedRowCount: 3, hiddenCount: 2, hiddenCountUnit: 'row' },
+          NO_NOUNS,
+        ),
+      ).toEqual({
+        heading: line('3 Pinned Results', '2 hidden'),
+        sublabels: [],
+      });
+    });
+
+    it('should note hidden pins on the view noun sublabel', () => {
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: 1, hiddenCountUnit: 'row' },
+          STANDARD_NOUNS,
+        ),
+      ).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('2 Models', '1 hidden')],
+      });
+    });
+
+    it('should note hidden parents on the parent line in a child view', () => {
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 3, hiddenCount: 1, hiddenCountUnit: 'parent' },
+          CHILD_NOUNS,
+        ),
+      ).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('2 Parents', '1 hidden'), line('3 Children')],
+      });
+    });
+
+    it('should note hidden rows on the row line in a child view', () => {
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 1, pinnedRowCount: 1, hiddenCount: 1, hiddenCountUnit: 'row' },
+          CHILD_NOUNS,
+        ),
+      ).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('1 Parent'), line('1 Child', '1 hidden')],
+      });
+    });
+
+    it('should note hidden parents with the row count unknown after a failed fetch in a child view', () => {
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 0, pinnedRowCount: null, hiddenCount: 3, hiddenCountUnit: 'parent' },
+          CHILD_NOUNS,
+        ),
+      ).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('0 Parents', '3 hidden'), line(TABLE_DATA_LOADING_MESSAGE)],
+      });
+    });
+
+    it('should note hidden rows with no rows after a failed fetch of the view rows in a child view', () => {
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 0, pinnedRowCount: 0, hiddenCount: 3, hiddenCountUnit: 'row' },
+          CHILD_NOUNS,
+        ),
+      ).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('0 Parents'), line('0 Children', '3 hidden')],
+      });
+    });
+
+    it('should not note hidden pins when none are hidden', () => {
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: 0, hiddenCountUnit: 'row' },
+          STANDARD_NOUNS,
+        ),
+      ).toEqual({
+        heading: line(PINNED_RESULTS_HEADING),
+        sublabels: [line('2 Models')],
+      });
+    });
+
+    it('should normalize lowercase and all-caps nouns to label case', () => {
+      const lowercase = { viewNoun: { singular: 'model', plural: 'models' }, parentNoun: null };
+      const allCaps = { viewNoun: { singular: 'MODEL', plural: 'MODELS' }, parentNoun: null };
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: null, hiddenCountUnit: 'row' },
+          lowercase,
+        ).sublabels,
+      ).toEqual([line('2 Models')]);
+      expect(
+        getPinnedResultsLabels(
+          { pinCount: 2, pinnedRowCount: 2, hiddenCount: null, hiddenCountUnit: 'row' },
+          allCaps,
+        ).sublabels,
+      ).toEqual([line('2 Models')]);
     });
   });
 
@@ -130,11 +269,11 @@ describe('comparison tool copy', () => {
     });
 
     it('should use the view noun', () => {
-      expect(getPinLimitTooltip(PIN_LIMIT, VIEW_NOUNS)).toBe(
-        'You have already pinned the maximum number of results (50 parents). You must unpin some results before you can pin more.',
+      expect(getPinLimitTooltip(PIN_LIMIT, STANDARD_NOUNS)).toBe(
+        'You have already pinned the maximum number of results (50 models). You must unpin some results before you can pin more.',
       );
-      expect(getPinLimitTooltip(1, VIEW_NOUNS)).toBe(
-        'You have already pinned the maximum number of results (1 parent). You must unpin some results before you can pin more.',
+      expect(getPinLimitTooltip(1, STANDARD_NOUNS)).toBe(
+        'You have already pinned the maximum number of results (1 model). You must unpin some results before you can pin more.',
       );
     });
 
@@ -147,11 +286,11 @@ describe('comparison tool copy', () => {
     it('should normalize all-caps nouns to sentence case', () => {
       expect(
         getPinLimitTooltip(PIN_LIMIT, {
-          viewNoun: { singular: 'PARENT', plural: 'PARENTS' },
+          viewNoun: { singular: 'MODEL', plural: 'MODELS' },
           parentNoun: null,
         }),
       ).toBe(
-        'You have already pinned the maximum number of results (50 parents). You must unpin some results before you can pin more.',
+        'You have already pinned the maximum number of results (50 models). You must unpin some results before you can pin more.',
       );
     });
   });
@@ -167,11 +306,11 @@ describe('comparison tool copy', () => {
     });
 
     it('should use the view noun', () => {
-      expect(getPinLimitWarning(50, PIN_LIMIT, VIEW_NOUNS)).toBe(
-        'Only 50 parents were pinned, because you reached the maximum of 50 pinned parents.',
+      expect(getPinLimitWarning(50, PIN_LIMIT, STANDARD_NOUNS)).toBe(
+        'Only 50 models were pinned, because you reached the maximum of 50 pinned models.',
       );
-      expect(getPinLimitWarning(1, PIN_LIMIT, VIEW_NOUNS)).toBe(
-        'Only 1 parent was pinned, because you reached the maximum of 50 pinned parents.',
+      expect(getPinLimitWarning(1, PIN_LIMIT, STANDARD_NOUNS)).toBe(
+        'Only 1 model was pinned, because you reached the maximum of 50 pinned models.',
       );
     });
 
@@ -187,10 +326,10 @@ describe('comparison tool copy', () => {
     it('should normalize lowercase nouns to sentence case', () => {
       expect(
         getPinLimitWarning(2, PIN_LIMIT, {
-          viewNoun: { singular: 'parent', plural: 'parents' },
+          viewNoun: { singular: 'model', plural: 'models' },
           parentNoun: null,
         }),
-      ).toBe('Only 2 parents were pinned, because you reached the maximum of 50 pinned parents.');
+      ).toBe('Only 2 models were pinned, because you reached the maximum of 50 pinned models.');
     });
   });
 
@@ -200,7 +339,7 @@ describe('comparison tool copy', () => {
     });
 
     it('should use the view noun', () => {
-      expect(getPinAllTooltip(VIEW_NOUNS)).toBe('Pin all matching parents to the top.');
+      expect(getPinAllTooltip(STANDARD_NOUNS)).toBe('Pin all matching models to the top.');
     });
 
     it('should use the view noun in a child view', () => {
@@ -215,8 +354,10 @@ describe('comparison tool copy', () => {
     });
 
     it('should use the view noun', () => {
-      expect(getPinToggleTooltip(true, VIEW_NOUNS)).toBe('Unpin this parent');
-      expect(getPinToggleTooltip(false, VIEW_NOUNS)).toBe('Pin this parent to the top of the list');
+      expect(getPinToggleTooltip(true, STANDARD_NOUNS)).toBe('Unpin this model');
+      expect(getPinToggleTooltip(false, STANDARD_NOUNS)).toBe(
+        'Pin this model to the top of the list',
+      );
     });
 
     it('should use the view noun in a child view', () => {
@@ -231,25 +372,37 @@ describe('comparison tool copy', () => {
     });
 
     it('should use the view noun', () => {
-      expect(getNoResultsMessage(VIEW_NOUNS)).toBe('No parents found...');
+      expect(getNoResultsMessage(STANDARD_NOUNS)).toBe('No models found...');
     });
   });
 
   describe('getPinnedFetchFailedMessage', () => {
     it('should fall back to results', () => {
-      expect(getPinnedFetchFailedMessage(NO_NOUNS)).toBe(
+      expect(getPinnedFetchFailedMessage(2, NO_NOUNS)).toBe(
         'We encountered a problem loading your pinned results.',
       );
     });
 
     it('should use the view noun', () => {
-      expect(getPinnedFetchFailedMessage(VIEW_NOUNS)).toBe(
-        'We encountered a problem loading your pinned parents.',
+      expect(getPinnedFetchFailedMessage(2, STANDARD_NOUNS)).toBe(
+        'We encountered a problem loading your pinned models.',
       );
     });
 
     it('should name the view rows, not their parents, in a child view', () => {
-      expect(getPinnedFetchFailedMessage(CHILD_NOUNS)).toBe(
+      expect(getPinnedFetchFailedMessage(2, CHILD_NOUNS)).toBe(
+        'We encountered a problem loading your pinned children.',
+      );
+    });
+
+    it('should use the singular for one row', () => {
+      expect(getPinnedFetchFailedMessage(1, STANDARD_NOUNS)).toBe(
+        'We encountered a problem loading your pinned model.',
+      );
+    });
+
+    it('should use the plural when the row count is unknown', () => {
+      expect(getPinnedFetchFailedMessage(null, CHILD_NOUNS)).toBe(
         'We encountered a problem loading your pinned children.',
       );
     });
@@ -263,8 +416,8 @@ describe('comparison tool copy', () => {
     });
 
     it('should use the view noun', () => {
-      expect(getUnpinnedFetchFailedMessage(VIEW_NOUNS)).toBe(
-        'We encountered a problem loading parents.',
+      expect(getUnpinnedFetchFailedMessage(STANDARD_NOUNS)).toBe(
+        'We encountered a problem loading models.',
       );
     });
 
@@ -283,8 +436,8 @@ describe('comparison tool copy', () => {
     });
 
     it('should use the view noun', () => {
-      expect(getShareUrlTooltip(VIEW_NOUNS)).toBe(
-        "Copy the URL to capture the table's current filtering, sorting, and pinned parents",
+      expect(getShareUrlTooltip(STANDARD_NOUNS)).toBe(
+        "Copy the URL to capture the table's current filtering, sorting, and pinned models",
       );
     });
 
@@ -305,10 +458,10 @@ describe('comparison tool copy', () => {
     });
 
     it('should use the view noun', () => {
-      expect(getPinnedResultsControlsCopy(VIEW_NOUNS)).toEqual({
-        downloadButtonTooltip: 'Download pinned parents',
-        downloadPanelHeading: 'Download pinned parents as:',
-        clearButtonTooltip: 'Clear all pinned parents',
+      expect(getPinnedResultsControlsCopy(STANDARD_NOUNS)).toEqual({
+        downloadButtonTooltip: 'Download pinned models',
+        downloadPanelHeading: 'Download pinned models as:',
+        clearButtonTooltip: 'Clear all pinned models',
       });
     });
   });

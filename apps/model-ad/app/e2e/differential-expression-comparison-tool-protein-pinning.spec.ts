@@ -46,6 +46,7 @@ const fourProteinGene = 'ENSMUSG00000019961~LOAD2~Male'; // Tmpo
 const fiveProteinMaleGene = 'ENSMUSG00000032826~LOAD2~Male'; // Ank2
 const fiveProteinFemaleGene = 'ENSMUSG00000032826~LOAD2~Female'; // Ank2
 const proteinOnlyGene = 'ENSMUSG00000005681~LOAD2~Female'; // Apoa2
+const rnaOnlyGene = 'ENSMUSG00000086714~LOAD2~Male'; // has RNA rows but no Protein rows
 const PINNED_RESULTS_HEADING = 'Pinned Results';
 const PROTEIN_PIN_LIMIT_TOOLTIP = `You have already pinned the maximum number of results (proteins for ${MAX_PIN_LIMIT} genes). You must unpin all proteins for a gene before you can pin proteins for a new gene.`;
 
@@ -114,6 +115,30 @@ test.describe('differential expression protein pinning', () => {
       PINNED_RESULTS_HEADING,
       '2 Genes',
       '9 Proteins',
+    ]);
+    await expectPinnedRows(page, proteinIds);
+  });
+
+  test('an RNA pin with no Protein rows is noted as a hidden gene in the Protein view', async ({
+    page,
+  }) => {
+    const proteinIds = getProteinIds(
+      await fetchProteinRows(page, [fourProteinGene]),
+      fourProteinGene,
+    );
+    expect(proteinIds).toHaveLength(4);
+    expect(await fetchRnaRows(page, [rnaOnlyGene])).toHaveLength(1);
+    expect(await fetchProteinRows(page, [rnaOnlyGene])).toHaveLength(0);
+    const pinnedGenes = [fourProteinGene, rnaOnlyGene];
+
+    await navigateByUrlWithPins(page, rnaHemibrainCategories, pinnedGenes);
+    await expectPinnedRows(page, pinnedGenes);
+
+    await switchToProteinView(page);
+    await expectPinnedResultsCount(page, proteinIds.length, [
+      PINNED_RESULTS_HEADING,
+      '1 Gene 1 hidden',
+      '4 Proteins',
     ]);
     await expectPinnedRows(page, proteinIds);
   });
@@ -291,7 +316,7 @@ test.describe('differential expression protein pinning', () => {
 
     await switchToRnaView(page);
     await expectPinnedParams(page, [fourProteinGene]);
-    await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene']);
+    await expectPinnedResultsCount(page, 1, [PINNED_RESULTS_HEADING, '1 Gene 1 hidden']);
 
     await switchToProteinView(page);
     await expectPinnedParams(page, proteinIds);

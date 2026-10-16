@@ -3,13 +3,18 @@ import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
 import { ComparisonToolConfig, ComparisonToolNoun } from '@sagebionetworks/explorers/models';
 import {
+  ComparisonToolServiceOptions,
   provideComparisonToolFilterService,
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import {
+  mockChildViewSelection,
   mockComparisonToolData,
   mockComparisonToolDataConfig,
   mockComparisonToolFiltersWithSelections,
+  mockOtherChildViewSelection,
+  mockParentChildComparisonToolConfigs,
+  mockParentViewSelection,
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
@@ -288,3 +293,48 @@ export const PinnedFetchFailedChildView: Story = {
     }),
   ],
 };
+
+const [familialChild, otherFamilialChild, , , lateOnsetChild] = mockComparisonToolData;
+const hiddenPinsChildPins = [familialChild, otherFamilialChild, lateOnsetChild];
+const hiddenPinsChildPinIds = hiddenPinsChildPins.map((item) => item['_id']);
+const hiddenPinsParentPinIds = ['Familial AD', 'Late Onset AD'];
+
+const hiddenPinsStory = (options: ComparisonToolServiceOptions): Story => ({
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        MessageService,
+        ...provideComparisonToolService({
+          configs: mockParentChildComparisonToolConfigs,
+          pinLimit: 5,
+          unpinnedData: mockComparisonToolData.filter(
+            (item) => !hiddenPinsChildPins.includes(item),
+          ),
+          ...options,
+        }),
+      ],
+    }),
+  ],
+});
+
+export const PinnedFetchFailedHiddenParentsChildView = hiddenPinsStory({
+  selection: mockChildViewSelection,
+  pinnedItems: hiddenPinsParentPinIds,
+  pinnedIn: { selection: mockParentViewSelection },
+  pinnedFetchFails: true,
+});
+
+export const HiddenParentsChildView = hiddenPinsStory({
+  selection: mockChildViewSelection,
+  pinnedItems: hiddenPinsParentPinIds,
+  pinnedIn: { selection: mockParentViewSelection },
+  pinnedData: [familialChild, otherFamilialChild],
+});
+
+export const HiddenChildrenChildView = hiddenPinsStory({
+  selection: mockChildViewSelection,
+  pinnedItems: hiddenPinsChildPinIds,
+  pinnedIn: { selection: mockOtherChildViewSelection, data: hiddenPinsChildPins },
+  pinnedData: [familialChild],
+});

@@ -24,6 +24,10 @@ export type ComparisonToolServiceOptions = {
   pinLimit?: number;
   pinAllFetch?: PinAllFetch<Record<string, unknown>>;
   pinnedItems?: string[];
+  // Makes `pinnedItems` under this dropdown selection, then switches back to `selection`, so the
+  // pins come from another view or selection. `data` are the rows the pins were made from, which a
+  // child view needs to know their parents
+  pinnedIn?: { selection: string[]; data?: Record<string, unknown>[] };
   unpinnedData?: Record<string, unknown>[];
   // Fails the initial unpinned fetch, so `unpinnedData` is ignored
   unpinnedFetchFails?: boolean;
@@ -115,7 +119,12 @@ export const provideComparisonToolService = (
         service.setPinLimit(options.pinLimit);
       }
 
-      if (options.pinnedItems !== undefined) {
+      if (options.pinnedItems !== undefined && options.pinnedIn) {
+        const activeSelection = service.dropdownSelection();
+        service.setDropdownSelection(options.pinnedIn.selection);
+        service.setPinnedItems(options.pinnedItems, options.pinnedIn.data);
+        service.setDropdownSelection(activeSelection);
+      } else if (options.pinnedItems !== undefined) {
         service.setPinnedItems(options.pinnedItems);
       }
 

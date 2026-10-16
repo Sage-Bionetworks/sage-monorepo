@@ -32,8 +32,15 @@ const pinnedResultsLabel = (text: string, note: string | null = null): PinnedRes
 const pinnedResultsCountLabel = (
   count: number | null,
   noun: ComparisonToolNoun,
+  note: string | null = null,
 ): PinnedResultsLabel =>
-  pinnedResultsLabel(count === null ? TABLE_DATA_LOADING_MESSAGE : countLabel(count, noun));
+  count === null
+    ? pinnedResultsLabel(TABLE_DATA_LOADING_MESSAGE)
+    : pinnedResultsLabel(countLabel(count, noun), note);
+
+// No note when nothing is hidden, or while that is unknown
+const hiddenPinsNote = (hiddenCount: number | null): string | null =>
+  hiddenCount ? `${hiddenCount} hidden` : null;
 
 /**
  * Takes the service's `pinnedResultsCounts` and `nouns`. Every variant shows `pinCount`;
@@ -43,34 +50,42 @@ const pinnedResultsCountLabel = (
  * A null count is unknown, and `TABLE_DATA_LOADING_MESSAGE` takes its place without changing the
  * header's line count. The standard heading shows it as a note. A child view with an unknown
  * `pinCount` shows it once, then a blank line, so it doesn't read as repeated
+ *
+ * `hiddenCount` is noted after the count it shares a unit with. In a child view that is the row
+ * count or the parent count, per `hiddenCountUnit`. Every other variant shows one count
  */
 export const getPinnedResultsLabels = (
-  { pinCount, pinnedRowCount }: PinnedResultsCounts,
+  { pinCount, pinnedRowCount, hiddenCount, hiddenCountUnit }: PinnedResultsCounts,
   { viewNoun, parentNoun }: ComparisonToolNouns,
 ): PinnedResultsLabels => {
+  const hiddenNote = hiddenPinsNote(hiddenCount);
   if (viewNoun && parentNoun) {
+    const isHiddenInRows = hiddenCountUnit === 'row';
     return {
       heading: pinnedResultsLabel(PINNED_RESULTS_HEADING),
       sublabels:
         pinCount === null
           ? [pinnedResultsLabel(TABLE_DATA_LOADING_MESSAGE), pinnedResultsLabel(BLANK_LABEL_TEXT)]
           : [
-              pinnedResultsCountLabel(pinCount, parentNoun),
-              pinnedResultsCountLabel(pinnedRowCount, viewNoun),
+              pinnedResultsCountLabel(pinCount, parentNoun, isHiddenInRows ? null : hiddenNote),
+              pinnedResultsCountLabel(pinnedRowCount, viewNoun, isHiddenInRows ? hiddenNote : null),
             ],
     };
   }
   if (viewNoun) {
     return {
       heading: pinnedResultsLabel(PINNED_RESULTS_HEADING),
-      sublabels: [pinnedResultsCountLabel(pinCount, viewNoun)],
+      sublabels: [pinnedResultsCountLabel(pinCount, viewNoun, hiddenNote)],
     };
   }
   return {
     heading:
       pinCount === null
         ? pinnedResultsLabel(PINNED_RESULTS_HEADING, TABLE_DATA_LOADING_MESSAGE)
-        : pinnedResultsLabel(`${pinCount} Pinned ${nounForCount(pinCount, DEFAULT_VIEW_NOUN)}`),
+        : pinnedResultsLabel(
+            `${pinCount} Pinned ${nounForCount(pinCount, DEFAULT_VIEW_NOUN)}`,
+            hiddenNote,
+          ),
     sublabels: [],
   };
 };
@@ -106,8 +121,17 @@ export const getPinToggleTooltip = (
 export const getNoResultsMessage = ({ viewNoun }: ComparisonToolNouns): string =>
   `No ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)} found...`;
 
-export const getPinnedFetchFailedMessage = ({ viewNoun }: ComparisonToolNouns): string =>
-  `We encountered a problem loading your pinned ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)}.`;
+/**
+ * Takes the service's `failedPinnedRowCount`. The noun is singular only for a known count of one, so
+ * an unknown count reads as plural.
+ */
+export const getPinnedFetchFailedMessage = (
+  rowCount: number | null,
+  { viewNoun }: ComparisonToolNouns,
+): string => {
+  const noun = viewNoun ?? DEFAULT_VIEW_NOUN;
+  return `We encountered a problem loading your pinned ${sentenceCase(rowCount === 1 ? noun.singular : noun.plural)}.`;
+};
 
 export const getUnpinnedFetchFailedMessage = ({ viewNoun }: ComparisonToolNouns): string =>
   `We encountered a problem loading ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)}.`;
