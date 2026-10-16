@@ -19,7 +19,7 @@ const meta: Meta<BoxplotDirective> = {
   },
   render: (args: BoxplotProps) => ({
     props: args,
-    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [xAxisLabelFormatter]="xAxisLabelFormatter" [xAxisCategories]="xAxisCategories" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisLabelTooltipFormatter]="xAxisLabelTooltipFormatter" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity" [noDataStyle]="noDataStyle" [chartStyle]="chartStyle" [laneBackgroundColors]="laneBackgroundColors" [showAxisTicks]="showAxisTicks" [boxplotBoxStyle]="boxplotBoxStyle" [axisTickLabelStyle]="axisTickLabelStyle" [axisLineStyle]="axisLineStyle" [tooltipStyle]="tooltipStyle"></div>`,
+    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [xAxisLabelFormatter]="xAxisLabelFormatter" [xAxisCategories]="xAxisCategories" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [capPointsAboveYAxisMax]="capPointsAboveYAxisMax" [xAxisLabelTooltipFormatter]="xAxisLabelTooltipFormatter" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity" [noDataStyle]="noDataStyle" [chartStyle]="chartStyle" [laneBackgroundColors]="laneBackgroundColors" [showAxisTicks]="showAxisTicks" [boxplotBoxStyle]="boxplotBoxStyle" [axisTickLabelStyle]="axisTickLabelStyle" [axisLineStyle]="axisLineStyle" [tooltipStyle]="tooltipStyle"></div>`,
   }),
 };
 export default meta;
@@ -69,6 +69,14 @@ export const DynamicSummary: Story = {
     pointOpacity: 0.5,
     noDataStyle: 'grayBackground',
     chartStyle: 'grayGrid',
+  },
+};
+
+export const CappedPoints: Story = {
+  args: {
+    ...DynamicSummary.args,
+    yAxisMax: 800,
+    capPointsAboveYAxisMax: true,
   },
 };
 

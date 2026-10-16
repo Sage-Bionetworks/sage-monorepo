@@ -30,6 +30,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() yAxisTitle = '';
   @Input() yAxisMin: number | undefined;
   @Input() yAxisMax: number | undefined;
+  @Input() capPointsAboveYAxisMax: boolean | undefined;
   @Input() xAxisLabelTooltipFormatter: ((params: CallbackDataParams) => string) | undefined;
   @Input() pointTooltipFormatter:
     | undefined
@@ -70,6 +71,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       yAxisTitle: this.yAxisTitle,
       yAxisMin: this.yAxisMin,
       yAxisMax: this.yAxisMax,
+      capPointsAboveYAxisMax: this.capPointsAboveYAxisMax,
       xAxisLabelTooltipFormatter: this.xAxisLabelTooltipFormatter,
       pointTooltipFormatter: this.pointTooltipFormatter,
       pointCategoryColors: this.pointCategoryColors,
