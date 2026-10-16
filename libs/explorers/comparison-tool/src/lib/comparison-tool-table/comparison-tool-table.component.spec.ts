@@ -553,13 +553,19 @@ describe('ComparisonToolTableComponent', () => {
         expect(screen.getByRole('button', { name: /clear all/i })).toBeEnabled();
       });
 
-      it('should keep the pinned section while a refetch makes the hidden count unknown', async () => {
-        const { component } = await setup({ ...allPinsHidden, pinnedFetchPending: true });
+      it('should keep the pinned section and the message while the pinned rows reload', async () => {
+        const { component } = await setup(allPinsHidden);
+
+        TestBed.inject(ComparisonToolService).fetchPinned(new Subject<never>());
+        component.detectChanges();
 
         expect(getPinnedResultsHeaderLines(component.container)).toEqual([
           `${PINNED_RESULTS_HEADING} ${TABLE_DATA_LOADING_MESSAGE}`,
         ]);
         expect(screen.getByRole('button', { name: /clear all/i })).toBeInTheDocument();
+        expect(
+          screen.getByText('No matching results exist in the current view.'),
+        ).toBeInTheDocument();
       });
 
       it('should remove the pinned section when Clear All Pins is clicked', async () => {

@@ -6,6 +6,7 @@ import {
   ElementRef,
   HostListener,
   inject,
+  linkedSignal,
   signal,
   viewChild,
   ViewEncapsulation,
@@ -106,11 +107,24 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     () => this.hasPinnedRows() || this.comparisonToolService.pinnedItems().length > 0,
   );
 
-  noMatchingPinsMessage = computed(() =>
+  private readonly currentNoMatchingPinsMessage = computed(() =>
     this.hasPinnedRows() || !this.hasHiddenPins()
       ? null
       : getNoMatchingPinsMessage(this.comparisonToolService.hiddenRowCount(), this.nouns()),
   );
+
+  // Kept while pinned rows reload, like the rows themselves, so the pinned section doesn't shift
+  noMatchingPinsMessage = linkedSignal<
+    { message: string | null; isLoading: boolean },
+    string | null
+  >({
+    source: () => ({
+      message: this.currentNoMatchingPinsMessage(),
+      isLoading: this.isLoadingPinnedData(),
+    }),
+    computation: ({ message, isLoading }, previous) =>
+      isLoading ? (previous?.value ?? null) : message,
+  });
 
   pinnedFetchFailedMessage = computed(() =>
     getPinnedFetchFailedMessage(this.comparisonToolService.failedPinnedRowCount(), this.nouns()),
