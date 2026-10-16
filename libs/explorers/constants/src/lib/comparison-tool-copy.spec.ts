@@ -1,7 +1,9 @@
 import { ComparisonToolNouns, PinnedResultsCounts } from '@sagebionetworks/explorers/models';
 import {
   BLANK_LABEL_TEXT,
+  getNoMatchingPinsMessage,
   getNoResultsMessage,
+  getOverwritePinsMessage,
   getPinAllTooltip,
   getPinLimitTooltip,
   getPinnedFetchFailedMessage,
@@ -19,6 +21,8 @@ import { getPinLimitWarning } from './toasts';
 
 const PARENT = { singular: 'Parent', plural: 'Parents' };
 const CHILD = { singular: 'Child', plural: 'Children' };
+// A self-parented view: its rows are their own parents, so it has no parent noun
+const SELF_PARENTED_NOUNS: ComparisonToolNouns = { viewNoun: PARENT, parentNoun: null };
 // A view noun with no parent/child meaning, for copy that applies to standard CTs
 const STANDARD_NOUNS: ComparisonToolNouns = {
   viewNoun: { singular: 'Model', plural: 'Models' },
@@ -408,6 +412,162 @@ describe('comparison tool copy', () => {
     });
   });
 
+  describe('getNoMatchingPinsMessage', () => {
+    it('should fall back to results', () => {
+      expect(getNoMatchingPinsMessage(2, NO_NOUNS)).toBe(
+        'No matching results exist in the current view.',
+      );
+    });
+
+    it('should name the view rows in a child view', () => {
+      expect(getNoMatchingPinsMessage(2, CHILD_NOUNS)).toBe(
+        'No matching children exist in the current view.',
+      );
+    });
+
+    it('should use the singular for one hidden row', () => {
+      expect(getNoMatchingPinsMessage(1, STANDARD_NOUNS)).toBe(
+        'No matching model exists in the current view.',
+      );
+    });
+
+    it('should use the plural when the row count is unknown', () => {
+      expect(getNoMatchingPinsMessage(null, CHILD_NOUNS)).toBe(
+        'No matching children exist in the current view.',
+      );
+    });
+  });
+
+  describe('getOverwritePinsMessage', () => {
+    const PINNED_VIEW = ['Category A', 'Option B'];
+    const message = (lostPins: string, toView: 'it' | 'them') => ({
+      lostPins,
+      returnToView: {
+        beforeView: `To view ${toView}, go back to the`,
+        pinnedView: PINNED_VIEW,
+        afterView: 'view.',
+      },
+    });
+    const failedToLoadMessage = (lostPins: string) => ({ lostPins, returnToView: null });
+
+    it('should fall back to results without a parent count', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 5, hiddenParentPinCount: null },
+          { returnView: PINNED_VIEW, pinnedFetchFailed: false },
+          NO_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 5 results that can't be shown in this view. Changing your pins here will unpin those results.",
+          'them',
+        ),
+      );
+    });
+
+    it('should use the view noun without a parent count', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 1, hiddenParentPinCount: null },
+          { returnView: PINNED_VIEW, pinnedFetchFailed: false },
+          STANDARD_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 1 model that can't be shown in this view. Changing your pins here will unpin that model.",
+          'it',
+        ),
+      );
+    });
+
+    it('should count the results per parent noun in a child view', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 2, hiddenParentPinCount: 2 },
+          { returnView: PINNED_VIEW, pinnedFetchFailed: false },
+          CHILD_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 2 results for 2 parents that can't be shown in this view. Changing your pins here will unpin the results for those parents.",
+          'them',
+        ),
+      );
+    });
+
+    it('should count the results per view noun in a self-parented view, whose rows are the parents', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 5, hiddenParentPinCount: 1 },
+          { returnView: PINNED_VIEW, pinnedFetchFailed: false },
+          SELF_PARENTED_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 5 results for 1 parent that can't be shown in this view. Changing your pins here will unpin the results for that parent.",
+          'them',
+        ),
+      );
+    });
+
+    it('should word one result for one parent in the singular', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 1, hiddenParentPinCount: 1 },
+          { returnView: PINNED_VIEW, pinnedFetchFailed: false },
+          CHILD_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 1 result for 1 parent that can't be shown in this view. Changing your pins here will unpin the result for that parent.",
+          'it',
+        ),
+      );
+    });
+
+    it('should say the pins could not be loaded when there is no view to go back to', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 3, hiddenParentPinCount: null },
+          { returnView: null, pinnedFetchFailed: true },
+          STANDARD_NOUNS,
+        ),
+      ).toEqual(
+        failedToLoadMessage(
+          "You pinned 3 models that couldn't be loaded. Changing your pins here will unpin those models.",
+        ),
+      );
+    });
+
+    it('should count the results per parent when the pins could not be loaded', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 5, hiddenParentPinCount: 2 },
+          { returnView: null, pinnedFetchFailed: true },
+          CHILD_NOUNS,
+        ),
+      ).toEqual(
+        failedToLoadMessage(
+          "You pinned 5 results for 2 parents that couldn't be loaded. Changing your pins here will unpin the results for those parents.",
+        ),
+      );
+    });
+
+    it('should say the pins could not be loaded and still name their view when they failed in another view', () => {
+      expect(
+        getOverwritePinsMessage(
+          { hiddenPinCount: 3, hiddenParentPinCount: null },
+          { returnView: PINNED_VIEW, pinnedFetchFailed: true },
+          STANDARD_NOUNS,
+        ),
+      ).toEqual(
+        message(
+          "You pinned 3 models that couldn't be loaded. Changing your pins here will unpin those models.",
+          'them',
+        ),
+      );
+    });
+  });
   describe('getUnpinnedFetchFailedMessage', () => {
     it('should fall back to results', () => {
       expect(getUnpinnedFetchFailedMessage(NO_NOUNS)).toBe(

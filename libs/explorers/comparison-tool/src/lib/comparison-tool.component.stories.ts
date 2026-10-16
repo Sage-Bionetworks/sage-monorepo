@@ -497,6 +497,14 @@ export const Demo: Story = {
   },
 };
 
+// One cached pin has no row in this view, so it is hidden, and the next pin edit asks to confirm
+export const HiddenPins: Story = {
+  args: {
+    ...Demo.args,
+    pinnedItems: ['3xTg-AD', '5xFAD (UCI)', '5xFAD (IU/Jax/Pitt)', 'Model not in this view'],
+  },
+};
+
 export const WithSidebar: Story = {
   args: {
     ...Demo.args,

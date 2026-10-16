@@ -1,21 +1,9 @@
+@use 'explorers/styles/src/mixins' as mixins;
+
 .legend-panel {
-  color: var(--color-text);
-  max-width: 580px;
-  width: 100%;
-  box-sizing: content-box;
-
-  .p-dialog-header {
-    padding: 20px 40px;
-
-    .p-dialog-title {
-      font-size: 28px;
-      font-weight: 600;
-    }
-  }
+  @include mixins.ct-dialog;
 
   .p-dialog-content {
-    padding: 0 40px;
-
     img,
     svg {
       width: 100%;
@@ -24,7 +12,6 @@
   }
 
   .p-dialog-footer {
-    padding: 20px 40px;
     text-align: right;
 
     a {

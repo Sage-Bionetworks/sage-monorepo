@@ -1,21 +1,9 @@
+@use 'explorers/styles/src/mixins' as mixins;
+
 .tutorial-panel {
-  color: var(--color-text);
-  max-width: 580px;
-  width: 100%;
-  box-sizing: content-box;
-
-  .p-dialog-header {
-    padding: 20px 40px;
-
-    .p-dialog-title {
-      font-size: 28px;
-      font-weight: 600;
-    }
-  }
+  @include mixins.ct-dialog;
 
   .p-dialog-content {
-    padding: 0 40px;
-
     img,
     svg,
     video {
@@ -28,7 +16,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
 
     a {
       color: var(--color-action-primary);
@@ -42,15 +29,7 @@
     }
 
     .checkbox {
-      display: flex;
-      column-gap: 0.5rem;
-      align-items: center;
-
-      label {
-        font-size: var(--font-size-sm);
-        cursor: pointer;
-        user-select: none;
-      }
+      @include mixins.ct-dialog-checkbox;
     }
 
     .tutorial-panel-previous {
