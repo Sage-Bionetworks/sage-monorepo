@@ -195,12 +195,6 @@ type VersionComparison = { isMismatch: boolean; serverVersionLabel: string } | n
 
 type VersionComparisons = Record<TrackedVersion, VersionComparison>;
 
-interface VersionCheckResult {
-  isAppVersionKnown: boolean;
-  isAppVersionMismatch: boolean;
-  isDataVersionMismatch: boolean;
-}
-
 /**
  * Detects that this tab is running code from an earlier deploy, or showing data from an earlier
  * data release, by comparing the versions it was loaded with against the versions the servers
@@ -251,17 +245,17 @@ export class AppUpdateService {
     app: null,
     data: null,
   };
-  private inFlightCheck$: Observable<VersionCheckResult> | null = null;
+  private inFlightCheck$: Observable<VersionComparison> | null = null;
   private hasChunkLoadErrorJoinedInFlightCheck = false;
   private readonly requestedChecks = new Subject<AppUpdateCheckTrigger>();
 
   /**
    * Starts checking for a newer deploy whenever the tab becomes visible again, whenever the
    * browser reconnects, periodically while the tab stays visible, and right away when a route's
-   * lazy-loaded chunk fails to load, which shows the overlay whatever the check finds. With a
-   * `dataVersionUrl`, each check also compares the data version against the one the tab loaded
-   * with (see `VersionService.getLoadedDataVersion`). Does nothing during SSR, when checks are
-   * disabled, or if already started.
+   * lazy-loaded chunk fails to load, which shows either the update notice or a reload prompt.
+   * With a `dataVersionUrl`, each check also compares the data version against the one the tab
+   * loaded with (see `VersionService.getLoadedDataVersion`). Does nothing during SSR, when checks
+   * are disabled, or if already started.
    */
   start(clientVersion: AppVersion, siteName: string, dataVersionUrl?: string) {
     const browserWindow = this.document.defaultView;
@@ -321,7 +315,7 @@ export class AppUpdateService {
    * Each failure is counted once in a Sentry metric, labeled with the check's outcome.
    */
   private async handleChunkLoadError() {
-    const outcome = await this.checkAppVersionNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+    const outcome = await this.getAppVersionCheckOutcome(AppUpdateCheckTriggerEnum.ChunkLoadError);
     Sentry.metrics.count(CHUNK_LOAD_FAILED_METRIC, 1, { attributes: { outcome } });
     if (outcome !== AppVersionCheckOutcomeEnum.Stale) {
       this.errorOverlayService.showError(CHUNK_LOAD_ERROR_MESSAGE);
@@ -347,16 +341,16 @@ export class AppUpdateService {
    * without waiting out the confirmation delay. Resolves false before `start` and while offline,
    * since the version is then unknown.
    */
-  checkNow(trigger: AppUpdateCheckTrigger): Promise<boolean> {
+  isAppStale(trigger: AppUpdateCheckTrigger): Promise<boolean> {
     if (!this.clientVersion) {
       return Promise.resolve(false);
     }
-    return this.checkAppVersionNow(trigger).then(
+    return this.getAppVersionCheckOutcome(trigger).then(
       (outcome) => outcome === AppVersionCheckOutcomeEnum.Stale,
     );
   }
 
-  private async checkAppVersionNow(
+  private async getAppVersionCheckOutcome(
     trigger: AppUpdateCheckTrigger,
   ): Promise<AppVersionCheckOutcome> {
     if (this.stale.app()) {
@@ -365,13 +359,13 @@ export class AppUpdateService {
     if (!this.isOnline()) {
       return AppVersionCheckOutcomeEnum.Offline;
     }
-    const { isAppVersionKnown, isAppVersionMismatch } = await firstValueFrom(this.check$(trigger));
-    if (isAppVersionMismatch) {
-      return AppVersionCheckOutcomeEnum.Stale;
+    const appComparison = await firstValueFrom(this.check$(trigger));
+    if (!appComparison) {
+      return AppVersionCheckOutcomeEnum.CheckFailed;
     }
-    return isAppVersionKnown
-      ? AppVersionCheckOutcomeEnum.Current
-      : AppVersionCheckOutcomeEnum.CheckFailed;
+    return appComparison.isMismatch
+      ? AppVersionCheckOutcomeEnum.Stale
+      : AppVersionCheckOutcomeEnum.Current;
   }
 
   /**
@@ -380,9 +374,10 @@ export class AppUpdateService {
    * reported with every version that differed. A chunk load that fails during a check started by
    * another trigger makes that check handle the app version as a chunk-load check, so a mismatch
    * shows the overlay without the confirmation delay. The data version keeps the trigger that
-   * started the check, since a failed chunk load says nothing about the data release.
+   * started the check, since a failed chunk load says nothing about the data release. Emits the app
+   * version comparison, which is null when the app version request failed.
    */
-  private check$(trigger: AppUpdateCheckTrigger): Observable<VersionCheckResult> {
+  private check$(trigger: AppUpdateCheckTrigger): Observable<VersionComparison> {
     if (this.inFlightCheck$) {
       if (trigger === AppUpdateCheckTriggerEnum.ChunkLoadError) {
         this.hasChunkLoadErrorJoinedInFlightCheck = true;
@@ -398,11 +393,7 @@ export class AppUpdateService {
             ? AppUpdateCheckTriggerEnum.ChunkLoadError
             : trigger;
           this.handleComparisons(comparisons, { app: appTrigger, data: trigger });
-          return {
-            isAppVersionKnown: comparisons.app !== null,
-            isAppVersionMismatch: comparisons.app?.isMismatch ?? false,
-            isDataVersionMismatch: comparisons.data?.isMismatch ?? false,
-          };
+          return comparisons.app;
         }),
         finalize(() => {
           this.inFlightCheck$ = null;

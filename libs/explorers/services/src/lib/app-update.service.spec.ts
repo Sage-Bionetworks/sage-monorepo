@@ -446,7 +446,7 @@ describe('AppUpdateService', () => {
       const appUpdateService = setup();
       appUpdateService.start(loadedVersion, siteName);
 
-      const isVersionMismatch = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.Visibility);
+      const isVersionMismatch = appUpdateService.isAppStale(AppUpdateCheckTriggerEnum.Visibility);
       respondWithServerVersion(newerVersion);
 
       await expect(isVersionMismatch).resolves.toBe(true);
@@ -637,7 +637,9 @@ describe('AppUpdateService', () => {
       const appUpdateService = setup();
       appUpdateService.start(loadedVersion, siteName);
 
-      const isVersionMismatch = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const isVersionMismatch = appUpdateService.isAppStale(
+        AppUpdateCheckTriggerEnum.ChunkLoadError,
+      );
       jest.advanceTimersByTime(VERSION_CHECK_TIMEOUT_MS);
 
       await expect(isVersionMismatch).resolves.toBe(false);
@@ -719,7 +721,7 @@ describe('AppUpdateService', () => {
       expect(isShowingAppUpdateNotice()).toBe(true);
     });
 
-    it('waits out the confirmation delay again on the check after one a route chunk failure joined', async () => {
+    it('waits out the confirmation delay on the next check after a route chunk failure', async () => {
       setup().start(loadedVersion, siteName);
       returnToTab();
       await navigateTo(missingChunkPath);
@@ -775,8 +777,8 @@ describe('AppUpdateService', () => {
       const appUpdateService = setup();
       appUpdateService.start(loadedVersion, siteName);
 
-      const firstCheck = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
-      const secondCheck = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const firstCheck = appUpdateService.isAppStale(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const secondCheck = appUpdateService.isAppStale(AppUpdateCheckTriggerEnum.ChunkLoadError);
       respondWithServerVersion(newerVersion);
 
       await expect(Promise.all([firstCheck, secondCheck])).resolves.toEqual([true, true]);
@@ -789,14 +791,14 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       confirmNewerVersion();
 
-      const isStale = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const isStale = appUpdateService.isAppStale(AppUpdateCheckTriggerEnum.ChunkLoadError);
 
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
       await expect(isStale).resolves.toBe(true);
     });
 
     it('resolves that the tab is current without a request before it starts', async () => {
-      const isStale = setup().checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const isStale = setup().isAppStale(AppUpdateCheckTriggerEnum.ChunkLoadError);
 
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
       await expect(isStale).resolves.toBe(false);
@@ -807,7 +809,7 @@ describe('AppUpdateService', () => {
       appUpdateService.start(loadedVersion, siteName);
       isBrowserOnline = false;
 
-      const isStale = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const isStale = appUpdateService.isAppStale(AppUpdateCheckTriggerEnum.ChunkLoadError);
 
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
       await expect(isStale).resolves.toBe(false);
@@ -905,6 +907,32 @@ describe('AppUpdateService', () => {
 
       expect(httpMock.match(dataVersionUrl)).toHaveLength(0);
       expect(isShowingDataUpdateNotice()).toBe(false);
+    });
+
+    it('restarts the confirmation delay when the confirmation check finds a different data release', () => {
+      startWithDataChecks(setup());
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataFile);
+
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS - 1);
+
+      expect(httpMock.match(dataVersionUrl)).toHaveLength(0);
+      expect(isShowingDataUpdateNotice()).toBe(false);
+    });
+
+    it('shows the overlay once a different data release found by the confirmation check outlasts its own delay', () => {
+      startWithDataChecks(setup());
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataFile);
+
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataFile);
+
+      expect(isShowingDataUpdateNotice()).toBe(true);
     });
 
     it('shows the overlay once a different data release outlasts its own confirmation delay', () => {
@@ -1062,7 +1090,9 @@ describe('AppUpdateService', () => {
       const appUpdateService = setup();
       startWithDataChecks(appUpdateService);
 
-      const isVersionMismatch = appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+      const isVersionMismatch = appUpdateService.isAppStale(
+        AppUpdateCheckTriggerEnum.ChunkLoadError,
+      );
       respondToCheck(loadedVersion, newerDataVersion);
 
       await expect(isVersionMismatch).resolves.toBe(false);

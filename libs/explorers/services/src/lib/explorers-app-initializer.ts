@@ -18,7 +18,7 @@ export function initializeExplorersApp(siteName: string): Promise<void> {
       dsn: sentryDsn,
       environment: sentryEnvironment,
       release: sentryRelease,
-      isStaleClient: () => appUpdateService.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError),
+      isStaleClient: () => appUpdateService.isAppStale(AppUpdateCheckTriggerEnum.ChunkLoadError),
     });
     appUpdateService.start(configService.config, siteName, getDataVersionUrl(csrApiUrl));
   });

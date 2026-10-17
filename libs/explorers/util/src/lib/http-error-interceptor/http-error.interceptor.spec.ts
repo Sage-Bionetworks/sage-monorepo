@@ -29,7 +29,7 @@ describe('httpErrorInterceptor', () => {
   let appUpdateService: {
     start: jest.Mock;
     requestCheck: jest.Mock;
-    checkNow: jest.Mock;
+    isAppStale: jest.Mock;
   };
 
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('httpErrorInterceptor', () => {
     appUpdateService = {
       start: jest.fn(),
       requestCheck: jest.fn(),
-      checkNow: jest.fn(() => Promise.resolve(false)),
+      isAppStale: jest.fn(() => Promise.resolve(false)),
     };
 
     TestBed.configureTestingModule({

@@ -24,7 +24,7 @@ const config = {
 describe('initializeExplorersApp', () => {
   let configService: { config: typeof config; loadConfig: jest.Mock };
   const dataVersionUrl = `${csrApiUrl}${DATA_VERSION_PATH}`;
-  let appUpdateService: { start: jest.Mock; requestCheck: jest.Mock; checkNow: jest.Mock };
+  let appUpdateService: { start: jest.Mock; requestCheck: jest.Mock; isAppStale: jest.Mock };
 
   async function initialize(loadedConfig: typeof config = config) {
     configService = {
@@ -34,7 +34,7 @@ describe('initializeExplorersApp', () => {
     appUpdateService = {
       start: jest.fn(),
       requestCheck: jest.fn(),
-      checkNow: jest.fn(() => Promise.resolve(true)),
+      isAppStale: jest.fn(() => Promise.resolve(true)),
     };
     TestBed.configureTestingModule({
       providers: [
@@ -87,7 +87,7 @@ describe('initializeExplorersApp', () => {
     await initialize();
 
     await expect(sentryConfig().isStaleClient?.()).resolves.toBe(true);
-    expect(appUpdateService.checkNow).toHaveBeenCalledWith(
+    expect(appUpdateService.isAppStale).toHaveBeenCalledWith(
       AppUpdateCheckTriggerEnum.ChunkLoadError,
     );
   });
