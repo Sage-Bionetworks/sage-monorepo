@@ -352,6 +352,21 @@ describe('AppUpdateService', () => {
   });
 
   describe('while a version mismatch is unconfirmed', () => {
+    it('restarts the confirmation delay when a different deploy appears before it ends', () => {
+      const laterVersion: AppVersion = { appVersion: '4.0.0-rc5', commitSha: '9a8b7c6' };
+      setup().start(loadedVersion, siteName);
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS - APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+      respondWithServerVersion(laterVersion);
+
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+      expect(isShowingAppUpdateNotice()).toBe(false);
+    });
+
     it('does not show the overlay on the first mismatch', () => {
       const appUpdateService = setup();
       appUpdateService.start(loadedVersion, siteName);
@@ -878,6 +893,34 @@ describe('AppUpdateService', () => {
   });
 
   describe('when the data version is checked', () => {
+    it('restarts the confirmation delay when a different data release appears before it ends', () => {
+      startWithDataChecks(setup());
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS - APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataFile);
+
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+
+      expect(httpMock.match(dataVersionUrl)).toHaveLength(0);
+      expect(isShowingDataUpdateNotice()).toBe(false);
+    });
+
+    it('shows the overlay once a different data release outlasts its own confirmation delay', () => {
+      startWithDataChecks(setup());
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS - APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+      respondToCheck(loadedVersion, newerDataFile);
+
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
+      respondToCheck(loadedVersion, newerDataFile);
+
+      expect(isShowingDataUpdateNotice()).toBe(true);
+    });
+
     it('does not check the data version without a data version URL', () => {
       const appUpdateService = setup();
       loadFooterDataVersion();

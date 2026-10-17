@@ -597,8 +597,16 @@ export class AppUpdateService {
    * release replaced it or a rollback removed it. The first mismatch starts the confirmation delay,
    * and only a mismatch after the delay shows the overlay. A match before then clears it, since the
    * servers still serve this tab's version. If that version really is going away, a later mismatch
-   * starts the delay again. An app version mismatch found because a chunk failed to load skips the
-   * delay, since the tab cannot navigate until it reloads.
+   * starts the delay again.
+   *
+   * The delay also starts over when the server reports a different version than the one already
+   * waiting, e.g. data release B is seen, then release C before B's delay ends. The delay is
+   * measured from when C was first seen, not B. Otherwise C could show the overlay moments after it
+   * appears, before the APIs have cleared their caches for C, and a reload would still show B's
+   * cached data.
+   *
+   * An app version mismatch found because a chunk failed to load skips the delay, since the tab
+   * cannot navigate until it reloads.
    */
   private handleVersionMismatch(
     trackedVersion: TrackedVersion,
@@ -611,7 +619,11 @@ export class AppUpdateService {
       return;
     }
     const pendingMismatch = this.pendingMismatches[trackedVersion];
-    if (!pendingMismatch) {
+    // A different label means a different server version, since each label includes every field
+    // the comparison checks. Cancelling stops the timer the earlier version started, so the new
+    // version waits out a full delay of its own.
+    if (!pendingMismatch || pendingMismatch.serverVersionLabel !== serverVersionLabel) {
+      this.cancelConfirmation(trackedVersion);
       this.pendingMismatches[trackedVersion] = {
         serverVersionLabel,
         trigger,
