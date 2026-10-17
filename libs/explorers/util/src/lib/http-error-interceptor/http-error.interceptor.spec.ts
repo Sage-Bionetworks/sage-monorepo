@@ -8,6 +8,8 @@ import {
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import {
+  AppUpdateCheckTriggerEnum,
+  AppUpdateService,
   ErrorOverlayService,
   LoggerService,
   SKIP_ERROR_REPORTING,
@@ -24,10 +26,20 @@ describe('httpErrorInterceptor', () => {
   let httpTestingController: HttpTestingController;
   let logger: { error: jest.Mock };
   let errorOverlayService: { showError: jest.Mock };
+  let appUpdateService: {
+    start: jest.Mock;
+    requestCheck: jest.Mock;
+    checkNow: jest.Mock;
+  };
 
   beforeEach(() => {
     logger = { error: jest.fn() };
     errorOverlayService = { showError: jest.fn() };
+    appUpdateService = {
+      start: jest.fn(),
+      requestCheck: jest.fn(),
+      checkNow: jest.fn(() => Promise.resolve(false)),
+    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -35,6 +47,7 @@ describe('httpErrorInterceptor', () => {
         provideHttpClientTesting(),
         { provide: LoggerService, useValue: { forSource: () => logger } },
         { provide: ErrorOverlayService, useValue: errorOverlayService },
+        { provide: AppUpdateService, useValue: appUpdateService },
       ],
     });
 
@@ -82,6 +95,13 @@ describe('httpErrorInterceptor', () => {
       `HTTP ${NOT_FOUND.status} GET ${DATA_VERSION_URL}`,
       expect.anything(),
     );
+  });
+
+  it('should ask for an app version check, since a stale tab may cause the error', () => {
+    requestAndFail(new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true));
+
+    expect(appUpdateService.requestCheck).toHaveBeenCalledTimes(1);
+    expect(appUpdateService.requestCheck).toHaveBeenCalledWith(AppUpdateCheckTriggerEnum.HttpError);
   });
 
   it('should not report the error when the caller owns error reporting', () => {

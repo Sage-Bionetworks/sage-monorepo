@@ -77,6 +77,15 @@ class AlternativeCache {
   get(key: string) {
     return this.data[key] ?? undefined;
   }
+
+  clear() {
+    this.data = {};
+  }
 }
 
 export const altCache = new AlternativeCache();
+
+export function clearAllCaches() {
+  cache.flushAll();
+  altCache.clear();
+}

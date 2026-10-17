@@ -9,7 +9,11 @@ import {
   HeaderComponent,
 } from '@sagebionetworks/explorers/ui';
 import { DataVersionService } from '@sagebionetworks/model-ad/api-client';
-import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
+import {
+  ConfigService,
+  MODEL_AD_LOADING_ICON_COLORS,
+  SITE_NAME,
+} from '@sagebionetworks/model-ad/config';
 import { SearchInputComponent } from '@sagebionetworks/model-ad/ui';
 import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';
 import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm';
@@ -53,6 +57,6 @@ export class AppComponent {
   footerLinks = footerLinks;
 
   constructor() {
-    this.metaTagService.initialize('Model AD');
+    this.metaTagService.initialize(SITE_NAME);
   }
 }

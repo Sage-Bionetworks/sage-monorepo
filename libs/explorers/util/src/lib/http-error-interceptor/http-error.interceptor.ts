@@ -9,6 +9,8 @@ import * as Sentry from '@sentry/angular';
 import { Observable, throwError, timer } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import {
+  AppUpdateCheckTriggerEnum,
+  AppUpdateService,
   ErrorOverlayService,
   LoggerService,
   SKIP_ERROR_REPORTING,
@@ -26,6 +28,9 @@ export const RETRY_DELAY_MS = 1000;
  * - Shows the error overlay, unless the request sets SUPPRESS_ERROR_OVERLAY
  * - Reports errors to Sentry, unless the request sets SKIP_ERROR_REPORTING
  *   because the caller reports its own failures
+ * - Asks for an app version check, since a tab from an earlier deploy may be calling an API that
+ *   has since changed. If the mismatch persists through the confirmation delay, the update
+ *   notice replaces any error overlay.
  * - Re-throws errors so callers can recover (fallback values, redirects)
  */
 export const httpErrorInterceptor: HttpInterceptorFn = (
@@ -34,6 +39,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
 ): Observable<any> => {
   const logger = inject(LoggerService).forSource('httpErrorInterceptor');
   const errorOverlayService = inject(ErrorOverlayService);
+  const appUpdateService = inject(AppUpdateService);
 
   return next(req).pipe(
     retry({
@@ -50,6 +56,8 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
     catchError((error: HttpErrorResponse) => {
       const errorMessage = buildErrorMessage(error);
       const urlPath = extractUrlPath(error.url);
+
+      appUpdateService.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
 
       if (!req.context.get(SKIP_ERROR_REPORTING)) {
         // The message groups Sentry issues, so it carries only the endpoint and status; tags make

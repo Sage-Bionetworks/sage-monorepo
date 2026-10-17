@@ -34,6 +34,8 @@ $extra-colors: (
   separator: map.get($main-colors, 'gray-300'),
   shadow: #c7c5c5,
   tooltip: #63676c,
+  warning-background: #fff7e9,
+  warning-hover: #fdd487,
 );
 $comparison-tool-colors: (
   row-highlight: #ebf2fa,

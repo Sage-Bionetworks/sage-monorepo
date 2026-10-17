@@ -5,13 +5,13 @@ import { ErrorOverlayService } from '@sagebionetworks/explorers/services';
 import { ErrorOverlayComponent } from './error-overlay.component';
 
 function createMockErrorOverlayService(hasError = false, errorMessage = '') {
-  const errorMessageSignal = signal<string | null>(hasError ? errorMessage : null);
+  const activeMessage = signal<string | null>(hasError ? errorMessage : null);
   return {
-    hasActiveError: signal(hasError),
-    activeErrorMessage: signal(errorMessage || 'Something went wrong.'),
-    showError: jest.fn((message: string) => {
-      errorMessageSignal.set(message);
-    }),
+    activeMessage,
+    isOverlayVisible: signal(hasError),
+    showError: jest.fn((message: string) => activeMessage.set(message)),
+    showAppUpdateAvailable: jest.fn(),
+    showDataUpdateAvailable: jest.fn(),
     reloadPage: jest.fn(),
   };
 }
@@ -25,12 +25,12 @@ async function setup(hasError = false, errorMessage = '') {
 }
 
 describe('ErrorOverlayComponent', () => {
-  it('should not display anything when hasActiveError is false', async () => {
+  it('should not display anything when the overlay is not visible', async () => {
     await setup(false);
     expect(screen.queryByText('Reload Page')).not.toBeInTheDocument();
   });
 
-  it('should display overlay and banner when hasActiveError is true', async () => {
+  it('should display overlay and banner when the overlay is visible', async () => {
     const { container } = await setup(true, 'Test error');
     expect(container.querySelector('.error-overlay')).toBeInTheDocument();
     expect(container.querySelector('.warning-banner')).toBeInTheDocument();

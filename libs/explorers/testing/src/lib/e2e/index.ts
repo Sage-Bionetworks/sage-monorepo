@@ -1,3 +1,4 @@
+export * from './app-update';
 export * from './comparison-tool';
 export * from './comparison-tool-dropdown';
 export * from './comparison-tool-filter';
