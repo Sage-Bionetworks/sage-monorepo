@@ -18,6 +18,8 @@ import {
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
   APP_VERSION_PATH,
+  CHUNK_LOAD_ERROR_MESSAGE,
+  CHUNK_LOAD_FAILED_METRIC,
   DATA_UPDATE_CONFIRM_DELAY_MS,
   DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
   STALE_APP_METRIC,
@@ -80,6 +82,23 @@ export const MismatchedVersionsEnum = {
 } as const;
 export type MismatchedVersions =
   (typeof MismatchedVersionsEnum)[keyof typeof MismatchedVersionsEnum];
+
+/**
+ * What an immediate app version check found. Reported as the outcome attribute of the chunk-load
+ * failure metric, which tells deploys apart from network problems.
+ */
+export const AppVersionCheckOutcomeEnum = {
+  /** The version request errored or timed out, so whether the tab is stale is unknown */
+  CheckFailed: 'check-failed',
+  /** The server runs the version this tab loaded with */
+  Current: 'current',
+  /** The browser reports no connection, so no request was sent */
+  Offline: 'offline',
+  /** The server runs a different version than this tab loaded with */
+  Stale: 'stale',
+} as const;
+export type AppVersionCheckOutcome =
+  (typeof AppVersionCheckOutcomeEnum)[keyof typeof AppVersionCheckOutcomeEnum];
 
 /** Which version endpoint a check failure came from. Reported as a Sentry metric attribute. */
 export const VersionCheckEndpointEnum = {
@@ -177,6 +196,7 @@ type VersionComparison = { isMismatch: boolean; serverVersionLabel: string } | n
 type VersionComparisons = Record<TrackedVersion, VersionComparison>;
 
 interface VersionCheckResult {
+  isAppVersionKnown: boolean;
   isAppVersionMismatch: boolean;
   isDataVersionMismatch: boolean;
 }
@@ -237,9 +257,10 @@ export class AppUpdateService {
   /**
    * Starts checking for a newer deploy whenever the tab becomes visible again, whenever the
    * browser reconnects, periodically while the tab stays visible, and right away when a route's
-   * lazy-loaded chunk fails to load. With a `dataVersionUrl`, each check also compares the data
-   * version against the one the tab loaded with (see `VersionService.getLoadedDataVersion`). Does
-   * nothing during SSR, when checks are disabled, or if already started.
+   * lazy-loaded chunk fails to load, which shows the overlay whatever the check finds. With a
+   * `dataVersionUrl`, each check also compares the data version against the one the tab loaded
+   * with (see `VersionService.getLoadedDataVersion`). Does nothing during SSR, when checks are
+   * disabled, or if already started.
    */
   start(clientVersion: AppVersion, siteName: string, dataVersionUrl?: string) {
     const browserWindow = this.document.defaultView;
@@ -284,7 +305,26 @@ export class AppUpdateService {
         filter((event) => event instanceof NavigationError && isChunkLoadError(event.error)),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(() => this.checkNow(AppUpdateCheckTriggerEnum.ChunkLoadError));
+      .subscribe(() => this.handleChunkLoadError());
+  }
+
+  /**
+   * Handles a route whose lazy-loaded chunk failed to download, which leaves the page without that
+   * route's content until the tab reloads.
+   *
+   * The app version is checked first. When the server runs a different version, a deploy most
+   * likely removed the chunk, and the check itself shows the update notice. In every other case
+   * (the version matches, the browser is offline, or the check failed), the download most likely
+   * failed on the network, so the error overlay asks the user to reload.
+   *
+   * Each failure is counted once in a Sentry metric, labeled with the check's outcome.
+   */
+  private async handleChunkLoadError() {
+    const outcome = await this.checkAppVersionNow(AppUpdateCheckTriggerEnum.ChunkLoadError);
+    Sentry.metrics.count(CHUNK_LOAD_FAILED_METRIC, 1, { attributes: { outcome } });
+    if (outcome !== AppVersionCheckOutcomeEnum.Stale) {
+      this.errorOverlayService.showError(CHUNK_LOAD_ERROR_MESSAGE);
+    }
   }
 
   /**
@@ -307,15 +347,30 @@ export class AppUpdateService {
    * since the version is then unknown.
    */
   checkNow(trigger: AppUpdateCheckTrigger): Promise<boolean> {
-    if (this.stale.app()) {
-      return Promise.resolve(true);
-    }
-    if (!this.clientVersion || !this.isOnline()) {
+    if (!this.clientVersion) {
       return Promise.resolve(false);
     }
-    return firstValueFrom(
-      this.check$(trigger).pipe(map(({ isAppVersionMismatch }) => isAppVersionMismatch)),
+    return this.checkAppVersionNow(trigger).then(
+      (outcome) => outcome === AppVersionCheckOutcomeEnum.Stale,
     );
+  }
+
+  private async checkAppVersionNow(
+    trigger: AppUpdateCheckTrigger,
+  ): Promise<AppVersionCheckOutcome> {
+    if (this.stale.app()) {
+      return AppVersionCheckOutcomeEnum.Stale;
+    }
+    if (!this.isOnline()) {
+      return AppVersionCheckOutcomeEnum.Offline;
+    }
+    const { isAppVersionKnown, isAppVersionMismatch } = await firstValueFrom(this.check$(trigger));
+    if (isAppVersionMismatch) {
+      return AppVersionCheckOutcomeEnum.Stale;
+    }
+    return isAppVersionKnown
+      ? AppVersionCheckOutcomeEnum.Current
+      : AppVersionCheckOutcomeEnum.CheckFailed;
   }
 
   /**
@@ -333,6 +388,7 @@ export class AppUpdateService {
         map((comparisons) => {
           this.handleComparisons(comparisons, trigger);
           return {
+            isAppVersionKnown: comparisons.app !== null,
             isAppVersionMismatch: comparisons.app?.isMismatch ?? false,
             isDataVersionMismatch: comparisons.data?.isMismatch ?? false,
           };

@@ -3,6 +3,7 @@ import type { AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_CONFIRM_DELAY_MS,
   APP_VERSION_PATH,
+  CHUNK_LOAD_ERROR_MESSAGE,
   DATA_UPDATE_CONFIRM_DELAY_MS,
   DATA_VERSION_PATH,
   getAppUpdateMessage,
@@ -46,6 +47,22 @@ export async function simulateNewDataRelease(page: Page) {
   await page.route(`**${DATA_VERSION_PATH}`, (route) =>
     route.fulfill({ json: NEWER_DATA_VERSION }),
   );
+}
+
+/** Makes every lazy-loaded chunk the tab requests from now on fail to download. */
+export async function simulateChunkDownloadFailure(page: Page) {
+  await page.route('**/chunk-*.js', (route) => route.abort());
+}
+
+/**
+ * Navigates within the running app, as a link click would, so the router loads the route's chunk
+ * instead of the browser loading a new page. Every explorer app has an about route.
+ */
+export async function navigateWithinApp(page: Page, path = '/about') {
+  await page.evaluate((targetPath) => {
+    history.pushState(null, '', targetPath);
+    dispatchEvent(new PopStateEvent('popstate'));
+  }, path);
 }
 
 /** Resolves with the next app version check's response. */
@@ -129,6 +146,18 @@ export function defineAppUpdateTests(siteName: string) {
         page.getByText(getDataUpdateMessage(siteName)),
       );
 
+      await expect(page.getByRole('button', { name: 'Reload Page' })).toBeVisible();
+    });
+
+    test('asks to reload when a page fails to download on the current deploy', async ({ page }) => {
+      await gotoAndWaitForBrowserApp(page);
+      await simulateChunkDownloadFailure(page);
+      const appVersionCheck = waitForAppVersionCheck(page);
+
+      await navigateWithinApp(page);
+
+      expect((await appVersionCheck).status()).toBe(200);
+      await expect(page.getByText(CHUNK_LOAD_ERROR_MESSAGE)).toBeVisible();
       await expect(page.getByRole('button', { name: 'Reload Page' })).toBeVisible();
     });
 

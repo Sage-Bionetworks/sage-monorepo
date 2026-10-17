@@ -13,6 +13,7 @@ export const VERSION_CHECK_TIMEOUT_MS = 10 * 1000;
  * cache invalidation, which polls every minute and clears again on the following poll.
  */
 export const DATA_UPDATE_CONFIRM_DELAY_MS = 2 * 60 * 1000;
+export const CHUNK_LOAD_FAILED_METRIC = 'app.chunk_load_failed';
 export const STALE_APP_METRIC = 'app.stale_app_detected';
 export const STALE_DATA_METRIC = 'app.stale_data_detected';
 export const TRANSIENT_APP_VERSION_MISMATCH_METRIC = 'app.transient_app_version_mismatch';
@@ -20,6 +21,9 @@ export const TRANSIENT_DATA_VERSION_MISMATCH_METRIC = 'app.transient_data_versio
 export const VERSION_CHECK_FAILED_METRIC = 'app.version_check_failed';
 export const APP_VERSION_ENDPOINT_MISCONFIGURED_WARNING = 'App version endpoint is misconfigured';
 export const DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING = 'Data version endpoint is misconfigured';
+
+export const CHUNK_LOAD_ERROR_MESSAGE =
+  'Part of this page could not be loaded. Please check your connection and reload the page.';
 
 export const getAppUpdateMessage = (siteName: string): string =>
   `A new version of ${siteName} is available. Please reload the page to continue.`;

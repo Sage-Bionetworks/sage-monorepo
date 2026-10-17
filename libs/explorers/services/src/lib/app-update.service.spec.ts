@@ -13,6 +13,8 @@ import {
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
   APP_VERSION_PATH,
+  CHUNK_LOAD_ERROR_MESSAGE,
+  CHUNK_LOAD_FAILED_METRIC,
   DATA_UPDATE_CONFIRM_DELAY_MS,
   DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
   getAppUpdateMessage,
@@ -30,6 +32,8 @@ import {
   APP_UPDATE_CHECKS_ENABLED,
   AppUpdateCheckTriggerEnum,
   AppUpdateService,
+  AppVersionCheckOutcome,
+  AppVersionCheckOutcomeEnum,
   MismatchedVersionsEnum,
   NO_RESPONSE_STATUS,
   VersionCheckEndpointEnum,
@@ -660,11 +664,41 @@ describe('AppUpdateService', () => {
       );
     });
 
-    it('stays current when a route chunk fails to load but the version matches', async () => {
+    it('asks to reload when a route chunk fails to load but the version matches', async () => {
       setup().start(loadedVersion, siteName);
 
       await navigateTo(missingChunkPath);
       respondWithServerVersion(loadedVersion);
+      await jest.advanceTimersByTimeAsync(0);
+
+      expect(errorOverlayService.activeMessage()).toBe(CHUNK_LOAD_ERROR_MESSAGE);
+    });
+
+    it('asks to reload when a route chunk fails to load while offline', async () => {
+      setup().start(loadedVersion, siteName);
+      isBrowserOnline = false;
+
+      await navigateTo(missingChunkPath);
+      await jest.advanceTimersByTimeAsync(0);
+
+      expect(errorOverlayService.activeMessage()).toBe(CHUNK_LOAD_ERROR_MESSAGE);
+    });
+
+    it('asks to reload when a route chunk fails to load and the version check fails', async () => {
+      setup().start(loadedVersion, siteName);
+
+      await navigateTo(missingChunkPath);
+      respondWithNetworkFailure();
+      await jest.advanceTimersByTimeAsync(0);
+
+      expect(errorOverlayService.activeMessage()).toBe(CHUNK_LOAD_ERROR_MESSAGE);
+    });
+
+    it('does not ask to reload when a route fails for another reason', async () => {
+      setup().start(loadedVersion, siteName);
+
+      await navigateTo(brokenRoutePath);
+      await jest.advanceTimersByTimeAsync(0);
 
       expect(errorOverlayService.isOverlayVisible()).toBe(false);
     });
@@ -739,6 +773,84 @@ describe('AppUpdateService', () => {
 
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
       await expect(isStale).resolves.toBe(false);
+    });
+  });
+
+  describe('when counting failed chunk loads', () => {
+    function chunkLoadFailureCount(outcome: AppVersionCheckOutcome) {
+      return [CHUNK_LOAD_FAILED_METRIC, 1, { attributes: { outcome } }] as const;
+    }
+
+    it('counts a failure on a mismatched version as stale', async () => {
+      setup().start(loadedVersion, siteName);
+
+      await navigateTo(missingChunkPath);
+      respondWithServerVersion(newerVersion);
+      await jest.advanceTimersByTimeAsync(0);
+
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(
+        ...chunkLoadFailureCount(AppVersionCheckOutcomeEnum.Stale),
+      );
+    });
+
+    it('counts a failure on a matching version as current', async () => {
+      setup().start(loadedVersion, siteName);
+
+      await navigateTo(missingChunkPath);
+      respondWithServerVersion(loadedVersion);
+      await jest.advanceTimersByTimeAsync(0);
+
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(
+        ...chunkLoadFailureCount(AppVersionCheckOutcomeEnum.Current),
+      );
+    });
+
+    it('counts a failure while offline as offline', async () => {
+      setup().start(loadedVersion, siteName);
+      isBrowserOnline = false;
+
+      await navigateTo(missingChunkPath);
+      await jest.advanceTimersByTimeAsync(0);
+
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(
+        ...chunkLoadFailureCount(AppVersionCheckOutcomeEnum.Offline),
+      );
+    });
+
+    it('counts a failure whose version check errors as check failed', async () => {
+      setup().start(loadedVersion, siteName);
+
+      await navigateTo(missingChunkPath);
+      respondWithNetworkFailure();
+      await jest.advanceTimersByTimeAsync(0);
+
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(
+        ...chunkLoadFailureCount(AppVersionCheckOutcomeEnum.CheckFailed),
+      );
+    });
+
+    it('counts a failure whose version check times out as check failed', async () => {
+      setup().start(loadedVersion, siteName);
+
+      await navigateTo(missingChunkPath);
+      await jest.advanceTimersByTimeAsync(VERSION_CHECK_TIMEOUT_MS);
+
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(
+        ...chunkLoadFailureCount(AppVersionCheckOutcomeEnum.CheckFailed),
+      );
+    });
+
+    it('does not count a route that fails for another reason', async () => {
+      setup().start(loadedVersion, siteName);
+
+      await navigateTo(brokenRoutePath);
+      await jest.advanceTimersByTimeAsync(0);
+
+      expect(Sentry.metrics.count).not.toHaveBeenCalledWith(
+        CHUNK_LOAD_FAILED_METRIC,
+        expect.anything(),
+        expect.anything(),
+      );
     });
   });
 
