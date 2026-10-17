@@ -252,6 +252,7 @@ export class AppUpdateService {
     data: null,
   };
   private inFlightCheck$: Observable<VersionCheckResult> | null = null;
+  private hasChunkLoadErrorJoinedInFlightCheck = false;
   private readonly requestedChecks = new Subject<AppUpdateCheckTrigger>();
 
   /**
@@ -376,17 +377,27 @@ export class AppUpdateService {
   /**
    * Reuses a check already in progress, so concurrent triggers send one request per endpoint. Both
    * comparisons are handled together once both responses are in, so a tab confirmed stale is
-   * reported with every version that differed.
+   * reported with every version that differed. A chunk load that fails during a check started by
+   * another trigger makes that check handle the app version as a chunk-load check, so a mismatch
+   * shows the overlay without the confirmation delay. The data version keeps the trigger that
+   * started the check, since a failed chunk load says nothing about the data release.
    */
   private check$(trigger: AppUpdateCheckTrigger): Observable<VersionCheckResult> {
-    if (!this.inFlightCheck$) {
+    if (this.inFlightCheck$) {
+      if (trigger === AppUpdateCheckTriggerEnum.ChunkLoadError) {
+        this.hasChunkLoadErrorJoinedInFlightCheck = true;
+      }
+    } else {
       this.lastCheckedAt = Date.now();
       this.inFlightCheck$ = forkJoin({
         app: this.checkAppVersion$(trigger),
         data: this.checkDataVersion$(trigger),
       }).pipe(
         map((comparisons) => {
-          this.handleComparisons(comparisons, trigger);
+          const appTrigger = this.hasChunkLoadErrorJoinedInFlightCheck
+            ? AppUpdateCheckTriggerEnum.ChunkLoadError
+            : trigger;
+          this.handleComparisons(comparisons, { app: appTrigger, data: trigger });
           return {
             isAppVersionKnown: comparisons.app !== null,
             isAppVersionMismatch: comparisons.app?.isMismatch ?? false,
@@ -395,6 +406,7 @@ export class AppUpdateService {
         }),
         finalize(() => {
           this.inFlightCheck$ = null;
+          this.hasChunkLoadErrorJoinedInFlightCheck = false;
         }),
         share(),
       );
@@ -406,7 +418,10 @@ export class AppUpdateService {
    * The data comparison is handled first, so when the app version is confirmed stale in the same
    * check, handling it cancels any data confirmation the data comparison just scheduled.
    */
-  private handleComparisons(comparisons: VersionComparisons, trigger: AppUpdateCheckTrigger) {
+  private handleComparisons(
+    comparisons: VersionComparisons,
+    triggers: Record<TrackedVersion, AppUpdateCheckTrigger>,
+  ) {
     for (const trackedVersion of ['data', 'app'] as const) {
       const comparison = comparisons[trackedVersion];
       if (!comparison) {
@@ -416,7 +431,7 @@ export class AppUpdateService {
         this.handleVersionMismatch(
           trackedVersion,
           comparison.serverVersionLabel,
-          trigger,
+          triggers[trackedVersion],
           comparisons,
         );
       } else {

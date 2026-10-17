@@ -694,6 +694,29 @@ describe('AppUpdateService', () => {
       expect(errorOverlayService.activeMessage()).toBe(CHUNK_LOAD_ERROR_MESSAGE);
     });
 
+    it('shows the overlay right away when a route chunk fails during a check started by returning to the tab', async () => {
+      setup().start(loadedVersion, siteName);
+
+      returnToTab();
+      await navigateTo(missingChunkPath);
+      respondWithServerVersion(newerVersion);
+
+      expect(isShowingAppUpdateNotice()).toBe(true);
+    });
+
+    it('waits out the confirmation delay again on the check after one a route chunk failure joined', async () => {
+      setup().start(loadedVersion, siteName);
+      returnToTab();
+      await navigateTo(missingChunkPath);
+      respondWithServerVersion(loadedVersion);
+
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+
+      expect(isShowingAppUpdateNotice()).toBe(false);
+    });
+
     it('does not ask to reload when a route fails for another reason', async () => {
       setup().start(loadedVersion, siteName);
 
