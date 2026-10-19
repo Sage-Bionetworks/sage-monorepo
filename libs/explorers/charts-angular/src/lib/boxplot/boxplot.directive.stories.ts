@@ -75,7 +75,22 @@ export const DynamicSummary: Story = {
 export const CappedPoints: Story = {
   args: {
     ...DynamicSummary.args,
-    yAxisMax: 800,
+    points: [
+      ...['Experimental', 'Control2', 'Control1'].flatMap((xAxisCategory, i) =>
+        ['Female', 'Male'].flatMap((pointCategory, j) =>
+          Array.from({ length: 15 }, (_, k) => ({
+            xAxisCategory,
+            pointCategory,
+            value: 300 + ((k * 37 + i * 53 + j * 71) % 500),
+          })),
+        ),
+      ),
+      { xAxisCategory: 'Experimental', value: 3100, pointCategory: 'Female' },
+      { xAxisCategory: 'Experimental', value: 3600, pointCategory: 'Female' },
+      { xAxisCategory: 'Experimental', value: 4200, pointCategory: 'Male' },
+      { xAxisCategory: 'Control2', value: 3500, pointCategory: 'Male' },
+    ],
+    yAxisMax: 1300,
     capPointsAboveYAxisMax: true,
   },
 };
