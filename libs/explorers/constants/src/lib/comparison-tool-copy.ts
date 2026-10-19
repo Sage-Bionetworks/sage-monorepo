@@ -133,6 +133,20 @@ export const getPinnedFetchFailedMessage = (
   return `We encountered a problem loading your pinned ${sentenceCase(rowCount === 1 ? noun.singular : noun.plural)}.`;
 };
 
+/**
+ * Takes the number of hidden rows and the active view's nouns. Shown in place of the pinned rows
+ * when every cached pin is hidden. The noun is singular only for a known count of one, so an unknown
+ * count, e.g. in a child view whose hidden parents can have any number of rows, reads as plural.
+ */
+export const getNoMatchingPinsMessage = (
+  hiddenRowCount: number | null,
+  { viewNoun }: ComparisonToolNouns,
+): string => {
+  const isOneRow = hiddenRowCount === 1;
+  const noun = viewNoun ?? DEFAULT_VIEW_NOUN;
+  return `No matching ${sentenceCase(isOneRow ? noun.singular : noun.plural)} ${isOneRow ? 'exists' : 'exist'} in the current view.`;
+};
+
 export const getUnpinnedFetchFailedMessage = ({ viewNoun }: ComparisonToolNouns): string =>
   `We encountered a problem loading ${sentenceCase((viewNoun ?? DEFAULT_VIEW_NOUN).plural)}.`;
 

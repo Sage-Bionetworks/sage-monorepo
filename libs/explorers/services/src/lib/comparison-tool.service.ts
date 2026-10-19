@@ -417,16 +417,31 @@ export class ComparisonToolService<T> {
     { equal: isEqual },
   );
 
+  // Pins from another view are counted as parents, and in a child view a parent can have any number
+  // of rows, so no count of them is a count of the active view's rows
+  private readonly isHiddenRowCountUnknown = computed(
+    () => this.pinnedItemsQuery().itemIdSpace === 'parent' && this.isChildView(),
+  );
+
   /**
-   * The number of active view rows a failed pinned fetch would have shown, to word its message.
-   * Known when the cached ids are the active view's row ids, or when the active view is self-parented,
-   * where each parent is one row. Null when no pinned fetch failed, or in a child view showing another
-   * view's pins, since a parent can have any number of child rows.
+   * The hidden pins counted as rows of the active view, to word messages about them. Null while the
+   * hidden pins are unknown, and in a child view showing another view's pins. In a self-parented view
+   * each parent is one row, so its hidden parent count is a row count.
+   */
+  readonly hiddenRowCount = computed<number | null>(() =>
+    this.isHiddenRowCountUnknown() ? null : this.pinnedResultsCounts().hiddenCount,
+  );
+
+  /**
+   * The number of active view rows a failed pinned fetch would have shown, to word its message. The
+   * same as `hiddenRowCount`, since every cached pin is hidden after a failure, except that the cached
+   * row ids are counted directly, so the count stays known while the fetch is retried.
    */
   readonly failedPinnedRowCount = computed<number | null>(() => {
-    if (!this.pinnedFetchFailed()) return null;
-    if (this.pinnedItemsQuery().itemIdSpace === 'row') return this.pinnedItems().length;
-    return this.isChildView() ? null : this.hiddenParentPinCount();
+    if (!this.pinnedFetchFailed() || this.isHiddenRowCountUnknown()) return null;
+    return this.pinnedItemsQuery().itemIdSpace === 'row'
+      ? this.pinnedItems().length
+      : this.hiddenParentPinCount();
   });
 
   // The parent of a cached pin, or undefined when it has none or it isn't known yet. If the pins were
