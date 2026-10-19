@@ -2,10 +2,11 @@
 @use 'explorers/styles/src/mixins' as mixins;
 
 main {
+  @include mixins.page-min-height;
+
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
   overflow: visible auto !important;
 
   #loading {
