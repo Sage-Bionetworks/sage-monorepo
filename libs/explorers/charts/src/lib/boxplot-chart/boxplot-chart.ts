@@ -27,6 +27,12 @@ const defaultPointOpacity = 0.8;
 const defaultPointCategoryOffset = 0.3;
 const defaultPointCategoryJitterMax = 0.02;
 
+// Series draw above the axes so grid lines run behind boxes and points. Lane fills are markAreas,
+// which default to z 1, so they stay below the axes and never cover the axis lines.
+const axisZ = 10;
+const boxplotZ = axisZ + 1;
+const pointZ = axisZ + 2;
+
 export class BoxplotChart {
   chart: ECharts | undefined;
 
@@ -90,8 +96,7 @@ export class BoxplotChart {
       {
         id: 'value-x-axis',
         type: 'value',
-        // Ensure axes render above series markAreas
-        z: 10,
+        z: axisZ,
         axisLine: {
           onZero: false,
         },
@@ -111,7 +116,7 @@ export class BoxplotChart {
       {
         id: 'category-x-axis',
         type: 'category',
-        z: 10,
+        z: axisZ,
         data: xAxisCategories,
         axisLabel: {
           ...boxplotChartTheme.xAxisLabelTextStyle,
@@ -164,8 +169,7 @@ export class BoxplotChart {
   ) {
     const yAxisOptions: EChartsOption['yAxis'] = {
       type: 'value',
-      // Ensure axes render above series markAreas
-      z: 10,
+      z: axisZ,
       name: yAxisTitle,
       nameLocation: 'middle',
       nameGap: boxplotChartTheme.yAxisTickLabelMaxWidth,
@@ -303,7 +307,7 @@ export class BoxplotChart {
     // boxplots
     const boxplotSeriesBase: SeriesOption = {
       type: 'boxplot',
-      z: 1,
+      z: boxplotZ,
       itemStyle: {
         ...boxplotChartTheme.boxplotItemStyle,
         ...(boxplotBoxStyle?.fillColor ? { color: boxplotBoxStyle.fillColor } : {}),
@@ -357,6 +361,7 @@ export class BoxplotChart {
     pointDatasetIds.forEach((id) => {
       seriesOpts.push({
         type: 'scatter',
+        z: pointZ,
         datasetId: id,
         name: id,
         xAxisId: 'value-x-axis',
