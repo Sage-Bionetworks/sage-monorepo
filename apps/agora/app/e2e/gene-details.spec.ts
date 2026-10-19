@@ -15,12 +15,9 @@ function getTab(page: Page, label: string) {
   return page.getByRole('button', { name: label, exact: true });
 }
 
-// Retries the click because a tab click before hydration finishes is dropped
 async function clickTab(page: Page, label: string, expectedPathname: string) {
-  await expect(async () => {
-    await getTab(page, label).click();
-    expect(new URL(page.url()).pathname).toBe(expectedPathname);
-  }).toPass();
+  await getTab(page, label).click();
+  await expect.poll(() => new URL(page.url()).pathname).toBe(expectedPathname);
 }
 
 async function goToGene(page: Page, path: string) {
