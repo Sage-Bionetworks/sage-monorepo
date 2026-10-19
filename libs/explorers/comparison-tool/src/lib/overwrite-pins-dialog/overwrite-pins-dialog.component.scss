@@ -16,4 +16,8 @@
 
 .overwrite-pins-dialog-checkbox {
   @include mixins.ct-dialog-checkbox;
+
+  // Room for the focus ring, which the dialog content's overflow would otherwise clip, since this is
+  // its last element and the content has no bottom padding
+  padding-bottom: 4px;
 }
