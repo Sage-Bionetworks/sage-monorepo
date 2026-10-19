@@ -1,4 +1,5 @@
 @use 'agora/styles/src/variables' as vars;
+@use 'explorers/styles/src/mixins' as mixins;
 
 .drug-details {
   overflow-x: clip;
@@ -8,10 +9,6 @@
   }
 
   #loading {
-    width: 100%;
-    min-height: calc(100vh - var(--header-height) - var(--footer-height));
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include mixins.page-loading;
   }
 }

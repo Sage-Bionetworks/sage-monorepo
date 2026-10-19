@@ -1,4 +1,5 @@
 @use 'explorers/styles/src/variables' as vars;
+@use 'explorers/styles/src/mixins' as mixins;
 
 main {
   display: flex;
@@ -8,10 +9,7 @@ main {
   overflow: visible auto !important;
 
   #loading {
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include mixins.page-loading;
   }
 
   .comparison-tool-content {
