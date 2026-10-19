@@ -448,16 +448,16 @@ export class ComparisonToolService<T> {
   });
 
   /**
-   * The dropdown selection to go back to for the hidden pins, or null when there is none: the pinned
-   * rows failed to load in the view the pins were made in. That includes every CT without dropdowns,
-   * whose selection is always empty. Pins can only be hidden in their own view when their fetch
-   * failed, but the failure is checked too, so this doesn't rely on that.
+   * The dropdown selection to go back to for the hidden pins, or null when the pins were made in the
+   * current selection, so there is no other view to send the user to. That covers a failed pinned
+   * fetch in the pins' own view, and every CT without dropdowns, whose selection is always empty.
    */
   readonly hiddenPinsReturnView = computed<string[] | null>(
     () => {
-      const cachedPinsView = this.cachedPinsView() ?? [];
-      const isPinnedView = isEqual(cachedPinsView, this.dropdownSelection());
-      return this.pinnedFetchFailed() && isPinnedView ? null : cachedPinsView;
+      const cachedPinsView = this.cachedPinsView();
+      const isPinnedView =
+        cachedPinsView === null || isEqual(cachedPinsView, this.dropdownSelection());
+      return isPinnedView ? null : cachedPinsView;
     },
     { equal: isEqual },
   );

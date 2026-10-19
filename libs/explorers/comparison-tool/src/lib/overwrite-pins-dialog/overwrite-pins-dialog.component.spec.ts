@@ -77,7 +77,7 @@ describe('OverwritePinsDialogComponent', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 
-  it('should name the hidden pins and the view they were pinned in', async () => {
+  it('should name the hidden pins, without a view, when they are hidden in the view they were pinned in', async () => {
     const { holdPinEdit } = await setup();
 
     holdPinEdit();
@@ -85,8 +85,8 @@ describe('OverwritePinsDialogComponent', () => {
     const dialog = screen.getByRole('dialog');
     expect(dialog).toHaveTextContent(OVERWRITE_PINS_DIALOG.heading);
     expect(dialog).toHaveTextContent("You pinned 2 results that can't be shown in this view.");
-    expect(dialog).toHaveTextContent('To view them, go back to the Category A, Option B view.');
-    expect(Array.from(dialog.querySelectorAll('i')).map((i) => i.textContent)).toEqual(PINNED_VIEW);
+    expect(dialog).not.toHaveTextContent('go back to');
+    expect(dialog.querySelectorAll('i')).toHaveLength(0);
   });
 
   it('should say the pins could not be loaded, without a view, when they failed in this view', async () => {
@@ -162,6 +162,9 @@ describe('OverwritePinsDialogComponent', () => {
 
       expect(dialog).toHaveTextContent(
         "You pinned 2 children that can't be shown in this view. Changing your pins here will unpin those children.",
+      );
+      expect(dialog).toHaveTextContent(
+        `To view them, go back to the ${mockOtherChildViewSelection.join(', ')} view.`,
       );
       expect(Array.from(dialog.querySelectorAll('i')).map((i) => i.textContent)).toEqual(
         mockOtherChildViewSelection,

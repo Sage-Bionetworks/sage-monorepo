@@ -1179,6 +1179,26 @@ describe('ComparisonToolService', () => {
 
         expect(service.hiddenPinsReturnView()).toBeNull();
       });
+
+      it('is null when pins are hidden in the view they were made in without a failed fetch', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        service.setPinnedItems(['parent1', 'parent2']);
+
+        landPinned(parentRow('parent1'));
+
+        expect(service.hiddenPinCount()).toBe(1);
+        expect(service.hiddenPinsReturnView()).toBeNull();
+      });
+
+      it('is null when pins are hidden in a CT without dropdowns without a failed fetch', () => {
+        connectService(mockComparisonToolDataConfig);
+        service.setPinnedItems(['id1', 'id2']);
+
+        service.fetchPinned(of({ data: rows('id1'), totalCount: 1 }));
+
+        expect(service.hiddenPinCount()).toBe(1);
+        expect(service.hiddenPinsReturnView()).toBeNull();
+      });
     });
 
     describe('pinnedParents', () => {
