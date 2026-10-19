@@ -247,6 +247,7 @@ describe('BoxplotChart', () => {
       const series = getSeries('Female above y-axis max');
       expect(series?.symbol).toBe(CAPPED_POINT_SYMBOL);
       expect(series?.symbolSize).toBe(CAPPED_POINT_SYMBOL_SIZE);
+      expect(series?.symbolKeepAspect).toBe(true);
       expect(series?.itemStyle).toEqual({ color: pointCategoryColors.Female });
     });
 

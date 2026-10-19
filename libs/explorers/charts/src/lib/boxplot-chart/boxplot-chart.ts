@@ -468,6 +468,7 @@ export class BoxplotChart {
           encode: { x: 'xAxisValue', y: 'cappedValue' },
           symbol: CAPPED_POINT_SYMBOL,
           symbolSize: CAPPED_POINT_SYMBOL_SIZE,
+          symbolKeepAspect: true,
           symbolOffset: (pt) => [pt.cappedOffsetPx, 0],
           itemStyle: { color: pointSeries.itemStyle?.color },
           z: 3,
