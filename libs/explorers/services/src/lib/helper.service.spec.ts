@@ -105,6 +105,62 @@ describe('Service: Helper', () => {
     });
   });
 
+  describe('setQueryParams', () => {
+    it('should add a query param', () => {
+      expect(helperService.setQueryParams('/genes/ENSG123', { a: '1' })).toEqual(
+        '/genes/ENSG123?a=1',
+      );
+    });
+
+    it('should replace an existing query param in place', () => {
+      expect(helperService.setQueryParams('/genes/ENSG123?a=1&b=2&c=3', { b: '4' })).toEqual(
+        '/genes/ENSG123?a=1&b=4&c=3',
+      );
+    });
+
+    it('should delete query params with null, undefined, or empty values', () => {
+      const result = helperService.setQueryParams('/genes/ENSG123?a=1&b=2&c=3&d=4', {
+        a: null,
+        b: undefined,
+        c: '',
+      });
+      expect(result).toEqual('/genes/ENSG123?d=4');
+    });
+
+    it('should keep other query params, including repeated ones', () => {
+      expect(helperService.setQueryParams('/genes/ENSG123?a=1&a=2', { b: '3' })).toEqual(
+        '/genes/ENSG123?a=1&a=2&b=3',
+      );
+    });
+
+    it('should keep the hash fragment', () => {
+      expect(helperService.setQueryParams('/genes/ENSG123?a=1#section', { b: '2' })).toEqual(
+        '/genes/ENSG123?a=1&b=2#section',
+      );
+    });
+
+    it('should drop the query string when the last query param is deleted', () => {
+      expect(helperService.setQueryParams('/genes/ENSG123?a=1#section', { a: null })).toEqual(
+        '/genes/ENSG123#section',
+      );
+    });
+
+    it('should encode spaces as %20 and leave parentheses as-is', () => {
+      const result = helperService.setQueryParams('/genes/ENSG123', {
+        model: 'AD Diagnosis x Sex (females only)',
+      });
+      expect(result).toEqual('/genes/ENSG123?model=AD%20Diagnosis%20x%20Sex%20(females%20only)');
+    });
+
+    it('should decode existing query params before re-encoding them', () => {
+      expect(
+        helperService.setQueryParams('/models/APOE4?tissue=Cerebral+Cortex&sex=%28Female%29', {
+          a: '1',
+        }),
+      ).toEqual('/models/APOE4?tissue=Cerebral%20Cortex&sex=(Female)&a=1');
+    });
+  });
+
   describe('handlePanelChange', () => {
     const basePath = '/genes/ENSG123';
 
