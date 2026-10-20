@@ -46,7 +46,7 @@ const laneZ = 10;
 const axisZ = laneZ + 1;
 const boxplotZ = axisZ + 1;
 const pointZ = boxplotZ + 1;
-// Carets go on top so a value above the cutoff is never hidden.
+// Capped points go on top so a value above the cutoff is never hidden.
 const cappedPointZ = pointZ + 1;
 
 export class BoxplotChart {
