@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationError, Router } from '@angular/router';
-import { AppVersion } from '@sagebionetworks/explorers/config';
+import { AppVersion, STALE_CHUNK_RELOAD_PENDING_KEY } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_CONFIRM_DELAY_MS,
   APP_UPDATE_CONFIRMATION_RETRY_LIMIT,
@@ -21,6 +21,7 @@ import {
   APP_VERSION_PATH,
   CHUNK_LOAD_ERROR_MESSAGE,
   CHUNK_LOAD_FAILED_METRIC,
+  STALE_CHUNK_RELOAD_METRIC,
   DATA_UPDATE_CONFIRM_DELAY_MS,
   DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
   STALE_APP_METRIC,
@@ -291,6 +292,7 @@ export class AppUpdateService {
     this.clientVersion = clientVersion;
     this.siteName = siteName;
     this.dataVersionUrl = dataVersionUrl ?? null;
+    this.recordStaleChunkReload(browserWindow);
 
     const visibility$ = fromEvent(this.document, 'visibilitychange').pipe(
       map(() => AppUpdateCheckTriggerEnum.Visibility),
@@ -341,6 +343,23 @@ export class AppUpdateService {
     if (outcome !== AppVersionCheckOutcomeEnum.Stale) {
       this.errorOverlayService.showError(CHUNK_LOAD_ERROR_MESSAGE);
     }
+  }
+
+  /**
+   * Counts a reload the app server's stale chunk module made before this page loaded, so those
+   * reloads still show up in Sentry. The module sets the pending flag just before reloading, and
+   * it is cleared here so each reload is counted once.
+   */
+  private recordStaleChunkReload(browserWindow: Window) {
+    try {
+      if (browserWindow.sessionStorage.getItem(STALE_CHUNK_RELOAD_PENDING_KEY) === null) {
+        return;
+      }
+      browserWindow.sessionStorage.removeItem(STALE_CHUNK_RELOAD_PENDING_KEY);
+    } catch {
+      return;
+    }
+    Sentry.metrics.count(STALE_CHUNK_RELOAD_METRIC, 1);
   }
 
   /**

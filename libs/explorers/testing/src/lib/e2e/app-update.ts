@@ -13,6 +13,22 @@ import {
 /** How long one fast-forward attempt waits for the update notice before trying again. */
 const UPDATE_NOTICE_RENDER_TIMEOUT_MS = 1000;
 
+/** A chunk file name in the build's format that no build produces, like one from an old deploy. */
+const CHUNK_FROM_EARLIER_DEPLOY_PATH = '/chunk-E2E00000.js';
+
+/**
+ * Scripts that make the page import a chunk, the way a route's lazy loading does. They are passed
+ * to the page as strings, so the browser runs a real dynamic import rather than whatever the test
+ * transform makes of one.
+ */
+function startChunkImportScript(chunkPath: string): string {
+  return `void import(${JSON.stringify(chunkPath)})`;
+}
+
+function chunkImportResultScript(chunkPath: string): string {
+  return `import(${JSON.stringify(chunkPath)}).then(() => 'loaded', () => 'failed')`;
+}
+
 export const NEWER_APP_VERSION: AppVersion = {
   appVersion: '999.0.0',
   commitSha: 'e2e0000',
@@ -174,6 +190,19 @@ export function defineAppUpdateTests(siteName: string) {
       expect((await dataVersionCheck).status()).toBe(200);
       await expect(page.getByText(getAppUpdateMessage(siteName))).toBeHidden();
       await expect(page.getByText(getDataUpdateMessage(siteName))).toBeHidden();
+    });
+
+    test('reloads the page once when it loads a chunk from an earlier deploy', async ({ page }) => {
+      await gotoAndWaitForBrowserApp(page);
+      const pageReload = page.waitForEvent('load');
+
+      await page.evaluate(startChunkImportScript(CHUNK_FROM_EARLIER_DEPLOY_PATH));
+      await pageReload;
+      const secondAttempt = await page.evaluate(
+        chunkImportResultScript(CHUNK_FROM_EARLIER_DEPLOY_PATH),
+      );
+
+      expect(secondAttempt).toBe('failed');
     });
   });
 }

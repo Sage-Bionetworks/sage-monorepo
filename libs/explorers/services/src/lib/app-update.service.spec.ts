@@ -7,7 +7,7 @@ import {
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router, Routes } from '@angular/router';
-import { AppVersion } from '@sagebionetworks/explorers/config';
+import { AppVersion, STALE_CHUNK_RELOAD_PENDING_KEY } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_CONFIRM_DELAY_MS,
   APP_UPDATE_CONFIRMATION_RETRY_LIMIT,
@@ -21,6 +21,7 @@ import {
   getAppUpdateMessage,
   getDataUpdateMessage,
   STALE_APP_METRIC,
+  STALE_CHUNK_RELOAD_METRIC,
   STALE_DATA_METRIC,
   TRANSIENT_DATA_VERSION_MISMATCH_METRIC,
   TRANSIENT_APP_VERSION_MISMATCH_METRIC,
@@ -181,6 +182,7 @@ describe('AppUpdateService', () => {
   });
 
   afterEach(() => {
+    window.sessionStorage.clear();
     // A request that timed out is cancelled rather than answered.
     httpMock.verify({ ignoreCancelled: true });
     TestBed.resetTestingModule();
@@ -270,6 +272,23 @@ describe('AppUpdateService', () => {
       confirmNewerVersion();
 
       expect(isShowingAppUpdateNotice()).toBe(true);
+    });
+  });
+
+  describe('after the app server reloaded the tab for a stale chunk', () => {
+    it('counts the reload once', () => {
+      window.sessionStorage.setItem(STALE_CHUNK_RELOAD_PENDING_KEY, 'true');
+
+      setup().start(loadedVersion, siteName);
+
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(STALE_CHUNK_RELOAD_METRIC, 1);
+      expect(window.sessionStorage.getItem(STALE_CHUNK_RELOAD_PENDING_KEY)).toBeNull();
+    });
+
+    it('counts nothing when the tab was not reloaded for a stale chunk', () => {
+      setup().start(loadedVersion, siteName);
+
+      expect(Sentry.metrics.count).not.toHaveBeenCalledWith(STALE_CHUNK_RELOAD_METRIC, 1);
     });
   });
 

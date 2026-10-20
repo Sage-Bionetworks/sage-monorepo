@@ -23,6 +23,7 @@ export const DATA_UPDATE_CONFIRM_DELAY_MS = 3 * 60 * 1000;
 export const VERSION_CHECK_TIMEOUT_MS = 10 * 1000;
 
 export const CHUNK_LOAD_FAILED_METRIC = 'app.chunk_load_failed';
+export const STALE_CHUNK_RELOAD_METRIC = 'app.stale_chunk_reload';
 export const STALE_APP_METRIC = 'app.stale_app_detected';
 export const STALE_DATA_METRIC = 'app.stale_data_detected';
 export const TRANSIENT_APP_VERSION_MISMATCH_METRIC = 'app.transient_app_version_mismatch';

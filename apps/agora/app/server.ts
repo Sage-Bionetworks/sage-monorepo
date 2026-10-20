@@ -1,6 +1,10 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr/node';
-import { createAppVersionHandler } from '@sagebionetworks/explorers/config';
+import {
+  CHUNK_FILE_PATH_PATTERN,
+  createAppVersionHandler,
+  createMissingChunkHandler,
+} from '@sagebionetworks/explorers/config';
 import { APP_VERSION_PATH } from '@sagebionetworks/explorers/constants';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
@@ -37,6 +41,9 @@ export function app(): express.Express {
 
   // Version endpoint polled by browser tabs to detect that a newer version was deployed
   server.get(APP_VERSION_PATH, createAppVersionHandler(process.env));
+
+  // Chunk files the build has were served above, so this only answers names from an earlier deploy
+  server.get(CHUNK_FILE_PATH_PATTERN, createMissingChunkHandler());
 
   // All regular routes use the Angular engine
   server.get('**', (req, res, next) => {
