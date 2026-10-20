@@ -60,6 +60,8 @@ export interface BoxplotProps {
   xAxisCategories?: string[];
   yAxisTitle?: string;
   yAxisMin?: number;
+  /* if defined, sets the top of the y-axis. Points above yAxisMax are hidden, unless
+  capPointsAboveYAxisMax draws them as capped symbols. */
   yAxisMax?: number;
   /* if true and yAxisMax is defined, points above yAxisMax are drawn at yAxisMax with a
   capped symbol instead of being hidden. */
