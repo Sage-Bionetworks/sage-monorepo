@@ -9,10 +9,17 @@ export const APP_UPDATE_MIN_CHECK_INTERVAL_MS = 60 * 1000;
  */
 export const APP_UPDATE_CONFIRM_DELAY_MS = 5 * 60 * 1000;
 /**
- * A data release switches the data version in one step, so this only has to outlast the APIs'
- * cache invalidation, which polls every minute and clears again on the following poll.
+ * How many times a confirmation check that could not compare a version is tried before the
+ * background checks take over, so a tab whose version endpoint keeps failing stops sending a
+ * request every minute.
  */
-export const DATA_UPDATE_CONFIRM_DELAY_MS = 2 * 60 * 1000;
+export const APP_UPDATE_CONFIRMATION_RETRY_LIMIT = 3;
+/**
+ * A data release switches the data version in one step, so this only has to outlast the APIs'
+ * cache invalidation, which polls every minute and clears again on the following poll. That second
+ * clear can land just over two minutes after the switch, so a third minute is added as margin.
+ */
+export const DATA_UPDATE_CONFIRM_DELAY_MS = 3 * 60 * 1000;
 export const VERSION_CHECK_TIMEOUT_MS = 10 * 1000;
 
 export const CHUNK_LOAD_FAILED_METRIC = 'app.chunk_load_failed';

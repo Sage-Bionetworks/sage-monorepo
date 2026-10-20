@@ -15,6 +15,7 @@ import { NavigationError, Router } from '@angular/router';
 import { AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_CONFIRM_DELAY_MS,
+  APP_UPDATE_CONFIRMATION_RETRY_LIMIT,
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
   APP_VERSION_PATH,
@@ -56,7 +57,7 @@ import {
 import { ErrorOverlayService } from './error-overlay.service';
 import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
-import { DataVersion, VersionService } from './version.service';
+import { DataVersion, isKnownDataVersion, VersionService } from './version.service';
 
 export const AppUpdateCheckTriggerEnum = {
   ChunkLoadError: 'chunk-load-error',
@@ -265,7 +266,7 @@ export class AppUpdateService {
     app: null,
     data: null,
   };
-  private inFlightCheck$: Observable<VersionComparison> | null = null;
+  private inFlightCheck$: Observable<VersionComparisons> | null = null;
   private hasChunkLoadErrorJoinedInFlightCheck = false;
   private readonly requestedChecks = new Subject<AppUpdateCheckTrigger>();
 
@@ -379,7 +380,7 @@ export class AppUpdateService {
     if (!this.isOnline()) {
       return AppVersionCheckOutcomeEnum.Offline;
     }
-    const appComparison = await firstValueFrom(this.check$(trigger));
+    const { app: appComparison } = await firstValueFrom(this.check$(trigger));
     if (!appComparison) {
       return AppVersionCheckOutcomeEnum.CheckFailed;
     }
@@ -394,10 +395,10 @@ export class AppUpdateService {
    * reported with every version that differed. A chunk load that fails during a check started by
    * another trigger makes that check handle the app version as a chunk-load check, so a mismatch
    * shows the overlay without the confirmation delay. The data version keeps the trigger that
-   * started the check, since a failed chunk load says nothing about the data release. Emits the app
-   * version comparison, which is null when the app version request failed.
+   * started the check, since a failed chunk load says nothing about the data release. Emits both
+   * comparisons; each is null when its version could not be compared.
    */
-  private check$(trigger: AppUpdateCheckTrigger): Observable<VersionComparison> {
+  private check$(trigger: AppUpdateCheckTrigger): Observable<VersionComparisons> {
     if (this.inFlightCheck$) {
       if (trigger === AppUpdateCheckTriggerEnum.ChunkLoadError) {
         this.hasChunkLoadErrorJoinedInFlightCheck = true;
@@ -413,7 +414,7 @@ export class AppUpdateService {
             ? AppUpdateCheckTriggerEnum.ChunkLoadError
             : trigger;
           this.handleComparisons(comparisons, { app: appTrigger, data: trigger });
-          return comparisons.app;
+          return comparisons;
         }),
         finalize(() => {
           this.inFlightCheck$ = null;
@@ -494,7 +495,7 @@ export class AppUpdateService {
       timeout(VERSION_CHECK_TIMEOUT_MS),
       map((body) => {
         if (!comparison.isVersion(body)) {
-          this.handleCheckFailure(
+          this.recordCheckFailure(
             trackedVersion,
             VersionCheckFailureReasonEnum.InvalidResponse,
             HttpStatusCode.Ok,
@@ -510,37 +511,18 @@ export class AppUpdateService {
       }),
       catchError((error: HttpErrorResponse | TimeoutError) => {
         if (error instanceof TimeoutError) {
-          this.handleCheckFailure(
+          this.recordCheckFailure(
             trackedVersion,
             VersionCheckFailureReasonEnum.Timeout,
             NO_RESPONSE_STATUS,
             trigger,
           );
         } else {
-          this.handleCheckFailure(trackedVersion, getFailureReason(error), error.status, trigger);
+          this.recordCheckFailure(trackedVersion, getFailureReason(error), error.status, trigger);
         }
         return of(null);
       }),
     );
-  }
-
-  /**
-   * A failed confirmation check leaves the mismatch unconfirmed, so it is retried after the minimum
-   * interval rather than waiting for the next background check.
-   */
-  private handleCheckFailure(
-    trackedVersion: TrackedVersion,
-    reason: VersionCheckFailureReason,
-    status: number,
-    trigger: AppUpdateCheckTrigger,
-  ) {
-    this.recordCheckFailure(trackedVersion, reason, status, trigger);
-    if (
-      trigger === TRACKED_VERSION_CONFIGS[trackedVersion].confirmationTrigger &&
-      this.pendingMismatches[trackedVersion]
-    ) {
-      this.scheduleConfirmation(trackedVersion, APP_UPDATE_MIN_CHECK_INTERVAL_MS);
-    }
   }
 
   /**
@@ -668,15 +650,45 @@ export class AppUpdateService {
     }
   }
 
-  private scheduleConfirmation(trackedVersion: TrackedVersion, delayMs: number) {
+  /**
+   * Re-checks the server once a pending mismatch's delay ends. This method decides whether to retry
+   * from the check's result rather than from how it was started: a confirmation that joins a check
+   * another trigger already started still retries if that shared check could not compare this
+   * version (the request failed or timed out). Retries wait the minimum interval and stop after
+   * `APP_UPDATE_CONFIRMATION_RETRY_LIMIT` attempts, after which the background checks take over.
+   *
+   * While the tab is hidden or offline, no request is sent. Returning to the tab or reconnecting
+   * runs a check of its own, and since the delay has already passed, that check confirms the
+   * mismatch.
+   */
+  private scheduleConfirmation(
+    trackedVersion: TrackedVersion,
+    delayMs: number,
+    failedAttempts = 0,
+  ) {
     // Subscribed outside the Angular zone for the same reason as the background checks.
     this.confirmationSubscriptions[trackedVersion] = this.ngZone.runOutsideAngular(() =>
       timer(delayMs)
         .pipe(
+          filter(() => this.isTabVisible() && this.isOnline()),
           switchMap(() => this.check$(TRACKED_VERSION_CONFIGS[trackedVersion].confirmationTrigger)),
           takeUntilDestroyed(this.destroyRef),
         )
-        .subscribe(),
+        .subscribe((comparisons) => {
+          const couldNotCompare = comparisons[trackedVersion] === null;
+          const nextAttempt = failedAttempts + 1;
+          if (
+            couldNotCompare &&
+            this.pendingMismatches[trackedVersion] &&
+            nextAttempt < APP_UPDATE_CONFIRMATION_RETRY_LIMIT
+          ) {
+            this.scheduleConfirmation(
+              trackedVersion,
+              APP_UPDATE_MIN_CHECK_INTERVAL_MS,
+              nextAttempt,
+            );
+          }
+        }),
     );
   }
 
@@ -819,10 +831,6 @@ function isDataVersion(body: unknown): body is DataVersion {
   }
   const { data_file: dataFile, data_version: dataVersion } = body as Record<string, unknown>;
   return typeof dataFile === 'string' && typeof dataVersion === 'string';
-}
-
-function isKnownDataVersion({ data_file: dataFile, data_version: dataVersion }: DataVersion) {
-  return Boolean(dataFile) && Boolean(dataVersion);
 }
 
 function getFailureReason(error: HttpErrorResponse): VersionCheckFailureReason {

@@ -10,6 +10,7 @@ import { provideRouter, Router, Routes } from '@angular/router';
 import { AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_CONFIRM_DELAY_MS,
+  APP_UPDATE_CONFIRMATION_RETRY_LIMIT,
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
   APP_VERSION_PATH,
@@ -379,6 +380,53 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(laterVersionWithoutSha);
 
       jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+      expect(isShowingAppUpdateNotice()).toBe(false);
+    });
+
+    it('retries a confirmation that joined a failed check started by another trigger', () => {
+      const timeBeforeConfirmationMs = 1;
+      const appUpdateService = setup();
+      appUpdateService.start(loadedVersion, siteName);
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS - timeBeforeConfirmationMs);
+      appUpdateService.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
+      jest.advanceTimersByTime(timeBeforeConfirmationMs);
+      respondWithNetworkFailure();
+
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      respondWithServerVersion(newerVersion);
+
+      expect(isShowingAppUpdateNotice()).toBe(true);
+    });
+
+    it('sends no confirmation request while the tab is hidden, and confirms once it returns', () => {
+      setup().start(loadedVersion, siteName);
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+      setTabVisibility('hidden');
+
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+
+      setTabVisibility('visible');
+      respondWithServerVersion(newerVersion);
+
+      expect(isShowingAppUpdateNotice()).toBe(true);
+    });
+
+    it('stops retrying a failed confirmation once the retry limit is reached', () => {
+      setup().start(loadedVersion, siteName);
+      returnToTab();
+      respondWithServerVersion(newerVersion);
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
+
+      for (let attempt = 0; attempt < APP_UPDATE_CONFIRMATION_RETRY_LIMIT; attempt++) {
+        respondWithNetworkFailure();
+        jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      }
 
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
       expect(isShowingAppUpdateNotice()).toBe(false);

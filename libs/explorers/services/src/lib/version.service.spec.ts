@@ -144,6 +144,19 @@ describe('VersionService', () => {
       expect(service.getLoadedDataVersion()).toEqual(mockDataVersion);
     });
 
+    it('should not keep an unknown data version, so a later request can still record one', async () => {
+      const unknownDataVersion: DataVersion = { data_file: '', data_version: '' };
+
+      await lastValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => of(unknownDataVersion))),
+      );
+      await lastValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => of(mockDataVersion))),
+      );
+
+      expect(service.getLoadedDataVersion()).toEqual(mockDataVersion);
+    });
+
     it('should not keep a data version when the request errors', async () => {
       jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
       const dataVersionService = mockDataVersionService(() =>

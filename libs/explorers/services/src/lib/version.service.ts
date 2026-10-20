@@ -17,6 +17,14 @@ export interface DataVersion {
   team_images_id?: string;
 }
 
+/** A data version is known only when both its data file and its version number are set. */
+export function isKnownDataVersion({
+  data_file: dataFile,
+  data_version: dataVersion,
+}: DataVersion) {
+  return Boolean(dataFile) && Boolean(dataVersion);
+}
+
 export interface DataVersionService {
   getDataVersion(
     observe?: 'body',
@@ -82,7 +90,9 @@ export class VersionService {
    * the change would go unnoticed.
    */
   recordLoadedDataVersion(dataVersion: DataVersion) {
-    if (this.loadedDataVersion === null) {
+    // An unknown version would be kept for good and could never be compared, which would turn off
+    // data release detection for the tab, so the slot stays empty for a later request to fill.
+    if (this.loadedDataVersion === null && isKnownDataVersion(dataVersion)) {
       this.loadedDataVersion = dataVersion;
     }
   }
