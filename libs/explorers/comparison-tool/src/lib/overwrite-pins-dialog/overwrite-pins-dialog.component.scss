@@ -2,12 +2,6 @@
 
 .overwrite-pins-dialog {
   @include mixins.ct-dialog;
-
-  .p-dialog-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-  }
 }
 
 .overwrite-pins-dialog-message {
