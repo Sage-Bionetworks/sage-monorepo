@@ -1,5 +1,23 @@
 import * as Sentry from '@sentry/angular';
 
+const SENSITIVE_KEY_DENYLIST = ['forwarded', '-ip', 'remote-', 'via', '-user'];
+
+/**
+ * Sentry collects user info, cookies, and HTTP bodies when `dataCollection` is unset, so every
+ * category is set explicitly to keep personal data out of events.
+ */
+export const SENTRY_DATA_COLLECTION: NonNullable<Sentry.BrowserOptions['dataCollection']> = {
+  userInfo: false,
+  cookies: false,
+  httpHeaders: { deny: SENSITIVE_KEY_DENYLIST },
+  httpBodies: [],
+  urlQueryParams: { deny: SENSITIVE_KEY_DENYLIST },
+  graphQL: { document: false, variables: false },
+  genAI: { inputs: false, outputs: false },
+  databaseQueryData: false,
+  queues: false,
+};
+
 export interface SentryConfig {
   dsn: string;
   environment: string;
@@ -21,6 +39,6 @@ export function initSentry(config: SentryConfig): void {
     dsn: config.dsn,
     environment: config.environment,
     release: config.release || undefined,
-    sendDefaultPii: false,
+    dataCollection: SENTRY_DATA_COLLECTION,
   });
 }
