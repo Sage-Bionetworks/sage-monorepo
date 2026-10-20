@@ -70,15 +70,13 @@ describe('BoxplotChart', () => {
   });
 
   describe('drawing order', () => {
-    // eCharts draws a markArea at z 1 unless the markArea sets its own z
-    const markAreaDefaultZ = 1;
-
     function getDrawingOrder() {
       const option = getOption();
       const axes = [...(option.xAxis as { z?: number }[]), option.yAxis as { z?: number }];
-      const series = option.series as { type: string; z?: number; markArea?: { z?: number } }[];
+      const series = option.series as { type: string; z?: number; markArea?: unknown }[];
       return {
         axisZs: axes.map((axis) => axis.z ?? 0),
+        laneZ: (option['markArea'] as { z?: number } | undefined)?.z,
         boxplot: series.find((s) => s.type === 'boxplot'),
         points: series.filter((s) => s.type === 'scatter'),
       };
@@ -100,10 +98,11 @@ describe('BoxplotChart', () => {
       ['custom lane colors', { laneBackgroundColors: ['#F9F9FA', '#FFFFFF'] }],
     ])('keeps %s below the axes, so they never cover the axis lines', (_, props) => {
       makeChart(props);
-      const { axisZs, boxplot } = getDrawingOrder();
+      const { axisZs, laneZ, boxplot } = getDrawingOrder();
 
       expect(boxplot?.markArea).toBeDefined();
-      expect(boxplot?.markArea?.z ?? markAreaDefaultZ).toBeLessThan(Math.min(...axisZs));
+      expect(laneZ).toBeDefined();
+      expect(laneZ).toBeLessThan(Math.min(...axisZs));
     });
   });
 });

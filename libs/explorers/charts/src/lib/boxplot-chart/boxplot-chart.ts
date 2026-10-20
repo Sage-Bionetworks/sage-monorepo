@@ -27,11 +27,13 @@ const defaultPointOpacity = 0.8;
 const defaultPointCategoryOffset = 0.3;
 const defaultPointCategoryJitterMax = 0.02;
 
-// Series draw above the axes so grid lines run behind boxes and points. Lane fills are markAreas,
-// which default to z 1, so they stay below the axes and never cover the axis lines.
-const axisZ = 10;
+// Drawing order, bottom to top. Lane fills stay below the axes so they never cover the axis lines,
+// and series draw above the axes so grid lines run behind boxes and points. ECharts ignores a z set
+// on a series' markArea, so the lane level is set chart-wide on the markArea option instead.
+const laneZ = 10;
+const axisZ = laneZ + 1;
 const boxplotZ = axisZ + 1;
-const pointZ = axisZ + 2;
+const pointZ = boxplotZ + 1;
 
 export class BoxplotChart {
   chart: ECharts | undefined;
@@ -408,6 +410,7 @@ export class BoxplotChart {
     });
 
     const option: EChartsOption = {
+      markArea: { z: laneZ },
       legend: {
         show: showLegend,
         data: pointDatasetIds,
