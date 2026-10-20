@@ -182,6 +182,7 @@ const TRACKED_VERSION_CONFIGS: Record<TrackedVersion, TrackedVersionConfig> = {
 
 /** A version mismatch that has not yet outlasted its confirmation delay. */
 interface PendingVersionMismatch {
+  serverVersionKey: string;
   serverVersionLabel: string;
   trigger: AppUpdateCheckTrigger;
   detectedAt: number;
@@ -189,27 +190,46 @@ interface PendingVersionMismatch {
 
 /**
  * The result of comparing one version with the one the tab loaded with, or null when the version
- * is unknown because the check was skipped or failed.
+ * is unknown because the check was skipped or failed. `serverVersionKey` identifies the server's
+ * exact version and is what tells two versions apart. `serverVersionLabel` is the same version as
+ * the footer and Sentry metrics show it, which drops details such as an app version's `-rcN`
+ * suffix, so it is for display only.
  */
-type VersionComparison = { isMismatch: boolean; serverVersionLabel: string } | null;
+type VersionComparison = {
+  isMismatch: boolean;
+  serverVersionKey: string;
+  serverVersionLabel: string;
+} | null;
 
 type VersionComparisons = Record<TrackedVersion, VersionComparison>;
 
 /**
- * Detects that this tab is running code from an earlier deploy, or showing data from an earlier
- * data release, by comparing the versions it was loaded with against the versions the servers
- * currently report, then blocks the page with an overlay whose only action is to reload.
+ * Detects that this tab is out of date, then blocks the page with an overlay whose only action is
+ * to reload. A tab can fall behind in two independent ways, and every check compares both.
  *
- * A mismatch must persist for its confirmation delay before the overlay is shown. During a rolling
- * deploy, old and new app tasks both answer the version endpoint, so a single mismatch can come
- * from a task that is about to be replaced. A data release switches over in one step, but the APIs
- * clear their caches up to a couple of minutes later, so a reload before then could still show the
- * old data. A chunk that fails to load on a mismatched app version is the exception: the tab's
- * navigation is already broken, and reloading is the only fix whichever task answers.
+ * App version mismatch: the code the tab runs does not match what the app server's `/app-version` reports.
+ * During a rolling deploy, the load balancer sends requests to old and new app tasks for a few
+ * minutes, so a single check reports whichever task answered. Prompting then would do more harm
+ * than good: a tab could reload onto an old task and be prompted again, and a tab already running
+ * the new code could be told to reload. So a mismatch must still be there after
+ * `APP_UPDATE_CONFIRM_DELAY_MS`, which outlasts the cutover; by then every task serves the same
+ * version, and a reload reliably gets it. A match in between means a task still serves this tab's
+ * version, so the mismatch is dropped. The exception is a lazy-loaded chunk that fails to load on a
+ * mismatched version: the tab can no longer navigate, so the overlay shows right away.
  *
- * Staleness is judged by any difference rather than by which version is newer, because a rollback
- * moves the server back to an earlier version and tabs loaded from the rolled-back one must reload
- * too.
+ * Data version mismatch: the data release the tab shows does not match the API's data version
+ * A data release switches over in one step, but each API task only notices on
+ * its own once-a-minute check, then clears its caches, and clears them again a minute later
+ * because a slow uncached query that read the previous release just before the switch could start
+ * caching after the first cache clear operation. Until both clears have run, a reload could
+ * still be served the previous release's cached data.
+ * So a mismatch must still be there after `DATA_UPDATE_CONFIRM_DELAY_MS`, which outlasts both
+ * clears, and a reload then gets the new data. A match in between means the data was rolled back,
+ * so the mismatch is dropped.
+ *
+ * For mismatches on both: any difference counts, not only a newer version. If a deployment fails,
+ * the rollback moves the server back to an earlier version and tabs loaded from the rolled-back
+ * version must reload too. In this scenario the app update notice is shown, since the reload fixes both.
  */
 @Injectable({ providedIn: 'root' })
 export class AppUpdateService {
@@ -421,6 +441,7 @@ export class AppUpdateService {
       if (comparison.isMismatch) {
         this.handleVersionMismatch(
           trackedVersion,
+          comparison.serverVersionKey,
           comparison.serverVersionLabel,
           triggers[trackedVersion],
           comparisons,
@@ -435,6 +456,7 @@ export class AppUpdateService {
     return this.fetchAndCompareVersion$('app', APP_VERSION_PATH, trigger, {
       isVersion: isAppVersion,
       isMismatch: (serverVersion) => this.isAppVersionMismatch(serverVersion),
+      key: ({ appVersion, commitSha }) => JSON.stringify([appVersion, commitSha]),
       label: (version) => this.versionService.getSiteVersion(version),
     });
   }
@@ -447,6 +469,8 @@ export class AppUpdateService {
     return this.fetchAndCompareVersion$('data', this.dataVersionUrl, trigger, {
       isVersion: isDataVersion,
       isMismatch: (serverVersion) => this.compareDataVersion(serverVersion),
+      key: ({ data_file: dataFile, data_version: dataVersion }) =>
+        JSON.stringify([dataFile, dataVersion]),
       label: (version) => this.versionService.formatDataVersion(version),
     });
   }
@@ -462,6 +486,7 @@ export class AppUpdateService {
     comparison: {
       isVersion: (body: unknown) => body is Version;
       isMismatch: (serverVersion: Version) => boolean;
+      key: (version: Version) => string;
       label: (version: Version) => string;
     },
   ): Observable<VersionComparison> {
@@ -479,6 +504,7 @@ export class AppUpdateService {
         }
         return {
           isMismatch: comparison.isMismatch(body),
+          serverVersionKey: comparison.key(body),
           serverVersionLabel: comparison.label(body),
         };
       }),
@@ -584,38 +610,39 @@ export class AppUpdateService {
   }
 
   /**
-   * Shows the overlay once the servers stop serving this tab's version, whether a deploy or data
-   * release replaced it or a rollback removed it. The first mismatch starts the confirmation delay,
-   * and only a mismatch after the delay shows the overlay. A match before then clears it, since the
-   * servers still serve this tab's version. If that version really is going away, a later mismatch
-   * starts the delay again.
-   *
-   * The delay also starts over when the server reports a different version than the one already
-   * waiting, e.g. data release B is seen, then release C before B's delay ends. The delay is
-   * measured from when C was first seen, not B. Otherwise C could show the overlay moments after it
-   * appears, before the APIs have cleared their caches for C, and a reload would still show B's
-   * cached data.
-   *
-   * An app version mismatch found because a chunk failed to load skips the delay, since the tab
-   * cannot navigate until it reloads.
+   * Called when a check finds the server's version differs from the one this tab loaded with.
+   * This method decides whether the difference has lasted long enough to show the overlay:
+   * - A newly seen version is recorded as pending, and a re-check is scheduled for when its
+   *   confirmation delay ends. App and data versions each have their own delay and pending state.
+   * - The same version still there after the full delay means the tab is out of date, so the
+   *   overlay is shown.
+   * - A different version seen while one is pending (two releases or deploys back to back)
+   *   restarts the delay, so the newer version always gets its full delay.
+   * - An app version mismatch found because a chunk failed to load shows the overlay right away,
+   *   without waiting for the delay.
    */
   private handleVersionMismatch(
     trackedVersion: TrackedVersion,
+    serverVersionKey: string,
     serverVersionLabel: string,
     trigger: AppUpdateCheckTrigger,
     comparisons: VersionComparisons,
   ) {
+    // The tab cannot navigate anywhere until it reloads, so waiting would only leave it broken.
     if (trackedVersion === 'app' && trigger === AppUpdateCheckTriggerEnum.ChunkLoadError) {
-      this.handleStaleVersion(trackedVersion, serverVersionLabel, trigger, comparisons);
+      this.handleConfirmedStaleVersion(trackedVersion, serverVersionLabel, trigger, comparisons);
       return;
     }
     const pendingMismatch = this.pendingMismatches[trackedVersion];
-    // A different label means a different server version, since each label includes every field
-    // the comparison checks. Cancelling stops the timer the earlier version started, so the new
-    // version waits out a full delay of its own.
-    if (!pendingMismatch || pendingMismatch.serverVersionLabel !== serverVersionLabel) {
+    // Compared by key, not label, so that versions the label displays the same way, such as
+    // `4.0.0-rc4` and `4.0.0-rc5` without a commit SHA, still count as different versions.
+    if (!pendingMismatch || pendingMismatch.serverVersionKey !== serverVersionKey) {
+      // Only one timer is kept per tracked version. This stops the earlier version's timer before
+      // `scheduleConfirmation` starts the new one. Otherwise the earlier timer would keep running
+      // with nothing left to stop it, and send an extra check later.
       this.cancelConfirmation(trackedVersion);
       this.pendingMismatches[trackedVersion] = {
+        serverVersionKey,
         serverVersionLabel,
         trigger,
         detectedAt: Date.now(),
@@ -630,7 +657,9 @@ export class AppUpdateService {
       Date.now() - pendingMismatch.detectedAt >=
       TRACKED_VERSION_CONFIGS[trackedVersion].confirmDelayMs
     ) {
-      this.handleStaleVersion(
+      // Reports the trigger that first found the mismatch, not the confirmation check that ended
+      // the delay, so the metric shows what made the tab notice the new version.
+      this.handleConfirmedStaleVersion(
         trackedVersion,
         serverVersionLabel,
         pendingMismatch.trigger,
@@ -667,7 +696,20 @@ export class AppUpdateService {
     this.cancelConfirmation(trackedVersion);
   }
 
-  private handleStaleVersion(
+  /**
+   * Called once a mismatch has lasted its full delay and the tab is out of date. This method
+   * shows the app or data update overlay, records the stale metric, and stops further background
+   * checks, since the reload the overlay asks for fixes both versions. Runs at most once per
+   * version.
+   *
+   * When the data version is the one out of date, a pending app mismatch keeps its timer. With
+   * background checks stopped, that timer is the only way a deploy already under way can still be
+   * confirmed. Confirming it switches the overlay to the app update message, which takes
+   * precedence, and records the app stale metric, so the tab is counted as missing both the deploy
+   * and the data release. The reload fixes both either way; the timer only keeps the message and
+   * metrics accurate.
+   */
+  private handleConfirmedStaleVersion(
     trackedVersion: TrackedVersion,
     serverVersionLabel: string,
     trigger: AppUpdateCheckTrigger,

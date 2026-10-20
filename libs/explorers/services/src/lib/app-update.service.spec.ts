@@ -367,6 +367,23 @@ describe('AppUpdateService', () => {
       expect(isShowingAppUpdateNotice()).toBe(false);
     });
 
+    it('restarts the confirmation delay when a release candidate without a commit SHA replaces another', () => {
+      const loadedVersionWithoutSha: AppVersion = { ...loadedVersion, commitSha: '' };
+      const newerVersionWithoutSha: AppVersion = { ...newerVersion, commitSha: '' };
+      const laterVersionWithoutSha: AppVersion = { appVersion: '4.0.0-rc5', commitSha: '' };
+      setup().start(loadedVersionWithoutSha, siteName);
+      returnToTab();
+      respondWithServerVersion(newerVersionWithoutSha);
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS - APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
+      respondWithServerVersion(laterVersionWithoutSha);
+
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+
+      expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+      expect(isShowingAppUpdateNotice()).toBe(false);
+    });
+
     it('does not show the overlay on the first mismatch', () => {
       const appUpdateService = setup();
       appUpdateService.start(loadedVersion, siteName);
