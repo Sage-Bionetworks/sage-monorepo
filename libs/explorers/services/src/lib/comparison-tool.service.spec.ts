@@ -17,6 +17,7 @@ import {
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, defer, EMPTY, Observable, of, Subject, throwError } from 'rxjs';
+import { AppStorageService } from './app-storage.service';
 import { deserializeComparisonToolUrlParams } from './comparison-tool-url-params';
 import {
   ComparisonToolFetchResult,
@@ -880,6 +881,146 @@ describe('ComparisonToolService', () => {
       });
     });
 
+    describe('overwrite confirmation', () => {
+      const CACHED_PINS = ['parent1', 'parent2'];
+      // parent2 has no rows in the child view, so it is hidden there
+      const hideAPinInChildView = (options: { pinAllFetch?: PinAllFetch<Row> } = {}) => {
+        connectService(viewConfigs, { selection: PARENT_VIEW, ...options });
+        pinInParentView(...CACHED_PINS);
+        service.setDropdownSelection(CHILD_VIEW);
+        landPinned(childRow('child1a', 'parent1'));
+        landUnpinned();
+        expect(service.hiddenPinCount()).toBe(1);
+      };
+
+      it('holds a pin while pins are hidden, leaving the cache as it was', () => {
+        hideAPinInChildView();
+
+        service.pinItem(childRow('child1b', 'parent1'));
+
+        expect(service.isOverwriteConfirmationVisible()).toBe(true);
+        expect(service.pinnedItems()).toEqual(CACHED_PINS);
+        expect(recordedIdentity()).toEqual(PARENT_VIEW_IDENTITY);
+      });
+
+      it('applies the held pin once confirmed', () => {
+        hideAPinInChildView();
+        service.pinItem(childRow('child1b', 'parent1'));
+
+        service.confirmPinEdit();
+
+        expect(service.isOverwriteConfirmationVisible()).toBe(false);
+        expect(service.pinnedItems()).toEqual(['child1a', 'child1b']);
+        expect(recordedIdentity()).toEqual(CHILD_VIEW_IDENTITY);
+      });
+
+      it('drops the held pin once cancelled, leaving the pins as they were', () => {
+        hideAPinInChildView();
+        const queryBeforeEdit = service.pinnedItemsQuery();
+        service.pinItem(childRow('child1b', 'parent1'));
+
+        service.cancelPinEdit();
+
+        expect(service.isOverwriteConfirmationVisible()).toBe(false);
+        expect(service.pinnedItems()).toEqual(CACHED_PINS);
+        expect(recordedIdentity()).toEqual(PARENT_VIEW_IDENTITY);
+        expect(service.pinnedItemsQuery()).toBe(queryBeforeEdit);
+      });
+
+      it('holds an unpin until confirmed', () => {
+        hideAPinInChildView();
+
+        service.unpinItem('child1a');
+        expect(service.isOverwriteConfirmationVisible()).toBe(true);
+        expect(service.pinnedItems()).toEqual(CACHED_PINS);
+
+        service.confirmPinEdit();
+        expect(service.pinnedItems()).toEqual([]);
+      });
+
+      it('holds pin-all before starting its fetch', () => {
+        const pinAllFetch = jest.fn<ReturnType<PinAllFetch<Row>>, Parameters<PinAllFetch<Row>>>(
+          () => of({ rows: [childRow('child3a', 'parent3')], totalElements: 1 }),
+        );
+        hideAPinInChildView({ pinAllFetch });
+
+        service.pinAll();
+        expect(service.isOverwriteConfirmationVisible()).toBe(true);
+        expect(pinAllFetch).not.toHaveBeenCalled();
+
+        service.confirmPinEdit();
+        expect(pinAllFetch).toHaveBeenCalledTimes(1);
+        expect(service.pinnedItems()).toEqual(['child1a', 'child3a']);
+      });
+
+      it('does nothing on confirm when the held pin can no longer be made', () => {
+        hideAPinInChildView();
+        service.pinItem(childRow('child3a', 'parent3'));
+        service.setPinLimit(1);
+
+        service.confirmPinEdit();
+
+        expect(service.pinnedItems()).toEqual(CACHED_PINS);
+      });
+
+      it('does not prompt when no pins are hidden', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        service.setDropdownSelection(CHILD_VIEW);
+        landPinned(childRow('child1a', 'parent1'));
+
+        service.pinItem(childRow('child1b', 'parent1'));
+
+        expect(service.isOverwriteConfirmationVisible()).toBe(false);
+        expect(service.pinnedItems()).toEqual(['child1a', 'child1b']);
+      });
+
+      it('does not prompt on a view switch or on clear all pins', () => {
+        hideAPinInChildView();
+
+        service.setDropdownSelection(OTHER_CHILD_VIEW);
+        expect(service.isOverwriteConfirmationVisible()).toBe(false);
+
+        service.resetPinnedItems();
+        expect(service.isOverwriteConfirmationVisible()).toBe(false);
+        expect(service.pinnedItems()).toEqual([]);
+      });
+
+      it('does not prompt once the user hides the confirmation', () => {
+        const appStorageService = TestBed.inject(AppStorageService);
+        jest.spyOn(appStorageService, 'isOverwritePinsConfirmationHidden').mockReturnValue(true);
+        hideAPinInChildView();
+
+        service.pinItem(childRow('child1b', 'parent1'));
+
+        expect(service.isOverwriteConfirmationVisible()).toBe(false);
+        expect(service.pinnedItems()).toEqual(['child1a', 'child1b']);
+      });
+
+      it('stores the user choice to hide the confirmation', () => {
+        const appStorageService = TestBed.inject(AppStorageService);
+        // Stubbed so the choice isn't written to localStorage, where it would leak into other tests
+        const setHidden = jest
+          .spyOn(appStorageService, 'setOverwritePinsConfirmationHidden')
+          .mockImplementation(() => undefined);
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+
+        service.setOverwriteConfirmationHiddenByUser(true);
+
+        expect(setHidden).toHaveBeenCalledWith(true);
+      });
+
+      it('drops the held edit on disconnect', () => {
+        hideAPinInChildView();
+        service.pinItem(childRow('child1b', 'parent1'));
+
+        service.disconnect();
+
+        expect(service.isOverwriteConfirmationVisible()).toBe(false);
+        expect(service.pinnedItems()).toEqual(CACHED_PINS);
+      });
+    });
+
     describe('URL pins that match no row', () => {
       const URL_PINS = ['parent1', 'child1a'];
       const loadUrlPins = () => {
@@ -998,6 +1139,65 @@ describe('ComparisonToolService', () => {
         service.setDropdownSelection(OTHER_PARENT_VIEW);
 
         expect(service.cachedPinsView()).toEqual(PARENT_VIEW);
+      });
+    });
+
+    describe('hiddenPinsReturnView', () => {
+      it('is the view the pins were made in after a switch', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+
+        service.setDropdownSelection(CHILD_VIEW);
+
+        expect(service.hiddenPinsReturnView()).toEqual(PARENT_VIEW);
+      });
+
+      it('is the view the pins were made in when their fetch fails after a switch', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+        service.setDropdownSelection(CHILD_VIEW);
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.hiddenPinsReturnView()).toEqual(PARENT_VIEW);
+      });
+
+      it('is null when the fetch fails in the view the pins were made in', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        pinInParentView('parent1');
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.hiddenPinsReturnView()).toBeNull();
+      });
+
+      it('is null when the fetch fails in a CT without dropdowns', () => {
+        connectService(mockComparisonToolDataConfig);
+        service.setPinnedItems(['id1']);
+
+        service.fetchPinned(failedRequest());
+
+        expect(service.hiddenPinsReturnView()).toBeNull();
+      });
+
+      it('is null when pins are hidden in the view they were made in without a failed fetch', () => {
+        connectService(viewConfigs, { selection: PARENT_VIEW });
+        service.setPinnedItems(['parent1', 'parent2']);
+
+        landPinned(parentRow('parent1'));
+
+        expect(service.hiddenPinCount()).toBe(1);
+        expect(service.hiddenPinsReturnView()).toBeNull();
+      });
+
+      it('is null when pins are hidden in a CT without dropdowns without a failed fetch', () => {
+        connectService(mockComparisonToolDataConfig);
+        service.setPinnedItems(['id1', 'id2']);
+
+        service.fetchPinned(of({ data: rows('id1'), totalCount: 1 }));
+
+        expect(service.hiddenPinCount()).toBe(1);
+        expect(service.hiddenPinsReturnView()).toBeNull();
       });
     });
 
@@ -1133,10 +1333,11 @@ describe('ComparisonToolService', () => {
         expect(service.canPin(childRow('child3a', 'parent3'))).toBe(true);
       });
 
-      it('replaces the unloaded pins and clears the failure on a pin edit', () => {
+      it('replaces the unloaded pins and clears the failure on a confirmed pin edit', () => {
         failPinnedFetchInChildView();
 
         service.pinItem(childRow('child3a', 'parent3'));
+        service.confirmPinEdit();
 
         expect(service.pinnedFetchFailed()).toBe(false);
         expect(service.pinnedItemsQuery()).toEqual({ items: ['child3a'], itemIdSpace: 'row' });
@@ -3766,7 +3967,7 @@ describe('ComparisonToolService', () => {
       connectService();
       service.setPinnedItems(['id1']);
       service.fetchPinned(failedRequest());
-      service.unpinItem('id1');
+      service.resetPinnedItems();
       const { source$, subscriptions } = failsOnce(() => of({ data: [], totalCount: 0 }));
 
       service.fetchPinned(source$);

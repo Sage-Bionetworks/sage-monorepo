@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { LocalStorageService } from '@sagebionetworks/web-shared/angular/storage';
 import {
+  DEFAULT_PAGE_SIZE,
+  HIDE_OVERWRITE_PINS_CONFIRMATION_KEY,
   HIDE_TUTORIAL_KEY,
   PAGE_SIZE_KEY,
   VALID_PAGE_SIZES,
-  DEFAULT_PAGE_SIZE,
 } from './app-storage.constants';
 import { AppStorageService } from './app-storage.service';
 
@@ -69,6 +70,32 @@ describe('AppStorageService', () => {
       service.setTutorialHidden(false);
       expect(storageServiceMock.removeItem).toHaveBeenCalledWith(HIDE_TUTORIAL_KEY);
       expect(storageServiceMock.setItem).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('overwrite pins confirmation', () => {
+    it('reads the overwrite pins confirmation key', () => {
+      const service = setup();
+      storageServiceMock.getItem.mockReturnValue('true');
+      expect(service.isOverwritePinsConfirmationHidden()).toBe(true);
+      expect(storageServiceMock.getItem).toHaveBeenCalledWith(HIDE_OVERWRITE_PINS_CONFIRMATION_KEY);
+    });
+
+    it('stores "true" when hiding', () => {
+      const service = setup();
+      service.setOverwritePinsConfirmationHidden(true);
+      expect(storageServiceMock.setItem).toHaveBeenCalledWith(
+        HIDE_OVERWRITE_PINS_CONFIRMATION_KEY,
+        'true',
+      );
+    });
+
+    it('removes key when showing', () => {
+      const service = setup();
+      service.setOverwritePinsConfirmationHidden(false);
+      expect(storageServiceMock.removeItem).toHaveBeenCalledWith(
+        HIDE_OVERWRITE_PINS_CONFIRMATION_KEY,
+      );
     });
   });
 

@@ -1,6 +1,7 @@
 import {
   ComparisonToolNoun,
   ComparisonToolNouns,
+  OverwritePinsMessage,
   PinnedResultsControlsCopy,
   PinnedResultsCounts,
   PinnedResultsLabel,
@@ -145,6 +146,52 @@ export const getNoMatchingPinsMessage = (
   const isOneRow = hiddenRowCount === 1;
   const noun = viewNoun ?? DEFAULT_VIEW_NOUN;
   return `No matching ${sentenceCase(isOneRow ? noun.singular : noun.plural)} ${isOneRow ? 'exists' : 'exist'} in the current view.`;
+};
+
+/**
+ * Takes the service's `hiddenPinCount`, `hiddenParentPinCount`, `hiddenPinsReturnView`, and
+ * `pinnedFetchFailed`, and the active view's nouns. A null `hiddenParentPinCount` words the message
+ * in the active view's rows, for pins made in that view's own row space. Otherwise the pins were made
+ * in another view, and the count of hidden results is given per parent, since the other view's noun
+ * isn't known here, and users should know how many results they would lose.
+ *
+ * After a failed pinned fetch, the message says the pins couldn't be loaded rather than that the view
+ * can't show them. A null `returnView` means they failed in the view they were made in, so there is
+ * no other view to send the user to.
+ */
+export const getOverwritePinsMessage = (
+  {
+    hiddenPinCount,
+    hiddenParentPinCount,
+  }: { hiddenPinCount: number; hiddenParentPinCount: number | null },
+  { returnView, pinnedFetchFailed }: { returnView: string[] | null; pinnedFetchFailed: boolean },
+  { viewNoun, parentNoun }: ComparisonToolNouns,
+): OverwritePinsMessage => {
+  const thatOrThose = (count: number) => (count === 1 ? 'that' : 'those');
+  const nounsFor = (count: number, noun: ComparisonToolNoun) =>
+    sentenceCase(nounForCount(count, noun));
+  const pins = nounsFor(hiddenPinCount, viewNoun ?? DEFAULT_VIEW_NOUN);
+  const results = nounsFor(hiddenPinCount, DEFAULT_VIEW_NOUN);
+  const parents =
+    hiddenParentPinCount === null
+      ? ''
+      : nounsFor(hiddenParentPinCount, parentNoun ?? viewNoun ?? DEFAULT_VIEW_NOUN);
+  const whyHidden = pinnedFetchFailed ? "couldn't be loaded" : "can't be shown in this view";
+  const lostPins =
+    hiddenParentPinCount === null
+      ? `You pinned ${hiddenPinCount} ${pins} that ${whyHidden}. Changing your pins here will unpin ${thatOrThose(hiddenPinCount)} ${pins}.`
+      : `You pinned ${hiddenPinCount} ${results} for ${hiddenParentPinCount} ${parents} that ${whyHidden}. Changing your pins here will unpin the ${results} for ${thatOrThose(hiddenParentPinCount)} ${parents}.`;
+  return {
+    lostPins,
+    returnToView:
+      returnView === null
+        ? null
+        : {
+            beforeView: `To view ${hiddenPinCount === 1 ? 'it' : 'them'}, go back to the`,
+            pinnedView: returnView,
+            afterView: 'view.',
+          },
+  };
 };
 
 export const getUnpinnedFetchFailedMessage = ({ viewNoun }: ComparisonToolNouns): string =>

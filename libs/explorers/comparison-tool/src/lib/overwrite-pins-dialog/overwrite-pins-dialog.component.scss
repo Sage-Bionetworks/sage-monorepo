@@ -1,0 +1,17 @@
+@use 'explorers/styles/src/mixins' as mixins;
+
+.overwrite-pins-dialog {
+  @include mixins.ct-dialog;
+}
+
+.overwrite-pins-dialog-message {
+  margin: 0 0 12px;
+}
+
+.overwrite-pins-dialog-checkbox {
+  @include mixins.ct-dialog-checkbox;
+
+  // Room for the focus ring, which the dialog content's overflow would otherwise clip, since this is
+  // its last element and the content has no bottom padding
+  padding-bottom: 4px;
+}
