@@ -123,6 +123,24 @@ describe('BoxplotChart', () => {
       points.forEach((series) => expect(series.z).toBeGreaterThan(boxplot?.z ?? Infinity));
     });
 
+    it('draws capped markers above the points they stand in for', () => {
+      makeChart({
+        points: [
+          { xAxisCategory: 'CAT1', pointCategory: 'Female', value: 4 },
+          { xAxisCategory: 'CAT1', pointCategory: 'Female', value: 20 },
+        ],
+        yAxisMax: 10,
+        capPointsAboveYAxisMax: true,
+      });
+      const series = getOption().series as { name?: string; z?: number }[];
+      const pointSeries = series.find((s) => s.name === 'Female');
+      const cappedSeries = series.find((s) => s.name === 'Female above y-axis max');
+
+      expect(pointSeries).toBeDefined();
+      expect(cappedSeries).toBeDefined();
+      expect(cappedSeries?.z).toBeGreaterThan(pointSeries?.z ?? Infinity);
+    });
+
     it.each([
       ['gray grid lanes', { chartStyle: 'grayGrid' } as Partial<BoxplotProps>],
       ['custom lane colors', { laneBackgroundColors: ['#F9F9FA', '#FFFFFF'] }],
