@@ -625,8 +625,6 @@ template {
   --transition-duration: 0.08s;
   --header-height: 86px;
   --footer-height: 71px;
-  --gene-details-nav-height: 80px;
-  --gene-details-subnav-offset: -19px;
   --color-chart-axis: #989898;
   --color-chart-axis-label: #000;
   --color-chart-axis-tick: #989898;
