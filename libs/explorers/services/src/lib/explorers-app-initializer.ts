@@ -18,6 +18,10 @@ export function initializeExplorersApp(siteName: string): Promise<void> {
       dsn: sentryDsn,
       environment: sentryEnvironment,
       release: sentryRelease,
+      // Intentionally does more than filter: for a chunk-load error, `isAppStale` runs a real
+      // version check and shows the update overlay on a mismatch. Chunk failures outside navigation
+      // (e.g. a `@defer` block) never reach the router, so this is the only place the app learns
+      // of them.
       isStaleClient: () => appUpdateService.isAppStale(AppUpdateCheckTriggerEnum.ChunkLoadError),
     });
     appUpdateService.start(configService.config, siteName, getDataVersionUrl(csrApiUrl));

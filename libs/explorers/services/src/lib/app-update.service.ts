@@ -50,6 +50,7 @@ import {
   Subject,
   Subscription,
   switchMap,
+  tap,
   timeout,
   TimeoutError,
   timer,
@@ -208,29 +209,29 @@ type VersionComparisons = Record<TrackedVersion, VersionComparison>;
  * Detects that this tab is out of date, then blocks the page with an overlay whose only action is
  * to reload. A tab can fall behind in two independent ways, and every check compares both.
  *
- * App version mismatch: the code the tab runs does not match what the app server's `/app-version` reports.
- * During a rolling deploy, the load balancer sends requests to old and new app tasks for a few
- * minutes, so a single check reports whichever task answered. Prompting then would do more harm
- * than good: a tab could reload onto an old task and be prompted again, and a tab already running
- * the new code could be told to reload. So a mismatch must still be there after
- * `APP_UPDATE_CONFIRM_DELAY_MS`, which outlasts the cutover; by then every task serves the same
- * version, and a reload reliably gets it. A match in between means a task still serves this tab's
- * version, so the mismatch is dropped. The exception is a lazy-loaded chunk that fails to load on a
- * mismatched version: the tab can no longer navigate, so the overlay shows right away.
+ * App version mismatch: the code the tab runs does not match what the app server's
+ * `/app-version` reports. During a rolling deploy, the load balancer sends requests to old and new
+ * app tasks for a few minutes, so a single check reports whichever task answered. Prompting then
+ * would do more harm than good: a tab could reload onto an old task and be prompted again, and a
+ * tab already running the new code could be told to reload. So a mismatch must still be there
+ * after `APP_UPDATE_CONFIRM_DELAY_MS`, which outlasts the cutover; by then every task serves the
+ * same version, and a reload reliably gets it. A match in between means a task still serves this
+ * tab's version, so the mismatch is dropped. The exception is a lazy-loaded chunk that fails to
+ * load on a mismatched version: the tab can no longer navigate, so the overlay shows right away.
  *
- * Data version mismatch: the data release the tab shows does not match the API's data version
- * A data release switches over in one step, but each API task only notices on
- * its own once-a-minute check, then clears its caches, and clears them again a minute later
- * because a slow uncached query that read the previous release just before the switch could start
- * caching after the first cache clear operation. Until both clears have run, a reload could
- * still be served the previous release's cached data.
- * So a mismatch must still be there after `DATA_UPDATE_CONFIRM_DELAY_MS`, which outlasts both
- * clears, and a reload then gets the new data. A match in between means the data was rolled back,
- * so the mismatch is dropped.
+ * Data version mismatch: the data release the tab shows does not match what the API's data
+ * version endpoint reports. A data release switches over in one step, but each API task only
+ * notices on its own once-a-minute check, then clears its caches, and clears them again a minute
+ * later because a slow uncached query that read the previous release just before the switch could
+ * start caching after the first cache clear operation. Until both clears have run, a reload could
+ * still be served the previous release's cached data. So a mismatch must still be there after
+ * `DATA_UPDATE_CONFIRM_DELAY_MS`, which outlasts both clears, and a reload then gets the new data.
+ * A match in between means the data was rolled back, so the mismatch is dropped.
  *
  * For mismatches on both: any difference counts, not only a newer version. If a deployment fails,
  * the rollback moves the server back to an earlier version and tabs loaded from the rolled-back
- * version must reload too. In this scenario the app update notice is shown, since the reload fixes both.
+ * version must reload too. When both versions differ, the app update notice is shown, since the
+ * reload fixes both.
  */
 @Injectable({ providedIn: 'root' })
 export class AppUpdateService {
@@ -267,7 +268,6 @@ export class AppUpdateService {
     data: null,
   };
   private inFlightCheck$: Observable<VersionComparisons> | null = null;
-  private hasChunkLoadErrorJoinedInFlightCheck = false;
   private readonly requestedChecks = new Subject<AppUpdateCheckTrigger>();
 
   /**
@@ -359,8 +359,8 @@ export class AppUpdateService {
    * exist there. A true result means a failed chunk load is expected rather than a bug. A data
    * version mismatch does not explain a missing chunk, so it never resolves true, though the check
    * still records it. With the `ChunkLoadError` trigger, an app version mismatch shows the overlay
-   * without waiting out the confirmation delay. Resolves false before `start` and while offline,
-   * since the version is then unknown.
+   * without waiting out the confirmation delay (see `getAppVersionCheckOutcome`). Resolves false
+   * before `start` and while offline, since the version is then unknown.
    */
   isAppStale(trigger: AppUpdateCheckTrigger): Promise<boolean> {
     if (!this.clientVersion) {
@@ -371,6 +371,13 @@ export class AppUpdateService {
     );
   }
 
+  /**
+   * Checks the app version right away. For a chunk-load check, this method also shows the overlay
+   * on a mismatch without waiting out the confirmation delay: the tab cannot navigate until it
+   * reloads, so waiting would only leave it broken. It does so on its own subscription to the
+   * check, as the result arrives, whether this call started the check or joined one another
+   * trigger had already started.
+   */
   private async getAppVersionCheckOutcome(
     trigger: AppUpdateCheckTrigger,
   ): Promise<AppVersionCheckOutcome> {
@@ -380,7 +387,20 @@ export class AppUpdateService {
     if (!this.isOnline()) {
       return AppVersionCheckOutcomeEnum.Offline;
     }
-    const { app: appComparison } = await firstValueFrom(this.check$(trigger));
+    const { app: appComparison } = await firstValueFrom(
+      this.check$(trigger).pipe(
+        tap((comparisons) => {
+          if (trigger === AppUpdateCheckTriggerEnum.ChunkLoadError && comparisons.app?.isMismatch) {
+            this.handleConfirmedStaleVersion(
+              'app',
+              comparisons.app.serverVersionLabel,
+              trigger,
+              comparisons,
+            );
+          }
+        }),
+      ),
+    );
     if (!appComparison) {
       return AppVersionCheckOutcomeEnum.CheckFailed;
     }
@@ -392,33 +412,23 @@ export class AppUpdateService {
   /**
    * Reuses a check already in progress, so concurrent triggers send one request per endpoint. Both
    * comparisons are handled together once both responses are in, so a tab confirmed stale is
-   * reported with every version that differed. A chunk load that fails during a check started by
-   * another trigger makes that check handle the app version as a chunk-load check, so a mismatch
-   * shows the overlay without the confirmation delay. The data version keeps the trigger that
-   * started the check, since a failed chunk load says nothing about the data release. Emits both
-   * comparisons; each is null when its version could not be compared.
+   * reported with every version that differed. Emits both comparisons; each is null when its
+   * version could not be compared. A caller that joins a check another trigger started gets the
+   * same result, so anything specific to its own trigger is handled after the check resolves.
    */
   private check$(trigger: AppUpdateCheckTrigger): Observable<VersionComparisons> {
-    if (this.inFlightCheck$) {
-      if (trigger === AppUpdateCheckTriggerEnum.ChunkLoadError) {
-        this.hasChunkLoadErrorJoinedInFlightCheck = true;
-      }
-    } else {
+    if (!this.inFlightCheck$) {
       this.lastCheckedAt = Date.now();
       this.inFlightCheck$ = forkJoin({
         app: this.checkAppVersion$(trigger),
         data: this.checkDataVersion$(trigger),
       }).pipe(
         map((comparisons) => {
-          const appTrigger = this.hasChunkLoadErrorJoinedInFlightCheck
-            ? AppUpdateCheckTriggerEnum.ChunkLoadError
-            : trigger;
-          this.handleComparisons(comparisons, { app: appTrigger, data: trigger });
+          this.handleComparisons(comparisons, trigger);
           return comparisons;
         }),
         finalize(() => {
           this.inFlightCheck$ = null;
-          this.hasChunkLoadErrorJoinedInFlightCheck = false;
         }),
         share(),
       );
@@ -430,10 +440,7 @@ export class AppUpdateService {
    * The data comparison is handled first, so when the app version is confirmed stale in the same
    * check, handling it cancels any data confirmation the data comparison just scheduled.
    */
-  private handleComparisons(
-    comparisons: VersionComparisons,
-    triggers: Record<TrackedVersion, AppUpdateCheckTrigger>,
-  ) {
+  private handleComparisons(comparisons: VersionComparisons, trigger: AppUpdateCheckTrigger) {
     for (const trackedVersion of ['data', 'app'] as const) {
       const comparison = comparisons[trackedVersion];
       if (!comparison) {
@@ -444,7 +451,7 @@ export class AppUpdateService {
           trackedVersion,
           comparison.serverVersionKey,
           comparison.serverVersionLabel,
-          triggers[trackedVersion],
+          trigger,
           comparisons,
         );
       } else {
@@ -600,8 +607,9 @@ export class AppUpdateService {
    *   overlay is shown.
    * - A different version seen while one is pending (two releases or deploys back to back)
    *   restarts the delay, so the newer version always gets its full delay.
-   * - An app version mismatch found because a chunk failed to load shows the overlay right away,
-   *   without waiting for the delay.
+   *
+   * A chunk that failed to load skips the delay, but that is handled by `getAppVersionCheckOutcome`
+   * once the check resolves, not here.
    */
   private handleVersionMismatch(
     trackedVersion: TrackedVersion,
@@ -610,11 +618,6 @@ export class AppUpdateService {
     trigger: AppUpdateCheckTrigger,
     comparisons: VersionComparisons,
   ) {
-    // The tab cannot navigate anywhere until it reloads, so waiting would only leave it broken.
-    if (trackedVersion === 'app' && trigger === AppUpdateCheckTriggerEnum.ChunkLoadError) {
-      this.handleConfirmedStaleVersion(trackedVersion, serverVersionLabel, trigger, comparisons);
-      return;
-    }
     const pendingMismatch = this.pendingMismatches[trackedVersion];
     // Compared by key, not label, so that versions the label displays the same way, such as
     // `4.0.0-rc4` and `4.0.0-rc5` without a commit SHA, still count as different versions.
