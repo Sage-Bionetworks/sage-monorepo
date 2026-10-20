@@ -117,6 +117,12 @@ test.describe('gene details - query parameter sets initial selected model', () =
       await confirmDropdown(page, model);
     });
   }
+
+  test('model is used when query parameter is set without parentheses', async ({ page }) => {
+    await page.goto(buildUrlWithModelQueryParam('AD Diagnosis x Sex females only'));
+    await waitForSpinnerNotVisible(page);
+    await confirmDropdown(page, GCT_RNA_SUBCATEGORIES.AD_SEX_F);
+  });
 });
 
 test.describe('gene details - tabs', () => {
@@ -175,18 +181,15 @@ test.describe('gene details - tabs', () => {
 
   test('model query parameter is kept when switching tabs', async ({ page }) => {
     const model = GCT_RNA_SUBCATEGORIES.AD_SEX_F;
-    // Agora's CustomUrlSerializer strips parentheses from the whole URL, query string included
-    // TODO(AG-2217): expect the model with parentheses once the serializer leaves query values alone
-    const modelInUrl = 'AD Diagnosis x Sex females only';
     await goToGene(page, `${genePath}/evidence/rna?model=${model}`);
     await expect(page.getByRole('combobox', { name: model })).toBeVisible();
-    await expect.poll(() => getModelQueryParam(page)).toBe(modelInUrl);
+    await expect.poll(() => getModelQueryParam(page)).toBe(model);
 
     await clickTab(page, 'Protein', `${genePath}/evidence/protein`);
-    expect(getModelQueryParam(page)).toBe(modelInUrl);
+    expect(getModelQueryParam(page)).toBe(model);
 
     await clickTab(page, 'RNA', `${genePath}/evidence/rna`);
-    expect(getModelQueryParam(page)).toBe(modelInUrl);
+    expect(getModelQueryParam(page)).toBe(model);
     await expect(page.getByRole('combobox', { name: model })).toBeVisible();
   });
 

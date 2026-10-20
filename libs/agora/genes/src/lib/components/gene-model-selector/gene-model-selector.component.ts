@@ -7,7 +7,6 @@ import { SelectModule } from 'primeng/select';
 
 interface Option {
   name: string;
-  value: string;
 }
 
 @Component({
@@ -25,29 +24,21 @@ export class GeneModelSelectorComponent implements OnInit {
   }
   @Input() set options(options: any) {
     this.selected = {} as Option;
-    this._options =
-      options?.map((option: any) => {
-        const newValue = removeParentheses(option);
-        return {
-          name: option,
-          value: newValue,
-        } as Option;
-      }) || [];
+    this._options = options?.map((option: any) => ({ name: option }) as Option) || [];
   }
 
-  selected: Option = { name: '', value: '' };
+  selected: Option = { name: '' };
 
   @Output() changeEvent: EventEmitter<object> = new EventEmitter<object>();
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       const modelFromURL = params[QUERY_PARAMS.MODEL];
-      let index = this._options.findIndex((o) => o.value === modelFromURL);
-      if (index === -1) {
-        // default to first option if page is loaded without a model parameter
-        index = 0;
-      }
-      this.selected = this._options[index];
+      const exactMatch = this._options.find((o) => o.name === modelFromURL);
+      // links shared while the URL serializer stripped parentheses carry the stripped name
+      const strippedMatch = this._options.find((o) => removeParentheses(o.name) === modelFromURL);
+      const defaultOption = this._options[0];
+      this.selected = exactMatch ?? strippedMatch ?? defaultOption;
       this._onChange();
     });
   }
