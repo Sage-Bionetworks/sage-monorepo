@@ -100,28 +100,29 @@ test.describe('gene details - query parameter sets initial selected model', () =
   function buildUrlWithModelQueryParam(model: string) {
     return `${path}?model=${model}`;
   }
-  async function confirmDropdown(page: Page, model: string) {
+  async function confirmSelectedModel(page: Page, model: string) {
     await expect(page.getByRole('combobox', { name: model })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 4, name: model, exact: true })).toBeVisible();
   }
 
   test('default model is used when there is no query parameter', async ({ page }) => {
     await page.goto(path);
     await waitForSpinnerNotVisible(page);
-    await confirmDropdown(page, GCT_RNA_SUBCATEGORIES.AD);
+    await confirmSelectedModel(page, GCT_RNA_SUBCATEGORIES.AD);
   });
 
   for (const model of Object.values(GCT_RNA_SUBCATEGORIES)) {
     test(`model ${model} is used when query parameter is set`, async ({ page }) => {
       await page.goto(buildUrlWithModelQueryParam(model));
       await waitForSpinnerNotVisible(page);
-      await confirmDropdown(page, model);
+      await confirmSelectedModel(page, model);
     });
   }
 
   test('model is used when query parameter is set without parentheses', async ({ page }) => {
     await page.goto(buildUrlWithModelQueryParam('AD Diagnosis x Sex females only'));
     await waitForSpinnerNotVisible(page);
-    await confirmDropdown(page, GCT_RNA_SUBCATEGORIES.AD_SEX_F);
+    await confirmSelectedModel(page, GCT_RNA_SUBCATEGORIES.AD_SEX_F);
   });
 });
 
