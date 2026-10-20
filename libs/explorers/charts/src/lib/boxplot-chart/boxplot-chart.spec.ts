@@ -3,6 +3,7 @@ import {
   CAPPED_POINT_SPACING_PX,
   CAPPED_POINT_SYMBOL,
   CAPPED_POINT_SYMBOL_SIZE,
+  CAPPED_SERIES_NAME_SUFFIX,
 } from '../constants';
 import { staticBoxplotPoints, staticBoxplotSummaries } from '../mocks';
 import { BoxplotProps, CategoryPoint } from '../models';
@@ -64,7 +65,7 @@ describe('BoxplotChart', () => {
   function getCappedSeriesNames(): string[] {
     return (getOption().series as ScatterSeriesOption[])
       .map((series) => String(series.name))
-      .filter((name) => name.endsWith('above y-axis max'));
+      .filter((name) => name.endsWith(CAPPED_SERIES_NAME_SUFFIX));
   }
 
   describe('setOptions -- no data', () => {
@@ -134,7 +135,7 @@ describe('BoxplotChart', () => {
       });
       const series = getOption().series as { name?: string; z?: number }[];
       const pointSeries = series.find((s) => s.name === 'Female');
-      const cappedSeries = series.find((s) => s.name === 'Female above y-axis max');
+      const cappedSeries = series.find((s) => s.name === `Female${CAPPED_SERIES_NAME_SUFFIX}`);
 
       expect(pointSeries).toBeDefined();
       expect(cappedSeries).toBeDefined();
@@ -222,8 +223,11 @@ describe('BoxplotChart', () => {
 
     it('draws each point above yAxisMax at yAxisMax, keeping its true value', () => {
       makeCappedChart();
-      expect(getCappedSeriesNames()).toEqual(['Female above y-axis max', 'Male above y-axis max']);
-      expect(getSeries('Female above y-axis max')?.encode).toEqual({
+      expect(getCappedSeriesNames()).toEqual([
+        `Female${CAPPED_SERIES_NAME_SUFFIX}`,
+        `Male${CAPPED_SERIES_NAME_SUFFIX}`,
+      ]);
+      expect(getSeries(`Female${CAPPED_SERIES_NAME_SUFFIX}`)?.encode).toEqual({
         x: 'xAxisValue',
         y: 'cappedValue',
       });
@@ -238,7 +242,7 @@ describe('BoxplotChart', () => {
 
     it('spreads the markers of one group evenly in pixels, smallest value first', () => {
       makeCappedChart();
-      const symbolOffset = getSeries('Female above y-axis max')?.symbolOffset as (
+      const symbolOffset = getSeries(`Female${CAPPED_SERIES_NAME_SUFFIX}`)?.symbolOffset as (
         pt: CappedRow,
       ) => number[];
       const cat1Rows = getCappedRows('Female').filter((pt) => pt.xAxisCategory === 'CAT1');
@@ -262,7 +266,7 @@ describe('BoxplotChart', () => {
 
     it('uses the capped symbol and size in the point category colour', () => {
       makeCappedChart();
-      const series = getSeries('Female above y-axis max');
+      const series = getSeries(`Female${CAPPED_SERIES_NAME_SUFFIX}`);
       expect(series?.symbol).toBe(CAPPED_POINT_SYMBOL);
       expect(series?.symbolSize).toBe(CAPPED_POINT_SYMBOL_SIZE);
       expect(series?.symbolKeepAspect).toBe(true);
@@ -276,7 +280,7 @@ describe('BoxplotChart', () => {
           { xAxisCategory: 'CAT1', value: yAxisMax + 1 },
         ],
       });
-      expect(getCappedSeriesNames()).toEqual(['points above y-axis max']);
+      expect(getCappedSeriesNames()).toEqual([`points${CAPPED_SERIES_NAME_SUFFIX}`]);
       expect(getCappedRows('points').map((pt) => pt.value)).toEqual([yAxisMax + 1]);
     });
 
@@ -284,7 +288,7 @@ describe('BoxplotChart', () => {
       const pointTooltipFormatter = jest.fn().mockReturnValue('tooltip');
       makeCappedChart({ pointTooltipFormatter });
       const formatter = (
-        getSeries('Male above y-axis max')?.tooltip as {
+        getSeries(`Male${CAPPED_SERIES_NAME_SUFFIX}`)?.tooltip as {
           formatter: (params: { data: unknown }) => string;
         }
       ).formatter;

@@ -7,6 +7,7 @@ export const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;
 export const CAPPED_POINT_SYMBOL = 'path://M0,0 L11,13 L5.5,13 L0,6.5 L-5.5,13 L-11,13 Z';
 export const CAPPED_POINT_SYMBOL_SIZE = 12;
 export const CAPPED_POINT_SPACING_PX = 15;
+export const CAPPED_SERIES_NAME_SUFFIX = ' above y-axis max';
 
 export const DARK_TOOLTIP: TooltipOption = {
   confine: true,

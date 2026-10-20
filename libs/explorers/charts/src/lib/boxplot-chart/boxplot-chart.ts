@@ -14,6 +14,7 @@ import {
   CAPPED_POINT_SPACING_PX,
   CAPPED_POINT_SYMBOL,
   CAPPED_POINT_SYMBOL_SIZE,
+  CAPPED_SERIES_NAME_SUFFIX,
   DEFAULT_COLOR,
 } from '../constants';
 import { BoxplotProps, CategoryPoint } from '../models';
@@ -466,7 +467,7 @@ export class BoxplotChart {
         seriesOpts.push({
           ...pointSeries,
           datasetId: cappedDatasetId,
-          name: `${id} above y-axis max`,
+          name: `${id}${CAPPED_SERIES_NAME_SUFFIX}`,
           encode: { x: 'xAxisValue', y: 'cappedValue' },
           symbol: CAPPED_POINT_SYMBOL,
           symbolSize: CAPPED_POINT_SYMBOL_SIZE,
