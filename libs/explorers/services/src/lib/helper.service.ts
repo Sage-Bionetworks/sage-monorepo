@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ParamMap } from '@angular/router';
 import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
-import { Panel } from '@sagebionetworks/explorers/models';
+import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
 
 @Injectable({
   providedIn: 'root',
@@ -46,19 +46,38 @@ export class HelperService {
     };
   }
 
-  getPanelUrl(basePath: string, activePanel: string, activeParent: string) {
+  appendQueryParams(url: string, queryParams: QueryParams) {
+    const queryString = Object.entries(queryParams)
+      .filter(([, value]) => value)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
+      .join('&');
+    if (!queryString) return url;
+    const fragmentIndex = url.includes('#') ? url.indexOf('#') : url.length;
+    const pathAndQuery = url.slice(0, fragmentIndex);
+    const fragment = url.slice(fragmentIndex);
+    const separator = pathAndQuery.includes('?') ? '&' : '?';
+    return `${pathAndQuery}${separator}${queryString}${fragment}`;
+  }
+
+  getPanelUrl(
+    basePath: string,
+    activePanel: string,
+    activeParent: string,
+    queryParams: QueryParams = {},
+  ) {
     const panelPath = activeParent === '' ? activePanel : `${activeParent}/${activePanel}`;
-    return `${basePath}/${panelPath}`;
+    return this.appendQueryParams(`${basePath}/${panelPath}`, queryParams);
   }
 
   handlePanelChange(
     panels: Panel[],
     panel: Panel,
     basePath: string,
+    queryParams: QueryParams = {},
   ): { activePanel: string; activeParent: string; url: string } | undefined {
     if (panel.disabled) return undefined;
     const { activePanel, activeParent } = this.getActivePanelAndParent(panels, panel);
-    const url = this.getPanelUrl(basePath, activePanel, activeParent);
+    const url = this.getPanelUrl(basePath, activePanel, activeParent, queryParams);
     return { activePanel, activeParent, url };
   }
 
@@ -124,9 +143,14 @@ export class HelperService {
   ): { activePanel: string; activeParent: string; shouldScrollToPanelNav: boolean } | undefined {
     const noHashFragment = this.getHashFragment() === '';
     if (params.get(PANEL_ROUTE_PARAMS.SUBTAB)) {
+      const parent = panels.find((p: Panel) => p.name === params.get(PANEL_ROUTE_PARAMS.TAB));
+      const child = parent?.children?.find(
+        (c: Panel) => c.name === params.get(PANEL_ROUTE_PARAMS.SUBTAB),
+      );
+      if (!parent || !child) return undefined;
       return {
-        activePanel: params.get(PANEL_ROUTE_PARAMS.SUBTAB) as string,
-        activeParent: params.get(PANEL_ROUTE_PARAMS.TAB) as string,
+        activePanel: child.name,
+        activeParent: parent.name,
         shouldScrollToPanelNav: noHashFragment,
       };
     } else if (params.get(PANEL_ROUTE_PARAMS.TAB)) {
@@ -155,6 +179,43 @@ export class HelperService {
       }
     }
     return undefined;
+  }
+
+  /**
+   * Resolves the panel to show on a details page's first load.
+   * If no panel is specified in the URL, the default panel is used and the URL is left untouched,
+   * retaining all query parameters and hash fragments.
+   * If a disabled or invalid panel is specified, the default panel is used and `replacementUrl` is
+   * the base path with only `queryParams`, dropping the invalid panel, other query parameters, and
+   * the hash fragment.
+   */
+  resolveInitialPanel(
+    panels: Panel[],
+    params: ParamMap,
+    basePath: string,
+    queryParams: QueryParams = {},
+  ): {
+    activePanel: string;
+    activeParent: string;
+    shouldScrollToPanelNav: boolean;
+    replacementUrl?: string;
+  } {
+    const fromUrl = this.getActivePanelAndParentFromUrl(panels, params) ?? {
+      activePanel: '',
+      activeParent: '',
+      shouldScrollToPanelNav: false,
+    };
+    const fallback = this.getFallbackPanelIfInvalid(panels, fromUrl.activePanel);
+    if (!fallback) return fromUrl;
+
+    if (!params.has(PANEL_ROUTE_PARAMS.TAB)) {
+      return { ...fallback, shouldScrollToPanelNav: false };
+    }
+    return {
+      ...fallback,
+      shouldScrollToPanelNav: false,
+      replacementUrl: this.appendQueryParams(basePath, queryParams),
+    };
   }
 
   encodeParenthesesForwardSlashes(uri: string) {

@@ -1,9 +1,9 @@
 import { Location } from '@angular/common';
 import { HttpContext } from '@angular/common/http';
-import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Panel } from '@sagebionetworks/explorers/models';
+import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
 import {
   HelperService,
   LoggerService,
@@ -42,7 +42,7 @@ import {
   templateUrl: './model-details.component.html',
   styleUrls: ['./model-details.component.scss'],
 })
-export class ModelDetailsComponent implements OnInit, AfterViewInit {
+export class ModelDetailsComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   location = inject(Location);
@@ -70,7 +70,6 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   activePanel = '';
   activeParent = '';
 
-  maybeScrollToPanelNavElementOnInitialLoad = false;
   scrollToPanelNavElementOnInitialLoad = false;
 
   reset() {
@@ -129,9 +128,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   private setModel(model: Model, params: ParamMap) {
     this.model = model;
     this.panels = this.buildPanels(model);
-    this.setActivePanelAndParentFromUrl(params);
-    this.applyFallbackPanelIfNeeded(params);
-    this.scrollToPanelNavElementOnInitialLoad = this.maybeScrollToPanelNavElementOnInitialLoad;
+    this.setInitialPanel(params);
     this.isLoading = false;
   }
 
@@ -145,40 +142,19 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private setActivePanelAndParentFromUrl(params: ParamMap) {
-    const result = this.helperService.getActivePanelAndParentFromUrl(this.panels, params);
-    if (result) {
-      this.activePanel = result.activePanel;
-      this.activeParent = result.activeParent;
-      this.maybeScrollToPanelNavElementOnInitialLoad = result.shouldScrollToPanelNav;
-    }
-  }
-
-  /**
-   * Specifies the active panel when either no panel is specified in the path or when the specified
-   * panel is disabled or doesn't exist.
-   * If no panel is specified, then use the default panel and leave the URL untouched, retaining all
-   * query parameters and hash fragments. modelOrganism does not need appending here because
-   * modelOrganismUrlGuard has already redirected the URL to carry it.
-   * If a disabled or invalid panel is specified, then drop the query parameters and hash fragment
-   * (other than the required modelOrganism query parameter).
-   */
-  private applyFallbackPanelIfNeeded(params: ParamMap) {
-    const fallback = this.helperService.getFallbackPanelIfInvalid(this.panels, this.activePanel);
-    if (!fallback) return;
-
-    this.activePanel = fallback.activePanel;
-    this.activeParent = fallback.activeParent;
-
-    if (params.has('tab')) {
-      this.location.replaceState(this.appendModelOrganism(this.getUrlBasePath()));
-      this.maybeScrollToPanelNavElementOnInitialLoad = false;
-    }
-  }
-
-  ngAfterViewInit() {
-    if (!this.model?.name) {
-      this.isLoading = true;
+  // A URL with no panel is left untouched; modelOrganismUrlGuard has already added modelOrganism to it
+  private setInitialPanel(params: ParamMap) {
+    const initial = this.helperService.resolveInitialPanel(
+      this.panels,
+      params,
+      this.getUrlBasePath(),
+      this.getModelOrganismQueryParams(),
+    );
+    this.activePanel = initial.activePanel;
+    this.activeParent = initial.activeParent;
+    this.scrollToPanelNavElementOnInitialLoad = initial.shouldScrollToPanelNav;
+    if (initial.replacementUrl) {
+      this.location.replaceState(initial.replacementUrl);
     }
   }
 
@@ -189,17 +165,21 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     return `/${ROUTE_PATHS.MODELS}/${encodedModel}`;
   }
 
-  private appendModelOrganism(url: string) {
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}${QUERY_PARAMS.MODEL_ORGANISM}=${this.modelOrganism}`;
+  private getModelOrganismQueryParams(): QueryParams {
+    return { [QUERY_PARAMS.MODEL_ORGANISM]: this.modelOrganism };
   }
 
   onPanelChange(event: Panel) {
-    const result = this.helperService.handlePanelChange(this.panels, event, this.getUrlBasePath());
+    const result = this.helperService.handlePanelChange(
+      this.panels,
+      event,
+      this.getUrlBasePath(),
+      this.getModelOrganismQueryParams(),
+    );
     if (result) {
       this.activePanel = result.activePanel;
       this.activeParent = result.activeParent;
-      this.location.replaceState(this.appendModelOrganism(result.url));
+      this.location.replaceState(result.url);
     }
   }
 }

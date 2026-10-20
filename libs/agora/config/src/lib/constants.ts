@@ -29,6 +29,10 @@ export const ROUTE_PARAMS = {
   GENE_ID: 'id',
 } as const;
 
+export const QUERY_PARAMS = {
+  MODEL: 'model',
+} as const;
+
 export const AGORA_LOADING_ICON_COLORS: LoadingIconColors = {
   colorInnermost: '#8b8ad1',
   colorCentral: '#8b8ad1',

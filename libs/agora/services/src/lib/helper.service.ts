@@ -1,4 +1,3 @@
-import { HttpParams } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { round } from 'lodash';
 
@@ -116,10 +115,5 @@ export class HelperService {
     if (name === 'tertiary') return '#42c7bb';
     if (name === 'action-primary') return '#5081a7';
     return '';
-  }
-
-  addSingleUrlParam(url: string, paramName: string, paramValue: string | number | boolean) {
-    const param = new HttpParams().set(paramName, paramValue);
-    return `${url.split('?')[0]}?${param.toString()}`;
   }
 }
