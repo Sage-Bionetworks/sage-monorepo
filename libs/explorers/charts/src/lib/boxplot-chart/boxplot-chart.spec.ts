@@ -89,6 +89,7 @@ describe('BoxplotChart', () => {
       const { axisZs, boxplot, points } = getDrawingOrder();
       const topAxisZ = Math.max(...axisZs);
 
+      expect(boxplot).toBeDefined();
       expect(boxplot?.z).toBeGreaterThan(topAxisZ);
       expect(points.length).toBeGreaterThan(0);
       points.forEach((series) => expect(series.z).toBeGreaterThan(boxplot?.z ?? Infinity));
