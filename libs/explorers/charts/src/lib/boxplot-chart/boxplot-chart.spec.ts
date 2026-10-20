@@ -68,4 +68,41 @@ describe('BoxplotChart', () => {
       expect(getXAxisCategories()).toEqual(['CAT1', 'CAT2', 'CAT3', 'CAT4']);
     });
   });
+
+  describe('drawing order', () => {
+    function getDrawingOrder() {
+      const option = getOption();
+      const axes = [...(option.xAxis as { z?: number }[]), option.yAxis as { z?: number }];
+      const series = option.series as { type: string; z?: number; markArea?: unknown }[];
+      return {
+        axisZs: axes.map((axis) => axis.z ?? 0),
+        laneZ: (option['markArea'] as { z?: number } | undefined)?.z,
+        boxplot: series.find((s) => s.type === 'boxplot'),
+        points: series.filter((s) => s.type === 'scatter'),
+      };
+    }
+
+    it('draws boxes and points above the axes, so grid lines run behind them', () => {
+      makeChart({ chartStyle: 'grayGrid' });
+      const { axisZs, boxplot, points } = getDrawingOrder();
+      const topAxisZ = Math.max(...axisZs);
+
+      expect(boxplot).toBeDefined();
+      expect(boxplot?.z).toBeGreaterThan(topAxisZ);
+      expect(points.length).toBeGreaterThan(0);
+      points.forEach((series) => expect(series.z).toBeGreaterThan(boxplot?.z ?? Infinity));
+    });
+
+    it.each([
+      ['gray grid lanes', { chartStyle: 'grayGrid' } as Partial<BoxplotProps>],
+      ['custom lane colors', { laneBackgroundColors: ['#F9F9FA', '#FFFFFF'] }],
+    ])('keeps %s below the axes, so they never cover the axis lines', (_, props) => {
+      makeChart(props);
+      const { axisZs, laneZ, boxplot } = getDrawingOrder();
+
+      expect(boxplot?.markArea).toBeDefined();
+      expect(laneZ).toBeDefined();
+      expect(laneZ).toBeLessThan(Math.min(...axisZs));
+    });
+  });
 });
