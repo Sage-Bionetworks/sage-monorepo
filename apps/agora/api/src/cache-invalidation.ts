@@ -5,12 +5,10 @@ export const CACHE_INVALIDATION_POLL_DELAY_MS = 60_000;
 
 const DATA_VERSION_COLLECTION = 'dataversion';
 
-/**
- * Identifies a data release by both fields of the `dataversion` document, since a release can
- * change the data file without changing the version number.
- */
 export interface DataRelease {
+  /** Synapse ID of the data file, e.g. `syn13363290`. */
   dataFile: string;
+  /** Synapse version number of the data file. */
   dataVersion: string;
 }
 

@@ -595,9 +595,9 @@ export class AppUpdateService {
   /**
    * Resolves whether the server's data release differs from the one this tab loaded with. When the
    * footer's request failed or timed out, the tab has no loaded release yet, so the first known
-   * release a check sees becomes it and counts as a match. A release can change the data file, the
-   * version number, or both. An empty value on either side leaves the release unknown, so it never
-   * counts as a mismatch, and is never kept as the loaded release.
+   * release a check sees becomes it and counts as a match. Both the data file and version number
+   * are compared. An empty value on either side leaves the release unknown, so it never counts as a
+   * mismatch, and is never kept as the loaded release.
    */
   private compareDataVersion(serverVersion: DataVersion): boolean {
     if (!isKnownDataVersion(serverVersion)) {

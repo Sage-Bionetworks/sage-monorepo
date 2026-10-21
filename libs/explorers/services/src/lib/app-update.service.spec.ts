@@ -60,7 +60,8 @@ const unknownVersion: AppVersion = { appVersion: '', commitSha: '' };
 const dataVersionUrl = 'https://modeladexplorer.org/api/v1/data-version';
 const loadedDataVersion: DataVersion = { data_file: 'syn73774820', data_version: '191' };
 const newerDataVersion: DataVersion = { data_file: 'syn73774820', data_version: '192' };
-const newerDataFile: DataVersion = { data_file: 'syn74000000', data_version: '191' };
+const laterDataVersion: DataVersion = { data_file: 'syn73774820', data_version: '193' };
+const differentDataFile: DataVersion = { data_file: 'syn74000000', data_version: '191' };
 const unknownDataVersion: DataVersion = { data_file: '', data_version: '' };
 
 const missingChunkPath = 'genes';
@@ -985,7 +986,7 @@ describe('AppUpdateService', () => {
       respondToCheck(loadedVersion, newerDataVersion);
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS - APP_UPDATE_MIN_CHECK_INTERVAL_MS);
       returnToTab();
-      respondToCheck(loadedVersion, newerDataFile);
+      respondToCheck(loadedVersion, laterDataVersion);
 
       jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
 
@@ -998,7 +999,7 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondToCheck(loadedVersion, newerDataVersion);
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
-      respondToCheck(loadedVersion, newerDataFile);
+      respondToCheck(loadedVersion, laterDataVersion);
 
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS - 1);
 
@@ -1011,10 +1012,10 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondToCheck(loadedVersion, newerDataVersion);
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
-      respondToCheck(loadedVersion, newerDataFile);
+      respondToCheck(loadedVersion, laterDataVersion);
 
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
-      respondToCheck(loadedVersion, newerDataFile);
+      respondToCheck(loadedVersion, laterDataVersion);
 
       expect(isShowingDataUpdateNotice()).toBe(true);
     });
@@ -1025,10 +1026,10 @@ describe('AppUpdateService', () => {
       respondToCheck(loadedVersion, newerDataVersion);
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS - APP_UPDATE_MIN_CHECK_INTERVAL_MS);
       returnToTab();
-      respondToCheck(loadedVersion, newerDataFile);
+      respondToCheck(loadedVersion, laterDataVersion);
 
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
-      respondToCheck(loadedVersion, newerDataFile);
+      respondToCheck(loadedVersion, laterDataVersion);
 
       expect(isShowingDataUpdateNotice()).toBe(true);
     });
@@ -1097,13 +1098,13 @@ describe('AppUpdateService', () => {
       expect(isShowingDataUpdateNotice()).toBe(true);
     });
 
-    it('counts a new data file as a new data release', () => {
+    it('shows the data update overlay when only the data file changes', () => {
       startWithDataChecks(setup());
 
       returnToTab();
-      respondToCheck(loadedVersion, newerDataFile);
+      respondToCheck(loadedVersion, differentDataFile);
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
-      respondToCheck(loadedVersion, newerDataFile);
+      respondToCheck(loadedVersion, differentDataFile);
 
       expect(isShowingDataUpdateNotice()).toBe(true);
     });

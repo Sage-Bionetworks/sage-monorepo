@@ -73,8 +73,8 @@ class CacheInvalidationServiceTest {
   }
 
   @Test
-  @DisplayName("should clear caches when only the data file changes")
-  void shouldClearCachesWhenOnlyTheDataFileChanges() {
+  @DisplayName("should clear all caches when only data file changes")
+  void shouldClearAllCachesWhenOnlyDataFileChanges() {
     when(dataVersionProvider.getCurrentDataRelease())
       .thenReturn(Optional.of(CURRENT_RELEASE))
       .thenReturn(Optional.of(NEXT_FILE));
