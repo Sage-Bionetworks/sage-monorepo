@@ -4,7 +4,7 @@ import {
   CHUNK_FILE_PATH_PATTERN,
   createAppVersionHandler,
   createMissingChunkHandler,
-} from '@sagebionetworks/explorers/config';
+} from '@sagebionetworks/explorers/config/server';
 import { APP_VERSION_PATH } from '@sagebionetworks/explorers/constants';
 import express from 'express';
 import { fileURLToPath } from 'node:url';

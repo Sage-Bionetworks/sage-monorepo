@@ -2,7 +2,8 @@ import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { EnvironmentMapperService } from '@sagebionetworks/platform/config/angular';
 import type { Request, Response } from 'express';
-import { AppVersion, createAppVersionHandler, getDeployedAppVersion } from './app-version';
+import { AppVersion } from '../app-version';
+import { createAppVersionHandler, getDeployedAppVersion } from './app-version-handler';
 
 const deployedEnvironmentVariables = { APP_VERSION: '4.0.0-rc3', COMMIT_SHA: 'abc1234' };
 /** Mirrors the version keys in the apps' `application.yaml`. */
