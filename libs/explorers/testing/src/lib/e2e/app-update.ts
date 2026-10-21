@@ -120,7 +120,7 @@ export async function waitOutMismatchConfirmation(
  */
 export function defineAppUpdateTests(siteName: string) {
   test.describe('app update', () => {
-    test('blocks the page with a reload prompt once a newer deploy is confirmed', async ({
+    test('blocks the page with a modal reload prompt once a newer deploy is confirmed', async ({
       page,
     }) => {
       await page.clock.install();
@@ -135,8 +135,14 @@ export function defineAppUpdateTests(siteName: string) {
         APP_UPDATE_CONFIRM_DELAY_MS,
         page.getByText(getAppUpdateMessage(siteName)),
       );
+      const reloadButton = page.getByRole('button', { name: 'Reload Page' });
+      await expect(reloadButton).toBeFocused();
+      await page.keyboard.press('Escape');
 
-      await expect(page.getByRole('button', { name: 'Reload Page' })).toBeVisible();
+      await expect(
+        page.getByRole('alertdialog', { name: getAppUpdateMessage(siteName) }),
+      ).toBeVisible();
+      await expect(reloadButton).toBeFocused();
     });
 
     test('blocks the page with a reload prompt once a new data release is confirmed', async ({

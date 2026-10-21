@@ -1,11 +1,16 @@
 @if (isOverlayVisible()) {
-  <div class="error-overlay">
-    <div class="warning-banner">
-      <div class="warning-banner-message">
-        <i class="pi pi-exclamation-triangle warning-icon"></i>
-        <span>{{ activeMessage() }}</span>
-      </div>
-      <button class="reload-button" (click)="onReload()">Reload Page</button>
+  <dialog
+    #dialog
+    class="warning-banner"
+    role="alertdialog"
+    aria-labelledby="error-overlay-message"
+    (keydown.escape)="$event.preventDefault()"
+    (cancel)="$event.preventDefault()"
+  >
+    <div class="warning-banner-message">
+      <i class="pi pi-exclamation-triangle warning-icon" aria-hidden="true"></i>
+      <span id="error-overlay-message">{{ activeMessage() }}</span>
     </div>
-  </div>
+    <button class="reload-button" (click)="onReload()">Reload Page</button>
+  </dialog>
 }
