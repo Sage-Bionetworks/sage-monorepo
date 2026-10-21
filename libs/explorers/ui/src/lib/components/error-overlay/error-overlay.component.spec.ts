@@ -1,6 +1,7 @@
 import { createEvent, fireEvent, render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { signal } from '@angular/core';
+import { getAppUpdateMessage } from '@sagebionetworks/explorers/constants';
 import { ErrorOverlayService } from '@sagebionetworks/explorers/services';
 import { ErrorOverlayComponent } from './error-overlay.component';
 
@@ -51,6 +52,18 @@ describe('ErrorOverlayComponent', () => {
     await setup(true, errorMessage);
 
     expect(screen.getByRole('alertdialog', { name: errorMessage })).toBeInTheDocument();
+    expect(showModal).toHaveBeenCalledTimes(1);
+  });
+
+  it('should announce a replaced message to screen readers while open', async () => {
+    const { mockService, fixture } = await setup(true, errorMessage);
+    const appUpdateMessage = getAppUpdateMessage('Model AD');
+
+    mockService.activeMessage.set(appUpdateMessage);
+    fixture.detectChanges();
+
+    expect(screen.getByRole('alertdialog', { name: appUpdateMessage })).toBeInTheDocument();
+    expect(screen.getByText(appUpdateMessage)).toHaveAttribute('aria-live', 'assertive');
     expect(showModal).toHaveBeenCalledTimes(1);
   });
 

@@ -9,7 +9,7 @@
   >
     <div class="warning-banner-message">
       <i class="pi pi-exclamation-triangle warning-icon" aria-hidden="true"></i>
-      <span id="error-overlay-message">{{ activeMessage() }}</span>
+      <span id="error-overlay-message" aria-live="assertive">{{ activeMessage() }}</span>
     </div>
     <button class="reload-button" (click)="onReload()">Reload Page</button>
   </dialog>
