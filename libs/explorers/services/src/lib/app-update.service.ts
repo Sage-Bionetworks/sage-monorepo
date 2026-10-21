@@ -1,15 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpBackend, HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import {
-  DestroyRef,
-  inject,
-  Injectable,
-  InjectionToken,
-  isDevMode,
-  NgZone,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { DestroyRef, inject, Injectable, InjectionToken, isDevMode, NgZone } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationError, Router } from '@angular/router';
 import { AppVersion } from '@sagebionetworks/explorers/config';
@@ -18,16 +9,12 @@ import {
   APP_UPDATE_CONFIRM_DELAY_MS,
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
-  APP_VERSION_CONFIRMED_MISMATCHES_METRIC,
   APP_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
   APP_VERSION_PATH,
-  APP_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
   CHUNK_LOAD_ERROR_MESSAGE,
   CHUNK_LOAD_FAILURES_METRIC,
   DATA_UPDATE_CONFIRM_DELAY_MS,
-  DATA_VERSION_CONFIRMED_MISMATCHES_METRIC,
   DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
-  DATA_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
   HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE,
   STALE_CHUNK_PAGE_LOADED_AT_KEY,
   STALE_CHUNK_PAGE_LOADS_METRIC,
@@ -35,6 +22,8 @@ import {
   STALE_CHUNK_PAGE_LOAD_PENDING_KEY,
   VERSION_CHECK_FAILURES_METRIC,
   VERSION_CHECK_TIMEOUT_MS,
+  VERSION_CONFIRMED_MISMATCHES_METRIC,
+  VERSION_UNCONFIRMED_MISMATCHES_METRIC,
 } from '@sagebionetworks/explorers/constants';
 import { isChunkLoadError } from '@sagebionetworks/explorers/sentry';
 import * as Sentry from '@sentry/angular';
@@ -67,20 +56,19 @@ import { DataVersion, isKnownDataVersion, VersionService } from './version.servi
 
 export const AppUpdateCheckTriggerEnum = {
   ChunkLoadError: 'chunk-load-error',
-  DataVersionMismatchConfirmation: 'data-version-mismatch-confirmation',
   HttpError: 'http-error',
   Poll: 'poll',
   Reconnect: 'reconnect',
-  AppVersionMismatchConfirmation: 'app-version-mismatch-confirmation',
+  VersionMismatchConfirmation: 'version-mismatch-confirmation',
   Visibility: 'visibility',
 } as const;
 export type AppUpdateCheckTrigger =
   (typeof AppUpdateCheckTriggerEnum)[keyof typeof AppUpdateCheckTriggerEnum];
 
 /**
- * Which versions differed from the ones the tab loaded with when it was confirmed stale. Reported
- * as a Sentry metric attribute, so tabs that missed both a deploy and a data release are counted as
- * such rather than as either one alone.
+ * Which versions differ from the ones the tab loaded with. Reported as a Sentry metric attribute,
+ * so tabs that missed both a deploy and a data release are counted as such rather than as either
+ * one alone.
  */
 export const MismatchedVersionsEnum = {
   App: 'app',
@@ -168,9 +156,6 @@ type TrackedVersion = 'app' | 'data';
 interface TrackedVersionConfig {
   endpoint: VersionCheckEndpoint;
   confirmDelayMs: number;
-  confirmationTrigger: AppUpdateCheckTrigger;
-  confirmedMismatchMetric: string;
-  unconfirmedMismatchMetric: string;
   misconfiguredWarning: string;
   checkFailedMessage: string;
 }
@@ -179,27 +164,32 @@ const TRACKED_VERSION_CONFIGS: Record<TrackedVersion, TrackedVersionConfig> = {
   app: {
     endpoint: VersionCheckEndpointEnum.AppVersion,
     confirmDelayMs: APP_UPDATE_CONFIRM_DELAY_MS,
-    confirmationTrigger: AppUpdateCheckTriggerEnum.AppVersionMismatchConfirmation,
-    confirmedMismatchMetric: APP_VERSION_CONFIRMED_MISMATCHES_METRIC,
-    unconfirmedMismatchMetric: APP_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
     misconfiguredWarning: APP_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
     checkFailedMessage: 'App version check failed',
   },
   data: {
     endpoint: VersionCheckEndpointEnum.DataVersion,
     confirmDelayMs: DATA_UPDATE_CONFIRM_DELAY_MS,
-    confirmationTrigger: AppUpdateCheckTriggerEnum.DataVersionMismatchConfirmation,
-    confirmedMismatchMetric: DATA_VERSION_CONFIRMED_MISMATCHES_METRIC,
-    unconfirmedMismatchMetric: DATA_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
     misconfiguredWarning: DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
     checkFailedMessage: 'Data version check failed',
   },
 };
 
-/** A version mismatch that has not yet outlasted its confirmation delay. */
-interface PendingVersionMismatch {
+/** A server version that differs from the one this tab loaded with. */
+interface ServerVersionMismatch {
   serverVersionKey: string;
   serverVersionLabel: string;
+}
+
+/**
+ * The server versions that differ from the ones this tab loaded with: the app version, the data
+ * version, or both. A version that matches has no entry.
+ */
+type VersionMismatches = Partial<Record<TrackedVersion, ServerVersionMismatch>>;
+
+/** Version mismatches that have not yet outlasted their confirmation delay. */
+interface PendingVersionMismatches {
+  mismatches: VersionMismatches;
   trigger: AppUpdateCheckTrigger;
   detectedAt: number;
 }
@@ -242,10 +232,14 @@ type VersionComparisons = Record<TrackedVersion, VersionComparison>;
  * `DATA_UPDATE_CONFIRM_DELAY_MS`, which outlasts both clears, and a reload then gets the new data.
  * A match in between means the data was rolled back, so the mismatch is dropped.
  *
- * For mismatches on both: any difference counts, not only a newer version. If a deployment fails,
- * the rollback moves the server back to an earlier version and tabs loaded from the rolled-back
- * version must reload too. When both versions differ, the app update notice is shown, since the
- * reload fixes both.
+ * Both versions are confirmed together. A check records which versions differ, and that set has
+ * to stay the same for the longest delay among them: data alone waits its own delay, but app and
+ * data together wait the app's. A different set (another deploy or release, or a version that
+ * matches again) starts the wait over. Confirming shows one overlay and stops every check, since
+ * the reload it asks for fixes both versions. When both differ, the app update notice is shown.
+ *
+ * Any difference counts, not only a newer version. If a deployment fails, the rollback moves the
+ * server back to an earlier version and tabs loaded from the rolled-back version must reload too.
  */
 @Injectable({ providedIn: 'root' })
 export class AppUpdateService {
@@ -263,25 +257,16 @@ export class AppUpdateService {
   private readonly checksEnabled = inject(APP_UPDATE_CHECKS_ENABLED);
   private readonly loadPage = inject(PAGE_LOADER);
 
-  private readonly stale: Record<TrackedVersion, WritableSignal<boolean>> = {
-    app: signal(false),
-    data: signal(false),
-  };
-
   private clientVersion: AppVersion | null = null;
   private dataVersionUrl: string | null = null;
   private siteName = '';
   private lastCheckedAt = 0;
   private readonly reportedMisconfigurations = new Set<VersionCheckEndpoint>();
   private backgroundVersionCheckSubscription: Subscription | null = null;
-  private readonly pendingMismatches: Record<TrackedVersion, PendingVersionMismatch | null> = {
-    app: null,
-    data: null,
-  };
-  private readonly confirmationSubscriptions: Record<TrackedVersion, Subscription | null> = {
-    app: null,
-    data: null,
-  };
+  private pendingMismatches: PendingVersionMismatches | null = null;
+  private confirmationSubscription: Subscription | null = null;
+  /** The mismatches that were confirmed, once the tab is known to be out of date. */
+  private confirmedMismatches: VersionMismatches | null = null;
   private inFlightCheck$: Observable<VersionComparisons> | null = null;
   private readonly requestedChecks = new Subject<AppUpdateCheckTrigger>();
 
@@ -447,7 +432,7 @@ export class AppUpdateService {
   private async getAppVersionCheckOutcome(
     trigger: AppUpdateCheckTrigger,
   ): Promise<AppVersionCheckOutcome> {
-    if (this.stale.app()) {
+    if (this.confirmedMismatches?.app) {
       return AppVersionCheckOutcomeEnum.Stale;
     }
     if (!this.isOnline()) {
@@ -456,13 +441,10 @@ export class AppUpdateService {
     const { app: appComparison } = await firstValueFrom(
       this.check$(trigger).pipe(
         tap((comparisons) => {
-          if (trigger === AppUpdateCheckTriggerEnum.ChunkLoadError && comparisons.app?.isMismatch) {
-            this.handleConfirmedStaleVersion(
-              'app',
-              comparisons.app.serverVersionLabel,
-              trigger,
-              comparisons,
-            );
+          const isChunkLoadError = trigger === AppUpdateCheckTriggerEnum.ChunkLoadError;
+          // The check just recorded what differs, so whatever is pending includes the app version
+          if (isChunkLoadError && comparisons.app?.isMismatch && this.pendingMismatches) {
+            this.handleConfirmedMismatches(this.pendingMismatches.mismatches, trigger);
           }
         }),
       ),
@@ -477,10 +459,10 @@ export class AppUpdateService {
 
   /**
    * Reuses a check already in progress, so concurrent triggers send one request per endpoint. Both
-   * comparisons are handled together once both responses are in, so a tab confirmed stale is
-   * reported with every version that differed. Emits both comparisons; each is null when its
-   * version could not be compared. A caller that joins a check another trigger started gets the
-   * same result, so anything specific to its own trigger is handled after the check resolves.
+   * comparisons are handled together once both responses are in. Emits both comparisons; each is
+   * null when its version could not be compared. A caller that joins a check another trigger
+   * started gets the same result, so anything specific to its own trigger is handled after the
+   * check resolves.
    */
   private check$(trigger: AppUpdateCheckTrigger): Observable<VersionComparisons> {
     if (!this.inFlightCheck$) {
@@ -503,27 +485,64 @@ export class AppUpdateService {
   }
 
   /**
-   * The data comparison is handled first, so when the app version is confirmed stale in the same
-   * check, handling it cancels any data confirmation the data comparison just scheduled.
+   * Called with every check's result, and decides whether the tab is out of date:
+   * - Nothing differs: any pending mismatch is dropped and counted as unconfirmed.
+   * - What differs is new, or changed since the last check: the wait starts over for it.
+   * - The same versions still differ after the wait: the tab is out of date.
+   *
+   * A version the check could not compare keeps its earlier state, since the check learned nothing
+   * about it. Confirming needs every pending version compared again, so a check that could not do
+   * that leaves the mismatch pending until one can.
    */
   private handleComparisons(comparisons: VersionComparisons, trigger: AppUpdateCheckTrigger) {
-    for (const trackedVersion of ['data', 'app'] as const) {
+    if (this.confirmedMismatches) {
+      return;
+    }
+    const pendingMismatches = this.pendingMismatches;
+    const mismatches = this.getMismatches(comparisons, pendingMismatches?.mismatches ?? {});
+    if (!hasMismatches(mismatches)) {
+      this.handleVersionsMatch();
+      return;
+    }
+    // Compared by key, not label, so that versions the label displays the same way, such as
+    // `4.0.0-rc4` and `4.0.0-rc5` without a commit SHA, still count as different versions.
+    if (
+      !pendingMismatches ||
+      getMismatchesKey(mismatches) !== getMismatchesKey(pendingMismatches.mismatches)
+    ) {
+      this.startConfirmation(mismatches, trigger);
+      return;
+    }
+    const hasWaitedLongEnough =
+      Date.now() - pendingMismatches.detectedAt >= getConfirmDelayMs(mismatches);
+    if (hasWaitedLongEnough && wereAllCompared(mismatches, comparisons)) {
+      // Reports the trigger that first found the mismatch, not the confirmation check that ended
+      // the delay, so the metric shows what made the tab notice the new version.
+      this.handleConfirmedMismatches(mismatches, pendingMismatches.trigger);
+    }
+  }
+
+  /**
+   * Works out which versions differ from this check's comparisons. A version the check could not
+   * compare is taken from `pendingMismatches`, the previous result.
+   */
+  private getMismatches(
+    comparisons: VersionComparisons,
+    pendingMismatches: VersionMismatches,
+  ): VersionMismatches {
+    const mismatches: VersionMismatches = {};
+    for (const trackedVersion of TRACKED_VERSIONS) {
       const comparison = comparisons[trackedVersion];
       if (!comparison) {
-        continue;
-      }
-      if (comparison.isMismatch) {
-        this.handleVersionMismatch(
-          trackedVersion,
-          comparison.serverVersionKey,
-          comparison.serverVersionLabel,
-          trigger,
-          comparisons,
-        );
-      } else {
-        this.handleVersionMatch(trackedVersion);
+        if (pendingMismatches[trackedVersion]) {
+          mismatches[trackedVersion] = pendingMismatches[trackedVersion];
+        }
+      } else if (comparison.isMismatch) {
+        const { serverVersionKey, serverVersionLabel } = comparison;
+        mismatches[trackedVersion] = { serverVersionKey, serverVersionLabel };
       }
     }
+    return mismatches;
   }
 
   private checkAppVersion$(trigger: AppUpdateCheckTrigger): Observable<VersionComparison> {
@@ -537,7 +556,7 @@ export class AppUpdateService {
 
   /** Skipped when no data version URL was given or when the tab is already known to be stale. */
   private checkDataVersion$(trigger: AppUpdateCheckTrigger): Observable<VersionComparison> {
-    if (!this.dataVersionUrl || this.stale.app() || this.stale.data()) {
+    if (!this.dataVersionUrl || this.confirmedMismatches) {
       return of(null);
     }
     return this.fetchAndCompareVersion$('data', this.dataVersionUrl, trigger, {
@@ -668,215 +687,132 @@ export class AppUpdateService {
   }
 
   /**
-   * Called when a check finds the server's version differs from the one this tab loaded with.
-   * This method decides whether the difference has lasted long enough to show the overlay:
-   * - A newly seen version is recorded as pending, and a re-check is scheduled for when its
-   *   confirmation delay ends. App and data versions each have their own delay and pending state.
-   * - The same version still there after the full delay means the tab is out of date, so the
-   *   overlay is shown.
-   * - A different version seen while one is pending (two releases or deploys back to back)
-   *   restarts the delay, so the newer version always gets its full delay.
-   *
-   * A chunk that failed to load skips the delay, but that is handled by `getAppVersionCheckOutcome`
-   * once the check resolves, not here.
+   * Records `mismatches` as pending, and schedules a check for when the longest of their delays
+   * ends. Any earlier wait is cancelled, so only one timer is ever running.
    */
-  private handleVersionMismatch(
-    trackedVersion: TrackedVersion,
-    serverVersionKey: string,
-    serverVersionLabel: string,
-    trigger: AppUpdateCheckTrigger,
-    comparisons: VersionComparisons,
-  ) {
-    const pendingMismatch = this.pendingMismatches[trackedVersion];
-    // Compared by key, not label, so that versions the label displays the same way, such as
-    // `4.0.0-rc4` and `4.0.0-rc5` without a commit SHA, still count as different versions.
-    if (!pendingMismatch || pendingMismatch.serverVersionKey !== serverVersionKey) {
-      // Only one timer is kept per tracked version. This stops the earlier version's timer before
-      // `scheduleConfirmation` starts the new one. Otherwise the earlier timer would keep running
-      // with nothing left to stop it, and send an extra check later.
-      this.cancelConfirmation(trackedVersion);
-      this.pendingMismatches[trackedVersion] = {
-        serverVersionKey,
-        serverVersionLabel,
-        trigger,
-        detectedAt: Date.now(),
-      };
-      this.scheduleConfirmation(
-        trackedVersion,
-        TRACKED_VERSION_CONFIGS[trackedVersion].confirmDelayMs,
-      );
-      return;
-    }
-    if (
-      Date.now() - pendingMismatch.detectedAt >=
-      TRACKED_VERSION_CONFIGS[trackedVersion].confirmDelayMs
-    ) {
-      // Reports the trigger that first found the mismatch, not the confirmation check that ended
-      // the delay, so the metric shows what made the tab notice the new version.
-      this.handleConfirmedStaleVersion(
-        trackedVersion,
-        serverVersionLabel,
-        pendingMismatch.trigger,
-        comparisons,
-      );
-    }
+  private startConfirmation(mismatches: VersionMismatches, trigger: AppUpdateCheckTrigger) {
+    this.cancelConfirmation();
+    this.pendingMismatches = { mismatches, trigger, detectedAt: Date.now() };
+    this.scheduleConfirmation(getConfirmDelayMs(mismatches));
   }
 
   /**
-   * Re-checks the server once a pending mismatch's delay ends. This method decides whether to retry
-   * from the check's result rather than from how it was started: a confirmation that joins a check
-   * another trigger already started still retries if that shared check could not compare this
-   * version (the request failed or timed out). Retries wait the minimum interval and stop after
-   * `APP_UPDATE_CONFIRMATION_RETRY_LIMIT` attempts, after which the background checks take over.
+   * Re-checks the server once the pending mismatches' delay ends. This method decides whether to
+   * retry from the check's result rather than from how it was started: a confirmation that joins a
+   * check another trigger already started still retries if that shared check could not compare a
+   * pending version (the request failed or timed out). Retries wait the minimum interval and stop
+   * after `APP_UPDATE_CONFIRMATION_RETRY_LIMIT` attempts, after which the background checks take
+   * over.
    *
    * While the tab is hidden or offline, no request is sent. Returning to the tab or reconnecting
-   * runs a check of its own, and since the delay has already passed, that check confirms the
-   * mismatch.
+   * runs a background check, and since the delay has already passed, that check confirms the
+   * mismatch. The background checks keep running until a mismatch is confirmed, so that always
+   * works.
    */
-  private scheduleConfirmation(
-    trackedVersion: TrackedVersion,
-    delayMs: number,
-    failedAttempts = 0,
-  ) {
+  private scheduleConfirmation(delayMs: number, failedAttempts = 0) {
+    const scheduledFor = this.pendingMismatches;
     // Subscribed outside the Angular zone for the same reason as the background checks.
-    this.confirmationSubscriptions[trackedVersion] = this.ngZone.runOutsideAngular(() =>
+    this.confirmationSubscription = this.ngZone.runOutsideAngular(() =>
       timer(delayMs)
         .pipe(
           filter(() => this.isTabVisible() && this.isOnline()),
-          switchMap(() => this.check$(TRACKED_VERSION_CONFIGS[trackedVersion].confirmationTrigger)),
+          switchMap(() => this.check$(AppUpdateCheckTriggerEnum.VersionMismatchConfirmation)),
           takeUntilDestroyed(this.destroyRef),
         )
         .subscribe((comparisons) => {
-          const couldNotCompare = comparisons[trackedVersion] === null;
+          // The check may have started a new wait with its own timer, or confirmed the mismatch
+          if (this.pendingMismatches !== scheduledFor || !scheduledFor) {
+            return;
+          }
           const nextAttempt = failedAttempts + 1;
           if (
-            couldNotCompare &&
-            this.pendingMismatches[trackedVersion] &&
+            !wereAllCompared(scheduledFor.mismatches, comparisons) &&
             nextAttempt < APP_UPDATE_CONFIRMATION_RETRY_LIMIT
           ) {
-            this.scheduleConfirmation(
-              trackedVersion,
-              APP_UPDATE_MIN_CHECK_INTERVAL_MS,
-              nextAttempt,
-            );
+            this.scheduleConfirmation(APP_UPDATE_MIN_CHECK_INTERVAL_MS, nextAttempt);
           }
         }),
     );
   }
 
-  private handleVersionMatch(trackedVersion: TrackedVersion) {
-    const pendingMismatch = this.pendingMismatches[trackedVersion];
-    const clientVersionLabel = this.getClientVersionLabel(trackedVersion);
-    if (!pendingMismatch || !clientVersionLabel) {
+  /** Drops a pending mismatch that went away before its delay ended, and counts it. */
+  private handleVersionsMatch() {
+    const pendingMismatches = this.pendingMismatches;
+    if (!pendingMismatches) {
       return;
     }
-    Sentry.metrics.count(TRACKED_VERSION_CONFIGS[trackedVersion].unconfirmedMismatchMetric, 1, {
-      attributes: {
-        client_version: clientVersionLabel,
-        server_version: pendingMismatch.serverVersionLabel,
-        trigger: pendingMismatch.trigger,
-      },
+    Sentry.metrics.count(VERSION_UNCONFIRMED_MISMATCHES_METRIC, 1, {
+      attributes: this.getMismatchAttributes(
+        pendingMismatches.mismatches,
+        pendingMismatches.trigger,
+      ),
     });
-    this.cancelConfirmation(trackedVersion);
+    this.cancelConfirmation();
   }
 
   /**
-   * Called once a mismatch has lasted its full delay and the tab is out of date. This method
-   * shows the app or data update overlay, records the confirmed mismatch metric, and stops further
-   * background checks, since the reload the overlay asks for fixes both versions. Runs at most once
-   * per version.
-   *
-   * When the data version is the one out of date, a pending app mismatch keeps its timer. With
-   * background checks stopped, that timer is the only way a deploy already under way can still be
-   * confirmed. Confirming it switches the overlay to the app update message, which takes
-   * precedence, and records the app version's confirmed mismatch metric, so the tab is counted as
-   * missing both the deploy and the data release. The reload fixes both either way; the timer only
-   * keeps the message and metrics accurate.
+   * Called once mismatches have lasted their full delay, or right away for a chunk that failed to
+   * load on a different app version. This method shows the update overlay (the app update notice
+   * when the app version differs, since it takes precedence), records the confirmed mismatch
+   * metric, and stops every further check, since the reload the overlay asks for fixes both
+   * versions. Runs at most once.
    */
-  private handleConfirmedStaleVersion(
-    trackedVersion: TrackedVersion,
-    serverVersionLabel: string,
-    trigger: AppUpdateCheckTrigger,
-    comparisons: VersionComparisons,
-  ) {
-    const clientVersionLabel = this.getClientVersionLabel(trackedVersion);
-    if (this.stale[trackedVersion]() || !clientVersionLabel) {
+  private handleConfirmedMismatches(mismatches: VersionMismatches, trigger: AppUpdateCheckTrigger) {
+    if (this.confirmedMismatches) {
       return;
     }
-    // Read before the confirmations below are cancelled, since a pending mismatch counts.
-    const mismatchedVersions = this.getMismatchedVersions(trackedVersion, comparisons);
-    this.stale[trackedVersion].set(true);
+    this.confirmedMismatches = mismatches;
     this.backgroundVersionCheckSubscription?.unsubscribe();
-    this.cancelConfirmation('data');
-    if (trackedVersion === 'app') {
-      this.cancelConfirmation('app');
+    this.cancelConfirmation();
+    if (mismatches.app) {
       this.errorOverlayService.showAppUpdateAvailable(this.siteName);
     } else {
       this.errorOverlayService.showDataUpdateAvailable(this.siteName);
     }
-    Sentry.metrics.count(TRACKED_VERSION_CONFIGS[trackedVersion].confirmedMismatchMetric, 1, {
-      attributes: {
-        client_version: clientVersionLabel,
-        server_version: serverVersionLabel,
-        trigger,
-        mismatched_versions: mismatchedVersions,
-      },
+    Sentry.metrics.count(VERSION_CONFIRMED_MISMATCHES_METRIC, 1, {
+      attributes: this.getMismatchAttributes(mismatches, trigger),
     });
   }
 
   /**
-   * Works out what the confirmed mismatch metric reports (`app`, `data`, or `app-and-data`) when
-   * one of the two versions has just been confirmed stale. That version differs by definition. The
-   * question is whether the other one differs too, so that a tab that missed both a deploy and a
-   * data release is reported as such.
+   * The metric attributes for `mismatches`: which versions differ, and for each, the version the
+   * tab loaded with and the one the server reports.
    */
-  private getMismatchedVersions(
-    confirmedStaleVersion: TrackedVersion,
-    latestComparisons: VersionComparisons,
-  ): MismatchedVersions {
-    // The version just confirmed stale needs no lookup; only the other one does.
-    const isAppVersionMismatched =
-      confirmedStaleVersion === 'app' || this.differsFromLoadedVersion('app', latestComparisons);
-    const isDataVersionMismatched =
-      confirmedStaleVersion === 'data' || this.differsFromLoadedVersion('data', latestComparisons);
-    if (isAppVersionMismatched && isDataVersionMismatched) {
-      return MismatchedVersionsEnum.AppAndData;
+  private getMismatchAttributes(
+    mismatches: VersionMismatches,
+    trigger: AppUpdateCheckTrigger,
+  ): Record<string, string> {
+    const attributes: Record<string, string> = {
+      mismatched_versions: getMismatchedVersions(mismatches),
+      trigger,
+    };
+    if (mismatches.app) {
+      attributes['client_app_version'] = this.getClientVersionLabel('app');
+      attributes['server_app_version'] = mismatches.app.serverVersionLabel;
     }
-    return isAppVersionMismatched ? MismatchedVersionsEnum.App : MismatchedVersionsEnum.Data;
+    if (mismatches.data) {
+      attributes['client_data_version'] = this.getClientVersionLabel('data');
+      attributes['server_data_version'] = mismatches.data.serverVersionLabel;
+    }
+    return attributes;
+  }
+
+  private cancelConfirmation() {
+    this.pendingMismatches = null;
+    this.confirmationSubscription?.unsubscribe();
+    this.confirmationSubscription = null;
   }
 
   /**
-   * Whether the server's app or data version differs from the one this tab loaded with.
-   * The latest check's comparison is the best evidence, so it's used when the check got one.
-   * When that request failed, timed out, or was skipped, earlier checks are the only evidence:
-   * the version may already be confirmed stale, or a mismatch may be waiting out its
-   * confirmation delay.
+   * The version this tab loaded with, as the footer shows it. Empty only before `start`, or before
+   * any data version loads, and a mismatch cannot be found before then.
    */
-  private differsFromLoadedVersion(
-    trackedVersion: TrackedVersion,
-    latestComparisons: VersionComparisons,
-  ): boolean {
-    const latestComparison = latestComparisons[trackedVersion];
-    if (latestComparison) {
-      return latestComparison.isMismatch;
-    }
-    const isAlreadyConfirmedStale = this.stale[trackedVersion]();
-    const isAwaitingConfirmation = this.pendingMismatches[trackedVersion] !== null;
-    return isAlreadyConfirmedStale || isAwaitingConfirmation;
-  }
-
-  private cancelConfirmation(trackedVersion: TrackedVersion) {
-    this.pendingMismatches[trackedVersion] = null;
-    this.confirmationSubscriptions[trackedVersion]?.unsubscribe();
-    this.confirmationSubscriptions[trackedVersion] = null;
-  }
-
-  private getClientVersionLabel(trackedVersion: TrackedVersion): string | null {
+  private getClientVersionLabel(trackedVersion: TrackedVersion): string {
     if (trackedVersion === 'app') {
-      return this.clientVersion ? this.versionService.getSiteVersion(this.clientVersion) : null;
+      return this.clientVersion ? this.versionService.getSiteVersion(this.clientVersion) : '';
     }
     const loadedDataVersion = this.versionService.getLoadedDataVersion();
-    return loadedDataVersion ? this.versionService.formatDataVersion(loadedDataVersion) : null;
+    return loadedDataVersion ? this.versionService.formatDataVersion(loadedDataVersion) : '';
   }
 
   private isTabVisible(): boolean {
@@ -887,6 +823,42 @@ export class AppUpdateService {
   private isOnline(): boolean {
     return this.document.defaultView?.navigator.onLine !== false;
   }
+}
+
+const TRACKED_VERSIONS: readonly TrackedVersion[] = ['app', 'data'];
+
+function hasMismatches(mismatches: VersionMismatches): boolean {
+  return TRACKED_VERSIONS.some((trackedVersion) => mismatches[trackedVersion]);
+}
+
+/** Identifies the exact server versions in `mismatches`, so two results can be compared. */
+function getMismatchesKey(mismatches: VersionMismatches): string {
+  return JSON.stringify(
+    TRACKED_VERSIONS.map((trackedVersion) => mismatches[trackedVersion]?.serverVersionKey ?? null),
+  );
+}
+
+/** The longest confirmation delay among the versions in `mismatches`. */
+function getConfirmDelayMs(mismatches: VersionMismatches): number {
+  return Math.max(
+    ...TRACKED_VERSIONS.filter((trackedVersion) => mismatches[trackedVersion]).map(
+      (trackedVersion) => TRACKED_VERSION_CONFIGS[trackedVersion].confirmDelayMs,
+    ),
+  );
+}
+
+/** Whether the check compared every version in `mismatches`, rather than failing for one. */
+function wereAllCompared(mismatches: VersionMismatches, comparisons: VersionComparisons): boolean {
+  return TRACKED_VERSIONS.every(
+    (trackedVersion) => !mismatches[trackedVersion] || comparisons[trackedVersion] !== null,
+  );
+}
+
+function getMismatchedVersions(mismatches: VersionMismatches): MismatchedVersions {
+  if (mismatches.app && mismatches.data) {
+    return MismatchedVersionsEnum.AppAndData;
+  }
+  return mismatches.app ? MismatchedVersionsEnum.App : MismatchedVersionsEnum.Data;
 }
 
 function isAppVersion(body: unknown): body is AppVersion {

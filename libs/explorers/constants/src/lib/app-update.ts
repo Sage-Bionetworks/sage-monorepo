@@ -33,17 +33,11 @@ export const STALE_CHUNK_PAGE_LOAD_PENDING_KEY = 'staleChunkPageLoadPending';
  */
 export const STALE_CHUNK_PAGE_LOAD_GUARD_MS = 60 * 1000;
 
-export const APP_VERSION_CONFIRMED_MISMATCHES_METRIC =
-  'app_update.app_version.confirmed_mismatches';
-export const APP_VERSION_UNCONFIRMED_MISMATCHES_METRIC =
-  'app_update.app_version.unconfirmed_mismatches';
 export const CHUNK_LOAD_FAILURES_METRIC = 'app_update.chunk_load.failures';
-export const DATA_VERSION_CONFIRMED_MISMATCHES_METRIC =
-  'app_update.data_version.confirmed_mismatches';
-export const DATA_VERSION_UNCONFIRMED_MISMATCHES_METRIC =
-  'app_update.data_version.unconfirmed_mismatches';
 export const STALE_CHUNK_PAGE_LOADS_METRIC = 'app_update.stale_chunk.page_loads';
 export const VERSION_CHECK_FAILURES_METRIC = 'app_update.version_check.failures';
+export const VERSION_CONFIRMED_MISMATCHES_METRIC = 'app_update.version.confirmed_mismatches';
+export const VERSION_UNCONFIRMED_MISMATCHES_METRIC = 'app_update.version.unconfirmed_mismatches';
 /** The attribute name for an HTTP response status code, aligned with OpenTelemetry's naming. */
 export const HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE = 'http.response.status_code';
 
