@@ -1,10 +1,15 @@
+import { HttpContext } from '@angular/common/http';
 import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { SearchResultIcon } from '@sagebionetworks/explorers/models';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/services';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
 import { ModelOrganism, SearchResult, SearchService } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { Observable } from 'rxjs';
+
+/** The search list shows a failed search's error itself, so it opts out of the error overlay. */
+const SEARCH_REQUEST_CONTEXT = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
 
 @Component({
   selector: 'model-ad-search-input',
@@ -38,7 +43,9 @@ export class SearchInputComponent {
   };
 
   getSearchResults = (query: string): Observable<SearchResult[]> => {
-    return this.searchService.searchModels(query, this.modelOrganisms());
+    return this.searchService.searchModels(query, this.modelOrganisms(), 'body', false, {
+      context: SEARCH_REQUEST_CONTEXT,
+    });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
