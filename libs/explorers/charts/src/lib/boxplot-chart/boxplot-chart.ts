@@ -27,6 +27,7 @@ import {
   getCategoryPointColor,
   getCategoryPointShape,
   getCategoryPointStyle,
+  getOffsetAndJitteredXValue,
   getUniqueValues,
   initChart,
   setNoDataOption,
@@ -229,8 +230,29 @@ export class BoxplotChart {
     return pointsAboveCap.map((pt) => {
       const group = pointsAboveCap.filter((other) => other.xAxisValue === pt.xAxisValue);
       const offsetIndex = group.indexOf(pt) - (group.length - 1) / 2;
-      return { ...pt, cappedValue: capAt, cappedOffsetPx: offsetIndex * CAPPED_POINT_SPACING_PX };
+      return {
+        ...pt,
+        cappedValue: capAt,
+        cappedOffsetIndex: offsetIndex,
+        cappedGroupSize: group.length,
+      };
     });
+  }
+
+  // Capped points sit CAPPED_POINT_SPACING_PX apart, but squeeze closer on narrow charts so a
+  // group never crosses into the next point category's column, as getOffsetAndJitteredXValue
+  // does for points.
+  private getCappedPointSpacingPx(groupSize: number, pointCategoryCount: number) {
+    if (groupSize < 2 || !this.chart) return CAPPED_POINT_SPACING_PX;
+    const xAxis = { xAxisId: 'value-x-axis' };
+    const pxPerCategory = this.chart.convertToPixel(xAxis, 1) - this.chart.convertToPixel(xAxis, 0);
+    const columnGap =
+      pointCategoryCount > 1
+        ? getOffsetAndJitteredXValue(1, 1, pointCategoryCount, defaultPointCategoryOffset) -
+          getOffsetAndJitteredXValue(1, 0, pointCategoryCount, defaultPointCategoryOffset)
+        : 1;
+    const roomPx = (columnGap / 2) * pxPerCategory - CAPPED_POINT_SYMBOL_SIZE / 2;
+    return Math.max(0, Math.min(CAPPED_POINT_SPACING_PX, roomPx / ((groupSize - 1) / 2)));
   }
 
   setOptions(boxplotProps: BoxplotProps) {
@@ -472,7 +494,11 @@ export class BoxplotChart {
           symbol: CAPPED_POINT_SYMBOL,
           symbolSize: CAPPED_POINT_SYMBOL_SIZE,
           symbolKeepAspect: true,
-          symbolOffset: (pt) => [pt.cappedOffsetPx, 0],
+          symbolOffset: (pt) => [
+            pt.cappedOffsetIndex *
+              this.getCappedPointSpacingPx(pt.cappedGroupSize, pointCategories.length),
+            0,
+          ],
           itemStyle: { color: pointSeries.itemStyle?.color },
           z: cappedPointZ,
         });

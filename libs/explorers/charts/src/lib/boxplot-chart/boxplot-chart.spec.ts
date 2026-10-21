@@ -21,7 +21,8 @@ jest.mock('../utils', () => ({
 type CappedRow = CategoryPoint & {
   xAxisValue: number;
   cappedValue: number;
-  cappedOffsetPx: number;
+  cappedOffsetIndex: number;
+  cappedGroupSize: number;
 };
 
 function makeChart(props: Partial<BoxplotProps> = {}): BoxplotChart {
@@ -33,10 +34,16 @@ function makeChart(props: Partial<BoxplotProps> = {}): BoxplotChart {
 
 describe('BoxplotChart', () => {
   const mockSetOption = jest.fn();
-  const mockChart = { setOption: mockSetOption, dispose: jest.fn() };
+  let pxPerCategory = 400;
+  const mockChart = {
+    setOption: mockSetOption,
+    dispose: jest.fn(),
+    convertToPixel: (_finder: unknown, value: number) => value * pxPerCategory,
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
+    pxPerCategory = 400;
     (initChart as jest.Mock).mockReturnValue(mockChart);
   });
 
@@ -255,6 +262,23 @@ describe('BoxplotChart', () => {
         [CAPPED_POINT_SPACING_PX, 0],
       ]);
       expect(cat2Rows.map(symbolOffset)).toEqual([[0, 0]]);
+    });
+
+    it("squeezes a group on narrow charts so it stays within its own point category's column", () => {
+      pxPerCategory = 90;
+      makeCappedChart();
+      const symbolOffset = getSeries(`Female${CAPPED_SERIES_NAME_SUFFIX}`)?.symbolOffset as (
+        pt: CappedRow,
+      ) => number[];
+      const femaleRows = getCappedRows('Female').filter((pt) => pt.xAxisCategory === 'CAT1');
+      const maleRow = getCappedRows('Male')[0];
+      const [left, middle, right] = femaleRows.map((pt) => symbolOffset(pt)[0]);
+
+      const columnGapPx = (maleRow.xAxisValue - femaleRows[0].xAxisValue) * pxPerCategory;
+
+      expect(right).toBeLessThan(CAPPED_POINT_SPACING_PX);
+      expect([left, middle]).toEqual([-right, 0]);
+      expect(right + CAPPED_POINT_SYMBOL_SIZE / 2).toBeLessThanOrEqual(columnGapPx / 2 + 1e-9);
     });
 
     it("places a group's markers at its point category offset without jitter", () => {
