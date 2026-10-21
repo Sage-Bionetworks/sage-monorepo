@@ -50,12 +50,20 @@ export async function simulateNewDataRelease(page: Page) {
 }
 
 /**
- * Makes the next lazy-loaded chunk the tab requests missing, as the app server answers a chunk
- * from an earlier deploy. Later requests load normally, as they would once the tab has the
- * current build.
+ * Makes every lazy-loaded chunk the tab requests missing, as the app server answers a chunk from
+ * an earlier deploy, until the tab starts loading a new page. The new page has the current build,
+ * so its chunks load normally.
  */
-export async function simulateChunkFromEarlierDeploy(page: Page) {
-  await page.route('**/chunk-*.js', (route) => route.fulfill({ status: 404 }), { times: 1 });
+export async function simulateChunksFromEarlierDeploy(page: Page) {
+  let isLoadingNewPage = false;
+  page.on('request', (request) => {
+    if (request.isNavigationRequest() && request.frame() === page.mainFrame()) {
+      isLoadingNewPage = true;
+    }
+  });
+  await page.route('**/chunk-*.js', (route) =>
+    isLoadingNewPage ? route.continue() : route.fulfill({ status: 404 }),
+  );
 }
 
 /** Makes every lazy-loaded chunk the tab requests from now on fail to download. */
@@ -196,12 +204,10 @@ export function defineAppUpdateTests(siteName: string) {
     }) => {
       await gotoAndWaitForBrowserApp(page);
       await simulateNewerDeploy(page);
-      await simulateChunkFromEarlierDeploy(page);
-      const newPageLoad = page.waitForEvent('load');
+      await simulateChunksFromEarlierDeploy(page);
 
       // A link click, unlike `navigateWithinApp`, leaves the URL unchanged until the route loads
       await page.getByRole('link', { name: 'About', exact: true }).first().click();
-      await newPageLoad;
 
       await expect(page).toHaveURL(/\/about$/);
     });
