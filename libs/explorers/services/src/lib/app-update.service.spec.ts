@@ -13,23 +13,24 @@ import {
   APP_UPDATE_CONFIRM_DELAY_MS,
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
+  APP_VERSION_CONFIRMED_MISMATCHES_METRIC,
   APP_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
   APP_VERSION_PATH,
+  APP_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
   CHUNK_LOAD_ERROR_MESSAGE,
-  CHUNK_LOAD_FAILED_METRIC,
+  CHUNK_LOAD_FAILURES_METRIC,
   DATA_UPDATE_CONFIRM_DELAY_MS,
+  DATA_VERSION_CONFIRMED_MISMATCHES_METRIC,
   DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
+  DATA_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
   getAppUpdateMessage,
   getDataUpdateMessage,
-  STALE_APP_METRIC,
-  STALE_CHUNK_RELOADED_AT_KEY,
-  STALE_CHUNK_RELOAD_GUARD_MS,
-  STALE_CHUNK_RELOAD_METRIC,
-  STALE_CHUNK_RELOAD_PENDING_KEY,
-  STALE_DATA_METRIC,
-  TRANSIENT_APP_VERSION_MISMATCH_METRIC,
-  TRANSIENT_DATA_VERSION_MISMATCH_METRIC,
-  VERSION_CHECK_FAILED_METRIC,
+  HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE,
+  STALE_CHUNK_PAGE_LOADED_AT_KEY,
+  STALE_CHUNK_PAGE_LOADS_METRIC,
+  STALE_CHUNK_PAGE_LOAD_GUARD_MS,
+  STALE_CHUNK_PAGE_LOAD_PENDING_KEY,
+  VERSION_CHECK_FAILURES_METRIC,
   VERSION_CHECK_TIMEOUT_MS,
 } from '@sagebionetworks/explorers/constants';
 import * as Sentry from '@sentry/angular';
@@ -40,7 +41,6 @@ import {
   AppVersionCheckOutcome,
   AppVersionCheckOutcomeEnum,
   MismatchedVersionsEnum,
-  NO_RESPONSE_STATUS,
   PAGE_LOADER,
   VersionCheckEndpointEnum,
   VersionCheckFailureReason,
@@ -285,18 +285,18 @@ describe('AppUpdateService', () => {
 
   describe('after the tab loaded a new page for a stale chunk', () => {
     it('counts the reload once', () => {
-      window.sessionStorage.setItem(STALE_CHUNK_RELOAD_PENDING_KEY, 'true');
+      window.sessionStorage.setItem(STALE_CHUNK_PAGE_LOAD_PENDING_KEY, 'true');
 
       setup().start(loadedVersion, siteName);
 
-      expect(Sentry.metrics.count).toHaveBeenCalledWith(STALE_CHUNK_RELOAD_METRIC, 1);
-      expect(window.sessionStorage.getItem(STALE_CHUNK_RELOAD_PENDING_KEY)).toBeNull();
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(STALE_CHUNK_PAGE_LOADS_METRIC, 1);
+      expect(window.sessionStorage.getItem(STALE_CHUNK_PAGE_LOAD_PENDING_KEY)).toBeNull();
     });
 
     it('counts nothing when the tab did not load a new page for a stale chunk', () => {
       setup().start(loadedVersion, siteName);
 
-      expect(Sentry.metrics.count).not.toHaveBeenCalledWith(STALE_CHUNK_RELOAD_METRIC, 1);
+      expect(Sentry.metrics.count).not.toHaveBeenCalledWith(STALE_CHUNK_PAGE_LOADS_METRIC, 1);
     });
   });
 
@@ -333,14 +333,18 @@ describe('AppUpdateService', () => {
 
       const versionService = TestBed.inject(VersionService);
       expect(Sentry.metrics.count).toHaveBeenCalledTimes(1);
-      expect(Sentry.metrics.count).toHaveBeenCalledWith(STALE_APP_METRIC, 1, {
-        attributes: {
-          clientVersion: versionService.getSiteVersion(loadedVersion),
-          serverVersion: versionService.getSiteVersion(newerVersion),
-          trigger: AppUpdateCheckTriggerEnum.Visibility,
-          mismatchedVersions: MismatchedVersionsEnum.App,
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(
+        APP_VERSION_CONFIRMED_MISMATCHES_METRIC,
+        1,
+        {
+          attributes: {
+            client_version: versionService.getSiteVersion(loadedVersion),
+            server_version: versionService.getSiteVersion(newerVersion),
+            trigger: AppUpdateCheckTriggerEnum.Visibility,
+            mismatched_versions: MismatchedVersionsEnum.App,
+          },
         },
-      });
+      );
     });
 
     it('compares app versions when either side has no commit SHA', () => {
@@ -483,7 +487,7 @@ describe('AppUpdateService', () => {
       expect(isShowingAppUpdateNotice()).toBe(false);
     });
 
-    it('stays current and counts a transient mismatch when the confirmation matches', () => {
+    it('stays current and counts an unconfirmed mismatch when the confirmation matches', () => {
       const appUpdateService = setup();
       appUpdateService.start(loadedVersion, siteName);
 
@@ -495,16 +499,20 @@ describe('AppUpdateService', () => {
       const versionService = TestBed.inject(VersionService);
       expect(isShowingAppUpdateNotice()).toBe(false);
       expect(Sentry.metrics.count).toHaveBeenCalledTimes(1);
-      expect(Sentry.metrics.count).toHaveBeenCalledWith(TRANSIENT_APP_VERSION_MISMATCH_METRIC, 1, {
-        attributes: {
-          clientVersion: versionService.getSiteVersion(loadedVersion),
-          serverVersion: versionService.getSiteVersion(newerVersion),
-          trigger: AppUpdateCheckTriggerEnum.Visibility,
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(
+        APP_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
+        1,
+        {
+          attributes: {
+            client_version: versionService.getSiteVersion(loadedVersion),
+            server_version: versionService.getSiteVersion(newerVersion),
+            trigger: AppUpdateCheckTriggerEnum.Visibility,
+          },
         },
-      });
+      );
     });
 
-    it('starts the confirmation delay over after a transient mismatch', () => {
+    it('starts the confirmation delay over after an unconfirmed mismatch', () => {
       const appUpdateService = setup();
       appUpdateService.start(loadedVersion, siteName);
 
@@ -577,78 +585,85 @@ describe('AppUpdateService', () => {
         scenario: string;
         respond: () => void;
         reason: VersionCheckFailureReason;
-        status: number;
+        httpStatusAttribute: Record<string, number>;
         isMisconfiguration: boolean;
       }[] = [
         {
           scenario: 'no response reaches the browser',
           respond: respondWithNoResponse,
           reason: VersionCheckFailureReasonEnum.Network,
-          status: NO_RESPONSE_STATUS,
+          httpStatusAttribute: {},
           isMisconfiguration: false,
         },
         {
           scenario: 'the server does not answer in time',
           respond: () => jest.advanceTimersByTime(VERSION_CHECK_TIMEOUT_MS),
           reason: VersionCheckFailureReasonEnum.Timeout,
-          status: NO_RESPONSE_STATUS,
+          httpStatusAttribute: {},
           isMisconfiguration: false,
         },
         {
           scenario: 'no healthy task answers',
           respond: respondWithStatus(HttpStatusCode.ServiceUnavailable, 'Service Unavailable'),
           reason: VersionCheckFailureReasonEnum.Server,
-          status: HttpStatusCode.ServiceUnavailable,
+          httpStatusAttribute: {
+            [HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE]: HttpStatusCode.ServiceUnavailable,
+          },
           isMisconfiguration: false,
         },
         {
           scenario: 'access is refused',
           respond: respondWithStatus(HttpStatusCode.Forbidden, 'Forbidden'),
           reason: VersionCheckFailureReasonEnum.UnexpectedStatus,
-          status: HttpStatusCode.Forbidden,
+          httpStatusAttribute: { [HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE]: HttpStatusCode.Forbidden },
           isMisconfiguration: false,
         },
         {
           scenario: 'the server has no version endpoint',
           respond: respondWithStatus(HttpStatusCode.NotFound, 'Not Found'),
           reason: VersionCheckFailureReasonEnum.NotFound,
-          status: HttpStatusCode.NotFound,
+          httpStatusAttribute: { [HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE]: HttpStatusCode.NotFound },
           isMisconfiguration: true,
         },
         {
           scenario: 'a misrouted request returns a page instead of a version',
           respond: respondWithBody('<!doctype html><html></html>'),
           reason: VersionCheckFailureReasonEnum.InvalidResponse,
-          status: HttpStatusCode.Ok,
+          httpStatusAttribute: { [HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE]: HttpStatusCode.Ok },
           isMisconfiguration: true,
         },
         {
           scenario: 'the browser cannot parse the response as JSON',
           respond: respondWithUnparsableBody,
           reason: VersionCheckFailureReasonEnum.InvalidResponse,
-          status: HttpStatusCode.Ok,
+          httpStatusAttribute: { [HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE]: HttpStatusCode.Ok },
           isMisconfiguration: true,
         },
         {
           scenario: 'a misrouted request returns another endpoint’s JSON',
           respond: respondWithBody({ status: 'UP' }),
           reason: VersionCheckFailureReasonEnum.InvalidResponse,
-          status: HttpStatusCode.Ok,
+          httpStatusAttribute: { [HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE]: HttpStatusCode.Ok },
           isMisconfiguration: true,
         },
       ];
 
       it.each(failures)(
         'counts the failure and stays current when $scenario',
-        ({ respond, reason, status }) => {
+        ({ respond, reason, httpStatusAttribute }) => {
           startTab();
 
           returnToTab();
           respondToOtherEndpoint();
           respond();
 
-          expect(Sentry.metrics.count).toHaveBeenCalledWith(VERSION_CHECK_FAILED_METRIC, 1, {
-            attributes: { endpoint, reason, status, trigger: AppUpdateCheckTriggerEnum.Visibility },
+          expect(Sentry.metrics.count).toHaveBeenCalledWith(VERSION_CHECK_FAILURES_METRIC, 1, {
+            attributes: {
+              endpoint,
+              reason,
+              ...httpStatusAttribute,
+              trigger: AppUpdateCheckTriggerEnum.Visibility,
+            },
           });
           expect(errorOverlayService.isOverlayVisible()).toBe(false);
         },
@@ -656,7 +671,7 @@ describe('AppUpdateService', () => {
 
       it.each(failures.filter(({ isMisconfiguration }) => isMisconfiguration))(
         'raises a Sentry warning when $scenario',
-        ({ respond, reason, status }) => {
+        ({ respond, reason, httpStatusAttribute }) => {
           startTab();
 
           returnToTab();
@@ -666,7 +681,7 @@ describe('AppUpdateService', () => {
           expect(logger.warn).toHaveBeenCalledWith(misconfiguredWarning, {
             endpoint,
             reason,
-            status,
+            ...httpStatusAttribute,
             trigger: AppUpdateCheckTriggerEnum.Visibility,
           });
         },
@@ -763,7 +778,7 @@ describe('AppUpdateService', () => {
 
       expect(isShowingAppUpdateNotice()).toBe(true);
       expect(Sentry.metrics.count).toHaveBeenCalledWith(
-        STALE_APP_METRIC,
+        APP_VERSION_CONFIRMED_MISMATCHES_METRIC,
         1,
         expect.objectContaining({
           attributes: expect.objectContaining({
@@ -788,12 +803,12 @@ describe('AppUpdateService', () => {
         await failRouteChunkOnNewerDeploy();
 
         expect(loadPage).toHaveBeenCalledWith(targetUrl);
-        expect(window.sessionStorage.getItem(STALE_CHUNK_RELOAD_PENDING_KEY)).toBe('true');
+        expect(window.sessionStorage.getItem(STALE_CHUNK_PAGE_LOAD_PENDING_KEY)).toBe('true');
       });
 
       it('keeps the update notice instead of loading another page within the guard window', async () => {
-        const reloadedAt = Date.now() - STALE_CHUNK_RELOAD_GUARD_MS;
-        window.sessionStorage.setItem(STALE_CHUNK_RELOADED_AT_KEY, String(reloadedAt));
+        const pageLoadedAt = Date.now() - STALE_CHUNK_PAGE_LOAD_GUARD_MS;
+        window.sessionStorage.setItem(STALE_CHUNK_PAGE_LOADED_AT_KEY, String(pageLoadedAt));
         setup().start(loadedVersion, siteName);
 
         await failRouteChunkOnNewerDeploy();
@@ -803,8 +818,8 @@ describe('AppUpdateService', () => {
       });
 
       it('loads the page again once the guard window has passed', async () => {
-        const reloadedAt = Date.now() - STALE_CHUNK_RELOAD_GUARD_MS - 1;
-        window.sessionStorage.setItem(STALE_CHUNK_RELOADED_AT_KEY, String(reloadedAt));
+        const pageLoadedAt = Date.now() - STALE_CHUNK_PAGE_LOAD_GUARD_MS - 1;
+        window.sessionStorage.setItem(STALE_CHUNK_PAGE_LOADED_AT_KEY, String(pageLoadedAt));
         setup().start(loadedVersion, siteName);
 
         await failRouteChunkOnNewerDeploy();
@@ -963,7 +978,7 @@ describe('AppUpdateService', () => {
 
   describe('when counting failed chunk loads', () => {
     function chunkLoadFailureCount(outcome: AppVersionCheckOutcome) {
-      return [CHUNK_LOAD_FAILED_METRIC, 1, { attributes: { outcome } }] as const;
+      return [CHUNK_LOAD_FAILURES_METRIC, 1, { attributes: { outcome } }] as const;
     }
 
     it('counts a failure on a mismatched version as stale', async () => {
@@ -1032,7 +1047,7 @@ describe('AppUpdateService', () => {
       await jest.advanceTimersByTimeAsync(0);
 
       expect(Sentry.metrics.count).not.toHaveBeenCalledWith(
-        CHUNK_LOAD_FAILED_METRIC,
+        CHUNK_LOAD_FAILURES_METRIC,
         expect.anything(),
         expect.anything(),
       );
@@ -1178,14 +1193,18 @@ describe('AppUpdateService', () => {
       respondToCheck(loadedVersion, newerDataVersion);
 
       const versionService = TestBed.inject(VersionService);
-      expect(Sentry.metrics.count).toHaveBeenCalledWith(STALE_DATA_METRIC, 1, {
-        attributes: {
-          clientVersion: versionService.formatDataVersion(loadedDataVersion),
-          serverVersion: versionService.formatDataVersion(newerDataVersion),
-          trigger: AppUpdateCheckTriggerEnum.Visibility,
-          mismatchedVersions: MismatchedVersionsEnum.Data,
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(
+        DATA_VERSION_CONFIRMED_MISMATCHES_METRIC,
+        1,
+        {
+          attributes: {
+            client_version: versionService.formatDataVersion(loadedDataVersion),
+            server_version: versionService.formatDataVersion(newerDataVersion),
+            trigger: AppUpdateCheckTriggerEnum.Visibility,
+            mismatched_versions: MismatchedVersionsEnum.Data,
+          },
         },
-      });
+      );
     });
 
     it('stays current when the server data version is unknown', () => {
@@ -1199,7 +1218,7 @@ describe('AppUpdateService', () => {
       expect(errorOverlayService.isOverlayVisible()).toBe(false);
     });
 
-    it('stays current and counts a transient data mismatch when the confirmation matches', () => {
+    it('stays current and counts an unconfirmed data mismatch when the confirmation matches', () => {
       startWithDataChecks(setup());
 
       returnToTab();
@@ -1209,7 +1228,7 @@ describe('AppUpdateService', () => {
 
       expect(errorOverlayService.isOverlayVisible()).toBe(false);
       expect(Sentry.metrics.count).toHaveBeenCalledWith(
-        TRANSIENT_DATA_VERSION_MISMATCH_METRIC,
+        DATA_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
         1,
         expect.anything(),
       );
@@ -1288,11 +1307,11 @@ describe('AppUpdateService', () => {
   });
 
   describe('when reporting which versions differed', () => {
-    function staleMetricMismatchedVersions(staleMetric: string) {
+    function mismatchedVersionsReportedBy(confirmedMismatchMetric: string) {
       const staleMetricCall = (Sentry.metrics.count as jest.Mock).mock.calls.find(
-        ([metricName]) => metricName === staleMetric,
+        ([metricName]) => metricName === confirmedMismatchMetric,
       );
-      return staleMetricCall?.[2].attributes.mismatchedVersions;
+      return staleMetricCall?.[2].attributes.mismatched_versions;
     }
 
     it('reports only the app version when the data version still matches', () => {
@@ -1303,7 +1322,9 @@ describe('AppUpdateService', () => {
       jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
       respondToCheck(newerVersion, loadedDataVersion);
 
-      expect(staleMetricMismatchedVersions(STALE_APP_METRIC)).toBe(MismatchedVersionsEnum.App);
+      expect(mismatchedVersionsReportedBy(APP_VERSION_CONFIRMED_MISMATCHES_METRIC)).toBe(
+        MismatchedVersionsEnum.App,
+      );
     });
 
     it('reports only the data version when the app version still matches', () => {
@@ -1314,10 +1335,12 @@ describe('AppUpdateService', () => {
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
       respondToCheck(loadedVersion, newerDataVersion);
 
-      expect(staleMetricMismatchedVersions(STALE_DATA_METRIC)).toBe(MismatchedVersionsEnum.Data);
+      expect(mismatchedVersionsReportedBy(DATA_VERSION_CONFIRMED_MISMATCHES_METRIC)).toBe(
+        MismatchedVersionsEnum.Data,
+      );
     });
 
-    it('reports both versions on each stale metric when a deploy and a data release are both confirmed', () => {
+    it('reports both versions on each confirmed mismatch metric when a deploy and a data release are both confirmed', () => {
       startWithDataChecks(setup());
 
       returnToTab();
@@ -1327,10 +1350,10 @@ describe('AppUpdateService', () => {
       jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS - DATA_UPDATE_CONFIRM_DELAY_MS);
       respondWithServerVersion(newerVersion);
 
-      expect(staleMetricMismatchedVersions(STALE_DATA_METRIC)).toBe(
+      expect(mismatchedVersionsReportedBy(DATA_VERSION_CONFIRMED_MISMATCHES_METRIC)).toBe(
         MismatchedVersionsEnum.AppAndData,
       );
-      expect(staleMetricMismatchedVersions(STALE_APP_METRIC)).toBe(
+      expect(mismatchedVersionsReportedBy(APP_VERSION_CONFIRMED_MISMATCHES_METRIC)).toBe(
         MismatchedVersionsEnum.AppAndData,
       );
     });
@@ -1341,7 +1364,7 @@ describe('AppUpdateService', () => {
       await navigateTo(missingChunkPath);
       respondToCheck(newerVersion, newerDataVersion);
 
-      expect(staleMetricMismatchedVersions(STALE_APP_METRIC)).toBe(
+      expect(mismatchedVersionsReportedBy(APP_VERSION_CONFIRMED_MISMATCHES_METRIC)).toBe(
         MismatchedVersionsEnum.AppAndData,
       );
     });
@@ -1355,7 +1378,7 @@ describe('AppUpdateService', () => {
       respondWithServerVersion(newerVersion);
       httpMock.expectOne(dataVersionUrl).error(new ProgressEvent('error'));
 
-      expect(staleMetricMismatchedVersions(STALE_APP_METRIC)).toBe(
+      expect(mismatchedVersionsReportedBy(APP_VERSION_CONFIRMED_MISMATCHES_METRIC)).toBe(
         MismatchedVersionsEnum.AppAndData,
       );
     });

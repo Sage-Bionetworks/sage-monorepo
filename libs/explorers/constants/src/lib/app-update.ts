@@ -23,23 +23,29 @@ export const DATA_UPDATE_CONFIRM_DELAY_MS = 3 * 60 * 1000;
 export const VERSION_CHECK_TIMEOUT_MS = 10 * 1000;
 
 /** When this tab last loaded a new page to replace a stale chunk, in `sessionStorage`. */
-export const STALE_CHUNK_RELOADED_AT_KEY = 'staleChunkReloadedAt';
+export const STALE_CHUNK_PAGE_LOADED_AT_KEY = 'staleChunkPageLoadedAt';
 /** Set just before that page load, so the loaded app can count it. */
-export const STALE_CHUNK_RELOAD_PENDING_KEY = 'staleChunkReloadPending';
+export const STALE_CHUNK_PAGE_LOAD_PENDING_KEY = 'staleChunkPageLoadPending';
 /**
  * How long after loading a new page for a stale chunk the tab shows the update overlay instead of
  * loading another. During a rolling deploy, the new page can still be served by an old task and
  * request a chunk a new task does not have, which would otherwise load page after page.
  */
-export const STALE_CHUNK_RELOAD_GUARD_MS = 60 * 1000;
+export const STALE_CHUNK_PAGE_LOAD_GUARD_MS = 60 * 1000;
 
-export const CHUNK_LOAD_FAILED_METRIC = 'app.chunk_load_failed';
-export const STALE_CHUNK_RELOAD_METRIC = 'app.stale_chunk_reload';
-export const STALE_APP_METRIC = 'app.stale_app_detected';
-export const STALE_DATA_METRIC = 'app.stale_data_detected';
-export const TRANSIENT_APP_VERSION_MISMATCH_METRIC = 'app.transient_app_version_mismatch';
-export const TRANSIENT_DATA_VERSION_MISMATCH_METRIC = 'app.transient_data_version_mismatch';
-export const VERSION_CHECK_FAILED_METRIC = 'app.version_check_failed';
+export const APP_VERSION_CONFIRMED_MISMATCHES_METRIC =
+  'app_update.app_version.confirmed_mismatches';
+export const APP_VERSION_UNCONFIRMED_MISMATCHES_METRIC =
+  'app_update.app_version.unconfirmed_mismatches';
+export const CHUNK_LOAD_FAILURES_METRIC = 'app_update.chunk_load.failures';
+export const DATA_VERSION_CONFIRMED_MISMATCHES_METRIC =
+  'app_update.data_version.confirmed_mismatches';
+export const DATA_VERSION_UNCONFIRMED_MISMATCHES_METRIC =
+  'app_update.data_version.unconfirmed_mismatches';
+export const STALE_CHUNK_PAGE_LOADS_METRIC = 'app_update.stale_chunk.page_loads';
+export const VERSION_CHECK_FAILURES_METRIC = 'app_update.version_check.failures';
+/** The attribute name for an HTTP response status code, aligned with OpenTelemetry's naming. */
+export const HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE = 'http.response.status_code';
 
 export const APP_VERSION_ENDPOINT_MISCONFIGURED_WARNING = 'App version endpoint is misconfigured';
 export const DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING = 'Data version endpoint is misconfigured';

@@ -18,21 +18,22 @@ import {
   APP_UPDATE_CONFIRM_DELAY_MS,
   APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_UPDATE_POLL_INTERVAL_MS,
+  APP_VERSION_CONFIRMED_MISMATCHES_METRIC,
   APP_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
   APP_VERSION_PATH,
+  APP_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
   CHUNK_LOAD_ERROR_MESSAGE,
-  CHUNK_LOAD_FAILED_METRIC,
+  CHUNK_LOAD_FAILURES_METRIC,
   DATA_UPDATE_CONFIRM_DELAY_MS,
+  DATA_VERSION_CONFIRMED_MISMATCHES_METRIC,
   DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
-  STALE_APP_METRIC,
-  STALE_CHUNK_RELOADED_AT_KEY,
-  STALE_CHUNK_RELOAD_GUARD_MS,
-  STALE_CHUNK_RELOAD_METRIC,
-  STALE_CHUNK_RELOAD_PENDING_KEY,
-  STALE_DATA_METRIC,
-  TRANSIENT_APP_VERSION_MISMATCH_METRIC,
-  TRANSIENT_DATA_VERSION_MISMATCH_METRIC,
-  VERSION_CHECK_FAILED_METRIC,
+  DATA_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
+  HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE,
+  STALE_CHUNK_PAGE_LOADED_AT_KEY,
+  STALE_CHUNK_PAGE_LOADS_METRIC,
+  STALE_CHUNK_PAGE_LOAD_GUARD_MS,
+  STALE_CHUNK_PAGE_LOAD_PENDING_KEY,
+  VERSION_CHECK_FAILURES_METRIC,
   VERSION_CHECK_TIMEOUT_MS,
 } from '@sagebionetworks/explorers/constants';
 import { isChunkLoadError } from '@sagebionetworks/explorers/sentry';
@@ -168,8 +169,8 @@ interface TrackedVersionConfig {
   endpoint: VersionCheckEndpoint;
   confirmDelayMs: number;
   confirmationTrigger: AppUpdateCheckTrigger;
-  staleMetric: string;
-  transientMismatchMetric: string;
+  confirmedMismatchMetric: string;
+  unconfirmedMismatchMetric: string;
   misconfiguredWarning: string;
   checkFailedMessage: string;
 }
@@ -179,8 +180,8 @@ const TRACKED_VERSION_CONFIGS: Record<TrackedVersion, TrackedVersionConfig> = {
     endpoint: VersionCheckEndpointEnum.AppVersion,
     confirmDelayMs: APP_UPDATE_CONFIRM_DELAY_MS,
     confirmationTrigger: AppUpdateCheckTriggerEnum.AppVersionMismatchConfirmation,
-    staleMetric: STALE_APP_METRIC,
-    transientMismatchMetric: TRANSIENT_APP_VERSION_MISMATCH_METRIC,
+    confirmedMismatchMetric: APP_VERSION_CONFIRMED_MISMATCHES_METRIC,
+    unconfirmedMismatchMetric: APP_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
     misconfiguredWarning: APP_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
     checkFailedMessage: 'App version check failed',
   },
@@ -188,8 +189,8 @@ const TRACKED_VERSION_CONFIGS: Record<TrackedVersion, TrackedVersionConfig> = {
     endpoint: VersionCheckEndpointEnum.DataVersion,
     confirmDelayMs: DATA_UPDATE_CONFIRM_DELAY_MS,
     confirmationTrigger: AppUpdateCheckTriggerEnum.DataVersionMismatchConfirmation,
-    staleMetric: STALE_DATA_METRIC,
-    transientMismatchMetric: TRANSIENT_DATA_VERSION_MISMATCH_METRIC,
+    confirmedMismatchMetric: DATA_VERSION_CONFIRMED_MISMATCHES_METRIC,
+    unconfirmedMismatchMetric: DATA_VERSION_UNCONFIRMED_MISMATCHES_METRIC,
     misconfiguredWarning: DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
     checkFailedMessage: 'Data version check failed',
   },
@@ -305,7 +306,7 @@ export class AppUpdateService {
     this.clientVersion = clientVersion;
     this.siteName = siteName;
     this.dataVersionUrl = dataVersionUrl ?? null;
-    this.recordStaleChunkReload(browserWindow);
+    this.recordStaleChunkPageLoad(browserWindow);
 
     const visibility$ = fromEvent(this.document, 'visibilitychange').pipe(
       map(() => AppUpdateCheckTriggerEnum.Visibility),
@@ -350,8 +351,8 @@ export class AppUpdateService {
    * likely removed the chunk, so the tab loads `targetUrl` as a new page, which gets the current
    * build and lands the user where they meant to go. Reloading would land them back on the page
    * they were leaving, since the router only updates the URL once a navigation succeeds. If the
-   * tab already did this within `STALE_CHUNK_RELOAD_GUARD_MS`, it keeps the update notice the check
-   * showed instead.
+   * tab already did this within `STALE_CHUNK_PAGE_LOAD_GUARD_MS`, it keeps the update notice the
+   * check showed instead.
    *
    * In every other case (the version matches, the browser is offline, or the check failed), the
    * download most likely failed on the network, so the error overlay asks the user to reload.
@@ -360,7 +361,7 @@ export class AppUpdateService {
    */
   private async handleChunkLoadError(targetUrl: string) {
     const outcome = await this.getAppVersionCheckOutcome(AppUpdateCheckTriggerEnum.ChunkLoadError);
-    Sentry.metrics.count(CHUNK_LOAD_FAILED_METRIC, 1, { attributes: { outcome } });
+    Sentry.metrics.count(CHUNK_LOAD_FAILURES_METRIC, 1, { attributes: { outcome } });
     if (outcome === AppVersionCheckOutcomeEnum.Stale) {
       this.loadPageForStaleChunk(targetUrl);
     } else {
@@ -369,7 +370,7 @@ export class AppUpdateService {
   }
 
   /**
-   * Loads `targetUrl` as a new page, at most once per `STALE_CHUNK_RELOAD_GUARD_MS`. Without
+   * Loads `targetUrl` as a new page, at most once per `STALE_CHUNK_PAGE_LOAD_GUARD_MS`. Without
    * `sessionStorage` (e.g. blocked by privacy settings), the guard cannot be kept, so no page is
    * loaded and the update notice stays.
    */
@@ -379,13 +380,13 @@ export class AppUpdateService {
       if (!sessionStorage) {
         return;
       }
-      const reloadedAt = Number(sessionStorage.getItem(STALE_CHUNK_RELOADED_AT_KEY));
-      if (Date.now() - reloadedAt <= STALE_CHUNK_RELOAD_GUARD_MS) {
+      const pageLoadedAt = Number(sessionStorage.getItem(STALE_CHUNK_PAGE_LOADED_AT_KEY));
+      if (Date.now() - pageLoadedAt <= STALE_CHUNK_PAGE_LOAD_GUARD_MS) {
         return;
       }
-      sessionStorage.setItem(STALE_CHUNK_RELOADED_AT_KEY, String(Date.now()));
+      sessionStorage.setItem(STALE_CHUNK_PAGE_LOADED_AT_KEY, String(Date.now()));
       // Counted by the next page, since a metric recorded now could be lost when this page unloads
-      sessionStorage.setItem(STALE_CHUNK_RELOAD_PENDING_KEY, 'true');
+      sessionStorage.setItem(STALE_CHUNK_PAGE_LOAD_PENDING_KEY, 'true');
     } catch {
       return;
     }
@@ -396,16 +397,16 @@ export class AppUpdateService {
    * Counts a page load `loadPageForStaleChunk` made before this page loaded. The pending flag is
    * cleared here, so each page load is counted once.
    */
-  private recordStaleChunkReload(browserWindow: Window) {
+  private recordStaleChunkPageLoad(browserWindow: Window) {
     try {
-      if (browserWindow.sessionStorage.getItem(STALE_CHUNK_RELOAD_PENDING_KEY) === null) {
+      if (browserWindow.sessionStorage.getItem(STALE_CHUNK_PAGE_LOAD_PENDING_KEY) === null) {
         return;
       }
-      browserWindow.sessionStorage.removeItem(STALE_CHUNK_RELOAD_PENDING_KEY);
+      browserWindow.sessionStorage.removeItem(STALE_CHUNK_PAGE_LOAD_PENDING_KEY);
     } catch {
       return;
     }
-    Sentry.metrics.count(STALE_CHUNK_RELOAD_METRIC, 1);
+    Sentry.metrics.count(STALE_CHUNK_PAGE_LOADS_METRIC, 1);
   }
 
   /**
@@ -610,8 +611,11 @@ export class AppUpdateService {
   ) {
     const { endpoint, misconfiguredWarning, checkFailedMessage } =
       TRACKED_VERSION_CONFIGS[trackedVersion];
-    const failureDetails = { endpoint, reason, status, trigger };
-    Sentry.metrics.count(VERSION_CHECK_FAILED_METRIC, 1, { attributes: failureDetails });
+    // A request that got no response has no HTTP status to report; `reason` says why it got none
+    const httpStatusAttribute =
+      status === NO_RESPONSE_STATUS ? {} : { [HTTP_RESPONSE_STATUS_CODE_ATTRIBUTE]: status };
+    const failureDetails = { endpoint, reason, ...httpStatusAttribute, trigger };
+    Sentry.metrics.count(VERSION_CHECK_FAILURES_METRIC, 1, { attributes: failureDetails });
     if (MISCONFIGURATION_REASONS.has(reason) && !this.reportedMisconfigurations.has(endpoint)) {
       this.reportedMisconfigurations.add(endpoint);
       this.logger.warn(misconfiguredWarning, failureDetails);
@@ -766,10 +770,10 @@ export class AppUpdateService {
     if (!pendingMismatch || !clientVersionLabel) {
       return;
     }
-    Sentry.metrics.count(TRACKED_VERSION_CONFIGS[trackedVersion].transientMismatchMetric, 1, {
+    Sentry.metrics.count(TRACKED_VERSION_CONFIGS[trackedVersion].unconfirmedMismatchMetric, 1, {
       attributes: {
-        clientVersion: clientVersionLabel,
-        serverVersion: pendingMismatch.serverVersionLabel,
+        client_version: clientVersionLabel,
+        server_version: pendingMismatch.serverVersionLabel,
         trigger: pendingMismatch.trigger,
       },
     });
@@ -778,16 +782,16 @@ export class AppUpdateService {
 
   /**
    * Called once a mismatch has lasted its full delay and the tab is out of date. This method
-   * shows the app or data update overlay, records the stale metric, and stops further background
-   * checks, since the reload the overlay asks for fixes both versions. Runs at most once per
-   * version.
+   * shows the app or data update overlay, records the confirmed mismatch metric, and stops further
+   * background checks, since the reload the overlay asks for fixes both versions. Runs at most once
+   * per version.
    *
    * When the data version is the one out of date, a pending app mismatch keeps its timer. With
    * background checks stopped, that timer is the only way a deploy already under way can still be
    * confirmed. Confirming it switches the overlay to the app update message, which takes
-   * precedence, and records the app stale metric, so the tab is counted as missing both the deploy
-   * and the data release. The reload fixes both either way; the timer only keeps the message and
-   * metrics accurate.
+   * precedence, and records the app version's confirmed mismatch metric, so the tab is counted as
+   * missing both the deploy and the data release. The reload fixes both either way; the timer only
+   * keeps the message and metrics accurate.
    */
   private handleConfirmedStaleVersion(
     trackedVersion: TrackedVersion,
@@ -810,21 +814,21 @@ export class AppUpdateService {
     } else {
       this.errorOverlayService.showDataUpdateAvailable(this.siteName);
     }
-    Sentry.metrics.count(TRACKED_VERSION_CONFIGS[trackedVersion].staleMetric, 1, {
+    Sentry.metrics.count(TRACKED_VERSION_CONFIGS[trackedVersion].confirmedMismatchMetric, 1, {
       attributes: {
-        clientVersion: clientVersionLabel,
-        serverVersion: serverVersionLabel,
+        client_version: clientVersionLabel,
+        server_version: serverVersionLabel,
         trigger,
-        mismatchedVersions,
+        mismatched_versions: mismatchedVersions,
       },
     });
   }
 
   /**
-   * Works out what the stale metric reports (`app`, `data`, or `app-and-data`) when one of the
-   * two versions has just been confirmed stale. That version differs by definition. The question
-   * is whether the other one differs too, so that a tab that missed both a deploy and a data
-   * release is reported as such.
+   * Works out what the confirmed mismatch metric reports (`app`, `data`, or `app-and-data`) when
+   * one of the two versions has just been confirmed stale. That version differs by definition. The
+   * question is whether the other one differs too, so that a tab that missed both a deploy and a
+   * data release is reported as such.
    */
   private getMismatchedVersions(
     confirmedStaleVersion: TrackedVersion,
