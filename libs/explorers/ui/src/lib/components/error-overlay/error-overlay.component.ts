@@ -16,8 +16,8 @@ export class ErrorOverlayComponent {
   private readonly errorOverlayService = inject(ErrorOverlayService);
   private readonly dialog = viewChild<ElementRef<HTMLDialogElement>>('dialog');
 
-  isOverlayVisible = this.errorOverlayService.isOverlayVisible;
-  activeMessage = this.errorOverlayService.activeMessage;
+  protected readonly isOverlayVisible = this.errorOverlayService.isOverlayVisible;
+  protected readonly activeMessage = this.errorOverlayService.activeMessage;
 
   constructor() {
     // Runs only in the browser, which is the only place a dialog can be opened as a modal
@@ -29,7 +29,7 @@ export class ErrorOverlayComponent {
     });
   }
 
-  onReload() {
+  protected onReload() {
     this.errorOverlayService.reloadPage();
   }
 }

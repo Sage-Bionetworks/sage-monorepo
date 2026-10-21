@@ -3,9 +3,9 @@ import { getAppUpdateMessage, getDataUpdateMessage } from '@sagebionetworks/expl
 
 @Injectable({ providedIn: 'root' })
 export class ErrorOverlayService {
-  private errorMessage = signal<string | null>(null);
-  private appUpdateMessage = signal<string | null>(null);
-  private dataUpdateMessage = signal<string | null>(null);
+  private readonly errorMessage = signal<string | null>(null);
+  private readonly appUpdateMessage = signal<string | null>(null);
+  private readonly dataUpdateMessage = signal<string | null>(null);
 
   /**
    * The message to display, or null when the overlay is hidden. An update notice takes precedence
@@ -13,11 +13,11 @@ export class ErrorOverlayService {
    * notice takes precedence over a data update notice: the reload both ask for fixes both, and new
    * data may need the new app to display it.
    */
-  activeMessage = computed(
+  readonly activeMessage = computed(
     () => this.appUpdateMessage() ?? this.dataUpdateMessage() ?? this.errorMessage(),
   );
 
-  isOverlayVisible = computed(() => this.activeMessage() !== null);
+  readonly isOverlayVisible = computed(() => this.activeMessage() !== null);
 
   showError(message: string) {
     // Only show if there's no active error - prevents cascading error messages
