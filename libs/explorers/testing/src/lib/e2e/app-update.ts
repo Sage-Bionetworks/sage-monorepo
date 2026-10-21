@@ -13,22 +13,6 @@ import {
 /** How long one fast-forward attempt waits for the update notice before trying again. */
 const UPDATE_NOTICE_RENDER_TIMEOUT_MS = 1000;
 
-/** A chunk file name in the build's format that no build produces, like one from an old deploy. */
-const CHUNK_FROM_EARLIER_DEPLOY_PATH = '/chunk-E2E00000.js';
-
-/**
- * Scripts that make the page import a chunk, the way a route's lazy loading does. They are passed
- * to the page as strings, so the browser runs a real dynamic import rather than whatever the test
- * transform makes of one.
- */
-function startChunkImportScript(chunkPath: string): string {
-  return `void import(${JSON.stringify(chunkPath)})`;
-}
-
-function chunkImportResultScript(chunkPath: string): string {
-  return `import(${JSON.stringify(chunkPath)}).then(() => 'loaded', () => 'failed')`;
-}
-
 export const NEWER_APP_VERSION: AppVersion = {
   appVersion: '999.0.0',
   commitSha: 'e2e0000',
@@ -63,6 +47,15 @@ export async function simulateNewDataRelease(page: Page) {
   await page.route(`**${DATA_VERSION_PATH}`, (route) =>
     route.fulfill({ json: NEWER_DATA_VERSION }),
   );
+}
+
+/**
+ * Makes the next lazy-loaded chunk the tab requests missing, as the app server answers a chunk
+ * from an earlier deploy. Later requests load normally, as they would once the tab has the
+ * current build.
+ */
+export async function simulateChunkFromEarlierDeploy(page: Page) {
+  await page.route('**/chunk-*.js', (route) => route.fulfill({ status: 404 }), { times: 1 });
 }
 
 /** Makes every lazy-loaded chunk the tab requests from now on fail to download. */
@@ -192,17 +185,19 @@ export function defineAppUpdateTests(siteName: string) {
       await expect(page.getByText(getDataUpdateMessage(siteName))).toBeHidden();
     });
 
-    test('reloads the page once when it loads a chunk from an earlier deploy', async ({ page }) => {
+    test('loads the page the user clicked when its chunk belongs to an earlier deploy', async ({
+      page,
+    }) => {
       await gotoAndWaitForBrowserApp(page);
-      const pageReload = page.waitForEvent('load');
+      await simulateNewerDeploy(page);
+      await simulateChunkFromEarlierDeploy(page);
+      const newPageLoad = page.waitForEvent('load');
 
-      await page.evaluate(startChunkImportScript(CHUNK_FROM_EARLIER_DEPLOY_PATH));
-      await pageReload;
-      const secondAttempt = await page.evaluate(
-        chunkImportResultScript(CHUNK_FROM_EARLIER_DEPLOY_PATH),
-      );
+      // A link click, unlike `navigateWithinApp`, leaves the URL unchanged until the route loads
+      await page.getByRole('link', { name: 'About', exact: true }).first().click();
+      await newPageLoad;
 
-      expect(secondAttempt).toBe('failed');
+      await expect(page).toHaveURL(/\/about$/);
     });
   });
 }

@@ -7,7 +7,7 @@ import {
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router, Routes } from '@angular/router';
-import { AppVersion, STALE_CHUNK_RELOAD_PENDING_KEY } from '@sagebionetworks/explorers/config';
+import { AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_CONFIRM_DELAY_MS,
   APP_UPDATE_CONFIRMATION_RETRY_LIMIT,
@@ -21,7 +21,10 @@ import {
   getAppUpdateMessage,
   getDataUpdateMessage,
   STALE_APP_METRIC,
+  STALE_CHUNK_RELOAD_GUARD_MS,
   STALE_CHUNK_RELOAD_METRIC,
+  STALE_CHUNK_RELOAD_PENDING_KEY,
+  STALE_CHUNK_RELOADED_AT_KEY,
   STALE_DATA_METRIC,
   TRANSIENT_DATA_VERSION_MISMATCH_METRIC,
   TRANSIENT_APP_VERSION_MISMATCH_METRIC,
@@ -38,6 +41,7 @@ import {
   AppVersionCheckOutcomeEnum,
   MismatchedVersionsEnum,
   NO_RESPONSE_STATUS,
+  PAGE_LOADER,
   VersionCheckEndpointEnum,
   VersionCheckFailureReason,
   VersionCheckFailureReasonEnum,
@@ -89,12 +93,14 @@ describe('AppUpdateService', () => {
   let errorOverlayService: ErrorOverlayService;
   let logger: { log: jest.Mock; warn: jest.Mock; error: jest.Mock };
   let appInterceptor: jest.Mock;
+  let loadPage: jest.Mock;
 
   function setup({ isServer = false, checksEnabled = true } = {}): AppUpdateService {
     logger = { log: jest.fn(), warn: jest.fn(), error: jest.fn() };
     appInterceptor = jest.fn<ReturnType<HttpInterceptorFn>, Parameters<HttpInterceptorFn>>(
       (req, next) => next(req),
     );
+    loadPage = jest.fn();
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(withInterceptors([appInterceptor])),
@@ -103,6 +109,7 @@ describe('AppUpdateService', () => {
         { provide: PlatformService, useValue: { isBrowser: !isServer, isServer } },
         { provide: LoggerService, useValue: { forSource: () => logger } },
         { provide: APP_UPDATE_CHECKS_ENABLED, useValue: checksEnabled },
+        { provide: PAGE_LOADER, useValue: loadPage },
       ],
     });
     httpMock = TestBed.inject(HttpTestingController);
@@ -276,7 +283,7 @@ describe('AppUpdateService', () => {
     });
   });
 
-  describe('after the app server reloaded the tab for a stale chunk', () => {
+  describe('after the tab loaded a new page for a stale chunk', () => {
     it('counts the reload once', () => {
       window.sessionStorage.setItem(STALE_CHUNK_RELOAD_PENDING_KEY, 'true');
 
@@ -286,7 +293,7 @@ describe('AppUpdateService', () => {
       expect(window.sessionStorage.getItem(STALE_CHUNK_RELOAD_PENDING_KEY)).toBeNull();
     });
 
-    it('counts nothing when the tab was not reloaded for a stale chunk', () => {
+    it('counts nothing when the tab did not load a new page for a stale chunk', () => {
       setup().start(loadedVersion, siteName);
 
       expect(Sentry.metrics.count).not.toHaveBeenCalledWith(STALE_CHUNK_RELOAD_METRIC, 1);
@@ -766,6 +773,58 @@ describe('AppUpdateService', () => {
       );
     });
 
+    describe('when a route chunk fails to load on a mismatched version', () => {
+      const targetUrl = `/${missingChunkPath}`;
+
+      async function failRouteChunkOnNewerDeploy() {
+        await navigateTo(missingChunkPath);
+        respondWithServerVersion(newerVersion);
+        await jest.advanceTimersByTimeAsync(0);
+      }
+
+      it('loads the page the user was navigating to, and marks it to be counted', async () => {
+        setup().start(loadedVersion, siteName);
+
+        await failRouteChunkOnNewerDeploy();
+
+        expect(loadPage).toHaveBeenCalledWith(targetUrl);
+        expect(window.sessionStorage.getItem(STALE_CHUNK_RELOAD_PENDING_KEY)).toBe('true');
+      });
+
+      it('keeps the update notice instead of loading another page within the guard window', async () => {
+        const reloadedAt = Date.now() - STALE_CHUNK_RELOAD_GUARD_MS;
+        window.sessionStorage.setItem(STALE_CHUNK_RELOADED_AT_KEY, String(reloadedAt));
+        setup().start(loadedVersion, siteName);
+
+        await failRouteChunkOnNewerDeploy();
+
+        expect(loadPage).not.toHaveBeenCalled();
+        expect(isShowingAppUpdateNotice()).toBe(true);
+      });
+
+      it('loads the page again once the guard window has passed', async () => {
+        const reloadedAt = Date.now() - STALE_CHUNK_RELOAD_GUARD_MS - 1;
+        window.sessionStorage.setItem(STALE_CHUNK_RELOADED_AT_KEY, String(reloadedAt));
+        setup().start(loadedVersion, siteName);
+
+        await failRouteChunkOnNewerDeploy();
+
+        expect(loadPage).toHaveBeenCalledWith(targetUrl);
+      });
+
+      it('keeps the update notice when session storage is unavailable', async () => {
+        setup().start(loadedVersion, siteName);
+        jest.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+          throw new DOMException('Access is denied', 'SecurityError');
+        });
+
+        await failRouteChunkOnNewerDeploy();
+
+        expect(loadPage).not.toHaveBeenCalled();
+        expect(isShowingAppUpdateNotice()).toBe(true);
+      });
+    });
+
     it('asks to reload when a route chunk fails to load but the version matches', async () => {
       setup().start(loadedVersion, siteName);
 
@@ -774,6 +833,7 @@ describe('AppUpdateService', () => {
       await jest.advanceTimersByTimeAsync(0);
 
       expect(errorOverlayService.activeMessage()).toBe(CHUNK_LOAD_ERROR_MESSAGE);
+      expect(loadPage).not.toHaveBeenCalled();
     });
 
     it('asks to reload when a route chunk fails to load while offline', async () => {

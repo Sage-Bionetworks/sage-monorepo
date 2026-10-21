@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationError, Router } from '@angular/router';
-import { AppVersion, STALE_CHUNK_RELOAD_PENDING_KEY } from '@sagebionetworks/explorers/config';
+import { AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_CONFIRM_DELAY_MS,
   APP_UPDATE_CONFIRMATION_RETRY_LIMIT,
@@ -21,7 +21,10 @@ import {
   APP_VERSION_PATH,
   CHUNK_LOAD_ERROR_MESSAGE,
   CHUNK_LOAD_FAILED_METRIC,
+  STALE_CHUNK_RELOAD_GUARD_MS,
   STALE_CHUNK_RELOAD_METRIC,
+  STALE_CHUNK_RELOAD_PENDING_KEY,
+  STALE_CHUNK_RELOADED_AT_KEY,
   DATA_UPDATE_CONFIRM_DELAY_MS,
   DATA_VERSION_ENDPOINT_MISCONFIGURED_WARNING,
   STALE_APP_METRIC,
@@ -146,6 +149,15 @@ export const APP_UPDATE_CHECKS_ENABLED = new InjectionToken<boolean>('APP_UPDATE
   factory: () => !isDevMode(),
 });
 
+/** Loads a URL as a new page, replacing the running app. */
+export const PAGE_LOADER = new InjectionToken<(url: string) => void>('PAGE_LOADER', {
+  providedIn: 'root',
+  factory: () => {
+    const document = inject(DOCUMENT);
+    return (url) => document.location.assign(url);
+  },
+});
+
 /**
  * The two versions this service tracks: the app version, which reflects the code the tab runs,
  * and the data version, which reflects the data release it shows.
@@ -248,6 +260,7 @@ export class AppUpdateService {
   private readonly versionService = inject(VersionService);
   private readonly logger = inject(LoggerService).forSource('AppUpdateService');
   private readonly checksEnabled = inject(APP_UPDATE_CHECKS_ENABLED);
+  private readonly loadPage = inject(PAGE_LOADER);
 
   private readonly stale: Record<TrackedVersion, WritableSignal<boolean>> = {
     app: signal(false),
@@ -320,35 +333,68 @@ export class AppUpdateService {
 
     this.router.events
       .pipe(
-        filter((event) => event instanceof NavigationError && isChunkLoadError(event.error)),
+        filter(
+          (event): event is NavigationError =>
+            event instanceof NavigationError && isChunkLoadError(event.error),
+        ),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(() => this.handleChunkLoadError());
+      .subscribe((event) => this.handleChunkLoadError(event.url));
   }
 
   /**
    * Handles a route whose lazy-loaded chunk failed to download, which leaves the page without that
-   * route's content until the tab reloads.
+   * route's content until the tab reloads. `targetUrl` is the page the user was navigating to.
    *
    * The app version is checked first. When the server runs a different version, a deploy most
-   * likely removed the chunk, and the check itself shows the update notice. In every other case
-   * (the version matches, the browser is offline, or the check failed), the download most likely
-   * failed on the network, so the error overlay asks the user to reload.
+   * likely removed the chunk, so the tab loads `targetUrl` as a new page, which gets the current
+   * build and lands the user where they meant to go. Reloading would land them back on the page
+   * they were leaving, since the router only updates the URL once a navigation succeeds. If the
+   * tab already did this within `STALE_CHUNK_RELOAD_GUARD_MS`, it keeps the update notice the check
+   * showed instead.
+   *
+   * In every other case (the version matches, the browser is offline, or the check failed), the
+   * download most likely failed on the network, so the error overlay asks the user to reload.
    *
    * Each failure is counted once in a Sentry metric, labeled with the check's outcome.
    */
-  private async handleChunkLoadError() {
+  private async handleChunkLoadError(targetUrl: string) {
     const outcome = await this.getAppVersionCheckOutcome(AppUpdateCheckTriggerEnum.ChunkLoadError);
     Sentry.metrics.count(CHUNK_LOAD_FAILED_METRIC, 1, { attributes: { outcome } });
-    if (outcome !== AppVersionCheckOutcomeEnum.Stale) {
+    if (outcome === AppVersionCheckOutcomeEnum.Stale) {
+      this.loadPageForStaleChunk(targetUrl);
+    } else {
       this.errorOverlayService.showError(CHUNK_LOAD_ERROR_MESSAGE);
     }
   }
 
   /**
-   * Counts a reload the app server's stale chunk module made before this page loaded, so those
-   * reloads still show up in Sentry. The module sets the pending flag just before reloading, and
-   * it is cleared here so each reload is counted once.
+   * Loads `targetUrl` as a new page, at most once per `STALE_CHUNK_RELOAD_GUARD_MS`. Without
+   * `sessionStorage` (e.g. blocked by privacy settings), the guard cannot be kept, so no page is
+   * loaded and the update notice stays.
+   */
+  private loadPageForStaleChunk(targetUrl: string) {
+    try {
+      const sessionStorage = this.document.defaultView?.sessionStorage;
+      if (!sessionStorage) {
+        return;
+      }
+      const reloadedAt = Number(sessionStorage.getItem(STALE_CHUNK_RELOADED_AT_KEY));
+      if (Date.now() - reloadedAt <= STALE_CHUNK_RELOAD_GUARD_MS) {
+        return;
+      }
+      sessionStorage.setItem(STALE_CHUNK_RELOADED_AT_KEY, String(Date.now()));
+      // Counted by the next page, since a metric recorded now could be lost when this page unloads
+      sessionStorage.setItem(STALE_CHUNK_RELOAD_PENDING_KEY, 'true');
+    } catch {
+      return;
+    }
+    this.loadPage(targetUrl);
+  }
+
+  /**
+   * Counts a page load `loadPageForStaleChunk` made before this page loaded. The pending flag is
+   * cleared here, so each page load is counted once.
    */
   private recordStaleChunkReload(browserWindow: Window) {
     try {

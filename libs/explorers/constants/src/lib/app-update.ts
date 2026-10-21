@@ -22,6 +22,17 @@ export const APP_UPDATE_CONFIRMATION_RETRY_LIMIT = 3;
 export const DATA_UPDATE_CONFIRM_DELAY_MS = 3 * 60 * 1000;
 export const VERSION_CHECK_TIMEOUT_MS = 10 * 1000;
 
+/** When this tab last loaded a new page to replace a stale chunk, in `sessionStorage`. */
+export const STALE_CHUNK_RELOADED_AT_KEY = 'staleChunkReloadedAt';
+/** Set just before that page load, so the loaded app can count it. */
+export const STALE_CHUNK_RELOAD_PENDING_KEY = 'staleChunkReloadPending';
+/**
+ * How long after loading a new page for a stale chunk the tab shows the update overlay instead of
+ * loading another. During a rolling deploy, the new page can still be served by an old task and
+ * request a chunk a new task does not have, which would otherwise load page after page.
+ */
+export const STALE_CHUNK_RELOAD_GUARD_MS = 60 * 1000;
+
 export const CHUNK_LOAD_FAILED_METRIC = 'app.chunk_load_failed';
 export const STALE_CHUNK_RELOAD_METRIC = 'app.stale_chunk_reload';
 export const STALE_APP_METRIC = 'app.stale_app_detected';
