@@ -1,7 +1,8 @@
 @use 'explorers/styles/src/mixins' as mixins;
 
 .error-page {
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  @include mixins.page-min-height;
+
   color: white;
   background-size: cover !important;
 

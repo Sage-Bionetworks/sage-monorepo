@@ -1,14 +1,12 @@
+@use 'explorers/styles/src/mixins' as mixins;
+
 .individual-expression-details {
   &.loading {
     display: flex;
   }
 
   #loading {
-    width: 100%;
-    min-height: calc(100vh - var(--header-height) - var(--footer-height));
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include mixins.page-loading;
   }
 
   .individual-expression-details-header {
