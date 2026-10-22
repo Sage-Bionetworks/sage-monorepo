@@ -28,7 +28,7 @@ export interface OrgSagebionetworksRepoModelSearchSearchQuery {
   collapse?: OrgSagebionetworksRepoModelSearchDslFieldCollapse;
   rescore?: OrgSagebionetworksRepoModelSearchDslRescore;
   /**
-   * Optional. Result <a href=\"https://docs.opensearch.org/latest/search-plugins/searching-data/sort/\">ordering</a>, in native OpenSearch sort shape (a string column name, <code>{column: \"asc|desc\"}</code>, or <code>{column: {order: ..., mode: ..., missing: ...}}</code>) applied in order. Only the <code>field</code> and <code>_score</code> sort kinds are accepted &mdash; script and geo-distance sorts are rejected server-side. The pseudo-column <code>_score</code> sorts by relevance. When omitted, results are sorted by relevance descending.
+   * Optional. Result <a href=\"https://docs.opensearch.org/latest/search-plugins/searching-data/sort/\">ordering</a>, in native OpenSearch sort shape (a string column name, <code>{column: \"asc|desc\"}</code>, or <code>{column: {order: ..., mode: ..., missing: ...}}</code>) applied in order. Only the <code>field</code> and <code>_score</code> sort kinds are accepted &mdash; script and geo-distance sorts are rejected server-side. The pseudo-column <code>_score</code> sorts by relevance. When omitted, results are sorted by relevance descending. Ties are broken by row ID ascending, except when <code>rescore</code> is supplied.
    */
   sort?: Array<any>;
   _source?: OrgSagebionetworksRepoModelSearchDslSourceFilter;

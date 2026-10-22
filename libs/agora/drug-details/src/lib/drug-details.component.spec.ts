@@ -1,7 +1,8 @@
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { DrugService } from '@sagebionetworks/agora/api-client';
-import { AGORA_LOADING_ICON_COLORS } from '@sagebionetworks/agora/config';
+import { AGORA_LOADING_ICON_COLORS, ROUTE_PARAMS } from '@sagebionetworks/agora/config';
 import { drugMock } from '@sagebionetworks/agora/testing';
+import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
@@ -19,7 +20,13 @@ async function setup(
   const user = userEvent.setup();
 
   const mockActivatedRoute = {
-    paramMap: of(convertToParamMap({ chemblId: drug.chembl_id, tab: tab, subtab: subtab })),
+    paramMap: of(
+      convertToParamMap({
+        [ROUTE_PARAMS.CHEMBL_ID]: drug.chembl_id,
+        [PANEL_ROUTE_PARAMS.TAB]: tab,
+        [PANEL_ROUTE_PARAMS.SUBTAB]: subtab,
+      }),
+    ),
   };
 
   const mockDrugService = {

@@ -14,4 +14,11 @@ test.describe('protein details', () => {
       ` This page isn't available right now. `,
     );
   });
+
+  test('url matching no data results in a 404 redirect', async ({ page }) => {
+    await page.goto('/proteins/ENSMUSG00000057738B9EKJ1?model=NotARealModel&tissue=Hemibrain');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      ` This page isn't available right now. `,
+    );
+  });
 });

@@ -167,6 +167,12 @@ export interface ComparisonToolNouns {
 export interface PinnedResultsCounts {
   pinCount: number | null;
   pinnedRowCount: number | null;
+  // Cached pins the active view isn't showing, in `hiddenCountUnit`
+  hiddenCount: number | null;
+  // Whether `hiddenCount` counts the active view's rows or their parents, from the id space the
+  // pins are in. Only a child view tells the two apart, so only there does it pick the line the
+  // count is noted on
+  hiddenCountUnit: ItemIdSpace;
 }
 
 /** One line of the pinned results header. `note` is shown inline after `text`, set off from it. */
@@ -178,6 +184,20 @@ export interface PinnedResultsLabel {
 export interface PinnedResultsLabels {
   heading: PinnedResultsLabel;
   sublabels: PinnedResultsLabel[];
+}
+
+/**
+ * The overwrite hidden pins message. `returnToView` is the sentence naming the view to go back to,
+ * split around that view's dropdown selection so the selection can be rendered apart from the
+ * surrounding text. It is null when there is no other view to go back to.
+ */
+export interface OverwritePinsMessage {
+  lostPins: string;
+  returnToView: {
+    beforeView: string;
+    pinnedView: string[];
+    afterView: string;
+  } | null;
 }
 
 export interface PinnedResultsControlsCopy {

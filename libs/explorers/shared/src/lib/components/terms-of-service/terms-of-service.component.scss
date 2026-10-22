@@ -1,10 +1,12 @@
 /* stylelint-disable media-feature-name-no-unknown */
 @use 'explorers/styles/src/variables' as vars;
+@use 'explorers/styles/src/mixins' as mixins;
 
 #terms-of-service-container {
+  @include mixins.page-min-height;
+
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height) + 1px);
 
   .terms-of-service {
     flex: 1 1 auto;

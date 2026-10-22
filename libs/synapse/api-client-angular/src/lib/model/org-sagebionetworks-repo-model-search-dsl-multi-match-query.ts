@@ -65,10 +65,6 @@ export interface OrgSagebionetworksRepoModelSearchDslMultiMatchQuery {
    */
   tie_breaker?: number;
   /**
-   * Optional. Analyzer used to tokenize the query text. Defaults to each field\'s search analyzer.
-   */
-  analyzer?: string;
-  /**
    * Optional. Maximum number of terms a fuzzy / prefix expansion will generate. Default <code>50</code>.
    */
   max_expansions?: number;

@@ -32,7 +32,7 @@
               [buttonTooltip]="downloadPinsTooltip()"
               [heading]="pinnedResultsControlsCopy().downloadPanelHeading"
               [note]="viewConfig().downloadPinsNote"
-              [disabled]="isLoadingTableData() || pinnedFetchFailed()"
+              [disabled]="isLoadingTableData() || pinnedFetchFailed() || !hasPinnedRows()"
             />
             <button
               (click)="clearAllPinned()"
@@ -48,12 +48,14 @@
       </div>
     }
     @if (pinnedFetchFailed()) {
-      <explorers-comparison-tool-fetch-failed-bar
+      <explorers-comparison-tool-message-bar
         [message]="pinnedFetchFailedMessage()"
         [buttonLabel]="pinnedResultsControls.retryButtonLabel"
         [loading]="isLoadingPinnedData()"
-        (retry)="retryPinnedFetch()"
+        (buttonClick)="retryPinnedFetch()"
       />
+    } @else if (noMatchingPinsMessage(); as message) {
+      <explorers-comparison-tool-message-bar [message]="message" severity="info" />
     } @else {
       <explorers-base-table
         [data]="pinnedData()"
@@ -95,11 +97,11 @@
   }
 
   @if (unpinnedFetchFailed()) {
-    <explorers-comparison-tool-fetch-failed-bar
+    <explorers-comparison-tool-message-bar
       [message]="unpinnedFetchFailedMessage()"
       [buttonLabel]="unpinnedRetryButtonLabel()"
       [loading]="isLoadingUnpinnedData()"
-      (retry)="retryUnpinnedFetch()"
+      (buttonClick)="retryUnpinnedFetch()"
     />
   } @else {
     <explorers-base-table [data]="unpinnedData()" [columnWidths]="columnWidths()" />

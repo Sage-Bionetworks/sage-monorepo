@@ -2,9 +2,11 @@ import { Route } from '@angular/router';
 import {
   DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
   DEFAULT_SYNAPSE_WIKI_OWNER_ID,
+  ROUTE_PARAMS,
   ROUTE_PATHS,
   SUPPORT_EMAIL,
 } from '@sagebionetworks/agora/config';
+import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 
 export const routes: Route[] = [
@@ -73,7 +75,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chemblId`,
+    path: `${ROUTE_PATHS.DRUG_DETAILS}/:${ROUTE_PARAMS.CHEMBL_ID}`,
     loadChildren: () =>
       import('@sagebionetworks/agora/drug-details').then((routes) => routes.routes),
     data: {
@@ -83,12 +85,12 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chemblId/:tab`,
+    path: `${ROUTE_PATHS.DRUG_DETAILS}/:${ROUTE_PARAMS.CHEMBL_ID}/:${PANEL_ROUTE_PARAMS.TAB}`,
     loadChildren: () =>
       import('@sagebionetworks/agora/drug-details').then((routes) => routes.routes),
   },
   {
-    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chemblId/:tab/:subtab`,
+    path: `${ROUTE_PATHS.DRUG_DETAILS}/:${ROUTE_PARAMS.CHEMBL_ID}/:${PANEL_ROUTE_PARAMS.TAB}/:${PANEL_ROUTE_PARAMS.SUBTAB}`,
     loadChildren: () =>
       import('@sagebionetworks/agora/drug-details').then((routes) => routes.routes),
   },
@@ -115,27 +117,27 @@ export const routes: Route[] = [
     pathMatch: 'full',
   },
   {
-    path: 'genes/genes-router:gene-details/:id',
-    redirectTo: 'genes/:id',
+    path: `genes/genes-router:gene-details/:${ROUTE_PARAMS.GENE_ID}`,
+    redirectTo: `genes/:${ROUTE_PARAMS.GENE_ID}`,
     pathMatch: 'full',
   },
   {
-    path: `${ROUTE_PATHS.DETAILS}/:id/similar`,
+    path: `${ROUTE_PATHS.DETAILS}/:${ROUTE_PARAMS.GENE_ID}/similar`,
     loadChildren: () =>
       import('@sagebionetworks/agora/genes').then((routes) => routes.similarRoute),
   },
   {
-    path: `${ROUTE_PATHS.DETAILS}/:id/:tab/:subtab`,
+    path: `${ROUTE_PATHS.DETAILS}/:${ROUTE_PARAMS.GENE_ID}/:${PANEL_ROUTE_PARAMS.TAB}/:${PANEL_ROUTE_PARAMS.SUBTAB}`,
     loadChildren: () =>
       import('@sagebionetworks/agora/genes').then((routes) => routes.detailsRoute),
   },
   {
-    path: `${ROUTE_PATHS.DETAILS}/:id/:tab`,
+    path: `${ROUTE_PATHS.DETAILS}/:${ROUTE_PARAMS.GENE_ID}/:${PANEL_ROUTE_PARAMS.TAB}`,
     loadChildren: () =>
       import('@sagebionetworks/agora/genes').then((routes) => routes.detailsRoute),
   },
   {
-    path: `${ROUTE_PATHS.DETAILS}/:id`,
+    path: `${ROUTE_PATHS.DETAILS}/:${ROUTE_PARAMS.GENE_ID}`,
     loadChildren: () =>
       import('@sagebionetworks/agora/genes').then((routes) => routes.detailsRoute),
     data: {

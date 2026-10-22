@@ -8,6 +8,7 @@ import { ComparisonToolFooterComponent } from './comparison-tool-footer/comparis
 import { ComparisonToolHeaderComponent } from './comparison-tool-header/comparison-tool-header.component';
 import { ComparisonToolTableComponent } from './comparison-tool-table/comparison-tool-table.component';
 import { HeatmapDetailsPanelComponent } from './comparison-tool-table/heatmap-details-panel/heatmap-details-panel.component';
+import { OverwritePinsDialogComponent } from './overwrite-pins-dialog/overwrite-pins-dialog.component';
 
 @Component({
   selector: 'explorers-comparison-tool',
@@ -20,6 +21,7 @@ import { HeatmapDetailsPanelComponent } from './comparison-tool-table/heatmap-de
     ComparisonToolTableComponent,
     ComparisonToolFooterComponent,
     HeatmapDetailsPanelComponent,
+    OverwritePinsDialogComponent,
   ],
   templateUrl: './comparison-tool.component.html',
   styleUrls: ['./comparison-tool.component.scss'],

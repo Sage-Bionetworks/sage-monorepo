@@ -1,10 +1,10 @@
 import { Location } from '@angular/common';
 import { HttpContext } from '@angular/common/http';
-import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Drug, DrugService } from '@sagebionetworks/agora/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { Panel } from '@sagebionetworks/explorers/models';
 import {
   HelperService,
@@ -32,7 +32,7 @@ import { DrugDetailsSummaryComponent } from './components/drug-details-summary/d
   templateUrl: './drug-details.component.html',
   styleUrls: ['./drug-details.component.scss'],
 })
-export class DrugDetailsComponent implements OnInit, AfterViewInit {
+export class DrugDetailsComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   location = inject(Location);
@@ -66,7 +66,6 @@ export class DrugDetailsComponent implements OnInit, AfterViewInit {
   activePanel = '';
   activeParent = '';
 
-  maybeScrollToPanelNavElementOnInitialLoad = false;
   scrollToPanelNavElementOnInitialLoad = false;
 
   reset() {
@@ -88,7 +87,7 @@ export class DrugDetailsComponent implements OnInit, AfterViewInit {
   }
 
   private loadPanelData(params: ParamMap) {
-    const chemblId = params.get('chemblId');
+    const chemblId = params.get(ROUTE_PARAMS.CHEMBL_ID);
     if (chemblId) {
       this.drugService
         .getDrug(chemblId, 'body', false, {
@@ -98,14 +97,10 @@ export class DrugDetailsComponent implements OnInit, AfterViewInit {
         .subscribe({
           next: (drug: Drug) => {
             this.drug = drug;
-            this.setActivePanelAndParentFromUrl(params);
-            this.changePanelAndUrlIfInitialActivePanelIsInvalid();
-            this.scrollToPanelNavElementOnInitialLoad =
-              this.maybeScrollToPanelNavElementOnInitialLoad;
+            this.setInitialPanel(params);
             this.isLoading = false;
           },
           error: () => {
-            this.isLoading = false;
             this.logger.log('loadPanelData: Drug not found, redirecting', { chemblId });
             this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
@@ -113,28 +108,17 @@ export class DrugDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private setActivePanelAndParentFromUrl(params: ParamMap) {
-    const result = this.helperService.getActivePanelAndParentFromUrl(this.panels, params);
-    if (result) {
-      this.activePanel = result.activePanel;
-      this.activeParent = result.activeParent;
-      this.maybeScrollToPanelNavElementOnInitialLoad = result.shouldScrollToPanelNav;
-    }
-  }
-
-  private changePanelAndUrlIfInitialActivePanelIsInvalid() {
-    const fallback = this.helperService.getFallbackPanelIfInvalid(this.panels, this.activePanel);
-    if (fallback) {
-      this.activePanel = fallback.activePanel;
-      this.activeParent = fallback.activeParent;
-      this.location.replaceState(this.getUrlBasePath());
-      this.maybeScrollToPanelNavElementOnInitialLoad = false;
-    }
-  }
-
-  ngAfterViewInit() {
-    if (!this.drug?.chembl_id) {
-      this.isLoading = true;
+  private setInitialPanel(params: ParamMap) {
+    const initial = this.helperService.resolveInitialPanel(
+      this.panels,
+      params,
+      this.getUrlBasePath(),
+    );
+    this.activePanel = initial.activePanel;
+    this.activeParent = initial.activeParent;
+    this.scrollToPanelNavElementOnInitialLoad = initial.shouldScrollToPanelNav;
+    if (initial.replacementUrl) {
+      this.location.replaceState(initial.replacementUrl);
     }
   }
 

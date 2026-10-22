@@ -1,12 +1,24 @@
-import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
+import {
+  DatasetComponentOption,
+  ECharts,
+  EChartsOption,
+  ScatterSeriesOption,
+  SeriesOption,
+} from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 import {
   grayGridBoxplotChartTheme,
   minimalBoxplotChartTheme,
 } from '../chart-theme/boxplot-chart-theme';
-import { DEFAULT_COLOR } from '../constants';
+import {
+  CAPPED_POINT_SPACING_PX,
+  CAPPED_POINT_SYMBOL,
+  CAPPED_POINT_SYMBOL_SIZE,
+  CAPPED_POINT_SERIES_NAME_SUFFIX,
+  DEFAULT_COLOR,
+} from '../constants';
 import { BoxplotProps, CategoryPoint } from '../models';
-import { BoxplotChartTheme } from '../models/boxplot';
+import { BoxplotChartTheme, CappedCategoryPoint } from '../models/boxplot';
 import {
   addXAxisValueToBoxplotSummaries,
   addXAxisValueToCategoryPoint,
@@ -15,17 +27,29 @@ import {
   getCategoryPointColor,
   getCategoryPointShape,
   getCategoryPointStyle,
+  getOffsetAndJitteredXValue,
   getUniqueValues,
   initChart,
   setNoDataOption,
 } from '../utils';
 
 const yAxisPadding = 0.2;
+const valueXAxisId = 'value-x-axis';
 const defaultPointShape = 'circle';
 const defaultPointOpacity = 0.8;
 
 const defaultPointCategoryOffset = 0.3;
 const defaultPointCategoryJitterMax = 0.02;
+
+// Drawing order, bottom to top. Lane fills stay below the axes so they never cover the axis lines,
+// and series draw above the axes so grid lines run behind boxes and points. ECharts ignores a z set
+// on a series' markArea, so the lane level is set chart-wide on the markArea option instead.
+const laneZ = 10;
+const axisZ = laneZ + 1;
+const boxplotZ = axisZ + 1;
+const pointZ = boxplotZ + 1;
+// Capped points go on top so a value above the cutoff is never hidden.
+const cappedPointZ = pointZ + 1;
 
 export class BoxplotChart {
   chart: ECharts | undefined;
@@ -88,10 +112,9 @@ export class BoxplotChart {
     //           value, not the displayed text.
     const xAxisOptions: EChartsOption['xAxis'] = [
       {
-        id: 'value-x-axis',
+        id: valueXAxisId,
         type: 'value',
-        // Ensure axes render above series markAreas
-        z: 10,
+        z: axisZ,
         axisLine: {
           onZero: false,
         },
@@ -111,7 +134,7 @@ export class BoxplotChart {
       {
         id: 'category-x-axis',
         type: 'category',
-        z: 10,
+        z: axisZ,
         data: xAxisCategories,
         axisLabel: {
           ...boxplotChartTheme.xAxisLabelTextStyle,
@@ -164,8 +187,7 @@ export class BoxplotChart {
   ) {
     const yAxisOptions: EChartsOption['yAxis'] = {
       type: 'value',
-      // Ensure axes render above series markAreas
-      z: 10,
+      z: axisZ,
       name: yAxisTitle,
       nameLocation: 'middle',
       nameGap: boxplotChartTheme.yAxisTickLabelMaxWidth,
@@ -191,6 +213,49 @@ export class BoxplotChart {
     return yAxisOptions;
   }
 
+  // Capped points skip the jitter and are spread in pixels rather than axis units,
+  // so the spacing stays even however wide the chart renders.
+  private getCappedPoints(
+    points: CategoryPoint[],
+    capAt: number,
+    xAxisCategories: string[],
+    pointCategories: string[],
+  ): CappedCategoryPoint[] {
+    const pointsAboveCap = addXAxisValueToCategoryPoint(
+      points.filter((pt) => pt.value > capAt).sort((a, b) => a.value - b.value),
+      xAxisCategories,
+      pointCategories,
+      defaultPointCategoryOffset,
+      0,
+    );
+    return pointsAboveCap.map((pt) => {
+      const group = pointsAboveCap.filter((other) => other.xAxisValue === pt.xAxisValue);
+      const offsetIndex = group.indexOf(pt) - (group.length - 1) / 2;
+      return {
+        ...pt,
+        cappedValue: capAt,
+        cappedOffsetIndex: offsetIndex,
+        cappedGroupSize: group.length,
+      };
+    });
+  }
+
+  // Capped points sit CAPPED_POINT_SPACING_PX apart, but squeeze closer on narrow charts so a
+  // group never crosses into the next point category's column, as getOffsetAndJitteredXValue
+  // does for points.
+  private getCappedPointSpacingPx(groupSize: number, pointCategoryCount: number) {
+    if (groupSize < 2 || !this.chart) return CAPPED_POINT_SPACING_PX;
+    const xAxis = { xAxisId: valueXAxisId };
+    const pxPerCategory = this.chart.convertToPixel(xAxis, 1) - this.chart.convertToPixel(xAxis, 0);
+    const columnGap =
+      pointCategoryCount > 1
+        ? getOffsetAndJitteredXValue(1, 1, pointCategoryCount, defaultPointCategoryOffset) -
+          getOffsetAndJitteredXValue(1, 0, pointCategoryCount, defaultPointCategoryOffset)
+        : 1;
+    const roomPx = (columnGap / 2) * pxPerCategory - CAPPED_POINT_SYMBOL_SIZE / 2;
+    return Math.max(0, Math.min(CAPPED_POINT_SPACING_PX, roomPx / ((groupSize - 1) / 2)));
+  }
+
   setOptions(boxplotProps: BoxplotProps) {
     if (!this.chart) return;
 
@@ -203,6 +268,7 @@ export class BoxplotChart {
       yAxisTitle,
       yAxisMin,
       yAxisMax,
+      capPointsAboveYAxisMax,
       xAxisLabelTooltipFormatter,
       pointTooltipFormatter,
       pointCategoryColors,
@@ -245,6 +311,14 @@ export class BoxplotChart {
       defaultPointCategoryOffset,
       defaultPointCategoryJitterMax,
     );
+    const inRangeScatterPoints = yAxisMax
+      ? dataForScatterPoints.filter((pt) => pt.value <= yAxisMax)
+      : dataForScatterPoints;
+    const capAt = capPointsAboveYAxisMax && yAxisMax ? yAxisMax : undefined;
+    const cappedPoints =
+      capAt === undefined
+        ? []
+        : this.getCappedPoints(points, capAt, xAxisCategories, pointCategories);
     const dataForStaticBoxplotSummaries = summaries
       ? addXAxisValueToBoxplotSummaries(summaries, xAxisCategories)
       : undefined;
@@ -265,7 +339,7 @@ export class BoxplotChart {
       {
         id: basePointsDatasetId,
         dimensions: noPoints ? undefined : Object.keys(dataForScatterPoints[0]),
-        source: dataForScatterPoints,
+        source: inRangeScatterPoints,
       },
       {
         id: 'points-formatted-for-boxplot-transform',
@@ -303,7 +377,7 @@ export class BoxplotChart {
     // boxplots
     const boxplotSeriesBase: SeriesOption = {
       type: 'boxplot',
-      z: 1,
+      z: boxplotZ,
       itemStyle: {
         ...boxplotChartTheme.boxplotItemStyle,
         ...(boxplotBoxStyle?.fillColor ? { color: boxplotBoxStyle.fillColor } : {}),
@@ -339,7 +413,7 @@ export class BoxplotChart {
       seriesOpts.push({
         ...boxplotSeriesBase,
         datasetId: 'static-boxplot-summaries',
-        xAxisId: 'value-x-axis',
+        xAxisId: valueXAxisId,
         encode: {
           x: 'xAxisValue',
           y: ['min', 'firstQuartile', 'median', 'thirdQuartile', 'max'],
@@ -349,17 +423,18 @@ export class BoxplotChart {
       seriesOpts.push({
         ...boxplotSeriesBase,
         datasetId: 'dynamic-boxplot-summaries',
-        xAxisId: 'value-x-axis',
+        xAxisId: valueXAxisId,
       });
     }
 
     // points series for each points dataset
     pointDatasetIds.forEach((id) => {
-      seriesOpts.push({
+      const pointSeries: ScatterSeriesOption = {
         type: 'scatter',
+        z: pointZ,
         datasetId: id,
         name: id,
-        xAxisId: 'value-x-axis',
+        xAxisId: valueXAxisId,
         encode: {
           x: 'xAxisValue',
           y: 'value',
@@ -399,10 +474,39 @@ export class BoxplotChart {
             return `${pt.value}`;
           },
         },
-      });
+      };
+      seriesOpts.push(pointSeries);
+
+      const cappedSource = cappedPoints.filter(
+        (pt) => id === basePointsDatasetId || pt.pointCategory === id,
+      );
+      if (cappedSource.length > 0) {
+        const cappedDatasetId = `capped-${id}`;
+        datasetOpts.push({
+          id: cappedDatasetId,
+          dimensions: Object.keys(cappedSource[0]),
+          source: cappedSource,
+        });
+        seriesOpts.push({
+          ...pointSeries,
+          datasetId: cappedDatasetId,
+          name: `${id}${CAPPED_POINT_SERIES_NAME_SUFFIX}`,
+          encode: { x: 'xAxisValue', y: 'cappedValue' },
+          symbol: CAPPED_POINT_SYMBOL,
+          symbolSize: CAPPED_POINT_SYMBOL_SIZE,
+          symbolKeepAspect: true,
+          symbolOffset: (pt: CappedCategoryPoint) => [
+            pt.cappedOffsetIndex *
+              this.getCappedPointSpacingPx(pt.cappedGroupSize, pointCategories.length),
+            0,
+          ],
+          z: cappedPointZ,
+        });
+      }
     });
 
     const option: EChartsOption = {
+      markArea: { z: laneZ },
       legend: {
         show: showLegend,
         data: pointDatasetIds,

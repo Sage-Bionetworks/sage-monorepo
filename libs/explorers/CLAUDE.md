@@ -66,6 +66,12 @@ comparison-tool / charts-angular / ui / util / shared   (feature/UI)
 
 All imports use `@sagebionetworks/explorers/<lib-name>` path aliases. Never use relative paths across library boundaries.
 
+## Comparison Tool Navigation and Service Lifetime
+
+The comparison tool writes all of its state to the URL with `replaceUrl`, and header links into an open tool replace too (`COMPARISON_TOOL_HEADER_LINK_OPTIONS`), so no change within a CT adds a history entry. Back/forward never lands on another state of the same CT. It leaves the CT, which destroys the component. Don't flag history-navigation races inside the CT.
+
+Leaving the CT does not destroy `ComparisonToolService`. Each CT provides it in its route's `providers` (e.g. `differential-expression-comparison-tool.routes.ts`), and Angular keeps a route's injector alive after navigating away, so the service and its state survive and are reused when the user returns. Anything that must not outlive a visit, such as a pin edit held for confirmation, has to be reset in `disconnect()`, which each product's CT component calls in `ngOnDestroy`.
+
 ## Backend and Database
 
 The explorers products use MongoDB locally but Amazon DocumentDB in the deployed stack. Any MongoDB query or aggregation change must be verified for DocumentDB compatibility -- not all MongoDB features are supported. To check the current DocumentDB engine version for a product, ask the user first -- they'll usually know. If not, consult the relevant infra repo:

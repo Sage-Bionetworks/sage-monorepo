@@ -88,10 +88,13 @@ export const getFiltersQueryParams = (url: string): Record<string, string[]> => 
   return filters;
 };
 
-export const getPinnedTable = (page: Page): Locator => page.locator('explorers-base-table').first();
+// Scoped to each table's region rather than picked by position, since a message bar can stand in
+// for either table, e.g. when no pins match the current view or a fetch fails
+export const getPinnedTable = (page: Page): Locator =>
+  page.locator('.table-header-and-pinned explorers-base-table');
 
 export const getUnpinnedTable = (page: Page): Locator =>
-  page.locator('explorers-base-table').last();
+  page.locator('.comparison-tool-table > explorers-base-table');
 
 const getPaginatorRange = (page: Page): Locator => page.locator('.p-paginator-current');
 

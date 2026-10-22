@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { baseURL } from '../playwright.config';
 
 const chemblId = 'CHEMBL2105759';
 const drugBankId = 'DB11817';
@@ -10,6 +11,14 @@ test.describe('drug details', () => {
   test('valid drug displays drug name', async ({ page }) => {
     await page.goto(drugPath);
     await expect(page.getByRole('heading', { level: 1, name: drugName })).toBeVisible();
+  });
+
+  test('invalid drug results in a 404 redirect', async ({ page }) => {
+    await page.goto('/drugs/CHEMBL0000000');
+    await expect(page).toHaveTitle('Agora | Page Not Found');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      ` This page isn't available right now. `,
+    );
   });
 
   test('default tab is summary', async ({ page }) => {
@@ -26,6 +35,13 @@ test.describe('drug details', () => {
     await page.goto(`${drugPath}/does-not-exist`);
     await page.waitForURL(drugPath);
     await expect(page.getByText('Modality')).toBeVisible();
+  });
+
+  test('url without a tab keeps its query parameters and hash fragment', async ({ page }) => {
+    const urlWithoutTab = `${drugPath}?source=newsletter#summary`;
+    await page.goto(urlWithoutTab);
+    await expect(page.getByText('Modality')).toBeVisible();
+    await expect(page).toHaveURL(`${baseURL}${urlWithoutTab}`);
   });
 });
 

@@ -14,4 +14,11 @@ test.describe('gene details', () => {
       ` This page isn't available right now. `,
     );
   });
+
+  test('url matching no data results in a 404 redirect', async ({ page }) => {
+    await page.goto('/genes/ENSMUSG00000033417?model=NotARealModel&tissue=Hippocampus');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      ` This page isn't available right now. `,
+    );
+  });
 });

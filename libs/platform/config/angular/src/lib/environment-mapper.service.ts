@@ -5,6 +5,8 @@ import { isPlatformServer } from '@angular/common';
  * Service for mapping environment variables to configuration properties
  * Follows Spring Boot convention: foo.bar.baz → FOO_BAR_BAZ
  * Also supports camelCase: csrApiUrl → CSR_API_URL
+ * An override takes the type of the value it replaces: it stays a string where the config file
+ * value is a string, and is parsed (boolean, number, JSON) otherwise.
  */
 @Injectable({
   providedIn: 'root',
@@ -54,7 +56,7 @@ export class EnvironmentMapperService {
         this.applyOverridesRecursive(value, currentPath);
       } else {
         // Check for environment variable override
-        const envValue = this.getEnvironmentValue(currentPath);
+        const envValue = this.getEnvironmentValue(currentPath, value);
         if (envValue !== undefined) {
           obj[key] = envValue;
         }
@@ -69,9 +71,11 @@ export class EnvironmentMapperService {
    * 2. SCREAMING_SNAKE_CASE with double underscores: FOO__BAR__BAZ
    *
    * @param path - Property path as array (e.g., ['api', 'csr', 'url'])
+   * @param configFileValue - The value being overridden; a string keeps the override unparsed, so
+   *   values that only look like numbers, such as a commit SHA made of digits, stay strings
    * @returns Parsed environment variable value or undefined
    */
-  private getEnvironmentValue(path: string[]): any {
+  private getEnvironmentValue(path: string[], configFileValue: unknown): any {
     const envVarNames = [
       // Convert to SCREAMING_SNAKE_CASE with single underscores
       path.map((segment) => this.toScreamingSnakeCase(segment)).join('_'),
@@ -82,7 +86,9 @@ export class EnvironmentMapperService {
     for (const envVarName of envVarNames) {
       const envValue = process.env[envVarName];
       if (envValue !== undefined) {
-        return this.parseEnvironmentValue(envValue);
+        return typeof configFileValue === 'string'
+          ? envValue
+          : this.parseEnvironmentValue(envValue);
       }
     }
 
@@ -171,7 +177,7 @@ export class EnvironmentMapperService {
       if (value && typeof value === 'object' && !Array.isArray(value)) {
         this.collectMatchingEnvVars(value, currentPath, matches);
       } else {
-        const envValue = this.getEnvironmentValue(currentPath);
+        const envValue = this.getEnvironmentValue(currentPath, value);
         if (envValue !== undefined) {
           const pathString = currentPath.join('.');
           matches[pathString] = envValue;

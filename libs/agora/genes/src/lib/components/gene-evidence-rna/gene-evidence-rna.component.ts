@@ -7,7 +7,7 @@ import {
   RnaDifferentialExpression,
 } from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent, MedianBarChartComponent } from '@sagebionetworks/agora/charts';
-import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID, QUERY_PARAMS } from '@sagebionetworks/agora/config';
 import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { CandlestickItem, ForestPlotItem } from '@sagebionetworks/explorers/charts';
@@ -130,7 +130,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
 
     this.statisticalModels = getStatisticalModels(this._gene);
 
-    const urlModelParam = this.explorersHelperService.getUrlParam('model');
+    const urlModelParam = this.explorersHelperService.getUrlParam(QUERY_PARAMS.MODEL);
     this.selectedStatisticalModel = urlModelParam || this.statisticalModels[0];
 
     this.initMedianExpression();

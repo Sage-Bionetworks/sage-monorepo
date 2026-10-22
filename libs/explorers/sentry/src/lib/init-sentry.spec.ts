@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/angular';
 import type { ErrorEvent, EventHint } from '@sentry/angular';
-import { initSentry, SentryConfig } from './init-sentry';
+import { initSentry, SENTRY_DATA_COLLECTION, SentryConfig } from './init-sentry';
 
 jest.mock('@sentry/angular', () => ({
   init: jest.fn(),
@@ -35,9 +35,23 @@ describe('initSentry', () => {
       dsn: mockConfig.dsn,
       environment: 'dev',
       release: 'agora@1.0.0+abc1234',
-      sendDefaultPii: false,
+      dataCollection: SENTRY_DATA_COLLECTION,
       beforeSend: expect.any(Function),
     });
+  });
+
+  it('does not collect user info, cookies, or HTTP bodies', () => {
+    initSentry(mockConfig);
+
+    expect(Sentry.init).toHaveBeenCalledWith(
+      expect.objectContaining({
+        dataCollection: expect.objectContaining({
+          userInfo: false,
+          cookies: false,
+          httpBodies: [],
+        }),
+      }),
+    );
   });
 
   it('passes release: undefined when release is not provided', () => {

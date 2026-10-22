@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { QUERY_PARAMS } from '@sagebionetworks/agora/config';
 import { removeParentheses } from '@sagebionetworks/shared/util';
 import { SelectModule } from 'primeng/select';
 
@@ -40,7 +41,7 @@ export class GeneModelSelectorComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      const modelFromURL = params['model'];
+      const modelFromURL = params[QUERY_PARAMS.MODEL];
       let index = this._options.findIndex((o) => o.value === modelFromURL);
       if (index === -1) {
         // default to first option if page is loaded without a model parameter

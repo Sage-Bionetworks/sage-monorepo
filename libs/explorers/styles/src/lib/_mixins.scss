@@ -36,6 +36,19 @@
   }
 }
 
+@mixin page-min-height {
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+}
+
+@mixin page-loading {
+  @include page-min-height;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /**
 * Responsive breakpoint manager
 * https://sass-guidelin.es/#architecture
@@ -55,5 +68,44 @@
     }
   } @else {
     @error 'No value found for `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.';
+  }
+}
+
+// The shared look of the comparison tool's dialogs. Include it in the dialog's `styleClass` rule,
+// in a stylesheet with `ViewEncapsulation.None`, since it styles PrimeNG's dialog parts
+@mixin ct-dialog {
+  color: var(--color-text);
+  max-width: 580px;
+  width: 100%;
+  box-sizing: content-box;
+
+  .p-dialog-header {
+    padding: 20px 40px;
+
+    .p-dialog-title {
+      font-size: 28px;
+      font-weight: 600;
+    }
+  }
+
+  .p-dialog-content {
+    padding: 0 40px;
+  }
+
+  .p-dialog-footer {
+    padding: 20px 40px;
+  }
+}
+
+// A checkbox and its label, side by side, in a comparison tool dialog
+@mixin ct-dialog-checkbox {
+  display: flex;
+  column-gap: 0.5rem;
+  align-items: center;
+
+  label {
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    user-select: none;
   }
 }

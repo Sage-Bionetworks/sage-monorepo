@@ -1,17 +1,22 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router, RouterOutlet } from '@angular/router';
+import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelOrganism, ModelService } from '@sagebionetworks/model-ad/api-client';
-import { MODEL_AD_LOADING_ICON_COLORS, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import {
+  MODEL_AD_LOADING_ICON_COLORS,
+  ROUTE_PARAMS,
+  ROUTE_PATHS,
+} from '@sagebionetworks/model-ad/config';
 import { marmosetModelMock, mouseModelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { MessageService } from 'primeng/api';
 import { of, switchMap, throwError, timer } from 'rxjs';
 import { ModelDetailsComponent } from './model-details.component';
-import { MessageService } from 'primeng/api';
 
 const NOT_FOUND_DELAY_MS = 10;
 
@@ -30,7 +35,11 @@ async function setup(
 ) {
   const user = userEvent.setup();
 
-  const paramMap = convertToParamMap({ name: model.name, tab: tab, subtab: subtab });
+  const paramMap = convertToParamMap({
+    [ROUTE_PARAMS.MODEL_NAME]: model.name,
+    [PANEL_ROUTE_PARAMS.TAB]: tab,
+    [PANEL_ROUTE_PARAMS.SUBTAB]: subtab,
+  });
   const queryParamMap = convertToParamMap(modelOrganism === null ? {} : { modelOrganism });
   const mockActivatedRoute = {
     paramMap: of(paramMap),
@@ -155,7 +164,10 @@ describe('ModelDetailsComponent', () => {
       const { navigate } = await render('<router-outlet></router-outlet>', {
         imports: [RouterOutlet, LoadingIconComponent],
         routes: [
-          { path: `${ROUTE_PATHS.MODELS}/:name`, component: ModelDetailsComponent },
+          {
+            path: `${ROUTE_PATHS.MODELS}/:${ROUTE_PARAMS.MODEL_NAME}`,
+            component: ModelDetailsComponent,
+          },
           { path: ROUTE_PATHS.NOT_FOUND, component: NotFoundStubComponent },
         ],
         initialRoute: `/${ROUTE_PATHS.MODELS}/${marmosetModelMock.name}?modelOrganism=marmoset`,

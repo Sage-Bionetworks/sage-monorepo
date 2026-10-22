@@ -37,6 +37,19 @@ export const ROUTE_PATHS = {
   ERROR: 'error',
 } as const;
 
+export const ROUTE_PARAMS = {
+  ENSEMBL_GENE_ID: 'ensemblGeneId',
+  MODEL_NAME: 'name',
+  UNIQUE_ID: 'uniqueId',
+} as const;
+
+export const QUERY_PARAMS = {
+  MODEL: 'model',
+  MODEL_GROUP: 'modelGroup',
+  MODEL_ORGANISM: 'modelOrganism',
+  TISSUE: 'tissue',
+} as const;
+
 // First-level category values only. The URL's `categories` is a comma-separated, outermost-first
 // list; each value here must stay its first entry so the header keeps the link active as the page
 // appends deeper levels (tissue, ...). See header isLinkActive.

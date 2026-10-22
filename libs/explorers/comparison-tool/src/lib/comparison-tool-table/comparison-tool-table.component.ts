@@ -6,11 +6,13 @@ import {
   ElementRef,
   HostListener,
   inject,
+  linkedSignal,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import {
+  getNoMatchingPinsMessage,
   getPinAllTooltip,
   getPinnedFetchFailedMessage,
   getPinnedResultsControlsCopy,
@@ -42,7 +44,7 @@ import {
   resolveFixedColumnWidths,
   restoreCellStyles,
 } from './comparison-tool-table.helpers';
-import { FetchFailedBarComponent } from './fetch-failed-bar/fetch-failed-bar.component';
+import { MessageBarComponent } from './message-bar/message-bar.component';
 
 @Component({
   selector: 'explorers-comparison-tool-table',
@@ -52,7 +54,7 @@ import { FetchFailedBarComponent } from './fetch-failed-bar/fetch-failed-bar.com
     SvgIconComponent,
     BaseTableComponent,
     DownloadDomImageComponent,
-    FetchFailedBarComponent,
+    MessageBarComponent,
   ],
   templateUrl: './comparison-tool-table.component.html',
   styleUrls: ['./comparison-tool-table.component.scss'],
@@ -68,7 +70,6 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   pinnedRowCount = this.comparisonToolService.pinnedRowCount;
   pinnedResultsCounts = this.comparisonToolService.pinnedResultsCounts;
-  nounsForPinCount = this.comparisonToolService.nounsForPinCount;
   nouns = this.comparisonToolService.nouns;
   canPinAll = this.comparisonToolService.canPinAll;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
@@ -94,12 +95,40 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   pinnedResultsControlsCopy = computed(() => getPinnedResultsControlsCopy(this.nouns()));
 
   pinnedResultsLabels = computed(() =>
-    getPinnedResultsLabels(this.pinnedResultsCounts(), this.nounsForPinCount()),
+    getPinnedResultsLabels(this.pinnedResultsCounts(), this.nouns()),
   );
 
-  hasPinnedSection = computed(() => this.pinnedRowCount() > 0 || this.pinnedFetchFailed());
+  hasPinnedRows = computed(() => this.pinnedRowCount() > 0);
+  hasHiddenPins = computed(() => (this.pinnedResultsCounts().hiddenCount ?? 0) > 0);
 
-  pinnedFetchFailedMessage = computed(() => getPinnedFetchFailedMessage(this.nouns()));
+  // Drawn while any pins are cached, so hidden pins don't look lost, and the section stays put while
+  // a refetch makes the hidden count unknown
+  hasPinnedSection = computed(
+    () => this.hasPinnedRows() || this.comparisonToolService.pinnedItems().length > 0,
+  );
+
+  private readonly currentNoMatchingPinsMessage = computed(() =>
+    this.hasPinnedRows() || !this.hasHiddenPins()
+      ? null
+      : getNoMatchingPinsMessage(this.comparisonToolService.hiddenRowCount(), this.nouns()),
+  );
+
+  // Kept while pinned rows reload, like the rows themselves, so the pinned section doesn't shift
+  noMatchingPinsMessage = linkedSignal<
+    { message: string | null; isLoading: boolean },
+    string | null
+  >({
+    source: () => ({
+      message: this.currentNoMatchingPinsMessage(),
+      isLoading: this.isLoadingPinnedData(),
+    }),
+    computation: ({ message, isLoading }, previous) =>
+      isLoading ? (previous?.value ?? null) : message,
+  });
+
+  pinnedFetchFailedMessage = computed(() =>
+    getPinnedFetchFailedMessage(this.comparisonToolService.failedPinnedRowCount(), this.nouns()),
+  );
 
   unpinnedFetchFailedMessage = computed(() => getUnpinnedFetchFailedMessage(this.nouns()));
 

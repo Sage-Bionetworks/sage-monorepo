@@ -27,6 +27,7 @@ import {
   COMPARISON_TOOL_HEADER_TITLES,
   COMPARISON_TOOL_NAV_TRAILS,
   COMPARISON_TOOL_PATHS,
+  DIFFERENTIAL_EXPRESSION_CEREBRAL_CORTEX_TISSUE,
   DIFFERENTIAL_EXPRESSION_PROTEIN_HEMIBRAIN_CATEGORIES,
   DIFFERENTIAL_EXPRESSION_RNA_CATEGORY,
   DIFFERENTIAL_EXPRESSION_RNA_HEMIBRAIN_CATEGORIES,
@@ -128,7 +129,7 @@ export const fetchDiseaseCorrelations = async (
 
 const DEFAULT_TRANSCRIPTOMICS_CATEGORIES = [
   DIFFERENTIAL_EXPRESSION_RNA_CATEGORY,
-  'Tissue - Cerebral Cortex',
+  DIFFERENTIAL_EXPRESSION_CEREBRAL_CORTEX_TISSUE,
 ];
 
 export const fetchTranscriptomics = async (
@@ -177,14 +178,13 @@ export const getProteinIds = (rows: Proteomics[], gene: string) =>
 
 const searchGenes = (genes: string[]) => [...new Set(genes.map(getEnsemblGeneId))].join(',');
 
-// The Hemibrain RNA rows of the given genes, in the table's default sort order
-export const fetchRnaRows = async (page: Page, genes: string[]): Promise<Transcriptomics[]> => {
-  const rows = await fetchTranscriptomics(
-    page,
-    DIFFERENTIAL_EXPRESSION_RNA_HEMIBRAIN_CATEGORIES,
-    {},
-    { search: searchGenes(genes) },
-  );
+// The RNA rows of the given genes, in the table's default sort order. Defaults to Hemibrain
+export const fetchRnaRows = async (
+  page: Page,
+  genes: string[],
+  categories: string[] = DIFFERENTIAL_EXPRESSION_RNA_HEMIBRAIN_CATEGORIES,
+): Promise<Transcriptomics[]> => {
+  const rows = await fetchTranscriptomics(page, categories, {}, { search: searchGenes(genes) });
   return rows.filter((row) => genes.includes(row.composite_id));
 };
 

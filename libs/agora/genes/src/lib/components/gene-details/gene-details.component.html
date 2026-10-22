@@ -1,105 +1,41 @@
-@if (gene) {
-  <div class="gene-details">
-    <agora-gene-hero [gene]="gene"></agora-gene-hero>
-    <div class="gene-details-nav" [class.has-active-child]="activeParent">
-      <div class="gene-details-nav-inner">
-        @if (navSlideIndex > 0) {
-          <button
-            class="gene-details-nav-scroll gene-details-nav-scroll-prev"
-            (click)="slideNavigation(-1)"
-          >
-            <fa-icon [icon]="faAngleLeft"></fa-icon>
-          </button>
-        }
-        <div class="gene-details-nav-container">
-          <ul>
-            @for (item of panels; track item) {
-              @if (!item.disabled) {
-                <li
-                  class="gene-details-nav-item"
-                  [class.active]="activePanel === item.name || activeParent === item.name"
-                >
-                  <a (click)="onNavigationItemClick(item)">
-                    {{ item.label }}
-                    <span class="gene-details-nav-icon"></span>
-                  </a>
-                  @if (item.children) {
-                    <div class="gene-details-subnav">
-                      <ul>
-                        @for (subItem of item.children; track subItem) {
-                          @if (!subItem.disabled) {
-                            <li
-                              class="gene-details-subnav-item"
-                              [class.active]="activePanel === subItem.name"
-                            >
-                              <a (click)="onNavigationItemClick(subItem)">
-                                {{ subItem.label }}
-                                <span class="gene-details-nav-icon"></span>
-                              </a>
-                            </li>
-                          }
-                        }
-                      </ul>
-                    </div>
-                  }
-                </li>
-              }
-            }
-          </ul>
-        </div>
-        @if (navSlideIndex < getPanelCount() - 1) {
-          <button
-            class="gene-details-nav-scroll gene-details-nav-scroll-next"
-            (click)="slideNavigation(1)"
-          >
-            <fa-icon [icon]="faAngleRight"></fa-icon>
-          </button>
-        }
-      </div>
+<div [class]="{ 'gene-details': true, loading: isLoading }">
+  @if (isLoading) {
+    <div id="loading">
+      <explorers-loading-icon />
     </div>
-
-    <div class="gene-details-body">
-      @if (activePanel === 'summary') {
-        <div class="gene-details-panel active">
-          <agora-gene-soe [gene]="gene"></agora-gene-soe>
-        </div>
-      }
-
-      @if (activePanel === 'rna') {
-        <div class="gene-details-panel active">
-          <agora-gene-evidence-rna [gene]="gene"></agora-gene-evidence-rna>
-        </div>
-      }
-
-      @if (activePanel === 'protein') {
-        <div class="gene-details-panel active">
-          <agora-gene-evidence-proteomics [gene]="gene"></agora-gene-evidence-proteomics>
-        </div>
-      }
-
-      @if (activePanel === 'metabolomics') {
-        <div class="gene-details-panel active">
-          <agora-gene-evidence-metabolomics [gene]="gene"></agora-gene-evidence-metabolomics>
-        </div>
-      }
-
-      @if (activePanel === 'resources') {
-        <div class="gene-details-panel active">
-          <agora-gene-resources [gene]="gene"></agora-gene-resources>
-        </div>
-      }
-
-      @if (activePanel === 'nominations') {
-        <div class="gene-details-panel active">
-          <agora-gene-nominations [gene]="gene"></agora-gene-nominations>
-        </div>
-      }
-
-      @if (activePanel === 'experimental-validation') {
-        <div class="gene-details-panel active">
-          <agora-gene-experimental-validation [gene]="gene"></agora-gene-experimental-validation>
-        </div>
+  } @else if (gene) {
+    <agora-gene-hero [gene]="gene" />
+    <explorers-panel-navigation
+      [panels]="panels"
+      (panelChange)="onPanelChange($event)"
+      [activePanel]="activePanel"
+      [activeParent]="activeParent"
+      [scrollToPanelNavElementOnInitialLoad]="scrollToPanelNavElementOnInitialLoad"
+    />
+    <div class="panel-content">
+      @switch (activePanel) {
+        @case ('summary') {
+          <agora-gene-soe [gene]="gene" />
+        }
+        @case ('rna') {
+          <agora-gene-evidence-rna [gene]="gene" />
+        }
+        @case ('protein') {
+          <agora-gene-evidence-proteomics [gene]="gene" />
+        }
+        @case ('metabolomics') {
+          <agora-gene-evidence-metabolomics [gene]="gene" />
+        }
+        @case ('resources') {
+          <agora-gene-resources [gene]="gene" />
+        }
+        @case ('nominations') {
+          <agora-gene-nominations [gene]="gene" />
+        }
+        @case ('experimental-validation') {
+          <agora-gene-experimental-validation [gene]="gene" />
+        }
       }
     </div>
-  </div>
-}
+  }
+</div>
