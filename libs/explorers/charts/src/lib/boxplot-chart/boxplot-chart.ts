@@ -18,7 +18,7 @@ import {
   DEFAULT_COLOR,
 } from '../constants';
 import { BoxplotProps, CategoryPoint } from '../models';
-import { BoxplotChartTheme } from '../models/boxplot';
+import { BoxplotChartTheme, CappedCategoryPoint } from '../models/boxplot';
 import {
   addXAxisValueToBoxplotSummaries,
   addXAxisValueToCategoryPoint,
@@ -220,7 +220,7 @@ export class BoxplotChart {
     capAt: number,
     xAxisCategories: string[],
     pointCategories: string[],
-  ) {
+  ): CappedCategoryPoint[] {
     const pointsAboveCap = addXAxisValueToCategoryPoint(
       points.filter((pt) => pt.value > capAt).sort((a, b) => a.value - b.value),
       xAxisCategories,
@@ -495,7 +495,7 @@ export class BoxplotChart {
           symbol: CAPPED_POINT_SYMBOL,
           symbolSize: CAPPED_POINT_SYMBOL_SIZE,
           symbolKeepAspect: true,
-          symbolOffset: (pt) => [
+          symbolOffset: (pt: CappedCategoryPoint) => [
             pt.cappedOffsetIndex *
               this.getCappedPointSpacingPx(pt.cappedGroupSize, pointCategories.length),
             0,

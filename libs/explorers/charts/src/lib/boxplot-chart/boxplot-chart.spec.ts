@@ -7,6 +7,7 @@ import {
 } from '../constants';
 import { staticBoxplotPoints, staticBoxplotSummaries } from '../mocks';
 import { BoxplotProps, CategoryPoint } from '../models';
+import { CappedCategoryPoint } from '../models/boxplot';
 import { initChart, setNoDataOption } from '../utils';
 import { BoxplotChart } from './boxplot-chart';
 
@@ -17,13 +18,6 @@ jest.mock('../utils', () => ({
   initChart: jest.fn(),
   setNoDataOption: jest.fn(),
 }));
-
-type CappedRow = CategoryPoint & {
-  xAxisValue: number;
-  cappedValue: number;
-  cappedOffsetIndex: number;
-  cappedGroupSize: number;
-};
 
 function makeChart(props: Partial<BoxplotProps> = {}): BoxplotChart {
   return new BoxplotChart(document.createElement('div'), {
@@ -216,8 +210,8 @@ describe('BoxplotChart', () => {
       });
     }
 
-    function getCappedRows(pointCategory: string): CappedRow[] {
-      return getDatasetSource(`capped-${pointCategory}`) as CappedRow[];
+    function getCappedRows(pointCategory: string): CappedCategoryPoint[] {
+      return getDatasetSource(`capped-${pointCategory}`) as CappedCategoryPoint[];
     }
 
     it('adds no capped markers when the flag is off', () => {
@@ -252,7 +246,7 @@ describe('BoxplotChart', () => {
     it('spreads the markers of one group evenly in pixels, smallest value first', () => {
       makeCappedChart();
       const symbolOffset = getSeries(`Female${CAPPED_POINT_SERIES_NAME_SUFFIX}`)?.symbolOffset as (
-        pt: CappedRow,
+        pt: CappedCategoryPoint,
       ) => number[];
       const cat1Rows = getCappedRows('Female').filter((pt) => pt.xAxisCategory === 'CAT1');
       const cat2Rows = getCappedRows('Female').filter((pt) => pt.xAxisCategory === 'CAT2');
@@ -270,7 +264,7 @@ describe('BoxplotChart', () => {
       pxPerCategory = 90;
       makeCappedChart();
       const symbolOffset = getSeries(`Female${CAPPED_POINT_SERIES_NAME_SUFFIX}`)?.symbolOffset as (
-        pt: CappedRow,
+        pt: CappedCategoryPoint,
       ) => number[];
       const femaleRows = getCappedRows('Female').filter((pt) => pt.xAxisCategory === 'CAT1');
       const maleRow = getCappedRows('Male')[0];

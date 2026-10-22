@@ -29,6 +29,16 @@ export type CategoryAsValuePoint = CategoryPoint & {
   xAxisValue: number;
 };
 
+export type CappedCategoryPoint = CategoryAsValuePoint & {
+  // y-value the capped symbol is drawn at, in place of the true value
+  cappedValue: number;
+  /* position within the point's group of capped points (same xAxisCategory and
+  pointCategory), centered on 0 and ordered by value, smallest first */
+  cappedOffsetIndex: number;
+  // number of capped points in the point's group
+  cappedGroupSize: number;
+};
+
 export type CategoryBoxplotSummary = {
   // x-axis category for this boxplot
   xAxisCategory: string;
