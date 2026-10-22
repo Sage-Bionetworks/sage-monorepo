@@ -15,7 +15,6 @@ overrides:
   handlebars: 4.7.9
   minimatch@3: 3.1.5
   minimatch@9: 9.0.9
-  piscina: 5.3.2
   protobufjs: 8.4.2
   shell-quote: 1.9.0
   tar: 7.5.22
@@ -17131,7 +17130,7 @@ snapshots:
 
   '@neoconfetti/react@1.0.0': {}
 
-  '@nestjs/axios@4.0.0(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.1))(axios@1.18.1(debug@4.3.7))(rxjs@7.8.2)':
+  '@nestjs/axios@4.0.0(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.18.1(debug@4.3.7))(rxjs@7.8.2)':
     dependencies:
       '@nestjs/common': 11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2)
       axios: 1.18.1(debug@4.3.7)
@@ -17149,7 +17148,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nestjs/core@11.0.20(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.2)':
+  '@nestjs/core@11.0.20(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)':
     dependencies:
       '@nestjs/common': 11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nuxt/opencollective': 0.4.1
@@ -18230,9 +18229,9 @@ snapshots:
 
   '@openapitools/openapi-generator-cli@2.19.1(debug@4.3.7)(encoding@0.1.13)':
     dependencies:
-      '@nestjs/axios': 4.0.0(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.1))(axios@1.18.1(debug@4.3.7))(rxjs@7.8.2)
+      '@nestjs/axios': 4.0.0(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.18.1(debug@4.3.7))(rxjs@7.8.2)
       '@nestjs/common': 11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      '@nestjs/core': 11.0.20(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/core': 11.0.20(@nestjs/common@11.0.20(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nuxtjs/opencollective': 0.3.2(encoding@0.1.13)
       axios: 1.18.1(debug@4.3.7)
       chalk: 4.1.2
