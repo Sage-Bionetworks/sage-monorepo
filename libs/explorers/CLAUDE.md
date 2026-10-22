@@ -20,7 +20,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `explorers-services`        | `services/`        | Angular services for state management                                                                                                       |
 | `explorers-constants`       | `constants/`       | App-wide constants, injection tokens, debounce durations, and user-facing copy (toast messages, comparison tool label and tooltip builders) |
 | `explorers-testing`         | `testing/`         | Test utilities: mock data, MSW handlers, provider factories                                                                                 |
-| `explorers-config`          | `config/`          | Runtime configuration management                                                                                                            |
+| `explorers-config`          | `config/`          | Runtime configuration management; app server Express handlers in `@sagebionetworks/explorers/config/server`                                 |
 | `explorers-sentry`          | `sentry/`          | Sentry error tracking integration                                                                                                           |
 | `explorers-themes`          | `themes/`          | SCSS theme variables (no public TS API)                                                                                                     |
 | `explorers-styles`          | `styles/`          | Shared SCSS styles                                                                                                                          |

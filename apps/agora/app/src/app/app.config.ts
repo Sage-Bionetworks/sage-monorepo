@@ -16,9 +16,12 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client';
-import { configFactory, ConfigService, GCT_TUTORIAL_PANES } from '@sagebionetworks/agora/config';
-import { initSentry } from '@sagebionetworks/explorers/sentry';
-import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
+import { ConfigService, GCT_TUTORIAL_PANES, SITE_NAME } from '@sagebionetworks/agora/config';
+import {
+  initializeExplorersApp,
+  LoggerService,
+  provideExplorersConfig,
+} from '@sagebionetworks/explorers/services';
 import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client';
@@ -39,17 +42,7 @@ export const appConfig: ApplicationConfig = {
       useFactory: () => 'https://repo-prod.prod.sagebase.org',
       deps: [],
     },
-    provideAppInitializer(() => {
-      const configService = inject(ConfigService);
-      return configFactory(configService)().then(() => {
-        const { sentryDsn, sentryEnvironment, sentryRelease } = configService.config;
-        initSentry({
-          dsn: sentryDsn,
-          environment: sentryEnvironment,
-          release: sentryRelease,
-        });
-      });
-    }),
+    provideAppInitializer(() => initializeExplorersApp(SITE_NAME)),
     provideExplorersConfig({
       tutorialPanes: GCT_TUTORIAL_PANES,
     }),

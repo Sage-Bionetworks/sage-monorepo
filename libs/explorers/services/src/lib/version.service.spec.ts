@@ -1,6 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN } from '@sagebionetworks/explorers/constants';
-import { firstValueFrom, lastValueFrom, Observable, of, throwError, toArray } from 'rxjs';
+import {
+  DATA_VERSION_LOADING,
+  DATA_VERSION_UNKNOWN,
+  VERSION_CHECK_TIMEOUT_MS,
+} from '@sagebionetworks/explorers/constants';
+import { firstValueFrom, lastValueFrom, NEVER, Observable, of, throwError, toArray } from 'rxjs';
 import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import { SourceLogger } from './logger.service';
 import { PlatformService } from './platform.service';
@@ -30,20 +34,21 @@ describe('VersionService', () => {
   });
 
   afterEach(() => {
+    jest.useRealTimers();
     jest.restoreAllMocks();
   });
+
+  function mockDataVersionService(
+    getDataVersion: DataVersionService['getDataVersion'],
+  ): DataVersionService {
+    return { getDataVersion };
+  }
 
   it('should create', () => {
     expect(service).toBeDefined();
   });
 
   describe('getDataVersion$', () => {
-    function mockDataVersionService(
-      getDataVersion: DataVersionService['getDataVersion'],
-    ): DataVersionService {
-      return { getDataVersion };
-    }
-
     function collectEmissions(dataVersion$: Observable<string>): Promise<string[]> {
       return firstValueFrom(dataVersion$.pipe(toArray()));
     }
@@ -98,6 +103,71 @@ describe('VersionService', () => {
 
       expect(emissions).toEqual([DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN]);
       expect(warnSpy).toHaveBeenCalledWith('Failed to fetch data version', { error });
+    });
+  });
+
+  describe('when the data version request does not answer in time', () => {
+    it('should emit unknown and leave a breadcrumb rather than a Sentry warning', async () => {
+      jest.useFakeTimers();
+      const logSpy = jest.spyOn(SourceLogger.prototype, 'log').mockImplementation();
+      const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+
+      const emissions = firstValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => NEVER)).pipe(toArray()),
+      );
+      jest.advanceTimersByTime(VERSION_CHECK_TIMEOUT_MS);
+
+      await expect(emissions).resolves.toEqual([DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN]);
+      expect(logSpy).toHaveBeenCalledWith('Data version request timed out', {
+        timeoutMs: VERSION_CHECK_TIMEOUT_MS,
+      });
+      expect(warnSpy).not.toHaveBeenCalled();
+      expect(service.getLoadedDataVersion()).toBeNull();
+    });
+  });
+
+  describe('getLoadedDataVersion', () => {
+    const nextDataVersion: DataVersion = { ...mockDataVersion, data_version: '43' };
+
+    it('should have no loaded data version before the request succeeds', () => {
+      expect(service.getLoadedDataVersion()).toBeNull();
+    });
+
+    it('should keep the data version the first successful request loaded', async () => {
+      await lastValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => of(mockDataVersion))),
+      );
+      await lastValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => of(nextDataVersion))),
+      );
+
+      expect(service.getLoadedDataVersion()).toEqual(mockDataVersion);
+    });
+
+    it('should not keep an unknown data version, so a later request can still record one', async () => {
+      const unknownDataVersion: DataVersion = { data_file: '', data_version: '' };
+
+      await lastValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => of(unknownDataVersion))),
+      );
+      await lastValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => of(mockDataVersion))),
+      );
+
+      expect(service.getLoadedDataVersion()).toEqual(mockDataVersion);
+    });
+
+    it('should not keep a data version when the request errors', async () => {
+      jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+      const dataVersionService = mockDataVersionService(() =>
+        throwError(
+          () => new Error('Unable to connect to the server. Please check your connection.'),
+        ),
+      );
+
+      await lastValueFrom(service.getDataVersion$(dataVersionService));
+
+      expect(service.getLoadedDataVersion()).toBeNull();
     });
   });
 

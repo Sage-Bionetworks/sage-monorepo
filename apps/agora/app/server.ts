@@ -1,5 +1,11 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr/node';
+import {
+  CHUNK_FILE_PATH_PATTERN,
+  createAppVersionHandler,
+  createMissingChunkHandler,
+} from '@sagebionetworks/explorers/config/server';
+import { APP_VERSION_PATH } from '@sagebionetworks/explorers/constants';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
@@ -32,6 +38,12 @@ export function app(): express.Express {
 
   // Health endpoint used by the Docker container
   server.get('/health', (_req, res) => res.status(200).json({ status: 'UP' }));
+
+  // Version endpoint polled by browser tabs to detect that a newer version was deployed
+  server.get(APP_VERSION_PATH, createAppVersionHandler(process.env));
+
+  // Chunk files the build has were served above, so this only answers names from an earlier deploy
+  server.get(CHUNK_FILE_PATH_PATTERN, createMissingChunkHandler());
 
   // All regular routes use the Angular engine
   server.get('**', (req, res, next) => {

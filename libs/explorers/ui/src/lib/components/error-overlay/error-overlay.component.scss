@@ -1,52 +1,54 @@
-.error-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgb(0 0 0 / 30%);
-  z-index: 10001;
-}
-
+// A modal dialog is centered in the browser's top layer, above every other element
 .warning-banner {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff3cd;
-  border: 1px solid #ffc107;
+  max-width: calc(100% - 32px);
+  background-color: var(--color-warning-background);
+  border: 1px solid var(--color-warning);
   border-radius: 8px;
   padding: 24px 40px;
-  z-index: 10002;
   box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
 
-  .warning-banner-content {
+  // Set on the open state only, since a display rule would otherwise show a closed dialog
+  &[open] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &::backdrop {
+    background-color: rgb(0 0 0 / 30%);
+  }
+
+  .warning-banner-message {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 12px;
 
     .warning-icon {
-      color: #856404;
+      color: var(--color-warning);
       flex-shrink: 0;
       font-size: 24px;
     }
 
     > span {
-      color: #856404;
+      color: var(--color-text);
       font-weight: 500;
     }
+  }
 
-    .reload-button {
-      background-color: #ffc107;
-      border: none;
-      border-radius: 4px;
-      color: #212529;
-      cursor: pointer;
-      font-weight: 500;
-      padding: 8px 16px;
-      transition: background-color 0.2s;
+  .reload-button {
+    background-color: var(--color-warning);
+    border: none;
+    border-radius: 4px;
+    color: var(--color-gray-1000);
+    cursor: pointer;
+    font-weight: 500;
+    padding: 8px 16px;
+    transition: background-color 0.2s;
+    white-space: nowrap;
 
-      &:hover {
-        background-color: #e0a800;
-      }
+    &:hover {
+      background-color: var(--color-warning-hover);
     }
   }
 }
