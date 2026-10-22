@@ -41,11 +41,7 @@ export interface OrgSagebionetworksRepoModelSearchDslSimpleQueryStringQuery {
    */
   flags?: string;
   /**
-   * Optional. Analyzer used to tokenize the query text. Defaults to each field\'s search analyzer.
-   */
-  analyzer?: string;
-  /**
-   * Optional. Whether to analyze wildcard terms. Default <code>false</code>. A leading wildcard with this enabled is rejected (it forces a full index scan).
+   * Optional. Whether to analyze wildcard terms. Default <code>false</code>.
    */
   analyze_wildcard?: boolean;
   /**

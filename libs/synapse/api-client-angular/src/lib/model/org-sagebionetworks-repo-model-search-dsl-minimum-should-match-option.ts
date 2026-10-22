@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelSearchDslQueryStringQuery } from './org-sagebionetworks-repo-model-search-dsl-query-string-query';
 import { OrgSagebionetworksRepoModelSearchDslSimpleQueryStringQuery } from './org-sagebionetworks-repo-model-search-dsl-simple-query-string-query';
 import { OrgSagebionetworksRepoModelSearchDslMultiMatchQuery } from './org-sagebionetworks-repo-model-search-dsl-multi-match-query';
 import { OrgSagebionetworksRepoModelSearchDslMatchBoolPrefixFieldOptions } from './org-sagebionetworks-repo-model-search-dsl-match-bool-prefix-field-options';
@@ -24,4 +25,5 @@ export type OrgSagebionetworksRepoModelSearchDslMinimumShouldMatchOption =
   | OrgSagebionetworksRepoModelSearchDslMatchBoolPrefixFieldOptions
   | OrgSagebionetworksRepoModelSearchDslMatchFieldOptions
   | OrgSagebionetworksRepoModelSearchDslMultiMatchQuery
+  | OrgSagebionetworksRepoModelSearchDslQueryStringQuery
   | OrgSagebionetworksRepoModelSearchDslSimpleQueryStringQuery;

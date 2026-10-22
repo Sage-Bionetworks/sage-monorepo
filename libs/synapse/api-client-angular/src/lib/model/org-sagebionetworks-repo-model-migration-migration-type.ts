@@ -128,6 +128,7 @@ export type OrgSagebionetworksRepoModelMigrationMigrationType =
   | 'WEBHOOK_VERIFICATION'
   | 'WEBHOOK_ALLOWED_DOMAIN'
   | 'AGENT_REGISTRATION'
+  | 'AGENT_REGISTRATION_ACT_SETTINGS'
   | 'AGENT_SESSION'
   | 'TOS_REQUIREMENTS'
   | 'TOS_AGREEMENT'
@@ -148,6 +149,8 @@ export type OrgSagebionetworksRepoModelMigrationMigrationType =
   | 'SEARCH_CONFIG_OBJECT_BINDING'
   | 'EDUC_QUOTA'
   | 'DATA_ACCESS_REQUEST_USER'
+  | 'FORM_TEMPLATE'
+  | 'FORM_TEMPLATE_REVISION'
   | 'CHANGE';
 
 export const OrgSagebionetworksRepoModelMigrationMigrationType = {
@@ -297,6 +300,8 @@ export const OrgSagebionetworksRepoModelMigrationMigrationType = {
   WebhookAllowedDomain:
     'WEBHOOK_ALLOWED_DOMAIN' as OrgSagebionetworksRepoModelMigrationMigrationType,
   AgentRegistration: 'AGENT_REGISTRATION' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  AgentRegistrationActSettings:
+    'AGENT_REGISTRATION_ACT_SETTINGS' as OrgSagebionetworksRepoModelMigrationMigrationType,
   AgentSession: 'AGENT_SESSION' as OrgSagebionetworksRepoModelMigrationMigrationType,
   TosRequirements: 'TOS_REQUIREMENTS' as OrgSagebionetworksRepoModelMigrationMigrationType,
   TosAgreement: 'TOS_AGREEMENT' as OrgSagebionetworksRepoModelMigrationMigrationType,
@@ -321,5 +326,8 @@ export const OrgSagebionetworksRepoModelMigrationMigrationType = {
   EducQuota: 'EDUC_QUOTA' as OrgSagebionetworksRepoModelMigrationMigrationType,
   DataAccessRequestUser:
     'DATA_ACCESS_REQUEST_USER' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  FormTemplate: 'FORM_TEMPLATE' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  FormTemplateRevision:
+    'FORM_TEMPLATE_REVISION' as OrgSagebionetworksRepoModelMigrationMigrationType,
   Change: 'CHANGE' as OrgSagebionetworksRepoModelMigrationMigrationType,
 };

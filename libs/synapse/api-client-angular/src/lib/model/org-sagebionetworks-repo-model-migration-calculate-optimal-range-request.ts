@@ -157,6 +157,7 @@ export namespace OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeReques
     | 'WEBHOOK_VERIFICATION'
     | 'WEBHOOK_ALLOWED_DOMAIN'
     | 'AGENT_REGISTRATION'
+    | 'AGENT_REGISTRATION_ACT_SETTINGS'
     | 'AGENT_SESSION'
     | 'TOS_REQUIREMENTS'
     | 'TOS_AGREEMENT'
@@ -177,6 +178,8 @@ export namespace OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeReques
     | 'SEARCH_CONFIG_OBJECT_BINDING'
     | 'EDUC_QUOTA'
     | 'DATA_ACCESS_REQUEST_USER'
+    | 'FORM_TEMPLATE'
+    | 'FORM_TEMPLATE_REVISION'
     | 'CHANGE';
   export const MigrationTypeEnum = {
     Realm: 'REALM' as MigrationTypeEnum,
@@ -300,6 +303,7 @@ export namespace OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeReques
     WebhookVerification: 'WEBHOOK_VERIFICATION' as MigrationTypeEnum,
     WebhookAllowedDomain: 'WEBHOOK_ALLOWED_DOMAIN' as MigrationTypeEnum,
     AgentRegistration: 'AGENT_REGISTRATION' as MigrationTypeEnum,
+    AgentRegistrationActSettings: 'AGENT_REGISTRATION_ACT_SETTINGS' as MigrationTypeEnum,
     AgentSession: 'AGENT_SESSION' as MigrationTypeEnum,
     TosRequirements: 'TOS_REQUIREMENTS' as MigrationTypeEnum,
     TosAgreement: 'TOS_AGREEMENT' as MigrationTypeEnum,
@@ -320,6 +324,8 @@ export namespace OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeReques
     SearchConfigObjectBinding: 'SEARCH_CONFIG_OBJECT_BINDING' as MigrationTypeEnum,
     EducQuota: 'EDUC_QUOTA' as MigrationTypeEnum,
     DataAccessRequestUser: 'DATA_ACCESS_REQUEST_USER' as MigrationTypeEnum,
+    FormTemplate: 'FORM_TEMPLATE' as MigrationTypeEnum,
+    FormTemplateRevision: 'FORM_TEMPLATE_REVISION' as MigrationTypeEnum,
     Change: 'CHANGE' as MigrationTypeEnum,
   };
 }
