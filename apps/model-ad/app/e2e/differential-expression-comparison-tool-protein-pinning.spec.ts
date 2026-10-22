@@ -43,9 +43,9 @@ import {
 
 // Protein rows are children of the RNA row keyed by their rna_composite_id, so each gene below is
 // an RNA composite_id.
-const fourProteinGene = 'ENSMUSG00000019961~LOAD2~Male'; // Tmpo
-const fiveProteinMaleGene = 'ENSMUSG00000032826~LOAD2~Male'; // Ank2
-const fiveProteinFemaleGene = 'ENSMUSG00000032826~LOAD2~Female'; // Ank2
+const fourProteinGene = 'ENSMUSG00000000631~LOAD2~Male'; // Myo18a
+const fiveProteinMaleGene = 'ENSMUSG00000019961~LOAD2~Male'; // Tmpo
+const fiveProteinFemaleGene = 'ENSMUSG00000019961~LOAD2~Female'; // Tmpo
 const proteinOnlyGene = 'ENSMUSG00000005681~LOAD2~Female'; // Apoa2
 const rnaOnlyGene = 'ENSMUSG00000086714~LOAD2~Male'; // has RNA rows but no Protein rows
 const PINNED_RESULTS_HEADING = 'Pinned Results';
@@ -101,7 +101,7 @@ const switchToRnaView = async (page: Page) => {
 const getOverwritePinsDialog = (page: Page) =>
   page.getByRole('dialog', { name: 'Overwrite hidden pins?' });
 
-// Pins Tmpo's and Apoa2's proteins in Protein, then switches to RNA, where Apoa2 has no gene row,
+// Pins Myo18a's and Apoa2's proteins in Protein, then switches to RNA, where Apoa2 has no gene row,
 // so its proteins are hidden
 const hideProteinOnlyGeneInRna = async (page: Page) => {
   const proteinRows = await fetchProteinRows(page, [fourProteinGene, proteinOnlyGene]);
