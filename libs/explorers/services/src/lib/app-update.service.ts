@@ -444,7 +444,11 @@ export class AppUpdateService {
           const isChunkLoadError = trigger === AppUpdateCheckTriggerEnum.ChunkLoadError;
           // The check just recorded what differs, so whatever is pending includes the app version
           if (isChunkLoadError && comparisons.app?.isMismatch && this.pendingMismatches) {
-            this.handleConfirmedMismatches(this.pendingMismatches.mismatches, trigger);
+            const { compared, unverified } = splitByCompared(
+              this.pendingMismatches.mismatches,
+              comparisons,
+            );
+            this.handleConfirmedMismatches(compared, trigger, unverified);
           }
         }),
       ),
@@ -491,8 +495,9 @@ export class AppUpdateService {
    * - The same versions still differ after the wait: the tab is out of date.
    *
    * A version the check could not compare keeps its earlier state, since the check learned nothing
-   * about it. Confirming needs every pending version compared again, so a check that could not do
-   * that leaves the mismatch pending until one can.
+   * about it. Once the wait has passed, the versions this check compared are confirmed, and a
+   * pending one it could not compare is reported as unverified. A version whose endpoint keeps
+   * failing therefore never holds back the other one.
    */
   private handleComparisons(comparisons: VersionComparisons, trigger: AppUpdateCheckTrigger) {
     if (this.confirmedMismatches) {
@@ -515,10 +520,11 @@ export class AppUpdateService {
     }
     const hasWaitedLongEnough =
       Date.now() - pendingMismatches.detectedAt >= getConfirmDelayMs(mismatches);
-    if (hasWaitedLongEnough && wereAllCompared(mismatches, comparisons)) {
+    const { compared, unverified } = splitByCompared(mismatches, comparisons);
+    if (hasWaitedLongEnough && hasMismatches(compared)) {
       // Reports the trigger that first found the mismatch, not the confirmation check that ended
       // the delay, so the metric shows what made the tab notice the new version.
-      this.handleConfirmedMismatches(mismatches, pendingMismatches.trigger);
+      this.handleConfirmedMismatches(compared, pendingMismatches.trigger, unverified);
     }
   }
 
@@ -699,8 +705,8 @@ export class AppUpdateService {
   /**
    * Re-checks the server once the pending mismatches' delay ends. This method decides whether to
    * retry from the check's result rather than from how it was started: a confirmation that joins a
-   * check another trigger already started still retries if that shared check could not compare a
-   * pending version (the request failed or timed out). Retries wait the minimum interval and stop
+   * check another trigger already started still retries if that shared check could not compare any
+   * pending version (every request failed or timed out). Retries wait the minimum interval and stop
    * after `APP_UPDATE_CONFIRMATION_RETRY_LIMIT` attempts, after which the background checks take
    * over.
    *
@@ -725,10 +731,8 @@ export class AppUpdateService {
             return;
           }
           const nextAttempt = failedAttempts + 1;
-          if (
-            !wereAllCompared(scheduledFor.mismatches, comparisons) &&
-            nextAttempt < APP_UPDATE_CONFIRMATION_RETRY_LIMIT
-          ) {
+          const { compared } = splitByCompared(scheduledFor.mismatches, comparisons);
+          if (!hasMismatches(compared) && nextAttempt < APP_UPDATE_CONFIRMATION_RETRY_LIMIT) {
             this.scheduleConfirmation(APP_UPDATE_MIN_CHECK_INTERVAL_MS, nextAttempt);
           }
         }),
@@ -756,8 +760,15 @@ export class AppUpdateService {
    * when the app version differs, since it takes precedence), records the confirmed mismatch
    * metric, and stops every further check, since the reload the overlay asks for fixes both
    * versions. Runs at most once.
+   *
+   * `mismatches` were compared again by the check that confirmed them. `unverifiedMismatches` were
+   * pending, but that check could not compare them, so they are reported separately.
    */
-  private handleConfirmedMismatches(mismatches: VersionMismatches, trigger: AppUpdateCheckTrigger) {
+  private handleConfirmedMismatches(
+    mismatches: VersionMismatches,
+    trigger: AppUpdateCheckTrigger,
+    unverifiedMismatches: VersionMismatches = {},
+  ) {
     if (this.confirmedMismatches) {
       return;
     }
@@ -770,29 +781,36 @@ export class AppUpdateService {
       this.errorOverlayService.showDataUpdateAvailable(this.siteName);
     }
     Sentry.metrics.count(VERSION_CONFIRMED_MISMATCHES_METRIC, 1, {
-      attributes: this.getMismatchAttributes(mismatches, trigger),
+      attributes: this.getMismatchAttributes(mismatches, trigger, unverifiedMismatches),
     });
   }
 
   /**
    * The metric attributes for `mismatches`: which versions differ, and for each, the version the
-   * tab loaded with and the one the server reports.
+   * tab loaded with and the one the server reports. `unverifiedMismatches` are listed in
+   * `unverified_versions`, with their server version from the last check that compared them.
    */
   private getMismatchAttributes(
     mismatches: VersionMismatches,
     trigger: AppUpdateCheckTrigger,
+    unverifiedMismatches: VersionMismatches = {},
   ): Record<string, string> {
     const attributes: Record<string, string> = {
       mismatched_versions: getMismatchedVersions(mismatches),
       trigger,
     };
-    if (mismatches.app) {
-      attributes['client_app_version'] = this.getClientVersionLabel('app');
-      attributes['server_app_version'] = mismatches.app.serverVersionLabel;
+    if (hasMismatches(unverifiedMismatches)) {
+      attributes['unverified_versions'] = getMismatchedVersions(unverifiedMismatches);
     }
-    if (mismatches.data) {
+    const app = mismatches.app ?? unverifiedMismatches.app;
+    if (app) {
+      attributes['client_app_version'] = this.getClientVersionLabel('app');
+      attributes['server_app_version'] = app.serverVersionLabel;
+    }
+    const data = mismatches.data ?? unverifiedMismatches.data;
+    if (data) {
       attributes['client_data_version'] = this.getClientVersionLabel('data');
-      attributes['server_data_version'] = mismatches.data.serverVersionLabel;
+      attributes['server_data_version'] = data.serverVersionLabel;
     }
     return attributes;
   }
@@ -847,11 +865,28 @@ function getConfirmDelayMs(mismatches: VersionMismatches): number {
   );
 }
 
-/** Whether the check compared every version in `mismatches`, rather than failing for one. */
-function wereAllCompared(mismatches: VersionMismatches, comparisons: VersionComparisons): boolean {
-  return TRACKED_VERSIONS.every(
-    (trackedVersion) => !mismatches[trackedVersion] || comparisons[trackedVersion] !== null,
-  );
+/**
+ * Splits `mismatches` into the versions this check compared and the ones it could not, because
+ * their request failed or timed out.
+ */
+function splitByCompared(
+  mismatches: VersionMismatches,
+  comparisons: VersionComparisons,
+): { compared: VersionMismatches; unverified: VersionMismatches } {
+  const compared: VersionMismatches = {};
+  const unverified: VersionMismatches = {};
+  for (const trackedVersion of TRACKED_VERSIONS) {
+    const mismatch = mismatches[trackedVersion];
+    if (!mismatch) {
+      continue;
+    }
+    if (comparisons[trackedVersion]) {
+      compared[trackedVersion] = mismatch;
+    } else {
+      unverified[trackedVersion] = mismatch;
+    }
+  }
+  return { compared, unverified };
 }
 
 function getMismatchedVersions(mismatches: VersionMismatches): MismatchedVersions {

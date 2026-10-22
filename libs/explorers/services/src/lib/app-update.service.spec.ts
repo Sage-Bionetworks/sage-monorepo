@@ -173,6 +173,10 @@ describe('AppUpdateService', () => {
     httpMock.expectOne(APP_VERSION_PATH).error(new ProgressEvent('error'));
   }
 
+  function respondWithDataVersionFailure() {
+    httpMock.expectOne(dataVersionUrl).error(new ProgressEvent('error'));
+  }
+
   /** Answers the check scheduled for when the confirmation delay ends with the newer version. */
   function confirmNewerVersion() {
     jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
@@ -1329,7 +1333,7 @@ describe('AppUpdateService', () => {
       jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
       for (let attempt = 0; attempt < APP_UPDATE_CONFIRMATION_RETRY_LIMIT; attempt++) {
         respondWithNetworkFailure();
-        respondWithServerDataVersion(newerDataVersion);
+        respondWithDataVersionFailure();
         jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
       }
 
@@ -1378,6 +1382,10 @@ describe('AppUpdateService', () => {
       return confirmedMismatchMetricCalls()[0]?.[2].attributes.mismatched_versions;
     }
 
+    function unverifiedVersionsReported() {
+      return confirmedMismatchMetricCalls()[0]?.[2].attributes.unverified_versions;
+    }
+
     it('reports only the app version when the data version still matches', () => {
       startWithDataChecks(setup());
 
@@ -1421,16 +1429,72 @@ describe('AppUpdateService', () => {
       expect(mismatchedVersionsReported()).toBe(MismatchedVersionsEnum.AppAndData);
     });
 
-    it('reports both versions when a data mismatch is still awaiting confirmation', async () => {
+    it('reports a waiting data release as unverified when a failed chunk load cannot check it again', async () => {
       startWithDataChecks(setup());
 
       returnToTab();
       respondToCheck(loadedVersion, newerDataVersion);
       await navigateTo(missingChunkPath);
       respondWithServerVersion(newerVersion);
-      httpMock.expectOne(dataVersionUrl).error(new ProgressEvent('error'));
+      respondWithDataVersionFailure();
 
-      expect(mismatchedVersionsReported()).toBe(MismatchedVersionsEnum.AppAndData);
+      expect(mismatchedVersionsReported()).toBe(MismatchedVersionsEnum.App);
+      expect(unverifiedVersionsReported()).toBe(MismatchedVersionsEnum.Data);
+    });
+
+    it('confirms the deploy and reports the data release as unverified when the data request keeps failing', () => {
+      startWithDataChecks(setup());
+      returnToTab();
+      respondToCheck(newerVersion, newerDataVersion);
+
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
+      respondWithServerVersion(newerVersion);
+      respondWithDataVersionFailure();
+
+      const versionService = TestBed.inject(VersionService);
+      expect(isShowingAppUpdateNotice()).toBe(true);
+      expect(Sentry.metrics.count).toHaveBeenCalledWith(VERSION_CONFIRMED_MISMATCHES_METRIC, 1, {
+        attributes: {
+          mismatched_versions: MismatchedVersionsEnum.App,
+          unverified_versions: MismatchedVersionsEnum.Data,
+          trigger: AppUpdateCheckTriggerEnum.Visibility,
+          client_app_version: versionService.getSiteVersion(loadedVersion),
+          server_app_version: versionService.getSiteVersion(newerVersion),
+          client_data_version: versionService.formatDataVersion(loadedDataVersion),
+          server_data_version: versionService.formatDataVersion(newerDataVersion),
+        },
+      });
+    });
+
+    it('confirms the data release and reports the deploy as unverified when the app request keeps failing', () => {
+      startWithDataChecks(setup());
+      returnToTab();
+      respondToCheck(newerVersion, newerDataVersion);
+
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
+      respondWithNetworkFailure();
+      respondWithServerDataVersion(newerDataVersion);
+
+      expect(isShowingDataUpdateNotice()).toBe(true);
+      expect(mismatchedVersionsReported()).toBe(MismatchedVersionsEnum.Data);
+      expect(unverifiedVersionsReported()).toBe(MismatchedVersionsEnum.App);
+    });
+
+    it('confirms nothing and tries again when neither request can be compared', () => {
+      startWithDataChecks(setup());
+      returnToTab();
+      respondToCheck(newerVersion, newerDataVersion);
+
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS);
+      respondWithNetworkFailure();
+      respondWithDataVersionFailure();
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
+
+      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      respondToCheck(newerVersion, newerDataVersion);
+
+      expect(isShowingAppUpdateNotice()).toBe(true);
+      expect(unverifiedVersionsReported()).toBeUndefined();
     });
   });
 });
