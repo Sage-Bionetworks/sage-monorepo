@@ -151,7 +151,8 @@ export const PAGE_LOADER = new InjectionToken<(url: string) => void>('PAGE_LOADE
  * The two versions this service tracks: the app version, which reflects the code the tab runs,
  * and the data version, which reflects the data release it shows.
  */
-type TrackedVersion = 'app' | 'data';
+const TRACKED_VERSIONS = ['app', 'data'] as const;
+type TrackedVersion = (typeof TRACKED_VERSIONS)[number];
 
 interface TrackedVersionConfig {
   endpoint: VersionCheckEndpoint;
@@ -843,8 +844,6 @@ export class AppUpdateService {
   }
 }
 
-const TRACKED_VERSIONS: readonly TrackedVersion[] = ['app', 'data'];
-
 function hasMismatches(mismatches: VersionMismatches): boolean {
   return TRACKED_VERSIONS.some((trackedVersion) => mismatches[trackedVersion]);
 }
@@ -856,7 +855,7 @@ function getMismatchesKey(mismatches: VersionMismatches): string {
   );
 }
 
-/** The longest confirmation delay among the versions in `mismatches`. */
+/** The longest confirmation delay among the versions in `mismatches`, which must not be empty. */
 function getConfirmDelayMs(mismatches: VersionMismatches): number {
   return Math.max(
     ...TRACKED_VERSIONS.filter((trackedVersion) => mismatches[trackedVersion]).map(
