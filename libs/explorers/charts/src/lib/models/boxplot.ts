@@ -29,6 +29,16 @@ export type CategoryAsValuePoint = CategoryPoint & {
   xAxisValue: number;
 };
 
+export type CappedCategoryPoint = CategoryAsValuePoint & {
+  // y-value the capped symbol is drawn at, in place of the true value
+  cappedValue: number;
+  /* position within the point's group of capped points (same xAxisCategory and
+  pointCategory), centered on 0 and ordered by value, smallest first */
+  cappedOffsetIndex: number;
+  // number of capped points in the point's group
+  cappedGroupSize: number;
+};
+
 export type CategoryBoxplotSummary = {
   // x-axis category for this boxplot
   xAxisCategory: string;
@@ -60,7 +70,12 @@ export interface BoxplotProps {
   xAxisCategories?: string[];
   yAxisTitle?: string;
   yAxisMin?: number;
+  /* if defined, sets the top of the y-axis. Points above yAxisMax are hidden, unless
+  capPointsAboveYAxisMax draws them as capped symbols. */
   yAxisMax?: number;
+  /* if true and yAxisMax is defined, points above yAxisMax are drawn at yAxisMax with a
+  capped symbol instead of being hidden. */
+  capPointsAboveYAxisMax?: boolean;
   /* if defined, will be used to format tooltip for each point. */
   pointTooltipFormatter?: (pt: CategoryPoint, params: CallbackDataParams) => string;
   /* if defined, will be used to set color for each point based on its pointCategory, 

@@ -1,6 +1,13 @@
-import { EChartsOption } from 'echarts';
+import { DatasetComponentOption, EChartsOption, ScatterSeriesOption } from 'echarts';
+import {
+  CAPPED_POINT_SPACING_PX,
+  CAPPED_POINT_SYMBOL,
+  CAPPED_POINT_SYMBOL_SIZE,
+  CAPPED_POINT_SERIES_NAME_SUFFIX,
+} from '../constants';
 import { staticBoxplotPoints, staticBoxplotSummaries } from '../mocks';
-import { BoxplotProps } from '../models';
+import { BoxplotProps, CategoryPoint } from '../models';
+import { CappedCategoryPoint } from '../models/boxplot';
 import { initChart, setNoDataOption } from '../utils';
 import { BoxplotChart } from './boxplot-chart';
 
@@ -21,10 +28,16 @@ function makeChart(props: Partial<BoxplotProps> = {}): BoxplotChart {
 
 describe('BoxplotChart', () => {
   const mockSetOption = jest.fn();
-  const mockChart = { setOption: mockSetOption, dispose: jest.fn() };
+  let pxPerCategory = 400;
+  const mockChart = {
+    setOption: mockSetOption,
+    dispose: jest.fn(),
+    convertToPixel: (_finder: unknown, value: number) => value * pxPerCategory,
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
+    pxPerCategory = 400;
     (initChart as jest.Mock).mockReturnValue(mockChart);
   });
 
@@ -35,6 +48,25 @@ describe('BoxplotChart', () => {
   function getXAxisCategories(): string[] {
     const axes = getOption().xAxis as { id: string; data?: string[] }[];
     return axes.find((axis) => axis.id === 'category-x-axis')?.data ?? [];
+  }
+
+  function getDatasetSource(id: string): unknown {
+    const datasets = getOption().dataset as DatasetComponentOption[];
+    return datasets.find((dataset) => dataset.id === id)?.source;
+  }
+
+  function getPointSeriesValues(): number[] {
+    return (getDatasetSource('points') as CategoryPoint[]).map((pt) => pt.value);
+  }
+
+  function getSeries(name: string): ScatterSeriesOption | undefined {
+    return (getOption().series as ScatterSeriesOption[]).find((series) => series.name === name);
+  }
+
+  function getCappedSeriesNames(): string[] {
+    return (getOption().series as ScatterSeriesOption[])
+      .map((series) => String(series.name))
+      .filter((name) => name.endsWith(CAPPED_POINT_SERIES_NAME_SUFFIX));
   }
 
   describe('setOptions -- no data', () => {
@@ -93,6 +125,26 @@ describe('BoxplotChart', () => {
       points.forEach((series) => expect(series.z).toBeGreaterThan(boxplot?.z ?? Infinity));
     });
 
+    it('draws capped markers above the points they stand in for', () => {
+      makeChart({
+        points: [
+          { xAxisCategory: 'CAT1', pointCategory: 'Female', value: 4 },
+          { xAxisCategory: 'CAT1', pointCategory: 'Female', value: 20 },
+        ],
+        yAxisMax: 10,
+        capPointsAboveYAxisMax: true,
+      });
+      const series = getOption().series as { name?: string; z?: number }[];
+      const pointSeries = series.find((s) => s.name === 'Female');
+      const cappedSeries = series.find(
+        (s) => s.name === `Female${CAPPED_POINT_SERIES_NAME_SUFFIX}`,
+      );
+
+      expect(pointSeries).toBeDefined();
+      expect(cappedSeries).toBeDefined();
+      expect(cappedSeries?.z).toBeGreaterThan(pointSeries?.z ?? Infinity);
+    });
+
     it.each([
       ['gray grid lanes', { chartStyle: 'grayGrid' } as Partial<BoxplotProps>],
       ['custom lane colors', { laneBackgroundColors: ['#F9F9FA', '#FFFFFF'] }],
@@ -103,6 +155,170 @@ describe('BoxplotChart', () => {
       expect(boxplot?.markArea).toBeDefined();
       expect(laneZ).toBeDefined();
       expect(laneZ).toBeLessThan(Math.min(...axisZs));
+    });
+  });
+
+  describe('points above yAxisMax', () => {
+    const yAxisMax = 10;
+    // yAxisMax + 0.1 sits inside the y-axis padding, so the axis alone would still draw it
+    const pointsAroundMax: CategoryPoint[] = [
+      { xAxisCategory: 'CAT1', pointCategory: 'Female', value: 4 },
+      { xAxisCategory: 'CAT1', pointCategory: 'Female', value: yAxisMax },
+      { xAxisCategory: 'CAT1', pointCategory: 'Female', value: yAxisMax + 0.1 },
+      { xAxisCategory: 'CAT1', pointCategory: 'Male', value: yAxisMax + 5 },
+    ];
+
+    it('removes points above yAxisMax from the point series and keeps a point equal to it', () => {
+      makeChart({ points: pointsAroundMax, yAxisMax });
+      expect(getPointSeriesValues()).toEqual([4, yAxisMax]);
+    });
+
+    it('keeps every point when yAxisMax is undefined', () => {
+      makeChart({ points: pointsAroundMax });
+      expect(getPointSeriesValues()).toEqual([4, yAxisMax, yAxisMax + 0.1, yAxisMax + 5]);
+    });
+
+    it('still computes the box from every point, including those above yAxisMax', () => {
+      makeChart({ points: pointsAroundMax, yAxisMax });
+      const boxInput = (
+        getDatasetSource('points-formatted-for-boxplot-transform') as number[][]
+      ).flat();
+      expect(boxInput).toEqual([4, yAxisMax, yAxisMax + 0.1, yAxisMax + 5]);
+    });
+  });
+
+  describe('capPointsAboveYAxisMax', () => {
+    const yAxisMax = 10;
+    const pointCategoryColors = { Female: '#D72247', Male: '#245299' };
+    const points: CategoryPoint[] = [
+      { xAxisCategory: 'CAT1', pointCategory: 'Female', value: 4 },
+      { xAxisCategory: 'CAT1', pointCategory: 'Female', value: yAxisMax + 2 },
+      { xAxisCategory: 'CAT1', pointCategory: 'Female', value: yAxisMax + 1 },
+      { xAxisCategory: 'CAT1', pointCategory: 'Female', value: yAxisMax + 3 },
+      { xAxisCategory: 'CAT2', pointCategory: 'Female', value: yAxisMax + 4 },
+      { xAxisCategory: 'CAT1', pointCategory: 'Male', value: 5 },
+      { xAxisCategory: 'CAT1', pointCategory: 'Male', value: yAxisMax + 5 },
+    ];
+
+    function makeCappedChart(props: Partial<BoxplotProps> = {}) {
+      makeChart({
+        points,
+        yAxisMax,
+        capPointsAboveYAxisMax: true,
+        pointCategoryColors,
+        ...props,
+      });
+    }
+
+    function getCappedRows(pointCategory: string): CappedCategoryPoint[] {
+      return getDatasetSource(`capped-${pointCategory}`) as CappedCategoryPoint[];
+    }
+
+    it('adds no capped markers when the flag is off', () => {
+      makeCappedChart({ capPointsAboveYAxisMax: false });
+      expect(getCappedSeriesNames()).toEqual([]);
+    });
+
+    it('adds no capped markers when yAxisMax is undefined', () => {
+      makeCappedChart({ yAxisMax: undefined });
+      expect(getCappedSeriesNames()).toEqual([]);
+    });
+
+    it('draws each point above yAxisMax at yAxisMax, keeping its true value', () => {
+      makeCappedChart();
+      expect(getCappedSeriesNames()).toEqual([
+        `Female${CAPPED_POINT_SERIES_NAME_SUFFIX}`,
+        `Male${CAPPED_POINT_SERIES_NAME_SUFFIX}`,
+      ]);
+      expect(getSeries(`Female${CAPPED_POINT_SERIES_NAME_SUFFIX}`)?.encode).toEqual({
+        x: 'xAxisValue',
+        y: 'cappedValue',
+      });
+      expect(getCappedRows('Female').map((pt) => [pt.value, pt.cappedValue])).toEqual([
+        [yAxisMax + 1, yAxisMax],
+        [yAxisMax + 2, yAxisMax],
+        [yAxisMax + 3, yAxisMax],
+        [yAxisMax + 4, yAxisMax],
+      ]);
+      expect(getCappedRows('Male').map((pt) => pt.value)).toEqual([yAxisMax + 5]);
+    });
+
+    it('spreads the markers of one group evenly in pixels, smallest value first', () => {
+      makeCappedChart();
+      const symbolOffset = getSeries(`Female${CAPPED_POINT_SERIES_NAME_SUFFIX}`)?.symbolOffset as (
+        pt: CappedCategoryPoint,
+      ) => number[];
+      const cat1Rows = getCappedRows('Female').filter((pt) => pt.xAxisCategory === 'CAT1');
+      const cat2Rows = getCappedRows('Female').filter((pt) => pt.xAxisCategory === 'CAT2');
+
+      expect(cat1Rows.map((pt) => pt.value)).toEqual([yAxisMax + 1, yAxisMax + 2, yAxisMax + 3]);
+      expect(cat1Rows.map(symbolOffset)).toEqual([
+        [-CAPPED_POINT_SPACING_PX, 0],
+        [0, 0],
+        [CAPPED_POINT_SPACING_PX, 0],
+      ]);
+      expect(cat2Rows.map(symbolOffset)).toEqual([[0, 0]]);
+    });
+
+    it("squeezes a group on narrow charts so it stays within its own point category's column", () => {
+      pxPerCategory = 90;
+      makeCappedChart();
+      const symbolOffset = getSeries(`Female${CAPPED_POINT_SERIES_NAME_SUFFIX}`)?.symbolOffset as (
+        pt: CappedCategoryPoint,
+      ) => number[];
+      const femaleRows = getCappedRows('Female').filter((pt) => pt.xAxisCategory === 'CAT1');
+      const maleRow = getCappedRows('Male')[0];
+      const [left, middle, right] = femaleRows.map((pt) => symbolOffset(pt)[0]);
+
+      const columnGapPx = (maleRow.xAxisValue - femaleRows[0].xAxisValue) * pxPerCategory;
+
+      expect(right).toBeLessThan(CAPPED_POINT_SPACING_PX);
+      expect([left, middle]).toEqual([-right, 0]);
+      expect(right + CAPPED_POINT_SYMBOL_SIZE / 2).toBeLessThanOrEqual(columnGapPx / 2 + 1e-9);
+    });
+
+    it("places a group's markers at its point category offset without jitter", () => {
+      makeCappedChart();
+      const cat1Rows = getCappedRows('Female').filter((pt) => pt.xAxisCategory === 'CAT1');
+      cat1Rows.forEach((pt) => expect(pt.xAxisValue).toBeCloseTo(0.85));
+      expect(getCappedRows('Male')[0].xAxisValue).toBeCloseTo(1.15);
+    });
+
+    it('uses the capped symbol and size in the point category colour and opacity', () => {
+      makeCappedChart({ pointOpacity: 0.5 });
+      const series = getSeries(`Female${CAPPED_POINT_SERIES_NAME_SUFFIX}`);
+      expect(series?.symbol).toBe(CAPPED_POINT_SYMBOL);
+      expect(series?.symbolSize).toBe(CAPPED_POINT_SYMBOL_SIZE);
+      expect(series?.symbolKeepAspect).toBe(true);
+      expect(series?.itemStyle).toEqual(getSeries('Female')?.itemStyle);
+      expect(series?.itemStyle).toEqual({ color: pointCategoryColors.Female, opacity: 0.5 });
+    });
+
+    it('caps points without point categories as a single group', () => {
+      makeCappedChart({
+        points: [
+          { xAxisCategory: 'CAT1', value: 4 },
+          { xAxisCategory: 'CAT1', value: yAxisMax + 1 },
+        ],
+      });
+      expect(getCappedSeriesNames()).toEqual([`points${CAPPED_POINT_SERIES_NAME_SUFFIX}`]);
+      expect(getCappedRows('points').map((pt) => pt.value)).toEqual([yAxisMax + 1]);
+    });
+
+    it('passes the true value to the point tooltip formatter', () => {
+      const pointTooltipFormatter = jest.fn().mockReturnValue('tooltip');
+      makeCappedChart({ pointTooltipFormatter });
+      const formatter = (
+        getSeries(`Male${CAPPED_POINT_SERIES_NAME_SUFFIX}`)?.tooltip as {
+          formatter: (params: { data: unknown }) => string;
+        }
+      ).formatter;
+
+      expect(formatter({ data: getCappedRows('Male')[0] })).toBe('tooltip');
+      expect(pointTooltipFormatter).toHaveBeenCalledWith(
+        expect.objectContaining({ value: yAxisMax + 5 }),
+        expect.anything(),
+      );
     });
   });
 });
