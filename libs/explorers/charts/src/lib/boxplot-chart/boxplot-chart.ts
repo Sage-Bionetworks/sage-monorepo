@@ -34,6 +34,7 @@ import {
 } from '../utils';
 
 const yAxisPadding = 0.2;
+const valueXAxisId = 'value-x-axis';
 const defaultPointShape = 'circle';
 const defaultPointOpacity = 0.8;
 
@@ -111,7 +112,7 @@ export class BoxplotChart {
     //           value, not the displayed text.
     const xAxisOptions: EChartsOption['xAxis'] = [
       {
-        id: 'value-x-axis',
+        id: valueXAxisId,
         type: 'value',
         z: axisZ,
         axisLine: {
@@ -244,7 +245,7 @@ export class BoxplotChart {
   // does for points.
   private getCappedPointSpacingPx(groupSize: number, pointCategoryCount: number) {
     if (groupSize < 2 || !this.chart) return CAPPED_POINT_SPACING_PX;
-    const xAxis = { xAxisId: 'value-x-axis' };
+    const xAxis = { xAxisId: valueXAxisId };
     const pxPerCategory = this.chart.convertToPixel(xAxis, 1) - this.chart.convertToPixel(xAxis, 0);
     const columnGap =
       pointCategoryCount > 1
@@ -412,7 +413,7 @@ export class BoxplotChart {
       seriesOpts.push({
         ...boxplotSeriesBase,
         datasetId: 'static-boxplot-summaries',
-        xAxisId: 'value-x-axis',
+        xAxisId: valueXAxisId,
         encode: {
           x: 'xAxisValue',
           y: ['min', 'firstQuartile', 'median', 'thirdQuartile', 'max'],
@@ -422,7 +423,7 @@ export class BoxplotChart {
       seriesOpts.push({
         ...boxplotSeriesBase,
         datasetId: 'dynamic-boxplot-summaries',
-        xAxisId: 'value-x-axis',
+        xAxisId: valueXAxisId,
       });
     }
 
@@ -433,7 +434,7 @@ export class BoxplotChart {
         z: pointZ,
         datasetId: id,
         name: id,
-        xAxisId: 'value-x-axis',
+        xAxisId: valueXAxisId,
         encode: {
           x: 'xAxisValue',
           y: 'value',
