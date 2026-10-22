@@ -2340,7 +2340,7 @@ export const marmosetModelDataMock: ModelData[] = [
 
 export const marmosetModelMock: MarmosetModel = {
   type: ModelOrganism.Marmoset,
-  name: 'Presenilin 1',
+  name: 'PSEN1',
   model_type: 'Familial AD',
   study_synid: 'syn61849889',
   genetic_info: [

@@ -121,7 +121,7 @@ class ModelSearchRepositoryImplTest {
     stubAggregation(
       MARMOSET_COLLECTION,
       marmosetResults,
-      List.of(document("Presenilin 1", NAME_PRECEDENCE))
+      List.of(document("PSEN1", NAME_PRECEDENCE))
     );
 
     List<SearchResultDocument> results = repository.searchModels(
@@ -132,7 +132,7 @@ class ModelSearchRepositoryImplTest {
     assertThat(results)
       .extracting(SearchResultDocument::getId)
       .as("precedence wins over id, and both collections interleave rather than concatenate")
-      .containsExactly("APOE4", "Presenilin 1", "Trem2R47H", "3xTg-AD");
+      .containsExactly("APOE4", "PSEN1", "Trem2R47H", "3xTg-AD");
   }
 
   @Test

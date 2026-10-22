@@ -33,7 +33,7 @@ import { fetchMarmosetModelOverviews, navigateToComparison } from './helpers/com
 const CT_PAGE = 'Marmoset Model Overview';
 const MARMOSET_MODEL_OVERVIEW_PATH = COMPARISON_TOOL_PATHS[CT_PAGE];
 
-const MODEL = 'Presenilin 1';
+const MODEL = 'PSEN1';
 const MODEL_BIOMARKERS_PATH = `/models/${encodeURIComponent(MODEL)}/biomarkers?modelOrganism=marmoset`;
 
 test.describe('marmoset model overview', () => {
@@ -97,7 +97,7 @@ test.describe('marmoset model overview', () => {
     page,
   }) => {
     await navigateToComparison(page, CT_PAGE, true);
-    await expectSearchResults(page, 'presenilin', [MODEL]);
+    await expectSearchResults(page, 'psen', [MODEL]);
   });
 
   test.describe('sort URL sync', () => {
