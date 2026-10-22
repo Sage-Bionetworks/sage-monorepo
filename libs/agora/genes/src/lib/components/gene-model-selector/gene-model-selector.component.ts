@@ -5,7 +5,7 @@ import { QUERY_PARAMS } from '@sagebionetworks/agora/config';
 import { removeParentheses } from '@sagebionetworks/shared/util';
 import { SelectModule } from 'primeng/select';
 
-interface Option {
+export interface ModelOption {
   name: string;
 }
 
@@ -18,18 +18,19 @@ interface Option {
 export class GeneModelSelectorComponent implements OnInit {
   route = inject(ActivatedRoute);
 
-  _options: Option[] = [];
-  get options(): Option[] {
+  _options: ModelOption[] = [];
+  get options(): ModelOption[] {
     return this._options;
   }
-  @Input() set options(options: any) {
-    this.selected = {} as Option;
-    this._options = options?.map((option: any) => ({ name: option }) as Option) || [];
+  @Input() set options(options: string[] | undefined) {
+    this.selected = {} as ModelOption;
+    this._options = options?.map((option) => ({ name: option })) || [];
   }
 
-  selected: Option = { name: '' };
+  selected: ModelOption = { name: '' };
 
-  @Output() changeEvent: EventEmitter<object> = new EventEmitter<object>();
+  // emits undefined when there are no options to select
+  @Output() changeEvent = new EventEmitter<ModelOption | undefined>();
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {

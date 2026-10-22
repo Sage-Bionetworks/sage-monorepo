@@ -23,7 +23,10 @@ import {
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { getStatisticalModels } from '../../helpers';
-import { GeneModelSelectorComponent } from '../gene-model-selector/gene-model-selector.component';
+import {
+  GeneModelSelectorComponent,
+  ModelOption,
+} from '../gene-model-selector/gene-model-selector.component';
 import { GeneNetworkComponent } from '../gene-network/gene-network.component';
 
 @Component({
@@ -280,7 +283,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
     }));
   }
 
-  onStatisticalModelChange(event: any) {
+  onStatisticalModelChange(event: ModelOption | undefined) {
     if (!event) {
       return;
     }
