@@ -24,6 +24,14 @@ export interface OrgSagebionetworksRepoModelDataaccessAccessRequestListRequest {
    * Direction of a sort.
    */
   sortDirection?: OrgSagebionetworksRepoModelDataaccessAccessRequestListRequest.SortDirectionEnum;
+  /**
+   * Optional filter. When true, only requests that use the eDUC flow are included; when false, only requests that do not. If omitted, requests are included regardless of whether they use the eDUC flow.
+   */
+  isEDuc?: boolean;
+  /**
+   * Optional filter. When set, only requests for the given access requirement are included. If omitted, requests for all access requirements are included.
+   */
+  accessRequirementId?: string;
 }
 export namespace OrgSagebionetworksRepoModelDataaccessAccessRequestListRequest {
   export type SortByEnum =

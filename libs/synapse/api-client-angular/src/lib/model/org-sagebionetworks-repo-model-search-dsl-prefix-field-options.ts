@@ -9,7 +9,7 @@
  */
 
 /**
- * Per-field options for a <a href=\"https://docs.opensearch.org/latest/query-dsl/term/prefix/\"><code>prefix</code></a> term-level clause. Carried as the value of the field-keyed <code>prefix</code> map (the map key is the column name). A leading <code>*</code> or <code>?</code> in <code>value</code> is rejected (it forces a full index scan).
+ * Per-field options for a <a href=\"https://docs.opensearch.org/latest/query-dsl/term/prefix/\"><code>prefix</code></a> term-level clause. Carried as the value of the field-keyed <code>prefix</code> map (the map key is the column name).
  */
 export interface OrgSagebionetworksRepoModelSearchDslPrefixFieldOptions {
   /**

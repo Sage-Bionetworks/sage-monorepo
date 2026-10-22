@@ -36,6 +36,19 @@
   }
 }
 
+@mixin page-min-height {
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+}
+
+@mixin page-loading {
+  @include page-min-height;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /**
 * Responsive breakpoint manager
 * https://sass-guidelin.es/#architecture

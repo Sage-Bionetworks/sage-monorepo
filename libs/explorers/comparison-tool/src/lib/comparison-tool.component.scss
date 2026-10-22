@@ -1,17 +1,16 @@
 @use 'explorers/styles/src/variables' as vars;
+@use 'explorers/styles/src/mixins' as mixins;
 
 main {
+  @include mixins.page-min-height;
+
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
   overflow: visible auto !important;
 
   #loading {
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include mixins.page-loading;
   }
 
   .comparison-tool-content {
