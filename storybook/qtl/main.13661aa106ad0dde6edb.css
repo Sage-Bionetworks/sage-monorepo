@@ -252,6 +252,7 @@ h6,
   --footer-padding-x: 60px;
   --header-padding-y: 24px;
   --header-padding-x: 60px;
+  --header-height: calc(64px + 2 * var(--header-padding-y));
   --header-link-color: var(--color-accent-lavender-600);
 }
 @media (width < 992px) {
