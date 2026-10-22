@@ -499,7 +499,6 @@ export class BoxplotChart {
               this.getCappedPointSpacingPx(pt.cappedGroupSize, pointCategories.length),
             0,
           ],
-          itemStyle: { color: pointSeries.itemStyle?.color },
           z: cappedPointZ,
         });
       }

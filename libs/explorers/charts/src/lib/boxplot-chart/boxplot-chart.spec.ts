@@ -288,13 +288,14 @@ describe('BoxplotChart', () => {
       expect(getCappedRows('Male')[0].xAxisValue).toBeCloseTo(1.15);
     });
 
-    it('uses the capped symbol and size in the point category colour', () => {
-      makeCappedChart();
+    it('uses the capped symbol and size in the point category colour and opacity', () => {
+      makeCappedChart({ pointOpacity: 0.5 });
       const series = getSeries(`Female${CAPPED_SERIES_NAME_SUFFIX}`);
       expect(series?.symbol).toBe(CAPPED_POINT_SYMBOL);
       expect(series?.symbolSize).toBe(CAPPED_POINT_SYMBOL_SIZE);
       expect(series?.symbolKeepAspect).toBe(true);
-      expect(series?.itemStyle).toEqual({ color: pointCategoryColors.Female });
+      expect(series?.itemStyle).toEqual(getSeries('Female')?.itemStyle);
+      expect(series?.itemStyle).toEqual({ color: pointCategoryColors.Female, opacity: 0.5 });
     });
 
     it('caps points without point categories as a single group', () => {
