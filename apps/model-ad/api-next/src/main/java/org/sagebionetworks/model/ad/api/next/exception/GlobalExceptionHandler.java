@@ -1,5 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.exception;
 
+import io.sentry.Sentry;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -124,6 +125,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       resolveInstance(request),
       ex
     );
+    Sentry.captureException(ex);
     BasicErrorDto errorDto = BasicErrorDto.builder()
       .title(ErrorConstants.DATA_INTEGRITY_ERROR.getTitle())
       .status(ErrorConstants.DATA_INTEGRITY_ERROR.getStatus().value())
@@ -245,6 +247,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       resolveInstance(request),
       ex
     );
+    Sentry.captureException(ex);
     BasicErrorDto errorDto = BasicErrorDto.builder()
       .title(ErrorConstants.INTERNAL_SERVER_ERROR.getTitle())
       .status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus().value())

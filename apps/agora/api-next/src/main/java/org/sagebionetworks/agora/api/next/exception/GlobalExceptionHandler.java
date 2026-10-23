@@ -1,5 +1,6 @@
 package org.sagebionetworks.agora.api.next.exception;
 
+import io.sentry.Sentry;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import lombok.extern.slf4j.Slf4j;
@@ -97,6 +98,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       resolveInstance(request),
       ex
     );
+    Sentry.captureException(ex);
     BasicErrorDto errorDto = BasicErrorDto.builder()
       .title(ErrorConstants.INTERNAL_SERVER_ERROR.getTitle())
       .status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus().value())

@@ -18,6 +18,7 @@ lombok = "1.18.42"
 nimbus = "10.7"
 nx-gradle = "0.1.7" # v0.1.11+ requires @nx/gradle 22.4+.
 postgresql = "42.7.9"
+sentry = "8.61.1"
 spring = "6.2.11"
 spring-ai = "1.1.2"
 spring-boot = "3.5.5"
@@ -83,6 +84,7 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-starter-jakarta", version.ref = "sentry" }
 spring-ai-starter-mcp-server-webflux = { module = "org.springframework.ai:spring-ai-starter-mcp-server-webflux", version.ref = "spring-ai" }
 springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 squareup-pollexor = { module = "com.squareup:pollexor", version.ref = "squareup" }

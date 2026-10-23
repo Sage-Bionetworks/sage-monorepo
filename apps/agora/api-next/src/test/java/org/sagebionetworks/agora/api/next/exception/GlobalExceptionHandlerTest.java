@@ -1,16 +1,19 @@
 package org.sagebionetworks.agora.api.next.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mockStatic;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import io.sentry.Sentry;
 import java.util.Locale;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.sagebionetworks.agora.api.next.model.dto.BasicErrorDto;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +55,18 @@ class GlobalExceptionHandlerTest {
   }
 
   @Test
+  @DisplayName("should report an unexpected exception to Sentry")
+  void shouldReportUnexpectedExceptionToSentry() {
+    RuntimeException unexpectedException = new IllegalStateException("database unavailable");
+
+    try (MockedStatic<Sentry> sentry = mockStatic(Sentry.class)) {
+      handler.handleGenericException(unexpectedException, request, Locale.US);
+
+      sentry.verify(() -> Sentry.captureException(unexpectedException));
+    }
+  }
+
+  @Test
   @DisplayName("should return the generic internal server error body for an unexpected exception")
   void shouldReturnGenericInternalServerErrorBodyForUnexpectedException() {
     RuntimeException unexpectedException = new IllegalStateException("database unavailable");
@@ -84,6 +99,20 @@ class GlobalExceptionHandlerTest {
     );
 
     assertThat(logAppender.list).isEmpty();
+  }
+
+  @Test
+  @DisplayName("should not report an expected client error to Sentry")
+  void shouldNotReportExpectedClientErrorToSentry() {
+    try (MockedStatic<Sentry> sentry = mockStatic(Sentry.class)) {
+      handler.handleIllegalArgument(
+        new IllegalArgumentException("invalid sort field"),
+        request,
+        Locale.US
+      );
+
+      sentry.verifyNoInteractions();
+    }
   }
 
   private void assertSingleErrorLogged(Throwable expectedException) {
