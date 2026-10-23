@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -20,8 +21,11 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+  static final String UNEXPECTED_ERROR_DETAIL = "An unexpected error occurred";
 
   @ExceptionHandler(ModelNotFoundException.class)
   protected ResponseEntity<BasicErrorDto> handleModelNotFound(
@@ -114,6 +118,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     NativeWebRequest request,
     Locale locale
   ) {
+    log.error(
+      "Data integrity error for {} {}",
+      resolveMethod(request),
+      resolveInstance(request),
+      ex
+    );
     BasicErrorDto errorDto = BasicErrorDto.builder()
       .title(ErrorConstants.DATA_INTEGRITY_ERROR.getTitle())
       .status(ErrorConstants.DATA_INTEGRITY_ERROR.getStatus().value())
@@ -229,10 +239,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     NativeWebRequest request,
     Locale locale
   ) {
+    log.error(
+      "Unhandled exception for {} {}",
+      resolveMethod(request),
+      resolveInstance(request),
+      ex
+    );
     BasicErrorDto errorDto = BasicErrorDto.builder()
       .title(ErrorConstants.INTERNAL_SERVER_ERROR.getTitle())
       .status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus().value())
-      .detail("An unexpected error occurred")
+      .detail(UNEXPECTED_ERROR_DETAIL)
       .instance(resolveInstance(request))
       .build();
     return ResponseEntity.status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus())
@@ -255,6 +271,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       );
     }
     return String.format("Query parameter %s is invalid: %s", parameter, violation.getMessage());
+  }
+
+  private String resolveMethod(NativeWebRequest request) {
+    HttpServletRequest servletRequest = request.getNativeRequest(HttpServletRequest.class);
+    return servletRequest != null ? servletRequest.getMethod() : "";
   }
 
   private String resolveInstance(NativeWebRequest request) {
