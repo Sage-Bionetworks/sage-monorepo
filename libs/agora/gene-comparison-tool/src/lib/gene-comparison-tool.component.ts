@@ -1316,7 +1316,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       '/genes/' + data.gene.ensembl_gene_id + '/evidence/rna',
     ]);
 
-    const url = `${baseURL.toString()}/?${QUERY_PARAMS.MODEL}=${this.subCategory}#consistency-of-change`;
+    const url = `${baseURL.toString()}/?${QUERY_PARAMS.MODEL}=${encodeURIComponent(this.subCategory)}#consistency-of-change`;
 
     window.open(url, '_blank');
   }

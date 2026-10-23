@@ -326,30 +326,16 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   }
 
   updateQueryParams(sex: string, filterValue: string) {
-    const params = new URLSearchParams(window.location.search);
-
-    if (sex !== this.defaultSexOption.label) {
-      params.set(this.SEX_QUERY_KEY, sex);
-    } else {
-      // Don't set query param for default value
-      params.delete(this.SEX_QUERY_KEY);
-    }
-
-    const filterQueryKey = this.filterConfig().queryParamKey;
-    if (filterValue !== this.getDefaultFilterOption()) {
-      params.set(filterQueryKey, filterValue);
-    } else {
-      // Don't set query param for default value
-      params.delete(filterQueryKey);
-    }
-
-    const queryString = params.toString();
-    const queryStringFormatted = queryString ? `?${queryString}` : '';
-
     const hashFragment = this.helperService.getHashFragment();
     const hash = this.isValidHashFragment(hashFragment) ? `#${hashFragment}` : '';
+    const currentUrl = `${window.location.pathname}${window.location.search}${hash}`;
 
-    const newUrl = `${window.location.pathname}${queryStringFormatted}${hash}`;
+    // Default values are left out of the URL
+    const newUrl = this.helperService.setQueryParams(currentUrl, {
+      [this.SEX_QUERY_KEY]: sex === this.defaultSexOption.label ? null : sex,
+      [this.filterConfig().queryParamKey]:
+        filterValue === this.getDefaultFilterOption() ? null : filterValue,
+    });
     this.location.replaceState(newUrl);
   }
 

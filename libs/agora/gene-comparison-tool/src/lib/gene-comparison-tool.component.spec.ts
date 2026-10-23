@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { GCTGene } from '@sagebionetworks/agora/api-client';
-import { AGORA_LOADING_ICON_COLORS } from '@sagebionetworks/agora/config';
+import { AGORA_LOADING_ICON_COLORS, QUERY_PARAMS } from '@sagebionetworks/agora/config';
 import { provideExplorersConfig, SvgIconService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
@@ -47,6 +47,31 @@ describe('GeneComparisonToolComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('navigateToConsistencyOfChange', () => {
+    let openSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      openSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
+    });
+
+    afterEach(() => {
+      openSpy.mockRestore();
+    });
+
+    it('opens the gene RNA consistency of change section with the encoded model', () => {
+      const model = 'Model (a+b) & c #1 100%';
+      component.subCategory = model;
+
+      component.navigateToConsistencyOfChange({ gene: makeGene('ENSG123') });
+
+      expect(openSpy).toHaveBeenCalledWith(expect.any(String), '_blank');
+      const url = new URL(openSpy.mock.calls[0][0], window.location.origin);
+      expect(url.pathname).toMatch('/genes/ENSG123/evidence/rna');
+      expect(url.searchParams.get(QUERY_PARAMS.MODEL)).toBe(model);
+      expect(url.hash).toBe('#consistency-of-change');
+    });
   });
 
   describe('pinning state', () => {
