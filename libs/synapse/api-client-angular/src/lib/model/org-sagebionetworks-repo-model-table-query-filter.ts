@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelTableTextMatchesQueryFilter } from './org-sagebionetworks-repo-model-table-text-matches-query-filter';
+import { OrgSagebionetworksRepoModelTableColumnCohortFilter } from './org-sagebionetworks-repo-model-table-column-cohort-filter';
 import { OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter } from './org-sagebionetworks-repo-model-table-column-single-value-query-filter';
 import { OrgSagebionetworksRepoModelTableFilterGroup } from './org-sagebionetworks-repo-model-table-filter-group';
 import { OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter } from './org-sagebionetworks-repo-model-table-column-multi-value-function-query-filter';
@@ -17,6 +18,7 @@ import { OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter } f
  * @export
  */
 export type OrgSagebionetworksRepoModelTableQueryFilter =
+  | OrgSagebionetworksRepoModelTableColumnCohortFilter
   | OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter
   | OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter
   | OrgSagebionetworksRepoModelTableFilterGroup

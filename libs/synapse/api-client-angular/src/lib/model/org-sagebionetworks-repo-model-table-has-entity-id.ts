@@ -25,6 +25,7 @@ import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebi
 import { OrgSagebionetworksRepoModelTableColumnChange } from './org-sagebionetworks-repo-model-table-column-change';
 import { OrgSagebionetworksRepoModelTableQuery } from './org-sagebionetworks-repo-model-table-query';
 import { OrgSagebionetworksRepoModelTableUploadToTableRequest } from './org-sagebionetworks-repo-model-table-upload-to-table-request';
+import { OrgSagebionetworksRepoModelTableCohortDefinition } from './org-sagebionetworks-repo-model-table-cohort-definition';
 
 /**
  * The object that implements this interface contains an entityId.

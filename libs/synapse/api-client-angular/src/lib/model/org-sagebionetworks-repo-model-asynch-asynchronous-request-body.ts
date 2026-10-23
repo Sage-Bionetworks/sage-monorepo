@@ -64,6 +64,7 @@ import { OrgSagebionetworksRepoModelGridUpdateGridUpdateRequest } from './org-sa
 import { OrgSagebionetworksRepoModelTableUploadToTableRequest } from './org-sagebionetworks-repo-model-table-upload-to-table-request';
 import { OrgSagebionetworksRepoModelDataaccessSchemaFormTemplate } from './org-sagebionetworks-repo-model-dataaccess-schema-form-template';
 import { OrgSagebionetworksRepoModelGridDownloadFromGridRequest } from './org-sagebionetworks-repo-model-grid-download-from-grid-request';
+import { OrgSagebionetworksRepoModelTableCohortDefinition } from './org-sagebionetworks-repo-model-table-cohort-definition';
 
 /**
  * The body of an Asynchronous job request.
