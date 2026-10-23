@@ -26,9 +26,9 @@ export const mockSearchResults: SearchResult[] = [
     model_organism: ModelOrganism.Mouse,
   },
   {
-    id: 'Presenilin 1',
+    id: 'PSEN1',
     match_field: 'name',
-    match_value: 'Presenilin 1',
+    match_value: 'PSEN1',
     model_organism: ModelOrganism.Marmoset,
   },
 ];

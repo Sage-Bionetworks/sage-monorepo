@@ -1254,7 +1254,7 @@ components:
           description: |
             List of item names to filter by.
           example:
-            - Presenilin 1
+            - PSEN1
             - Another Name
           items:
             type: string
@@ -1265,9 +1265,9 @@ components:
         search:
           description: |
             Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
-            Examples: 'presenilin 1,another name' (comma-separated list) or 'presenilin' (partial match). Only applied when
+            Examples: 'psen1,another name' (comma-separated list) or 'psen' (partial match). Only applied when
             itemFilterType is 'exclude'.
-          example: 'presenilin 1,another name'
+          example: 'psen1,another name'
           nullable: true
           type: string
         availableData:

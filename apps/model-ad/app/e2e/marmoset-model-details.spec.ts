@@ -9,9 +9,9 @@ import {
 } from './helpers/model-details';
 
 test.describe('marmoset model details - boxplots selector', () => {
-  const model = 'Presenilin 1';
-  const biomarkersPath = '/models/Presenilin%201/biomarkers?modelOrganism=marmoset';
-  const noTabPath = '/models/Presenilin%201?modelOrganism=marmoset';
+  const model = 'PSEN1';
+  const biomarkersPath = '/models/PSEN1/biomarkers?modelOrganism=marmoset';
+  const noTabPath = '/models/PSEN1?modelOrganism=marmoset';
   const measurementDefault = 'Aβ40';
   const measurementOtherRaw = 'A&beta;42/A&beta;40';
   const measurementOther = 'Aβ42/Aβ40';

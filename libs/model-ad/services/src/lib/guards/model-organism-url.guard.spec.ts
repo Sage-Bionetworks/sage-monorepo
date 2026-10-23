@@ -28,9 +28,9 @@ describe('modelOrganismUrlGuard', () => {
   });
 
   it('should allow activation when modelOrganism is a valid marmoset value', () => {
-    expect(
-      runGuard('/models/Presenilin%201?modelOrganism=marmoset', { modelOrganism: 'marmoset' }),
-    ).toBe(true);
+    expect(runGuard('/models/PSEN1?modelOrganism=marmoset', { modelOrganism: 'marmoset' })).toBe(
+      true,
+    );
   });
 
   it('should redirect and add mouse when modelOrganism is missing', () => {

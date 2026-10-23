@@ -40,8 +40,8 @@ test.describe('search', () => {
 
   test('can navigate to a marmoset model from a mouse model details page', async ({ page }) => {
     const mouseModel = 'LOAD1';
-    const marmosetModel = 'Presenilin 1';
-    const marmosetModelPath = '/models/Presenilin%201?modelOrganism=marmoset';
+    const marmosetModel = 'PSEN1';
+    const marmosetModelPath = '/models/PSEN1?modelOrganism=marmoset';
 
     // A mismatched request 404s and redirects to the not-found page without changing the URL, and
     // the correct model can still win the race and render, so the requests are what prove the fix.
@@ -54,7 +54,7 @@ test.describe('search', () => {
     await page.goto(`/models/${mouseModel}?modelOrganism=mouse`);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(mouseModel);
 
-    const { searchListItems } = await searchAndGetSearchListItems('presenilin', page);
+    const { searchListItems } = await searchAndGetSearchListItems('psen', page);
     await expect(searchListItems.first()).toHaveText(marmosetModel);
     await searchListItems.first().click();
 
@@ -112,11 +112,11 @@ test.describe('search', () => {
   });
 
   test('can search using marmoset home card input', async ({ page }) => {
-    const model = 'Presenilin 1';
+    const model = 'PSEN1';
     await page.goto('/');
     await page.getByText('Marmoset Models').click();
     const { searchListItems } = await searchAndGetSearchListItems(
-      'presenilin',
+      'psen',
       page,
       'Find marmoset model by name...',
     );
@@ -124,10 +124,10 @@ test.describe('search', () => {
   });
 
   test('can search across organisms and navigate to marmoset model', async ({ page }) => {
-    const modelQuery = 'il';
-    const mouseModelName = 'LOAD1.Il1rapExon2KO';
-    const marmosetModelName = 'Presenilin 1';
-    const marmosetModelPath = '/models/Presenilin%201?modelOrganism=marmoset';
+    const modelQuery = 'n1';
+    const mouseModelName = 'Bin1K358R';
+    const marmosetModelName = 'PSEN1';
+    const marmosetModelPath = '/models/PSEN1?modelOrganism=marmoset';
 
     await page.goto('/');
 
