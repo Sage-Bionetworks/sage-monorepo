@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/angular';
-import { initSentry, SENTRY_DATA_COLLECTION, SentryConfig } from './init-sentry';
+import { initSentry } from './init-sentry';
+import { SENTRY_DATA_COLLECTION, SentryConfig } from './sentry-options';
 
 jest.mock('@sentry/angular', () => ({
   init: jest.fn(),
