@@ -84,6 +84,7 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+sentry-core = { module = "io.sentry:sentry", version.ref = "sentry" }
 sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-starter-jakarta", version.ref = "sentry" }
 spring-ai-starter-mcp-server-webflux = { module = "org.springframework.ai:spring-ai-starter-mcp-server-webflux", version.ref = "spring-ai" }
 springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }

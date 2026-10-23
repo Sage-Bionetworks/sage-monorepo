@@ -1,10 +1,10 @@
 package org.sagebionetworks.agora.api.next.exception;
 
-import io.sentry.Sentry;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.agora.api.next.model.dto.BasicErrorDto;
+import org.sagebionetworks.explorers.UnhandledExceptionReporter;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -98,7 +98,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       resolveInstance(request),
       ex
     );
-    Sentry.captureException(ex);
+    UnhandledExceptionReporter.report(ex);
     BasicErrorDto errorDto = BasicErrorDto.builder()
       .title(ErrorConstants.INTERNAL_SERVER_ERROR.getTitle())
       .status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus().value())
