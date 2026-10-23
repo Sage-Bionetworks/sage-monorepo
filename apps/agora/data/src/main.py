@@ -1,6 +1,4 @@
 from csv import reader
-from glob import glob
-from gridfs import GridFS
 from json import load
 import logging
 import logging.config as logging_config
@@ -18,6 +16,9 @@ DB_HOST = getenv("DB_HOST")
 
 DATA_FILE = getenv("DATA_FILE")
 DATA_VERSION = getenv("DATA_VERSION")
+
+DATA_VERSION_COLLECTION_NAME = "dataversion"
+DATA_VERSION_COLLECTION_FILENAME = "dataversion.json"
 
 # Configure logging
 logging_config.dictConfig(
@@ -86,18 +87,31 @@ def download_synapse_data(local_data_dir: str) -> None:
     logger.debug("All manifest files downloaded successfully")
 
 
-def create_data_version_collection(db: database.Database) -> None:
-    """Create collection that contains data version info"""
-    logger.debug("Creating data version collection")
-    data_version_collection = db.get_collection("dataversion")
-    data_version_collection.drop()
-    dataversion = {
-        "data_file": DATA_FILE,
-        "data_version": DATA_VERSION,
-        "team_images_id": "NOT_SET",
-    }
-    data_version_collection.insert_one(dataversion)
-    logger.debug("Data version collection created successfully")
+def import_collection(
+    db: database.Database,
+    collection_name: str,
+    collection_filename: str,
+    local_data_dir: str,
+) -> None:
+    """Import a single collection into MongoDB from local data"""
+    logger.debug(
+        "Importing collection '%s' from '%s'",
+        collection_name,
+        collection_filename,
+    )
+
+    collection_filepath = path.join(local_data_dir, collection_filename)
+    with open(collection_filepath) as collection_file:
+        documents = load(collection_file)
+
+    collection = db.get_collection(collection_name)
+    collection.drop()
+    collection.insert_many(documents)
+    logger.debug(
+        "Successfully imported %d documents to collection '%s'",
+        len(documents),
+        collection_name,
+    )
 
 
 def import_collections_data(
@@ -105,32 +119,29 @@ def import_collections_data(
 ) -> None:
     """Import collections into MongoDB using local definition CSV and local data"""
     logger.debug("Starting collections import process")
-    with open(collections_filepath, "r") as collections_file:
-        collections_reader = reader(collections_file)
-        for row in collections_reader:
-            collection_name = row[0]
-            collection_filename = row[1]
-            logger.debug(
-                "Importing collection '%s' from '%s'",
-                collection_name,
-                collection_filename,
-            )
+    with open(collections_filepath) as collections_file:
+        collections = list(reader(collections_file))
 
-            # read json
-            collection_filepath = path.join(local_data_dir, collection_filename)
-            with open(collection_filepath, "r") as collection_file:
-                documents = load(collection_file)
-
-            # import into collection
-            collection = db.get_collection(collection_name)
-            collection.drop()
-            collection.insert_many(documents)
-            logger.debug(
-                "Successfully imported %d documents to collection '%s'",
-                len(documents),
-                collection_name,
-            )
+    if any(name == DATA_VERSION_COLLECTION_NAME for name, _ in collections):
+        raise ValueError(
+            f"'{DATA_VERSION_COLLECTION_NAME}' must not be listed in "
+            f"{collections_filepath}: it is imported last, once every other "
+            "collection is loaded and indexed"
+        )
+    for collection_name, collection_filename in collections:
+        import_collection(db, collection_name, collection_filename, local_data_dir)
     logger.debug("All collections imported successfully")
+
+
+def import_data_version(db: database.Database, local_data_dir: str) -> None:
+    """Import dataversion last: the APIs clear their caches when it changes, so it
+    must only change once every other collection is loaded and indexed"""
+    import_collection(
+        db,
+        DATA_VERSION_COLLECTION_NAME,
+        DATA_VERSION_COLLECTION_FILENAME,
+        local_data_dir,
+    )
 
 
 def create_collections_indexes(
@@ -177,9 +188,9 @@ def main() -> None:
     client = MongoClient(db_uri)
     try:
         db = client.get_database(DB_NAME)
-        create_data_version_collection(db)
         import_collections_data(db, collections_filepath, local_data_dir)
         create_collections_indexes(db, collections_indexes_filepath)
+        import_data_version(db, local_data_dir)
         client.close()
     except Exception as e:
         logger.error("Error during MongoDB update: %s", e)

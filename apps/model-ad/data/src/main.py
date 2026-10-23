@@ -18,6 +18,9 @@ DB_HOST = getenv("DB_HOST")
 DATA_FILE = getenv("DATA_FILE")
 DATA_VERSION = getenv("DATA_VERSION")
 
+DATA_VERSION_COLLECTION_NAME = "dataversion"
+DATA_VERSION_COLLECTION_FILENAME = "dataversion.json"
+
 # Configure logging
 logging_config.dictConfig(
     {
@@ -85,46 +88,66 @@ def download_synapse_data(local_data_dir: str) -> None:
     logger.debug("All manifest files downloaded successfully")
 
 
+def import_collection(
+    collection_name: str, collection_filename: str, local_data_dir: str
+) -> None:
+    """Import a single collection into MongoDB from local data"""
+    collection_filepath = path.join(local_data_dir, collection_filename)
+
+    logger.debug(
+        "Importing collection '%s' from '%s'",
+        collection_name,
+        collection_filename,
+    )
+
+    # Use mongoimport instead of pymongo for performance with large datasets
+    cmd = [
+        "mongoimport",
+        f"--uri=mongodb://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}?authSource=admin",
+        f"--collection={collection_name}",
+        f"--file={collection_filepath}",
+        "--jsonArray",
+        "--drop",
+    ]
+
+    # Only maintain insertion order for ui_config collection
+    if collection_name == "ui_config":
+        cmd.append("--maintainInsertionOrder")
+    else:
+        # Use parallel workers for better performance on other collections
+        cmd.append("--numInsertionWorkers=4")
+
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        logger.error("mongoimport failed: %s", result.stderr)
+        raise Exception(f"Failed to import {collection_name}")
+
+    logger.debug("Successfully imported collection '%s'", collection_name)
+
+
 def import_collections_data(collections_filepath: str, local_data_dir: str) -> None:
     """Import collections into MongoDB using local definition CSV and local data"""
     logger.debug("Starting collections import process")
     with open(collections_filepath) as collections_file:
-        collections_reader = reader(collections_file)
-        for row in collections_reader:
-            collection_name = row[0]
-            collection_filename = row[1]
-            collection_filepath = path.join(local_data_dir, collection_filename)
+        collections = list(reader(collections_file))
 
-            logger.debug(
-                "Importing collection '%s' from '%s'",
-                collection_name,
-                collection_filename,
-            )
-
-            # Use mongoimport instead of pymongo for performance with large datasets
-            cmd = [
-                "mongoimport",
-                f"--uri=mongodb://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}?authSource=admin",
-                f"--collection={collection_name}",
-                f"--file={collection_filepath}",
-                "--jsonArray",
-                "--drop",
-            ]
-
-            # Only maintain insertion order for ui_config collection
-            if collection_name == "ui_config":
-                cmd.append("--maintainInsertionOrder")
-            else:
-                # Use parallel workers for better performance on other collections
-                cmd.append("--numInsertionWorkers=4")
-
-            result = subprocess.run(cmd, capture_output=True, text=True)
-            if result.returncode != 0:
-                logger.error("mongoimport failed: %s", result.stderr)
-                raise Exception(f"Failed to import {collection_name}")
-
-            logger.debug("Successfully imported collection '%s'", collection_name)
+    if any(name == DATA_VERSION_COLLECTION_NAME for name, _ in collections):
+        raise ValueError(
+            f"'{DATA_VERSION_COLLECTION_NAME}' must not be listed in "
+            f"{collections_filepath}: it is imported last, once every other "
+            "collection is loaded and indexed"
+        )
+    for collection_name, collection_filename in collections:
+        import_collection(collection_name, collection_filename, local_data_dir)
     logger.debug("All collections imported successfully")
+
+
+def import_data_version(local_data_dir: str) -> None:
+    """Import dataversion last: the APIs clear their caches when it changes, so it
+    must only change once every other collection is loaded and indexed"""
+    import_collection(
+        DATA_VERSION_COLLECTION_NAME, DATA_VERSION_COLLECTION_FILENAME, local_data_dir
+    )
 
 
 def create_collections_indexes(
@@ -179,6 +202,8 @@ def main() -> None:
     except Exception as e:
         logger.error("Error during MongoDB update: %s", e)
         raise Exception("Error", e)
+
+    import_data_version(local_data_dir)
     logger.debug("MongoDB import completed successfully")
 
 

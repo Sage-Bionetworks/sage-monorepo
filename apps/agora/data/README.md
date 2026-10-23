@@ -24,8 +24,7 @@ In the `.env` file,
 - specify the desired data release using `DATA_FILE` and `DATA_VERSION`
 - update `SYNAPSE_AUTH_TOKEN` to a Synapse PAT with view/download permissions for a user that can
   download the data release (i.e. the data manifest file specified by `DATA_FILE` and
-  `DATA_VERSION` and all files described within the manifest) and the team image files (i.e. all
-  files within the folder specified by `TEAM_IMAGES_ID`)
+  `DATA_VERSION` and all files described within the manifest)
 
 ### Start MongoDB then Run the Python script
 
