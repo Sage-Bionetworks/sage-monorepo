@@ -1015,6 +1015,23 @@ tags:
        <li><a href="${POST.search.synonym.set.list}">POST /search/synonym/set/list</a></li>
        </ul>
 
+       <h6>Search Pipelines</h6>
+       <p>
+       A <a href="${org.sagebionetworks.repo.model.search.table.NamedSearchPipeline}">NamedSearchPipeline</a>
+       is a shareable, named OpenSearch
+       <a href="https://docs.opensearch.org/latest/search-plugins/search-pipelines/index/">search pipeline</a>:
+       how a <code>hybrid</code> query's per-clause scores are normalized and combined. Its
+       <code>settings</code> is a typed
+       <a href="${org.sagebionetworks.repo.model.search.dsl.SearchPipeline}">SearchPipeline</a>; keys outside
+       that schema are rejected.
+       </p>
+       <ul>
+       <li><a href="${POST.search.pipeline}">POST /search/pipeline</a></li>
+       <li><a href="${GET.search.pipeline.searchPipelineId}">GET /search/pipeline/{searchPipelineId}</a></li>
+       <li><a href="${PUT.search.pipeline.searchPipelineId}">PUT /search/pipeline/{searchPipelineId}</a></li>
+       <li><a href="${POST.search.pipeline.list}">POST /search/pipeline/list</a></li>
+       </ul>
+
        <h6>Search Configurations</h6>
        <p>
        A <a href="${org.sagebionetworks.repo.model.search.table.SearchConfiguration}">SearchConfiguration</a>
@@ -11177,6 +11194,95 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListSynonymSetsResponse'
+  /repo/v1/search/pipeline:
+    post:
+      tags:
+        - Search Management Services
+      operationId: post-/repo/v1/search/pipeline
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.NamedSearchPipeline'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: The created search pipeline with a generated ID, etag, and audit timestamps.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.NamedSearchPipeline'
+  /repo/v1/search/pipeline/{searchPipelineId}:
+    get:
+      tags:
+        - Search Management Services
+      operationId: get-/repo/v1/search/pipeline/{searchPipelineId}
+      parameters:
+        - name: searchPipelineId
+          in: path
+          required: true
+          description: The ID of the search pipeline to retrieve.
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The requested search pipeline.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.NamedSearchPipeline'
+    put:
+      tags:
+        - Search Management Services
+      operationId: put-/repo/v1/search/pipeline/{searchPipelineId}
+      parameters:
+        - name: searchPipelineId
+          in: path
+          required: true
+          description: The path ID (must match the request body's ID).
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.NamedSearchPipeline'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The updated search pipeline with a new etag.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.NamedSearchPipeline'
+  /repo/v1/search/pipeline/list:
+    post:
+      tags:
+        - Search Management Services
+      operationId: post-/repo/v1/search/pipeline/list
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListNamedSearchPipelinesRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A paginated list of search pipelines.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.ListNamedSearchPipelinesResponse'
   /repo/v1/search/configuration:
     post:
       tags:
@@ -17122,6 +17228,7 @@ components:
               - TEXT_ANALYZER
               - COLUMN_ANALYZER_OVERRIDE
               - SYNONYM_SET
+              - SEARCH_PIPELINE
               - SEARCH_CONFIGURATION
               - SEARCH_CONFIG_OBJECT_BINDING
               - EDUC_QUOTA
@@ -17605,6 +17712,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -17752,6 +17860,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -18647,6 +18756,8 @@ components:
             - PROJECT_STORAGE_LIMIT_EXCEEDED
             - TWO_FA_ENABLED_REQUIRED
             - BELOW_THRESHOLD
+            - ROW_SUPPRESSED
+            - COHORT_TOO_LARGE
       description: Error returned when an aggregate query against a restricted source matches a non-zero number of rows below the configured suppression threshold. The result is suppressed to protect individual-level data.
       required:
         - concreteType
@@ -19182,6 +19293,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -19439,6 +19551,22 @@ components:
           type: string
           description: Forward this token to get the next page of results.
       description: A single page of CurationTasks.
+    org.sagebionetworks.repo.model.search.dsl.NormalizationParameters:
+      type: object
+      properties:
+        lower_bounds:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.LowerBound'
+            description: The minimum threshold score of one hybrid query clause for <code>min_max</code> normalization.
+          description: <p>Optional. The <a href="${org.sagebionetworks.repo.model.search.dsl.LowerBound}">lower bound</a> of each hybrid query clause, positional against <code>hybrid.queries</code>. When set, must hold 2 to 5 entries &mdash; 5 being the maximum <code>hybrid.queries</code> length &mdash; and as many entries as any other set weights or bounds. A query may send fewer clauses than there are bounds, in which case only the bounds of the clauses it sends are used; a query that sends more clauses than there are bounds is rejected. If not provided, no lower bound is applied and each clause's actual minimum score is used for normalization.</p>
+        upper_bounds:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.UpperBound'
+            description: The maximum threshold score of one hybrid query clause for <code>min_max</code> normalization.
+          description: <p>Optional. The <a href="${org.sagebionetworks.repo.model.search.dsl.UpperBound}">upper bound</a> of each hybrid query clause, positional against <code>hybrid.queries</code>. When set, must hold 2 to 5 entries &mdash; 5 being the maximum <code>hybrid.queries</code> length &mdash; and as many entries as any other set weights or bounds. A query may send fewer clauses than there are bounds, in which case only the bounds of the clauses it sends are used; a query that sends more clauses than there are bounds is rejected. If not provided, no upper bound is applied and each clause's actual maximum score is used for normalization.</p>
+      description: Parameters of the normalization stage. Applies only to the <code>min_max</code> normalization technique.
     org.sagebionetworks.repo.model.MembershipRequest:
       type: object
       properties:
@@ -19736,6 +19864,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.SortItem'
+        cohorts:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.CohortDefinition'
+            description: "A named, request-scoped cohort: the distinct values of the single column selected by a query. The cohort query runs with the caller's own authorization. When the caller has aggregate-only access to the cohort source, a non-empty cohort smaller than the source's suppression threshold is rejected."
+          description: Optional, request-scoped cohort definitions. Each cohort is referenced by name from the sql (<column> IN COHORT(<name>)) or from a ColumnCohortFilter. The server runs each cohort query as the caller and replaces the reference with the cohort's distinct values, which are never returned to the caller. Every reference must match a definition and every definition must be referenced.
       description: A CSV table download request.
       required:
         - concreteType
@@ -20177,6 +20311,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -20249,6 +20384,12 @@ components:
         query:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.Query'
           description: <p>A single <a href="https://docs.opensearch.org/latest/query-dsl/">OpenSearch query DSL</a> clause. Exactly one of the properties below may be set &mdash; the set property names the clause kind. See <a href="https://docs.opensearch.org/latest/query-dsl/query-filter-context/">query vs. filter context</a> and <a href="https://docs.opensearch.org/latest/query-dsl/term-vs-full-text/">term-level vs. full-text queries</a>.</p><p>The field-keyed leaf clauses (<code>match</code>, <code>term</code>, <code>range</code>, ...) are maps whose key is the column name and whose value is the per-field options object &mdash; only the long form is accepted (e.g. <code>{"match":{"title":{"query":"x"}}}</code>, not the <code>{"match":{"title":"x"}}</code> shorthand). The compound clauses (<code>bool</code>, <code>dis_max</code>, ...) nest further Query DSL clauses recursively.</p>
+        hybrid:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.HybridQuery'
+          description: <p>A <a href="https://docs.opensearch.org/latest/query-dsl/compound/hybrid/"><code>hybrid</code></a> query &mdash; several independently-scored clauses whose scores are normalized onto a common scale and then combined, so keyword and semantic relevance can be blended meaningfully. Supplied as <code>SearchQuery.hybrid</code> rather than inside <code>query</code>, because OpenSearch requires a hybrid query to be the top-level query.</p><p>The scores are normalized and combined by <code>SearchQuery.search_pipeline</code>; when it is omitted, the search configuration's default search pipeline is used, and failing that <code>min_max</code> normalization with an <code>arithmetic_mean</code> combination of equally-weighted clauses.</p><p>Results are ranked by relevance unless <code>sort</code> names a column. Pages requested with <code>from</code> / <code>size</code> are capped at <code>from + size &lt;= 1000</code>. A relevance-ranked query emits no <code>nextSearchAfter</code> and rejects <code>search_after</code>; sorting by a column enables <code>search_after</code> paging.</p>
+        search_pipeline:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.SearchPipelineBinding'
+          description: '<p>A <a href="${org.sagebionetworks.repo.model.search.dsl.SearchPipeline}">search pipeline</a> slot: exactly one of <code>$ref</code> and <code>phase_results_processors</code> is required. Either a reference to a saved <a href="${org.sagebionetworks.repo.model.search.table.NamedSearchPipeline}">NamedSearchPipeline</a> written as <code>{"$ref": "{organizationName}-{name}"}</code>, or an inline SearchPipeline literal.</p>'
         post_filter:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.Query'
           description: <p>A single <a href="https://docs.opensearch.org/latest/query-dsl/">OpenSearch query DSL</a> clause. Exactly one of the properties below may be set &mdash; the set property names the clause kind. See <a href="https://docs.opensearch.org/latest/query-dsl/query-filter-context/">query vs. filter context</a> and <a href="https://docs.opensearch.org/latest/query-dsl/term-vs-full-text/">term-level vs. full-text queries</a>.</p><p>The field-keyed leaf clauses (<code>match</code>, <code>term</code>, <code>range</code>, ...) are maps whose key is the column name and whose value is the per-field options object &mdash; only the long form is accepted (e.g. <code>{"match":{"title":{"query":"x"}}}</code>, not the <code>{"match":{"title":"x"}}</code> shorthand). The compound clauses (<code>bool</code>, <code>dis_max</code>, ...) nest further Query DSL clauses recursively.</p>
@@ -20270,7 +20411,7 @@ components:
         sort:
           type: array
           items: {}
-          description: 'Optional. Result <a href="https://docs.opensearch.org/latest/search-plugins/searching-data/sort/">ordering</a>, in native OpenSearch sort shape (a string column name, <code>{column: "asc|desc"}</code>, or <code>{column: {order: ..., mode: ..., missing: ...}}</code>) applied in order. Only the <code>field</code> and <code>_score</code> sort kinds are accepted &mdash; script and geo-distance sorts are rejected server-side. The pseudo-column <code>_score</code> sorts by relevance. When omitted, results are sorted by relevance descending. Ties are broken by row ID ascending, except when <code>rescore</code> is supplied.'
+          description: 'Optional. Result <a href="https://docs.opensearch.org/latest/search-plugins/searching-data/sort/">ordering</a>, in native OpenSearch sort shape (a string column name, <code>{column: "asc|desc"}</code>, or <code>{column: {order: ..., mode: ..., missing: ...}}</code>) applied in order. Only the <code>field</code> and <code>_score</code> sort kinds are accepted &mdash; script and geo-distance sorts are rejected server-side. The pseudo-column <code>_score</code> sorts by relevance. When omitted, results are sorted by relevance descending. Ties are broken by row ID ascending, except when <code>rescore</code> is supplied or a <code>hybrid</code> query is ranked by relevance.'
         _source:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.SourceFilter'
           description: A <a href="https://docs.opensearch.org/latest/search-plugins/searching-data/retrieve-specific-fields/">source filter</a> selecting which columns are returned on each hit. Carried as the <a href="${org.sagebionetworks.repo.model.search.SearchQuery}">SearchQuery</a> <code>_source</code> field. Only this typed <code>{includes, excludes}</code> form is accepted &mdash; the boolean (<code>true</code> / <code>false</code>) and bare-array shorthands are not.
@@ -20388,6 +20529,20 @@ components:
       description: Request used to tag unlinked file handles for archival. Only administrator can perform this kind of job.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.search.dsl.Combination:
+      type: object
+      properties:
+        technique:
+          type: string
+          description: How the normalized per-clause scores are combined into one score per document.
+          enum:
+            - arithmetic_mean
+            - harmonic_mean
+            - geometric_mean
+        parameters:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.CombinationParameters'
+          description: Parameters of the combination stage.
+      description: The combination stage of a <a href="https://docs.opensearch.org/latest/search-plugins/search-pipelines/normalization-processor/">normalization processor</a>.
     org.sagebionetworks.repo.model.oauth.OAuthRefreshTokenInformationList:
       type: object
       properties:
@@ -20761,6 +20916,7 @@ components:
         - TEXT_ANALYZER
         - COLUMN_ANALYZER_OVERRIDE
         - SYNONYM_SET
+        - SEARCH_PIPELINE
         - SEARCH_CONFIGURATION
         - SEARCH_CONFIG_OBJECT_BINDING
         - EDUC_QUOTA
@@ -20919,6 +21075,12 @@ components:
           description: The number of files that require this action.
           format: int32
       description: Represents a single action that the user will need to take in order to download one or more files.
+    org.sagebionetworks.repo.model.search.dsl.CombinationTechnique:
+      type: string
+      enum:
+        - arithmetic_mean
+        - harmonic_mean
+        - geometric_mean
     org.sagebionetworks.repo.model.message.cloudmailin.Attachment:
       type: object
       properties:
@@ -21713,6 +21875,12 @@ components:
           type: string
           description: The parentID to of this page.
       description: A WikiHeader contains basic metadata about a WikiPage.
+    org.sagebionetworks.repo.model.search.dsl.BoundMode:
+      type: string
+      enum:
+        - apply
+        - clip
+        - ignore
     org.sagebionetworks.repo.model.message.cloudmailin.Headers:
       type: object
       properties:
@@ -22274,6 +22442,45 @@ components:
           type: boolean
           description: If true, then in addition to following directions in the 'actContactInfo' the client should open a JIRA issue to notify the ACT.  If omitted, default is 'true'.
       description: JSON schema for out of band 'Access Control Team' controlled Access Requirement, a 'tier 3' Access Requirement. This access requirement directs user to contact an ACT member to gain access to the data.
+      required:
+        - concreteType
+    org.sagebionetworks.repo.model.table.RowSuppressionErrorResponse:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.table.RowSuppressionErrorResponse
+        rowSuppressionReasonCode:
+          type: string
+          description: A machine-readable code explaining why the row results of a query against an aggregate-only source were withheld. When such a query requests row results, it is rejected with this code rather than returning rows.
+          enum:
+            - NO_QUASI_IDENTIFIERS
+            - QID_PROJECTED
+            - QID_IN_NON_COUNT_AGGREGATE
+            - QID_IN_GROUP_BY
+            - QID_IN_ORDER_BY
+            - QID_IN_SELECT_DISTINCT
+            - QID_IN_EXPRESSION
+        reason:
+          type: string
+          description: The reason for the error
+        errorCode:
+          type: string
+          description: A code to be used by clients to handle the error.
+          enum:
+            - PASSWORD_RESET_VIA_EMAIL_REQUIRED
+            - USER_CERTIFICATION_REQUIRED
+            - INVALID_TABLE_QUERY_FACET_COLUMN_REQUEST
+            - OAUTH_CLIENT_NOT_VERIFIED
+            - TWO_FA_REQUIRED
+            - UNSUPPORTED_WEBHOOK_DOMAIN
+            - PROJECT_STORAGE_LIMIT_EXCEEDED
+            - TWO_FA_ENABLED_REQUIRED
+            - BELOW_THRESHOLD
+            - ROW_SUPPRESSED
+            - COHORT_TOO_LARGE
+      description: Error returned when a query against an aggregate-only source requests row results but references a quasi-identifier column in a way that would expose it as more than a count. The row results are withheld to protect individual-level data. To obtain the aggregate-only response (the gated total count and obscured facet statistics), re-run the query without requesting row results.
       required:
         - concreteType
     org.sagebionetworks.repo.model.grid.ListGridSessionsRequest:
@@ -23169,11 +23376,21 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.ColumnMultiValueFunctionQueryFilter'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.FilterGroup'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.ColumnSingleValueQueryFilter'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.ColumnCohortFilter'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.TextMatchesQueryFilter'
       required:
         - concreteType
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.table.CohortDefinition:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Required. The name of the cohort, unique within the request. Must be a simple identifier (letters, digits and underscores, not starting with a digit).
+        query:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.CohortDefinition'
+      description: "A named, request-scoped cohort: the distinct values of the single column selected by a query. The cohort query runs with the caller's own authorization. When the caller has aggregate-only access to the cohort source, a non-empty cohort smaller than the source's suppression threshold is rejected."
     org.sagebionetworks.repo.model.agent.SessionFileToAdd:
       type: object
       properties:
@@ -23328,11 +23545,11 @@ components:
           format: int32
         min_doc_count:
           type: integer
-          description: Optional. Minimum document count for a bucket to be returned. Default <code>1</code>.
+          description: Optional. Minimum document count for a bucket to be returned. Default and minimum <code>1</code>; <code>0</code> is rejected.
           format: int32
         shard_min_doc_count:
           type: integer
-          description: Optional. Per-shard minimum document count before a bucket is considered.
+          description: Optional. Per-shard minimum document count before a bucket is considered. Minimum <code>1</code>; <code>0</code> is rejected.
           format: int32
         show_term_doc_count_error:
           type: boolean
@@ -23458,6 +23675,16 @@ components:
         - done
         - declined
         - bounced
+    org.sagebionetworks.repo.model.search.table.ListNamedSearchPipelinesRequest:
+      type: object
+      properties:
+        organizationName:
+          type: string
+          description: Optional filter by organization name.
+        nextPageToken:
+          type: string
+          description: Token for the next page of results.
+      description: Request to list search pipelines, optionally filtered by organization.
     org.sagebionetworks.evaluation.model.SubmissionContributor:
       type: object
       properties:
@@ -25169,6 +25396,12 @@ components:
           type: string
           description: Date/time when the access approval expires, or null if no approval exists for this user
       description: Summary of a data access request
+    org.sagebionetworks.repo.model.search.dsl.NormalizationTechnique:
+      type: string
+      enum:
+        - min_max
+        - l2
+        - z_score
     org.sagebionetworks.repo.model.FacetRoundingParameters:
       type: object
       properties:
@@ -25917,6 +26150,19 @@ components:
       type: string
       enum:
         - TEAM_NAME
+    org.sagebionetworks.repo.model.search.dsl.SearchPipelineBinding:
+      type: object
+      properties:
+        $ref:
+          type: string
+          description: The qualified name, <code>{organizationName}-{name}</code>, of a saved NamedSearchPipeline.
+        phase_results_processors:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.PhaseResultsProcessor'
+            description: One phase-results processor. Exactly one processor kind may be set.
+          description: Required. Exactly one <a href="${org.sagebionetworks.repo.model.search.dsl.PhaseResultsProcessor}">phase-results processor</a>, which must set <code>normalization-processor</code>.
+      description: '<p>A <a href="${org.sagebionetworks.repo.model.search.dsl.SearchPipeline}">search pipeline</a> slot: exactly one of <code>$ref</code> and <code>phase_results_processors</code> is required. Either a reference to a saved <a href="${org.sagebionetworks.repo.model.search.table.NamedSearchPipeline}">NamedSearchPipeline</a> written as <code>{"$ref": "{organizationName}-{name}"}</code>, or an inline SearchPipeline literal.</p>'
     org.sagebionetworks.repo.model.download.DownloadListPackageResponse:
       type: object
       properties:
@@ -25962,6 +26208,8 @@ components:
             - PROJECT_STORAGE_LIMIT_EXCEEDED
             - TWO_FA_ENABLED_REQUIRED
             - BELOW_THRESHOLD
+            - ROW_SUPPRESSED
+            - COHORT_TOO_LARGE
       description: JSON schema for an error
       required:
         - concreteType
@@ -25986,6 +26234,20 @@ components:
         etag:
           type: string
           description: Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.
+    org.sagebionetworks.repo.model.search.dsl.Normalization:
+      type: object
+      properties:
+        technique:
+          type: string
+          description: How each clause's raw scores are mapped onto a common scale before combination.
+          enum:
+            - min_max
+            - l2
+            - z_score
+        parameters:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.NormalizationParameters'
+          description: Parameters of the normalization stage. Applies only to the <code>min_max</code> normalization technique.
+      description: The normalization stage of a <a href="https://docs.opensearch.org/latest/search-plugins/search-pipelines/normalization-processor/">normalization processor</a>.
     org.sagebionetworks.repo.model.search.dsl.MinAggregation:
       type: object
       properties:
@@ -26001,6 +26263,25 @@ components:
           type: string
           description: Optional. Explicit value type for the field when it cannot be inferred.
       description: A <a href="https://docs.opensearch.org/latest/aggregations/metric/minimum/"><code>min</code></a> metric aggregation &mdash; the minimum value of a numeric column.
+    org.sagebionetworks.repo.model.table.ColumnCohortFilter:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.table.ColumnCohortFilter
+        isDefiningCondition:
+          type: boolean
+          description: When null (default) or false, this condition will be applied to WHERE clause of table/view query.  When set to true, for a query against a VirtualTable, this condition will be applied to the WHERE clause of the VirtualTable's definingSQL.
+        columnName:
+          type: string
+          description: The name of the column to filter on.
+        cohortName:
+          type: string
+          description: The name of a cohort defined in the request's cohorts.
+      description: A filter that limits the query to rows whose column value is in a cohort defined in the same request. Equivalent to <columnName> IN COHORT(<cohortName>).
+      required:
+        - concreteType
     org.sagebionetworks.evaluation.model.SubmissionEligibilityInterface:
       type: object
       properties:
@@ -26265,6 +26546,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.SortItem'
+        cohorts:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.CohortDefinition'
+            description: "A named, request-scoped cohort: the distinct values of the single column selected by a query. The cohort query runs with the caller's own authorization. When the caller has aggregate-only access to the cohort source, a non-empty cohort smaller than the source's suppression threshold is rejected."
+          description: Optional, request-scoped cohort definitions. Each cohort is referenced by name from the sql (<column> IN COHORT(<name>)) or from a ColumnCohortFilter. The server runs each cohort query as the caller and replaces the reference with the cohort's distinct values, which are never returned to the caller. Every reference must match a definition and every definition must be referenced.
     org.sagebionetworks.repo.model.search.dsl.MissingAggregation:
       type: object
       properties:
@@ -27236,6 +27523,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -28257,6 +28545,20 @@ components:
       description: In order to download a file the user will need to meet an access requirement associated with the file.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.search.dsl.UpperBound:
+      type: object
+      properties:
+        mode:
+          type: string
+          description: How a <a href="${org.sagebionetworks.repo.model.search.dsl.LowerBound}">lower</a> or <a href="${org.sagebionetworks.repo.model.search.dsl.UpperBound}">upper</a> bound is applied to a clause's scores during <code>min_max</code> normalization.
+          enum:
+            - apply
+            - clip
+            - ignore
+        max_score:
+          type: number
+          description: Optional. The upper bound threshold, in the <code>[-10000.0, 10000.0]</code> range. Has no effect when <code>mode</code> is <code>ignore</code>. Defaults to 1.0.
+      description: The maximum threshold score of one hybrid query clause for <code>min_max</code> normalization.
     org.sagebionetworks.repo.model.search.dsl.WildcardFieldOptions:
       type: object
       properties:
@@ -29312,8 +29614,19 @@ components:
       properties:
         suppressionThreshold:
           type: integer
-          description: The minimum number of matching rows required before an aggregate result is returned. An aggregate query that matches a non-zero row count below this threshold is suppressed. Must be a positive value.
+          description: 'The minimum number of matching rows required before an aggregate result is returned. An aggregate query that matches a non-zero row count below this threshold is suppressed. Must be a positive value. This is also the k value enforced by cell-level k-anonymity: a participant-count cell whose value is non-zero but below this threshold is suppressed.'
           format: int32
+        quasiIdentifierColumnNames:
+          type: array
+          items:
+            type: string
+          description: 'The names of the columns of the source that are quasi-identifiers (QIDs), including any direct participant identifier. Optional: when omitted, the source is restricted to aggregate-only reads (no row-level data is ever returned, and the total count is gated against the suppression threshold). When provided, the source additionally allows row-returning aggregate queries with cell-level k-anonymity applied. Each name must match an actual column name of the source; at query time, if any configured QID name does not match a column of the source, an exception is thrown. A QID column may only appear in a query as the argument of a COUNT (or COUNT DISTINCT) or in a WHERE clause. Any other use (bare projection, a non-count aggregate, GROUP BY, ORDER BY, SELECT DISTINCT, or an arithmetic/string expression) is permitted only for the aggregate-only response (the gated total count and obscured facet statistics); a query that both uses a QID in one of those ways and requests row results is rejected with an error identifying the offending use.'
+        countSuppressionStrategy:
+          type: string
+          description: Selects how a query that returns rows from an aggregate-only source treats a participant-count cell whose value is non-zero but below the suppression threshold (k). A count of exactly zero is never suppressed under either strategy. The ACT chooses the strategy per source based on what a given case requires.
+          enum:
+            - EXCLUDE_ROW
+            - MASK_BELOW_THRESHOLD
         facetPostProcessingConfig:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.FacetPostProcessingConfig'
           description: Configuration describing how facet counts are post-processed for an aggregate-only query.
@@ -30159,6 +30472,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -30364,6 +30678,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.SortItem'
+        cohorts:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.CohortDefinition'
+            description: "A named, request-scoped cohort: the distinct values of the single column selected by a query. The cohort query runs with the caller's own authorization. When the caller has aggregate-only access to the cohort source, a non-empty cohort smaller than the source's suppression threshold is rejected."
+          description: Optional, request-scoped cohort definitions. Each cohort is referenced by name from the sql (<column> IN COHORT(<name>)) or from a ColumnCohortFilter. The server runs each cohort query as the caller and replaces the reference with the cohort's distinct values, which are never returned to the caller. Every reference must match a definition and every definition must be referenced.
       description: Request to download a Portable Format for Biomedical (PFB) file from a table/view query result.
       required:
         - concreteType
@@ -31247,6 +31567,26 @@ components:
       enum:
         - SUCCESS
         - FAILURE
+    org.sagebionetworks.repo.model.search.dsl.NeuralFieldOptions:
+      type: object
+      properties:
+        query_text:
+          type: string
+          description: Required. The query text from which to generate vector embeddings.
+        k:
+          type: integer
+          description: Optional. The number of results returned by the k nearest neighbours search. Only one variable, either <code>k</code>, <code>min_score</code>, or <code>max_distance</code>, can be specified. If a variable is not specified, the default is <code>k</code> with a value of 10. A number in the range of 100 to 200 is recommended for datasets up to 10M documents; raising it beyond that increases latency without improving relevance.
+          format: int32
+        min_score:
+          type: number
+          description: Optional. The minimum score threshold for the search results. Only one variable, either <code>k</code>, <code>min_score</code>, or <code>max_distance</code>, can be specified. For more information, see <a href="https://docs.opensearch.org/latest/vector-search/specialized-operations/radial-search-knn/">radial search</a>.
+        max_distance:
+          type: number
+          description: Optional. The maximum distance threshold for the search results. Only one variable, either <code>k</code>, <code>min_score</code>, or <code>max_distance</code>, can be specified. For more information, see <a href="https://docs.opensearch.org/latest/vector-search/specialized-operations/radial-search-knn/">radial search</a>.
+        filter:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.Query'
+          description: <p>A single <a href="https://docs.opensearch.org/latest/query-dsl/">OpenSearch query DSL</a> clause. Exactly one of the properties below may be set &mdash; the set property names the clause kind. See <a href="https://docs.opensearch.org/latest/query-dsl/query-filter-context/">query vs. filter context</a> and <a href="https://docs.opensearch.org/latest/query-dsl/term-vs-full-text/">term-level vs. full-text queries</a>.</p><p>The field-keyed leaf clauses (<code>match</code>, <code>term</code>, <code>range</code>, ...) are maps whose key is the column name and whose value is the per-field options object &mdash; only the long form is accepted (e.g. <code>{"match":{"title":{"query":"x"}}}</code>, not the <code>{"match":{"title":"x"}}</code> shorthand). The compound clauses (<code>bool</code>, <code>dis_max</code>, ...) nest further Query DSL clauses recursively.</p>
+      description: '<p>The per-field options of a <a href="https://docs.opensearch.org/latest/query-dsl/specialized/neural/"><code>neural</code></a> clause &mdash; semantic (vector) matching. The platform embeds <code>query_text</code> with its own registered model, so the caller supplies text rather than a vector; a caller-supplied raw vector is not accepted because there would be no way to detect an embedding-space mismatch.</p><p>At most one of <code>k</code>, <code>min_score</code>, and <code>max_distance</code> may be set.</p><p><code>filter</code> restricts the candidates of <i>this</i> clause, and is applied <a href="https://docs.opensearch.org/latest/vector-search/filter-search-knn/efficient-knn-filtering/">during</a> the vector search rather than after it, so a selective filter still yields <code>k</code> results. Use it only when the semantic clause must draw from a narrower subset than the rest of the query: a narrowing meant for every clause belongs in <code>hybrid.filter</code>, which is combined with this filter rather than replacing it. Server-side access-control filters are AND-ed in here as well. Narrowing one clause also rescales it &mdash; each clause is normalized over its own returned candidates, so the best document within the subset takes the top normalized score however weak its absolute similarity.</p>'
     org.sagebionetworks.repo.model.AccessApprovalInfo:
       type: object
       properties:
@@ -31388,6 +31728,11 @@ components:
           type: string
           description: Token for the next page of results, if more results exist.
       description: Response containing a page of search configurations.
+    org.sagebionetworks.repo.model.AggregateCountSuppressionStrategy:
+      type: string
+      enum:
+        - EXCLUDE_ROW
+        - MASK_BELOW_THRESHOLD
     org.sagebionetworks.repo.model.table.EntityRefCollectionView:
       type: object
       properties:
@@ -31806,6 +32151,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -32019,6 +32365,15 @@ components:
       enum:
         - ASC
         - DESC
+    org.sagebionetworks.repo.model.search.dsl.CombinationParameters:
+      type: object
+      properties:
+        weights:
+          type: array
+          items:
+            type: number
+          description: '<p>Optional. The weight of each hybrid query clause, positional against <code>hybrid.queries</code>. When set, must hold 2 to 5 entries &mdash; 5 being the maximum <code>hybrid.queries</code> length &mdash; each in the <code>[0.0, 1.0]</code> range, with a sum equal to 1.0. Weights are decimal percentages: the closer a weight is to 1.0, the more weight is given to its clause. A query may send fewer clauses than there are weights, in which case the weights of the clauses it sends are rescaled to sum to 1.0; a query that sends more clauses than there are weights is rejected. If not provided, every clause is given equal weight.</p>'
+      description: Parameters of the combination stage.
     org.sagebionetworks.repo.model.table.DefiningSqlEntityType:
       type: string
       enum:
@@ -34136,6 +34491,7 @@ components:
               - TEXT_ANALYZER
               - COLUMN_ANALYZER_OVERRIDE
               - SYNONYM_SET
+              - SEARCH_PIPELINE
               - SEARCH_CONFIGURATION
               - SEARCH_CONFIG_OBJECT_BINDING
               - EDUC_QUOTA
@@ -34875,6 +35231,9 @@ components:
         columnName:
           type: string
           description: The name of the column to override. Silently skipped at index-build time if the column is not present in the target SearchIndex's schema — a single override bundle can therefore be applied across several indexes that share some column names.
+        semantic:
+          type: boolean
+          description: "<p>When true this column also feeds the index's <code>semantic_search</code> vector field, so a neural clause can match against it. Only STRING, STRING_LIST, MEDIUMTEXT, LARGETEXT, LINK, and JSON columns may be flagged; flagging any other type, or flagging any column on a source with more than 50,000 rows, fails the index build. A JSON value is embedded as its JSON text. Independent of <code>analyzer</code> &mdash; an entry may set either, both, or <code>semantic</code> alone. When several overrides name the same column, only the first entry is used, so a <code>semantic</code> flag on a later entry for that column is ignored.</p><p><b>Long values are truncated for embedding.</b> All of a row's flagged columns are joined into a single text of <code>Name: value</code> lines, and that text is capped at 8,000 tokens before it is embedded. Text past the cap contributes nothing to the vector. The columns themselves are unaffected: each value is indexed in full, returned in full on a hit, and remains fully matchable by keyword clauses.</p>"
         analyzer:
           description: |-
             <p>The analyzer to use for this column. Either a reference to a saved TextAnalyzer (preferred &mdash; supports reuse) written as <code>{"$ref": "{organizationName}-{name}"}</code>, or an inline analyzer literal pasted directly.</p><p><b>$ref form:</b></p><pre><code>"analyzer": { "$ref": "biomed-acronym_exact" }</code></pre><p><b>Inline form</b> &mdash; the bare OpenSearch <code>settings.analysis</code> block (same shape as a TextAnalyzer record's <code>settings</code> field, with no surrounding identity / audit fields and no outer <code>settings</code> wrapper). Allowed root keys are <code>char_filter</code>, <code>tokenizer</code>, <code>filter</code>, and <code>analyzer</code>. The inner <code>analyzer</code> map must declare <code>default</code> (required), and may optionally declare <code>default_search</code> for asymmetric search-time analysis. Refs to SynonymSets are not permitted inside an inline analyzer literal &mdash; save a TextAnalyzer and reference it by qualified name to use synonyms.</p><pre><code>"analyzer": {
@@ -35327,6 +35686,13 @@ components:
         - IS_NOT_NULL
         - IS_UNDEFINED
         - IS_DEFINED
+    org.sagebionetworks.repo.model.search.dsl.PhaseResultsProcessor:
+      type: object
+      properties:
+        normalization-processor:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.NormalizationProcessor'
+          description: 'A <a href="https://docs.opensearch.org/latest/search-plugins/search-pipelines/normalization-processor/">normalization processor</a>: normalizes each hybrid clause''s scores onto a common scale, then combines them.'
+      description: One phase-results processor. Exactly one processor kind may be set.
     org.sagebionetworks.repo.model.oauth.OAuthRefreshTokenInformation:
       type: object
       properties:
@@ -36335,6 +36701,20 @@ components:
       description: Array of annotation keys
       required:
         - keys
+    org.sagebionetworks.repo.model.search.dsl.LowerBound:
+      type: object
+      properties:
+        mode:
+          type: string
+          description: How a <a href="${org.sagebionetworks.repo.model.search.dsl.LowerBound}">lower</a> or <a href="${org.sagebionetworks.repo.model.search.dsl.UpperBound}">upper</a> bound is applied to a clause's scores during <code>min_max</code> normalization.
+          enum:
+            - apply
+            - clip
+            - ignore
+        min_score:
+          type: number
+          description: Optional. The lower bound threshold, in the <code>[-10000.0, 10000.0]</code> range. Has no effect when <code>mode</code> is <code>ignore</code>. Defaults to 0.0.
+      description: The minimum threshold score of one hybrid query clause for <code>min_max</code> normalization.
     org.sagebionetworks.repo.model.portals.ListPortalsResponse:
       type: object
       properties:
@@ -36403,6 +36783,16 @@ components:
         - concreteType
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.table.RowSuppressionReasonCode:
+      type: string
+      enum:
+        - NO_QUASI_IDENTIFIERS
+        - QID_PROJECTED
+        - QID_IN_NON_COUNT_AGGREGATE
+        - QID_IN_GROUP_BY
+        - QID_IN_ORDER_BY
+        - QID_IN_SELECT_DISTINCT
+        - QID_IN_EXPRESSION
     org.sagebionetworks.repo.model.educ.EDucSignatureStatus:
       type: object
       properties:
@@ -36502,6 +36892,8 @@ components:
         - PROJECT_STORAGE_LIMIT_EXCEEDED
         - TWO_FA_ENABLED_REQUIRED
         - BELOW_THRESHOLD
+        - ROW_SUPPRESSED
+        - COHORT_TOO_LARGE
     org.sagebionetworks.repo.model.curation.TaskStatus:
       type: object
       properties:
@@ -36747,6 +37139,57 @@ components:
       description: Interface for JSON schema for UsedEntity POJO
       required:
         - concreteType
+    org.sagebionetworks.repo.model.search.table.NamedSearchPipeline:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique ID of this search pipeline.
+        organizationName:
+          type: string
+          description: The name of the Organization this resource belongs to. Immutable after creation.
+        name:
+          type: string
+          description: The resource name. Must start with a letter and contain only letters, digits, and underscores. Unique within the organization and immutable after creation. Used as part of the qualified name ({organizationName}-{name}) when referenced by other resources.
+        description:
+          type: string
+          description: Optional description of the search pipeline.
+        settings:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.SearchPipeline'
+          description: '<p>A <a href="https://docs.opensearch.org/latest/search-plugins/search-pipelines/index/">search pipeline</a>: how a hybrid query''s per-clause scores are normalized and combined. Saved as the <code>settings</code> of a <a href="${org.sagebionetworks.repo.model.search.table.NamedSearchPipeline}">NamedSearchPipeline</a>.</p>'
+        etag:
+          type: string
+          description: Synapse employs an Optimistic Concurrency Control (OCC) scheme.
+        createdOn:
+          type: string
+          description: The date this resource was created.
+        createdBy:
+          type: string
+          description: The ID of the user that created this resource.
+        modifiedOn:
+          type: string
+          description: The date this resource was last modified.
+        modifiedBy:
+          type: string
+          description: The ID of the user that last modified this resource.
+      description: |-
+        <p>A shareable, named <a href="${org.sagebionetworks.repo.model.search.dsl.SearchPipeline}">search pipeline</a>: how a <code>hybrid</code> query's per-clause scores are normalized and combined. NamedSearchPipelines belong to an Organization and are identified by the qualified name <code>{organizationName}-{name}</code>.</p><p>Example:</p><pre><code>{
+          "organizationName": "biomed",
+          "name": "keyword_heavy",
+          "settings": {
+            "phase_results_processors": [
+              {
+                "normalization-processor": {
+                  "normalization": { "technique": "min_max" },
+                  "combination": {
+                    "technique": "arithmetic_mean",
+                    "parameters": { "weights": [0.4, 0.3, 0.1, 0.1, 0.1] }
+                  }
+                }
+              }
+            ]
+          }
+        }</code></pre>
     org.sagebionetworks.repo.model.EntityType:
       type: string
       enum:
@@ -37032,6 +37475,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -37182,6 +37626,36 @@ components:
           type: boolean
           description: Set to true to request a preview's pre-signed URL for each file.
       description: Batch Request for file pre-signed-URLs and/or FileHandles.
+    org.sagebionetworks.repo.model.search.table.ListNamedSearchPipelinesResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.table.NamedSearchPipeline'
+            description: |-
+              <p>A shareable, named <a href="${org.sagebionetworks.repo.model.search.dsl.SearchPipeline}">search pipeline</a>: how a <code>hybrid</code> query's per-clause scores are normalized and combined. NamedSearchPipelines belong to an Organization and are identified by the qualified name <code>{organizationName}-{name}</code>.</p><p>Example:</p><pre><code>{
+                "organizationName": "biomed",
+                "name": "keyword_heavy",
+                "settings": {
+                  "phase_results_processors": [
+                    {
+                      "normalization-processor": {
+                        "normalization": { "technique": "min_max" },
+                        "combination": {
+                          "technique": "arithmetic_mean",
+                          "parameters": { "weights": [0.4, 0.3, 0.1, 0.1, 0.1] }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }</code></pre>
+          description: The list of search pipelines for this page.
+        nextPageToken:
+          type: string
+          description: Token for the next page of results, if more results exist.
+      description: Response containing a page of search pipelines.
     org.sagebionetworks.repo.model.schema.ListValidationResultsResponse:
       type: object
       properties:
@@ -37671,6 +38145,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -37833,6 +38308,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -38274,6 +38750,22 @@ components:
           description: The total number of results
           format: int32
       description: A paginated list of Challenge objects
+    org.sagebionetworks.repo.model.search.dsl.HybridQuery:
+      type: object
+      properties:
+        queries:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.HybridClause'
+            description: '<p>One entry of <code>hybrid.queries</code>: any <a href="${org.sagebionetworks.repo.model.search.dsl.Query}">Query</a> clause, plus the <code>neural</code> clause that is accepted only here. Each entry is scored independently and the per-clause scores are then normalized and combined by <code>search_pipeline</code>.</p>'
+          description: Required. An array of one or more <a href="${org.sagebionetworks.repo.model.search.dsl.HybridClause}">query clauses</a> that are used to match documents. A document must match at least one query clause in order to be returned in the results. The documents' relevance scores from all query clauses are combined into one score by applying a search pipeline. The maximum number of query clauses is 5.
+        filter:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.Query'
+          description: <p>A single <a href="https://docs.opensearch.org/latest/query-dsl/">OpenSearch query DSL</a> clause. Exactly one of the properties below may be set &mdash; the set property names the clause kind. See <a href="https://docs.opensearch.org/latest/query-dsl/query-filter-context/">query vs. filter context</a> and <a href="https://docs.opensearch.org/latest/query-dsl/term-vs-full-text/">term-level vs. full-text queries</a>.</p><p>The field-keyed leaf clauses (<code>match</code>, <code>term</code>, <code>range</code>, ...) are maps whose key is the column name and whose value is the per-field options object &mdash; only the long form is accepted (e.g. <code>{"match":{"title":{"query":"x"}}}</code>, not the <code>{"match":{"title":"x"}}</code> shorthand). The compound clauses (<code>bool</code>, <code>dis_max</code>, ...) nest further Query DSL clauses recursively.</p>
+        min_score:
+          type: number
+          description: Optional. Drop hits whose fused score &mdash; after normalization and combination &mdash; is below this value. Distinct from a leg's own <code>neural.min_score</code>, which bounds which candidates that leg contributes rather than the final combined score.
+      description: <p>A <a href="https://docs.opensearch.org/latest/query-dsl/compound/hybrid/"><code>hybrid</code></a> query &mdash; several independently-scored clauses whose scores are normalized onto a common scale and then combined, so keyword and semantic relevance can be blended meaningfully. Supplied as <code>SearchQuery.hybrid</code> rather than inside <code>query</code>, because OpenSearch requires a hybrid query to be the top-level query.</p><p>The scores are normalized and combined by <code>SearchQuery.search_pipeline</code>; when it is omitted, the search configuration's default search pipeline is used, and failing that <code>min_max</code> normalization with an <code>arithmetic_mean</code> combination of equally-weighted clauses.</p><p>Results are ranked by relevance unless <code>sort</code> names a column. Pages requested with <code>from</code> / <code>size</code> are capped at <code>from + size &lt;= 1000</code>. A relevance-ranked query emits no <code>nextSearchAfter</code> and rejects <code>search_after</code>; sorting by a column enables <code>search_after</code> paging.</p>
     org.sagebionetworks.repo.model.search.table.SearchConfiguration:
       type: object
       properties:
@@ -38302,6 +38794,9 @@ components:
                 }
               }
             }</code></pre><p>If the analyzer also declares an <code>analyzer.default_search</code> entry, that becomes the index's <code>analysis.analyzer.default_search</code> &mdash; see OpenSearch's <a href='https://docs.opensearch.org/latest/analyzers/index-analyzers/'>index analyzers</a> and <a href='https://docs.opensearch.org/latest/analyzers/search-analyzers/'>search analyzers</a> for the precedence rules. If omitted, each column falls back to the system default analyzer for its data type (see ColumnTypeToOpenSearchMapping).</p>
+        defaultSearchPipeline:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.SearchPipelineBinding'
+          description: '<p>A <a href="${org.sagebionetworks.repo.model.search.dsl.SearchPipeline}">search pipeline</a> slot: exactly one of <code>$ref</code> and <code>phase_results_processors</code> is required. Either a reference to a saved <a href="${org.sagebionetworks.repo.model.search.table.NamedSearchPipeline}">NamedSearchPipeline</a> written as <code>{"$ref": "{organizationName}-{name}"}</code>, or an inline SearchPipeline literal.</p>'
         columnAnalyzerOverrides:
           type: array
           items: {}
@@ -38670,6 +39165,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -39177,6 +39673,13 @@ components:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.SourceDependency'
             description: A single source object (table or view) that a defining-SQL object's index was built from, by id, optional pinned version, and table type. The dependencies of an IndexDescriptionSnapshot are the flattened transitive closure of the object's dependencies; each carries the table type because the transitive READ authorization check keys on (id, type).
           description: The flattened transitive closure of the objects this index was built from. Reconstituting the queried object with these as its (childless) dependencies reproduces the exact node set the transitive READ authorization check evaluates.
+        definingSql:
+          type: string
+          description: The defining SQL for objects that are defined by SQL (MaterializedView, VirtualTable, SearchIndex). Null for other types. Captured so a future query can reconstruct the real IndexDescription with all its type-specific behavior (e.g. VirtualTable.preprocessQuery).
+        indexVersion:
+          type: integer
+          description: The index version for views and tables. Used to reconstruct ViewIndexDescription and TableIndexDescription. Null for types that don't track index version.
+          format: int32
       description: "A serialized, authorization-relevant projection of a runtime org.sagebionetworks.table.cluster.description.IndexDescription, captured as-built at index build time: the object's id and version, its table type, the benefactor columns baked into its index, and its flattened transitive dependencies. It is reconstituted at query time so the transitive-dependency ACL check and the benefactor row-level filter run against as-built state through the same authorization code path used for current-truth state. Only the queried object's own benefactors drive the row-level filter, and the ACL check flattens the dependency tree anyway, so dependencies are stored pre-flattened (each a childless node carrying only id, version, and type). It intentionally omits everything IndexDescription needs only for SQL generation (create/update SQL, query preprocessing, columns-to-add, change numbers), which authorization never consults."
     org.sagebionetworks.repo.model.table.ViewColumnModelResponse:
       type: object
@@ -39590,6 +40093,16 @@ components:
     org.sagebionetworks.repo.model.provenance.WasExecuted:
       type: boolean
       description: The enclosed entity was used and also executed in the Activity
+    org.sagebionetworks.repo.model.search.dsl.NormalizationProcessor:
+      type: object
+      properties:
+        normalization:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.Normalization'
+          description: The normalization stage of a <a href="https://docs.opensearch.org/latest/search-plugins/search-pipelines/normalization-processor/">normalization processor</a>.
+        combination:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.Combination'
+          description: The combination stage of a <a href="https://docs.opensearch.org/latest/search-plugins/search-pipelines/normalization-processor/">normalization processor</a>.
+      description: 'A <a href="https://docs.opensearch.org/latest/search-plugins/search-pipelines/normalization-processor/">normalization processor</a>: normalizes each hybrid clause''s scores onto a common scale, then combines them.'
     org.sagebionetworks.repo.model.auth.LoginCredentials:
       type: object
       properties:
@@ -40120,6 +40633,99 @@ components:
       description: A question whose response is an (unconstrained) text string
       required:
         - concreteType
+    org.sagebionetworks.repo.model.search.dsl.HybridClause:
+      type: object
+      properties:
+        neural:
+          type: object
+          description: <p>A <a href="${org.sagebionetworks.repo.model.search.dsl.NeuralFieldOptions}">semantic (vector)</a> clause. <code>semantic_search</code> is the only key accepted; any other key is rejected. At index time that field is added to each OpenSearch document if at least one column is flagged <code>semantic</code>. The single-key restriction keeps room for additional vector fields later. See <a href="https://docs.opensearch.org/latest/query-dsl/specialized/neural/">neural query</a>.</p><p>The key names a vector field of the document, not a column, and is not resolved against the index's columns.</p><p>When the index has no column flagged <code>semantic</code>, every <code>neural</code> clause is dropped from the query, along with the entries at the same positions of the search pipeline's weights and bounds, and the remaining clauses are scored as if the dropped clauses had never been sent. A query whose clauses are all <code>neural</code> is rejected in that case.</p>
+          additionalProperties:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.NeuralFieldOptions'
+            description: '<p>The per-field options of a <a href="https://docs.opensearch.org/latest/query-dsl/specialized/neural/"><code>neural</code></a> clause &mdash; semantic (vector) matching. The platform embeds <code>query_text</code> with its own registered model, so the caller supplies text rather than a vector; a caller-supplied raw vector is not accepted because there would be no way to detect an embedding-space mismatch.</p><p>At most one of <code>k</code>, <code>min_score</code>, and <code>max_distance</code> may be set.</p><p><code>filter</code> restricts the candidates of <i>this</i> clause, and is applied <a href="https://docs.opensearch.org/latest/vector-search/filter-search-knn/efficient-knn-filtering/">during</a> the vector search rather than after it, so a selective filter still yields <code>k</code> results. Use it only when the semantic clause must draw from a narrower subset than the rest of the query: a narrowing meant for every clause belongs in <code>hybrid.filter</code>, which is combined with this filter rather than replacing it. Server-side access-control filters are AND-ed in here as well. Narrowing one clause also rescales it &mdash; each clause is normalized over its own returned candidates, so the best document within the subset takes the top normalized score however weak its absolute similarity.</p>'
+        match:
+          type: object
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/full-text/match/"><code>match</code></a> full-text clause. Map of column name to its match options.
+          additionalProperties:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.MatchFieldOptions'
+            description: Per-field options for a <a href="https://docs.opensearch.org/latest/query-dsl/full-text/match/"><code>match</code></a> full-text clause. Carried as the value of the field-keyed <code>match</code> map (the map key is the column name).
+        match_phrase:
+          type: object
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/full-text/match-phrase/"><code>match_phrase</code></a> clause. Map of column name to its phrase options.
+          additionalProperties:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.MatchPhraseFieldOptions'
+            description: Per-field options for a <a href="https://docs.opensearch.org/latest/query-dsl/full-text/match-phrase/"><code>match_phrase</code></a> clause. Carried as the value of the field-keyed <code>match_phrase</code> map (the map key is the column name).
+        match_phrase_prefix:
+          type: object
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/full-text/match-phrase-prefix/"><code>match_phrase_prefix</code></a> clause. Map of column name to its options.
+          additionalProperties:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.MatchPhrasePrefixFieldOptions'
+            description: Per-field options for a <a href="https://docs.opensearch.org/latest/query-dsl/full-text/match-phrase-prefix/"><code>match_phrase_prefix</code></a> clause. Carried as the value of the field-keyed <code>match_phrase_prefix</code> map (the map key is the column name).
+        match_bool_prefix:
+          type: object
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/full-text/match-bool-prefix/"><code>match_bool_prefix</code></a> clause. Map of column name to its options.
+          additionalProperties:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.MatchBoolPrefixFieldOptions'
+            description: Per-field options for a <a href="https://docs.opensearch.org/latest/query-dsl/full-text/match-bool-prefix/"><code>match_bool_prefix</code></a> clause. Carried as the value of the field-keyed <code>match_bool_prefix</code> map (the map key is the column name).
+        term:
+          type: object
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/term/term/"><code>term</code></a> term-level clause. Map of column name to its term options.
+          additionalProperties:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.TermFieldOptions'
+            description: Per-field options for a <a href="https://docs.opensearch.org/latest/query-dsl/term/term/"><code>term</code></a> term-level clause (exact, non-analyzed match). Carried as the value of the field-keyed <code>term</code> map (the map key is the column name).
+        range:
+          type: object
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/term/range/"><code>range</code></a> term-level clause. Map of column name to its range bounds.
+          additionalProperties:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.RangeFieldOptions'
+            description: Per-field options for a <a href="https://docs.opensearch.org/latest/query-dsl/term/range/"><code>range</code></a> term-level clause. Carried as the value of the field-keyed <code>range</code> map (the map key is the column name). Bound values are polymorphic (number, date string, ...) and so are typed as opaque objects.
+        prefix:
+          type: object
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/term/prefix/"><code>prefix</code></a> term-level clause. Map of column name to its prefix options.
+          additionalProperties:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.PrefixFieldOptions'
+            description: Per-field options for a <a href="https://docs.opensearch.org/latest/query-dsl/term/prefix/"><code>prefix</code></a> term-level clause. Carried as the value of the field-keyed <code>prefix</code> map (the map key is the column name).
+        wildcard:
+          type: object
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/term/wildcard/"><code>wildcard</code></a> term-level clause. Map of column name to its wildcard options.
+          additionalProperties:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.WildcardFieldOptions'
+            description: Per-field options for a <a href="https://docs.opensearch.org/latest/query-dsl/term/wildcard/"><code>wildcard</code></a> term-level clause. Carried as the value of the field-keyed <code>wildcard</code> map (the map key is the column name).
+        fuzzy:
+          type: object
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/term/fuzzy/"><code>fuzzy</code></a> term-level clause. Map of column name to its fuzzy options.
+          additionalProperties:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.FuzzyFieldOptions'
+            description: Per-field options for a <a href="https://docs.opensearch.org/latest/query-dsl/term/fuzzy/"><code>fuzzy</code></a> term-level clause. Carried as the value of the field-keyed <code>fuzzy</code> map (the map key is the column name).
+        terms:
+          description: 'A <a href="https://docs.opensearch.org/latest/query-dsl/term/terms/"><code>terms</code></a> term-level clause (matches any of several exact values). Field-keyed: <code>{"terms":{"&lt;column&gt;":[v1, v2], "boost":1.0}}</code>. The cross-index <code>terms</code>-lookup form is rejected. Carried as an opaque object because the field name is itself a key and the values are an array of polymorphic scalars; the same allowlist is enforced server-side.'
+        exists:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.ExistsQuery'
+          description: An <a href="https://docs.opensearch.org/latest/query-dsl/term/exists/"><code>exists</code></a> term-level clause. Matches documents that have any non-null value for the given column.
+        multi_match:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.MultiMatchQuery'
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/full-text/multi-match/"><code>multi_match</code></a> full-text clause &mdash; a <code>match</code> run across several columns at once.
+        simple_query_string:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.SimpleQueryStringQuery'
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/full-text/simple-query-string/"><code>simple_query_string</code></a> full-text clause &mdash; a compact mini-DSL (<code>+</code>, <code>|</code>, <code>-</code>, <code>"</code>, <code>*</code>, <code>()</code>) parsed leniently across the listed columns.
+        query_string:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.QueryStringQuery'
+          description: 'A <a href="https://docs.opensearch.org/latest/query-dsl/full-text/query-string/"><code>query_string</code></a> full-text clause &mdash; the full Lucene query syntax (column prefixes such as <code>title: wind</code>, <code>AND</code>/<code>OR</code>/<code>NOT</code>, grouping, ranges, <code>~</code> fuzziness, <code>^</code> boosts, <code>/regex/</code>). The operators have no precedence, so parenthesize any expression that mixes <code>AND</code> and <code>OR</code>. Every column named in <code>query</code>, <code>fields</code> and <code>default_field</code> is resolved against the index schema, and an unknown column is rejected. Inside <code>query</code>, a column name containing white space or one of <code>+ - ! ( ) : ^ [ ] " { } ~ * ? \ /</code> must escape that character with a backslash (e.g. <code>sample\ id: S-1</code>); the all-columns prefix <code>*:</code> is not supported, and <code>_exists_:</code> takes a single column name.'
+        match_all:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.MatchAllQuery'
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/match-all/"><code>match_all</code></a> clause. Matches every document. Use <code>{"match_all":{}}</code> to match all documents.
+        bool:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.BoolQuery'
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/compound/bool/"><code>bool</code></a> compound clause &mdash; combines sub-clauses with boolean logic.
+        dis_max:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.DisMaxQuery'
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/compound/disjunction-max/"><code>dis_max</code></a> compound clause. A document matches if any sub-clause matches; its score is the best single sub-clause score plus <code>tie_breaker</code> times the rest.
+        constant_score:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.ConstantScoreQuery'
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/compound/constant-score/"><code>constant_score</code></a> compound clause. Wraps a filter and assigns every matching document the same score (<code>boost</code>).
+        boosting:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.BoostingQuery'
+          description: A <a href="https://docs.opensearch.org/latest/query-dsl/compound/boosting/"><code>boosting</code></a> compound clause. Returns documents matching <code>positive</code>, demoting those that also match <code>negative</code> by <code>negative_boost</code>.
+      description: '<p>One entry of <code>hybrid.queries</code>: any <a href="${org.sagebionetworks.repo.model.search.dsl.Query}">Query</a> clause, plus the <code>neural</code> clause that is accepted only here. Each entry is scored independently and the per-clause scores are then normalized and combined by <code>search_pipeline</code>.</p>'
     org.sagebionetworks.repo.model.oauth.OIDCSigningAlgorithm:
       type: string
       enum:
@@ -40323,6 +40929,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -40908,6 +41515,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA
@@ -41001,6 +41609,16 @@ components:
       description: A dataset collection is a type of view defined by a flat list of datasets.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.search.dsl.SearchPipeline:
+      type: object
+      properties:
+        phase_results_processors:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.dsl.PhaseResultsProcessor'
+            description: One phase-results processor. Exactly one processor kind may be set.
+          description: Required. Exactly one <a href="${org.sagebionetworks.repo.model.search.dsl.PhaseResultsProcessor}">phase-results processor</a>, which must set <code>normalization-processor</code>.
+      description: '<p>A <a href="https://docs.opensearch.org/latest/search-plugins/search-pipelines/index/">search pipeline</a>: how a hybrid query''s per-clause scores are normalized and combined. Saved as the <code>settings</code> of a <a href="${org.sagebionetworks.repo.model.search.table.NamedSearchPipeline}">NamedSearchPipeline</a>.</p>'
     org.sagebionetworks.repo.model.dataaccess.ResearchProject:
       type: object
       properties:
@@ -41276,6 +41894,8 @@ components:
             - PROJECT_STORAGE_LIMIT_EXCEEDED
             - TWO_FA_ENABLED_REQUIRED
             - BELOW_THRESHOLD
+            - ROW_SUPPRESSED
+            - COHORT_TOO_LARGE
       description: JSON schema for an errors related to two factor authentication
       required:
         - concreteType
@@ -41672,6 +42292,8 @@ components:
             - PROJECT_STORAGE_LIMIT_EXCEEDED
             - TWO_FA_ENABLED_REQUIRED
             - BELOW_THRESHOLD
+            - ROW_SUPPRESSED
+            - COHORT_TOO_LARGE
         reason:
           type: string
           description: The reason for the error
@@ -42031,6 +42653,7 @@ components:
             - TEXT_ANALYZER
             - COLUMN_ANALYZER_OVERRIDE
             - SYNONYM_SET
+            - SEARCH_PIPELINE
             - SEARCH_CONFIGURATION
             - SEARCH_CONFIG_OBJECT_BINDING
             - EDUC_QUOTA

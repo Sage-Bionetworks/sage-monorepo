@@ -177,6 +177,7 @@ export namespace OrgSagebionetworksRepoModelMigrationBatchChecksumRequest {
     | 'TEXT_ANALYZER'
     | 'COLUMN_ANALYZER_OVERRIDE'
     | 'SYNONYM_SET'
+    | 'SEARCH_PIPELINE'
     | 'SEARCH_CONFIGURATION'
     | 'SEARCH_CONFIG_OBJECT_BINDING'
     | 'EDUC_QUOTA'
@@ -323,6 +324,7 @@ export namespace OrgSagebionetworksRepoModelMigrationBatchChecksumRequest {
     TextAnalyzer: 'TEXT_ANALYZER' as MigrationTypeEnum,
     ColumnAnalyzerOverride: 'COLUMN_ANALYZER_OVERRIDE' as MigrationTypeEnum,
     SynonymSet: 'SYNONYM_SET' as MigrationTypeEnum,
+    SearchPipeline: 'SEARCH_PIPELINE' as MigrationTypeEnum,
     SearchConfiguration: 'SEARCH_CONFIGURATION' as MigrationTypeEnum,
     SearchConfigObjectBinding: 'SEARCH_CONFIG_OBJECT_BINDING' as MigrationTypeEnum,
     EducQuota: 'EDUC_QUOTA' as MigrationTypeEnum,
