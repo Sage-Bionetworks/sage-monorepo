@@ -5,10 +5,6 @@
     linear-gradient(90deg, #2a77dc 0%, #b186df 51.44%, #65d8bf 100%);
   --footer-padding-x: 60px;
   --header-padding-y: 24px;
-  --header-padding-x: 60px;
-
-  // the header's 64px logo plus the padding above, so page heights subtract the real header
-  --header-height: calc(64px + 2 * var(--header-padding-y));
   --header-link-color: var(--color-accent-lavender-600);
 
   @media (width < #{variables.$desktop-breakpoint}) {
