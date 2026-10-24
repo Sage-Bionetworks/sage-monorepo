@@ -34,7 +34,6 @@
   --container-max-width-lg: #{vars.$container-max-width-lg};
   --container-gutter-width: #{vars.$container-gutter-width};
   --transition-duration: #{vars.$transition-duration};
-  --header-height: #{vars.$header-height};
   --footer-height: #{vars.$footer-height};
 
   @each $key, $value in vars.$chart-colors {
