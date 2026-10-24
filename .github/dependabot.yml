@@ -1,5 +1,11 @@
 version: 2
 updates:
+  # Paketo builder image used by the Spring Boot `bootBuildImage` task. Gradle reads the image
+  # from the FROM line of this directory's Dockerfile; no image is built from that file.
+  - package-ecosystem: docker
+    directory: /buildSrc/paketo-builder
+    schedule:
+      interval: weekly
   - package-ecosystem: github-actions
     directory: /
     schedule:
