@@ -29,6 +29,7 @@ from explorers_data_loader.settings import (
 )
 from explorers_data_loader.staging import (
     SwapError,
+    drop_orphaned_collections,
     verify_staging_collections,
     drop_staging_leftovers,
     log_database_size,
@@ -50,6 +51,7 @@ class Step(StrEnum):
     CREATE_INDEXES = "create_indexes"
     VERIFY_STAGING = "verify_staging"
     SWAP = "swap"
+    DROP_ORPHANS = "drop_orphans"
 
 
 class LiveRelease(StrEnum):
@@ -66,6 +68,8 @@ class RunSummary:
     collections_imported: list[str] = field(default_factory=list)
     collections_swapped: list[str] = field(default_factory=list)
     collections_not_swapped: list[str] = field(default_factory=list)
+    orphans_dropped: list[str] = field(default_factory=list)
+    orphans_failed: list[str] = field(default_factory=list)
 
     def failed_live_release(self) -> LiveRelease:
         return LiveRelease.MIXED if self.collections_swapped else LiveRelease.PREVIOUS
@@ -75,6 +79,8 @@ class RunSummary:
             "collections_imported": self.collections_imported,
             "collections_swapped": self.collections_swapped,
             "collections_not_swapped": self.collections_not_swapped,
+            "orphans_dropped": self.orphans_dropped,
+            "orphans_failed": self.orphans_failed,
         }
 
 
@@ -181,4 +187,11 @@ def load_release(
             raise
         summary.collections_not_swapped = []
 
-        log_database_size(db, "after_swap")
+        summary.step = Step.DROP_ORPHANS
+        orphan_cleanup = drop_orphaned_collections(
+            db, [*collection_names, *product.kept_collection_names]
+        )
+        summary.orphans_dropped = orphan_cleanup.dropped
+        summary.orphans_failed = orphan_cleanup.failed
+
+        log_database_size(db, "after_load")

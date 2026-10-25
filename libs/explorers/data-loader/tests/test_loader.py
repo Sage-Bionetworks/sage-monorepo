@@ -5,7 +5,7 @@ import pytest
 from explorers_data_loader.loader import LiveRelease, Step, run
 from explorers_data_loader.mongo import DATA_VERSION_COLLECTION_NAME
 from explorers_data_loader.settings import ProductSettings
-from explorers_data_loader.staging import SwapError
+from explorers_data_loader.staging import OrphanCleanup, SwapError
 
 AGORA_ENV = {
     "DB_USER": "root",
@@ -84,6 +84,12 @@ def steps():
             "explorers_data_loader.loader.swap_staging_collections",
             side_effect=lambda _db, names: recorded.append(f"swap {names}") or names,
         ),
+        mock.patch(
+            "explorers_data_loader.loader.drop_orphaned_collections",
+            side_effect=lambda _db, names: (
+                recorded.append(f"drop orphans {names}") or OrphanCleanup()
+            ),
+        ),
         mock.patch("explorers_data_loader.loader.MongoClient"),
     ):
         yield recorded
@@ -107,7 +113,8 @@ def test_run_stages_checks_and_swaps_with_dataversion_last(working_dir, steps):
         "create indexes",
         f"verify {RELEASE_COLLECTION_NAMES}",
         f"swap {RELEASE_COLLECTION_NAMES}",
-        "measure size after_swap",
+        f"drop orphans {RELEASE_COLLECTION_NAMES}",
+        "measure size after_load",
     ]
 
 
@@ -135,6 +142,8 @@ def test_run_reports_a_succeeded_run_with_the_new_release_live(
     assert summary.fields["collections_imported"] == RELEASE_COLLECTION_NAMES
     assert summary.fields["collections_swapped"] == RELEASE_COLLECTION_NAMES
     assert summary.fields["collections_not_swapped"] == []
+    assert summary.fields["orphans_dropped"] == []
+    assert summary.fields["orphans_failed"] == []
 
 
 def test_run_names_the_release_in_its_start_and_finish_messages(
@@ -220,3 +229,28 @@ def test_run_reports_missing_settings_as_a_failed_run(
     assert summary.fields["failed_step"] == Step.READ_SETTINGS
     assert summary.fields["live_release"] == LiveRelease.PREVIOUS
     assert steps == []
+
+
+def test_run_keeps_the_product_kept_collections_and_reports_dropped_orphans(
+    working_dir, steps, records
+):
+    agora_with_team_images = ProductSettings(
+        name="agora",
+        insertion_ordered_collection_name="uiconfig",
+        kept_collection_names=("fs.files", "fs.chunks"),
+    )
+    orphan_cleanup = OrphanCleanup(
+        dropped=["genes_legacy"], failed=["proteomics_legacy"]
+    )
+    with mock.patch(
+        "explorers_data_loader.loader.drop_orphaned_collections",
+        return_value=orphan_cleanup,
+    ) as drop_orphaned_collections:
+        run(agora_with_team_images, str(working_dir))
+
+    expected_names = [*RELEASE_COLLECTION_NAMES, "fs.files", "fs.chunks"]
+    assert drop_orphaned_collections.call_args.args[1] == expected_names
+    summary = run_completed(records)
+    assert summary.fields["outcome"] == "succeeded"
+    assert summary.fields["orphans_dropped"] == ["genes_legacy"]
+    assert summary.fields["orphans_failed"] == ["proteomics_legacy"]

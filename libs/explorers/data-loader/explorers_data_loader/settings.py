@@ -62,6 +62,9 @@ class ProductSettings:
     name: str
     # The UI shows this collection's documents in the order they are stored
     insertion_ordered_collection_name: str | None = None
+    # Collections a release owns that collections.csv doesn't list, so dropping
+    # orphaned collections never removes them
+    kept_collection_names: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)

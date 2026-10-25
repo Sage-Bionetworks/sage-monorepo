@@ -5,6 +5,7 @@ collections keep serving the previous release until the swap. A failure at any
 point before the swap leaves the previous release fully live.
 """
 
+from dataclasses import dataclass, field
 import logging
 
 from pymongo import database
@@ -15,6 +16,9 @@ from explorers_data_loader.logs import BYTES_PER_MEGABYTE, event_fields
 logger = logging.getLogger(__name__)
 
 STAGING_SUFFIX = "_staging"
+
+# MongoDB's own collections, such as system.views, belong to no release
+SYSTEM_COLLECTION_PREFIX = "system."
 
 
 def staging_collection_name(collection_name: str) -> str:
@@ -126,6 +130,71 @@ def swap_staging_collections(
             extra=event_fields("collection_swapped", collection=name),
         )
     return swapped
+
+
+@dataclass
+class OrphanCleanup:
+    dropped: list[str] = field(default_factory=list)
+    failed: list[str] = field(default_factory=list)
+
+
+def drop_orphaned_collections(
+    db: database.Database, release_collection_names: list[str]
+) -> OrphanCleanup:
+    """Drop live collections the release doesn't include.
+
+    Runs only after a successful swap, so a failed import never removes a
+    collection the previous release still reads. The new release is already
+    live by then, so a collection that can't be dropped is a warning that the
+    next run retries, not a failed run.
+    """
+    cleanup = OrphanCleanup()
+    try:
+        existing_names = db.list_collection_names()
+    except PyMongoError as error:
+        logger.warning(
+            "Could not list collections, so no orphaned collections were dropped",
+            extra=event_fields("orphan_cleanup_failed", error=str(error)),
+        )
+        return cleanup
+
+    release_names = set(release_collection_names)
+    orphaned_names = sorted(
+        name
+        for name in existing_names
+        if name not in release_names
+        and not name.startswith(SYSTEM_COLLECTION_PREFIX)
+        and not name.endswith(STAGING_SUFFIX)
+    )
+    for name in orphaned_names:
+        try:
+            db.drop_collection(name)
+        except PyMongoError as error:
+            cleanup.failed.append(name)
+            logger.warning(
+                "Failed to drop orphaned collection '%s'",
+                name,
+                extra=event_fields(
+                    "orphan_drop_failed", collection=name, error=str(error)
+                ),
+            )
+            continue
+        cleanup.dropped.append(name)
+        logger.warning(
+            "Dropped orphaned collection '%s'",
+            name,
+            extra=event_fields("orphan_dropped", collection=name),
+        )
+    logger.info(
+        "Dropped %d orphaned collections",
+        len(cleanup.dropped),
+        extra=event_fields(
+            "orphan_cleanup_completed",
+            dropped=cleanup.dropped,
+            failed=cleanup.failed,
+        ),
+    )
+    return cleanup
 
 
 def log_database_size(db: database.Database, stage: str) -> None:
