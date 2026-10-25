@@ -4,6 +4,7 @@ import logging
 import logging.config as logging_config
 from os import getenv, getcwd, makedirs, path
 from pymongo import MongoClient, database
+from pymongo.collation import Collation
 import subprocess
 import synapseclient
 
@@ -19,6 +20,9 @@ DATA_VERSION = getenv("DATA_VERSION")
 
 DATA_VERSION_COLLECTION_NAME = "dataversion"
 DATA_VERSION_COLLECTION_FILENAME = "dataversion.json"
+
+# The UI shows this collection's documents in the order they are stored
+INSERTION_ORDERED_COLLECTION_NAME: str | None = None
 
 # Configure logging
 logging_config.dictConfig(
@@ -111,8 +115,7 @@ def import_collection(
         "--drop",
     ]
 
-    # Only maintain insertion order for ui_config collection
-    if collection_name == "ui_config":
+    if collection_name == INSERTION_ORDERED_COLLECTION_NAME:
         cmd.append("--maintainInsertionOrder")
     else:
         # Use parallel workers for better performance on other collections
@@ -161,13 +164,15 @@ def create_collections_indexes(
         for collection_index_data in collections_indexes_data:
             collection_name = collection_index_data["name"]
             logger.debug("Creating indexes for collection '%s'", collection_name)
-            indexes = collection_index_data["indexes"]
+            indexes = collection_index_data.get("indexes", [])
             collection = db.get_collection(collection_name)
             for index in indexes:
                 collection.create_index(list(index.items()))
+            for index in collection_index_data.get("collatedIndexes", []):
+                key = list(index.items())
+                collection.create_index(key, collation=Collation("en", strength=2))
             logger.debug(
-                "Created %d indexes for collection '%s' successfully",
-                len(indexes),
+                "Created indexes for collection '%s' successfully",
                 collection_name,
             )
     logger.debug("All indexes created successfully")

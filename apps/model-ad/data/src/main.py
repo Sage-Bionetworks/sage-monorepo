@@ -21,6 +21,9 @@ DATA_VERSION = getenv("DATA_VERSION")
 DATA_VERSION_COLLECTION_NAME = "dataversion"
 DATA_VERSION_COLLECTION_FILENAME = "dataversion.json"
 
+# The UI shows this collection's documents in the order they are stored
+INSERTION_ORDERED_COLLECTION_NAME: str | None = "ui_config"
+
 # Configure logging
 logging_config.dictConfig(
     {
@@ -112,8 +115,7 @@ def import_collection(
         "--drop",
     ]
 
-    # Only maintain insertion order for ui_config collection
-    if collection_name == "ui_config":
+    if collection_name == INSERTION_ORDERED_COLLECTION_NAME:
         cmd.append("--maintainInsertionOrder")
     else:
         # Use parallel workers for better performance on other collections
