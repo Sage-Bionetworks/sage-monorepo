@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 import json
 import logging
-from os import getenv
+from os import getenv, path
 import sys
 from time import monotonic
 from typing import Any
@@ -24,6 +24,14 @@ def release_label(context: dict[str, str]) -> str:
     if "data_version" in context:
         label = f"{label} v{context['data_version']}"
     return label.strip()
+
+
+def total_size_mb(file_paths: list[str]) -> float:
+    """The combined size of the files, in megabytes to one decimal place"""
+    return round(
+        sum(path.getsize(file_path) for file_path in file_paths) / BYTES_PER_MEGABYTE,
+        1,
+    )
 
 
 def elapsed_ms(started: float) -> int:

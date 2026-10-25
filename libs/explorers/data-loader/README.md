@@ -35,13 +35,27 @@ The live collections keep serving the previous release until the new one is comp
    it only changes once every other collection is live.
 6. Drop live collections the release doesn't include (orphans), such as one a release removed
    or renamed. This runs only after a successful swap, so a failed import never removes a
-   collection the previous release still reads. A product lists any collections it keeps
-   without importing them in `ProductSettings.kept_collection_names`. A collection that can't
-   be dropped is a warning that the next run retries, not a failed run.
+   collection the previous release still reads. A collection that can't be dropped is a
+   warning that the next run retries, not a failed run.
 
 A failure before step 5 leaves the previous release fully live, and the next run drops the
 leftover staging collections. A failure during step 5 leaves some collections on each release;
 `run_completed` lists both, and re-running the import finishes the release.
+
+## Team images
+
+A product that serves team member photos (`ProductSettings(loads_team_images=True)`, agora)
+also loads them from the Synapse folder `TEAM_IMAGES_ID` into GridFS's default `fs` bucket,
+which its API reads by bare file name (e.g. `jane_doe.jpg`):
+
+- The images are downloaded after the release files, into a fresh `local/data/team_images/`
+  folder, so a photo removed from Synapse isn't uploaded again from an earlier download.
+- After the indexes, every `.jpg`, `.jpeg` and `.png` is uploaded to a staging bucket, whose
+  collections become `fs.files_staging` and `fs.chunks_staging`. They are verified and swapped
+  with the rest of the release, before `dataversion`.
+- `LOAD_TEAM_IMAGES` (`true` by default) turns them off, e.g. in CI, where the download is slow.
+  A run with it `false` leaves the photos already loaded in place: `fs.files` and `fs.chunks`
+  stay part of the release, so dropping orphans never removes them.
 
 ## Logs
 
@@ -56,8 +70,9 @@ also carry an `event` name and that event's fields:
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `run_started`                  | none beyond the run fields                                                                                                                                                                                                                            |
 | `download_started`             | none beyond the run fields                                                                                                                                                                                                                            |
-| `file_downloaded`              | `synapse_id`, `version`, `file`, `file_number`, `files`, `size_mb`, `duration_ms`                                                                                                                                                                     |
-| `download_completed`           | `files`, `duration_ms`                                                                                                                                                                                                                                |
+| `file_downloaded`              | `synapse_id`, `version`, `file`, `entry_number`, `entries`, `size_mb`, `duration_ms`                                                                                                                                                                  |
+| `manifest_entry_skipped`       | `synapse_id`, `version`, `name`, `entity_type` (a manifest entry that isn't a file, e.g. a `Folder`)                                                                                                                                                  |
+| `download_completed`           | `files`, `skipped_entries`, `duration_ms`                                                                                                                                                                                                             |
 | `database_size_measured`       | `stage` (`before_import` or `after_load`), `collections`, `data_size_mb`, `storage_size_mb`, `index_size_mb`                                                                                                                                          |
 | `database_size_unavailable`    | `stage`, `error`                                                                                                                                                                                                                                      |
 | `staging_leftovers_dropped`    | `collections` (empty unless a previous run failed)                                                                                                                                                                                                    |
@@ -72,6 +87,9 @@ also carry an `event` name and that event's fields:
 | `orphan_drop_failed`           | `collection`, `error`                                                                                                                                                                                                                                 |
 | `orphan_cleanup_failed`        | `error` (the collections couldn't be listed, so none were dropped)                                                                                                                                                                                    |
 | `orphan_cleanup_completed`     | `dropped`, `failed`                                                                                                                                                                                                                                   |
+| `team_images_downloaded`       | `synapse_id`, `images`, `size_mb`, `duration_ms`                                                                                                                                                                                                      |
+| `team_images_uploaded`         | `images`, `size_mb`, `duration_ms`                                                                                                                                                                                                                    |
+| `team_images_skipped`          | none beyond the run fields (`LOAD_TEAM_IMAGES` is `false`)                                                                                                                                                                                            |
 | `run_completed`                | `outcome` (`succeeded` or `failed`), `failed_step`, `error` (on failure), `live_release` (`new`, `previous` or `mixed`), `duration_ms`, `collections_imported`, `collections_swapped`, `collections_not_swapped`, `orphans_dropped`, `orphans_failed` |
 
 `run_completed` is written once per run, whether it succeeds or fails, so it is the record to

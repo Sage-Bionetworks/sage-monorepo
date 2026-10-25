@@ -6,6 +6,7 @@ from explorers_data_loader.loader import LiveRelease, Step, run
 from explorers_data_loader.mongo import DATA_VERSION_COLLECTION_NAME
 from explorers_data_loader.settings import ProductSettings
 from explorers_data_loader.staging import OrphanCleanup, SwapError
+from explorers_data_loader.team_images import TEAM_IMAGES_COLLECTION_NAMES
 
 AGORA_ENV = {
     "DB_USER": "root",
@@ -24,6 +25,22 @@ AGORA_COLLECTIONS = [
     ("uiconfig", "ui_config.json"),
 ]
 RELEASE_COLLECTION_NAMES = ["genes", "uiconfig", DATA_VERSION_COLLECTION_NAME]
+TEAM_IMAGE_PATHS = (
+    "/app/local/data/team_images/jane_doe.jpg",
+    "/app/local/data/team_images/john_roe.png",
+)
+TEAM_IMAGES_FOLDER_ID = "syn12861877"
+AGORA_WITH_TEAM_IMAGES = ProductSettings(
+    name="agora",
+    insertion_ordered_collection_name="uiconfig",
+    loads_team_images=True,
+)
+RELEASE_WITH_TEAM_IMAGES = [
+    "genes",
+    "uiconfig",
+    *TEAM_IMAGES_COLLECTION_NAMES,
+    DATA_VERSION_COLLECTION_NAME,
+]
 
 
 @pytest.fixture
@@ -90,6 +107,22 @@ def steps():
                 recorded.append(f"drop orphans {names}") or OrphanCleanup()
             ),
         ),
+        mock.patch(
+            "explorers_data_loader.loader.login_to_synapse",
+            side_effect=record_step(recorded, "log in to synapse"),
+        ),
+        mock.patch(
+            "explorers_data_loader.loader.download_team_images",
+            side_effect=record_step(
+                recorded, "download team images", list(TEAM_IMAGE_PATHS)
+            ),
+        ),
+        mock.patch(
+            "explorers_data_loader.loader.upload_team_images_to_staging",
+            side_effect=record_step(
+                recorded, lambda _db, paths: f"upload team images {paths}"
+            ),
+        ),
         mock.patch("explorers_data_loader.loader.MongoClient"),
     ):
         yield recorded
@@ -104,6 +137,7 @@ def test_run_stages_checks_and_swaps_with_dataversion_last(working_dir, steps):
     run(AGORA_PRODUCT, str(working_dir))
 
     assert steps == [
+        "log in to synapse",
         "download",
         "measure size before_import",
         "drop staging leftovers",
@@ -231,26 +265,48 @@ def test_run_reports_missing_settings_as_a_failed_run(
     assert steps == []
 
 
-def test_run_keeps_the_product_kept_collections_and_reports_dropped_orphans(
-    working_dir, steps, records
-):
-    agora_with_team_images = ProductSettings(
-        name="agora",
-        insertion_ordered_collection_name="uiconfig",
-        kept_collection_names=("fs.files", "fs.chunks"),
-    )
+def test_run_reports_dropped_orphans(working_dir, steps, records):
     orphan_cleanup = OrphanCleanup(
         dropped=["genes_legacy"], failed=["proteomics_legacy"]
     )
     with mock.patch(
         "explorers_data_loader.loader.drop_orphaned_collections",
         return_value=orphan_cleanup,
-    ) as drop_orphaned_collections:
-        run(agora_with_team_images, str(working_dir))
+    ):
+        run(AGORA_PRODUCT, str(working_dir))
 
-    expected_names = [*RELEASE_COLLECTION_NAMES, "fs.files", "fs.chunks"]
-    assert drop_orphaned_collections.call_args.args[1] == expected_names
     summary = run_completed(records)
     assert summary.fields["outcome"] == "succeeded"
     assert summary.fields["orphans_dropped"] == ["genes_legacy"]
     assert summary.fields["orphans_failed"] == ["proteomics_legacy"]
+
+
+def test_run_loads_team_images_after_the_indexes_and_swaps_them_before_dataversion(
+    working_dir, steps, monkeypatch
+):
+    monkeypatch.setenv("TEAM_IMAGES_ID", TEAM_IMAGES_FOLDER_ID)
+
+    run(AGORA_WITH_TEAM_IMAGES, str(working_dir))
+
+    assert steps[steps.index("download") + 1] == "download team images"
+    assert steps[steps.index("create indexes") + 1] == (
+        f"upload team images {list(TEAM_IMAGE_PATHS)}"
+    )
+    assert f"verify {RELEASE_WITH_TEAM_IMAGES}" in steps
+    assert f"swap {RELEASE_WITH_TEAM_IMAGES}" in steps
+    assert f"drop orphans {RELEASE_WITH_TEAM_IMAGES}" in steps
+
+
+def test_run_with_team_images_off_keeps_the_loaded_photos(
+    working_dir, steps, records, monkeypatch
+):
+    monkeypatch.setenv("LOAD_TEAM_IMAGES", "false")
+
+    run(AGORA_WITH_TEAM_IMAGES, str(working_dir))
+
+    assert "download team images" not in steps
+    assert not any(step.startswith("upload team images") for step in steps)
+    assert f"swap {RELEASE_COLLECTION_NAMES}" in steps
+    assert f"drop orphans {RELEASE_WITH_TEAM_IMAGES}" in steps
+    skipped = [r for r in records if getattr(r, "event", None) == "team_images_skipped"]
+    assert len(skipped) == 1

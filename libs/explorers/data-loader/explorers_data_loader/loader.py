@@ -24,18 +24,28 @@ from explorers_data_loader.mongo import (
 from explorers_data_loader.settings import (
     DatabaseSettings,
     LoaderPaths,
+    LOAD_TEAM_IMAGES_ENV,
     ProductSettings,
     ReleaseSettings,
+    TeamImagesSettings,
 )
 from explorers_data_loader.staging import (
     SwapError,
     drop_orphaned_collections,
-    verify_staging_collections,
     drop_staging_leftovers,
     log_database_size,
     swap_staging_collections,
+    verify_staging_collections,
 )
-from explorers_data_loader.synapse import download_synapse_data
+from explorers_data_loader.synapse import (
+    download_synapse_data,
+    download_team_images,
+    login_to_synapse,
+)
+from explorers_data_loader.team_images import (
+    TEAM_IMAGES_COLLECTION_NAMES,
+    upload_team_images_to_staging,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +59,7 @@ class Step(StrEnum):
     DROP_STAGING_LEFTOVERS = "drop_staging_leftovers"
     IMPORT_COLLECTIONS = "import_collections"
     CREATE_INDEXES = "create_indexes"
+    UPLOAD_TEAM_IMAGES = "upload_team_images"
     VERIFY_STAGING = "verify_staging"
     SWAP = "swap"
     DROP_ORPHANS = "drop_orphans"
@@ -132,6 +143,7 @@ def load_release(
     paths = LoaderPaths.from_working_dir(working_dir)
     db_settings = DatabaseSettings.from_env()
     release = ReleaseSettings.from_env()
+    team_images = TeamImagesSettings.from_env() if product.loads_team_images else None
     run_context["data_file"] = release.data_file
     run_context["data_version"] = release.data_version
     logger.info(
@@ -139,19 +151,44 @@ def load_release(
         release_label(run_context),
         extra=event_fields("run_started"),
     )
+    if product.loads_team_images and team_images is None:
+        logger.info(
+            "Skipping team images because %s is false",
+            LOAD_TEAM_IMAGES_ENV,
+            extra=event_fields("team_images_skipped"),
+        )
 
     summary.step = Step.READ_COLLECTIONS
-    # Read before downloading, so an invalid collection list fails in seconds.
-    # dataversion goes last: the APIs clear their caches when it changes, so it
-    # must only be swapped in once every other collection is live.
-    release_collections = [
-        *read_collections(paths.collections_filepath),
+    # Read before downloading, so an invalid collection list fails in seconds
+    file_collections = read_collections(paths.collections_filepath)
+    imported_collections = [
+        *file_collections,
         (DATA_VERSION_COLLECTION_NAME, DATA_VERSION_COLLECTION_FILENAME),
     ]
-    collection_names = [name for name, _ in release_collections]
+    file_collection_names = [name for name, _ in file_collections]
+    # dataversion goes last: the APIs clear their caches when it changes, so it
+    # must only be swapped in once every other collection is live
+    swapped_names = [
+        *file_collection_names,
+        *(TEAM_IMAGES_COLLECTION_NAMES if team_images else ()),
+        DATA_VERSION_COLLECTION_NAME,
+    ]
+    # The team images collections stay part of the release when this run
+    # skips them, so dropping orphans never removes the photos already loaded
+    release_names = [
+        *file_collection_names,
+        *(TEAM_IMAGES_COLLECTION_NAMES if product.loads_team_images else ()),
+        DATA_VERSION_COLLECTION_NAME,
+    ]
 
     summary.step = Step.DOWNLOAD
-    download_synapse_data(release, paths.download_dir)
+    syn = login_to_synapse()
+    download_synapse_data(syn, release, paths.download_dir)
+    team_image_paths = (
+        download_team_images(syn, team_images.folder_id, paths.team_images_dir)
+        if team_images
+        else []
+    )
 
     with MongoClient(db_settings.client_uri) as client:
         db = client.get_database(db_settings.name)
@@ -161,7 +198,7 @@ def load_release(
         drop_staging_leftovers(db)
 
         summary.step = Step.IMPORT_COLLECTIONS
-        for collection_name, collection_filename in release_collections:
+        for collection_name, collection_filename in imported_collections:
             import_collection(
                 db_settings,
                 product,
@@ -174,13 +211,17 @@ def load_release(
         summary.step = Step.CREATE_INDEXES
         create_collections_indexes(db, paths.collections_indexes_filepath)
 
+        if team_image_paths:
+            summary.step = Step.UPLOAD_TEAM_IMAGES
+            upload_team_images_to_staging(db, team_image_paths)
+
         summary.step = Step.VERIFY_STAGING
-        verify_staging_collections(db, collection_names)
+        verify_staging_collections(db, swapped_names)
 
         summary.step = Step.SWAP
-        summary.collections_not_swapped = list(collection_names)
+        summary.collections_not_swapped = list(swapped_names)
         try:
-            summary.collections_swapped = swap_staging_collections(db, collection_names)
+            summary.collections_swapped = swap_staging_collections(db, swapped_names)
         except SwapError as error:
             summary.collections_swapped = error.swapped
             summary.collections_not_swapped = error.not_swapped
@@ -188,9 +229,7 @@ def load_release(
         summary.collections_not_swapped = []
 
         summary.step = Step.DROP_ORPHANS
-        orphan_cleanup = drop_orphaned_collections(
-            db, [*collection_names, *product.kept_collection_names]
-        )
+        orphan_cleanup = drop_orphaned_collections(db, release_names)
         summary.orphans_dropped = orphan_cleanup.dropped
         summary.orphans_failed = orphan_cleanup.failed
 
