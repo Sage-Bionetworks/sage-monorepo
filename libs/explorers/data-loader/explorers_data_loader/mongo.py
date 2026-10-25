@@ -11,6 +11,7 @@ from pymongo.collation import Collation
 
 from explorers_data_loader.logs import elapsed_ms, event_fields
 from explorers_data_loader.settings import DatabaseSettings, ProductSettings
+from explorers_data_loader.staging import staging_collection_name
 
 logger = logging.getLogger(__name__)
 
@@ -44,20 +45,23 @@ def import_collection(
     collection_filename: str,
     download_dir: str,
 ) -> None:
-    """Import a single collection into MongoDB from local data"""
+    """Import a collection's file into its staging collection, leaving the live
+    collection serving the previous release"""
     collection_filepath = path.join(download_dir, collection_filename)
+    staging_name = staging_collection_name(collection_name)
 
     logger.debug(
         "Importing collection '%s' from '%s'",
-        collection_name,
+        staging_name,
         collection_filename,
     )
 
-    # Use mongoimport instead of pymongo for performance with large datasets
+    # Use mongoimport instead of pymongo for performance with large datasets.
+    # --drop only ever clears the staging collection, never the live one.
     cmd = [
         "mongoimport",
         f"--uri={db_settings.import_uri}",
-        f"--collection={collection_name}",
+        f"--collection={staging_name}",
         f"--file={collection_filepath}",
         "--jsonArray",
         "--drop",
@@ -88,10 +92,11 @@ def import_collection(
 
     logger.info(
         "Imported collection '%s'",
-        collection_name,
+        staging_name,
         extra=event_fields(
             "collection_imported",
             collection=collection_name,
+            staging_collection=staging_name,
             file=collection_filename,
             documents=read_imported_document_count(result.stderr),
             duration_ms=duration_ms,
@@ -108,14 +113,19 @@ def read_imported_document_count(mongoimport_output: str) -> int | None:
 def create_collections_indexes(
     db: database.Database, collections_indexes_filepath: str
 ) -> None:
-    """Create indexes for MongoDB collections based on JSON file"""
+    """Create the indexes from the JSON file on the staging collections.
+
+    A rename keeps a collection's indexes, so building them before the swap
+    means no collection is ever served unindexed.
+    """
     logger.debug("Starting index creation process")
     with open(collections_indexes_filepath) as collection_indexes_file:
         collections_indexes_data = load(collection_indexes_file)
     for collection_index_data in collections_indexes_data:
         collection_name = collection_index_data["name"]
-        logger.debug("Creating indexes for collection '%s'", collection_name)
-        collection = db.get_collection(collection_name)
+        staging_name = staging_collection_name(collection_name)
+        logger.debug("Creating indexes for collection '%s'", staging_name)
+        collection = db.get_collection(staging_name)
         indexes = collection_index_data.get("indexes", [])
         collated_indexes = collection_index_data.get("collatedIndexes", [])
         for index in indexes:

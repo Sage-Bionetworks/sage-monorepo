@@ -15,6 +15,7 @@ from explorers_data_loader.logs import (
     configure_logging,
     event_fields,
     read_log_format,
+    release_label,
 )
 
 RUN_CONTEXT = {
@@ -115,3 +116,8 @@ def test_configure_logging_writes_to_stdout_so_library_output_cannot_split_recor
 
     (handler,) = logging.getLogger(LOGGER_NAME).handlers
     assert handler.stream is sys.stdout
+
+
+def test_release_label_names_only_the_product_before_the_release_is_known():
+    assert release_label({"product": "agora"}) == "agora"
+    assert release_label({"product": "agora", "data_version": "119"}) == "agora v119"

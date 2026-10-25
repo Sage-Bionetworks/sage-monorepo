@@ -5,7 +5,7 @@ from time import monotonic
 
 import synapseclient
 
-from explorers_data_loader.logs import elapsed_ms, event_fields
+from explorers_data_loader.logs import BYTES_PER_MEGABYTE, elapsed_ms, event_fields
 from explorers_data_loader.settings import ReleaseSettings
 
 logger = logging.getLogger(__name__)
@@ -14,6 +14,9 @@ logger = logging.getLogger(__name__)
 def download_synapse_data(release: ReleaseSettings, download_dir: str) -> None:
     """Download the release manifest and every file it lists"""
     started = monotonic()
+    logger.info(
+        "Downloading the release from Synapse", extra=event_fields("download_started")
+    )
     logger.debug("Logging in to Synapse")
     # silent turns off the client's progress bars and messages, which would
     # otherwise interleave with the loader's structured records
@@ -39,24 +42,38 @@ def download_synapse_data(release: ReleaseSettings, download_dir: str) -> None:
     with open(manifest_filepath) as manifest_file:
         manifest_reader = reader(manifest_file)
         next(manifest_reader)  # skip header row
-        downloaded_files = 0
-        for row in manifest_reader:
-            syn_id = row[0]
-            version = row[1]
-            logger.debug("Downloading %s version %s", syn_id, version)
-            syn.get(
-                syn_id,
+        manifest_rows = list(manifest_reader)
+
+    for file_number, (syn_id, version, *_) in enumerate(manifest_rows, start=1):
+        logger.debug("Downloading %s version %s", syn_id, version)
+        file_started = monotonic()
+        entity = syn.get(
+            syn_id,
+            version=version,
+            downloadLocation=download_dir,
+            ifcollision="overwrite.local",
+        )
+        logger.info(
+            "Downloaded file %d of %d: '%s'",
+            file_number,
+            len(manifest_rows),
+            entity.name,
+            extra=event_fields(
+                "file_downloaded",
+                synapse_id=syn_id,
                 version=version,
-                downloadLocation=download_dir,
-                ifcollision="overwrite.local",
-            )
-            logger.debug("Downloaded %s version %s successfully", syn_id, version)
-            downloaded_files += 1
+                file=entity.name,
+                file_number=file_number,
+                files=len(manifest_rows),
+                size_mb=round(path.getsize(entity.path) / BYTES_PER_MEGABYTE, 1),
+                duration_ms=elapsed_ms(file_started),
+            ),
+        )
     logger.info(
         "Downloaded the release from Synapse",
         extra=event_fields(
             "download_completed",
-            files=downloaded_files,
+            files=len(manifest_rows),
             duration_ms=elapsed_ms(started),
         ),
     )

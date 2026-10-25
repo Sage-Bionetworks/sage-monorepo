@@ -21,6 +21,23 @@ run(ProductSettings(name="model-ad", insertion_ordered_collection_name="ui_confi
 collection list from the data project's `src/data/collections.csv` and
 `src/data/collections-indexes.json`.
 
+## How a release is loaded
+
+The live collections keep serving the previous release until the new one is complete:
+
+1. Drop any `<name>_staging` collections a failed run left behind.
+2. Import every collection, `dataversion` last, into `<name>_staging` with `mongoimport`.
+3. Build the indexes on the staging collections. A rename keeps a collection's indexes, so no
+   collection is ever served unindexed.
+4. Stop if any staging collection is missing or empty.
+5. Rename each staging collection over its live collection (`renameCollection` with
+   `dropTarget`), `dataversion` last. The APIs clear their caches when `dataversion` changes, so
+   it only changes once every other collection is live.
+
+A failure before step 5 leaves the previous release fully live, and the next run drops the
+leftover staging collections. A failure during step 5 leaves some collections on each release;
+`run_completed` lists both, and re-running the import finishes the release.
+
 ## Logs
 
 The loader writes one JSON object per line to stdout, so log tools (CloudWatch Logs Insights,
@@ -30,17 +47,27 @@ readable lines while watching a local run.
 Every record carries `run_id`, `product`, `data_file` and `data_version`. Records that mark a step
 also carry an `event` name and that event's fields:
 
-| Event                      | Fields                                                                                                          |
-| -------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `run_started`              | none beyond the run fields                                                                                      |
-| `download_completed`       | `files`, `duration_ms`                                                                                          |
-| `collection_imported`      | `collection`, `file`, `documents`, `duration_ms`                                                                |
-| `collection_import_failed` | `collection`, `file`, `duration_ms`, `error`                                                                    |
-| `indexes_created`          | `collection`, `indexes`, `collated_indexes`                                                                     |
-| `run_completed`            | `outcome` (`succeeded` or `failed`), `failed_step`, `error` (on failure), `duration_ms`, `collections_imported` |
+| Event                          | Fields                                                                                                                                                                                                           |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `run_started`                  | none beyond the run fields                                                                                                                                                                                       |
+| `download_started`             | none beyond the run fields                                                                                                                                                                                       |
+| `file_downloaded`              | `synapse_id`, `version`, `file`, `file_number`, `files`, `size_mb`, `duration_ms`                                                                                                                                |
+| `download_completed`           | `files`, `duration_ms`                                                                                                                                                                                           |
+| `database_size_measured`       | `stage` (`before_import` or `after_swap`), `collections`, `data_size_mb`, `storage_size_mb`, `index_size_mb`                                                                                                     |
+| `database_size_unavailable`    | `stage`, `error`                                                                                                                                                                                                 |
+| `staging_leftovers_dropped`    | `collections` (empty unless a previous run failed)                                                                                                                                                               |
+| `collection_imported`          | `collection`, `staging_collection`, `file`, `documents`, `duration_ms`                                                                                                                                           |
+| `collection_import_failed`     | `collection`, `file`, `duration_ms`, `error`                                                                                                                                                                     |
+| `indexes_created`              | `collection`, `indexes`, `collated_indexes`                                                                                                                                                                      |
+| `staging_collections_verified` | `collections`                                                                                                                                                                                                    |
+| `staging_verification_failed`  | `empty_or_missing`                                                                                                                                                                                               |
+| `collection_swapped`           | `collection`                                                                                                                                                                                                     |
+| `collection_swap_failed`       | `collection`, `error`                                                                                                                                                                                            |
+| `run_completed`                | `outcome` (`succeeded` or `failed`), `failed_step`, `error` (on failure), `live_release` (`new`, `previous` or `mixed`), `duration_ms`, `collections_imported`, `collections_swapped`, `collections_not_swapped` |
 
 `run_completed` is written once per run, whether it succeeds or fails, so it is the record to
-build dashboards on. Event and field names are a contract with those queries: add new ones
+build dashboards on. Its `live_release` says what the site serves once the run ends: the new
+release, the previous one (any failure before the swap), or a mix (a swap that stopped partway). Event and field names are a contract with those queries: add new ones
 freely, but rename or remove one only together with the queries that read it.
 
 To read a JSON log locally, for example each collection's document count:

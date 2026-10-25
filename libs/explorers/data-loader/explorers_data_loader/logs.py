@@ -13,7 +13,17 @@ JSON_LOG_FORMAT = "json"
 TEXT_LOG_FORMAT = "text"
 LOG_FORMATS = (JSON_LOG_FORMAT, TEXT_LOG_FORMAT)
 
+BYTES_PER_MEGABYTE = 1024 * 1024
+
 TEXT_LINE_FORMAT = "%(asctime)s [%(module)s:%(lineno)d - %(levelname)s]: %(message)s"
+
+
+def release_label(context: dict[str, str]) -> str:
+    """Name the product and release a run loads, e.g. 'model-ad v221'"""
+    label = context.get("product", "")
+    if "data_version" in context:
+        label = f"{label} v{context['data_version']}"
+    return label.strip()
 
 
 def elapsed_ms(started: float) -> int:

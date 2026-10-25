@@ -13,6 +13,7 @@ from explorers_data_loader.mongo import (
     read_imported_document_count,
 )
 from explorers_data_loader.settings import DatabaseSettings, ProductSettings
+from explorers_data_loader.staging import staging_collection_name
 
 AGORA_DB_SETTINGS = DatabaseSettings(
     user="root", password="password", name="agora", host="agora-mongo", port="27017"
@@ -88,6 +89,13 @@ def test_import_collection_uses_parallel_workers_for_other_collections():
     assert f"--file={DOWNLOAD_DIR}/rnaseq_differential_expression.json" in command
 
 
+def test_import_collection_writes_only_to_the_staging_collection():
+    command = run_import("genes", "rnaseq_differential_expression.json")
+
+    assert f"--collection={staging_collection_name('genes')}" in command
+    assert "--collection=genes" not in command
+
+
 def test_import_collection_raises_when_mongoimport_fails():
     with pytest.raises(Exception, match="Failed to import genes"):
         run_import(
@@ -112,19 +120,23 @@ def test_create_collections_indexes_creates_plain_and_collated_indexes(tmp_path)
             ]
         )
     )
-    collections = {"geneinfo": mock.Mock(), "druginfo": mock.Mock()}
+    geneinfo, druginfo = mock.Mock(), mock.Mock()
+    collections = {
+        staging_collection_name("geneinfo"): geneinfo,
+        staging_collection_name("druginfo"): druginfo,
+    }
     db = mock.Mock(get_collection=collections.__getitem__)
 
     create_collections_indexes(db, str(indexes_filepath))
 
-    assert collections["geneinfo"].create_index.call_args_list == [
+    assert geneinfo.create_index.call_args_list == [
         mock.call([("hgnc_symbol", 1)]),
         mock.call(
             [("hgnc_symbol", 1), ("ensembl_gene_id", 1)],
             collation=CASE_INSENSITIVE_COLLATION,
         ),
     ]
-    assert collections["druginfo"].create_index.call_args_list == [
+    assert druginfo.create_index.call_args_list == [
         mock.call([("common_name", 1)], collation=CASE_INSENSITIVE_COLLATION),
     ]
 
@@ -135,6 +147,9 @@ def test_import_collection_logs_the_imported_document_count(caplog):
 
     (record,) = [r for r in caplog.records if r.event == "collection_imported"]
     assert record.fields["collection"] == "rna_de_individual"
+    assert record.fields["staging_collection"] == staging_collection_name(
+        "rna_de_individual"
+    )
     assert record.fields["file"] == "rna_de_individual.json"
     assert record.fields["documents"] == RNA_DE_INDIVIDUAL_DOCUMENTS
     assert isinstance(record.fields["duration_ms"], int)
