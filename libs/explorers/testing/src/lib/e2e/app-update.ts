@@ -1,7 +1,8 @@
-import { expect, type Locator, type Page, test } from '@playwright/test';
+import { expect, type Locator, type Page, type Response, test } from '@playwright/test';
 import type { AppVersion } from '@sagebionetworks/explorers/config';
 import {
   APP_UPDATE_CONFIRM_DELAY_MS,
+  APP_UPDATE_MIN_CHECK_INTERVAL_MS,
   APP_VERSION_PATH,
   CHUNK_LOAD_ERROR_MESSAGE,
   DATA_UPDATE_CONFIRM_DELAY_MS,
@@ -12,6 +13,12 @@ import {
 
 /** How long one fast-forward attempt waits for the update notice before trying again. */
 const UPDATE_NOTICE_RENDER_TIMEOUT_MS = 1000;
+
+/**
+ * Must match the `TransferState` key `ConfigLoaderService` sends the app config to the browser
+ * under.
+ */
+const TRANSFERRED_CONFIG_KEY = 'app-config';
 
 export const NEWER_APP_VERSION: AppVersion = {
   appVersion: '999.0.0',
@@ -34,9 +41,66 @@ export async function gotoAndWaitForBrowserApp(page: Page, path = '/') {
   await dataVersionResponse;
 }
 
+/**
+ * Makes the app server's `/app-version` report `appVersion` instead of the version it was deployed
+ * with. Tests override it because the app server only knows its version from environment variables
+ * the infra deploy sets, so a local app server reports an empty version, which a check cannot
+ * compare against.
+ */
+export async function overrideAppVersion(page: Page, appVersion: AppVersion) {
+  await page.route(`**${APP_VERSION_PATH}`, (route) => route.fulfill({ json: appVersion }));
+}
+
 /** Makes the app server report a newer deploy than the one the tab loaded with. */
 export async function simulateNewerDeploy(page: Page) {
-  await page.route(`**${APP_VERSION_PATH}`, (route) => route.fulfill({ json: NEWER_APP_VERSION }));
+  await overrideAppVersion(page, NEWER_APP_VERSION);
+}
+
+/** Reads the app version the tab loaded with, from the app config the server sent the page. */
+export async function readLoadedAppVersion(page: Page): Promise<AppVersion> {
+  return page.evaluate((configKey): AppVersion => {
+    // Angular writes transferred state into a script tag whose id is the app's `APP_ID` followed by
+    // `-state`, such as `model-ad-app-state`
+    const transferredState = document.querySelector('script[id$="-state"]')?.textContent;
+    const { appVersion = '', commitSha = '' } =
+      JSON.parse(transferredState || '{}')[configKey] ?? {};
+    return { appVersion, commitSha };
+  }, TRANSFERRED_CONFIG_KEY);
+}
+
+/**
+ * Makes the app server report the app version the tab loaded with, as a deployed app server does
+ * until the next deploy. Resolves with that version, so the test can verify the override with
+ * `expectMatchingAppVersionCheck`. Must be called after `gotoAndWaitForBrowserApp`.
+ */
+export async function setupMatchingAppVersion(page: Page): Promise<AppVersion> {
+  // Deployed environments: the infra deploy sets `APP_VERSION` and `COMMIT_SHA` on the app container. Both the
+  // app config the tab loads and `/app-version` read them, so the two match until the next deploy.
+  //
+  // Local and CI: neither variable is set. The tab falls back to the config file's `appVersion`
+  // (`local`), while `/app-version` reports empty values. A check treats an empty version as
+  // unknown, and an unknown version never counts as a mismatch, so a check would match even if the
+  // comparison were wrong.
+  //
+  // Overriding `/app-version` with the tab's own version makes a local check compare two known,
+  // equal versions, as it would on a deployed app with no new deploy.
+  const loadedAppVersion = await readLoadedAppVersion(page);
+  await overrideAppVersion(page, loadedAppVersion);
+  return loadedAppVersion;
+}
+
+/**
+ * Verifies that a check compared two known, equal app versions: the tab loaded with a nonempty
+ * version, and the server reported that same version back through `setupMatchingAppVersion`.
+ */
+export async function expectMatchingAppVersionCheck(
+  appVersionCheck: Response,
+  loadedAppVersion: AppVersion,
+) {
+  expect(loadedAppVersion.appVersion, 'the app version the tab loaded with').not.toBe('');
+  expect(await appVersionCheck.json(), 'the app version the server reported').toEqual(
+    loadedAppVersion,
+  );
 }
 
 /**
@@ -103,6 +167,26 @@ export async function returnToTab(page: Page) {
       document.dispatchEvent(new Event('visibilitychange'));
     }
   });
+}
+
+/**
+ * Runs a version check once the minimum interval between checks has passed, and resolves when both
+ * versions' responses arrive, resolving with them. The tab sends a check's requests only after it
+ * has handled the previous check's result, so this also proves that result was handled. The test
+ * must call `page.clock.install()` before loading the page.
+ */
+async function runNextVersionCheck(page: Page) {
+  await page.clock.fastForward(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+  const appVersionResponse = waitForAppVersionCheck(page);
+  const dataVersionResponse = waitForDataVersionCheck(page);
+  await returnToTab(page);
+  const [appVersionCheck, dataVersionCheck] = await Promise.all([
+    appVersionResponse,
+    dataVersionResponse,
+  ]);
+  expect(appVersionCheck.status()).toBe(200);
+  expect(dataVersionCheck.status()).toBe(200);
+  return { appVersionCheck, dataVersionCheck };
 }
 
 /**
@@ -174,27 +258,43 @@ export function defineAppUpdateTests(siteName: string) {
 
     test('asks to reload when a page fails to download on the current deploy', async ({ page }) => {
       await gotoAndWaitForBrowserApp(page);
+      // Not verified with `expectMatchingAppVersionCheck` here: a wrong comparison loads a new page,
+      // which discards the response body before it can be read. The overlay assertions below catch
+      // that instead, and the "stays usable" test verifies the same setup.
+      await setupMatchingAppVersion(page);
       await simulateChunkDownloadFailure(page);
       const appVersionCheck = waitForAppVersionCheck(page);
 
       await navigateWithinApp(page);
 
       expect((await appVersionCheck).status()).toBe(200);
-      await expect(page.getByText(CHUNK_LOAD_ERROR_MESSAGE)).toBeVisible();
-      await expect(page.getByRole('button', { name: 'Reload Page' })).toBeVisible();
+      await expect(
+        page.getByText(CHUNK_LOAD_ERROR_MESSAGE),
+        'expected the network error overlay when a chunk fails to download and the server reports the same app version the tab loaded with',
+      ).toBeVisible();
+      await expect(
+        page.getByRole('button', { name: 'Reload Page' }),
+        'expected a Reload Page button on the network error overlay when a chunk fails to download and the server reports the same app version the tab loaded with',
+      ).toBeVisible();
     });
 
-    test('stays usable when neither the deployed version nor the data release has changed', async ({
+    test('stays usable past the confirmation delay when neither the deployed version nor the data release has changed', async ({
       page,
     }) => {
+      await page.clock.install();
       await gotoAndWaitForBrowserApp(page);
-      const appVersionCheck = waitForAppVersionCheck(page);
-      const dataVersionCheck = waitForDataVersionCheck(page);
+      const loadedAppVersion = await setupMatchingAppVersion(page);
+      const { appVersionCheck } = await runNextVersionCheck(page);
+      await expectMatchingAppVersionCheck(appVersionCheck, loadedAppVersion);
+      // The second check proves the first one's result was handled, so a mismatch the first one
+      // found is now waiting out its confirmation delay
+      await runNextVersionCheck(page);
 
-      await returnToTab(page);
+      await page.clock.fastForward(APP_UPDATE_CONFIRM_DELAY_MS);
 
-      expect((await appVersionCheck).status()).toBe(200);
-      expect((await dataVersionCheck).status()).toBe(200);
+      // A mismatch confirmed after the delay stops every check, so at most one more would arrive
+      await runNextVersionCheck(page);
+      await runNextVersionCheck(page);
       await expect(page.getByText(getAppUpdateMessage(siteName))).toBeHidden();
       await expect(page.getByText(getDataUpdateMessage(siteName))).toBeHidden();
     });
