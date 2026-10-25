@@ -22,6 +22,10 @@ def login_to_synapse() -> synapseclient.Synapse:
     # otherwise interleave with the loader's structured records
     syn = synapseclient.Synapse(silent=True)
     syn.login(silent=True)
+    # Downloads attach a stderr handler even to the silent client's logger, so
+    # its per-file INFO lines, which repeat file_downloaded, are filtered out here;
+    # its warnings and errors still reach stderr
+    syn.logger.setLevel(logging.WARNING)
     logger.debug("Logged in to Synapse successfully")
     return syn
 

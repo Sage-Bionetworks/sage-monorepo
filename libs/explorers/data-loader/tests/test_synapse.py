@@ -135,6 +135,7 @@ def test_download_logs_in_silently_so_client_output_cannot_split_records(tmp_pat
 
     synapse.assert_called_once_with(silent=True)
     synapse.return_value.login.assert_called_once_with(silent=True)
+    synapse.return_value.logger.setLevel.assert_called_once_with(logging.WARNING)
 
 
 TEAM_IMAGES_FOLDER_ID = "syn12861877"
