@@ -2,7 +2,6 @@ package org.sagebionetworks.agora.api.next.configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.List;
-import org.sagebionetworks.agora.api.next.model.document.DataVersionDocument;
 import org.sagebionetworks.agora.api.next.model.repository.DataVersionRepository;
 import org.sagebionetworks.explorers.cacheinvalidation.DataRelease;
 import org.sagebionetworks.explorers.cacheinvalidation.DataVersionProvider;

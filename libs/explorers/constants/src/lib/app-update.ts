@@ -14,6 +14,7 @@ export const APP_UPDATE_CONFIRM_DELAY_MS = 5 * 60 * 1000;
  * request every minute.
  */
 export const APP_UPDATE_CONFIRMATION_RETRY_LIMIT = 3;
+// TODO(MG-1175): lower once API cache keys are scoped to the data release
 /**
  * A data release switches the data version in one step, so this only has to outlast the APIs'
  * cache invalidation, which polls every minute and clears again on the following poll. That second
