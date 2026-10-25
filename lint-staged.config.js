@@ -35,7 +35,7 @@ module.exports = {
     `ktlint --format ${filenames.join(' ')}`,
   ],
 
-  '**/Dockerfile.*': (filenames) => {
+  '**/{Dockerfile,Dockerfile.*}': (filenames) => {
     // Lint Dockerfiles with Hadolint. Dockerfile.dockerignore files match this
     // pattern too, but they are build context filters, not Dockerfiles.
     const dockerfiles = filenames.filter((filename) => !filename.endsWith('.dockerignore'));
