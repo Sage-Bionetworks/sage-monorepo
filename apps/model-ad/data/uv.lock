@@ -95,6 +95,24 @@ wheels = [
 ]
 
 [[package]]
+name = "explorers-data-loader"
+version = "0.1.0"
+source = { editable = "../../../libs/explorers/data-loader" }
+dependencies = [
+    { name = "pymongo" },
+    { name = "synapseclient" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pymongo", specifier = "==4.7.3" },
+    { name = "synapseclient", specifier = "==4.13.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = "==8.3.5" }]
+
+[[package]]
 name = "googleapis-common-protos"
 version = "1.66.0"
 source = { registry = "https://pypi.org/simple" }
@@ -170,15 +188,11 @@ name = "model-ad-data"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "pymongo" },
-    { name = "synapseclient" },
+    { name = "explorers-data-loader" },
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "pymongo", specifier = "==4.7.3" },
-    { name = "synapseclient", specifier = "==4.13.0" },
-]
+requires-dist = [{ name = "explorers-data-loader", editable = "../../../libs/explorers/data-loader" }]
 
 [package.metadata.requires-dev]
 dev = []
