@@ -1,9 +1,11 @@
 from csv import reader
 import logging
 from os import makedirs, path
+from time import monotonic
 
 import synapseclient
 
+from explorers_data_loader.logs import elapsed_ms, event_fields
 from explorers_data_loader.settings import ReleaseSettings
 
 logger = logging.getLogger(__name__)
@@ -11,8 +13,12 @@ logger = logging.getLogger(__name__)
 
 def download_synapse_data(release: ReleaseSettings, download_dir: str) -> None:
     """Download the release manifest and every file it lists"""
+    started = monotonic()
     logger.debug("Logging in to Synapse")
-    syn = synapseclient.login()
+    # silent turns off the client's progress bars and messages, which would
+    # otherwise interleave with the loader's structured records
+    syn = synapseclient.Synapse(silent=True)
+    syn.login(silent=True)
     logger.debug("Logged in to Synapse successfully")
 
     logger.debug("Creating local data directory")
@@ -33,6 +39,7 @@ def download_synapse_data(release: ReleaseSettings, download_dir: str) -> None:
     with open(manifest_filepath) as manifest_file:
         manifest_reader = reader(manifest_file)
         next(manifest_reader)  # skip header row
+        downloaded_files = 0
         for row in manifest_reader:
             syn_id = row[0]
             version = row[1]
@@ -44,4 +51,12 @@ def download_synapse_data(release: ReleaseSettings, download_dir: str) -> None:
                 ifcollision="overwrite.local",
             )
             logger.debug("Downloaded %s version %s successfully", syn_id, version)
-    logger.debug("All manifest files downloaded successfully")
+            downloaded_files += 1
+    logger.info(
+        "Downloaded the release from Synapse",
+        extra=event_fields(
+            "download_completed",
+            files=downloaded_files,
+            duration_ms=elapsed_ms(started),
+        ),
+    )

@@ -4,7 +4,7 @@ from explorers_data_loader.settings import DatabaseSettings, ReleaseSettings
 
 AGORA_DATABASE_ENV = {
     "DB_USER": "root",
-    "DB_PASS": "changeme",
+    "DB_PASS": "password",
     "DB_NAME": "agora",
     "DB_HOST": "agora-mongo",
     "DB_PORT": "27017",
@@ -17,10 +17,10 @@ def test_database_settings_build_both_uris_from_env(monkeypatch):
 
     db_settings = DatabaseSettings.from_env()
 
-    assert db_settings.client_uri == "mongodb://root:changeme@agora-mongo:27017"
+    assert db_settings.client_uri == "mongodb://root:password@agora-mongo:27017"
     assert (
         db_settings.import_uri
-        == "mongodb://root:changeme@agora-mongo:27017/agora?authSource=admin"
+        == "mongodb://root:password@agora-mongo:27017/agora?authSource=admin"
     )
 
 

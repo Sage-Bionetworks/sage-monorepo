@@ -2,11 +2,14 @@ from csv import reader
 from json import load
 import logging
 from os import path
+import re
 import subprocess
+from time import monotonic
 
 from pymongo import database
 from pymongo.collation import Collation
 
+from explorers_data_loader.logs import elapsed_ms, event_fields
 from explorers_data_loader.settings import DatabaseSettings, ProductSettings
 
 logger = logging.getLogger(__name__)
@@ -15,6 +18,9 @@ DATA_VERSION_COLLECTION_NAME = "dataversion"
 DATA_VERSION_COLLECTION_FILENAME = "dataversion.json"
 
 CASE_INSENSITIVE_COLLATION = Collation("en", strength=2)
+
+# mongoimport ends with e.g. "1169360 document(s) imported successfully."
+IMPORTED_DOCUMENTS_PATTERN = re.compile(r"(\d+) document\(s\) imported successfully")
 
 
 def read_collections(collections_filepath: str) -> list[tuple[str, str]]:
@@ -63,12 +69,40 @@ def import_collection(
         # Use parallel workers for better performance on other collections
         cmd.append("--numInsertionWorkers=4")
 
+    started = monotonic()
     result = subprocess.run(cmd, capture_output=True, text=True)
+    duration_ms = elapsed_ms(started)
     if result.returncode != 0:
-        logger.error("mongoimport failed: %s", result.stderr)
+        logger.error(
+            "mongoimport failed for collection '%s'",
+            collection_name,
+            extra=event_fields(
+                "collection_import_failed",
+                collection=collection_name,
+                file=collection_filename,
+                duration_ms=duration_ms,
+                error=result.stderr.strip(),
+            ),
+        )
         raise Exception(f"Failed to import {collection_name}")
 
-    logger.debug("Successfully imported collection '%s'", collection_name)
+    logger.info(
+        "Imported collection '%s'",
+        collection_name,
+        extra=event_fields(
+            "collection_imported",
+            collection=collection_name,
+            file=collection_filename,
+            documents=read_imported_document_count(result.stderr),
+            duration_ms=duration_ms,
+        ),
+    )
+
+
+def read_imported_document_count(mongoimport_output: str) -> int | None:
+    """Read the document count from mongoimport's summary line, if it printed one"""
+    match = IMPORTED_DOCUMENTS_PATTERN.search(mongoimport_output)
+    return int(match.group(1)) if match else None
 
 
 def create_collections_indexes(
@@ -82,14 +116,22 @@ def create_collections_indexes(
         collection_name = collection_index_data["name"]
         logger.debug("Creating indexes for collection '%s'", collection_name)
         collection = db.get_collection(collection_name)
-        for index in collection_index_data.get("indexes", []):
+        indexes = collection_index_data.get("indexes", [])
+        collated_indexes = collection_index_data.get("collatedIndexes", [])
+        for index in indexes:
             collection.create_index(list(index.items()))
-        for index in collection_index_data.get("collatedIndexes", []):
+        for index in collated_indexes:
             collection.create_index(
                 list(index.items()), collation=CASE_INSENSITIVE_COLLATION
             )
-        logger.debug(
-            "Created indexes for collection '%s' successfully",
+        logger.info(
+            "Created indexes for collection '%s'",
             collection_name,
+            extra=event_fields(
+                "indexes_created",
+                collection=collection_name,
+                indexes=len(indexes),
+                collated_indexes=len(collated_indexes),
+            ),
         )
     logger.debug("All indexes created successfully")

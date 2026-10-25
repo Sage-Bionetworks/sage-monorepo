@@ -58,6 +58,8 @@ class ReleaseSettings:
 class ProductSettings:
     """Settings that differ between the explorer products"""
 
+    # Identifies the product on every log record
+    name: str
     # The UI shows this collection's documents in the order they are stored
     insertion_ordered_collection_name: str | None = None
 
