@@ -15,9 +15,12 @@ ENV UV_LINK_MODE=copy
 # Copy uv binary
 COPY --from=uv /uv /bin/uv
 
-# Copy dependency files
-WORKDIR /app
-COPY pyproject.toml uv.lock ./
+# Copy the shared data loader and this project's dependency files at their repo
+# paths, so the project's relative path dependency on the loader resolves
+WORKDIR /build
+COPY libs/explorers/data-loader ./libs/explorers/data-loader
+COPY apps/qtl/data/pyproject.toml apps/qtl/data/uv.lock ./apps/qtl/data/
+WORKDIR /build/apps/qtl/data
 
 # Generate requirements.txt and install dependencies
 RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
@@ -57,11 +60,11 @@ RUN groupadd --gid "$USER_GID" "$USER_NAME" \
 COPY --from=builder ${APP_DIR} ${APP_DIR}
 
 # Copy the application code.
-COPY ./src /${APP_DIR}/src
+COPY apps/qtl/data/src ${APP_DIR}/src
 RUN chown -R ${APP_USER_NAME}:${APP_USER_NAME} ${APP_DIR}
 
 WORKDIR /
-COPY docker-entrypoint.sh ./
+COPY apps/qtl/data/docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
