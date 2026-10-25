@@ -14,13 +14,11 @@ from explorers_data_loader.logs import (
     read_log_format,
     release_label,
 )
-from explorers_data_loader.mongo import (
-    DATA_VERSION_COLLECTION_FILENAME,
-    DATA_VERSION_COLLECTION_NAME,
-    create_collections_indexes,
-    import_collection,
-    read_collections,
+from explorers_data_loader.collection_config import (
+    DATA_VERSION_COLLECTION,
+    read_collection_configs,
 )
+from explorers_data_loader.mongo import create_collections_indexes, import_collection
 from explorers_data_loader.settings import (
     DatabaseSettings,
     LoaderPaths,
@@ -160,25 +158,22 @@ def load_release(
 
     summary.step = Step.READ_COLLECTIONS
     # Read before downloading, so an invalid collection list fails in seconds
-    file_collections = read_collections(paths.collections_filepath)
-    imported_collections = [
-        *file_collections,
-        (DATA_VERSION_COLLECTION_NAME, DATA_VERSION_COLLECTION_FILENAME),
-    ]
-    file_collection_names = [name for name, _ in file_collections]
+    file_collections = read_collection_configs(paths.collections_filepath)
+    imported_collections = [*file_collections, DATA_VERSION_COLLECTION]
+    file_collection_names = [collection.name for collection in file_collections]
     # dataversion goes last: the APIs clear their caches when it changes, so it
     # must only be swapped in once every other collection is live
     swapped_names = [
         *file_collection_names,
         *(TEAM_IMAGES_COLLECTION_NAMES if team_images else ()),
-        DATA_VERSION_COLLECTION_NAME,
+        DATA_VERSION_COLLECTION.name,
     ]
     # The team images collections stay part of the release when this run
     # skips them, so dropping orphans never removes the photos already loaded
     release_names = [
         *file_collection_names,
         *(TEAM_IMAGES_COLLECTION_NAMES if product.loads_team_images else ()),
-        DATA_VERSION_COLLECTION_NAME,
+        DATA_VERSION_COLLECTION.name,
     ]
 
     summary.step = Step.DOWNLOAD
@@ -198,18 +193,12 @@ def load_release(
         drop_staging_leftovers(db)
 
         summary.step = Step.IMPORT_COLLECTIONS
-        for collection_name, collection_filename in imported_collections:
-            import_collection(
-                db_settings,
-                product,
-                collection_name,
-                collection_filename,
-                paths.download_dir,
-            )
-            summary.collections_imported.append(collection_name)
+        for collection in imported_collections:
+            import_collection(db_settings, collection, paths.download_dir)
+            summary.collections_imported.append(collection.name)
 
         summary.step = Step.CREATE_INDEXES
-        create_collections_indexes(db, paths.collections_indexes_filepath)
+        create_collections_indexes(db, file_collections)
 
         if team_image_paths:
             summary.step = Step.UPLOAD_TEAM_IMAGES

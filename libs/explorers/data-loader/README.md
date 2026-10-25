@@ -13,13 +13,45 @@ A data project calls `run` with its product settings:
 ```python
 from explorers_data_loader import ProductSettings, run
 
-run(ProductSettings(name="model-ad", insertion_ordered_collection_name="ui_config"))
+run(ProductSettings(name="model-ad"))
 ```
 
 `run` reads its configuration from the environment (`DB_USER`, `DB_PASS`, `DB_NAME`, `DB_HOST`,
 `DB_PORT`, `DATA_FILE`, `DATA_VERSION`, and `SYNAPSE_AUTH_TOKEN` for the Synapse client) and its
-collection list from the data project's `src/data/collections.csv` and
-`src/data/collections-indexes.json`.
+collection list from the data project's `src/data/collections.json`.
+
+## collections.json
+
+Lists the collections a release imports, in import order, with each collection's indexes:
+
+```json
+[
+  {
+    "name": "rna_de_aggregate",
+    "file": "rna_de_aggregate.json",
+    "indexes": [{ "ensembl_gene_id": 1 }],
+    "collatedIndexes": [{ "tissue": 1, "ensembl_gene_id": 1, "name.link_text": 1, "sex": 1 }]
+  },
+  {
+    "name": "ui_config",
+    "file": "ui_config.json",
+    "indexes": [{ "page": 1 }],
+    "maintainInsertionOrder": true
+  }
+]
+```
+
+| Key                      | Required | Meaning                                                                                                                                     |
+| ------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`                   | yes      | The MongoDB collection                                                                                                                      |
+| `file`                   | yes      | The release file it is imported from                                                                                                        |
+| `indexes`                | no       | Indexes to build, each mapping fields to `1` (ascending) or `-1` (descending). A compound index's fields keep their order                   |
+| `collatedIndexes`        | no       | Indexes to build with case-insensitive collation (`en`, strength 2), for fields the APIs sort or match without regard to case               |
+| `maintainInsertionOrder` | no       | `true` imports the file one document at a time, keeping its order, for a collection the UI shows in stored order. Others import in parallel |
+
+The loader checks the whole file before downloading anything, and reports every problem in one
+error: a missing or empty `name` or `file`, an unknown key, an invalid index, a collection listed
+twice, or `dataversion`, which the loader always imports last on its own.
 
 ## How a release is loaded
 

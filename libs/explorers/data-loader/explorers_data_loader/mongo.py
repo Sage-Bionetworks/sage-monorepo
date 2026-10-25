@@ -1,5 +1,3 @@
-from csv import reader
-from json import load
 import logging
 from os import path
 import re
@@ -9,14 +7,12 @@ from time import monotonic
 from pymongo import database
 from pymongo.collation import Collation
 
+from explorers_data_loader.collection_config import CollectionConfig
 from explorers_data_loader.logs import elapsed_ms, event_fields
-from explorers_data_loader.settings import DatabaseSettings, ProductSettings
+from explorers_data_loader.settings import DatabaseSettings
 from explorers_data_loader.staging import staging_collection_name
 
 logger = logging.getLogger(__name__)
-
-DATA_VERSION_COLLECTION_NAME = "dataversion"
-DATA_VERSION_COLLECTION_FILENAME = "dataversion.json"
 
 CASE_INSENSITIVE_COLLATION = Collation("en", strength=2)
 
@@ -24,37 +20,15 @@ CASE_INSENSITIVE_COLLATION = Collation("en", strength=2)
 IMPORTED_DOCUMENTS_PATTERN = re.compile(r"(\d+) document\(s\) imported successfully")
 
 
-def read_collections(collections_filepath: str) -> list[tuple[str, str]]:
-    """Read the (collection name, file name) pairs a release imports"""
-    with open(collections_filepath) as collections_file:
-        collections = [(name, filename) for name, filename in reader(collections_file)]
-
-    if any(name == DATA_VERSION_COLLECTION_NAME for name, _ in collections):
-        raise ValueError(
-            f"'{DATA_VERSION_COLLECTION_NAME}' must not be listed in "
-            f"{collections_filepath}: it is imported last, once every other "
-            "collection is loaded and indexed"
-        )
-    return collections
-
-
 def import_collection(
-    db_settings: DatabaseSettings,
-    product: ProductSettings,
-    collection_name: str,
-    collection_filename: str,
-    download_dir: str,
+    db_settings: DatabaseSettings, collection: CollectionConfig, download_dir: str
 ) -> None:
     """Import a collection's file into its staging collection, leaving the live
     collection serving the previous release"""
-    collection_filepath = path.join(download_dir, collection_filename)
-    staging_name = staging_collection_name(collection_name)
+    collection_filepath = path.join(download_dir, collection.file)
+    staging_name = staging_collection_name(collection.name)
 
-    logger.debug(
-        "Importing collection '%s' from '%s'",
-        staging_name,
-        collection_filename,
-    )
+    logger.debug("Importing collection '%s' from '%s'", staging_name, collection.file)
 
     # Use mongoimport instead of pymongo for performance with large datasets.
     # --drop only ever clears the staging collection, never the live one.
@@ -67,7 +41,7 @@ def import_collection(
         "--drop",
     ]
 
-    if collection_name == product.insertion_ordered_collection_name:
+    if collection.maintain_insertion_order:
         cmd.append("--maintainInsertionOrder")
     else:
         # Use parallel workers for better performance on other collections
@@ -79,25 +53,25 @@ def import_collection(
     if result.returncode != 0:
         logger.error(
             "mongoimport failed for collection '%s'",
-            collection_name,
+            collection.name,
             extra=event_fields(
                 "collection_import_failed",
-                collection=collection_name,
-                file=collection_filename,
+                collection=collection.name,
+                file=collection.file,
                 duration_ms=duration_ms,
                 error=result.stderr.strip(),
             ),
         )
-        raise Exception(f"Failed to import {collection_name}")
+        raise Exception(f"Failed to import {collection.name}")
 
     logger.info(
         "Imported collection '%s'",
         staging_name,
         extra=event_fields(
             "collection_imported",
-            collection=collection_name,
+            collection=collection.name,
             staging_collection=staging_name,
-            file=collection_filename,
+            file=collection.file,
             documents=read_imported_document_count(result.stderr),
             duration_ms=duration_ms,
         ),
@@ -111,37 +85,34 @@ def read_imported_document_count(mongoimport_output: str) -> int | None:
 
 
 def create_collections_indexes(
-    db: database.Database, collections_indexes_filepath: str
+    db: database.Database, collections: list[CollectionConfig]
 ) -> None:
-    """Create the indexes from the JSON file on the staging collections.
+    """Create each collection's indexes on its staging collection.
 
     A rename keeps a collection's indexes, so building them before the swap
     means no collection is ever served unindexed.
     """
     logger.debug("Starting index creation process")
-    with open(collections_indexes_filepath) as collection_indexes_file:
-        collections_indexes_data = load(collection_indexes_file)
-    for collection_index_data in collections_indexes_data:
-        collection_name = collection_index_data["name"]
-        staging_name = staging_collection_name(collection_name)
+    for config in collections:
+        if not config.indexes and not config.collated_indexes:
+            continue
+        staging_name = staging_collection_name(config.name)
         logger.debug("Creating indexes for collection '%s'", staging_name)
         collection = db.get_collection(staging_name)
-        indexes = collection_index_data.get("indexes", [])
-        collated_indexes = collection_index_data.get("collatedIndexes", [])
-        for index in indexes:
+        for index in config.indexes:
             collection.create_index(list(index.items()))
-        for index in collated_indexes:
+        for index in config.collated_indexes:
             collection.create_index(
                 list(index.items()), collation=CASE_INSENSITIVE_COLLATION
             )
         logger.info(
             "Created indexes for collection '%s'",
-            collection_name,
+            config.name,
             extra=event_fields(
                 "indexes_created",
-                collection=collection_name,
-                indexes=len(indexes),
-                collated_indexes=len(collated_indexes),
+                collection=config.name,
+                indexes=len(config.indexes),
+                collated_indexes=len(config.collated_indexes),
             ),
         )
     logger.debug("All indexes created successfully")

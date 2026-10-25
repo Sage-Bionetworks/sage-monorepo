@@ -65,8 +65,6 @@ class ProductSettings:
 
     # Identifies the product on every log record
     name: str
-    # The UI shows this collection's documents in the order they are stored
-    insertion_ordered_collection_name: str | None = None
     # The product serves team member photos from GridFS, loaded from the
     # Synapse folder TEAM_IMAGES_ID unless LOAD_TEAM_IMAGES turns them off
     loads_team_images: bool = False
@@ -100,7 +98,6 @@ class LoaderPaths:
     download_dir: str
     team_images_dir: str
     collections_filepath: str
-    collections_indexes_filepath: str
 
     @classmethod
     def from_working_dir(cls, working_dir: str) -> "LoaderPaths":
@@ -109,8 +106,5 @@ class LoaderPaths:
         return cls(
             download_dir=download_dir,
             team_images_dir=path.join(download_dir, "team_images"),
-            collections_filepath=path.join(config_dir, "collections.csv"),
-            collections_indexes_filepath=path.join(
-                config_dir, "collections-indexes.json"
-            ),
+            collections_filepath=path.join(config_dir, "collections.json"),
         )

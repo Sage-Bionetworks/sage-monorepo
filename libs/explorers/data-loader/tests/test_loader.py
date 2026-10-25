@@ -1,9 +1,11 @@
 from unittest import mock
 
+import json
+
 import pytest
 
 from explorers_data_loader.loader import LiveRelease, Step, run
-from explorers_data_loader.mongo import DATA_VERSION_COLLECTION_NAME
+from explorers_data_loader.collection_config import DATA_VERSION_COLLECTION_NAME
 from explorers_data_loader.settings import ProductSettings
 from explorers_data_loader.staging import OrphanCleanup, SwapError
 from explorers_data_loader.team_images import TEAM_IMAGES_COLLECTION_NAMES
@@ -17,12 +19,10 @@ AGORA_ENV = {
     "DATA_FILE": "syn13363290",
     "DATA_VERSION": "119",
 }
-AGORA_PRODUCT = ProductSettings(
-    name="agora", insertion_ordered_collection_name="uiconfig"
-)
+AGORA_PRODUCT = ProductSettings(name="agora")
 AGORA_COLLECTIONS = [
-    ("genes", "rnaseq_differential_expression.json"),
-    ("uiconfig", "ui_config.json"),
+    {"name": "genes", "file": "rnaseq_differential_expression.json"},
+    {"name": "uiconfig", "file": "ui_config.json", "maintainInsertionOrder": True},
 ]
 RELEASE_COLLECTION_NAMES = ["genes", "uiconfig", DATA_VERSION_COLLECTION_NAME]
 TEAM_IMAGE_PATHS = (
@@ -30,11 +30,7 @@ TEAM_IMAGE_PATHS = (
     "/app/local/data/team_images/john_roe.png",
 )
 TEAM_IMAGES_FOLDER_ID = "syn12861877"
-AGORA_WITH_TEAM_IMAGES = ProductSettings(
-    name="agora",
-    insertion_ordered_collection_name="uiconfig",
-    loads_team_images=True,
-)
+AGORA_WITH_TEAM_IMAGES = ProductSettings(name="agora", loads_team_images=True)
 RELEASE_WITH_TEAM_IMAGES = [
     "genes",
     "uiconfig",
@@ -49,10 +45,7 @@ def working_dir(tmp_path, monkeypatch):
         monkeypatch.setenv(name, value)
     config_dir = tmp_path / "src" / "data"
     config_dir.mkdir(parents=True)
-    (config_dir / "collections-indexes.json").write_text("[]")
-    (config_dir / "collections.csv").write_text(
-        "".join(f"{name},{filename}\n" for name, filename in AGORA_COLLECTIONS)
-    )
+    (config_dir / "collections.json").write_text(json.dumps(AGORA_COLLECTIONS))
     return tmp_path
 
 
@@ -86,7 +79,7 @@ def steps():
         mock.patch(
             "explorers_data_loader.loader.import_collection",
             side_effect=record_step(
-                recorded, lambda _db, _product, name, *_: f"import {name}"
+                recorded, lambda _db, collection, _dir: f"import {collection.name}"
             ),
         ),
         mock.patch(
@@ -152,10 +145,14 @@ def test_run_stages_checks_and_swaps_with_dataversion_last(working_dir, steps):
     ]
 
 
-def test_run_rejects_a_listed_dataversion_before_downloading(working_dir, steps):
-    (working_dir / "src" / "data" / "collections.csv").write_text(
-        "genes,rnaseq_differential_expression.json\n"
-        f"{DATA_VERSION_COLLECTION_NAME},dataversion.json\n"
+def test_run_rejects_an_invalid_collection_list_before_downloading(working_dir, steps):
+    (working_dir / "src" / "data" / "collections.json").write_text(
+        json.dumps(
+            [
+                *AGORA_COLLECTIONS,
+                {"name": DATA_VERSION_COLLECTION_NAME, "file": "dataversion.json"},
+            ]
+        )
     )
 
     with pytest.raises(ValueError, match="must not be listed"):
