@@ -1,4 +1,6 @@
 import logging
+import os
+import stat
 from unittest import mock
 
 import pytest
@@ -54,7 +56,6 @@ def test_import_collection_uses_parallel_workers_for_other_collections():
 
     assert "--numInsertionWorkers=4" in command
     assert "--maintainInsertionOrder" not in command
-    assert f"--uri={AGORA_DB_SETTINGS.import_uri}" in command
     assert f"--file={DOWNLOAD_DIR}/{GENES.file}" in command
 
 
@@ -135,3 +136,57 @@ def test_import_collection_logs_mongoimport_errors_as_a_failed_import(caplog):
 
 def test_read_imported_document_count_is_none_without_a_summary_line():
     assert read_imported_document_count(MONGOIMPORT_ERROR) is None
+
+
+def test_import_collection_keeps_the_password_off_the_command_line():
+    command = run_import(GENES)
+
+    assert not any(AGORA_DB_SETTINGS.password in argument for argument in command)
+    assert any(argument.startswith("--config=") for argument in command)
+
+
+def test_import_collection_reads_the_uri_from_a_private_config_file_it_removes():
+    seen = {}
+
+    def inspect_config_file(command, **_):
+        config_path = next(
+            argument.removeprefix("--config=")
+            for argument in command
+            if argument.startswith("--config=")
+        )
+        seen["path"] = config_path
+        seen["mode"] = stat.S_IMODE(os.stat(config_path).st_mode)
+        with open(config_path) as config_file:
+            seen["contents"] = config_file.read()
+        return mock.Mock(returncode=0, stderr=MONGOIMPORT_SUMMARY)
+
+    with mock.patch(
+        "explorers_data_loader.mongo.subprocess.run", side_effect=inspect_config_file
+    ):
+        import_collection(AGORA_DB_SETTINGS, GENES, DOWNLOAD_DIR)
+
+    assert seen["mode"] == 0o600
+    assert seen["contents"] == f'uri: "{AGORA_DB_SETTINGS.import_uri}"\n'
+    assert not os.path.exists(seen["path"])
+
+
+def test_import_collection_removes_the_config_file_when_mongoimport_cannot_start():
+    seen = {}
+
+    def fail_to_start(command, **_):
+        seen["path"] = next(
+            argument.removeprefix("--config=")
+            for argument in command
+            if argument.startswith("--config=")
+        )
+        raise FileNotFoundError("mongoimport")
+
+    with (
+        mock.patch(
+            "explorers_data_loader.mongo.subprocess.run", side_effect=fail_to_start
+        ),
+        pytest.raises(FileNotFoundError),
+    ):
+        import_collection(AGORA_DB_SETTINGS, GENES, DOWNLOAD_DIR)
+
+    assert not os.path.exists(seen["path"])

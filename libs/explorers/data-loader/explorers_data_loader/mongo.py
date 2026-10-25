@@ -1,7 +1,11 @@
+from collections.abc import Iterator
+from contextlib import contextmanager
+import json
 import logging
-from os import path
+from os import fdopen, path, remove
 import re
 import subprocess
+from tempfile import mkstemp
 from time import monotonic
 
 from pymongo import database
@@ -20,6 +24,24 @@ CASE_INSENSITIVE_COLLATION = Collation("en", strength=2)
 IMPORTED_DOCUMENTS_PATTERN = re.compile(r"(\d+) document\(s\) imported successfully")
 
 
+@contextmanager
+def mongoimport_config_file(db_settings: DatabaseSettings) -> Iterator[str]:
+    """Write the connection URI to a config file only this user can read.
+
+    mongoimport reads the URI, password included, from the file, so the password
+    never appears on its command line, which other processes can read.
+    """
+    # mkstemp creates the file with mode 0600
+    file_descriptor, config_path = mkstemp(prefix="mongoimport-", suffix=".yaml")
+    try:
+        with fdopen(file_descriptor, "w") as config_file:
+            # A JSON string is valid YAML, and escapes any character in the URI
+            config_file.write(f"uri: {json.dumps(db_settings.import_uri)}\n")
+        yield config_path
+    finally:
+        remove(config_path)
+
+
 def import_collection(
     db_settings: DatabaseSettings, collection: CollectionConfig, download_dir: str
 ) -> None:
@@ -30,26 +52,27 @@ def import_collection(
 
     logger.debug("Importing collection '%s' from '%s'", staging_name, collection.file)
 
-    # Use mongoimport instead of pymongo for performance with large datasets.
-    # --drop only ever clears the staging collection, never the live one.
-    cmd = [
-        "mongoimport",
-        f"--uri={db_settings.import_uri}",
-        f"--collection={staging_name}",
-        f"--file={collection_filepath}",
-        "--jsonArray",
-        "--drop",
-    ]
+    with mongoimport_config_file(db_settings) as config_path:
+        # Use mongoimport instead of pymongo for performance with large datasets.
+        # --drop only ever clears the staging collection, never the live one.
+        cmd = [
+            "mongoimport",
+            f"--config={config_path}",
+            f"--collection={staging_name}",
+            f"--file={collection_filepath}",
+            "--jsonArray",
+            "--drop",
+        ]
 
-    if collection.maintain_insertion_order:
-        cmd.append("--maintainInsertionOrder")
-    else:
-        # Use parallel workers for better performance on other collections
-        cmd.append("--numInsertionWorkers=4")
+        if collection.maintain_insertion_order:
+            cmd.append("--maintainInsertionOrder")
+        else:
+            # Use parallel workers for better performance on other collections
+            cmd.append("--numInsertionWorkers=4")
 
-    started = monotonic()
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    duration_ms = elapsed_ms(started)
+        started = monotonic()
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        duration_ms = elapsed_ms(started)
     if result.returncode != 0:
         logger.error(
             "mongoimport failed for collection '%s'",
