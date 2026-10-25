@@ -16,9 +16,34 @@ from explorers_data_loader import ProductSettings, run
 run(ProductSettings(name="model-ad"))
 ```
 
-`run` reads its configuration from the environment (`DB_USER`, `DB_PASS`, `DB_NAME`, `DB_HOST`,
-`DB_PORT`, `DATA_FILE`, `DATA_VERSION`, and `SYNAPSE_AUTH_TOKEN` for the Synapse client) and its
-collection list from the data project's `src/data/collections.json`.
+`run` reads the database connection from the environment (`DB_USER`, `DB_PASS`, `DB_NAME`,
+`DB_HOST`, `DB_PORT`, and `SYNAPSE_AUTH_TOKEN` for the Synapse client), the release to load from
+the data project's `src/data/data-releases.json`, and the collections it holds from
+`src/data/collections.json`.
+
+## data-releases.json
+
+Names the Synapse data release each environment loads:
+
+```json
+{
+  "local": { "dataFile": "syn73774820", "dataVersion": "221" },
+  "prod": { "dataFile": "syn74702351", "dataVersion": "9" }
+}
+```
+
+- `DATA_RELEASE` picks the entry, `local` by default. Local runs and CI set nothing; a deployed
+  import sets the environment it loads.
+- `dataFile` is the release manifest and `dataVersion` its version. A product that loads team
+  images also sets `teamImagesId`, the Synapse folder of photos.
+- To load a different release locally, edit the `local` entry without committing it, and
+  rebuild the data image. `DATA_FILE`, `DATA_VERSION` and `TEAM_IMAGES_ID`, which `.env` files
+  set before this file existed, are ignored, and a run that finds them logs
+  `release_env_ignored`.
+- Keys starting with `$`, such as `$comment`, annotate the file and name no release.
+
+A data version bump changes the entry, so rebuilding the data image picks it up, without anyone
+editing their own `.env`.
 
 ## collections.json
 
@@ -77,7 +102,7 @@ leftover staging collections. A failure during step 5 leaves some collections on
 ## Team images
 
 A product that serves team member photos (`ProductSettings(loads_team_images=True)`, agora)
-also loads them from the Synapse folder `TEAM_IMAGES_ID` into GridFS's default `fs` bucket,
+also loads them from the release's `teamImagesId` folder into GridFS's default `fs` bucket,
 which its API reads by bare file name (e.g. `jane_doe.jpg`):
 
 - The images are downloaded after the release files, into a fresh `local/data/team_images/`
@@ -95,12 +120,13 @@ The loader writes one JSON object per line to stdout, so log tools (CloudWatch L
 Grafana Loki) can filter and count runs without parsing messages. Set `LOG_FORMAT=text` for
 readable lines while watching a local run.
 
-Every record carries `run_id`, `product`, `data_file` and `data_version`. Records that mark a step
+Every record carries `run_id`, `product`, `data_release`, `data_file` and `data_version`. Records that mark a step
 also carry an `event` name and that event's fields:
 
 | Event                          | Fields                                                                                                                                                                                                                                                |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `run_started`                  | none beyond the run fields                                                                                                                                                                                                                            |
+| `release_env_ignored`          | `variables`: the retired release variables still set, e.g. by an older `.env`                                                                                                                                                                         |
 | `download_started`             | none beyond the run fields                                                                                                                                                                                                                            |
 | `file_downloaded`              | `synapse_id`, `version`, `file`, `entry_number`, `entries`, `size_mb`, `duration_ms`                                                                                                                                                                  |
 | `manifest_entry_skipped`       | `synapse_id`, `version`, `name`, `entity_type` (a manifest entry that isn't a file, e.g. a `Folder`)                                                                                                                                                  |

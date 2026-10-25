@@ -16,9 +16,13 @@ AGORA_ENV = {
     "DB_NAME": "agora",
     "DB_HOST": "agora-mongo",
     "DB_PORT": "27017",
-    "DATA_FILE": "syn13363290",
-    "DATA_VERSION": "119",
 }
+AGORA_LOCAL_RELEASE = {
+    "dataFile": "syn13363290",
+    "dataVersion": "117",
+    "teamImagesId": "syn12861877",
+}
+RELEASE_ENV_NAMES = ("DATA_RELEASE", "DATA_FILE", "DATA_VERSION", "TEAM_IMAGES_ID")
 AGORA_PRODUCT = ProductSettings(name="agora")
 AGORA_COLLECTIONS = [
     {"name": "genes", "file": "rnaseq_differential_expression.json"},
@@ -29,7 +33,6 @@ TEAM_IMAGE_PATHS = (
     "/app/local/data/team_images/jane_doe.jpg",
     "/app/local/data/team_images/john_roe.png",
 )
-TEAM_IMAGES_FOLDER_ID = "syn12861877"
 AGORA_WITH_TEAM_IMAGES = ProductSettings(name="agora", loads_team_images=True)
 RELEASE_WITH_TEAM_IMAGES = [
     "genes",
@@ -43,9 +46,14 @@ RELEASE_WITH_TEAM_IMAGES = [
 def working_dir(tmp_path, monkeypatch):
     for name, value in AGORA_ENV.items():
         monkeypatch.setenv(name, value)
+    for name in RELEASE_ENV_NAMES:
+        monkeypatch.delenv(name, raising=False)
     config_dir = tmp_path / "src" / "data"
     config_dir.mkdir(parents=True)
     (config_dir / "collections.json").write_text(json.dumps(AGORA_COLLECTIONS))
+    (config_dir / "data-releases.json").write_text(
+        json.dumps({"local": AGORA_LOCAL_RELEASE})
+    )
     return tmp_path
 
 
@@ -188,8 +196,8 @@ def test_run_names_the_release_in_its_start_and_finish_messages(
         if getattr(record, "event", None) in ("run_started", "run_completed")
     ]
     assert messages == [
-        f"Data load started for agora v{AGORA_ENV['DATA_VERSION']}",
-        f"Data load completed for agora v{AGORA_ENV['DATA_VERSION']}",
+        f"Data load started for agora v{AGORA_LOCAL_RELEASE['dataVersion']}",
+        f"Data load completed for agora v{AGORA_LOCAL_RELEASE['dataVersion']}",
     ]
 
 
@@ -200,7 +208,8 @@ def test_run_tags_every_record_with_the_run_and_release(working_dir, steps, reco
     assert len(run_ids) == 1
     for record in records:
         assert record.context["product"] == AGORA_PRODUCT.name
-        assert record.context["data_version"] == AGORA_ENV["DATA_VERSION"]
+        assert record.context["data_release"] == "local"
+        assert record.context["data_version"] == AGORA_LOCAL_RELEASE["dataVersion"]
 
 
 def test_run_failing_before_the_swap_leaves_the_previous_release_live(
@@ -251,9 +260,9 @@ def test_run_reports_a_partial_swap_as_a_mixed_release(working_dir, steps, recor
 def test_run_reports_missing_settings_as_a_failed_run(
     working_dir, steps, records, monkeypatch
 ):
-    monkeypatch.delenv("DATA_VERSION")
+    monkeypatch.delenv("DB_PASS")
 
-    with pytest.raises(ValueError, match="DATA_VERSION"):
+    with pytest.raises(ValueError, match="DB_PASS"):
         run(AGORA_PRODUCT, str(working_dir))
 
     summary = run_completed(records)
@@ -281,8 +290,6 @@ def test_run_reports_dropped_orphans(working_dir, steps, records):
 def test_run_loads_team_images_after_the_indexes_and_swaps_them_before_dataversion(
     working_dir, steps, monkeypatch
 ):
-    monkeypatch.setenv("TEAM_IMAGES_ID", TEAM_IMAGES_FOLDER_ID)
-
     run(AGORA_WITH_TEAM_IMAGES, str(working_dir))
 
     assert steps[steps.index("download") + 1] == "download team images"
@@ -307,3 +314,20 @@ def test_run_with_team_images_off_keeps_the_loaded_photos(
     assert f"drop orphans {RELEASE_WITH_TEAM_IMAGES}" in steps
     skipped = [r for r in records if getattr(r, "event", None) == "team_images_skipped"]
     assert len(skipped) == 1
+
+
+def test_run_warns_about_retired_release_variables_and_ignores_them(
+    working_dir, steps, records, monkeypatch
+):
+    monkeypatch.setenv("DATA_VERSION", "119")
+
+    run(AGORA_PRODUCT, str(working_dir))
+
+    (ignored,) = [
+        r for r in records if getattr(r, "event", None) == "release_env_ignored"
+    ]
+    assert ignored.fields["variables"] == ["DATA_VERSION"]
+    assert (
+        run_completed(records).context["data_version"]
+        == (AGORA_LOCAL_RELEASE["dataVersion"])
+    )

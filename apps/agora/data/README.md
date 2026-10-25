@@ -21,13 +21,15 @@ nx create-config agora-data
 
 In the `.env` file,
 
-- specify the desired data release using `DATA_FILE` and `DATA_VERSION`
 - update `SYNAPSE_AUTH_TOKEN` to a Synapse PAT with view/download permissions for a user that can
-  download the data release (i.e. the data manifest file specified by `DATA_FILE` and
-  `DATA_VERSION` and all files described within the manifest) and the team images (i.e. all
-  files within the folder specified by `TEAM_IMAGES_ID`)
+  download the data release (i.e. the data manifest file and all files described within it) and
+  the team images (i.e. all files within the release's `teamImagesId` folder)
 - set `LOAD_TEAM_IMAGES="false"` to skip downloading the team images, e.g. to load faster; the
   photos already in MongoDB stay in place
+
+The release to load is the `local` entry of `src/data/data-releases.json`. To load a different
+release, edit that entry without committing it. `nx serve` reads the file directly; for
+`nx serve-detach`, rebuild the image first (`nx build-image agora-data`).
 
 ### Start MongoDB then Run the Python script
 

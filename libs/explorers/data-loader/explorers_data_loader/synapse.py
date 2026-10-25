@@ -8,7 +8,7 @@ import synapseclient
 import synapseutils
 
 from explorers_data_loader.logs import elapsed_ms, event_fields, total_size_mb
-from explorers_data_loader.settings import ReleaseSettings
+from explorers_data_loader.releases import ReleaseSettings
 
 logger = logging.getLogger(__name__)
 

@@ -1,0 +1,19 @@
+{
+  "$comment": "TODO(EX-146): develop, staging and prod copy data-manifest.json from the matching branch of Sage-Bionetworks/model-ad-data-manager, which deployed releases still read. Update both until EX-146 moves deployed releases here and EX-149 archives Sage-Bionetworks/model-ad-data-manager.",
+  "local": {
+    "dataFile": "syn73774820",
+    "dataVersion": "221"
+  },
+  "develop": {
+    "dataFile": "syn73774820",
+    "dataVersion": "221"
+  },
+  "staging": {
+    "dataFile": "syn73774820",
+    "dataVersion": "191"
+  },
+  "prod": {
+    "dataFile": "syn74702351",
+    "dataVersion": "9"
+  }
+}

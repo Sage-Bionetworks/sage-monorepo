@@ -5,14 +5,16 @@ from unittest import mock
 import pytest
 
 from explorers_data_loader.logs import BYTES_PER_MEGABYTE
-from explorers_data_loader.settings import ReleaseSettings
+from explorers_data_loader.releases import ReleaseSettings
 from explorers_data_loader.synapse import (
     download_synapse_data,
     download_team_images,
     login_to_synapse,
 )
 
-MODEL_AD_RELEASE = ReleaseSettings(data_file="syn73774820", data_version="221")
+MODEL_AD_RELEASE = ReleaseSettings(
+    name="develop", data_file="syn73774820", data_version="221"
+)
 MANIFEST_FILENAME = "data_manifest.csv"
 RELEASE_FILES = {
     "syn73774525": ("4", "ui_config.json", 2 * BYTES_PER_MEGABYTE),

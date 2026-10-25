@@ -24,9 +24,9 @@ from explorers_data_loader.settings import (
     LoaderPaths,
     LOAD_TEAM_IMAGES_ENV,
     ProductSettings,
-    ReleaseSettings,
     TeamImagesSettings,
 )
+from explorers_data_loader.releases import read_release, retired_release_env_names
 from explorers_data_loader.staging import (
     SwapError,
     drop_orphaned_collections,
@@ -140,8 +140,11 @@ def load_release(
 ) -> None:
     paths = LoaderPaths.from_working_dir(working_dir)
     db_settings = DatabaseSettings.from_env()
-    release = ReleaseSettings.from_env()
-    team_images = TeamImagesSettings.from_env() if product.loads_team_images else None
+    release = read_release(paths.data_releases_filepath)
+    team_images = (
+        TeamImagesSettings.from_release(release) if product.loads_team_images else None
+    )
+    run_context["data_release"] = release.name
     run_context["data_file"] = release.data_file
     run_context["data_version"] = release.data_version
     logger.info(
@@ -149,6 +152,15 @@ def load_release(
         release_label(run_context),
         extra=event_fields("run_started"),
     )
+    ignored_env_names = retired_release_env_names()
+    if ignored_env_names:
+        logger.warning(
+            "Ignoring %s: the release now comes from data-releases.json; remove "
+            "them from .env and edit the '%s' entry to load a different release",
+            ", ".join(ignored_env_names),
+            release.name,
+            extra=event_fields("release_env_ignored", variables=ignored_env_names),
+        )
     if product.loads_team_images and team_images is None:
         logger.info(
             "Skipping team images because %s is false",

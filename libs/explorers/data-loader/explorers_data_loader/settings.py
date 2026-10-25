@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from os import getenv, path
 
+from explorers_data_loader.releases import ReleaseSettings
+
 LOAD_TEAM_IMAGES_ENV = "LOAD_TEAM_IMAGES"
-TEAM_IMAGES_ID_ENV = "TEAM_IMAGES_ID"
 
 BOOLEAN_ENV_VALUES = {"true": True, "false": False}
 
@@ -49,24 +50,13 @@ class DatabaseSettings:
 
 
 @dataclass(frozen=True)
-class ReleaseSettings:
-    data_file: str
-    data_version: str
-
-    @classmethod
-    def from_env(cls) -> "ReleaseSettings":
-        values = read_required_env("DATA_FILE", "DATA_VERSION")
-        return cls(data_file=values["DATA_FILE"], data_version=values["DATA_VERSION"])
-
-
-@dataclass(frozen=True)
 class ProductSettings:
     """Settings that differ between the explorer products"""
 
     # Identifies the product on every log record
     name: str
     # The product serves team member photos from GridFS, loaded from the
-    # Synapse folder TEAM_IMAGES_ID unless LOAD_TEAM_IMAGES turns them off
+    # release's teamImagesId folder unless LOAD_TEAM_IMAGES turns them off
     loads_team_images: bool = False
 
 
@@ -75,12 +65,16 @@ class TeamImagesSettings:
     folder_id: str
 
     @classmethod
-    def from_env(cls) -> "TeamImagesSettings | None":
+    def from_release(cls, release: ReleaseSettings) -> "TeamImagesSettings | None":
         """The team images folder to load, or None when LOAD_TEAM_IMAGES is false"""
         if not read_bool_env(LOAD_TEAM_IMAGES_ENV, default=True):
             return None
-        values = read_required_env(TEAM_IMAGES_ID_ENV)
-        return cls(folder_id=values[TEAM_IMAGES_ID_ENV])
+        if not release.team_images_id:
+            raise ValueError(
+                f"Release '{release.name}' has no teamImagesId in data-releases.json; "
+                f"add one, or set {LOAD_TEAM_IMAGES_ENV}=false"
+            )
+        return cls(folder_id=release.team_images_id)
 
 
 def read_bool_env(name: str, default: bool) -> bool:
@@ -98,6 +92,7 @@ class LoaderPaths:
     download_dir: str
     team_images_dir: str
     collections_filepath: str
+    data_releases_filepath: str
 
     @classmethod
     def from_working_dir(cls, working_dir: str) -> "LoaderPaths":
@@ -107,4 +102,5 @@ class LoaderPaths:
             download_dir=download_dir,
             team_images_dir=path.join(download_dir, "team_images"),
             collections_filepath=path.join(config_dir, "collections.json"),
+            data_releases_filepath=path.join(config_dir, "data-releases.json"),
         )
