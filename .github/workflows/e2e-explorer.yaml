@@ -96,14 +96,16 @@ jobs:
 
       # SYNAPSE_AUTH_TOKEN must be passed explicitly from the caller workflow (not via
       # `secrets: inherit`) so only this one secret is exposed to the reusable workflow.
-      - name: Write Synapse PAT for Explorer
+      - name: Configure the Explorer data loader for CI
         if: ${{ steps.explorer_affected.outputs.affected == 'true' }}
         run: |
           env_filename="apps/${{ inputs.explorer }}/data/.env"
           if [ -f "$env_filename" ]; then
             sed -i "s/^SYNAPSE_AUTH_TOKEN=.*/SYNAPSE_AUTH_TOKEN=\"${{ secrets.SYNAPSE_AUTH_TOKEN }}\"/" "${env_filename}"
+            # e2e tests don't need team images, and downloading them timed out CI (AG-1800)
+            sed -i 's/^LOAD_TEAM_IMAGES=.*/LOAD_TEAM_IMAGES="false"/' "${env_filename}"
           else
-            echo "${env_filename} not found for ${{ inputs.explorer }}. Skipping SYNAPSE_AUTH_TOKEN injection."
+            echo "${env_filename} not found for ${{ inputs.explorer }}. Skipping data loader configuration."
           fi
 
       - name: Start Explorer

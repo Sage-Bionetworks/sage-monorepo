@@ -44,11 +44,8 @@ nx build-image agora-data
 
 ### Run the container "manually"
 
-Run the container after building the image locally:
-
-```
-docker run --rm ghcr.io/sage-bionetworks/agora-data:local
-```
+Use `nx serve-detach agora-data` (below), which passes the container its `.env` settings and
+connects it to MongoDB.
 
 ### Run the container and its dependencies (MongoDB)
 
@@ -61,6 +58,25 @@ nx serve-detach agora-data
 ```
 nx serve-detach agora-app
 ```
+
+### How a release is loaded
+
+The loader uses the shared [explorers data loader](../../../libs/explorers/data-loader/README.md).
+It imports the release into staging collections and swaps them in only once every collection has
+loaded and been indexed, so a failed or interrupted run leaves the previous release in place, and
+the next run cleans up after it. That README describes each step and every log event.
+
+### Reading the logs
+
+The loader writes one JSON object per line. Each run ends with a `run_completed` record that says
+whether it succeeded and, if not, which step failed and which release the database now serves. It
+is always the last line:
+
+```
+docker logs agora-data 2>/dev/null | tail -1
+```
+
+To read a run as plain lines instead, set `LOG_FORMAT="text"` in the `.env` file.
 
 ### Cleaning the database
 
