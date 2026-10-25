@@ -27,7 +27,9 @@ logging_config.dictConfig(
         "disable_existing_loggers": False,
         "formatters": {
             "detailed": {
-                "format": "%(asctime)s [%(module)s:%(lineno)d - %(levelname)s]: %(message)s"
+                "format": (
+                    "%(asctime)s [%(module)s:%(lineno)d - %(levelname)s]: %(message)s"
+                )
             },
         },
         "handlers": {
@@ -191,14 +193,9 @@ def main() -> None:
 
     # Create indexes using pymongo
     db_uri = f"mongodb://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}"
-    client = MongoClient(db_uri)
-    try:
+    with MongoClient(db_uri) as client:
         db = client.get_database(DB_NAME)
         create_collections_indexes(db, collections_indexes_filepath)
-        client.close()
-    except Exception as e:
-        logger.error("Error during MongoDB update: %s", e)
-        raise Exception("Error", e)
 
     import_data_version(local_data_dir)
     logger.debug("MongoDB import completed successfully")
