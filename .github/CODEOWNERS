@@ -12,7 +12,6 @@
 
 ## Sage
 /apps/sage/ @Sage-Bionetworks/sage-monorepo
-/libs/sage/ @Sage-Bionetworks/sage-monorepo
 
 /apps/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /libs/agora/ @Sage-Bionetworks/sage-monorepo-agora
