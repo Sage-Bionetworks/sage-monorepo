@@ -187,7 +187,7 @@ public class MarmosetModelOverviewSearchQueryDto {
    * @return items
    */
   
-  @Schema(name = "items", example = "[\"Presenilin 1\",\"Another Name\"]", description = "List of item names to filter by. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "items", example = "[\"PSEN1\",\"Another Name\"]", description = "List of item names to filter by. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
   public @Nullable List<String> getItems() {
     return items;
@@ -223,11 +223,11 @@ public class MarmosetModelOverviewSearchQueryDto {
   }
 
   /**
-   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: 'presenilin 1,another name' (comma-separated list) or 'presenilin' (partial match). Only applied when itemFilterType is 'exclude'. 
+   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: 'psen1,another name' (comma-separated list) or 'psen' (partial match). Only applied when itemFilterType is 'exclude'. 
    * @return search
    */
   
-  @Schema(name = "search", example = "presenilin 1,another name", description = "Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: 'presenilin 1,another name' (comma-separated list) or 'presenilin' (partial match). Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "search", example = "psen1,another name", description = "Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: 'psen1,another name' (comma-separated list) or 'psen' (partial match). Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("search")
   public @Nullable String getSearch() {
     return search;

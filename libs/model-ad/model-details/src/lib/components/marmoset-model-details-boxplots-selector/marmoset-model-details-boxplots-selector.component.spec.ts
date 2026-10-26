@@ -11,12 +11,12 @@ import {
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { marmosetModelDataMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
+import { MessageService } from 'primeng/api';
 import {
   ANCHOR_HIGHLIGHT_HOLD_MS,
   ModelDetailsBoxplotsSelectorComponent,
 } from '../model-details-boxplots-selector/model-details-boxplots-selector.component';
 import { MarmosetModelDetailsBoxplotsSelectorComponent } from './marmoset-model-details-boxplots-selector.component';
-import { MessageService } from 'primeng/api';
 
 const ageGroup = '0-1 year';
 
@@ -25,7 +25,7 @@ async function setup() {
     imports: [MockWikiComponent],
     componentInputs: {
       title: 'Plasma Biomarkers',
-      modelName: 'Presenilin 1',
+      modelName: 'PSEN1',
       modelDataList: marmosetModelDataMock,
       wikiParams: validWikiParams[0],
     },
@@ -57,7 +57,7 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
 
   it('should render description with model name', async () => {
     await setup();
-    expect(screen.getByText(/Presenilin 1 marmosets/, { exact: false })).toBeVisible();
+    expect(screen.getByText(/PSEN1 marmosets/, { exact: false })).toBeVisible();
   });
 
   it('should render measurement dropdown', async () => {
@@ -97,7 +97,7 @@ describe('MarmosetModelDetailsBoxplotsSelectorComponent', () => {
       imports: [MockWikiComponent],
       componentInputs: {
         title: 'Plasma Biomarkers',
-        modelName: 'Presenilin 1',
+        modelName: 'PSEN1',
         modelDataList: duplicateAgeData,
         wikiParams: validWikiParams[0],
       },

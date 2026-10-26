@@ -44,7 +44,7 @@ test.describe('model details', () => {
   test('loads marmoset data when modelOrganism=marmoset query param is provided', async ({
     page,
   }) => {
-    const model = 'Presenilin 1';
+    const model = 'PSEN1';
     await page.goto(`/models/${encodeURIComponent(model)}?modelOrganism=marmoset`);
     await expect(page).toHaveTitle(`Marmoset Model Details | ${model} AD model`);
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
@@ -55,7 +55,7 @@ test.describe('model details', () => {
   });
 
   test('loads marmoset data when modelOrganism query param has wrong casing', async ({ page }) => {
-    const model = 'Presenilin 1';
+    const model = 'PSEN1';
     const modelPath = `/models/${encodeURIComponent(model)}`;
     await page.goto(`${modelPath}?modelOrganism=Marmoset`);
     await page.waitForURL(`${modelPath}?modelOrganism=marmoset`);
