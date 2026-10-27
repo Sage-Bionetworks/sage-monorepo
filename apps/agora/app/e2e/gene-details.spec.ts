@@ -100,23 +100,30 @@ test.describe('gene details - query parameter sets initial selected model', () =
   function buildUrlWithModelQueryParam(model: string) {
     return `${path}?model=${model}`;
   }
-  async function confirmDropdown(page: Page, model: string) {
+  async function confirmSelectedModel(page: Page, model: string) {
     await expect(page.getByRole('combobox', { name: model })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 4, name: model, exact: true })).toBeVisible();
   }
 
   test('default model is used when there is no query parameter', async ({ page }) => {
     await page.goto(path);
     await waitForSpinnerNotVisible(page);
-    await confirmDropdown(page, GCT_RNA_SUBCATEGORIES.AD);
+    await confirmSelectedModel(page, GCT_RNA_SUBCATEGORIES.AD);
   });
 
   for (const model of Object.values(GCT_RNA_SUBCATEGORIES)) {
     test(`model ${model} is used when query parameter is set`, async ({ page }) => {
       await page.goto(buildUrlWithModelQueryParam(model));
       await waitForSpinnerNotVisible(page);
-      await confirmDropdown(page, model);
+      await confirmSelectedModel(page, model);
     });
   }
+
+  test('model is used when query parameter is set without parentheses', async ({ page }) => {
+    await page.goto(buildUrlWithModelQueryParam('AD Diagnosis x Sex females only'));
+    await waitForSpinnerNotVisible(page);
+    await confirmSelectedModel(page, GCT_RNA_SUBCATEGORIES.AD_SEX_F);
+  });
 });
 
 test.describe('gene details - tabs', () => {
@@ -175,18 +182,15 @@ test.describe('gene details - tabs', () => {
 
   test('model query parameter is kept when switching tabs', async ({ page }) => {
     const model = GCT_RNA_SUBCATEGORIES.AD_SEX_F;
-    // Agora's CustomUrlSerializer strips parentheses from the whole URL, query string included
-    // TODO(AG-2217): expect the model with parentheses once the serializer leaves query values alone
-    const modelInUrl = 'AD Diagnosis x Sex females only';
     await goToGene(page, `${genePath}/evidence/rna?model=${model}`);
     await expect(page.getByRole('combobox', { name: model })).toBeVisible();
-    await expect.poll(() => getModelQueryParam(page)).toBe(modelInUrl);
+    await expect.poll(() => getModelQueryParam(page)).toBe(model);
 
     await clickTab(page, 'Protein', `${genePath}/evidence/protein`);
-    expect(getModelQueryParam(page)).toBe(modelInUrl);
+    expect(getModelQueryParam(page)).toBe(model);
 
     await clickTab(page, 'RNA', `${genePath}/evidence/rna`);
-    expect(getModelQueryParam(page)).toBe(modelInUrl);
+    expect(getModelQueryParam(page)).toBe(model);
     await expect(page.getByRole('combobox', { name: model })).toBeVisible();
   });
 

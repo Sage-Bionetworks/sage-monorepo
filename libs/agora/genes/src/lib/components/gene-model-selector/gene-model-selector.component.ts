@@ -5,9 +5,8 @@ import { QUERY_PARAMS } from '@sagebionetworks/agora/config';
 import { removeParentheses } from '@sagebionetworks/shared/util';
 import { SelectModule } from 'primeng/select';
 
-interface Option {
+export interface ModelOption {
   name: string;
-  value: string;
 }
 
 @Component({
@@ -19,35 +18,28 @@ interface Option {
 export class GeneModelSelectorComponent implements OnInit {
   route = inject(ActivatedRoute);
 
-  _options: Option[] = [];
-  get options(): Option[] {
+  _options: ModelOption[] = [];
+  get options(): ModelOption[] {
     return this._options;
   }
-  @Input() set options(options: any) {
-    this.selected = {} as Option;
-    this._options =
-      options?.map((option: any) => {
-        const newValue = removeParentheses(option);
-        return {
-          name: option,
-          value: newValue,
-        } as Option;
-      }) || [];
+  @Input() set options(options: string[] | undefined) {
+    this.selected = {} as ModelOption;
+    this._options = options?.map((option) => ({ name: option })) || [];
   }
 
-  selected: Option = { name: '', value: '' };
+  selected: ModelOption = { name: '' };
 
-  @Output() changeEvent: EventEmitter<object> = new EventEmitter<object>();
+  // emits undefined when there are no options to select
+  @Output() changeEvent = new EventEmitter<ModelOption | undefined>();
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       const modelFromURL = params[QUERY_PARAMS.MODEL];
-      let index = this._options.findIndex((o) => o.value === modelFromURL);
-      if (index === -1) {
-        // default to first option if page is loaded without a model parameter
-        index = 0;
-      }
-      this.selected = this._options[index];
+      const exactMatch = this._options.find((o) => o.name === modelFromURL);
+      // links shared while the URL serializer stripped parentheses carry the stripped name
+      const strippedMatch = this._options.find((o) => removeParentheses(o.name) === modelFromURL);
+      const defaultOption = this._options[0];
+      this.selected = exactMatch ?? strippedMatch ?? defaultOption;
       this._onChange();
     });
   }
