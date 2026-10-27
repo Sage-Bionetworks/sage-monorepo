@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ConfigService } from '@sagebionetworks/explorers/config';
 import { DATA_VERSION_PATH } from '@sagebionetworks/explorers/constants';
-import { initSentry, SentryConfig } from '@sagebionetworks/explorers/sentry';
+import { BrowserSentryConfig, initSentry } from '@sagebionetworks/explorers/sentry';
 import { AppUpdateCheckTriggerEnum, AppUpdateService } from './app-update.service';
 import { initializeExplorersApp } from './explorers-app-initializer';
 
@@ -45,7 +45,7 @@ describe('initializeExplorersApp', () => {
     await TestBed.runInInjectionContext(() => initializeExplorersApp(siteName));
   }
 
-  function sentryConfig(): SentryConfig {
+  function sentryConfig(): BrowserSentryConfig {
     return (initSentry as jest.Mock).mock.calls[0][0];
   }
 

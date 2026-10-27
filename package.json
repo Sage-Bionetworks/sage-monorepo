@@ -34,6 +34,8 @@
     "@octokit/rest": "22.0.0",
     "@primeuix/themes": "2.0.3",
     "@sentry/angular": "11.8.0",
+    "@sentry/core": "11.8.0",
+    "@sentry/node": "11.8.0",
     "angular-google-tag-manager": "1.11.0",
     "compression": "1.8.0",
     "d3": "7.9.0",

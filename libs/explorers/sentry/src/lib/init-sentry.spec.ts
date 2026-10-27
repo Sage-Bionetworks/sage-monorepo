@@ -1,12 +1,13 @@
 import * as Sentry from '@sentry/angular';
 import type { ErrorEvent, EventHint } from '@sentry/angular';
-import { initSentry, SENTRY_DATA_COLLECTION, SentryConfig } from './init-sentry';
+import { BrowserSentryConfig, initSentry } from './init-sentry';
+import { SENTRY_DATA_COLLECTION } from './sentry-options';
 
 jest.mock('@sentry/angular', () => ({
   init: jest.fn(),
 }));
 
-const mockConfig: SentryConfig = {
+const mockConfig: BrowserSentryConfig = {
   dsn: 'https://test-dsn@sentry.io/123',
   environment: 'dev',
 };
