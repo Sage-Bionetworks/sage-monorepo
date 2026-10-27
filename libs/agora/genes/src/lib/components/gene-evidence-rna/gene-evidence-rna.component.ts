@@ -7,7 +7,7 @@ import {
   RnaDifferentialExpression,
 } from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent, MedianBarChartComponent } from '@sagebionetworks/agora/charts';
-import { DEFAULT_SYNAPSE_WIKI_OWNER_ID, QUERY_PARAMS } from '@sagebionetworks/agora/config';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { CandlestickItem, ForestPlotItem } from '@sagebionetworks/explorers/charts';
@@ -23,7 +23,10 @@ import {
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { getStatisticalModels } from '../../helpers';
-import { GeneModelSelectorComponent } from '../gene-model-selector/gene-model-selector.component';
+import {
+  GeneModelSelectorComponent,
+  ModelOption,
+} from '../gene-model-selector/gene-model-selector.component';
 import { GeneNetworkComponent } from '../gene-network/gene-network.component';
 
 @Component({
@@ -130,8 +133,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
 
     this.statisticalModels = getStatisticalModels(this._gene);
 
-    const urlModelParam = this.explorersHelperService.getUrlParam(QUERY_PARAMS.MODEL);
-    this.selectedStatisticalModel = urlModelParam || this.statisticalModels[0];
+    this.selectedStatisticalModel = this.statisticalModels[0];
 
     this.initMedianExpression();
     this.initDifferentialExpression();
@@ -281,7 +283,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
     }));
   }
 
-  onStatisticalModelChange(event: any) {
+  onStatisticalModelChange(event: ModelOption | undefined) {
     if (!event) {
       return;
     }
