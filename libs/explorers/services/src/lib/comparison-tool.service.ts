@@ -41,6 +41,7 @@ import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
 import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
+import { HttpErrorReportLevelEnum, reportHttpError } from './http-request-error';
 import { LoggerService } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
 
@@ -58,6 +59,19 @@ export const UNMATCHED_URL_CATEGORIES_MESSAGE =
 
 export const UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE =
   'Link categories match no comparison tool config; keeping the current selection.';
+
+export const UNPINNED_FETCH_ERROR_MESSAGE = 'Error fetching unpinned rows';
+
+export const PINNED_FETCH_ERROR_MESSAGE = 'Error fetching pinned rows';
+
+export const PIN_ALL_ERROR_MESSAGE = 'Error pinning all matching rows';
+
+export const ComparisonToolSentryTagEnum = {
+  Page: 'comparison_tool.page',
+  DropdownSelection: 'comparison_tool.dropdown_selection',
+} as const;
+
+export const DROPDOWN_SELECTION_TAG_SEPARATOR = ' / ';
 
 /**
  * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
@@ -534,6 +548,7 @@ export class ComparisonToolService<T> {
   constructor() {
     // Unpinned rows are paged, so totalCount is the cross-page total used for pagination.
     this.subscribeToFetchStream(
+      UNPINNED_FETCH_ERROR_MESSAGE,
       this.unpinnedFetch$,
       this.pendingUnpinnedFetchesSignal,
       (result) => this.applyUnpinnedData(result),
@@ -543,6 +558,7 @@ export class ComparisonToolService<T> {
     // Pinned rows are never paged: applyPinnedData enforces the pin cap and the count comes from
     // pinnedData(), so totalCount from the response is unused and therefore is omitted intentionally.
     this.subscribeToFetchStream(
+      PINNED_FETCH_ERROR_MESSAGE,
       this.pinnedFetch$,
       this.pendingPinnedFetchesSignal,
       ({ data, identity, dropdownSelection, requestedPins }) =>
@@ -1078,7 +1094,7 @@ export class ComparisonToolService<T> {
           }
         },
         error: (error) => {
-          this.logger.error('Error pinning all matching rows', { error });
+          this.reportFailure(PIN_ALL_ERROR_MESSAGE, error);
           this.toastNotificationService.showError(
             'Something went wrong while pinning all matching rows. Please try again.',
           );
@@ -1379,11 +1395,11 @@ export class ComparisonToolService<T> {
    * Subscribes a fetch stream once for the lifetime of the service. `switchMap` unsubscribes the
    * previous result observable whenever a newer one arrives, which aborts the superseded HTTP
    * request so responses are always applied latest-wins. `finalize` runs on completion, error, or
-   * switchMap cancellation, keeping `pendingCounter` balanced; `catchError` hands a failed
-   * request to `applyFailure` and keeps the outer stream alive for the next fetch. Error logging is
-   * handled centrally by `httpErrorInterceptor`, so `applyFailure` only updates state.
+   * switchMap cancellation, keeping `pendingCounter` balanced; `catchError` reports a failed
+   * request, hands it to `applyFailure`, and keeps the outer stream alive for the next fetch.
    */
   private subscribeToFetchStream<R extends ComparisonToolFetchResult<unknown>>(
+    errorMessage: string,
     fetch$: Subject<Observable<R>>,
     pendingCounter: WritableSignal<number>,
     applyResult: (result: R) => void,
@@ -1394,7 +1410,8 @@ export class ComparisonToolService<T> {
         switchMap((source$) =>
           source$.pipe(
             finalize(() => this.completeFetch(pendingCounter)),
-            catchError(() => {
+            catchError((error) => {
+              this.reportFailure(errorMessage, error);
               applyFailure();
               return EMPTY;
             }),
@@ -1403,6 +1420,30 @@ export class ComparisonToolService<T> {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(applyResult);
+  }
+
+  /**
+   * Reports a failed fetch, tagged with the comparison tool page and, when the tool has dropdowns,
+   * the selected view, so Sentry can filter failures by tool and view.
+   */
+  private reportFailure(errorMessage: string, error: unknown): void {
+    const tags: Record<string, string> = {};
+    // Every config of a comparison tool belongs to the same page.
+    const page = this.configsSignal()[0]?.page;
+    if (page) {
+      tags[ComparisonToolSentryTagEnum.Page] = page;
+    }
+    const dropdownSelection = this.dropdownSelection();
+    if (dropdownSelection.length > 0) {
+      tags[ComparisonToolSentryTagEnum.DropdownSelection] = dropdownSelection.join(
+        DROPDOWN_SELECTION_TAG_SEPARATOR,
+      );
+    }
+    reportHttpError(this.logger, errorMessage, {
+      error,
+      level: HttpErrorReportLevelEnum.Error,
+      tags,
+    });
   }
 
   /**

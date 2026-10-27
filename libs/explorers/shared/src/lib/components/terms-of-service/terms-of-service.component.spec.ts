@@ -1,5 +1,10 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import {
+  HttpRequestError,
+  SourceLogger,
+  SynapseApiService,
+} from '@sagebionetworks/explorers/services';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { MarkdownModule } from 'ngx-markdown';
 import { of, throwError } from 'rxjs';
@@ -17,11 +22,23 @@ class MockHeroComponent {}
 @Component({ selector: 'explorers-loading-icon', template: '' })
 class MockLoadingIconComponent {}
 
+const synapseRequestError = new HttpRequestError(
+  new HttpErrorResponse({
+    status: HttpStatusCode.ServiceUnavailable,
+    url: 'https://repo-prod.prod.sagebase.org/auth/v1/termsOfUse2/info',
+  }),
+  'GET',
+);
+
 describe('TermsOfServiceComponent', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   async function setup(mockMarkdown = 'Mock TOS Content', error = false) {
     const mockService = new MockSynapseApiService();
     if (error) {
-      mockService.getTermsOfService.mockReturnValue(throwError(() => new Error('Failed to load')));
+      mockService.getTermsOfService.mockReturnValue(throwError(() => synapseRequestError));
     } else {
       mockService.getTermsOfService.mockReturnValue(of(mockMarkdown));
     }
@@ -40,6 +57,17 @@ describe('TermsOfServiceComponent', () => {
     await waitFor(() => {
       expect(screen.getByText(mockContent)).toBeInTheDocument();
     });
+  });
+
+  it('reports a failed Synapse request as a warning', async () => {
+    const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+
+    await setup(undefined, true);
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining(synapseRequestError.message),
+      expect.objectContaining({ error: synapseRequestError }),
+    );
   });
 
   it('returns undefined for heroBackgroundImagePath when no value is provided', async () => {

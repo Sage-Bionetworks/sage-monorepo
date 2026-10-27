@@ -11,6 +11,7 @@ import {
   AppUpdateCheckTriggerEnum,
   AppUpdateService,
   ErrorOverlayService,
+  HttpErrorReportLevelEnum,
   HttpRequestError,
   LoggerService,
   reportHttpError,
@@ -61,7 +62,10 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
       appUpdateService.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
 
       if (!req.context.get(SKIP_ERROR_REPORTING)) {
-        reportHttpError(logger, httpRequestError, 'error');
+        reportHttpError(logger, 'HTTP request failed', {
+          error: httpRequestError,
+          level: HttpErrorReportLevelEnum.Error,
+        });
       }
 
       // Show error overlay so users know when requests fail, unless the request

@@ -1,7 +1,11 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import {
+  HttpRequestError,
+  SourceLogger,
+  SynapseApiService,
+} from '@sagebionetworks/explorers/services';
 import {
   invalidWikiParam,
   provideLoadingIconColors,
@@ -10,6 +14,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { server } from '@sagebionetworks/explorers/testing/msw';
 import { render, waitFor } from '@testing-library/angular';
+import { throwError } from 'rxjs';
 import { WikiComponent } from './wiki.component';
 
 // Mock DomSanitizer
@@ -44,6 +49,7 @@ describe('WikiComponent', () => {
     // Reset handlers after each test
     server.resetHandlers();
     jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   afterAll(() => {
@@ -87,6 +93,29 @@ describe('WikiComponent', () => {
       await waitFor(() => {
         expect(component.isLoading()).toBe(false);
         expect(component.safeHtml).toBe('No data found, please try again later.');
+      });
+    });
+
+    it('reports a failed Synapse request as a warning', async () => {
+      const wikiRequestError = new HttpRequestError(
+        new HttpErrorResponse({
+          status: HttpStatusCode.NotFound,
+          url: `https://repo-prod.prod.sagebase.org/repo/v1/entity/${invalidWikiParam.ownerId}/wiki/${invalidWikiParam.wikiId}`,
+        }),
+        'GET',
+      );
+      jest
+        .spyOn(SynapseApiService.prototype, 'getWikiMarkdown')
+        .mockReturnValue(throwError(() => wikiRequestError));
+      const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+
+      await setup(invalidWikiParam);
+
+      await waitFor(() => {
+        expect(warnSpy).toHaveBeenCalledWith(
+          expect.stringContaining(wikiRequestError.message),
+          expect.objectContaining({ error: wikiRequestError }),
+        );
       });
     });
   });

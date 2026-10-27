@@ -17,7 +17,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
 import { SearchResult, SearchResultIcon } from '@sagebionetworks/explorers/models';
-import { PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  HttpErrorReportLevelEnum,
+  LoggerService,
+  PlatformService,
+  reportHttpError,
+} from '@sagebionetworks/explorers/services';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import { pluralize } from '@sagebionetworks/shared/util';
 import {
@@ -42,6 +47,7 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
 })
 export class SearchInputComponent<T extends SearchResult> implements AfterViewInit {
   private readonly platformService = inject(PlatformService);
+  private readonly logger = inject(LoggerService).forSource('SearchInputComponent');
   router = inject(Router);
   elementRef = inject(ElementRef);
   destroyRef = inject(DestroyRef);
@@ -70,15 +76,13 @@ export class SearchInputComponent<T extends SearchResult> implements AfterViewIn
   navigateToResult = input.required<(result: T) => void>();
   getSearchResults = input.required<(query: string) => Observable<T[]>>();
   getNoSearchResultsMessage = input<(query: string) => string>(
-    (query: string) => 'No results match your search term.',
+    () => 'No results match your search term.',
   );
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
   sanitizeQuery = input<(query: string) => string>((query: string) => query); // default is no-op
   formatResultForDisplay = input<(result: T) => string>((result: T) => result.id);
-  formatResultSubtextForDisplay = input<(result: T) => string | undefined>(
-    (result: T) => undefined,
-  );
-  getResultIcon = input<(result: T) => SearchResultIcon | undefined>((result: T) => undefined);
+  formatResultSubtextForDisplay = input<(result: T) => string | undefined>(() => undefined);
+  getResultIcon = input<(result: T) => SearchResultIcon | undefined>(() => undefined);
 
   faMagnifyingGlass = faMagnifyingGlass;
   faSpinner = faSpinner;
@@ -117,7 +121,11 @@ export class SearchInputComponent<T extends SearchResult> implements AfterViewIn
         switchMap((event: Event) => {
           const target = event.target as HTMLInputElement;
           return this.search(target.value).pipe(
-            catchError(() => {
+            catchError((error) => {
+              reportHttpError(this.logger, 'Error fetching search results', {
+                error,
+                level: HttpErrorReportLevelEnum.Warn,
+              });
               this.error = 'An unknown error occurred, please try again.';
               this.isLoading = false;
               this.showResults = true;

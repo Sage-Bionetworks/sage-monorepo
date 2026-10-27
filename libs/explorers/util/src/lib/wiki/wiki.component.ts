@@ -9,7 +9,13 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SynapseWikiMarkdown, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { PlatformService, SynapseApiService } from '@sagebionetworks/explorers/services';
+import {
+  HttpErrorReportLevelEnum,
+  LoggerService,
+  PlatformService,
+  reportHttpError,
+  SynapseApiService,
+} from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
@@ -22,6 +28,7 @@ import { finalize } from 'rxjs';
 })
 export class WikiComponent {
   private readonly platformService = inject(PlatformService);
+  private readonly logger = inject(LoggerService).forSource('WikiComponent');
   synapseApiService = inject(SynapseApiService);
   domSanitizer = inject(DomSanitizer);
   private readonly destroyRef = inject(DestroyRef);
@@ -61,7 +68,11 @@ export class WikiComponent {
               this.synapseApiService.renderHtml(wiki.markdown),
             );
           },
-          error: () => {
+          error: (error) => {
+            reportHttpError(this.logger, 'Error loading wiki', {
+              error,
+              level: HttpErrorReportLevelEnum.Warn,
+            });
             this.safeHtml = 'No data found, please try again later.';
           },
         });

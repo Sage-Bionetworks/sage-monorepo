@@ -69,13 +69,16 @@ describe('httpErrorInterceptor', () => {
   it('should report the error under a message naming the status, method, and path', () => {
     requestAndFail();
 
-    expect(logger.error).toHaveBeenCalledWith(`HTTP ${NOT_FOUND.status} GET ${DATA_VERSION_URL}`, {
-      error: expect.any(HttpRequestError),
-      data: expect.objectContaining({
-        userMessage: 'The requested resource was not found.',
-        statusText: NOT_FOUND.statusText,
-      }),
-    });
+    expect(logger.error).toHaveBeenCalledWith(
+      `HTTP request failed (HTTP ${NOT_FOUND.status} GET ${DATA_VERSION_URL})`,
+      {
+        error: expect.any(HttpRequestError),
+        data: expect.objectContaining({
+          userMessage: 'The requested resource was not found.',
+          statusText: NOT_FOUND.statusText,
+        }),
+      },
+    );
   });
 
   it('should re-throw a typed error that keeps the status, method, and path', () => {
@@ -108,7 +111,7 @@ describe('httpErrorInterceptor', () => {
       .flush(null, NOT_FOUND);
 
     expect(logger.error).toHaveBeenCalledWith(
-      `HTTP ${NOT_FOUND.status} GET ${DATA_VERSION_URL}`,
+      `HTTP request failed (HTTP ${NOT_FOUND.status} GET ${DATA_VERSION_URL})`,
       expect.anything(),
     );
   });

@@ -7,9 +7,12 @@ import {
   VERSION_CHECK_TIMEOUT_MS,
 } from '@sagebionetworks/explorers/constants';
 import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
+import { HttpErrorReportLevelEnum, reportHttpError } from './http-request-error';
 import { catchError, map, Observable, of, startWith, tap, timeout, TimeoutError } from 'rxjs';
 import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
+
+export const DATA_VERSION_ERROR_MESSAGE = 'Failed to fetch data version';
 
 export interface DataVersion {
   data_file: string;
@@ -66,7 +69,10 @@ export class VersionService {
             timeoutMs: VERSION_CHECK_TIMEOUT_MS,
           });
         } else {
-          this.logger.warn('Failed to fetch data version', { error });
+          reportHttpError(this.logger, DATA_VERSION_ERROR_MESSAGE, {
+            error,
+            level: HttpErrorReportLevelEnum.Warn,
+          });
         }
         return of(DATA_VERSION_UNKNOWN);
       }),

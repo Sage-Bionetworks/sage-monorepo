@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import {
   DATA_VERSION_LOADING,
@@ -5,14 +6,29 @@ import {
   VERSION_CHECK_TIMEOUT_MS,
 } from '@sagebionetworks/explorers/constants';
 import { firstValueFrom, lastValueFrom, NEVER, Observable, of, throwError, toArray } from 'rxjs';
+import { NO_RESPONSE_STATUS } from './app-update.service';
 import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
+import { HttpRequestError } from './http-request-error';
 import { SourceLogger } from './logger.service';
 import { PlatformService } from './platform.service';
-import { DataVersion, DataVersionService, VersionService } from './version.service';
+import {
+  DATA_VERSION_ERROR_MESSAGE,
+  DataVersion,
+  DataVersionService,
+  VersionService,
+} from './version.service';
 
 describe('VersionService', () => {
   let service: VersionService;
   let mockPlatformService: Partial<PlatformService>;
+
+  const failedRequest = new HttpRequestError(
+    new HttpErrorResponse({
+      status: NO_RESPONSE_STATUS,
+      url: 'https://modeladexplorer.org/api/v1/data-version',
+    }),
+    'GET',
+  );
 
   const mockDataVersion: DataVersion = {
     data_file: 'syn12345',
@@ -95,14 +111,19 @@ describe('VersionService', () => {
     });
 
     it('should emit loading, then unknown and report a Sentry warning when the request errors', async () => {
-      const error = new Error('Unable to connect to the server. Please check your connection.');
       const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
-      const dataVersionService = mockDataVersionService(() => throwError(() => error));
+      const errorSpy = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+      const dataVersionService = mockDataVersionService(() => throwError(() => failedRequest));
 
       const emissions = await collectEmissions(service.getDataVersion$(dataVersionService));
 
       expect(emissions).toEqual([DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN]);
-      expect(warnSpy).toHaveBeenCalledWith('Failed to fetch data version', { error });
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(warnSpy).toHaveBeenCalledWith(
+        `${DATA_VERSION_ERROR_MESSAGE} (${failedRequest.message})`,
+        expect.objectContaining({ error: failedRequest }),
+      );
+      expect(errorSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -159,11 +180,7 @@ describe('VersionService', () => {
 
     it('should not keep a data version when the request errors', async () => {
       jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
-      const dataVersionService = mockDataVersionService(() =>
-        throwError(
-          () => new Error('Unable to connect to the server. Please check your connection.'),
-        ),
-      );
+      const dataVersionService = mockDataVersionService(() => throwError(() => failedRequest));
 
       await lastValueFrom(service.getDataVersion$(dataVersionService));
 

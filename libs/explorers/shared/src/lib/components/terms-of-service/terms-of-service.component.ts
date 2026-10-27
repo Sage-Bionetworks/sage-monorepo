@@ -11,7 +11,13 @@ import {
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
-import { PlatformService, SynapseApiService } from '@sagebionetworks/explorers/services';
+import {
+  HttpErrorReportLevelEnum,
+  LoggerService,
+  PlatformService,
+  reportHttpError,
+  SynapseApiService,
+} from '@sagebionetworks/explorers/services';
 import { HeroComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { MarkdownModule } from 'ngx-markdown';
@@ -28,6 +34,7 @@ export class TermsOfServiceComponent implements OnInit {
   synapseService = inject(SynapseApiService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
+  private readonly logger = inject(LoggerService).forSource('TermsOfServiceComponent');
 
   content = '';
   isLoading = signal(true);
@@ -55,8 +62,11 @@ export class TermsOfServiceComponent implements OnInit {
           next: (markdown) => {
             this.content = markdown;
           },
-          error: () => {
-            // Handled by httpErrorInterceptor
+          error: (error) => {
+            reportHttpError(this.logger, 'Error loading terms of service', {
+              error,
+              level: HttpErrorReportLevelEnum.Warn,
+            });
           },
         });
     }

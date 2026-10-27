@@ -2,9 +2,11 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import * as Sentry from '@sentry/angular';
 import { NO_RESPONSE_STATUS } from './app-update.service';
 import {
+  HttpErrorReportLevel,
+  HttpErrorReportLevelEnum,
   HttpRequestError,
+  HttpSentryTagEnum,
   isNotFoundError,
-  NON_HTTP_ERROR_MESSAGE,
   reportHttpError,
   UNKNOWN_URL_PATH,
 } from './http-request-error';
@@ -14,7 +16,7 @@ jest.mock('@sentry/angular', () => ({
   withScope: jest.fn((callback: (scope: unknown) => void) => callback(mockScope)),
 }));
 
-const mockScope = { setTag: jest.fn() };
+const mockScope = { setTag: jest.fn(), setTags: jest.fn() };
 
 const GENES_PATH = '/api/v1/genes/ENSG00000130203';
 const GENES_URL = `https://modeladexplorer.org${GENES_PATH}?panel=rna`;
@@ -118,6 +120,8 @@ describe('isNotFoundError', () => {
 });
 
 describe('reportHttpError', () => {
+  const OPERATION = 'Error fetching gene expression rows';
+
   let logger: jest.Mocked<Pick<SourceLogger, 'warn' | 'error'>>;
 
   beforeEach(() => {
@@ -125,16 +129,16 @@ describe('reportHttpError', () => {
     jest.clearAllMocks();
   });
 
-  function report(error: unknown, level: 'warn' | 'error') {
-    reportHttpError(logger as unknown as SourceLogger, error, level);
+  function report(error: unknown, level: HttpErrorReportLevel, tags?: Record<string, string>) {
+    reportHttpError(logger as unknown as SourceLogger, OPERATION, { error, level, tags });
   }
 
-  it('reports at the call site level under the endpoint and status message', () => {
+  it('reports at the call site level under the operation, endpoint, and status', () => {
     const error = buildError(HttpStatusCode.ServiceUnavailable);
 
-    report(error, 'error');
+    report(error, HttpErrorReportLevelEnum.Error);
 
-    expect(logger.error).toHaveBeenCalledWith(error.message, {
+    expect(logger.error).toHaveBeenCalledWith(`${OPERATION} (${error.message})`, {
       error,
       data: { userMessage: error.userMessage, url: GENES_URL, statusText: 'Status Text' },
     });
@@ -144,48 +148,64 @@ describe('reportHttpError', () => {
   it('reports a warning when the call site asks for one', () => {
     const error = buildError(HttpStatusCode.NotFound);
 
-    report(error, 'warn');
+    report(error, HttpErrorReportLevelEnum.Warn);
 
-    expect(logger.warn).toHaveBeenCalledWith(error.message, expect.objectContaining({ error }));
+    expect(logger.warn).toHaveBeenCalledWith(
+      `${OPERATION} (${error.message})`,
+      expect.objectContaining({ error }),
+    );
     expect(logger.error).not.toHaveBeenCalled();
   });
 
   it('reports a 500 as a warning at most, since the API reports its own exception', () => {
     const error = buildError(HttpStatusCode.InternalServerError);
 
-    report(error, 'error');
+    report(error, HttpErrorReportLevelEnum.Error);
 
-    expect(logger.warn).toHaveBeenCalledWith(error.message, expect.objectContaining({ error }));
+    expect(logger.warn).toHaveBeenCalledWith(
+      `${OPERATION} (${error.message})`,
+      expect.objectContaining({ error }),
+    );
     expect(logger.error).not.toHaveBeenCalled();
   });
 
   it.each([NO_RESPONSE_STATUS, HttpStatusCode.BadGateway, HttpStatusCode.GatewayTimeout])(
     'reports a %s at the call site level, since the API never saw the failure',
     (status) => {
-      report(buildError(status), 'error');
+      report(buildError(status), HttpErrorReportLevelEnum.Error);
 
       expect(logger.error).toHaveBeenCalledTimes(1);
     },
   );
 
   it('tags the event with the method, status, and path', () => {
-    report(buildError(HttpStatusCode.NotFound), 'error');
+    report(buildError(HttpStatusCode.NotFound), HttpErrorReportLevelEnum.Error);
 
     expect(Sentry.withScope).toHaveBeenCalledTimes(1);
-    expect(mockScope.setTag).toHaveBeenCalledWith('http.method', 'GET');
+    expect(mockScope.setTag).toHaveBeenCalledWith(HttpSentryTagEnum.Method, 'GET');
     expect(mockScope.setTag).toHaveBeenCalledWith(
-      'http.status_code',
+      HttpSentryTagEnum.StatusCode,
       String(HttpStatusCode.NotFound),
     );
-    expect(mockScope.setTag).toHaveBeenCalledWith('http.url', GENES_PATH);
+    expect(mockScope.setTag).toHaveBeenCalledWith(HttpSentryTagEnum.Url, GENES_PATH);
   });
 
-  it('reports anything other than a failed request as an error, whatever the level', () => {
+  it("tags the event with the call site's context", () => {
+    const tags = { 'comparison_tool.page': 'Differential Expression' };
+
+    report(buildError(HttpStatusCode.NotFound), HttpErrorReportLevelEnum.Error, tags);
+
+    expect(mockScope.setTags).toHaveBeenCalledWith(tags);
+  });
+
+  it('reports anything other than a failed request as an error under the operation alone', () => {
     const error = new TypeError("Cannot read properties of undefined (reading 'items')");
+    const tags = { 'comparison_tool.page': 'Differential Expression' };
 
-    report(error, 'warn');
+    report(error, HttpErrorReportLevelEnum.Warn, tags);
 
-    expect(logger.error).toHaveBeenCalledWith(NON_HTTP_ERROR_MESSAGE, { error });
+    expect(logger.error).toHaveBeenCalledWith(OPERATION, { error });
     expect(logger.warn).not.toHaveBeenCalled();
+    expect(mockScope.setTags).toHaveBeenCalledWith(tags);
   });
 });

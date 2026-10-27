@@ -3,11 +3,27 @@ import * as Sentry from '@sentry/angular';
 import { NO_RESPONSE_STATUS } from './app-update.service';
 import { SourceLogger } from './logger.service';
 
-export type HttpErrorReportLevel = 'warn' | 'error';
+export const HttpErrorReportLevelEnum = {
+  Warn: 'warn',
+  Error: 'error',
+} as const;
+export type HttpErrorReportLevel =
+  (typeof HttpErrorReportLevelEnum)[keyof typeof HttpErrorReportLevelEnum];
 
 export const UNKNOWN_URL_PATH = 'unknown';
 
-export const NON_HTTP_ERROR_MESSAGE = 'Non-HTTP error in an HTTP request pipeline';
+export const HttpSentryTagEnum = {
+  Method: 'http.method',
+  StatusCode: 'http.status_code',
+  Url: 'http.url',
+} as const;
+
+export interface HttpErrorReportContext {
+  error: unknown;
+  level: HttpErrorReportLevel;
+  /** Searchable context, such as which comparison tool view the request was made for. */
+  tags?: Record<string, string>;
+}
 
 /**
  * A failed HTTP request, as re-thrown by `httpErrorInterceptor`. Its message names the status,
@@ -38,41 +54,46 @@ export function isNotFoundError(error: unknown): boolean {
 }
 
 /**
- * Reports a failed request through the caller's logger, under the `HTTP <status> <method> <path>`
- * message and with `http.*` tags, so Sentry groups each call site's failures by endpoint and
- * status. `level` is the call site's judgment of how serious the failure is, except that a 500 is
- * reported as a warning at most: the API reports the exception behind its own 500, with the stack
- * trace, on the same trace as this event.
+ * Reports a failed request through the caller's logger as `<operation> (HTTP <status> <method>
+ * <path>)`, with `http.*` tags, so Sentry groups each call site's failures by operation, endpoint,
+ * and status. `operation` names what the caller was doing and must stay fixed, since it is part of
+ * the grouping. `level` is the call site's judgment of how serious the failure is, except that a
+ * 500 is reported as a warning at most: the API reports the exception behind its own 500, with the
+ * stack trace, on the same trace as this event.
  *
  * Anything other than an `HttpRequestError`, such as an error thrown while mapping a response, is
- * a bug rather than a failed request, so it is reported as an error whatever `level` says.
+ * a bug rather than a failed request, so it is reported as an error under `operation` alone,
+ * whatever `level` says.
  */
 export function reportHttpError(
   logger: SourceLogger,
-  error: unknown,
-  level: HttpErrorReportLevel,
+  operation: string,
+  { error, level, tags = {} }: HttpErrorReportContext,
 ): void {
-  if (!(error instanceof HttpRequestError)) {
-    logger.error(NON_HTTP_ERROR_MESSAGE, { error });
-    return;
-  }
-
-  const reportLevel = error.status === HttpStatusCode.InternalServerError ? 'warn' : level;
-  const data = {
-    userMessage: error.userMessage,
-    url: error.cause.url,
-    statusText: error.cause.statusText,
-  };
-
   Sentry.withScope((scope) => {
-    scope.setTag('http.method', error.method);
-    scope.setTag('http.status_code', String(error.status));
-    scope.setTag('http.url', error.urlPath);
+    scope.setTags(tags);
 
-    if (reportLevel === 'warn') {
-      logger.warn(error.message, { ...data, error });
+    if (!(error instanceof HttpRequestError)) {
+      logger.error(operation, { error });
+      return;
+    }
+
+    scope.setTag(HttpSentryTagEnum.Method, error.method);
+    scope.setTag(HttpSentryTagEnum.StatusCode, String(error.status));
+    scope.setTag(HttpSentryTagEnum.Url, error.urlPath);
+
+    const message = `${operation} (${error.message})`;
+    const data = {
+      userMessage: error.userMessage,
+      url: error.cause.url,
+      statusText: error.cause.statusText,
+    };
+    const reportLevel =
+      error.status === HttpStatusCode.InternalServerError ? HttpErrorReportLevelEnum.Warn : level;
+    if (reportLevel === HttpErrorReportLevelEnum.Warn) {
+      logger.warn(message, { ...data, error });
     } else {
-      logger.error(error.message, { error, data });
+      logger.error(message, { error, data });
     }
   });
 }
