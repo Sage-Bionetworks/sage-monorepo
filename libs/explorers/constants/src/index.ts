@@ -1,3 +1,4 @@
+export * from './lib/app-update';
 export * from './lib/comparison-tool';
 export * from './lib/comparison-tool-copy';
 export * from './lib/data-version';

@@ -1,5 +1,6 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HttpContext, provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/services';
 import { ModelOrganism, SearchResult, SearchService } from '@sagebionetworks/model-ad/api-client';
 import { mockSearchResults } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
@@ -45,8 +46,23 @@ describe('SearchInputComponent', () => {
   it('should call searchModels when getSearchResults is invoked', async () => {
     const { component } = await setup();
     const result = component.getSearchResults('test query');
-    expect(mockSearchService.searchModels).toHaveBeenCalledWith('test query', undefined);
+    expect(mockSearchService.searchModels).toHaveBeenCalledWith(
+      'test query',
+      undefined,
+      'body',
+      false,
+      { context: expect.any(HttpContext) },
+    );
     expect(result).toBeDefined();
+  });
+
+  it('should leave a failed search to the search list instead of the error overlay', async () => {
+    const { component } = await setup();
+
+    component.getSearchResults('test query');
+
+    const { context } = mockSearchService.searchModels.mock.calls[0][4];
+    expect(context.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
   });
 
   it('should format results correctly for different match fields', async () => {

@@ -1,5 +1,6 @@
 export * from './lib/app-storage.constants';
 export * from './lib/app-storage.service';
+export * from './lib/app-update.service';
 export * from './lib/breakpoint-config.service';
 export * from './lib/comparison-tool-filter.service';
 export * from './lib/comparison-tool-filter.service.providers';
@@ -10,6 +11,7 @@ export * from './lib/comparison-tool-url.service';
 export * from './lib/comparison-tool.service';
 export * from './lib/comparison-tool.service.providers';
 export * from './lib/explorers-app-config.service';
+export * from './lib/explorers-app-initializer';
 export * from './lib/helper.service';
 export * from './lib/http-context-tokens';
 export * from './lib/legacy-comparison-tool-url.guard';

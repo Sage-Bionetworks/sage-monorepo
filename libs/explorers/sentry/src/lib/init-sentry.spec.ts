@@ -1,15 +1,28 @@
 import * as Sentry from '@sentry/angular';
-import { initSentry } from './init-sentry';
-import { SENTRY_DATA_COLLECTION, SentryConfig } from './sentry-options';
+import type { ErrorEvent, EventHint } from '@sentry/angular';
+import { BrowserSentryConfig, initSentry } from './init-sentry';
+import { SENTRY_DATA_COLLECTION } from './sentry-options';
 
 jest.mock('@sentry/angular', () => ({
   init: jest.fn(),
 }));
 
-const mockConfig: SentryConfig = {
+const mockConfig: BrowserSentryConfig = {
   dsn: 'https://test-dsn@sentry.io/123',
   environment: 'dev',
 };
+
+const event = { message: 'Uncaught error' } as ErrorEvent;
+const chunkLoadError = new TypeError(
+  'Failed to fetch dynamically imported module: https://modeladexplorer.org/chunk-ABCD1234.js',
+);
+const unrelatedError = new TypeError('Cannot read properties of undefined');
+
+function runBeforeSend(originalException: unknown) {
+  const { beforeSend } = (Sentry.init as jest.Mock).mock.calls[0][0];
+  const hint: EventHint = { originalException };
+  return beforeSend(event, hint);
+}
 
 describe('initSentry', () => {
   afterEach(() => {
@@ -24,6 +37,7 @@ describe('initSentry', () => {
       environment: 'dev',
       release: 'agora@1.0.0+abc1234',
       dataCollection: SENTRY_DATA_COLLECTION,
+      beforeSend: expect.any(Function),
     });
   });
 
@@ -73,5 +87,33 @@ describe('initSentry', () => {
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('SENTRY_DSN'));
 
     warnSpy.mockRestore();
+  });
+
+  describe('beforeSend', () => {
+    it('drops a chunk-load error from a stale tab', async () => {
+      initSentry({ ...mockConfig, isStaleClient: () => Promise.resolve(true) });
+
+      await expect(runBeforeSend(chunkLoadError)).resolves.toBeNull();
+    });
+
+    it('reports a chunk-load error from a current tab', async () => {
+      initSentry({ ...mockConfig, isStaleClient: () => Promise.resolve(false) });
+
+      await expect(runBeforeSend(chunkLoadError)).resolves.toBe(event);
+    });
+
+    it('reports other errors from a stale tab without checking staleness', async () => {
+      const isStaleClient = jest.fn(() => Promise.resolve(true));
+      initSentry({ ...mockConfig, isStaleClient });
+
+      await expect(runBeforeSend(unrelatedError)).resolves.toBe(event);
+      expect(isStaleClient).not.toHaveBeenCalled();
+    });
+
+    it('reports chunk-load errors when staleness cannot be checked', async () => {
+      initSentry(mockConfig);
+
+      await expect(runBeforeSend(chunkLoadError)).resolves.toBe(event);
+    });
   });
 });

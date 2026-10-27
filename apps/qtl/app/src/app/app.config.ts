@@ -10,11 +10,14 @@ import {
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
-import { initSentry } from '@sagebionetworks/explorers/sentry';
-import { LoggerService, provideExplorersConfig } from '@sagebionetworks/explorers/services';
+import {
+  initializeExplorersApp,
+  LoggerService,
+  provideExplorersConfig,
+} from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/qtl/api-client';
-import { configFactory, ConfigService, TUTORIAL_PANES } from '@sagebionetworks/qtl/config';
+import { ConfigService, SITE_NAME, TUTORIAL_PANES } from '@sagebionetworks/qtl/config';
 import { QtlPreset } from '@sagebionetworks/qtl/themes';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
@@ -27,17 +30,7 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'qtl-app' },
-    provideAppInitializer(() => {
-      const configService = inject(ConfigService);
-      return configFactory(configService)().then(() => {
-        const { sentryDsn, sentryEnvironment, sentryRelease } = configService.config;
-        initSentry({
-          dsn: sentryDsn,
-          environment: sentryEnvironment,
-          release: sentryRelease,
-        });
-      });
-    }),
+    provideAppInitializer(() => initializeExplorersApp(SITE_NAME)),
     provideExplorersConfig({
       tutorialPanes: TUTORIAL_PANES,
     }),

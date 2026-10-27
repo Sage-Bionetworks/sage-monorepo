@@ -55,6 +55,7 @@
       "@sagebionetworks/explorers/charts-angular": ["libs/explorers/charts-angular/src/index.ts"],
       "@sagebionetworks/explorers/comparison-tool": ["libs/explorers/comparison-tool/src/index.ts"],
       "@sagebionetworks/explorers/config": ["libs/explorers/config/src/index.ts"],
+      "@sagebionetworks/explorers/config/server": ["libs/explorers/config/src/server.ts"],
       "@sagebionetworks/explorers/constants": ["libs/explorers/constants/src/index.ts"],
       "@sagebionetworks/explorers/models": ["libs/explorers/models/src/index.ts"],
       "@sagebionetworks/explorers/sentry": ["libs/explorers/sentry/src/index.ts"],
