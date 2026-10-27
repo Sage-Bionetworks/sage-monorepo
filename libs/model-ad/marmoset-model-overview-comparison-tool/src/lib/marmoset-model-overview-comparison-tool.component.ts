@@ -4,9 +4,12 @@ import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
+  COMPARISON_TOOL_CONFIG_ERROR_MESSAGE,
   ComparisonToolUrlService,
+  HttpErrorReportLevelEnum,
   LoggerService,
   PlatformService,
+  reportHttpError,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
@@ -48,7 +51,10 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     .getComparisonToolConfig(ComparisonToolPage.MarmosetModelOverview)
     .pipe(
       catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', { error });
+        reportHttpError(this.logger, COMPARISON_TOOL_CONFIG_ERROR_MESSAGE, {
+          error,
+          level: HttpErrorReportLevelEnum.Error,
+        });
         return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true }),

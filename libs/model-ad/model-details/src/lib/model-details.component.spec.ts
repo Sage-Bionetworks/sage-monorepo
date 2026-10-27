@@ -1,8 +1,14 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router, RouterOutlet } from '@angular/router';
 import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
-import { PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ErrorOverlayService,
+  HttpRequestError,
+  PlatformService,
+  SourceLogger,
+} from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelOrganism, ModelService } from '@sagebionetworks/model-ad/api-client';
@@ -74,7 +80,7 @@ async function setup(
 }
 
 describe('ModelDetailsComponent', () => {
-  afterAll(() => jest.restoreAllMocks());
+  afterEach(() => jest.restoreAllMocks());
 
   describe('model organism resolution', () => {
     it('should fetch the mouse model when no modelOrganism query param is provided', async () => {
@@ -149,6 +155,17 @@ describe('ModelDetailsComponent', () => {
     const load1Mock = { ...mouseModelMock, name: 'LOAD1' };
     const load1Route = `/${ROUTE_PATHS.MODELS}/${load1Mock.name}?modelOrganism=mouse`;
     const unknownModelRoute = `/${ROUTE_PATHS.MODELS}/Unknown?modelOrganism=mouse`;
+    const unavailableModelName = 'Unavailable';
+    const unavailableModelRoute = `/${ROUTE_PATHS.MODELS}/${unavailableModelName}?modelOrganism=mouse`;
+
+    const modelRequestError = (status: HttpStatusCode, modelOrganism: string, name: string) =>
+      new HttpRequestError(
+        new HttpErrorResponse({
+          status,
+          url: `https://modeladexplorer.org/api/v1/models/${modelOrganism}/${name}`,
+        }),
+        'GET',
+      );
 
     async function setupWithRouter(notFoundDelayMs = 0) {
       const getModelByName = jest.fn((modelOrganism: ModelOrganism, name: string) => {
@@ -157,7 +174,15 @@ describe('ModelDetailsComponent', () => {
         );
         if (model) return of(model);
 
-        const notFound = throwError(() => new Error(`${modelOrganism}/${name} not found`));
+        if (name === unavailableModelName) {
+          return throwError(() =>
+            modelRequestError(HttpStatusCode.ServiceUnavailable, modelOrganism, name),
+          );
+        }
+
+        const notFound = throwError(() =>
+          modelRequestError(HttpStatusCode.NotFound, modelOrganism, name),
+        );
         return notFoundDelayMs ? timer(notFoundDelayMs).pipe(switchMap(() => notFound)) : notFound;
       });
 
@@ -221,6 +246,28 @@ describe('ModelDetailsComponent', () => {
       await navigate(unknownModelRoute);
 
       expect(screen.getByText('Not found')).toBeInTheDocument();
+    });
+
+    it('should show the error overlay and report, without redirecting, when the request fails otherwise', async () => {
+      const showError = jest.spyOn(ErrorOverlayService.prototype, 'showError');
+      const loggerError = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+      const { navigate, router } = await setupWithRouter();
+      const error = modelRequestError(
+        HttpStatusCode.ServiceUnavailable,
+        ModelOrganism.Mouse,
+        unavailableModelName,
+      );
+
+      await navigate(unavailableModelRoute);
+
+      expect(router.url).toBe(unavailableModelRoute);
+      expect(screen.queryByText('Not found')).not.toBeInTheDocument();
+      expect(showError).toHaveBeenCalledWith(error.userMessage);
+      expect(loggerError).toHaveBeenCalledWith(
+        expect.stringContaining(error.message),
+        expect.objectContaining({ error: expect.any(HttpRequestError) }),
+      );
+      expect(document.querySelector('.loading-icon')).not.toBeInTheDocument();
     });
   });
 

@@ -3,8 +3,13 @@ import { DestroyRef, inject, Signal, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import {
+  ErrorOverlayService,
+  getUserMessage,
+  HttpErrorReportLevelEnum,
+  isNotFoundError,
   LoggerService,
   PlatformService,
+  reportHttpError,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { routeSnapshotChanges } from '@sagebionetworks/explorers/util';
@@ -48,6 +53,7 @@ export function individualExpressionDetailsFromRoute<T>({
   const router = inject(Router);
   const logger = inject(LoggerService).forSource(source);
   const platformService = inject(PlatformService);
+  const errorOverlayService = inject(ErrorOverlayService);
   const destroyRef = inject(DestroyRef);
 
   const isLoading = signal(true);
@@ -109,11 +115,20 @@ export function individualExpressionDetailsFromRoute<T>({
               query: { [pathParam]: id, ...query },
             }),
       ),
-      catchError(() =>
-        redirectToNotFound('individual expression request failed', {
-          query: { [pathParam]: id, ...query },
-        }),
-      ),
+      catchError((error) => {
+        if (isNotFoundError(error)) {
+          return redirectToNotFound('individual expression data not found', {
+            query: { [pathParam]: id, ...query },
+          });
+        }
+        reportHttpError(logger, 'Error loading individual expression data', {
+          error,
+          level: HttpErrorReportLevelEnum.Error,
+        });
+        errorOverlayService.showError(getUserMessage(error));
+        isLoading.set(false);
+        return EMPTY;
+      }),
     );
   };
 

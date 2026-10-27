@@ -5,9 +5,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
 import {
+  ErrorOverlayService,
+  getUserMessage,
   HelperService,
+  HttpErrorReportLevelEnum,
+  isNotFoundError,
   LoggerService,
   PlatformService,
+  reportHttpError,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent, routeSnapshotChanges } from '@sagebionetworks/explorers/util';
@@ -50,6 +55,7 @@ export class ModelDetailsComponent implements OnInit {
   modelService = inject(ModelService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
+  private readonly errorOverlayService = inject(ErrorOverlayService);
   private readonly logger = inject(LoggerService).forSource('ModelDetailsComponent');
 
   isLoading = true;
@@ -114,12 +120,21 @@ export class ModelDetailsComponent implements OnInit {
         context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
       })
       .pipe(
-        catchError(() => {
-          this.logger.log('model not found, redirecting', {
-            modelName,
-            modelOrganism,
+        catchError((error) => {
+          if (isNotFoundError(error)) {
+            this.logger.log('model not found, redirecting', {
+              modelName,
+              modelOrganism,
+            });
+            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+            return EMPTY;
+          }
+          reportHttpError(this.logger, 'Error loading model', {
+            error,
+            level: HttpErrorReportLevelEnum.Error,
           });
-          this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+          this.errorOverlayService.showError(getUserMessage(error));
+          this.isLoading = false;
           return EMPTY;
         }),
       );
