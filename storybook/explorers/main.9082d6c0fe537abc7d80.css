@@ -65,6 +65,8 @@ ol {
   --color-separator: #eaecee;
   --color-shadow: #c7c5c5;
   --color-tooltip: #63676c;
+  --color-warning-background: #fff7e9;
+  --color-warning-hover: #fdd487;
   --color-comparison-tool-row-highlight: #ebf2fa;
   --color-search-input-result-highlight: #f1f3f5;
   --font-size-h1: 28px;
