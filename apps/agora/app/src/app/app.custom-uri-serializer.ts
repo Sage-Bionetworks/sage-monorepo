@@ -1,14 +1,15 @@
 import { DefaultUrlSerializer, UrlSerializer, UrlTree } from '@angular/router';
 
-// CustomUrlSerializer strips parentheses from legacy Agora URLs
-// before parsing; this prevents legacy path parts (e.g. (genes-router:genes-list)
-// from being stripped before Angular route handling.
+const LEGACY_GENES_ROUTER_OUTLET = /^\/genes\/\((genes-router:[^)]*)\)/;
+
+// Agora 2.x placed gene pages in a named outlet, e.g. /genes/(genes-router:genes-list).
+// Unwrapping that outlet before parsing lets the legacy redirects in app.routes.ts match
+// instead of Angular reading the parentheses as an outlet group.
 export class CustomUrlSerializer implements UrlSerializer {
   private readonly defaultSerializer = new DefaultUrlSerializer();
 
   parse(url: string): UrlTree {
-    url = url.replace('(', '').replace(')', '');
-    return this.defaultSerializer.parse(url);
+    return this.defaultSerializer.parse(url.replace(LEGACY_GENES_ROUTER_OUTLET, '/genes/$1'));
   }
 
   serialize(tree: UrlTree): string {
