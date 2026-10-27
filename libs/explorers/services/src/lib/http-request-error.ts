@@ -12,6 +12,8 @@ export type HttpErrorReportLevel =
 
 export const UNKNOWN_URL_PATH = 'unknown';
 
+export const UNEXPECTED_ERROR_USER_MESSAGE = 'An unexpected error occurred. Please try again.';
+
 export const HttpSentryTagEnum = {
   Method: 'http.method',
   StatusCode: 'http.status_code',
@@ -51,6 +53,11 @@ export class HttpRequestError extends Error {
 
 export function isNotFoundError(error: unknown): boolean {
   return error instanceof HttpRequestError && error.status === HttpStatusCode.NotFound;
+}
+
+/** A message suitable for showing to users for any caught error, e.g. in the error overlay. */
+export function getUserMessage(error: unknown): string {
+  return error instanceof HttpRequestError ? error.userMessage : UNEXPECTED_ERROR_USER_MESSAGE;
 }
 
 /**

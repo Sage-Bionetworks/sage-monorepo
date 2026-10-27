@@ -7,9 +7,14 @@ import { Drug, DrugService } from '@sagebionetworks/agora/api-client';
 import { ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { Panel } from '@sagebionetworks/explorers/models';
 import {
+  ErrorOverlayService,
+  getUserMessage,
   HelperService,
+  HttpErrorReportLevelEnum,
+  isNotFoundError,
   LoggerService,
   PlatformService,
+  reportHttpError,
   SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
@@ -40,6 +45,7 @@ export class DrugDetailsComponent implements OnInit {
   drugService = inject(DrugService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
+  private readonly errorOverlayService = inject(ErrorOverlayService);
   private readonly logger = inject(LoggerService).forSource('DrugDetailsComponent');
 
   isLoading = true;
@@ -100,9 +106,18 @@ export class DrugDetailsComponent implements OnInit {
             this.setInitialPanel(params);
             this.isLoading = false;
           },
-          error: () => {
-            this.logger.log('loadPanelData: Drug not found, redirecting', { chemblId });
-            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+          error: (error) => {
+            if (isNotFoundError(error)) {
+              this.logger.log('loadPanelData: Drug not found, redirecting', { chemblId });
+              this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+              return;
+            }
+            reportHttpError(this.logger, 'Error loading drug', {
+              error,
+              level: HttpErrorReportLevelEnum.Error,
+            });
+            this.errorOverlayService.showError(getUserMessage(error));
+            this.isLoading = false;
           },
         });
     }

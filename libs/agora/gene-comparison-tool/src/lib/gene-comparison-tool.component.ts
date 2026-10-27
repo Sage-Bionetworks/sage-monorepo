@@ -31,8 +31,10 @@ import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolService,
   HelperService as ExplorersHelperService,
+  HttpErrorReportLevelEnum,
   LoggerService,
   provideComparisonToolService,
+  reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { cloneDeep } from 'lodash';
 import { FilterService, MessageService, SortEvent } from 'primeng/api';
@@ -308,7 +310,11 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
             this.isLoading = false;
           }
         },
-        error: () => {
+        error: (error) => {
+          reportHttpError(this.logger, 'Error loading genes and score distribution', {
+            error,
+            level: HttpErrorReportLevelEnum.Error,
+          });
           this.isLoading = false;
         },
       });
@@ -1061,7 +1067,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         return negate ? -possible : possible;
       }
       return;
-    } catch (e) {
+    } catch {
       return;
     }
   }

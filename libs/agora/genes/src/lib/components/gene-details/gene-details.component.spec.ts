@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import {
@@ -7,7 +7,12 @@ import {
   ROUTE_PATHS,
 } from '@sagebionetworks/agora/config';
 import { geneMock1, geneMock3 } from '@sagebionetworks/agora/testing';
-import { PlatformService, SvgIconService } from '@sagebionetworks/explorers/services';
+import {
+  HttpRequestError,
+  PlatformService,
+  SourceLogger,
+  SvgIconService,
+} from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import { Observable, of, throwError } from 'rxjs';
@@ -105,11 +110,23 @@ describe('GeneDetailsComponent', () => {
     });
   });
 
-  it('should leave the loading state without redirecting when the request fails', async () => {
-    const { component, navigateByUrl } = await setup({
-      geneResponse: throwError(() => new Error('request failed')),
-    });
+  it('should leave the loading state and report, without redirecting, when the request fails', async () => {
+    const error = new HttpRequestError(
+      new HttpErrorResponse({
+        status: HttpStatusCode.ServiceUnavailable,
+        url: `https://agora.adknowledgeportal.org/api/v1/genes/${geneMock1.ensembl_gene_id}`,
+      }),
+      'GET',
+    );
+    const loggerError = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+
+    const { component, navigateByUrl } = await setup({ geneResponse: throwError(() => error) });
+
     expect(navigateByUrl).not.toHaveBeenCalled();
     expect(component.container.querySelector('.loading-icon')).not.toBeInTheDocument();
+    expect(loggerError).toHaveBeenCalledWith(
+      expect.stringContaining(error.message),
+      expect.objectContaining({ error }),
+    );
   });
 });

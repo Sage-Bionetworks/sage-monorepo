@@ -9,7 +9,11 @@ import {
   ROUTE_PATHS,
 } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import {
+  HttpErrorReportLevelEnum,
+  LoggerService,
+  reportHttpError,
+} from '@sagebionetworks/explorers/services';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { GeneTableComponent } from '../gene-table/gene-table.component';
 
@@ -89,7 +93,11 @@ export class GeneSimilarComponent implements OnInit {
                 this.init();
               }
             },
-            error: () => {
+            error: (error) => {
+              reportHttpError(this.logger, 'Error loading gene', {
+                error,
+                level: HttpErrorReportLevelEnum.Error,
+              });
               this.helperService.setLoading(false);
             },
           });
@@ -134,7 +142,11 @@ export class GeneSimilarComponent implements OnInit {
           this.genes = genes;
           this.helperService.setLoading(false);
         },
-        error: () => {
+        error: (error) => {
+          reportHttpError(this.logger, 'Error loading similar genes', {
+            error,
+            level: HttpErrorReportLevelEnum.Error,
+          });
           this.helperService.setLoading(false);
         },
       });

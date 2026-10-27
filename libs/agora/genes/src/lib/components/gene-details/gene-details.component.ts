@@ -5,7 +5,13 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { QUERY_PARAMS, ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
-import { HelperService, LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  HelperService,
+  HttpErrorReportLevelEnum,
+  LoggerService,
+  PlatformService,
+  reportHttpError,
+} from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
@@ -94,7 +100,11 @@ export class GeneDetailsComponent implements OnInit {
           this.setInitialPanel(params);
           this.isLoading = false;
         },
-        error: () => {
+        error: (error) => {
+          reportHttpError(this.logger, 'Error loading gene', {
+            error,
+            level: HttpErrorReportLevelEnum.Error,
+          });
           this.isLoading = false;
         },
       });

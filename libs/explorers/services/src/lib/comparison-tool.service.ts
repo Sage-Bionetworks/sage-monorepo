@@ -60,6 +60,8 @@ export const UNMATCHED_URL_CATEGORIES_MESSAGE =
 export const UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE =
   'Link categories match no comparison tool config; keeping the current selection.';
 
+export const COMPARISON_TOOL_CONFIG_ERROR_MESSAGE = 'Error retrieving comparison tool config';
+
 export const UNPINNED_FETCH_ERROR_MESSAGE = 'Error fetching unpinned rows';
 
 export const PINNED_FETCH_ERROR_MESSAGE = 'Error fetching pinned rows';

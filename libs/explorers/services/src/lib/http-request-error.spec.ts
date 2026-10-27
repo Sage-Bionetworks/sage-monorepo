@@ -5,9 +5,11 @@ import {
   HttpErrorReportLevel,
   HttpErrorReportLevelEnum,
   HttpRequestError,
+  getUserMessage,
   HttpSentryTagEnum,
   isNotFoundError,
   reportHttpError,
+  UNEXPECTED_ERROR_USER_MESSAGE,
   UNKNOWN_URL_PATH,
 } from './http-request-error';
 import { SourceLogger } from './logger.service';
@@ -116,6 +118,18 @@ describe('isNotFoundError', () => {
 
   it('is false for anything other than a failed request', () => {
     expect(isNotFoundError(new Error('not found'))).toBe(false);
+  });
+});
+
+describe('getUserMessage', () => {
+  it("is a failed request's own message for users", () => {
+    const error = buildError(HttpStatusCode.ServiceUnavailable);
+
+    expect(getUserMessage(error)).toBe(error.userMessage);
+  });
+
+  it('is a generic message for anything other than a failed request', () => {
+    expect(getUserMessage(new TypeError('boom'))).toBe(UNEXPECTED_ERROR_USER_MESSAGE);
   });
 });
 

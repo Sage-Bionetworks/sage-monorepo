@@ -4,7 +4,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Team, TeamService, TeamsList } from '@sagebionetworks/agora/api-client';
 import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  HttpErrorReportLevelEnum,
+  LoggerService,
+  PlatformService,
+  reportHttpError,
+} from '@sagebionetworks/explorers/services';
 import { catchError, finalize, map, Observable, of } from 'rxjs';
 import { TeamListComponent } from './team-list/team-list.component';
 
@@ -38,7 +43,13 @@ export class TeamsComponent implements OnInit {
       this.teams$ = this.teamService.listTeams().pipe(
         takeUntilDestroyed(this.destroyRef),
         map((res: TeamsList) => res.items || []),
-        catchError(() => of([])),
+        catchError((error) => {
+          reportHttpError(this.logger, 'Error loading teams', {
+            error,
+            level: HttpErrorReportLevelEnum.Error,
+          });
+          return of([]);
+        }),
         finalize(() => this.helperService.setLoading(false)),
       );
     }
