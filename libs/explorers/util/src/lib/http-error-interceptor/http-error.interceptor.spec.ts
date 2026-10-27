@@ -1,16 +1,11 @@
-import {
-  HttpClient,
-  HttpContext,
-  HttpErrorResponse,
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { HttpClient, HttpContext, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import {
   AppUpdateCheckTriggerEnum,
   AppUpdateService,
   ErrorOverlayService,
+  HttpRequestError,
   LoggerService,
   SKIP_ERROR_REPORTING,
   SUPPRESS_ERROR_OVERLAY,
@@ -24,7 +19,7 @@ const SERVICE_UNAVAILABLE = { status: 503, statusText: 'Service Unavailable' };
 describe('httpErrorInterceptor', () => {
   let http: HttpClient;
   let httpTestingController: HttpTestingController;
-  let logger: { error: jest.Mock };
+  let logger: { warn: jest.Mock; error: jest.Mock };
   let errorOverlayService: { showError: jest.Mock };
   let appUpdateService: {
     start: jest.Mock;
@@ -33,7 +28,7 @@ describe('httpErrorInterceptor', () => {
   };
 
   beforeEach(() => {
-    logger = { error: jest.fn() };
+    logger = { warn: jest.fn(), error: jest.fn() };
     errorOverlayService = { showError: jest.fn() };
     appUpdateService = {
       start: jest.fn(),
@@ -75,12 +70,33 @@ describe('httpErrorInterceptor', () => {
     requestAndFail();
 
     expect(logger.error).toHaveBeenCalledWith(`HTTP ${NOT_FOUND.status} GET ${DATA_VERSION_URL}`, {
-      error: expect.any(HttpErrorResponse),
+      error: expect.any(HttpRequestError),
       data: expect.objectContaining({
-        errorMessage: 'The requested resource was not found.',
+        userMessage: 'The requested resource was not found.',
         statusText: NOT_FOUND.statusText,
       }),
     });
+  });
+
+  it('should re-throw a typed error that keeps the status, method, and path', () => {
+    let thrown: unknown;
+    http.get(DATA_VERSION_URL).subscribe({ error: (error) => (thrown = error) });
+    httpTestingController.expectOne(DATA_VERSION_URL).flush(null, NOT_FOUND);
+
+    expect(thrown).toBeInstanceOf(HttpRequestError);
+    expect(thrown).toMatchObject({
+      status: NOT_FOUND.status,
+      method: 'GET',
+      urlPath: DATA_VERSION_URL,
+    });
+  });
+
+  it('should show the overlay with the message for users', () => {
+    requestAndFail();
+
+    expect(errorOverlayService.showError).toHaveBeenCalledWith(
+      'The requested resource was not found.',
+    );
   });
 
   it('should drop the query string from the reported path', () => {
