@@ -13,26 +13,26 @@
 ## Sage
 /apps/sage/ @Sage-Bionetworks/sage-monorepo
 
-/apps/agora/ @Sage-Bionetworks/sage-monorepo-agora
-/libs/agora/ @Sage-Bionetworks/sage-monorepo-agora
-/docker/agora/ @Sage-Bionetworks/sage-monorepo-agora
+/apps/agora/ @Sage-Bionetworks/explorers-dev
+/libs/agora/ @Sage-Bionetworks/explorers-dev
+/docker/agora/ @Sage-Bionetworks/explorers-dev
 
 /libs/shared/ @Sage-Bionetworks/sage-monorepo
 
-/apps/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
-/docker/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
-/libs/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
+/apps/model-ad/ @Sage-Bionetworks/explorers-dev
+/docker/model-ad/ @Sage-Bionetworks/explorers-dev
+/libs/model-ad/ @Sage-Bionetworks/explorers-dev
 
-/apps/qtl/ @Sage-Bionetworks/sage-monorepo-agora
-/docker/qtl/ @Sage-Bionetworks/sage-monorepo-agora
-/libs/qtl/ @Sage-Bionetworks/sage-monorepo-agora
+/apps/qtl/ @Sage-Bionetworks/explorers-dev
+/docker/qtl/ @Sage-Bionetworks/explorers-dev
+/libs/qtl/ @Sage-Bionetworks/explorers-dev
 
-/libs/explorers/ @Sage-Bionetworks/sage-monorepo-agora
-/libs/results-visualization-framework/ @Sage-Bionetworks/sage-monorepo-agora
-/.github/workflows/e2e-explorer.yaml @Sage-Bionetworks/sage-monorepo-agora
-/.github/workflows/e2e-explorers.yaml @Sage-Bionetworks/sage-monorepo-agora
+/libs/explorers/ @Sage-Bionetworks/explorers-dev
+/libs/results-visualization-framework/ @Sage-Bionetworks/explorers-dev
+/.github/workflows/e2e-explorer.yaml @Sage-Bionetworks/explorers-dev
+/.github/workflows/e2e-explorers.yaml @Sage-Bionetworks/explorers-dev
 
-/libs/synapse/ @Sage-Bionetworks/sage-monorepo-agora
+/libs/synapse/ @Sage-Bionetworks/explorers-dev
 
 # Platform
 /libs/platform/config/angular @Sage-Bionetworks/sage-monorepo
