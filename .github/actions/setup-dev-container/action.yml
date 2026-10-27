@@ -74,14 +74,23 @@ runs:
     - name: Check the Docker daemon in the dev container
       # Diagnostic only: warns instead of failing, because not every workflow needs Docker. The
       # docker-in-docker feature writes the daemon output to /tmp/dockerd.log in the container.
+      # The full log is printed when Docker is unreachable, so this step must run before any secrets
+      # or registry logins reach the dev container.
       shell: bash
       run: |
-        for attempt in $(seq 1 30); do
-          if devcontainer exec --workspace-folder ../sage-monorepo docker info > /dev/null 2>&1; then
-            echo "Docker is reachable in the dev container (attempt ${attempt})."
+        max_failures=15
+        check_timeout_seconds=5
+        retry_delay_seconds=2
+        for attempt in $(seq 1 "${max_failures}"); do
+          if timeout "${check_timeout_seconds}" \
+            devcontainer exec --workspace-folder ../sage-monorepo docker info > /dev/null 2>&1; then
+            echo "Docker is reachable in the dev container (attempt ${attempt} of ${max_failures})."
             exit 0
+          else
+            exit_code=$?
+            echo "Docker is not reachable yet (attempt ${attempt} of ${max_failures}, exit code ${exit_code})."
           fi
-          sleep 2
+          sleep "${retry_delay_seconds}"
         done
 
         echo "::warning title=Docker unreachable::The Docker daemon in the dev container did not respond. Open this step's log for diagnostics."
