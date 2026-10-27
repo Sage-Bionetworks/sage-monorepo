@@ -74,8 +74,8 @@ runs:
     - name: Check the Docker daemon in the dev container
       # Diagnostic only: warns instead of failing, because not every workflow needs Docker. The
       # docker-in-docker feature writes the daemon output to /tmp/dockerd.log in the container.
-      # The full log is printed when Docker is unreachable, so this step must run before any secrets
-      # or registry logins reach the dev container.
+      # Run logs are public, so print only daemon and host state, never environment variables:
+      # containerEnv secrets are already in the container. Keep this step before steps that add other secrets
       shell: bash
       run: |
         max_failures=15
