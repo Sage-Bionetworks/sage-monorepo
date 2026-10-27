@@ -6,7 +6,7 @@ import {
   DATA_VERSION_UNKNOWN,
   VERSION_CHECK_TIMEOUT_MS,
 } from '@sagebionetworks/explorers/constants';
-import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
+import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import { HttpErrorReportLevelEnum, reportHttpError } from './http-request-error';
 import { catchError, map, Observable, of, startWith, tap, timeout, TimeoutError } from 'rxjs';
 import { LoggerService } from './logger.service';
@@ -55,9 +55,7 @@ export class VersionService {
     if (this.platformService.isServer) {
       return of(DATA_VERSION_LOADING);
     }
-    const context = new HttpContext()
-      .set(SUPPRESS_ERROR_OVERLAY, true)
-      .set(SKIP_ERROR_REPORTING, true);
+    const context = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
     return dataVersionService.getDataVersion('body', false, { context }).pipe(
       timeout(VERSION_CHECK_TIMEOUT_MS),
       tap((dataVersion) => this.recordLoadedDataVersion(dataVersion)),

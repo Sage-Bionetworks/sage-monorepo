@@ -7,7 +7,7 @@ import {
 } from '@sagebionetworks/explorers/constants';
 import { firstValueFrom, lastValueFrom, NEVER, Observable, of, throwError, toArray } from 'rxjs';
 import { NO_RESPONSE_STATUS } from './app-update.service';
-import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
+import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import { HttpRequestError } from './http-request-error';
 import { SourceLogger } from './logger.service';
 import { PlatformService } from './platform.service';
@@ -98,7 +98,7 @@ describe('VersionService', () => {
       expect(emissions).toEqual([DATA_VERSION_LOADING, service.formatDataVersion(mockDataVersion)]);
     });
 
-    it('should request without the error overlay and with caller-owned error reporting', async () => {
+    it('should request without the error overlay', async () => {
       const getDataVersion: jest.MockedFunction<DataVersionService['getDataVersion']> = jest
         .fn()
         .mockReturnValue(of(mockDataVersion));
@@ -107,7 +107,6 @@ describe('VersionService', () => {
 
       const context = getDataVersion.mock.calls[0][2]?.context;
       expect(context?.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
-      expect(context?.get(SKIP_ERROR_REPORTING)).toBe(true);
     });
 
     it('should emit loading, then unknown and report a Sentry warning when the request errors', async () => {
