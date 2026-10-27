@@ -2,9 +2,12 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
+import './instrument';
+
 import '@angular/compiler';
 import '@angular/platform-browser-dynamic';
 
+import { sentryExpressErrorHandler } from '@sagebionetworks/explorers/sentry/node';
 import compression from 'compression';
 import express from 'express';
 import path from 'path';
@@ -18,6 +21,8 @@ app.use('/v1', api);
 
 // Health endpoint used by the container
 app.get('/health', (_req, res) => res.status(200).json({ status: 'UP' }));
+
+app.use(sentryExpressErrorHandler());
 
 const port = process.env.PORT ?? 3333;
 const server = app.listen(port, () => {

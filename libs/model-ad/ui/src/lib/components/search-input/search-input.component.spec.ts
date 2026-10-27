@@ -88,13 +88,13 @@ describe('SearchInputComponent', () => {
     const { component } = await setup();
     const navigateSpy = jest.spyOn(component.router, 'navigate');
     const marmosetResult: SearchResult = {
-      id: 'Presenilin 1',
+      id: 'PSEN1',
       match_field: 'name',
-      match_value: 'Presenilin 1',
+      match_value: 'PSEN1',
       model_organism: ModelOrganism.Marmoset,
     };
     component.navigateToResult(marmosetResult);
-    expect(navigateSpy).toHaveBeenCalledWith(['models', 'Presenilin 1'], {
+    expect(navigateSpy).toHaveBeenCalledWith(['models', 'PSEN1'], {
       queryParams: { modelOrganism: ModelOrganism.Marmoset },
     });
   });
@@ -111,9 +111,9 @@ describe('SearchInputComponent', () => {
   it('should return marmoset icon for marmoset results', async () => {
     const { component } = await setup();
     const marmosetResult: SearchResult = {
-      id: 'Presenilin 1',
+      id: 'PSEN1',
       match_field: 'name',
-      match_value: 'Presenilin 1',
+      match_value: 'PSEN1',
       model_organism: ModelOrganism.Marmoset,
     };
     const icon = component.getResultIcon(marmosetResult);

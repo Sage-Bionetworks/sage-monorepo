@@ -46,7 +46,23 @@ tasks.register<Test>("testIntegration") {
   }
 }
 
+// Pinned rather than Spring Boot's default `:latest`, which Paketo has published as a
+// single-architecture image (paketo-buildpacks/builder-noble-java-tiny#344). The version lives in
+// a stub Dockerfile so Dependabot can bump it.
+val paketoBuilderDockerfile = rootProject.layout.projectDirectory.file("buildSrc/paketo-builder/Dockerfile")
+val paketoBuilderImage =
+  providers.fileContents(paketoBuilderDockerfile).asText.map { dockerfile ->
+    dockerfile
+      .lineSequence()
+      .map { it.trim() }
+      .firstOrNull { it.startsWith("FROM ") }
+      ?.removePrefix("FROM ")
+      ?.trim()
+      ?: throw GradleException("No FROM line found in ${paketoBuilderDockerfile.asFile}")
+  }
+
 // Configure standard boot build image
 tasks.named<BootBuildImage>("bootBuildImage") {
   imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
+  builder.set(paketoBuilderImage)
 }

@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.explorers.UnhandledExceptionReporter;
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -124,6 +125,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       resolveInstance(request),
       ex
     );
+    UnhandledExceptionReporter.report(ex);
     BasicErrorDto errorDto = BasicErrorDto.builder()
       .title(ErrorConstants.DATA_INTEGRITY_ERROR.getTitle())
       .status(ErrorConstants.DATA_INTEGRITY_ERROR.getStatus().value())
@@ -245,6 +247,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       resolveInstance(request),
       ex
     );
+    UnhandledExceptionReporter.report(ex);
     BasicErrorDto errorDto = BasicErrorDto.builder()
       .title(ErrorConstants.INTERNAL_SERVER_ERROR.getTitle())
       .status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus().value())

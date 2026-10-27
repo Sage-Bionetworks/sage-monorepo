@@ -91,4 +91,28 @@ test.describe('specific viewport block', () => {
     await searchInput.pressSequentially(',,,,,,');
     await expect(page.getByText('1-2 of 2')).toBeVisible();
   });
+
+  test('view all brain regions opens the gene RNA page with the selected model', async ({
+    page,
+  }) => {
+    const gene = { name: 'GFAP', ensemblId: 'ENSG00000131095' };
+    const model = GCT_RNA_SUBCATEGORIES.AD_SEX_F;
+    await page.goto(`${URL_GCT}?subCategory=${encodeURIComponent(model)}`);
+    await expectGctPageLoaded(page, GCT_CATEGORIES.RNA, model);
+
+    await page.getByPlaceholder('Search', { exact: true }).fill(gene.name);
+    const geneRow = page.getByRole('row').filter({ hasText: gene.name });
+    await geneRow.locator('td.cell-default button').first().click();
+
+    const popupPromise = page.waitForEvent('popup');
+    await page.getByText('View all brain regions').click();
+    const genePage = await popupPromise;
+    await waitForSpinnerNotVisible(genePage);
+
+    const genePageUrl = new URL(genePage.url());
+    expect(genePageUrl.pathname).toMatch(`/genes/${gene.ensemblId}/evidence/rna`);
+    expect(genePageUrl.searchParams.get('model')).toBe(model);
+    expect(genePageUrl.hash).toBe('#consistency-of-change');
+    await expect(genePage.getByRole('combobox', { name: model })).toBeVisible();
+  });
 });

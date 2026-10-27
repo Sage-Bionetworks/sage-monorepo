@@ -31,7 +31,7 @@ export interface MarmosetModelOverviewSearchQuery {
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
   /**
-   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: \'presenilin 1,another name\' (comma-separated list) or \'presenilin\' (partial match). Only applied when itemFilterType is \'exclude\'.
+   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: \'psen1,another name\' (comma-separated list) or \'psen\' (partial match). Only applied when itemFilterType is \'exclude\'.
    */
   search?: string | null;
   /**

@@ -1,6 +1,7 @@
 package org.sagebionetworks.agora.api.next.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mockStatic;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -11,7 +12,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.sagebionetworks.agora.api.next.model.dto.BasicErrorDto;
+import org.sagebionetworks.explorers.UnhandledExceptionReporter;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -52,6 +55,22 @@ class GlobalExceptionHandlerTest {
   }
 
   @Test
+  @DisplayName("should report an unexpected exception to Sentry")
+  void shouldReportUnexpectedExceptionToSentry() {
+    RuntimeException unexpectedException = new IllegalStateException("database unavailable");
+
+    try (
+      MockedStatic<UnhandledExceptionReporter> reporter = mockStatic(
+        UnhandledExceptionReporter.class
+      )
+    ) {
+      handler.handleGenericException(unexpectedException, request, Locale.US);
+
+      reporter.verify(() -> UnhandledExceptionReporter.report(unexpectedException));
+    }
+  }
+
+  @Test
   @DisplayName("should return the generic internal server error body for an unexpected exception")
   void shouldReturnGenericInternalServerErrorBodyForUnexpectedException() {
     RuntimeException unexpectedException = new IllegalStateException("database unavailable");
@@ -84,6 +103,24 @@ class GlobalExceptionHandlerTest {
     );
 
     assertThat(logAppender.list).isEmpty();
+  }
+
+  @Test
+  @DisplayName("should not report an expected client error to Sentry")
+  void shouldNotReportExpectedClientErrorToSentry() {
+    try (
+      MockedStatic<UnhandledExceptionReporter> reporter = mockStatic(
+        UnhandledExceptionReporter.class
+      )
+    ) {
+      handler.handleIllegalArgument(
+        new IllegalArgumentException("invalid sort field"),
+        request,
+        Locale.US
+      );
+
+      reporter.verifyNoInteractions();
+    }
   }
 
   private void assertSingleErrorLogged(Throwable expectedException) {
