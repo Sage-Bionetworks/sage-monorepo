@@ -21,6 +21,9 @@ export function initSentry(config: BrowserSentryConfig): void {
     environment: config.environment,
     release: config.release || undefined,
     dataCollection: SENTRY_DATA_COLLECTION,
+    // With `tracesSampleRate` unset, this sends no performance data. It only adds trace headers to
+    // same-origin API requests, so the API's Sentry events share the browser's trace ID.
+    integrations: [Sentry.browserTracingIntegration()],
     beforeSend: async (event, hint) => {
       if (isStaleClient && isChunkLoadError(hint.originalException) && (await isStaleClient())) {
         return null;
