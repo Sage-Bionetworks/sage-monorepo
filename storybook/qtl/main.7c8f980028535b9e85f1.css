@@ -106,7 +106,10 @@ ol {
   --section-max-width: 1120px;
   --section-padding: 40px;
   --transition-duration: 0.08s;
-  --header-height: 84px;
+  --header-logo-height: 64px;
+  --header-padding-y: 10px;
+  --header-padding-x: 80px;
+  --header-height: calc(var(--header-logo-height) + 2 * var(--header-padding-y));
   --panel-nav-height: 80px;
   --comparison-tool-primary-column-width: 300px;
   --footer-height: 84px;
@@ -253,8 +256,6 @@ h6,
     linear-gradient(90deg, #2a77dc 0%, #b186df 51.44%, #65d8bf 100%);
   --footer-padding-x: 60px;
   --header-padding-y: 24px;
-  --header-padding-x: 60px;
-  --header-height: calc(64px + 2 * var(--header-padding-y));
   --header-link-color: var(--color-accent-lavender-600);
 }
 @media (width < 992px) {
