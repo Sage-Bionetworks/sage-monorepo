@@ -106,7 +106,10 @@ ol {
   --section-max-width: 1120px;
   --section-padding: 40px;
   --transition-duration: 0.08s;
-  --header-height: 84px;
+  --header-logo-height: 64px;
+  --header-padding-y: 10px;
+  --header-padding-x: 80px;
+  --header-height: calc(var(--header-logo-height) + 2 * var(--header-padding-y));
   --panel-nav-height: 80px;
   --comparison-tool-primary-column-width: 300px;
   --footer-height: 84px;
