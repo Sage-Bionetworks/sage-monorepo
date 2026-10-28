@@ -180,6 +180,8 @@ export class BoxplotChart {
     yAxisTitle: BoxplotProps['yAxisTitle'],
     yAxisMin: BoxplotProps['yAxisMin'],
     yAxisMax: BoxplotProps['yAxisMax'],
+    points: BoxplotProps['points'],
+    summaries: BoxplotProps['summaries'],
     boxplotChartTheme: BoxplotChartTheme,
     showAxisTicks: BoxplotProps['showAxisTicks'],
     axisTickLabelStyle: BoxplotProps['axisTickLabelStyle'],
@@ -207,11 +209,25 @@ export class BoxplotChart {
       splitLine: boxplotChartTheme.yAxisSplitLine,
       min: yAxisMin,
       max: yAxisMax,
-      // A margin on an unset end would push a zero-based axis below zero when the other end is set.
-      boundaryGap:
-        yAxisMin == null && yAxisMax == null ? [AUTO_Y_AXIS_MARGIN, AUTO_Y_AXIS_MARGIN] : undefined,
+      boundaryGap: this.getYAxisMargin(points, summaries),
     };
     return yAxisOptions;
+  }
+
+  // ECharts starts an all-positive axis at zero only if the margin hasn't already pushed the
+  // bottom below zero, so a side the data doesn't extend past zero on gets no margin.
+  private getYAxisMargin(
+    points: BoxplotProps['points'],
+    summaries: BoxplotProps['summaries'],
+  ): [string, string] {
+    const values = [
+      ...points.map((pt) => pt.value),
+      ...(summaries ?? []).flatMap((summary) => [summary.min, summary.max]),
+    ];
+    return [
+      values.some((value) => value < 0) ? AUTO_Y_AXIS_MARGIN : '0%',
+      values.some((value) => value > 0) ? AUTO_Y_AXIS_MARGIN : '0%',
+    ];
   }
 
   // Capped points skip the jitter and are spread in pixels rather than axis units,
@@ -541,6 +557,8 @@ export class BoxplotChart {
         yAxisTitle,
         yAxisMin,
         yAxisMax,
+        points,
+        summaries,
         boxplotChartTheme,
         showAxisTicks,
         axisTickLabelStyle,

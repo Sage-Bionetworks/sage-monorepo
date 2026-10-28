@@ -169,13 +169,12 @@ describe('BoxplotChart', () => {
       };
     }
 
-    it('ends the y-axis exactly at yAxisMin and yAxisMax, with no margin', () => {
+    it('ends the y-axis exactly at yAxisMin and yAxisMax', () => {
       makeChart({ yAxisMin: -1, yAxisMax: 0.002 });
       const yAxis = getYAxis();
 
       expect(yAxis.min).toBe(-1);
       expect(yAxis.max).toBe(0.002);
-      expect(yAxis.boundaryGap).toBeUndefined();
     });
 
     it.each([
@@ -186,21 +185,46 @@ describe('BoxplotChart', () => {
       expect(getYAxis()[end]).toBe(0);
     });
 
-    it('adds no margin when only yAxisMax is set, so a zero-based axis stays at zero', () => {
-      makeChart({ yAxisMax: 10 });
-      const yAxis = getYAxis();
+    function pointsWithValues(values: number[]): CategoryPoint[] {
+      return values.map((value) => ({ xAxisCategory: 'CAT1', value }));
+    }
 
-      expect(yAxis.min).toBeUndefined();
-      expect(yAxis.boundaryGap).toBeUndefined();
-    });
-
-    it('fits the y-axis to the data with a margin at both ends when no bound is set', () => {
-      makeChart();
+    it.each([
+      ['all positive, so the bottom stays at zero', [0, 5, 950], ['0%', AUTO_Y_AXIS_MARGIN]],
+      ['all negative, so the top stays at zero', [-950, -5, 0], [AUTO_Y_AXIS_MARGIN, '0%']],
+      ['on both sides of zero', [-0.6, 0.1, 0.6], [AUTO_Y_AXIS_MARGIN, AUTO_Y_AXIS_MARGIN]],
+    ])('fits the y-axis to data that is %s', (_, values, expectedMargin) => {
+      makeChart({ points: pointsWithValues(values) });
       const yAxis = getYAxis();
 
       expect(yAxis.min).toBeUndefined();
       expect(yAxis.max).toBeUndefined();
-      expect(yAxis.boundaryGap).toEqual([AUTO_Y_AXIS_MARGIN, AUTO_Y_AXIS_MARGIN]);
+      expect(yAxis.boundaryGap).toEqual(expectedMargin);
+    });
+
+    it('counts summaries that extend past zero when choosing the margin', () => {
+      makeChart({
+        points: pointsWithValues([0.1]),
+        summaries: [
+          {
+            xAxisCategory: 'CAT1',
+            min: -0.5,
+            firstQuartile: -0.1,
+            median: 0,
+            thirdQuartile: 0.1,
+            max: 0.5,
+          },
+        ],
+      });
+      expect(getYAxis().boundaryGap).toEqual([AUTO_Y_AXIS_MARGIN, AUTO_Y_AXIS_MARGIN]);
+    });
+
+    it('keeps a zero-based axis at zero when only yAxisMax is set', () => {
+      makeChart({ points: pointsWithValues([0, 4, 20]), yAxisMax: 10 });
+      const yAxis = getYAxis();
+
+      expect(yAxis.min).toBeUndefined();
+      expect(yAxis.boundaryGap?.[0]).toBe('0%');
     });
 
     it('does not hide the end labels when bounds are set', () => {

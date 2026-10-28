@@ -69,8 +69,8 @@ export interface BoxplotProps {
   /* if defined will determine the order in which categories appear on the x-axis */
   xAxisCategories?: string[];
   yAxisTitle?: string;
-  /* if defined, sets the bottom of the y-axis. When neither yAxisMin nor yAxisMax is
-  defined, the y-axis is fitted to the data with a margin at both ends. */
+  /* if defined, sets the bottom of the y-axis. An undefined end is fitted to the data, with a
+  margin unless the axis is anchored at zero on that side. */
   yAxisMin?: number;
   /* if defined, sets the top of the y-axis. Points above yAxisMax are hidden, unless
   capPointsAboveYAxisMax draws them as capped symbols. */
