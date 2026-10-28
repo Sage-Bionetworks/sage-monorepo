@@ -12,6 +12,7 @@ export const AppConfigSchema = BaseConfigSchema.extend({
   sentryDsn: z.string().default(''),
   sentryEnvironment: z.string().default(''),
   sentryRelease: z.string().default(''),
+  sentryTracesSampleRate: z.number().min(0).max(1).nullable().default(null),
 });
 
 export type AppConfig = z.infer<typeof AppConfigSchema>;

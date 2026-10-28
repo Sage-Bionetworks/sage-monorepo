@@ -13,4 +13,6 @@ googleTagManagerId: ''
 sentryDsn: ''
 sentryEnvironment: ''
 sentryRelease: ''
+# Unset (null) turns performance tracing off; set SENTRY_TRACES_SAMPLE_RATE to a number from 0 to 1.
+sentryTracesSampleRate: null
 environment: dev

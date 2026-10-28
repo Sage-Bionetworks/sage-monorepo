@@ -13,11 +13,13 @@ export function initializeExplorersApp(siteName: string): Promise<void> {
   const configService = inject(ConfigService);
   const appUpdateService = inject(AppUpdateService);
   return configService.loadConfig().then(() => {
-    const { csrApiUrl, sentryDsn, sentryEnvironment, sentryRelease } = configService.config;
+    const { csrApiUrl, sentryDsn, sentryEnvironment, sentryRelease, sentryTracesSampleRate } =
+      configService.config;
     initSentry({
       dsn: sentryDsn,
       environment: sentryEnvironment,
       release: sentryRelease,
+      tracesSampleRate: sentryTracesSampleRate,
       // Intentionally does more than filter: for a chunk-load error, `isAppStale` runs a real
       // version check and shows the update overlay on a mismatch. Chunk failures outside navigation
       // (e.g. a `@defer` block) never reach the router, so this is the only place the app learns

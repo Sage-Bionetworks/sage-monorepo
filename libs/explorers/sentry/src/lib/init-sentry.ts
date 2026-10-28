@@ -1,6 +1,11 @@
 import * as Sentry from '@sentry/angular';
 import { isChunkLoadError } from './chunk-load-error';
-import { hasRequiredSentryConfig, SENTRY_DATA_COLLECTION, SentryConfig } from './sentry-options';
+import {
+  hasRequiredSentryConfig,
+  SENTRY_DATA_COLLECTION,
+  SentryConfig,
+  tracingOptions,
+} from './sentry-options';
 
 export interface BrowserSentryConfig extends SentryConfig {
   /**
@@ -21,9 +26,11 @@ export function initSentry(config: BrowserSentryConfig): void {
     environment: config.environment,
     release: config.release || undefined,
     dataCollection: SENTRY_DATA_COLLECTION,
-    // With `tracesSampleRate` unset, this sends no performance data. It only adds trace headers to
-    // same-origin API requests, so the API's Sentry events share the browser's trace ID.
+    // Adds trace headers to same-origin API requests, so the API's Sentry events share the
+    // browser's trace ID. It records page loads, navigations, and requests as spans only when
+    // `tracesSampleRate` is set.
     integrations: [Sentry.browserTracingIntegration()],
+    ...tracingOptions(config),
     beforeSend: async (event, hint) => {
       if (isStaleClient && isChunkLoadError(hint.originalException) && (await isStaleClient())) {
         return null;

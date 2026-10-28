@@ -19,6 +19,7 @@ const config = {
   sentryDsn: 'https://test-dsn@sentry.io/123',
   sentryEnvironment: 'stage',
   sentryRelease: 'model-ad@4.0.0-rc3+abc1234',
+  sentryTracesSampleRate: null as number | null,
 };
 
 describe('initializeExplorersApp', () => {
@@ -65,6 +66,14 @@ describe('initializeExplorersApp', () => {
         release: config.sentryRelease,
       }),
     );
+  });
+
+  it('passes the configured performance tracing sample rate to Sentry', async () => {
+    const fullSampleRate = 1;
+
+    await initialize({ ...config, sentryTracesSampleRate: fullSampleRate });
+
+    expect(sentryConfig().tracesSampleRate).toBe(fullSampleRate);
   });
 
   it('starts update detection with the loaded version, the site name, and the data version URL', async () => {

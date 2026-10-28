@@ -45,14 +45,27 @@ describe('initSentry', () => {
     });
   });
 
-  it('propagates trace headers without sending performance data', () => {
-    initSentry(mockConfig);
+  it('sends performance data at the configured sample rate', () => {
+    const fullSampleRate = 1;
 
-    const options = (Sentry.init as jest.Mock).mock.calls[0][0];
-    expect(options.integrations).toContain(mockBrowserTracingIntegration);
-    expect(options).not.toHaveProperty('tracesSampleRate');
-    expect(options).not.toHaveProperty('tracesSampler');
+    initSentry({ ...mockConfig, tracesSampleRate: fullSampleRate });
+
+    expect(Sentry.init).toHaveBeenCalledWith(
+      expect.objectContaining({ tracesSampleRate: fullSampleRate }),
+    );
   });
+
+  it.each([undefined, null])(
+    'propagates trace headers without sending performance data when the sample rate is %s',
+    (tracesSampleRate) => {
+      initSentry({ ...mockConfig, tracesSampleRate });
+
+      const options = (Sentry.init as jest.Mock).mock.calls[0][0];
+      expect(options.integrations).toContain(mockBrowserTracingIntegration);
+      expect(options).not.toHaveProperty('tracesSampleRate');
+      expect(options).not.toHaveProperty('tracesSampler');
+    },
+  );
 
   it('does not collect user info, cookies, or HTTP bodies', () => {
     initSentry(mockConfig);
