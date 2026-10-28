@@ -31,20 +31,21 @@ jobs:
     outputs:
       authorized: ${{ steps.check.outputs.authorized }}
     steps:
-      - name: Check that the PR author and triggering user have write access
+      - name: Check that the PR author and the user who started the run have write access
         id: check
         env:
           GH_TOKEN: ${{ github.token }}
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
-          TRIGGERING_ACTOR: ${{ github.triggering_actor }}
+          # Not triggering_actor: a re-run would swap in the re-runner and skip the approval.
+          ACTOR: ${{ github.actor }}
         run: |
           author_permission=none
           actor_permission=none
           if [[ "${GITHUB_EVENT_NAME}" == "pull_request_target" ]]; then
             author_permission=$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${PR_AUTHOR}/permission" --jq .permission) || author_permission=none
-            actor_permission=$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${TRIGGERING_ACTOR}/permission" --jq .permission) || actor_permission=none
+            actor_permission=$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${ACTOR}/permission" --jq .permission) || actor_permission=none
           fi
-          echo "PR author ${PR_AUTHOR}: ${author_permission}, triggered by ${TRIGGERING_ACTOR}: ${actor_permission}"
+          echo "PR author ${PR_AUTHOR}: ${author_permission}, started by ${ACTOR}: ${actor_permission}"
           if [[ "${author_permission}" =~ ^(admin|write)$ && "${actor_permission}" =~ ^(admin|write)$ ]]; then
             echo "authorized=true" >> "${GITHUB_OUTPUT}"
           else
