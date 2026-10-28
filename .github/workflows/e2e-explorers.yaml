@@ -5,7 +5,7 @@ on:
   # Warning: using the pull_request_target event without the cautionary measures may allow
   # unauthorized GitHub users to open a “pwn request” and exfiltrate secrets.
   pull_request_target:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
@@ -13,7 +13,7 @@ permissions:
 jobs:
   run-explorer-e2e:
     # Run in Sage repo on main branch and on all branches in user-owned forks
-    if: ${{ github.ref_name == 'main' || github.actor == github.repository_owner }}
+    if: ${{ (github.ref_name == 'main' || github.actor == github.repository_owner) && !github.event.pull_request.draft }}
     strategy:
       matrix:
         explorer:
