@@ -42,8 +42,6 @@ export class BoxPlotComponent {
   @Input() heading = '';
   @Input() xAxisLabel = '';
   @Input() yAxisLabel = 'LOG2 FOLD CHANGE';
-  @Input() yAxisMin: number | undefined;
-  @Input() yAxisMax: number | undefined;
   @Input() plotHeight = '480px';
 
   reset() {

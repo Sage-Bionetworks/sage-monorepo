@@ -9,7 +9,7 @@ import {
 } from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
-import { BoxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
+import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
 import {
   HelperService as ExplorersHelperService,
   LoggerService,
@@ -53,13 +53,8 @@ export class GeneEvidenceProteomicsComponent {
   selectedUniProtId = '';
 
   LFQData: BoxPlotChartItem[] = [];
-  LFQRange: ChartRange | undefined;
-
   SRMData: BoxPlotChartItem[] = [];
-  SRMRange: ChartRange | undefined;
-
   TMTData: BoxPlotChartItem[] = [];
-  TMTRange: ChartRange | undefined;
 
   reset() {
     this.uniProtIds = [];
@@ -72,17 +67,14 @@ export class GeneEvidenceProteomicsComponent {
 
   resetSRM() {
     this.SRMData = [];
-    this.SRMRange = undefined;
   }
 
   resetLFQ() {
     this.LFQData = [];
-    this.LFQRange = undefined;
   }
 
   resetTMT() {
     this.TMTData = [];
-    this.TMTRange = undefined;
   }
 
   init() {
@@ -115,20 +107,8 @@ export class GeneEvidenceProteomicsComponent {
   processDifferentialExpressionData(
     item: ProteinDifferentialExpression,
     data: ProteomicsDistribution,
-    range: ChartRange,
     proteomicData: BoxPlotChartItem[],
   ) {
-    const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
-    const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
-
-    if (yAxisMin < range.Min) {
-      range.Min = yAxisMin;
-    }
-
-    if (yAxisMax > range.Max) {
-      range.Max = yAxisMax;
-    }
-
     proteomicData.push({
       key: data.tissue,
       value: [data.min, data.median, data.max],
@@ -161,8 +141,7 @@ export class GeneEvidenceProteomicsComponent {
           });
 
           if (data) {
-            if (!this.SRMRange) this.SRMRange = new ChartRange(data.min, data.max);
-            this.processDifferentialExpressionData(item, data, this.SRMRange, proteomicData);
+            this.processDifferentialExpressionData(item, data, proteomicData);
           }
         });
 
@@ -191,8 +170,7 @@ export class GeneEvidenceProteomicsComponent {
           });
 
           if (data) {
-            if (!this.LFQRange) this.LFQRange = new ChartRange(data.min, data.max);
-            this.processDifferentialExpressionData(item, data, this.LFQRange, proteomicData);
+            this.processDifferentialExpressionData(item, data, proteomicData);
           }
         });
 
@@ -221,8 +199,7 @@ export class GeneEvidenceProteomicsComponent {
           });
 
           if (data) {
-            if (!this.TMTRange) this.TMTRange = new ChartRange(data.min, data.max);
-            this.processDifferentialExpressionData(item, data, this.TMTRange, proteomicData);
+            this.processDifferentialExpressionData(item, data, proteomicData);
           }
         });
 
