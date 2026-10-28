@@ -11,6 +11,7 @@ import {
   minimalBoxplotChartTheme,
 } from '../chart-theme/boxplot-chart-theme';
 import {
+  AUTO_Y_AXIS_MARGIN,
   CAPPED_POINT_SPACING_PX,
   CAPPED_POINT_SYMBOL,
   CAPPED_POINT_SYMBOL_SIZE,
@@ -33,7 +34,6 @@ import {
   setNoDataOption,
 } from '../utils';
 
-const yAxisPadding = 0.2;
 const valueXAxisId = 'value-x-axis';
 const defaultPointShape = 'circle';
 const defaultPointOpacity = 0.8;
@@ -203,12 +203,13 @@ export class BoxplotChart {
         ...axisTickLabelStyle,
         width: boxplotChartTheme.yAxisTickLabelMaxWidth,
         hideOverlap: true,
-        showMinLabel: yAxisMin == null,
-        showMaxLabel: yAxisMax == null,
       },
       splitLine: boxplotChartTheme.yAxisSplitLine,
-      min: yAxisMin ? yAxisMin - yAxisPadding : undefined,
-      max: yAxisMax ? yAxisMax + yAxisPadding : undefined,
+      min: yAxisMin,
+      max: yAxisMax,
+      // A margin on an unset end would push a zero-based axis below zero when the other end is set.
+      boundaryGap:
+        yAxisMin == null && yAxisMax == null ? [AUTO_Y_AXIS_MARGIN, AUTO_Y_AXIS_MARGIN] : undefined,
     };
     return yAxisOptions;
   }

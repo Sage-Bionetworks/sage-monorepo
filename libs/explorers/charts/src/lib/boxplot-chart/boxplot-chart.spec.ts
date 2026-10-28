@@ -1,5 +1,6 @@
 import { DatasetComponentOption, EChartsOption, ScatterSeriesOption } from 'echarts';
 import {
+  AUTO_Y_AXIS_MARGIN,
   CAPPED_POINT_SPACING_PX,
   CAPPED_POINT_SYMBOL,
   CAPPED_POINT_SYMBOL_SIZE,
@@ -158,9 +159,61 @@ describe('BoxplotChart', () => {
     });
   });
 
+  describe('y-axis range', () => {
+    function getYAxis() {
+      return getOption().yAxis as {
+        min?: number;
+        max?: number;
+        boundaryGap?: [string, string];
+        axisLabel?: { showMinLabel?: boolean; showMaxLabel?: boolean };
+      };
+    }
+
+    it('ends the y-axis exactly at yAxisMin and yAxisMax, with no margin', () => {
+      makeChart({ yAxisMin: -1, yAxisMax: 0.002 });
+      const yAxis = getYAxis();
+
+      expect(yAxis.min).toBe(-1);
+      expect(yAxis.max).toBe(0.002);
+      expect(yAxis.boundaryGap).toBeUndefined();
+    });
+
+    it.each([
+      ['yAxisMin', { yAxisMin: 0, yAxisMax: 10 }, 'min'],
+      ['yAxisMax', { yAxisMin: -10, yAxisMax: 0 }, 'max'],
+    ] as const)('keeps a %s of zero', (_, props, end) => {
+      makeChart(props);
+      expect(getYAxis()[end]).toBe(0);
+    });
+
+    it('adds no margin when only yAxisMax is set, so a zero-based axis stays at zero', () => {
+      makeChart({ yAxisMax: 10 });
+      const yAxis = getYAxis();
+
+      expect(yAxis.min).toBeUndefined();
+      expect(yAxis.boundaryGap).toBeUndefined();
+    });
+
+    it('fits the y-axis to the data with a margin at both ends when no bound is set', () => {
+      makeChart();
+      const yAxis = getYAxis();
+
+      expect(yAxis.min).toBeUndefined();
+      expect(yAxis.max).toBeUndefined();
+      expect(yAxis.boundaryGap).toEqual([AUTO_Y_AXIS_MARGIN, AUTO_Y_AXIS_MARGIN]);
+    });
+
+    it('does not hide the end labels when bounds are set', () => {
+      makeChart({ yAxisMin: 0, yAxisMax: 10 });
+      const { axisLabel } = getYAxis();
+
+      expect(axisLabel?.showMinLabel).not.toBe(false);
+      expect(axisLabel?.showMaxLabel).not.toBe(false);
+    });
+  });
+
   describe('points above yAxisMax', () => {
     const yAxisMax = 10;
-    // yAxisMax + 0.1 sits inside the y-axis padding, so the axis alone would still draw it
     const pointsAroundMax: CategoryPoint[] = [
       { xAxisCategory: 'CAT1', pointCategory: 'Female', value: 4 },
       { xAxisCategory: 'CAT1', pointCategory: 'Female', value: yAxisMax },
