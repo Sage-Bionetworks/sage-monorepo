@@ -16,6 +16,7 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import {
+  ExplorersErrorHandler,
   initializeExplorersApp,
   LoggerService,
   provideExplorersConfig,
@@ -82,7 +83,7 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     {
       provide: ErrorHandler,
-      useValue: Sentry.createErrorHandler(),
+      useClass: ExplorersErrorHandler,
     },
     provideAppInitializer(() => {
       inject(Sentry.TraceService);

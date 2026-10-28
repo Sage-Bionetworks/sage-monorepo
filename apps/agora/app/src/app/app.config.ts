@@ -18,6 +18,7 @@ import {
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client';
 import { ConfigService, GCT_TUTORIAL_PANES, SITE_NAME } from '@sagebionetworks/agora/config';
 import {
+  ExplorersErrorHandler,
   initializeExplorersApp,
   LoggerService,
   provideExplorersConfig,
@@ -88,7 +89,7 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     {
       provide: ErrorHandler,
-      useValue: Sentry.createErrorHandler(),
+      useClass: ExplorersErrorHandler,
     },
     provideAppInitializer(() => {
       inject(Sentry.TraceService);
