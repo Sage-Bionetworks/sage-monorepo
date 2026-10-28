@@ -1,4 +1,4 @@
-import { HttpClient, HttpContext, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import {
@@ -7,7 +7,6 @@ import {
   ErrorOverlayService,
   HttpRequestError,
   SourceLogger,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor, RETRY_DELAY_MS } from './http-error.interceptor';
 
@@ -18,7 +17,6 @@ const SERVICE_UNAVAILABLE = { status: 503, statusText: 'Service Unavailable' };
 describe('httpErrorInterceptor', () => {
   let http: HttpClient;
   let httpTestingController: HttpTestingController;
-  let errorOverlayService: { showError: jest.Mock };
   let appUpdateService: {
     start: jest.Mock;
     requestCheck: jest.Mock;
@@ -26,7 +24,6 @@ describe('httpErrorInterceptor', () => {
   };
 
   beforeEach(() => {
-    errorOverlayService = { showError: jest.fn() };
     appUpdateService = {
       start: jest.fn(),
       requestCheck: jest.fn(),
@@ -37,7 +34,6 @@ describe('httpErrorInterceptor', () => {
       providers: [
         provideHttpClient(withInterceptors([httpErrorInterceptor])),
         provideHttpClientTesting(),
-        { provide: ErrorOverlayService, useValue: errorOverlayService },
         { provide: AppUpdateService, useValue: appUpdateService },
       ],
     });
@@ -52,33 +48,22 @@ describe('httpErrorInterceptor', () => {
   });
 
   /** Sends a request and returns a getter for the error it fails with, once it has failed. */
-  function request(context?: HttpContext, params?: Record<string, string>): () => unknown {
+  function request(params?: Record<string, string>): () => unknown {
     let thrown: unknown;
-    http
-      .get(DATA_VERSION_URL, { context, params })
-      .subscribe({ error: (error) => (thrown = error) });
+    http.get(DATA_VERSION_URL, { params }).subscribe({ error: (error) => (thrown = error) });
     return () => thrown;
   }
 
-  function requestAndFail(context?: HttpContext): unknown {
-    const thrown = request(context);
+  function requestAndFail(): unknown {
+    const thrown = request();
     httpTestingController.expectOne(DATA_VERSION_URL).flush(null, NOT_FOUND);
     return thrown();
   }
 
-  it('should show the overlay with the message for users by default', () => {
+  it('should not show the overlay, since only the caller knows whether to', () => {
     requestAndFail();
 
-    expect(errorOverlayService.showError).toHaveBeenCalledTimes(1);
-    expect(errorOverlayService.showError).toHaveBeenCalledWith(
-      'The requested resource was not found.',
-    );
-  });
-
-  it('should not show the overlay when the request suppresses it', () => {
-    requestAndFail(new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true));
-
-    expect(errorOverlayService.showError).not.toHaveBeenCalled();
+    expect(TestBed.inject(ErrorOverlayService).isOverlayVisible()).toBe(false);
   });
 
   it('should not report the error, since only the caller knows whether it was expected', () => {
@@ -103,7 +88,7 @@ describe('httpErrorInterceptor', () => {
   });
 
   it('should drop the query string from the path of the re-thrown error', () => {
-    const thrown = request(undefined, { id: 'ENSG00000130203' });
+    const thrown = request({ id: 'ENSG00000130203' });
     httpTestingController
       .expectOne((pendingRequest) => pendingRequest.url === DATA_VERSION_URL)
       .flush(null, NOT_FOUND);
@@ -112,7 +97,7 @@ describe('httpErrorInterceptor', () => {
   });
 
   it('should ask for an app version check, since a stale tab may cause the error', () => {
-    requestAndFail(new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true));
+    requestAndFail();
 
     expect(appUpdateService.requestCheck).toHaveBeenCalledTimes(1);
     expect(appUpdateService.requestCheck).toHaveBeenCalledWith(AppUpdateCheckTriggerEnum.HttpError);

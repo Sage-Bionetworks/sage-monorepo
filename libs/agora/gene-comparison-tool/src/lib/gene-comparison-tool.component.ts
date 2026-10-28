@@ -29,6 +29,7 @@ import {
 import { HelperService } from '@sagebionetworks/agora/services';
 import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
+  ErrorOverlayService,
   ComparisonToolService,
   HelperService as ExplorersHelperService,
   HttpErrorReportLevelEnum,
@@ -93,6 +94,7 @@ import { GeneComparisonToolFilterListComponent } from './components/gene-compari
 export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService).forSource('GeneComparisonToolComponent');
+  private readonly errorOverlayService = inject(ErrorOverlayService);
   comparisonToolService = inject(ComparisonToolService);
 
   router = inject(Router);
@@ -315,6 +317,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
             error,
             level: HttpErrorReportLevelEnum.Error,
           });
+          this.errorOverlayService.showRequestError(error);
           this.isLoading = false;
         },
       });

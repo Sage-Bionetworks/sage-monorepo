@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpStatusCode, provideHttpClient } from '@angular/c
 import { DomSanitizer } from '@angular/platform-browser';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import {
+  ErrorOverlayService,
   HttpRequestError,
   SourceLogger,
   SynapseApiService,
@@ -23,7 +24,7 @@ const mockDomSanitizer = {
 };
 
 describe('WikiComponent', () => {
-  async function setup(wikiParams?: SynapseWikiParams) {
+  async function setup(wikiParams?: SynapseWikiParams, suppressErrorOverlay = false) {
     const result = await render(WikiComponent, {
       providers: [
         provideHttpClient(),
@@ -33,6 +34,7 @@ describe('WikiComponent', () => {
       ],
       componentInputs: {
         wikiParams,
+        suppressErrorOverlay,
       },
     });
 
@@ -96,7 +98,7 @@ describe('WikiComponent', () => {
       });
     });
 
-    it('reports a failed Synapse request as a warning', async () => {
+    describe('when the Synapse request fails', () => {
       const wikiRequestError = new HttpRequestError(
         new HttpErrorResponse({
           status: HttpStatusCode.NotFound,
@@ -104,18 +106,37 @@ describe('WikiComponent', () => {
         }),
         'GET',
       );
-      jest
-        .spyOn(SynapseApiService.prototype, 'getWikiMarkdown')
-        .mockReturnValue(throwError(() => wikiRequestError));
-      const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
 
-      await setup(invalidWikiParam);
+      let warnSpy: jest.SpyInstance;
+      let showRequestErrorSpy: jest.SpyInstance;
 
-      await waitFor(() => {
-        expect(warnSpy).toHaveBeenCalledWith(
-          expect.stringContaining(wikiRequestError.message),
-          expect.objectContaining({ error: wikiRequestError }),
-        );
+      beforeEach(() => {
+        jest
+          .spyOn(SynapseApiService.prototype, 'getWikiMarkdown')
+          .mockReturnValue(throwError(() => wikiRequestError));
+        warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+        showRequestErrorSpy = jest.spyOn(ErrorOverlayService.prototype, 'showRequestError');
+      });
+
+      it('reports a warning and shows the error overlay', async () => {
+        await setup(invalidWikiParam);
+
+        await waitFor(() => {
+          expect(warnSpy).toHaveBeenCalledWith(
+            expect.stringContaining(wikiRequestError.message),
+            expect.objectContaining({ error: wikiRequestError }),
+          );
+        });
+        expect(showRequestErrorSpy).toHaveBeenCalledWith(wikiRequestError);
+      });
+
+      it('reports a warning without the error overlay when the wiki suppresses it', async () => {
+        await setup(invalidWikiParam, true);
+
+        await waitFor(() => {
+          expect(warnSpy).toHaveBeenCalled();
+        });
+        expect(showRequestErrorSpy).not.toHaveBeenCalled();
       });
     });
   });

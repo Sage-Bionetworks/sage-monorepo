@@ -1,4 +1,3 @@
-import { HttpContext } from '@angular/common/http';
 import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -10,7 +9,6 @@ import {
   LoggerService,
   PlatformService,
   reportHttpError,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
@@ -153,16 +151,12 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.marmosetModelOverviewService
-        .getMarmosetModelOverviews(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: MarmosetModelOverviewsPage) => ({
-            data: response.marmosetModelOverviews,
-            totalCount: response.page.totalElements,
-          })),
-        ),
+      this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
+        map((response: MarmosetModelOverviewsPage) => ({
+          data: response.marmosetModelOverviews,
+          totalCount: response.page.totalElements,
+        })),
+      ),
     );
   }
 
@@ -179,16 +173,12 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     this.logger.log('pinned query', { query });
 
     this.comparisonToolService.fetchPinned(
-      this.marmosetModelOverviewService
-        .getMarmosetModelOverviews(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: MarmosetModelOverviewsPage) => {
-            const data = response.marmosetModelOverviews;
-            return { data, totalCount: data.length };
-          }),
-        ),
+      this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
+        map((response: MarmosetModelOverviewsPage) => {
+          const data = response.marmosetModelOverviews;
+          return { data, totalCount: data.length };
+        }),
+      ),
     );
   }
 }

@@ -1,6 +1,8 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { getAppUpdateMessage, getDataUpdateMessage } from '@sagebionetworks/explorers/constants';
 import { ErrorOverlayService } from './error-overlay.service';
+import { HttpRequestError, UNEXPECTED_ERROR_USER_MESSAGE } from './http-request-error';
 
 const siteName = 'Model AD';
 const firstErrorMessage = 'The requested resource was not found.';
@@ -12,6 +14,26 @@ describe('ErrorOverlayService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(ErrorOverlayService);
+  });
+
+  it("shows a failed request's message for users", () => {
+    const error = new HttpRequestError(
+      new HttpErrorResponse({
+        status: HttpStatusCode.ServiceUnavailable,
+        url: 'https://modeladexplorer.org/api/v1/models/mouse/LOAD1',
+      }),
+      'GET',
+    );
+
+    service.showRequestError(error);
+
+    expect(service.activeMessage()).toBe(error.userMessage);
+  });
+
+  it('shows a generic message for anything other than a failed request', () => {
+    service.showRequestError(new TypeError("Cannot read properties of undefined (reading 'name')"));
+
+    expect(service.activeMessage()).toBe(UNEXPECTED_ERROR_USER_MESSAGE);
   });
 
   it('is hidden until something is shown', () => {

@@ -85,46 +85,22 @@ describe('ModelDetailsComponent', () => {
   describe('model organism resolution', () => {
     it('should fetch the mouse model when no modelOrganism query param is provided', async () => {
       const { getModelByName } = await setup();
-      expect(getModelByName).toHaveBeenCalledWith(
-        ModelOrganism.Mouse,
-        mouseModelMock.name,
-        'body',
-        false,
-        expect.anything(),
-      );
+      expect(getModelByName).toHaveBeenCalledWith(ModelOrganism.Mouse, mouseModelMock.name);
     });
 
     it('should fetch the mouse model when modelOrganism is mouse', async () => {
       const { getModelByName } = await setup(mouseModelMock, 'omics', null, null, 'mouse');
-      expect(getModelByName).toHaveBeenCalledWith(
-        ModelOrganism.Mouse,
-        mouseModelMock.name,
-        'body',
-        false,
-        expect.anything(),
-      );
+      expect(getModelByName).toHaveBeenCalledWith(ModelOrganism.Mouse, mouseModelMock.name);
     });
 
     it('should fetch the marmoset model when modelOrganism is marmoset', async () => {
       const { getModelByName } = await setup(marmosetModelMock, 'omics', null, null, 'marmoset');
-      expect(getModelByName).toHaveBeenCalledWith(
-        ModelOrganism.Marmoset,
-        marmosetModelMock.name,
-        'body',
-        false,
-        expect.anything(),
-      );
+      expect(getModelByName).toHaveBeenCalledWith(ModelOrganism.Marmoset, marmosetModelMock.name);
     });
 
     it('should fetch the marmoset model when modelOrganism is marmoset with wrong casing', async () => {
       const { getModelByName } = await setup(marmosetModelMock, 'omics', null, null, 'Marmoset');
-      expect(getModelByName).toHaveBeenCalledWith(
-        ModelOrganism.Marmoset,
-        marmosetModelMock.name,
-        'body',
-        false,
-        expect.anything(),
-      );
+      expect(getModelByName).toHaveBeenCalledWith(ModelOrganism.Marmoset, marmosetModelMock.name);
     });
   });
 

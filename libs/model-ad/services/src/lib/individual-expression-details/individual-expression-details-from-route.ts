@@ -1,16 +1,13 @@
-import { HttpContext } from '@angular/common/http';
 import { DestroyRef, inject, Signal, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import {
   ErrorOverlayService,
-  getUserMessage,
   HttpErrorReportLevelEnum,
   isNotFoundError,
   LoggerService,
   PlatformService,
   reportHttpError,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import { ModelIdentifierType } from '@sagebionetworks/model-ad/api-client';
@@ -23,18 +20,10 @@ export interface IndividualExpressionDetailsQuery {
   modelIdentifier: string;
 }
 
-export interface IndividualExpressionDetailsFetchOptions {
-  context: HttpContext;
-}
-
 export interface IndividualExpressionDetailsFromRouteOptions<T> {
   pathParam: string;
   source: string;
-  fetchData: (
-    id: string,
-    query: IndividualExpressionDetailsQuery,
-    options: IndividualExpressionDetailsFetchOptions,
-  ) => Observable<T[]>;
+  fetchData: (id: string, query: IndividualExpressionDetailsQuery) => Observable<T[]>;
 }
 
 export interface IndividualExpressionDetailsState<T> {
@@ -105,9 +94,7 @@ export function individualExpressionDetailsFromRoute<T>({
       modelIdentifier: modelIdentifierParam,
     };
 
-    return fetchData(id, query, {
-      context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-    }).pipe(
+    return fetchData(id, query).pipe(
       switchMap((individualData) =>
         individualData.length
           ? of(individualData)
@@ -125,7 +112,7 @@ export function individualExpressionDetailsFromRoute<T>({
           error,
           level: HttpErrorReportLevelEnum.Error,
         });
-        errorOverlayService.showError(getUserMessage(error));
+        errorOverlayService.showRequestError(error);
         isLoading.set(false);
         return EMPTY;
       }),

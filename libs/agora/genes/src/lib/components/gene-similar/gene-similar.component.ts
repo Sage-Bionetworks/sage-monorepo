@@ -10,6 +10,7 @@ import {
 } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import {
+  ErrorOverlayService,
   HttpErrorReportLevelEnum,
   LoggerService,
   reportHttpError,
@@ -33,6 +34,7 @@ interface TableColumn {
 export class GeneSimilarComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService).forSource('GeneSimilarComponent');
+  private readonly errorOverlayService = inject(ErrorOverlayService);
 
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -98,6 +100,7 @@ export class GeneSimilarComponent implements OnInit {
                 error,
                 level: HttpErrorReportLevelEnum.Error,
               });
+              this.errorOverlayService.showRequestError(error);
               this.helperService.setLoading(false);
             },
           });
@@ -147,6 +150,7 @@ export class GeneSimilarComponent implements OnInit {
             error,
             level: HttpErrorReportLevelEnum.Error,
           });
+          this.errorOverlayService.showRequestError(error);
           this.helperService.setLoading(false);
         },
       });

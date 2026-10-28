@@ -5,6 +5,7 @@ import { Team, TeamService, TeamsList } from '@sagebionetworks/agora/api-client'
 import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import {
+  ErrorOverlayService,
   HttpErrorReportLevelEnum,
   LoggerService,
   PlatformService,
@@ -23,6 +24,7 @@ export class TeamsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService).forSource('TeamsComponent');
+  private readonly errorOverlayService = inject(ErrorOverlayService);
 
   helperService = inject(HelperService);
   teamService = inject(TeamService);
@@ -48,6 +50,7 @@ export class TeamsComponent implements OnInit {
             error,
             level: HttpErrorReportLevelEnum.Error,
           });
+          this.errorOverlayService.showRequestError(error);
           return of([]);
         }),
         finalize(() => this.helperService.setLoading(false)),

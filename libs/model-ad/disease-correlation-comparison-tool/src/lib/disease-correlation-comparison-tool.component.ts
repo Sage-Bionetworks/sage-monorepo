@@ -1,4 +1,3 @@
-import { HttpContext } from '@angular/common/http';
 import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -16,7 +15,6 @@ import {
   LoggerService,
   PlatformService,
   reportHttpError,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
@@ -199,16 +197,12 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.diseaseCorrelationService
-        .getDiseaseCorrelations(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: DiseaseCorrelationsPage) => ({
-            data: response.diseaseCorrelations,
-            totalCount: response.page.totalElements,
-          })),
-        ),
+      this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(
+        map((response: DiseaseCorrelationsPage) => ({
+          data: response.diseaseCorrelations,
+          totalCount: response.page.totalElements,
+        })),
+      ),
     );
   }
 
@@ -226,16 +220,12 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.logger.log('pinned query', { query });
 
     this.comparisonToolService.fetchPinned(
-      this.diseaseCorrelationService
-        .getDiseaseCorrelations(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: DiseaseCorrelationsPage) => {
-            const data = response.diseaseCorrelations;
-            return { data, totalCount: data.length };
-          }),
-        ),
+      this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(
+        map((response: DiseaseCorrelationsPage) => {
+          const data = response.diseaseCorrelations;
+          return { data, totalCount: data.length };
+        }),
+      ),
     );
   }
 }

@@ -1,5 +1,4 @@
 import { Location } from '@angular/common';
-import { HttpContext } from '@angular/common/http';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -8,14 +7,12 @@ import { ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { Panel } from '@sagebionetworks/explorers/models';
 import {
   ErrorOverlayService,
-  getUserMessage,
   HelperService,
   HttpErrorReportLevelEnum,
   isNotFoundError,
   LoggerService,
   PlatformService,
   reportHttpError,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
@@ -96,9 +93,7 @@ export class DrugDetailsComponent implements OnInit {
     const chemblId = params.get(ROUTE_PARAMS.CHEMBL_ID);
     if (chemblId) {
       this.drugService
-        .getDrug(chemblId, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
+        .getDrug(chemblId)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (drug: Drug) => {
@@ -116,7 +111,7 @@ export class DrugDetailsComponent implements OnInit {
               error,
               level: HttpErrorReportLevelEnum.Error,
             });
-            this.errorOverlayService.showError(getUserMessage(error));
+            this.errorOverlayService.showRequestError(error);
             this.isLoading = false;
           },
         });

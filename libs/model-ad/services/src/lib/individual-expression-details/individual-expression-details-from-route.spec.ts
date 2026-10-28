@@ -6,7 +6,6 @@ import {
   HttpRequestError,
   PlatformService,
   SourceLogger,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   ModelIdentifierType,
@@ -17,7 +16,6 @@ import { transcriptomicsIndividualMocks } from '@sagebionetworks/model-ad/testin
 import { render, screen } from '@testing-library/angular';
 import { Observable, of, switchMap, throwError, timer } from 'rxjs';
 import {
-  IndividualExpressionDetailsFetchOptions,
   individualExpressionDetailsFromRoute,
   IndividualExpressionDetailsQuery,
 } from './individual-expression-details-from-route';
@@ -29,7 +27,6 @@ const DETAILS_PATH = 'details';
 type FetchData = (
   id: string,
   query: IndividualExpressionDetailsQuery,
-  options: IndividualExpressionDetailsFetchOptions,
 ) => Observable<TranscriptomicsIndividual[]>;
 
 type FetchDataMock = jest.Mock<ReturnType<FetchData>, Parameters<FetchData>>;
@@ -129,13 +126,6 @@ describe('individualExpressionDetailsFromRoute', () => {
     expect(
       screen.getByText(`Records: ${transcriptomicsIndividualMocks.length}`),
     ).toBeInTheDocument();
-  });
-
-  it('should suppress the error overlay on the request', async () => {
-    const { fetchMock } = await setup(detailsRoute(gene.ensembl_gene_id));
-
-    const [, , options] = fetchMock.mock.calls[0];
-    expect(options.context.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
   });
 
   it('should stay loading without a request on the server', async () => {

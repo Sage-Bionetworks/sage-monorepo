@@ -80,17 +80,12 @@ describe('GeneDetailsComponent', () => {
   it('should request the gene in the url from the transcriptomics individual service', async () => {
     const gene = transcriptomicsIndividualMocks[0];
     const { mockTranscriptomicsIndividualService } = await setup();
-    expect(mockTranscriptomicsIndividualService.getTranscriptomicsIndividual).toHaveBeenCalledWith(
-      {
-        ensemblGeneId: gene.ensembl_gene_id,
-        tissue: gene.tissue,
-        modelIdentifierType: ModelIdentifierType.Name,
-        modelIdentifier: gene.name,
-      },
-      'body',
-      false,
-      expect.anything(),
-    );
+    expect(mockTranscriptomicsIndividualService.getTranscriptomicsIndividual).toHaveBeenCalledWith({
+      ensemblGeneId: gene.ensembl_gene_id,
+      tissue: gene.tissue,
+      modelIdentifierType: ModelIdentifierType.Name,
+      modelIdentifier: gene.name,
+    });
   });
 
   it('should display label', async () => {

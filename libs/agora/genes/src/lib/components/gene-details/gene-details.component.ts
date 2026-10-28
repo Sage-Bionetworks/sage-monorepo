@@ -6,6 +6,7 @@ import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { QUERY_PARAMS, ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
 import {
+  ErrorOverlayService,
   HelperService,
   HttpErrorReportLevelEnum,
   LoggerService,
@@ -50,6 +51,7 @@ export class GeneDetailsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService).forSource('GeneDetailsComponent');
+  private readonly errorOverlayService = inject(ErrorOverlayService);
 
   isLoading = true;
   gene: Gene | undefined;
@@ -105,6 +107,7 @@ export class GeneDetailsComponent implements OnInit {
             error,
             level: HttpErrorReportLevelEnum.Error,
           });
+          this.errorOverlayService.showRequestError(error);
           this.isLoading = false;
         },
       });

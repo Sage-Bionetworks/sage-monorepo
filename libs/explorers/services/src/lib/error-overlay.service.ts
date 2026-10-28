@@ -1,5 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { getAppUpdateMessage, getDataUpdateMessage } from '@sagebionetworks/explorers/constants';
+import { getUserMessage } from './http-request-error';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorOverlayService {
@@ -18,6 +19,11 @@ export class ErrorOverlayService {
   );
 
   readonly isOverlayVisible = computed(() => this.activeMessage() !== null);
+
+  /** Shows the overlay for a caught error, with its message for users. */
+  showRequestError(error: unknown) {
+    this.showError(getUserMessage(error));
+  }
 
   showError(message: string) {
     // Only show if there's no active error - prevents cascading error messages

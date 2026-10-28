@@ -78,17 +78,12 @@ describe('ProteinDetailsComponent', () => {
   it('should request the protein in the url from the proteomics individual service', async () => {
     const protein = proteomicsIndividualMocks[0];
     const { mockProteomicsIndividualService } = await setup();
-    expect(mockProteomicsIndividualService.getProteomicsIndividual).toHaveBeenCalledWith(
-      {
-        uniqueId: protein.unique_id,
-        tissue: protein.tissue,
-        modelIdentifierType: ModelIdentifierType.Name,
-        modelIdentifier: protein.name,
-      },
-      'body',
-      false,
-      expect.anything(),
-    );
+    expect(mockProteomicsIndividualService.getProteomicsIndividual).toHaveBeenCalledWith({
+      uniqueId: protein.unique_id,
+      tissue: protein.tissue,
+      modelIdentifierType: ModelIdentifierType.Name,
+      modelIdentifier: protein.name,
+    });
   });
 
   it('should display label', async () => {

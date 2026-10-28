@@ -10,6 +10,7 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SynapseWikiMarkdown, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import {
+  ErrorOverlayService,
   HttpErrorReportLevelEnum,
   LoggerService,
   PlatformService,
@@ -28,6 +29,7 @@ import { finalize } from 'rxjs';
 })
 export class WikiComponent {
   private readonly platformService = inject(PlatformService);
+  private readonly errorOverlayService = inject(ErrorOverlayService);
   private readonly logger = inject(LoggerService).forSource('WikiComponent');
   synapseApiService = inject(SynapseApiService);
   domSanitizer = inject(DomSanitizer);
@@ -54,7 +56,7 @@ export class WikiComponent {
       this.isLoading.set(true);
 
       this.synapseApiService
-        .getWikiMarkdown(ownerId, wikiId, this.suppressErrorOverlay())
+        .getWikiMarkdown(ownerId, wikiId)
         .pipe(
           takeUntilDestroyed(this.destroyRef),
           finalize(() => {
@@ -73,6 +75,9 @@ export class WikiComponent {
               error,
               level: HttpErrorReportLevelEnum.Warn,
             });
+            if (!this.suppressErrorOverlay()) {
+              this.errorOverlayService.showRequestError(error);
+            }
             this.safeHtml = 'No data found, please try again later.';
           },
         });

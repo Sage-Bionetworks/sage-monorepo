@@ -1,6 +1,5 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import * as Sentry from '@sentry/angular';
-import { NO_RESPONSE_STATUS } from './app-update.service';
 import {
   HttpErrorReportLevel,
   HttpErrorReportLevelEnum,
@@ -8,6 +7,7 @@ import {
   getUserMessage,
   HttpSentryTagEnum,
   isNotFoundError,
+  NO_RESPONSE_STATUS,
   reportHttpError,
   UNEXPECTED_ERROR_USER_MESSAGE,
   UNKNOWN_URL_PATH,

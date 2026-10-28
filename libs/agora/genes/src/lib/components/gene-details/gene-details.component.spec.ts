@@ -8,6 +8,7 @@ import {
 } from '@sagebionetworks/agora/config';
 import { geneMock1, geneMock3 } from '@sagebionetworks/agora/testing';
 import {
+  ErrorOverlayService,
   HttpRequestError,
   PlatformService,
   SourceLogger,
@@ -110,7 +111,7 @@ describe('GeneDetailsComponent', () => {
     });
   });
 
-  it('should leave the loading state and report, without redirecting, when the request fails', async () => {
+  it('should leave the loading state, report, and show the error overlay, without redirecting, when the request fails', async () => {
     const error = new HttpRequestError(
       new HttpErrorResponse({
         status: HttpStatusCode.ServiceUnavailable,
@@ -119,8 +120,11 @@ describe('GeneDetailsComponent', () => {
       'GET',
     );
     const loggerError = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+    const showRequestError = jest.spyOn(ErrorOverlayService.prototype, 'showRequestError');
 
     const { component, navigateByUrl } = await setup({ geneResponse: throwError(() => error) });
+
+    expect(showRequestError).toHaveBeenCalledWith(error);
 
     expect(navigateByUrl).not.toHaveBeenCalled();
     expect(component.container.querySelector('.loading-icon')).not.toBeInTheDocument();

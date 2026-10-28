@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
 import {
+  ErrorOverlayService,
   HttpRequestError,
   SourceLogger,
   SynapseApiService,
@@ -59,10 +60,13 @@ describe('TermsOfServiceComponent', () => {
     });
   });
 
-  it('reports a failed Synapse request as a warning', async () => {
+  it('reports a failed Synapse request as a warning and shows the error overlay', async () => {
     const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+    const showRequestErrorSpy = jest.spyOn(ErrorOverlayService.prototype, 'showRequestError');
 
     await setup(undefined, true);
+
+    expect(showRequestErrorSpy).toHaveBeenCalledWith(synapseRequestError);
 
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining(synapseRequestError.message),

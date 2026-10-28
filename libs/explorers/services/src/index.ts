@@ -13,7 +13,6 @@ export * from './lib/comparison-tool.service.providers';
 export * from './lib/explorers-app-config.service';
 export * from './lib/explorers-app-initializer';
 export * from './lib/helper.service';
-export * from './lib/http-context-tokens';
 export * from './lib/http-request-error';
 export * from './lib/legacy-comparison-tool-url.guard';
 export * from './lib/logger.service';

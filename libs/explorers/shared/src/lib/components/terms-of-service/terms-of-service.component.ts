@@ -12,6 +12,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import {
+  ErrorOverlayService,
   HttpErrorReportLevelEnum,
   LoggerService,
   PlatformService,
@@ -35,6 +36,7 @@ export class TermsOfServiceComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService).forSource('TermsOfServiceComponent');
+  private readonly errorOverlayService = inject(ErrorOverlayService);
 
   content = '';
   isLoading = signal(true);
@@ -67,6 +69,7 @@ export class TermsOfServiceComponent implements OnInit {
               error,
               level: HttpErrorReportLevelEnum.Warn,
             });
+            this.errorOverlayService.showRequestError(error);
           },
         });
     }

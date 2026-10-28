@@ -1,6 +1,5 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import * as Sentry from '@sentry/angular';
-import { NO_RESPONSE_STATUS } from './app-update.service';
 import { SourceLogger } from './logger.service';
 
 export const HttpErrorReportLevelEnum = {
@@ -9,6 +8,9 @@ export const HttpErrorReportLevelEnum = {
 } as const;
 export type HttpErrorReportLevel =
   (typeof HttpErrorReportLevelEnum)[keyof typeof HttpErrorReportLevelEnum];
+
+/** The status Angular reports when a request gets no response at all, also used for a timeout. */
+export const NO_RESPONSE_STATUS = 0;
 
 export const UNKNOWN_URL_PATH = 'unknown';
 

@@ -3,6 +3,7 @@ import { TeamsComponent } from './teams.component';
 import { HttpErrorResponse, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { TeamService } from '@sagebionetworks/agora/api-client';
 import {
+  ErrorOverlayService,
   HttpRequestError,
   PlatformService,
   SourceLogger,
@@ -39,7 +40,7 @@ describe('TeamsComponent when the teams request fails', () => {
 
   afterEach(() => jest.restoreAllMocks());
 
-  it('shows no teams and reports the failure', async () => {
+  it('shows no teams, reports the failure, and shows the error overlay', async () => {
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
@@ -55,7 +56,10 @@ describe('TeamsComponent when the teams request fails', () => {
 
     component.loadTeams();
 
+    const showRequestError = jest.spyOn(ErrorOverlayService.prototype, 'showRequestError');
+
     await expect(firstValueFrom(component.teams$)).resolves.toEqual([]);
+    expect(showRequestError).toHaveBeenCalledWith(teamsRequestError);
     expect(loggerError).toHaveBeenCalledWith(
       expect.stringContaining(teamsRequestError.message),
       expect.objectContaining({ error: teamsRequestError }),
