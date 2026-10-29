@@ -7,12 +7,14 @@ import { SourceLogger } from './logger.service';
 import {
   getNavigationArrival,
   NAVIGATION_ARRIVAL_TAG,
+  NavigationArrival,
   NavigationArrivalEnum,
   NotFoundService,
 } from './not-found.service';
 
 const SITE_ORIGIN = 'https://agora.adknowledgeportal.org';
 const SOURCE_PAGE = '/genes/nominated-targets?pinned=ENSG00000130203';
+const SITE_REFERRER = `${SITE_ORIGIN}${SOURCE_PAGE}`;
 const MISSING_DRUG = { chemblId: 'CHEMBL0000000' };
 const urlSerializer = new DefaultUrlSerializer();
 
@@ -49,9 +51,9 @@ describe('getNavigationArrival', () => {
   });
 
   it("is an internal new tab when the app's first page was opened from one of the site's links", () => {
-    expect(
-      getNavigationArrival(navigationTo(drugPage), `${SITE_ORIGIN}${SOURCE_PAGE}`, SITE_ORIGIN),
-    ).toBe(NavigationArrivalEnum.InternalNewTab);
+    expect(getNavigationArrival(navigationTo(drugPage), SITE_REFERRER, SITE_ORIGIN)).toBe(
+      NavigationArrivalEnum.InternalNewTab,
+    );
   });
 
   it("is external when the app's first page was opened from another site", () => {
@@ -65,6 +67,32 @@ describe('getNavigationArrival', () => {
       NavigationArrivalEnum.Direct,
     );
   });
+
+  it("is an internal new tab when the browser loaded the app's first page by following the site's link", () => {
+    expect(
+      getNavigationArrival(navigationTo(drugPage), SITE_REFERRER, SITE_ORIGIN, 'navigate'),
+    ).toBe(NavigationArrivalEnum.InternalNewTab);
+  });
+
+  it("is reload when the app's first page was reloaded, though the referrer is the site's own page", () => {
+    expect(getNavigationArrival(navigationTo(drugPage), SITE_REFERRER, SITE_ORIGIN, 'reload')).toBe(
+      NavigationArrivalEnum.Reload,
+    );
+  });
+
+  it("is history when the app's first page was loaded with the back or forward button, though the referrer is the site's own page", () => {
+    expect(
+      getNavigationArrival(navigationTo(drugPage), SITE_REFERRER, SITE_ORIGIN, 'back_forward'),
+    ).toBe(NavigationArrivalEnum.History);
+  });
+
+  it('is in-app after the first page, however the browser loaded the document', () => {
+    const navigation = navigationTo(drugPage, { from: SOURCE_PAGE });
+
+    expect(getNavigationArrival(navigation, SITE_REFERRER, SITE_ORIGIN, 'reload')).toBe(
+      NavigationArrivalEnum.InApp,
+    );
+  });
 });
 
 describe('NotFoundService', () => {
@@ -75,7 +103,11 @@ describe('NotFoundService', () => {
     navigation: Navigation,
     referrer = '',
     inFlightNavigation: Navigation | null = null,
+    documentLoadType?: NavigationTimingType,
   ) {
+    const defaultView = documentLoadType
+      ? { performance: { getEntriesByType: () => [{ type: documentLoadType }] } }
+      : undefined;
     logger = { log: jest.fn(), warn: jest.fn() };
     navigateByUrl = jest.fn(() => Promise.resolve(true));
     TestBed.configureTestingModule({
@@ -90,7 +122,10 @@ describe('NotFoundService', () => {
               urlSerializer.serialize(url),
           },
         },
-        { provide: DOCUMENT, useValue: { referrer, location: { origin: SITE_ORIGIN } } },
+        {
+          provide: DOCUMENT,
+          useValue: { referrer, location: { origin: SITE_ORIGIN }, defaultView },
+        },
       ],
     });
     return TestBed.inject(NotFoundService);
@@ -120,7 +155,9 @@ describe('NotFoundService', () => {
     const setTag = jest.spyOn(Sentry.Scope.prototype, 'setTag');
     const notFoundService = setup(
       navigationTo('/drugs/CHEMBL0000000'),
-      `${SITE_ORIGIN}${SOURCE_PAGE}`,
+      SITE_REFERRER,
+      null,
+      'navigate',
     );
 
     redirectToNotFound(notFoundService);
@@ -162,20 +199,44 @@ describe('NotFoundService', () => {
     );
   });
 
-  it.each([
-    [NavigationArrivalEnum.Direct, navigationTo('/drugs/CHEMBL0000000'), ''],
+  it.each<[string, NavigationArrival, Navigation, string, NavigationTimingType | undefined]>([
     [
+      'typed URL',
+      NavigationArrivalEnum.Direct,
+      navigationTo('/drugs/CHEMBL0000000'),
+      '',
+      undefined,
+    ],
+    [
+      'link on another site',
       NavigationArrivalEnum.External,
       navigationTo('/drugs/CHEMBL0000000'),
       'https://www.google.com/',
+      undefined,
     ],
     [
+      'back button inside the app',
       NavigationArrivalEnum.History,
       navigationTo('/drugs/CHEMBL0000000', { from: SOURCE_PAGE, trigger: 'popstate' }),
       '',
+      undefined,
     ],
-  ])('leaves only a breadcrumb for a %s arrival', (arrival, navigation, referrer) => {
-    const notFoundService = setup(navigation, referrer);
+    [
+      "reload of a page opened from the site's link",
+      NavigationArrivalEnum.Reload,
+      navigationTo('/drugs/CHEMBL0000000'),
+      SITE_REFERRER,
+      'reload',
+    ],
+    [
+      "back button onto a page opened from the site's link",
+      NavigationArrivalEnum.History,
+      navigationTo('/drugs/CHEMBL0000000'),
+      SITE_REFERRER,
+      'back_forward',
+    ],
+  ])('leaves only a breadcrumb for a %s', (_, arrival, navigation, referrer, loadType) => {
+    const notFoundService = setup(navigation, referrer, null, loadType);
 
     redirectToNotFound(notFoundService);
 

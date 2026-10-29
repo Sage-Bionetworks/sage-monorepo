@@ -12,6 +12,8 @@ export const NavigationArrivalEnum = {
   InternalNewTab: 'internal-new-tab',
   /** Used the browser's back or forward button. */
   History: 'history',
+  /** Reloaded the page. */
+  Reload: 'reload',
   /** Followed a link on another site. */
   External: 'external',
   /** Typed, pasted or bookmarked the URL, or the referrer was withheld. */
@@ -29,20 +31,25 @@ const SITE_LINK_ARRIVALS: readonly NavigationArrival[] = [
 
 /**
  * Classifies how the user arrived at the current page. `navigation` is the navigation that opened
- * the page; it has a previous navigation only after the app's first page. The referrer only
- * matters on that first page, where it tells the site's own links apart from other sites' links
- * and from typed URLs.
+ * the page; it has a previous navigation only after the app's first page. The referrer and
+ * `documentLoadType`, how the browser loaded the document, only matter on that first page. A
+ * reload or a back/forward load keeps the referrer of the visit it repeats, so the load type is
+ * checked first; the referrer then tells the site's own links apart from other sites' links and
+ * from typed URLs.
  */
 export function getNavigationArrival(
   navigation: Navigation | null,
   referrer: string,
   origin: string,
+  documentLoadType?: NavigationTimingType,
 ): NavigationArrival {
   if (navigation?.previousNavigation) {
     return navigation.trigger === 'popstate'
       ? NavigationArrivalEnum.History
       : NavigationArrivalEnum.InApp;
   }
+  if (documentLoadType === 'reload') return NavigationArrivalEnum.Reload;
+  if (documentLoadType === 'back_forward') return NavigationArrivalEnum.History;
   if (!referrer) return NavigationArrivalEnum.Direct;
   try {
     return new URL(referrer).origin === origin
@@ -84,6 +91,7 @@ export class NotFoundService {
       navigation,
       this.document.referrer,
       this.document.location.origin,
+      this.documentLoadType(),
     );
 
     if (!SITE_LINK_ARRIVALS.includes(arrival)) {
@@ -97,6 +105,11 @@ export class NotFoundService {
       scope.setTag(NAVIGATION_ARRIVAL_TAG, arrival);
       logger.warn(`Linked ${itemType} not found`, { ...data, sourcePage });
     });
+  }
+
+  private documentLoadType(): NavigationTimingType | undefined {
+    const [entry] = this.document.defaultView?.performance?.getEntriesByType('navigation') ?? [];
+    return (entry as PerformanceNavigationTiming | undefined)?.type;
   }
 
   private previousUrl(navigation: Navigation | null): string | undefined {
