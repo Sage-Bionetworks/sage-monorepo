@@ -61,12 +61,12 @@ describe('parseTracesSampleRate', () => {
     expect(parseTracesSampleRate(value)).toBeUndefined();
   });
 
-  it.each(['1.5', '-0.1', 'all'])('leaves tracing off with a warning for "%s"', (value) => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
-
-    expect(parseTracesSampleRate(value)).toBeUndefined();
-    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('SENTRY_TRACES_SAMPLE_RATE'));
-
-    warnSpy.mockRestore();
-  });
+  it.each(['1.5', '-0.1', 'all', '10%'])(
+    'throws for "%s", so the server fails to start',
+    (value) => {
+      expect(() => parseTracesSampleRate(value)).toThrow(
+        `SENTRY_TRACES_SAMPLE_RATE must be a sample rate from 0.0 to 1.0, got "${value}"`,
+      );
+    },
+  );
 });

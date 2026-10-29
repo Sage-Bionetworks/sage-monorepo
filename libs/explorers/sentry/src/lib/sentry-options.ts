@@ -66,18 +66,17 @@ export function backendTracingOptions({
 }
 
 /**
- * Reads a `SENTRY_TRACES_SAMPLE_RATE` environment variable. Unset or empty leaves tracing off; a
- * value that isn't a sample rate from 0.0 to 1.0 also leaves it off, with a warning, rather than
- * failing the server's start.
+ * Reads a `SENTRY_TRACES_SAMPLE_RATE` environment variable. Unset or empty leaves tracing off. A
+ * value that isn't a sample rate from 0.0 to 1.0 throws, so the server fails to start, as the SSR
+ * servers do for the same value, rather than running with tracing silently off.
  */
 export function parseTracesSampleRate(value: string | undefined): number | undefined {
   if (value === undefined || value.trim() === '') return undefined;
   const rate = Number(value);
   if (Number.isNaN(rate) || rate < 0 || rate > 1) {
-    console.warn(
-      `[Sentry] SENTRY_TRACES_SAMPLE_RATE must be a sample rate from 0.0 to 1.0, got "${value}"; performance tracing is off.`,
+    throw new Error(
+      `SENTRY_TRACES_SAMPLE_RATE must be a sample rate from 0.0 to 1.0, got "${value}"`,
     );
-    return undefined;
   }
   return rate;
 }
