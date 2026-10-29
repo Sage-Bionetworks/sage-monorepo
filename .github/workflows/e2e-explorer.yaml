@@ -52,7 +52,7 @@ jobs:
             echo "authorized=false" >> "${GITHUB_OUTPUT}"
           fi
   run-explorer-e2e-tests:
-    needs: [validate-explorer-input, authorize]
+    needs: [authorize, validate-explorer-input]
     # The explorer and explorer-pr environments should contain the same secrets. However, the explorer
     # environment should be configured to run workflows automatically and should only be used when
     # the workflow is running against trusted code. The explorer-pr environment should be configured
