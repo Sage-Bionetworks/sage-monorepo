@@ -25,6 +25,8 @@ import { GeneResourcesComponent } from '../gene-resources/gene-resources.compone
 import { GeneSoeComponent } from '../gene-soe/gene-soe.component';
 import { getPanels, getPanelsWithDisabledState } from './gene-details-panels';
 
+export const GENE_ERROR_MESSAGE = 'Error loading gene';
+
 @Component({
   selector: 'agora-gene-details',
   imports: [
@@ -102,7 +104,7 @@ export class GeneDetailsComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          this.errorOverlayService.reportAndShow(this.logger, 'Error loading gene', {
+          this.errorOverlayService.reportAndShow(this.logger, GENE_ERROR_MESSAGE, {
             error,
             level: HttpErrorReportLevelEnum.Error,
           });

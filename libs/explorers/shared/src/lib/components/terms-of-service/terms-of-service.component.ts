@@ -23,6 +23,8 @@ import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { MarkdownModule } from 'ngx-markdown';
 import { finalize } from 'rxjs/operators';
 
+export const TERMS_OF_SERVICE_ERROR_MESSAGE = 'Error loading terms of service';
+
 @Component({
   selector: 'explorers-terms-of-service',
   imports: [HeroComponent, MarkdownModule, LoadingIconComponent, RouterModule],
@@ -64,7 +66,7 @@ export class TermsOfServiceComponent implements OnInit {
             this.content = markdown;
           },
           error: (error) => {
-            this.errorOverlayService.reportAndShow(this.logger, 'Error loading terms of service', {
+            this.errorOverlayService.reportAndShow(this.logger, TERMS_OF_SERVICE_ERROR_MESSAGE, {
               error,
               level: HttpErrorReportLevelEnum.Warn,
             });

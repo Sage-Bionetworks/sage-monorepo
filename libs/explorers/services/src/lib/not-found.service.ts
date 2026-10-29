@@ -23,6 +23,16 @@ export type NavigationArrival = (typeof NavigationArrivalEnum)[keyof typeof Navi
 
 export const NAVIGATION_ARRIVAL_TAG = 'navigation.arrival';
 
+/** The breadcrumb logged when a missing item's page redirects to the not-found page. */
+export function getItemNotFoundMessage(itemType: string): string {
+  return `${itemType} not found, redirecting`;
+}
+
+/** The warning reported when a link inside the site leads to a missing item. */
+export function getLinkedItemNotFoundMessage(itemType: string): string {
+  return `Linked ${itemType} not found`;
+}
+
 /** Arrivals through one of the site's own links, where a missing item is a data-quality issue. */
 const SITE_LINK_ARRIVALS: readonly NavigationArrival[] = [
   NavigationArrivalEnum.InApp,
@@ -95,7 +105,7 @@ export class NotFoundService {
     );
 
     if (!SITE_LINK_ARRIVALS.includes(arrival)) {
-      logger.log(`${itemType} not found, redirecting`, { ...data, arrival });
+      logger.log(getItemNotFoundMessage(itemType), { ...data, arrival });
       return;
     }
 
@@ -103,7 +113,7 @@ export class NotFoundService {
       arrival === NavigationArrivalEnum.InApp ? this.previousUrl(navigation) : this.referrerPath();
     Sentry.withScope((scope) => {
       scope.setTag(NAVIGATION_ARRIVAL_TAG, arrival);
-      logger.warn(`Linked ${itemType} not found`, { ...data, sourcePage });
+      logger.warn(getLinkedItemNotFoundMessage(itemType), { ...data, sourcePage });
     });
   }
 

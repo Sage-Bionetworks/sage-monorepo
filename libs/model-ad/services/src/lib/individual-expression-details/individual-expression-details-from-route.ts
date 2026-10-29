@@ -14,6 +14,8 @@ import { ModelIdentifierType } from '@sagebionetworks/model-ad/api-client';
 import { QUERY_PARAMS } from '@sagebionetworks/model-ad/config';
 import { catchError, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 
+export const INDIVIDUAL_EXPRESSION_DATA_ERROR_MESSAGE = 'Error loading individual expression data';
+
 /** The item type a not-found report names, for both the gene and protein details pages. */
 export const INDIVIDUAL_EXPRESSION_ITEM_TYPE = 'individual expression data';
 
@@ -113,7 +115,7 @@ export function individualExpressionDetailsFromRoute<T>({
             query: { [pathParam]: id, ...query },
           });
         }
-        errorOverlayService.reportAndShow(logger, 'Error loading individual expression data', {
+        errorOverlayService.reportAndShow(logger, INDIVIDUAL_EXPRESSION_DATA_ERROR_MESSAGE, {
           error,
           level: HttpErrorReportLevelEnum.Error,
         });

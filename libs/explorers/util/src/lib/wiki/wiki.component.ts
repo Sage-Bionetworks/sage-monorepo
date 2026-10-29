@@ -20,6 +20,8 @@ import {
 import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
+
+export const WIKI_ERROR_MESSAGE = 'Error loading wiki';
 @Component({
   selector: 'explorers-wiki',
   imports: [LoadingIconComponent],
@@ -71,7 +73,7 @@ export class WikiComponent {
             );
           },
           error: (error) => {
-            reportHttpError(this.logger, 'Error loading wiki', {
+            reportHttpError(this.logger, WIKI_ERROR_MESSAGE, {
               error,
               level: HttpErrorReportLevelEnum.Warn,
             });

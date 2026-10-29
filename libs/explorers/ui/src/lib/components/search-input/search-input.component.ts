@@ -38,6 +38,8 @@ import {
 import sanitizeHtml from 'sanitize-html';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
+export const SEARCH_RESULTS_ERROR_MESSAGE = 'Error fetching search results';
+
 @Component({
   selector: 'explorers-search-input',
   imports: [SvgImageComponent, FormsModule, FontAwesomeModule, SanitizeHtmlPipe],
@@ -122,7 +124,7 @@ export class SearchInputComponent<T extends SearchResult> implements AfterViewIn
           const target = event.target as HTMLInputElement;
           return this.search(target.value).pipe(
             catchError((error) => {
-              reportHttpError(this.logger, 'Error fetching search results', {
+              reportHttpError(this.logger, SEARCH_RESULTS_ERROR_MESSAGE, {
                 error,
                 level: HttpErrorReportLevelEnum.Warn,
               });

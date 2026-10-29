@@ -10,7 +10,10 @@ import {
 import { render, screen, waitFor } from '@testing-library/angular';
 import { MarkdownModule } from 'ngx-markdown';
 import { of, throwError } from 'rxjs';
-import { TermsOfServiceComponent } from './terms-of-service.component';
+import {
+  TERMS_OF_SERVICE_ERROR_MESSAGE,
+  TermsOfServiceComponent,
+} from './terms-of-service.component';
 
 // Mock SynapseApiService
 class MockSynapseApiService {
@@ -70,7 +73,7 @@ describe('TermsOfServiceComponent', () => {
     expect(showRequestErrorSpy).toHaveBeenCalledWith(synapseRequestError);
 
     expect(warnSpy).toHaveBeenCalledWith(
-      formatHttpErrorReportMessage('Error loading terms of service', synapseRequestError),
+      formatHttpErrorReportMessage(TERMS_OF_SERVICE_ERROR_MESSAGE, synapseRequestError),
       expect.any(Object),
       synapseRequestError,
     );

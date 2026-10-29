@@ -21,6 +21,8 @@ import { DrugDetailsNominationDetailsComponent } from './components/drug-details
 import { DrugDetailsResourcesComponent } from './components/drug-details-resources/drug-details-resources.component';
 import { DrugDetailsSummaryComponent } from './components/drug-details-summary/drug-details-summary.component';
 
+export const DRUG_ERROR_MESSAGE = 'Error loading drug';
+
 @Component({
   selector: 'agora-drug-details',
   imports: [
@@ -106,7 +108,7 @@ export class DrugDetailsComponent implements OnInit {
               this.notFoundService.redirectToNotFound(this.logger, 'drug', { chemblId });
               return;
             }
-            this.errorOverlayService.reportAndShow(this.logger, 'Error loading drug', {
+            this.errorOverlayService.reportAndShow(this.logger, DRUG_ERROR_MESSAGE, {
               error,
               level: HttpErrorReportLevelEnum.Error,
             });

@@ -18,7 +18,7 @@ import {
 import { provideLoadingIconColors, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import { Observable, of, throwError } from 'rxjs';
-import { GeneDetailsComponent } from './gene-details.component';
+import { GENE_ERROR_MESSAGE, GeneDetailsComponent } from './gene-details.component';
 
 const ALWAYS_AVAILABLE_TABS = [
   'Summary',
@@ -130,7 +130,7 @@ describe('GeneDetailsComponent', () => {
     expect(navigateByUrl).not.toHaveBeenCalled();
     expect(component.container.querySelector('.loading-icon')).not.toBeInTheDocument();
     expect(loggerError).toHaveBeenCalledWith(
-      formatHttpErrorReportMessage('Error loading gene', error),
+      formatHttpErrorReportMessage(GENE_ERROR_MESSAGE, error),
       expect.objectContaining({ error }),
     );
   });

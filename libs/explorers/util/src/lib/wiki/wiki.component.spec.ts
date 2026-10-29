@@ -17,7 +17,7 @@ import {
 import { server } from '@sagebionetworks/explorers/testing/msw';
 import { render, waitFor } from '@testing-library/angular';
 import { throwError } from 'rxjs';
-import { WikiComponent } from './wiki.component';
+import { WIKI_ERROR_MESSAGE, WikiComponent } from './wiki.component';
 
 // Mock DomSanitizer
 const mockDomSanitizer = {
@@ -124,7 +124,7 @@ describe('WikiComponent', () => {
 
         await waitFor(() => {
           expect(warnSpy).toHaveBeenCalledWith(
-            formatHttpErrorReportMessage('Error loading wiki', wikiRequestError),
+            formatHttpErrorReportMessage(WIKI_ERROR_MESSAGE, wikiRequestError),
             expect.any(Object),
             wikiRequestError,
           );

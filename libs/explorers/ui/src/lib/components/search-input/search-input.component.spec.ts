@@ -19,7 +19,7 @@ import {
 import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { Observable, throwError } from 'rxjs';
-import { SearchInputComponent } from './search-input.component';
+import { SEARCH_RESULTS_ERROR_MESSAGE, SearchInputComponent } from './search-input.component';
 
 // Mock scrollIntoView for JSDOM environment since it doesn't exist there
 Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
@@ -156,7 +156,7 @@ describe('SearchInputComponent', () => {
 
     await screen.findByText('An unknown error occurred, please try again.');
     expect(warnSpy).toHaveBeenCalledWith(
-      formatHttpErrorReportMessage('Error fetching search results', searchRequestError),
+      formatHttpErrorReportMessage(SEARCH_RESULTS_ERROR_MESSAGE, searchRequestError),
       expect.any(Object),
       searchRequestError,
     );

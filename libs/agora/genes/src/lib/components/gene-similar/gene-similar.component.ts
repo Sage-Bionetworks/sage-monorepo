@@ -17,6 +17,9 @@ import {
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { GeneTableComponent } from '../gene-table/gene-table.component';
 
+export const GENE_ERROR_MESSAGE = 'Error loading gene';
+export const SIMILAR_GENES_ERROR_MESSAGE = 'Error loading similar genes';
+
 interface TableColumn {
   field: string;
   header: string;
@@ -95,7 +98,7 @@ export class GeneSimilarComponent implements OnInit {
               }
             },
             error: (error) => {
-              this.errorOverlayService.reportAndShow(this.logger, 'Error loading gene', {
+              this.errorOverlayService.reportAndShow(this.logger, GENE_ERROR_MESSAGE, {
                 error,
                 level: HttpErrorReportLevelEnum.Error,
               });
@@ -144,7 +147,7 @@ export class GeneSimilarComponent implements OnInit {
           this.helperService.setLoading(false);
         },
         error: (error) => {
-          this.errorOverlayService.reportAndShow(this.logger, 'Error loading similar genes', {
+          this.errorOverlayService.reportAndShow(this.logger, SIMILAR_GENES_ERROR_MESSAGE, {
             error,
             level: HttpErrorReportLevelEnum.Error,
           });

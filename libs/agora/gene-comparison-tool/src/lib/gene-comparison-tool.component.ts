@@ -63,6 +63,9 @@ import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { GeneComparisonToolFilterListComponent } from './components/gene-comparison-tool-filter-list/gene-comparison-tool-filter-list.component';
 
+export const GENES_AND_SCORE_DISTRIBUTION_ERROR_MESSAGE =
+  'Error loading genes and score distribution';
+
 @Component({
   selector: 'agora-gene-comparison-tool',
   imports: [
@@ -314,7 +317,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         error: (error) => {
           this.errorOverlayService.reportAndShow(
             this.logger,
-            'Error loading genes and score distribution',
+            GENES_AND_SCORE_DISTRIBUTION_ERROR_MESSAGE,
             {
               error,
               level: HttpErrorReportLevelEnum.Error,

@@ -20,7 +20,7 @@ import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { Observable, of, throwError } from 'rxjs';
-import { DrugDetailsComponent } from './drug-details.component';
+import { DRUG_ERROR_MESSAGE, DrugDetailsComponent } from './drug-details.component';
 
 async function setup(
   drug = drugMock,
@@ -139,7 +139,7 @@ describe('DrugDetailsComponent', () => {
     expect(navigateByUrl).not.toHaveBeenCalled();
     expect(showError).toHaveBeenCalledWith(error.userMessage);
     expect(loggerError).toHaveBeenCalledWith(
-      formatHttpErrorReportMessage('Error loading drug', error),
+      formatHttpErrorReportMessage(DRUG_ERROR_MESSAGE, error),
       expect.objectContaining({ error }),
     );
     expect(component.container.querySelector('.loading-icon')).not.toBeInTheDocument();

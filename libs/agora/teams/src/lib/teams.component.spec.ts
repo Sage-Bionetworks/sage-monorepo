@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TeamsComponent } from './teams.component';
+import { TEAMS_ERROR_MESSAGE, TeamsComponent } from './teams.component';
 import { HttpErrorResponse, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { TeamService } from '@sagebionetworks/agora/api-client';
 import {
@@ -62,7 +62,7 @@ describe('TeamsComponent when the teams request fails', () => {
     await expect(firstValueFrom(component.teams$)).resolves.toEqual([]);
     expect(showRequestError).toHaveBeenCalledWith(teamsRequestError);
     expect(loggerError).toHaveBeenCalledWith(
-      formatHttpErrorReportMessage('Error loading teams', teamsRequestError),
+      formatHttpErrorReportMessage(TEAMS_ERROR_MESSAGE, teamsRequestError),
       expect.objectContaining({ error: teamsRequestError }),
     );
   });

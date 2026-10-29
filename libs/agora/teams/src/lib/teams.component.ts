@@ -13,6 +13,8 @@ import {
 import { catchError, finalize, map, Observable, of } from 'rxjs';
 import { TeamListComponent } from './team-list/team-list.component';
 
+export const TEAMS_ERROR_MESSAGE = 'Error loading teams';
+
 @Component({
   selector: 'agora-teams',
   imports: [CommonModule, TeamListComponent],
@@ -45,7 +47,7 @@ export class TeamsComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
         map((res: TeamsList) => res.items || []),
         catchError((error) => {
-          this.errorOverlayService.reportAndShow(this.logger, 'Error loading teams', {
+          this.errorOverlayService.reportAndShow(this.logger, TEAMS_ERROR_MESSAGE, {
             error,
             level: HttpErrorReportLevelEnum.Error,
           });

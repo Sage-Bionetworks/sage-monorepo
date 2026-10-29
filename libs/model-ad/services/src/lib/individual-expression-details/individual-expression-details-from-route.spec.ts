@@ -17,6 +17,7 @@ import { transcriptomicsIndividualMocks } from '@sagebionetworks/model-ad/testin
 import { render, screen } from '@testing-library/angular';
 import { Observable, of, switchMap, throwError, timer } from 'rxjs';
 import {
+  INDIVIDUAL_EXPRESSION_DATA_ERROR_MESSAGE,
   individualExpressionDetailsFromRoute,
   IndividualExpressionDetailsQuery,
 } from './individual-expression-details-from-route';
@@ -232,7 +233,7 @@ describe('individualExpressionDetailsFromRoute', () => {
     expect(screen.queryByText('Not found')).not.toBeInTheDocument();
     expect(showError).toHaveBeenCalledWith(error.userMessage);
     expect(loggerError).toHaveBeenCalledWith(
-      formatHttpErrorReportMessage('Error loading individual expression data', error),
+      formatHttpErrorReportMessage(INDIVIDUAL_EXPRESSION_DATA_ERROR_MESSAGE, error),
       expect.objectContaining({ error: expect.any(HttpRequestError) }),
     );
   });

@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router, RouterOutlet } from '@angular/router';
 import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
 import {
+  getLinkedItemNotFoundMessage,
   formatHttpErrorReportMessage,
   ErrorOverlayService,
   HttpRequestError,
@@ -23,7 +24,7 @@ import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { MessageService } from 'primeng/api';
 import { of, switchMap, throwError, timer } from 'rxjs';
-import { ModelDetailsComponent } from './model-details.component';
+import { MODEL_ERROR_MESSAGE, ModelDetailsComponent } from './model-details.component';
 
 const NOT_FOUND_DELAY_MS = 10;
 
@@ -232,7 +233,7 @@ describe('ModelDetailsComponent', () => {
 
       await navigate(unknownModelRoute);
 
-      expect(loggerWarn).toHaveBeenCalledWith('Linked model not found', {
+      expect(loggerWarn).toHaveBeenCalledWith(getLinkedItemNotFoundMessage('model'), {
         modelName: 'Unknown',
         modelOrganism: ModelOrganism.Mouse,
         sourcePage: initialModelRoute,
@@ -255,7 +256,7 @@ describe('ModelDetailsComponent', () => {
       expect(screen.queryByText('Not found')).not.toBeInTheDocument();
       expect(showError).toHaveBeenCalledWith(error.userMessage);
       expect(loggerError).toHaveBeenCalledWith(
-        formatHttpErrorReportMessage('Error loading model', error),
+        formatHttpErrorReportMessage(MODEL_ERROR_MESSAGE, error),
         expect.objectContaining({ error: expect.any(HttpRequestError) }),
       );
       expect(document.querySelector('.loading-icon')).not.toBeInTheDocument();

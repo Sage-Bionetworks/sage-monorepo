@@ -34,6 +34,8 @@ import {
   getPanelsWithDisabledState as getMousePanelsWithDisabledState,
 } from './components/mouse-model-details-content/mouse-model-details-panels';
 
+export const MODEL_ERROR_MESSAGE = 'Error loading model';
+
 @Component({
   selector: 'model-ad-model-details',
   imports: [
@@ -121,7 +123,7 @@ export class ModelDetailsComponent implements OnInit {
           });
           return EMPTY;
         }
-        this.errorOverlayService.reportAndShow(this.logger, 'Error loading model', {
+        this.errorOverlayService.reportAndShow(this.logger, MODEL_ERROR_MESSAGE, {
           error,
           level: HttpErrorReportLevelEnum.Error,
         });

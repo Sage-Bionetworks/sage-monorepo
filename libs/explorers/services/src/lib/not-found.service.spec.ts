@@ -5,6 +5,8 @@ import { DefaultUrlSerializer, Navigation, Router } from '@angular/router';
 import * as Sentry from '@sentry/angular';
 import { SourceLogger } from './logger.service';
 import {
+  getItemNotFoundMessage,
+  getLinkedItemNotFoundMessage,
   getNavigationArrival,
   NAVIGATION_ARRIVAL_TAG,
   NavigationArrival,
@@ -15,6 +17,7 @@ import {
 const SITE_ORIGIN = 'https://agora.adknowledgeportal.org';
 const SOURCE_PAGE = '/genes/nominated-targets?pinned=ENSG00000130203';
 const SITE_REFERRER = `${SITE_ORIGIN}${SOURCE_PAGE}`;
+const MISSING_ITEM_TYPE = 'drug';
 const MISSING_DRUG = { chemblId: 'CHEMBL0000000' };
 const urlSerializer = new DefaultUrlSerializer();
 
@@ -132,7 +135,11 @@ describe('NotFoundService', () => {
   }
 
   function redirectToNotFound(notFoundService: NotFoundService) {
-    notFoundService.redirectToNotFound(logger as unknown as SourceLogger, 'drug', MISSING_DRUG);
+    notFoundService.redirectToNotFound(
+      logger as unknown as SourceLogger,
+      MISSING_ITEM_TYPE,
+      MISSING_DRUG,
+    );
   }
 
   afterEach(() => jest.restoreAllMocks());
@@ -143,7 +150,7 @@ describe('NotFoundService', () => {
 
     redirectToNotFound(notFoundService);
 
-    expect(logger.warn).toHaveBeenCalledWith('Linked drug not found', {
+    expect(logger.warn).toHaveBeenCalledWith(getLinkedItemNotFoundMessage(MISSING_ITEM_TYPE), {
       ...MISSING_DRUG,
       sourcePage: SOURCE_PAGE,
     });
@@ -162,7 +169,7 @@ describe('NotFoundService', () => {
 
     redirectToNotFound(notFoundService);
 
-    expect(logger.warn).toHaveBeenCalledWith('Linked drug not found', {
+    expect(logger.warn).toHaveBeenCalledWith(getLinkedItemNotFoundMessage(MISSING_ITEM_TYPE), {
       ...MISSING_DRUG,
       sourcePage: SOURCE_PAGE,
     });
@@ -182,7 +189,7 @@ describe('NotFoundService', () => {
 
     redirectToNotFound(notFoundService);
 
-    expect(logger.warn).toHaveBeenCalledWith('Linked drug not found', {
+    expect(logger.warn).toHaveBeenCalledWith(getLinkedItemNotFoundMessage(MISSING_ITEM_TYPE), {
       ...MISSING_DRUG,
       sourcePage: SOURCE_PAGE,
     });
@@ -241,7 +248,7 @@ describe('NotFoundService', () => {
     redirectToNotFound(notFoundService);
 
     expect(logger.warn).not.toHaveBeenCalled();
-    expect(logger.log).toHaveBeenCalledWith('drug not found, redirecting', {
+    expect(logger.log).toHaveBeenCalledWith(getItemNotFoundMessage(MISSING_ITEM_TYPE), {
       ...MISSING_DRUG,
       arrival,
     });
