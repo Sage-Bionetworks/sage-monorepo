@@ -5,6 +5,10 @@ services:
     restart: always
     env_file:
       - ../../../apps/agora/api/.env
+    environment:
+      # Node sizes its default heap at half the memory limit below, too small to hold the API's
+      # in-memory caches once every GCT subcategory is cached. Keep this below the memory limit.
+      NODE_OPTIONS: --max-old-space-size=768
     networks:
       - agora
     ports:
