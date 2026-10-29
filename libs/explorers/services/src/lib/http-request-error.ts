@@ -16,6 +16,15 @@ export const UNKNOWN_URL_PATH = 'unknown';
 
 export const UNEXPECTED_ERROR_USER_MESSAGE = 'An unexpected error occurred. Please try again.';
 
+export const UNREPORTED_HTTP_ERROR_MESSAGE = 'HTTP failure not reported by its call site';
+
+const reportedErrors = new WeakSet<HttpRequestError>();
+
+/** Whether `reportHttpError` has reported this failure. */
+export function wasReported(error: HttpRequestError): boolean {
+  return reportedErrors.has(error);
+}
+
 export const HttpSentryTagEnum = {
   Method: 'http.method',
   StatusCode: 'http.status_code',
@@ -92,6 +101,7 @@ export function reportHttpError(
       logger.error(operation, { error });
       return;
     }
+    reportedErrors.add(error);
 
     scope.setTag(HttpSentryTagEnum.Method, error.method);
     scope.setTag(HttpSentryTagEnum.StatusCode, String(error.status));

@@ -82,6 +82,17 @@ The explorers products use MongoDB locally but Amazon DocumentDB in the deployed
 
 No external products outside this repo depend on the explorers APIs, so breaking API changes are acceptable as long as all explorer products within this repo continue to work.
 
+## HTTP Error Handling
+
+`httpErrorInterceptor` (`libs/explorers/util/`) turns every failed request into an `HttpRequestError` and re-throws it, but it doesn't report to Sentry or show the error overlay: only the call site knows what it was doing and how serious the failure is. So any code that catches a failed API request must:
+
+- **Report it** with `reportHttpError(logger, operation, { error, level })` from `@sagebionetworks/explorers/services`. `operation` names what the call site was doing and must stay fixed, since Sentry groups each call site's failures by it. `level` is `HttpErrorReportLevelEnum.Error` for a failure that breaks the page, `Warn` for one the page recovers from (a fallback value, a redirect).
+- **Show the overlay** with `ErrorOverlayService.showRequestError(error)` when the failure leaves the page without its content.
+
+A failure no call site catches reaches `ExplorersErrorHandler`, which does both. A failure a call site catches without reporting is sent as an `UNREPORTED_HTTP_ERROR_MESSAGE` warning a tick later. That warning means a call site is missing its `reportHttpError` call; fix the call site rather than silencing the warning. Report from the catch itself (a `catchError`, or the `catch` of an awaited request), not from a later timer, or the warning fires first.
+
+Requests made through an `HttpClient` built on `HttpBackend` (such as the app version check) bypass all interceptors, so none of this applies to them.
+
 ## Storybook
 
 For components that don't call our own backend APIs (third-party service calls like Synapse wiki fetches are fine): add a `.stories.ts` file for new components; for changes to existing components, adjust the existing story if the new behavior fits naturally, or add a new story variant for sufficiently distinct behavior. When it's unclear whether a new story is warranted, ask the user. See `libs/explorers/util/src/lib/tooltip-button/tooltip-button.component.stories.ts` for the canonical pattern.

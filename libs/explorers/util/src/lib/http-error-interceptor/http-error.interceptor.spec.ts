@@ -5,9 +5,15 @@ import {
   AppUpdateCheckTriggerEnum,
   AppUpdateService,
   ErrorOverlayService,
+  formatHttpErrorReportMessage,
+  HttpErrorReportLevelEnum,
   HttpRequestError,
+  LoggerService,
+  reportHttpError,
   SourceLogger,
+  UNREPORTED_HTTP_ERROR_MESSAGE,
 } from '@sagebionetworks/explorers/services';
+import { config, firstValueFrom } from 'rxjs';
 import { httpErrorInterceptor, RETRY_DELAY_MS } from './http-error.interceptor';
 
 const DATA_VERSION_URL = '/v1/dataversion';
@@ -66,14 +72,88 @@ describe('httpErrorInterceptor', () => {
     expect(TestBed.inject(ErrorOverlayService).isOverlayVisible()).toBe(false);
   });
 
-  it('should not report the error, since only the caller knows whether it was expected', () => {
-    const loggerWarn = jest.spyOn(SourceLogger.prototype, 'warn');
-    const loggerError = jest.spyOn(SourceLogger.prototype, 'error');
+  describe('unreported failures', () => {
+    const CALLER_OPERATION = 'Error loading data version';
 
-    requestAndFail();
+    let loggerWarn: jest.SpyInstance;
+    let loggerError: jest.SpyInstance;
 
-    expect(loggerWarn).not.toHaveBeenCalled();
-    expect(loggerError).not.toHaveBeenCalled();
+    function reportAsCaller(error: unknown) {
+      const logger = TestBed.inject(LoggerService).forSource('caller');
+      reportHttpError(logger, CALLER_OPERATION, { error, level: HttpErrorReportLevelEnum.Error });
+    }
+
+    function failPendingRequest() {
+      httpTestingController.expectOne(DATA_VERSION_URL).flush(null, NOT_FOUND);
+    }
+
+    function unreportedWarnings() {
+      return loggerWarn.mock.calls.filter(([message]) =>
+        String(message).startsWith(UNREPORTED_HTTP_ERROR_MESSAGE),
+      );
+    }
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+      loggerWarn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+      loggerError = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+    });
+
+    afterEach(() => {
+      config.onUnhandledError = null;
+      jest.useRealTimers();
+    });
+
+    it('should not report a failure while its caller may still report it', () => {
+      requestAndFail();
+
+      expect(loggerWarn).not.toHaveBeenCalled();
+      expect(loggerError).not.toHaveBeenCalled();
+    });
+
+    it('should warn on the next tick about a failure its caller caught without reporting', async () => {
+      const thrown = requestAndFail();
+
+      await jest.runOnlyPendingTimersAsync();
+
+      expect(loggerWarn).toHaveBeenCalledWith(
+        formatHttpErrorReportMessage(UNREPORTED_HTTP_ERROR_MESSAGE, thrown as HttpRequestError),
+        expect.objectContaining({ error: thrown }),
+      );
+    });
+
+    it('should stay quiet when the caller reports the failure in its error handler', async () => {
+      http.get(DATA_VERSION_URL).subscribe({ error: reportAsCaller });
+      failPendingRequest();
+
+      await jest.runOnlyPendingTimersAsync();
+
+      expect(unreportedWarnings()).toHaveLength(0);
+      expect(loggerError).toHaveBeenCalledTimes(1);
+    });
+
+    it('should stay quiet when an awaiting caller reports the failure in its catch', async () => {
+      const awaitingCaller = firstValueFrom(http.get(DATA_VERSION_URL)).catch(reportAsCaller);
+      failPendingRequest();
+
+      await awaitingCaller;
+      await jest.runOnlyPendingTimersAsync();
+
+      expect(unreportedWarnings()).toHaveLength(0);
+    });
+
+    it('should stay quiet when the failure is unhandled and the ErrorHandler reports it', async () => {
+      // RxJS hands an error no subscriber handles to onUnhandledError, or throws it to the
+      // ErrorHandler when unset, from a timer it queues while the error is delivered.
+      config.onUnhandledError = reportAsCaller;
+      http.get(DATA_VERSION_URL).subscribe();
+      failPendingRequest();
+
+      await jest.runOnlyPendingTimersAsync();
+
+      expect(unreportedWarnings()).toHaveLength(0);
+      expect(loggerError).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('should re-throw a typed error that keeps the status, method, and path', () => {
