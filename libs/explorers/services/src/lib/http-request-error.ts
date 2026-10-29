@@ -62,11 +62,17 @@ export function getUserMessage(error: unknown): string {
   return error instanceof HttpRequestError ? error.userMessage : UNEXPECTED_ERROR_USER_MESSAGE;
 }
 
+/** The message `reportHttpError` reports a failed request under. */
+export function formatHttpErrorReportMessage(operation: string, error: HttpRequestError): string {
+  return `${operation} (HTTP ${error.status} ${error.method})`;
+}
+
 /**
- * Reports a failed request through the caller's logger as `<operation> (HTTP <status> <method>
- * <path>)`, with `http.*` tags, so Sentry groups each call site's failures by operation, endpoint,
- * and status. `operation` names what the caller was doing and must stay fixed, since it is part of
- * the grouping. `level` is the call site's judgment of how serious the failure is, except that a
+ * Reports a failed request through the caller's logger as `<operation> (HTTP <status> <method>)`,
+ * with `http.*` tags, so Sentry groups each call site's failures by operation, method, and status.
+ * The path is only a tag: it can hold item IDs, and in the message it would split one outage into
+ * an issue per item. `operation` names what the caller was doing and must stay fixed, since it is
+ * part of the grouping. `level` is the call site's judgment of how serious the failure is, except that a
  * 500 is reported as a warning at most: the API reports the exception behind its own 500, with the
  * stack trace, on the same trace as this event.
  *
@@ -91,7 +97,7 @@ export function reportHttpError(
     scope.setTag(HttpSentryTagEnum.StatusCode, String(error.status));
     scope.setTag(HttpSentryTagEnum.Url, error.urlPath);
 
-    const message = `${operation} (${error.message})`;
+    const message = formatHttpErrorReportMessage(operation, error);
     const data = {
       userMessage: error.userMessage,
       url: error.cause.url,

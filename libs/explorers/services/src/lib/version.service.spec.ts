@@ -6,7 +6,11 @@ import {
   VERSION_CHECK_TIMEOUT_MS,
 } from '@sagebionetworks/explorers/constants';
 import { firstValueFrom, lastValueFrom, NEVER, Observable, of, throwError, toArray } from 'rxjs';
-import { HttpRequestError, NO_RESPONSE_STATUS } from './http-request-error';
+import {
+  formatHttpErrorReportMessage,
+  HttpRequestError,
+  NO_RESPONSE_STATUS,
+} from './http-request-error';
 import { SourceLogger } from './logger.service';
 import { PlatformService } from './platform.service';
 import {
@@ -106,7 +110,7 @@ describe('VersionService', () => {
       expect(emissions).toEqual([DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN]);
       expect(warnSpy).toHaveBeenCalledTimes(1);
       expect(warnSpy).toHaveBeenCalledWith(
-        `${DATA_VERSION_ERROR_MESSAGE} (${failedRequest.message})`,
+        formatHttpErrorReportMessage(DATA_VERSION_ERROR_MESSAGE, failedRequest),
         expect.objectContaining({ error: failedRequest }),
       );
       expect(errorSpy).not.toHaveBeenCalled();

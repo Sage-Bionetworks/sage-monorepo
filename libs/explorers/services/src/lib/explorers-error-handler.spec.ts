@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ErrorOverlayService } from './error-overlay.service';
 import { ExplorersErrorHandler, UNHANDLED_HTTP_ERROR_MESSAGE } from './explorers-error-handler';
-import { HttpRequestError } from './http-request-error';
+import { formatHttpErrorReportMessage, HttpRequestError } from './http-request-error';
 import { SourceLogger } from './logger.service';
 
 jest.mock('@sentry/angular', () => ({
@@ -49,7 +49,7 @@ describe('ExplorersErrorHandler', () => {
       errorHandler.handleError(serviceUnavailableError);
 
       expect(loggerErrorSpy).toHaveBeenCalledWith(
-        `${UNHANDLED_HTTP_ERROR_MESSAGE} (${serviceUnavailableError.message})`,
+        formatHttpErrorReportMessage(UNHANDLED_HTTP_ERROR_MESSAGE, serviceUnavailableError),
         expect.objectContaining({ error: serviceUnavailableError }),
       );
       expect(mockSentryErrorHandler.handleError).not.toHaveBeenCalled();
@@ -61,7 +61,7 @@ describe('ExplorersErrorHandler', () => {
       errorHandler.handleError(internalServerError);
 
       expect(loggerWarnSpy).toHaveBeenCalledWith(
-        `${UNHANDLED_HTTP_ERROR_MESSAGE} (${internalServerError.message})`,
+        formatHttpErrorReportMessage(UNHANDLED_HTTP_ERROR_MESSAGE, internalServerError),
         expect.objectContaining({ error: internalServerError }),
       );
       expect(loggerErrorSpy).not.toHaveBeenCalled();

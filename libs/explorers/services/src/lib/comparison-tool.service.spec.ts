@@ -41,7 +41,7 @@ import {
 } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
 import { ErrorOverlayService } from './error-overlay.service';
-import { HttpRequestError } from './http-request-error';
+import { formatHttpErrorReportMessage, HttpRequestError } from './http-request-error';
 import { SourceLogger } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
 
@@ -2404,7 +2404,7 @@ describe('ComparisonToolService', () => {
       service.pinAll();
 
       expect(loggerErrorSpy).toHaveBeenCalledWith(
-        `${PIN_ALL_ERROR_MESSAGE} (${requestError.message})`,
+        formatHttpErrorReportMessage(PIN_ALL_ERROR_MESSAGE, requestError),
         expect.objectContaining({ error: requestError }),
       );
     });
@@ -3957,7 +3957,7 @@ describe('ComparisonToolService', () => {
 
         expect(loggerErrorSpy).toHaveBeenCalledTimes(1);
         expect(loggerErrorSpy).toHaveBeenCalledWith(
-          `${errorMessage} (${requestError.message})`,
+          formatHttpErrorReportMessage(errorMessage, requestError),
           expect.objectContaining({ error: requestError }),
         );
       },
@@ -3972,7 +3972,7 @@ describe('ComparisonToolService', () => {
       });
 
       expect(loggerErrorSpy).toHaveBeenCalledWith(
-        `${COMPARISON_TOOL_CONFIG_ERROR_MESSAGE} (${requestError.message})`,
+        formatHttpErrorReportMessage(COMPARISON_TOOL_CONFIG_ERROR_MESSAGE, requestError),
         expect.objectContaining({ error: requestError }),
       );
       expect(TestBed.inject(ErrorOverlayService).activeMessage()).toBe(requestError.userMessage);

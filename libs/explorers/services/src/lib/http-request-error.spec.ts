@@ -22,6 +22,7 @@ const mockScope = { setTag: jest.fn(), setTags: jest.fn() };
 
 const GENES_PATH = '/api/v1/genes/ENSG00000130203';
 const GENES_URL = `https://modeladexplorer.org${GENES_PATH}?panel=rna`;
+const OTHER_GENE_URL = 'https://modeladexplorer.org/api/v1/genes/ENSG00000095970';
 
 function buildResponse(status: number, url: string | null = GENES_URL, error: unknown = null) {
   return new HttpErrorResponse({ status, statusText: 'Status Text', url: url ?? undefined, error });
@@ -152,11 +153,26 @@ describe('reportHttpError', () => {
 
     report(error, HttpErrorReportLevelEnum.Error);
 
-    expect(logger.error).toHaveBeenCalledWith(`${OPERATION} (${error.message})`, {
-      error,
-      data: { userMessage: error.userMessage, url: GENES_URL, statusText: 'Status Text' },
-    });
+    expect(logger.error).toHaveBeenCalledWith(
+      `${OPERATION} (HTTP ${HttpStatusCode.ServiceUnavailable} GET)`,
+      {
+        error,
+        data: { userMessage: error.userMessage, url: GENES_URL, statusText: 'Status Text' },
+      },
+    );
     expect(logger.warn).not.toHaveBeenCalled();
+  });
+
+  it('leaves the path out of the message, so failures for different items group together', () => {
+    report(buildError(HttpStatusCode.ServiceUnavailable), HttpErrorReportLevelEnum.Error);
+    report(
+      new HttpRequestError(buildResponse(HttpStatusCode.ServiceUnavailable, OTHER_GENE_URL), 'GET'),
+      HttpErrorReportLevelEnum.Error,
+    );
+
+    const [firstMessage, secondMessage] = logger.error.mock.calls.map(([message]) => message);
+    expect(firstMessage).toBe(secondMessage);
+    expect(firstMessage).not.toContain(GENES_PATH);
   });
 
   it('reports a warning when the call site asks for one', () => {
@@ -165,7 +181,7 @@ describe('reportHttpError', () => {
     report(error, HttpErrorReportLevelEnum.Warn);
 
     expect(logger.warn).toHaveBeenCalledWith(
-      `${OPERATION} (${error.message})`,
+      `${OPERATION} (HTTP ${HttpStatusCode.NotFound} GET)`,
       expect.objectContaining({ error }),
     );
     expect(logger.error).not.toHaveBeenCalled();
@@ -177,7 +193,7 @@ describe('reportHttpError', () => {
     report(error, HttpErrorReportLevelEnum.Error);
 
     expect(logger.warn).toHaveBeenCalledWith(
-      `${OPERATION} (${error.message})`,
+      `${OPERATION} (HTTP ${HttpStatusCode.InternalServerError} GET)`,
       expect.objectContaining({ error }),
     );
     expect(logger.error).not.toHaveBeenCalled();
