@@ -127,11 +127,6 @@ function extractUrlPath(url: string | null): string {
 }
 
 function buildUserMessage(response: HttpErrorResponse): string {
-  if (response.error instanceof ErrorEvent) {
-    // Client-side error (network issue, etc.)
-    return response.error.message || 'A network error occurred. Please check your connection.';
-  }
-
   switch (response.status) {
     case NO_RESPONSE_STATUS:
       return 'Unable to connect to the server. Please check your connection.';

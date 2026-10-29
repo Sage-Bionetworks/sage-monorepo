@@ -97,14 +97,28 @@ describe('HttpRequestError', () => {
     expect(buildError(status).userMessage).toBe(userMessage);
   });
 
-  it("gives users a network error's own message", () => {
-    const networkError = new ErrorEvent('error', { message: 'Failed to fetch' });
+  it('gives users the connection message for a network failure from the fetch backend', () => {
+    const fetchFailure = new TypeError('Failed to fetch');
     const error = new HttpRequestError(
-      buildResponse(NO_RESPONSE_STATUS, GENES_URL, networkError),
+      buildResponse(NO_RESPONSE_STATUS, GENES_URL, fetchFailure),
       'GET',
     );
 
-    expect(error.userMessage).toBe('Failed to fetch');
+    expect(error.userMessage).toBe(
+      'Unable to connect to the server. Please check your connection.',
+    );
+  });
+
+  // Jest's jsdom defines browser-only classes such as ErrorEvent, but Node, where server-side
+  // rendering runs, does not, and referring to one there throws a ReferenceError.
+  it('can be built without browser-only globals, as during server-side rendering', () => {
+    const browserErrorEvent = globalThis.ErrorEvent;
+    Reflect.deleteProperty(globalThis, 'ErrorEvent');
+    try {
+      expect(() => buildError(HttpStatusCode.NotFound)).not.toThrow();
+    } finally {
+      globalThis.ErrorEvent = browserErrorEvent;
+    }
   });
 });
 
