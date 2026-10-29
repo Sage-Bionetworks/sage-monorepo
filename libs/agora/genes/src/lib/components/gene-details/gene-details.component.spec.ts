@@ -8,6 +8,7 @@ import {
 } from '@sagebionetworks/agora/config';
 import { geneMock1, geneMock3 } from '@sagebionetworks/agora/testing';
 import {
+  formatHttpErrorReportMessage,
   ErrorOverlayService,
   HttpRequestError,
   PlatformService,
@@ -129,7 +130,7 @@ describe('GeneDetailsComponent', () => {
     expect(navigateByUrl).not.toHaveBeenCalled();
     expect(component.container.querySelector('.loading-icon')).not.toBeInTheDocument();
     expect(loggerError).toHaveBeenCalledWith(
-      expect.stringContaining(error.message),
+      formatHttpErrorReportMessage('Error loading gene', error),
       expect.objectContaining({ error }),
     );
   });

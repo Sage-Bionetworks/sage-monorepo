@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
 import {
+  formatHttpErrorReportMessage,
   ErrorOverlayService,
   HttpRequestError,
   SourceLogger,
@@ -69,7 +70,7 @@ describe('TermsOfServiceComponent', () => {
     expect(showRequestErrorSpy).toHaveBeenCalledWith(synapseRequestError);
 
     expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining(synapseRequestError.message),
+      formatHttpErrorReportMessage('Error loading terms of service', synapseRequestError),
       expect.objectContaining({ error: synapseRequestError }),
     );
   });

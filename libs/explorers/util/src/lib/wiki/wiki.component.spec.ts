@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpStatusCode, provideHttpClient } from '@angular/c
 import { DomSanitizer } from '@angular/platform-browser';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import {
+  formatHttpErrorReportMessage,
   ErrorOverlayService,
   HttpRequestError,
   SourceLogger,
@@ -123,7 +124,7 @@ describe('WikiComponent', () => {
 
         await waitFor(() => {
           expect(warnSpy).toHaveBeenCalledWith(
-            expect.stringContaining(wikiRequestError.message),
+            formatHttpErrorReportMessage('Error loading wiki', wikiRequestError),
             expect.objectContaining({ error: wikiRequestError }),
           );
         });

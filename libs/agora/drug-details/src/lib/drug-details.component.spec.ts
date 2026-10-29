@@ -9,6 +9,7 @@ import {
 import { drugMock } from '@sagebionetworks/agora/testing';
 import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
 import {
+  formatHttpErrorReportMessage,
   ErrorOverlayService,
   HttpRequestError,
   PlatformService,
@@ -138,7 +139,7 @@ describe('DrugDetailsComponent', () => {
     expect(navigateByUrl).not.toHaveBeenCalled();
     expect(showError).toHaveBeenCalledWith(error.userMessage);
     expect(loggerError).toHaveBeenCalledWith(
-      expect.stringContaining(error.message),
+      formatHttpErrorReportMessage('Error loading drug', error),
       expect.objectContaining({ error }),
     );
     expect(component.container.querySelector('.loading-icon')).not.toBeInTheDocument();

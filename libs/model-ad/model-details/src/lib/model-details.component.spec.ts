@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router, RouterOutlet } from '@angular/router';
 import { PANEL_ROUTE_PARAMS } from '@sagebionetworks/explorers/constants';
 import {
+  formatHttpErrorReportMessage,
   ErrorOverlayService,
   HttpRequestError,
   PlatformService,
@@ -254,7 +255,7 @@ describe('ModelDetailsComponent', () => {
       expect(screen.queryByText('Not found')).not.toBeInTheDocument();
       expect(showError).toHaveBeenCalledWith(error.userMessage);
       expect(loggerError).toHaveBeenCalledWith(
-        expect.stringContaining(error.message),
+        formatHttpErrorReportMessage('Error loading model', error),
         expect.objectContaining({ error: expect.any(HttpRequestError) }),
       );
       expect(document.querySelector('.loading-icon')).not.toBeInTheDocument();

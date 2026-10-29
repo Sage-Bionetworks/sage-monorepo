@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpStatusCode, provideHttpClient } from '@angular/c
 import { provideRouter } from '@angular/router';
 import { SearchResult, SearchResultIcon } from '@sagebionetworks/explorers/models';
 import {
+  formatHttpErrorReportMessage,
   HttpRequestError,
   SourceLogger,
   SvgIconService,
@@ -155,7 +156,7 @@ describe('SearchInputComponent', () => {
 
     await screen.findByText('An unknown error occurred, please try again.');
     expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining(searchRequestError.message),
+      formatHttpErrorReportMessage('Error fetching search results', searchRequestError),
       expect.objectContaining({ error: searchRequestError }),
     );
   });

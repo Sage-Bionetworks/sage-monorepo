@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, inject, InjectionToken } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {
+  formatHttpErrorReportMessage,
   ErrorOverlayService,
   HttpRequestError,
   PlatformService,
@@ -231,7 +232,7 @@ describe('individualExpressionDetailsFromRoute', () => {
     expect(screen.queryByText('Not found')).not.toBeInTheDocument();
     expect(showError).toHaveBeenCalledWith(error.userMessage);
     expect(loggerError).toHaveBeenCalledWith(
-      expect.stringContaining(error.message),
+      formatHttpErrorReportMessage('Error loading individual expression data', error),
       expect.objectContaining({ error: expect.any(HttpRequestError) }),
     );
   });
