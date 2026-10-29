@@ -38,12 +38,15 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           # Not triggering_actor: a re-run would swap in the re-runner and skip the approval.
           ACTOR: ${{ github.actor }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
         run: |
           author_permission=none
           actor_permission=none
-          if [[ "${GITHUB_EVENT_NAME}" == "pull_request_target" ]]; then
-            author_permission=$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${PR_AUTHOR}/permission" --jq .permission) || author_permission=none
-            actor_permission=$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${ACTOR}/permission" --jq .permission) || actor_permission=none
+          if [[ "${GITHUB_EVENT_NAME}" == "pull_request_target" && "${HEAD_REPO}" != "${GITHUB_REPOSITORY}" ]]; then
+            author_permission=$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${PR_AUTHOR}/permission" --jq .permission) \
+              || { echo "::warning::Could not read permission for ${PR_AUTHOR}; falling back to approval"; author_permission=none; }
+            actor_permission=$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${ACTOR}/permission" --jq .permission) \
+              || { echo "::warning::Could not read permission for ${ACTOR}; falling back to approval"; actor_permission=none; }
           fi
           echo "PR author ${PR_AUTHOR}: ${author_permission}, started by ${ACTOR}: ${actor_permission}"
           if [[ "${author_permission}" =~ ^(admin|write)$ && "${actor_permission}" =~ ^(admin|write)$ ]]; then
