@@ -78,6 +78,27 @@ class AlternativeCache {
     return this.data[key] ?? undefined;
   }
 
+  /**
+   * Caches the load's promise rather than its result, so concurrent misses on one key share a
+   * single load instead of each holding its own copy of a large data set in memory. A rejected
+   * load is evicted so the next request retries it.
+   */
+  getOrLoad<T>(key: string, load: () => Promise<T>): Promise<T> {
+    const cached: Promise<T> | undefined = this.get(key);
+    if (cached) {
+      return cached;
+    }
+
+    const pending = load();
+    this.set(key, pending);
+    pending.catch(() => {
+      if (this.data[key] === pending) {
+        delete this.data[key];
+      }
+    });
+    return pending;
+  }
+
   clear() {
     this.data = {};
   }

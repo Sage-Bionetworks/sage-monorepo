@@ -1,10 +1,6 @@
 @use 'explorers/styles/src/mixins' as mixins;
 
 .individual-expression-details {
-  &.loading {
-    display: flex;
-  }
-
   #loading {
     @include mixins.page-loading;
   }

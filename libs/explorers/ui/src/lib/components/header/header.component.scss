@@ -2,7 +2,7 @@
 @use 'explorers/styles/src/variables' as vars;
 
 #header {
-  padding: var(--header-padding-y, 10px) var(--header-padding-x, 80px);
+  padding: var(--header-padding-y) var(--header-padding-x);
   min-height: var(--header-height);
   display: flex;
   justify-content: center;
@@ -25,7 +25,7 @@
 .header-logo {
   display: flex;
   justify-content: flex-start;
-  height: 64px;
+  height: var(--header-logo-height);
 }
 
 .header-nav {
