@@ -1,29 +1,12 @@
-import mongoose from 'mongoose';
+import { DataRelease, formatDataRelease, isSameDataRelease } from './data-release';
 
 /** Matches the Spring APIs' cache invalidation poll in libs/explorers/api-cache-invalidation. */
 export const CACHE_INVALIDATION_POLL_DELAY_MS = 60_000;
-
-const DATA_VERSION_COLLECTION = 'dataversion';
-
-export interface DataRelease {
-  /** Synapse ID of the data file, e.g. `syn13363290`. */
-  dataFile: string;
-  /** Synapse version number of the data file. */
-  dataVersion: string;
-}
 
 export interface CacheInvalidationOptions {
   getCurrentDataRelease: () => Promise<DataRelease | null>;
   clearCaches: () => void;
   pollDelayMs?: number;
-}
-
-export function formatDataRelease({ dataFile, dataVersion }: DataRelease): string {
-  return `${dataFile}-v${dataVersion}`;
-}
-
-function isSameDataRelease(first: DataRelease, second: DataRelease): boolean {
-  return first.dataFile === second.dataFile && first.dataVersion === second.dataVersion;
 }
 
 /**
@@ -95,18 +78,4 @@ export function startCacheInvalidation({
     isStopped = true;
     clearTimeout(nextPoll);
   };
-}
-
-/**
- * Reads the current release from the `dataversion` collection. The loader may store the version as
- * a number, so both fields are compared as strings.
- */
-export async function getAgoraDataRelease(): Promise<DataRelease | null> {
-  const document = await mongoose.connection.db
-    ?.collection(DATA_VERSION_COLLECTION)
-    .findOne({}, { projection: { data_file: 1, data_version: 1 } });
-  if (document?.['data_file'] == null || document?.['data_version'] == null) {
-    return null;
-  }
-  return { dataFile: String(document['data_file']), dataVersion: String(document['data_version']) };
 }

@@ -1,9 +1,5 @@
-import {
-  CACHE_INVALIDATION_POLL_DELAY_MS,
-  DataRelease,
-  formatDataRelease,
-  startCacheInvalidation,
-} from './cache-invalidation';
+import { CACHE_INVALIDATION_POLL_DELAY_MS, startCacheInvalidation } from './cache-invalidation';
+import { DataRelease } from './data-release';
 
 const currentRelease: DataRelease = { dataFile: 'syn13363290', dataVersion: '117' };
 const nextVersion: DataRelease = { dataFile: 'syn13363290', dataVersion: '118' };
@@ -140,11 +136,5 @@ describe('startCacheInvalidation', () => {
     await runNextPolls(3);
 
     expect(getCurrentDataRelease).toHaveBeenCalledTimes(1);
-  });
-});
-
-describe('formatDataRelease', () => {
-  it('describes a release the way the footer shows it', () => {
-    expect(formatDataRelease(currentRelease)).toBe('syn13363290-v117');
   });
 });

@@ -57,6 +57,7 @@
       "@sagebionetworks/explorers/config": ["libs/explorers/config/src/index.ts"],
       "@sagebionetworks/explorers/config/server": ["libs/explorers/config/src/server.ts"],
       "@sagebionetworks/explorers/constants": ["libs/explorers/constants/src/index.ts"],
+      "@sagebionetworks/explorers/constants/node": ["libs/explorers/constants/src/node.ts"],
       "@sagebionetworks/explorers/models": ["libs/explorers/models/src/index.ts"],
       "@sagebionetworks/explorers/sentry": ["libs/explorers/sentry/src/index.ts"],
       "@sagebionetworks/explorers/sentry/node": ["libs/explorers/sentry/src/node.ts"],
