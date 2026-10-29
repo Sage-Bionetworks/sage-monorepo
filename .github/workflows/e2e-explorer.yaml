@@ -56,11 +56,10 @@ jobs:
           fi
   run-explorer-e2e-tests:
     needs: [authorize, validate-explorer-input]
-    # The explorer and explorer-pr environments should contain the same secrets. However, the explorer
-    # environment should be configured to run workflows automatically and should only be used when
-    # the workflow is running against trusted code. The explorer-pr environment should be configured
-    # to require an authorized user's approval to run the workflow, so should be used when running
-    # against untrusted code, e.g. PRs from forked repos.
+    # The explorer and explorer-pr environments should contain the same secrets. The explorer
+    # environment runs automatically and is used for trusted code: pushes, same-repo PRs, and fork
+    # PRs whose author and actor both have write access (see the authorize job). The explorer-pr
+    # environment requires approval and is used for all other fork PRs.
     environment: ${{ github.event_name == 'pull_request_target' &&
       github.event.pull_request.head.repo.full_name != github.repository &&
       needs.authorize.outputs.authorized != 'true' &&
