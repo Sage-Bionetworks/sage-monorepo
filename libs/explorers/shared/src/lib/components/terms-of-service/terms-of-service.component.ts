@@ -16,7 +16,6 @@ import {
   HttpErrorReportLevelEnum,
   LoggerService,
   PlatformService,
-  reportHttpError,
   SynapseApiService,
 } from '@sagebionetworks/explorers/services';
 import { HeroComponent } from '@sagebionetworks/explorers/ui';
@@ -65,11 +64,10 @@ export class TermsOfServiceComponent implements OnInit {
             this.content = markdown;
           },
           error: (error) => {
-            reportHttpError(this.logger, 'Error loading terms of service', {
+            this.errorOverlayService.reportAndShow(this.logger, 'Error loading terms of service', {
               error,
               level: HttpErrorReportLevelEnum.Warn,
             });
-            this.errorOverlayService.showRequestError(error);
           },
         });
     }

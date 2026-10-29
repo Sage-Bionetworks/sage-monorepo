@@ -9,7 +9,6 @@ import {
   HttpErrorReportLevelEnum,
   LoggerService,
   PlatformService,
-  reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { catchError, finalize, map, Observable, of } from 'rxjs';
 import { TeamListComponent } from './team-list/team-list.component';
@@ -46,11 +45,10 @@ export class TeamsComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
         map((res: TeamsList) => res.items || []),
         catchError((error) => {
-          reportHttpError(this.logger, 'Error loading teams', {
+          this.errorOverlayService.reportAndShow(this.logger, 'Error loading teams', {
             error,
             level: HttpErrorReportLevelEnum.Error,
           });
-          this.errorOverlayService.showRequestError(error);
           return of([]);
         }),
         finalize(() => this.helperService.setLoading(false)),

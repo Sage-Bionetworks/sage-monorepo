@@ -631,8 +631,11 @@ export class ComparisonToolService<T> {
     // in place of a loading skeleton that never ends.
     const config$ = options.config$.pipe(
       catchError((error) => {
-        this.reportFailure(COMPARISON_TOOL_CONFIG_ERROR_MESSAGE, error);
-        this.errorOverlayService.showRequestError(error);
+        this.errorOverlayService.reportAndShow(this.logger, COMPARISON_TOOL_CONFIG_ERROR_MESSAGE, {
+          error,
+          level: HttpErrorReportLevelEnum.Error,
+          tags: this.failureTags(),
+        });
         return EMPTY;
       }),
     );
@@ -1436,11 +1439,20 @@ export class ComparisonToolService<T> {
       .subscribe(applyResult);
   }
 
-  /**
-   * Reports a failed fetch, tagged with the comparison tool page and, when the tool has dropdowns,
-   * the selected view, so Sentry can filter failures by tool and view.
-   */
+  /** Reports a failed fetch that the tool recovers from, with `failureTags`. */
   private reportFailure(errorMessage: string, error: unknown): void {
+    reportHttpError(this.logger, errorMessage, {
+      error,
+      level: HttpErrorReportLevelEnum.Error,
+      tags: this.failureTags(),
+    });
+  }
+
+  /**
+   * The tags a failed fetch is reported with: the comparison tool page and, when the tool has
+   * dropdowns, the selected view, so Sentry can filter failures by tool and view.
+   */
+  private failureTags(): Record<string, string> {
     const tags: Record<string, string> = {};
     // Every config of a comparison tool belongs to the same page.
     const page = this.configsSignal()[0]?.page;
@@ -1453,11 +1465,7 @@ export class ComparisonToolService<T> {
         DROPDOWN_SELECTION_TAG_SEPARATOR,
       );
     }
-    reportHttpError(this.logger, errorMessage, {
-      error,
-      level: HttpErrorReportLevelEnum.Error,
-      tags,
-    });
+    return tags;
   }
 
   /**

@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { getAppUpdateMessage, getDataUpdateMessage } from '@sagebionetworks/explorers/constants';
-import { getUserMessage } from './http-request-error';
+import { getUserMessage, HttpErrorReportContext, reportHttpError } from './http-request-error';
+import { SourceLogger } from './logger.service';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorOverlayService {
@@ -23,6 +24,15 @@ export class ErrorOverlayService {
   /** Shows the overlay for a caught error, with its message for users. */
   showRequestError(error: unknown) {
     this.showError(getUserMessage(error));
+  }
+
+  /**
+   * Reports a failed request through `reportHttpError` and shows the overlay, for a failure that
+   * leaves the page without its content.
+   */
+  reportAndShow(logger: SourceLogger, operation: string, context: HttpErrorReportContext): void {
+    reportHttpError(logger, operation, context);
+    this.showRequestError(context.error);
   }
 
   showError(message: string) {

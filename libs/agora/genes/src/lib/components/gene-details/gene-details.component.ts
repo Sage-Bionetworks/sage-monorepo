@@ -12,7 +12,6 @@ import {
   LoggerService,
   NotFoundService,
   PlatformService,
-  reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
@@ -103,11 +102,10 @@ export class GeneDetailsComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          reportHttpError(this.logger, 'Error loading gene', {
+          this.errorOverlayService.reportAndShow(this.logger, 'Error loading gene', {
             error,
             level: HttpErrorReportLevelEnum.Error,
           });
-          this.errorOverlayService.showRequestError(error);
           this.isLoading = false;
         },
       });

@@ -11,7 +11,6 @@ import {
   LoggerService,
   NotFoundService,
   PlatformService,
-  reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent, routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import {
@@ -122,11 +121,10 @@ export class ModelDetailsComponent implements OnInit {
           });
           return EMPTY;
         }
-        reportHttpError(this.logger, 'Error loading model', {
+        this.errorOverlayService.reportAndShow(this.logger, 'Error loading model', {
           error,
           level: HttpErrorReportLevelEnum.Error,
         });
-        this.errorOverlayService.showRequestError(error);
         this.isLoading = false;
         return EMPTY;
       }),

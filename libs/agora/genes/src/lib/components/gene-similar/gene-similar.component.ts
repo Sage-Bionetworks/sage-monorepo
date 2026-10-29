@@ -13,7 +13,6 @@ import {
   HttpErrorReportLevelEnum,
   LoggerService,
   NotFoundService,
-  reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { GeneTableComponent } from '../gene-table/gene-table.component';
@@ -96,11 +95,10 @@ export class GeneSimilarComponent implements OnInit {
               }
             },
             error: (error) => {
-              reportHttpError(this.logger, 'Error loading gene', {
+              this.errorOverlayService.reportAndShow(this.logger, 'Error loading gene', {
                 error,
                 level: HttpErrorReportLevelEnum.Error,
               });
-              this.errorOverlayService.showRequestError(error);
               this.helperService.setLoading(false);
             },
           });
@@ -146,11 +144,10 @@ export class GeneSimilarComponent implements OnInit {
           this.helperService.setLoading(false);
         },
         error: (error) => {
-          reportHttpError(this.logger, 'Error loading similar genes', {
+          this.errorOverlayService.reportAndShow(this.logger, 'Error loading similar genes', {
             error,
             level: HttpErrorReportLevelEnum.Error,
           });
-          this.errorOverlayService.showRequestError(error);
           this.helperService.setLoading(false);
         },
       });

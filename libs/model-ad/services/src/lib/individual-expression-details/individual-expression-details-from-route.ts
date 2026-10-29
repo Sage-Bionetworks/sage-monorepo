@@ -8,7 +8,6 @@ import {
   LoggerService,
   NotFoundService,
   PlatformService,
-  reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import { ModelIdentifierType } from '@sagebionetworks/model-ad/api-client';
@@ -114,11 +113,10 @@ export function individualExpressionDetailsFromRoute<T>({
             query: { [pathParam]: id, ...query },
           });
         }
-        reportHttpError(logger, 'Error loading individual expression data', {
+        errorOverlayService.reportAndShow(logger, 'Error loading individual expression data', {
           error,
           level: HttpErrorReportLevelEnum.Error,
         });
-        errorOverlayService.showRequestError(error);
         isLoading.set(false);
         return EMPTY;
       }),

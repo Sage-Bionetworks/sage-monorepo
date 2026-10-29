@@ -35,7 +35,6 @@ import {
   HttpErrorReportLevelEnum,
   LoggerService,
   provideComparisonToolService,
-  reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { cloneDeep } from 'lodash';
 import { FilterService, MessageService, SortEvent } from 'primeng/api';
@@ -313,11 +312,14 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
           }
         },
         error: (error) => {
-          reportHttpError(this.logger, 'Error loading genes and score distribution', {
-            error,
-            level: HttpErrorReportLevelEnum.Error,
-          });
-          this.errorOverlayService.showRequestError(error);
+          this.errorOverlayService.reportAndShow(
+            this.logger,
+            'Error loading genes and score distribution',
+            {
+              error,
+              level: HttpErrorReportLevelEnum.Error,
+            },
+          );
           this.isLoading = false;
         },
       });

@@ -13,7 +13,6 @@ import {
   LoggerService,
   NotFoundService,
   PlatformService,
-  reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
@@ -107,11 +106,10 @@ export class DrugDetailsComponent implements OnInit {
               this.notFoundService.redirectToNotFound(this.logger, 'drug', { chemblId });
               return;
             }
-            reportHttpError(this.logger, 'Error loading drug', {
+            this.errorOverlayService.reportAndShow(this.logger, 'Error loading drug', {
               error,
               level: HttpErrorReportLevelEnum.Error,
             });
-            this.errorOverlayService.showRequestError(error);
             this.isLoading = false;
           },
         });
