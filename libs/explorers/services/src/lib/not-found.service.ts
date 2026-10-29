@@ -108,7 +108,8 @@ export class NotFoundService {
   }
 
   private documentLoadType(): NavigationTimingType | undefined {
-    const [entry] = this.document.defaultView?.performance?.getEntriesByType('navigation') ?? [];
+    // Every browser implements getEntriesByType, but jsdom, which runs the Jest specs, does not.
+    const [entry] = this.document.defaultView?.performance?.getEntriesByType?.('navigation') ?? [];
     return (entry as PerformanceNavigationTiming | undefined)?.type;
   }
 
