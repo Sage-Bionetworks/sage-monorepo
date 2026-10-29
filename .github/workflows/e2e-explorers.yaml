@@ -5,7 +5,7 @@ on:
   # Warning: using the pull_request_target event without the cautionary measures may allow
   # unauthorized GitHub users to open a “pwn request” and exfiltrate secrets.
   pull_request_target:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
 
 permissions:
   contents: read
