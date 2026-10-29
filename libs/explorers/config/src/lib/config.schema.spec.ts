@@ -22,7 +22,7 @@ describe('SentryTracesSampleRateSchema', () => {
     TestBed.configureTestingModule({ providers: [{ provide: PLATFORM_ID, useValue: 'server' }] });
   });
 
-  it('turns tracing off when the config file leaves the rate unset', () => {
+  it('turns tracing off when the config file leaves the sample rate unset', () => {
     expect(SentryTracesSampleRateSchema.parse(undefined)).toBeNull();
     expect(SentryTracesSampleRateSchema.parse(null)).toBeNull();
   });
@@ -32,13 +32,13 @@ describe('SentryTracesSampleRateSchema', () => {
     expect(parseSampleRateFromEnvironment('  ')).toBeNull();
   });
 
-  it('reads a rate from the environment variable', () => {
+  it('reads a sample rate from the environment variable', () => {
     expect(parseSampleRateFromEnvironment('0.1')).toBe(0.1);
     expect(parseSampleRateFromEnvironment('.5')).toBe(0.5);
     expect(parseSampleRateFromEnvironment('1')).toBe(1);
   });
 
-  it('rejects a rate that is not a number from 0 to 1', () => {
+  it('rejects a sample rate that is not from 0.0 to 1.0', () => {
     for (const invalidRate of ['abc', '10', '-0.1']) {
       expect(() => parseSampleRateFromEnvironment(invalidRate)).toThrow();
     }
