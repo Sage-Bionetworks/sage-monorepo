@@ -92,6 +92,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolPage.MarmosetModelOverview,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget) =>

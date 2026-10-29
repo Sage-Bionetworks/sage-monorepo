@@ -97,6 +97,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolConfigPage.NominatedDrugs,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget) =>

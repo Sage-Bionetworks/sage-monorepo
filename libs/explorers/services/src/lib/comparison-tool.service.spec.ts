@@ -146,6 +146,7 @@ describe('ComparisonToolService', () => {
   ) => {
     paramsSubject = new BehaviorSubject<ComparisonToolUrlParams>(options.initialParams ?? {});
     injectService().connect({
+      page: configs[0]?.page,
       config$: of(configs),
       queryParams$: paramsSubject.asObservable(),
       pinAllFetch: options.pinAllFetch ?? noMatchingRows,
@@ -3138,6 +3139,7 @@ describe('ComparisonToolService', () => {
 
         paramsSubject = new BehaviorSubject<ComparisonToolUrlParams>({});
         service.connect({
+          page: mockComparisonToolDataConfig[0].page,
           config$: of(mockComparisonToolDataConfig),
           queryParams$: paramsSubject.asObservable(),
           pinAllFetch: noMatchingRows,
@@ -3159,6 +3161,7 @@ describe('ComparisonToolService', () => {
 
         paramsSubject = new BehaviorSubject<ComparisonToolUrlParams>({});
         service.connect({
+          page: mockComparisonToolDataConfig[0].page,
           config$: of(mockComparisonToolDataConfig),
           queryParams$: paramsSubject.asObservable(),
           pinAllFetch: noMatchingRows,
@@ -3963,9 +3966,12 @@ describe('ComparisonToolService', () => {
       },
     );
 
-    it('reports a failed config request and shows the error overlay', () => {
+    it('reports a failed config request, tagged with its page, and shows the error overlay', () => {
+      const page = mockComparisonToolDataConfig[0].page;
       const loggerErrorSpy = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+      const setTagsSpy = jest.spyOn(Sentry.Scope.prototype, 'setTags');
       injectService().connect({
+        page,
         config$: failedRequest(),
         queryParams$: of({}),
         pinAllFetch: noMatchingRows,
@@ -3975,6 +3981,7 @@ describe('ComparisonToolService', () => {
         formatHttpErrorReportMessage(COMPARISON_TOOL_CONFIG_ERROR_MESSAGE, requestError),
         expect.objectContaining({ error: requestError }),
       );
+      expect(setTagsSpy).toHaveBeenCalledWith({ [ComparisonToolSentryTagEnum.Page]: page });
       expect(TestBed.inject(ErrorOverlayService).activeMessage()).toBe(requestError.userMessage);
       expect(service.isInitialized()).toBe(false);
     });

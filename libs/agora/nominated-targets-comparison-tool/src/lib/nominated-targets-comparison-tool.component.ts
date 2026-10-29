@@ -100,6 +100,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolConfigPage.NominatedTargets,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget) =>

@@ -204,6 +204,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolPage.DifferentialExpression,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget, prebudgetedParentIds) =>

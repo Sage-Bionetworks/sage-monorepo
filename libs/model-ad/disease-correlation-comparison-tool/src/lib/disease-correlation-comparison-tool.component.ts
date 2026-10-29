@@ -135,6 +135,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolPage.DiseaseCorrelation,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget) =>

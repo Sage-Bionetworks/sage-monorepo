@@ -95,6 +95,7 @@ export class MouseModelOverviewComparisonToolComponent implements OnInit, OnDest
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolPage.MouseModelOverview,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget) =>

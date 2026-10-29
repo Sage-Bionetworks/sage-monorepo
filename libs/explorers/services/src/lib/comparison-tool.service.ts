@@ -23,6 +23,7 @@ import {
   ComparisonToolConfigFilter,
   ComparisonToolFilter,
   ComparisonToolNouns,
+  ComparisonToolPage,
   ComparisonToolQuery,
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
@@ -256,6 +257,7 @@ export class ComparisonToolService<T> {
   // Connect-Time Dependencies
   private pinAllFetch?: PinAllFetch<T>;
   private initialSelection: string[] | undefined;
+  private page: ComparisonToolPage | undefined;
 
   // URL Sync State
   // What the URL holds as far as this service knows, to tell its own URL changes from external ones.
@@ -601,6 +603,8 @@ export class ComparisonToolService<T> {
 
   // Lifecycle
   connect(options: {
+    /** The page this tool's configs are requested for, to tag its failure reports with. */
+    page: ComparisonToolPage | undefined;
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
     pinAllFetch: PinAllFetch<T>;
@@ -608,6 +612,7 @@ export class ComparisonToolService<T> {
   }): void {
     this.coordinatorService.setActive(this);
     this.pinAllFetch = options.pinAllFetch;
+    this.page = options.page;
 
     if (this.isInitialized()) {
       // Re-entering an already-initialized service (navigating back to this CT)
@@ -1454,10 +1459,9 @@ export class ComparisonToolService<T> {
    */
   private failureTags(): Record<string, string> {
     const tags: Record<string, string> = {};
-    // Every config of a comparison tool belongs to the same page.
-    const page = this.configsSignal()[0]?.page;
-    if (page) {
-      tags[ComparisonToolSentryTagEnum.Page] = page;
+    // Taken from connect rather than the configs, which are still empty when their request fails.
+    if (this.page) {
+      tags[ComparisonToolSentryTagEnum.Page] = this.page;
     }
     const dropdownSelection = this.dropdownSelection();
     if (dropdownSelection.length > 0) {
