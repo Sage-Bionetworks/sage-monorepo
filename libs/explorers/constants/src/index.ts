@@ -5,4 +5,5 @@ export * from './lib/data-version';
 export * from './lib/debounce-duration';
 export * from './lib/injection-tokens';
 export * from './lib/route-params';
+export * from './lib/route-paths';
 export * from './lib/toasts';

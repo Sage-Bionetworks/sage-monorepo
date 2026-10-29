@@ -1,18 +1,22 @@
 import { DestroyRef, inject, Signal, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import {
   ErrorOverlayService,
   HttpErrorReportLevelEnum,
   isNotFoundError,
   LoggerService,
+  NotFoundService,
   PlatformService,
   reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import { ModelIdentifierType } from '@sagebionetworks/model-ad/api-client';
-import { QUERY_PARAMS, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { QUERY_PARAMS } from '@sagebionetworks/model-ad/config';
 import { catchError, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
+
+/** The item type a not-found report names, for both the gene and protein details pages. */
+export const INDIVIDUAL_EXPRESSION_ITEM_TYPE = 'individual expression data';
 
 export interface IndividualExpressionDetailsQuery {
   tissue: string;
@@ -39,10 +43,10 @@ export function individualExpressionDetailsFromRoute<T>({
   fetchData,
 }: IndividualExpressionDetailsFromRouteOptions<T>): IndividualExpressionDetailsState<T> {
   const route = inject(ActivatedRoute);
-  const router = inject(Router);
   const logger = inject(LoggerService).forSource(source);
   const platformService = inject(PlatformService);
   const errorOverlayService = inject(ErrorOverlayService);
+  const notFoundService = inject(NotFoundService);
   const destroyRef = inject(DestroyRef);
 
   const isLoading = signal(true);
@@ -58,11 +62,13 @@ export function individualExpressionDetailsFromRoute<T>({
   };
 
   const redirectToNotFound = (
-    message: string,
+    reason: string,
     logData: Record<string, unknown>,
   ): Observable<never> => {
-    logger.log(`${message}, redirecting`, logData);
-    router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+    notFoundService.redirectToNotFound(logger, INDIVIDUAL_EXPRESSION_ITEM_TYPE, {
+      reason,
+      ...logData,
+    });
     return EMPTY;
   };
 

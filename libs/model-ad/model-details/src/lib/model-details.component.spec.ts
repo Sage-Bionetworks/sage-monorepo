@@ -131,6 +131,7 @@ describe('ModelDetailsComponent', () => {
     const load1Mock = { ...mouseModelMock, name: 'LOAD1' };
     const load1Route = `/${ROUTE_PATHS.MODELS}/${load1Mock.name}?modelOrganism=mouse`;
     const unknownModelRoute = `/${ROUTE_PATHS.MODELS}/Unknown?modelOrganism=mouse`;
+    const initialModelRoute = `/${ROUTE_PATHS.MODELS}/${marmosetModelMock.name}?modelOrganism=marmoset`;
     const unavailableModelName = 'Unavailable';
     const unavailableModelRoute = `/${ROUTE_PATHS.MODELS}/${unavailableModelName}?modelOrganism=mouse`;
 
@@ -171,7 +172,7 @@ describe('ModelDetailsComponent', () => {
           },
           { path: ROUTE_PATHS.NOT_FOUND, component: NotFoundStubComponent },
         ],
-        initialRoute: `/${ROUTE_PATHS.MODELS}/${marmosetModelMock.name}?modelOrganism=marmoset`,
+        initialRoute: initialModelRoute,
         providers: [
           { provide: ModelService, useValue: { getModelByName } },
           { provide: PlatformService, useValue: { isBrowser: true, isServer: false } },
@@ -222,6 +223,19 @@ describe('ModelDetailsComponent', () => {
       await navigate(unknownModelRoute);
 
       expect(screen.getByText('Not found')).toBeInTheDocument();
+    });
+
+    it('should report a data-quality warning when a link inside the app leads to a missing model', async () => {
+      const loggerWarn = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+      const { navigate } = await setupWithRouter();
+
+      await navigate(unknownModelRoute);
+
+      expect(loggerWarn).toHaveBeenCalledWith('Linked model not found', {
+        modelName: 'Unknown',
+        modelOrganism: ModelOrganism.Mouse,
+        sourcePage: initialModelRoute,
+      });
     });
 
     it('should show the error overlay and report, without redirecting, when the request fails otherwise', async () => {

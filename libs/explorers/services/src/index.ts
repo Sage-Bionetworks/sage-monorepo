@@ -18,6 +18,7 @@ export * from './lib/http-request-error';
 export * from './lib/legacy-comparison-tool-url.guard';
 export * from './lib/logger.service';
 export * from './lib/meta-tag.service';
+export * from './lib/not-found.service';
 export * from './lib/error-overlay.service';
 export * from './lib/toast-notification.service';
 export * from './lib/platform.service';

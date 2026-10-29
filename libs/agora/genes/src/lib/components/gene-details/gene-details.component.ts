@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { QUERY_PARAMS, ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
@@ -10,6 +10,7 @@ import {
   HelperService,
   HttpErrorReportLevelEnum,
   LoggerService,
+  NotFoundService,
   PlatformService,
   reportHttpError,
 } from '@sagebionetworks/explorers/services';
@@ -44,12 +45,12 @@ import { getPanels, getPanelsWithDisabledState } from './gene-details-panels';
 })
 export class GeneDetailsComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
   private readonly location = inject(Location);
   private readonly helperService = inject(HelperService);
   private readonly geneService = inject(GeneService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
+  private readonly notFoundService = inject(NotFoundService);
   private readonly logger = inject(LoggerService).forSource('GeneDetailsComponent');
   private readonly errorOverlayService = inject(ErrorOverlayService);
 
@@ -93,8 +94,7 @@ export class GeneDetailsComponent implements OnInit {
         next: (gene) => {
           // the API answers an unknown gene with an empty body rather than a 404
           if (!gene) {
-            this.logger.log('Gene not found, redirecting', { geneId });
-            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+            this.notFoundService.redirectToNotFound(this.logger, 'gene', { geneId });
             return;
           }
           this.gene = gene;

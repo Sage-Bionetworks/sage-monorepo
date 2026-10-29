@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
 import {
   ErrorOverlayService,
@@ -9,6 +9,7 @@ import {
   HttpErrorReportLevelEnum,
   isNotFoundError,
   LoggerService,
+  NotFoundService,
   PlatformService,
   reportHttpError,
 } from '@sagebionetworks/explorers/services';
@@ -46,13 +47,13 @@ import {
 })
 export class ModelDetailsComponent implements OnInit {
   route = inject(ActivatedRoute);
-  router = inject(Router);
   location = inject(Location);
   helperService = inject(HelperService);
   modelService = inject(ModelService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
   private readonly errorOverlayService = inject(ErrorOverlayService);
+  private readonly notFoundService = inject(NotFoundService);
   private readonly logger = inject(LoggerService).forSource('ModelDetailsComponent');
 
   isLoading = true;
@@ -115,11 +116,10 @@ export class ModelDetailsComponent implements OnInit {
     return this.modelService.getModelByName(modelOrganism, modelName).pipe(
       catchError((error) => {
         if (isNotFoundError(error)) {
-          this.logger.log('model not found, redirecting', {
+          this.notFoundService.redirectToNotFound(this.logger, 'model', {
             modelName,
             modelOrganism,
           });
-          this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           return EMPTY;
         }
         reportHttpError(this.logger, 'Error loading model', {

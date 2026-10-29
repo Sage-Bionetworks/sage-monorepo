@@ -6,13 +6,13 @@ import {
   DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
   DEFAULT_SYNAPSE_WIKI_OWNER_ID,
   ROUTE_PARAMS,
-  ROUTE_PATHS,
 } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import {
   ErrorOverlayService,
   HttpErrorReportLevelEnum,
   LoggerService,
+  NotFoundService,
   reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/explorers/util';
@@ -33,6 +33,7 @@ interface TableColumn {
 })
 export class GeneSimilarComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly notFoundService = inject(NotFoundService);
   private readonly logger = inject(LoggerService).forSource('GeneSimilarComponent');
   private readonly errorOverlayService = inject(ErrorOverlayService);
 
@@ -88,8 +89,7 @@ export class GeneSimilarComponent implements OnInit {
             next: (gene: Gene | null) => {
               if (!gene) {
                 this.helperService.setLoading(false);
-                this.logger.log('Gene not found, redirecting', { geneId });
-                this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+                this.notFoundService.redirectToNotFound(this.logger, 'gene', { geneId });
               } else {
                 this.gene = gene;
                 this.init();
