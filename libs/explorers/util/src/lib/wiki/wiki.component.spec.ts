@@ -125,7 +125,8 @@ describe('WikiComponent', () => {
         await waitFor(() => {
           expect(warnSpy).toHaveBeenCalledWith(
             formatHttpErrorReportMessage('Error loading wiki', wikiRequestError),
-            expect.objectContaining({ error: wikiRequestError }),
+            expect.any(Object),
+            wikiRequestError,
           );
         });
         expect(showRequestErrorSpy).toHaveBeenCalledWith(wikiRequestError);

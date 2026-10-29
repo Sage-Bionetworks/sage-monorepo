@@ -157,7 +157,8 @@ describe('SearchInputComponent', () => {
     await screen.findByText('An unknown error occurred, please try again.');
     expect(warnSpy).toHaveBeenCalledWith(
       formatHttpErrorReportMessage('Error fetching search results', searchRequestError),
-      expect.objectContaining({ error: searchRequestError }),
+      expect.any(Object),
+      searchRequestError,
     );
   });
 

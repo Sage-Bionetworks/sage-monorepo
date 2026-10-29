@@ -71,7 +71,8 @@ describe('TermsOfServiceComponent', () => {
 
     expect(warnSpy).toHaveBeenCalledWith(
       formatHttpErrorReportMessage('Error loading terms of service', synapseRequestError),
-      expect.objectContaining({ error: synapseRequestError }),
+      expect.any(Object),
+      synapseRequestError,
     );
   });
 

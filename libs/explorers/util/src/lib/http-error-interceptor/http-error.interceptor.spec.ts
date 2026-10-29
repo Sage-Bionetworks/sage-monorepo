@@ -118,7 +118,8 @@ describe('httpErrorInterceptor', () => {
 
       expect(loggerWarn).toHaveBeenCalledWith(
         formatHttpErrorReportMessage(UNREPORTED_HTTP_ERROR_MESSAGE, thrown as HttpRequestError),
-        expect.objectContaining({ error: thrown }),
+        expect.any(Object),
+        thrown,
       );
     });
 

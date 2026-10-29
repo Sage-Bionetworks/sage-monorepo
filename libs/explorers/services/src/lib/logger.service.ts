@@ -44,13 +44,12 @@ export class SourceLogger implements Logger {
 
   /**
    * Log a warning and send it to Sentry as a warning-level event, with `data` attached as extra
-   * context. Use for unexpected conditions the caller recovers from but that should still be
-   * investigated.
+   * context and a caught `error`, if any, attached the way `error` attaches one. Use for
+   * unexpected conditions the caller recovers from but that should still be investigated.
    */
-  warn(message: string, data?: Record<string, unknown>) {
-    const title = sourceTitle(this.source, message);
-    console.warn('[WARN]', title, ...definedValues(data));
-    Sentry.captureMessage(title, this.captureContext('warning', message, data));
+  warn(message: string, data?: Record<string, unknown>, error?: unknown) {
+    console.warn('[WARN]', sourceTitle(this.source, message), ...definedValues(error, data));
+    this.capture('warning', message, data, error);
   }
 
   /**
@@ -61,20 +60,28 @@ export class SourceLogger implements Logger {
    * `cause` instead.
    */
   error(message: string, { error, data }: ErrorLogContext) {
-    const title = sourceTitle(this.source, message);
-    console.error('[ERROR]', title, ...definedValues(error, data));
+    console.error('[ERROR]', sourceTitle(this.source, message), ...definedValues(error, data));
+    this.capture('error', message, data, error);
+  }
 
+  private capture(
+    level: 'warning' | 'error',
+    message: string,
+    data: Record<string, unknown> | undefined,
+    error: unknown,
+  ) {
+    const title = sourceTitle(this.source, message);
     if (error === undefined) {
-      Sentry.captureMessage(title, this.captureContext('error', message, data));
+      Sentry.captureMessage(title, this.captureContext(level, message, data));
     } else if (error instanceof Error) {
       Sentry.captureException(
         new Error(title, { cause: error }),
-        this.captureContext('error', message, data),
+        this.captureContext(level, message, data),
       );
     } else {
       Sentry.captureException(
         new Error(title),
-        this.captureContext('error', message, { ...data, cause: error }),
+        this.captureContext(level, message, { ...data, cause: error }),
       );
     }
   }

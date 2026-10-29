@@ -73,6 +73,37 @@ describe('LoggerService', () => {
       });
     });
 
+    it('should send a warning-level event with a caught error as its cause, like error does', () => {
+      const data = { url: '/v1/dataversion' };
+      const cause = new Error('HTTP 503 GET /v1/dataversion');
+
+      logger.warn(WARNING_MESSAGE, data, cause);
+
+      const [event, context] = (Sentry.captureException as jest.Mock).mock.calls[0];
+      expect(event).toEqual(new Error(title(WARNING_MESSAGE)));
+      expect(event.cause).toBe(cause);
+      expect(context).toEqual({
+        level: 'warning',
+        fingerprint: [SOURCE, WARNING_MESSAGE],
+        tags: { source: SOURCE },
+        extra: data,
+      });
+      expect(Sentry.captureMessage).not.toHaveBeenCalled();
+    });
+
+    it('should attach a caught non-Error value to the extra context instead of as the cause', () => {
+      const cause = { status: 503 };
+
+      logger.warn(WARNING_MESSAGE, undefined, cause);
+
+      expect(Sentry.captureException).toHaveBeenCalledWith(new Error(title(WARNING_MESSAGE)), {
+        level: 'warning',
+        fingerprint: [SOURCE, WARNING_MESSAGE],
+        tags: { source: SOURCE },
+        extra: { cause },
+      });
+    });
+
     it('should write the titled message to the console', () => {
       logger.warn(WARNING_MESSAGE);
 

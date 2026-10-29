@@ -62,7 +62,8 @@ describe('ExplorersErrorHandler', () => {
 
       expect(loggerWarnSpy).toHaveBeenCalledWith(
         formatHttpErrorReportMessage(UNHANDLED_HTTP_ERROR_MESSAGE, internalServerError),
-        expect.objectContaining({ error: internalServerError }),
+        expect.any(Object),
+        internalServerError,
       );
       expect(loggerErrorSpy).not.toHaveBeenCalled();
       expect(mockSentryErrorHandler.handleError).not.toHaveBeenCalled();

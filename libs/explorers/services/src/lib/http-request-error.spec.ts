@@ -196,9 +196,24 @@ describe('reportHttpError', () => {
 
     expect(logger.warn).toHaveBeenCalledWith(
       `${OPERATION} (HTTP ${HttpStatusCode.NotFound} GET)`,
-      expect.objectContaining({ error }),
+      { userMessage: error.userMessage, url: GENES_URL, statusText: 'Status Text' },
+      error,
     );
     expect(logger.error).not.toHaveBeenCalled();
+  });
+
+  it('attaches the failure the same way at both levels, as the cause with the same data', () => {
+    const warningError = buildError(HttpStatusCode.NotFound);
+    const errorError = buildError(HttpStatusCode.NotFound);
+
+    report(warningError, HttpErrorReportLevelEnum.Warn);
+    report(errorError, HttpErrorReportLevelEnum.Error);
+
+    const [, warningData, warningCause] = logger.warn.mock.calls[0];
+    const [, { data: errorData, error: errorCause }] = logger.error.mock.calls[0];
+    expect(warningData).toEqual(errorData);
+    expect(warningCause).toBe(warningError);
+    expect(errorCause).toBe(errorError);
   });
 
   it('reports a 500 as a warning at most, since the API reports its own exception', () => {
@@ -208,7 +223,8 @@ describe('reportHttpError', () => {
 
     expect(logger.warn).toHaveBeenCalledWith(
       `${OPERATION} (HTTP ${HttpStatusCode.InternalServerError} GET)`,
-      expect.objectContaining({ error }),
+      { userMessage: error.userMessage, url: GENES_URL, statusText: 'Status Text' },
+      error,
     );
     expect(logger.error).not.toHaveBeenCalled();
   });

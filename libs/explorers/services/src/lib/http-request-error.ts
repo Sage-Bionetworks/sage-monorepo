@@ -116,7 +116,7 @@ export function reportHttpError(
     const reportLevel =
       error.status === HttpStatusCode.InternalServerError ? HttpErrorReportLevelEnum.Warn : level;
     if (reportLevel === HttpErrorReportLevelEnum.Warn) {
-      logger.warn(message, { ...data, error });
+      logger.warn(message, data, error);
     } else {
       logger.error(message, { error, data });
     }

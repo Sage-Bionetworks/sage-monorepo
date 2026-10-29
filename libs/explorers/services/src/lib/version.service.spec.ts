@@ -111,7 +111,8 @@ describe('VersionService', () => {
       expect(warnSpy).toHaveBeenCalledTimes(1);
       expect(warnSpy).toHaveBeenCalledWith(
         formatHttpErrorReportMessage(DATA_VERSION_ERROR_MESSAGE, failedRequest),
-        expect.objectContaining({ error: failedRequest }),
+        expect.any(Object),
+        failedRequest,
       );
       expect(errorSpy).not.toHaveBeenCalled();
     });
