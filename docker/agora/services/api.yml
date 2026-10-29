@@ -12,6 +12,6 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1GB
+          memory: 4GB
     depends_on:
       - agora-mongo
