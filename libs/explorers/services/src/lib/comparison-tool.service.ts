@@ -41,6 +41,7 @@ import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
 import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
+import { ErrorOverlayService } from './error-overlay.service';
 import { HttpErrorReportLevelEnum, reportHttpError } from './http-request-error';
 import { LoggerService } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
@@ -142,6 +143,7 @@ export class ComparisonToolService<T> {
   private readonly helperService = inject(ComparisonToolHelperService);
   private readonly coordinatorService = inject(ComparisonToolCoordinatorService);
   private readonly appStorageService = inject(AppStorageService);
+  private readonly errorOverlayService = inject(ErrorOverlayService);
   private readonly logger = inject(LoggerService).forSource('ComparisonToolService');
 
   // Cache column selections only for dropdown selections up to this length
@@ -625,7 +627,17 @@ export class ComparisonToolService<T> {
 
     this.initialSelection = options.initialSelection;
 
-    combineLatest([options.config$, options.queryParams$])
+    // The tool can't render without its config, so a failed config request shows the error overlay
+    // in place of a loading skeleton that never ends.
+    const config$ = options.config$.pipe(
+      catchError((error) => {
+        this.reportFailure(COMPARISON_TOOL_CONFIG_ERROR_MESSAGE, error);
+        this.errorOverlayService.showRequestError(error);
+        return EMPTY;
+      }),
+    );
+
+    combineLatest([config$, options.queryParams$])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([configs, params]) => {
         if (!this.isInitializedSignal()) {

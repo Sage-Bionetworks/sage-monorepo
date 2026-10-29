@@ -26,6 +26,7 @@ import { AppStorageService } from './app-storage.service';
 import { deserializeComparisonToolUrlParams } from './comparison-tool-url-params';
 import {
   ComparisonToolFetchResult,
+  COMPARISON_TOOL_CONFIG_ERROR_MESSAGE,
   ComparisonToolSentryTagEnum,
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
@@ -39,6 +40,7 @@ import {
   UNPINNED_FETCH_ERROR_MESSAGE,
 } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
+import { ErrorOverlayService } from './error-overlay.service';
 import { HttpRequestError } from './http-request-error';
 import { SourceLogger } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
@@ -3960,6 +3962,22 @@ describe('ComparisonToolService', () => {
         );
       },
     );
+
+    it('reports a failed config request and shows the error overlay', () => {
+      const loggerErrorSpy = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+      injectService().connect({
+        config$: failedRequest(),
+        queryParams$: of({}),
+        pinAllFetch: noMatchingRows,
+      });
+
+      expect(loggerErrorSpy).toHaveBeenCalledWith(
+        `${COMPARISON_TOOL_CONFIG_ERROR_MESSAGE} (${requestError.message})`,
+        expect.objectContaining({ error: requestError }),
+      );
+      expect(TestBed.inject(ErrorOverlayService).activeMessage()).toBe(requestError.userMessage);
+      expect(service.isInitialized()).toBe(false);
+    });
 
     it('tags a failed fetch with the page and the selected dropdowns', () => {
       const proteinTmtSelection = ['Protein - Differential Expression', 'TMT'];

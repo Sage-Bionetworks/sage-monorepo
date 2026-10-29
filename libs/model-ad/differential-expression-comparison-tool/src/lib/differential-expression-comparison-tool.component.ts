@@ -11,12 +11,9 @@ import {
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 import {
-  COMPARISON_TOOL_CONFIG_ERROR_MESSAGE,
   ComparisonToolUrlService,
-  HttpErrorReportLevelEnum,
   LoggerService,
   PlatformService,
-  reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
@@ -39,7 +36,7 @@ import {
   ROUTE_PATHS,
 } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, map, Observable, of, shareReplay } from 'rxjs';
+import { EMPTY, map, Observable, of, shareReplay } from 'rxjs';
 import {
   DifferentialExpressionComparisonToolService,
   DifferentialExpressionRow,
@@ -88,16 +85,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.DifferentialExpression)
-    .pipe(
-      catchError((error) => {
-        reportHttpError(this.logger, COMPARISON_TOOL_CONFIG_ERROR_MESSAGE, {
-          error,
-          level: HttpErrorReportLevelEnum.Error,
-        });
-        return EMPTY;
-      }),
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     [DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA]: {

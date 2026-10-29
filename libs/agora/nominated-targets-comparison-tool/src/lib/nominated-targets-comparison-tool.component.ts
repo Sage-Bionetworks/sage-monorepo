@@ -17,15 +17,12 @@ import {
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
-  COMPARISON_TOOL_CONFIG_ERROR_MESSAGE,
   ComparisonToolUrlService,
-  HttpErrorReportLevelEnum,
   LoggerService,
   PlatformService,
-  reportHttpError,
 } from '@sagebionetworks/explorers/services';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, map, shareReplay } from 'rxjs';
+import { map, shareReplay } from 'rxjs';
 import { NominatedTargetsComparisonToolService } from './services/nominated-targets-comparison-tool.service';
 
 @Component({
@@ -50,16 +47,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolsConfig(ComparisonToolConfigPage.NominatedTargets)
-    .pipe(
-      catchError((error) => {
-        reportHttpError(this.logger, COMPARISON_TOOL_CONFIG_ERROR_MESSAGE, {
-          error,
-          level: HttpErrorReportLevelEnum.Error,
-        });
-        return EMPTY;
-      }),
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     headerTitle: ComparisonToolConfigPage.NominatedTargets,
