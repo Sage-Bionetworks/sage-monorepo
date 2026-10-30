@@ -151,18 +151,6 @@ export class AlternativeCache {
 
   constructor(private readonly releases: CacheReleaseSource) {}
 
-  set(key: string, data: any) {
-    const release = this.releases.releaseAtRequestStart();
-    if (isLatestRelease(release, this.releases)) {
-      this.data[scopeKey(release, key)] = data;
-    }
-  }
-
-  get(key: string) {
-    const release = this.releases.releaseAtRequestStart();
-    return release ? (this.data[scopeKey(release, key)] ?? undefined) : undefined;
-  }
-
   /**
    * Caches the load's promise rather than its result, so concurrent misses on one key share a
    * single load instead of each holding its own copy of a large data set in memory. A rejected

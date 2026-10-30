@@ -35,15 +35,17 @@ function deferred<T>() {
 describe('clearAllCaches', () => {
   afterEach(() => jest.restoreAllMocks());
 
-  it('empties both the node cache and the alternative cache', () => {
+  it('empties both the node cache and the alternative cache', async () => {
     jest.spyOn(dataReleaseTracker, 'latestRelease').mockReturnValue(initialRelease);
+    const loadGenes = jest.fn().mockResolvedValue(genes);
     cache.set(geneCacheKey, { hgnc_symbol: 'APOE' });
-    altCache.set(genesCacheKey, genes);
+    await altCache.getOrLoad(genesCacheKey, loadGenes);
 
     clearAllCaches();
+    await altCache.getOrLoad(genesCacheKey, loadGenes);
 
     expect(cache.get(geneCacheKey)).toBeUndefined();
-    expect(altCache.get(genesCacheKey)).toBeUndefined();
+    expect(loadGenes).toHaveBeenCalledTimes(2);
   });
 });
 
@@ -156,9 +158,13 @@ describe('AlternativeCache.getOrLoad', () => {
     const result = alternativeCache.getOrLoad(genesCacheKey, () => pendingLoad.promise);
     releases.latest = nextRelease;
     pendingLoad.resolve(genes);
-
     await expect(result).resolves.toBe(genes);
-    expect(alternativeCache.get(genesCacheKey)).toBeUndefined();
+
+    releases.latest = initialRelease;
+    const reload = jest.fn().mockResolvedValue(genes);
+    await alternativeCache.getOrLoad(genesCacheKey, reload);
+
+    expect(reload).toHaveBeenCalledTimes(1);
   });
 
   it('shares a load while the release is unknown, without keeping its result', async () => {
