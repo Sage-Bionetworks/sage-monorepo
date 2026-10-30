@@ -19,12 +19,7 @@ export class ProteinDetailsComponent {
   readonly details = individualExpressionDetailsFromRoute({
     pathParam: ROUTE_PARAMS.UNIQUE_ID,
     source: 'ProteinDetailsComponent',
-    fetchData: (uniqueId, query, options) =>
-      this.proteomicsIndividualService.getProteomicsIndividual(
-        { uniqueId, ...query },
-        'body',
-        false,
-        options,
-      ),
+    fetchData: (uniqueId, query) =>
+      this.proteomicsIndividualService.getProteomicsIndividual({ uniqueId, ...query }),
   });
 }

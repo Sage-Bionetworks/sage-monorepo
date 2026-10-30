@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { signal, WritableSignal } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Navigation, NavigationExtras, Router } from '@angular/router';
@@ -14,21 +15,33 @@ import {
   ComparisonToolQuery,
   ComparisonToolUrlParams,
 } from '@sagebionetworks/explorers/models';
-import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
+import {
+  mockComparisonToolDataConfig,
+  mockComparisonToolDataConfigWithDropdowns,
+} from '@sagebionetworks/explorers/testing';
+import * as Sentry from '@sentry/angular';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, defer, EMPTY, Observable, of, Subject, throwError } from 'rxjs';
 import { AppStorageService } from './app-storage.service';
 import { deserializeComparisonToolUrlParams } from './comparison-tool-url-params';
 import {
   ComparisonToolFetchResult,
+  COMPARISON_TOOL_CONFIG_ERROR_MESSAGE,
+  ComparisonToolSentryTagEnum,
   ComparisonToolService,
   DEFAULT_COLUMN_WIDTH_PX,
+  DROPDOWN_SELECTION_TAG_SEPARATOR,
+  PIN_ALL_ERROR_MESSAGE,
   PinAllFetch,
+  PINNED_FETCH_ERROR_MESSAGE,
   RESERVED_FILTER_KEY_MESSAGE,
   UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE,
   UNMATCHED_URL_CATEGORIES_MESSAGE,
+  UNPINNED_FETCH_ERROR_MESSAGE,
 } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
+import { ErrorOverlayService } from './error-overlay.service';
+import { formatHttpErrorReportMessage, HttpRequestError } from './http-request-error';
 import { SourceLogger } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
 
@@ -105,7 +118,15 @@ describe('ComparisonToolService', () => {
 
   const noMatchingRows: PinAllFetch<Row> = () => of({ rows: [], totalElements: 0 });
 
-  const failedRequest = () => throwError(() => new Error('request failed'));
+  const requestError = new HttpRequestError(
+    new HttpErrorResponse({
+      status: HttpStatusCode.ServiceUnavailable,
+      url: 'https://modeladexplorer.org/api/v1/comparison-tools/gene-expression',
+    }),
+    'GET',
+  );
+
+  const failedRequest = () => throwError(() => requestError);
 
   // A cold source like an HTTP request: the first subscription fails, and each later one (a retry)
   // gets `retried()`
@@ -125,6 +146,7 @@ describe('ComparisonToolService', () => {
   ) => {
     paramsSubject = new BehaviorSubject<ComparisonToolUrlParams>(options.initialParams ?? {});
     injectService().connect({
+      page: configs[0]?.page,
       config$: of(configs),
       queryParams$: paramsSubject.asObservable(),
       pinAllFetch: options.pinAllFetch ?? noMatchingRows,
@@ -2376,6 +2398,18 @@ describe('ComparisonToolService', () => {
       );
     });
 
+    it('should report a failed fetch under its endpoint and status', () => {
+      connectWithMatchingRows(jest.fn(failedRequest));
+      const loggerErrorSpy = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+
+      service.pinAll();
+
+      expect(loggerErrorSpy).toHaveBeenCalledWith(
+        formatHttpErrorReportMessage(PIN_ALL_ERROR_MESSAGE, requestError),
+        expect.objectContaining({ error: requestError }),
+      );
+    });
+
     it('should warn when there were more matching rows than could be pinned', () => {
       const pinAllFetch = stubFetch({ rows: rows('id1', 'id2'), totalElements: 5 });
       connectWithMatchingRows(pinAllFetch);
@@ -3105,6 +3139,7 @@ describe('ComparisonToolService', () => {
 
         paramsSubject = new BehaviorSubject<ComparisonToolUrlParams>({});
         service.connect({
+          page: mockComparisonToolDataConfig[0].page,
           config$: of(mockComparisonToolDataConfig),
           queryParams$: paramsSubject.asObservable(),
           pinAllFetch: noMatchingRows,
@@ -3126,6 +3161,7 @@ describe('ComparisonToolService', () => {
 
         paramsSubject = new BehaviorSubject<ComparisonToolUrlParams>({});
         service.connect({
+          page: mockComparisonToolDataConfig[0].page,
           config$: of(mockComparisonToolDataConfig),
           queryParams$: paramsSubject.asObservable(),
           pinAllFetch: noMatchingRows,
@@ -3903,6 +3939,79 @@ describe('ComparisonToolService', () => {
       expect(service.unpinnedData()).toEqual([{ _id: 'newest' }]);
       expect(service.unpinnedFetchFailed()).toBe(false);
       expect(service.isLoadingTableData()).toBe(false);
+    });
+
+    const fetchUnpinnedAndFail = (ctService: ComparisonToolService<Row>) =>
+      ctService.fetchUnpinned(failedRequest());
+    const fetchPinnedAndFail = (ctService: ComparisonToolService<Row>) =>
+      ctService.fetchPinned(failedRequest());
+
+    it.each([
+      ['unpinned', UNPINNED_FETCH_ERROR_MESSAGE, fetchUnpinnedAndFail],
+      ['pinned', PINNED_FETCH_ERROR_MESSAGE, fetchPinnedAndFail],
+    ])(
+      'reports a failed %s fetch under its own message, endpoint, and status',
+      (_, errorMessage, fetchAndFail) => {
+        connectService();
+        service.setPinnedItems(['id1']);
+        const loggerErrorSpy = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+
+        fetchAndFail(service);
+
+        expect(loggerErrorSpy).toHaveBeenCalledTimes(1);
+        expect(loggerErrorSpy).toHaveBeenCalledWith(
+          formatHttpErrorReportMessage(errorMessage, requestError),
+          expect.objectContaining({ error: requestError }),
+        );
+      },
+    );
+
+    it('reports a failed config request, tagged with its page, and shows the error overlay', () => {
+      const page = mockComparisonToolDataConfig[0].page;
+      const loggerErrorSpy = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+      const setTagsSpy = jest.spyOn(Sentry.Scope.prototype, 'setTags');
+      injectService().connect({
+        page,
+        config$: failedRequest(),
+        queryParams$: of({}),
+        pinAllFetch: noMatchingRows,
+      });
+
+      expect(loggerErrorSpy).toHaveBeenCalledWith(
+        formatHttpErrorReportMessage(COMPARISON_TOOL_CONFIG_ERROR_MESSAGE, requestError),
+        expect.objectContaining({ error: requestError }),
+      );
+      expect(setTagsSpy).toHaveBeenCalledWith({ [ComparisonToolSentryTagEnum.Page]: page });
+      expect(TestBed.inject(ErrorOverlayService).activeMessage()).toBe(requestError.userMessage);
+      expect(service.isInitialized()).toBe(false);
+    });
+
+    it('tags a failed fetch with the page and the selected dropdowns', () => {
+      const proteinTmtSelection = ['Protein - Differential Expression', 'TMT'];
+      connectService(mockComparisonToolDataConfigWithDropdowns, { selection: proteinTmtSelection });
+      jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+      const setTagsSpy = jest.spyOn(Sentry.Scope.prototype, 'setTags');
+
+      fetchUnpinnedAndFail(service);
+
+      expect(setTagsSpy).toHaveBeenCalledWith({
+        [ComparisonToolSentryTagEnum.Page]: mockComparisonToolDataConfigWithDropdowns[0].page,
+        [ComparisonToolSentryTagEnum.DropdownSelection]: proteinTmtSelection.join(
+          DROPDOWN_SELECTION_TAG_SEPARATOR,
+        ),
+      });
+    });
+
+    it('tags a failed fetch with the page alone when the tool has no dropdowns', () => {
+      connectService();
+      jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+      const setTagsSpy = jest.spyOn(Sentry.Scope.prototype, 'setTags');
+
+      fetchUnpinnedAndFail(service);
+
+      expect(setTagsSpy).toHaveBeenCalledWith({
+        [ComparisonToolSentryTagEnum.Page]: mockComparisonToolDataConfig[0].page,
+      });
     });
 
     it('keeps the pinned rows when an unpinned fetch fails', () => {

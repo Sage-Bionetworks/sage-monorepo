@@ -29,6 +29,24 @@ describe('initNodeSentry', () => {
     });
   });
 
+  it("follows the browser trace's sampling decision when a sample rate is configured", () => {
+    const inheritOrSampleWith = jest.fn(() => 1);
+
+    initNodeSentry({ ...mockConfig, tracesSampleRate: 1 });
+    const { tracesSampler } = (Sentry.init as jest.Mock).mock.calls[0][0];
+    tracesSampler({ name: 'GET /v1/genes', attributes: {}, inheritOrSampleWith });
+
+    expect(inheritOrSampleWith).toHaveBeenCalledWith(0);
+  });
+
+  it('sends no performance data when no sample rate is configured', () => {
+    initNodeSentry(mockConfig);
+
+    const options = (Sentry.init as jest.Mock).mock.calls[0][0];
+    expect(options).not.toHaveProperty('tracesSampleRate');
+    expect(options).not.toHaveProperty('tracesSampler');
+  });
+
   it('passes release: undefined when release is empty', () => {
     initNodeSentry({ ...mockConfig, release: '' });
 

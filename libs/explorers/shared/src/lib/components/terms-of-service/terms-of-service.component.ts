@@ -11,11 +11,19 @@ import {
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
-import { PlatformService, SynapseApiService } from '@sagebionetworks/explorers/services';
+import {
+  ErrorOverlayService,
+  HttpErrorReportLevelEnum,
+  LoggerService,
+  PlatformService,
+  SynapseApiService,
+} from '@sagebionetworks/explorers/services';
 import { HeroComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { MarkdownModule } from 'ngx-markdown';
 import { finalize } from 'rxjs/operators';
+
+export const TERMS_OF_SERVICE_ERROR_MESSAGE = 'Error loading terms of service';
 
 @Component({
   selector: 'explorers-terms-of-service',
@@ -28,6 +36,8 @@ export class TermsOfServiceComponent implements OnInit {
   synapseService = inject(SynapseApiService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
+  private readonly logger = inject(LoggerService).forSource('TermsOfServiceComponent');
+  private readonly errorOverlayService = inject(ErrorOverlayService);
 
   content = '';
   isLoading = signal(true);
@@ -55,8 +65,11 @@ export class TermsOfServiceComponent implements OnInit {
           next: (markdown) => {
             this.content = markdown;
           },
-          error: () => {
-            // Handled by httpErrorInterceptor
+          error: (error) => {
+            this.errorOverlayService.reportAndShow(this.logger, TERMS_OF_SERVICE_ERROR_MESSAGE, {
+              error,
+              level: HttpErrorReportLevelEnum.Warn,
+            });
           },
         });
     }

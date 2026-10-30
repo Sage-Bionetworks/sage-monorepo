@@ -163,6 +163,7 @@ class ComparisonToolInnerComponent {
 
       // Now connect - initialization will read the view config we just set
       this.comparisonToolService.connect({
+        page: configs[0]?.page,
         config$: of(configs),
         queryParams$: of({}),
         pinAllFetch: () => {

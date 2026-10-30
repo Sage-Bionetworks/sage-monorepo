@@ -73,6 +73,48 @@ describe('LoggerService', () => {
       });
     });
 
+    it('should send a warning-level event with a caught error as its cause, like error does', () => {
+      const data = { url: '/v1/dataversion' };
+      const cause = new Error('HTTP 503 GET /v1/dataversion');
+
+      logger.warn(WARNING_MESSAGE, data, cause);
+
+      const [event, context] = (Sentry.captureException as jest.Mock).mock.calls[0];
+      expect(event).toEqual(new Error(title(WARNING_MESSAGE)));
+      expect(event.cause).toBe(cause);
+      expect(context).toEqual({
+        level: 'warning',
+        fingerprint: [SOURCE, WARNING_MESSAGE],
+        tags: { source: SOURCE },
+        extra: data,
+      });
+      expect(Sentry.captureMessage).not.toHaveBeenCalled();
+    });
+
+    it('should attach a caught non-Error value to the extra context instead of as the cause', () => {
+      const cause = { status: 503 };
+
+      logger.warn(WARNING_MESSAGE, undefined, cause);
+
+      expect(Sentry.captureException).toHaveBeenCalledWith(new Error(title(WARNING_MESSAGE)), {
+        level: 'warning',
+        fingerprint: [SOURCE, WARNING_MESSAGE],
+        tags: { source: SOURCE },
+        extra: { cause },
+      });
+    });
+
+    it('should report a caught error as not handled, under its source, when asked', () => {
+      const cause = new Error('HTTP 500 GET /v1/dataversion');
+
+      logger.warn(WARNING_MESSAGE, undefined, cause, { handled: false });
+
+      expect(Sentry.captureException).toHaveBeenCalledWith(expect.any(Error), {
+        captureContext: expect.objectContaining({ level: 'warning' }),
+        mechanism: { type: SOURCE, handled: false },
+      });
+    });
+
     it('should write the titled message to the console', () => {
       logger.warn(WARNING_MESSAGE);
 
@@ -116,6 +158,22 @@ describe('LoggerService', () => {
       expect(capturedException().message).toBe(title(ERROR_MESSAGE));
       expect(capturedException().cause).toBeUndefined();
       expect(Sentry.captureMessage).not.toHaveBeenCalled();
+    });
+
+    it('should report a caught error as not handled, under its source, when asked', () => {
+      const cause = new Error('HTTP 503 GET /v1/comparison-tools/config');
+
+      logger.error(ERROR_MESSAGE, { error: cause }, { handled: false });
+
+      expect(Sentry.captureException).toHaveBeenCalledWith(expect.any(Error), {
+        captureContext: {
+          level: 'error',
+          fingerprint: [SOURCE, ERROR_MESSAGE],
+          tags: { source: SOURCE },
+          extra: undefined,
+        },
+        mechanism: { type: SOURCE, handled: false },
+      });
     });
 
     it('should send an error-level message when only data is given', () => {

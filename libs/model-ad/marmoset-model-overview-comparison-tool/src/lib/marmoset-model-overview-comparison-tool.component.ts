@@ -1,4 +1,3 @@
-import { HttpContext } from '@angular/common/http';
 import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -7,7 +6,6 @@ import {
   ComparisonToolUrlService,
   LoggerService,
   PlatformService,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
@@ -21,7 +19,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { DOWNLOAD_PINS_NOTE, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, map, shareReplay } from 'rxjs';
+import { map, shareReplay } from 'rxjs';
 import { MarmosetModelOverviewComparisonToolService } from './services/marmoset-model-overview-comparison-tool.service';
 
 @Component({
@@ -46,13 +44,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.MarmosetModelOverview)
-    .pipe(
-      catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', { error });
-        return EMPTY;
-      }),
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     headerTitle: ComparisonToolPage.MarmosetModelOverview,
@@ -100,6 +92,7 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolPage.MarmosetModelOverview,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget) =>
@@ -147,16 +140,12 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.marmosetModelOverviewService
-        .getMarmosetModelOverviews(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: MarmosetModelOverviewsPage) => ({
-            data: response.marmosetModelOverviews,
-            totalCount: response.page.totalElements,
-          })),
-        ),
+      this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
+        map((response: MarmosetModelOverviewsPage) => ({
+          data: response.marmosetModelOverviews,
+          totalCount: response.page.totalElements,
+        })),
+      ),
     );
   }
 
@@ -173,16 +162,12 @@ export class MarmosetModelOverviewComparisonToolComponent implements OnInit, OnD
     this.logger.log('pinned query', { query });
 
     this.comparisonToolService.fetchPinned(
-      this.marmosetModelOverviewService
-        .getMarmosetModelOverviews(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: MarmosetModelOverviewsPage) => {
-            const data = response.marmosetModelOverviews;
-            return { data, totalCount: data.length };
-          }),
-        ),
+      this.marmosetModelOverviewService.getMarmosetModelOverviews(query).pipe(
+        map((response: MarmosetModelOverviewsPage) => {
+          const data = response.marmosetModelOverviews;
+          return { data, totalCount: data.length };
+        }),
+      ),
     );
   }
 }

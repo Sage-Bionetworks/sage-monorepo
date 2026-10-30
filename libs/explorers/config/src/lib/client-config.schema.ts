@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { BaseConfigSchema } from '@sagebionetworks/platform/config/angular';
+import { SentryTracesSampleRateSchema } from './config.schema';
 
 export const ClientConfigSchema = BaseConfigSchema.extend({
   appVersion: z.string().min(1),
@@ -11,6 +12,7 @@ export const ClientConfigSchema = BaseConfigSchema.extend({
   sentryDsn: z.string().default(''),
   sentryEnvironment: z.string().default(''),
   sentryRelease: z.string().default(''),
+  sentryTracesSampleRate: SentryTracesSampleRateSchema,
 });
 
 export type ClientConfig = z.infer<typeof ClientConfigSchema>;

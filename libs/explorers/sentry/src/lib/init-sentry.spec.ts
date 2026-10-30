@@ -5,7 +5,10 @@ import { SENTRY_DATA_COLLECTION } from './sentry-options';
 
 jest.mock('@sentry/angular', () => ({
   init: jest.fn(),
+  browserTracingIntegration: jest.fn(() => mockBrowserTracingIntegration),
 }));
+
+const mockBrowserTracingIntegration = { name: 'BrowserTracing' };
 
 const mockConfig: BrowserSentryConfig = {
   dsn: 'https://test-dsn@sentry.io/123',
@@ -37,9 +40,32 @@ describe('initSentry', () => {
       environment: 'dev',
       release: 'agora@1.0.0+abc1234',
       dataCollection: SENTRY_DATA_COLLECTION,
+      integrations: [mockBrowserTracingIntegration],
       beforeSend: expect.any(Function),
     });
   });
+
+  it('sends performance data at the configured sample rate', () => {
+    const fullSampleRate = 1;
+
+    initSentry({ ...mockConfig, tracesSampleRate: fullSampleRate });
+
+    expect(Sentry.init).toHaveBeenCalledWith(
+      expect.objectContaining({ tracesSampleRate: fullSampleRate }),
+    );
+  });
+
+  it.each([undefined, null])(
+    'propagates trace headers without sending performance data when the sample rate is %s',
+    (tracesSampleRate) => {
+      initSentry({ ...mockConfig, tracesSampleRate });
+
+      const options = (Sentry.init as jest.Mock).mock.calls[0][0];
+      expect(options.integrations).toContain(mockBrowserTracingIntegration);
+      expect(options).not.toHaveProperty('tracesSampleRate');
+      expect(options).not.toHaveProperty('tracesSampler');
+    },
+  );
 
   it('does not collect user info, cookies, or HTTP bodies', () => {
     initSentry(mockConfig);

@@ -8,6 +8,16 @@ import {
 } from '@sagebionetworks/web-shared/angular/logger';
 import * as Sentry from '@sentry/angular';
 
+/** How a captured error reached the logger. */
+export interface CaptureOptions {
+  /**
+   * Whether the code the error came from caught it, as Sentry's `handled` flag reports it.
+   * Defaults to `true`, Sentry's default. A safety-net handler, such as a global `ErrorHandler`,
+   * sets it to `false`, so the error counts against the session the way an uncaught exception does.
+   */
+  handled?: boolean;
+}
+
 /**
  * Creates source-bound loggers that report to Sentry. There is no way to log without a source, so
  * every event says where it came from.
@@ -44,13 +54,17 @@ export class SourceLogger implements Logger {
 
   /**
    * Log a warning and send it to Sentry as a warning-level event, with `data` attached as extra
-   * context. Use for unexpected conditions the caller recovers from but that should still be
-   * investigated.
+   * context and a caught `error`, if any, attached the way `error` attaches one. Use for
+   * unexpected conditions the caller recovers from but that should still be investigated.
    */
-  warn(message: string, data?: Record<string, unknown>) {
-    const title = sourceTitle(this.source, message);
-    console.warn('[WARN]', title, ...definedValues(data));
-    Sentry.captureMessage(title, this.captureContext('warning', message, data));
+  warn(
+    message: string,
+    data?: Record<string, unknown>,
+    error?: unknown,
+    options: CaptureOptions = {},
+  ) {
+    console.warn('[WARN]', sourceTitle(this.source, message), ...definedValues(error, data));
+    this.capture('warning', message, data, error, options);
   }
 
   /**
@@ -60,23 +74,35 @@ export class SourceLogger implements Logger {
    * any other caught value, such as an `HttpErrorResponse`, is attached to the extra context as
    * `cause` instead.
    */
-  error(message: string, { error, data }: ErrorLogContext) {
-    const title = sourceTitle(this.source, message);
-    console.error('[ERROR]', title, ...definedValues(error, data));
+  error(message: string, { error, data }: ErrorLogContext, options: CaptureOptions = {}) {
+    console.error('[ERROR]', sourceTitle(this.source, message), ...definedValues(error, data));
+    this.capture('error', message, data, error, options);
+  }
 
+  private capture(
+    level: 'warning' | 'error',
+    message: string,
+    data: Record<string, unknown> | undefined,
+    error: unknown,
+    { handled = true }: CaptureOptions,
+  ) {
+    const title = sourceTitle(this.source, message);
     if (error === undefined) {
-      Sentry.captureMessage(title, this.captureContext('error', message, data));
-    } else if (error instanceof Error) {
-      Sentry.captureException(
-        new Error(title, { cause: error }),
-        this.captureContext('error', message, data),
-      );
-    } else {
-      Sentry.captureException(
-        new Error(title),
-        this.captureContext('error', message, { ...data, cause: error }),
-      );
+      Sentry.captureMessage(title, this.captureContext(level, message, data));
+      return;
     }
+    const exception =
+      error instanceof Error ? new Error(title, { cause: error }) : new Error(title);
+    const captureContext = this.captureContext(
+      level,
+      message,
+      error instanceof Error ? data : { ...data, cause: error },
+    );
+    // A hint can carry the mechanism only with the capture context nested inside it.
+    Sentry.captureException(
+      exception,
+      handled ? captureContext : { captureContext, mechanism: { type: this.source, handled } },
+    );
   }
 
   private captureContext(

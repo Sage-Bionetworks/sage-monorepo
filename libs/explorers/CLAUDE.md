@@ -82,6 +82,21 @@ The explorers products use MongoDB locally but Amazon DocumentDB in the deployed
 
 No external products outside this repo depend on the explorers APIs, so breaking API changes are acceptable as long as all explorer products within this repo continue to work.
 
+## HTTP Error Handling
+
+`httpErrorInterceptor` (`libs/explorers/util/`) turns every failed request into an `HttpRequestError` and re-throws it, but it doesn't report to Sentry or show the error overlay: only the call site knows what it was doing and how serious the failure is. So any code that catches a failed API request must:
+
+- **Report it** with `reportHttpError(logger, operation, { error, level })` from `@sagebionetworks/explorers/services`. `operation` names what the call site was doing and must stay fixed, since Sentry groups each call site's failures by it: export it as a `<THING>_ERROR_MESSAGE` constant from the call site's file (e.g. `DRUG_ERROR_MESSAGE`), and assert it in specs through that constant. `level` is `HttpErrorReportLevelEnum.Error` for a failure that breaks the page, `Warn` for one the page recovers from (a fallback value, a redirect).
+- **Show the overlay** when the failure leaves the page without its content. `ErrorOverlayService.reportAndShow(logger, operation, { error, level })` reports and shows in one call; use `showRequestError(error)` on its own only when showing the overlay depends on something else, as in the wiki component.
+
+A detail page whose request returns a 404 because its item is missing calls `NotFoundService.redirectToNotFound` instead, which writes the report itself.
+
+A failure no call site catches reaches `ExplorersErrorHandler`, which does both. Its reports group only by status and method, so one Sentry issue can hold failures from several endpoints: find them through the issue's `http.url` tag (a wildcard search such as `http.url:*/genes/*` merges one endpoint's item IDs), and expect a resolved issue to reopen when a different endpoint is missing a handler.
+
+A failure a call site catches but neither reports nor redirects is lost: it reaches neither Sentry nor `ExplorersErrorHandler`. So every `catchError`, `error` callback, or `catch` on an API request must do one of the above. Check for this in review, since nothing checks for it at runtime.
+
+Requests made through an `HttpClient` built on `HttpBackend` (such as the app version check) bypass all interceptors, so none of this applies to them.
+
 ## Storybook
 
 For components that don't call our own backend APIs (third-party service calls like Synapse wiki fetches are fine): add a `.stories.ts` file for new components; for changes to existing components, adjust the existing story if the new behavior fits naturally, or add a new story variant for sufficiently distinct behavior. When it's unclear whether a new story is warranted, ask the user. See `libs/explorers/util/src/lib/tooltip-button/tooltip-button.component.stories.ts` for the canonical pattern.

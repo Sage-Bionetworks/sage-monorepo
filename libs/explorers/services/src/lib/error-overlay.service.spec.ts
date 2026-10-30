@@ -1,6 +1,14 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { getAppUpdateMessage, getDataUpdateMessage } from '@sagebionetworks/explorers/constants';
 import { ErrorOverlayService } from './error-overlay.service';
+import {
+  formatHttpErrorReportMessage,
+  HttpErrorReportLevelEnum,
+  HttpRequestError,
+  UNEXPECTED_ERROR_USER_MESSAGE,
+} from './http-request-error';
+import { SourceLogger } from './logger.service';
 
 const siteName = 'Model AD';
 const firstErrorMessage = 'The requested resource was not found.';
@@ -12,6 +20,49 @@ describe('ErrorOverlayService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(ErrorOverlayService);
+  });
+
+  it("shows a failed request's message for users", () => {
+    const error = new HttpRequestError(
+      new HttpErrorResponse({
+        status: HttpStatusCode.ServiceUnavailable,
+        url: 'https://modeladexplorer.org/api/v1/models/mouse/LOAD1',
+      }),
+      'GET',
+    );
+
+    service.showRequestError(error);
+
+    expect(service.activeMessage()).toBe(error.userMessage);
+  });
+
+  it('reports a failed request and shows its message for users', () => {
+    const operation = 'Error loading model';
+    const logger = { warn: jest.fn(), error: jest.fn() };
+    const error = new HttpRequestError(
+      new HttpErrorResponse({
+        status: HttpStatusCode.ServiceUnavailable,
+        url: 'https://modeladexplorer.org/api/v1/models/mouse/LOAD1',
+      }),
+      'GET',
+    );
+
+    service.reportAndShow(logger as unknown as SourceLogger, operation, {
+      error,
+      level: HttpErrorReportLevelEnum.Error,
+    });
+
+    expect(logger.error).toHaveBeenCalledWith(
+      formatHttpErrorReportMessage(operation, error),
+      expect.objectContaining({ error }),
+    );
+    expect(service.activeMessage()).toBe(error.userMessage);
+  });
+
+  it('shows a generic message for anything other than a failed request', () => {
+    service.showRequestError(new TypeError("Cannot read properties of undefined (reading 'name')"));
+
+    expect(service.activeMessage()).toBe(UNEXPECTED_ERROR_USER_MESSAGE);
   });
 
   it('is hidden until something is shown', () => {

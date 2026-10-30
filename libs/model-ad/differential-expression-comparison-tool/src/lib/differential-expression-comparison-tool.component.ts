@@ -1,4 +1,3 @@
-import { HttpContext } from '@angular/common/http';
 import { Component, computed, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -15,7 +14,6 @@ import {
   ComparisonToolUrlService,
   LoggerService,
   PlatformService,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
@@ -38,7 +36,7 @@ import {
   ROUTE_PATHS,
 } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, map, Observable, of, shareReplay } from 'rxjs';
+import { EMPTY, map, Observable, of, shareReplay } from 'rxjs';
 import {
   DifferentialExpressionComparisonToolService,
   DifferentialExpressionRow,
@@ -87,13 +85,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.DifferentialExpression)
-    .pipe(
-      catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', { error });
-        return EMPTY;
-      }),
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     [DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA]: {
@@ -212,6 +204,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolPage.DifferentialExpression,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget, prebudgetedParentIds) =>
@@ -275,9 +268,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
     this.logger.log('unpinned query', { query });
 
     const mainCategory = currentQuery.categories[0];
-    const page$ = this.fetchDifferentialExpressionPage(mainCategory, query, {
-      context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-    });
+    const page$ = this.fetchDifferentialExpressionPage(mainCategory, query);
     if (page$ === null) {
       this.logUnrecognizedMainCategory(mainCategory);
       this.comparisonToolService.fetchUnpinned(of({ data: [], totalCount: 0 }));
@@ -310,9 +301,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
 
     this.logger.log('pinned query', { query });
 
-    const page$ = this.fetchDifferentialExpressionPage(mainCategory, query, {
-      context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-    });
+    const page$ = this.fetchDifferentialExpressionPage(mainCategory, query);
     if (page$ === null) {
       this.logUnrecognizedMainCategory(mainCategory);
       this.comparisonToolService.fetchPinned(of({ data: [], totalCount: 0 }));
@@ -337,11 +326,10 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
   private fetchDifferentialExpressionPage(
     mainCategory: string | undefined,
     query: DifferentialExpressionSearchQuery,
-    options?: { context?: HttpContext },
   ): Observable<DifferentialExpressionPage> | null {
     switch (mainCategory) {
       case DIFFERENTIAL_EXPRESSION_CATEGORIES.RNA:
-        return this.transcriptomicsService.getTranscriptomics(query, 'body', false, options).pipe(
+        return this.transcriptomicsService.getTranscriptomics(query).pipe(
           map((response) => ({
             rows: response.transcriptomics,
             page: response.page,
@@ -349,7 +337,7 @@ export class DifferentialExpressionComparisonToolComponent implements OnInit, On
           })),
         );
       case DIFFERENTIAL_EXPRESSION_CATEGORIES.PROTEIN:
-        return this.proteomicsService.getProteomics(query, 'body', false, options).pipe(
+        return this.proteomicsService.getProteomics(query).pipe(
           map((response) => ({
             rows: response.proteomics,
             page: response.page,

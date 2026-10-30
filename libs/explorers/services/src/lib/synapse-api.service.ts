@@ -1,11 +1,10 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { HttpClient, HttpContext } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import sanitizeHtml from 'sanitize-html';
 
 // -------------------------------------------------------------------------- //
@@ -27,22 +26,13 @@ export class SynapseApiService {
     terms: null,
   };
 
-  getWikiMarkdown(
-    ownerId: string,
-    wikiId: string,
-    suppressErrorOverlay = false,
-  ): Observable<SynapseWikiMarkdown> {
+  getWikiMarkdown(ownerId: string, wikiId: string): Observable<SynapseWikiMarkdown> {
     const key = ownerId + wikiId;
     if (this.cache['wikis'][key]) {
       return of(this.cache['wikis'][key]);
     } else {
-      const context = suppressErrorOverlay
-        ? new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true)
-        : undefined;
       return this.http
-        .get('https://repo-prod.prod.sagebase.org/repo/v1/entity/' + ownerId + '/wiki/' + wikiId, {
-          context,
-        })
+        .get('https://repo-prod.prod.sagebase.org/repo/v1/entity/' + ownerId + '/wiki/' + wikiId)
         .pipe(
           tap((wiki: any) => {
             this.cache['wikis'][key] = wiki;

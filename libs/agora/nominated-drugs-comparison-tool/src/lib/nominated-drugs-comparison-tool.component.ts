@@ -1,4 +1,3 @@
-import { HttpContext } from '@angular/common/http';
 import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -21,10 +20,9 @@ import {
   ComparisonToolUrlService,
   LoggerService,
   PlatformService,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, map, shareReplay } from 'rxjs';
+import { map, shareReplay } from 'rxjs';
 import { NominatedDrugsComparisonToolService } from './services/nominated-drugs-comparison-tool.service';
 
 @Component({
@@ -49,13 +47,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolsConfig(ComparisonToolConfigPage.NominatedDrugs)
-    .pipe(
-      catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', { error });
-        return EMPTY;
-      }),
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     headerTitle: ComparisonToolConfigPage.NominatedDrugs,
@@ -105,6 +97,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolConfigPage.NominatedDrugs,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget) =>
@@ -153,16 +146,12 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.nominatedDrugsService
-        .getNominatedDrugs(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: NominatedDrugsPage) => ({
-            data: response.nominatedDrugs,
-            totalCount: response.page.totalElements,
-          })),
-        ),
+      this.nominatedDrugsService.getNominatedDrugs(query).pipe(
+        map((response: NominatedDrugsPage) => ({
+          data: response.nominatedDrugs,
+          totalCount: response.page.totalElements,
+        })),
+      ),
     );
   }
 
@@ -179,16 +168,12 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     this.logger.log('pinned query', { query });
 
     this.comparisonToolService.fetchPinned(
-      this.nominatedDrugsService
-        .getNominatedDrugs(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: NominatedDrugsPage) => {
-            const data = response.nominatedDrugs;
-            return { data, totalCount: data.length };
-          }),
-        ),
+      this.nominatedDrugsService.getNominatedDrugs(query).pipe(
+        map((response: NominatedDrugsPage) => {
+          const data = response.nominatedDrugs;
+          return { data, totalCount: data.length };
+        }),
+      ),
     );
   }
 }

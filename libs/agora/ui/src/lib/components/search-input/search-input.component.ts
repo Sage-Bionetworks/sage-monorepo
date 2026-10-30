@@ -1,16 +1,12 @@
-import { HttpContext } from '@angular/common/http';
 import { Component, DestroyRef, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { GeneService, SearchResult } from '@sagebionetworks/agora/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { isEnsemblId, sanitizeSearchQuery } from '@sagebionetworks/agora/util';
-import { LoggerService, SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/services';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
 import { Observable, tap } from 'rxjs';
-
-/** The search list shows a failed search's error itself, so it opts out of the error overlay. */
-const SEARCH_REQUEST_CONTEXT = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
 
 @Component({
   selector: 'agora-search-input',
@@ -61,14 +57,12 @@ export class SearchInputComponent {
   getSearchResults = (query: string): Observable<SearchResult[]> => {
     this.logger.log('Searching', { query });
 
-    return this.geneService
-      .searchGeneEnhanced(query, 'body', false, { context: SEARCH_REQUEST_CONTEXT })
-      .pipe(
-        tap((results) => {
-          this.getHgncSymbolCounts(results);
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      );
+    return this.geneService.searchGeneEnhanced(query).pipe(
+      tap((results) => {
+        this.getHgncSymbolCounts(results);
+      }),
+      takeUntilDestroyed(this.destroyRef),
+    );
   };
 
   checkQueryForErrors(query: string): string {

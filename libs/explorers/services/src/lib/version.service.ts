@@ -1,4 +1,3 @@
-import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AppVersion } from '@sagebionetworks/explorers/config';
 import {
@@ -6,10 +5,12 @@ import {
   DATA_VERSION_UNKNOWN,
   VERSION_CHECK_TIMEOUT_MS,
 } from '@sagebionetworks/explorers/constants';
-import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
+import { HttpErrorReportLevelEnum, reportHttpError } from './http-request-error';
 import { catchError, map, Observable, of, startWith, tap, timeout, TimeoutError } from 'rxjs';
 import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
+
+export const DATA_VERSION_ERROR_MESSAGE = 'Failed to fetch data version';
 
 export interface DataVersion {
   data_file: string;
@@ -26,11 +27,7 @@ export function isKnownDataVersion({
 }
 
 export interface DataVersionService {
-  getDataVersion(
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { context?: HttpContext },
-  ): Observable<DataVersion>;
+  getDataVersion(): Observable<DataVersion>;
 }
 
 @Injectable({
@@ -52,10 +49,7 @@ export class VersionService {
     if (this.platformService.isServer) {
       return of(DATA_VERSION_LOADING);
     }
-    const context = new HttpContext()
-      .set(SUPPRESS_ERROR_OVERLAY, true)
-      .set(SKIP_ERROR_REPORTING, true);
-    return dataVersionService.getDataVersion('body', false, { context }).pipe(
+    return dataVersionService.getDataVersion().pipe(
       timeout(VERSION_CHECK_TIMEOUT_MS),
       tap((dataVersion) => this.recordLoadedDataVersion(dataVersion)),
       map((dataVersion) => this.formatDataVersion(dataVersion)),
@@ -66,7 +60,10 @@ export class VersionService {
             timeoutMs: VERSION_CHECK_TIMEOUT_MS,
           });
         } else {
-          this.logger.warn('Failed to fetch data version', { error });
+          reportHttpError(this.logger, DATA_VERSION_ERROR_MESSAGE, {
+            error,
+            level: HttpErrorReportLevelEnum.Warn,
+          });
         }
         return of(DATA_VERSION_UNKNOWN);
       }),

@@ -1,7 +1,13 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import {
+  formatHttpErrorReportMessage,
+  ErrorOverlayService,
+  HttpRequestError,
+  SourceLogger,
+  SynapseApiService,
+} from '@sagebionetworks/explorers/services';
 import {
   invalidWikiParam,
   provideLoadingIconColors,
@@ -10,7 +16,8 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { server } from '@sagebionetworks/explorers/testing/msw';
 import { render, waitFor } from '@testing-library/angular';
-import { WikiComponent } from './wiki.component';
+import { throwError } from 'rxjs';
+import { WIKI_ERROR_MESSAGE, WikiComponent } from './wiki.component';
 
 // Mock DomSanitizer
 const mockDomSanitizer = {
@@ -18,7 +25,7 @@ const mockDomSanitizer = {
 };
 
 describe('WikiComponent', () => {
-  async function setup(wikiParams?: SynapseWikiParams) {
+  async function setup(wikiParams?: SynapseWikiParams, suppressErrorOverlay = false) {
     const result = await render(WikiComponent, {
       providers: [
         provideHttpClient(),
@@ -28,6 +35,7 @@ describe('WikiComponent', () => {
       ],
       componentInputs: {
         wikiParams,
+        suppressErrorOverlay,
       },
     });
 
@@ -44,6 +52,7 @@ describe('WikiComponent', () => {
     // Reset handlers after each test
     server.resetHandlers();
     jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   afterAll(() => {
@@ -87,6 +96,49 @@ describe('WikiComponent', () => {
       await waitFor(() => {
         expect(component.isLoading()).toBe(false);
         expect(component.safeHtml).toBe('No data found, please try again later.');
+      });
+    });
+
+    describe('when the Synapse request fails', () => {
+      const wikiRequestError = new HttpRequestError(
+        new HttpErrorResponse({
+          status: HttpStatusCode.NotFound,
+          url: `https://repo-prod.prod.sagebase.org/repo/v1/entity/${invalidWikiParam.ownerId}/wiki/${invalidWikiParam.wikiId}`,
+        }),
+        'GET',
+      );
+
+      let warnSpy: jest.SpyInstance;
+      let showRequestErrorSpy: jest.SpyInstance;
+
+      beforeEach(() => {
+        jest
+          .spyOn(SynapseApiService.prototype, 'getWikiMarkdown')
+          .mockReturnValue(throwError(() => wikiRequestError));
+        warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+        showRequestErrorSpy = jest.spyOn(ErrorOverlayService.prototype, 'showRequestError');
+      });
+
+      it('reports a warning and shows the error overlay', async () => {
+        await setup(invalidWikiParam);
+
+        await waitFor(() => {
+          expect(warnSpy).toHaveBeenCalledWith(
+            formatHttpErrorReportMessage(WIKI_ERROR_MESSAGE, wikiRequestError),
+            expect.any(Object),
+            wikiRequestError,
+          );
+        });
+        expect(showRequestErrorSpy).toHaveBeenCalledWith(wikiRequestError);
+      });
+
+      it('reports a warning without the error overlay when the wiki suppresses it', async () => {
+        await setup(invalidWikiParam, true);
+
+        await waitFor(() => {
+          expect(warnSpy).toHaveBeenCalled();
+        });
+        expect(showRequestErrorSpy).not.toHaveBeenCalled();
       });
     });
   });

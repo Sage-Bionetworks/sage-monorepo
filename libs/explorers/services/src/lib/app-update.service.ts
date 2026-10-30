@@ -50,6 +50,7 @@ import {
   timer,
 } from 'rxjs';
 import { ErrorOverlayService } from './error-overlay.service';
+import { NO_RESPONSE_STATUS } from './http-request-error';
 import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
 import { DataVersion, isKnownDataVersion, VersionService } from './version.service';
@@ -120,9 +121,6 @@ export const VersionCheckFailureReasonEnum = {
 } as const;
 export type VersionCheckFailureReason =
   (typeof VersionCheckFailureReasonEnum)[keyof typeof VersionCheckFailureReasonEnum];
-
-/** The status Angular reports when a request gets no response at all, also used for a timeout. */
-export const NO_RESPONSE_STATUS = 0;
 
 const MISCONFIGURATION_REASONS: ReadonlySet<VersionCheckFailureReason> = new Set([
   VersionCheckFailureReasonEnum.InvalidResponse,

@@ -13,5 +13,6 @@ export function transformServerToClientConfig(serverConfig: AppConfig): ClientCo
     sentryDsn: serverConfig.sentryDsn,
     sentryEnvironment: serverConfig.sentryEnvironment,
     sentryRelease: serverConfig.sentryRelease,
+    sentryTracesSampleRate: serverConfig.sentryTracesSampleRate,
   };
 }

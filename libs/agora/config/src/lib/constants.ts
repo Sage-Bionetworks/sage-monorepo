@@ -1,3 +1,4 @@
+import { NOT_FOUND_ROUTE_PATH } from '@sagebionetworks/explorers/constants';
 import { LoadingIconColors } from '@sagebionetworks/explorers/models';
 
 export const HELP_URL = 'https://help.adknowledgeportal.org/apd/Agora-Resources.2646671361.html';
@@ -20,7 +21,7 @@ export const ROUTE_PATHS = {
   NEWS: 'news',
   ABOUT: 'about',
   TERMS_OF_SERVICE: 'terms-of-service',
-  NOT_FOUND: 'not-found',
+  NOT_FOUND: NOT_FOUND_ROUTE_PATH,
   ERROR: 'error',
   DETAILS: 'genes',
   DRUG_DETAILS: 'drugs',

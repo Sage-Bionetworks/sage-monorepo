@@ -1,19 +1,12 @@
-import {
-  HttpClient,
-  HttpContext,
-  HttpErrorResponse,
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import {
   AppUpdateCheckTriggerEnum,
   AppUpdateService,
   ErrorOverlayService,
-  LoggerService,
-  SKIP_ERROR_REPORTING,
-  SUPPRESS_ERROR_OVERLAY,
+  HttpRequestError,
+  SourceLogger,
 } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor, RETRY_DELAY_MS } from './http-error.interceptor';
 
@@ -24,8 +17,6 @@ const SERVICE_UNAVAILABLE = { status: 503, statusText: 'Service Unavailable' };
 describe('httpErrorInterceptor', () => {
   let http: HttpClient;
   let httpTestingController: HttpTestingController;
-  let logger: { error: jest.Mock };
-  let errorOverlayService: { showError: jest.Mock };
   let appUpdateService: {
     start: jest.Mock;
     requestCheck: jest.Mock;
@@ -33,8 +24,6 @@ describe('httpErrorInterceptor', () => {
   };
 
   beforeEach(() => {
-    logger = { error: jest.fn() };
-    errorOverlayService = { showError: jest.fn() };
     appUpdateService = {
       start: jest.fn(),
       requestCheck: jest.fn(),
@@ -45,8 +34,6 @@ describe('httpErrorInterceptor', () => {
       providers: [
         provideHttpClient(withInterceptors([httpErrorInterceptor])),
         provideHttpClientTesting(),
-        { provide: LoggerService, useValue: { forSource: () => logger } },
-        { provide: ErrorOverlayService, useValue: errorOverlayService },
         { provide: AppUpdateService, useValue: appUpdateService },
       ],
     });
@@ -57,63 +44,63 @@ describe('httpErrorInterceptor', () => {
 
   afterEach(() => {
     httpTestingController.verify();
+    jest.restoreAllMocks();
   });
 
-  function requestAndFail(context?: HttpContext): void {
-    http.get(DATA_VERSION_URL, { context }).subscribe({ error: () => undefined });
-    httpTestingController.expectOne(DATA_VERSION_URL).flush(null, NOT_FOUND);
+  /** Sends a request and returns a getter for the error it fails with, once it has failed. */
+  function request(params?: Record<string, string>): () => unknown {
+    let thrown: unknown;
+    http.get(DATA_VERSION_URL, { params }).subscribe({ error: (error) => (thrown = error) });
+    return () => thrown;
   }
 
-  it('should report the error and show the overlay by default', () => {
+  function requestAndFail(): unknown {
+    const thrown = request();
+    httpTestingController.expectOne(DATA_VERSION_URL).flush(null, NOT_FOUND);
+    return thrown();
+  }
+
+  it('should not show the overlay, since only the caller knows whether to', () => {
     requestAndFail();
 
-    expect(logger.error).toHaveBeenCalledTimes(1);
-    expect(errorOverlayService.showError).toHaveBeenCalledTimes(1);
+    expect(TestBed.inject(ErrorOverlayService).isOverlayVisible()).toBe(false);
   });
 
-  it('should report the error under a message naming the status, method, and path', () => {
+  it('should not report the error, since only the caller knows whether it was expected', () => {
+    const loggerWarn = jest.spyOn(SourceLogger.prototype, 'warn');
+    const loggerError = jest.spyOn(SourceLogger.prototype, 'error');
+
     requestAndFail();
 
-    expect(logger.error).toHaveBeenCalledWith(`HTTP ${NOT_FOUND.status} GET ${DATA_VERSION_URL}`, {
-      error: expect.any(HttpErrorResponse),
-      data: expect.objectContaining({
-        errorMessage: 'The requested resource was not found.',
-        statusText: NOT_FOUND.statusText,
-      }),
+    expect(loggerWarn).not.toHaveBeenCalled();
+    expect(loggerError).not.toHaveBeenCalled();
+  });
+
+  it('should re-throw a typed error that keeps the status, method, and path', () => {
+    const thrown = requestAndFail();
+
+    expect(thrown).toBeInstanceOf(HttpRequestError);
+    expect(thrown).toMatchObject({
+      status: NOT_FOUND.status,
+      method: 'GET',
+      urlPath: DATA_VERSION_URL,
     });
   });
 
-  it('should drop the query string from the reported path', () => {
-    http.get(DATA_VERSION_URL, { params: { id: 'ENSG00000130203' } }).subscribe({
-      error: () => undefined,
-    });
+  it('should drop the query string from the path of the re-thrown error', () => {
+    const thrown = request({ id: 'ENSG00000130203' });
     httpTestingController
-      .expectOne((request) => request.url === DATA_VERSION_URL)
+      .expectOne((pendingRequest) => pendingRequest.url === DATA_VERSION_URL)
       .flush(null, NOT_FOUND);
 
-    expect(logger.error).toHaveBeenCalledWith(
-      `HTTP ${NOT_FOUND.status} GET ${DATA_VERSION_URL}`,
-      expect.anything(),
-    );
+    expect(thrown()).toMatchObject({ urlPath: DATA_VERSION_URL });
   });
 
   it('should ask for an app version check, since a stale tab may cause the error', () => {
-    requestAndFail(new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true));
+    requestAndFail();
 
     expect(appUpdateService.requestCheck).toHaveBeenCalledTimes(1);
     expect(appUpdateService.requestCheck).toHaveBeenCalledWith(AppUpdateCheckTriggerEnum.HttpError);
-  });
-
-  it('should not report the error when the caller owns error reporting', () => {
-    requestAndFail(new HttpContext().set(SKIP_ERROR_REPORTING, true));
-
-    expect(logger.error).not.toHaveBeenCalled();
-  });
-
-  it('should not show the overlay when the request suppresses it', () => {
-    requestAndFail(new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true));
-
-    expect(errorOverlayService.showError).not.toHaveBeenCalled();
   });
 
   describe('retry', () => {
@@ -125,21 +112,21 @@ describe('httpErrorInterceptor', () => {
       jest.useRealTimers();
     });
 
-    it('should retry a server error once before reporting it', () => {
-      http.get(DATA_VERSION_URL).subscribe({ error: () => undefined });
+    it('should retry a server error once before re-throwing it', () => {
+      const thrown = request();
 
       httpTestingController.expectOne(DATA_VERSION_URL).flush(null, SERVICE_UNAVAILABLE);
-      expect(logger.error).not.toHaveBeenCalled();
+      expect(thrown()).toBeUndefined();
 
       jest.advanceTimersByTime(RETRY_DELAY_MS);
       httpTestingController.expectOne(DATA_VERSION_URL).flush(null, SERVICE_UNAVAILABLE);
 
-      expect(logger.error).toHaveBeenCalledTimes(1);
+      expect(thrown()).toMatchObject({ status: SERVICE_UNAVAILABLE.status });
     });
 
-    it('should report a client error immediately without retrying', () => {
-      requestAndFail();
-      expect(logger.error).toHaveBeenCalledTimes(1);
+    it('should re-throw a client error immediately without retrying', () => {
+      const thrown = requestAndFail();
+      expect(thrown).toMatchObject({ status: NOT_FOUND.status });
 
       jest.advanceTimersByTime(RETRY_DELAY_MS);
 

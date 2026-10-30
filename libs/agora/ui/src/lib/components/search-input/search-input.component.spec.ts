@@ -1,8 +1,7 @@
-import { HttpContext, provideHttpClient } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { GeneService, SearchResult } from '@sagebionetworks/agora/api-client';
 import { mockSearchResults } from '@sagebionetworks/agora/testing';
-import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/services';
 import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';
 import { SearchInputComponent } from './search-input.component';
@@ -47,19 +46,8 @@ describe('SearchInputComponent', () => {
     it('should call searchGeneEnhanced when getSearchResults is invoked', async () => {
       const { component } = await setup();
       const result = component.getSearchResults('test query');
-      expect(mockGeneService.searchGeneEnhanced).toHaveBeenCalledWith('test query', 'body', false, {
-        context: expect.any(HttpContext),
-      });
+      expect(mockGeneService.searchGeneEnhanced).toHaveBeenCalledWith('test query');
       expect(result).toBeDefined();
-    });
-
-    it('should leave a failed search to the search list instead of the error overlay', async () => {
-      const { component } = await setup();
-
-      component.getSearchResults('test query');
-
-      const { context } = mockGeneService.searchGeneEnhanced.mock.calls[0][3];
-      expect(context.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
     });
   });
 

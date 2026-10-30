@@ -1,16 +1,23 @@
-import { HttpContext } from '@angular/common/http';
 import { DestroyRef, inject, Signal, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import {
+  ErrorOverlayService,
+  HttpErrorReportLevelEnum,
+  isNotFoundError,
   LoggerService,
+  NotFoundService,
   PlatformService,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import { ModelIdentifierType } from '@sagebionetworks/model-ad/api-client';
-import { QUERY_PARAMS, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { QUERY_PARAMS } from '@sagebionetworks/model-ad/config';
 import { catchError, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
+
+export const INDIVIDUAL_EXPRESSION_DATA_ERROR_MESSAGE = 'Error loading individual expression data';
+
+/** The item type a not-found report names, for both the gene and protein details pages. */
+export const INDIVIDUAL_EXPRESSION_ITEM_TYPE = 'individual expression data';
 
 export interface IndividualExpressionDetailsQuery {
   tissue: string;
@@ -18,18 +25,10 @@ export interface IndividualExpressionDetailsQuery {
   modelIdentifier: string;
 }
 
-export interface IndividualExpressionDetailsFetchOptions {
-  context: HttpContext;
-}
-
 export interface IndividualExpressionDetailsFromRouteOptions<T> {
   pathParam: string;
   source: string;
-  fetchData: (
-    id: string,
-    query: IndividualExpressionDetailsQuery,
-    options: IndividualExpressionDetailsFetchOptions,
-  ) => Observable<T[]>;
+  fetchData: (id: string, query: IndividualExpressionDetailsQuery) => Observable<T[]>;
 }
 
 export interface IndividualExpressionDetailsState<T> {
@@ -45,9 +44,10 @@ export function individualExpressionDetailsFromRoute<T>({
   fetchData,
 }: IndividualExpressionDetailsFromRouteOptions<T>): IndividualExpressionDetailsState<T> {
   const route = inject(ActivatedRoute);
-  const router = inject(Router);
   const logger = inject(LoggerService).forSource(source);
   const platformService = inject(PlatformService);
+  const errorOverlayService = inject(ErrorOverlayService);
+  const notFoundService = inject(NotFoundService);
   const destroyRef = inject(DestroyRef);
 
   const isLoading = signal(true);
@@ -63,11 +63,13 @@ export function individualExpressionDetailsFromRoute<T>({
   };
 
   const redirectToNotFound = (
-    message: string,
+    reason: string,
     logData: Record<string, unknown>,
   ): Observable<never> => {
-    logger.log(`${message}, redirecting`, logData);
-    router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+    notFoundService.redirectToNotFound(logger, INDIVIDUAL_EXPRESSION_ITEM_TYPE, {
+      reason,
+      ...logData,
+    });
     return EMPTY;
   };
 
@@ -99,9 +101,7 @@ export function individualExpressionDetailsFromRoute<T>({
       modelIdentifier: modelIdentifierParam,
     };
 
-    return fetchData(id, query, {
-      context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-    }).pipe(
+    return fetchData(id, query).pipe(
       switchMap((individualData) =>
         individualData.length
           ? of(individualData)
@@ -109,11 +109,19 @@ export function individualExpressionDetailsFromRoute<T>({
               query: { [pathParam]: id, ...query },
             }),
       ),
-      catchError(() =>
-        redirectToNotFound('individual expression request failed', {
-          query: { [pathParam]: id, ...query },
-        }),
-      ),
+      catchError((error) => {
+        if (isNotFoundError(error)) {
+          return redirectToNotFound('individual expression data not found', {
+            query: { [pathParam]: id, ...query },
+          });
+        }
+        errorOverlayService.reportAndShow(logger, INDIVIDUAL_EXPRESSION_DATA_ERROR_MESSAGE, {
+          error,
+          level: HttpErrorReportLevelEnum.Error,
+        });
+        isLoading.set(false);
+        return EMPTY;
+      }),
     );
   };
 

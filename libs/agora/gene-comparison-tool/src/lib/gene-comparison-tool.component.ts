@@ -29,8 +29,10 @@ import {
 import { HelperService } from '@sagebionetworks/agora/services';
 import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
+  ErrorOverlayService,
   ComparisonToolService,
   HelperService as ExplorersHelperService,
+  HttpErrorReportLevelEnum,
   LoggerService,
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
@@ -60,6 +62,9 @@ import { PopoverModule } from 'primeng/popover';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { GeneComparisonToolFilterListComponent } from './components/gene-comparison-tool-filter-list/gene-comparison-tool-filter-list.component';
+
+export const GENES_AND_SCORE_DISTRIBUTION_ERROR_MESSAGE =
+  'Error loading genes and score distribution';
 
 @Component({
   selector: 'agora-gene-comparison-tool',
@@ -91,6 +96,7 @@ import { GeneComparisonToolFilterListComponent } from './components/gene-compari
 export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService).forSource('GeneComparisonToolComponent');
+  private readonly errorOverlayService = inject(ErrorOverlayService);
   comparisonToolService = inject(ComparisonToolService);
 
   router = inject(Router);
@@ -308,7 +314,15 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
             this.isLoading = false;
           }
         },
-        error: () => {
+        error: (error) => {
+          this.errorOverlayService.reportAndShow(
+            this.logger,
+            GENES_AND_SCORE_DISTRIBUTION_ERROR_MESSAGE,
+            {
+              error,
+              level: HttpErrorReportLevelEnum.Error,
+            },
+          );
           this.isLoading = false;
         },
       });
@@ -1061,7 +1075,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         return negate ? -possible : possible;
       }
       return;
-    } catch (e) {
+    } catch {
       return;
     }
   }

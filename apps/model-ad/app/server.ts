@@ -1,6 +1,7 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr/node';
 import {
+  assertValidAppConfig,
   CHUNK_FILE_PATH_PATTERN,
   createAppVersionHandler,
   createMissingChunkHandler,
@@ -11,11 +12,12 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import bootstrap from './src/main.server';
 
+const serverDistFolder = dirname(fileURLToPath(import.meta.url));
+const browserDistFolder = resolve(serverDistFolder, '../browser');
+
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-  const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-  const browserDistFolder = resolve(serverDistFolder, '../browser');
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
   const commonEngine = new CommonEngine({
@@ -67,8 +69,16 @@ export function app(): express.Express {
   return server;
 }
 
-function run(): void {
+async function run(): Promise<void> {
   const port = process.env['PORT'] || '4200';
+
+  // Exit before listening if the config is invalid, so a deploy fails instead of every page.
+  try {
+    await assertValidAppConfig(join(browserDistFolder, 'config'));
+  } catch (error) {
+    console.error('Invalid app configuration; the server will not start:', error);
+    process.exit(1);
+  }
 
   // Start up the Node server
   const server = app();
@@ -77,4 +87,4 @@ function run(): void {
   });
 }
 
-run();
+void run();

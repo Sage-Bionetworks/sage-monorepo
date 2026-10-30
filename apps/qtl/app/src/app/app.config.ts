@@ -11,6 +11,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import {
+  ExplorersErrorHandler,
   initializeExplorersApp,
   LoggerService,
   provideExplorersConfig,
@@ -75,7 +76,7 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     {
       provide: ErrorHandler,
-      useValue: Sentry.createErrorHandler(),
+      useClass: ExplorersErrorHandler,
     },
     provideAppInitializer(() => {
       inject(Sentry.TraceService);

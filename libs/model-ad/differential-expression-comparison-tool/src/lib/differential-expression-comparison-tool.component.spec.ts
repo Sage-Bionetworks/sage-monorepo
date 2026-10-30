@@ -14,7 +14,6 @@ import {
   provideComparisonToolService,
   provideExplorersConfig,
   SourceLogger,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   mockEmptyComparisonToolQuery,
@@ -391,30 +390,6 @@ describe('DifferentialExpressionComparisonToolComponent', () => {
         expect.objectContaining({ pageSize }),
       );
     });
-
-    it.each(MAIN_CATEGORIES)(
-      'should suppress the error overlay on the pinned request for %s',
-      async (mainCategory) => {
-        const { component, apiSpyFor } = await setup();
-
-        component.getPinnedData([mainCategory, TISSUE_CATEGORY], PINNED_ROWS_QUERY, []);
-
-        const context = apiSpyFor(mainCategory).mock.lastCall?.[3]?.context;
-        expect(context?.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
-      },
-    );
-
-    it.each(MAIN_CATEGORIES)(
-      'should suppress the error overlay on the unpinned request for %s',
-      async (mainCategory) => {
-        const { component, apiSpyFor } = await setup();
-
-        component.getUnpinnedData(mockQuery([mainCategory, TISSUE_CATEGORY]));
-
-        const context = apiSpyFor(mainCategory).mock.lastCall?.[3]?.context;
-        expect(context?.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
-      },
-    );
 
     it.each(MAIN_CATEGORIES)(
       'should send the prebudgeted parent ids in the unpinned query for %s',

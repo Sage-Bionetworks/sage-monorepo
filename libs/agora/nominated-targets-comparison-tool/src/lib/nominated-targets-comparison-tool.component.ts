@@ -1,4 +1,3 @@
-import { HttpContext } from '@angular/common/http';
 import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -21,10 +20,9 @@ import {
   ComparisonToolUrlService,
   LoggerService,
   PlatformService,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, map, shareReplay } from 'rxjs';
+import { map, shareReplay } from 'rxjs';
 import { NominatedTargetsComparisonToolService } from './services/nominated-targets-comparison-tool.service';
 
 @Component({
@@ -49,13 +47,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolsConfig(ComparisonToolConfigPage.NominatedTargets)
-    .pipe(
-      catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', { error });
-        return EMPTY;
-      }),
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     headerTitle: ComparisonToolConfigPage.NominatedTargets,
@@ -108,6 +100,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolConfigPage.NominatedTargets,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget) =>
@@ -159,16 +152,12 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.nominatedTargetsService
-        .getNominatedTargets(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: NominatedTargetsPage) => ({
-            data: response.nominatedTargets,
-            totalCount: response.page.totalElements,
-          })),
-        ),
+      this.nominatedTargetsService.getNominatedTargets(query).pipe(
+        map((response: NominatedTargetsPage) => ({
+          data: response.nominatedTargets,
+          totalCount: response.page.totalElements,
+        })),
+      ),
     );
   }
 
@@ -185,16 +174,12 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     this.logger.log('pinned query', { query });
 
     this.comparisonToolService.fetchPinned(
-      this.nominatedTargetsService
-        .getNominatedTargets(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: NominatedTargetsPage) => {
-            const data = response.nominatedTargets;
-            return { data, totalCount: data.length };
-          }),
-        ),
+      this.nominatedTargetsService.getNominatedTargets(query).pipe(
+        map((response: NominatedTargetsPage) => {
+          const data = response.nominatedTargets;
+          return { data, totalCount: data.length };
+        }),
+      ),
     );
   }
 }

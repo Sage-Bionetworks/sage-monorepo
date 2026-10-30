@@ -1,16 +1,18 @@
 import { Location } from '@angular/common';
-import { HttpContext } from '@angular/common/http';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Drug, DrugService } from '@sagebionetworks/agora/api-client';
 import { ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { Panel } from '@sagebionetworks/explorers/models';
 import {
+  ErrorOverlayService,
   HelperService,
+  HttpErrorReportLevelEnum,
+  isNotFoundError,
   LoggerService,
+  NotFoundService,
   PlatformService,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
@@ -18,6 +20,8 @@ import { DrugDetailsHeroComponent } from './components/drug-details-hero/drug-de
 import { DrugDetailsNominationDetailsComponent } from './components/drug-details-nomination-details/drug-details-nomination-details.component';
 import { DrugDetailsResourcesComponent } from './components/drug-details-resources/drug-details-resources.component';
 import { DrugDetailsSummaryComponent } from './components/drug-details-summary/drug-details-summary.component';
+
+export const DRUG_ERROR_MESSAGE = 'Error loading drug';
 
 @Component({
   selector: 'agora-drug-details',
@@ -34,12 +38,13 @@ import { DrugDetailsSummaryComponent } from './components/drug-details-summary/d
 })
 export class DrugDetailsComponent implements OnInit {
   route = inject(ActivatedRoute);
-  router = inject(Router);
   location = inject(Location);
   helperService = inject(HelperService);
   drugService = inject(DrugService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
+  private readonly errorOverlayService = inject(ErrorOverlayService);
+  private readonly notFoundService = inject(NotFoundService);
   private readonly logger = inject(LoggerService).forSource('DrugDetailsComponent');
 
   isLoading = true;
@@ -90,9 +95,7 @@ export class DrugDetailsComponent implements OnInit {
     const chemblId = params.get(ROUTE_PARAMS.CHEMBL_ID);
     if (chemblId) {
       this.drugService
-        .getDrug(chemblId, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
+        .getDrug(chemblId)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (drug: Drug) => {
@@ -100,9 +103,16 @@ export class DrugDetailsComponent implements OnInit {
             this.setInitialPanel(params);
             this.isLoading = false;
           },
-          error: () => {
-            this.logger.log('loadPanelData: Drug not found, redirecting', { chemblId });
-            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+          error: (error) => {
+            if (isNotFoundError(error)) {
+              this.notFoundService.redirectToNotFound(this.logger, 'drug', { chemblId });
+              return;
+            }
+            this.errorOverlayService.reportAndShow(this.logger, DRUG_ERROR_MESSAGE, {
+              error,
+              level: HttpErrorReportLevelEnum.Error,
+            });
+            this.isLoading = false;
           },
         });
     }

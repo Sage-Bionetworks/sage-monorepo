@@ -1,7 +1,12 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { SearchResult, SearchResultIcon } from '@sagebionetworks/explorers/models';
-import { SvgIconService } from '@sagebionetworks/explorers/services';
+import {
+  formatHttpErrorReportMessage,
+  HttpRequestError,
+  SourceLogger,
+  SvgIconService,
+} from '@sagebionetworks/explorers/services';
 import {
   mockCheckQueryForErrors,
   mockFormatResultSubtextForDisplay,
@@ -13,7 +18,8 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { SearchInputComponent } from './search-input.component';
+import { Observable, throwError } from 'rxjs';
+import { SEARCH_RESULTS_ERROR_MESSAGE, SearchInputComponent } from './search-input.component';
 
 // Mock scrollIntoView for JSDOM environment since it doesn't exist there
 Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
@@ -43,6 +49,7 @@ async function setup(
     formatResultSubtextForDisplay?: (result: SearchResult) => string | undefined;
     getNoSearchResultsMessage?: (query: string) => string;
     getResultIcon?: (result: SearchResult) => SearchResultIcon;
+    getSearchResults?: (query: string) => Observable<SearchResult[]>;
     hasLightResultHighlight?: boolean;
   } = {},
 ) {
@@ -78,7 +85,7 @@ async function setup(
       searchImageAltText: 'gene search icon',
       hasThickBorder: true,
       navigateToResult: mockNavigateToResult,
-      getSearchResults: mockGetSearchResults,
+      getSearchResults: options.getSearchResults ?? mockGetSearchResults,
       checkQueryForErrors: mockCheckQueryForErrors,
     },
   });
@@ -89,6 +96,10 @@ async function setup(
 describe('SearchInputComponent', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should display', async () => {
@@ -128,6 +139,27 @@ describe('SearchInputComponent', () => {
     await waitForSpinner();
 
     await screen.findByText('No results match your search term.');
+  });
+
+  it('should show an inline error and report a warning when the search request fails', async () => {
+    const searchRequestError = new HttpRequestError(
+      new HttpErrorResponse({
+        status: HttpStatusCode.ServiceUnavailable,
+        url: 'https://modeladexplorer.org/api/v1/search/genes?q=apoe',
+      }),
+      'GET',
+    );
+    const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+    const { user } = await setup({ getSearchResults: () => throwError(() => searchRequestError) });
+
+    await user.type(getInput(), 'apoe');
+
+    await screen.findByText('An unknown error occurred, please try again.');
+    expect(warnSpy).toHaveBeenCalledWith(
+      formatHttpErrorReportMessage(SEARCH_RESULTS_ERROR_MESSAGE, searchRequestError),
+      expect.any(Object),
+      searchRequestError,
+    );
   });
 
   it('should highlight search query with mark', async () => {
