@@ -173,12 +173,14 @@ export async function returnToTab(page: Page) {
  * Runs a version check once the minimum interval between checks has passed, and resolves when both
  * versions' responses arrive, resolving with them. The tab sends a check's requests only after it
  * has handled the previous check's result, so this also proves that result was handled. The test
- * must call `page.clock.install()` before loading the page.
+ * must call `page.clock.install()` before loading the page. The fast-forward can reach a background
+ * poll, which then runs the check and holds back the tab switch's, so the responses are awaited
+ * from before it.
  */
 async function runNextVersionCheck(page: Page) {
-  await page.clock.fastForward(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
   const appVersionResponse = waitForAppVersionCheck(page);
   const dataVersionResponse = waitForDataVersionCheck(page);
+  await page.clock.fastForward(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
   await returnToTab(page);
   const [appVersionCheck, dataVersionCheck] = await Promise.all([
     appVersionResponse,
