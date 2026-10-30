@@ -5,17 +5,12 @@ import {
   HttpHandlerFn,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, timer } from 'rxjs';
-import { retry } from 'rxjs/operators';
+import { Observable, throwError, timer } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
 import {
   AppUpdateCheckTriggerEnum,
   AppUpdateService,
-  HttpErrorReportLevelEnum,
   HttpRequestError,
-  LoggerService,
-  reportHttpError,
-  UNREPORTED_HTTP_ERROR_MESSAGE,
-  wasReported,
 } from '@sagebionetworks/explorers/services';
 
 export const RETRY_DELAY_MS = 1000;
@@ -33,19 +28,17 @@ export const RETRY_DELAY_MS = 1000;
  *   recover (fallback values, redirects)
  *
  * It neither reports to Sentry nor shows the error overlay: only the caller knows whether a failure
- * is expected, so callers report through `reportHttpError` and show the overlay through
- * `ErrorOverlayService.showRequestError`. The global `ErrorHandler` does both for any failure no
- * caller handles, and a failure a caller catches but never reports is sent as an
- * `UNREPORTED_HTTP_ERROR_MESSAGE` warning.
+ * is expected, so callers report through `reportHttpError`, or report and show the overlay through
+ * `ErrorOverlayService.reportAndShow`. The global `ErrorHandler` does both for any failure no
+ * caller handles.
  */
 export const httpErrorInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn,
 ): Observable<any> => {
   const appUpdateService = inject(AppUpdateService);
-  const logger = inject(LoggerService).forSource('httpErrorInterceptor');
 
-  const retried = next(req).pipe(
+  return next(req).pipe(
     retry({
       count: 1,
       delay: (error: HttpErrorResponse) => {
@@ -57,30 +50,12 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
         throw error;
       },
     }),
-  );
+    catchError((error: HttpErrorResponse) => {
+      const httpRequestError = new HttpRequestError(error, req.method);
 
-  return new Observable((subscriber) =>
-    retried.subscribe({
-      next: (event) => subscriber.next(event),
-      complete: () => subscriber.complete(),
-      error: (error: HttpErrorResponse) => {
-        const httpRequestError = new HttpRequestError(error, req.method);
-        appUpdateService.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
+      appUpdateService.requestCheck(AppUpdateCheckTriggerEnum.HttpError);
 
-        subscriber.error(httpRequestError);
-
-        // Checked a tick after the error is delivered, by which point a caller's catchError (run
-        // while delivering), an awaiting try/catch (a microtask), and RxJS's hand-off of an
-        // unhandled error to the ErrorHandler (a timer queued while delivering) have all reported.
-        setTimeout(() => {
-          if (!wasReported(httpRequestError)) {
-            reportHttpError(logger, UNREPORTED_HTTP_ERROR_MESSAGE, {
-              error: httpRequestError,
-              level: HttpErrorReportLevelEnum.Warn,
-            });
-          }
-        });
-      },
+      return throwError(() => httpRequestError);
     }),
   );
 };
