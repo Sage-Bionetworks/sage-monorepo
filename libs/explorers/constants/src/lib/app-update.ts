@@ -3,8 +3,8 @@ import { DATA_RELEASE_REFRESH_INTERVAL_MS } from './data-release';
 export const APP_VERSION_PATH = '/app-version';
 export const DATA_VERSION_PATH = '/data-version';
 
-export const APP_UPDATE_POLL_INTERVAL_MS = 10 * 60 * 1000;
 export const APP_UPDATE_MIN_CHECK_INTERVAL_MS = 60 * 1000;
+export const APP_UPDATE_POLL_INTERVAL_MS = 2 * APP_UPDATE_MIN_CHECK_INTERVAL_MS;
 /**
  * A rolling deploy sends requests to both old and new app tasks for a few minutes, so this has to
  * outlast that cutover: a mismatch still there afterwards reflects the version every task serves.
