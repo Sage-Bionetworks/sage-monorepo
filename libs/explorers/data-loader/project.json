@@ -1,0 +1,29 @@
+{
+  "name": "explorers-data-loader",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/explorers/data-loader/explorers_data_loader",
+  "projectType": "library",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv sync",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run pytest",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run ruff check {projectRoot} && uv run ruff format --check {projectRoot}"
+      }
+    }
+  },
+  "tags": ["type:util", "scope:explorers", "language:python", "package-manager:uv"]
+}

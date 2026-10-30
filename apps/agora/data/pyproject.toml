@@ -8,8 +8,7 @@ authors = [
 ]
 requires-python = "==3.11.9"
 dependencies = [
-    "synapseclient==4.13.0",
-    "pymongo==4.7.3",
+    "explorers-data-loader",
 ]
 name = "agora-data"
 version = "0.1.0"
@@ -23,3 +22,6 @@ test = []
 
 [tool.uv]
 default-groups = []
+
+[tool.uv.sources]
+explorers-data-loader = { path = "../../../libs/explorers/data-loader", editable = true }

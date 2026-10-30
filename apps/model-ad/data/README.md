@@ -21,11 +21,12 @@ nx create-config model-ad-data
 
 In the `.env` file,
 
-- specify the desired data release using `DATA_FILE` and `DATA_VERSION`
 - update `SYNAPSE_AUTH_TOKEN` to a Synapse PAT with view/download permissions for a user that can
-  download the data release (i.e. the data manifest file specified by `DATA_FILE` and
-  `DATA_VERSION` and all files described within the manifest) and the team image files (i.e. all
-  files within the folder specified by `TEAM_IMAGES_ID`)
+  download the data release (i.e. the data manifest file and all files described within it)
+
+The release to load is the `local` entry of `src/data/data-releases.json`. To load a different
+release, edit that entry without committing it. `nx serve` reads the file directly; for
+`nx serve-detach`, rebuild the image first (`nx build-image model-ad-data`).
 
 ### Start MongoDB then Run the Python script
 
@@ -42,11 +43,8 @@ nx build-image model-ad-data
 
 ### Run the container "manually"
 
-Run the container after building the image locally:
-
-```
-docker run --rm ghcr.io/sage-bionetworks/model-ad-data:local
-```
+Use `nx serve-detach model-ad-data` (below), which passes the container its `.env` settings and
+connects it to MongoDB.
 
 ### Run the container and its dependencies (MongoDB)
 
@@ -59,6 +57,25 @@ nx serve-detach model-ad-data
 ```
 nx serve-detach model-ad-app
 ```
+
+### How a release is loaded
+
+The loader uses the shared [explorers data loader](../../../libs/explorers/data-loader/README.md).
+It imports the release into staging collections and swaps them in only once every collection has
+loaded and been indexed, so a failed or interrupted run leaves the previous release in place, and
+the next run cleans up after it. That README describes each step and every log event.
+
+### Reading the logs
+
+The loader writes one JSON object per line. Each run ends with a `run_completed` record that says
+whether it succeeded and, if not, which step failed and which release the database now serves. It
+is always the last line:
+
+```
+docker logs model-ad-data 2>/dev/null | tail -1
+```
+
+To read a run as plain lines instead, set `LOG_FORMAT="text"` in the `.env` file.
 
 ### Cleaning the database
 

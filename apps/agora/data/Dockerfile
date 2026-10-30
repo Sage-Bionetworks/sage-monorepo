@@ -15,9 +15,12 @@ ENV UV_LINK_MODE=copy
 # Copy uv binary
 COPY --from=uv /uv /bin/uv
 
-# Copy dependency files
-WORKDIR /app
-COPY pyproject.toml uv.lock ./
+# Copy the shared data loader and this project's dependency files at their repo
+# paths, so the project's relative path dependency on the loader resolves
+WORKDIR /build
+COPY libs/explorers/data-loader ./libs/explorers/data-loader
+COPY apps/agora/data/pyproject.toml apps/agora/data/uv.lock ./apps/agora/data/
+WORKDIR /build/apps/agora/data
 
 # Generate requirements.txt and install dependencies
 RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
@@ -34,10 +37,21 @@ ENV PYTHONPATH="${APP_DIR}"
 
 RUN groupadd --gid "$USER_GID" "$USER_NAME" \
   && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USER_NAME" \
-  # Install sudo
+  # Install dependencies
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
+    ca-certificates \
     gosu \
+    wget \
+    gnupg \
+  # Add MongoDB GPG key and repository (modern scoped trust approach)
+  && wget -qO /tmp/mongodb-key.asc https://www.mongodb.org/static/pgp/server-8.0.asc \
+  && gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg /tmp/mongodb-key.asc \
+  && rm /tmp/mongodb-key.asc \
+  && echo "deb [signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" > /etc/apt/sources.list.d/mongodb-org-8.0.list \
+  && apt-get update -qq -y \
+  && apt-get install --no-install-recommends -qq -y \
+    mongodb-database-tools \
   && apt-get -y clean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
@@ -46,11 +60,11 @@ RUN groupadd --gid "$USER_GID" "$USER_NAME" \
 COPY --from=builder ${APP_DIR} ${APP_DIR}
 
 # Copy the application code.
-COPY ./src /${APP_DIR}/src
+COPY apps/agora/data/src ${APP_DIR}/src
 RUN chown -R ${APP_USER_NAME}:${APP_USER_NAME} ${APP_DIR}
 
 WORKDIR /
-COPY docker-entrypoint.sh ./
+COPY apps/agora/data/docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

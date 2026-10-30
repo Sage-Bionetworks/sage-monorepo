@@ -1,0 +1,10 @@
+# The image builds from the repo root, so send only the files the Dockerfile copies
+*
+!libs/explorers/data-loader/
+!apps/model-ad/data/pyproject.toml
+!apps/model-ad/data/uv.lock
+!apps/model-ad/data/src/
+!apps/model-ad/data/docker-entrypoint.sh
+**/.venv
+**/__pycache__
+**/.pytest_cache

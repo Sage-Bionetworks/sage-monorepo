@@ -1,0 +1,170 @@
+# Explorers Data Loader
+
+## Introduction
+
+This Python library downloads an explorer data release from Synapse, then seeds and indexes the
+data in MongoDB. The data projects of agora, model-ad and qtl (`apps/<product>/data`) each depend
+on it and pass only the settings that differ between products.
+
+## Usage
+
+A data project calls `run` with its product settings:
+
+```python
+from explorers_data_loader import ProductSettings, run
+
+run(ProductSettings(name="model-ad"))
+```
+
+`run` reads the database connection from the environment (`DB_USER`, `DB_PASS`, `DB_NAME`,
+`DB_HOST`, `DB_PORT`, and `SYNAPSE_AUTH_TOKEN` for the Synapse client), the release to load from
+the data project's `src/data/data-releases.json`, and the collections it holds from
+`src/data/collections.json`.
+
+## data-releases.json
+
+Names the Synapse data release each environment loads:
+
+```json
+{
+  "local": { "dataFile": "syn73774820", "dataVersion": "221" },
+  "prod": { "dataFile": "syn74702351", "dataVersion": "9" }
+}
+```
+
+- `DATA_RELEASE` picks the entry, `local` by default. Local runs and CI set nothing; a deployed
+  import sets the environment it loads.
+- `dataFile` is the release manifest and `dataVersion` its version. A product that loads team
+  images also sets `teamImagesId`, the Synapse folder of photos.
+- To load a different release locally, edit the `local` entry without committing it, and
+  rebuild the data image. `DATA_FILE`, `DATA_VERSION` and `TEAM_IMAGES_ID`, which `.env` files
+  set before this file existed, are ignored, and a run that finds them logs
+  `release_env_ignored`.
+- Keys starting with `$`, such as `$comment`, annotate the file and name no release.
+
+A data version bump changes the entry, so rebuilding the data image picks it up, without anyone
+editing their own `.env`.
+
+## collections.json
+
+Lists the collections a release imports, in import order, with each collection's indexes:
+
+```json
+[
+  {
+    "name": "rna_de_aggregate",
+    "file": "rna_de_aggregate.json",
+    "indexes": [{ "ensembl_gene_id": 1 }],
+    "collatedIndexes": [{ "tissue": 1, "ensembl_gene_id": 1, "name.link_text": 1, "sex": 1 }]
+  },
+  {
+    "name": "ui_config",
+    "file": "ui_config.json",
+    "indexes": [{ "page": 1 }],
+    "maintainInsertionOrder": true
+  }
+]
+```
+
+| Key                      | Required | Meaning                                                                                                                                     |
+| ------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`                   | yes      | The MongoDB collection                                                                                                                      |
+| `file`                   | yes      | The release file it is imported from                                                                                                        |
+| `indexes`                | no       | Indexes to build, each mapping fields to `1` (ascending) or `-1` (descending). A compound index's fields keep their order                   |
+| `collatedIndexes`        | no       | Indexes to build with case-insensitive collation (`en`, strength 2), for fields the APIs sort or match without regard to case               |
+| `maintainInsertionOrder` | no       | `true` imports the file one document at a time, keeping its order, for a collection the UI shows in stored order. Others import in parallel |
+
+The loader checks the whole file before downloading anything, and reports every problem in one
+error: a missing or empty `name` or `file`, an unknown key, an invalid index, a collection listed
+twice, or `dataversion`, which the loader always imports last on its own.
+
+## How a release is loaded
+
+The live collections keep serving the previous release until the new one is complete:
+
+1. Drop any `<name>_staging` collections a failed run left behind.
+2. Import every collection, `dataversion` last, into `<name>_staging` with `mongoimport`.
+3. Build the indexes on the staging collections. A rename keeps a collection's indexes, so no
+   collection is ever served unindexed.
+4. Stop if any staging collection is missing or empty.
+5. Rename each staging collection over its live collection (`renameCollection` with
+   `dropTarget`), `dataversion` last. The APIs clear their caches when `dataversion` changes, so
+   it only changes once every other collection is live.
+6. Drop live collections the release doesn't include (orphans), such as one a release removed
+   or renamed. This runs only after a successful swap, so a failed import never removes a
+   collection the previous release still reads. A collection that can't be dropped is a
+   warning that the next run retries, not a failed run.
+
+A failure before step 5 leaves the previous release fully live, and the next run drops the
+leftover staging collections. A failure during step 5 leaves some collections on each release;
+`run_completed` lists both, and re-running the import finishes the release.
+
+## Team images
+
+A product that serves team member photos (`ProductSettings(loads_team_images=True)`, agora)
+also loads them from the release's `teamImagesId` folder into GridFS's default `fs` bucket,
+which its API reads by bare file name (e.g. `jane_doe.jpg`):
+
+- The images are downloaded after the release files, into a fresh `local/data/team_images/`
+  folder, so a photo removed from Synapse isn't uploaded again from an earlier download.
+- After the indexes, every `.jpg`, `.jpeg` and `.png` is uploaded to a staging bucket, whose
+  collections become `fs.files_staging` and `fs.chunks_staging`. They are verified and swapped
+  with the rest of the release, before `dataversion`.
+- `LOAD_TEAM_IMAGES` (`true` by default) turns them off, e.g. in CI, where the download is slow.
+  A run with it `false` leaves the photos already loaded in place: `fs.files` and `fs.chunks`
+  stay part of the release, so dropping orphans never removes them.
+
+## Logs
+
+The loader writes one JSON object per line to stdout, so log tools (CloudWatch Logs Insights,
+Grafana Loki) can filter and count runs without parsing messages. Set `LOG_FORMAT=text` for
+readable lines while watching a local run.
+
+Every record carries `run_id`, `product`, `data_release`, `data_file` and `data_version`. Records that mark a step
+also carry an `event` name and that event's fields:
+
+| Event                          | Fields                                                                                                                                                                                                                                                |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `run_started`                  | none beyond the run fields                                                                                                                                                                                                                            |
+| `release_env_ignored`          | `variables`: the retired release variables still set, e.g. by an older `.env`                                                                                                                                                                         |
+| `download_started`             | none beyond the run fields                                                                                                                                                                                                                            |
+| `file_downloaded`              | `synapse_id`, `version`, `file`, `entry_number`, `entries`, `size_mb`, `duration_ms`                                                                                                                                                                  |
+| `manifest_entry_skipped`       | `synapse_id`, `version`, `name`, `entity_type` (a manifest entry that isn't a file, e.g. a `Folder`)                                                                                                                                                  |
+| `download_completed`           | `files`, `skipped_entries`, `duration_ms`                                                                                                                                                                                                             |
+| `database_size_measured`       | `stage` (`before_import` or `after_load`), `collections`, `data_size_mb`, `storage_size_mb`, `index_size_mb`                                                                                                                                          |
+| `database_size_unavailable`    | `stage`, `error`                                                                                                                                                                                                                                      |
+| `staging_leftovers_dropped`    | `collections` (empty unless a previous run failed)                                                                                                                                                                                                    |
+| `collection_imported`          | `collection`, `staging_collection`, `file`, `documents`, `duration_ms`                                                                                                                                                                                |
+| `collection_import_failed`     | `collection`, `file`, `duration_ms`, `error`                                                                                                                                                                                                          |
+| `indexes_created`              | `collection`, `indexes`, `collated_indexes`                                                                                                                                                                                                           |
+| `staging_collections_verified` | `collections`                                                                                                                                                                                                                                         |
+| `staging_verification_failed`  | `empty_or_missing`                                                                                                                                                                                                                                    |
+| `collection_swapped`           | `collection`                                                                                                                                                                                                                                          |
+| `collection_swap_failed`       | `collection`, `error`                                                                                                                                                                                                                                 |
+| `orphan_dropped`               | `collection`                                                                                                                                                                                                                                          |
+| `orphan_drop_failed`           | `collection`, `error`                                                                                                                                                                                                                                 |
+| `orphan_cleanup_failed`        | `error` (the collections couldn't be listed, so none were dropped)                                                                                                                                                                                    |
+| `orphan_cleanup_completed`     | `dropped`, `failed`                                                                                                                                                                                                                                   |
+| `team_images_downloaded`       | `synapse_id`, `images`, `size_mb`, `duration_ms`                                                                                                                                                                                                      |
+| `team_images_uploaded`         | `images`, `size_mb`, `duration_ms`                                                                                                                                                                                                                    |
+| `team_images_skipped`          | none beyond the run fields (`LOAD_TEAM_IMAGES` is `false`)                                                                                                                                                                                            |
+| `run_completed`                | `outcome` (`succeeded` or `failed`), `failed_step`, `error` (on failure), `live_release` (`new`, `previous` or `mixed`), `duration_ms`, `collections_imported`, `collections_swapped`, `collections_not_swapped`, `orphans_dropped`, `orphans_failed` |
+
+`run_completed` is written once per run, whether it succeeds or fails, so it is the record to
+build dashboards on. Its `live_release` says what the site serves once the run ends: the new
+release, the previous one (any failure before the swap), or a mix (a swap that stopped partway). Event and field names are a contract with those queries: add new ones
+freely, but rename or remove one only together with the queries that read it.
+
+To read a JSON log locally, for example each collection's document count:
+
+```
+docker logs model-ad-data 2>/dev/null | jq -c 'select(.event == "collection_imported") | {collection, documents, duration_ms}'
+```
+
+## Development
+
+```
+nx prepare explorers-data-loader
+nx test explorers-data-loader
+nx lint explorers-data-loader
+```

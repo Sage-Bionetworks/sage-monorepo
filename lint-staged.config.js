@@ -35,10 +35,12 @@ module.exports = {
     `ktlint --format ${filenames.join(' ')}`,
   ],
 
-  '**/Dockerfile.*': (filenames) => [
-    // Lint Dockerfiles with Hadolint
-    `hadolint ${filenames.join(' ')}`,
-  ],
+  '**/{Dockerfile,Dockerfile.*}': (filenames) => {
+    // Lint Dockerfiles with Hadolint. Dockerfile.dockerignore files match this
+    // pattern too, but they are build context filters, not Dockerfiles.
+    const dockerfiles = filenames.filter((filename) => !filename.endsWith('.dockerignore'));
+    return dockerfiles.length > 0 ? [`hadolint ${dockerfiles.join(' ')}`] : [];
+  },
 
   'libs/explorers/assets/icons/*.svg': () => [
     // Regenerate the bundled icon registry whenever a source SVG changes,
