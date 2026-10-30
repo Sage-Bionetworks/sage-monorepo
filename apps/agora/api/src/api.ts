@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import { startCacheInvalidation } from './cache-invalidation';
+import { clearCachesOnReleaseChange } from './cache-invalidation';
 import {
   allBiodomainsRoute,
   biodomainsRoute,
@@ -13,7 +13,7 @@ import {
   teamMemberImageRoute,
   teamsRoute,
 } from './components';
-import { dataReleaseTracker, getAgoraDataRelease } from './data-release';
+import { dataReleaseTracker } from './data-release';
 import { clearAllCaches } from './helpers';
 
 const mongodbUser = process.env.MONGODB_USER;
@@ -58,6 +58,7 @@ mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection 
 
 const router = express.Router();
 mongoose.connection.once('open', async () => {
+  clearCachesOnReleaseChange(dataReleaseTracker, clearAllCaches);
   // Read the release before registering the routes, so no data is served before it is known.
   await dataReleaseTracker.start();
 
@@ -71,11 +72,6 @@ mongoose.connection.once('open', async () => {
   router.get('/genes', genesRoute);
   router.get('/teams', teamsRoute);
   router.get('/team-members/:name/image', teamMemberImageRoute);
-
-  startCacheInvalidation({
-    getCurrentDataRelease: getAgoraDataRelease,
-    clearCaches: clearAllCaches,
-  });
 });
 
 export default router;
