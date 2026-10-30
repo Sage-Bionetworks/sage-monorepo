@@ -12,7 +12,7 @@ import * as Sentry from '@sentry/angular';
 export interface CaptureOptions {
   /**
    * Whether the code the error came from caught it, as Sentry's `handled` flag reports it.
-   * Defaults to `true`, Sentry's default. A last-resort handler, such as a global `ErrorHandler`,
+   * Defaults to `true`, Sentry's default. A safety-net handler, such as a global `ErrorHandler`,
    * sets it to `false`, so the error counts against the session the way an uncaught exception does.
    */
   handled?: boolean;

@@ -96,7 +96,7 @@ export function reportHttpError(
   operation: string,
   { error, level, tags = {}, handled = true }: HttpErrorReportContext,
 ): void {
-  // Only a last-resort handler passes capture options, so a call site's report keeps the logger's
+  // Only a safety-net handler passes capture options, so a call site's report keeps the logger's
   // usual arguments.
   const captureOptions = handled ? [] : [{ handled }];
   Sentry.withScope((scope) => {
