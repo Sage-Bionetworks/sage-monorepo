@@ -1050,15 +1050,13 @@ describe('AppUpdateService', () => {
   });
 
   describe('when the data version is checked', () => {
-    it('restarts the confirmation delay when a different data release appears before it ends', () => {
+    it('does not check again before the confirmation, since the delay is shorter than the minimum check interval', () => {
       startWithDataChecks(setup());
       returnToTab();
       respondToCheck(loadedVersion, newerDataVersion);
-      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS - APP_UPDATE_MIN_CHECK_INTERVAL_MS);
-      returnToTab();
-      respondToCheck(loadedVersion, laterDataVersion);
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS - 1);
 
-      jest.advanceTimersByTime(APP_UPDATE_MIN_CHECK_INTERVAL_MS);
+      returnToTab();
 
       expect(httpMock.match(dataVersionUrl)).toHaveLength(0);
       expect(isShowingDataUpdateNotice()).toBe(false);
@@ -1082,20 +1080,6 @@ describe('AppUpdateService', () => {
       returnToTab();
       respondToCheck(loadedVersion, newerDataVersion);
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
-      respondToCheck(loadedVersion, laterDataVersion);
-
-      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
-      respondToCheck(loadedVersion, laterDataVersion);
-
-      expect(isShowingDataUpdateNotice()).toBe(true);
-    });
-
-    it('shows the overlay once a different data release outlasts its own confirmation delay', () => {
-      startWithDataChecks(setup());
-      returnToTab();
-      respondToCheck(loadedVersion, newerDataVersion);
-      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS - APP_UPDATE_MIN_CHECK_INTERVAL_MS);
-      returnToTab();
       respondToCheck(loadedVersion, laterDataVersion);
 
       jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
@@ -1288,20 +1272,18 @@ describe('AppUpdateService', () => {
       expect(isShowingAppUpdateNotice()).toBe(true);
     });
 
-    it('starts the wait over when a deploy appears while a data release is waiting', () => {
-      const deployFoundAfterMs = DATA_UPDATE_CONFIRM_DELAY_MS - APP_UPDATE_MIN_CHECK_INTERVAL_MS;
+    it('starts the wait over with the app delay when the data confirmation check also finds a deploy', () => {
       startWithDataChecks(setup());
       returnToTab();
       respondToCheck(loadedVersion, newerDataVersion);
-      jest.advanceTimersByTime(deployFoundAfterMs);
-      returnToTab();
+      jest.advanceTimersByTime(DATA_UPDATE_CONFIRM_DELAY_MS);
       respondToCheck(newerVersion, newerDataVersion);
 
-      const untilDataDelayEndsMs = DATA_UPDATE_CONFIRM_DELAY_MS - deployFoundAfterMs;
-      jest.advanceTimersByTime(untilDataDelayEndsMs);
+      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS - 1);
       expect(httpMock.match(APP_VERSION_PATH)).toHaveLength(0);
+      expect(errorOverlayService.isOverlayVisible()).toBe(false);
 
-      jest.advanceTimersByTime(APP_UPDATE_CONFIRM_DELAY_MS - untilDataDelayEndsMs);
+      jest.advanceTimersByTime(1);
       respondToCheck(newerVersion, newerDataVersion);
 
       expect(isShowingAppUpdateNotice()).toBe(true);

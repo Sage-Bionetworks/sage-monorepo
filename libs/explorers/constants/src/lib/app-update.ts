@@ -1,3 +1,5 @@
+import { DATA_RELEASE_REFRESH_INTERVAL_MS } from './data-release';
+
 export const APP_VERSION_PATH = '/app-version';
 export const DATA_VERSION_PATH = '/data-version';
 
@@ -14,13 +16,13 @@ export const APP_UPDATE_CONFIRM_DELAY_MS = 5 * 60 * 1000;
  * request every minute.
  */
 export const APP_UPDATE_CONFIRMATION_RETRY_LIMIT = 3;
-// TODO(MG-1175): lower once API cache keys are scoped to the data release
 /**
- * A data release switches the data version in one step, so this only has to outlast the APIs'
- * cache invalidation, which polls every minute and clears again on the following poll. That second
- * clear can land just over two minutes after the switch, so a third minute is added as margin.
+ * A data release switches the data version in one step, and each API task stops serving the
+ * previous release's cached data as soon as its next refresh reads the new one, within
+ * `DATA_RELEASE_REFRESH_INTERVAL_MS`. So this only has to outlast one refresh on every task; the
+ * second interval is margin for a slow read.
  */
-export const DATA_UPDATE_CONFIRM_DELAY_MS = 3 * 60 * 1000;
+export const DATA_UPDATE_CONFIRM_DELAY_MS = 2 * DATA_RELEASE_REFRESH_INTERVAL_MS;
 export const VERSION_CHECK_TIMEOUT_MS = 10 * 1000;
 
 /** When this tab last loaded a new page to replace a stale chunk, in `sessionStorage`. */

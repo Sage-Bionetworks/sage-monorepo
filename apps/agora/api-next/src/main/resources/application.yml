@@ -30,5 +30,8 @@ management:
         include: health, metrics
   endpoint:
     health:
+      # Shows each health indicator's details, such as the data release in use. The actuator is
+      # only reachable inside the container network: the site's proxy doesn't route to it.
+      show-details: always
       probes:
         enabled: true
