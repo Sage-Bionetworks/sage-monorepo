@@ -225,13 +225,13 @@ type VersionComparisons = Record<TrackedVersion, VersionComparison>;
  * load on a mismatched version: the tab can no longer navigate, so the overlay shows right away.
  *
  * Data version mismatch: the data release the tab shows does not match what the API's data
- * version endpoint reports. A data release switches over in one step, but each API task only
- * notices on its own once-a-minute check, then clears its caches, and clears them again a minute
- * later because a slow uncached query that read the previous release just before the switch could
- * start caching after the first cache clear operation. Until both clears have run, a reload could
- * still be served the previous release's cached data. So a mismatch must still be there after
- * `DATA_UPDATE_CONFIRM_DELAY_MS`, which outlasts both clears, and a reload then gets the new data.
- * A match in between means the data was rolled back, so the mismatch is dropped.
+ * version endpoint reports. A data release switches over in one step, but each API task only stops
+ * serving the previous release's cached data at its next release refresh, so until every task has
+ * refreshed, a reload could still be served the previous release. So a mismatch must still be there
+ * after `DATA_UPDATE_CONFIRM_DELAY_MS`, which outlasts a refresh on every task, and a reload then
+ * gets the new data. The delay is shorter than `APP_UPDATE_MIN_CHECK_INTERVAL_MS`, so the
+ * confirmation is the first check after the mismatch. A match then means the data was rolled back,
+ * so the mismatch is dropped.
  *
  * Both versions are confirmed together. A check records which versions differ, and that set has
  * to stay the same for the longest delay among them: data alone waits its own delay, but app and
