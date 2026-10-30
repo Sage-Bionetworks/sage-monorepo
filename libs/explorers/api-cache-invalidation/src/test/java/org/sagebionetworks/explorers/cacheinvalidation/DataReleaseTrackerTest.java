@@ -49,7 +49,10 @@ class DataReleaseTrackerTest {
   @BeforeEach
   void setUp() {
     sentry = mockStatic(Sentry.class);
-    tracker = new DataReleaseTracker(dataVersionProvider, Clock.fixed(REFRESHED_AT, ZoneOffset.UTC));
+    tracker = new DataReleaseTracker(
+      dataVersionProvider,
+      Clock.fixed(REFRESHED_AT, ZoneOffset.UTC)
+    );
     tracker.addChangeListener(changeListener);
   }
 
@@ -72,7 +75,7 @@ class DataReleaseTrackerTest {
 
   @Test
   @DisplayName("should read the release while starting without reporting a change")
-  void shouldReadTheReleaseWhileStartingWithoutReportingAChange() {
+  void shouldReadTheReleaseWhileStartingWithoutReportingChange() {
     when(dataVersionProvider.getCurrentDataRelease()).thenReturn(Optional.of(INITIAL_RELEASE));
 
     tracker.afterPropertiesSet();
@@ -86,7 +89,7 @@ class DataReleaseTrackerTest {
 
   @Test
   @DisplayName("should report a change to listeners when the release changes")
-  void shouldReportAChangeToListenersWhenTheReleaseChanges() {
+  void shouldReportTheChangeToListenersWhenTheReleaseChanges() {
     when(dataVersionProvider.getCurrentDataRelease()).thenReturn(
       Optional.of(INITIAL_RELEASE),
       Optional.of(NEXT_VERSION)
@@ -100,7 +103,7 @@ class DataReleaseTrackerTest {
 
   @Test
   @DisplayName("should not report a change when the release is unchanged")
-  void shouldNotReportAChangeWhenTheReleaseIsUnchanged() {
+  void shouldNotReportChangeWhenTheReleaseIsUnchanged() {
     when(dataVersionProvider.getCurrentDataRelease()).thenReturn(Optional.of(INITIAL_RELEASE));
 
     refreshTimes(3);
@@ -155,7 +158,7 @@ class DataReleaseTrackerTest {
 
   @Test
   @DisplayName("should reset the failure count when a refresh succeeds again")
-  void shouldResetTheFailureCountWhenARefreshSucceedsAgain() {
+  void shouldResetTheFailureCountWhenRefreshSucceedsAgain() {
     when(dataVersionProvider.getCurrentDataRelease())
       .thenReturn(Optional.of(INITIAL_RELEASE))
       .thenThrow(READ_ERROR)
@@ -168,7 +171,7 @@ class DataReleaseTrackerTest {
 
   @Test
   @DisplayName("should report an unknown release once as an error without a refresh warning")
-  void shouldReportAnUnknownReleaseOnceAsAnErrorWithoutARefreshWarning() {
+  void shouldReportAnUnknownReleaseOnceAsAnErrorWithoutRefreshWarning() {
     when(dataVersionProvider.getCurrentDataRelease()).thenReturn(Optional.empty());
 
     refreshTimes(DataReleaseTracker.FAILURE_WARNING_THRESHOLD * 2);
@@ -189,7 +192,7 @@ class DataReleaseTrackerTest {
 
   @Test
   @DisplayName("should start using the release without reporting a change when one can be read")
-  void shouldStartUsingTheReleaseWithoutReportingAChangeWhenOneCanBeRead() {
+  void shouldStartUsingTheReleaseWithoutReportingChangeWhenOneCanBeRead() {
     when(dataVersionProvider.getCurrentDataRelease()).thenReturn(
       Optional.empty(),
       Optional.of(INITIAL_RELEASE)

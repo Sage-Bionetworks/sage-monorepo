@@ -85,7 +85,7 @@ class DataReleaseCacheResolverIntegrationTest {
 
   @Test
   @DisplayName("should serve a repeated call from the cache within one release")
-  void shouldServeARepeatedCallFromTheCacheWithinOneRelease() {
+  void shouldServeRepeatedCallFromTheCacheWithinOneRelease() {
     storedRelease.set(INITIAL_RELEASE);
     contextRunner.run(context -> {
       ModelService modelService = context.getBean(ModelService.class);
@@ -99,7 +99,7 @@ class DataReleaseCacheResolverIntegrationTest {
 
   @Test
   @DisplayName("should load again in a new release instead of serving the previous one")
-  void shouldLoadAgainInANewReleaseInsteadOfServingThePreviousOne() {
+  void shouldLoadAgainInNewReleaseInsteadOfServingThePreviousOne() {
     storedRelease.set(INITIAL_RELEASE);
     contextRunner.run(context -> {
       ModelService modelService = context.getBean(ModelService.class);
@@ -114,7 +114,7 @@ class DataReleaseCacheResolverIntegrationTest {
 
   @Test
   @DisplayName("should not store a call's result when the release switches during the call")
-  void shouldNotStoreACallsResultWhenTheReleaseSwitchesDuringTheCall() {
+  void shouldNotStoreCallResultWhenTheReleaseSwitchesDuringTheCall() {
     storedRelease.set(INITIAL_RELEASE);
     contextRunner.run(context -> {
       ModelService modelService = context.getBean(ModelService.class);

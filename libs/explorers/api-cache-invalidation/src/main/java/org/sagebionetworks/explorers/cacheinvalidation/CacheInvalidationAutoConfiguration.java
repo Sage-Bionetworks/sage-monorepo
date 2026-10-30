@@ -18,10 +18,10 @@ public class CacheInvalidationAutoConfiguration {
 
   @Bean
   public CacheInvalidationService cacheInvalidationService(
-    DataVersionProvider dataVersionProvider,
+    DataReleaseTracker dataReleaseTracker,
     CacheManager cacheManager
   ) {
-    return new CacheInvalidationService(dataVersionProvider, cacheManager);
+    return new CacheInvalidationService(dataReleaseTracker, cacheManager);
   }
 
   @Bean

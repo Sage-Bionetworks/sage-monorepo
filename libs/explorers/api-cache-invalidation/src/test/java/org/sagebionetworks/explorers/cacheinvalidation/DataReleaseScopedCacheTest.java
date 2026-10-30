@@ -46,7 +46,7 @@ class DataReleaseScopedCacheTest {
 
   @Test
   @DisplayName("should store and serve a value under the release the call started with")
-  void shouldStoreAndServeAValueUnderTheReleaseTheCallStartedWith() {
+  void shouldStoreAndServeValuesUnderTheReleaseTheCallStartedWith() {
     when(tracker.latestRelease()).thenReturn(Optional.of(INITIAL_RELEASE));
     Cache cache = scopedTo(INITIAL_RELEASE);
 
@@ -60,7 +60,7 @@ class DataReleaseScopedCacheTest {
 
   @Test
   @DisplayName("should miss the previous release's value when a call starts in a new release")
-  void shouldMissThePreviousReleasesValueWhenACallStartsInANewRelease() {
+  void shouldMissThePreviousReleasesValueWhenCallStartsInNewRelease() {
     when(tracker.latestRelease()).thenReturn(Optional.of(INITIAL_RELEASE));
     scopedTo(INITIAL_RELEASE).put(MODEL_KEY, MODEL);
 
@@ -71,7 +71,7 @@ class DataReleaseScopedCacheTest {
 
   @Test
   @DisplayName("should not store a value when the release changed after the call started")
-  void shouldNotStoreAValueWhenTheReleaseChangedAfterTheCallStarted() {
+  void shouldNotStoreValueWhenTheReleaseChangedAfterTheCallStarted() {
     when(tracker.latestRelease()).thenReturn(Optional.of(NEXT_VERSION));
 
     scopedTo(INITIAL_RELEASE).put(MODEL_KEY, MODEL);
@@ -110,7 +110,7 @@ class DataReleaseScopedCacheTest {
 
   @Test
   @DisplayName("should not keep a loaded value when the release changes during the load")
-  void shouldNotKeepALoadedValueWhenTheReleaseChangesDuringTheLoad() {
+  void shouldNotKeepLoadedValueWhenTheReleaseChangesDuringTheLoad() {
     when(tracker.latestRelease()).thenReturn(
       Optional.of(INITIAL_RELEASE),
       Optional.of(NEXT_VERSION)
@@ -133,7 +133,7 @@ class DataReleaseScopedCacheTest {
 
   @Test
   @DisplayName("should rethrow a failed load as a value retrieval exception when not caching")
-  void shouldRethrowAFailedLoadAsAValueRetrievalExceptionWhenNotCaching() {
+  void shouldRethrowFailedLoadAsValueRetrievalExceptionWhenNotCaching() {
     Callable<String> failingLoader = () -> {
       throw new IllegalStateException("MongoDB connection lost");
     };
