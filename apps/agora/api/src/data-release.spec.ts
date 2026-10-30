@@ -1,10 +1,13 @@
 import { DATA_RELEASE_REFRESH_INTERVAL_MS } from '@sagebionetworks/explorers/constants/node';
 import * as Sentry from '@sentry/node';
+import type { NextFunction, Request, Response } from 'express';
 import {
   DATA_RELEASE_REFRESH_FAILURE_WARNING_DELAY_MS,
   DataRelease,
+  dataReleaseContext,
   DataReleaseTracker,
   formatDataRelease,
+  getReleaseAtRequestStart,
 } from './data-release';
 
 jest.mock('@sentry/node', () => ({
@@ -12,7 +15,7 @@ jest.mock('@sentry/node', () => ({
   captureMessage: jest.fn(),
 }));
 
-const currentRelease: DataRelease = { dataFile: 'syn13363290', dataVersion: '117' };
+const initialRelease: DataRelease = { dataFile: 'syn13363290', dataVersion: '117' };
 const nextVersion: DataRelease = { dataFile: 'syn13363290', dataVersion: '118' };
 const nextFile: DataRelease = { dataFile: 'syn13400000', dataVersion: '117' };
 const failuresBeforeWarning =
@@ -64,13 +67,13 @@ describe('DataReleaseTracker', () => {
   });
 
   it('reads the release once start resolves, without reporting a change', async () => {
-    const { tracker } = trackReads(currentRelease);
+    const { tracker } = trackReads(initialRelease);
     const onChange = jest.fn();
     tracker.onChange(onChange);
 
     await tracker.start();
 
-    expect(tracker.currentRelease()).toEqual(currentRelease);
+    expect(tracker.latestRelease()).toEqual(initialRelease);
     expect(tracker.getState()).toEqual({
       release: 'syn13363290-v117',
       lastRefreshedAt: startTime.toISOString(),
@@ -80,7 +83,7 @@ describe('DataReleaseTracker', () => {
   });
 
   it('re-reads the release every refresh interval', async () => {
-    const { tracker, readCurrentRelease } = trackReads(currentRelease);
+    const { tracker, readCurrentRelease } = trackReads(initialRelease);
 
     await tracker.start();
     await runNextRefreshes(2);
@@ -89,30 +92,30 @@ describe('DataReleaseTracker', () => {
   });
 
   it('reports a change of data version to listeners', async () => {
-    const { tracker } = trackReads(currentRelease, nextVersion);
+    const { tracker } = trackReads(initialRelease, nextVersion);
     const onChange = jest.fn();
     tracker.onChange(onChange);
 
     await tracker.start();
     await runNextRefreshes();
 
-    expect(onChange).toHaveBeenCalledWith(currentRelease, nextVersion);
-    expect(tracker.currentRelease()).toEqual(nextVersion);
+    expect(onChange).toHaveBeenCalledWith(initialRelease, nextVersion);
+    expect(tracker.latestRelease()).toEqual(nextVersion);
   });
 
   it('reports a change of data file to listeners', async () => {
-    const { tracker } = trackReads(currentRelease, nextFile);
+    const { tracker } = trackReads(initialRelease, nextFile);
     const onChange = jest.fn();
     tracker.onChange(onChange);
 
     await tracker.start();
     await runNextRefreshes();
 
-    expect(onChange).toHaveBeenCalledWith(currentRelease, nextFile);
+    expect(onChange).toHaveBeenCalledWith(initialRelease, nextFile);
   });
 
   it('does not report a change while the release is unchanged', async () => {
-    const { tracker } = trackReads(currentRelease);
+    const { tracker } = trackReads(initialRelease);
     const onChange = jest.fn();
     tracker.onChange(onChange);
 
@@ -123,7 +126,7 @@ describe('DataReleaseTracker', () => {
   });
 
   it('stops calling a listener once it is removed', async () => {
-    const { tracker } = trackReads(currentRelease, nextVersion);
+    const { tracker } = trackReads(initialRelease, nextVersion);
     const onChange = jest.fn();
     const removeListener = tracker.onChange(onChange);
 
@@ -135,7 +138,7 @@ describe('DataReleaseTracker', () => {
   });
 
   it('still calls the other listeners when one fails, and reports the failure', async () => {
-    const { tracker } = trackReads(currentRelease, nextVersion);
+    const { tracker } = trackReads(initialRelease, nextVersion);
     const listenerError = new Error('cache clear failed');
     tracker.onChange(() => {
       throw listenerError;
@@ -146,17 +149,17 @@ describe('DataReleaseTracker', () => {
     await tracker.start();
     await runNextRefreshes();
 
-    expect(otherListener).toHaveBeenCalledWith(currentRelease, nextVersion);
+    expect(otherListener).toHaveBeenCalledWith(initialRelease, nextVersion);
     expect(Sentry.captureException).toHaveBeenCalledWith(listenerError);
   });
 
   it('keeps the last release and counts failures when refreshes fail', async () => {
-    const { tracker } = trackReads(currentRelease, readError, null);
+    const { tracker } = trackReads(initialRelease, readError, null);
 
     await tracker.start();
     await runNextRefreshes(2);
 
-    expect(tracker.currentRelease()).toEqual(currentRelease);
+    expect(tracker.latestRelease()).toEqual(initialRelease);
     expect(tracker.getState()).toEqual({
       release: 'syn13363290-v117',
       lastRefreshedAt: startTime.toISOString(),
@@ -165,7 +168,7 @@ describe('DataReleaseTracker', () => {
   });
 
   it('warns once when refreshes have kept failing for the warning delay', async () => {
-    const { tracker } = trackReads(currentRelease, readError);
+    const { tracker } = trackReads(initialRelease, readError);
 
     await tracker.start();
     await runNextRefreshes(failuresBeforeWarning - 1);
@@ -184,9 +187,9 @@ describe('DataReleaseTracker', () => {
 
   it('logs the recovery and resets the failure count after warning', async () => {
     const reads: ReadResult[] = [
-      currentRelease,
+      initialRelease,
       ...Array<ReadResult>(failuresBeforeWarning).fill(readError),
-      currentRelease,
+      initialRelease,
     ];
     const { tracker } = trackReads(...reads);
 
@@ -205,7 +208,7 @@ describe('DataReleaseTracker', () => {
     await tracker.start();
     await runNextRefreshes(failuresBeforeWarning * 2);
 
-    expect(tracker.currentRelease()).toBeNull();
+    expect(tracker.latestRelease()).toBeNull();
     expect(console.error).toHaveBeenCalledTimes(1);
     expect(Sentry.captureMessage).toHaveBeenCalledTimes(1);
     expect(Sentry.captureMessage).toHaveBeenCalledWith(
@@ -232,14 +235,14 @@ describe('DataReleaseTracker', () => {
   });
 
   it('starts using the release once one can be read, without reporting a change', async () => {
-    const { tracker } = trackReads(null, currentRelease);
+    const { tracker } = trackReads(null, initialRelease);
     const onChange = jest.fn();
     tracker.onChange(onChange);
 
     await tracker.start();
     await runNextRefreshes();
 
-    expect(tracker.currentRelease()).toEqual(currentRelease);
+    expect(tracker.latestRelease()).toEqual(initialRelease);
     expect(onChange).not.toHaveBeenCalled();
   });
 
@@ -254,7 +257,7 @@ describe('DataReleaseTracker', () => {
   });
 
   it('stops refreshing once stopped', async () => {
-    const { tracker, readCurrentRelease } = trackReads(currentRelease);
+    const { tracker, readCurrentRelease } = trackReads(initialRelease);
 
     await tracker.start();
     tracker.stop();
@@ -266,6 +269,62 @@ describe('DataReleaseTracker', () => {
 
 describe('formatDataRelease', () => {
   it('describes a release the way the footer shows it', () => {
-    expect(formatDataRelease(currentRelease)).toBe('syn13363290-v117');
+    expect(formatDataRelease(initialRelease)).toBe('syn13363290-v117');
+  });
+});
+
+describe('dataReleaseContext', () => {
+  function trackerAt(release: DataRelease | null) {
+    const tracker = new DataReleaseTracker({ readCurrentRelease: jest.fn() });
+    const latestReleaseSpy = jest.spyOn(tracker, 'latestRelease').mockReturnValue(release);
+    return { tracker, latestReleaseSpy };
+  }
+
+  function runRequest<T>(tracker: DataReleaseTracker, handler: () => Promise<T>): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      const next: NextFunction = () => handler().then(resolve, reject);
+      dataReleaseContext(tracker)({} as Request, {} as Response, next);
+    });
+  }
+
+  afterEach(() => jest.restoreAllMocks());
+
+  it('keeps the release a request started with after the tracker moves on', async () => {
+    const { tracker, latestReleaseSpy } = trackerAt(initialRelease);
+
+    const releaseAtRequestStart = await runRequest(tracker, async () => {
+      latestReleaseSpy.mockReturnValue(nextVersion);
+      await Promise.resolve();
+      return getReleaseAtRequestStart();
+    });
+
+    expect(releaseAtRequestStart).toEqual(initialRelease);
+  });
+
+  it('keeps each concurrent request on its own release', async () => {
+    const { tracker, latestReleaseSpy } = trackerAt(initialRelease);
+    let releaseFirstRequest!: () => void;
+    const firstRequestCanFinish = new Promise<void>((resolve) => (releaseFirstRequest = resolve));
+
+    const firstRequest = runRequest(tracker, async () => {
+      await firstRequestCanFinish;
+      return getReleaseAtRequestStart();
+    });
+    latestReleaseSpy.mockReturnValue(nextVersion);
+    const secondRequest = runRequest(tracker, async () => getReleaseAtRequestStart());
+    releaseFirstRequest();
+
+    await expect(firstRequest).resolves.toEqual(initialRelease);
+    await expect(secondRequest).resolves.toEqual(nextVersion);
+  });
+
+  it('marks a request made while the release is unknown', async () => {
+    const { tracker } = trackerAt(null);
+
+    await expect(runRequest(tracker, async () => getReleaseAtRequestStart())).resolves.toBeNull();
+  });
+
+  it('has no release outside a request', () => {
+    expect(getReleaseAtRequestStart()).toBeUndefined();
   });
 });

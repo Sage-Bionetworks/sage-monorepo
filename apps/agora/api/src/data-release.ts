@@ -1,6 +1,8 @@
 import { DATA_RELEASE_REFRESH_INTERVAL_MS } from '@sagebionetworks/explorers/constants/node';
 import * as Sentry from '@sentry/node';
+import type { RequestHandler } from 'express';
 import mongoose from 'mongoose';
+import { AsyncLocalStorage } from 'node:async_hooks';
 
 const DATA_VERSION_COLLECTION = 'dataversion';
 
@@ -80,7 +82,7 @@ export class DataReleaseTracker {
   }
 
   /** The last release read, or null if none has been read since the API started. */
-  currentRelease(): DataRelease | null {
+  latestRelease(): DataRelease | null {
     return this.release;
   }
 
@@ -205,3 +207,22 @@ export async function getAgoraDataRelease(): Promise<DataRelease | null> {
 export const dataReleaseTracker = new DataReleaseTracker({
   readCurrentRelease: getAgoraDataRelease,
 });
+
+const requestDataRelease = new AsyncLocalStorage<DataRelease | null>();
+
+/**
+ * Express middleware that reads the tracker's release once per request and keeps it for the rest
+ * of the request, so every cache lookup and store the request makes uses the same release, even if
+ * the tracker moves on to a new one while the request is still running.
+ */
+export function dataReleaseContext(tracker: DataReleaseTracker): RequestHandler {
+  return (_request, _response, next) => requestDataRelease.run(tracker.latestRelease(), next);
+}
+
+/**
+ * The release the current request started with, read once by `dataReleaseContext` when it arrived:
+ * null while the release is unknown, and undefined outside a request.
+ */
+export function getReleaseAtRequestStart(): DataRelease | null | undefined {
+  return requestDataRelease.getStore();
+}
