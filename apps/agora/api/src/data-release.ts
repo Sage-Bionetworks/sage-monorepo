@@ -9,6 +9,40 @@ const DATA_VERSION_COLLECTION = 'dataversion';
 /** How long refreshes can keep failing before the tracker warns, once. */
 export const DATA_RELEASE_REFRESH_FAILURE_WARNING_DELAY_MS = 2 * 60 * 1000;
 
+/** The source the tracker's Sentry events are titled, grouped, and tagged with. */
+export const DATA_RELEASE_TRACKER_SOURCE = 'DataReleaseTracker';
+export const DATA_RELEASE_UNKNOWN_MESSAGE = 'Data release unknown';
+export const DATA_RELEASE_REFRESH_FAILING_MESSAGE = 'Data release refresh keeps failing';
+export const DATA_RELEASE_CHANGE_LISTENER_FAILED_MESSAGE = 'A data release change listener failed';
+export const DATAVERSION_DOCUMENT_INCOMPLETE_REASON =
+  'The dataversion document is missing or incomplete';
+export const DATA_RELEASE_READ_FAILED_REASON = 'The data release could not be read';
+
+/**
+ * Sends a tracker event to Sentry the way the frontend's `SourceLogger` does: titled
+ * `<source>: <message>` and grouped by source and message, which stay fixed, with the values that
+ * vary per occurrence in `extra`. A caught `Error` is attached as the event's cause.
+ */
+function reportToSentry(
+  level: 'warning' | 'error',
+  message: string,
+  extra: Record<string, unknown>,
+  error?: unknown,
+): void {
+  const title = `${DATA_RELEASE_TRACKER_SOURCE}: ${message}`;
+  const captureContext = {
+    level,
+    fingerprint: [DATA_RELEASE_TRACKER_SOURCE, message],
+    tags: { source: DATA_RELEASE_TRACKER_SOURCE },
+    extra: error === undefined || error instanceof Error ? extra : { ...extra, cause: error },
+  };
+  if (error instanceof Error) {
+    Sentry.captureException(new Error(title, { cause: error }), captureContext);
+  } else {
+    Sentry.captureMessage(title, captureContext);
+  }
+}
+
 export interface DataRelease {
   /** Synapse ID of the data file, e.g. `syn13363290`. */
   dataFile: string;
@@ -109,10 +143,10 @@ export class DataReleaseTracker {
       if (release) {
         this.recordRelease(release);
       } else {
-        this.recordFailure('The dataversion document is missing or incomplete');
+        this.recordFailure(DATAVERSION_DOCUMENT_INCOMPLETE_REASON);
       }
     } catch (error) {
-      this.recordFailure('The data release could not be read', error);
+      this.recordFailure(DATA_RELEASE_READ_FAILED_REASON, error);
     } finally {
       this.scheduleNextRefresh();
     }
@@ -155,8 +189,13 @@ export class DataReleaseTracker {
       try {
         listener(previous, current);
       } catch (error) {
-        console.error('A data release change listener failed', error);
-        Sentry.captureException(error);
+        console.error(DATA_RELEASE_CHANGE_LISTENER_FAILED_MESSAGE, error);
+        reportToSentry(
+          'error',
+          DATA_RELEASE_CHANGE_LISTENER_FAILED_MESSAGE,
+          { previous: formatDataRelease(previous), current: formatDataRelease(current) },
+          error,
+        );
       }
     }
   }
@@ -169,9 +208,8 @@ export class DataReleaseTracker {
     if (!this.release) {
       if (!this.hasReportedUnknownRelease) {
         this.hasReportedUnknownRelease = true;
-        const message = `Data release unknown: ${reason}`;
-        console.error(message, error ?? '');
-        Sentry.captureMessage(message, 'error');
+        console.error(`${DATA_RELEASE_UNKNOWN_MESSAGE}: ${reason}`, error ?? '');
+        reportToSentry('error', DATA_RELEASE_UNKNOWN_MESSAGE, { reason }, error);
       }
       return;
     }
@@ -181,11 +219,18 @@ export class DataReleaseTracker {
       !this.hasWarnedOfFailingRefresh
     ) {
       this.hasWarnedOfFailingRefresh = true;
-      const message =
-        `Data release refresh has failed ${this.consecutiveFailures} times in a row; ` +
-        `still using ${formatDataRelease(this.release)}: ${reason}`;
-      console.warn(message, error ?? '');
-      Sentry.captureMessage(message, 'warning');
+      const releaseInUse = formatDataRelease(this.release);
+      console.warn(
+        `${DATA_RELEASE_REFRESH_FAILING_MESSAGE}: ${this.consecutiveFailures} failures in a row, ` +
+          `still using ${releaseInUse}: ${reason}`,
+        error ?? '',
+      );
+      reportToSentry(
+        'warning',
+        DATA_RELEASE_REFRESH_FAILING_MESSAGE,
+        { consecutiveFailures: this.consecutiveFailures, releaseInUse, reason },
+        error,
+      );
     }
   }
 }

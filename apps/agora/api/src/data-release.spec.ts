@@ -2,7 +2,13 @@ import { DATA_RELEASE_REFRESH_INTERVAL_MS } from '@sagebionetworks/explorers/con
 import * as Sentry from '@sentry/node';
 import type { NextFunction, Request, Response } from 'express';
 import {
+  DATA_RELEASE_CHANGE_LISTENER_FAILED_MESSAGE,
+  DATA_RELEASE_READ_FAILED_REASON,
+  DATA_RELEASE_REFRESH_FAILING_MESSAGE,
   DATA_RELEASE_REFRESH_FAILURE_WARNING_DELAY_MS,
+  DATA_RELEASE_TRACKER_SOURCE,
+  DATA_RELEASE_UNKNOWN_MESSAGE,
+  DATAVERSION_DOCUMENT_INCOMPLETE_REASON,
   DataRelease,
   dataReleaseContext,
   DataReleaseTracker,
@@ -24,6 +30,21 @@ const startTime = new Date('2026-10-29T17:00:00.000Z');
 const readError = new Error('MongoDB connection lost');
 
 type ReadResult = DataRelease | null | Error;
+
+/** The capture context the tracker sends for one of its fixed messages. */
+function trackerEvent(level: 'warning' | 'error', message: string, extra: Record<string, unknown>) {
+  return {
+    level,
+    fingerprint: [DATA_RELEASE_TRACKER_SOURCE, message],
+    tags: { source: DATA_RELEASE_TRACKER_SOURCE },
+    extra,
+  };
+}
+
+/** The exception the tracker captured, and the capture context it sent with it. */
+function capturedException(callIndex = 0): [Error, unknown] {
+  return (Sentry.captureException as jest.Mock).mock.calls[callIndex];
+}
 
 describe('DataReleaseTracker', () => {
   let tracker: DataReleaseTracker | undefined;
@@ -150,7 +171,14 @@ describe('DataReleaseTracker', () => {
     await runNextRefreshes();
 
     expect(otherListener).toHaveBeenCalledWith(initialRelease, nextVersion);
-    expect(Sentry.captureException).toHaveBeenCalledWith(listenerError);
+    const [exception, captureContext] = capturedException();
+    expect(exception.cause).toBe(listenerError);
+    expect(captureContext).toEqual(
+      trackerEvent('error', DATA_RELEASE_CHANGE_LISTENER_FAILED_MESSAGE, {
+        previous: 'syn13363290-v117',
+        current: 'syn13363290-v118',
+      }),
+    );
   });
 
   it('keeps the last release and counts failures when refreshes fail', async () => {
@@ -176,9 +204,17 @@ describe('DataReleaseTracker', () => {
 
     await runNextRefreshes();
     expect(console.warn).toHaveBeenCalledTimes(1);
-    expect(Sentry.captureMessage).toHaveBeenCalledWith(
-      expect.stringContaining('still using syn13363290-v117'),
-      'warning',
+    const [exception, captureContext] = capturedException();
+    expect(exception.message).toBe(
+      `${DATA_RELEASE_TRACKER_SOURCE}: ${DATA_RELEASE_REFRESH_FAILING_MESSAGE}`,
+    );
+    expect(exception.cause).toBe(readError);
+    expect(captureContext).toEqual(
+      trackerEvent('warning', DATA_RELEASE_REFRESH_FAILING_MESSAGE, {
+        consecutiveFailures: failuresBeforeWarning,
+        releaseInUse: 'syn13363290-v117',
+        reason: DATA_RELEASE_READ_FAILED_REASON,
+      }),
     );
 
     await runNextRefreshes(failuresBeforeWarning);
@@ -212,8 +248,10 @@ describe('DataReleaseTracker', () => {
     expect(console.error).toHaveBeenCalledTimes(1);
     expect(Sentry.captureMessage).toHaveBeenCalledTimes(1);
     expect(Sentry.captureMessage).toHaveBeenCalledWith(
-      'Data release unknown: The dataversion document is missing or incomplete',
-      'error',
+      `${DATA_RELEASE_TRACKER_SOURCE}: ${DATA_RELEASE_UNKNOWN_MESSAGE}`,
+      trackerEvent('error', DATA_RELEASE_UNKNOWN_MESSAGE, {
+        reason: DATAVERSION_DOCUMENT_INCOMPLETE_REASON,
+      }),
     );
     expect(console.warn).not.toHaveBeenCalled();
   });
@@ -228,9 +266,12 @@ describe('DataReleaseTracker', () => {
       lastRefreshedAt: null,
       consecutiveFailures: 1,
     });
-    expect(Sentry.captureMessage).toHaveBeenCalledWith(
-      'Data release unknown: The data release could not be read',
-      'error',
+    const [exception, captureContext] = capturedException();
+    expect(exception.cause).toBe(readError);
+    expect(captureContext).toEqual(
+      trackerEvent('error', DATA_RELEASE_UNKNOWN_MESSAGE, {
+        reason: DATA_RELEASE_READ_FAILED_REASON,
+      }),
     );
   });
 
