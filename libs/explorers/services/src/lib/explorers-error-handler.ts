@@ -27,6 +27,7 @@ export class ExplorersErrorHandler implements ErrorHandler {
     this.errorOverlayService.reportAndShow(this.logger, UNHANDLED_HTTP_ERROR_MESSAGE, {
       error,
       level: HttpErrorReportLevelEnum.Error,
+      handled: false,
     });
   }
 }

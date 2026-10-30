@@ -104,6 +104,17 @@ describe('LoggerService', () => {
       });
     });
 
+    it('should report a caught error as not handled, under its source, when asked', () => {
+      const cause = new Error('HTTP 500 GET /v1/dataversion');
+
+      logger.warn(WARNING_MESSAGE, undefined, cause, { handled: false });
+
+      expect(Sentry.captureException).toHaveBeenCalledWith(expect.any(Error), {
+        captureContext: expect.objectContaining({ level: 'warning' }),
+        mechanism: { type: SOURCE, handled: false },
+      });
+    });
+
     it('should write the titled message to the console', () => {
       logger.warn(WARNING_MESSAGE);
 
@@ -147,6 +158,22 @@ describe('LoggerService', () => {
       expect(capturedException().message).toBe(title(ERROR_MESSAGE));
       expect(capturedException().cause).toBeUndefined();
       expect(Sentry.captureMessage).not.toHaveBeenCalled();
+    });
+
+    it('should report a caught error as not handled, under its source, when asked', () => {
+      const cause = new Error('HTTP 503 GET /v1/comparison-tools/config');
+
+      logger.error(ERROR_MESSAGE, { error: cause }, { handled: false });
+
+      expect(Sentry.captureException).toHaveBeenCalledWith(expect.any(Error), {
+        captureContext: {
+          level: 'error',
+          fingerprint: [SOURCE, ERROR_MESSAGE],
+          tags: { source: SOURCE },
+          extra: undefined,
+        },
+        mechanism: { type: SOURCE, handled: false },
+      });
     });
 
     it('should send an error-level message when only data is given', () => {

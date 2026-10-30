@@ -216,6 +216,18 @@ describe('reportHttpError', () => {
     expect(errorCause).toBe(errorError);
   });
 
+  it('passes handled: false to the logger for a failure no call site caught, and nothing otherwise', () => {
+    reportHttpError(logger as unknown as SourceLogger, OPERATION, {
+      error: buildError(HttpStatusCode.ServiceUnavailable),
+      level: HttpErrorReportLevelEnum.Error,
+      handled: false,
+    });
+    report(buildError(HttpStatusCode.ServiceUnavailable), HttpErrorReportLevelEnum.Error);
+
+    expect(logger.error.mock.calls[0][2]).toEqual({ handled: false });
+    expect(logger.error.mock.calls[1]).toHaveLength(2);
+  });
+
   it('reports a 500 as a warning at most, since the API reports its own exception', () => {
     const error = buildError(HttpStatusCode.InternalServerError);
 

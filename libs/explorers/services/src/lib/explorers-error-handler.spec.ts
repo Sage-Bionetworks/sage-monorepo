@@ -45,17 +45,18 @@ describe('ExplorersErrorHandler', () => {
       expect(errorOverlayService.activeMessage()).toBe(serviceUnavailableError.userMessage);
     });
 
-    it('is reported as an error under its endpoint and status', () => {
+    it('is reported as a not-handled error under its endpoint and status', () => {
       errorHandler.handleError(serviceUnavailableError);
 
       expect(loggerErrorSpy).toHaveBeenCalledWith(
         formatHttpErrorReportMessage(UNHANDLED_HTTP_ERROR_MESSAGE, serviceUnavailableError),
         expect.objectContaining({ error: serviceUnavailableError }),
+        { handled: false },
       );
       expect(mockSentryErrorHandler.handleError).not.toHaveBeenCalled();
     });
 
-    it('is reported as a warning when it is a 500 the API already reported', () => {
+    it('is reported as a not-handled warning when it is a 500 the API already reported', () => {
       const internalServerError = unhandledRequestError(HttpStatusCode.InternalServerError);
 
       errorHandler.handleError(internalServerError);
@@ -64,6 +65,7 @@ describe('ExplorersErrorHandler', () => {
         formatHttpErrorReportMessage(UNHANDLED_HTTP_ERROR_MESSAGE, internalServerError),
         expect.any(Object),
         internalServerError,
+        { handled: false },
       );
       expect(loggerErrorSpy).not.toHaveBeenCalled();
       expect(mockSentryErrorHandler.handleError).not.toHaveBeenCalled();

@@ -36,6 +36,8 @@ export interface HttpErrorReportContext {
   level: HttpErrorReportLevel;
   /** Searchable context, such as which comparison tool view the request was made for. */
   tags?: Record<string, string>;
+  /** Whether the error was handled by the caller. Defaults to `true`. */
+  handled?: boolean;
 }
 
 /**
@@ -92,13 +94,16 @@ export function formatHttpErrorReportMessage(operation: string, error: HttpReque
 export function reportHttpError(
   logger: SourceLogger,
   operation: string,
-  { error, level, tags = {} }: HttpErrorReportContext,
+  { error, level, tags = {}, handled = true }: HttpErrorReportContext,
 ): void {
+  // Only a last-resort handler passes capture options, so a call site's report keeps the logger's
+  // usual arguments.
+  const captureOptions = handled ? [] : [{ handled }];
   Sentry.withScope((scope) => {
     scope.setTags(tags);
 
     if (!(error instanceof HttpRequestError)) {
-      logger.error(operation, { error });
+      logger.error(operation, { error }, ...captureOptions);
       return;
     }
     reportedErrors.add(error);
@@ -116,9 +121,9 @@ export function reportHttpError(
     const reportLevel =
       error.status === HttpStatusCode.InternalServerError ? HttpErrorReportLevelEnum.Warn : level;
     if (reportLevel === HttpErrorReportLevelEnum.Warn) {
-      logger.warn(message, data, error);
+      logger.warn(message, data, error, ...captureOptions);
     } else {
-      logger.error(message, { error, data });
+      logger.error(message, { error, data }, ...captureOptions);
     }
   });
 }
