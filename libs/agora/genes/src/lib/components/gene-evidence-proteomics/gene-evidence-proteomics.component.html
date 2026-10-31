@@ -54,12 +54,7 @@
       <div class="container-lg">
         <div #srmChart>
           @if (platformService.isBrowser) {
-            <agora-box-plot-chart
-              xAxisLabel="BRAIN TISSUE"
-              [yAxisMin]="SRMRange?.Min"
-              [yAxisMax]="SRMRange?.Max"
-              [data]="SRMData"
-            ></agora-box-plot-chart>
+            <agora-box-plot-chart xAxisLabel="BRAIN TISSUE" [data]="SRMData"></agora-box-plot-chart>
           }
         </div>
       </div>
@@ -127,12 +122,7 @@
       <div class="container-lg">
         <div #tmtChart>
           @if (platformService.isBrowser) {
-            <agora-box-plot-chart
-              xAxisLabel="BRAIN TISSUE"
-              [yAxisMin]="TMTRange?.Min"
-              [yAxisMax]="TMTRange?.Max"
-              [data]="TMTData"
-            ></agora-box-plot-chart>
+            <agora-box-plot-chart xAxisLabel="BRAIN TISSUE" [data]="TMTData"></agora-box-plot-chart>
           }
         </div>
       </div>
@@ -169,12 +159,7 @@
       <div class="container-lg">
         <div #lfqChart>
           @if (platformService.isBrowser) {
-            <agora-box-plot-chart
-              xAxisLabel="BRAIN TISSUE"
-              [yAxisMin]="LFQRange?.Min"
-              [yAxisMax]="LFQRange?.Max"
-              [data]="LFQData"
-            ></agora-box-plot-chart>
+            <agora-box-plot-chart xAxisLabel="BRAIN TISSUE" [data]="LFQData"></agora-box-plot-chart>
           }
         </div>
       </div>

@@ -11,6 +11,7 @@ import {
   minimalBoxplotChartTheme,
 } from '../chart-theme/boxplot-chart-theme';
 import {
+  AUTO_Y_AXIS_MARGIN,
   CAPPED_POINT_SPACING_PX,
   CAPPED_POINT_SYMBOL,
   CAPPED_POINT_SYMBOL_SIZE,
@@ -33,7 +34,6 @@ import {
   setNoDataOption,
 } from '../utils';
 
-const yAxisPadding = 0.2;
 const valueXAxisId = 'value-x-axis';
 const defaultPointShape = 'circle';
 const defaultPointOpacity = 0.8;
@@ -180,6 +180,8 @@ export class BoxplotChart {
     yAxisTitle: BoxplotProps['yAxisTitle'],
     yAxisMin: BoxplotProps['yAxisMin'],
     yAxisMax: BoxplotProps['yAxisMax'],
+    points: BoxplotProps['points'],
+    summaries: BoxplotProps['summaries'],
     boxplotChartTheme: BoxplotChartTheme,
     showAxisTicks: BoxplotProps['showAxisTicks'],
     axisTickLabelStyle: BoxplotProps['axisTickLabelStyle'],
@@ -203,14 +205,29 @@ export class BoxplotChart {
         ...axisTickLabelStyle,
         width: boxplotChartTheme.yAxisTickLabelMaxWidth,
         hideOverlap: true,
-        showMinLabel: yAxisMin == null,
-        showMaxLabel: yAxisMax == null,
       },
       splitLine: boxplotChartTheme.yAxisSplitLine,
-      min: yAxisMin ? yAxisMin - yAxisPadding : undefined,
-      max: yAxisMax ? yAxisMax + yAxisPadding : undefined,
+      min: yAxisMin,
+      max: yAxisMax,
+      boundaryGap: this.getYAxisMargin(points, summaries),
     };
     return yAxisOptions;
+  }
+
+  // ECharts starts an all-positive axis at zero only if the margin hasn't already pushed the
+  // bottom below zero, so a side the data doesn't extend past zero on gets no margin.
+  private getYAxisMargin(
+    points: BoxplotProps['points'],
+    summaries: BoxplotProps['summaries'],
+  ): [string, string] {
+    const values = [
+      ...points.map((pt) => pt.value),
+      ...(summaries ?? []).flatMap((summary) => [summary.min, summary.max]),
+    ];
+    return [
+      values.some((value) => value < 0) ? AUTO_Y_AXIS_MARGIN : '0%',
+      values.some((value) => value > 0) ? AUTO_Y_AXIS_MARGIN : '0%',
+    ];
   }
 
   // Capped points skip the jitter and are spread in pixels rather than axis units,
@@ -540,6 +557,8 @@ export class BoxplotChart {
         yAxisTitle,
         yAxisMin,
         yAxisMax,
+        points,
+        summaries,
         boxplotChartTheme,
         showAxisTicks,
         axisTickLabelStyle,
