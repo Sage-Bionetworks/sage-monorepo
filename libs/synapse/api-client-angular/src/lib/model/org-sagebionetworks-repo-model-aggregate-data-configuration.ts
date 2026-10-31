@@ -14,8 +14,23 @@ import { OrgSagebionetworksRepoModelFacetPostProcessingConfig } from './org-sage
  */
 export interface OrgSagebionetworksRepoModelAggregateDataConfiguration {
   /**
-   * The minimum number of matching rows required before an aggregate result is returned. An aggregate query that matches a non-zero row count below this threshold is suppressed. Must be a positive value.
+   * The minimum number of matching rows required before an aggregate result is returned. An aggregate query that matches a non-zero row count below this threshold is suppressed. Must be a positive value. This is also the k value enforced by cell-level k-anonymity: a participant-count cell whose value is non-zero but below this threshold is suppressed.
    */
   suppressionThreshold: number;
+  /**
+   * The names of the columns of the source that are quasi-identifiers (QIDs), including any direct participant identifier. Optional: when omitted, the source is restricted to aggregate-only reads (no row-level data is ever returned, and the total count is gated against the suppression threshold). When provided, the source additionally allows row-returning aggregate queries with cell-level k-anonymity applied. Each name must match an actual column name of the source; at query time, if any configured QID name does not match a column of the source, an exception is thrown. A QID column may only appear in a query as the argument of a COUNT (or COUNT DISTINCT) or in a WHERE clause. Any other use (bare projection, a non-count aggregate, GROUP BY, ORDER BY, SELECT DISTINCT, or an arithmetic/string expression) is permitted only for the aggregate-only response (the gated total count and obscured facet statistics); a query that both uses a QID in one of those ways and requests row results is rejected with an error identifying the offending use.
+   */
+  quasiIdentifierColumnNames?: Array<string>;
+  /**
+   * Selects how a query that returns rows from an aggregate-only source treats a participant-count cell whose value is non-zero but below the suppression threshold (k). A count of exactly zero is never suppressed under either strategy. The ACT chooses the strategy per source based on what a given case requires.
+   */
+  countSuppressionStrategy?: OrgSagebionetworksRepoModelAggregateDataConfiguration.CountSuppressionStrategyEnum;
   facetPostProcessingConfig?: OrgSagebionetworksRepoModelFacetPostProcessingConfig;
+}
+export namespace OrgSagebionetworksRepoModelAggregateDataConfiguration {
+  export type CountSuppressionStrategyEnum = 'EXCLUDE_ROW' | 'MASK_BELOW_THRESHOLD';
+  export const CountSuppressionStrategyEnum = {
+    ExcludeRow: 'EXCLUDE_ROW' as CountSuppressionStrategyEnum,
+    MaskBelowThreshold: 'MASK_BELOW_THRESHOLD' as CountSuppressionStrategyEnum,
+  };
 }
