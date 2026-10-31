@@ -159,6 +159,7 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     | 'TEXT_ANALYZER'
     | 'COLUMN_ANALYZER_OVERRIDE'
     | 'SYNONYM_SET'
+    | 'SEARCH_PIPELINE'
     | 'SEARCH_CONFIGURATION'
     | 'SEARCH_CONFIG_OBJECT_BINDING'
     | 'EDUC_QUOTA'
@@ -303,6 +304,7 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     TextAnalyzer: 'TEXT_ANALYZER' as TypesEnum,
     ColumnAnalyzerOverride: 'COLUMN_ANALYZER_OVERRIDE' as TypesEnum,
     SynonymSet: 'SYNONYM_SET' as TypesEnum,
+    SearchPipeline: 'SEARCH_PIPELINE' as TypesEnum,
     SearchConfiguration: 'SEARCH_CONFIGURATION' as TypesEnum,
     SearchConfigObjectBinding: 'SEARCH_CONFIG_OBJECT_BINDING' as TypesEnum,
     EducQuota: 'EDUC_QUOTA' as TypesEnum,

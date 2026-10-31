@@ -25,11 +25,11 @@ export interface OrgSagebionetworksRepoModelSearchDslTermsAggregation {
    */
   shard_size?: number;
   /**
-   * Optional. Minimum document count for a bucket to be returned. Default <code>1</code>.
+   * Optional. Minimum document count for a bucket to be returned. Default and minimum <code>1</code>; <code>0</code> is rejected.
    */
   min_doc_count?: number;
   /**
-   * Optional. Per-shard minimum document count before a bucket is considered.
+   * Optional. Per-shard minimum document count before a bucket is considered. Minimum <code>1</code>; <code>0</code> is rejected.
    */
   shard_min_doc_count?: number;
   /**
