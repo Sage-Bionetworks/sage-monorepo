@@ -214,8 +214,8 @@ export class BoxplotChart {
     return yAxisOptions;
   }
 
-  // ECharts starts an all-positive axis at zero only if the margin hasn't already pushed the
-  // bottom below zero, so a side the data doesn't extend past zero on gets no margin.
+  // ECharts only starts an all-positive or all-negative axis at zero if the margin doesn't
+  // push that end past zero, so only add a margin on a side of zero the data reaches.
   private getYAxisMargin(
     points: BoxplotProps['points'],
     summaries: BoxplotProps['summaries'],
