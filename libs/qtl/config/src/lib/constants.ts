@@ -1,9 +1,12 @@
+import { NOT_FOUND_ROUTE_PATH } from '@sagebionetworks/explorers/constants';
 import { LoadingIconColors } from '@sagebionetworks/explorers/models';
 
 export const HELP_URL =
   'https://help.adknowledgeportal.org/apd/xQTL-Explorer-Resources.4669014109.html';
 
 export const SUPPORT_EMAIL = 'xqtlexplorer@sagebionetworks.org';
+
+export const SITE_NAME = 'QTL';
 
 export const DEFAULT_HERO_BACKGROUND_IMAGE_PATH = 'qtl-assets/images/hero-background.svg';
 
@@ -20,7 +23,7 @@ export const ROUTE_PATHS = {
   // TODO: update based on values in QTL-34
   EQTL: 'comparison/eqtl',
   TERMS_OF_SERVICE: 'terms-of-service',
-  NOT_FOUND: 'not-found',
+  NOT_FOUND: NOT_FOUND_ROUTE_PATH,
   ERROR: 'error',
 } as const;
 

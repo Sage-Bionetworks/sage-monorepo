@@ -1,9 +1,19 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import {
+  formatHttpErrorReportMessage,
+  ErrorOverlayService,
+  HttpRequestError,
+  SourceLogger,
+  SynapseApiService,
+} from '@sagebionetworks/explorers/services';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { MarkdownModule } from 'ngx-markdown';
 import { of, throwError } from 'rxjs';
-import { TermsOfServiceComponent } from './terms-of-service.component';
+import {
+  TERMS_OF_SERVICE_ERROR_MESSAGE,
+  TermsOfServiceComponent,
+} from './terms-of-service.component';
 
 // Mock SynapseApiService
 class MockSynapseApiService {
@@ -17,11 +27,23 @@ class MockHeroComponent {}
 @Component({ selector: 'explorers-loading-icon', template: '' })
 class MockLoadingIconComponent {}
 
+const synapseRequestError = new HttpRequestError(
+  new HttpErrorResponse({
+    status: HttpStatusCode.ServiceUnavailable,
+    url: 'https://repo-prod.prod.sagebase.org/auth/v1/termsOfUse2/info',
+  }),
+  'GET',
+);
+
 describe('TermsOfServiceComponent', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   async function setup(mockMarkdown = 'Mock TOS Content', error = false) {
     const mockService = new MockSynapseApiService();
     if (error) {
-      mockService.getTermsOfService.mockReturnValue(throwError(() => new Error('Failed to load')));
+      mockService.getTermsOfService.mockReturnValue(throwError(() => synapseRequestError));
     } else {
       mockService.getTermsOfService.mockReturnValue(of(mockMarkdown));
     }
@@ -40,6 +62,21 @@ describe('TermsOfServiceComponent', () => {
     await waitFor(() => {
       expect(screen.getByText(mockContent)).toBeInTheDocument();
     });
+  });
+
+  it('reports a failed Synapse request as a warning and shows the error overlay', async () => {
+    const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+    const showRequestErrorSpy = jest.spyOn(ErrorOverlayService.prototype, 'showRequestError');
+
+    await setup(undefined, true);
+
+    expect(showRequestErrorSpy).toHaveBeenCalledWith(synapseRequestError);
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      formatHttpErrorReportMessage(TERMS_OF_SERVICE_ERROR_MESSAGE, synapseRequestError),
+      expect.any(Object),
+      synapseRequestError,
+    );
   });
 
   it('returns undefined for heroBackgroundImagePath when no value is provided', async () => {

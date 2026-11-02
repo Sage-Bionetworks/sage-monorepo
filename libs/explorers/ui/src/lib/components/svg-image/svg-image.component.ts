@@ -1,4 +1,3 @@
-
 import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
 
 type SvgSizeMode = 'full-height' | 'full-width' | 'original';

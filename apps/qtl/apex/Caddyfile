@@ -3,9 +3,10 @@
     reverse_proxy {env.API_DOCS_HOST}:{env.API_DOCS_PORT}
   }
 
-	# Route all /api/* requests to the default API service, stripping /api
-  handle_path /api/* {
-    reverse_proxy {env.API_HOST}:{env.API_PORT}
+  # Route /api/v1/* requests to the API service, stripping /api
+  handle /api/v1/* {
+   uri strip_prefix /api
+   reverse_proxy {env.API_HOST}:{env.API_PORT}
   }
 
   handle {

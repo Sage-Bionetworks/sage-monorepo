@@ -1,11 +1,18 @@
 import { Location } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { QUERY_PARAMS, ROUTE_PARAMS, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
-import { HelperService, LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ErrorOverlayService,
+  HelperService,
+  HttpErrorReportLevelEnum,
+  LoggerService,
+  NotFoundService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
@@ -17,6 +24,8 @@ import { GeneNominationsComponent } from '../gene-nominations/gene-nominations.c
 import { GeneResourcesComponent } from '../gene-resources/gene-resources.component';
 import { GeneSoeComponent } from '../gene-soe/gene-soe.component';
 import { getPanels, getPanelsWithDisabledState } from './gene-details-panels';
+
+export const GENE_ERROR_MESSAGE = 'Error loading gene';
 
 @Component({
   selector: 'agora-gene-details',
@@ -37,13 +46,14 @@ import { getPanels, getPanelsWithDisabledState } from './gene-details-panels';
 })
 export class GeneDetailsComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
   private readonly location = inject(Location);
   private readonly helperService = inject(HelperService);
   private readonly geneService = inject(GeneService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
+  private readonly notFoundService = inject(NotFoundService);
   private readonly logger = inject(LoggerService).forSource('GeneDetailsComponent');
+  private readonly errorOverlayService = inject(ErrorOverlayService);
 
   isLoading = true;
   gene: Gene | undefined;
@@ -85,8 +95,7 @@ export class GeneDetailsComponent implements OnInit {
         next: (gene) => {
           // the API answers an unknown gene with an empty body rather than a 404
           if (!gene) {
-            this.logger.log('Gene not found, redirecting', { geneId });
-            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+            this.notFoundService.redirectToNotFound(this.logger, 'gene', { geneId });
             return;
           }
           this.gene = gene;
@@ -94,7 +103,11 @@ export class GeneDetailsComponent implements OnInit {
           this.setInitialPanel(params);
           this.isLoading = false;
         },
-        error: () => {
+        error: (error) => {
+          this.errorOverlayService.reportAndShow(this.logger, GENE_ERROR_MESSAGE, {
+            error,
+            level: HttpErrorReportLevelEnum.Error,
+          });
           this.isLoading = false;
         },
       });

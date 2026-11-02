@@ -35,6 +35,8 @@ export class EqtlComparisonToolComponent {
     // TODO(QTL-113): uncomment when CT data fetching is implemented
     // this.comparisonToolService.setViewConfig(this.viewConfig);
     this.comparisonToolService.connect({
+      // TODO(QTL-113): pass the eQTL page once it is a comparison tool page
+      page: undefined,
       config$: of([]),
       queryParams$: of({}),
       // TODO(QTL-113): fetch the matching rows once CT data fetching is implemented

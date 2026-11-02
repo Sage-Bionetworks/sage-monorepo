@@ -1,9 +1,12 @@
+import { NOT_FOUND_ROUTE_PATH } from '@sagebionetworks/explorers/constants';
 import { PointStyle } from '@sagebionetworks/explorers/charts';
 import { DownloadNote, LoadingIconColors } from '@sagebionetworks/explorers/models';
 
 export const HELP_URL = 'https://help.adknowledgeportal.org/apd/model-ad-explorer-resources';
 
 export const SUPPORT_EMAIL = 'modeladexplorer@sagebionetworks.org';
+
+export const SITE_NAME = 'Model AD';
 
 export const DOWNLOAD_PINS_NOTE: DownloadNote = {
   textBefore: 'See the ',
@@ -31,7 +34,7 @@ export const ROUTE_PATHS = {
   DISEASE_CORRELATION: 'comparison/correlation',
   MODELS: 'models',
   TERMS_OF_SERVICE: 'terms-of-service',
-  NOT_FOUND: 'not-found',
+  NOT_FOUND: NOT_FOUND_ROUTE_PATH,
   ERROR: 'error',
 } as const;
 

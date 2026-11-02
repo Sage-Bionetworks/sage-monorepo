@@ -1,18 +1,18 @@
 package org.sagebionetworks.explorers.cacheinvalidation;
 
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.function.BiConsumer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cache.Cache;
@@ -21,108 +21,59 @@ import org.springframework.cache.CacheManager;
 @ExtendWith(MockitoExtension.class)
 class CacheInvalidationServiceTest {
 
+  private static final DataRelease INITIAL_RELEASE = new DataRelease("syn73774820", "191");
+  private static final DataRelease NEXT_VERSION = new DataRelease("syn73774820", "192");
+
   @Mock
-  private DataVersionProvider dataVersionProvider;
+  private DataReleaseTracker tracker;
 
   @Mock
   private CacheManager cacheManager;
 
-  @InjectMocks
-  private CacheInvalidationService service;
+  private BiConsumer<DataRelease, DataRelease> changeListener;
 
-  @Test
-  @DisplayName("should record initial version and not clear caches on first poll")
-  void shouldRecordInitialVersionAndNotClearCachesOnFirstPoll() {
-    when(dataVersionProvider.getCurrentDataVersion()).thenReturn(Optional.of("1.0.0"));
-
-    service.pollForDataVersionChange();
-
-    verify(dataVersionProvider).getCurrentDataVersion();
-    verifyNoInteractions(cacheManager);
+  @BeforeEach
+  @SuppressWarnings("unchecked")
+  void setUp() {
+    new CacheInvalidationService(tracker, cacheManager);
+    ArgumentCaptor<BiConsumer<DataRelease, DataRelease>> listener = ArgumentCaptor.forClass(
+      BiConsumer.class
+    );
+    verify(tracker).addChangeListener(listener.capture());
+    changeListener = listener.getValue();
   }
 
   @Test
-  @DisplayName("should clear all caches when data version changes")
-  void shouldClearAllCachesWhenDataVersionChanges() {
-    when(dataVersionProvider.getCurrentDataVersion())
-      .thenReturn(Optional.of("1.0.0"))
-      .thenReturn(Optional.of("2.0.0"));
-    Cache cacheA = mock(Cache.class);
-    Cache cacheB = mock(Cache.class);
-    when(cacheManager.getCacheNames()).thenReturn(List.of("cacheA", "cacheB"));
-    when(cacheManager.getCache("cacheA")).thenReturn(cacheA);
-    when(cacheManager.getCache("cacheB")).thenReturn(cacheB);
+  @DisplayName("should clear every cache once when the release changes")
+  void shouldClearEveryCacheOnceWhenTheReleaseChanges() {
+    Cache modelCache = mock(Cache.class);
+    Cache searchCache = mock(Cache.class);
+    when(cacheManager.getCacheNames()).thenReturn(List.of("model", "modelSearch"));
+    when(cacheManager.getCache("model")).thenReturn(modelCache);
+    when(cacheManager.getCache("modelSearch")).thenReturn(searchCache);
 
-    service.pollForDataVersionChange();
-    service.pollForDataVersionChange();
+    changeListener.accept(INITIAL_RELEASE, NEXT_VERSION);
 
-    verify(cacheA).clear();
-    verify(cacheB).clear();
+    verify(modelCache, times(1)).clear();
+    verify(searchCache, times(1)).clear();
   }
 
   @Test
-  @DisplayName("should not clear caches when data version unchanged")
-  void shouldNotClearCachesWhenDataVersionUnchanged() {
-    when(dataVersionProvider.getCurrentDataVersion()).thenReturn(Optional.of("1.0.0"));
-
-    service.pollForDataVersionChange();
-    service.pollForDataVersionChange();
-
-    verify(dataVersionProvider, times(2)).getCurrentDataVersion();
-    verifyNoInteractions(cacheManager);
+  @DisplayName("should not clear the caches until the release changes")
+  void shouldNotClearTheCachesUntilTheReleaseChanges() {
+    verify(cacheManager, never()).getCacheNames();
   }
 
   @Test
-  @DisplayName("should skip when data version is unavailable")
-  void shouldSkipWhenDataVersionIsUnavailable() {
-    when(dataVersionProvider.getCurrentDataVersion()).thenReturn(Optional.empty());
+  @DisplayName("should skip a cache the cache manager no longer has")
+  void shouldSkipCachesTheCacheManagerNoLongerHas() {
+    Cache searchCache = mock(Cache.class);
+    when(cacheManager.getCacheNames()).thenReturn(List.of("model", "modelSearch"));
+    when(cacheManager.getCache("model")).thenReturn(null);
+    when(cacheManager.getCache("modelSearch")).thenReturn(searchCache);
 
-    service.pollForDataVersionChange();
+    changeListener.accept(INITIAL_RELEASE, NEXT_VERSION);
 
-    verify(dataVersionProvider).getCurrentDataVersion();
-    verifyNoInteractions(cacheManager);
-  }
-
-  @Test
-  @DisplayName("should clear caches only on the poll where version changes")
-  void shouldClearCachesOnlyOnThePollWhereVersionChanges() {
-    when(dataVersionProvider.getCurrentDataVersion())
-      .thenReturn(Optional.of("1.0.0"))
-      .thenReturn(Optional.of("1.0.0"))
-      .thenReturn(Optional.of("2.0.0"));
-    Cache cache = mock(Cache.class);
-    when(cacheManager.getCacheNames()).thenReturn(List.of("cacheA"));
-    when(cacheManager.getCache("cacheA")).thenReturn(cache);
-
-    service.pollForDataVersionChange();
-    service.pollForDataVersionChange();
-    service.pollForDataVersionChange();
-
-    verify(cache, times(1)).clear();
-  }
-
-  @Test
-  @DisplayName("should skip null cache references returned from cache manager")
-  void shouldSkipNullCacheReferencesReturnedFromCacheManager() {
-    when(dataVersionProvider.getCurrentDataVersion())
-      .thenReturn(Optional.of("1.0.0"))
-      .thenReturn(Optional.of("2.0.0"));
-    Cache cacheB = mock(Cache.class);
-    when(cacheManager.getCacheNames()).thenReturn(List.of("cacheA", "cacheB"));
-    when(cacheManager.getCache("cacheA")).thenReturn(null);
-    when(cacheManager.getCache("cacheB")).thenReturn(cacheB);
-
-    service.pollForDataVersionChange();
-    service.pollForDataVersionChange();
-
-    verify(cacheB).clear();
-  }
-
-  @Test
-  @DisplayName("should not propagate exception thrown by data version provider")
-  void shouldNotPropagateExceptionThrownByDataVersionProvider() {
-    when(dataVersionProvider.getCurrentDataVersion()).thenThrow(new RuntimeException("db error"));
-
-    assertThatCode(() -> service.pollForDataVersionChange()).doesNotThrowAnyException();
+    verify(searchCache).clear();
   }
 }

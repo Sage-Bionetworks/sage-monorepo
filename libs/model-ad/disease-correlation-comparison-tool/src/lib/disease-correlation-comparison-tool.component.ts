@@ -1,4 +1,3 @@
-import { HttpContext } from '@angular/common/http';
 import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -13,7 +12,6 @@ import {
   ComparisonToolUrlService,
   LoggerService,
   PlatformService,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
@@ -27,7 +25,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { DOWNLOAD_PINS_NOTE, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, EMPTY, map, shareReplay } from 'rxjs';
+import { map, shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 @Component({
@@ -52,13 +50,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
-    .pipe(
-      catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', { error });
-        return EMPTY;
-      }),
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'CONSENSUS NETWORK MODULES': {
@@ -143,6 +135,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     }
 
     this.comparisonToolService.connect({
+      page: ComparisonToolPage.DiseaseCorrelation,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
       pinAllFetch: (query, remainingBudget) =>
@@ -193,16 +186,12 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
-      this.diseaseCorrelationService
-        .getDiseaseCorrelations(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: DiseaseCorrelationsPage) => ({
-            data: response.diseaseCorrelations,
-            totalCount: response.page.totalElements,
-          })),
-        ),
+      this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(
+        map((response: DiseaseCorrelationsPage) => ({
+          data: response.diseaseCorrelations,
+          totalCount: response.page.totalElements,
+        })),
+      ),
     );
   }
 
@@ -220,16 +209,12 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.logger.log('pinned query', { query });
 
     this.comparisonToolService.fetchPinned(
-      this.diseaseCorrelationService
-        .getDiseaseCorrelations(query, 'body', false, {
-          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-        })
-        .pipe(
-          map((response: DiseaseCorrelationsPage) => {
-            const data = response.diseaseCorrelations;
-            return { data, totalCount: data.length };
-          }),
-        ),
+      this.diseaseCorrelationService.getDiseaseCorrelations(query).pipe(
+        map((response: DiseaseCorrelationsPage) => {
+          const data = response.diseaseCorrelations;
+          return { data, totalCount: data.length };
+        }),
+      ),
     );
   }
 }

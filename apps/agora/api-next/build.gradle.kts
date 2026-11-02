@@ -11,6 +11,7 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
+  implementation(libs.sentry.spring.boot.starter.jakarta)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
   implementation(libs.spring.boot.starter.data.mongodb)

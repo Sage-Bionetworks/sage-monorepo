@@ -90,6 +90,7 @@ export const provideComparisonToolService = (
 
       if (options.configs) {
         service.connect({
+          page: options.configs[0]?.page,
           config$: of(options.configs),
           queryParams$: urlService.params$,
           pinAllFetch: options.pinAllFetch ?? noMatchingRows,

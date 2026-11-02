@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { DataVersionService } from '@sagebionetworks/agora/api-client';
-import { AGORA_LOADING_ICON_COLORS, ConfigService } from '@sagebionetworks/agora/config';
+import { AGORA_LOADING_ICON_COLORS, ConfigService, SITE_NAME } from '@sagebionetworks/agora/config';
 import { SearchInputComponent } from '@sagebionetworks/agora/ui';
 import { footerLinks, headerLinks } from '@sagebionetworks/agora/util';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
@@ -53,6 +53,6 @@ export class AppComponent {
   footerLinks = footerLinks;
 
   constructor() {
-    this.metaTagService.initialize('Agora');
+    this.metaTagService.initialize(SITE_NAME);
   }
 }

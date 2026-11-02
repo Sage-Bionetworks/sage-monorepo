@@ -25,15 +25,45 @@ jobs:
             echo "Invalid Explorer input: ${{ inputs.explorer }}"
             exit 1
           fi
+  authorize:
+    # Skips the explorer-pr approval for fork PRs from users with write access.
+    runs-on: ubuntu-24.04
+    outputs:
+      authorized: ${{ steps.check.outputs.authorized }}
+    steps:
+      - name: Check that the PR author and the user who started the run have write access
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          # Not triggering_actor: a re-run would swap in the re-runner and skip the approval.
+          ACTOR: ${{ github.actor }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          author_permission=none
+          actor_permission=none
+          if [[ "${GITHUB_EVENT_NAME}" == "pull_request_target" && "${HEAD_REPO}" != "${GITHUB_REPOSITORY}" ]]; then
+            author_permission=$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${PR_AUTHOR}/permission" --jq .permission) \
+              || { echo "::warning::Could not read permission for ${PR_AUTHOR}; falling back to approval"; author_permission=none; }
+            actor_permission=$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${ACTOR}/permission" --jq .permission) \
+              || { echo "::warning::Could not read permission for ${ACTOR}; falling back to approval"; actor_permission=none; }
+          fi
+          echo "PR author ${PR_AUTHOR}: ${author_permission}, started by ${ACTOR}: ${actor_permission}"
+          if [[ "${author_permission}" =~ ^(admin|write)$ && "${actor_permission}" =~ ^(admin|write)$ ]]; then
+            echo "authorized=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "authorized=false" >> "${GITHUB_OUTPUT}"
+          fi
   run-explorer-e2e-tests:
-    needs: validate-explorer-input
-    # The explorer and explorer-pr environments should contain the same secrets. However, the explorer
-    # environment should be configured to run workflows automatically and should only be used when
-    # the workflow is running against trusted code. The explorer-pr environment should be configured
-    # to require an authorized user's approval to run the workflow, so should be used when running
-    # against untrusted code, e.g. PRs from forked repos.
+    needs: [authorize, validate-explorer-input]
+    # The explorer and explorer-pr environments should contain the same secrets. The explorer
+    # environment runs automatically and is used for trusted code: pushes, same-repo PRs, and fork
+    # PRs whose author and actor both have write access (see the authorize job). The explorer-pr
+    # environment requires approval and is used for all other fork PRs.
     environment: ${{ github.event_name == 'pull_request_target' &&
-      github.event.pull_request.head.repo.full_name != github.repository && format('{0}-pr', inputs.explorer) || inputs.explorer }}
+      github.event.pull_request.head.repo.full_name != github.repository &&
+      needs.authorize.outputs.authorized != 'true' &&
+      format('{0}-pr', inputs.explorer) || inputs.explorer }}
     timeout-minutes: 60
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     steps:

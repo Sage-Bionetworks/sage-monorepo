@@ -1,14 +1,36 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN } from '@sagebionetworks/explorers/constants';
-import { firstValueFrom, lastValueFrom, Observable, of, throwError, toArray } from 'rxjs';
-import { SKIP_ERROR_REPORTING, SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
+import {
+  DATA_VERSION_LOADING,
+  DATA_VERSION_UNKNOWN,
+  VERSION_CHECK_TIMEOUT_MS,
+} from '@sagebionetworks/explorers/constants';
+import { firstValueFrom, lastValueFrom, NEVER, Observable, of, throwError, toArray } from 'rxjs';
+import {
+  formatHttpErrorReportMessage,
+  HttpRequestError,
+  NO_RESPONSE_STATUS,
+} from './http-request-error';
 import { SourceLogger } from './logger.service';
 import { PlatformService } from './platform.service';
-import { DataVersion, DataVersionService, VersionService } from './version.service';
+import {
+  DATA_VERSION_ERROR_MESSAGE,
+  DataVersion,
+  DataVersionService,
+  VersionService,
+} from './version.service';
 
 describe('VersionService', () => {
   let service: VersionService;
   let mockPlatformService: Partial<PlatformService>;
+
+  const failedRequest = new HttpRequestError(
+    new HttpErrorResponse({
+      status: NO_RESPONSE_STATUS,
+      url: 'https://modeladexplorer.org/api/v1/data-version',
+    }),
+    'GET',
+  );
 
   const mockDataVersion: DataVersion = {
     data_file: 'syn12345',
@@ -30,20 +52,21 @@ describe('VersionService', () => {
   });
 
   afterEach(() => {
+    jest.useRealTimers();
     jest.restoreAllMocks();
   });
+
+  function mockDataVersionService(
+    getDataVersion: DataVersionService['getDataVersion'],
+  ): DataVersionService {
+    return { getDataVersion };
+  }
 
   it('should create', () => {
     expect(service).toBeDefined();
   });
 
   describe('getDataVersion$', () => {
-    function mockDataVersionService(
-      getDataVersion: DataVersionService['getDataVersion'],
-    ): DataVersionService {
-      return { getDataVersion };
-    }
-
     function collectEmissions(dataVersion$: Observable<string>): Promise<string[]> {
       return firstValueFrom(dataVersion$.pipe(toArray()));
     }
@@ -77,27 +100,82 @@ describe('VersionService', () => {
       expect(emissions).toEqual([DATA_VERSION_LOADING, service.formatDataVersion(mockDataVersion)]);
     });
 
-    it('should request without the error overlay and with caller-owned error reporting', async () => {
-      const getDataVersion: jest.MockedFunction<DataVersionService['getDataVersion']> = jest
-        .fn()
-        .mockReturnValue(of(mockDataVersion));
-
-      await lastValueFrom(service.getDataVersion$(mockDataVersionService(getDataVersion)));
-
-      const context = getDataVersion.mock.calls[0][2]?.context;
-      expect(context?.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
-      expect(context?.get(SKIP_ERROR_REPORTING)).toBe(true);
-    });
-
     it('should emit loading, then unknown and report a Sentry warning when the request errors', async () => {
-      const error = new Error('Unable to connect to the server. Please check your connection.');
       const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
-      const dataVersionService = mockDataVersionService(() => throwError(() => error));
+      const errorSpy = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+      const dataVersionService = mockDataVersionService(() => throwError(() => failedRequest));
 
       const emissions = await collectEmissions(service.getDataVersion$(dataVersionService));
 
       expect(emissions).toEqual([DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN]);
-      expect(warnSpy).toHaveBeenCalledWith('Failed to fetch data version', { error });
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(warnSpy).toHaveBeenCalledWith(
+        formatHttpErrorReportMessage(DATA_VERSION_ERROR_MESSAGE, failedRequest),
+        expect.any(Object),
+        failedRequest,
+      );
+      expect(errorSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when the data version request does not answer in time', () => {
+    it('should emit unknown and leave a breadcrumb rather than a Sentry warning', async () => {
+      jest.useFakeTimers();
+      const logSpy = jest.spyOn(SourceLogger.prototype, 'log').mockImplementation();
+      const warnSpy = jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+
+      const emissions = firstValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => NEVER)).pipe(toArray()),
+      );
+      jest.advanceTimersByTime(VERSION_CHECK_TIMEOUT_MS);
+
+      await expect(emissions).resolves.toEqual([DATA_VERSION_LOADING, DATA_VERSION_UNKNOWN]);
+      expect(logSpy).toHaveBeenCalledWith('Data version request timed out', {
+        timeoutMs: VERSION_CHECK_TIMEOUT_MS,
+      });
+      expect(warnSpy).not.toHaveBeenCalled();
+      expect(service.getLoadedDataVersion()).toBeNull();
+    });
+  });
+
+  describe('getLoadedDataVersion', () => {
+    const nextDataVersion: DataVersion = { ...mockDataVersion, data_version: '43' };
+
+    it('should have no loaded data version before the request succeeds', () => {
+      expect(service.getLoadedDataVersion()).toBeNull();
+    });
+
+    it('should keep the data version the first successful request loaded', async () => {
+      await lastValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => of(mockDataVersion))),
+      );
+      await lastValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => of(nextDataVersion))),
+      );
+
+      expect(service.getLoadedDataVersion()).toEqual(mockDataVersion);
+    });
+
+    it('should not keep an unknown data version, so a later request can still record one', async () => {
+      const unknownDataVersion: DataVersion = { data_file: '', data_version: '' };
+
+      await lastValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => of(unknownDataVersion))),
+      );
+      await lastValueFrom(
+        service.getDataVersion$(mockDataVersionService(() => of(mockDataVersion))),
+      );
+
+      expect(service.getLoadedDataVersion()).toEqual(mockDataVersion);
+    });
+
+    it('should not keep a data version when the request errors', async () => {
+      jest.spyOn(SourceLogger.prototype, 'warn').mockImplementation();
+      const dataVersionService = mockDataVersionService(() => throwError(() => failedRequest));
+
+      await lastValueFrom(service.getDataVersion$(dataVersionService));
+
+      expect(service.getLoadedDataVersion()).toBeNull();
     });
   });
 

@@ -9,10 +9,19 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SynapseWikiMarkdown, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { PlatformService, SynapseApiService } from '@sagebionetworks/explorers/services';
+import {
+  ErrorOverlayService,
+  HttpErrorReportLevelEnum,
+  LoggerService,
+  PlatformService,
+  reportHttpError,
+  SynapseApiService,
+} from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
+
+export const WIKI_ERROR_MESSAGE = 'Error loading wiki';
 @Component({
   selector: 'explorers-wiki',
   imports: [LoadingIconComponent],
@@ -22,6 +31,8 @@ import { finalize } from 'rxjs';
 })
 export class WikiComponent {
   private readonly platformService = inject(PlatformService);
+  private readonly errorOverlayService = inject(ErrorOverlayService);
+  private readonly logger = inject(LoggerService).forSource('WikiComponent');
   synapseApiService = inject(SynapseApiService);
   domSanitizer = inject(DomSanitizer);
   private readonly destroyRef = inject(DestroyRef);
@@ -47,7 +58,7 @@ export class WikiComponent {
       this.isLoading.set(true);
 
       this.synapseApiService
-        .getWikiMarkdown(ownerId, wikiId, this.suppressErrorOverlay())
+        .getWikiMarkdown(ownerId, wikiId)
         .pipe(
           takeUntilDestroyed(this.destroyRef),
           finalize(() => {
@@ -61,7 +72,14 @@ export class WikiComponent {
               this.synapseApiService.renderHtml(wiki.markdown),
             );
           },
-          error: () => {
+          error: (error) => {
+            reportHttpError(this.logger, WIKI_ERROR_MESSAGE, {
+              error,
+              level: HttpErrorReportLevelEnum.Warn,
+            });
+            if (!this.suppressErrorOverlay()) {
+              this.errorOverlayService.showRequestError(error);
+            }
             this.safeHtml = 'No data found, please try again later.';
           },
         });

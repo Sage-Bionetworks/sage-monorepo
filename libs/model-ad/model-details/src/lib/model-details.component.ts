@@ -1,14 +1,16 @@
 import { Location } from '@angular/common';
-import { HttpContext } from '@angular/common/http';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Panel, QueryParams } from '@sagebionetworks/explorers/models';
 import {
+  ErrorOverlayService,
   HelperService,
+  HttpErrorReportLevelEnum,
+  isNotFoundError,
   LoggerService,
+  NotFoundService,
   PlatformService,
-  SUPPRESS_ERROR_OVERLAY,
 } from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent, routeSnapshotChanges } from '@sagebionetworks/explorers/util';
 import {
@@ -32,6 +34,8 @@ import {
   getPanelsWithDisabledState as getMousePanelsWithDisabledState,
 } from './components/mouse-model-details-content/mouse-model-details-panels';
 
+export const MODEL_ERROR_MESSAGE = 'Error loading model';
+
 @Component({
   selector: 'model-ad-model-details',
   imports: [
@@ -44,12 +48,13 @@ import {
 })
 export class ModelDetailsComponent implements OnInit {
   route = inject(ActivatedRoute);
-  router = inject(Router);
   location = inject(Location);
   helperService = inject(HelperService);
   modelService = inject(ModelService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
+  private readonly errorOverlayService = inject(ErrorOverlayService);
+  private readonly notFoundService = inject(NotFoundService);
   private readonly logger = inject(LoggerService).forSource('ModelDetailsComponent');
 
   isLoading = true;
@@ -109,20 +114,23 @@ export class ModelDetailsComponent implements OnInit {
     const modelName = params.get(ROUTE_PARAMS.MODEL_NAME);
     if (!modelName) return EMPTY;
 
-    return this.modelService
-      .getModelByName(modelOrganism, modelName, 'body', false, {
-        context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
-      })
-      .pipe(
-        catchError(() => {
-          this.logger.log('model not found, redirecting', {
+    return this.modelService.getModelByName(modelOrganism, modelName).pipe(
+      catchError((error) => {
+        if (isNotFoundError(error)) {
+          this.notFoundService.redirectToNotFound(this.logger, 'model', {
             modelName,
             modelOrganism,
           });
-          this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           return EMPTY;
-        }),
-      );
+        }
+        this.errorOverlayService.reportAndShow(this.logger, MODEL_ERROR_MESSAGE, {
+          error,
+          level: HttpErrorReportLevelEnum.Error,
+        });
+        this.isLoading = false;
+        return EMPTY;
+      }),
+    );
   }
 
   private setModel(model: Model, params: ParamMap) {

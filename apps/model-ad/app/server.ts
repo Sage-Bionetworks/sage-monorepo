@@ -1,15 +1,23 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr/node';
+import {
+  assertValidAppConfig,
+  CHUNK_FILE_PATH_PATTERN,
+  createAppVersionHandler,
+  createMissingChunkHandler,
+} from '@sagebionetworks/explorers/config/server';
+import { APP_VERSION_PATH } from '@sagebionetworks/explorers/constants';
 import express from 'express';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import bootstrap from './src/main.server';
 
+const serverDistFolder = dirname(fileURLToPath(import.meta.url));
+const browserDistFolder = resolve(serverDistFolder, '../browser');
+
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-  const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-  const browserDistFolder = resolve(serverDistFolder, '../browser');
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
   const commonEngine = new CommonEngine({
@@ -33,6 +41,12 @@ export function app(): express.Express {
   // Health endpoint used by the Docker container
   server.get('/health', (_req, res) => res.status(200).json({ status: 'UP' }));
 
+  // Version endpoint polled by browser tabs to detect that a newer version was deployed
+  server.get(APP_VERSION_PATH, createAppVersionHandler(process.env));
+
+  // Chunk files the build has were served above, so this only answers names from an earlier deploy
+  server.get(CHUNK_FILE_PATH_PATTERN, createMissingChunkHandler());
+
   // Serve static OpenGraph images at /opengraph
   server.use('/opengraph', express.static(join(serverDistFolder, '../browser/opengraph')));
 
@@ -55,8 +69,16 @@ export function app(): express.Express {
   return server;
 }
 
-function run(): void {
+async function run(): Promise<void> {
   const port = process.env['PORT'] || '4200';
+
+  // Exit before listening if the config is invalid, so a deploy fails instead of every page.
+  try {
+    await assertValidAppConfig(join(browserDistFolder, 'config'));
+  } catch (error) {
+    console.error('Invalid app configuration; the server will not start:', error);
+    process.exit(1);
+  }
 
   // Start up the Node server
   const server = app();
@@ -65,4 +87,4 @@ function run(): void {
   });
 }
 
-run();
+void run();

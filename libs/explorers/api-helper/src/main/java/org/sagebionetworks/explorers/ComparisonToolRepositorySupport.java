@@ -246,70 +246,65 @@ public abstract class ComparisonToolRepositorySupport<T> {
     Pageable pageable,
     CtQueryOptions options
   ) {
-    try {
-      BudgetMode budgetMode = resolveBudgetMode(options);
-      // When the budget caps parents, first run a separate query to pick the admitted parents, then
-      // narrow the match to their rows. Otherwise use the match criteria as-is.
-      Criteria rowCriteria = budgetMode == BudgetMode.CAPS_PARENTS
-        ? buildAdmittedParentsCriteria(matchCriteria, pageable.getSort(), options)
-        : matchCriteria;
+    BudgetMode budgetMode = resolveBudgetMode(options);
+    // When the budget caps parents, first run a separate query to pick the admitted parents, then
+    // narrow the match to their rows. Otherwise use the match criteria as-is.
+    Criteria rowCriteria = budgetMode == BudgetMode.CAPS_PARENTS
+      ? buildAdmittedParentsCriteria(matchCriteria, pageable.getSort(), options)
+      : matchCriteria;
 
-      List<AggregationOperation> operations = new ArrayList<>();
-      operations.add(Aggregation.match(rowCriteria));
+    List<AggregationOperation> operations = new ArrayList<>();
+    operations.add(Aggregation.match(rowCriteria));
 
-      Map<String, ComputedSortField> computedFields = getComputedSortFieldExpressions();
-      Map<String, String> aliases = getSortFieldAliases();
+    Map<String, ComputedSortField> computedFields = getComputedSortFieldExpressions();
+    Map<String, String> aliases = getSortFieldAliases();
 
-      operations.addAll(buildSortPrepStages(pageable.getSort(), computedFields, aliases));
+    operations.addAll(buildSortPrepStages(pageable.getSort(), computedFields, aliases));
 
-      // Build and add sort operation
-      AggregationOperation sort = buildSortOperation(pageable.getSort(), computedFields, aliases);
-      if (sort != null) {
-        operations.add(sort);
-      }
-
-      operations.addAll(
-        switch (budgetMode) {
-          case NONE -> List.of(
-            Aggregation.skip((long) pageable.getPageNumber() * pageable.getPageSize()),
-            Aggregation.limit(pageable.getPageSize())
-          );
-          case CAPS_ROWS -> List.of(Aggregation.limit(options.remainingBudget()));
-          // No $skip or $limit: the $match already names the admitted parents, and every row of
-          // each is wanted
-          case CAPS_PARENTS -> List.of();
-        }
-      );
-
-      // Permits disk spillover when the $sort working set exceeds 100MB; only activates
-      // when needed -- required for deep pagination on large collections
-      Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(
-        AggregationOptions.builder().allowDiskUse(true).collation(CASE_INSENSITIVE).build()
-      );
-      log.debug("Executing aggregation on collection {}: {}", getCollectionName(), aggregation);
-      AggregationResults<T> results = mongoTemplate.aggregate(
-        aggregation,
-        getCollectionName(),
-        getDocumentClass()
-      );
-
-      long total = mongoTemplate.count(
-        new Query(matchCriteria).collation(CASE_INSENSITIVE),
-        getCollectionName()
-      );
-      Pageable resultPageable = budgetMode == BudgetMode.NONE
-        ? pageable
-        : Pageable.unpaged(pageable.getSort());
-      return new CtPage<>(
-        results.getMappedResults(),
-        resultPageable,
-        total,
-        findRowsForPrebudgetedParents(matchCriteria, options)
-      );
-    } catch (Exception e) {
-      log.error("Error executing aggregation on collection {}", getCollectionName(), e);
-      throw e;
+    // Build and add sort operation
+    AggregationOperation sort = buildSortOperation(pageable.getSort(), computedFields, aliases);
+    if (sort != null) {
+      operations.add(sort);
     }
+
+    operations.addAll(
+      switch (budgetMode) {
+        case NONE -> List.of(
+          Aggregation.skip((long) pageable.getPageNumber() * pageable.getPageSize()),
+          Aggregation.limit(pageable.getPageSize())
+        );
+        case CAPS_ROWS -> List.of(Aggregation.limit(options.remainingBudget()));
+        // No $skip or $limit: the $match already names the admitted parents, and every row of
+        // each is wanted
+        case CAPS_PARENTS -> List.of();
+      }
+    );
+
+    // Permits disk spillover when the $sort working set exceeds 100MB; only activates
+    // when needed -- required for deep pagination on large collections
+    Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(
+      AggregationOptions.builder().allowDiskUse(true).collation(CASE_INSENSITIVE).build()
+    );
+    log.debug("Executing aggregation on collection {}: {}", getCollectionName(), aggregation);
+    AggregationResults<T> results = mongoTemplate.aggregate(
+      aggregation,
+      getCollectionName(),
+      getDocumentClass()
+    );
+
+    long total = mongoTemplate.count(
+      new Query(matchCriteria).collation(CASE_INSENSITIVE),
+      getCollectionName()
+    );
+    Pageable resultPageable = budgetMode == BudgetMode.NONE
+      ? pageable
+      : Pageable.unpaged(pageable.getSort());
+    return new CtPage<>(
+      results.getMappedResults(),
+      resultPageable,
+      total,
+      findRowsForPrebudgetedParents(matchCriteria, options)
+    );
   }
 
   /** What a request's budget caps, which decides how its row pipeline ends. */

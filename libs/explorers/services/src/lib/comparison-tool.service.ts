@@ -23,6 +23,7 @@ import {
   ComparisonToolConfigFilter,
   ComparisonToolFilter,
   ComparisonToolNouns,
+  ComparisonToolPage,
   ComparisonToolQuery,
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
@@ -41,6 +42,8 @@ import { AppStorageService } from './app-storage.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
 import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
+import { ErrorOverlayService } from './error-overlay.service';
+import { HttpErrorReportLevelEnum, reportHttpError } from './http-request-error';
 import { LoggerService } from './logger.service';
 import { ToastNotificationService } from './toast-notification.service';
 
@@ -58,6 +61,21 @@ export const UNMATCHED_URL_CATEGORIES_MESSAGE =
 
 export const UNMATCHED_KEEP_STATE_LINK_CATEGORIES_MESSAGE =
   'Link categories match no comparison tool config; keeping the current selection.';
+
+export const COMPARISON_TOOL_CONFIG_ERROR_MESSAGE = 'Error retrieving comparison tool config';
+
+export const UNPINNED_FETCH_ERROR_MESSAGE = 'Error fetching unpinned rows';
+
+export const PINNED_FETCH_ERROR_MESSAGE = 'Error fetching pinned rows';
+
+export const PIN_ALL_ERROR_MESSAGE = 'Error pinning all matching rows';
+
+export const ComparisonToolSentryTagEnum = {
+  Page: 'comparison_tool.page',
+  DropdownSelection: 'comparison_tool.dropdown_selection',
+} as const;
+
+export const DROPDOWN_SELECTION_TAG_SEPARATOR = ' / ';
 
 /**
  * Result of a comparison tool data fetch. `data` is the rows to render; `totalCount` is the value
@@ -126,6 +144,7 @@ export class ComparisonToolService<T> {
   private readonly helperService = inject(ComparisonToolHelperService);
   private readonly coordinatorService = inject(ComparisonToolCoordinatorService);
   private readonly appStorageService = inject(AppStorageService);
+  private readonly errorOverlayService = inject(ErrorOverlayService);
   private readonly logger = inject(LoggerService).forSource('ComparisonToolService');
 
   // Cache column selections only for dropdown selections up to this length
@@ -238,6 +257,7 @@ export class ComparisonToolService<T> {
   // Connect-Time Dependencies
   private pinAllFetch?: PinAllFetch<T>;
   private initialSelection: string[] | undefined;
+  private page: ComparisonToolPage | undefined;
 
   // URL Sync State
   // What the URL holds as far as this service knows, to tell its own URL changes from external ones.
@@ -534,6 +554,7 @@ export class ComparisonToolService<T> {
   constructor() {
     // Unpinned rows are paged, so totalCount is the cross-page total used for pagination.
     this.subscribeToFetchStream(
+      UNPINNED_FETCH_ERROR_MESSAGE,
       this.unpinnedFetch$,
       this.pendingUnpinnedFetchesSignal,
       (result) => this.applyUnpinnedData(result),
@@ -543,6 +564,7 @@ export class ComparisonToolService<T> {
     // Pinned rows are never paged: applyPinnedData enforces the pin cap and the count comes from
     // pinnedData(), so totalCount from the response is unused and therefore is omitted intentionally.
     this.subscribeToFetchStream(
+      PINNED_FETCH_ERROR_MESSAGE,
       this.pinnedFetch$,
       this.pendingPinnedFetchesSignal,
       ({ data, identity, dropdownSelection, requestedPins }) =>
@@ -581,6 +603,8 @@ export class ComparisonToolService<T> {
 
   // Lifecycle
   connect(options: {
+    /** The page this tool's configs are requested for, to tag its failure reports with. */
+    page: ComparisonToolPage | undefined;
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
     pinAllFetch: PinAllFetch<T>;
@@ -588,6 +612,7 @@ export class ComparisonToolService<T> {
   }): void {
     this.coordinatorService.setActive(this);
     this.pinAllFetch = options.pinAllFetch;
+    this.page = options.page;
 
     if (this.isInitialized()) {
       // Re-entering an already-initialized service (navigating back to this CT)
@@ -607,7 +632,20 @@ export class ComparisonToolService<T> {
 
     this.initialSelection = options.initialSelection;
 
-    combineLatest([options.config$, options.queryParams$])
+    // The tool can't render without its config, so a failed config request shows the error overlay
+    // in place of a loading skeleton that never ends.
+    const config$ = options.config$.pipe(
+      catchError((error) => {
+        this.errorOverlayService.reportAndShow(this.logger, COMPARISON_TOOL_CONFIG_ERROR_MESSAGE, {
+          error,
+          level: HttpErrorReportLevelEnum.Error,
+          tags: this.failureTags(),
+        });
+        return EMPTY;
+      }),
+    );
+
+    combineLatest([config$, options.queryParams$])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([configs, params]) => {
         if (!this.isInitializedSignal()) {
@@ -1078,7 +1116,7 @@ export class ComparisonToolService<T> {
           }
         },
         error: (error) => {
-          this.logger.error('Error pinning all matching rows', { error });
+          this.reportFailure(PIN_ALL_ERROR_MESSAGE, error);
           this.toastNotificationService.showError(
             'Something went wrong while pinning all matching rows. Please try again.',
           );
@@ -1379,11 +1417,11 @@ export class ComparisonToolService<T> {
    * Subscribes a fetch stream once for the lifetime of the service. `switchMap` unsubscribes the
    * previous result observable whenever a newer one arrives, which aborts the superseded HTTP
    * request so responses are always applied latest-wins. `finalize` runs on completion, error, or
-   * switchMap cancellation, keeping `pendingCounter` balanced; `catchError` hands a failed
-   * request to `applyFailure` and keeps the outer stream alive for the next fetch. Error logging is
-   * handled centrally by `httpErrorInterceptor`, so `applyFailure` only updates state.
+   * switchMap cancellation, keeping `pendingCounter` balanced; `catchError` reports a failed
+   * request, hands it to `applyFailure`, and keeps the outer stream alive for the next fetch.
    */
   private subscribeToFetchStream<R extends ComparisonToolFetchResult<unknown>>(
+    errorMessage: string,
     fetch$: Subject<Observable<R>>,
     pendingCounter: WritableSignal<number>,
     applyResult: (result: R) => void,
@@ -1394,7 +1432,8 @@ export class ComparisonToolService<T> {
         switchMap((source$) =>
           source$.pipe(
             finalize(() => this.completeFetch(pendingCounter)),
-            catchError(() => {
+            catchError((error) => {
+              this.reportFailure(errorMessage, error);
               applyFailure();
               return EMPTY;
             }),
@@ -1403,6 +1442,34 @@ export class ComparisonToolService<T> {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(applyResult);
+  }
+
+  /** Reports a failed fetch that the tool recovers from, with `failureTags`. */
+  private reportFailure(errorMessage: string, error: unknown): void {
+    reportHttpError(this.logger, errorMessage, {
+      error,
+      level: HttpErrorReportLevelEnum.Error,
+      tags: this.failureTags(),
+    });
+  }
+
+  /**
+   * The tags a failed fetch is reported with: the comparison tool page and, when the tool has
+   * dropdowns, the selected view, so Sentry can filter failures by tool and view.
+   */
+  private failureTags(): Record<string, string> {
+    const tags: Record<string, string> = {};
+    // Taken from connect rather than the configs, which are still empty when their request fails.
+    if (this.page) {
+      tags[ComparisonToolSentryTagEnum.Page] = this.page;
+    }
+    const dropdownSelection = this.dropdownSelection();
+    if (dropdownSelection.length > 0) {
+      tags[ComparisonToolSentryTagEnum.DropdownSelection] = dropdownSelection.join(
+        DROPDOWN_SELECTION_TAG_SEPARATOR,
+      );
+    }
+    return tags;
   }
 
   /**

@@ -1,3 +1,4 @@
+export * from './lib/app-version';
 export * from './lib/config.schema';
 export * from './lib/client-config.schema';
 export * from './lib/config-transformer';

@@ -1,6 +1,13 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, inject, InjectionToken } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { PlatformService, SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/services';
+import {
+  formatHttpErrorReportMessage,
+  ErrorOverlayService,
+  HttpRequestError,
+  PlatformService,
+  SourceLogger,
+} from '@sagebionetworks/explorers/services';
 import {
   ModelIdentifierType,
   TranscriptomicsIndividual,
@@ -10,7 +17,7 @@ import { transcriptomicsIndividualMocks } from '@sagebionetworks/model-ad/testin
 import { render, screen } from '@testing-library/angular';
 import { Observable, of, switchMap, throwError, timer } from 'rxjs';
 import {
-  IndividualExpressionDetailsFetchOptions,
+  INDIVIDUAL_EXPRESSION_DATA_ERROR_MESSAGE,
   individualExpressionDetailsFromRoute,
   IndividualExpressionDetailsQuery,
 } from './individual-expression-details-from-route';
@@ -22,7 +29,6 @@ const DETAILS_PATH = 'details';
 type FetchData = (
   id: string,
   query: IndividualExpressionDetailsQuery,
-  options: IndividualExpressionDetailsFetchOptions,
 ) => Observable<TranscriptomicsIndividual[]>;
 
 type FetchDataMock = jest.Mock<ReturnType<FetchData>, Parameters<FetchData>>;
@@ -62,6 +68,18 @@ describe('individualExpressionDetailsFromRoute', () => {
   const modelGroup = 'LOAD2';
   const unknownEnsemblGeneId = 'Unknown';
   const noDataEnsemblGeneId = 'NoData';
+  const unavailableEnsemblGeneId = 'Unavailable';
+
+  const detailsRequestError = (status: HttpStatusCode, id: string) =>
+    new HttpRequestError(
+      new HttpErrorResponse({
+        status,
+        url: `https://modeladexplorer.org/api/v1/transcriptomics-individual/${id}`,
+      }),
+      'GET',
+    );
+
+  afterEach(() => jest.restoreAllMocks());
 
   const detailsRoute = (
     id: string,
@@ -74,9 +92,12 @@ describe('individualExpressionDetailsFromRoute', () => {
   async function setup(initialRoute: string, { notFoundDelayMs = 0, isBrowser = true } = {}) {
     const fetchMock = jest.fn<ReturnType<FetchData>, Parameters<FetchData>>((id) => {
       if (id === noDataEnsemblGeneId) return of([]);
+      if (id === unavailableEnsemblGeneId) {
+        return throwError(() => detailsRequestError(HttpStatusCode.ServiceUnavailable, id));
+      }
       if (id !== unknownEnsemblGeneId) return of(transcriptomicsIndividualMocks);
 
-      const notFound = throwError(() => new Error(`${id} not found`));
+      const notFound = throwError(() => detailsRequestError(HttpStatusCode.NotFound, id));
       return notFoundDelayMs ? timer(notFoundDelayMs).pipe(switchMap(() => notFound)) : notFound;
     });
 
@@ -107,13 +128,6 @@ describe('individualExpressionDetailsFromRoute', () => {
     expect(
       screen.getByText(`Records: ${transcriptomicsIndividualMocks.length}`),
     ).toBeInTheDocument();
-  });
-
-  it('should suppress the error overlay on the request', async () => {
-    const { fetchMock } = await setup(detailsRoute(gene.ensembl_gene_id));
-
-    const [, , options] = fetchMock.mock.calls[0];
-    expect(options.context.get(SUPPRESS_ERROR_OVERLAY)).toBe(true);
   });
 
   it('should stay loading without a request on the server', async () => {
@@ -202,10 +216,26 @@ describe('individualExpressionDetailsFromRoute', () => {
     },
   );
 
-  it('should redirect to the not found page when the request fails', async () => {
+  it('should redirect to the not found page when the gene is not found', async () => {
     await setup(detailsRoute(unknownEnsemblGeneId));
 
     expect(await screen.findByText('Not found')).toBeInTheDocument();
+  });
+
+  it('should show the error overlay and report, without redirecting, when the request fails otherwise', async () => {
+    const showError = jest.spyOn(ErrorOverlayService.prototype, 'showError');
+    const loggerError = jest.spyOn(SourceLogger.prototype, 'error').mockImplementation();
+    const error = detailsRequestError(HttpStatusCode.ServiceUnavailable, unavailableEnsemblGeneId);
+
+    await setup(detailsRoute(unavailableEnsemblGeneId));
+
+    expect(await screen.findByText(`Tissue: ${gene.tissue}`)).toBeInTheDocument();
+    expect(screen.queryByText('Not found')).not.toBeInTheDocument();
+    expect(showError).toHaveBeenCalledWith(error.userMessage);
+    expect(loggerError).toHaveBeenCalledWith(
+      formatHttpErrorReportMessage(INDIVIDUAL_EXPRESSION_DATA_ERROR_MESSAGE, error),
+      expect.objectContaining({ error: expect.any(HttpRequestError) }),
+    );
   });
 
   it('should redirect to the not found page when the request returns no data', async () => {

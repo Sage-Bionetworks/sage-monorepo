@@ -35,7 +35,12 @@
   --section-max-width: #{vars.$section-max-width};
   --section-padding: #{vars.$section-padding};
   --transition-duration: #{vars.$transition-duration};
-  --header-height: #{vars.$header-height};
+  --header-logo-height: #{vars.$header-logo-height};
+  --header-padding-y: #{vars.$header-padding-y};
+  --header-padding-x: #{vars.$header-padding-x};
+
+  // Computed here on :root, so apps must override the logo height and padding on :root too
+  --header-height: calc(var(--header-logo-height) + 2 * var(--header-padding-y));
   --panel-nav-height: #{vars.$panel-nav-height};
   --comparison-tool-primary-column-width: #{vars.$comparison-tool-primary-column-width};
   --footer-height: #{vars.$footer-height};

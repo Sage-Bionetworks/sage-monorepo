@@ -147,15 +147,12 @@ export function getTargetEnablingResources(gene: Gene) {
   return resources;
 }
 
-export async function getRnaComparisonGenes(model: string) {
+export function getRnaComparisonGenes(model: string): Promise<GCTGene[]> {
   const cacheKey = 'rna-comparison-' + model.replace(/[^a-z0-9]/gi, '');
+  return altCache.getOrLoad(cacheKey, () => loadRnaComparisonGenes(model));
+}
 
-  let result: GCTGene[] | undefined = altCache.get(cacheKey);
-
-  if (result) {
-    return result;
-  }
-
+async function loadRnaComparisonGenes(model: string): Promise<GCTGene[]> {
   const differentialExpression: RnaDifferentialExpression[] =
     await RnaDifferentialExpressionCollection.find({
       model: model,
@@ -165,49 +162,41 @@ export async function getRnaComparisonGenes(model: string) {
       .collation(CASE_INSENSITIVE_COLLATION)
       .exec();
 
-  if (differentialExpression) {
-    const genes: { [key: string]: GCTGene } = {};
-    const allGenes = await getGenesMap();
-    const teams = await getTeams();
-    const scores = await getAllScores();
-    const allBiodomains = await getAllGeneBioDomains();
+  const genes: { [key: string]: GCTGene } = {};
+  const allGenes = await getGenesMap();
+  const teams = await getTeams();
+  const scores = await getAllScores();
+  const allBiodomains = await getAllGeneBioDomains();
 
-    differentialExpression.forEach((exp: RnaDifferentialExpression) => {
-      if (!genes[exp.ensembl_gene_id]) {
-        const gene: Gene =
-          allGenes.get(exp.ensembl_gene_id) ||
-          ({
-            ensembl_gene_id: exp.ensembl_gene_id || '',
-            hgnc_symbol: exp.hgnc_symbol || '',
-          } as Gene);
-        genes[exp.ensembl_gene_id] = getComparisonGene(gene, teams, scores, allBiodomains);
-      }
+  differentialExpression.forEach((exp: RnaDifferentialExpression) => {
+    if (!genes[exp.ensembl_gene_id]) {
+      const gene: Gene =
+        allGenes.get(exp.ensembl_gene_id) ||
+        ({
+          ensembl_gene_id: exp.ensembl_gene_id || '',
+          hgnc_symbol: exp.hgnc_symbol || '',
+        } as Gene);
+      genes[exp.ensembl_gene_id] = getComparisonGene(gene, teams, scores, allBiodomains);
+    }
 
-      genes[exp.ensembl_gene_id].tissues.push({
-        name: exp.tissue,
-        logfc: exp.logfc,
-        adj_p_val: exp.adj_p_val,
-        ci_l: exp.ci_l,
-        ci_r: exp.ci_r,
-      });
+    genes[exp.ensembl_gene_id].tissues.push({
+      name: exp.tissue,
+      logfc: exp.logfc,
+      adj_p_val: exp.adj_p_val,
+      ci_l: exp.ci_l,
+      ci_r: exp.ci_r,
     });
+  });
 
-    result = Object.values(genes);
-  }
-
-  altCache.set(cacheKey, result);
-  return result;
+  return Object.values(genes);
 }
 
-export async function getProteinComparisonGenes(method: string) {
+export function getProteinComparisonGenes(method: string): Promise<GCTGene[]> {
   const cacheKey = 'rna-comparison-' + method.replace(/[^a-z0-9]/gi, '');
+  return altCache.getOrLoad(cacheKey, () => loadProteinComparisonGenes(method));
+}
 
-  let result = altCache.get(cacheKey);
-
-  if (result?.length) {
-    return result;
-  }
-
+async function loadProteinComparisonGenes(method: string): Promise<GCTGene[]> {
   let items: ProteinDifferentialExpression[] = [];
 
   if ('TMT' === method) {
@@ -233,39 +222,34 @@ export async function getProteinComparisonGenes(method: string) {
     throw 'unknown method selected: ' + method;
   }
 
-  if (items) {
-    const genes: { [key: string]: GCTGene } = {};
-    const allGenes = await getGenesMap();
-    const teams = await getTeams();
-    const scores = await getAllScores();
-    const allBiodomains = await getAllGeneBioDomains();
+  const genes: { [key: string]: GCTGene } = {};
+  const allGenes = await getGenesMap();
+  const teams = await getTeams();
+  const scores = await getAllScores();
+  const allBiodomains = await getAllGeneBioDomains();
 
-    items.forEach((item: ProteinDifferentialExpression) => {
-      if (!genes[item.uniqid]) {
-        const gene: Gene =
-          allGenes.get(item.ensembl_gene_id) ||
-          ({
-            ensembl_gene_id: item.ensembl_gene_id || '',
-            hgnc_symbol: item.hgnc_symbol || '',
-          } as Gene);
-        genes[item.uniqid] = getComparisonGene(gene, teams, scores, allBiodomains);
-        genes[item.uniqid].uniprotid = item.uniprotid;
-      }
+  items.forEach((item: ProteinDifferentialExpression) => {
+    if (!genes[item.uniqid]) {
+      const gene: Gene =
+        allGenes.get(item.ensembl_gene_id) ||
+        ({
+          ensembl_gene_id: item.ensembl_gene_id || '',
+          hgnc_symbol: item.hgnc_symbol || '',
+        } as Gene);
+      genes[item.uniqid] = getComparisonGene(gene, teams, scores, allBiodomains);
+      genes[item.uniqid].uniprotid = item.uniprotid;
+    }
 
-      genes[item.uniqid].tissues.push({
-        name: item.tissue,
-        logfc: item.log2_fc,
-        adj_p_val: item.cor_pval,
-        ci_l: item.ci_lwr,
-        ci_r: item.ci_upr,
-      });
+    genes[item.uniqid].tissues.push({
+      name: item.tissue,
+      logfc: item.log2_fc,
+      adj_p_val: item.cor_pval,
+      ci_l: item.ci_lwr,
+      ci_r: item.ci_upr,
     });
+  });
 
-    result = Object.values(genes);
-  }
-
-  altCache.set(cacheKey, result);
-  return result;
+  return Object.values(genes);
 }
 
 // -------------------------------------------------------------------------- //
@@ -285,7 +269,7 @@ export async function comparisonGenesRoute(req: Request, res: Response, next: Ne
   }
 
   try {
-    let items: GCTGene[] | undefined = [] as GCTGene[];
+    let items: GCTGene[] = [];
 
     if ('RNA - Differential Expression' === req.query.category) {
       items = await getRnaComparisonGenes(req.query.subCategory);

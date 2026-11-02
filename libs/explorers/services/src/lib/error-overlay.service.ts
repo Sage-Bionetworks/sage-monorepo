@@ -1,21 +1,53 @@
 import { computed, Injectable, signal } from '@angular/core';
+import { getAppUpdateMessage, getDataUpdateMessage } from '@sagebionetworks/explorers/constants';
+import { getUserMessage, HttpErrorReportContext, reportHttpError } from './http-request-error';
+import { SourceLogger } from './logger.service';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorOverlayService {
-  /** Signal containing the current error message, or null if no error */
-  private errorMessage = signal<string | null>(null);
+  private readonly errorMessage = signal<string | null>(null);
+  private readonly appUpdateMessage = signal<string | null>(null);
+  private readonly dataUpdateMessage = signal<string | null>(null);
 
-  /** Signal indicating whether an error overlay is currently visible */
-  hasActiveError = computed(() => this.errorMessage() !== null);
+  /**
+   * The message to display, or null when the overlay is hidden. An update notice takes precedence
+   * over an error, since errors in a stale tab are most likely caused by the update. An app update
+   * notice takes precedence over a data update notice: the reload both ask for fixes both, and new
+   * data may need the new app to display it.
+   */
+  readonly activeMessage = computed(
+    () => this.appUpdateMessage() ?? this.dataUpdateMessage() ?? this.errorMessage(),
+  );
 
-  /** The current error message to display */
-  activeErrorMessage = computed(() => this.errorMessage() ?? 'Something went wrong.');
+  readonly isOverlayVisible = computed(() => this.activeMessage() !== null);
+
+  /** Shows the overlay for a caught error, with its message for users. */
+  showRequestError(error: unknown) {
+    this.showError(getUserMessage(error));
+  }
+
+  /**
+   * Reports a failed request through `reportHttpError` and shows the overlay, for a failure that
+   * leaves the page without its content.
+   */
+  reportAndShow(logger: SourceLogger, operation: string, context: HttpErrorReportContext): void {
+    reportHttpError(logger, operation, context);
+    this.showRequestError(context.error);
+  }
 
   showError(message: string) {
     // Only show if there's no active error - prevents cascading error messages
     if (this.errorMessage() === null) {
       this.errorMessage.set(message);
     }
+  }
+
+  showAppUpdateAvailable(siteName: string) {
+    this.appUpdateMessage.set(getAppUpdateMessage(siteName));
+  }
+
+  showDataUpdateAvailable(siteName: string) {
+    this.dataUpdateMessage.set(getDataUpdateMessage(siteName));
   }
 
   reloadPage() {

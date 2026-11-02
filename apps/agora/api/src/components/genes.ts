@@ -25,22 +25,14 @@ import { getSimilarGenesNetwork } from './similar-genes-network';
 // -------------------------------------------------------------------------- //
 // Functions
 // -------------------------------------------------------------------------- //
-export async function getAllGenes() {
-  const cacheKey = 'genes';
-  let result: Gene[] | undefined = altCache.get(cacheKey);
-
-  if (result) {
-    return result;
-  }
-
-  result = await GeneCollection.find()
-    .lean()
-    .sort({ hgnc_symbol: 1, ensembl_gene_id: 1 })
-    .collation(CASE_INSENSITIVE_COLLATION)
-    .exec();
-
-  altCache.set(cacheKey, result);
-  return result;
+export function getAllGenes(): Promise<Gene[]> {
+  return altCache.getOrLoad('genes', () =>
+    GeneCollection.find()
+      .lean()
+      .sort({ hgnc_symbol: 1, ensembl_gene_id: 1 })
+      .collation(CASE_INSENSITIVE_COLLATION)
+      .exec(),
+  );
 }
 
 export async function getGenes(ids?: string) {

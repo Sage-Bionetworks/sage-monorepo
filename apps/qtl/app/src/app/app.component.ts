@@ -9,7 +9,7 @@ import {
   HeaderComponent,
 } from '@sagebionetworks/explorers/ui';
 import { DataVersionService } from '@sagebionetworks/qtl/api-client';
-import { ConfigService, QTL_LOADING_ICON_COLORS } from '@sagebionetworks/qtl/config';
+import { ConfigService, QTL_LOADING_ICON_COLORS, SITE_NAME } from '@sagebionetworks/qtl/config';
 import { footerLinks, headerLinks } from '@sagebionetworks/qtl/util';
 import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { ToastModule } from 'primeng/toast';
@@ -51,6 +51,6 @@ export class AppComponent {
   footerLinks = footerLinks;
 
   constructor() {
-    this.metaTagService.initialize('QTL');
+    this.metaTagService.initialize(SITE_NAME);
   }
 }

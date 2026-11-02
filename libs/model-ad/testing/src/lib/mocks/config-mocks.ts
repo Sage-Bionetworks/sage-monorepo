@@ -11,6 +11,7 @@ export const configMock: RuntimeServerConfig = {
   sentryDsn: '',
   sentryEnvironment: '',
   sentryRelease: '',
+  sentryTracesSampleRate: null,
   environment: 'dev',
   isPlatformServer: true,
 };
