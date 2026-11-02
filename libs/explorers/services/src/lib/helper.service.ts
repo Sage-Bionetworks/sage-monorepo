@@ -47,15 +47,7 @@ export class HelperService {
   }
 
   appendQueryParams(url: string, queryParams: QueryParams) {
-    const queryString = this.toQueryString(
-      Object.entries(queryParams).filter((entry): entry is [string, string] => !!entry[1]),
-    );
-    if (!queryString) return url;
-    const fragmentIndex = url.includes('#') ? url.indexOf('#') : url.length;
-    const pathAndQuery = url.slice(0, fragmentIndex);
-    const fragment = url.slice(fragmentIndex);
-    const separator = pathAndQuery.includes('?') ? '&' : '?';
-    return `${pathAndQuery}${separator}${queryString}${fragment}`;
+    return this.setQueryParams(url, queryParams);
   }
 
   /**
