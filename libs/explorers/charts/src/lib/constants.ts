@@ -8,6 +8,7 @@ export const CAPPED_POINT_SYMBOL = 'path://M0,0 L11,13 L5.5,13 L0,6.5 L-5.5,13 L
 export const CAPPED_POINT_SYMBOL_SIZE = 12;
 export const CAPPED_POINT_SPACING_PX = 15;
 export const CAPPED_POINT_SERIES_NAME_SUFFIX = ' above y-axis max';
+export const AUTO_Y_AXIS_MARGIN = '5%';
 
 export const DARK_TOOLTIP: TooltipOption = {
   confine: true,

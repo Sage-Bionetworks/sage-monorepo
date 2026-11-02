@@ -73,8 +73,6 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   differentialExpression: RnaDifferentialExpression[] = [];
 
   differentialExpressionChartData: BoxPlotChartItem[] = [];
-  differentialExpressionYAxisMin: number | undefined;
-  differentialExpressionYAxisMax: number | undefined;
 
   consistencyOfChangeChartData: ForestPlotItem[] = [];
 
@@ -118,8 +116,6 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   resetDifferentialExpression() {
     this.differentialExpression = [];
     this.differentialExpressionChartData = [];
-    this.differentialExpressionYAxisMin = undefined;
-    this.differentialExpressionYAxisMax = undefined;
   }
 
   init() {
@@ -220,23 +216,6 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
           });
 
           if (data) {
-            const yAxisMin = item.logfc < data.min ? item.logfc : data.min;
-            const yAxisMax = item.logfc > data.max ? item.logfc : data.max;
-
-            if (
-              this.differentialExpressionYAxisMin === undefined ||
-              yAxisMin < this.differentialExpressionYAxisMin
-            ) {
-              this.differentialExpressionYAxisMin = yAxisMin;
-            }
-
-            if (
-              this.differentialExpressionYAxisMax === undefined ||
-              yAxisMax > this.differentialExpressionYAxisMax
-            ) {
-              this.differentialExpressionYAxisMax = yAxisMax;
-            }
-
             differentialExpressionChartData.push({
               key: data.tissue,
               value: [data.min, data.median, data.max],
@@ -261,14 +240,6 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
             });
           }
         });
-
-        if (this.differentialExpressionYAxisMin) {
-          this.differentialExpressionYAxisMin -= 0.2;
-        }
-
-        if (this.differentialExpressionYAxisMax) {
-          this.differentialExpressionYAxisMax += 0.2;
-        }
 
         this.differentialExpressionChartData = differentialExpressionChartData;
       });

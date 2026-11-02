@@ -1,4 +1,3 @@
-export * from './chart-range';
 export * from './charts';
 export * from './comparison';
 export * from './distribution';
