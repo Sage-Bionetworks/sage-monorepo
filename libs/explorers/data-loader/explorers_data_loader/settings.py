@@ -71,7 +71,7 @@ class TeamImagesSettings:
             return None
         if not release.team_images_id:
             raise ValueError(
-                f"Release '{release.name}' has no teamImagesId in data-releases.json; "
+                "The release has no teamImagesId in data-release.json; "
                 f"add one, or set {LOAD_TEAM_IMAGES_ENV}=false"
             )
         return cls(folder_id=release.team_images_id)
@@ -92,7 +92,7 @@ class LoaderPaths:
     download_dir: str
     team_images_dir: str
     collections_filepath: str
-    data_releases_filepath: str
+    data_release_filepath: str
 
     @classmethod
     def from_working_dir(cls, working_dir: str) -> "LoaderPaths":
@@ -102,5 +102,5 @@ class LoaderPaths:
             download_dir=download_dir,
             team_images_dir=path.join(download_dir, "team_images"),
             collections_filepath=path.join(config_dir, "collections.json"),
-            data_releases_filepath=path.join(config_dir, "data-releases.json"),
+            data_release_filepath=path.join(config_dir, "data-release.json"),
         )

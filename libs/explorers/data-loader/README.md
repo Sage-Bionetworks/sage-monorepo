@@ -18,31 +18,28 @@ run(ProductSettings(name="model-ad"))
 
 `run` reads the database connection from the environment (`DB_USER`, `DB_PASS`, `DB_NAME`,
 `DB_HOST`, `DB_PORT`, and `SYNAPSE_AUTH_TOKEN` for the Synapse client), the release to load from
-the data project's `src/data/data-releases.json`, and the collections it holds from
+the data project's `src/data/data-release.json`, and the collections it holds from
 `src/data/collections.json`.
 
-## data-releases.json
+## data-release.json
 
-Names the Synapse data release each environment loads:
+Names the Synapse data release the data image loads:
 
 ```json
-{
-  "local": { "dataFile": "syn73774820", "dataVersion": "221" },
-  "prod": { "dataFile": "syn74702351", "dataVersion": "9" }
-}
+{ "dataFile": "syn74702351", "dataVersion": "11" }
 ```
 
-- `DATA_RELEASE` picks the entry, `local` by default. Local runs and CI set nothing; a deployed
-  import sets the environment it loads.
+- Every environment loads the same release. The import is baked into the data image, so the
+  release follows the image tag as it promotes: dev runs `edge`, stage the `-rc` tag, and prod the
+  final release tag.
 - `dataFile` is the release manifest and `dataVersion` its version. A product that loads team
   images also sets `teamImagesId`, the Synapse folder of photos.
-- To load a different release locally, edit the `local` entry without committing it, and
-  rebuild the data image. `DATA_FILE`, `DATA_VERSION` and `TEAM_IMAGES_ID`, which `.env` files
-  set before this file existed, are ignored, and a run that finds them logs
-  `release_env_ignored`.
-- Keys starting with `$`, such as `$comment`, annotate the file and name no release.
+- To load a different release locally, edit the file without committing it, and rebuild the data
+  image. `DATA_FILE`, `DATA_VERSION` and `TEAM_IMAGES_ID`, which `.env` files set before this file
+  existed, are ignored, and a run that finds them logs `release_env_ignored`.
+- Keys starting with `$`, such as `$comment`, annotate the file and are not part of the release.
 
-A data version bump changes the entry, so rebuilding the data image picks it up, without anyone
+A data version bump changes the file, so rebuilding the data image picks it up, without anyone
 editing their own `.env`.
 
 ## collections.json

@@ -24,9 +24,9 @@ In the `.env` file,
 - update `SYNAPSE_AUTH_TOKEN` to a Synapse PAT with view/download permissions for a user that can
   download the data release (i.e. the data manifest file and all files described within it)
 
-The release to load is the `local` entry of `src/data/data-releases.json`. To load a different
-release, edit that entry without committing it. `nx serve` reads the file directly; for
-`nx serve-detach`, rebuild the image first (`nx build-image qtl-data`).
+The release to load is `src/data/data-release.json`. To
+load a different release, edit that file without committing it. `nx serve` reads the file directly;
+for `nx serve-detach`, rebuild the image first (`nx build-image qtl-data`).
 
 ### Start MongoDB then Run the Python script
 

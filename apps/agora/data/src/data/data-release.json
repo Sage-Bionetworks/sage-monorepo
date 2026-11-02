@@ -1,0 +1,6 @@
+{
+  "$comment": "TODO(EX-146): deployed releases still read data-manifest.json from Sage-Bionetworks/agora-data-manager. Update both until EX-146 moves deployed releases here and EX-149 archives Sage-Bionetworks/agora-data-manager.",
+  "dataFile": "syn13363290",
+  "dataVersion": "117",
+  "teamImagesId": "syn12861877"
+}

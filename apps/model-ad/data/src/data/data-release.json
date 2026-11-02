@@ -1,0 +1,5 @@
+{
+  "$comment": "TODO(EX-146): deployed releases still read data-manifest.json from Sage-Bionetworks/model-ad-data-manager. Update both until EX-146 moves deployed releases here and EX-149 archives Sage-Bionetworks/model-ad-data-manager.",
+  "dataFile": "syn74702351",
+  "dataVersion": "11"
+}

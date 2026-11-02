@@ -17,12 +17,12 @@ AGORA_ENV = {
     "DB_HOST": "agora-mongo",
     "DB_PORT": "27017",
 }
-AGORA_LOCAL_RELEASE = {
+AGORA_RELEASE = {
     "dataFile": "syn13363290",
     "dataVersion": "117",
     "teamImagesId": "syn12861877",
 }
-RELEASE_ENV_NAMES = ("DATA_RELEASE", "DATA_FILE", "DATA_VERSION", "TEAM_IMAGES_ID")
+RELEASE_ENV_NAMES = ("DATA_FILE", "DATA_VERSION", "TEAM_IMAGES_ID")
 AGORA_PRODUCT = ProductSettings(name="agora")
 AGORA_COLLECTIONS = [
     {"name": "genes", "file": "rnaseq_differential_expression.json"},
@@ -51,9 +51,7 @@ def working_dir(tmp_path, monkeypatch):
     config_dir = tmp_path / "src" / "data"
     config_dir.mkdir(parents=True)
     (config_dir / "collections.json").write_text(json.dumps(AGORA_COLLECTIONS))
-    (config_dir / "data-releases.json").write_text(
-        json.dumps({"local": AGORA_LOCAL_RELEASE})
-    )
+    (config_dir / "data-release.json").write_text(json.dumps(AGORA_RELEASE))
     return tmp_path
 
 
@@ -196,8 +194,8 @@ def test_run_names_the_release_in_its_start_and_finish_messages(
         if getattr(record, "event", None) in ("run_started", "run_completed")
     ]
     assert messages == [
-        f"Data load started for agora v{AGORA_LOCAL_RELEASE['dataVersion']}",
-        f"Data load completed for agora v{AGORA_LOCAL_RELEASE['dataVersion']}",
+        f"Data load started for agora v{AGORA_RELEASE['dataVersion']}",
+        f"Data load completed for agora v{AGORA_RELEASE['dataVersion']}",
     ]
 
 
@@ -208,8 +206,7 @@ def test_run_tags_every_record_with_the_run_and_release(working_dir, steps, reco
     assert len(run_ids) == 1
     for record in records:
         assert record.context["product"] == AGORA_PRODUCT.name
-        assert record.context["data_release"] == "local"
-        assert record.context["data_version"] == AGORA_LOCAL_RELEASE["dataVersion"]
+        assert record.context["data_version"] == AGORA_RELEASE["dataVersion"]
 
 
 def test_run_failing_before_the_swap_leaves_the_previous_release_live(
@@ -328,6 +325,5 @@ def test_run_warns_about_retired_release_variables_and_ignores_them(
     ]
     assert ignored.fields["variables"] == ["DATA_VERSION"]
     assert (
-        run_completed(records).context["data_version"]
-        == (AGORA_LOCAL_RELEASE["dataVersion"])
+        run_completed(records).context["data_version"] == (AGORA_RELEASE["dataVersion"])
     )

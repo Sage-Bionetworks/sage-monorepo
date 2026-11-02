@@ -39,8 +39,7 @@ def test_database_settings_report_every_missing_variable(monkeypatch):
 
 
 AGORA_TEAM_IMAGES_FOLDER_ID = "syn12861877"
-AGORA_LOCAL_RELEASE = ReleaseSettings(
-    name="local",
+AGORA_RELEASE = ReleaseSettings(
     data_file="syn13363290",
     data_version="117",
     team_images_id=AGORA_TEAM_IMAGES_FOLDER_ID,
@@ -50,7 +49,7 @@ AGORA_LOCAL_RELEASE = ReleaseSettings(
 def test_team_images_load_from_the_release_folder_by_default(monkeypatch):
     monkeypatch.delenv(LOAD_TEAM_IMAGES_ENV, raising=False)
 
-    assert TeamImagesSettings.from_release(AGORA_LOCAL_RELEASE) == TeamImagesSettings(
+    assert TeamImagesSettings.from_release(AGORA_RELEASE) == TeamImagesSettings(
         folder_id=AGORA_TEAM_IMAGES_FOLDER_ID
     )
 
@@ -59,13 +58,13 @@ def test_team_images_load_from_the_release_folder_by_default(monkeypatch):
 def test_team_images_turn_off_with_load_team_images_false(monkeypatch, disabled):
     monkeypatch.setenv(LOAD_TEAM_IMAGES_ENV, disabled)
 
-    assert TeamImagesSettings.from_release(AGORA_LOCAL_RELEASE) is None
+    assert TeamImagesSettings.from_release(AGORA_RELEASE) is None
 
 
 def test_team_images_require_a_folder_in_the_release_when_turned_on(monkeypatch):
     monkeypatch.setenv(LOAD_TEAM_IMAGES_ENV, "true")
     release_without_images = ReleaseSettings(
-        name="local", data_file="syn13363290", data_version="117"
+        data_file="syn13363290", data_version="117"
     )
 
     with pytest.raises(ValueError, match="no teamImagesId"):
@@ -76,4 +75,4 @@ def test_load_team_images_rejects_a_value_that_is_not_true_or_false(monkeypatch)
     monkeypatch.setenv(LOAD_TEAM_IMAGES_ENV, "no")
 
     with pytest.raises(ValueError, match="must be true or false"):
-        TeamImagesSettings.from_release(AGORA_LOCAL_RELEASE)
+        TeamImagesSettings.from_release(AGORA_RELEASE)

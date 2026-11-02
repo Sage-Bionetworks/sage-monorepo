@@ -12,9 +12,7 @@ from explorers_data_loader.synapse import (
     login_to_synapse,
 )
 
-MODEL_AD_RELEASE = ReleaseSettings(
-    name="develop", data_file="syn73774820", data_version="221"
-)
+MODEL_AD_RELEASE = ReleaseSettings(data_file="syn73774820", data_version="221")
 MANIFEST_FILENAME = "data_manifest.csv"
 RELEASE_FILES = {
     "syn73774525": ("4", "ui_config.json", 2 * BYTES_PER_MEGABYTE),
