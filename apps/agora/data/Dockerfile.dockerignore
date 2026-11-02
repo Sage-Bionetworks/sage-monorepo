@@ -1,0 +1,10 @@
+# The image builds from the repo root, so send only the files the Dockerfile copies
+*
+!libs/explorers/data-loader/
+!apps/agora/data/pyproject.toml
+!apps/agora/data/uv.lock
+!apps/agora/data/src/
+!apps/agora/data/docker-entrypoint.sh
+**/.venv
+**/__pycache__
+**/.pytest_cache

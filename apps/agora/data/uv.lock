@@ -7,15 +7,11 @@ name = "agora-data"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "pymongo" },
-    { name = "synapseclient" },
+    { name = "explorers-data-loader" },
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "pymongo", specifier = "==4.7.3" },
-    { name = "synapseclient", specifier = "==4.13.0" },
-]
+requires-dist = [{ name = "explorers-data-loader", editable = "../../../libs/explorers/data-loader" }]
 
 [package.metadata.requires-dev]
 dev = []
@@ -113,6 +109,24 @@ sdist = { url = "https://files.pythonhosted.org/packages/b5/4a/263763cb2ba3816dd
 wheels = [
     { url = "https://files.pythonhosted.org/packages/68/1b/e0a87d256e40e8c888847551b20a017a6b98139178505dc7ffb96f04e954/dnspython-2.7.0-py3-none-any.whl", hash = "sha256:b4c34b7d10b51bcc3a5071e7b8dee77939f1e878477eeecc965e9835f63c6c86", size = 313632, upload-time = "2024-10-05T20:14:57.687Z" },
 ]
+
+[[package]]
+name = "explorers-data-loader"
+version = "0.1.0"
+source = { editable = "../../../libs/explorers/data-loader" }
+dependencies = [
+    { name = "pymongo" },
+    { name = "synapseclient" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pymongo", specifier = "==4.7.3" },
+    { name = "synapseclient", specifier = "==4.13.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = "==8.3.5" }]
 
 [[package]]
 name = "googleapis-common-protos"

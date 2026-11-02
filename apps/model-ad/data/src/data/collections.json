@@ -1,32 +1,39 @@
 [
   {
     "name": "disease_correlation",
+    "file": "disease_correlation.json",
     "indexes": [{ "name": 1 }],
     "collatedIndexes": [{ "cluster": 1, "name": 1, "age": 1, "sex": 1 }]
   },
   {
     "name": "marmo_details",
+    "file": "marmo_details.json",
     "indexes": [{ "name": 1 }]
   },
   {
     "name": "marmo_overview",
+    "file": "marmo_overview.json",
     "indexes": [{ "name": 1 }]
   },
   {
     "name": "model_details",
+    "file": "model_details.json",
     "indexes": [{ "name": 1 }]
   },
   {
     "name": "model_overview",
+    "file": "model_overview.json",
     "collatedIndexes": [{ "name": 1 }]
   },
   {
     "name": "protein_de_aggregate",
+    "file": "protein_de_aggregate.json",
     "indexes": [{ "unique_id": 1 }],
     "collatedIndexes": [{ "tissue": 1, "unique_id": 1, "name.link_text": 1, "sex": 1 }]
   },
   {
     "name": "protein_de_individual",
+    "file": "protein_de_individual.json",
     "indexes": [
       { "unique_id": 1, "tissue": 1, "name": 1, "model_group": 1 },
       { "unique_id": 1, "model_group": 1, "tissue": 1 }
@@ -34,11 +41,13 @@
   },
   {
     "name": "rna_de_aggregate",
+    "file": "rna_de_aggregate.json",
     "indexes": [{ "ensembl_gene_id": 1 }],
     "collatedIndexes": [{ "tissue": 1, "ensembl_gene_id": 1, "name.link_text": 1, "sex": 1 }]
   },
   {
     "name": "rna_de_individual",
+    "file": "rna_de_individual.json",
     "indexes": [
       { "ensembl_gene_id": 1, "tissue": 1, "name": 1, "model_group": 1 },
       { "ensembl_gene_id": 1, "model_group": 1, "tissue": 1 }
@@ -46,6 +55,8 @@
   },
   {
     "name": "ui_config",
-    "indexes": [{ "page": 1 }]
+    "file": "ui_config.json",
+    "indexes": [{ "page": 1 }],
+    "maintainInsertionOrder": true
   }
 ]

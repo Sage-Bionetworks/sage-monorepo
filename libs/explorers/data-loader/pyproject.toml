@@ -1,0 +1,19 @@
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+requires-python = "==3.11.9"
+dependencies = [
+    "synapseclient==4.13.0",
+    "pymongo==4.7.3",
+]
+name = "explorers-data-loader"
+version = "0.1.0"
+description = "Loads explorer data releases from Synapse into MongoDB"
+readme = "README.md"
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.5",
+]
