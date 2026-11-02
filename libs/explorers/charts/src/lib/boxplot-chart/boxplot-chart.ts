@@ -328,10 +328,11 @@ export class BoxplotChart {
       defaultPointCategoryOffset,
       defaultPointCategoryJitterMax,
     );
-    const inRangeScatterPoints = yAxisMax
-      ? dataForScatterPoints.filter((pt) => pt.value <= yAxisMax)
-      : dataForScatterPoints;
-    const capAt = capPointsAboveYAxisMax && yAxisMax ? yAxisMax : undefined;
+    const inRangeScatterPoints =
+      yAxisMax != null
+        ? dataForScatterPoints.filter((pt) => pt.value <= yAxisMax)
+        : dataForScatterPoints;
+    const capAt = capPointsAboveYAxisMax && yAxisMax != null ? yAxisMax : undefined;
     const cappedPoints =
       capAt === undefined
         ? []

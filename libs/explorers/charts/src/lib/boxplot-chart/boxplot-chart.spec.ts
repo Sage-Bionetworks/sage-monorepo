@@ -250,6 +250,18 @@ describe('BoxplotChart', () => {
       expect(getPointSeriesValues()).toEqual([4, yAxisMax]);
     });
 
+    it('removes points above a yAxisMax of zero from the point series', () => {
+      makeChart({
+        points: [
+          { xAxisCategory: 'CAT1', pointCategory: 'Female', value: -3 },
+          { xAxisCategory: 'CAT1', pointCategory: 'Female', value: 0 },
+          { xAxisCategory: 'CAT1', pointCategory: 'Female', value: 2 },
+        ],
+        yAxisMax: 0,
+      });
+      expect(getPointSeriesValues()).toEqual([-3, 0]);
+    });
+
     it('keeps every point when yAxisMax is undefined', () => {
       makeChart({ points: pointsAroundMax });
       expect(getPointSeriesValues()).toEqual([4, yAxisMax, yAxisMax + 0.1, yAxisMax + 5]);
@@ -299,6 +311,17 @@ describe('BoxplotChart', () => {
     it('adds no capped markers when yAxisMax is undefined', () => {
       makeCappedChart({ yAxisMax: undefined });
       expect(getCappedSeriesNames()).toEqual([]);
+    });
+
+    it('draws points above a yAxisMax of zero as capped markers at zero', () => {
+      makeCappedChart({
+        points: [
+          { xAxisCategory: 'CAT1', pointCategory: 'Female', value: -3 },
+          { xAxisCategory: 'CAT1', pointCategory: 'Female', value: 2 },
+        ],
+        yAxisMax: 0,
+      });
+      expect(getCappedRows('Female').map((pt) => [pt.value, pt.cappedValue])).toEqual([[2, 0]]);
     });
 
     it('draws each point above yAxisMax at yAxisMax, keeping its true value', () => {
