@@ -8,6 +8,7 @@ src/main/java/org/sagebionetworks/model/ad/api/next/api/DataVersionApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DataVersionApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DataVersionApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApi.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/MarmosetModelOverviewApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/MarmosetModelOverviewApiController.java

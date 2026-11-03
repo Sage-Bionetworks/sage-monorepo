@@ -29,7 +29,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.modelADAPINext.base-path:/v1}")
+@RequestMapping("${openapi.modelADAPINext.base-path:/v2}")
 public class DataVersionApiController implements DataVersionApi {
 
     private final DataVersionApiDelegate delegate;
