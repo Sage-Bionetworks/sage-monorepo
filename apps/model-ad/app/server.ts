@@ -4,12 +4,14 @@ import {
   assertValidAppConfig,
   CHUNK_FILE_PATH_PATTERN,
   createAppVersionHandler,
+  createLegacyChunkReloadHandler,
   createMissingChunkHandler,
 } from '@sagebionetworks/explorers/config/server';
 import { APP_VERSION_PATH } from '@sagebionetworks/explorers/constants';
 import express from 'express';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { LEGACY_CHUNK_FILE_NAMES } from './legacy-chunk-file-names';
 import bootstrap from './src/main.server';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -44,8 +46,13 @@ export function app(): express.Express {
   // Version endpoint polled by browser tabs to detect that a newer version was deployed
   server.get(APP_VERSION_PATH, createAppVersionHandler(process.env));
 
-  // Chunk files the build has were served above, so this only answers names from an earlier deploy
-  server.get(CHUNK_FILE_PATH_PATTERN, createMissingChunkHandler());
+  // Chunk files the build has were served above, so this only answers names from an earlier deploy:
+  // a reload for builds without update checks, and a 404 for the rest
+  server.get(
+    CHUNK_FILE_PATH_PATTERN,
+    createLegacyChunkReloadHandler(LEGACY_CHUNK_FILE_NAMES),
+    createMissingChunkHandler(),
+  );
 
   // Serve static OpenGraph images at /opengraph
   server.use('/opengraph', express.static(join(serverDistFolder, '../browser/opengraph')));
