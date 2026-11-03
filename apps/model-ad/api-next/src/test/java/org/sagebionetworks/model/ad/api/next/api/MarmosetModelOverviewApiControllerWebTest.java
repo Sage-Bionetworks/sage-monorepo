@@ -67,7 +67,7 @@ class MarmosetModelOverviewApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/marmoset-model-overview")
+        get("/v2/comparison-tools/marmoset-model-overview")
           .param("items", modelName)
           .param("sortFields", "name")
           .param("sortOrders", "1")

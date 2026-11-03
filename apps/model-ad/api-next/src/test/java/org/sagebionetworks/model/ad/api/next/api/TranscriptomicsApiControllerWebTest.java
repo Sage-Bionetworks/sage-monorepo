@@ -65,7 +65,7 @@ class TranscriptomicsApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/transcriptomics")
+        get("/v2/comparison-tools/transcriptomics")
           .param("categories", "RNA - DIFFERENTIAL EXPRESSION")
           .param("categories", "InvalidTissue")
           .param("sortFields", "gene_symbol")
@@ -76,7 +76,7 @@ class TranscriptomicsApiControllerWebTest {
       .andExpect(jsonPath("$.title").value("Invalid Category"))
       .andExpect(jsonPath("$.status").value(400))
       .andExpect(jsonPath("$.detail").value("Tissue category must start with 'Tissue - ' prefix"))
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/transcriptomics"));
+      .andExpect(jsonPath("$.instance").value("/v2/comparison-tools/transcriptomics"));
   }
 
   @Test
@@ -88,7 +88,7 @@ class TranscriptomicsApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/transcriptomics")
+        get("/v2/comparison-tools/transcriptomics")
           .param("categories", "OTHER")
           .param("categories", "Tissue - Hemibrain")
           .param("sortFields", "gene_symbol")
@@ -103,7 +103,7 @@ class TranscriptomicsApiControllerWebTest {
           "Category 'OTHER' is not supported. Only 'RNA - DIFFERENTIAL EXPRESSION' is supported"
         )
       )
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/transcriptomics"));
+      .andExpect(jsonPath("$.instance").value("/v2/comparison-tools/transcriptomics"));
   }
 
   @Test
@@ -113,7 +113,7 @@ class TranscriptomicsApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/transcriptomics")
+        get("/v2/comparison-tools/transcriptomics")
           .param("categories", "RNA - DIFFERENTIAL EXPRESSION")
           .param("categories", "Tissue - Hemibrain")
           .param("items", "not-an-id")
@@ -125,7 +125,7 @@ class TranscriptomicsApiControllerWebTest {
       .andExpect(jsonPath("$.title").value("Invalid Request Parameter"))
       .andExpect(jsonPath("$.status").value(400))
       .andExpect(jsonPath("$.detail").value("Invalid ObjectId format: not-an-id"))
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/transcriptomics"));
+      .andExpect(jsonPath("$.instance").value("/v2/comparison-tools/transcriptomics"));
   }
 
   @Test
@@ -141,7 +141,7 @@ class TranscriptomicsApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/transcriptomics")
+        get("/v2/comparison-tools/transcriptomics")
           .param("categories", "RNA - DIFFERENTIAL EXPRESSION")
           .param("categories", "Tissue - Hemibrain")
           .param("items", transcriptomicsId)
