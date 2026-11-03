@@ -20,6 +20,8 @@ export const COMPARISON_TOOL_HEADER_TITLES: Partial<Record<ComparisonToolPage, s
   'Disease Correlation': 'Mouse-Human Disease Correlation',
 };
 
+export const API_BASE_PATH = '/api/v2';
+
 export const COMPARISON_TOOL_API_PATHS: Record<ComparisonToolPage, string> = {
   'Marmoset Model Overview': '/comparison-tools/marmoset-model-overview',
   'Mouse Model Overview': '/comparison-tools/mouse-model-overview',
