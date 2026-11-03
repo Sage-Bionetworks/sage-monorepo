@@ -1,18 +1,6 @@
 # Redocly configuration file for QTL API
-#
-# About `x-audience`:
-# - The optional `x-audience` annotation can be applied to OpenAPI nodes such as tags, paths,
-#   components, and others.
-# - When using decorators like `filter-in` or `filter-out`, only nodes annotated with `x-audience`
-#   are evaluated for inclusion or exclusion.
-# - Nodes without an `x-audience` annotation are not affected by these filters and will always be
-#   included in the output OpenAPI files.
-# - This allows you to selectively expose or hide parts of your API for different audiences, while
-#   keeping unannotated nodes visible in all outputs.
-# - Best practice: Be intentional and always specify the `x-audience` annotation on path nodes.
 
 apis:
-  # QTL public API (consumed by docs)
   qtl-public:
     root: ./src/api.openapi.yaml
     decorators:
