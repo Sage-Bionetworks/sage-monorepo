@@ -7,17 +7,25 @@ import org.sagebionetworks.qtl.api.model.dto.ComparisonToolConfigDto;
 import org.sagebionetworks.qtl.api.model.dto.ComparisonToolConfigFilterDto;
 import org.sagebionetworks.qtl.api.model.dto.ComparisonToolNounDto;
 import org.sagebionetworks.qtl.api.model.dto.ComparisonToolPageDto;
+import org.sagebionetworks.qtl.api.util.EnumConverter;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ComparisonToolConfigMapper {
+
+  private static final String RECORD_TYPE = "comparison tool config record";
 
   public ComparisonToolConfigDto toDto(ComparisonToolConfigDocument document) {
     if (document == null) {
       return null;
     }
 
-    ComparisonToolPageDto page = ComparisonToolPageDto.fromValue(document.getPage());
+    ComparisonToolPageDto page = EnumConverter.toEnum(
+      document.getPage(),
+      ComparisonToolPageDto::fromValue,
+      "page",
+      RECORD_TYPE
+    );
 
     List<ComparisonToolConfigColumnDto> columns = document.getColumns() == null
       ? List.of()
@@ -51,7 +59,12 @@ public class ComparisonToolConfigMapper {
     }
 
     ComparisonToolConfigColumnDto dto = new ComparisonToolConfigColumnDto(
-      ComparisonToolConfigColumnDto.TypeEnum.fromValue(column.getType()),
+      EnumConverter.toEnum(
+        column.getType(),
+        ComparisonToolConfigColumnDto.TypeEnum::fromValue,
+        "column type",
+        RECORD_TYPE
+      ),
       column.getDataKey(),
       column.getIsExported(),
       column.getIsHidden()
