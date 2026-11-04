@@ -38,24 +38,3 @@ Filter by project in the query, e.g. `project:model-ad` or `project:[agora,model
 ## Read-only by default
 
 The server exposes write tools as well as read tools: resolving or assigning issues (`update_issue`), notes, issue links, alert rules, monitors, DSNs, projects and teams. Use them only when the user explicitly asks for that specific change, and confirm first, since they change the team's Sentry. Searching, counting and reading issue details are always fine.
-
-## Common tools
-
-```
-# Counts and aggregations: errors by issue, environment and route
-mcp__sentry__search_errors(
-  query="project:model-ad environment:prod",
-  fields=["issue", "title", "transaction", "count()", "last_seen()"],
-  sort="-count()",
-  period="30d"
-)
-
-# A list of issues
-mcp__sentry__search_issues(query="project:agora is:unresolved", sort="freq", period="30d")
-
-# One issue's stack trace and tags, or the spread of one tag across its events
-mcp__sentry__get_issue_details(issueId="AGORA-30")
-mcp__sentry__get_issue_tag_values(issueId="AGORA-30", tagKey="release")
-```
-
-Use `search_errors` for numbers, and `search_issues` for lists of issues.
