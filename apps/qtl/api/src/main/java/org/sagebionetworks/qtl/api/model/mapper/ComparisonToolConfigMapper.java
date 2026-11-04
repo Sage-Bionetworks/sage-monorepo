@@ -1,6 +1,7 @@
 package org.sagebionetworks.qtl.api.model.mapper;
 
 import java.util.List;
+import org.sagebionetworks.qtl.api.exception.DataIntegrityException;
 import org.sagebionetworks.qtl.api.model.document.ComparisonToolConfigDocument;
 import org.sagebionetworks.qtl.api.model.dto.ComparisonToolConfigColumnDto;
 import org.sagebionetworks.qtl.api.model.dto.ComparisonToolConfigDto;
@@ -37,7 +38,7 @@ public class ComparisonToolConfigMapper {
 
     ComparisonToolConfigDto dto = new ComparisonToolConfigDto(
       page,
-      document.getDropdowns(),
+      requireValue(document.getDropdowns(), "dropdowns"),
       document.getRowCount(),
       columns,
       filters
@@ -65,9 +66,9 @@ public class ComparisonToolConfigMapper {
         "column type",
         RECORD_TYPE
       ),
-      column.getDataKey(),
-      column.getIsExported(),
-      column.getIsHidden()
+      requireValue(column.getDataKey(), "column data_key"),
+      requireValue(column.getIsExported(), "column is_exported"),
+      requireValue(column.getIsHidden(), "column is_hidden")
     );
 
     dto.setName(column.getName());
@@ -88,9 +89,9 @@ public class ComparisonToolConfigMapper {
     }
 
     ComparisonToolConfigFilterDto dto = new ComparisonToolConfigFilterDto(
-      filter.getName(),
-      filter.getDataKey(),
-      filter.getQueryParamKey(),
+      requireValue(filter.getName(), "filter name"),
+      requireValue(filter.getDataKey(), "filter data_key"),
+      requireValue(filter.getQueryParamKey(), "filter query_param_key"),
       filter.getValues()
     );
     dto.setShortName(filter.getShortName());
@@ -105,5 +106,12 @@ public class ComparisonToolConfigMapper {
     }
 
     return new ComparisonToolNounDto(noun.getSingular(), noun.getPlural());
+  }
+
+  private static <T> T requireValue(T value, String fieldName) {
+    if (value == null) {
+      throw new DataIntegrityException("Missing " + fieldName + " value in " + RECORD_TYPE);
+    }
+    return value;
   }
 }
