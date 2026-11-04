@@ -49,10 +49,12 @@ throw new Error(${JSON.stringify(LEGACY_CHUNK_RELOAD_SKIPPED_MESSAGE)});
  * is reloaded instead. Builds with the update checks recover on their own by loading the page the
  * user clicked, which a reload would lose, so their chunk names must never be in the list.
  *
- * The module only runs when a legacy tab navigates to a page it has not loaded, since those builds
- * load chunks on navigation alone. Must be registered after the static file handler, so chunks the
- * build has are served normally, and before the missing-chunk handler. The response must never be
- * cached: after a rollback, the same name can be a real chunk again.
+ * The module reloads the tab when the chunk is requested, so only list builds that request chunks
+ * in response to a user action, such as a navigation or rendering a deferred section, and never in
+ * the background, such as route preloading, which would reload a page the user is reading. Must be
+ * registered after the static file handler, so chunks the build has are served normally, and
+ * before the missing-chunk handler. The response must never be cached: after a rollback, the same
+ * name can be a real chunk again.
  */
 export function createLegacyChunkReloadHandler(
   legacyChunkFileNames: ReadonlySet<string>,
