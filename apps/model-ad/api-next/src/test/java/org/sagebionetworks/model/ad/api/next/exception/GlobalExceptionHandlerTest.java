@@ -23,7 +23,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 class GlobalExceptionHandlerTest {
 
   private static final String REQUEST_METHOD = "GET";
-  private static final String REQUEST_PATH = "/v1/comparison-tools/transcriptomics";
+  private static final String REQUEST_PATH = "/v2/comparison-tools/transcriptomics";
 
   private final GlobalExceptionHandler handler = new GlobalExceptionHandler();
   private final Logger handlerLogger = (Logger) LoggerFactory.getLogger(

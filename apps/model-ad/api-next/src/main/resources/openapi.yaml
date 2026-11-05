@@ -7,12 +7,12 @@ info:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   title: Model-AD API Next
-  version: 1.0.0
+  version: 2.0.0
   x-logo:
     url: https://modeladexplorer.org/opengraph/opengraph.png?v=1.0.0
     altText: Model-AD Explorer
 servers:
-  - url: http://localhost/v1
+  - url: http://localhost/v2
 tags:
   - description: Operations about Comparison Tool UI configuration.
     name: Comparison Tool Config

@@ -74,7 +74,7 @@ describe('individualExpressionDetailsFromRoute', () => {
     new HttpRequestError(
       new HttpErrorResponse({
         status,
-        url: `https://modeladexplorer.org/api/v1/transcriptomics-individual/${id}`,
+        url: `https://modeladexplorer.org/api/v2/transcriptomics-individual/${id}`,
       }),
       'GET',
     );

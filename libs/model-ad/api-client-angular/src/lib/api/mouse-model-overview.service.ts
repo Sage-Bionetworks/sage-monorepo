@@ -37,7 +37,7 @@ import { Configuration } from '../configuration';
   providedIn: 'root',
 })
 export class MouseModelOverviewService {
-  protected basePath = 'http://localhost/v1';
+  protected basePath = 'http://localhost/v2';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;

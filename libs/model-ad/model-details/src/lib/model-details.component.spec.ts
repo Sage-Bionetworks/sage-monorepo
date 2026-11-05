@@ -141,7 +141,7 @@ describe('ModelDetailsComponent', () => {
       new HttpRequestError(
         new HttpErrorResponse({
           status,
-          url: `https://modeladexplorer.org/api/v1/models/${modelOrganism}/${name}`,
+          url: `https://modeladexplorer.org/api/v2/models/${modelOrganism}/${name}`,
         }),
         'GET',
       );

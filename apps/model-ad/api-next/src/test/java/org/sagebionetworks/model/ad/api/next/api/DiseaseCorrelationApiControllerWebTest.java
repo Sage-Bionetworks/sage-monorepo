@@ -71,7 +71,7 @@ class DiseaseCorrelationApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/disease-correlation")
+        get("/v2/comparison-tools/disease-correlation")
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", "")
           .param("sortFields", "name")
@@ -88,7 +88,7 @@ class DiseaseCorrelationApiControllerWebTest {
           "&categories=subcategory) and each value must be a string"
         )
       )
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));
+      .andExpect(jsonPath("$.instance").value("/v2/comparison-tools/disease-correlation"));
   }
 
   @Test
@@ -100,7 +100,7 @@ class DiseaseCorrelationApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/disease-correlation")
+        get("/v2/comparison-tools/disease-correlation")
           .param("categories", "OTHER")
           .param("categories", "Cluster A")
           .param("sortFields", "name")
@@ -115,7 +115,7 @@ class DiseaseCorrelationApiControllerWebTest {
           "Category 'OTHER' is not supported. Only 'CONSENSUS NETWORK MODULES' is supported"
         )
       )
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));
+      .andExpect(jsonPath("$.instance").value("/v2/comparison-tools/disease-correlation"));
   }
 
   @Test
@@ -127,7 +127,7 @@ class DiseaseCorrelationApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/disease-correlation")
+        get("/v2/comparison-tools/disease-correlation")
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", "Cluster A")
           .param("items", "not-an-id")
@@ -139,7 +139,7 @@ class DiseaseCorrelationApiControllerWebTest {
       .andExpect(jsonPath("$.title").value("Invalid Request Parameter"))
       .andExpect(jsonPath("$.status").value(400))
       .andExpect(jsonPath("$.detail").value("Invalid ObjectId format: not-an-id"))
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));
+      .andExpect(jsonPath("$.instance").value("/v2/comparison-tools/disease-correlation"));
   }
 
   @Test
@@ -156,7 +156,7 @@ class DiseaseCorrelationApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/disease-correlation")
+        get("/v2/comparison-tools/disease-correlation")
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", "Cluster A")
           .param("items", correlationId)
@@ -180,7 +180,7 @@ class DiseaseCorrelationApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/disease-correlation")
+        get("/v2/comparison-tools/disease-correlation")
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", cluster)
           .param("items", correlationId)
