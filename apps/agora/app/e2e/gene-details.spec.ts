@@ -29,6 +29,16 @@ function getModelQueryParam(page: Page) {
   return new URL(page.url()).searchParams.get('model');
 }
 
+async function confirmSelectedModel(page: Page, model: string) {
+  await expect(page.getByRole('combobox', { name: model })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 4, name: model, exact: true })).toBeVisible();
+}
+
+async function selectModel(page: Page, currentModel: string, newModel: string) {
+  await page.getByRole('combobox', { name: currentModel }).click();
+  await page.getByRole('option', { name: newModel, exact: true }).click();
+}
+
 test.describe('gene details', () => {
   test.slow();
   test.use({ viewport: { width: 1600, height: 1200 } });
@@ -100,10 +110,6 @@ test.describe('gene details - query parameter sets initial selected model', () =
   function buildUrlWithModelQueryParam(model: string) {
     return `${path}?model=${model}`;
   }
-  async function confirmSelectedModel(page: Page, model: string) {
-    await expect(page.getByRole('combobox', { name: model })).toBeVisible();
-    await expect(page.getByRole('heading', { level: 4, name: model, exact: true })).toBeVisible();
-  }
 
   test('default model is used when there is no query parameter', async ({ page }) => {
     await page.goto(path);
@@ -123,6 +129,70 @@ test.describe('gene details - query parameter sets initial selected model', () =
     await page.goto(buildUrlWithModelQueryParam('AD Diagnosis x Sex females only'));
     await waitForSpinnerNotVisible(page);
     await confirmSelectedModel(page, GCT_RNA_SUBCATEGORIES.AD_SEX_F);
+  });
+});
+
+test.describe('gene details - changing the model updates the query parameter', () => {
+  test.slow();
+  test.use({ viewport: { width: 1600, height: 1200 } });
+
+  const genePath = `/genes/${geneWithAllTabs.id}`;
+  const rnaPath = `${genePath}/evidence/rna`;
+  const defaultModel = GCT_RNA_SUBCATEGORIES.AD;
+  const model = GCT_RNA_SUBCATEGORIES.AD_SEX_F;
+
+  test('selecting a model sets the query parameter', async ({ page }) => {
+    await goToGene(page, rnaPath);
+    await selectModel(page, defaultModel, model);
+    await expect.poll(() => getModelQueryParam(page)).toBe(model);
+    await confirmSelectedModel(page, model);
+  });
+
+  test('selecting the default model removes the query parameter', async ({ page }) => {
+    await goToGene(page, `${rnaPath}?model=${model}`);
+    await selectModel(page, model, defaultModel);
+    await expect.poll(() => getModelQueryParam(page)).toBeNull();
+    await confirmSelectedModel(page, defaultModel);
+  });
+
+  test('selecting a model does not add a history entry', async ({ page }) => {
+    await page.goto('/');
+    await goToGene(page, rnaPath);
+    await selectModel(page, defaultModel, model);
+    await expect.poll(() => getModelQueryParam(page)).toBe(model);
+
+    await page.goBack();
+    await expect.poll(() => new URL(page.url()).pathname).toBe('/');
+  });
+
+  test('selecting a model keeps the hash fragment', async ({ page }) => {
+    await goToGene(page, `${rnaPath}#consistency-of-change`);
+    await selectModel(page, defaultModel, model);
+    await expect.poll(() => getModelQueryParam(page)).toBe(model);
+    expect(new URL(page.url()).hash).toBe('#consistency-of-change');
+  });
+
+  test('selected model is kept when switching tabs', async ({ page }) => {
+    await goToGene(page, rnaPath);
+    await selectModel(page, defaultModel, model);
+    await expect.poll(() => getModelQueryParam(page)).toBe(model);
+
+    await clickTab(page, 'Protein', `${genePath}/evidence/protein`);
+    expect(getModelQueryParam(page)).toBe(model);
+
+    await clickTab(page, 'RNA', rnaPath);
+    expect(getModelQueryParam(page)).toBe(model);
+    await confirmSelectedModel(page, model);
+  });
+
+  test('opening the updated url selects the same model', async ({ page }) => {
+    await goToGene(page, rnaPath);
+    await selectModel(page, defaultModel, model);
+    await expect.poll(() => getModelQueryParam(page)).toBe(model);
+
+    const newPage = await page.context().newPage();
+    await goToGene(newPage, page.url());
+    await confirmSelectedModel(newPage, model);
   });
 });
 
