@@ -46,10 +46,29 @@ export interface OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequest {
    * Timestamp marking when authorization was approved (set by server)
    */
   authorizedAt?: string;
+  /**
+   * Identity Provider names
+   */
+  identityProviderName?: OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequest.IdentityProviderNameEnum;
 }
 export namespace OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequest {
   export type ResponseTypeEnum = 'code';
   export const ResponseTypeEnum = {
     Code: 'code' as ResponseTypeEnum,
+  };
+  export type IdentityProviderNameEnum =
+    | 'SYNAPSE'
+    | 'GOOGLE_OAUTH_2_0'
+    | 'ORCID'
+    | 'ARCUS_BIOSCIENCES'
+    | 'SAGE_BIONETWORKS'
+    | 'NIH_RESEARCHER_AUTH_SERVICE';
+  export const IdentityProviderNameEnum = {
+    Synapse: 'SYNAPSE' as IdentityProviderNameEnum,
+    GoogleOauth20: 'GOOGLE_OAUTH_2_0' as IdentityProviderNameEnum,
+    Orcid: 'ORCID' as IdentityProviderNameEnum,
+    ArcusBiosciences: 'ARCUS_BIOSCIENCES' as IdentityProviderNameEnum,
+    SageBionetworks: 'SAGE_BIONETWORKS' as IdentityProviderNameEnum,
+    NihResearcherAuthService: 'NIH_RESEARCHER_AUTH_SERVICE' as IdentityProviderNameEnum,
   };
 }

@@ -16,6 +16,7 @@ import { OrgSagebionetworksRepoModelAggregateDataConfiguration } from './org-sag
 import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebionetworks-repo-model-table-csv-table-descriptor';
 import { OrgSagebionetworksRepoModelTableQuery } from './org-sagebionetworks-repo-model-table-query';
 import { OrgSagebionetworksRepoModelTableQueryFilter } from './org-sagebionetworks-repo-model-table-query-filter';
+import { OrgSagebionetworksRepoModelTableCohortDefinition } from './org-sagebionetworks-repo-model-table-cohort-definition';
 import { OrgSagebionetworksRepoModelTableDownloadPFBRequest } from './org-sagebionetworks-repo-model-table-download-pfb-request';
 
 /**

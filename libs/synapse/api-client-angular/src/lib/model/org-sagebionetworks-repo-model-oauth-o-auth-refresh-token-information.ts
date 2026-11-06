@@ -35,6 +35,10 @@ export interface OrgSagebionetworksRepoModelOauthOAuthRefreshTokenInformation {
   scopes?: Array<OrgSagebionetworksRepoModelOauthOAuthRefreshTokenInformation.ScopesEnum>;
   claims?: OrgSagebionetworksRepoModelOauthOIDCClaimsRequest;
   /**
+   * Identity Provider names
+   */
+  identityProviderName?: OrgSagebionetworksRepoModelOauthOAuthRefreshTokenInformation.IdentityProviderNameEnum;
+  /**
    * The date this refresh token was initially issued.
    */
   authorizedOn?: string;
@@ -72,5 +76,20 @@ export namespace OrgSagebionetworksRepoModelOauthOAuthRefreshTokenInformation {
     Modify: 'modify' as ScopesEnum,
     Authorize: 'authorize' as ScopesEnum,
     OfflineAccess: 'offline_access' as ScopesEnum,
+  };
+  export type IdentityProviderNameEnum =
+    | 'SYNAPSE'
+    | 'GOOGLE_OAUTH_2_0'
+    | 'ORCID'
+    | 'ARCUS_BIOSCIENCES'
+    | 'SAGE_BIONETWORKS'
+    | 'NIH_RESEARCHER_AUTH_SERVICE';
+  export const IdentityProviderNameEnum = {
+    Synapse: 'SYNAPSE' as IdentityProviderNameEnum,
+    GoogleOauth20: 'GOOGLE_OAUTH_2_0' as IdentityProviderNameEnum,
+    Orcid: 'ORCID' as IdentityProviderNameEnum,
+    ArcusBiosciences: 'ARCUS_BIOSCIENCES' as IdentityProviderNameEnum,
+    SageBionetworks: 'SAGE_BIONETWORKS' as IdentityProviderNameEnum,
+    NihResearcherAuthService: 'NIH_RESEARCHER_AUTH_SERVICE' as IdentityProviderNameEnum,
   };
 }

@@ -152,6 +152,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     | 'TEXT_ANALYZER'
     | 'COLUMN_ANALYZER_OVERRIDE'
     | 'SYNONYM_SET'
+    | 'SEARCH_PIPELINE'
     | 'SEARCH_CONFIGURATION'
     | 'SEARCH_CONFIG_OBJECT_BINDING'
     | 'EDUC_QUOTA'
@@ -296,6 +297,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     TextAnalyzer: 'TEXT_ANALYZER' as ListEnum,
     ColumnAnalyzerOverride: 'COLUMN_ANALYZER_OVERRIDE' as ListEnum,
     SynonymSet: 'SYNONYM_SET' as ListEnum,
+    SearchPipeline: 'SEARCH_PIPELINE' as ListEnum,
     SearchConfiguration: 'SEARCH_CONFIGURATION' as ListEnum,
     SearchConfigObjectBinding: 'SEARCH_CONFIG_OBJECT_BINDING' as ListEnum,
     EducQuota: 'EDUC_QUOTA' as ListEnum,

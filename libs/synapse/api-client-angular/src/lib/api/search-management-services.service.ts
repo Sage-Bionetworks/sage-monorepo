@@ -35,6 +35,10 @@ import { OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesReques
 // @ts-ignore
 import { OrgSagebionetworksRepoModelSearchTableListColumnAnalyzerOverridesResponse } from '../model/org-sagebionetworks-repo-model-search-table-list-column-analyzer-overrides-response';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest } from '../model/org-sagebionetworks-repo-model-search-table-list-named-search-pipelines-request';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesResponse } from '../model/org-sagebionetworks-repo-model-search-table-list-named-search-pipelines-response';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest } from '../model/org-sagebionetworks-repo-model-search-table-list-search-configurations-request';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelSearchTableListSearchConfigurationsResponse } from '../model/org-sagebionetworks-repo-model-search-table-list-search-configurations-response';
@@ -46,6 +50,8 @@ import { OrgSagebionetworksRepoModelSearchTableListSynonymSetsResponse } from '.
 import { OrgSagebionetworksRepoModelSearchTableListTextAnalyzersRequest } from '../model/org-sagebionetworks-repo-model-search-table-list-text-analyzers-request';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelSearchTableListTextAnalyzersResponse } from '../model/org-sagebionetworks-repo-model-search-table-list-text-analyzers-response';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline } from '../model/org-sagebionetworks-repo-model-search-table-named-search-pipeline';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelSearchTableSearchAutocompleteRequest } from '../model/org-sagebionetworks-repo-model-search-table-search-autocomplete-request';
 // @ts-ignore
@@ -532,6 +538,113 @@ export class SearchManagementServicesService {
 
     let localVarPath = `/repo/v1/search/configuration/${this.configuration.encodeParam({ name: 'searchConfigurationId', value: searchConfigurationId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
     return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableSearchConfiguration>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param searchPipelineId The ID of the search pipeline to retrieve.
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRepoV1SearchPipelineSearchPipelineId(
+    searchPipelineId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>;
+  public getRepoV1SearchPipelineSearchPipelineId(
+    searchPipelineId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>>;
+  public getRepoV1SearchPipelineSearchPipelineId(
+    searchPipelineId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>>;
+  public getRepoV1SearchPipelineSearchPipelineId(
+    searchPipelineId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (searchPipelineId === null || searchPipelineId === undefined) {
+      throw new Error(
+        'Required parameter searchPipelineId was null or undefined when calling getRepoV1SearchPipelineSearchPipelineId.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/search/pipeline/${this.configuration.encodeParam({ name: 'searchPipelineId', value: searchPipelineId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -1458,6 +1571,246 @@ export class SearchManagementServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelSearchTableListSearchConfigurationsRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param orgSagebionetworksRepoModelSearchTableNamedSearchPipeline
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1SearchPipeline(
+    orgSagebionetworksRepoModelSearchTableNamedSearchPipeline: OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>;
+  public postRepoV1SearchPipeline(
+    orgSagebionetworksRepoModelSearchTableNamedSearchPipeline: OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>>;
+  public postRepoV1SearchPipeline(
+    orgSagebionetworksRepoModelSearchTableNamedSearchPipeline: OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>>;
+  public postRepoV1SearchPipeline(
+    orgSagebionetworksRepoModelSearchTableNamedSearchPipeline: OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (
+      orgSagebionetworksRepoModelSearchTableNamedSearchPipeline === null ||
+      orgSagebionetworksRepoModelSearchTableNamedSearchPipeline === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelSearchTableNamedSearchPipeline was null or undefined when calling postRepoV1SearchPipeline.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/search/pipeline`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelSearchTableNamedSearchPipeline,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param orgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1SearchPipelineList(
+    orgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest: OrgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesResponse>;
+  public postRepoV1SearchPipelineList(
+    orgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest: OrgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<
+    HttpResponse<OrgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesResponse>
+  >;
+  public postRepoV1SearchPipelineList(
+    orgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest: OrgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesResponse>>;
+  public postRepoV1SearchPipelineList(
+    orgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest: OrgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (
+      orgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest === null ||
+      orgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest was null or undefined when calling postRepoV1SearchPipelineList.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/search/pipeline/list`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesResponse>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelSearchTableListNamedSearchPipelinesRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -2440,6 +2793,135 @@ export class SearchManagementServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelSearchTableSearchConfiguration,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param searchPipelineId The path ID (must match the request body\&#39;s ID).
+   * @param orgSagebionetworksRepoModelSearchTableNamedSearchPipeline
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public putRepoV1SearchPipelineSearchPipelineId(
+    searchPipelineId: string,
+    orgSagebionetworksRepoModelSearchTableNamedSearchPipeline: OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>;
+  public putRepoV1SearchPipelineSearchPipelineId(
+    searchPipelineId: string,
+    orgSagebionetworksRepoModelSearchTableNamedSearchPipeline: OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>>;
+  public putRepoV1SearchPipelineSearchPipelineId(
+    searchPipelineId: string,
+    orgSagebionetworksRepoModelSearchTableNamedSearchPipeline: OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>>;
+  public putRepoV1SearchPipelineSearchPipelineId(
+    searchPipelineId: string,
+    orgSagebionetworksRepoModelSearchTableNamedSearchPipeline: OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (searchPipelineId === null || searchPipelineId === undefined) {
+      throw new Error(
+        'Required parameter searchPipelineId was null or undefined when calling putRepoV1SearchPipelineSearchPipelineId.',
+      );
+    }
+    if (
+      orgSagebionetworksRepoModelSearchTableNamedSearchPipeline === null ||
+      orgSagebionetworksRepoModelSearchTableNamedSearchPipeline === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelSearchTableNamedSearchPipeline was null or undefined when calling putRepoV1SearchPipelineSearchPipelineId.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/search/pipeline/${this.configuration.encodeParam({ name: 'searchPipelineId', value: searchPipelineId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchTableNamedSearchPipeline>(
+      'put',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelSearchTableNamedSearchPipeline,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

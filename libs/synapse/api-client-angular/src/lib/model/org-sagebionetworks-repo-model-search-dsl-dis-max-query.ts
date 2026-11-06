@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelSearchDslQuery } from './org-sagebionetworks-repo-model-search-dsl-query';
 
 /**
  * A <a href=\"https://docs.opensearch.org/latest/query-dsl/compound/disjunction-max/\"><code>dis_max</code></a> compound clause. A document matches if any sub-clause matches; its score is the best single sub-clause score plus <code>tie_breaker</code> times the rest.
@@ -15,7 +16,7 @@ export interface OrgSagebionetworksRepoModelSearchDslDisMaxQuery {
   /**
    * Required. The candidate clauses.
    */
-  queries?: Array<OrgSagebionetworksRepoModelSearchDslDisMaxQuery>;
+  queries?: Array<OrgSagebionetworksRepoModelSearchDslQuery>;
   /**
    * Optional. Weight (0&ndash;1) applied to the scores of the non-best matching clauses. Default <code>0.0</code>.
    */

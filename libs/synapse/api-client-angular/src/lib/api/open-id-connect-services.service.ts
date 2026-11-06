@@ -25,6 +25,8 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelAccessControlList } from '../model/org-sagebionetworks-repo-model-access-control-list';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelAuthIdentityProviderName } from '../model/org-sagebionetworks-repo-model-auth-identity-provider-name';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelOauthJsonWebKeySet } from '../model/org-sagebionetworks-repo-model-oauth-json-web-key-set';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelOauthOAuthAuthorizationResponse } from '../model/org-sagebionetworks-repo-model-oauth-o-auth-authorization-response';
@@ -1686,11 +1688,13 @@ export class OpenIDConnectServicesService {
 
   /**
    * @param orgSagebionetworksRepoModelOauthOIDCAuthorizationRequest
+   * @param identityProvider
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public postAuthV1Oauth2Consent(
     orgSagebionetworksRepoModelOauthOIDCAuthorizationRequest: OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequest,
+    identityProvider?: OrgSagebionetworksRepoModelAuthIdentityProviderName,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -1701,6 +1705,7 @@ export class OpenIDConnectServicesService {
   ): Observable<OrgSagebionetworksRepoModelOauthOAuthAuthorizationResponse>;
   public postAuthV1Oauth2Consent(
     orgSagebionetworksRepoModelOauthOIDCAuthorizationRequest: OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequest,
+    identityProvider?: OrgSagebionetworksRepoModelAuthIdentityProviderName,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -1711,6 +1716,7 @@ export class OpenIDConnectServicesService {
   ): Observable<HttpResponse<OrgSagebionetworksRepoModelOauthOAuthAuthorizationResponse>>;
   public postAuthV1Oauth2Consent(
     orgSagebionetworksRepoModelOauthOIDCAuthorizationRequest: OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequest,
+    identityProvider?: OrgSagebionetworksRepoModelAuthIdentityProviderName,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -1721,6 +1727,7 @@ export class OpenIDConnectServicesService {
   ): Observable<HttpEvent<OrgSagebionetworksRepoModelOauthOAuthAuthorizationResponse>>;
   public postAuthV1Oauth2Consent(
     orgSagebionetworksRepoModelOauthOIDCAuthorizationRequest: OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequest,
+    identityProvider?: OrgSagebionetworksRepoModelAuthIdentityProviderName,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -1739,6 +1746,9 @@ export class OpenIDConnectServicesService {
     }
 
     let localVarHeaders = this.defaultHeaders;
+    if (identityProvider !== undefined && identityProvider !== null) {
+      localVarHeaders = localVarHeaders.set('identityProvider', String(identityProvider));
+    }
 
     let localVarCredential: string | undefined;
     // authentication (bearerAuth) required

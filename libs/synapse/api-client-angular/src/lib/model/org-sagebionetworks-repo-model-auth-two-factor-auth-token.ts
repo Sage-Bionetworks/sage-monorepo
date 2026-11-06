@@ -37,6 +37,10 @@ export interface OrgSagebionetworksRepoModelAuthTwoFactorAuthToken {
    * The context within which a twoFaToken for two factor authentication is generated.
    */
   context?: OrgSagebionetworksRepoModelAuthTwoFactorAuthToken.ContextEnum;
+  /**
+   * Identity Provider names
+   */
+  identityProviderName?: OrgSagebionetworksRepoModelAuthTwoFactorAuthToken.IdentityProviderNameEnum;
 }
 export namespace OrgSagebionetworksRepoModelAuthTwoFactorAuthToken {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.auth.TwoFactorAuthToken';
@@ -48,5 +52,20 @@ export namespace OrgSagebionetworksRepoModelAuthTwoFactorAuthToken {
   export const ContextEnum = {
     Authentication: 'AUTHENTICATION' as ContextEnum,
     PasswordChange: 'PASSWORD_CHANGE' as ContextEnum,
+  };
+  export type IdentityProviderNameEnum =
+    | 'SYNAPSE'
+    | 'GOOGLE_OAUTH_2_0'
+    | 'ORCID'
+    | 'ARCUS_BIOSCIENCES'
+    | 'SAGE_BIONETWORKS'
+    | 'NIH_RESEARCHER_AUTH_SERVICE';
+  export const IdentityProviderNameEnum = {
+    Synapse: 'SYNAPSE' as IdentityProviderNameEnum,
+    GoogleOauth20: 'GOOGLE_OAUTH_2_0' as IdentityProviderNameEnum,
+    Orcid: 'ORCID' as IdentityProviderNameEnum,
+    ArcusBiosciences: 'ARCUS_BIOSCIENCES' as IdentityProviderNameEnum,
+    SageBionetworks: 'SAGE_BIONETWORKS' as IdentityProviderNameEnum,
+    NihResearcherAuthService: 'NIH_RESEARCHER_AUTH_SERVICE' as IdentityProviderNameEnum,
   };
 }

@@ -39,7 +39,7 @@ export interface OrgSagebionetworksRepoModelDataaccessSubmission {
    */
   irbFileHandleId?: string;
   /**
-   * The set of file handle ID of attached files to this request.
+   * The IDs of the file handles attached to this submission, snapshotted from the request it was created from. For a ManagedACTAccessRequirement these are the other attachments it asks for. For a JsonSchemaAccessRequirement these are the file handles that schemaData references.
    */
   attachments?: Array<string>;
   /**
