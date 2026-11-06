@@ -34,4 +34,12 @@ export interface OrgSagebionetworksRepoModelTableIndexDescriptionSnapshot {
    * The flattened transitive closure of the objects this index was built from. Reconstituting the queried object with these as its (childless) dependencies reproduces the exact node set the transitive READ authorization check evaluates.
    */
   dependencies?: Array<OrgSagebionetworksRepoModelTableSourceDependency>;
+  /**
+   * The defining SQL for objects that are defined by SQL (MaterializedView, VirtualTable, SearchIndex). Null for other types. Captured so a future query can reconstruct the real IndexDescription with all its type-specific behavior (e.g. VirtualTable.preprocessQuery).
+   */
+  definingSql?: string;
+  /**
+   * The index version for views and tables. Used to reconstruct ViewIndexDescription and TableIndexDescription. Null for types that don\'t track index version.
+   */
+  indexVersion?: number;
 }

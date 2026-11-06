@@ -35,6 +35,7 @@ export type OrgSagebionetworksRepoModelOauthOIDCClaimName =
   | 'validated_orcid'
   | 'validated_at'
   | 'refresh_token_id'
+  | 'identity_provider'
   | 'token_type'
   | 'ga4gh_passport_v1';
 
@@ -65,6 +66,7 @@ export const OrgSagebionetworksRepoModelOauthOIDCClaimName = {
   ValidatedOrcid: 'validated_orcid' as OrgSagebionetworksRepoModelOauthOIDCClaimName,
   ValidatedAt: 'validated_at' as OrgSagebionetworksRepoModelOauthOIDCClaimName,
   RefreshTokenId: 'refresh_token_id' as OrgSagebionetworksRepoModelOauthOIDCClaimName,
+  IdentityProvider: 'identity_provider' as OrgSagebionetworksRepoModelOauthOIDCClaimName,
   TokenType: 'token_type' as OrgSagebionetworksRepoModelOauthOIDCClaimName,
   Ga4ghPassportV1: 'ga4gh_passport_v1' as OrgSagebionetworksRepoModelOauthOIDCClaimName,
 };

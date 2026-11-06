@@ -17,7 +17,11 @@ export type OrgSagebionetworksRepoModelErrorResponseCode =
   | 'UNSUPPORTED_WEBHOOK_DOMAIN'
   | 'PROJECT_STORAGE_LIMIT_EXCEEDED'
   | 'TWO_FA_ENABLED_REQUIRED'
-  | 'BELOW_THRESHOLD';
+  | 'BELOW_THRESHOLD'
+  | 'ROW_SUPPRESSED'
+  | 'COHORT_TOO_LARGE'
+  | 'ACCESS_REQUIREMENT_VERSION_OUT_OF_DATE'
+  | 'SUBMISSION_CONTEXT_MISMATCH';
 
 export const OrgSagebionetworksRepoModelErrorResponseCode = {
   PasswordResetViaEmailRequired:
@@ -35,4 +39,10 @@ export const OrgSagebionetworksRepoModelErrorResponseCode = {
     'PROJECT_STORAGE_LIMIT_EXCEEDED' as OrgSagebionetworksRepoModelErrorResponseCode,
   TwoFaEnabledRequired: 'TWO_FA_ENABLED_REQUIRED' as OrgSagebionetworksRepoModelErrorResponseCode,
   BelowThreshold: 'BELOW_THRESHOLD' as OrgSagebionetworksRepoModelErrorResponseCode,
+  RowSuppressed: 'ROW_SUPPRESSED' as OrgSagebionetworksRepoModelErrorResponseCode,
+  CohortTooLarge: 'COHORT_TOO_LARGE' as OrgSagebionetworksRepoModelErrorResponseCode,
+  AccessRequirementVersionOutOfDate:
+    'ACCESS_REQUIREMENT_VERSION_OUT_OF_DATE' as OrgSagebionetworksRepoModelErrorResponseCode,
+  SubmissionContextMismatch:
+    'SUBMISSION_CONTEXT_MISMATCH' as OrgSagebionetworksRepoModelErrorResponseCode,
 };

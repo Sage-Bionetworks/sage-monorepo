@@ -159,6 +159,7 @@ export namespace OrgSagebionetworksRepoModelOauthOIDConnectConfiguration {
     | 'validated_orcid'
     | 'validated_at'
     | 'refresh_token_id'
+    | 'identity_provider'
     | 'token_type'
     | 'ga4gh_passport_v1';
   export const ClaimsSupportedEnum = {
@@ -188,6 +189,7 @@ export namespace OrgSagebionetworksRepoModelOauthOIDConnectConfiguration {
     ValidatedOrcid: 'validated_orcid' as ClaimsSupportedEnum,
     ValidatedAt: 'validated_at' as ClaimsSupportedEnum,
     RefreshTokenId: 'refresh_token_id' as ClaimsSupportedEnum,
+    IdentityProvider: 'identity_provider' as ClaimsSupportedEnum,
     TokenType: 'token_type' as ClaimsSupportedEnum,
     Ga4ghPassportV1: 'ga4gh_passport_v1' as ClaimsSupportedEnum,
   };

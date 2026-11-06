@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelSearchDslQuery } from './org-sagebionetworks-repo-model-search-dsl-query';
 
 /**
  * A <a href=\"https://docs.opensearch.org/latest/query-dsl/compound/bool/\"><code>bool</code></a> compound clause &mdash; combines sub-clauses with boolean logic.
@@ -15,19 +16,19 @@ export interface OrgSagebionetworksRepoModelSearchDslBoolQuery {
   /**
    * Sub-clauses that must all match (scored). Logical AND.
    */
-  must?: Array<OrgSagebionetworksRepoModelSearchDslBoolQuery>;
+  must?: Array<OrgSagebionetworksRepoModelSearchDslQuery>;
   /**
    * Sub-clauses that should match (scored). See <code>minimum_should_match</code>.
    */
-  should?: Array<OrgSagebionetworksRepoModelSearchDslBoolQuery>;
+  should?: Array<OrgSagebionetworksRepoModelSearchDslQuery>;
   /**
    * Sub-clauses that must not match (filter context, not scored).
    */
-  must_not?: Array<OrgSagebionetworksRepoModelSearchDslBoolQuery>;
+  must_not?: Array<OrgSagebionetworksRepoModelSearchDslQuery>;
   /**
    * Sub-clauses that must all match in filter context (not scored).
    */
-  filter?: Array<OrgSagebionetworksRepoModelSearchDslBoolQuery>;
+  filter?: Array<OrgSagebionetworksRepoModelSearchDslQuery>;
   /**
    * Optional. How many <code>should</code> clauses must match. An integer or a percentage / formula string.
    */

@@ -10,6 +10,7 @@
 import { OrgSagebionetworksRepoModelTableSortItem } from './org-sagebionetworks-repo-model-table-sort-item';
 import { OrgSagebionetworksRepoModelTableFacetColumnRequest } from './org-sagebionetworks-repo-model-table-facet-column-request';
 import { OrgSagebionetworksRepoModelTableQueryFilter } from './org-sagebionetworks-repo-model-table-query-filter';
+import { OrgSagebionetworksRepoModelTableCohortDefinition } from './org-sagebionetworks-repo-model-table-cohort-definition';
 
 export interface OrgSagebionetworksRepoModelTableQuery {
   /**
@@ -45,4 +46,8 @@ export interface OrgSagebionetworksRepoModelTableQuery {
    */
   limit?: number;
   sort?: Array<OrgSagebionetworksRepoModelTableSortItem>;
+  /**
+   * Optional, request-scoped cohort definitions. Each cohort is referenced by name from the sql (<column> IN COHORT(<name>)) or from a ColumnCohortFilter. The server runs each cohort query as the caller and replaces the reference with the cohort\'s distinct values, which are never returned to the caller. Every reference must match a definition and every definition must be referenced.
+   */
+  cohorts?: Array<OrgSagebionetworksRepoModelTableCohortDefinition>;
 }

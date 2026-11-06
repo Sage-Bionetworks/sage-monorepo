@@ -7,13 +7,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelSearchDslQuery } from './org-sagebionetworks-repo-model-search-dsl-query';
 
 /**
  * A <a href=\"https://docs.opensearch.org/latest/query-dsl/compound/boosting/\"><code>boosting</code></a> compound clause. Returns documents matching <code>positive</code>, demoting those that also match <code>negative</code> by <code>negative_boost</code>.
  */
 export interface OrgSagebionetworksRepoModelSearchDslBoostingQuery {
-  positive?: OrgSagebionetworksRepoModelSearchDslBoostingQuery;
-  negative?: OrgSagebionetworksRepoModelSearchDslBoostingQuery;
+  positive?: OrgSagebionetworksRepoModelSearchDslQuery;
+  negative?: OrgSagebionetworksRepoModelSearchDslQuery;
   /**
    * Required. Multiplier (0&ndash;1) applied to the score of documents that also match <code>negative</code>.
    */

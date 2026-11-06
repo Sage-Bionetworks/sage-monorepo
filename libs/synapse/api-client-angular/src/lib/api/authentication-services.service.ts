@@ -37,6 +37,8 @@ import { OrgSagebionetworksRepoModelAuthAuthenticatedOn } from '../model/org-sag
 // @ts-ignore
 import { OrgSagebionetworksRepoModelAuthChangePasswordInterface } from '../model/org-sagebionetworks-repo-model-auth-change-password-interface';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelAuthIdentityProviderName } from '../model/org-sagebionetworks-repo-model-auth-identity-provider-name';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelAuthLoginRequest } from '../model/org-sagebionetworks-repo-model-auth-login-request';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelAuthLoginResponse } from '../model/org-sagebionetworks-repo-model-auth-login-response';
@@ -1871,12 +1873,14 @@ export class AuthenticationServicesService {
 
   /**
    * @param orgSagebionetworksRepoModelAuthAccessTokenGenerationRequest
+   * @param identityProvider
    * @param synapseAuthorization
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public postAuthV1PersonalAccessToken(
     orgSagebionetworksRepoModelAuthAccessTokenGenerationRequest: OrgSagebionetworksRepoModelAuthAccessTokenGenerationRequest,
+    identityProvider?: OrgSagebionetworksRepoModelAuthIdentityProviderName,
     synapseAuthorization?: string,
     observe?: 'body',
     reportProgress?: boolean,
@@ -1888,6 +1892,7 @@ export class AuthenticationServicesService {
   ): Observable<OrgSagebionetworksRepoModelAuthAccessTokenGenerationResponse>;
   public postAuthV1PersonalAccessToken(
     orgSagebionetworksRepoModelAuthAccessTokenGenerationRequest: OrgSagebionetworksRepoModelAuthAccessTokenGenerationRequest,
+    identityProvider?: OrgSagebionetworksRepoModelAuthIdentityProviderName,
     synapseAuthorization?: string,
     observe?: 'response',
     reportProgress?: boolean,
@@ -1899,6 +1904,7 @@ export class AuthenticationServicesService {
   ): Observable<HttpResponse<OrgSagebionetworksRepoModelAuthAccessTokenGenerationResponse>>;
   public postAuthV1PersonalAccessToken(
     orgSagebionetworksRepoModelAuthAccessTokenGenerationRequest: OrgSagebionetworksRepoModelAuthAccessTokenGenerationRequest,
+    identityProvider?: OrgSagebionetworksRepoModelAuthIdentityProviderName,
     synapseAuthorization?: string,
     observe?: 'events',
     reportProgress?: boolean,
@@ -1910,6 +1916,7 @@ export class AuthenticationServicesService {
   ): Observable<HttpEvent<OrgSagebionetworksRepoModelAuthAccessTokenGenerationResponse>>;
   public postAuthV1PersonalAccessToken(
     orgSagebionetworksRepoModelAuthAccessTokenGenerationRequest: OrgSagebionetworksRepoModelAuthAccessTokenGenerationRequest,
+    identityProvider?: OrgSagebionetworksRepoModelAuthIdentityProviderName,
     synapseAuthorization?: string,
     observe: any = 'body',
     reportProgress: boolean = false,
@@ -1929,6 +1936,9 @@ export class AuthenticationServicesService {
     }
 
     let localVarHeaders = this.defaultHeaders;
+    if (identityProvider !== undefined && identityProvider !== null) {
+      localVarHeaders = localVarHeaders.set('identityProvider', String(identityProvider));
+    }
     if (synapseAuthorization !== undefined && synapseAuthorization !== null) {
       localVarHeaders = localVarHeaders.set('Synapse-Authorization', String(synapseAuthorization));
     }
