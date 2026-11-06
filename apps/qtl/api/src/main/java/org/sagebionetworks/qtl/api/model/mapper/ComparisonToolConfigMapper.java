@@ -28,13 +28,15 @@ public class ComparisonToolConfigMapper {
       RECORD_TYPE
     );
 
-    List<ComparisonToolConfigColumnDto> columns = document.getColumns() == null
-      ? List.of()
-      : document.getColumns().stream().map(this::toComparisonToolConfigDto).toList();
+    List<ComparisonToolConfigColumnDto> columns = requireValue(document.getColumns(), "columns")
+      .stream()
+      .map(column -> toComparisonToolConfigDto(requireValue(column, "column")))
+      .toList();
 
-    List<ComparisonToolConfigFilterDto> filters = document.getFilters() == null
-      ? List.of()
-      : document.getFilters().stream().map(this::toComparisonToolConfigFilterDto).toList();
+    List<ComparisonToolConfigFilterDto> filters = requireValue(document.getFilters(), "filters")
+      .stream()
+      .map(filter -> toComparisonToolConfigFilterDto(requireValue(filter, "filter")))
+      .toList();
 
     ComparisonToolConfigDto dto = new ComparisonToolConfigDto(
       page,
@@ -55,10 +57,6 @@ public class ComparisonToolConfigMapper {
   private ComparisonToolConfigColumnDto toComparisonToolConfigDto(
     ComparisonToolConfigDocument.ComparisonToolConfigColumn column
   ) {
-    if (column == null) {
-      return null;
-    }
-
     ComparisonToolConfigColumnDto dto = new ComparisonToolConfigColumnDto(
       EnumConverter.toEnum(
         column.getType(),
@@ -84,15 +82,11 @@ public class ComparisonToolConfigMapper {
   private ComparisonToolConfigFilterDto toComparisonToolConfigFilterDto(
     ComparisonToolConfigDocument.ComparisonToolConfigFilter filter
   ) {
-    if (filter == null) {
-      return null;
-    }
-
     ComparisonToolConfigFilterDto dto = new ComparisonToolConfigFilterDto(
       requireValue(filter.getName(), "filter name"),
       requireValue(filter.getDataKey(), "filter data_key"),
       requireValue(filter.getQueryParamKey(), "filter query_param_key"),
-      filter.getValues()
+      requireValue(filter.getValues(), "filter values")
     );
     dto.setShortName(filter.getShortName());
     return dto;
@@ -105,7 +99,10 @@ public class ComparisonToolConfigMapper {
       return null;
     }
 
-    return new ComparisonToolNounDto(noun.getSingular(), noun.getPlural());
+    return new ComparisonToolNounDto(
+      requireValue(noun.getSingular(), "noun singular"),
+      requireValue(noun.getPlural(), "noun plural")
+    );
   }
 
   private static <T> T requireValue(T value, String fieldName) {

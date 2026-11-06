@@ -3,6 +3,7 @@ package org.sagebionetworks.qtl.api.model.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.Arrays;
 import java.util.List;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
@@ -267,8 +268,8 @@ class ComparisonToolConfigMapperTest {
   }
 
   @Test
-  @DisplayName("should handle null columns list")
-  void shouldHandleNullColumnsList() {
+  @DisplayName("should throw data integrity exception for a missing columns list")
+  void shouldThrowDataIntegrityExceptionForAMissingColumnsList() {
     // given
     ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
     document.setPage("eQTLs");
@@ -276,16 +277,15 @@ class ComparisonToolConfigMapperTest {
     document.setColumns(null);
     document.setFilters(List.of());
 
-    // when
-    ComparisonToolConfigDto result = mapper.toDto(document);
-
-    // then
-    assertThat(result.getColumns()).isEmpty();
+    // when & then
+    assertThatThrownBy(() -> mapper.toDto(document))
+      .isInstanceOf(DataIntegrityException.class)
+      .hasMessage("Missing columns value in comparison tool config record");
   }
 
   @Test
-  @DisplayName("should handle null filters list")
-  void shouldHandleNullFiltersList() {
+  @DisplayName("should throw data integrity exception for a missing filters list")
+  void shouldThrowDataIntegrityExceptionForAMissingFiltersList() {
     // given
     ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
     document.setPage("eQTLs");
@@ -293,11 +293,66 @@ class ComparisonToolConfigMapperTest {
     document.setColumns(List.of());
     document.setFilters(null);
 
-    // when
-    ComparisonToolConfigDto result = mapper.toDto(document);
+    // when & then
+    assertThatThrownBy(() -> mapper.toDto(document))
+      .isInstanceOf(DataIntegrityException.class)
+      .hasMessage("Missing filters value in comparison tool config record");
+  }
 
-    // then
-    assertThat(result.getFilters()).isEmpty();
+  @Test
+  @DisplayName("should throw data integrity exception for a null column or filter entry")
+  void shouldThrowDataIntegrityExceptionForANullColumnOrFilterEntry() {
+    ComparisonToolConfigDocument withNullColumn = new ComparisonToolConfigDocument();
+    withNullColumn.setPage("eQTLs");
+    withNullColumn.setDropdowns(List.of());
+    withNullColumn.setColumns(
+      Arrays.asList((ComparisonToolConfigDocument.ComparisonToolConfigColumn) null)
+    );
+    withNullColumn.setFilters(List.of());
+    assertThatThrownBy(() -> mapper.toDto(withNullColumn))
+      .isInstanceOf(DataIntegrityException.class)
+      .hasMessage("Missing column value in comparison tool config record");
+
+    ComparisonToolConfigDocument withNullFilter = new ComparisonToolConfigDocument();
+    withNullFilter.setPage("eQTLs");
+    withNullFilter.setDropdowns(List.of());
+    withNullFilter.setColumns(List.of());
+    withNullFilter.setFilters(
+      Arrays.asList((ComparisonToolConfigDocument.ComparisonToolConfigFilter) null)
+    );
+    assertThatThrownBy(() -> mapper.toDto(withNullFilter))
+      .isInstanceOf(DataIntegrityException.class)
+      .hasMessage("Missing filter value in comparison tool config record");
+  }
+
+  @Test
+  @DisplayName("should throw data integrity exception for missing filter values")
+  void shouldThrowDataIntegrityExceptionForMissingFilterValues() {
+    assertMissingFilterField(
+      ComparisonToolConfigDocument.ComparisonToolConfigFilter.builder()
+        .name("Variant")
+        .dataKey("variant")
+        .queryParamKey("variant")
+        .build(),
+      "Missing filter values value in comparison tool config record"
+    );
+  }
+
+  @Test
+  @DisplayName("should throw data integrity exception for a noun missing a form")
+  void shouldThrowDataIntegrityExceptionForANounMissingAForm() {
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("eQTLs");
+    document.setDropdowns(List.of());
+    document.setColumns(List.of());
+    document.setFilters(List.of());
+    document.setViewNoun(
+      ComparisonToolConfigDocument.ComparisonToolNoun.builder().singular("eQTL").build()
+    );
+
+    assertThatThrownBy(() -> mapper.toDto(document))
+      .isInstanceOf(DataIntegrityException.class)
+      .hasMessage("Missing noun plural value in comparison tool config record");
   }
 
   @Test
