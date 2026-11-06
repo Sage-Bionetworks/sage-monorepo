@@ -15,9 +15,49 @@ servers:
   - description: Local development server
     url: http://localhost/v1
 tags:
+  - description: Operations about Comparison Tool UI configuration.
+    name: Comparison Tool Config
   - description: Operations about the data version.
     name: Data Version
 paths:
+  /comparison-tools/config:
+    get:
+      description: Retrieve the Comparison Tool configuration schema for the xQTL
+        Explorer application
+      operationId: getComparisonToolConfig
+      parameters:
+        - description: Name of the page to retrieve the Comparison Tool configuration
+            for
+          explode: true
+          in: query
+          name: page
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComparisonToolPage'
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ComparisonToolConfig'
+                type: array
+          description: Successfully retrieved Comparison Tool configuration
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get Comparison Tool configuration
+      tags:
+        - Comparison Tool Config
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Comparison Tool Config
   /data-version:
     get:
       description: Get data version
@@ -43,8 +83,6 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Data Version
-    x-audience:
-      - public
 components:
   responses:
     BadRequest:
@@ -66,19 +104,254 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
-    DataVersion:
-      description: Synapse data version
+    ComparisonToolPage:
+      description: The type of comparison tool page
+      enum:
+        - eQTLs
+      example: eQTLs
+      type: string
+    ComparisonToolConfigColumn:
       example:
-        data_file: data_file
-        data_version: data_version
+        name: name
+        tooltip: tooltip
+        is_hidden: true
+        link_url: link_url
+        sort_tooltip: sort_tooltip
+        column_width: 300
+        is_exported: true
+        type: text
+        data_key: data_key
+        link_text: link_text
       properties:
-        data_file:
+        name:
+          description: The display name of the column.
           type: string
-        data_version:
+        type:
+          description: "The data type of the column. Must be 'text', 'heat_map', 'link_internal',\
+            \ 'link_external', 'primary', or 'numeric', where 'primary' is the primary\
+            \ key column that uniquely identifies each record in the table."
+          enum:
+            - text
+            - heat_map
+            - link_internal
+            - link_external
+            - primary
+            - numeric
+          type: string
+        data_key:
+          description: The key used to retrieve data for this column from the data
+            source.
+          type: string
+        tooltip:
+          description: Tooltip text for the column.
+          type: string
+        sort_tooltip:
+          description: Tooltip text for the column's sort functionality.
+          type: string
+        link_text:
+          description: The default text for a link in this column.
+          type: string
+        link_url:
+          description: The default URL for this column.
+          type: string
+        is_exported:
+          description: Indicates whether the column is included in data exports.
+          type: boolean
+        is_hidden:
+          description: Indicates whether the column is shown in the comparison table
+            UI.
+          type: boolean
+        column_width:
+          description: "Optional fixed width for the column in pixels. When set, the\
+            \ UI uses this width verbatim instead of auto-sizing the column from content."
+          example: 300
+          format: int32
+          minimum: 1
+          type: integer
+      required:
+        - data_key
+        - is_exported
+        - is_hidden
+        - type
+      type: object
+    ComparisonToolConfigFilter:
+      description: Comparison Tool Config Filter
+      example:
+        values:
+          - Astrocyte
+          - Astrocyte
+        name: Cell Class
+        short_name: Class
+        data_key: cell_class
+        query_param_key: class
+      properties:
+        name:
+          description: Name of the filter group
+          example: Cell Class
+          type: string
+        data_key:
+          description: Field to filter on
+          example: cell_class
+          type: string
+        short_name:
+          description: Short name of the filter group
+          example: Class
+          type: string
+        query_param_key:
+          description: Query parameter key for the filter
+          example: class
+          type: string
+        values:
+          description: List of filter values
+          items:
+            example: Astrocyte
+            type: string
+          type: array
+      required:
+        - data_key
+        - name
+        - query_param_key
+        - values
+      type: object
+    ComparisonToolNoun:
+      description: |
+        A noun used to label a set of records in the comparison tool UI, in both its singular and
+        plural forms.
+      example:
+        singular: protein
+        plural: proteins
+      properties:
+        singular:
+          description: The singular form of the noun.
+          example: protein
+          type: string
+        plural:
+          description: The plural form of the noun.
+          example: proteins
           type: string
       required:
-        - data_file
-        - data_version
+        - plural
+        - singular
+      type: object
+    ComparisonToolConfig:
+      example:
+        parent_id_data_key: rna_composite_id
+        columns:
+          - name: name
+            tooltip: tooltip
+            is_hidden: true
+            link_url: link_url
+            sort_tooltip: sort_tooltip
+            column_width: 300
+            is_exported: true
+            type: text
+            data_key: data_key
+            link_text: link_text
+          - name: name
+            tooltip: tooltip
+            is_hidden: true
+            link_url: link_url
+            sort_tooltip: sort_tooltip
+            column_width: 300
+            is_exported: true
+            type: text
+            data_key: data_key
+            link_text: link_text
+        row_id_data_key: composite_id
+        page: eQTLs
+        dropdowns:
+          - dropdowns
+          - dropdowns
+        filters:
+          - values:
+              - Astrocyte
+              - Astrocyte
+            name: Cell Class
+            short_name: Class
+            data_key: cell_class
+            query_param_key: class
+          - values:
+              - Astrocyte
+              - Astrocyte
+            name: Cell Class
+            short_name: Class
+            data_key: cell_class
+            query_param_key: class
+        row_count: row_count
+        parent_noun:
+          singular: gene
+          plural: genes
+        view_noun:
+          singular: protein
+          plural: proteins
+      properties:
+        page:
+          $ref: '#/components/schemas/ComparisonToolPage'
+        dropdowns:
+          description: List of dropdown options
+          items:
+            type: string
+          type: array
+        row_count:
+          description: Deprecated field that is always null. Previously contained
+            relative description of the total number of rows in the data
+          nullable: true
+          type: string
+        columns:
+          description: List of column definitions
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigColumn'
+          type: array
+        filters:
+          description: List of filter configurations
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigFilter'
+          type: array
+        row_id_data_key:
+          description: |
+            The data key holding this view's row UID, overriding the comparison tool's default row id
+            key for this view. Null when the view declares no hierarchy.
+          example: composite_id
+          nullable: true
+          type: string
+        parent_id_data_key:
+          description: |
+            The data key holding the id of the row's parent. It must map to the same values in every
+            view of the comparison tool, though not necessarily through the same field, since different
+            views can read different collections. Equal to row_id_data_key means the view's rows are
+            their own parents; a different key means the view's rows are children. Null when the view
+            declares no hierarchy.
+          example: rna_composite_id
+          nullable: true
+          type: string
+        parent_noun:
+          allOf:
+            - $ref: '#/components/schemas/ComparisonToolNoun'
+          description: |
+            The noun for this view's parent records, used to label parent counts. Set by a child view,
+            which displays both counts. Null otherwise.
+          example:
+            singular: gene
+            plural: genes
+          nullable: true
+          type: object
+        view_noun:
+          allOf:
+            - $ref: '#/components/schemas/ComparisonToolNoun'
+          description: |
+            The noun for this view's own records, used to label row counts. Any view can set it to
+            override the generic nouns in the comparison table. Null otherwise.
+          example:
+            singular: protein
+            plural: proteins
+          nullable: true
+          type: object
+      required:
+        - columns
+        - dropdowns
+        - filters
+        - page
+        - row_count
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -103,4 +376,18 @@ components:
       required:
         - status
         - title
+      type: object
+    DataVersion:
+      description: Synapse data version
+      example:
+        data_file: data_file
+        data_version: data_version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+      required:
+        - data_file
+        - data_version
       type: object

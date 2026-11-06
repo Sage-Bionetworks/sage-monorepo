@@ -1,6 +1,7 @@
 package org.sagebionetworks.qtl.api.configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
+import java.util.List;
 import org.sagebionetworks.explorers.cacheinvalidation.DataRelease;
 import org.sagebionetworks.explorers.cacheinvalidation.DataVersionProvider;
 import org.sagebionetworks.qtl.api.model.document.DataVersionDocument;
@@ -27,7 +28,9 @@ public class CacheConfiguration {
   public CacheManager cacheManager() {
     CaffeineCacheManager cacheManager = new CaffeineCacheManager();
 
-    cacheManager.setCaffeine(Caffeine.newBuilder().recordStats());
+    cacheManager.setCaffeine(Caffeine.newBuilder().maximumSize(10_000).recordStats());
+
+    cacheManager.setCacheNames(List.of(CacheNames.COMPARISON_TOOL_CONFIG));
 
     return cacheManager;
   }
