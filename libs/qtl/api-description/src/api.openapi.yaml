@@ -19,7 +19,7 @@ tags:
     description: Operations about Comparison Tool UI configuration.
   - name: Data Version
     description: Operations about the data version.
-  - name: eQTL
+  - name: Eqtl
     description: Operations about eQTLs.
 paths:
   /comparison-tools/config:

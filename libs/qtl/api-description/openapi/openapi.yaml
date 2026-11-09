@@ -19,7 +19,7 @@ tags:
     description: Operations about Comparison Tool UI configuration.
   - name: Data Version
     description: Operations about the data version.
-  - name: eQTL
+  - name: Eqtl
     description: Operations about eQTLs.
 paths:
   /comparison-tools/config:
@@ -54,7 +54,7 @@ paths:
   /comparison-tools/eqtl:
     get:
       tags:
-        - eQTL
+        - Eqtl
       summary: Get eQTL comparison data
       description: Returns a paginated list of eQTL objects for use in comparison tools.
       operationId: getEqtls

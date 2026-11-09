@@ -1,6 +1,6 @@
 get:
   tags:
-    - eQTL
+    - Eqtl
   summary: Get eQTL comparison data
   description: Returns a paginated list of eQTL objects for use in comparison tools.
   operationId: getEqtls
