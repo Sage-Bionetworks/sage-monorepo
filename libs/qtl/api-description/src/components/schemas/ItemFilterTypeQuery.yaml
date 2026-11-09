@@ -1,0 +1,8 @@
+type: string
+enum:
+  - include
+  - exclude
+description: |
+  - include: Include only the specified items.
+  - exclude: Exclude the specified items.
+default: include

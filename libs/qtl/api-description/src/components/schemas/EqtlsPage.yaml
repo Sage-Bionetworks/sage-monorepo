@@ -1,0 +1,13 @@
+type: object
+description: A paginated response containing eQTL objects and pagination metadata.
+properties:
+  eqtls:
+    type: array
+    description: The list of eQTL objects for the current page
+    items:
+      $ref: ./Eqtl.yaml
+  page:
+    $ref: ./PageMetadata.yaml
+required:
+  - eqtls
+  - page

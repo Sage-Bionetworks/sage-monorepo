@@ -1,0 +1,107 @@
+type: object
+description: eQTL search query with pagination and filtering options.
+properties:
+  pageNumber:
+    description: The page number.
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+    maximum: 100
+    example: 100
+  remainingBudget:
+    description: |
+      Maximum number of rows to return, letting a client retrieve matching rows from beyond the
+      current page in a single request. When set, pageNumber and pageSize are ignored. Only
+      applied when itemFilterType is 'exclude'.
+    type: integer
+    format: int32
+    minimum: 1
+    maximum: 50 # this CT's pin limit -- keep in sync with the frontend's MAX_PIN_LIMIT
+    nullable: true
+    example: 50
+  items:
+    description: |
+      List of composite identifiers to filter by. Each identifier uses the format
+      "variant~ensembl_gene_id~cell_type_id" where each identifier represents one complete
+      combination of variant, Ensembl gene ID, and cell type ID.
+
+      Example: "rs12655812~ENSG00000250891~astro" filters for documents matching that exact combination.
+      Multiple items can be provided to filter for multiple specific combinations.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['rs12655812~ENSG00000250891~astro', 'rs170094~ENSG00000136267~astro']
+  itemFilterType:
+    $ref: ItemFilterTypeQuery.yaml
+    nullable: true
+  search:
+    description: |
+      Search by variant, gene symbol, or Ensembl gene ID. A single term is a case-insensitive partial
+      match on any of the three; a comma separated list full-matches each term, case-insensitively,
+      against any of the three.
+      Examples: 'rs170094,DGKB' (comma-separated list) or 'dgk' (partial match). Only applied when
+      itemFilterType is 'exclude'.
+    type: string
+    nullable: true
+    example: 'rs170094,DGKB'
+  variant:
+    description: Filter by variant.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['rs12655812', 'rs170094']
+  gene:
+    description: Filter by gene symbol.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['DGKB', 'LINC02208']
+  cellClass:
+    description: Filter by cell class.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Astrocyte']
+  cellSubclass:
+    description: Filter by cell subclass.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Astrocyte', 'Layer 3-5 Intratelencephalic Excitatory Neuron 1']
+  sortFields:
+    description: |
+      List of field names to sort by (e.g., ["adj_p_val", "variant"]).
+      Each field in sortFields must have a corresponding order in sortOrders.
+    type: array
+    items:
+      type: string
+    minItems: 1
+    example: ['adj_p_val', 'variant']
+  sortOrders:
+    description: |
+      List of sort directions corresponding to sortFields.
+      Values: 1 (ascending) or -1 (descending).
+      Must have the same length as sortFields.
+    type: array
+    items:
+      type: integer
+      format: int32
+      enum: [1, -1]
+    minItems: 1
+    example: [1, 1]
+required:
+  - sortFields
+  - sortOrders
