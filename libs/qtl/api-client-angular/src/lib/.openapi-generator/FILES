@@ -4,6 +4,7 @@ api.module.ts
 api/api.ts
 api/comparison-tool-config.service.ts
 api/data-version.service.ts
+api/eqtl.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -15,6 +16,13 @@ model/comparison-tool-config.ts
 model/comparison-tool-noun.ts
 model/comparison-tool-page.ts
 model/data-version.ts
+model/effect-direction.ts
+model/eqtl-search-query.ts
+model/eqtl.ts
+model/eqtls-page.ts
+model/genomic-location.ts
+model/item-filter-type-query.ts
 model/models.ts
+model/page-metadata.ts
 param.ts
 variables.ts

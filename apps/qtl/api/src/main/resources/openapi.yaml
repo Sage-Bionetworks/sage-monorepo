@@ -19,6 +19,8 @@ tags:
     name: Comparison Tool Config
   - description: Operations about the data version.
     name: Data Version
+  - description: Operations about eQTLs.
+    name: Eqtl
 paths:
   /comparison-tools/config:
     get:
@@ -58,6 +60,41 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Comparison Tool Config
+  /comparison-tools/eqtl:
+    get:
+      description: Returns a paginated list of eQTL objects for use in comparison
+        tools.
+      operationId: getEqtls
+      parameters:
+        - description: The search query used to find and filter eQTLs.
+          explode: true
+          in: query
+          name: eqtlSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/EqtlSearchQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EqtlsPage'
+          description: A paginated response containing eQTL objects
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get eQTL comparison data
+      tags:
+        - Eqtl
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Eqtl
   /data-version:
     get:
       description: Get data version
@@ -84,6 +121,16 @@ paths:
       x-tags:
         - tag: Data Version
 components:
+  parameters:
+    eqtlSearchQuery:
+      description: The search query used to find and filter eQTLs.
+      explode: true
+      in: query
+      name: eqtlSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/EqtlSearchQuery'
+      style: deepObject
   responses:
     BadRequest:
       content:
@@ -376,6 +423,397 @@ components:
       required:
         - status
         - title
+      type: object
+    ItemFilterTypeQuery:
+      default: include
+      description: |
+        - include: Include only the specified items.
+        - exclude: Exclude the specified items.
+      enum:
+        - include
+        - exclude
+      type: string
+    EqtlSearchQuery:
+      description: eQTL search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          example: 100
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        remainingBudget:
+          description: |
+            Maximum number of rows to return, letting a client retrieve matching rows from beyond the
+            current page in a single request. When set, pageNumber and pageSize are ignored. Only
+            applied when itemFilterType is 'exclude'.
+          example: 50
+          format: int32
+          maximum: 50
+          minimum: 1
+          nullable: true
+          type: integer
+        items:
+          description: |
+            List of composite identifiers to filter by. Each identifier uses the format
+            "variant~ensembl_gene_id~cell_type_id" where each identifier represents one complete
+            combination of variant, Ensembl gene ID, and cell type ID.
+
+            Example: "rs12655812~ENSG00000250891~astro" filters for documents matching that exact combination.
+            Multiple items can be provided to filter for multiple specific combinations.
+          example:
+            - rs12655812~ENSG00000250891~astro
+            - rs170094~ENSG00000136267~astro
+          items:
+            type: string
+          nullable: true
+          type: array
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+        search:
+          description: |
+            Search by variant, gene symbol, or Ensembl gene ID. A single term is a case-insensitive partial
+            match on any of the three; a comma separated list full-matches each term, case-insensitively,
+            against any of the three.
+            Examples: 'rs170094,DGKB' (comma-separated list) or 'dgk' (partial match). Only applied when
+            itemFilterType is 'exclude'.
+          example: 'rs170094,DGKB'
+          nullable: true
+          type: string
+        variant:
+          description: Filter by variant.
+          example:
+            - rs12655812
+            - rs170094
+          items:
+            type: string
+          nullable: true
+          type: array
+        gene:
+          description: Filter by gene symbol.
+          example:
+            - DGKB
+            - LINC02208
+          items:
+            type: string
+          nullable: true
+          type: array
+        cellClass:
+          description: Filter by cell class.
+          example:
+            - Astrocyte
+          items:
+            type: string
+          nullable: true
+          type: array
+        cellSubclass:
+          description: Filter by cell subclass.
+          example:
+            - Astrocyte
+            - Layer 3-5 Intratelencephalic Excitatory Neuron 1
+          items:
+            type: string
+          nullable: true
+          type: array
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["adj_p_val", "variant"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          example:
+            - adj_p_val
+            - variant
+          items:
+            type: string
+          minItems: 1
+          type: array
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          example:
+            - 1
+            - 1
+          items:
+            enum:
+              - 1
+              - -1
+            format: int32
+            type: integer
+          minItems: 1
+          type: array
+      required:
+        - sortFields
+        - sortOrders
+      type: object
+    GenomicLocation:
+      description: A location on a chromosome
+      example:
+        start: 118488207
+        end: 118488208
+        chr: '5'
+      properties:
+        chr:
+          description: Chromosome name
+          example: '5'
+          type: string
+        start:
+          description: Start position
+          example: 118488207
+          format: int32
+          type: integer
+        end:
+          description: End position
+          example: 118488208
+          format: int32
+          type: integer
+      required:
+        - chr
+        - end
+        - start
+      type: object
+    EffectDirection:
+      description: Direction of the variant's effect on gene expression
+      enum:
+        - Up
+        - Down
+      type: string
+    Eqtl:
+      description: eQTL
+      example:
+        gene_symbol: LINC02208
+        adj_p_val_numeric: -161.583901
+        minor_allele: C
+        cell_subclass: Astrocyte
+        effect_direction: Up
+        adj_p_val: 2.61E-162
+        composite_id: rs12655812~ENSG00000250891~astro
+        maf: 0.1418
+        reference_allele: T
+        cell_class: Astrocyte
+        cell_subclass_short: Astro
+        ensembl_gene_id: ENSG00000250891
+        cell_class_short: Astro
+        variant: rs12655812
+        cell_type_id: astro
+        variant_location:
+          start: 118488207
+          end: 118488208
+          chr: '5'
+        gene_location:
+          start: 118488207
+          end: 118488208
+          chr: '5'
+        beta: 0.608491
+      properties:
+        composite_id:
+          description: Unique identifier for the eQTL object
+          example: rs12655812~ENSG00000250891~astro
+          type: string
+        variant:
+          description: Variant ID
+          example: rs12655812
+          type: string
+        variant_location:
+          $ref: '#/components/schemas/GenomicLocation'
+        effect_direction:
+          $ref: '#/components/schemas/EffectDirection'
+        gene_symbol:
+          description: Gene symbol
+          example: LINC02208
+          type: string
+        ensembl_gene_id:
+          description: Ensembl gene ID
+          example: ENSG00000250891
+          type: string
+        gene_location:
+          $ref: '#/components/schemas/GenomicLocation'
+        beta:
+          description: Effect size
+          example: 0.608491
+          type: number
+        adj_p_val:
+          description: 'Adjusted p-value, preformatted for display'
+          example: 2.61E-162
+          type: string
+        adj_p_val_numeric:
+          description: Base-10 logarithm of the adjusted p-value
+          example: -161.583901
+          type: number
+        maf:
+          description: Minor allele frequency
+          example: 0.1418
+          type: number
+        minor_allele:
+          description: Minor allele
+          example: C
+          type: string
+        reference_allele:
+          description: Reference allele
+          example: T
+          type: string
+        cell_type_id:
+          description: Cell type ID
+          example: astro
+          type: string
+        cell_class:
+          description: Cell class
+          example: Astrocyte
+          type: string
+        cell_class_short:
+          description: Abbreviated cell class
+          example: Astro
+          type: string
+        cell_subclass:
+          description: Cell subclass
+          example: Astrocyte
+          type: string
+        cell_subclass_short:
+          description: Abbreviated cell subclass
+          example: Astro
+          type: string
+      required:
+        - adj_p_val
+        - adj_p_val_numeric
+        - beta
+        - cell_class
+        - cell_class_short
+        - cell_subclass
+        - cell_subclass_short
+        - cell_type_id
+        - composite_id
+        - effect_direction
+        - ensembl_gene_id
+        - gene_location
+        - gene_symbol
+        - maf
+        - minor_allele
+        - reference_allele
+        - variant
+        - variant_location
+      type: object
+    PageMetadata:
+      description: The metadata of a page.
+      example:
+        number: 0
+        size: 100
+        totalPages: 3
+        hasPrevious: false
+        hasNext: true
+        totalElements: 250
+      properties:
+        number:
+          description: The page number.
+          example: 0
+          type: integer
+        size:
+          description: The number of items in a single page.
+          example: 100
+          type: integer
+        totalElements:
+          description: Total number of elements in the result set.
+          example: 250
+          format: int64
+          type: integer
+        totalPages:
+          description: Total number of pages in the result set.
+          example: 3
+          type: integer
+        hasNext:
+          description: Returns if there is a next page.
+          example: true
+          type: boolean
+        hasPrevious:
+          description: Returns if there is a previous page.
+          example: false
+          type: boolean
+      required:
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
+      type: object
+    EqtlsPage:
+      description: A paginated response containing eQTL objects and pagination metadata.
+      example:
+        eqtls:
+          - gene_symbol: LINC02208
+            adj_p_val_numeric: -161.583901
+            minor_allele: C
+            cell_subclass: Astrocyte
+            effect_direction: Up
+            adj_p_val: 2.61E-162
+            composite_id: rs12655812~ENSG00000250891~astro
+            maf: 0.1418
+            reference_allele: T
+            cell_class: Astrocyte
+            cell_subclass_short: Astro
+            ensembl_gene_id: ENSG00000250891
+            cell_class_short: Astro
+            variant: rs12655812
+            cell_type_id: astro
+            variant_location:
+              start: 118488207
+              end: 118488208
+              chr: '5'
+            gene_location:
+              start: 118488207
+              end: 118488208
+              chr: '5'
+            beta: 0.608491
+          - gene_symbol: LINC02208
+            adj_p_val_numeric: -161.583901
+            minor_allele: C
+            cell_subclass: Astrocyte
+            effect_direction: Up
+            adj_p_val: 2.61E-162
+            composite_id: rs12655812~ENSG00000250891~astro
+            maf: 0.1418
+            reference_allele: T
+            cell_class: Astrocyte
+            cell_subclass_short: Astro
+            ensembl_gene_id: ENSG00000250891
+            cell_class_short: Astro
+            variant: rs12655812
+            cell_type_id: astro
+            variant_location:
+              start: 118488207
+              end: 118488208
+              chr: '5'
+            gene_location:
+              start: 118488207
+              end: 118488208
+              chr: '5'
+            beta: 0.608491
+        page:
+          number: 0
+          size: 100
+          totalPages: 3
+          hasPrevious: false
+          hasNext: true
+          totalElements: 250
+      properties:
+        eqtls:
+          description: The list of eQTL objects for the current page
+          items:
+            $ref: '#/components/schemas/Eqtl'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - eqtls
+        - page
       type: object
     DataVersion:
       description: Synapse data version
