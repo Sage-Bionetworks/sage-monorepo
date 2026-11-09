@@ -36,7 +36,7 @@ class EnumConverterTest {
       )
     )
       .isInstanceOf(DataIntegrityException.class)
-      .hasMessage("Missing column type value in test record");
+      .hasMessage("Missing column type in test record");
   }
 
   @Test

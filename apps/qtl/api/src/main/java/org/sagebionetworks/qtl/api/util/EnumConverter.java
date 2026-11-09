@@ -32,7 +32,7 @@ public final class EnumConverter {
     String recordType
   ) {
     if (value == null) {
-      throw new DataIntegrityException("Missing " + fieldName + " value in " + recordType);
+      throw new DataIntegrityException("Missing " + fieldName + " in " + recordType);
     }
     try {
       return converter.apply(value);

@@ -280,7 +280,7 @@ class ComparisonToolConfigMapperTest {
     // when & then
     assertThatThrownBy(() -> mapper.toDto(document))
       .isInstanceOf(DataIntegrityException.class)
-      .hasMessage("Missing columns value in comparison tool config record");
+      .hasMessage("Missing columns in comparison tool config record");
   }
 
   @Test
@@ -296,33 +296,43 @@ class ComparisonToolConfigMapperTest {
     // when & then
     assertThatThrownBy(() -> mapper.toDto(document))
       .isInstanceOf(DataIntegrityException.class)
-      .hasMessage("Missing filters value in comparison tool config record");
+      .hasMessage("Missing filters in comparison tool config record");
   }
 
   @Test
-  @DisplayName("should throw data integrity exception for a null column or filter entry")
-  void shouldThrowDataIntegrityExceptionForANullColumnOrFilterEntry() {
-    ComparisonToolConfigDocument withNullColumn = new ComparisonToolConfigDocument();
-    withNullColumn.setPage("eQTLs");
-    withNullColumn.setDropdowns(List.of());
-    withNullColumn.setColumns(
+  @DisplayName("should throw data integrity exception for a null column entry")
+  void shouldThrowDataIntegrityExceptionForANullColumnEntry() {
+    // given
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("eQTLs");
+    document.setDropdowns(List.of());
+    document.setColumns(
       Arrays.asList((ComparisonToolConfigDocument.ComparisonToolConfigColumn) null)
     );
-    withNullColumn.setFilters(List.of());
-    assertThatThrownBy(() -> mapper.toDto(withNullColumn))
-      .isInstanceOf(DataIntegrityException.class)
-      .hasMessage("Missing column value in comparison tool config record");
+    document.setFilters(List.of());
 
-    ComparisonToolConfigDocument withNullFilter = new ComparisonToolConfigDocument();
-    withNullFilter.setPage("eQTLs");
-    withNullFilter.setDropdowns(List.of());
-    withNullFilter.setColumns(List.of());
-    withNullFilter.setFilters(
+    // when & then
+    assertThatThrownBy(() -> mapper.toDto(document))
+      .isInstanceOf(DataIntegrityException.class)
+      .hasMessage("Missing column in comparison tool config record");
+  }
+
+  @Test
+  @DisplayName("should throw data integrity exception for a null filter entry")
+  void shouldThrowDataIntegrityExceptionForANullFilterEntry() {
+    // given
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("eQTLs");
+    document.setDropdowns(List.of());
+    document.setColumns(List.of());
+    document.setFilters(
       Arrays.asList((ComparisonToolConfigDocument.ComparisonToolConfigFilter) null)
     );
-    assertThatThrownBy(() -> mapper.toDto(withNullFilter))
+
+    // when & then
+    assertThatThrownBy(() -> mapper.toDto(document))
       .isInstanceOf(DataIntegrityException.class)
-      .hasMessage("Missing filter value in comparison tool config record");
+      .hasMessage("Missing filter in comparison tool config record");
   }
 
   @Test
@@ -334,7 +344,7 @@ class ComparisonToolConfigMapperTest {
         .dataKey("variant")
         .queryParamKey("variant")
         .build(),
-      "Missing filter values value in comparison tool config record"
+      "Missing filter values in comparison tool config record"
     );
   }
 
@@ -352,7 +362,7 @@ class ComparisonToolConfigMapperTest {
 
     assertThatThrownBy(() -> mapper.toDto(document))
       .isInstanceOf(DataIntegrityException.class)
-      .hasMessage("Missing noun plural value in comparison tool config record");
+      .hasMessage("Missing noun plural in comparison tool config record");
   }
 
   @Test
@@ -486,7 +496,7 @@ class ComparisonToolConfigMapperTest {
     // when & then
     assertThatThrownBy(() -> mapper.toDto(document))
       .isInstanceOf(DataIntegrityException.class)
-      .hasMessage("Missing column type value in comparison tool config record");
+      .hasMessage("Missing column type in comparison tool config record");
   }
 
   @Test
@@ -501,7 +511,7 @@ class ComparisonToolConfigMapperTest {
     // when & then
     assertThatThrownBy(() -> mapper.toDto(document))
       .isInstanceOf(DataIntegrityException.class)
-      .hasMessage("Missing dropdowns value in comparison tool config record");
+      .hasMessage("Missing dropdowns in comparison tool config record");
   }
 
   @Test
@@ -509,7 +519,7 @@ class ComparisonToolConfigMapperTest {
   void shouldThrowDataIntegrityExceptionForMissingRequiredColumnFields() {
     assertMissingColumnField(
       column("text", null),
-      "Missing column data_key value in comparison tool config record"
+      "Missing column data_key in comparison tool config record"
     );
     assertMissingColumnField(
       ComparisonToolConfigDocument.ComparisonToolConfigColumn.builder()
@@ -517,7 +527,7 @@ class ComparisonToolConfigMapperTest {
         .dataKey("variant")
         .isHidden(false)
         .build(),
-      "Missing column is_exported value in comparison tool config record"
+      "Missing column is_exported in comparison tool config record"
     );
     assertMissingColumnField(
       ComparisonToolConfigDocument.ComparisonToolConfigColumn.builder()
@@ -525,7 +535,7 @@ class ComparisonToolConfigMapperTest {
         .dataKey("variant")
         .isExported(true)
         .build(),
-      "Missing column is_hidden value in comparison tool config record"
+      "Missing column is_hidden in comparison tool config record"
     );
   }
 
@@ -534,15 +544,15 @@ class ComparisonToolConfigMapperTest {
   void shouldThrowDataIntegrityExceptionForMissingRequiredFilterFields() {
     assertMissingFilterField(
       filter(null, "cell_class", "class"),
-      "Missing filter name value in comparison tool config record"
+      "Missing filter name in comparison tool config record"
     );
     assertMissingFilterField(
       filter("Cell Class", null, "class"),
-      "Missing filter data_key value in comparison tool config record"
+      "Missing filter data_key in comparison tool config record"
     );
     assertMissingFilterField(
       filter("Cell Class", "cell_class", null),
-      "Missing filter query_param_key value in comparison tool config record"
+      "Missing filter query_param_key in comparison tool config record"
     );
   }
 

@@ -107,7 +107,7 @@ public class ComparisonToolConfigMapper {
 
   private static <T> T requireValue(T value, String fieldName) {
     if (value == null) {
-      throw new DataIntegrityException("Missing " + fieldName + " value in " + RECORD_TYPE);
+      throw new DataIntegrityException("Missing " + fieldName + " in " + RECORD_TYPE);
     }
     return value;
   }
