@@ -24,6 +24,8 @@ $main-colors: (
   gray-300: #eaecee,
   gray-200: #f1f3f5,
   gray-100: #fbfbfc,
+
+  white: #fff,
 );
 $extra-colors: (
   heading: map.get($main-colors, 'primary'),

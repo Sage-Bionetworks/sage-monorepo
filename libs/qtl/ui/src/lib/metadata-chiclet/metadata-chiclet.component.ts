@@ -11,4 +11,5 @@ export class MetadataChicletComponent {
   backgroundColor = input.required<string>();
   label = input.required<string>();
   value = input.required<string>();
+  textColor = input<string>('var(--color-gray-900)');
 }
