@@ -32,3 +32,17 @@ export const FixedTermWidth: Story = {
     `,
   }),
 };
+
+export const LongTerms: Story = {
+  args: {
+    items: [
+      { term: 'Transcription Start Site Distance', description: '1,204 bp' },
+      { term: 'Beta', description: '.98' },
+      { term: 'Variant ID', description: 'chr11_54455252455_A_G_b38_extended_identifier' },
+    ],
+  },
+  render: (args) => ({
+    props: args,
+    template: `<explorers-description-list [items]="items" style="width: 260px" />`,
+  }),
+};

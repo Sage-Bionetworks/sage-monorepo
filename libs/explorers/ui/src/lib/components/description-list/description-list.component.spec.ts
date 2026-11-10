@@ -30,6 +30,19 @@ describe('DescriptionListComponent', () => {
     expect(pValueTerm.nextElementSibling).toHaveTextContent('1.25e-08');
   });
 
+  it('renders every item when a term repeats', async () => {
+    const repeatedTerm = 'Note';
+    const notes: DescriptionListItem[] = [
+      { term: repeatedTerm, description: 'Lead variant for this gene' },
+      { term: repeatedTerm, description: 'Replicated in a second cohort' },
+    ];
+    await setup(notes);
+    expect(screen.getAllByRole('term')).toHaveLength(notes.length);
+    expect(
+      screen.getAllByRole('definition').map((description) => description.textContent?.trim()),
+    ).toEqual(notes.map(({ description }) => description));
+  });
+
   it('renders an empty list when there are no items', async () => {
     const { container } = await setup([]);
     expect(container.querySelector('dl')).toBeEmptyDOMElement();
