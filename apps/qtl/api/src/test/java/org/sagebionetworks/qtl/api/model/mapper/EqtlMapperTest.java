@@ -29,7 +29,7 @@ class EqtlMapperTest {
     EqtlDto dto = mapper.toDto(completeDocument());
 
     // then
-    assertThat(dto.getCompositeId()).isEqualTo("rs170094~ENSG00000136267~astro");
+    assertThat(dto.getCompositeId()).isEqualTo("rs170094~ENSG00000136267~enl35it1");
     assertThat(dto.getVariant()).isEqualTo("rs170094");
     assertThat(dto.getVariantLocation()).isEqualTo(
       GenomicLocationDto.builder().chr("7").start(14889039).end(14889040).build()
@@ -46,11 +46,11 @@ class EqtlMapperTest {
     assertThat(dto.getMaf()).isEqualTo(new BigDecimal("0.21"));
     assertThat(dto.getMinorAllele()).isEqualTo("A");
     assertThat(dto.getReferenceAllele()).isEqualTo("G");
-    assertThat(dto.getCellTypeId()).isEqualTo("astro");
-    assertThat(dto.getCellClass()).isEqualTo("Astrocyte");
-    assertThat(dto.getCellClassShort()).isEqualTo("Astro");
-    assertThat(dto.getCellSubclass()).isEqualTo("Astrocyte");
-    assertThat(dto.getCellSubclassShort()).isEqualTo("Astro");
+    assertThat(dto.getCellTypeId()).isEqualTo("enl35it1");
+    assertThat(dto.getCellClass()).isEqualTo("Excitatory Neuron");
+    assertThat(dto.getCellClassShort()).isEqualTo("EN");
+    assertThat(dto.getCellSubclass()).isEqualTo("Layer 3-5 Intratelencephalic Excitatory Neuron 1");
+    assertThat(dto.getCellSubclassShort()).isEqualTo("EN_L3-5_IT_1");
   }
 
   @Test
@@ -130,11 +130,11 @@ class EqtlMapperTest {
     document.setMaf(new BigDecimal("0.21"));
     document.setMinorAllele("A");
     document.setReferenceAllele("G");
-    document.setCellTypeId("astro");
-    document.setCellClass("Astrocyte");
-    document.setCellClassShort("Astro");
-    document.setCellSubclass("Astrocyte");
-    document.setCellSubclassShort("Astro");
+    document.setCellTypeId("enl35it1");
+    document.setCellClass("Excitatory Neuron");
+    document.setCellClassShort("EN");
+    document.setCellSubclass("Layer 3-5 Intratelencephalic Excitatory Neuron 1");
+    document.setCellSubclassShort("EN_L3-5_IT_1");
     return document;
   }
 }

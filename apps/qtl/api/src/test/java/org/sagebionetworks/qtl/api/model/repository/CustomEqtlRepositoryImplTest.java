@@ -72,8 +72,8 @@ class CustomEqtlRepositoryImplTest {
     EqtlSearchQueryDto query = excludeQuery();
     query.setVariant(List.of("rs170094"));
     query.setGene(List.of("DGKB"));
-    query.setCellClass(List.of("Astrocyte"));
-    query.setCellSubclass(List.of("Astrocyte"));
+    query.setCellClass(List.of("Excitatory Neuron"));
+    query.setCellSubclass(List.of("Layer 3-5 Intratelencephalic Excitatory Neuron 1"));
 
     // when
     List<Document> pipeline = runAndCapturePipeline(FIRST_PAGE, query, List.of());
@@ -82,8 +82,8 @@ class CustomEqtlRepositoryImplTest {
     assertThat(matchConditions(pipeline)).containsExactlyInAnyOrder(
       json("{\"variant\": {\"$in\": [\"rs170094\"]}}"),
       json("{\"gene_symbol\": {\"$in\": [\"DGKB\"]}}"),
-      json("{\"cell_class\": {\"$in\": [\"Astrocyte\"]}}"),
-      json("{\"cell_subclass\": {\"$in\": [\"Astrocyte\"]}}")
+      json("{\"cell_class\": {\"$in\": [\"Excitatory Neuron\"]}}"),
+      json("{\"cell_subclass\": {\"$in\": [\"Layer 3-5 Intratelencephalic Excitatory Neuron 1\"]}}")
     );
   }
 
