@@ -1,7 +1,7 @@
 import { Component, ElementRef, signal, viewChildren } from '@angular/core';
 import { CELL_CLASSES, CELL_SUBCLASSES } from '@sagebionetworks/qtl/config';
 import { MetadataChicletComponent } from '@sagebionetworks/qtl/ui';
-import { getCellTypeMutedColor, getParentCellClassColor } from '@sagebionetworks/qtl/util';
+import { getCellTypeMutedColor } from '@sagebionetworks/qtl/util';
 
 type SidebarTab = 'impact' | 'traits' | 'resources';
 
@@ -21,7 +21,7 @@ export class SidebarComponent {
   };
 
   protected readonly cellTypeBackgroundColor = getCellTypeMutedColor(this.data.cell_type);
-  protected readonly cellSubclassBackgroundColor = getParentCellClassColor(this.data.cell_subclass);
+  protected readonly cellSubclassBackgroundColor = CELL_SUBCLASSES[this.data.cell_subclass].color;
 
   protected readonly tabs: { value: SidebarTab; label: string }[] = [
     { value: 'impact', label: 'Impact' },

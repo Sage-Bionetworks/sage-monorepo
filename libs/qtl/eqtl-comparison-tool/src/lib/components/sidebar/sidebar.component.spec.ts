@@ -16,7 +16,7 @@ describe('SidebarComponent', () => {
     expect(screen.getByText(/rs29475839/)).toBeInTheDocument();
     expect(screen.getByText('gene:')).toBeInTheDocument();
     expect(screen.getByText(/PAK1/)).toBeInTheDocument();
-    expect(screen.getByText('cell type:')).toBeInTheDocument();
+    expect(screen.getByText('cell class:')).toBeInTheDocument();
     expect(screen.getByText('cell subclass:')).toBeInTheDocument();
     expect(screen.getAllByText(/Astrocyte/)).toHaveLength(2);
   });

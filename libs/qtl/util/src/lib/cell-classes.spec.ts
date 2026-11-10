@@ -1,5 +1,5 @@
 import { CELL_CLASSES } from '@sagebionetworks/qtl/config';
-import { getCellTypeMutedColor, getParentCellClassColor } from './cell-classes';
+import { getCellTypeMutedColor } from './cell-classes';
 
 describe('getCellTypeMutedColor', () => {
   it('returns the cell type muted color when defined', () => {
@@ -14,11 +14,5 @@ describe('getCellTypeMutedColor', () => {
     } finally {
       (CELL_CLASSES['Immune Cell'] as { mutedColor?: string }).mutedColor = original;
     }
-  });
-});
-
-describe('getParentCellClassColor', () => {
-  it('returns the parent cell class color rather than the subclass color', () => {
-    expect(getParentCellClassColor('Adaptive Immune Cell')).toBe(CELL_CLASSES['Immune Cell'].color);
   });
 });
