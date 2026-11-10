@@ -1,7 +1,8 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { SidebarComponent } from './sidebar.component';
+import { IMPACT_DETAIL_FIELDS } from '../impact/details/impact-details.component';
+import { SIDEBAR_CHICLET_LIST_ARIA_LABEL, SidebarComponent } from './sidebar.component';
 
 async function setup() {
   return render(SidebarComponent, {
@@ -9,25 +10,30 @@ async function setup() {
   });
 }
 
-function getChicletText(label: string): string | undefined {
-  return screen.getByText(`${label}:`).parentElement?.textContent?.replace(/\s+/g, ' ').trim();
+function getChicletTexts(): string[] {
+  const chicletList = screen.getByRole('list', { name: SIDEBAR_CHICLET_LIST_ARIA_LABEL });
+  return within(chicletList)
+    .getAllByRole('listitem')
+    .map((chiclet) => chiclet.textContent?.replace(/\s+/g, ' ').trim() ?? '');
 }
 
 describe('SidebarComponent', () => {
-  it('renders all four chiclets with the expected label/value pairs', async () => {
+  it('lists the four chiclets with their label/value pairs, as a named list', async () => {
     await setup();
-    expect(getChicletText('variant')).toBe('variant: rs29475839');
-    expect(getChicletText('gene')).toBe('gene: PAK1');
-    expect(getChicletText('cell class')).toBe('cell class: Astrocyte');
-    expect(getChicletText('cell subclass')).toBe('cell subclass: Astrocyte');
+    expect(getChicletTexts()).toEqual([
+      'variant: rs29475839',
+      'gene: PAK1',
+      'cell class: Astrocyte',
+      'cell subclass: Astrocyte',
+    ]);
   });
 
   it('shows the impact details in the Impact tab, with the same cell class as the chiclet', async () => {
     await setup();
     const impactPanel = screen.getByRole('tabpanel');
-    const cellClassRow = within(impactPanel).getByRole('row', { name: /Cell Class/ });
-    expect(within(impactPanel).getAllByRole('row')).toHaveLength(5);
-    expect(within(cellClassRow).getByRole('cell', { name: 'Astrocyte' })).toBeInTheDocument();
+    const cellClassTerm = within(impactPanel).getByText('Cell Class');
+    expect(within(impactPanel).getAllByRole('term')).toHaveLength(IMPACT_DETAIL_FIELDS.length);
+    expect(cellClassTerm.nextElementSibling).toHaveTextContent('Astrocyte');
   });
 
   it('renders all three tab headers', async () => {

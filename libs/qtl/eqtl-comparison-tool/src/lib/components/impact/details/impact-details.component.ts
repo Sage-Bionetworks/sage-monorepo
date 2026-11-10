@@ -1,6 +1,6 @@
-import { Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { SimpleTableCell } from '@sagebionetworks/explorers/models';
-import { SimpleTableComponent } from '@sagebionetworks/explorers/ui';
+import { Component, computed, input } from '@angular/core';
+import { DescriptionListItem } from '@sagebionetworks/explorers/models';
+import { DescriptionListComponent } from '@sagebionetworks/explorers/ui';
 
 export interface ImpactDetails {
   beta: string;
@@ -10,27 +10,27 @@ export interface ImpactDetails {
   cellClass: string;
 }
 
+export const IMPACT_DETAIL_FIELDS = [
+  { key: 'beta', label: 'Beta' },
+  { key: 'pValue', label: 'P-Value' },
+  { key: 'variantLocation', label: 'Variant Loc.' },
+  { key: 'geneLocation', label: 'Gene Loc.' },
+  { key: 'cellClass', label: 'Cell Class' },
+] as const satisfies readonly { key: keyof ImpactDetails; label: string }[];
+
 @Component({
   selector: 'qtl-eqtl-comparison-tool-impact-details',
-  imports: [SimpleTableComponent],
+  imports: [DescriptionListComponent],
   templateUrl: './impact-details.component.html',
   styleUrls: ['./impact-details.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class ImpactDetailsComponent {
   details = input.required<ImpactDetails>();
 
-  protected readonly rows = computed<SimpleTableCell[][]>(() => {
-    const { beta, pValue, variantLocation, geneLocation, cellClass } = this.details();
-    return [
-      ['Beta', beta],
-      ['P-Value', pValue],
-      ['Variant Loc.', variantLocation],
-      ['Gene Loc.', geneLocation],
-      ['Cell Class', cellClass],
-    ].map(([label, value]) => [
-      { type: 'label', text: label },
-      { type: 'text', value },
-    ]);
-  });
+  protected readonly items = computed<DescriptionListItem[]>(() =>
+    IMPACT_DETAIL_FIELDS.map(({ key, label }) => ({
+      term: label,
+      description: this.details()[key],
+    })),
+  );
 }

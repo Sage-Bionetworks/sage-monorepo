@@ -1,5 +1,5 @@
-import { render, screen, within } from '@testing-library/angular';
-import { ImpactDetailsComponent } from './impact-details.component';
+import { render, screen } from '@testing-library/angular';
+import { IMPACT_DETAIL_FIELDS, ImpactDetailsComponent } from './impact-details.component';
 import { IMPACT_DETAILS_EXAMPLE } from './impact-details.constants';
 
 async function setup(details = IMPACT_DETAILS_EXAMPLE) {
@@ -7,24 +7,16 @@ async function setup(details = IMPACT_DETAILS_EXAMPLE) {
 }
 
 describe('ImpactDetailsComponent', () => {
-  it('renders each detail label next to its value, in design order', async () => {
+  it('lists each detail label as a term, followed by its value as the definition', async () => {
     await setup();
-    const rowTexts = screen.getAllByRole('row').map((row) =>
-      within(row)
-        .getAllByRole('cell')
-        .map((cell) => cell.textContent?.trim()),
-    );
-    expect(rowTexts).toEqual([
-      ['Beta', IMPACT_DETAILS_EXAMPLE.beta],
-      ['P-Value', IMPACT_DETAILS_EXAMPLE.pValue],
-      ['Variant Loc.', IMPACT_DETAILS_EXAMPLE.variantLocation],
-      ['Gene Loc.', IMPACT_DETAILS_EXAMPLE.geneLocation],
-      ['Cell Class', IMPACT_DETAILS_EXAMPLE.cellClass],
+    const terms = screen.getAllByRole('term');
+    const pairs = terms.map((term) => [
+      term.textContent?.trim(),
+      term.nextElementSibling?.textContent?.trim(),
     ]);
-  });
-
-  it('renders no header row', async () => {
-    await setup();
-    expect(screen.queryByRole('columnheader')).not.toBeInTheDocument();
+    expect(pairs).toEqual(
+      IMPACT_DETAIL_FIELDS.map(({ key, label }) => [label, IMPACT_DETAILS_EXAMPLE[key]]),
+    );
+    terms.forEach((term) => expect(term.nextElementSibling).toHaveRole('definition'));
   });
 });

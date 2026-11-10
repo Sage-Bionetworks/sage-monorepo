@@ -1,20 +1,24 @@
-<div class="sidebar-chiclets">
+<div class="sidebar-chiclets" role="list" [attr.aria-label]="chicletListAriaLabel">
   <qtl-metadata-chiclet
+    role="listitem"
     backgroundColor="var(--color-variant-muted)"
     label="variant"
     [value]="data.variant_id"
   />
   <qtl-metadata-chiclet
+    role="listitem"
     backgroundColor="var(--color-gene-muted)"
     label="gene"
     [value]="data.hgnc_symbol"
   />
   <qtl-metadata-chiclet
+    role="listitem"
     [backgroundColor]="cellTypeBackgroundColor"
     label="cell class"
     [value]="data.cell_type"
   />
   <qtl-metadata-chiclet
+    role="listitem"
     [backgroundColor]="cellSubclassBackgroundColor"
     textColor="var(--color-white)"
     label="cell subclass"

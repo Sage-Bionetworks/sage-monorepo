@@ -6,6 +6,8 @@ import { ImpactDetails, ImpactDetailsComponent } from '../impact/details/impact-
 
 type SidebarTab = 'impact' | 'traits' | 'resources';
 
+export const SIDEBAR_CHICLET_LIST_ARIA_LABEL = 'Selected eQTL';
+
 @Component({
   selector: 'qtl-eqtl-comparison-tool-sidebar',
   imports: [ImpactDetailsComponent, MetadataChicletComponent],
@@ -24,6 +26,8 @@ export class SidebarComponent {
     variant_location: 'chr:11:54455—252455',
     gene_location: 'chr:11:54455—252455',
   };
+
+  protected readonly chicletListAriaLabel = SIDEBAR_CHICLET_LIST_ARIA_LABEL;
 
   protected readonly cellTypeBackgroundColor = getCellTypeMutedColor(this.data.cell_type);
   protected readonly cellSubclassBackgroundColor = CELL_SUBCLASSES[this.data.cell_subclass].color;
