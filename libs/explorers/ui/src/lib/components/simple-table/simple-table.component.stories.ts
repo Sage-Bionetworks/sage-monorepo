@@ -129,12 +129,13 @@ export const WithoutHeader: Story = {
         { type: 'text', value: 'Microglia' },
       ],
     ],
+    ariaLabel: 'Variant details',
   },
   render: (args) => ({
     props: args,
     template: `
       <div style="--simple-table-font-size: 14px; --simple-table-line-height: 17px; --simple-table-text-color: #4A5056; --simple-table-row-padding: 12px;">
-        <explorers-simple-table [rows]="rows" />
+        <explorers-simple-table [rows]="rows" [ariaLabel]="ariaLabel" />
       </div>
     `,
   }),

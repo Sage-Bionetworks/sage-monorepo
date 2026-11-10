@@ -9,7 +9,11 @@ import { SimpleTableComponent } from './simple-table.component';
 @Component({ template: '<div>Internal Page</div>' })
 class InternalPageComponent {}
 
-async function setup(args: { columns?: SimpleTableColumn[]; rows: SimpleTableCell[][] }) {
+async function setup(args: {
+  columns?: SimpleTableColumn[];
+  rows: SimpleTableCell[][];
+  ariaLabel?: string;
+}) {
   const user = userEvent.setup();
   const component = await render(SimpleTableComponent, {
     providers: [
@@ -19,6 +23,7 @@ async function setup(args: { columns?: SimpleTableColumn[]; rows: SimpleTableCel
     componentInputs: {
       columns: args.columns,
       rows: args.rows,
+      ...(args.ariaLabel !== undefined && { ariaLabel: args.ariaLabel }),
     },
   });
   return { user, component };
@@ -187,6 +192,22 @@ describe('SimpleTableComponent', () => {
       expect(screen.getByRole('link', { name: 'View' })).toBeInTheDocument();
       expect(screen.getByText('Manual')).toHaveClass('cell-label');
       expect(screen.getByText('0.98')).toBeInTheDocument();
+    });
+  });
+
+  describe('accessibility', () => {
+    it('names the table with ariaLabel', async () => {
+      const tableLabel = 'Variant details';
+      await setup({
+        rows: [
+          [
+            { type: 'label', text: 'P-Value' },
+            { type: 'text', value: '1.25e-08' },
+          ],
+        ],
+        ariaLabel: tableLabel,
+      });
+      expect(screen.getByRole('table', { name: tableLabel })).toBeInTheDocument();
     });
   });
 });

@@ -15,6 +15,7 @@ export class SimpleTableComponent {
   columns = input<SimpleTableColumn[]>();
   rows = input.required<SimpleTableCell[][]>();
   columnGap = input<string>();
+  ariaLabel = input<string>();
 
   protected readonly isExternalLink = isExternalLink;
 }
