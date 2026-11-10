@@ -1,5 +1,5 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { render, screen } from '@testing-library/angular';
+import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { SidebarComponent } from './sidebar.component';
 
@@ -9,16 +9,25 @@ async function setup() {
   });
 }
 
+function getChicletText(label: string): string | undefined {
+  return screen.getByText(`${label}:`).parentElement?.textContent?.replace(/\s+/g, ' ').trim();
+}
+
 describe('SidebarComponent', () => {
   it('renders all four chiclets with the expected label/value pairs', async () => {
     await setup();
-    expect(screen.getByText('variant:')).toBeInTheDocument();
-    expect(screen.getByText(/rs29475839/)).toBeInTheDocument();
-    expect(screen.getByText('gene:')).toBeInTheDocument();
-    expect(screen.getByText(/PAK1/)).toBeInTheDocument();
-    expect(screen.getByText('cell class:')).toBeInTheDocument();
-    expect(screen.getByText('cell subclass:')).toBeInTheDocument();
-    expect(screen.getAllByText(/Astrocyte/)).toHaveLength(2);
+    expect(getChicletText('variant')).toBe('variant: rs29475839');
+    expect(getChicletText('gene')).toBe('gene: PAK1');
+    expect(getChicletText('cell class')).toBe('cell class: Astrocyte');
+    expect(getChicletText('cell subclass')).toBe('cell subclass: Astrocyte');
+  });
+
+  it('shows the impact details in the Impact tab, with the same cell class as the chiclet', async () => {
+    await setup();
+    const impactPanel = screen.getByRole('tabpanel');
+    const cellClassRow = within(impactPanel).getByRole('row', { name: /Cell Class/ });
+    expect(within(impactPanel).getAllByRole('row')).toHaveLength(5);
+    expect(within(cellClassRow).getByRole('cell', { name: 'Astrocyte' })).toBeInTheDocument();
   });
 
   it('renders all three tab headers', async () => {

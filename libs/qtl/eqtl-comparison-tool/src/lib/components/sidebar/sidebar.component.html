@@ -49,7 +49,8 @@
 >
   @switch (activeTab()) {
     @case ('impact') {
-      <p>Impact panel content -- see QTL-37.</p>
+      <qtl-eqtl-comparison-tool-impact-details [details]="impactDetails" />
+      <!-- TODO: add the remaining impact tab content (EX-73) -->
     }
     @case ('traits') {
       <p>Traits panel content -- see QTL-43.</p>
