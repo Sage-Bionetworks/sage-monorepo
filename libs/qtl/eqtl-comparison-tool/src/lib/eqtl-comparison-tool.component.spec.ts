@@ -30,7 +30,7 @@ describe('EqtlComparisonToolComponent', () => {
     await setup();
     expect(screen.getByText('variant:')).toBeInTheDocument();
     expect(screen.getByText('gene:')).toBeInTheDocument();
-    expect(screen.getByText('cell type:')).toBeInTheDocument();
+    expect(screen.getByText('cell class:')).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: 'Impact' })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: 'Traits' })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: 'Resources' })).toBeInTheDocument();

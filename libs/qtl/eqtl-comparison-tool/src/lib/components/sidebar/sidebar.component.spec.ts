@@ -10,14 +10,15 @@ async function setup() {
 }
 
 describe('SidebarComponent', () => {
-  it('renders all three chiclets with the expected label/value pairs', async () => {
+  it('renders all four chiclets with the expected label/value pairs', async () => {
     await setup();
     expect(screen.getByText('variant:')).toBeInTheDocument();
     expect(screen.getByText(/rs29475839/)).toBeInTheDocument();
     expect(screen.getByText('gene:')).toBeInTheDocument();
     expect(screen.getByText(/PAK1/)).toBeInTheDocument();
-    expect(screen.getByText('cell type:')).toBeInTheDocument();
-    expect(screen.getByText(/Astrocyte/)).toBeInTheDocument();
+    expect(screen.getByText('cell class:')).toBeInTheDocument();
+    expect(screen.getByText('cell subclass:')).toBeInTheDocument();
+    expect(screen.getAllByText(/Astrocyte/)).toHaveLength(2);
   });
 
   it('renders all three tab headers', async () => {
