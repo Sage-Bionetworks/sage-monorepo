@@ -125,6 +125,23 @@ class EqtlServiceTest {
     );
   }
 
+  @Test
+  @DisplayName("should pass on whether the selected row is in the results")
+  void shouldPassOnWhetherTheSelectedRowIsInTheResults() {
+    // given
+    EqtlSearchQueryDto query = sortedQuery();
+    query.setSelectedRowId("rs1~ENSG1~astro");
+    when(repository.findAll(any(), eq(query), eq(List.of()))).thenReturn(
+      new CtPage<>(List.of(), Pageable.unpaged(), 0, null, false)
+    );
+
+    // when
+    EqtlsPageDto page = service.loadEqtls(query);
+
+    // then
+    assertThat(page.getSelectedRowInResults()).isFalse();
+  }
+
   private static EqtlSearchQueryDto sortedQuery() {
     EqtlSearchQueryDto query = new EqtlSearchQueryDto();
     query.setSortFields(List.of("adj_p_val", "variant"));

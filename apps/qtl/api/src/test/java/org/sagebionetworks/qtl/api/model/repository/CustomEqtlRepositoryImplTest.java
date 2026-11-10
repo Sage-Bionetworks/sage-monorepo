@@ -3,6 +3,7 @@ package org.sagebionetworks.qtl.api.model.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,6 +17,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.explorers.ApiHelper;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.qtl.api.model.document.EqtlDocument;
 import org.sagebionetworks.qtl.api.model.dto.EqtlSearchQueryDto;
 import org.sagebionetworks.qtl.api.model.dto.ItemFilterTypeQueryDto;
@@ -257,6 +259,39 @@ class CustomEqtlRepositoryImplTest {
     assertThat(countCaptor.getValue().getQueryObject().toJson()).isEqualTo(
       ((Document) stageValue(pipeline, "$match")).toJson()
     );
+  }
+
+  @Test
+  @DisplayName("should ask whether the selected row is in the filtered results")
+  void shouldAskWhetherTheSelectedRowIsInTheFilteredResults() {
+    // given
+    EqtlSearchQueryDto query = excludeQuery();
+    query.setCellClass(List.of("Excitatory Neuron"));
+    query.setSelectedRowId(PIN);
+    when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(true);
+
+    // when
+    CtPage<EqtlDocument> page = repository.findAll(FIRST_PAGE, query, List.of());
+
+    // then
+    assertThat(page.getSelectedRowInResults()).isTrue();
+    ArgumentCaptor<Query> probeCaptor = ArgumentCaptor.forClass(Query.class);
+    verify(mongoTemplate).exists(probeCaptor.capture(), eq(COLLECTION));
+    String probe = probeCaptor.getValue().getQueryObject().toJson();
+    assertThat(probe)
+      .contains(json("{\"cell_class\": {\"$in\": [\"Excitatory Neuron\"]}}"))
+      .contains(json("{\"$or\": [" + PIN_CRITERIA + "]}"));
+  }
+
+  @Test
+  @DisplayName("should not ask about a selected row when none is sent")
+  void shouldNotAskAboutASelectedRowWhenNoneIsSent() {
+    // when
+    CtPage<EqtlDocument> page = repository.findAll(FIRST_PAGE, excludeQuery(), List.of());
+
+    // then
+    assertThat(page.getSelectedRowInResults()).isNull();
+    verify(mongoTemplate, never()).exists(any(Query.class), any(String.class));
   }
 
   private static EqtlSearchQueryDto excludeQuery() {
