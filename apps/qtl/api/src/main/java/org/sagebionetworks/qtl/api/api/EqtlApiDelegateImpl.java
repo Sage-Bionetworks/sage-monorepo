@@ -22,6 +22,7 @@ public class EqtlApiDelegateImpl implements EqtlApiDelegate {
     "remainingBudget",
     "items",
     "itemFilterType",
+    "selectedRowId",
     "search",
     "variant",
     "gene",
