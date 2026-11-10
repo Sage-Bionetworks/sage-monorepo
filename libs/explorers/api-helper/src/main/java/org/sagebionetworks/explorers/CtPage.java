@@ -22,14 +22,28 @@ public final class CtPage<T> extends PageImpl<T> {
   @Nullable
   private final Boolean hasRowsForPrebudgetedParents;
 
+  @Nullable
+  private final Boolean selectedRowInResults;
+
   public CtPage(
     List<T> content,
     Pageable pageable,
     long total,
     @Nullable Boolean hasRowsForPrebudgetedParents
   ) {
+    this(content, pageable, total, hasRowsForPrebudgetedParents, null);
+  }
+
+  public CtPage(
+    List<T> content,
+    Pageable pageable,
+    long total,
+    @Nullable Boolean hasRowsForPrebudgetedParents,
+    @Nullable Boolean selectedRowInResults
+  ) {
     super(content, pageable, total);
     this.hasRowsForPrebudgetedParents = hasRowsForPrebudgetedParents;
+    this.selectedRowInResults = selectedRowInResults;
   }
 
   /**
@@ -43,5 +57,18 @@ public final class CtPage<T> extends PageImpl<T> {
   @Nullable
   public Boolean getHasRowsForPrebudgetedParents() {
     return hasRowsForPrebudgetedParents;
+  }
+
+  /**
+   * Whether the row the caller has selected is anywhere in this request's whole match set, not
+   * just the returned page.
+   *
+   * <p>{@code null} when the question was not asked: see
+   * {@link ComparisonToolRepositorySupport#executePagedAggregation(
+   * org.springframework.data.mongodb.core.query.Criteria, Pageable, CtQueryOptions)}.
+   */
+  @Nullable
+  public Boolean getSelectedRowInResults() {
+    return selectedRowInResults;
   }
 }
