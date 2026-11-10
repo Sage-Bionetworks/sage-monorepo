@@ -9,7 +9,9 @@
   },
   {
     "name": "eqtl_results",
-    "file": "eqtl_results.json"
+    "file": "eqtl_results.json",
+    "indexes": [{ "variant": 1 }],
+    "collatedIndexes": [{ "variant": 1, "ensembl_gene_id": 1, "cell_type_id": 1 }]
   },
   {
     "name": "gene_structure",
