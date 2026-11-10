@@ -110,6 +110,25 @@ def test_read_collection_configs_reports_every_problem_at_once(tmp_path):
     assert "'ui_config' is listed more than once" in problems
 
 
+def test_read_collection_configs_rejects_an_index_declared_in_both_lists(tmp_path):
+    problems = read_problems(
+        tmp_path,
+        [
+            {
+                "name": "eqtl_results",
+                "file": "eqtl_results.json",
+                "indexes": [{"variant": 1, "cell_type_id": 1}],
+                "collatedIndexes": [{"variant": 1, "cell_type_id": 1}],
+            }
+        ],
+    )
+
+    assert (
+        "entry 1 (eqtl_results): 'indexes' and 'collatedIndexes' both declare "
+        '{"variant": 1, "cell_type_id": 1}'
+    ) in problems
+
+
 def test_read_collection_configs_requires_an_array(tmp_path):
     with pytest.raises(CollectionConfigError, match="must hold a JSON array"):
         read_collection_configs(write_collections(tmp_path, MODEL_AD_UI_CONFIG))
