@@ -1,0 +1,19 @@
+.impact-details-table {
+  --simple-table-font-size: 14px;
+  --simple-table-line-height: 18px;
+  --simple-table-row-padding: 12px;
+  --simple-table-label-color: var(--color-text);
+  --simple-table-text-color-secondary: var(--color-text-secondary);
+  --impact-details-label-width: 105px;
+  --impact-details-column-gap: 10px;
+
+  td {
+    vertical-align: top;
+  }
+
+  td:first-child {
+    box-sizing: border-box;
+    width: calc(var(--impact-details-label-width) + var(--impact-details-column-gap));
+    padding-right: var(--impact-details-column-gap);
+  }
+}
