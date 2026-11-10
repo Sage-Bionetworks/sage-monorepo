@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "name": "chromosome_features",
+    "file": "chromosome_features.json"
+  },
+  {
+    "name": "eqtl_phenotype",
+    "file": "eqtl_phenotype.json"
+  },
+  {
+    "name": "eqtl_results",
+    "file": "eqtl_results.json"
+  },
+  {
+    "name": "gene_structure",
+    "file": "gene_structure.json"
+  },
+  {
+    "name": "ui_config",
+    "file": "ui_config.json",
+    "indexes": [{ "page": 1 }],
+    "maintainInsertionOrder": true
+  }
+]
