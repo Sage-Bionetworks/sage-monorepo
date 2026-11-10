@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/angular';
-import { MetadataChicletComponent } from './metadata-chiclet.component';
+import { DEFAULT_CHICLET_TEXT_COLOR, MetadataChicletComponent } from './metadata-chiclet.component';
 
 async function setup({
   backgroundColor = 'var(--color-gray-300)',
@@ -8,7 +8,12 @@ async function setup({
   textColor,
 }: { backgroundColor?: string; label?: string; value?: string; textColor?: string } = {}) {
   return render(MetadataChicletComponent, {
-    componentInputs: { backgroundColor, label, value, ...(textColor && { textColor }) },
+    componentInputs: {
+      backgroundColor,
+      label,
+      value,
+      ...(textColor !== undefined && { textColor }),
+    },
   });
 }
 
@@ -26,7 +31,7 @@ describe('MetadataChicletComponent', () => {
   it('defaults the text color to dark gray', async () => {
     const { container } = await setup();
     expect(container.querySelector('.explorers-chiclet')).toHaveStyle({
-      color: 'var(--color-gray-900)',
+      color: DEFAULT_CHICLET_TEXT_COLOR,
     });
   });
 
