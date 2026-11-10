@@ -489,6 +489,15 @@ components:
           type: array
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
+        selectedRowId:
+          description: |
+            The composite identifier of the selected row, if any. The response's selectedRowInResults then
+            tells whether that row is anywhere in the filtered results, not just the current page. A row
+            listed in items is left out of those results, so it answers false. Only applied when
+            itemFilterType is 'exclude'.
+          example: rs170094~ENSG00000136267~astro
+          nullable: true
+          type: string
         search:
           description: |
             Search by variant, gene symbol, or Ensembl gene ID. A single term is a case-insensitive partial
@@ -813,6 +822,7 @@ components:
           hasPrevious: false
           hasNext: true
           totalElements: 250
+        selectedRowInResults: true
       properties:
         eqtls:
           description: The list of eQTL objects for the current page
@@ -821,6 +831,14 @@ components:
           type: array
         page:
           $ref: '#/components/schemas/PageMetadata'
+        selectedRowInResults:
+          description: |
+            Over the full filtered results, whether they contain the row named by the request's
+            selectedRowId, regardless of the current page. A row listed in the request's items is not in
+            them, so it answers false. Null when the request carries no selectedRowId or itemFilterType is
+            'include'.
+          nullable: true
+          type: boolean
       required:
         - eqtls
         - page

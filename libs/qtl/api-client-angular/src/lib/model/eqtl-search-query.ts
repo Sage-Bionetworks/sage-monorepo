@@ -31,6 +31,10 @@ export interface EqtlSearchQuery {
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
   /**
+   * The composite identifier of the selected row, if any. The response\'s selectedRowInResults then tells whether that row is anywhere in the filtered results, not just the current page. A row listed in items is left out of those results, so it answers false. Only applied when itemFilterType is \'exclude\'.
+   */
+  selectedRowId?: string | null;
+  /**
    * Search by variant, gene symbol, or Ensembl gene ID. A single term is a case-insensitive partial match on any of the three; a comma separated list full-matches each term, case-insensitively, against any of the three. Examples: \'rs170094,DGKB\' (comma-separated list) or \'dgk\' (partial match). Only applied when itemFilterType is \'exclude\'.
    */
   search?: string | null;
