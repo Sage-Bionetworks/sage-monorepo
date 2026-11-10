@@ -15,4 +15,10 @@ public final class CacheNames {
    * Key format: Static key "comparisonToolConfig"
    */
   public static final String COMPARISON_TOOL_CONFIG = "comparisonToolConfig";
+
+  /**
+   * Cache for eQTL comparison tool queries.
+   * Key format: "eqtl-{filterType}-{items}-{search}-{filters}-{page}-{size}-{budget}-{sort}"
+   */
+  public static final String EQTL = "eqtl";
 }
