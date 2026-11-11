@@ -32,6 +32,7 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     filterResultsButtonTooltip: 'Filter results by variant, gene, cell type and more',
     showSignificanceControls: false,
     showTableSearch: false,
+    legendEnabled: false,
     // TODO(EX-251): set the row id, default sort and pinned download
     // TODO(EX-252): turn on row selection and hover
   };
