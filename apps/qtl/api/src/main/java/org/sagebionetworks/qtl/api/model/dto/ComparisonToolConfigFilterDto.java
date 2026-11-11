@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +36,43 @@ public class ComparisonToolConfigFilterDto {
 
   private String queryParamKey;
 
+  /**
+   * The type of the filter. Must be 'list' or 'search'.
+   */
+  public enum TypeEnum {
+    LIST("list"),
+    
+    SEARCH("search");
+
+    private final String value;
+
+    TypeEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static TypeEnum fromValue(String value) {
+      for (TypeEnum b : TypeEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  private TypeEnum type;
+
   @Valid
   private List<String> values = new ArrayList<>();
 
@@ -45,10 +83,11 @@ public class ComparisonToolConfigFilterDto {
   /**
    * Constructor with only required parameters
    */
-  public ComparisonToolConfigFilterDto(String name, String dataKey, String queryParamKey, List<String> values) {
+  public ComparisonToolConfigFilterDto(String name, String dataKey, String queryParamKey, TypeEnum type, List<String> values) {
     this.name = name;
     this.dataKey = dataKey;
     this.queryParamKey = queryParamKey;
+    this.type = type;
     this.values = values;
   }
 
@@ -122,7 +161,7 @@ public class ComparisonToolConfigFilterDto {
    * @return queryParamKey
    */
   @NotNull 
-  @Schema(name = "query_param_key", example = "class", description = "Query parameter key for the filter", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "query_param_key", example = "cellClass", description = "Query parameter key for the filter", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("query_param_key")
   public String getQueryParamKey() {
     return queryParamKey;
@@ -130,6 +169,26 @@ public class ComparisonToolConfigFilterDto {
 
   public void setQueryParamKey(String queryParamKey) {
     this.queryParamKey = queryParamKey;
+  }
+
+  public ComparisonToolConfigFilterDto type(TypeEnum type) {
+    this.type = type;
+    return this;
+  }
+
+  /**
+   * The type of the filter. Must be 'list' or 'search'.
+   * @return type
+   */
+  @NotNull 
+  @Schema(name = "type", description = "The type of the filter. Must be 'list' or 'search'.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("type")
+  public TypeEnum getType() {
+    return type;
+  }
+
+  public void setType(TypeEnum type) {
+    this.type = type;
   }
 
   public ComparisonToolConfigFilterDto values(List<String> values) {
@@ -173,12 +232,13 @@ public class ComparisonToolConfigFilterDto {
         Objects.equals(this.dataKey, comparisonToolConfigFilter.dataKey) &&
         Objects.equals(this.shortName, comparisonToolConfigFilter.shortName) &&
         Objects.equals(this.queryParamKey, comparisonToolConfigFilter.queryParamKey) &&
+        Objects.equals(this.type, comparisonToolConfigFilter.type) &&
         Objects.equals(this.values, comparisonToolConfigFilter.values);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, dataKey, shortName, queryParamKey, values);
+    return Objects.hash(name, dataKey, shortName, queryParamKey, type, values);
   }
 
   @Override
@@ -189,6 +249,7 @@ public class ComparisonToolConfigFilterDto {
     sb.append("    dataKey: ").append(toIndentedString(dataKey)).append("\n");
     sb.append("    shortName: ").append(toIndentedString(shortName)).append("\n");
     sb.append("    queryParamKey: ").append(toIndentedString(queryParamKey)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    values: ").append(toIndentedString(values)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -222,6 +283,7 @@ public class ComparisonToolConfigFilterDto {
       this.instance.setDataKey(value.dataKey);
       this.instance.setShortName(value.shortName);
       this.instance.setQueryParamKey(value.queryParamKey);
+      this.instance.setType(value.type);
       this.instance.setValues(value.values);
       return this;
     }
@@ -243,6 +305,11 @@ public class ComparisonToolConfigFilterDto {
     
     public ComparisonToolConfigFilterDto.Builder queryParamKey(String queryParamKey) {
       this.instance.queryParamKey(queryParamKey);
+      return this;
+    }
+    
+    public ComparisonToolConfigFilterDto.Builder type(TypeEnum type) {
+      this.instance.type(type);
       return this;
     }
     

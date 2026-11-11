@@ -29,7 +29,18 @@ export interface ComparisonToolConfigFilter {
    */
   query_param_key: string;
   /**
+   * The type of the filter. Must be \'list\' or \'search\'.
+   */
+  type: ComparisonToolConfigFilter.TypeEnum;
+  /**
    * List of filter values
    */
   values: Array<string>;
+}
+export namespace ComparisonToolConfigFilter {
+  export type TypeEnum = 'list' | 'search';
+  export const TypeEnum = {
+    List: 'list' as TypeEnum,
+    Search: 'search' as TypeEnum,
+  };
 }

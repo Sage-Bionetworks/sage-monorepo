@@ -182,8 +182,9 @@ components:
           - Astrocyte
         name: Cell Class
         short_name: Class
+        type: list
         data_key: cell_class
-        query_param_key: class
+        query_param_key: cellClass
       properties:
         name:
           description: Name of the filter group
@@ -199,7 +200,13 @@ components:
           type: string
         query_param_key:
           description: Query parameter key for the filter
-          example: class
+          example: cellClass
+          type: string
+        type:
+          description: The type of the filter. Must be 'list' or 'search'.
+          enum:
+            - list
+            - search
           type: string
         values:
           description: List of filter values
@@ -211,6 +218,7 @@ components:
         - data_key
         - name
         - query_param_key
+        - type
         - values
       type: object
     ComparisonToolNoun:
@@ -268,15 +276,17 @@ components:
               - Astrocyte
             name: Cell Class
             short_name: Class
+            type: list
             data_key: cell_class
-            query_param_key: class
+            query_param_key: cellClass
           - values:
               - Astrocyte
               - Astrocyte
             name: Cell Class
             short_name: Class
+            type: list
             data_key: cell_class
-            query_param_key: class
+            query_param_key: cellClass
         row_count: row_count
         parent_noun:
           singular: gene
