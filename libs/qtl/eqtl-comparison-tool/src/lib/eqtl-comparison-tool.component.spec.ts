@@ -1,9 +1,16 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { provideExplorersConfig, SvgIconService } from '@sagebionetworks/explorers/services';
+import {
+  provideComparisonToolFilterService,
+  provideComparisonToolService,
+  provideExplorersConfig,
+  SvgIconService,
+} from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
+import { MessageService } from 'primeng/api';
 import { EqtlComparisonToolComponent } from './eqtl-comparison-tool.component';
+import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
 
 async function setup() {
   const { fixture } = await render(EqtlComparisonToolComponent, {
@@ -13,6 +20,10 @@ async function setup() {
       provideLoadingIconColors(),
       provideExplorersConfig({ tutorialPanes: [] }),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
+      MessageService,
+      ...provideComparisonToolService(),
+      ...provideComparisonToolFilterService(),
+      EqtlComparisonToolService,
     ],
   });
 
