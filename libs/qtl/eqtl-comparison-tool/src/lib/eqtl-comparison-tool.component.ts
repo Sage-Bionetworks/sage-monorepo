@@ -30,6 +30,8 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     headerTitle: ComparisonToolPage.EQtls,
     headerTitleWikiParams: { ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID, wikiId: '641079' },
     filterResultsButtonTooltip: 'Filter results by variant, gene, cell type and more',
+    showSignificanceControls: false,
+    showTableSearch: false,
     // TODO(EX-251): set the row id, default sort and pinned download
     // TODO(EX-252): turn on row selection and hover
   };
