@@ -37,7 +37,7 @@ public record CtQueryOptions(
     selectedRowId = selectedRowId == null || selectedRowId.isBlank() ? null : selectedRowId;
   }
 
-  /** Options that don't ask about a selected row, as built before selected-row lookup existed. */
+  /** Options that don't ask about a selected row. */
   public CtQueryOptions(
     boolean isInclude,
     @Nullable Integer remainingBudget,
