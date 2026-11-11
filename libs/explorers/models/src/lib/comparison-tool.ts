@@ -101,7 +101,7 @@ export interface ComparisonToolFilter {
 }
 
 export interface ComparisonToolConfigFilter {
-  // TODO(EX-96): add the filter type ('list' | 'search') that the QTL config route serves
+  // TODO(EX-96): add an optional filter type ('list' | 'search') and treat a missing one as 'list' until Agora and Model AD serve it (EX-249)
   name: string;
   data_key: string;
   short_name?: string;
