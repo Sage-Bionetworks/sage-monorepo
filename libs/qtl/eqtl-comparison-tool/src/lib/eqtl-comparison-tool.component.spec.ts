@@ -46,7 +46,8 @@ async function setup() {
   const comparisonToolConfigService = fixture.debugElement.injector.get(
     ComparisonToolConfigService,
   );
-  return { component, fixture, comparisonToolConfigService };
+  const comparisonToolService = fixture.debugElement.injector.get(EqtlComparisonToolService);
+  return { component, fixture, comparisonToolConfigService, comparisonToolService };
 }
 
 describe('EqtlComparisonToolComponent', () => {
@@ -59,6 +60,13 @@ describe('EqtlComparisonToolComponent', () => {
     const { comparisonToolConfigService } = await setup();
     expect(comparisonToolConfigService.getComparisonToolConfig).toHaveBeenCalledWith(
       ComparisonToolPage.EQtls,
+    );
+  });
+
+  it('should hand its view config to the comparison tool service', async () => {
+    const { component, comparisonToolService } = await setup();
+    expect(comparisonToolService.viewConfig()).toEqual(
+      expect.objectContaining(component.viewConfig),
     );
   });
 

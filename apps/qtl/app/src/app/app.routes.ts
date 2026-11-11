@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import {
   DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+  DEFAULT_SYNAPSE_WIKI_OWNER_ID,
   ROUTE_PATHS,
   SUPPORT_EMAIL,
 } from '@sagebionetworks/qtl/config';
@@ -27,7 +28,7 @@ export const routes: Route[] = [
       heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
       wikiParams: {
         wikiId: '640479',
-        ownerId: 'syn74592415',
+        ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
       } as SynapseWikiParams,
     },
   },
@@ -43,7 +44,7 @@ export const routes: Route[] = [
       heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
       wikiParams: {
         wikiId: '640478',
-        ownerId: 'syn74592415',
+        ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
       } as SynapseWikiParams,
     },
   },

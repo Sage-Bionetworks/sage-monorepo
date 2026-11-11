@@ -1,7 +1,9 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
+import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import { ComparisonToolUrlService, PlatformService } from '@sagebionetworks/explorers/services';
 import { ComparisonToolConfigService, ComparisonToolPage } from '@sagebionetworks/qtl/api-client';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/qtl/config';
 import { of, shareReplay } from 'rxjs';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
@@ -24,13 +26,17 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     .getComparisonToolConfig(ComparisonToolPage.EQtls)
     .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
-  // TODO(QTL-113): uncomment and populate when CT data fetching is implemented
-  // viewConfig: Partial<ComparisonToolViewConfig> = {
-  //   rowSelectionEnabled: true,
-  //   rowHoverEnabled: true,
-  //   rowIdDataKey: 'some_id_field',
-  //   // ... other config
-  // };
+  viewConfig: Partial<ComparisonToolViewConfig> = {
+    headerTitle: ComparisonToolPage.EQtls,
+    headerTitleWikiParams: { ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID, wikiId: '641079' },
+    filterResultsButtonTooltip: 'Filter results by variant, gene, cell type and more',
+    // TODO(EX-251): set the row id, default sort and pinned download
+    // TODO(EX-252): turn on row selection and hover
+  };
+
+  constructor() {
+    this.comparisonToolService.setViewConfig(this.viewConfig);
+  }
 
   ngOnInit() {
     if (this.platformService.isServer) {
