@@ -1,14 +1,18 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 import {
+  PlatformService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
   provideExplorersConfig,
   SvgIconService,
 } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
+import { ComparisonToolConfigService, ComparisonToolPage } from '@sagebionetworks/qtl/api-client';
 import { render, screen } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
+import { of } from 'rxjs';
 import { EqtlComparisonToolComponent } from './eqtl-comparison-tool.component';
 import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
 
@@ -20,6 +24,17 @@ async function setup() {
       provideLoadingIconColors(),
       provideExplorersConfig({ tutorialPanes: [] }),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
+      provideRouter([]),
+      {
+        provide: PlatformService,
+        useValue: { isBrowser: true },
+      },
+      {
+        provide: ComparisonToolConfigService,
+        useValue: {
+          getComparisonToolConfig: jest.fn().mockReturnValue(of([])),
+        },
+      },
       MessageService,
       ...provideComparisonToolService(),
       ...provideComparisonToolFilterService(),
@@ -28,13 +43,23 @@ async function setup() {
   });
 
   const component = fixture.componentInstance;
-  return { component, fixture };
+  const comparisonToolConfigService = fixture.debugElement.injector.get(
+    ComparisonToolConfigService,
+  );
+  return { component, fixture, comparisonToolConfigService };
 }
 
 describe('EqtlComparisonToolComponent', () => {
   it('should create', async () => {
     const { component } = await setup();
     expect(component).toBeTruthy();
+  });
+
+  it('should request the eQTLs comparison tool config', async () => {
+    const { comparisonToolConfigService } = await setup();
+    expect(comparisonToolConfigService.getComparisonToolConfig).toHaveBeenCalledWith(
+      ComparisonToolPage.EQtls,
+    );
   });
 
   it('renders the sidebar chiclets and tabs', async () => {

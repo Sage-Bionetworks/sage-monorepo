@@ -1,6 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import { of } from 'rxjs';
+import { ComparisonToolUrlService, PlatformService } from '@sagebionetworks/explorers/services';
+import { ComparisonToolConfigService, ComparisonToolPage } from '@sagebionetworks/qtl/api-client';
+import { of, shareReplay } from 'rxjs';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
 
@@ -10,8 +12,17 @@ import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.servi
   templateUrl: './eqtl-comparison-tool.component.html',
   styleUrls: ['./eqtl-comparison-tool.component.scss'],
 })
-export class EqtlComparisonToolComponent {
+export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
+  private readonly platformService = inject(PlatformService);
+  private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly comparisonToolService = inject(EqtlComparisonToolService);
+  private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+
+  isInitialized = this.comparisonToolService.isInitialized;
+
+  readonly config$ = this.comparisonToolConfigService
+    .getComparisonToolConfig(ComparisonToolPage.EQtls)
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   // TODO(QTL-113): uncomment and populate when CT data fetching is implemented
   // viewConfig: Partial<ComparisonToolViewConfig> = {
@@ -21,17 +32,22 @@ export class EqtlComparisonToolComponent {
   //   // ... other config
   // };
 
-  constructor() {
-    // TODO(QTL-113): uncomment when CT data fetching is implemented
-    // this.comparisonToolService.setViewConfig(this.viewConfig);
+  ngOnInit() {
+    if (this.platformService.isServer) {
+      return;
+    }
+
     this.comparisonToolService.connect({
-      // TODO(QTL-113): pass the eQTL page once it is a comparison tool page
-      page: undefined,
-      config$: of([]),
-      queryParams$: of({}),
-      // TODO(QTL-113): fetch the matching rows once CT data fetching is implemented
+      page: ComparisonToolPage.EQtls,
+      config$: this.config$,
+      queryParams$: this.comparisonToolUrlService.params$,
+      // TODO(EX-251): fetch the matching rows for Pin All
       pinAllFetch: () => of({ rows: [], totalElements: 0 }),
     });
+  }
+
+  ngOnDestroy() {
+    this.comparisonToolService.disconnect();
   }
 
   // TODO(QTL-113): add effects and fetch methods when CT data fetching is implemented.
