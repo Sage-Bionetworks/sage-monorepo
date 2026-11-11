@@ -218,7 +218,7 @@ class ComparisonToolConfigMapperTest {
       ComparisonToolConfigDocument.ComparisonToolConfigFilter.builder()
         .name("Cell Class")
         .dataKey("cell_class")
-        .queryParamKey("class")
+        .queryParamKey("cellClass")
         .type("list")
         .values(List.of("Astrocyte", "Excitatory Neuron"))
         .build();
@@ -237,7 +237,7 @@ class ComparisonToolConfigMapperTest {
     ComparisonToolConfigFilterDto filterDto = result.getFilters().get(0);
     assertThat(filterDto.getName()).isEqualTo("Cell Class");
     assertThat(filterDto.getDataKey()).isEqualTo("cell_class");
-    assertThat(filterDto.getQueryParamKey()).isEqualTo("class");
+    assertThat(filterDto.getQueryParamKey()).isEqualTo("cellClass");
     assertThat(filterDto.getValues()).containsExactly("Astrocyte", "Excitatory Neuron");
   }
 
@@ -250,7 +250,7 @@ class ComparisonToolConfigMapperTest {
         .name("Cell Class")
         .dataKey("cell_class")
         .shortName("Class")
-        .queryParamKey("class")
+        .queryParamKey("cellClass")
         .type("list")
         .values(List.of("Astrocyte"))
         .build();
@@ -602,11 +602,11 @@ class ComparisonToolConfigMapperTest {
   @DisplayName("should throw data integrity exception for missing required filter fields")
   void shouldThrowDataIntegrityExceptionForMissingRequiredFilterFields() {
     assertMissingFilterField(
-      filter(null, "cell_class", "class"),
+      filter(null, "cell_class", "cellClass"),
       "Missing filter name in comparison tool config record"
     );
     assertMissingFilterField(
-      filter("Cell Class", null, "class"),
+      filter("Cell Class", null, "cellClass"),
       "Missing filter data_key in comparison tool config record"
     );
     assertMissingFilterField(
