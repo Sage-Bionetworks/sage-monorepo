@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+.description-list {
+  display: grid;
+  grid-template-columns: var(--description-list-term-width, fit-content(40%)) minmax(0, 1fr);
+  gap: var(--description-list-row-gap, 12px) var(--description-list-column-gap, 10px);
+  margin: 0;
+  font-size: var(--description-list-font-size, 14px);
+  line-height: var(--description-list-line-height, 18px);
+
+  dt {
+    font-weight: var(--description-list-term-font-weight, 600);
+    color: var(--description-list-term-color, var(--color-text));
+    overflow-wrap: anywhere;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--description-list-description-color, var(--color-text-secondary));
+    overflow-wrap: anywhere;
+  }
+}
