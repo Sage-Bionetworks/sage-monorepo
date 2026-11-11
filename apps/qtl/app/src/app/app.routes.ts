@@ -53,9 +53,9 @@ export const routes: Route[] = [
     loadChildren: () =>
       import('@sagebionetworks/qtl/eqtl-comparison-tool').then((routes) => routes.routes),
     data: {
-      // TODO: update based on values in QTL-34
-      title: 'eQTL Comparison',
-      description: '',
+      title: 'eQTL Explorer',
+      description:
+        'Explore the cell type-specific quantitative trait locus (QTL) atlas for gene expression regulation in the human brain.',
     },
   },
   {

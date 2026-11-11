@@ -22,7 +22,6 @@ export const ROUTE_PATHS = {
   HOME: '',
   ABOUT: 'about',
   NEWS: 'news',
-  // TODO: update based on values in QTL-34
   EQTL: 'comparison/eqtl',
   TERMS_OF_SERVICE: 'terms-of-service',
   NOT_FOUND: NOT_FOUND_ROUTE_PATH,
