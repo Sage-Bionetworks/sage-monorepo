@@ -144,7 +144,13 @@ components:
         query_param_key:
           type: string
           description: Query parameter key for the filter
-          example: class
+          example: cellClass
+        type:
+          type: string
+          enum:
+            - list
+            - search
+          description: The type of the filter. Must be 'list' or 'search'.
         values:
           type: array
           description: List of filter values
@@ -155,6 +161,7 @@ components:
         - name
         - data_key
         - query_param_key
+        - type
         - values
     ComparisonToolNoun:
       type: object
