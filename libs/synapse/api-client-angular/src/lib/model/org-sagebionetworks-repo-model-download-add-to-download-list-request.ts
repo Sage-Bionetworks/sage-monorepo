@@ -24,7 +24,7 @@ export interface OrgSagebionetworksRepoModelDownloadAddToDownloadListRequest {
    */
   recursive?: boolean;
   /**
-   * When true (default), the version number will be included for each file added to the user\'s download list.  When set to false, the version number will be excluded, indicating that the \'current\' version should always be downloaded.
+   * When true (default), the version number will be included for each file added to the user\'s download list.  When set to false, the version number will be excluded, indicating that the \'current\' version should always be downloaded. Note: this does not apply to files contributed by a Dataset (whether the dataset is referenced by parentId or appears in a query result) or by a DatasetCollection referenced by parentId. Those files are always added at the specific version recorded in the dataset\'s items.
    */
   useVersionNumber?: boolean;
 }

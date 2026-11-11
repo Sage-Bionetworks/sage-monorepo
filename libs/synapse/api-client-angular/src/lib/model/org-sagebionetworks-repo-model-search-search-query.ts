@@ -7,18 +7,22 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelSearchDslHybridQuery } from './org-sagebionetworks-repo-model-search-dsl-hybrid-query';
 import { OrgSagebionetworksRepoModelSearchDslQuery } from './org-sagebionetworks-repo-model-search-dsl-query';
 import { OrgSagebionetworksRepoModelSearchDslHighlight } from './org-sagebionetworks-repo-model-search-dsl-highlight';
 import { OrgSagebionetworksRepoModelSearchDslAggregation } from './org-sagebionetworks-repo-model-search-dsl-aggregation';
 import { OrgSagebionetworksRepoModelSearchDslRescore } from './org-sagebionetworks-repo-model-search-dsl-rescore';
 import { OrgSagebionetworksRepoModelSearchDslFieldCollapse } from './org-sagebionetworks-repo-model-search-dsl-field-collapse';
 import { OrgSagebionetworksRepoModelSearchDslSourceFilter } from './org-sagebionetworks-repo-model-search-dsl-source-filter';
+import { OrgSagebionetworksRepoModelSearchDslSearchPipelineBinding } from './org-sagebionetworks-repo-model-search-dsl-search-pipeline-binding';
 
 /**
  * <p>The body of an OpenSearch <a href=\"https://docs.opensearch.org/latest/api-reference/search-apis/search/\"><code>_search</code></a> request, narrowed to the top-level keys Synapse accepts. Each slot\'s contents are pass-through <a href=\"https://docs.opensearch.org/latest/query-dsl/\">OpenSearch query DSL</a>; see the search REST endpoint for the inner-clause allowlist, field-reference rules, pagination semantics, and per-request limits.</p>
  */
 export interface OrgSagebionetworksRepoModelSearchSearchQuery {
   query?: OrgSagebionetworksRepoModelSearchDslQuery;
+  hybrid?: OrgSagebionetworksRepoModelSearchDslHybridQuery;
+  search_pipeline?: OrgSagebionetworksRepoModelSearchDslSearchPipelineBinding;
   post_filter?: OrgSagebionetworksRepoModelSearchDslQuery;
   /**
    * <p>Optional. Map of caller-chosen name to <a href=\"${org.sagebionetworks.repo.model.search.dsl.Aggregation}\">aggregation</a> definition. The raw aggregation result comes back on <code>SearchQueryResults.aggregationResults</code>. For the facet-counting pattern (a <code>terms</code> aggregation alongside <code>post_filter</code>), see the <a href=\"https://docs.opensearch.org/latest/tutorials/faceted-search/#maintaining-facet-options-during-filtering\">faceted search tutorial</a>.</p>
@@ -28,7 +32,7 @@ export interface OrgSagebionetworksRepoModelSearchSearchQuery {
   collapse?: OrgSagebionetworksRepoModelSearchDslFieldCollapse;
   rescore?: OrgSagebionetworksRepoModelSearchDslRescore;
   /**
-   * Optional. Result <a href=\"https://docs.opensearch.org/latest/search-plugins/searching-data/sort/\">ordering</a>, in native OpenSearch sort shape (a string column name, <code>{column: \"asc|desc\"}</code>, or <code>{column: {order: ..., mode: ..., missing: ...}}</code>) applied in order. Only the <code>field</code> and <code>_score</code> sort kinds are accepted &mdash; script and geo-distance sorts are rejected server-side. The pseudo-column <code>_score</code> sorts by relevance. When omitted, results are sorted by relevance descending. Ties are broken by row ID ascending, except when <code>rescore</code> is supplied.
+   * Optional. Result <a href=\"https://docs.opensearch.org/latest/search-plugins/searching-data/sort/\">ordering</a>, in native OpenSearch sort shape (a string column name, <code>{column: \"asc|desc\"}</code>, or <code>{column: {order: ..., mode: ..., missing: ...}}</code>) applied in order. Only the <code>field</code> and <code>_score</code> sort kinds are accepted &mdash; script and geo-distance sorts are rejected server-side. The pseudo-column <code>_score</code> sorts by relevance. When omitted, results are sorted by relevance descending. Ties are broken by row ID ascending, except when <code>rescore</code> is supplied or a <code>hybrid</code> query is ranked by relevance.
    */
   sort?: Array<any>;
   _source?: OrgSagebionetworksRepoModelSearchDslSourceFilter;

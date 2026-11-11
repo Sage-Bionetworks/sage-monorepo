@@ -56,7 +56,7 @@ export interface OrgSagebionetworksRepoModelDataaccessRenewal {
    */
   irbFileHandleId?: string;
   /**
-   * The set of file handle ID of attached files to this request.
+   * The IDs of the file handles attached to this request. The user saving the request must be the creator (uploader) of each of these file handles, and they are associated with the request so that its reviewers can download them. For a ManagedACTAccessRequirement these are the other attachments it asks for. For a JsonSchemaAccessRequirement these are the file handles that schemaData references, listed by the client, which knows which of its answers are files; Synapse does not verify that this list matches the file handles in schemaData.
    */
   attachments?: Array<string>;
   /**
