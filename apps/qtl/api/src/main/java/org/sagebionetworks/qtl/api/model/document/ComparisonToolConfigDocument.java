@@ -92,6 +92,8 @@ public class ComparisonToolConfigDocument {
     @Field("query_param_key")
     private String queryParamKey;
 
+    private String type;
+
     private List<String> values;
   }
 

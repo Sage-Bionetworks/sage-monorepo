@@ -219,6 +219,7 @@ class ComparisonToolConfigMapperTest {
         .name("Cell Class")
         .dataKey("cell_class")
         .queryParamKey("class")
+        .type("list")
         .values(List.of("Astrocyte", "Excitatory Neuron"))
         .build();
 
@@ -250,6 +251,7 @@ class ComparisonToolConfigMapperTest {
         .dataKey("cell_class")
         .shortName("Class")
         .queryParamKey("class")
+        .type("list")
         .values(List.of("Astrocyte"))
         .build();
 
@@ -343,6 +345,7 @@ class ComparisonToolConfigMapperTest {
         .name("Variant")
         .dataKey("variant")
         .queryParamKey("variant")
+        .type("search")
         .build(),
       "Missing filter values in comparison tool config record"
     );
@@ -390,6 +393,7 @@ class ComparisonToolConfigMapperTest {
         .name("Filter 1")
         .dataKey("filter1")
         .queryParamKey("filter_1")
+        .type("list")
         .values(List.of("value1"))
         .build();
 
@@ -398,6 +402,7 @@ class ComparisonToolConfigMapperTest {
         .name("Filter 2")
         .dataKey("filter2")
         .queryParamKey("filter_2")
+        .type("list")
         .values(List.of("value2"))
         .build();
 
@@ -595,6 +600,7 @@ class ComparisonToolConfigMapperTest {
       .name(name)
       .dataKey(dataKey)
       .queryParamKey(queryParamKey)
+      .type("list")
       .values(List.of("Astrocyte"))
       .build();
   }

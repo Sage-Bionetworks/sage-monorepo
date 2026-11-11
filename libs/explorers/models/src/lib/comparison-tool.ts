@@ -101,6 +101,7 @@ export interface ComparisonToolFilter {
 }
 
 export interface ComparisonToolConfigFilter {
+  // TODO(EX-96): add the filter type ('list' | 'search') that the QTL config route serves
   name: string;
   data_key: string;
   short_name?: string;
