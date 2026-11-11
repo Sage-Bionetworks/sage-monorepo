@@ -240,7 +240,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
    *
    * @param matchCriteria the assembled match criteria
    * @param pageable pagination and sort; pagination is ignored when the budget applies
-   * @param options the request's include/exclude, budget, prebudgeted parents, and item id space
+   * @param options the request's include/exclude, budget, prebudgeted parents, item id space, and
+   *     selected row
    */
   protected final CtPage<T> executePagedAggregation(
     Criteria matchCriteria,

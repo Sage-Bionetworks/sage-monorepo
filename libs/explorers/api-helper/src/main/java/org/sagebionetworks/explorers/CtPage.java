@@ -8,7 +8,7 @@ import org.springframework.lang.Nullable;
 
 /**
  * A comparison-tool page: an ordinary {@link PageImpl} plus the CT-specific
- * {@code hasRowsForPrebudgetedParents} flag.
+ * {@code hasRowsForPrebudgetedParents} and {@code selectedRowInResults} flags.
  *
  * <p>Extends {@link PageImpl} rather than wrapping it so that widening
  * {@link ComparisonToolRepositorySupport#executePagedAggregation} to return this type costs the
@@ -61,11 +61,11 @@ public final class CtPage<T> extends PageImpl<T> {
 
   /**
    * Whether the row the caller has selected is anywhere in this request's whole match set, not
-   * just the returned page.
+   * just the returned page. A row the request excludes through its items is not in it, so a pinned
+   * selected row answers {@code false}.
    *
-   * <p>{@code null} when the question was not asked: see
-   * {@link ComparisonToolRepositorySupport#executePagedAggregation(
-   * org.springframework.data.mongodb.core.query.Criteria, Pageable, CtQueryOptions)}.
+   * <p>{@code null} when the question was not asked: an INCLUDE request, or no selected row id
+   * (see {@link CtQueryOptions#withSelectedRowId(String)}).
    */
   @Nullable
   public Boolean getSelectedRowInResults() {
