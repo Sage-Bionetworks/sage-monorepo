@@ -505,6 +505,60 @@ class ComparisonToolConfigMapperTest {
   }
 
   @Test
+  @DisplayName("should map each filter type")
+  void shouldMapEachFilterType() {
+    // given
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("eQTLs");
+    document.setDropdowns(List.of());
+    document.setColumns(List.of());
+    document.setFilters(List.of(filterOfType("list"), filterOfType("search")));
+
+    // when
+    ComparisonToolConfigDto dto = mapper.toDto(document);
+
+    // then
+    assertThat(dto.getFilters())
+      .extracting(ComparisonToolConfigFilterDto::getType)
+      .containsExactly(
+        ComparisonToolConfigFilterDto.TypeEnum.LIST,
+        ComparisonToolConfigFilterDto.TypeEnum.SEARCH
+      );
+  }
+
+  @Test
+  @DisplayName("should throw data integrity exception for an unknown filter type")
+  void shouldThrowDataIntegrityExceptionForAnUnknownFilterType() {
+    // given
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("eQTLs");
+    document.setDropdowns(List.of());
+    document.setColumns(List.of());
+    document.setFilters(List.of(filterOfType("dropdown")));
+
+    // when & then
+    assertThatThrownBy(() -> mapper.toDto(document))
+      .isInstanceOf(DataIntegrityException.class)
+      .hasMessage("Unexpected filter type value 'dropdown' in comparison tool config record");
+  }
+
+  @Test
+  @DisplayName("should throw data integrity exception for a missing filter type")
+  void shouldThrowDataIntegrityExceptionForAMissingFilterType() {
+    // given
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("eQTLs");
+    document.setDropdowns(List.of());
+    document.setColumns(List.of());
+    document.setFilters(List.of(filterOfType(null)));
+
+    // when & then
+    assertThatThrownBy(() -> mapper.toDto(document))
+      .isInstanceOf(DataIntegrityException.class)
+      .hasMessage("Missing filter type in comparison tool config record");
+  }
+
+  @Test
   @DisplayName("should throw data integrity exception for missing dropdowns")
   void shouldThrowDataIntegrityExceptionForMissingDropdowns() {
     // given
@@ -589,6 +643,16 @@ class ComparisonToolConfigMapperTest {
     assertThatThrownBy(() -> mapper.toDto(document))
       .isInstanceOf(DataIntegrityException.class)
       .hasMessage(expectedMessage);
+  }
+
+  private static ComparisonToolConfigDocument.ComparisonToolConfigFilter filterOfType(String type) {
+    return ComparisonToolConfigDocument.ComparisonToolConfigFilter.builder()
+      .name("Cell Class")
+      .dataKey("cell_class")
+      .queryParamKey("cellClass")
+      .type(type)
+      .values(List.of("Astrocyte"))
+      .build();
   }
 
   private static ComparisonToolConfigDocument.ComparisonToolConfigFilter filter(

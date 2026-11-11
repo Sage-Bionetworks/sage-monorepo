@@ -65,6 +65,22 @@ class ComparisonToolConfigDocumentTest {
   }
 
   @Test
+  @DisplayName("should read the filter type")
+  void shouldReadTheFilterType() {
+    // given
+    Document source = configWithFilterValues(List.of("Astrocyte"));
+
+    // when
+    ComparisonToolConfigDocument result = converter.read(
+      ComparisonToolConfigDocument.class,
+      source
+    );
+
+    // then
+    assertThat(result.getFilters()).extracting(f -> f.getType()).containsExactly("list");
+  }
+
+  @Test
   @DisplayName("should read hierarchy fields including nested nouns")
   void shouldReadHierarchyFieldsIncludingNestedNouns() {
     // given
@@ -119,7 +135,8 @@ class ComparisonToolConfigDocumentTest {
     Document filter = new Document()
       .append("name", "Cell Class")
       .append("data_key", "cell_class")
-      .append("query_param_key", "class")
+      .append("query_param_key", "cellClass")
+      .append("type", "list")
       .append("values", values);
 
     return new Document()
