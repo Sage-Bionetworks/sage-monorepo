@@ -33,7 +33,8 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     showSignificanceControls: false,
     showTableSearch: false,
     legendEnabled: false,
-    // TODO(EX-251): set the row id, default sort and pinned download
+    defaultSort: [{ field: 'adj_p_val', order: 1 }],
+    // TODO(EX-251): set the row id and pinned download
     // TODO(EX-252): turn on row selection and hover
   };
 
