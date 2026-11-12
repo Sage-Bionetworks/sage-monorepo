@@ -328,7 +328,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   updateQueryParams(sex: string, filterValue: string) {
     const hashFragment = this.helperService.getHashFragment();
     const hash = this.isValidHashFragment(hashFragment) ? `#${hashFragment}` : '';
-    const currentUrl = `${window.location.pathname}${window.location.search}${hash}`;
+    const currentUrl = `${this.location.path()}${hash}`;
 
     // Default values are left out of the URL
     const newUrl = this.helperService.setQueryParams(currentUrl, {
