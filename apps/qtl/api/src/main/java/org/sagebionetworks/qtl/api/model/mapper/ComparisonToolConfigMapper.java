@@ -86,6 +86,12 @@ public class ComparisonToolConfigMapper {
       requireValue(filter.getName(), "filter name"),
       requireValue(filter.getDataKey(), "filter data_key"),
       requireValue(filter.getQueryParamKey(), "filter query_param_key"),
+      EnumConverter.toEnum(
+        filter.getType(),
+        ComparisonToolConfigFilterDto.TypeEnum::fromValue,
+        "filter type",
+        RECORD_TYPE
+      ),
       requireValue(filter.getValues(), "filter values")
     );
     dto.setShortName(filter.getShortName());

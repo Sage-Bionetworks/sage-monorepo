@@ -21,6 +21,8 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
  */
 class ComparisonToolConfigDocumentTest {
 
+  private static final String LIST_FILTER_TYPE = "list";
+
   private MappingMongoConverter converter;
 
   @BeforeEach
@@ -62,6 +64,24 @@ class ComparisonToolConfigDocumentTest {
 
     // then
     assertThat(filterValuesOf(result)).containsExactly("Astrocyte", "Excitatory Neuron");
+  }
+
+  @Test
+  @DisplayName("should read the filter type")
+  void shouldReadTheFilterType() {
+    // given
+    Document source = configWithFilterValues(List.of("Astrocyte"));
+
+    // when
+    ComparisonToolConfigDocument result = converter.read(
+      ComparisonToolConfigDocument.class,
+      source
+    );
+
+    // then
+    assertThat(result.getFilters())
+      .extracting(ComparisonToolConfigDocument.ComparisonToolConfigFilter::getType)
+      .containsExactly(LIST_FILTER_TYPE);
   }
 
   @Test
@@ -119,7 +139,8 @@ class ComparisonToolConfigDocumentTest {
     Document filter = new Document()
       .append("name", "Cell Class")
       .append("data_key", "cell_class")
-      .append("query_param_key", "class")
+      .append("query_param_key", "cellClass")
+      .append("type", LIST_FILTER_TYPE)
       .append("values", values);
 
     return new Document()

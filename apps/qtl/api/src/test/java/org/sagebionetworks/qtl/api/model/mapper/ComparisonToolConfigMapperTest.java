@@ -218,7 +218,8 @@ class ComparisonToolConfigMapperTest {
       ComparisonToolConfigDocument.ComparisonToolConfigFilter.builder()
         .name("Cell Class")
         .dataKey("cell_class")
-        .queryParamKey("class")
+        .queryParamKey("cellClass")
+        .type("list")
         .values(List.of("Astrocyte", "Excitatory Neuron"))
         .build();
 
@@ -236,7 +237,8 @@ class ComparisonToolConfigMapperTest {
     ComparisonToolConfigFilterDto filterDto = result.getFilters().get(0);
     assertThat(filterDto.getName()).isEqualTo("Cell Class");
     assertThat(filterDto.getDataKey()).isEqualTo("cell_class");
-    assertThat(filterDto.getQueryParamKey()).isEqualTo("class");
+    assertThat(filterDto.getQueryParamKey()).isEqualTo("cellClass");
+    assertThat(filterDto.getType()).isEqualTo(ComparisonToolConfigFilterDto.TypeEnum.LIST);
     assertThat(filterDto.getValues()).containsExactly("Astrocyte", "Excitatory Neuron");
   }
 
@@ -249,7 +251,8 @@ class ComparisonToolConfigMapperTest {
         .name("Cell Class")
         .dataKey("cell_class")
         .shortName("Class")
-        .queryParamKey("class")
+        .queryParamKey("cellClass")
+        .type("list")
         .values(List.of("Astrocyte"))
         .build();
 
@@ -343,6 +346,7 @@ class ComparisonToolConfigMapperTest {
         .name("Variant")
         .dataKey("variant")
         .queryParamKey("variant")
+        .type("search")
         .build(),
       "Missing filter values in comparison tool config record"
     );
@@ -390,6 +394,7 @@ class ComparisonToolConfigMapperTest {
         .name("Filter 1")
         .dataKey("filter1")
         .queryParamKey("filter_1")
+        .type("list")
         .values(List.of("value1"))
         .build();
 
@@ -398,6 +403,7 @@ class ComparisonToolConfigMapperTest {
         .name("Filter 2")
         .dataKey("filter2")
         .queryParamKey("filter_2")
+        .type("list")
         .values(List.of("value2"))
         .build();
 
@@ -500,6 +506,60 @@ class ComparisonToolConfigMapperTest {
   }
 
   @Test
+  @DisplayName("should map each filter type")
+  void shouldMapEachFilterType() {
+    // given
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("eQTLs");
+    document.setDropdowns(List.of());
+    document.setColumns(List.of());
+    document.setFilters(List.of(filterOfType("list"), filterOfType("search")));
+
+    // when
+    ComparisonToolConfigDto dto = mapper.toDto(document);
+
+    // then
+    assertThat(dto.getFilters())
+      .extracting(ComparisonToolConfigFilterDto::getType)
+      .containsExactly(
+        ComparisonToolConfigFilterDto.TypeEnum.LIST,
+        ComparisonToolConfigFilterDto.TypeEnum.SEARCH
+      );
+  }
+
+  @Test
+  @DisplayName("should throw data integrity exception for an unknown filter type")
+  void shouldThrowDataIntegrityExceptionForAnUnknownFilterType() {
+    // given
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("eQTLs");
+    document.setDropdowns(List.of());
+    document.setColumns(List.of());
+    document.setFilters(List.of(filterOfType("dropdown")));
+
+    // when & then
+    assertThatThrownBy(() -> mapper.toDto(document))
+      .isInstanceOf(DataIntegrityException.class)
+      .hasMessage("Unexpected filter type value 'dropdown' in comparison tool config record");
+  }
+
+  @Test
+  @DisplayName("should throw data integrity exception for a missing filter type")
+  void shouldThrowDataIntegrityExceptionForAMissingFilterType() {
+    // given
+    ComparisonToolConfigDocument document = new ComparisonToolConfigDocument();
+    document.setPage("eQTLs");
+    document.setDropdowns(List.of());
+    document.setColumns(List.of());
+    document.setFilters(List.of(filterOfType(null)));
+
+    // when & then
+    assertThatThrownBy(() -> mapper.toDto(document))
+      .isInstanceOf(DataIntegrityException.class)
+      .hasMessage("Missing filter type in comparison tool config record");
+  }
+
+  @Test
   @DisplayName("should throw data integrity exception for missing dropdowns")
   void shouldThrowDataIntegrityExceptionForMissingDropdowns() {
     // given
@@ -543,11 +603,11 @@ class ComparisonToolConfigMapperTest {
   @DisplayName("should throw data integrity exception for missing required filter fields")
   void shouldThrowDataIntegrityExceptionForMissingRequiredFilterFields() {
     assertMissingFilterField(
-      filter(null, "cell_class", "class"),
+      filter(null, "cell_class", "cellClass"),
       "Missing filter name in comparison tool config record"
     );
     assertMissingFilterField(
-      filter("Cell Class", null, "class"),
+      filter("Cell Class", null, "cellClass"),
       "Missing filter data_key in comparison tool config record"
     );
     assertMissingFilterField(
@@ -586,6 +646,16 @@ class ComparisonToolConfigMapperTest {
       .hasMessage(expectedMessage);
   }
 
+  private static ComparisonToolConfigDocument.ComparisonToolConfigFilter filterOfType(String type) {
+    return ComparisonToolConfigDocument.ComparisonToolConfigFilter.builder()
+      .name("Cell Class")
+      .dataKey("cell_class")
+      .queryParamKey("cellClass")
+      .type(type)
+      .values(List.of("Astrocyte"))
+      .build();
+  }
+
   private static ComparisonToolConfigDocument.ComparisonToolConfigFilter filter(
     String name,
     String dataKey,
@@ -595,6 +665,7 @@ class ComparisonToolConfigMapperTest {
       .name(name)
       .dataKey(dataKey)
       .queryParamKey(queryParamKey)
+      .type("list")
       .values(List.of("Astrocyte"))
       .build();
   }
