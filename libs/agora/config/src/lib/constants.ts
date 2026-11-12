@@ -1,7 +1,7 @@
 import { NOT_FOUND_ROUTE_PATH } from '@sagebionetworks/explorers/constants';
 import { LoadingIconColors } from '@sagebionetworks/explorers/models';
 
-export const HELP_URL = 'https://help.adknowledgeportal.org/apd/Agora-Resources.2646671361.html';
+export const HELP_URL = 'https://help.adknowledgeportal.org/apd/agora-resources';
 
 export const SUPPORT_EMAIL = 'agora@sagebionetworks.org';
 
