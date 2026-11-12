@@ -1,7 +1,6 @@
 package org.sagebionetworks.qtl.api.model.dto;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.Value;
 import org.sagebionetworks.qtl.api.exception.InvalidFilterException;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -12,7 +11,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
  */
 @Value
 @Builder
-@Getter
 public class EqtlIdentifier {
 
   String variant;
