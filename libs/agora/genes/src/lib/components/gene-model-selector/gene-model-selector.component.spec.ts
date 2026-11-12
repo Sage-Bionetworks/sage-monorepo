@@ -108,6 +108,13 @@ describe('Component: Gene Model Selector', () => {
       expect(window.location.search).toBe('');
     });
 
+    it('should remove the model query parameter when the selected model only matches the default by name', () => {
+      setup(urlWithModel(MODEL_WITH_PARENTHESES));
+      component.selected = { name: DEFAULT_MODEL };
+      component.onSelectionChange();
+      expect(window.location.search).toBe('');
+    });
+
     it('should treat the first model in the options as the default', () => {
       setup(GENE_RNA_PATH, [MODEL_WITH_PARENTHESES, DEFAULT_MODEL]);
       selectModel(DEFAULT_MODEL);

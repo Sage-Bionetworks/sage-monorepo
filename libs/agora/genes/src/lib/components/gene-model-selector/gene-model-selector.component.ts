@@ -51,7 +51,7 @@ export class GeneModelSelectorComponent implements OnInit {
 
   onSelectionChange() {
     const currentUrl = this.location.path(true);
-    const model = this.selected === this.defaultOption ? null : this.selected.name;
+    const model = this.selected.name === this.defaultOption?.name ? null : this.selected.name;
     this.location.replaceState(
       this.helperService.setQueryParams(currentUrl, { [QUERY_PARAMS.MODEL]: model }),
     );
