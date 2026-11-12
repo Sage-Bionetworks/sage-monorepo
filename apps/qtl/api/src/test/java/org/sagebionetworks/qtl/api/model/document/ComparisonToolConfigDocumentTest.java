@@ -21,6 +21,8 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
  */
 class ComparisonToolConfigDocumentTest {
 
+  private static final String LIST_FILTER_TYPE = "list";
+
   private MappingMongoConverter converter;
 
   @BeforeEach
@@ -77,7 +79,9 @@ class ComparisonToolConfigDocumentTest {
     );
 
     // then
-    assertThat(result.getFilters()).extracting(f -> f.getType()).containsExactly("list");
+    assertThat(result.getFilters())
+      .extracting(ComparisonToolConfigDocument.ComparisonToolConfigFilter::getType)
+      .containsExactly(LIST_FILTER_TYPE);
   }
 
   @Test
@@ -136,7 +140,7 @@ class ComparisonToolConfigDocumentTest {
       .append("name", "Cell Class")
       .append("data_key", "cell_class")
       .append("query_param_key", "cellClass")
-      .append("type", "list")
+      .append("type", LIST_FILTER_TYPE)
       .append("values", values);
 
     return new Document()
