@@ -238,6 +238,7 @@ class ComparisonToolConfigMapperTest {
     assertThat(filterDto.getName()).isEqualTo("Cell Class");
     assertThat(filterDto.getDataKey()).isEqualTo("cell_class");
     assertThat(filterDto.getQueryParamKey()).isEqualTo("cellClass");
+    assertThat(filterDto.getType()).isEqualTo(ComparisonToolConfigFilterDto.TypeEnum.LIST);
     assertThat(filterDto.getValues()).containsExactly("Astrocyte", "Excitatory Neuron");
   }
 
