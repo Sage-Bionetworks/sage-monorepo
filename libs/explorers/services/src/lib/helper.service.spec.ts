@@ -60,51 +60,6 @@ describe('Service: Helper', () => {
     expect(result).toEqual('/models/APOE4/omics?modelOrganism=mouse');
   });
 
-  describe('appendQueryParams', () => {
-    it('should append query params', () => {
-      const result = helperService.appendQueryParams('/genes/ENSG123', { a: '1', b: '2' });
-      expect(result).toEqual('/genes/ENSG123?a=1&b=2');
-    });
-
-    it('should append to existing query params', () => {
-      const result = helperService.appendQueryParams('/genes/ENSG123?a=1', { b: '2' });
-      expect(result).toEqual('/genes/ENSG123?a=1&b=2');
-    });
-
-    it('should insert query params before a hash fragment', () => {
-      expect(helperService.appendQueryParams('/genes/ENSG123#section', { b: '2' })).toEqual(
-        '/genes/ENSG123?b=2#section',
-      );
-      expect(helperService.appendQueryParams('/genes/ENSG123?a=1#section', { b: '2' })).toEqual(
-        '/genes/ENSG123?a=1&b=2#section',
-      );
-    });
-
-    it('should drop null, undefined, and empty values', () => {
-      const result = helperService.appendQueryParams('/genes/ENSG123', {
-        a: null,
-        b: undefined,
-        c: '',
-        d: '4',
-      });
-      expect(result).toEqual('/genes/ENSG123?d=4');
-    });
-
-    it('should leave the url unchanged when there are no query params', () => {
-      expect(helperService.appendQueryParams('/genes/ENSG123', {})).toEqual('/genes/ENSG123');
-      expect(helperService.appendQueryParams('/genes/ENSG123', { a: null })).toEqual(
-        '/genes/ENSG123',
-      );
-    });
-
-    it('should encode spaces as %20 and leave parentheses as-is', () => {
-      const result = helperService.appendQueryParams('/genes/ENSG123', {
-        model: 'AD Diagnosis x Sex (females only)',
-      });
-      expect(result).toEqual('/genes/ENSG123?model=AD%20Diagnosis%20x%20Sex%20(females%20only)');
-    });
-  });
-
   describe('setQueryParams', () => {
     it('should add a query param', () => {
       expect(helperService.setQueryParams('/genes/ENSG123', { a: '1' })).toEqual(
@@ -137,6 +92,17 @@ describe('Service: Helper', () => {
       expect(helperService.setQueryParams('/genes/ENSG123?a=1#section', { b: '2' })).toEqual(
         '/genes/ENSG123?a=1&b=2#section',
       );
+    });
+
+    it('should insert the query string before a hash fragment', () => {
+      expect(helperService.setQueryParams('/genes/ENSG123#section', { b: '2' })).toEqual(
+        '/genes/ENSG123?b=2#section',
+      );
+    });
+
+    it('should leave the url unchanged when there are no query params to set', () => {
+      expect(helperService.setQueryParams('/genes/ENSG123', {})).toEqual('/genes/ENSG123');
+      expect(helperService.setQueryParams('/genes/ENSG123', { a: null })).toEqual('/genes/ENSG123');
     });
 
     it('should drop the query string when the last query param is deleted', () => {

@@ -46,10 +46,6 @@ export class HelperService {
     };
   }
 
-  appendQueryParams(url: string, queryParams: QueryParams) {
-    return this.setQueryParams(url, queryParams);
-  }
-
   /**
    * Sets query parameters on a URL, for example before passing it to `Location.replaceState`.
    * A null, undefined, or empty value deletes its parameter. Other parameters keep their order,
@@ -89,7 +85,7 @@ export class HelperService {
     queryParams: QueryParams = {},
   ) {
     const panelPath = activeParent === '' ? activePanel : `${activeParent}/${activePanel}`;
-    return this.appendQueryParams(`${basePath}/${panelPath}`, queryParams);
+    return this.setQueryParams(`${basePath}/${panelPath}`, queryParams);
   }
 
   handlePanelChange(
@@ -237,7 +233,7 @@ export class HelperService {
     return {
       ...fallback,
       shouldScrollToPanelNav: false,
-      replacementUrl: this.appendQueryParams(basePath, queryParams),
+      replacementUrl: this.setQueryParams(basePath, queryParams),
     };
   }
 
