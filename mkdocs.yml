@@ -20,7 +20,6 @@ nav:
       - Model-AD: api/model-ad.md
       - QTL: api/qtl.md
       - OpenChallenges (legacy): products/openchallenges.md
-      - Synapse: api/synapse.md
   - Develop:
       - Quick Start: develop/quick-start.md
       - Remote Development: develop/remote-dev.md
@@ -67,7 +66,6 @@ nav:
       - BixArena: api/bixarena.md
       - Model-AD: api/model-ad.md
       - QTL: api/qtl.md
-      - Synapse: api/synapse.md
   - Resources:
       - FAQ: resources/faq.md
       - Bug Reports: resources/bug-report.md
