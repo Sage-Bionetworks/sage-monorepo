@@ -275,7 +275,7 @@ An `ItemFilterDef` (`libs/explorers/api-helper/`) does two things: it turns a cl
 
 ### The request knobs
 
-The three query fields below reach the repository as one `CtQueryOptions`. Build it in `findAll` and pass the same instance to both `buildCtMatchCriteria` and `executePagedAggregation`, so the two cannot disagree about the request. A CT with no parent-awareness keeps using the `boolean isInclude` / `Integer remainingBudget` overloads.
+The three query fields below reach the repository as one `CtQueryOptions`. Build it in `findAll` and pass the same instance to both `buildCtMatchCriteria` and `executePagedAggregation`, so the two cannot disagree about the request. A CT that is not parent-aware and needs neither `hasRowsForPrebudgetedParents` nor `selectedRowInResults` keeps using the `boolean isInclude` / `Integer remainingBudget` overloads.
 
 | Query field            | Effect                                                                                                                                                        |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
