@@ -19,8 +19,12 @@ tags:
     description: Operations about Comparison Tool UI configuration.
   - name: Data Version
     description: Operations about the data version.
+  - name: Eqtl
+    description: Operations about eQTLs.
 paths:
   /comparison-tools/config:
     $ref: paths/comparison-tools/config.yaml
+  /comparison-tools/eqtl:
+    $ref: paths/comparison-tools/eqtl.yaml
   /data-version:
     $ref: paths/data-version.yaml

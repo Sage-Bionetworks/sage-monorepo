@@ -1,0 +1,7 @@
+name: eqtlSearchQuery
+description: The search query used to find and filter eQTLs.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/EqtlSearchQuery.yaml

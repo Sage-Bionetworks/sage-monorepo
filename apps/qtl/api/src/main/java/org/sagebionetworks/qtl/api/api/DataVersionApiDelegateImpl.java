@@ -2,9 +2,9 @@ package org.sagebionetworks.qtl.api.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.explorers.ApiHelper;
 import org.sagebionetworks.qtl.api.model.dto.DataVersionDto;
 import org.sagebionetworks.qtl.api.service.DataVersionService;
-import org.sagebionetworks.qtl.api.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

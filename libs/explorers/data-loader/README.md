@@ -72,8 +72,10 @@ Lists the collections a release imports, in import order, with each collection's
 | `maintainInsertionOrder` | no       | `true` imports the file one document at a time, keeping its order, for a collection the UI shows in stored order. Others import in parallel |
 
 The loader checks the whole file before downloading anything, and reports every problem in one
-error: a missing or empty `name` or `file`, an unknown key, an invalid index, a collection listed
-twice, or `dataversion`, which the loader always imports last on its own.
+error: a missing or empty `name` or `file`, an unknown key, an invalid index, an index declared in
+both `indexes` and `collatedIndexes` (MongoDB names an index after its fields, so the two would
+collide), a collection listed twice, or `dataversion`, which the loader always imports last on its
+own.
 
 ## How a release is loaded
 

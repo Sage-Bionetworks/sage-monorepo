@@ -2,7 +2,7 @@
 which files, with which indexes, in import order."""
 
 from dataclasses import dataclass
-from json import load
+from json import dumps, load
 from typing import Any
 
 DATA_VERSION_COLLECTION_NAME = "dataversion"
@@ -103,11 +103,25 @@ def entry_problems(entry: Any) -> list[str]:
                 f"'{key}' must be a list of indexes like "
                 '{"field": 1}, with each field 1 or -1'
             )
+    problems += [
+        f"'indexes' and 'collatedIndexes' both declare {dumps(index)}: MongoDB "
+        "names an index after its fields, so the second one would fail to build"
+        for index in shared_indexes(entry)
+    ]
     if "maintainInsertionOrder" in entry and not isinstance(
         entry["maintainInsertionOrder"], bool
     ):
         problems.append("'maintainInsertionOrder' must be true or false")
     return problems
+
+
+def shared_indexes(entry: dict[str, Any]) -> list[dict[str, int]]:
+    """The indexes declared in both lists, which would get the same name"""
+    indexes, collated_indexes = (entry.get(key, []) for key in INDEX_KEYS)
+    if not (is_index_list(indexes) and is_index_list(collated_indexes)):
+        return []
+    plain_keys = [list(index.items()) for index in indexes]
+    return [index for index in collated_indexes if list(index.items()) in plain_keys]
 
 
 def is_index_list(indexes: Any) -> bool:

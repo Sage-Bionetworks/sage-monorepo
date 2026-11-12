@@ -1,0 +1,21 @@
+type: object
+description: A location on a chromosome
+properties:
+  chr:
+    type: string
+    description: Chromosome name
+    example: '5'
+  start:
+    type: integer
+    format: int32
+    description: Start position
+    example: 118488207
+  end:
+    type: integer
+    format: int32
+    description: End position
+    example: 118488208
+required:
+  - chr
+  - start
+  - end

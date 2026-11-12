@@ -1,0 +1,5 @@
+type: string
+description: Direction of the variant's effect on gene expression
+enum:
+  - Up
+  - Down

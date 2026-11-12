@@ -7,6 +7,9 @@ src/main/java/org/sagebionetworks/qtl/api/api/ComparisonToolConfigApiDelegate.ja
 src/main/java/org/sagebionetworks/qtl/api/api/DataVersionApi.java
 src/main/java/org/sagebionetworks/qtl/api/api/DataVersionApiController.java
 src/main/java/org/sagebionetworks/qtl/api/api/DataVersionApiDelegate.java
+src/main/java/org/sagebionetworks/qtl/api/api/EqtlApi.java
+src/main/java/org/sagebionetworks/qtl/api/api/EqtlApiController.java
+src/main/java/org/sagebionetworks/qtl/api/api/EqtlApiDelegate.java
 src/main/java/org/sagebionetworks/qtl/api/configuration/EnumConverterConfiguration.java
 src/main/java/org/sagebionetworks/qtl/api/configuration/HomeController.java
 src/main/java/org/sagebionetworks/qtl/api/configuration/SpringDocConfiguration.java
@@ -17,4 +20,11 @@ src/main/java/org/sagebionetworks/qtl/api/model/dto/ComparisonToolConfigFilterDt
 src/main/java/org/sagebionetworks/qtl/api/model/dto/ComparisonToolNounDto.java
 src/main/java/org/sagebionetworks/qtl/api/model/dto/ComparisonToolPageDto.java
 src/main/java/org/sagebionetworks/qtl/api/model/dto/DataVersionDto.java
+src/main/java/org/sagebionetworks/qtl/api/model/dto/EffectDirectionDto.java
+src/main/java/org/sagebionetworks/qtl/api/model/dto/EqtlDto.java
+src/main/java/org/sagebionetworks/qtl/api/model/dto/EqtlSearchQueryDto.java
+src/main/java/org/sagebionetworks/qtl/api/model/dto/EqtlsPageDto.java
+src/main/java/org/sagebionetworks/qtl/api/model/dto/GenomicLocationDto.java
+src/main/java/org/sagebionetworks/qtl/api/model/dto/ItemFilterTypeQueryDto.java
+src/main/java/org/sagebionetworks/qtl/api/model/dto/PageMetadataDto.java
 src/main/resources/openapi.yaml

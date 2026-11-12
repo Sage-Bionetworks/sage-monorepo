@@ -4,7 +4,7 @@ This rule covers every task that touches a `ComparisonToolRepositorySupport` sub
 
 ## What is a CT repository?
 
-Every CT table is backed by a MongoDB aggregation pipeline assembled by `ComparisonToolRepositorySupport<T>` (`libs/explorers/api-helper/`). Each product (Agora, Model-AD) has one or more concrete subclasses -- one per CT collection. The base class owns the pipeline shape; subclasses configure it by overriding a small set of hooks.
+Every CT table is backed by a MongoDB aggregation pipeline assembled by `ComparisonToolRepositorySupport<T>` (`libs/explorers/api-helper/`). Each product (Agora, Model-AD, QTL) has one or more concrete subclasses -- one per CT collection. The base class owns the pipeline shape; subclasses configure it by overriding a small set of hooks.
 
 ## Minimal subclass skeleton
 
@@ -89,7 +89,7 @@ Key points:
 Every field the repository reads off the search query DTO has to be declared in three places outside the repository. Each one fails at runtime rather than at compile time, so none of them is caught by simply getting `findAll` to build:
 
 - **The search query schema** (`libs/<product>/api-description/src/components/schemas/*SearchQuery.yaml`), then `nx run-many -t=generate -p=<product>-*` to regenerate the DTO and clients.
-- **The delegate's `VALID_QUERY_PARAMS`** (`apps/<product>/api-next/.../api/*ApiDelegateImpl.java`) -- `ApiHelper.validateQueryParameters` rejects any request carrying an unlisted parameter with a 400. These sets mirror the schema's property order, not alphabetical order.
+- **The delegate's `VALID_QUERY_PARAMS`** (`apps/<product>/api-next/.../api/*ApiDelegateImpl.java`; `apps/qtl/api/` for QTL) -- `ApiHelper.validateQueryParameters` rejects any request carrying an unlisted parameter with a 400. These sets mirror the schema's property order, not alphabetical order.
 - **The service's `@Cacheable` key**, built via `ApiHelper.buildCacheKey(...)` -- a field missing from the key makes two requests that differ only by that field collide on one cache entry.
 
 The parent/child fields are no exception: `itemIdSpace` and `prebudgetedParentIds` each need all three declarations, and their `$ref`ed enum (`ItemIdSpaceQuery.yaml`) needs a converter entry in `EnumConverterConfiguration`. The response half, `hasRowsForPrebudgetedParents`, is a nullable property on the `*Page.yaml` schema that the service copies off the returned `CtPage`; a repository whose custom interface still declares `Page<T>` compiles fine and silently loses the flag, so narrow the interface to `CtPage<T>` when a caller needs it. What these fields do is covered under **Parent/child CTs**.
@@ -336,7 +336,8 @@ Criteria matchCriteria = buildCtMatchCriteria(
 | Model-AD | `CustomDiseaseCorrelationRepositoryImpl` | `disease_correlation`  | Nested object columns (brain regions), companion numeric field, base criteria (cluster)                                     |
 | Model-AD | `CustomTranscriptomicsRepositoryImpl`    | `rna_de_aggregate`     | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue), self-parented          |
 | Model-AD | `CustomProteomicsRepositoryImpl`         | `protein_de_aggregate` | Nested object columns (time-points), composite item filter, custom multi-field search, base criteria (tissue), parent-aware |
+| QTL      | `CustomEqtlRepositoryImpl`               | `eqtl_results`         | Composite item filter, custom multi-field search, companion numeric field (adjusted p-value), self-parented                 |
 
-All implementations are under `apps/<product>/api-next/src/main/java/.../model/repository/`.
+All implementations are under `apps/<product>/api-next/src/main/java/.../model/repository/`, except QTL's, which are under `apps/qtl/api/src/main/java/.../model/repository/`.
 
 For a worked parent-aware example, read Proteomics: its protein isoform rows roll up to the gene their transcriptomics counterpart is keyed by, so it declares its parent item filter from `TranscriptomicsIdentifier.FIELDS` -- the token the RNA view identifies its own rows with. Every other CT is self-parented, which takes no override.
