@@ -61,7 +61,6 @@ jobs:
             sage
             sage-monorepo
             sandbox
-            synapse
           # Configure that a scope must always be provided.
           requireScope: false
           # Configure additional validation for the subject based on a regex.

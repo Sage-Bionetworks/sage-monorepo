@@ -17,7 +17,6 @@ body:
         - Sage
         - Sage Monorepo
         - Sandbox
-        - Synapse
   - type: textarea
     attributes:
       label: 'As a user, I want'

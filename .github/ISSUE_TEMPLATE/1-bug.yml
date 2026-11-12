@@ -28,7 +28,6 @@ body:
         - Sage
         - Sage Monorepo
         - Sandbox
-        - Synapse
   - type: textarea
     attributes:
       label: Current behavior
