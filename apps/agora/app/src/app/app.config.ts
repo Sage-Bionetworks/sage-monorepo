@@ -25,7 +25,6 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { provideLogger } from '@sagebionetworks/web-shared/angular/logger';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
-import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client';
 import * as Sentry from '@sentry/angular';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { provideMarkdown } from 'ngx-markdown';
@@ -38,11 +37,6 @@ import { AgoraPreset } from './primeNGPreset';
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'agora-app' },
-    {
-      provide: SYNAPSE_API_CLIENT_BASE_PATH,
-      useFactory: () => 'https://repo-prod.prod.sagebase.org',
-      deps: [],
-    },
     provideAppInitializer(() => initializeExplorersApp(SITE_NAME)),
     provideExplorersConfig({
       tutorialPanes: GCT_TUTORIAL_PANES,
