@@ -1,10 +1,17 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import { ComparisonToolUrlService, PlatformService } from '@sagebionetworks/explorers/services';
-import { ComparisonToolConfigService, ComparisonToolPage } from '@sagebionetworks/qtl/api-client';
+import {
+  ComparisonToolConfigService,
+  ComparisonToolPage,
+  EqtlSearchQuery,
+  EqtlService,
+  EqtlsPage,
+  ItemFilterTypeQuery,
+} from '@sagebionetworks/qtl/api-client';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/qtl/config';
-import { of, shareReplay } from 'rxjs';
+import { map, of, shareReplay } from 'rxjs';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
 
@@ -17,10 +24,12 @@ import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.servi
 export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
+  private readonly eqtlService = inject(EqtlService);
   private readonly comparisonToolService = inject(EqtlComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
 
   isInitialized = this.comparisonToolService.isInitialized;
+  query = this.comparisonToolService.query;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.EQtls)
@@ -42,6 +51,13 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
 
+  readonly unpinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const query = this.query();
+      this.getUnpinnedData(query);
+    }
+  });
+
   ngOnInit() {
     if (this.platformService.isServer) {
       return;
@@ -60,5 +76,32 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     this.comparisonToolService.disconnect();
   }
 
-  // TODO(EX-251): fetch the unpinned and pinned rows; the URL isn't updated until the first pinned fetch lands
+  private buildUnpinnedQuery(currentQuery: ComparisonToolQuery): EqtlSearchQuery {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
+      currentQuery.multiSortMeta,
+    );
+
+    // TODO(EX-251): send the pinned items and the selected filters
+    return {
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery),
+      sortFields,
+      sortOrders,
+    };
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const query = this.buildUnpinnedQuery(currentQuery);
+
+    this.comparisonToolService.fetchUnpinned(
+      this.eqtlService.getEqtls(query).pipe(
+        map((response: EqtlsPage) => ({
+          data: response.eqtls,
+          totalCount: response.page.totalElements,
+        })),
+      ),
+    );
+  }
+
+  // TODO(EX-251): fetch the pinned rows; the URL isn't updated until the first pinned fetch lands
 }
