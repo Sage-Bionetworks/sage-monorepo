@@ -46,17 +46,36 @@ export class HelperService {
     };
   }
 
-  appendQueryParams(url: string, queryParams: QueryParams) {
-    const queryString = Object.entries(queryParams)
-      .filter(([, value]) => value)
-      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
-      .join('&');
-    if (!queryString) return url;
+  /**
+   * Sets query parameters on a URL, for example before passing it to `Location.replaceState`.
+   * A null, undefined, or empty value deletes its parameter. Other parameters keep their order,
+   * and the hash fragment is kept.
+   */
+  setQueryParams(url: string, queryParams: QueryParams) {
     const fragmentIndex = url.includes('#') ? url.indexOf('#') : url.length;
     const pathAndQuery = url.slice(0, fragmentIndex);
     const fragment = url.slice(fragmentIndex);
-    const separator = pathAndQuery.includes('?') ? '&' : '?';
-    return `${pathAndQuery}${separator}${queryString}${fragment}`;
+    const queryIndex = pathAndQuery.includes('?') ? pathAndQuery.indexOf('?') : pathAndQuery.length;
+    const path = pathAndQuery.slice(0, queryIndex);
+
+    const params = new URLSearchParams(pathAndQuery.slice(queryIndex));
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    }
+
+    const queryString = this.toQueryString([...params]);
+    const query = queryString ? '?' + queryString : '';
+    return `${path}${query}${fragment}`;
+  }
+
+  private toQueryString(entries: [string, string][]) {
+    return entries
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
   }
 
   getPanelUrl(
@@ -66,7 +85,7 @@ export class HelperService {
     queryParams: QueryParams = {},
   ) {
     const panelPath = activeParent === '' ? activePanel : `${activeParent}/${activePanel}`;
-    return this.appendQueryParams(`${basePath}/${panelPath}`, queryParams);
+    return this.setQueryParams(`${basePath}/${panelPath}`, queryParams);
   }
 
   handlePanelChange(
@@ -214,7 +233,7 @@ export class HelperService {
     return {
       ...fallback,
       shouldScrollToPanelNav: false,
-      replacementUrl: this.appendQueryParams(basePath, queryParams),
+      replacementUrl: this.setQueryParams(basePath, queryParams),
     };
   }
 
