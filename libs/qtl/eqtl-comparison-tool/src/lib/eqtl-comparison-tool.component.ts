@@ -87,12 +87,18 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
       currentQuery.multiSortMeta,
     );
 
-    // TODO(EX-251): send the pinned items and the selected filters
+    const selectedFilters = this.comparisonToolService.selectedFilters();
+
+    // TODO(EX-251): send the pinned items
     return {
       itemFilterType: ItemFilterTypeQuery.Exclude,
       ...this.comparisonToolService.buildPaginationOrBudget(currentQuery),
       sortFields,
       sortOrders,
+      variant: selectedFilters['variant'],
+      gene: selectedFilters['gene'],
+      cellClass: selectedFilters['cellClass'],
+      cellSubclass: selectedFilters['cellSubclass'],
     };
   }
 
