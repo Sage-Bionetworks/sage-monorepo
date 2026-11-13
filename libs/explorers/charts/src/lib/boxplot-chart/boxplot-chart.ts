@@ -298,6 +298,7 @@ export class BoxplotChart {
       axisTickLabelStyle,
       axisLineStyle,
       tooltipStyle,
+      gridMargins,
     } = boxplotProps;
 
     const showLegend = boxplotProps.showLegend || false;
@@ -538,6 +539,7 @@ export class BoxplotChart {
       grid: {
         ...boxplotChartTheme.grid,
         top: title ? 60 : 20,
+        ...gridMargins,
       },
       title: this.getTitleOptions(boxplotChartTheme, xAxisTitle, title),
       aria: {
