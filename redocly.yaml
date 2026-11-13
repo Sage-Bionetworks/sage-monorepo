@@ -19,9 +19,3 @@ apis:
     root: libs/model-ad/api-description/openapi/openapi.yaml
   qtl-api-description:
     root: libs/qtl/api-description/openapi/openapi.yaml
-  synapse-api-description:
-    root: libs/synapse/api-description/openapi/openapi.yaml
-    rules:
-      operation-4xx-response: off
-      operation-operationId-url-safe: off
-      operation-summary: off

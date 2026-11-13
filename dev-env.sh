@@ -175,10 +175,6 @@ function iatlas-build-images {
   nx run-many --target=build-image --projects=iatlas-* --parallel=3
 }
 
-function synapse-build-images {
-  nx run-many --target=build-image --projects=synapse-* --parallel=3
-}
-
 function workspace-nx-cloud-help {
   printf "%s\n" \
     "" \

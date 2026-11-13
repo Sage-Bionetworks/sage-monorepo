@@ -1,4 +1,0 @@
-networks:
-  synapse:
-    name: synapse
-    driver: bridge

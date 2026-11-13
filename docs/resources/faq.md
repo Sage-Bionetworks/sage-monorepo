@@ -63,7 +63,6 @@ API documentation is auto-generated and available for:
 - [Agora API](../api/agora.md)
 - [BixArena API](../api/bixarena.md)
 - [Model-AD API](../api/model-ad.md)
-- [Synapse API](../api/synapse.md)
 
 ## Contributing
 

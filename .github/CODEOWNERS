@@ -32,8 +32,6 @@
 /.github/workflows/e2e-explorer.yaml @Sage-Bionetworks/explorers-dev
 /.github/workflows/e2e-explorers.yaml @Sage-Bionetworks/explorers-dev
 
-/libs/synapse/ @Sage-Bionetworks/explorers-dev
-
 # Platform
 /libs/platform/config/angular @Sage-Bionetworks/sage-monorepo
 

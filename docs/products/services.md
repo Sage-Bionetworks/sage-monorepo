@@ -379,13 +379,6 @@ Develop a sample Python project that implements the "three pillars of observabil
 - **Available Tasks**: create-config, prepare, serve, serve-detach
 - **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/apps/sandbox/observability-python/README.md)
 
-#### synapse-api-docs
-
-- **Language**: unknown
-- **Location**: `apps/synapse/api-docs`
-- **Available Tasks**: create-config, build, serve, serve-detach, build-image, scan-image
-- **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/apps/synapse/api-docs/README.md)
-
 ## Bixarena Projects
 
 ### Libraries
@@ -889,20 +882,6 @@ This library was generated with Nx.
 - **Location**: `libs/shared/typescript/util`
 - **Available Tasks**: test, lint, lint-fix
 - **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/libs/shared/typescript/util/README.md)
-
-#### synapse-api-client-angular
-
-- **Type**: unknown
-- **Language**: typescript
-- **Location**: `libs/synapse/api-client-angular`
-- **Available Tasks**: test, generate
-
-#### synapse-api-description
-
-- **Type**: unknown
-- **Language**: openapi
-- **Location**: `libs/synapse/api-description`
-- **Available Tasks**: get, build, lint
 
 ---
 
