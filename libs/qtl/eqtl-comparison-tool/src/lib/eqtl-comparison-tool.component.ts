@@ -1,7 +1,11 @@
 import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
-import { ComparisonToolUrlService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolUrlService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
   ComparisonToolPage,
@@ -27,6 +31,7 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
   private readonly eqtlService = inject(EqtlService);
   private readonly comparisonToolService = inject(EqtlComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService).forSource('EqtlComparisonToolComponent');
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -92,6 +97,8 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
 
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
     const query = this.buildUnpinnedQuery(currentQuery);
+
+    this.logger.log('unpinned query', { query });
 
     this.comparisonToolService.fetchUnpinned(
       this.eqtlService.getEqtls(query).pipe(
