@@ -9,7 +9,11 @@ import {
   provideExplorersConfig,
   SvgIconService,
 } from '@sagebionetworks/explorers/services';
-import { provideLoadingIconColors, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
+import {
+  mockEmptyComparisonToolQuery,
+  provideLoadingIconColors,
+  SvgIconServiceStub,
+} from '@sagebionetworks/explorers/testing';
 import {
   ComparisonToolConfigService,
   ComparisonToolPage,
@@ -139,6 +143,23 @@ describe('EqtlComparisonToolComponent', () => {
 
     expect(comparisonToolService.unpinnedData()).toEqual([mockEqtl]);
     expect(comparisonToolService.unpinnedRowCount()).toBe(totalElements);
+  });
+
+  it('should send the selected filters in the unpinned query', async () => {
+    const { component, comparisonToolService, eqtlService } = await setup();
+    const selectedFilters = {
+      variant: ['rs2120461'],
+      gene: ['RERE'],
+      cellClass: ['Astrocyte'],
+      cellSubclass: ['Astrocyte'],
+    };
+    jest.spyOn(comparisonToolService, 'selectedFilters').mockReturnValue(selectedFilters);
+
+    component.getUnpinnedData(mockEmptyComparisonToolQuery);
+
+    expect(jest.mocked(eqtlService.getEqtls).mock.lastCall?.[0]).toEqual(
+      expect.objectContaining(selectedFilters),
+    );
   });
 
   it('renders the sidebar chiclets and tabs', async () => {
