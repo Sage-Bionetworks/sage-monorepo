@@ -115,7 +115,8 @@ export type ComparisonToolPage =
   | 'Differential Expression'
   | 'Disease Correlation'
   | 'Nominated Targets'
-  | 'Nominated Drugs';
+  | 'Nominated Drugs'
+  | 'eQTLs';
 
 export type ComparisonToolConfigColumnType =
   | 'text'
