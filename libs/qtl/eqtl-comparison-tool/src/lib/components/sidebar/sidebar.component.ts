@@ -2,6 +2,8 @@ import { Component, ElementRef, signal, viewChildren } from '@angular/core';
 import { CELL_CLASSES, CELL_SUBCLASSES } from '@sagebionetworks/qtl/config';
 import { MetadataChicletComponent } from '@sagebionetworks/qtl/ui';
 import { getCellTypeMutedColor } from '@sagebionetworks/qtl/util';
+import { ImpactBoxplotComponent } from '../impact/boxplot/impact-boxplot.component';
+import { IMPACT_BOXPLOT_EXAMPLE_SUMMARIES } from '../impact/boxplot/impact-boxplot.constants';
 import { ImpactDetails, ImpactDetailsComponent } from '../impact/details/impact-details.component';
 
 type SidebarTab = 'impact' | 'traits' | 'resources';
@@ -10,7 +12,7 @@ export const SIDEBAR_CHICLET_LIST_ARIA_LABEL = 'Selected eQTL';
 
 @Component({
   selector: 'qtl-eqtl-comparison-tool-sidebar',
-  imports: [ImpactDetailsComponent, MetadataChicletComponent],
+  imports: [ImpactBoxplotComponent, ImpactDetailsComponent, MetadataChicletComponent],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
@@ -25,6 +27,8 @@ export class SidebarComponent {
     p_value: '1.25e-08',
     variant_location: 'chr:11:54455—252455',
     gene_location: 'chr:11:54455—252455',
+    // TODO: fetch from the eQTL phenotype endpoint (EX-283)
+    expression_summaries: IMPACT_BOXPLOT_EXAMPLE_SUMMARIES,
   };
 
   protected readonly chicletListAriaLabel = SIDEBAR_CHICLET_LIST_ARIA_LABEL;
