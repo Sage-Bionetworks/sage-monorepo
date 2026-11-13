@@ -145,6 +145,7 @@ export type OrgSagebionetworksRepoModelMigrationMigrationType =
   | 'TEXT_ANALYZER'
   | 'COLUMN_ANALYZER_OVERRIDE'
   | 'SYNONYM_SET'
+  | 'SEARCH_PIPELINE'
   | 'SEARCH_CONFIGURATION'
   | 'SEARCH_CONFIG_OBJECT_BINDING'
   | 'EDUC_QUOTA'
@@ -320,6 +321,7 @@ export const OrgSagebionetworksRepoModelMigrationMigrationType = {
   ColumnAnalyzerOverride:
     'COLUMN_ANALYZER_OVERRIDE' as OrgSagebionetworksRepoModelMigrationMigrationType,
   SynonymSet: 'SYNONYM_SET' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  SearchPipeline: 'SEARCH_PIPELINE' as OrgSagebionetworksRepoModelMigrationMigrationType,
   SearchConfiguration: 'SEARCH_CONFIGURATION' as OrgSagebionetworksRepoModelMigrationMigrationType,
   SearchConfigObjectBinding:
     'SEARCH_CONFIG_OBJECT_BINDING' as OrgSagebionetworksRepoModelMigrationMigrationType,

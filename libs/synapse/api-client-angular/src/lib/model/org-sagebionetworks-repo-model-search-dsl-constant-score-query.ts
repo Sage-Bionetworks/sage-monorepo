@@ -7,12 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelSearchDslQuery } from './org-sagebionetworks-repo-model-search-dsl-query';
 
 /**
  * A <a href=\"https://docs.opensearch.org/latest/query-dsl/compound/constant-score/\"><code>constant_score</code></a> compound clause. Wraps a filter and assigns every matching document the same score (<code>boost</code>).
  */
 export interface OrgSagebionetworksRepoModelSearchDslConstantScoreQuery {
-  filter?: OrgSagebionetworksRepoModelSearchDslConstantScoreQuery;
+  filter?: OrgSagebionetworksRepoModelSearchDslQuery;
   /**
    * Optional. The constant score assigned to every matching document. Default <code>1.0</code>.
    */
