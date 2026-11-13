@@ -18,7 +18,7 @@ public final class CacheNames {
 
   /**
    * Cache for eQTL comparison tool queries.
-   * Key format: "eqtl-{filterType}-{items}-{search}-{filters}-{page}-{size}-{budget}-{sort}"
+   * Key format: "eqtl-{filterType}-{items}-{selectedRowId}-{search}-{filters}-{page}-{size}-{budget}-{sort}"
    */
   public static final String EQTL = "eqtl";
 }

@@ -43,6 +43,15 @@ properties:
   itemFilterType:
     $ref: ItemFilterTypeQuery.yaml
     nullable: true
+  selectedRowId:
+    description: |
+      The composite identifier of the selected row, if any. The response's selectedRowInResults then
+      tells whether that row is anywhere in the filtered results, not just the current page. A row
+      listed in items is left out of those results, so it answers false. Only applied when
+      itemFilterType is 'exclude'.
+    type: string
+    nullable: true
+    example: 'rs170094~ENSG00000136267~astro'
   search:
     description: |
       Search by variant, gene symbol, or Ensembl gene ID. A single term is a case-insensitive partial

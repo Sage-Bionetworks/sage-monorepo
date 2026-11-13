@@ -34,6 +34,8 @@ public class EqtlsPageDto {
 
   private PageMetadataDto page;
 
+  private @Nullable Boolean selectedRowInResults = null;
+
   public EqtlsPageDto() {
     super();
   }
@@ -94,6 +96,26 @@ public class EqtlsPageDto {
     this.page = page;
   }
 
+  public EqtlsPageDto selectedRowInResults(@Nullable Boolean selectedRowInResults) {
+    this.selectedRowInResults = selectedRowInResults;
+    return this;
+  }
+
+  /**
+   * Over the full filtered results, whether they contain the row named by the request's selectedRowId, regardless of the current page. A row listed in the request's items is not in them, so it answers false. Null when the request carries no selectedRowId or itemFilterType is 'include'. 
+   * @return selectedRowInResults
+   */
+  
+  @Schema(name = "selectedRowInResults", description = "Over the full filtered results, whether they contain the row named by the request's selectedRowId, regardless of the current page. A row listed in the request's items is not in them, so it answers false. Null when the request carries no selectedRowId or itemFilterType is 'include'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("selectedRowInResults")
+  public @Nullable Boolean getSelectedRowInResults() {
+    return selectedRowInResults;
+  }
+
+  public void setSelectedRowInResults(@Nullable Boolean selectedRowInResults) {
+    this.selectedRowInResults = selectedRowInResults;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -104,12 +126,13 @@ public class EqtlsPageDto {
     }
     EqtlsPageDto eqtlsPage = (EqtlsPageDto) o;
     return Objects.equals(this.eqtls, eqtlsPage.eqtls) &&
-        Objects.equals(this.page, eqtlsPage.page);
+        Objects.equals(this.page, eqtlsPage.page) &&
+        Objects.equals(this.selectedRowInResults, eqtlsPage.selectedRowInResults);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(eqtls, page);
+    return Objects.hash(eqtls, page, selectedRowInResults);
   }
 
   @Override
@@ -118,6 +141,7 @@ public class EqtlsPageDto {
     sb.append("class EqtlsPageDto {\n");
     sb.append("    eqtls: ").append(toIndentedString(eqtls)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
+    sb.append("    selectedRowInResults: ").append(toIndentedString(selectedRowInResults)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -148,6 +172,7 @@ public class EqtlsPageDto {
     protected Builder copyOf(EqtlsPageDto value) { 
       this.instance.setEqtls(value.eqtls);
       this.instance.setPage(value.page);
+      this.instance.setSelectedRowInResults(value.selectedRowInResults);
       return this;
     }
 
@@ -158,6 +183,11 @@ public class EqtlsPageDto {
     
     public EqtlsPageDto.Builder page(PageMetadataDto page) {
       this.instance.page(page);
+      return this;
+    }
+    
+    public EqtlsPageDto.Builder selectedRowInResults(Boolean selectedRowInResults) {
+      this.instance.selectedRowInResults(selectedRowInResults);
       return this;
     }
     

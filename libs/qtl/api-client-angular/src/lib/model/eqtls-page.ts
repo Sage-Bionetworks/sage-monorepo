@@ -19,4 +19,8 @@ export interface EqtlsPage {
    */
   eqtls: Array<Eqtl>;
   page: PageMetadata;
+  /**
+   * Over the full filtered results, whether they contain the row named by the request\'s selectedRowId, regardless of the current page. A row listed in the request\'s items is not in them, so it answers false. Null when the request carries no selectedRowId or itemFilterType is \'include\'.
+   */
+  selectedRowInResults?: boolean | null;
 }

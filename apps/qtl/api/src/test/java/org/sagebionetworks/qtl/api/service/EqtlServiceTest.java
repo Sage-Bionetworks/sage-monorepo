@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.qtl.api.model.document.EqtlDocument;
 import org.sagebionetworks.qtl.api.model.dto.EqtlDto;
 import org.sagebionetworks.qtl.api.model.dto.EqtlSearchQueryDto;
@@ -23,7 +24,6 @@ import org.sagebionetworks.qtl.api.model.dto.EqtlsPageDto;
 import org.sagebionetworks.qtl.api.model.dto.PageMetadataDto;
 import org.sagebionetworks.qtl.api.model.mapper.EqtlMapper;
 import org.sagebionetworks.qtl.api.model.repository.EqtlRepository;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -53,7 +53,9 @@ class EqtlServiceTest {
     EqtlSearchQueryDto query = sortedQuery();
     query.setPageNumber(null);
     query.setPageSize(null);
-    when(repository.findAll(any(), eq(query), eq(List.of()))).thenReturn(new PageImpl<>(List.of()));
+    when(repository.findAll(any(), eq(query), eq(List.of()))).thenReturn(
+      new CtPage<>(List.of(), Pageable.unpaged(), 0, null)
+    );
 
     // when
     service.loadEqtls(query);
@@ -77,7 +79,7 @@ class EqtlServiceTest {
     query.setItems(Arrays.asList("rs1~ENSG1~astro", null));
     List<String> sanitizedItems = List.of("rs1~ENSG1~astro");
     when(repository.findAll(any(), eq(query), eq(sanitizedItems))).thenReturn(
-      new PageImpl<>(List.of())
+      new CtPage<>(List.of(), Pageable.unpaged(), 0, null)
     );
 
     // when
@@ -103,7 +105,7 @@ class EqtlServiceTest {
     when(mapper.toDto(first)).thenReturn(firstDto);
     when(mapper.toDto(second)).thenReturn(secondDto);
     when(repository.findAll(any(), eq(query), eq(List.of()))).thenReturn(
-      new PageImpl<>(List.of(first, second), PageRequest.of(1, 2), TOTAL_ROWS)
+      new CtPage<>(List.of(first, second), PageRequest.of(1, 2), TOTAL_ROWS, null)
     );
 
     // when
@@ -121,6 +123,23 @@ class EqtlServiceTest {
         .hasPrevious(true)
         .build()
     );
+  }
+
+  @Test
+  @DisplayName("should pass on whether the selected row is in the results")
+  void shouldPassOnWhetherTheSelectedRowIsInTheResults() {
+    // given
+    EqtlSearchQueryDto query = sortedQuery();
+    query.setSelectedRowId("rs1~ENSG1~astro");
+    when(repository.findAll(any(), eq(query), eq(List.of()))).thenReturn(
+      new CtPage<>(List.of(), Pageable.unpaged(), 0, null, false)
+    );
+
+    // when
+    EqtlsPageDto page = service.loadEqtls(query);
+
+    // then
+    assertThat(page.getSelectedRowInResults()).isFalse();
   }
 
   private static EqtlSearchQueryDto sortedQuery() {

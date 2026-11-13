@@ -82,7 +82,7 @@ Key points:
 - `@Repository @Slf4j` on the class; constructor takes only `MongoTemplate`.
 - Always `Objects.requireNonNullElse(query.getItemFilterType(), ItemFilterTypeQueryDto.INCLUDE)` -- the frontend may send null and the base class does not default it.
 - `findAll` signature is defined by the custom interface, not the base class -- add product-specific parameters (tissue, cluster, etc.) there and pass them as base criteria varargs.
-- A parent-aware CT, or one whose caller needs `hasRowsForPrebudgetedParents`, builds a `CtQueryOptions` instead of the bare `isInclude` / `remainingBudget` pair and passes it to both `buildCtMatchCriteria` and `executePagedAggregation`. See **Parent/child CTs**.
+- A parent-aware CT, or one whose caller needs `hasRowsForPrebudgetedParents` or `selectedRowInResults`, builds a `CtQueryOptions` instead of the bare `isInclude` / `remainingBudget` pair and passes it to both `buildCtMatchCriteria` and `executePagedAggregation`. See **Parent/child CTs** and **Selected row lookup**.
 
 ## Query parameter wiring
 
@@ -94,7 +94,9 @@ Every field the repository reads off the search query DTO has to be declared in 
 
 The parent/child fields are no exception: `itemIdSpace` and `prebudgetedParentIds` each need all three declarations, and their `$ref`ed enum (`ItemIdSpaceQuery.yaml`) needs a converter entry in `EnumConverterConfiguration`. The response half, `hasRowsForPrebudgetedParents`, is a nullable property on the `*Page.yaml` schema that the service copies off the returned `CtPage`; a repository whose custom interface still declares `Page<T>` compiles fine and silently loses the flag, so narrow the interface to `CtPage<T>` when a caller needs it. What these fields do is covered under **Parent/child CTs**.
 
-One constraint carries over from search. The existence query behind `hasRowsForPrebudgetedParents` uses `mongoTemplate.exists`, which -- like the `count()` documented under **Overriding search** -- bypasses the aggregation pipeline and therefore reads **stored fields only**. A parent item filter that depends on a computed `$addFields` value cannot answer it.
+The selected-row field is wired the same way: `selectedRowId` needs all three declarations, and its response half, `selectedRowInResults`, is a nullable property on the `*Page.yaml` schema that the service copies off the returned `CtPage`.
+
+One constraint carries over from search. The existence queries behind `hasRowsForPrebudgetedParents` and `selectedRowInResults` use `mongoTemplate.exists`, which -- like the `count()` documented under **Overriding search** -- bypasses the aggregation pipeline and therefore reads **stored fields only**. An item filter that depends on a computed `$addFields` value cannot answer them.
 
 ## Pipeline shape
 
@@ -273,7 +275,7 @@ An `ItemFilterDef` (`libs/explorers/api-helper/`) does two things: it turns a cl
 
 ### The request knobs
 
-The three query fields below reach the repository as one `CtQueryOptions`. Build it in `findAll` and pass the same instance to both `buildCtMatchCriteria` and `executePagedAggregation`, so the two cannot disagree about the request. A CT with no parent-awareness keeps using the `boolean isInclude` / `Integer remainingBudget` overloads.
+The three query fields below reach the repository as one `CtQueryOptions`. Build it in `findAll` and pass the same instance to both `buildCtMatchCriteria` and `executePagedAggregation`, so the two cannot disagree about the request. A CT that is not parent-aware and needs neither `hasRowsForPrebudgetedParents` nor `selectedRowInResults` keeps using the `boolean isInclude` / `Integer remainingBudget` overloads.
 
 | Query field            | Effect                                                                                                                                                        |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -308,6 +310,19 @@ Differential Expression (`libs/model-ad/differential-expression-comparison-tool/
 
 ---
 
+## Selected row lookup
+
+A CT with row selection keeps one selected row, pinned or unpinned, and the browser holds only one page of unpinned rows. So it can't tell a selected row that sits on another page from one a filter removed. `selectedRowInResults` answers that over the whole match set.
+
+- Pass the request's row token through `CtQueryOptions.withSelectedRowId(...)`. The base class adds one `mongoTemplate.exists` over the match criteria and the **row** item filter, even on a parent-aware CT, since a selection is a row
+- Answered on EXCLUDE requests only. It is `null` on an INCLUDE request, or when no row id (or a blank one) is sent, and then no extra query runs. CTs that never set it are unchanged
+- An EXCLUDE request leaves its `items` out of the match set, so a pinned selected row answers `false`. The caller already holds its pins and checks them first: `ComparisonToolService.notifySelectedRowValidity` keeps a pinned selection and otherwise resets to the first row
+- A malformed row token fails through the identifier DTO's own parse, like a malformed pin
+
+eQTL (`CustomEqtlRepositoryImpl`) is the worked example.
+
+---
+
 ## Base criteria injection
 
 When the collection is always scoped by a request parameter (cluster, tissue), pass the mandatory `Criteria` objects as varargs at the end of `buildCtMatchCriteria()`:
@@ -328,15 +343,15 @@ Criteria matchCriteria = buildCtMatchCriteria(
 
 ## Existing implementations (reference)
 
-| App      | Class                                    | Collection             | Notable                                                                                                                     |
-| -------- | ---------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Agora    | `CustomNominatedTargetRepositoryImpl`    | `nominatedtargets`     | 4 array columns, simple item filter                                                                                         |
-| Agora    | `CustomNominatedDrugRepositoryImpl`      | `nominateddrugs`       | 2 array columns, composite item filter                                                                                      |
-| Model-AD | `CustomModelOverviewRepositoryImpl`      | `model_overview`       | 1 array column                                                                                                              |
-| Model-AD | `CustomDiseaseCorrelationRepositoryImpl` | `disease_correlation`  | Nested object columns (brain regions), companion numeric field, base criteria (cluster)                                     |
-| Model-AD | `CustomTranscriptomicsRepositoryImpl`    | `rna_de_aggregate`     | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue), self-parented          |
-| Model-AD | `CustomProteomicsRepositoryImpl`         | `protein_de_aggregate` | Nested object columns (time-points), composite item filter, custom multi-field search, base criteria (tissue), parent-aware |
-| QTL      | `CustomEqtlRepositoryImpl`               | `eqtl_results`         | Composite item filter, custom multi-field search, companion numeric field (adjusted p-value), self-parented                 |
+| App      | Class                                    | Collection             | Notable                                                                                                                          |
+| -------- | ---------------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Agora    | `CustomNominatedTargetRepositoryImpl`    | `nominatedtargets`     | 4 array columns, simple item filter                                                                                              |
+| Agora    | `CustomNominatedDrugRepositoryImpl`      | `nominateddrugs`       | 2 array columns, composite item filter                                                                                           |
+| Model-AD | `CustomModelOverviewRepositoryImpl`      | `model_overview`       | 1 array column                                                                                                                   |
+| Model-AD | `CustomDiseaseCorrelationRepositoryImpl` | `disease_correlation`  | Nested object columns (brain regions), companion numeric field, base criteria (cluster)                                          |
+| Model-AD | `CustomTranscriptomicsRepositoryImpl`    | `rna_de_aggregate`     | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue), self-parented               |
+| Model-AD | `CustomProteomicsRepositoryImpl`         | `protein_de_aggregate` | Nested object columns (time-points), composite item filter, custom multi-field search, base criteria (tissue), parent-aware      |
+| QTL      | `CustomEqtlRepositoryImpl`               | `eqtl_results`         | Composite item filter, custom multi-field search, companion numeric field (adjusted p-value), selected row lookup, self-parented |
 
 All implementations are under `apps/<product>/api-next/src/main/java/.../model/repository/`, except QTL's, which are under `apps/qtl/api/src/main/java/.../model/repository/`.
 
