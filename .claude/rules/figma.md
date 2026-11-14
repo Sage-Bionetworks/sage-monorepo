@@ -90,7 +90,7 @@ When the Figma MCP returns an image URL (look for `const imgX = "..."` or `<img 
 2. If it's an icon, substitute an existing one. This repo uses three icon sources -- match whatever the surrounding code/file already uses to keep consistency, then fall back to whichever fits:
    - **FontAwesome** -- `<fa-icon [icon]="faName"></fa-icon>` with `import { faName } from '@fortawesome/free-solid-svg-icons'`. The most widely used inline icon library in this repo.
    - **PrimeIcons** -- `<i class="pi pi-{name}"></i>` or `icon="pi pi-{name}"` on PrimeNG components. Use especially for icons on PrimeNG components (where PrimeIcons ships natively).
-   - **Custom SVGs** via `SvgIconComponent` from `libs/explorers/util/src/lib/svg-icon/`. These live in `*-assets/icons/` directories (`explorers-assets/icons/`, `qtl-assets/icons/`, etc.). The preloaded set is in `SvgIconService.commonSvgPaths` (`libs/explorers/services/src/lib/svg-icon.service.ts`). Use for product-specific or non-standard icons.
+   - **Custom SVGs** via `SvgIconComponent` from `libs/explorers/util/src/lib/svg-icon/`. Only icons in `explorers-assets/icons/` are accepted (`SvgIconService.isValidImagePath`); they are bundled at build time into `SVG_ICON_REGISTRY` (`libs/explorers/services/src/lib/svg-icon-registry.gen.ts`), so after adding a file run `pnpm generate:svg-icon-registry`. Use for product-specific or non-standard icons.
 3. If no existing icon matches (or the asset isn't an icon at all), stop and ask the user to provide the file directly from the design source. Do not fetch or commit the Figma asset URL -- those expire after ~7 days, and getting the asset from the design source ensures the committed file matches the canonical version.
 
 ## Effects
