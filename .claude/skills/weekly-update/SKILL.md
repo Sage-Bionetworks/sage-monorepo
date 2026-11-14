@@ -13,7 +13,7 @@ Generate a clear, stakeholder-friendly weekly update for `Sage-Bionetworks/sage-
 
 ### 1. Determine Date Range
 
-If the user didn't provide a date range, ask — or default to the past 7 days from today's date. Format the range as "Month Day-Day, Year" (e.g., "April 3-10, 2026"). When spanning two months, write "March 28 – April 3, 2026".
+If the user didn't provide a date range, use the past 7 days from today's date and state the range in the update. Format the range as "Month Day-Day, Year" (e.g., "April 3-10, 2026"). When spanning two months, write "March 28 – April 3, 2026".
 
 ### 2. Fetch Merged PRs
 
