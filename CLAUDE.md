@@ -72,12 +72,12 @@ uv run ruff check         # lint
 
 ### Main Products
 
-| Product      | Description                           | Stack                         |
-| ------------ | ------------------------------------- | ----------------------------- |
-| **agora**    | Alzheimer's disease evidence explorer | Angular, Node.js, MongoDB     |
-| **model-ad** | AD model data platform                | Angular, Spring Boot, MongoDB |
-| **qtl**      | QTL analysis explorer                 | Angular, Spring Boot, MongoDB |
-| **bixarena** | Battle arena platform                 | Angular, Spring Boot, Python  |
+| Product      | Description                           | Stack                                  |
+| ------------ | ------------------------------------- | -------------------------------------- |
+| **agora**    | Alzheimer's disease evidence explorer | Angular, Node.js, Spring Boot, MongoDB |
+| **model-ad** | AD model data platform                | Angular, Spring Boot, MongoDB          |
+| **qtl**      | QTL analysis explorer                 | Angular, Spring Boot, MongoDB          |
+| **bixarena** | Battle arena platform                 | Angular, Spring Boot, Python           |
 
 ### OpenAPI-First Workflow
 
