@@ -67,7 +67,7 @@ class MouseModelOverviewApiControllerWebTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/mouse-model-overview")
+        get("/v2/comparison-tools/mouse-model-overview")
           .param("items", modelName)
           .param("sortFields", "name")
           .param("sortOrders", "1")

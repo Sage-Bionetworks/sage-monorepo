@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 class ProteomicsApiControllerWebTest {
 
-  private static final String PROTEOMICS_PATH = "/v1/comparison-tools/proteomics";
+  private static final String PROTEOMICS_PATH = "/v2/comparison-tools/proteomics";
   private static final String PROTEOMICS_CATEGORY = "PROTEIN - DIFFERENTIAL EXPRESSION";
 
   private ProteomicsApiDelegate delegate;

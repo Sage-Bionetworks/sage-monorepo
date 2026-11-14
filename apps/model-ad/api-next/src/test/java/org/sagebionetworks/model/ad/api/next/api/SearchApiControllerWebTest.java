@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 class SearchApiControllerWebTest {
 
-  private static final String SEARCH_MODELS_PATH = "/v1/search/models";
+  private static final String SEARCH_MODELS_PATH = "/v2/search/models";
 
   private SearchApiDelegate delegate;
   private SearchApiController controller;

@@ -56,7 +56,7 @@ class ModelApiControllerWebTest {
     );
 
     mockMvc
-      .perform(get("/v1/models/mouse/3xTg-AD"))
+      .perform(get("/v2/models/mouse/3xTg-AD"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.type").value("mouse"));
   }
@@ -64,7 +64,7 @@ class ModelApiControllerWebTest {
   @Test
   @DisplayName("should return bad request when organism is unknown")
   void shouldReturnBadRequestWhenOrganismIsUnknown() throws Exception {
-    mockMvc.perform(get("/v1/models/rat/3xTg-AD")).andExpect(status().isBadRequest());
+    mockMvc.perform(get("/v2/models/rat/3xTg-AD")).andExpect(status().isBadRequest());
   }
 
   @Test
@@ -74,6 +74,6 @@ class ModelApiControllerWebTest {
       new ModelNotFoundException(ModelOrganismDto.MOUSE, "missing")
     );
 
-    mockMvc.perform(get("/v1/models/mouse/missing")).andExpect(status().isNotFound());
+    mockMvc.perform(get("/v2/models/mouse/missing")).andExpect(status().isNotFound());
   }
 }

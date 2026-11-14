@@ -1,8 +1,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.modelADAPINext.base-path:/v1}")
+@RequestMapping("${openapi.modelADAPINext.base-path:/v2}")
 public class DiseaseCorrelationApiController implements DiseaseCorrelationApi {
 
     private final DiseaseCorrelationApiDelegate delegate;

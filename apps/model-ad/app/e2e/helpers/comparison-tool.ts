@@ -21,6 +21,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { baseURL } from '../../playwright.config';
 import {
+  API_BASE_PATH,
   COMPARISON_TOOL_API_PATHS,
   COMPARISON_TOOL_CONFIG_PATH,
   COMPARISON_TOOL_DEFAULT_SORTS,
@@ -85,7 +86,7 @@ export const fetchComparisonToolData = async <T>(
     params.append('sortOrders', sort.order.toString());
   }
 
-  const response = await page.request.get(`${baseURL}/api/v1/${apiPath}`, {
+  const response = await page.request.get(`${baseURL}${API_BASE_PATH}/${apiPath}`, {
     params,
   });
   expect(response.ok()).toBeTruthy();
@@ -203,9 +204,12 @@ export const fetchComparisonToolConfig = async (
   page: Page,
   name: ComparisonToolPage,
 ): Promise<ComparisonToolConfig[]> => {
-  const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_CONFIG_PATH}`, {
-    params: { page: name },
-  });
+  const response = await page.request.get(
+    `${baseURL}${API_BASE_PATH}/${COMPARISON_TOOL_CONFIG_PATH}`,
+    {
+      params: { page: name },
+    },
+  );
   expect(response.ok()).toBeTruthy();
   const data = (await response.json()) as ComparisonToolConfig[];
   return data;
