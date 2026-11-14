@@ -86,7 +86,7 @@ nx run-many -t=generate -p=model-ad-*
 nx build model-ad-api-description
 ```
 
-`redocly.yaml` defines four APIs (`api-public`, `api-service`, `api-next-public`, `api-next-service`) filtered by `x-audience` annotations in the YAML specs.
+`redocly.yaml` defines five APIs: `model-ad-public` (the published bundle from `openapi/openapi.yaml`) and four built from `src/` (`api-public`, `api-service`, `api-next-public`, `api-next-service`), filtered by `x-audience` annotations in the YAML specs.
 
 ## Comparison Tool Pattern
 

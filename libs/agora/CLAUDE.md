@@ -33,6 +33,7 @@ For serving the Agora app, see the "Serving an App" section in the root `CLAUDE.
 | `agora-charts`                            | `charts/`                            | D3-based chart components (BoxPlot, Candlestick, BiodomainsChart, Network, Score, etc.) |
 | `agora-ui`                                | `ui/`                                | Shared presentational components (SearchInputComponent)                                 |
 | `agora-genes`                             | `genes/`                             | Gene details pages with evidence panels, bio-domains, nominations                       |
+| `agora-drug-details`                      | `drug-details/`                      | Drug details page                                                                       |
 | `agora-home`                              | `home/`                              | Landing page                                                                            |
 | `agora-teams`                             | `teams/`                             | Team/researcher listing and detail pages                                                |
 | `agora-nomination-form`                   | `nomination-form/`                   | Gene nomination submission form                                                         |
