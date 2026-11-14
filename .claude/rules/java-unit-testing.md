@@ -15,7 +15,7 @@ This rule provides focused guidance for generating strong, idiomatic unit tests 
 
 ## Test File Naming Conventions
 
-**STRICT REQUIREMENT:** Follow consistent naming patterns for different types of tests.
+Name test files by test type:
 
 - **Pure Unit Tests:** `ClassNameTest.java` - Use `@ExtendWith(MockitoExtension.class)`
 - **Web Layer Tests:** `ClassNameWebTest.java` - Use `@WebMvcTest` + `MockMvc`
@@ -97,7 +97,7 @@ class MyServiceTest {
 
 ### Method Naming Convention
 
-**STRICT REQUIREMENT:** Use consistent CamelCase naming for both method names and @DisplayName annotations.
+Name test methods in CamelCase and keep @DisplayName in the same words, lowercase:
 
 **Method Names:** Use the pattern `should<ExpectedBehavior>When<Condition>()`
 **@DisplayName:** Use lowercase "should" with descriptive text
@@ -117,23 +117,13 @@ void shouldThrowExceptionWhenInputIsNull() {
 
 ```
 
-**❌ AVOID these inconsistent patterns:**
-
-- Method names with underscores: `void login_ShouldReturn_WhenValid()`
-- Uppercase "Should" in @DisplayName: `@DisplayName("Should return user...")`
-- Mixed casing patterns within the same test class
-
-**✅ CORRECT examples:**
-
-- `shouldAuthenticateUserWhenCredentialsAreValid()`
-- `shouldReturnEmptyWhenUserNotFound()`
-- `shouldThrowExceptionWhenParameterIsNull()`
+Not `login_ShouldReturn_WhenValid()` (underscores) or `@DisplayName("Should …")` (capitalized).
 
 ## Project Execution (Gradle)
 
 ### Multi-Module Gradle Workspace
 
-This Sage monorepo uses a multi-module Gradle setup. **You no longer need to navigate to project directories.** Run all Gradle tasks from the repository root using the project path notation.
+This Sage monorepo uses a multi-module Gradle setup. Run all Gradle tasks from the repository root using the project path notation.
 
 **Examples:**
 
@@ -162,25 +152,12 @@ When running tests in the multi-module workspace, use targeted commands with pro
 ./gradlew :bixarena-api:testIntegration --no-daemon --console=plain
 ```
 
-**Efficient Testing Strategy:**
-
-1. **Target specific test class first** - Don't run all tests initially
-2. **Use `--stacktrace` for failures** - Gets full error details immediately
-3. **Use `--no-daemon --console=plain`** - Avoids terminal environment issues
-4. **Only use `--rerun-tasks` when needed** - When you suspect cache issues
-5. **Avoid redundant compilation checks** - `test` task includes compilation
+`--no-daemon --console=plain` avoids terminal-environment issues in this container; `test` compiles, so no separate compile step is needed.
 
 **Test Separation:**
 
 - **Unit tests** (`testUnit`): Fast execution, no Spring context, use `@ExtendWith(MockitoExtension.class)`
 - **Integration tests** (`testIntegration`): Slower execution, full Spring context, use `@SpringBootTest` and `@Tag("integration")`
-
-**Command Execution Tips:**
-
-- **One targeted command is better than multiple broad ones**
-- **Full stacktrace on first failure reveals root cause immediately**
-- **Don't check compilation separately - test task will catch compile errors**
-- **Use plain console output to avoid terminal formatting issues**
 
 ## Clean Code Rules
 
@@ -188,16 +165,3 @@ When running tests in the multi-module workspace, use targeted commands with pro
 - Avoid real HTTP calls or database operations
 - Use Arrange-Act-Assert (AAA) structure
 - Prefer one assertion per test (unless logically grouped)
-- **CONSISTENCY:** Always use the same naming convention within a test class
-- **NO MIXED PATTERNS:** Don't mix CamelCase and underscore naming in the same project
-
-## When Writing Tests
-
-When generating or modifying tests, ensure:
-
-- Method names use CamelCase: `shouldDoSomethingWhenConditionExists()`
-- @DisplayName uses lowercase "should": `@DisplayName("should do something when condition exists")`
-- Consistent naming patterns throughout the test class
-- Tests are short and isolated
-- Use mocking for all external dependencies
-- Follow Arrange-Act-Assert (AAA) structure
