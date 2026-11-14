@@ -11,26 +11,7 @@ This rule provides coding standards and guidelines for editing Gradle build scri
 
 ### Indentation
 
-- **ALWAYS use 2 spaces for indentation** in build.gradle.kts files
-- Do not use tabs or other indentation sizes
-- Ensure consistent indentation throughout the file
-
-### Example of correct indentation:
-
-```gradle-kotlin-dsl
-configure(listOf(project(":bixarena-api"))) {
-  apply(plugin = "org.springframework.boot")
-  apply(plugin = "org.graalvm.buildtools.native")
-  apply(plugin = "dev.nx.gradle.project-graph")
-
-  configure<SomeExtension> {
-    property = "value"
-    nested {
-      anotherProperty = "anotherValue"
-    }
-  }
-}
-```
+Indent `build.gradle.kts` files with 2 spaces.
 
 ### Dependencies
 
@@ -42,14 +23,14 @@ configure(listOf(project(":bixarena-api"))) {
 
 - Apply plugins using the `alias(libs.plugins.pluginName)` syntax when available
 - Use `apply false` in the root build.gradle.kts for plugins that will be applied conditionally to subprojects
-- Apply plugins to specific subprojects using the `configure(listOf(project(...)))` pattern
+- Put shared build logic in a convention plugin under `buildSrc/src/main/kotlin/` (`sage.java-library`, `sage.spring-boot-library`, `sage.spring-boot-application`), not in individual build files. The root `subprojects { when { ... } }` block applies one to each project based on its location.
 
 ## Multi-Module Structure
 
 This is a multi-module Gradle workspace where:
 
 - Root project manages plugin versions and common configuration
-- Subprojects are configured individually using `configure(listOf(project(...)))`
+- Subprojects receive their convention plugin from the root build script by path (`libs/` → library, `apps/` → Spring Boot application)
 - Version catalog centralizes all dependency versions in `gradle/libs.versions.toml`
 
 When editing build files, ensure compatibility with the Nx Gradle plugin and maintain the established patterns.
