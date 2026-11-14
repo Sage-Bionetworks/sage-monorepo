@@ -104,7 +104,17 @@ export interface BoxplotProps {
   axisLineStyle?: AxisLineStyle;
   /* if defined, overrides individual fields on the default tooltip styling. */
   tooltipStyle?: TooltipStyle;
+  /* if defined, overrides individual sides of the plot area's margin, in pixels. A side left
+  undefined keeps the active chartStyle's margin. */
+  gridMargins?: BoxplotGridMargins;
 }
+
+export type BoxplotGridMargins = {
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
+};
 
 export type BoxplotBoxStyle = {
   fillColor?: string;

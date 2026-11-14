@@ -54,6 +54,11 @@
   @switch (activeTab()) {
     @case ('impact') {
       <qtl-eqtl-comparison-tool-impact-details [details]="impactDetails" />
+      <qtl-eqtl-comparison-tool-impact-boxplot
+        class="sidebar-impact-boxplot"
+        [cellSubclass]="data.cell_subclass"
+        [expressionSummaries]="data.expression_summaries"
+      />
       <!-- TODO: add the remaining impact tab content (EX-73) -->
     }
     @case ('traits') {

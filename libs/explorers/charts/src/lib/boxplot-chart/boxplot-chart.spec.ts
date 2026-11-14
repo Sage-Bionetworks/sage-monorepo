@@ -7,7 +7,8 @@ import {
   CAPPED_POINT_SERIES_NAME_SUFFIX,
 } from '../constants';
 import { staticBoxplotPoints, staticBoxplotSummaries } from '../mocks';
-import { BoxplotProps, CategoryPoint } from '../models';
+import { minimalBoxplotChartTheme } from '../chart-theme/boxplot-chart-theme';
+import { BoxplotGridMargins, BoxplotProps, CategoryPoint } from '../models';
 import { CappedCategoryPoint } from '../models/boxplot';
 import { initChart, setNoDataOption } from '../utils';
 import { BoxplotChart } from './boxplot-chart';
@@ -419,6 +420,31 @@ describe('BoxplotChart', () => {
         expect.objectContaining({ value: yAxisMax + 5 }),
         expect.anything(),
       );
+    });
+  });
+
+  describe('gridMargins', () => {
+    const untitledGridTop = 20;
+
+    function getGrid() {
+      return getOption().grid as BoxplotGridMargins & { containLabel?: boolean };
+    }
+
+    it("keeps the chart style's margins when gridMargins is undefined", () => {
+      makeChart();
+      expect(getGrid()).toEqual({ ...minimalBoxplotChartTheme.grid, top: untitledGridTop });
+    });
+
+    it('overrides only the sides that are given', () => {
+      const gridMargins: BoxplotGridMargins = { top: 8, bottom: 24 };
+      makeChart({ gridMargins });
+      expect(getGrid()).toEqual({ ...minimalBoxplotChartTheme.grid, ...gridMargins });
+    });
+
+    it('overrides the extra top margin a title adds', () => {
+      const gridMargins: BoxplotGridMargins = { top: 8 };
+      makeChart({ title: 'Expression by genotype', gridMargins });
+      expect(getGrid().top).toBe(gridMargins.top);
     });
   });
 });

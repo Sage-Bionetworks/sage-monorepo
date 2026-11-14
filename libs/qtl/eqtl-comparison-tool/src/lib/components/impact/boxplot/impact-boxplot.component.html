@@ -1,0 +1,21 @@
+<figure class="impact-boxplot">
+  <!-- TODO: add the info tooltip once its wiki ID exists (EX-284) -->
+  <figcaption class="impact-boxplot-title">
+    {{ titlePrefix }} <br />({{ cellSubclass() }})
+  </figcaption>
+  <div
+    sageBoxplot
+    class="impact-boxplot-chart"
+    [style.height.px]="chartHeight"
+    [points]="[]"
+    [summaries]="summaries()"
+    [xAxisCategories]="genotypes()"
+    [laneBackgroundColors]="laneBackgroundColors"
+    [showAxisTicks]="false"
+    [boxplotBoxStyle]="boxplotBoxStyle()"
+    [axisTickLabelStyle]="axisTickLabelStyle"
+    [axisLineStyle]="axisLineStyle"
+    [tooltipStyle]="tooltipStyle"
+    [gridMargins]="gridMargins"
+  ></div>
+</figure>

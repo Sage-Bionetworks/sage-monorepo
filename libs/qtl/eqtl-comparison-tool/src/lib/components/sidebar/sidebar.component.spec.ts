@@ -1,6 +1,7 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { IMPACT_BOXPLOT_TITLE_PREFIX } from '../impact/boxplot/impact-boxplot.constants';
 import { IMPACT_DETAIL_FIELDS } from '../impact/details/impact-details.component';
 import { SIDEBAR_CHICLET_LIST_ARIA_LABEL, SidebarComponent } from './sidebar.component';
 
@@ -34,6 +35,16 @@ describe('SidebarComponent', () => {
     const cellClassTerm = within(impactPanel).getByText('Cell Class');
     expect(within(impactPanel).getAllByRole('term')).toHaveLength(IMPACT_DETAIL_FIELDS.length);
     expect(cellClassTerm.nextElementSibling).toHaveTextContent('Astrocyte');
+  });
+
+  it('shows the expression-by-genotype boxplot in the Impact tab, for the same cell subclass as the chiclet', async () => {
+    await setup();
+    const impactPanel = screen.getByRole('tabpanel');
+    expect(
+      within(within(impactPanel).getByRole('figure')).getByText(
+        `${IMPACT_BOXPLOT_TITLE_PREFIX} (Astrocyte)`,
+      ),
+    ).toBeVisible();
   });
 
   it('renders all three tab headers', async () => {
