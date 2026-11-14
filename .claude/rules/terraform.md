@@ -21,7 +21,7 @@ There are three principal configuration layers for Terragrunt projects:
 
 2. **Project Layer** (`project.hcl` inside each infra project directory)
 
-   - Corresponds to an Nx project (e.g., `apps/bixarena/infra/bootstrap`)
+   - Corresponds to an Nx project (e.g., `apps/bixarena/infra/terraform/terraform-backend`)
    - Always includes/references `workspace.hcl` to inherit global settings
    - Centralizes project-wide locals: project name, environment list, tagging schema, naming prefixes
    - Loads structured module configuration from an adjacent `config.yaml`
