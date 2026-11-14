@@ -1,3 +1,14 @@
+---
+paths:
+  - 'apps/agora/api-next/**/*.java'
+  - 'apps/model-ad/api-next/**/*.java'
+  - 'apps/qtl/api/**/*.java'
+  - 'libs/explorers/api-helper/**'
+  - 'libs/*/api-description/**'
+  - 'libs/**/*comparison-tool*/**'
+  - 'libs/explorers/services/src/lib/comparison-tool*'
+---
+
 # Comparison Tool Repository Pattern
 
 This rule covers every task that touches a `ComparisonToolRepositorySupport` subclass: creating a new CT repository, adding or debugging a sort column, declaring a parent/child hierarchy, reviewing an implementation, or understanding why rows are ordered or truncated unexpectedly.
