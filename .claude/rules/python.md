@@ -9,26 +9,16 @@ paths:
 
 - Use type hints for all function signatures and variable declarations.
 - Prefer logging over print statements. Configure logging with appropriate levels (INFO for general, DEBUG for troubleshooting).
-- Always handle exceptions gracefully and log errors with context.
 - Use environment variables for configuration. Document required variables in README or script docstrings.
 - Structure code for modularity: separate concerns into functions and keep main logic in a `main()` function.
-- Use concurrent processing (e.g., ThreadPoolExecutor) for I/O-bound tasks when appropriate.
-- Avoid hardcoding sensitive information; use environment variables or configuration files.
-- Remove unused imports and code to maintain clarity.
-- Use list comprehensions and dictionary comprehensions for concise data transformations.
-- Prefer explicit over implicit: check for `None`, empty strings, and handle edge cases.
 
 ## Code Quality
 
 - Run `uv run ruff check` before committing code.
-- Use docstrings for public functions and modules.
-- Remove debug logging before production deployment, or set logging level appropriately.
 
 ## Testing
 
-- Write unit tests for all functions, especially those with complex logic.
 - Use mocking for external API calls in tests.
-- Validate edge cases and error handling in tests.
 
 ## Environment Variables
 
