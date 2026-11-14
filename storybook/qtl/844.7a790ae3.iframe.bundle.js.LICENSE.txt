@@ -1,0 +1,7 @@
+/*! js-yaml 4.1.0 https://github.com/nodeca/js-yaml @license MIT */
+
+/**
+ * @license Angular v20.3.34
+ * (c) 2010-2025 Google LLC. https://angular.dev/
+ * License: MIT
+ */
