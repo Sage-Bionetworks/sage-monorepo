@@ -10,8 +10,6 @@ import org.springframework.cache.caffeine.CaffeineCache;
 
 class CacheConfigurationTest {
 
-  private static final long EXPECTED_MAXIMUM_SIZE = 10_000L;
-
   @Test
   @DisplayName("should configure maximumSize for every registered cache")
   void shouldConfigureMaximumSizeForEveryRegisteredCache() {
@@ -25,7 +23,9 @@ class CacheConfigurationTest {
 
       Cache<Object, Object> nativeCache = springCache.getNativeCache();
       long maximum = nativeCache.policy().eviction().orElseThrow().getMaximum();
-      assertThat(maximum).as("cache '%s' maximumSize", name).isEqualTo(EXPECTED_MAXIMUM_SIZE);
+      assertThat(maximum)
+        .as("cache '%s' maximumSize", name)
+        .isEqualTo(CacheConfiguration.MAXIMUM_CACHE_SIZE);
     }
   }
 }

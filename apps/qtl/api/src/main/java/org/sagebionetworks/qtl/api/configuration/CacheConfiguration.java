@@ -21,6 +21,8 @@ import org.springframework.context.annotation.Configuration;
 @EnableCaching
 public class CacheConfiguration {
 
+  static final long MAXIMUM_CACHE_SIZE = 10_000;
+
   /**
    * Configure cache manager with size limits.
    */
@@ -28,7 +30,7 @@ public class CacheConfiguration {
   public CacheManager cacheManager() {
     CaffeineCacheManager cacheManager = new CaffeineCacheManager();
 
-    cacheManager.setCaffeine(Caffeine.newBuilder().maximumSize(10_000).recordStats());
+    cacheManager.setCaffeine(Caffeine.newBuilder().maximumSize(MAXIMUM_CACHE_SIZE).recordStats());
 
     cacheManager.setCacheNames(List.of(CacheNames.COMPARISON_TOOL_CONFIG, CacheNames.EQTL));
 
