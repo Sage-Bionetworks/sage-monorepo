@@ -8,6 +8,8 @@ export const SUPPORT_EMAIL = 'xqtlexplorer@sagebionetworks.org';
 
 export const SITE_NAME = 'QTL';
 
+export const DEFAULT_SYNAPSE_WIKI_OWNER_ID = 'syn74592415';
+
 export const DEFAULT_HERO_BACKGROUND_IMAGE_PATH = 'qtl-assets/images/hero-background.svg';
 
 export const QTL_LOADING_ICON_COLORS: LoadingIconColors = {
@@ -20,7 +22,6 @@ export const ROUTE_PATHS = {
   HOME: '',
   ABOUT: 'about',
   NEWS: 'news',
-  // TODO: update based on values in QTL-34
   EQTL: 'comparison/eqtl',
   TERMS_OF_SERVICE: 'terms-of-service',
   NOT_FOUND: NOT_FOUND_ROUTE_PATH,
