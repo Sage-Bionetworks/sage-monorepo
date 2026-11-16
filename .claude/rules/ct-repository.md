@@ -4,7 +4,9 @@ paths:
   - 'apps/model-ad/api-next/**/*.java'
   - 'apps/qtl/api/**/*.java'
   - 'libs/explorers/api-helper/**'
-  - 'libs/*/api-description/**'
+  - 'libs/agora/api-description/**'
+  - 'libs/model-ad/api-description/**'
+  - 'libs/qtl/api-description/**'
   - 'libs/**/*comparison-tool*/**'
   - 'libs/explorers/services/src/lib/comparison-tool*'
 ---
