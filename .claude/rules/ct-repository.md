@@ -330,7 +330,7 @@ A CT with row selection keeps one selected row, pinned or unpinned, and the brow
 - Pass the request's row token through `CtQueryOptions.withSelectedRowId(...)`. The base class adds one `mongoTemplate.exists` over the match criteria and the **row** item filter, even on a parent-aware CT, since a selection is a row
 - Answered on EXCLUDE requests only. It is `null` on an INCLUDE request, or when no row id (or a blank one) is sent, and then no extra query runs. CTs that never set it are unchanged
 - An EXCLUDE request leaves its `items` out of the match set, so a pinned selected row answers `false`. The caller already holds its pins and checks them first: `ComparisonToolService.notifySelectedRowValidity` keeps a pinned selection and otherwise resets to the first row
-- A malformed row token fails through the identifier DTO's own parse, like a malformed pin
+- A malformed row token fails through the identifier DTO's own parse before any query runs, like a malformed pin
 
 eQTL (`CustomEqtlRepositoryImpl`) is the worked example.
 

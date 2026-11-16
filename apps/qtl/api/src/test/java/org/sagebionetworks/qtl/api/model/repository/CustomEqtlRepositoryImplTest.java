@@ -1,10 +1,13 @@
 package org.sagebionetworks.qtl.api.model.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -18,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.explorers.ApiHelper;
 import org.sagebionetworks.explorers.CtPage;
+import org.sagebionetworks.qtl.api.exception.InvalidFilterException;
 import org.sagebionetworks.qtl.api.model.document.EqtlDocument;
 import org.sagebionetworks.qtl.api.model.dto.EqtlSearchQueryDto;
 import org.sagebionetworks.qtl.api.model.dto.ItemFilterTypeQueryDto;
@@ -61,10 +65,10 @@ class CustomEqtlRepositoryImplTest {
   @BeforeEach
   void setUp() {
     repository = new CustomEqtlRepositoryImpl(mongoTemplate);
-    when(aggregationResults.getMappedResults()).thenReturn(List.of());
-    when(
-      mongoTemplate.aggregate(any(Aggregation.class), eq(COLLECTION), eq(EqtlDocument.class))
-    ).thenReturn(aggregationResults);
+    lenient().when(aggregationResults.getMappedResults()).thenReturn(List.of());
+    lenient()
+      .when(mongoTemplate.aggregate(any(Aggregation.class), eq(COLLECTION), eq(EqtlDocument.class)))
+      .thenReturn(aggregationResults);
   }
 
   @Test
@@ -292,6 +296,20 @@ class CustomEqtlRepositoryImplTest {
     // then
     assertThat(page.getSelectedRowInResults()).isNull();
     verify(mongoTemplate, never()).exists(any(Query.class), any(String.class));
+  }
+
+  @Test
+  @DisplayName("should reject a malformed selected row before running any query")
+  void shouldRejectAMalformedSelectedRowBeforeRunningAnyQuery() {
+    // given
+    EqtlSearchQueryDto query = excludeQuery();
+    query.setSelectedRowId("not-a-composite-id");
+
+    // when / then
+    assertThatThrownBy(() -> repository.findAll(FIRST_PAGE, query, List.of())).isInstanceOf(
+      InvalidFilterException.class
+    );
+    verifyNoInteractions(mongoTemplate);
   }
 
   private static EqtlSearchQueryDto excludeQuery() {

@@ -248,6 +248,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
     Pageable pageable,
     CtQueryOptions options
   ) {
+    Criteria selectedRowCriteria = buildSelectedRowCriteria(options);
     BudgetMode budgetMode = resolveBudgetMode(options);
     // When the budget caps parents, first run a separate query to pick the admitted parents, then
     // narrow the match to their rows. Otherwise use the match criteria as-is.
@@ -306,7 +307,7 @@ public abstract class ComparisonToolRepositorySupport<T> {
       resultPageable,
       total,
       findRowsForPrebudgetedParents(matchCriteria, options),
-      findSelectedRowInResults(matchCriteria, options)
+      findSelectedRowInResults(matchCriteria, selectedRowCriteria)
     );
   }
 
@@ -370,27 +371,43 @@ public abstract class ComparisonToolRepositorySupport<T> {
   }
 
   /**
+   * The row item filter's criteria for the caller's selected row, or {@code null} when the question
+   * is not asked: no selected row, or an INCLUDE request, whose rows are the caller's own pins.
+   *
+   * <p>Built before any query runs, so a malformed row token fails the request before it reaches
+   * the database, as a malformed pin does in {@code buildCtMatchCriteria}.
+   */
+  @Nullable
+  private Criteria buildSelectedRowCriteria(CtQueryOptions options) {
+    String selectedRowId = options.selectedRowId();
+    if (options.isInclude() || selectedRowId == null) {
+      return null;
+    }
+    return getRowItemFilter().criteriaForAny(List.of(selectedRowId));
+  }
+
+  /**
    * Answers whether the caller's selected row is in the match set. Only the whole match set can
    * answer that, so no single page can, and the caller uses it to keep a selection that sits on
    * another page and reset one that a filter removed.
    *
-   * <p>Returns {@code null} when the question was not asked: no selected row, or an INCLUDE
-   * request, whose rows are the caller's own pins. An EXCLUDE request leaves out the pinned rows,
-   * so a pinned selected row answers {@code false}; the caller already holds its pins and checks
-   * them first.
+   * <p>Returns {@code null} when the question was not asked (see
+   * {@link #buildSelectedRowCriteria}). An EXCLUDE request leaves out the pinned rows, so a pinned
+   * selected row answers {@code false}; the caller already holds its pins and checks them first.
    *
    * <p>A separate query for the same reasons as {@link #findRowsForPrebudgetedParents}, and so
    * equally limited to <strong>stored fields</strong>.
    */
   @Nullable
-  private Boolean findSelectedRowInResults(Criteria matchCriteria, CtQueryOptions options) {
-    String selectedRowId = options.selectedRowId();
-    if (options.isInclude() || selectedRowId == null) {
+  private Boolean findSelectedRowInResults(
+    Criteria matchCriteria,
+    @Nullable Criteria selectedRowCriteria
+  ) {
+    if (selectedRowCriteria == null) {
       return null;
     }
 
-    Criteria criteria = new Criteria()
-      .andOperator(matchCriteria, getRowItemFilter().criteriaForAny(List.of(selectedRowId)));
+    Criteria criteria = new Criteria().andOperator(matchCriteria, selectedRowCriteria);
     return mongoTemplate.exists(
       new Query(criteria).collation(CASE_INSENSITIVE),
       getCollectionName()
