@@ -27,7 +27,7 @@ async function setup() {
       provideRouter([]),
       {
         provide: PlatformService,
-        useValue: { isBrowser: true },
+        useValue: { isBrowser: true, isServer: false },
       },
       {
         provide: ComparisonToolConfigService,
