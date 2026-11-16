@@ -1,14 +1,23 @@
 import * as Sentry from '@sentry/angular';
 import type { ErrorEvent, EventHint } from '@sentry/angular';
-import { BrowserSentryConfig, initSentry } from './init-sentry';
+import type { Envelope, EnvelopeItemType } from '@sentry/core';
+import {
+  BrowserSentryConfig,
+  initSentry,
+  OFFLINE_QUEUE_MAX_ENVELOPES,
+  OFFLINE_TRANSPORT_OPTIONS,
+} from './init-sentry';
 import { SENTRY_DATA_COLLECTION } from './sentry-options';
 
 jest.mock('@sentry/angular', () => ({
   init: jest.fn(),
   browserTracingIntegration: jest.fn(() => mockBrowserTracingIntegration),
+  makeFetchTransport: jest.fn(),
+  makeBrowserOfflineTransport: jest.fn(() => mockOfflineTransport),
 }));
 
 const mockBrowserTracingIntegration = { name: 'BrowserTracing' };
+const mockOfflineTransport = jest.fn();
 
 const mockConfig: BrowserSentryConfig = {
   dsn: 'https://test-dsn@sentry.io/123',
@@ -27,6 +36,17 @@ function runBeforeSend(originalException: unknown) {
   return beforeSend(event, hint);
 }
 
+function createEnvelopeOf(itemType: EnvelopeItemType): Envelope {
+  return [{}, [[{ type: itemType }, {}]]] as unknown as Envelope;
+}
+
+const networkError = new TypeError('Failed to fetch');
+const firstRetryDelayMs = 5000;
+
+function shouldStoreAfterNetworkError(envelope: Envelope) {
+  return OFFLINE_TRANSPORT_OPTIONS.shouldStore?.(envelope, networkError, firstRetryDelayMs);
+}
+
 describe('initSentry', () => {
   afterEach(() => {
     (Sentry.init as jest.Mock).mockClear();
@@ -40,9 +60,40 @@ describe('initSentry', () => {
       environment: 'dev',
       release: 'agora@1.0.0+abc1234',
       dataCollection: SENTRY_DATA_COLLECTION,
+      transport: mockOfflineTransport,
+      transportOptions: OFFLINE_TRANSPORT_OPTIONS,
       integrations: [mockBrowserTracingIntegration],
       beforeSend: expect.any(Function),
     });
+  });
+
+  describe('offline transport', () => {
+    it('sends through the fetch transport, retrying sends that fail', () => {
+      initSentry(mockConfig);
+
+      expect(Sentry.makeBrowserOfflineTransport).toHaveBeenCalledWith(Sentry.makeFetchTransport);
+      expect(Sentry.init).toHaveBeenCalledWith(
+        expect.objectContaining({ transport: mockOfflineTransport }),
+      );
+    });
+
+    it('keeps a bounded queue and retries it after the next page load', () => {
+      expect(OFFLINE_TRANSPORT_OPTIONS).toMatchObject({
+        maxQueueSize: OFFLINE_QUEUE_MAX_ENVELOPES,
+        flushAtStartup: true,
+      });
+    });
+
+    it('stores metrics that failed to send', () => {
+      expect(shouldStoreAfterNetworkError(createEnvelopeOf('trace_metric'))).toBe(true);
+    });
+
+    it.each<EnvelopeItemType>(['event', 'transaction', 'span'])(
+      'drops a %s envelope that failed to send, so it cannot crowd out metrics',
+      (itemType) => {
+        expect(shouldStoreAfterNetworkError(createEnvelopeOf(itemType))).toBe(false);
+      },
+    );
   });
 
   it('sends performance data at the configured sample rate', () => {
