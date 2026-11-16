@@ -7,6 +7,7 @@ import {
   SentryConfig,
   tracingOptions,
 } from './sentry-options';
+import { getTabId, TAB_ID_KEY } from './tab-id';
 
 type BrowserOfflineTransportOptions = Partial<
   Parameters<ReturnType<typeof Sentry.makeBrowserOfflineTransport>>[0]
@@ -64,4 +65,9 @@ export function initSentry(config: BrowserSentryConfig): void {
       return event;
     },
   });
+
+  const tabId = getTabId(window);
+  const globalScope = Sentry.getGlobalScope();
+  globalScope.setAttribute(TAB_ID_KEY, tabId);
+  globalScope.setTag(TAB_ID_KEY, tabId);
 }

@@ -8,16 +8,19 @@ import {
   OFFLINE_TRANSPORT_OPTIONS,
 } from './init-sentry';
 import { SENTRY_DATA_COLLECTION } from './sentry-options';
+import { TAB_ID_KEY, TAB_ID_STORAGE_KEY } from './tab-id';
 
 jest.mock('@sentry/angular', () => ({
   init: jest.fn(),
   browserTracingIntegration: jest.fn(() => mockBrowserTracingIntegration),
   makeFetchTransport: jest.fn(),
   makeBrowserOfflineTransport: jest.fn(() => mockOfflineTransport),
+  getGlobalScope: jest.fn(() => mockGlobalScope),
 }));
 
 const mockBrowserTracingIntegration = { name: 'BrowserTracing' };
 const mockOfflineTransport = jest.fn();
+const mockGlobalScope = { setAttribute: jest.fn(), setTag: jest.fn() };
 
 const mockConfig: BrowserSentryConfig = {
   dsn: 'https://test-dsn@sentry.io/123',
@@ -50,6 +53,31 @@ function shouldStoreAfterNetworkError(envelope: Envelope) {
 describe('initSentry', () => {
   afterEach(() => {
     (Sentry.init as jest.Mock).mockClear();
+    mockGlobalScope.setAttribute.mockClear();
+    mockGlobalScope.setTag.mockClear();
+    window.sessionStorage.clear();
+  });
+
+  describe('tab ID', () => {
+    it("labels the tab's metrics and error events with its stored tab ID", () => {
+      initSentry(mockConfig);
+
+      const storedTabId = window.sessionStorage.getItem(TAB_ID_STORAGE_KEY);
+      expect(storedTabId).not.toBeNull();
+      expect(mockGlobalScope.setAttribute).toHaveBeenCalledWith(TAB_ID_KEY, storedTabId);
+      expect(mockGlobalScope.setTag).toHaveBeenCalledWith(TAB_ID_KEY, storedTabId);
+    });
+
+    it('labels nothing when Sentry is not configured', () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+      initSentry({ ...mockConfig, dsn: '' });
+
+      expect(mockGlobalScope.setAttribute).not.toHaveBeenCalled();
+      expect(mockGlobalScope.setTag).not.toHaveBeenCalled();
+
+      warnSpy.mockRestore();
+    });
   });
 
   it('initializes Sentry with dsn, environment, and release', () => {
