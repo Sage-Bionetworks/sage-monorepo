@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import {
+  ComparisonToolService,
   PlatformService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
@@ -38,6 +39,7 @@ async function setup() {
       MessageService,
       ...provideComparisonToolService(),
       ...provideComparisonToolFilterService(),
+      { provide: ComparisonToolService, useExisting: EqtlComparisonToolService },
       EqtlComparisonToolService,
     ],
   });
