@@ -223,7 +223,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
    * Assembles and executes the standard CT pipeline for a request carrying
    * {@link CtQueryOptions}. Budgeting and paging behave exactly as documented on
    * {@link #executePagedAggregation(Criteria, Pageable, boolean, Integer)}; this overload
-   * additionally answers {@code hasRowsForPrebudgetedParents} on the returned {@link CtPage}.
+   * additionally answers {@code hasRowsForPrebudgetedParents} and {@code selectedRowInResults} on
+   * the returned {@link CtPage}.
    *
    * <p>On a <strong>parent-aware</strong> CT a budget caps distinct parents instead of rows, so a
    * budgeted request first selects the parents it admits (see
@@ -239,13 +240,15 @@ public abstract class ComparisonToolRepositorySupport<T> {
    *
    * @param matchCriteria the assembled match criteria
    * @param pageable pagination and sort; pagination is ignored when the budget applies
-   * @param options the request's include/exclude, budget, prebudgeted parents, and item id space
+   * @param options the request's include/exclude, budget, prebudgeted parents, item id space, and
+   *     selected row
    */
   protected final CtPage<T> executePagedAggregation(
     Criteria matchCriteria,
     Pageable pageable,
     CtQueryOptions options
   ) {
+    Criteria selectedRowCriteria = buildSelectedRowCriteria(options);
     BudgetMode budgetMode = resolveBudgetMode(options);
     // When the budget caps parents, first run a separate query to pick the admitted parents, then
     // narrow the match to their rows. Otherwise use the match criteria as-is.
@@ -303,7 +306,8 @@ public abstract class ComparisonToolRepositorySupport<T> {
       results.getMappedResults(),
       resultPageable,
       total,
-      findRowsForPrebudgetedParents(matchCriteria, options)
+      findRowsForPrebudgetedParents(matchCriteria, options),
+      findSelectedRowInResults(matchCriteria, selectedRowCriteria)
     );
   }
 
@@ -360,6 +364,50 @@ public abstract class ComparisonToolRepositorySupport<T> {
 
     Criteria criteria = new Criteria()
       .andOperator(matchCriteria, resolveParentItemFilter().criteriaForAny(prebudgetedParentIds));
+    return mongoTemplate.exists(
+      new Query(criteria).collation(CASE_INSENSITIVE),
+      getCollectionName()
+    );
+  }
+
+  /**
+   * The row item filter's criteria for the caller's selected row, or {@code null} when the question
+   * is not asked: no selected row, or an INCLUDE request, whose rows are the caller's own pins.
+   *
+   * <p>Built before any query runs, so a malformed row token fails the request before it reaches
+   * the database, as a malformed pin does in {@code buildCtMatchCriteria}.
+   */
+  @Nullable
+  private Criteria buildSelectedRowCriteria(CtQueryOptions options) {
+    String selectedRowId = options.selectedRowId();
+    if (options.isInclude() || selectedRowId == null) {
+      return null;
+    }
+    return getRowItemFilter().criteriaForAny(List.of(selectedRowId));
+  }
+
+  /**
+   * Answers whether the caller's selected row is in the match set. Only the whole match set can
+   * answer that, so no single page can, and the caller uses it to keep a selection that sits on
+   * another page and reset one that a filter removed.
+   *
+   * <p>Returns {@code null} when the question was not asked (see
+   * {@link #buildSelectedRowCriteria}). An EXCLUDE request leaves out the pinned rows, so a pinned
+   * selected row answers {@code false}; the caller already holds its pins and checks them first.
+   *
+   * <p>A separate query for the same reasons as {@link #findRowsForPrebudgetedParents}, and so
+   * equally limited to <strong>stored fields</strong>.
+   */
+  @Nullable
+  private Boolean findSelectedRowInResults(
+    Criteria matchCriteria,
+    @Nullable Criteria selectedRowCriteria
+  ) {
+    if (selectedRowCriteria == null) {
+      return null;
+    }
+
+    Criteria criteria = new Criteria().andOperator(matchCriteria, selectedRowCriteria);
     return mongoTemplate.exists(
       new Query(criteria).collation(CASE_INSENSITIVE),
       getCollectionName()

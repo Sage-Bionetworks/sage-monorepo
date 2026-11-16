@@ -40,6 +40,8 @@ public class EqtlSearchQueryDto {
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
 
+  private @Nullable String selectedRowId = null;
+
   private @Nullable String search = null;
 
   @Valid
@@ -218,6 +220,26 @@ public class EqtlSearchQueryDto {
 
   public void setItemFilterType(ItemFilterTypeQueryDto itemFilterType) {
     this.itemFilterType = itemFilterType;
+  }
+
+  public EqtlSearchQueryDto selectedRowId(@Nullable String selectedRowId) {
+    this.selectedRowId = selectedRowId;
+    return this;
+  }
+
+  /**
+   * The composite identifier of the selected row, if any. The response's selectedRowInResults then tells whether that row is anywhere in the filtered results, not just the current page. A row listed in items is left out of those results, so it answers false. Only applied when itemFilterType is 'exclude'. 
+   * @return selectedRowId
+   */
+  
+  @Schema(name = "selectedRowId", example = "rs170094~ENSG00000136267~astro", description = "The composite identifier of the selected row, if any. The response's selectedRowInResults then tells whether that row is anywhere in the filtered results, not just the current page. A row listed in items is left out of those results, so it answers false. Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("selectedRowId")
+  public @Nullable String getSelectedRowId() {
+    return selectedRowId;
+  }
+
+  public void setSelectedRowId(@Nullable String selectedRowId) {
+    this.selectedRowId = selectedRowId;
   }
 
   public EqtlSearchQueryDto search(@Nullable String search) {
@@ -422,6 +444,7 @@ public class EqtlSearchQueryDto {
         Objects.equals(this.remainingBudget, eqtlSearchQuery.remainingBudget) &&
         Objects.equals(this.items, eqtlSearchQuery.items) &&
         Objects.equals(this.itemFilterType, eqtlSearchQuery.itemFilterType) &&
+        Objects.equals(this.selectedRowId, eqtlSearchQuery.selectedRowId) &&
         Objects.equals(this.search, eqtlSearchQuery.search) &&
         Objects.equals(this.variant, eqtlSearchQuery.variant) &&
         Objects.equals(this.gene, eqtlSearchQuery.gene) &&
@@ -433,7 +456,7 @@ public class EqtlSearchQueryDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, remainingBudget, items, itemFilterType, search, variant, gene, cellClass, cellSubclass, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, remainingBudget, items, itemFilterType, selectedRowId, search, variant, gene, cellClass, cellSubclass, sortFields, sortOrders);
   }
 
   @Override
@@ -445,6 +468,7 @@ public class EqtlSearchQueryDto {
     sb.append("    remainingBudget: ").append(toIndentedString(remainingBudget)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
+    sb.append("    selectedRowId: ").append(toIndentedString(selectedRowId)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("    variant: ").append(toIndentedString(variant)).append("\n");
     sb.append("    gene: ").append(toIndentedString(gene)).append("\n");
@@ -485,6 +509,7 @@ public class EqtlSearchQueryDto {
       this.instance.setRemainingBudget(value.remainingBudget);
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
+      this.instance.setSelectedRowId(value.selectedRowId);
       this.instance.setSearch(value.search);
       this.instance.setVariant(value.variant);
       this.instance.setGene(value.gene);
@@ -517,6 +542,11 @@ public class EqtlSearchQueryDto {
     
     public EqtlSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
       this.instance.itemFilterType(itemFilterType);
+      return this;
+    }
+    
+    public EqtlSearchQueryDto.Builder selectedRowId(String selectedRowId) {
+      this.instance.selectedRowId(selectedRowId);
       return this;
     }
     

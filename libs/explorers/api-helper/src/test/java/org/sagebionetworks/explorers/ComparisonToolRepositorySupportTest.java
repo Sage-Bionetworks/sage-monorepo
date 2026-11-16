@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -177,12 +178,18 @@ class ComparisonToolRepositorySupportTest {
       .as("isEmpty expression must use $let to bind $$val to the $getField result")
       .contains("$let");
     assertThat(pipeline)
-      .as("isEmpty expression must use $getField for spaced field names, not $-prefix expression syntax")
+      .as(
+        "isEmpty expression must use $getField for spaced field names, not $-prefix expression syntax"
+      )
       .contains("$getField");
     assertThat(pipeline)
-      .as("isEmpty expression must use $type for null/missing and cover empty string and empty array")
-      .contains("$type").contains("missing")
-      .contains("$isArray").contains("$size");
+      .as(
+        "isEmpty expression must use $type for null/missing and cover empty string and empty array"
+      )
+      .contains("$type")
+      .contains("missing")
+      .contains("$isArray")
+      .contains("$size");
   }
 
   @Test
@@ -250,11 +257,7 @@ class ComparisonToolRepositorySupportTest {
 
   private Aggregation capturePipeline() {
     ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
-    verify(mongoTemplate).aggregate(
-      captor.capture(),
-      eq(COLLECTION),
-      eq(TestDocument.class)
-    );
+    verify(mongoTemplate).aggregate(captor.capture(), eq(COLLECTION), eq(TestDocument.class));
     return captor.getValue();
   }
 
@@ -414,7 +417,9 @@ class ComparisonToolRepositorySupportTest {
 
       return Map.of(
         "gene_symbol",
-        ComputedSortField.of(new Document("$toLower", "$display_gene_symbol")).withPrerequisite(prereq)
+        ComputedSortField.of(new Document("$toLower", "$display_gene_symbol")).withPrerequisite(
+          prereq
+        )
       );
     }
 
@@ -608,7 +613,9 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Test
-  @DisplayName("should append _id as final tiebreaker in sort document for deterministic pagination")
+  @DisplayName(
+    "should append _id as final tiebreaker in sort document for deterministic pagination"
+  )
   void shouldAppendIdTiebreakerInSortDocument() {
     BareRepo repo = new BareRepo(mongoTemplate);
     stubMongoTemplate(0L);
@@ -620,11 +627,15 @@ class ComparisonToolRepositorySupportTest {
     assertThat(pipeline).contains("\"_id\" : 1");
     int nameIdx = pipeline.indexOf("\"name\" : 1");
     int idIdx = pipeline.indexOf("\"_id\" : 1");
-    assertThat(idIdx).as("_id should appear after the user-requested sort field").isGreaterThan(nameIdx);
+    assertThat(idIdx)
+      .as("_id should appear after the user-requested sort field")
+      .isGreaterThan(nameIdx);
   }
 
   @Test
-  @DisplayName("should append _id once, after all sort keys, when multiple sort orders are requested")
+  @DisplayName(
+    "should append _id once, after all sort keys, when multiple sort orders are requested"
+  )
   void shouldAppendIdTiebreakerOnceAfterAllSortKeysForMultiSort() {
     ComputedRepo repo = new ComputedRepo(mongoTemplate);
     stubMongoTemplate(0L);
@@ -832,11 +843,7 @@ class ComparisonToolRepositorySupportTest {
     private static final int PAGE_SIZE = 10;
     private static final List<String> PARENT_IDS = List.of("ENSG1~5xFAD~Female");
 
-    private final Pageable pageable = PageRequest.of(
-      0,
-      PAGE_SIZE,
-      Sort.by(Sort.Order.asc("name"))
-    );
+    private final Pageable pageable = PageRequest.of(0, PAGE_SIZE, Sort.by(Sort.Order.asc("name")));
 
     private CtQueryOptions options(boolean isInclude, List<String> prebudgetedParentIds) {
       return new CtQueryOptions(isInclude, null, prebudgetedParentIds, false);
@@ -960,6 +967,163 @@ class ComparisonToolRepositorySupportTest {
   }
 
   @Nested
+  @DisplayName("selected row")
+  class SelectedRow {
+
+    private static final String SELECTED_ROW_ID = "row-7";
+
+    private final Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("name")));
+
+    private CtQueryOptions options(boolean isInclude, String selectedRowId) {
+      return CtQueryOptions.rowSpace(isInclude, null).withSelectedRowId(selectedRowId);
+    }
+
+    @Test
+    @DisplayName("should leave the flag unset without a query when no row is selected")
+    void shouldLeaveTheFlagUnsetWithoutAQueryWhenNoRowIsSelected() {
+      // given
+      SelfParentedRepo repo = new SelfParentedRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      // when
+      CtPage<TestDocument> page = repo.run(
+        new Criteria(),
+        pageable,
+        CtQueryOptions.rowSpace(false, null)
+      );
+
+      // then
+      assertThat(page.getSelectedRowInResults()).isNull();
+      verify(mongoTemplate, never()).exists(any(Query.class), anyString());
+    }
+
+    @Test
+    @DisplayName("should treat a blank selected row as no selection")
+    void shouldTreatABlankSelectedRowAsNoSelection() {
+      // given
+      SelfParentedRepo repo = new SelfParentedRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      // when
+      CtPage<TestDocument> page = repo.run(new Criteria(), pageable, options(false, "  "));
+
+      // then
+      assertThat(page.getSelectedRowInResults()).isNull();
+      verify(mongoTemplate, never()).exists(any(Query.class), anyString());
+    }
+
+    @Test
+    @DisplayName("should leave the flag unset on an include query even with a selected row")
+    void shouldLeaveTheFlagUnsetOnAnIncludeQueryEvenWithASelectedRow() {
+      // given
+      SelfParentedRepo repo = new SelfParentedRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+
+      // when
+      CtPage<TestDocument> page = repo.run(
+        new Criteria(),
+        pageable,
+        options(true, SELECTED_ROW_ID)
+      );
+
+      // then
+      assertThat(page.getSelectedRowInResults()).isNull();
+      verify(mongoTemplate, never()).exists(any(Query.class), anyString());
+    }
+
+    @Test
+    @DisplayName("should report true when the selected row is in the match set")
+    void shouldReportTrueWhenTheSelectedRowIsInTheMatchSet() {
+      // given
+      SelfParentedRepo repo = new SelfParentedRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(true);
+
+      // when
+      CtPage<TestDocument> page = repo.run(
+        new Criteria(),
+        pageable,
+        options(false, SELECTED_ROW_ID)
+      );
+
+      // then
+      assertThat(page.getSelectedRowInResults()).isTrue();
+    }
+
+    @Test
+    @DisplayName("should report false when the selected row is not in the match set")
+    void shouldReportFalseWhenTheSelectedRowIsNotInTheMatchSet() {
+      // given
+      SelfParentedRepo repo = new SelfParentedRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(false);
+
+      // when
+      CtPage<TestDocument> page = repo.run(
+        new Criteria(),
+        pageable,
+        options(false, SELECTED_ROW_ID)
+      );
+
+      // then
+      assertThat(page.getSelectedRowInResults()).isFalse();
+    }
+
+    @Test
+    @DisplayName(
+      "should probe the row item filter alongside the match criteria, even when parent-aware"
+    )
+    void shouldProbeTheRowItemFilterAlongsideTheMatchCriteriaEvenWhenParentAware() {
+      // given
+      ParentAwareRepo repo = new ParentAwareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(true);
+      Criteria matchCriteria = Criteria.where("tissue").is("brain");
+
+      // when
+      repo.run(matchCriteria, pageable, options(false, SELECTED_ROW_ID));
+
+      // then
+      Query probe = captureExistsQuery();
+      assertThat(probe.getQueryObject().toJson())
+        .contains("\"tissue\": \"brain\"")
+        .contains("\"" + ROW_ID_FIELD + "\"")
+        .contains(SELECTED_ROW_ID)
+        .doesNotContain(PARENT_ID_FIELD);
+      assertThat(probe.getCollation()).isPresent();
+    }
+
+    @Test
+    @DisplayName("should answer both flags with separate probes when both are asked")
+    void shouldAnswerBothFlagsWithSeparateProbesWhenBothAreAsked() {
+      // given
+      ParentAwareRepo repo = new ParentAwareRepo(mongoTemplate);
+      stubMongoTemplate(0L);
+      when(mongoTemplate.exists(any(Query.class), eq(COLLECTION))).thenReturn(true, false);
+      CtQueryOptions options = new CtQueryOptions(
+        false,
+        null,
+        List.of("ENSG1~5xFAD~Female"),
+        false
+      ).withSelectedRowId(SELECTED_ROW_ID);
+
+      // when
+      CtPage<TestDocument> page = repo.run(new Criteria(), pageable, options);
+
+      // then
+      assertThat(page.getHasRowsForPrebudgetedParents()).isTrue();
+      assertThat(page.getSelectedRowInResults()).isFalse();
+      verify(mongoTemplate, times(2)).exists(any(Query.class), eq(COLLECTION));
+    }
+
+    private Query captureExistsQuery() {
+      ArgumentCaptor<Query> captor = ArgumentCaptor.forClass(Query.class);
+      verify(mongoTemplate).exists(captor.capture(), eq(COLLECTION));
+      return captor.getValue();
+    }
+  }
+
+  @Nested
   @DisplayName("parent-aware capping")
   class ParentAwareCapping {
 
@@ -1034,8 +1198,9 @@ class ComparisonToolRepositorySupportTest {
 
       repo.run(matchCriteria, pageable, options(BUDGET, List.of()));
 
-      assertThat(stageNamed(parentSelectionStages(), "$match"))
-        .isEqualTo(matchCriteria.getCriteriaObject());
+      assertThat(stageNamed(parentSelectionStages(), "$match")).isEqualTo(
+        matchCriteria.getCriteriaObject()
+      );
     }
 
     @Test
@@ -1110,8 +1275,11 @@ class ComparisonToolRepositorySupportTest {
       repo.run(matchCriteria, pageable, options(BUDGET, PREBUDGETED));
 
       List<Document> stages = parentSelectionStages();
-      assertThat(sortBeforeGroup(stages).keySet())
-        .containsExactly(SPACED_SORT_FLAG, SPACED_SORT_PATH, "_id");
+      assertThat(sortBeforeGroup(stages).keySet()).containsExactly(
+        SPACED_SORT_FLAG,
+        SPACED_SORT_PATH,
+        "_id"
+      );
       assertThat(sortAfterGroup(stages).keySet())
         .as("each row sort key maps to the key it was captured under, in the same order")
         .containsExactly(SPACED_SORT_FLAG, SORT_KEY_ALIAS, LEADING_ROW_ID_FIELD);
@@ -1214,8 +1382,12 @@ class ComparisonToolRepositorySupportTest {
       repo.run(matchCriteria, pageable, options(BUDGET, PREBUDGETED));
 
       assertThat(admittedParentsClause(rowStages()))
-        .as("a budget of %d behind %d prebudgeted parents admits %d more, not fewer", BUDGET,
-          PREBUDGETED.size(), BUDGET)
+        .as(
+          "a budget of %d behind %d prebudgeted parents admits %d more, not fewer",
+          BUDGET,
+          PREBUDGETED.size(),
+          BUDGET
+        )
         .isEqualTo(parentsClause(ALL_ADMITTED, Criteria::orOperator));
     }
 
@@ -1226,10 +1398,11 @@ class ComparisonToolRepositorySupportTest {
       stubMongoTemplate(0L);
       stubParentSelection(SELECTED);
 
-      repo.run(matchCriteria, PageRequest.of(2, PAGE_SIZE, pageable.getSort()), options(
-        BUDGET,
-        PREBUDGETED
-      ));
+      repo.run(
+        matchCriteria,
+        PageRequest.of(2, PAGE_SIZE, pageable.getSort()),
+        options(BUDGET, PREBUDGETED)
+      );
 
       assertThat(rowStages())
         .as("the admitted parents already bound the result, so nothing is skipped or capped")
@@ -1352,8 +1525,10 @@ class ComparisonToolRepositorySupportTest {
       @SuppressWarnings("unchecked")
       Collection<Object> admittedIds = (Collection<Object>) rowIdClause.get("$in");
       assertThat(admittedIds)
-        .as("an exhausted budget frees children of accounted-for parents whether or not the CT has"
-          + " a parent item filter of its own")
+        .as(
+          "an exhausted budget frees children of accounted-for parents whether or not the CT has" +
+          " a parent item filter of its own"
+        )
         .containsExactly(PREBUDGETED.toArray());
       assertThat(stages)
         .as("{$limit: 0} is rejected by the server, and free children are unpaged besides")
@@ -1367,8 +1542,10 @@ class ComparisonToolRepositorySupportTest {
       stubParentSelection(List.of(UNPARSEABLE_TOKEN));
 
       assertThatThrownBy(() -> repo.run(matchCriteria, pageable, options(BUDGET, List.of())))
-        .as("a row whose token cannot round-trip is unaddressable by every feature keyed by that"
-          + " token, so the request says so rather than dropping the parent silently")
+        .as(
+          "a row whose token cannot round-trip is unaddressable by every feature keyed by that" +
+          " token, so the request says so rather than dropping the parent silently"
+        )
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(UNPARSEABLE_TOKEN);
     }

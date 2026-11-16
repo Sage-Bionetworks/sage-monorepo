@@ -1,9 +1,9 @@
 package org.sagebionetworks.qtl.api.model.repository;
 
 import java.util.List;
+import org.sagebionetworks.explorers.CtPage;
 import org.sagebionetworks.qtl.api.model.document.EqtlDocument;
 import org.sagebionetworks.qtl.api.model.dto.EqtlSearchQueryDto;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -19,7 +19,7 @@ public interface CustomEqtlRepository {
    * @param pageable the pagination information
    * @param query the search query containing all filter criteria
    * @param items the sanitized list of composite identifiers (from query.items)
-   * @return page of eQTL documents matching all criteria
+   * @return page of eQTL documents matching all criteria, with whether the selected row is in them
    */
-  Page<EqtlDocument> findAll(Pageable pageable, EqtlSearchQueryDto query, List<String> items);
+  CtPage<EqtlDocument> findAll(Pageable pageable, EqtlSearchQueryDto query, List<String> items);
 }

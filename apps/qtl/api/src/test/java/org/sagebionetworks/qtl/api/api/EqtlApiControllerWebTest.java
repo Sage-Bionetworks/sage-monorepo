@@ -1,5 +1,6 @@
 package org.sagebionetworks.qtl.api.api;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -14,6 +15,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.sagebionetworks.explorers.SortOrdersConverterFactory;
 import org.sagebionetworks.qtl.api.exception.DataIntegrityException;
 import org.sagebionetworks.qtl.api.exception.GlobalExceptionHandler;
@@ -100,6 +102,27 @@ class EqtlApiControllerWebTest {
       .andExpect(header().string("Cache-Control", "no-cache, no-store, must-revalidate"))
       .andExpect(jsonPath("$.eqtls[0].composite_id").value(COMPOSITE_ID))
       .andExpect(jsonPath("$.page.totalElements").value(381));
+  }
+
+  @Test
+  @DisplayName("should bind the selected row id and return whether it is in the results")
+  void shouldBindTheSelectedRowIdAndReturnWhetherItIsInTheResults() throws Exception {
+    // given
+    ArgumentCaptor<EqtlSearchQueryDto> queryCaptor = ArgumentCaptor.forClass(
+      EqtlSearchQueryDto.class
+    );
+    when(service.loadEqtls(queryCaptor.capture())).thenReturn(
+      EqtlsPageDto.builder().eqtls(List.of()).selectedRowInResults(true).build()
+    );
+
+    // when
+    ResultActions result = mockMvc.perform(
+      sortedRequest().param("itemFilterType", "exclude").param("selectedRowId", COMPOSITE_ID)
+    );
+
+    // then
+    result.andExpect(status().isOk()).andExpect(jsonPath("$.selectedRowInResults").value(true));
+    assertThat(queryCaptor.getValue().getSelectedRowId()).isEqualTo(COMPOSITE_ID);
   }
 
   @Test

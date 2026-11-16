@@ -8,7 +8,7 @@ import org.springframework.lang.Nullable;
 
 /**
  * A comparison-tool page: an ordinary {@link PageImpl} plus the CT-specific
- * {@code hasRowsForPrebudgetedParents} flag.
+ * {@code hasRowsForPrebudgetedParents} and {@code selectedRowInResults} flags.
  *
  * <p>Extends {@link PageImpl} rather than wrapping it so that widening
  * {@link ComparisonToolRepositorySupport#executePagedAggregation} to return this type costs the
@@ -22,14 +22,28 @@ public final class CtPage<T> extends PageImpl<T> {
   @Nullable
   private final Boolean hasRowsForPrebudgetedParents;
 
+  @Nullable
+  private final Boolean selectedRowInResults;
+
   public CtPage(
     List<T> content,
     Pageable pageable,
     long total,
     @Nullable Boolean hasRowsForPrebudgetedParents
   ) {
+    this(content, pageable, total, hasRowsForPrebudgetedParents, null);
+  }
+
+  public CtPage(
+    List<T> content,
+    Pageable pageable,
+    long total,
+    @Nullable Boolean hasRowsForPrebudgetedParents,
+    @Nullable Boolean selectedRowInResults
+  ) {
     super(content, pageable, total);
     this.hasRowsForPrebudgetedParents = hasRowsForPrebudgetedParents;
+    this.selectedRowInResults = selectedRowInResults;
   }
 
   /**
@@ -43,5 +57,18 @@ public final class CtPage<T> extends PageImpl<T> {
   @Nullable
   public Boolean getHasRowsForPrebudgetedParents() {
     return hasRowsForPrebudgetedParents;
+  }
+
+  /**
+   * Whether the row the caller has selected is anywhere in this request's whole match set, not
+   * just the returned page. A row the request excludes through its items is not in it, so a pinned
+   * selected row answers {@code false}.
+   *
+   * <p>{@code null} when the question was not asked: an INCLUDE request, or no selected row id
+   * (see {@link CtQueryOptions#withSelectedRowId(String)}).
+   */
+  @Nullable
+  public Boolean getSelectedRowInResults() {
+    return selectedRowInResults;
   }
 }

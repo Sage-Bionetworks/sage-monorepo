@@ -8,11 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.explorers.ApiHelper;
 import org.sagebionetworks.explorers.ComparisonToolRepositorySupport;
 import org.sagebionetworks.explorers.CtFilterConfig;
+import org.sagebionetworks.explorers.CtPage;
+import org.sagebionetworks.explorers.CtQueryOptions;
 import org.sagebionetworks.qtl.api.model.document.EqtlDocument;
 import org.sagebionetworks.qtl.api.model.dto.EqtlIdentifier;
 import org.sagebionetworks.qtl.api.model.dto.EqtlSearchQueryDto;
 import org.sagebionetworks.qtl.api.model.dto.ItemFilterTypeQueryDto;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -85,7 +86,7 @@ public class CustomEqtlRepositoryImpl
   }
 
   @Override
-  public Page<EqtlDocument> findAll(
+  public CtPage<EqtlDocument> findAll(
     Pageable pageable,
     EqtlSearchQueryDto query,
     List<String> items
@@ -94,16 +95,19 @@ public class CustomEqtlRepositoryImpl
       query.getItemFilterType(),
       ItemFilterTypeQueryDto.INCLUDE
     );
-    boolean isInclude = filterType == ItemFilterTypeQueryDto.INCLUDE;
+    CtQueryOptions options = CtQueryOptions.rowSpace(
+      filterType == ItemFilterTypeQueryDto.INCLUDE,
+      query.getRemainingBudget()
+    ).withSelectedRowId(query.getSelectedRowId());
     Criteria matchCriteria = buildCtMatchCriteria(
       query,
       items,
-      isInclude,
+      options,
       query.getSearch(),
       getFilterConfig()
     );
 
-    return executePagedAggregation(matchCriteria, pageable, isInclude, query.getRemainingBudget());
+    return executePagedAggregation(matchCriteria, pageable, options);
   }
 
   /**

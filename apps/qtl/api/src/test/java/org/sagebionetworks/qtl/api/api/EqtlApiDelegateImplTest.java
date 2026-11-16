@@ -68,6 +68,21 @@ class EqtlApiDelegateImplTest {
   }
 
   @Test
+  @DisplayName("should accept a selected row id as a known param")
+  void shouldAcceptASelectedRowIdAsAKnownParam() {
+    // given
+    request.setParameter("selectedRowId", "rs1~ENSG1~astro");
+    EqtlSearchQueryDto query = new EqtlSearchQueryDto();
+    when(service.loadEqtls(query)).thenReturn(EqtlsPageDto.builder().eqtls(List.of()).build());
+
+    // when
+    ResponseEntity<EqtlsPageDto> response = delegate.getEqtls(query);
+
+    // then
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+  }
+
+  @Test
   @DisplayName("should reject the request before querying when a param is unknown")
   void shouldRejectTheRequestBeforeQueryingWhenAParamIsUnknown() {
     // given

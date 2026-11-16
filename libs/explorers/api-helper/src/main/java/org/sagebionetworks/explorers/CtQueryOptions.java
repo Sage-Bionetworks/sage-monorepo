@@ -22,15 +22,40 @@ import org.springframework.lang.Nullable;
  *     children are therefore free; never null (an absent value is normalized to an empty list)
  * @param matchParentIdSpace true when {@code items} are matched against the parent item filter
  *     rather than the row item filter. Exactly one is matched, never both
+ * @param selectedRowId the row token of the row the caller has selected, or null when the request
+ *     doesn't ask whether that row is still in the results; a blank value is normalized to null
  */
 public record CtQueryOptions(
   boolean isInclude,
   @Nullable Integer remainingBudget,
   List<String> prebudgetedParentIds,
-  boolean matchParentIdSpace
+  boolean matchParentIdSpace,
+  @Nullable String selectedRowId
 ) {
   public CtQueryOptions {
     prebudgetedParentIds = ApiHelper.sanitizeItems(prebudgetedParentIds);
+    selectedRowId = selectedRowId == null || selectedRowId.isBlank() ? null : selectedRowId;
+  }
+
+  /** Options that don't ask about a selected row. */
+  public CtQueryOptions(
+    boolean isInclude,
+    @Nullable Integer remainingBudget,
+    List<String> prebudgetedParentIds,
+    boolean matchParentIdSpace
+  ) {
+    this(isInclude, remainingBudget, prebudgetedParentIds, matchParentIdSpace, null);
+  }
+
+  /** These options, also asking whether the given row is still in the results. */
+  public CtQueryOptions withSelectedRowId(@Nullable String rowId) {
+    return new CtQueryOptions(
+      isInclude,
+      remainingBudget,
+      prebudgetedParentIds,
+      matchParentIdSpace,
+      rowId
+    );
   }
 
   /**
