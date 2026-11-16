@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is an Angular standalone component library within the Sage monorepo that provides an interactive data comparison visualization tool. It renders comparative data in a tabular format with heatmap cells, filtering, column selection, pinning, and CSV/image export. It is consumed by `agora` and `model-ad` comparison tool libraries.
+This is an Angular standalone component library within the Sage monorepo that provides an interactive data comparison visualization tool. It renders comparative data in a tabular format with heatmap cells, filtering, column selection, pinning, and CSV/image export. It is consumed by the `agora`, `model-ad`, and `qtl` comparison tool libraries.
 
 ## Commands
 

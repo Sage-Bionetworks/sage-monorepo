@@ -328,15 +328,16 @@ Criteria matchCriteria = buildCtMatchCriteria(
 
 ## Existing implementations (reference)
 
-| App      | Class                                    | Collection             | Notable                                                                                                                     |
-| -------- | ---------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Agora    | `CustomNominatedTargetRepositoryImpl`    | `nominatedtargets`     | 4 array columns, simple item filter                                                                                         |
-| Agora    | `CustomNominatedDrugRepositoryImpl`      | `nominateddrugs`       | 2 array columns, composite item filter                                                                                      |
-| Model-AD | `CustomModelOverviewRepositoryImpl`      | `model_overview`       | 1 array column                                                                                                              |
-| Model-AD | `CustomDiseaseCorrelationRepositoryImpl` | `disease_correlation`  | Nested object columns (brain regions), companion numeric field, base criteria (cluster)                                     |
-| Model-AD | `CustomTranscriptomicsRepositoryImpl`    | `rna_de_aggregate`     | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue), self-parented          |
-| Model-AD | `CustomProteomicsRepositoryImpl`         | `protein_de_aggregate` | Nested object columns (time-points), composite item filter, custom multi-field search, base criteria (tissue), parent-aware |
-| QTL      | `CustomEqtlRepositoryImpl`               | `eqtl_results`         | Composite item filter, custom multi-field search, companion numeric field (adjusted p-value), self-parented                 |
+| App      | Class                                       | Collection             | Notable                                                                                                                     |
+| -------- | ------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Agora    | `CustomNominatedTargetRepositoryImpl`       | `nominatedtargets`     | 4 array columns, simple item filter                                                                                         |
+| Agora    | `CustomNominatedDrugRepositoryImpl`         | `nominateddrugs`       | 2 array columns, composite item filter                                                                                      |
+| Model-AD | `CustomMouseModelOverviewRepositoryImpl`    | `model_overview`       | 1 array column                                                                                                              |
+| Model-AD | `CustomMarmosetModelOverviewRepositoryImpl` | `marmo_overview`       | 2 array columns                                                                                                             |
+| Model-AD | `CustomDiseaseCorrelationRepositoryImpl`    | `disease_correlation`  | Nested object columns (brain regions), companion numeric field, base criteria (cluster)                                     |
+| Model-AD | `CustomTranscriptomicsRepositoryImpl`       | `rna_de_aggregate`     | Nested object columns (time-points), computed fallback field, custom search, base criteria (tissue), self-parented          |
+| Model-AD | `CustomProteomicsRepositoryImpl`            | `protein_de_aggregate` | Nested object columns (time-points), composite item filter, custom multi-field search, base criteria (tissue), parent-aware |
+| QTL      | `CustomEqtlRepositoryImpl`                  | `eqtl_results`         | Composite item filter, custom multi-field search, companion numeric field (adjusted p-value), self-parented                 |
 
 All implementations are under `apps/<product>/api-next/src/main/java/.../model/repository/`, except QTL's, which are under `apps/qtl/api/src/main/java/.../model/repository/`.
 
