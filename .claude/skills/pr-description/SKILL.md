@@ -42,7 +42,7 @@ The ticket ID appears in one of these places (check in order):
 2. Recent commit messages on the current branch (not on `main`)
 3. The user may state it directly
 
-Common ticket prefixes in this repo: **AG**, **MG**, **QTL**, **SMR**.
+Ticket IDs match `[A-Z]+-\d+` (e.g. `AG-`, `EX-`, `MG-`, `QTL-`, `SMR-`; new projects add prefixes).
 
 ### Fetching ticket details from Jira
 
@@ -146,7 +146,7 @@ Do NOT include unit test or e2e test commands — CI handles those.]
 - Step a reviewer can perform manually
 - Another verification step
 
-### Preview
+## Preview
 
 [If the PR includes visual/UI changes, suggest specific screenshots to capture.]
 
@@ -193,11 +193,11 @@ verify to gain confidence this PR is correct.
 
 ### Preview
 
-- Only include this sub-section when the PR has **visual or UI changes**
+- Only include this section when the PR has **visual or UI changes**
 - Suggest **specific screens or components** to screenshot, not generic "take a screenshot"
 - Use the before/after table format from the template
 - Be precise: "Screenshot the gene details page header at /genes/APOE" is better than "Screenshot the page"
-- If the change is purely backend or config, omit the Screenshots sub-section entirely
+- If the change is purely backend or config, omit the Preview section entirely
 
 ---
 
@@ -210,6 +210,6 @@ Before writing the files, verify:
 - Related Issue links are full URLs
 - Changelog is 3–7 flat bullets in imperative voice
 - Testing has actionable human-verification steps (no CI commands)
-- Screenshots sub-section is present only for visual changes, with specific guidance
+- Preview section is present only for visual changes, with specific guidance
 - Jira acceptance criteria are reflected in Testing steps where applicable
 - Output is saved to `tmp/pr-description/TICKET-ID.md`
