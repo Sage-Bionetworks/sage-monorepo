@@ -165,3 +165,4 @@ When running tests in the multi-module workspace, use targeted commands with pro
 - Avoid real HTTP calls or database operations
 - Use Arrange-Act-Assert (AAA) structure
 - Prefer one assertion per test (unless logically grouped)
+- When adding to an existing test class, match its naming. If it doesn't follow the convention above, point out the drift and let the user decide whether to rename.
