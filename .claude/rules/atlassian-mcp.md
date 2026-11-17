@@ -56,6 +56,8 @@ mcp__atlassian__searchJiraIssuesUsingJql(
 )
 ```
 
+`getJiraIssue` returns a compact view by default, which leaves out fields such as the parent, issue links and comments. Pass `view: "full"` when those are needed, including for the related context above.
+
 ## Ticket-ID prefixes
 
 Examples seen in this repo: `SMR`, `AG`, `MG`, `QTL`. Not exhaustive — new projects can introduce their own prefixes, so prefer pattern matching over hard-coded lists when scanning branch names or PR titles.
