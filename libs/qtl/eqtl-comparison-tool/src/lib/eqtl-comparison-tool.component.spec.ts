@@ -200,6 +200,21 @@ describe('EqtlComparisonToolComponent', () => {
     );
   });
 
+  it('should ask Pin All for the remaining budget of unpinned eQTLs instead of a page', async () => {
+    const { comparisonToolService, eqtlService } = await setup(mockPage([mockEqtl]));
+    jest.spyOn(comparisonToolService, 'canPinAll').mockReturnValue(true);
+    const remainingBudget = comparisonToolService.pinLimit() - comparisonToolService.pinCount();
+
+    comparisonToolService.pinAll();
+
+    const pinAllQuery = jest.mocked(eqtlService.getEqtls).mock.lastCall?.[0];
+    expect(pinAllQuery).toEqual(
+      expect.objectContaining({ itemFilterType: ItemFilterTypeQuery.Exclude, remainingBudget }),
+    );
+    expect(pinAllQuery).not.toHaveProperty('pageNumber');
+    expect(pinAllQuery).not.toHaveProperty('pageSize');
+  });
+
   it('renders the sidebar chiclets and tabs', async () => {
     await setup();
     expect(screen.getByText('variant:')).toBeInTheDocument();

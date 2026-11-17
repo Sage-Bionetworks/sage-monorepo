@@ -16,7 +16,7 @@ import {
 } from '@sagebionetworks/qtl/api-client';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/qtl/config';
 import { SortMeta } from 'primeng/api';
-import { map, of, shareReplay } from 'rxjs';
+import { map, shareReplay } from 'rxjs';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
 
@@ -84,8 +84,13 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
       page: ComparisonToolPage.EQtls,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
-      // TODO(EX-251): fetch the matching rows for Pin All
-      pinAllFetch: () => of({ rows: [], totalElements: 0 }),
+      pinAllFetch: (query, remainingBudget) =>
+        this.eqtlService.getEqtls(this.buildUnpinnedQuery(query, { remainingBudget })).pipe(
+          map((response) => ({
+            rows: response.eqtls,
+            totalElements: response.page.totalElements,
+          })),
+        ),
     });
   }
 
@@ -93,7 +98,10 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     this.comparisonToolService.disconnect();
   }
 
-  private buildUnpinnedQuery(currentQuery: ComparisonToolQuery): EqtlSearchQuery {
+  private buildUnpinnedQuery(
+    currentQuery: ComparisonToolQuery,
+    options?: { remainingBudget?: number },
+  ): EqtlSearchQuery {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
       currentQuery.multiSortMeta,
     );
@@ -103,7 +111,7 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     return {
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery),
+      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
       sortFields,
       sortOrders,
       variant: selectedFilters['variant'],
