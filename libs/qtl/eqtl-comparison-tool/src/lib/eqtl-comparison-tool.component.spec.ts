@@ -131,6 +131,7 @@ describe('EqtlComparisonToolComponent', () => {
     const defaultSort = component.viewConfig.defaultSort ?? [];
 
     expect(eqtlService.getEqtls).toHaveBeenCalledWith({
+      items: [],
       itemFilterType: ItemFilterTypeQuery.Exclude,
       pageNumber: 0,
       pageSize: DEFAULT_PAGE_SIZE,
@@ -186,6 +187,17 @@ describe('EqtlComparisonToolComponent', () => {
       sortOrders: defaultSort.map((sort) => sort.order),
     });
     expect(comparisonToolService.pinnedData()).toEqual([mockEqtl]);
+  });
+
+  it('should leave the pinned eQTLs out of the unpinned query', async () => {
+    const { component, eqtlService } = await setup();
+    const pinnedItems = [mockEqtl.composite_id];
+
+    component.getUnpinnedData({ ...mockEmptyComparisonToolQuery, pinnedItems });
+
+    expect(jest.mocked(eqtlService.getEqtls).mock.lastCall?.[0]).toEqual(
+      expect.objectContaining({ items: pinnedItems, itemFilterType: ItemFilterTypeQuery.Exclude }),
+    );
   });
 
   it('renders the sidebar chiclets and tabs', async () => {

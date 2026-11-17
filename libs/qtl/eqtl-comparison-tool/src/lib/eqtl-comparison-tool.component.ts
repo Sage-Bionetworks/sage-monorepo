@@ -100,8 +100,8 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
 
     const selectedFilters = this.comparisonToolService.selectedFilters();
 
-    // TODO(EX-251): send the pinned items
     return {
+      items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
       ...this.comparisonToolService.buildPaginationOrBudget(currentQuery),
       sortFields,
