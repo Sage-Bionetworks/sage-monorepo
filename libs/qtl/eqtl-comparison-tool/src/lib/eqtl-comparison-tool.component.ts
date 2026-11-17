@@ -50,6 +50,7 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     defaultSort: [{ field: 'adj_p_val', order: 1 }],
     // TODO(EX-251): set the row id and pinned download
     // TODO(EX-287): round the Beta and MAF columns on screen
+    // TODO(EX-279): hide the view details button; the eQTL CT has no details page
     // TODO(EX-252): turn on row selection and hover
   };
 
