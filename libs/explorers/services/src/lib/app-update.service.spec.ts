@@ -26,6 +26,7 @@ import {
   STALE_CHUNK_PAGE_LOADS_METRIC,
   STALE_CHUNK_PAGE_LOAD_GUARD_MS,
   STALE_CHUNK_PAGE_LOAD_PENDING_KEY,
+  STALE_CHUNK_PAGE_LOAD_SKIPPED_METRIC,
   VERSION_CHECK_FAILURES_METRIC,
   VERSION_CHECK_TIMEOUT_MS,
   VERSION_CONFIRMED_MISMATCHES_METRIC,
@@ -40,6 +41,8 @@ import {
   AppVersionCheckOutcomeEnum,
   MismatchedVersionsEnum,
   PAGE_LOADER,
+  StaleChunkPageLoadSkipReason,
+  StaleChunkPageLoadSkipReasonEnum,
   VersionCheckEndpointEnum,
   VersionCheckFailureReason,
   VersionCheckFailureReasonEnum,
@@ -832,6 +835,12 @@ describe('AppUpdateService', () => {
         await jest.advanceTimersByTimeAsync(0);
       }
 
+      function expectPageLoadSkippedFor(reason: StaleChunkPageLoadSkipReason) {
+        expect(Sentry.metrics.count).toHaveBeenCalledWith(STALE_CHUNK_PAGE_LOAD_SKIPPED_METRIC, 1, {
+          attributes: { reason },
+        });
+      }
+
       it('loads the page the user was navigating to, and marks it to be counted', async () => {
         setup().start(loadedAppVersion, siteName);
 
@@ -839,9 +848,14 @@ describe('AppUpdateService', () => {
 
         expect(loadPage).toHaveBeenCalledWith(targetUrl);
         expect(window.sessionStorage.getItem(STALE_CHUNK_PAGE_LOAD_PENDING_KEY)).toBe('true');
+        expect(Sentry.metrics.count).not.toHaveBeenCalledWith(
+          STALE_CHUNK_PAGE_LOAD_SKIPPED_METRIC,
+          expect.anything(),
+          expect.anything(),
+        );
       });
 
-      it('keeps the update notice instead of loading another page within the guard window', async () => {
+      it('keeps the update notice and counts the skip when the page it loaded is still stale', async () => {
         const pageLoadedAt = Date.now() - STALE_CHUNK_PAGE_LOAD_GUARD_MS;
         window.sessionStorage.setItem(STALE_CHUNK_PAGE_LOADED_AT_KEY, String(pageLoadedAt));
         setup().start(loadedAppVersion, siteName);
@@ -850,6 +864,7 @@ describe('AppUpdateService', () => {
 
         expect(loadPage).not.toHaveBeenCalled();
         expect(isShowingAppUpdateNotice()).toBe(true);
+        expectPageLoadSkippedFor(StaleChunkPageLoadSkipReasonEnum.StillStaleAfterPageLoad);
       });
 
       it('loads the page again once the guard window has passed', async () => {
@@ -862,7 +877,7 @@ describe('AppUpdateService', () => {
         expect(loadPage).toHaveBeenCalledWith(targetUrl);
       });
 
-      it('keeps the update notice when session storage is unavailable', async () => {
+      it('keeps the update notice when session storage is unavailable, and counts the skip', async () => {
         setup().start(loadedAppVersion, siteName);
         jest.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
           throw new DOMException('Access is denied', 'SecurityError');
@@ -872,6 +887,19 @@ describe('AppUpdateService', () => {
 
         expect(loadPage).not.toHaveBeenCalled();
         expect(isShowingAppUpdateNotice()).toBe(true);
+        expectPageLoadSkippedFor(StaleChunkPageLoadSkipReasonEnum.StorageUnavailable);
+      });
+
+      it('counts the skip when session storage is full', async () => {
+        setup().start(loadedAppVersion, siteName);
+        jest.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+          throw new DOMException('The quota has been exceeded.', 'QuotaExceededError');
+        });
+
+        await failRouteChunkOnNewerDeploy();
+
+        expect(loadPage).not.toHaveBeenCalled();
+        expectPageLoadSkippedFor(StaleChunkPageLoadSkipReasonEnum.StorageUnavailable);
       });
     });
 

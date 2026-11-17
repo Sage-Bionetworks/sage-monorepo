@@ -20,6 +20,7 @@ import {
   STALE_CHUNK_PAGE_LOADS_METRIC,
   STALE_CHUNK_PAGE_LOAD_GUARD_MS,
   STALE_CHUNK_PAGE_LOAD_PENDING_KEY,
+  STALE_CHUNK_PAGE_LOAD_SKIPPED_METRIC,
   VERSION_CHECK_FAILURES_METRIC,
   VERSION_CHECK_TIMEOUT_MS,
   VERSION_CONFIRMED_MISMATCHES_METRIC,
@@ -121,6 +122,22 @@ export const VersionCheckFailureReasonEnum = {
 } as const;
 export type VersionCheckFailureReason =
   (typeof VersionCheckFailureReasonEnum)[keyof typeof VersionCheckFailureReasonEnum];
+
+/**
+ * Why a tab whose chunk was removed by a deploy did not load a new page. These values are reported
+ * as a Sentry metric attribute.
+ */
+export const StaleChunkPageLoadSkipReasonEnum = {
+  /**
+   * The tab already loaded a new page for a stale chunk within `STALE_CHUNK_PAGE_LOAD_GUARD_MS`,
+   * and that page is stale too: a rolling deploy served it, or the new build is missing a chunk
+   */
+  StillStaleAfterPageLoad: 'still-stale-after-page-load',
+  /** `sessionStorage` is blocked or full, so the guard cannot be kept */
+  StorageUnavailable: 'storage-unavailable',
+} as const;
+export type StaleChunkPageLoadSkipReason =
+  (typeof StaleChunkPageLoadSkipReasonEnum)[keyof typeof StaleChunkPageLoadSkipReasonEnum];
 
 const MISCONFIGURATION_REASONS: ReadonlySet<VersionCheckFailureReason> = new Set([
   VersionCheckFailureReasonEnum.InvalidResponse,
@@ -356,25 +373,40 @@ export class AppUpdateService {
   /**
    * Loads `targetUrl` as a new page, at most once per `STALE_CHUNK_PAGE_LOAD_GUARD_MS`. Without
    * `sessionStorage` (e.g. blocked by privacy settings), the guard cannot be kept, so no page is
-   * loaded and the update notice stays.
+   * loaded and the update notice stays. A page load that is skipped is counted with its reason.
    */
   private loadPageForStaleChunk(targetUrl: string) {
+    const skipReason = this.reserveStaleChunkPageLoad();
+    if (skipReason) {
+      Sentry.metrics.count(STALE_CHUNK_PAGE_LOAD_SKIPPED_METRIC, 1, {
+        attributes: { reason: skipReason },
+      });
+      return;
+    }
+    this.loadPage(targetUrl);
+  }
+
+  /**
+   * Records in `sessionStorage` that this tab is about to load a new page for a stale chunk, and
+   * returns null. Returns why the page can't be loaded instead, without recording anything.
+   */
+  private reserveStaleChunkPageLoad(): StaleChunkPageLoadSkipReason | null {
     try {
       const sessionStorage = this.document.defaultView?.sessionStorage;
       if (!sessionStorage) {
-        return;
+        return StaleChunkPageLoadSkipReasonEnum.StorageUnavailable;
       }
       const pageLoadedAt = Number(sessionStorage.getItem(STALE_CHUNK_PAGE_LOADED_AT_KEY));
       if (Date.now() - pageLoadedAt <= STALE_CHUNK_PAGE_LOAD_GUARD_MS) {
-        return;
+        return StaleChunkPageLoadSkipReasonEnum.StillStaleAfterPageLoad;
       }
       sessionStorage.setItem(STALE_CHUNK_PAGE_LOADED_AT_KEY, String(Date.now()));
       // Counted by the next page, since a metric recorded now could be lost when this page unloads
       sessionStorage.setItem(STALE_CHUNK_PAGE_LOAD_PENDING_KEY, 'true');
+      return null;
     } catch {
-      return;
+      return StaleChunkPageLoadSkipReasonEnum.StorageUnavailable;
     }
-    this.loadPage(targetUrl);
   }
 
   /**
