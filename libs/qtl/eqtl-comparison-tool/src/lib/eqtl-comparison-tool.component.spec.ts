@@ -164,6 +164,11 @@ describe('EqtlComparisonToolComponent', () => {
     );
   });
 
+  it('should identify each eQTL by its composite id', async () => {
+    const { comparisonToolService } = await setup();
+    expect(comparisonToolService.rowId(mockEqtl)).toBe(mockEqtl.composite_id);
+  });
+
   it('renders the sidebar chiclets and tabs', async () => {
     await setup();
     expect(screen.getByText('variant:')).toBeInTheDocument();
