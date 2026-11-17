@@ -15,6 +15,7 @@ import {
   ItemFilterTypeQuery,
 } from '@sagebionetworks/qtl/api-client';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/qtl/config';
+import { SortMeta } from 'primeng/api';
 import { map, of, shareReplay } from 'rxjs';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
@@ -58,6 +59,14 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
+
+  readonly pinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const pinnedItems = this.comparisonToolService.pinnedItems();
+      const sortMeta = this.comparisonToolService.multiSortMeta();
+      this.getPinnedData(pinnedItems, sortMeta);
+    }
+  });
 
   readonly unpinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
@@ -119,5 +128,25 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     );
   }
 
-  // TODO(EX-251): fetch the pinned rows; the URL isn't updated until the first pinned fetch lands
+  getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+
+    const query: EqtlSearchQuery = {
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields,
+      sortOrders,
+    };
+
+    this.logger.log('pinned query', { query });
+
+    this.comparisonToolService.fetchPinned(
+      this.eqtlService.getEqtls(query).pipe(
+        map((response: EqtlsPage) => {
+          const data = response.eqtls;
+          return { data, totalCount: data.length };
+        }),
+      ),
+    );
+  }
 }

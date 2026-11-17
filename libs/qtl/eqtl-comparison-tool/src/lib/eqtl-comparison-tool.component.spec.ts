@@ -169,6 +169,25 @@ describe('EqtlComparisonToolComponent', () => {
     expect(comparisonToolService.rowId(mockEqtl)).toBe(mockEqtl.composite_id);
   });
 
+  it('should request a pinned eQTL in the current sort and show it in the pinned section', async () => {
+    const { fixture, component, comparisonToolService, eqtlService } = await setup(
+      mockPage([mockEqtl]),
+    );
+    const defaultSort = component.viewConfig.defaultSort ?? [];
+
+    comparisonToolService.pinItem(mockEqtl);
+    fixture.detectChanges();
+
+    const queriesSent = jest.mocked(eqtlService.getEqtls).mock.calls.map(([query]) => query);
+    expect(queriesSent).toContainEqual({
+      items: [mockEqtl.composite_id],
+      itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields: defaultSort.map((sort) => sort.field),
+      sortOrders: defaultSort.map((sort) => sort.order),
+    });
+    expect(comparisonToolService.pinnedData()).toEqual([mockEqtl]);
+  });
+
   it('renders the sidebar chiclets and tabs', async () => {
     await setup();
     expect(screen.getByText('variant:')).toBeInTheDocument();
