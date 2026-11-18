@@ -19,6 +19,7 @@ import {
   IMPACT_FOREST_PLOT_ROW_HOVER_HIGHLIGHT_STYLE,
   IMPACT_FOREST_PLOT_TARGET_TICK_INTERVALS,
   IMPACT_FOREST_PLOT_TITLE,
+  IMPACT_FOREST_PLOT_TOOLTIP_VALUE_DECIMALS,
   IMPACT_FOREST_PLOT_X_AXIS_TITLE,
 } from './impact-forest-plot.constants';
 
@@ -112,19 +113,18 @@ export class ImpactForestPlotComponent {
     computeEffectSizeXAxis(this.items(), IMPACT_FOREST_PLOT_TARGET_TICK_INTERVALS),
   );
 
-  private readonly cellClassByCategory = computed(
+  private readonly effectSizeByCategory = computed(
     () =>
-      new Map(
-        this.effectSizes().map((effectSize) => [
-          toCategoryLabel(effectSize),
-          effectSize.cell_class,
-        ]),
-      ),
+      new Map(this.effectSizes().map((effectSize) => [toCategoryLabel(effectSize), effectSize])),
   );
 
-  protected readonly categoryTooltipFormatter = (category: string): string =>
-    this.cellClassByCategory().get(category) ?? category;
+  protected readonly categoryTooltipFormatter = (category: string): string => {
+    const effectSize = this.effectSizeByCategory().get(category);
+    return effectSize
+      ? `${effectSize.cell_class}\n${effectSize.value.toFixed(IMPACT_FOREST_PLOT_TOOLTIP_VALUE_DECIMALS)}`
+      : category;
+  };
 
   protected readonly pointTooltipFormatter = (item: ForestPlotItem): string =>
-    `Effect size: ${item.value.toPrecision(2)}`;
+    this.categoryTooltipFormatter(item.yAxisCategory);
 }

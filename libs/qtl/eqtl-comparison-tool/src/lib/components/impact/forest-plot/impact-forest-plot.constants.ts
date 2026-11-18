@@ -22,6 +22,8 @@ export const IMPACT_FOREST_PLOT_CI_LINE_WIDTH_PX = 1;
 
 export const IMPACT_FOREST_PLOT_TARGET_TICK_INTERVALS = 4;
 
+export const IMPACT_FOREST_PLOT_TOOLTIP_VALUE_DECIMALS = 2;
+
 // Top-to-bottom row order from the design.
 export const IMPACT_FOREST_PLOT_CELL_CLASS_ORDER = [
   'Endothelial',

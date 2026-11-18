@@ -75,10 +75,18 @@ describe('ImpactForestPlotComponent', () => {
     expect(forestPlot.selectedYAxisCategory()).toBeUndefined();
   });
 
-  it('names the full cell class when hovering a row label', async () => {
+  it('shows the full cell class and its effect size, on two lines, when hovering a point', async () => {
+    const { forestPlot } = await setup();
+    const immuneItem = forestPlot.items().find((item) => item.yAxisCategory === 'IMMUNE');
+    expect(immuneItem && forestPlot.pointTooltipFormatter()?.(immuneItem)).toBe(
+      'Immune Cell\n-0.22',
+    );
+  });
+
+  it('shows the same full cell class and effect size when hovering a row label', async () => {
     const { forestPlot } = await setup();
     expect(forestPlot.yAxisLabelTooltipFormatter()?.('OPC')).toBe(
-      'Oligodendrocyte Progenitor Cell',
+      'Oligodendrocyte Progenitor Cell\n0.52',
     );
   });
 });
