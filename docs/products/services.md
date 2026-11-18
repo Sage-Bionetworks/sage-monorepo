@@ -843,16 +843,6 @@ This library was generated with Nx.
 - **Available Tasks**: test, lint, lint-fix, storybook, build-storybook, static-storybook
 - **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/libs/shared/typescript/charts-angular/README.md)
 
-#### shared-typescript-google-tag-manager
-
-A reusable Google Tag Manager integration component for Angular applications in the sage-monorepo.
-
-- **Type**: util
-- **Language**: typescript
-- **Location**: `libs/shared/typescript/google-tag-manager`
-- **Available Tasks**: test, lint, lint-fix
-- **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/libs/shared/typescript/google-tag-manager/README.md)
-
 #### shared-typescript-styles
 
 This library was generated with Nx.
