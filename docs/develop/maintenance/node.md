@@ -98,7 +98,7 @@ All dependencies should use exact version numbers without ranges:
 2. **Update target versions** in the root `package.json`. Always specify exact versions (e.g., `"20.1.8"`) in package.json. If pnpm adds ranges, manually edit to remove them.
    ```bash
    # Update specific packages
-   pnpm update echarts ngx-echarts
+   pnpm update echarts
    # or manually edit package.json with exact versions
    ```
 3. **Install and update lockfile**:
