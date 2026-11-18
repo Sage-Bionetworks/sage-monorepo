@@ -16,3 +16,22 @@
     }
   }
 }
+
+// Notch under chart tooltips pinned above their element. The class and color property names
+// must match TOOLTIP_NOTCH_CLASS and TOOLTIP_NOTCH_COLOR_PROPERTY in explorers/charts.
+$chart-tooltip-notch-width: 11px;
+$chart-tooltip-notch-height: 5px;
+
+.explorers-chart-tooltip-notch::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: $chart-tooltip-notch-width;
+  height: $chart-tooltip-notch-height;
+  background-color: var(--explorers-chart-tooltip-notch-color);
+
+  // A border triangle would snap its half-width to whole pixels; clip-path keeps the exact size.
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}

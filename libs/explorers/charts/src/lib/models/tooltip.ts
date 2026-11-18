@@ -9,9 +9,9 @@ export type TooltipStyle = {
   color?: string;
   borderColor?: string;
   /**
-   * If true, keeps the tooltip above the hovered element, with its arrow pointing down at it,
-   * even near the chart's top edge. The tooltip is appended to the document body so it can
-   * extend past the chart's edges.
+   * If true, keeps the tooltip above the hovered element, with a notch pointing down at it, even
+   * near the chart's top edge. The tooltip is appended to the document body so it can extend past
+   * the chart's edges. The notch is drawn by the explorers styles, so the app must load them.
    */
   pinAbove?: boolean;
   /** Text alignment inside the tooltip. Defaults to center. */
