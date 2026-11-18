@@ -80,8 +80,11 @@ export class ImpactForestPlotComponent {
     color: IMPACT_FOREST_PLOT_COLORS.yAxisGridLine,
     type: 'solid',
   };
+  // TODO: match the Figma tooltip typography and spacing (EX-299)
   protected readonly tooltipStyle: TooltipStyle = {
     backgroundColor: IMPACT_FOREST_PLOT_COLORS.tooltipBackground,
+    pinAbove: true,
+    textAlign: 'left',
   };
 
   private readonly orderedEffectSizes = computed(() =>

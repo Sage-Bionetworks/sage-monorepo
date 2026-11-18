@@ -89,4 +89,9 @@ describe('ImpactForestPlotComponent', () => {
       'Oligodendrocyte Progenitor Cell\n0.52',
     );
   });
+
+  it('pins its left-aligned tooltips above the hovered point or label', async () => {
+    const { forestPlot } = await setup();
+    expect(forestPlot.tooltipStyle()).toMatchObject({ pinAbove: true, textAlign: 'left' });
+  });
 });
