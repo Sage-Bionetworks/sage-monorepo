@@ -137,8 +137,8 @@ between version <old> and <new>.
    - Any CVEs or security advisories filed against versions in this range
 5. Report the publish date of the target version (`<new>`) so age can be computed against the current date.
 
-Report all of the above plus migration steps. Be thorough -- this is for evaluating whether we
-can safely bump, both for compatibility and security posture.
+Report all of the above plus migration steps. The report decides whether we can safely bump,
+for both compatibility and security posture.
 ```
 
 **In either path, the synthesis is the same.** Identify: breaking changes, new/removed/renamed inputs, output changes, default behavior changes, runtime requirements (Node version, runner version), permission changes, **and security-relevant changes**. Cover every intermediate major version, not just the target.

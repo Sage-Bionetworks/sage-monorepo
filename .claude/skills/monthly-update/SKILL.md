@@ -25,7 +25,7 @@ Use the `gh` CLI (preferred) or GitHub MCP tools (fallback):
 gh pr list \
   --repo Sage-Bionetworks/sage-monorepo \
   --state merged \
-  --search "merged:>=YYYY-MM-01 merged:<=YYYY-MM-31" \
+  --search "merged:YYYY-MM-01..YYYY-MM-LL" \
   --limit 200 \
   --json number,title,author,mergedAt,body,labels,url
 ```
@@ -34,8 +34,10 @@ gh pr list \
 
 ```
 mcp__github__search_issues with query:
-  repo:Sage-Bionetworks/sage-monorepo is:pr is:merged merged:YYYY-MM-01..YYYY-MM-31
+  repo:Sage-Bionetworks/sage-monorepo is:pr is:merged merged:YYYY-MM-01..YYYY-MM-LL
 ```
+
+`LL` is the month's last day (`28`-`31`). GitHub rejects a date that doesn't exist, such as `09-31`, and applies only the last of several `merged:` qualifiers, so keep the range in one `merged:start..end` qualifier.
 
 Then use `mcp__github__get_pull_request` for details on each.
 
