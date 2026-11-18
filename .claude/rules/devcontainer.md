@@ -10,7 +10,7 @@ Full documentation: [`docs/develop/maintenance/dev-container.md`](docs/develop/m
 
 ## Two-PR workflow (critical)
 
-Dev container changes always follow a **BUILD → ACTIVATE** split. Never collapse into one PR.
+Dev container changes always follow a **BUILD → ACTIVATE** split. Never collapse into one PR: the image has to be published and tested before anyone is switched to it, and keeping activation to a one-line tag change makes it easy to roll back.
 
 | Step                | Branch pattern                      | Files touched                                                                 |
 | ------------------- | ----------------------------------- | ----------------------------------------------------------------------------- |

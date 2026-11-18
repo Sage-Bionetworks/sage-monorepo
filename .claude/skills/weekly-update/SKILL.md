@@ -25,13 +25,15 @@ Get all PRs merged in the date range from `Sage-Bionetworks/sage-monorepo`.
 gh pr list \
   --repo Sage-Bionetworks/sage-monorepo \
   --state merged \
-  --search "merged:>=YYYY-MM-DD merged:<=YYYY-MM-DD" \
+  --search "merged:YYYY-MM-DD..YYYY-MM-DD" \
   --limit 100 \
   --json number,title,author,mergedAt,body,labels
 ```
 
 **Using GitHub MCP tools (fallback):**
-Use `mcp__github__search_issues` with query `repo:Sage-Bionetworks/sage-monorepo is:pr is:merged merged:>=YYYY-MM-DD` to find merged PRs, then `mcp__github__get_pull_request` for details on each.
+Use `mcp__github__search_issues` with query `repo:Sage-Bionetworks/sage-monorepo is:pr is:merged merged:YYYY-MM-DD..YYYY-MM-DD` to find merged PRs, then `mcp__github__get_pull_request` for details on each.
+
+Keep the date range in one `merged:start..end` qualifier: GitHub applies only the last of several `merged:` qualifiers.
 
 **If neither is available:** Stop and tell the user clearly:
 
