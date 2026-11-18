@@ -115,6 +115,7 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
       ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
       sortFields,
       sortOrders,
+      // TODO(EX-96): the Variant and Gene filter values are placeholders that match no rows until the search filter replaces them
       variant: selectedFilters['variant'],
       gene: selectedFilters['gene'],
       cellClass: selectedFilters['cellClass'],
