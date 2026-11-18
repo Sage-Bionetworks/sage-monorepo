@@ -5,11 +5,11 @@ paths:
 
 # Nx Workspace
 
-This is an Nx 21.5.3 workspace using pnpm as the package manager. The Nx MCP server and its tools are available — use them.
+This is an Nx 21.5.3 workspace using pnpm as the package manager. When the Nx MCP tools (`nx_*`) are connected, use them instead of guessing at workspace structure or Nx configuration; otherwise use the `nx` CLI.
 
 ## General Guidelines
 
-- When answering questions, use the `nx_workspace` tool first to gain an understanding of the workspace architecture
+- For questions about workspace architecture, use the `nx_workspace` tool to see the project graph
 - For questions around Nx configuration, best practices, or if unsure, use the `nx_docs` tool to get relevant, up-to-date docs — always use this instead of assuming things about Nx configuration
 - If the user needs help with an Nx configuration or project graph error, use the `nx_workspace` tool to get any errors
 - To help answer questions about the workspace structure or demonstrate how tasks depend on each other, use the `nx_visualize_graph` tool
@@ -31,7 +31,7 @@ If the user wants to generate something, use the following flow:
 
 ## Running Tasks Guidelines
 
-If the user wants help with tasks or commands (keywords like "test", "build", "lint", or similar actions):
+If the user wants help with a task that is running or has already run (a failed build, a stuck serve):
 
 1. Use `nx_current_running_tasks_details` to get the list of tasks (includes completed, stopped, or failed tasks)
 2. If there are tasks, ask the user if they'd like help with a specific one, then use `nx_current_running_task_output` to get the terminal output

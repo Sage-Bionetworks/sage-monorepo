@@ -101,7 +101,7 @@ Module boundaries are enforced via ESLint (`@nx/enforce-module-boundaries`). Sco
 
 ### Gradle Convention Plugins
 
-Projects automatically receive convention plugins based on their path in `buildSrc/`:
+The root `build.gradle.kts` applies a convention plugin (defined in `buildSrc/`) to each project based on its path:
 
 - `apps/*/` → `sage.spring-boot-application`
 - Java libs → `sage.java-library` or `sage.spring-boot-library`
