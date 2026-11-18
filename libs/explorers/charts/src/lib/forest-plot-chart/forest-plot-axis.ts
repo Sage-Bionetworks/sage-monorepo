@@ -138,7 +138,9 @@ export function buildYAxis(
       ...tooltip,
       show: Boolean(yAxisLabelTooltipFormatter),
       ...(yAxisLabelTooltipFormatter && {
-        formatter: (params: CallbackDataParams) => yAxisLabelTooltipFormatter(params.name),
+        // ECharts passes the formatted label as `name` (rich-text markup like `{b|ACC}` when
+        // the label is bold) and the raw category as `value`.
+        formatter: (params: CallbackDataParams) => yAxisLabelTooltipFormatter(String(params.value)),
       }),
     },
     axisLabel: {

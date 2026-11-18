@@ -59,6 +59,8 @@ export class ImpactBoxplotComponent {
     borderWidth: 1,
   }));
 
+  protected readonly ariaLabel = computed(() => `${this.titlePrefix} (${this.cellSubclass()})`);
+
   readonly genotypes = computed(() =>
     this.expressionSummaries().map((summary) => summary.genotype),
   );

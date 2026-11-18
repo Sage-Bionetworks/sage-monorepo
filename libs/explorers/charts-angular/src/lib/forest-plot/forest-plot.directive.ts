@@ -15,6 +15,7 @@ import {
   ForestPlotItem,
   ForestPlotProps,
   GridLineStyle,
+  GridMargins,
   RowHoverHighlightStyle,
   TooltipStyle,
 } from '@sagebionetworks/explorers/charts';
@@ -54,6 +55,7 @@ export class ForestPlotDirective implements OnDestroy {
   yAxisGridLineStyle = input<GridLineStyle>();
   rowHoverHighlightStyle = input<RowHoverHighlightStyle>();
   tooltipStyle = input<TooltipStyle>();
+  gridMargins = input<GridMargins>();
 
   private forestPlot: ForestPlotChart | undefined;
 
@@ -86,6 +88,7 @@ export class ForestPlotDirective implements OnDestroy {
     yAxisGridLineStyle: this.yAxisGridLineStyle(),
     rowHoverHighlightStyle: this.rowHoverHighlightStyle(),
     tooltipStyle: this.tooltipStyle(),
+    gridMargins: this.gridMargins(),
   }));
 
   constructor() {

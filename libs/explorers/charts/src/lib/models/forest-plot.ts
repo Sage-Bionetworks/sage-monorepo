@@ -1,4 +1,4 @@
-import type { AxisLineStyle, AxisTickLabelStyle, GridLineStyle } from './axis';
+import type { AxisLineStyle, AxisTickLabelStyle, GridLineStyle, GridMargins } from './axis';
 import type { TooltipStyle } from './tooltip';
 
 export type ForestPlotItem = {
@@ -75,4 +75,9 @@ export interface ForestPlotProps {
   rowHoverHighlightStyle?: RowHoverHighlightStyle;
   /** If defined, overrides individual fields on the default tooltip styling. */
   tooltipStyle?: TooltipStyle;
+  /**
+   * If defined, overrides individual sides of the plot area's margin, in pixels. A side left
+   * undefined keeps the default margin. Labels stay inside the margin (containLabel).
+   */
+  gridMargins?: GridMargins;
 }

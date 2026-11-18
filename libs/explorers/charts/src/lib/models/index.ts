@@ -1,7 +1,6 @@
-export type { AxisLineStyle, AxisTickLabelStyle, GridLineStyle } from './axis';
+export type { AxisLineStyle, AxisTickLabelStyle, GridLineStyle, GridMargins } from './axis';
 export type {
   BoxplotBoxStyle,
-  BoxplotGridMargins,
   BoxplotProps,
   CategoryAsValueBoxplotSummary,
   CategoryAsValuePoint,

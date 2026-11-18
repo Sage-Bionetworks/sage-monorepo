@@ -3,7 +3,7 @@ import type { BoxplotSeriesOption } from 'echarts/charts';
 import type { TitleComponentOption } from 'echarts/components';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
 import type { TooltipOption } from '../types';
-import type { AxisLineStyle, AxisTickLabelStyle } from './axis';
+import type { AxisLineStyle, AxisTickLabelStyle, GridMargins } from './axis';
 import type { BaseChartTheme, ChartStyle } from './chart';
 import type { TooltipStyle } from './tooltip';
 
@@ -106,15 +106,8 @@ export interface BoxplotProps {
   tooltipStyle?: TooltipStyle;
   /* if defined, overrides individual sides of the plot area's margin, in pixels. A side left
   undefined keeps the active chartStyle's margin. */
-  gridMargins?: BoxplotGridMargins;
+  gridMargins?: GridMargins;
 }
-
-export type BoxplotGridMargins = {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-};
 
 export type BoxplotBoxStyle = {
   fillColor?: string;

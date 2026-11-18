@@ -1,3 +1,5 @@
+@use 'qtl/styles/src/mixins' as mixins;
+
 :host {
   display: block;
 }
@@ -10,9 +12,5 @@
 }
 
 .impact-boxplot-title {
-  color: var(--color-text-secondary);
-  font-size: 14px;
-  font-style: italic;
-  line-height: normal;
-  text-align: center;
+  @include mixins.chart-caption;
 }

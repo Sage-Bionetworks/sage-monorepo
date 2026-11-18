@@ -1,0 +1,29 @@
+<figure class="impact-forest-plot" [attr.aria-label]="title">
+  <!-- TODO: add the info tooltip once its wiki ID exists (EX-284) -->
+  <figcaption class="impact-forest-plot-title">{{ title }}</figcaption>
+  <div
+    sageForestPlot
+    class="impact-forest-plot-chart"
+    [style.height.px]="chartHeight"
+    [items]="items()"
+    [selectedYAxisCategory]="selectedCategory()"
+    [xAxisMin]="xAxis().min"
+    [xAxisMax]="xAxis().max"
+    [xAxisInterval]="xAxis().interval"
+    [xAxisLabelPrecision]="xAxis().labelPrecision"
+    [yAxisLabelTooltipFormatter]="categoryTooltipFormatter"
+    [pointTooltipFormatter]="pointTooltipFormatter"
+    [pointSize]="pointSize"
+    [ciLineWidth]="ciLineWidth"
+    [showZeroLine]="false"
+    [xAxisLineStyle]="axisLineStyle"
+    [xAxisTickLabelStyle]="xAxisTickLabelStyle"
+    [yAxisTickLabelStyle]="yAxisTickLabelStyle"
+    [xAxisGridLineStyle]="xAxisGridLineStyle"
+    [yAxisGridLineStyle]="yAxisGridLineStyle"
+    [rowHoverHighlightStyle]="rowHoverHighlightStyle"
+    [tooltipStyle]="tooltipStyle"
+    [gridMargins]="gridMargins"
+  ></div>
+  <p class="impact-forest-plot-x-axis-title">{{ xAxisTitle }}</p>
+</figure>

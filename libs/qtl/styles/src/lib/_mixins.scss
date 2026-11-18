@@ -1,1 +1,7 @@
-@forward 'explorers/styles/src/mixins';
+@mixin chart-caption {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-style: italic;
+  line-height: normal;
+  text-align: center;
+}

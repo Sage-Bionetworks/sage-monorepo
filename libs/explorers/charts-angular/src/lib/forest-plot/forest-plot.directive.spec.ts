@@ -69,6 +69,7 @@ describe('ForestPlotDirective', () => {
         [xAxisGridLineStyle]="{ width: 1, color: '#D0D4D9', type: 'dotted' }"
         [yAxisGridLineStyle]="{ width: 1, color: '#F1F2F4', type: 'solid' }"
         [rowHoverHighlightStyle]="{ backgroundColor: 'rgba(158, 158, 158, 0.15)', thickness: 13 }"
+        [gridMargins]="{ right: 10 }"
       ></div>`,
     })
     class StyledTestComponent {
@@ -91,6 +92,7 @@ describe('ForestPlotDirective', () => {
         xAxisGridLineStyle: { width: 1, color: '#D0D4D9', type: 'dotted' },
         yAxisGridLineStyle: { width: 1, color: '#F1F2F4', type: 'solid' },
         rowHoverHighlightStyle: { backgroundColor: 'rgba(158, 158, 158, 0.15)', thickness: 13 },
+        gridMargins: { right: 10 },
       }),
     );
 

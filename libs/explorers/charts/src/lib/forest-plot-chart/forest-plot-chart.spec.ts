@@ -3,6 +3,7 @@ import { CallbackDataParams } from 'echarts/types/dist/shared';
 import { DEFAULT_COLOR } from '../constants';
 import { forestPlotItems } from '../mocks';
 import { ForestPlotItem, ForestPlotProps } from '../models';
+import { GRID_TOP } from '../point-plot-defaults';
 import { initChart, setNoDataOption } from '../utils';
 import { computeXBounds, computeXTickPositions } from './forest-plot-axis';
 import { ForestPlotChart, computeInitialHeight } from './forest-plot-chart';
@@ -226,6 +227,14 @@ describe('ForestPlotChart', () => {
       expect((getOption().grid as { bottom: number }).bottom).toBe(40);
     });
 
+    it('overrides only the grid sides given in gridMargins', () => {
+      const gridMargins = { right: 10, bottom: 24 };
+      makeChart({ xAxisTitle: 'Effect Size', gridMargins });
+      const grid = getOption().grid as { top: number; right: number; bottom: number };
+      expect(grid).toMatchObject(gridMargins);
+      expect(grid.top).toBe(GRID_TOP.withoutTitle);
+    });
+
     it('uses X_AXIS_TITLE_GAP as grid bottom when x-axis title is provided', () => {
       makeChart({ xAxisTitle: 'Log FC' });
       expect((getOption().grid as { bottom: number }).bottom).toBe(50);
@@ -259,6 +268,21 @@ describe('ForestPlotChart', () => {
       const yAxis = getOption().yAxis as { triggerEvent: boolean; tooltip: { show: boolean } };
       expect(yAxis.triggerEvent).toBe(true);
       expect(yAxis.tooltip.show).toBe(true);
+    });
+
+    it('passes the raw category to yAxisLabelTooltipFormatter when the label is bold', () => {
+      const selectedCategory = forestPlotItems[1].yAxisCategory;
+      const yAxisLabelTooltipFormatter = jest.fn((category: string) => `Tissue ${category}`);
+      makeChart({ selectedYAxisCategory: selectedCategory, yAxisLabelTooltipFormatter });
+      const yAxis = getOption().yAxis as {
+        tooltip: { formatter: (params: CallbackDataParams) => string };
+      };
+      const boldLabelParams = {
+        name: `{b|${selectedCategory}}`,
+        value: selectedCategory,
+      } as CallbackDataParams;
+      expect(yAxis.tooltip.formatter(boldLabelParams)).toBe(`Tissue ${selectedCategory}`);
+      expect(yAxisLabelTooltipFormatter).toHaveBeenCalledWith(selectedCategory);
     });
 
     it('uses default dot tooltip when no pointTooltipFormatter', () => {
