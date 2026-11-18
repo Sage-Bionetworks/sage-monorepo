@@ -136,18 +136,9 @@ importers:
       mongoose:
         specifier: 8.9.5
         version: 8.9.5(socks@2.8.9)
-      ngx-countup:
-        specifier: 13.1.0
-        version: 13.1.0(@angular/common@20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))
-      ngx-echarts:
-        specifier: 20.0.1
-        version: 20.0.1(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(echarts@5.6.0)
       ngx-markdown:
         specifier: 19.1.1
         version: 19.1.1(@angular/common@20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.34(@angular/animations@20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0)))(marked@15.0.11)(rxjs@7.8.1)(zone.js@0.15.0)
-      ngx-typed-js:
-        specifier: 2.1.1
-        version: 2.1.1(@angular/common@20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))
       node-cache:
         specifier: 5.1.2
         version: 5.1.2
@@ -7191,9 +7182,6 @@ packages:
       typescript:
         optional: true
 
-  countup.js@2.10.0:
-    resolution: {integrity: sha512-QQpZx7oYxsR+OeITlZe46fY/OQjV11oBqjY8wgIXzLU2jIz8GzOrbMhqKLysGY8bWI3T1ZNrYkwGzKb4JNgyzg==}
-
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
 
@@ -8923,6 +8911,7 @@ packages:
   image-size@0.5.5:
     resolution: {integrity: sha512-6TDAlDPZxUFCv+fuOkIoXT/V/f3Qbq8e37p+YOiYrUv3v9cc3/6x78VdfPgFVaB9dZYeLUfKgHRebpkm/oP2VQ==}
     engines: {node: '>=0.10.0'}
+    deprecated: Please migrate to image-size@2.x
     hasBin: true
 
   immediate@3.0.6:
@@ -10395,18 +10384,6 @@ packages:
       tailwindcss:
         optional: true
 
-  ngx-countup@13.1.0:
-    resolution: {integrity: sha512-5U1heict3J3F+MTvwhEM3w/j9JuSp4Jqm530yrIzZtQC4huOPCTyZ4ZwBhGk+ZkBkb8HOCcm1xXu90/sydt0Qg==}
-    peerDependencies:
-      '@angular/common': '>=13.0.0'
-      '@angular/core': '>=13.0.0'
-
-  ngx-echarts@20.0.1:
-    resolution: {integrity: sha512-SpMj8jX4qVle1ZEA3ob4AlTXduhsUeMQdyILu7UWcNr/zRqR3dPgiiahIepdOIel+5PJDl3qtJGUiYhuIyUUMA==}
-    peerDependencies:
-      '@angular/core': '>=20.0.0'
-      echarts: '>=5.0.0'
-
   ngx-markdown@19.1.1:
     resolution: {integrity: sha512-R0SGsSa8QMLS4mXMWjB7EoK7Vab30QeGA+Y4zeeb4yb+YdAqg0hU/XFkBiQefJx/JxrtxTWJAu1b97LEGscluQ==}
     peerDependencies:
@@ -10416,12 +10393,6 @@ packages:
       marked: ^15.0.0
       rxjs: ^6.5.3 || ^7.4.0
       zone.js: ~0.15.0
-
-  ngx-typed-js@2.1.1:
-    resolution: {integrity: sha512-j/S5SdYy+Wjw+ad6OEfgk3QfucdqgS48XmKv34k0QII2MyRSwYvMxJ9ax60WdwRQCAG0xmu67FAN8tww7XwTEQ==}
-    peerDependencies:
-      '@angular/common': '>=11.0.0'
-      '@angular/core': '>=11.0.0'
 
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
@@ -13230,9 +13201,6 @@ packages:
 
   typed-assert@1.0.9:
     resolution: {integrity: sha512-KNNZtayBCtmnNmbo5mG47p1XsCyrx6iVqomjcZnec/1Y5GGARaxPs6r49RnSPeUP3YjNYiU9sQHAtY4BBvnZwg==}
-
-  typed.js@2.1.0:
-    resolution: {integrity: sha512-bDuXEf7YcaKN4g08NMTUM6G90XU25CK3bh6U0THC/Mod/QPKlEt9g/EjvbYB8x2Qwr2p6J6I3NrsoYaVnY6wsQ==}
 
   typescript@5.9.2:
     resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
@@ -21862,8 +21830,6 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.2
 
-  countup.js@2.10.0: {}
-
   create-require@1.1.1: {}
 
   cron-parser@4.9.0:
@@ -25885,19 +25851,6 @@ snapshots:
       rollup: 4.61.0
       tailwindcss: 3.4.3(ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.17))(@types/node@22.5.1)(typescript@5.9.2))
 
-  ngx-countup@13.1.0(@angular/common@20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0)):
-    dependencies:
-      '@angular/common': 20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
-      '@angular/core': 20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0)
-      countup.js: 2.10.0
-      tslib: 2.4.1
-
-  ngx-echarts@20.0.1(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(echarts@5.6.0):
-    dependencies:
-      '@angular/core': 20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0)
-      echarts: 5.6.0
-      tslib: 2.4.1
-
   ngx-markdown@19.1.1(@angular/common@20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.34(@angular/animations@20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0)))(marked@15.0.11)(rxjs@7.8.1)(zone.js@0.15.0):
     dependencies:
       '@angular/common': 20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
@@ -25913,13 +25866,6 @@ snapshots:
       katex: 0.16.47
       mermaid: 11.15.0
       prismjs: 1.30.0
-
-  ngx-typed-js@2.1.1(@angular/common@20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0)):
-    dependencies:
-      '@angular/common': 20.3.34(@angular/core@20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
-      '@angular/core': 20.3.34(@angular/compiler@20.3.34)(rxjs@7.8.1)(zone.js@0.15.0)
-      tslib: 2.4.1
-      typed.js: 2.1.0
 
   no-case@3.0.4:
     dependencies:
@@ -29151,8 +29097,6 @@ snapshots:
       reflect.getprototypeof: 1.0.10
 
   typed-assert@1.0.9: {}
-
-  typed.js@2.1.0: {}
 
   typescript@5.9.2: {}
 
