@@ -64,7 +64,7 @@ uv run ruff check         # lint
 
 ### Structure
 
-- `apps/` — standalone applications (agora, model-ad, bixarena, amp-als, etc.)
+- `apps/` — standalone applications (agora, model-ad, bixarena, etc.)
 - `libs/` — shared libraries organized by scope (e.g., `libs/agora/`, `libs/bixarena/`)
 - `tools/` — build utilities and custom Nx executors
 - `gradle/libs.versions.toml` — single source of truth for all Java dependency versions
