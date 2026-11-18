@@ -447,6 +447,15 @@ describe('ForestPlotChart', () => {
       expect(xAxis.axisLine.lineStyle.color).toBe('#22252A');
     });
 
+    it('passes the axis line cap through so the two axis lines can meet in a square corner', () => {
+      const frameLineStyle = { width: 1, color: '#22252A', cap: 'butt' as const };
+      makeChart({ xAxisLineStyle: frameLineStyle, yAxisLineStyle: frameLineStyle });
+      const xAxis = getOption().xAxis as { axisLine: { lineStyle: { cap?: string } } };
+      const yAxis = getOption().yAxis as { axisLine: { lineStyle: { cap?: string } } };
+      expect(xAxis.axisLine.lineStyle.cap).toBe('butt');
+      expect(yAxis.axisLine.lineStyle.cap).toBe('butt');
+    });
+
     it('hides the y-axis line by default', () => {
       makeChart();
       const yAxis = getOption().yAxis as { axisLine: { show: boolean } };

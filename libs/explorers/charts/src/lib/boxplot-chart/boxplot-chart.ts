@@ -116,6 +116,7 @@ export class BoxplotChart {
         type: 'value',
         z: axisZ,
         axisLine: {
+          show: false,
           onZero: false,
         },
         // Specify min/max values so the value xAxis aligns with the category xAxis

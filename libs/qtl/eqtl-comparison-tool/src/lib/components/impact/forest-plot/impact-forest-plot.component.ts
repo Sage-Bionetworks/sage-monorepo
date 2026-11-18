@@ -59,6 +59,7 @@ export class ImpactForestPlotComponent {
   protected readonly axisLineStyle: AxisLineStyle = {
     width: 1,
     color: IMPACT_FOREST_PLOT_COLORS.axisLine,
+    cap: 'butt',
   };
   protected readonly xAxisTickLabelStyle: AxisTickLabelStyle = {
     fontSize: TICK_LABEL_FONT_SIZE,

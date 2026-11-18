@@ -1,6 +1,11 @@
 export type AxisLineStyle = {
   width?: number;
   color?: string;
+  /**
+   * Line end shape. ECharts defaults axis lines to 'round', which extends each end by half the
+   * width; use 'butt' when two axis lines must meet in a square corner.
+   */
+  cap?: 'butt' | 'round' | 'square';
 };
 
 export type AxisTickLabelStyle = {

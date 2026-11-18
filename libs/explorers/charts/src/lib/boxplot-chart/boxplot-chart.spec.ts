@@ -103,6 +103,19 @@ describe('BoxplotChart', () => {
     });
   });
 
+  describe('x-axis lines', () => {
+    type XAxisOption = { type: string; axisLine: { show?: boolean; lineStyle?: object } };
+
+    it('draws only the category x-axis line, so the hidden value axis adds no line under it', () => {
+      const axisLineStyle = { width: 1, color: '#22252A', cap: 'butt' as const };
+      makeChart({ axisLineStyle });
+      const [valueXAxis, categoryXAxis] = getOption().xAxis as XAxisOption[];
+      expect(valueXAxis.type).toBe('value');
+      expect(valueXAxis.axisLine.show).toBe(false);
+      expect(categoryXAxis.axisLine.lineStyle).toEqual(axisLineStyle);
+    });
+  });
+
   describe('drawing order', () => {
     function getDrawingOrder() {
       const option = getOption();

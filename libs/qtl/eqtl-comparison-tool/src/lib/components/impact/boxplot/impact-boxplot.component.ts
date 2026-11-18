@@ -47,6 +47,7 @@ export class ImpactBoxplotComponent {
   protected readonly axisLineStyle: AxisLineStyle = {
     width: 1,
     color: IMPACT_BOXPLOT_COLORS.axisLine,
+    cap: 'butt',
   };
   protected readonly tooltipStyle: TooltipStyle = {
     backgroundColor: IMPACT_BOXPLOT_COLORS.tooltipBackground,
