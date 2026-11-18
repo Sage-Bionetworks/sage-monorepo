@@ -1,4 +1,8 @@
-import { GridMargins, RowHoverHighlightStyle } from '@sagebionetworks/explorers/charts';
+import {
+  GridMargins,
+  RowHoverHighlightStyle,
+  TooltipStyle,
+} from '@sagebionetworks/explorers/charts';
 import { CELL_CLASSES } from '@sagebionetworks/qtl/config';
 import { CellClassEffectSize } from './impact-forest-plot.component';
 
@@ -45,6 +49,17 @@ export const IMPACT_FOREST_PLOT_COLORS = {
   yAxisGridLine: '#F1F2F4',
   tooltipBackground: '#22252A',
 } as const;
+
+// The tooltip is HTML, not canvas, so it can use the app's font variable.
+export const IMPACT_FOREST_PLOT_TOOLTIP_STYLE: TooltipStyle = {
+  backgroundColor: IMPACT_FOREST_PLOT_COLORS.tooltipBackground,
+  pinAbove: true,
+  textAlign: 'left',
+  fontFamily: 'var(--font-family-primary)',
+  lineHeight: 16,
+  padding: 8,
+  borderRadius: 2,
+};
 
 export const IMPACT_FOREST_PLOT_ROW_HOVER_HIGHLIGHT_STYLE: RowHoverHighlightStyle = {
   backgroundColor: 'rgba(158, 158, 158, 0.15)',

@@ -16,6 +16,15 @@ function buildExtraCssText(base: TooltipOption, style: TooltipStyle): string | u
   return `${base.extraCssText ?? ''} text-align: ${style.textAlign};`.trim();
 }
 
+function buildTextStyle(base: TooltipOption, style: TooltipStyle): TooltipOption['textStyle'] {
+  return {
+    ...base.textStyle,
+    ...(style.color !== undefined && { color: style.color }),
+    ...(style.fontFamily !== undefined && { fontFamily: style.fontFamily }),
+    ...(style.lineHeight !== undefined && { lineHeight: style.lineHeight }),
+  };
+}
+
 // Merges TooltipStyle overrides onto a base tooltip config. Fields not present
 // on `style` fall through, so callers only need to specify what they want to
 // change (e.g. just backgroundColor) and everything else (confine, extraCssText,
@@ -26,7 +35,9 @@ export function buildTooltip(base: TooltipOption, style: TooltipStyle | undefine
     ...base,
     ...(style.backgroundColor !== undefined && { backgroundColor: style.backgroundColor }),
     ...(style.borderColor !== undefined && { borderColor: style.borderColor }),
-    ...(style.color !== undefined && { textStyle: { ...base?.textStyle, color: style.color } }),
+    ...(style.padding !== undefined && { padding: style.padding }),
+    ...(style.borderRadius !== undefined && { borderRadius: style.borderRadius }),
+    textStyle: buildTextStyle(base, style),
     ...(style.pinAbove && PIN_ABOVE_TOOLTIP),
     extraCssText: buildExtraCssText(base, style),
   };

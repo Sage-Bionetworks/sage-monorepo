@@ -16,4 +16,15 @@ export type TooltipStyle = {
   pinAbove?: boolean;
   /** Text alignment inside the tooltip. Defaults to center. */
   textAlign?: 'left' | 'center' | 'right';
+  /**
+   * CSS font-family for the tooltip text. The tooltip is HTML, not canvas, so CSS custom
+   * properties such as `var(--font-family-primary)` resolve here.
+   */
+  fontFamily?: string;
+  /** Line height of the tooltip text, in pixels. Defaults to 1.5 times the font size. */
+  lineHeight?: number;
+  /** Space between the tooltip's edge and its text, in pixels. */
+  padding?: number;
+  /** Corner radius of the tooltip, in pixels. */
+  borderRadius?: number;
 };

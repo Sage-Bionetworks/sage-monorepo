@@ -4,7 +4,6 @@ import {
   AxisTickLabelStyle,
   ForestPlotItem,
   GridLineStyle,
-  TooltipStyle,
 } from '@sagebionetworks/explorers/charts';
 import { ForestPlotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { CELL_CLASSES } from '@sagebionetworks/qtl/config';
@@ -19,6 +18,7 @@ import {
   IMPACT_FOREST_PLOT_ROW_HOVER_HIGHLIGHT_STYLE,
   IMPACT_FOREST_PLOT_TARGET_TICK_INTERVALS,
   IMPACT_FOREST_PLOT_TITLE,
+  IMPACT_FOREST_PLOT_TOOLTIP_STYLE,
   IMPACT_FOREST_PLOT_TOOLTIP_VALUE_DECIMALS,
   IMPACT_FOREST_PLOT_X_AXIS_TITLE,
 } from './impact-forest-plot.constants';
@@ -80,12 +80,7 @@ export class ImpactForestPlotComponent {
     color: IMPACT_FOREST_PLOT_COLORS.yAxisGridLine,
     type: 'solid',
   };
-  // TODO: match the Figma tooltip typography and spacing (EX-299)
-  protected readonly tooltipStyle: TooltipStyle = {
-    backgroundColor: IMPACT_FOREST_PLOT_COLORS.tooltipBackground,
-    pinAbove: true,
-    textAlign: 'left',
-  };
+  protected readonly tooltipStyle = IMPACT_FOREST_PLOT_TOOLTIP_STYLE;
 
   private readonly orderedEffectSizes = computed(() =>
     [...this.effectSizes()].sort(
