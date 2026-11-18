@@ -27,7 +27,6 @@ _Last updated: 2025-08-23T22:04:00.590Z_
 - **model-ad**: 13 projects
 - **explorers**: 10 projects
 - **monorepo**: 3 projects
-- **results-visualization-framework**: 1 projects
 - **bixarena**: 1 projects
 
 ## Agora Projects
@@ -638,20 +637,6 @@ A powerful script to analyze OpenAPI dependencies🔗 Used Files with Dependency
 - **Location**: `apps/monorepo/tools`
 - **Available Tasks**: analyze-openapi
 - **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/apps/monorepo/tools/README.md)
-
-## Results-visualization-framework Projects
-
-### Libraries
-
-#### results-visualization-framework-ui
-
-This library was generated with Nx.
-
-- **Type**: feature
-- **Language**: typescript
-- **Location**: `libs/results-visualization-framework/ui`
-- **Available Tasks**: test, lint, storybook, build-storybook, static-storybook
-- **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/libs/results-visualization-framework/ui/README.md)
 
 ## Shared Projects
 

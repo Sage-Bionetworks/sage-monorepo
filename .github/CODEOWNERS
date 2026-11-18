@@ -28,7 +28,6 @@
 /libs/qtl/ @Sage-Bionetworks/explorers-dev
 
 /libs/explorers/ @Sage-Bionetworks/explorers-dev
-/libs/results-visualization-framework/ @Sage-Bionetworks/explorers-dev
 /.github/workflows/e2e-explorer.yaml @Sage-Bionetworks/explorers-dev
 /.github/workflows/e2e-explorers.yaml @Sage-Bionetworks/explorers-dev
 

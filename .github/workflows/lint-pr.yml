@@ -57,7 +57,6 @@ jobs:
             model-ad
             observability
             qtl
-            results-visualization-framework
             sage
             sage-monorepo
             sandbox
