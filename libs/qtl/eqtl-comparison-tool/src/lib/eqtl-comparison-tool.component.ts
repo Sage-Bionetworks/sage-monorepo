@@ -53,6 +53,7 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     defaultSort: [{ field: 'adj_p_val', order: 1 }],
     // TODO(EX-287): round the Beta and MAF columns on screen
     // TODO(EX-295): the pinned CSV exports variant_location and gene_location as "[object Object]" until the CT can export location columns
+    // TODO(EX-298): link the xQTL docs from the Download Pins menu once the resources page has content
     // TODO(EX-279): hide the view details button; the eQTL CT has no details page
     // TODO(EX-252): turn on row selection and hover
   };
