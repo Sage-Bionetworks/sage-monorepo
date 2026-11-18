@@ -24,6 +24,7 @@ const meta: Meta<ForestPlotDirective> = {
       [xAxisMin]="xAxisMin"
       [xAxisMax]="xAxisMax"
       [yAxisCategories]="yAxisCategories"
+      [selectedYAxisCategory]="selectedYAxisCategory"
       [yAxisLabelTooltipFormatter]="yAxisLabelTooltipFormatter"
       [pointTooltipFormatter]="pointTooltipFormatter"
       [ciLabelFormatter]="ciLabelFormatter"
@@ -81,6 +82,7 @@ export const Default: Story = {
 export const Styled: Story = {
   args: {
     items: forestPlotItemsColoredByLine,
+    selectedYAxisCategory: 'IMMUNE',
     xAxisMin: -0.1,
     xAxisMax: 0.7,
     showCILabels: false,

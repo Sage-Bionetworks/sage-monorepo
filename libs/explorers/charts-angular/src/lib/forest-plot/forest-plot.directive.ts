@@ -32,6 +32,7 @@ export class ForestPlotDirective implements OnDestroy {
   xAxisMin = input<number>();
   xAxisMax = input<number>();
   yAxisCategories = input<string[]>();
+  selectedYAxisCategory = input<string>();
   yAxisLabelTooltipFormatter = input<(category: string) => string>();
   pointTooltipFormatter = input<(item: ForestPlotItem) => string>();
   ciLabelFormatter = input<(value: number) => string>();
@@ -63,6 +64,7 @@ export class ForestPlotDirective implements OnDestroy {
     xAxisMin: this.xAxisMin(),
     xAxisMax: this.xAxisMax(),
     yAxisCategories: this.yAxisCategories(),
+    selectedYAxisCategory: this.selectedYAxisCategory(),
     yAxisLabelTooltipFormatter: this.yAxisLabelTooltipFormatter(),
     pointTooltipFormatter: this.pointTooltipFormatter(),
     ciLabelFormatter: this.ciLabelFormatter(),

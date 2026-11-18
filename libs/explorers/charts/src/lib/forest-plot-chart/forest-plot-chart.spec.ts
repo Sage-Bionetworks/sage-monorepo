@@ -532,5 +532,26 @@ describe('ForestPlotChart', () => {
       expect(yAxis.axisLabel.rich.b.fontSize).toBe('18px');
       expect(yAxis.axisLabel.rich.b.color).toBe('#4A5056');
     });
+
+    it('bolds the selected y-axis category without row hover enabled', () => {
+      const selectedCategory = forestPlotItems[1].yAxisCategory;
+      makeChart({ selectedYAxisCategory: selectedCategory });
+      const yAxis = getOption().yAxis as {
+        axisLabel: { formatter: (cat: string) => string; rich: { b: { fontWeight: number } } };
+      };
+      expect(yAxis.axisLabel.formatter(selectedCategory)).toBe(`{b|${selectedCategory}}`);
+      expect(yAxis.axisLabel.formatter(forestPlotItems[0].yAxisCategory)).toBe(
+        forestPlotItems[0].yAxisCategory,
+      );
+      expect(yAxis.axisLabel.rich.b.fontWeight).toBe(700);
+      expect(mockOn).not.toHaveBeenCalled();
+    });
+
+    it('leaves y-axis labels unformatted without a selected category or row hover', () => {
+      makeChart();
+      const yAxis = getOption().yAxis as { axisLabel: { formatter?: unknown; rich?: unknown } };
+      expect(yAxis.axisLabel.formatter).toBeUndefined();
+      expect(yAxis.axisLabel.rich).toBeUndefined();
+    });
   });
 });

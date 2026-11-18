@@ -3,7 +3,13 @@ import { DARK_TOOLTIP } from '../constants';
 import { ForestPlotProps } from '../models';
 import { AXIS_STYLE, GRID_TOP, TEXT_STYLE } from '../point-plot-defaults';
 import { buildTooltip, initChart, setNoDataOption } from '../utils';
-import { buildXAxis, buildYAxis, computeXBounds, computeXTickPositions } from './forest-plot-axis';
+import {
+  buildBoldYAxisLabelFormatter,
+  buildXAxis,
+  buildYAxis,
+  computeXBounds,
+  computeXTickPositions,
+} from './forest-plot-axis';
 import { RowHoverController } from './forest-plot-row-hover';
 import { buildSeries } from './forest-plot-series';
 
@@ -72,8 +78,13 @@ export class ForestPlotChart {
     // (with fresh hover state) is created if row-hover is still enabled.
     this.rowHoverController?.detach();
     this.rowHoverController = props.rowHoverHighlightStyle
-      ? new RowHoverController(this.chart, yAxisCategories)
+      ? new RowHoverController(this.chart, yAxisCategories, props.selectedYAxisCategory)
       : null;
+    const yAxisLabelFormatter =
+      this.rowHoverController?.getYAxisLabelFormatter() ??
+      (props.selectedYAxisCategory === undefined
+        ? undefined
+        : buildBoldYAxisLabelFormatter([props.selectedYAxisCategory]));
 
     const option: EChartsOption = {
       grid: {
@@ -84,12 +95,7 @@ export class ForestPlotChart {
         bottom: props.xAxisTitle ? AXIS_STYLE.titleGap : GRID_BOTTOM_WITHOUT_X_AXIS_TITLE,
       },
       xAxis: buildXAxis(props, xMin, xMax, xTickPositions),
-      yAxis: buildYAxis(
-        props,
-        yAxisCategories,
-        tooltip,
-        this.rowHoverController?.getYAxisLabelFormatter(),
-      ),
+      yAxis: buildYAxis(props, yAxisCategories, tooltip, yAxisLabelFormatter),
       series: buildSeries(props, yAxisCategories, xMin, xMax, xTickPositions),
       tooltip,
       // Top-level axisPointer enables the y-axis pointer to track the cursor on

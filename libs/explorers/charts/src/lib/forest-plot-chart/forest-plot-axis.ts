@@ -40,6 +40,12 @@ export function computeXTickPositions(xMin: number, xMax: number, interval: numb
   return positions;
 }
 
+export function buildBoldYAxisLabelFormatter(
+  boldCategories: (string | null | undefined)[],
+): (category: string) => string {
+  return (category: string) => (boldCategories.includes(category) ? `{b|${category}}` : category);
+}
+
 export function buildXAxis(
   props: ForestPlotProps,
   xMin: number,
@@ -107,7 +113,7 @@ export function buildYAxis(
   props: ForestPlotProps,
   yAxisCategories: string[],
   tooltip: EChartsOption['tooltip'],
-  rowHoverLabelFormatter: ((cat: string) => string) | undefined,
+  yAxisLabelFormatter: ((category: string) => string) | undefined,
 ): EChartsOption['yAxis'] {
   const yAxisLabelTooltipFormatter = props.yAxisLabelTooltipFormatter;
   const rowHoverHighlightStyle = props.rowHoverHighlightStyle;
@@ -139,8 +145,8 @@ export function buildYAxis(
       ...Y_AXIS_LABEL_TEXT_STYLE,
       margin: 30,
       ...yAxisTickLabelStyle,
-      ...(rowHoverLabelFormatter && {
-        formatter: rowHoverLabelFormatter,
+      ...(yAxisLabelFormatter && {
+        formatter: yAxisLabelFormatter,
         rich: { b: { ...yAxisTickLabelStyle, fontWeight: 700 } },
       }),
     },

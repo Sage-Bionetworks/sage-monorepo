@@ -27,6 +27,38 @@ describe('RowHoverController', () => {
       expect(fmt('ACC')).toBe('ACC');
       expect(fmt('TCX')).toBe('TCX');
     });
+
+    it('bolds the selected category when nothing is hovered', () => {
+      const selectedCategory = yAxisCategories[3];
+      const fmt = new RowHoverController(
+        mockChart,
+        yAxisCategories,
+        selectedCategory,
+      ).getYAxisLabelFormatter();
+      expect(fmt(selectedCategory)).toBe(`{b|${selectedCategory}}`);
+      expect(fmt('ACC')).toBe('ACC');
+    });
+  });
+
+  describe('with a selected category', () => {
+    const selectedCategory = yAxisCategories[3];
+
+    it('keeps the selected category bold while another row is hovered', () => {
+      const selectedController = new RowHoverController(
+        mockChart,
+        yAxisCategories,
+        selectedCategory,
+      );
+      selectedController.attach();
+      const listener = mockOn.mock.calls[0][1];
+
+      listener({ axesInfo: [{ axisDim: 'y', value: 'ACC' }] });
+
+      const fmt = mockSetOption.mock.calls[0][0].yAxis.axisLabel.formatter;
+      expect(fmt('ACC')).toBe('{b|ACC}');
+      expect(fmt(selectedCategory)).toBe(`{b|${selectedCategory}}`);
+      expect(fmt('CBE')).toBe('CBE');
+    });
   });
 
   describe('attach', () => {

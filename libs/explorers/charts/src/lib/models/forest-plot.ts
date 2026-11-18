@@ -26,6 +26,8 @@ export interface ForestPlotProps {
   xAxisMin?: number;
   xAxisMax?: number;
   yAxisCategories?: string[]; // controls display order
+  /** If defined, renders this category's y-axis tick label bold, independent of row hover. */
+  selectedYAxisCategory?: string;
   // Receives the category label string directly (ECharts params unwrapped internally)
   yAxisLabelTooltipFormatter?: (category: string) => string;
   pointTooltipFormatter?: (item: ForestPlotItem) => string;

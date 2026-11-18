@@ -1,12 +1,13 @@
 import { ECharts } from 'echarts';
 import { UpdateAxisPointerEvent } from '../types';
+import { buildBoldYAxisLabelFormatter } from './forest-plot-axis';
 
 const UPDATE_AXIS_POINTER = 'updateAxisPointer';
 
 // Owns the "bolded label on the hovered row" interaction. ECharts' y-axis axisPointer
 // paints the highlight band on its own; this controller listens for the corresponding
 // updateAxisPointer event and rewrites the y-axis label formatter so the hovered
-// category renders via the rich-text `b` style.
+// category (and the selected category, if any) renders via the rich-text `b` style.
 //
 // Lifecycle: construct -> getYAxisLabelFormatter() -> attach() after setOption ->
 // detach() before the next setOption or chart dispose.
@@ -17,11 +18,11 @@ export class RowHoverController {
   constructor(
     private readonly chart: ECharts,
     private readonly yAxisCategories: string[],
+    private readonly selectedCategory?: string,
   ) {}
 
-  getYAxisLabelFormatter(): (cat: string) => string {
-    const hovered = this.hoveredCategory;
-    return (cat: string) => (cat === hovered ? `{b|${cat}}` : cat);
+  getYAxisLabelFormatter(): (category: string) => string {
+    return buildBoldYAxisLabelFormatter([this.hoveredCategory, this.selectedCategory]);
   }
 
   attach() {
