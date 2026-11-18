@@ -1,10 +1,33 @@
 import { EChartsOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
-import { ForestPlotProps } from '../models';
+import { AxisTickLabelStyle, ForestPlotProps } from '../models';
 import { AXIS_STYLE, TEXT_STYLE } from '../point-plot-defaults';
 
 const X_AXIS_LABEL_TEXT_STYLE = { color: AXIS_STYLE.tickLabelColor, fontSize: 14 };
 const Y_AXIS_LABEL_TEXT_STYLE = { color: AXIS_STYLE.tickLabelColor, fontSize: 16 };
+// Set explicitly so the measured font always matches the rendered one; ECharts' own default
+// depends on the platform.
+const Y_AXIS_LABEL_FONT_FAMILY = 'sans-serif';
+const BOLD_FONT_WEIGHT = 700;
+
+function toCssFontSize(fontSize: string | number): string {
+  return typeof fontSize === 'number' ? `${fontSize}px` : fontSize;
+}
+
+// ECharts sizes the plot around its widest y-axis label (containLabel), measuring bold labels in
+// bold. Giving every label the widest bold width keeps the plot from shifting when a label turns
+// bold on hover. Returns undefined where text can't be measured.
+export function measureWidestBoldLabel(
+  categories: string[],
+  yAxisTickLabelStyle: AxisTickLabelStyle | undefined,
+): number | undefined {
+  const context = document.createElement('canvas').getContext('2d');
+  if (!context) return undefined;
+  const fontSize = toCssFontSize(yAxisTickLabelStyle?.fontSize ?? Y_AXIS_LABEL_TEXT_STYLE.fontSize);
+  context.font = `${BOLD_FONT_WEIGHT} ${fontSize} ${Y_AXIS_LABEL_FONT_FAMILY}`;
+  const widest = Math.max(0, ...categories.map((category) => context.measureText(category).width));
+  return Math.ceil(widest);
+}
 
 // Symmetric bounds from max(|ciLeft|, |ciRight|) *1.1
 export function computeXBounds(props: ForestPlotProps): [number, number] {
@@ -40,10 +63,38 @@ export function computeXTickPositions(xMin: number, xMax: number, interval: numb
   return positions;
 }
 
+// Rich-text style names for y-axis labels. Every label gets one, so all labels share the fixed
+// width set on these styles; ECharts ignores a plain label's `width` when sizing the plot.
+export const Y_AXIS_LABEL_STYLE_NAMES = { regular: 'regular', bold: 'bold' } as const;
+
 export function buildBoldYAxisLabelFormatter(
   boldCategories: (string | null | undefined)[],
 ): (category: string) => string {
-  return (category: string) => (boldCategories.includes(category) ? `{b|${category}}` : category);
+  return (category: string) => {
+    const styleName = boldCategories.includes(category)
+      ? Y_AXIS_LABEL_STYLE_NAMES.bold
+      : Y_AXIS_LABEL_STYLE_NAMES.regular;
+    return `{${styleName}|${category}}`;
+  };
+}
+
+function buildYAxisLabelRichStyles(
+  yAxisCategories: string[],
+  yAxisTickLabelStyle: AxisTickLabelStyle | undefined,
+) {
+  const regular = {
+    ...yAxisTickLabelStyle,
+    fontFamily: Y_AXIS_LABEL_FONT_FAMILY,
+    width: measureWidestBoldLabel(yAxisCategories, yAxisTickLabelStyle),
+    align: 'right' as const,
+    // A background makes ECharts size the label by its full fixed-width box rather than by its
+    // glyphs, which differ between regular and bold.
+    backgroundColor: 'transparent',
+  };
+  return {
+    [Y_AXIS_LABEL_STYLE_NAMES.regular]: regular,
+    [Y_AXIS_LABEL_STYLE_NAMES.bold]: { ...regular, fontWeight: BOLD_FONT_WEIGHT },
+  };
 }
 
 export function buildXAxis(
@@ -149,7 +200,8 @@ export function buildYAxis(
       ...yAxisTickLabelStyle,
       ...(yAxisLabelFormatter && {
         formatter: yAxisLabelFormatter,
-        rich: { b: { ...yAxisTickLabelStyle, fontWeight: 700 } },
+        fontFamily: Y_AXIS_LABEL_FONT_FAMILY,
+        rich: buildYAxisLabelRichStyles(yAxisCategories, yAxisTickLabelStyle),
       }),
     },
     // splitLine is rendered via gridLineSeries so it aligns with category ticks

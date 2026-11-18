@@ -5,7 +5,27 @@ import { forestPlotItems } from '../mocks';
 import { ForestPlotItem, ForestPlotProps } from '../models';
 import { GRID_TOP } from '../point-plot-defaults';
 import { initChart, setNoDataOption } from '../utils';
-import { computeXBounds, computeXTickPositions } from './forest-plot-axis';
+import {
+  computeXBounds,
+  computeXTickPositions,
+  measureWidestBoldLabel,
+  Y_AXIS_LABEL_STYLE_NAMES,
+} from './forest-plot-axis';
+
+type YAxisLabelRichStyle = {
+  fontWeight?: number;
+  fontSize?: string;
+  color?: string;
+  width?: number;
+  align?: string;
+  backgroundColor?: string;
+};
+type YAxisLabelOption = {
+  formatter: (category: string) => string;
+  rich: Record<string, YAxisLabelRichStyle>;
+};
+const bold = (category: string) => `{${Y_AXIS_LABEL_STYLE_NAMES.bold}|${category}}`;
+const regular = (category: string) => `{${Y_AXIS_LABEL_STYLE_NAMES.regular}|${category}}`;
 import { ForestPlotChart, computeInitialHeight } from './forest-plot-chart';
 import { resolveItemColor } from './forest-plot-series';
 
@@ -132,6 +152,28 @@ function makeChart(props: Partial<ForestPlotProps> = {}): ForestPlotChart {
     ...props,
   });
 }
+
+describe('measureWidestBoldLabel', () => {
+  const labelStyle = { fontSize: '12px' };
+
+  function measure(text: string, fontWeight: number): number {
+    const context = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
+    context.font = `${fontWeight} 12px sans-serif`;
+    return context.measureText(text).width;
+  }
+
+  it('measures the widest category, set in bold', () => {
+    const categories = ['IN', 'VASCULAR', 'OPC'];
+    expect(measureWidestBoldLabel(categories, labelStyle)).toBe(
+      Math.ceil(measure('VASCULAR', 700)),
+    );
+  });
+
+  it('is at least as wide as the widest category in its regular weight', () => {
+    const width = measureWidestBoldLabel(['VASCULAR'], labelStyle) ?? 0;
+    expect(width).toBeGreaterThanOrEqual(measure('VASCULAR', 400));
+  });
+});
 
 describe('ForestPlotChart', () => {
   const mockSetOption = jest.fn();
@@ -278,7 +320,7 @@ describe('ForestPlotChart', () => {
         tooltip: { formatter: (params: CallbackDataParams) => string };
       };
       const boldLabelParams = {
-        name: `{b|${selectedCategory}}`,
+        name: bold(selectedCategory),
         value: selectedCategory,
       } as CallbackDataParams;
       expect(yAxis.tooltip.formatter(boldLabelParams)).toBe(`Tissue ${selectedCategory}`);
@@ -543,32 +585,45 @@ describe('ForestPlotChart', () => {
         rowHoverHighlightStyle: { backgroundColor: 'rgba(0,0,0,0.1)', thickness: 13 },
         yAxisTickLabelStyle: { fontSize: '18px', color: '#4A5056' },
       });
-      const yAxis = getOption().yAxis as {
-        axisLabel: {
-          formatter: (cat: string) => string;
-          rich: { b: { fontWeight: number; fontSize: string; color: string } };
-        };
-      };
-      // No category is hovered initially, so the formatter returns the bare category
-      expect(yAxis.axisLabel.formatter('ACC')).toBe('ACC');
-      expect(yAxis.axisLabel.rich.b.fontWeight).toBe(700);
-      // Bold style inherits typography from yAxisTickLabelStyle
-      expect(yAxis.axisLabel.rich.b.fontSize).toBe('18px');
-      expect(yAxis.axisLabel.rich.b.color).toBe('#4A5056');
+      const { axisLabel } = getOption().yAxis as { axisLabel: YAxisLabelOption };
+      // No category is hovered initially, so the formatter renders the regular style
+      expect(axisLabel.formatter('ACC')).toBe(regular('ACC'));
+      expect(axisLabel.rich[Y_AXIS_LABEL_STYLE_NAMES.bold].fontWeight).toBe(700);
+      // Both styles inherit typography from yAxisTickLabelStyle
+      for (const styleName of Object.values(Y_AXIS_LABEL_STYLE_NAMES)) {
+        expect(axisLabel.rich[styleName]).toMatchObject({ fontSize: '18px', color: '#4A5056' });
+      }
     });
 
     it('bolds the selected y-axis category without row hover enabled', () => {
       const selectedCategory = forestPlotItems[1].yAxisCategory;
       makeChart({ selectedYAxisCategory: selectedCategory });
-      const yAxis = getOption().yAxis as {
-        axisLabel: { formatter: (cat: string) => string; rich: { b: { fontWeight: number } } };
-      };
-      expect(yAxis.axisLabel.formatter(selectedCategory)).toBe(`{b|${selectedCategory}}`);
-      expect(yAxis.axisLabel.formatter(forestPlotItems[0].yAxisCategory)).toBe(
-        forestPlotItems[0].yAxisCategory,
+      const { axisLabel } = getOption().yAxis as { axisLabel: YAxisLabelOption };
+      expect(axisLabel.formatter(selectedCategory)).toBe(bold(selectedCategory));
+      expect(axisLabel.formatter(forestPlotItems[0].yAxisCategory)).toBe(
+        regular(forestPlotItems[0].yAxisCategory),
       );
-      expect(yAxis.axisLabel.rich.b.fontWeight).toBe(700);
+      expect(axisLabel.rich[Y_AXIS_LABEL_STYLE_NAMES.bold].fontWeight).toBe(700);
       expect(mockOn).not.toHaveBeenCalled();
+    });
+
+    it('keeps every y-axis label the width of the widest bold label, so hovering does not shift the plot', () => {
+      const yAxisTickLabelStyle = { fontSize: '12px' };
+      makeChart({
+        rowHoverHighlightStyle: { backgroundColor: 'rgba(0,0,0,0.1)', thickness: 13 },
+        yAxisTickLabelStyle,
+      });
+      const { axisLabel } = getOption().yAxis as { axisLabel: YAxisLabelOption };
+      const categories = forestPlotItems.map((item) => item.yAxisCategory);
+      const widestBoldLabel = measureWidestBoldLabel(categories, yAxisTickLabelStyle);
+      // ECharts sizes the plot by each label's box; a background makes that box the fixed width.
+      for (const styleName of Object.values(Y_AXIS_LABEL_STYLE_NAMES)) {
+        expect(axisLabel.rich[styleName]).toMatchObject({
+          width: widestBoldLabel,
+          align: 'right',
+          backgroundColor: 'transparent',
+        });
+      }
     });
 
     it('leaves y-axis labels unformatted without a selected category or row hover', () => {
@@ -576,6 +631,7 @@ describe('ForestPlotChart', () => {
       const yAxis = getOption().yAxis as { axisLabel: { formatter?: unknown; rich?: unknown } };
       expect(yAxis.axisLabel.formatter).toBeUndefined();
       expect(yAxis.axisLabel.rich).toBeUndefined();
+      expect((yAxis.axisLabel as { width?: number }).width).toBeUndefined();
     });
   });
 });

@@ -1,5 +1,9 @@
 import { ECharts } from 'echarts';
+import { Y_AXIS_LABEL_STYLE_NAMES } from './forest-plot-axis';
 import { RowHoverController } from './forest-plot-row-hover';
+
+const bold = (category: string) => `{${Y_AXIS_LABEL_STYLE_NAMES.bold}|${category}}`;
+const regular = (category: string) => `{${Y_AXIS_LABEL_STYLE_NAMES.regular}|${category}}`;
 
 describe('RowHoverController', () => {
   const yAxisCategories = ['ACC', 'CBE', 'DLPFC', 'TCX'];
@@ -22,10 +26,10 @@ describe('RowHoverController', () => {
   });
 
   describe('getYAxisLabelFormatter', () => {
-    it('returns the bare category when nothing is hovered', () => {
+    it('renders every category in the regular style when nothing is hovered', () => {
       const fmt = controller.getYAxisLabelFormatter();
-      expect(fmt('ACC')).toBe('ACC');
-      expect(fmt('TCX')).toBe('TCX');
+      expect(fmt('ACC')).toBe(regular('ACC'));
+      expect(fmt('TCX')).toBe(regular('TCX'));
     });
 
     it('bolds the selected category when nothing is hovered', () => {
@@ -35,8 +39,8 @@ describe('RowHoverController', () => {
         yAxisCategories,
         selectedCategory,
       ).getYAxisLabelFormatter();
-      expect(fmt(selectedCategory)).toBe(`{b|${selectedCategory}}`);
-      expect(fmt('ACC')).toBe('ACC');
+      expect(fmt(selectedCategory)).toBe(bold(selectedCategory));
+      expect(fmt('ACC')).toBe(regular('ACC'));
     });
   });
 
@@ -55,9 +59,9 @@ describe('RowHoverController', () => {
       listener({ axesInfo: [{ axisDim: 'y', value: 'ACC' }] });
 
       const fmt = mockSetOption.mock.calls[0][0].yAxis.axisLabel.formatter;
-      expect(fmt('ACC')).toBe('{b|ACC}');
-      expect(fmt(selectedCategory)).toBe(`{b|${selectedCategory}}`);
-      expect(fmt('CBE')).toBe('CBE');
+      expect(fmt('ACC')).toBe(bold('ACC'));
+      expect(fmt(selectedCategory)).toBe(bold(selectedCategory));
+      expect(fmt('CBE')).toBe(regular('CBE'));
     });
   });
 
@@ -111,21 +115,21 @@ describe('RowHoverController', () => {
       listener({ axesInfo: [{ axisDim: 'y', value: 2 }] });
       expect(mockSetOption).toHaveBeenCalledTimes(1);
       const fmt = mockSetOption.mock.calls[0][0].yAxis.axisLabel.formatter;
-      expect(fmt('DLPFC')).toBe('{b|DLPFC}');
-      expect(fmt('ACC')).toBe('ACC');
+      expect(fmt('DLPFC')).toBe(bold('DLPFC'));
+      expect(fmt('ACC')).toBe(regular('ACC'));
     });
 
     it('rounds fractional numeric values to the nearest index', () => {
       // 1.6 -> Math.round = 2 -> 'DLPFC'
       listener({ axesInfo: [{ axisDim: 'y', value: 1.6 }] });
       const fmt = mockSetOption.mock.calls[0][0].yAxis.axisLabel.formatter;
-      expect(fmt('DLPFC')).toBe('{b|DLPFC}');
+      expect(fmt('DLPFC')).toBe(bold('DLPFC'));
     });
 
     it('uses a string value directly when it matches a known category', () => {
       listener({ axesInfo: [{ axisDim: 'y', value: 'CBE' }] });
       const fmt = mockSetOption.mock.calls[0][0].yAxis.axisLabel.formatter;
-      expect(fmt('CBE')).toBe('{b|CBE}');
+      expect(fmt('CBE')).toBe(bold('CBE'));
     });
 
     it('clears the hover when the string value is not in yAxisCategories', () => {
@@ -134,7 +138,7 @@ describe('RowHoverController', () => {
       listener({ axesInfo: [{ axisDim: 'y', value: 'UNKNOWN' }] });
       expect(mockSetOption).toHaveBeenCalledTimes(1);
       const fmt = mockSetOption.mock.calls[0][0].yAxis.axisLabel.formatter;
-      expect(fmt('ACC')).toBe('ACC');
+      expect(fmt('ACC')).toBe(regular('ACC'));
     });
 
     it('clears the hover when the numeric value is out of range', () => {
@@ -143,7 +147,7 @@ describe('RowHoverController', () => {
       listener({ axesInfo: [{ axisDim: 'y', value: 99 }] });
       expect(mockSetOption).toHaveBeenCalledTimes(1);
       const fmt = mockSetOption.mock.calls[0][0].yAxis.axisLabel.formatter;
-      expect(fmt('ACC')).toBe('ACC');
+      expect(fmt('ACC')).toBe(regular('ACC'));
     });
 
     it('clears the hover when axesInfo has no y-axis entry', () => {
@@ -152,7 +156,7 @@ describe('RowHoverController', () => {
       listener({ axesInfo: [{ axisDim: 'x', value: 0.5 }] });
       expect(mockSetOption).toHaveBeenCalledTimes(1);
       const fmt = mockSetOption.mock.calls[0][0].yAxis.axisLabel.formatter;
-      expect(fmt('ACC')).toBe('ACC');
+      expect(fmt('ACC')).toBe(regular('ACC'));
     });
 
     it('ignores events with no y entry when nothing was previously hovered', () => {
