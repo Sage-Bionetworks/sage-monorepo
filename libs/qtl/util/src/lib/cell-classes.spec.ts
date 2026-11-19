@@ -1,18 +1,11 @@
-import { CELL_CLASSES } from '@sagebionetworks/qtl/config';
-import { getCellTypeMutedColor } from './cell-classes';
+import { CELL_CLASSES, CellClassId } from '@sagebionetworks/qtl/config';
+import { CELL_CLASS_MUTED_COLOR_PERCENT, getCellClassMutedColor } from './cell-classes';
 
-describe('getCellTypeMutedColor', () => {
-  it('returns the cell type muted color when defined', () => {
-    expect(getCellTypeMutedColor('Astrocyte')).toBe(CELL_CLASSES.Astrocyte.mutedColor);
-  });
-
-  it('falls back to the gray CSS variable when mutedColor is undefined', () => {
-    const original = CELL_CLASSES['Immune Cell'].mutedColor;
-    (CELL_CLASSES['Immune Cell'] as { mutedColor?: string }).mutedColor = undefined;
-    try {
-      expect(getCellTypeMutedColor('Immune Cell')).toBe('var(--color-gray-300)');
-    } finally {
-      (CELL_CLASSES['Immune Cell'] as { mutedColor?: string }).mutedColor = original;
-    }
+describe('getCellClassMutedColor', () => {
+  it('lightens the cell class color by mixing it with white', () => {
+    const astrocyte: CellClassId = 'class_astro';
+    expect(getCellClassMutedColor(astrocyte)).toBe(
+      `color-mix(in srgb, ${CELL_CLASSES[astrocyte].color} ${CELL_CLASS_MUTED_COLOR_PERCENT}%, var(--color-white))`,
+    );
   });
 });

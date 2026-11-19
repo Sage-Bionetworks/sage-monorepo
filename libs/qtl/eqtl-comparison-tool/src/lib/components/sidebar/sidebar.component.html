@@ -13,16 +13,16 @@
   />
   <qtl-metadata-chiclet
     role="listitem"
-    [backgroundColor]="cellTypeBackgroundColor"
+    [backgroundColor]="cellClassBackgroundColor"
     label="cell class"
-    [value]="data.cell_type"
+    [value]="cellClass.name"
   />
   <qtl-metadata-chiclet
     role="listitem"
-    [backgroundColor]="cellSubclassBackgroundColor"
+    [backgroundColor]="cellSubclass.color"
     textColor="var(--color-white)"
     label="cell subclass"
-    [value]="data.cell_subclass"
+    [value]="cellSubclass.name"
   />
 </div>
 
@@ -56,12 +56,12 @@
       <qtl-eqtl-comparison-tool-impact-details [details]="impactDetails" />
       <qtl-eqtl-comparison-tool-impact-boxplot
         class="sidebar-impact-boxplot"
-        [cellSubclass]="data.cell_subclass"
+        [cellSubclassId]="data.cell_subclass_id"
         [expressionSummaries]="data.expression_summaries"
       />
       <qtl-eqtl-comparison-tool-impact-forest-plot
         class="sidebar-impact-forest-plot"
-        [selectedCellClass]="data.cell_type"
+        [selectedCellClassId]="data.cell_class_id"
         [effectSizes]="data.effect_size_cell_class_data"
       />
       <!-- TODO: add the remaining impact tab content (EX-73) -->

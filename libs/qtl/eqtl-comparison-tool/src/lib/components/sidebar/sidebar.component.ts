@@ -1,7 +1,12 @@
 import { Component, ElementRef, signal, viewChildren } from '@angular/core';
-import { CELL_CLASSES, CELL_SUBCLASSES } from '@sagebionetworks/qtl/config';
+import {
+  CELL_CLASSES,
+  CELL_SUBCLASSES,
+  CellClassId,
+  CellSubclassId,
+} from '@sagebionetworks/qtl/config';
 import { MetadataChicletComponent } from '@sagebionetworks/qtl/ui';
-import { getCellTypeMutedColor } from '@sagebionetworks/qtl/util';
+import { getCellClassMutedColor } from '@sagebionetworks/qtl/util';
 import { ImpactBoxplotComponent } from '../impact/boxplot/impact-boxplot.component';
 import { IMPACT_BOXPLOT_EXAMPLE_SUMMARIES } from '../impact/boxplot/impact-boxplot.constants';
 import { ImpactDetails, ImpactDetailsComponent } from '../impact/details/impact-details.component';
@@ -28,8 +33,8 @@ export class SidebarComponent {
   protected readonly data = {
     variant_id: 'rs29475839',
     hgnc_symbol: 'PAK1',
-    cell_type: 'Astrocyte' as keyof typeof CELL_CLASSES,
-    cell_subclass: 'Astrocyte' as keyof typeof CELL_SUBCLASSES,
+    cell_class_id: 'class_astro' as CellClassId,
+    cell_subclass_id: 'astro' as CellSubclassId,
     beta: '.98',
     p_value: '1.25e-08',
     variant_location: 'chr:11:54455—252455',
@@ -41,15 +46,17 @@ export class SidebarComponent {
 
   protected readonly chicletListAriaLabel = SIDEBAR_CHICLET_LIST_ARIA_LABEL;
 
-  protected readonly cellTypeBackgroundColor = getCellTypeMutedColor(this.data.cell_type);
-  protected readonly cellSubclassBackgroundColor = CELL_SUBCLASSES[this.data.cell_subclass].color;
+  protected readonly cellClass = CELL_CLASSES[this.data.cell_class_id];
+  protected readonly cellSubclass = CELL_SUBCLASSES[this.data.cell_subclass_id];
+
+  protected readonly cellClassBackgroundColor = getCellClassMutedColor(this.data.cell_class_id);
 
   protected readonly impactDetails: ImpactDetails = {
     beta: this.data.beta,
     pValue: this.data.p_value,
     variantLocation: this.data.variant_location,
     geneLocation: this.data.gene_location,
-    cellClass: this.data.cell_type,
+    cellClass: this.cellClass.name,
   };
 
   protected readonly tabs: { value: SidebarTab; label: string }[] = [

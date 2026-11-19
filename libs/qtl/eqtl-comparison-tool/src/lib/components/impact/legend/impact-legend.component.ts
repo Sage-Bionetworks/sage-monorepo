@@ -23,10 +23,10 @@ export class ImpactLegendComponent {
     { name: 'Description', className: 'impact-legend-description-col' },
   ];
 
-  protected readonly rows: SimpleTableCell[][] = Object.entries(CELL_CLASSES).map(
-    ([longName, { color, short }]) => [
+  protected readonly rows: SimpleTableCell[][] = Object.values(CELL_CLASSES).map(
+    ({ name, short, color }) => [
       { type: 'swatch' as const, color, text: short },
-      { type: 'text' as const, value: longName },
+      { type: 'text' as const, value: name },
     ],
   );
 

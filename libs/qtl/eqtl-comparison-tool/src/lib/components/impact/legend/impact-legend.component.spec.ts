@@ -39,13 +39,13 @@ describe('ImpactLegendComponent', () => {
   it('renders a row for each cell class with its short and long name', async () => {
     await setup();
     const rows = screen.getAllByRole('row').slice(1); // drop header row
-    const entries = Object.entries(CELL_CLASSES);
-    expect(rows).toHaveLength(entries.length);
+    const cellClasses = Object.values(CELL_CLASSES);
+    expect(rows).toHaveLength(cellClasses.length);
 
-    entries.forEach(([longName, { short }], i) => {
+    cellClasses.forEach(({ name, short }, i) => {
       const row = within(rows[i]);
       expect(row.getByText(short)).toBeInTheDocument();
-      expect(row.getByText(longName)).toBeInTheDocument();
+      expect(row.getByText(name)).toBeInTheDocument();
     });
   });
 

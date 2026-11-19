@@ -1,5 +1,7 @@
-import { CELL_CLASSES } from '@sagebionetworks/qtl/config';
+import { CELL_CLASSES, CellClassId } from '@sagebionetworks/qtl/config';
 
-export function getCellTypeMutedColor(cellType: keyof typeof CELL_CLASSES): string {
-  return CELL_CLASSES[cellType].mutedColor ?? 'var(--color-gray-300)';
+export const CELL_CLASS_MUTED_COLOR_PERCENT = 50;
+
+export function getCellClassMutedColor(cellClassId: CellClassId): string {
+  return `color-mix(in srgb, ${CELL_CLASSES[cellClassId].color} ${CELL_CLASS_MUTED_COLOR_PERCENT}%, var(--color-white))`;
 }

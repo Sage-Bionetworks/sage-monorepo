@@ -1,6 +1,6 @@
 import { By } from '@angular/platform-browser';
 import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
-import { CELL_CLASSES, CELL_SUBCLASSES } from '@sagebionetworks/qtl/config';
+import { CELL_CLASSES, CELL_SUBCLASSES, CellSubclassId } from '@sagebionetworks/qtl/config';
 import { render, screen, within } from '@testing-library/angular';
 import { ImpactBoxplotComponent } from './impact-boxplot.component';
 import {
@@ -8,12 +8,12 @@ import {
   IMPACT_BOXPLOT_TITLE_PREFIX,
 } from './impact-boxplot.constants';
 
-const astrocyteSubclass: keyof typeof CELL_SUBCLASSES = 'Astrocyte';
-const adaptiveImmuneSubclass: keyof typeof CELL_SUBCLASSES = 'Adaptive Immune Cell';
+const astrocyteSubclass: CellSubclassId = 'astro';
+const adaptiveImmuneSubclass: CellSubclassId = 'adaptiveimmune';
 
-async function setup(cellSubclass = astrocyteSubclass) {
+async function setup(cellSubclassId = astrocyteSubclass) {
   const { fixture } = await render(ImpactBoxplotComponent, {
-    componentInputs: { cellSubclass, expressionSummaries: IMPACT_BOXPLOT_EXAMPLE_SUMMARIES },
+    componentInputs: { cellSubclassId, expressionSummaries: IMPACT_BOXPLOT_EXAMPLE_SUMMARIES },
   });
   const boxplot = fixture.debugElement
     .query(By.directive(BoxplotDirective))
@@ -26,7 +26,7 @@ describe('ImpactBoxplotComponent', () => {
     await setup();
     expect(
       within(screen.getByRole('figure')).getByText(
-        `${IMPACT_BOXPLOT_TITLE_PREFIX} (${astrocyteSubclass})`,
+        `${IMPACT_BOXPLOT_TITLE_PREFIX} (${CELL_SUBCLASSES[astrocyteSubclass].name})`,
       ),
     ).toBeVisible();
   });
@@ -54,7 +54,7 @@ describe('ImpactBoxplotComponent', () => {
   it('fills the boxes with the color of the subclass’s cell class', async () => {
     const { boxplot } = await setup(adaptiveImmuneSubclass);
     expect(boxplot.boxplotBoxStyle?.fillColor).toBe(
-      CELL_CLASSES[CELL_SUBCLASSES[adaptiveImmuneSubclass].cellClass].color,
+      CELL_CLASSES[CELL_SUBCLASSES[adaptiveImmuneSubclass].cellClassId].color,
     );
   });
 });

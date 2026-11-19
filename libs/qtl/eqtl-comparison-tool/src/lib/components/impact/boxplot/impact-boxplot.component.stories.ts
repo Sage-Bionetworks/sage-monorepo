@@ -11,14 +11,14 @@ type Story = StoryObj<ImpactBoxplotComponent>;
 
 export const Demo: Story = {
   args: {
-    cellSubclass: 'Astrocyte',
+    cellSubclassId: 'astro',
     expressionSummaries: IMPACT_BOXPLOT_EXAMPLE_SUMMARIES,
   },
 };
 
 export const LongSubclassName: Story = {
   args: {
-    cellSubclass: 'Layer 3-5 Intratelencephalic Excitatory Neuron 1',
+    cellSubclassId: 'enl35it1',
     expressionSummaries: IMPACT_BOXPLOT_EXAMPLE_SUMMARIES,
   },
 };
