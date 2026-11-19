@@ -1,6 +1,7 @@
 import * as echarts from 'echarts';
 import { ECharts, EChartsOption } from 'echarts';
 import { GRAY_BACKGROUND_COLOR } from '../constants';
+import { getChartFontFamily } from './chart-font';
 
 // Chart must have initial height to be visible
 export function ensureChartDomHasHeight(
@@ -16,7 +17,8 @@ export function ensureChartDomHasHeight(
 
 export function initChart(chartDom: HTMLDivElement | HTMLCanvasElement, initialHeight = '350px') {
   ensureChartDomHasHeight(chartDom, initialHeight);
-  const chart = echarts.init(chartDom);
+  // A theme default, unlike an option, survives each chart's setOption(option, true) reset.
+  const chart = echarts.init(chartDom, { textStyle: { fontFamily: getChartFontFamily() } });
   resizeChartOnWindowResize(chartDom, chart);
   return chart;
 }

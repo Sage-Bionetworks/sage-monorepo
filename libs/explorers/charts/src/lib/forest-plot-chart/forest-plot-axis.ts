@@ -2,12 +2,10 @@ import { EChartsOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 import { AxisTickLabelStyle, ForestPlotProps } from '../models';
 import { AXIS_STYLE, TEXT_STYLE } from '../point-plot-defaults';
+import { getChartFontFamily } from '../utils/chart-font';
 
 const X_AXIS_LABEL_TEXT_STYLE = { color: AXIS_STYLE.tickLabelColor, fontSize: 14 };
 const Y_AXIS_LABEL_TEXT_STYLE = { color: AXIS_STYLE.tickLabelColor, fontSize: 16 };
-// Set explicitly so the measured font always matches the rendered one; ECharts' own default
-// depends on the platform.
-const Y_AXIS_LABEL_FONT_FAMILY = 'sans-serif';
 const BOLD_FONT_WEIGHT = 700;
 
 function toCssFontSize(fontSize: string | number): string {
@@ -24,7 +22,7 @@ export function measureWidestBoldLabel(
   const context = document.createElement('canvas').getContext('2d');
   if (!context) return undefined;
   const fontSize = toCssFontSize(yAxisTickLabelStyle?.fontSize ?? Y_AXIS_LABEL_TEXT_STYLE.fontSize);
-  context.font = `${BOLD_FONT_WEIGHT} ${fontSize} ${Y_AXIS_LABEL_FONT_FAMILY}`;
+  context.font = `${BOLD_FONT_WEIGHT} ${fontSize} ${getChartFontFamily()}`;
   const widest = Math.max(0, ...categories.map((category) => context.measureText(category).width));
   return Math.ceil(widest);
 }
@@ -84,7 +82,8 @@ function buildYAxisLabelRichStyles(
 ) {
   const regular = {
     ...yAxisTickLabelStyle,
-    fontFamily: Y_AXIS_LABEL_FONT_FAMILY,
+    // Set on the labels as well as the theme so the measured font always matches the rendered one.
+    fontFamily: getChartFontFamily(),
     width: measureWidestBoldLabel(yAxisCategories, yAxisTickLabelStyle),
     align: 'right' as const,
     // A background makes ECharts size the label by its full fixed-width box rather than by its
@@ -200,7 +199,7 @@ export function buildYAxis(
       ...yAxisTickLabelStyle,
       ...(yAxisLabelFormatter && {
         formatter: yAxisLabelFormatter,
-        fontFamily: Y_AXIS_LABEL_FONT_FAMILY,
+        fontFamily: getChartFontFamily(),
         rich: buildYAxisLabelRichStyles(yAxisCategories, yAxisTickLabelStyle),
       }),
     },

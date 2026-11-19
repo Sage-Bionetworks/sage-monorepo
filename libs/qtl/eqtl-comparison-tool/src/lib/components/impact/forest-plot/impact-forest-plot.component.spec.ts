@@ -90,12 +90,8 @@ describe('ImpactForestPlotComponent', () => {
     );
   });
 
-  it('pins its left-aligned tooltips above the hovered point or label, in the app font', async () => {
+  it('pins its left-aligned tooltips above the hovered point or label', async () => {
     const { forestPlot } = await setup();
-    expect(forestPlot.tooltipStyle()).toMatchObject({
-      pinAbove: true,
-      textAlign: 'left',
-      fontFamily: 'var(--font-family-primary)',
-    });
+    expect(forestPlot.tooltipStyle()).toMatchObject({ pinAbove: true, textAlign: 'left' });
   });
 });

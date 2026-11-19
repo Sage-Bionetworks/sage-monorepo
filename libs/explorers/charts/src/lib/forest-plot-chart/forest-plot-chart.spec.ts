@@ -5,6 +5,7 @@ import { forestPlotItems } from '../mocks';
 import { ForestPlotItem, ForestPlotProps } from '../models';
 import { GRID_TOP } from '../point-plot-defaults';
 import { initChart, setNoDataOption } from '../utils';
+import { getChartFontFamily } from '../utils/chart-font';
 import {
   computeXBounds,
   computeXTickPositions,
@@ -158,7 +159,7 @@ describe('measureWidestBoldLabel', () => {
 
   function measure(text: string, fontWeight: number): number {
     const context = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
-    context.font = `${fontWeight} 12px sans-serif`;
+    context.font = `${fontWeight} 12px ${getChartFontFamily()}`;
     return context.measureText(text).width;
   }
 

@@ -10,6 +10,7 @@ import {
   CategoryPoint,
   ChartStyle,
   TooltipStyle,
+  whenChartFontReady,
 } from '@sagebionetworks/explorers/charts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 
@@ -21,6 +22,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   private readonly el = inject(ElementRef);
 
   boxplot: BoxplotChart | undefined;
+  private destroyed = false;
 
   @Input({ required: true }) points: CategoryPoint[] = [];
   @Input() summaries: CategoryBoxplotSummary[] | undefined;
@@ -51,7 +53,10 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() gridMargins: undefined | GridMargins;
 
   ngOnInit() {
-    this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
+    whenChartFontReady(() => {
+      if (this.destroyed) return;
+      this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
+    });
   }
 
   ngOnChanges(): void {
@@ -59,6 +64,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     this.boxplot?.destroy();
   }
 

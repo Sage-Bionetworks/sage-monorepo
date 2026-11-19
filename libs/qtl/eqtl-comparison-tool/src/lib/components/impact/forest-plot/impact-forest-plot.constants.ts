@@ -23,7 +23,7 @@ export const IMPACT_FOREST_PLOT_GRID_MARGINS: GridMargins = {
 
 // Distances from each axis line to its tick labels, from the design.
 export const IMPACT_FOREST_PLOT_X_AXIS_LABEL_MARGIN_PX = 17;
-export const IMPACT_FOREST_PLOT_Y_AXIS_LABEL_MARGIN_PX = 8;
+export const IMPACT_FOREST_PLOT_Y_AXIS_LABEL_MARGIN_PX = 10;
 
 export const IMPACT_FOREST_PLOT_POINT_SIZE_PX = 11;
 
@@ -55,12 +55,10 @@ export const IMPACT_FOREST_PLOT_COLORS = {
   tooltipBackground: '#22252A',
 } as const;
 
-// The tooltip is HTML, not canvas, so it can use the app's font variable.
 export const IMPACT_FOREST_PLOT_TOOLTIP_STYLE: TooltipStyle = {
   backgroundColor: IMPACT_FOREST_PLOT_COLORS.tooltipBackground,
   pinAbove: true,
   textAlign: 'left',
-  fontFamily: 'var(--font-family-primary)',
   lineHeight: 16,
   padding: 8,
   borderRadius: 2,

@@ -48,7 +48,6 @@ function buildTextStyle(base: TooltipOption, style: TooltipStyle): TooltipOption
   return {
     ...base.textStyle,
     ...(style.color !== undefined && { color: style.color }),
-    ...(style.fontFamily !== undefined && { fontFamily: style.fontFamily }),
     ...(style.lineHeight !== undefined && { lineHeight: style.lineHeight }),
   };
 }

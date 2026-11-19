@@ -18,6 +18,7 @@ import {
   GridMargins,
   RowHoverHighlightStyle,
   TooltipStyle,
+  whenChartFontReady,
 } from '@sagebionetworks/explorers/charts';
 
 @Directive({
@@ -58,6 +59,7 @@ export class ForestPlotDirective implements OnDestroy {
   gridMargins = input<GridMargins>();
 
   private forestPlot: ForestPlotChart | undefined;
+  private destroyed = false;
 
   private readonly props = computed<ForestPlotProps>(() => ({
     items: this.items(),
@@ -92,9 +94,12 @@ export class ForestPlotDirective implements OnDestroy {
   }));
 
   constructor() {
-    afterNextRender(() => {
-      this.forestPlot = new ForestPlotChart(this.el.nativeElement, this.props());
-    });
+    afterNextRender(() =>
+      whenChartFontReady(() => {
+        if (this.destroyed) return;
+        this.forestPlot = new ForestPlotChart(this.el.nativeElement, this.props());
+      }),
+    );
 
     effect(() => {
       const currentProps = this.props();
@@ -103,6 +108,7 @@ export class ForestPlotDirective implements OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     this.forestPlot?.destroy();
   }
 }

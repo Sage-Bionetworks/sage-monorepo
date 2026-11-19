@@ -12,6 +12,7 @@ import {
   CandlestickChart,
   CandlestickItem,
   CandlestickProps,
+  whenChartFontReady,
 } from '@sagebionetworks/explorers/charts';
 
 @Directive({
@@ -38,6 +39,7 @@ export class CandlestickDirective implements OnDestroy {
   noDataStyle = input<'textOnly' | 'grayBackground'>();
 
   private candlestick: CandlestickChart | undefined;
+  private destroyed = false;
 
   private readonly props = computed<CandlestickProps>(() => ({
     items: this.items(),
@@ -58,9 +60,12 @@ export class CandlestickDirective implements OnDestroy {
   }));
 
   constructor() {
-    afterNextRender(() => {
-      this.candlestick = new CandlestickChart(this.el.nativeElement, this.props());
-    });
+    afterNextRender(() =>
+      whenChartFontReady(() => {
+        if (this.destroyed) return;
+        this.candlestick = new CandlestickChart(this.el.nativeElement, this.props());
+      }),
+    );
 
     effect(() => {
       const currentProps = this.props();
@@ -69,6 +74,7 @@ export class CandlestickDirective implements OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     this.candlestick?.destroy();
   }
 }
