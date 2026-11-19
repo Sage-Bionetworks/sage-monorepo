@@ -1,4 +1,4 @@
-export const LEGEND_LOCUS_BROWSER_TITLE = 'QTL Explorer';
+export const LEGEND_LOCUS_BROWSER_TITLE = 'Locus Browser';
 
 export const LEGEND_CELL_CLASSES_TITLE = 'Cell Classes';
 
