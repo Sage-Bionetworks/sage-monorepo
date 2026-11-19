@@ -56,7 +56,7 @@ export class HomeComponent {
       iconAltText: 'gene search',
       header: '3',
       subHeader: 'Ancestries',
-      iconBackgroundColor: 'var(--color-browser-exon)',
+      iconBackgroundColor: 'var(--color-accent-blue-300)',
       iconColor: 'white',
       // TODO: update stat card link (QTL-110)
       link: `/${ROUTE_PATHS.NOT_FOUND}`,
