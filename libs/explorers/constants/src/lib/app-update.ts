@@ -38,6 +38,7 @@ export const STALE_CHUNK_PAGE_LOAD_GUARD_MS = 60 * 1000;
 
 export const CHUNK_LOAD_FAILURES_METRIC = 'app_update.chunk_load.failures';
 export const STALE_CHUNK_PAGE_LOADS_METRIC = 'app_update.stale_chunk.page_loads';
+export const STALE_CHUNK_PAGE_LOAD_SKIPPED_METRIC = 'app_update.stale_chunk.page_load_skipped';
 export const VERSION_CHECK_FAILURES_METRIC = 'app_update.version_check.failures';
 export const VERSION_CONFIRMED_MISMATCHES_METRIC = 'app_update.version.confirmed_mismatches';
 export const VERSION_UNCONFIRMED_MISMATCHES_METRIC = 'app_update.version.unconfirmed_mismatches';
