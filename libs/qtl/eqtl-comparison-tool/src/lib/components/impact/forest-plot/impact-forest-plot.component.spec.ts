@@ -40,16 +40,16 @@ describe('ImpactForestPlotComponent', () => {
     expect(within(figure).getByText(IMPACT_FOREST_PLOT_X_AXIS_TITLE)).toBeVisible();
   });
 
-  it('lists the cell classes top to bottom in the design order, as uppercase abbreviations', async () => {
+  it('lists the cell classes top to bottom alphabetically by full name, as uppercase abbreviations', async () => {
     const { forestPlot } = await setup();
     expect(forestPlot.items().map((item) => item.yAxisCategory)).toEqual([
-      'VASCULAR',
-      'IMMUNE',
       'ASTRO',
-      'OPC',
-      'OLIGO',
-      'IN',
       'EN',
+      'IMMUNE',
+      'IN',
+      'OLIGO',
+      'OPC',
+      'VASCULAR',
     ]);
   });
 

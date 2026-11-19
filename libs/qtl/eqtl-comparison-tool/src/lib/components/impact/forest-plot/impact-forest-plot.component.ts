@@ -9,7 +9,6 @@ import { ForestPlotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { CELL_CLASSES } from '@sagebionetworks/qtl/config';
 import { computeEffectSizeXAxis } from './impact-forest-plot-x-axis';
 import {
-  IMPACT_FOREST_PLOT_CELL_CLASS_ORDER,
   IMPACT_FOREST_PLOT_CI_LINE_WIDTH_PX,
   IMPACT_FOREST_PLOT_CHART_HEIGHT_PX,
   IMPACT_FOREST_PLOT_COLORS,
@@ -88,11 +87,7 @@ export class ImpactForestPlotComponent {
   protected readonly tooltipStyle = IMPACT_FOREST_PLOT_TOOLTIP_STYLE;
 
   private readonly orderedEffectSizes = computed(() =>
-    [...this.effectSizes()].sort(
-      (a, b) =>
-        IMPACT_FOREST_PLOT_CELL_CLASS_ORDER.indexOf(a.cell_class) -
-        IMPACT_FOREST_PLOT_CELL_CLASS_ORDER.indexOf(b.cell_class),
-    ),
+    [...this.effectSizes()].sort((a, b) => a.cell_class.localeCompare(b.cell_class)),
   );
 
   readonly items = computed<ForestPlotItem[]>(() =>

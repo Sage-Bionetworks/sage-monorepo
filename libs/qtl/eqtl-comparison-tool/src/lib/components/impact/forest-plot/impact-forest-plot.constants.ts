@@ -3,7 +3,6 @@ import {
   RowHoverHighlightStyle,
   TooltipStyle,
 } from '@sagebionetworks/explorers/charts';
-import { CELL_CLASSES } from '@sagebionetworks/qtl/config';
 import { CellClassEffectSize } from './impact-forest-plot.component';
 
 export const IMPACT_FOREST_PLOT_TITLE = 'Effect Sizes by Cell Class';
@@ -32,18 +31,6 @@ export const IMPACT_FOREST_PLOT_CI_LINE_WIDTH_PX = 1;
 export const IMPACT_FOREST_PLOT_TARGET_TICK_INTERVALS = 4;
 
 export const IMPACT_FOREST_PLOT_TOOLTIP_VALUE_DECIMALS = 2;
-
-// Top-to-bottom row order from the design.
-export const IMPACT_FOREST_PLOT_CELL_CLASS_ORDER = [
-  'Endothelial',
-  'Vascular Cell',
-  'Immune Cell',
-  'Astrocyte',
-  'Oligodendrocyte Progenitor Cell',
-  'Oligodendrocyte',
-  'Inhibitory Neuron',
-  'Excitatory Neuron',
-] as const satisfies readonly (keyof typeof CELL_CLASSES)[];
 
 // The chart draws on a canvas, which can't resolve CSS custom properties, so these are hex values.
 export const IMPACT_FOREST_PLOT_COLORS = {
