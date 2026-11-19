@@ -82,12 +82,20 @@ export const DROPDOWN_SELECTION_TAG_SEPARATOR = ' / ';
  * the corresponding results-count signal should be set to (unpinned: total matching rows across
  * pages; pinned: the number of pinned rows returned). `hasRowsForPrebudgetedParents` is read from
  * unpinned results only: whether any row of the pinned parents is still unpinned, or null when the
- * request sent no prebudgeted parents.
+ * request sent no prebudgeted parents. `selectedRowLookup` is also read from unpinned results only:
+ * whether the row the request asked about is anywhere in the results, not just on this page, or
+ * absent when the request didn't ask.
  */
 export interface ComparisonToolFetchResult<T> {
   data: T[];
   totalCount: number;
   hasRowsForPrebudgetedParents?: boolean | null;
+  selectedRowLookup?: SelectedRowLookup;
+}
+
+export interface SelectedRowLookup {
+  rowId: string;
+  inResults: boolean;
 }
 
 /**
@@ -1335,12 +1343,17 @@ export class ComparisonToolService<T> {
     data,
     totalCount,
     hasRowsForPrebudgetedParents,
+    selectedRowLookup,
   }: ComparisonToolFetchResult<unknown>) {
     this.unpinnedFetchFailedSignal.set(false);
     this.unpinnedDataSignal.set(data as T[]);
     this.unpinnedRowCount.set(totalCount);
     this.hasRowsForPrebudgetedParents.set(hasRowsForPrebudgetedParents ?? null);
     this.hasCompletedUnpinnedFetchSignal.set(true);
+    // A click doesn't refetch, so the selection can move while this response is in flight.
+    if (selectedRowLookup && selectedRowLookup.rowId === this.selectedRowIdSignal()) {
+      this.notifySelectedRowValidity(selectedRowLookup.inResults);
+    }
   }
 
   private setPinnedData(pinnedData: T[], identity: ViewIdentity) {

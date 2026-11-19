@@ -3544,6 +3544,65 @@ describe('ComparisonToolService', () => {
       expect(service.selectedRowId()).toBe('row-1');
     });
 
+    describe('selected row lookup from the unpinned fetch', () => {
+      const selectRow2 = () => {
+        connectService();
+        service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+        service.fetchUnpinned(of({ data: [{ _id: 'row-1' }, { _id: 'row-2' }], totalCount: 2 }));
+        service.selectRow('row-2');
+      };
+
+      it('selects the first new result when the selected row left the results', () => {
+        selectRow2();
+        service.fetchUnpinned(
+          of({
+            data: [{ _id: 'row-3' }],
+            totalCount: 1,
+            selectedRowLookup: { rowId: 'row-2', inResults: false },
+          }),
+        );
+        expect(service.selectedRowId()).toBe('row-3');
+      });
+
+      it('selects nothing when the selected row left the results and none are left', () => {
+        selectRow2();
+        service.fetchUnpinned(
+          of({ data: [], totalCount: 0, selectedRowLookup: { rowId: 'row-2', inResults: false } }),
+        );
+        expect(service.selectedRowId()).toBeNull();
+      });
+
+      it('keeps the selection when the selected row is still in the results', () => {
+        selectRow2();
+        service.fetchUnpinned(
+          of({
+            data: [{ _id: 'row-3' }],
+            totalCount: 5,
+            selectedRowLookup: { rowId: 'row-2', inResults: true },
+          }),
+        );
+        expect(service.selectedRowId()).toBe('row-2');
+      });
+
+      it('ignores an answer about a row that is no longer selected', () => {
+        selectRow2();
+        service.fetchUnpinned(
+          of({
+            data: [{ _id: 'row-3' }],
+            totalCount: 1,
+            selectedRowLookup: { rowId: 'row-1', inResults: false },
+          }),
+        );
+        expect(service.selectedRowId()).toBe('row-2');
+      });
+
+      it('keeps the selection when the fetch carries no lookup', () => {
+        selectRow2();
+        service.fetchUnpinned(of({ data: [{ _id: 'row-3' }], totalCount: 1 }));
+        expect(service.selectedRowId()).toBe('row-2');
+      });
+    });
+
     it('notifySelectedRowValidity() is a no-op when rowSelectionEnabled is false', () => {
       connectService();
       service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
