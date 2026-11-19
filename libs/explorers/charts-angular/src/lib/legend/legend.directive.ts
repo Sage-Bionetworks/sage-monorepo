@@ -4,6 +4,7 @@ import {
   LegendChart,
   LegendProps,
   PointStyle,
+  whenChartFontReady,
 } from '@sagebionetworks/explorers/charts';
 
 @Directive({
@@ -14,12 +15,16 @@ export class LegendDirective implements OnChanges, OnInit, OnDestroy {
   private readonly el = inject(ElementRef);
 
   legend: LegendChart | undefined;
+  private destroyed = false;
 
   @Input({ required: true }) pointStyles: PointStyle[] = [];
   @Input() chartStyle: undefined | ChartStyle;
 
   ngOnInit() {
-    this.legend = new LegendChart(this.el.nativeElement, this.getLegendProps());
+    whenChartFontReady(() => {
+      if (this.destroyed) return;
+      this.legend = new LegendChart(this.el.nativeElement, this.getLegendProps());
+    });
   }
 
   ngOnChanges(): void {
@@ -27,6 +32,7 @@ export class LegendDirective implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     this.legend?.destroy();
   }
 

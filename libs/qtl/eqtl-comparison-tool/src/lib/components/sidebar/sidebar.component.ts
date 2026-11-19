@@ -5,6 +5,8 @@ import { getCellTypeMutedColor } from '@sagebionetworks/qtl/util';
 import { ImpactBoxplotComponent } from '../impact/boxplot/impact-boxplot.component';
 import { IMPACT_BOXPLOT_EXAMPLE_SUMMARIES } from '../impact/boxplot/impact-boxplot.constants';
 import { ImpactDetails, ImpactDetailsComponent } from '../impact/details/impact-details.component';
+import { ImpactForestPlotComponent } from '../impact/forest-plot/impact-forest-plot.component';
+import { IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES } from '../impact/forest-plot/impact-forest-plot.constants';
 
 type SidebarTab = 'impact' | 'traits' | 'resources';
 
@@ -12,7 +14,12 @@ export const SIDEBAR_CHICLET_LIST_ARIA_LABEL = 'Selected eQTL';
 
 @Component({
   selector: 'qtl-eqtl-comparison-tool-sidebar',
-  imports: [ImpactBoxplotComponent, ImpactDetailsComponent, MetadataChicletComponent],
+  imports: [
+    ImpactBoxplotComponent,
+    ImpactDetailsComponent,
+    ImpactForestPlotComponent,
+    MetadataChicletComponent,
+  ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
@@ -29,6 +36,7 @@ export class SidebarComponent {
     gene_location: 'chr:11:54455—252455',
     // TODO: fetch from the eQTL phenotype endpoint (EX-283)
     expression_summaries: IMPACT_BOXPLOT_EXAMPLE_SUMMARIES,
+    effect_size_cell_class_data: IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES,
   };
 
   protected readonly chicletListAriaLabel = SIDEBAR_CHICLET_LIST_ARIA_LABEL;

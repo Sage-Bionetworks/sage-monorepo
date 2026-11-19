@@ -11,7 +11,7 @@ import { CELL_CLASSES, CELL_SUBCLASSES } from '@sagebionetworks/qtl/config';
 import {
   IMPACT_BOXPLOT_CHART_HEIGHT_PX,
   IMPACT_BOXPLOT_COLORS,
-  IMPACT_BOXPLOT_GRID_MARGINS,
+  IMPACT_BOXPLOT_PLOT_AREA_MARGINS,
   IMPACT_BOXPLOT_TITLE_PREFIX,
 } from './impact-boxplot.constants';
 
@@ -37,7 +37,7 @@ export class ImpactBoxplotComponent {
 
   protected readonly titlePrefix = IMPACT_BOXPLOT_TITLE_PREFIX;
   protected readonly chartHeight = IMPACT_BOXPLOT_CHART_HEIGHT_PX;
-  protected readonly gridMargins = IMPACT_BOXPLOT_GRID_MARGINS;
+  protected readonly plotAreaMargins = IMPACT_BOXPLOT_PLOT_AREA_MARGINS;
   protected readonly laneBackgroundColors = [...IMPACT_BOXPLOT_COLORS.laneBackgrounds];
   protected readonly axisTickLabelStyle: AxisTickLabelStyle = {
     fontSize: '12px',
@@ -47,6 +47,7 @@ export class ImpactBoxplotComponent {
   protected readonly axisLineStyle: AxisLineStyle = {
     width: 1,
     color: IMPACT_BOXPLOT_COLORS.axisLine,
+    cap: 'butt',
   };
   protected readonly tooltipStyle: TooltipStyle = {
     backgroundColor: IMPACT_BOXPLOT_COLORS.tooltipBackground,
@@ -58,6 +59,8 @@ export class ImpactBoxplotComponent {
     borderColor: IMPACT_BOXPLOT_COLORS.boxBorder,
     borderWidth: 1,
   }));
+
+  protected readonly ariaLabel = computed(() => `${this.titlePrefix} (${this.cellSubclass()})`);
 
   readonly genotypes = computed(() =>
     this.expressionSummaries().map((summary) => summary.genotype),

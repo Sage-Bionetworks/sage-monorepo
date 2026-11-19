@@ -15,8 +15,10 @@ import {
   ForestPlotItem,
   ForestPlotProps,
   GridLineStyle,
+  PlotAreaMargins,
   RowHoverHighlightStyle,
   TooltipStyle,
+  whenChartFontReady,
 } from '@sagebionetworks/explorers/charts';
 
 @Directive({
@@ -32,6 +34,7 @@ export class ForestPlotDirective implements OnDestroy {
   xAxisMin = input<number>();
   xAxisMax = input<number>();
   yAxisCategories = input<string[]>();
+  selectedYAxisCategory = input<string>();
   yAxisLabelTooltipFormatter = input<(category: string) => string>();
   pointTooltipFormatter = input<(item: ForestPlotItem) => string>();
   ciLabelFormatter = input<(value: number) => string>();
@@ -40,6 +43,7 @@ export class ForestPlotDirective implements OnDestroy {
   pointSize = input<number>();
   ciLineWidth = input<number>();
   showCILabels = input<boolean>();
+  showCILineTooltip = input<boolean>();
   noDataStyle = input<'textOnly' | 'grayBackground'>();
   showZeroLine = input<boolean>();
   xAxisInterval = input<number>();
@@ -53,8 +57,10 @@ export class ForestPlotDirective implements OnDestroy {
   yAxisGridLineStyle = input<GridLineStyle>();
   rowHoverHighlightStyle = input<RowHoverHighlightStyle>();
   tooltipStyle = input<TooltipStyle>();
+  plotAreaMargins = input<PlotAreaMargins>();
 
   private forestPlot: ForestPlotChart | undefined;
+  private destroyed = false;
 
   private readonly props = computed<ForestPlotProps>(() => ({
     items: this.items(),
@@ -63,6 +69,7 @@ export class ForestPlotDirective implements OnDestroy {
     xAxisMin: this.xAxisMin(),
     xAxisMax: this.xAxisMax(),
     yAxisCategories: this.yAxisCategories(),
+    selectedYAxisCategory: this.selectedYAxisCategory(),
     yAxisLabelTooltipFormatter: this.yAxisLabelTooltipFormatter(),
     pointTooltipFormatter: this.pointTooltipFormatter(),
     ciLabelFormatter: this.ciLabelFormatter(),
@@ -71,6 +78,7 @@ export class ForestPlotDirective implements OnDestroy {
     pointSize: this.pointSize(),
     ciLineWidth: this.ciLineWidth(),
     showCILabels: this.showCILabels(),
+    showCILineTooltip: this.showCILineTooltip(),
     noDataStyle: this.noDataStyle(),
     showZeroLine: this.showZeroLine(),
     xAxisInterval: this.xAxisInterval(),
@@ -84,12 +92,16 @@ export class ForestPlotDirective implements OnDestroy {
     yAxisGridLineStyle: this.yAxisGridLineStyle(),
     rowHoverHighlightStyle: this.rowHoverHighlightStyle(),
     tooltipStyle: this.tooltipStyle(),
+    plotAreaMargins: this.plotAreaMargins(),
   }));
 
   constructor() {
-    afterNextRender(() => {
-      this.forestPlot = new ForestPlotChart(this.el.nativeElement, this.props());
-    });
+    afterNextRender(() =>
+      whenChartFontReady(() => {
+        if (this.destroyed) return;
+        this.forestPlot = new ForestPlotChart(this.el.nativeElement, this.props());
+      }),
+    );
 
     effect(() => {
       const currentProps = this.props();
@@ -98,6 +110,7 @@ export class ForestPlotDirective implements OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     this.forestPlot?.destroy();
   }
 }

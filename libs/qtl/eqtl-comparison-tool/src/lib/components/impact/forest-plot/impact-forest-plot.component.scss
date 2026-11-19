@@ -1,0 +1,19 @@
+@use 'qtl/styles/src/mixins' as mixins;
+
+:host {
+  display: block;
+}
+
+.impact-forest-plot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+.impact-forest-plot-title,
+.impact-forest-plot-x-axis-title {
+  @include mixins.chart-caption;
+
+  margin: 0;
+}

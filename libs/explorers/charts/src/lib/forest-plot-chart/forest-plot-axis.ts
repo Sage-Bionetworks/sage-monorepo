@@ -1,10 +1,31 @@
 import { EChartsOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
-import { ForestPlotProps } from '../models';
+import { AxisTickLabelStyle, ForestPlotProps } from '../models';
 import { AXIS_STYLE, TEXT_STYLE } from '../point-plot-defaults';
+import { getChartFontFamily } from '../utils/chart-font';
 
 const X_AXIS_LABEL_TEXT_STYLE = { color: AXIS_STYLE.tickLabelColor, fontSize: 14 };
 const Y_AXIS_LABEL_TEXT_STYLE = { color: AXIS_STYLE.tickLabelColor, fontSize: 16 };
+const BOLD_FONT_WEIGHT = 700;
+
+function toCssFontSize(fontSize: string | number): string {
+  return typeof fontSize === 'number' ? `${fontSize}px` : fontSize;
+}
+
+// ECharts sizes the plot around its widest y-axis label (containLabel), measuring bold labels in
+// bold. Giving every label the widest bold width keeps the plot from shifting when a label turns
+// bold on hover. Returns undefined where text can't be measured.
+export function measureWidestBoldLabel(
+  categories: string[],
+  yAxisTickLabelStyle: AxisTickLabelStyle | undefined,
+): number | undefined {
+  const context = document.createElement('canvas').getContext('2d');
+  if (!context) return undefined;
+  const fontSize = toCssFontSize(yAxisTickLabelStyle?.fontSize ?? Y_AXIS_LABEL_TEXT_STYLE.fontSize);
+  context.font = `${BOLD_FONT_WEIGHT} ${fontSize} ${getChartFontFamily()}`;
+  const widest = Math.max(0, ...categories.map((category) => context.measureText(category).width));
+  return Math.ceil(widest);
+}
 
 // Symmetric bounds from max(|ciLeft|, |ciRight|) *1.1
 export function computeXBounds(props: ForestPlotProps): [number, number] {
@@ -38,6 +59,41 @@ export function computeXTickPositions(xMin: number, xMax: number, interval: numb
     positions.push(Math.round(k * interval * 1e10) / 1e10 + 0);
   }
   return positions;
+}
+
+// Rich-text style names for y-axis labels. Every label gets one, so all labels share the fixed
+// width set on these styles; ECharts ignores a plain label's `width` when sizing the plot.
+export const Y_AXIS_LABEL_STYLE_NAMES = { regular: 'regular', bold: 'bold' } as const;
+
+export function buildBoldYAxisLabelFormatter(
+  boldCategories: (string | null | undefined)[],
+): (category: string) => string {
+  return (category: string) => {
+    const styleName = boldCategories.includes(category)
+      ? Y_AXIS_LABEL_STYLE_NAMES.bold
+      : Y_AXIS_LABEL_STYLE_NAMES.regular;
+    return `{${styleName}|${category}}`;
+  };
+}
+
+function buildYAxisLabelRichStyles(
+  yAxisCategories: string[],
+  yAxisTickLabelStyle: AxisTickLabelStyle | undefined,
+) {
+  const regular = {
+    ...yAxisTickLabelStyle,
+    // Set on the labels as well as the theme so the measured font always matches the rendered one.
+    fontFamily: getChartFontFamily(),
+    width: measureWidestBoldLabel(yAxisCategories, yAxisTickLabelStyle),
+    align: 'right' as const,
+    // A background makes ECharts size the label by its full fixed-width box rather than by its
+    // glyphs, which differ between regular and bold.
+    backgroundColor: 'transparent',
+  };
+  return {
+    [Y_AXIS_LABEL_STYLE_NAMES.regular]: regular,
+    [Y_AXIS_LABEL_STYLE_NAMES.bold]: { ...regular, fontWeight: BOLD_FONT_WEIGHT },
+  };
 }
 
 export function buildXAxis(
@@ -107,7 +163,7 @@ export function buildYAxis(
   props: ForestPlotProps,
   yAxisCategories: string[],
   tooltip: EChartsOption['tooltip'],
-  rowHoverLabelFormatter: ((cat: string) => string) | undefined,
+  yAxisLabelFormatter: ((category: string) => string) | undefined,
 ): EChartsOption['yAxis'] {
   const yAxisLabelTooltipFormatter = props.yAxisLabelTooltipFormatter;
   const rowHoverHighlightStyle = props.rowHoverHighlightStyle;
@@ -132,16 +188,19 @@ export function buildYAxis(
       ...tooltip,
       show: Boolean(yAxisLabelTooltipFormatter),
       ...(yAxisLabelTooltipFormatter && {
-        formatter: (params: CallbackDataParams) => yAxisLabelTooltipFormatter(params.name),
+        // ECharts passes the formatted label as `name` (rich-text markup like `{b|ACC}` when
+        // the label is bold) and the raw category as `value`.
+        formatter: (params: CallbackDataParams) => yAxisLabelTooltipFormatter(String(params.value)),
       }),
     },
     axisLabel: {
       ...Y_AXIS_LABEL_TEXT_STYLE,
       margin: 30,
       ...yAxisTickLabelStyle,
-      ...(rowHoverLabelFormatter && {
-        formatter: rowHoverLabelFormatter,
-        rich: { b: { ...yAxisTickLabelStyle, fontWeight: 700 } },
+      ...(yAxisLabelFormatter && {
+        formatter: yAxisLabelFormatter,
+        fontFamily: getChartFontFamily(),
+        rich: buildYAxisLabelRichStyles(yAxisCategories, yAxisTickLabelStyle),
       }),
     },
     // splitLine is rendered via gridLineSeries so it aligns with category ticks

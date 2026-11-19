@@ -59,6 +59,8 @@ describe('ForestPlotDirective', () => {
       template: `<div
         sageForestPlot
         [items]="items"
+        [selectedYAxisCategory]="selectedYAxisCategory"
+        [showCILineTooltip]="true"
         [showZeroLine]="false"
         [xAxisLineStyle]="{ width: 1, color: '#22252A' }"
         [yAxisLineStyle]="{ width: 1, color: '#22252A' }"
@@ -68,10 +70,12 @@ describe('ForestPlotDirective', () => {
         [xAxisGridLineStyle]="{ width: 1, color: '#D0D4D9', type: 'dotted' }"
         [yAxisGridLineStyle]="{ width: 1, color: '#F1F2F4', type: 'solid' }"
         [rowHoverHighlightStyle]="{ backgroundColor: 'rgba(158, 158, 158, 0.15)', thickness: 13 }"
+        [plotAreaMargins]="{ right: 10 }"
       ></div>`,
     })
     class StyledTestComponent {
       items = forestPlotItems;
+      selectedYAxisCategory = forestPlotItems[1].yAxisCategory;
     }
 
     const setOptionsSpy = jest.spyOn(ForestPlotChart.prototype, 'setOptions');
@@ -79,6 +83,8 @@ describe('ForestPlotDirective', () => {
 
     expect(setOptionsSpy).toHaveBeenCalledWith(
       expect.objectContaining({
+        selectedYAxisCategory: forestPlotItems[1].yAxisCategory,
+        showCILineTooltip: true,
         showZeroLine: false,
         xAxisLineStyle: { width: 1, color: '#22252A' },
         yAxisLineStyle: { width: 1, color: '#22252A' },
@@ -88,6 +94,7 @@ describe('ForestPlotDirective', () => {
         xAxisGridLineStyle: { width: 1, color: '#D0D4D9', type: 'dotted' },
         yAxisGridLineStyle: { width: 1, color: '#F1F2F4', type: 'solid' },
         rowHoverHighlightStyle: { backgroundColor: 'rgba(158, 158, 158, 0.15)', thickness: 13 },
+        plotAreaMargins: { right: 10 },
       }),
     );
 

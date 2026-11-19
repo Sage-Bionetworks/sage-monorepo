@@ -3,13 +3,14 @@ import {
   AxisLineStyle,
   AxisTickLabelStyle,
   BoxplotBoxStyle,
-  BoxplotGridMargins,
+  PlotAreaMargins,
   BoxplotChart,
   BoxplotProps,
   CategoryBoxplotSummary,
   CategoryPoint,
   ChartStyle,
   TooltipStyle,
+  whenChartFontReady,
 } from '@sagebionetworks/explorers/charts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 
@@ -21,6 +22,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   private readonly el = inject(ElementRef);
 
   boxplot: BoxplotChart | undefined;
+  private destroyed = false;
 
   @Input({ required: true }) points: CategoryPoint[] = [];
   @Input() summaries: CategoryBoxplotSummary[] | undefined;
@@ -48,10 +50,13 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() axisTickLabelStyle: undefined | AxisTickLabelStyle;
   @Input() axisLineStyle: undefined | AxisLineStyle;
   @Input() tooltipStyle: undefined | TooltipStyle;
-  @Input() gridMargins: undefined | BoxplotGridMargins;
+  @Input() plotAreaMargins: undefined | PlotAreaMargins;
 
   ngOnInit() {
-    this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
+    whenChartFontReady(() => {
+      if (this.destroyed) return;
+      this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
+    });
   }
 
   ngOnChanges(): void {
@@ -59,6 +64,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     this.boxplot?.destroy();
   }
 
@@ -88,7 +94,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       axisTickLabelStyle: this.axisTickLabelStyle,
       axisLineStyle: this.axisLineStyle,
       tooltipStyle: this.tooltipStyle,
-      gridMargins: this.gridMargins,
+      plotAreaMargins: this.plotAreaMargins,
     };
   }
 }

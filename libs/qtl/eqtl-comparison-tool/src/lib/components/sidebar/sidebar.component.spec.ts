@@ -3,6 +3,7 @@ import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { IMPACT_BOXPLOT_TITLE_PREFIX } from '../impact/boxplot/impact-boxplot.constants';
 import { IMPACT_DETAIL_FIELDS } from '../impact/details/impact-details.component';
+import { IMPACT_FOREST_PLOT_TITLE } from '../impact/forest-plot/impact-forest-plot.constants';
 import { SIDEBAR_CHICLET_LIST_ARIA_LABEL, SidebarComponent } from './sidebar.component';
 
 async function setup() {
@@ -41,9 +42,17 @@ describe('SidebarComponent', () => {
     await setup();
     const impactPanel = screen.getByRole('tabpanel');
     expect(
-      within(within(impactPanel).getByRole('figure')).getByText(
-        `${IMPACT_BOXPLOT_TITLE_PREFIX} (Astrocyte)`,
-      ),
+      within(impactPanel).getByRole('figure', {
+        name: `${IMPACT_BOXPLOT_TITLE_PREFIX} (Astrocyte)`,
+      }),
+    ).toBeVisible();
+  });
+
+  it('shows the effect sizes by cell class plot in the Impact tab', async () => {
+    await setup();
+    const impactPanel = screen.getByRole('tabpanel');
+    expect(
+      within(impactPanel).getByRole('figure', { name: IMPACT_FOREST_PLOT_TITLE }),
     ).toBeVisible();
   });
 

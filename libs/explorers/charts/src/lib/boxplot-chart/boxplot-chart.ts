@@ -116,6 +116,7 @@ export class BoxplotChart {
         type: 'value',
         z: axisZ,
         axisLine: {
+          show: false,
           onZero: false,
         },
         // Specify min/max values so the value xAxis aligns with the category xAxis
@@ -298,7 +299,7 @@ export class BoxplotChart {
       axisTickLabelStyle,
       axisLineStyle,
       tooltipStyle,
-      gridMargins,
+      plotAreaMargins,
     } = boxplotProps;
 
     const showLegend = boxplotProps.showLegend || false;
@@ -539,7 +540,7 @@ export class BoxplotChart {
       grid: {
         ...boxplotChartTheme.grid,
         top: title ? 60 : 20,
-        ...gridMargins,
+        ...plotAreaMargins,
       },
       title: this.getTitleOptions(boxplotChartTheme, xAxisTitle, title),
       aria: {

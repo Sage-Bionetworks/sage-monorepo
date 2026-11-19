@@ -8,7 +8,7 @@ import {
 } from '../constants';
 import { staticBoxplotPoints, staticBoxplotSummaries } from '../mocks';
 import { minimalBoxplotChartTheme } from '../chart-theme/boxplot-chart-theme';
-import { BoxplotGridMargins, BoxplotProps, CategoryPoint } from '../models';
+import { PlotAreaMargins, BoxplotProps, CategoryPoint } from '../models';
 import { CappedCategoryPoint } from '../models/boxplot';
 import { initChart, setNoDataOption } from '../utils';
 import { BoxplotChart } from './boxplot-chart';
@@ -100,6 +100,19 @@ describe('BoxplotChart', () => {
     it('derives categories from points when xAxisCategories is empty', () => {
       makeChart({ xAxisCategories: [] });
       expect(getXAxisCategories()).toEqual(['CAT1', 'CAT2', 'CAT3', 'CAT4']);
+    });
+  });
+
+  describe('x-axis lines', () => {
+    type XAxisOption = { type: string; axisLine: { show?: boolean; lineStyle?: object } };
+
+    it('draws only the category x-axis line, so the hidden value axis adds no line under it', () => {
+      const axisLineStyle = { width: 1, color: '#22252A', cap: 'butt' as const };
+      makeChart({ axisLineStyle });
+      const [valueXAxis, categoryXAxis] = getOption().xAxis as XAxisOption[];
+      expect(valueXAxis.type).toBe('value');
+      expect(valueXAxis.axisLine.show).toBe(false);
+      expect(categoryXAxis.axisLine.lineStyle).toEqual(axisLineStyle);
     });
   });
 
@@ -423,28 +436,28 @@ describe('BoxplotChart', () => {
     });
   });
 
-  describe('gridMargins', () => {
+  describe('plotAreaMargins', () => {
     const untitledGridTop = 20;
 
     function getGrid() {
-      return getOption().grid as BoxplotGridMargins & { containLabel?: boolean };
+      return getOption().grid as PlotAreaMargins & { containLabel?: boolean };
     }
 
-    it("keeps the chart style's margins when gridMargins is undefined", () => {
+    it("keeps the chart style's margins when plotAreaMargins is undefined", () => {
       makeChart();
       expect(getGrid()).toEqual({ ...minimalBoxplotChartTheme.grid, top: untitledGridTop });
     });
 
     it('overrides only the sides that are given', () => {
-      const gridMargins: BoxplotGridMargins = { top: 8, bottom: 24 };
-      makeChart({ gridMargins });
-      expect(getGrid()).toEqual({ ...minimalBoxplotChartTheme.grid, ...gridMargins });
+      const plotAreaMargins: PlotAreaMargins = { top: 8, bottom: 24 };
+      makeChart({ plotAreaMargins });
+      expect(getGrid()).toEqual({ ...minimalBoxplotChartTheme.grid, ...plotAreaMargins });
     });
 
     it('overrides the extra top margin a title adds', () => {
-      const gridMargins: BoxplotGridMargins = { top: 8 };
-      makeChart({ title: 'Expression by genotype', gridMargins });
-      expect(getGrid().top).toBe(gridMargins.top);
+      const plotAreaMargins: PlotAreaMargins = { top: 8 };
+      makeChart({ title: 'Expression by genotype', plotAreaMargins });
+      expect(getGrid().top).toBe(plotAreaMargins.top);
     });
   });
 });

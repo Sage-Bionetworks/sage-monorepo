@@ -24,6 +24,7 @@ const meta: Meta<ForestPlotDirective> = {
       [xAxisMin]="xAxisMin"
       [xAxisMax]="xAxisMax"
       [yAxisCategories]="yAxisCategories"
+      [selectedYAxisCategory]="selectedYAxisCategory"
       [yAxisLabelTooltipFormatter]="yAxisLabelTooltipFormatter"
       [pointTooltipFormatter]="pointTooltipFormatter"
       [ciLabelFormatter]="ciLabelFormatter"
@@ -32,6 +33,7 @@ const meta: Meta<ForestPlotDirective> = {
       [pointSize]="pointSize"
       [ciLineWidth]="ciLineWidth"
       [showCILabels]="showCILabels"
+      [showCILineTooltip]="showCILineTooltip"
       [noDataStyle]="noDataStyle"
       [showZeroLine]="showZeroLine"
       [xAxisInterval]="xAxisInterval"
@@ -45,6 +47,7 @@ const meta: Meta<ForestPlotDirective> = {
       [yAxisGridLineStyle]="yAxisGridLineStyle"
       [rowHoverHighlightStyle]="rowHoverHighlightStyle"
       [tooltipStyle]="tooltipStyle"
+      [plotAreaMargins]="plotAreaMargins"
     ></div>`,
   }),
 };
@@ -81,9 +84,11 @@ export const Default: Story = {
 export const Styled: Story = {
   args: {
     items: forestPlotItemsColoredByLine,
+    selectedYAxisCategory: 'IMMUNE',
     xAxisMin: -0.1,
     xAxisMax: 0.7,
     showCILabels: false,
+    showCILineTooltip: true,
     pointSize: 11,
     ciLineWidth: 1,
     pointTooltipFormatter: (item) => `Effect size: ${item.value.toPrecision(2)}`,

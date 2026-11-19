@@ -59,6 +59,11 @@
         [cellSubclass]="data.cell_subclass"
         [expressionSummaries]="data.expression_summaries"
       />
+      <qtl-eqtl-comparison-tool-impact-forest-plot
+        class="sidebar-impact-forest-plot"
+        [selectedCellClass]="data.cell_type"
+        [effectSizes]="data.effect_size_cell_class_data"
+      />
       <!-- TODO: add the remaining impact tab content (EX-73) -->
     }
     @case ('traits') {
