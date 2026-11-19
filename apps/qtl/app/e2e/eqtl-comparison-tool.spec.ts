@@ -37,6 +37,12 @@ const CELL_CLASS_FILTER = {
   value: 'Astrocyte',
 };
 
+const CELL_SUBCLASS_FILTER = {
+  menuName: 'Cell Subclass',
+  queryParamKey: 'cellSubclass',
+  value: 'Astrocyte',
+};
+
 const filterByCellClass = async (page: Page) => {
   await openFilterMenuAndClickCheckbox(page, CELL_CLASS_FILTER.menuName, CELL_CLASS_FILTER.value);
   await toggleFilterPanel(page);
@@ -67,11 +73,11 @@ test.describe('eQTL comparison tool', () => {
   test.describe('filter URL sync', () => {
     const selectedFilterParams = {
       [CELL_CLASS_FILTER.queryParamKey]: [CELL_CLASS_FILTER.value],
-      cellSubclass: ['Astrocyte'],
+      [CELL_SUBCLASS_FILTER.queryParamKey]: [CELL_SUBCLASS_FILTER.value],
     };
     const selectedFilters = {
       [CELL_CLASS_FILTER.menuName]: [CELL_CLASS_FILTER.value],
-      'Cell Subclass': ['Astrocyte'],
+      [CELL_SUBCLASS_FILTER.menuName]: [CELL_SUBCLASS_FILTER.value],
     };
 
     test('filter selections are added to URL when selected and removed when cleared', async ({
@@ -125,7 +131,12 @@ test.describe('eQTL comparison tool', () => {
     });
 
     test('sort is restored from URL on page load', async ({ page }) => {
-      await navigateToEqtlComparison(page, true, 'url', 'sortFields=beta&sortOrders=1');
+      await navigateToEqtlComparison(
+        page,
+        true,
+        'url',
+        `sortFields=${sortColumns[0].field}&sortOrders=1`,
+      );
       await testSortRestoredFromUrl(page, sortColumns[0].name, sortColumns[0].field);
     });
 
@@ -140,7 +151,12 @@ test.describe('eQTL comparison tool', () => {
     });
 
     test('multi-column sort is restored from URL', async ({ page }) => {
-      await navigateToEqtlComparison(page, true, 'url', 'sortFields=beta,maf&sortOrders=-1,1');
+      await navigateToEqtlComparison(
+        page,
+        true,
+        'url',
+        `sortFields=${sortColumns[0].field},${sortColumns[1].field}&sortOrders=-1,1`,
+      );
       await testMultiColumnSortRestoredFromUrl(page, sortColumns.slice(0, 2), sortColumns[2]);
     });
 
