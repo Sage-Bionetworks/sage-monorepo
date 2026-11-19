@@ -11,14 +11,19 @@ export const IMPACT_FOREST_PLOT_TITLE = 'Effect Sizes by Cell Class';
 export const IMPACT_FOREST_PLOT_X_AXIS_TITLE = 'Effect Size (Beta)';
 
 // The chart helper only keeps a height set inline on its element, so this is bound in the template.
-export const IMPACT_FOREST_PLOT_CHART_HEIGHT_PX = 228;
+export const IMPACT_FOREST_PLOT_CHART_HEIGHT_PX = 230;
 
+// The right margin leaves room for half of the last x-axis tick label, which sits on the plot edge.
 export const IMPACT_FOREST_PLOT_GRID_MARGINS: GridMargins = {
-  top: 4,
+  top: 11,
   right: 10,
-  bottom: 24,
+  bottom: 0,
   left: 0,
 };
+
+// Distances from each axis line to its tick labels, from the design.
+export const IMPACT_FOREST_PLOT_X_AXIS_LABEL_MARGIN_PX = 17;
+export const IMPACT_FOREST_PLOT_Y_AXIS_LABEL_MARGIN_PX = 8;
 
 export const IMPACT_FOREST_PLOT_POINT_SIZE_PX = 11;
 
@@ -44,7 +49,7 @@ export const IMPACT_FOREST_PLOT_CELL_CLASS_ORDER = [
 export const IMPACT_FOREST_PLOT_COLORS = {
   categoryLabel: '#353A3F',
   tickLabel: '#4A5056',
-  axisLine: 'transparent',
+  axisLine: '#22252A',
   xAxisGridLine: '#D0D4D9',
   yAxisGridLine: '#F1F2F4',
   tooltipBackground: '#22252A',

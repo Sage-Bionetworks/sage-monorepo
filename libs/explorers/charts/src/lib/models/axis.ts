@@ -12,6 +12,8 @@ export type AxisTickLabelStyle = {
   fontSize?: string;
   fontWeight?: 'normal' | 'bold' | 'bolder' | 'lighter' | number;
   color?: string;
+  /** Distance from the axis line to its tick labels, in pixels. */
+  margin?: number;
 };
 
 export type GridMargins = {

@@ -456,6 +456,19 @@ describe('ForestPlotChart', () => {
       expect(yAxis.axisLine.lineStyle.cap).toBe('butt');
     });
 
+    it('sets the distance from each axis line to its tick labels', () => {
+      const xAxisLabelMargin = 14;
+      const yAxisLabelMargin = 9;
+      makeChart({
+        xAxisTickLabelStyle: { margin: xAxisLabelMargin },
+        yAxisTickLabelStyle: { margin: yAxisLabelMargin },
+      });
+      const xAxis = getOption().xAxis as { axisLabel: { margin: number } };
+      const yAxis = getOption().yAxis as { axisLabel: { margin: number } };
+      expect(xAxis.axisLabel.margin).toBe(xAxisLabelMargin);
+      expect(yAxis.axisLabel.margin).toBe(yAxisLabelMargin);
+    });
+
     it('hides the y-axis line by default', () => {
       makeChart();
       const yAxis = getOption().yAxis as { axisLine: { show: boolean } };

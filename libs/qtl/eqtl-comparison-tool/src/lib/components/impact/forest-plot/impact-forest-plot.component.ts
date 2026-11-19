@@ -20,7 +20,9 @@ import {
   IMPACT_FOREST_PLOT_TITLE,
   IMPACT_FOREST_PLOT_TOOLTIP_STYLE,
   IMPACT_FOREST_PLOT_TOOLTIP_VALUE_DECIMALS,
+  IMPACT_FOREST_PLOT_X_AXIS_LABEL_MARGIN_PX,
   IMPACT_FOREST_PLOT_X_AXIS_TITLE,
+  IMPACT_FOREST_PLOT_Y_AXIS_LABEL_MARGIN_PX,
 } from './impact-forest-plot.constants';
 
 export interface CellClassEffectSize {
@@ -65,11 +67,13 @@ export class ImpactForestPlotComponent {
     fontSize: TICK_LABEL_FONT_SIZE,
     fontWeight: 400,
     color: IMPACT_FOREST_PLOT_COLORS.tickLabel,
+    margin: IMPACT_FOREST_PLOT_X_AXIS_LABEL_MARGIN_PX,
   };
   protected readonly yAxisTickLabelStyle: AxisTickLabelStyle = {
     fontSize: TICK_LABEL_FONT_SIZE,
     fontWeight: 400,
     color: IMPACT_FOREST_PLOT_COLORS.categoryLabel,
+    margin: IMPACT_FOREST_PLOT_Y_AXIS_LABEL_MARGIN_PX,
   };
   protected readonly xAxisGridLineStyle: GridLineStyle = {
     width: 1,
