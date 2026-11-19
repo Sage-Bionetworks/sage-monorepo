@@ -168,6 +168,18 @@ section h2 {
   white-space: pre;
 }
 
+.explorers-chart-tooltip-notch::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 11px;
+  height: 5px;
+  background-color: var(--explorers-chart-tooltip-notch-color);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
 .p-radiobutton {
   display: inline-flex !important;
   flex-direction: column !important;
