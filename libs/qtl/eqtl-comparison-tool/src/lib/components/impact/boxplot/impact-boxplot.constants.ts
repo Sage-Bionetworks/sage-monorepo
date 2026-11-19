@@ -1,4 +1,4 @@
-import { GridMargins } from '@sagebionetworks/explorers/charts';
+import { PlotAreaMargins } from '@sagebionetworks/explorers/charts';
 import { GenotypeExpressionSummary } from './impact-boxplot.component';
 
 export const IMPACT_BOXPLOT_TITLE_PREFIX = 'Expression by Genotype';
@@ -6,7 +6,7 @@ export const IMPACT_BOXPLOT_TITLE_PREFIX = 'Expression by Genotype';
 // The chart helper only keeps a height set inline on its element, so this is bound in the template.
 export const IMPACT_BOXPLOT_CHART_HEIGHT_PX = 184;
 
-export const IMPACT_BOXPLOT_GRID_MARGINS: GridMargins = {
+export const IMPACT_BOXPLOT_PLOT_AREA_MARGINS: PlotAreaMargins = {
   top: 8,
   right: 10,
   bottom: 20,

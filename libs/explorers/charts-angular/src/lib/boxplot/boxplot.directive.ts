@@ -3,7 +3,7 @@ import {
   AxisLineStyle,
   AxisTickLabelStyle,
   BoxplotBoxStyle,
-  GridMargins,
+  PlotAreaMargins,
   BoxplotChart,
   BoxplotProps,
   CategoryBoxplotSummary,
@@ -50,7 +50,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() axisTickLabelStyle: undefined | AxisTickLabelStyle;
   @Input() axisLineStyle: undefined | AxisLineStyle;
   @Input() tooltipStyle: undefined | TooltipStyle;
-  @Input() gridMargins: undefined | GridMargins;
+  @Input() plotAreaMargins: undefined | PlotAreaMargins;
 
   ngOnInit() {
     whenChartFontReady(() => {
@@ -94,7 +94,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       axisTickLabelStyle: this.axisTickLabelStyle,
       axisLineStyle: this.axisLineStyle,
       tooltipStyle: this.tooltipStyle,
-      gridMargins: this.gridMargins,
+      plotAreaMargins: this.plotAreaMargins,
     };
   }
 }

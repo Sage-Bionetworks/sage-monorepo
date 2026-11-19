@@ -1,4 +1,5 @@
-import type { AxisLineStyle, AxisTickLabelStyle, GridLineStyle, GridMargins } from './axis';
+import type { AxisLineStyle, AxisTickLabelStyle, GridLineStyle } from './axis';
+import type { PlotAreaMargins } from './chart';
 import type { TooltipStyle } from './tooltip';
 
 export type ForestPlotItem = {
@@ -78,8 +79,9 @@ export interface ForestPlotProps {
   /** If defined, overrides individual fields on the default tooltip styling. */
   tooltipStyle?: TooltipStyle;
   /**
-   * If defined, overrides individual sides of the plot area's margin, in pixels. A side left
-   * undefined keeps the default margin. Labels stay inside the margin (containLabel).
+   * If defined, overrides individual sides of the plot area's margins, in pixels. Margins are
+   * measured to the outer edge of the tick labels, so the labels sit between them and the plot
+   * area (containLabel). A side left undefined keeps the default margin.
    */
-  gridMargins?: GridMargins;
+  plotAreaMargins?: PlotAreaMargins;
 }

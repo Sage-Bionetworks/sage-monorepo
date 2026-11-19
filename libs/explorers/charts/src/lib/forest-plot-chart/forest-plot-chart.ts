@@ -100,7 +100,7 @@ export class ForestPlotChart {
           (props.title ? GRID_TOP.withTitle : GRID_TOP.withoutTitle) +
           (props.showXAxisLabelsOnTop ? TOP_X_AXIS_LABEL_HEIGHT : 0),
         bottom: props.xAxisTitle ? AXIS_STYLE.titleGap : GRID_BOTTOM_WITHOUT_X_AXIS_TITLE,
-        ...props.gridMargins,
+        ...props.plotAreaMargins,
       },
       xAxis: buildXAxis(props, xMin, xMax, xTickPositions),
       yAxis: buildYAxis(props, yAxisCategories, tooltip, yAxisLabelFormatter),

@@ -3,8 +3,8 @@ import type { BoxplotSeriesOption } from 'echarts/charts';
 import type { TitleComponentOption } from 'echarts/components';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
 import type { TooltipOption } from '../types';
-import type { AxisLineStyle, AxisTickLabelStyle, GridMargins } from './axis';
-import type { BaseChartTheme, ChartStyle } from './chart';
+import type { AxisLineStyle, AxisTickLabelStyle } from './axis';
+import type { BaseChartTheme, ChartStyle, PlotAreaMargins } from './chart';
 import type { TooltipStyle } from './tooltip';
 
 export type CategoryPoint = {
@@ -104,9 +104,10 @@ export interface BoxplotProps {
   axisLineStyle?: AxisLineStyle;
   /* if defined, overrides individual fields on the default tooltip styling. */
   tooltipStyle?: TooltipStyle;
-  /* if defined, overrides individual sides of the plot area's margin, in pixels. A side left
-  undefined keeps the active chartStyle's margin. */
-  gridMargins?: GridMargins;
+  /* if defined, overrides individual sides of the plot area's margins, in pixels. Margins are
+  measured to the axis lines, so the tick labels sit within the margins. A side left undefined keeps the
+  active chartStyle's margin. */
+  plotAreaMargins?: PlotAreaMargins;
 }
 
 export type BoxplotBoxStyle = {

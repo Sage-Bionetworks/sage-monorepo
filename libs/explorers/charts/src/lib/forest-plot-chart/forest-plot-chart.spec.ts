@@ -272,11 +272,11 @@ describe('ForestPlotChart', () => {
       expect((getOption().grid as { bottom: number }).bottom).toBe(40);
     });
 
-    it('overrides only the grid sides given in gridMargins', () => {
-      const gridMargins = { right: 10, bottom: 24 };
-      makeChart({ xAxisTitle: 'Effect Size', gridMargins });
+    it('overrides only the plot area sides given in plotAreaMargins', () => {
+      const plotAreaMargins = { right: 10, bottom: 24 };
+      makeChart({ xAxisTitle: 'Effect Size', plotAreaMargins });
       const grid = getOption().grid as { top: number; right: number; bottom: number };
-      expect(grid).toMatchObject(gridMargins);
+      expect(grid).toMatchObject(plotAreaMargins);
       expect(grid.top).toBe(GRID_TOP.withoutTitle);
     });
 

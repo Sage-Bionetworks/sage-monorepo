@@ -1,5 +1,5 @@
 import {
-  GridMargins,
+  PlotAreaMargins,
   RowHoverHighlightStyle,
   TooltipStyle,
 } from '@sagebionetworks/explorers/charts';
@@ -14,7 +14,7 @@ export const IMPACT_FOREST_PLOT_X_AXIS_TITLE = 'Effect Size (Beta)';
 export const IMPACT_FOREST_PLOT_CHART_HEIGHT_PX = 230;
 
 // The right margin leaves room for half of the last x-axis tick label, which sits on the plot edge.
-export const IMPACT_FOREST_PLOT_GRID_MARGINS: GridMargins = {
+export const IMPACT_FOREST_PLOT_PLOT_AREA_MARGINS: PlotAreaMargins = {
   top: 11,
   right: 10,
   bottom: 0,

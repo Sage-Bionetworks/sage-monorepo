@@ -8,7 +8,7 @@ import {
 } from '../constants';
 import { staticBoxplotPoints, staticBoxplotSummaries } from '../mocks';
 import { minimalBoxplotChartTheme } from '../chart-theme/boxplot-chart-theme';
-import { GridMargins, BoxplotProps, CategoryPoint } from '../models';
+import { PlotAreaMargins, BoxplotProps, CategoryPoint } from '../models';
 import { CappedCategoryPoint } from '../models/boxplot';
 import { initChart, setNoDataOption } from '../utils';
 import { BoxplotChart } from './boxplot-chart';
@@ -436,28 +436,28 @@ describe('BoxplotChart', () => {
     });
   });
 
-  describe('gridMargins', () => {
+  describe('plotAreaMargins', () => {
     const untitledGridTop = 20;
 
     function getGrid() {
-      return getOption().grid as GridMargins & { containLabel?: boolean };
+      return getOption().grid as PlotAreaMargins & { containLabel?: boolean };
     }
 
-    it("keeps the chart style's margins when gridMargins is undefined", () => {
+    it("keeps the chart style's margins when plotAreaMargins is undefined", () => {
       makeChart();
       expect(getGrid()).toEqual({ ...minimalBoxplotChartTheme.grid, top: untitledGridTop });
     });
 
     it('overrides only the sides that are given', () => {
-      const gridMargins: GridMargins = { top: 8, bottom: 24 };
-      makeChart({ gridMargins });
-      expect(getGrid()).toEqual({ ...minimalBoxplotChartTheme.grid, ...gridMargins });
+      const plotAreaMargins: PlotAreaMargins = { top: 8, bottom: 24 };
+      makeChart({ plotAreaMargins });
+      expect(getGrid()).toEqual({ ...minimalBoxplotChartTheme.grid, ...plotAreaMargins });
     });
 
     it('overrides the extra top margin a title adds', () => {
-      const gridMargins: GridMargins = { top: 8 };
-      makeChart({ title: 'Expression by genotype', gridMargins });
-      expect(getGrid().top).toBe(gridMargins.top);
+      const plotAreaMargins: PlotAreaMargins = { top: 8 };
+      makeChart({ title: 'Expression by genotype', plotAreaMargins });
+      expect(getGrid().top).toBe(plotAreaMargins.top);
     });
   });
 });

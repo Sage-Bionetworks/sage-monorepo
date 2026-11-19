@@ -47,7 +47,7 @@ const meta: Meta<ForestPlotDirective> = {
       [yAxisGridLineStyle]="yAxisGridLineStyle"
       [rowHoverHighlightStyle]="rowHoverHighlightStyle"
       [tooltipStyle]="tooltipStyle"
-      [gridMargins]="gridMargins"
+      [plotAreaMargins]="plotAreaMargins"
     ></div>`,
   }),
 };

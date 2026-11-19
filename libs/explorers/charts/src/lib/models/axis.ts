@@ -16,13 +16,6 @@ export type AxisTickLabelStyle = {
   margin?: number;
 };
 
-export type GridMargins = {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-};
-
 export type GridLineStyle = {
   width: number;
   color: string;

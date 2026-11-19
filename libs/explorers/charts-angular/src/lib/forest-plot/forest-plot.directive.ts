@@ -15,7 +15,7 @@ import {
   ForestPlotItem,
   ForestPlotProps,
   GridLineStyle,
-  GridMargins,
+  PlotAreaMargins,
   RowHoverHighlightStyle,
   TooltipStyle,
   whenChartFontReady,
@@ -57,7 +57,7 @@ export class ForestPlotDirective implements OnDestroy {
   yAxisGridLineStyle = input<GridLineStyle>();
   rowHoverHighlightStyle = input<RowHoverHighlightStyle>();
   tooltipStyle = input<TooltipStyle>();
-  gridMargins = input<GridMargins>();
+  plotAreaMargins = input<PlotAreaMargins>();
 
   private forestPlot: ForestPlotChart | undefined;
   private destroyed = false;
@@ -92,7 +92,7 @@ export class ForestPlotDirective implements OnDestroy {
     yAxisGridLineStyle: this.yAxisGridLineStyle(),
     rowHoverHighlightStyle: this.rowHoverHighlightStyle(),
     tooltipStyle: this.tooltipStyle(),
-    gridMargins: this.gridMargins(),
+    plotAreaMargins: this.plotAreaMargins(),
   }));
 
   constructor() {
