@@ -126,7 +126,8 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
   }
 
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
-    const query = this.buildUnpinnedQuery(currentQuery);
+    const selectedRowId = this.comparisonToolService.selectedRowIdForUnpinnedFetch() ?? undefined;
+    const query = { ...this.buildUnpinnedQuery(currentQuery), selectedRowId };
 
     this.logger.log('unpinned query', { query });
 
@@ -135,6 +136,10 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
         map((response: EqtlsPage) => ({
           data: response.eqtls,
           totalCount: response.page.totalElements,
+          selectedRowLookup:
+            selectedRowId !== undefined && response.selectedRowInResults != null
+              ? { rowId: selectedRowId, inResults: response.selectedRowInResults }
+              : undefined,
         })),
       ),
     );
