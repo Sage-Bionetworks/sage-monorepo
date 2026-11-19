@@ -90,6 +90,11 @@ describe('ImpactForestPlotComponent', () => {
     );
   });
 
+  it("shows a point's tooltip when hovering its confidence interval line too", async () => {
+    const { forestPlot } = await setup();
+    expect(forestPlot.showCILineTooltip()).toBe(true);
+  });
+
   it('pins its left-aligned tooltips above the hovered point or label', async () => {
     const { forestPlot } = await setup();
     expect(forestPlot.tooltipStyle()).toMatchObject({ pinAbove: true, textAlign: 'left' });

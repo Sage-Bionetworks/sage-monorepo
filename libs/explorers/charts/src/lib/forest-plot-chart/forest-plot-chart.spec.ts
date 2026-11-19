@@ -28,7 +28,7 @@ type YAxisLabelOption = {
 const bold = (category: string) => `{${Y_AXIS_LABEL_STYLE_NAMES.bold}|${category}}`;
 const regular = (category: string) => `{${Y_AXIS_LABEL_STYLE_NAMES.regular}|${category}}`;
 import { ForestPlotChart, computeInitialHeight } from './forest-plot-chart';
-import { resolveItemColor } from './forest-plot-series';
+import { CI_LINE_SERIES_ID, DOT_SERIES_ID, resolveItemColor } from './forest-plot-series';
 
 jest.mock('../utils', () => ({
   initChart: jest.fn(),
@@ -181,11 +181,13 @@ describe('ForestPlotChart', () => {
   const mockDispose = jest.fn();
   const mockOn = jest.fn();
   const mockOff = jest.fn();
+  const mockDispatchAction = jest.fn();
   const mockChart = {
     setOption: mockSetOption,
     dispose: mockDispose,
     on: mockOn,
     off: mockOff,
+    dispatchAction: mockDispatchAction,
   };
 
   beforeEach(() => {
@@ -281,6 +283,38 @@ describe('ForestPlotChart', () => {
     it('uses X_AXIS_TITLE_GAP as grid bottom when x-axis title is provided', () => {
       makeChart({ xAxisTitle: 'Log FC' });
       expect((getOption().grid as { bottom: number }).bottom).toBe(50);
+    });
+
+    it('keeps the CI lines silent unless they show their point tooltip', () => {
+      makeChart();
+      const ciLines = (getOption().series as { id?: string; silent?: boolean }[]).find(
+        (series) => series.id === CI_LINE_SERIES_ID,
+      );
+      expect(ciLines?.silent).toBe(true);
+      expect(mockOn).not.toHaveBeenCalled();
+    });
+
+    it('shows the point tooltip from its CI line when showCILineTooltip is set', () => {
+      makeChart({ showCILineTooltip: true });
+      const series = getOption().series as { id?: string; silent?: boolean }[];
+      expect(series.find((s) => s.id === CI_LINE_SERIES_ID)?.silent).toBe(false);
+      expect(mockOn).toHaveBeenCalledWith(
+        'mousemove',
+        { seriesId: CI_LINE_SERIES_ID },
+        expect.any(Function),
+      );
+    });
+
+    it('points the CI line tooltip at the point series', () => {
+      makeChart({ showCILineTooltip: true });
+      const series = getOption().series as { id?: string }[];
+      const onMouseMove = mockOn.mock.calls.find(([name]) => name === 'mousemove')?.[2];
+      onMouseMove({ dataIndex: 0 });
+      expect(mockDispatchAction).toHaveBeenCalledWith({
+        type: 'showTip',
+        seriesIndex: series.findIndex((s) => s.id === DOT_SERIES_ID),
+        dataIndex: 0,
+      });
     });
 
     it('renders 3 series by default (zero line, CI line, dots)', () => {

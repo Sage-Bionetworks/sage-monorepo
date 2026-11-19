@@ -33,6 +33,7 @@ const meta: Meta<ForestPlotDirective> = {
       [pointSize]="pointSize"
       [ciLineWidth]="ciLineWidth"
       [showCILabels]="showCILabels"
+      [showCILineTooltip]="showCILineTooltip"
       [noDataStyle]="noDataStyle"
       [showZeroLine]="showZeroLine"
       [xAxisInterval]="xAxisInterval"
@@ -87,6 +88,7 @@ export const Styled: Story = {
     xAxisMin: -0.1,
     xAxisMax: 0.7,
     showCILabels: false,
+    showCILineTooltip: true,
     pointSize: 11,
     ciLineWidth: 1,
     pointTooltipFormatter: (item) => `Effect size: ${item.value.toPrecision(2)}`,

@@ -37,6 +37,8 @@ export interface ForestPlotProps {
   /** Stroke width of each CI (stick) line in pixels. Defaults to CI_LINE_WIDTH (1.5px). */
   ciLineWidth?: number;
   showCILabels?: boolean; // show ciLeft/ciRight values as text next to line
+  /** If true, hovering a CI line shows its point's tooltip, pinned to the point. */
+  showCILineTooltip?: boolean;
   // Optional formatter for CI label text; defaults to toPrecision(2)
   ciLabelFormatter?: (value: number) => string;
   noDataStyle?: 'textOnly' | 'grayBackground';

@@ -60,6 +60,7 @@ describe('ForestPlotDirective', () => {
         sageForestPlot
         [items]="items"
         [selectedYAxisCategory]="selectedYAxisCategory"
+        [showCILineTooltip]="true"
         [showZeroLine]="false"
         [xAxisLineStyle]="{ width: 1, color: '#22252A' }"
         [yAxisLineStyle]="{ width: 1, color: '#22252A' }"
@@ -83,6 +84,7 @@ describe('ForestPlotDirective', () => {
     expect(setOptionsSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         selectedYAxisCategory: forestPlotItems[1].yAxisCategory,
+        showCILineTooltip: true,
         showZeroLine: false,
         xAxisLineStyle: { width: 1, color: '#22252A' },
         yAxisLineStyle: { width: 1, color: '#22252A' },

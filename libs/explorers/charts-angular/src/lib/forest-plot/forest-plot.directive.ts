@@ -43,6 +43,7 @@ export class ForestPlotDirective implements OnDestroy {
   pointSize = input<number>();
   ciLineWidth = input<number>();
   showCILabels = input<boolean>();
+  showCILineTooltip = input<boolean>();
   noDataStyle = input<'textOnly' | 'grayBackground'>();
   showZeroLine = input<boolean>();
   xAxisInterval = input<number>();
@@ -77,6 +78,7 @@ export class ForestPlotDirective implements OnDestroy {
     pointSize: this.pointSize(),
     ciLineWidth: this.ciLineWidth(),
     showCILabels: this.showCILabels(),
+    showCILineTooltip: this.showCILineTooltip(),
     noDataStyle: this.noDataStyle(),
     showZeroLine: this.showZeroLine(),
     xAxisInterval: this.xAxisInterval(),

@@ -1,4 +1,4 @@
-import { CustomSeriesOption, EChartsOption, ScatterSeriesOption } from 'echarts';
+import { CustomSeriesOption, ScatterSeriesOption, SeriesOption } from 'echarts';
 import { DEFAULT_COLOR, DEFAULT_POINT_SIZE } from '../constants';
 import { ForestPlotProps } from '../models';
 import { GridLineStyle } from '../models/axis';
@@ -10,6 +10,9 @@ const CI_LABEL_STYLE = { fill: '#4a5056', fontSize: 14, textVerticalAlign: 'midd
 
 const ZERO_LINE_STYLE = { stroke: '#BCC0CA', lineWidth: 2, fill: 'none' };
 
+export const CI_LINE_SERIES_ID = 'forest-plot-ci-lines';
+export const DOT_SERIES_ID = 'forest-plot-dots';
+
 export function resolveItemColor(
   itemColor: string | undefined,
   propDefault: string | undefined,
@@ -20,8 +23,11 @@ export function resolveItemColor(
 export function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
   const formatCILabel = props.ciLabelFormatter ?? ((value: number) => value.toPrecision(2));
   const ciLineWidth = props.ciLineWidth ?? CI_LINE_WIDTH;
+  // A thin line is hard to hover, so a transparent line as tall as the point catches the pointer.
+  const hoverAreaHeight = props.pointSize ?? DEFAULT_POINT_SIZE;
 
   return {
+    id: CI_LINE_SERIES_ID,
     type: 'custom',
     clip: false,
     data: props.items.map((item) => ({
@@ -45,6 +51,15 @@ export function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
             shape: { x1, y1: y, x2, y2: y },
             style: { stroke: color, lineWidth: ciLineWidth },
           },
+          ...(props.showCILineTooltip
+            ? [
+                {
+                  type: 'line' as const,
+                  shape: { x1, y1: y, x2, y2: y },
+                  style: { stroke: 'transparent', lineWidth: hoverAreaHeight },
+                },
+              ]
+            : []),
           // optional CI text labels
           ...(props.showCILabels
             ? [
@@ -73,7 +88,8 @@ export function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
         ],
       };
     },
-    silent: true,
+    // The line shows its point's tooltip (see CILineHoverController), not one of its own.
+    silent: !props.showCILineTooltip,
     tooltip: { show: false },
     z: 1,
   };
@@ -106,6 +122,7 @@ export function zeroLineSeries(yAxisCategories: string[]): CustomSeriesOption {
 
 export function dotSeries(props: ForestPlotProps): ScatterSeriesOption {
   return {
+    id: DOT_SERIES_ID,
     type: 'scatter',
     symbolSize: props.pointSize ?? DEFAULT_POINT_SIZE,
     data: props.items.map((item) => ({
@@ -218,7 +235,7 @@ export function buildSeries(
   xMin: number,
   xMax: number,
   xTickPositions: number[],
-): EChartsOption['series'] {
+): SeriesOption[] {
   return [
     ...(props.xAxisGridLineStyle || props.yAxisGridLineStyle
       ? [

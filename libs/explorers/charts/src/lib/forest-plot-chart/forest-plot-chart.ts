@@ -10,8 +10,9 @@ import {
   computeXBounds,
   computeXTickPositions,
 } from './forest-plot-axis';
+import { CILineHoverController } from './forest-plot-ci-line-hover';
 import { RowHoverController } from './forest-plot-row-hover';
-import { buildSeries } from './forest-plot-series';
+import { buildSeries, DOT_SERIES_ID } from './forest-plot-series';
 
 const GRID_BOTTOM_WITHOUT_X_AXIS_TITLE = 40;
 const GRID_DEFAULT_MARGINS = GRID_TOP.withoutTitle + GRID_BOTTOM_WITHOUT_X_AXIS_TITLE;
@@ -28,6 +29,7 @@ export function computeInitialHeight(rowCount: number): string {
 export class ForestPlotChart {
   chart: ECharts | undefined;
   private rowHoverController: RowHoverController | null = null;
+  private ciLineHoverController: CILineHoverController | null = null;
 
   constructor(chartDom: HTMLDivElement | HTMLCanvasElement, props: ForestPlotProps) {
     // Height is set once at construction time based on the number of rows to render.
@@ -43,6 +45,8 @@ export class ForestPlotChart {
   destroy() {
     this.rowHoverController?.detach();
     this.rowHoverController = null;
+    this.ciLineHoverController?.detach();
+    this.ciLineHoverController = null;
     this.chart?.dispose();
   }
 
@@ -77,6 +81,9 @@ export class ForestPlotChart {
     // doesn't fire against stale yAxisCategories during setOption. A new controller
     // (with fresh hover state) is created if row-hover is still enabled.
     this.rowHoverController?.detach();
+    this.ciLineHoverController?.detach();
+    this.ciLineHoverController = null;
+    const series = buildSeries(props, yAxisCategories, xMin, xMax, xTickPositions);
     this.rowHoverController = props.rowHoverHighlightStyle
       ? new RowHoverController(this.chart, yAxisCategories, props.selectedYAxisCategory)
       : null;
@@ -97,7 +104,7 @@ export class ForestPlotChart {
       },
       xAxis: buildXAxis(props, xMin, xMax, xTickPositions),
       yAxis: buildYAxis(props, yAxisCategories, tooltip, yAxisLabelFormatter),
-      series: buildSeries(props, yAxisCategories, xMin, xMax, xTickPositions),
+      series,
       tooltip,
       // Top-level axisPointer enables the y-axis pointer to track the cursor on
       // mousemove (instead of only on click or when a tooltip is active).
@@ -114,5 +121,9 @@ export class ForestPlotChart {
     this.chart.setOption(option, true);
 
     this.rowHoverController?.attach();
+    if (props.showCILineTooltip) {
+      this.ciLineHoverController = new CILineHoverController(this.chart);
+      this.ciLineHoverController.attach(series.findIndex((s) => s.id === DOT_SERIES_ID));
+    }
   }
 }
