@@ -17,9 +17,15 @@ import {
   ColoredCellClassEffectSize,
   ImpactForestPlotComponent,
 } from '../impact/forest-plot/impact-forest-plot.component';
+import { LegendComponent } from '../legend/legend.component';
 import { IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES } from '../impact/forest-plot/impact-forest-plot.constants';
 
-type SidebarTab = 'impact' | 'traits' | 'resources';
+export const SIDEBAR_TABS = [
+  { value: 'impact', label: 'Impact' },
+  { value: 'legend', label: 'Legend' },
+] as const;
+
+type SidebarTab = (typeof SIDEBAR_TABS)[number]['value'];
 
 export const SIDEBAR_CHICLET_LIST_ARIA_LABEL = 'Selected eQTL';
 const UNKNOWN_CELL_CLASS_ID_MESSAGE = 'Unknown cell class ID';
@@ -31,6 +37,7 @@ const UNKNOWN_CELL_SUBCLASS_ID_MESSAGE = 'Unknown cell subclass ID';
     ImpactBoxplotComponent,
     ImpactDetailsComponent,
     ImpactForestPlotComponent,
+    LegendComponent,
     MetadataChicletComponent,
   ],
   templateUrl: './sidebar.component.html',
@@ -74,11 +81,7 @@ export class SidebarComponent {
     cellClass: this.cellClass.name,
   };
 
-  protected readonly tabs: { value: SidebarTab; label: string }[] = [
-    { value: 'impact', label: 'Impact' },
-    { value: 'traits', label: 'Traits' },
-    { value: 'resources', label: 'Resources' },
-  ];
+  protected readonly tabs = SIDEBAR_TABS;
 
   protected readonly activeTab = signal<SidebarTab>('impact');
 

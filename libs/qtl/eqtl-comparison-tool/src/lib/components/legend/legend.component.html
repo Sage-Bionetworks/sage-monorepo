@@ -1,7 +1,7 @@
-<section class="legend-group legend-locus-browser" aria-labelledby="legend-locus-browser-title">
-  <h2 id="legend-locus-browser-title" class="legend-title">{{ locusBrowserTitle }}</h2>
+<div class="legend-group legend-locus-browser">
+  <h2 class="legend-title">{{ locusBrowserTitle }}</h2>
   @for (section of sections; track section.title; let sectionIndex = $index) {
-    <h3 [id]="'legend-section-title-' + sectionIndex" class="legend-header legend-section-title">
+    <h3 [id]="'legend-section-title-' + sectionIndex" class="legend-section-title">
       {{ section.title }}
     </h3>
     <ul class="legend-items" [attr.aria-labelledby]="'legend-section-title-' + sectionIndex">
@@ -26,14 +26,14 @@
       }
     </ul>
   }
-</section>
+</div>
 
-<section class="legend-group legend-cell-classes" aria-labelledby="legend-cell-classes-title">
-  <h2 id="legend-cell-classes-title" class="legend-title">{{ cellClassesTitle }}</h2>
+<div class="legend-group legend-cell-classes">
+  <h2 class="legend-title">{{ cellClassesTitle }}</h2>
   <explorers-simple-table
     class="legend-cell-class-table"
     [ariaLabel]="cellClassesTitle"
     [columns]="cellClassColumns"
     [rows]="cellClassRows"
   />
-</section>
+</div>
