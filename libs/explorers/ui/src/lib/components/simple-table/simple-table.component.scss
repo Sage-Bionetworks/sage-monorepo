@@ -40,7 +40,7 @@
   }
 
   thead + tbody tr:first-child td {
-    padding-top: 16px;
+    padding-top: var(--simple-table-body-padding-top, 16px);
   }
 
   &.fixed-gap {

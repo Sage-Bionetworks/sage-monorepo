@@ -1,0 +1,146 @@
+// Shared by the section headers and the cell class table's header row, so both read as one style.
+qtl-eqtl-comparison-tool-legend {
+  --legend-header-color: var(--color-gray-1000);
+  --legend-header-font-weight: 700;
+  --legend-header-border-width: 2px;
+  --legend-header-border-color: var(--color-gray-300);
+
+  display: block;
+  color: var(--color-gray-900);
+  font-size: 14px;
+  line-height: 18px;
+
+  .legend-group + .legend-group {
+    margin-top: 24px;
+  }
+
+  .legend-title {
+    margin: 0;
+    color: var(--legend-header-color);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 23px;
+  }
+
+  .legend-locus-browser .legend-title {
+    margin-bottom: 16px;
+  }
+
+  .legend-cell-classes .legend-title {
+    margin-bottom: 8px;
+  }
+
+  .legend-section-title {
+    margin: 0;
+    padding-bottom: 8px;
+    border-bottom: var(--legend-header-border-width) solid var(--legend-header-border-color);
+    color: var(--legend-header-color);
+    font-size: 14px;
+    font-weight: var(--legend-header-font-weight);
+    line-height: 18px;
+  }
+
+  .legend-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .legend-items + .legend-section-title {
+    margin-top: 16px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .legend-glyph {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+  }
+
+  .legend-glyph-track {
+    position: absolute;
+    inset: 7px 0;
+    border-radius: 4px;
+    background-color: var(--color-gray-300);
+  }
+
+  .legend-glyph-mark {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 18px;
+    color: var(--color-white);
+    font-weight: 700;
+  }
+
+  .legend-glyph-gene-not-in-results .legend-glyph-mark {
+    background-color: var(--color-gray-600);
+  }
+
+  .legend-glyph-gene-in-results .legend-glyph-mark {
+    background-color: var(--color-gene-in-results);
+  }
+
+  .legend-glyph-gene-selected .legend-glyph-mark {
+    background-color: var(--color-gene-selected);
+  }
+
+  .legend-glyph-single-variant .legend-glyph-mark,
+  .legend-glyph-multiple-variants .legend-glyph-mark {
+    height: 24px;
+    border-radius: 4px;
+    background-color: var(--color-variant);
+  }
+
+  .legend-glyph-single-variant .legend-glyph-mark {
+    width: 3px;
+  }
+
+  .legend-glyph-multiple-variants .legend-glyph-mark {
+    width: 14px;
+  }
+
+  .legend-glyph-exon .legend-glyph-mark {
+    background-color: var(--color-exon);
+  }
+
+  .legend-glyph-utr .legend-glyph-mark {
+    width: 20px;
+    background-color: var(--color-utr);
+  }
+
+  .legend-cell-class-table {
+    --simple-table-font-size: 14px;
+    --simple-table-line-height: 18px;
+    --simple-table-row-padding: 10px;
+    --simple-table-body-padding-top: 8px;
+    --simple-table-text-color: var(--color-gray-900);
+    --simple-table-text-color-secondary: var(--color-gray-800);
+    --simple-table-header-color: var(--legend-header-color);
+    --simple-table-header-font-weight: var(--legend-header-font-weight);
+    --simple-table-header-border-width: var(--legend-header-border-width);
+    --simple-table-color-border-divider: var(--legend-header-border-color);
+
+    .legend-abbreviation-col {
+      width: 102px;
+    }
+
+    tbody td.legend-cell-class-col {
+      font-style: italic;
+    }
+  }
+}
