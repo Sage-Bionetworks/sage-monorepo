@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { signal, WritableSignal } from '@angular/core';
+import { effect, signal, WritableSignal } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Navigation, NavigationExtras, Router } from '@angular/router';
 import {
@@ -3542,6 +3542,48 @@ describe('ComparisonToolService', () => {
       service.selectRow('row-1');
       service.notifySelectedRowValidity(true);
       expect(service.selectedRowId()).toBe('row-1');
+    });
+
+    describe('selectedRowIdForUnpinnedFetch', () => {
+      const connectWithRows = () => {
+        connectService();
+        service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+        service.fetchUnpinned(of({ data: [{ _id: 'row-1' }, { _id: 'row-2' }], totalCount: 2 }));
+      };
+
+      it('is null when nothing is selected', () => {
+        connectService();
+        expect(service.selectedRowIdForUnpinnedFetch()).toBeNull();
+      });
+
+      it('is the selected row when it is not pinned', () => {
+        connectWithRows();
+        service.selectRow('row-2');
+        expect(service.selectedRowIdForUnpinnedFetch()).toBe('row-2');
+      });
+
+      it('is null when the selected row is pinned', () => {
+        connectWithRows();
+        service.setPinnedItems(['pinned-1']);
+        service.selectRow('pinned-1');
+        expect(service.selectedRowIdForUnpinnedFetch()).toBeNull();
+      });
+
+      it('does not make a reading effect re-run when the selection changes', () => {
+        connectWithRows();
+        let runs = 0;
+        TestBed.runInInjectionContext(() =>
+          effect(() => {
+            service.selectedRowIdForUnpinnedFetch();
+            runs++;
+          }),
+        );
+        TestBed.tick();
+        const runsBefore = runs;
+        service.selectRow('row-2');
+        TestBed.tick();
+        expect(runs).toBe(runsBefore);
+      });
     });
 
     describe('selected row lookup from the unpinned fetch', () => {

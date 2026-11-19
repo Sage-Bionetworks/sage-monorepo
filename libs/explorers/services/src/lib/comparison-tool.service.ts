@@ -6,6 +6,7 @@ import {
   Injectable,
   signal,
   Signal,
+  untracked,
   WritableSignal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -1398,6 +1399,20 @@ export class ComparisonToolService<T> {
     if (!this.viewConfig().rowSelectionEnabled) return;
     if (this.selectedRowIdSignal() === id) return;
     this.selectedRowIdSignal.set(id);
+  }
+
+  /**
+   * The selected row to send with the unpinned fetch as `selectedRowId`, so the response can say
+   * whether it's still anywhere in the results. Null when nothing is selected or the selected row is
+   * pinned, since the request leaves pins out and would answer false for it.
+   *
+   * Read untracked, so selecting a row doesn't refetch the table that builds its request from this.
+   */
+  selectedRowIdForUnpinnedFetch(): string | null {
+    return untracked(() => {
+      const selectedId = this.selectedRowIdSignal();
+      return selectedId !== null && !this.pinnedItems().includes(selectedId) ? selectedId : null;
+    });
   }
 
   setHoveredRowId(id: string | null): void {
