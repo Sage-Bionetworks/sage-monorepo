@@ -3436,14 +3436,26 @@ describe('ComparisonToolService', () => {
       expect(service.selectedRowId()).toBe('row-1');
     }));
 
-    it('falls back to first pinned row when unpinned is empty and fetches complete', fakeAsync(() => {
+    it('selects nothing when only pinned rows are showing', fakeAsync(() => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
       service.setPinnedItems(['pinned-1']);
       service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
       service.fetchUnpinned(of({ data: [], totalCount: 0 }));
       tick();
-      expect(service.selectedRowId()).toBe('pinned-1');
+      expect(service.selectedRowId()).toBeNull();
+    }));
+
+    it('selects the first unpinned row once results return', fakeAsync(() => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setPinnedItems(['pinned-1']);
+      service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
+      service.fetchUnpinned(of({ data: [], totalCount: 0 }));
+      tick();
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
+      tick();
+      expect(service.selectedRowId()).toBe('row-1');
     }));
 
     it('auto-selects regardless of which fetch completes first', fakeAsync(() => {
@@ -3492,13 +3504,24 @@ describe('ComparisonToolService', () => {
       expect(service.selectedRowId()).toBe('row-2');
     }));
 
-    it('notifySelectedRowValidity(false) resets and re-selects first row', () => {
+    it('notifySelectedRowValidity(false) resets to the first unpinned row', () => {
       connectService();
       service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
       service.fetchUnpinned(of({ data: [{ _id: 'row-1' }, { _id: 'row-2' }], totalCount: 2 }));
       service.selectRow('row-2');
       service.notifySelectedRowValidity(false);
       expect(service.selectedRowId()).toBe('row-1');
+    });
+
+    it('notifySelectedRowValidity(false) selects nothing when there are no unpinned rows', () => {
+      connectService();
+      service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+      service.setPinnedItems(['pinned-1']);
+      service.fetchPinned(of({ data: [{ _id: 'pinned-1' }], totalCount: 1 }));
+      service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
+      service.fetchUnpinned(of({ data: [], totalCount: 0 }));
+      service.notifySelectedRowValidity(false);
+      expect(service.selectedRowId()).toBeNull();
     });
 
     it('notifySelectedRowValidity(false) is a no-op when selected row is in pinned data', () => {

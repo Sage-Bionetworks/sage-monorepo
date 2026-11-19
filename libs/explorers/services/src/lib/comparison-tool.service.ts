@@ -1376,12 +1376,8 @@ export class ComparisonToolService<T> {
   // Row selection
   private autoSelectFirstRow(): void {
     const unpinned = this.unpinnedDataSignal();
-    const pinned = this.pinnedDataSignal();
-
     if (unpinned.length > 0) {
       this.selectedRowIdSignal.set(this.rowId(unpinned[0]));
-    } else if (pinned.length > 0) {
-      this.selectedRowIdSignal.set(this.rowId(pinned[0]));
     }
   }
 
@@ -1396,8 +1392,9 @@ export class ComparisonToolService<T> {
     this.hoveredRowIdSignal.set(id);
   }
 
-  /** Call after a filtered fetch to report whether the selected row exists in the full result set;
-   * resets to first row if not */
+  /** Call after a filtered fetch to report whether the selected row exists in the full result set.
+   * If not, keeps a pinned selection, otherwise selects the first unpinned row, or nothing when
+   * there is none */
   notifySelectedRowValidity(isInResults: boolean): void {
     if (!this.viewConfig().rowSelectionEnabled) return;
     if (isInResults) return;
