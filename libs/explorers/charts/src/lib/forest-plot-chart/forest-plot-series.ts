@@ -4,6 +4,7 @@ import { ForestPlotProps } from '../models';
 import { GridLineStyle } from '../models/axis';
 import { CI_LINE_WIDTH } from '../point-plot-defaults';
 import { GridCoordSys } from '../types';
+import { getChartFontFamily } from '../utils/chart-font';
 
 const CI_LABEL_GAP = 4;
 const CI_LABEL_STYLE = { fill: '#4a5056', fontSize: 14, textVerticalAlign: 'middle' };
@@ -25,6 +26,7 @@ export function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
   const ciLineWidth = props.ciLineWidth ?? CI_LINE_WIDTH;
   // A thin line is hard to hover, so a transparent line as tall as the point catches the pointer.
   const hoverAreaHeight = props.pointSize ?? DEFAULT_POINT_SIZE;
+  const ciLabelStyle = { ...CI_LABEL_STYLE, fontFamily: getChartFontFamily() };
 
   return {
     id: CI_LINE_SERIES_ID,
@@ -66,7 +68,7 @@ export function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
                 {
                   type: 'text' as const,
                   style: {
-                    ...CI_LABEL_STYLE,
+                    ...ciLabelStyle,
                     text: formatCILabel(ciLeft),
                     x: x1 - CI_LABEL_GAP,
                     y,
@@ -76,7 +78,7 @@ export function ciLineSeries(props: ForestPlotProps): CustomSeriesOption {
                 {
                   type: 'text' as const,
                   style: {
-                    ...CI_LABEL_STYLE,
+                    ...ciLabelStyle,
                     text: formatCILabel(ciRight),
                     x: x2 + CI_LABEL_GAP,
                     y,

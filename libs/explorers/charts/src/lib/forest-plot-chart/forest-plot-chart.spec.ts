@@ -5,7 +5,7 @@ import { forestPlotItems } from '../mocks';
 import { ForestPlotItem, ForestPlotProps } from '../models';
 import { GRID_TOP } from '../point-plot-defaults';
 import { initChart, setNoDataOption } from '../utils';
-import { getChartFontFamily } from '../utils/chart-font';
+import { APP_FONT_FAMILY_PROPERTY, getChartFontFamily } from '../utils/chart-font';
 import {
   computeXBounds,
   computeXTickPositions,
@@ -28,7 +28,12 @@ type YAxisLabelOption = {
 const bold = (category: string) => `{${Y_AXIS_LABEL_STYLE_NAMES.bold}|${category}}`;
 const regular = (category: string) => `{${Y_AXIS_LABEL_STYLE_NAMES.regular}|${category}}`;
 import { ForestPlotChart, computeInitialHeight } from './forest-plot-chart';
-import { CI_LINE_SERIES_ID, DOT_SERIES_ID, resolveItemColor } from './forest-plot-series';
+import {
+  CI_LINE_SERIES_ID,
+  ciLineSeries,
+  DOT_SERIES_ID,
+  resolveItemColor,
+} from './forest-plot-series';
 
 jest.mock('../utils', () => ({
   initChart: jest.fn(),
@@ -51,6 +56,33 @@ describe('resolveItemColor', () => {
 
   it('treats empty string item color as not set, falling back to prop default', () => {
     expect(resolveItemColor('', '#00ff00')).toBe('#00ff00');
+  });
+});
+
+describe('ciLineSeries', () => {
+  const appFontFamily = "'DM Sans Variable', sans-serif";
+
+  type RenderedElement = { type: string; style?: { fontFamily?: string } };
+  type CILineRenderItem = (params: unknown, api: unknown) => { children: RenderedElement[] };
+
+  function renderCILabels(): RenderedElement[] {
+    const series = ciLineSeries({ items: forestPlotItems, showCILabels: true });
+    const fakeApi = {
+      value: (dimension: number) => [-0.5, 0.5, forestPlotItems[0].yAxisCategory][dimension],
+      coord: () => [100, 50],
+      visual: () => DEFAULT_COLOR,
+    };
+    const rendered = (series.renderItem as unknown as CILineRenderItem)({}, fakeApi);
+    return rendered.children.filter((element) => element.type === 'text');
+  }
+
+  afterEach(() => document.documentElement.style.removeProperty(APP_FONT_FAMILY_PROPERTY));
+
+  it('draws the CI labels in the app font', () => {
+    document.documentElement.style.setProperty(APP_FONT_FAMILY_PROPERTY, appFontFamily);
+    const ciLabels = renderCILabels();
+    expect(ciLabels).toHaveLength(2);
+    ciLabels.forEach((label) => expect(label.style?.fontFamily).toBe(appFontFamily));
   });
 });
 
