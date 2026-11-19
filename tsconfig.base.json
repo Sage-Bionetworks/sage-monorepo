@@ -104,13 +104,7 @@
       "@sagebionetworks/qtl/themes": ["libs/qtl/themes/src/index.ts"],
       "@sagebionetworks/qtl/ui": ["libs/qtl/ui/src/index.ts"],
       "@sagebionetworks/qtl/util": ["libs/qtl/util/src/index.ts"],
-      "@sagebionetworks/results-visualization-framework/ui": [
-        "libs/results-visualization-framework/ui/src/index.ts"
-      ],
       "@sagebionetworks/sage-monorepo-nx-plugin": ["libs/sage-monorepo/nx-plugin/src/index.ts"],
-      "@sagebionetworks/shared/google-tag-manager": [
-        "libs/shared/typescript/google-tag-manager/src/index.ts"
-      ],
       "@sagebionetworks/shared/util": ["libs/shared/typescript/util/src/index.ts"],
       "@sagebionetworks/shared/util/helpers": ["libs/shared/typescript/util/src/helpers.ts"],
       "@sagebionetworks/shared/web-components": [
