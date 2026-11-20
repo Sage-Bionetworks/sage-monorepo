@@ -28,7 +28,8 @@ export const ROUTE_PATHS = {
   ERROR: 'error',
 } as const;
 
-// Keys are the data's cell_type_id; colors follow QTL's cell type color guide.
+// Keys are the data's cell_type_id. Colors follow QTL's cell type color guide:
+// https://www.synapse.org/Synapse:syn77455755
 export interface CellClass {
   name: string;
   short: string;
@@ -46,6 +47,9 @@ export const CELL_CLASSES = {
 } as const satisfies Record<string, CellClass>;
 
 export type CellClassId = keyof typeof CELL_CLASSES;
+
+// --color-gray-700 as a hex value, since canvas charts can't resolve CSS custom properties.
+export const UNKNOWN_CELL_TYPE_COLOR = '#878E95';
 
 export interface CellSubclass {
   name: string;

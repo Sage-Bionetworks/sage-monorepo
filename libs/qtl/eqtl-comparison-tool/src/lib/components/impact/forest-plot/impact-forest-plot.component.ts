@@ -6,7 +6,6 @@ import {
   GridLineStyle,
 } from '@sagebionetworks/explorers/charts';
 import { ForestPlotDirective } from '@sagebionetworks/explorers/charts-angular';
-import { CELL_CLASSES, CellClassId } from '@sagebionetworks/qtl/config';
 import { computeEffectSizeXAxis } from './impact-forest-plot-x-axis';
 import {
   IMPACT_FOREST_PLOT_CI_LINE_WIDTH_PX,
@@ -25,12 +24,16 @@ import {
 } from './impact-forest-plot.constants';
 
 export interface CellClassEffectSize {
-  cell_type_id: CellClassId;
+  cell_type_id: string;
   cell_class: string;
   cell_class_short: string;
   value: number;
   ci_left: number;
   ci_right: number;
+}
+
+export interface ColoredCellClassEffectSize extends CellClassEffectSize {
+  color: string;
 }
 
 const TICK_LABEL_FONT_SIZE = '12px';
@@ -46,9 +49,9 @@ function toCategoryLabel(effectSize: CellClassEffectSize): string {
   styleUrls: ['./impact-forest-plot.component.scss'],
 })
 export class ImpactForestPlotComponent {
-  selectedCellClassId = input.required<CellClassId>();
+  selectedCellClassId = input.required<string>();
   // TODO: confirm whether cell class or cell subclass effect sizes drive this plot (EX-283)
-  effectSizes = input.required<CellClassEffectSize[]>();
+  effectSizes = input.required<ColoredCellClassEffectSize[]>();
 
   protected readonly title = IMPACT_FOREST_PLOT_TITLE;
   protected readonly xAxisTitle = IMPACT_FOREST_PLOT_X_AXIS_TITLE;
@@ -96,7 +99,7 @@ export class ImpactForestPlotComponent {
       value: effectSize.value,
       ciLeft: effectSize.ci_left,
       ciRight: effectSize.ci_right,
-      color: CELL_CLASSES[effectSize.cell_type_id].color,
+      color: effectSize.color,
     })),
   );
 
