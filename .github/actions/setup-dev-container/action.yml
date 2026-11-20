@@ -102,10 +102,13 @@ runs:
         echo "::endgroup::"
 
         echo "::group::Docker daemon in the dev container"
+        stop_marker="$(cat /proc/sys/kernel/random/uuid)"
+        echo "::stop-commands::${stop_marker}"
         devcontainer exec --workspace-folder ../sage-monorepo bash -c '
           ls -l /var/run/docker.sock
           pgrep -a dockerd || echo "dockerd is not running"
           sudo cat /tmp/dockerd.log' || true
+        echo "::${stop_marker}::"
         echo "::endgroup::"
 
     - name: Prepare the workspace
@@ -125,9 +128,19 @@ runs:
     - name: Get affected Nx projects
       id: get-affected-projects
       shell: bash
+      # Nx writes errors to stdout, which the capture below would otherwise swallow on failure.
+      # The output is printed between stop-commands markers so no line in it can run as a workflow command.
       run: |
         AFFECTED_PROJECTS=$(devcontainer exec --workspace-folder ../sage-monorepo bash -c "
-          . ./dev-env.sh && nx show projects --affected --sep ','")
+          . ./dev-env.sh && nx show projects --affected --sep ','") || {
+          exit_code=$?
+          echo "::error title=Get affected Nx projects failed::The dev container command that runs nx show projects --affected exited with code ${exit_code}. Its output follows."
+          stop_marker="$(cat /proc/sys/kernel/random/uuid)"
+          echo "::stop-commands::${stop_marker}"
+          echo "${AFFECTED_PROJECTS}"
+          echo "::${stop_marker}::"
+          exit "${exit_code}"
+        }
         echo "Affected projects: $AFFECTED_PROJECTS"
         echo "affected_projects=$AFFECTED_PROJECTS" >> $GITHUB_ENV
         echo "affected_projects=$AFFECTED_PROJECTS" >> $GITHUB_OUTPUT
