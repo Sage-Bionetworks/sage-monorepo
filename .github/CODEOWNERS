@@ -10,6 +10,9 @@
 /libs/bixarena/ @rrchai
 /docker/bixarena/ @rrchai
 
+# DPE
+/apps/dpe/ @Sage-Bionetworks/dpe
+
 ## Sage
 /apps/sage/ @Sage-Bionetworks/sage-monorepo
 
