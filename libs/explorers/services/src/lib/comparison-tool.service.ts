@@ -1411,7 +1411,7 @@ export class ComparisonToolService<T> {
   selectedRowIdForUnpinnedFetch(): string | null {
     return untracked(() => {
       const selectedId = this.selectedRowIdSignal();
-      return selectedId !== null && !this.pinnedItems().includes(selectedId) ? selectedId : null;
+      return selectedId !== null && !this.isPinned(selectedId) ? selectedId : null;
     });
   }
 
@@ -1428,10 +1428,8 @@ export class ComparisonToolService<T> {
     if (isInResults) return;
 
     const selectedId = this.selectedRowIdSignal();
-    if (selectedId !== null) {
-      const isInPinned = this.pinnedDataSignal().some((row) => this.rowId(row) === selectedId);
-      if (isInPinned) return;
-    }
+    // The pins, not the pinned rows: an unpin's rows can arrive after the results that drop it.
+    if (selectedId !== null && this.isPinned(selectedId)) return;
 
     this.selectedRowIdSignal.set(null);
     this.autoSelectFirstRow();

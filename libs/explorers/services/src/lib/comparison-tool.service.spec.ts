@@ -3638,6 +3638,49 @@ describe('ComparisonToolService', () => {
         expect(service.selectedRowId()).toBe('row-2');
       });
 
+      describe('after unpinning the selected row while a filter excludes it', () => {
+        const unpinSelectedRow2 = () => {
+          connectService();
+          service.setViewConfig({ rowSelectionEnabled: true, rowIdDataKey: '_id' });
+          service.setPinnedItems(['row-2', 'row-9']);
+          service.fetchPinned(of({ data: [{ _id: 'row-2' }, { _id: 'row-9' }], totalCount: 2 }));
+          service.fetchUnpinned(of({ data: [{ _id: 'row-1' }], totalCount: 1 }));
+          service.selectRow('row-2');
+          service.setPinnedItems(['row-9']);
+          const pendingPinned$ = new Subject<{ data: Row[]; totalCount: number }>();
+          service.fetchPinned(pendingPinned$);
+          return pendingPinned$;
+        };
+
+        it('selects the first result when the results answer before the pinned rows', () => {
+          const pendingPinned$ = unpinSelectedRow2();
+          service.fetchUnpinned(
+            of({
+              data: [{ _id: 'row-1' }],
+              totalCount: 1,
+              selectedRowLookup: { rowId: 'row-2', inResults: false },
+            }),
+          );
+          pendingPinned$.next({ data: [{ _id: 'row-9' }], totalCount: 1 });
+          pendingPinned$.complete();
+          expect(service.selectedRowId()).toBe('row-1');
+        });
+
+        it('selects nothing when no results are left and they answer before the pinned rows', () => {
+          const pendingPinned$ = unpinSelectedRow2();
+          service.fetchUnpinned(
+            of({
+              data: [],
+              totalCount: 0,
+              selectedRowLookup: { rowId: 'row-2', inResults: false },
+            }),
+          );
+          pendingPinned$.next({ data: [{ _id: 'row-9' }], totalCount: 1 });
+          pendingPinned$.complete();
+          expect(service.selectedRowId()).toBeNull();
+        });
+      });
+
       it('keeps the selection when the fetch carries no lookup', () => {
         selectRow2();
         service.fetchUnpinned(of({ data: [{ _id: 'row-3' }], totalCount: 1 }));
