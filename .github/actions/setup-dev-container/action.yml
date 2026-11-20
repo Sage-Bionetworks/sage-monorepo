@@ -102,10 +102,13 @@ runs:
         echo "::endgroup::"
 
         echo "::group::Docker daemon in the dev container"
+        stop_marker="$(cat /proc/sys/kernel/random/uuid)"
+        echo "::stop-commands::${stop_marker}"
         devcontainer exec --workspace-folder ../sage-monorepo bash -c '
           ls -l /var/run/docker.sock
           pgrep -a dockerd || echo "dockerd is not running"
           sudo cat /tmp/dockerd.log' || true
+        echo "::${stop_marker}::"
         echo "::endgroup::"
 
     - name: Prepare the workspace
