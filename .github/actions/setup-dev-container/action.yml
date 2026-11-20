@@ -131,7 +131,7 @@ runs:
         AFFECTED_PROJECTS=$(devcontainer exec --workspace-folder ../sage-monorepo bash -c "
           . ./dev-env.sh && nx show projects --affected --sep ','") || {
           exit_code=$?
-          echo "::error title=Get affected Nx projects failed::nx show projects exited with code ${exit_code}. Its output follows."
+          echo "::error title=Get affected Nx projects failed::The dev container command that runs nx show projects --affected exited with code ${exit_code}. Its output follows."
           stop_marker="$(cat /proc/sys/kernel/random/uuid)"
           echo "::stop-commands::${stop_marker}"
           echo "${AFFECTED_PROJECTS}"
