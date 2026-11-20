@@ -394,15 +394,27 @@ export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
   await expect(lastPageBtn).toHaveClass(/p-disabled/);
 }
 
-// Tests that "Pin All" pins every row matching the search, not just the rows on the current page
-// searchTerm - a term whose matches span more than one page but stay within the pin limit
+// How a Pin All test narrows the table so the Pin All button shows: a filterbox search term, or a
+// step that applies filters instead, for a CT without a filterbox
+export type NarrowResults = string | ((page: Page) => Promise<void>);
+
+const narrowTableResults = async (page: Page, narrowResults: NarrowResults): Promise<void> => {
+  if (typeof narrowResults === 'string') {
+    await searchViaFilterbox(page, narrowResults);
+  } else {
+    await narrowResults(page);
+  }
+};
+
+// Tests that "Pin All" pins every matching row, not just the rows on the current page
+// narrowResults - narrows to matches that span more than one page but stay within the pin limit
 // expectedPinnedIds - every matching row id, in the table's sort order. Derive these from the
 //                     same query Pin All sends, so rows the browser never held are covered
 // expectedPinnedLabels - the pinned header labels once every match is pinned
 // noResultsMessage - the view's empty table message
 export async function testPinAllAcrossPages(
   page: Page,
-  searchTerm: string,
+  narrowResults: NarrowResults,
   expectedPinnedIds: string[],
   expectedPinnedLabels: string[],
   noResultsMessage = STANDARD_NO_RESULTS_MESSAGE,
@@ -410,7 +422,7 @@ export async function testPinAllAcrossPages(
   expect(expectedPinnedIds.length).toBeGreaterThan(DEFAULT_PAGE_SIZE);
   expect(expectedPinnedIds.length).toBeLessThanOrEqual(MAX_PIN_LIMIT);
 
-  await searchViaFilterbox(page, searchTerm);
+  await narrowTableResults(page, narrowResults);
   await expectPaginatorRange(page, `1-${DEFAULT_PAGE_SIZE} of ${expectedPinnedIds.length}`);
 
   await pinAll(page);
@@ -423,18 +435,18 @@ export async function testPinAllAcrossPages(
 }
 
 // Tests that "Pin All" stops at the pin limit and says so
-// searchTerm - term matching more rows than the pin limit allows
-// expectedPinnedIds - the MAX_PIN_LIMIT row ids the server returns for the search, in the
+// narrowResults - narrows to more matches than the pin limit allows
+// expectedPinnedIds - the MAX_PIN_LIMIT row ids the server returns for those matches, in the
 //                      table's sort order
 export async function testPinAllExceedsLimit(
   page: Page,
-  searchTerm: string,
+  narrowResults: NarrowResults,
   expectedPinnedIds: string[],
   copy: PinLimitCopy,
 ) {
   expect(expectedPinnedIds).toHaveLength(MAX_PIN_LIMIT);
 
-  await searchViaFilterbox(page, searchTerm);
+  await narrowTableResults(page, narrowResults);
   await pinAll(page);
 
   await expectToastDetail(page, copy.toast);

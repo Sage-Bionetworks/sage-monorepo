@@ -1,10 +1,22 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
-import { ComparisonToolUrlService, PlatformService } from '@sagebionetworks/explorers/services';
-import { ComparisonToolConfigService, ComparisonToolPage } from '@sagebionetworks/qtl/api-client';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolUrlService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolConfigService,
+  ComparisonToolPage,
+  EqtlSearchQuery,
+  EqtlService,
+  EqtlsPage,
+  ItemFilterTypeQuery,
+} from '@sagebionetworks/qtl/api-client';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/qtl/config';
-import { of, shareReplay } from 'rxjs';
+import { SortMeta } from 'primeng/api';
+import { map, shareReplay } from 'rxjs';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
 
@@ -17,10 +29,13 @@ import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.servi
 export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
+  private readonly eqtlService = inject(EqtlService);
   private readonly comparisonToolService = inject(EqtlComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService).forSource('EqtlComparisonToolComponent');
 
   isInitialized = this.comparisonToolService.isInitialized;
+  query = this.comparisonToolService.query;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.EQtls)
@@ -33,13 +48,34 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     showSignificanceControls: false,
     showTableSearch: false,
     legendEnabled: false,
-    // TODO(EX-251): set the row id, default sort and pinned download
+    rowIdDataKey: 'composite_id',
+    allowPinnedImageDownload: false,
+    defaultSort: [{ field: 'adj_p_val', order: 1 }],
+    // TODO(EX-287): round the Beta and MAF columns on screen
+    // TODO(EX-295): the pinned CSV exports variant_location and gene_location as "[object Object]" until the CT can export location columns
+    // TODO(EX-298): link the xQTL docs from the Download Pins menu once the resources page has content
+    // TODO(EX-279): hide the view details button; the eQTL CT has no details page
     // TODO(EX-252): turn on row selection and hover
   };
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
+
+  readonly pinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const pinnedItems = this.comparisonToolService.pinnedItems();
+      const sortMeta = this.comparisonToolService.multiSortMeta();
+      this.getPinnedData(pinnedItems, sortMeta);
+    }
+  });
+
+  readonly unpinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const query = this.query();
+      this.getUnpinnedData(query);
+    }
+  });
 
   ngOnInit() {
     if (this.platformService.isServer) {
@@ -50,8 +86,13 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
       page: ComparisonToolPage.EQtls,
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
-      // TODO(EX-251): fetch the matching rows for Pin All
-      pinAllFetch: () => of({ rows: [], totalElements: 0 }),
+      pinAllFetch: (query, remainingBudget) =>
+        this.eqtlService.getEqtls(this.buildUnpinnedQuery(query, { remainingBudget })).pipe(
+          map((response) => ({
+            rows: response.eqtls,
+            totalElements: response.page.totalElements,
+          })),
+        ),
     });
   }
 
@@ -59,5 +100,64 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     this.comparisonToolService.disconnect();
   }
 
-  // TODO(EX-251): fetch the unpinned and pinned rows; the URL isn't updated until the first pinned fetch lands
+  private buildUnpinnedQuery(
+    currentQuery: ComparisonToolQuery,
+    options?: { remainingBudget?: number },
+  ): EqtlSearchQuery {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
+      currentQuery.multiSortMeta,
+    );
+
+    const selectedFilters = this.comparisonToolService.selectedFilters();
+
+    return {
+      items: currentQuery.pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      ...this.comparisonToolService.buildPaginationOrBudget(currentQuery, options?.remainingBudget),
+      sortFields,
+      sortOrders,
+      // TODO(EX-96): the Variant and Gene filter values are placeholders that match no rows until the search filter replaces them
+      variant: selectedFilters['variant'],
+      gene: selectedFilters['gene'],
+      cellClass: selectedFilters['cellClass'],
+      cellSubclass: selectedFilters['cellSubclass'],
+    };
+  }
+
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const query = this.buildUnpinnedQuery(currentQuery);
+
+    this.logger.log('unpinned query', { query });
+
+    this.comparisonToolService.fetchUnpinned(
+      this.eqtlService.getEqtls(query).pipe(
+        map((response: EqtlsPage) => ({
+          data: response.eqtls,
+          totalCount: response.page.totalElements,
+        })),
+      ),
+    );
+  }
+
+  getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+
+    const query: EqtlSearchQuery = {
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields,
+      sortOrders,
+    };
+
+    this.logger.log('pinned query', { query });
+
+    this.comparisonToolService.fetchPinned(
+      this.eqtlService.getEqtls(query).pipe(
+        map((response: EqtlsPage) => {
+          const data = response.eqtls;
+          return { data, totalCount: data.length };
+        }),
+      ),
+    );
+  }
 }

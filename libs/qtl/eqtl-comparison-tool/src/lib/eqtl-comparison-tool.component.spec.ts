@@ -3,21 +3,68 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import {
   ComparisonToolService,
+  DEFAULT_PAGE_SIZE,
   PlatformService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
   provideExplorersConfig,
   SvgIconService,
 } from '@sagebionetworks/explorers/services';
-import { provideLoadingIconColors, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
-import { ComparisonToolConfigService, ComparisonToolPage } from '@sagebionetworks/qtl/api-client';
+import {
+  mockEmptyComparisonToolQuery,
+  provideLoadingIconColors,
+  SvgIconServiceStub,
+} from '@sagebionetworks/explorers/testing';
+import {
+  ComparisonToolConfigService,
+  ComparisonToolPage,
+  Eqtl,
+  EqtlService,
+  EqtlsPage,
+  ItemFilterTypeQuery,
+} from '@sagebionetworks/qtl/api-client';
 import { render, screen } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { EqtlComparisonToolComponent } from './eqtl-comparison-tool.component';
 import { EqtlComparisonToolService } from './services/eqtl-comparison-tool.service';
 
-async function setup() {
+const mockEqtl: Eqtl = {
+  composite_id: 'rs2120461~ENSG00000142599~astro',
+  variant: 'rs2120461',
+  variant_location: { chr: '1', start: 8387662, end: 8387663 },
+  effect_direction: 'Up',
+  gene_symbol: 'RERE',
+  ensembl_gene_id: 'ENSG00000142599',
+  gene_location: { chr: '1', start: 8387662, end: 8387663 },
+  beta: 0.575878,
+  adj_p_val: '1.05E-136',
+  adj_p_val_numeric: -135.977471,
+  maf: 0.3321,
+  minor_allele: 'C',
+  reference_allele: 'T',
+  cell_type_id: 'astro',
+  cell_class: 'Astrocyte',
+  cell_class_short: 'Astro',
+  cell_subclass: 'Astrocyte',
+  cell_subclass_short: 'Astro',
+};
+
+function mockPage(rows: Eqtl[], totalElements = rows.length): EqtlsPage {
+  return {
+    eqtls: rows,
+    page: {
+      number: 0,
+      size: DEFAULT_PAGE_SIZE,
+      totalElements,
+      totalPages: Math.ceil(totalElements / DEFAULT_PAGE_SIZE),
+      hasNext: totalElements > DEFAULT_PAGE_SIZE,
+      hasPrevious: false,
+    },
+  };
+}
+
+async function setup(page: EqtlsPage = mockPage([])) {
   const { fixture } = await render(EqtlComparisonToolComponent, {
     providers: [
       provideHttpClient(),
@@ -36,6 +83,12 @@ async function setup() {
           getComparisonToolConfig: jest.fn().mockReturnValue(of([])),
         },
       },
+      {
+        provide: EqtlService,
+        useValue: {
+          getEqtls: jest.fn().mockReturnValue(of(page)),
+        },
+      },
       MessageService,
       ...provideComparisonToolService(),
       ...provideComparisonToolFilterService(),
@@ -49,7 +102,8 @@ async function setup() {
     ComparisonToolConfigService,
   );
   const comparisonToolService = fixture.debugElement.injector.get(EqtlComparisonToolService);
-  return { component, fixture, comparisonToolConfigService, comparisonToolService };
+  const eqtlService = fixture.debugElement.injector.get(EqtlService);
+  return { component, fixture, comparisonToolConfigService, comparisonToolService, eqtlService };
 }
 
 describe('EqtlComparisonToolComponent', () => {
@@ -70,6 +124,95 @@ describe('EqtlComparisonToolComponent', () => {
     expect(comparisonToolService.viewConfig()).toEqual(
       expect.objectContaining(component.viewConfig),
     );
+  });
+
+  it('should request the first page of unpinned eQTLs in the default sort', async () => {
+    const { component, eqtlService } = await setup();
+    const defaultSort = component.viewConfig.defaultSort ?? [];
+
+    expect(eqtlService.getEqtls).toHaveBeenCalledWith({
+      items: [],
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      pageNumber: 0,
+      pageSize: DEFAULT_PAGE_SIZE,
+      sortFields: defaultSort.map((sort) => sort.field),
+      sortOrders: defaultSort.map((sort) => sort.order),
+    });
+  });
+
+  it('should hand the unpinned eQTLs and their total to the comparison tool service', async () => {
+    const totalElements = 381;
+    const { comparisonToolService } = await setup(mockPage([mockEqtl], totalElements));
+
+    expect(comparisonToolService.unpinnedData()).toEqual([mockEqtl]);
+    expect(comparisonToolService.unpinnedRowCount()).toBe(totalElements);
+  });
+
+  it('should send the selected filters in the unpinned query', async () => {
+    const { component, comparisonToolService, eqtlService } = await setup();
+    const selectedFilters = {
+      variant: ['rs2120461'],
+      gene: ['RERE'],
+      cellClass: ['Astrocyte'],
+      cellSubclass: ['Astrocyte'],
+    };
+    jest.spyOn(comparisonToolService, 'selectedFilters').mockReturnValue(selectedFilters);
+
+    component.getUnpinnedData(mockEmptyComparisonToolQuery);
+
+    expect(jest.mocked(eqtlService.getEqtls).mock.lastCall?.[0]).toEqual(
+      expect.objectContaining(selectedFilters),
+    );
+  });
+
+  it('should identify each eQTL by its composite id', async () => {
+    const { comparisonToolService } = await setup();
+    expect(comparisonToolService.rowId(mockEqtl)).toBe(mockEqtl.composite_id);
+  });
+
+  it('should request a pinned eQTL in the current sort and show it in the pinned section', async () => {
+    const { fixture, component, comparisonToolService, eqtlService } = await setup(
+      mockPage([mockEqtl]),
+    );
+    const defaultSort = component.viewConfig.defaultSort ?? [];
+
+    comparisonToolService.pinItem(mockEqtl);
+    fixture.detectChanges();
+
+    const queriesSent = jest.mocked(eqtlService.getEqtls).mock.calls.map(([query]) => query);
+    expect(queriesSent).toContainEqual({
+      items: [mockEqtl.composite_id],
+      itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields: defaultSort.map((sort) => sort.field),
+      sortOrders: defaultSort.map((sort) => sort.order),
+    });
+    expect(comparisonToolService.pinnedData()).toEqual([mockEqtl]);
+  });
+
+  it('should leave the pinned eQTLs out of the unpinned query', async () => {
+    const { component, eqtlService } = await setup();
+    const pinnedItems = [mockEqtl.composite_id];
+
+    component.getUnpinnedData({ ...mockEmptyComparisonToolQuery, pinnedItems });
+
+    expect(jest.mocked(eqtlService.getEqtls).mock.lastCall?.[0]).toEqual(
+      expect.objectContaining({ items: pinnedItems, itemFilterType: ItemFilterTypeQuery.Exclude }),
+    );
+  });
+
+  it('should ask Pin All for the remaining budget of unpinned eQTLs instead of a page', async () => {
+    const { comparisonToolService, eqtlService } = await setup(mockPage([mockEqtl]));
+    jest.spyOn(comparisonToolService, 'canPinAll').mockReturnValue(true);
+    const remainingBudget = comparisonToolService.pinLimit() - comparisonToolService.pinCount();
+
+    comparisonToolService.pinAll();
+
+    const pinAllQuery = jest.mocked(eqtlService.getEqtls).mock.lastCall?.[0];
+    expect(pinAllQuery).toEqual(
+      expect.objectContaining({ itemFilterType: ItemFilterTypeQuery.Exclude, remainingBudget }),
+    );
+    expect(pinAllQuery).not.toHaveProperty('pageNumber');
+    expect(pinAllQuery).not.toHaveProperty('pageSize');
   });
 
   it('renders the sidebar chiclets and tabs', async () => {
