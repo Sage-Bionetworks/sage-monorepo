@@ -215,6 +215,57 @@ describe('EqtlComparisonToolComponent', () => {
     expect(pinAllQuery).not.toHaveProperty('pageSize');
   });
 
+  describe('selected row', () => {
+    const otherEqtl: Eqtl = { ...mockEqtl, composite_id: 'rs2120461~ENSG00000142599~micro' };
+    const newResult: Eqtl = { ...mockEqtl, composite_id: 'rs2120461~ENSG00000142599~oligo' };
+
+    it('should send the selected row with the unpinned query', async () => {
+      const { component, comparisonToolService, eqtlService } = await setup(
+        mockPage([mockEqtl, otherEqtl]),
+      );
+      comparisonToolService.selectRow(otherEqtl.composite_id);
+
+      component.getUnpinnedData(mockEmptyComparisonToolQuery);
+
+      expect(jest.mocked(eqtlService.getEqtls).mock.lastCall?.[0]).toEqual(
+        expect.objectContaining({ selectedRowId: otherEqtl.composite_id }),
+      );
+    });
+
+    it('should send no selected row when nothing is selected', async () => {
+      const { component, eqtlService } = await setup();
+
+      component.getUnpinnedData(mockEmptyComparisonToolQuery);
+
+      expect(jest.mocked(eqtlService.getEqtls).mock.lastCall?.[0]?.selectedRowId).toBeUndefined();
+    });
+
+    it('should select the first new result when the selected row left the results', async () => {
+      const { component, comparisonToolService, eqtlService } = await setup(
+        mockPage([mockEqtl, otherEqtl]),
+      );
+      comparisonToolService.selectRow(otherEqtl.composite_id);
+      const answer: EqtlsPage = { ...mockPage([newResult]), selectedRowInResults: false };
+      (eqtlService.getEqtls as jest.Mock).mockReturnValue(of(answer));
+
+      component.getUnpinnedData(mockEmptyComparisonToolQuery);
+
+      expect(comparisonToolService.selectedRowId()).toBe(newResult.composite_id);
+    });
+
+    it('should not send the selected row with the Pin All query', async () => {
+      const { comparisonToolService, eqtlService } = await setup(mockPage([mockEqtl, otherEqtl]));
+      comparisonToolService.selectRow(otherEqtl.composite_id);
+      jest.spyOn(comparisonToolService, 'canPinAll').mockReturnValue(true);
+
+      comparisonToolService.pinAll();
+
+      expect(jest.mocked(eqtlService.getEqtls).mock.lastCall?.[0]).not.toHaveProperty(
+        'selectedRowId',
+      );
+    });
+  });
+
   it('renders the sidebar chiclets and tabs', async () => {
     await setup();
     expect(screen.getByText('variant:')).toBeInTheDocument();

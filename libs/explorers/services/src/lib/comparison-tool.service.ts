@@ -6,6 +6,7 @@ import {
   Injectable,
   signal,
   Signal,
+  untracked,
   WritableSignal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -82,12 +83,20 @@ export const DROPDOWN_SELECTION_TAG_SEPARATOR = ' / ';
  * the corresponding results-count signal should be set to (unpinned: total matching rows across
  * pages; pinned: the number of pinned rows returned). `hasRowsForPrebudgetedParents` is read from
  * unpinned results only: whether any row of the pinned parents is still unpinned, or null when the
- * request sent no prebudgeted parents.
+ * request sent no prebudgeted parents. `selectedRowLookup` is also read from unpinned results only:
+ * whether the row the request asked about is anywhere in the results, not just on this page, or
+ * absent when the request didn't ask.
  */
 export interface ComparisonToolFetchResult<T> {
   data: T[];
   totalCount: number;
   hasRowsForPrebudgetedParents?: boolean | null;
+  selectedRowLookup?: SelectedRowLookup;
+}
+
+export interface SelectedRowLookup {
+  rowId: string;
+  inResults: boolean;
 }
 
 /**
@@ -1335,12 +1344,17 @@ export class ComparisonToolService<T> {
     data,
     totalCount,
     hasRowsForPrebudgetedParents,
+    selectedRowLookup,
   }: ComparisonToolFetchResult<unknown>) {
     this.unpinnedFetchFailedSignal.set(false);
     this.unpinnedDataSignal.set(data as T[]);
     this.unpinnedRowCount.set(totalCount);
     this.hasRowsForPrebudgetedParents.set(hasRowsForPrebudgetedParents ?? null);
     this.hasCompletedUnpinnedFetchSignal.set(true);
+    // A click doesn't refetch, so the selection can move while this response is in flight.
+    if (selectedRowLookup && selectedRowLookup.rowId === this.selectedRowIdSignal()) {
+      this.notifySelectedRowValidity(selectedRowLookup.inResults);
+    }
   }
 
   private setPinnedData(pinnedData: T[], identity: ViewIdentity) {
@@ -1376,12 +1390,8 @@ export class ComparisonToolService<T> {
   // Row selection
   private autoSelectFirstRow(): void {
     const unpinned = this.unpinnedDataSignal();
-    const pinned = this.pinnedDataSignal();
-
     if (unpinned.length > 0) {
       this.selectedRowIdSignal.set(this.rowId(unpinned[0]));
-    } else if (pinned.length > 0) {
-      this.selectedRowIdSignal.set(this.rowId(pinned[0]));
     }
   }
 
@@ -1391,22 +1401,35 @@ export class ComparisonToolService<T> {
     this.selectedRowIdSignal.set(id);
   }
 
+  /**
+   * The selected row to send with the unpinned fetch as `selectedRowId`, so the response can say
+   * whether it's still anywhere in the results. Null when nothing is selected or the selected row is
+   * pinned, since the request leaves pins out and would answer false for it.
+   *
+   * Read untracked, so selecting a row doesn't refetch the table that builds its request from this.
+   */
+  selectedRowIdForUnpinnedFetch(): string | null {
+    return untracked(() => {
+      const selectedId = this.selectedRowIdSignal();
+      return selectedId !== null && !this.isPinned(selectedId) ? selectedId : null;
+    });
+  }
+
   setHoveredRowId(id: string | null): void {
     if (!this.viewConfig().rowHoverEnabled) return;
     this.hoveredRowIdSignal.set(id);
   }
 
-  /** Call after a filtered fetch to report whether the selected row exists in the full result set;
-   * resets to first row if not */
+  /** Call after a filtered fetch to report whether the selected row exists in the full result set.
+   * If not, keeps a pinned selection, otherwise selects the first unpinned row, or nothing when
+   * there is none */
   notifySelectedRowValidity(isInResults: boolean): void {
     if (!this.viewConfig().rowSelectionEnabled) return;
     if (isInResults) return;
 
     const selectedId = this.selectedRowIdSignal();
-    if (selectedId !== null) {
-      const isInPinned = this.pinnedDataSignal().some((row) => this.rowId(row) === selectedId);
-      if (isInPinned) return;
-    }
+    // The pins, not the pinned rows: an unpin's rows can arrive after the results that drop it.
+    if (selectedId !== null && this.isPinned(selectedId)) return;
 
     this.selectedRowIdSignal.set(null);
     this.autoSelectFirstRow();

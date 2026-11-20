@@ -109,10 +109,39 @@ export const expectUnpinnedTableOnly = async (page: Page): Promise<void> => {
 
 const PRIMARY_CELL_SELECTOR = `td.${ComparisonToolConfigColumnTypeEnum.Primary}`;
 
-export const getRowByName = (table: Locator, page: Page, name: string): Locator =>
-  table.locator('tbody tr').filter({
+const filterRowsByName = (rows: Locator, page: Page, name: string): Locator =>
+  rows.filter({
     has: page.getByRole('cell', { name, exact: true }).and(page.locator(PRIMARY_CELL_SELECTOR)),
   });
+
+export const getRowByName = (table: Locator, page: Page, name: string): Locator =>
+  filterRowsByName(table.locator('tbody tr'), page, name);
+
+// The table marks rows with these classes; it exposes no ARIA state for selection or hover
+const SELECTED_ROW_SELECTOR = 'tbody tr.selected';
+const HOVERED_ROW_SELECTOR = 'tbody tr.hovered';
+
+export const getSelectedRows = (page: Page): Locator => page.locator(SELECTED_ROW_SELECTOR);
+
+export const getHoveredRows = (page: Page): Locator => page.locator(HOVERED_ROW_SELECTOR);
+
+export const expectSelectedRow = async (page: Page, name: string): Promise<void> => {
+  const selectedRows = getSelectedRows(page);
+  await expect(selectedRows).toHaveCount(1);
+  await expect(filterRowsByName(selectedRows, page, name)).toHaveCount(1);
+};
+
+// Targets a cell outside the primary column, whose pin and view details buttons act on the row
+const getRowBodyCell = (table: Locator, page: Page, name: string): Locator =>
+  getRowByName(table, page, name).locator(`td:not(${PRIMARY_CELL_SELECTOR})`).first();
+
+export const clickRowByName = async (table: Locator, page: Page, name: string): Promise<void> => {
+  await getRowBodyCell(table, page, name).click();
+};
+
+export const hoverRowByName = async (table: Locator, page: Page, name: string): Promise<void> => {
+  await getRowBodyCell(table, page, name).hover();
+};
 
 export const clickViewDetailsButtonByName = async (table: Locator, page: Page, name: string) => {
   const row = getRowByName(table, page, name);

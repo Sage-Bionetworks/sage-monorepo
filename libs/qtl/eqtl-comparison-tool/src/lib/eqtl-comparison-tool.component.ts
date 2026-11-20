@@ -51,11 +51,13 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
     rowIdDataKey: 'composite_id',
     allowPinnedImageDownload: false,
     defaultSort: [{ field: 'adj_p_val', order: 1 }],
+    rowSelectionEnabled: true,
+    rowHoverEnabled: true,
     // TODO(EX-287): round the Beta and MAF columns on screen
     // TODO(EX-295): the pinned CSV exports variant_location and gene_location as "[object Object]" until the CT can export location columns
     // TODO(EX-298): link the xQTL docs from the Download Pins menu once the resources page has content
     // TODO(EX-279): hide the view details button; the eQTL CT has no details page
-    // TODO(EX-252): turn on row selection and hover
+    // TODO(EX-83): clicking a row's Pin or other controls should not select the row
   };
 
   constructor() {
@@ -125,7 +127,8 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
   }
 
   getUnpinnedData(currentQuery: ComparisonToolQuery) {
-    const query = this.buildUnpinnedQuery(currentQuery);
+    const selectedRowId = this.comparisonToolService.selectedRowIdForUnpinnedFetch() ?? undefined;
+    const query = { ...this.buildUnpinnedQuery(currentQuery), selectedRowId };
 
     this.logger.log('unpinned query', { query });
 
@@ -134,6 +137,10 @@ export class EqtlComparisonToolComponent implements OnInit, OnDestroy {
         map((response: EqtlsPage) => ({
           data: response.eqtls,
           totalCount: response.page.totalElements,
+          selectedRowLookup:
+            selectedRowId !== undefined && response.selectedRowInResults != null
+              ? { rowId: selectedRowId, inResults: response.selectedRowInResults }
+              : undefined,
         })),
       ),
     );
