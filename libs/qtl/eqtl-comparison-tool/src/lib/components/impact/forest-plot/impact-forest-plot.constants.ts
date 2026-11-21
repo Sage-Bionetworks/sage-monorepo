@@ -3,7 +3,8 @@ import {
   RowHoverHighlightStyle,
   TooltipStyle,
 } from '@sagebionetworks/explorers/charts';
-import { CellClassEffectSize } from './impact-forest-plot.component';
+import { CELL_CLASSES, CellClassId } from '@sagebionetworks/qtl/config';
+import { CellClassEffectSize, ColoredCellClassEffectSize } from './impact-forest-plot.component';
 
 export const IMPACT_FOREST_PLOT_TITLE = 'Effect Sizes by Cell Class';
 
@@ -57,7 +58,7 @@ export const IMPACT_FOREST_PLOT_ROW_HOVER_HIGHLIGHT_STYLE: RowHoverHighlightStyl
 };
 
 // The astro document's cell class effect sizes for rs2120461 in the eqtl_phenotype collection.
-export const IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES: CellClassEffectSize[] = [
+export const IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES = [
   {
     cell_type_id: 'class_astro',
     cell_class_short: 'Astro',
@@ -114,4 +115,10 @@ export const IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES: CellClassEffectSize[] = [
     ci_left: -0.434836,
     ci_right: 0.683868,
   },
-];
+] satisfies (CellClassEffectSize & { cell_type_id: CellClassId })[];
+
+export const IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES: ColoredCellClassEffectSize[] =
+  IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES.map((effectSize) => ({
+    ...effectSize,
+    color: CELL_CLASSES[effectSize.cell_type_id].color,
+  }));

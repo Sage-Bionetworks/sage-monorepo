@@ -1,23 +1,25 @@
 import { By } from '@angular/platform-browser';
 import { ForestPlotDirective } from '@sagebionetworks/explorers/charts-angular';
-import { CELL_CLASSES } from '@sagebionetworks/qtl/config';
+import { CellClassId } from '@sagebionetworks/qtl/config';
 import { render, screen, within } from '@testing-library/angular';
-import { CellClassEffectSize, ImpactForestPlotComponent } from './impact-forest-plot.component';
 import {
-  IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES,
+  ColoredCellClassEffectSize,
+  ImpactForestPlotComponent,
+} from './impact-forest-plot.component';
+import {
+  IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES,
   IMPACT_FOREST_PLOT_TITLE,
   IMPACT_FOREST_PLOT_X_AXIS_TITLE,
 } from './impact-forest-plot.constants';
 
-const astrocyte: keyof typeof CELL_CLASSES = 'Astrocyte';
-const endothelial: keyof typeof CELL_CLASSES = 'Endothelial';
+const astrocyte: CellClassId = 'class_astro';
 
 async function setup(
-  selectedCellClass = astrocyte,
-  effectSizes: CellClassEffectSize[] = IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES,
+  selectedCellClassId: string = astrocyte,
+  effectSizes: ColoredCellClassEffectSize[] = IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES,
 ) {
   const { fixture } = await render(ImpactForestPlotComponent, {
-    componentInputs: { selectedCellClass, effectSizes },
+    componentInputs: { selectedCellClassId, effectSizes },
   });
   const forestPlot = fixture.debugElement
     .query(By.directive(ForestPlotDirective))
@@ -25,11 +27,11 @@ async function setup(
   return { forestPlot };
 }
 
-function findExampleEffectSize(cellClass: keyof typeof CELL_CLASSES): CellClassEffectSize {
-  const effectSize = IMPACT_FOREST_PLOT_EXAMPLE_EFFECT_SIZES.find(
-    (example) => example.cell_class === cellClass,
+function findExampleEffectSize(cellClassId: CellClassId): ColoredCellClassEffectSize {
+  const effectSize = IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES.find(
+    (example) => example.cell_type_id === cellClassId,
   );
-  if (!effectSize) throw new Error(`No example effect size for ${cellClass}`);
+  if (!effectSize) throw new Error(`No example effect size for ${cellClassId}`);
   return effectSize;
 }
 
@@ -53,7 +55,7 @@ describe('ImpactForestPlotComponent', () => {
     ]);
   });
 
-  it('plots each cell class’s effect size and confidence interval in its cell class color', async () => {
+  it('plots each cell class’s effect size and confidence interval in the color it was given', async () => {
     const { forestPlot } = await setup();
     const astrocyteEffectSize = findExampleEffectSize(astrocyte);
     expect(forestPlot.items()).toContainEqual({
@@ -61,7 +63,7 @@ describe('ImpactForestPlotComponent', () => {
       value: astrocyteEffectSize.value,
       ciLeft: astrocyteEffectSize.ci_left,
       ciRight: astrocyteEffectSize.ci_right,
-      color: CELL_CLASSES[astrocyte].color,
+      color: astrocyteEffectSize.color,
     });
   });
 
@@ -71,7 +73,10 @@ describe('ImpactForestPlotComponent', () => {
   });
 
   it('bolds no row when the selected cell class has no effect size', async () => {
-    const { forestPlot } = await setup(endothelial);
+    const effectSizesWithoutAstrocyte = IMPACT_FOREST_PLOT_EXAMPLE_COLORED_EFFECT_SIZES.filter(
+      (effectSize) => effectSize.cell_type_id !== astrocyte,
+    );
+    const { forestPlot } = await setup(astrocyte, effectSizesWithoutAstrocyte);
     expect(forestPlot.selectedYAxisCategory()).toBeUndefined();
   });
 

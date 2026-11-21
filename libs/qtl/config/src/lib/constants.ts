@@ -28,120 +28,122 @@ export const ROUTE_PATHS = {
   ERROR: 'error',
 } as const;
 
+// Keys are the data's cell_type_id. Colors follow QTL's cell type color guide:
+// https://www.synapse.org/Synapse:syn77455755
 export interface CellClass {
-  color: string;
-  mutedColor?: string;
+  name: string;
   short: string;
+  color: string;
 }
 
 export const CELL_CLASSES = {
-  'Immune Cell': { color: '#C80813', mutedColor: '#E38389', short: 'Immune' },
-  Astrocyte: { color: '#D2AF81', mutedColor: '#E9D7C0', short: 'Astro' },
-  'Oligodendrocyte Progenitor Cell': { color: '#FED439', mutedColor: '#FFE99C', short: 'OPC' },
-  Oligodendrocyte: { color: '#AEC365', mutedColor: '#D7E1B2', short: 'Oligo' },
-  'Inhibitory Neuron': { color: '#1A9993', mutedColor: '#8CCCC9', short: 'IN' },
-  'Excitatory Neuron': { color: '#197EC0', mutedColor: '#8CBEDF', short: 'EN' },
-  Endothelial: { color: '#FD7446', mutedColor: '#FEB9A2', short: 'Endo' },
-  'Vascular Cell': { color: '#FD8CC1', mutedColor: '#FEC5E0', short: 'Mural' },
+  class_astro: { name: 'Astrocyte', short: 'Astro', color: '#D2AF80' },
+  class_en: { name: 'Excitatory Neuron', short: 'EN', color: '#197EC0' },
+  class_immune: { name: 'Immune Cell', short: 'Immune', color: '#C80813' },
+  class_in: { name: 'Inhibitory Neuron', short: 'IN', color: '#199992' },
+  class_oligo: { name: 'Oligodendrocyte', short: 'Oligo', color: '#AEC365' },
+  class_opc: { name: 'Oligodendrocyte Progenitor Cell', short: 'OPC', color: '#F0C400' },
+  class_vascular: { name: 'Vascular Cell', short: 'Vascular', color: '#FD8CC1' },
 } as const satisfies Record<string, CellClass>;
 
-export interface CellSubclass extends CellClass {
-  cellClass: keyof typeof CELL_CLASSES;
+export type CellClassId = keyof typeof CELL_CLASSES;
+
+// --color-gray-700 as a hex value, since canvas charts can't resolve CSS custom properties.
+export const UNKNOWN_CELL_TYPE_COLOR = '#878E95';
+
+export interface CellSubclass {
+  name: string;
+  cellClassId: CellClassId;
+  color: string;
 }
 
 export const CELL_SUBCLASSES = {
-  Astrocyte: { ...CELL_CLASSES.Astrocyte, cellClass: 'Astrocyte' },
-  'Oligodendrocyte Progenitor Cell': {
-    ...CELL_CLASSES['Oligodendrocyte Progenitor Cell'],
-    cellClass: 'Oligodendrocyte Progenitor Cell',
+  astro: { name: 'Astrocyte', cellClassId: 'class_astro', color: '#C1996A' },
+  enl23it: {
+    name: 'Layer 2-3 Intratelencephalic Excitatory Neuron',
+    cellClassId: 'class_en',
+    color: '#659DC7',
   },
-  Oligodendrocyte: { ...CELL_CLASSES.Oligodendrocyte, cellClass: 'Oligodendrocyte' },
-  Endothelial: { ...CELL_CLASSES.Endothelial, cellClass: 'Endothelial' },
-  'Adaptive Immune Cell': { color: '#6F4E37', short: 'Adaptive', cellClass: 'Immune Cell' },
-  'Layer 2-3 Intratelencephalic Excitatory Neuron': {
-    color: '#659EC7',
-    short: 'L2/3 IT',
-    cellClass: 'Excitatory Neuron',
-  },
-  'Layer 3-5 Intratelencephalic Excitatory Neuron 1': {
+  enl35it1: {
+    name: 'Layer 3-5 Intratelencephalic Excitatory Neuron 1',
+    cellClassId: 'class_en',
     color: '#95B9C7',
-    short: 'L3/5 IT 1',
-    cellClass: 'Excitatory Neuron',
   },
-  'Layer 3-5 Intratelencephalic Excitatory Neuron 2': {
-    color: '#6495ED',
-    short: 'L3/5 IT 2',
-    cellClass: 'Excitatory Neuron',
+  enl35it2: {
+    name: 'Layer 3-5 Intratelencephalic Excitatory Neuron 2',
+    cellClassId: 'class_en',
+    color: '#6395EC',
   },
-  'Layer 3-5 Intratelencephalic Excitatory Neuron 3': {
-    color: '#79BAEC',
-    short: 'L3/5 IT 3',
-    cellClass: 'Excitatory Neuron',
+  enl35it3: {
+    name: 'Layer 3-5 Intratelencephalic Excitatory Neuron 3',
+    cellClassId: 'class_en',
+    color: '#78B9EC',
   },
-  'Layer 5 Extratelencephalic Excitatory Neuron': {
-    color: '#4863A0',
-    short: 'L5 ET',
-    cellClass: 'Excitatory Neuron',
+  enl5et: {
+    name: 'Layer 5 Extratelencephalic Excitatory Neuron',
+    cellClassId: 'class_en',
+    color: '#4862A1',
   },
-  'Layer 5-6 Near-Projecting Excitatory Neuron': {
+  enl56np: {
+    name: 'Layer 5-6 Near-Projecting Excitatory Neuron',
+    cellClassId: 'class_en',
     color: '#0020C2',
-    short: 'L5/6 NP',
-    cellClass: 'Excitatory Neuron',
   },
-  'Layer 6 Corticothalamic Excitatory Neuron': {
-    color: '#3BB9FF',
-    short: 'L6 CT',
-    cellClass: 'Excitatory Neuron',
+  enl6ct: {
+    name: 'Layer 6 Corticothalamic Excitatory Neuron',
+    cellClassId: 'class_en',
+    color: '#3AB9FF',
   },
-  'Layer 6 Excitatory Neuron 1': {
-    color: '#B4CFEC',
-    short: 'L6 IT 1',
-    cellClass: 'Excitatory Neuron',
+  enl6it1: {
+    name: 'Layer 6 Intratelencephalic Excitatory Neuron 1',
+    cellClassId: 'class_en',
+    color: '#5B70DD',
   },
-  'Layer 6 Excitatory Neuron 2': {
+  enl6it2: {
+    name: 'Layer 6 Intratelencephalic Excitatory Neuron 2',
+    cellClassId: 'class_en',
     color: '#1589FF',
-    short: 'L6 IT 2',
-    cellClass: 'Excitatory Neuron',
   },
-  'Layer 6B Excitatory Neuron': {
-    color: '#488AC7',
-    short: 'L6B',
-    cellClass: 'Excitatory Neuron',
+  enl6b: { name: 'Layer 6B Excitatory Neuron', cellClassId: 'class_en', color: '#488AC7' },
+  adaptiveimmune: { name: 'Adaptive Immune Cell', cellClassId: 'class_immune', color: '#6F4E37' },
+  micropvm: {
+    name: 'Microglia and Perivascular Macrophage',
+    cellClassId: 'class_immune',
+    color: '#F75D58',
   },
-  'ADARB2 Inhibitory Neuron': {
-    color: '#4E8975',
-    short: 'ADARB2',
-    cellClass: 'Inhibitory Neuron',
+  incgekcng1: { name: 'ADARB2 Inhibitory Neuron', cellClassId: 'class_in', color: '#4D8974' },
+  incgelamp5reln: {
+    name: 'Neurogliaform cell (LAMP5 RELN Inhibitory Neuron)',
+    cellClassId: 'class_in',
+    color: '#3A9C9C',
   },
-  'Neurogliaform cell (LAMP5 RELN Inhibitory Neuron)': {
-    color: '#3B9C9C',
-    short: 'RELN',
-    cellClass: 'Inhibitory Neuron',
+  incgevip: { name: 'VIP Inhibitory Neuron', cellClassId: 'class_in', color: '#89C35B' },
+  inlamp5lhx6: {
+    name: 'Ivy cell (LAMP5 LHX6 Inhibitory Neuron)',
+    cellClassId: 'class_in',
+    color: '#7BCCB6',
   },
-  'VIP Inhibitory Neuron': { color: '#89C35C', short: 'VIP', cellClass: 'Inhibitory Neuron' },
-  'Ivy cell (LAMP5 LHX6 Inhibitory Neuron)': {
-    color: '#7BCCB5',
-    short: 'LHX6',
-    cellClass: 'Inhibitory Neuron',
+  inmgepvalb: {
+    name: 'Basket Cell (PVALB Inhibitory Neuron)',
+    cellClassId: 'class_in',
+    color: '#B2C149',
   },
-  'Basket Cell (PVALB Inhibitory Neuron)': {
-    color: '#B2C248',
-    short: 'PVALB',
-    cellClass: 'Inhibitory Neuron',
+  inmgepvalbchc: {
+    name: 'Chandelier Cell (PVALB CHC Inhibitory Neuron)',
+    cellClassId: 'class_in',
+    color: '#007F7F',
   },
-  'Chandelier Cell (PVALB CHC Inhibitory Neuron)': {
-    color: '#008080',
-    short: 'CHC',
-    cellClass: 'Inhibitory Neuron',
+  inmgesst: {
+    name: 'Martinotti and Non-Martinotti cell (SST Inhibitory Neuron)',
+    cellClassId: 'class_in',
+    color: '#718B01',
   },
-  'Martinotti and Non-Martinotti cell (SST Inhibitory Neuron)': {
-    color: '#728C00',
-    short: 'SST',
-    cellClass: 'Inhibitory Neuron',
-  },
-  'Perivascular Macrophage': { color: '#C11B17', short: 'PVM', cellClass: 'Immune Cell' },
-  Microglia: { color: '#F75D59', short: 'Micro', cellClass: 'Immune Cell' },
-  Pericyte: { color: '#E0B0FF', short: 'PC', cellClass: 'Vascular Cell' },
-  'Smooth Muscle Cell': { color: '#4E387E', short: 'SMC', cellClass: 'Vascular Cell' },
-  'Vascular Leptomeningeal Cell': { color: '#B93B8F', short: 'VLMC', cellClass: 'Vascular Cell' },
+  oligo: { name: 'Oligodendrocyte', cellClassId: 'class_oligo', color: '#D2C98D' },
+  opc: { name: 'Oligodendrocyte Progenitor Cell', cellClassId: 'class_opc', color: '#F7DB3B' },
+  endo: { name: 'Endothelial Cell', cellClassId: 'class_vascular', color: '#FFA62F' },
+  pc: { name: 'Pericyte', cellClassId: 'class_vascular', color: '#E0B0FF' },
+  smc: { name: 'Smooth Muscle Cell', cellClassId: 'class_vascular', color: '#4E387E' },
+  vlmc: { name: 'Vascular Leptomeningeal Cell', cellClassId: 'class_vascular', color: '#B93B8F' },
 } as const satisfies Record<string, CellSubclass>;
+
+export type CellSubclassId = keyof typeof CELL_SUBCLASSES;

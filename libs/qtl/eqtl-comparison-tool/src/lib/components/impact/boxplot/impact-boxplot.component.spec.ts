@@ -1,6 +1,6 @@
 import { By } from '@angular/platform-browser';
 import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
-import { CELL_CLASSES, CELL_SUBCLASSES } from '@sagebionetworks/qtl/config';
+import { ResolvedCellSubclass, resolveCellSubclass } from '@sagebionetworks/qtl/util';
 import { render, screen, within } from '@testing-library/angular';
 import { ImpactBoxplotComponent } from './impact-boxplot.component';
 import {
@@ -8,10 +8,10 @@ import {
   IMPACT_BOXPLOT_TITLE_PREFIX,
 } from './impact-boxplot.constants';
 
-const astrocyteSubclass: keyof typeof CELL_SUBCLASSES = 'Astrocyte';
-const adaptiveImmuneSubclass: keyof typeof CELL_SUBCLASSES = 'Adaptive Immune Cell';
+const astrocyteSubclass = resolveCellSubclass('astro');
+const adaptiveImmuneSubclass = resolveCellSubclass('adaptiveimmune');
 
-async function setup(cellSubclass = astrocyteSubclass) {
+async function setup(cellSubclass: ResolvedCellSubclass = astrocyteSubclass) {
   const { fixture } = await render(ImpactBoxplotComponent, {
     componentInputs: { cellSubclass, expressionSummaries: IMPACT_BOXPLOT_EXAMPLE_SUMMARIES },
   });
@@ -26,7 +26,7 @@ describe('ImpactBoxplotComponent', () => {
     await setup();
     expect(
       within(screen.getByRole('figure')).getByText(
-        `${IMPACT_BOXPLOT_TITLE_PREFIX} (${astrocyteSubclass})`,
+        `${IMPACT_BOXPLOT_TITLE_PREFIX} (${astrocyteSubclass.name})`,
       ),
     ).toBeVisible();
   });
@@ -53,8 +53,6 @@ describe('ImpactBoxplotComponent', () => {
 
   it('fills the boxes with the color of the subclass’s cell class', async () => {
     const { boxplot } = await setup(adaptiveImmuneSubclass);
-    expect(boxplot.boxplotBoxStyle?.fillColor).toBe(
-      CELL_CLASSES[CELL_SUBCLASSES[adaptiveImmuneSubclass].cellClass].color,
-    );
+    expect(boxplot.boxplotBoxStyle?.fillColor).toBe(adaptiveImmuneSubclass.cellClass.color);
   });
 });

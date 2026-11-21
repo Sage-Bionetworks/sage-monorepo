@@ -7,7 +7,7 @@ import {
   TooltipStyle,
 } from '@sagebionetworks/explorers/charts';
 import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
-import { CELL_CLASSES, CELL_SUBCLASSES } from '@sagebionetworks/qtl/config';
+import { ResolvedCellSubclass } from '@sagebionetworks/qtl/util';
 import {
   IMPACT_BOXPLOT_CHART_HEIGHT_PX,
   IMPACT_BOXPLOT_COLORS,
@@ -31,7 +31,7 @@ export interface GenotypeExpressionSummary {
   styleUrls: ['./impact-boxplot.component.scss'],
 })
 export class ImpactBoxplotComponent {
-  cellSubclass = input.required<keyof typeof CELL_SUBCLASSES>();
+  cellSubclass = input.required<ResolvedCellSubclass>();
   // Plotted in the given order, labeled by each summary's genotype.
   expressionSummaries = input.required<GenotypeExpressionSummary[]>();
 
@@ -55,12 +55,14 @@ export class ImpactBoxplotComponent {
 
   // TODO: confirm vibrant vs muted fill in the design pass (EX-285)
   readonly boxplotBoxStyle = computed<BoxplotBoxStyle>(() => ({
-    fillColor: CELL_CLASSES[CELL_SUBCLASSES[this.cellSubclass()].cellClass].color,
+    fillColor: this.cellSubclass().cellClass.color,
     borderColor: IMPACT_BOXPLOT_COLORS.boxBorder,
     borderWidth: 1,
   }));
 
-  protected readonly ariaLabel = computed(() => `${this.titlePrefix} (${this.cellSubclass()})`);
+  protected readonly ariaLabel = computed(
+    () => `${this.titlePrefix} (${this.cellSubclass().name})`,
+  );
 
   readonly genotypes = computed(() =>
     this.expressionSummaries().map((summary) => summary.genotype),
