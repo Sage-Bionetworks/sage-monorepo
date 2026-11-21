@@ -40,7 +40,7 @@
   }
 
   thead + tbody tr:first-child td {
-    padding-top: 16px;
+    padding-top: var(--simple-table-body-padding-top, 16px);
   }
 
   &.fixed-gap {
@@ -71,10 +71,12 @@
     @include mixins.link;
   }
 
+  // Top-aligned so the swatch doesn't leave room below it for the text's descenders.
   .cell-swatch {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    vertical-align: top;
   }
 
   .cell-swatch-color {
